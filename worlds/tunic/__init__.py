@@ -69,12 +69,16 @@ class TunicWorld(World):
 
     def generate_early(self) -> None:
         if self.multiworld.plando_connections[self.player]:
-            for cxn in self.multiworld.plando_connections[self.player]:
+            for index, cxn in enumerate(self.multiworld.plando_connections[self.player]):
                 # making shops second to simplify other things later
                 if cxn.entrance.startswith("Shop"):
                     replacement = PlandoConnection(cxn.exit, "Shop Portal", "both")
-                    self.multiworld.plando_connections[self.player].append(replacement)
                     self.multiworld.plando_connections[self.player].remove(cxn)
+                    self.multiworld.plando_connections[self.player].insert(index, replacement)
+                elif cxn.exit.startswith("Shop"):
+                    replacement = PlandoConnection(cxn.entrance, "Shop Portal", "both")
+                    self.multiworld.plando_connections[self.player].remove(cxn)
+                    self.multiworld.plando_connections[self.player].insert(index, replacement)
 
         # Universal tracker stuff, shouldn't do anything in standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
