@@ -453,7 +453,8 @@ class DarkSouls3World(World):
             lambda state: state.has("Cinders of a Lord - Abyss Watcher", self.player) and
                           state.has("Cinders of a Lord - Yhorm the Giant", self.player) and
                           state.has("Cinders of a Lord - Aldrich", self.player) and
-                          state.has("Cinders of a Lord - Lothric Prince", self.player))
+                          state.has("Cinders of a Lord - Lothric Prince", self.player) and
+                          state.has("Transposing Kiln", self.player))
 
         if self.options.late_basin_of_vows:
             self._add_entrance_rule("Lothric Castle", lambda state: (
