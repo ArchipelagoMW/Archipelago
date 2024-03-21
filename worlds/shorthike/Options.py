@@ -63,7 +63,7 @@ class CostMultiplier(Range):
 
 class FillerCoinAmount(Choice):
     """The amount of coins that will be in each filler coin item."""
-    display_name = "Filler Coin Amount"
+    display_name = "Coins per Filler Item"
     option_7_coins = 0
     option_13_coins = 1
     option_15_coins = 2
