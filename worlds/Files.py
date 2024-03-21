@@ -7,7 +7,7 @@ from enum import IntEnum
 import os
 import threading
 
-from typing import ClassVar, Dict, List, Literal, Tuple, Any, Optional, Union, BinaryIO, overload
+from typing import ClassVar, Dict, List, Literal, Tuple, Any, Optional, Union, BinaryIO, overload, Sequence
 
 import bsdiff4
 
@@ -298,12 +298,12 @@ class APTokenMixin:
     """
     A class that defines functions for generating a token binary, for use in patches.
     """
-    _tokens: List[
+    _tokens: Sequence[
         Tuple[APTokenTypes, int, Union[
             bytes,  # WRITE
             Tuple[int, int],  # COPY, RLE
             int  # AND_8, OR_8, XOR_8
-        ]]]
+        ]]] = ()
 
     def get_token_binary(self) -> bytes:
         """
@@ -357,7 +357,8 @@ class APTokenMixin:
         """
         Stores a token to be used by patching.
         """
-        if not hasattr(self, "_tokens"):
+        if not isinstance(self._tokens, list):
+            assert len(self._tokens) == 0, f"{type(self)}._tokens was tampered with."
             self._tokens = []
         self._tokens.append((token_type, offset, data))
 
