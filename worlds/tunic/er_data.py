@@ -682,12 +682,6 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Hero Relic - Library": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats, hint=Hint.region),
     "Hero Relic - Swamp": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats, hint=Hint.region),
     "Purgatory": RegionInfo("Purgatory"),
-    "Shop Entrance 1": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
-    "Shop Entrance 2": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
-    "Shop Entrance 3": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
-    "Shop Entrance 4": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
-    "Shop Entrance 5": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
-    "Shop Entrance 6": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
     "Shop": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
     "Spirit Arena": RegionInfo("Spirit Arena", dead_end=DeadEnd.all_cats, hint=Hint.region),
     "Spirit Arena Victory": RegionInfo("Spirit Arena", dead_end=DeadEnd.all_cats)
