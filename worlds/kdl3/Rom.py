@@ -387,9 +387,6 @@ def patch_rom(world: "KDL3World", patch: KDL3ProcedurePatch):
     patch.write_file("kdl3_basepatch.bsdiff4",
                      get_data(__name__, os.path.join("data", "kdl3_basepatch.bsdiff4")))
 
-    tiles = get_data(__name__, os.path.join("data", "APPauseIcons.dat"))
-    patch.write_token(APTokenTypes.WRITE, 0x3F000, tiles)
-
     # Write open world patch
     if world.options.open_world:
         patch.write_token(APTokenTypes.WRITE, 0x143C7, bytes([0xAD, 0xC1, 0x5A, 0xCD, 0xC1, 0x5A, ]))
@@ -449,7 +446,7 @@ def patch_rom(world: "KDL3World", patch: KDL3ProcedurePatch):
             patch.write_token(APTokenTypes.WRITE, 0x4A38D, world.random.choice(music_choices).to_bytes(1, "little"))
 
     for room in rooms:
-        room.patch(patch)
+        room.patch(patch, bool(world.options.consumables.value), True)
 
     if world.options.virtual_console in [1, 3]:
         # Flash Reduction

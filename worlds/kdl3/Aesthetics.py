@@ -420,7 +420,7 @@ def rgb888_to_bgr555(red, green, blue) -> bytes:
     return struct.pack("H", outcol)
 
 
-def get_palette_bytes(palette, target, offset, factor):
+def get_palette_bytes(palette, target, offset, factor) -> bytes:
     output_data = bytearray()
     for color in target:
         hexcol = palette[color]
@@ -431,4 +431,4 @@ def get_palette_bytes(palette, target, offset, factor):
         col = tuple(int(int(factor*x) + offset) for x in col)
         byte_data = rgb888_to_bgr555(col[0], col[1], col[2])
         output_data.extend(bytearray(byte_data))
-    return output_data
+    return bytes(output_data)

@@ -2,6 +2,7 @@ import struct
 import typing
 from BaseClasses import Region, ItemClassification
 from worlds.Files import APTokenTypes
+from .ClientAddrs import consumable_addrs, star_addrs
 
 if typing.TYPE_CHECKING:
     from .Rom import KDL3ProcedurePatch
@@ -43,14 +44,39 @@ class KDL3Room(Region):
         self.consumables = consumables
         self.consumable_pointer = consumable_pointer
 
-    def patch(self, patch: "KDL3ProcedurePatch"):
+    def patch(self, patch: "KDL3ProcedurePatch", consumables: bool, local_items: bool):
         patch.write_token(APTokenTypes.WRITE, self.pointer + 2, self.music.to_bytes(1, "little"))
         animals = [x.item.name for x in self.locations if "Animal" in x.name]
         if len(animals) > 0:
             for current_animal, address in zip(animals, self.animal_pointers):
                 patch.write_token(APTokenTypes.WRITE, self.pointer + address + 7,
                                   animal_map[current_animal].to_bytes(1, "little"))
-        if self.multiworld.worlds[self.player].options.consumables:
+        if local_items:
+            for location in self.locations:
+                if not location.address or location.item.player != self.player:
+                    continue
+                item = location.item.code
+                item_idx = item & 0x00000F
+                location_idx = location.address & 0xFFFF
+                if location_idx & 0xF00 in (0x300, 0x400, 0x500, 0x600):
+                    # consumable or star, need remapped
+                    location_base = location_idx & 0xF00
+                    if location_base == 0x300:
+                        # consumable
+                        location_idx = consumable_addrs[location_idx & 0xFF] | 0x1000
+                    else:
+                        # star
+                        location_idx = star_addrs[location.address] | 0x2000
+                if item & 0x000070 == 0:
+                    patch.write_token(APTokenTypes.WRITE, 0x4B000 + location_idx, bytes([item_idx | 0x10]))
+                elif item & 0x000010 > 0:
+                    patch.write_token(APTokenTypes.WRITE, 0x4B000 + location_idx, bytes([item_idx | 0x20]))
+                elif item & 0x000020 > 0:
+                    patch.write_token(APTokenTypes.WRITE, 0x4B000 + location_idx, bytes([item_idx | 0x40]))
+                elif item & 0x000040 > 0:
+                    patch.write_token(APTokenTypes.WRITE, 0x4B000 + location_idx, bytes([item_idx | 0x80]))
+
+        if consumables:
             load_len = len(self.entity_load)
             for consumable in self.consumables:
                 location = next(x for x in self.locations if x.name == consumable["name"])

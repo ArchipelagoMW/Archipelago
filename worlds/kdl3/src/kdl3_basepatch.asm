@@ -519,8 +519,16 @@ ConsumableSet:
     BRA .LoopHead ; return to loop head
     .ApplyCheck:
     LDA $A000, X ; consumables index
+    PHA
     ORA #$0001
     STA $A000, X
+    PLA
+    AND #$00FF
+    BNE .Return
+    TXA
+    ORA #$1000
+    JSL ApplyLocalCheck
+    .Return:
     PLY
     PLX
     PLA
@@ -1183,8 +1191,15 @@ StarsSet:
     BRA .2LoopHead
     .2LoopEnd:
     LDA $B000, X
+    PHA
     ORA #$0001
     STA $B000, X
+    PLA
+    AND #$00FF
+    BNE .Return
+    TXA
+    ORA #$2000
+    JSL ApplyLocalCheck
     .Return:
     PLY
     PLX
@@ -1199,6 +1214,26 @@ StarsSet:
     STA $39D7
     BRA .Return
 
+org $07A680
+ApplyLocalCheck:
+; args: A-address of check following $08B000
+    TAX
+    LDA $08B000, X
+    AND #$00FF
+    TAY
+    LDX #$0000
+    .Loop:
+    LDA $C000, X
+    BEQ .Apply
+    INX
+    INX
+    CPX #$0010
+    BCC .Loop
+    BRA .Return ; this is dangerous, could lose a check here
+    .Apply:
+    STY $C000, X
+    .Return:
+    RTL
 
 org $07C000
     db "KDL3_BASEPATCH_ARCHI"
@@ -1235,3 +1270,6 @@ org $07E040
     db $3B, $05
     db $3C, $05
     db $3D, $05
+
+org $07F000
+incbin "APPauseIcons.bin"
