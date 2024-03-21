@@ -150,9 +150,9 @@ class LingoPlayerLogic:
             for room_name, room_data in DOORS_BY_ROOM.items():
                 for door_name, door_data in room_data.items():
                     if door_data.skip_item is False and door_data.event is False:
-                        if door_data.group is not None and door_shuffle == ShuffleDoors.option_simple:
+                        if door_data.door_group is not None and door_shuffle == ShuffleDoors.option_simple:
                             # Grouped doors are handled differently if shuffle doors is on simple.
-                            self.set_door_item(room_name, door_name, door_data.group)
+                            self.set_door_item(room_name, door_name, door_data.door_group)
                         else:
                             self.handle_non_grouped_door(room_name, door_data, world)
 

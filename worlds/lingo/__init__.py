@@ -6,8 +6,8 @@ from logging import warning
 from BaseClasses import Item, ItemClassification, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .datatypes import Room, RoomEntrance
-from .items import ALL_ITEM_TABLE, LingoItem
-from .locations import ALL_LOCATION_TABLE
+from .items import ALL_ITEM_TABLE, ITEMS_BY_GROUP, LingoItem
+from .locations import ALL_LOCATION_TABLE, LOCATIONS_BY_GROUP
 from .options import LingoOptions
 from .player_logic import LingoPlayerLogic
 from .regions import create_regions
@@ -46,6 +46,8 @@ class LingoWorld(World):
     location_name_to_id = {
         name: data.code for name, data in ALL_LOCATION_TABLE.items()
     }
+    item_name_groups = ITEMS_BY_GROUP
+    location_name_groups = LOCATIONS_BY_GROUP
 
     player_logic: LingoPlayerLogic
 

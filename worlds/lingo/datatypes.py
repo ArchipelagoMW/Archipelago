@@ -32,9 +32,10 @@ class Door(NamedTuple):
     has_doors: bool
     painting_ids: List[str]
     event: bool
-    group: Optional[str]
+    door_group: Optional[str]
     include_reduce: bool
     junk_item: bool
+    item_group: Optional[str]
 
 
 class Panel(NamedTuple):
