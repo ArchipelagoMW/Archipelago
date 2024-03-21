@@ -103,9 +103,10 @@ class ExtraHexagonPercentage(Range):
 class EntranceRando(TextChoice):
     """
     Randomize the connections between scenes.
-    If you set this to a value besides true or false, that value will be used as a custom seed.
-    Every player who uses the same seed will have the same entrances, choosing the most restrictive settings among these players for the purpose of pairing entrances.
     A small, very lost fox on a big adventure.
+    
+    If you set this to a value besides true or false, that value will be used as a custom seed.
+    Every player who uses the same seed will have the same entrances, choosing the most restrictive settings among these players for the purpose of pairing entrances.    
     """
     internal_name = "entrance_rando"
     display_name = "Entrance Rando"
