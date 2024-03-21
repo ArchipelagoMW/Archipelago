@@ -189,6 +189,7 @@ class WitnessWordedHint:
     location: Optional[Location] = None
     area: Optional[str] = None
     area_amount: Optional[int] = None
+    confusified_hint: bool = False
 
 
 def get_always_hint_items(world: "WitnessWorld") -> List[str]:
@@ -351,6 +352,7 @@ def try_getting_location_group_other_world(world: "WitnessWorld", location: Loca
         return "Everywhere"
 
     location_groups_with_weights = {
+        # Listen. Just don't worry about it. :)))
         location_group: x ** 0.6 * math.e ** - (x / 7) ** 0.6 if x > 6 else x/6
         for location_group, x in valid_location_groups.items()
     }
@@ -398,7 +400,7 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint):
         else:
             hint_text = f"{item_name} can be found at {location_name}."
 
-    return WitnessWordedHint(hint_text, hint.location)
+    return WitnessWordedHint(hint_text, hint.location, confusified_hint=bool(world.options.vague_hints))
 
 
 def hint_from_item(world: "WitnessWorld", item_name: str, own_itempool: List[Item]) -> Optional[WitnessLocationHint]:
@@ -800,6 +802,9 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int,
 def make_compact_hint_data(hint: WitnessWordedHint, local_player_number: int) -> CompactItemData:
     location = hint.location
     area_amount = hint.area_amount
+
+    if hint.confusified_hint:
+        local_player_number = -1
 
     # None if junk hint, address if location hint, area string if area hint
     arg_1 = location.address if location else (hint.area if hint.area else None)
