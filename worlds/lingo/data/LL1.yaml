@@ -573,32 +573,32 @@
     doors:
       1 Sunwarp:
         warp_id: Teleporter Warps/Sunwarp_enter_1
-        group: Sunwarps
+        door_group: Sunwarps
         skip_location: True
         item_name: "1 Sunwarp"
       2 Sunwarp:
         warp_id: Teleporter Warps/Sunwarp_enter_2
-        group: Sunwarps
+        door_group: Sunwarps
         skip_location: True
         item_name: 2 Sunwarp
       3 Sunwarp:
         warp_id: Teleporter Warps/Sunwarp_enter_3
-        group: Sunwarps
+        door_group: Sunwarps
         skip_location: True
         item_name: "3 Sunwarp"
       4 Sunwarp:
         warp_id: Teleporter Warps/Sunwarp_enter_4
-        group: Sunwarps
+        door_group: Sunwarps
         skip_location: True
         item_name: 4 Sunwarp
       5 Sunwarp:
         warp_id: Teleporter Warps/Sunwarp_enter_5
-        group: Sunwarps
+        door_group: Sunwarps
         skip_location: True
         item_name: "5 Sunwarp"
       6 Sunwarp:
         warp_id: Teleporter Warps/Sunwarp_enter_6
-        group: Sunwarps
+        door_group: Sunwarps
         skip_location: True
         item_name: "6 Sunwarp"
     progression:
@@ -2055,7 +2055,8 @@
         door: Shortcut to Tower
       Rhyme Room (Smiley):
         door: Rhyme Room Entrance
-      Art Gallery: True # mark this as a warp in the sunwarps branch
+      Art Gallery:
+        warp: True
     panels:
       RED:
         id: Color Arrow Room/Panel_red_afar
