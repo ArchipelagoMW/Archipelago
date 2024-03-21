@@ -227,7 +227,7 @@ class HintAmount(Range):
     default = 12
 
 
-class VagueHints(DefaultOnToggle):
+class VagueHints(Toggle):
     """Make Location Hints a bit more vague, where they only tell you about the general area the item is in.
     Area Hints will be generated as normal."""
     display_name = "Vague Hints"
