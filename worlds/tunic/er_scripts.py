@@ -69,7 +69,7 @@ tunic_events: Dict[str, str] = {
     "Quarry Fuse": "Quarry",
     "Ziggurat Fuse": "Rooted Ziggurat Lower Back",
     "West Garden Fuse": "West Garden",
-    "Library Fuse": "Library Lab"
+    "Library Fuse": "Library Lab",
 }
 
 
