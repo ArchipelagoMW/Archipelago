@@ -454,27 +454,29 @@ def get_item_and_location_names_in_random_order(world: "WitnessWorld", own_itemp
 def make_always_and_priority_hints(world: "WitnessWorld", own_itempool: List[Item],
                                    already_hinted_locations: Set[Location]
                                    ) -> Tuple[List[WitnessLocationHint], List[WitnessLocationHint]]:
-    if world.options.vague_hints:
-        return [], []
 
     prog_items_in_this_world, loc_in_this_world = get_item_and_location_names_in_random_order(world, own_itempool)
 
-    always_locations = [
-        location for location in get_always_hint_locations(world)
-        if location in loc_in_this_world
-    ]
     always_items = [
         item for item in get_always_hint_items(world)
         if item in prog_items_in_this_world
-    ]
-    priority_locations = [
-        location for location in get_priority_hint_locations(world)
-        if location in loc_in_this_world
     ]
     priority_items = [
         item for item in get_priority_hint_items(world)
         if item in prog_items_in_this_world
     ]
+
+    if world.options.vague_hints:
+        always_locations, priority_locations = [], []
+    else:
+        always_locations = [
+            location for location in get_always_hint_locations(world)
+            if location in loc_in_this_world
+        ]
+        priority_locations = [
+            location for location in get_priority_hint_locations(world)
+            if location in loc_in_this_world
+        ]
 
     # Get always and priority location/item hints
     always_location_hints = {hint_from_location(world, location) for location in always_locations}
