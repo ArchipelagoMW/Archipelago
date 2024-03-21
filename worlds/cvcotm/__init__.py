@@ -17,7 +17,7 @@ from ..AutoWorld import WebWorld, World
 
 
 # from .aesthetics import shuffle_sub_weapons, get_start_inventory_data, get_location_data, get_countdown_numbers
-from .rom import LocalRom, patch_rom, get_base_rom_path, CVCotMDeltaPatch
+from .rom import RomData, patch_rom, get_base_rom_path, CVCotMProcedurePatch
 from .client import CastlevaniaCotMClient
 
 
@@ -26,7 +26,7 @@ class CVCotMSettings(settings.Group):
         """File name of the Castlevania CVCotM US rom"""
         copy_to = "Castlevania - Circle of the Moon (USA).gba"
         description = "Castlevania CotM (US) ROM File"
-        md5s = [CVCotMDeltaPatch.hash]
+        md5s = [CVCotMProcedurePatch.hash]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
 
@@ -174,18 +174,13 @@ class CVCotMWorld(World):
         #offset_data.update(get_start_inventory_data(self.player, self.options,
         #                                            self.multiworld.precollected_items[self.player]))
 
-        cvcotm_rom = LocalRom(get_base_rom_path())
+        patch = CVCotMProcedurePatch()
+        patch_rom(self, patch, offset_data, active_locations)
 
-        rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.z64")
+        rom_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}"
+                                                  f"{patch.patch_file_ending}")
 
-        patch_rom(self, cvcotm_rom, offset_data, active_locations)
-
-        cvcotm_rom.write_to_file(rompath)
-
-        patch = CVCotMDeltaPatch(os.path.splitext(rompath)[0] + CVCotMDeltaPatch.patch_file_ending, player=self.player,
-                                 player_name=self.multiworld.player_name[self.player], patched_path=rompath)
-        patch.write()
-        os.unlink(rompath)
+        patch.write(rom_path)
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_item_names)

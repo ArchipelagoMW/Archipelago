@@ -1,10 +1,14 @@
 
 import Utils
 import logging
+import dataclasses
+import json
 
 from BaseClasses import Location
-from worlds.Files import APDeltaPatch
-from typing import List, Dict, Union, Iterable, Collection, TYPE_CHECKING
+from Options import PerGameCommonOptions
+from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
+from typing import List, Dict, Optional, Union, Iterable, Collection, TYPE_CHECKING
+from .options import CVCotMOptions
 
 import hashlib
 import os
@@ -20,62 +24,27 @@ if TYPE_CHECKING:
     from . import CVCotMWorld
 
 CVCOTMUSHASH = "50a1089600603a94e15ecf287f8d5a1f"
-ROM_PLAYER_LIMIT = 65535
 
 
-class LocalRom:
-    orig_buffer: None
-    buffer: bytearray
+class RomData:
+    def __init__(self, file: bytes, name: Optional[str] = None):
+        self.file = bytearray(file)
+        self.name = name
 
-    def __init__(self, file: str) -> None:
-        self.orig_buffer = None
+    def read_byte(self, offset: int):
+        return self.file[offset]
 
-        with open(file, "rb") as stream:
-            self.buffer = bytearray(stream.read())
+    def read_bytes(self, offset: int, length: int):
+        return self.file[offset:offset + length]
 
-    def read_bit(self, address: int, bit_number: int) -> bool:
-        bitflag = (1 << bit_number)
-        return (self.buffer[address] & bitflag) != 0
+    def write_byte(self, offset: int, value: int):
+        self.file[offset] = value
 
-    def read_byte(self, address: int) -> int:
-        return self.buffer[address]
+    def write_bytes(self, offset: int, values):
+        self.file[offset:offset + len(values)] = values
 
-    def read_bytes(self, start_address: int, length: int) -> bytearray:
-        return self.buffer[start_address:start_address + length]
-
-    def write_byte(self, address: int, value: int) -> None:
-        self.buffer[address] = value
-
-    def write_bytes(self, start_address: int, values: Collection[int]) -> None:
-        self.buffer[start_address:start_address + len(values)] = values
-
-    def write_int16(self, address: int, value: int) -> None:
-        value = value & 0xFFFF
-        self.write_bytes(address, [(value >> 8) & 0xFF, value & 0xFF])
-
-    def write_int16s(self, start_address: int, values: List[int]) -> None:
-        for i, value in enumerate(values):
-            self.write_int16(start_address + (i * 2), value)
-
-    def write_int24(self, address: int, value: int) -> None:
-        value = value & 0xFFFFFF
-        self.write_bytes(address, [(value >> 16) & 0xFF, (value >> 8) & 0xFF, value & 0xFF])
-
-    def write_int24s(self, start_address: int, values: List[int]) -> None:
-        for i, value in enumerate(values):
-            self.write_int24(start_address + (i * 3), value)
-
-    def write_int32(self, address, value: int) -> None:
-        value = value & 0xFFFFFFFF
-        self.write_bytes(address, [(value >> 24) & 0xFF, (value >> 16) & 0xFF, (value >> 8) & 0xFF, value & 0xFF])
-
-    def write_int32s(self, start_address: int, values: list) -> None:
-        for i, value in enumerate(values):
-            self.write_int32(start_address + (i * 4), value)
-
-    def write_to_file(self, filepath: str) -> None:
-        with open(filepath, "wb") as outfile:
-            outfile.write(self.buffer)
+    def get_bytes(self) -> bytes:
+        return bytes(self.file)
 
     def apply_ips(self, filename: str) -> None:
         ips_file = bytearray(pkgutil.get_data(__name__, "data/ips/" + filename))
@@ -84,8 +53,6 @@ class LocalRom:
         if ips_file[0:5].decode("ascii") != "PATCH":
             logging.error(filename + " does not appear to be an IPS patch...")
             return
-
-        # self.write_bytes(22484, b'\x00I\x08G\x01\x00h\x08')
 
         file_pos = 5
         while True:
@@ -120,73 +87,97 @@ class LocalRom:
                 file_pos += 8
 
 
-def patch_rom(world: "CVCotMWorld", rom: LocalRom, offset_data: Dict[int, int],
-              active_locations: Iterable[Location]) -> None:
+class CVCotMPatchExtensions(APPatchExtension):
+    game = "Castlevania - Circle of the Moon"
 
-    multiworld = world.multiworld
-    options = world.options
-    player = world.player
-    required_last_keys = world.required_last_keys
-    total_last_keys = world.total_last_keys
+    @staticmethod
+    def apply_ips_patches(caller: APProcedurePatch, rom: bytes, options_file: str) -> bytes:
+        rom_data = RomData(rom)
+        options = json.loads(caller.get_file(options_file).decode("utf-8"))
 
-    # These patches get applied regardless of settings.
-    rom.apply_ips("AutoDashBoots.ips")
-    rom.apply_ips("CardUp_v3_Custom.ips")
-    rom.apply_ips("NoDSSDrops.ips")
-    rom.apply_ips("CardCombosRevealed.ips")
-    rom.apply_ips("CandleFix.ips")
-    rom.apply_ips("SoftlockBlockFix.ips")
-    rom.apply_ips("MPComboFix.ips")
-    rom.apply_ips("GameClearBypass.ips")
-    rom.apply_ips("MapEdits.ips")
-    rom.apply_ips("DemoForceFirst.ips")
-    rom.apply_ips("AllowAlwaysDrop.ips")
-    # rom.apply_ips("SeedDisplay.ips")
+        # These patches get applied regardless of settings.
+        rom_data.apply_ips("AutoDashBoots.ips")
+        rom_data.apply_ips("CardUp_v3_Custom.ips")
+        rom_data.apply_ips("NoDSSDrops.ips")
+        rom_data.apply_ips("CardCombosRevealed.ips")
+        rom_data.apply_ips("CandleFix.ips")
+        rom_data.apply_ips("SoftlockBlockFix.ips")
+        rom_data.apply_ips("MPComboFix.ips")
+        rom_data.apply_ips("GameClearBypass.ips")
+        rom_data.apply_ips("MapEdits.ips")
+        rom_data.apply_ips("DemoForceFirst.ips")
+        rom_data.apply_ips("AllowAlwaysDrop.ips")
+        rom_data.apply_ips("SeedDisplay.ips")
 
-    if options.auto_run:
-        rom.apply_ips("PermanentDash.ips")
+        if options["auto_run"] == "Yes":
+            rom_data.apply_ips("PermanentDash.ips")
 
-    if options.dss_patch:
-        rom.apply_ips("DSSGlitchFix.ips")
+        if options["dss_patch"] == "Yes":
+            rom_data.apply_ips("DSSGlitchFix.ips")
 
-    if options.break_iron_maidens:
-        rom.apply_ips("BrokenMaidens.ips")
+        if options["break_iron_maidens"] == "Yes":
+            rom_data.apply_ips("BrokenMaidens.ips")
 
-    if required_last_keys != 1:
-        rom.apply_ips("MultiLastKey.ips")
-        rom.write_byte(0x96C1E, required_last_keys)
-        rom.write_byte(0xDFB4, required_last_keys)
-        rom.write_byte(0xCB84, required_last_keys)
+        required_last_keys = int(options["required_last_keys"])
+        if required_last_keys != 1:
+            rom_data.apply_ips("MultiLastKey.ips")
+            rom_data.write_byte(0x96C1E, required_last_keys)
+            rom_data.write_byte(0xDFB4, required_last_keys)
+            rom_data.write_byte(0xCB84, required_last_keys)
 
-    if options.buff_ranged_familiars:
-        rom.apply_ips("BuffFamiliars.ips")
+        if options["buff_ranged_familiars"] == "Yes":
+            rom_data.apply_ips("BuffFamiliars.ips")
 
-    if options.buff_sub_weapons:
-        rom.apply_ips("BuffSubweapons.ips")
+        if options["buff_sub_weapons"] == "Yes":
+            rom_data.apply_ips("BuffSubweapons.ips")
 
-    if options.buff_shooter_strength:
-        rom.apply_ips("ShooterStrength.ips")
+        if options["buff_shooter_strength"] == "Yes":
+            rom_data.apply_ips("ShooterStrength.ips")
 
-    if options.always_allow_speed_dash:
-        rom.apply_ips("AllowSpeedDash.ips")
+        if options["always_allow_speed_dash"] == "Yes":
+            rom_data.apply_ips("AllowSpeedDash.ips")
 
-    if options.countdown:
-        rom.apply_ips("Countdown.ips")
+        if options["countdown"] == "Yes":
+            rom_data.apply_ips("Countdown.ips")
 
-    if options.disable_battle_arena_mp_drain:
-        rom.apply_ips("NoMPDrain.ips")
+        if options["disable_battle_arena_mp_drain"] == "Yes":
+            rom_data.apply_ips("NoMPDrain.ips")
+
+        return rom_data.get_bytes()
 
 
-class CVCotMDeltaPatch(APDeltaPatch):
+class CVCotMProcedurePatch(APProcedurePatch, APTokenMixin):
     hash = CVCOTMUSHASH
     patch_file_ending: str = ".apcvcotm"
     result_file_ending: str = ".gba"
 
     game = "Castlevania - Circle of the Moon"
 
+    procedure = [
+        ("apply_tokens", ["token_data.bin"]),
+        ("apply_ips_patches", ["options.json"])
+    ]
+
     @classmethod
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes()
+
+
+def patch_rom(world: "CVCotMWorld", patch: CVCotMProcedurePatch, offset_data: Dict[int, int],
+              active_locations: Iterable[Location]) -> None:
+
+    # patch.write_token(APTokenTypes.WRITE, 0x7FFFE0, b"\xFF\xFF\xFF\xFF")
+
+    patch.write_file("token_data.bin", patch.get_token_binary())
+
+    # Write the slot's options to a JSON.
+    options_dict = {}
+    for option_name in (attr.name for attr in dataclasses.fields(CVCotMOptions)
+                        if attr not in dataclasses.fields(PerGameCommonOptions)):
+        option = getattr(world.options, option_name)
+        options_dict[option_name] = option.current_option_name
+
+    patch.write_file("options.json", json.dumps(options_dict).encode('utf-8'))
 
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:
