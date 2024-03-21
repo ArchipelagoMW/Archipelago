@@ -255,10 +255,15 @@ def process_door(room_name, door_name, door_data):
     else:
         junk_item = False
 
-    if "group" in door_data:
-        group = door_data["group"]
+    if "door_group" in door_data:
+        door_group = door_data["door_group"]
     else:
-        group = None
+        door_group = None
+
+    if "item_group" in door_data:
+        item_group = door_data["item_group"]
+    else:
+        item_group = None
 
     # panels is a list of panels. Each panel can either be a simple string (the name of a panel in the current room) or
     # a dictionary specifying a panel in a different room.
@@ -308,7 +313,7 @@ def process_door(room_name, door_name, door_data):
         painting_ids = []
 
     door_obj = Door(door_name, item_name, location_name, panels, skip_location, skip_item, has_doors,
-                    painting_ids, event, group, include_reduce, junk_item)
+                    painting_ids, event, door_group, include_reduce, junk_item, item_group)
 
     DOORS_BY_ROOM[room_name][door_name] = door_obj
 
