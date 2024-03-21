@@ -322,7 +322,7 @@ class APTokenMixin:
                 data.append(args)
             elif token_type in [APTokenTypes.COPY, APTokenTypes.RLE]:
                 assert isinstance(args, tuple), f"Arguments to COPY/RLE must be of type tuple, not {type(args)}"
-                data.extend(int.to_bytes(4, 4, "little"))
+                data.extend(int.to_bytes(8, 4, "little"))
                 data.extend(args[0].to_bytes(4, "little"))
                 data.extend(args[1].to_bytes(4, "little"))
             elif token_type == APTokenTypes.WRITE:
