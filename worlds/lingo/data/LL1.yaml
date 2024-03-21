@@ -452,6 +452,7 @@
         id: Shuffle Room/Panel_lost_found
         colors: black
         tag: botblack
+        check: True
       FORWARD:
         id: Entry Room/Panel_forward_forward
         tag: midwhite
@@ -463,7 +464,12 @@
         tag: midwhite
     doors:
       Crossroads Entrance:
-        id: Shuffle Room Area Doors/Door_chaos
+        id:
+          - Shuffle Room Area Doors/Door_chaos
+          - Shuffle Room Area Doors/Door_swap
+          - Shuffle Room Area Doors/Door_swap2
+          - Shuffle Room Area Doors/Door_swap3
+          - Shuffle Room Area Doors/Door_swap4
         panels:
           - ORDER
       Tenacious Entrance:
@@ -491,11 +497,6 @@
         item_group: Achievement Room Entrances
         panels:
           - OPEN
-      Lost Door:
-        id: Shuffle Room Area Doors/Door_lost_found
-        junk_item: True
-        panels:
-          - LOST
     paintings:
       - id: maze_painting
         orientation: west
@@ -699,6 +700,8 @@
           door: Hollow Hallway
         tag: midwhite
       SWAP:
+        # In vanilla doors, solving this panel will open the way to Hub Room. This does not impact logic at all because
+        # Hub Room is always sphere 1 in vanilla doors.
         id: Shuffle Room/Panel_swap_wasp
         colors: yellow
         tag: midyellow
@@ -1298,7 +1301,7 @@
         id: Antonym Room/Panel_star_rats
         colors: black
         tag: midblack
-      TAME:
+      TUBE:
         id: Antonym Room/Panel_tame_mate
         colors: black
         tag: topblack
@@ -1967,6 +1970,7 @@
         door: Shortcut to Tower
       Rhyme Room (Smiley):
         door: Rhyme Room Entrance
+      Art Gallery: True # mark this as a warp in the sunwarps branch
     panels:
       RED:
         id: Color Arrow Room/Panel_red_afar
@@ -4988,7 +4992,7 @@
         colors:
           - red
           - blue
-        tag: mid red blue
+        tag: chain mid red blue
         required_panel:
           - room: Knight Night (Right Lower Segment)
             panel: ADJUST

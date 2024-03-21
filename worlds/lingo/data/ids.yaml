@@ -165,7 +165,7 @@ panels:
     THAT: 444525
     STRESSED: 444526
     STAR: 444527
-    TAME: 444528
+    TUBE: 444528
     CAT: 444529
   Hedge Maze:
     DOWN: 444530
@@ -995,9 +995,6 @@ doors:
     Traveled Entrance:
       item: 444433
       location: 444438
-    Lost Door:
-      item: 444435
-      location: 444440
   Pilgrim Antechamber:
     Sun Painting:
       item: 444436
