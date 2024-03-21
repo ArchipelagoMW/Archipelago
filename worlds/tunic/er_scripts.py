@@ -133,7 +133,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         seed_group = world.seed_groups[world.options.entrance_rando.value]
         logic_rules = seed_group["logic_rules"]
         fixed_shop = seed_group["fixed_shop"]
-        laurels_location = "10_fairies" if seed_group["laurels_at_10_fairies"] is True
+        laurels_location = "10_fairies" if seed_group["laurels_at_10_fairies"] is True else False
     
     shop_scenes: Set[str] = set()
     shop_count = 6
