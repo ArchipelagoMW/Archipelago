@@ -392,6 +392,7 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint):
         item_name += " (" + world.multiworld.get_player_name(item.player) + ")"
 
     hint_text = ""
+    area: Optional[str] = None
 
     if world.options.vague_hints:
         if hint.location.player == world.player:
@@ -417,7 +418,7 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint):
         else:
             hint_text = f"{item_name} can be found at {location_name}."
 
-    return WitnessWordedHint(hint_text, hint.location, confusified_hint=bool(world.options.vague_hints))
+    return WitnessWordedHint(hint_text, hint.location, area=area, confusified_hint=bool(world.options.vague_hints))
 
 
 def hint_from_item(world: "WitnessWorld", item_name: str, own_itempool: List[Item]) -> Optional[WitnessLocationHint]:
@@ -826,14 +827,13 @@ def make_compact_hint_data(hint: WitnessWordedHint, local_player_number: int) ->
     if location:
         player_number = location.player
     if player_number == local_player_number and hint.confusified_hint:
-        # -1 will be interpreted by the client as "local player, do not scout"
         player_number = -1
 
     # None if junk hint, address if location hint, area string if area hint
     arg_1 = location.address if location else (hint.area if hint.area else None)
 
     # self.player if junk hint, player if location hint, progression amount if area hint
-    arg_2 = area_amount if area_amount is not None else player_number
+    arg_2 = area_amount if area_amount is not None else (f"containing_area:{hint.area}" if hint.area else player_number)
 
     return hint.wording, arg_1, arg_2
 
