@@ -141,8 +141,30 @@ item_table: Dict[str, TunicItemData] = {
     "Pages 46-47": TunicItemData(ItemClassification.useful, 1, 125, "pages"),
     "Pages 48-49": TunicItemData(ItemClassification.useful, 1, 126, "pages"),
     "Pages 50-51": TunicItemData(ItemClassification.useful, 1, 127, "pages"),
-    "Pages 52-53 (Ice Rod)": TunicItemData(ItemClassification.progression, 1, 128, "pages"),
+    "Pages 52-53 (Icebolt)": TunicItemData(ItemClassification.progression, 1, 128, "pages"),
     "Pages 54-55": TunicItemData(ItemClassification.useful, 1, 129, "pages"),
+    
+    "Ladders near Weathervane": TunicItemData(ItemClassification.progression, 0, 130, "ladders"),
+    "Ladders near Overworld Checkpoint": TunicItemData(ItemClassification.progression, 0, 131, "ladders"),
+    "Ladders near Patrol Cave": TunicItemData(ItemClassification.progression, 0, 132, "ladders"),
+    "Ladder near Temple Rafters": TunicItemData(ItemClassification.progression, 0, 133, "ladders"),
+    "Ladders near Dark Tomb": TunicItemData(ItemClassification.progression, 0, 134, "ladders"),
+    "Ladder to Quarry": TunicItemData(ItemClassification.progression, 0, 135, "ladders"),
+    "Ladders to West Bell": TunicItemData(ItemClassification.progression, 0, 136, "ladders"),
+    "Ladders in Overworld Town": TunicItemData(ItemClassification.progression, 0, 137, "ladders"),
+    "Ladder to Ruined Atoll": TunicItemData(ItemClassification.progression, 0, 138, "ladders"),
+    "Ladder to Swamp": TunicItemData(ItemClassification.progression, 0, 139, "ladders"),
+    "Ladders in Well": TunicItemData(ItemClassification.progression, 0, 140, "ladders"),
+    "Ladder in Dark Tomb": TunicItemData(ItemClassification.progression, 0, 141, "ladders"),
+    "Ladder to East Forest": TunicItemData(ItemClassification.progression, 0, 142, "ladders"),
+    "Ladders to Lower Forest": TunicItemData(ItemClassification.progression, 0, 143, "ladders"),
+    "Ladder to Beneath the Vault": TunicItemData(ItemClassification.progression, 0, 144, "ladders"),
+    "Ladders in Hourglass Cave": TunicItemData(ItemClassification.progression, 0, 145, "ladders"),
+    "Ladders in South Atoll": TunicItemData(ItemClassification.progression, 0, 146, "ladders"),
+    "Ladders to Frog's Domain": TunicItemData(ItemClassification.progression, 0, 147, "ladders"),
+    "Ladders in Library": TunicItemData(ItemClassification.progression, 0, 148, "ladders"),
+    "Ladders in Lower Quarry": TunicItemData(ItemClassification.progression, 0, 149, "ladders"),
+    "Ladders in Swamp": TunicItemData(ItemClassification.progression, 0, 150, "ladders"),
 }
 
 fool_tiers: List[List[str]] = [
@@ -176,7 +198,7 @@ slot_data_item_names = [
     "Hero Relic - MP",
     "Pages 24-25 (Prayer)",
     "Pages 42-43 (Holy Cross)",
-    "Pages 52-53 (Ice Rod)",
+    "Pages 52-53 (Icebolt)",
     "Red Questagon",
     "Green Questagon",
     "Blue Questagon",
@@ -204,11 +226,14 @@ extra_groups: Dict[str, Set[str]] = {
     "magic rod": {"Magic Wand"},
     "holy cross": {"Pages 42-43 (Holy Cross)"},
     "prayer": {"Pages 24-25 (Prayer)"},
-    "ice rod": {"Pages 52-53 (Ice Rod)"},
+    "icebolt": {"Pages 52-53 (Icebolt)"},
+    "ice rod": {"Pages 52-53 (Icebolt)"},
     "melee weapons": {"Stick", "Sword", "Sword Upgrade"},
     "progressive sword": {"Sword Upgrade"},
-    "abilities": {"Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)", "Pages 52-53 (Ice Rod)"},
-    "questagons": {"Red Questagon", "Green Questagon", "Blue Questagon", "Gold Questagon"}
+    "abilities": {"Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)", "Pages 52-53 (Icebolt)"},
+    "questagons": {"Red Questagon", "Green Questagon", "Blue Questagon", "Gold Questagon"},
+    "ladder to atoll": {"Ladder to Ruined Atoll"},  # fuzzy matching made it hint Ladders in Well, now it won't
+    "ladders to bell": {"Ladders to West Bell"},
 }
 
 item_name_groups.update(extra_groups)

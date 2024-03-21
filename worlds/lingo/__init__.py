@@ -5,12 +5,12 @@ from logging import warning
 
 from BaseClasses import Item, ItemClassification, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from .items import ALL_ITEM_TABLE, LingoItem
-from .locations import ALL_LOCATION_TABLE
+from .datatypes import Room, RoomEntrance
+from .items import ALL_ITEM_TABLE, ITEMS_BY_GROUP, LingoItem
+from .locations import ALL_LOCATION_TABLE, LOCATIONS_BY_GROUP
 from .options import LingoOptions
 from .player_logic import LingoPlayerLogic
 from .regions import create_regions
-from .static_logic import Room, RoomEntrance
 
 
 class LingoWebWorld(WebWorld):
@@ -46,6 +46,8 @@ class LingoWorld(World):
     location_name_to_id = {
         name: data.code for name, data in ALL_LOCATION_TABLE.items()
     }
+    item_name_groups = ITEMS_BY_GROUP
+    location_name_groups = LOCATIONS_BY_GROUP
 
     player_logic: LingoPlayerLogic
 
@@ -100,9 +102,9 @@ class LingoWorld(World):
         item = ALL_ITEM_TABLE[name]
 
         classification = item.classification
-        if hasattr(self, "options") and self.options.shuffle_paintings and len(item.painting_ids) > 0\
-                and len(item.door_ids) == 0 and all(painting_id not in self.player_logic.painting_mapping
-                                                    for painting_id in item.painting_ids)\
+        if hasattr(self, "options") and self.options.shuffle_paintings and len(item.painting_ids) > 0 \
+                and not item.has_doors and all(painting_id not in self.player_logic.painting_mapping
+                                               for painting_id in item.painting_ids) \
                 and "pilgrim_painting2" not in item.painting_ids:
             # If this is a "door" that just moves one or more paintings, and painting shuffle is on and those paintings
             # go nowhere, then this item should not be progression. The Pilgrim Room painting is special and needs to be
