@@ -273,11 +273,6 @@ class RomData:
     def write_bytes(self, offset: int, values: typing.Sequence) -> None:
         self.file[offset:offset + len(values)] = values
 
-    def write_crc(self) -> None:
-        crc = (sum(self.file[:0x7FDC] + self.file[0x7FE0:]) + 0x01FE) & 0xFFFF
-        inv = crc ^ 0xFFFF
-        self.write_bytes(0x7FDC, [inv & 0xFF, (inv >> 8) & 0xFF, crc & 0xFF, (crc >> 8) & 0xFF])
-
     def get_bytes(self) -> bytes:
         return bytes(self.file)
 
@@ -342,8 +337,9 @@ def write_consumable_sprites(rom: RomData, consumables: bool, stars: bool):
 
 class KDL3PatchExtensions(APPatchExtension):
     game = "Kirby's Dream Land 3"
+
     @staticmethod
-    def apply_post_patch(caller: APProcedurePatch, rom: bytes):
+    def apply_post_patch(_: APProcedurePatch, rom: bytes):
         rom_data = RomData(rom)
         target_language = rom_data.read_byte(0x3C020)
         rom_data.write_byte(0x7FD9, target_language)
@@ -361,9 +357,6 @@ class KDL3PatchExtensions(APPatchExtension):
             rom_data.write_bytes(0x460A, [0x00, 0xA0, 0x39, 0x20, 0xA9, 0x39, 0x30, 0xB2, 0x39, 0x40, 0xBB, 0x39,
                                           0x50, 0xC4, 0x39])
         write_consumable_sprites(rom_data, rom_data.read_byte(0x3D018) > 0, rom_data.read_byte(0x3D01A) > 0)
-        rom_name = rom_data.read_bytes(0x3C000, 21)
-        rom_data.write_bytes(0x7FC0, rom_name)
-        rom_data.write_crc()
         return rom_data.get_bytes()
 
 
@@ -375,6 +368,7 @@ class KDL3ProcedurePatch(APProcedurePatch, APTokenMixin):
         ("apply_bsdiff4", ["kdl3_basepatch.bsdiff4"]),
         ("apply_tokens", ["token_patch.bin"]),
         ("apply_post_patch", []),
+        ("write_snes_crc", [])
     ]
     name: bytes  # used to pass to init
 
@@ -435,10 +429,12 @@ def patch_rom(world: "KDL3World", patch: KDL3ProcedurePatch):
             for room in rooms:
                 room.music = world.random.choice(music_choices)
             for room in room_music:
-                patch.write_token(APTokenTypes.WRITE, room + 2, world.random.choice(music_choices).to_bytes(1, "little"))
+                patch.write_token(APTokenTypes.WRITE, room + 2,
+                                  world.random.choice(music_choices).to_bytes(1, "little"))
             for i in range(5):
                 # level themes
-                patch.write_token(APTokenTypes.WRITE, 0x133F2 + i, world.random.choice(music_choices).to_bytes(1, "little"))
+                patch.write_token(APTokenTypes.WRITE, 0x133F2 + i,
+                                  world.random.choice(music_choices).to_bytes(1, "little"))
             # Zero
             patch.write_token(APTokenTypes.WRITE, 0x9AE79, world.random.choice(music_choices).to_bytes(1, "little"))
             # Heart Star success and fail
@@ -446,7 +442,7 @@ def patch_rom(world: "KDL3World", patch: KDL3ProcedurePatch):
             patch.write_token(APTokenTypes.WRITE, 0x4A38D, world.random.choice(music_choices).to_bytes(1, "little"))
 
     for room in rooms:
-        room.patch(patch, bool(world.options.consumables.value), True)
+        room.patch(patch, bool(world.options.consumables.value), not bool(world.options.remote_items.value))
 
     if world.options.virtual_console in [1, 3]:
         # Flash Reduction
@@ -471,14 +467,15 @@ def patch_rom(world: "KDL3World", patch: KDL3ProcedurePatch):
                       struct.pack("H", world.required_heart_stars if world.options.goal_speed == 1 else 0xFFFF))
     patch.write_token(APTokenTypes.WRITE, 0x3D00C, world.options.goal_speed.value.to_bytes(2, "little"))
     patch.write_token(APTokenTypes.WRITE, 0x3D00E, world.options.open_world.value.to_bytes(2, "little"))
-    patch.write_token(APTokenTypes.WRITE, 0x3D010, world.options.death_link.value.to_bytes(2, "little"))
+    patch.write_token(APTokenTypes.WRITE, 0x3D010, ((world.options.remote_items.value << 1) +
+                                                    world.options.death_link.value).to_bytes(2, "little"))
     patch.write_token(APTokenTypes.WRITE, 0x3D012, world.options.goal.value.to_bytes(2, "little"))
     patch.write_token(APTokenTypes.WRITE, 0x3D014, world.options.stage_shuffle.value.to_bytes(2, "little"))
     patch.write_token(APTokenTypes.WRITE, 0x3D016, world.options.ow_boss_requirement.value.to_bytes(2, "little"))
     patch.write_token(APTokenTypes.WRITE, 0x3D018, world.options.consumables.value.to_bytes(2, "little"))
     patch.write_token(APTokenTypes.WRITE, 0x3D01A, world.options.starsanity.value.to_bytes(2, "little"))
     patch.write_token(APTokenTypes.WRITE, 0x3D01C, world.options.gifting.value.to_bytes(2, "little")
-                                                         if world.multiworld.players > 1 else bytes([0]))
+                      if world.multiworld.players > 1 else bytes([0]))
     patch.write_token(APTokenTypes.WRITE, 0x3D01E, world.options.strict_bosses.value.to_bytes(2, "little"))
     # don't write gifting for solo game, since there's no one to send anything to
 
@@ -557,6 +554,9 @@ def patch_rom(world: "KDL3World", patch: KDL3ProcedurePatch):
     patch.name.extend([0] * (21 - len(patch.name)))
     patch.write_token(APTokenTypes.WRITE, 0x3C000, bytes(patch.name))
     patch.write_token(APTokenTypes.WRITE, 0x3C020, world.options.game_language.value.to_bytes(1, "little"))
+
+    patch.write_token(APTokenTypes.COPY, 0x7FC0, (0x3C000, 21))
+    patch.write_token(APTokenTypes.COPY, 0x7FD9, (0x3C020, 1))
 
     # handle palette
     if world.options.kirby_flavor_preset.value != 0:

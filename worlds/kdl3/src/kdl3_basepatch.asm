@@ -160,7 +160,6 @@ CopyAbilityAnimalOverride:
     STA $39DF, X
     RTL
 
-org $079A00
 HeartStarCheck:
     TXA
     CMP #$0000 ; is this level 1
@@ -201,7 +200,6 @@ HeartStarCheck:
     SEC
     RTL
 
-org $079A80
 OpenWorldUnlock:
     PHX
     LDX $900E ; Are we on open world?
@@ -224,7 +222,6 @@ OpenWorldUnlock:
     PLX
     RTL
 
-org $079B00
 MainLoopHook:
     STA $D4
     INC $3524
@@ -265,7 +262,6 @@ MainLoopHook:
     .Return:
     RTL
 
-org $079B80
 HeartStarGraphicFix:
     LDA #$0000
     PHX
@@ -299,7 +295,6 @@ HeartStarGraphicFix:
     PLX
     RTL
 
-org $079BF0
 ParseItemQueue:
 ; Local item queue parsing
     NOP
@@ -427,7 +422,6 @@ ParseItemQueue:
     LDA #$0000
     BRA .PlaySFXLong
 
-org $079D00
 AnimalFriendSpawn:
     PHA
     CPX #$0002  ; is this an animal friend?
@@ -446,7 +440,6 @@ AnimalFriendSpawn:
     LDA #$9999
     RTL
 
-org $079E00
 WriteBWRAM:
     LDY #$6001 ;starting addr
     LDA #$1FFE ;bytes to write
@@ -479,7 +472,6 @@ WriteBWRAM:
     .Return:
     RTL
 
-org $079E80
 ConsumableSet:
     PHA
     PHX
@@ -536,7 +528,6 @@ ConsumableSet:
     AND #$00FF
     RTL
 
-org $079F00
 NormalGoalSet:
     PHX
     LDA $07D012
@@ -557,7 +548,6 @@ NormalGoalSet:
     STA $5AC1 ; cutscene
     RTL
 
-org $079F80
 FinalIcebergFix:
     PHX
     PHY
@@ -591,7 +581,6 @@ FinalIcebergFix:
     PLX
     RTL
 
-org $07A000
 StrictBosses:
     PHX
     LDA $901E ; Do we have strict bosses enabled?
@@ -618,7 +607,6 @@ StrictBosses:
     LDA $53CD
     RTL
 
-org $07A030
 NintenHalken:
     LDX #$0005
     .Halken:
@@ -636,7 +624,6 @@ NintenHalken:
     LDA #$0001
     RTL
 
-org $07A080
 StageCompleteSet:
     PHX
     LDA $5AC1 ; completed stage cutscene
@@ -667,6 +654,16 @@ StageCompleteSet:
     DEC
     ASL
     TAX
+    PHX
+    LDA $8200, X
+    AND #$00FF
+    BNE .ApplyClear
+    TXA
+    LSR
+    INC
+    JSL ApplyLocalCheck
+    .ApplyClear:
+    PLX
     LDA #$0001
     ORA $8200, X
     STA $8200, X
@@ -676,7 +673,6 @@ StageCompleteSet:
     CMP $53CB
     RTL
 
-org $07A100
 OpenWorldBossUnlock:
     PHX
     PHY
@@ -740,7 +736,6 @@ OpenWorldBossUnlock:
     PLX
     RTL
 
-org $07A180
 GooeySpawn:
     PHY 
     PHX 
@@ -776,7 +771,6 @@ GooeySpawn:
     PLY 
     RTL 
 
-org $07A200
 SpeedTrap:
     PHX
     LDX $8082 ; do we have slowness
@@ -788,7 +782,6 @@ SpeedTrap:
     EOR #$FFFF
     RTL
 
-org $07A280
 HeartStarVisual:
     CPX #$0000
     BEQ .SkipInx
@@ -852,7 +845,6 @@ HeartStarVisual:
     .Return:
     RTL
 
-org $07A300
 LoadFont:
     JSL $00D29F ; play sfx
     PHX
@@ -923,7 +915,6 @@ LoadFont:
     PLX
     RTL
 
-org $07A380
 HeartStarVisual2:
     LDA #$2C80
     STA $0000, Y
@@ -1037,7 +1028,6 @@ HeartStarVisual2:
     STA $0000, Y
     RTL
 
-org $07A480
 HeartStarSelectFix:
     PHX
     TXA
@@ -1059,15 +1049,22 @@ HeartStarSelectFix:
     AND #$00FF
     RTL
 
-org $07A500
 HeartStarCutsceneFix:
     TAX
     LDA $53D3
     DEC
     STA $5AC3
+    LDA $53A7, X
+    AND #$00FF
+    BNE .Return
+    PHX
+    TXA
+    ORA #$0100
+    JSL ApplyLocalCheck
+    PLX
+    .Return
     RTL
 
-org $07A510
 GiftGiving:
     CMP #$0008
     .This:
@@ -1083,7 +1080,6 @@ GiftGiving:
     PLX
     JML $CABC18
 
-org $07A550
 PauseMenu:
     JSL $00D29F
     PHX
@@ -1144,7 +1140,6 @@ PauseMenu:
     PLX
     RTL
 
-org $07A600
 StarsSet:
     PHA
     PHX
@@ -1214,11 +1209,10 @@ StarsSet:
     STA $39D7
     BRA .Return
 
-org $07A680
 ApplyLocalCheck:
 ; args: A-address of check following $08B000
     TAX
-    LDA $08B000, X
+    LDA $09B000, X
     AND #$00FF
     TAY
     LDX #$0000
@@ -1231,7 +1225,8 @@ ApplyLocalCheck:
     BCC .Loop
     BRA .Return ; this is dangerous, could lose a check here
     .Apply:
-    STY $C000, X
+    TYA
+    STA $C000, X
     .Return:
     RTL
 
@@ -1272,4 +1267,4 @@ org $07E040
     db $3D, $05
 
 org $07F000
-incbin "APPauseIcons.bin"
+incbin "APPauseIcons.dat"

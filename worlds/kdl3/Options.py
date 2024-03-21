@@ -1,9 +1,16 @@
 import random
 from dataclasses import dataclass
 
-from Options import DeathLink, Choice, Toggle, OptionDict, Range, PlandoBosses, DefaultOnToggle, \
+from Options import DeathLinkMixin, Choice, Toggle, OptionDict, Range, PlandoBosses, DefaultOnToggle, \
     PerGameCommonOptions
 from .Names import LocationName
+
+
+class RemoteItems(DefaultOnToggle):
+    """
+    Enables receiving items from your own world, primarily for co-op play.
+    """
+    display_name = "Remote Items"
 
 
 class Goal(Choice):
@@ -25,6 +32,7 @@ class Goal(Choice):
         if value == 2:
             return cls.name_lookup[value].upper()
         return super().get_option_name(value)
+
 
 class GoalSpeed(Choice):
     """
@@ -292,6 +300,7 @@ class KirbyFlavor(OptionDict):
     A custom color for Kirby. To use a custom color, set the preset to Custom and then define a dict of keys from "1" to
     "15", with their values being an HTML hex color.
     """
+    display_name = "Custom Kirby Flavor"
     default = {
       "1": "B01810",
       "2": "F0E0E8",
@@ -348,6 +357,7 @@ class GooeyFlavor(OptionDict):
     A custom color for Gooey. To use a custom color, set the preset to Custom and then define a dict of keys from "1" to
     "15", with their values being an HTML hex color.
     """
+    display_name = "Custom Gooey Flavor"
     default = {
         "1": "000808",
         "2": "102838",
@@ -399,8 +409,8 @@ class Gifting(Toggle):
 
 
 @dataclass
-class KDL3Options(PerGameCommonOptions):
-    death_link: DeathLink
+class KDL3Options(PerGameCommonOptions, DeathLinkMixin):
+    remote_items: RemoteItems
     game_language: GameLanguage
     goal: Goal
     goal_speed: GoalSpeed

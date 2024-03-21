@@ -139,7 +139,7 @@ class KDL3SNIClient(SNIClient):
 
         ctx.game = self.game
         ctx.rom = rom_name
-        ctx.items_handling = 0b111  # always remote items
+        ctx.items_handling = 0b101  # default local items with remote start inventory
         ctx.allow_collect = True
         if "gift" not in ctx.command_processor.commands:
             ctx.command_processor.commands["gift"] = cmd_gift
@@ -147,6 +147,7 @@ class KDL3SNIClient(SNIClient):
         death_link = await snes_read(ctx, KDL3_DEATH_LINK_ADDR, 1)
         if death_link:
             await ctx.update_death_link(bool(death_link[0] & 0b1))
+            ctx.items_handling |= (death_link[0] & 0b10)  # set local items if enabled
         return True
 
     async def pop_item(self, ctx, in_stage):
