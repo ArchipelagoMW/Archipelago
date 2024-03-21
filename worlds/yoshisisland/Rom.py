@@ -10,7 +10,6 @@ from .Options import YoshiColors, BowserDoor, PlayerGoal, MinigameChecks
 if TYPE_CHECKING:
     from . import YoshisIslandWorld
 USHASH = "cb472164c5a71ccd3739963390ec6a50"
-ROM_PLAYER_LIMIT = 65535
 
 item_values = {
     0x302050: [0x1467, 0x01],  # ! Switch
