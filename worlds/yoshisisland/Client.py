@@ -57,7 +57,7 @@ class YoshisIslandSNIClient(SNIClient):
         from SNIClient import snes_read
 
         rom_name = await snes_read(ctx, YOSHISISLAND_ROMHASH_START, ROMHASH_SIZE)
-        if rom_name is None or rom_name == bytes([0] * ROMHASH_SIZE) or rom_name[:7] != b"YOSHIAP":
+        if rom_name is None or rom_name[:7] != b"YOSHIAP":
             return False
 
         ctx.game = self.game
