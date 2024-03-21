@@ -432,7 +432,7 @@ def set_moderate_rules(world: "HatInTimeWorld"):
 
     # Moderate: Vanessa Manor with nothing
     for loc in world.multiworld.get_region("Queen Vanessa's Manor", world.player).locations:
-        set_rule(loc, lambda state: True)
+        set_rule(loc, lambda state: has_paintings(state, world, 1))
 
     set_rule(world.multiworld.get_location("Subcon Forest - Manor Rooftop", world.player), lambda state: True)
 
