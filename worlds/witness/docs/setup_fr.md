@@ -19,29 +19,29 @@
 5. Cliquez sur "Connect"
 6. Jouez!
 
-Pour continuer un jeu multimonde précedemment commencé:
+Pour continuer un jeu multimonde prÃ©cedemment commencÃ©:
 
 1. Lancez The Witness
-2. Chargez la sauvegarde sur laquelle vous avez dernièrement joué ce monde, si ce n'est pas celle qui a été chargée automatiquement 
+2. Chargez la sauvegarde sur laquelle vous avez derniÃ¨rement jouÃ© ce monde, si ce n'est pas celle qui a Ã©tÃ© chargÃ©e automatiquement 
 3. Lancez [The Witness Archipelago Randomizer](https://github.com/NewSoupVi/The-Witness-Randomizer-for-Archipelago/releases/latest)
 4. Cliquez sur "Load Credentials" (ou tapez les manuellement)
 5. Cliquez sur "Connect"
 
 ## Archipelago Text Client
 
-Il est recommandé d'utiliser le "Archipelago Text Client" en parallèle afin de suivre quels items vous envoyez et recevez.
-<br/>The Witness affiche également ces informations en jeu, mais seulement pour une courte période et donc il est facile de manquer ces messages.
+Il est recommandÃ© d'utiliser le "Archipelago Text Client" en parallÃ¨le afin de suivre quels items vous envoyez et recevez.
+<br/>The Witness affiche Ã©galement ces informations en jeu, mais seulement pour une courte pÃ©riode et donc il est facile de manquer ces messages.
 
-<br/><br/>Bien sûr, vous pouvez également utiliser l'auto-tracker!
+<br/><br/>Bien sÃ»r, vous pouvez Ã©galement utiliser l'auto-tracker!
 
 ## Auto-Tracking
 
 The Witness a un tracker fonctionnel qui supporte l'auto-tracking.
 
-1. Téléchargez [The Witness Map- and Auto-Tracker](https://github.com/NewSoupVi/witness_archipelago_tracker/releases) et [PopTracker](https://github.com/black-sliver/PopTracker/releases).
+1. TÃ©lÃ©chargez [The Witness Map- and Auto-Tracker](https://github.com/NewSoupVi/witness_archipelago_tracker/releases) et [PopTracker](https://github.com/black-sliver/PopTracker/releases).
 2. Ouvrez Poptracker, puis chargez le pack Witness. 
 3. Cliquez sur l'icone "AP" qui se situe au dessus de la carte.
 4. Inscrivez l'adresse Archipelago, votre nom de joueur et le mot de passe du jeu multimonde.
 
-Le reste devrait être pris en charge par Poptracker - les items que vous recevrez et les puzzles que vous résolverez seront automatiquement indiqués. De plus, Poptracker est en mesure de détecter
-vos paramètres de jeu - les puzzles accessibles seront alors masqués ou affichés en fonction de vos paramètres de randomization et de logique. Veuillez prendre note que le tracker peut être obsolète.
+Le reste devrait Ãªtre pris en charge par Poptracker - les items que vous recevrez et les puzzles que vous rÃ©solverez seront automatiquement indiquÃ©s. De plus, Poptracker est en mesure de dÃ©tecter
+vos paramï¿½tres de jeu - les puzzles accessibles seront alors masquï¿½s ou affichï¿½s en fonction de vos paramï¿½tres de randomization et de logique. Veuillez noter que le tracker peut ï¿½tre obsolï¿½te.
