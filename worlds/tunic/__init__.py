@@ -40,7 +40,7 @@ class SeedGroup(TypedDict):
     logic_rules: int  # logic rules value
     laurels_at_10_fairies: bool  # laurels location value
     fixed_shop: bool  # fixed shop value
-    plando: List[PlandoConnection] = []  # consolidated list of plando connections for the seed group
+    plando: List[PlandoConnection]  # consolidated list of plando connections for the seed group
 
 
 class TunicWorld(World):
@@ -68,6 +68,14 @@ class TunicWorld(World):
     seed_groups: Dict[str, SeedGroup] = {}
 
     def generate_early(self) -> None:
+        if self.multiworld.plando_connections[self.player]:
+            for cxn in self.multiworld.plando_connections[self.player]:
+                # making shops second to simplify other things later
+                if cxn.entrance.startswith("Shop"):
+                    replacement = PlandoConnection(cxn.exit, "Shop Portal", "both")
+                    self.multiworld.plando_connections[self.player].append(replacement)
+                    self.multiworld.plando_connections[self.player].remove(cxn)
+
         # Universal tracker stuff, shouldn't do anything in standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "TUNIC" in self.multiworld.re_gen_passthrough:
@@ -97,38 +105,39 @@ class TunicWorld(World):
                 else:
                     # lower value is more restrictive
                     if tunc.options.logic_rules.value < cls.seed_groups[group]["logic_rules"]:
-                        print("restricting logic rules")  # debug print, remove later
                         cls.seed_groups[group]["logic_rules"] = tunc.options.logic_rules.value
                     if tunc.options.laurels_location == 3:
-                        print("restricting for laurels location")  # debug print, remove later
                         cls.seed_groups[group]["laurels_at_10_fairies"] = True
                     if tunc.options.fixed_shop:
-                        print("restricting for fixed shop")  # debug print, remove later
                         cls.seed_groups[group]["fixed_shop"] = True
+
                     if multiworld.plando_connections[tunc.player]:
                         # loop through the connections in the player's yaml
-                        for cxn in multiworld.plando_conections[tunc.player]:
+                        for cxn in multiworld.plando_connections[tunc.player]:
                             new_conn = True
-                            # check if either of the entrances in the pair match. If one matches and the other doesn't, error out
-                            for group_cxn in cls.seed_group[group]["plando"]:
-                                # todo: figure out what to do regarding shops
+                            # check if either of the entrances in the pair match
+                            for group_cxn in cls.seed_groups[group]["plando"]:
                                 if cxn.entrance == group_cxn.entrance:
                                     new_conn = False
                                     if cxn.exit == group_cxn.exit:
                                         continue
                                     else:
-                                        # todo: figure out what to do with shop vs shop portal
-                                        raise Exception(f"Conflict between group and plando_connections for {tunc.get_player_name()} for their connection {cxn.entrance} <-> {cxn.exit} and the group's connection {group_cxn.entrance} <-> {group_cxn.exit}")
-                                # if a connection exit matches an entrance in the seed group, check if the entrance matches
+                                        raise Exception(f"TUNIC: Conflict between seed group {group}'s plando "
+                                                        f"connection {group_cxn.entrance} <-> {group_cxn.exit} and "
+                                                        f"{tunc.multiworld.get_player_name(tunc.player)}'s plando "
+                                                        f"connection {cxn.entrance} <-> {cxn.exit}")
+                                # if a connection exit matches an entrance in the seed group, check if entrance matches
                                 elif cxn.entrance == group_cxn.exit:
                                     new_conn = False
                                     if cxn.exit == group_cxn.entrance:
                                         continue
                                     else:
-                                        raise Exception(f"Conflict between group and plando_connections for {tunc.get_player_name()} for their connection {cxn.entrance} <-> {cxn.exit} and the group's connection {group_cxn.entrance} <-> {group_cxn.exit}")
+                                        raise Exception(f"TUNIC: Conflict between seed group {group}'s plando "
+                                                        f"connection {group_cxn.entrance} <-> {group_cxn.exit} and "
+                                                        f"{tunc.multiworld.get_player_name(tunc.player)}'s plando "
+                                                        f"connection {cxn.entrance} <-> {cxn.exit}")
                             if new_conn:
                                 cls.seed_groups[group]["plando"].append(cxn)
-                                
 
     def create_item(self, name: str) -> TunicItem:
         item_data = item_table[name]

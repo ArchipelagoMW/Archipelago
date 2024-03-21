@@ -205,13 +205,10 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
 
     if not logic_rules:
         dependent_regions = dependent_regions_restricted
-        print("not logic rules")
     elif logic_rules == 1:
         dependent_regions = dependent_regions_nmg
-        print("logic rules is 1")
     else:
         dependent_regions = dependent_regions_ur
-        print("logic rules is more than 1")
 
     # create separate lists for dead ends and non-dead ends
     if logic_rules:
@@ -232,7 +229,10 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     start_region = "Overworld"
     connected_regions.update(add_dependent_regions(start_region, logic_rules))
 
-    plando_connections = world.multiworld.plando_connections[world.player]
+    if isinstance(world.options.entrance_rando.value, str):
+        plando_connections = world.seed_groups[world.options.entrance_rando.value]["plando"]
+    else:
+        plando_connections = world.multiworld.plando_connections[world.player]
 
     # universal tracker support stuff, don't need to care about region dependency
     if hasattr(world.multiworld, "re_gen_passthrough"):
@@ -266,10 +266,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         for connection in plando_connections:
             p_entrance = connection.entrance
             p_exit = connection.exit
-
-            if p_entrance.startswith("Shop"):
-                p_entrance = p_exit
-                p_exit = "Shop Portal"
+            entrance_dead_end = False
 
             portal1 = None
             portal2 = None
@@ -290,6 +287,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                 if not portal1:
                     raise Exception(f"Could not find entrance named {p_entrance} for "
                                     f"plando connections in {player_name}'s YAML.")
+                entrance_dead_end = True
                 dead_ends.remove(portal1)
             else:
                 two_plus.remove(portal1)
@@ -299,7 +297,15 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                     if p_exit == portal.name:
                         portal2 = portal
                         break
-                if p_exit in ["Shop Portal", "Shop"]:
+                if p_exit == "Shop Portal":
+                    # don't pair dead ends to dead ends, that's bad
+                    if entrance_dead_end:
+                        if isinstance(world.options.entrance_rando.value, str):
+                            raise Exception(f"Tunic ER seed group {world.options.entrance_rando.value} paired a dead "
+                                            "end to a dead end in their plando connections.")
+                        else:
+                            raise Exception(f"{player_name} paired a dead end to a dead end in their "
+                                            "plando connections.")
                     portal2 = Portal(name="Shop Portal", region=f"Shop",
                                      destination="Previous Region_")
                     shop_count -= 1
@@ -313,6 +319,14 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                     if not portal2:
                         raise Exception(f"Could not find entrance named {p_exit} for "
                                         f"plando connections in {player_name}'s YAML.")
+                    # don't pair dead ends to dead ends, that's bad
+                    if entrance_dead_end:
+                        if isinstance(world.options.entrance_rando.value, str):
+                            raise Exception(f"Tunic ER seed group {world.options.entrance_rando.value} paired a dead "
+                                            "end to a dead end in their plando connections.")
+                        else:
+                            raise Exception(f"{player_name} paired a dead end to a dead end in their "
+                                            "plando connections.")
                     dead_ends.remove(portal2)
             else:
                 two_plus.remove(portal2)
