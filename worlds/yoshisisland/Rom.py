@@ -4,393 +4,396 @@ import Utils
 from worlds.Files import APDeltaPatch
 from settings import get_settings
 from typing import TYPE_CHECKING
+
+from .Options import YoshiColors, BowserDoor, PlayerGoal, MinigameChecks
+
 if TYPE_CHECKING:
     from . import YoshisIslandWorld
-USHASH = 'cb472164c5a71ccd3739963390ec6a50'
+USHASH = "cb472164c5a71ccd3739963390ec6a50"
 ROM_PLAYER_LIMIT = 65535
 
 item_values = {
-    0x302050: [0x1467, 0x01], #! Switch
-    0x302051: [0x1467, 0x02], #Dashed Platform
-    0x302052: [0x1467, 0x03], #Dashed Stairs
-    0x302053: [0x1467, 0x04], #Beanstalk
-    0x302054: [0x1467, 0x05], #Helicopter
-    0x302059: [0x1467, 0x06], #Mole Tank
-    0x302068: [0x1467, 0x07], #Train
-    0x30205E: [0x1467, 0x08], #Car
-    0x302063: [0x1467, 0x09], #Submarine
-    0x302055: [0x1467, 0x0A], #Spring Ball
-    0x302056: [0x1467, 0x0B], #Large Spring Ball
-    0x302057: [0x1467, 0x0C], #Arrow Wheel
-    0x302058: [0x1467, 0x0D], #Vanishing Arrow Wheel
-    0x30205A: [0x1467, 0x0E], #Watermelon
-    0x30205B: [0x1467, 0x0F], #Ice Melon
-    0x30205C: [0x1467, 0x10], #Fire Melon
-    0x30205D: [0x1467, 0x11], #Super Star
-    0x30205F: [0x1467, 0x12], #Flashing Eggs
-    0x302060: [0x1467, 0x13], #Giant Eggs
-    0x302061: [0x1467, 0x14], #Egg Launcher
-    0x302062: [0x1467, 0x15], #Egg Plant
-    0x302064: [0x1467, 0x16], #Chomp Rock
-    0x302065: [0x1467, 0x17], #Poochy
-    0x302066: [0x1467, 0x18], #Platform Ghost
-    0x302067: [0x1467, 0x19], #Skis
-    0x302069: [0x1467, 0x1A], #Key
-    0x30206A: [0x1467, 0x1B], #Middle Ring
-    0x30206B: [0x1467, 0x1C], #Bucket
-    0x30206C: [0x1467, 0x1D], #Tulip
-    0x302081: [0x1467, 0x1E], #Secret Lens
+    0x302050: [0x1467, 0x01],  # ! Switch
+    0x302051: [0x1467, 0x02],  # Dashed Platform
+    0x302052: [0x1467, 0x03],  # Dashed Stairs
+    0x302053: [0x1467, 0x04],  # Beanstalk
+    0x302054: [0x1467, 0x05],  # Helicopter
+    0x302059: [0x1467, 0x06],  # Mole Tank
+    0x302068: [0x1467, 0x07],  # Train
+    0x30205E: [0x1467, 0x08],  # Car
+    0x302063: [0x1467, 0x09],  # Submarine
+    0x302055: [0x1467, 0x0A],  # Spring Ball
+    0x302056: [0x1467, 0x0B],  # Large Spring Ball
+    0x302057: [0x1467, 0x0C],  # Arrow Wheel
+    0x302058: [0x1467, 0x0D],  # Vanishing Arrow Wheel
+    0x30205A: [0x1467, 0x0E],  # Watermelon
+    0x30205B: [0x1467, 0x0F],  # Ice Melon
+    0x30205C: [0x1467, 0x10],  # Fire Melon
+    0x30205D: [0x1467, 0x11],  # Super Star
+    0x30205F: [0x1467, 0x12],  # Flashing Eggs
+    0x302060: [0x1467, 0x13],  # Giant Eggs
+    0x302061: [0x1467, 0x14],  # Egg Launcher
+    0x302062: [0x1467, 0x15],  # Egg Plant
+    0x302064: [0x1467, 0x16],  # Chomp Rock
+    0x302065: [0x1467, 0x17],  # Poochy
+    0x302066: [0x1467, 0x18],  # Platform Ghost
+    0x302067: [0x1467, 0x19],  # Skis
+    0x302069: [0x1467, 0x1A],  # Key
+    0x30206A: [0x1467, 0x1B],  # Middle Ring
+    0x30206B: [0x1467, 0x1C],  # Bucket
+    0x30206C: [0x1467, 0x1D],  # Tulip
+    0x302081: [0x1467, 0x1E],  # Secret Lens
 
-    0x30206D: [0x1467, 0x1F], #Egg Capacity Upgrade
+    0x30206D: [0x1467, 0x1F],  # Egg Capacity Upgrade
 
-    0x30206E: [0x1467, 0x20], #World 1 Gate
-    0x30206F: [0x1467, 0x21], #World 2 Gate
-    0x302070: [0x1467, 0x22], #World 3 Gate
-    0x302071: [0x1467, 0x23], #World 4 Gate
-    0x302072: [0x1467, 0x24], #World 5 Gate
-    0x302073: [0x1467, 0x25], #World 6 Gate
+    0x30206E: [0x1467, 0x20],  # World 1 Gate
+    0x30206F: [0x1467, 0x21],  # World 2 Gate
+    0x302070: [0x1467, 0x22],  # World 3 Gate
+    0x302071: [0x1467, 0x23],  # World 4 Gate
+    0x302072: [0x1467, 0x24],  # World 5 Gate
+    0x302073: [0x1467, 0x25],  # World 6 Gate
 
-    0x302074: [0x1467, 0x26], #Extra 1
-    0x302075: [0x1467, 0x27], #Extra 2
-    0x302076: [0x1467, 0x28], #Extra 3
-    0x302077: [0x1467, 0x29], #Extra 4
-    0x302078: [0x1467, 0x2A], #Extra 5
-    0x302079: [0x1467, 0x2B], #Extra 6
-    0x30207A: [0x1467, 0x2C], #Extra Panels
+    0x302074: [0x1467, 0x26],  # Extra 1
+    0x302075: [0x1467, 0x27],  # Extra 2
+    0x302076: [0x1467, 0x28],  # Extra 3
+    0x302077: [0x1467, 0x29],  # Extra 4
+    0x302078: [0x1467, 0x2A],  # Extra 5
+    0x302079: [0x1467, 0x2B],  # Extra 6
+    0x30207A: [0x1467, 0x2C],  # Extra Panels
 
-    0x30207B: [0x1467, 0x2D], #Bonus 1
-    0x30207C: [0x1467, 0x2E], #Bonus 2
-    0x30207D: [0x1467, 0x2F], #Bonus 3
-    0x30207E: [0x1467, 0x30], #Bonus 4
-    0x30207F: [0x1467, 0x31], #Bonus 5
-    0x302080: [0x1467, 0x32], #Bonus 6
-    0x302082: [0x1467, 0x33], #Bonus Panels
+    0x30207B: [0x1467, 0x2D],  # Bonus 1
+    0x30207C: [0x1467, 0x2E],  # Bonus 2
+    0x30207D: [0x1467, 0x2F],  # Bonus 3
+    0x30207E: [0x1467, 0x30],  # Bonus 4
+    0x30207F: [0x1467, 0x31],  # Bonus 5
+    0x302080: [0x1467, 0x32],  # Bonus 6
+    0x302082: [0x1467, 0x33],  # Bonus Panels
 
-    0x302083: [0x1467, 0x34], #Anytime Egg
-    0x302084: [0x1467, 0x35], #Anywhere Pow
-    0x302085: [0x1467, 0x36], #Cloud
-    0x302086: [0x1467, 0x37], #Pocket Melon
-    0x302088: [0x1467, 0x38], #Ice Melon
-    0x302087: [0x1467, 0x39], #Fire Melon
-    0x302089: [0x1467, 0x3A], #Magnifying Glass
-    0x30208A: [0x1467, 0x3B], #10 Stars
-    0x30208B: [0x1467, 0x3C], #20 Stars
+    0x302083: [0x1467, 0x34],  # Anytime Egg
+    0x302084: [0x1467, 0x35],  # Anywhere Pow
+    0x302085: [0x1467, 0x36],  # Cloud
+    0x302086: [0x1467, 0x37],  # Pocket Melon
+    0x302088: [0x1467, 0x38],  # Ice Melon
+    0x302087: [0x1467, 0x39],  # Fire Melon
+    0x302089: [0x1467, 0x3A],  # Magnifying Glass
+    0x30208A: [0x1467, 0x3B],  # 10 Stars
+    0x30208B: [0x1467, 0x3C],  # 20 Stars
 
-    0x30208C: [0x1467, 0x3D], #1up
-    0x30208D: [0x1467, 0x3E], #2up
-    0x30208E: [0x1467, 0x3F], #3up
-    0x30208F: [0x1467, 0x40], #10up
+    0x30208C: [0x1467, 0x3D],  # 1up
+    0x30208D: [0x1467, 0x3E],  # 2up
+    0x30208E: [0x1467, 0x3F],  # 3up
+    0x30208F: [0x1467, 0x40],  # 10up
 
-    0x302090: [0x1467, 0x41], #Fuzzy Trap
-    0x302093: [0x1467, 0x42], #Freeze Trap
-    0x302091: [0x1467, 0x43], #Reverse Trap
-    0x302092: [0x1467, 0x44], #Dark Trap
-    0x302094: [0x1467, 0x00], #Boss clear, local handling
+    0x302090: [0x1467, 0x41],  # Fuzzy Trap
+    0x302093: [0x1467, 0x42],  # Freeze Trap
+    0x302091: [0x1467, 0x43],  # Reverse Trap
+    0x302092: [0x1467, 0x44],  # Dark Trap
+    0x302094: [0x1467, 0x00],  # Boss clear, local handling
 
-    0x302095: [0x1467, 0x45] #Luigi Piece
+    0x302095: [0x1467, 0x45]  # Luigi Piece
 
 }
 
 location_table = {
-    #1-1
-    0x305020: [0x146D, 0], #Red Coins
-    0x305021: [0x146D, 1], #Flowers
-    0x305022: [0x146D, 2], #Stars
-    0x305023: [0x146D, 3], #Level Clear
-    #1-2
+    # 1-1
+    0x305020: [0x146D, 0],  # Red Coins
+    0x305021: [0x146D, 1],  # Flowers
+    0x305022: [0x146D, 2],  # Stars
+    0x305023: [0x146D, 3],  # Level Clear
+    # 1-2
     0x305024: [0x146E, 0],
     0x305025: [0x146E, 1],
     0x305026: [0x146E, 2],
     0x305027: [0x146E, 3],
-    #1-3
+    # 1-3
     0x305028: [0x146F, 0],
     0x305029: [0x146F, 1],
     0x30502A: [0x146F, 2],
     0x30502B: [0x146F, 3],
     0x3050F8: [0x146F, 4],
-    #1-4
+    # 1-4
     0x30502C: [0x1470, 0],
     0x30502D: [0x1470, 1],
     0x30502E: [0x1470, 2],
     0x30502F: [0x1470, 3],
-    #1-5
+    # 1-5
     0x305031: [0x1471, 0],
     0x305032: [0x1471, 1],
     0x305033: [0x1471, 2],
     0x305034: [0x1471, 3],
-    #1-6
+    # 1-6
     0x305035: [0x1472, 0],
     0x305036: [0x1472, 1],
     0x305037: [0x1472, 2],
     0x305038: [0x1472, 3],
-    #1-7
+    # 1-7
     0x305039: [0x1473, 0],
     0x30503A: [0x1473, 1],
     0x30503B: [0x1473, 2],
     0x30503C: [0x1473, 3],
     0x3050F9: [0x1473, 4],
-    #1-8
+    # 1-8
     0x30503D: [0x1474, 0],
     0x30503E: [0x1474, 1],
     0x30503F: [0x1474, 2],
     0x305040: [0x1474, 3],
-    #1-E
+    # 1-E
     0x3050E0: [0x1475, 0],
     0x3050E1: [0x1475, 1],
     0x3050E2: [0x1475, 2],
     0x3050E3: [0x1475, 3],
-    #1-B
+    # 1-B
     0x305106: [0x1476, 4],
-    #########################
-    #2-1
+    ######################
+    # 2-1
     0x305041: [0x1479, 0],
     0x305042: [0x1479, 1],
     0x305043: [0x1479, 2],
     0x305044: [0x1479, 3],
     0x3050FA: [0x1479, 4],
-    #2-2
+    # 2-2
     0x305045: [0x147A, 0],
     0x305046: [0x147A, 1],
     0x305047: [0x147A, 2],
     0x305048: [0x147A, 3],
-    #2-3
+    # 2-3
     0x305049: [0x147B, 0],
     0x30504A: [0x147B, 1],
     0x30504B: [0x147B, 2],
     0x30504C: [0x147B, 3],
     0x3050FB: [0x147B, 4],
-    #2-4
+    # 2-4
     0x30504D: [0x147C, 0],
     0x30504E: [0x147C, 1],
     0x30504F: [0x147C, 2],
     0x305050: [0x147C, 3],
-    #2-5
+    # 2-5
     0x305051: [0x147D, 0],
     0x305052: [0x147D, 1],
     0x305053: [0x147D, 2],
     0x305054: [0x147D, 3],
-    #2-6
+    # 2-6
     0x305055: [0x147E, 0],
     0x305056: [0x147E, 1],
     0x305057: [0x147E, 2],
     0x305058: [0x147E, 3],
     0x3050FC: [0x147E, 4],
-    #2-7
+    # 2-7
     0x305059: [0x147F, 0],
     0x30505A: [0x147F, 1],
     0x30505B: [0x147F, 2],
     0x30505C: [0x147F, 3],
     0x3050FD: [0x147F, 4],
-    #2-8
+    # 2-8
     0x30505D: [0x1480, 0],
     0x30505E: [0x1480, 1],
     0x30505F: [0x1480, 2],
     0x305060: [0x1480, 3],
-    #2-E
+    # 2-E
     0x3050E4: [0x1481, 0],
     0x3050E5: [0x1481, 1],
     0x3050E6: [0x1481, 2],
     0x3050E7: [0x1481, 3],
-    #2-B
+    # 2-B
     0x305107: [0x1482, 4],
     ######################
-    #3-1
+    # 3-1
     0x305061: [0x1485, 0],
     0x305062: [0x1485, 1],
     0x305063: [0x1485, 2],
     0x305064: [0x1485, 3],
-    #3-2
+    # 3-2
     0x305065: [0x1486, 0],
     0x305066: [0x1486, 1],
     0x305067: [0x1486, 2],
     0x305068: [0x1486, 3],
     0x3050FE: [0x1486, 4],
-    #3-3
+    # 3-3
     0x305069: [0x1487, 0],
     0x30506A: [0x1487, 1],
     0x30506B: [0x1487, 2],
     0x30506C: [0x1487, 3],
-    #3-4
+    # 3-4
     0x30506D: [0x1488, 0],
     0x30506E: [0x1488, 1],
     0x30506F: [0x1488, 2],
     0x305070: [0x1488, 3],
-    #3-5
+    # 3-5
     0x305071: [0x1489, 0],
     0x305072: [0x1489, 1],
     0x305073: [0x1489, 2],
     0x305074: [0x1489, 3],
-    #3-6
+    # 3-6
     0x305075: [0x148A, 0],
     0x305076: [0x148A, 1],
     0x305077: [0x148A, 2],
     0x305078: [0x148A, 3],
-    #3-7
+    # 3-7
     0x305079: [0x148B, 0],
     0x30507A: [0x148B, 1],
     0x30507B: [0x148B, 2],
     0x30507C: [0x148B, 3],
     0x3050FF: [0x148B, 4],
-    #3-8
+    # 3-8
     0x30507D: [0x148C, 0],
     0x30507E: [0x148C, 1],
     0x30507F: [0x148C, 2],
     0x305080: [0x148C, 3],
-    #3-E
+    # 3-E
     0x3050E8: [0x148D, 0],
     0x3050E9: [0x148D, 1],
     0x3050EA: [0x148D, 2],
     0x3050EB: [0x148D, 3],
-    #3-B
+    # 3-B
     0x305108: [0x148E, 4],
     ######################
-    #4-1
+    # 4-1
     0x305081: [0x1491, 0],
     0x305082: [0x1491, 1],
     0x305083: [0x1491, 2],
     0x305084: [0x1491, 3],
-    #4-2
+    # 4-2
     0x305085: [0x1492, 0],
     0x305086: [0x1492, 1],
     0x305087: [0x1492, 2],
     0x305088: [0x1492, 3],
     0x305100: [0x1492, 4],
-    #4-3
+    # 4-3
     0x305089: [0x1493, 0],
     0x30508A: [0x1493, 1],
     0x30508B: [0x1493, 2],
     0x30508C: [0x1493, 3],
-    #4-4
+    # 4-4
     0x30508D: [0x1494, 0],
     0x30508E: [0x1494, 1],
     0x30508F: [0x1494, 2],
     0x305090: [0x1494, 3],
-    #4-5
+    # 4-5
     0x305091: [0x1495, 0],
     0x305092: [0x1495, 1],
     0x305093: [0x1495, 2],
     0x305094: [0x1495, 3],
-    #4-6
+    # 4-6
     0x305095: [0x1496, 0],
     0x305096: [0x1496, 1],
     0x305097: [0x1496, 2],
     0x305098: [0x1496, 3],
     0x305101: [0x1496, 4],
-    #4-7
+    # 4-7
     0x305099: [0x1497, 0],
     0x30509A: [0x1497, 1],
     0x30509B: [0x1497, 2],
     0x30509C: [0x1497, 3],
     0x305102: [0x1497, 4],
-    #4-8
+    # 4-8
     0x30509D: [0x1498, 0],
     0x30509E: [0x1498, 1],
     0x30509F: [0x1498, 2],
     0x3050A0: [0x1498, 3],
-    #4-E
+    # 4-E
     0x3050EC: [0x1499, 0],
     0x3050ED: [0x1499, 1],
     0x3050EE: [0x1499, 2],
     0x3050EF: [0x1499, 3],
-    #4-B
+    # 4-B
     0x305109: [0x149A, 4],
     ######################
-    #5-1
+    # 5-1
     0x3050A1: [0x149D, 0],
     0x3050A2: [0x149D, 1],
     0x3050A3: [0x149D, 2],
     0x3050A4: [0x149D, 3],
     0x305103: [0x149D, 4],
-    #5-2
+    # 5-2
     0x3050A5: [0x149E, 0],
     0x3050A6: [0x149E, 1],
     0x3050A7: [0x149E, 2],
     0x3050A8: [0x149E, 3],
-    #5-3
+    # 5-3
     0x3050A9: [0x149F, 0],
     0x3050AA: [0x149F, 1],
     0x3050AB: [0x149F, 2],
     0x3050AC: [0x149F, 3],
-    #5-4
+    # 5-4
     0x3050AD: [0x14A0, 0],
     0x3050AE: [0x14A0, 1],
     0x3050AF: [0x14A0, 2],
     0x3050B0: [0x14A0, 3],
-    #5-5
+    # 5-5
     0x3050B1: [0x14A1, 0],
     0x3050B2: [0x14A1, 1],
     0x3050B3: [0x14A1, 2],
     0x3050B4: [0x14A1, 3],
-    #5-6
+    # 5-6
     0x3050B5: [0x14A2, 0],
     0x3050B6: [0x14A2, 1],
     0x3050B7: [0x14A2, 2],
     0x3050B8: [0x14A2, 3],
-    #5-7
+    # 5-7
     0x3050B9: [0x14A3, 0],
     0x3050BA: [0x14A3, 1],
     0x3050BB: [0x14A3, 2],
     0x3050BC: [0x14A3, 3],
-    #5-8
+    # 5-8
     0x3050BD: [0x14A4, 0],
     0x3050BE: [0x14A4, 1],
     0x3050BF: [0x14A4, 2],
     0x3050C0: [0x14A4, 3],
-    #5-E
+    # 5-E
     0x3050F0: [0x14A5, 0],
     0x3050F1: [0x14A5, 1],
     0x3050F2: [0x14A5, 2],
     0x3050F3: [0x14A5, 3],
-    #5-B
+    # 5-B
     0x30510A: [0x14A6, 4],
     #######################
-    #6-1
+    # 6-1
     0x3050C1: [0x14A9, 0],
     0x3050C2: [0x14A9, 1],
     0x3050C3: [0x14A9, 2],
     0x3050C4: [0x14A9, 3],
     0x305104: [0x14A9, 4],
-    #6-2
+    # 6-2
     0x3050C5: [0x14AA, 0],
     0x3050C6: [0x14AA, 1],
     0x3050C7: [0x14AA, 2],
     0x3050C8: [0x14AA, 3],
-    #6-3
+    # 6-3
     0x3050C9: [0x14AB, 0],
     0x3050CA: [0x14AB, 1],
     0x3050CB: [0x14AB, 2],
     0x3050CC: [0x14AB, 3],
-    #6-4
+    # 6-4
     0x3050CD: [0x14AC, 0],
     0x3050CE: [0x14AC, 1],
     0x3050CF: [0x14AC, 2],
     0x3050D0: [0x14AC, 3],
-    #6-5
+    # 6-5
     0x3050D1: [0x14AD, 0],
     0x3050D2: [0x14AD, 1],
     0x3050D3: [0x14AD, 2],
     0x3050D4: [0x14AD, 3],
-    #6-6
+    # 6-6
     0x3050D5: [0x14AE, 0],
     0x3050D6: [0x14AE, 1],
     0x3050D7: [0x14AE, 2],
     0x3050D8: [0x14AE, 3],
-    #6-7
+    # 6-7
     0x3050D9: [0x14AF, 0],
     0x3050DA: [0x14AF, 1],
     0x3050DB: [0x14AF, 2],
     0x3050DC: [0x14AF, 3],
     0x305105: [0x14AF, 4],
-    #6-8
+    # 6-8
     0x3050DD: [0x14B0, 0],
     0x3050DE: [0x14B0, 1],
     0x3050DF: [0x14B0, 2],
-    #6-E
+    # 6-E
     0x3050F4: [0x14B1, 0],
     0x3050F5: [0x14B1, 1],
     0x3050F6: [0x14B1, 2],
     0x3050F7: [0x14B1, 3],
-    #6-B
+    # 6-B
     0x30510B: [0x14B2, 4]
 }
 
@@ -401,7 +404,7 @@ class LocalRom(object):
         self.hash = hash
         self.orig_buffer = None
 
-        with open(file, 'rb') as stream:
+        with open(file, "rb") as stream:
             self.buffer = Utils.read_snes_rom(stream)
 
     def read_bit(self, address: int, bit_number: int) -> bool:
@@ -421,11 +424,11 @@ class LocalRom(object):
         self.buffer[startaddress:startaddress + len(values)] = values
 
     def write_to_file(self, file: str) -> None:
-        with open(file, 'wb') as outfile:
+        with open(file, "wb") as outfile:
             outfile.write(self.buffer)
 
     def read_from_file(self, file: str) -> None:
-        with open(file, 'rb') as stream:
+        with open(file, "rb") as stream:
             self.buffer = bytearray(stream.read())
 
 def handle_items(rom: LocalRom) -> None:
@@ -585,6 +588,7 @@ def Item_Data(rom: LocalRom) -> None:
     rom.write_bytes(0x04AFA0, bytearray([0x12, 0x12, 0x12, 0x02, 0x04, 0x06, 0x08, 0x0A, 0x0C, 0x0E, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01]))
     rom.write_bytes(0x04AFB0, bytearray([0x01, 0x01, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x00, 0x02, 0x04, 0x06, 0x08, 0x0A]))
 
+
 def Server_Data(rom: LocalRom) -> None:
     rom.write_bytes(0x037EAA, bytearray([0x00, 0x00, 0x01, 0x02, 0x03, 0x04]))
     rom.write_bytes(0x037EB0, bytearray([0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14]))
@@ -593,6 +597,7 @@ def Server_Data(rom: LocalRom) -> None:
     rom.write_bytes(0x037EE0, bytearray([0x31, 0x32, 0x33, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0xFF, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39]))
     rom.write_bytes(0x037EF0, bytearray([0x3A, 0x3B, 0x3C, 0x02, 0x6A, 0xD2, 0x04, 0x03, 0x06, 0x07, 0x08, 0x09, 0x05, 0x01, 0x02, 0x3D]))
     rom.write_bytes(0x037F00, bytearray([0x3E, 0x3F, 0x40, 0x01, 0x02, 0x03, 0x0A, 0x80, 0x7E, 0x00, 0x7F, 0x80, 0x7F]))
+
 
 def Menu_Data(rom: LocalRom) -> None:
     rom.write_bytes(0x115348, bytearray([0x80, 0x80, 0x4E, 0x80, 0x80, 0x4E, 0x80, 0x80]))
@@ -612,7 +617,7 @@ def Menu_Data(rom: LocalRom) -> None:
     rom.write_bytes(0x115420, bytearray([0x07, 0x0F, 0x13, 0x1B, 0x1F, 0x27, 0x2B, 0x33, 0x37, 0x3F, 0x00, 0x00, 0x02, 0x02, 0x04, 0x04]))
     rom.write_bytes(0x115430, bytearray([0x06, 0x06, 0x08, 0x08, 0x0A, 0x41, 0x00, 0x3C, 0x00, 0x33, 0x00, 0x25, 0x00, 0x1B, 0x00, 0x14]))
     rom.write_bytes(0x115440, bytearray([0x00, 0x0B, 0x00, 0x02, 0x00, 0xF6, 0x3F, 0xEC, 0x3F, 0xDC, 0x3F]))
-    
+
     rom.write_bytes(0x082660, bytearray([0x07]))
     rom.write_bytes(0x082667, bytearray([0x05]))
     rom.write_bytes(0x082677, bytearray([0x0A, 0x03, 0x05]))
@@ -623,213 +628,214 @@ def Menu_Data(rom: LocalRom) -> None:
 
 
 def CodeHandler(rom: LocalRom) -> None:
-    rom.write_bytes(0x073637, bytearray([0x5C, 0xB0, 0xF7, 0x00])) #Check ! Switch
-    rom.write_bytes(0x07360B, bytearray([0x20, 0x82, 0xFF])) #Flash ! Switch
+    rom.write_bytes(0x073637, bytearray([0x5C, 0xB0, 0xF7, 0x00]))  # Check ! Switch
+    rom.write_bytes(0x07360B, bytearray([0x20, 0x82, 0xFF]))  # Flash ! Switch
 
-    rom.write_bytes(0x01C2F3, bytearray([0x22, 0x11, 0xF8, 0x00])) #Check visibility of winged clouds
-    rom.write_bytes(0x01C32E, bytearray([0x5C, 0xEE, 0xFE, 0x03])) #Check items in winged clouds
+    rom.write_bytes(0x01C2F3, bytearray([0x22, 0x11, 0xF8, 0x00]))  # Check visibility of winged clouds
+    rom.write_bytes(0x01C32E, bytearray([0x5C, 0xEE, 0xFE, 0x03]))  # Check items in winged clouds
 
-    rom.write_bytes(0x01C9AD, bytearray([0x5C, 0x19, 0xF8, 0x00])) #Check transformations
-    rom.write_bytes(0x01C995, bytearray([0x5C, 0x59, 0xF8, 0x00])) #Flash transformations
-    rom.write_bytes(0x01C943, bytearray([0x5C, 0x77, 0xF8, 0x00])) #Fixes a bug where transformation bubbles flashing would displace the sprite
+    rom.write_bytes(0x01C9AD, bytearray([0x5C, 0x19, 0xF8, 0x00]))  # Check transformations
+    rom.write_bytes(0x01C995, bytearray([0x5C, 0x59, 0xF8, 0x00]))  # Flash transformations
+    rom.write_bytes(0x01C943, bytearray([0x5C, 0x77, 0xF8, 0x00]))  # Fixes a bug where transformation bubbles flashing would displace the sprite
 
-    rom.write_bytes(0x028329, bytearray([0x5C, 0x9A, 0xF8, 0x00])) #Flash Spring Ball
-    rom.write_bytes(0x02837E, bytearray([0x5C, 0xC4, 0xF8, 0x00])) #Check Spring Ball
+    rom.write_bytes(0x028329, bytearray([0x5C, 0x9A, 0xF8, 0x00]))  # Flash Spring Ball
+    rom.write_bytes(0x02837E, bytearray([0x5C, 0xC4, 0xF8, 0x00]))  # Check Spring Ball
 
-    rom.write_bytes(0x02F0A2, bytearray([0x5C, 0xEA, 0xF8, 0x00])) #Flash Arrow Wheel
-    rom.write_bytes(0x02F0AD, bytearray([0x4C, 0xC4, 0xFF])) #Check Arrow Wheel
+    rom.write_bytes(0x02F0A2, bytearray([0x5C, 0xEA, 0xF8, 0x00]))  # Flash Arrow Wheel
+    rom.write_bytes(0x02F0AD, bytearray([0x4C, 0xC4, 0xFF]))  # Check Arrow Wheel
 
-    rom.write_bytes(0x02001D, bytearray([0x5C, 0x15, 0xF9, 0x00])) #Check Melon
-    rom.write_bytes(0x020028, bytearray([0x5C, 0x41, 0xF9, 0x00])) #Secondary check for melon used to overwrite visibility on the ground
-    rom.write_bytes(0x020031, bytearray([0x5C, 0xAE, 0xF9, 0x00])) #Check for melons that are spawned by objects which skips the initial check
-    rom.write_bytes(0x012DF7, bytearray([0x20, 0xD7, 0xFF])) #Check for monkeys holding melons
-    rom.write_bytes(0x012E07, bytearray([0x20, 0xD7, 0xFF])) #Check for monkeys holding melons
-    rom.write_bytes(0x03F17D, bytearray([0x5C, 0xE1, 0xF9, 0x00])) #Fixes a bug where balloons with ice melons will write to yoshi's mouth before deactivating the melon.
+    rom.write_bytes(0x02001D, bytearray([0x5C, 0x15, 0xF9, 0x00]))  # Check Melon
+    rom.write_bytes(0x020028, bytearray([0x5C, 0x41, 0xF9, 0x00]))  # Secondary check for melon used to overwrite visibility on the ground
+    rom.write_bytes(0x020031, bytearray([0x5C, 0xAE, 0xF9, 0x00]))  # Check for melons that are spawned by objects which skips the initial check
+    rom.write_bytes(0x012DF7, bytearray([0x20, 0xD7, 0xFF]))  # Check for monkeys holding melons
+    rom.write_bytes(0x012E07, bytearray([0x20, 0xD7, 0xFF]))  # Check for monkeys holding melons
+    rom.write_bytes(0x03F17D, bytearray([0x5C, 0xE1, 0xF9, 0x00]))  # Fixes a bug where balloons with ice melons will write to yoshi's mouth before deactivating the melon.
 
-    rom.write_bytes(0x011901, bytearray([0x5C, 0x7A, 0xF9, 0x00])) #Flash Super Star
-    rom.write_bytes(0x01192A, bytearray([0x5C, 0x95, 0xF9, 0x00])) #Check Super Star
+    rom.write_bytes(0x011901, bytearray([0x5C, 0x7A, 0xF9, 0x00]))  # Flash Super Star
+    rom.write_bytes(0x01192A, bytearray([0x5C, 0x95, 0xF9, 0x00]))  # Check Super Star
 
-    rom.write_bytes(0x01BEB9, bytearray([0x5C, 0xF6, 0xF9, 0x00])) #Check egg-type items
-    rom.write_bytes(0x01B75E, bytearray([0x5C, 0x5B, 0xFA, 0x00])) #Flash flashing eggs and force them to purple
+    rom.write_bytes(0x01BEB9, bytearray([0x5C, 0xF6, 0xF9, 0x00]))  # Check egg-type items
+    rom.write_bytes(0x01B75E, bytearray([0x5C, 0x5B, 0xFA, 0x00]))  # Flash flashing eggs and force them to purple
 
-    rom.write_bytes(0x03BA31, bytearray([0x22, 0x81, 0xFA, 0x00])) #Flash Arrow Cloud
-    rom.write_bytes(0x03BA35, bytearray([0x22, 0x9A, 0xFA, 0x00])) #Check Arrow Cloud
-    rom.write_bytes(0x03BA3D, bytearray([0x22, 0x81, 0xFA, 0x00])) #Flash Arrow Cloud, rotating
-    rom.write_bytes(0x03BA5A, bytearray([0x22, 0x9A, 0xFA, 0x00])) #Check Arrow Cloud, rotating
+    rom.write_bytes(0x03BA31, bytearray([0x22, 0x81, 0xFA, 0x00]))  # Flash Arrow Cloud
+    rom.write_bytes(0x03BA35, bytearray([0x22, 0x9A, 0xFA, 0x00]))  # Check Arrow Cloud
+    rom.write_bytes(0x03BA3D, bytearray([0x22, 0x81, 0xFA, 0x00]))  # Flash Arrow Cloud, rotating
+    rom.write_bytes(0x03BA5A, bytearray([0x22, 0x9A, 0xFA, 0x00]))  # Check Arrow Cloud, rotating
 
-    rom.write_bytes(0x03818F, bytearray([0x5C, 0xAB, 0xFA, 0x00])) #Check Egg Plant
-    rom.write_bytes(0x0380F3, bytearray([0x5C, 0xC3, 0xFA, 0x00])) #Flash Egg Plant
+    rom.write_bytes(0x03818F, bytearray([0x5C, 0xAB, 0xFA, 0x00]))  # Check Egg Plant
+    rom.write_bytes(0x0380F3, bytearray([0x5C, 0xC3, 0xFA, 0x00]))  # Flash Egg Plant
 
-    rom.write_bytes(0x073EF6, bytearray([0x5C, 0xE0, 0xFA, 0x00])) #Flash Chomp Rock
-    rom.write_bytes(0x073EFA, bytearray([0x4C, 0x9D, 0xFF])) #Check Chomp Rock
+    rom.write_bytes(0x073EF6, bytearray([0x5C, 0xE0, 0xFA, 0x00]))  # Flash Chomp Rock
+    rom.write_bytes(0x073EFA, bytearray([0x4C, 0x9D, 0xFF]))  # Check Chomp Rock
 
-    rom.write_bytes(0x039639, bytearray([0x5C, 0xFF, 0xFA, 0x00])) #Flash Poochy
-    rom.write_bytes(0x03964C, bytearray([0x4C, 0x48, 0xFF])) #Check Poochy
+    rom.write_bytes(0x039639, bytearray([0x5C, 0xFF, 0xFA, 0x00]))  # Flash Poochy
+    rom.write_bytes(0x03964C, bytearray([0x4C, 0x48, 0xFF]))  # Check Poochy
 
-    rom.write_bytes(0x0370C2, bytearray([0x22, 0x1A, 0xFB, 0x00, 0xEA])) #Flash Platform Ghosts
-    rom.write_bytes(0x03723F, bytearray([0x5C, 0x32, 0xFB, 0x00])) #Fixes a bug where the eyes would assign to a random sprite while flashing
-    rom.write_bytes(0x03739B, bytearray([0x5C, 0x52, 0xFB, 0x00])) #Check Vertical Platform Ghost
-    rom.write_bytes(0x036530, bytearray([0x5C, 0x6B, 0xFB, 0x00])) #Flash horizontal ghost
-    rom.write_bytes(0x03685C, bytearray([0x5C, 0x89, 0xFB, 0x00])) #Fix flashing horizontal ghost
-    rom.write_bytes(0x036894, bytearray([0x5C, 0xA9, 0xFB, 0x00])) #Check horizontal ghost
+    rom.write_bytes(0x0370C2, bytearray([0x22, 0x1A, 0xFB, 0x00, 0xEA]))  # Flash Platform Ghosts
+    rom.write_bytes(0x03723F, bytearray([0x5C, 0x32, 0xFB, 0x00]))  # Fixes a bug where the eyes would assign to a random sprite while flashing
+    rom.write_bytes(0x03739B, bytearray([0x5C, 0x52, 0xFB, 0x00]))  # Check Vertical Platform Ghost
+    rom.write_bytes(0x036530, bytearray([0x5C, 0x6B, 0xFB, 0x00]))  # Flash horizontal ghost
+    rom.write_bytes(0x03685C, bytearray([0x5C, 0x89, 0xFB, 0x00]))  # Fix flashing horizontal ghost
+    rom.write_bytes(0x036894, bytearray([0x5C, 0xA9, 0xFB, 0x00]))  # Check horizontal ghost
 
-    rom.write_bytes(0x012497, bytearray([0x5C, 0xBF, 0xFB, 0x00])) #Check Skis
-    rom.write_bytes(0x01234D, bytearray([0x5C, 0xF1, 0xFB, 0x00])) #Allow ski doors to be re-entered
+    rom.write_bytes(0x012497, bytearray([0x5C, 0xBF, 0xFB, 0x00]))  # Check Skis
+    rom.write_bytes(0x01234D, bytearray([0x5C, 0xF1, 0xFB, 0x00]))  # Allow ski doors to be re-entered
 
-    rom.write_bytes(0x01204A, bytearray([0x5C, 0x10, 0xFC, 0x00])) #Flash Key
-    rom.write_bytes(0x012388, bytearray([0x5C, 0x30, 0xFC, 0x00])) #Check Key
+    rom.write_bytes(0x01204A, bytearray([0x5C, 0x10, 0xFC, 0x00]))  # Flash Key
+    rom.write_bytes(0x012388, bytearray([0x5C, 0x30, 0xFC, 0x00]))  # Check Key
 
-    rom.write_bytes(0x011398, bytearray([0x5C, 0x46, 0xFC, 0x00])) #Flash MidRing
-    rom.write_bytes(0x0113D6, bytearray([0x5C, 0x65, 0xFC, 0x00])) #Check MidRing
-    
-    rom.write_bytes(0x02C4C6, bytearray([0x5C, 0x77, 0xFC, 0x00])) #Check Bucket w/ Item
-    rom.write_bytes(0x02C8BD, bytearray([0x5C, 0x8A, 0xFC, 0x00])) #Check Bucket, ridable
-    rom.write_bytes(0x02C4D5, bytearray([0x5C, 0x9D, 0xFC, 0x00])) #Flash Bucket
+    rom.write_bytes(0x011398, bytearray([0x5C, 0x46, 0xFC, 0x00]))  # Flash MidRing
+    rom.write_bytes(0x0113D6, bytearray([0x5C, 0x65, 0xFC, 0x00]))  # Check MidRing
 
-    rom.write_bytes(0x064920, bytearray([0x5C, 0xBC, 0xFC, 0x00])) #Flash Tulip
-    rom.write_bytes(0x064D49, bytearray([0x5C, 0xD9, 0xFC, 0x00])) #Check Tulip
+    rom.write_bytes(0x02C4C6, bytearray([0x5C, 0x77, 0xFC, 0x00]))  # Check Bucket w/ Item
+    rom.write_bytes(0x02C8BD, bytearray([0x5C, 0x8A, 0xFC, 0x00]))  # Check Bucket, ridable
+    rom.write_bytes(0x02C4D5, bytearray([0x5C, 0x9D, 0xFC, 0x00]))  # Flash Bucket
 
-    rom.write_bytes(0x01BEC7, bytearray([0x5C, 0xEF, 0xFC, 0x00])) #Check Egg Capacity
-    rom.write_bytes(0x01BF12, bytearray([0x4C, 0x27, 0xFF])) #Set current egg max
-    rom.write_bytes(0x01BF1A, bytearray([0x5C, 0x3C, 0xFD, 0x00])) #Cap eggs
+    rom.write_bytes(0x064920, bytearray([0x5C, 0xBC, 0xFC, 0x00]))  # Flash Tulip
+    rom.write_bytes(0x064D49, bytearray([0x5C, 0xD9, 0xFC, 0x00]))  # Check Tulip
 
-    rom.write_bytes(0x0BA5AE, bytearray([0x5C, 0x41, 0xFD, 0x00])) #Unlock Levels
+    rom.write_bytes(0x01BEC7, bytearray([0x5C, 0xEF, 0xFC, 0x00]))  # Check Egg Capacity
+    rom.write_bytes(0x01BF12, bytearray([0x4C, 0x27, 0xFF]))  # Set current egg max
+    rom.write_bytes(0x01BF1A, bytearray([0x5C, 0x3C, 0xFD, 0x00]))  # Cap eggs
 
-    rom.write_bytes(0x0B9953, bytearray([0x5C, 0xD9, 0xFD, 0x00])) #File initialization
+    rom.write_bytes(0x0BA5AE, bytearray([0x5C, 0x41, 0xFD, 0x00]))  # Unlock Levels
 
-    rom.write_bytes(0x0BD8AB, bytearray([0x5C, 0x29, 0xFE, 0x00])) #Prevent the world 1 tab from being drawn without it being unlocked
+    rom.write_bytes(0x0B9953, bytearray([0x5C, 0xD9, 0xFD, 0x00]))  # File initialization
 
-    rom.write_bytes(0x00C155, bytearray([0x5C, 0x45, 0xFE, 0x00])) #Save between levels
+    rom.write_bytes(0x0BD8AB, bytearray([0x5C, 0x29, 0xFE, 0x00]))  # Prevent the world 1 tab from being drawn without it being unlocked
 
-    rom.write_bytes(0x0BDB20, bytearray([0x5C, 0x58, 0xFE, 0x00])) #Unlock extra and bonus stages
+    rom.write_bytes(0x00C155, bytearray([0x5C, 0x45, 0xFE, 0x00]))  # Save between levels
 
-    rom.write_bytes(0x0BA8FF, bytearray([0x5C, 0xF6, 0xFE, 0x00])) #Skip the score animation if coming from start-select, but still save
+    rom.write_bytes(0x0BDB20, bytearray([0x5C, 0x58, 0xFE, 0x00]))  # Unlock extra and bonus stages
 
-    rom.write_bytes(0x0BA8A9, bytearray([0x80, 0x46])) #Prevent unlocking new levels
+    rom.write_bytes(0x0BA8FF, bytearray([0x5C, 0xF6, 0xFE, 0x00]))  # Skip the score animation if coming from start-select, but still save
 
-    rom.write_bytes(0x066A42, bytearray([0x5C, 0x0D, 0xFF, 0x00])) #Coin visibility
-    rom.write_bytes(0x01C08C, bytearray([0x5C, 0x2D, 0xFF, 0x00])) #Cloud visibility
+    rom.write_bytes(0x0BA8A9, bytearray([0x80, 0x46]))  # Prevent unlocking new levels
 
-    rom.write_bytes(0x00C0D9, bytearray([0x5C, 0xB8, 0xF3, 0x0B])) #Receive item from server
+    rom.write_bytes(0x066A42, bytearray([0x5C, 0x0D, 0xFF, 0x00]))  # Coin visibility
+    rom.write_bytes(0x01C08C, bytearray([0x5C, 0x2D, 0xFF, 0x00]))  # Cloud visibility
 
-    rom.write_bytes(0x00C153, bytearray([0xEA, 0xEA])) #Always enable Start/Select
+    rom.write_bytes(0x00C0D9, bytearray([0x5C, 0xB8, 0xF3, 0x0B]))  # Receive item from server
 
-    rom.write_bytes(0x00C18B, bytearray([0x5C, 0x1B, 0xF5, 0x0B])) #Enable traps
+    rom.write_bytes(0x00C153, bytearray([0xEA, 0xEA]))  # Always enable Start/Select
 
-    rom.write_bytes(0x01B365, bytearray([0x5C, 0x86, 0xF5, 0x0B])) #Red Coin checks
-    rom.write_bytes(0x0734C6, bytearray([0x5C, 0xCE, 0xF5, 0x0B])) #Flower checks
-    rom.write_bytes(0x00C0DE, bytearray([0x5C, 0xF5, 0xF5, 0x0B])) #Star checks
-    rom.write_bytes(0x00B580, bytearray([0x5C, 0xB1, 0xF5, 0x0B])) #Level Clear checks
+    rom.write_bytes(0x00C18B, bytearray([0x5C, 0x1B, 0xF5, 0x0B]))  # Enable traps
 
-    rom.write_bytes(0x0B9937, bytearray([0x5C, 0x23, 0xF6, 0x0B])) #Load AP data
-    rom.write_bytes(0x0BE14A, bytearray([0x5C, 0x58, 0xF6, 0x0B])) #Save AP data
+    rom.write_bytes(0x01B365, bytearray([0x5C, 0x86, 0xF5, 0x0B]))  # Red Coin checks
+    rom.write_bytes(0x0734C6, bytearray([0x5C, 0xCE, 0xF5, 0x0B]))  # Flower checks
+    rom.write_bytes(0x00C0DE, bytearray([0x5C, 0xF5, 0xF5, 0x0B]))  # Star checks
+    rom.write_bytes(0x00B580, bytearray([0x5C, 0xB1, 0xF5, 0x0B]))  # Level Clear checks
 
-    rom.write_bytes(0x00D09F, bytearray([0x5C, 0x8C, 0xF6, 0x0B])) #Clear Menu
-    rom.write_bytes(0x00BCB5, bytearray([0x5C, 0xAD, 0xF6, 0x0B])) #Clear Score for menu
-    rom.write_bytes(0x00D072, bytearray([0x5C, 0xC3, 0xF6, 0x0B])) #Loads the data for the AP menu
-    rom.write_bytes(0x00D07A, bytearray([0x5C, 0x5A, 0xF7, 0x0B])) #Draw the AP menu over the pause menu
-    rom.write_bytes(0x00D17A, bytearray([0x5C, 0xDA, 0xF7, 0x0B])) #Skip the flower counter in the AP menu
-    rom.write_bytes(0x00D0DE, bytearray([0x5C, 0xF1, 0xF7, 0x0B])) #Skip the coin counter in the AP menu
-    rom.write_bytes(0x00CFB4, bytearray([0x5C, 0x06, 0xF8, 0x0B])) #Get the number of bosses required to unlock 6-8
-    rom.write_bytes(0x00CFD0, bytearray([0x5C, 0x2B, 0xF8, 0x0B])) #Get bosses for 6-8 clear
-    rom.write_bytes(0x00D203, bytearray([0x5C, 0xF0, 0xF8, 0x0B])) #Wipe total score line
-    rom.write_bytes(0x00D277, bytearray([0x5C, 0x04, 0xF9, 0x0B])) #Wipe high score line
-    rom.write_bytes(0x00C104, bytearray([0x5C, 0x18, 0xF9, 0x0B])) #Replace the pause menu with AP menu when SELECT is pressed
-    rom.write_bytes(0x00C137, bytearray([0x5C, 0x31, 0xF9, 0x0B])) #Prevent accidentally quitting out of a stage while opening the AP menu
-    rom.write_bytes(0x00CE48, bytearray([0x5C, 0x42, 0xF9, 0x0B])) #When closing the AP menu, reset the AP menu flag so the normal menu can be opened.
+    rom.write_bytes(0x0B9937, bytearray([0x5C, 0x23, 0xF6, 0x0B]))  # Load AP data
+    rom.write_bytes(0x0BE14A, bytearray([0x5C, 0x58, 0xF6, 0x0B]))  # Save AP data
 
-    rom.write_bytes(0x0BA5B6, bytearray([0x5C, 0x4E, 0xF9, 0x0B])) #Unlock 6-8 if the current number of defeated bosses is higher than the number of bosses required. If 6-8 is marked 'cleared', skip boss checks
-    rom.write_bytes(0x01209E, bytearray([0x5C, 0x92, 0xF9, 0x0B])) #Write a flag to check bosses if setting up the final boss door
-    rom.write_bytes(0x0123AA, bytearray([0x5C, 0xA3, 0xF9, 0x0B])) #If the boss check flag is set, read the number of bosses before opening door
+    rom.write_bytes(0x00D09F, bytearray([0x5C, 0x8C, 0xF6, 0x0B]))  # Clear Menu
+    rom.write_bytes(0x00BCB5, bytearray([0x5C, 0xAD, 0xF6, 0x0B]))  # Clear Score for menu
+    rom.write_bytes(0x00D072, bytearray([0x5C, 0xC3, 0xF6, 0x0B]))  # Loads the data for the AP menu
+    rom.write_bytes(0x00D07A, bytearray([0x5C, 0x5A, 0xF7, 0x0B]))  # Draw the AP menu over the pause menu
+    rom.write_bytes(0x00D17A, bytearray([0x5C, 0xDA, 0xF7, 0x0B]))  # Skip the flower counter in the AP menu
+    rom.write_bytes(0x00D0DE, bytearray([0x5C, 0xF1, 0xF7, 0x0B]))  # Skip the coin counter in the AP menu
+    rom.write_bytes(0x00CFB4, bytearray([0x5C, 0x06, 0xF8, 0x0B]))  # Get the number of bosses required to unlock 6-8
+    rom.write_bytes(0x00CFD0, bytearray([0x5C, 0x2B, 0xF8, 0x0B]))  # Get bosses for 6-8 clear
+    rom.write_bytes(0x00D203, bytearray([0x5C, 0xF0, 0xF8, 0x0B]))  # Wipe total score line
+    rom.write_bytes(0x00D277, bytearray([0x5C, 0x04, 0xF9, 0x0B]))  # Wipe high score line
+    rom.write_bytes(0x00C104, bytearray([0x5C, 0x18, 0xF9, 0x0B]))  # Replace the pause menu with AP menu when SELECT is pressed
+    rom.write_bytes(0x00C137, bytearray([0x5C, 0x31, 0xF9, 0x0B]))  # Prevent accidentally quitting out of a stage while opening the AP menu
+    rom.write_bytes(0x00CE48, bytearray([0x5C, 0x42, 0xF9, 0x0B]))  # When closing the AP menu, reset the AP menu flag so the normal menu can be opened.
 
-    rom.write_bytes(0x015F7A, bytearray([0x5C, 0xCA, 0xF9, 0x0B])) #Write Boss Clears
+    rom.write_bytes(0x0BA5B6, bytearray([0x5C, 0x4E, 0xF9, 0x0B]))  # Unlock 6-8 if the current number of defeated bosses is higher than the number of bosses required. If 6-8 is marked 'cleared', skip boss checks
+    rom.write_bytes(0x01209E, bytearray([0x5C, 0x92, 0xF9, 0x0B]))  # Write a flag to check bosses if setting up the final boss door
+    rom.write_bytes(0x0123AA, bytearray([0x5C, 0xA3, 0xF9, 0x0B]))  # If the boss check flag is set, read the number of bosses before opening door
 
-    rom.write_bytes(0x0BE16E, bytearray([0x80, 0x12])) #Disable overworld bandit code
+    rom.write_bytes(0x015F7A, bytearray([0x5C, 0xCA, 0xF9, 0x0B]))  # Write Boss Clears
 
-    rom.write_bytes(0x083015, bytearray([0x5C, 0x26, 0xFA, 0x0B])) #Flip Cards
-    rom.write_bytes(0x0839B6, bytearray([0x5C, 0x18, 0xFA, 0x0B])) #Scratch Cards
-    rom.write_bytes(0x085094, bytearray([0x5C, 0x31, 0xFA, 0x0B])) #Draw Lots
-    rom.write_bytes(0x0852C5, bytearray([0x5C, 0x3D, 0xFA, 0x0B])) #Match Cards
-    rom.write_bytes(0x0845EA, bytearray([0x5C, 0x48, 0xFA, 0x0B])) #Roulette
-    rom.write_bytes(0x083E0A, bytearray([0x5C, 0x53, 0xFA, 0x0B])) #Slots
+    rom.write_bytes(0x0BE16E, bytearray([0x80, 0x12]))  # Disable overworld bandit code
 
-    rom.write_bytes(0x01D845, bytearray([0x5C, 0x76, 0xF9, 0x0B])) #Check setting for disabled autoscrolls
+    rom.write_bytes(0x083015, bytearray([0x5C, 0x26, 0xFA, 0x0B]))  # Flip Cards
+    rom.write_bytes(0x0839B6, bytearray([0x5C, 0x18, 0xFA, 0x0B]))  # Scratch Cards
+    rom.write_bytes(0x085094, bytearray([0x5C, 0x31, 0xFA, 0x0B]))  # Draw Lots
+    rom.write_bytes(0x0852C5, bytearray([0x5C, 0x3D, 0xFA, 0x0B]))  # Match Cards
+    rom.write_bytes(0x0845EA, bytearray([0x5C, 0x48, 0xFA, 0x0B]))  # Roulette
+    rom.write_bytes(0x083E0A, bytearray([0x5C, 0x53, 0xFA, 0x0B]))  # Slots
 
-    rom.write_bytes(0x0BDAC2, bytearray([0x80, 0x0E])) #Prevent extra and bonus stages from auto-unlocking at 100 points
-    rom.write_bytes(0x0BA720, bytearray([0xA9, 0x00, 0x00])) #Always read level scores as 0. This stops extras and bonus from trying to unlock
+    rom.write_bytes(0x01D845, bytearray([0x5C, 0x76, 0xF9, 0x0B]))  # Check setting for disabled autoscrolls
 
-    rom.write_bytes(0x0BA720, bytearray([0xA9, 0x00, 0x00])) #Always read level scores as 0. This stops extras and bonus from trying to unlock
+    rom.write_bytes(0x0BDAC2, bytearray([0x80, 0x0E]))  # Prevent extra and bonus stages from auto-unlocking at 100 points
+    rom.write_bytes(0x0BA720, bytearray([0xA9, 0x00, 0x00]))  # Always read level scores as 0. This stops extras and bonus from trying to unlock
 
-    rom.write_bytes(0x03FE85, bytearray([0x5C, 0x09, 0xFB, 0x0B])) #Decrement the key counter when unlocking the 6-4 cork
+    rom.write_bytes(0x0BA720, bytearray([0xA9, 0x00, 0x00]))  # Always read level scores as 0. This stops extras and bonus from trying to unlock
 
-    rom.write_bytes(0x06F1B4, bytearray([0x5C, 0x22, 0xFB, 0x0B])) #Mark the goal and bowser clear after defeating bowser
+    rom.write_bytes(0x03FE85, bytearray([0x5C, 0x09, 0xFB, 0x0B]))  # Decrement the key counter when unlocking the 6-4 cork
 
-    rom.write_bytes(0x005FE2, bytearray([0x5C, 0x9C, 0xFB, 0x0B])) #Flag red coins as checked if the last one came from a pole
+    rom.write_bytes(0x06F1B4, bytearray([0x5C, 0x22, 0xFB, 0x0B]))  # Mark the goal and bowser clear after defeating bowser
 
-    rom.write_bytes(0x01C2E1, bytearray([0x80])) #Makes hidden clouds not flash
-    rom.write_bytes(0x0120C0, bytearray([0x80])) #Prevents bandit game doors from sealing
+    rom.write_bytes(0x005FE2, bytearray([0x5C, 0x9C, 0xFB, 0x0B]))  # Flag red coins as checked if the last one came from a pole
 
-    rom.write_bytes(0x0382A7, bytearray([0x5C, 0xC2, 0xFB, 0x0B])) #Make cactus eggplants check the eggplant item correctly
+    rom.write_bytes(0x01C2E1, bytearray([0x80]))  # Makes hidden clouds not flash
+    rom.write_bytes(0x0120C0, bytearray([0x80]))  # Prevents bandit game doors from sealing
 
-    rom.write_bytes(0x025E71, bytearray([0x5C, 0xFA, 0xFB, 0x0B])) #Write the stored reverse value
+    rom.write_bytes(0x0382A7, bytearray([0x5C, 0xC2, 0xFB, 0x0B]))  # Make cactus eggplants check the eggplant item correctly
 
-    rom.write_bytes(0x00B587, bytearray([0x5C, 0x24, 0xFC, 0x0B])) #Store the reverse value and zero it
+    rom.write_bytes(0x025E71, bytearray([0x5C, 0xFA, 0xFB, 0x0B]))  # Write the stored reverse value
 
-    rom.write_bytes(0x0B9932, bytearray([0x5C, 0x96, 0xFA, 0x0B])) #Get 16 bit life count
+    rom.write_bytes(0x00B587, bytearray([0x5C, 0x24, 0xFC, 0x0B]))  # Store the reverse value and zero it
+
+    rom.write_bytes(0x0B9932, bytearray([0x5C, 0x96, 0xFA, 0x0B]))  # Get 16 bit life count
 
     rom.write_bytes(0x00C288, bytearray([0x00]))
-    rom.write_bytes(0x00C28B, bytearray([0x80])) #Disable baby mario tutorial text
+    rom.write_bytes(0x00C28B, bytearray([0x80]))  # Disable baby mario tutorial text
 
-    rom.write_bytes(0x01141F, bytearray([0x80])) #Disable Middle Ring tutorial
+    rom.write_bytes(0x01141F, bytearray([0x80]))  # Disable Middle Ring tutorial
 
-    rom.write_bytes(0x073534, bytearray([0x80])) #Disable Flower tutorial
+    rom.write_bytes(0x073534, bytearray([0x80]))  # Disable Flower tutorial
 
-    rom.write_bytes(0x065B24, bytearray([0x5C, 0x45, 0xFC, 0x0B])) #Fix boss cutscenes
+    rom.write_bytes(0x065B24, bytearray([0x5C, 0x45, 0xFC, 0x0B]))  # Fix boss cutscenes
 
-    rom.write_bytes(0x011507, bytearray([0x5C, 0x70, 0xFC, 0x0B])) #Fix Hookbill middle ring during boss shuffle
+    rom.write_bytes(0x011507, bytearray([0x5C, 0x70, 0xFC, 0x0B]))  # Fix Hookbill middle ring during boss shuffle
 
-    rom.write_bytes(0x019E98, bytearray([0x5C, 0xB4, 0xFC, 0x0B])) #Flag red coins as checked if the last one was eaten
+    rom.write_bytes(0x019E98, bytearray([0x5C, 0xB4, 0xFC, 0x0B]))  # Flag red coins as checked if the last one was eaten
 
-    rom.write_bytes(0x011AB6, bytearray([0x5C, 0xD7, 0xFC, 0x0B])) #Check egg refills for how many eggs to spawn
+    rom.write_bytes(0x011AB6, bytearray([0x5C, 0xD7, 0xFC, 0x0B]))  # Check egg refills for how many eggs to spawn
 
-    rom.write_bytes(0x00DCA6, bytearray([0x5C, 0x00, 0xFD, 0x0B])) #Check egg refill pause use
+    rom.write_bytes(0x00DCA6, bytearray([0x5C, 0x00, 0xFD, 0x0B]))  # Check egg refill pause use
 
-    rom.write_bytes(0x0BE06B, bytearray([0x5C, 0x56, 0xFD, 0x0B])) #Get level from shuffled order
+    rom.write_bytes(0x0BE06B, bytearray([0x5C, 0x56, 0xFD, 0x0B]))  # Get level from shuffled order
 
+    rom.write_bytes(0x00C14B, bytearray([0xAE, 0x7C, 0x02, 0x8E, 0x1A, 0x02]))  # Return to the original list when exiting a level
 
-    rom.write_bytes(0x00C14B, bytearray([0xAE, 0x7C, 0x02, 0x8E, 0x1A, 0x02])) #Return to the original list when exiting a level
+    rom.write_bytes(0x00BEA8, bytearray([0x5C, 0x3F, 0xFE, 0x0B]))  # Save the original level when beating a shuffled one.
 
-    rom.write_bytes(0x00BEA8, bytearray([0x5C, 0x3F, 0xFE, 0x0B])) #Save the original level when beating a shuffled one.
+    rom.write_bytes(0x00E702, bytearray([0xAD, 0x7C, 0x02, 0x8D, 0x1A, 0x02, 0x80, 0x05]))  # Save the original level when leaving through death
 
-    rom.write_bytes(0x00E702, bytearray([0xAD, 0x7C, 0x02, 0x8D, 0x1A, 0x02, 0x80, 0x05])) #Save the original level when leaving through death
+    rom.write_bytes(0x0BE72A, bytearray([0x7C]))  # Load yoshi colors by slot number not level number
 
-    rom.write_bytes(0x0BE72A, bytearray([0x7C])) #Load yoshi colors by slot number not level number
+    rom.write_bytes(0x003346, bytearray([0x22, 0x54, 0xFE, 0x0B, 0xEA, 0xEA]))  # Fix World 6 levels using weird tilesets
 
-    rom.write_bytes(0x003346, bytearray([0x22, 0x54, 0xFE, 0x0B, 0xEA, 0xEA])) #Fix World 6 levels using weird tilesets
-
-    rom.write_bytes(0x003A37, bytearray([0x22, 0x54, 0xFE, 0x0B, 0xEA, 0xEA])) #Fix World 6 levels using weird tilesets
+    rom.write_bytes(0x003A37, bytearray([0x22, 0x54, 0xFE, 0x0B, 0xEA, 0xEA]))  # Fix World 6 levels using weird tilesets
 
     rom.write_bytes(0x0B87D5, bytearray([0x5C, 0x67, 0xFE, 0x0B]))
 
-    rom.write_bytes(0x07081F, bytearray([0x80])) #Fix for weird falling chomps. Why does this even read the world number?????
+    rom.write_bytes(0x07081F, bytearray([0x80]))  # Fix for weird falling chomps. Why does this even read the world number?????
 
-    rom.write_bytes(0x0BC0B2, bytearray([0x5C, 0xD0, 0xED, 0x01]))#Load randomized yoshi colors on the world map
+    rom.write_bytes(0x0BC0B2, bytearray([0x5C, 0xD0, 0xED, 0x01]))  # Load randomized yoshi colors on the world map
 
-    rom.write_bytes(0x0BC6F7, bytearray([0x5C, 0x04, 0xEE, 0x01]))#Load selected yoshi color on the world map
+    rom.write_bytes(0x0BC6F7, bytearray([0x5C, 0x04, 0xEE, 0x01]))  # Load selected yoshi color on the world map
 
-    rom.write_bytes(0x0BC0AB, bytearray([0x80]))#Skip special color check for world 6; Levels handle this anyway
-
+    rom.write_bytes(0x0BC0AB, bytearray([0x80]))  # Skip special color check for world 6; Levels handle this anyway
 
 
 def write_lives(rom: LocalRom) -> None:
     rom.write_bytes(0x05FA96, bytearray([0xC2, 0x20, 0xAF, 0x89, 0xFC, 0x0D, 0x8D, 0x79, 0x03, 0xE2, 0x20, 0x5C, 0x37, 0x99, 0x17]))
     rom.write_bytes(0x05FABF, bytearray([0x48, 0xE2, 0x20, 0xAD, 0xCC, 0x00, 0xF0, 0x06, 0xCE, 0xCC, 0x00, 0xCE, 0xCC, 0x00, 0xC2, 0x20, 0x68, 0x22, 0x87, 0xBF, 0x03, 0x5C, 0x89, 0xFE, 0x07]))
 
+
 def bonus_checks(rom: LocalRom) -> None:
-    rom.write_bytes(0x082156, bytearray([0x5C, 0x5F, 0xFA, 0x0B])) #Write bonus check
+    rom.write_bytes(0x082156, bytearray([0x5C, 0x5F, 0xFA, 0x0B]))  # Write bonus check
+
 
 def bandit_checks(rom: LocalRom) -> None:
-    rom.write_bytes(0x08C9E4, bytearray([0x5C, 0xF3, 0xF9, 0x0B])) #Write Bandit Checks
+    rom.write_bytes(0x08C9E4, bytearray([0x5C, 0xF3, 0xF9, 0x0B]))  # Write Bandit Checks
+
 
 def Handle_Locations(rom: LocalRom) -> None:
     rom.write_bytes(0x05F3B8, bytearray([0xAD, 0x67, 0x14, 0xF0, 0x59, 0xDA, 0xC9, 0x1F]))
@@ -1019,6 +1025,7 @@ def Handle_Locations(rom: LocalRom) -> None:
     rom.write_bytes(0x00EE20, bytearray([0x00, 0x80, 0x02, 0xaa, 0xbf, 0x9e, 0xd4, 0x22, 0xc2, 0x20, 0x29, 0xff, 0x00, 0xfa, 0x5c, 0xfd]))
     rom.write_bytes(0x00EE30, bytearray([0xc6, 0x17]))
 
+
 def ExtendedItemHandler(rom: LocalRom) -> None:
     rom.write_bytes(0x10B3FB, bytearray([0xE2, 0x20, 0xC9, 0x45, 0xB0]))
     rom.write_bytes(0x10B400, bytearray([0x0C, 0xC2, 0x20, 0xA9, 0x10, 0x03, 0x8D, 0x7E, 0x02, 0x5C, 0xCF, 0xF4, 0x0B, 0xAD, 0x0F, 0x0B]))
@@ -1029,12 +1036,12 @@ def ExtendedItemHandler(rom: LocalRom) -> None:
 
 
 def patch_rom(world: "YoshisIslandWorld", rom: LocalRom, player: int) -> None:
-    handle_items(rom) #Implement main item functionality
-    Item_Data(rom) #Pointers necessary for item functionality
-    write_lives(rom) #Writes the number of lives as set in AP
-    CodeHandler(rom) #Jumps to my code
-    Server_Data(rom) #Pointers mostly related to receiving items
-    Menu_Data(rom) #Data related to the AP menu
+    handle_items(rom)  # Implement main item functionality
+    Item_Data(rom)  # Pointers necessary for item functionality
+    write_lives(rom)  # Writes the number of lives as set in AP
+    CodeHandler(rom)  # Jumps to my code
+    Server_Data(rom)  # Pointers mostly related to receiving items
+    Menu_Data(rom)  # Data related to the AP menu
     Handle_Locations(rom)
     ExtendedItemHandler(rom)
     rom.write_bytes(0x11544B, bytearray(world.global_level_list))
@@ -1054,7 +1061,7 @@ def patch_rom(world: "YoshisIslandWorld", rom: LocalRom, player: int) -> None:
     rom.write_bytes(0x06FC99, bytearray([world.options.luigi_pieces_required.value]))
     rom.write_bytes(0x06FC9A, bytearray([world.options.goal.value]))
 
-    if world.options.yoshi_colors !=0:
+    if world.options.yoshi_colors != YoshiColors.option_normal:
         rom.write_bytes(0x113A33, bytearray(world.bowser_text))
 
     rom.write_bytes(0x0A060C, bytearray(world.boss_burt_data))
@@ -1130,8 +1137,7 @@ def patch_rom(world: "YoshisIslandWorld", rom: LocalRom, player: int) -> None:
     rom.write_bytes(0x0BDBAF, bytearray(world.level_gfx_table))
     rom.write_bytes(0x0BDC4F, bytearray(world.palette_panel_list))
 
-
-    if world.options.yoshi_colors.value == 1:
+    if world.options.yoshi_colors == YoshiColors.option_random_order:
         rom.write_bytes(0x010000, ([world.leader_color]))
         rom.write_bytes(0x010008, ([world.leader_color]))
         rom.write_bytes(0x010009, ([world.leader_color]))
@@ -1157,39 +1163,40 @@ def patch_rom(world: "YoshisIslandWorld", rom: LocalRom, player: int) -> None:
         rom.write_bytes(0x010045, ([world.leader_color]))
         rom.write_bytes(0x01003D, bytearray(world.color_order))
         rom.write_bytes(0x010043, ([world.leader_color]))
-    elif world.options.yoshi_colors.value in {2, 3}:
+    elif world.options.yoshi_colors in {YoshiColors.option_random_color, YoshiColors.option_singularity}:
         rom.write_bytes(0x010000, bytearray(world.level_colors))
 
-    if world.options.minigame_checks.value in {2, 3}:
+    if world.options.minigame_checks in {MinigameChecks.option_bonus_games, MinigameChecks.option_both}:
         bonus_checks(rom)
 
-    if world.options.minigame_checks.value in {1, 3}:
+    if world.options.minigame_checks in {MinigameChecks.option_bandit_games, MinigameChecks.option_both}:
         bandit_checks(rom)
 
     rom.write_bytes(0x00BF2C, bytearray(world.world_bonus))
 
-    if world.options.softlock_prevention == 1:
-        rom.write_bytes(0x00C18F, bytearray([0x5C, 0x58, 0xFB, 0x0B])) #R + X Code
+    if world.options.softlock_prevention:
+        rom.write_bytes(0x00C18F, bytearray([0x5C, 0x58, 0xFB, 0x0B]))  # R + X Code
 
-    if world.options.bowser_door_mode.value != 0:
-        rom.write_bytes(0x07891F, bytearray(world.castle_door)) #1 Entry
-        rom.write_bytes(0x078923, bytearray(world.castle_door)) #2 Entry
-        rom.write_bytes(0x078927, bytearray(world.castle_door)) #3 Entry
-        rom.write_bytes(0x07892B, bytearray(world.castle_door)) #4 Entry
+    if world.options.bowser_door_mode != BowserDoor.option_manual:
+        rom.write_bytes(0x07891F, bytearray(world.castle_door))  # 1 Entry
+        rom.write_bytes(0x078923, bytearray(world.castle_door))  # 2 Entry
+        rom.write_bytes(0x078927, bytearray(world.castle_door))  # 3 Entry
+        rom.write_bytes(0x07892B, bytearray(world.castle_door))  # 4 Entry
 
-    if world.options.bowser_door_mode.value == 5:
-        rom.write_bytes(0x0AF517, bytearray([0xC6, 0x07, 0x7A, 0x00])) #Door 2
-        rom.write_bytes(0x0AF6B7, bytearray([0xCD, 0x05, 0x5B, 0x00])) #Door 3
-        rom.write_bytes(0x0AF8F2, bytearray([0xD3, 0x00, 0x77, 0x06])) #Door 4
+    if world.options.bowser_door_mode == BowserDoor.option_gauntlet:
+        rom.write_bytes(0x0AF517, bytearray([0xC6, 0x07, 0x7A, 0x00]))  # Door 2
+        rom.write_bytes(0x0AF6B7, bytearray([0xCD, 0x05, 0x5B, 0x00]))  # Door 3
+        rom.write_bytes(0x0AF8F2, bytearray([0xD3, 0x00, 0x77, 0x06]))  # Door 4
 
-    if world.options.goal == 1:
-        rom.write_bytes(0x1153F6, bytearray([0x16, 0x28, 0x10, 0x0C, 0x10, 0x4E, 0x1E, 0x10, 0x08, 0x04, 0x08, 0x24, 0x36, 0x82, 0x83, 0x83, 0x34, 0x84, 0x85, 0x85])) #Luigi piece clear text
-        rom.write_bytes(0x06FC86, bytearray([0xFF])) #Boss clear goal = 255, renders bowser inaccessible
+    if world.options.goal == PlayerGoal.option_luigi_hunt:
+        rom.write_bytes(0x1153F6, bytearray([0x16, 0x28, 0x10, 0x0C, 0x10, 0x4E, 0x1E, 0x10, 0x08, 0x04, 0x08, 0x24, 0x36, 0x82, 0x83, 0x83, 0x34, 0x84, 0x85, 0x85]))  # Luigi piece clear text
+        rom.write_bytes(0x06FC86, bytearray([0xFF]))  # Boss clear goal = 255, renders bowser inaccessible
 
     from Main import __version__
-    rom.name = bytearray(f'YOSHIAP{__version__.replace(".", "")[0:3]}_{player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
+    rom.name = bytearray(f'YOSHIAP{__version__.replace(".", "")[0:3]}_{player}_{world.multiworld.seed:11}\0', "utf8")[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x007FC0, rom.name)
+
 
 class YoshisIslandDeltaPatch(APDeltaPatch):
     hash = USHASH
@@ -1201,7 +1208,6 @@ class YoshisIslandDeltaPatch(APDeltaPatch):
         return get_base_rom_bytes()
 
 
-
 def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
@@ -1211,10 +1217,11 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
         if USHASH != basemd5.hexdigest():
-            raise Exception('Supplied Base Rom does not match known MD5 for US(1.0) release. '
-                            'Get the correct game and version, then dump it')
+            raise Exception("Supplied Base Rom does not match known MD5 for US(1.0) release. "
+                            "Get the correct game and version, then dump it")
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes
+
 
 def get_base_rom_path(file_name: str = "") -> str:
     if not file_name:

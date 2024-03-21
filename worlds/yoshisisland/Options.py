@@ -1,17 +1,21 @@
 from dataclasses import dataclass
 from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, PerGameCommonOptions
 
+
 class ExtrasEnabled(Toggle):
     """If enabled, the more difficult Extra stages will be added into logic. Otherwise, they will be inaccessible."""
     display_name = "Include Extra Stages"
+
 
 class SplitExtras(Toggle):
     """If enabled, Extra stages will be unlocked individually. Otherwise, there will be a single 'Extra Panels' item that unlocks all of them."""
     display_name = "Split Extra Stages"
 
+
 class SplitBonus(Toggle):
     """If enabled, Bonus Games will be unlocked individually. Otherwise, there will be a single 'Bonus Panels' item that unlocks all of them."""
     display_name = "Split Bonus Games"
+
 
 class ObjectVis(Choice):
     """This will determine the default visibility of objects revealed by the Magnifying Glass.
@@ -23,9 +27,11 @@ class ObjectVis(Choice):
     option_full = 3
     default = 1
 
+
 class SoftlockPrevention(DefaultOnToggle):
     """If enabled, hold R + X to warp to the last used Middle Ring, or the start of the level if none have been activated."""
     display_name = "Softlock Prevention Code"
+
 
 class StageLogic(Choice):
     """This determines what logic mode the stages will use.
@@ -36,21 +42,25 @@ class StageLogic(Choice):
     option_strict = 0
     option_loose = 1
     option_expert = 2
-    #option_glitched = 3
+    # option_glitched = 3
     default = 0
+
 
 class ShuffleMiddleRings(Toggle):
     """If enabled, Middle Rings will be added to the item pool."""
     display_name = "Shuffle Middle Rings"
+
 
 class ShuffleSecretLens(Toggle):
     """If enabled, the Secret Lens will be added to the item pool.
     The Secret Lens will act as a permanent Magnifying Glass."""
     display_name = "Add Secret Lens"
 
+
 class DisableAutoScrollers(Toggle):
     """If enabled, will disable autoscrolling during levels, except during levels which cannot function otherwise."""
     display_name = "Disable Autoscrolling"
+
 
 class ItemLogic(Toggle):
     """This will enable logic to expect consumables to be used from the inventory in place of some major items.
@@ -58,6 +68,7 @@ class ItemLogic(Toggle):
     Logic will NOT expect grinding end-of-level bonus games, or any inventory consumables received from checks.
     Casual logic will only expect consumables from Overworld games; Loose and Expert may expect them from bandit games."""
     display_name = "Consumable Logic"
+
 
 class MinigameChecks(Choice):
     """This will set minigame victories to give Archipelago checks.
@@ -71,6 +82,7 @@ class MinigameChecks(Choice):
     option_both = 3
     default = 0
 
+
 class StartingWorld(Choice):
     """This sets which world you start in. Other worlds can be accessed by receiving a Gate respective to that world."""
     display_name = "Starting World"
@@ -82,12 +94,14 @@ class StartingWorld(Choice):
     option_world_6 = 5
     default = 0
 
+
 class StartingLives(Range):
     """This sets the amount of lives Yoshi will have upon loading the game."""
     display_name = "Starting Life Count"
     range_start = 1
     range_end = 999
     default = 3
+
 
 class PlayerGoal(Choice):
     """This sets the goal. Bowser goal requires defeating Bowser at the end of 6-8, while Luigi Hunt requires collecting all required Luigi Pieces."""
@@ -96,6 +110,7 @@ class PlayerGoal(Choice):
     option_luigi_hunt = 1
     default = 0
 
+
 class LuigiPiecesReq(Range):
     """This will set how many Luigi Pieces are required to trigger a victory."""
     display_name = "Luigi Pieces Required"
@@ -103,14 +118,16 @@ class LuigiPiecesReq(Range):
     range_end = 100
     default = 25
 
+
 class LuigiPiecesAmt(Range):
-    """This will set how many Luigi Pieces are in the item pool. 
+    """This will set how many Luigi Pieces are in the item pool.
        If the number in the pool is lower than the number required,
        the amount in the pool will be randomized, with the minimum being the amount required."""
     display_name = "Amount of Luigi Pieces"
     range_start = 1
     range_end = 100
     default = 50
+
 
 class FinalLevelBosses(Range):
     """This sets how many bosses need to be defeated to access 6-8.
@@ -120,6 +137,7 @@ class FinalLevelBosses(Range):
     range_end = 11
     default = 5
 
+
 class FinalBossBosses(Range):
     """This sets how many bosses need to be defeated to access the boss of 6-8.
        You can check this in-game by pressing SELECT while in any level."""
@@ -127,6 +145,7 @@ class FinalBossBosses(Range):
     range_start = 0
     range_end = 11
     default = 0
+
 
 class BowserDoor(Choice):
     """This will set which route you take through 6-8.
@@ -142,9 +161,11 @@ class BowserDoor(Choice):
     option_gauntlet = 5
     default = 0
 
+
 class BossShuffle(Toggle):
     """This whill shuffle which boss each boss door will lead to. Each boss can only appear once, and Baby Bowser is left alone."""
     display_name = "Boss Shuffle"
+
 
 class LevelShuffle(Choice):
     """Disabled: All levels will appear in their normal location.
@@ -156,6 +177,7 @@ class LevelShuffle(Choice):
     option_bosses_guranteed = 1
     option_full = 2
     default = 0
+
 
 class YoshiColors(Choice):
     """Sets the Yoshi color for each level.
@@ -170,6 +192,7 @@ class YoshiColors(Choice):
     option_singularity = 3
     default = 0
 
+
 class SinguColor(Choice):
     """Sets which color Yoshi will be if Yoshi Colors is set to singularity."""
     display_name = "Singularity Yoshi Color"
@@ -183,6 +206,7 @@ class SinguColor(Choice):
     option_blue = 7
     default = 0
 
+
 class BabySound(Choice):
     """Change the sound that Baby Mario makes when not on Yoshi."""
     display_name = "Mario Sound Effect"
@@ -191,10 +215,12 @@ class BabySound(Choice):
     option_random_sound_effect = 2
     default = 0
 
+
 class TrapsEnabled(Toggle):
-    """Will place traps into the item pool. 
+    """Will place traps into the item pool.
        Traps have a variety of negative effects, and will only replace filler items."""
     display_name = "Traps Enabled"
+
 
 class TrapPercent(Range):
     """Percentage of the item pool that becomes replaced with traps."""
@@ -203,41 +229,40 @@ class TrapPercent(Range):
     range_end = 100
     default = 10
 
-#class EnableScrets(Range):
- #   """This sets the amount of lives Yoshi will have upon loading the game."""
-  #  display_name = "Starting Life Count"
-   # range_start = 1
-    #range_end = 255
-    #default = 3
+# class EnableScrets(Range):
+    # """This sets the amount of lives Yoshi will have upon loading the game."""
+    # display_name = "Starting Life Count"
+    # range_start = 1
+    # range_end = 255
+    # default = 3
 
-#class BackgroundColors(Range):
- #   """This sets the amount of lives Yoshi will have upon loading the game."""
-  #  display_name = "Starting Life Count"
-   # range_start = 1
-    #range_end = 255
-    #default = 3
+# class BackgroundColors(Range):
+    # """This sets the amount of lives Yoshi will have upon loading the game."""
+    # display_name = "Starting Life Count"
+    # range_start = 1
+    # range_end = 255
+    # default = 3
 
-#class Foreground Colors(Range):
- #   """This sets the amount of lives Yoshi will have upon loading the game."""
-  #  display_name = "Starting Life Count"
-   # range_start = 1
-    #range_end = 255
-    #default = 3
+# class Foreground Colors(Range):
+    # """This sets the amount of lives Yoshi will have upon loading the game."""
+    # display_name = "Starting Life Count"
+    # range_start = 1
+    # range_end = 255
+    # default = 3
 
-#class Music Shuffle(Range):
- #   """This sets the amount of lives Yoshi will have upon loading the game."""
-  #  display_name = "Starting Life Count"
-   # range_start = 1
-    #range_end = 255
-    #default = 3
+# class Music Shuffle(Range):
+    # """This sets the amount of lives Yoshi will have upon loading the game."""
+    # display_name = "Starting Life Count"
+    # range_start = 1
+    # range_end = 255
+    # default = 3
 
-#class Star Loss Rate(Range):
- #   """This sets the amount of lives Yoshi will have upon loading the game."""
-  #  display_name = "Starting Life Count"
-   # range_start = 1
-    #range_end = 255
-    #default = 3
-
+# class Star Loss Rate(Range):
+    # """This sets the amount of lives Yoshi will have upon loading the game."""
+    # display_name = "Starting Life Count"
+    # range_start = 1
+    # range_end = 255
+    # default = 3
 
 
 @dataclass
