@@ -23,7 +23,7 @@ def setup_solo_multiworld(
 
 
 def setup_multiworld(worlds: Union[List[Type[World]], Type[World]], steps: Tuple[str, ...] = gen_steps,
-    seed: Optional[int] = None) -> MultiWorld:
+                     seed: Optional[int] = None) -> MultiWorld:
     """
     Creates a multiworld with a player for each provided world type, allowing duplicates, setting default options, and
     calling the provided gen steps.
@@ -73,7 +73,8 @@ def generate_test_multiworld(players: int = 1) -> MultiWorld:
     return multiworld
 
 
-def generate_locations(count: int, player_id: int, region: Region, address: Optional[int] = None, tag: str = "") -> List[Location]:
+def generate_locations(count: int, player_id: int, region: Region, address: Optional[int] = None,
+                       tag: str = "") -> List[Location]:
     """
     Generates the specified amount of locations for the player and adds them to the specified region.
 
