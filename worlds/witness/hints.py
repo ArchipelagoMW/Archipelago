@@ -340,11 +340,14 @@ def get_priority_hint_locations(world: "WitnessWorld") -> List[str]:
     return priority
 
 
-def try_getting_location_group_other_world(world: "WitnessWorld", location: Location) -> str:
-    possible_location_groups = world.multiworld.worlds[location.player].location_name_groups
+def try_getting_location_group_other_world(world: "WitnessWorld", hint_loc: Location) -> str:
+    possible_location_groups = {
+        k: v for k, v in world.multiworld.worlds[hint_loc.player].location_name_groups.items()
+        if hint_loc.name in v
+    }
 
     locations_in_that_world = {
-        location.name for location in world.multiworld.get_locations(location.player) if location.address is not None
+        location.name for location in world.multiworld.get_locations(hint_loc.player) if location.address is not None
     }
 
     valid_location_groups = dict()
@@ -357,13 +360,13 @@ def try_getting_location_group_other_world(world: "WitnessWorld", location: Loca
     if len(valid_location_groups) > 1 and valid_location_groups["Everywhere"] > 100:
         del valid_location_groups["Everywhere"]
 
-    parent_region = location.parent_region
+    parent_region = hint_loc.parent_region
     if parent_region.name not in possible_location_groups:
         parent_region_location_amount = sum(
             location.address is not None for location in parent_region.locations
         )
         if len(locations_in_that_world) / 2 > parent_region_location_amount > 2 and parent_region.name != "Menu":
-            valid_location_groups[location.parent_region.name] = parent_region_location_amount
+            valid_location_groups[hint_loc.parent_region.name] = parent_region_location_amount
 
     if not valid_location_groups:
         return "Everywhere"
@@ -398,10 +401,7 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint):
         if hint.location.player == world.player:
             area = try_getting_location_group_other_world(world, hint.location)
 
-            if hint.hint_came_from_location:
-                hint_text = f"In the {area} area, you can find \"{item_name}\"."
-            else:
-                hint_text = f"{item_name} can be found in the {area} area."
+            hint_text = f"{item_name} can be found in the {area} area."
         else:
             chosen_group = try_getting_location_group_other_world(world, hint.location)
 
