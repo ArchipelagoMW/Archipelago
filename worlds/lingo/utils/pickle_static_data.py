@@ -258,11 +258,6 @@ def process_door(room_name, door_name, door_data):
     else:
         include_reduce = False
 
-    if "junk_item" in door_data:
-        junk_item = door_data["junk_item"]
-    else:
-        junk_item = False
-
     if "door_group" in door_data:
         door_group = door_data["door_group"]
     else:
@@ -327,7 +322,7 @@ def process_door(room_name, door_name, door_data):
         door_type = DoorType.SUN_PAINTING
 
     door_obj = Door(door_name, item_name, location_name, panels, skip_location, skip_item, has_doors,
-                    painting_ids, event, door_group, include_reduce, junk_item, door_type, item_group)
+                    painting_ids, event, door_group, include_reduce, door_type, item_group)
 
     DOORS_BY_ROOM[room_name][door_name] = door_obj
 

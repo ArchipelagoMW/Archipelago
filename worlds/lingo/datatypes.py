@@ -49,7 +49,6 @@ class Door(NamedTuple):
     event: bool
     door_group: Optional[str]
     include_reduce: bool
-    junk_item: bool
     type: DoorType
     item_group: Optional[str]
 
