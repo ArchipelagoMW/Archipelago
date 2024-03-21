@@ -204,7 +204,7 @@ For example:
 ```python
 range_start = 1
 range_end = 99
-special_range_names: {
+special_range_names = {
     "normal": 20,
     "extreme": 99,
     "unlimited": -1,
