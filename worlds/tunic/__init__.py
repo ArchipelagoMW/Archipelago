@@ -106,8 +106,10 @@ class TunicWorld(World):
                     # lower value is more restrictive
                     if tunc.options.logic_rules.value < cls.seed_groups[group]["logic_rules"]:
                         cls.seed_groups[group]["logic_rules"] = tunc.options.logic_rules.value
+                    # laurels at 10 fairies changes logic for secret gathering place placement
                     if tunc.options.laurels_location == 3:
                         cls.seed_groups[group]["laurels_at_10_fairies"] = True
+                    # fewer shops, one at windmill
                     if tunc.options.fixed_shop:
                         cls.seed_groups[group]["fixed_shop"] = True
 
@@ -115,7 +117,7 @@ class TunicWorld(World):
                         # loop through the connections in the player's yaml
                         for cxn in multiworld.plando_connections[tunc.player]:
                             new_conn = True
-                            # check if either of the entrances in the pair match
+                            # check if either of the entrances in the pair match, then check for conflicts
                             for group_cxn in cls.seed_groups[group]["plando"]:
                                 if cxn.entrance == group_cxn.entrance:
                                     new_conn = False
@@ -126,7 +128,6 @@ class TunicWorld(World):
                                                         f"connection {group_cxn.entrance} <-> {group_cxn.exit} and "
                                                         f"{tunc.multiworld.get_player_name(tunc.player)}'s plando "
                                                         f"connection {cxn.entrance} <-> {cxn.exit}")
-                                # if a connection exit matches an entrance in the seed group, check if entrance matches
                                 elif cxn.entrance == group_cxn.exit:
                                     new_conn = False
                                     if cxn.exit == group_cxn.entrance:
