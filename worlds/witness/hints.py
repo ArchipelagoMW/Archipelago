@@ -822,14 +822,18 @@ def make_compact_hint_data(hint: WitnessWordedHint, local_player_number: int) ->
     location = hint.location
     area_amount = hint.area_amount
 
-    if hint.confusified_hint:
-        local_player_number = -1
+    player_number = local_player_number
+    if location:
+        player_number = location.player
+    if player_number == local_player_number and hint.confusified_hint:
+        # -1 will be interpreted by the client as "local player, do not scout"
+        player_number = -1
 
     # None if junk hint, address if location hint, area string if area hint
     arg_1 = location.address if location else (hint.area if hint.area else None)
 
     # self.player if junk hint, player if location hint, progression amount if area hint
-    arg_2 = area_amount if area_amount is not None else (location.player if location else local_player_number)
+    arg_2 = area_amount if area_amount is not None else player_number
 
     return hint.wording, arg_1, arg_2
 
