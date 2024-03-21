@@ -368,7 +368,7 @@ class KDL3ProcedurePatch(APProcedurePatch, APTokenMixin):
         ("apply_bsdiff4", ["kdl3_basepatch.bsdiff4"]),
         ("apply_tokens", ["token_patch.bin"]),
         ("apply_post_patch", []),
-        ("write_snes_crc", [])
+        ("calc_snes_crc", [])
     ]
     name: bytes  # used to pass to init
 
@@ -555,8 +555,8 @@ def patch_rom(world: "KDL3World", patch: KDL3ProcedurePatch):
     patch.write_token(APTokenTypes.WRITE, 0x3C000, bytes(patch.name))
     patch.write_token(APTokenTypes.WRITE, 0x3C020, world.options.game_language.value.to_bytes(1, "little"))
 
-    patch.write_token(APTokenTypes.COPY, 0x7FC0, (0x3C000, 21))
-    patch.write_token(APTokenTypes.COPY, 0x7FD9, (0x3C020, 1))
+    patch.write_token(APTokenTypes.COPY, 0x7FC0, (21, 0x3C000))
+    patch.write_token(APTokenTypes.COPY, 0x7FD9, (1, 0x3C020))
 
     # handle palette
     if world.options.kirby_flavor_preset.value != 0:

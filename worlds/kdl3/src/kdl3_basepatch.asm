@@ -58,6 +58,10 @@ org $01AFC8
 org $01B013
     SEC ; Remove Dedede Bad Ending
 
+org $01B050
+    JSL HookBossPurify
+    NOP
+
 org $02B7B0 ; Zero unlock
     LDA $80A0
     CMP #$0001
@@ -1227,6 +1231,28 @@ ApplyLocalCheck:
     .Apply:
     TYA
     STA $C000, X
+    .Return:
+    RTL
+
+HookBossPurify:
+    ORA $B0
+    STA $53D5
+    LDA $B0
+    LDX #$0000
+    LSR
+    .Loop:
+    BIT #$0001
+    BNE .Apply
+    LSR
+    LSR
+    INX
+    CPX #$0005
+    BCS .Return
+    BRA .Loop
+    .Apply:
+    TXA
+    ORA #$0200
+    JSL ApplyLocalCheck
     .Return:
     RTL
 
