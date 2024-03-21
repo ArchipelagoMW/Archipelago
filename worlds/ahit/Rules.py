@@ -434,7 +434,7 @@ def set_moderate_rules(world: "HatInTimeWorld"):
     for loc in world.multiworld.get_region("Queen Vanessa's Manor", world.player).locations:
         set_rule(loc, lambda state: has_paintings(state, world, 1))
 
-    set_rule(world.multiworld.get_location("Subcon Forest - Manor Rooftop", world.player), lambda state: True)
+    set_rule(world.multiworld.get_location("Subcon Forest - Manor Rooftop", world.player), lambda state: has_paintings(state, world, 1))
 
     # Moderate: get to Birdhouse/Yellow Band Hills without Brewing Hat
     set_rule(world.multiworld.get_entrance("-> The Birdhouse", world.player),
