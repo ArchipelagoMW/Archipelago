@@ -233,6 +233,8 @@ class VagueHints(Choice):
 
     If set to "stable", only location groups will be used. If a game one of your items ended up in doesn't implement location groups, your hint will end up only telling you that the item is somewhere in that game.
     If set to "experimental", region names will be used as a fallback. Region names are not always intended to be comprehensible to players. Only turn this on if you are okay with a bit of chaos.
+
+    The distinction does not matter in single player, as Witness implements location groups for every location.
     """
     display_name = "Vague Hints"
 
