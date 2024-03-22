@@ -2,7 +2,7 @@ from enum import Enum
 from typing import Dict, List, NamedTuple, Optional, Set, Tuple, TYPE_CHECKING
 
 from .datatypes import Door, RoomAndDoor, RoomAndPanel
-from .items import ALL_ITEM_TABLE
+from .items import ALL_ITEM_TABLE, ItemData
 from .locations import ALL_LOCATION_TABLE, LocationClassification
 from .options import LocationChecks, ShuffleDoors, VictoryCondition
 from .static_logic import DOORS_BY_ROOM, PAINTINGS, PAINTING_ENTRANCES, PAINTING_EXITS, \
@@ -56,6 +56,21 @@ def should_split_progression(progression_name: str, world: "LingoWorld") -> Prog
             return ProgressiveItemBehavior.SPLIT
 
     return ProgressiveItemBehavior.PROGRESSIVE
+
+
+def should_include_item(item: ItemData, world: "LingoWorld") -> bool:
+    if item.mode == "colors":
+        return world.options.shuffle_colors > 0
+    elif item.mode == "doors":
+        return world.options.shuffle_doors != ShuffleDoors.option_none
+    elif item.mode == "complex door":
+        return world.options.shuffle_doors == ShuffleDoors.option_complex
+    elif item.mode == "door group":
+        return world.options.shuffle_doors == ShuffleDoors.option_simple
+    elif item.mode == "special":
+        return False
+    else:
+        return True
 
 
 class LingoPlayerLogic:
@@ -212,7 +227,7 @@ class LingoPlayerLogic:
 
         # Instantiate all real items.
         for name, item in ALL_ITEM_TABLE.items():
-            if item.should_include(world):
+            if should_include_item(item, world):
                 self.real_items.append(name)
 
         # Calculate the requirements for the fake pilgrimage.
