@@ -365,7 +365,7 @@ def try_getting_location_group_other_world(world: "WitnessWorld", hint_loc: Loca
         parent_region_location_amount = sum(
             location.address is not None for location in parent_region.locations
         )
-        if len(locations_in_that_world) / 2 > parent_region_location_amount > 2 and parent_region.name != "Menu":
+        if parent_region.name != "Menu" and 2 < parent_region_location_amount < (len(locations_in_that_world) / 2):
             valid_location_groups[hint_loc.parent_region.name] = parent_region_location_amount
 
     if not valid_location_groups:
