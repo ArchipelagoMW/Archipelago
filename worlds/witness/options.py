@@ -235,6 +235,8 @@ class VagueHints(Choice):
     If set to "experimental", region names will be eligible as well, and you will never receive a "somewhere in" hint. Keep in mind that region names are not always intended to be comprehensible to players - Only turn this on if you are okay with a bit of chaos.
 
     The distinction does not matter in single player, as Witness implements location groups for every location.
+
+    Also, please don't pester any devs about implementing location groups. Bring it up nicely, accept their response even if it is "No".
     """
     display_name = "Vague Hints"
 
