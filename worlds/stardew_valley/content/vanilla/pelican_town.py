@@ -15,6 +15,7 @@ pelican_town = ContentPack(
         fish_data.eel,
         fish_data.flounder,
         fish_data.ghostfish,
+        fish_data.goby,
         fish_data.halibut,
         fish_data.herring,
         fish_data.ice_pip,

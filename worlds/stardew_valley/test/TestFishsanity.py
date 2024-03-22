@@ -5,20 +5,21 @@ from . import SVTestBase
 from ..content.feature import fishsanity
 from ..mods.mod_data import ModNames
 from ..options import Fishsanity, ExcludeGingerIsland, Mods, SpecialOrderLocations
+from ..strings.fish_names import Fish
 
 pelican_town_legendary_fishes = {"Angler", "Crimsonfish", "Glacierfish", "Legend", "Mutant Carp", }
 pelican_town_hard_special_fishes = {"Lava Eel", "Octopus", "Scorpion Carp", "Ice Pip", "Super Cucumber", }
 pelican_town_medium_special_fishes = {"Blobfish", "Dorado", }
 pelican_town_hard_normal_fishes = {"Lingcod", "Pufferfish", "Void Salmon", }
 pelican_town_medium_normal_fishes = {
-    "Albacore", "Catfish", "Eel", "Flounder", "Ghostfish", "Halibut", "Largemouth Bass", "Midnight Carp", "Midnight Squid", "Pike", "Red Mullet", "Salmon",
+    "Albacore", "Catfish", "Eel", "Flounder", "Ghostfish", Fish.goby, "Halibut", "Largemouth Bass", "Midnight Carp", "Midnight Squid", "Pike", "Red Mullet", "Salmon",
     "Sandfish", "Slimejack", "Stonefish", "Spook Fish", "Squid", "Sturgeon", "Tiger Trout", "Tilapia", "Tuna", "Woodskip",
 }
 pelican_town_easy_normal_fishes = {
     "Anchovy", "Bream", "Bullhead", "Carp", "Chub", "Herring", "Perch", "Rainbow Trout", "Red Snapper", "Sardine", "Shad", "Sea Cucumber", "Shad",
     "Smallmouth Bass", "Sunfish", "Walleye",
 }
-pelican_town_carb_pot_fishes = {"Clam", "Cockle", "Crab", "Crayfish", "Lobster", "Mussel", "Oyster", "Periwinkle", "Shrimp", "Snail", }
+pelican_town_crab_pot_fishes = {"Clam", "Cockle", "Crab", "Crayfish", "Lobster", "Mussel", "Oyster", "Periwinkle", "Shrimp", "Snail", }
 
 ginger_island_hard_fishes = {"Pufferfish", "Stingray", "Super Cucumber", }
 ginger_island_medium_fishes = {"Blue Discus", "Lionfish", "Tilapia", "Tuna", }
@@ -105,7 +106,7 @@ class TestFishsanityAll_Vanilla(SVFishsanityTestBase):
             pelican_town_hard_normal_fishes |
             pelican_town_medium_normal_fishes |
             pelican_town_easy_normal_fishes |
-            pelican_town_carb_pot_fishes |
+            pelican_town_crab_pot_fishes |
             ginger_island_hard_fishes |
             ginger_island_medium_fishes
     )
@@ -123,7 +124,7 @@ class TestFishsanityAll_ExcludeGingerIsland(SVFishsanityTestBase):
             pelican_town_hard_normal_fishes |
             pelican_town_medium_normal_fishes |
             pelican_town_easy_normal_fishes |
-            pelican_town_carb_pot_fishes
+            pelican_town_crab_pot_fishes
     )
 
 
@@ -139,7 +140,7 @@ class TestFishsanityAll_SVE(SVFishsanityTestBase):
             pelican_town_hard_normal_fishes |
             pelican_town_medium_normal_fishes |
             pelican_town_easy_normal_fishes |
-            pelican_town_carb_pot_fishes |
+            pelican_town_crab_pot_fishes |
             ginger_island_hard_fishes |
             ginger_island_medium_fishes |
             sve_pelican_town_hard_fishes |
@@ -164,7 +165,7 @@ class TestFishsanityAll_ExcludeGingerIsland_SVE(SVFishsanityTestBase):
             pelican_town_hard_normal_fishes |
             pelican_town_medium_normal_fishes |
             pelican_town_easy_normal_fishes |
-            pelican_town_carb_pot_fishes |
+            pelican_town_crab_pot_fishes |
             sve_pelican_town_hard_fishes |
             sve_pelican_town_medium_fishes |
             sve_pelican_town_easy_fishes
@@ -183,7 +184,7 @@ class TestFishsanityAll_DistantLands(SVFishsanityTestBase):
             pelican_town_hard_normal_fishes |
             pelican_town_medium_normal_fishes |
             pelican_town_easy_normal_fishes |
-            pelican_town_carb_pot_fishes |
+            pelican_town_crab_pot_fishes |
             ginger_island_hard_fishes |
             ginger_island_medium_fishes |
             distant_lands_hard_fishes |
@@ -203,7 +204,7 @@ class TestFishsanityAll_QiBoard(SVFishsanityTestBase):
             pelican_town_hard_normal_fishes |
             pelican_town_medium_normal_fishes |
             pelican_town_easy_normal_fishes |
-            pelican_town_carb_pot_fishes |
+            pelican_town_crab_pot_fishes |
             ginger_island_hard_fishes |
             ginger_island_medium_fishes |
             qi_board_legendary_fishes
@@ -223,7 +224,7 @@ class TestFishsanityAll_ExcludeGingerIsland_QiBoard(SVFishsanityTestBase):
             pelican_town_hard_normal_fishes |
             pelican_town_medium_normal_fishes |
             pelican_town_easy_normal_fishes |
-            pelican_town_carb_pot_fishes
+            pelican_town_crab_pot_fishes
     )
 
 
@@ -237,7 +238,7 @@ class TestFishsanityExcludeLegendaries_Vanilla(SVFishsanityTestBase):
             pelican_town_hard_normal_fishes |
             pelican_town_medium_normal_fishes |
             pelican_town_easy_normal_fishes |
-            pelican_town_carb_pot_fishes |
+            pelican_town_crab_pot_fishes |
             ginger_island_hard_fishes |
             ginger_island_medium_fishes
     )
@@ -254,7 +255,7 @@ class TestFishsanityExcludeLegendaries_QiBoard(SVFishsanityTestBase):
             pelican_town_hard_normal_fishes |
             pelican_town_medium_normal_fishes |
             pelican_town_easy_normal_fishes |
-            pelican_town_carb_pot_fishes |
+            pelican_town_crab_pot_fishes |
             ginger_island_hard_fishes |
             ginger_island_medium_fishes
     )
@@ -268,7 +269,7 @@ class TestFishsanityExcludeHardFishes_Vanilla(SVFishsanityTestBase):
             pelican_town_medium_special_fishes |
             pelican_town_medium_normal_fishes |
             pelican_town_easy_normal_fishes |
-            pelican_town_carb_pot_fishes |
+            pelican_town_crab_pot_fishes |
             ginger_island_medium_fishes
     )
 
@@ -282,7 +283,7 @@ class TestFishsanityExcludeHardFishes_SVE(SVFishsanityTestBase):
             pelican_town_medium_special_fishes |
             pelican_town_medium_normal_fishes |
             pelican_town_easy_normal_fishes |
-            pelican_town_carb_pot_fishes |
+            pelican_town_crab_pot_fishes |
             ginger_island_medium_fishes |
             sve_pelican_town_medium_fishes |
             sve_pelican_town_easy_fishes |
@@ -300,7 +301,7 @@ class TestFishsanityExcludeHardFishes_DistantLands(SVFishsanityTestBase):
             pelican_town_medium_special_fishes |
             pelican_town_medium_normal_fishes |
             pelican_town_easy_normal_fishes |
-            pelican_town_carb_pot_fishes |
+            pelican_town_crab_pot_fishes |
             ginger_island_medium_fishes |
             distant_lands_easy_fishes
     )
@@ -315,7 +316,7 @@ class TestFishsanityExcludeHardFishes_QiBoard(SVFishsanityTestBase):
             pelican_town_medium_special_fishes |
             pelican_town_medium_normal_fishes |
             pelican_town_easy_normal_fishes |
-            pelican_town_carb_pot_fishes |
+            pelican_town_crab_pot_fishes |
             ginger_island_medium_fishes
     )
 
@@ -326,7 +327,7 @@ class TestFishsanityOnlyEasyFishes_Vanilla(SVFishsanityTestBase):
     }
     expected_fishes = (
             pelican_town_easy_normal_fishes |
-            pelican_town_carb_pot_fishes
+            pelican_town_crab_pot_fishes
     )
 
 
@@ -337,7 +338,7 @@ class TestFishsanityOnlyEasyFishes_SVE(SVFishsanityTestBase):
     }
     expected_fishes = (
             pelican_town_easy_normal_fishes |
-            pelican_town_carb_pot_fishes |
+            pelican_town_crab_pot_fishes |
             sve_pelican_town_easy_fishes |
             sve_ginger_island_easy_fishes
     )
@@ -350,7 +351,7 @@ class TestFishsanityOnlyEasyFishes_DistantLands(SVFishsanityTestBase):
     }
     expected_fishes = (
             pelican_town_easy_normal_fishes |
-            pelican_town_carb_pot_fishes |
+            pelican_town_crab_pot_fishes |
             distant_lands_easy_fishes
     )
 
@@ -362,5 +363,5 @@ class TestFishsanityOnlyEasyFishes_QiBoard(SVFishsanityTestBase):
     }
     expected_fishes = (
             pelican_town_easy_normal_fishes |
-            pelican_town_carb_pot_fishes
+            pelican_town_crab_pot_fishes
     )

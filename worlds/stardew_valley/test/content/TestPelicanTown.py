@@ -56,6 +56,7 @@ class TestPelicanTown(SVContentPackTestBase):
         self.assertIn(Fish.eel, fish_names)
         self.assertIn(Fish.flounder, fish_names)
         self.assertIn(Fish.ghostfish, fish_names)
+        self.assertIn(Fish.goby, fish_names)
         self.assertIn(Fish.halibut, fish_names)
         self.assertIn(Fish.herring, fish_names)
         self.assertIn(Fish.ice_pip, fish_names)
