@@ -790,7 +790,7 @@ class AquariaRegions:
         self.__connect_one_way_regions(
             "sun_temple_boss_lb", "sun_temple_boss_lt",
             self.turtle_cave_bubble, self.turtle_cave_top_bubble,
-            lambda state: state.has("ingredient_hotsoup", self.player)
+            lambda state: __has_hot_soup(state, self.player)
             # Beast form needed
         )
 
@@ -805,7 +805,7 @@ class AquariaRegions:
         self.__connect_one_way_regions(
             "turtle_cave_bubble", "turtle_cave_top_bubble",
             self.turtle_cave_bubble, self.turtle_cave_top_bubble,
-            lambda state: state.has("ingredient_hotsoup", self.player)
+            lambda state: __has_hot_soup(state, self.player)
             # Beast form needed
         )
         self.__connect_one_way_regions(
@@ -814,7 +814,7 @@ class AquariaRegions:
         self.__connect_one_way_regions(
             "veil_tr_l", "veil_tr_water_fall",
             self.veil_tr_l, self.veil_tr_water_fall,
-            lambda state: state.has("ingredient_hotsoup", self.player)
+            lambda state: __has_hot_soup(state, self.player)
             # Beast form needed
         )
         self.__connect_one_way_regions("veil_tr_water_fall", "veil_tr_l",
@@ -842,7 +842,7 @@ class AquariaRegions:
         self.__connect_regions(
             "abyss_lb", "body_c",
             self.abyss_lb, self.body_c,
-            lambda state: state.has("Body tongue cleared", self.player))  # Adding a check for opening
+            lambda state: __has_tongue_cleared(state, self.player))
         self.__connect_regions("abyss_l", "king_jellyfish_cave",
                                self.abyss_l,
                                self.king_jellyfish_cave)  # Energy form needed
@@ -880,16 +880,14 @@ class AquariaRegions:
                                self.body_c, self.body_rt)
         self.__connect_regions("body_c", "body_rb",
                                self.body_c, self.body_rb)
-        body_door_condition = \
-            lambda state: state.has("Body door 1 opened", self.player) and \
-                          state.has("Body door 2 opened", self.player) and \
-                          state.has("Body door 3 opened", self.player) and \
-                          state.has("Body door 4 opened", self.player)
         self.__connect_regions("body_c", "body_b",
-                               self.body_c, self.body_b, body_door_condition)
+                               self.body_c, self.body_b,
+                               lambda state:
+                               __has_body_doors_opened(state, self.player))
         self.__connect_regions("body_b", "final_boss",
                                self.body_b, self.final_boss,
-                               body_door_condition)  # Need 4 spirits
+                               lambda state:
+                               __has_body_doors_opened(state, self.player))
         self.__connect_regions("final_boss", "final_boss_tube",
                                self.final_boss,
                                self.final_boss_tube)  # Nature form needed
@@ -1105,3 +1103,66 @@ class AquariaRegions:
         self.__create_abyss()
         self.__create_sunken_city()
         self.__create_body()
+
+
+# Every condition to connect regions
+
+def __has_hot_soup(state, player) -> bool:
+    """`player` in `state` has the hotsoup item"""
+    return state.has("Hot soup", player)
+
+
+def __has_tongue_cleared(state, player) -> bool:
+    """`player` in `state` has the Body tongue cleared item"""
+    return state.has("Body tongue cleared", player)
+
+
+def __has_body_doors_opened(state, player) -> bool:
+    """`player` in `state` has the 4 body doors opened item"""
+    return state.has("Body door 1 opened", player) and \
+        state.has("Body door 2 opened", player) and \
+        state.has("Body door 3 opened", player) and \
+        state.has("Body door 4 opened", player)
+
+
+def __has_li(state, player) -> bool:
+    """`player` in `state` has Li in it's team"""
+    return state.has("Li and Li song", player)
+
+
+def __has_shield_song(state, player) -> bool:
+    """`player` in `state` has the shield song item"""
+    return state.has("Shield song", player)
+
+
+def __has_bind_song(state, player) -> bool:
+    """`player` in `state` has the bind song item"""
+    return state.has("Bind song", player)
+
+def __has_energy_form(state, player) -> bool:
+    """`player` in `state` has the energy form item"""
+    return state.has("Energy Form", player)
+
+def __has_beast_form(state, player) -> bool:
+    """`player` in `state` has the beast form item"""
+    return state.has("Beast Form", player)
+
+def __has_nature_form(state, player) -> bool:
+    """`player` in `state` has the nature form item"""
+    return state.has("Nature Form", player)
+
+def __has_sun_form(state, player) -> bool:
+    """`player` in `state` has the sun form item"""
+    return state.has("Sun Form", player)
+
+def __has_dual_form(state, player) -> bool:
+    """`player` in `state` has the dual form item"""
+    return state.has("Dual Form", player)
+
+def __has_fish_form(state, player) -> bool:
+    """`player` in `state` has the fish form item"""
+    return state.has("Fish Form", player)
+
+def __has_spirit_form(state, player) -> bool:
+    """`player` in `state` has the spirit form item"""
+    return state.has("Spirit Form", player)
