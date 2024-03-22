@@ -229,7 +229,9 @@ class HintAmount(Range):
 
 class VagueHints(Toggle):
     """Make Location Hints a bit more vague, where they only tell you about the general area the item is in.
-    Area Hints will be generated as normal."""
+    Area Hints will be generated as normal.
+
+    This feature, by its design, can produce some strange or inconsistent results in multiworlds. Not every game implements location groups, and region names (which are used as a fallback) are not always meant to be "human readable". Only turn this on if you are okay with a little bit of chaos."""
     display_name = "Vague Hints"
 
 
