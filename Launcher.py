@@ -16,10 +16,11 @@ import multiprocessing
 import shlex
 import subprocess
 import sys
+import urllib.parse
 import webbrowser
 from os.path import isfile
 from shutil import which
-from typing import Sequence, Union, Optional
+from typing import Sequence, Tuple, Union, Optional
 
 import Utils
 import settings
@@ -107,9 +108,23 @@ components.extend([
 ])
 
 
-def identify(path: Union[None, str]):
+def identify(path: Union[None, str]) -> Tuple[Union[None, str], Union[None, Component]]:
     if path is None:
         return None, None
+    if path.startswith("archipelago://"):
+        url = urllib.parse.urlparse(path)
+        queries = urllib.parse.parse_qs(url.query)
+        if "game" in queries:
+            game = queries["game"][0]
+        else:  # TODO around 0.5.0 - this is for pre this change webhost uri's
+            game = "Archipelago"
+        for component in components:
+            if component.supports_uri and component.game_name == game:
+                return path, component
+            elif component.display_name == "Text Client":
+                # fallback
+                text_client_component = component
+        return path, text_client_component
     for component in components:
         if component.handles_file(path):
             return path, component
@@ -270,9 +285,9 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
 
     if args["update_settings"]:
         update_settings()
-    if 'file' in args:
+    if "file" in args:
         run_component(args["component"], args["file"], *args["args"])
-    elif 'component' in args:
+    elif "component" in args:
         run_component(args["component"], *args["args"])
     elif not args["update_settings"]:
         run_gui()
