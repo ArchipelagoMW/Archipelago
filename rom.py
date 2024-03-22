@@ -7,10 +7,9 @@ from pathlib import Path
 from typing import Dict, NamedTuple, Optional, TYPE_CHECKING
 
 import bsdiff4
-from Options import PerGameCommonOptions
 
 import Utils
-from Patch import APDeltaPatch
+from worlds.Files import APDeltaPatch
 
 from .data import ap_id_offset, data_path, Domain, encode_str, get_symbol
 from .items import WL4Item, filter_items
