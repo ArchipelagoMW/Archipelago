@@ -357,6 +357,9 @@ def try_getting_location_group_other_world(world: "WitnessWorld", hint_loc: Loca
         if present_locations > 1:
             valid_location_groups[group] = present_locations
 
+    if valid_location_groups["Everywhere"] > 100:
+        del valid_location_groups["Everywhere"]
+
     if world.options.vague_hints == "experimental":
         parent_region = hint_loc.parent_region
 
@@ -370,9 +373,6 @@ def try_getting_location_group_other_world(world: "WitnessWorld", hint_loc: Loca
             )
             if parent_region.name != "Menu" and 2 < parent_region_location_amount < (len(locations_in_that_world) / 2):
                 valid_location_groups[hint_loc.parent_region.name] = parent_region_location_amount
-
-    if valid_location_groups["Everywhere"] > 100:
-        del valid_location_groups["Everywhere"]
 
     if not valid_location_groups:
         return "Everywhere"
