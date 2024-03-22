@@ -62,8 +62,8 @@ class TestSVE(SVContentPackTestBase):
         self.assertIn(SVEFish.water_grub, fish_names)
         self.assertIn(SVEFish.dulse_seaweed, fish_names)
 
-        # 62 pelican town  + 17 sve pelican town
-        self.assertEqual(62 + 17, len(self.content.fishes))
+        # 63 pelican town  + 17 sve pelican town
+        self.assertEqual(63 + 17, len(self.content.fishes))
 
 
 class TestSVEWithGingerIsland(SVContentPackTestBase):
@@ -122,8 +122,8 @@ class TestSVEWithGingerIsland(SVContentPackTestBase):
         self.assertIn(SVEFish.sea_sponge, fish_names)
         self.assertIn(SVEFish.dulse_seaweed, fish_names)
 
-        # 62 pelican town + 3 ginger island + 17 sve pelican town + 10 sve ginger island
-        self.assertEqual(62 + 3 + 17 + 10, len(self.content.fishes))
+        # 63 pelican town + 3 ginger island + 17 sve pelican town + 10 sve ginger island
+        self.assertEqual(63 + 3 + 17 + 10, len(self.content.fishes))
 
 
 class TestSVEWithoutGingerIslandE2E(SVTestBase):

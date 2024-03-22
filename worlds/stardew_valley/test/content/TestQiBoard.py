@@ -15,5 +15,5 @@ class TestQiBoard(SVContentPackTestBase):
         self.assertIn(Fish.legend_ii, fish_names)
         self.assertIn(Fish.radioactive_carp, fish_names)
 
-        # 62 from pelican town + 3 ginger island exclusive + 5 extended family
-        self.assertEqual(62 + 3 + 5, len(self.content.fishes))
+        # 63 from pelican town + 3 ginger island exclusive + 5 extended family
+        self.assertEqual(63 + 3 + 5, len(self.content.fishes))

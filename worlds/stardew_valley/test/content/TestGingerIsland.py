@@ -19,8 +19,8 @@ class TestGingerIsland(SVContentPackTestBase):
         self.assertIn(Fish.lionfish, fish_names)
         self.assertIn(Fish.stingray, fish_names)
 
-        # 67 from pelican town + 3 ginger island exclusive
-        self.assertEqual(62 + 3, len(self.content.fishes))
+        # 63 from pelican town + 3 ginger island exclusive
+        self.assertEqual(63 + 3, len(self.content.fishes))
 
 
 class TestWithoutGingerIslandE2E(SVTestBase):

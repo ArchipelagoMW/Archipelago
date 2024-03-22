@@ -109,4 +109,4 @@ class TestPelicanTown(SVContentPackTestBase):
         self.assertIn(Fish.shrimp, fish_names)
         self.assertIn(Fish.snail, fish_names)
 
-        self.assertEqual(62, len(self.content.fishes))
+        self.assertEqual(63, len(self.content.fishes))
