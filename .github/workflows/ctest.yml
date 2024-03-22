@@ -1,0 +1,54 @@
+# Run CMake / CTest C++ unit tests
+
+name: ctest
+
+on:
+  push:
+    paths:
+      - '**.cc?'
+      - '**.cpp'
+      - '**.cxx'
+      - '**.hh?'
+      - '**.hpp'
+      - '**.hxx'
+      - '**.CMakeLists'
+      - '.github/workflows/ctest.yml'
+  pull_request:
+    paths:
+      - '**.cc?'
+      - '**.cpp'
+      - '**.cxx'
+      - '**.hh?'
+      - '**.hpp'
+      - '**.hxx'
+      - '**.CMakeLists'
+      - '.github/workflows/ctest.yml'
+
+jobs:
+  ctest:
+    runs-on: ${{ matrix.os }}
+    name: Test C++ ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: ilammy/msvc-dev-cmd@v1
+      if: startsWith(matrix.os,'windows')
+    - uses: Bacondish2023/setup-googletest@v1
+      with:
+        build-type: 'Release'
+    - name: Build tests
+      run: |
+        cd test/cpp
+        mkdir build
+        cmake -S . -B build/ -DCMAKE_BUILD_TYPE=Release
+        cmake --build build/ --config Release
+        ls
+    - name: Run tests
+      run: |
+        cd test/cpp
+        ctest --test-dir build/ -C Release --output-on-failure
