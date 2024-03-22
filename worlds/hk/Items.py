@@ -35,6 +35,7 @@ item_name_groups = ({
     "GeoChests": lookup_type_to_names["Geo"],
     "GeoRocks": lookup_type_to_names["Rock"],
     "GrimmkinFlames": lookup_type_to_names["Flame"],
+    "Grimmchild": {"Grimmchild1", "Grimmchild2"},
     "Grubs": lookup_type_to_names["Grub"],
     "JournalEntries": lookup_type_to_names["Journal"],
     "JunkPitChests": lookup_type_to_names["JunkPitChest"],

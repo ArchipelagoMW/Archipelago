@@ -5,8 +5,8 @@ from .Items import item_table, action_item_table, cannon_item_table, SM64Item
 from .Locations import location_table, SM64Location
 from .Options import sm64_options
 from .Rules import set_rules
-from .Regions import create_regions, sm64_level_to_entrances
-from BaseClasses import Item, Tutorial, ItemClassification
+from .Regions import create_regions, sm64_level_to_entrances, SM64Levels
+from BaseClasses import Item, Tutorial, ItemClassification, Region
 from ..AutoWorld import World, WebWorld
 
 
@@ -200,11 +200,21 @@ class SM64World(World):
         with open(os.path.join(output_directory, filename), 'w') as f:
             json.dump(data, f)
 
-    def modify_multidata(self, multidata):
+    def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
         if self.topology_present:
             er_hint_data = {}
             for entrance, destination in self.area_connections.items():
-                region = self.multiworld.get_region(sm64_level_to_entrances[destination], self.player)
-                for location in region.locations:
-                    er_hint_data[location.address] = sm64_level_to_entrances[entrance]
-            multidata['er_hint_data'][self.player] = er_hint_data
+                regions = [self.multiworld.get_region(sm64_level_to_entrances[destination], self.player)]
+                if regions[0].name == "Tiny-Huge Island (Huge)":
+                    # Special rules for Tiny-Huge Island's dual entrances
+                    reverse_area_connections = {destination: entrance for entrance, destination in self.area_connections.items()}
+                    entrance_name = sm64_level_to_entrances[reverse_area_connections[SM64Levels.TINY_HUGE_ISLAND_HUGE]] \
+                                    + ' or ' + sm64_level_to_entrances[reverse_area_connections[SM64Levels.TINY_HUGE_ISLAND_TINY]]
+                    regions[0] = self.multiworld.get_region("Tiny-Huge Island", self.player)
+                else:
+                    entrance_name = sm64_level_to_entrances[entrance]
+                regions += regions[0].subregions
+                for region in regions:
+                    for location in region.locations:
+                        er_hint_data[location.address] = entrance_name
+            hint_data[self.player] = er_hint_data

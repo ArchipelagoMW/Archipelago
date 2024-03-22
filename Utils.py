@@ -19,6 +19,7 @@ import warnings
 from argparse import Namespace
 from settings import Settings, get_settings
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
+from typing_extensions import TypeGuard
 from yaml import load, load_all, dump
 
 try:
@@ -45,7 +46,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.4.4"
+__version__ = "0.4.5"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -224,6 +225,9 @@ class UniqueKeyLoader(SafeLoader):
             if key in mapping:
                 logging.error(f"YAML duplicates sanity check failed{key_node.start_mark}")
                 raise KeyError(f"Duplicate key {key} found in YAML. Already found keys: {mapping}.")
+            if (str(key).startswith("+") and (str(key)[1:] in mapping)) or (f"+{key}" in mapping):
+                logging.error(f"YAML merge duplicates sanity check failed{key_node.start_mark}")
+                raise KeyError(f"Equivalent key {key} found in YAML. Already found keys: {mapping}.")
             mapping.add(key)
         return super().construct_mapping(node, deep)
 
@@ -712,7 +716,7 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         import ctypes
         style = 0x10 if error else 0x0
         return ctypes.windll.user32.MessageBoxW(0, text, title, style)
-    
+
     # fall back to tk
     try:
         import tkinter
@@ -966,3 +970,10 @@ class RepeatableChain:
 
     def __len__(self):
         return sum(len(iterable) for iterable in self.iterable)
+
+
+def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]]:
+    """ `str` is `Iterable`, but that's not what we want """
+    if isinstance(obj, str):
+        return False
+    return isinstance(obj, typing.Iterable)
