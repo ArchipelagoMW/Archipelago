@@ -350,7 +350,7 @@ def try_getting_location_group_other_world(world: "WitnessWorld", hint_loc: Loca
         location.name for location in world.multiworld.get_locations(hint_loc.player) if location.address is not None
     }
 
-    valid_location_groups = dict()
+    valid_location_groups: Dict[str, int] = {}
 
     for group, locations in possible_location_groups.items():
         present_locations = sum(location in locations_in_that_world for location in locations)
