@@ -3,7 +3,7 @@ from typing import Dict, List
 
 from .item_definition_classes import ItemCategory, CATEGORY_NAME_MAPPINGS, DoorItemDefinition, WeightedItemDefinition, \
     ProgressiveItemDefinition, ItemDefinition
-from ..utils import define_new_region, parse_lambda, get_items, get_sigma_normal_logic, get_sigma_expert_logic,\
+from .utils import define_new_region, parse_lambda, get_items, get_sigma_normal_logic, get_sigma_expert_logic,\
     get_vanilla_logic
 
 

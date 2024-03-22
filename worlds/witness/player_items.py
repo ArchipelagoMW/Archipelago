@@ -10,7 +10,7 @@ from .data.item_definition_classes import ItemCategory, DoorItemDefinition, Item
     WeightedItemDefinition, ItemData
 from .locations import WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
-from .utils import build_weighted_int_list
+from .data.utils import build_weighted_int_list
 
 from .data import static_logic as StaticWitnessLogic
 from .data import static_items as StaticWitnessItems

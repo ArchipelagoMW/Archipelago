@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import Tuple, List, TYPE_CHECKING, Set, Dict, Optional, Union
 from BaseClasses import Item, Location, LocationProgressType, CollectionState
 from .data import static_logic as StaticWitnessLogic
-from .utils import weighted_sample
+from .data.utils import weighted_sample
 
 if TYPE_CHECKING:
     from . import WitnessWorld

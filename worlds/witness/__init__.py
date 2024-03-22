@@ -16,7 +16,7 @@ from .player_items import WitnessItem, WitnessPlayerItems
 from .regions import WitnessPlayerRegions
 from .rules import set_rules
 from .options import TheWitnessOptions
-from .utils import get_audio_logs
+from .data.utils import get_audio_logs
 from logging import warning, error
 
 from .data import static_logic as StaticWitnessLogic

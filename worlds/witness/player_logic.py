@@ -21,9 +21,8 @@ from functools import lru_cache
 from typing import cast, TYPE_CHECKING, FrozenSet, Set, Dict, List, Tuple
 from logging import warning
 
-from .data import static_logic as StaticWitnessLogic
+from .data import static_logic as StaticWitnessLogic, utils
 from .data.item_definition_classes import DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
-from . import utils
 
 if TYPE_CHECKING:
     from . import WitnessWorld

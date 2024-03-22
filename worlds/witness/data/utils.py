@@ -102,135 +102,135 @@ def get_adjustment_file(adjustment_file: str) -> List[str]:
 
 
 def get_disable_unrandomized_list() -> List[str]:
-    return get_adjustment_file("data/settings/Exclusions/Disable_Unrandomized.txt")
+    return get_adjustment_file("settings/Exclusions/Disable_Unrandomized.txt")
 
 
 def get_early_caves_list() -> List[str]:
-    return get_adjustment_file("data/settings/Early_Caves.txt")
+    return get_adjustment_file("settings/Early_Caves.txt")
 
 
 def get_early_caves_start_list() -> List[str]:
-    return get_adjustment_file("data/settings/Early_Caves_Start.txt")
+    return get_adjustment_file("settings/Early_Caves_Start.txt")
 
 
 def get_symbol_shuffle_list() -> List[str]:
-    return get_adjustment_file("data/settings/Symbol_Shuffle.txt")
+    return get_adjustment_file("settings/Symbol_Shuffle.txt")
 
 
 def get_complex_doors() -> List[str]:
-    return get_adjustment_file("data/settings/Door_Shuffle/Complex_Doors.txt")
+    return get_adjustment_file("settings/Door_Shuffle/Complex_Doors.txt")
 
 
 def get_simple_doors() -> List[str]:
-    return get_adjustment_file("data/settings/Door_Shuffle/Simple_Doors.txt")
+    return get_adjustment_file("settings/Door_Shuffle/Simple_Doors.txt")
 
 
 def get_complex_door_panels() -> List[str]:
-    return get_adjustment_file("data/settings/Door_Shuffle/Complex_Door_Panels.txt")
+    return get_adjustment_file("settings/Door_Shuffle/Complex_Door_Panels.txt")
 
 
 def get_complex_additional_panels() -> List[str]:
-    return get_adjustment_file("data/settings/Door_Shuffle/Complex_Additional_Panels.txt")
+    return get_adjustment_file("settings/Door_Shuffle/Complex_Additional_Panels.txt")
 
 
 def get_simple_panels() -> List[str]:
-    return get_adjustment_file("data/settings/Door_Shuffle/Simple_Panels.txt")
+    return get_adjustment_file("settings/Door_Shuffle/Simple_Panels.txt")
 
 
 def get_simple_additional_panels() -> List[str]:
-    return get_adjustment_file("data/settings/Door_Shuffle/Simple_Additional_Panels.txt")
+    return get_adjustment_file("settings/Door_Shuffle/Simple_Additional_Panels.txt")
 
 
 def get_boat() -> List[str]:
-    return get_adjustment_file("data/settings/Door_Shuffle/Boat.txt")
+    return get_adjustment_file("settings/Door_Shuffle/Boat.txt")
 
 
 def get_laser_shuffle() -> List[str]:
-    return get_adjustment_file("data/settings/Laser_Shuffle.txt")
+    return get_adjustment_file("settings/Laser_Shuffle.txt")
 
 
 def get_audio_logs() -> List[str]:
-    return get_adjustment_file("data/settings/Audio_Logs.txt")
+    return get_adjustment_file("settings/Audio_Logs.txt")
 
 
 def get_ep_all_individual() -> List[str]:
-    return get_adjustment_file("data/settings/EP_Shuffle/EP_All.txt")
+    return get_adjustment_file("settings/EP_Shuffle/EP_All.txt")
 
 
 def get_ep_obelisks() -> List[str]:
-    return get_adjustment_file("data/settings/EP_Shuffle/EP_Sides.txt")
+    return get_adjustment_file("settings/EP_Shuffle/EP_Sides.txt")
 
 
 def get_obelisk_keys() -> List[str]:
-    return get_adjustment_file("data/settings/Door_Shuffle/Obelisk_Keys.txt")
+    return get_adjustment_file("settings/Door_Shuffle/Obelisk_Keys.txt")
 
 
 def get_ep_easy() -> List[str]:
-    return get_adjustment_file("data/settings/EP_Shuffle/EP_Easy.txt")
+    return get_adjustment_file("settings/EP_Shuffle/EP_Easy.txt")
 
 
 def get_ep_no_eclipse() -> List[str]:
-    return get_adjustment_file("data/settings/EP_Shuffle/EP_NoEclipse.txt")
+    return get_adjustment_file("settings/EP_Shuffle/EP_NoEclipse.txt")
 
 
 def get_vault_exclusion_list() -> List[str]:
-    return get_adjustment_file("data/settings/Exclusions/Vaults.txt")
+    return get_adjustment_file("settings/Exclusions/Vaults.txt")
 
 
 def get_discard_exclusion_list() -> List[str]:
-    return get_adjustment_file("data/settings/Exclusions/Discards.txt")
+    return get_adjustment_file("settings/Exclusions/Discards.txt")
 
 
 def get_caves_exclusion_list() -> List[str]:
-    return get_adjustment_file("data/settings/Postgame/Caves.txt")
+    return get_adjustment_file("settings/Postgame/Caves.txt")
 
 
 def get_beyond_challenge_exclusion_list() -> List[str]:
-    return get_adjustment_file("data/settings/Postgame/Beyond_Challenge.txt")
+    return get_adjustment_file("settings/Postgame/Beyond_Challenge.txt")
 
 
 def get_bottom_floor_discard_exclusion_list() -> List[str]:
-    return get_adjustment_file("data/settings/Postgame/Bottom_Floor_Discard.txt")
+    return get_adjustment_file("settings/Postgame/Bottom_Floor_Discard.txt")
 
 
 def get_bottom_floor_discard_nondoors_exclusion_list() -> List[str]:
-    return get_adjustment_file("data/settings/Postgame/Bottom_Floor_Discard_NonDoors.txt")
+    return get_adjustment_file("settings/Postgame/Bottom_Floor_Discard_NonDoors.txt")
 
 
 def get_mountain_upper_exclusion_list() -> List[str]:
-    return get_adjustment_file("data/settings/Postgame/Mountain_Upper.txt")
+    return get_adjustment_file("settings/Postgame/Mountain_Upper.txt")
 
 
 def get_challenge_vault_box_exclusion_list() -> List[str]:
-    return get_adjustment_file("data/settings/Postgame/Challenge_Vault_Box.txt")
+    return get_adjustment_file("settings/Postgame/Challenge_Vault_Box.txt")
 
 
 def get_path_to_challenge_exclusion_list() -> List[str]:
-    return get_adjustment_file("data/settings/Postgame/Path_To_Challenge.txt")
+    return get_adjustment_file("settings/Postgame/Path_To_Challenge.txt")
 
 
 def get_mountain_lower_exclusion_list() -> List[str]:
-    return get_adjustment_file("data/settings/Postgame/Mountain_Lower.txt")
+    return get_adjustment_file("settings/Postgame/Mountain_Lower.txt")
 
 
 def get_elevators_come_to_you() -> List[str]:
-    return get_adjustment_file("data/settings/Door_Shuffle/Elevators_Come_To_You.txt")
+    return get_adjustment_file("settings/Door_Shuffle/Elevators_Come_To_You.txt")
 
 
 def get_sigma_normal_logic() -> List[str]:
-    return get_adjustment_file("data/WitnessLogic.txt")
+    return get_adjustment_file("WitnessLogic.txt")
 
 
 def get_sigma_expert_logic() -> List[str]:
-    return get_adjustment_file("data/WitnessLogicExpert.txt")
+    return get_adjustment_file("WitnessLogicExpert.txt")
 
 
 def get_vanilla_logic() -> List[str]:
-    return get_adjustment_file("data/WitnessLogicVanilla.txt")
+    return get_adjustment_file("WitnessLogicVanilla.txt")
 
 
 def get_items() -> List[str]:
-    return get_adjustment_file("data/WitnessItems.txt")
+    return get_adjustment_file("WitnessItems.txt")
 
 
 def dnf_remove_redundancies(dnf_requirement: FrozenSet[FrozenSet[str]]) -> FrozenSet[FrozenSet[str]]:
