@@ -80,12 +80,6 @@ class CVCotMWorld(World):
 
     web = CVCotMWeb()
 
-    @classmethod
-    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
-        rom_file = get_base_rom_path()
-        if not os.path.exists(rom_file):
-            raise FileNotFoundError(rom_file)
-
     def generate_early(self) -> None:
         # Generate the player's unique authentication
         self.auth = bytearray(self.multiworld.random.getrandbits(8) for _ in range(16))
