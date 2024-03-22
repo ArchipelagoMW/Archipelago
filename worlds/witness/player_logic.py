@@ -652,8 +652,8 @@ class WitnessPlayerLogic:
         elif self.DIFFICULTY == "none":
             self.REFERENCE_LOGIC = StaticWitnessLogic.vanilla
 
-        self.CONNECTIONS_BY_REGION_NAME = copy.copy(self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME)
-        self.DEPENDENT_REQUIREMENTS_BY_HEX = copy.copy(self.REFERENCE_LOGIC.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)
+        self.CONNECTIONS_BY_REGION_NAME = copy.deepcopy(self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME)
+        self.DEPENDENT_REQUIREMENTS_BY_HEX = copy.deepcopy(self.REFERENCE_LOGIC.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)
         self.REQUIREMENTS_BY_HEX = dict()
 
         # Determining which panels need to be events is a difficult process.
