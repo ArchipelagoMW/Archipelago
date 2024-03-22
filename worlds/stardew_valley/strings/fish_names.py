@@ -20,6 +20,7 @@ class Fish:
     eel = "Eel"
     flounder = "Flounder"
     ghostfish = "Ghostfish"
+    goby = "Goby"
     glacierfish = "Glacierfish"
     glacierfish_jr = "Glacierfish Jr."
     halibut = "Halibut"
