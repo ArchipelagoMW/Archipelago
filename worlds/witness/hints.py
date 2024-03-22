@@ -373,7 +373,7 @@ def try_getting_location_group_other_world(world: "WitnessWorld", hint_loc: Loca
 
     location_groups_with_weights = {
         # Listen. Just don't worry about it. :)))
-        location_group: x ** 0.6 * math.e ** - (x / 7) ** 0.6 if x > 6 else x/6
+        location_group: (x ** 0.6) * math.e ** (- (x / 7) ** 0.6) if x > 6 else x / 6
         for location_group, x in valid_location_groups.items()
     }
 
