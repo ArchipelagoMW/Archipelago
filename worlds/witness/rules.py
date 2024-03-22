@@ -224,4 +224,4 @@ def set_rules(world: "WitnessWorld"):
 
         set_rule(location, rule)
 
-    world.multiworld.completion_condition[world.player] = lambda state: state.has('Victory', world.player)
+    world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)

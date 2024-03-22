@@ -9,16 +9,14 @@ from Options import PerGameCommonOptions, Toggle
 from .presets import witness_option_presets
 from worlds.AutoWorld import World, WebWorld
 from .player_logic import WitnessPlayerLogic
-from .static_logic import StaticWitnessLogic, ItemCategory, DoorItemDefinition
-from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
-    get_priority_hint_items, make_always_and_priority_hints, generate_joke_hints, make_area_hints, get_hintable_areas, \
-    make_extra_location_hints, create_all_hints, make_laser_hints, make_compact_hint_data, CompactItemData
+from .static_logic import StaticWitnessLogic, DoorItemDefinition
+from .hints import generate_joke_hints, create_all_hints, make_laser_hints, make_compact_hint_data, CompactItemData
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems, ItemData
 from .regions import WitnessRegions
 from .rules import set_rules
 from .options import TheWitnessOptions
-from .utils import get_audio_logs, get_laser_shuffle
+from .utils import get_audio_logs
 from logging import warning, error
 
 
@@ -74,19 +72,19 @@ class WitnessWorld(World):
 
     def _get_slot_data(self):
         return {
-            'seed': self.random.randrange(0, 1000000),
-            'victory_location': int(self.player_logic.VICTORY_LOCATION, 16),
-            'panelhex_to_id': self.locat.CHECK_PANELHEX_TO_ID,
-            'item_id_to_door_hexes': StaticWitnessItems.get_item_to_door_mappings(),
-            'door_hexes_in_the_pool': self.items.get_door_ids_in_pool(),
-            'symbols_not_in_the_game': self.items.get_symbol_ids_not_in_pool(),
-            'disabled_entities': [int(h, 16) for h in self.player_logic.COMPLETELY_DISABLED_ENTITIES],
-            'log_ids_to_hints': self.log_ids_to_hints,
-            'laser_ids_to_hints': self.laser_ids_to_hints,
-            'progressive_item_lists': self.items.get_progressive_item_ids_in_pool(),
-            'obelisk_side_id_to_EPs': StaticWitnessLogic.OBELISK_SIDE_ID_TO_EP_HEXES,
-            'precompleted_puzzles': [int(h, 16) for h in self.player_logic.EXCLUDED_LOCATIONS],
-            'entity_to_name': StaticWitnessLogic.ENTITY_ID_TO_NAME,
+            "seed": self.random.randrange(0, 1000000),
+            "victory_location": int(self.player_logic.VICTORY_LOCATION, 16),
+            "panelhex_to_id": self.locat.CHECK_PANELHEX_TO_ID,
+            "item_id_to_door_hexes": StaticWitnessItems.get_item_to_door_mappings(),
+            "door_hexes_in_the_pool": self.items.get_door_ids_in_pool(),
+            "symbols_not_in_the_game": self.items.get_symbol_ids_not_in_pool(),
+            "disabled_entities": [int(h, 16) for h in self.player_logic.COMPLETELY_DISABLED_ENTITIES],
+            "log_ids_to_hints": self.log_ids_to_hints,
+            "laser_ids_to_hints": self.laser_ids_to_hints,
+            "progressive_item_lists": self.items.get_progressive_item_ids_in_pool(),
+            "obelisk_side_id_to_EPs": StaticWitnessLogic.OBELISK_SIDE_ID_TO_EP_HEXES,
+            "precompleted_puzzles": [int(h, 16) for h in self.player_logic.EXCLUDED_LOCATIONS],
+            "entity_to_name": StaticWitnessLogic.ENTITY_ID_TO_NAME,
         }
 
     def determine_sufficient_progression(self):
@@ -227,7 +225,7 @@ class WitnessWorld(World):
             self.multiworld.get_region(region, self.player).add_locations({loc: self.location_name_to_id[loc]})
 
             player = self.multiworld.get_player_name(self.player)
-            
+
             warning(f"""Location "{loc}" had to be added to {player}'s world due to insufficient sphere 1 size.""")
 
     def create_items(self):
@@ -359,12 +357,12 @@ class WitnessWorld(World):
     def create_item(self, item_name: str) -> Item:
         # If the player's plando options are malformed, the item_name parameter could be a dictionary containing the
         #   name of the item, rather than the item itself. This is a workaround to prevent a crash.
-        if type(item_name) is dict:
+        if isinstance(item_name, dict):
             item_name = list(item_name.keys())[0]
 
         # this conditional is purely for unit tests, which need to be able to create an item before generate_early
         item_data: ItemData
-        if hasattr(self, 'items') and self.items and item_name in self.items.item_data:
+        if hasattr(self, "items") and self.items and item_name in self.items.item_data:
             item_data = self.items.item_data[item_name]
         else:
             item_data = StaticWitnessItems.item_data[item_name]

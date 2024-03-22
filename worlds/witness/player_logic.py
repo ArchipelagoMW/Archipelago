@@ -17,11 +17,12 @@ When the world has parsed its options, a second function is called to finalize t
 
 import copy
 from collections import defaultdict
-from typing import cast, TYPE_CHECKING
+from functools import lru_cache
+from typing import cast, TYPE_CHECKING, FrozenSet, Set, Dict, List
 from logging import warning
 
 from .static_logic import StaticWitnessLogic, DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
-from .utils import *
+import utils
 
 if TYPE_CHECKING:
     from . import WitnessWorld
@@ -121,13 +122,13 @@ class WitnessPlayerLogic:
                             for possibility in new_items
                         )
 
-                dependent_items_for_option = dnf_and([dependent_items_for_option, new_items])
+                dependent_items_for_option = utils.dnf_and([dependent_items_for_option, new_items])
 
             for items_option in these_items:
                 for dependentItem in dependent_items_for_option:
                     all_options.add(items_option.union(dependentItem))
 
-        return dnf_remove_redundancies(frozenset(all_options))
+        return utils.dnf_remove_redundancies(frozenset(all_options))
 
     def make_single_adjustment(self, adj_type: str, line: str):
         from . import StaticWitnessItems
@@ -138,7 +139,7 @@ class WitnessPlayerLogic:
             item_name = line_split[0]
 
             if item_name not in StaticWitnessItems.item_data:
-                raise RuntimeError("Item \"" + item_name + "\" does not exist.")
+                raise RuntimeError('Item "' + item_name + '" does not exist.')
 
             self.THEORETICAL_ITEMS.add(item_name)
             if isinstance(StaticWitnessLogic.all_items[item_name], ProgressiveItemDefinition):
@@ -189,11 +190,11 @@ class WitnessPlayerLogic:
             line_split = line.split(" - ")
 
             requirement = {
-                "panels": parse_lambda(line_split[1]),
+                "panels": utils.parse_lambda(line_split[1]),
             }
 
             if len(line_split) > 2:
-                required_items = parse_lambda(line_split[2])
+                required_items = utils.parse_lambda(line_split[2])
                 items_actually_in_the_game = [
                     item_name for item_name, item_definition in StaticWitnessLogic.all_items.items()
                     if item_definition.category is ItemCategory.SYMBOL
@@ -224,7 +225,7 @@ class WitnessPlayerLogic:
             return
 
         if adj_type == "Region Changes":
-            new_region_and_options = define_new_region(line + ":")
+            new_region_and_options = utils.define_new_region(line + ":")
 
             self.CONNECTIONS_BY_REGION_NAME[new_region_and_options[0]["name"]] = new_region_and_options[1]
 
@@ -245,11 +246,11 @@ class WitnessPlayerLogic:
                             (target_region, frozenset({frozenset(["TrueOneWay"])}))
                         )
                     else:
-                        new_lambda = connection[1] | parse_lambda(panel_set_string)
+                        new_lambda = connection[1] | utils.parse_lambda(panel_set_string)
                         self.CONNECTIONS_BY_REGION_NAME[source_region].add((target_region, new_lambda))
                     break
             else:  # Execute if loop did not break. TIL this is a thing you can do!
-                new_conn = (target_region, parse_lambda(panel_set_string))
+                new_conn = (target_region, utils.parse_lambda(panel_set_string))
                 self.CONNECTIONS_BY_REGION_NAME[source_region].add(new_conn)
 
         if adj_type == "Added Locations":
@@ -285,29 +286,29 @@ class WitnessPlayerLogic:
         # Caves & Challenge should never have anything if doors are vanilla - definitionally "post-game"
         # This is technically imprecise, but it matches player expectations better.
         if not (early_caves or doors):
-            postgame_adjustments.append(get_caves_exclusion_list())
-            postgame_adjustments.append(get_beyond_challenge_exclusion_list())
+            postgame_adjustments.append(utils.get_caves_exclusion_list())
+            postgame_adjustments.append(utils.get_beyond_challenge_exclusion_list())
 
             # If Challenge is the goal, some panels on the way need to be left on, as well as Challenge Vault box itself
             if not victory == "challenge":
-                postgame_adjustments.append(get_path_to_challenge_exclusion_list())
-                postgame_adjustments.append(get_challenge_vault_box_exclusion_list())
+                postgame_adjustments.append(utils.get_path_to_challenge_exclusion_list())
+                postgame_adjustments.append(utils.get_challenge_vault_box_exclusion_list())
 
         # Challenge can only have something if the goal is not challenge or longbox itself.
         # In case of shortbox, it'd have to be a "reverse shortbox" situation where shortbox requires *more* lasers.
         # In that case, it'd also have to be a doors mode, but that's already covered by the previous block.
         if not (victory == "elevator" or reverse_shortbox_goal):
-            postgame_adjustments.append(get_beyond_challenge_exclusion_list())
+            postgame_adjustments.append(utils.get_beyond_challenge_exclusion_list())
             if not victory == "challenge":
-                postgame_adjustments.append(get_challenge_vault_box_exclusion_list())
+                postgame_adjustments.append(utils.get_challenge_vault_box_exclusion_list())
 
         # Mountain can't be reached if the goal is shortbox (or "reverse long box")
         if not mountain_enterable_from_top:
-            postgame_adjustments.append(get_mountain_upper_exclusion_list())
+            postgame_adjustments.append(utils.get_mountain_upper_exclusion_list())
 
             # Same goes for lower mountain, but that one *can* be reached in remote doors modes.
             if not doors:
-                postgame_adjustments.append(get_mountain_lower_exclusion_list())
+                postgame_adjustments.append(utils.get_mountain_lower_exclusion_list())
 
         # The Mountain Bottom Floor Discard is a bit complicated, so we handle it separately. ("it" == the Discard)
         # In Elevator Goal, it is definitionally in the post-game, unless remote doors is played.
@@ -319,15 +320,15 @@ class WitnessPlayerLogic:
             # This has different consequences depending on whether remote doors is being played.
             # If doors are vanilla, Bottom Floor Discard locks a door to an area, which has to be disabled as well.
             if doors:
-                postgame_adjustments.append(get_bottom_floor_discard_exclusion_list())
+                postgame_adjustments.append(utils.get_bottom_floor_discard_exclusion_list())
             else:
-                postgame_adjustments.append(get_bottom_floor_discard_nondoors_exclusion_list())
+                postgame_adjustments.append(utils.get_bottom_floor_discard_nondoors_exclusion_list())
 
         # In Challenge goal + early_caves + vanilla doors, you could find something important on Bottom Floor Discard,
         # including the Caves Shortcuts themselves if playing "early_caves: start_inventory".
         # This is another thing that was deemed "unfun" more than fitting the actual definition of post-game.
         if victory == "challenge" and early_caves and not doors:
-            postgame_adjustments.append(get_bottom_floor_discard_nondoors_exclusion_list())
+            postgame_adjustments.append(utils.get_bottom_floor_discard_nondoors_exclusion_list())
 
         # If we have a proper short box goal, long box will never be activated first.
         if proper_shortbox_goal:
@@ -356,15 +357,15 @@ class WitnessPlayerLogic:
             # In disable_non_randomized, the discards are needed for alternate activation triggers, UNLESS both
             # (remote) doors and lasers are shuffled.
             if not world.options.disable_non_randomized_puzzles or (doors and lasers):
-                adjustment_linesets_in_order.append(get_discard_exclusion_list())
+                adjustment_linesets_in_order.append(utils.get_discard_exclusion_list())
 
             if doors:
-                adjustment_linesets_in_order.append(get_bottom_floor_discard_exclusion_list())
+                adjustment_linesets_in_order.append(utils.get_bottom_floor_discard_exclusion_list())
 
         if not world.options.shuffle_vault_boxes:
-            adjustment_linesets_in_order.append(get_vault_exclusion_list())
+            adjustment_linesets_in_order.append(utils.get_vault_exclusion_list())
             if not victory == "challenge":
-                adjustment_linesets_in_order.append(get_challenge_vault_box_exclusion_list())
+                adjustment_linesets_in_order.append(utils.get_challenge_vault_box_exclusion_list())
 
         # Victory Condition
 
@@ -387,54 +388,54 @@ class WitnessPlayerLogic:
             ])
 
         if world.options.disable_non_randomized_puzzles:
-            adjustment_linesets_in_order.append(get_disable_unrandomized_list())
+            adjustment_linesets_in_order.append(utils.get_disable_unrandomized_list())
 
         if world.options.shuffle_symbols:
-            adjustment_linesets_in_order.append(get_symbol_shuffle_list())
+            adjustment_linesets_in_order.append(utils.get_symbol_shuffle_list())
 
         if world.options.EP_difficulty == "normal":
-            adjustment_linesets_in_order.append(get_ep_easy())
+            adjustment_linesets_in_order.append(utils.get_ep_easy())
         elif world.options.EP_difficulty == "tedious":
-            adjustment_linesets_in_order.append(get_ep_no_eclipse())
+            adjustment_linesets_in_order.append(utils.get_ep_no_eclipse())
 
         if world.options.door_groupings == "regional":
             if world.options.shuffle_doors == "panels":
-                adjustment_linesets_in_order.append(get_simple_panels())
+                adjustment_linesets_in_order.append(utils.get_simple_panels())
             elif world.options.shuffle_doors == "doors":
-                adjustment_linesets_in_order.append(get_simple_doors())
+                adjustment_linesets_in_order.append(utils.get_simple_doors())
             elif world.options.shuffle_doors == "mixed":
-                adjustment_linesets_in_order.append(get_simple_doors())
-                adjustment_linesets_in_order.append(get_simple_additional_panels())
+                adjustment_linesets_in_order.append(utils.get_simple_doors())
+                adjustment_linesets_in_order.append(utils.get_simple_additional_panels())
         else:
             if world.options.shuffle_doors == "panels":
-                adjustment_linesets_in_order.append(get_complex_door_panels())
-                adjustment_linesets_in_order.append(get_complex_additional_panels())
+                adjustment_linesets_in_order.append(utils.get_complex_door_panels())
+                adjustment_linesets_in_order.append(utils.get_complex_additional_panels())
             elif world.options.shuffle_doors == "doors":
-                adjustment_linesets_in_order.append(get_complex_doors())
+                adjustment_linesets_in_order.append(utils.get_complex_doors())
             elif world.options.shuffle_doors == "mixed":
-                adjustment_linesets_in_order.append(get_complex_doors())
-                adjustment_linesets_in_order.append(get_complex_additional_panels())
+                adjustment_linesets_in_order.append(utils.get_complex_doors())
+                adjustment_linesets_in_order.append(utils.get_complex_additional_panels())
 
         if world.options.shuffle_boat:
-            adjustment_linesets_in_order.append(get_boat())
+            adjustment_linesets_in_order.append(utils.get_boat())
 
         if world.options.early_caves == "starting_inventory":
-            adjustment_linesets_in_order.append(get_early_caves_start_list())
+            adjustment_linesets_in_order.append(utils.get_early_caves_start_list())
 
         if world.options.early_caves == "add_to_pool" and not doors:
-            adjustment_linesets_in_order.append(get_early_caves_list())
+            adjustment_linesets_in_order.append(utils.get_early_caves_list())
 
         if world.options.elevators_come_to_you:
-            adjustment_linesets_in_order.append(get_elevators_come_to_you())
+            adjustment_linesets_in_order.append(utils.get_elevators_come_to_you())
 
         for item in self.YAML_ADDED_ITEMS:
             adjustment_linesets_in_order.append(["Items:", item])
 
         if lasers:
-            adjustment_linesets_in_order.append(get_laser_shuffle())
+            adjustment_linesets_in_order.append(utils.get_laser_shuffle())
 
         if world.options.shuffle_EPs and world.options.obelisk_keys:
-            adjustment_linesets_in_order.append(get_obelisk_keys())
+            adjustment_linesets_in_order.append(utils.get_obelisk_keys())
 
         if world.options.shuffle_EPs == "obelisk_sides":
             ep_gen = ((ep_hex, ep_obj) for (ep_hex, ep_obj) in self.REFERENCE_LOGIC.ENTITIES_BY_HEX.items()
@@ -446,10 +447,10 @@ class WitnessPlayerLogic:
                 ep_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[ep_hex]["checkName"]
                 self.ALWAYS_EVENT_NAMES_BY_HEX[ep_hex] = f"{obelisk_name} - {ep_name}"
         else:
-            adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_obelisks()[1:])
+            adjustment_linesets_in_order.append(["Disabled Locations:"] + utils.get_ep_obelisks()[1:])
 
         if not world.options.shuffle_EPs:
-            adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_all_individual()[1:])
+            adjustment_linesets_in_order.append(["Disabled Locations:"] + utils.get_ep_all_individual()[1:])
 
         for yaml_disabled_location in self.YAML_DISABLED_LOCATIONS:
             if yaml_disabled_location not in self.REFERENCE_LOGIC.ENTITIES_BY_NAME:
@@ -520,11 +521,11 @@ class WitnessPlayerLogic:
 
                             if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"]:
                                 region_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"]["name"]
-                                entity_req = dnf_and([entity_req, frozenset({frozenset({region_name})})])
+                                entity_req = utils.dnf_and([entity_req, frozenset({frozenset({region_name})})])
 
                             individual_entity_requirements.append(entity_req)
 
-                    overall_requirement |= dnf_and(individual_entity_requirements)
+                    overall_requirement |= utils.dnf_and(individual_entity_requirements)
 
                 new_connections.append((connection[0], overall_requirement))
 
@@ -604,7 +605,7 @@ class WitnessPlayerLogic:
 
         name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel]["checkName"] + action
         if panel not in self.USED_EVENT_NAMES_BY_HEX:
-            warning("Panel \"" + name + "\" does not have an associated event name.")
+            warning('Panel "' + name + '" does not have an associated event name.')
             self.USED_EVENT_NAMES_BY_HEX[panel] = name + " Event"
         pair = (name, self.USED_EVENT_NAMES_BY_HEX[panel])
         return pair

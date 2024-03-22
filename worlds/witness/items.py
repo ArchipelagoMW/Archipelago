@@ -227,16 +227,16 @@ class WitnessPlayerItems:
         for plando_setting in self._multiworld.plando_items[self._player_id]:
             if plando_setting.get("from_pool", True):
                 for item_setting_key in [key for key in ["item", "items"] if key in plando_setting]:
-                    if type(plando_setting[item_setting_key]) is str:
+                    if isinstance(plando_setting[item_setting_key], str):
                         output -= {plando_setting[item_setting_key]}
-                    elif type(plando_setting[item_setting_key]) is dict:
+                    elif isinstance(plando_setting[item_setting_key], dict):
                         output -= {item for item, weight in plando_setting[item_setting_key].items() if weight}
                     else:
                         # Assume this is some other kind of iterable.
                         for inner_item in plando_setting[item_setting_key]:
-                            if type(inner_item) is str:
+                            if isinstance(inner_item, str):
                                 output -= {inner_item}
-                            elif type(inner_item) is dict:
+                            elif isinstance(inner_item, dict):
                                 output -= {item for item, weight in inner_item.items() if weight}
 
         # Sort the output for consistency across versions if the implementation changes but the logic does not.

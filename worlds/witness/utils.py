@@ -113,7 +113,7 @@ class lazy(object):
 
 @lru_cache(maxsize=None)
 def get_adjustment_file(adjustment_file: str) -> List[str]:
-    data = get_data(__name__, adjustment_file).decode('utf-8')
+    data = get_data(__name__, adjustment_file).decode("utf-8")
     return [line.strip() for line in data.split("\n")]
 
 
