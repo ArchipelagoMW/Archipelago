@@ -47,7 +47,7 @@ an experience customized for their taste, and different players in the same mult
 
 ### Where do I get a YAML file?
 
-You can generate a yaml or download a template by visiting the [Pokemon Red and Blue Player Settings Page](/games/Pokemon%20Red%20and%20Blue/player-settings)
+You can generate a yaml or download a template by visiting the [Pokemon Red and Blue Player Options Page](/games/Pokemon%20Red%20and%20Blue/player-options)
 
 It is important to note that the `game_version` option determines the ROM file that will be patched.
 Both the player and the person generating (if they are generating locally) will need the corresponding ROM file.
@@ -72,7 +72,7 @@ And the following special characters (these each count as one character):
 
 ### Generating and Patching a Game
 
-1. Create your settings file (YAML).
+1. Create your options file (YAML).
 2. Follow the general Archipelago instructions for [generating a game](../../Archipelago/setup/en#generating-a-game).
 This will generate an output file for you. Your patch file will have a `.apred` or `.apblue` file extension.
 3. Open `ArchipelagoLauncher.exe`
@@ -114,5 +114,5 @@ Pokémon Red and Blue has a fully functional map tracker that supports auto-trac
 3. Click on the "AP" symbol at the top.
 4. Enter the AP address, slot name and password. 
 
-The rest should take care of itself! Items and checks will be marked automatically, and it even knows your settings - It
+The rest should take care of itself! Items and checks will be marked automatically, and it even knows your options - It
 will hide checks & adjust logic accordingly.

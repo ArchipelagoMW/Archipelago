@@ -32,6 +32,8 @@ class LingoItem(Item):
 ALL_ITEM_TABLE: Dict[str, ItemData] = {}
 ITEMS_BY_GROUP: Dict[str, List[str]] = {}
 
+TRAP_ITEMS: List[str] = ["Slowness Trap", "Iceland Trap", "Atbash Trap"]
+
 
 def load_item_data():
     global ALL_ITEM_TABLE, ITEMS_BY_GROUP
@@ -68,9 +70,7 @@ def load_item_data():
         "The Feeling of Being Lost": ItemClassification.filler,
         "Wanderlust":                ItemClassification.filler,
         "Empty White Hallways":      ItemClassification.filler,
-        "Slowness Trap":             ItemClassification.trap,
-        "Iceland Trap":              ItemClassification.trap,
-        "Atbash Trap":               ItemClassification.trap,
+        **{trap_name: ItemClassification.trap for trap_name in TRAP_ITEMS},
         "Puzzle Skip":               ItemClassification.useful,
     }
 
