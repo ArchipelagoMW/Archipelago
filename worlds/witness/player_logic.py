@@ -22,7 +22,7 @@ from typing import cast, TYPE_CHECKING, FrozenSet, Set, Dict, List
 from logging import warning
 
 from .static_logic import StaticWitnessLogic, DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
-import utils
+from . import utils
 
 if TYPE_CHECKING:
     from . import WitnessWorld

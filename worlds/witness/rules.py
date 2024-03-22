@@ -220,7 +220,7 @@ def set_rules(world: "WitnessWorld"):
 
         rule = make_lambda(entity_hex, world)
 
-        location = world.multiworld.get_location(location, world.player)
+        location = world.get_location(location)
 
         set_rule(location, rule)
 
