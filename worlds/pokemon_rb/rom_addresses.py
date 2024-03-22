@@ -1,9 +1,9 @@
 rom_addresses = {
     "Option_Encounter_Minimum_Steps": 0x3c1,
     "Option_Pitch_Black_Rock_Tunnel": 0x76a,
-    "Option_Blind_Trainers": 0x30d5,
-    "Option_Split_Card_Key": 0x3e1d,
-    "Option_Fix_Combat_Bugs": 0x3e1e,
+    "Option_Blind_Trainers": 0x32f0,
+    "Option_Split_Card_Key": 0x3e19,
+    "Option_Fix_Combat_Bugs": 0x3e1a,
     "Option_Lose_Money": 0x40d4,
     "Base_Stats_Mew": 0x4260,
     "Title_Mon_First": 0x4373,

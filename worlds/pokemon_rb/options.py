@@ -526,7 +526,8 @@ class TrainerLegendaries(Toggle):
 
 class BlindTrainers(Range):
     """Chance each frame that you are standing on a tile in a trainer's line of sight that they will fail to initiate a
-    battle. If you move into and out of their line of sight without stopping, this chance will only trigger once."""
+    battle. If you move into and out of their line of sight without stopping, this chance will only trigger once.
+    Trainers which have Trainersanity location checks ignore the Blind Trainers setting."""
     display_name = "Blind Trainers"
     range_start = 0
     range_end = 100
