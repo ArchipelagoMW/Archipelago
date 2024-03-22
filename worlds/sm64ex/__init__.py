@@ -52,12 +52,13 @@ class SM64World(World):
         if (not self.options.enable_coin_stars):
             max_stars -= 15
         self.move_rando_bitvec = 0
-        for action, itemid in action_item_table.items():
-            # HACK: Disable randomization of double jump
-            if action == 'Double Jump': continue
-            if getattr(self.options, f"move_randomizer_{action.replace(' ','')}"):
-                max_stars -= 1
-                self.move_rando_bitvec |= (1 << (itemid - action_item_table['Double Jump']))
+        if self.options.enable_move_rando:
+            for action, itemid in action_item_table.items():
+                # HACK: Disable randomization of double jump
+                if action == 'Double Jump': continue
+                if action in self.options.move_rando_actions:
+                    max_stars -= 1
+                    self.move_rando_bitvec |= (1 << (itemid - action_item_table['Double Jump']))
         if (self.options.exclamation_boxes > 0):
             max_stars += 29
         self.number_of_stars = min(self.options.amount_of_stars, max_stars)
