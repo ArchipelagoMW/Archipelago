@@ -9,7 +9,7 @@
     - An emulator capable of connecting to SNI such as:
         - snes9x-rr from: [snes9x rr](https://github.com/gocha/snes9x-rr/releases),
         - BizHawk from: [TASVideos](https://tasvideos.org/BizHawk)
-        -snes9x-nwa from: [snes9x nwa](https://github.com/Skarsnik/snes9x-emunwa/releases)
+        - snes9x-nwa from: [snes9x nwa](https://github.com/Skarsnik/snes9x-emunwa/releases)
         
         NOTE: RetroArch and FXPakPro are not currently supported.
 - Your legally obtained Yoshi's Island English 1.0 ROM file, probably named `Super Mario World 2 - Yoshi's Island (U).sfc`
@@ -39,8 +39,8 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a config file?
 
-The Player Settings page on the website allows you to configure your personal settings and export a config file from
-them. Player settings page: 
+The Player Options page on the website allows you to configure your personal settings and export a config file from
+them.
 
 ### Verifying your config file
 
