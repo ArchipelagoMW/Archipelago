@@ -8,7 +8,7 @@ from BaseClasses import Region, Entrance
 from . import rules
 from .locations import WL4Location, get_level_location_data
 from .types import AccessRule, Passage
-from .options import Difficulty, Goal, OpenDoors
+from .options import Goal, OpenDoors
 
 if TYPE_CHECKING:
     from . import WL4World
