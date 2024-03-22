@@ -1,7 +1,7 @@
 # ArchipIdle Setup Guide
 
 ## Joining a MultiWorld Game
-1. Generate a `.yaml` file from the [ArchipIDLE Player Settings Page](/games/ArchipIDLE/player-settings)
+1. Generate a `.yaml` file from the [ArchipIDLE Player Options Page](/games/ArchipIDLE/player-options)
 2. Open the ArchipIDLE Client in your web browser by either:
     - Navigate to the [ArchipIDLE Client](http://idle.multiworld.link)
     - Download the client and run it locally from the
