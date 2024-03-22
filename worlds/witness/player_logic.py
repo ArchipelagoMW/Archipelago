@@ -18,10 +18,11 @@ When the world has parsed its options, a second function is called to finalize t
 import copy
 from collections import defaultdict
 from functools import lru_cache
-from typing import cast, TYPE_CHECKING, FrozenSet, Set, Dict, List
+from typing import cast, TYPE_CHECKING, FrozenSet, Set, Dict, List, Tuple
 from logging import warning
 
-from .static_logic import StaticWitnessLogic, DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
+from .data import static_logic as StaticWitnessLogic
+from .data.item_definition_classes import DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
 from . import utils
 
 if TYPE_CHECKING:
@@ -32,7 +33,7 @@ class WitnessPlayerLogic:
     """WITNESS LOGIC CLASS"""
 
     @lru_cache(maxsize=None)
-    def reduce_req_within_region(self, panel_hex: str) -> FrozenSet[FrozenSet[str]]:
+    def reduce_req_within_region(self, entity_hex: str) -> FrozenSet[FrozenSet[str]]:
         """
         Panels in this game often only turn on when other panels are solved.
         Those other panels may have different item requirements.
@@ -41,15 +42,15 @@ class WitnessPlayerLogic:
         Panels outside of the same region will still be checked manually.
         """
 
-        if panel_hex in self.COMPLETELY_DISABLED_ENTITIES or panel_hex in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES:
+        if entity_hex in self.COMPLETELY_DISABLED_ENTITIES or entity_hex in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES:
             return frozenset()
 
-        entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel_hex]
+        entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity_hex]
 
         these_items = frozenset({frozenset()})
 
         if entity_obj["id"]:
-            these_items = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["items"]
+            these_items = self.DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex]["items"]
 
         these_items = frozenset({
             subset.intersection(self.THEORETICAL_ITEMS_NO_MULTI)
@@ -59,10 +60,10 @@ class WitnessPlayerLogic:
         for subset in these_items:
             self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(subset)
 
-        these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"]
+        these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex]["panels"]
 
-        if panel_hex in self.DOOR_ITEMS_BY_ID:
-            door_items = frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[panel_hex]})
+        if entity_hex in self.DOOR_ITEMS_BY_ID:
+            door_items = frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[entity_hex]})
 
             all_options: Set[FrozenSet[str]] = set()
 
@@ -72,15 +73,15 @@ class WitnessPlayerLogic:
                     all_options.add(items_option.union(dependentItem))
 
             # If this entity is not an EP, and it has an associated door item, ignore the original power dependencies
-            if StaticWitnessLogic.ENTITIES_BY_HEX[panel_hex]["entityType"] != "EP":
+            if StaticWitnessLogic.ENTITIES_BY_HEX[entity_hex]["entityType"] != "EP":
                 # 0x28A0D depends on another entity for *non-power* reasons -> This dependency needs to be preserved,
                 # except in Expert, where that dependency doesn't exist, but now there *is* a power dependency.
                 # In the future, it'd be wise to make a distinction between "power dependencies" and other dependencies.
-                if panel_hex == "0x28A0D" and not any("0x28998" in option for option in these_panels):
+                if entity_hex == "0x28A0D" and not any("0x28998" in option for option in these_panels):
                     these_items = all_options
 
                 # Another dependency that is not power-based: The Symmetry Island Upper Panel latches
-                elif panel_hex == "0x1C349":
+                elif entity_hex == "0x1C349":
                     these_items = all_options
 
                 else:
@@ -108,9 +109,9 @@ class WitnessPlayerLogic:
 
                 if option_entity in self.ALWAYS_EVENT_NAMES_BY_HEX:
                     new_items = frozenset({frozenset([option_entity])})
-                elif (panel_hex, option_entity) in self.CONDITIONAL_EVENTS:
+                elif (entity_hex, option_entity) in self.CONDITIONAL_EVENTS:
                     new_items = frozenset({frozenset([option_entity])})
-                    self.USED_EVENT_NAMES_BY_HEX[option_entity] = self.CONDITIONAL_EVENTS[(panel_hex, option_entity)]
+                    self.USED_EVENT_NAMES_BY_HEX[option_entity] = self.CONDITIONAL_EVENTS[(entity_hex, option_entity)]
                 elif option_entity in {"7 Lasers", "11 Lasers", "7 Lasers + Redirect", "11 Lasers + Redirect",
                                        "PP2 Weirdness", "Theater to Tunnels"}:
                     new_items = frozenset({frozenset([option_entity])})
@@ -130,28 +131,28 @@ class WitnessPlayerLogic:
 
         return utils.dnf_remove_redundancies(frozenset(all_options))
 
-    def make_single_adjustment(self, adj_type: str, line: str):
-        from . import StaticWitnessItems
+    def make_single_adjustment(self, adj_type: str, line: str) -> None:
+        from .data import static_items as StaticWitnessItems
         """Makes a single logic adjustment based on additional logic file"""
 
         if adj_type == "Items":
             line_split = line.split(" - ")
             item_name = line_split[0]
 
-            if item_name not in StaticWitnessItems.item_data:
+            if item_name not in StaticWitnessItems.ITEM_DATA:
                 raise RuntimeError('Item "' + item_name + '" does not exist.')
 
             self.THEORETICAL_ITEMS.add(item_name)
-            if isinstance(StaticWitnessLogic.all_items[item_name], ProgressiveItemDefinition):
+            if isinstance(StaticWitnessLogic.ALL_ITEMS[item_name], ProgressiveItemDefinition):
                 self.THEORETICAL_ITEMS_NO_MULTI.update(cast(ProgressiveItemDefinition,
-                                                            StaticWitnessLogic.all_items[item_name]).child_item_names)
+                                                            StaticWitnessLogic.ALL_ITEMS[item_name]).child_item_names)
             else:
                 self.THEORETICAL_ITEMS_NO_MULTI.add(item_name)
 
-            if StaticWitnessLogic.all_items[item_name].category in [ItemCategory.DOOR, ItemCategory.LASER]:
-                panel_hexes = cast(DoorItemDefinition, StaticWitnessLogic.all_items[item_name]).panel_id_hexes
-                for panel_hex in panel_hexes:
-                    self.DOOR_ITEMS_BY_ID.setdefault(panel_hex, []).append(item_name)
+            if StaticWitnessLogic.ALL_ITEMS[item_name].category in [ItemCategory.DOOR, ItemCategory.LASER]:
+                entity_hexes = cast(DoorItemDefinition, StaticWitnessLogic.ALL_ITEMS[item_name]).panel_id_hexes
+                for entity_hex in entity_hexes:
+                    self.DOOR_ITEMS_BY_ID.setdefault(entity_hex, []).append(item_name)
 
             return
 
@@ -159,18 +160,18 @@ class WitnessPlayerLogic:
             item_name = line
 
             self.THEORETICAL_ITEMS.discard(item_name)
-            if isinstance(StaticWitnessLogic.all_items[item_name], ProgressiveItemDefinition):
+            if isinstance(StaticWitnessLogic.ALL_ITEMS[item_name], ProgressiveItemDefinition):
                 self.THEORETICAL_ITEMS_NO_MULTI.difference_update(
-                    cast(ProgressiveItemDefinition, StaticWitnessLogic.all_items[item_name]).child_item_names
+                    cast(ProgressiveItemDefinition, StaticWitnessLogic.ALL_ITEMS[item_name]).child_item_names
                 )
             else:
                 self.THEORETICAL_ITEMS_NO_MULTI.discard(item_name)
 
-            if StaticWitnessLogic.all_items[item_name].category in [ItemCategory.DOOR, ItemCategory.LASER]:
-                panel_hexes = cast(DoorItemDefinition, StaticWitnessLogic.all_items[item_name]).panel_id_hexes
-                for panel_hex in panel_hexes:
-                    if panel_hex in self.DOOR_ITEMS_BY_ID and item_name in self.DOOR_ITEMS_BY_ID[panel_hex]:
-                        self.DOOR_ITEMS_BY_ID[panel_hex].remove(item_name)
+            if StaticWitnessLogic.ALL_ITEMS[item_name].category in [ItemCategory.DOOR, ItemCategory.LASER]:
+                entity_hexes = cast(DoorItemDefinition, StaticWitnessLogic.ALL_ITEMS[item_name]).panel_id_hexes
+                for entity_hex in entity_hexes:
+                    if entity_hex in self.DOOR_ITEMS_BY_ID and item_name in self.DOOR_ITEMS_BY_ID[entity_hex]:
+                        self.DOOR_ITEMS_BY_ID[entity_hex].remove(item_name)
 
         if adj_type == "Starting Inventory":
             self.STARTING_INVENTORY.add(line)
@@ -196,7 +197,7 @@ class WitnessPlayerLogic:
             if len(line_split) > 2:
                 required_items = utils.parse_lambda(line_split[2])
                 items_actually_in_the_game = [
-                    item_name for item_name, item_definition in StaticWitnessLogic.all_items.items()
+                    item_name for item_name, item_definition in StaticWitnessLogic.ALL_ITEMS.items()
                     if item_definition.category is ItemCategory.SYMBOL
                 ]
                 required_items = frozenset(
@@ -211,16 +212,16 @@ class WitnessPlayerLogic:
             return
 
         if adj_type == "Disabled Locations":
-            panel_hex = line[:7]
+            entity_hex = line[:7]
 
-            self.COMPLETELY_DISABLED_ENTITIES.add(panel_hex)
+            self.COMPLETELY_DISABLED_ENTITIES.add(entity_hex)
 
             return
 
         if adj_type == "Irrelevant Locations":
-            panel_hex = line[:7]
+            entity_hex = line[:7]
 
-            self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES.add(panel_hex)
+            self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES.add(entity_hex)
 
             return
 
@@ -259,7 +260,7 @@ class WitnessPlayerLogic:
             self.ADDED_CHECKS.add(line)
 
     @staticmethod
-    def handle_postgame(world: "WitnessWorld"):
+    def handle_postgame(world: "WitnessWorld") -> List[List[str]]:
         # In shuffle_postgame, panels that become accessible "after or at the same time as the goal" are disabled.
         # This has a lot of complicated considerations, which I'll try my best to explain.
         postgame_adjustments = []
@@ -336,7 +337,7 @@ class WitnessPlayerLogic:
 
         return postgame_adjustments
 
-    def make_options_adjustments(self, world: "WitnessWorld"):
+    def make_options_adjustments(self, world: "WitnessWorld") -> None:
         """Makes logic adjustments based on options"""
         adjustment_linesets_in_order = []
 
@@ -481,7 +482,7 @@ class WitnessPlayerLogic:
             if entity_id in self.DOOR_ITEMS_BY_ID:
                 del self.DOOR_ITEMS_BY_ID[entity_id]
 
-    def make_dependency_reduced_checklist(self):
+    def make_dependency_reduced_checklist(self) -> None:
         """
         Turns dependent check set into semi-independent check set
         """
@@ -496,7 +497,7 @@ class WitnessPlayerLogic:
                 progressive_item_name = StaticWitnessLogic.get_parent_progressive_item(item)
                 self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(progressive_item_name)
                 child_items = cast(ProgressiveItemDefinition,
-                                   StaticWitnessLogic.all_items[progressive_item_name]).child_item_names
+                                   StaticWitnessLogic.ALL_ITEMS[progressive_item_name]).child_item_names
                 multi_list = [child_item for child_item in child_items
                               if child_item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI]
                 self.MULTI_AMOUNTS[item] = multi_list.index(item) + 1
@@ -531,14 +532,14 @@ class WitnessPlayerLogic:
 
             self.CONNECTIONS_BY_REGION_NAME[region] = new_connections
 
-    def solvability_guaranteed(self, entity_hex: str):
+    def solvability_guaranteed(self, entity_hex: str) -> bool:
         return not (
             entity_hex in self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY
             or entity_hex in self.COMPLETELY_DISABLED_ENTITIES
             or entity_hex in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES
         )
 
-    def determine_unrequired_entities(self, world: "WitnessWorld"):
+    def determine_unrequired_entities(self, world: "WitnessWorld") -> None:
         """Figure out which major items are actually useless in this world's settings"""
 
         # Gather quick references to relevant options
@@ -597,7 +598,7 @@ class WitnessPlayerLogic:
             item_name for item_name, is_required in is_item_required_dict.items() if not is_required
         }
 
-    def make_event_item_pair(self, panel: str):
+    def make_event_item_pair(self, panel: str) -> Tuple[str, str]:
         """
         Makes a pair of an event panel and its event item
         """
@@ -610,7 +611,7 @@ class WitnessPlayerLogic:
         pair = (name, self.USED_EVENT_NAMES_BY_HEX[panel])
         return pair
 
-    def make_event_panel_lists(self):
+    def make_event_panel_lists(self) -> None:
         self.ALWAYS_EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION] = "Victory"
 
         self.USED_EVENT_NAMES_BY_HEX.update(self.ALWAYS_EVENT_NAMES_BY_HEX)
@@ -624,7 +625,7 @@ class WitnessPlayerLogic:
             pair = self.make_event_item_pair(panel)
             self.EVENT_ITEM_PAIRS[pair[0]] = pair[1]
 
-    def __init__(self, world: "WitnessWorld", disabled_locations: Set[str], start_inv: Dict[str, int]):
+    def __init__(self, world: "WitnessWorld", disabled_locations: Set[str], start_inv: Dict[str, int]) -> None:
         self.YAML_DISABLED_LOCATIONS = disabled_locations
         self.YAML_ADDED_ITEMS = start_inv
 

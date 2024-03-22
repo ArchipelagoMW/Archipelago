@@ -3,31 +3,22 @@ Defines progression, junk and event items for The Witness
 """
 import copy
 
-from dataclasses import dataclass
-from typing import Optional, Dict, List, Set, TYPE_CHECKING
+from typing import Dict, List, Set, TYPE_CHECKING
 
 from BaseClasses import Item, MultiWorld, ItemClassification
-from .locations import ID_START, WitnessPlayerLocations
+from .data.item_definition_classes import ItemCategory, DoorItemDefinition, ItemDefinition, ProgressiveItemDefinition, \
+    WeightedItemDefinition, ItemData
+from .locations import WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
-from .static_logic import ItemDefinition, DoorItemDefinition, ProgressiveItemDefinition, ItemCategory, \
-    StaticWitnessLogic, WeightedItemDefinition
 from .utils import build_weighted_int_list
+
+from .data import static_logic as StaticWitnessLogic
+from .data import static_items as StaticWitnessItems
 
 if TYPE_CHECKING:
     from . import WitnessWorld
 
 NUM_ENERGY_UPGRADES = 4
-
-
-@dataclass()
-class ItemData:
-    """
-    ItemData for an item in The Witness
-    """
-    ap_code: Optional[int]
-    definition: ItemDefinition
-    classification: ItemClassification
-    local_only: bool = False
 
 
 class WitnessItem(Item):
@@ -37,79 +28,30 @@ class WitnessItem(Item):
     game: str = "The Witness"
 
 
-class StaticWitnessItems:
-    """
-    Class that handles Witness items independent of world settings
-    """
-    item_data: Dict[str, ItemData] = {}
-    item_groups: Dict[str, List[str]] = {}
-
-    # Useful items that are treated specially at generation time and should not be automatically added to the player's
-    #   item list during get_progression_items.
-    special_usefuls: List[str] = ["Puzzle Skip"]
-
-    def __init__(self):
-        for item_name, definition in StaticWitnessLogic.all_items.items():
-            ap_item_code = definition.local_code + ID_START
-            classification: ItemClassification = ItemClassification.filler
-            local_only: bool = False
-
-            if definition.category is ItemCategory.SYMBOL:
-                classification = ItemClassification.progression
-                StaticWitnessItems.item_groups.setdefault("Symbols", []).append(item_name)
-            elif definition.category is ItemCategory.DOOR:
-                classification = ItemClassification.progression
-                StaticWitnessItems.item_groups.setdefault("Doors", []).append(item_name)
-            elif definition.category is ItemCategory.LASER:
-                classification = ItemClassification.progression_skip_balancing
-                StaticWitnessItems.item_groups.setdefault("Lasers", []).append(item_name)
-            elif definition.category is ItemCategory.USEFUL:
-                classification = ItemClassification.useful
-            elif definition.category is ItemCategory.FILLER:
-                if item_name in ["Energy Fill (Small)"]:
-                    local_only = True
-                classification = ItemClassification.filler
-            elif definition.category is ItemCategory.TRAP:
-                classification = ItemClassification.trap
-            elif definition.category is ItemCategory.JOKE:
-                classification = ItemClassification.filler
-
-            StaticWitnessItems.item_data[item_name] = ItemData(ap_item_code, definition,
-                                                               classification, local_only)
-
-    @staticmethod
-    def get_item_to_door_mappings() -> Dict[int, List[int]]:
-        output: Dict[int, List[int]] = {}
-        for item_name, item_data in {name: data for name, data in StaticWitnessItems.item_data.items()
-                                     if isinstance(data.definition, DoorItemDefinition)}.items():
-            item = StaticWitnessItems.item_data[item_name]
-            output[item.ap_code] = [int(hex_string, 16) for hex_string in item_data.definition.panel_id_hexes]
-        return output
-
-
 class WitnessPlayerItems:
     """
     Class that defines Items for a single world
     """
 
-    def __init__(self, world: "WitnessWorld", logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
+    def __init__(self, world: "WitnessWorld", player_logic: WitnessPlayerLogic,
+                 player_locations: WitnessPlayerLocations) -> None:
         """Adds event items after logic changes due to options"""
 
         self._world: "WitnessWorld" = world
         self._multiworld: MultiWorld = world.multiworld
         self._player_id: int = world.player
-        self._logic: WitnessPlayerLogic = logic
-        self._locations: WitnessPlayerLocations = locat
+        self._logic: WitnessPlayerLogic = player_logic
+        self._locations: WitnessPlayerLocations = player_locations
 
         # Duplicate the static item data, then make any player-specific adjustments to classification.
-        self.item_data: Dict[str, ItemData] = copy.deepcopy(StaticWitnessItems.item_data)
+        self.item_data: Dict[str, ItemData] = copy.deepcopy(StaticWitnessItems.ITEM_DATA)
 
         # Remove all progression items that aren't actually in the game.
         self.item_data = {
             name: data for (name, data) in self.item_data.items()
             if data.classification not in
-            {ItemClassification.progression, ItemClassification.progression_skip_balancing}
-            or name in logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME
+               {ItemClassification.progression, ItemClassification.progression_skip_balancing}
+               or name in player_logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME
         }
 
         # Downgrade door items
@@ -138,7 +80,7 @@ class WitnessPlayerItems:
         # Add setting-specific useful items to the mandatory item list.
         for item_name, item_data in {name: data for (name, data) in self.item_data.items()
                                      if data.classification == ItemClassification.useful}.items():
-            if item_name in StaticWitnessItems.special_usefuls:
+            if item_name in StaticWitnessItems._special_usefuls:
                 continue
             elif item_name == "Energy Capacity":
                 self._mandatory_items[item_name] = NUM_ENERGY_UPGRADES
@@ -149,7 +91,7 @@ class WitnessPlayerItems:
 
         # Add event items to the item definition list for later lookup.
         for event_location in self._locations.EVENT_LOCATION_TABLE:
-            location_name = logic.EVENT_ITEM_PAIRS[event_location]
+            location_name = player_logic.EVENT_ITEM_PAIRS[event_location]
             self.item_data[location_name] = ItemData(None, ItemDefinition(0, ItemCategory.EVENT),
                                                      ItemClassification.progression, False)
 
@@ -257,7 +199,7 @@ class WitnessPlayerItems:
         """
         Returns the item IDs of symbol items that were defined in the configuration file but are not in the pool.
         """
-        return [data.ap_code for name, data in StaticWitnessItems.item_data.items()
+        return [data.ap_code for name, data in StaticWitnessItems.ITEM_DATA.items()
                 if name not in self.item_data.keys() and data.definition.category is ItemCategory.SYMBOL]
 
     def get_progressive_item_ids_in_pool(self) -> Dict[int, List[int]]:
@@ -267,9 +209,8 @@ class WitnessPlayerItems:
             if isinstance(item.definition, ProgressiveItemDefinition):
                 # Note: we need to reference the static table here rather than the player-specific one because the child
                 #   items were removed from the pool when we pruned out all progression items not in the settings.
-                output[item.ap_code] = [StaticWitnessItems.item_data[child_item].ap_code
+                output[item.ap_code] = [StaticWitnessItems.ITEM_DATA[child_item].ap_code
                                         for child_item in item.definition.child_item_names]
         return output
 
 
-StaticWitnessItems()

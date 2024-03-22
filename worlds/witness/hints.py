@@ -2,7 +2,7 @@ import logging
 from dataclasses import dataclass
 from typing import Tuple, List, TYPE_CHECKING, Set, Dict, Optional, Union
 from BaseClasses import Item, Location, LocationProgressType, CollectionState
-from . import StaticWitnessLogic
+from .data import static_logic as StaticWitnessLogic
 from .utils import weighted_sample
 
 if TYPE_CHECKING:
@@ -192,10 +192,10 @@ class WitnessLocationHint:
     hint_came_from_location: bool
 
     # If a hint gets added to a set twice, but once as an item hint and once as a location hint, those are the same
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.location)
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return self.location == other.location
 
 
@@ -338,7 +338,7 @@ def get_priority_hint_locations(world: "WitnessWorld") -> List[str]:
     return priority
 
 
-def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint):
+def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint) -> WitnessWordedHint:
     location_name = hint.location.name
     if hint.location.player != world.player:
         location_name += " (" + world.multiworld.get_player_name(hint.location.player) + ")"
@@ -382,7 +382,8 @@ def hint_from_location(world: "WitnessWorld", location: str) -> Optional[Witness
     return WitnessLocationHint(location_obj, True)
 
 
-def get_items_and_locations_in_random_order(world: "WitnessWorld", own_itempool: List[Item]):
+def get_items_and_locations_in_random_order(world: "WitnessWorld",
+                                            own_itempool: List[Item]) -> Tuple[List[str], List[str]]:
     prog_items_in_this_world = sorted(
         item.name for item in own_itempool
         if item.advancement and item.code and item.location
@@ -540,9 +541,9 @@ def get_hintable_areas(world: "WitnessWorld") -> Tuple[Dict[str, List[Location]]
 
     for area in potential_areas:
         regions = [
-            world.regio.created_regions[region]
+            world.player_regions.created_regions[region]
             for region in StaticWitnessLogic.ALL_AREAS_BY_NAME[area]["regions"]
-            if region in world.regio.created_regions
+            if region in world.player_regions.created_regions
         ]
         locations = [location for region in regions for location in region.get_locations() if location.address]
 

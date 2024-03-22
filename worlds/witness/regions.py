@@ -2,26 +2,28 @@
 Defines Region for The Witness, assigns locations to them,
 and connects them with the proper requirements
 """
+from collections import defaultdict
 from typing import FrozenSet, TYPE_CHECKING, Dict, Tuple, List
 
 from BaseClasses import Entrance, Region
-from Utils import KeyedDefaultDict
-from .static_logic import StaticWitnessLogic
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .player_logic import WitnessPlayerLogic
+from worlds.generic.Rules import CollectionRule
+
+from .data import static_logic as StaticWitnessLogic
 
 if TYPE_CHECKING:
     from . import WitnessWorld
 
 
-class WitnessRegions:
+class WitnessPlayerRegions:
     """Class that defines Witness Regions"""
 
-    locat = None
+    player_locations = None
     logic = None
 
     @staticmethod
-    def make_lambda(item_requirement: FrozenSet[FrozenSet[str]], world: "WitnessWorld"):
+    def make_lambda(item_requirement: FrozenSet[FrozenSet[str]], world: "WitnessWorld") -> CollectionRule:
         from .rules import _meets_item_requirements
 
         """
@@ -82,7 +84,7 @@ class WitnessRegions:
         for dependent_region in mentioned_regions:
             world.multiworld.register_indirect_condition(regions_by_name[dependent_region], connection)
 
-    def create_regions(self, world: "WitnessWorld", player_logic: WitnessPlayerLogic):
+    def create_regions(self, world: "WitnessWorld", player_logic: WitnessPlayerLogic) -> None:
         """
         Creates all the regions for The Witness
         """
@@ -94,16 +96,17 @@ class WitnessRegions:
         for region_name, region in self.reference_logic.ALL_REGIONS_BY_NAME.items():
             locations_for_this_region = [
                 self.reference_logic.ENTITIES_BY_HEX[panel]["checkName"] for panel in region["panels"]
-                if self.reference_logic.ENTITIES_BY_HEX[panel]["checkName"] in self.locat.CHECK_LOCATION_TABLE
+                if self.reference_logic.ENTITIES_BY_HEX[panel]["checkName"]
+                in self.player_locations.CHECK_LOCATION_TABLE
             ]
             locations_for_this_region += [
                 StaticWitnessLocations.get_event_name(panel) for panel in region["panels"]
-                if StaticWitnessLocations.get_event_name(panel) in self.locat.EVENT_LOCATION_TABLE
+                if StaticWitnessLocations.get_event_name(panel) in self.player_locations.EVENT_LOCATION_TABLE
             ]
 
             all_locations = all_locations | set(locations_for_this_region)
 
-            new_region = create_region(world, region_name, self.locat, locations_for_this_region)
+            new_region = create_region(world, region_name, self.player_locations, locations_for_this_region)
 
             regions_by_name[region_name] = new_region
 
@@ -133,7 +136,7 @@ class WitnessRegions:
 
         world.multiworld.regions += self.created_regions.values()
 
-    def __init__(self, locat: WitnessPlayerLocations, world: "WitnessWorld"):
+    def __init__(self, player_locations: WitnessPlayerLocations, world: "WitnessWorld") -> None:
         difficulty = world.options.puzzle_randomization
 
         if difficulty == "sigma_normal":
@@ -143,6 +146,6 @@ class WitnessRegions:
         elif difficulty == "none":
             self.reference_logic = StaticWitnessLogic.vanilla
 
-        self.locat = locat
-        self.created_entrances: Dict[Tuple[str, str], List[Entrance]] = KeyedDefaultDict(lambda _: [])
+        self.player_locations = player_locations
+        self.created_entrances: Dict[Tuple[str, str], List[Entrance]] = defaultdict(lambda: [])
         self.created_regions: Dict[str, Region] = dict()

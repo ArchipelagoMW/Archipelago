@@ -4,7 +4,8 @@ from schema import Schema, And
 
 from Options import Toggle, DefaultOnToggle, Range, Choice, PerGameCommonOptions, OptionDict
 
-from .static_logic import WeightedItemDefinition, ItemCategory, StaticWitnessLogic
+from .data import static_logic as StaticWitnessLogic
+from .data.item_definition_classes import WeightedItemDefinition, ItemCategory
 
 
 class DisableNonRandomizedPuzzles(Toggle):
@@ -232,12 +233,12 @@ class TrapWeights(OptionDict):
     display_name = "Trap Weights"
     schema = Schema({
         trap_name: And(int, lambda n: n >= 0)
-        for trap_name, item_definition in StaticWitnessLogic.all_items.items()
+        for trap_name, item_definition in StaticWitnessLogic.ALL_ITEMS.items()
         if isinstance(item_definition, WeightedItemDefinition) and item_definition.category is ItemCategory.TRAP
     })
     default = {
         trap_name: item_definition.weight
-        for trap_name, item_definition in StaticWitnessLogic.all_items.items()
+        for trap_name, item_definition in StaticWitnessLogic.ALL_ITEMS.items()
         if isinstance(item_definition, WeightedItemDefinition) and item_definition.category is ItemCategory.TRAP
     }
 
