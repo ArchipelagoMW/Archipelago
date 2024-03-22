@@ -40,7 +40,8 @@ class AutoWorldRegister(type):
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
-            assert isinstance(dct["web"], WebWorld), "WebWorld has to be instantiated."
+            assert isinstance(dct["web"], WebWorld) or isinstance(dct["web"], staticproperty), \
+                "WebWorld has to be instantiated."
         # filter out any events
         dct["item_name_to_id"] = {name: id for name, id in dct["item_name_to_id"].items() if id}
         dct["location_name_to_id"] = {name: id for name, id in dct["location_name_to_id"].items() if id}
@@ -528,6 +529,11 @@ class World(metaclass=AutoWorldRegister):
 # please use a prefix as all of them get clobbered together
 class LogicMixin(metaclass=AutoLogicRegister):
     pass
+
+
+class staticproperty(staticmethod):
+    def __get__(self, *args):
+        return self.__func__()
 
 
 def data_package_checksum(data: "GamesPackage") -> str:
