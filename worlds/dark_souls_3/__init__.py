@@ -108,7 +108,7 @@ class DarkSouls3World(World):
                 self.yhorm_location.name == "Iudex Gundyr" or
                 self.yhorm_location.name == "Vordt of the Boreal Valley" or (
                     self.yhorm_location.name == "Dancer of the Boreal Valley" and
-                    not self.multiworld.late_basin_of_vows
+                    not self.options.late_basin_of_vows
                 )
             ):
                 self.multiworld.early_items[self.player]['Storm Ruler'] = 1
