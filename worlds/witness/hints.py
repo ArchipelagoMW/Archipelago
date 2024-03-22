@@ -367,6 +367,8 @@ def try_getting_location_group_other_world(world: "WitnessWorld", hint_loc: Loca
         if not valid_location_groups:
             return hint_loc.parent_region.name
 
+        # Assume that an "experimental" player enjoys the idea of weird region names, and thus
+        # make them possible even if location groups are available
         if parent_region.name not in possible_location_groups:
             parent_region_location_amount = sum(
                 location.address is not None for location in parent_region.locations
