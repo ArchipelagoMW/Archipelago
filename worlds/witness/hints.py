@@ -206,7 +206,7 @@ class WitnessWordedHint:
     location: Optional[Location] = None
     area: Optional[str] = None
     area_amount: Optional[int] = None
-    confusified_hint: bool = False
+    vague_location_hint: bool = False
 
 
 def get_always_hint_items(world: "WitnessWorld") -> List[str]:
@@ -418,7 +418,7 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint):
         else:
             hint_text = f"{item_name} can be found at {location_name}."
 
-    return WitnessWordedHint(hint_text, hint.location, area=area, confusified_hint=bool(world.options.vague_hints))
+    return WitnessWordedHint(hint_text, hint.location, area=area, vague_location_hint=bool(world.options.vague_hints))
 
 
 def hint_from_item(world: "WitnessWorld", item_name: str, own_itempool: List[Item]) -> Optional[WitnessLocationHint]:
@@ -448,10 +448,10 @@ def hint_from_location(world: "WitnessWorld", location: str) -> Optional[Witness
 
 
 def get_item_and_location_names_in_random_order(world: "WitnessWorld", own_itempool: List[Item]):
-    prog_item_names_in_this_world = sorted(
+    prog_item_names_in_this_world = [
         item.name for item in own_itempool
         if item.advancement and item.code and item.location
-    )
+    ]
     world.random.shuffle(prog_item_names_in_this_world)
 
     locations_in_this_world = sorted(
@@ -826,7 +826,7 @@ def make_compact_hint_data(hint: WitnessWordedHint, local_player_number: int) ->
     player_number = local_player_number
     if location:
         player_number = location.player
-    if player_number == local_player_number and hint.confusified_hint:
+    if player_number == local_player_number and hint.vague_location_hint:
         player_number = -1
 
     # None if junk hint, address if location hint, area string if area hint
