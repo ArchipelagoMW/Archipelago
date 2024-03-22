@@ -1226,7 +1226,8 @@ class DarkSouls3World(World):
 
         if not candidate_locations:
             if not mandatory: return
-            raise Exception(f"No valid locations to place {name}")
+            warning(f"Couldn't place \"{name}\" in a valid location for {self.multiworld.get_player_name(self.player)}. Adding it to starting inventory instead.")
+            self.multiworld.push_precollected(self.create_item(name))
 
         location = self.multiworld.random.choice(candidate_locations)
         location.place_locked_item(item)
