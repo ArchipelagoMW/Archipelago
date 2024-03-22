@@ -76,7 +76,7 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
 
     front_access = (
         any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Keep 2nd Pressure Plate", "Keep"])
-        and state.can_reach("Keep", "Region", player)
+        and state.can_reach_region("Keep", player)
     )
 
     # If we don't have front access, we can't do PP2.
