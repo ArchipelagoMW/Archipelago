@@ -357,7 +357,7 @@ def try_getting_location_group_other_world(world: "WitnessWorld", hint_loc: Loca
         if present_locations > 1:
             valid_location_groups[group] = present_locations
 
-    if valid_location_groups["Everywhere"] > 100:
+    if valid_location_groups["Everywhere"] > 100 or world.options.vague_hints == "experimental":
         del valid_location_groups["Everywhere"]
 
     if world.options.vague_hints == "experimental":
