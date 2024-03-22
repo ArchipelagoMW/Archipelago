@@ -1,8 +1,8 @@
 # Ocarina of Time
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What does randomization do to this game?
@@ -37,4 +37,4 @@ business!
 The following commands are only available when using the OoTClient to play with Archipelago.
 
 - `/n64` Check N64 Connection State
-- `/deathlink` Toggle deathlink from client. Overrides default setting.
+- `/deathlink` Toggle deathlink from client. Overrides default option.

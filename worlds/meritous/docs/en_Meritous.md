@@ -1,7 +1,7 @@
 # Meritous
 
-## Where is the settings page?
-The [player settings page for Meritous](../player-settings) contains all the options you need to configure and export a config file.
+## Where is the options page?
+The [player options page for Meritous](../player-options) contains all the options you need to configure and export a config file.
 
 ## What does randomization do to this game?
 The PSI Enhancement Tiles have become general-purpose Item Caches, and all upgrades and artifacts are added to the multiworld item pool. Optionally, the progression-critical PSI Keys can also be added to the pool, as well as monster evolution traps which (in vanilla) trigger when bosses are defeated.

@@ -31,7 +31,7 @@ You can see the [basic multiworld setup guide](/tutorial/Archipelago/setup/en) h
 about why Archipelago uses YAML files and what they're for.
 
 ### Where do I get a YAML?
-You can use the [game settings page for Hollow Knight](/games/Hollow%20Knight/player-settings) here on the Archipelago 
+You can use the [game options page for Hollow Knight](/games/Hollow%20Knight/player-options) here on the Archipelago 
 website to generate a YAML using a graphical interface.
 
 ### Joining an Archipelago Game in Hollow Knight

@@ -8,6 +8,6 @@ BK Sudoku is not a typical Archipelago game; instead, it is a generic Sudoku cli
 
 After completing a Sudoku puzzle, the game will unlock 1 random hint for an unchecked location in the slot you are connected to.
 
-## Where is the settings page?
+## Where is the options page?
 
-There is no settings page; this game cannot be used in your .yamls. Instead, the client can connect to any slot in a multiworld.
+There is no options page; this game cannot be used in your .yamls. Instead, the client can connect to any slot in a multiworld.

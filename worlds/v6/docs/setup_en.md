@@ -30,7 +30,7 @@ If everything worked out, you will see a textbox informing you the connection ha
 
 # Playing offline
 
-To play offline, first generate a seed on the game's settings page.
+To play offline, first generate a seed on the game's options page.
 Create a room and download the `.apv6` file, include the offline single-player launch option described above.
 
 ## Installation Troubleshooting

@@ -1,8 +1,8 @@
 # Hollow Knight
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What does randomization do to this game?
@@ -12,7 +12,7 @@ Shop costs are presently always randomized.
 
 ## What Hollow Knight items can appear in other players' worlds?
 
-This is dependent entirely upon your YAML settings. Some examples include: charms, grubs, lifeblood cocoons, geo, etc.
+This is dependent entirely upon your YAML options. Some examples include: charms, grubs, lifeblood cocoons, geo, etc.
 
 ## What does another world's item look like in Hollow Knight?
 

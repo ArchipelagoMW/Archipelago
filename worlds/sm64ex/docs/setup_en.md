@@ -70,7 +70,7 @@ After the compliation was successful, there will be a binary in your `sm64ex/bui
 ### Joining a MultiWorld Game
 
 To join, set the following launch options: `--sm64ap_name YourName --sm64ap_ip ServerIP:Port`.
-For example, if you are hosting a game using the website, `YourName` will be the name from the Settings Page, `ServerIP` is `archipelago.gg` and `Port` the port given on the Archipelago room page.
+For example, if you are hosting a game using the website, `YourName` will be the name from the Options Page, `ServerIP` is `archipelago.gg` and `Port` the port given on the Archipelago room page.
 Optionally, add `--sm64ap_passwd "YourPassword"` if the room you are using requires a password.
 Should your name or password have spaces, enclose it in quotes: `"YourPassword"` and `"YourName"`.
 
@@ -82,7 +82,7 @@ Failing to use a new file may make some locations unavailable. However, this can
 
 ### Playing offline
 
-To play offline, first generate a seed on the game's settings page.
+To play offline, first generate a seed on the game's options page.
 Create a room and download the `.apsm64ex` file, and start the game with the `--sm64ap_file "path/to/FileName"` launch argument.
 
 ### Optional: Using Batch Files to play offline and MultiWorld games

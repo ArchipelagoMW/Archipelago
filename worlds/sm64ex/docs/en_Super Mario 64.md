@@ -1,9 +1,9 @@
 # Super Mario 64 EX
 
-## Where is the settings page?
+## Where is the options page?
 
-The player settings page for this game contains all the options you need to configure and export a config file. Player
-settings page link: [SM64EX Player Settings Page](../player-settings).
+The player options page for this game contains all the options you need to configure and export a config file. Player
+options page link: [SM64EX Player Options Page](../player-options).
 
 ## What does randomization do to this game?
 All 120 Stars, the 3 Cap Switches, the Basement and Secound Floor Key are now Location Checks and may contain Items for different games as well

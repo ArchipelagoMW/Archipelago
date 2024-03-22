@@ -51,5 +51,5 @@ add it at the root folder of your game (e.g. "SteamLibrary\steamapps\common\DARK
 
 ## Where do I get a config file?
 
-The [Player Settings](/games/Dark%20Souls%20III/player-settings) page on the website allows you to
-configure your personal settings and export them into a config file.
+The [Player Options](/games/Dark%20Souls%20III/player-options) page on the website allows you to
+configure your personal options and export them into a config file.
