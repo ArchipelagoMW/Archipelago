@@ -61,6 +61,21 @@ class CostMultiplier(Range):
     range_end = 200
     default = 100
 
+class FillerCoinAmount(Choice):
+    """The number of coins that will be in each filler coin item."""
+    display_name = "Coins per Filler Item"
+    option_7_coins = 0
+    option_13_coins = 1
+    option_15_coins = 2
+    option_18_coins = 3
+    option_21_coins = 4
+    option_25_coins = 5
+    option_27_coins = 6
+    option_32_coins = 7
+    option_33_coins = 8
+    option_50_coins = 9
+    default = 1
+
 @dataclass
 class ShortHikeOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -71,3 +86,4 @@ class ShortHikeOptions(PerGameCommonOptions):
     buckets: Buckets
     golden_feather_progression: GoldenFeatherProgression
     cost_multiplier: CostMultiplier
+    filler_coin_amount: FillerCoinAmount
