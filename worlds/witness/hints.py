@@ -454,10 +454,10 @@ def get_item_and_location_names_in_random_order(world: "WitnessWorld", own_itemp
     ]
     world.random.shuffle(prog_item_names_in_this_world)
 
-    locations_in_this_world = sorted(
+    locations_in_this_world = [
         location for location in world.multiworld.get_locations(world.player)
         if location.item and location.address and location.progress_type != LocationProgressType.EXCLUDED
-    )
+    ]
 
     world.random.shuffle(locations_in_this_world)
 
