@@ -99,7 +99,7 @@ various plando options.
 
 See the plando guide for more info on plando options. Plando
 guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
-
+Following are the options and the expected format for those that aren't choices:
 * `accessibility` determines the level of access to the game the generation will expect you to have in order to reach
   your completion goal. This supports `items`, `locations`, and `minimal` and is set to `locations` by default.
     * `locations` will guarantee all locations are accessible in your world.
@@ -120,24 +120,24 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
 * `triggers` is one of the more advanced options that allows you to create conditional adjustments. You can read
   more triggers in the triggers guide. Triggers
   guide: [Archipelago Triggers Guide](/tutorial/Archipelago/triggers/en)
-* `local_items` will force any items you want to be in your world instead of being in another world.
+* `local_items` will force any items you want to be in your world instead of being in another world. List.
 * `non_local_items` is the inverse of `local_items`, forcing any items you want to be in another world instead of
-  your own.
+  your own. List.
 * `start_inventory` will give any items defined here to you at the beginning of your game. The format for this must be
   the name as it appears in the game files and the amount you would like to start with. For example `Rupees(5): 6` which
-  will give you 30 rupees.
+  will give you 30 rupees. Dictionary.
 * `start_hints` gives you free server hints for the defined items at the beginning of the game, allowing you to hint for
-  the location without using any hint points.
+  the location without using any hint points. Dictionary.
 * `start_location_hints` is the same as `start_hints` but for locations, allowing you to hint for the item contained
-  there without using any hint points.
+  there without using any hint points. List.
 * `exclude_locations` lets you define any locations that you don't want to do and during generation will force a "junk"
-  item which isn't necessary for progression to go in these locations.
-* `priority_locations` is the inverse of `exclude_locations`, forcing a progression item in the defined locations.
+  item which isn't necessary for progression to go in these locations. List.
+* `priority_locations` is the inverse of `exclude_locations`, forcing a progression item in the defined locations. List.
 * `item_links` allows players to link their items into a group with the same item link name and game. The items declared
   in `item_pool` get combined and when an item is found for the group, all players in the group receive it. Item links
   can also have local and non local items, forcing the items to either be placed within the worlds of the group or in
   worlds outside the group. If players have a varying amount of a specific item in the link, the lowest amount from the
-  players will be the amount put into the group.
+  players will be the amount put into the group. List of dictionaries per item_link group.
 
 ### Random numbers
 
@@ -174,17 +174,17 @@ A Link to the Past:
     random-low: 1
   crystals_needed_for_ganon:
     random-range-high-1-7: 1
-  local_items:
+  local_items:  # a list of items
     - Bombos
     - Ether
     - Quake
   non_local_items:
     - Moon Pearl
-  start_inventory:
+  start_inventory:  # a dictionary of items
     Pegasus Boots: 1
     Bombs (3): 2
   start_hints:
-    - Hammer
+    Hammer: 1
   start_location_hints:
     - Spike Cave
   exclude_locations:
@@ -248,8 +248,8 @@ Timespinner:
   example we have:
   * `Pegasus Boots: 1` which gives us 1 copy of the Pegasus Boots
   * `Bombs (3): 2` gives us 2 packs of 3 bombs or 6 total bombs
-* `start_hints` gives us a starting hint for the hammer available at the beginning of the multiworld which we can use
-  with no cost.
+* `start_hints` gives us a single starting hint for the hammer available at the beginning of the multiworld which we can
+  use with no cost.
 * `start_location_hints` gives us a starting hint for the `Spike Cave` location available at the beginning of the
   multiworld that can be used for no cost.
 * `exclude_locations` forces a not important item to be placed on the `Cave 45` location.

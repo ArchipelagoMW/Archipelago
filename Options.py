@@ -1020,7 +1020,7 @@ class StartInventoryPool(StartInventory):
     display_name = "Start Inventory from Pool"
 
 
-class StartHints(ItemSet):
+class StartHints(ItemDict):
     """Start with these item's locations prefilled into the !hint command."""
     display_name = "Start Hints"
 

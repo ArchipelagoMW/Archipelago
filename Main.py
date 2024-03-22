@@ -306,12 +306,26 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     else:
         logger.info("Progression balancing skipped.")
 
-    # we're about to output using multithreading, so we're removing the global random state to prevent accidental use
-    multiworld.random.passthrough = False
-
     if args.skip_output:
         logger.info('Done. Skipped output/spoiler generation. Total Time: %s', time.perf_counter() - start)
         return multiworld
+
+    # determine which items should get starting hints and add those location to start_location_hints to be collected
+    # into multidata later
+    filled_locations = multiworld.get_filled_locations()
+    multiworld.random.shuffle(filled_locations)
+    collected_hints = {player: collections.Counter() for player in multiworld.get_all_ids()}
+    for location in filled_locations:
+        if type(location.address) == int:
+            if location.item.name in multiworld.worlds[location.item.player].options.start_hints:
+                item = location.item
+                if (collected_hints[item.player].setdefault(item.name, 0)
+                        < multiworld.worlds[item.player].options.start_hints.value[item.name]):
+                    multiworld.worlds[location.player].options.start_location_hints.value.add(location.name)
+                    collected_hints[item.player][item.name] += 1
+
+    # we're about to output using multithreading, so we're removing the global random state to prevent accidental use
+    multiworld.random.passthrough = False
 
     logger.info(f'Beginning output...')
     outfilebase = 'AP_' + multiworld.seed_name
@@ -355,11 +369,12 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 precollected_items = {player: [item.code for item in world_precollected if type(item.code) == int]
                                       for player, world_precollected in multiworld.precollected_items.items()}
                 precollected_hints = {player: set() for player in range(1, multiworld.players + 1 + len(multiworld.groups))}
+                collected_hints = {player: {} for player in range(1, multiworld.players + 1 + len(multiworld.groups))}
 
                 for slot in multiworld.player_ids:
                     slot_data[slot] = multiworld.worlds[slot].fill_slot_data()
 
-                def precollect_hint(location):
+                def precollect_hint(location: Location):
                     entrance = er_hint_data.get(location.player, {}).get(location.address, "")
                     hint = NetUtils.Hint(location.item.player, location.player, location.address,
                                          location.item.code, False, entrance, location.item.flags)
@@ -370,8 +385,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                         for player in multiworld.groups[location.item.player]["players"]:
                             precollected_hints[player].add(hint)
 
-                locations_data: Dict[int, Dict[int, Tuple[int, int, int]]] = {player: {} for player in multiworld.player_ids}
-                for location in multiworld.get_filled_locations():
+                locations_data: Dict[int, Dict[int, Tuple[int, int, int]]] = {player: {}
+                                                                              for player in multiworld.player_ids}
+                filled_locations = multiworld.get_filled_locations()
+                for location in filled_locations:
                     if type(location.address) == int:
                         assert location.item.code is not None, "item code None should be event, " \
                                                                "location.address should then also be None. Location: " \
@@ -382,8 +399,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                         locations_data[location.player][location.address] = \
                             location.item.code, location.item.player, location.item.flags
                         if location.name in multiworld.worlds[location.player].options.start_location_hints:
-                            precollect_hint(location)
-                        elif location.item.name in multiworld.worlds[location.item.player].options.start_hints:
                             precollect_hint(location)
                         elif any([location.item.name in multiworld.worlds[player].options.start_hints
                                   for player in multiworld.groups.get(location.item.player, {}).get("players", [])]):
