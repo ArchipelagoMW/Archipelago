@@ -12,12 +12,16 @@ if typing.TYPE_CHECKING:
 else:
     Random = typing.Any
 
-
 locations = {"option_" + start: i for i, start in enumerate(starts)}
 # This way the dynamic start names are picked up by the MetaClass Choice belongs to
-StartLocation = type("StartLocation", (Choice,), {"__module__": __name__, "auto_display_name": False, **locations,
-                                                  "__doc__": "Choose your start location. "
-                                                             "This is currently only locked to King's Pass."})
+StartLocation = type("StartLocation", (Choice,), {
+    "__module__": __name__,
+    "auto_display_name": False,
+    "display_name": "Start Location",
+    "__doc__": "Choose your start location. "
+               "This is currently only locked to King's Pass.",
+    **locations,
+})
 del (locations)
 
 option_docstrings = {
@@ -278,11 +282,11 @@ class RandomCharmCosts(NamedRange):
             random_source.shuffle(charms)
             return charms
         else:
-            charms = [0]*self.charm_count
+            charms = [0] * self.charm_count
             for x in range(self.value):
-                index = random_source.randint(0, self.charm_count-1)
+                index = random_source.randint(0, self.charm_count - 1)
                 while charms[index] > 5:
-                    index = random_source.randint(0, self.charm_count-1)
+                    index = random_source.randint(0, self.charm_count - 1)
                 charms[index] += 1
             return charms
 
@@ -504,7 +508,6 @@ for term, cost in cost_terms.items():
     option.display_name = display_name
     globals()[option.__name__] = option
     cost_sanity_weights[option.__name__] = option
-
 
 hollow_knight_options: typing.Dict[str, type(Option)] = {
     **hollow_knight_randomize_options,

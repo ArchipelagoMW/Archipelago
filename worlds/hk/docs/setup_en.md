@@ -48,6 +48,5 @@ website to generate a YAML using a graphical interface.
    
 ## Hints and other commands
 While playing in a multiworld, you can interact with the server using various commands listed in the 
-[commands guide](/tutorial/Archipelago/commands/en). As this game does not have an in-game text client at the moment,
-you can optionally connect to the multiworld using the text client, which can be found in the 
-[main Archipelago installation](https://github.com/ArchipelagoMW/Archipelago/releases) as Archipelago Text Client to enter these commands.
+[commands guide](/tutorial/Archipelago/commands/en). In order to do this, install the latest release of the [Archipelago software](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
+and connect to your slot with the Archipelago Text Client to enter commands.
