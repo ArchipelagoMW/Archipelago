@@ -134,13 +134,12 @@ class Hylics2World(World):
                 gestures.remove("CHARGE UP")
                 tvs.remove(tv)
 
-            for _ in range(len(gestures)):
-                gest = self.random.choice(gestures)
-                tv = self.random.choice(tvs)
-                self.multiworld.get_location(tv, self.player)\
-                    .place_locked_item(self.create_item(gest))
-                gestures.remove(gest)
-                tvs.remove(tv)
+            self.random.shuffle(gestures)
+            self.random.shuffle(tvs)
+            while gestures:
+                gesture = gestures.pop()
+                tv = tvs.pop()
+                self.get_location(tv).place_locked_item(self.create_item(gesture))
 
 
     def fill_slot_data(self) -> Dict[str, Any]:
