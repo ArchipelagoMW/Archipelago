@@ -25,6 +25,8 @@ class TestBase(unittest.TestCase):
                 {"medallions", "stones", "rewards", "logic_bottles"},
             "Starcraft 2":
                 {"Missions", "WoL Missions"},
+            "Yu-Gi-Oh! 2006":
+                {"Campaign Boss Beaten"}
         }
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest(game_name, game_name=game_name):
