@@ -9,6 +9,13 @@ class Calamity(Toggle):
     default = False
 
 
+class Getfixedboi(Toggle):
+    """Generation accomodates the secret "getfixedboi" seed"""
+
+    display_name = """"getfixedboi" seed"""
+    default = False
+
+
 class Goal(Choice):
     """The victory condition for your run. Stuff after the goal will not be shuffled."""
 
@@ -59,6 +66,7 @@ class FillExtraChecksWith(Choice):
 
 options: typing.Dict[str, type(Option)] = {  # type: ignore
     "calamity": Calamity,
+    "getfixedboi": Getfixedboi,
     "goal": Goal,
     "achievements": Achievements,
     "fill_extra_checks_with": FillExtraChecksWith,
