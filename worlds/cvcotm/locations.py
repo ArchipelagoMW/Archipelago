@@ -27,7 +27,7 @@ location_info = {
     lname.cc1:   {"code": 0x37,   "offset": 0xD0658, "rule": "Push"},
     lname.cc3:   {"code": 0x43,   "offset": 0xD0370, "rule": "Double"},
     lname.cc3b:  {"code": 0x36,   "offset": 0xD0364, "rule": "Double AND Freeze"},
-    lname.cc4:   {"code": 0xA8,   "offset": 0xD0934},
+    lname.cc4:   {"code": 0xA8,   "offset": 0xD0934, "type": "magic item"},
     lname.cc5:   {"code": 0x38,   "offset": 0xD0DE4, "rule": "Tackle"},
     lname.cc8:   {"code": 0x3A,   "offset": 0xD1078},
     lname.cc8b:  {"code": 0x3B,   "offset": 0xD1084, "rule": "Kick"},

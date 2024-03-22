@@ -4,11 +4,9 @@ import logging
 import dataclasses
 import json
 
-from BaseClasses import Location
 from Options import PerGameCommonOptions
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
-from typing import List, Dict, Optional, Union, Iterable, Collection, TYPE_CHECKING
-from .options import CVCotMOptions
+from typing import List, Dict, Optional, TYPE_CHECKING
 
 import hashlib
 import os
@@ -16,14 +14,15 @@ import pkgutil
 
 # from .data import patches
 # from .text import cvcotm_string_to_bytearray, cvcotm_text_truncate, cvcotm_text_wrap
-from .locations import get_location_info
-from .options import Countdown
+from .locations import get_location_info, get_all_location_names
+from .options import CVCotMOptions
 from settings import get_settings
 
 if TYPE_CHECKING:
     from . import CVCotMWorld
 
-CVCOTMUSHASH = "50a1089600603a94e15ecf287f8d5a1f"
+CVCOTM_CT_US_HASH = "50a1089600603a94e15ecf287f8d5a1f"  # GBA Cartridge version
+CVCOTM_AC_US_HASH = "87a1bd6577b6702f97a60fc55772ad74"  # Castlevania Advance Collection version
 
 
 class RomData:
@@ -145,9 +144,31 @@ class CVCotMPatchExtensions(APPatchExtension):
 
         return rom_data.get_bytes()
 
+    @staticmethod
+    def fix_item_graphics(caller: APProcedurePatch, rom: bytes) -> bytes:
+        rom_data = RomData(rom)
+        for loc in get_all_location_names():
+            offset = get_location_info(loc, "offset")
+            if offset is None:
+                continue
+            item_category = rom_data.read_byte(offset)
+
+            # Magic Items in Max Up locations should have their Y position decreased by 8.
+            if item_category == 0xE8 and get_location_info(loc, "type") not in ["magic item", "boss"]:
+                y_pos = int.from_bytes(rom_data.read_bytes(offset-2, 2), "little")
+                y_pos -= 8
+                rom_data.write_bytes(offset-2, int.to_bytes(y_pos, 2, "little"))
+            # Max Ups in Magic Item locations should have their Y position increased by 8.
+            if item_category == 0xE4 and get_location_info(loc, "type") in ["magic item", "boss"]:
+                y_pos = int.from_bytes(rom_data.read_bytes(offset - 2, 2), "little")
+                y_pos += 8
+                rom_data.write_bytes(offset - 2, int.to_bytes(y_pos, 2, "little"))
+
+        return rom_data.get_bytes()
+
 
 class CVCotMProcedurePatch(APProcedurePatch, APTokenMixin):
-    hash = CVCOTMUSHASH
+    hash = CVCOTM_CT_US_HASH
     patch_file_ending: str = ".apcvcotm"
     result_file_ending: str = ".gba"
 
@@ -155,7 +176,8 @@ class CVCotMProcedurePatch(APProcedurePatch, APTokenMixin):
 
     procedure = [
         ("apply_tokens", ["token_data.bin"]),
-        ("apply_ips_patches", ["options.json"])
+        ("apply_ips_patches", ["options.json"]),
+        ("fix_item_graphics", [])
     ]
 
     @classmethod
@@ -163,10 +185,11 @@ class CVCotMProcedurePatch(APProcedurePatch, APTokenMixin):
         return get_base_rom_bytes()
 
 
-def patch_rom(world: "CVCotMWorld", patch: CVCotMProcedurePatch, offset_data: Dict[int, int],
-              active_locations: Iterable[Location]) -> None:
+def patch_rom(world: "CVCotMWorld", patch: CVCotMProcedurePatch, offset_data: Dict[int, List[int]]) -> None:
 
-    # patch.write_token(APTokenTypes.WRITE, 0x7FFFE0, b"\xFF\xFF\xFF\xFF")
+    # Write all the new item values
+    for offset, data in offset_data.items():
+        patch.write_token(APTokenTypes.WRITE, offset, bytes(data))
 
     patch.write_file("token_data.bin", patch.get_token_binary())
 
@@ -188,9 +211,9 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
-        if CVCOTMUSHASH != basemd5.hexdigest():
-            raise Exception("Supplied Base Rom does not match known MD5 for Castlevania: Circle of the Moon USA."
-                            "Get the correct game and version, then dump it.")
+        if basemd5.hexdigest() not in [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH]:
+            raise Exception("Supplied Base ROM does not match known MD5s for Castlevania: Circle of the Moon USA."
+                            "Get the correct cartridge, or the Castlevania Advance Collection, then extract it.")
         setattr(get_base_rom_bytes, "base_rom_bytes", base_rom_bytes)
     return base_rom_bytes
 

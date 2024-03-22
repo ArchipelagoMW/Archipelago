@@ -4,7 +4,7 @@ import settings
 import base64
 import logging
 
-from BaseClasses import Item, Region, MultiWorld, Tutorial, ItemClassification
+from BaseClasses import Item, Region, Tutorial, ItemClassification
 from .items import CVCotMItem, filler_item_names, action_cards, attribute_cards, get_item_info, get_item_names_to_ids,\
     get_item_counts
 from .locations import CVCotMLocation, get_location_info, get_location_names_to_ids, base_id, get_named_locations_data,\
@@ -16,17 +16,17 @@ from .data import iname
 from ..AutoWorld import WebWorld, World
 
 
-# from .aesthetics import shuffle_sub_weapons, get_start_inventory_data, get_location_data, get_countdown_numbers
-from .rom import RomData, patch_rom, get_base_rom_path, CVCotMProcedurePatch
+from .aesthetics import shuffle_sub_weapons, get_start_inventory_data, get_location_data, get_countdown_numbers
+from .rom import RomData, patch_rom, get_base_rom_path, CVCotMProcedurePatch, CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH
 from .client import CastlevaniaCotMClient
 
 
 class CVCotMSettings(settings.Group):
     class RomFile(settings.UserFilePath):
-        """File name of the Castlevania CVCotM US rom"""
+        """File name of the Castlevania CotM US rom"""
         copy_to = "Castlevania - Circle of the Moon (USA).gba"
         description = "Castlevania CotM (US) ROM File"
-        md5s = [CVCotMProcedurePatch.hash]
+        md5s = [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
 
@@ -156,8 +156,7 @@ class CVCotMWorld(World):
         active_locations = self.multiworld.get_locations(self.player)
 
     # Location data
-        offset_data = {}
-        #offset_data = get_location_data(self, active_locations)
+        offset_data = get_location_data(self, active_locations)
     # Sub-weapons
         #if self.options.sub_weapon_shuffle:
         #    offset_data.update(shuffle_sub_weapons(self))
@@ -169,7 +168,7 @@ class CVCotMWorld(World):
         #                                            self.multiworld.precollected_items[self.player]))
 
         patch = CVCotMProcedurePatch()
-        patch_rom(self, patch, offset_data, active_locations)
+        patch_rom(self, patch, offset_data)
 
         rom_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}"
                                                   f"{patch.patch_file_ending}")
