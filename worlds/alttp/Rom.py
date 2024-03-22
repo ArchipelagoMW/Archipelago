@@ -4,7 +4,7 @@ import Utils
 import worlds.Files
 
 LTTPJPN10HASH: str = "03a63945398191337e896e5771f77173"
-RANDOMIZERBASEHASH: str = "35d010bc148e0ea0ee68e81e330223f1"
+RANDOMIZERBASEHASH: str = "fd8cc0b9f78da5c1fc78d2129d63e9d7"
 ROM_PLAYER_LIMIT: int = 255
 
 import io
@@ -430,15 +430,14 @@ def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
 
     # Moblins attached to "key drop" locations crash the game when dropping their item when Key Drop Shuffle is on.
     # Replace them with a Slime enemy if they are placed.
-    if multiworld.key_drop_shuffle[player]:
-        key_drop_enemies = {
-            0x4DA20, 0x4DA5C, 0x4DB7F, 0x4DD73, 0x4DDC3, 0x4DE07, 0x4E201,
-            0x4E20A, 0x4E326, 0x4E4F7, 0x4E686, 0x4E70C, 0x4E7C8, 0x4E7FA
-        }
-        for enemy in key_drop_enemies:
-            if rom.read_byte(enemy) == 0x12:
-                logging.debug(f"Moblin found and replaced at {enemy} in world {player}")
-                rom.write_byte(enemy, 0x8F)
+    key_drop_enemies = {
+        0x4DA20, 0x4DA5C, 0x4DB7F, 0x4DD73, 0x4DDC3, 0x4DE07, 0x4E201,
+        0x4E20A, 0x4E326, 0x4E4F7, 0x4E686, 0x4E70C, 0x4E7C8, 0x4E7FA
+    }
+    for enemy in key_drop_enemies:
+        if rom.read_byte(enemy) == 0x12:
+            logging.debug(f"Moblin found and replaced at {enemy} in world {player}")
+            rom.write_byte(enemy, 0x8F)
 
     for used in (randopatch_path, options_path):
         try:
@@ -913,27 +912,24 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
 
     rom.write_byte(0x187010, credits_total)  # dynamic credits
 
-    if world.key_drop_shuffle[player]:
-        rom.write_byte(0x140000, 1)  # enable key drop shuffle
-        credits_total += len(key_drop_data)
-        # update dungeon counters
-        rom.write_byte(0x187001, 12)  # Hyrule Castle
-        rom.write_byte(0x187002, 8)  # Eastern Palace
-        rom.write_byte(0x187003, 9)  # Desert Palace
-        rom.write_byte(0x187004, 4)  # Agahnims Tower
-        rom.write_byte(0x187005, 15)  # Swamp Palace
-        rom.write_byte(0x187007, 11)  # Misery Mire
-        rom.write_byte(0x187008, 10)  # Skull Woods
-        rom.write_byte(0x187009, 12)  # Ice Palace
-        rom.write_byte(0x18700B, 10)  # Thieves Town
-        rom.write_byte(0x18700C, 14)  # Turtle Rock
-        rom.write_byte(0x18700D, 31)  # Ganons Tower
-        # update credits GT Big Key counter
-        gt_bigkey_top, gt_bigkey_bottom = credits_digit(5)
-        rom.write_byte(0x118B6A, gt_bigkey_top)
-        rom.write_byte(0x118B88, gt_bigkey_bottom)
-
-
+    rom.write_byte(0x140000, 1)  # enable key drop shuffle
+    credits_total += len(key_drop_data)
+    # update dungeon counters
+    rom.write_byte(0x187001, 12)  # Hyrule Castle
+    rom.write_byte(0x187002, 8)  # Eastern Palace
+    rom.write_byte(0x187003, 9)  # Desert Palace
+    rom.write_byte(0x187004, 4)  # Agahnims Tower
+    rom.write_byte(0x187005, 15)  # Swamp Palace
+    rom.write_byte(0x187007, 11)  # Misery Mire
+    rom.write_byte(0x187008, 10)  # Skull Woods
+    rom.write_byte(0x187009, 12)  # Ice Palace
+    rom.write_byte(0x18700B, 10)  # Thieves Town
+    rom.write_byte(0x18700C, 14)  # Turtle Rock
+    rom.write_byte(0x18700D, 31)  # Ganons Tower
+    # update credits GT Big Key counter
+    gt_bigkey_top, gt_bigkey_bottom = credits_digit(5)
+    rom.write_byte(0x118B6A, gt_bigkey_top)
+    rom.write_byte(0x118B88, gt_bigkey_bottom)
 
     # collection rate address: 238C37
     first_top, first_bot = credits_digit((credits_total / 100) % 10)
@@ -1510,6 +1506,9 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     rom.write_byte(0x18004D, ((0x01 if 'arrows' in world.escape_assist[player] else 0x00) |
                               (0x02 if 'bombs' in world.escape_assist[player] else 0x00) |
                               (0x04 if 'magic' in world.escape_assist[player] else 0x00)))  # Escape assist
+
+    if world.master_keys[player] :
+        rom.write_byte(0x186FFE, 0x01)
 
     if world.goal[player] in ['pedestal', 'triforce_hunt', 'local_triforce_hunt']:
         rom.write_byte(0x18003E, 0x01)  # make ganon invincible

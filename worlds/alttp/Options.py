@@ -210,11 +210,12 @@ class map_shuffle(DungeonItem):
     display_name = "Map Shuffle"
 
 
-class key_drop_shuffle(DefaultOnToggle):
-    """Shuffle keys found in pots and dropped from killed enemies,
-    respects the small key and big key shuffle options."""
-    display_name = "Key Drop Shuffle"
-
+class MasterSmallKeys(Toggle):
+    """Each dungeon only has one Small Key, which is not consumed upon opening doors.
+    If Universal Small Keys is on, there will be a single universal Small Key."""
+    display_name = "Master Keys"
+    default = False
+    
 
 class DungeonCounters(Choice):
     """On: Always display amount of items checked in a dungeon. Pickup: Show when compass is picked up.
@@ -740,7 +741,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "entrance_shuffle_seed": EntranceShuffleSeed,
     "big_key_shuffle": big_key_shuffle,
     "small_key_shuffle": small_key_shuffle,
-    "key_drop_shuffle": key_drop_shuffle,
+    "master_keys": MasterSmallKeys,
     "compass_shuffle": compass_shuffle,
     "map_shuffle": map_shuffle,
     "restrict_dungeon_item_on_boss": RestrictBossItem,
