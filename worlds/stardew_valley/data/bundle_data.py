@@ -436,6 +436,10 @@ island_foraging_bundle = IslandBundleTemplate(CCRoom.crafts_room, BundleName.isl
 sticky_items = [sap.as_amount(500), sap.as_amount(500)]
 sticky_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.sticky, sticky_items, 1, 1)
 
+forest_items = [moss.as_amount(10), fiber.as_amount(200), acorn.as_amount(10), maple_seed.as_amount(10), pine_cone.as_amount(10), mahogany_seed,
+                mushroom_tree_seed, mystic_tree_seed, mossy_seed.as_amount(5)]
+forest_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.forest, forest_items, 1, 1)
+
 wild_medicine_items = [item.as_amount(5) for item in [purple_mushroom, fiddlehead_fern, white_algae, hops, blackberry, dandelion]]
 wild_medicine_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.wild_medicine, wild_medicine_items, 4, 3)
 
@@ -450,24 +454,25 @@ crafts_room_bundles_vanilla = [spring_foraging_bundle_vanilla, summer_foraging_b
 crafts_room_bundles_thematic = [spring_foraging_bundle_thematic, summer_foraging_bundle_thematic, fall_foraging_bundle_thematic,
                                 winter_foraging_bundle_thematic, construction_bundle_thematic, exotic_foraging_bundle_thematic]
 crafts_room_bundles_remixed = [*crafts_room_bundles_thematic, beach_foraging_bundle, mines_foraging_bundle, desert_foraging_bundle,
-                               island_foraging_bundle, sticky_bundle, wild_medicine_bundle, quality_foraging_bundle]
+                               island_foraging_bundle, sticky_bundle, forest_bundle, wild_medicine_bundle, quality_foraging_bundle]
 crafts_room_vanilla = BundleRoomTemplate(CCRoom.crafts_room, crafts_room_bundles_vanilla, 6)
 crafts_room_thematic = BundleRoomTemplate(CCRoom.crafts_room, crafts_room_bundles_thematic, 6)
 crafts_room_remixed = BundleRoomTemplate(CCRoom.crafts_room, crafts_room_bundles_remixed, 6)
 
 # Pantry
 spring_crops_items_vanilla = [parsnip, green_bean, cauliflower, potato]
-spring_crops_items_thematic = [*spring_crops_items_vanilla, blue_jazz, coffee_bean, garlic, kale, rhubarb, strawberry, tulip, unmilled_rice]
+spring_crops_items_thematic = [*spring_crops_items_vanilla, blue_jazz, coffee_bean, garlic, kale, rhubarb, strawberry, tulip, unmilled_rice, carrot]
 spring_crops_bundle_vanilla = BundleTemplate(CCRoom.pantry, BundleName.spring_crops, spring_crops_items_vanilla, 4, 4)
 spring_crops_bundle_thematic = BundleTemplate.extend_from(spring_crops_bundle_vanilla, spring_crops_items_thematic)
 
 summer_crops_items_vanilla = [tomato, hot_pepper, blueberry, melon]
-summer_crops_items_thematic = [*summer_crops_items_vanilla, corn, hops, poppy, radish, red_cabbage, starfruit, summer_spangle, sunflower, wheat]
+summer_crops_items_thematic = [*summer_crops_items_vanilla, corn, hops, poppy, radish, red_cabbage, starfruit, summer_spangle, sunflower, wheat, sumer_squash]
 summer_crops_bundle_vanilla = BundleTemplate(CCRoom.pantry, BundleName.summer_crops, summer_crops_items_vanilla, 4, 4)
 summer_crops_bundle_thematic = BundleTemplate.extend_from(summer_crops_bundle_vanilla, summer_crops_items_thematic)
 
 fall_crops_items_vanilla = [corn, eggplant, pumpkin, yam]
-fall_crops_items_thematic = [*fall_crops_items_vanilla, amaranth, artichoke, beet, bok_choy, cranberries, fairy_rose, grape, sunflower, wheat, sweet_gem_berry]
+fall_crops_items_thematic = [*fall_crops_items_vanilla, amaranth, artichoke, beet, bok_choy, cranberries, fairy_rose, grape,
+                             sunflower, wheat, sweet_gem_berry, broccoli]
 fall_crops_bundle_vanilla = BundleTemplate(CCRoom.pantry, BundleName.fall_crops, fall_crops_items_vanilla, 4, 4)
 fall_crops_bundle_thematic = BundleTemplate.extend_from(fall_crops_bundle_vanilla, fall_crops_items_thematic)
 
@@ -670,12 +675,12 @@ chef_bundle_vanilla = BundleTemplate(CCRoom.bulletin_board, BundleName.chef, che
 chef_bundle_thematic = BundleTemplate.extend_from(chef_bundle_vanilla, chef_items_thematic)
 
 dye_items_vanilla = [red_mushroom, sea_urchin, sunflower, duck_feather, aquamarine, red_cabbage]
-dye_red_items = [cranberries, hot_pepper, radish, rhubarb, spaghetti, strawberry, tomato, tulip]
+dye_red_items = [cranberries, hot_pepper, radish, rhubarb, spaghetti, strawberry, tomato, tulip, red_mushroom]
 dye_orange_items = [poppy, pumpkin, apricot, orange, spice_berry, winter_root]
-dye_yellow_items = [corn, parsnip, summer_spangle, sunflower]
-dye_green_items = [fiddlehead_fern, kale, artichoke, bok_choy, green_bean]
-dye_blue_items = [blueberry, blue_jazz, blackberry, crystal_fruit]
-dye_purple_items = [beet, crocus, eggplant, red_cabbage, sweet_pea]
+dye_yellow_items = [corn, parsnip, summer_spangle, sunflower, starfruit]
+dye_green_items = [fiddlehead_fern, kale, artichoke, bok_choy, green_bean, cactus_fruit, duck_feather, dinosaur_egg]
+dye_blue_items = [blueberry, blue_jazz, blackberry, crystal_fruit, aquamarine]
+dye_purple_items = [beet, crocus, eggplant, red_cabbage, sweet_pea, iridium_bar, sea_urchin, amaranth]
 dye_items_thematic = [dye_red_items, dye_orange_items, dye_yellow_items, dye_green_items, dye_blue_items, dye_purple_items]
 dye_bundle_vanilla = BundleTemplate(CCRoom.bulletin_board, BundleName.dye, dye_items_vanilla, 6, 6)
 dye_bundle_thematic = DeepBundleTemplate(CCRoom.bulletin_board, BundleName.dye, dye_items_thematic, 6, 6)
@@ -710,8 +715,21 @@ home_cook_items = [egg.as_amount(10), milk.as_amount(10), wheat_flour.as_amount(
                    chocolate_cake, pancakes, rhubarb_pie]
 home_cook_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.home_cook, home_cook_items, 3, 3)
 
+helper_items = [prize_ticket, mystery_box.as_amount(5), gold_mystery_box]
+helper_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.helper, helper_items, 2, 2)
+
+spirit_eve_items = [jack_o_lantern, corn.as_amount(10), bat_wing.as_amount(10)]
+spirit_eve_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.spirit_eve, spirit_eve_items, 3, 3)
+
+winter_star_items = [holly.as_amount(5), plum_pudding, stuffing, powdermelon.as_amount(5)]
+winter_star_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.winter_star, winter_star_items, 2, 2)
+
 bartender_items = [shrimp_cocktail, triple_shot_espresso, ginger_ale, cranberry_candy, beer, pale_ale, pina_colada]
 bartender_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.bartender, bartender_items, 3, 3)
+
+calico_items = [calico_egg.as_amount(200), calico_egg.as_amount(200), calico_egg.as_amount(200), magic_rock_candy, mega_bomb.as_amount(10),
+                mystery_box.as_amount(10), mixed_seeds.as_amount(50), eggplant_parmesan.as_amount(50)]
+calico_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.calico, calico_items, 2, 2)
 
 bulletin_board_bundles_vanilla = [chef_bundle_vanilla, dye_bundle_vanilla, field_research_bundle_vanilla, fodder_bundle_vanilla, enchanter_bundle_vanilla]
 bulletin_board_bundles_thematic = [chef_bundle_thematic, dye_bundle_thematic, field_research_bundle_thematic, fodder_bundle_thematic, enchanter_bundle_thematic]
