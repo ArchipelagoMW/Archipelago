@@ -360,6 +360,7 @@ def try_getting_location_group_other_world(world: "WitnessWorld", hint_loc: Loca
     if world.options.vague_hints == "experimental":
         parent_region = hint_loc.parent_region
 
+        # Assume that an "experimental" player would never want an "Everywhere" hint.
         if not valid_location_groups:
             return hint_loc.parent_region.name
 
