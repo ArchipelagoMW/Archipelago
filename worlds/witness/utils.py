@@ -197,36 +197,8 @@ def get_discard_exclusion_list() -> List[str]:
     return get_adjustment_file("settings/Exclusions/Discards.txt")
 
 
-def get_caves_exclusion_list() -> List[str]:
-    return get_adjustment_file("settings/Postgame/Caves.txt")
-
-
-def get_beyond_challenge_exclusion_list() -> List[str]:
-    return get_adjustment_file("settings/Postgame/Beyond_Challenge.txt")
-
-
-def get_bottom_floor_discard_exclusion_list() -> List[str]:
-    return get_adjustment_file("settings/Postgame/Bottom_Floor_Discard.txt")
-
-
-def get_bottom_floor_discard_nondoors_exclusion_list() -> List[str]:
-    return get_adjustment_file("settings/Postgame/Bottom_Floor_Discard_NonDoors.txt")
-
-
-def get_mountain_upper_exclusion_list() -> List[str]:
-    return get_adjustment_file("settings/Postgame/Mountain_Upper.txt")
-
-
-def get_challenge_vault_box_exclusion_list() -> List[str]:
-    return get_adjustment_file("settings/Postgame/Challenge_Vault_Box.txt")
-
-
-def get_path_to_challenge_exclusion_list() -> List[str]:
-    return get_adjustment_file("settings/Postgame/Path_To_Challenge.txt")
-
-
-def get_mountain_lower_exclusion_list() -> List[str]:
-    return get_adjustment_file("settings/Postgame/Mountain_Lower.txt")
+def get_caves_except_path_to_challenge_exclusion_list() -> List[str]:
+    return get_adjustment_file("settings/Exclusions/Caves_Except_Path_To_Challenge.txt")
 
 
 def get_elevators_come_to_you() -> List[str]:

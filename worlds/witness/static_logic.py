@@ -1,9 +1,10 @@
+from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, List
 
-from .utils import define_new_region, parse_lambda, lazy, get_items, get_sigma_normal_logic, get_sigma_expert_logic,\
-    get_vanilla_logic
+from .utils import define_new_region, parse_lambda, lazy, get_items, get_sigma_normal_logic, get_sigma_expert_logic, \
+    get_vanilla_logic, dnf_remove_redundancies
 
 
 class ItemCategory(Enum):
@@ -71,7 +72,8 @@ class StaticWitnessLogicObj:
                 current_region = new_region_and_connections[0]
                 region_name = current_region["name"]
                 self.ALL_REGIONS_BY_NAME[region_name] = current_region
-                self.STATIC_CONNECTIONS_BY_REGION_NAME[region_name] = new_region_and_connections[1]
+                for connection in new_region_and_connections[1]:
+                    self.CONNECTIONS_WITH_DUPLICATES[region_name][connection[0]].add(connection[1])
                 current_area["regions"].append(region_name)
                 continue
 
@@ -177,6 +179,27 @@ class StaticWitnessLogicObj:
 
             current_region["panels"].append(entity_hex)
 
+    def reverse_connections(self):
+        for region_name, connections in list(self.CONNECTIONS_WITH_DUPLICATES.items()):
+            for target, requirement_set in connections.items():
+                for requirement in requirement_set:
+                    remaining_options = set()
+                    for option in requirement:
+                        if not any(req == "TrueOneWay" for req in option):
+                            remaining_options.add(option)
+
+                    if remaining_options:
+                        self.CONNECTIONS_WITH_DUPLICATES[target][region_name].add(frozenset(remaining_options))
+
+    def combine_connections(self):
+        # All regions need to be present, and this dict is copied later - Thus, defaultdict is not the correct choice.
+        self.STATIC_CONNECTIONS_BY_REGION_NAME = {region_name: set() for region_name in self.ALL_REGIONS_BY_NAME}
+
+        for source, connections in self.CONNECTIONS_WITH_DUPLICATES.items():
+            for target, requirement in connections.items():
+                combined_req = dnf_remove_redundancies(frozenset().union(*requirement))
+                self.STATIC_CONNECTIONS_BY_REGION_NAME[source].add((target, combined_req))
+
     def __init__(self, lines=None):
         if lines is None:
             lines = get_sigma_normal_logic()
@@ -184,6 +207,7 @@ class StaticWitnessLogicObj:
         # All regions with a list of panels in them and the connections to other regions, before logic adjustments
         self.ALL_REGIONS_BY_NAME = dict()
         self.ALL_AREAS_BY_NAME = dict()
+        self.CONNECTIONS_WITH_DUPLICATES = defaultdict(lambda: defaultdict(lambda: set()))
         self.STATIC_CONNECTIONS_BY_REGION_NAME = dict()
 
         self.ENTITIES_BY_HEX = dict()
@@ -197,6 +221,8 @@ class StaticWitnessLogicObj:
         self.ENTITY_ID_TO_NAME = dict()
 
         self.read_logic_file(lines)
+        self.reverse_connections()
+        self.combine_connections()
 
 
 class StaticWitnessLogic:
