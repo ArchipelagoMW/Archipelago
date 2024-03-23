@@ -207,7 +207,7 @@
 {% endmacro %}
 
 {% macro RangeRow(world_name, option_name, option, display_value, value, can_delete=False) %}
-    <tr data-row="{{ world_name }}-{{ option_name }}-{{ value }}-row">
+    <tr data-row="{{ world_name }}-{{ option_name }}-{{ value }}-row" data-world-name="{{ world_name }}" data-option-name="{{ option_name }}" data-value="{{ value }}">
         <td class="td-left">
             <label for="{{ world_name }}||{{ option_name }}||{{ value }}">
                 {{ display_value }}

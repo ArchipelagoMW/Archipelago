@@ -1,3 +1,5 @@
+let deletedOptions = {};
+
 window.addEventListener('load', () => {
   // Generic change listener. Detecting unique qualities and acting on them here reduces initial JS initialisation time
   // and handles dynamically created elements
@@ -44,6 +46,11 @@ window.addEventListener('load', () => {
     // Handle deleting range rows
     if (evt.target.classList.contains('range-option-delete')) {
       const targetRow = document.querySelector(`tr[data-row="${evt.target.getAttribute('data-target')}"]`);
+      setDeletedOption(
+        targetRow.getAttribute('data-world-name'),
+        targetRow.getAttribute('data-option-name'),
+        targetRow.getAttribute('data-value'),
+      );
       targetRow.parentElement.removeChild(targetRow);
     }
   });
@@ -89,12 +96,27 @@ window.addEventListener('load', () => {
       if (worldName) { return weightedOptions[worldName] = determineValue(input); }
     });
 
-    localStorage.setItem('weightedOptions', JSON.stringify(weightedOptions))
+    localStorage.setItem('weightedOptions', JSON.stringify(weightedOptions));
+    localStorage.setItem('deletedOptions', JSON.stringify(deletedOptions));
 
     evt.preventDefault();
   });
 
+  // Remove all deleted values as specified by localStorage.deletedOptions
+  deletedOptions = JSON.parse(localStorage.getItem('deletedOptions') || '{}');
+  Object.keys(deletedOptions).forEach((worldName) => {
+    Object.keys(deletedOptions[worldName]).forEach((optionName) => {
+      deletedOptions[worldName][optionName].forEach((value) => {
+        const targetRow = document.querySelector(`tr[data-row="value"]`);
+        targetRow.parentElement.removeChild(targetRow);
+        // TODO: Fix me!
+      });
+    });
+  });
+
   // TODO: Populate all settings from localStorage on page initialisation
+
+  // TODO: Show or hide game divs based on game choice weights
 });
 
 const addRangeRow = (worldName, optionName) => {
@@ -109,6 +131,9 @@ const addRangeRow = (worldName, optionName) => {
   const tBody = document.querySelector(`table[data-option="${worldName}-${optionName}"].range-rows tbody`);
   const tr = document.createElement('tr');
   tr.setAttribute('data-row', `${worldName}-${optionName}-${newValue}-row`);
+  tr.setAttribute('data-world-name', worldName);
+  tr.setAttribute('data-option-name', optionName);
+  tr.setAttribute('data-value', newValue);
   const tdLeft = document.createElement('td');
   tdLeft.classList.add('td-left');
   const label = document.createElement('label');
@@ -143,8 +168,54 @@ const addRangeRow = (worldName, optionName) => {
   tdDelete.appendChild(deleteSpan);
   tr.appendChild(tdDelete);
   tBody.appendChild(tr);
+
+  // Remove this option from the set of deleted options if it exists
+  unsetDeletedOption(worldName, optionName, newValue);
 };
 
+/**
+ * Determines the value of an input element, or returns a 1 or 0 if the element is a checkbox
+ *
+ * @param {object} input - The input element.
+ * @returns {number} The value of the input element.
+ */
 const determineValue = (input) => {
   return input.type === 'checkbox' ? (input.checked ? 1 : 0) : parseInt(input.value, 10);
+};
+
+/**
+ * Sets the deleted option value for a given world and option name.
+ * If the world or option does not exist, it creates the necessary entries.
+ *
+ * @param {string} worldName - The name of the world.
+ * @param {string} optionName - The name of the option.
+ * @param {*} value - The value to be set for the deleted option.
+ * @returns {void}
+ */
+const setDeletedOption = (worldName, optionName, value) => {
+  deletedOptions[worldName] = deletedOptions[worldName] || {};
+  deletedOptions[worldName][optionName] = deletedOptions[worldName][optionName] || [];
+  deletedOptions[worldName][optionName].push(`${worldName}-${optionName}-${value}`);
+};
+
+/**
+ * Removes a specific value from the deletedOptions object.
+ *
+ * @param {string} worldName - The name of the world.
+ * @param {string} optionName - The name of the option.
+ * @param {*} value - The value to be removed
+ * @returns {void}
+ */
+const unsetDeletedOption = (worldName, optionName, value) => {
+  if (!deletedOptions.hasOwnProperty(worldName)) { return; }
+  if (!deletedOptions[worldName].hasOwnProperty(optionName)) { return; }
+  if (deletedOptions[worldName][optionName].includes(`${worldName}-${optionName}-${value}`)) {
+    deletedOptions[worldName][optionName].splice(deletedOptions[worldName][optionName].indexOf(`${worldName}-${optionName}-${value}`), 1);
+  }
+  if (deletedOptions[worldName][optionName].length === 0) {
+    delete deletedOptions[worldName][optionName];
+  }
+  if (Object.keys(deletedOptions[worldName]).length === 0) {
+    delete deletedOptions[worldName];
+  }
 };
