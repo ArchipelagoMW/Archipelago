@@ -1,4 +1,4 @@
-from typing import Dict, List, Set, Tuple, TYPE_CHECKING
+from typing import Dict, List, Set, TYPE_CHECKING
 from BaseClasses import Region, ItemClassification, Item, Location
 from .locations import location_table
 from .er_data import Portal, tunic_er_regions, portal_mapping, \
