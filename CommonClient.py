@@ -19,7 +19,7 @@ import Utils
 if __name__ == "__main__":
     Utils.init_logging("TextClient", exception_logger="Client")
 
-from MultiServer import CommandProcessor
+from MultiServer import CommandProcessor, mark_raw
 from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
                       RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes)
 from Utils import Version, stream_input, async_start
@@ -70,21 +70,35 @@ class ClientCommandProcessor(CommandProcessor):
         async_start(self.ctx.disconnect(), name="disconnecting")
         return True
 
-    def _cmd_received(self) -> bool:
-        """List all received items"""
-        item: NetworkItem
-        self.output(f'{len(self.ctx.items_received)} received items, sorted by time:')
-        for index, item in enumerate(self.ctx.items_received, 1):
-            parts = []
-            add_json_item(parts, item.item, self.ctx.slot, item.flags)
-            add_json_text(parts, " from ")
-            add_json_location(parts, item.location, item.player)
-            add_json_text(parts, " by ")
-            add_json_text(parts, item.player, type=JSONTypes.player_id)
-            self.ctx.on_print_json({"data": parts, "cmd": "PrintJSON"})
+    @mark_raw
+    def _cmd_received(self, filter_text: str = "") -> bool:
+        """List all received items.
+        Can be given text, which will be used as filter."""
+        count = 0
+        if filter_text:
+            self.output(f"Received items matching '{filter_text}':")
+        else:
+            self.output("Received items:")
+        self.output("")
+        for item in self.ctx.items_received:
+            item_name = self.ctx.item_names[item.item]
+            if not filter_text or filter_text.lower() in item_name.lower():
+                count += 1
+                parts = []
+                add_json_item(parts, item.item, self.ctx.slot, item.flags)
+                add_json_text(parts, " from ")
+                add_json_location(parts, item.location, item.player)
+                add_json_text(parts, " by ")
+                add_json_text(parts, item.player, type=JSONTypes.player_id)
+                self.ctx.on_print_json({"data": parts, "cmd": "PrintJSON"})
+        if count == 0:
+            self.output("No received items found")
+        else:
+            self.output(f"Found {count} {'matching ' if filter_text else ''}received items")
         return True
 
-    def _cmd_missing(self, filter_text = "") -> bool:
+    @mark_raw
+    def _cmd_missing(self, filter_text: str = "") -> bool:
         """List all missing location checks, from your local game state.
         Can be given text, which will be used as filter."""
         if not self.ctx.game:
@@ -93,7 +107,7 @@ class ClientCommandProcessor(CommandProcessor):
         count = 0
         checked_count = 0
         for location, location_id in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id.items():
-            if filter_text and filter_text not in location:
+            if filter_text and filter_text.lower() not in location.lower():
                 continue
             if location_id < 0:
                 continue
@@ -108,46 +122,71 @@ class ClientCommandProcessor(CommandProcessor):
 
         if count:
             self.output(
-                f"Found {count} missing location checks{f'. {checked_count} location checks previously visited.' if checked_count else ''}")
+                f"Found {count} missing location checks{f" matching '{filter_text}'" if filter_text else ""}{f'. {checked_count} location checks previously visited.' if checked_count else ''}")
         else:
-            self.output("No missing location checks found.")
+            self.output(f"No missing location checks{f" matching '{filter_text}'" if filter_text else ""} found.")
         return True
 
-    def _cmd_items(self):
-        """List all item names for the currently running game."""
+    @mark_raw
+    def _cmd_items(self, filter_text: str = ""):
+        """List all item names for the currently running game.
+        Can be given text, which will be used as filter."""
         if not self.ctx.game:
             self.output("No game set, cannot determine existing items.")
             return False
-        self.output(f"Item Names for {self.ctx.game}")
+        if filter_text:
+            self.output(f"Item Names for {self.ctx.game} matching '{filter_text}':")
+        else:
+            self.output(f"Item Names for {self.ctx.game}:")
+        self.output("")
         for item_name in AutoWorldRegister.world_types[self.ctx.game].item_name_to_id:
-            self.output(item_name)
-
-    def _cmd_item_groups(self):
-        """List all item group names for the currently running game."""
+            if not filter_text or filter_text.lower() in item_name.lower():
+                self.output(item_name)
+    
+    @mark_raw
+    def _cmd_item_groups(self, filter_text = ""):
+        """List all item group names for the currently running game.
+        Can be given text, which will be used as filter."""
         if not self.ctx.game:
             self.output("No game set, cannot determine existing item groups.")
             return False
-        self.output(f"Item Group Names for {self.ctx.game}")
+        if filter_text:
+            self.output(f"Item Group Names for {self.ctx.game} matching '{filter_text}':")
+        else:
+            self.output(f"Item Group Names for {self.ctx.game}:")
         for group_name in AutoWorldRegister.world_types[self.ctx.game].item_name_groups:
-            self.output(group_name)
-
-    def _cmd_locations(self):
-        """List all location names for the currently running game."""
+            if not filter_text or filter_text.lower() in group_name.lower():
+                self.output(group_name)
+        
+    @mark_raw
+    def _cmd_locations(self, filter_text: str = ""):
+        """List all location names for the currently running game.
+        Can be given text, which will be used as filter."""
         if not self.ctx.game:
             self.output("No game set, cannot determine existing locations.")
             return False
-        self.output(f"Location Names for {self.ctx.game}")
+        if filter_text:
+            self.output(f"Location Names for {self.ctx.game} matching '{filter_text}':")
+        else:
+            self.output(f"Location Names for {self.ctx.game}:")
+        self.output("")
         for location_name in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id:
-            self.output(location_name)
+            if not filter_text or filter_text.lower() in location_name.lower():
+                self.output(location_name)
 
     def _cmd_location_groups(self):
-        """List all location group names for the currently running game."""
+        """List all location group names for the currently running game.
+        Can be given text, which will be used as filter."""
         if not self.ctx.game:
             self.output("No game set, cannot determine existing location groups.")
             return False
-        self.output(f"Location Group Names for {self.ctx.game}")
+        if filter_text:
+            self.output(f"Location Group Names for {self.ctx.game} matching '{filter_text}':")
+        else:
+            self.output(f"Location Group Names for {self.ctx.game}:")
         for group_name in AutoWorldRegister.world_types[self.ctx.game].location_name_groups:
-            self.output(group_name)
+            if not filter_text or filter_text.lower() in group_name.lower():
+                self.output(group_name)
 
     def _cmd_ready(self):
         """Send ready status to server."""
