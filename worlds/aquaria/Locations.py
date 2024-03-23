@@ -618,6 +618,7 @@ location_table = {
     **AquariaLocations.locations_sunken_city_l,
     **AquariaLocations.locations_sunken_city_r,
     **AquariaLocations.locations_sunken_city_boss,
+    **AquariaLocations.locations_sunken_city_l_bedroom,
     **AquariaLocations.locations_simon,
     **AquariaLocations.locations_whale,
 }
