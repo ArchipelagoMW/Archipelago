@@ -43,6 +43,9 @@ def fortress_loot(state: CollectionState, player: int) -> bool: # saddles, blaze
 def can_brew_potions(state: CollectionState, player: int) -> bool:
     return state.has('Blaze Rods', player) and state.has('Brewing', player) and has_bottle(state, player)
 
+def can_excavate(state: CollectionState, player: int) -> bool:
+    return has_copper_ingots(state, player) and state.has('Brush', player) and can_adventure(state, player)
+
 def can_piglin_trade(state: CollectionState, player: int) -> bool:
     return has_gold_ingots(state, player) and (
                 state.can_reach('The Nether', 'Region', player) or 
@@ -172,7 +175,7 @@ def get_rules_lookup(player: int):
             "Bullseye": lambda state: (state.has("Archery", player) and state.has("Progressive Tools", player, 2) and
                 has_iron_ingots(state, player)),
             "Spooky Scary Skeleton": lambda state: basic_combat(state, player),
-            "Two by Two": lambda state: has_iron_ingots(state, player) and state.has("Bucket", player) and can_adventure(state, player),
+            "Two by Two": lambda state: has_iron_ingots(state, player) and state.has("Bucket", player) and state.has("Brush", player) and can_adventure(state, player),
             "Two Birds, One Arrow": lambda state: craft_crossbow(state, player) and can_enchant(state, player),
             "Who's the Pillager Now?": lambda state: craft_crossbow(state, player),
             "Getting an Upgrade": lambda state: state.has("Progressive Tools", player),
@@ -247,7 +250,7 @@ def get_rules_lookup(player: int):
             "Glow and Behold!": lambda state: can_adventure(state, player),
             "Whatever Floats Your Goat!": lambda state: can_adventure(state, player),
             "Caves & Cliffs": lambda state: has_iron_ingots(state, player) and state.has('Bucket', player) and state.has('Progressive Tools', player, 2),
-            "Feels like home": lambda state: (has_iron_ingots(state, player) and state.has('Bucket', player) and state.has('Fishing Rod', player) and
+            "Feels Like Home": lambda state: (has_iron_ingots(state, player) and state.has('Bucket', player) and state.has('Fishing Rod', player) and
                 (fortress_loot(state, player) or complete_raid(state, player)) and state.has("Saddle", player)),
             "Sound of Music": lambda state: state.has("Progressive Tools", player, 2) and has_iron_ingots(state, player) and basic_combat(state, player),
             "Star Trader": lambda state: (has_iron_ingots(state, player) and state.has('Bucket', player) and
@@ -261,6 +264,26 @@ def get_rules_lookup(player: int):
             "Sneak 100": lambda state: can_adventure(state, player) and has_iron_ingots(state, player) and state.has("Progressive Tools", player, 2),
             "When the Squad Hops into Town": lambda state: can_adventure(state, player) and state.has("Lead", player),
             "With Our Powers Combined!": lambda state: can_adventure(state, player) and state.has("Lead", player),
+            "Smells Interesting": lambda state: can_excavate(state, player),
+            "Little Sniffs": lambda state: can_excavate(state, player),
+            "Planting the Past": lambda state: can_excavate(state, player),
+            "Crafting a New Look": lambda state: (has_iron_ingots(state, player) and # Maybe streamline this one
+                (can_adventure(state, player) or
+                    fortress_loot(state, player) or
+                    (state.can_reach("Pillager Outpost", 'Region', player) and basic_combat(state, player)) or
+                    (state.can_reach("Bastion Remnant", 'Region', player) and basic_combat(state, player)) or
+                    (state.can_reach("End City", 'Region', player) and basic_combat(state, player)))),
+            "Smithing with Style": lambda state: (can_excavate(state, player) and # Wayfinder Armor Trim
+                fortress_loot(state, player) and # Rib Armor Trim
+                (state.can_reach("Village", 'Region', player) or overworld_villager(state, player)) and  # Explorer Maps for the Vex and Tide Armor Trims
+                state.can_reach("Bastion Remnant", 'Region', player) and  # Snout Armor Trim
+                state.can_reach("End City", 'Region', player) and  # Spire Armor Trim
+                state.has("Progressive Tools", player, 2) and  # Ward and Silence Armor Trims
+                ((state.has("Fishing Rod", player) and can_brew_potions(state, player)) or  # Water Breathing Potions for the Tide Armor Trim
+                (state.has("Bucket", player) and can_enchant(state, player)))),  # Access to Milk/Aqua Affinity and Axolotls/Respiration for the Tide Armor Trim
+            "Respecting the Remnants": lambda state: can_excavate(state, player),
+            "Careful Restoration": lambda state: can_excavate(state, player),
+            "The Power of Books": lambda state: state.has("Progressive Tools", player, 2),
         }
     }
     return rules_lookup
