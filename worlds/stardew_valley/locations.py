@@ -39,6 +39,7 @@ class LocationTags(enum.Enum):
     WATERING_CAN_UPGRADE = enum.auto()
     TRASH_CAN_UPGRADE = enum.auto()
     FISHING_ROD_UPGRADE = enum.auto()
+    PAN_UPGRADE = enum.auto()
     THE_MINES_TREASURE = enum.auto()
     CROPSANITY = enum.auto()
     ELEVATOR = enum.auto()
