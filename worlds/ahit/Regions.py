@@ -716,7 +716,13 @@ def connect_time_rift(world: "HatInTimeWorld", time_rift: Region, exit_region: R
     i: int = 1
     while i <= count:
         name = f"{time_rift.name} Portal - Entrance {i}"
-        entrance: Entrance = world.multiworld.get_entrance(name, world.player)
+        entrance: Entrance
+        try:
+            entrance = world.multiworld.get_entrance(name, world.player)
+        except KeyError:
+            entrance = time_rift.entrances[0]
+
+        # noinspection PyUnboundLocalVariable
         reconnect_regions(entrance, entrance.parent_region, exit_region)
         i += 1
 
