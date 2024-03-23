@@ -116,7 +116,7 @@ Enabling Carrie Logic will also expect the following:
 
 - Orb-sniping dogs through the front gates in Villa
 
-Library Skip is **NOT** logically expected with any option. The basement arena crack will always logically expect two Nitros
+Library Skip is **NOT** logically expected by any options. The basement arena crack will always logically expect two Nitros
 and two Mandragoras even with Hard Logic on due to the possibility of wasting a pair on the upper wall, after managing
 to skip past it. And plus, the RNG manip may not even be possible after picking up all the items in the Nitro room.
 
