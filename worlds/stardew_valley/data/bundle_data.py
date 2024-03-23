@@ -69,6 +69,11 @@ stone = BundleItem(Material.stone, 99)
 hardwood = BundleItem(Material.hardwood, 10)
 clay = BundleItem(Material.clay, 10)
 fiber = BundleItem(Material.fiber, 99)
+moss = BundleItem(Material.moss)
+
+mixed_seeds = BundleItem(Seed.mixed)
+forest_items = [moss.as_amount(10), fiber.as_amount(200), acorn.as_amount(10), maple_seed.as_amount(10), pine_cone.as_amount(10), mahogany_seed,
+                mushroom_tree_seed, mystic_tree_seed, mossy_seed.as_amount(5)]
 
 blue_jazz = BundleItem(Flower.blue_jazz)
 cauliflower = BundleItem(Vegetable.cauliflower)
