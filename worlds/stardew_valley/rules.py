@@ -1,7 +1,7 @@
 import itertools
 from typing import List, Dict, Set
 
-from BaseClasses import MultiWorld
+from BaseClasses import MultiWorld, CollectionState
 from worlds.generic import Rules as MultiWorldRules
 from . import locations
 from .bundles.bundle_room import BundleRoom
@@ -21,6 +21,7 @@ from .options import ToolProgression, BuildingProgression, ExcludeGingerIsland, 
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, Cropsanity, SkillProgression
 from .stardew_rule import And, StardewRule
 from .stardew_rule.indirect_connection import look_for_indirect_connection
+from .stardew_rule.rule_explain import explain
 from .strings.ap_names.event_names import Event
 from .strings.ap_names.mods.mod_items import SVEQuestItem, SVERunes
 from .strings.ap_names.transport_names import Transportation
@@ -907,12 +908,17 @@ def set_boarding_house_rules(logic: StardewLogic, multiworld: MultiWorld, player
 
 
 def set_entrance_rule(multiworld, player, entrance: str, rule: StardewRule):
-    potentially_required_regions = look_for_indirect_connection(rule)
-    if potentially_required_regions:
-        for region in potentially_required_regions:
-            multiworld.register_indirect_condition(multiworld.get_region(region, player), multiworld.get_entrance(entrance, player))
+    try:
+        potentially_required_regions = look_for_indirect_connection(rule)
+        if potentially_required_regions:
+            for region in potentially_required_regions:
+                multiworld.register_indirect_condition(multiworld.get_region(region, player), multiworld.get_entrance(entrance, player))
 
-    MultiWorldRules.set_rule(multiworld.get_entrance(entrance, player), rule)
+        MultiWorldRules.set_rule(multiworld.get_entrance(entrance, player), rule)
+    except KeyError as ex:
+        print(f"Failed to evaluate indirect connection in {entrance}")
+        print(explain(rule, CollectionState(multiworld)))
+        raise ex
 
 
 def set_island_entrance_rule(multiworld, player, entrance: str, rule: StardewRule, world_options: StardewValleyOptions):

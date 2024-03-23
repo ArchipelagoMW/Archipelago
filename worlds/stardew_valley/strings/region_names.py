@@ -14,6 +14,7 @@ class Region:
     forest = "Forest"
     bus_stop = "Bus Stop"
     backwoods = "Backwoods"
+    tunnel_entrance = "Tunnel Entrance"
     bus_tunnel = "Bus Tunnel"
     railroad = "Railroad"
     secret_woods = "Secret Woods"
@@ -83,7 +84,6 @@ class Region:
     traveling_cart_saturday = "Traveling Cart Saturday"
     farm_cave = "Farmcave"
     greenhouse = "Greenhouse"
-    tunnel_entrance = "Tunnel Entrance"
     leah_house = "Leah's Cottage"
     wizard_tower = "Wizard Tower"
     wizard_basement = "Wizard Basement"
@@ -304,5 +304,3 @@ class BoardingHouseRegion:
     lost_valley_house_1 = "Lost Valley Ruins - First House"
     lost_valley_house_2 = "Lost Valley Ruins - Second House"
     buffalo_ranch = "Buffalo's Ranch"
-
-

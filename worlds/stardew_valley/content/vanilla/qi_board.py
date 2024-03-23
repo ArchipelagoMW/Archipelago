@@ -1,4 +1,4 @@
-from .ginger_island import ginger_island as ginger_island_content_pack
+from .ginger_island import ginger_island_content_pack as ginger_island_content_pack
 from .pelican_town import pelican_town as pelican_town_content_pack
 from ..game_content import ContentPack
 from ...data import fish_data

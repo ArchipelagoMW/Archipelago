@@ -48,7 +48,10 @@ class RuleExplanation:
 
     @cached_property
     def result(self) -> bool:
-        return self.rule(self.state)
+        try:
+            return self.rule(self.state)
+        except KeyError:
+            return False
 
     @cached_property
     def explained_sub_rules(self) -> List[RuleExplanation]:
@@ -85,7 +88,10 @@ def _(rule: Count, state: CollectionState, expected: bool, explored_spots: Set[T
 
 @_explain.register
 def _(rule: Has, state: CollectionState, expected: bool, explored_spots: Set[Tuple[str, str]]) -> RuleExplanation:
-    return RuleExplanation(rule, state, expected, [rule.other_rules[rule.item]], explored_spots=explored_spots)
+    try:
+        return RuleExplanation(rule, state, expected, [rule.other_rules[rule.item]], explored_spots=explored_spots)
+    except KeyError:
+        return RuleExplanation(rule, state, expected, explored_spots=explored_spots)
 
 
 @_explain.register

@@ -18,6 +18,7 @@ from .crop_logic import CropLogicMixin
 from .farming_logic import FarmingLogicMixin
 from .fishing_logic import FishingLogicMixin
 from .gift_logic import GiftLogicMixin
+from .harvesting_logic import HarvestingLogicMixin
 from .has_logic import HasLogicMixin
 from .mine_logic import MineLogicMixin
 from .money_logic import MoneyLogicMixin
@@ -31,6 +32,7 @@ from .relationship_logic import RelationshipLogicMixin
 from .season_logic import SeasonLogicMixin
 from .shipping_logic import ShippingLogicMixin
 from .skill_logic import SkillLogicMixin
+from .source_logic import SourceLogicMixin
 from .special_order_logic import SpecialOrderLogicMixin
 from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
@@ -88,7 +90,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
                    BuildingLogicMixin, ShippingLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, WalletLogicMixin, AnimalLogicMixin,
                    CombatLogicMixin, MagicLogicMixin, MonsterLogicMixin, ToolLogicMixin, PetLogicMixin, CropLogicMixin,
                    SkillLogicMixin, FarmingLogicMixin, BundleLogicMixin, FishingLogicMixin, MineLogicMixin, CookingLogicMixin, AbilityLogicMixin,
-                   SpecialOrderLogicMixin, QuestLogicMixin, CraftingLogicMixin, ModLogicMixin):
+                   SpecialOrderLogicMixin, QuestLogicMixin, CraftingLogicMixin, ModLogicMixin, HarvestingLogicMixin, SourceLogicMixin):
     player: int
     options: StardewValleyOptions
     content: StardewContent
@@ -255,38 +257,9 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Fish.snail: self.skill.can_crab_pot_at(Region.town),
             Fishing.curiosity_lure: self.monster.can_kill(self.monster.all_monsters_by_name[Monster.mummy]),
             Fishing.lead_bobber: self.skill.has_level(Skill.fishing, 6) & self.money.can_spend_at(Region.fish_shop, 200),
-            Forageable.blackberry: self.tool.can_forage(Season.fall) | self.has_fruit_bats(),
-            Forageable.cactus_fruit: self.tool.can_forage(Generic.any, Region.desert),
-            Forageable.cave_carrot: self.tool.can_forage(Generic.any, Region.mines_floor_10, True),
-            Forageable.chanterelle: self.tool.can_forage(Season.fall, Region.secret_woods) | self.has_mushroom_cave(),
-            Forageable.coconut: self.tool.can_forage(Generic.any, Region.desert),
-            Forageable.common_mushroom: self.tool.can_forage(Season.fall) | (self.tool.can_forage(Season.spring, Region.secret_woods)) | self.has_mushroom_cave(),
-            Forageable.crocus: self.tool.can_forage(Season.winter),
-            Forageable.crystal_fruit: self.tool.can_forage(Season.winter),
-            Forageable.daffodil: self.tool.can_forage(Season.spring),
-            Forageable.dandelion: self.tool.can_forage(Season.spring),
-            Forageable.dragon_tooth: self.tool.can_forage(Generic.any, Region.volcano_floor_10),
-            Forageable.fiddlehead_fern: self.tool.can_forage(Season.summer, Region.secret_woods),
-            Forageable.ginger: self.tool.can_forage(Generic.any, Region.island_west, True),
-            Forageable.hay: self.building.has_building(Building.silo) & self.tool.has_tool(Tool.scythe),
-            Forageable.hazelnut: self.tool.can_forage(Season.fall),
-            Forageable.holly: self.tool.can_forage(Season.winter),
-            Forageable.journal_scrap: self.region.can_reach_all((Region.island_west, Region.island_north, Region.island_south, Region.volcano_floor_10)) & self.quest.has_magnifying_glass() & (self.ability.can_chop_trees() | self.mine.can_mine_in_the_mines_floor_1_40()),
-            Forageable.leek: self.tool.can_forage(Season.spring),
-            Forageable.magma_cap: self.tool.can_forage(Generic.any, Region.volcano_floor_5),
-            Forageable.morel: self.tool.can_forage(Season.spring, Region.secret_woods) | self.has_mushroom_cave(),
-            Forageable.purple_mushroom: self.tool.can_forage(Generic.any, Region.mines_floor_95) | self.tool.can_forage(Generic.any, Region.skull_cavern_25) | self.has_mushroom_cave(),
-            Forageable.rainbow_shell: self.tool.can_forage(Season.summer, Region.beach),
-            Forageable.red_mushroom: self.tool.can_forage(Season.summer, Region.secret_woods) | self.tool.can_forage(Season.fall, Region.secret_woods) | self.has_mushroom_cave(),
-            Forageable.salmonberry: self.tool.can_forage(Season.spring) | self.has_fruit_bats(),
-            Forageable.secret_note: self.quest.has_magnifying_glass() & (self.ability.can_chop_trees() | self.mine.can_mine_in_the_mines_floor_1_40()),
-            Forageable.snow_yam: self.tool.can_forage(Season.winter, Region.beach, True),
-            Forageable.spice_berry: self.tool.can_forage(Season.summer) | self.has_fruit_bats(),
-            Forageable.spring_onion: self.tool.can_forage(Season.spring),
-            Forageable.sweet_pea: self.tool.can_forage(Season.summer),
-            Forageable.wild_horseradish: self.tool.can_forage(Season.spring),
-            Forageable.wild_plum: self.tool.can_forage(Season.fall) | self.has_fruit_bats(),
-            Forageable.winter_root: self.tool.can_forage(Season.winter, Region.forest, True),
+            Forageable.hay: self.building.has_building(Building.silo) & self.tool.has_tool(Tool.scythe), #
+            Forageable.journal_scrap: self.region.can_reach_all((Region.island_west, Region.island_north, Region.island_south, Region.volcano_floor_10)) & self.quest.has_magnifying_glass() & (self.ability.can_chop_trees() | self.mine.can_mine_in_the_mines_floor_1_40()),#
+            Forageable.secret_note: self.quest.has_magnifying_glass() & (self.ability.can_chop_trees() | self.mine.can_mine_in_the_mines_floor_1_40()), #
             Fossil.bone_fragment: (self.region.can_reach(Region.dig_site) & self.tool.has_tool(Tool.pickaxe)) | self.monster.can_kill(Monster.skeleton),
             Fossil.fossilized_leg: self.region.can_reach(Region.dig_site) & self.tool.has_tool(Tool.pickaxe),
             Fossil.fossilized_ribs: self.region.can_reach(Region.island_south) & self.tool.has_tool(Tool.hoe),
@@ -389,15 +362,19 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Vegetable.tea_leaves: self.has(Sapling.tea) & self.time.has_lived_months(2) & self.season.has_any_not_winter(),
             Fish.clam: self.tool.can_forage(Generic.any, Region.beach),
             Fish.cockle: self.tool.can_forage(Generic.any, Region.beach),
-            WaterItem.coral: self.tool.can_forage(Generic.any, Region.tide_pools) | self.tool.can_forage(Season.summer, Region.beach),
-            WaterItem.green_algae: self.fishing.can_fish_in_freshwater(),
-            WaterItem.nautilus_shell: self.tool.can_forage(Season.winter, Region.beach),
-            WaterItem.sea_urchin: self.tool.can_forage(Generic.any, Region.tide_pools),
-            WaterItem.seaweed: self.skill.can_fish(Region.tide_pools),
-            WaterItem.white_algae: self.skill.can_fish(Region.mines_floor_20),
+            WaterItem.green_algae: self.fishing.can_fish_in_freshwater(), #
+            WaterItem.seaweed: self.skill.can_fish(Region.tide_pools), #
+            WaterItem.white_algae: self.skill.can_fish(Region.mines_floor_20), #
             WildSeeds.grass_starter: self.money.can_spend_at(Region.pierre_store, 100),
         })
         # @formatter:on
+
+        harvest_rules = {
+            item_name: self.source.has_access_to_any(harvest_item.harvest_sources)
+            for item_name, harvest_item in self.content.harvestables.items()
+        }
+
+        self.registry.item_rules.update(harvest_rules)
         self.registry.item_rules.update(self.registry.fish_rules)
         self.registry.item_rules.update(self.registry.museum_rules)
         self.registry.item_rules.update(self.registry.sapling_rules)
@@ -671,12 +648,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
 
     def can_use_obelisk(self, obelisk: str) -> StardewRule:
         return self.region.can_reach(Region.farm) & self.received(obelisk)
-
-    def has_fruit_bats(self) -> StardewRule:
-        return self.region.can_reach(Region.farm_cave) & self.received(CommunityUpgrade.fruit_bats)
-
-    def has_mushroom_cave(self) -> StardewRule:
-        return self.region.can_reach(Region.farm_cave) & self.received(CommunityUpgrade.mushroom_boxes)
 
     def can_fish_pond(self, fish: str) -> StardewRule:
         return self.building.has_building(Building.fish_pond) & self.has(fish)

@@ -34,10 +34,10 @@ class Forageable:
 
 
 class SVEForage:
-    ornate_treasure_chest = "Ornate Treasure Chest"
-    swirl_stone = "Swirl Stone"
-    void_pebble = "Void Pebble"
-    void_soul = "Void Soul"
+    ornate_treasure_chest = "Ornate Treasure Chest"  # This is a monster loot... (in the wiki)
+    swirl_stone = "Swirl Stone"  # This is a monster loot... (in the wiki)
+    void_pebble = "Void Pebble"  # This is a monster loot... (in the wiki)
+    void_soul = "Void Soul"  # This is a monster loot... (in the wiki)
     ferngill_primrose = "Ferngill Primrose"
     goldenrod = "Goldenrod"
     winter_star_rose = "Winter Star Rose"
@@ -50,7 +50,6 @@ class SVEForage:
     golden_ocean_flower = "Golden Ocean Flower"
     lucky_four_leaf_clover = "Lucky Four Leaf Clover"
     mushroom_colony = "Mushroom Colony"
-    poison_mushroom = "Poison Mushroom"
     rusty_blade = "Rusty Blade"
     smelly_rafflesia = "Smelly Rafflesia"
     thistle = "Thistle"

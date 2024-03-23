@@ -18,7 +18,8 @@ from .shipping_logic import ShippingLogicMixin
 from .skill_logic import SkillLogicMixin
 from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
-from ..stardew_rule import StardewRule, Has
+from ..content.vanilla.ginger_island import ginger_island_content_pack
+from ..stardew_rule import StardewRule, Has, false_
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.ap_names.event_names import Event
 from ..strings.ap_names.transport_names import Transportation
@@ -51,9 +52,6 @@ class SpecialOrderLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, Regio
 
     def initialize_rules(self):
         self.update_rules({
-            SpecialOrder.island_ingredients: self.logic.relationship.can_meet(NPC.caroline) & self.logic.special_order.has_island_transport() &
-                                             self.logic.ability.can_farm_perfectly() & self.logic.shipping.can_ship(Vegetable.taro_root) &
-                                             self.logic.shipping.can_ship(Fruit.pineapple) & self.logic.shipping.can_ship(Forageable.ginger),
             SpecialOrder.cave_patrol: self.logic.relationship.can_meet(NPC.clint),
             SpecialOrder.aquatic_overpopulation: self.logic.relationship.can_meet(NPC.demetrius) & self.logic.ability.can_fish_perfectly(),
             SpecialOrder.biome_balance: self.logic.relationship.can_meet(NPC.demetrius) & self.logic.ability.can_fish_perfectly(),
@@ -72,9 +70,6 @@ class SpecialOrderLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, Regio
             SpecialOrder.robins_resource_rush: self.logic.relationship.can_meet(NPC.robin) & self.logic.ability.can_chop_perfectly() &
                                                self.logic.has(Fertilizer.tree) & self.logic.ability.can_mine_perfectly(),
             SpecialOrder.juicy_bugs_wanted: self.logic.has(Loot.bug_meat),
-            SpecialOrder.tropical_fish: self.logic.relationship.can_meet(NPC.willy) & self.logic.received("Island Resort") &
-                                        self.logic.special_order.has_island_transport() &
-                                        self.logic.has(Fish.stingray) & self.logic.has(Fish.blue_discus) & self.logic.has(Fish.lionfish),
             SpecialOrder.a_curious_substance: self.logic.region.can_reach(Region.wizard_tower),
             SpecialOrder.prismatic_jelly: self.logic.region.can_reach(Region.wizard_tower),
             SpecialOrder.qis_crop: self.logic.ability.can_farm_perfectly() & self.logic.region.can_reach(Region.greenhouse) &
@@ -99,6 +94,21 @@ class SpecialOrderLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, Regio
                                                self.logic.money.can_spend_at(Region.saloon, 7500) &  # 100 Joja Cola
                                                self.logic.money.can_spend(80000),  # I need this extra rule because money rules aren't additive...
         })
+
+        if ginger_island_content_pack.name in self.content.registered_packs:
+            self.update_rules({
+                SpecialOrder.island_ingredients: self.logic.relationship.can_meet(NPC.caroline) & self.logic.special_order.has_island_transport() &
+                                                 self.logic.ability.can_farm_perfectly() & self.logic.shipping.can_ship(Vegetable.taro_root) &
+                                                 self.logic.shipping.can_ship(Fruit.pineapple) & self.logic.shipping.can_ship(Forageable.ginger),
+                SpecialOrder.tropical_fish: self.logic.relationship.can_meet(NPC.willy) & self.logic.received("Island Resort") &
+                                            self.logic.special_order.has_island_transport() &
+                                            self.logic.has(Fish.stingray) & self.logic.has(Fish.blue_discus) & self.logic.has(Fish.lionfish),
+            })
+        else:
+            self.update_rules({
+                SpecialOrder.island_ingredients: false_,
+                SpecialOrder.tropical_fish: false_,
+            })
 
     def update_rules(self, new_rules: Dict[str, StardewRule]):
         self.registry.special_order_rules.update(new_rules)

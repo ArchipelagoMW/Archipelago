@@ -4,6 +4,7 @@ from typing import Iterable
 
 from .game_content import StardewContent, ContentPack, StardewFeatures
 from .vanilla.base import base_game as base_game_content_pack
+from ..data.harvest import HarvestItem
 
 try:
     from graphlib import TopologicalSorter
@@ -43,6 +44,11 @@ def register_pack(content: StardewContent, pack: ContentPack):
     # register regions
 
     # register entrances
+
+    for item_name, sources in pack.harvest_sources.items():
+        item = content.harvestables.setdefault(item_name, HarvestItem(item_name))
+        item.add_sources(sources)
+    pack.harvestable_hook(content)
 
     for fish in pack.fishes:
         content.fishes[fish.name] = fish

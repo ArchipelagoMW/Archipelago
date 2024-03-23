@@ -10,7 +10,7 @@ default_features = StardewFeatures(
 
 
 class SVContentPackTestBase(unittest.TestCase):
-    vanilla_packs: ClassVar[Tuple[ContentPack]] = (content_packs.pelican_town,)
+    vanilla_packs: ClassVar[Tuple[ContentPack]] = (content_packs.pelican_town, content_packs.the_desert, content_packs.the_farm, content_packs.the_mines)
     mods: ClassVar[Tuple[str]] = ()
 
     content: ClassVar[StardewContent]

@@ -67,7 +67,7 @@ class TestSVE(SVContentPackTestBase):
 
 
 class TestSVEWithGingerIsland(SVContentPackTestBase):
-    vanilla_packs = (content_packs.pelican_town, content_packs.ginger_island)
+    vanilla_packs = SVContentPackTestBase.vanilla_packs + (content_packs.ginger_island_content_pack,)
     mods = (ModNames.sve,)
 
     def test_lance_is_included(self):

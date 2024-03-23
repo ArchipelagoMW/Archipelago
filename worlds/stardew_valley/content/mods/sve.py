@@ -1,7 +1,7 @@
 from ..game_content import ContentPack, StardewContent
 from ..mod_registry import register_mod_content_pack
 from ..override import override
-from ..vanilla.ginger_island import ginger_island as ginger_island_content_pack
+from ..vanilla.ginger_island import ginger_island_content_pack as ginger_island_content_pack
 from ...data import villagers_data, fish_data
 from ...mods.mod_data import ModNames
 from ...strings.region_names import Region

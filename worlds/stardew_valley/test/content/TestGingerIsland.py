@@ -7,7 +7,7 @@ from ...strings.villager_names import NPC
 
 
 class TestGingerIsland(SVContentPackTestBase):
-    vanilla_packs = (content_packs.pelican_town, content_packs.ginger_island)
+    vanilla_packs = SVContentPackTestBase.vanilla_packs + (content_packs.ginger_island_content_pack,)
 
     def test_leo_is_included(self):
         self.assertIn(NPC.leo, self.content.villagers)
