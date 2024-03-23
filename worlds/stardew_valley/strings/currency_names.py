@@ -5,6 +5,8 @@ class Currency:
     star_token = "Star Token"
     money = "Money"
     cinder_shard = "Cinder Shard"
+    prize_ticket = "Prize Ticket"
+    calico_egg = "Calico Egg"
 
     @staticmethod
     def is_currency(item: str) -> bool:

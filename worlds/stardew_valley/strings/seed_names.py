@@ -18,6 +18,8 @@ class Seed:
 class TreeSeed:
     acorn = "Acorn"
     maple = "Maple Seed"
+    mossy = "Mossy Seed"
+    mystic = "Mystic Tree Seed"
     pine = "Pine Cone"
     mahogany = "Mahogany Seed"
     mushroom = "Mushroom Tree Seed"

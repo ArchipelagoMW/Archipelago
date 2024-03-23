@@ -4,7 +4,7 @@ from ..bundles.bundle_room import BundleRoomTemplate
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.bundle_names import CCRoom, BundleName
-from ..strings.craftable_names import Fishing, Craftable, Bomb
+from ..strings.craftable_names import Fishing, Craftable, Bomb, Consumable, Lighting
 from ..strings.crop_names import Fruit, Vegetable
 from ..strings.currency_names import Currency
 from ..strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
@@ -19,7 +19,7 @@ from ..strings.material_names import Material
 from ..strings.metal_names import MetalBar, Artifact, Fossil, Ore, Mineral
 from ..strings.monster_drop_names import Loot
 from ..strings.quality_names import ForageQuality, ArtisanQuality, FishQuality
-from ..strings.seed_names import Seed
+from ..strings.seed_names import Seed, TreeSeed
 
 wild_horseradish = BundleItem(Forageable.wild_horseradish)
 daffodil = BundleItem(Forageable.daffodil)
@@ -72,8 +72,13 @@ fiber = BundleItem(Material.fiber, 99)
 moss = BundleItem(Material.moss)
 
 mixed_seeds = BundleItem(Seed.mixed)
-forest_items = [moss.as_amount(10), fiber.as_amount(200), acorn.as_amount(10), maple_seed.as_amount(10), pine_cone.as_amount(10), mahogany_seed,
-                mushroom_tree_seed, mystic_tree_seed, mossy_seed.as_amount(5)]
+acorn = BundleItem(TreeSeed.acorn)
+maple_seed = BundleItem(TreeSeed.maple)
+pine_cone = BundleItem(TreeSeed.pine)
+mahogany_seed = BundleItem(TreeSeed.mahogany)
+mushroom_tree_seed = BundleItem(TreeSeed.mushroom)
+mystic_tree_seed = BundleItem(TreeSeed.mystic)
+mossy_seed = BundleItem(TreeSeed.mossy)
 
 blue_jazz = BundleItem(Flower.blue_jazz)
 cauliflower = BundleItem(Vegetable.cauliflower)
@@ -113,6 +118,11 @@ starfruit = BundleItem(Fruit.starfruit)
 artichoke = BundleItem(Vegetable.artichoke)
 pineapple = BundleItem(Fruit.pineapple, source=BundleItem.Sources.island)
 taro_root = BundleItem(Vegetable.taro_root, source=BundleItem.Sources.island, )
+
+carrot = BundleItem(Vegetable.carrot)
+summer_squash = BundleItem(Vegetable.summer_squash)
+broccoli = BundleItem(Vegetable.broccoli)
+powdermelon = BundleItem(Fruit.powdermelon)
 
 egg = BundleItem(AnimalProduct.egg)
 large_egg = BundleItem(AnimalProduct.large_egg)
@@ -305,6 +315,9 @@ chocolate_cake = BundleItem(Meal.chocolate_cake)
 rhubarb_pie = BundleItem(Meal.rhubarb_pie)
 shrimp_cocktail = BundleItem(Meal.shrimp_cocktail)
 pina_colada = BundleItem(Beverage.pina_colada, source=BundleItem.Sources.island)
+stuffing = BundleItem(Meal.stuffing)
+magic_rock_candy = BundleItem(Meal.magic_rock_candy)
+eggplant_parmesan = BundleItem(Meal.eggplant_parmesan)
 
 green_algae = BundleItem(WaterItem.green_algae)
 white_algae = BundleItem(WaterItem.white_algae)
@@ -394,6 +407,12 @@ wheat_flour = BundleItem(Ingredient.wheat_flour)
 sugar = BundleItem(Ingredient.sugar)
 vinegar = BundleItem(Ingredient.vinegar)
 
+jack_o_lantern = BundleItem(Lighting.jack_o_lantern)
+prize_ticket = BundleItem(Currency.prize_ticket)
+mystery_box = BundleItem(Consumable.mystery_box)
+gold_mystery_box = BundleItem(Consumable.gold_mystery_box)
+calico_egg = BundleItem(Currency.calico_egg)
+
 # Crafts Room
 spring_foraging_items_vanilla = [wild_horseradish, daffodil, leek, dandelion]
 spring_foraging_items_thematic = [*spring_foraging_items_vanilla, spring_onion, salmonberry, morel]
@@ -471,7 +490,7 @@ spring_crops_bundle_vanilla = BundleTemplate(CCRoom.pantry, BundleName.spring_cr
 spring_crops_bundle_thematic = BundleTemplate.extend_from(spring_crops_bundle_vanilla, spring_crops_items_thematic)
 
 summer_crops_items_vanilla = [tomato, hot_pepper, blueberry, melon]
-summer_crops_items_thematic = [*summer_crops_items_vanilla, corn, hops, poppy, radish, red_cabbage, starfruit, summer_spangle, sunflower, wheat, sumer_squash]
+summer_crops_items_thematic = [*summer_crops_items_vanilla, corn, hops, poppy, radish, red_cabbage, starfruit, summer_spangle, sunflower, wheat, summer_squash]
 summer_crops_bundle_vanilla = BundleTemplate(CCRoom.pantry, BundleName.summer_crops, summer_crops_items_vanilla, 4, 4)
 summer_crops_bundle_thematic = BundleTemplate.extend_from(summer_crops_bundle_vanilla, summer_crops_items_thematic)
 
@@ -481,7 +500,7 @@ fall_crops_items_thematic = [*fall_crops_items_vanilla, amaranth, artichoke, bee
 fall_crops_bundle_vanilla = BundleTemplate(CCRoom.pantry, BundleName.fall_crops, fall_crops_items_vanilla, 4, 4)
 fall_crops_bundle_thematic = BundleTemplate.extend_from(fall_crops_bundle_vanilla, fall_crops_items_thematic)
 
-all_crops_items = sorted({*spring_crops_items_thematic, *summer_crops_items_thematic, *fall_crops_items_thematic})
+all_crops_items = sorted({*spring_crops_items_thematic, *summer_crops_items_thematic, *fall_crops_items_thematic, powdermelon})
 
 quality_crops_items_vanilla = [item.as_quality_crop() for item in [parsnip, melon, pumpkin, corn]]
 quality_crops_items_thematic = [item.as_quality_crop() for item in all_crops_items]

@@ -88,6 +88,8 @@ class Consumable:
     warp_totem_desert = "Warp Totem: Desert"
     warp_totem_island = "Warp Totem: Island"
     rain_totem = "Rain Totem"
+    mystery_box = "Mystery Box"
+    gold_mystery_box = "Golden Mystery Box"
 
 
 class Lighting:

@@ -33,6 +33,7 @@ class Fruit:
     grape = fruity("Grape")
     cranberries = fruity("Cranberries")
     hot_pepper = fruity("Hot Pepper")
+    powdermelon = fruity("Powdermelon")
 
 
 class Vegetable:
@@ -59,6 +60,9 @@ class Vegetable:
     yam = veggie("Yam")
     radish = veggie("Radish")
     taro_root = veggie("Taro Root")
+    carrot = veggie("Carrot")
+    summer_squash = veggie("Summer Squash")
+    broccoli = veggie("Broccoli")
 
 
 class SVEFruit:
