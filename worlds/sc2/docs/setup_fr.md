@@ -1,49 +1,61 @@
-# Guide d'installation de *StarCraft 2 Wings of Liberty Randomizer*
+# Guide d'installation de *StarCraft 2 Randomizer*
 
-Ce guide contient les instructions pour install et dépanner le client de *StarCraft 2 Archipelago*, ainsi qu'où obtenir le fichier de configuration de *Starcraft 2*.
+Ce guide contient les instructions pour installer et dépanner le client de *StarCraft 2 Archipelago*, ainsi que des indications pour obtenir un fichier de configuration de *Starcraft 2 Archipelago* et comment modifier ce dernier.
 
 ## Logiciels requis
 
 - [*StarCraft 2*](https://starcraft2.com/en-us/)
-- [La version la plus récente d'*Archipelago*](https://github.com/ArchipelagoMW/Archipelago/releases)
+- [La version la plus récente d'Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
 
 ## Comment est-ce que j'installe ce *randomizer*?
 
-1. Installer *StarCraft 2* and *Archipelago* en suivant les instructions indiqués dans les liens précédents. Le client de *StarCraft 2 Archipelago* est téléchargé par le programme d'installation d'*Archipelago*.
-   - Linux users should also follow the instructions found at the bottom of this page 
-     (["Running in Linux"](#running-in-linux)).
-2. Run ArchipelagoStarcraft2Client.exe.
-   - macOS users should instead follow the instructions found at ["Running in macOS"](#running-in-macos) for this step only.
-3. Type the command `/download_data`. This will automatically install the Maps and Data files from the third link above.
+1. Installer *StarCraft 2* et Archipelago en suivant les instructions indiquées dans les liens précédents. Le client de *StarCraft 2 Archipelago* est téléchargé par le programme d'installation d'Archipelago.
+   - Les utilisateurs de Linux devrait aussi suivre les instructions qui se retrouvent à la fin de cette page 
+     (["Éxécuter sous Linux"](#éxécuter-sous-linux)).
+2. Éxécuter `ArchipelagoStarcraft2Client.exe`.
+   - Uniquement pour cette étape, les utilisateurs de macOS devraient plutôt suivre les instructions qui se trouvent à ["Éxécuter sous macOS"](#éxécuter-sous-macos).
+3. Dans le client de *StarCraft 2 Archipelago*, écrire la commande `/download_data`. Cette commande va lancer l'installation des *Maps* et des *Data files* qui sont nécessairent pour jouer à *StarCraft 2 Archipelago*.
 
-## Where do I get a config file (aka "YAML") for this game?
+## Où est-ce que j'obtiens le fichier de configuration (i.e., le *yaml*) pour ce jeu?
 
-Yaml files are configuration files that tell Archipelago how you'd like your game to be randomized, even if you're only using default options.
-When you're setting up a multiworld, every world needs its own yaml file.
+Un fichier dans le format *yaml* est utilisé pour communiquer à Archipelago comment est-ce que vous voulez que votre jeu soit *randomized*. 
+Ce dernier est nécesaire même si vous voulez utiliser les options par défaut. 
+L'approche usuel pour générer un *multiworld* consiste à avoir un fichier *yaml* par monde.
 
-There are three basic ways to get a yaml:
-* You can go to the [Player Options](https://archipelago.gg/games/Starcraft%202/player-options) page, set your options in the GUI, and export the yaml.
-* You can generate a template, either by downloading it from the [Player Options](https://archipelago.gg/games/Starcraft%202/player-options) page or by generating it from the Launcher (ArchipelagoLauncher.exe). The template includes descriptions of each option, you just have to edit it in your text editor of choice.
-* You can ask someone else to share their yaml to use it for yourself or adjust it as you wish.
+Il y a trois approches pour obtenir un fichier *yaml* pour *StarCraft 2 Randomizer*:
+* Vous pouvez aller à la page [*Player options*](/games/Starcraft%202/player-options) qui vous permet de définir vos choix via une interface graphique et ensuite télécharger le *yaml* correspondant à ces choix.
+* Vous pouvez obtenir le modèle de base en le téléchargant de la page [*Player options*](/games/Starcraft%202/player-options) ou en cliquant sur *Generate template* après avoir éxécuté le *Launcher* d'archipelago (i.e., `ArchipelagoLauncher.exe`). Ce modèle de base inclut une desciption pour chacun des options et vous n'avez qu'à modifier les options dans un éditeur de texte de votre choix.
+* Vous pouvez demander à quelqu'un d'autres de partager un de ces fichiers *yaml* pour l'utiliser ou l'ajuster à vos préférences.
 
-Remember the name you enter in the options page or in the yaml file, you'll need it to connect later!
+Prennez soin de vous rappeller du nom de joueur que vous avez inscrit dans la page à options ou dans le fichier *yaml* puisque vous en aurez besoin pour vous connecter à votre monde!
 
-Note that the basic Player Options page doesn't allow you to change all advanced options, such as excluding particular units or upgrades. Go through the [Weighted Options](https://archipelago.gg/weighted-options) page for that.
+Notez que la page *Player options* ne permet pas de définir certaines des options avancées, e.g., l'exclusion de certaines unitées ou de leur *upgrade*. 
+Utilisez la page [*Weighted Options*](/weighted-options) pour avoir accès à ces dernières.
 
-Check out [Creating a YAML](https://archipelago.gg/tutorial/Archipelago/setup/en#creating-a-yaml) for more game-agnostic information.
+Si vous désirez des informations et/ou instructions générale sur l'utilisation d'un fichier *yaml* pour Archipelago, veuilliez consutler [*Creating a YAML*](/tutorial/Archipelago/setup/en#creating-a-yaml).
 
 ### Questions récurrentes à propos du fichier yaml
-#### How do I know I set my yaml up correctly?
+#### Comment est-ce que je sais que mon *yaml* est bien définit?
 
-The simplest way to check is to test it out. Save your yaml to the Players/ folder within your Archipelago installation and run ArchipelagoGenerate.exe. You should see a new .zip file within the output/ folder of your Archipelago installation if things worked correctly. It's advisable to run ArchipelagoGenerate through a terminal so that you can see the printout, which will include any errors and the precise output file name if it's successful. If you don't like terminals, you can also check the log file in the logs/ folder.
+La manière la plus simple de valider est d'essayer. 
+Sauvegarder votre *yaml* dans le dossier `Players/` de votre installation d'Archipelago et éxécuter `ArchipelagoGenerate.exe`. 
+Si votre *yaml* est bien définit, vous devriez voir un nouveau fichier, avec l'extension `.zip`, apparaître dans le dossier `output/` de votre installation d'Archipelago.
+Il est recommandé de lancer `ArchipelagoGenerate.exe` via un terminal afin que vous puissiez voir les messages générés par le logiciel, ce qui va inclure toutes erreurs qui a eu lieu et le nom de fichier généré.
+Si vous n'appréciez pas le fait d'utiliser un terminal, vous pouvez aussi regarder le fichier *log* qui va être produit dans le dossier `logs/`.
 
-#### What does Progression Balancing do?
+#### À quoi sert l'option *Progression Balancing*?
 
-For Starcraft 2, not much. It's an Archipelago-wide option meant to shift required items earlier in the playthrough, but Starcraft 2 tends to be much more open in what items you can use. As such, this adjustment isn't very noticeable. It can also increase generation times, so we generally recommend turning it off.
+Pour un monde *Starcraft 2* seule, cette option ne fait rien. 
+Il s'agit d'une option d'Archipelago qui permet de balancer la progression d'un monde relativement aux autres mondes en interchangent les *items* de progression dans les *sphères*.
+Si le *Progression Balancing* d'un monde est plus grand que ceux des autres, les *items* de progression de ce monde ont plus de chance d'être obtenus tôt et vice-versa si sa valeur est plus petite que celle des autres mondes.
+Cependant, *Starcraft 2* est beaucoup plus permissif en termes d'*items* qui sont nécessaire pour progresser.
+Pour cette raison, cet ajustement a souvent peu d'influence sur la capacité de progresser dans un monde de *StarCraft 2*. 
+Notez que l'utilisation de cette option, i.e. au moins un monde avec une valeur différente de *Progression Balancing*, augmente le temps de génération d'un *MultiWorld*, alors certains recommandent de ne pas toucher à cette option.
 
-#### How do I specify items in a list, like in excluded items?
+#### Comment est-ce que je définie une liste d'*items*, e.g. pour l'option *excluded items*?
 
-You can look up the syntax for yaml collections in the [YAML specification](https://yaml.org/spec/1.2.2/#21-collections). For lists, every item goes on its own line, started with a hyphen:
+Vous pouvez lire sur la syntaxe des conteneurs dans le format *yaml* à la page [*YAML specification*](https://yaml.org/spec/1.2.2/#21-collections). 
+Pour les listes, chaque *item* doit être sur sa propre ligne et doit être précédé par un trait d'union.
 
 ```yaml
 excluded_items:
@@ -51,11 +63,14 @@ excluded_items:
   - Drop-Pods (Kerrigan Tier 7)
 ```
 
-An empty list is just a matching pair of square brackets: `[]`. That's the default value in the template, which should let you know to use this syntax.
+Une liste vide est représentée par une paire de crochet: `[]`. 
+Il s'agît de la valeur par défaut dans le modèle de base, ce qui devrait vous aider à apprendre à utiliser cette syntaxe.
 
-#### How do I specify items for the starting inventory?
+#### Comment est-ce que je fais pour avoir des *items* dès le départ?
 
-The starting inventory is a YAML mapping rather than a list, which associates an item with the amount you start with. The syntax looks like the item name, followed by a colon, then a whitespace character, and then the value:
+L'option *starting inventory* est un *map* et non une liste. 
+Ainsi, elle permet de spécifier le nombre de chaque *item* avec lequel vous allez commencer.
+Sa syntaxe consiste à indiquer le nom de l'*item*, suivit par un deux points, puis par un espace et enfin par le nombre désiré de cette *item*.
 
 ```yaml
 start_inventory:
@@ -63,74 +78,71 @@ start_inventory:
   Additional Starting Vespene: 5
 ```
 
-An empty mapping is just a matching pair of curly braces: `{}`. That's the default value in the template, which should let you know to use this syntax.
+Un *map* vide est représenté par une paire d'accolade: `{}`. 
+Il s'agît de la valeur par défaut dans le modèle de base, ce qui devrait vous aider à apprendre à utiliser cette syntaxe.
 
-#### How do I know the exact names of items?
+#### Comment est-ce que je fais pour connaître le nom des *items* dans *StarCraft 2 Archipelago*? 
 
-You can look up a complete list if item names in the [Icon Repository](https://matthewmarinets.github.io/ap_sc2_icons/).
+Vous trouverez la liste complète des *items* de *StarCraft 2 Archipelago* à la page [*Icon Repository*](https://matthewmarinets.github.io/ap_sc2_icons/).
 
-## How do I join a MultiWorld game?
+## Comment est-ce que je peux joindre un *MultiWorld*?
 
-1. Run ArchipelagoStarcraft2Client.exe.
-   - macOS users should instead follow the instructions found at ["Running in macOS"](#running-in-macos) for this step only.
-2. Type `/connect [server ip]`.
-   - If you're running through the website, the server IP should be displayed near the top of the room page.
-3. Type your slot name from your YAML when prompted.
-4. If the server has a password, enter that when prompted.
-5. Once connected, switch to the 'StarCraft 2 Launcher' tab in the client. There, you can see all the missions in your world. Unreachable missions will have greyed-out text. Just click on an available mission to start it!
+1. Éxécuter `ArchipelagoStarcraft2Client.exe`.
+   - Uniquement pour cette étape, les utilisateurs de macOS devraient plutôt suivre les instructions à la page ["Éxécuter sous macOS"](#éxécuter-sous-macos).
+2. Entrer la commande `/connect [server ip]`.
+   - Si le *MultiWorld* est hébergé via un siteweb, l'IP du server devrait être indiqué dans le haut de la page de votre *room*.
+3. Inscrivez le nom de joueur spécifié dans votre *yaml* lorsque vous y êtes invité.
+4. Si le serveur a un mot de passe, l'inscrire lorsque vous y êtes invité.
+5. Une fois connecté, changer l'onglet *StarCraft 2 Launcher* dans le client. Dans cet onglet, vous devriez trouver toutes les missions de votre monde. Les missions qui ne sont pas disponible présentement auront leur texte dans une tonte de gris. Vous n'avez qu'à cliquer une des missions qui est disponible pour la commencer!
 
-## The game isn't launching when I try to start a mission.
+## *StarCraft 2* ne démarre pas quand je tente de commencer une mission
 
-First, check the log file for issues (stored at `[Archipelago Directory]/logs/SC2Client.txt`). If you can't figure out
-the log file, visit our [Discord's](https://discord.com/invite/8Z65BR2) tech-support channel for help. Please include a
-specific description of what's going wrong and attach your log file to your message.
+Pour commencer, regarder le fichier *log* pour trouver le problème (ce dernier devrait être dans `[Archipelago Directory]/logs/SC2Client.txt`).
+Si vous ne comprennez pas le problème avec le fichier *log*, visitez notre [*Discord*](https://discord.com/invite/8Z65BR2) pour demander de l'aide dans le forum *tech-support*.
+Dans votre message, veuillez inclure une description détaillé de ce qui ne marche pas et ajouter en pièce jointe le fichier *log*.
 
-## Running in macOS
+## Éxécuter sous macOS
 
-To run StarCraft 2 through Archipelago in macOS, you will need to run the client via source as seen here: [macOS Guide](https://archipelago.gg/tutorial/Archipelago/mac/en). Note: when running the client, you will need to run the command `python3 Starcraft2Client.py`.
+Pour éxécuter *StarCraft 2* via Archipelago sous macOS, vous devez éxécuter le client à partir de la source tel qu'indiqué ici: [*macOS Guide*](/tutorial/Archipelago/mac/en). 
+Notez que pour lancer le client, vous devez éxécuter la commande `python3 Starcraft2Client.py`.
 
-## Running in Linux
+## Éxécuter sous Linux
 
-To run StarCraft 2 through Archipelago in Linux, you will need to install the game using Wine, then run the Linux build
-of the Archipelago client.
+Pour éxécuter *StarCraft 2* via Archipelago sous Linux, vous allez devoir installer le jeu avec *Wine* et ensuite éxécuter le client d'Archipelago pour Linux.
 
-Make sure you have StarCraft 2 installed using Wine, and that you have followed the
-[installation procedures](#how-do-i-install-this-randomizer?) to add the Archipelago maps to the correct location. You will not
-need to copy the .dll files. If you're having trouble installing or running StarCraft 2 on Linux, I recommend using the
-Lutris installer.
+Confirmez que vous avez installé *StarCraft 2* via *Wine* et que vous avez suivi les 
+[instructions d'installation](#comment-est-ce-que-j'installe-ce-randomizer?) pour ajouter les *Maps* et et les *Data files* nécessairent pour *StarCraft 2 Archipelago* au bon endroit.
+Vous n'avez pas besoin de copier les fichiers `.dll`.
+Si vous avez des difficultés pour installer ou éxécuter *StarCraft 2* sous Linux, il est recommandé d'utiliser le logiciel *Lutris*.
 
-Copy the following into a .sh file, replacing the values of **WINE** and **SC2PATH** variables with the relevant
-locations, as well as setting **PATH_TO_ARCHIPELAGO** to the directory containing the AppImage if it is not in the same
-folder as the script.
+Copier ce qui suit dans un fichier avec l'extension `.sh`, en prennant soin de définir les variables **WINE** et **SC2PATH** avec les bons chemins et de définir **PATH_TO_ARCHIPELAGO** avec le chemin vers le dossier qui contient le *AppImage* si ce dernier n'est pas dans le même dossier que ce script.
 
 ```sh
-# Let the client know we're running SC2 in Wine
+# Permet au client de savoir que SC2 est éxécuté via Wine
 export SC2PF=WineLinux
 export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
 
-# FIXME Replace with path to the version of Wine used to run SC2
+# À_CHANGER Remplacer le chemin avec celui qui correspond à la version de Wine utilisé pour éxécuter SC2
 export WINE="/usr/bin/wine"
 
-# FIXME Replace with path to StarCraft II install folder
+# À_CHANGER Remplacer le chemin par celui qui indique où StarCraft II est installé
 export SC2PATH="/home/user/Games/starcraft-ii/drive_c/Program Files (x86)/StarCraft II/"
 
-# FIXME Set to directory which contains Archipelago AppImage file
+# À_CHANGER Indiquer le dossier qui contient l'AppImage d'Archipelago
 PATH_TO_ARCHIPELAGO=
 
-# Gets the latest version of Archipelago AppImage in PATH_TO_ARCHIPELAGO.
-# If PATH_TO_ARCHIPELAGO is not set, this defaults to the directory containing
-# this script file.
+# Obtiens la dernière version de l'AppImage de Archipelago dans le dossier PATH_TO_ARCHIPELAGO.
+# Si PATH_TO_ARCHIPELAGO n'est pas défénit, la valeur par défaut est le dossier qui contient ce script.
 ARCHIPELAGO="$(ls ${PATH_TO_ARCHIPELAGO:-$(dirname $0)}/Archipelago_*.AppImage | sort -r | head -1)"
 
-# Start the Archipelago client
+# Lance le client de Archipelago
 $ARCHIPELAGO Starcraft2Client
 ```
 
-For Lutris installs, you can run `lutris -l` to get the numerical ID of your StarCraft II install, then run the command
-below, replacing **${ID}** with the numerical ID.
+Pour une installation via Lutris, vous pouvez éxécuter `lutris -l` pour obtenir l'identifiant numérique de votre installation *StarCraft II* et ensuite éxécuter la commande suivante, en remplacant **${ID}** pour cette identifiant numérique.
 
     lutris lutris:rungameid/${ID} --output-script sc2.sh
 
-This will get all of the relevant environment variables Lutris sets to run StarCraft 2 in a script, including the path
-to the Wine binary that Lutris uses. You can then remove the line that runs the Battle.Net launcher and copy the code
-above into the existing script.
+Cette commande va définir toutes les variables d'environnement nécessaires pour éxécuter *StarCraft 2* dans un script, incluant le chemin vert l'éxécutable *Wine* que Lutris utilise.
+Après ça, vous pouvez enlever la ligne qui permet de démarer *Battle.Net* et copier le code décrit plus haut dans le script existant.
+
