@@ -49,7 +49,7 @@ class TestDeathMountain(TestVanilla):
             ["Mimic Cave", False, [], ['Cane of Somaria']],
             ["Mimic Cave", False, ['Small Key (Turtle Rock)'], ['Small Key (Turtle Rock)']],
             ["Mimic Cave", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
-            ["Mimic Cave", True, ['Bomb Upgrade (+5)', 'Quake', 'Progressive Sword', 'Flute', 'Progressive Glove', 'Progressive Glove', 'Hammer', 'Moon Pearl', 'Cane of Somaria', 'Magic Mirror', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
+            ["Mimic Cave", True, ['Bomb Upgrade (+5)', 'Quake', 'Progressive Sword', 'Flute', 'Progressive Glove', 'Progressive Glove', 'Hammer', 'Moon Pearl', 'Cane of Somaria', 'Magic Mirror', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
             
             ["Spiral Cave", False, []],
             ["Spiral Cave", False, [], ['Progressive Glove', 'Flute']],
