@@ -310,6 +310,8 @@ def set_festival_entrance_rules(logic, multiworld, player):
     set_entrance_rule(multiworld, player, Entrance.attend_night_market, logic.season.has(Season.winter))
     set_entrance_rule(multiworld, player, Entrance.attend_winter_star, logic.season.has(Season.winter))
 
+    set_entrance_rule(multiworld, player, Entrance.attend_desert_festival, logic.season.has(Season.spring))
+
 
 def set_ginger_island_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
     set_island_entrances_rules(logic, multiworld, player, world_options)

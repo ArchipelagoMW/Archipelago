@@ -158,6 +158,7 @@ class Region:
     farming = "Farming"
     fishing = "Fishing"
     egg_festival = "Egg Festival"
+    desert_festival = "Desert Festival"
     flower_dance = "Flower Dance"
     luau = "Luau"
     moonlight_jellies = "Dance of the Moonlight Jellies"
@@ -166,6 +167,7 @@ class Region:
     festival_of_ice = "Festival of Ice"
     night_market = "Night Market"
     winter_star = "Feast of the Winter Star"
+    raccoon_shop = "Raccoon Shop"
 
 
 class DeepWoodsRegion:

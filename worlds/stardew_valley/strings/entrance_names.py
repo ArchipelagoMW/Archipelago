@@ -194,6 +194,7 @@ class Entrance:
     farming = "Start Farming"
     fishing = "Start Fishing"
     attend_egg_festival = "Attend Egg Festival"
+    attend_desert_festival = "Attend Desert Festival"
     attend_flower_dance = "Attend Flower Dance"
     attend_luau = "Attend Luau"
     attend_moonlight_jellies = "Attend Dance of the Moonlight Jellies"
