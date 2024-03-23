@@ -139,14 +139,11 @@ preserves_jar = skill_recipe(Machine.preserves_jar, Skill.farming, 4, {Material.
 
 basic_fertilizer = skill_recipe(Fertilizer.basic, Skill.farming, 1, {Material.sap: 2})
 
-# 1.6 doubled the sap requirement
 quality_fertilizer = skill_recipe(Fertilizer.quality, Skill.farming, 9, {Material.sap: 4, Fish.any: 1})
 deluxe_fertilizer = ap_recipe(Fertilizer.deluxe, {MetalBar.iridium: 1, Material.sap: 40})
 
-# 1.6 changed from clam to moss. Keep both requirements for now. Update properly later
-basic_speed_gro = skill_recipe(SpeedGro.basic, Skill.farming, 3, {ArtisanGood.pine_tar: 1, Fish.clam: 1, Material.moss: 5})
-# 1.6 changed from coral to bone fragments. Keep both requirements for now. Update properly later
-deluxe_speed_gro = skill_recipe(SpeedGro.deluxe, Skill.farming, 8, {ArtisanGood.oak_resin: 1, WaterItem.coral: 1, Fossil.bone_fragment: 5})
+basic_speed_gro = skill_recipe(SpeedGro.basic, Skill.farming, 3, {ArtisanGood.pine_tar: 1, Material.moss: 5})
+deluxe_speed_gro = skill_recipe(SpeedGro.deluxe, Skill.farming, 8, {ArtisanGood.oak_resin: 1, Fossil.bone_fragment: 5})
 hyper_speed_gro = ap_recipe(SpeedGro.hyper, {Ore.radioactive: 1, Fossil.bone_fragment: 3, Loot.solar_essence: 1})
 basic_retaining_soil = skill_recipe(RetainingSoil.basic, Skill.farming, 4, {Material.stone: 2})
 quality_retaining_soil = skill_recipe(RetainingSoil.quality, Skill.farming, 7, {Material.stone: 3, Material.clay: 1})
@@ -228,8 +225,7 @@ jack_o_lantern = festival_shop_recipe(Lighting.jack_o_lantern, Region.spirit_eve
 
 bone_mill = special_order_recipe(Machine.bone_mill, SpecialOrder.fragments_of_the_past, {Fossil.bone_fragment: 10, Material.clay: 3, Material.stone: 20})
 
-# 1.6 changed from 4 to 2. Keep highest requirement for now. Update properly later
-charcoal_kiln = skill_recipe(Machine.charcoal_kiln, Skill.foraging, 4, {Material.wood: 20, MetalBar.copper: 2})
+charcoal_kiln = skill_recipe(Machine.charcoal_kiln, Skill.foraging, 2, {Material.wood: 20, MetalBar.copper: 2})
 
 crystalarium = skill_recipe(Machine.crystalarium, Skill.mining, 9, {Material.stone: 99, MetalBar.gold: 5, MetalBar.iridium: 2, ArtisanGood.battery_pack: 1})
 furnace = skill_recipe(Machine.furnace, Skill.mining, 1, {Ore.copper: 20, Material.stone: 25})
@@ -243,11 +239,9 @@ slime_egg_press = skill_recipe(Machine.slime_egg_press, Skill.combat, 6, {Materi
 slime_incubator = skill_recipe(Machine.slime_incubator, Skill.combat, 8, {MetalBar.iridium: 2, Loot.slime: 100})
 solar_panel = special_order_recipe(Machine.solar_panel, SpecialOrder.island_ingredients, {MetalBar.quartz: 10, MetalBar.iron: 5, MetalBar.gold: 5})
 
-# 1.6 changed from 3 to 4. Keep highest requirement for now. Update properly later
 tapper = skill_recipe(Machine.tapper, Skill.foraging, 4, {Material.wood: 40, MetalBar.copper: 2})
 
-# 1.6 changed from 8 to 4. Keep highest requirement for now. Update properly later
-worm_bin = skill_recipe(Machine.worm_bin, Skill.fishing, 8, {Material.hardwood: 25, MetalBar.gold: 1, MetalBar.iron: 1, Material.fiber: 50})
+worm_bin = skill_recipe(Machine.worm_bin, Skill.fishing, 4, {Material.hardwood: 25, MetalBar.gold: 1, MetalBar.iron: 1, Material.fiber: 50})
 
 tub_o_flowers = festival_shop_recipe(Furniture.tub_o_flowers, Region.flower_dance, 2000, {Material.wood: 15, Seed.tulip: 1, Seed.jazz: 1, Seed.poppy: 1, Seed.spangle: 1})
 wicked_statue = shop_recipe(Furniture.wicked_statue, Region.sewer, 1000, {Material.stone: 25, Material.coal: 5})
@@ -273,8 +267,7 @@ mini_obelisk = special_order_recipe(Craftable.mini_obelisk, SpecialOrder.a_curio
 farm_computer = special_order_recipe(Craftable.farm_computer, SpecialOrder.aquatic_overpopulation, {Artifact.dwarf_gadget: 1, ArtisanGood.battery_pack: 1, MetalBar.quartz: 10})
 hopper = ap_recipe(Craftable.hopper, {Material.hardwood: 10, MetalBar.iridium: 1, MetalBar.radioactive: 1})
 
-# 1.6 changed from 9 to 3. Keep highest requirement for now. Update properly later
-cookout_kit = skill_recipe(Craftable.cookout_kit, Skill.foraging, 9, {Material.wood: 15, Material.fiber: 10, Material.coal: 3})
+cookout_kit = skill_recipe(Craftable.cookout_kit, Skill.foraging, 3, {Material.wood: 15, Material.fiber: 10, Material.coal: 3})
 
 travel_charm = shop_recipe(ModCraftable.travel_core, Region.adventurer_guild, 250, {Loot.solar_essence: 1, Loot.void_essence: 1}, ModNames.magic)
 preservation_chamber = skill_recipe(ModMachine.preservation_chamber, ModSkill.archaeology, 2, {MetalBar.copper: 1, Material.wood: 15, ArtisanGood.oak_resin: 30},
