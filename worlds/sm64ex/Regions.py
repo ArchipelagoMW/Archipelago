@@ -2,6 +2,7 @@ import typing
 from enum import Enum
 
 from BaseClasses import MultiWorld, Region, Entrance, Location
+from .Options import SM64Options
 from .Locations import SM64Location, location_table, locBoB_table, locWhomp_table, locJRB_table, locCCM_table, \
     locBBH_table, \
     locHMC_table, locLLL_table, locSSL_table, locDDD_table, locSL_table, \
@@ -78,7 +79,7 @@ sm64_secrets_to_level = {secret: level for (level,secret) in sm64_level_to_secre
 sm64_entrances_to_level = {**sm64_paintings_to_level, **sm64_secrets_to_level }
 sm64_level_to_entrances = {**sm64_level_to_paintings, **sm64_level_to_secrets }
 
-def create_regions(world: MultiWorld, options, player: int):
+def create_regions(world: MultiWorld, options: SM64Options, player: int):
     regSS = Region("Menu", player, world, "Castle Area")
     create_default_locs(regSS, locSS_table)
     world.regions.append(regSS)

@@ -3,6 +3,7 @@ from typing import Callable, Union, Dict, Set
 from BaseClasses import MultiWorld
 from ..generic.Rules import add_rule, set_rule
 from .Locations import location_table
+from .Options import SM64Options
 from .Regions import connect_regions, SM64Levels, sm64_level_to_paintings, sm64_paintings_to_level,\
 sm64_level_to_secrets, sm64_secrets_to_level, sm64_entrances_to_level, sm64_level_to_entrances
 from .Items import action_item_table
@@ -24,7 +25,7 @@ def fix_reg(entrance_map: Dict[SM64Levels, str], entrance: SM64Levels, invalid_r
         swapdict[entrance], swapdict[rand_entrance] = rand_region, old_dest
     swapdict.pop(entrance)
 
-def set_rules(world, options, player: int, area_connections: dict, star_costs: dict, move_rando_bitvec: int):
+def set_rules(world, options: SM64Options, player: int, area_connections: dict, star_costs: dict, move_rando_bitvec: int):
     randomized_level_to_paintings = sm64_level_to_paintings.copy()
     randomized_level_to_secrets = sm64_level_to_secrets.copy()
     valid_move_randomizer_start_courses = [
@@ -262,7 +263,7 @@ class RuleFactory:
     class SM64LogicException(Exception):
         pass
 
-    def __init__(self, world, options, player, move_rando_bitvec):
+    def __init__(self, world, options: SM64Options, player: int, move_rando_bitvec: int):
         self.world = world
         self.player = player
         self.move_rando_bitvec = move_rando_bitvec

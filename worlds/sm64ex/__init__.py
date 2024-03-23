@@ -53,12 +53,9 @@ class SM64World(World):
             max_stars -= 15
         self.move_rando_bitvec = 0
         if self.options.enable_move_rando:
-            for action, itemid in action_item_table.items():
-                # HACK: Disable randomization of double jump
-                if action == 'Double Jump': continue
-                if action in self.options.move_rando_actions:
-                    max_stars -= 1
-                    self.move_rando_bitvec |= (1 << (itemid - action_item_table['Double Jump']))
+            for action in self.options.move_rando_actions.value:
+                max_stars -= 1
+                self.move_rando_bitvec |= (1 << (action_item_table[action] - action_item_table['Double Jump']))
         if (self.options.exclamation_boxes > 0):
             max_stars += 29
         self.number_of_stars = min(self.options.amount_of_stars, max_stars)

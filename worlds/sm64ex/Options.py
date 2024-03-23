@@ -1,6 +1,6 @@
 import typing
-from dataclasses import dataclass, make_dataclass
-from Options import Option, DefaultOnToggle, Range, Toggle, DeathLink, Choice, PerGameCommonOptions, OptionSet
+from dataclasses import dataclass
+from Options import DefaultOnToggle, Range, Toggle, DeathLink, Choice, PerGameCommonOptions, OptionSet
 from .Items import action_item_table
 
 class EnableCoinStars(DefaultOnToggle):
@@ -119,10 +119,12 @@ class EnableMoveRandomizer(Toggle):
     """Mario is unable to perform some actions until a corresponding item is picked up.
     This option is incompatible with builds using a 'nomoverando' branch.
     Specific actions to randomize can be specified in the YAML."""
+    display_name = "Enable Move Randomizer"
 
 class MoveRandomizerActions(OptionSet):
     """Which actions to randomize when Move Randomizer is enabled"""
     display_name = "Randomized Moves"
+    # HACK: Disable randomization for double jump
     valid_keys = [action for action in action_item_table if action != 'Double Jump']
     default = valid_keys
 
