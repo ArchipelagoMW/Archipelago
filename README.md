@@ -64,6 +64,7 @@ Currently, the following games are supported:
 * Zork Grand Inquisitor
 * Castlevania 64
 * A Short Hike
+* Yoshi's Island
 * Bomb Rush Cyberfunk
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).

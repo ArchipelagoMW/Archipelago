@@ -180,7 +180,7 @@
 /worlds/tloz/ @Rosalie-A @t3hf1gm3nt
 
 # TUNIC
-/worlds/tunic/ @silent-destroyer
+/worlds/tunic/ @silent-destroyer @ScipioWright
 
 # Undertale
 /worlds/undertale/ @jonloveslegos
@@ -193,6 +193,9 @@
 
 # The Witness
 /worlds/witness/ @NewSoupVi @blastron
+
+# Yoshi's Island
+/worlds/yoshisisland/ @PinkSwitch
 
 # Zillion
 /worlds/zillion/ @beauxq
