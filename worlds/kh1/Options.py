@@ -67,21 +67,43 @@ class Atlantica(Toggle):
 class Goal(Choice):
     """
     Determines the goal of your playthrough.
+    Depending on your setting for Require Final Ansem, this will either yield Victory or required Ansem Reports to enter End of the World.
+    Note: If requiring Final Ansem, with more than 1 Ansem Report in the pool (or more than 5 if you are using the Super Boss Hunt goal), the goal(s) will not be required, but will remain a way to get a report.
+    
+    Sephiroth: Defeat Sephiroth.
+    Unknown: Defeat Unknown.
+    Postcards: Turn in all 10 postcards in Traverse Town
+    Final Ansem: Enter End of the World and defeat Ansem as normal
+    Puppies: Rescue and return all 99 puppies in Traverse Town.
+    Super Boss Hunt: Ansem Reports are set to appear as rewards for defeating Phantom, Kurt Zisa, Sephiroth and Unknown.  Forces require Final Ansem on.
     """
     display_name = "Goal"
-    option_final_rest = 0
-    option_wonderland = 1
-    option_deep_jungle = 2
-    option_agrabah = 3
-    option_monstro = 4
-    option_atlantica = 5
-    option_halloween_town = 6
-    option_neverland = 7
-    option_sephiroth = 8
-    option_unknown = 9
-    option_postcards = 10
-    option_final_ansem = 11
-    default = 11
+    option_sephiroth = 0
+    option_unknown = 1
+    option_postcards = 2
+    option_final_ansem = 3
+    option_puppies = 4
+    option_super_boss_hunt = 5
+    default = 3
+
+class RequireFinalAnsem(Toggle):
+    """
+    Determines whether the Victory item is behind your goal or if your goal will provide an Ansem's Report to enter End of the World and defeat Ansem.
+    """
+    display_name = "Require Final Ansem"
+
+class Puppies(Choice):
+    """
+    Determines how dalmation puppies are shuffled into the pool.
+    Full: All puppies are in one location
+    Triplets: Puppies are found in triplets just as they are in the base game
+    Individual: One puppy can be found per location
+    """
+    display_name = "Puppies"
+    option_full = 0
+    option_triplets = 1
+    option_individual = 2
+    default = 0
 
 class EXPMultiplier(NamedRange):
     """
@@ -181,3 +203,5 @@ class KH1Options(PerGameCommonOptions):
     keyblade_min_str: KeybladeMinStrength
     keyblade_max_mp: KeybladeMaxMP
     keyblade_min_mp: KeybladeMinMP
+    puppies: Puppies
+    require_final_ansem: RequireFinalAnsem

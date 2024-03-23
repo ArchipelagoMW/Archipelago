@@ -83,10 +83,19 @@ class KH1World(World):
         while i < len(level_up_item_pool):
             self.multiworld.get_location(level_up_locations[i], self.player).place_locked_item(self.create_item(level_up_item_pool[i]))
             i = i + 1
-
-        total_locations = len(self.multiworld.get_unfilled_locations(self.player)) - 1  # for victory placement
+        total_locations = len(self.multiworld.get_unfilled_locations(self.player)) - 1
+        if self.options.goal.current_key == "super_boss_hunt":
+            total_locations = total_locations - 5
+        elif self.options.goal.current_key != "Final Ansem" and self.options.require_final_ansem:
+            total_locations = total_locations - 1
         non_filler_item_categories = ["Key", "Magic", "Worlds", "Trinities", "Cups", "Summons", "Abilities", "Shared Abilities", "Keyblades", "Accessory", "Weapons"]
-        if self.options.atlantica or self.options.goal == "atlantica":
+        if self.options.puppies == "full":
+            non_filler_item_categories.append("Puppies ALL")
+        if self.options.puppies == "triplets":
+            non_filler_item_categories.append("Puppies TRP")
+        if self.options.puppies == "individual":
+           non_filler_item_categories.append("Puppies IND")
+        if self.options.atlantica:
             non_filler_item_categories.append("Atlantica")
         for name, data in item_table.items():
             quantity = data.max_quantity
@@ -96,9 +105,17 @@ class KH1World(World):
                 continue
             item_pool += [self.create_item(name) for _ in range(0, quantity)]
         
-        for i in range(max(self.options.required_reports, self.options.reports_in_pool)):
+        reports_in_pool = max(int(self.options.required_reports), int(self.options.reports_in_pool))
+        if self.options.goal.current_key == "super_boss_hunt":
+            i = 5
+        elif self.options.require_final_ansem:
+            i = 1
+        else:
+            i = 0
+        while i < reports_in_pool:
             item_pool += [self.create_item("Ansem's Report " + str(i+1))]
-
+            i = i + 1
+        
         # Fill any empty locations with filler items.
         item_names = []
         attempts = 0  # If we ever try to add items 200 times, and all the items are used up, lets clear the item_names array, we probably don't have enough items
@@ -118,20 +135,25 @@ class KH1World(World):
 
     def pre_fill(self) -> None:
         goal_dict = {
-            "sephiroth":      "Olympus Coliseum Defeat Sephiroth Ansem's Report 12",
-            "wonderland":     "Wonderland Defeat Trickmaster Ifrit's Horn Event",
-            "deep_jungle":    "Deep Jungle Seal Keyhole Jungle King Event",
-            "agrabah":        "Agrabah Seal Keyhole Genie Event",
-            "monstro":        "Monstro Defeat Parasite Cage II Stop Event",
-            "atlantica":      "Atlantica Seal Keyhole Crabclaw Event",
-            "halloween_town": "Halloween Town Seal Keyhole Pumpkinhead Event",
-            "neverland":      "Neverland Seal Keyhole Fairy Harp Event",
-            "unknown":        "Hollow Bastion Defeat Unknown Ansem's Report 13",
-            "final_rest":     "End of the World Final Rest Chest",
-            "postcards":      "Traverse Town Mail Postcard 10 Event",
-            "final_ansem":    "Final Ansem"
+            "sephiroth":       ["Olympus Coliseum Defeat Sephiroth Ansem's Report 12"],
+            "unknown":         ["Hollow Bastion Defeat Unknown Ansem's Report 13"],
+            "postcards":       ["Traverse Town Mail Postcard 10 Event"],
+            "final_ansem":     ["Final Ansem"],
+            "puppies":         ["Traverse Town Piano Room Return 99 Puppies Reward 2"],
+            "super_boss_hunt": ["Olympus Coliseum Defeat Sephiroth Ansem's Report 12"
+                               , "Hollow Bastion Defeat Unknown Ansem's Report 13"
+                               , "Agrabah Defeat Kurt Zisa Ansem's Report 11"
+                               , "Neverland Defeat Phantom Stop Event"
+                               , "Olympus Coliseum Defeat Ice Titan Diamond Dust Event"],
         }
-        self.multiworld.get_location(goal_dict[self.options.goal.current_key], self.player).place_locked_item(self.create_item("Victory"))
+        if (self.options.require_final_ansem or self.options.goal.current_key == "super_boss_hunt") and self.options.goal.current_key != "final_ansem":
+            self.multiworld.get_location("Final Ansem", self.player).place_locked_item(self.create_item("Victory"))
+            report_no = 1
+            for location_name in goal_dict[self.options.goal.current_key]: 
+                self.multiworld.get_location(location_name, self.player).place_locked_item(self.create_item("Ansem's Report " + str(report_no)))
+                report_no = report_no + 1
+        else:
+            self.multiworld.get_location(goal_dict[self.options.goal.current_key][0], self.player).place_locked_item(self.create_item("Victory"))
 
     def get_filler_item_name(self) -> str:
         fillers = {}
@@ -143,8 +165,13 @@ class KH1World(World):
         return self.multiworld.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
 
     def fill_slot_data(self) -> dict:
+        if self.options.goal.current_key == "super_boss_hunt":
+            reports_in_pool = max(self.options.reports_in_pool, 5)
+        else:
+            reports_in_pool = self.options.reports_in_pool
+        required_reports = min(int(self.options.required_reports), reports_in_pool)
         slot_data = {"EXP Multiplier": int(self.options.exp_multiplier)/16
-                    ,"Required Reports": min(int(self.options.required_reports), int(self.options.reports_in_pool))}
+                    ,"Required Reports": required_reports}
         if self.options.randomize_keyblade_stats:
             min_str_bonus = min(self.options.keyblade_min_str, self.options.keyblade_max_str)
             max_str_bonus = max(self.options.keyblade_min_str, self.options.keyblade_max_str)
@@ -165,9 +192,13 @@ class KH1World(World):
         return KH1Item(name, data.classification, data.code, self.player)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player, self.options.goal, self.options.atlantica, min(self.options.required_reports, self.options.reports_in_pool))
+        if self.options.goal.current_key == "super_boss_hunt":
+            reports_in_pool = max(self.options.reports_in_pool, 5)
+        else:
+            reports_in_pool = self.options.reports_in_pool
+        set_rules(self.multiworld, self.player, self.options.goal, self.options.atlantica, min(self.options.required_reports, reports_in_pool))
 
     def create_regions(self):
         create_regions(self.multiworld, self.player, self.options.goal, self.options.atlantica \
                 , min((self.options.strength_increase + self.options.defense_increase + self.options.hp_increase + self.options.mp_increase \
-                       + self.options.ap_increase + self.options.accessory_slot_increase + self.options.item_slot_increase), 100))
+                       + self.options.ap_increase + self.options.accessory_slot_increase + self.options.item_slot_increase), 100), self.options.require_final_ansem)
