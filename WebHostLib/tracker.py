@@ -2333,12 +2333,12 @@ if "Starcraft 2" in network_data_package["games"]:
             "Progressive Zerg Armor Upgrade":           106 + SC2HOTS_ITEM_ID_OFFSET,
             "Progressive Zerg Ground Upgrade":          107 + SC2HOTS_ITEM_ID_OFFSET,
             "Progressive Zerg Flyer Upgrade":           108 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Zerg Weapon/Armor Upgrade":    109 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Protoss Weapon Upgrade":       105 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Protoss Armor Upgrade":        106 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Protoss Ground Upgrade":       107 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Protoss Air Upgrade":          108 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Protoss Weapon/Armor Upgrade": 109 + SC2WOL_ITEM_ID_OFFSET,
+            "Progressive Zerg Weapon/Armor Upgrade":    109 + SC2HOTS_ITEM_ID_OFFSET,
+            "Progressive Protoss Weapon Upgrade":       105 + SC2LOTV_ITEM_ID_OFFSET,
+            "Progressive Protoss Armor Upgrade":        106 + SC2LOTV_ITEM_ID_OFFSET,
+            "Progressive Protoss Ground Upgrade":       107 + SC2LOTV_ITEM_ID_OFFSET,
+            "Progressive Protoss Air Upgrade":          108 + SC2LOTV_ITEM_ID_OFFSET,
+            "Progressive Protoss Weapon/Armor Upgrade": 109 + SC2LOTV_ITEM_ID_OFFSET,
         }
         grouped_item_replacements = {
             "Progressive Terran Weapon Upgrade":   ["Progressive Terran Infantry Weapon",
