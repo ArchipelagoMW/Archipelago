@@ -231,7 +231,7 @@ class VagueHints(Choice):
     """Make Location Hints a bit more vague, where they only tell you about the general area the item is in.
     Area Hints will be generated as normal.
 
-    If set to "stable", only location groups will be used. If a game one of your items ended up in doesn't implement location groups, your hint will instead only tell you that the item is "somewhere in" that game.
+    If set to "stable", only location groups will be used. If location groups aren't implemented for the game your item ended up in, your hint will instead only tell you that the item is "somewhere in" that game.
     If set to "experimental", region names will be eligible as well, and you will never receive a "somewhere in" hint. Keep in mind that region names are not always intended to be comprehensible to players - Only turn this on if you are okay with a bit of chaos.
 
     The distinction does not matter in single player, as Witness implements location groups for every location.
