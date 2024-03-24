@@ -97,8 +97,8 @@ class TunicWorld(World):
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
-        tunc_worlds: Tuple[TunicWorld] = multiworld.get_game_worlds("TUNIC")
-        for tunc in tunc_worlds:
+        tunic_worlds: Tuple[TunicWorld] = multiworld.get_game_worlds("TUNIC")
+        for tunic in tunic_worlds:
             if isinstance(tunc.options.entrance_rando.value, str):
                 group = tunc.options.entrance_rando.value
                 # if this is the first world in the group, set the rules equal to its rules
