@@ -402,7 +402,7 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint):
         chosen_group, group_type = try_getting_location_group_for_location(world, hint.location)
 
         if hint.location.player == world.player:
-            # local checks should only ever return a location group, as Witness defines groups for every location.
+            # local locations should only ever return a location group, as Witness defines groups for every location.
             hint_text = f"{item_name} can be found in the {area} area."
         else:
             player_name = world.multiworld.get_player_name(hint.location.player)
