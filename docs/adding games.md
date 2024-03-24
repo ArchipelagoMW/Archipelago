@@ -16,13 +16,14 @@ modification to the game, an external program, or both. This can be implemented 
 must fulfill a few requirements in order to function as expected. The specific requirements the game client must follow
 to behave as expected are:
 
-* Handle both ws and wss connections
+* Handle both secure and unsecure websocket connections
 * Detect and react when a location has been "checked" by the player by sending a network packet to the server
 * Receive and parse network packets when the player receives an item from the server, and reward it to the player on
 demand
   * **Any** of your items can be received any number of times, up to and far surpassing those that the game might
-normally expect
-  * Items can be sent from the server and so might not have a player or location attributed to them
+normally expect from features such as starting inventory, item link replacement, or item cheating
+  * Players and the admin can cheat items to the player at any time with a server command, and these items may not have
+a player or location attributed to them
 * Be able to change the port for saved connection info
   * Rooms hosted on the website attempt to reserve their port, but since there are a limited number of ports, this
 privilege can be lost, requiring the room to be moved to a new port
@@ -30,8 +31,8 @@ privilege can be lost, requiring the room to be moved to a new port
 * Keep an index for items received in order to resync. The ItemsReceived Packets are a single list with guaranteed 
 order.
 * Receive items that were sent to the player while they were not connected to the server
-  * The player being able to complete checks and sending them when reconnecting is a good bonus but not strictly 
-required
+  * The player being able to complete checks while offline and sending them when reconnecting is a good bonus, but not 
+strictly required
 * Send a status update packet alerting the server that the player has completed their goal
 
 Libraries for most modern languages and the spec for various packets can be found in the
@@ -51,8 +52,8 @@ following requirements:
 * A unique game name
 * For webhost documentation and behaviors, a `WebWorld` subclass that must be instantiated in the `World` class 
 definition
-  * the game_info doc must follow the format `{language_code}_{game_name}.md`
-* A mapping for items and locations defining their names and id's for clients to be able to identify them. These are 
+  * The game_info doc must follow the format `{language_code}_{game_name}.md`
+* A mapping for items and locations defining their names and ids for clients to be able to identify them. These are 
 `item_name_to_id` and `location_name_to_id`, respectively.
 * Create an item when `create_item` is called both by your code and externally
 * An `options_dataclass` defining the options players have available to them
