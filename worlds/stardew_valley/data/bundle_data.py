@@ -76,7 +76,7 @@ acorn = BundleItem(TreeSeed.acorn)
 maple_seed = BundleItem(TreeSeed.maple)
 pine_cone = BundleItem(TreeSeed.pine)
 mahogany_seed = BundleItem(TreeSeed.mahogany)
-mushroom_tree_seed = BundleItem(TreeSeed.mushroom)
+mushroom_tree_seed = BundleItem(TreeSeed.mushroom, source=BundleItem.Sources.island)
 # mystic_tree_seed = BundleItem(TreeSeed.mystic)
 mossy_seed = BundleItem(TreeSeed.mossy)
 
