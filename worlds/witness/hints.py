@@ -419,8 +419,6 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint):
         else:
             hint_text = f"{item_name} can be found at {location_name}."
 
-    print(hint_text)
-
     return WitnessWordedHint(hint_text, hint.location, area=area, vague_location_hint=bool(world.options.vague_hints))
 
 
