@@ -236,7 +236,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Beverage.pina_colada: self.money.can_spend_at(Region.island_resort, 600),
             Beverage.triple_shot_espresso: self.has("Hot Java Ring"),
             Consumable.mystery_box: self.time.has_lived_months(3) | self.has(Currency.prize_ticket),
-            Consumable.gold_mystery_box: False_(),
+            Consumable.gold_mystery_box: False_(),  # Masteries
             Currency.calico_egg: self.region.can_reach(Region.desert_festival),
             Currency.prize_ticket: self.time.has_lived_months(2),  # Time to do a few help wanted quests
             Decoration.rotten_plant: self.has(Lighting.jack_o_lantern) & self.season.has(Season.winter),
@@ -384,6 +384,8 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             TreeSeed.maple: self.skill.has_level(Skill.foraging, 1) & self.ability.can_chop_trees(),
             TreeSeed.mushroom: self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 5),
             TreeSeed.pine: self.skill.has_level(Skill.foraging, 1) & self.ability.can_chop_trees(),
+            TreeSeed.mystic: False_(),  # Masteries
+            TreeSeed.mossy: self.ability.can_chop_trees() & self.season.has(Season.summer),
             Vegetable.tea_leaves: self.has(Sapling.tea) & self.time.has_lived_months(2) & self.season.has_any_not_winter(),
             Fish.clam: self.tool.can_forage(Generic.any, Region.beach),
             Fish.cockle: self.tool.can_forage(Generic.any, Region.beach),
