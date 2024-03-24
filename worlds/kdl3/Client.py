@@ -281,6 +281,7 @@ class KDL3SNIClient(SNIClient):
                 for i in range(5):
                     level_data = await snes_read(ctx, KDL3_LEVEL_ADDR + (14 * i), 14)
                     self.levels[i] = unpack("HHHHHHH", level_data)
+                self.levels[5] = [0x205, 0, 0, 0, 0, 0, 0]
 
             if self.consumables is None:
                 consumables = await snes_read(ctx, KDL3_CONSUMABLE_FLAG, 1)
