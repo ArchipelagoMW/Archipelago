@@ -33,7 +33,7 @@ A settings YAML file is the way that you provide your settings to Archipelago.
 See the [basic multiworld setup guide](/tutorial/Archipelago/setup/en) here on the Archipelago website to learn more.
 
 ### Where do I get a YAML?
-You can use the [game settings page for Hollow Knight](/games/Hollow%20Knight/player-settings) here on the Archipelago 
+You can use the [game options page for Hollow Knight](/games/Hollow%20Knight/player-options) here on the Archipelago 
 website to generate a YAML using a graphical interface.
 
 ### Joining an Archipelago Game in Hollow Knight
