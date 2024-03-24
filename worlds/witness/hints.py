@@ -340,7 +340,7 @@ def get_priority_hint_locations(world: "WitnessWorld") -> List[str]:
     return priority
 
 
-def try_getting_location_group_other_world(world: "WitnessWorld", hint_loc: Location) -> str:
+def try_getting_location_group_for_location(world: "WitnessWorld", hint_loc: Location, allow_regions: bool) -> str:
     possible_location_groups = {
         k: v for k, v in world.multiworld.worlds[hint_loc.player].location_name_groups.items()
         if hint_loc.name in v
@@ -357,10 +357,10 @@ def try_getting_location_group_other_world(world: "WitnessWorld", hint_loc: Loca
         if present_locations > 1:
             valid_location_groups[group] = present_locations
 
-    if valid_location_groups["Everywhere"] > 100 or world.options.vague_hints == "experimental":
+    if valid_location_groups["Everywhere"] > 100 or allow_regions:
         del valid_location_groups["Everywhere"]
 
-    if world.options.vague_hints == "experimental":
+    if allow_regions:
         parent_region = hint_loc.parent_region
 
         # Assume that an "experimental" player would never want an "Everywhere" hint.
@@ -407,11 +407,13 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint):
 
     if world.options.vague_hints:
         if hint.location.player == world.player:
-            area = try_getting_location_group_other_world(world, hint.location)
+            area = try_getting_location_group_for_location(world, hint.location, False)
 
             hint_text = f"{item_name} can be found in the {area} area."
         else:
-            chosen_group = try_getting_location_group_other_world(world, hint.location)
+            chosen_group = try_getting_location_group_for_location(
+                world, hint.location, world.options.vague_hints == "experimental"
+            )
 
             player_name = world.multiworld.get_player_name(hint.location.player)
 
