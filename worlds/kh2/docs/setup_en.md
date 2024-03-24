@@ -2,7 +2,7 @@
 <h2 style="text-transform:none";>Quick Links</h2>
 
 - [Game Info Page](../../../../games/Kingdom%20Hearts%202/info/en)
-- [Player Settings Page](../../../../games/Kingdom%20Hearts%202/player-settings)
+- [Player Options Page](../../../../games/Kingdom%20Hearts%202/player-options)
 
 <h2 style="text-transform:none";>Required Software:</h2>
  `Kingdom Hearts II Final Mix` from the [Epic Games Store](https://store.epicgames.com/en-US/discover/kingdom-hearts)
