@@ -208,13 +208,11 @@ class FFMQWorld(World):
                                     if self.options.map_shuffle != "dungeons":
                                         hint.append((subregion.split("Subregion ")[-1] + (" Region" if subregion not
                                                     in single_location_regions else "")))
-                                    if self.options.map_shuffle != "overworld" and subregion not in \
-                                            ("Subregion Mac's Ship", "Subregion Doom Castle"):
+                                    if self.options.map_shuffle != "overworld":
                                         hint.append(overworld_spot.name.split("Overworld - ")[-1].replace("Pazuzu",
                                             "Pazuzu's"))
-                                    hint = " - ".join(hint)
+                                    hint = " - ".join(hint).replace(" - Mac Ship", "")
                                     if location.address in hint_data[self.player]:
                                         hint_data[self.player][location.address] += f"/{hint}"
                                     else:
                                         hint_data[self.player][location.address] = hint
-
