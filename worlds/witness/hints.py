@@ -412,7 +412,7 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint):
             elif group_type == "Group":
                 location_name = f"a \"{chosen_group}\" location in {player_name}'s world"
             elif group_type == "Region":
-                location_name = f"a location in {player_name}'s \"{chosen_group}\" region."
+                location_name = f"a location in {player_name}'s \"{chosen_group}\" region"
 
     if hint_text == "":
         if hint.hint_came_from_location:
