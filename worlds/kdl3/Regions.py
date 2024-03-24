@@ -37,7 +37,7 @@ def generate_valid_level(level, stage, possible_stages, slot_random):
         return new_stage
 
 
-def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing.Dict[int, Region]):
+def generate_rooms(world: "KDL3World", level_regions: typing.Dict[int, Region]):
     level_names = {LocationName.level_names[level]: level for level in LocationName.level_names}
     room_data = orjson.loads(get_data(__name__, os.path.join("data", "Rooms.json")))
     rooms: typing.Dict[str, KDL3Room] = dict()
@@ -62,33 +62,25 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
     world.multiworld.regions.extend(world.rooms)
 
     first_rooms: typing.Dict[int, KDL3Room] = dict()
-    if door_shuffle:
-        # first, we need to generate the notable edge cases
-        # 5-6 is the first, being the most restrictive
-        # half of its rooms are required to be vanilla, but can be in different orders
-        # the room before it *must* contain the copy ability required to unlock the room's goal
-
-        raise NotImplementedError()
-    else:
-        for name, room in rooms.items():
-            if room.room == 0:
-                if room.stage == 7:
-                    first_rooms[0x770200 + room.level - 1] = room
-                else:
-                    first_rooms[0x770000 + ((room.level - 1) * 6) + room.stage] = room
-            exits = dict()
-            for def_exit in room.default_exits:
-                target = f"{level_names[room.level]} {room.stage} - {def_exit['room']}"
-                access_rule = tuple(def_exit["access_rule"])
-                exits[target] = lambda state, rule=access_rule: state.has_all(rule, world.player)
-            room.add_exits(
-                exits.keys(),
-                exits
-            )
-            if world.options.open_world:
-                if any("Complete" in location.name for location in room.locations):
-                    room.add_locations({f"{level_names[room.level]} {room.stage} - Stage Completion": None},
-                                       KDL3Location)
+    for name, room in rooms.items():
+        if room.room == 0:
+            if room.stage == 7:
+                first_rooms[0x770200 + room.level - 1] = room
+            else:
+                first_rooms[0x770000 + ((room.level - 1) * 6) + room.stage] = room
+        exits = dict()
+        for def_exit in room.default_exits:
+            target = f"{level_names[room.level]} {room.stage} - {def_exit['room']}"
+            access_rule = tuple(def_exit["access_rule"])
+            exits[target] = lambda state, rule=access_rule: state.has_all(rule, world.player)
+        room.add_exits(
+            exits.keys(),
+            exits
+        )
+        if world.options.open_world:
+            if any("Complete" in location.name for location in room.locations):
+                room.add_locations({f"{level_names[room.level]} {room.stage} - Stage Completion": None},
+                                   KDL3Location)
 
     for level in world.player_levels:
         for stage in range(6):
