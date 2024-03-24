@@ -513,7 +513,7 @@ class World(metaclass=AutoWorldRegister):
     def get_regions(self) -> Iterable["Region"]:
         return self.multiworld.get_regions(self.player)
 
-    def push_precollected(self, item: Item) -> None:
+    def add_to_starting_inventory(self, item: Item) -> None:
         self.multiworld.push_precollected(item)
 
     @classmethod
