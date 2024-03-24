@@ -107,9 +107,9 @@ def set_rules(world, player: int, area_connections: dict, star_costs: dict, move
 
     connect_regions(world, player, "Second Floor", "Third Floor", lambda state: state.has("Power Star", player, star_costs["SecondFloorDoorCost"]))
 
-    connect_regions(world, player, "Third Floor", randomized_entrances_s["Tick Tock Clock"])
-    connect_regions(world, player, "Third Floor", randomized_entrances_s["Rainbow Ride"])
-    connect_regions(world, player, "Third Floor", randomized_entrances_s["Wing Mario over the Rainbow"])
+    connect_regions(world, player, "Third Floor", randomized_entrances_s["Tick Tock Clock"], rf.build_rule("LG/TJ/SF/BF/WK"))
+    connect_regions(world, player, "Third Floor", randomized_entrances_s["Rainbow Ride"], rf.build_rule("TJ/SF/BF"))
+    connect_regions(world, player, "Third Floor", randomized_entrances_s["Wing Mario over the Rainbow"], rf.build_rule("TJ/SF/BF"))
     connect_regions(world, player, "Third Floor", "Bowser in the Sky", lambda state: state.has("Power Star", player, star_costs["StarsToFinish"]))
 
     # Course Rules
@@ -146,7 +146,7 @@ def set_rules(world, player: int, area_connections: dict, star_costs: dict, move
     rf.assign_rule("LLL: Upper Volcano", "CL")
     # Shifting Sand Land
     rf.assign_rule("SSL: Upper Pyramid", "CL & TJ/BF/SF/LG | MOVELESS")
-    rf.assign_rule("SSL: Free Flying for 8 Red Coins", "TJ/SF/BF & TJ+WC | TJ/SF/BF & CAPLESS | MOVELESS")
+    rf.assign_rule("SSL: Free Flying for 8 Red Coins", "TJ/SF/BF & TJ+WC | TJ/SF/BF & CAPLESS | MOVELESS & CAPLESS")
     # Dire, Dire Docks
     rf.assign_rule("DDD: Moving Poles", "CL & {{Bowser in the Fire Sea Key}} | TJ+DV+LG+WK & MOVELESS")
     rf.assign_rule("DDD: Through the Jet Stream", "MC | CAPLESS")
@@ -165,6 +165,7 @@ def set_rules(world, player: int, area_connections: dict, star_costs: dict, move
     rf.assign_rule("TTM: Top", "MOVELESS & TJ | LJ/DV & LG/KK | MOVELESS & WK & SF/LG | MOVELESS & KK/DV")
     rf.assign_rule("TTM: Blast to the Lonely Mushroom", "CANN | CANNLESS & LJ | MOVELESS & CANNLESS")
     # Tiny-Huge Island
+    rf.assign_rule("THI: 1Up Block THI Small near Start", "NAR | {THI: Pipes}")
     rf.assign_rule("THI: Pipes", "NAR | LJ/TJ/DV/LG | MOVELESS & BF/SF/KK")
     rf.assign_rule("THI: Large Top", "NAR | LJ/TJ/DV | MOVELESS")
     rf.assign_rule("THI: Wiggler's Red Coins", "WK")
@@ -225,11 +226,11 @@ def set_rules(world, player: int, area_connections: dict, star_costs: dict, move
     world.completion_condition[player] = lambda state: state.can_reach("BitS: Top", 'Region', player)
 
     if world.CompletionType[player] == "last_bowser_stage":
-        world.completion_condition[player] = lambda state: state.can_reach("Bowser in the Sky", 'Region', player)
+        world.completion_condition[player] = lambda state: state.can_reach("BitS: Top", 'Region', player)
     elif world.CompletionType[player] == "all_bowser_stages":
         world.completion_condition[player] = lambda state: state.can_reach("Bowser in the Dark World", 'Region', player) and \
-                                                           state.can_reach("Bowser in the Fire Sea", 'Region', player) and \
-                                                           state.can_reach("Bowser in the Sky", 'Region', player)
+                                                           state.can_reach("BitFS: Upper", 'Region', player) and \
+                                                           state.can_reach("BitS: Top", 'Region', player)
 
 
 class RuleFactory:

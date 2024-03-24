@@ -643,13 +643,13 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
         ctx.username = server_url.username
     if server_url.password:
         ctx.password = server_url.password
-    port = server_url.port or 38281
 
     def reconnect_hint() -> str:
         return ", type /connect to reconnect" if ctx.server_address else ""
 
     logger.info(f'Connecting to Archipelago server at {address}')
     try:
+        port = server_url.port or 38281  # raises ValueError if invalid
         socket = await websockets.connect(address, port=port, ping_timeout=None, ping_interval=None,
                                           ssl=get_ssl_context() if address.startswith("wss://") else None)
         if ctx.ui is not None:
@@ -758,8 +758,10 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
     elif cmd == 'ConnectionRefused':
         errors = args["errors"]
         if 'InvalidSlot' in errors:
+            ctx.disconnected_intentionally = True
             ctx.event_invalid_slot()
         elif 'InvalidGame' in errors:
+            ctx.disconnected_intentionally = True
             ctx.event_invalid_game()
         elif 'IncompatibleVersion' in errors:
             raise Exception('Server reported your client version as incompatible. '
