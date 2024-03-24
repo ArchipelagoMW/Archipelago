@@ -49,6 +49,7 @@ class Quest:
     dark_talisman = "Dark Talisman"
     goblin_problem = "Goblin Problem"
     magic_ink = "Magic Ink"
+    giant_stump = "The Giant Stump"
 
 
 class ModQuest:

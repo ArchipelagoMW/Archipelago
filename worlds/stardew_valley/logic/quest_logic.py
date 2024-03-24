@@ -17,6 +17,7 @@ from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
 from .wallet_logic import WalletLogicMixin
 from ..stardew_rule import StardewRule, Has, True_
+from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.building_names import Building
 from ..strings.craftable_names import Craftable
@@ -104,6 +105,7 @@ FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillL
             Quest.the_pirates_wife: self.logic.relationship.can_meet(NPC.kent) & self.logic.relationship.can_meet(NPC.gus) &
                                     self.logic.relationship.can_meet(NPC.sandy) & self.logic.relationship.can_meet(NPC.george) &
                                     self.logic.relationship.can_meet(NPC.wizard) & self.logic.relationship.can_meet(NPC.willy),
+            Quest.giant_stump: self.logic.has(Material.hardwood)
         })
 
     def update_rules(self, new_rules: Dict[str, StardewRule]):
@@ -126,3 +128,12 @@ FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillL
         if self.options.quest_locations < 0:
             return self.logic.quest.can_complete_quest(Quest.dark_talisman)
         return self.logic.received(Wallet.dark_talisman)
+
+    def has_raccoon_shop(self) -> StardewRule:
+        if self.options.quest_locations < 0:
+            return self.logic.received(CommunityUpgrade.raccoon, 2) & self.logic.quest.can_complete_quest(Quest.giant_stump)
+
+        # 1 - Break the tree
+        # 2 - Build the house, which summons the bundle racoon. This one is done manually if quests are turned off
+        # 3 - Racoon's wife opens the shop
+        return self.logic.received(CommunityUpgrade.raccoon, 3)

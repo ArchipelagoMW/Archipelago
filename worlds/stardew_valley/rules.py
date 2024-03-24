@@ -208,6 +208,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_entrance_rule(multiworld, player, Entrance.enter_skull_cavern, logic.received(Wallet.skull_key))
     set_entrance_rule(multiworld, player, Entrance.talk_to_mines_dwarf, logic.wallet.can_speak_dwarf() & logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
     set_entrance_rule(multiworld, player, Entrance.buy_from_traveling_merchant, logic.traveling_merchant.has_days())
+    set_entrance_rule(multiworld, player, Entrance.buy_from_raccoon, logic.quest.has_raccoon_shop())
 
     set_farm_buildings_entrance_rules(logic, multiworld, player)
 

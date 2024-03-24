@@ -6,13 +6,17 @@ from .farming_logic import FarmingLogicMixin
 from .fishing_logic import FishingLogicMixin
 from .has_logic import HasLogicMixin
 from .money_logic import MoneyLogicMixin
+from .quest_logic import QuestLogicMixin
+from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .skill_logic import SkillLogicMixin
 from ..bundles.bundle import Bundle
 from ..stardew_rule import StardewRule, True_
+from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.currency_names import Currency
 from ..strings.machine_names import Machine
 from ..strings.quality_names import CropQuality, ForageQuality, FishQuality, ArtisanQuality
+from ..strings.quest_names import Quest
 from ..strings.region_names import Region
 
 
@@ -22,7 +26,8 @@ class BundleLogicMixin(BaseLogicMixin):
         self.bundle = BundleLogic(*args, **kwargs)
 
 
-class BundleLogic(BaseLogic[Union[HasLogicMixin, RegionLogicMixin, MoneyLogicMixin, FarmingLogicMixin, FishingLogicMixin, SkillLogicMixin]]):
+class BundleLogic(BaseLogic[Union[ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, MoneyLogicMixin, FarmingLogicMixin, FishingLogicMixin, SkillLogicMixin,
+                                  QuestLogicMixin]]):
     # Should be cached
     def can_complete_bundle(self, bundle: Bundle) -> StardewRule:
         item_rules = []
@@ -64,3 +69,11 @@ class BundleLogic(BaseLogic[Union[HasLogicMixin, RegionLogicMixin, MoneyLogicMix
                 self.logic.region.can_reach_location("Complete Bulletin Board") &
                 self.logic.region.can_reach_location("Complete Vault") &
                 self.logic.region.can_reach_location("Complete Boiler Room"))
+
+    def can_access_raccoon_bundles(self) -> StardewRule:
+        if self.options.quest_locations < 0:
+            return self.logic.received(CommunityUpgrade.raccoon, 1) & self.logic.quest.can_complete_quest(Quest.giant_stump)
+
+        # 1 - Break the tree
+        # 2 - Build the house, which summons the bundle racoon. This one is done manually if quests are turned off
+        return self.logic.received(CommunityUpgrade.raccoon, 2)
