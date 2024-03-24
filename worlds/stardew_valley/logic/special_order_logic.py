@@ -45,9 +45,9 @@ class SpecialOrderLogicMixin(BaseLogicMixin):
 
 
 class SpecialOrderLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, TimeLogicMixin, MoneyLogicMixin,
-ShippingLogicMixin, ArcadeLogicMixin, ArtisanLogicMixin, RelationshipLogicMixin, ToolLogicMixin, SkillLogicMixin,
-MineLogicMixin, CookingLogicMixin, BuffLogicMixin,
-AbilityLogicMixin, SpecialOrderLogicMixin, MonsterLogicMixin]]):
+                                        ShippingLogicMixin, ArcadeLogicMixin, ArtisanLogicMixin, RelationshipLogicMixin, ToolLogicMixin, SkillLogicMixin,
+                                        MineLogicMixin, CookingLogicMixin, BuffLogicMixin,
+                                        AbilityLogicMixin, SpecialOrderLogicMixin, MonsterLogicMixin]]):
 
     def initialize_rules(self):
         self.update_rules({

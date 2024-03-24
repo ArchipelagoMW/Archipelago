@@ -135,5 +135,5 @@ FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillL
 
         # 1 - Break the tree
         # 2 - Build the house, which summons the bundle racoon. This one is done manually if quests are turned off
-        # 3 - Racoon's wife opens the shop
+        # 3 - Raccoon's wife opens the shop
         return self.logic.received(CommunityUpgrade.raccoon, 3)
