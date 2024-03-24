@@ -21,7 +21,7 @@ def generate_output(self, output_directory):
             item_name = "".join(item_name.split(" "))
         else:
             if item.advancement or item.useful or (item.trap and
-                                                   self.multiworld.per_slot_randoms[self.player].randint(0, 1)):
+                                                   self.random.randint(0, 1)):
                 item_name = "APItem"
             else:
                 item_name = "APItemFiller"
@@ -96,7 +96,7 @@ def generate_output(self, output_directory):
     self.rom_name_available_event.set()
 
     setup = {"version": "1.5", "name": self.multiworld.player_name[self.player], "romname": rom_name, "seed":
-             hex(self.multiworld.per_slot_randoms[self.player].randint(0, 0xFFFFFFFF)).split("0x")[1].upper()}
+             hex(self.random.randint(0, 0xFFFFFFFF)).split("0x")[1].upper()}
 
     starting_items = [output_item_name(item) for item in self.multiworld.precollected_items[self.player]]
     if self.options.sky_coin_mode == "shattered_sky_coin":
