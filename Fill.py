@@ -198,10 +198,16 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
         # There are leftover unplaceable items and locations that won't accept them
         if multiworld.can_beat_game():
             logging.warning(
-                f'Not all items placed. Game beatable anyway. (Could not place {unplaced_items})')
+                f"Not all items placed. Game beatable anyway.\nCould not place:\n"
+                f"{', '.join(str(item) for item in unplaced_items)}")
         else:
-            raise FillError(f'No more spots to place {unplaced_items}, locations {locations} are invalid. '
-                            f'Already placed {len(placements)}: {", ".join(str(place) for place in placements)}')
+            raise FillError(f"No more spots to place {len(unplaced_items)} items. Remaining locations are invalid.\n"
+                            f"Unplaced items:\n"
+                            f"{', '.join(str(item) for item in unplaced_items)}\n"
+                            f"Unfilled locations:\n"
+                            f"{', '.join(str(location) for location in locations)}\n"
+                            f"Already placed {len(placements)}:\n"
+                            f"{', '.join(str(place) for place in placements)}")
 
     item_pool.extend(unplaced_items)
 
