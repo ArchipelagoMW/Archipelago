@@ -5,10 +5,14 @@ import logging
 import os
 import random
 import string
+import sys
+import types
+import typing
 import urllib.parse
 import urllib.request
 from collections import Counter
 from typing import Any, Dict, Tuple, Union
+from traceback import format_exception_only, format_exception
 
 import ModuleUpdate
 
@@ -20,7 +24,7 @@ import Options
 from BaseClasses import seeddigits, get_seed, PlandoOptions
 from Main import main as ERmain
 from settings import get_settings
-from Utils import parse_yamls, version_tuple, __version__, tuplize_version
+from Utils import parse_yamls, version_tuple, __version__, tuplize_version, messagebox
 from worlds.alttp import Options as LttPOptions
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from worlds.alttp.Text import TextTable
@@ -56,6 +60,8 @@ def mystery_argparse():
     parser.add_argument("--skip_output", action="store_true",
                         help="Skips generation assertion and output stages and skips multidata and spoiler output. "
                              "Intended for debugging and testing purposes.")
+    parser.add_argument("--no_gui", action="store_true",
+                        help="Disables any GUI from being created during the generation process.")
     args = parser.parse_args()
     if not os.path.isabs(args.weights_file_path):
         args.weights_file_path = os.path.join(args.player_files_path, args.weights_file_path)
@@ -74,6 +80,9 @@ def main(args=None, callback=ERmain):
         args, options = mystery_argparse()
     else:
         options = get_settings()
+
+    if not (__debug__ or args.no_gui):
+        sys.excepthook = parsing_failure_gui
 
     seed = get_seed(args.seed)
     Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level)
@@ -154,6 +163,7 @@ def main(args=None, callback=ERmain):
     erargs.outputpath = args.outputpath
     erargs.skip_prog_balancing = args.skip_prog_balancing
     erargs.skip_output = args.skip_output
+    erargs.no_gui = args.no_gui
 
     settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
         {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.samesettings else None)
@@ -538,9 +548,15 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
                         ret.sprite_pool += [key] * int(value)
 
 
+def parsing_failure_gui(_type: typing.Type[BaseException], value: BaseException, traceback: types.TracebackType) -> None:
+    exception_text = format_exception(_type, value, traceback.tb_next, 0)
+    error_message = "".join(exception_text[0])
+    error_message += "" if len(exception_text) <= 1 else f"\n{format_exception_only(_type, value)[0]}"
+
+    messagebox(f"Generation Failed", f"{error_message}", True)
+
+
 if __name__ == '__main__':
-    import atexit
-    confirmation = atexit.register(input, "Press enter to close.")
     multiworld = main()
     if __debug__:
         import gc
@@ -551,5 +567,3 @@ if __name__ == '__main__':
         gc.collect()  # need to collect to deref all hard references
         assert not weak(), f"MultiWorld object was not de-allocated, it's referenced {sys.getrefcount(weak())} times." \
                            " This would be a memory leak."
-    # in case of error-free exit should not need confirmation
-    atexit.unregister(confirmation)
