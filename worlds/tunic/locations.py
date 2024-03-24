@@ -325,7 +325,7 @@ location_name_to_id: Dict[str, int] = {name: location_base_id + index for index,
 
 location_name_groups: Dict[str, Set[str]] = {}
 for loc_name, loc_data in location_table.items():
-    loc_group_name = loc_name.split(" - ")[0]
+    loc_group_name = loc_name.split(" - ", 1)[0]
     if loc_group_name not in location_name_groups.keys():
         location_name_groups[loc_group_name] = set()
     location_name_groups[loc_group_name].add(loc_name)
