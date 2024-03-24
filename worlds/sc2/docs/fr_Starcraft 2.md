@@ -2,14 +2,14 @@
 
 ## Quel est l'effet de la randomisation sur ce jeu ?
 
-The following unlocks are randomized as items:
-1. Your ability to build any non-worker unit.
-2. Unit specific upgrades including some combinations not available in the vanilla campaigns, such as both strain choices simultaneously for Zerg and every Spear of Adun upgrade simultaneously for Protoss!
-3. Your ability to get the generic unit upgrades, such as attack and armour upgrades.
-4. Other miscellaneous upgrades such as laboratory upgrades and mercenaries for Terran, Kerrigan levels and upgrades for Zerg, and Spear of Adun upgrades for Protoss.
+Les éléments qui suivent sont les *items* qui sont randomizés et qui doivent être débloqués pour être utilisé:
+1. La capacité de produire des unités, outre les drones/probes/scv.
+2. Des améliorations spécifique à certains unités incluant quelques combinaisons qui ne sont pas disponible dans les campagnes génériques, comme le fait d'avoir les deux types d'évolution en même temps pour une unité *Zerg* et toutes les améliorations de la Lance d'Adun simultanément pour les *Protoss*.
+3. L'accès aux améliorations génériques des unités, e.g. les améliorations d'attaque et d'armure.
+4. D'autres améliorations diverses tel que les améliration de laboratoire et les mercenaires pour les *Terran*, les niveaux et les améliorations de Kerrigan pour les *Zerg*, et les amélirations de la Lance d'Adun pour les *Protoss*.
 5. Small boosts to your starting mineral, vespene gas, and supply totals on each mission.
 
-You find items by making progress in these categories:
+Les *items* sont trouvés en accomplissant du progrès dans les catégories suivantes:
 * Completing missions
 * Completing bonus objectives (like by gathering lab research material in Wings of Liberty)
 * Reaching milestones in the mission, such as completing part of a main objective
@@ -17,14 +17,19 @@ You find items by making progress in these categories:
 
 Except for mission completion, these categories can be disabled in the game's settings. For instance, you can disable getting items for reaching required milestones.
 
-When you receive items, they will immediately become available, even during a mission, and you will be
-notified via a text box in the top-right corner of the game screen. Item unlocks are also logged in the Archipelago client.
+Quand vous recevez un *item*, il devient imédiatement disponible, même pendant une mission, et vous serez avertis via la boîte de texte situé dans le coin haut-droit de *StarCraft 2*.
+L'acquisition d'un *item* est aussi indiqué dans le client d'Archipelago.
 
-Missions are launched through the Starcraft 2 Archipelago client, through the Starcraft 2 Launcher tab. The between mission segments on the Hyperion, the Leviathan, and the Spear of Adun are not included. Additionally, metaprogression currencies such as credits and Solarite are not used.
+Les missions peuvent être lancées par le client *StarCraft 2 Archipelago*, via l'interface graphique de l'onglet *StarCraft 2 Launcher*.
+Missions are launched through the Starcraft 2 Archipelago client, through the Starcraft 2 Launcher tab. 
+Les segments qui se passe sur l'Hyperrion, le Léviathan et la Lance d'Adun ne sont pas inclus.
+De plus, les points de progression tel que les crédits ou la Solarite ne sont pas utilisés dans *StarCraft 2 Archipelago*.
 
-## What is the goal of this game when randomized?
+## Quel est le but de ce jeu quand il est randomisé?
 
-The goal is to beat the final mission in the mission order. The yaml configuration file controls the mission order and how missions are shuffled.
+Le but est de réussir la mission finale dans le dsa(missison order).
+dsa couleur de celle-ci
+Les choix fait dans le fichier *yaml* définissent le dsa(mission oder) et comment les missions sont disposés.
 
 ## What non-randomized changes are there from vanilla Starcraft 2?
 

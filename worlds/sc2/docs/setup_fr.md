@@ -29,7 +29,7 @@ Il y a trois approches pour obtenir un fichier *yaml* pour *StarCraft 2 Randomiz
 
 Prennez soin de vous rappeller du nom de joueur que vous avez inscrit dans la page à options ou dans le fichier *yaml* puisque vous en aurez besoin pour vous connecter à votre monde!
 
-Notez que la page *Player options* ne permet pas de définir certaines des options avancées, e.g., l'exclusion de certaines unitées ou de leur *upgrade*. 
+Notez que la page *Player options* ne permet pas de définir certaines des options avancées, e.g., l'exclusion de certaines unitées ou de leurs améliorations. 
 Utilisez la page [*Weighted Options*](/weighted-options) pour avoir accès à ces dernières.
 
 Si vous désirez des informations et/ou instructions générale sur l'utilisation d'un fichier *yaml* pour Archipelago, veuilliez consutler [*Creating a YAML*](/tutorial/Archipelago/setup/en#creating-a-yaml).
