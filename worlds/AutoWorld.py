@@ -504,7 +504,7 @@ class World(metaclass=AutoWorldRegister):
     def get_entrance(self, entrance_name: str) -> "Entrance":
         return self.multiworld.get_entrance(entrance_name, self.player)
 
-    def get_entrances(self):
+    def get_entrances(self) -> Iterable["Entrance"]:
         return self.multiworld.get_entrances(self.player)
 
     def get_region(self, region_name: str) -> "Region":
@@ -513,7 +513,7 @@ class World(metaclass=AutoWorldRegister):
     def get_regions(self) -> Iterable["Region"]:
         return self.multiworld.get_regions(self.player)
 
-    def push_precollected(self, item: Item):
+    def push_precollected(self, item: Item) -> None:
         self.multiworld.push_precollected(item)
 
     @classmethod
