@@ -403,7 +403,7 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint):
 
         if hint.location.player == world.player:
             area = chosen_group
-            
+
             # local locations should only ever return a location group, as Witness defines groups for every location.
             hint_text = f"{item_name} can be found in the {area} area."
         else:
@@ -414,7 +414,10 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint):
             elif group_type == "Group":
                 location_name = f"a \"{chosen_group}\" location in {player_name}'s world"
             elif group_type == "Region":
-                location_name = f"a location in {player_name}'s \"{chosen_group}\" region"
+                if chosen_group == "Menu":
+                    location_name = f"a location near the start of {player_name}'s game (\"Menu\" region)"
+                else:
+                    location_name = f"a location in {player_name}'s \"{chosen_group}\" region"
 
     if hint_text == "":
         if hint.hint_came_from_location:
