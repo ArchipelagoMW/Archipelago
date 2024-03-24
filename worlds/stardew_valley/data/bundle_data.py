@@ -77,7 +77,7 @@ maple_seed = BundleItem(TreeSeed.maple)
 pine_cone = BundleItem(TreeSeed.pine)
 mahogany_seed = BundleItem(TreeSeed.mahogany)
 mushroom_tree_seed = BundleItem(TreeSeed.mushroom, source=BundleItem.Sources.island)
-# mystic_tree_seed = BundleItem(TreeSeed.mystic)
+mystic_tree_seed = BundleItem(TreeSeed.mystic, source=BundleItem.Sources.masteries)
 mossy_seed = BundleItem(TreeSeed.mossy)
 
 blue_jazz = BundleItem(Flower.blue_jazz)
@@ -410,7 +410,7 @@ vinegar = BundleItem(Ingredient.vinegar)
 jack_o_lantern = BundleItem(Lighting.jack_o_lantern)
 prize_ticket = BundleItem(Currency.prize_ticket)
 mystery_box = BundleItem(Consumable.mystery_box)
-# gold_mystery_box = BundleItem(Consumable.gold_mystery_box)
+gold_mystery_box = BundleItem(Consumable.gold_mystery_box, source=BundleItem.Sources.masteries)
 calico_egg = BundleItem(Currency.calico_egg)
 
 # Crafts Room
@@ -461,7 +461,7 @@ sticky_items = [sap.as_amount(500), sap.as_amount(500)]
 sticky_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.sticky, sticky_items, 1, 1)
 
 forest_items = [moss.as_amount(10), fiber.as_amount(200), acorn.as_amount(10), maple_seed.as_amount(10), pine_cone.as_amount(10), mahogany_seed,
-                mushroom_tree_seed, mossy_seed.as_amount(5)]  #, mystic_tree_seed]
+                mushroom_tree_seed, mossy_seed.as_amount(5), mystic_tree_seed]
 forest_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.forest, forest_items, 1, 1)
 
 wild_medicine_items = [item.as_amount(5) for item in [purple_mushroom, fiddlehead_fern, white_algae, hops, blackberry, dandelion]]
@@ -739,7 +739,7 @@ home_cook_items = [egg.as_amount(10), milk.as_amount(10), wheat_flour.as_amount(
                    chocolate_cake, pancakes, rhubarb_pie]
 home_cook_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.home_cook, home_cook_items, 3, 3)
 
-helper_items = [prize_ticket, mystery_box.as_amount(5)]  #, gold_mystery_box]
+helper_items = [prize_ticket, mystery_box.as_amount(5), gold_mystery_box]
 helper_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.helper, helper_items, 2, 2)
 
 spirit_eve_items = [jack_o_lantern, corn.as_amount(10), bat_wing.as_amount(10)]

@@ -3,7 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-from ..options import StardewValleyOptions, ExcludeGingerIsland, FestivalLocations
+from ..options import StardewValleyOptions, ExcludeGingerIsland, FestivalLocations, SkillProgression
 from ..strings.crop_names import Fruit
 from ..strings.currency_names import Currency
 from ..strings.quality_names import CropQuality, FishQuality, ForageQuality
@@ -30,12 +30,18 @@ class FestivalItemSource(BundleItemSource):
         return options.festival_locations != FestivalLocations.option_disabled
 
 
+class MasteryItemSource(BundleItemSource):
+    def can_appear(self, options: StardewValleyOptions) -> bool:
+        return options.skill_progression == SkillProgression.option_progressive_with_masteries
+
+
 @dataclass(frozen=True, order=True)
 class BundleItem:
     class Sources:
         vanilla = VanillaItemSource()
         island = IslandItemSource()
         festival = FestivalItemSource()
+        masteries = MasteryItemSource()
 
     item_name: str
     amount: int = 1

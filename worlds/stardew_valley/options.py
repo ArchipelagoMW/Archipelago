@@ -255,12 +255,14 @@ class ElevatorProgression(Choice):
 class SkillProgression(Choice):
     """Shuffle skill levels?
     Vanilla: Leveling up skills is normal
-    Progressive: Skill levels are unlocked randomly, and earning xp sends checks"""
+    Progressive: Skill levels are unlocked randomly, and earning xp sends checks. Masteries are excluded
+    With Masteries: Skill levels are unlocked randomly, and earning xp sends checks. Masteries are included"""
     internal_name = "skill_progression"
     display_name = "Skill Progression"
     default = 1
     option_vanilla = 0
     option_progressive = 1
+    option_progressive_with_masteries = 2
 
 
 class BuildingProgression(Choice):
