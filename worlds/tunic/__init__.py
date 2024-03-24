@@ -250,7 +250,7 @@ class TunicWorld(World):
                     name, connection = connection
                     # for LS entrances, we just want to give the portal name
                     if "(LS)" in name:
-                        name, _ = name.split(" (LS) ")
+                        name = name.split(" (LS) ")[0]
                     # was getting some cases like Library Grave -> Library Grave -> other place
                     if name in portal_names and name != previous_name:
                         previous_name = name

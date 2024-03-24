@@ -64,10 +64,11 @@ For the Entrance Randomizer:
 - The elevator in Cathedral is immediately usable without activating the fuse. Activating the fuse does nothing.
 
 ## What item groups are there?
-Bombs, consumables (non-bomb ones), weapons, melee weapons (stick and sword), keys, hexagons, offerings, hero relics, cards, golden treasures, money, pages, and abilities (the three ability pages). There are also a few groups being used for singular items: laurels, orb, dagger, magic rod, holy cross, prayer, icebolt, and progressive sword.
+Bombs, consumables (non-bomb ones), weapons, melee weapons (stick and sword), keys, hexagons, offerings, hero relics, cards, golden treasures, money, pages, abilities (the three ability pages), and ladders (for shuffle ladders). There are also a few groups being used for singular items: laurels, orb, dagger, magic rod, holy cross, prayer, icebolt, and progressive sword.
 
 ## What location groups are there?
-Holy cross (for all holy cross checks), fairies (for the two fairy checks), well (for the coin well checks), shop, bosses (for the bosses with checks associated with them), hero relic (for the 6 hero grave checks), and ladders (for the ladder items when you have shuffle ladders enabled).
+Holy Cross (for all Holy Cross checks), Fairies (for the two fairy checks), Well (for the coin well checks), Shop, and Bosses (for the bosses with checks associated with them).
+Additionally, there are location groups for each area of the game which share their name with the beginning of the location names (the part before the -).
 
 ## Is Connection Plando supported?
 Yes. The host needs to enable it in their `host.yaml`, and the player's yaml needs to contain a plando_connections block.
