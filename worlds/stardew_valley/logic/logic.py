@@ -235,6 +235,8 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Beverage.coffee: self.artisan.can_keg(Seed.coffee) | self.has(Machine.coffee_maker) | (self.money.can_spend_at(Region.saloon, 300)) | self.has("Hot Java Ring"),
             Beverage.pina_colada: self.money.can_spend_at(Region.island_resort, 600),
             Beverage.triple_shot_espresso: self.has("Hot Java Ring"),
+            Consumable.mystery_box: self.time.has_lived_months(3) | self.has(Currency.prize_ticket),
+            Consumable.gold_mystery_box: False_(),
             Currency.calico_egg: self.region.can_reach(Region.desert_festival),
             Decoration.rotten_plant: self.has(Lighting.jack_o_lantern) & self.season.has(Season.winter),
             Fertilizer.basic: self.money.can_spend_at(Region.pierre_store, 100),
