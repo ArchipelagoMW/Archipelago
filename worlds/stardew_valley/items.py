@@ -218,6 +218,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
 
     items.extend(item_factory(item) for item in items_by_group[Group.COMMUNITY_REWARD])
     items.append(item_factory(CommunityUpgrade.movie_theater))  # It is a community reward, but we need two of them
+    create_raccoons(item_factory, options, items)
     items.append(item_factory(Wallet.metal_detector))  # Always offer at least one metal detector
 
     create_backpack_items(item_factory, options, items)
@@ -252,11 +253,22 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_shipsanity_items(item_factory, options, items)
     create_goal_items(item_factory, options, items)
     items.append(item_factory("Golden Egg"))
+
     create_magic_mod_spells(item_factory, options, items)
     create_deepwoods_pendants(item_factory, options, items)
     create_archaeology_items(item_factory, options, items)
 
     return items
+
+
+def create_raccoons(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+    number_progressive_raccoons = 3
+    number_filler_raccoons = 4
+    if options.quest_locations < 0:
+        number_progressive_raccoons = 2
+
+    items.extend(item_factory(item, ItemClassification.progression) for item in [CommunityUpgrade.raccoon] * number_progressive_raccoons)
+    items.extend(item_factory(item, ItemClassification.useful) for item in [CommunityUpgrade.raccoon] * number_filler_raccoons)
 
 
 def create_backpack_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
