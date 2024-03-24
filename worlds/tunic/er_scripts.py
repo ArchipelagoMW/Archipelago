@@ -159,12 +159,12 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     start_region = "Overworld"
     connected_regions.update(add_dependent_regions(start_region, logic_rules))
 
-    plando_connections = world.options.plando_connections
+    plando_connections = world.options.plando_connections.value
 
     # universal tracker support stuff, don't need to care about region dependency
     if hasattr(world.multiworld, "re_gen_passthrough"):
         if "TUNIC" in world.multiworld.re_gen_passthrough:
-            plando_connections.value.clear()
+            plando_connections.clear()
             # universal tracker stuff, won't do anything in normal gen
             for portal1, portal2 in world.multiworld.re_gen_passthrough["TUNIC"]["Entrance Rando"].items():
                 portal_name1 = ""
@@ -180,7 +180,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                 # shops have special handling
                 if not portal_name2 and portal2 == "Shop, Previous Region_":
                     portal_name2 = "Shop Portal"
-                plando_connections.value.append(PlandoConnection(portal_name1, portal_name2, "both"))
+                plando_connections.append(PlandoConnection(portal_name1, portal_name2, "both"))
 
     non_dead_end_regions = set()
     for region_name, region_info in tunic_er_regions.items():
