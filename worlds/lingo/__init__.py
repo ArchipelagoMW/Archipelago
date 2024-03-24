@@ -5,12 +5,12 @@ from logging import warning
 
 from BaseClasses import Item, ItemClassification, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from .items import ALL_ITEM_TABLE, LingoItem
-from .locations import ALL_LOCATION_TABLE
+from .datatypes import Room, RoomEntrance
+from .items import ALL_ITEM_TABLE, ITEMS_BY_GROUP, TRAP_ITEMS, LingoItem
+from .locations import ALL_LOCATION_TABLE, LOCATIONS_BY_GROUP
 from .options import LingoOptions
 from .player_logic import LingoPlayerLogic
 from .regions import create_regions
-from .static_logic import Room, RoomEntrance
 
 
 class LingoWebWorld(WebWorld):
@@ -46,6 +46,8 @@ class LingoWorld(World):
     location_name_to_id = {
         name: data.code for name, data in ALL_LOCATION_TABLE.items()
     }
+    item_name_groups = ITEMS_BY_GROUP
+    location_name_groups = LOCATIONS_BY_GROUP
 
     player_logic: LingoPlayerLogic
 
@@ -89,10 +91,23 @@ class LingoWorld(World):
                     pool.append(self.create_item("Puzzle Skip"))
 
             if traps:
-                traps_list = ["Slowness Trap", "Iceland Trap", "Atbash Trap"]
+                total_weight = sum(self.options.trap_weights.values())
 
-                for i in range(0, traps):
-                    pool.append(self.create_item(traps_list[i % len(traps_list)]))
+                if total_weight == 0:
+                    raise Exception("Sum of trap weights must be at least one.")
+
+                trap_counts = {name: int(weight * traps / total_weight)
+                               for name, weight in self.options.trap_weights.items()}
+                
+                trap_difference = traps - sum(trap_counts.values())
+                if trap_difference > 0:
+                    allowed_traps = [name for name in TRAP_ITEMS if self.options.trap_weights[name] > 0]
+                    for i in range(0, trap_difference):
+                        trap_counts[allowed_traps[i % len(allowed_traps)]] += 1
+
+                for name, count in trap_counts.items():
+                    for i in range(0, count):
+                        pool.append(self.create_item(name))
 
         self.multiworld.itempool += pool
 
@@ -100,9 +115,9 @@ class LingoWorld(World):
         item = ALL_ITEM_TABLE[name]
 
         classification = item.classification
-        if hasattr(self, "options") and self.options.shuffle_paintings and len(item.painting_ids) > 0\
-                and len(item.door_ids) == 0 and all(painting_id not in self.player_logic.painting_mapping
-                                                    for painting_id in item.painting_ids)\
+        if hasattr(self, "options") and self.options.shuffle_paintings and len(item.painting_ids) > 0 \
+                and not item.has_doors and all(painting_id not in self.player_logic.painting_mapping
+                                               for painting_id in item.painting_ids) \
                 and "pilgrim_painting2" not in item.painting_ids:
             # If this is a "door" that just moves one or more paintings, and painting shuffle is on and those paintings
             # go nowhere, then this item should not be progression. The Pilgrim Room painting is special and needs to be

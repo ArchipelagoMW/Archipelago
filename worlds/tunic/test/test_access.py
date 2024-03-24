@@ -59,7 +59,7 @@ class TestNormalGoal(TunicTestBase):
 
 
 class TestER(TunicTestBase):
-    options = {options.EntranceRando.internal_name: options.EntranceRando.option_true,
+    options = {options.EntranceRando.internal_name: options.EntranceRando.option_yes,
                options.AbilityShuffling.internal_name: options.AbilityShuffling.option_true,
                options.HexagonQuest.internal_name: options.HexagonQuest.option_false}
 

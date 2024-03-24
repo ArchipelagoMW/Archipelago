@@ -13,6 +13,7 @@ from worlds.generic.Rules import CollectionRule, add_item_rule, locality_rules, 
 
 def generate_multiworld(players: int = 1) -> MultiWorld:
     multiworld = MultiWorld(players)
+    multiworld.set_seed(0)
     multiworld.player_name = {}
     multiworld.state = CollectionState(multiworld)
     for i in range(players):
@@ -31,8 +32,6 @@ def generate_multiworld(players: int = 1) -> MultiWorld:
         # TODO - remove this loop once all worlds use options dataclasses
         world.options = world.options_dataclass(**{option_key: getattr(multiworld, option_key)[player_id]
                                                    for option_key in world.options_dataclass.type_hints})
-
-    multiworld.set_seed(0)
 
     return multiworld
 

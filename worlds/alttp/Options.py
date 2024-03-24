@@ -156,7 +156,7 @@ class OpenPyramid(Choice):
             return world.goal[player].current_key in {'crystals', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'ganon_pedestal'}
         elif self.value == self.option_auto:
             return world.goal[player].current_key in {'crystals', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'ganon_pedestal'} \
-            and (world.entrance_shuffle[player] in {'vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed'} or not
+            and (world.entrance_shuffle[player].current_key in {'vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed'} or not
                  world.shuffle_ganon)
         elif self.value == self.option_open:
             return True
