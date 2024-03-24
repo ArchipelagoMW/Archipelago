@@ -238,6 +238,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Consumable.mystery_box: self.time.has_lived_months(3) | self.has(Currency.prize_ticket),
             Consumable.gold_mystery_box: False_(),
             Currency.calico_egg: self.region.can_reach(Region.desert_festival),
+            Currency.prize_ticket: self.time.has_lived_months(2),  # Time to do a few help wanted quests
             Decoration.rotten_plant: self.has(Lighting.jack_o_lantern) & self.season.has(Season.winter),
             Fertilizer.basic: self.money.can_spend_at(Region.pierre_store, 100),
             Fertilizer.quality: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
