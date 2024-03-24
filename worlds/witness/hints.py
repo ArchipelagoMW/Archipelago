@@ -340,7 +340,9 @@ def get_priority_hint_locations(world: "WitnessWorld") -> List[str]:
     return priority
 
 
-def try_getting_location_group_for_location(world: "WitnessWorld", hint_loc: Location, allow_regions: bool) -> str:
+def try_getting_location_group_for_location(world: "WitnessWorld", hint_loc: Location) -> Tuple[str, str]:
+    allow_regions = world.options.vague_hints == "experimental"
+
     possible_location_groups = {
         k: v for k, v in world.multiworld.worlds[hint_loc.player].location_name_groups.items()
         if hint_loc.name in v
@@ -352,43 +354,34 @@ def try_getting_location_group_for_location(world: "WitnessWorld", hint_loc: Loc
 
     valid_location_groups: Dict[str, int] = {}
 
+    # Find valid location groups.
     for group, locations in possible_location_groups.items():
+        if group == "Everywhere":
+            continue
         present_locations = sum(location in locations_in_that_world for location in locations)
-        if present_locations > 1:
-            valid_location_groups[group] = present_locations
+        valid_location_groups[group] = present_locations
 
-    if valid_location_groups["Everywhere"] > 100 or allow_regions:
-        del valid_location_groups["Everywhere"]
+    # If there are valid location groups, use a random one.
+    if valid_location_groups:
+        # If there are location groups with more than 1 location, remove any that only have 1.
+        if any(num_locs > 1 for num_locs in valid_location_groups.values()):
+            valid_location_groups = {name: num_locs for name, num_locs in valid_location_groups.items() if num_locs > 1}
+
+        location_groups_with_weights = {
+            # Listen. Just don't worry about it. :)))
+            location_group: (x ** 0.6) * math.e ** (- (x / 7) ** 0.6) if x > 6 else x / 6
+            for location_group, x in valid_location_groups.items()
+        }
+
+        location_groups = list(location_groups_with_weights.keys())
+        weights = list(location_groups_with_weights.values())
+
+        return world.random.choices(location_groups, weights, k=1)[0], "Group"
 
     if allow_regions:
-        parent_region = hint_loc.parent_region
+        return hint_loc.parent_region.name, "Region"
 
-        # Assume that an "experimental" player would never want an "Everywhere" hint.
-        if not valid_location_groups:
-            return hint_loc.parent_region.name
-
-        # Assume that an "experimental" player enjoys the idea of weird region names, and thus
-        # make them possible even if location groups are available
-        if parent_region.name not in possible_location_groups:
-            parent_region_location_amount = sum(
-                location.address is not None for location in parent_region.locations
-            )
-            if parent_region.name != "Menu" and 2 < parent_region_location_amount < (len(locations_in_that_world) / 2):
-                valid_location_groups[hint_loc.parent_region.name] = parent_region_location_amount
-
-    if not valid_location_groups:
-        return "Everywhere"
-
-    location_groups_with_weights = {
-        # Listen. Just don't worry about it. :)))
-        location_group: (x ** 0.6) * math.e ** (- (x / 7) ** 0.6) if x > 6 else x / 6
-        for location_group, x in valid_location_groups.items()
-    }
-
-    location_groups = list(location_groups_with_weights.keys())
-    weights = list(location_groups_with_weights.values())
-
-    return world.random.choices(location_groups, weights, k=1)[0]
+    return "Everywhere", "Everywhere"
 
 
 def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint):
@@ -406,21 +399,20 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint):
     area: Optional[str] = None
 
     if world.options.vague_hints:
-        if hint.location.player == world.player:
-            area = try_getting_location_group_for_location(world, hint.location, False)
+        chosen_group, group_type = try_getting_location_group_for_location(world, hint.location)
 
+        if hint.location.player == world.player:
+            # local checks should only ever return a location group, as Witness defines groups for every location.
             hint_text = f"{item_name} can be found in the {area} area."
         else:
-            chosen_group = try_getting_location_group_for_location(
-                world, hint.location, world.options.vague_hints == "experimental"
-            )
-
             player_name = world.multiworld.get_player_name(hint.location.player)
 
-            if chosen_group == "Everywhere":
+            if group_type == "Everywhere":
                 location_name = f"a location in {player_name}'s world"
-            else:
+            elif group_type == "Group":
                 location_name = f"a \"{chosen_group}\" location in {player_name}'s world"
+            elif group_type == "Region":
+                location_name = f"a location in {player_name}'s \"{chosen_group}\" region."
 
     if hint_text == "":
         if hint.hint_came_from_location:
