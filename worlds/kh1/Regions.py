@@ -250,6 +250,7 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["End of the World"].locations.append("End of the World Final Dimension 8th Chest"),
     regions["End of the World"].locations.append("End of the World Final Dimension 7th Chest"),
     regions["End of the World"].locations.append("End of the World Giant Crevasse 3rd Chest"),
+    regions["End of the World"].locations.append("End of the World Giant Crevasse 5th Chest"),
     regions["End of the World"].locations.append("End of the World Giant Crevasse 1st Chest"),
     regions["End of the World"].locations.append("End of the World Giant Crevasse 4th Chest"),
     regions["End of the World"].locations.append("End of the World Giant Crevasse 2nd Chest"),
@@ -260,7 +261,7 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["End of the World"].locations.append("End of the World World Terminus Agrabah Chest"),
     regions["End of the World"].locations.append("End of the World World Terminus Atlantica Chest"),
     regions["End of the World"].locations.append("End of the World World Terminus Halloween Town Chest"),
-    regions["End of the World"].locations.append("End of the World World Terminus Neverland Chest"),
+   #regions["End of the World"].locations.append("End of the World World Terminus Neverland Chest"),
     regions["End of the World"].locations.append("End of the World World Terminus 100 Acre Wood Chest"),
     regions["End of the World"].locations.append("End of the World World Terminus Hollow Bastion Chest"),
     regions["End of the World"].locations.append("End of the World Final Rest Chest"),
@@ -383,12 +384,12 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
    #regions["Traverse Town"].locations.append("Traverse Town Magician's Study Turn in Watergleam")
    #regions["Traverse Town"].locations.append("Traverse Town Magician's Study Turn in Fireglow")
    #regions["Traverse Town"].locations.append("Traverse Town Magician's Study Turn in all Summon Gems")
-   #regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Defeat 500 Heartless")
-   #regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Defeat 1000 Heartless")
-   #regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Defeat 1500 Heartless")
-   #regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Defeat 3000 Heartless")
-   #regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Defeat 4000 Heartless")
-   #regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Defeat 5000 Heartless and Acquire All Summons")
+    regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Geppetto Reward 1")
+    regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Geppetto Reward 2")
+    regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Geppetto Reward 3")
+    regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Geppetto Reward 4")
+    regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Geppetto Reward 5")
+    regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Geppetto All Summons Reward")
     regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Enter 30 Times")
     regions["Traverse Town"].locations.append("Traverse Town Magician's Study Obtained All Arts Items")
     regions["Traverse Town"].locations.append("Traverse Town Magician's Study Obtained All LV1 Magic")
@@ -434,7 +435,7 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 4")
     if atlantica:
         regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 5")
-   #regions["100 Acre Wood"].locations.append("100 Acre Wood Pooh's House Start Fire")
+    regions["100 Acre Wood"].locations.append("100 Acre Wood Pooh's House Start Fire")
     regions["100 Acre Wood"].locations.append("100 Acre Wood Pooh's Room Cabinet")
     regions["100 Acre Wood"].locations.append("100 Acre Wood Pooh's Room Chimney")
     regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Break Log")
@@ -447,6 +448,7 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["Deep Jungle"].locations.append("Deep Jungle Camp Save Gorillas")
     regions["Deep Jungle"].locations.append("Deep Jungle Bamboo Thicket Save Gorillas")
     regions["Deep Jungle"].locations.append("Deep Jungle Climbing Trees Save Gorillas")
+    regions["Olympus Coliseum"].locations.append("Olympus Coliseum Olympia Chest")
     
     regions["Traverse Town"].locations.append("Traverse Town Synth Log")
     regions["Traverse Town"].locations.append("Traverse Town Synth Cloth")
