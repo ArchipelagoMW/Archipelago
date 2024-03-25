@@ -574,7 +574,7 @@ def randomize_act_entrances(world: "HatInTimeWorld"):
     first_chapter: Region = get_first_chapter_region(world)
     has_guaranteed: bool = False
 
-    i: int = 0
+    i = 0
     while i < len(region_list):
         region = region_list[i]
         i += 1
@@ -780,8 +780,8 @@ def create_region(world: "HatInTimeWorld", name: str) -> Region:
 def create_badge_seller(world: "HatInTimeWorld") -> Region:
     badge_seller = Region("Badge Seller", world.player, world.multiworld)
     world.multiworld.regions.append(badge_seller)
-    count: int = 0
-    max_items: int = 0
+    count = 0
+    max_items = 0
 
     if world.options.BadgeSellerMaxItems.value > 0:
         max_items = world.random.randint(world.options.BadgeSellerMinItems.value,
@@ -879,9 +879,9 @@ def get_shuffled_region(self, region: str) -> str:
 def create_thug_shops(world: "HatInTimeWorld"):
     min_items: int = min(world.options.NyakuzaThugMinShopItems.value, world.options.NyakuzaThugMaxShopItems.value)
     max_items: int = max(world.options.NyakuzaThugMaxShopItems.value, world.options.NyakuzaThugMinShopItems.value)
-    count: int = -1
-    step: int = 0
-    old_name: str = ""
+    count = -1
+    step = 0
+    old_name = ""
     thug_items = world.get_nyakuza_thug_items()
 
     for key, data in shop_locations.items():
@@ -919,7 +919,7 @@ def create_thug_shops(world: "HatInTimeWorld"):
 
 
 def create_events(world: "HatInTimeWorld") -> int:
-    count: int = 0
+    count = 0
 
     for (name, data) in event_locs.items():
         if not is_location_valid(world, name):

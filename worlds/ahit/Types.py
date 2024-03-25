@@ -4,11 +4,11 @@ from BaseClasses import Location, Item, ItemClassification
 
 
 class HatInTimeLocation(Location):
-    game: str = "A Hat in Time"
+    game = "A Hat in Time"
 
 
 class HatInTimeItem(Item):
-    game: str = "A Hat in Time"
+    game = "A Hat in Time"
 
 
 class HatType(IntEnum):

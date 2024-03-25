@@ -207,7 +207,7 @@ class HatInTimeWorld(World):
                 slot_data[name] = nyakuza_thug_items[self.player][name]
 
         if self.is_dw():
-            i: int = 0
+            i = 0
             for name in excluded_dws[self.player]:
                 if self.options.EndGoal.value == 3 and name == "Seal the Deal":
                     continue

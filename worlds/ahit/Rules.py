@@ -42,7 +42,7 @@ def can_use_hat(state: CollectionState, world: "HatInTimeWorld", hat: HatType) -
 
 
 def get_hat_cost(world: "HatInTimeWorld", hat: HatType) -> int:
-    cost: int = 0
+    cost = 0
     costs = world.get_hat_yarn_costs()
     for h in world.get_hat_craft_order():
         cost += costs[h]
@@ -192,9 +192,9 @@ def set_rules(world: "HatInTimeWorld"):
     highest_cost: int = world.options.HighestChapterCost.value
     cost_increment: int = world.options.ChapterCostIncrement.value
     min_difference: int = world.options.ChapterCostMinDifference.value
-    last_cost: int = 0
-    cost: int
-    loop_count: int = 0
+    last_cost = 0
+    cost = 0
+    loop_count = 0
 
     for chapter in chapter_list:
         min_range: int = lowest_cost + (cost_increment * loop_count)

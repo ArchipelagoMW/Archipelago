@@ -9,7 +9,7 @@ TASKSANITY_START_ID = 2000300204
 
 
 def get_total_locations(world: "HatInTimeWorld") -> int:
-    total: int = 0
+    total = 0
 
     if not world.is_dw_only():
         for (name) in location_table.keys():

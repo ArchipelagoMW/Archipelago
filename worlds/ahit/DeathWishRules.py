@@ -275,7 +275,7 @@ def get_total_dw_stamps(state: CollectionState, world: "HatInTimeWorld") -> int:
     if world.options.DWShuffle.value > 0:
         return 999  # no stamp costs in death wish shuffle
 
-    count: int = 0
+    count = 0
 
     for name in death_wishes:
         if name == "Snatcher Coins in Nyakuza Metro" and not world.is_dlc2():
@@ -332,7 +332,7 @@ def set_candle_dw_rules(name: str, world: "HatInTimeWorld"):
 
 
 def get_zero_jump_clear_count(state: CollectionState, world: "HatInTimeWorld") -> int:
-    total: int = 0
+    total = 0
 
     for name in act_chapters.keys():
         n = f"{name} (Zero Jumps)"
@@ -354,7 +354,7 @@ def get_zero_jump_clear_count(state: CollectionState, world: "HatInTimeWorld") -
 
 
 def get_reachable_enemy_count(state: CollectionState, world: "HatInTimeWorld") -> int:
-    count: int = 0
+    count = 0
     for enemy in hit_list.keys():
         if enemy in bosses:
             continue
