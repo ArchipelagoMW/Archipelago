@@ -59,6 +59,8 @@ class Fishing:
     magic_bait = "Magic Bait"
     lead_bobber = "Lead Bobber"
     curiosity_lure = "Curiosity Lure"
+    deluxe_bait = "Deluxe Bait"
+    challenge_bait = "Challenge Bait"
 
 
 class Ring:
@@ -145,7 +147,6 @@ class Craftable:
     farm_computer = "Farm Computer"
     hopper = "Hopper"
     cookout_kit = "Cookout Kit"
-    challenge_bait = "Challenge Bait"
 
 
 class ModEdible:

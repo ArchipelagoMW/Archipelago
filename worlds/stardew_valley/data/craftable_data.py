@@ -189,6 +189,7 @@ dressed_spinner = skill_recipe(Fishing.dressed_spinner, Skill.fishing, 8, {Metal
 barbed_hook = skill_recipe(Fishing.barbed_hook, Skill.fishing, 8, {MetalBar.copper: 1, MetalBar.iron: 1, MetalBar.gold: 1})
 magnet = skill_recipe(Fishing.magnet, Skill.fishing, 9, {MetalBar.iron: 1})
 bait = skill_recipe(Fishing.bait, Skill.fishing, 2, {Loot.bug_meat: 1})
+deluxe_bait = skill_recipe(Fishing.bait, Skill.fishing, 4, {Fishing.bait: 5, Material.moss: 2})
 wild_bait = cutscene_recipe(Fishing.wild_bait, Region.tent, NPC.linus, 4, {Material.fiber: 10, Loot.bug_meat: 5, Loot.slime: 5})
 magic_bait = ap_recipe(Fishing.magic_bait, {Ore.radioactive: 1, Loot.bug_meat: 3})
 crab_pot = skill_recipe(Machine.crab_pot, Skill.fishing, 3, {Material.wood: 40, MetalBar.iron: 3})
