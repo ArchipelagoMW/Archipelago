@@ -490,7 +490,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
    #multiworld.get_location("100 Acre Wood Pooh's Room Cabinet"                                            , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("100 Acre Wood Pooh's Room Chimney"                                            , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("100 Acre Wood Bouncing Spot Break Log"                                        , player).access_rule = lambda state: has_torn_pages(state, player, 4)
-    multiworld.get_location("100 Acre Wood Bouncing Spot Fall Through Top of Tree Next to Pooh"            , player).access_rule = lambda state: has_torn_pages(state, player, 4)
+    multiworld.get_location("100 Acre Wood Bouncing Spot Fall Through Top of Tree Next to Pooh"            , player).access_rule = lambda state: has_torn_pages(state, player, 4) and (has_item(state, player, "High Jump") or can_glide(state, player))
     multiworld.get_location("Deep Jungle Camp Hi-Potion Experiment"                                        , player).access_rule = lambda state: has_item(state, player, "Progressive Fire")
     multiworld.get_location("Deep Jungle Camp Ether Experiment"                                            , player).access_rule = lambda state: has_item(state, player, "Progressive Blizzard")
    #multiworld.get_location("Deep Jungle Camp Replication Experiment"                                      , player).access_rule = lambda state: has_item(state, player, "")
