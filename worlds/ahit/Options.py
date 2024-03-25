@@ -126,6 +126,9 @@ class ActRandomizer(Choice):
 class ActPlando(OptionDict):
     """Plando acts onto other acts. For example, \"Train Rush\": \"Alpine Free Roam\""""
     display_name = "Act Plando"
+    schema = Schema({
+        str: str
+    })
 
 
 class FinaleShuffle(Toggle):
