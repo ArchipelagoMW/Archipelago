@@ -213,7 +213,7 @@ item_table: Dict[str, KH1ItemData] = {
    #"Nahara Vol. 5":                     KH1ItemData("Key",              code = 264_1184, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
    #"Hafet Vol. 4":                      KH1ItemData("Key",              code = 264_1185, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Empty Bottle":                      KH1ItemData("Key",              code = 264_1186, classification = ItemClassification.progression, max_quantity = 6,  weight = 10),
-    "Old Book":                          KH1ItemData("Key",              code = 264_1187, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
+   #"Old Book":                          KH1ItemData("Key",              code = 264_1187, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
    #"Emblem Piece (Flame)":              KH1ItemData("Key",              code = 264_1188, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
    #"Emblem Piece (Chest)":              KH1ItemData("Key",              code = 264_1189, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
    #"Emblem Piece (Statue)":             KH1ItemData("Key",              code = 264_1190, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),

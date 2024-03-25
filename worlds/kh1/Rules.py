@@ -486,7 +486,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
     multiworld.get_location("100 Acre Wood Convert Torn Page 4"                                            , player).access_rule = lambda state: has_torn_pages(state, player, 4)
     if atlantica:
         multiworld.get_location("100 Acre Wood Convert Torn Page 5"                                        , player).access_rule = lambda state: has_torn_pages(state, player, 5)
-    multiworld.get_location("100 Acre Wood Pooh's House Start Fire"                                        , player).access_rule = lambda state: has_item(state, player, "Progressive Fire") and has_torn_pages(state, player, 3)
+    multiworld.get_location("100 Acre Wood Pooh's House Start Fire"                                        , player).access_rule = lambda state: has_torn_pages(state, player, 3)
    #multiworld.get_location("100 Acre Wood Pooh's Room Cabinet"                                            , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("100 Acre Wood Pooh's Room Chimney"                                            , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("100 Acre Wood Bouncing Spot Break Log"                                        , player).access_rule = lambda state: has_torn_pages(state, player, 4)
@@ -523,7 +523,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
     multiworld.get_entrance("Neverland"                                                                    , player).access_rule = lambda state: has_item(state, player,"Neverland") and has_x_worlds(state, player, 4)
     multiworld.get_entrance("Hollow Bastion"                                                               , player).access_rule = lambda state: has_item(state, player,"Hollow Bastion") and has_x_worlds(state, player, 5)
     multiworld.get_entrance("End of the World"                                                             , player).access_rule = lambda state: has_x_worlds(state, player, 7) and has_reports(state, player, required_reports)
-    multiworld.get_entrance("100 Acre Wood"                                                                , player).access_rule = lambda state: has_item(state, player, "Old Book")
+    multiworld.get_entrance("100 Acre Wood"                                                                , player).access_rule = lambda state: has_item(state, player, "Progressive Fire")
 
     # Win condition.
     multiworld.completion_condition[player] = lambda state: state.has_all({"Victory"}, player)
