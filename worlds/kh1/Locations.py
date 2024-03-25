@@ -290,7 +290,7 @@ location_table: Dict[str, KH1LocationData] = {
     "Neverland Seal Keyhole Tinker Bell Event":                                         KH1LocationData("Events",     265_6094),
     "Neverland Seal Keyhole Glide Event":                                               KH1LocationData("Events",     265_6095),
     "Neverland Defeat Phantom Stop Event":                                              KH1LocationData("Events",     265_6096),
-    "Neverland Defeat Captain Hook Ars Aracanum Event":                                 KH1LocationData("Events",     265_6097),
+    "Neverland Defeat Captain Hook Ars Arcanum Event":                                  KH1LocationData("Events",     265_6097),
     "Hollow Bastion Defeat Riku I White Trinity Event":                                 KH1LocationData("Events",     265_6101),
     "Hollow Bastion Defeat Maleficent Donald Cheer Event":                              KH1LocationData("Events",     265_6102),
     "Hollow Bastion Defeat Dragon Maleficent Fireglow Event":                           KH1LocationData("Events",     265_6103),

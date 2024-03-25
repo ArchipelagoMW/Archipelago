@@ -356,7 +356,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
     multiworld.get_location("Neverland Seal Keyhole Tinker Bell Event"                                     , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
     multiworld.get_location("Neverland Seal Keyhole Glide Event"                                           , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
     multiworld.get_location("Neverland Defeat Phantom Stop Event"                                          , player).access_rule = lambda state: has_item(state, player, "Green Trinity") and has_all_magic_lvx(state, player, 2)
-    multiworld.get_location("Neverland Defeat Captain Hook Ars Aracanum Event"                             , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
+    multiworld.get_location("Neverland Defeat Captain Hook Ars Arcanum Event"                              , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
    #multiworld.get_location("Hollow Bastion Defeat Riku I White Trinity Event"                             , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Hollow Bastion Defeat Maleficent Donald Cheer Event"                          , player).access_rule = lambda state: has_emblems(state, player)
     multiworld.get_location("Hollow Bastion Defeat Dragon Maleficent Fireglow Event"                       , player).access_rule = lambda state: has_emblems(state, player)
@@ -486,7 +486,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
     multiworld.get_location("100 Acre Wood Convert Torn Page 4"                                            , player).access_rule = lambda state: has_torn_pages(state, player, 4)
     if atlantica:
         multiworld.get_location("100 Acre Wood Convert Torn Page 5"                                        , player).access_rule = lambda state: has_torn_pages(state, player, 5)
-    multiworld.get_location("100 Acre Wood Pooh's House Start Fire"                                        , player).access_rule = lambda state: has_item(state, player, "Progressive Fire") and has_torn_pages(state, player, 1)
+    multiworld.get_location("100 Acre Wood Pooh's House Start Fire"                                        , player).access_rule = lambda state: has_item(state, player, "Progressive Fire") and has_torn_pages(state, player, 3)
    #multiworld.get_location("100 Acre Wood Pooh's Room Cabinet"                                            , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("100 Acre Wood Pooh's Room Chimney"                                            , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("100 Acre Wood Bouncing Spot Break Log"                                        , player).access_rule = lambda state: has_torn_pages(state, player, 4)

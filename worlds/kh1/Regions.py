@@ -303,7 +303,7 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["Neverland"].locations.append("Neverland Seal Keyhole Tinker Bell Event")
     regions["Neverland"].locations.append("Neverland Seal Keyhole Glide Event")
     regions["Neverland"].locations.append("Neverland Defeat Phantom Stop Event")
-    regions["Neverland"].locations.append("Neverland Defeat Captain Hook Ars Aracanum Event")
+    regions["Neverland"].locations.append("Neverland Defeat Captain Hook Ars Arcanum Event")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Riku I White Trinity Event")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Maleficent Donald Cheer Event")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Dragon Maleficent Fireglow Event")
