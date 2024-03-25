@@ -560,7 +560,7 @@ def read_data() -> Tuple[
                     "Mech Boss",
                     "Final Boss",
                     "Getfixedboi",
-                    "NotGetfixedboi",
+                    "Not Getfixedboi",
                     "Calamity",
                 }:
                     raise Exception(

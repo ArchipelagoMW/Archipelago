@@ -88,7 +88,7 @@ class TerrariaWorld(World):
         for rule in rules[:goal]:
             if (
                 (not self.getfixedboi and "Getfixedboi" in rule.flags)
-                or (self.getfixedboi and "NotGetfixedboi" in rule.flags)
+                or (self.getfixedboi and "Not Getfixedboi" in rule.flags)
                 or (not self.calamity and "Calamity" in rule.flags)
                 or (achievements < 1 and "Achievement" in rule.flags)
                 or (achievements < 2 and "Grindy" in rule.flags)
