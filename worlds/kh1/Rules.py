@@ -476,8 +476,8 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
     multiworld.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 1"                               , player).access_rule = lambda state: has_torn_pages(state, player, 4)
     multiworld.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 2"                               , player).access_rule = lambda state: has_torn_pages(state, player, 4)
     multiworld.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 3"                               , player).access_rule = lambda state: has_torn_pages(state, player, 4)
-    multiworld.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 4"                               , player).access_rule = lambda state: has_torn_pages(state, player, 4)
-    multiworld.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 5"                               , player).access_rule = lambda state: has_torn_pages(state, player, 4)
+    multiworld.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 4"                               , player).access_rule = lambda state: has_torn_pages(state, player, 4) and can_glide(state, player)
+    multiworld.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 5"                               , player).access_rule = lambda state: has_torn_pages(state, player, 4) and can_glide(state, player)
     if atlantica:
         multiworld.get_location("100 Acre Wood Pooh's House Owl Cheer"                                     , player).access_rule = lambda state: has_torn_pages(state, player, 5)
     multiworld.get_location("100 Acre Wood Convert Torn Page 1"                                            , player).access_rule = lambda state: has_torn_pages(state, player, 1)
