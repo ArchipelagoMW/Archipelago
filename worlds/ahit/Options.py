@@ -1,7 +1,7 @@
 from typing import List, TYPE_CHECKING
 from dataclasses import dataclass
 from worlds.AutoWorld import PerGameCommonOptions
-from Options import Range, Toggle, DeathLink, Choice, OptionDict
+from Options import Range, Toggle, DeathLink, Choice, OptionDict, DefaultOnToggle
 
 if TYPE_CHECKING:
     from . import HatInTimeWorld
@@ -131,11 +131,12 @@ class ActPlando(OptionDict):
 class FinaleShuffle(Toggle):
     """If enabled, chapter finales will only be shuffled amongst each other in act shuffle."""
     display_name = "Finale Shuffle"
-    default = 0
 
 
 class LogicDifficulty(Choice):
-    """Choose the difficulty setting for logic."""
+    """Choose the difficulty setting for logic.
+    For an exhaustive list of all logic tricks for each difficulty, see this Google Doc:
+    https://docs.google.com/document/d/1x9VLSQ5davfx1KGamR9T0mD5h69_lDXJ6H7Gq7knJRI/edit?usp=sharing"""
     display_name = "Logic Difficulty"
     option_normal = -1
     option_moderate = 0
@@ -180,11 +181,10 @@ class TimePieceBalancePercent(Range):
     range_end = 100
 
 
-class StartWithCompassBadge(Toggle):
+class StartWithCompassBadge(DefaultOnToggle):
     """If enabled, start with the Compass Badge. In Archipelago, the Compass Badge will track all items in the world
     (instead of just Relics). Recommended if you're not familiar with where item locations are."""
     display_name = "Start with Compass Badge"
-    default = 1
 
 
 class CompassBadgeMode(Choice):
@@ -201,39 +201,33 @@ class CompassBadgeMode(Choice):
 class UmbrellaLogic(Toggle):
     """Makes Hat Kid's default punch attack do absolutely nothing, making the Umbrella much more relevant and useful"""
     display_name = "Umbrella Logic"
-    default = 0
 
 
-class ShuffleStorybookPages(Toggle):
+class ShuffleStorybookPages(DefaultOnToggle):
     """If enabled, each storybook page in the purple Time Rifts is an item check.
     The Compass Badge can track these down for you."""
     display_name = "Shuffle Storybook Pages"
-    default = 1
 
 
-class ShuffleActContracts(Toggle):
+class ShuffleActContracts(DefaultOnToggle):
     """If enabled, shuffle Snatcher's act contracts into the pool as items"""
     display_name = "Shuffle Contracts"
-    default = 1
 
 
 class ShuffleAlpineZiplines(Toggle):
     """If enabled, Alpine's zipline paths leading to the peaks will be locked behind items."""
     display_name = "Shuffle Alpine Ziplines"
-    default = 0
 
 
 class ShuffleSubconPaintings(Toggle):
     """If enabled, shuffle items into the pool that unlock Subcon Forest fire spirit paintings.
     These items are progressive, with the order of Village-Swamp-Courtyard."""
     display_name = "Shuffle Subcon Paintings"
-    default = 0
 
 
 class NoPaintingSkips(Toggle):
     """If enabled, prevent Subcon fire wall skips from being in logic on higher difficulty settings."""
     display_name = "No Subcon Fire Wall Skips"
-    default = 0
 
 
 class StartingChapter(Choice):
@@ -343,7 +337,6 @@ class MinExtraYarn(Range):
 class HatItems(Toggle):
     """Removes all yarn from the pool and turns the hats into individual items instead."""
     display_name = "Hat Items"
-    default = 0
 
 
 class MinPonCost(Range):
@@ -382,13 +375,11 @@ class EnableDLC1(Toggle):
     """Shuffle content from The Arctic Cruise (Chapter 6) into the game. This also includes the Tour time rift.
     DO NOT ENABLE THIS OPTION IF YOU DO NOT HAVE SEAL THE DEAL DLC INSTALLED!!!"""
     display_name = "Shuffle Chapter 6"
-    default = 0
 
 
 class Tasksanity(Toggle):
     """If enabled, Ship Shape tasks will become checks. Requires DLC1 content to be enabled."""
     display_name = "Tasksanity"
-    default = 0
 
 
 class TasksanityTaskStep(Range):
@@ -412,7 +403,6 @@ class ExcludeTour(Toggle):
     important levels being shuffled onto the Tour time rift, or important items being shuffled onto Tour pages
     when your goal is Time's End."""
     display_name = "Exclude Tour Time Rift"
-    default = 0
 
 
 class ShipShapeCustomTaskGoal(Range):
@@ -427,7 +417,6 @@ class EnableDLC2(Toggle):
     """Shuffle content from Nyakuza Metro (Chapter 7) into the game.
     DO NOT ENABLE THIS OPTION IF YOU DO NOT HAVE NYAKUZA METRO DLC INSTALLED!!!"""
     display_name = "Shuffle Chapter 7"
-    default = 0
 
 
 class MetroMinPonCost(Range):
@@ -475,14 +464,12 @@ class BaseballBat(Toggle):
     """Replace the Umbrella with the baseball bat from Nyakuza Metro.
     DLC2 content does not have to be shuffled for this option but Nyakuza Metro still needs to be installed."""
     display_name = "Baseball Bat"
-    default = 0
 
 
 class EnableDeathWish(Toggle):
     """Shuffle Death Wish contracts into the game. Each contract by default will have 1 check granted upon completion.
     DO NOT ENABLE THIS OPTION IF YOU DO NOT HAVE SEAL THE DEAL DLC INSTALLED!!!"""
     display_name = "Enable Death Wish"
-    default = 0
 
 
 class DeathWishOnly(Toggle):
@@ -496,7 +483,6 @@ class DeathWishOnly(Toggle):
     - All Pons in the item pool are replaced with Health Pons or random cosmetics
     - The EndGoal option is forced to complete Seal the Deal"""
     display_name = "Death Wish Only"
-    default = 0
 
 
 class DWShuffle(Toggle):
@@ -505,7 +491,6 @@ class DWShuffle(Toggle):
     If Seal the Deal is the end goal, it will always be the last Death Wish in the sequence.
     Disabling candles is highly recommended."""
     display_name = "Death Wish Shuffle"
-    default = 0
 
 
 class DWShuffleCountMin(Range):
@@ -532,17 +517,15 @@ class DWEnableBonus(Toggle):
     ONLY turn this on if you know what you are doing to yourself and everyone else in the multiworld!
     Using Peace and Tranquility to auto-complete the bonuses will NOT count!"""
     display_name = "Shuffle Death Wish Full Completions"
-    default = 0
 
 
-class DWAutoCompleteBonuses(Toggle):
+class DWAutoCompleteBonuses(DefaultOnToggle):
     """If enabled, auto complete all bonus stamps after completing the main objective in a Death Wish.
     This option will have no effect if bonus checks (DWEnableBonus) are turned on."""
     display_name = "Auto Complete Bonus Stamps"
-    default = 1
 
 
-class DWExcludeAnnoyingContracts(Toggle):
+class DWExcludeAnnoyingContracts(DefaultOnToggle):
     """Exclude Death Wish contracts from the pool that are particularly tedious or take a long time to reach/clear.
     Excluded Death Wishes are automatically completed as soon as they are unlocked.
     This option currently excludes the following contracts:
@@ -554,10 +537,9 @@ class DWExcludeAnnoyingContracts(Toggle):
     - Cruisin' for a Bruisin'
     - Seal the Deal (non-excluded if goal, but the checks are still excluded)"""
     display_name = "Exclude Annoying Death Wish Contracts"
-    default = 1
 
 
-class DWExcludeAnnoyingBonuses(Toggle):
+class DWExcludeAnnoyingBonuses(DefaultOnToggle):
     """If Death Wish full completions are shuffled in, exclude tedious Death Wish full completions from the pool.
     Excluded bonus Death Wishes automatically reward their bonus stamps upon completion of the main objective.
     This option currently excludes the following bonuses:
@@ -577,13 +559,11 @@ class DWExcludeAnnoyingBonuses(Toggle):
     - Cruisin' for a Bruisin'
     - Seal the Deal"""
     display_name = "Exclude Annoying Death Wish Full Completions"
-    default = 1
 
 
-class DWExcludeCandles(Toggle):
+class DWExcludeCandles(DefaultOnToggle):
     """If enabled, exclude all candle Death Wishes."""
     display_name = "Exclude Candle Death Wishes"
-    default = 1
 
 
 class DWTimePieceRequirement(Range):
