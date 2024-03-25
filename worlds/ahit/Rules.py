@@ -2,7 +2,7 @@ from worlds.AutoWorld import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 from .Locations import location_table, zipline_unlocks, is_location_valid, contract_locations, \
     shop_locations, event_locs, snatcher_coins
-from .Types import HatType, ChapterIndex, hat_type_to_item, Difficulty, HatDLC
+from .Types import HatType, ChapterIndex, hat_type_to_item, Difficulty, HatDLC, HitType
 from BaseClasses import Location, Entrance, Region
 from typing import TYPE_CHECKING, List, Callable, Union, Dict
 
@@ -193,7 +193,6 @@ def set_rules(world: "HatInTimeWorld"):
     cost_increment: int = world.options.ChapterCostIncrement.value
     min_difference: int = world.options.ChapterCostMinDifference.value
     last_cost = 0
-    cost = 0
     loop_count = 0
 
     for chapter in chapter_list:
@@ -249,7 +248,7 @@ def set_rules(world: "HatInTimeWorld"):
         set_default_rift_rules(world)
 
     table = {**location_table, **event_locs}
-    location: Location
+    loc: Location
     for (key, data) in table.items():
         if not is_location_valid(world, key):
             continue
@@ -260,29 +259,33 @@ def set_rules(world: "HatInTimeWorld"):
         if data.dlc_flags & HatDLC.death_wish and key in snatcher_coins.keys():
             key = f"{key} ({data.region})"
 
-        location = world.multiworld.get_location(key, world.player)
+        loc = world.multiworld.get_location(key, world.player)
 
         for hat in data.required_hats:
             if hat is not HatType.NONE:
-                add_rule(location, lambda state, h=hat: can_use_hat(state, world, h))
+                add_rule(loc, lambda state, h=hat: can_use_hat(state, world, h))
 
         if data.hookshot:
-            add_rule(location, lambda state: can_use_hookshot(state, world))
-
-        if data.umbrella and world.options.UmbrellaLogic.value > 0:
-            add_rule(location, lambda state: state.has("Umbrella", world.player))
+            add_rule(loc, lambda state: can_use_hookshot(state, world))
 
         if data.paintings > 0 and world.options.ShuffleSubconPaintings.value > 0:
-            add_rule(location, lambda state, paintings=data.paintings: has_paintings(state, world, paintings))
+            add_rule(loc, lambda state, paintings=data.paintings: has_paintings(state, world, paintings))
 
-        if data.hit_requirement > 0:
-            if data.hit_requirement == 1:
-                add_rule(location, lambda state: can_hit(state, world))
-            elif data.hit_requirement == 2:  # Can bypass with Dweller Mask (dweller bells)
-                add_rule(location, lambda state: can_hit(state, world) or can_use_hat(state, world, HatType.DWELLER))
+        if data.hit_type is not HitType.none and world.options.UmbrellaLogic.value > 0:
+            if data.hit_type == HitType.umbrella:
+                add_rule(loc, lambda state: state.has("Umbrella", world.player))
+
+            elif data.hit_type == HitType.umbrella_or_brewing:
+                add_rule(loc, lambda state: state.has("Umbrella", world.player)
+                         or can_use_hat(state, world, HatType.BREWING))
+
+            elif data.hit_type == HitType.dweller_bell:
+                add_rule(loc, lambda state: state.has("Umbrella", world.player)
+                         or can_use_hat(state, world, HatType.BREWING)
+                         or can_use_hat(state, world, HatType.DWELLER))
 
         for misc in data.misc_required:
-            add_rule(location, lambda state, item=misc: state.has(item, world.player))
+            add_rule(loc, lambda state, item=misc: state.has(item, world.player))
 
     set_specific_rules(world)
 
@@ -434,7 +437,8 @@ def set_moderate_rules(world: "HatInTimeWorld"):
     for loc in world.multiworld.get_region("Queen Vanessa's Manor", world.player).locations:
         set_rule(loc, lambda state: has_paintings(state, world, 1))
 
-    set_rule(world.multiworld.get_location("Subcon Forest - Manor Rooftop", world.player), lambda state: has_paintings(state, world, 1))
+    set_rule(world.multiworld.get_location("Subcon Forest - Manor Rooftop", world.player),
+             lambda state: has_paintings(state, world, 1))
 
     # Moderate: get to Birdhouse/Yellow Band Hills without Brewing Hat
     set_rule(world.multiworld.get_entrance("-> The Birdhouse", world.player),
@@ -728,12 +732,6 @@ def set_subcon_rules(world: "HatInTimeWorld"):
     if painting_logic(world):
         add_rule(world.multiworld.get_location("Act Completion (Contractual Obligations)", world.player),
                  lambda state: has_paintings(state, world, 1, False))
-
-        for key in contract_locations:
-            if key == "Snatcher's Contract - The Subcon Well":
-                continue
-
-            add_rule(world.multiworld.get_location(key, world.player), lambda state: has_paintings(state, world, 1))
 
 
 def set_alps_rules(world: "HatInTimeWorld"):

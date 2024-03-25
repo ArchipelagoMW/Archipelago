@@ -1,6 +1,6 @@
 from worlds.AutoWorld import CollectionState
 from .Rules import can_use_hat, can_use_hookshot, can_hit, zipline_logic, get_difficulty, has_paintings
-from .Types import HatType, Difficulty, HatInTimeLocation, HatInTimeItem, LocData
+from .Types import HatType, Difficulty, HatInTimeLocation, HatInTimeItem, LocData, HitType
 from .DeathWishLocations import dw_prereqs, dw_candles
 from BaseClasses import Entrance, Location, ItemClassification
 from worlds.generic.Rules import add_rule, set_rule
@@ -14,17 +14,17 @@ if TYPE_CHECKING:
 
 # Any speedruns expect the player to have Sprint Hat
 dw_requirements = {
-    "Beat the Heat": LocData(umbrella=True),
+    "Beat the Heat": LocData(hit_type=HitType.umbrella),
     "So You're Back From Outer Space": LocData(hookshot=True),
     "Mafia's Jumps": LocData(required_hats=[HatType.ICE]),
     "Vault Codes in the Wind": LocData(required_hats=[HatType.SPRINT]),
 
-    "Security Breach": LocData(hit_requirement=1),
+    "Security Breach": LocData(hit_type=HitType.umbrella_or_brewing),
     "10 Seconds until Self-Destruct": LocData(hookshot=True),
     "Community Rift: Rhythm Jump Studio": LocData(required_hats=[HatType.ICE]),
 
-    "Speedrun Well": LocData(hookshot=True, hit_requirement=1),
-    "Boss Rush": LocData(umbrella=True, hookshot=True),
+    "Speedrun Well": LocData(hookshot=True, hit_type=HitType.umbrella_or_brewing),
+    "Boss Rush": LocData(hit_type=HitType.umbrella, hookshot=True),
     "Community Rift: Twilight Travels": LocData(hookshot=True, required_hats=[HatType.DWELLER]),
 
     "Bird Sanctuary": LocData(hookshot=True),
@@ -168,17 +168,21 @@ def set_dw_rules(world: "HatInTimeWorld"):
             for misc in data.misc_required:
                 add_rule(loc, lambda state, item=misc: state.has(item, world.player))
 
-            if data.umbrella and world.options.UmbrellaLogic.value > 0:
-                add_rule(loc, lambda state: state.has("Umbrella", world.player))
-
             if data.paintings > 0 and world.options.ShuffleSubconPaintings.value > 0:
                 add_rule(loc, lambda state, paintings=data.paintings: has_paintings(state, world, paintings))
 
-            if data.hit_requirement > 0:
-                if data.hit_requirement == 1:
-                    add_rule(loc, lambda state: can_hit(state, world))
-                elif data.hit_requirement == 2:  # Can bypass with Dweller Mask (dweller bells)
-                    add_rule(loc, lambda state: can_hit(state, world) or can_use_hat(state, world, HatType.DWELLER))
+            if data.hit_type is not HitType.none and world.options.UmbrellaLogic.value > 0:
+                if data.hit_type == HitType.umbrella:
+                    add_rule(loc, lambda state: state.has("Umbrella", world.player))
+
+                elif data.hit_type == HitType.umbrella_or_brewing:
+                    add_rule(loc, lambda state: state.has("Umbrella", world.player)
+                             or can_use_hat(state, world, HatType.BREWING))
+
+                elif data.hit_type == HitType.dweller_bell:
+                    add_rule(loc, lambda state: state.has("Umbrella", world.player)
+                             or can_use_hat(state, world, HatType.BREWING)
+                             or can_use_hat(state, world, HatType.DWELLER))
 
             main_rule = main_objective.access_rule
 

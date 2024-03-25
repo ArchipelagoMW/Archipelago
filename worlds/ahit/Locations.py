@@ -1,4 +1,4 @@
-from .Types import HatDLC, HatType, LocData, Difficulty
+from .Types import HatDLC, HatType, LocData, Difficulty, HitType
 from typing import Dict, TYPE_CHECKING
 from .Options import TasksanityCheckCount
 
@@ -112,7 +112,7 @@ def get_location_names() -> Dict[str, int]:
 
 
 ahit_locations = {
-    "Spaceship - Rumbi Abuse": LocData(2000301000, "Spaceship", hit_requirement=1),
+    "Spaceship - Rumbi Abuse": LocData(2000301000, "Spaceship", hit_type=HitType.umbrella_or_brewing),
 
     # 300000 range - Mafia Town/Batle of the Birds
     "Welcome to Mafia Town - Umbrella": LocData(2000301002, "Welcome to Mafia Town"),
@@ -168,15 +168,16 @@ ahit_locations = {
     "Dead Bird Studio - Side of House": LocData(2000305247, "Dead Bird Studio - Elevator Area"),
 
     "Dead Bird Studio - DJ Grooves Sign Chest": LocData(2000303901, "Dead Bird Studio - Post Elevator Area",
-                                                        hit_requirement=1),
+                                                        hit_type=HitType.umbrella_or_brewing),
 
     "Dead Bird Studio - Tightrope Chest": LocData(2000303898, "Dead Bird Studio - Post Elevator Area",
-                                                  hit_requirement=1),
+                                                  hit_type=HitType.umbrella_or_brewing),
 
-    "Dead Bird Studio - Tepee Chest": LocData(2000303899, "Dead Bird Studio - Post Elevator Area", hit_requirement=1),
+    "Dead Bird Studio - Tepee Chest": LocData(2000303899, "Dead Bird Studio - Post Elevator Area",
+                                              hit_type=HitType.umbrella_or_brewing),
 
     "Dead Bird Studio - Conductor Chest": LocData(2000303900, "Dead Bird Studio - Post Elevator Area",
-                                                  hit_requirement=1),
+                                                  hit_type=HitType.umbrella_or_brewing),
 
     "Murder on the Owl Express - Cafeteria": LocData(2000305313, "Murder on the Owl Express"),
     "Murder on the Owl Express - Luggage Room Top": LocData(2000305090, "Murder on the Owl Express"),
@@ -215,14 +216,14 @@ ahit_locations = {
     "Subcon Forest - Ice Cube Shack": LocData(2000324465, "Subcon Forest Area", paintings=1),
     "Subcon Forest - Swamp Gravestone": LocData(2000326296, "Subcon Forest Area",
                                                 required_hats=[HatType.BREWING], paintings=1),
-    
+
     "Subcon Forest - Swamp Near Well": LocData(2000324762, "Subcon Forest Area", paintings=1),
     "Subcon Forest - Swamp Tree A": LocData(2000324763, "Subcon Forest Area", paintings=1),
     "Subcon Forest - Swamp Tree B": LocData(2000324764, "Subcon Forest Area", paintings=1),
     "Subcon Forest - Swamp Ice Wall": LocData(2000324706, "Subcon Forest Area", paintings=1),
     "Subcon Forest - Swamp Treehouse": LocData(2000325468, "Subcon Forest Area", paintings=1),
     "Subcon Forest - Swamp Tree Chest": LocData(2000323728, "Subcon Forest Area", paintings=1),
-    
+
     "Subcon Forest - Burning House": LocData(2000324710, "Subcon Forest Area", paintings=2),
     "Subcon Forest - Burning Tree Climb": LocData(2000325079, "Subcon Forest Area", paintings=2),
     "Subcon Forest - Burning Stump Chest": LocData(2000323731, "Subcon Forest Area", paintings=2),
@@ -231,16 +232,18 @@ ahit_locations = {
     "Subcon Forest - Spider Bone Cage B": LocData(2000325080, "Subcon Forest Area", paintings=2),
     "Subcon Forest - Triple Spider Bounce": LocData(2000324765, "Subcon Forest Area", paintings=2),
     "Subcon Forest - Noose Treehouse": LocData(2000324856, "Subcon Forest Area", hookshot=True, paintings=2),
-    
+
     "Subcon Forest - Long Tree Climb Chest": LocData(2000323734, "Subcon Forest Area",
                                                      required_hats=[HatType.DWELLER], paintings=2),
-    
+
     "Subcon Forest - Boss Arena Chest": LocData(2000323735, "Subcon Forest Area"),
-    "Subcon Forest - Manor Rooftop": LocData(2000325466, "Subcon Forest Area", hit_requirement=2, paintings=1),
-    
+
+    "Subcon Forest - Manor Rooftop": LocData(2000325466, "Subcon Forest Area",
+                                             hit_type=HitType.dweller_bell, paintings=1),
+
     "Subcon Forest - Infinite Yarn Bush": LocData(2000325478, "Subcon Forest Area",
                                                   required_hats=[HatType.BREWING], paintings=2),
-    
+
     "Subcon Forest - Magnet Badge Bush": LocData(2000325479, "Subcon Forest Area",
                                                  required_hats=[HatType.BREWING], paintings=3),
 
@@ -267,19 +270,30 @@ ahit_locations = {
                                                         required_hats=[HatType.DWELLER],
                                                         hookshot=True,
                                                         paintings=3),
-    
-    "Subcon Well - Hookshot Badge Chest": LocData(2000324114, "The Subcon Well", hit_requirement=1, paintings=1),
-    "Subcon Well - Above Chest": LocData(2000324612, "The Subcon Well", hit_requirement=1, paintings=1),
-    "Subcon Well - On Pipe": LocData(2000324311, "The Subcon Well", hookshot=True, hit_requirement=1, paintings=1),
-    "Subcon Well - Mushroom": LocData(2000325318, "The Subcon Well", hit_requirement=1, paintings=1),
-    
-    "Queen Vanessa's Manor - Cellar": LocData(2000324841, "Queen Vanessa's Manor", hit_requirement=2, paintings=1),
 
-    "Queen Vanessa's Manor - Bedroom Chest": LocData(2000323808, "Queen Vanessa's Manor", hit_requirement=2,
-                                                     paintings=1),
+    "Subcon Well - Hookshot Badge Chest": LocData(2000324114, "The Subcon Well",
+                                                  hit_type=HitType.umbrella_or_brewing, paintings=1),
 
-    "Queen Vanessa's Manor - Hall Chest": LocData(2000323896, "Queen Vanessa's Manor", hit_requirement=2, paintings=1),
-    "Queen Vanessa's Manor - Chandelier": LocData(2000325546, "Queen Vanessa's Manor", hit_requirement=2, paintings=1),
+    "Subcon Well - Above Chest": LocData(2000324612, "The Subcon Well",
+                                         hit_type=HitType.umbrella_or_brewing, paintings=1),
+
+    "Subcon Well - On Pipe": LocData(2000324311, "The Subcon Well", hookshot=True,
+                                     hit_type=HitType.umbrella_or_brewing, paintings=1),
+
+    "Subcon Well - Mushroom": LocData(2000325318, "The Subcon Well",
+                                      hit_type=HitType.umbrella_or_brewing, paintings=1),
+
+    "Queen Vanessa's Manor - Cellar": LocData(2000324841, "Queen Vanessa's Manor",
+                                              hit_type=HitType.dweller_bell, paintings=1),
+
+    "Queen Vanessa's Manor - Bedroom Chest": LocData(2000323808, "Queen Vanessa's Manor",
+                                                     hit_type=HitType.dweller_bell, paintings=1),
+
+    "Queen Vanessa's Manor - Hall Chest": LocData(2000323896, "Queen Vanessa's Manor",
+                                                  hit_type=HitType.dweller_bell, paintings=1),
+
+    "Queen Vanessa's Manor - Chandelier": LocData(2000325546, "Queen Vanessa's Manor",
+                                                  hit_type=HitType.dweller_bell, paintings=1),
 
     # Alpine Skyline
     "Alpine Skyline - Goat Village: Below Hookpoint": LocData(2000334856, "Alpine Skyline Area (TIHS)"),
@@ -368,17 +382,19 @@ act_completions = {
     "Act Completion (She Came from Outer Space)": LocData(2000312262, "She Came from Outer Space"),
     "Act Completion (Down with the Mafia!)": LocData(2000311326, "Down with the Mafia!"),
     "Act Completion (Cheating the Race)": LocData(2000312318, "Cheating the Race", required_hats=[HatType.TIME_STOP]),
-    "Act Completion (Heating Up Mafia Town)": LocData(2000311481, "Heating Up Mafia Town", umbrella=True),
+    "Act Completion (Heating Up Mafia Town)": LocData(2000311481, "Heating Up Mafia Town", hit_type=HitType.umbrella),
     "Act Completion (The Golden Vault)": LocData(2000312250, "The Golden Vault"),
     "Act Completion (Time Rift - Bazaar)": LocData(2000312465, "Time Rift - Bazaar"),
     "Act Completion (Time Rift - Sewers)": LocData(2000312484, "Time Rift - Sewers"),
     "Act Completion (Time Rift - Mafia of Cooks)": LocData(2000311855, "Time Rift - Mafia of Cooks"),
 
-    "Act Completion (Dead Bird Studio)": LocData(2000311383, "Dead Bird Studio", hit_requirement=1),
+    "Act Completion (Dead Bird Studio)": LocData(2000311383, "Dead Bird Studio",
+                                                 hit_type=HitType.umbrella_or_brewing),
+
     "Act Completion (Murder on the Owl Express)": LocData(2000311544, "Murder on the Owl Express"),
     "Act Completion (Picture Perfect)": LocData(2000311587, "Picture Perfect"),
     "Act Completion (Train Rush)": LocData(2000312481, "Train Rush", hookshot=True),
-    "Act Completion (The Big Parade)": LocData(2000311157, "The Big Parade", umbrella=True),
+    "Act Completion (The Big Parade)": LocData(2000311157, "The Big Parade", hit_type=HitType.umbrella),
     "Act Completion (Award Ceremony)": LocData(2000311488, "Award Ceremony"),
     "Act Completion (Dead Bird Studio Basement)": LocData(2000312253, "Dead Bird Studio Basement", hookshot=True),
     "Act Completion (Time Rift - The Owl Express)": LocData(2000312807, "Time Rift - The Owl Express"),
@@ -387,18 +403,21 @@ act_completions = {
 
     "Act Completion (Contractual Obligations)": LocData(2000312317, "Contractual Obligations", paintings=1),
 
-    "Act Completion (The Subcon Well)": LocData(2000311160, "The Subcon Well", hookshot=True, hit_requirement=1,
-                                                paintings=1),
+    "Act Completion (The Subcon Well)": LocData(2000311160, "The Subcon Well",
+                                                hookshot=True, hit_type=HitType.umbrella_or_brewing, paintings=1),
 
-    "Act Completion (Toilet of Doom)": LocData(2000311984, "Toilet of Doom", hit_requirement=1, hookshot=True,
-                                               paintings=1),
+    "Act Completion (Toilet of Doom)": LocData(2000311984, "Toilet of Doom",
+                                               hit_type=HitType.umbrella_or_brewing, hookshot=True, paintings=1),
 
-    "Act Completion (Queen Vanessa's Manor)": LocData(2000312017, "Queen Vanessa's Manor", umbrella=True, paintings=1),
+    "Act Completion (Queen Vanessa's Manor)": LocData(2000312017, "Queen Vanessa's Manor",
+                                                      hit_type=HitType.umbrella, paintings=1),
 
     "Act Completion (Mail Delivery Service)": LocData(2000312032, "Mail Delivery Service",
                                                       required_hats=[HatType.SPRINT]),
 
-    "Act Completion (Your Contract has Expired)": LocData(2000311390, "Your Contract has Expired", umbrella=True),
+    "Act Completion (Your Contract has Expired)": LocData(2000311390, "Your Contract has Expired",
+                                                          hit_type=HitType.umbrella),
+
     "Act Completion (Time Rift - Pipe)": LocData(2000313069, "Time Rift - Pipe", hookshot=True),
     "Act Completion (Time Rift - Village)": LocData(2000313056, "Time Rift - Village"),
     "Act Completion (Time Rift - Sleepy Subcon)": LocData(2000312086, "Time Rift - Sleepy Subcon"),
@@ -408,13 +427,13 @@ act_completions = {
     "Act Completion (The Twilight Bell)": LocData(2000311540, "The Twilight Bell"),
     "Act Completion (The Windmill)": LocData(2000312263, "The Windmill"),
     "Act Completion (The Illness has Spread)": LocData(2000312022, "The Illness has Spread", hookshot=True),
-    
+
     "Act Completion (Time Rift - The Twilight Bell)": LocData(2000312399, "Time Rift - The Twilight Bell",
                                                               required_hats=[HatType.DWELLER]),
-    
+
     "Act Completion (Time Rift - Curly Tail Trail)": LocData(2000313335, "Time Rift - Curly Tail Trail",
                                                              required_hats=[HatType.ICE]),
-    
+
     "Act Completion (Time Rift - Alpine Skyline)": LocData(2000311777, "Time Rift - Alpine Skyline"),
 
     "Act Completion (The Finale)": LocData(2000311872, "The Finale", hookshot=True, required_hats=[HatType.DWELLER]),
@@ -693,9 +712,9 @@ shop_locations = {
 
 contract_locations = {
     "Snatcher's Contract - The Subcon Well": LocData(2000300200, "Contractual Obligations"),
-    "Snatcher's Contract - Toilet of Doom": LocData(2000300201, "Subcon Forest Area"),
-    "Snatcher's Contract - Queen Vanessa's Manor": LocData(2000300202, "Subcon Forest Area"),
-    "Snatcher's Contract - Mail Delivery Service": LocData(2000300203, "Subcon Forest Area"),
+    "Snatcher's Contract - Toilet of Doom": LocData(2000300201, "Subcon Forest Area", paintings=1),
+    "Snatcher's Contract - Queen Vanessa's Manor": LocData(2000300202, "Subcon Forest Area", paintings=1),
+    "Snatcher's Contract - Mail Delivery Service": LocData(2000300203, "Subcon Forest Area", paintings=1),
 }
 
 # Don't put any of the locations from peaks here, the rules for their entrances are set already
@@ -723,10 +742,10 @@ zero_jumps_hard = {
     "Time Rift - Bazaar (Zero Jumps)": LocData(0, "Time Rift - Bazaar",
                                                required_hats=[HatType.ICE], dlc_flags=HatDLC.death_wish),
 
-    "The Big Parade": LocData(0, "The Big Parade",
-                              umbrella=True,
-                              required_hats=[HatType.ICE],
-                              dlc_flags=HatDLC.death_wish),
+    "The Big Parade (Zero Jumps)": LocData(0, "The Big Parade",
+                                           hit_type=HitType.umbrella,
+                                           required_hats=[HatType.ICE],
+                                           dlc_flags=HatDLC.death_wish),
 
     "Time Rift - Pipe (Zero Jumps)": LocData(0, "Time Rift - Pipe", hookshot=True, dlc_flags=HatDLC.death_wish),
 
@@ -735,12 +754,12 @@ zero_jumps_hard = {
 
     "Time Rift - The Twilight Bell (Zero Jumps)": LocData(0, "Time Rift - The Twilight Bell",
                                                           required_hats=[HatType.ICE, HatType.DWELLER],
-                                                          hit_requirement=1,
+                                                          hit_type=HitType.umbrella_or_brewing,
                                                           dlc_flags=HatDLC.death_wish),
 
     "The Illness has Spread (Zero Jumps)": LocData(0, "The Illness has Spread",
                                                    required_hats=[HatType.ICE], hookshot=True,
-                                                   hit_requirement=1, dlc_flags=HatDLC.death_wish),
+                                                   hit_type=HitType.umbrella_or_brewing, dlc_flags=HatDLC.death_wish),
 
     "The Finale (Zero Jumps)": LocData(0, "The Finale",
                                        required_hats=[HatType.ICE, HatType.DWELLER],
@@ -766,7 +785,7 @@ zero_jumps_expert = {
                                          dlc_flags=HatDLC.death_wish),
     "The Twilight Bell (Zero Jumps)": LocData(0, "The Twilight Bell",
                                               required_hats=[HatType.ICE, HatType.DWELLER],
-                                              hit_requirement=1,
+                                              hit_type=HitType.umbrella_or_brewing,
                                               misc_required=["No Bonk Badge"],
                                               dlc_flags=HatDLC.death_wish),
 
@@ -795,7 +814,7 @@ zero_jumps = {
 
     "Dead Bird Studio (Zero Jumps)": LocData(0, "Dead Bird Studio",
                                              required_hats=[HatType.ICE],
-                                             hit_requirement=1,
+                                             hit_type=HitType.umbrella_or_brewing,
                                              dlc_flags=HatDLC.death_wish),
 
     "Murder on the Owl Express (Zero Jumps)": LocData(0, "Murder on the Owl Express",
@@ -814,13 +833,13 @@ zero_jumps = {
                                                     dlc_flags=HatDLC.death_wish),
 
     "Your Contract has Expired (Zero Jumps)": LocData(0, "Your Contract has Expired",
-                                                      umbrella=True,
+                                                      hit_type=HitType.umbrella,
                                                       dlc_flags=HatDLC.death_wish),
 
     # No ice hat/painting required in Expert
     "Toilet of Doom (Zero Jumps)": LocData(0, "Toilet of Doom",
                                            hookshot=True,
-                                           hit_requirement=1,
+                                           hit_type=HitType.umbrella_or_brewing,
                                            required_hats=[HatType.ICE],
                                            paintings=1,
                                            dlc_flags=HatDLC.death_wish),
@@ -852,7 +871,10 @@ zero_jumps = {
 snatcher_coins = {
     "Snatcher Coin - Top of HQ": LocData(0, "Down with the Mafia!", dlc_flags=HatDLC.death_wish),
     "Snatcher Coin - Top of HQ": LocData(0, "Cheating the Race", dlc_flags=HatDLC.death_wish),
-    "Snatcher Coin - Top of HQ": LocData(0, "Heating Up Mafia Town", umbrella=True, dlc_flags=HatDLC.death_wish),
+
+    "Snatcher Coin - Top of HQ": LocData(0, "Heating Up Mafia Town",
+                                         hit_type=HitType.umbrella, dlc_flags=HatDLC.death_wish),
+
     "Snatcher Coin - Top of HQ": LocData(0, "The Golden Vault", dlc_flags=HatDLC.death_wish),
     "Snatcher Coin - Top of HQ": LocData(0, "Beat the Heat", dlc_flags=HatDLC.death_wish),
 
@@ -879,7 +901,7 @@ snatcher_coins = {
 
     "Snatcher Coin - Swamp Tree": LocData(0, "Speedrun Well", hookshot=True, dlc_flags=HatDLC.death_wish),
 
-    "Snatcher Coin - Manor Roof": LocData(0, "Subcon Forest Area", hit_requirement=2, paintings=1,
+    "Snatcher Coin - Manor Roof": LocData(0, "Subcon Forest Area", hit_type=HitType.dweller_bell, paintings=1,
                                           dlc_flags=HatDLC.death_wish),
 
     "Snatcher Coin - Giant Time Piece": LocData(0, "Subcon Forest Area", paintings=3, dlc_flags=HatDLC.death_wish),
