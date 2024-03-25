@@ -397,6 +397,11 @@ location_table: Dict[str, KH1LocationData] = {
     "Deep Jungle Bamboo Thicket Save Gorillas":                                         KH1LocationData("Misc",       265_6367),
     "Deep Jungle Climbing Trees Save Gorillas":                                         KH1LocationData("Misc",       265_6368),
     "Olympus Coliseum Olympia Chest":                                                   KH1LocationData("Misc",       265_6369),
+    "Deep Jungle Jungle Slider 10 Fruits":                                              KH1LocationData("Misc",       265_6370),
+    "Deep Jungle Jungle Slider 20 Fruits":                                              KH1LocationData("Misc",       265_6371),
+    "Deep Jungle Jungle Slider 30 Fruits":                                              KH1LocationData("Misc",       265_6372),
+    "Deep Jungle Jungle Slider 40 Fruits":                                              KH1LocationData("Misc",       265_6373),
+    "Deep Jungle Jungle Slider 50 Fruits":                                              KH1LocationData("Misc",       265_6374),
     
     "Traverse Town Synth Log":                                                          KH1LocationData("Synth",      265_6401),
     "Traverse Town Synth Cloth":                                                        KH1LocationData("Synth",      265_6402),

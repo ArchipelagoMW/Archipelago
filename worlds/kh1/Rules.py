@@ -500,6 +500,11 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
     multiworld.get_location("Deep Jungle Bamboo Thicket Save Gorillas"                                     , player).access_rule = lambda state: has_slides(state, player)
     multiworld.get_location("Deep Jungle Climbing Trees Save Gorillas"                                     , player).access_rule = lambda state: has_slides(state, player)
     multiworld.get_location("Olympus Coliseum Olympia Chest"                                               , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup") and has_x_worlds(state, player, 7)
+    multiworld.get_location("Deep Jungle Jungle Slider 10 Fruits"                                          , player).access_rule = lambda state: has_item(state, player, "Slide 1")
+    multiworld.get_location("Deep Jungle Jungle Slider 20 Fruits"                                          , player).access_rule = lambda state: has_item(state, player, "Slide 1")
+    multiworld.get_location("Deep Jungle Jungle Slider 30 Fruits"                                          , player).access_rule = lambda state: has_item(state, player, "Slide 1")
+    multiworld.get_location("Deep Jungle Jungle Slider 40 Fruits"                                          , player).access_rule = lambda state: has_item(state, player, "Slide 1")
+    multiworld.get_location("Deep Jungle Jungle Slider 50 Fruits"                                          , player).access_rule = lambda state: has_item(state, player, "Slide 1")
 
     multiworld.get_location("Traverse Town Synth Log"                                                      , player).access_rule = lambda state: has_at_least(state, player, "Material", 6) and has_item(state, player, "Green Trinity")
     multiworld.get_location("Traverse Town Synth Cloth"                                                    , player).access_rule = lambda state: has_at_least(state, player, "Material", 6) and has_item(state, player, "Green Trinity")
