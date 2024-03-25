@@ -75,7 +75,7 @@ class Goal(Choice):
     Postcards: Turn in all 10 postcards in Traverse Town
     Final Ansem: Enter End of the World and defeat Ansem as normal
     Puppies: Rescue and return all 99 puppies in Traverse Town.
-    Super Boss Hunt: Ansem Reports are set to appear as rewards for defeating Phantom, Kurt Zisa, Sephiroth and Unknown.  Forces require Final Ansem on.
+    Super Boss Hunt: Ansem Reports are set to appear as rewards for defeating Phantom, Kurt Zisa, Sephiroth, Ice Titan, and Unknown.  Forces require Final Ansem on.
     """
     display_name = "Goal"
     option_sephiroth = 0
