@@ -1,4 +1,5 @@
 from typing import List, TYPE_CHECKING
+from schema import Schema
 from dataclasses import dataclass
 from worlds.AutoWorld import PerGameCommonOptions
 from Options import Range, Toggle, DeathLink, Choice, OptionDict, DefaultOnToggle
