@@ -625,7 +625,7 @@ island_fish_bundle = IslandBundleTemplate(CCRoom.fish_tank, BundleName.island_fi
 tackle_items = [spinner, dressed_spinner, trap_bobber, cork_bobber, lead_bobber, treasure_hunter, barbed_hook, curiosity_lure, quality_bobber]
 tackle_bundle = IslandBundleTemplate(CCRoom.fish_tank, BundleName.tackle, tackle_items, 3, 2)
 
-bait_items = [bait, magnet, wild_bait, magic_bait, challenge_bait]
+bait_items = [bait, magnet, wild_bait, magic_bait, challenge_bait, deluxe_bait]
 bait_bundle = IslandBundleTemplate(CCRoom.fish_tank, BundleName.bait, bait_items, 2, 2)
 
 deep_fishing_items = [blobfish, spook_fish, midnight_squid, sea_cucumber, super_cucumber, octopus, pearl, seaweed]
