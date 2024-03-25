@@ -49,7 +49,7 @@ class BigBossesToBeat(Choice):
 class MiniBossesToBeat(Choice):
     """
     A number of Minibosses to beat before having access to the creator (the final boss). Mini bosses are
-    "Nautilus Prime", "Blaster Peg Prime", "Mermog", "Mithalan priests", "Octopus Prime", "Crabbius Maximus",
+    "Nautilus Prime", "Blaster Peg Prime", "Mergog", "Mithalan priests", "Octopus Prime", "Crabbius Maximus",
     "Mantis Shrimp Prime" and "King Jellyfish God Prime". Note that the Energy statue and Simon says are not
     mini bosses.
     """

@@ -93,7 +93,7 @@ def _has_mini_bosses(state, player: int) -> bool:
     """`player` in `state` has beated every big bosses"""
     return (state.has("Nautilus Prime beated", player) and
             state.has("Blaster Peg Prime beated", player) and
-            state.has("Mermog beated", player) and
+            state.has("Mergog beated", player) and
             state.has("Mithalan priests beated", player) and
             state.has("Octopus Prime beated", player) and
             state.has("Crabbius Maximus beated", player) and
@@ -843,8 +843,8 @@ class AquariaRegions:
                                   "Beating Blaster Peg Prime",
                                   "Blaster Peg Prime beated")
         self.__add_event_location(self.mermog_boss,
-                                  "Beating Mermog",
-                                  "Mermog beated")
+                                  "Beating Mergog",
+                                  "Mergog beated")
         self.__add_event_location(self.cathedral_l_tube,
                                   "Beating Mithalan priests",
                                   "Mithalan priests beated")
