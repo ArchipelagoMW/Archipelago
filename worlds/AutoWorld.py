@@ -3,7 +3,6 @@ from __future__ import annotations
 import hashlib
 import logging
 import pathlib
-import random
 import re
 import sys
 import time
@@ -11,8 +10,11 @@ from dataclasses import make_dataclass
 from typing import (Any, Callable, ClassVar, Dict, FrozenSet, List, Mapping,
                     Optional, Set, TextIO, Tuple, TYPE_CHECKING, Type, Union)
 
-from Options import PerGameCommonOptions
-from BaseClasses import CollectionState
+from Options import ExcludeLocations, ItemLinks, LocalItems, NonLocalItems, PerGameCommonOptions, \
+    PriorityLocations, \
+    StartHints, \
+    StartInventory, StartInventoryPool, StartLocationHints
+from BaseClasses import CollectionState, OptionGroup
 
 if TYPE_CHECKING:
     import random
@@ -118,6 +120,29 @@ class AutoLogicRegister(type):
         return new_class
 
 
+class WebWorldRegister(type):
+    def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> WebWorldRegister:
+        # don't allow an option to appear in multiple groups, allow "Item & Location Options" to appear anywhere by the
+        # dev, putting it at the end if they don't define options in it
+        option_groups: List[OptionGroup] = dct.get("option_groups", [])
+        item_and_loc_options = [LocalItems, NonLocalItems, StartInventory, StartInventoryPool, StartHints,
+                                StartLocationHints, ExcludeLocations, PriorityLocations, ItemLinks]
+        seen_options = []
+        item_group_in_list = False
+        for group in option_groups:
+            assert group.name != "Game Options", "Game Options is a pre-determined group and can not be defined."
+            if group.name == "Item & Location Options":
+                group.options.extend(item_and_loc_options)
+                item_group_in_list = True
+            assert len(group.options) == len(set(group.options)), f"Duplicate options in option group {group.name}"
+            for option in group.options:
+                assert option not in seen_options, f"{option} found in two option groups"
+                seen_options.append(option)
+        if not item_group_in_list:
+            option_groups.append(OptionGroup("Item & Location Options", item_and_loc_options))
+        return super().__new__(mcs, name, bases, dct)
+
+
 def _timed_call(method: Callable[..., Any], *args: Any,
                 multiworld: Optional["MultiWorld"] = None, player: Optional[int] = None) -> Any:
     start = time.perf_counter()
@@ -172,7 +197,7 @@ def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
             _timed_call(stage_callable, multiworld, *args)
 
 
-class WebWorld:
+class WebWorld(metaclass=WebWorldRegister):
     """Webhost integration"""
 
     options_page: Union[bool, str] = True
@@ -193,6 +218,9 @@ class WebWorld:
 
     options_presets: Dict[str, Dict[str, Any]] = {}
     """A dictionary containing a collection of developer-defined game option presets."""
+
+    option_groups: ClassVar[List[OptionGroup]] = []
+    """Ordered list of option groupings. Any options not set in a group will be placed in a pre-built "Game Options"."""
 
 
 class World(metaclass=AutoWorldRegister):
