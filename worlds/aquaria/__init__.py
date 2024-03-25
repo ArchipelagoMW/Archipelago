@@ -69,6 +69,13 @@ class AquariaWorld(World):
         {name: data[0] for name, data in item_table.items()}
     "The name and associated ID of each item of the world"
 
+    item_name_groups = {
+        "Damage": {"Energy form", "Nature form", "Beast form",
+                   "Li and Li song", "Baby nautilus", "Baby piranha",
+                   "Baby blaster", "Baby dumbo"},
+    }
+    """Grouping item make it easier to find them"""
+
     location_name_to_id = location_table
     "The name and associated ID of each location of the world"
 

@@ -158,7 +158,7 @@ item_table = {
     "Healing poultice x 2": (698106, 2, ItemType.NORMAL, ItemGroup.RECIPE),
     "Hot soup x 2": (698107, 3, ItemType.PROGRESSION, ItemGroup.RECIPE),
     "Leadership roll x 2": (698108, 1, ItemType.NORMAL, ItemGroup.RECIPE),
-    "Leaf poultice x 3": (698109, 1, ItemType.PROGRESSION, ItemGroup.RECIPE),
+    "Leaf poultice x 3": (698109, 2, ItemType.PROGRESSION, ItemGroup.RECIPE),
     "Plant leaf x 2": (698110, 2, ItemType.NORMAL, ItemGroup.INGREDIENT),
     "Plant leaf x 3": (698111, 4, ItemType.NORMAL, ItemGroup.INGREDIENT),
     "Rotten meat x 2": (698112, 1, ItemType.JUNK, ItemGroup.INGREDIENT),
@@ -166,4 +166,14 @@ item_table = {
     "Sea loaf x 2": (698114, 1, ItemType.NORMAL, ItemGroup.RECIPE),
     "Small bone x 3": (698115, 3, ItemType.NORMAL, ItemGroup.INGREDIENT),
     "Small egg x 2": (698116, 1, ItemType.NORMAL, ItemGroup.INGREDIENT),
+    "Li and Li song": (698117, 1, ItemType.PROGRESSION, ItemGroup.SONG),
+    "Shield song": (698118, 1, ItemType.NORMAL, ItemGroup.SONG),
+    "Beast form": (698119, 1, ItemType.PROGRESSION, ItemGroup.SONG),
+    "Sun form": (698120, 1, ItemType.PROGRESSION, ItemGroup.SONG),
+    "Nature form": (698121, 1, ItemType.PROGRESSION, ItemGroup.SONG),
+    "Energy form": (698122, 1, ItemType.PROGRESSION, ItemGroup.SONG),
+    "Bind song": (698123, 1, ItemType.PROGRESSION, ItemGroup.SONG),
+    "Fish form": (698124, 1, ItemType.PROGRESSION, ItemGroup.SONG),
+    "Spirit form": (698125, 1, ItemType.PROGRESSION, ItemGroup.SONG),
 }
+
