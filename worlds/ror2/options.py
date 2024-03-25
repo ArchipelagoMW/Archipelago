@@ -151,6 +151,17 @@ class DLC_SOTV(Toggle):
     display_name = "Enable DLC - SOTV"
 
 
+class RequireStages(DefaultOnToggle):
+    """Add Stage items to the pool to block access to the next set of environments."""
+    display_name = "Require Stages"
+
+
+class ProgressiveStages(DefaultOnToggle):
+    """This will convert Stage items to be a progressive item. For example instead of "Stage 2" it would be
+     "Progressive Stage" """
+    display_name = "Progressive Stages"
+
+
 class GreenScrap(Range):
     """Weight of Green Scraps in the item pool.
 
@@ -378,6 +389,8 @@ class ROR2Options(PerGameCommonOptions):
     start_with_revive: StartWithRevive
     final_stage_death: FinalStageDeath
     dlc_sotv: DLC_SOTV
+    require_stages: RequireStages
+    progressive_stages: ProgressiveStages
     death_link: DeathLink
     item_pickup_step: ItemPickupStep
     shrine_use_step: ShrineUseStep
