@@ -369,12 +369,12 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         })
         # @formatter:on
 
-        harvest_rules = {
-            item_name: self.source.has_access_to_any(harvest_item.harvest_sources)
-            for item_name, harvest_item in self.content.harvestables.items()
+        content_rules = {
+            item_name: self.source.has_access_to_any(game_item.sources)
+            for item_name, game_item in self.content.game_items.items()
         }
 
-        self.registry.item_rules.update(harvest_rules)
+        self.registry.item_rules.update(content_rules)
         self.registry.item_rules.update(self.registry.fish_rules)
         self.registry.item_rules.update(self.registry.museum_rules)
         self.registry.item_rules.update(self.registry.sapling_rules)

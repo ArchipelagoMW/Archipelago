@@ -6,7 +6,7 @@ from typing import Dict, Iterable, Set, Any, Mapping
 
 from .feature import fishsanity, friendsanity
 from ..data.fish_data import FishItem
-from ..data.harvest import HarvestItem, HarvestSource
+from ..data.game_item import GameItem, ItemSource
 from ..data.villagers_data import Villager
 
 NO_CONTENT = MappingProxyType({})
@@ -19,9 +19,7 @@ class StardewContent:
 
     # regions -> To be used with can reach rule
 
-    harvestables: Dict[str, HarvestItem] = field(default_factory=dict)
-    """Harvestables contains both crops and forageables, but also fruits from trees, the cave farm and stuff harvested from tapping like maple syrup."""
-
+    game_items: Dict[str, GameItem] = field(default_factory=dict)
     fishes: Dict[str, FishItem] = field(default_factory=dict)
     villagers: Dict[str, Villager] = field(default_factory=dict)
     skills: Dict[str, Any] = field(default_factory=dict)
@@ -47,9 +45,15 @@ class ContentPack:
     # def item_hook
     # ...
 
-    harvest_sources: Mapping[str, Iterable[HarvestSource]] = NO_CONTENT
+    harvest_sources: Mapping[str, Iterable[ItemSource]] = NO_CONTENT
+    """Harvest sources contains both crops and forageables, but also fruits from trees, the cave farm and stuff harvested from tapping like maple syrup."""
 
-    def harvestable_hook(self, content: StardewContent):
+    def harvest_source_hook(self, content: StardewContent):
+        ...
+
+    shop_sources: Mapping[str, Iterable[ItemSource]] = NO_CONTENT
+
+    def shop_source_hook(self, content: StardewContent):
         ...
 
     fishes: Iterable[FishItem] = ()

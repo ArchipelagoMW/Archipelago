@@ -1,22 +1,19 @@
 from dataclasses import dataclass, field
-from typing import List, Tuple, Protocol, Iterable, Sequence
+from typing import Tuple, Sequence
 
+from .game_item import ItemSource
 from ..strings.season_names import Season
 
 
-class HarvestSource(Protocol):
-    ...
-
-
 @dataclass(frozen=True)
-class ForagingSource(HarvestSource):
+class ForagingSource(ItemSource):
     seasons: Tuple[str, ...] = field(default=Season.all, kw_only=True)
     regions: Tuple[str, ...] = field(kw_only=True)
     requires_hoe: bool = field(default=False, kw_only=True)
 
 
 @dataclass(frozen=True)
-class SeasonalForagingSource(HarvestSource):
+class SeasonalForagingSource(ItemSource):
     season: str = field(kw_only=True)
     days: Sequence[int] = field(kw_only=True)
     regions: Tuple[str, ...] = field(kw_only=True)
@@ -26,19 +23,10 @@ class SeasonalForagingSource(HarvestSource):
 
 
 @dataclass(frozen=True)
-class FruitBatsSource(HarvestSource):
+class FruitBatsSource(ItemSource):
     ...
 
 
 @dataclass(frozen=True)
-class MushroomCaveSource(HarvestSource):
+class MushroomCaveSource(ItemSource):
     ...
-
-
-@dataclass(frozen=True)
-class HarvestItem:
-    name: str
-    harvest_sources: List[HarvestSource] = field(default_factory=list)
-
-    def add_sources(self, sources: Iterable[HarvestSource]):
-        self.harvest_sources.extend(sources)
