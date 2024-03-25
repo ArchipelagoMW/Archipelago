@@ -13,9 +13,8 @@ from .skill_logic import SkillLogicMixin
 from .special_order_logic import SpecialOrderLogicMixin
 from .. import options
 from ..data.craftable_data import CraftingRecipe, all_crafting_recipes_by_name
-from ..data.recipe_data import StarterSource, ShopSource, SkillSource, FriendshipSource
 from ..data.recipe_source import CutsceneSource, ShopTradeSource, ArchipelagoSource, LogicSource, SpecialOrderSource, \
-    FestivalShopSource, QuestSource
+    FestivalShopSource, QuestSource, StarterSource, ShopSource, SkillSource, MasterySource, FriendshipSource
 from ..locations import locations_by_tag, LocationTags
 from ..options import Craftsanity, SpecialOrderLocations, ExcludeGingerIsland
 from ..stardew_rule import StardewRule, True_, False_
@@ -74,6 +73,8 @@ SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin, QuestLogicMixin]]):
             return self.logic.money.can_spend_at(recipe.source.region, recipe.source.price)
         if isinstance(recipe.source, SkillSource):
             return self.logic.skill.has_level(recipe.source.skill, recipe.source.level)
+        if isinstance(recipe.source, MasterySource):
+            return self.logic.skill.has_mastery(recipe.source.skill)
         if isinstance(recipe.source, CutsceneSource):
             return self.logic.region.can_reach(recipe.source.region) & self.logic.relationship.has_hearts(recipe.source.friend, recipe.source.hearts)
         if isinstance(recipe.source, FriendshipSource):

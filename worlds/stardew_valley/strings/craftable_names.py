@@ -90,6 +90,7 @@ class Consumable:
     rain_totem = "Rain Totem"
     mystery_box = "Mystery Box"
     gold_mystery_box = "Golden Mystery Box"
+    treasure_totem = "Treasure Totem"
 
 
 class Lighting:
@@ -126,6 +127,11 @@ class Sign:
     dark = "Dark Sign"
 
 
+class Statue:
+    blessings = "Statue Of Blessings"
+    dwarf_king = "Statue Of The Dwarf King"
+
+
 class Craftable:
     garden_pot = "Garden Pot"
     scarecrow = "Scarecrow"
@@ -139,6 +145,7 @@ class Craftable:
     farm_computer = "Farm Computer"
     hopper = "Hopper"
     cookout_kit = "Cookout Kit"
+    challenge_bait = "Challenge Bait"
 
 
 class ModEdible:

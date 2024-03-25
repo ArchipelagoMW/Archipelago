@@ -50,9 +50,10 @@ class TestBaseLocationDependencies(SVTestBase):
 
 class TestBaseItemGeneration(SVTestBase):
     options = {
-        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
         options.SeasonRandomization.internal_name: options.SeasonRandomization.option_progressive,
+        options.SkillProgression.internal_name: options.SkillProgression.option_progressive_with_masteries,
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
+        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
         options.Shipsanity.internal_name: options.Shipsanity.option_everything,
         options.Chefsanity.internal_name: options.Chefsanity.option_all,
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
@@ -78,12 +79,13 @@ class TestBaseItemGeneration(SVTestBase):
 
 class TestNoGingerIslandModItemGeneration(SVTestBase):
     options = {
-        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
         options.SeasonRandomization.internal_name: options.SeasonRandomization.option_progressive,
-        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
+        options.SkillProgression.internal_name: options.SkillProgression.option_progressive_with_masteries,
+        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
         options.Shipsanity.internal_name: options.Shipsanity.option_everything,
         options.Chefsanity.internal_name: options.Chefsanity.option_all,
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
         options.Mods.internal_name: all_mods
     }
 

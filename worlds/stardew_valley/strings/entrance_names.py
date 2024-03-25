@@ -42,6 +42,7 @@ class Entrance:
     forest_to_marnie_ranch = "Forest to Marnie's Ranch"
     forest_to_leah_cottage = "Forest to Leah's Cottage"
     forest_to_sewer = "Forest to Sewer"
+    forest_to_mastery_cave = "Forest to Mastery Cave"
     buy_from_traveling_merchant = "Buy from Traveling Merchant"
     buy_from_traveling_merchant_sunday = "Buy from Traveling Merchant Sunday"
     buy_from_traveling_merchant_monday = "Buy from Traveling Merchant Monday"

@@ -21,6 +21,7 @@ class ArtisanGood:
     caviar = "Caviar"
     green_tea = "Green Tea"
     mead = "Mead"
+    mystic_syrup = "Mystic Syrup"
 
 
 class ModArtisanGood:

@@ -74,6 +74,7 @@ class Region:
     alex_house = "Alex's House"
     elliott_house = "Elliott's House"
     ranch = "Marnie's Ranch"
+    mastery_cave = "Mastery Cave"
     traveling_cart = "Traveling Cart"
     traveling_cart_sunday = "Traveling Cart Sunday"
     traveling_cart_monday = "Traveling Cart Monday"

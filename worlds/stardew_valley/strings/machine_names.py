@@ -26,4 +26,7 @@ class Machine:
     solar_panel = "Solar Panel"
     tapper = "Tapper"
     worm_bin = "Worm Bin"
+    heavy_furnace = "Heavy Furnace"
+    anvil = "Anvil"
+    mini_forge = "Mini Forge"
 

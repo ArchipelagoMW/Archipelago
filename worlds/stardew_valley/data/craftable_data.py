@@ -2,10 +2,11 @@ from typing import Dict, List, Optional
 
 from ..mods.mod_data import ModNames
 from .recipe_source import RecipeSource, StarterSource, QueenOfSauceSource, ShopSource, SkillSource, FriendshipSource, ShopTradeSource, CutsceneSource, \
-    ArchipelagoSource, LogicSource, SpecialOrderSource, FestivalShopSource, QuestSource
+    ArchipelagoSource, LogicSource, SpecialOrderSource, FestivalShopSource, QuestSource, MasterySource
 from ..strings.artisan_good_names import ArtisanGood
-from ..strings.craftable_names import Bomb, Fence, Sprinkler, WildSeeds, Floor, Fishing, Ring, Consumable, Edible, Lighting, Storage, Furniture, Sign, Craftable, \
-    ModEdible, ModCraftable, ModMachine, ModFloor, ModConsumable
+from ..strings.craftable_names import Bomb, Fence, Sprinkler, WildSeeds, Floor, Fishing, Ring, Consumable, Edible, Lighting, Storage, Furniture, Sign, \
+    Craftable, \
+    ModEdible, ModCraftable, ModMachine, ModFloor, ModConsumable, Statue
 from ..strings.crop_names import Fruit, Vegetable
 from ..strings.currency_names import Currency
 from ..strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
@@ -58,6 +59,11 @@ def cutscene_recipe(name: str, region: str, friend: str, hearts: int, ingredient
 
 def skill_recipe(name: str, skill: str, level: int, ingredients: Dict[str, int], mod_name: Optional[str] = None) -> CraftingRecipe:
     source = SkillSource(skill, level)
+    return create_recipe(name, ingredients, source, mod_name)
+
+
+def mastery_recipe(name: str, skill: str, ingredients: Dict[str, int], mod_name: Optional[str] = None) -> CraftingRecipe:
+    source = MasterySource(skill)
     return create_recipe(name, ingredients, source, mod_name)
 
 
@@ -268,6 +274,15 @@ farm_computer = special_order_recipe(Craftable.farm_computer, SpecialOrder.aquat
 hopper = ap_recipe(Craftable.hopper, {Material.hardwood: 10, MetalBar.iridium: 1, MetalBar.radioactive: 1})
 
 cookout_kit = skill_recipe(Craftable.cookout_kit, Skill.foraging, 3, {Material.wood: 15, Material.fiber: 10, Material.coal: 3})
+
+statue_of_blessings = mastery_recipe(Statue.blessings, Skill.farming, {Material.sap: 999, Material.fiber: 999, Material.stone: 999})
+statue_of_dwarf_king = mastery_recipe(Statue.dwarf_king, Skill.mining, {MetalBar.iridium: 20})
+heavy_furnace = mastery_recipe(Machine.heavy_furnace, Skill.mining, {Machine.furnace: 2, MetalBar.iron: 3, Material.stone: 50})
+mystic_tree_seed = mastery_recipe(TreeSeed.mystic, Skill.foraging, {TreeSeed.acorn: 5, TreeSeed.maple: 5, TreeSeed.pine: 5, TreeSeed.mahogany: 5})
+treasure_totem = mastery_recipe(Consumable.treasure_totem, Skill.foraging, {Material.hardwood: 5, ArtisanGood.mystic_syrup: 1, Material.moss: 10})
+challenge_bait = mastery_recipe(Craftable.challenge_bait, Skill.fishing, {Fossil.bone_fragment: 5, Material.moss: 2})
+anvil = mastery_recipe(Machine.anvil, Skill.combat, {MetalBar.iron: 50})
+mini_forge = mastery_recipe(Machine.mini_forge, Skill.combat, {Forageable.dragon_tooth: 5, MetalBar.iron: 10, MetalBar.gold: 10, MetalBar.iridium: 5})
 
 travel_charm = shop_recipe(ModCraftable.travel_core, Region.adventurer_guild, 250, {Loot.solar_essence: 1, Loot.void_essence: 1}, ModNames.magic)
 preservation_chamber = skill_recipe(ModMachine.preservation_chamber, ModSkill.archaeology, 2, {MetalBar.copper: 1, Material.wood: 15, ArtisanGood.oak_resin: 30},

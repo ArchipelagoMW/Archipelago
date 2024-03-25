@@ -148,6 +148,10 @@ def set_skills_rules(logic: StardewLogic, multiworld, player, world_options: Sta
     for i in range(1, 11):
         set_vanilla_skill_rule_for_level(logic, multiworld, player, i)
         set_modded_skill_rule_for_level(logic, multiworld, player, mods, i)
+    if world_options.skill_progression != SkillProgression.option_progressive_with_masteries:
+        return
+    for skill in [Skill.farming, Skill.fishing, Skill.foraging, Skill.mining, Skill.combat]:
+        MultiWorldRules.set_rule(multiworld.get_location(f"{skill} Mastery", player), logic.skill.can_earn_mastery_experience)
 
 
 def set_vanilla_skill_rule_for_level(logic: StardewLogic, multiworld, player, level: int):
@@ -226,6 +230,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_entrance_rule(multiworld, player, Entrance.farmhouse_cooking, logic.cooking.can_cook_in_kitchen)
     set_entrance_rule(multiworld, player, Entrance.shipping, logic.shipping.can_use_shipping_bin)
     set_entrance_rule(multiworld, player, Entrance.watch_queen_of_sauce, logic.action.can_watch(Channel.queen_of_sauce))
+    set_entrance_rule(multiworld, player, Entrance.forest_to_mastery_cave, logic.skill.has_all_skills_maxed())
 
 
 def set_dangerous_mine_rules(logic, multiworld, player, world_options: StardewValleyOptions):

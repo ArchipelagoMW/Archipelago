@@ -6,15 +6,17 @@ from . import SVTestBase, allsanity_options_without_mods, \
 from .. import items, location_table, options
 from ..items import Group, item_table
 from ..locations import LocationTags
-from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, ToolProgression
+from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, ToolProgression, \
+    SkillProgression
 from ..strings.region_names import Region
 
 
 class TestBaseItemGeneration(SVTestBase):
     options = {
-        Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
         SeasonRandomization.internal_name: SeasonRandomization.option_progressive,
+        SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
         SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
+        Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
         Shipsanity.internal_name: Shipsanity.option_everything,
         Chefsanity.internal_name: Chefsanity.option_all,
         Craftsanity.internal_name: Craftsanity.option_all,
@@ -62,12 +64,13 @@ class TestBaseItemGeneration(SVTestBase):
 
 class TestNoGingerIslandItemGeneration(SVTestBase):
     options = {
-        Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
         SeasonRandomization.internal_name: SeasonRandomization.option_progressive,
-        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
+        SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
+        Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
         Shipsanity.internal_name: Shipsanity.option_everything,
         Chefsanity.internal_name: Chefsanity.option_all,
         Craftsanity.internal_name: Craftsanity.option_all,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
     }
 
     def test_all_progression_items_except_island_are_added_to_the_pool(self):

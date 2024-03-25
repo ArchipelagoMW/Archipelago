@@ -15,7 +15,7 @@ from .. import options
 from ..data import all_crops
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_skills_levels import get_mod_skill_levels
-from ..stardew_rule import StardewRule, True_, False_, true_
+from ..stardew_rule import StardewRule, True_, False_, true_, And
 from ..strings.craftable_names import Fishing
 from ..strings.machine_names import Machine
 from ..strings.performance_names import Performance
@@ -25,6 +25,7 @@ from ..strings.skill_names import Skill, all_mod_skills
 from ..strings.tool_names import ToolMaterial, Tool
 
 fishing_regions = (Region.beach, Region.town, Region.forest, Region.mountain, Region.island_south, Region.island_west)
+vanilla_skill_items = ("Farming Level", "Mining Level", "Foraging Level", "Fishing Level", "Combat Level")
 
 
 class SkillLogicMixin(BaseLogicMixin):
@@ -92,7 +93,7 @@ CombatLogicMixin, CropLogicMixin, MagicLogicMixin]]):
             return True_()
 
         if self.options.skill_progression == options.SkillProgression.option_progressive:
-            skills_items = ("Farming Level", "Mining Level", "Foraging Level", "Fishing Level", "Combat Level")
+            skills_items = vanilla_skill_items
             if allow_modded_skills:
                 skills_items += get_mod_skill_levels(self.options.mods)
             return self.logic.received_n(*skills_items, count=level)
@@ -103,6 +104,15 @@ CombatLogicMixin, CropLogicMixin, MagicLogicMixin]]):
         if level > 40:
             return rule_with_fishing
         return self.logic.time.has_lived_months(months_with_4_skills) | rule_with_fishing
+
+    def has_all_skills_maxed(self, included_modded_skills: bool = True) -> StardewRule:
+        if self.options.skill_progression == options.SkillProgression.option_progressive:
+            skills_items = vanilla_skill_items
+            if included_modded_skills:
+                skills_items += get_mod_skill_levels(self.options.mods)
+            return And(*[self.logic.received(skill, 10) for skill in skills_items])
+
+        return self.has_total_level(50)
 
     @cached_property
     def can_get_farming_xp(self) -> StardewRule:
@@ -178,3 +188,14 @@ CombatLogicMixin, CropLogicMixin, MagicLogicMixin]]):
         if quality == ForageQuality.gold:
             return self.has_level(Skill.foraging, 9)
         return False_()
+
+    @cached_property
+    def can_earn_mastery_experience(self) -> StardewRule:
+        if self.options.skill_progression != options.SkillProgression.option_progressive_with_masteries:
+            return self.has_all_skills_maxed() & self.logic.time.has_lived_max_months
+        return self.logic.time.has_lived_max_months
+
+    def has_mastery(self, skill: str) -> StardewRule:
+        if self.options.skill_progression != options.SkillProgression.option_progressive_with_masteries:
+            return self.can_earn_mastery_experience and self.logic.region.can_reach(Region.mastery_cave)
+        return self.logic.received(f"{skill} Mastery")
