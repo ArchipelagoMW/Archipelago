@@ -44,15 +44,25 @@ class StardewWebWorld(WebWorld):
     bug_report_page = "https://github.com/agilbert1412/StardewArchipelago/issues/new?labels=bug&title=%5BBug%5D%3A+Brief+Description+of+bug+here"
     options_presets = sv_options_presets
 
-    tutorials = [
-        Tutorial(
-            "Multiworld Setup Guide",
-            "A guide to playing Stardew Valley with Archipelago.",
-            "English",
-            "setup_en.md",
-            "setup/en",
-            ["KaitoKid", "Jouramie", "Witchybun (Mod Support)", "Exempt-Medic (Proofreading)"]
-        )]
+    setup_en = Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to playing Stardew Valley with Archipelago.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["KaitoKid", "Jouramie", "Witchybun (Mod Support)", "Exempt-Medic (Proofreading)"]
+    )
+
+    setup_fr = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["Firzohche"]
+    )
+
+    tutorials = [setup_en, setup_fr]
 
 
 class StardewValleyWorld(World):
