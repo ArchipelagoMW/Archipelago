@@ -267,6 +267,7 @@ class BlasphemousWorld(World):
                     for logic in e["logic"]:
                         rule: Callable[[CollectionState], bool] = None
                         for string in logic["item_requirements"]:
+                            old_rule: Callable[[CollectionState], bool] = rule
                             new_rule: Callable[[CollectionState], bool] = None
                             if (string[0] == "D" and string[3] == "Z" and string[6] == "S")\
                             or (string[0] == "D" and string[3] == "B" and string[4] == "Z" and string[7] == "S"):
@@ -277,7 +278,7 @@ class BlasphemousWorld(World):
                             if rule == None:
                                 rule = new_rule
                             else:
-                                rule = lambda: rule and new_rule
+                                rule = lambda state: old_rule(state) and new_rule(state)
 
                         add_rule(self.get_entrance(f"{r['name']} -> {e['target']}"), rule, "or")
 
