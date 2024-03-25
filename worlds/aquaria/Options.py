@@ -31,6 +31,41 @@ class AquarianTranslation(Toggle):
     display_name = "Translate Aquarian"
 
 
+class BigBossesToBeat(Choice):
+    """
+    A number of big bosses to beat before having access to the creator (the final boss). The big bosses are
+    "Fallen God", "Mithalan God", "Drunian God", "Sun God" and "The Golem".
+    """
+    display_name = "Big bosses to beat"
+    option_none = 0
+    option_1 = 1
+    option_2 = 2
+    option_3 = 3
+    option_4 = 4
+    default = 0
+
+
+
+class MiniBossesToBeat(Choice):
+    """
+    A number of Minibosses to beat before having access to the creator (the final boss). Mini bosses are
+    "Nautilus Prime", "Blaster Peg Prime", "Mermog", "Mithalan priests", "Octopus Prime", "Crabbius Maximus",
+    "Mantis Shrimp Prime" and "King Jellyfish God Prime". Note that the Energy statue and Simon says are not
+    mini bosses.
+    """
+    display_name = "Mini bosses to beat"
+    option_none = 0
+    option_1 = 1
+    option_2 = 2
+    option_3 = 3
+    option_4 = 4
+    option_5 = 5
+    option_6 = 6
+    option_7 = 7
+    option_8 = 8
+    default = 0
+
+
 class Objective(Choice):
     """
     The game objective can be only to kill the creator or to kill the creator
@@ -45,10 +80,12 @@ class Objective(Choice):
 @dataclass
 class AquariaOptions(PerGameCommonOptions):
     """
-    Every options in the Aquaria randomizer
+    Every option in the Aquaria randomizer
     """
     ingredient_randomizer: IngredientRandomizer
     dish_randomizer: DishRandomizer
     aquarian_translation: AquarianTranslation
     objective: Objective
+    big_bosses_to_beat: BigBossesToBeat
+    mini_bosses_to_beat: MiniBossesToBeat
     death_link: DeathLink

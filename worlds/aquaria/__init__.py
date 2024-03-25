@@ -6,7 +6,7 @@ Description: Main module for Aquaria game multiworld randomizer
 
 from typing import List, Dict, ClassVar, Any
 from ..AutoWorld import World, WebWorld
-from BaseClasses import Tutorial, MultiWorld, ItemClassification
+from BaseClasses import Tutorial, MultiWorld, ItemClassification, LocationProgressType
 from .Items import item_table, AquariaItem, ItemType
 from .Locations import location_table
 from .Options import AquariaOptions
@@ -120,11 +120,61 @@ class AquariaWorld(World):
                                    self.player)
                 self.multiworld.itempool.append(item)
 
+    def __set_excluded_location(self):
+        if self.options.big_bosses_to_beat.value > 0:
+            self.multiworld.get_location("Fallen god tooth in the Energy temple", self.player).progress_type = (
+                LocationProgressType.EXCLUDED)
+            self.multiworld.get_location("Cathedral boss area, beating Mithalan God", self.player).progress_type = (
+                LocationProgressType.EXCLUDED)
+            self.multiworld.get_location("Kelp forest boss area, beating Drunian God", self.player).progress_type = (
+                LocationProgressType.EXCLUDED)
+            self.multiworld.get_location("Sun temple boss area, beating Sun God", self.player).progress_type = (
+                LocationProgressType.EXCLUDED)
+            self.multiworld.get_location("Sunken city, bulb on the top of the boss area (boiler room)",
+                                         self.player).progress_type = LocationProgressType.EXCLUDED
+        if self.options.mini_bosses_to_beat.value > 0:
+            self.multiworld.get_location("Nautilus Egg in Home water", self.player).progress_type = (
+                LocationProgressType.EXCLUDED)
+            self.multiworld.get_location("Blaster egg in the Energy temple", self.player).progress_type = (
+                LocationProgressType.EXCLUDED)
+            self.multiworld.get_location("Mithalas castle, beating the priests", self.player).progress_type = (
+                LocationProgressType.EXCLUDED)
+            self.multiworld.get_location("Piranha Egg in the Mermog cave", self.player).progress_type = (
+                LocationProgressType.EXCLUDED)
+            self.multiworld.get_location("Dumbo Egg in the Octocave", self.player).progress_type = (
+                LocationProgressType.EXCLUDED)
+            self.multiworld.get_location("Verse egg in the Bubble cave", self.player).progress_type = (
+                LocationProgressType.EXCLUDED)
+            self.multiworld.get_location("King Jellyfish cave, bulb in the right path from King Jelly",
+                                         self.player).progress_type = LocationProgressType.EXCLUDED
+            self.multiworld.get_location("Jellyfish Costume in the King Jellyfish cave",
+                                         self.player).progress_type = LocationProgressType.EXCLUDED
+
+        # ToDo: Removing the following exclusion on Hard mode
+        self.multiworld.get_location("Sun Worm path, first cliff bulb", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.multiworld.get_location("Sun Worm path, second cliff bulb", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.multiworld.get_location("The veil top right area, bulb in the top of the water fall", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.multiworld.get_location("Bubble cave, bulb in the left cave wall", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.multiworld.get_location("Bubble cave, bulb in the right cave wall (behind the ice cristal)", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.multiworld.get_location("Verse egg in the Bubble cave", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.multiworld.get_location("Kelp Forest bottom left area, bulb close to the spirit cristals", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.multiworld.get_location("Walker baby in the Kelp forest bottom left area", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+
     def set_rules(self) -> None:
         """
         Launched when the Multiworld generator is ready to generate rules
         """
         self.regions.add_event_locations()
+        self.regions.adjusting_rules(self.options)
+        self.__set_excluded_location()
         self.multiworld.completion_condition[self.player] = lambda \
             state: state.has("Victory", self.player)
 
@@ -163,4 +213,7 @@ class AquariaWorld(World):
         if self.options.aquarian_translation:
             aquarian_translation = True
         return {"ingredientReplacement": self.ingredients_substitution,
-                "aquarianTranslate": aquarian_translation}
+                "aquarianTranslate": aquarian_translation,
+                "secret_needed": self.options.objective.value > 0,
+                "minibosses_to_kill": self.options.mini_bosses_to_beat.value,
+                "bigbosses_to_kill": self.options.big_bosses_to_beat.value}
