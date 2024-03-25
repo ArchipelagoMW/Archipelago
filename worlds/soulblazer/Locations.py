@@ -4,10 +4,7 @@ from typing import Optional
 from enum import Enum
 from . import SoulBlazerWorld
 from Names import LairID, LairName, ChestID, ChestName, NPCRewardID, NPCRewardName
-
-
-class SoulBlazerLocation(Location):  # or from Locations import MyGameLocation
-    game = "Soul Blazer"  # name of the game/world this location is in
+from Rules import LocationFlag
 
 
 #TODO: Use IntEnum instead?
@@ -25,6 +22,7 @@ class SoulBlazerLocationData():
     id: int
     """Internal location ID and index into ROM chest/lair/NPC reward table"""
     type: LocationType
+    flag: LocationFlag = LocationFlag.NONE
     #TODO: What other location properties are needed?
 
     @property
@@ -35,7 +33,16 @@ class SoulBlazerLocationData():
         if (self.type == LocationType.NPC_REWARD):
             return SoulBlazerWorld.base_id + SoulBlazerWorld.npc_reward_offset + self.id
         return SoulBlazerWorld.base_id + self.id
-    
+
+
+class SoulBlazerLocation(Location):
+    game = "Soul Blazer"
+    _locationData: SoulBlazerLocationData
+
+    def __init__(self, player: int, name: str, locationData: SoulBlazerLocationData | None = None, parent: Region | None = None):
+        super().__init__(player, name, parent=parent)
+        self._locationData = locationData
+
 
 chest_table = {
     ChestName.TRIAL_ROOM                     : SoulBlazerLocationData(ChestID.TRIAL_ROOM                    , LocationType.CHEST),
@@ -46,7 +53,7 @@ chest_table = {
     ChestName.UNDERGROUND_CASTLE_DREAM_ROD   : SoulBlazerLocationData(ChestID.UNDERGROUND_CASTLE_DREAM_ROD  , LocationType.CHEST),
     ChestName.UNDERGROUND_CASTLE_LEOS_BRUSH  : SoulBlazerLocationData(ChestID.UNDERGROUND_CASTLE_LEOS_BRUSH , LocationType.CHEST),
     ChestName.LEOS_PAINTING_HERB             : SoulBlazerLocationData(ChestID.LEOS_PAINTING_HERB            , LocationType.CHEST),
-    ChestName.LEOS_PAINTING_TORNADO          : SoulBlazerLocationData(ChestID.LEOS_PAINTING_TORNADO         , LocationType.CHEST),
+    ChestName.LEOS_PAINTING_TORNADO          : SoulBlazerLocationData(ChestID.LEOS_PAINTING_TORNADO         , LocationType.CHEST, LocationFlag.CAN_CUT_METAL),
     ChestName.GREENWOOD_ICE_ARMOR            : SoulBlazerLocationData(ChestID.GREENWOOD_ICE_ARMOR           , LocationType.CHEST),
     ChestName.GREENWOOD_TUNNELS              : SoulBlazerLocationData(ChestID.GREENWOOD_TUNNELS             , LocationType.CHEST),
     ChestName.WATER_SHRINE_1                 : SoulBlazerLocationData(ChestID.WATER_SHRINE_1                , LocationType.CHEST),
@@ -56,10 +63,10 @@ chest_table = {
     ChestName.WATER_SHRINE_3_SE              : SoulBlazerLocationData(ChestID.WATER_SHRINE_3_SE             , LocationType.CHEST),
     ChestName.FIRE_SHRINE_1                  : SoulBlazerLocationData(ChestID.FIRE_SHRINE_1                 , LocationType.CHEST),
     ChestName.FIRE_SHRINE_2_DISAPPEARING     : SoulBlazerLocationData(ChestID.FIRE_SHRINE_2_DISAPPEARING    , LocationType.CHEST),
-    ChestName.FIRE_SHRINE_2_SCORPION         : SoulBlazerLocationData(ChestID.FIRE_SHRINE_2_SCORPION        , LocationType.CHEST),
+    ChestName.FIRE_SHRINE_2_SCORPION         : SoulBlazerLocationData(ChestID.FIRE_SHRINE_2_SCORPION        , LocationType.CHEST, LocationFlag.CAN_CUT_METAL),
     ChestName.FIRE_SHRINE_3_100GEM           : SoulBlazerLocationData(ChestID.FIRE_SHRINE_3_100GEM          , LocationType.CHEST),
     ChestName.FIRE_SHRINE_3_60GEM            : SoulBlazerLocationData(ChestID.FIRE_SHRINE_3_60GEM           , LocationType.CHEST),
-    ChestName.LIGHT_SHRINE                   : SoulBlazerLocationData(ChestID.LIGHT_SHRINE                  , LocationType.CHEST),
+    ChestName.LIGHT_SHRINE                   : SoulBlazerLocationData(ChestID.LIGHT_SHRINE                  , LocationType.CHEST, LocationFlag.CAN_CUT_SPIRIT),
     ChestName.ST_ELLIS_MERMAIDS_TEARS        : SoulBlazerLocationData(ChestID.ST_ELLIS_MERMAIDS_TEARS       , LocationType.CHEST),
     ChestName.ST_ELLIS_BIG_PEARL             : SoulBlazerLocationData(ChestID.ST_ELLIS_BIG_PEARL            , LocationType.CHEST),
     ChestName.SEABED_SECRET_TL               : SoulBlazerLocationData(ChestID.SEABED_SECRET_TL              , LocationType.CHEST),
@@ -82,7 +89,7 @@ chest_table = {
     ChestName.LAYNOLE_HERB                   : SoulBlazerLocationData(ChestID.LAYNOLE_HERB                  , LocationType.CHEST),
     ChestName.LAYNOLE_ROTATOR                : SoulBlazerLocationData(ChestID.LAYNOLE_ROTATOR               , LocationType.CHEST),
     ChestName.LEOS_LAB_ZANTETSU              : SoulBlazerLocationData(ChestID.LEOS_LAB_ZANTETSU             , LocationType.CHEST),
-    ChestName.POWER_PLANT_LIGHT_ARMOR        : SoulBlazerLocationData(ChestID.POWER_PLANT_LIGHT_ARMOR       , LocationType.CHEST),
+    ChestName.POWER_PLANT_LIGHT_ARMOR        : SoulBlazerLocationData(ChestID.POWER_PLANT_LIGHT_ARMOR       , LocationType.CHEST, LocationFlag.CAN_CUT_METAL),
     ChestName.MODEL_TOWN_1_SE                : SoulBlazerLocationData(ChestID.MODEL_TOWN_1_SE               , LocationType.CHEST),
     ChestName.MODEL_TOWN_1_NL                : SoulBlazerLocationData(ChestID.MODEL_TOWN_1_NL               , LocationType.CHEST),
     ChestName.MODEL_TOWN_1_NR                : SoulBlazerLocationData(ChestID.MODEL_TOWN_1_NR               , LocationType.CHEST),
@@ -130,7 +137,7 @@ npc_reward_table = {
     NPCRewardName.LIGHT_ARROW_CRYSTAL              : SoulBlazerLocationData(NPCRewardID.LIGHT_ARROW_CRYSTAL             , LocationType.NPC_REWARD),
     NPCRewardName.LOST_MARSH_CRYSTAL               : SoulBlazerLocationData(NPCRewardID.LOST_MARSH_CRYSTAL              , LocationType.NPC_REWARD),
     NPCRewardName.WATER_SHRINE_CRYSTAL             : SoulBlazerLocationData(NPCRewardID.WATER_SHRINE_CRYSTAL            , LocationType.NPC_REWARD),
-    NPCRewardName.FIRE_SHRINE_CRYSTAL              : SoulBlazerLocationData(NPCRewardID.FIRE_SHRINE_CRYSTAL             , LocationType.NPC_REWARD),
+    NPCRewardName.FIRE_SHRINE_CRYSTAL              : SoulBlazerLocationData(NPCRewardID.FIRE_SHRINE_CRYSTAL             , LocationType.NPC_REWARD, LocationFlag.CAN_CUT_METAL),
     NPCRewardName.MOUNTAIN_KING                    : SoulBlazerLocationData(NPCRewardID.MOUNTAIN_KING                   , LocationType.NPC_REWARD),
     NPCRewardName.MUSHROOM_SHOES_BOY               : SoulBlazerLocationData(NPCRewardID.MUSHROOM_SHOES_BOY              , LocationType.NPC_REWARD),
     NPCRewardName.NOME                             : SoulBlazerLocationData(NPCRewardID.NOME                            , LocationType.NPC_REWARD),
@@ -193,11 +200,11 @@ lair_table = {
     LairName.OLD_MAN                       : SoulBlazerLocationData(LairID.OLD_MAN                      , LocationType.LAIR),
     LairName.OLD_MAN2                      : SoulBlazerLocationData(LairID.OLD_MAN2                     , LocationType.LAIR),
     LairName.IVY2                          : SoulBlazerLocationData(LairID.IVY2                         , LocationType.LAIR),
-    LairName.IVY_EMBLEM_A                  : SoulBlazerLocationData(LairID.IVY_EMBLEM_A                 , LocationType.LAIR),
-    LairName.IVY_RECOVERY_SWORD            : SoulBlazerLocationData(LairID.IVY_RECOVERY_SWORD           , LocationType.LAIR),
+    LairName.IVY_EMBLEM_A                  : SoulBlazerLocationData(LairID.IVY_EMBLEM_A                 , LocationType.LAIR, LocationFlag.CAN_CUT_METAL),
+    LairName.IVY_RECOVERY_SWORD            : SoulBlazerLocationData(LairID.IVY_RECOVERY_SWORD           , LocationType.LAIR, LocationFlag.CAN_CUT_METAL),
     LairName.TULIP4                        : SoulBlazerLocationData(LairID.TULIP4                       , LocationType.LAIR),
     LairName.GOAT2                         : SoulBlazerLocationData(LairID.GOAT2                        , LocationType.LAIR),
-    LairName.BIRD_RED_HOT_MIRROR           : SoulBlazerLocationData(LairID.BIRD_RED_HOT_MIRROR          , LocationType.LAIR),
+    LairName.BIRD_RED_HOT_MIRROR           : SoulBlazerLocationData(LairID.BIRD_RED_HOT_MIRROR          , LocationType.LAIR, LocationFlag.CAN_CUT_SPIRIT),
     LairName.BIRD                          : SoulBlazerLocationData(LairID.BIRD                         , LocationType.LAIR),
     LairName.DOG                           : SoulBlazerLocationData(LairID.DOG                          , LocationType.LAIR),
     LairName.DOG2                          : SoulBlazerLocationData(LairID.DOG2                         , LocationType.LAIR),
@@ -222,7 +229,7 @@ lair_table = {
     LairName.BIRD_GREENWOOD_LEAF           : SoulBlazerLocationData(LairID.BIRD_GREENWOOD_LEAF          , LocationType.LAIR),
     LairName.MOLE3                         : SoulBlazerLocationData(LairID.MOLE3                        , LocationType.LAIR),
     LairName.DEER_MAGIC_BELL               : SoulBlazerLocationData(LairID.DEER_MAGIC_BELL              , LocationType.LAIR),
-    LairName.BIRD3                         : SoulBlazerLocationData(LairID.BIRD3                        , LocationType.LAIR),
+    LairName.BIRD3                         : SoulBlazerLocationData(LairID.BIRD3                        , LocationType.LAIR, LocationFlag.CAN_CUT_METAL),
     LairName.CROCODILE3                    : SoulBlazerLocationData(LairID.CROCODILE3                   , LocationType.LAIR),
     LairName.MONMO                         : SoulBlazerLocationData(LairID.MONMO                        , LocationType.LAIR),
     LairName.DOLPHIN                       : SoulBlazerLocationData(LairID.DOLPHIN                      , LocationType.LAIR),
@@ -233,7 +240,7 @@ lair_table = {
     LairName.MERMAID2                      : SoulBlazerLocationData(LairID.MERMAID2                     , LocationType.LAIR),
     LairName.DOLPHIN_SAVES_LUE             : SoulBlazerLocationData(LairID.DOLPHIN_SAVES_LUE            , LocationType.LAIR),
     LairName.MERMAID_STATUE_BLESTER        : SoulBlazerLocationData(LairID.MERMAID_STATUE_BLESTER       , LocationType.LAIR),
-    LairName.MERMAID_RED_HOT_STICK         : SoulBlazerLocationData(LairID.MERMAID_RED_HOT_STICK        , LocationType.LAIR),
+    LairName.MERMAID_RED_HOT_STICK         : SoulBlazerLocationData(LairID.MERMAID_RED_HOT_STICK        , LocationType.LAIR, LocationFlag.CAN_CUT_METAL),
     LairName.LUE                           : SoulBlazerLocationData(LairID.LUE                          , LocationType.LAIR),
     LairName.MERMAID3                      : SoulBlazerLocationData(LairID.MERMAID3                     , LocationType.LAIR),
     LairName.MERMAID_NANA                  : SoulBlazerLocationData(LairID.MERMAID_NANA                 , LocationType.LAIR),
@@ -249,7 +256,7 @@ lair_table = {
     LairName.ANGELFISH_SOUL_OF_SHIELD      : SoulBlazerLocationData(LairID.ANGELFISH_SOUL_OF_SHIELD     , LocationType.LAIR),
     LairName.MERMAID_MAGIC_FLARE           : SoulBlazerLocationData(LairID.MERMAID_MAGIC_FLARE          , LocationType.LAIR),
     LairName.MERMAID_QUEEN                 : SoulBlazerLocationData(LairID.MERMAID_QUEEN                , LocationType.LAIR),
-    LairName.MERMAID_STATUE_GHOST_SHIP     : SoulBlazerLocationData(LairID.MERMAID_STATUE_GHOST_SHIP    , LocationType.LAIR),
+    LairName.MERMAID_STATUE_GHOST_SHIP     : SoulBlazerLocationData(LairID.MERMAID_STATUE_GHOST_SHIP    , LocationType.LAIR, LocationFlag.HAS_THUNDER),
     LairName.DOLPHIN_SECRET_CAVE           : SoulBlazerLocationData(LairID.DOLPHIN_SECRET_CAVE          , LocationType.LAIR),
     LairName.MERMAID7                      : SoulBlazerLocationData(LairID.MERMAID7                     , LocationType.LAIR),
     LairName.ANGELFISH4                    : SoulBlazerLocationData(LairID.ANGELFISH4                   , LocationType.LAIR),
@@ -283,19 +290,19 @@ lair_table = {
     LairName.GRANDPA_LUNE                  : SoulBlazerLocationData(LairID.GRANDPA_LUNE                 , LocationType.LAIR),
     LairName.GRANDPA5                      : SoulBlazerLocationData(LairID.GRANDPA5                     , LocationType.LAIR),
     LairName.MOUNTAIN_KING                 : SoulBlazerLocationData(LairID.MOUNTAIN_KING                , LocationType.LAIR),
-    LairName.PLANT_HERB                    : SoulBlazerLocationData(LairID.PLANT_HERB                   , LocationType.LAIR),
+    LairName.PLANT_HERB                    : SoulBlazerLocationData(LairID.PLANT_HERB                   , LocationType.LAIR, LocationFlag.CAN_CUT_METAL),
     LairName.PLANT                         : SoulBlazerLocationData(LairID.PLANT                        , LocationType.LAIR),
-    LairName.CHEST_OF_DRAWERS_MYSTIC_ARMOR : SoulBlazerLocationData(LairID.CHEST_OF_DRAWERS_MYSTIC_ARMOR, LocationType.LAIR),
+    LairName.CHEST_OF_DRAWERS_MYSTIC_ARMOR : SoulBlazerLocationData(LairID.CHEST_OF_DRAWERS_MYSTIC_ARMOR, LocationType.LAIR, LocationFlag.CAN_CUT_METAL),
     LairName.CAT                           : SoulBlazerLocationData(LairID.CAT                          , LocationType.LAIR),
     LairName.GREAT_DOOR_ZANTETSU_SWORD     : SoulBlazerLocationData(LairID.GREAT_DOOR_ZANTETSU_SWORD    , LocationType.LAIR),
-    LairName.CAT2                          : SoulBlazerLocationData(LairID.CAT2                         , LocationType.LAIR),
-    LairName.GREAT_DOOR                    : SoulBlazerLocationData(LairID.GREAT_DOOR                   , LocationType.LAIR),
+    LairName.CAT2                          : SoulBlazerLocationData(LairID.CAT2                         , LocationType.LAIR, LocationFlag.CAN_CUT_METAL),
+    LairName.GREAT_DOOR                    : SoulBlazerLocationData(LairID.GREAT_DOOR                   , LocationType.LAIR, LocationFlag.CAN_CUT_METAL),
     LairName.CAT3                          : SoulBlazerLocationData(LairID.CAT3                         , LocationType.LAIR),
     LairName.MODEL_TOWN1                   : SoulBlazerLocationData(LairID.MODEL_TOWN1                  , LocationType.LAIR),
-    LairName.GREAT_DOOR_MODEL_TOWNS        : SoulBlazerLocationData(LairID.GREAT_DOOR_MODEL_TOWNS       , LocationType.LAIR),
-    LairName.STEPS_UPSTAIRS                : SoulBlazerLocationData(LairID.STEPS_UPSTAIRS               , LocationType.LAIR),
+    LairName.GREAT_DOOR_MODEL_TOWNS        : SoulBlazerLocationData(LairID.GREAT_DOOR_MODEL_TOWNS       , LocationType.LAIR, LocationFlag.CAN_CUT_METAL),
+    LairName.STEPS_UPSTAIRS                : SoulBlazerLocationData(LairID.STEPS_UPSTAIRS               , LocationType.LAIR, LocationFlag.CAN_CUT_METAL),
     LairName.CAT_DOOR_KEY                  : SoulBlazerLocationData(LairID.CAT_DOOR_KEY                 , LocationType.LAIR),
-    LairName.MOUSE                         : SoulBlazerLocationData(LairID.MOUSE                        , LocationType.LAIR),
+    LairName.MOUSE                         : SoulBlazerLocationData(LairID.MOUSE                        , LocationType.LAIR, LocationFlag.CAN_CUT_METAL),
     LairName.MARIE                         : SoulBlazerLocationData(LairID.MARIE                        , LocationType.LAIR),
     LairName.DOLL                          : SoulBlazerLocationData(LairID.DOLL                         , LocationType.LAIR),
     LairName.CHEST_OF_DRAWERS              : SoulBlazerLocationData(LairID.CHEST_OF_DRAWERS             , LocationType.LAIR),
@@ -313,18 +320,18 @@ lair_table = {
     LairName.CAT4                          : SoulBlazerLocationData(LairID.CAT4                         , LocationType.LAIR),
     LairName.STAIRS_POWER_PLANT            : SoulBlazerLocationData(LairID.STAIRS_POWER_PLANT           , LocationType.LAIR),
     LairName.SOLDIER                       : SoulBlazerLocationData(LairID.SOLDIER                      , LocationType.LAIR),
-    LairName.SOLDIER2                      : SoulBlazerLocationData(LairID.SOLDIER2                     , LocationType.LAIR),
-    LairName.SOLDIER3                      : SoulBlazerLocationData(LairID.SOLDIER3                     , LocationType.LAIR),
-    LairName.SOLDIER_ELEMENTAL_MAIL        : SoulBlazerLocationData(LairID.SOLDIER_ELEMENTAL_MAIL       , LocationType.LAIR),
-    LairName.SOLDIER4                      : SoulBlazerLocationData(LairID.SOLDIER4                     , LocationType.LAIR),
+    LairName.SOLDIER2                      : SoulBlazerLocationData(LairID.SOLDIER2                     , LocationType.LAIR, LocationFlag.CAN_CUT_SPIRIT),
+    LairName.SOLDIER3                      : SoulBlazerLocationData(LairID.SOLDIER3                     , LocationType.LAIR, LocationFlag.CAN_CUT_SPIRIT),
+    LairName.SOLDIER_ELEMENTAL_MAIL        : SoulBlazerLocationData(LairID.SOLDIER_ELEMENTAL_MAIL       , LocationType.LAIR, LocationFlag.CAN_CUT_SPIRIT),
+    LairName.SOLDIER4                      : SoulBlazerLocationData(LairID.SOLDIER4                     , LocationType.LAIR, LocationFlag.CAN_CUT_SPIRIT),
     LairName.SOLDIER5                      : SoulBlazerLocationData(LairID.SOLDIER5                     , LocationType.LAIR),
-    LairName.SINGER_CONCERT_HALL           : SoulBlazerLocationData(LairID.SINGER_CONCERT_HALL          , LocationType.LAIR),
+    LairName.SINGER_CONCERT_HALL           : SoulBlazerLocationData(LairID.SINGER_CONCERT_HALL          , LocationType.LAIR, LocationFlag.CAN_CUT_SPIRIT),
     LairName.SOLDIER6                      : SoulBlazerLocationData(LairID.SOLDIER6                     , LocationType.LAIR),
-    LairName.MAID                          : SoulBlazerLocationData(LairID.MAID                         , LocationType.LAIR),
+    LairName.MAID                          : SoulBlazerLocationData(LairID.MAID                         , LocationType.LAIR, LocationFlag.CAN_CUT_SPIRIT),
     LairName.SOLDIER_LEFT_TOWER            : SoulBlazerLocationData(LairID.SOLDIER_LEFT_TOWER           , LocationType.LAIR),
     LairName.SOLDIER_DOK                   : SoulBlazerLocationData(LairID.SOLDIER_DOK                  , LocationType.LAIR),
-    LairName.SOLDIER_PLATINUM_CARD         : SoulBlazerLocationData(LairID.SOLDIER_PLATINUM_CARD        , LocationType.LAIR),
-    LairName.SINGER                        : SoulBlazerLocationData(LairID.SINGER                       , LocationType.LAIR),
+    LairName.SOLDIER_PLATINUM_CARD         : SoulBlazerLocationData(LairID.SOLDIER_PLATINUM_CARD        , LocationType.LAIR, LocationFlag.CAN_CUT_SPIRIT),
+    LairName.SINGER                        : SoulBlazerLocationData(LairID.SINGER                       , LocationType.LAIR, LocationFlag.CAN_CUT_SPIRIT),
     LairName.SOLDIER_SOUL_OF_REALITY       : SoulBlazerLocationData(LairID.SOLDIER_SOUL_OF_REALITY      , LocationType.LAIR),
     LairName.MAID2                         : SoulBlazerLocationData(LairID.MAID2                        , LocationType.LAIR),
     LairName.QUEEN_MAGRIDD                 : SoulBlazerLocationData(LairID.QUEEN_MAGRIDD                , LocationType.LAIR),

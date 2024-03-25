@@ -1,10 +1,11 @@
 import settings
 import typing
+import copy
 from .Options import SoulBlazerOptions  # the options we defined earlier
-from .Items import SoulBlazerItem, SoulBlazerItemData, all_items_table  # data used below to add items to the World
+from .Items import SoulBlazerItem, SoulBlazerItemData, all_items_table, repeatable_items_table  # data used below to add items to the World
 from .Locations import SoulBlazerLocation, all_locations_table  # same as above
 from worlds.AutoWorld import WebWorld, World
-from BaseClasses import Region, Location, Entrance, Item, ItemClassification, Tutorial
+from BaseClasses import MultiWorld, Region, Location, Entrance, Item, ItemClassification, Tutorial
 
 
 class SoulBlazerSettings(settings.Group):
@@ -61,6 +62,20 @@ class SoulBlazerWorld(World):
     # Items can be grouped using their names to allow easy checking if any item
     # from that group has been collected. Group names can also be used for !hint
     # TODO: Define groups?
-    item_name_groups = {
-        "weapons": {"sword", "lance"},
-    }
+    #item_name_groups = {
+    #    "weapons": {"sword", "lance"},
+    #}
+
+
+    def create_item(self, item: str) -> SoulBlazerItem:
+        if item in repeatable_items_table:
+            # Create shallow copy of repeatable items so we can change the operand if needed.
+            data = copy.copy(repeatable_items_table[item])
+        else:
+            data = all_items_table[item]
+        return SoulBlazerItem(item, self.player, data)
+
+
+    def create_items(self) -> None:
+        #TODO: This
+        pass

@@ -6,15 +6,14 @@ from .Names import ItemID, ItemName, LairID, NPCName
 from . import SoulBlazerWorld
 
 
-class SoulBlazerItem(Item):  # or from Items import MyGameItem
-    game = "Soul Blazer"  # name of the game/world this item is from
-
 @dataclass
 class SoulBlazerItemData():
     id: int
     """Internal item ID"""
+
     operand: Optional[int]
     """Either Gems/Exp Quantity or Lair ID"""
+
     classification: ItemClassification
     
     @property
@@ -51,14 +50,52 @@ class SoulBlazerItemData():
 
         operand = decimal
 
-herbs_count = 20
+
+
+class SoulBlazerItem(Item):  # or from Items import MyGameItem
+    game = "Soul Blazer"  # name of the game/world this item is from
+
+    def __init__(self, name: str, player: int, itemData: SoulBlazerItemData):
+        super().__init__(name, itemData.classification, itemData.code, player)
+        self._itemData = itemData
+
+    @property
+    def id(self) -> int:
+        return self._itemData.id
+    
+    @property
+    def operand(self) -> int:
+        return self._itemData.operand
+    
+    @operand.setter
+    def operand(self, value: int):
+        self._itemData.operand = value
+
+    @property
+    def operand_bcd(self) -> int:
+        return self._itemData.operand_bcd
+    
+    @operand_bcd.setter
+    def operand_bcd(self, bcd: int):
+        self._itemData.operand_bcd = bcd
+
+
+herb_count = 20
 """Number of Herbs in vanilla item pool"""
+
+bottle_count = 7
+"""Number of Strange Bottles in vanilla item pool"""
+
+nothing_count = 3
+"""Number of 'Nothing' rewards in vanilla item pool"""
 
 gems_values = [1, 12, 40, 50, 50, 50, 50, 50, 60, 60, 80, 80, 80, 80, 80, 100, 100, 100, 100, 150, 200]
 """Gem reward values in vanilla item pool"""
 
 exp_values = [1, 30, 80, 150, 180, 200, 250, 300, 300, 300, 300, 300, 400]
 """Exp reward values in vanilla item pool"""
+
+
 
 #TODO: Unsure which progression items should skip balancing
 swords_table = {
@@ -152,8 +189,14 @@ inventory_items_table = {
 
 misc_table = {
     ItemName.NOTHING : SoulBlazerItemData(ItemID.NOTHING, None, ItemClassification.trap),
-    ItemName.GEMS    : SoulBlazerItemData(ItemID.GEMS   , 0   , ItemClassification.filler),
-    ItemName.EXP     : SoulBlazerItemData(ItemID.EXP    , 0   , ItemClassification.filler),
+    ItemName.GEMS    : SoulBlazerItemData(ItemID.GEMS   , 100 , ItemClassification.filler),
+    ItemName.EXP     : SoulBlazerItemData(ItemID.EXP    , 250 , ItemClassification.filler),
+}
+
+repeatable_items_table = {
+    ItemName.MEDICALHERB   : inventory_items_table[ItemName.MEDICALHERB],
+    ItemName.STRANGEBOTTLE : inventory_items_table[ItemName.STRANGEBOTTLE],
+    **misc_table,
 }
 
 items_table = {
@@ -340,4 +383,8 @@ npc_release_table = {
 all_items_table = {
     **items_table,
     **npc_release_table,
+}
+
+unique_items_table = {
+    **(x for x in all_items_table if x not in repeatable_items_table)
 }
