@@ -55,9 +55,10 @@ def has_torn_pages(state: CollectionState, player: int, pages_required: int) -> 
         pages_available = pages_available + 1
     if state.has("Halloween Town", player):
         pages_available = pages_available + 1
+    if has_puppies(state, player, 51):
+        pages_available = pages_available + 1
     pages_available = pages_available + state.count("Torn Page 1", player)
     pages_available = pages_available + state.count("Torn Page 2", player)
-    pages_available = pages_available + state.count("Torn Page 5", player)
     return pages_available >= pages_required
 
 def has_all_arts(state: CollectionState, player: int) -> bool:
@@ -427,10 +428,10 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
     multiworld.get_location("Hercules Cup Defeat Cloud Event"                                              , player).access_rule = lambda state: has_item(state, player, "Hercules Cup")
     multiworld.get_location("Hercules Cup Yellow Trinity Event"                                            , player).access_rule = lambda state: has_item(state, player, "Hercules Cup")
     
-    multiworld.get_location("Traverse Town Magician's Study Turn in Naturespark"                           , player).access_rule = lambda state: has_item(state, player, "Naturespark") and has_item(state, player, "Progressive Fire")
-    multiworld.get_location("Traverse Town Magician's Study Turn in Watergleam"                            , player).access_rule = lambda state: has_item(state, player, "Watergleam") and has_item(state, player, "Progressive Fire")
-    multiworld.get_location("Traverse Town Magician's Study Turn in Fireglow"                              , player).access_rule = lambda state: has_item(state, player, "Fireglow") and has_item(state, player, "Progressive Fire")
-    multiworld.get_location("Traverse Town Magician's Study Turn in all Summon Gems"                       , player).access_rule = lambda state: has_item(state, player, "Naturespark") and has_item(state, player, "Watergleam") and has_item(state, player, "Fireglow") and has_item(state, player, "Progressive Fire")
+   #multiworld.get_location("Traverse Town Magician's Study Turn in Naturespark"                           , player).access_rule = lambda state: has_item(state, player, "Naturespark") and has_item(state, player, "Progressive Fire")
+   #multiworld.get_location("Traverse Town Magician's Study Turn in Watergleam"                            , player).access_rule = lambda state: has_item(state, player, "Watergleam") and has_item(state, player, "Progressive Fire")
+   #multiworld.get_location("Traverse Town Magician's Study Turn in Fireglow"                              , player).access_rule = lambda state: has_item(state, player, "Fireglow") and has_item(state, player, "Progressive Fire")
+   #multiworld.get_location("Traverse Town Magician's Study Turn in all Summon Gems"                       , player).access_rule = lambda state: has_item(state, player, "Naturespark") and has_item(state, player, "Watergleam") and has_item(state, player, "Fireglow") and has_item(state, player, "Progressive Fire")
    #multiworld.get_location("Traverse Town Geppetto's House Defeat 500 Heartless"                          , player).access_rule = lambda state: has_item(state, player, "Monstro") and (has_item(state, player, "High Jump") or can_glide(state, player))
    #multiworld.get_location("Traverse Town Geppetto's House Defeat 1000 Heartless"                         , player).access_rule = lambda state: has_item(state, player, "Monstro") and (has_item(state, player, "High Jump") or can_glide(state, player))
    #multiworld.get_location("Traverse Town Geppetto's House Defeat 1500 Heartless"                         , player).access_rule = lambda state: has_item(state, player, "Monstro") and (has_item(state, player, "High Jump") or can_glide(state, player))
@@ -441,17 +442,15 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
     multiworld.get_location("Traverse Town Magician's Study Obtained All Arts Items"                       , player).access_rule = lambda state: has_item(state, player, "Progressive Fire") and has_all_arts(state, player)
     multiworld.get_location("Traverse Town Magician's Study Obtained All LV1 Magic"                        , player).access_rule = lambda state: has_all_magic_lvx(state, player, 1)
     multiworld.get_location("Traverse Town Magician's Study Obtained All LV3 Magic"                        , player).access_rule = lambda state: has_all_magic_lvx(state, player, 3)
-    multiworld.get_location("Traverse Town Piano Room Return 12 Puppies"                                   , player).access_rule = lambda state: has_puppies(state, player, 12)
-    multiworld.get_location("Traverse Town Piano Room Return 24 Puppies"                                   , player).access_rule = lambda state: has_puppies(state, player, 24)
+    multiworld.get_location("Traverse Town Piano Room Return 10 Puppies"                                   , player).access_rule = lambda state: has_puppies(state, player, 12)
+    multiworld.get_location("Traverse Town Piano Room Return 20 Puppies"                                   , player).access_rule = lambda state: has_puppies(state, player, 24)
     multiworld.get_location("Traverse Town Piano Room Return 30 Puppies"                                   , player).access_rule = lambda state: has_puppies(state, player, 30)
-    multiworld.get_location("Traverse Town Piano Room Return 42 Puppies"                                   , player).access_rule = lambda state: has_puppies(state, player, 42)
-    multiworld.get_location("Traverse Town Piano Room Return 51 Puppies Reward 1"                          , player).access_rule = lambda state: has_puppies(state, player, 51)
-    multiworld.get_location("Traverse Town Piano Room Return 51 Puppies Reward 2"                          , player).access_rule = lambda state: has_puppies(state, player, 51)
+    multiworld.get_location("Traverse Town Piano Room Return 40 Puppies"                                   , player).access_rule = lambda state: has_puppies(state, player, 41)
+    multiworld.get_location("Traverse Town Piano Room Return 50 Puppies"                                   , player).access_rule = lambda state: has_puppies(state, player, 51)
     multiworld.get_location("Traverse Town Piano Room Return 60 Puppies"                                   , player).access_rule = lambda state: has_puppies(state, player, 60)
-    multiworld.get_location("Traverse Town Piano Room Return 72 Puppies"                                   , player).access_rule = lambda state: has_puppies(state, player, 72)
-    multiworld.get_location("Traverse Town Piano Room Return 81 Puppies"                                   , player).access_rule = lambda state: has_puppies(state, player, 81)
-    multiworld.get_location("Traverse Town Piano Room Return 90 Puppies Reward 1"                          , player).access_rule = lambda state: has_puppies(state, player, 90)
-    multiworld.get_location("Traverse Town Piano Room Return 90 Puppies Reward 2"                          , player).access_rule = lambda state: has_puppies(state, player, 90)
+    multiworld.get_location("Traverse Town Piano Room Return 70 Puppies"                                   , player).access_rule = lambda state: has_puppies(state, player, 72)
+    multiworld.get_location("Traverse Town Piano Room Return 80 Puppies"                                   , player).access_rule = lambda state: has_puppies(state, player, 81)
+    multiworld.get_location("Traverse Town Piano Room Return 90 Puppies"                                   , player).access_rule = lambda state: has_puppies(state, player, 90)
     multiworld.get_location("Traverse Town Piano Room Return 99 Puppies Reward 1"                          , player).access_rule = lambda state: has_puppies(state, player, 99)
     multiworld.get_location("Traverse Town Piano Room Return 99 Puppies Reward 2"                          , player).access_rule = lambda state: has_puppies(state, player, 99)
     multiworld.get_location("Olympus Coliseum Defeat Sephiroth One-Winged Angel Event"                     , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup") and has_x_worlds(state, player, 7)
@@ -484,7 +483,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
     multiworld.get_location("100 Acre Wood Convert Torn Page 4"                                            , player).access_rule = lambda state: has_torn_pages(state, player, 4)
     if atlantica:
         multiworld.get_location("100 Acre Wood Convert Torn Page 5"                                        , player).access_rule = lambda state: has_torn_pages(state, player, 5)
-    multiworld.get_location("100 Acre Wood Pooh's House Start Fire"                                        , player).access_rule = lambda state: has_item(state, player, "Progressive Fire")
+   #multiworld.get_location("100 Acre Wood Pooh's House Start Fire"                                        , player).access_rule = lambda state: has_item(state, player, "Progressive Fire")
    #multiworld.get_location("100 Acre Wood Pooh's Room Cabinet"                                            , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("100 Acre Wood Pooh's Room Chimney"                                            , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("100 Acre Wood Bouncing Spot Break Log"                                        , player).access_rule = lambda state: has_torn_pages(state, player, 4)
@@ -498,12 +497,12 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
     multiworld.get_location("Deep Jungle Bamboo Thicket Save Gorillas"                                     , player).access_rule = lambda state: has_slides(state, player)
     multiworld.get_location("Deep Jungle Climbing Trees Save Gorillas"                                     , player).access_rule = lambda state: has_slides(state, player)
 
-    multiworld.get_location("Traverse Town Synth Log"                                                      , player).access_rule = lambda state: has_at_least(state, player, "Material", 6)
-    multiworld.get_location("Traverse Town Synth Cloth"                                                    , player).access_rule = lambda state: has_at_least(state, player, "Material", 6)
-    multiworld.get_location("Traverse Town Synth Rope"                                                     , player).access_rule = lambda state: has_at_least(state, player, "Material", 6)
-    multiworld.get_location("Traverse Town Synth Seagull Egg"                                              , player).access_rule = lambda state: has_at_least(state, player, "Material", 6)
-    multiworld.get_location("Traverse Town Synth Fish"                                                     , player).access_rule = lambda state: has_at_least(state, player, "Material", 6)
-    multiworld.get_location("Traverse Town Synth Mushroom"                                                 , player).access_rule = lambda state: has_at_least(state, player, "Material", 6)
+    multiworld.get_location("Traverse Town Synth Log"                                                      , player).access_rule = lambda state: has_at_least(state, player, "Material", 6) and has_item(state, player, "Green Trinity")
+    multiworld.get_location("Traverse Town Synth Cloth"                                                    , player).access_rule = lambda state: has_at_least(state, player, "Material", 6) and has_item(state, player, "Green Trinity")
+    multiworld.get_location("Traverse Town Synth Rope"                                                     , player).access_rule = lambda state: has_at_least(state, player, "Material", 6) and has_item(state, player, "Green Trinity")
+    multiworld.get_location("Traverse Town Synth Seagull Egg"                                              , player).access_rule = lambda state: has_at_least(state, player, "Material", 6) and has_item(state, player, "Green Trinity")
+    multiworld.get_location("Traverse Town Synth Fish"                                                     , player).access_rule = lambda state: has_at_least(state, player, "Material", 6) and has_item(state, player, "Green Trinity")
+    multiworld.get_location("Traverse Town Synth Mushroom"                                                 , player).access_rule = lambda state: has_at_least(state, player, "Material", 6) and has_item(state, player, "Green Trinity")
 
     
    #multiworld.get_location("Final Ansem"                                                                  , player).access_rule = lambda state: has_item(state, player, "")
