@@ -1,15 +1,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from types import MappingProxyType
 from typing import Dict, Iterable, Set, Any, Mapping
 
 from .feature import fishsanity, friendsanity
 from ..data.fish_data import FishItem
 from ..data.game_item import GameItem, ItemSource
 from ..data.villagers_data import Villager
-
-NO_CONTENT = MappingProxyType({})
 
 
 @dataclass(frozen=True)
@@ -45,13 +42,13 @@ class ContentPack:
     # def item_hook
     # ...
 
-    harvest_sources: Mapping[str, Iterable[ItemSource]] = NO_CONTENT
+    harvest_sources: Mapping[str, Iterable[ItemSource]] = field(default_factory=dict)
     """Harvest sources contains both crops and forageables, but also fruits from trees, the cave farm and stuff harvested from tapping like maple syrup."""
 
     def harvest_source_hook(self, content: StardewContent):
         ...
 
-    shop_sources: Mapping[str, Iterable[ItemSource]] = NO_CONTENT
+    shop_sources: Mapping[str, Iterable[ItemSource]] = field(default_factory=dict)
 
     def shop_source_hook(self, content: StardewContent):
         ...
