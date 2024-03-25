@@ -44,6 +44,7 @@ class Group(enum.Enum):
     WEAPON_SLINGSHOT = enum.auto()
     PROGRESSIVE_TOOLS = enum.auto()
     SKILL_LEVEL_UP = enum.auto()
+    SKILL_MASTERY = enum.auto()
     BUILDING = enum.auto()
     WIZARD_BUILDING = enum.auto()
     ARCADE_MACHINE_BUFFS = enum.auto()
@@ -326,11 +327,22 @@ def create_tools(item_factory: StardewItemFactory, options: StardewValleyOptions
 
 
 def create_skills(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    if options.skill_progression == SkillProgression.option_progressive:
-        for item in items_by_group[Group.SKILL_LEVEL_UP]:
-            if item.mod_name not in options.mods and item.mod_name is not None:
-                continue
-            items.extend(item_factory(item) for item in [item.name] * 10)
+    if options.skill_progression == SkillProgression.option_vanilla:
+        return
+
+    for item in items_by_group[Group.SKILL_LEVEL_UP]:
+        if item.mod_name not in options.mods and item.mod_name is not None:
+            continue
+        items.extend(item_factory(item) for item in [item.name] * 10)
+
+    if options.skill_progression != SkillProgression.option_progressive_with_masteries:
+        return
+
+    for item in items_by_group[Group.SKILL_MASTERY]:
+        if item.mod_name not in options.mods and item.mod_name is not None:
+            continue
+        items.append(item_factory(item))
+
 
 
 def create_wizard_buildings(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):

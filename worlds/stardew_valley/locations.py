@@ -49,6 +49,7 @@ class LocationTags(enum.Enum):
     FORAGING_LEVEL = enum.auto()
     COMBAT_LEVEL = enum.auto()
     MINING_LEVEL = enum.auto()
+    MASTERY_LEVEL = enum.auto()
     BUILDING_BLUEPRINT = enum.auto()
     STORY_QUEST = enum.auto()
     ARCADE_MACHINE = enum.auto()
@@ -431,8 +432,11 @@ def create_locations(location_collector: StardewLocationCollector,
 
     if not options.skill_progression == SkillProgression.option_vanilla:
         for location in locations_by_tag[LocationTags.SKILL_LEVEL]:
-            if location.mod_name is None or location.mod_name in options.mods:
-                randomized_locations.append(location_table[location.name])
+            if location.mod_name is not None and location.mod_name not in options.mods:
+                continue
+            if LocationTags.MASTERY_LEVEL in location.tags and options.skill_progression != SkillProgression.option_progressive_with_masteries:
+                continue
+            randomized_locations.append(location_table[location.name])
 
     if options.building_progression & BuildingProgression.option_progressive:
         for location in locations_by_tag[LocationTags.BUILDING_BLUEPRINT]:
