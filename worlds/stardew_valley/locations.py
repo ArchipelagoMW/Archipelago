@@ -7,9 +7,10 @@ from typing import Optional, Dict, Protocol, List, FrozenSet, Iterable
 from . import data
 from .bundles.bundle_room import BundleRoom
 from .content.game_content import StardewContent
+from .data.game_item import ItemTag
 from .data.museum_data import all_museum_items
 from .mods.mod_data import ModNames
-from .options import ExcludeGingerIsland, ArcadeMachineLocations, SpecialOrderLocations, Cropsanity, Museumsanity, FestivalLocations, \
+from .options import ExcludeGingerIsland, ArcadeMachineLocations, SpecialOrderLocations, Museumsanity, FestivalLocations, \
     SkillProgression, BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
 from .strings.goal_names import Goal
@@ -171,13 +172,12 @@ def initialize_groups():
 initialize_groups()
 
 
-def extend_cropsanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
-    if options.cropsanity == Cropsanity.option_disabled:
+def extend_cropsanity_locations(randomized_locations: List[LocationData], content: StardewContent):
+    if not content.features.cropsanity.is_enabled:
         return
 
-    cropsanity_locations = [item for item in locations_by_tag[LocationTags.CROPSANITY] if not item.mod_name or item.mod_name in options.mods]
-    cropsanity_locations = filter_ginger_island(options, cropsanity_locations)
-    randomized_locations.extend(cropsanity_locations)
+    randomized_locations.extend(location_table[content.features.cropsanity.to_location_name(item.name)]
+                                for item in content.find_tagged_items(ItemTag.CROPSANITY))
 
 
 def extend_quests_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
@@ -451,7 +451,7 @@ def create_locations(location_collector: StardewLocationCollector,
     if options.arcade_machine_locations == ArcadeMachineLocations.option_full_shuffling:
         randomized_locations.extend(locations_by_tag[LocationTags.ARCADE_MACHINE])
 
-    extend_cropsanity_locations(randomized_locations, options)
+    extend_cropsanity_locations(randomized_locations, content)
     extend_fishsanity_locations(randomized_locations, content, random)
     extend_museumsanity_locations(randomized_locations, options, random)
     extend_friendsanity_locations(randomized_locations, content)

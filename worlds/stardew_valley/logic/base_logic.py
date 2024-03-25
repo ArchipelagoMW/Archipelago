@@ -11,8 +11,6 @@ class LogicRegistry:
 
     def __init__(self):
         self.item_rules: Dict[str, StardewRule] = {}
-        self.sapling_rules: Dict[str, StardewRule] = {}
-        self.tree_fruit_rules: Dict[str, StardewRule] = {}
         self.seed_rules: Dict[str, StardewRule] = {}
         self.cooking_rules: Dict[str, StardewRule] = {}
         self.crafting_rules: Dict[str, StardewRule] = {}

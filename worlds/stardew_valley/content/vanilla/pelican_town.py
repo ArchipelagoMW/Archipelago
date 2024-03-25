@@ -1,11 +1,16 @@
 from ..game_content import ContentPack
 from ...data import villagers_data, fish_data
+from ...data.game_item import PermanentSource
 from ...data.harvest import ForagingSource, SeasonalForagingSource
+from ...data.shop import ShopSource
 from ...strings.crop_names import Fruit
 from ...strings.fish_names import WaterItem
 from ...strings.forageable_names import Forageable, Mushroom
+from ...strings.fruit_tree_names import Sapling
+from ...strings.material_names import Material
 from ...strings.region_names import Region
 from ...strings.season_names import Season
+from ...strings.seed_names import Seed, TreeSeed
 
 pelican_town = ContentPack(
     "Pelican Town (Vanilla)",
@@ -113,6 +118,61 @@ pelican_town = ContentPack(
         WaterItem.sea_urchin: (
             ForagingSource(regions=(Region.tide_pools,)),
         ),
+
+        Seed.mixed: (
+            PermanentSource(regions=(Region.town, Region.farm, Region.forest)),
+        )
+    },
+    shop_sources={
+        # Saplings
+        Sapling.apple: (ShopSource(money_price=4000, shop_region=Region.pierre_store),),
+        Sapling.apricot: (ShopSource(money_price=2000, shop_region=Region.pierre_store),),
+        Sapling.cherry: (ShopSource(money_price=3400, shop_region=Region.pierre_store),),
+        Sapling.orange: (ShopSource(money_price=4000, shop_region=Region.pierre_store),),
+        Sapling.peach: (ShopSource(money_price=6000, shop_region=Region.pierre_store),),
+        Sapling.pomegranate: (ShopSource(money_price=6000, shop_region=Region.pierre_store),),
+
+        # Crop seeds, assuming they are bought in season, otherwise price is different with missing stock list.
+        Seed.parsnip: (ShopSource(money_price=20, shop_region=Region.pierre_store, seasons=(Season.spring,)),),
+        Seed.bean: (ShopSource(money_price=60, shop_region=Region.pierre_store, seasons=(Season.spring,)),),
+        Seed.cauliflower: (ShopSource(money_price=80, shop_region=Region.pierre_store, seasons=(Season.spring,)),),
+        Seed.potato: (ShopSource(money_price=50, shop_region=Region.pierre_store, seasons=(Season.spring,)),),
+        Seed.tulip: (ShopSource(money_price=20, shop_region=Region.pierre_store, seasons=(Season.spring,)),),
+        Seed.kale: (ShopSource(money_price=70, shop_region=Region.pierre_store, seasons=(Season.spring,)),),
+        Seed.jazz: (ShopSource(money_price=30, shop_region=Region.pierre_store, seasons=(Season.spring,)),),
+        Seed.garlic: (ShopSource(money_price=40, shop_region=Region.pierre_store, seasons=(Season.spring,)),),
+        Seed.rice: (ShopSource(money_price=40, shop_region=Region.pierre_store, seasons=(Season.spring,)),),
+
+        Seed.melon: (ShopSource(money_price=80, shop_region=Region.pierre_store, seasons=(Season.summer,)),),
+        Seed.tomato: (ShopSource(money_price=50, shop_region=Region.pierre_store, seasons=(Season.summer,)),),
+        Seed.blueberry: (ShopSource(money_price=80, shop_region=Region.pierre_store, seasons=(Season.summer,)),),
+        Seed.pepper: (ShopSource(money_price=40, shop_region=Region.pierre_store, seasons=(Season.summer,)),),
+        Seed.wheat: (ShopSource(money_price=10, shop_region=Region.pierre_store, seasons=(Season.summer, Season.fall)),),
+        Seed.radish: (ShopSource(money_price=40, shop_region=Region.pierre_store, seasons=(Season.summer,)),),
+        Seed.poppy: (ShopSource(money_price=100, shop_region=Region.pierre_store, seasons=(Season.summer,)),),
+        Seed.spangle: (ShopSource(money_price=50, shop_region=Region.pierre_store, seasons=(Season.summer,)),),
+        Seed.hops: (ShopSource(money_price=60, shop_region=Region.pierre_store, seasons=(Season.summer,)),),
+        Seed.corn: (ShopSource(money_price=150, shop_region=Region.pierre_store, seasons=(Season.summer, Season.fall)),),
+        Seed.sunflower: (ShopSource(money_price=200, shop_region=Region.pierre_store, seasons=(Season.summer, Season.fall)),),
+        Seed.red_cabbage: (ShopSource(money_price=100, shop_region=Region.pierre_store, seasons=(Season.summer,)),),
+
+        Seed.eggplant: (ShopSource(money_price=20, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
+        Seed.pumpkin: (ShopSource(money_price=100, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
+        Seed.bok_choy: (ShopSource(money_price=50, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
+        Seed.yam: (ShopSource(money_price=60, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
+        Seed.cranberry: (ShopSource(money_price=240, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
+        Seed.fairy: (ShopSource(money_price=200, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
+        Seed.amaranth: (ShopSource(money_price=70, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
+        Seed.grape: (ShopSource(money_price=60, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
+        Seed.artichoke: (ShopSource(money_price=30, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
+
+        Seed.broccoli: (ShopSource(items_price=(Material.moss,), shop_region=Region.raccoon_shop),),
+        Seed.carrot: (ShopSource(items_price=(TreeSeed.maple,), shop_region=Region.raccoon_shop),),
+        Seed.powdermelon: (ShopSource(items_price=(TreeSeed.acorn,), shop_region=Region.raccoon_shop),),
+        Seed.summer_squash: (ShopSource(items_price=(Material.sap,), shop_region=Region.raccoon_shop),),
+
+        Seed.strawberry: (ShopSource(money_price=100, shop_region=Region.egg_festival, seasons=(Season.spring,)),),
+        Seed.rare_seed: (ShopSource(money_price=1000, shop_region=Region.traveling_cart, seasons=(Season.spring, Season.summer)),),
     },
     fishes=(
         fish_data.albacore,

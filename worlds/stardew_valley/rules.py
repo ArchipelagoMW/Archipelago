@@ -8,6 +8,8 @@ from .bundles.bundle_room import BundleRoom
 from .content import StardewContent
 from .content.feature import friendsanity
 from .data.craftable_data import all_crafting_recipes_by_name
+from .data.game_item import ItemTag
+from .data.harvest import HarvestCropSource, HarvestFruitTreeSource
 from .data.museum_data import all_museum_items, dwarf_scrolls, skeleton_front, skeleton_middle, skeleton_back, all_museum_items_by_name, all_museum_minerals, \
     all_museum_artifacts, Artifact
 from .data.recipe_data import all_cooking_recipes_by_name
@@ -18,7 +20,7 @@ from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
 from .options import StardewValleyOptions
 from .options import ToolProgression, BuildingProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
-    Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, Cropsanity, SkillProgression
+    Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, SkillProgression
 from .stardew_rule import And, StardewRule
 from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .stardew_rule.rule_explain import explain
@@ -40,6 +42,7 @@ from .strings.performance_names import Performance
 from .strings.quest_names import Quest
 from .strings.region_names import Region
 from .strings.season_names import Season
+from .strings.seed_names import Seed
 from .strings.skill_names import ModSkill, Skill
 from .strings.tool_names import Tool, ToolMaterial
 from .strings.tv_channel_names import Channel
@@ -64,7 +67,7 @@ def set_rules(world):
     set_skills_rules(logic, multiworld, player, world_options)
     set_bundle_rules(bundle_rooms, logic, multiworld, player)
     set_building_rules(logic, multiworld, player, world_options)
-    set_cropsanity_rules(all_location_names, logic, multiworld, player, world_options)
+    set_cropsanity_rules(logic, multiworld, player, world_content)
     set_story_quests_rules(all_location_names, logic, multiworld, player, world_options)
     set_special_order_rules(all_location_names, logic, multiworld, player, world_options)
     set_help_wanted_quests_rules(logic, multiworld, player, world_options)
@@ -420,17 +423,19 @@ def set_island_parrot_rules(logic: StardewLogic, multiworld, player):
                              has_10_walnut)
 
 
-def set_cropsanity_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
-    if world_options.cropsanity == Cropsanity.option_disabled:
+def set_cropsanity_rules(logic: StardewLogic, multiworld, player, world_content: StardewContent):
+    if not world_content.features.cropsanity.is_enabled:
         return
 
-    harvest_prefix = "Harvest "
-    harvest_prefix_length = len(harvest_prefix)
-    for harvest_location in locations.locations_by_tag[LocationTags.CROPSANITY]:
-        if harvest_location.name in all_location_names and (harvest_location.mod_name is None or harvest_location.mod_name in world_options.mods):
-            crop_name = harvest_location.name[harvest_prefix_length:]
-            MultiWorldRules.set_rule(multiworld.get_location(harvest_location.name, player),
-                                     logic.has(crop_name))
+    for item in world_content.find_tagged_items(ItemTag.CROPSANITY):
+        location = world_content.features.cropsanity.to_location_name(item.name)
+
+        if item.name == Seed.coffee:
+            MultiWorldRules.set_rule(multiworld.get_location(location, player), logic.has(Seed.coffee))
+            continue
+
+        harvest_sources = (source for source in item.sources if isinstance(source, (HarvestFruitTreeSource, HarvestCropSource)))
+        MultiWorldRules.set_rule(multiworld.get_location(location, player), logic.source.has_access_to_any(harvest_sources))
 
 
 def set_story_quests_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):

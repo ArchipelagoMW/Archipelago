@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, Iterable, Set, Any, Mapping
+from typing import Dict, Iterable, Set, Any, Mapping, Type, Tuple, Union
 
-from .feature import fishsanity, friendsanity
+from .feature import cropsanity, fishsanity, friendsanity
 from ..data.fish_data import FishItem
-from ..data.game_item import GameItem, ItemSource
+from ..data.game_item import GameItem, ItemSource, ItemTag
 from ..data.villagers_data import Villager
 
 
@@ -22,9 +22,33 @@ class StardewContent:
     skills: Dict[str, Any] = field(default_factory=dict)
     quests: Dict[str, Any] = field(default_factory=dict)
 
+    def find_sources_of_type(self, types: Union[Type[ItemSource], Tuple[Type[ItemSource]]]) -> Iterable[ItemSource]:
+        for item in self.game_items.values():
+            for source in item.sources:
+                if isinstance(source, types):
+                    yield source
+
+    def source_item(self, item_name: str, *sources: ItemSource):
+        item = self.game_items.setdefault(item_name, GameItem(item_name))
+        item.add_sources(sources)
+
+    def tag_item(self, item_name: str, *tags: ItemTag):
+        item = self.game_items.setdefault(item_name, GameItem(item_name))
+        item.add_tags(tags)
+
+    def untag_item(self, item_name: str, tag: ItemTag):
+        self.game_items[item_name].tags.remove(tag)
+
+    def find_tagged_items(self, tag: ItemTag) -> Iterable[GameItem]:
+        # TODO might be worth caching this, but it need to only be cached once the content is finalized...
+        for item in self.game_items.values():
+            if tag in item.tags:
+                yield item
+
 
 @dataclass(frozen=True)
 class StardewFeatures:
+    cropsanity: cropsanity.CropsanityFeature
     fishsanity: fishsanity.FishsanityFeature
     friendsanity: friendsanity.FriendsanityFeature
 
@@ -58,6 +82,16 @@ class ContentPack:
     def fish_hook(self, content: StardewContent):
         ...
 
+    artisan_equipment_sources: Mapping[str, Iterable[ItemSource]] = field(default_factory=dict)
+
+    def artisan_equipment_hook(self, content: StardewContent):
+        ...
+
+    artisan_good_sources: Mapping[str, Iterable[ItemSource]] = field(default_factory=dict)
+
+    def artisan_good_hook(self, content: StardewContent):
+        ...
+
     villagers: Iterable[Villager] = ()
 
     def villager_hook(self, content: StardewContent):
@@ -71,4 +105,11 @@ class ContentPack:
     quests: Iterable[Any] = ()
 
     def quest_hook(self, content: StardewContent):
+        ...
+
+    def finalize_hook(self, content: StardewContent):
+        """Last hook called on the pack, once all other content packs have been registered.
+
+        This is the place to do any final adjustments to the content, like adding rules based on tags applied by other packs.
+        """
         ...

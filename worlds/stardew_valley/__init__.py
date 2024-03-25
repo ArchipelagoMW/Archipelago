@@ -121,6 +121,7 @@ class StardewValleyWorld(World):
         self.logic = StardewLogic(self.player, self.options, self.content, world_regions.keys())
         self.modified_bundles = get_all_bundles(self.random,
                                                 self.logic,
+                                                self.content,
                                                 self.options)
 
         def add_location(name: str, code: Optional[int], region: str):

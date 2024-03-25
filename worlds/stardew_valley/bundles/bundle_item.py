@@ -3,6 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
+from ..content import StardewContent
 from ..options import StardewValleyOptions, ExcludeGingerIsland, FestivalLocations, SkillProgression
 from ..strings.crop_names import Fruit
 from ..strings.currency_names import Currency
@@ -35,6 +36,13 @@ class MasteryItemSource(BundleItemSource):
         return options.skill_progression == SkillProgression.option_progressive_with_masteries
 
 
+class ContentItemSource(BundleItemSource):
+    """This is meant to be used for items that are managed by the content packs."""
+
+    def can_appear(self, options: StardewValleyOptions) -> bool:
+        raise ValueError("This should not be called, check if the item is in the content instead.")
+
+
 @dataclass(frozen=True, order=True)
 class BundleItem:
     class Sources:
@@ -42,6 +50,7 @@ class BundleItem:
         island = IslandItemSource()
         festival = FestivalItemSource()
         masteries = MasteryItemSource()
+        content = ContentItemSource()
 
     item_name: str
     amount: int = 1
@@ -81,6 +90,9 @@ class BundleItem:
         quality = "" if self.quality == CropQuality.basic else self.quality
         return f"{self.amount} {quality} {self.get_item()}"
 
-    def can_appear(self, options: StardewValleyOptions) -> bool:
+    def can_appear(self, content: StardewContent, options: StardewValleyOptions) -> bool:
+        if isinstance(self.source, ContentItemSource):
+            return self.item_name in content.game_items
+
         return self.source.can_appear(options)
 

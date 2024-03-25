@@ -34,6 +34,7 @@ class SeasonLogic(BaseLogic[Union[HasLogicMixin, SeasonLogicMixin, TimeLogicMixi
 
     def has_any(self, seasons: Iterable[str]):
         if not seasons:
+            # That should be false, but I'm scared.
             return True_()
         return self.logic.or_(*(self.logic.season.has(season) for season in seasons))
 

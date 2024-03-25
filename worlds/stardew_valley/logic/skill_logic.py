@@ -5,6 +5,7 @@ from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
 from .combat_logic import CombatLogicMixin
 from .crop_logic import CropLogicMixin
+from .harvesting_logic import HarvestingLogicMixin
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
@@ -12,7 +13,7 @@ from .season_logic import SeasonLogicMixin
 from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
 from .. import options
-from ..data import all_crops
+from ..data.harvest import HarvestCropSource
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_skills_levels import get_mod_skill_levels
 from ..stardew_rule import StardewRule, True_, False_, true_, And
@@ -35,7 +36,7 @@ class SkillLogicMixin(BaseLogicMixin):
 
 
 class SkillLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, TimeLogicMixin, ToolLogicMixin, SkillLogicMixin,
-CombatLogicMixin, CropLogicMixin, MagicLogicMixin]]):
+CombatLogicMixin, CropLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
     # Should be cached
     def can_earn_level(self, skill: str, level: int) -> StardewRule:
         if level <= 0:
@@ -116,9 +117,10 @@ CombatLogicMixin, CropLogicMixin, MagicLogicMixin]]):
 
     @cached_property
     def can_get_farming_xp(self) -> StardewRule:
+        sources = self.content.find_sources_of_type(HarvestCropSource)
         crop_rules = []
-        for crop in all_crops:
-            crop_rules.append(self.logic.crop.can_grow(crop))
+        for crop_source in sources:
+            crop_rules.append(self.logic.harvesting.can_harvest_crop_from(crop_source))
         return self.logic.or_(*crop_rules)
 
     @cached_property

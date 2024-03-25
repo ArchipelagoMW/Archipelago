@@ -4,7 +4,7 @@ from ...strings.fish_names import Fish
 
 
 class TestQiBoard(SVContentPackTestBase):
-    vanilla_packs = SVContentPackTestBase.vanilla_packs + (content_packs.ginger_island_content_pack, content_packs.qi_board)
+    vanilla_packs = SVContentPackTestBase.vanilla_packs + (content_packs.ginger_island_content_pack, content_packs.qi_board_content_pack)
 
     def test_extended_family_fishes_are_included(self):
         fish_names = self.content.fishes.keys()

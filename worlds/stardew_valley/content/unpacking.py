@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from typing import Iterable
+from typing import Iterable, Mapping, Callable
 
 from .game_content import StardewContent, ContentPack, StardewFeatures
 from .vanilla.base import base_game as base_game_content_pack
-from ..data.game_item import GameItem
+from ..data.game_item import GameItem, ItemSource
 
 try:
     from graphlib import TopologicalSorter
@@ -15,6 +15,7 @@ except ImportError:
 def unpack_content(features: StardewFeatures, packs: Iterable[ContentPack]) -> StardewContent:
     # Base game is always registered first.
     content = StardewContent(features)
+    packs_to_finalize = [base_game_content_pack]
     register_pack(content, base_game_content_pack)
 
     # Content packs are added in order based on their dependencies
@@ -32,23 +33,27 @@ def unpack_content(features: StardewFeatures, packs: Iterable[ContentPack]) -> S
     while sorter.is_active():
         # Packs get shuffled in TopologicalSorter, most likely due to hash seeding.
         for pack_name in sorted(sorter.get_ready()):
-            register_pack(content, packs_by_name[pack_name])
+            pack = packs_by_name[pack_name]
+            register_pack(content, pack)
             sorter.done(pack_name)
+            packs_to_finalize.append(pack)
 
+    for pack in packs_to_finalize:
+        pack.finalize_hook(content)
+
+    # Maybe items without source should be removed at some point
     return content
 
 
 def register_pack(content: StardewContent, pack: ContentPack):
-    # register game item
-
     # register regions
 
     # register entrances
 
-    for item_name, sources in pack.harvest_sources.items():
-        item = content.game_items.setdefault(item_name, GameItem(item_name))
-        item.add_sources(sources)
-    pack.harvest_source_hook(content)
+    register_sources_and_call_hook(content, pack.harvest_sources, pack.harvest_source_hook)
+    register_sources_and_call_hook(content, pack.shop_sources, pack.shop_source_hook)
+    register_sources_and_call_hook(content, pack.artisan_equipment_sources, pack.artisan_equipment_hook)
+    register_sources_and_call_hook(content, pack.artisan_good_sources, pack.artisan_good_hook)
 
     for fish in pack.fishes:
         content.fishes[fish.name] = fish
@@ -65,3 +70,18 @@ def register_pack(content: StardewContent, pack: ContentPack):
     # ...
 
     content.registered_packs.add(pack.name)
+
+
+def register_sources_and_call_hook(content: StardewContent,
+                                   sources_by_item_name: Mapping[str, Iterable[ItemSource, ...]],
+                                   hook: Callable[[StardewContent], None]):
+    for item_name, sources in sources_by_item_name.items():
+        item = content.game_items.setdefault(item_name, GameItem(item_name))
+        item.add_sources(sources)
+
+        for source in sources:
+            for requirement_name, tags in source.requirement_tags.items():
+                requirement_item = content.game_items.setdefault(requirement_name, GameItem(requirement_name))
+                requirement_item.add_tags(tags)
+
+    hook(content)

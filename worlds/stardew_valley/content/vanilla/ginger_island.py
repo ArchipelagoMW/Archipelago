@@ -1,16 +1,36 @@
 from .pelican_town import pelican_town as pelican_town_content_pack
-from ..game_content import ContentPack
+from ..game_content import ContentPack, StardewContent
 from ...data import villagers_data, fish_data
-from ...data.harvest import ForagingSource
+from ...data.game_item import ItemTag
+from ...data.harvest import ForagingSource, HarvestFruitTreeSource, HarvestCropSource
+from ...data.shop import ShopSource
+from ...strings.crop_names import Fruit, Vegetable
+from ...strings.fish_names import Fish
 from ...strings.forageable_names import Forageable, Mushroom
+from ...strings.fruit_tree_names import Sapling
+from ...strings.metal_names import Fossil
 from ...strings.region_names import Region
+from ...strings.season_names import Season
+from ...strings.seed_names import Seed
 
-ginger_island_content_pack = ContentPack(
+
+class GingerIslandContentPack(ContentPack):
+
+    def harvest_source_hook(self, content: StardewContent):
+        content.tag_item(Fruit.banana, ItemTag.FRUIT)
+        content.tag_item(Fruit.pineapple, ItemTag.FRUIT)
+        content.tag_item(Fruit.mango, ItemTag.FRUIT)
+        content.tag_item(Vegetable.taro_root, ItemTag.VEGETABLE)
+        content.tag_item(Mushroom.magma_cap, ItemTag.EDIBLE_MUSHROOM)
+
+
+ginger_island_content_pack = GingerIslandContentPack(
     "Ginger Island (Vanilla)",
     weak_dependencies=(
         pelican_town_content_pack.name,
     ),
     harvest_sources={
+        # Foraging
         Forageable.dragon_tooth: (
             ForagingSource(regions=(Region.volcano_floor_10,)),
         ),
@@ -20,6 +40,22 @@ ginger_island_content_pack = ContentPack(
         Mushroom.magma_cap: (
             ForagingSource(regions=(Region.volcano_floor_5,)),
         ),
+
+        # Fruit tree
+        Fruit.banana: (HarvestFruitTreeSource(sapling=Sapling.banana, seasons=(Season.summer,)),),
+        Fruit.mango: (HarvestFruitTreeSource(sapling=Sapling.mango, seasons=(Season.summer,)),),
+
+        # Crop
+        Vegetable.taro_root: (HarvestCropSource(seed=Seed.taro, seasons=(Season.summer,)),),
+        Fruit.pineapple: (HarvestCropSource(seed=Seed.pineapple, seasons=(Season.summer,)),),
+
+    },
+    shop_sources={
+        Seed.taro: (ShopSource(items_price=(Mushroom.magma_cap,), shop_region=Region.island_trader),),
+        Seed.pineapple: (ShopSource(items_price=(Fossil.bone_fragment,), shop_region=Region.island_trader),),
+        Sapling.banana: (ShopSource(items_price=(Forageable.dragon_tooth,), shop_region=Region.island_trader),),
+        Sapling.mango: (ShopSource(items_price=(Fish.mussel_node,), shop_region=Region.island_trader),),
+
     },
     fishes=(
         # TODO override region so no need to add inaccessible regions in logic

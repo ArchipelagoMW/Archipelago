@@ -39,15 +39,13 @@ from .tool_logic import ToolLogicMixin
 from .traveling_merchant_logic import TravelingMerchantLogicMixin
 from .wallet_logic import WalletLogicMixin
 from ..content.game_content import StardewContent
-from ..data import all_purchasable_seeds, all_crops
 from ..data.craftable_data import all_crafting_recipes
-from ..data.crops_data import crops_by_name
 from ..data.museum_data import all_museum_items
 from ..data.recipe_data import all_cooking_recipes
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_logic import ModLogicMixin
 from ..mods.mod_data import ModNames
-from ..options import Cropsanity, SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, StardewValleyOptions
+from ..options import SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, StardewValleyOptions
 from ..stardew_rule import False_, True_, StardewRule
 from ..strings.animal_names import Animal
 from ..strings.animal_product_names import AnimalProduct
@@ -119,37 +117,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
                 can_craft_rule = can_craft_rule | self.registry.crafting_rules[recipe.item]
             self.registry.crafting_rules[recipe.item] = can_craft_rule
 
-        self.registry.sapling_rules.update({
-            Sapling.apple: self.can_buy_sapling(Fruit.apple),
-            Sapling.apricot: self.can_buy_sapling(Fruit.apricot),
-            Sapling.cherry: self.can_buy_sapling(Fruit.cherry),
-            Sapling.orange: self.can_buy_sapling(Fruit.orange),
-            Sapling.peach: self.can_buy_sapling(Fruit.peach),
-            Sapling.pomegranate: self.can_buy_sapling(Fruit.pomegranate),
-            Sapling.banana: self.can_buy_sapling(Fruit.banana),
-            Sapling.mango: self.can_buy_sapling(Fruit.mango),
-        })
-
-        self.registry.tree_fruit_rules.update({
-            Fruit.apple: self.crop.can_plant_and_grow_item(Season.fall),
-            Fruit.apricot: self.crop.can_plant_and_grow_item(Season.spring),
-            Fruit.cherry: self.crop.can_plant_and_grow_item(Season.spring),
-            Fruit.orange: self.crop.can_plant_and_grow_item(Season.summer),
-            Fruit.peach: self.crop.can_plant_and_grow_item(Season.summer),
-            Fruit.pomegranate: self.crop.can_plant_and_grow_item(Season.fall),
-            Fruit.banana: self.crop.can_plant_and_grow_item(Season.summer),
-            Fruit.mango: self.crop.can_plant_and_grow_item(Season.summer),
-        })
-
-        for tree_fruit in self.registry.tree_fruit_rules:
-            existing_rules = self.registry.tree_fruit_rules[tree_fruit]
-            sapling = f"{tree_fruit} Sapling"
-            self.registry.tree_fruit_rules[tree_fruit] = existing_rules & self.has(sapling) & self.time.has_lived_months(1)
-
-        self.registry.seed_rules.update({seed.name: self.crop.can_buy_seed(seed) for seed in all_purchasable_seeds})
-        self.registry.crop_rules.update({crop.name: self.crop.can_grow(crop) for crop in all_crops})
         self.registry.crop_rules.update({
-            Seed.coffee: (self.season.has(Season.spring) | self.season.has(Season.summer)) & self.crop.can_buy_seed(crops_by_name[Seed.coffee].seed),
             Fruit.ancient_fruit: (self.received("Ancient Seeds") | self.received("Ancient Seeds Recipe")) &
                                  self.region.can_reach(Region.greenhouse) & self.has(Machine.seed_maker),
         })
@@ -344,7 +312,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             RetainingSoil.basic: self.money.can_spend_at(Region.pierre_store, 100),
             RetainingSoil.quality: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             Sapling.tea: self.relationship.has_hearts(NPC.caroline, 2) & self.has(Material.fiber) & self.has(Material.wood),
-            Seed.mixed: self.tool.has_tool(Tool.scythe) & self.region.can_reach_all((Region.farm, Region.forest, Region.town)),
+            Seed.coffee: self.traveling_merchant.has_days(3) & self.crop.can_plant_and_grow_item((Season.spring, Season.summer)),
             SpeedGro.basic: self.money.can_spend_at(Region.pierre_store, 100),
             SpeedGro.deluxe: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             Trash.broken_cd: self.skill.can_crab_pot,
@@ -373,16 +341,14 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         # @formatter:on
 
         content_rules = {
-            item_name: self.source.has_access_to_any(game_item.sources)
+            item_name: self.source.has_access_to_item(game_item)
             for item_name, game_item in self.content.game_items.items()
+            if game_item.sources
         }
 
         self.registry.item_rules.update(content_rules)
         self.registry.item_rules.update(self.registry.fish_rules)
         self.registry.item_rules.update(self.registry.museum_rules)
-        self.registry.item_rules.update(self.registry.sapling_rules)
-        self.registry.item_rules.update(self.registry.tree_fruit_rules)
-        self.registry.item_rules.update(self.registry.seed_rules)
         self.registry.item_rules.update(self.registry.crop_rules)
         self.artisan.initialize_rules()
         self.registry.item_rules.update(self.registry.artisan_good_rules)
@@ -450,23 +416,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         self.special_order.initialize_rules()
         self.special_order.update_rules(self.mod.special_order.get_modded_special_orders_rules())
 
-    def can_buy_sapling(self, fruit: str) -> StardewRule:
-        sapling_prices = {Fruit.apple: 4000, Fruit.apricot: 2000, Fruit.cherry: 3400, Fruit.orange: 4000,
-                          Fruit.peach: 6000,
-                          Fruit.pomegranate: 6000, Fruit.banana: 0, Fruit.mango: 0}
-        received_sapling = self.received(f"{fruit} Sapling")
-        if self.options.cropsanity == Cropsanity.option_disabled:
-            allowed_buy_sapling = True_()
-        else:
-            allowed_buy_sapling = received_sapling
-        can_buy_sapling = self.money.can_spend_at(Region.pierre_store, sapling_prices[fruit])
-        if fruit == Fruit.banana:
-            can_buy_sapling = self.has_island_trader() & self.has(Forageable.dragon_tooth)
-        elif fruit == Fruit.mango:
-            can_buy_sapling = self.has_island_trader() & self.has(Fish.mussel_node)
-
-        return allowed_buy_sapling & can_buy_sapling
-
     def can_smelt(self, item: str) -> StardewRule:
         return self.has(Machine.furnace) & self.has(item)
 
@@ -519,14 +468,14 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
     def can_succeed_luau_soup(self) -> StardewRule:
         if self.options.festival_locations != FestivalLocations.option_hard:
             return True_()
-        eligible_fish = [Fish.blobfish, Fish.crimsonfish, "Ice Pip", Fish.lava_eel, Fish.legend, Fish.angler, Fish.catfish, Fish.glacierfish, Fish.mutant_carp,
-                         Fish.spookfish, Fish.stingray, Fish.sturgeon, "Super Cucumber"]
+        eligible_fish = (Fish.blobfish, Fish.crimsonfish, Fish.ice_pip, Fish.lava_eel, Fish.legend, Fish.angler, Fish.catfish, Fish.glacierfish,
+                         Fish.mutant_carp, Fish.spookfish, Fish.stingray, Fish.sturgeon, Fish.super_cucumber)
         fish_rule = self.has_any(*(f for f in eligible_fish if f in self.content.fishes))  # To filter stingray
-        eligible_kegables = [Fruit.ancient_fruit, Fruit.apple, Fruit.banana, Forageable.coconut, Forageable.crystal_fruit, Fruit.mango, Fruit.melon,
+        eligible_kegables = (Fruit.ancient_fruit, Fruit.apple, Fruit.banana, Forageable.coconut, Forageable.crystal_fruit, Fruit.mango, Fruit.melon,
                              Fruit.orange, Fruit.peach, Fruit.pineapple, Fruit.pomegranate, Fruit.rhubarb, Fruit.starfruit, Fruit.strawberry,
                              Forageable.cactus_fruit, Fruit.cherry, Fruit.cranberries, Fruit.grape, Forageable.spice_berry, Forageable.wild_plum,
-                             Vegetable.hops, Vegetable.wheat]
-        keg_rules = [self.artisan.can_keg(kegable) for kegable in eligible_kegables]
+                             Vegetable.hops, Vegetable.wheat)
+        keg_rules = [self.artisan.can_keg(kegable) for kegable in eligible_kegables if kegable in self.content.game_items]
         aged_rule = self.has(Machine.cask) & self.logic.or_(*keg_rules)
         # There are a few other valid items, but I don't feel like coding them all
         return fish_rule | aged_rule
@@ -541,11 +490,17 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         fish_rule = self.skill.can_fish(difficulty=50)
         forage_rule = self.region.can_reach_any((Region.forest, Region.backwoods))  # Hazelnut always available since the grange display is in fall
         mineral_rule = self.action.can_open_geode(Generic.any)  # More than half the minerals are good enough
-        good_fruits = [Fruit.apple, Fruit.banana, Forageable.coconut, Forageable.crystal_fruit, Fruit.mango, Fruit.orange, Fruit.peach, Fruit.pomegranate,
-                       Fruit.strawberry, Fruit.melon, Fruit.rhubarb, Fruit.pineapple, Fruit.ancient_fruit, Fruit.starfruit, ]
+        good_fruits = (fruit
+                       for fruit in
+                       (Fruit.apple, Fruit.banana, Forageable.coconut, Forageable.crystal_fruit, Fruit.mango, Fruit.orange, Fruit.peach, Fruit.pomegranate,
+                        Fruit.strawberry, Fruit.melon, Fruit.rhubarb, Fruit.pineapple, Fruit.ancient_fruit, Fruit.starfruit)
+                       if fruit in self.content.game_items)
         fruit_rule = self.has_any(*good_fruits)
-        good_vegetables = [Vegetable.amaranth, Vegetable.artichoke, Vegetable.beet, Vegetable.cauliflower, Forageable.fiddlehead_fern, Vegetable.kale,
-                           Vegetable.radish, Vegetable.taro_root, Vegetable.yam, Vegetable.red_cabbage, Vegetable.pumpkin]
+        good_vegetables = (vegeteable
+                           for vegeteable in
+                           (Vegetable.amaranth, Vegetable.artichoke, Vegetable.beet, Vegetable.cauliflower, Forageable.fiddlehead_fern, Vegetable.kale,
+                            Vegetable.radish, Vegetable.taro_root, Vegetable.yam, Vegetable.red_cabbage, Vegetable.pumpkin)
+                           if vegeteable in self.content.game_items)
         vegetable_rule = self.has_any(*good_vegetables)
 
         return animal_rule & artisan_rule & cooking_rule & fish_rule & \

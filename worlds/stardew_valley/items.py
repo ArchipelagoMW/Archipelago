@@ -10,9 +10,9 @@ from BaseClasses import Item, ItemClassification
 from . import data
 from .content.feature import friendsanity
 from .content.game_content import StardewContent
+from .data.game_item import ItemTag
 from .mods.mod_data import ModNames
-from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Cropsanity, \
-    Museumsanity, \
+from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
     BuildingProgression, SkillProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
     Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity
 from .strings.ap_names.ap_weapon_names import APWeapon
@@ -244,7 +244,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_traveling_merchant_items(item_factory, items)
     items.append(item_factory("Return Scepter"))
     create_seasons(item_factory, options, items)
-    create_seeds(item_factory, options, items)
+    create_seeds(item_factory, content, items)
     create_friendsanity_items(item_factory, options, content, items, random)
     create_festival_rewards(item_factory, options, items)
     create_special_order_board_rewards(item_factory, options, items)
@@ -343,7 +343,6 @@ def create_skills(item_factory: StardewItemFactory, options: StardewValleyOption
         if item.mod_name not in options.mods and item.mod_name is not None:
             continue
         items.append(item_factory(item))
-
 
 
 def create_wizard_buildings(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
@@ -483,8 +482,8 @@ def create_player_buffs(item_factory: StardewItemFactory, options: StardewValley
 def create_player_buff(item_factory, buff: str, amount: int, need_all_buffs: bool, need_half_buffs: bool, items: List[Item]):
     progression_buffs = amount if need_all_buffs else (amount // 2 if need_half_buffs else 0)
     useful_buffs = amount - progression_buffs
-    items.extend(item_factory(item) for item in [buff] * progression_buffs)
     items.extend(item_factory(item, ItemClassification.useful) for item in [buff] * useful_buffs)
+    items.extend(item_factory(item) for item in [buff] * progression_buffs)
 
 
 def create_traveling_merchant_items(item_factory: StardewItemFactory, items: List[Item]):
@@ -504,14 +503,12 @@ def create_seasons(item_factory: StardewItemFactory, options: StardewValleyOptio
     items.extend([item_factory(item) for item in items_by_group[Group.SEASON]])
 
 
-def create_seeds(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    if options.cropsanity == Cropsanity.option_disabled:
+def create_seeds(item_factory: StardewItemFactory, content: StardewContent, items: List[Item]):
+    if not content.features.cropsanity.is_enabled:
         return
 
-    base_seed_items = [item for item in items_by_group[Group.CROPSANITY]]
-    filtered_seed_items = remove_excluded_items(base_seed_items, options)
-    seed_items = [item_factory(item) for item in filtered_seed_items]
-    items.extend(seed_items)
+    items.extend(item_factory(item_table[seed.name])
+                 for seed in content.find_tagged_items(ItemTag.CROPSANITY_SEED))
 
 
 def create_festival_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
@@ -713,8 +710,8 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
                   if trap.name not in items_already_added_names and
                   (trap.mod_name is None or trap.mod_name in options.mods)]
     trap_items.extend([bonus for bonus in items_by_group[Group.BONUS]
-                  if bonus.name not in items_already_added_names and
-                  (bonus.mod_name is None or bonus.mod_name in options.mods)])
+                       if bonus.name not in items_already_added_names and
+                       (bonus.mod_name is None or bonus.mod_name in options.mods)])
 
     priority_filler_items = []
     priority_filler_items.extend(useful_resource_packs)

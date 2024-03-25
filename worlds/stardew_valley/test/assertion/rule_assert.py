@@ -7,17 +7,42 @@ from ...stardew_rule.rule_explain import explain
 
 class RuleAssertMixin(TestCase):
     def assert_rule_true(self, rule: StardewRule, state: CollectionState):
-        self.assertTrue(rule(state), explain(rule, state))
+        expl = explain(rule, state)
+        try:
+            self.assertTrue(rule(state), expl)
+        except KeyError as e:
+            raise AssertionError(f"Error while checking rule {rule}: {e}"
+                                 f"\nExplanation: {expl}")
 
     def assert_rule_false(self, rule: StardewRule, state: CollectionState):
-        self.assertFalse(rule(state), explain(rule, state, expected=False))
+        expl = explain(rule, state, expected=False)
+        try:
+            self.assertFalse(rule(state), expl)
+        except KeyError as e:
+            raise AssertionError(f"Error while checking rule {rule}: {e}"
+                                 f"\nExplanation: {expl}")
 
     def assert_rule_can_be_resolved(self, rule: StardewRule, complete_state: CollectionState):
-        self.assertNotIn(MISSING_ITEM, repr(rule))
-        self.assertTrue(rule is false_ or rule(complete_state), explain(rule, complete_state))
+        expl = explain(rule, complete_state)
+        try:
+            self.assertNotIn(MISSING_ITEM, repr(rule))
+            self.assertTrue(rule is false_ or rule(complete_state), expl)
+        except KeyError as e:
+            raise AssertionError(f"Error while checking rule {rule}: {e}"
+                                 f"\nExplanation: {expl}")
 
     def assert_reach_location_true(self, location: Location, state: CollectionState):
-        self.assertTrue(location.can_reach(state), explain(Reach(location.name, "Location", 1), state))
+        expl = explain(Reach(location.name, "Location", 1), state)
+        try:
+            self.assertTrue(location.can_reach(state), expl)
+        except KeyError as e:
+            raise AssertionError(f"Error while checking location {location.name}: {e}"
+                                 f"\nExplanation: {expl}")
 
     def assert_reach_location_false(self, location: Location, state: CollectionState):
-        self.assertFalse(location.can_reach(state), explain(Reach(location.name, "Location", 1), state, expected=False))
+        expl = explain(Reach(location.name, "Location", 1), state, expected=False)
+        try:
+            self.assertFalse(location.can_reach(state), expl)
+        except KeyError as e:
+            raise AssertionError(f"Error while checking location {location.name}: {e}"
+                                 f"\nExplanation: {expl}")

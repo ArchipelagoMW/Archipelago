@@ -4,6 +4,7 @@ from typing import ClassVar, Tuple
 from ...content import content_packs, ContentPack, StardewContent, unpack_content, StardewFeatures, feature
 
 default_features = StardewFeatures(
+    feature.cropsanity.CropsanityDisabled(),
     feature.fishsanity.FishsanityNone(),
     feature.friendsanity.FriendsanityNone()
 )

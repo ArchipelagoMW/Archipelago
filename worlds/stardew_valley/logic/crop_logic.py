@@ -11,10 +11,8 @@ from .tool_logic import ToolLogicMixin
 from .traveling_merchant_logic import TravelingMerchantLogicMixin
 from ..data import CropItem, SeedItem
 from ..options import Cropsanity, ExcludeGingerIsland
-from ..stardew_rule import StardewRule, True_, False_
-from ..strings.craftable_names import Craftable
-from ..strings.forageable_names import Forageable, Mushroom
-from ..strings.machine_names import Machine
+from ..stardew_rule import StardewRule, True_, False_, false_
+from ..strings.forageable_names import Mushroom
 from ..strings.metal_names import Fossil
 from ..strings.region_names import Region
 from ..strings.seed_names import Seed
@@ -28,24 +26,34 @@ class CropLogicMixin(BaseLogicMixin):
 
 
 class CropLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, TravelingMerchantLogicMixin, SeasonLogicMixin, MoneyLogicMixin,
-                                ToolLogicMixin, CropLogicMixin]]):
+ToolLogicMixin, CropLogicMixin]]):
     @cache_self1
     def can_grow(self, crop: CropItem) -> StardewRule:
-        season_rule = self.logic.season.has_any(crop.farm_growth_seasons)
-        seed_rule = self.logic.has(crop.seed.name)
-        farm_rule = self.logic.region.can_reach(Region.farm) & season_rule
-        tool_rule = self.logic.tool.has_tool(Tool.hoe) & self.logic.tool.has_tool(Tool.watering_can)
-        region_rule = farm_rule | self.logic.region.can_reach(Region.greenhouse) | self.logic.crop.has_island_farm()
-        if crop.name == Forageable.cactus_fruit:
-            region_rule = self.logic.region.can_reach(Region.greenhouse) | self.logic.has(Craftable.garden_pot)
-        return seed_rule & region_rule & tool_rule
+        region_to_grow_rule = self.logic.crop.can_plant_and_grow_item(crop.farm_growth_seasons)
 
+        seed_rule = self.logic.has(crop.seed.name)
+        tool_rule = self.logic.tool.has_tool(Tool.hoe) & self.logic.tool.has_tool(Tool.watering_can)
+
+        return seed_rule & region_to_grow_rule & tool_rule
+
+    @cache_self1
     def can_plant_and_grow_item(self, seasons: Union[str, Iterable[str]]) -> StardewRule:
+        # TODO this should be an event in a "season+farming" region.
+        #  There would be an entrance without condition in greenhouse + island_farm + farm given you have season
         if isinstance(seasons, str):
             seasons = [seasons]
-        season_rule = self.logic.season.has_any(seasons) | self.logic.region.can_reach(Region.greenhouse) | self.logic.crop.has_island_farm()
-        farm_rule = self.logic.region.can_reach(Region.farm) | self.logic.region.can_reach(Region.greenhouse) | self.logic.crop.has_island_farm()
-        return season_rule & farm_rule
+
+        greenhouse_rule = self.logic.region.can_reach(Region.greenhouse)
+        island_farm_rule = self.logic.crop.has_island_farm()
+
+        if seasons:
+            farm_with_right_season_rule = self.logic.season.has_any(seasons) & self.logic.region.can_reach(Region.farm)
+        else:
+            # Because no season means it can't be grown in the farm.
+            # FIXME this should be handled by has_any
+            farm_with_right_season_rule = false_
+
+        return greenhouse_rule | island_farm_rule | farm_with_right_season_rule
 
     def has_island_farm(self) -> StardewRule:
         if self.options.exclude_ginger_island == ExcludeGingerIsland.option_false:

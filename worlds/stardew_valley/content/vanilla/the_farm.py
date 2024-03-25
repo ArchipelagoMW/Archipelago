@@ -39,6 +39,5 @@ the_farm = ContentPack(
         Mushroom.red: (
             MushroomCaveSource(),
         ),
-
     }
 )

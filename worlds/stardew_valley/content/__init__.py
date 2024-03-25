@@ -1,5 +1,5 @@
 from . import content_packs
-from .feature import friendsanity, fishsanity
+from .feature import cropsanity, friendsanity, fishsanity
 from .game_content import ContentPack, StardewContent, StardewFeatures
 from .unpacking import unpack_content
 from .. import options
@@ -18,7 +18,7 @@ def choose_content_packs(player_options: options.StardewValleyOptions):
         active_packs.append(content_packs.ginger_island_content_pack)
 
         if player_options.special_order_locations == options.SpecialOrderLocations.option_board_qi:
-            active_packs.append(content_packs.qi_board)
+            active_packs.append(content_packs.qi_board_content_pack)
 
     for mod in player_options.mods.value:
         active_packs.append(content_packs.by_mod[mod])
@@ -28,9 +28,25 @@ def choose_content_packs(player_options: options.StardewValleyOptions):
 
 def choose_features(player_options: options.StardewValleyOptions) -> StardewFeatures:
     return StardewFeatures(
+        choose_cropsanity(player_options.cropsanity),
         choose_fishsanity(player_options.fishsanity),
         choose_friendsanity(player_options.friendsanity, player_options.friendsanity_heart_size)
     )
+
+
+cropsanity_by_option = {
+    options.Cropsanity.option_disabled: cropsanity.CropsanityDisabled(),
+    options.Cropsanity.option_enabled: cropsanity.CropsanityEnabled(),
+}
+
+
+def choose_cropsanity(cropsanity_option: options.Cropsanity) -> cropsanity.CropsanityFeature:
+    cropsanity_feature = cropsanity_by_option.get(cropsanity_option)
+
+    if cropsanity_feature is None:
+        raise ValueError(f"No cropsanity feature mapped to {str(cropsanity_option.value)}")
+
+    return cropsanity_feature
 
 
 fishsanity_by_option = {

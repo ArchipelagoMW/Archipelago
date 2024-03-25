@@ -6,9 +6,11 @@ from .buff_logic import BuffLogicMixin
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
+from .season_logic import SeasonLogicMixin
 from .time_logic import TimeLogicMixin
+from ..data.shop import ShopSource
 from ..options import SpecialOrderLocations
-from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_
+from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_, true_
 from ..strings.ap_names.event_names import Event
 from ..strings.currency_names import Currency
 from ..strings.region_names import Region
@@ -23,7 +25,8 @@ class MoneyLogicMixin(BaseLogicMixin):
         self.money = MoneyLogic(*args, **kwargs)
 
 
-class MoneyLogic(BaseLogic[Union[RegionLogicMixin, MoneyLogicMixin, TimeLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin, BuffLogicMixin]]):
+class MoneyLogic(BaseLogic[Union[RegionLogicMixin, MoneyLogicMixin, TimeLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin, BuffLogicMixin,
+SeasonLogicMixin]]):
 
     @cache_self1
     def can_have_earned_total(self, amount: int) -> StardewRule:
@@ -63,6 +66,15 @@ class MoneyLogic(BaseLogic[Union[RegionLogicMixin, MoneyLogicMixin, TimeLogicMix
     # Should be cached
     def can_spend_at(self, region: str, amount: int) -> StardewRule:
         return self.logic.region.can_reach(region) & self.logic.money.can_spend(amount)
+
+    @cache_self1
+    def can_shop_from(self, source: ShopSource) -> StardewRule:
+        season_rule = self.logic.season.has_any(source.seasons)
+        money_rule = self.logic.money.can_spend(source.money_price) if source.money_price is not None else true_
+        item_rule = self.logic.has_all(*source.items_price) if source.items_price is not None else true_
+        region_rule = self.logic.region.can_reach(source.shop_region)
+
+        return self.logic.and_(season_rule, money_rule, item_rule, region_rule)
 
     # Should be cached
     def can_trade(self, currency: str, amount: int) -> StardewRule:

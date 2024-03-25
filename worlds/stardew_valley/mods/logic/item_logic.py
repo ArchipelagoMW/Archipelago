@@ -101,7 +101,7 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
                 SVEForage.goldenrod: self.logic.region.can_reach(SVERegion.summit) & (
                         self.logic.season.has(Season.summer) | self.logic.season.has(Season.fall)),
                 SVESeed.shrub_seed: self.logic.region.can_reach(Region.secret_woods) & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.basic),
-                SVEFruit.salal_berry: self.logic.crop.can_plant_and_grow_item([Season.spring, Season.summer]) & self.logic.has(SVESeed.shrub_seed),
+                SVEFruit.salal_berry: self.logic.crop.can_plant_and_grow_item((Season.spring, Season.summer)) & self.logic.has(SVESeed.shrub_seed),
                 ModEdible.aegis_elixir: self.logic.money.can_spend_at(SVERegion.galmoran_outpost, 28000),
                 ModEdible.lightning_elixir: self.logic.money.can_spend_at(SVERegion.galmoran_outpost, 12000),
                 ModEdible.barbarian_elixir: self.logic.money.can_spend_at(SVERegion.galmoran_outpost, 22000),
@@ -166,18 +166,6 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
 
     def get_modified_item_rules_for_deep_woods(self, items: Dict[str, StardewRule]):
         options_to_update = {
-            Fruit.apple: items[Fruit.apple] | self.logic.region.can_reach(DeepWoodsRegion.floor_10),  # Deep enough to have seen such a tree at least once
-            Fruit.apricot: items[Fruit.apricot] | self.logic.region.can_reach(DeepWoodsRegion.floor_10),
-            Fruit.cherry: items[Fruit.cherry] | self.logic.region.can_reach(DeepWoodsRegion.floor_10),
-            Fruit.orange: items[Fruit.orange] | self.logic.region.can_reach(DeepWoodsRegion.floor_10),
-            Fruit.peach: items[Fruit.peach] | self.logic.region.can_reach(DeepWoodsRegion.floor_10),
-            Fruit.pomegranate: items[Fruit.pomegranate] | self.logic.region.can_reach(DeepWoodsRegion.floor_10),
-            Fruit.mango: items[Fruit.mango] | self.logic.region.can_reach(DeepWoodsRegion.floor_10),
-            Flower.tulip: items[Flower.tulip] | self.logic.tool.can_forage(Season.not_winter, DeepWoodsRegion.floor_10),
-            Flower.blue_jazz: items[Flower.blue_jazz] | self.logic.region.can_reach(DeepWoodsRegion.floor_10),
-            Flower.summer_spangle: items[Flower.summer_spangle] | self.logic.tool.can_forage(Season.not_winter, DeepWoodsRegion.floor_10),
-            Flower.poppy: items[Flower.poppy] | self.logic.tool.can_forage(Season.not_winter, DeepWoodsRegion.floor_10),
-            Flower.fairy_rose: items[Flower.fairy_rose] | self.logic.region.can_reach(DeepWoodsRegion.floor_10),
             Material.hardwood: items[Material.hardwood] | self.logic.tool.can_use_tool_at(Tool.axe, ToolMaterial.iron, DeepWoodsRegion.floor_10),
             Ingredient.sugar: items[Ingredient.sugar] | self.logic.tool.can_use_tool_at(Tool.axe, ToolMaterial.gold, DeepWoodsRegion.floor_50),
             # Gingerbread House
