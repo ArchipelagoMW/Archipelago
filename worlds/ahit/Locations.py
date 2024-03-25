@@ -114,7 +114,7 @@ def get_location_names() -> Dict[str, int]:
 ahit_locations = {
     "Spaceship - Rumbi Abuse": LocData(2000301000, "Spaceship", hit_type=HitType.umbrella_or_brewing),
 
-    # 300000 range - Mafia Town/Batle of the Birds
+    # 300000 range - Mafia Town/Battle of the Birds
     "Welcome to Mafia Town - Umbrella": LocData(2000301002, "Welcome to Mafia Town"),
     "Mafia Town - Old Man (Seaside Spaghetti)": LocData(2000303833, "Mafia Town Area"),
     "Mafia Town - Old Man (Steel Beams)": LocData(2000303832, "Mafia Town Area"),

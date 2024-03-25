@@ -516,7 +516,7 @@ class DWShuffleCountMax(Range):
 
 
 class DWEnableBonus(Toggle):
-    """In Death Wish, allow the full completion of contracts to reward items.
+    """In Death Wish, add a location for completing all of a DW contract's bonuses, in addition to the location for completing the DW contract normally.
     WARNING!! Only for the brave! This option can create VERY DIFFICULT SEEDS!
     ONLY turn this on if you know what you are doing to yourself and everyone else in the multiworld!
     Using Peace and Tranquility to auto-complete the bonuses will NOT count!"""
