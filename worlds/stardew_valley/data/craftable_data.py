@@ -281,7 +281,7 @@ statue_of_dwarf_king = mastery_recipe(Statue.dwarf_king, Skill.mining, {MetalBar
 heavy_furnace = mastery_recipe(Machine.heavy_furnace, Skill.mining, {Machine.furnace: 2, MetalBar.iron: 3, Material.stone: 50})
 mystic_tree_seed = mastery_recipe(TreeSeed.mystic, Skill.foraging, {TreeSeed.acorn: 5, TreeSeed.maple: 5, TreeSeed.pine: 5, TreeSeed.mahogany: 5})
 treasure_totem = mastery_recipe(Consumable.treasure_totem, Skill.foraging, {Material.hardwood: 5, ArtisanGood.mystic_syrup: 1, Material.moss: 10})
-challenge_bait = mastery_recipe(Craftable.challenge_bait, Skill.fishing, {Fossil.bone_fragment: 5, Material.moss: 2})
+challenge_bait = mastery_recipe(Fishing.challenge_bait, Skill.fishing, {Fossil.bone_fragment: 5, Material.moss: 2})
 anvil = mastery_recipe(Machine.anvil, Skill.combat, {MetalBar.iron: 50})
 mini_forge = mastery_recipe(Machine.mini_forge, Skill.combat, {Forageable.dragon_tooth: 5, MetalBar.iron: 10, MetalBar.gold: 10, MetalBar.iridium: 5})
 
