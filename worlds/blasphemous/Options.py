@@ -1,4 +1,5 @@
-from Options import Choice, Toggle, DefaultOnToggle, DeathLink, StartInventoryPool
+from dataclasses import dataclass
+from Options import Choice, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions
 import random
 
 
@@ -163,26 +164,25 @@ class BlasphemousDeathLink(DeathLink):
     Note that Guilt Fragments will not appear when killed by Death Link."""
 
 
-blasphemous_options = {
-    "prie_dieu_warp": PrieDieuWarp,
-    "skip_cutscenes": SkipCutscenes,
-    "corpse_hints": CorpseHints,
-    "difficulty": Difficulty,
-    "penitence": Penitence,
-    "starting_location": StartingLocation,
-    "ending": Ending,
-    "skip_long_quests": SkipLongQuests,
-    "thorn_shuffle" : ThornShuffle,
-    "dash_shuffle": DashShuffle,
-    "wall_climb_shuffle": WallClimbShuffle,
-    "reliquary_shuffle": ReliquaryShuffle,
-    "boots_of_pleading": CustomItem1,
-    "purified_hand": CustomItem2,
-    "start_wheel": StartWheel,
-    "skill_randomizer": SkillRando,
-    "enemy_randomizer": EnemyRando,
-    "enemy_groups": EnemyGroups,
-    "enemy_scaling": EnemyScaling,
-    "death_link": BlasphemousDeathLink,
-    "start_inventory": StartInventoryPool
-}
+@dataclass
+class BlasphemousOptions(PerGameCommonOptions):
+    prie_dieu_warp: PrieDieuWarp
+    skip_cutscenes: SkipCutscenes
+    corpse_hints: CorpseHints
+    difficulty: Difficulty
+    penitence: Penitence
+    starting_location: StartingLocation
+    ending: Ending
+    skip_long_quests: SkipLongQuests
+    thorn_shuffle: ThornShuffle
+    dash_shuffle: DashShuffle
+    wall_climb_shuffle: WallClimbShuffle
+    reliquary_shuffle: ReliquaryShuffle
+    boots_of_pleading: CustomItem1
+    purified_hand: CustomItem2
+    start_wheel: StartWheel
+    skill_randomizer: SkillRando
+    enemy_randomizer: EnemyRando
+    enemy_groups: EnemyGroups
+    enemy_scaling: EnemyScaling
+    death_link: BlasphemousDeathLink
