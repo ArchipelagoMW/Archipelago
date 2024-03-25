@@ -12,6 +12,7 @@
 
 2. In the Steam console, enter the following command: 
 `download_depot 253230 253232 7770543545116491859`. ***Wait for the console to say the download is finished!***
+This can take a while to finish (30+ minutes) so please be patient.
 
 3. Once the download finishes, go to `steamapps/content/app_253230` in Steam's program folder.
 
