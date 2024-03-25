@@ -410,7 +410,7 @@ def set_specific_rules(world: "HatInTimeWorld"):
     if difficulty >= Difficulty.HARD:
         set_hard_rules(world)
 
-    if difficulty >= 2:
+    if difficulty >= Difficulty.EXPERT:
         set_expert_rules(world)
 
 
