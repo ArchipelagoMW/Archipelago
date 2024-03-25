@@ -273,6 +273,7 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["Traverse Town"].locations.append("Traverse Town Defeat Guard Armor Blue Trinity Event"),
     regions["Traverse Town"].locations.append("Traverse Town Leon Secret Waterway Earthshine Event"),
     regions["Traverse Town"].locations.append("Traverse Town Kairi Secret Waterway Oathkeeper Event"),
+    regions["Traverse Town"].locations.append("Traverse Town Defeat Guard Armor Brave Warrior Event"),
     regions["Deep Jungle"].locations.append("Deep Jungle Defeat Sabor White Fang Event"),
     regions["Deep Jungle"].locations.append("Deep Jungle Defeat Clayton Cure Event"),
     regions["Deep Jungle"].locations.append("Deep Jungle Seal Keyhole Jungle King Event"),
@@ -302,6 +303,7 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["Neverland"].locations.append("Neverland Seal Keyhole Tinker Bell Event")
     regions["Neverland"].locations.append("Neverland Seal Keyhole Glide Event")
     regions["Neverland"].locations.append("Neverland Defeat Phantom Stop Event")
+    regions["Neverland"].locations.append("Neverland Defeat Captain Hook Ars Aracanum Event")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Riku I White Trinity Event")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Maleficent Donald Cheer Event")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Dragon Maleficent Fireglow Event")
