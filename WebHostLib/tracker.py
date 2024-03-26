@@ -1606,6 +1606,7 @@ if "Starcraft 2" in network_data_package["games"]:
             "Hellstorm Batteries (Missile Turret)":        github_icon_base_url + "blizzard/btn-ability-stetmann-corruptormissilebarrage.png",
             "Advanced Construction (SCV)":                 github_icon_base_url + "blizzard/btn-ability-mengsk-trooper-advancedconstruction.png",
             "Dual-Fusion Welders (SCV)":                   github_icon_base_url + "blizzard/btn-upgrade-swann-scvdoublerepair.png",
+            "Hostile Environment Adaptation (SCV)":        github_icon_base_url + "blizzard/btn-upgrade-swann-hellarmor.png",
             "Fire-Suppression System Level 1":             organics_icon_base_url + "Fire-SuppressionSystem.png",
             "Fire-Suppression System Level 2":             github_icon_base_url + "blizzard/btn-upgrade-swann-firesuppressionsystem.png",
 
@@ -2333,12 +2334,12 @@ if "Starcraft 2" in network_data_package["games"]:
             "Progressive Zerg Armor Upgrade":           106 + SC2HOTS_ITEM_ID_OFFSET,
             "Progressive Zerg Ground Upgrade":          107 + SC2HOTS_ITEM_ID_OFFSET,
             "Progressive Zerg Flyer Upgrade":           108 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Zerg Weapon/Armor Upgrade":    109 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Protoss Weapon Upgrade":       105 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Protoss Armor Upgrade":        106 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Protoss Ground Upgrade":       107 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Protoss Air Upgrade":          108 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Protoss Weapon/Armor Upgrade": 109 + SC2WOL_ITEM_ID_OFFSET,
+            "Progressive Zerg Weapon/Armor Upgrade":    109 + SC2HOTS_ITEM_ID_OFFSET,
+            "Progressive Protoss Weapon Upgrade":       105 + SC2LOTV_ITEM_ID_OFFSET,
+            "Progressive Protoss Armor Upgrade":        106 + SC2LOTV_ITEM_ID_OFFSET,
+            "Progressive Protoss Ground Upgrade":       107 + SC2LOTV_ITEM_ID_OFFSET,
+            "Progressive Protoss Air Upgrade":          108 + SC2LOTV_ITEM_ID_OFFSET,
+            "Progressive Protoss Weapon/Armor Upgrade": 109 + SC2LOTV_ITEM_ID_OFFSET,
         }
         grouped_item_replacements = {
             "Progressive Terran Weapon Upgrade":   ["Progressive Terran Infantry Weapon",
