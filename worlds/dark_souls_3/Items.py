@@ -179,7 +179,9 @@ class DS3ItemData():
             DS3ItemCategory.SOUL: "Small Souls",
             DS3ItemCategory.UPGRADE: "Upgrade",
             DS3ItemCategory.HEALING: "Healing",
-        }[default_item.category])
+        }[self.category])
+
+        return names
 
     def counts(self, counts: List[int]) -> Generator["DS3ItemData", None, None]:
         """Returns an iterable of copies of this item with the given counts."""
@@ -1687,6 +1689,10 @@ item_descriptions = {
 
 
 _all_items = _vanilla_items + _dlc_items
+
+for item_data in _all_items:
+  for group_name in item_data.item_groups():
+    item_name_groups[group_name].add(item_data.name)
 
 filler_item_names = [item_data.name for item_data in _all_items if item_data.filler]
 item_dictionary = {item_data.name: item_data for item_data in _all_items}

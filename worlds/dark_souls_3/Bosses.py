@@ -69,15 +69,10 @@ all_bosses = [
             region = "Catacombs of Carthus", locations = {
         "FK: Soul of the Blood of the Wolf",
         "FK: Cinders of a Lord - Abyss Watcher",
-        "UG: Hornet Ring - environs, right of main path after killing FK boss",
         "FS: Undead Legion Helm - shop after killing FK boss",
         "FS: Undead Legion Armor - shop after killing FK boss",
         "FS: Undead Legion Gauntlet - shop after killing FK boss",
         "FS: Undead Legion Leggings - shop after killing FK boss",
-        "UG: Wolf Knight Helm - shop after killing FK boss",
-        "UG: Wolf Knight Armor - shop after killing FK boss",
-        "UG: Wolf Knight Gauntlets - shop after killing FK boss",
-        "UG: Wolf Knight Leggings - shop after killing FK boss",
         "FS: Farron Ring - Hawkwood",
         "FS: Hawkwood's Shield - gravestone after Hawkwood leaves",
     }),
@@ -146,6 +141,7 @@ all_bosses = [
         "UG: Ring of Steel Protection+1 - environs, behind bell tower",
         "FS: Ring of Sacrifice - Yuria shop",
         "UG: Ember - shop",
+        "UG: Priestess Ring - shop",
         "UG: Wolf Knight Helm - shop after killing FK boss",
         "UG: Wolf Knight Armor - shop after killing FK boss",
         "UG: Wolf Knight Gauntlets - shop after killing FK boss",
@@ -237,7 +233,13 @@ all_bosses = [
         "RC: Soul of Slave Knight Gael",
         "RC: Blood of the Dark Soul - end boss drop",
     }),
-    DS3BossInfo("Lords of Cinder", 4100800),
+    DS3BossInfo("Lords of Cinder", 4100800, locations = {
+        "KFF: Soul of the Lords",
+        "FS: Billed Mask - Yuria after killing KFF boss",
+        "FS: Black Dress - Yuria after killing KFF boss",
+        "FS: Black Gauntlets - Yuria after killing KFF boss",
+        "FS: Black Leggings - Yuria after killing KFF boss"
+    }),
 ]
 
 default_yhorm_location = DS3BossInfo("Yhorm the Giant", 3900800, locations = {

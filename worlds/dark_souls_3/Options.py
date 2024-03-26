@@ -346,7 +346,7 @@ class RandomEnemyPresetOption(Option[typing.Dict[str, typing.Any]], VerifyKeys):
     supports_weighting = False
     default = {}
 
-    valid_keys: ["Description", "RecommendFullRandomization", "RecommendNoEnemyProgression",
+    valid_keys = ["Description", "RecommendFullRandomization", "RecommendNoEnemyProgression",
                  "OopsAll", "Boss", "Miniboss", "Basic", "BuffBasicEnemiesAsBosses",
                  "DontRandomize", "RemoveSource", "Enemies"]
 
