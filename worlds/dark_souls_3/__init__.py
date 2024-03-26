@@ -481,8 +481,9 @@ class DarkSouls3World(World):
             self._add_entrance_rule("Ringed City", "Small Envoy Banner")
 
             if self.options.late_dlc:
-                self._add_entrance_rule("Painted World of Ariandel (Before Contraption)", "Small Doll")
-                self._add_entrance_rule("Painted World of Ariandel (Before Contraption)", self._has_any_scroll)
+                self._add_entrance_rule(
+                    "Painted World of Ariandel (Before Contraption)",
+                    lambda state: state.has("Small Doll") and self._has_any_scroll(state))
 
         # Define the access rules to some specific locations
         if self._is_location_available("FS: Lift Chamber Key - Leonhard"):
@@ -497,8 +498,7 @@ class DarkSouls3World(World):
             "UG: Wolf Knight Armor - shop after killing FK boss",
             "UG: Wolf Knight Gauntlets - shop after killing FK boss",
             "UG: Wolf Knight Leggings - shop after killing FK boss"
-        ], lambda state: self._can_get(state, "FK: Cinders of a Lord - Abyss Watcher")
-        )
+        ], lambda state: self._can_get(state, "FK: Cinders of a Lord - Abyss Watcher"))
         self._add_location_rule(
             "ID: Prisoner Chief's Ashes - B2 near, locked cell by stairs",
             "Jailer's Key Ring"
@@ -778,23 +778,13 @@ class DarkSouls3World(World):
         self._add_location_rule([
             "AL: Crescent Moon Sword - Leonhard drop",
             "AL: Silver Mask - Leonhard drop",
-            "AL: Soul of Rosaria - Leonhard drop"
-        ], "Black Eye Orb")
-
-        self._add_location_rule([
+            "AL: Soul of Rosaria - Leonhard drop",
+        ] + [
             f"FS: {item} - shop after killing Leonhard"
             for item in ["Leonhard's Garb", "Leonhard's Gauntlets", "Leonhard's Trousers"]
         ], "Black Eye Orb")
 
         ## Hawkwood
-
-        # Hawkwood only leaves after defating Abyss Watchers, Curse-Rotted Greatwood, Deacons of the Deep and Crystal Sage
-        # All of these are covered by the Farron Keep placement except for Abyss Watchers
-        self._add_location_rule([
-                "FS: Hawkwood's Shield - gravestone after Hawkwood leaves",
-                "FS: Farron Ring - Hawkwood"
-        ], lambda state: self._can_get(state, "FK: Cinders of a Lord - Abyss Watcher")
-        )
         
         # After Hawkwood leaves and once you have the Torso Stone, you can fight him for dragon
         # stones. Andre will give Swordgrass as a hint as well
@@ -932,17 +922,26 @@ class DarkSouls3World(World):
             and state.has("Sage's Scroll", self.player)
         ))
 
-        self._add_location_rule("FS: Pestilent Mist - Orbeck for any scroll", self._has_any_scroll)
-        self._add_location_rule("FS: Young Dragon Ring - Orbeck for one scroll and buying three spells", self._has_any_scroll)
+        self._add_location_rule([
+            "FS: Pestilent Mist - Orbeck for any scroll",
+            "FS: Young Dragon Ring - Orbeck for one scroll and buying three spells",
+            # Make sure that the player can keep Orbeck around by giving him at least one scroll
+            # before killing Abyss Watchers.
+            "FK: Soul of the Blood of the Wolf",
+            "FK: Cinders of a Lord - Abyss Watcher",
+            "FS: Undead Legion Helm - shop after killing FK boss",
+            "FS: Undead Legion Armor - shop after killing FK boss",
+            "FS: Undead Legion Gauntlet - shop after killing FK boss",
+            "FS: Undead Legion Leggings - shop after killing FK boss",
+            "FS: Farron Ring - Hawkwood",
+            "FS: Hawkwood's Shield - gravestone after Hawkwood leaves",
+            "UG: Hornet Ring - environs, right of main path after killing FK boss",
+            "UG: Wolf Knight Helm - shop after killing FK boss",
+            "UG: Wolf Knight Armor - shop after killing FK boss",
+            "UG: Wolf Knight Gauntlets - shop after killing FK boss",
+            "UG: Wolf Knight Leggings - shop after killing FK boss",
+        ], self._has_any_scroll)
 
-        # Make sure that the player can keep Orbeck around by giving him at least one scroll
-        # before killing Abyss Watchers.
-        self._add_location_rule("FK: Soul of the Blood of the Wolf", self._has_any_scroll)
-        self._add_location_rule("FK: Cinders of a Lord - Abyss Watcher", self._has_any_scroll)
-        self._add_location_rule("FS: Undead Legion Helm - shop after killing FK boss", self._has_any_scroll)
-        self._add_location_rule("FS: Undead Legion Armor - shop after killing FK boss", self._has_any_scroll)
-        self._add_location_rule("FS: Undead Legion Gauntlet - shop after killing FK boss", self._has_any_scroll)
-        self._add_location_rule("FS: Undead Legion Leggings - shop after killing FK boss", self._has_any_scroll)
         self._add_entrance_rule("Catacombs of Carthus", self._has_any_scroll)
         # Not really necessary but ensures players can decide which way to go
         if self.options.enable_dlc:
@@ -950,6 +949,27 @@ class DarkSouls3World(World):
                 "Painted World of Ariandel (After Contraption)",
                 self._has_any_scroll
             )
+
+        ## Anri
+
+        # Anri only leaves Road of Sacrifices once Deacons is defeated
+        self._add_location_rule([
+            "IBV: Ring of the Evil Eye - Anri",
+            "AL: Chameleon - tomb after marrying Anri",
+        ], lambda state: self._can_get(state, "CD: Soul of the Deacons of the Deep"))
+
+        # If the player does Anri's non-marriage quest, they'll need to defeat the AL boss as well
+        # before it's complete.
+        self._add_location_rule([
+            "AL: Anri's Straight Sword - Anri quest",
+            "FS: Elite Knight Helm - shop after Anri quest",
+            "FS: Elite Knight Armor - shop after Anri quest",
+            "FS: Elite Knight Gauntlets - shop after Anri quest",
+            "FS: Elite Knight Leggings - shop after Anri quest",
+        ], lambda state: (
+            self._can_get(state, "IBV: Ring of the Evil Eye - Anri") and
+            self._can_get(state, "AL: Soul of Aldrich")
+        ))
 
 
     def _add_transposition_rules(self) -> None:
@@ -1050,10 +1070,12 @@ class DarkSouls3World(World):
 
 
     def _add_unnecessary_location_rules(self) -> None:
-        """Adds rules for locations that can contain useful but not necessary items."""
-        # If we allow useful  items in the excluded locations, we don't want Archipelago's fill
-        # algorithm to consider them excluded because it never allows useful items there. Instead,
-        # we manually add item rules to exclude important items.
+        """Adds rules for locations that can contain useful but not necessary items.
+
+        If we allow useful items in the excluded locations, we don't want Archipelago's fill
+        algorithm to consider them excluded because it never allows useful items there. Instead, we
+        manually add item rules to exclude important items.
+        """
 
         unnecessary_locations = (
             self.options.exclude_locations.value

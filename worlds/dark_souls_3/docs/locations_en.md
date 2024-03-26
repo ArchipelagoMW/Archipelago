@@ -783,7 +783,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>AL: Havel&#x27;s Ring+2 - prison tower, rafters</td><td>On the rafters dropping down from Yorshka&#x27;s Prison Tower to the Church of Yorshka</td></tr>
 <tr><td>AL: Human Dregs - water reserves</td><td>In the open in the Water Reserves</td></tr>
 <tr><td>AL: Large Soul of a Weary Warrior - left of dark cathedral entrance</td><td>In front of the Anor Londo cathedral, slightly to the left</td></tr>
-<tr><td>AL: Large Titanite Shard - after light cathedral</td><td>After the Pontiff fight, on the balcony to the right of the area with the Giant Slaves</td></tr>
+<tr><td>AL: Large Titanite Shard - balcony by dead giants</td><td>After the Pontiff fight, on the balcony to the right of the area with the Giant Slaves</td></tr>
 <tr><td>AL: Large Titanite Shard - bottom of the furthest buttress</td><td>At the base of the rightmost flying buttress leading up to Anor Londo</td></tr>
 <tr><td>AL: Large Titanite Shard - bottom of the nearest buttress</td><td>On the tower leading back from Anor Londo to the shortcut to Irithyll, down the flying buttress closest to the Darkmoon Tomb entrance.</td></tr>
 <tr><td>AL: Large Titanite Shard - right after light cathedral</td><td>After Pontiff&#x27;s cathedral, hugging the wall to the right</td></tr>
@@ -947,7 +947,6 @@ offline _Dark Souls III_ randomizer].
 <tr><td>CD: Herald Helm - path, by fire</td><td>Guarded by the Cathedral Evangelist after the Crystal Sage fight</td></tr>
 <tr><td>CD: Herald Trousers - path, by fire</td><td>Guarded by the Cathedral Evangelist after the Crystal Sage fight</td></tr>
 <tr><td>CD: Heysel Pick - Heysel Corpse-Grub in Rosaria&#x27;s Bed Chamber</td><td>Dropped by the Heysel Corpse-grub in Rosaria&#x27;s Bed Chamber</td></tr>
-<tr><td>CD: Hidden Blessing - Patches</td><td>Sold by Patches after Greirat pillages Lothric Castle, telling Patches, and Patches returning</td></tr>
 <tr><td>CD: Homeward Bone - outside main hall south door</td><td>Past the cathedral doors guarded by the Giant Slave opposite to the Deacons fight</td></tr>
 <tr><td>CD: Horsehoof Ring - Patches</td><td>Sold or dropped by Patches after he mentions Greirat</td></tr>
 <tr><td>CD: Large Soul of an Unknown Traveler - by white tree #1</td><td>In the graveyard with the White Birch and Infested Corpses</td></tr>
@@ -1190,7 +1189,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>FS: Bountiful Light - Irina for Tome of Lothric</td><td>Sold by Irina after giving her the Braille Divine Tome of Lothric</td></tr>
 <tr><td>FS: Bountiful Sunlight - Ludleth for Rosaria</td><td>Boss weapon for Rosaria, available after Leonhard is killed</td></tr>
 <tr><td>FS: Broken Straight Sword - gravestone after boss</td><td>Near the grave after Iudex Gundyr fight</td></tr>
-<tr><td>FS: Budding Green Blossom - shop killing Creighton and AL boss</td><td>Sold by Handmaid after receiving Silvercat Ring item lot from Sirris and defeating Aldrich</td></tr>
+<tr><td>FS: Budding Green Blossom - shop after killing Creighton and AL boss</td><td>Sold by Handmaid after receiving Silvercat Ring item lot from Sirris and defeating Aldrich</td></tr>
 <tr><td>FS: Bursting Fireball - Cornyx for Great Swamp Tome</td><td>Sold by Cornyx after giving him the Great Swamp Pyromancy Tome</td></tr>
 <tr><td>FS: Caressing Tears - Irina</td><td>Sold by Irina after recruiting her, or in her ashes</td></tr>
 <tr><td>FS: Carthus Beacon - Cornyx for Carthus Tome</td><td>Sold by Cornyx after giving him the Carthus Pyromancy Tome</td></tr>
@@ -1295,7 +1294,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>FS: Gundyr&#x27;s Helm - shop after killing UG boss</td><td>Sold by Handmaid after defeating Champion Gundyr</td></tr>
 <tr><td>FS: Gundyr&#x27;s Leggings - shop after killing UG boss</td><td>Sold by Handmaid after defeating Champion Gundyr</td></tr>
 <tr><td>FS: Havel&#x27;s Ring - Ludleth for Stray Demon</td><td>Boss weapon for Stray Demon</td></tr>
-<tr><td>FS: Hawkwood&#x27;s Shield - Hawkwood</td><td>Left by Hawkwood after defeating Abyss Watchers, Curse-Rotted Greatwood, Deacons of the Deep, and Crystal Sage</td></tr>
+<tr><td>FS: Hawkwood&#x27;s Shield - gravestone after Hawkwood leaves</td><td>Left by Hawkwood after defeating Abyss Watchers, Curse-Rotted Greatwood, Deacons of the Deep, and Crystal Sage</td></tr>
 <tr><td>FS: Hawkwood&#x27;s Swordgrass - Andre after gesture in AP summit</td><td>Given by Andre after praying at the Dragon Altar in Archdragon Peak, after acquiring Twinkling Dragon Torso Stone.</td></tr>
 <tr><td>FS: Heal - Irina</td><td>Sold by Irina after recruiting her, or in her ashes</td></tr>
 <tr><td>FS: Heal Aid - shop</td><td>Sold by Handmaid</td></tr>
@@ -1304,6 +1303,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>FS: Helm of Favor - shop after killing water reserve minibosses</td><td>Sold by Handmaid after killing Sulyvahn&#x27;s Beasts in Water Reserve</td></tr>
 <tr><td>FS: Hidden Blessing - Dreamchaser&#x27;s Ashes</td><td>Sold by Greirat after pillaging Irithyll</td></tr>
 <tr><td>FS: Hidden Blessing - Greirat from IBV</td><td>Sold by Greirat after pillaging Irithyll</td></tr>
+<tr><td>FS: Hidden Blessing - Patches after searching GA</td><td>Sold by Handmaid after giving Dreamchaser&#x27;s Ashes, saying where they were found</td></tr>
 <tr><td>FS: Hidden Body - Orbeck for Golden Scroll</td><td>Sold by Orbeck after giving him the Golden Scroll</td></tr>
 <tr><td>FS: Hidden Weapon - Orbeck for Golden Scroll</td><td>Sold by Orbeck after giving him the Golden Scroll</td></tr>
 <tr><td>FS: Hollowslayer Greatsword - Ludleth for Greatwood</td><td>Boss weapon for Curse-Rotted Greatwood</td></tr>
@@ -1895,7 +1895,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>PW2: Dung Pie - B1</td><td>On the higher level of the Ariandel Chapel basement, on a wooden beam overlooking the lower level</td></tr>
 <tr><td>PW2: Earth Seeker - pit cave</td><td>In the area after Snowy Mountain Pass with the giant tree and Earth Seeker Millwood Knight, in the cave</td></tr>
 <tr><td>PW2: Ember - pass, central alcove</td><td>After the Snowy Mountain Pass bonfire, going left of the bell stuck in the ground, in a small alcove along the left wall</td></tr>
-<tr><td>PW2: Floating Chaos - Dunnel drop</td><td>Dropped by Livid Pyromancer Dunnel when he invades while embered, whether boss is defeated or not. On the second level of Priscilla&#x27;s building above the Gravetender fight, accessed from the lowest level of the Ariandel Chapel basement, past an illusory wall nearly straight left of the mechanism that moves the statue, then carefully dropping down tree branches.</td></tr>
+<tr><td>PW2: Floating Chaos - NPC drop</td><td>Dropped by Livid Pyromancer Dunnel when he invades while embered, whether boss is defeated or not. On the second level of Priscilla&#x27;s building above the Gravetender fight, accessed from the lowest level of the Ariandel Chapel basement, past an illusory wall nearly straight left of the mechanism that moves the statue, then carefully dropping down tree branches.</td></tr>
 <tr><td>PW2: Follower Shield - pass, far cliffside</td><td>After the Snowy Mountain Pass bonfire, going left of the bell stuck in the ground, on the cliff ledge past the open area, to the left</td></tr>
 <tr><td>PW2: Follower Torch - pass, far side path</td><td>On the way to the Ariandel Chapel basement, where the first wolf enemies reappear, going all the way down the slope on the edge of the map. Guarded by a Follower</td></tr>
 <tr><td>PW2: Homeward Bone - rotunda</td><td>On the second level of Priscilla&#x27;s building above the Gravetender fight. Can be accessed from the lowest level of the Ariandel Chapel basement, past an illusory wall nearly straight left of the mechanism that moves the statue, then carefully dropping down tree branches.</td></tr>
@@ -2026,7 +2026,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>RC: Twinkling Titanite - wall tower, jump from chandelier</td><td>In the cylindrical building before the long stairs with many Harald Legion Knights. Carefully drop down to the chandelier in the center, then jump to the second floor. The item is on a ledge.</td></tr>
 <tr><td>RC: Violet Wrappings - wall hidden, before boss</td><td>In the chapel before the Midir fight in the Ringed Inner Wall building.</td></tr>
 <tr><td>RC: White Birch Bow - swamp far left, up hill</td><td>Up a hill at the edge of the muck pit with the Hollow Clerics.</td></tr>
-<tr><td>RC: White Preacher Head - swamp near, ground near bonfire exit</td><td>Past the balcony to the right of the Ringed City Streets bonfire room entrance. Can be accessed by dropping down straight after from the bonfire, then around to the left.</td></tr>
+<tr><td>RC: White Preacher Head - swamp near, nook right of stairs</td><td>Past the balcony to the right of the Ringed City Streets bonfire room entrance. Can be accessed by dropping down straight after from the bonfire, then around to the left.</td></tr>
 <tr><td>RC: Wolf Ring+3 - street gardens, NPC drop</td><td>Dropped by Alva (invades whether embered or not, or boss defeated or not), partway down the stairs from Shira, across the bridge, and past the Ringed Knight.</td></tr>
 <tr><td>RC: Young White Branch - swamp far left, by white tree #1</td><td>Next to a small birch tree at the edge of the muck pit, between the hill with the aggressive Hollow Clerics and the building with the praying Hollow Clerics outside.</td></tr>
 <tr><td>RC: Young White Branch - swamp far left, by white tree #2</td><td>Next to a small birch tree at the edge of the muck pit, between the hill with the aggressive Hollow Clerics and the building with the praying Hollow Clerics outside.</td></tr>

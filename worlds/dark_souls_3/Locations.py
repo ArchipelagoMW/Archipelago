@@ -1839,7 +1839,7 @@ location_tables = {
         DS3LocationData("AL: Soul of a Weary Warrior - plaza, nearer", "Soul of a Weary Warrior"),
         DS3LocationData("AL: Ember - plaza, right side", "Ember"),
         DS3LocationData("AL: Ember - plaza, further", "Ember"),
-        DS3LocationData("AL: Large Titanite Shard - after light cathedral",
+        DS3LocationData("AL: Large Titanite Shard - balcony by dead giants",
                         "Large Titanite Shard"),
         DS3LocationData("AL: Dark Stoneplate Ring - by dark stairs up from plaza",
                         "Dark Stoneplate Ring"),
@@ -1930,7 +1930,7 @@ location_tables = {
         # Anri of Astora
         DS3LocationData("AL: Chameleon - tomb after marrying Anri", "Chameleon", missable = True,
                         npc = True),
-        DS3LocationData("AL: Anri's Straight Sword - Anri quest","Anri's Straight Sword",
+        DS3LocationData("AL: Anri's Straight Sword - Anri quest", "Anri's Straight Sword",
                         missable = True, npc = True),
 
         # Shrine Handmaid after killing Ringfinger Leonhard
@@ -1956,6 +1956,14 @@ location_tables = {
         DS3LocationData("FS: Smough's Leggings - shop after killing AL boss", "Smough's Leggings",
                         boss = True, shop = True),
 
+        # Ringfinger Leonhard (quest or kill)
+        DS3LocationData("AL: Crescent Moon Sword - Leonhard drop", "Crescent Moon Sword",
+                        missable = True, npc = True),
+        DS3LocationData("AL: Silver Mask - Leonhard drop", "Silver Mask",  missable = True,
+                        npc = True),
+        DS3LocationData("AL: Soul of Rosaria - Leonhard drop", "Soul of Rosaria",  missable = True,
+                        npc = True),
+
         # Shrine Handmaid after killing Anri or completing their quest
         DS3LocationData("FS: Elite Knight Helm - shop after Anri quest", "Elite Knight Helm",
                         npc = True, shop = True),
@@ -1965,14 +1973,6 @@ location_tables = {
                         "Elite Knight Gauntlets", npc = True, shop = True),
         DS3LocationData("FS: Elite Knight Leggings - shop after Anri quest",
                         "Elite Knight Leggings", npc = True, shop = True),
-
-        # Ringfinger Leonhard (quest or kill)
-        DS3LocationData("AL: Crescent Moon Sword - Leonhard drop", "Crescent Moon Sword",
-                        missable = True, npc = True),
-        DS3LocationData("AL: Silver Mask - Leonhard drop", "Silver Mask",  missable = True,
-                        npc = True),
-        DS3LocationData("AL: Soul of Rosaria - Leonhard drop", "Soul of Rosaria",  missable = True,
-                        npc = True),
     ],
     "Lothric Castle": [
         DS3LocationData("LC: Soul of Dragonslayer Armour", "Soul of Dragonslayer Armour",
