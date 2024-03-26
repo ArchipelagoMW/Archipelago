@@ -1,3 +1,4 @@
+from test.TestBase import TestBase
 from worlds.alttp.Dungeons import get_dungeon_item_pool
 from worlds.alttp.EntranceShuffle import link_inverted_entrances
 from worlds.alttp.InvertedRegions import create_inverted_regions
@@ -6,8 +7,6 @@ from worlds.alttp.Items import item_factory
 from worlds.alttp.Options import GlitchesRequired
 from worlds.alttp.Regions import mark_light_world_regions
 from worlds.alttp.Shops import create_shops
-from test.TestBase import TestBase
-
 from worlds.alttp.test import LTTPTestBase
 
 

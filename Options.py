@@ -917,15 +917,30 @@ class ItemSet(OptionSet):
 
 
 class Accessibility(Choice):
-    """Set rules for reachability of your items/locations.
-    Locations: ensure everything can be reached and acquired.
-    Items: ensure all logically relevant items can be acquired.
-    Minimal: ensure what is needed to reach your goal can be acquired."""
+    """
+    Set rules for reachability of your items/locations.
+    
+    Full: ensure everything can be reached and acquired.
+    Minimal: ensure what is needed to reach your goal can be acquired.
+    """
     display_name = "Accessibility"
-    option_locations = 0
-    option_items = 1
+    option_full = 0
     option_minimal = 2
     alias_none = 2
+    alias_locations = 0
+    alias_items = 0
+    default = 0
+
+
+class ItemsAccessibility(Accessibility):
+    """
+    Set rules for reachability of your items/locations.
+    
+    Full: ensure everything can be reached and acquired.
+    Items: ensure all logically relevant items can be acquired. Some items, such as keys, may be self-locking, and some locations may be inaccessible.
+    Minimal: ensure what is needed to reach your goal can be acquired.
+    """
+    option_items = 1
     default = 1
 
 

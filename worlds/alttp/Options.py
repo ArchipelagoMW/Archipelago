@@ -2,7 +2,7 @@ import typing
 
 from BaseClasses import MultiWorld
 from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, StartInventoryPool, PlandoBosses,\
-    FreeText
+    FreeText, ItemsAccessibility
 
 
 class GlitchesRequired(Choice):
@@ -723,6 +723,7 @@ class AllowCollect(Toggle):
 
 
 alttp_options: typing.Dict[str, type(Option)] = {
+    "accessibility": ItemsAccessibility,
     "start_inventory_from_pool": StartInventoryPool,
     "goal": Goal,
     "mode": Mode,

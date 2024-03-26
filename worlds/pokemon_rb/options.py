@@ -1,4 +1,4 @@
-from Options import Toggle, Choice, Range, NamedRange, TextChoice, DeathLink
+from Options import Toggle, Choice, Range, NamedRange, TextChoice, DeathLink, ItemsAccessibility
 
 
 class GameVersion(Choice):
@@ -861,6 +861,7 @@ class RandomizePokemonPalettes(Choice):
 
 
 pokemon_rb_options = {
+    "accessibility": ItemsAccessibility,
     "game_version": GameVersion,
     "trainer_name": TrainerName,
     "rival_name": RivalName,

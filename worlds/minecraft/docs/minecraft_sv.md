@@ -79,7 +79,7 @@ description: Template Name
 # Ditt spelnamn. Mellanslag kommer bli omplacerad med understräck och det är en 16-karaktärsgräns.
 name: YourName
 game: Minecraft
-accessibility: locations
+accessibility: full
 progression_balancing: 0
 advancement_goal:
   few: 0

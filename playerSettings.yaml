@@ -44,10 +44,10 @@ A Link to the Past:
 
   accessibility:
     # Set rules for reachability of your items/locations.
-    # Locations: ensure everything can be reached and acquired.
-    # Items: ensure all logically relevant items can be acquired.
+    # Full: ensure everything can be reached and acquired.
+    # Items: ensure all logically relevant items can be acquired. Some items, such as keys, may be self-locking.
     # Minimal: ensure what is needed to reach your goal can be acquired.
-    locations: 0
+    full: 0
     items: 50
     minimal: 0
 
