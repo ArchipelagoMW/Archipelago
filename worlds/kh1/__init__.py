@@ -152,6 +152,8 @@ class KH1World(World):
             for location_name in goal_dict[self.options.goal.current_key]: 
                 self.multiworld.get_location(location_name, self.player).place_locked_item(self.create_item("Ansem's Report " + str(report_no)))
                 report_no = report_no + 1
+        elif self.options.goal.current_key == "final_ansem":
+            self.multiworld.get_location("Final Ansem", self.player).place_locked_item(self.create_item("Victory"))
         else:
             self.multiworld.get_location(goal_dict[self.options.goal.current_key][0], self.player).place_locked_item(self.create_item("Victory"))
 
