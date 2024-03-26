@@ -3,6 +3,8 @@ from collections import defaultdict
 
 from .OverworldGlitchRules import overworld_glitch_connections
 from .UnderworldGlitchRules import underworld_glitch_connections
+from .Regions import mark_light_world_regions
+from .InvertedRegions import mark_dark_world_regions
 
 
 def link_entrances(world, player):
@@ -1827,6 +1829,10 @@ def plando_connect(world, player: int):
                 func(world, connection.entrance, connection.exit, player)
             except Exception as e:
                 raise Exception(f"Could not connect using {connection}") from e
+        if world.mode[player] != 'inverted':
+            mark_light_world_regions(world, player)
+        else:
+            mark_dark_world_regions(world, player)
 
 
 LW_Dungeon_Entrances = ['Desert Palace Entrance (South)',
