@@ -406,6 +406,8 @@ location_table: Dict[str, KH1LocationData] = {
     "Traverse Town 1st District Speak with Cid Event":                                  KH1LocationData("Misc",       265_6375),
     "Wonderland Bizarre Room Read Book":                                                KH1LocationData("Misc",       265_6376),
     "Olympus Coliseum Coliseum Gates Green Trinity":                                    KH1LocationData("Misc",       265_6377),
+    "Agrabah Defeat Kurt Zisa Zantetsuken Event":                                       KH1LocationData("Misc",       265_6378),
+    "Hollow Bastion Defeat Unknown EXP Necklace Event":                                 KH1LocationData("Misc",       265_6379),
     
     "Traverse Town Synth Log":                                                          KH1LocationData("Synth",      265_6401),
     "Traverse Town Synth Cloth":                                                        KH1LocationData("Synth",      265_6402),

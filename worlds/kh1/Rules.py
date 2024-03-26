@@ -18,7 +18,7 @@ def can_glide(state: CollectionState, player: int) -> bool:
     return state.has("Glide", player) or state.has("Superglide", player)
 
 def has_emblems(state: CollectionState, player: int) -> bool:
-    return state.has("Theon Vol. 6", player) and state.has("Red Trinity", player) and state.has("Progressive Fire", player) and (state.has("Progressive Thunder", player) or state.has("High Jump", player) or can_glide(state, player))
+    return state.has("Theon Vol. 6", player) and state.has("Red Trinity", player) and state.has("Progressive Fire", player) and (state.has("Progressive Thunder", player) or state.has("High Jump", player) or can_glide(state, player)) and state.has("Hollow Bastion", player)
 
 def has_item(state: CollectionState, player: int, item) -> bool:
     return state.has(item, player)
@@ -509,6 +509,8 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
    #multiworld.get_location("Traverse Town 1st District Speak with Cid Event"                              , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Wonderland Bizarre Room Read Book"                                            , player).access_rule = lambda state: has_evidence(state, player)
     multiworld.get_location("Olympus Coliseum Coliseum Gates Green Trinity"                                , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
+    multiworld.get_location("Agrabah Defeat Kurt Zisa Zantetsuken Event"                                   , player).access_rule = lambda state: has_emblems(state, player) and has_x_worlds(state, player, 7)
+    multiworld.get_location("Hollow Bastion Defeat Unknown EXP Necklace Event"                             , player).access_rule = lambda state: has_emblems(state, player) and has_x_worlds(state, player, 7)
 
     multiworld.get_location("Traverse Town Synth Log"                                                      , player).access_rule = lambda state: has_at_least(state, player, "Material", 6) and has_item(state, player, "Green Trinity")
     multiworld.get_location("Traverse Town Synth Cloth"                                                    , player).access_rule = lambda state: has_at_least(state, player, "Material", 6) and has_item(state, player, "Green Trinity")
