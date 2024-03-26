@@ -28,7 +28,7 @@ AREA_LIST_START = 0xD9A40
 
 
 class RomData:
-    def __init__(self, file: bytes, name: Optional[str] = None):
+    def __init__(self, file: bytes, name: Optional[str] = None) -> None:
         self.file = bytearray(file)
         self.name = name
 
@@ -41,7 +41,7 @@ class RomData:
     def write_byte(self, offset: int, value: int) -> None:
         self.file[offset] = value
 
-    def write_bytes(self, offset: int, values):
+    def write_bytes(self, offset: int, values) -> None:
         self.file[offset:offset + len(values)] = values
 
     def get_bytes(self) -> bytes:
@@ -161,7 +161,8 @@ class CVCotMPatchExtensions(APPatchExtension):
                 y_pos -= 8
                 rom_data.write_bytes(offset-2, int.to_bytes(y_pos, 2, "little"))
 
-                # Fix the Magic Item's graphics if it's in a room it can be fixed in (the room graphics value is 0xFFFF)
+                # Fix the Magic Item's graphics if it's in a room it can be fixed in (the room graphics value is 0xFFFF,
+                # meaning it's not loading any additional graphics)
                 gfx_offset = get_location_info(loc, "room gfx")
                 if gfx_offset is not None:
                     if rom_data.read_bytes(gfx_offset, 2) == b"\xFF\xFF":
@@ -194,11 +195,11 @@ class CVCotMProcedurePatch(APProcedurePatch, APTokenMixin):
         return get_base_rom_bytes()
 
 
-def patch_rom(world: "CVCotMWorld", patch: CVCotMProcedurePatch, offset_data: Dict[int, List[int]]) -> None:
+def patch_rom(world: "CVCotMWorld", patch: CVCotMProcedurePatch, offset_data: Dict[int, bytes]) -> None:
 
     # Write all the new item values
     for offset, data in offset_data.items():
-        patch.write_token(APTokenTypes.WRITE, offset, bytes(data))
+        patch.write_token(APTokenTypes.WRITE, offset, data)
 
     patch.write_file("token_data.bin", patch.get_token_binary())
 

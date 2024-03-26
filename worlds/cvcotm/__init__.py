@@ -158,8 +158,8 @@ class CVCotMWorld(World):
     # Location data
         offset_data = get_location_data(self, active_locations)
     # Sub-weapons
-        #if self.options.sub_weapon_shuffle:
-        #    offset_data.update(shuffle_sub_weapons(self))
+        if self.options.sub_weapon_shuffle:
+            offset_data.update(shuffle_sub_weapons(self))
     # Countdown
         #if self.options.countdown:
         #    offset_data.update(get_countdown_numbers(self.options, active_locations))
