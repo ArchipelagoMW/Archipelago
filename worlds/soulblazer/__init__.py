@@ -2,8 +2,9 @@ import settings
 import typing
 import copy
 from .Options import SoulBlazerOptions  # the options we defined earlier
-from .Items import SoulBlazerItem, SoulBlazerItemData, all_items_table, repeatable_items_table  # data used below to add items to the World
+from .Items import SoulBlazerItem, SoulBlazerItemData, all_items_table, repeatable_items_table, create_itempool  # data used below to add items to the World
 from .Locations import SoulBlazerLocation, all_locations_table  # same as above
+from .Names import ItemName
 from worlds.AutoWorld import WebWorld, World
 from BaseClasses import MultiWorld, Region, Location, Entrance, Item, ItemClassification, Tutorial
 
@@ -49,8 +50,6 @@ class SoulBlazerWorld(World):
     npc_reward_offset = 500
     """ID offset for NPC rewards"""
 
-    # Instead of dynamic numbering, IDs could be part of data.
-
     # The following two dicts are required for the generation to know which
     # items exist. They could be generated from json or something else. They can
     # include events, but don't have to since events will be placed manually.
@@ -66,6 +65,10 @@ class SoulBlazerWorld(World):
     #    "weapons": {"sword", "lance"},
     #}
 
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
+        self.exp_items: list[SoulBlazerItem]
+        self.gem_items: list[SoulBlazerItem]
 
     def create_item(self, item: str) -> SoulBlazerItem:
         if item in repeatable_items_table:
@@ -77,5 +80,4 @@ class SoulBlazerWorld(World):
 
 
     def create_items(self) -> None:
-        #TODO: This
-        pass
+        create_itempool(self)

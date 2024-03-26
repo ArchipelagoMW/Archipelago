@@ -59,6 +59,10 @@ class SoulBlazerItem(Item):  # or from Items import MyGameItem
         super().__init__(name, itemData.classification, itemData.code, player)
         self._itemData = itemData
 
+    def set_operand(self, value: int):
+        self._itemData.operamd = value
+        return self
+
     @property
     def id(self) -> int:
         return self._itemData.id
@@ -89,13 +93,25 @@ bottle_count = 7
 nothing_count = 3
 """Number of 'Nothing' rewards in vanilla item pool"""
 
-gems_values = [1, 12, 40, 50, 50, 50, 50, 50, 60, 60, 80, 80, 80, 80, 80, 100, 100, 100, 100, 150, 200]
+gem_values = [1, 12, 40, 50, 50, 50, 50, 50, 60, 60, 80, 80, 80, 80, 80, 100, 100, 100, 100, 150, 200]
 """Gem reward values in vanilla item pool"""
 
 exp_values = [1, 30, 80, 150, 180, 200, 250, 300, 300, 300, 300, 300, 400]
 """Exp reward values in vanilla item pool"""
 
-
+def create_itempool(world: SoulBlazerWorld):
+    itempool =  [SoulBlazerItem(name, world.player, itemData) for (name, itemData) in unique_items_table.items()]
+    itempool += [SoulBlazerItem(ItemName.MEDICALHERB, world.player, repeatable_items_table[ItemName.MEDICALHERB]) for _ in range(herb_count)]
+    itempool += [SoulBlazerItem(ItemName.STRANGEBOTTLE, world.player, repeatable_items_table[ItemName.STRANGEBOTTLE]) for _ in range(bottle_count)]
+    # TODO: Add option to replace nothings with... something
+    itempool += [SoulBlazerItem(ItemName.NOTHING, world.player, repeatable_items_table[ItemName.NOTHING]) for _ in range(nothing_count)]
+    # TODO: Add option for modyfing exp/gem amounts
+    world.gem_items = [world.create_item(ItemName.GEMS).set_operand(value) for value in gem_values]
+    itempool += world.gem_items
+    world.exp_items = [world.create_item(ItemName.EXP).set_operand(value) for value in exp_values]
+    itempool += world.exp_items
+    world.multiworld.itempool += itempool
+    
 
 #TODO: Unsure which progression items should skip balancing
 swords_table = {
