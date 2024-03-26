@@ -332,6 +332,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
     multiworld.get_location("Deep Jungle Seal Keyhole Jungle King Event"                                   , player).access_rule = lambda state: has_slides(state, player)
     multiworld.get_location("Deep Jungle Seal Keyhole Red Trinity Event"                                   , player).access_rule = lambda state: has_slides(state, player)
    #multiworld.get_location("Olympus Coliseum Clear Phil's Training Thunder Event"                         , player).access_rule = lambda state: has_item(state, player, "")
+   #multiworld.get_location("Olympus Coliseum Defeat Cerberus Inferno Band Event"                          , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Olympus Coliseum Cloud Sonic Blade Event"                                     , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Wonderland Defeat Trickmaster Blizzard Event"                                 , player).access_rule = lambda state: has_evidence(state, player)
     multiworld.get_location("Wonderland Defeat Trickmaster Ifrit's Horn Event"                             , player).access_rule = lambda state: has_evidence(state, player)

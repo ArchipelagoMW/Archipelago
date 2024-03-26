@@ -279,6 +279,7 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["Deep Jungle"].locations.append("Deep Jungle Seal Keyhole Jungle King Event"),
     regions["Deep Jungle"].locations.append("Deep Jungle Seal Keyhole Red Trinity Event"),
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Clear Phil's Training Thunder Event"),
+    regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Cerberus Inferno Band Event"),
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Cloud Sonic Blade Event"),
     regions["Wonderland"].locations.append("Wonderland Defeat Trickmaster Blizzard Event"),
     regions["Wonderland"].locations.append("Wonderland Defeat Trickmaster Ifrit's Horn Event"),

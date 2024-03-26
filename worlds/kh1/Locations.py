@@ -268,6 +268,7 @@ location_table: Dict[str, KH1LocationData] = {
     "Deep Jungle Seal Keyhole Jungle King Event":                                       KH1LocationData("Events",     265_6023),
     "Deep Jungle Seal Keyhole Red Trinity Event":                                       KH1LocationData("Events",     265_6024),
     "Olympus Coliseum Clear Phil's Training Thunder Event":                             KH1LocationData("Events",     265_6031),
+    "Olympus Coliseum Defeat Cerberus Inferno Band Event":                              KH1LocationData("Events",     265_6032),
     "Wonderland Defeat Trickmaster Blizzard Event":                                     KH1LocationData("Events",     265_6041),
     "Wonderland Defeat Trickmaster Ifrit's Horn Event":                                 KH1LocationData("Events",     265_6042),
     "Agrabah Defeat Pot Centipede Ray of Light Event":                                  KH1LocationData("Events",     265_6051),
