@@ -263,24 +263,7 @@ class BlasphemousWorld(World):
 
             for e in r["exits"]:
                 region.add_exits({e["target"]})
-                if len(e["logic"]) > 0:
-                    for logic in e["logic"]:
-                        rule: Callable[[CollectionState], bool] = None
-                        for string in logic["item_requirements"]:
-                            old_rule: Callable[[CollectionState], bool] = rule
-                            new_rule: Callable[[CollectionState], bool] = None
-                            if (string[0] == "D" and string[3] == "Z" and string[6] == "S")\
-                            or (string[0] == "D" and string[3] == "B" and string[4] == "Z" and string[7] == "S"):
-                                new_rule = lambda state: state.can_reach_region(string, self.player)
-                            else:
-                                new_rule = blas_logic.string_rules[string]
-
-                            if rule == None:
-                                rule = new_rule
-                            else:
-                                rule = lambda state: old_rule(state) and new_rule(state)
-
-                        add_rule(self.get_entrance(f"{r['name']} -> {e['target']}"), rule, "or")
+                #region.add_exits({e["target"]}, {e["target"]: blas_logic.load_rule(e)})
 
             for l in r["locations"]:
                 if not self.options.boots_of_pleading and l == "RE401":
@@ -305,51 +288,7 @@ class BlasphemousWorld(World):
             if not self.options.purified_hand and l["name"] == "RE402":
                 continue
             location = self.get_location(location_names[l["name"]])
-            if len(l["logic"]) > 0:
-                for index, logic in enumerate(l["logic"]):
-                    rule: Callable[[CollectionState], bool] = None
-                    for string in logic["item_requirements"]:
-                        old_rule: Callable[[CollectionState], bool] = rule
-                        new_rule: Callable[[CollectionState], bool] = None
-                        if (string[0] == "D" and string[3] == "Z" and string[6] == "S")\
-                        or (string[0] == "D" and string[3] == "B" and string[4] == "Z" and string[7] == "S"):
-                            new_rule = lambda state: state.can_reach_region(string, self.player)
-                        else:
-                            new_rule = blas_logic.string_rules[string]
-
-                        if rule == None:
-                            rule = new_rule
-                        else:
-                            rule = lambda state: old_rule(state) and new_rule(state)
-                    
-                    if index == 0:
-                        set_rule(location, rule)
-                    else:
-                        add_rule(location, rule, "or")
-
-        for t in transitions:
-            if len(t["logic"]) > 0:
-                for index, logic in enumerate(t["logic"]):
-                    rule: Callable[[CollectionState], bool] = None
-                    for string in logic["item_requirements"]:
-                        old_rule: Callable[[CollectionState], bool] = rule
-                        new_rule: Callable[[CollectionState], bool] = None
-                        if (string[0] == "D" and string[3] == "Z" and string[6] == "S")\
-                        or (string[0] == "D" and string[3] == "B" and string[4] == "Z" and string[7] == "S"):
-                            new_rule = lambda state: state.can_reach_region(string, self.player)
-                        else:
-                            new_rule = blas_logic.string_rules[string]
-
-                        if rule == None:
-                            rule = new_rule
-                        else:
-                            rule = lambda state: old_rule(state) and new_rule(state)
-
-                    for entrance in self.get_region(t["name"]).entrances:
-                        if index == 0:
-                            set_rule(entrance, rule)
-                        else:
-                            add_rule(entrance, rule, "or")
+            set_rule(location, blas_logic.load_rule(l))
 
         from Utils import visualize_regions
         visualize_regions(self.get_region("Menu"), "blasphemous_regions.puml")

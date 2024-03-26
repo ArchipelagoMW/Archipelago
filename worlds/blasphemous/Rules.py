@@ -1,4 +1,4 @@
-from typing import Dict, Callable, TYPE_CHECKING
+from typing import Dict, Any, Callable, TYPE_CHECKING
 from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
@@ -52,7 +52,7 @@ class BlasRules:
             "bones40": lambda state: self.bones(state) >= 40,
             "bones44": lambda state: self.bones(state) >= 44,
 
-            "tears0": True,
+            "tears0": lambda: True,
 
             # Special items
             "dash": self.dash,
@@ -267,6 +267,24 @@ class BlasRules:
             "canBeatPerpetua": self.can_beat_perpetua,
             "canBeatLegionary": self.can_beat_legionary
         }
+
+    def is_region(self, string: str) -> bool:
+        if (string[0] == "D" and string[3] == "Z" and string[6] == "S")\
+        or (string[0] == "D" and string[3] == "B" and string[4] == "Z" and string[7] == "S"):
+            return True
+        return False
+
+    def load_rule(self, obj: Dict[str, Any]) -> Callable[[CollectionState], bool]:
+        clauses = []
+        for clause in obj["logic"]:
+            reqs = []
+            for req in clause["item_requirements"]:
+                if self.is_region(req):
+                    reqs.append(lambda state, req=req: state.can_reach_region(req, self.player))
+                else:
+                    reqs.append(self.string_rules[req])
+            clauses.append(lambda state, reqs=reqs: all(req(state) for req in reqs))
+        return lambda state: True if not clauses else any(clause(state) for clause in clauses)
 
     # Relics
     def blood(self, state: CollectionState) -> bool:
