@@ -161,6 +161,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
             placements.append(spot_to_fill)
             spot_to_fill.event = item_to_place.advancement
             placed += 1
+
             if total < 10000 or placed/total < 0.8:
                 if not placed % 1000:
                     _log_fill_progress(name, placed, total)
@@ -169,6 +170,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                     _log_fill_progress(name, placed, total)
             elif not placed % 100:
                 _log_fill_progress(name, placed, total)
+
             if on_place:
                 on_place(spot_to_fill)
 
