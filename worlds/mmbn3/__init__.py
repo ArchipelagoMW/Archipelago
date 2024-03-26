@@ -468,11 +468,7 @@ class MMBN3World(World):
         return MMBN3Item(event, ItemClassification.progression, None, self.player)
 
     def fill_slot_data(self):
-        return {
-            "extra_ranks": self.options.extra_ranks.value,
-            "include_jobs": self.options.include_jobs.value,
-            "trade_quest_hinting": self.options.trade_quest_hinting.value
-        }
+        return self.options.as_dict("extra_ranks", "include_jobs", "trade_quest_hunting")
 
 
     def explore_score(self, state):

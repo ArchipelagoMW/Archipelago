@@ -20,7 +20,7 @@ Once Bizhawk has been installed, open Bizhawk and change the following settings:
 
 - **If you are using a version of BizHawk older than 2.9**, you will need to modify the Lua Core.
   Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua" to
-  "Lua+LuaInterface". This is required for the Lua script to function correctly.
+  "Lua+LuaInterface". This is required for the Lua script to function correctly.  
   **NOTE:** Even if "Lua+LuaInterface" is already selected, toggle between the two options and reselect it. Fresh installs 
   of newer versions of Bizhawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load 
   "NLua+KopiLua" until this step is done.
@@ -74,8 +74,8 @@ to the emulator as recommended).
 Once both the client and the emulator are started, you must connect them. Within the emulator click on the "Tools"
 menu and select "Lua Console". Click the folder button or press Ctrl+O to open a Lua script.
 
-Navigate to your Archipelago install folder and open `data/lua/connector_mmbn3.lua`.
-**Note:** The MMBN3 Lua file depends on other shared Lua files inside of the `data` directory in the Archipelago
+Navigate to your Archipelago install folder and open `data/lua/connector_mmbn3.lua`.  
+**NOTE:** The MMBN3 Lua file depends on other shared Lua files inside of the `data` directory in the Archipelago
 installation. Do not move this Lua file from its default location or you may run into issues connecting.
 
 To connect the client to the multiserver simply put `<address>:<port>` on the textfield on top and press enter (if the
