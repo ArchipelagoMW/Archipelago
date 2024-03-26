@@ -85,7 +85,7 @@ Archipelago was directly forked from bonta0's `multiworld_31` branch of ALttPEnt
 ## Running Archipelago
 For most people all you need to do is head over to the [releases](https://github.com/ArchipelagoMW/Archipelago/releases) page then download and run the appropriate installer. 
 
-If you are or are planning to become a developer, or you are running on a platform with no compiled releases available, please see our doc on [running Archipelago from source](docs/running%20from%20source.md).
+If you are a developer or are running on a platform with no compiled releases available, please see our doc on [running Archipelago from source](docs/running%20from%20source.md).
 
 ## Related Repositories
 This project makes use of multiple other projects. We wouldn't be here without these other repositories and the contributions of their developers, past and present.
