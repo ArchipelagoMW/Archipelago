@@ -64,6 +64,18 @@ class Atlantica(Toggle):
     """
     display_name = "Atlantica"
 
+class HundredAcreWood(Toggle):
+    """
+    Toggle whether to include checks in the 100 Acre Wood
+    """
+    display_name = "100 Acre Wood"
+
+class SuperBosses(Toggle):
+    """
+    Toggle whether to include checks behind Super Bosses.  This is ignored if Super Boss Hunt is your goal.
+    """
+    display_name = "Super Bosses"
+
 class Goal(Choice):
     """
     Determines the goal of your playthrough.
@@ -205,3 +217,5 @@ class KH1Options(PerGameCommonOptions):
     keyblade_min_mp: KeybladeMinMP
     puppies: Puppies
     require_final_ansem: RequireFinalAnsem
+    hundred_acre_wood: HundredAcreWood
+    super_bosses: SuperBosses

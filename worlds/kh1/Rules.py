@@ -84,7 +84,7 @@ def has_reports(state: CollectionState, player: int, required_reports: int) -> b
             reports_acquired = reports_acquired + 1
     return reports_acquired >= required_reports
 
-def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, required_reports: int):
+def set_rules(multiworld: MultiWorld, player: int, options, required_reports):
     #Location rules.
     #Keys
    #multiworld.get_location("Destiny Islands Chest"                                                        , player).access_rule = lambda state: has_item(state, player, "")
@@ -192,7 +192,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
     multiworld.get_location("Monstro Chamber 6 Platform Near Chamber 5 Entrance Chest"                     , player).access_rule = lambda state: has_item(state, player, "High Jump")
     multiworld.get_location("Monstro Chamber 6 Raised Area Near Chamber 1 Entrance Chest"                  , player).access_rule = lambda state: has_item(state, player, "High Jump")
    #multiworld.get_location("Monstro Chamber 6 Low Chest"                                                  , player).access_rule = lambda state: has_item(state, player, "")
-    if atlantica:
+    if options.atlantica:
        #multiworld.get_location("Atlantica Sunken Ship In Flipped Boat Chest"                              , player).access_rule = lambda state: has_item(state, player, "")
        #multiworld.get_location("Atlantica Sunken Ship Seabed Chest"                                       , player).access_rule = lambda state: has_item(state, player, "")
        #multiworld.get_location("Atlantica Sunken Ship Inside Ship Chest"                                  , player).access_rule = lambda state: has_item(state, player, "")
@@ -344,7 +344,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
    #multiworld.get_location("Agrabah Seal Keyhole Green Trinity Event"                                     , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Monstro Defeat Parasite Cage I Goofy Cheer Event"                             , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Monstro Defeat Parasite Cage II Stop Event"                                   , player).access_rule = lambda state: has_item(state, player, "High Jump")
-    if atlantica:
+    if options.atlantica:
         multiworld.get_location("Atlantica Defeat Ursula I Mermaid Kick Event"                             , player).access_rule = lambda state: has_offensive_magic(state, player)
         multiworld.get_location("Atlantica Defeat Ursula II Thunder Event"                                 , player).access_rule = lambda state: has_item(state, player, "Mermaid Kick") and has_offensive_magic(state, player)
         multiworld.get_location("Atlantica Seal Keyhole Crabclaw Event"                                    , player).access_rule = lambda state: has_item(state, player, "Mermaid Kick") and has_offensive_magic(state, player)
@@ -356,7 +356,8 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
     multiworld.get_location("Neverland Seal Keyhole Fairy Harp Event"                                      , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
     multiworld.get_location("Neverland Seal Keyhole Tinker Bell Event"                                     , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
     multiworld.get_location("Neverland Seal Keyhole Glide Event"                                           , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
-    multiworld.get_location("Neverland Defeat Phantom Stop Event"                                          , player).access_rule = lambda state: has_item(state, player, "Green Trinity") and has_all_magic_lvx(state, player, 2)
+    if options.super_bosses and options.goal.current_key != "super_boss_hunt":
+        multiworld.get_location("Neverland Defeat Phantom Stop Event"                                      , player).access_rule = lambda state: has_item(state, player, "Green Trinity") and has_all_magic_lvx(state, player, 2)
     multiworld.get_location("Neverland Defeat Captain Hook Ars Arcanum Event"                              , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
    #multiworld.get_location("Hollow Bastion Defeat Riku I White Trinity Event"                             , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Hollow Bastion Defeat Maleficent Donald Cheer Event"                          , player).access_rule = lambda state: has_emblems(state, player)
@@ -379,7 +380,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
     
     multiworld.get_location("Traverse Town Defeat Opposite Armor Aero Event"                               , player).access_rule = lambda state: has_item(state, player, "Red Trinity")
     
-    if atlantica:
+    if options.atlantica:
         multiworld.get_location("Atlantica Undersea Gorge Blizzard Clam"                                       , player).access_rule = lambda state: has_item(state, player, "Progressive Blizzard")
        #multiworld.get_location("Atlantica Undersea Gorge Ocean Floor Clam"                                    , player).access_rule = lambda state: has_item(state, player, "")
        #multiworld.get_location("Atlantica Undersea Valley Higher Cave Clam"                                   , player).access_rule = lambda state: has_item(state, player, "")
@@ -399,7 +400,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
 
    #multiworld.get_location("Agrabah Defeat Jafar Genie Ansem's Report 1"                           , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Hollow Bastion Speak with Aerith Ansem's Report 2"                     , player).access_rule = lambda state: has_emblems(state, player)
-    if atlantica:
+    if options.atlantica:
         multiworld.get_location("Atlantica Defeat Ursula II Ansem's Report 3"                       , player).access_rule = lambda state: has_item(state, player, "Mermaid Kick") and has_offensive_magic(state, player)
    #multiworld.get_location("Hollow Bastion Speak with Aerith Ansem's Report 4"                     , player).access_rule = lambda state: has_emblems(state, player)
     multiworld.get_location("Hollow Bastion Defeat Maleficent Ansem's Report 5"                     , player).access_rule = lambda state: has_emblems(state, player)
@@ -408,9 +409,10 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
     multiworld.get_location("Olympus Coliseum Defeat Hades Ansem's Report 8"                        , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup") and has_x_worlds(state, player, 7)
     multiworld.get_location("Neverland Defeat Hook Ansem's Report 9"                                , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
    #multiworld.get_location("Hollow Bastion Speak with Aerith Ansem's Report 10"                    , player).access_rule = lambda state: has_emblems(state, player)
-    multiworld.get_location("Agrabah Defeat Kurt Zisa Ansem's Report 11"                            , player).access_rule = lambda state: has_emblems(state, player) and has_x_worlds(state, player, 7)
-    multiworld.get_location("Olympus Coliseum Defeat Sephiroth Ansem's Report 12"                   , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup") and has_x_worlds(state, player, 7)
-    multiworld.get_location("Hollow Bastion Defeat Unknown Ansem's Report 13"                       , player).access_rule = lambda state: has_emblems(state, player) and has_x_worlds(state, player, 7)
+    if options.super_bosses and options.goal.current_key != "super_boss_hunt":
+        multiworld.get_location("Agrabah Defeat Kurt Zisa Ansem's Report 11"                        , player).access_rule = lambda state: has_emblems(state, player) and has_x_worlds(state, player, 7)
+        multiworld.get_location("Olympus Coliseum Defeat Sephiroth Ansem's Report 12"               , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup") and has_x_worlds(state, player, 7)
+        multiworld.get_location("Hollow Bastion Defeat Unknown Ansem's Report 13"                   , player).access_rule = lambda state: has_emblems(state, player) and has_x_worlds(state, player, 7)
 
     multiworld.get_location("Complete Phil Cup"                                                            , player).access_rule = lambda state: has_item(state, player, "Phil Cup")
     multiworld.get_location("Complete Phil Cup Solo"                                                       , player).access_rule = lambda state: has_item(state, player, "Phil Cup")
@@ -457,8 +459,9 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
     multiworld.get_location("Traverse Town Piano Room Return 90 Puppies"                                   , player).access_rule = lambda state: has_puppies(state, player, 90)
     multiworld.get_location("Traverse Town Piano Room Return 99 Puppies Reward 1"                          , player).access_rule = lambda state: has_puppies(state, player, 99)
     multiworld.get_location("Traverse Town Piano Room Return 99 Puppies Reward 2"                          , player).access_rule = lambda state: has_puppies(state, player, 99)
-    multiworld.get_location("Olympus Coliseum Defeat Sephiroth One-Winged Angel Event"                     , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup") and has_x_worlds(state, player, 7)
-    multiworld.get_location("Olympus Coliseum Defeat Ice Titan Diamond Dust Event"                         , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup") and has_x_worlds(state, player, 7) and has_item(state, player, "Guard")
+    if options.super_bosses and options.goal.current_key != "super_boss_hunt":
+        multiworld.get_location("Olympus Coliseum Defeat Sephiroth One-Winged Angel Event"                     , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup") and has_x_worlds(state, player, 7)
+        multiworld.get_location("Olympus Coliseum Defeat Ice Titan Diamond Dust Event"                         , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup") and has_x_worlds(state, player, 7) and has_item(state, player, "Guard")
     multiworld.get_location("Olympus Coliseum Gates Purple Jar After Defeating Hades"                      , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup") and has_x_worlds(state, player, 7)
    #multiworld.get_location("Halloween Town Guillotine Square Ring Jack's Doorbell 3 Times"                , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Neverland Clock Tower 01:00 Door"                                             , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
@@ -479,13 +482,13 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
     multiworld.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 3"                               , player).access_rule = lambda state: has_torn_pages(state, player, 4) and (has_item(state, player, "High Jump") or can_glide(state, player))
     multiworld.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 4"                               , player).access_rule = lambda state: has_torn_pages(state, player, 4) and (has_item(state, player, "High Jump") or can_glide(state, player))
     multiworld.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 5"                               , player).access_rule = lambda state: has_torn_pages(state, player, 4) and (has_item(state, player, "High Jump") or can_glide(state, player))
-    if atlantica:
+    if options.atlantica:
         multiworld.get_location("100 Acre Wood Pooh's House Owl Cheer"                                     , player).access_rule = lambda state: has_torn_pages(state, player, 5)
     multiworld.get_location("100 Acre Wood Convert Torn Page 1"                                            , player).access_rule = lambda state: has_torn_pages(state, player, 1)
     multiworld.get_location("100 Acre Wood Convert Torn Page 2"                                            , player).access_rule = lambda state: has_torn_pages(state, player, 2)
     multiworld.get_location("100 Acre Wood Convert Torn Page 3"                                            , player).access_rule = lambda state: has_torn_pages(state, player, 3)
     multiworld.get_location("100 Acre Wood Convert Torn Page 4"                                            , player).access_rule = lambda state: has_torn_pages(state, player, 4)
-    if atlantica:
+    if options.atlantica:
         multiworld.get_location("100 Acre Wood Convert Torn Page 5"                                        , player).access_rule = lambda state: has_torn_pages(state, player, 5)
     multiworld.get_location("100 Acre Wood Pooh's House Start Fire"                                        , player).access_rule = lambda state: has_torn_pages(state, player, 3)
    #multiworld.get_location("100 Acre Wood Pooh's Room Cabinet"                                            , player).access_rule = lambda state: has_item(state, player, "")
@@ -509,8 +512,9 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
    #multiworld.get_location("Traverse Town 1st District Speak with Cid Event"                              , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Wonderland Bizarre Room Read Book"                                            , player).access_rule = lambda state: has_evidence(state, player)
     multiworld.get_location("Olympus Coliseum Coliseum Gates Green Trinity"                                , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
-    multiworld.get_location("Agrabah Defeat Kurt Zisa Zantetsuken Event"                                   , player).access_rule = lambda state: has_emblems(state, player) and has_x_worlds(state, player, 7)
-    multiworld.get_location("Hollow Bastion Defeat Unknown EXP Necklace Event"                             , player).access_rule = lambda state: has_emblems(state, player) and has_x_worlds(state, player, 7)
+    if options.super_bosses and options.goal.current_key != "super_boss_hunt":
+        multiworld.get_location("Agrabah Defeat Kurt Zisa Zantetsuken Event"                               , player).access_rule = lambda state: has_emblems(state, player) and has_x_worlds(state, player, 7)
+        multiworld.get_location("Hollow Bastion Defeat Unknown EXP Necklace Event"                         , player).access_rule = lambda state: has_emblems(state, player) and has_x_worlds(state, player, 7)
 
     multiworld.get_location("Traverse Town Synth Log"                                                      , player).access_rule = lambda state: has_at_least(state, player, "Material", 6) and has_item(state, player, "Green Trinity")
     multiworld.get_location("Traverse Town Synth Cloth"                                                    , player).access_rule = lambda state: has_at_least(state, player, "Material", 6) and has_item(state, player, "Green Trinity")
@@ -528,7 +532,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
     multiworld.get_entrance("Deep Jungle"                                                                  , player).access_rule = lambda state: has_item(state, player,"Deep Jungle")
     multiworld.get_entrance("Agrabah"                                                                      , player).access_rule = lambda state: has_item(state, player,"Agrabah")
     multiworld.get_entrance("Monstro"                                                                      , player).access_rule = lambda state: has_item(state, player,"Monstro")
-    if atlantica:
+    if options.atlantica:
         multiworld.get_entrance("Atlantica"                                                                , player).access_rule = lambda state: has_item(state, player,"Atlantica") and has_x_worlds(state, player, 2)
     multiworld.get_entrance("Halloween Town"                                                               , player).access_rule = lambda state: has_item(state, player,"Halloween Town") and has_x_worlds(state, player, 2)
     multiworld.get_entrance("Neverland"                                                                    , player).access_rule = lambda state: has_item(state, player,"Neverland") and has_x_worlds(state, player, 4)

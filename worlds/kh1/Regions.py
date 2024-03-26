@@ -9,7 +9,7 @@ class KH1RegionData(NamedTuple):
     region_exits: Optional[List[str]]
 
 
-def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, levels: int, require_final_ansem: bool):
+def create_regions(multiworld: MultiWorld, player: int, options, levels: int):
     regions: Dict[str, KH1RegionData] = {
         "Menu":             KH1RegionData(None, ["Awakening", "Levels"]),
         "Awakening":        KH1RegionData([],   ["Destiny Islands"]),
@@ -139,7 +139,7 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["Monstro"].locations.append("Monstro Chamber 6 Platform Near Chamber 5 Entrance Chest"),
     regions["Monstro"].locations.append("Monstro Chamber 6 Raised Area Near Chamber 1 Entrance Chest"),
     regions["Monstro"].locations.append("Monstro Chamber 6 Low Chest"),
-    if atlantica:
+    if options.atlantica:
         regions["Atlantica"].locations.append("Atlantica Sunken Ship In Flipped Boat Chest"),
         regions["Atlantica"].locations.append("Atlantica Sunken Ship Seabed Chest"),
         regions["Atlantica"].locations.append("Atlantica Sunken Ship Inside Ship Chest"),
@@ -291,7 +291,7 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["Agrabah"].locations.append("Agrabah Seal Keyhole Green Trinity Event"),
     regions["Monstro"].locations.append("Monstro Defeat Parasite Cage I Goofy Cheer Event"),
     regions["Monstro"].locations.append("Monstro Defeat Parasite Cage II Stop Event"),
-    if atlantica:
+    if options.atlantica:
         regions["Atlantica"].locations.append("Atlantica Defeat Ursula I Mermaid Kick Event")
         regions["Atlantica"].locations.append("Atlantica Defeat Ursula II Thunder Event")
         regions["Atlantica"].locations.append("Atlantica Seal Keyhole Crabclaw Event")
@@ -303,7 +303,8 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["Neverland"].locations.append("Neverland Seal Keyhole Fairy Harp Event")
     regions["Neverland"].locations.append("Neverland Seal Keyhole Tinker Bell Event")
     regions["Neverland"].locations.append("Neverland Seal Keyhole Glide Event")
-    regions["Neverland"].locations.append("Neverland Defeat Phantom Stop Event")
+    if options.super_bosses and options.goal.current_key != "super_boss_hunt":
+        regions["Neverland"].locations.append("Neverland Defeat Phantom Stop Event")
     regions["Neverland"].locations.append("Neverland Defeat Captain Hook Ars Arcanum Event")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Riku I White Trinity Event")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Maleficent Donald Cheer Event")
@@ -326,7 +327,7 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     
     regions["Traverse Town"].locations.append("Traverse Town Defeat Opposite Armor Aero Event")
     
-    if atlantica:
+    if options.atlantica:
         regions["Atlantica"].locations.append("Atlantica Undersea Gorge Blizzard Clam")
         regions["Atlantica"].locations.append("Atlantica Undersea Gorge Ocean Floor Clam")
         regions["Atlantica"].locations.append("Atlantica Undersea Valley Higher Cave Clam")
@@ -346,7 +347,7 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     
     regions["Agrabah"].locations.append("Agrabah Defeat Jafar Genie Ansem's Report 1")
    #regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 2")
-    if atlantica:
+    if options.atlantica:
         regions["Atlantica"].locations.append("Atlantica Defeat Ursula II Ansem's Report 3")
    #regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 4")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Maleficent Ansem's Report 5")
@@ -355,9 +356,10 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Hades Ansem's Report 8")
     regions["Neverland"].locations.append("Neverland Defeat Hook Ansem's Report 9")
    #regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 10")
-    regions["Agrabah"].locations.append("Agrabah Defeat Kurt Zisa Ansem's Report 11")
-    regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Sephiroth Ansem's Report 12")
-    regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown Ansem's Report 13")
+    if options.super_bosses and options.goal.current_key != "super_boss_hunt":
+        regions["Agrabah"].locations.append("Agrabah Defeat Kurt Zisa Ansem's Report 11")
+        regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Sephiroth Ansem's Report 12")
+        regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown Ansem's Report 13")
    
     for i in range(levels):
         regions["Levels"].locations.append("Level " + str(i+1).rjust(3,'0'))
@@ -408,8 +410,9 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 90 Puppies")
     regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 99 Puppies Reward 1")
     regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 99 Puppies Reward 2")
-    regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Sephiroth One-Winged Angel Event")
-    regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Ice Titan Diamond Dust Event")
+    if options.super_bosses and options.goal.current_key != "super_boss_hunt":
+        regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Sephiroth One-Winged Angel Event")
+        regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Ice Titan Diamond Dust Event")
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Gates Purple Jar After Defeating Hades")
     regions["Halloween Town"].locations.append("Halloween Town Guillotine Square Ring Jack's Doorbell 3 Times")
    #regions["Neverland"].locations.append("Neverland Clock Tower 01:00 Door")
@@ -430,13 +433,13 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Turn in Rare Nut 3")
     regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Turn in Rare Nut 4")
     regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Turn in Rare Nut 5")
-    if atlantica:
+    if options.atlantica:
         regions["100 Acre Wood"].locations.append("100 Acre Wood Pooh's House Owl Cheer")
     regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 1")
     regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 2")
     regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 3")
     regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 4")
-    if atlantica:
+    if options.atlantica:
         regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 5")
     regions["100 Acre Wood"].locations.append("100 Acre Wood Pooh's House Start Fire")
     regions["100 Acre Wood"].locations.append("100 Acre Wood Pooh's Room Cabinet")
@@ -460,8 +463,9 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["Traverse Town"].locations.append("Traverse Town 1st District Speak with Cid Event")
     regions["Wonderland"].locations.append("Wonderland Bizarre Room Read Book")
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Coliseum Gates Green Trinity")
-    regions["Agrabah"].locations.append("Agrabah Defeat Kurt Zisa Zantetsuken Event")
-    regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown EXP Necklace Event")
+    if options.super_bosses and options.goal.current_key != "super_boss_hunt":
+        regions["Agrabah"].locations.append("Agrabah Defeat Kurt Zisa Zantetsuken Event")
+        regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown EXP Necklace Event")
     
     regions["Traverse Town"].locations.append("Traverse Town Synth Log")
     regions["Traverse Town"].locations.append("Traverse Town Synth Cloth")
@@ -471,7 +475,7 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["Traverse Town"].locations.append("Traverse Town Synth Mushroom")
 
     
-    if goal == "final_ansem" or require_final_ansem:
+    if options.goal.current_key == "final_ansem" or options.require_final_ansem:
         regions["End of the World"].locations.append("Final Ansem")
 
     # Set up the regions correctly.

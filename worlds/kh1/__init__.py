@@ -97,6 +97,8 @@ class KH1World(World):
            non_filler_item_categories.append("Puppies IND")
         if self.options.atlantica:
             non_filler_item_categories.append("Atlantica")
+        if self.options.hundred_acre_wood:
+            non_filler_item_categories.append("HAW")
         for name, data in item_table.items():
             quantity = data.max_quantity
 
@@ -198,9 +200,9 @@ class KH1World(World):
             reports_in_pool = max(self.options.reports_in_pool, 5)
         else:
             reports_in_pool = self.options.reports_in_pool
-        set_rules(self.multiworld, self.player, self.options.goal, self.options.atlantica, min(self.options.required_reports, reports_in_pool))
+        set_rules(self.multiworld, self.player, self.options, min(self.options.required_reports, reports_in_pool))
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player, self.options.goal, self.options.atlantica \
+        create_regions(self.multiworld, self.player, self.options \
                 , min((self.options.strength_increase + self.options.defense_increase + self.options.hp_increase + self.options.mp_increase \
-                       + self.options.ap_increase + self.options.accessory_slot_increase + self.options.item_slot_increase), 100), self.options.require_final_ansem)
+                       + self.options.ap_increase + self.options.accessory_slot_increase + self.options.item_slot_increase), 100))
