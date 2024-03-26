@@ -767,6 +767,18 @@ class CollectionState():
         Utils.deprecate("Use count instead.")
         return self.count(item, player)
 
+    def has_list(self, items: Iterable[str], player: int, count: int = 1) -> bool:
+        found: int = 0
+        player_prog_items = self.prog_items[player]
+        for item_name in items:
+            found += player_prog_items[item_name]
+            if found >= count:
+                return True
+        return False
+
+    def count_list(self, items: Iterable[str], player: int) -> int:
+        return sum(self.prog_items[player][item_name] for item_name in items)
+
     # item name group related
     def has_group(self, item_name_group: str, player: int, count: int = 1) -> bool:
         found: int = 0
@@ -778,11 +790,11 @@ class CollectionState():
         return False
 
     def count_group(self, item_name_group: str, player: int) -> int:
-        found: int = 0
         player_prog_items = self.prog_items[player]
-        for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
-            found += player_prog_items[item_name]
-        return found
+        return sum(
+            player_prog_items[item_name]
+            for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]
+        )
 
     # Item related
     def collect(self, item: Item, event: bool = False, location: Optional[Location] = None) -> bool:
