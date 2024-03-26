@@ -201,7 +201,7 @@ Kirby's Dream Land 3:
 As this is currently only supported by A Link to the Past, instead of finding an explanation here, please refer to the
 relevant guide: [A Link to the Past Plando Guide](/tutorial/A%20Link%20to%20the%20Past/plando/en)
 
-## Connections Plando
+## Connection Plando
 
 This is currently only supported by a few games, including A Link to the Past, Minecraft, and Ocarina of Time. As the way that these games interact with their
 connections is different, only the basics are explained here. More specific information for connection plando in A Link to the Past can be found in 
