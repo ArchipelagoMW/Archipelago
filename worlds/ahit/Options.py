@@ -1,5 +1,5 @@
 from typing import List, TYPE_CHECKING
-from schema import Schema
+from schema import Schema, Optional
 from dataclasses import dataclass
 from worlds.AutoWorld import PerGameCommonOptions
 from Options import Range, Toggle, DeathLink, Choice, OptionDict, DefaultOnToggle
@@ -128,7 +128,7 @@ class ActPlando(OptionDict):
     """Plando acts onto other acts. For example, \"Train Rush\": \"Alpine Free Roam\""""
     display_name = "Act Plando"
     schema = Schema({
-        str: str
+        Optional(str): str
     })
 
 
@@ -516,7 +516,8 @@ class DWShuffleCountMax(Range):
 
 
 class DWEnableBonus(Toggle):
-    """In Death Wish, add a location for completing all of a DW contract's bonuses, in addition to the location for completing the DW contract normally.
+    """In Death Wish, add a location for completing all of a DW contract's bonuses,
+    in addition to the location for completing the DW contract normally.
     WARNING!! Only for the brave! This option can create VERY DIFFICULT SEEDS!
     ONLY turn this on if you know what you are doing to yourself and everyone else in the multiworld!
     Using Peace and Tranquility to auto-complete the bonuses will NOT count!"""

@@ -149,21 +149,21 @@ dw_classes = {
 def create_dw_regions(world: "HatInTimeWorld"):
     if world.options.DWExcludeAnnoyingContracts.value > 0:
         for name in annoying_dws:
-            world.get_excluded_dws().append(name)
+            world.excluded_dws.append(name)
 
     if world.options.DWEnableBonus.value == 0 \
        or world.options.DWAutoCompleteBonuses.value > 0:
         for name in death_wishes:
-            world.get_excluded_bonuses().append(name)
+            world.excluded_bonuses.append(name)
     elif world.options.DWExcludeAnnoyingBonuses.value > 0:
         for name in annoying_bonuses:
-            world.get_excluded_bonuses().append(name)
+            world.excluded_bonuses.append(name)
 
     if world.options.DWExcludeCandles.value > 0:
         for name in dw_candles:
-            if name in world.get_excluded_dws():
+            if name in world.excluded_dws:
                 continue
-            world.get_excluded_dws().append(name)
+            world.excluded_dws.append(name)
 
     spaceship = world.multiworld.get_region("Spaceship", world.player)
     dw_map: Region = create_region(world, "Death Wish Map")
@@ -193,7 +193,7 @@ def create_dw_regions(world: "HatInTimeWorld"):
 
             dw_shuffle.append("Seal the Deal")
 
-        world.set_dw_shuffle(dw_shuffle)
+        world.dw_shuffle = dw_shuffle
         prev_dw: Region
         for i in range(len(dw_shuffle)):
             name = dw_shuffle[i]
@@ -220,7 +220,7 @@ def create_dw_regions(world: "HatInTimeWorld"):
             bonus_stamps.place_locked_item(HatInTimeItem(f"2 Stamps - {name}",
                                                          ItemClassification.progression, None, world.player))
 
-            if name in world.get_excluded_dws():
+            if name in world.excluded_dws:
                 main_objective.progress_type = LocationProgressType.EXCLUDED
                 full_clear.progress_type = LocationProgressType.EXCLUDED
             elif world.is_bonus_excluded(name):
@@ -232,7 +232,7 @@ def create_dw_regions(world: "HatInTimeWorld"):
     else:
         for key, loc_id in death_wishes.items():
             if key == "Snatcher Coins in Nyakuza Metro" and not world.is_dlc2():
-                world.get_excluded_dws().append(key)
+                world.excluded_dws.append(key)
                 continue
 
             dw = create_region(world, key)
@@ -258,7 +258,7 @@ def create_dw_regions(world: "HatInTimeWorld"):
             bonus_stamps.place_locked_item(HatInTimeItem(f"2 Stamps - {key}",
                                                          ItemClassification.progression, None, world.player))
 
-            if key in world.get_excluded_dws():
+            if key in world.excluded_dws:
                 main_objective.progress_type = LocationProgressType.EXCLUDED
                 full_clear.progress_type = LocationProgressType.EXCLUDED
             elif world.is_bonus_excluded(key):

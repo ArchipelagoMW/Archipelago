@@ -69,6 +69,7 @@ class LocData(NamedTuple):
     # Other
     act_event: Optional[bool] = False  # Only used for event locations. Copy access rule from act completion
     nyakuza_thug: Optional[str] = ""  # Name of Nyakuza thug NPC (for metro shops)
+    snatcher_coin: Optional[str] = ""  # Only for Snatcher Coin event locations, name of the Snatcher Coin item
 
 
 class ItemData(NamedTuple):

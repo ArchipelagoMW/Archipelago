@@ -788,7 +788,7 @@ def create_badge_seller(world: "HatInTimeWorld") -> Region:
                                          world.options.BadgeSellerMaxItems.value)
 
     if max_items <= 0:
-        world.set_badge_seller_count(0)
+        world.badge_seller_count = 0
         return badge_seller
 
     for (key, data) in shop_locations.items():
@@ -803,7 +803,7 @@ def create_badge_seller(world: "HatInTimeWorld") -> Region:
         if count >= max_items:
             break
 
-    world.set_badge_seller_count(max_items)
+    world.badge_seller_count = max_items
     return badge_seller
 
 
@@ -867,9 +867,9 @@ def update_chapter_act_info(world: "HatInTimeWorld", original_region: Region, ne
     world.act_connections[original_act_info] = new_act_info
 
 
-def get_shuffled_region(self, region: str) -> str:
+def get_shuffled_region(world: "HatInTimeWorld", region: str) -> str:
     ci: str = chapter_act_info[region]
-    for key, val in self.act_connections.items():
+    for key, val in world.act_connections.items():
         if val == ci:
             for name in chapter_act_info.keys():
                 if chapter_act_info[name] == key:
@@ -882,7 +882,6 @@ def create_thug_shops(world: "HatInTimeWorld"):
     count = -1
     step = 0
     old_name = ""
-    thug_items = world.get_nyakuza_thug_items()
 
     for key, data in shop_locations.items():
         if data.nyakuza_thug == "":
@@ -892,14 +891,14 @@ def create_thug_shops(world: "HatInTimeWorld"):
             continue
 
         try:
-            if thug_items[data.nyakuza_thug] <= 0:
+            if world.nyakuza_thug_items[data.nyakuza_thug] <= 0:
                 continue
         except KeyError:
             pass
 
         if count == -1:
             count = world.random.randint(min_items, max_items)
-            thug_items.setdefault(data.nyakuza_thug, count)
+            world.nyakuza_thug_items.setdefault(data.nyakuza_thug, count)
             if count <= 0:
                 continue
 
@@ -915,8 +914,6 @@ def create_thug_shops(world: "HatInTimeWorld"):
                 step = 0
                 count = -1
 
-    world.set_nyakuza_thug_items(thug_items)
-
 
 def create_events(world: "HatInTimeWorld") -> int:
     count = 0
@@ -928,7 +925,7 @@ def create_events(world: "HatInTimeWorld") -> int:
         item_name: str = name
         if world.is_dw():
             if name in snatcher_coins.keys():
-                name = f"{name} ({data.region})"
+                item_name = data.snatcher_coin
             elif name in zero_jumps:
                 if get_difficulty(world) < Difficulty.HARD and name in zero_jumps_hard:
                     continue

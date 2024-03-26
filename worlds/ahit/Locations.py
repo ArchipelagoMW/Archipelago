@@ -12,7 +12,7 @@ def get_total_locations(world: "HatInTimeWorld") -> int:
     total = 0
 
     if not world.is_dw_only():
-        for (name) in location_table.keys():
+        for name in location_table.keys():
             if is_location_valid(world, name):
                 total += 1
 
@@ -21,9 +21,9 @@ def get_total_locations(world: "HatInTimeWorld") -> int:
 
     if world.is_dw():
         if world.options.DWShuffle.value > 0:
-            total += len(world.get_dw_shuffle())
+            total += len(world.dw_shuffle)
             if world.options.DWEnableBonus.value > 0:
-                total += len(world.get_dw_shuffle())
+                total += len(world.dw_shuffle)
         else:
             total += 37
             if world.is_dlc2():
@@ -81,11 +81,11 @@ def is_location_valid(world: "HatInTimeWorld", location: str) -> bool:
             return False
 
         if world.options.DWShuffle.value > 0 \
-           and data.region in death_wishes and data.region not in world.get_dw_shuffle():
+           and data.region in death_wishes and data.region not in world.dw_shuffle:
             return False
 
         if location in zero_jumps:
-            if world.options.DWShuffle.value > 0 and "Zero Jumps" not in world.get_dw_shuffle():
+            if world.options.DWShuffle.value > 0 and "Zero Jumps" not in world.dw_shuffle:
                 return False
 
             difficulty: int = world.options.LogicDifficulty.value
@@ -298,10 +298,10 @@ ahit_locations = {
     # Alpine Skyline
     "Alpine Skyline - Goat Village: Below Hookpoint": LocData(2000334856, "Alpine Skyline Area (TIHS)"),
     "Alpine Skyline - Goat Village: Hidden Branch": LocData(2000334855, "Alpine Skyline Area (TIHS)"),
-    "Alpine Skyline - Goat Refinery": LocData(2000333635, "Alpine Skyline Area (TIHS)"),
-    "Alpine Skyline - Bird Pass Fork": LocData(2000335911, "Alpine Skyline Area (TIHS)"),
+    "Alpine Skyline - Goat Refinery": LocData(2000333635, "Alpine Skyline Area (TIHS)", hookshot=True),
+    "Alpine Skyline - Bird Pass Fork": LocData(2000335911, "Alpine Skyline Area (TIHS)", hookshot=True),
 
-    "Alpine Skyline - Yellow Band Hills": LocData(2000335756, "Alpine Skyline Area (TIHS)",
+    "Alpine Skyline - Yellow Band Hills": LocData(2000335756, "Alpine Skyline Area (TIHS)", hookshot=True,
                                                   required_hats=[HatType.BREWING]),
 
     "Alpine Skyline - The Purrloined Village: Horned Stone": LocData(2000335561, "Alpine Skyline Area"),
@@ -318,7 +318,7 @@ ahit_locations = {
 
     "Alpine Skyline - Mystifying Time Mesa: Zipline": LocData(2000337058, "Alpine Skyline Area"),
     "Alpine Skyline - Mystifying Time Mesa: Gate Puzzle": LocData(2000336052, "Alpine Skyline Area"),
-    "Alpine Skyline - Ember Summit": LocData(2000336311, "Alpine Skyline Area (TIHS)"),
+    "Alpine Skyline - Ember Summit": LocData(2000336311, "Alpine Skyline Area (TIHS)", hookshot=True),
     "Alpine Skyline - The Lava Cake: Center Fence Cage": LocData(2000335448, "The Lava Cake"),
     "Alpine Skyline - The Lava Cake: Outer Island Chest": LocData(2000334291, "The Lava Cake"),
     "Alpine Skyline - The Lava Cake: Dweller Pillars": LocData(2000335417, "The Lava Cake"),
@@ -327,7 +327,7 @@ ahit_locations = {
     "Alpine Skyline - The Twilight Bell: Wide Purple Platform": LocData(2000336478, "The Twilight Bell"),
     "Alpine Skyline - The Twilight Bell: Ice Platform": LocData(2000335826, "The Twilight Bell"),
     "Alpine Skyline - Goat Outpost Horn": LocData(2000334760, "Alpine Skyline Area"),
-    "Alpine Skyline - Windy Passage": LocData(2000334776, "Alpine Skyline Area (TIHS)"),
+    "Alpine Skyline - Windy Passage": LocData(2000334776, "Alpine Skyline Area (TIHS)", hookshot=True),
     "Alpine Skyline - The Windmill: Inside Pon Cluster": LocData(2000336395, "The Windmill"),
     "Alpine Skyline - The Windmill: Entrance": LocData(2000335783, "The Windmill"),
     "Alpine Skyline - The Windmill: Dropdown": LocData(2000335815, "The Windmill"),
@@ -867,54 +867,112 @@ zero_jumps = {
                                                 dlc_flags=HatDLC.dlc2_dw),
 }
 
-# noinspection PyDictDuplicateKeys
 snatcher_coins = {
-    "Snatcher Coin - Top of HQ": LocData(0, "Down with the Mafia!", dlc_flags=HatDLC.death_wish),
-    "Snatcher Coin - Top of HQ": LocData(0, "Cheating the Race", dlc_flags=HatDLC.death_wish),
+    "Snatcher Coin - Top of HQ (DWTM)": LocData(0, "Down with the Mafia!", snatcher_coin="Snatcher Coin - Top of HQ",
+                                                dlc_flags=HatDLC.death_wish),
 
-    "Snatcher Coin - Top of HQ": LocData(0, "Heating Up Mafia Town",
-                                         hit_type=HitType.umbrella, dlc_flags=HatDLC.death_wish),
+    "Snatcher Coin - Top of HQ (CTR)": LocData(0, "Cheating the Race", snatcher_coin="Snatcher Coin - Top of HQ",
+                                               dlc_flags=HatDLC.death_wish),
 
-    "Snatcher Coin - Top of HQ": LocData(0, "The Golden Vault", dlc_flags=HatDLC.death_wish),
-    "Snatcher Coin - Top of HQ": LocData(0, "Beat the Heat", dlc_flags=HatDLC.death_wish),
+    "Snatcher Coin - Top of HQ (HUMT)": LocData(0, "Heating Up Mafia Town", snatcher_coin="Snatcher Coin - Top of HQ",
+                                                hit_type=HitType.umbrella, dlc_flags=HatDLC.death_wish),
 
-    "Snatcher Coin - Top of Tower": LocData(0, "Mafia Town Area (HUMT)", dlc_flags=HatDLC.death_wish),
-    "Snatcher Coin - Top of Tower": LocData(0, "Beat the Heat", dlc_flags=HatDLC.death_wish),
-    "Snatcher Coin - Top of Tower": LocData(0, "Collect-a-thon", dlc_flags=HatDLC.death_wish),
-    "Snatcher Coin - Top of Tower": LocData(0, "She Speedran from Outer Space", dlc_flags=HatDLC.death_wish),
-    "Snatcher Coin - Top of Tower": LocData(0, "Mafia's Jumps", dlc_flags=HatDLC.death_wish),
-    "Snatcher Coin - Under Ruined Tower": LocData(0, "Mafia Town Area", dlc_flags=HatDLC.death_wish),
-    "Snatcher Coin - Under Ruined Tower": LocData(0, "Collect-a-thon", dlc_flags=HatDLC.death_wish),
-    "Snatcher Coin - Under Ruined Tower": LocData(0, "She Speedran from Outer Space", dlc_flags=HatDLC.death_wish),
+    "Snatcher Coin - Top of HQ (TGV)": LocData(0, "The Golden Vault", snatcher_coin="Snatcher Coin - Top of HQ",
+                                               dlc_flags=HatDLC.death_wish),
 
-    "Snatcher Coin - Top of Red House": LocData(0, "Dead Bird Studio - Elevator Area", dlc_flags=HatDLC.death_wish),
-    "Snatcher Coin - Top of Red House": LocData(0, "Security Breach", dlc_flags=HatDLC.death_wish),
-    "Snatcher Coin - Train Rush": LocData(0, "Train Rush", hookshot=True, dlc_flags=HatDLC.death_wish),
+    "Snatcher Coin - Top of HQ (DW: BTH)": LocData(0, "Beat the Heat", snatcher_coin="Snatcher Coin - Top of HQ",
+                                                   dlc_flags=HatDLC.death_wish),
 
-    "Snatcher Coin - Train Rush": LocData(0, "10 Seconds until Self-Destruct", hookshot=True,
+    "Snatcher Coin - Top of Tower": LocData(0, "Mafia Town Area (HUMT)", snatcher_coin="Snatcher Coin - Top of Tower",
+                                            dlc_flags=HatDLC.death_wish),
+
+    "Snatcher Coin - Top of Tower (DW: BTH)": LocData(0, "Beat the Heat", snatcher_coin="Snatcher Coin - Top of Tower",
+                                                      dlc_flags=HatDLC.death_wish),
+
+    "Snatcher Coin - Top of Tower (DW: CAT)": LocData(0, "Collect-a-thon", snatcher_coin="Snatcher Coin - Top of Tower",
+                                                      dlc_flags=HatDLC.death_wish),
+
+    "Snatcher Coin - Top of Tower (SSFOS)": LocData(0, "She Speedran from Outer Space",
+                                                    snatcher_coin="Snatcher Coin - Top of Tower",
+                                                    dlc_flags=HatDLC.death_wish),
+
+    "Snatcher Coin - Top of Tower (DW: MJ)": LocData(0, "Mafia's Jumps", snatcher_coin="Snatcher Coin - Top of Tower",
+                                                     dlc_flags=HatDLC.death_wish),
+
+    "Snatcher Coin - Under Ruined Tower": LocData(0, "Mafia Town Area",
+                                                  snatcher_coin="Snatcher Coin - Under Ruined Tower",
+                                                  dlc_flags=HatDLC.death_wish),
+
+    "Snatcher Coin - Under Ruined Tower (DW: CAT)": LocData(0, "Collect-a-thon",
+                                                            snatcher_coin="Snatcher Coin - Under Ruined Tower",
+                                                            dlc_flags=HatDLC.death_wish),
+
+    "Snatcher Coin - Under Ruined Tower (DW: SSFOS)": LocData(0, "She Speedran from Outer Space",
+                                                              snatcher_coin="Snatcher Coin - Under Ruined Tower",
+                                                              dlc_flags=HatDLC.death_wish),
+
+    "Snatcher Coin - Top of Red House (DBS)": LocData(0, "Dead Bird Studio - Elevator Area",
+                                                      snatcher_coin="Snatcher Coin - Top of Red House",
+                                                      dlc_flags=HatDLC.death_wish),
+
+    "Snatcher Coin - Top of Red House (DW: SB)": LocData(0, "Security Breach",
+                                                         snatcher_coin="Snatcher Coin - Top of Red House",
+                                                         dlc_flags=HatDLC.death_wish),
+
+    "Snatcher Coin - Train Rush": LocData(0, "Train Rush", snatcher_coin="Snatcher Coin - Train Rush",
+                                          hookshot=True, dlc_flags=HatDLC.death_wish),
+
+    "Snatcher Coin - Train Rush (10 Seconds)": LocData(0, "10 Seconds until Self-Destruct",
+                                                       snatcher_coin="Snatcher Coin - Train Rush",
+                                                       hookshot=True, dlc_flags=HatDLC.death_wish),
+
+    "Snatcher Coin - Picture Perfect": LocData(0, "Picture Perfect", snatcher_coin="Snatcher Coin - Picture Perfect",
+                                               dlc_flags=HatDLC.death_wish),
+
+    "Snatcher Coin - Swamp Tree": LocData(0, "Subcon Forest Area", snatcher_coin="Snatcher Coin - Swamp Tree",
+                                          hookshot=True, paintings=1,
                                           dlc_flags=HatDLC.death_wish),
 
-    "Snatcher Coin - Picture Perfect": LocData(0, "Picture Perfect", dlc_flags=HatDLC.death_wish),
+    "Snatcher Coin - Swamp Tree (Speedrun Well)": LocData(0, "Speedrun Well",
+                                                          snatcher_coin="Snatcher Coin - Swamp Tree",
+                                                          hookshot=True, dlc_flags=HatDLC.death_wish),
 
-    "Snatcher Coin - Swamp Tree": LocData(0, "Subcon Forest Area", hookshot=True, paintings=1,
+    "Snatcher Coin - Manor Roof": LocData(0, "Subcon Forest Area", snatcher_coin="Snatcher Coin - Manor Roof",
+                                          hit_type=HitType.dweller_bell, paintings=1,
                                           dlc_flags=HatDLC.death_wish),
 
-    "Snatcher Coin - Swamp Tree": LocData(0, "Speedrun Well", hookshot=True, dlc_flags=HatDLC.death_wish),
+    "Snatcher Coin - Giant Time Piece": LocData(0, "Subcon Forest Area",
+                                                snatcher_coin="Snatcher Coin - Giant Time Piece",
+                                                paintings=3, dlc_flags=HatDLC.death_wish),
 
-    "Snatcher Coin - Manor Roof": LocData(0, "Subcon Forest Area", hit_type=HitType.dweller_bell, paintings=1,
-                                          dlc_flags=HatDLC.death_wish),
+    "Snatcher Coin - Goat Village Top": LocData(0, "Alpine Skyline Area (TIHS)",
+                                                snatcher_coin="Snatcher Coin - Goat Village Top",
+                                                dlc_flags=HatDLC.death_wish),
 
-    "Snatcher Coin - Giant Time Piece": LocData(0, "Subcon Forest Area", paintings=3, dlc_flags=HatDLC.death_wish),
+    "Snatcher Coin - Goat Village Top (Illness Speedrun)": LocData(0, "The Illness has Speedrun",
+                                                                   snatcher_coin="Snatcher Coin - Goat Village Top",
+                                                                   dlc_flags=HatDLC.death_wish),
 
-    "Snatcher Coin - Goat Village Top": LocData(0, "Alpine Skyline Area (TIHS)", dlc_flags=HatDLC.death_wish),
-    "Snatcher Coin - Goat Village Top": LocData(0, "The Illness has Speedrun", dlc_flags=HatDLC.death_wish),
-    "Snatcher Coin - Lava Cake": LocData(0, "The Lava Cake", dlc_flags=HatDLC.death_wish),
-    "Snatcher Coin - Windmill": LocData(0, "The Windmill", dlc_flags=HatDLC.death_wish),
-    "Snatcher Coin - Windmill": LocData(0, "Wound-Up Windmill", hookshot=True, dlc_flags=HatDLC.death_wish),
+    "Snatcher Coin - Lava Cake": LocData(0, "The Lava Cake", snatcher_coin="Snatcher Coin - Lava Cake",
+                                         dlc_flags=HatDLC.death_wish),
 
-    "Snatcher Coin - Green Clean Tower": LocData(0, "Green Clean Station", dlc_flags=HatDLC.dlc2_dw),
-    "Snatcher Coin - Bluefin Cat Train": LocData(0, "Bluefin Tunnel", dlc_flags=HatDLC.dlc2_dw),
-    "Snatcher Coin - Pink Paw Fence": LocData(0, "Pink Paw Station", dlc_flags=HatDLC.dlc2_dw),
+    "Snatcher Coin - Windmill": LocData(0, "The Windmill", snatcher_coin="Snatcher Coin - Windmill",
+                                        dlc_flags=HatDLC.death_wish),
+
+    "Snatcher Coin - Windmill (DW: WUW)": LocData(0, "Wound-Up Windmill", snatcher_coin="Snatcher Coin - Windmill",
+                                                  hookshot=True, dlc_flags=HatDLC.death_wish),
+
+    "Snatcher Coin - Green Clean Tower": LocData(0, "Green Clean Station",
+                                                 snatcher_coin="Snatcher Coin - Green Clean Tower",
+                                                 dlc_flags=HatDLC.dlc2_dw),
+
+    "Snatcher Coin - Bluefin Cat Train": LocData(0, "Bluefin Tunnel",
+                                                 snatcher_coin="Snatcher Coin - Bluefin Tunnel",
+                                                 dlc_flags=HatDLC.dlc2_dw),
+
+    "Snatcher Coin - Pink Paw Fence": LocData(0, "Pink Paw Station",
+                                              snatcher_coin="Snatcher Coin - Pink Paw Fence",
+                                              dlc_flags=HatDLC.dlc2_dw),
 }
 
 event_locs = {

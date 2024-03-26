@@ -103,13 +103,13 @@ required_snatcher_coins = {
 
 
 def set_dw_rules(world: "HatInTimeWorld"):
-    if "Snatcher's Hit List" not in world.get_excluded_dws() \
-       or "Camera Tourist" not in world.get_excluded_dws():
+    if "Snatcher's Hit List" not in world.excluded_dws \
+       or "Camera Tourist" not in world.excluded_dws:
         set_enemy_rules(world)
 
     dw_list: List[str] = []
     if world.options.DWShuffle.value > 0:
-        dw_list = world.get_dw_shuffle()
+        dw_list = world.dw_shuffle
     else:
         for name in death_wishes.keys():
             dw_list.append(name)
@@ -196,13 +196,12 @@ def set_dw_rules(world: "HatInTimeWorld"):
                     add_rule(bonus_stamps, loc.access_rule)
 
     if world.options.DWShuffle.value > 0:
-        dw_shuffle = world.get_dw_shuffle()
-        for i in range(len(dw_shuffle)):
+        for i in range(len(world.dw_shuffle)):
             if i == 0:
                 continue
 
-            name = dw_shuffle[i]
-            prev_dw = world.multiworld.get_region(dw_shuffle[i-1], world.player)
+            name = world.dw_shuffle[i]
+            prev_dw = world.multiworld.get_region(world.dw_shuffle[i-1], world.player)
             entrance = world.multiworld.get_entrance(f"{prev_dw.name} -> {name}", world.player)
             add_rule(entrance, lambda state, n=prev_dw.name: state.has(f"1 Stamp - {n}", world.player))
     else:
@@ -330,9 +329,15 @@ def set_candle_dw_rules(name: str, world: "HatInTimeWorld"):
                  and state.has("Triple Enemy Picture", world.player))
 
     elif "Snatcher Coins" in name:
+        coins: List[str] = []
         for coin in required_snatcher_coins[name]:
-            add_rule(main_objective, lambda state: state.has(coin, world.player), "or")
+            coins.append(coin)
             add_rule(full_clear, lambda state: state.has(coin, world.player))
+
+        # any coin works for the main objective
+        add_rule(main_objective, lambda state: state.has(coins[0], world.player)
+                 or state.has(coins[1], world.player)
+                 or state.has(coins[2], world.player))
 
 
 def get_zero_jump_clear_count(state: CollectionState, world: "HatInTimeWorld") -> int:
@@ -378,7 +383,7 @@ def can_reach_all_bosses(state: CollectionState, world: "HatInTimeWorld") -> boo
 
 
 def create_enemy_events(world: "HatInTimeWorld"):
-    no_tourist = "Camera Tourist" in world.get_excluded_dws() or "Camera Tourist" in world.get_excluded_bonuses()
+    no_tourist = "Camera Tourist" in world.excluded_dws or "Camera Tourist" in world.excluded_bonuses
 
     for enemy, regions in hit_list.items():
         if no_tourist and enemy in bosses:
@@ -395,7 +400,7 @@ def create_enemy_events(world: "HatInTimeWorld"):
             if area == "Bluefin Tunnel" and not world.is_dlc2():
                 continue
             if world.options.DWShuffle.value > 0 and area in death_wishes.keys() \
-               and area not in world.get_dw_shuffle():
+               and area not in world.dw_shuffle:
                 continue
 
             region = world.multiworld.get_region(area, world.player)
@@ -409,7 +414,7 @@ def create_enemy_events(world: "HatInTimeWorld"):
             continue
 
         if world.options.DWShuffle.value > 0 and name in death_wishes.keys() \
-           and name not in world.get_dw_shuffle():
+           and name not in world.dw_shuffle:
             continue
 
         region = world.multiworld.get_region(name, world.player)
@@ -422,7 +427,7 @@ def create_enemy_events(world: "HatInTimeWorld"):
 
 
 def set_enemy_rules(world: "HatInTimeWorld"):
-    no_tourist = "Camera Tourist" in world.get_excluded_dws() or "Camera Tourist" in world.get_excluded_bonuses()
+    no_tourist = "Camera Tourist" in world.excluded_dws or "Camera Tourist" in world.excluded_bonuses
 
     for enemy, regions in hit_list.items():
         if no_tourist and enemy in bosses:
@@ -440,7 +445,7 @@ def set_enemy_rules(world: "HatInTimeWorld"):
                 continue
 
             if world.options.DWShuffle.value > 0 and area in death_wishes \
-               and area not in world.get_dw_shuffle():
+               and area not in world.dw_shuffle:
                 continue
 
             event = world.multiworld.get_location(f"{enemy} - {area}", world.player)

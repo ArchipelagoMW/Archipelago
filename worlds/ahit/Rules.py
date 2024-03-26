@@ -1,8 +1,8 @@
 from worlds.AutoWorld import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 from .Locations import location_table, zipline_unlocks, is_location_valid, contract_locations, \
-    shop_locations, event_locs, snatcher_coins
-from .Types import HatType, ChapterIndex, hat_type_to_item, Difficulty, HatDLC, HitType
+    shop_locations, event_locs
+from .Types import HatType, ChapterIndex, hat_type_to_item, Difficulty, HitType
 from BaseClasses import Location, Entrance, Region
 from typing import TYPE_CHECKING, List, Callable, Union, Dict
 
@@ -43,9 +43,8 @@ def can_use_hat(state: CollectionState, world: "HatInTimeWorld", hat: HatType) -
 
 def get_hat_cost(world: "HatInTimeWorld", hat: HatType) -> int:
     cost = 0
-    costs = world.get_hat_yarn_costs()
-    for h in world.get_hat_craft_order():
-        cost += costs[h]
+    for h in world.hat_craft_order:
+        cost += world.hat_yarn_costs[h]
         if h == hat:
             break
 
@@ -136,7 +135,7 @@ def can_clear_metro(state: CollectionState, world: "HatInTimeWorld") -> bool:
 def set_rules(world: "HatInTimeWorld"):
     # First, chapter access
     starting_chapter = ChapterIndex(world.options.StartingChapter.value)
-    world.set_chapter_cost(starting_chapter, 0)
+    world.chapter_timepiece_costs[starting_chapter] = 0
 
     # Chapter costs increase progressively. Randomly decide the chapter order, except for Finale
     chapter_list: List[ChapterIndex] = [ChapterIndex.MAFIA, ChapterIndex.BIRDS,
@@ -160,8 +159,8 @@ def set_rules(world: "HatInTimeWorld"):
     world.random.shuffle(chapter_list)
 
     if starting_chapter is not ChapterIndex.ALPINE and (world.is_dlc1() or world.is_dlc2()):
-        index1: int = 69
-        index2: int = 69
+        index1 = 69
+        index2 = 69
         pos: int
         lowest_index: int
         chapter_list.remove(ChapterIndex.ALPINE)
@@ -180,84 +179,69 @@ def set_rules(world: "HatInTimeWorld"):
 
         chapter_list.insert(pos, ChapterIndex.ALPINE)
 
-    if world.is_dlc1() and world.is_dlc2() and final_chapter is not ChapterIndex.METRO:
-        chapter_list.remove(ChapterIndex.METRO)
-        index = chapter_list.index(ChapterIndex.CRUISE)
-        if index >= len(chapter_list):
-            chapter_list.append(ChapterIndex.METRO)
-        else:
-            chapter_list.insert(world.random.randint(index+1, len(chapter_list)), ChapterIndex.METRO)
-
     lowest_cost: int = world.options.LowestChapterCost.value
     highest_cost: int = world.options.HighestChapterCost.value
     cost_increment: int = world.options.ChapterCostIncrement.value
     min_difference: int = world.options.ChapterCostMinDifference.value
     last_cost = 0
-    loop_count = 0
 
-    for chapter in chapter_list:
-        min_range: int = lowest_cost + (cost_increment * loop_count)
+    for i, chapter in enumerate(chapter_list):
+        min_range: int = lowest_cost + (cost_increment * i)
         if min_range >= highest_cost:
             min_range = highest_cost-1
 
         value: int = world.random.randint(min_range, min(highest_cost, max(lowest_cost, last_cost + cost_increment)))
-
         cost = world.random.randint(value, min(value + cost_increment, highest_cost))
-        if loop_count >= 1:
+        if i >= 1:
             if last_cost + min_difference > cost:
                 cost = last_cost + min_difference
 
         cost = min(cost, highest_cost)
-        world.set_chapter_cost(chapter, cost)
+        world.chapter_timepiece_costs[chapter] = cost
         last_cost = cost
-        loop_count += 1
 
     if final_chapter is not None:
-        world.set_chapter_cost(final_chapter, world.random.randint(
+        world.chapter_timepiece_costs[final_chapter] = world.random.randint(
                                                             world.options.FinalChapterMinCost.value,
-                                                            world.options.FinalChapterMaxCost.value))
+                                                            world.options.FinalChapterMaxCost.value)
 
     add_rule(world.multiworld.get_entrance("Telescope -> Mafia Town", world.player),
-             lambda state: state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.MAFIA)))
+             lambda state: state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.MAFIA]))
 
     add_rule(world.multiworld.get_entrance("Telescope -> Battle of the Birds", world.player),
-             lambda state: state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.BIRDS)))
+             lambda state: state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.BIRDS]))
 
     add_rule(world.multiworld.get_entrance("Telescope -> Subcon Forest", world.player),
-             lambda state: state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.SUBCON)))
+             lambda state: state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.SUBCON]))
 
     add_rule(world.multiworld.get_entrance("Telescope -> Alpine Skyline", world.player),
-             lambda state: state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.ALPINE)))
+             lambda state: state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.ALPINE]))
 
     add_rule(world.multiworld.get_entrance("Telescope -> Time's End", world.player),
-             lambda state: state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.FINALE))
+             lambda state: state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.FINALE])
              and can_use_hat(state, world, HatType.BREWING) and can_use_hat(state, world, HatType.DWELLER))
 
     if world.is_dlc1():
         add_rule(world.multiworld.get_entrance("Telescope -> The Arctic Cruise", world.player),
-                 lambda state: state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.ALPINE))
-                 and state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.CRUISE)))
+                 lambda state: state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.ALPINE])
+                 and state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.CRUISE]))
 
     if world.is_dlc2():
         add_rule(world.multiworld.get_entrance("Telescope -> Nyakuza Metro", world.player),
-                 lambda state: state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.ALPINE))
-                 and state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.METRO))
+                 lambda state: state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.ALPINE])
+                 and state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.METRO])
                  and can_use_hat(state, world, HatType.DWELLER) and can_use_hat(state, world, HatType.ICE))
 
     if world.options.ActRandomizer.value == 0:
         set_default_rift_rules(world)
 
     table = {**location_table, **event_locs}
-    loc: Location
     for (key, data) in table.items():
         if not is_location_valid(world, key):
             continue
 
         if key in contract_locations.keys():
             continue
-
-        if data.dlc_flags & HatDLC.death_wish and key in snatcher_coins.keys():
-            key = f"{key} ({data.region})"
 
         loc = world.multiworld.get_location(key, world.player)
 
@@ -319,33 +303,12 @@ def set_rules(world: "HatInTimeWorld"):
             add_rule(world.multiworld.get_location(loc, world.player),
                      lambda state, z=zipline: state.has(z, world.player))
 
-    for loc in world.multiworld.get_region("Alpine Skyline Area (TIHS)", world.player).locations:
-        if "Goat Village" in loc.name:
-            continue
-        # This needs some special handling
-        if loc.name == "Alpine Skyline - Goat Refinery":
-            add_rule(loc, lambda state: state.has("AFR Access", world.player)
-                     and can_use_hookshot(state, world)
-                     and can_hit(state, world, True))
-
-            difficulty: Difficulty = Difficulty(world.options.LogicDifficulty.value)
-            if difficulty >= Difficulty.MODERATE:
-                add_rule(loc, lambda state: state.has("TIHS Access", world.player)
-                         and can_use_hat(state, world, HatType.SPRINT), "or")
-            elif difficulty >= Difficulty.HARD:
-                add_rule(loc, lambda state: state.has("TIHS Access", world.player, "or"))
-
-            continue
-
-        add_rule(loc, lambda state: can_use_hookshot(state, world))
-
     dummy_entrances: List[Entrance] = []
       
     for (key, acts) in act_connections.items():
         if "Arctic Cruise" in key and not world.is_dlc1():
             continue
 
-        i: int = 1
         entrance: Entrance = world.multiworld.get_entrance(key, world.player)
         region: Region = entrance.connected_region
         access_rules: List[Callable[[CollectionState], bool]] = []
@@ -354,7 +317,7 @@ def set_rules(world: "HatInTimeWorld"):
         # Entrances to this act that we have to set access_rules on
         entrances: List[Entrance] = []
 
-        for act in acts:
+        for i, act in enumerate(acts, start=1):
             act_entrance: Entrance = world.multiworld.get_entrance(act, world.player)
             access_rules.append(act_entrance.access_rule)
             required_region = act_entrance.connected_region
@@ -368,8 +331,6 @@ def set_rules(world: "HatInTimeWorld"):
                 name = f"Act Completion ({required_region.name})"
                 rule = world.multiworld.get_location(name, world.player).access_rule
                 access_rules.append(rule)
-
-            i += 1
 
         for e in entrances:
             for rules in access_rules:
@@ -389,7 +350,7 @@ def set_rules(world: "HatInTimeWorld"):
 def set_specific_rules(world: "HatInTimeWorld"):
     add_rule(world.multiworld.get_location("Mafia Boss Shop Item", world.player),
              lambda state: state.has("Time Piece", world.player, 12)
-             and state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.BIRDS)))
+             and state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.BIRDS]))
 
     add_rule(world.multiworld.get_location("Spaceship - Rumbi Abuse", world.player),
              lambda state: state.has("Time Piece", world.player, 4))
@@ -456,6 +417,11 @@ def set_moderate_rules(world: "HatInTimeWorld"):
     # Moderate: Mystifying Time Mesa time trial without hats
     set_rule(world.multiworld.get_location("Alpine Skyline - Mystifying Time Mesa: Zipline", world.player),
              lambda state: can_use_hookshot(state, world))
+
+    # Moderate: Goat Refinery from TIHS with Sprint only
+    add_rule(world.multiworld.get_location("Alpine Skyline - Goat Refinery", world.player),
+             lambda state: state.has("TIHS Access", world.player)
+             and can_use_hat(state, world, HatType.SPRINT), "or")
 
     # Moderate: Finale without Hookshot
     set_rule(world.multiworld.get_location("Act Completion (The Finale)", world.player),
@@ -530,6 +496,10 @@ def set_hard_rules(world: "HatInTimeWorld"):
     add_rule(world.multiworld.get_entrance("Telescope -> Time's End", world.player),
              lambda state: can_use_hat(state, world, HatType.ICE), "or")
 
+    # Hard: Goat Refinery from TIHS with nothing
+    add_rule(world.multiworld.get_location("Alpine Skyline - Goat Refinery", world.player),
+             lambda state: state.has("TIHS Access", world.player, "or"))
+
     if world.is_dlc1():
         # Hard: clear Deep Sea without Dweller Mask
         set_rule(world.multiworld.get_location("Act Completion (Time Rift - Deep Sea)", world.player),
@@ -555,7 +525,7 @@ def set_hard_rules(world: "HatInTimeWorld"):
 def set_expert_rules(world: "HatInTimeWorld"):
     # Finale Telescope with no hats
     set_rule(world.multiworld.get_entrance("Telescope -> Time's End", world.player),
-             lambda state: state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.FINALE)))
+             lambda state: state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.FINALE]))
 
     # Expert: Mafia Town - Above Boats, Top of Lighthouse, and Hot Air Balloon with nothing
     set_rule(world.multiworld.get_location("Mafia Town - Above Boats", world.player), lambda state: True)
@@ -753,6 +723,11 @@ def set_alps_rules(world: "HatInTimeWorld"):
     add_rule(world.multiworld.get_entrance("Alpine Skyline - Finale", world.player),
              lambda state: can_clear_alpine(state, world))
 
+    add_rule(world.multiworld.get_location("Alpine Skyline - Goat Refinery", world.player),
+             lambda state: state.has("AFR Access", world.player)
+             and can_use_hookshot(state, world)
+             and can_hit(state, world, True))
+
 
 def set_dlc1_rules(world: "HatInTimeWorld"):
     add_rule(world.multiworld.get_entrance("Cruise Ship Entrance BV", world.player),
@@ -810,11 +785,11 @@ def set_rift_rules(world: "HatInTimeWorld", regions: Dict[str, Region]):
     # This is accessing the regions in place of these time rifts, so we can set the rules on all the entrances.
     for entrance in regions["Time Rift - Gallery"].entrances:
         add_rule(entrance, lambda state: can_use_hat(state, world, HatType.BREWING)
-                 and state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.BIRDS)))
+                 and state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.BIRDS]))
 
     for entrance in regions["Time Rift - The Lab"].entrances:
         add_rule(entrance, lambda state: can_use_hat(state, world, HatType.DWELLER)
-                 and state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.ALPINE)))
+                 and state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.ALPINE]))
 
     for entrance in regions["Time Rift - Sewers"].entrances:
         add_rule(entrance, lambda state: can_clear_act(state, world, "Mafia Town - Act 4"))
@@ -895,11 +870,11 @@ def set_default_rift_rules(world: "HatInTimeWorld"):
 
     for entrance in world.multiworld.get_region("Time Rift - Gallery", world.player).entrances:
         add_rule(entrance, lambda state: can_use_hat(state, world, HatType.BREWING)
-                 and state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.BIRDS)))
+                 and state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.BIRDS]))
 
     for entrance in world.multiworld.get_region("Time Rift - The Lab", world.player).entrances:
         add_rule(entrance, lambda state: can_use_hat(state, world, HatType.DWELLER)
-                 and state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.ALPINE)))
+                 and state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.ALPINE]))
 
     for entrance in world.multiworld.get_region("Time Rift - Sewers", world.player).entrances:
         add_rule(entrance, lambda state: can_clear_act(state, world, "Mafia Town - Act 4"))
@@ -969,9 +944,6 @@ def set_event_rules(world: "HatInTimeWorld"):
     for (name, data) in event_locs.items():
         if not is_location_valid(world, name):
             continue
-
-        if data.dlc_flags & HatDLC.death_wish and name in snatcher_coins.keys():
-            name = f"{name} ({data.region})"
 
         event: Location = world.multiworld.get_location(name, world.player)
 

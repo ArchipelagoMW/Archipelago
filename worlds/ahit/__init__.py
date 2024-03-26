@@ -1,4 +1,4 @@
-from BaseClasses import Item, ItemClassification, Tutorial, Location
+from BaseClasses import Item, ItemClassification, Tutorial, Location, MultiWorld
 from .Items import item_table, create_item, relic_groups, act_contracts, create_itempool
 from .Regions import create_regions, randomize_act_entrances, chapter_act_info, create_events, get_shuffled_region
 from .Locations import location_table, contract_locations, is_location_valid, get_location_names, TASKSANITY_START_ID, \
@@ -23,15 +23,6 @@ components.append(Component("A Hat in Time Client", "AHITClient", func=launch_cl
                             component_type=Type.CLIENT, icon='yatta'))
 
 icon_paths['yatta'] = local_path('data', 'yatta.png')
-
-hat_craft_order: Dict[int, List[HatType]] = {}
-hat_yarn_costs: Dict[int, Dict[HatType, int]] = {}
-chapter_timepiece_costs: Dict[int, Dict[ChapterIndex, int]] = {}
-excluded_dws: Dict[int, List[str]] = {}
-excluded_bonuses: Dict[int, List[str]] = {}
-dw_shuffle: Dict[int, List[str]] = {}
-nyakuza_thug_items: Dict[int, Dict[str, int]] = {}
-badge_seller_count: Dict[int, int] = {}
 
 
 class AWebInTime(WebWorld):
@@ -60,10 +51,32 @@ class HatInTimeWorld(World):
 
     options_dataclass = AHITOptions
     options: AHITOptions
-    act_connections: Dict[str, str] = {}
-    shop_locs: List[str] = []
     item_name_groups = relic_groups
     web = AWebInTime()
+
+    def __init__(self, multiworld: "MultiWorld", player: int):
+        super().__init__(multiworld, player)
+        self.act_connections: Dict[str, str] = {}
+        self.shop_locs: List[str] = []
+
+        self.hat_craft_order: List[HatType] = [HatType.SPRINT, HatType.BREWING, HatType.ICE,
+                                               HatType.DWELLER, HatType.TIME_STOP]
+
+        self.hat_yarn_costs: Dict[HatType, int] = {HatType.SPRINT: -1, HatType.BREWING: -1, HatType.ICE: -1,
+                                                   HatType.DWELLER: -1, HatType.TIME_STOP: -1}
+
+        self.chapter_timepiece_costs: Dict[ChapterIndex, int] = {ChapterIndex.MAFIA: -1,
+                                                                 ChapterIndex.BIRDS: -1,
+                                                                 ChapterIndex.SUBCON: -1,
+                                                                 ChapterIndex.ALPINE: -1,
+                                                                 ChapterIndex.FINALE: -1,
+                                                                 ChapterIndex.CRUISE: -1,
+                                                                 ChapterIndex.METRO: -1}
+        self.excluded_dws: List[str] = []
+        self.excluded_bonuses: List[str] = []
+        self.dw_shuffle: List[str] = []
+        self.nyakuza_thug_items: Dict[str, int] = {}
+        self.badge_seller_count: int = 0
 
     def generate_early(self):
         adjust_options(self)
@@ -87,12 +100,6 @@ class HatInTimeWorld(World):
                     self.multiworld.push_precollected(self.create_item("Progressive Painting Unlock"))
 
     def create_regions(self):
-        excluded_dws[self.player] = []
-        excluded_bonuses[self.player] = []
-        dw_shuffle[self.player] = []
-        nyakuza_thug_items[self.player] = {}
-        badge_seller_count[self.player] = 0
-        self.shop_locs = []
         # noinspection PyClassVar
         self.topology_present = bool(self.options.ActRandomizer.value)
 
@@ -105,8 +112,8 @@ class HatInTimeWorld(World):
 
         create_events(self)
         if self.is_dw():
-            if "Snatcher's Hit List" not in self.get_excluded_dws() \
-               or "Camera Tourist" not in self.get_excluded_dws():
+            if "Snatcher's Hit List" not in self.excluded_dws \
+               or "Camera Tourist" not in self.excluded_dws:
                 create_enemy_events(self)
 
         # place vanilla contract locations if contract shuffle is off
@@ -115,30 +122,15 @@ class HatInTimeWorld(World):
                 self.multiworld.get_location(name, self.player).place_locked_item(create_item(self, name))
 
     def create_items(self):
-        hat_yarn_costs[self.player] = {HatType.SPRINT: -1, HatType.BREWING: -1, HatType.ICE: -1,
-                                       HatType.DWELLER: -1, HatType.TIME_STOP: -1}
-
-        hat_craft_order[self.player] = [HatType.SPRINT, HatType.BREWING, HatType.ICE,
-                                        HatType.DWELLER, HatType.TIME_STOP]
-
         if self.options.HatItems.value == 0 and self.options.RandomizeHatOrder.value > 0:
-            self.random.shuffle(hat_craft_order[self.player])
+            self.random.shuffle(self.hat_craft_order)
             if self.options.RandomizeHatOrder.value == 2:
-                hat_craft_order[self.player].remove(HatType.TIME_STOP)
-                hat_craft_order[self.player].append(HatType.TIME_STOP)
+                self.hat_craft_order.remove(HatType.TIME_STOP)
+                self.hat_craft_order.append(HatType.TIME_STOP)
 
         self.multiworld.itempool += create_itempool(self)
 
     def set_rules(self):
-        self.act_connections = {}
-        chapter_timepiece_costs[self.player] = {ChapterIndex.MAFIA: -1,
-                                                ChapterIndex.BIRDS: -1,
-                                                ChapterIndex.SUBCON: -1,
-                                                ChapterIndex.ALPINE: -1,
-                                                ChapterIndex.FINALE: -1,
-                                                ChapterIndex.CRUISE: -1,
-                                                ChapterIndex.METRO: -1}
-
         if self.is_dw_only():
             # we already have all items if this is the case, no need for rules
             self.multiworld.push_precollected(HatInTimeItem("Death Wish Only Mode", ItemClassification.progression,
@@ -152,7 +144,7 @@ class HatInTimeWorld(World):
                     if name == "Snatcher Coins in Nyakuza Metro" and not self.is_dlc2():
                         continue
 
-                    if self.options.DWShuffle.value > 0 and name not in self.get_dw_shuffle():
+                    if self.options.DWShuffle.value > 0 and name not in self.dw_shuffle:
                         continue
 
                     full_clear = self.multiworld.get_location(f"{name} - All Clear", self.player)
@@ -174,41 +166,41 @@ class HatInTimeWorld(World):
         return create_item(self, name)
 
     def fill_slot_data(self) -> dict:
-        slot_data: dict = {"Chapter1Cost": chapter_timepiece_costs[self.player][ChapterIndex.MAFIA],
-                           "Chapter2Cost": chapter_timepiece_costs[self.player][ChapterIndex.BIRDS],
-                           "Chapter3Cost": chapter_timepiece_costs[self.player][ChapterIndex.SUBCON],
-                           "Chapter4Cost": chapter_timepiece_costs[self.player][ChapterIndex.ALPINE],
-                           "Chapter5Cost": chapter_timepiece_costs[self.player][ChapterIndex.FINALE],
-                           "Chapter6Cost": chapter_timepiece_costs[self.player][ChapterIndex.CRUISE],
-                           "Chapter7Cost": chapter_timepiece_costs[self.player][ChapterIndex.METRO],
-                           "BadgeSellerItemCount": badge_seller_count[self.player],
+        slot_data: dict = {"Chapter1Cost": self.chapter_timepiece_costs[ChapterIndex.MAFIA],
+                           "Chapter2Cost": self.chapter_timepiece_costs[ChapterIndex.BIRDS],
+                           "Chapter3Cost": self.chapter_timepiece_costs[ChapterIndex.SUBCON],
+                           "Chapter4Cost": self.chapter_timepiece_costs[ChapterIndex.ALPINE],
+                           "Chapter5Cost": self.chapter_timepiece_costs[ChapterIndex.FINALE],
+                           "Chapter6Cost": self.chapter_timepiece_costs[ChapterIndex.CRUISE],
+                           "Chapter7Cost": self.chapter_timepiece_costs[ChapterIndex.METRO],
+                           "BadgeSellerItemCount": self.badge_seller_count,
                            "SeedNumber": str(self.multiworld.seed),  # For shop prices
                            "SeedName": self.multiworld.seed_name,
                            "TotalLocations": get_total_locations(self)}
 
         if self.options.HatItems.value == 0:
-            slot_data.setdefault("SprintYarnCost", hat_yarn_costs[self.player][HatType.SPRINT])
-            slot_data.setdefault("BrewingYarnCost", hat_yarn_costs[self.player][HatType.BREWING])
-            slot_data.setdefault("IceYarnCost", hat_yarn_costs[self.player][HatType.ICE])
-            slot_data.setdefault("DwellerYarnCost", hat_yarn_costs[self.player][HatType.DWELLER])
-            slot_data.setdefault("TimeStopYarnCost", hat_yarn_costs[self.player][HatType.TIME_STOP])
-            slot_data.setdefault("Hat1", int(hat_craft_order[self.player][0]))
-            slot_data.setdefault("Hat2", int(hat_craft_order[self.player][1]))
-            slot_data.setdefault("Hat3", int(hat_craft_order[self.player][2]))
-            slot_data.setdefault("Hat4", int(hat_craft_order[self.player][3]))
-            slot_data.setdefault("Hat5", int(hat_craft_order[self.player][4]))
+            slot_data.setdefault("SprintYarnCost", self.hat_yarn_costs[HatType.SPRINT])
+            slot_data.setdefault("BrewingYarnCost", self.hat_yarn_costs[HatType.BREWING])
+            slot_data.setdefault("IceYarnCost", self.hat_yarn_costs[HatType.ICE])
+            slot_data.setdefault("DwellerYarnCost", self.hat_yarn_costs[HatType.DWELLER])
+            slot_data.setdefault("TimeStopYarnCost", self.hat_yarn_costs[HatType.TIME_STOP])
+            slot_data.setdefault("Hat1", int(self.hat_craft_order[0]))
+            slot_data.setdefault("Hat2", int(self.hat_craft_order[1]))
+            slot_data.setdefault("Hat3", int(self.hat_craft_order[2]))
+            slot_data.setdefault("Hat4", int(self.hat_craft_order[3]))
+            slot_data.setdefault("Hat5", int(self.hat_craft_order[4]))
 
         if self.options.ActRandomizer.value > 0:
             for name in self.act_connections.keys():
                 slot_data[name] = self.act_connections[name]
 
         if self.is_dlc2() and not self.is_dw_only():
-            for name in nyakuza_thug_items[self.player].keys():
-                slot_data[name] = nyakuza_thug_items[self.player][name]
+            for name in self.nyakuza_thug_items.keys():
+                slot_data[name] = self.nyakuza_thug_items[name]
 
         if self.is_dw():
             i = 0
-            for name in excluded_dws[self.player]:
+            for name in self.excluded_dws:
                 if self.options.EndGoal.value == 3 and name == "Seal the Deal":
                     continue
 
@@ -217,15 +209,15 @@ class HatInTimeWorld(World):
 
             i = 0
             if self.options.DWAutoCompleteBonuses.value == 0:
-                for name in excluded_bonuses[self.player]:
-                    if name in excluded_dws[self.player]:
+                for name in self.excluded_bonuses:
+                    if name in self.excluded_dws:
                         continue
 
                     slot_data[f"excluded_bonus{i}"] = dw_classes[name]
                     i += 1
 
             if self.options.DWShuffle.value > 0:
-                shuffled_dws = self.get_dw_shuffle()
+                shuffled_dws = self.dw_shuffle
                 for i in range(len(shuffled_dws)):
                     slot_data[f"dw_{i}"] = dw_classes[shuffled_dws[i]]
 
@@ -281,26 +273,11 @@ class HatInTimeWorld(World):
         hint_data[self.player] = new_hint_data
 
     def write_spoiler_header(self, spoiler_handle: TextIO):
-        for i in self.get_chapter_costs():
-            spoiler_handle.write("Chapter %i Cost: %i\n" % (i, self.get_chapter_costs()[ChapterIndex(i)]))
+        for i in self.chapter_timepiece_costs:
+            spoiler_handle.write("Chapter %i Cost: %i\n" % (i, self.chapter_timepiece_costs[ChapterIndex(i)]))
 
-        for hat in hat_craft_order[self.player]:
-            spoiler_handle.write("Hat Cost: %s: %i\n" % (hat, hat_yarn_costs[self.player][hat]))
-
-    def set_chapter_cost(self, chapter: ChapterIndex, cost: int):
-        chapter_timepiece_costs[self.player][chapter] = cost
-
-    def get_chapter_cost(self, chapter: ChapterIndex) -> int:
-        return chapter_timepiece_costs[self.player][chapter]
-
-    def get_hat_craft_order(self):
-        return hat_craft_order[self.player]
-
-    def get_hat_yarn_costs(self):
-        return hat_yarn_costs[self.player]
-
-    def get_chapter_costs(self):
-        return chapter_timepiece_costs[self.player]
+        for hat in self.hat_craft_order:
+            spoiler_handle.write("Hat Cost: %s: %i\n" % (hat, self.hat_yarn_costs[hat]))
 
     def is_dlc1(self) -> bool:
         return self.options.EnableDLC1.value > 0
@@ -314,43 +291,19 @@ class HatInTimeWorld(World):
     def is_dw_only(self) -> bool:
         return self.is_dw() and self.options.DeathWishOnly.value > 0
 
-    def get_excluded_dws(self):
-        return excluded_dws[self.player]
-
-    def get_excluded_bonuses(self):
-        return excluded_bonuses[self.player]
-
     def is_dw_excluded(self, name: str) -> bool:
         # don't exclude Seal the Deal if it's our goal
         if self.options.EndGoal.value == 3 and name == "Seal the Deal" \
            and f"{name} - Main Objective" not in self.options.exclude_locations:
             return False
 
-        if name in excluded_dws[self.player]:
+        if name in self.excluded_dws:
             return True
 
         return f"{name} - Main Objective" in self.options.exclude_locations
 
     def is_bonus_excluded(self, name: str) -> bool:
-        if self.is_dw_excluded(name) or name in excluded_bonuses[self.player]:
+        if self.is_dw_excluded(name) or name in self.excluded_bonuses:
             return True
 
         return f"{name} - All Clear" in self.options.exclude_locations
-
-    def get_dw_shuffle(self):
-        return dw_shuffle[self.player]
-
-    def set_dw_shuffle(self, shuffle: List[str]):
-        dw_shuffle[self.player] = shuffle
-
-    def get_badge_seller_count(self) -> int:
-        return badge_seller_count[self.player]
-
-    def set_badge_seller_count(self, value: int):
-        badge_seller_count[self.player] = value
-
-    def get_nyakuza_thug_items(self):
-        return nyakuza_thug_items[self.player]
-
-    def set_nyakuza_thug_items(self, items: Dict[str, int]):
-        nyakuza_thug_items[self.player] = items
