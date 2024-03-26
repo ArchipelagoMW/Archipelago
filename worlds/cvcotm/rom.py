@@ -24,19 +24,21 @@ if TYPE_CHECKING:
 CVCOTM_CT_US_HASH = "50a1089600603a94e15ecf287f8d5a1f"  # GBA Cartridge version
 CVCOTM_AC_US_HASH = "87a1bd6577b6702f97a60fc55772ad74"  # Castlevania Advance Collection version
 
+AREA_LIST_START = 0xD9A40
+
 
 class RomData:
     def __init__(self, file: bytes, name: Optional[str] = None):
         self.file = bytearray(file)
         self.name = name
 
-    def read_byte(self, offset: int):
+    def read_byte(self, offset: int) -> int:
         return self.file[offset]
 
-    def read_bytes(self, offset: int, length: int):
+    def read_bytes(self, offset: int, length: int) -> bytes:
         return self.file[offset:offset + length]
 
-    def write_byte(self, offset: int, value: int):
+    def write_byte(self, offset: int, value: int) -> None:
         self.file[offset] = value
 
     def write_bytes(self, offset: int, values):
@@ -158,8 +160,15 @@ class CVCotMPatchExtensions(APPatchExtension):
                 y_pos = int.from_bytes(rom_data.read_bytes(offset-2, 2), "little")
                 y_pos -= 8
                 rom_data.write_bytes(offset-2, int.to_bytes(y_pos, 2, "little"))
+
+                # Fix the Magic Item's graphics if it's in a room it can be fixed in (the room graphics value is 0xFFFF)
+                gfx_offset = get_location_info(loc, "room gfx")
+                if gfx_offset is not None:
+                    if rom_data.read_bytes(gfx_offset, 2) == b"\xFF\xFF":
+                        rom_data.write_bytes(gfx_offset, b"\x0A\x00")
+
             # Max Ups in Magic Item locations should have their Y position increased by 8.
-            if item_category == 0xE4 and get_location_info(loc, "type") in ["magic item", "boss"]:
+            if item_category != 0xE8 and get_location_info(loc, "type") in ["magic item", "boss"]:
                 y_pos = int.from_bytes(rom_data.read_bytes(offset - 2, 2), "little")
                 y_pos += 8
                 rom_data.write_bytes(offset - 2, int.to_bytes(y_pos, 2, "little"))

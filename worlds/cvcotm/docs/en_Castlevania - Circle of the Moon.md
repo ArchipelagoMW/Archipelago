@@ -53,3 +53,8 @@ groups you can use for Castlevania: Circle of the Moon are as follows:
 ## What are the location name groups?
 In Castlevania: Circle of the Moon, every location is part of a location group under that location's area name.
 So if you want to exclude all of, say, Underground Waterway, you can do so by just excluding "Underground Waterway" as a whole.
+
+## Why do magic items sometimes look like a garbled mess?
+This is to do with the fact that the magic item's graphics cannot be loaded at the same time as some special action objects
+that might be in that same room, such as crumbling platforms and push/tackle blocks. It will still function like normal when
+picked up, it just looks weird.
