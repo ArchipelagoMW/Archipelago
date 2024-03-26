@@ -86,7 +86,7 @@ class KH1World(World):
         total_locations = len(self.multiworld.get_unfilled_locations(self.player)) - 1
         if self.options.goal.current_key == "super_boss_hunt":
             total_locations = total_locations - 5
-        elif self.options.goal.current_key != "Final Ansem" and self.options.require_final_ansem:
+        elif self.options.goal.current_key != "final_ansem" and self.options.require_final_ansem:
             total_locations = total_locations - 1
         non_filler_item_categories = ["Key", "Magic", "Worlds", "Trinities", "Cups", "Summons", "Abilities", "Shared Abilities", "Keyblades", "Accessory", "Weapons"]
         if self.options.puppies == "full":
