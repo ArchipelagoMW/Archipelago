@@ -1,9 +1,8 @@
 import os
 import pkgutil
+import pickle
 from io import BytesIO
 from typing import Dict, List, Set
-
-import pickle
 
 from .datatypes import Door, Painting, Panel, Progression, Room
 
@@ -20,6 +19,9 @@ PAINTING_EXIT_ROOMS: Set[str] = set()
 PAINTING_EXITS: int = 0
 REQUIRED_PAINTING_ROOMS: List[str] = []
 REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS: List[str] = []
+
+SUNWARP_ENTRANCES: List[str] = []
+SUNWARP_EXITS: List[str] = []
 
 SPECIAL_ITEM_IDS: Dict[str, int] = {}
 PANEL_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
@@ -99,6 +101,8 @@ def load_static_data_from_file():
     PAINTING_EXITS = pickdata["PAINTING_EXITS"]
     REQUIRED_PAINTING_ROOMS.extend(pickdata["REQUIRED_PAINTING_ROOMS"])
     REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS.extend(pickdata["REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS"])
+    SUNWARP_ENTRANCES.extend(pickdata["SUNWARP_ENTRANCES"])
+    SUNWARP_EXITS.extend(pickdata["SUNWARP_EXITS"])
     SPECIAL_ITEM_IDS.update(pickdata["SPECIAL_ITEM_IDS"])
     PANEL_LOCATION_IDS.update(pickdata["PANEL_LOCATION_IDS"])
     DOOR_LOCATION_IDS.update(pickdata["DOOR_LOCATION_IDS"])
