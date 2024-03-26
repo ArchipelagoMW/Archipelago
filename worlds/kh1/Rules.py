@@ -506,6 +506,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
     multiworld.get_location("Deep Jungle Jungle Slider 40 Fruits"                                          , player).access_rule = lambda state: has_item(state, player, "Slide 1")
     multiworld.get_location("Deep Jungle Jungle Slider 50 Fruits"                                          , player).access_rule = lambda state: has_item(state, player, "Slide 1")
    #multiworld.get_location("Traverse Town 1st District Speak with Cid Event"                              , player).access_rule = lambda state: has_item(state, player, "")
+    multiworld.get_location("Wonderland Bizarre Room Read Book"                                            , player).access_rule = lambda state: has_evidence(state, player)
 
     multiworld.get_location("Traverse Town Synth Log"                                                      , player).access_rule = lambda state: has_at_least(state, player, "Material", 6) and has_item(state, player, "Green Trinity")
     multiworld.get_location("Traverse Town Synth Cloth"                                                    , player).access_rule = lambda state: has_at_least(state, player, "Material", 6) and has_item(state, player, "Green Trinity")
