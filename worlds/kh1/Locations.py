@@ -404,6 +404,7 @@ location_table: Dict[str, KH1LocationData] = {
     "Deep Jungle Jungle Slider 50 Fruits":                                              KH1LocationData("Misc",       265_6374),
     "Traverse Town 1st District Speak with Cid Event":                                  KH1LocationData("Misc",       265_6375),
     "Wonderland Bizarre Room Read Book":                                                KH1LocationData("Misc",       265_6376),
+    "Olympus Coliseum Coliseum Gates Green Trinity":                                    KH1LocationData("Misc",       265_6377),
     
     "Traverse Town Synth Log":                                                          KH1LocationData("Synth",      265_6401),
     "Traverse Town Synth Cloth":                                                        KH1LocationData("Synth",      265_6402),

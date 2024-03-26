@@ -458,6 +458,7 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 50 Fruits")
     regions["Traverse Town"].locations.append("Traverse Town 1st District Speak with Cid Event")
     regions["Wonderland"].locations.append("Wonderland Bizarre Room Read Book")
+    regions["Olympus Coliseum"].locations.append("Olympus Coliseum Coliseum Gates Green Trinity")
     
     regions["Traverse Town"].locations.append("Traverse Town Synth Log")
     regions["Traverse Town"].locations.append("Traverse Town Synth Cloth")
