@@ -602,8 +602,8 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     regions["Library Exterior Ladder Region"].connect(
         connecting_region=regions["Library Exterior Tree Region"],
         rule=lambda state: has_ability(state, player, prayer, options, ability_unlocks)
-        and state.has_any({grapple, laurels}, player)
-        and has_ladder("Ladders in Library", state, player, options))
+        and (state.has(grapple, player) or (state.has(laurels, player)
+                                            and has_ladder("Ladders in Library", state, player, options))))
 
     regions["Library Hall Bookshelf"].connect(
         connecting_region=regions["Library Hall"],
