@@ -43,7 +43,7 @@ def has_puppies(state: CollectionState, player: int, puppies_required: int) -> b
         if state.has("Puppy " + str(i).rjust(2,"0"), player):
             puppies_available = puppies_available + 1
     for i in range(1,34):
-        if state.has("Puppies " + str(3*(i-1)).rjust(2, "0") + "-" + str(3*(i-1)+2).rjust(2, "0"), player):
+        if state.has("Puppies " + str(3*(i-1)+1).rjust(2, "0") + "-" + str(3*(i-1)+3).rjust(2, "0"), player):
             puppies_available = puppies_available + 3
     if state.has("All Puppies", player):
         puppies_available = puppies_available + 99

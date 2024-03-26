@@ -403,7 +403,7 @@ location_table: Dict[str, KH1LocationData] = {
     "Deep Jungle Jungle Slider 30 Fruits":                                              KH1LocationData("Misc",       265_6372),
     "Deep Jungle Jungle Slider 40 Fruits":                                              KH1LocationData("Misc",       265_6373),
     "Deep Jungle Jungle Slider 50 Fruits":                                              KH1LocationData("Misc",       265_6374),
-    "Traverse Town 1st District Speak with Cid Event":                                  KH1LocationData("Misc",       265_6375),
+   #"Traverse Town 1st District Speak with Cid Event":                                  KH1LocationData("Misc",       265_6375),
     "Wonderland Bizarre Room Read Book":                                                KH1LocationData("Misc",       265_6376),
     "Olympus Coliseum Coliseum Gates Green Trinity":                                    KH1LocationData("Misc",       265_6377),
     "Agrabah Defeat Kurt Zisa Zantetsuken Event":                                       KH1LocationData("Misc",       265_6378),

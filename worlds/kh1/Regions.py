@@ -460,7 +460,7 @@ def create_regions(multiworld: MultiWorld, player: int, options, levels: int):
     regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 30 Fruits")
     regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 40 Fruits")
     regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 50 Fruits")
-    regions["Traverse Town"].locations.append("Traverse Town 1st District Speak with Cid Event")
+   #regions["Traverse Town"].locations.append("Traverse Town 1st District Speak with Cid Event")
     regions["Wonderland"].locations.append("Wonderland Bizarre Room Read Book")
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Coliseum Gates Green Trinity")
     if options.super_bosses and options.goal.current_key != "super_boss_hunt":

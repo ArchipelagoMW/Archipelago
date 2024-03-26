@@ -394,7 +394,7 @@ item_table: Dict[str, KH1ItemData] = {
     "Puppies 19-21":                     KH1ItemData("Puppies TRP",      code = 264_2207, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Puppies 22-24":                     KH1ItemData("Puppies TRP",      code = 264_2208, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Puppies 25-27":                     KH1ItemData("Puppies TRP",      code = 264_2209, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
-    "Puppies 27-30":                     KH1ItemData("Puppies TRP",      code = 264_2210, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
+    "Puppies 28-30":                     KH1ItemData("Puppies TRP",      code = 264_2210, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Puppies 31-33":                     KH1ItemData("Puppies TRP",      code = 264_2211, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Puppies 34-36":                     KH1ItemData("Puppies TRP",      code = 264_2212, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Puppies 37-39":                     KH1ItemData("Puppies TRP",      code = 264_2213, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
