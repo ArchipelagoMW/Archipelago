@@ -158,6 +158,7 @@ def set_rules(world: "HatInTimeWorld"):
     chapter_list.remove(starting_chapter)
     world.random.shuffle(chapter_list)
 
+    # Make sure Alpine is unlocked before any DLC chapters are, as the Alpine door needs to be open to access them
     if starting_chapter is not ChapterIndex.ALPINE and (world.is_dlc1() or world.is_dlc2()):
         index1 = 69
         index2 = 69
