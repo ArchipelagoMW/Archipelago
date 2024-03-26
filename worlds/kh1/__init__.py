@@ -108,7 +108,7 @@ class KH1World(World):
         reports_in_pool = max(int(self.options.required_reports), int(self.options.reports_in_pool))
         if self.options.goal.current_key == "super_boss_hunt":
             i = 5
-        elif self.options.require_final_ansem:
+        elif self.options.require_final_ansem and self.options.goal.current_key != "final_ansem":
             i = 1
         else:
             i = 0
