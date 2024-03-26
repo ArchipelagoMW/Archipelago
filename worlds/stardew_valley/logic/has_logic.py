@@ -1,5 +1,5 @@
 from .base_logic import BaseLogic
-from ..stardew_rule import StardewRule, And, Or, Has, Count
+from ..stardew_rule import StardewRule, And, Or, Has, Count, true_
 
 
 class HasLogicMixin(BaseLogic[None]):
@@ -24,6 +24,16 @@ class HasLogicMixin(BaseLogic[None]):
     def count(count: int, *rules: StardewRule) -> StardewRule:
         assert rules, "Can't create a Count conditions without rules"
         assert len(rules) >= count, "Count need at least as many rules as the count"
+        assert count > 0, "Count can't be negative"
+
+        count -= sum(r is true_ for r in rules)
+        rules = list(r for r in rules if r is not true_)
+
+        if count <= 0:
+            return true_
+
+        if len(rules) == 1:
+            return rules[0]
 
         if count == 1:
             return Or(*rules)
@@ -31,4 +41,4 @@ class HasLogicMixin(BaseLogic[None]):
         if count == len(rules):
             return And(*rules)
 
-        return Count(list(rules), count)
+        return Count(rules, count)

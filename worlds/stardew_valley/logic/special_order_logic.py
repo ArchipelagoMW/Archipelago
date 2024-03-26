@@ -35,7 +35,6 @@ from ..strings.monster_names import Monster
 from ..strings.region_names import Region
 from ..strings.season_names import Season
 from ..strings.special_order_names import SpecialOrder
-from ..strings.tool_names import Tool
 from ..strings.villager_names import NPC
 
 
@@ -105,7 +104,7 @@ AbilityLogicMixin, SpecialOrderLogicMixin, MonsterLogicMixin]]):
         self.registry.special_order_rules.update(new_rules)
 
     def can_complete_special_order(self, special_order: str) -> StardewRule:
-        return Has(special_order, self.registry.special_order_rules)
+        return Has(special_order, self.registry.special_order_rules, "special order")
 
     def has_island_transport(self) -> StardewRule:
         return self.logic.received(Transportation.island_obelisk) | self.logic.received(Transportation.boat_repair)
