@@ -44,13 +44,10 @@ class OOTLocation(Location):
         self.vanilla_item = vanilla_item
         if filter_tags is None: 
             self.filter_tags = None
-        else: 
+        else:
             self.filter_tags = list(filter_tags)
         self.never = False # no idea what this does
         self.disabled = DisableType.ENABLED
-
-        if type == 'Event': 
-            self.event = True
 
     @property
     def dungeon(self):

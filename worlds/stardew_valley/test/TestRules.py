@@ -556,8 +556,8 @@ class TestDonationLogicRandomized(SVTestBase):
         railroad_item = "Railroad Boulder Removed"
         swap_museum_and_bathhouse(self.multiworld, self.player)
         collect_all_except(self.multiworld, railroad_item)
-        donation_locations = [location for location in self.multiworld.get_locations() if
-                              not location.event and LocationTags.MUSEUM_DONATIONS in location_table[location.name].tags]
+        donation_locations = [location for location in self.get_real_locations() if
+                              LocationTags.MUSEUM_DONATIONS in location_table[location.name].tags]
 
         for donation in donation_locations:
             self.assertFalse(self.world.logic.region.can_reach_location(donation.name)(self.multiworld.state))
@@ -664,10 +664,9 @@ class TestShipsanityNone(SVTestBase):
     }
 
     def test_no_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event:
-                self.assertFalse("Shipsanity" in location.name)
-                self.assertNotIn(LocationTags.SHIPSANITY, location_table[location.name].tags)
+        for location in self.get_real_locations():
+            self.assertFalse("Shipsanity" in location.name)
+            self.assertNotIn(LocationTags.SHIPSANITY, location_table[location.name].tags)
 
 
 class TestShipsanityCrops(SVTestBase):
@@ -676,8 +675,8 @@ class TestShipsanityCrops(SVTestBase):
     }
 
     def test_only_crop_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+        for location in self.get_real_locations():
+            if LocationTags.SHIPSANITY in location_table[location.name].tags:
                 self.assertIn(LocationTags.SHIPSANITY_CROP, location_table[location.name].tags)
 
 
@@ -687,8 +686,8 @@ class TestShipsanityFish(SVTestBase):
     }
 
     def test_only_fish_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+        for location in self.get_real_locations():
+            if LocationTags.SHIPSANITY in location_table[location.name].tags:
                 self.assertIn(LocationTags.SHIPSANITY_FISH, location_table[location.name].tags)
 
 
@@ -698,8 +697,8 @@ class TestShipsanityFullShipment(SVTestBase):
     }
 
     def test_only_full_shipment_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+        for location in self.get_real_locations():
+            if LocationTags.SHIPSANITY in location_table[location.name].tags:
                 self.assertIn(LocationTags.SHIPSANITY_FULL_SHIPMENT, location_table[location.name].tags)
                 self.assertNotIn(LocationTags.SHIPSANITY_FISH, location_table[location.name].tags)
 
@@ -710,8 +709,8 @@ class TestShipsanityFullShipmentWithFish(SVTestBase):
     }
 
     def test_only_full_shipment_and_fish_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+        for location in self.get_real_locations():
+            if LocationTags.SHIPSANITY in location_table[location.name].tags:
                 self.assertTrue(LocationTags.SHIPSANITY_FULL_SHIPMENT in location_table[location.name].tags or
                                 LocationTags.SHIPSANITY_FISH in location_table[location.name].tags)
 
@@ -725,8 +724,8 @@ class TestShipsanityEverything(SVTestBase):
     def test_all_shipsanity_locations_require_shipping_bin(self):
         bin_name = "Shipping Bin"
         collect_all_except(self.multiworld, bin_name)
-        shipsanity_locations = [location for location in self.multiworld.get_locations() if
-                                not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags]
+        shipsanity_locations = [location for location in self.get_real_locations() if
+                                LocationTags.SHIPSANITY in location_table[location.name].tags]
         bin_item = self.world.create_item(bin_name)
         for location in shipsanity_locations:
             with self.subTest(location.name):

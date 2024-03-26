@@ -527,7 +527,6 @@ class SMZ3World(World):
                 if (loc.item.player == self.player and loc.always_allow(state, loc.item)):
                     loc.item.classification = ItemClassification.filler
                     loc.item.item.Progression = False
-                    loc.item.location.event = False
                     self.unreachable.append(loc)
 
     def get_filler_item_name(self) -> str:
@@ -573,7 +572,6 @@ class SMZ3World(World):
                         break
                 assert itemFromPool is not None, "Can't find anymore item(s) to pre fill GT"
                 self.multiworld.push_item(loc, itemFromPool, False)
-                loc.event = False
         toRemove.sort(reverse = True)
         for i in toRemove: 
             self.multiworld.itempool.pop(i)

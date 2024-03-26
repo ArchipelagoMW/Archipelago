@@ -61,7 +61,7 @@ class DLCqworld(World):
         self.precollect_coinsanity()
         locations_count = len([location
                                for location in self.multiworld.get_locations(self.player)
-                               if not location.event])
+                               if not location.advancement])
 
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]]

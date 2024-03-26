@@ -80,7 +80,6 @@ def fill_region(multiworld: MultiWorld, region: Region, items: List[Item]) -> Li
             return items
         item = items.pop(0)
         multiworld.push_item(location, item, False)
-        location.event = item.advancement
 
     return items
 
@@ -489,7 +488,6 @@ class TestFillRestrictive(unittest.TestCase):
         player1 = generate_player_data(multiworld, 1, 1, 1)
         location = player1.locations[0]
         location.address = None
-        location.event = True
         item = player1.prog_items[0]
         item.code = None
         location.place_locked_item(item)
@@ -527,13 +525,13 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         distribute_items_restrictive(multiworld)
 
         self.assertEqual(locations[0].item, basic_items[1])
-        self.assertFalse(locations[0].event)
+        self.assertFalse(locations[0].advancement)
         self.assertEqual(locations[1].item, prog_items[0])
-        self.assertTrue(locations[1].event)
+        self.assertTrue(locations[1].advancement)
         self.assertEqual(locations[2].item, prog_items[1])
-        self.assertTrue(locations[2].event)
+        self.assertTrue(locations[2].advancement)
         self.assertEqual(locations[3].item, basic_items[0])
-        self.assertFalse(locations[3].event)
+        self.assertFalse(locations[3].advancement)
 
     def test_excluded_distribute(self):
         """Test that distribute_items_restrictive doesn't put advancement items on excluded locations"""
@@ -746,7 +744,7 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
         for item in multiworld.get_items():
             self.assertEqual(item.player, item.location.player)
-            self.assertFalse(item.location.event, False)
+            self.assertFalse(item.location.advancement, False)
 
     def test_early_items(self) -> None:
         """Test that the early items API successfully places items early"""

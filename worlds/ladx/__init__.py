@@ -154,7 +154,7 @@ class LinksAwakeningWorld(World):
         # Place RAFT, other access events
         for region in regions:
             for loc in region.locations:
-                if loc.event:
+                if loc.address is None:
                     loc.place_locked_item(self.create_event(loc.ladxr_item.event))
         
         # Connect Windfish -> Victory

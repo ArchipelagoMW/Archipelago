@@ -221,7 +221,7 @@ class WorldTestBase(unittest.TestCase):
         if isinstance(items, Item):
             items = (items,)
         for item in items:
-            if item.location and item.location.event and item.location in self.multiworld.state.events:
+            if item.location and item.advancement and item.location in self.multiworld.state.events:
                 self.multiworld.state.events.remove(item.location)
             self.multiworld.state.remove(item)
 

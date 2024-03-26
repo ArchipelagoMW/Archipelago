@@ -206,7 +206,6 @@ def create_location(player: int, location_data: LocationData, region: Region) ->
         location.access_rule = location_data.rule
 
     if id is None:
-        location.event = True
         location.locked = True
     return location
 
