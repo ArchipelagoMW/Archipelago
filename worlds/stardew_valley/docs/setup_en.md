@@ -38,7 +38,7 @@ You can customize your options by visiting the [Stardew Valley Player Options Pa
 
 ### Installing the mod
 
-- Install [SMAPI](https://smapi.io/) by following the instructions on their website
+- Install [SMAPI version 3.x.x](https://www.nexusmods.com/stardewvalley/mods/2400?tab=files) by following the instructions on the mod page
 - Download and extract the [StardewArchipelago](https://github.com/agilbert1412/StardewArchipelago/releases) mod into 
 your Stardew Valley "Mods" folder
 - *OPTIONAL*: If you want to launch your game through Steam, add the following to your Stardew Valley launch options: `"[PATH TO STARDEW VALLEY]\Stardew Valley\StardewModdingAPI.exe" %command%`
