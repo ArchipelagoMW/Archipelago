@@ -34,7 +34,7 @@ Each unique level exit awards a location check. Additionally, the following in-l
 
 Mario's various abilities and powerups as described above are placed into the item pool.
 If the player is playing Yoshi Egg Hunt, a certain number of Yoshi Eggs will be placed into the item pool.
-Any additional items that are needed to fill out the item pool will be 1-Up Mushrooms, bundles of coins, or, if turned on, various trap items.
+Any additional items that are needed to fill out the item pool will be 1-Up Mushrooms, bundles of coins, or, if enabled, various trap items.
 
 ## Which items can be in another player's world?
 
