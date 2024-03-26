@@ -1292,9 +1292,10 @@ _vanilla_items = flatten([
     DS3ItemData("Easterner's Ashes",                   0x40000868, DS3ItemCategory.UNIQUE,
                 classification = ItemClassification.progression),
 
-    # Fake item for controlling access to Archdragon Peak
+    # Fake item for controlling access to Archdragon Peak. The real drop isn't actually an item as
+    # such so we have to inject this because there's no slot for it to come from.
     DS3ItemData("Path of the Dragon",                  0x40002346, DS3ItemCategory.UNIQUE,
-                classification = ItemClassification.progression),
+                inject = True, classification = ItemClassification.progression),
 
     # Spells
     DS3ItemData("Farron Dart",                         0x40124F80, DS3ItemCategory.SPELL),
