@@ -5,7 +5,7 @@ Description: Manage options in the Aquaria game multiworld randomizer
 """
 
 from dataclasses import dataclass
-from Options import Toggle, Choice, DeathLink, PerGameCommonOptions
+from Options import Toggle, Choice, DeathLink, PerGameCommonOptions, DefaultOnToggle
 
 
 class IngredientRandomizer(Choice):
@@ -26,9 +26,58 @@ class DishRandomizer(Toggle):
     display_name = "Dish Randomizer"
 
 
+class TurtleRandomizer(Choice):
+    """Randomize the transportation turtle."""
+    display_name = "Turtle Randomizer"
+    option_no_turtle_randomization = 0
+    option_randomize_all_turtle = 1
+    option_randomize_turtle_other_than_the_final_one = 2
+    default = 2
+
+class EarlyEnergyForm(DefaultOnToggle):
+    """
+    Force the Energy Form to be in a location before leaving the areas around the Home Water.
+    """
+    display_name = "Early Energy Form"
+
 class AquarianTranslation(Toggle):
     """Translate to English the Aquarian scripture in the game."""
     display_name = "Translate Aquarian"
+
+
+class BigBossesToBeat(Choice):
+    """
+    A number of big bosses to beat before having access to the creator (the final boss). The big bosses are
+    "Fallen God", "Mithalan God", "Drunian God", "Sun God" and "The Golem".
+    """
+    display_name = "Big bosses to beat"
+    option_none = 0
+    option_1 = 1
+    option_2 = 2
+    option_3 = 3
+    option_4 = 4
+    option_5 = 5
+    default = 0
+
+
+class MiniBossesToBeat(Choice):
+    """
+    A number of Minibosses to beat before having access to the creator (the final boss). Mini bosses are
+    "Nautilus Prime", "Blaster Peg Prime", "Mergog", "Mithalan priests", "Octopus Prime", "Crabbius Maximus",
+    "Mantis Shrimp Prime" and "King Jellyfish God Prime". Note that the Energy statue and Simon says are not
+    mini bosses.
+    """
+    display_name = "Mini bosses to beat"
+    option_none = 0
+    option_1 = 1
+    option_2 = 2
+    option_3 = 3
+    option_4 = 4
+    option_5 = 5
+    option_6 = 6
+    option_7 = 7
+    option_8 = 8
+    default = 0
 
 
 class Objective(Choice):
@@ -45,10 +94,14 @@ class Objective(Choice):
 @dataclass
 class AquariaOptions(PerGameCommonOptions):
     """
-    Every options in the Aquaria randomizer
+    Every option in the Aquaria randomizer
     """
     ingredient_randomizer: IngredientRandomizer
     dish_randomizer: DishRandomizer
     aquarian_translation: AquarianTranslation
     objective: Objective
+    turtle_randomizer: TurtleRandomizer
+    early_energy_form: EarlyEnergyForm
+    big_bosses_to_beat: BigBossesToBeat
+    mini_bosses_to_beat: MiniBossesToBeat
     death_link: DeathLink
