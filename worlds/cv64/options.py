@@ -337,13 +337,13 @@ class BigToss(Toggle):
     """Makes every non-immobilizing damage source launch you as if you got hit by Behemoth's charge.
     Press A while tossed to cancel the launch momentum and avoid being thrown off ledges.
     Hold Z to have all incoming damage be treated as it normally would.
-    Any tricks that might be possible with it are NOT considered in logic on any setting."""
+    Any tricks that might be possible with it are NOT considered in logic by any options."""
     display_name = "Big Toss"
 
 
 class PantherDash(Choice):
     """Hold C-right at any time to sprint way faster. Any tricks that might be
-    possible with it are NOT considered in logic on any setting and any boss
+    possible with it are NOT considered in logic by any options and any boss
     fights with boss health meters, if started, are expected to be finished
     before leaving their arenas if Dracula's Condition is bosses. Jumpless will
     prevent jumping while moving at the increased speed to ensure logic cannot be broken with it."""
