@@ -48,11 +48,14 @@ class AquariaLocations:
         "Home water, bulb in the bottom left room": 698063,
         "Home water, bulb close to the Naija's home": 698064,
         "Home water, bulb under the rock in the left path from the verse cave": 698065,
-        "Home water, Transturtle": 698213,
     }
 
     locations_home_water_nautilus = {
         "Nautilus Egg in Home water": 698194,
+    }
+
+    locations_home_water_transturtle = {
+        "Home water, Transturtle": 698213,
     }
 
     locations_naija_home = {
@@ -524,6 +527,8 @@ location_table = {
     **AquariaLocations.locations_forest_sprite_cave_tube,
     **AquariaLocations.locations_forest_fish_cave,
     **AquariaLocations.locations_home_water,
+    **AquariaLocations.locations_home_water_transturtle,
+    **AquariaLocations.locations_home_water_nautilus,
     **AquariaLocations.locations_body_l,
     **AquariaLocations.locations_body_rt,
     **AquariaLocations.locations_body_rb,

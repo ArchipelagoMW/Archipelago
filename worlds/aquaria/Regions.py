@@ -101,6 +101,11 @@ def _has_mini_bosses(state, player: int) -> bool:
             state.has("King Jellyfish God Prime beated", player)
             )
 
+def _has_secrets(state, player: int) -> bool:
+    return (state.has("First secret obtained",player) and
+            state.has("Second secret obtained",player) and
+            state.has("Third secret obtained",player))
+
 
 class AquariaRegions:
     """
@@ -111,6 +116,7 @@ class AquariaRegions:
     verse_cave_l: Region
     home_water: Region
     home_water_nautilus: Region
+    home_water_transturtle: Region
     naija_home: Region
     song_cave: Region
     energy_temple_1: Region
@@ -217,7 +223,7 @@ class AquariaRegions:
 
 
 
-    def __create_home_water_area(self):
+    def __create_home_water_area(self) -> None:
         """
         Create the `verse_cave`, `home_water` and `song_cave*` regions
         """
@@ -229,10 +235,12 @@ class AquariaRegions:
         self.home_water = self.__add_region("Home Water", AquariaLocations.locations_home_water)
         self.home_water_nautilus = self.__add_region("Home Water, Nautilus nest",
                                                      AquariaLocations.locations_home_water_nautilus)
+        self.home_water_transturtle = self.__add_region("Home Water, turtle room",
+                                                     AquariaLocations.locations_home_water_transturtle)
         self.naija_home = self.__add_region("Naija's home", AquariaLocations.locations_naija_home)
         self.song_cave = self.__add_region("Song cave", AquariaLocations.locations_song_cave)
 
-    def __create_energy_temple(self):
+    def __create_energy_temple(self) -> None:
         """
         Create the `energy_temple_*` regions
         """
@@ -251,7 +259,7 @@ class AquariaRegions:
         self.energy_temple_blaster_room = self.__add_region("Energy temple blaster room",
                                                             AquariaLocations.locations_energy_temple_blaster_room)
 
-    def __create_openwater(self):
+    def __create_openwater(self) -> None:
         """
         Create the `openwater_*`, `skeleton_path`, `arnassi*` and `simon`
         regions
@@ -276,7 +284,7 @@ class AquariaRegions:
         self.arnassi_crab_boss = self.__add_region("Arnassi Ruins, Crabbius Maximus lair",
                                                    AquariaLocations.locations_arnassi_crab_boss)
 
-    def __create_mithalas(self):
+    def __create_mithalas(self) -> None:
         """
         Create the `mithalas_city*` and `cathedral_*` regions
         """
@@ -299,7 +307,7 @@ class AquariaRegions:
                                                   AquariaLocations.locations_cathedral_boss)
         self.cathedral_boss_l = self.__add_region("Mithalas Cathedral, after Mithalan God room", None)
 
-    def __create_forest(self):
+    def __create_forest(self) -> None:
         """
         Create the `forest_*` dans `mermog_cave` regions
         """
@@ -330,7 +338,7 @@ class AquariaRegions:
         self.forest_fish_cave = self.__add_region("Kelp forest fish cave",
                                                   AquariaLocations.locations_forest_fish_cave)
 
-    def __create_veil(self):
+    def __create_veil(self) -> None:
         """
         Create the `veil_*`, `octo_cave` and `turtle_cave` regions
         """
@@ -358,7 +366,7 @@ class AquariaRegions:
         self.veil_br = self.__add_region("The veil bottom right area",
                                          AquariaLocations.locations_veil_br)
 
-    def __create_sun_temple(self):
+    def __create_sun_temple(self) -> None:
         """
         Create the `sun_temple*` regions
         """
@@ -371,7 +379,7 @@ class AquariaRegions:
         self.sun_temple_boss = self.__add_region("Sun temple boss area",
                                                    AquariaLocations.locations_sun_temple_boss)
 
-    def __create_abyss(self):
+    def __create_abyss(self) -> None:
         """
         Create the `abyss_*`, `ice_cave`, `king_jellyfish_cave` and `whale`
         regions
@@ -386,7 +394,7 @@ class AquariaRegions:
                                                      AquariaLocations.locations_king_jellyfish_cave)
         self.whale = self.__add_region("Inside the whale", AquariaLocations.locations_whale)
 
-    def __create_sunken_city(self):
+    def __create_sunken_city(self) -> None:
         """
         Create the `sunken_city_*` regions
         """
@@ -399,7 +407,7 @@ class AquariaRegions:
         self.sunken_city_boss = self.__add_region("Sunken city boss area",
                               AquariaLocations.locations_sunken_city_boss)
 
-    def __create_body(self):
+    def __create_body(self) -> None:
         """
         Create the `body_*` and `final_boss* regions
         """
@@ -422,7 +430,7 @@ class AquariaRegions:
 
     def __connect_one_way_regions(self, source_name: str, destination_name: str,
                                   source_region: Region,
-                                  destination_region: Region, rule=None):
+                                  destination_region: Region, rule=None) -> None:
         """
         Connect from the `source_region` to the `destination_region`
         """
@@ -434,14 +442,14 @@ class AquariaRegions:
 
     def __connect_regions(self, source_name: str, destination_name: str,
                           source_region: Region,
-                          destination_region: Region, rule=None):
+                          destination_region: Region, rule=None) -> None:
         """
         Connect the `source_region` and the `destination_region` (two-way)
         """
         self.__connect_one_way_regions(source_name, destination_name, source_region, destination_region, rule)
         self.__connect_one_way_regions(destination_name, source_name, destination_region, source_region, rule)
 
-    def __connect_home_water_regions(self):
+    def __connect_home_water_regions(self) -> None:
         """
         Connect entrances of the different regions around `home_water`
         """
@@ -452,9 +460,12 @@ class AquariaRegions:
         self.__connect_regions("Verse cave", "Home water", self.verse_cave_l, self.home_water)
         self.__connect_regions("Home Water", "Haija's home", self.home_water, self.naija_home)
         self.__connect_regions("Home Water", "Song cave", self.home_water, self.song_cave)
-        self.__connect_regions("Home Water", "home_water_nautilus",
+        self.__connect_regions("Home Water", "Home water, nautilus nest",
                                self.home_water, self.home_water_nautilus,
                                lambda state: _has_energy_form(state, self.player))
+        self.__connect_regions("Home Water", "Home water transturtle room",
+                               self.home_water, self.home_water_transturtle,
+                               lambda state: _has_bind_song(state, self.player))
         self.__connect_regions("Home Water", "Energy temple first area",
                                self.home_water, self.energy_temple_1,
                                lambda state: _has_bind_song(state, self.player))
@@ -497,7 +508,7 @@ class AquariaRegions:
                                lambda state: _has_bind_song(state, self.player) and
                                              _has_energy_form(state, self.player))
 
-    def __connect_open_water_regions(self):
+    def __connect_open_water_regions(self) -> None:
         """
         Connect entrances of the different regions around open water
         """
@@ -548,7 +559,7 @@ class AquariaRegions:
         self.__connect_regions("Arnassi path", "simon", self.arnassi_path, self.simon,
                                lambda state: _has_fish_form(state, self.player))
 
-    def __connect_mithalas_regions(self):
+    def __connect_mithalas_regions(self) -> None:
         """
         Connect entrances of the different regions around Mithalas
         """
@@ -609,7 +620,7 @@ class AquariaRegions:
         self.__connect_one_way_regions("Cathedral boss left area", "Cathedral boss right area",
                                        self.cathedral_boss_l, self.cathedral_boss_r)
 
-    def __connect_forest_regions(self):
+    def __connect_forest_regions(self) -> None:
         """
         Connect entrances of the different regions around the Kelp Forest
         """
@@ -654,7 +665,7 @@ class AquariaRegions:
                                lambda state: _has_beast_form(state, self.player) and
                                              _has_energy_form(state, self.player))
 
-    def __connect_veil_regions(self):
+    def __connect_veil_regions(self) -> None:
         """
         Connect entrances of the different regions around The Veil
         """
@@ -705,7 +716,7 @@ class AquariaRegions:
                                self.veil_tr_l, self.octo_cave_b,
                                lambda state: _has_fish_form(state, self.player))
 
-    def __connect_abyss_regions(self):
+    def __connect_abyss_regions(self) -> None:
         """
         Connect entrances of the different regions around The Abyss
         """
@@ -735,7 +746,7 @@ class AquariaRegions:
                                self.abyss_r, self.bubble_cave,
                                lambda state: _has_beast_form(state, self.player))
 
-    def __connect_sunken_city_regions(self):
+    def __connect_sunken_city_regions(self) -> None:
         """
         Connect entrances of the different regions around The Sunken City
         """
@@ -751,7 +762,7 @@ class AquariaRegions:
                                lambda state: _has_beast_form(state, self.player) and
                                              _has_energy_form(state, self.player))
 
-    def __connect_body_regions(self):
+    def __connect_body_regions(self) -> None:
         """
         Connect entrances of the different regions around The body
         """
@@ -777,7 +788,8 @@ class AquariaRegions:
                                        self.final_boss, self.final_boss_end)
 
     def __connect_transturtle(self, item_source: str, item_target: str, region_source: Region, region_target: Region,
-                              rule=None):
+                              rule=None) -> None:
+        """Connect a single transturtle to another one"""
         if item_source != item_target:
             if rule is None:
                 self.__connect_one_way_regions(item_source, item_target, region_source, region_target,
@@ -786,7 +798,8 @@ class AquariaRegions:
                 self.__connect_one_way_regions(item_source, item_target, region_source, region_target, rule)
 
 
-    def _connect_transturtle_to_other(self, item: str, region: Region):
+    def _connect_transturtle_to_other(self, item: str, region: Region) -> None:
+        """Connect a single transturtle to all others"""
         self.__connect_transturtle(item, "Transturtle Veil top left", region, self.veil_tl)
         self.__connect_transturtle(item, "Transturtle Veil top right", region, self.veil_tr_l)
         self.__connect_one_way_regions(item, "Transturtle Open Water top left", region, self.openwater_tl)
@@ -800,7 +813,8 @@ class AquariaRegions:
         self.__connect_one_way_regions(item, "Transturtle Arnassi ruins", region, self.arnassi_path,
                                        lambda state: state.has("Transturtle Arnassi ruins", self.player) and
                                                      _has_fish_form(state, self.player))
-    def __connect_transturtles(self):
+    def __connect_transturtles(self) -> None:
+        """Connect every transturtle with others"""
         self._connect_transturtle_to_other("Transturtle Veil top left", self.veil_tl)
         self._connect_transturtle_to_other("Transturtle Veil top right", self.veil_tr_l)
         self._connect_transturtle_to_other("Transturtle Open Water top left", self.openwater_tl)
@@ -811,7 +825,8 @@ class AquariaRegions:
         self._connect_transturtle_to_other("Transturtle Simon says", self.simon)
         self._connect_transturtle_to_other("Transturtle Arnassi ruins", self.arnassi_path)
 
-    def connect_regions(self):
+
+    def connect_regions(self) -> None:
         """
         Connect every region (entrances and exits)
         """
@@ -825,7 +840,7 @@ class AquariaRegions:
         self.__connect_body_regions()
         self.__connect_transturtles()
 
-    def __add_event_location(self, region: Region, name: str, event_name: str):
+    def __add_event_location(self, region: Region, name: str, event_name: str) -> None:
         """
         Add an event to the `region` with the name `name` and the item
         `event_name`
@@ -839,7 +854,7 @@ class AquariaRegions:
                                                None,
                                                self.player))
 
-    def __add_event_big_bosses(self):
+    def __add_event_big_bosses(self) -> None:
         """
         Add every bit bosses (other than the creator) events to the `world`
         """
@@ -859,7 +874,7 @@ class AquariaRegions:
                                   "Beating the Golem",
                                   "The Golem beated")
 
-    def __add_event_mini_bosses(self):
+    def __add_event_mini_bosses(self) -> None:
         """
         Add every mini bosses (excluding Energy statue and Simon says)
         events to the `world`
@@ -889,19 +904,34 @@ class AquariaRegions:
                                   "Beating King Jellyfish God Prime",
                                   "King Jellyfish God Prime beated")
 
-    def add_event_locations(self):
+    def __add_event_secrets(self) -> None:
+        """
+        Add secrets events to the `world`
+        """
+        self.__add_event_location(self.whale,
+                                  "First secret",
+                                  "First secret obtained")
+        self.__add_event_location(self.mithalas_city,
+                                  "Second secret",
+                                  "Second secret obtained")
+        self.__add_event_location(self.sun_temple_l,
+                                  "Third secret",
+                                  "Third secret obtained")
+
+    def add_event_locations(self) -> None:
         """
         Add every event (locations and items) to the `world`
         """
         self.__add_event_mini_bosses()
         self.__add_event_big_bosses()
+        self.__add_event_secrets()
         self.__add_event_location(self.abyss_lb,
                                   "Sunken City cleared",
                                   "Body tongue cleared")
         self.__add_event_location(self.final_boss_end, "Objective complete",
                                   "Victory")
 
-    def __adjusting_urns_rules(self):
+    def __adjusting_urns_rules(self) -> None:
         add_rule(self.world.get_location("Open water top right area, first urn in the Mithalas exit", self.player),
                  lambda state: _has_damaging_item(state, self.player))
         add_rule(self.world.get_location("Open water top right area, second urn in the Mithalas exit", self.player),
@@ -933,7 +963,7 @@ class AquariaRegions:
         add_rule(self.world.get_location("Mithalas city castle, second urn on the entrance path", self.player),
                  lambda state: _has_damaging_item(state, self.player))
 
-    def __adjusting_soup_rules(self):
+    def __adjusting_soup_rules(self) -> None:
         """
         Modify rules for location that need soup
         """
@@ -946,7 +976,7 @@ class AquariaRegions:
         add_rule(self.world.get_location("The veil top right area, bulb in the top of the water fall", self.player),
                  lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
 
-    def adjusting_rules(self, options: AquariaOptions):
+    def adjusting_rules(self, options: AquariaOptions) -> None:
         """
         Modify rules for single location or optional rules
         """
@@ -976,8 +1006,14 @@ class AquariaRegions:
         if options.big_bosses_to_beat.value > 0:
             add_rule(self.world.get_entrance("Before Final boss to Final boss", self.player),
                      lambda state: _has_big_bosses(state, self.player))
+        if options.objective.value == 1:
+            add_rule(self.world.get_entrance("Before Final boss to Final boss", self.player),
+                     lambda state: _has_secrets(state, self.player))
+        if options.early_energy_form:
+            add_rule(self.world.get_entrance("Home Water to Home water transturtle room", self.player),
+                     lambda state: _has_energy_form(state, self.player))
 
-    def __add_home_water_regions_to_world(self):
+    def __add_home_water_regions_to_world(self) -> None:
         """
         Add every region around home water to the `world`
         """
@@ -995,7 +1031,7 @@ class AquariaRegions:
         self.world.regions.append(self.energy_temple_blaster_room)
         self.world.regions.append(self.energy_temple_altar)
 
-    def __add_open_water_regions_to_world(self):
+    def __add_open_water_regions_to_world(self) -> None:
         """
         Add every region around open water to the `world`
         """
@@ -1011,7 +1047,7 @@ class AquariaRegions:
         self.world.regions.append(self.arnassi_crab_boss)
         self.world.regions.append(self.simon)
 
-    def __add_mithalas_regions_to_world(self):
+    def __add_mithalas_regions_to_world(self) -> None:
         """
         Add every region around Mithalas to the `world`
         """
@@ -1026,7 +1062,7 @@ class AquariaRegions:
         self.world.regions.append(self.cathedral_boss_l)
         self.world.regions.append(self.cathedral_boss_r)
 
-    def __add_forest_regions_to_world(self):
+    def __add_forest_regions_to_world(self) -> None:
         """
         Add every region around the kelp forest to the `world`
         """
@@ -1044,7 +1080,7 @@ class AquariaRegions:
         self.world.regions.append(self.mermog_boss)
         self.world.regions.append(self.forest_fish_cave)
 
-    def __add_veil_regions_to_world(self):
+    def __add_veil_regions_to_world(self) -> None:
         """
         Add every region around the Veil to the `world`
         """
@@ -1065,7 +1101,7 @@ class AquariaRegions:
         self.world.regions.append(self.sun_temple_boss_path)
         self.world.regions.append(self.sun_temple_boss)
 
-    def __add_abyss_regions_to_world(self):
+    def __add_abyss_regions_to_world(self) -> None:
         """
         Add every region around the Abyss to the `world`
         """
@@ -1081,7 +1117,7 @@ class AquariaRegions:
         self.world.regions.append(self.sunken_city_boss)
         self.world.regions.append(self.sunken_city_l_bedroom)
 
-    def __add_body_regions_to_world(self):
+    def __add_body_regions_to_world(self) -> None:
         """
         Add every region around the Body to the `world`
         """
@@ -1095,7 +1131,7 @@ class AquariaRegions:
         self.world.regions.append(self.final_boss)
         self.world.regions.append(self.final_boss_end)
 
-    def add_regions_to_world(self):
+    def add_regions_to_world(self) -> None:
         """
         Add every region to the `world`
         """

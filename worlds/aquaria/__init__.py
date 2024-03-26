@@ -110,7 +110,7 @@ class AquariaWorld(World):
         self.regions.add_regions_to_world()
         self.regions.connect_regions()
 
-    def __pre_fill_item(self, item_name: str, location_name: str):
+    def __pre_fill_item(self, item_name: str, location_name: str) -> None:
         """Pre-assign an item to a location"""
         self.exclude.append(item_name)
         data = item_table[item_name]
@@ -119,8 +119,8 @@ class AquariaWorld(World):
 
     def create_items(self) -> None:
         """Create every item in the world"""
-        if self.options.turtle_randomizer:
-            if not self.options.final_turtle_randomisation:
+        if self.options.turtle_randomizer.value > 0:
+            if self.options.turtle_randomizer.value == 2:
                 self.__pre_fill_item("Transturtle Final Boss", "Final boss area, Transturtle")
         else:
             self.__pre_fill_item("Transturtle Veil top left", "The veil top left area, Transturtle")
@@ -144,7 +144,7 @@ class AquariaWorld(World):
                     item = AquariaItem(name, classification, data[0], self.player)
                     self.multiworld.itempool.append(item)
 
-    def __set_excluded_location(self):
+    def __set_excluded_location(self) -> None:
         if self.options.big_bosses_to_beat.value > 0:
             self.multiworld.get_location("Fallen god tooth in the Energy temple", self.player).progress_type = (
                 LocationProgressType.EXCLUDED)
@@ -180,19 +180,21 @@ class AquariaWorld(World):
             LocationProgressType.EXCLUDED)
         self.multiworld.get_location("Sun Worm path, second cliff bulb", self.player).progress_type = (
             LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("The veil top right area, bulb in the top of the water fall", self.player).progress_type = (
+        self.multiworld.get_location("The veil top right area, bulb in the top of the water fall",
+                                     self.player).progress_type = (
             LocationProgressType.EXCLUDED)
         self.multiworld.get_location("Bubble cave, bulb in the left cave wall", self.player).progress_type = (
             LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Bubble cave, bulb in the right cave wall (behind the ice cristal)", self.player).progress_type = (
+        self.multiworld.get_location("Bubble cave, bulb in the right cave wall (behind the ice cristal)",
+                                     self.player).progress_type = (
             LocationProgressType.EXCLUDED)
         self.multiworld.get_location("Verse egg in the Bubble cave", self.player).progress_type = (
             LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Kelp Forest bottom left area, bulb close to the spirit cristals", self.player).progress_type = (
+        self.multiworld.get_location("Kelp Forest bottom left area, bulb close to the spirit cristals",
+                                     self.player).progress_type = (
             LocationProgressType.EXCLUDED)
         self.multiworld.get_location("Walker baby in the Kelp forest bottom left area", self.player).progress_type = (
             LocationProgressType.EXCLUDED)
-
 
     def set_rules(self) -> None:
         """
@@ -212,7 +214,7 @@ class AquariaWorld(World):
         # from Utils import visualize_regions
         # visualize_regions(self.multiworld.get_region("Menu", self.player), "aquaria_world.puml")
 
-    def generate_basic(self):
+    def generate_basic(self) -> None:
         """
         Player-specific randomization that does not affect logic.
         Used to fill then `ingredients_substitution` list
@@ -232,7 +234,6 @@ class AquariaWorld(World):
         self.ingredients_substitution.clear()
         self.ingredients_substitution.extend(simple_ingredients_substitution)
         self.ingredients_substitution.extend(dishes_substitution)
-
 
     def fill_slot_data(self) -> Dict[str, Any]:
         aquarian_translation = False

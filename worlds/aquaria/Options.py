@@ -26,17 +26,19 @@ class DishRandomizer(Toggle):
     display_name = "Dish Randomizer"
 
 
-class TurtleRandomizer(DefaultOnToggle):
+class TurtleRandomizer(Choice):
     """Randomize the transportation turtle."""
     display_name = "Turtle Randomizer"
+    option_no_turtle_randomization = 0
+    option_randomize_all_turtle = 1
+    option_randomize_turtle_other_than_the_final_one = 2
+    default = 2
 
-
-class FinalTurtleRandomizer(Toggle):
+class EarlyEnergyForm(DefaultOnToggle):
     """
-    If randomisation of the transportation turtle is enable, also enable
-    the transportation turtle before the final boss."""
-    display_name = "Final Turtle Randomisation"
-
+    Force the Energy Form to be in a location before leaving the areas around the Home Water.
+    """
+    display_name = "Early Energy Form"
 
 class AquarianTranslation(Toggle):
     """Translate to English the Aquarian scripture in the game."""
@@ -54,6 +56,7 @@ class BigBossesToBeat(Choice):
     option_2 = 2
     option_3 = 3
     option_4 = 4
+    option_5 = 5
     default = 0
 
 
@@ -98,7 +101,7 @@ class AquariaOptions(PerGameCommonOptions):
     aquarian_translation: AquarianTranslation
     objective: Objective
     turtle_randomizer: TurtleRandomizer
-    final_turtle_randomisation: FinalTurtleRandomizer
+    early_energy_form: EarlyEnergyForm
     big_bosses_to_beat: BigBossesToBeat
     mini_bosses_to_beat: MiniBossesToBeat
     death_link: DeathLink
