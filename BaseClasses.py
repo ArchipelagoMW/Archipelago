@@ -1076,6 +1076,11 @@ class Location:
         return (self.player, self.name) < (other.player, other.name)
 
     @property
+    def is_event(self) -> bool:
+        """Returns True if the address of this location is None, denoting it is an Event Location."""
+        return self.address is None
+
+    @property
     def native_item(self) -> bool:
         """Returns True if the item in this location matches game."""
         return self.item and self.item.game == self.game
