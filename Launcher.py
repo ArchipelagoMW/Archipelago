@@ -100,7 +100,7 @@ components.extend([
     # Functions
     Component("Open host.yaml", func=open_host_yaml),
     Component("Open Patch", func=open_patch),
-    Component("Generate Template Settings", func=generate_yamls),
+    Component("Generate Template Options", func=generate_yamls),
     Component("Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/8Z65BR2")),
     Component("18+ Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4")),
     Component("Browse Files", func=browse_files),

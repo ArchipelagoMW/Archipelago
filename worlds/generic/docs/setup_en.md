@@ -39,7 +39,7 @@ to your Archipelago installation.
 ### What is a YAML?
 
 YAML is the file format which Archipelago uses in order to configure a player's world. It allows you to dictate which
-game you will be playing as well as the settings you would like for that game.
+game you will be playing as well as the options you would like for that game.
 
 YAML is a format very similar to JSON however it is made to be more human-readable. If you are ever unsure of the
 validity of your YAML file you may check the file by uploading it to the check page on the Archipelago website:
@@ -48,10 +48,10 @@ validity of your YAML file you may check the file by uploading it to the check p
 ### Creating a YAML
 
 YAML files may be generated on the Archipelago website by visiting the [games page](/games) and clicking the
-"Settings Page" link under the relevant game. Clicking "Export Settings" in a game's settings page will download the
+"Options Page" link under the relevant game. Clicking "Export Options" in a game's options page will download the
 YAML to your system.
 
-Alternatively, you can run `ArchipelagoLauncher.exe` and click on `Generate Template Settings` to create a set of template 
+Alternatively, you can run `ArchipelagoLauncher.exe` and click on `Generate Template Options` to create a set of template 
 YAMLs for each game in your Archipelago install (including for APWorlds). These will be placed in your `Players/Templates` folder.
 
 In a multiworld there must be one YAML per world. Any number of players can play on each world using either the game's
@@ -66,17 +66,17 @@ each player is planning on playing their own game then they will each need a YAM
 #### On the website
 
 The easiest way to get started playing an Archipelago generated game, after following the base setup from the game's
-setup guide, is to find the game on the [Archipelago Games List](/games), click on `Settings Page`, set the settings for
+setup guide, is to find the game on the [Archipelago Games List](/games), click on `Options Page`, set the options for
 how you want to play, and click `Generate Game` at the bottom of the page. This will create a page for the seed, from
 which you can create a room, and then [connect](#connecting-to-an-archipelago-server).
 
-If you have downloaded the settings, or have created a settings file manually, this file can be uploaded on the
+If you have downloaded the options, or have created an options file manually, this file can be uploaded on the
 [Generation Page](/generate) where you can also set any specific hosting settings.
 
 #### On your local installation
 
 To generate a game on your local machine, make sure to install the Archipelago software. Navigate to your Archipelago
-installation (usually C:\ProgramData\Archipelago), and place the settings file you have either created or downloaded
+installation (usually C:\ProgramData\Archipelago), and place the options file you have either created or downloaded
 from the website in the `Players` folder.
 
 Run `ArchipelagoGenerate.exe`, or click on `Generate` in the launcher, and it will inform you whether the generation
@@ -97,7 +97,7 @@ resources, and host the resulting multiworld on the website.
 
 #### Gather All Player YAMLs
 
-All players that wish to play in the generated multiworld must have a YAML file which contains the settings that they
+All players that wish to play in the generated multiworld must have a YAML file which contains the options that they
 wish to play with. One person should gather all files from all participants in the generated multiworld. It is possible
 for a single player to have multiple games, or even multiple slots of a single game, but each YAML must have a unique
 player name.
@@ -129,7 +129,7 @@ need the corresponding ROM files.
 Sometimes there are various settings that you may want to change before rolling a seed such as enabling race mode,
 auto-release, plando support, or setting a password.
 
-All of these settings, plus other options, may be changed by modifying the `host.yaml` file in the Archipelago
+All of these settings, plus more, can be changed by modifying the `host.yaml` file in the Archipelago
 installation folder. You can quickly access this file by clicking on `Open host.yaml` in the launcher. The settings
 chosen here are baked into the `.archipelago` file that gets output with the other files after generation, so if you 
 are rolling locally, ensure this file is edited to your liking **before** rolling the seed. This file is overwritten 
