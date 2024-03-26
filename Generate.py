@@ -9,7 +9,7 @@ import urllib.parse
 import urllib.request
 from collections import Counter
 from typing import Any, Dict, Tuple, Union
-from itertools import cycle
+from itertools import chain
 
 import ModuleUpdate
 
@@ -475,7 +475,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     world_type = AutoWorldRegister.world_types[ret.game]
     game_weights = weights[ret.game]
 
-    for weight in cycle((game_weights, weights)):
+    for weight in chain(game_weights, weights):
         if weight.startswith("+"):
             raise Exception(f"Merge tag cannot be used outside of trigger contexts. Found {weight}")
         if weight.startswith("-"):
