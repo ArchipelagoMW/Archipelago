@@ -834,6 +834,7 @@ class Starcraft2Options(PerGameCommonOptions):
     starting_supply_per_item: StartingSupplyPerItem
     local_victory_items: LocalVictoryItems
 
+
 def get_option_value(world: World, name: str) -> Union[int,  FrozenSet]:
     if world is None:
         field: Field = [class_field for class_field in fields(Starcraft2Options) if class_field.name == name][0]

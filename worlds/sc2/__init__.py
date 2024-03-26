@@ -13,7 +13,7 @@ from .Items import StarcraftItem, filler_items, get_item_table, get_full_item_li
     kerrigan_only_passives, progressive_if_ext, not_balanced_starting_units, spear_of_adun_calldowns, \
     spear_of_adun_castable_passives, nova_equipment
 from .ItemGroups import item_name_groups
-from .Locations import get_locations, LocationType, get_location_types, get_plando_locations
+from .Locations import get_locations, LocationType, get_location_types, get_plando_locations, is_victory_location
 from .Regions import create_regions
 from .Options import get_option_value, LocationInclusion, KerriganLevelItemDistribution, \
     KerriganPresence, KerriganPrimalStatus, RequiredTactics, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence, \
@@ -402,7 +402,7 @@ def fill_item_pool_with_dummy_items(self: SC2World, locked_locations: List[str],
 
 def place_local_victory_items(multiworld: MultiWorld, world: World, pool: list):
     victory_locations = [location for location in multiworld.get_unfilled_locations(world.player)
-                         if location.name.endswith((": Victory", ": Defeat"))]
+                         if is_victory_location(location.name)]
     for location in victory_locations:
         add_item_rule(location, lambda state: location.player == world.player)
     world.random.shuffle(pool)
