@@ -15,9 +15,10 @@ jobs:
     steps:
       - uses: actions/labeler@v5
         with:
-          sync-labels: true
+          sync-labels: false
   peer_review:
     name: 'Apply peer review label'
+    needs: labeler
     if: >-
       (github.event.action == 'opened' || github.event.action == 'reopened' || 
       github.event.action == 'ready_for_review') && !github.event.pull_request.draft
@@ -30,6 +31,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   unblock_draft_prs:
     name: 'Remove waiting-on labels'
+    needs: labeler
     if: github.event.action == 'converted_to_draft' || github.event.action == 'closed'
     runs-on: ubuntu-latest
     steps:

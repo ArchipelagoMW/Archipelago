@@ -8,7 +8,7 @@ class TestBase(unittest.TestCase):
     def test_create_item(self):
         """Test that a world can successfully create all items in its datapackage"""
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            proxy_world = world_type(None, 0)  # this is identical to MultiServer.py creating worlds
+            proxy_world = setup_solo_multiworld(world_type, ()).worlds[1]
             for item_name in world_type.item_name_to_id:
                 with self.subTest("Create Item", item_name=item_name, game_name=game_name):
                     item = proxy_world.create_item(item_name)
@@ -23,8 +23,8 @@ class TestBase(unittest.TestCase):
                 {"Pendants", "Crystals"},
             "Ocarina of Time":
                 {"medallions", "stones", "rewards", "logic_bottles"},
-            "Starcraft 2 Wings of Liberty":
-                {"Missions"},
+            "Starcraft 2":
+                {"Missions", "WoL Missions"},
         }
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest(game_name, game_name=game_name):

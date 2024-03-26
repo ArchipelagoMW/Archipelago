@@ -1,12 +1,12 @@
 from enum import Enum
 from typing import Dict, List, NamedTuple, Optional, Set, Tuple, TYPE_CHECKING
 
-from .items import ALL_ITEM_TABLE
+from .datatypes import Door, RoomAndDoor, RoomAndPanel
+from .items import ALL_ITEM_TABLE, ItemData
 from .locations import ALL_LOCATION_TABLE, LocationClassification
 from .options import LocationChecks, ShuffleDoors, VictoryCondition
-from .static_logic import DOORS_BY_ROOM, Door, PAINTINGS, PAINTINGS_BY_ROOM, PAINTING_ENTRANCES, PAINTING_EXITS, \
-    PANELS_BY_ROOM, PROGRESSION_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, RoomAndDoor, \
-    RoomAndPanel
+from .static_logic import DOORS_BY_ROOM, PAINTINGS, PAINTING_ENTRANCES, PAINTING_EXITS, \
+    PANELS_BY_ROOM, PROGRESSION_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS
 
 if TYPE_CHECKING:
     from . import LingoWorld
@@ -56,6 +56,21 @@ def should_split_progression(progression_name: str, world: "LingoWorld") -> Prog
             return ProgressiveItemBehavior.SPLIT
 
     return ProgressiveItemBehavior.PROGRESSIVE
+
+
+def should_include_item(item: ItemData, world: "LingoWorld") -> bool:
+    if item.mode == "colors":
+        return world.options.shuffle_colors > 0
+    elif item.mode == "doors":
+        return world.options.shuffle_doors != ShuffleDoors.option_none
+    elif item.mode == "complex door":
+        return world.options.shuffle_doors == ShuffleDoors.option_complex
+    elif item.mode == "door group":
+        return world.options.shuffle_doors == ShuffleDoors.option_simple
+    elif item.mode == "special":
+        return False
+    else:
+        return True
 
 
 class LingoPlayerLogic:
@@ -150,9 +165,9 @@ class LingoPlayerLogic:
             for room_name, room_data in DOORS_BY_ROOM.items():
                 for door_name, door_data in room_data.items():
                     if door_data.skip_item is False and door_data.event is False:
-                        if door_data.group is not None and door_shuffle == ShuffleDoors.option_simple:
+                        if door_data.door_group is not None and door_shuffle == ShuffleDoors.option_simple:
                             # Grouped doors are handled differently if shuffle doors is on simple.
-                            self.set_door_item(room_name, door_name, door_data.group)
+                            self.set_door_item(room_name, door_name, door_data.door_group)
                         else:
                             self.handle_non_grouped_door(room_name, door_data, world)
 
@@ -212,7 +227,7 @@ class LingoPlayerLogic:
 
         # Instantiate all real items.
         for name, item in ALL_ITEM_TABLE.items():
-            if item.should_include(world):
+            if should_include_item(item, world):
                 self.real_items.append(name)
 
         # Calculate the requirements for the fake pilgrimage.
@@ -279,8 +294,9 @@ class LingoPlayerLogic:
 
             # When painting shuffle is off, most Starting Room paintings give color hallways access. The Wondrous's
             # painting does not, but it gives access to SHRINK and WELCOME BACK.
-            for painting_obj in PAINTINGS_BY_ROOM["Starting Room"]:
-                if not painting_obj.enter_only or painting_obj.required_door is None:
+            for painting_obj in PAINTINGS.values():
+                if not painting_obj.enter_only or painting_obj.required_door is None\
+                        or painting_obj.room != "Starting Room":
                     continue
 
                 # If painting shuffle is on, we only want to consider paintings that actually go somewhere.

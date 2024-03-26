@@ -5,7 +5,7 @@ import zipfile
 from typing_extensions import override
 
 import Utils
-from worlds.Files import APPatch
+from worlds.Files import APAutoPatchInterface
 
 from zilliandomizer.patch import Patcher
 
@@ -14,7 +14,7 @@ from .gen_data import GenData
 USHASH = 'd4bf9e7bcf9a48da53785d2ae7bc4270'
 
 
-class ZillionPatch(APPatch):
+class ZillionPatch(APAutoPatchInterface):
     hash = USHASH
     game = "Zillion"
     patch_file_ending = ".apzl"
