@@ -389,7 +389,10 @@ class DarkSouls3World(World):
 
         number_to_inject = min(num_required_extra_items, len(all_injectable_items))
         items = (
-            self.multiworld.random.sample(injectable_progression, k=min(3, number_to_inject)) +
+            self.multiworld.random.sample(
+                injectable_progression,
+                k=min(len(injectable_progression), number_to_inject)
+            ) +
             self.multiworld.random.sample(
                 injectable_non_progression,
                 k=max(0, number_to_inject - len(injectable_progression))
@@ -428,7 +431,7 @@ class DarkSouls3World(World):
             and data.category.upgrade_level
             # Because we require the Pyromancy Flame to be available early, don't upgrade it so it
             # doesn't get shuffled around by weapon smoothing.
-            and not data.name == "Pyromancy FLame"
+            and not data.name == "Pyromancy Flame"
         ):
             # if the user made an error and set a min higher than the max we default to the max
             max_5 = self.options.max_levels_in_5
@@ -516,7 +519,7 @@ class DarkSouls3World(World):
             if self.options.late_dlc:
                 self._add_entrance_rule(
                     "Painted World of Ariandel (Before Contraption)",
-                    lambda state: state.has("Small Doll") and self._has_any_scroll(state))
+                    lambda state: state.has("Small Doll", self.player) and self._has_any_scroll(state))
 
         # Define the access rules to some specific locations
         if self._is_location_available("FS: Lift Chamber Key - Leonhard"):
