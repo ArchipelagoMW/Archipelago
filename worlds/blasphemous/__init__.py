@@ -262,8 +262,8 @@ class BlasphemousWorld(World):
             region = multiworld.get_region(r["name"], player)
 
             for e in r["exits"]:
-                region.add_exits({e["target"]})
-                #region.add_exits({e["target"]}, {e["target"]: blas_logic.load_rule(e)})
+                #region.add_exits({e["target"]})
+                region.add_exits({e["target"]}, {e["target"]: blas_logic.load_rule(e)})
 
             for l in r["locations"]:
                 if not self.options.boots_of_pleading and l == "RE401":
@@ -293,9 +293,9 @@ class BlasphemousWorld(World):
         from Utils import visualize_regions
         visualize_regions(self.get_region("Menu"), "blasphemous_regions.puml")
         
-        victory = Location(player, "His Holiness Escribar", None, self.get_region("D07Z01S03"))
+        victory = Location(player, "His Holiness Escribar", None, self.get_region("D07Z01S03[W]"))
         victory.place_locked_item(self.create_event("Victory"))
-        self.get_region("D07Z01S03").locations.append(victory)
+        self.get_region("D07Z01S03[W]").locations.append(victory)
 
         if self.options.ending == 1:
             set_rule(victory, lambda state: state.has("Thorn Upgrade", player, 8))

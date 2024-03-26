@@ -16807,7 +16807,7 @@ regions = [
                 ]
             },
             {
-                "target": "RB16",
+                "target": "D09Z01S09[Cell24]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -16846,7 +16846,7 @@ regions = [
                 ]
             },
             {
-                "target": "D09BZ01S01[Cell21]",
+                "target": "RB16",
                 "logic": [
                     {
                         "item_requirements": [
@@ -16883,7 +16883,7 @@ regions = [
                 ]
             },
             {
-                "target": "D09BZ01S01[Cell24]",
+                "target": "D09BZ01S01[Cell21]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -17074,7 +17074,7 @@ regions = [
                 ]
             },
             {
-                "target": "RB16",
+                "target": "D09Z01S09[Cell24]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -17113,7 +17113,7 @@ regions = [
                 ]
             },
             {
-                "target": "D09BZ01S01[Cell21]",
+                "target": "RB16",
                 "logic": [
                     {
                         "item_requirements": [
@@ -17150,7 +17150,7 @@ regions = [
                 ]
             },
             {
-                "target": "D09BZ01S01[Cell24]",
+                "target": "D09BZ01S01[Cell21]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -17274,7 +17274,7 @@ regions = [
         "name": "D09Z01S12[E]",
         "exits": [
             {
-                "target": "RB16",
+                "target": "D09Z01S09[Cell24]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -17284,6 +17284,10 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "RB16",
+                "logic": []
             },
             {
                 "target": "D09Z01S09[SW]",
@@ -17299,10 +17303,6 @@ regions = [
             },
             {
                 "target": "D09BZ01S01[Cell21]",
-                "logic": []
-            },
-            {
-                "target": "D09BZ01S01[Cell24]",
                 "logic": []
             },
             {
@@ -17377,7 +17377,7 @@ regions = [
                 ]
             },
             {
-                "target": "RB16",
+                "target": "D09Z01S09[Cell24]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -17416,7 +17416,7 @@ regions = [
                 ]
             },
             {
-                "target": "D09BZ01S01[Cell24]",
+                "target": "RB16",
                 "logic": [
                     {
                         "item_requirements": [
@@ -17537,90 +17537,6 @@ regions = [
         "locations": [
             "CO02"
         ],
-        "transitions": []
-    },
-    {
-        "name": "D09BZ01S01[Cell24]",
-        "exits": [
-            {
-                "target": "D09Z01S09[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB16",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[SW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S09[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09BZ01S01[Cell21]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S02[Cell2]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB11",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
         "transitions": []
     },
     {
@@ -24960,15 +24876,11 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D09BZ01S01[Cell24]",
-                "logic": []
-            },
-            {
                 "target": "D09Z01S09[NW]",
                 "logic": []
             },
             {
-                "target": "RB16",
+                "target": "D09Z01S09[Cell24]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -24978,6 +24890,10 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "RB16",
+                "logic": []
             },
             {
                 "target": "D09Z01S09[SW]",
@@ -25017,15 +24933,11 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D09BZ01S01[Cell24]",
-                "logic": []
-            },
-            {
                 "target": "D09Z01S09[NW]",
                 "logic": []
             },
             {
-                "target": "RB16",
+                "target": "D09Z01S09[Cell24]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -25035,6 +24947,10 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "RB16",
+                "logic": []
             },
             {
                 "target": "D09Z01S09[SW]",
@@ -25074,15 +24990,11 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D09BZ01S01[Cell24]",
-                "logic": []
-            },
-            {
                 "target": "D09Z01S09[NW]",
                 "logic": []
             },
             {
-                "target": "RB16",
+                "target": "D09Z01S09[Cell24]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -25092,6 +25004,10 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "RB16",
+                "logic": []
             },
             {
                 "target": "D09Z01S09[SW]",
@@ -25232,15 +25148,11 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D09BZ01S01[Cell24]",
-                "logic": []
-            },
-            {
                 "target": "D09Z01S09[NW]",
                 "logic": []
             },
             {
-                "target": "RB16",
+                "target": "D09Z01S09[Cell24]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -25250,6 +25162,10 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "RB16",
+                "logic": []
             },
             {
                 "target": "D09Z01S09[SW]",
@@ -25282,14 +25198,10 @@ regions = [
         "transitions": []
     },
     {
-        "name": "D09Z01S10[Cell10]",
+        "name": "D09Z01S09[Cell24]",
         "exits": [
             {
                 "target": "D09BZ01S01[Cell21]",
-                "logic": []
-            },
-            {
-                "target": "D09BZ01S01[Cell24]",
                 "logic": []
             },
             {
@@ -25298,6 +25210,49 @@ regions = [
             },
             {
                 "target": "RB16",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S09[E]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S02[Cell2]",
+                "logic": []
+            },
+            {
+                "target": "RB11",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": []
+    },
+    {
+        "name": "D09Z01S10[Cell10]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell21]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S09[NW]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S09[Cell24]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -25307,6 +25262,10 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "RB16",
+                "logic": []
             },
             {
                 "target": "D09Z01S09[SW]",
@@ -25501,18 +25460,6 @@ regions = [
                 ]
             },
             {
-                "target": "D09BZ01S01[Cell24]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "D09Z01S09[NW]",
                 "logic": [
                     {
@@ -25525,12 +25472,24 @@ regions = [
                 ]
             },
             {
-                "target": "RB16",
+                "target": "D09Z01S09[Cell24]",
                 "logic": [
                     {
                         "item_requirements": [
                             "silverKey",
                             "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -25613,18 +25572,6 @@ regions = [
                 ]
             },
             {
-                "target": "D09BZ01S01[Cell24]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "D09Z01S09[NW]",
                 "logic": [
                     {
@@ -25637,12 +25584,24 @@ regions = [
                 ]
             },
             {
-                "target": "RB16",
+                "target": "D09Z01S09[Cell24]",
                 "logic": [
                     {
                         "item_requirements": [
                             "goldKey",
                             "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
