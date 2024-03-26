@@ -316,6 +316,21 @@ class Overworld(Choice, LADXROption):
 # [Disable] no music in the whole game""",
 #                 aesthetic=True),
 
+class BootsControls(Choice):
+    """
+    Adds additional button to activate Pegasus Boots (does nothing if you haven't picked up your boots!)
+    [Vanilla] Nothing changes, you have to equip the boots to use them
+    [Bracelet] Holding down the button for the bracelet also activates boots (somewhat like Link to the Past)
+    [Press A] Holding down A activates boots
+    [Press B] Holding down B activates boots
+    """
+    display_name = "Boots Controls"
+    option_vanilla = 0
+    option_bracelet = 1
+    option_press_a = 2
+    option_press_b = 3
+    
+
 class LinkPalette(Choice, LADXROption):
     """
     Sets link's palette
@@ -485,5 +500,5 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'music_change_condition': MusicChangeCondition,
     'nag_messages': NagMessages,
     'ap_title_screen': APTitleScreen,
-    
+    'boots_controls': BootsControls,   
 }

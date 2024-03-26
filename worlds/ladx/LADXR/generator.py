@@ -65,7 +65,7 @@ from .locations.keyLocation import KeyLocation
 
 from BaseClasses import ItemClassification
 from ..Locations import LinksAwakeningLocation
-from ..Options import TrendyGame, Palette, MusicChangeCondition
+from ..Options import TrendyGame, Palette, MusicChangeCondition, BootsControls
 
 
 # Function to generate a final rom, this patches the rom with all required patches
@@ -97,7 +97,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     assembler.const("wTradeSequenceItem2", 0xDB7F)  # Normally used to store that we have exchanged the trade item, we use it to store flags of which trade items we have
     assembler.const("wSeashellsCount", 0xDB41)
     assembler.const("wGoldenLeaves", 0xDB42)  # New memory location where to store the golden leaf counter
-    assembler.const("wCollectedTunics", 0xDB6D)  # Memory location where to store which tunic options are available
+    assembler.const("wCollectedTunics", 0xDB6D)  # Memory location where to store which tunic options are available (and boots)
     assembler.const("wCustomMessage", 0xC0A0)
 
     # We store the link info in unused color dungeon flags, so it gets preserved in the savegame.
@@ -243,6 +243,9 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
         patches.core.quickswap(rom, 1)
     elif settings.quickswap == 'b':
         patches.core.quickswap(rom, 0)
+    
+    patches.core.addBootsControls(rom, ap_settings['boots_controls'])
+
 
     world_setup = logic.world_setup
 
