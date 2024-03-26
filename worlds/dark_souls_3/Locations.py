@@ -1839,7 +1839,7 @@ location_tables = {
         DS3LocationData("AL: Soul of a Weary Warrior - plaza, nearer", "Soul of a Weary Warrior"),
         DS3LocationData("AL: Ember - plaza, right side", "Ember"),
         DS3LocationData("AL: Ember - plaza, further", "Ember"),
-        DS3LocationData("AL: Large Titanite Shard - after light cathedral",
+        DS3LocationData("AL: Large Titanite Shard - balcony by dead giants",
                         "Large Titanite Shard"),
         DS3LocationData("AL: Dark Stoneplate Ring - by dark stairs up from plaza",
                         "Dark Stoneplate Ring"),
