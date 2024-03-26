@@ -10,8 +10,7 @@ As we are using Bizhawk, this guide is only applicable to Windows and Linux syst
   - Version 2.7.0 and later are supported.
   - Detailed installation instructions for Bizhawk can be found at the above link.
   - Windows users must run the prereq installer first, which can also be found at the above link.
-- The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
-  (select `MegaMan Battle Network 3 Client` during installation).
+- The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases).
 - A US MegaMan Battle Network 3 Blue Rom. If you have the [MegaMan Battle Network Legacy Collection Vol. 1](https://store.steampowered.com/app/1798010/Mega_Man_Battle_Network_Legacy_Collection_Vol_1/)
 on Steam, you can obtain a copy of this ROM from the game's files, see instructions below.
 
@@ -54,8 +53,8 @@ an experience customized for their taste, and different players in the same mult
 
 ### Where do I get a YAML file?
 
-You can customize your settings by visiting the 
-[MegaMan Battle Network 3 Player Settings Page](/games/MegaMan%20Battle%20Network%203/player-settings)
+You can customize your options by visiting the 
+[MegaMan Battle Network 3 Player Options Page](/games/MegaMan%20Battle%20Network%203/player-options)
 
 ## Joining a MultiWorld Game
 

@@ -5,7 +5,6 @@
 - Minecraft Java Edition from
   the [Minecraft Java Edition Store Page](https://www.minecraft.net/en-us/store/minecraft-java-edition)
 - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
-    - (select `Minecraft Client` during installation.)
 
 ## Configuring your YAML file
 
@@ -16,7 +15,7 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a YAML file?
 
-You can customize your settings by visiting the [Minecraft Player Settings Page](/games/Minecraft/player-settings)
+You can customize your options by visiting the [Minecraft Player Options Page](/games/Minecraft/player-options)
 
 ## Joining a MultiWorld Game
 
