@@ -268,8 +268,8 @@ def create_raccoons(item_factory: StardewItemFactory, options: StardewValleyOpti
     if options.quest_locations < 0:
         number_progressive_raccoons = 2
 
+    items.extend(item_factory(item, ItemClassification.filler) for item in [CommunityUpgrade.raccoon] * number_filler_raccoons)
     items.extend(item_factory(item, ItemClassification.progression) for item in [CommunityUpgrade.raccoon] * number_progressive_raccoons)
-    items.extend(item_factory(item, ItemClassification.useful) for item in [CommunityUpgrade.raccoon] * number_filler_raccoons)
 
 
 def create_backpack_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
