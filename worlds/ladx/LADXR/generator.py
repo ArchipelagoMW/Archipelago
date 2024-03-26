@@ -3,6 +3,7 @@ import importlib.util
 import importlib.machinery
 import os
 import pkgutil
+from collections import defaultdict
 
 from .romTables import ROMWithTables
 from . import assembler
@@ -55,6 +56,9 @@ from .patches import tradeSequence as _
 from . import hints
 
 from .patches import bank34
+from .utils import formatText
+from ..Options import TrendyGame, Palette
+from .roomEditor import RoomEditor, Object
 from .patches.aesthetics import rgb_to_bin, bin_to_rgb
 
 from .locations.keyLocation import KeyLocation
@@ -134,7 +138,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     patches.core.fixWrongWarp(rom)
     patches.core.alwaysAllowSecretBook(rom)
     patches.core.injectMainLoop(rom)
-    
+
     from ..Options import ShuffleSmallKeys, ShuffleNightmareKeys
 
     if ap_settings["shuffle_small_keys"] != ShuffleSmallKeys.option_original_dungeon or  ap_settings["shuffle_nightmare_keys"] != ShuffleNightmareKeys.option_original_dungeon:
@@ -239,7 +243,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
         patches.core.quickswap(rom, 1)
     elif settings.quickswap == 'b':
         patches.core.quickswap(rom, 0)
-    
+
     world_setup = logic.world_setup
 
     JUNK_HINT = 0.33
@@ -263,7 +267,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
             name = "Your"
         else:
             name = f"{multiworld.player_name[location.item.player]}'s"
-        
+
         if isinstance(location, LinksAwakeningLocation):
             location_name = location.ladxr_item.metadata.name
         else:
@@ -319,11 +323,27 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     if args.doubletrouble:
         patches.enemies.doubleTrouble(rom)
 
+    if ap_settings["text_shuffle"]:
+        buckets = defaultdict(list)
+        # For each ROM bank, shuffle text within the bank
+        for n, data in enumerate(rom.texts._PointerTable__data):
+            # Don't muck up which text boxes are questions and which are statements
+            if type(data) != int and data and data != b'\xFF':
+                buckets[(rom.texts._PointerTable__banks[n], data[len(data) - 1] == 0xfe)].append((n, data))
+        for bucket in buckets.values():
+            # For each bucket, make a copy and shuffle
+            shuffled = bucket.copy()
+            rnd.shuffle(shuffled)
+            # Then put new text in
+            for bucket_idx, (orig_idx, data) in enumerate(bucket):
+                rom.texts[shuffled[bucket_idx][0]] = data
+    
+
     if ap_settings["trendy_game"] != TrendyGame.option_normal:
 
         # TODO: if 0 or 4, 5, remove inaccurate conveyor tiles
 
-        from .roomEditor import RoomEditor, Object
+
         room_editor = RoomEditor(rom, 0x2A0)
 
         if ap_settings["trendy_game"] == TrendyGame.option_easy:
@@ -352,12 +372,12 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
                 }
                 def speed():
                     return rnd.randint(*speeds[ap_settings["trendy_game"]])
-                rom.banks[0x4][0x76A0-0x4000] = 0xFF - speed()                
+                rom.banks[0x4][0x76A0-0x4000] = 0xFF - speed()
                 rom.banks[0x4][0x76A2-0x4000] = speed()
                 rom.banks[0x4][0x76A6-0x4000] = speed()
                 rom.banks[0x4][0x76A8-0x4000] = 0xFF - speed()
                 if int(ap_settings["trendy_game"]) >= TrendyGame.option_hardest:
-                    rom.banks[0x4][0x76A1-0x4000] = 0xFF - speed()                
+                    rom.banks[0x4][0x76A1-0x4000] = 0xFF - speed()
                     rom.banks[0x4][0x76A3-0x4000] = speed()
                     rom.banks[0x4][0x76A5-0x4000] = speed()
                     rom.banks[0x4][0x76A7-0x4000] = 0xFF - speed()
@@ -374,12 +394,14 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
             [0x0f, 0x38, 0x0f],
             [0x30, 0x62, 0x30],
             [0x8b, 0xac, 0x0f],
-            [0x9b, 0xbc, 0x0f], 
+            [0x9b, 0xbc, 0x0f],
         ]
         for color in gb_colors:
             for channel in range(3):
                 color[channel] = color[channel] * 31 // 0xbc
-        
+
+    if ap_settings["warp_improvements"]:
+        patches.core.addWarpImprovements(rom, ap_settings["additional_warp_points"])
 
     palette = ap_settings["palette"]
     if palette != Palette.option_normal:
@@ -410,7 +432,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
             for address in range(start, end, 2):
                 packed = (rom.banks[bank][address + 1] << 8) | rom.banks[bank][address]
                 r,g,b = bin_to_rgb(packed)
-                
+
                 # 1 bit
                 if palette == Palette.option_1bit:
                     r &= 0b10000

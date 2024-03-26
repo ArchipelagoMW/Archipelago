@@ -1,21 +1,19 @@
 ## Required Software
 
-Download the game from the [Bumper Stickers GitHub releases page](https://github.com/FelicitusNeko/FlixelBumpStik/releases).
-
-*A web version will be made available on itch.io at a later time.*
+Download the game from the [Bumper Stickers GitHub releases page](https://github.com/FelicitusNeko/FlixelBumpStik/releases), or from the [Bumper Stickers AP Itch page](https://kewliomzx.itch.io/bumpstik-ap), where you can also play it in your browser.
 
 ## Installation Procedures
 
 Simply download the latest version of Bumper Stickers from the link above, and extract it wherever you like.
 
-- ⚠️ Do not extract Bumper Stickers to Program Files, as this will cause file access issues.
+- ⚠️ It is not recommended to copy this game, or any files, directly into your Program Files folder under Windows.
 
 ## Joining a Multiworld Game
 
-1. Run `BumpStik-AP.exe`.
+1. Run `BumpStikAP.exe`.
 2. Select "Archipelago Mode".
 3. Enter your server details in the fields provided, and click "Start".
-  - ※ If you are connecting to a WSS server (such as archipelago.gg), specify `wss://` in the host name. Otherwise, the game will assume `ws://`.
+  - The game will attempt to automatically detect whether to connect via normal (WS) or secure (WSS) server, but you can specify `ws://` or `wss://` to prioritise one or the other.
 
 ## How to play Bumper Stickers (Classic)
 

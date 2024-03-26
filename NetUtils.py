@@ -290,8 +290,8 @@ def add_json_item(parts: list, item_id: int, player: int = 0, item_flags: int = 
     parts.append({"text": str(item_id), "player": player, "flags": item_flags, "type": JSONTypes.item_id, **kwargs})
 
 
-def add_json_location(parts: list, item_id: int, player: int = 0, **kwargs) -> None:
-    parts.append({"text": str(item_id), "player": player, "type": JSONTypes.location_id, **kwargs})
+def add_json_location(parts: list, location_id: int, player: int = 0, **kwargs) -> None:
+    parts.append({"text": str(location_id), "player": player, "type": JSONTypes.location_id, **kwargs})
 
 
 class Hint(typing.NamedTuple):
@@ -408,13 +408,21 @@ if typing.TYPE_CHECKING:  # type-check with pure python implementation until we 
     LocationStore = _LocationStore
 else:
     try:
-        import pyximport
-        pyximport.install()
-    except ImportError:
-        pyximport = None
-    try:
         from _speedups import LocationStore
+        import _speedups
+        import os.path
+        if os.path.isfile("_speedups.pyx") and os.path.getctime(_speedups.__file__) < os.path.getctime("_speedups.pyx"):
+            warnings.warn(f"{_speedups.__file__} outdated! "
+                          f"Please rebuild with `cythonize -b -i _speedups.pyx` or delete it!")
     except ImportError:
-        warnings.warn("_speedups not available. Falling back to pure python LocationStore. "
-                      "Install a matching C++ compiler for your platform to compile _speedups.")
-        LocationStore = _LocationStore
+        try:
+            import pyximport
+            pyximport.install()
+        except ImportError:
+            pyximport = None
+        try:
+            from _speedups import LocationStore
+        except ImportError:
+            warnings.warn("_speedups not available. Falling back to pure python LocationStore. "
+                          "Install a matching C++ compiler for your platform to compile _speedups.")
+            LocationStore = _LocationStore
