@@ -224,6 +224,7 @@ extra_groups: Dict[str, Set[str]] = {
     "orb": {"Magic Orb"},
     "dagger": {"Magic Dagger"},
     "magic rod": {"Magic Wand"},
+    "wand": {"Magic Wand"},
     "holy cross": {"Pages 42-43 (Holy Cross)"},
     "prayer": {"Pages 24-25 (Prayer)"},
     "icebolt": {"Pages 52-53 (Icebolt)"},
