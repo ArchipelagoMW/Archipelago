@@ -108,40 +108,47 @@ class CVCotMPatchExtensions(APPatchExtension):
         rom_data.apply_ips("MapEdits.ips")
         rom_data.apply_ips("DemoForceFirst.ips")
         rom_data.apply_ips("AllowAlwaysDrop.ips")
-        rom_data.apply_ips("SeedDisplay.ips")
+        rom_data.apply_ips("SeedDisplayAPEdition.ips")
 
-        if options["auto_run"] == "Yes":
+        # Write the 20-digit seed name.
+        curr_seed_addr = 0x672152
+        while options["seed_name"]:
+            seed_digit = (options["seed_name"] % 10) + 0x511C
+            rom_data.write_bytes(curr_seed_addr, int.to_bytes(seed_digit, 2, "little"))
+            curr_seed_addr -= 2
+            options["seed_name"] //= 10
+
+        if options["auto_run"]:
             rom_data.apply_ips("PermanentDash.ips")
 
-        if options["dss_patch"] == "Yes":
+        if options["dss_patch"]:
             rom_data.apply_ips("DSSGlitchFix.ips")
 
-        if options["break_iron_maidens"] == "Yes":
+        if options["break_iron_maidens"]:
             rom_data.apply_ips("BrokenMaidens.ips")
 
-        required_last_keys = int(options["required_last_keys"])
-        if required_last_keys != 1:
+        if options["required_last_keys"] != 1:
             rom_data.apply_ips("MultiLastKey.ips")
-            rom_data.write_byte(0x96C1E, required_last_keys)
-            rom_data.write_byte(0xDFB4, required_last_keys)
-            rom_data.write_byte(0xCB84, required_last_keys)
+            rom_data.write_byte(0x96C1E, options["required_last_keys"])
+            rom_data.write_byte(0xDFB4, options["required_last_keys"])
+            rom_data.write_byte(0xCB84, options["required_last_keys"])
 
-        if options["buff_ranged_familiars"] == "Yes":
+        if options["buff_ranged_familiars"]:
             rom_data.apply_ips("BuffFamiliars.ips")
 
-        if options["buff_sub_weapons"] == "Yes":
+        if options["buff_sub_weapons"]:
             rom_data.apply_ips("BuffSubweapons.ips")
 
-        if options["buff_shooter_strength"] == "Yes":
+        if options["buff_shooter_strength"]:
             rom_data.apply_ips("ShooterStrength.ips")
 
-        if options["always_allow_speed_dash"] == "Yes":
+        if options["always_allow_speed_dash"]:
             rom_data.apply_ips("AllowSpeedDash.ips")
 
-        if options["countdown"] == "Yes":
+        if options["countdown"]:
             rom_data.apply_ips("Countdown.ips")
 
-        if options["disable_battle_arena_mp_drain"] == "Yes":
+        if options["disable_battle_arena_mp_drain"]:
             rom_data.apply_ips("NoMPDrain.ips")
 
         return rom_data.get_bytes()
@@ -203,12 +210,20 @@ def patch_rom(world: "CVCotMWorld", patch: CVCotMProcedurePatch, offset_data: Di
 
     patch.write_file("token_data.bin", patch.get_token_binary())
 
-    # Write the slot's options to a JSON.
-    options_dict = {}
-    for option_name in (attr.name for attr in dataclasses.fields(CVCotMOptions)
-                        if attr not in dataclasses.fields(PerGameCommonOptions)):
-        option = getattr(world.options, option_name)
-        options_dict[option_name] = option.current_option_name
+    # Write these slot options to a JSON.
+    options_dict = {
+        "auto_run": world.options.auto_run.value,
+        "dss_patch": world.options.dss_patch.value,
+        "break_iron_maidens": world.options.break_iron_maidens.value,
+        "required_last_keys": world.required_last_keys,
+        "buff_ranged_familiars": world.options.buff_ranged_familiars.value,
+        "buff_sub_weapons": world.options.buff_sub_weapons.value,
+        "buff_shooter_strength": world.options.buff_shooter_strength.value,
+        "always_allow_speed_dash": world.options.always_allow_speed_dash.value,
+        "countdown": world.options.countdown.value,
+        "disable_battle_arena_mp_drain": world.options.disable_battle_arena_mp_drain.value,
+        "seed_name": int(world.multiworld.seed_name)
+    }
 
     patch.write_file("options.json", json.dumps(options_dict).encode('utf-8'))
 
