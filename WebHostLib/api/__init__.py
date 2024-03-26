@@ -16,17 +16,18 @@ def get_players(seed: Seed) -> List[Tuple[str, str]]:
     return [(slot.player_name, slot.game) for slot in seed.slots]
 
 
-@api_endpoints.route('/room_status/<suuid:room>')
+@api_endpoints.route("/room_status/<suuid:room>")
 def room_info(room: UUID):
     room = Room.get(id=room)
     if room is None:
         return abort(404)
+    from base64 import urlsafe_b64encode
     return {
-        "tracker": room.tracker,
+        "tracker": urlsafe_b64encode(room.tracker.bytes).rstrip(b'=').decode('ascii'),
         "players": get_players(room.seed),
         "last_port": room.last_port,
         "last_activity": room.last_activity,
-        "timeout": room.timeout
+        "timeout": room.timeout,
     }
 
 
@@ -56,4 +57,4 @@ def get_datapackage_checksums():
     return version_package
 
 
-from . import generate, user  # trigger registration
+from . import generate, user, tracker  # trigger registration
