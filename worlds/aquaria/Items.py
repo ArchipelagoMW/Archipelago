@@ -26,7 +26,7 @@ class ItemGroup(Enum):
     HEALTH = 3
     UTILITY = 4
     SONG = 5
-    LOGIC = 6
+    TURTLE = 6
 
 class AquariaItem(Item):
     """
@@ -174,5 +174,14 @@ item_table = {
     "Fish form": (698122, 1, ItemType.PROGRESSION, ItemGroup.SONG),  # song_fish
     "Spirit form": (698123, 1, ItemType.PROGRESSION, ItemGroup.SONG),  # song_spirit
     "Dual form": (698124, 1, ItemType.PROGRESSION, ItemGroup.SONG),  # song_dual
+    "Transturtle Veil top left": (698125, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_veil01
+    "Transturtle Veil top right": (698126, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_veil02
+    "Transturtle Open Water top left": (698127, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_openwater03
+    "Transturtle Forest bottom left": (698128, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_forest04
+    "Transturtle Home water": (698129, 1, ItemType.NORMAL, ItemGroup.TURTLE),  # transport_mainarea
+    "Transturtle Abyss right": (698130, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_abyss03
+    "Transturtle Final Boss": (698131, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_finalboss
+    "Transturtle Simon says": (698132, 1, ItemType.NORMAL, ItemGroup.TURTLE),  # transport_forest05
+    "Transturtle Arnassi ruins": (698133, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_seahorse
 }
 

@@ -5,7 +5,7 @@ Description: Manage options in the Aquaria game multiworld randomizer
 """
 
 from dataclasses import dataclass
-from Options import Toggle, Choice, DeathLink, PerGameCommonOptions
+from Options import Toggle, Choice, DeathLink, PerGameCommonOptions, DefaultOnToggle
 
 
 class IngredientRandomizer(Choice):
@@ -26,6 +26,18 @@ class DishRandomizer(Toggle):
     display_name = "Dish Randomizer"
 
 
+class TurtleRandomizer(DefaultOnToggle):
+    """Randomize the transportation turtle."""
+    display_name = "Turtle Randomizer"
+
+
+class FinalTurtleRandomizer(Toggle):
+    """
+    If randomisation of the transportation turtle is enable, also enable
+    the transportation turtle before the final boss."""
+    display_name = "Final Turtle Randomisation"
+
+
 class AquarianTranslation(Toggle):
     """Translate to English the Aquarian scripture in the game."""
     display_name = "Translate Aquarian"
@@ -43,7 +55,6 @@ class BigBossesToBeat(Choice):
     option_3 = 3
     option_4 = 4
     default = 0
-
 
 
 class MiniBossesToBeat(Choice):
@@ -86,6 +97,8 @@ class AquariaOptions(PerGameCommonOptions):
     dish_randomizer: DishRandomizer
     aquarian_translation: AquarianTranslation
     objective: Objective
+    turtle_randomizer: TurtleRandomizer
+    final_turtle_randomisation: FinalTurtleRandomizer
     big_bosses_to_beat: BigBossesToBeat
     mini_bosses_to_beat: MiniBossesToBeat
     death_link: DeathLink

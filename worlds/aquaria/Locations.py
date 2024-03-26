@@ -48,6 +48,7 @@ class AquariaLocations:
         "Home water, bulb in the bottom left room": 698063,
         "Home water, bulb close to the Naija's home": 698064,
         "Home water, bulb under the rock in the left path from the verse cave": 698065,
+        "Home water, Transturtle": 698213,
     }
 
     locations_home_water_nautilus = {
@@ -118,6 +119,7 @@ class AquariaLocations:
     }
     locations_openwater_tr_turtle = {
         "Open water top right area, bulb in the turtle room": 698009,
+        "Open water top right area, Transturtle": 698211,
     }
 
     locations_openwater_bl = {
@@ -144,6 +146,7 @@ class AquariaLocations:
 
     locations_arnassi_path = {
         "Arnassi statue in Arnassi Ruins": 698164,
+        "Arnassi Ruins, Transturtle": 698217,
     }
 
     locations_arnassi_crab_boss = {
@@ -152,6 +155,7 @@ class AquariaLocations:
 
     locations_simon = {
         "Arnassi ruins, beating Simon says": 698156,
+        "Simon says area, Transturtle": 698216,
     }
 
     locations_mithalas_city = {
@@ -261,6 +265,7 @@ class AquariaLocations:
     locations_forest_bl = {
         "Kelp Forest bottom left area, bulb close to the spirit cristals": 698054,
         "Walker baby in the Kelp forest bottom left area": 698186,
+        "Kelp Forest bottom left area, Transturtle": 698212,
     }
 
     locations_forest_br = {
@@ -300,6 +305,7 @@ class AquariaLocations:
         "In the Li cave": 698199,
         "The veil top left area, bulb under the rock in the top right path": 698078,
         "The veil top left area, bulb hidden behind the blocking rock": 698076,
+        "The veil top left area, Transturtle": 698209,
     }
 
     locations_veil_tl_fp = {
@@ -320,8 +326,9 @@ class AquariaLocations:
         "The veil top right area, golden starfish at the bottom right of the bottom path": 698180,
     }
 
-    locations_veil_tr_water_fall = {
+    locations_veil_tr_l = {
         "The veil top right area, bulb in the top of the water fall": 698080,
+        "The veil top right area, Transturtle": 698210,
     }
 
     locations_veil_bl = {
@@ -392,6 +399,7 @@ class AquariaLocations:
         "Abyss right area, bulb in the middle path": 698110,
         "Abyss right area, bulb behind the rock in the middle path": 698111,
         "Abyss right area, bulb in the left green room": 698112,
+        "Abyss right area, Transturtle": 698214,
     }
 
     locations_ice_cave = {
@@ -462,6 +470,7 @@ class AquariaLocations:
         "Final boss area, first bulb in the turtle room": 698103,
         "Final boss area, second bulbs in the turtle room": 698104,
         "Final boss area, third bulbs in the turtle room": 698105,
+        "Final boss area, Transturtle": 698215,
     }
 
     locations_final_boss = {
@@ -528,7 +537,7 @@ location_table = {
     **AquariaLocations.locations_turtle_cave,
     **AquariaLocations.locations_turtle_cave_bubble,
     **AquariaLocations.locations_veil_tr_r,
-    **AquariaLocations.locations_veil_tr_water_fall,
+    **AquariaLocations.locations_veil_tr_l,
     **AquariaLocations.locations_veil_bl,
     **AquariaLocations.locations_veil_b_sc,
     **AquariaLocations.locations_veil_bl_fp,

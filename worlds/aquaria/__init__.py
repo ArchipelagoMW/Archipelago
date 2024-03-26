@@ -94,11 +94,14 @@ class AquariaWorld(World):
     regions: AquariaRegions
     "Used to manage Regions"
 
+    exclude: List[str]
+
     def __init__(self, world: MultiWorld, player: int):
         """Initialisation of the Aquaria World"""
         super(AquariaWorld, self).__init__(world, player)
         self.regions = AquariaRegions(world, player)
         self.ingredients_substitution = []
+        self.exclude = []
 
     def create_regions(self) -> None:
         """
@@ -107,18 +110,39 @@ class AquariaWorld(World):
         self.regions.add_regions_to_world()
         self.regions.connect_regions()
 
+    def __pre_fill_item(self, item_name: str, location_name: str):
+        """Pre-assign an item to a location"""
+        self.exclude.append(item_name)
+        data = item_table[item_name]
+        item = AquariaItem(item_name, ItemClassification.useful, data[0], self.player)
+        self.multiworld.get_location(location_name, self.player).place_locked_item(item)
+
     def create_items(self) -> None:
-        """Create every items in the world"""
+        """Create every item in the world"""
+        if self.options.turtle_randomizer:
+            if not self.options.final_turtle_randomisation:
+                self.__pre_fill_item("Transturtle Final Boss", "Final boss area, Transturtle")
+        else:
+            self.__pre_fill_item("Transturtle Veil top left", "The veil top left area, Transturtle")
+            self.__pre_fill_item("Transturtle Veil top right", "The veil top right area, Transturtle")
+            self.__pre_fill_item("Transturtle Open Water top left", "Open water top right area, Transturtle")
+            self.__pre_fill_item("Transturtle Forest bottom left", "Kelp Forest bottom left area, Transturtle")
+            self.__pre_fill_item("Transturtle Home water", "Home water, Transturtle")
+            self.__pre_fill_item("Transturtle Abyss right", "Abyss right area, Transturtle")
+            self.__pre_fill_item("Transturtle Final Boss", "Final boss area, Transturtle")
+            # The last two are inverted because in the original game, they are special turtle that communicate directly
+            self.__pre_fill_item("Transturtle Simon says", "Arnassi Ruins, Transturtle")
+            self.__pre_fill_item("Transturtle Arnassi ruins", "Simon says area, Transturtle")
         for name, data in item_table.items():
-            classification: ItemClassification = ItemClassification.useful
-            if data[2] == ItemType.JUNK:
-                classification = ItemClassification.filler
-            elif data[2] == ItemType.PROGRESSION:
-                classification = ItemClassification.progression
-            for i in range(data[1]):
-                item = AquariaItem(name, classification, data[0],
-                                   self.player)
-                self.multiworld.itempool.append(item)
+            if name not in self.exclude:
+                classification: ItemClassification = ItemClassification.useful
+                if data[2] == ItemType.JUNK:
+                    classification = ItemClassification.filler
+                elif data[2] == ItemType.PROGRESSION:
+                    classification = ItemClassification.progression
+                for i in range(data[1]):
+                    item = AquariaItem(name, classification, data[0], self.player)
+                    self.multiworld.itempool.append(item)
 
     def __set_excluded_location(self):
         if self.options.big_bosses_to_beat.value > 0:
@@ -149,7 +173,8 @@ class AquariaWorld(World):
                                          self.player).progress_type = LocationProgressType.EXCLUDED
             self.multiworld.get_location("Jellyfish Costume in the King Jellyfish cave",
                                          self.player).progress_type = LocationProgressType.EXCLUDED
-
+        self.multiworld.get_location("Final boss area, bulb in the boss second form room",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
         # ToDo: Removing the following exclusion on Hard mode
         self.multiworld.get_location("Sun Worm path, first cliff bulb", self.player).progress_type = (
             LocationProgressType.EXCLUDED)
@@ -168,6 +193,7 @@ class AquariaWorld(World):
         self.multiworld.get_location("Walker baby in the Kelp forest bottom left area", self.player).progress_type = (
             LocationProgressType.EXCLUDED)
 
+
     def set_rules(self) -> None:
         """
         Launched when the Multiworld generator is ready to generate rules
@@ -175,10 +201,11 @@ class AquariaWorld(World):
         self.regions.add_event_locations()
         self.regions.adjusting_rules(self.options)
         self.__set_excluded_location()
+
         self.multiworld.completion_condition[self.player] = lambda \
             state: state.has("Victory", self.player)
 
-            # for debugging purposes, you may want to visualize the layout of your world.
+        # for debugging purposes, you may want to visualize the layout of your world.
         # Uncomment the following code to write a PlantUML diagram to the file
         # "aquaria_world.puml" that can help you see whether your regions and locations
         # are connected and placed as desired
@@ -199,7 +226,6 @@ class AquariaWorld(World):
             self.multiworld.random.shuffle(simple_ingredients_substitution)
             if self.options.ingredient_randomizer.value == 1:
                 simple_ingredients_substitution.extend([24, 25, 26])
-
         dishes_substitution = [i for i in range(27, 76)]
         if self.options.dish_randomizer:
             self.multiworld.random.shuffle(dishes_substitution)

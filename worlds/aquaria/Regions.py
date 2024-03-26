@@ -158,7 +158,6 @@ class AquariaRegions:
     veil_tl_fp: Region
     veil_tr_l: Region
     veil_tr_r: Region
-    veil_tr_water_fall: Region
     veil_bl: Region
     veil_b_sc: Region
     veil_bl_fp: Region
@@ -342,11 +341,10 @@ class AquariaRegions:
                                              AquariaLocations.locations_turtle_cave)
         self.turtle_cave_bubble = self.__add_region("The veil top left area, turtle cave bubble cliff",
                                                     AquariaLocations.locations_turtle_cave_bubble)
-        self.veil_tr_l = self.__add_region("The veil top right area, left of temple", None)
+        self.veil_tr_l = self.__add_region("The veil top right area, left of temple",
+                                           AquariaLocations.locations_veil_tr_l)
         self.veil_tr_r = self.__add_region("The veil top right area, right of temple",
                                            AquariaLocations.locations_veil_tr_r)
-        self.veil_tr_water_fall = self.__add_region("The veil top right area, top of the water fall",
-                                                    AquariaLocations.locations_veil_tr_water_fall)
         self.octo_cave_t = self.__add_region("Octopus cave top entrance",
                                              AquariaLocations.locations_octo_cave_t)
         self.octo_cave_b = self.__add_region("Octopus cave bottom entrance",
@@ -698,12 +696,6 @@ class AquariaRegions:
                                lambda state: _has_energy_form(state, self.player))
         self.__connect_one_way_regions("Sun temple boss area", "Veil left of sun temple",
                                        self.sun_temple_boss, self.veil_tr_l)
-        self.__connect_one_way_regions("Veil left of sun temple", "Veil left of sun temple, water fall",
-                                       self.veil_tr_l, self.veil_tr_water_fall,
-                                       lambda state: _has_hot_soup(state, self.player) and
-                                                     _has_beast_form(state, self.player))
-        self.__connect_one_way_regions("Veil left of sun temple, water fall", "Veil left of sun temple",
-                                       self.veil_tr_water_fall, self.veil_tr_l)
         self.__connect_regions("Veil left of sun temple", "Octo cave top path",
                                self.veil_tr_l, self.octo_cave_t,
                                lambda state: _has_fish_form(state, self.player) and
@@ -784,6 +776,41 @@ class AquariaRegions:
         self.__connect_one_way_regions("final boss third form area", "final boss end",
                                        self.final_boss, self.final_boss_end)
 
+    def __connect_transturtle(self, item_source: str, item_target: str, region_source: Region, region_target: Region,
+                              rule=None):
+        if item_source != item_target:
+            if rule is None:
+                self.__connect_one_way_regions(item_source, item_target, region_source, region_target,
+                                               lambda state: state.has(item_target, self.player))
+            else:
+                self.__connect_one_way_regions(item_source, item_target, region_source, region_target, rule)
+
+
+    def _connect_transturtle_to_other(self, item: str, region: Region):
+        self.__connect_transturtle(item, "Transturtle Veil top left", region, self.veil_tl)
+        self.__connect_transturtle(item, "Transturtle Veil top right", region, self.veil_tr_l)
+        self.__connect_one_way_regions(item, "Transturtle Open Water top left", region, self.openwater_tl)
+        self.__connect_one_way_regions(item, "Transturtle Forest bottom left", region, self.forest_bl)
+        self.__connect_one_way_regions(item, "Transturtle Home water", region, self.home_water)
+        self.__connect_one_way_regions(item, "Transturtle Abyss right", region, self.abyss_r,
+                                       lambda state: state.has("Transturtle Abyss right", self.player) and
+                                                     _has_sun_form(state, self.player))
+        self.__connect_one_way_regions(item, "Transturtle Final Boss", region, self.final_boss_tube)
+        self.__connect_one_way_regions(item, "Transturtle Simon says", region, self.simon)
+        self.__connect_one_way_regions(item, "Transturtle Arnassi ruins", region, self.arnassi_path,
+                                       lambda state: state.has("Transturtle Arnassi ruins", self.player) and
+                                                     _has_fish_form(state, self.player))
+    def __connect_transturtles(self):
+        self._connect_transturtle_to_other("Transturtle Veil top left", self.veil_tl)
+        self._connect_transturtle_to_other("Transturtle Veil top right", self.veil_tr_l)
+        self._connect_transturtle_to_other("Transturtle Open Water top left", self.openwater_tl)
+        self._connect_transturtle_to_other("Transturtle Forest bottom left", self.forest_bl)
+        self._connect_transturtle_to_other("Transturtle Home water", self.home_water)
+        self._connect_transturtle_to_other("Transturtle Abyss right", self.abyss_r)
+        self._connect_transturtle_to_other("Transturtle Final Boss", self.final_boss_tube)
+        self._connect_transturtle_to_other("Transturtle Simon says", self.simon)
+        self._connect_transturtle_to_other("Transturtle Arnassi ruins", self.arnassi_path)
+
     def connect_regions(self):
         """
         Connect every region (entrances and exits)
@@ -796,6 +823,7 @@ class AquariaRegions:
         self.__connect_abyss_regions()
         self.__connect_sunken_city_regions()
         self.__connect_body_regions()
+        self.__connect_transturtles()
 
     def __add_event_location(self, region: Region, name: str, event_name: str):
         """
@@ -905,10 +933,25 @@ class AquariaRegions:
         add_rule(self.world.get_location("Mithalas city castle, second urn on the entrance path", self.player),
                  lambda state: _has_damaging_item(state, self.player))
 
+    def __adjusting_soup_rules(self):
+        """
+        Modify rules for location that need soup
+        """
+        add_rule(self.world.get_location("Urchin costume in the Turtle cave", self.player),
+                 lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
+        add_rule(self.world.get_location("Sun Worm path, first cliff bulb", self.player),
+                 lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
+        add_rule(self.world.get_location("Sun Worm path, second cliff bulb", self.player),
+                 lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
+        add_rule(self.world.get_location("The veil top right area, bulb in the top of the water fall", self.player),
+                 lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
+
     def adjusting_rules(self, options: AquariaOptions):
         """
         Modify rules for single location or optional rules
         """
+        self.__adjusting_urns_rules()
+        self.__adjusting_soup_rules()
         add_rule(self.world.get_location("Mithalan Dress in the Mithalas cathedral", self.player),
                  lambda state: _has_beast_form(state, self.player))
         add_rule(self.world.get_location("Open water bottom left area, bulb inside the downest fish pass", self.player),
@@ -923,12 +966,6 @@ class AquariaRegions:
                  lambda state: _has_bind_song(state, self.player))
         add_rule(self.world.get_location("Turtle Egg in the Turtle cave", self.player),
                  lambda state: _has_bind_song(state, self.player))
-        add_rule(self.world.get_location("Urchin costume in the Turtle cave", self.player),
-                 lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
-        add_rule(self.world.get_location("Sun Worm path, first cliff bulb", self.player),
-                 lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
-        add_rule(self.world.get_location("Sun Worm path, second cliff bulb", self.player),
-                 lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
         add_rule(self.world.get_location("Abyss left area, bulb in the bottom fish pass", self.player),
                  lambda state: _has_fish_form(state, self.player))
         add_rule(self.world.get_location("Anemone seed in the Song cave", self.player),
@@ -1015,7 +1052,6 @@ class AquariaRegions:
         self.world.regions.append(self.veil_tl_fp)
         self.world.regions.append(self.veil_tr_l)
         self.world.regions.append(self.veil_tr_r)
-        self.world.regions.append(self.veil_tr_water_fall)
         self.world.regions.append(self.veil_bl)
         self.world.regions.append(self.veil_b_sc)
         self.world.regions.append(self.veil_bl_fp)
