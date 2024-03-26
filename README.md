@@ -83,7 +83,7 @@ We recognize that there is a strong community of incredibly smart people that ha
 Archipelago was directly forked from bonta0's `multiworld_31` branch of ALttPEntranceRandomizer (this project has a long legacy of its own, please check it out linked above) on January 12, 2020. The repository was then named to _MultiWorld-Utilities_ to better encompass its intended function. As Archipelago matured, then known as "Berserker's MultiWorld" by some, we found it necessary to transform our repository into a root level repository (as opposed to a 'forked repo') and change the name (which came later) to better reflect our project.
 
 ## Running Archipelago
-For most people all you need to do is head over to the [releases](https://github.com/ArchipelagoMW/Archipelago/releases) page then download and run the appropriate installer. 
+For most people, all you need to do is head over to the [releases](https://github.com/ArchipelagoMW/Archipelago/releases) page then download and run the appropriate installer, or AppImage for Linux-based systems.
 
 If you are a developer or are running on a platform with no compiled releases available, please see our doc on [running Archipelago from source](docs/running%20from%20source.md).
 
