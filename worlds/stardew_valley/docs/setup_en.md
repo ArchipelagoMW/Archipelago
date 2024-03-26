@@ -3,7 +3,11 @@
 ## Required Software
 
 - Stardew Valley on PC (Recommended: [Steam version](https://store.steampowered.com/app/413150/Stardew_Valley/))
-- SMAPI ([Mod loader for Stardew Valley](https://smapi.io/))
+    - You need version 1.5.6. It is available in a public beta branch on Steam ![image](https://i.imgur.com/uKAUmF0.png).
+    - If your Stardew is not on Steam, you are responsible for finding a way to downgrade it.
+    - This measure is temporary. We are working hard to bring the mod to Stardew 1.6 as soon as possible.
+- SMAPI 3.x.x ([Mod loader for Stardew Valley](https://www.nexusmods.com/stardewvalley/mods/2400?tab=files))
+    - Same as Stardew Valley itself, SMAPI needs a slightly older version to be compatible with Stardew Valley 1.5.6 ![image](https://i.imgur.com/kzgObHy.png)
 - [StardewArchipelago Mod Release 5.x.x](https://github.com/agilbert1412/StardewArchipelago/releases)
     - It is important to use a mod release of version 5.x.x to play seeds that have been generated here. Later releases 
   can only be used with later releases of the world generator, that are not hosted on archipelago.gg yet.
@@ -18,13 +22,6 @@
     * It is **not** recommended to further mod Stardew Valley with unsupported mods, although it is possible to do so. 
   Mod interactions can be unpredictable, and no support will be offered for related bugs.
     * The more unsupported mods you have, and the bigger they are, the more likely things are to break.
-
-## Notes About Game Versions
-The randomizer is built for a specific version of Stardew Valley. When a new version gets released, we will try our best to support it as fast as possible, but we can't make any promises.
-
-You may need to downgrade your game in order to play Archipelago when Stardew Valley itself has had a recent update.
-
-The SMAPI mod will tell you what version is currently supported. If you are having trouble, feel free to join the Archipelago Discord to ask for assistance.
 
 ## Configuring your YAML file
 
