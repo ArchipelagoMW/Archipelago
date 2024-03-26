@@ -60,7 +60,7 @@ class WitnessPlayerLogic:
 
         these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"]
 
-        if panel_hex in self.DOOR_ITEMS_BY_ID:
+        if panel_hex in self.DOOR_ITEMS_BY_ID and not panel_hex in self.FORBIDDEN_DOORS:
             door_items = frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[panel_hex]})
 
             all_options: Set[FrozenSet[str]] = set()
@@ -170,6 +170,10 @@ class WitnessPlayerLogic:
                 for panel_hex in panel_hexes:
                     if panel_hex in self.DOOR_ITEMS_BY_ID and item_name in self.DOOR_ITEMS_BY_ID[panel_hex]:
                         self.DOOR_ITEMS_BY_ID[panel_hex].remove(item_name)
+
+        if adj_type == "Forbidden Doors":
+            entity_hex = line[:7]
+            self.FORBIDDEN_DOORS.add(entity_hex)
 
         if adj_type == "Starting Inventory":
             self.STARTING_INVENTORY.add(line)
@@ -476,7 +480,7 @@ class WitnessPlayerLogic:
 
                 self.make_single_adjustment(current_adjustment_type, line)
 
-        for entity_id in self.COMPLETELY_DISABLED_ENTITIES:
+        for entity_id in self.COMPLETELY_DISABLED_ENTITIES | self.FORBIDDEN_DOORS:
             if entity_id in self.DOOR_ITEMS_BY_ID:
                 del self.DOOR_ITEMS_BY_ID[entity_id]
 
@@ -641,6 +645,7 @@ class WitnessPlayerLogic:
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI = set()
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME = set()
         self.DOOR_ITEMS_BY_ID: Dict[str, List[str]] = {}
+        self.FORBIDDEN_DOORS: Set[str] = set()
         self.STARTING_INVENTORY = set()
 
         self.DIFFICULTY = world.options.puzzle_randomization
