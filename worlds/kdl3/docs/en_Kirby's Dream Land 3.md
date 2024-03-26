@@ -1,8 +1,8 @@
 # Kirby's Dream Land 3
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What does randomization do to this game?
@@ -15,6 +15,7 @@ as Heart Stars, 1-Ups, and Invincibility Candy will be shuffled into the pool fo
 - Purifying a boss after acquiring a certain number of Heart Stars
  (indicated by their portrait flashing in the level select)
 - If enabled, 1-Ups and Maxim Tomatoes
+- If enabled, every single Star Piece within a stage
 
 ## When the player receives an item, what happens?
 A sound effect will play, and Kirby will immediately receive the effects of that item, such as being able to receive Copy Abilities from enemies that 
