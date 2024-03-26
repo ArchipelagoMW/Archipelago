@@ -88,7 +88,7 @@ class ShuffleTransitions(Choice):
 
 
 class Goal(Choice):
-    """Requirement to finish the game."""
+    """Requirement to finish the game. To win power seal hunt you enter the Music Box through the shop chest."""
     display_name = "Goal"
     option_open_music_box = 0
     option_power_seal_hunt = 1
