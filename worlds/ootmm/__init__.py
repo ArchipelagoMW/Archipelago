@@ -89,8 +89,11 @@ class OoTMMWorld(World):
             assert(isinstance(location, OoTMMLocation))
             key = location.name
             data = location_data_table[key]
-            zetable.append({"Location": data.name, "Game": data.game, "Id": data.id, "Item": location.item.name,})
-            pass
+            if location.item.player == self.player:
+                zetable.append({"Location Name": data.name, "Location Id": data.id, "Game": data.game, "Item": {"Type": "OoTM", "Id": location.item.name}})
+            else:
+                zetable.append({"Location Name": data.name, "Location Id": data.id, "Game": data.game, "Item": {"Type": "AP", "Id": location.item.code, "Slot": location.item.player}})
+            
         with open (output_directory + "/output.json","w", encoding="utf-8") as outfile:
             outfile.write(json.dumps(zetable))
         
