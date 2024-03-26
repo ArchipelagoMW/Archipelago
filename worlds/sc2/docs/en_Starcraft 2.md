@@ -1,4 +1,7 @@
-# Starcraft 2 Wings of Liberty
+# Starcraft 2
+
+## Game page in other languages:
+* [Français](/games/Starcraft%202/info/fr)
 
 ## What does randomization do to this game?
 
