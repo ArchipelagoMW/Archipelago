@@ -91,7 +91,8 @@ def _copy_from_lb_ark_dir(temp_dir: str, lb_ark_dir: str):
     for directory_name in MODIFIED_ARCHIVES:
         dt_path = os.path.join(lb_ark_dir, directory_name)
         if not os.path.exists(dt_path):
-            raise FileNotFoundError(f"Cannot find {directory_name}.")
+            print(f"Directory {dt_path} not found and will be created.")
+            os.makedirs(dt_path, exist_ok=True)
         dest_path = os.path.join(temp_dir, directory_name)
         shutil.copytree(dt_path, dest_path)
 
