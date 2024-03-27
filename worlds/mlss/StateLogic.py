@@ -11,7 +11,7 @@ def canDash(state, player):
 
 
 def canCrash(state, player):
-    return state.has("Green Pearl Bean", player) and state.has("Thunder Hand", player)
+    return state.has("Green Pearl Bean", player) and state.has("Thunderhand", player)
 
 
 def hammers(state, player):
@@ -57,7 +57,7 @@ def brooch(state, player):
 
 
 def thunder(state, player):
-    return state.has("Thunder Hand", player)
+    return state.has("Thunderhand", player)
 
 
 def fire(state, player):

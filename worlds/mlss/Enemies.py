@@ -1,40 +1,13 @@
-class EnemyGroup:
-    def __init__(self, id: bytes, type: bytes, position: int, data: bytes, boss, group_type=0x64):
-        self.id = id
-        self.type = type
-        self.position = position
-        self.data = data
-        self.boss = boss
-        self.group_type = group_type
+flying = [
+    0x14,
+    0x1D,
+    0x4C
+]
 
-    @property
-    def size(self):
-        return len(self.id)
-
-
-class Enemy:
-    def __init__(self, id, type):
-        self.id = id
-        self.type = type
-
-
-class StatCount:
-    def __init__(self, id):
-        self.id = id
-        self.count = 1
-        self.total = 0
-
-
-class EnemyRandomize:
-    def __init__(self):
-        self.groups = []
-        self.stardustGroups = []
-        self.groupSizes = []
-        self.enemies = []
-        self.spikedEnemies = []
-        self.bossGroups = []
-        self.enemyCount = []
-
+pestnut = [
+    0x20,
+    0x34
+]
 
 enemies = [
     0x5030EC,
@@ -205,4 +178,30 @@ bosses = [
     0x5045CC,
     0x5045EC,
     0x50460C
+]
+
+bowsers = [
+    0x50404C,
+    0x50406C,
+    0x50408C,
+    0x5040AC,
+    0x5040CC,
+    0x5040EC,
+    0x50410C,
+    0x50412C,
+    0x50414C,
+    0x50416C,
+    0x50418C,
+    0x5041AC,
+    0x5041CC,
+    0x5041EC,
+    0x50420C,
+    0x50422C,
+    0x50424C,
+    0x50426C,
+    0x50428C,
+    0x5042AC,
+    0x5042CC,
+    0x5042EC,
+    0x50430C,
 ]

@@ -4,11 +4,10 @@ import pkgutil
 import typing
 import bsdiff4
 
+from . import Enemies
 from BaseClasses import Item, Location
-from worlds.AutoWorld import World
 from settings import get_settings
 from worlds.Files import APDeltaPatch
-from .Enemies import enemies, bosses, EnemyRandomize, Enemy, EnemyGroup
 from .Items import item_table
 from .Locations import shop, badge, pants
 
@@ -186,10 +185,9 @@ class Rom:
         self.stream.seek(0xDF00A0, 0)
         self.stream.write(self.world.multiworld.seed_name.encode("UTF-8"))
 
-        if self.world.options.skip_intro:
-            # Enable Skip Intro in ROM
-            self.stream.seek(0x244D08, 0)
-            self.stream.write(bytes([0x88, 0x0, 0x19, 0x91, 0x1, 0x20, 0x58, 0x1, 0xF, 0xA0, 0x3, 0x15, 0x27, 0x8]))
+        # Enable Skip Intro in ROM
+        self.stream.seek(0x244D08, 0)
+        self.stream.write(bytes([0x88, 0x0, 0x19, 0x91, 0x1, 0x20, 0x58, 0x1, 0xF, 0xA0, 0x3, 0x15, 0x27, 0x8]))
 
         if self.world.options.extra_pipes:
             # Spawn in extra pipes in ROM
@@ -222,7 +220,7 @@ class Rom:
         if self.world.options.randomize_backgrounds:
             self.randomize_backgrounds()
 
-        if self.world.options.randomize_enemies or self.world.options.randomize_bosses:
+        if self.world.options.randomize_enemies != 0 or self.world.options.randomize_bosses != 0:
             self.enemy_randomize()
 
         if self.world.options.scale_stats:
@@ -256,18 +254,107 @@ class Rom:
         self.swap_pants(cpants[self.world.options.luigi_pants], 1)
 
     def enemy_randomize(self):
-        enemy_data = EnemyRandomize()
-        if self.world.options.randomize_enemies:
-            enemy_data = self.populate_enemy_array(enemy_data)
-            enemy_data = self.generate_groups(enemy_data)
+        enemies = [pos for pos in Enemies.enemies if pos not in Enemies.bowsers] if self.world.options.castle_skip else Enemies.enemies
+        bosses = [pos for pos in Enemies.bosses if pos not in Enemies.bowsers] if self.world.options.castle_skip else Enemies.bosses
 
-        if self.world.options.randomize_bosses:
-            enemy_data = self.generate_boss_groups(enemy_data)
+        if self.world.options.randomize_bosses == 1:
+            raw = []
+            for pos in bosses:
+                self.stream.seek(pos + 1)
+                raw += [self.stream.read(0x1F)]
+            self.random.shuffle(raw)
+            for pos in bosses:
+                self.stream.seek(pos + 1)
+                self.stream.write(raw.pop())
 
-        self.insert_groups(enemy_data)
+        if self.world.options.randomize_enemies == 1:
+            raw = []
+            for pos in enemies:
+                self.stream.seek(pos + 1)
+                raw += [self.stream.read(0x1F)]
+            if self.world.options.randomize_bosses == 2:
+                for pos in bosses:
+                    self.stream.seek(pos + 1)
+                    raw += [self.stream.read(0x1F)]
+            self.random.shuffle(raw)
+            for pos in enemies:
+                self.stream.seek(pos + 1)
+                self.stream.write(raw.pop())
+            if self.world.options.randomize_bosses == 2:
+                for pos in bosses:
+                    self.stream.seek(pos + 1)
+                    self.stream.write(raw.pop())
+            return
+
+        enemies_raw = []
+        groups = []
+
+        if self.world.options.randomize_bosses == 2:
+            for pos in bosses:
+                self.stream.seek(pos + 1)
+                groups += [self.stream.read(0x1F)]
+
+        for pos in enemies:
+            self.stream.seek(pos + 8)
+            for _ in range(6):
+                enemy = int.from_bytes(self.stream.read(1))
+                if enemy > 0:
+                    self.stream.seek(1, 1)
+                    flag = int.from_bytes(self.stream.read(1))
+                    if flag == 0x7:
+                        break
+                    if flag in [0x0, 0x4]:
+                        if enemy not in Enemies.pestnut and enemy not in Enemies.flying:
+                            print(f"adding: 0x{format(enemy, 'x')}")
+                            enemies_raw += [enemy]
+                    self.stream.seek(1, 1)
+                else:
+                    self.stream.seek(3, 1)
+
+        self.random.shuffle(enemies_raw)
+        chomp = False
+        for pos in enemies:
+            self.stream.seek(pos + 8)
+
+            for _ in range(6):
+                enemy = int.from_bytes(self.stream.read(1))
+                if enemy > 0 and enemy not in Enemies.flying and enemy not in Enemies.pestnut:
+                    if enemy == 0x52:
+                        chomp = True
+                    self.stream.seek(1, 1)
+                    flag = int.from_bytes(self.stream.read(1))
+                    if flag not in [0x0, 0x4]:
+                        self.stream.seek(1, 1)
+                        continue
+                    self.stream.seek(-3, 1)
+                    self.stream.write(bytes([enemies_raw.pop()]))
+                    self.stream.seek(1, 1)
+                    self.stream.write(bytes([0x4]))
+                    self.stream.seek(1, 1)
+                else:
+                    self.stream.seek(3, 1)
+
+            self.stream.seek(pos + 1)
+            raw = self.stream.read(0x1F)
+            if chomp:
+                raw = raw[0:3] + bytes([0x67, 0xAB, 0x28, 0x08]) + raw[7:]
+            else:
+                raw = raw[0:3] + bytes([0xEE, 0x2C, 0x28, 0x08]) + raw[7:]
+            groups += [raw]
+
+        self.random.shuffle(groups)
+        arr = Enemies.enemies
+        if self.world.options.randomize_bosses == 2:
+            arr += Enemies.bosses
+
+        for pos in arr:
+            self.stream.seek(pos + 1)
+            self.stream.write(groups.pop())
+
+
 
     def randomize_backgrounds(self):
-        all_enemies = enemies + bosses
+        all_enemies = Enemies.enemies + Enemies.bosses
         for address in all_enemies:
             self.stream.seek(address + 3, io.SEEK_SET)
             self.stream.write(bytes([self.random.randint(0x0, 0x26)]))
@@ -315,232 +402,6 @@ class Rom:
                 self.stream.seek(4, io.SEEK_CUR)
                 continue
             self.stream.write(songs[i])
-
-    def populate_enemy_array(self, enemy_data_) -> EnemyRandomize:
-        enemy_data = enemy_data_
-
-        for e in enemies:
-            i = 0
-            count = 0
-            while True:
-                if 0x50402C < e < 0x50434C and self.world.options.castle_skip:
-                    break
-                stream_seek_position = e + 10 + (i * 4)
-                self.stream.seek(stream_seek_position, os.SEEK_SET)
-                type_val = self.stream.read(1)[0]
-                if type_val == 0x0:
-                    type_val = 0x4
-                if type_val == 0x7:
-                    break
-                self.stream.seek(-3, os.SEEK_CUR)
-                id_val = self.stream.read(1)[0]
-                if id_val in [int(hex_value) for hex_value in [0x18, 0x53, 0x4B]] or (
-                        0x2D <= id_val <= 0x30) or id_val == 0x3C:
-                    type_val = 0x4
-                if id_val == 0xF and type_val == 0x3:
-                    i += 1
-                    if i == 6:
-                        break
-                    continue
-                if id_val in [int(hex_value) for hex_value in [0x16, 0x1E, 0x20, 0x34, 0x35, 0x36, 0x37, 0x38, 0x46]]:
-                    enemy_data.spikedEnemies.append(Enemy(id_val, type_val))
-                else:
-                    enemy_data.enemies.append(Enemy(id_val, type_val))
-                count += 1
-
-                i += 1
-                if i == 6:
-                    break
-
-            if count > 4:
-                count = 4
-            if count != 0:
-                enemy_data.groupSizes.append(count)
-
-        return enemy_data
-
-    def generate_groups(self, enemy_data_) -> EnemyRandomize:
-        enemy_data = enemy_data_
-        no_spike = False
-        enemies_copy = enemy_data.enemies
-        spiked_copy = enemy_data.spikedEnemies
-        self.random.shuffle(enemies_copy)
-        self.random.shuffle(spiked_copy)
-        total = 0
-        for sizes in enemy_data.groupSizes:
-            total += min(sizes, 4)
-
-        for size in enemy_data.groupSizes:
-            temp_size = min(size, 4)
-            if temp_size == 0:
-                continue
-
-            id_list = []
-            type_list = []
-            pestnuts = []
-            temp_enemies = []
-            script = bytes([0xEE, 0x2C, 0x28, 0x08])
-            nut = 0
-            special = 0
-
-            for _ in range(temp_size):
-                enemy = enemies_copy.pop(0)
-                if enemy.id in [0x20, 0x34]:
-                    nut += 1
-                    pestnuts.append(enemy)
-                else:
-                    temp_enemies.append(enemy)
-                if enemy.id in [0x52, 0x2C, 0x4A]:
-                    special = 1
-                if enemy.id == 0x52:
-                    script = bytes([0x67, 0xAB, 0x28, 0x08])
-
-            if len(pestnuts) == 3 and size == 4:
-                for enemy in pestnuts:
-                    id_list.append(enemy.id)
-                    type_list.append(enemy.type)
-                for _ in range(3):
-                    id_list.append(0xF)
-                    type_list.append(0x3)
-            else:
-                if size == 1 and pestnuts:
-                    id_list.append(pestnuts[0].id)
-                    type_list.append(pestnuts[0].type)
-
-                for enemy in pestnuts:
-                    id_list.append(enemy.id)
-                    type_list.append(enemy.type)
-                for enemy in temp_enemies:
-                    id_list.append(enemy.id)
-                    type_list.append(enemy.type)
-
-                if size == 4:
-                    for _ in range(nut):
-                        id_list.append(0xF)
-                        type_list.append(0x3)
-                else:
-                    if pestnuts:
-                        for _ in range(4 - len(pestnuts + temp_enemies)):
-                            id_list.append(0x0)
-                            type_list.append(0x7)
-                        for _ in range(nut):
-                            id_list.append(0xF)
-                            type_list.append(0x3)
-
-            if len(enemy_data.stardustGroups) < 3:
-                enemy_data.stardustGroups.append(EnemyGroup(bytes(id_list), bytes(type_list), temp_size, script, special))
-            else:
-                enemy_data.groups.append(EnemyGroup(bytes(id_list), bytes(type_list), temp_size, script, special))
-
-            if len(enemy_data.stardustGroups) == 3 and not no_spike:
-                enemies_copy.extend(spiked_copy)
-                self.random.shuffle(enemies_copy)
-                no_spike = True
-
-        return enemy_data
-
-    def generate_boss_groups(self, enemy_data_) -> EnemyRandomize:
-        enemy_data = enemy_data_
-        for boss_val in bosses:
-
-            if 0x50402C < boss_val < 0x50434C and self.world.options.castle_skip:
-                continue
-            stream_seek_position = boss_val + 2
-            self.stream.seek(stream_seek_position, os.SEEK_SET)
-            boss = self.stream.read(1)[0]
-            stream_seek_position = boss_val + 4
-            self.stream.seek(stream_seek_position, os.SEEK_SET)
-            data = self.stream.read(4)
-            id = []
-            types = []
-            iterate = True
-            i = 0
-            while iterate:
-                stream_seek_position = boss_val + 10 + (i * 4)
-                self.stream.seek(stream_seek_position, os.SEEK_SET)
-                type_val = self.stream.read(1)[0]
-                types.append(type_val)
-                self.stream.seek(-3, os.SEEK_CUR)
-                id_val = self.stream.read(1)[0]
-                id.append(id_val)
-                i += 1
-                if i == 6:
-                    break
-            stream_seek_position = boss_val + 1
-            self.stream.seek(stream_seek_position, os.SEEK_SET)
-            enemy_data.bossGroups.append(EnemyGroup(bytes(id), bytes(types), self.stream.read(1)[0], data, boss))
-
-        return enemy_data
-
-    def insert_groups(self, enemy_data):
-        do_boss = self.world.options.randomize_bosses
-
-        if do_boss != 1:
-            enemy_data.groups.extend(enemy_data.bossGroups)
-        self.random.shuffle(enemy_data.groups)
-        enemy_data.groups = enemy_data.stardustGroups + enemy_data.groups
-        locations = enemies
-        boss_locations = bosses
-
-        if do_boss == 2:
-            locations += boss_locations
-        locations.sort()
-        count = 0
-
-        for location in locations:
-            if len(enemy_data.groups) > 0:
-                if self.world.options.castle_skip and 0x50402C < location < 0x50434C:
-                    continue
-                count += 1
-                temp_group = enemy_data.groups[0]
-                enemy_data.groups = enemy_data.groups[1:]
-                self.stream.seek(location + 1, 0)
-                b = temp_group.position.to_bytes(1, byteorder='big')
-                self.stream.write(b)
-                for i in range(6):
-                    if i < len(temp_group.id):
-                        self.stream.seek(location + 8 + (i * 4))
-                        self.stream.write(bytes([temp_group.id[i]]))
-                        self.stream.seek(1, os.SEEK_CUR)
-                        self.stream.write(bytes([temp_group.type[i]]))
-                    else:
-                        self.stream.seek(location + 8 + (i * 4))
-                        self.stream.write(bytes([0]))
-                        self.stream.seek(1, os.SEEK_CUR)
-                        self.stream.write(bytes([7]))
-                self.stream.seek(location + 2)
-                self.stream.write(bytes([temp_group.boss]))
-                if len(temp_group.data) > 0:
-                    self.stream.seek(location + 4)
-                    self.stream.write(temp_group.data)
-
-        if do_boss == 1:
-            for location in bosses:
-                if self.world.options.castle_skip and 0x50402C < location < 0x50434C:
-                    continue
-                self.random.shuffle(enemy_data.bossGroups)
-                count += 1
-                temp_group = enemy_data.bossGroups[0]
-                enemy_data.bossGroups = enemy_data.bossGroups[1:]
-                self.stream.seek(location + 1, 0)
-                b = temp_group.position.to_bytes(1, byteorder='big')
-                self.stream.write(b)
-                for i in range(6):
-                    if i < len(temp_group.id):
-                        self.stream.seek(location + 8 + (i * 4))
-                        self.stream.write(bytes([temp_group.id[i]]))
-                        self.stream.seek(1, os.SEEK_CUR)
-                        self.stream.write(bytes([temp_group.type[i]]))
-                    else:
-                        self.stream.seek(location + 8 + (i * 4))
-                        self.stream.write(bytes([0]))
-                        self.stream.seek(1, os.SEEK_CUR)
-                        self.stream.write(bytes([7]))
-                self.stream.seek(location + 2)
-                self.stream.write(bytes([temp_group.boss]))
-                if len(temp_group.data) > 0:
-                    self.stream.seek(location + 4)
-                    self.stream.write(temp_group.data)
 
     def desc_inject(self, location: Location, item: Item):
         index = -1

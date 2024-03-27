@@ -136,8 +136,6 @@ class MLSSWorld(World):
         # Then, get a random amount of fillers until we have as many items as we have locations
         filler_items = []
         for item in itemList:
-            if item.progression == ItemClassification.skip_balancing:
-                continue
             if item.progression == ItemClassification.filler:
                 if item.itemName == "5 Coins" and not self.options.coins:
                     continue

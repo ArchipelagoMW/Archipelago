@@ -86,7 +86,7 @@ def connect_regions(world: "MLSSWorld"):
         connect(world, names, "PostJokes", "Bowser's Castle")
         connect(world, names, "Bowser's Castle", "Bowser's Castle Mini", lambda state: StateLogic.canMini(state, world.player) and StateLogic.thunder(state, world.player))
     connect(world, names, "Chucklehuck Woods", "Winkle", lambda state: StateLogic.canDash(state, world.player))
-    connect(world, names, "Chucklehuck Woods", "Beanbean Castle Town", lambda state: StateLogic.fruits(state, world.player))
+    connect(world, names, "Chucklehuck Woods", "Beanbean Castle Town", lambda state: StateLogic.fruits(state, world.player) and (StateLogic.hammers(state, world.player) or StateLogic.fire(state, world.player) or StateLogic.thunder(state, world.player)))
     if world.options.difficult_logic:
         connect(world, names, "GwarharEntrance", "GwarharMain", lambda state: StateLogic.canDash(state, world.player))
         connect(world, names, "JokesEntrance", "JokesMain", lambda state: StateLogic.canDig(state, world.player))

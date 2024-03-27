@@ -2,14 +2,6 @@ from Options import Choice, Toggle, StartInventoryPool, PerGameCommonOptions
 from dataclasses import dataclass
 
 
-class IntroSkip(Toggle):
-    """
-    Skip the intro sequence. Spawns you in pipe 1 on game start.
-    This does not affect any items.
-    """
-    display_name = "Intro Skip"
-
-
 class BowsersCastleSkip(Toggle):
     """
     Skip straight from the entrance hall to bowletta in Bowser's Castle.
@@ -143,12 +135,20 @@ class LuigiPants(Choice):
     default = 0
 
 
-class RandomizeEnemies(Toggle):
+class RandomizeEnemies(Choice):
     """
     Randomize all normal enemy encounters in the game.
     If Bowser's castle skip is enabled then enemies from Bowser's Castle will not be included.
+    disabled: Enemies will not be randomized
+    vanilla_groups: Vanilla enemy groups will be shuffled with each other. Custom enemy groups will not be made.
+    custom_groups: Custom enemy groups will be made and shuffled. Some enemy groups will only be semi-random.
+    (Groups including flying enemies or pestnuts)
     """
     display_name = "Randomize Enemies"
+    option_disabled = 0
+    option_vanilla_groups = 1
+    option_custom_groups = 2
+    default = 0
 
 
 class RandomizeBosses(Choice):
@@ -168,14 +168,14 @@ class RandomizeBosses(Choice):
 
 class ScaleStats(Toggle):
     """
-    This scales enemy HP and XP according to the area of the game you are in scaling linearly.
+    This scales enemy HP and XP according to the area of the game you are in.
     """
     display_name = "Scale Enemy Stats"
 
 
 class ScalePow(Toggle):
     """
-    This scales enemy POW according to the area of the game you are in scaling linearly.
+    This scales enemy POW according to the area of the game you are in.
     """
     display_name = "Scale Enemy POW"
 
@@ -250,7 +250,6 @@ class MLSSOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     coins: Coins
     difficult_logic: DifficultLogic
-    skip_intro: IntroSkip
     castle_skip: BowsersCastleSkip
     extra_pipes: ExtraPipes
     skip_minecart: SkipMinecart
