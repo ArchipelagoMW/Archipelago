@@ -784,7 +784,8 @@ class AquariaRegions:
                                lambda state: _has_nature_form(state, self.player))
         self.__connect_one_way_regions("Before Final boss", "Final boss",
                                        self.final_boss_loby, self.final_boss,
-                                       lambda state: _has_energy_form(state, self.player))
+                                       lambda state: _has_energy_form(state, self.player) and
+                                                     _has_li(state, self.player) and _has_dual_form(state, self.player))
         self.__connect_one_way_regions("final boss third form area", "final boss end",
                                        self.final_boss, self.final_boss_end)
 
