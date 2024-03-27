@@ -518,12 +518,12 @@ def set_rules(multiworld: MultiWorld, player: int, options, required_reports):
         multiworld.get_location("Agrabah Defeat Kurt Zisa Zantetsuken Event"                               , player).access_rule = lambda state: has_emblems(state, player) and has_x_worlds(state, player, 7)
         multiworld.get_location("Hollow Bastion Defeat Unknown EXP Necklace Event"                         , player).access_rule = lambda state: has_emblems(state, player) and has_x_worlds(state, player, 7)
 
-    multiworld.get_location("Traverse Town Synth Log"                                                      , player).access_rule = lambda state: has_at_least(state, player, "Material", 6) and has_item(state, player, "Green Trinity")
-    multiworld.get_location("Traverse Town Synth Cloth"                                                    , player).access_rule = lambda state: has_at_least(state, player, "Material", 6) and has_item(state, player, "Green Trinity")
-    multiworld.get_location("Traverse Town Synth Rope"                                                     , player).access_rule = lambda state: has_at_least(state, player, "Material", 6) and has_item(state, player, "Green Trinity")
-    multiworld.get_location("Traverse Town Synth Seagull Egg"                                              , player).access_rule = lambda state: has_at_least(state, player, "Material", 6) and has_item(state, player, "Green Trinity")
-    multiworld.get_location("Traverse Town Synth Fish"                                                     , player).access_rule = lambda state: has_at_least(state, player, "Material", 6) and has_item(state, player, "Green Trinity")
-    multiworld.get_location("Traverse Town Synth Mushroom"                                                 , player).access_rule = lambda state: has_at_least(state, player, "Material", 6) and has_item(state, player, "Green Trinity")
+    multiworld.get_location("Traverse Town Synth Log"                                                      , player).access_rule = lambda state: has_at_least(state, player, "Empty Bottle", 6) and has_item(state, player, "Green Trinity")
+    multiworld.get_location("Traverse Town Synth Cloth"                                                    , player).access_rule = lambda state: has_at_least(state, player, "Empty Bottle", 6) and has_item(state, player, "Green Trinity")
+    multiworld.get_location("Traverse Town Synth Rope"                                                     , player).access_rule = lambda state: has_at_least(state, player, "Empty Bottle", 6) and has_item(state, player, "Green Trinity")
+    multiworld.get_location("Traverse Town Synth Seagull Egg"                                              , player).access_rule = lambda state: has_at_least(state, player, "Empty Bottle", 6) and has_item(state, player, "Green Trinity")
+    multiworld.get_location("Traverse Town Synth Fish"                                                     , player).access_rule = lambda state: has_at_least(state, player, "Empty Bottle", 6) and has_item(state, player, "Green Trinity")
+    multiworld.get_location("Traverse Town Synth Mushroom"                                                 , player).access_rule = lambda state: has_at_least(state, player, "Empty Bottle", 6) and has_item(state, player, "Green Trinity")
 
     
    #multiworld.get_location("Final Ansem"                                                                  , player).access_rule = lambda state: has_item(state, player, "")
