@@ -215,7 +215,7 @@ def create_regions(multiworld: MultiWorld, player: int, options, levels: int):
     regions["Hollow Bastion"].locations.append("Hollow Bastion Great Crest After Battle Platform Chest"),
     regions["Hollow Bastion"].locations.append("Hollow Bastion High Tower 2nd Gravity Chest"),
     regions["Hollow Bastion"].locations.append("Hollow Bastion High Tower 1st Gravity Chest"),
-    regions["Hollow Bastion"].locations.append("Hollow Bastion High Tower Above Sliding Gates Chest"),
+    regions["Hollow Bastion"].locations.append("Hollow Bastion High Tower Above Sliding Blocks Chest"),
     regions["Hollow Bastion"].locations.append("Hollow Bastion Library Top of Bookshelf Chest"),
     regions["Hollow Bastion"].locations.append("Hollow Bastion Library 1st Floor Turn the Carousel Chest"),
     regions["Hollow Bastion"].locations.append("Hollow Bastion Library Top of Bookshelf Turn the Carousel Chest"),
@@ -396,7 +396,7 @@ def create_regions(multiworld: MultiWorld, player: int, options, levels: int):
     regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Geppetto Reward 4")
     regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Geppetto Reward 5")
     regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Geppetto All Summons Reward")
-    regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Enter 30 Times")
+    regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Talk to Pinocchio")
     regions["Traverse Town"].locations.append("Traverse Town Magician's Study Obtained All Arts Items")
     regions["Traverse Town"].locations.append("Traverse Town Magician's Study Obtained All LV1 Magic")
     regions["Traverse Town"].locations.append("Traverse Town Magician's Study Obtained All LV3 Magic")
