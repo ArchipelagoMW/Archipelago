@@ -454,7 +454,7 @@ id,name,classification,groups,mod_name
 488,Big Chest Recipe,progression,CRAFTSANITY,
 489,Big Stone Chest Recipe,progression,CRAFTSANITY,
 490,Text Sign Recipe,progression,CRAFTSANITY,
-491,Blue Grass Starter Recipe,progression,CRAFTSANITY,
+491,Blue Grass Starter Recipe,progression,"QI_CRAFTING_RECIPE,GINGER_ISLAND",
 4001,Burnt Trap,trap,TRAP,
 4002,Darkness Trap,trap,TRAP,
 4003,Frozen Trap,trap,TRAP,
