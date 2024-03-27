@@ -1,0 +1,120 @@
+Quest: Cook's Assistant,Quest,"Lumbridge, Wheat, Windmill, Egg, Milk",,,
+Quest: Demon Slayer,Quest,"Central Varrock, Varrock Palace, Wizard Tower, South of Varrock",,,
+Quest: The Restless Ghost,Quest,"Lumbridge, Lumbridge Swamp, Wizard Tower",,,
+Quest: Romeo & Juliet,Quest,"Central Varrock, Varrock Palace, South of Varrock, West Varrock",,,
+Quest: Sheep Shearer,Quest,"Lumbridge Farms West, Spinning Wheel",,,
+Quest: Shield of Arrav,Quest,"Central Varrock, Varrock Palace, South of Varrock, West Varrock",,,
+Quest: Ernest the Chicken,Quest,Draynor Manor,,,
+Quest: Vampyre Slayer,Quest,"Draynor Village, Central Varrock, Draynor Manor",,,
+Quest: Imp Catcher,Quest,"Wizard Tower, Imps",,,
+Quest: Prince Ali Rescue,Quest,"Al Kharid, Central Varrock, Bronze Ores, Clay Ore, Sheep, Spinning Wheel, Draynor Village",,,
+Quest: Doric's Quest,Quest,"Dwarven Mountain Pass, Clay Ore, Iron Ore, Bronze Ores",Mining 15,,
+Quest: Black Knights' Fortress,Quest,"Dwarven Mines, Falador, Monastery, Ice Mountain, Falador Farms",,Progressive Armor,12
+Quest: Witch's Potion,Quest,"Rimmington, Port Sarim",,,
+Quest: The Knight's Sword,Quest,"Falador, Varrock Palace, Mudskipper Point, South of Varrock, Windmill, Pie Dish, Port Sarim","Cooking 10, Mining 10",,
+Quest: Goblin Diplomacy,Quest,"Goblin Village, Draynor Village, Falador, South of Varrock, Onion",,,
+Quest: Pirate's Treasure,Quest,"Port Sarim, Karamja, Falador",,,
+Quest: Rune Mysteries,Quest,"Lumbridge, Wizard Tower, Central Varrock",,,
+Quest: Misthalin Mystery,Quest,Lumbridge Swamp,,,
+Quest: The Corsair Curse,Quest,"Rimmington, Falador Farms, Corsair Cove",,,
+Quest: X Marks the Spot,Quest,"Lumbridge, Draynor Village, Port Sarim",,,
+Quest: Below Ice Mountain,Quest,"Dwarven Mines, Dwarven Mountain Pass, Ice Mountain, Barbarian Village, Falador, Central Varrock, Edgeville",,,16
+Quest: Dragon Slayer,Goal,"Crandor, South of Varrock, Edgeville, Lumbridge, Rimmington, Monastery, Dwarven Mines, Port Sarim, Draynor Village",,,32
+"Activate the ""Rock Skin"" Prayer",Prayer,,Prayer 10,,
+"Activate the ""Protect Item"" Prayer",Prayer,,Prayer 25,,2
+Pray at the Edgeville Monastery,Prayer,Monastery,Prayer 31,,6
+Cast Bones To Bananas,Magic,Nature Runes,Magic 15,,
+Teleport to Varrock,Magic,"Central Varrock, Law Runes",Magic 25,,
+Teleport to Lumbridge,Magic,"Lumbridge, Law Runes",Magic 31,,2
+Teleport to Falador,Magic,"Falador, Law Runes",Magic 37,,6
+Craft an Air Rune,Runecraft,"Rune Essence, Falador Farms",Runecraft 1,,
+Craft runes with a Mind Core,Runecraft,"Camdozaal, Goblin Village",Runecraft 2,,
+Craft runes with a Body Core,Runecraft,"Camdozaal, Dwarven Mountain Pass",Runecraft 20,,
+Make an Unblessed Symbol,Crafting,"Silver Ore, Furnace, Al Kharid, Sheep, Spinning Wheel",Crafting 16,,
+Cut a Sapphire,Crafting,Chisel,Crafting 20,,
+Cut an Emerald,Crafting,Chisel,Crafting 27,,
+Cut a Ruby,Crafting,Chisel,Crafting 34,,4
+Cut a Diamond,Crafting,Chisel,Crafting 43,,8
+Mine a Blurite Ore,Mining,"Mudskipper Point, Port Sarim",Mining 10,,
+Crush a Barronite Deposit,Mining,Camdozaal,Mining 14,,
+Mine Silver,Mining,Silver Ore,Mining 20,,
+Mine Coal,Mining,Coal Ore,Mining 30,,2
+Mine Gold,Mining,Gold Ore,Mining 40,,6
+Smelt an Iron Bar,Smithing,"Iron Ore, Furnace","Smithing 15, Mining 15",,
+Smelt a Silver Bar,Smithing,"Silver Ore, Furnace","Smithing 20, Mining 20",,
+Smelt a Steel Bar,Smithing,"Coal Ore, Iron Ore, Furnace","Smithing 30, Mining 30",,2
+Smelt a Gold Bar,Smithing,"Gold Ore, Furnace","Smithing 40, Mining 40",,6
+Catch some Anchovies,Fishing,Shrimp Spot,Fishing 15,,
+Catch a Trout,Fishing,Fly Fishing Spot,Fishing 20,,
+Prepare a Tetra,Fishing,Camdozaal,"Fishing 33, Cooking 33",,2
+Catch a Lobster,Fishing,Lobster Spot,Fishing 40,,6
+Catch a Swordfish,Fishing,Lobster Spot,Fishing 50,,12
+Bake a Redberry Pie,Cooking,"Redberry Bush, Wheat, Windmill, Pie Dish",Cooking 10,,
+Cook some Stew,Cooking,"Bowl, Meat, Potato",Cooking 25,,
+Bake an Apple Pie,Cooking,"Cooking Apple, Wheat, Windmill, Pie Dish",Cooking 30,,2
+Bake a Cake,Cooking,"Wheat, Windmill, Egg, Milk, Cake Tin",Cooking 40,,6
+Bake a Meat Pizza,Cooking,"Wheat, Windmill, Cheese, Tomato, Meat",Cooking 45,,8
+Burn some Oak Logs,Firemaking,Oak Tree,Firemaking 15,,
+Burn some Willow Logs,Firemaking,Willow Tree,Firemaking 30,,
+Travel on a Canoe,Woodcutting,Canoe Tree,Woodcutting 12,,
+Cut an Oak Log,Woodcutting,Oak Tree,Woodcutting 15,,
+Cut a Willow Log,Woodcutting,Willow Tree,Woodcutting 30,,
+Kill Jeff,Combat,Dwarven Mountain Pass,Combat 2,,
+Kill a Goblin,Combat,Goblin,Combat 2,,
+Kill a Monkey,Combat,Karamja,Combat 3,,
+Kill a Barbarian,Combat,Barbarian,Combat 10,,
+Kill a Giant Frog,Combat,Lumbridge Swamp,Combat 13,,
+Kill a Zombie,Combat,Zombie,Combat 13,,
+Kill a Guard,Combat,Guard,Combat 21,,
+Kill a Hill Giant,Combat,Hill Giant,Combat 28,,2
+Kill a Deadly Red Spider,Combat,Deadly Red Spider,Combat 34,,2
+Kill a Moss Giant,Combat,Moss Giant,Combat 42,,2
+Kill a Catablepon,Combat,Barbarian Village,Combat 49,,4
+Kill an Ice Giant,Combat,Ice Giant,Combat 53,,4
+Kill a Lesser Demon,Combat,Lesser Demon,Combat 82,,8
+Kill an Ogress Shaman,Combat,Corsair Cove,Combat 82,,8
+Kill Obor,Combat,Edgeville,Combat 106,,28
+Kill Bryophyta,Combat,Central Varrock,Combat 128,,28
+"Total XP 5,000",General,,,,
+Combat Level 5,General,,,,
+"Total XP 10,000",General,,,,
+Total Level 50,General,,,,
+"Total XP 25,000",General,,,,
+Total Level 100,General,,,,
+"Total XP 50,000",General,,,,
+Combat Level 15,General,,,,
+Total Level 150,General,,,,2
+"Total XP 75,000",General,,,,2
+Combat Level 25,General,,,,2
+"Total XP 100,000",General,,,,6
+Total Level 200,General,,,,6
+"Total XP 125,000",General,,,,6
+Combat Level 30,General,,,,10
+Total Level 250,General,,,,10
+"Total XP 150,000",General,,,,10
+Total Level 300,General,,,,16
+Combat Level 40,General,,,,16
+Open a Simple Lockbox,General,Camdozaal,,,
+Open an Elaborate Lockbox,General,Camdozaal,,,
+Open an Ornate Lockbox,General,Camdozaal,,,
+Points: Cook's Assistant,Points,,,,
+Points: Demon Slayer,Points,,,,
+Points: The Restless Ghost,Points,,,,
+Points: Romeo & Juliet,Points,,,,
+Points: Sheep Shearer,Points,,,,
+Points: Shield of Arrav,Points,,,,
+Points: Ernest the Chicken,Points,,,,
+Points: Vampyre Slayer,Points,,,,
+Points: Imp Catcher,Points,,,,
+Points: Prince Ali Rescue,Points,,,,
+Points: Doric's Quest,Points,,,,
+Points: Black Knights' Fortress,Points,,,,
+Points: Witch's Potion,Points,,,,
+Points: The Knight's Sword,Points,,,,
+Points: Goblin Diplomacy,Points,,,,
+Points: Pirate's Treasure,Points,,,,
+Points: Rune Mysteries,Points,,,,
+Points: Misthalin Mystery,Points,,,,
+Points: The Corsair Curse,Points,,,,
+Points: X Marks the Spot,Points,,,,
+Points: Below Ice Mountain,Points,,,,
