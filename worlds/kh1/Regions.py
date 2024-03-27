@@ -304,7 +304,7 @@ def create_regions(multiworld: MultiWorld, player: int, options, levels: int):
     regions["Neverland"].locations.append("Neverland Seal Keyhole Fairy Harp Event")
     regions["Neverland"].locations.append("Neverland Seal Keyhole Tinker Bell Event")
     regions["Neverland"].locations.append("Neverland Seal Keyhole Glide Event")
-    if options.super_bosses and options.goal.current_key != "super_boss_hunt":
+    if options.super_bosses or options.goal.current_key == "super_boss_hunt":
         regions["Neverland"].locations.append("Neverland Defeat Phantom Stop Event")
     regions["Neverland"].locations.append("Neverland Defeat Captain Hook Ars Arcanum Event")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Riku I White Trinity Event")
@@ -357,7 +357,7 @@ def create_regions(multiworld: MultiWorld, player: int, options, levels: int):
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Hades Ansem's Report 8")
     regions["Neverland"].locations.append("Neverland Defeat Hook Ansem's Report 9")
    #regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 10")
-    if options.super_bosses and options.goal.current_key != "super_boss_hunt":
+    if options.super_bosses or options.goal.current_key == "super_boss_hunt":
         regions["Agrabah"].locations.append("Agrabah Defeat Kurt Zisa Ansem's Report 11")
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Sephiroth Ansem's Report 12")
         regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown Ansem's Report 13")
@@ -411,7 +411,7 @@ def create_regions(multiworld: MultiWorld, player: int, options, levels: int):
     regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 90 Puppies")
     regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 99 Puppies Reward 1")
     regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 99 Puppies Reward 2")
-    if options.super_bosses and options.goal.current_key != "super_boss_hunt":
+    if options.super_bosses or options.goal.current_key == "super_boss_hunt":
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Sephiroth One-Winged Angel Event")
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Ice Titan Diamond Dust Event")
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Gates Purple Jar After Defeating Hades")
@@ -465,7 +465,7 @@ def create_regions(multiworld: MultiWorld, player: int, options, levels: int):
    #regions["Traverse Town"].locations.append("Traverse Town 1st District Speak with Cid Event")
     regions["Wonderland"].locations.append("Wonderland Bizarre Room Read Book")
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Coliseum Gates Green Trinity")
-    if options.super_bosses and options.goal.current_key != "super_boss_hunt":
+    if options.super_bosses or options.goal.current_key == "super_boss_hunt":
         regions["Agrabah"].locations.append("Agrabah Defeat Kurt Zisa Zantetsuken Event")
         regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown EXP Necklace Event")
     

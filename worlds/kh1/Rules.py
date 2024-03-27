@@ -357,7 +357,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, required_reports):
     multiworld.get_location("Neverland Seal Keyhole Fairy Harp Event"                                      , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
     multiworld.get_location("Neverland Seal Keyhole Tinker Bell Event"                                     , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
     multiworld.get_location("Neverland Seal Keyhole Glide Event"                                           , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
-    if options.super_bosses and options.goal.current_key != "super_boss_hunt":
+    if options.super_bosses or options.goal.current_key == "super_boss_hunt":
         multiworld.get_location("Neverland Defeat Phantom Stop Event"                                      , player).access_rule = lambda state: has_item(state, player, "Green Trinity") and has_all_magic_lvx(state, player, 2)
     multiworld.get_location("Neverland Defeat Captain Hook Ars Arcanum Event"                              , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
    #multiworld.get_location("Hollow Bastion Defeat Riku I White Trinity Event"                             , player).access_rule = lambda state: has_item(state, player, "")
@@ -410,7 +410,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, required_reports):
     multiworld.get_location("Olympus Coliseum Defeat Hades Ansem's Report 8"                        , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup") and has_x_worlds(state, player, 7)
     multiworld.get_location("Neverland Defeat Hook Ansem's Report 9"                                , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
    #multiworld.get_location("Hollow Bastion Speak with Aerith Ansem's Report 10"                    , player).access_rule = lambda state: has_emblems(state, player)
-    if options.super_bosses and options.goal.current_key != "super_boss_hunt":
+    if options.super_bosses or options.goal.current_key == "super_boss_hunt":
         multiworld.get_location("Agrabah Defeat Kurt Zisa Ansem's Report 11"                        , player).access_rule = lambda state: has_emblems(state, player) and has_x_worlds(state, player, 7)
         multiworld.get_location("Olympus Coliseum Defeat Sephiroth Ansem's Report 12"               , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup") and has_x_worlds(state, player, 7)
         multiworld.get_location("Hollow Bastion Defeat Unknown Ansem's Report 13"                   , player).access_rule = lambda state: has_emblems(state, player) and has_x_worlds(state, player, 7)
@@ -460,7 +460,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, required_reports):
     multiworld.get_location("Traverse Town Piano Room Return 90 Puppies"                                   , player).access_rule = lambda state: has_puppies(state, player, 90)
     multiworld.get_location("Traverse Town Piano Room Return 99 Puppies Reward 1"                          , player).access_rule = lambda state: has_puppies(state, player, 99)
     multiworld.get_location("Traverse Town Piano Room Return 99 Puppies Reward 2"                          , player).access_rule = lambda state: has_puppies(state, player, 99)
-    if options.super_bosses and options.goal.current_key != "super_boss_hunt":
+    if options.super_bosses or options.goal.current_key == "super_boss_hunt":
         multiworld.get_location("Olympus Coliseum Defeat Sephiroth One-Winged Angel Event"                     , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup") and has_x_worlds(state, player, 7)
         multiworld.get_location("Olympus Coliseum Defeat Ice Titan Diamond Dust Event"                         , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup") and has_x_worlds(state, player, 7) and has_item(state, player, "Guard")
     multiworld.get_location("Olympus Coliseum Gates Purple Jar After Defeating Hades"                      , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup") and has_x_worlds(state, player, 7)
@@ -514,7 +514,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, required_reports):
    #multiworld.get_location("Traverse Town 1st District Speak with Cid Event"                              , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Wonderland Bizarre Room Read Book"                                            , player).access_rule = lambda state: has_evidence(state, player)
     multiworld.get_location("Olympus Coliseum Coliseum Gates Green Trinity"                                , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
-    if options.super_bosses and options.goal.current_key != "super_boss_hunt":
+    if options.super_bosses or options.goal.current_key == "super_boss_hunt":
         multiworld.get_location("Agrabah Defeat Kurt Zisa Zantetsuken Event"                               , player).access_rule = lambda state: has_emblems(state, player) and has_x_worlds(state, player, 7)
         multiworld.get_location("Hollow Bastion Defeat Unknown EXP Necklace Event"                         , player).access_rule = lambda state: has_emblems(state, player) and has_x_worlds(state, player, 7)
 
