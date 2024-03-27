@@ -480,6 +480,7 @@ id,name,classification,groups,mod_name
 4023,Benjamin Budton Trap,trap,TRAP,
 4024,Inflation Trap,trap,TRAP,
 4025,Bomb Trap,trap,TRAP,
+4501,Deflation Bonus,filler,BONUS,
 5000,Resource Pack: 500 Money,useful,"BASE_RESOURCE,RESOURCE_PACK",
 5001,Resource Pack: 1000 Money,useful,"BASE_RESOURCE,RESOURCE_PACK",
 5002,Resource Pack: 1500 Money,useful,"BASE_RESOURCE,RESOURCE_PACK",

@@ -63,6 +63,7 @@ class Group(enum.Enum):
     FESTIVAL = enum.auto()
     RARECROW = enum.auto()
     TRAP = enum.auto()
+    BONUS = enum.auto()
     MAXIMUM_ONE = enum.auto()
     EXACTLY_TWO = enum.auto()
     DEPRECATED = enum.auto()
@@ -708,9 +709,12 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
     items_already_added_names = [item.name for item in items_already_added]
     useful_resource_packs = [pack for pack in items_by_group[Group.RESOURCE_PACK_USEFUL]
                              if pack.name not in items_already_added_names]
-    trap_items = [pack for pack in items_by_group[Group.TRAP]
-                  if pack.name not in items_already_added_names and
-                  (pack.mod_name is None or pack.mod_name in options.mods)]
+    trap_items = [trap for trap in items_by_group[Group.TRAP]
+                  if trap.name not in items_already_added_names and
+                  (trap.mod_name is None or trap.mod_name in options.mods)]
+    trap_items.extend([bonus for bonus in items_by_group[Group.BONUS]
+                  if bonus.name not in items_already_added_names and
+                  (bonus.mod_name is None or bonus.mod_name in options.mods)])
 
     priority_filler_items = []
     priority_filler_items.extend(useful_resource_packs)
@@ -790,6 +794,7 @@ def get_all_filler_items(include_traps: bool, exclude_ginger_island: bool):
     all_filler_items.extend(items_by_group[Group.TRASH])
     if include_traps:
         all_filler_items.extend(items_by_group[Group.TRAP])
+        all_filler_items.extend(items_by_group[Group.BONUS])
     all_filler_items = remove_excluded_items_island_mods(all_filler_items, exclude_ginger_island, set())
     return all_filler_items
 
