@@ -37,6 +37,9 @@
 # ChecksFinder
 /worlds/checksfinder/ @jonloveslegos
 
+# ChecksMate Chess
+/worlds/checksmate/ @chesslogic
+
 # Clique
 /worlds/clique/ @ThePhar
 
