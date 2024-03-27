@@ -26,6 +26,7 @@ from worlds.alttp.EntranceRandomizer import parse_arguments
 from worlds.alttp.Text import TextTable
 from worlds.AutoWorld import AutoWorldRegister
 from worlds.generic import PlandoConnection
+from worlds import failed_world_loads
 
 
 def mystery_argparse():
@@ -458,7 +459,11 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
 
     ret.game = get_choice("game", weights)
     if ret.game not in AutoWorldRegister.world_types:
-        picks = Utils.get_fuzzy_results(ret.game, AutoWorldRegister.world_types, limit=1)[0]
+        picks = Utils.get_fuzzy_results(ret.game, list(AutoWorldRegister.world_types) + failed_world_loads, limit=1)[0]
+        if picks[0] in failed_world_loads:
+            raise Exception(f"No functional world found to handle game {ret.game}. "
+                            f"Did you mean '{picks[0]}' ({picks[1]}% sure)? "
+                            f"If so, it appears the world failed to initialize correctly.")
         raise Exception(f"No world found to handle game {ret.game}. Did you mean '{picks[0]}' ({picks[1]}% sure)? "
                         f"Check your spelling or installation of that world.")
 

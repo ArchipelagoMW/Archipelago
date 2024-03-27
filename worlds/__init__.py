@@ -20,7 +20,11 @@ __all__ = {
     "user_folder",
     "GamesPackage",
     "DataPackage",
+    "failed_world_loads",
 }
+
+
+failed_world_loads: List[str] = []
 
 
 class GamesPackage(TypedDict, total=False):
@@ -87,6 +91,7 @@ class WorldSource:
             file_like.seek(0)
             import logging
             logging.exception(file_like.read())
+            failed_world_loads.append(os.path.basename(self.path).rsplit(".", 1)[0])
             return False
 
 
