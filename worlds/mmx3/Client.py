@@ -29,6 +29,7 @@ MMX3_LIFE_COUNT         = WRAM_START + 0x01FB4
 MMX3_ACTIVE_CHARACTER   = WRAM_START + 0x00A8E
 MMX3_ZSABER             = WRAM_START + 0x01FB2
 MMX3_CAN_MOVE           = WRAM_START + 0x01F45
+MMX3_GOING_THROUGH_GATE = WRAM_START + 0x01F25
 
 MMX3_ENABLE_HEART_TANK  = WRAM_START + 0x0F4E0
 MMX3_ENABLE_HP_REFILL   = WRAM_START + 0x0F4E4
@@ -148,8 +149,19 @@ class MMX3SNIClient(SNIClient):
         menu_state = await snes_read(ctx, MMX3_MENU_STATE, 0x1)
         gameplay_state = await snes_read(ctx, MMX3_GAMEPLAY_STATE, 0x1)
         can_move = await snes_read(ctx, MMX3_CAN_MOVE, 0x1)
+        going_through_gate = await snes_read(ctx, MMX3_GOING_THROUGH_GATE, 0x4)
         pause_state = await snes_read(ctx, MMX3_PAUSE_STATE, 0x1)
-        if menu_state[0] != 0x04 or gameplay_state[0] != 0x04 or can_move[0] != 0x00 or pause_state[0] != 0x00 or receiving_item[0] != 0x00:
+        if menu_state[0] != 0x04 or \
+            gameplay_state[0] != 0x04 or \
+            can_move[0] != 0x00 or \
+            pause_state[0] != 0x00 or \
+            receiving_item[0] != 0x00 or \
+            (
+                going_through_gate[0] != 0x00 and \
+                going_through_gate[1] != 0x00 and \
+                going_through_gate[2] != 0x00 and \
+                going_through_gate[3] != 0x00 \
+            ):
             return
         
         # Handle items that Zero can also get
@@ -263,7 +275,6 @@ class MMX3SNIClient(SNIClient):
         game_state = await snes_read(ctx, MMX3_GAME_STATE, 0x1)
         menu_state = await snes_read(ctx, MMX3_MENU_STATE, 0x1)
         gameplay_state = await snes_read(ctx, MMX3_GAMEPLAY_STATE, 0x1)
-        pause_state = await snes_read(ctx, MMX3_PAUSE_STATE, 0x1)
 
         # Discard uninitialized ROMs
         if menu_state is None:
