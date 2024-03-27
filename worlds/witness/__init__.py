@@ -2,8 +2,9 @@
 Archipelago init file for The Witness
 """
 import dataclasses
+import logging
 
-from typing import Dict, Optional, cast
+from typing import Dict, Optional, cast, List
 from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial, CollectionState
 from Options import PerGameCommonOptions, Toggle
 from .presets import witness_option_presets
@@ -178,20 +179,6 @@ class WitnessWorld(World):
 
         self.items_placed_early.append("Puzzle Skip")
 
-        # Pick an early item to place on the tutorial gate.
-        early_items = [item for item in self.items.get_early_items() if item in self.items.get_mandatory_items()]
-        if early_items:
-            random_early_item = self.random.choice(early_items)
-            if self.options.puzzle_randomization == "sigma_expert":
-                # In Expert, only tag the item as early, rather than forcing it onto the gate.
-                self.multiworld.local_early_items[self.player][random_early_item] = 1
-            else:
-                # Force the item onto the tutorial gate check and remove it from our random pool.
-                gate_item = self.create_item(random_early_item)
-                self.multiworld.get_location("Tutorial Gate Open", self.player).place_locked_item(gate_item)
-                self.own_itempool.append(gate_item)
-                self.items_placed_early.append(random_early_item)
-
         # There are some really restrictive settings in The Witness.
         # They are rarely played, but when they are, we add some extra sphere 1 locations.
         # This is done both to prevent generation failures, but also to make the early game less linear.
@@ -227,7 +214,7 @@ class WitnessWorld(World):
             self.multiworld.get_region(region, self.player).add_locations({loc: self.location_name_to_id[loc]})
 
             player = self.multiworld.get_player_name(self.player)
-            
+
             warning(f"""Location "{loc}" had to be added to {player}'s world due to insufficient sphere 1 size.""")
 
     def create_items(self):
@@ -293,6 +280,42 @@ class WitnessWorld(World):
             self.multiworld.itempool += new_items
             if self.items.item_data[item_name].local_only:
                 self.options.local_items.value.add(item_name)
+
+    def fill_hook(self, progitempool: List[Item], _, _2, fill_locations: List[Location]) -> None:
+        # Pick an early item to place on the tutorial gate.
+        early_items = self.items.get_early_items()
+        self.random.shuffle(early_items)
+
+        player_name = self.multiworld.get_player_name(self.player)
+
+        for early_item_name in early_items:
+            try:
+                early_item_index, early_item = next(
+                    (i, item) for i, item in enumerate(progitempool)
+                    if item.name == early_item_name and item.player == self.player
+                )
+            except StopIteration:
+                logging.info(f"{early_item_name} could not be placed on {player_name}'s Tutorial Gate Open,"
+                             " as all copies of it were plandoed elsewhere.")
+                continue
+
+            if self.options.puzzle_randomization == "sigma_expert":
+                # In Expert, only tag the item as early, rather than forcing it onto the gate.
+                self.multiworld.local_early_items[self.player][early_item.name] = 1
+            else:
+                tutorial_gate_open = self.get_location("Tutorial Gate Open")
+                if tutorial_gate_open not in fill_locations:
+                    return
+
+                progitempool.pop(early_item_index)
+                tutorial_gate_open.place_locked_item(early_item)
+                fill_locations.remove(tutorial_gate_open)
+
+            return
+
+        if not early_items:
+            logging.error(f"No item could be placed on {player_name}'s Tutorial Gate Open,"
+                          f" they were all plandoed elsewhere.")
 
     def fill_slot_data(self) -> dict:
         already_hinted_locations = set()
