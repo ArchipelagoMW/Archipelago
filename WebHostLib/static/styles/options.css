@@ -1,0 +1,213 @@
+html{
+    background-image: url('../static/backgrounds/grass.png');
+    background-repeat: repeat;
+    background-size: 650px 650px;
+}
+
+.options {
+    box-sizing: border-box;
+    max-width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 1rem;
+    color: #eeffeb;
+}
+
+.options code{
+    background-color: #d9cd8e;
+    border-radius: 4px;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    color: #000000;
+}
+
+.options #user-message{
+    display: none;
+    width: calc(100% - 8px);
+    background-color: #ffe86b;
+    border-radius: 4px;
+    color: #000000;
+    padding: 4px;
+    text-align: center;
+}
+
+.options #user-message.visible{
+    display: block;
+    cursor: pointer;
+}
+
+.options a{
+    color: #ffef00;
+    cursor: pointer;
+}
+
+.options h1{
+    font-size: 2.5rem;
+    font-weight: normal;
+    border-bottom: 1px solid #ffffff;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+    text-shadow: 1px 1px 4px #000000;
+}
+
+.options h2{
+    font-size: 2rem;
+    font-weight: normal;
+    border-bottom: 1px solid #ffffff;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    color: #ffe993;
+    text-transform: none;
+    text-shadow: 1px 1px 2px #000000;
+}
+
+.options h3, .options h4, .options h5, .options h6{
+    color: #ffffff;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    text-transform: none;
+}
+
+.options input:not([type]){
+    border: 1px solid #000000;
+    padding: 3px;
+    border-radius: 3px;
+    min-width: 150px;
+}
+
+.options input:not([type]):focus{
+    border: 1px solid #ffffff;
+}
+
+.options select{
+    border: 1px solid #000000;
+    padding: 3px;
+    border-radius: 3px;
+    min-width: 150px;
+    background-color: #ffffff;
+}
+
+.options .items-wrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.options .items-div h3{
+    margin-bottom: 0.5rem;
+}
+
+.options .items-wrapper .item-set-wrapper{
+    width: 24%;
+    font-weight: bold;
+}
+
+.options .item-container{
+    border: 1px solid #ffffff;
+    border-radius: 2px;
+    width: 100%;
+    height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-top: 0.125rem;
+    font-weight: normal;
+}
+
+.options .item-container .item-div{
+    padding: 0.125rem 0.5rem;
+    cursor: pointer;
+}
+
+.options .item-container .item-div:hover{
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.options .item-container .item-qty-div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.125rem 0.5rem;
+    cursor: pointer;
+}
+
+.options .item-container .item-qty-div .item-qty-input-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.options .item-container .item-qty-div input{
+    min-width: unset;
+    width: 1.5rem;
+    text-align: center;
+}
+
+.options .item-container .item-qty-div:hover{
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.options .hints-div, .options .locations-div{
+    margin-top: 2rem;
+}
+
+.options .hints-div h3, .options .locations-div h3{
+    margin-bottom: 0.5rem;
+}
+
+.options .hints-container, .options .locations-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.options .hints-wrapper, .options .locations-wrapper{
+    width: calc(50% - 0.5rem);
+    font-weight: bold;
+}
+
+.options .hints-wrapper .simple-list, .options .locations-wrapper .simple-list{
+    margin-top: 0.25rem;
+    height: 300px;
+    font-weight: normal;
+}
+
+.options .simple-list{
+    display: flex;
+    flex-direction: column;
+
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ffffff;
+    border-radius: 4px;
+}
+
+.options .simple-list .list-row label{
+    display: block;
+    width: calc(100% - 0.5rem);
+    padding: 0.0625rem 0.25rem;
+}
+
+.options .simple-list .list-row label:hover{
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.options .simple-list .list-row label input[type=checkbox]{
+    margin-right: 0.5rem;
+}
+
+.options .simple-list hr{
+    width: calc(100% - 2px);
+    margin: 2px auto;
+    border-bottom: 1px solid rgb(255 255 255 / 0.6);
+}
+
+.options p.setting-description{
+    margin: 0 0 1rem;
+}
+
+.options p.hint-text{
+    margin: 0 0 1rem;
+    font-style: italic;
+}

@@ -117,6 +117,16 @@ def create():
                 logging.debug(f"{option} not exported to Web Options.")
 
         player_options["gameOptions"] = game_options
+        player_options["gameItems"] = tuple(world.item_names)
+        player_options["gameItemGroups"] = [
+            group for group in world.item_name_groups.keys() if group != "Everything"
+        ]
+        player_options["gameItemDescriptions"] = world.item_descriptions
+        player_options["gameLocations"] = tuple(world.location_names)
+        player_options["gameLocationGroups"] = [
+            group for group in world.location_name_groups.keys() if group != "Everywhere"
+        ]
+        player_options["gameLocationDescriptions"] = world.location_descriptions
 
         player_options["presetOptions"] = {}
         for preset_name, preset in world.web.options_presets.items():
@@ -170,17 +180,11 @@ def create():
 
             weighted_options["baseOptions"]["game"][game_name] = 0
             weighted_options["games"][game_name] = {
-                "gameSettings": game_options,
-                "gameItems": tuple(world.item_names),
-                "gameItemGroups": [
-                    group for group in world.item_name_groups.keys() if group != "Everything"
-                ],
-                "gameItemDescriptions": world.item_descriptions,
-                "gameLocations": tuple(world.location_names),
-                "gameLocationGroups": [
-                    group for group in world.location_name_groups.keys() if group != "Everywhere"
-                ],
-                "gameLocationDescriptions": world.location_descriptions,
+                key: player_options[key]
+                for key in [
+                    "gameOptions", "gameItems", "gameItemGroups", "gameItemDescriptions",
+                    "gameLocations", "gameLocationGroups", "gameLocationDescriptions",
+                ]
             }
 
     with open(os.path.join(target_folder, 'weighted-options.json'), "w") as f:

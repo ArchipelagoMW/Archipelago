@@ -3,16 +3,17 @@
 {% block head %}
     <title>{{ game }} Options</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/options.css") }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/weighted-options.css") }}" />
     <script type="application/ecmascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/md5.min.js") }}"></script>
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/js-yaml.min.js") }}"></script>
-    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/weighted-options.js") }}"></script>
+    <script type="module" src="{{ url_for('static', filename="assets/weighted-options.js") }}"></script>
 {% endblock %}
 
 {% block body %}
     {% include 'header/grassHeader.html' %}
-    <div id="weighted-settings" class="markdown" data-game="{{ game }}">
+    <div id="weighted-settings" class="markdown options" data-game="{{ game }}">
         <div id="user-message"></div>
         <h1>Weighted Options</h1>
         <p>Weighted options allow you to choose how likely a particular option is to be used in game generation.
