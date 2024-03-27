@@ -787,7 +787,8 @@ class AquariaRegions:
                                        lambda state: _has_energy_form(state, self.player) and
                                                      _has_li(state, self.player) and
                                                      _has_dual_form(state, self.player) and
-                                                     _has_sun_form(state, self.player))
+                                                     _has_sun_form(state, self.player) and
+                                                     _has_bind_song(state, self.player))
         self.__connect_one_way_regions("final boss third form area", "final boss end",
                                        self.final_boss, self.final_boss_end)
 
