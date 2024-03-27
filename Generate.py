@@ -120,7 +120,7 @@ def main(args=None, callback=ERmain):
                 raise ValueError(f"File {fname} is invalid. Please fix your yaml.") from e
 
     # sort dict for consistent results across platforms:
-    weights_cache = {key: value for key, value in sorted(weights_cache.items())}
+    weights_cache = {key: value for key, value in sorted(weights_cache.items(), key=lambda k: k[0].casefold())}
     for filename, yaml_data in weights_cache.items():
         if filename not in {args.meta_file_path, args.weights_file_path}:
             for yaml in yaml_data:
