@@ -303,7 +303,7 @@ class Rom:
                     flag = int.from_bytes(self.stream.read(1))
                     if flag == 0x7:
                         break
-                    if flag in [0x0, 0x4]:
+                    if flag in [0x0, 0x2, 0x4]:
                         if enemy not in Enemies.pestnut and enemy not in Enemies.flying:
                             print(f"adding: 0x{format(enemy, 'x')}")
                             enemies_raw += [enemy]
@@ -323,7 +323,7 @@ class Rom:
                         chomp = True
                     self.stream.seek(1, 1)
                     flag = int.from_bytes(self.stream.read(1))
-                    if flag not in [0x0, 0x4]:
+                    if flag not in [0x0, 0x2, 0x4]:
                         self.stream.seek(1, 1)
                         continue
                     self.stream.seek(-3, 1)
