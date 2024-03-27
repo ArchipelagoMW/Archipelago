@@ -304,6 +304,8 @@ class WitnessWorld(World):
             else:
                 tutorial_gate_open = self.get_location("Tutorial Gate Open")
                 if tutorial_gate_open not in fill_locations:
+                    error(f"Tried to put an item on {player_name}'s Tutorial Gate Open, but was unsuccessful as the"
+                          " location no longer exists. This could be the result of plando.")
                     return
 
                 progitempool.pop(early_item_index)
