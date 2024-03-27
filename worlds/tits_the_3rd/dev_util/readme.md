@@ -3,10 +3,10 @@ This directory contains a collection of scripts to help with modding Trails in t
 
 ## Setup
 Before running these scripts, please modify `dev_config.json` in this directory to point to the correct paths.
-- gameDirectory: This should point to your TitS the 3rd installation root. This root should contain the unmodified ED6_DTXX files from your game download.
-- libARKDirectory: This should point to your [LB-ARK installation](https://github.com/Aureole-Suite/LB-ARK). This is by default `"C:\\Program Files (x86)\\Steam\\steamapps\\common\\Trails in the Sky the 3rd\\data"`
+- gameDirectory: This should point to your TitS the 3rd installation root. This root should contain the unmodified `ED6_DTXX` files from your game download.
+- lbARKDirectory: This should point to your [LB-ARK installation](https://github.com/Aureole-Suite/LB-ARK). This is by default `"C:\\Program Files (x86)\\Steam\\steamapps\\common\\Trails in the Sky the 3rd\\data"`
 
-Afterwards, please download both [calmare.exe](https://github.com/Kyuuhachi/Aureole/releases/tag/factoria-v1.1.0) and [factoria.exe](https://github.com/Kyuuhachi/Aureole/releases/tag/factoria-v1.1.0) and place them within the `tits_the_third/external_tools` directory.
+Afterwards, please download both [calmare.exe](https://github.com/Kyuuhachi/Aureole/releases/tag/factoria-v1.1.0) and [factoria.exe](https://github.com/Kyuuhachi/Aureole/releases/tag/factoria-v1.1.0) and place them within the `worlds/tits_the_third/external_tools` directory.
 
 ## patch.py
 
@@ -18,7 +18,7 @@ This script is used to create, apply, and diff patches to and from your LB-ARK d
 │   └───ED6_DT22
 ```
 
-If you wish to add any new archives to the patch, please update the `MODIFIED_ARCHIVES` constant at the top of `tits_the_third/patch/patch.py`.
+If you wish to add any new archives to the patch, please update the `MODIFIED_ARCHIVES` constant at the top of `worlds/tits_the_third/patch/patch.py`.
 
 # Usage:
 - `./patch.py create` will create a new patch based off the contents in your LB-ARK directory.
