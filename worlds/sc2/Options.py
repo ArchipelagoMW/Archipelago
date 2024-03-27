@@ -764,6 +764,14 @@ class StartingSupplyPerItem(Range):
     default = 5
 
 
+class LocalVictoryItems(Toggle):
+    """
+    Forces mission victory locations to contain items for yourself.
+    This prevents other games running !collect from marking your missions as completed.
+    """
+    display_name = "Local Victory Items"
+
+
 @dataclass
 class Starcraft2Options(PerGameCommonOptions):
     game_difficulty: GameDifficulty
@@ -824,6 +832,7 @@ class Starcraft2Options(PerGameCommonOptions):
     minerals_per_item: MineralsPerItem
     vespene_per_item: VespenePerItem
     starting_supply_per_item: StartingSupplyPerItem
+    local_victory_items: LocalVictoryItems
 
 
 def get_option_value(world: World, name: str) -> Union[int,  FrozenSet]:

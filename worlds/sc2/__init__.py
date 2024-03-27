@@ -5,13 +5,15 @@ from typing import List, Set, Iterable, Sequence, Dict, Callable, Union
 from math import floor, ceil
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
+from Fill import fill_restrictive
+from worlds.generic.Rules import add_item_rule
 from . import ItemNames
 from .Items import StarcraftItem, filler_items, get_item_table, get_full_item_list, \
     get_basic_units, ItemData, upgrade_included_names, progressive_if_nco, kerrigan_actives, kerrigan_passives, \
     kerrigan_only_passives, progressive_if_ext, not_balanced_starting_units, spear_of_adun_calldowns, \
     spear_of_adun_castable_passives, nova_equipment
 from .ItemGroups import item_name_groups
-from .Locations import get_locations, LocationType, get_location_types, get_plando_locations
+from .Locations import get_locations, LocationType, get_location_types, get_plando_locations, is_victory_location
 from .Regions import create_regions
 from .Options import get_option_value, LocationInclusion, KerriganLevelItemDistribution, \
     KerriganPresence, KerriganPrimalStatus, RequiredTactics, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence, \
@@ -83,6 +85,9 @@ class SC2World(World):
         pool = get_item_pool(self, self.mission_req_table, starter_items, excluded_items, self.location_cache)
 
         fill_item_pool_with_dummy_items(self, self.locked_locations, self.location_cache, pool)
+
+        if self.options.local_victory_items:
+            place_local_victory_items(self.multiworld, self, pool)
 
         self.multiworld.itempool += pool
 
@@ -393,6 +398,16 @@ def fill_item_pool_with_dummy_items(self: SC2World, locked_locations: List[str],
     for _ in range(len(location_cache) - len(locked_locations) - len(pool)):
         item = create_item_with_correct_settings(self.player, self.get_filler_item_name())
         pool.append(item)
+
+
+def place_local_victory_items(multiworld: MultiWorld, world: World, pool: list):
+    victory_locations = [location for location in multiworld.get_unfilled_locations(world.player)
+                         if is_victory_location(location.name)]
+    for location in victory_locations:
+        add_item_rule(location, lambda state: location.player == world.player)
+    world.random.shuffle(pool)
+    fill_restrictive(multiworld, multiworld.state, victory_locations, pool, single_player_placement=True, lock=False,
+                     swap=False)
 
 
 def create_item_with_correct_settings(player: int, name: str) -> Item:

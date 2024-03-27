@@ -35,6 +35,10 @@ class LocationData(NamedTuple):
     rule: Optional[Callable[[Any], bool]] = Location.access_rule
 
 
+def is_victory_location(location_name):
+    return location_name.endswith((": Victory", ": Defeat"))
+
+
 def get_location_types(world: World, inclusion_type: LocationInclusion) -> Set[LocationType]:
     """
 
@@ -1629,7 +1633,7 @@ def get_locations(world: Optional[World]) -> Tuple[LocationData, ...]:
             location_data = location_data._replace(rule=Location.access_rule)
             location_table[i] = location_data
         # Generating Beat event locations
-        if location_data.name.endswith((": Victory", ": Defeat")):
+        if is_victory_location(location_data.name):
             beat_events.append(
                 location_data._replace(name="Beat " + location_data.name.rsplit(": ", 1)[0], code=None)
             )
