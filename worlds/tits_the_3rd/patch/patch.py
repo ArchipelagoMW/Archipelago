@@ -69,7 +69,7 @@ def _copy_to_lb_ark_dir(temp_dir: str, lb_ark_dir: str):
         entrypoint_file = frame.filename
         backup_dir = os.path.dirname(os.path.abspath(entrypoint_file))
         print("***************************************")
-        print("          PATCH / lbARK DIFF          ")
+        print("          PATCH / LB-ARK DIFF          ")
         print("***************************************")
         _print_diff(temp_dir, lb_ark_dir)
         print("***************************************")
