@@ -388,6 +388,7 @@ legend = BundleItem(Fish.legend)
 spinner = BundleItem(Fishing.spinner)
 dressed_spinner = BundleItem(Fishing.dressed_spinner)
 trap_bobber = BundleItem(Fishing.trap_bobber)
+sonar_bobber = BundleItem(Fishing.sonar_bobber)
 cork_bobber = BundleItem(Fishing.cork_bobber)
 lead_bobber = BundleItem(Fishing.lead_bobber)
 treasure_hunter = BundleItem(Fishing.treasure_hunter)
@@ -629,7 +630,7 @@ legendary_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.legendary_fi
 island_fish_items = [lionfish, blue_discus, stingray]
 island_fish_bundle = IslandBundleTemplate(CCRoom.fish_tank, BundleName.island_fish, island_fish_items, 3, 3)
 
-tackle_items = [spinner, dressed_spinner, trap_bobber, cork_bobber, lead_bobber, treasure_hunter, barbed_hook, curiosity_lure, quality_bobber]
+tackle_items = [spinner, dressed_spinner, trap_bobber, sonar_bobber, cork_bobber, lead_bobber, treasure_hunter, barbed_hook, curiosity_lure, quality_bobber]
 tackle_bundle = IslandBundleTemplate(CCRoom.fish_tank, BundleName.tackle, tackle_items, 3, 2)
 
 bait_items = [bait, magnet, wild_bait, magic_bait, challenge_bait, deluxe_bait]

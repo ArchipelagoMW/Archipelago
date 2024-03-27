@@ -25,6 +25,7 @@ class WildSeeds:
     winter = "Winter Seeds"
     ancient = "Ancient Seeds"
     grass_starter = "Grass Starter"
+    blue_grass_starter = "Blue Grass Starter"
     tea_sapling = "Tea Sapling"
     fiber = "Fiber Seeds"
 
@@ -48,6 +49,7 @@ class Floor:
 class Fishing:
     spinner = "Spinner"
     trap_bobber = "Trap Bobber"
+    sonar_bobber = "Sonar Bobber"
     cork_bobber = "Cork Bobber"
     quality_bobber = "Quality Bobber"
     treasure_hunter = "Treasure Hunter"
@@ -121,12 +123,15 @@ class Furniture:
 class Storage:
     chest = "Chest"
     stone_chest = "Stone Chest"
+    big_chest = "Big Chest"
+    big_stone_chest = "Big Stone Chest"
 
 
 class Sign:
     wood = "Wood Sign"
     stone = "Stone Sign"
     dark = "Dark Sign"
+    text = "Text Sign"
 
 
 class Statue:
@@ -147,6 +152,7 @@ class Craftable:
     farm_computer = "Farm Computer"
     hopper = "Hopper"
     cookout_kit = "Cookout Kit"
+    tent_kit = "Tent Kit"
 
 
 class ModEdible:

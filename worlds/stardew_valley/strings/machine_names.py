@@ -12,6 +12,7 @@ class Machine:
     enricher = "Enricher"
     furnace = "Furnace"
     geode_crusher = "Geode Crusher"
+    mushroom_log = "Mushroom Log"
     heavy_tapper = "Heavy Tapper"
     keg = "Keg"
     lightning_rod = "Lightning Rod"
@@ -28,7 +29,8 @@ class Machine:
     solar_panel = "Solar Panel"
     tapper = "Tapper"
     worm_bin = "Worm Bin"
+    deluxe_worm_bin = "Deluxe Worm Bin"
     heavy_furnace = "Heavy Furnace"
     anvil = "Anvil"
-    mini_forge = "Mini Forge"
+    mini_forge = "Mini-Forge"
 

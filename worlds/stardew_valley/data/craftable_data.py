@@ -164,6 +164,7 @@ fall_seeds = skill_recipe(WildSeeds.fall, Skill.foraging, 6, {Mushroom.common: 1
 winter_seeds = skill_recipe(WildSeeds.winter, Skill.foraging, 7, {Forageable.winter_root: 1, Forageable.crystal_fruit: 1, Forageable.snow_yam: 1, Forageable.crocus: 1})
 ancient_seeds = ap_recipe(WildSeeds.ancient, {Artifact.ancient_seed: 1})
 grass_starter = shop_recipe(WildSeeds.grass_starter, Region.pierre_store, 1000, {Material.fiber: 10})
+blue_grass_starter = ap_recipe(WildSeeds.blue_grass_starter, {Material.fiber: 25, Material.moss: 10, ArtisanGood.mystic_syrup: 1})
 for wild_seeds in [WildSeeds.spring, WildSeeds.summer, WildSeeds.fall, WildSeeds.winter]:
     tea_sapling = cutscene_recipe(WildSeeds.tea_sapling, Region.sunroom, NPC.caroline, 2, {wild_seeds: 2, Material.fiber: 5, Material.wood: 5})
 fiber_seeds = special_order_recipe(WildSeeds.fiber, SpecialOrder.community_cleanup, {Seed.mixed: 1, Material.sap: 5, Material.clay: 1})
@@ -184,6 +185,7 @@ crystal_path = shop_recipe(Floor.crystal_path, Region.carpenter, 200, {MetalBar.
 
 spinner = skill_recipe(Fishing.spinner, Skill.fishing, 6, {MetalBar.iron: 2})
 trap_bobber = skill_recipe(Fishing.trap_bobber, Skill.fishing, 6, {MetalBar.copper: 1, Material.sap: 10})
+sonar_bobber = skill_recipe(Fishing.sonar_bobber, Skill.fishing, 6, {MetalBar.iron: 1, MetalBar.quartz: 2})
 cork_bobber = skill_recipe(Fishing.cork_bobber, Skill.fishing, 7, {Material.wood: 10, Material.hardwood: 5, Loot.slime: 10})
 quality_bobber = special_order_recipe(Fishing.quality_bobber, SpecialOrder.juicy_bugs_wanted, {MetalBar.copper: 1, Material.sap: 20, Loot.solar_essence: 5})
 treasure_hunter = skill_recipe(Fishing.treasure_hunter, Skill.fishing, 7, {MetalBar.gold: 2})
@@ -239,6 +241,7 @@ charcoal_kiln = skill_recipe(Machine.charcoal_kiln, Skill.foraging, 2, {Material
 crystalarium = skill_recipe(Machine.crystalarium, Skill.mining, 9, {Material.stone: 99, MetalBar.gold: 5, MetalBar.iridium: 2, ArtisanGood.battery_pack: 1})
 furnace = skill_recipe(Machine.furnace, Skill.mining, 1, {Ore.copper: 20, Material.stone: 25})
 geode_crusher = special_order_recipe(Machine.geode_crusher, SpecialOrder.cave_patrol, {MetalBar.gold: 2, Material.stone: 50, Mineral.diamond: 1})
+mushroom_log = skill_recipe(Machine.mushroom_log, Skill.foraging, 4, {Material.hardwood: 10, Material.moss: 10})
 heavy_tapper = ap_recipe(Machine.heavy_tapper, {Material.hardwood: 30, MetalBar.radioactive: 1})
 lightning_rod = skill_recipe(Machine.lightning_rod, Skill.foraging, 6, {MetalBar.iron: 1, MetalBar.quartz: 1, Loot.bat_wing: 5})
 ostrich_incubator = ap_recipe(Machine.ostrich_incubator, {Fossil.bone_fragment: 50, Material.hardwood: 50, Currency.cinder_shard: 20})
@@ -251,6 +254,7 @@ solar_panel = special_order_recipe(Machine.solar_panel, SpecialOrder.island_ingr
 tapper = skill_recipe(Machine.tapper, Skill.foraging, 4, {Material.wood: 40, MetalBar.copper: 2})
 
 worm_bin = skill_recipe(Machine.worm_bin, Skill.fishing, 4, {Material.hardwood: 25, MetalBar.gold: 1, MetalBar.iron: 1, Material.fiber: 50})
+deluxe_worm_bin = skill_recipe(Machine.deluxe_worm_bin, Skill.fishing, 8, {Machine.worm_bin: 1, Material.moss: 30})
 
 tub_o_flowers = festival_shop_recipe(Furniture.tub_o_flowers, Region.flower_dance, 2000, {Material.wood: 15, Seed.tulip: 1, Seed.jazz: 1, Seed.poppy: 1, Seed.spangle: 1})
 wicked_statue = shop_recipe(Furniture.wicked_statue, Region.sewer, 1000, {Material.stone: 25, Material.coal: 5})
@@ -259,10 +263,13 @@ drum_block = cutscene_recipe(Furniture.drum_block, Region.carpenter, NPC.robin, 
 
 chest = starter_recipe(Storage.chest, {Material.wood: 50})
 stone_chest = special_order_recipe(Storage.stone_chest, SpecialOrder.robins_resource_rush, {Material.stone: 50})
+big_chest = shop_recipe(Storage.big_chest, Region.carpenter, 5000, {Material.wood: 120, MetalBar.copper: 2})
+big_stone_chest = shop_recipe(Storage.big_stone_chest, Region.mines_dwarf_shop, 5000, {Material.stone: 250})
 
 wood_sign = starter_recipe(Sign.wood, {Material.wood: 25})
 stone_sign = starter_recipe(Sign.stone, {Material.stone: 25})
 dark_sign = friendship_recipe(Sign.dark, NPC.krobus, 3, {Loot.bat_wing: 5, Fossil.bone_fragment: 5})
+text_sign = starter_recipe(Sign.text, {Material.wood: 25})
 
 garden_pot = ap_recipe(Craftable.garden_pot, {Material.clay: 1, Material.stone: 10, MetalBar.quartz: 1}, "Greenhouse")
 scarecrow = skill_recipe(Craftable.scarecrow, Skill.farming, 1, {Material.wood: 50, Material.coal: 1, Material.fiber: 20})
@@ -277,6 +284,7 @@ farm_computer = special_order_recipe(Craftable.farm_computer, SpecialOrder.aquat
 hopper = ap_recipe(Craftable.hopper, {Material.hardwood: 10, MetalBar.iridium: 1, MetalBar.radioactive: 1})
 
 cookout_kit = skill_recipe(Craftable.cookout_kit, Skill.foraging, 3, {Material.wood: 15, Material.fiber: 10, Material.coal: 3})
+tent_kit = skill_recipe(Craftable.tent_kit, Skill.foraging, 8, {Material.hardwood: 10, Material.fiber: 25, ArtisanGood.cloth: 1})
 
 statue_of_blessings = mastery_recipe(Statue.blessings, Skill.farming, {Material.sap: 999, Material.fiber: 999, Material.stone: 999})
 statue_of_dwarf_king = mastery_recipe(Statue.dwarf_king, Skill.mining, {MetalBar.iridium: 20})
