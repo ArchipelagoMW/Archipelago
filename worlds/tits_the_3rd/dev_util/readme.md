@@ -11,10 +11,12 @@ Afterwards, please download both [calmare.exe](https://github.com/Kyuuhachi/Aure
 ## patch.py
 
 This script is used to create, apply, and diff patches to and from your LB-ARK directory. It expects the following directory structure:
+```
 ├───data
 │   ├───ED6_DT21
 │   ├───ED6_DT21_CLM
 │   └───ED6_DT22
+```
 
 If you wish to add any new archives to the patch, please update the `MODIFIED_ARCHIVES` constant at the top of `tits_the_third/patch/patch.py`.
 
@@ -33,5 +35,5 @@ Note that the `ED6_DT21_CLM` is ignored when creating a patch! When applying a p
 ## update_dt21.py
 You can run `./update_dt21.py` to wipe your `ED6_DT21`, put all files within `ED6_DT21_CLM` through calmare and move them to `ED6_DT21`.
 
-# hot_refresh_clm_changes.py
+## hot_refresh_clm_changes.py
 You can run `./hot_refresh_clm_changes.py` while developing to automatically detect changes to `.clm` files in `ED6_DT21_CLM`, compile them through calmare, and replace the existing file in `ED6_DT21`.
