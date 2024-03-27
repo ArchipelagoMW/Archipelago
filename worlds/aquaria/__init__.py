@@ -108,7 +108,7 @@ class AquariaWorld(World):
         Create every Region in `regions`
         """
         self.regions.add_regions_to_world()
-        self.regions.connect_regions(self.options.objective.value != 0)
+        self.regions.connect_regions()
 
     def __pre_fill_item(self, item_name: str, location_name: str) -> None:
         """Pre-assign an item to a location"""

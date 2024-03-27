@@ -179,7 +179,6 @@ class AquariaRegions:
     abyss_l: Region
     abyss_lb: Region
     abyss_r: Region
-    abyss_r_secret_1: Region
     ice_cave: Region
     bubble_cave: Region
     king_jellyfish_cave: Region
@@ -498,7 +497,7 @@ class AquariaRegions:
                                lambda state: _has_nature_form(state, self.player) and
                                              _has_bind_song(state, self.player) and
                                              _has_energy_form(state, self.player))
-        self.__connect_regions("Energy temple first area", "Energy temple_blaster_room",
+        self.__connect_regions("Energy temple first area", "Energy temple blaster room",
                                self.energy_temple_1, self.energy_temple_blaster_room,
                                lambda state: _has_nature_form(state, self.player) and
                                              _has_bind_song(state, self.player) and
@@ -536,11 +535,11 @@ class AquariaRegions:
                                        lambda state: _has_beast_form(state, self.player))
         self.__connect_regions("Open water bottom left area", "Open water bottom right",
                                self.openwater_bl, self.openwater_br)
-        self.__connect_regions("Open water bottom left area", "skeleton_path",
+        self.__connect_regions("Open water bottom left area", "sSkeleton path",
                                self.openwater_bl, self.skeleton_path)
         self.__connect_regions("Open water bottom left area", "Abyss left area",
                                self.openwater_bl, self.abyss_l)
-        self.__connect_regions("skeleton_path", "skeleton_path_sc",
+        self.__connect_regions("Skeleton path", "skeleton_path_sc",
                                self.skeleton_path, self.skeleton_path_sc,
                                lambda state: _has_spirit_form(state, self.player))
         self.__connect_regions("Open water bottom right", "Abyss right area",
@@ -564,7 +563,7 @@ class AquariaRegions:
         """
         Connect entrances of the different regions around Mithalas
         """
-        self.__connect_one_way_regions("Mithalas city", "Mithalas city_top_path",
+        self.__connect_one_way_regions("Mithalas city", "Mithalas city top path",
                                        self.mithalas_city, self.mithalas_city_top_path,
                                        lambda state: _has_beast_form(state, self.player))
         self.__connect_one_way_regions("Mithalas city_top_path", "Mithalas city",
@@ -730,7 +729,7 @@ class AquariaRegions:
         self.__connect_regions("Abyss left bottom area", "Body center area",
                                self.abyss_lb, self.body_c,
                                lambda state: _has_tongue_cleared(state, self.player))
-        self.__connect_regions("Abyss left area", "king_jellyfish_cave",
+        self.__connect_regions("Abyss left area", "King jellyfish cave",
                                self.abyss_l, self.king_jellyfish_cave,
                                lambda state: _has_energy_form(state, self.player) and
                                              _has_beast_form(state, self.player))
@@ -740,10 +739,10 @@ class AquariaRegions:
                                self.abyss_r, self.whale,
                                lambda state: _has_spirit_form(state, self.player) and
                                              _has_sun_form(state, self.player))
-        self.__connect_regions("Abyss right area", "ice_cave",
+        self.__connect_regions("Abyss right area", "Ice cave",
                                self.abyss_r, self.ice_cave,
                                lambda state: _has_spirit_form(state, self.player))
-        self.__connect_regions("Abyss right area", "bubble_cave",
+        self.__connect_regions("Abyss right area", "Bubble cave",
                                self.abyss_r, self.bubble_cave,
                                lambda state: _has_beast_form(state, self.player))
 
@@ -1113,7 +1112,6 @@ class AquariaRegions:
         self.world.regions.append(self.abyss_l)
         self.world.regions.append(self.abyss_lb)
         self.world.regions.append(self.abyss_r)
-        self.world.regions.append(self.abyss_r_secret_1)
         self.world.regions.append(self.ice_cave)
         self.world.regions.append(self.bubble_cave)
         self.world.regions.append(self.king_jellyfish_cave)
