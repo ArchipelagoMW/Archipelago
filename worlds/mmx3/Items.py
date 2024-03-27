@@ -84,6 +84,12 @@ item_groups = {
         ItemName.parasitic_bomb,
         ItemName.z_saber,
     },
+    "Ride Armors": {
+        ItemName.ride_chimera,
+        ItemName.ride_kangaroo,
+        ItemName.ride_hawk,
+        ItemName.ride_frog,
+    },
     "Armor Upgrades": {
         ItemName.third_armor_helmet,
         ItemName.third_armor_body,

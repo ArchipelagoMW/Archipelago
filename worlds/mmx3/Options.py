@@ -38,6 +38,24 @@ class PickupSanity(Toggle):
     """
     display_name = "Pickupsanity"
 
+class Lab1Boss(Choice):
+    """
+    Cuál jefe estará en Doppler Lab 1
+    """
+    display_name = "Doppler Lab 1 Boss"
+    option_press_disposer = 0
+    option_godkarmachine = 1
+    default = 0
+
+class Lab2Boss(Choice):
+    """
+    Cuál jefe estará en Doppler Lab 2
+    """
+    display_name = "Doppler Lab 2 Boss"
+    option_volt_kurageil = 0
+    option_vile = 1
+    default = 0
+
 class DopplerOpen(Choice):
     """
     Under what conditions will Dr. Doppler's lab open.
@@ -174,6 +192,8 @@ class MMX3Options(PerGameCommonOptions):
     logic_boss_weakness: LogicBossWeakness
     logic_z_saber: LogicZSaber
     pickupsanity: PickupSanity
+    doppler_lab_1_boss: Lab1Boss
+    doppler_lab_2_boss: Lab2Boss
     doppler_open: DopplerOpen
     doppler_medal_count: DopplerMedalCount
     doppler_weapon_count: DopplerWeaponCount
