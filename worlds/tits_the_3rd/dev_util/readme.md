@@ -22,8 +22,8 @@ If you wish to add any new archives to the patch, please update the `MODIFIED_AR
 
 # Usage:
 - `./patch.py create` will create a new patch based off the contents in your LB-ARK directory.
-- `./patch.py apply` will use the files in your base Trails the Sky installation folder. It will automatically put them through Factoria and store them in your LB-ARK folder. Additionally, it will put any `._sn` files through Calmare and store them in `ED6_DT21_CLM` within your LB-ARK folder. Before applying, it will show you a rudementary diff between the patch and your current LB-ARK directory, and if there are files in your LB-ARK directory, it will prompt you to back them up if you wish through a y/n prompt before replacing your LB-ARK directory.
-- `./patch.py diff` will only diff the differences between the patch output and your current LB-ARK directory. This is useful for finding out what changed after pulling the latest changes from the repo.
+- `./patch.py apply` will use the files in your base Trails in the Sky the Third installation folder. It will automatically put them through Factoria and store them in your LB-ARK folder. Additionally, it will put any `._sn` files through Calmare and store them in `ED6_DT21_CLM` within your LB-ARK folder. Before applying, it will show you a rudementary diff between the patch and your current LB-ARK directory, and if there are files in your LB-ARK directory, it will prompt you to back them up if you wish through a y/n prompt before replacing your LB-ARK directory.
+- `./patch.py diff` will only diff the differences between the patch output and your current LB-ARK directory. This is useful for finding out what changed after pulling the latest changes from the repo. **Note that your console text should support the JP character set, or this might print some garbage if it tries to render any of that.**
 
 ### About `ED6_DT21`
 `ED6_DT21` is split into two parts after applying the patch:
@@ -33,7 +33,10 @@ If you wish to add any new archives to the patch, please update the `MODIFIED_AR
 Note that the `ED6_DT21_CLM` is ignored when creating a patch! When applying a patch, it will generate this folder from the `._sn` files in `ED6_DT21`.
 
 ## update_dt21.py
-You can run `./update_dt21.py` to wipe your `ED6_DT21`, put all files within `ED6_DT21_CLM` through calmare and move them to `ED6_DT21`.
+You can run `./update_dt21.py` to:
+1. wipe your `ED6_DT21`
+2. put all files within `ED6_DT21_CLM` through calmare and
+3. move them to `ED6_DT21`.
 
 ## hot_refresh_clm_changes.py
 You can run `./hot_refresh_clm_changes.py` while developing to automatically detect changes to `.clm` files in `ED6_DT21_CLM`, compile them through calmare, and replace the existing file in `ED6_DT21`.
