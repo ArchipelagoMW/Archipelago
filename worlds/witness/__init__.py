@@ -2,7 +2,6 @@
 Archipelago init file for The Witness
 """
 import dataclasses
-import logging
 
 from typing import Dict, Optional, cast, List
 from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial, CollectionState
@@ -295,8 +294,8 @@ class WitnessWorld(World):
                     if item.name == early_item_name and item.player == self.player
                 )
             except StopIteration:
-                logging.info(f"{early_item_name} could not be placed on {player_name}'s Tutorial Gate Open,"
-                             " as all copies of it were plandoed elsewhere.")
+                warning(f"{early_item_name} could not be placed on {player_name}'s Tutorial Gate Open,"
+                        " as all copies of it were plandoed elsewhere.")
                 continue
 
             if self.options.puzzle_randomization == "sigma_expert":
@@ -314,8 +313,7 @@ class WitnessWorld(World):
             return
 
         if not early_items:
-            logging.error(f"No item could be placed on {player_name}'s Tutorial Gate Open,"
-                          f" they were all plandoed elsewhere.")
+            error(f"No item could be placed on {player_name}'s Tutorial Gate Open, they were all plandoed elsewhere.")
 
     def fill_slot_data(self) -> dict:
         already_hinted_locations = set()
