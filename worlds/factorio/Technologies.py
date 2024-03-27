@@ -7,7 +7,7 @@ import string
 import pkgutil
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
-from typing import Dict, Set, FrozenSet, Tuple, Union, List, Any
+from typing import Dict, Optional, Set, FrozenSet, Tuple, Union, List, Any
 
 import Utils
 from . import Options
@@ -54,9 +54,10 @@ class Technology(FactorioElement):  # maybe make subclass of Location?
     ingredients: Set[str]
     progressive: Tuple[str]
     unlocks: Union[Set[str], bool]  # bool case is for progressive technologies
+    requires: Set[str]
 
     def __init__(self, name: str, ingredients: Set[str], factorio_id: int, progressive: Tuple[str] = (),
-                 has_modifier: bool = False, unlocks: Union[Set[str], bool] = None):
+                 has_modifier: bool = False, unlocks: Union[Set[str], bool] = None, requires: list[str] = None):
         self.name = name
         self.factorio_id = factorio_id
         self.ingredients = ingredients
@@ -66,6 +67,10 @@ class Technology(FactorioElement):  # maybe make subclass of Location?
             self.unlocks = unlocks
         else:
             self.unlocks = set()
+        if requires:
+            self.requires = set(requires)
+        else:
+            self.requires = set()
 
     def build_rule(self, player: int):
         logging.debug(f"Building rules for {self.name}")
@@ -78,6 +83,15 @@ class Technology(FactorioElement):  # maybe make subclass of Location?
         technologies = set()
         for ingredient in self.ingredients:
             technologies |= required_technologies[ingredient]  # technologies that unlock the recipes
+        return technologies
+
+    def get_vanilla_prerequisites(self) -> Set[str]:
+        """Get Technologies that are vanilla requirements of this one."""
+        # Modded technologies might offer better recipes for getting the early game resources, so use this when you don't want the above method to yield half the tech tree
+        technologies = set()
+        for tech in self.requires:
+            technologies.add(technology_table[tech].name)
+            technologies |= technology_table[tech].get_vanilla_prerequisites()
         return technologies
 
     def __hash__(self):
@@ -104,7 +118,9 @@ class CustomTechnology(Technology):
                 ingredients.add("military-science-pack")
             ingredients = list(ingredients)
             ingredients.sort()  # deterministic sample
-            ingredients = world.random.sample(ingredients, world.random.randint(1, len(ingredients)))
+            if ingredients:
+                ingredients = world.random.sample(ingredients, world.random.randint(1, len(ingredients)))
+
         elif origin.name == "rocket-silo" and military_allowed:
             ingredients.add("military-science-pack")
         super(CustomTechnology, self).__init__(origin.name, ingredients, origin.factorio_id)
@@ -116,6 +132,9 @@ class Recipe(FactorioElement):
     ingredients: Dict[str, int]
     products: Dict[str, int]
     energy: float
+
+    _cached_base_cost: Optional[Dict[str, int]] = None
+    _cached_energy: Optional[float] = None
 
     def __init__(self, name: str, category: str, ingredients: Dict[str, int], products: Dict[str, int], energy: float):
         self.name = name
@@ -150,35 +169,55 @@ class Recipe(FactorioElement):
         ingredients = sum(self.ingredients.values())
         return min(ingredients / amount for product, amount in self.products.items())
 
-    @property
-    def base_cost(self) -> Dict[str, int]:
+    def base_cost(self, calculated: Optional[set[str]] = None) -> Dict[str, int]:
+        if self._cached_base_cost is not None:
+            return self._cached_base_cost
+        if calculated is None:
+            calculated = set()  # Some modpacks have recursive byproduct loops, so this will stop us going down rabbit holes
         ingredients = Counter()
         for ingredient, cost in self.ingredients.items():
             if ingredient in all_product_sources:
-                for recipe in all_product_sources[ingredient]:
+                recipes = list(all_product_sources[ingredient])
+                recipes.sort(key=lambda recipe: len(recipe.recursive_unlocking_technologies))
+                for recipe in recipes:
                     if recipe.ingredients:
+                        if recipe.name in calculated:
+                            break
+                        calculated.add(recipe.name)
                         ingredients.update({name: amount * cost / recipe.products[ingredient] for name, amount in
-                                            recipe.base_cost.items()})
+                                            recipe.base_cost(calculated).items()})
                     else:
                         ingredients[ingredient] += recipe.energy * cost / recipe.products[ingredient]
+                    break  # Let's assume the first recipe is the least likely to be recursive
             else:
                 ingredients[ingredient] += cost
+        self._cached_base_cost = ingredients
         return ingredients
 
-    @property
-    def total_energy(self) -> float:
+    def total_energy(self, calculated: Optional[set[str]] = None) -> float:
         """Total required energy (crafting time) for single craft"""
         # TODO: multiply mining energy by 2 since drill has 0.5 speed
+        if self._cached_energy is not None:
+            return self._cached_energy
+
+        if calculated is None:
+            calculated = set()  # Some modpacks have recursive byproduct loops, so this will stop us going down rabbit holes
+
         total_energy = self.energy
         for ingredient, cost in self.ingredients.items():
             if ingredient in all_product_sources:
                 selected_recipe_energy = float('inf')
                 for ingredient_recipe in all_product_sources[ingredient]:
+                    if ingredient_recipe.name in calculated:
+                        break
+                    calculated.add(ingredient_recipe.name)
                     craft_count = max((n for name, n in ingredient_recipe.products.items() if name == ingredient))
-                    recipe_energy = ingredient_recipe.total_energy / craft_count * cost
+                    recipe_energy = ingredient_recipe.total_energy(calculated) / craft_count * cost
                     if recipe_energy < selected_recipe_energy:
                         selected_recipe_energy = recipe_energy
+                    break
                 total_energy += selected_recipe_energy
+        self._cached_energy = total_energy
         return total_energy
 
 
@@ -194,7 +233,7 @@ recipe_sources: Dict[str, Set[str]] = {}  # recipe_name -> technology source
 for technology_name, data in sorted(techs_future.result().items()):
     current_ingredients = set(data["ingredients"])
     technology = Technology(technology_name, current_ingredients, factorio_tech_id,
-                            has_modifier=data["has_modifier"], unlocks=set(data["unlocks"]))
+                            has_modifier=data["has_modifier"], unlocks=set(data["unlocks"]), requires=data["requires"])
     factorio_tech_id += 1
     tech_table[technology_name] = technology.factorio_id
     technology_table[technology_name] = technology
@@ -370,8 +409,18 @@ for root in base_starts:
     progressive = [root]
     while seeking in progressive_incs:
         progressive.append(seeking)
+        progressive_incs.remove(seeking)
         seeking = seeking[:-1] + str(int(seeking[-1]) + 1)
     progressive_rows["progressive-" + root] = tuple(progressive)
+
+# some modded techs add a -0 tech
+for remnant in list(progressive_incs):
+    if remnant[-1] == "0":
+        prog_name = "progressive-" + remnant[:-2]
+        progressive_rows[prog_name] = tuple([remnant] + list(progressive_rows[prog_name]))
+        progressive_incs.remove(remnant)
+
+assert not progressive_incs, "some numbered techs were not included in progressive techs"
 
 # science packs
 progressive_rows["progressive-science-pack"] = tuple(Options.MaxSciencePack.get_ordered_science_packs())[1:]
@@ -396,7 +445,8 @@ progressive_rows["progressive-turret"] = ("gun-turret", "laser-turret")
 progressive_rows["progressive-flamethrower"] = ("flamethrower",)  # leaving out flammables, as they do nothing
 progressive_rows["progressive-personal-roboport-equipment"] = ("personal-roboport-equipment",
                                                                "personal-roboport-mk2-equipment")
-
+# modded progressives
+progressive_rows["progressive-ore-crushing"] = ("ore-crushing", "ore-advanced-crushing", "ore-floatation",)
 sorted_rows = sorted(progressive_rows)
 
 # integrate into
@@ -407,7 +457,8 @@ source_target_mapping: Dict[str, str] = {
 }
 
 for source, target in source_target_mapping.items():
-    progressive_rows[target] += progressive_rows[source]
+    if source in progressive_rows:
+        progressive_rows[target] += progressive_rows[source]
 
 base_tech_table = tech_table.copy()  # without progressive techs
 base_technology_table = technology_table.copy()
@@ -417,7 +468,10 @@ progressive_technology_table: Dict[str, Technology] = {}
 
 for root in sorted_rows:
     progressive = progressive_rows[root]
-    assert all(tech in tech_table for tech in progressive), "declared a progressive technology without base technology"
+    progressive = tuple(tech for tech in progressive if tech in tech_table)
+    if not progressive:
+        continue
+    # assert all(tech in tech_table for tech in progressive), "declared a progressive technology without base technology"
     factorio_tech_id += 1
     progressive_technology = Technology(root, technology_table[progressive[0]].ingredients, factorio_tech_id,
                                         progressive,
@@ -434,6 +488,11 @@ for technology in progressive_technology_table.values():
 
 tech_table.update(progressive_tech_table)
 technology_table.update(progressive_technology_table)
+
+# vanilla_techs = base_technology_table["automation"].get_vanilla_prerequisites()
+# for pre_automation in vanilla_techs:
+#     del base_tech_table[pre_automation]  # don't mark the vanilla techs as hidden
+    # del technology_table[pre_automation]
 
 # techs that are never progressive
 common_tech_table: Dict[str, int] = {tech_name: tech_id for tech_name, tech_id in base_tech_table.items()
@@ -463,7 +522,7 @@ del fluids_future
 @Utils.cache_argsless
 def get_science_pack_pools() -> Dict[str, Set[str]]:
     def get_estimated_difficulty(recipe: Recipe):
-        base_ingredients = recipe.base_cost
+        base_ingredients = recipe.base_cost()
         cost = 0
 
         for ingredient_name, amount in base_ingredients.items():
