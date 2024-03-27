@@ -1,10 +1,10 @@
 from BaseClasses import Region, Location, Entrance, Item, ItemClassification
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Callable
 from enum import Enum
 from . import SoulBlazerWorld
 from Names import LairID, LairName, ChestID, ChestName, NPCRewardID, NPCRewardName
-from Rules import LocationFlag
+from Rules import LocationFlag, get_rule_for_location
 
 
 #TODO: Use IntEnum instead?
@@ -37,11 +37,12 @@ class SoulBlazerLocationData():
 
 class SoulBlazerLocation(Location):
     game = "Soul Blazer"
-    _locationData: SoulBlazerLocationData
+    _data: SoulBlazerLocationData
 
-    def __init__(self, player: int, name: str, locationData: SoulBlazerLocationData | None = None, parent: Region | None = None):
+    def __init__(self, player: int, name: str, data: SoulBlazerLocationData | None = None, parent: Region | None = None):
         super().__init__(player, name, parent=parent)
-        self._locationData = locationData
+        self._data = data
+        self.access_rule = get_rule_for_location(name, player, data.flag)
 
 
 chest_table = {
