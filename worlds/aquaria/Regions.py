@@ -66,7 +66,7 @@ def _has_sun_form(state, player: int) -> bool:
 
 def _has_dual_form(state, player: int) -> bool:
     """`player` in `state` has the dual form item"""
-    return state.has("Dual form", player)
+    return _has_li(state, player) and state.has("Dual form", player)
 
 
 def _has_fish_form(state, player: int) -> bool:
@@ -751,12 +751,10 @@ class AquariaRegions:
         Connect entrances of the different regions around The Sunken City
         """
         self.__connect_regions("Sunken city right area", "Sunken city left area",
-                               self.sunken_city_r, self.sunken_city_l,
-                               lambda state: _has_damaging_item(state, self.player))
+                               self.sunken_city_r, self.sunken_city_l)
         self.__connect_regions("Sunken city left area", "Sunken city bedroom",
                                self.sunken_city_l, self.sunken_city_l_bedroom,
-                               lambda state: _has_spirit_form(state, self.player) and
-                                             _has_damaging_item(state, self.player))
+                               lambda state: _has_spirit_form(state, self.player))
         self.__connect_regions("Sunken city left area", "Sunken city boss area",
                                self.sunken_city_l, self.sunken_city_boss,
                                lambda state: _has_beast_form(state, self.player) and
@@ -784,7 +782,6 @@ class AquariaRegions:
         self.__connect_one_way_regions("Before Final boss", "Final boss",
                                        self.final_boss_loby, self.final_boss,
                                        lambda state: _has_energy_form(state, self.player) and
-                                                     _has_li(state, self.player) and
                                                      _has_dual_form(state, self.player) and
                                                      _has_sun_form(state, self.player) and
                                                      _has_bind_song(state, self.player))
@@ -936,6 +933,7 @@ class AquariaRegions:
                                   "Victory")
 
     def __adjusting_urns_rules(self) -> None:
+        """Since Urns need to be broken, add a damaging item to rules"""
         add_rule(self.world.get_location("Open water top right area, first urn in the Mithalas exit", self.player),
                  lambda state: _has_damaging_item(state, self.player))
         add_rule(self.world.get_location("Open water top right area, second urn in the Mithalas exit", self.player),
@@ -967,6 +965,19 @@ class AquariaRegions:
         add_rule(self.world.get_location("Mithalas city castle, second urn on the entrance path", self.player),
                  lambda state: _has_damaging_item(state, self.player))
 
+    def __adjusting_crates_rules(self) -> None:
+        """Since Crate need to be broken, add a damaging item to rules"""
+        add_rule(self.world.get_location("Sunken city right area, crate close to the save cristal", self.player),
+                 lambda state: _has_damaging_item(state, self.player))
+        add_rule(self.world.get_location("Sunken city right area, crate in the left bottom room", self.player),
+                 lambda state: _has_damaging_item(state, self.player))
+        add_rule(self.world.get_location("Sunken city left area, crate in the little pipe room", self.player),
+                 lambda state: _has_damaging_item(state, self.player))
+        add_rule(self.world.get_location("Sunken city left area, crate close to the save cristal", self.player),
+                 lambda state: _has_damaging_item(state, self.player))
+        add_rule(self.world.get_location("Sunken city left area, crate before the bedroom", self.player),
+                 lambda state: _has_damaging_item(state, self.player))
+
     def __adjusting_soup_rules(self) -> None:
         """
         Modify rules for location that need soup
@@ -985,6 +996,7 @@ class AquariaRegions:
         Modify rules for single location or optional rules
         """
         self.__adjusting_urns_rules()
+        self.__adjusting_crates_rules()
         self.__adjusting_soup_rules()
         add_rule(self.world.get_location("Mithalan Dress in the Mithalas cathedral", self.player),
                  lambda state: _has_beast_form(state, self.player))

@@ -6,6 +6,7 @@ Description: Manage locations in the Aquaria game multiworld randomizer
 
 from BaseClasses import Location
 
+
 class AquariaLocation(Location):
     """
     A location in the game.
@@ -23,6 +24,7 @@ class AquariaLocation(Location):
         """
         super(AquariaLocation, self).__init__(player, name, code, parent)
         self.event = code is None
+
 
 class AquariaLocations:
 
