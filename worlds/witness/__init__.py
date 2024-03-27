@@ -281,7 +281,7 @@ class WitnessWorld(World):
                 self.options.local_items.value.add(item_name)
 
     def fill_hook(self, progitempool: List[Item], _, _2, fill_locations: List[Location]) -> None:
-        # Pick an early item to place on the tutorial gate.
+        # Pick an early item to place on the tutorial gate (or an early location in expert)
         early_items = self.items.get_early_items()
         self.random.shuffle(early_items)
 
