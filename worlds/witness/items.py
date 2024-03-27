@@ -221,26 +221,8 @@ class WitnessPlayerItems:
             # Replace progressive items with their parents.
             output = {StaticWitnessLogic.get_parent_progressive_item(item) for item in output}
 
-        # Remove items that are mentioned in any plando options. (Hopefully, in the future, plando will get resolved
-        #   before create_items so that we'll be able to check placed items instead of just removing all items mentioned
-        #   regardless of whether or not they actually wind up being manually placed.
-        for plando_setting in self._multiworld.plando_items[self._player_id]:
-            if plando_setting.get("from_pool", True):
-                for item_setting_key in [key for key in ["item", "items"] if key in plando_setting]:
-                    if type(plando_setting[item_setting_key]) is str:
-                        output -= {plando_setting[item_setting_key]}
-                    elif type(plando_setting[item_setting_key]) is dict:
-                        output -= {item for item, weight in plando_setting[item_setting_key].items() if weight}
-                    else:
-                        # Assume this is some other kind of iterable.
-                        for inner_item in plando_setting[item_setting_key]:
-                            if type(inner_item) is str:
-                                output -= {inner_item}
-                            elif type(inner_item) is dict:
-                                output -= {item for item, weight in inner_item.items() if weight}
-
         # Sort the output for consistency across versions if the implementation changes but the logic does not.
-        return sorted(list(output))
+        return sorted([item for item in output if item in self.get_mandatory_items()])
 
     def get_door_ids_in_pool(self) -> List[int]:
         """
