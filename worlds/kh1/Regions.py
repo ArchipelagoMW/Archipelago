@@ -94,10 +94,11 @@ def create_regions(multiworld: MultiWorld, player: int, options, levels: int):
     regions["Deep Jungle"].locations.append("Deep Jungle Cliff Right Cliff Left Chest"),
     regions["Deep Jungle"].locations.append("Deep Jungle Cliff Right Cliff Right Chest"),
     regions["Deep Jungle"].locations.append("Deep Jungle Tree House Suspended Boat Chest"),
-    regions["100 Acre Wood"].locations.append("100 Acre Wood Meadow Inside Log Chest"),
-    regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Left Cliff Chest"),
-    regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Right Tree Alcove Chest"),
-    regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Under Giant Pot Chest"),
+    if options.hundred_acre_wood:
+        regions["100 Acre Wood"].locations.append("100 Acre Wood Meadow Inside Log Chest"),
+        regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Left Cliff Chest"),
+        regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Right Tree Alcove Chest"),
+        regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Under Giant Pot Chest"),
     regions["Agrabah"].locations.append("Agrabah Plaza By Storage Chest"),
     regions["Agrabah"].locations.append("Agrabah Plaza Raised Terrace Chest"),
     regions["Agrabah"].locations.append("Agrabah Plaza Top Corner Chest"),
@@ -428,24 +429,25 @@ def create_regions(multiworld: MultiWorld, player: int, options, levels: int):
    #regions["Neverland"].locations.append("Neverland Clock Tower 11:00 Door")
    #regions["Neverland"].locations.append("Neverland Clock Tower 12:00 Door")
     regions["Neverland"].locations.append("Neverland Hold Aero Chest")
-    regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Turn in Rare Nut 1")
-    regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Turn in Rare Nut 2")
-    regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Turn in Rare Nut 3")
-    regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Turn in Rare Nut 4")
-    regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Turn in Rare Nut 5")
-    if options.atlantica:
-        regions["100 Acre Wood"].locations.append("100 Acre Wood Pooh's House Owl Cheer")
-    regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 1")
-    regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 2")
-    regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 3")
-    regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 4")
-    if options.atlantica:
-        regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 5")
-    regions["100 Acre Wood"].locations.append("100 Acre Wood Pooh's House Start Fire")
-    regions["100 Acre Wood"].locations.append("100 Acre Wood Pooh's Room Cabinet")
-    regions["100 Acre Wood"].locations.append("100 Acre Wood Pooh's Room Chimney")
-    regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Break Log")
-    regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Fall Through Top of Tree Next to Pooh")
+    if options.hundred_acre_wood:
+        regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Turn in Rare Nut 1")
+        regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Turn in Rare Nut 2")
+        regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Turn in Rare Nut 3")
+        regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Turn in Rare Nut 4")
+        regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Turn in Rare Nut 5")
+        if options.atlantica:
+            regions["100 Acre Wood"].locations.append("100 Acre Wood Pooh's House Owl Cheer")
+        regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 1")
+        regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 2")
+        regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 3")
+        regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 4")
+        if options.atlantica:
+            regions["100 Acre Wood"].locations.append("100 Acre Wood Convert Torn Page 5")
+        regions["100 Acre Wood"].locations.append("100 Acre Wood Pooh's House Start Fire")
+        regions["100 Acre Wood"].locations.append("100 Acre Wood Pooh's Room Cabinet")
+        regions["100 Acre Wood"].locations.append("100 Acre Wood Pooh's Room Chimney")
+        regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Break Log")
+        regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Fall Through Top of Tree Next to Pooh")
     regions["Deep Jungle"].locations.append("Deep Jungle Camp Hi-Potion Experiment")
     regions["Deep Jungle"].locations.append("Deep Jungle Camp Ether Experiment")
     regions["Deep Jungle"].locations.append("Deep Jungle Camp Replication Experiment")

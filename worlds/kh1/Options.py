@@ -199,7 +199,19 @@ class KeybladeMaxMP(Range):
 @dataclass
 class KH1Options(PerGameCommonOptions):
     goal: Goal
+    require_final_ansem: RequireFinalAnsem
+    required_reports: RequiredReports
+    reports_in_pool: ReportsInPool
+    super_bosses: SuperBosses
     atlantica: Atlantica
+    hundred_acre_wood: HundredAcreWood
+    puppies: Puppies
+    exp_multiplier: EXPMultiplier
+    randomize_keyblade_stats: RandomizeKeybladeStats
+    keyblade_max_str: KeybladeMaxStrength
+    keyblade_min_str: KeybladeMinStrength
+    keyblade_max_mp: KeybladeMaxMP
+    keyblade_min_mp: KeybladeMinMP
     strength_increase: StrengthIncrease
     defense_increase: DefenseIncrease
     hp_increase: HPIncrease
@@ -207,15 +219,3 @@ class KH1Options(PerGameCommonOptions):
     mp_increase: MPIncrease
     accessory_slot_increase: AccessorySlotIncrease
     item_slot_increase: ItemSlotIncrease
-    exp_multiplier: EXPMultiplier
-    required_reports: RequiredReports
-    reports_in_pool: ReportsInPool
-    randomize_keyblade_stats: RandomizeKeybladeStats
-    keyblade_max_str: KeybladeMaxStrength
-    keyblade_min_str: KeybladeMinStrength
-    keyblade_max_mp: KeybladeMaxMP
-    keyblade_min_mp: KeybladeMinMP
-    puppies: Puppies
-    require_final_ansem: RequireFinalAnsem
-    hundred_acre_wood: HundredAcreWood
-    super_bosses: SuperBosses
