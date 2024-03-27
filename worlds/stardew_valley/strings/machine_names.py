@@ -1,4 +1,6 @@
 class Machine:
+    dehydrator = "Dehydrator"
+    fish_smoker = "Fish Smoker"
     bee_house = "Bee House"
     bone_mill = "Bone Mill"
     cask = "Cask"

@@ -133,6 +133,10 @@ id,region,name,tags,mod_name
 152,Bulletin Board,Spirit's Eve Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE"
 153,Bulletin Board,Winter Star Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE"
 154,Bulletin Board,Calico Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE"
+155,Pantry,Sommelier Bundle,"PANTRY_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE"
+156,Pantry,Dry Bundle,"PANTRY_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE"
+157,Fish Tank,Fish Smoker Bundle,"FISH_TANK_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE"
+158,Bulletin Board,Raccoon Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE"
 201,The Mines - Floor 10,The Mines Floor 10 Treasure,"MANDATORY,THE_MINES_TREASURE",
 202,The Mines - Floor 20,The Mines Floor 20 Treasure,"MANDATORY,THE_MINES_TREASURE",
 203,The Mines - Floor 40,The Mines Floor 40 Treasure,"MANDATORY,THE_MINES_TREASURE",
@@ -2079,6 +2083,24 @@ id,region,name,tags,mod_name
 3528,Farm,Craft Farm Computer,CRAFTSANITY,
 3529,Farm,Craft Hopper,"CRAFTSANITY,GINGER_ISLAND",
 3530,Farm,Craft Cookout Kit,CRAFTSANITY,
+3531,Farm,Craft Fish Smoker,"CRAFTSANITY",
+3532,Farm,Craft Dehydrator,"CRAFTSANITY",
+3533,Farm,Craft Blue Grass Starter,"CRAFTSANITY,GINGER_ISLAND",
+3534,Farm,Craft Mystic Tree Seed,"CRAFTSANITY,REQUIRES_MASTERIES",
+3535,Farm,Craft Sonar Bobber,"CRAFTSANITY",
+3536,Farm,Craft Challenge Bait,"CRAFTSANITY,REQUIRES_MASTERIES",
+3537,Farm,Craft Treasure Totem,"CRAFTSANITY,REQUIRES_MASTERIES",
+3538,Farm,Craft Heavy Furnace,"CRAFTSANITY,REQUIRES_MASTERIES",
+3539,Farm,Craft Deluxe Worm Bin,"CRAFTSANITY",
+3540,Farm,Craft Mushroom Log,"CRAFTSANITY",
+3541,Farm,Craft Big Chest,"CRAFTSANITY",
+3542,Farm,Craft Big Stone Chest,"CRAFTSANITY",
+3543,Farm,Craft Text Sign,"CRAFTSANITY",
+3544,Farm,Craft Tent Kit,"CRAFTSANITY",
+3545,Farm,Craft Statue Of The Dwarf King,"CRAFTSANITY,REQUIRES_MASTERIES",
+3546,Farm,Craft Statue Of Blessings,"CRAFTSANITY,REQUIRES_MASTERIES",
+3547,Farm,Craft Anvil,"CRAFTSANITY,REQUIRES_MASTERIES",
+3548,Farm,Craft Mini-Forge,"CRAFTSANITY,REQUIRES_MASTERIES",
 3551,Pierre's General Store,Grass Starter Recipe,CRAFTSANITY,
 3552,Carpenter Shop,Wood Floor Recipe,CRAFTSANITY,
 3553,Carpenter Shop,Rustic Plank Floor Recipe,CRAFTSANITY,
@@ -2105,6 +2127,10 @@ id,region,name,tags,mod_name
 3574,Sewer,Wicked Statue Recipe,CRAFTSANITY,
 3575,Desert,Warp Totem: Desert Recipe,"CRAFTSANITY",
 3576,Island Trader,Deluxe Retaining Soil Recipe,"CRAFTSANITY,GINGER_ISLAND",
+3577,Willy's Fish Shop,Fish Smoker Recipe,CRAFTSANITY,
+3578,Pierre's General Store,Dehydrator Recipe,CRAFTSANITY,
+3579,Carpenter Shop,Big Chest Recipe,CRAFTSANITY,
+3580,Mines Dwarf Shop,Big Stone Chest Recipe,CRAFTSANITY,
 5001,Stardew Valley,Level 1 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
 5002,Stardew Valley,Level 2 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
 5003,Stardew Valley,Level 3 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill

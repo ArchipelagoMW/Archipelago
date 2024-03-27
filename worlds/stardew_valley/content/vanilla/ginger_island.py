@@ -2,7 +2,7 @@ from .pelican_town import pelican_town as pelican_town_content_pack
 from ..game_content import ContentPack
 from ...data import villagers_data, fish_data
 from ...data.harvest import ForagingSource
-from ...strings.forageable_names import Forageable
+from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.region_names import Region
 
 ginger_island_content_pack = ContentPack(
@@ -17,7 +17,7 @@ ginger_island_content_pack = ContentPack(
         Forageable.ginger: (
             ForagingSource(regions=(Region.island_west,)),
         ),
-        Forageable.magma_cap: (
+        Mushroom.magma_cap: (
             ForagingSource(regions=(Region.volcano_floor_5,)),
         ),
     },

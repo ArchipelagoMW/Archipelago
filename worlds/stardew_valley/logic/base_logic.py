@@ -17,6 +17,7 @@ class LogicRegistry:
         self.cooking_rules: Dict[str, StardewRule] = {}
         self.crafting_rules: Dict[str, StardewRule] = {}
         self.crop_rules: Dict[str, StardewRule] = {}
+        self.artisan_good_rules: Dict[str, StardewRule] = {}
         self.fish_rules: Dict[str, StardewRule] = {}
         self.museum_rules: Dict[str, StardewRule] = {}
         self.festival_rules: Dict[str, StardewRule] = {}

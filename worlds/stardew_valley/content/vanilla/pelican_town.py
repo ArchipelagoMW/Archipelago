@@ -3,7 +3,7 @@ from ...data import villagers_data, fish_data
 from ...data.harvest import ForagingSource, SeasonalForagingSource
 from ...strings.crop_names import Fruit
 from ...strings.fish_names import WaterItem
-from ...strings.forageable_names import Forageable
+from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.region_names import Region
 from ...strings.season_names import Season
 
@@ -85,17 +85,17 @@ pelican_town = ContentPack(
         ),
 
         # Mushrooms
-        Forageable.common_mushroom: (
+        Mushroom.common: (
             ForagingSource(seasons=(Season.spring,), regions=(Region.secret_woods,)),
             ForagingSource(seasons=(Season.fall,), regions=(Region.backwoods, Region.mountain, Region.forest)),
         ),
-        Forageable.chanterelle: (
+        Mushroom.chanterelle: (
             ForagingSource(seasons=(Season.fall,), regions=(Region.secret_woods,)),
         ),
-        Forageable.morel: (
+        Mushroom.morel: (
             ForagingSource(seasons=(Season.spring, Season.fall), regions=(Region.secret_woods,)),
         ),
-        Forageable.red_mushroom: (
+        Mushroom.red: (
             ForagingSource(seasons=(Season.summer, Season.fall), regions=(Region.secret_woods,)),
         ),
 

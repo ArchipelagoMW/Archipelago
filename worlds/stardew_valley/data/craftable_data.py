@@ -13,7 +13,7 @@ from ..strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
 from ..strings.fish_names import Fish, WaterItem
 from ..strings.flower_names import Flower
 from ..strings.food_names import Meal
-from ..strings.forageable_names import Forageable, SVEForage, DistantLandsForageable
+from ..strings.forageable_names import Forageable, SVEForage, DistantLandsForageable, Mushroom
 from ..strings.ingredient_names import Ingredient
 from ..strings.machine_names import Machine
 from ..strings.material_names import Material
@@ -142,6 +142,8 @@ loom = skill_recipe(Machine.loom, Skill.farming, 7, {Material.wood: 60, Material
 mayonnaise_machine = skill_recipe(Machine.mayonnaise_machine, Skill.farming, 2, {Material.wood: 15, Material.stone: 15, Mineral.earth_crystal: 10, MetalBar.copper: 1})
 oil_maker = skill_recipe(Machine.oil_maker, Skill.farming, 8, {Loot.slime: 50, Material.hardwood: 20, MetalBar.gold: 1})
 preserves_jar = skill_recipe(Machine.preserves_jar, Skill.farming, 4, {Material.wood: 50, Material.stone: 40, Material.coal: 8})
+fish_smoker = shop_recipe(Machine.fish_smoker, Region.fish_shop, 10000, {Material.hardwood: 10, WaterItem.sea_jelly: 1, WaterItem.river_jelly: 1, WaterItem.cave_jelly: 1})
+dehydrator = shop_recipe(Machine.dehydrator, Region.pierre_store, 10000, {Material.wood: 30, Material.clay: 2, Mineral.fire_quartz: 1})
 
 basic_fertilizer = skill_recipe(Fertilizer.basic, Skill.farming, 1, {Material.sap: 2})
 
@@ -158,7 +160,7 @@ tree_fertilizer = skill_recipe(Fertilizer.tree, Skill.foraging, 7, {Material.fib
 
 spring_seeds = skill_recipe(WildSeeds.spring, Skill.foraging, 1, {Forageable.wild_horseradish: 1, Forageable.daffodil: 1, Forageable.leek: 1, Forageable.dandelion: 1})
 summer_seeds = skill_recipe(WildSeeds.summer, Skill.foraging, 4, {Forageable.spice_berry: 1, Fruit.grape: 1, Forageable.sweet_pea: 1})
-fall_seeds = skill_recipe(WildSeeds.fall, Skill.foraging, 6, {Forageable.common_mushroom: 1, Forageable.wild_plum: 1, Forageable.hazelnut: 1, Forageable.blackberry: 1})
+fall_seeds = skill_recipe(WildSeeds.fall, Skill.foraging, 6, {Mushroom.common: 1, Forageable.wild_plum: 1, Forageable.hazelnut: 1, Forageable.blackberry: 1})
 winter_seeds = skill_recipe(WildSeeds.winter, Skill.foraging, 7, {Forageable.winter_root: 1, Forageable.crystal_fruit: 1, Forageable.snow_yam: 1, Forageable.crocus: 1})
 ancient_seeds = ap_recipe(WildSeeds.ancient, {Artifact.ancient_seed: 1})
 grass_starter = shop_recipe(WildSeeds.grass_starter, Region.pierre_store, 1000, {Material.fiber: 10})
@@ -204,7 +206,7 @@ wedding_ring = shop_recipe(Ring.wedding_ring, Region.traveling_cart, 500, {Metal
 
 field_snack = skill_recipe(Edible.field_snack, Skill.foraging, 1, {TreeSeed.acorn: 1, TreeSeed.maple: 1, TreeSeed.pine: 1})
 bug_steak = skill_recipe(Edible.bug_steak, Skill.combat, 1, {Loot.bug_meat: 10})
-life_elixir = skill_recipe(Edible.life_elixir, Skill.combat, 2, {Forageable.red_mushroom: 1, Forageable.purple_mushroom: 1, Forageable.morel: 1, Forageable.chanterelle: 1})
+life_elixir = skill_recipe(Edible.life_elixir, Skill.combat, 2, {Mushroom.red: 1, Mushroom.purple: 1, Mushroom.morel: 1, Mushroom.chanterelle: 1})
 oil_of_garlic = skill_recipe(Edible.oil_of_garlic, Skill.combat, 6, {Vegetable.garlic: 10, Ingredient.oil: 1})
 
 monster_musk = special_order_recipe(Consumable.monster_musk, SpecialOrder.prismatic_jelly, {Loot.bat_wing: 30, Loot.slime: 30})

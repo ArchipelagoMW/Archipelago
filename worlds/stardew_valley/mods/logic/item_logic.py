@@ -28,7 +28,7 @@ from ...strings.crop_names import SVEVegetable, SVEFruit, DistantLandsCrop, Frui
 from ...strings.fish_names import WaterItem
 from ...strings.flower_names import Flower
 from ...strings.food_names import SVEMeal, SVEBeverage
-from ...strings.forageable_names import SVEForage, DistantLandsForageable, Forageable
+from ...strings.forageable_names import SVEForage, DistantLandsForageable, Forageable, Mushroom
 from ...strings.gift_names import SVEGift
 from ...strings.ingredient_names import Ingredient
 from ...strings.material_names import Material
@@ -149,12 +149,12 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
             WaterItem.coral: items[WaterItem.coral] | self.logic.region.can_reach(SVERegion.fable_reef),
             Forageable.rainbow_shell: items[Forageable.rainbow_shell] | self.logic.region.can_reach(SVERegion.fable_reef),
             WaterItem.sea_urchin: items[WaterItem.sea_urchin] | self.logic.region.can_reach(SVERegion.fable_reef),
-            Forageable.red_mushroom: items[Forageable.red_mushroom] | self.logic.tool.can_forage((Season.summer, Season.fall), SVERegion.forest_west) |
+            Mushroom.red: items[Mushroom.red] | self.logic.tool.can_forage((Season.summer, Season.fall), SVERegion.forest_west) |
                                      self.logic.region.can_reach(SVERegion.sprite_spring_cave),
-            Forageable.purple_mushroom: items[Forageable.purple_mushroom] | self.logic.tool.can_forage(Season.fall, SVERegion.forest_west) |
+            Mushroom.purple: items[Mushroom.purple] | self.logic.tool.can_forage(Season.fall, SVERegion.forest_west) |
                                         self.logic.region.can_reach(SVERegion.sprite_spring_cave),
-            Forageable.morel: items[Forageable.morel] | self.logic.tool.can_forage(Season.fall, SVERegion.forest_west),
-            Forageable.chanterelle: items[Forageable.chanterelle] | self.logic.tool.can_forage(Season.fall, SVERegion.forest_west) |
+            Mushroom.morel: items[Mushroom.morel] | self.logic.tool.can_forage(Season.fall, SVERegion.forest_west),
+            Mushroom.chanterelle: items[Mushroom.chanterelle] | self.logic.tool.can_forage(Season.fall, SVERegion.forest_west) |
                                     self.logic.region.can_reach(SVERegion.sprite_spring_cave),
             Ore.copper: items[Ore.copper] | (self.logic.tool.can_use_tool_at(Tool.pickaxe, ToolMaterial.basic, SVERegion.highlands_cavern) &
                                              self.logic.combat.can_fight_at_level(Performance.great)),

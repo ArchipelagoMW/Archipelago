@@ -23,6 +23,20 @@ class ArtisanGood:
     mead = "Mead"
     mystic_syrup = "Mystic Syrup"
 
+    @classmethod
+    def specific_wine(cls, fruit: str) -> str:
+        return f"{fruit} Wine"
+
+    @classmethod
+    def specific_dried(cls, food: str) -> str:
+        if food[-1] == "s":
+            return f"Dried {food}"
+        return f"Dried {food}s"
+
+    @classmethod
+    def specific_smoked(cls, fish: str) -> str:
+        return f"Smoked {fish}"
+
 
 class ModArtisanGood:
     pterodactyl_egg = "Pterodactyl Egg"

@@ -1,7 +1,7 @@
 from .pelican_town import pelican_town as pelican_town_content_pack
 from ..game_content import ContentPack
 from ...data.harvest import FruitBatsSource, MushroomCaveSource
-from ...strings.forageable_names import Forageable
+from ...strings.forageable_names import Forageable, Mushroom
 
 the_farm = ContentPack(
     "The Farm (Vanilla)",
@@ -24,19 +24,19 @@ the_farm = ContentPack(
         ),
 
         # Mushrooms
-        Forageable.common_mushroom: (
+        Mushroom.common: (
             MushroomCaveSource(),
         ),
-        Forageable.chanterelle: (
+        Mushroom.chanterelle: (
             MushroomCaveSource(),
         ),
-        Forageable.morel: (
+        Mushroom.morel: (
             MushroomCaveSource(),
         ),
-        Forageable.purple_mushroom: (
+        Mushroom.purple: (
             MushroomCaveSource(),
         ),
-        Forageable.red_mushroom: (
+        Mushroom.red: (
             MushroomCaveSource(),
         ),
 

@@ -2,7 +2,7 @@ from .pelican_town import pelican_town as pelican_town_content_pack
 from ..game_content import ContentPack
 from ...data import fish_data, villagers_data
 from ...data.harvest import ForagingSource
-from ...strings.forageable_names import Forageable
+from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.region_names import Region
 
 the_desert = ContentPack(
@@ -17,7 +17,7 @@ the_desert = ContentPack(
         Forageable.coconut: (
             ForagingSource(regions=(Region.desert,)),
         ),
-        Forageable.purple_mushroom: (
+        Mushroom.purple: (
             ForagingSource(regions=(Region.skull_cavern_25,)),
         )
     },

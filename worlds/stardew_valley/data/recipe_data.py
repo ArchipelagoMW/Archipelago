@@ -7,7 +7,7 @@ from ..strings.craftable_names import ModEdible, Edible
 from ..strings.crop_names import Fruit, Vegetable, SVEFruit, DistantLandsCrop
 from ..strings.fish_names import Fish, SVEFish, WaterItem, DistantLandsFish
 from ..strings.flower_names import Flower
-from ..strings.forageable_names import Forageable, SVEForage, DistantLandsForageable
+from ..strings.forageable_names import Forageable, SVEForage, DistantLandsForageable, Mushroom
 from ..strings.ingredient_names import Ingredient
 from ..strings.food_names import Meal, SVEMeal, Beverage, DistantLandsMeal, BoardingHouseMeal
 from ..strings.material_names import Material
@@ -116,7 +116,7 @@ fish_taco = friendship_recipe(Meal.fish_taco, NPC.linus, 7, {Fish.tuna: 1, Meal.
 fried_calamari = friendship_recipe(Meal.fried_calamari, NPC.jodi, 3, {Fish.squid: 1, Ingredient.wheat_flour: 1, Ingredient.oil: 1})
 fried_eel = friendship_recipe(Meal.fried_eel, NPC.george, 3, {Fish.eel: 1, Ingredient.oil: 1})
 fried_egg = starter_recipe(Meal.fried_egg, {AnimalProduct.chicken_egg: 1})
-fried_mushroom = friendship_recipe(Meal.fried_mushroom, NPC.demetrius, 3, {Forageable.common_mushroom: 1, Forageable.morel: 1, Ingredient.oil: 1})
+fried_mushroom = friendship_recipe(Meal.fried_mushroom, NPC.demetrius, 3, {Mushroom.common: 1, Mushroom.morel: 1, Ingredient.oil: 1})
 fruit_salad = queen_of_sauce_recipe(Meal.fruit_salad, 2, Season.fall, 7, {Fruit.blueberry: 1, Fruit.melon: 1, Fruit.apricot: 1})
 ginger_ale = shop_recipe(Beverage.ginger_ale, Region.volcano_dwarf_shop, 1000, {Forageable.ginger: 3, Ingredient.sugar: 1})
 glazed_yams = queen_of_sauce_recipe(Meal.glazed_yams, 1, Season.fall, 21, {Vegetable.yam: 1, Ingredient.sugar: 1})
@@ -160,14 +160,14 @@ shrimp_cocktail = queen_of_sauce_recipe(Meal.shrimp_cocktail, 2, Season.winter, 
 spaghetti = friendship_recipe(Meal.spaghetti, NPC.lewis, 3, {Vegetable.tomato: 1, Ingredient.wheat_flour: 1})
 spicy_eel = friendship_recipe(Meal.spicy_eel, NPC.george, 7, {Fish.eel: 1, Fruit.hot_pepper: 1})
 squid_ink_ravioli = skill_recipe(Meal.squid_ink_ravioli, Skill.combat, 9, {AnimalProduct.squid_ink: 1, Ingredient.wheat_flour: 1, Vegetable.tomato: 1})
-stir_fry_ingredients = {Forageable.cave_carrot: 1, Forageable.common_mushroom: 1, Vegetable.kale: 1, Ingredient.sugar: 1}
+stir_fry_ingredients = {Forageable.cave_carrot: 1, Mushroom.common: 1, Vegetable.kale: 1, Ingredient.sugar: 1}
 stir_fry_qos = queen_of_sauce_recipe(Meal.stir_fry, 1, Season.spring, 7, stir_fry_ingredients)
 strange_bun = friendship_recipe(Meal.strange_bun, NPC.shane, 7, {Ingredient.wheat_flour: 1, Fish.periwinkle: 1, ArtisanGood.void_mayonnaise: 1})
 stuffing = friendship_recipe(Meal.stuffing, NPC.pam, 7, {Meal.bread: 1, Fruit.cranberries: 1, Forageable.hazelnut: 1})
 super_meal = friendship_recipe(Meal.super_meal, NPC.kent, 7, {Vegetable.bok_choy: 1, Fruit.cranberries: 1, Vegetable.artichoke: 1})
 
 survival_burger = skill_recipe(Meal.survival_burger, Skill.foraging, 8, {Meal.bread: 1, Forageable.cave_carrot: 1, Vegetable.eggplant: 1})
-tom_kha_soup = friendship_recipe(Meal.tom_kha_soup, NPC.sandy, 7, {Forageable.coconut: 1, Fish.shrimp: 1, Forageable.common_mushroom: 1})
+tom_kha_soup = friendship_recipe(Meal.tom_kha_soup, NPC.sandy, 7, {Forageable.coconut: 1, Fish.shrimp: 1, Mushroom.common: 1})
 tortilla_ingredients = {Vegetable.corn: 1}
 tortilla_qos = queen_of_sauce_recipe(Meal.tortilla, 1, Season.fall, 7, tortilla_ingredients)
 tortilla_saloon = shop_recipe(Meal.tortilla, Region.saloon, 100, tortilla_ingredients)
@@ -176,7 +176,7 @@ tropical_curry = shop_recipe(Meal.tropical_curry, Region.island_resort, 2000, {F
 trout_soup = queen_of_sauce_recipe(Meal.trout_soup, 1, Season.fall, 14, {Fish.rainbow_trout: 1, WaterItem.green_algae: 1})
 vegetable_medley = friendship_recipe(Meal.vegetable_medley, NPC.caroline, 7, {Vegetable.tomato: 1, Vegetable.beet: 1})
 
-magic_elixir = shop_recipe(ModEdible.magic_elixir, Region.adventurer_guild, 3000, {Edible.life_elixir: 1, Forageable.purple_mushroom: 1}, ModNames.magic)
+magic_elixir = shop_recipe(ModEdible.magic_elixir, Region.adventurer_guild, 3000, {Edible.life_elixir: 1, Mushroom.purple: 1}, ModNames.magic)
 
 baked_berry_oatmeal = shop_recipe(SVEMeal.baked_berry_oatmeal, SVERegion.bear_shop, 0, {Forageable.salmonberry: 15, Forageable.blackberry: 15,
                                                                                             Ingredient.sugar: 1, Ingredient.wheat_flour: 2}, ModNames.sve)
@@ -199,8 +199,8 @@ void_delight = friendship_and_shop_recipe(SVEMeal.void_delight, NPC.krobus, 10, 
 void_salmon_sushi = friendship_and_shop_recipe(SVEMeal.void_salmon_sushi, NPC.krobus, 10, Region.sewer, 5000,
                                                {Fish.void_salmon: 1, ArtisanGood.void_mayonnaise: 1, WaterItem.seaweed: 3}, ModNames.sve)
 
-mushroom_kebab = friendship_recipe(DistantLandsMeal.mushroom_kebab, ModNPC.goblin, 2, {Forageable.chanterelle: 1, Forageable.common_mushroom: 1,
-                                                                                       Forageable.red_mushroom: 1, Material.wood: 1}, ModNames.distant_lands)
+mushroom_kebab = friendship_recipe(DistantLandsMeal.mushroom_kebab, ModNPC.goblin, 2, {Mushroom.chanterelle: 1, Mushroom.common: 1,
+                                                                                       Mushroom.red: 1, Material.wood: 1}, ModNames.distant_lands)
 void_mint_tea = friendship_recipe(DistantLandsMeal.void_mint_tea, ModNPC.goblin, 4, {DistantLandsCrop.void_mint: 1}, ModNames.distant_lands)
 crayfish_soup = friendship_recipe(DistantLandsMeal.crayfish_soup, ModNPC.goblin, 6, {Forageable.cave_carrot: 1, Fish.crayfish: 1,
                                                                                      DistantLandsFish.purple_algae: 1, WaterItem.white_algae: 1}, ModNames.distant_lands)

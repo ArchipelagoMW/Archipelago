@@ -363,6 +363,9 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Fish.clam: self.tool.can_forage(Generic.any, Region.beach),
             Fish.cockle: self.tool.can_forage(Generic.any, Region.beach),
             WaterItem.green_algae: self.fishing.can_fish_in_freshwater(), #
+            WaterItem.cave_jelly: self.fishing.can_fish_at(Region.mines_floor_100),
+            WaterItem.river_jelly: self.fishing.can_fish_at(Region.town),
+            WaterItem.sea_jelly: self.fishing.can_fish_at(Region.beach),
             WaterItem.seaweed: self.skill.can_fish(Region.tide_pools), #
             WaterItem.white_algae: self.skill.can_fish(Region.mines_floor_20), #
             WildSeeds.grass_starter: self.money.can_spend_at(Region.pierre_store, 100),
@@ -381,6 +384,8 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         self.registry.item_rules.update(self.registry.tree_fruit_rules)
         self.registry.item_rules.update(self.registry.seed_rules)
         self.registry.item_rules.update(self.registry.crop_rules)
+        self.artisan.initialize_rules()
+        self.registry.item_rules.update(self.registry.artisan_good_rules)
 
         self.registry.item_rules.update(self.mod.item.get_modded_item_rules())
         self.mod.item.modify_vanilla_item_rules_with_mod_additions(self.registry.item_rules)  # New regions and content means new ways to obtain old items

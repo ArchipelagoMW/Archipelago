@@ -67,6 +67,7 @@ class LocationTags(enum.Enum):
     SPECIAL_ORDER_BOARD = enum.auto()
     SPECIAL_ORDER_QI = enum.auto()
     REQUIRES_QI_ORDERS = enum.auto()
+    REQUIRES_MASTERIES = enum.auto()
     GINGER_ISLAND = enum.auto()
     WALNUT_PURCHASE = enum.auto()
 
@@ -480,6 +481,11 @@ def filter_qi_order_locations(options: StardewValleyOptions, locations: Iterable
     return (location for location in locations if include_qi_orders or LocationTags.REQUIRES_QI_ORDERS not in location.tags)
 
 
+def filter_masteries_locations(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
+    include_masteries = options.skill_progression == SkillProgression.option_progressive_with_masteries
+    return (location for location in locations if include_masteries or LocationTags.REQUIRES_MASTERIES not in location.tags)
+
+
 def filter_modded_locations(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
     return (location for location in locations if location.mod_name is None or location.mod_name in options.mods)
 
@@ -487,5 +493,6 @@ def filter_modded_locations(options: StardewValleyOptions, locations: Iterable[L
 def filter_disabled_locations(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
     locations_island_filter = filter_ginger_island(options, locations)
     locations_qi_filter = filter_qi_order_locations(options, locations_island_filter)
-    locations_mod_filter = filter_modded_locations(options, locations_qi_filter)
+    locations_masteries_filter = filter_masteries_locations(options, locations_qi_filter)
+    locations_mod_filter = filter_modded_locations(options, locations_masteries_filter)
     return locations_mod_filter

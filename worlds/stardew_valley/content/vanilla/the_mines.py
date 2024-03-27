@@ -2,7 +2,7 @@ from .pelican_town import pelican_town as pelican_town_content_pack
 from ..game_content import ContentPack
 from ...data import fish_data, villagers_data
 from ...data.harvest import ForagingSource
-from ...strings.forageable_names import Forageable
+from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.region_names import Region
 
 the_mines = ContentPack(
@@ -14,7 +14,7 @@ the_mines = ContentPack(
         Forageable.cave_carrot: (
             ForagingSource(regions=(Region.mines_floor_10,), requires_hoe=True),
         ),
-        Forageable.purple_mushroom: (
+        Mushroom.purple: (
             ForagingSource(regions=(Region.mines_floor_95,)),
         )
     },

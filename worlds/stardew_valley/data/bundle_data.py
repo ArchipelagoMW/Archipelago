@@ -5,13 +5,13 @@ from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.bundle_names import CCRoom, BundleName
 from ..strings.craftable_names import Fishing, Craftable, Bomb, Consumable, Lighting
-from ..strings.crop_names import Fruit, Vegetable
+from ..strings.crop_names import Fruit, Vegetable, all_fruits
 from ..strings.currency_names import Currency
 from ..strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
 from ..strings.fish_names import Fish, WaterItem, Trash
 from ..strings.flower_names import Flower
 from ..strings.food_names import Beverage, Meal
-from ..strings.forageable_names import Forageable
+from ..strings.forageable_names import Forageable, all_edible_mushrooms, Mushroom
 from ..strings.geode_names import Geode
 from ..strings.gift_names import Gift
 from ..strings.ingredient_names import Ingredient
@@ -25,21 +25,21 @@ wild_horseradish = BundleItem(Forageable.wild_horseradish)
 daffodil = BundleItem(Forageable.daffodil)
 leek = BundleItem(Forageable.leek)
 dandelion = BundleItem(Forageable.dandelion)
-morel = BundleItem(Forageable.morel)
-common_mushroom = BundleItem(Forageable.common_mushroom)
+morel = BundleItem(Mushroom.morel)
+common_mushroom = BundleItem(Mushroom.common)
 salmonberry = BundleItem(Forageable.salmonberry)
 spring_onion = BundleItem(Forageable.spring_onion)
 
 grape = BundleItem(Fruit.grape)
 spice_berry = BundleItem(Forageable.spice_berry)
 sweet_pea = BundleItem(Forageable.sweet_pea)
-red_mushroom = BundleItem(Forageable.red_mushroom)
+red_mushroom = BundleItem(Mushroom.red)
 fiddlehead_fern = BundleItem(Forageable.fiddlehead_fern)
 
 wild_plum = BundleItem(Forageable.wild_plum)
 hazelnut = BundleItem(Forageable.hazelnut)
 blackberry = BundleItem(Forageable.blackberry)
-chanterelle = BundleItem(Forageable.chanterelle)
+chanterelle = BundleItem(Mushroom.chanterelle)
 
 winter_root = BundleItem(Forageable.winter_root)
 crystal_fruit = BundleItem(Forageable.crystal_fruit)
@@ -50,7 +50,7 @@ holly = BundleItem(Forageable.holly)
 coconut = BundleItem(Forageable.coconut)
 cactus_fruit = BundleItem(Forageable.cactus_fruit)
 cave_carrot = BundleItem(Forageable.cave_carrot)
-purple_mushroom = BundleItem(Forageable.purple_mushroom)
+purple_mushroom = BundleItem(Mushroom.purple)
 maple_syrup = BundleItem(ArtisanGood.maple_syrup)
 oak_resin = BundleItem(ArtisanGood.oak_resin)
 pine_tar = BundleItem(ArtisanGood.pine_tar)
@@ -403,7 +403,7 @@ pearl = BundleItem(Gift.pearl)
 challenge_bait = BundleItem(Fishing.challenge_bait, 25, source=BundleItem.Sources.masteries)
 
 ginger = BundleItem(Forageable.ginger, source=BundleItem.Sources.island)
-magma_cap = BundleItem(Forageable.magma_cap, source=BundleItem.Sources.island)
+magma_cap = BundleItem(Mushroom.magma_cap, source=BundleItem.Sources.island)
 
 wheat_flour = BundleItem(Ingredient.wheat_flour)
 sugar = BundleItem(Ingredient.sugar)
@@ -547,12 +547,19 @@ slime_farmer_items = [slime.as_amount(99), petrified_slime.as_amount(10), blue_s
                       purple_slime_egg, green_slime_egg, tiger_slime_egg]
 slime_farmer_bundle = BundleTemplate(CCRoom.pantry, BundleName.slime_farmer, slime_farmer_items, 4, 3)
 
+sommelier_items = [BundleItem(ArtisanGood.specific_wine(fruit)) for fruit in all_fruits]
+sommelier_bundle = BundleTemplate(CCRoom.pantry, BundleName.sommelier, sommelier_items, 6, 3)
+
+dry_items = [BundleItem(dry_item, source=BundleItem.Sources.island if Mushroom.magma_cap in dry_item else BundleItem.Sources.vanilla)
+             for dry_item in [ArtisanGood.specific_dried(item_to_dry) for item_to_dry in[*all_fruits, *all_edible_mushrooms]]]
+dry_bundle = BundleTemplate(CCRoom.pantry, BundleName.dry, dry_items, 6, 3)
+
 pantry_bundles_vanilla = [spring_crops_bundle_vanilla, summer_crops_bundle_vanilla, fall_crops_bundle_vanilla,
                           quality_crops_bundle_vanilla, animal_bundle_vanilla, artisan_bundle_vanilla]
 pantry_bundles_thematic = [spring_crops_bundle_thematic, summer_crops_bundle_thematic, fall_crops_bundle_thematic,
                            quality_crops_bundle_thematic, animal_bundle_thematic, artisan_bundle_thematic]
 pantry_bundles_remixed = [*pantry_bundles_thematic, rare_crops_bundle, fish_farmer_bundle, garden_bundle,
-                          brewer_bundle, orchard_bundle, island_crops_bundle, agronomist_bundle, slime_farmer_bundle]
+                          brewer_bundle, orchard_bundle, island_crops_bundle, agronomist_bundle, slime_farmer_bundle, sommelier_bundle, dry_bundle]
 pantry_vanilla = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_vanilla, 6)
 pantry_thematic = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_thematic, 6)
 pantry_remixed = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_remixed, 6)
@@ -631,12 +638,17 @@ bait_bundle = IslandBundleTemplate(CCRoom.fish_tank, BundleName.bait, bait_items
 deep_fishing_items = [blobfish, spook_fish, midnight_squid, sea_cucumber, super_cucumber, octopus, pearl, seaweed]
 deep_fishing_bundle = FestivalBundleTemplate(CCRoom.fish_tank, BundleName.deep_fishing, deep_fishing_items, 4, 3)
 
+smokeable_fish = [Fish.largemouth_bass, Fish.bream, Fish.bullhead, Fish.chub, Fish.ghostfish, Fish.flounder, Fish.shad, Fish.rainbow_trout, Fish.tilapia,
+                 Fish.red_mullet, Fish.tuna, Fish.midnight_carp, Fish.salmon, Fish.perch]
+fish_smoker_items = [BundleItem(ArtisanGood.specific_smoked(fish)) for fish in smokeable_fish]
+fish_smoker_bundle = FestivalBundleTemplate(CCRoom.fish_tank, BundleName.fish_smoker, fish_smoker_items, 6, 3)
+
 fish_tank_bundles_vanilla = [river_fish_bundle_vanilla, lake_fish_bundle_vanilla, ocean_fish_bundle_vanilla,
                              night_fish_bundle_vanilla, crab_pot_bundle_vanilla, specialty_fish_bundle_vanilla]
 fish_tank_bundles_thematic = [river_fish_bundle_thematic, lake_fish_bundle_thematic, ocean_fish_bundle_thematic,
                               night_fish_bundle_thematic, crab_pot_bundle_thematic, specialty_fish_bundle_thematic]
 fish_tank_bundles_remixed = [*fish_tank_bundles_thematic, spring_fish_bundle, summer_fish_bundle, fall_fish_bundle, winter_fish_bundle, trash_bundle,
-                             rain_fish_bundle, quality_fish_bundle, master_fisher_bundle, legendary_fish_bundle, tackle_bundle, bait_bundle]
+                             rain_fish_bundle, quality_fish_bundle, master_fisher_bundle, legendary_fish_bundle, tackle_bundle, bait_bundle, fish_smoker_bundle]
 
 # In Remixed, the trash items are in the recycling bundle, so we don't use the thematic version of the crab pot bundle that added trash items to it
 fish_tank_bundles_remixed.remove(crab_pot_bundle_thematic)
@@ -757,10 +769,15 @@ calico_items = [calico_egg.as_amount(200), calico_egg.as_amount(200), calico_egg
                 mystery_box.as_amount(10), mixed_seeds.as_amount(50), eggplant_parmesan.as_amount(50)]
 calico_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.calico, calico_items, 2, 2)
 
+raccoon_foraging_items = [moss.as_amount(10), rusty_spoon, trash.as_amount(5), slime.as_amount(99), bat_wing.as_amount(10), geode.as_amount(8),
+                          frozen_geode.as_amount(5), magma_geode.as_amount(3), coral.as_amount(4), sea_urchin.as_amount(2), bug_meat.as_amount(10),
+                          diamond, topaz.as_amount(3), ghostfish.as_amount(3)]
+raccoon_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.raccoon, raccoon_foraging_items, 4, 4)
+
 bulletin_board_bundles_vanilla = [chef_bundle_vanilla, dye_bundle_vanilla, field_research_bundle_vanilla, fodder_bundle_vanilla, enchanter_bundle_vanilla]
 bulletin_board_bundles_thematic = [chef_bundle_thematic, dye_bundle_thematic, field_research_bundle_thematic, fodder_bundle_thematic, enchanter_bundle_thematic]
 bulletin_board_bundles_remixed = [*bulletin_board_bundles_thematic, children_bundle, forager_bundle, home_cook_bundle,
-                                  helper_bundle, spirit_eve_bundle, winter_star_bundle, bartender_bundle, calico_bundle]
+                                  helper_bundle, spirit_eve_bundle, winter_star_bundle, bartender_bundle, calico_bundle, raccoon_bundle]
 bulletin_board_vanilla = BundleRoomTemplate(CCRoom.bulletin_board, bulletin_board_bundles_vanilla, 5)
 bulletin_board_thematic = BundleRoomTemplate(CCRoom.bulletin_board, bulletin_board_bundles_thematic, 5)
 bulletin_board_remixed = BundleRoomTemplate(CCRoom.bulletin_board, bulletin_board_bundles_remixed, 5)

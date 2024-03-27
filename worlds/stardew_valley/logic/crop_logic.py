@@ -13,7 +13,7 @@ from ..data import CropItem, SeedItem
 from ..options import Cropsanity, ExcludeGingerIsland
 from ..stardew_rule import StardewRule, True_, False_
 from ..strings.craftable_names import Craftable
-from ..strings.forageable_names import Forageable
+from ..strings.forageable_names import Forageable, Mushroom
 from ..strings.machine_names import Machine
 from ..strings.metal_names import Fossil
 from ..strings.region_names import Region
@@ -66,7 +66,7 @@ class CropLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMi
         region_rule = self.logic.region.can_reach_all(seed.regions)
         currency_rule = self.logic.money.can_spend(1000)
         if seed.name == Seed.pineapple:
-            currency_rule = self.logic.has(Forageable.magma_cap)
+            currency_rule = self.logic.has(Mushroom.magma_cap)
         if seed.name == Seed.taro:
             currency_rule = self.logic.has(Fossil.bone_fragment)
         return season_rule & region_rule & item_rule & currency_rule
