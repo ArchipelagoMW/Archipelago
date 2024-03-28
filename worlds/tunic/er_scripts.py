@@ -1,4 +1,4 @@
-from typing import Dict, List, Set, Tuple, TYPE_CHECKING
+from typing import Dict, List, Set, TYPE_CHECKING
 from BaseClasses import Region, ItemClassification, Item, Location
 from .locations import location_table
 from .er_data import Portal, tunic_er_regions, portal_mapping, \
@@ -89,7 +89,6 @@ def place_event_items(world: "TunicWorld", regions: Dict[str, Region]) -> None:
 def vanilla_portals() -> Dict[Portal, Portal]:
     portal_pairs: Dict[Portal, Portal] = {}
     portal_map = portal_mapping.copy()
-    shop_num = 1
 
     while portal_map:
         portal1 = portal_map[0]
@@ -98,11 +97,10 @@ def vanilla_portals() -> Dict[Portal, Portal]:
         portal2_sdt = portal1.destination_scene()
 
         if portal2_sdt.startswith("Shop,"):
-            portal2 = Portal(name=f"Shop", region="Shop",
+            portal2 = Portal(name="Shop", region="Shop",
                              destination="Previous Region", tag="_")
-            shop_num += 1
 
-        if portal2_sdt == "Purgatory, Purgatory_bottom":
+        elif portal2_sdt == "Purgatory, Purgatory_bottom":
             portal2_sdt = "Purgatory, Purgatory_top"
 
         for portal in portal_map:
