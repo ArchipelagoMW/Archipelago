@@ -3,6 +3,7 @@ from .Items import item_table
 from .Rules import set_rules
 from ..AutoWorld import World, WebWorld
 from datetime import datetime
+from random import shuffle
 
 
 class ArchipIDLEWebWorld(WebWorld):
@@ -29,7 +30,7 @@ class ArchipIDLEWebWorld(WebWorld):
 
 class ArchipIDLEWorld(World):
     """
-    An idle game which sends a check every thirty seconds, up to two hundred checks.
+    An idle game which sends a check every thirty to sixty seconds, up to two hundred checks.
     """
     game = "ArchipIDLE"
     topology_present = False
@@ -56,18 +57,38 @@ class ArchipIDLEWorld(World):
         return Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
 
     def create_items(self):
-        item_table_copy = list(item_table)
-        self.multiworld.random.shuffle(item_table_copy)
-
-        item_pool = []
-        for i in range(200):
-            item = ArchipIDLEItem(
-                item_table_copy[i],
-                ItemClassification.progression if i < 40 else ItemClassification.filler,
-                self.item_name_to_id[item_table_copy[i]],
+        item_pool = [
+            ArchipIDLEItem(
+                item_table[0],
+                ItemClassification.progression,
+                self.item_name_to_id[item_table[0]],
                 self.player
             )
-            item_pool.append(item)
+        ]
+
+        for i in range(25):
+            item_pool.append(ArchipIDLEItem(
+                item_table[1],
+                ItemClassification.progression,
+                self.item_name_to_id[item_table[1]],
+                self.player
+            ))
+            item_pool.append(ArchipIDLEItem(
+                item_table[2],
+                ItemClassification.progression,
+                self.item_name_to_id[item_table[2]],
+                self.player
+            ))
+
+        item_table_copy = list(item_table[3:])
+        self.random.shuffle(item_table_copy)
+        for i in range(150):
+            item_pool.append(ArchipIDLEItem(
+                item_table_copy[i],
+                ItemClassification.progression if i < 9 else ItemClassification.filler,
+                self.item_name_to_id[item_table_copy[i]],
+                self.player
+            ))
 
         self.multiworld.itempool += item_pool
 
