@@ -33,6 +33,7 @@ def world_by_id(id) -> World:
 
 
 class MetroidPrimeInterface:
+    """Interface sitting in front of the DolphinClient to provide higher level functions for interacting with Metroid Prime"""
     dolphin_client: DolphinClient
     connection_status: str
     logger: Logger
@@ -41,7 +42,26 @@ class MetroidPrimeInterface:
         self.logger = logger
         self.dolphin_client = DolphinClient(logger)
 
+    def give_item_to_player(self, item_id):
+        pass
+
+    def check_for_new_locations(self):
+        pass
+
+    def get_current_inventory(self) -> :
+
+
+    def get_current_world(self) -> World:
+        """Returns the world that the player is currently in"""
+        world_bytes = self.dolphin_client.read_pointer(
+            game_state_pointer, 0x84, struct.calcsize(">I"))
+        if world_bytes is not None:
+            world_asset_id = struct.unpack(">I", world_bytes)[0]
+            return world_by_id(world_asset_id)
+        return None
+
     def connect_to_game(self):
+        """Initializes the connection to dolphin and verifies it is connected to Metroid Prime"""
         self.dolphin_client.connect()
         self.logger.info("Connected to Dolphin Emulator")
         if self.dolphin_client.read_address(GC_GAME_ID_ADDRESS, 6) != METROID_PRIME_ID:
@@ -60,24 +80,8 @@ class MetroidPrimeInterface:
         """ Check if the player is in the actual game rather than the main menu """
         return self.get_current_world() != None and self.__is_player_table_ready()
 
-    def get_current_region(self):
-        pass
-
-    def give_item_to_player(self, item_id):
-        pass
-
-    def check_for_new_locations(self):
-        pass
-
-    def get_current_world(self) -> World:
-        world_bytes = self.dolphin_client.read_pointer(
-            game_state_pointer, 0x84, struct.calcsize(">I"))
-        if world_bytes is not None:
-            world_asset_id = struct.unpack(">I", world_bytes)[0]
-            return world_by_id(world_asset_id)
-        return None
-
     def __is_player_table_ready(self) -> bool:
+        """Check if the player table is ready to be read from memory, indicating the game is in a playable state"""
         player_table_bytes = self.dolphin_client.read_pointer(
             cstate_manager_global + 0x84C, 0, 4)
         player_table = struct.unpack(">I", player_table_bytes)[0]

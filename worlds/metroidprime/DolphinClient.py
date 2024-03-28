@@ -35,6 +35,7 @@ class DolphinClient:
             self.dolphin.un_hook()
 
     def __assert_connected(self):
+        """Custom assert function that returns a DolphinException instead of a generic RuntimeError if the connection is lost"""
         try:
             self.dolphin.assert_hooked()
             # For some reason the dolphin_memory_engine.is_hooked() function doesn't recognize when the game is closed, checking if memory is available will assert the connection is alive
@@ -44,6 +45,7 @@ class DolphinClient:
             raise DolphinException(e)
 
     def verify_target_address(self, target_address: int, read_size: int):
+        """Ensures that the target address is within the valid range for GC memory"""
         if target_address < 0x80000000 or target_address + read_size > 0x81800000:
             raise DolphinException(
                 f"{target_address:x} -> {target_address + read_size:x} is not a valid for GC memory"
