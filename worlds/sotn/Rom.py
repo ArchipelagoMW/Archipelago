@@ -1,10 +1,12 @@
 import Utils
 import random
+import logging
 from sys import platform
 from worlds.Files import APDeltaPatch
 from Utils import home_path
 from settings import get_settings
 from worlds.AutoWorld import World
+from BaseClasses import ItemClassification
 from .Items import ItemData, item_table, IType, get_item_data_shop
 from .Locations import location_table
 
@@ -15,6 +17,7 @@ import bsdiff4
 
 USHASH = "acbb3a2e4a8f865f363dc06df147afa2"
 AUDIOHASH = "8f4b1df20c0173f7c2e6a30bd3109ac8"
+logger = logging.getLogger("Client")
 
 shop_stock = {
         "Potion": 0x047a309c,
@@ -65,11 +68,84 @@ class SOTNDeltaPatch(APDeltaPatch):
     hash = USHASH
     game = "Symphony of the Night"
     patch_file_ending = ".apsotn"
-    result_file_ending: str = ".bin"
+    result_file_ending: str = ".cue"
 
     @classmethod
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes()
+
+    def patch(self, target: str):
+        print(f"Patching SOTN {target} {self.delta}")
+        """Base + Delta -> Patched"""
+        patch_path = target[:-4] + ".apsotn"
+
+        with open(patch_path, "rb") as infile:
+            print("Opening patch")
+            diff_patch = bytes(infile.read())
+        with open(get_settings().sotn_settings.rom_file, "rb") as infile:
+            print("Opening track 1")
+            original_rom = bytearray(infile.read())
+        with open(get_settings().sotn_settings.audio_file, "rb") as infile:
+            print("Opening track 2")
+            audio_rom = bytearray(infile.read())
+
+        patched_rom = original_rom.copy()
+        music_slice = original_rom[0x000affd0:0x000b0c2c]  # Size 0xc5c / 3164
+        original_slice = music_slice + original_rom[0x04389c6c:0x06a868a4]
+
+        patched_slice = bsdiff4.patch(bytes(original_slice), diff_patch)
+
+        # Patch Clock Room cutscene
+        write_char(patched_rom, 0x0aeaa0, 0x00)
+        write_char(patched_rom, 0x119af4, 0x00)
+
+        # patchPowerOfSireFlashing Patches researched by MottZilla.
+        write_word(patched_rom, 0x00136580, 0x03e00008)
+
+        patched_rom[0x000affd0:0x000b0c2c] = patched_slice[0:0xc5c]
+        patched_rom[0x04389c6c:0x06a868a4] = patched_slice[0xc5c:]
+
+        with open(target[:-4] + ".bin", "wb") as stream:
+            stream.write(patched_rom)
+
+        audio_name = target[0:target.rfind('/') + 1]
+        audio_name += "Castlevania - Symphony of the Night (USA) (Track 2).bin"
+
+        if os.path.exists(audio_name):
+            print("Track 2 already exists!")
+        else:
+            print("Creating audio file!")
+            with open(audio_name, "wb") as stream:
+                stream.write(audio_rom)
+
+        error_recalc_path = ""
+        if platform == "win32":
+            print("ERROR RECALC started. Please wait")
+            if os.path.exists("error_recalc.exe"):
+                error_recalc_path = "error_recalc.exe"
+            elif os.path.exists(f"{home_path('lib')}\\error_recalc.exe"):
+                error_recalc_path = f"{home_path('lib')}\\error_recalc.exe"
+        elif platform.startswith("linux") or platform.startswith("darwin"):
+            if os.path.exists("error_recalc"):
+                error_recalc_path = "./error_recalc"
+            elif os.path.exists(f"{home_path('lib')}/error_recalc"):
+                error_recalc_path = f"{home_path('lib')}/error_recalc"
+        else:
+            print("ERROR RECALC FAILED!!!")
+            logger.info("ERROR RECALC FAILED!!!")
+
+        track1_name = target[target.rfind('/') + 1:-4]
+        if error_recalc_path != "":
+            target_bin = target[:-4] + ".bin"
+            subprocess.call([error_recalc_path, target_bin])
+            cue_file = f'FILE "{track1_name}.bin" BINARY\n  TRACK 01 MODE2/2352\n\tINDEX 01 00:00:00\n'
+            cue_file += f'FILE "Castlevania - Symphony of the Night (USA) (Track 2).bin" BINARY\n  TRACK 02 AUDIO\n'
+            cue_file += f'\tINDEX 00 00:00:00\n\tINDEX 01 00:02:00'
+            with open(target[:-4] + ".cue", 'wb') as outfile:
+                outfile.write(bytes(cue_file, 'utf-8'))
+        else:
+            print("Couldn't find error_recalc.exe")
+            logger.info("Couldn't find error_recalc.exe")
 
 
 def get_base_rom_bytes() -> bytes:
@@ -217,7 +293,10 @@ def patch_rom(world: World, output_directory: str) -> None:
                                 write_short(patched_rom, address - 4, 0x000c)
                                 write_word(patched_rom, address - 2, loc_data.get_delete())
                         else:
-                            write_short(patched_rom, address, 0x0004)
+                            if loc.item.classification == ItemClassification.filler:
+                                write_short(patched_rom, address, 0x0004)
+                            else:
+                                write_short(patched_rom, address, 0x0003)
 
     offset = 0x0492df64
     offset = write_word(patched_rom, offset, 0xa0202ee8)
@@ -257,7 +336,6 @@ def patch_rom(world: World, output_directory: str) -> None:
     """
     The instruction that check relics of Vlad is jnz r2, 801c1790 we gonna change to je r0, r0 so it's always 
     branch. ROM is @ 0x4fcf7b4 and RAM is @ 0x801c132c
-    @ 4f85ae3 on ram its 0x180f8b
     """
     write_word(patched_rom, 0x04fcf7b4, 0x10000118)
 
@@ -297,7 +375,7 @@ def patch_rom(world: World, output_directory: str) -> None:
     #    os.unlink(filename)
 
 
-def write_seed(buffer, seed) -> str:
+def write_seed(buffer, seed) -> None:
     write_short(buffer, 0x043930c4, 0x78b4)
     write_short(buffer, 0x043930d4, 0x78d4)
     write_short(buffer, 0x0439312c, 0x78b4)
