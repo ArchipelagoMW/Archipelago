@@ -3,7 +3,6 @@ from .Items import item_table
 from .Rules import set_rules
 from ..AutoWorld import World, WebWorld
 from datetime import datetime
-from random import shuffle
 
 
 class ArchipIDLEWebWorld(WebWorld):
