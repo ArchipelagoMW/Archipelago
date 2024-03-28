@@ -41,7 +41,6 @@ filler and useful items will cost less, and uncategorized items will be in the m
 - Pressing Select will cycle through your inventory.
 - Shop purchases are tracked within sessions, indicated by the item being elevated from its normal position.
 - What slots from a Take Any Cave have been chosen are similarly tracked.
--
 
 ## Local Unique Commands
 
