@@ -73,7 +73,8 @@ class FishingLogic(BaseLogic[Union[FishingLogicMixin, ReceivedLogicMixin, Region
             return rod_rule & self.logic.skill.has_level(Skill.fishing, 4)
         if fish_quality == FishQuality.iridium:
             return rod_rule & self.logic.skill.has_level(Skill.fishing, 10)
-        return False_()
+
+        raise ValueError(f"Quality {fish_quality} is unknown.")
 
     def can_catch_every_fish(self) -> StardewRule:
         rules = [self.has_max_fishing()]
