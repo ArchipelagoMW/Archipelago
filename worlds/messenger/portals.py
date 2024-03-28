@@ -207,9 +207,8 @@ REGION_ORDER = [
 
 def shuffle_portals(world: "MessengerWorld") -> None:
     """shuffles the output of the portals from the main hub"""
-    def create_mapping(in_portal: str, warp: str) -> None:
+    def create_mapping(in_portal: str, warp: str) -> str:
         """assigns the chosen output to the input"""
-        nonlocal available_portals
         parent = out_to_parent[warp]
         exit_string = f"{parent.strip(' ')} - "
 
@@ -226,9 +225,7 @@ def shuffle_portals(world: "MessengerWorld") -> None:
         world.spoiler_portal_mapping[in_portal] = exit_string
         connect_portal(world, in_portal, exit_string)
 
-        if shuffle_type < ShufflePortals.option_anywhere:
-            available_portals = [port for port in available_portals if port not in shop_points[parent]]
-            world.random.shuffle(available_portals)
+        return parent
 
     def handle_planned_portals(plando_connections: List[PlandoConnection]) -> None:
         """checks the provided plando connections for portals and connects them"""
@@ -259,7 +256,10 @@ def shuffle_portals(world: "MessengerWorld") -> None:
         if portal in world.plando_portals:
             continue
         warp_point = available_portals.pop()
-        create_mapping(portal, warp_point)
+        parent = create_mapping(portal, warp_point)
+        if shuffle_type < ShufflePortals.option_anywhere:
+            available_portals = [port for port in available_portals if port not in shop_points[parent]]
+            world.random.shuffle(available_portals)
 
 
 def connect_portal(world: "MessengerWorld", portal: str, out_region: str) -> None:
