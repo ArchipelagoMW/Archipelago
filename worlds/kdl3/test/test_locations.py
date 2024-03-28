@@ -33,7 +33,8 @@ class TestLocations(KDL3TestBase):
         self.run_location_test(LocationName.iceberg_kogoesou, ["Burning"])
         self.run_location_test(LocationName.iceberg_samus, ["Ice"])
         self.run_location_test(LocationName.iceberg_name, ["Burning", "Coo", "ChuChu"])
-        self.run_location_test(LocationName.iceberg_angel, ["Cutter", "Burning", "Spark", "Parasol", "Needle", "Clean", "Stone", "Ice"])
+        self.run_location_test(LocationName.iceberg_angel, ["Cutter", "Burning", "Spark", "Parasol", "Needle", "Clean",
+                                                            "Stone", "Ice"])
 
     def run_location_test(self, location: str, itempool: typing.List[str]):
         items = itempool.copy()

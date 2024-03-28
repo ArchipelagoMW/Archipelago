@@ -264,7 +264,7 @@ def set_rules(world: "KDL3World") -> None:
         for r in [range(1, 31), range(44, 51)]:
             for i in r:
                 set_rule(world.multiworld.get_location(f"Cloudy Park 4 - Star {i}", world.player),
-                         lambda state: can_reach_clean(state, world.player))
+                         lambda state: can_reach_coo(state, world.player))
         for i in [18, *list(range(20, 25))]:
             set_rule(world.multiworld.get_location(f"Cloudy Park 6 - Star {i}", world.player),
                      lambda state: can_reach_ice(state, world.player))
