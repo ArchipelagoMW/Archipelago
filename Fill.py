@@ -888,8 +888,8 @@ def distribute_planned(multiworld: MultiWorld) -> None:
     multiworld.random.shuffle(plando_blocks)
     plando_blocks.sort(key=lambda block: (len(block["locations"]) - block["count"]["target"]
                                           if len(block["locations"]) > 0
-                                          else len(multiworld.get_unfilled_locations(player))
-                                               - block["count"]["target"]))
+                                          else len(multiworld.get_unfilled_locations(player)) -
+                                          block["count"]["target"]))
     for placement in plando_blocks:
         player = placement["player"]
         try:

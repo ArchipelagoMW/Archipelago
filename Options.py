@@ -1123,10 +1123,10 @@ class PlandoItem(typing.NamedTuple):
     force: typing.Union[bool, typing.Literal["silent"]] = "silent"
     count: typing.Union[int, bool, typing.Dict[str, int]] = False
     percentage: int = 100
-    player: int = -1  # present for use later
 
 
 class PlandoItems(Option[typing.List[PlandoItem]]):
+    """Generic items plando."""
     default = ()
     supports_weighting = False
     display_name = "Plando Items"
