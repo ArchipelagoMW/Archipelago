@@ -179,18 +179,28 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
     no0.connect(no1)
     no0.connect(no2, "NO0->NO2", lambda state: state.has("Leap stone", player) or
                 state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                state.has("Power of mist", player)))
+                state.has("Power of mist", player)) or state.has("Gravity boots", player))
     no0.connect(no4, "NO0->NO4", lambda state: state.has("Jewel of open", player))
     no0.connect(no3)
     no0.connect(nz0)
     # Outer Wall
     no1.connect(lib)
     no1.connect(no0)
-    no1.connect(nz1)  # NO1 connect to NZ1 with only 2 items available, better leave the rules to items and
+    no1.connect(nz1, "NO1->NZ1", lambda state: state.has("Leap stone", player) or
+                state.has("Soul of bat", player) or
+                (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+                state.has("Gravity boots", player))
     # reinforce NZ1->TOP
     # Olrox's Quarters
     no2.connect(dai)
-    no2.connect(are)
+    if not open_no2:
+        no2.connect(are)
+    else:
+        (no2.connect(are, "NO2->ARE"), lambda state: state.has("Soul of bat", player) or
+                    (state.has("Gravity boots", player)) and (state.has("Leap stone", player) or
+                                                               state.has("Soul of wolf", player) or
+                                                               state.has("Form of mist", player)) or
+                    (state.has("Form of mist", player) and state.has("Power of mist", player)))
     no2.connect(no0, "NO2->NO0", lambda state: state.has("Leap stone", player) or
                 state.has("Soul of bat", player) or
                 (state.has("Form of mist", player) and state.has("Power of mist", player)))
@@ -229,8 +239,8 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
                 state.has("Soul of bat", player) or state.has("Gravity boots", player) or
                 (state.has("Form of mist", player) and state.has("Power of mist", player)))
     # Castle Keep
-    top.connect(nz1, "TOP->NZ1", lambda state: state.has("Leap stone", player) or
-                state.has("Soul of bat", player) or state.has("Gravity boots", player) or
+    top.connect(nz1, "TOP->NZ1", lambda state: state.has("Soul of bat", player) or
+                state.has("Gravity boots", player) or
                 (state.has("Form of mist", player) and state.has("Power of mist", player)))
     top.connect(dai)
     top.connect(rtop, "TOP->RTOP", lambda state: state.has("Holy glasses", player) and
@@ -246,10 +256,10 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
     rtop.connect(rdai)
     rtop.connect(rnz1)
     # Anti-Chapel
-    rnz1.connect(rtop)
-    rnz1.connect(rno2)
-    rnz1.connect(rare)
-    rnz1.connect(rnz0)
+    rdai.connect(rtop)
+    rdai.connect(rno2)
+    rdai.connect(rare)
+    rdai.connect(rnz0)
     # Reverse Clock Tower
     rnz1.connect(rtop)
     rnz1.connect(rno1)
