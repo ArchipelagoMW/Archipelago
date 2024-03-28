@@ -1138,7 +1138,7 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
     @classmethod
     def from_any(cls, data: typing.Any) -> Option[typing.List[PlandoItem]]:
         if not isinstance(data, typing.Iterable):
-            raise Exception(f"Cannot create plando connections from non-Iterable type, got {type(data)}")
+            raise Exception(f"Cannot create plando items from non-Iterable type, got {type(data)}")
 
         value: typing.List[PlandoItem] = []
         for item in data:
