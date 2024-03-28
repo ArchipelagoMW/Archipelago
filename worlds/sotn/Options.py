@@ -1,6 +1,6 @@
 from typing import Dict, Union
 from BaseClasses import MultiWorld
-from Options import Option, Toggle, Choice, Range
+from Options import Option, Toggle, Choice, Range, FreeText
 
 
 class OpenedNO4NO3(Toggle):
@@ -78,6 +78,11 @@ class ExpNeed(Range):
     default = 0
 
 
+class ExtraPool(FreeText):
+    """Extra item added to the pool"""
+    display_name = "Extra items"
+
+
 sotn_option_definitions: Dict[str, type(Option)] = {
     "opened_no4": OpenedNO4NO3,
     "opened_are": OpenedDAIARE,
@@ -87,7 +92,8 @@ sotn_option_definitions: Dict[str, type(Option)] = {
     "rng_songs": RngSongs,
     "rng_shop": RngShop,
     "rng_prices": RngPrices,
-    "exp_need": ExpNeed
+    "exp_need": ExpNeed,
+    "extra_pool": ExtraPool
 }
 
 
