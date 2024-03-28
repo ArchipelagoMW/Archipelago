@@ -111,7 +111,7 @@ class BlasphemousWorld(World):
                 invalid = True
 
             if invalid:
-                self.options.starting_location = multiworld.random.choice(locations)
+                self.options.starting_location.value = multiworld.random.choice(locations)
             
         
         if not self.options.dash_shuffle:
@@ -319,14 +319,14 @@ class BlasphemousWorld(World):
         locations = []
         doors: Dict[str, str] = {}
 
-        world = self.multiworld
+        multiworld = self.multiworld
         player = self.player
         thorns: bool = True
 
         if self.options.thorn_shuffle == 2:
             thorns = False
 
-        for loc in world.get_filled_locations(player):
+        for loc in multiworld.get_filled_locations(player):
             if loc.item.code == None:
                 continue
             else:
@@ -334,7 +334,7 @@ class BlasphemousWorld(World):
                     "id": [i for i in location_names if location_names[i] == loc.name][0],
                     "ap_id": loc.address,
                     "name": loc.item.name,
-                    "player_name": world.player_name[loc.item.player],
+                    "player_name": multiworld.player_name[loc.item.player],
                     "type": int(loc.item.classification)
                 }
 

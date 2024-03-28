@@ -19,6 +19,11 @@ class BlasRules:
 
         # BrandenEK/Blasphemous.Randomizer/ItemRando/BlasphemousInventory.cs
         self.string_rules = {
+            # Visibility flags
+            "NormalLogic": lambda state: self.world.options.difficulty >= 1,
+            "HardLogic": lambda state: self.world.options.difficulty >= 2,
+            "EnemySkips": self.enemy_skips_allowed,
+
             # Relics
             "blood": self.blood,
             # skip "root"
@@ -738,7 +743,7 @@ class BlasRules:
         return (
             state.can_reach_region("D04Z02S11[E]", self.player)
             or state.can_reach_region("D04Z02S09[W]", self.player)
-            or state.can_reach_region("D04Z02S23[S]", self.player)
+            or state.can_reach_region("D06Z01S23[S]", self.player)
             or state.can_reach_region("D04Z02S04[N]", self.player)
         )
         #return (

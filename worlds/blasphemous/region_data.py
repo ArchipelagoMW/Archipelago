@@ -258,31 +258,16 @@ regions = [
         "name": "D01Z06S01[N]",
         "exits": [
             {
+                "target": "D01Z01S01[S]",
+                "logic": []
+            },
+            {
                 "target": "D01Z01S01[W]",
                 "logic": []
             },
             {
                 "target": "D01Z01S01[E]",
                 "logic": []
-            },
-            {
-                "target": "D01Z01S01[S]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canBreakHoles"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
@@ -410,10 +395,6 @@ regions = [
         "name": "D01Z01S07[W]",
         "exits": [
             {
-                "target": "D17Z01S03[W]",
-                "logic": []
-            },
-            {
                 "target": "D17Z01S03[E]",
                 "logic": []
             },
@@ -428,6 +409,10 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D17Z01S11[E]",
+                "logic": []
             }
         ],
         "locations": [],
@@ -439,10 +424,6 @@ regions = [
         "name": "D17Z01S11[E]",
         "exits": [
             {
-                "target": "D17Z01S03[W]",
-                "logic": []
-            },
-            {
                 "target": "D17Z01S03[E]",
                 "logic": []
             },
@@ -457,21 +438,22 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D17Z01S11",
+                "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D17Z01S11[E]"
+            "D17Z01S11[E]",
+            "D17Z01S03[W]"
         ]
     },
     {
         "name": "D17BZ01S01[relic]",
         "exits": [
             {
-                "target": "D17Z01S03[W]",
-                "logic": []
-            },
-            {
                 "target": "D17Z01S03[E]",
                 "logic": []
             },
@@ -486,6 +468,10 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D17Z01S11[E]",
+                "logic": []
             }
         ],
         "locations": [],
@@ -561,53 +547,6 @@ regions = [
             {
                 "target": "D01Z02S02",
                 "logic": []
-            },
-            {
-                "target": "RESCUED_CHERUB_08",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canCrossGap2"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "lorquiana"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "aubade"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "cantina"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "chargeBeam"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "rangedAttack"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
@@ -752,10 +691,6 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D01Z02S03[NW]",
-                "logic": []
-            },
-            {
                 "target": "D01Z02S03[E]",
                 "logic": []
             },
@@ -845,6 +780,57 @@ regions = [
             {
                 "target": "D01Z02S03",
                 "logic": []
+            },
+            {
+                "target": "D01Z02S03[NW]",
+                "logic": []
+            },
+            {
+                "target": "RESCUED_CHERUB_08",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canCrossGap2"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "lorquiana"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "aubade"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "cantina"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "chargeBeam"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "rangedAttack"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
@@ -1000,22 +986,6 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
-            },
-            {
-                "target": "D01Z05S03[W]",
-                "logic": []
-            },
-            {
-                "target": "D01Z05S03[E]",
-                "logic": []
-            },
-            {
-                "target": "D01Z05S03[S]",
-                "logic": []
-            },
-            {
-                "target": "D01Z05S04[E]",
-                "logic": []
             }
         ],
         "locations": [],
@@ -1023,11 +993,7 @@ regions = [
             "D01Z05S02[N]",
             "D01Z05S01[S]",
             "D01Z05S27[E]",
-            "D01Z05S01[W]",
-            "D01Z05S03[NW]",
-            "D01Z05S02[E]",
-            "D01Z05S04[W]",
-            "D01Z05S03[NE]"
+            "D01Z05S01[W]"
         ]
     },
     {
@@ -1101,10 +1067,6 @@ regions = [
             {
                 "target": "D01Z03S01[E]",
                 "logic": []
-            },
-            {
-                "target": "D01Z03S01[SE]",
-                "logic": []
             }
         ],
         "locations": [],
@@ -1122,10 +1084,6 @@ regions = [
             {
                 "target": "D01Z03S01[E]",
                 "logic": []
-            },
-            {
-                "target": "D01Z03S01[SE]",
-                "logic": []
             }
         ],
         "locations": [],
@@ -1137,15 +1095,15 @@ regions = [
         "name": "D01Z03S02[SW]",
         "exits": [
             {
+                "target": "D01Z03S01[SE]",
+                "logic": []
+            },
+            {
                 "target": "D01Z03S01[W]",
                 "logic": []
             },
             {
                 "target": "D01Z03S01[E]",
-                "logic": []
-            },
-            {
-                "target": "D01Z03S01[SE]",
                 "logic": []
             }
         ],
@@ -1222,10 +1180,6 @@ regions = [
             {
                 "target": "D01Z03S02[E]",
                 "logic": []
-            },
-            {
-                "target": "D01Z03S02[S]",
-                "logic": []
             }
         ],
         "locations": [
@@ -1277,6 +1231,10 @@ regions = [
         "exits": [
             {
                 "target": "D01Z03S02",
+                "logic": []
+            },
+            {
+                "target": "D01Z03S02[S]",
                 "logic": []
             }
         ],
@@ -1606,25 +1564,6 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z01S01[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "CO11",
                 "logic": [
                     {
@@ -1676,6 +1615,25 @@ regions = [
                     {
                         "item_requirements": [
                             "fullThimble",
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z01S02[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
                             "doubleJump"
                         ],
                         "location_requirements": [],
@@ -1882,7 +1840,125 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z01S01[W]",
+                "target": "D02Z01S01[SE]",
+                "logic": []
+            },
+            {
+                "target": "D02Z01S02[W]",
+                "logic": []
+            },
+            {
+                "target": "D02Z01S02[NE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canEnemyBounce"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "canWalkOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "canCrossGap10"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canWalkOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canCrossGap10"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z01S02[]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_23",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "canWalkOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "canCrossGap4"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "pillar"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canWalkOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canCrossGap4"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "pillar"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z01S03[SE]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -1899,39 +1975,23 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
-            },
-            {
-                "target": "D02Z01S01[SE]",
-                "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D02Z01S02[E]"
+            "D02Z01S02[E]",
+            "D02Z01S01[W]"
         ]
     },
     {
         "name": "D02Z01S06[E]",
         "exits": [
             {
-                "target": "CO11",
-                "logic": []
-            },
-            {
                 "target": "D02Z01S01[SW]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "openedWOTWCave",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "openedWOTWCave",
-                            "wallClimb"
+                            "openedWOTWCave"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -1939,18 +1999,12 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z01S01[W]",
+                "target": "D02Z01S04[-N]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
+                            "fullThimble",
+                            "canDawnJump"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -1958,12 +2012,19 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z01S01[SE]",
+                "target": "CO11",
                 "logic": []
             },
             {
                 "target": "QI59",
                 "logic": [
+                    {
+                        "item_requirements": [
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
                     {
                         "item_requirements": [
                             "wallClimb"
@@ -1986,6 +2047,14 @@ regions = [
                     {
                         "item_requirements": [
                             "fullThimble",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "fullThimble",
                             "wallClimb"
                         ],
                         "location_requirements": [],
@@ -1994,6 +2063,49 @@ regions = [
                     {
                         "item_requirements": [
                             "fullThimble",
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI68",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "fullThimble",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z01S01[SE]",
+                "logic": []
+            },
+            {
+                "target": "D02Z01S02[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
                             "doubleJump"
                         ],
                         "location_requirements": [],
@@ -2021,10 +2133,6 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
-            },
-            {
-                "target": "D02Z01S01[W]",
-                "logic": []
             },
             {
                 "target": "D02Z01S04[-N]",
@@ -2073,6 +2181,10 @@ regions = [
             {
                 "target": "D02Z01S01[SE]",
                 "logic": []
+            },
+            {
+                "target": "D02Z01S02[E]",
+                "logic": []
             }
         ],
         "locations": [],
@@ -2096,22 +2208,12 @@ regions = [
                 ]
             },
             {
-                "target": "CO11",
-                "logic": []
-            },
-            {
-                "target": "D02Z01S01[W]",
+                "target": "D02Z01S04[-N]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
+                            "fullThimble",
+                            "canDawnJump"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -2119,12 +2221,19 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z01S01[SE]",
+                "target": "CO11",
                 "logic": []
             },
             {
                 "target": "QI59",
                 "logic": [
+                    {
+                        "item_requirements": [
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
                     {
                         "item_requirements": [
                             "wallClimb"
@@ -2147,6 +2256,14 @@ regions = [
                     {
                         "item_requirements": [
                             "fullThimble",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "fullThimble",
                             "wallClimb"
                         ],
                         "location_requirements": [],
@@ -2155,6 +2272,49 @@ regions = [
                     {
                         "item_requirements": [
                             "fullThimble",
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI68",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "fullThimble",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z01S01[SE]",
+                "logic": []
+            },
+            {
+                "target": "D02Z01S02[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
                             "doubleJump"
                         ],
                         "location_requirements": [],
@@ -2278,10 +2438,6 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D01Z04S01[SE]",
-                "logic": []
-            },
-            {
                 "target": "D01Z04S03[E]",
                 "logic": []
             }
@@ -2301,124 +2457,6 @@ regions = [
             {
                 "target": "D01Z04S01[E]",
                 "logic": []
-            },
-            {
-                "target": "D01Z04S01[SE]",
-                "logic": []
-            },
-            {
-                "target": "D01Z04S15[NE]",
-                "logic": []
-            },
-            {
-                "target": "D01Z04S15[W]",
-                "logic": []
-            },
-            {
-                "target": "D01Z04S15[E]",
-                "logic": []
-            },
-            {
-                "target": "D01Z04S10[SW]",
-                "logic": []
-            },
-            {
-                "target": "D01Z04S12[W]",
-                "logic": []
-            },
-            {
-                "target": "D01Z04S13[SW]",
-                "logic": []
-            },
-            {
-                "target": "D01Z04S13[SE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canDiveLaser",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canDiveLaser",
-                            "wheel"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canDiveLaser",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canDiveLaser",
-                            "canEnemyBounce"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "CO21",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canDiveLaser",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canDiveLaser",
-                            "wheel"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canDiveLaser",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canDiveLaser",
-                            "canEnemyBounce"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z04S09[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "openedDCGateE"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z04S09[C]",
-                "logic": []
             }
         ],
         "locations": [],
@@ -2426,19 +2464,7 @@ regions = [
             "D01Z04S03[E]",
             "D01Z04S01[W]",
             "D01Z04S17[W]",
-            "D01Z04S01[NE]",
-            "D01Z04S15[N]",
-            "D01Z04S01[S]",
-            "D01Z04S10[NW]",
-            "D01Z04S15[SE]",
-            "D01Z04S10[SE]",
-            "D01Z04S12[NW]",
-            "D01Z04S12[SE]",
-            "D01Z04S13[NW]",
-            "D01Z04S02[W]",
-            "D01Z04S13[NE]",
-            "D01Z04S09[E]",
-            "D01Z04S15[SW]"
+            "D01Z04S01[NE]"
         ]
     },
     {
@@ -2450,10 +2476,6 @@ regions = [
             },
             {
                 "target": "D01Z04S01[E]",
-                "logic": []
-            },
-            {
-                "target": "D01Z04S01[SE]",
                 "logic": []
             },
             {
@@ -2470,6 +2492,10 @@ regions = [
         "name": "D01Z04S05[SW]",
         "exits": [
             {
+                "target": "D01Z04S01[SE]",
+                "logic": []
+            },
+            {
                 "target": "D01Z04S01[NW]",
                 "logic": []
             },
@@ -2478,17 +2504,47 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D01Z04S01[SE]",
+                "target": "D01Z04S03[E]",
                 "logic": []
             },
             {
-                "target": "D01Z04S03[E]",
+                "target": "D01Z04S15[N]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
             "D01Z04S05[SW]"
+        ]
+    },
+    {
+        "name": "D01Z04S15[N]",
+        "exits": [
+            {
+                "target": "D01Z04S01[SE]",
+                "logic": []
+            },
+            {
+                "target": "D01Z04S01[NW]",
+                "logic": []
+            },
+            {
+                "target": "D01Z04S01[E]",
+                "logic": []
+            },
+            {
+                "target": "D01Z04S03[E]",
+                "logic": []
+            },
+            {
+                "target": "D01Z04S15[NE]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D01Z04S15[N]",
+            "D01Z04S01[S]"
         ]
     },
     {
@@ -2571,6 +2627,10 @@ regions = [
             {
                 "target": "D08Z01S01",
                 "logic": []
+            },
+            {
+                "target": "D08Z01S01[W]",
+                "logic": []
             }
         ],
         "locations": [],
@@ -2609,6 +2669,18 @@ regions = [
             {
                 "target": "D08Z01S01",
                 "logic": []
+            },
+            {
+                "target": "D08Z01S01[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "holyWounds3"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
@@ -2663,19 +2735,11 @@ regions = [
         "name": "D01Z04S06[NW]",
         "exits": [
             {
+                "target": "D01Z04S15[N]",
+                "logic": []
+            },
+            {
                 "target": "D01Z04S15[NE]",
-                "logic": []
-            },
-            {
-                "target": "D01Z04S15[W]",
-                "logic": []
-            },
-            {
-                "target": "D01Z04S15[E]",
-                "logic": []
-            },
-            {
-                "target": "D01Z04S03[E]",
                 "logic": []
             }
         ],
@@ -2688,10 +2752,6 @@ regions = [
         "name": "D01Z04S06[SW]",
         "exits": [
             {
-                "target": "D01Z04S15[NE]",
-                "logic": []
-            },
-            {
                 "target": "D01Z04S15[W]",
                 "logic": []
             },
@@ -2700,7 +2760,15 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D01Z04S03[E]",
+                "target": "D01Z04S15[N]",
+                "logic": []
+            },
+            {
+                "target": "D01Z04S15[NE]",
+                "logic": []
+            },
+            {
+                "target": "D01Z04S09[E]",
                 "logic": []
             }
         ],
@@ -2713,9 +2781,34 @@ regions = [
         "name": "D01Z04S08[E]",
         "exits": [
             {
+                "target": "D01Z04S15[W]",
+                "logic": []
+            },
+            {
+                "target": "D01Z04S15[E]",
+                "logic": []
+            },
+            {
+                "target": "D01Z04S15[N]",
+                "logic": []
+            },
+            {
                 "target": "D01Z04S15[NE]",
                 "logic": []
             },
+            {
+                "target": "D01Z04S09[E]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D01Z04S08[E]"
+        ]
+    },
+    {
+        "name": "D01Z04S09[E]",
+        "exits": [
             {
                 "target": "D01Z04S15[W]",
                 "logic": []
@@ -2725,13 +2818,134 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D01Z04S03[E]",
+                "target": "D01Z04S15[N]",
+                "logic": []
+            },
+            {
+                "target": "D01Z04S15[NE]",
+                "logic": []
+            },
+            {
+                "target": "D01Z04S09[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "openedDCGateE"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D01Z04S09[C]",
+                "logic": []
+            },
+            {
+                "target": "D01Z04S10[SW]",
+                "logic": []
+            },
+            {
+                "target": "D01Z04S13[SW]",
+                "logic": []
+            },
+            {
+                "target": "D01Z04S13[SE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "HardLogic",
+                            "canDiveLaser",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "HardLogic",
+                            "canDiveLaser",
+                            "wheel"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "HardLogic",
+                            "canDiveLaser",
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "HardLogic",
+                            "canDiveLaser",
+                            "canEnemyBounce"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO21",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canDiveLaser",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canDiveLaser",
+                            "wheel"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canDiveLaser",
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canDiveLaser",
+                            "canEnemyBounce"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D01Z04S18",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D01Z04S08[E]"
+            "D01Z04S09[E]",
+            "D01Z04S15[SW]",
+            "D01Z04S10[NW]",
+            "D01Z04S15[SE]",
+            "D01Z04S10[SE]",
+            "D01Z04S12[NW]",
+            "D01Z04S12[SE]",
+            "D01Z04S13[NW]",
+            "D01Z04S18[E]",
+            "D01Z04S12[W]",
+            "D01Z04S02[W]",
+            "D01Z04S13[NE]"
         ]
     },
     {
@@ -2746,6 +2960,7 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
+                            "HardLogic",
                             "canDiveLaser",
                             "canAirStall"
                         ],
@@ -2754,6 +2969,7 @@ regions = [
                     },
                     {
                         "item_requirements": [
+                            "HardLogic",
                             "canDiveLaser",
                             "wheel"
                         ],
@@ -2762,6 +2978,7 @@ regions = [
                     },
                     {
                         "item_requirements": [
+                            "HardLogic",
                             "canDiveLaser",
                             "doubleJump"
                         ],
@@ -2770,6 +2987,7 @@ regions = [
                     },
                     {
                         "item_requirements": [
+                            "HardLogic",
                             "canDiveLaser",
                             "canEnemyBounce"
                         ],
@@ -2816,7 +3034,7 @@ regions = [
                 ]
             },
             {
-                "target": "D01Z04S03[E]",
+                "target": "D01Z04S09[E]",
                 "logic": []
             }
         ],
@@ -2829,73 +3047,19 @@ regions = [
         "name": "D01Z04S16[W]",
         "exits": [
             {
-                "target": "CO21",
+                "target": "D01Z04S13[SE]",
                 "logic": []
             },
             {
-                "target": "RB26",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blueWax1",
-                            "D17Z01S04[N]"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "blueWax1",
-                            "D17Z01S04[FrontR]"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "target": "CO21",
+                "logic": []
             },
             {
                 "target": "D01Z04S13[SW]",
                 "logic": []
             },
             {
-                "target": "D01Z04S13[SE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canDiveLaser",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canDiveLaser",
-                            "wheel"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canDiveLaser",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canDiveLaser",
-                            "canEnemyBounce"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z04S03[E]",
+                "target": "D01Z04S09[E]",
                 "logic": []
             }
         ],
@@ -3091,23 +3255,6 @@ regions = [
         ]
     },
     {
-        "name": "D01Z04S18[E]",
-        "exits": [
-            {
-                "target": "D01Z04S12[W]",
-                "logic": []
-            },
-            {
-                "target": "D01Z04S03[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D01Z04S18[E]"
-        ]
-    },
-    {
         "name": "D01Z04S11[NE]",
         "exits": [
             {
@@ -3115,7 +3262,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D01Z04S03[E]",
+                "target": "D01Z04S09[E]",
                 "logic": []
             }
         ],
@@ -3140,7 +3287,7 @@ regions = [
                 ]
             },
             {
-                "target": "D01Z04S18[E]",
+                "target": "D01Z04S09[E]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -3158,23 +3305,14 @@ regions = [
         "transitions": []
     },
     {
-        "name": "D01Z04S12[W]",
-        "exits": [
-            {
-                "target": "D01Z04S18",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D01Z04S12[W]"
-        ]
-    },
-    {
         "name": "D01Z04S19[E]",
         "exits": [
             {
                 "target": "D01Z04S18",
+                "logic": []
+            },
+            {
+                "target": "D01Z04S18[W]",
                 "logic": []
             }
         ],
@@ -3318,11 +3456,11 @@ regions = [
                 ]
             },
             {
-                "target": "D01Z04S09[C]",
+                "target": "D01Z04S09[E]",
                 "logic": []
             },
             {
-                "target": "D01Z04S03[E]",
+                "target": "D01Z04S09[C]",
                 "logic": []
             }
         ],
@@ -3347,11 +3485,11 @@ regions = [
                 ]
             },
             {
-                "target": "D01Z04S09[C]",
+                "target": "D01Z04S09[E]",
                 "logic": []
             },
             {
-                "target": "D01Z04S03[E]",
+                "target": "D01Z04S09[C]",
                 "logic": []
             }
         ],
@@ -3363,27 +3501,6 @@ regions = [
     {
         "name": "D01Z04S16[E]",
         "exits": [
-            {
-                "target": "RB26",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blueWax1",
-                            "D17Z01S04[N]"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "blueWax1",
-                            "D17Z01S04[FrontR]"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
             {
                 "target": "D05Z02S12[W]",
                 "logic": []
@@ -3529,6 +3646,52 @@ regions = [
         ]
     },
     {
+        "name": "D01Z05S03[NW]",
+        "exits": [
+            {
+                "target": "D01Z05S02[N]",
+                "logic": []
+            },
+            {
+                "target": "D01Z05S02[W]",
+                "logic": []
+            },
+            {
+                "target": "D01Z05S02[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "openedDCLadder"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D01Z05S03[W]",
+                "logic": []
+            },
+            {
+                "target": "D01Z05S03[E]",
+                "logic": []
+            },
+            {
+                "target": "D01Z05S04[E]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D01Z05S03[NW]",
+            "D01Z05S02[E]",
+            "D01Z05S13[N]",
+            "D01Z05S03[S]",
+            "D01Z05S04[W]",
+            "D01Z05S03[NE]"
+        ]
+    },
+    {
         "name": "D01Z05S20[N]",
         "exits": [
             {
@@ -3598,10 +3761,6 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D03Z01S01[S]",
-                "logic": []
-            },
-            {
                 "target": "D03Z01S01[-Cherubs]",
                 "logic": [
                     {
@@ -3651,30 +3810,31 @@ regions = [
             {
                 "target": "D03Z01S01",
                 "logic": []
+            },
+            {
+                "target": "D20Z01S03[W]",
+                "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D20Z01S03[N]"
+            "D20Z01S03[N]",
+            "D03Z01S01[S]"
         ]
     },
     {
         "name": "D01Z05S07[E]",
         "exits": [
             {
+                "target": "D01Z05S03[NW]",
+                "logic": []
+            },
+            {
                 "target": "D01Z05S03[W]",
                 "logic": []
             },
             {
                 "target": "D01Z05S03[E]",
-                "logic": []
-            },
-            {
-                "target": "D01Z05S03[S]",
-                "logic": []
-            },
-            {
-                "target": "D01Z05S02[N]",
                 "logic": []
             }
         ],
@@ -3687,50 +3847,21 @@ regions = [
         "name": "D01Z05S08[W]",
         "exits": [
             {
+                "target": "D01Z05S03[NW]",
+                "logic": []
+            },
+            {
                 "target": "D01Z05S03[W]",
                 "logic": []
             },
             {
                 "target": "D01Z05S03[E]",
-                "logic": []
-            },
-            {
-                "target": "D01Z05S03[S]",
-                "logic": []
-            },
-            {
-                "target": "D01Z05S02[N]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
             "D01Z05S08[W]"
-        ]
-    },
-    {
-        "name": "D01Z05S13[N]",
-        "exits": [
-            {
-                "target": "D01Z05S03[W]",
-                "logic": []
-            },
-            {
-                "target": "D01Z05S03[E]",
-                "logic": []
-            },
-            {
-                "target": "D01Z05S03[S]",
-                "logic": []
-            },
-            {
-                "target": "D01Z05S02[N]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D01Z05S13[N]"
         ]
     },
     {
@@ -3769,27 +3900,6 @@ regions = [
             {
                 "target": "D01Z05S20",
                 "logic": []
-            },
-            {
-                "target": "RESCUED_CHERUB_22",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "obscureSkipsAllowed",
-                            "aubade"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "obscureSkipsAllowed",
-                            "cantina"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
@@ -3805,7 +3915,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D01Z05S02[N]",
+                "target": "D01Z05S03[NW]",
                 "logic": []
             }
         ],
@@ -3868,76 +3978,64 @@ regions = [
         ]
     },
     {
-        "name": "D01Z05S03[S]",
-        "exits": [
-            {
-                "target": "D01Z05S13[SW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canSurvivePoison3",
-                            "canWaterJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S13[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canSurvivePoison3",
-                            "canWaterJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S13[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D01Z05S03[S]"
-        ]
-    },
-    {
         "name": "D01Z05S14[W]",
         "exits": [
             {
-                "target": "D01Z05S13[SW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canSurvivePoison3",
-                            "canWaterJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S13[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canSurvivePoison3",
-                            "canWaterJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "D01Z05S13[E]",
                 "logic": []
+            },
+            {
+                "target": "RESCUED_CHERUB_12",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canSurvivePoison3",
+                            "canWaterJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D01Z05S03[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D01Z05S03[S]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canSurvivePoison3",
+                            "canWaterJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D01Z05S16[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D01Z05S16[N]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canSurvivePoison3",
+                            "canWaterJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
@@ -3953,12 +4051,11 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D01Z05S13[SW]",
+                "target": "D01Z05S21[Reward]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "canSurvivePoison3",
-                            "canWaterJump"
+                            "shroud"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -3966,12 +4063,34 @@ regions = [
                 ]
             },
             {
-                "target": "D01Z05S13[N]",
+                "target": "D01Z05S25[W]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "canSurvivePoison3",
-                            "canWaterJump"
+                            "canWalkOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canCrossGap3"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "canAirStall"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -3979,13 +4098,123 @@ regions = [
                 ]
             },
             {
-                "target": "D01Z05S13[E]",
-                "logic": []
+                "target": "RESCUED_CHERUB_22",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "pillar"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D01Z05S17[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "canWaterJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO32",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canWaterJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D01Z05S25[NE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D01Z05S25[SE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO44",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z03S17[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
         "transitions": [
-            "D01Z05S16[N]"
+            "D01Z05S16[N]",
+            "D01Z05S13[SW]",
+            "D01Z05S21[E]",
+            "D01Z05S16[SW]",
+            "D01Z05S25[E]",
+            "D01Z05S21[W]",
+            "D01Z05S17[W]",
+            "D01Z05S16[SE]"
         ]
     },
     {
@@ -4100,19 +4329,6 @@ regions = [
             {
                 "target": "D01Z05S14",
                 "logic": []
-            },
-            {
-                "target": "RESCUED_CHERUB_12",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canSurvivePoison3",
-                            "canWaterJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
@@ -4131,95 +4347,6 @@ regions = [
         "locations": [],
         "transitions": [
             "D01Z05S15[W]"
-        ]
-    },
-    {
-        "name": "D01Z05S13[SW]",
-        "exits": [
-            {
-                "target": "D01Z05S16[N]",
-                "logic": []
-            },
-            {
-                "target": "D01Z05S17[W]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D01Z05S13[SW]"
-        ]
-    },
-    {
-        "name": "D01Z05S17[W]",
-        "exits": [
-            {
-                "target": "D01Z05S16[N]",
-                "logic": []
-            },
-            {
-                "target": "D01Z05S17[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "canWaterJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "CO32",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canWaterJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S21[W]",
-                "logic": []
-            },
-            {
-                "target": "D01Z05S21[Reward]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "shroud"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D01Z05S17[W]",
-            "D01Z05S16[SE]",
-            "D01Z05S21[E]",
-            "D01Z05S16[SW]"
         ]
     },
     {
@@ -4309,61 +4436,9 @@ regions = [
         ]
     },
     {
-        "name": "D01Z05S25[E]",
-        "exits": [
-            {
-                "target": "D01Z05S25[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canCrossGap3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S21[W]",
-                "logic": []
-            },
-            {
-                "target": "D01Z05S21[Reward]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "shroud"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S17[W]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D01Z05S25[E]"
-        ]
-    },
-    {
         "name": "D01BZ05S01[Reward]",
         "exits": [
             {
-                "target": "D01Z05S21[W]",
-                "logic": []
-            },
-            {
                 "target": "D01Z05S21[Reward]",
                 "logic": [
                     {
@@ -4376,7 +4451,7 @@ regions = [
                 ]
             },
             {
-                "target": "D01Z05S17[W]",
+                "target": "D01Z05S16[N]",
                 "logic": []
             }
         ],
@@ -4389,33 +4464,24 @@ regions = [
         "name": "D01BZ09S01[W]",
         "exits": [
             {
-                "target": "CO32",
-                "logic": []
-            },
-            {
-                "target": "D01Z05S17[W]",
-                "logic": []
-            },
-            {
                 "target": "D01Z05S17[E]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "dash",
-                            "canWaterJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "canCrossGap5"
+                            "dash"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "CO32",
+                "logic": []
+            },
+            {
+                "target": "D01Z05S16[N]",
+                "logic": []
             }
         ],
         "locations": [],
@@ -4440,7 +4506,7 @@ regions = [
         "name": "D01Z05S20[W]",
         "exits": [
             {
-                "target": "D01Z05S25[SW]",
+                "target": "D01Z05S25[NE]",
                 "logic": []
             },
             {
@@ -4467,8 +4533,24 @@ regions = [
                 ]
             },
             {
-                "target": "D01Z05S25[NE]",
+                "target": "RESCUED_CHERUB_22",
                 "logic": [
+                    {
+                        "item_requirements": [
+                            "obscureSkipsAllowed",
+                            "aubade"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "obscureSkipsAllowed",
+                            "cantina"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
                     {
                         "item_requirements": [
                             "linen"
@@ -4508,10 +4590,11 @@ regions = [
                 ]
             },
             {
-                "target": "D01Z05S25[E]",
+                "target": "D01Z05S16[N]",
                 "logic": [
                     {
                         "item_requirements": [
+                            "HardLogic",
                             "tirana",
                             "obscureSkipsAllowed",
                             "linen"
@@ -4522,60 +4605,8 @@ regions = [
                 ]
             },
             {
-                "target": "D01Z05S25[EchoesW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canAirStall",
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[EchoesE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canAirStall",
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RESCUED_CHERUB_22",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "target": "D03Z03S17[E]",
+                "logic": []
             }
         ],
         "locations": [],
@@ -4584,174 +4615,31 @@ regions = [
         ]
     },
     {
-        "name": "D01Z05S21[W]",
-        "exits": [
-            {
-                "target": "RESCUED_CHERUB_22",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "pillar"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "tirana",
-                            "obscureSkipsAllowed",
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[SW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[SE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[EchoesW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canAirStall",
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[EchoesE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canAirStall",
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "CO44",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D01Z05S21[W]"
-        ]
-    },
-    {
         "name": "D01Z05S23[E]",
         "exits": [
             {
-                "target": "D01Z05S25[NE]",
+                "target": "D01Z05S25[W]",
+                "logic": []
+            },
+            {
+                "target": "RESCUED_CHERUB_22",
                 "logic": [
+                    {
+                        "item_requirements": [
+                            "pillar",
+                            "canWalkOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "pillar",
+                            "canCrossGap3"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
                     {
                         "item_requirements": [
                             "linen"
@@ -4762,11 +4650,13 @@ regions = [
                 ]
             },
             {
-                "target": "D01Z05S25[W]",
+                "target": "D01Z05S16[N]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "linen",
+                            "HardLogic",
+                            "tirana",
+                            "obscureSkipsAllowed",
                             "canWalkOnRoot"
                         ],
                         "location_requirements": [],
@@ -4774,27 +4664,17 @@ regions = [
                     },
                     {
                         "item_requirements": [
-                            "linen",
-                            "doubleJump"
+                            "HardLogic",
+                            "tirana",
+                            "obscureSkipsAllowed",
+                            "canCrossGap3"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     },
                     {
                         "item_requirements": [
-                            "linen",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
+                            "HardLogic",
                             "tirana",
                             "obscureSkipsAllowed",
                             "linen"
@@ -4805,7 +4685,7 @@ regions = [
                 ]
             },
             {
-                "target": "D01Z05S25[SW]",
+                "target": "D01Z05S25[NE]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -4829,50 +4709,6 @@ regions = [
                 ]
             },
             {
-                "target": "D01Z05S25[EchoesW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canAirStall",
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[EchoesE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canAirStall",
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "CO44",
                 "logic": [
                     {
@@ -4885,7 +4721,7 @@ regions = [
                 ]
             },
             {
-                "target": "RESCUED_CHERUB_22",
+                "target": "D03Z03S17[E]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -4910,7 +4746,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D01Z05S25[SW]",
+                "target": "D01Z05S25[SE]",
                 "logic": []
             },
             {
@@ -4919,6 +4755,34 @@ regions = [
                     {
                         "item_requirements": [
                             "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_22",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "obscureSkipsAllowed",
+                            "aubade"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "obscureSkipsAllowed",
+                            "cantina"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -4962,10 +4826,11 @@ regions = [
                 ]
             },
             {
-                "target": "D01Z05S25[E]",
+                "target": "D01Z05S16[N]",
                 "logic": [
                     {
                         "item_requirements": [
+                            "HardLogic",
                             "tirana",
                             "obscureSkipsAllowed",
                             "linen"
@@ -4976,72 +4841,8 @@ regions = [
                 ]
             },
             {
-                "target": "D01Z05S25[SE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[EchoesW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canAirStall",
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[EchoesE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canAirStall",
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RESCUED_CHERUB_22",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "target": "D03Z03S17[E]",
+                "logic": []
             }
         ],
         "locations": [],
@@ -5080,6 +4881,34 @@ regions = [
                 ]
             },
             {
+                "target": "RESCUED_CHERUB_22",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "obscureSkipsAllowed",
+                            "aubade"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "obscureSkipsAllowed",
+                            "cantina"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D01Z05S25[W]",
                 "logic": [
                     {
@@ -5109,10 +4938,11 @@ regions = [
                 ]
             },
             {
-                "target": "D01Z05S25[E]",
+                "target": "D01Z05S16[N]",
                 "logic": [
                     {
                         "item_requirements": [
+                            "HardLogic",
                             "tirana",
                             "obscureSkipsAllowed",
                             "linen"
@@ -5123,77 +4953,14 @@ regions = [
                 ]
             },
             {
-                "target": "D01Z05S25[SW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[EchoesW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canAirStall",
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[EchoesE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canAirStall",
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RESCUED_CHERUB_22",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "target": "D03Z03S17[W]",
+                "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D03Z03S17[E]"
+            "D03Z03S17[E]",
+            "D01Z05S25[SW]"
         ]
     },
     {
@@ -5241,81 +5008,11 @@ regions = [
                 ]
             },
             {
-                "target": "D01Z05S25[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "tirana",
-                            "obscureSkipsAllowed",
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[SW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "D01Z05S25[SE]",
                 "logic": [
                     {
                         "item_requirements": [
                             "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[EchoesW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canAirStall",
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[EchoesE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canAirStall",
-                            "blood"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -5336,6 +5033,33 @@ regions = [
             },
             {
                 "target": "RESCUED_CHERUB_22",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D01Z05S16[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "HardLogic",
+                            "tirana",
+                            "obscureSkipsAllowed",
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z03S17[E]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -5397,81 +5121,11 @@ regions = [
                 ]
             },
             {
-                "target": "D01Z05S25[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "tirana",
-                            "obscureSkipsAllowed",
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[SW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "D01Z05S25[SE]",
                 "logic": [
                     {
                         "item_requirements": [
                             "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[EchoesW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canAirStall",
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[EchoesE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canAirStall",
-                            "blood"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -5492,6 +5146,33 @@ regions = [
             },
             {
                 "target": "RESCUED_CHERUB_22",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D01Z05S16[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "HardLogic",
+                            "tirana",
+                            "obscureSkipsAllowed",
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z03S17[E]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -5626,8 +5307,21 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D20Z01S07[SE]",
+                "target": "RB202",
                 "logic": []
+            },
+            {
+                "target": "D20Z01S09[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "blood",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
@@ -5640,6 +5334,8 @@ regions = [
             "D20Z01S05[W]",
             "D20Z01S07[NW]",
             "D20Z01S06[SE]",
+            "D20Z01S07[SE]",
+            "D20Z01S09[W]",
             "D20Z01S08[W]",
             "D20Z01S07[NE]"
         ]
@@ -5689,93 +5385,11 @@ regions = [
             {
                 "target": "D01Z05S23",
                 "logic": []
-            },
-            {
-                "target": "D01Z05S25[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "tirana",
-                            "obscureSkipsAllowed",
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "tirana",
-                            "obscureSkipsAllowed",
-                            "canCrossGap3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RESCUED_CHERUB_22",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "pillar",
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "pillar",
-                            "canCrossGap3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
         "transitions": [
             "D01Z05S25[W]"
-        ]
-    },
-    {
-        "name": "D01Z05S25[SW]",
-        "exits": [
-            {
-                "target": "RESCUED_CHERUB_22",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "obscureSkipsAllowed",
-                            "aubade"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "obscureSkipsAllowed",
-                            "cantina"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z03S17[W]",
-                "logic": []
-            },
-            {
-                "target": "D03Z03S17[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D01Z05S25[SW]"
         ]
     },
     {
@@ -5814,27 +5428,6 @@ regions = [
             {
                 "target": "D01Z05S26",
                 "logic": []
-            },
-            {
-                "target": "RESCUED_CHERUB_22",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "obscureSkipsAllowed",
-                            "aubade"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "obscureSkipsAllowed",
-                            "cantina"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
@@ -5846,51 +5439,23 @@ regions = [
         "name": "D01Z05S25[EchoesW]",
         "exits": [
             {
-                "target": "D01Z05S25[EchoesE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canCrossGap8"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D20Z01S09[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "D20Z01S09[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "logic": []
             },
             {
                 "target": "RB202",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D20Z01S01[S]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -5908,80 +5473,14 @@ regions = [
         ]
     },
     {
-        "name": "D20Z01S07[SE]",
-        "exits": [
-            {
-                "target": "RB202",
-                "logic": []
-            },
-            {
-                "target": "D20Z01S09[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D20Z01S09[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D20Z01S07[SE]"
-        ]
-    },
-    {
         "name": "D01Z05S25[EchoesE]",
         "exits": [
             {
-                "target": "D01Z05S25[EchoesW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canCrossGap8"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "D20Z01S10[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "logic": []
             },
             {
-                "target": "D20Z01S10[E]",
+                "target": "D20Z01S11[W]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -6016,12 +5515,25 @@ regions = [
                 ]
             },
             {
-                "target": "D20Z01S10[E]",
+                "target": "D20Z02S11",
+                "logic": []
+            },
+            {
+                "target": "D20Z02S12[E]",
+                "logic": []
+            },
+            {
+                "target": "D20Z01S14[E]",
+                "logic": []
+            },
+            {
+                "target": "D20Z02S10[W]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "blood",
-                            "dash"
+                            "HardLogic",
+                            "mourningSkipAllowed",
+                            "canCrossGap5"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -6031,7 +5543,18 @@ regions = [
         ],
         "locations": [],
         "transitions": [
-            "D20Z01S11[W]"
+            "D20Z01S11[W]",
+            "D20Z01S10[E]",
+            "D20Z01S12[E]",
+            "D20Z01S11[NW]",
+            "D20Z01S13[W]",
+            "D20Z01S11[NE]",
+            "D20Z02S11[NW]",
+            "D20Z01S13[E]",
+            "D20Z02S12[W]",
+            "D20Z01S11[SE]",
+            "D20Z01S14[S]",
+            "D20Z01S13[N]"
         ]
     },
     {
@@ -6051,67 +5574,8 @@ regions = [
         "name": "D02Z01S01[SW]",
         "exits": [
             {
-                "target": "D02Z01S01[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z01S04[-N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "fullThimble",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "QI59",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB10",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "fullThimble",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "QI68",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "fullThimble",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "target": "D02Z01S06[E]",
+                "logic": []
             },
             {
                 "target": "D02Z01S06[W]",
@@ -6127,18 +5591,6 @@ regions = [
                         "item_requirements": [
                             "wallClimb",
                             "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z01S06[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -6496,10 +5948,28 @@ regions = [
         "exits": [
             {
                 "target": "D02Z01S06[W]",
+                "logic": []
+            },
+            {
+                "target": "RESCUED_CHERUB_27",
                 "logic": [
                     {
                         "item_requirements": [
-                            "dash"
+                            "pillar"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "cante"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canDiveLaser"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -6507,7 +5977,31 @@ regions = [
                     {
                         "item_requirements": [
                             "wallClimb",
-                            "doubleJump"
+                            "lorquiana"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "aubade"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "cantina"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "canAirStall"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -6547,134 +6041,6 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
-            },
-            {
-                "target": "RESCUED_CHERUB_27",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "pillar"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "cante"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "canDiveLaser"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "wallClimb",
-                            "pillar"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "wallClimb",
-                            "cante"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "wallClimb",
-                            "canDiveLaser"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "doubleJump",
-                            "lorquiana"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "doubleJump",
-                            "aubade"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "doubleJump",
-                            "cantina"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "doubleJump",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "dash",
-                            "lorquiana"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "dash",
-                            "aubade"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "dash",
-                            "cantina"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "dash",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
@@ -6683,184 +6049,25 @@ regions = [
         ]
     },
     {
-        "name": "D02Z01S01[W]",
-        "exits": [
-            {
-                "target": "D02Z01S02[W]",
-                "logic": []
-            },
-            {
-                "target": "D02Z01S02[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z01S02[E]",
-                "logic": []
-            },
-            {
-                "target": "D02Z01S02[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyBounce"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canCrossGap10"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canCrossGap10"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z01S02[]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RESCUED_CHERUB_23",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canCrossGap4"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "pillar"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canCrossGap4"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "pillar"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z01S01[W]"
-        ]
-    },
-    {
         "name": "D02Z01S03[SE]",
         "exits": [
             {
-                "target": "D02Z01S02[W]",
-                "logic": []
-            },
-            {
-                "target": "D02Z01S02[NW]",
+                "target": "D02Z01S02[NE]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "wallClimb"
+                            "canWalkOnRoot"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     },
                     {
                         "item_requirements": [
-                            "doubleJump"
+                            "canCrossGap10"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z01S02[E]",
-                "logic": []
-            },
-            {
-                "target": "D02Z01S02[NE]",
-                "logic": [
+                    },
                     {
                         "item_requirements": [
                             "doubleJump",
@@ -6868,10 +6075,14 @@ regions = [
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
-                    },
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_23",
+                "logic": [
                     {
                         "item_requirements": [
-                            "wallClimb",
                             "canWalkOnRoot"
                         ],
                         "location_requirements": [],
@@ -6879,29 +6090,27 @@ regions = [
                     },
                     {
                         "item_requirements": [
-                            "wallClimb",
-                            "canCrossGap10"
+                            "canCrossGap4"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     },
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canCrossGap10"
+                            "pillar"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D02Z01S02[W]",
+                "logic": []
+            },
+            {
+                "target": "D02Z01S02[E]",
+                "logic": []
             },
             {
                 "target": "D02Z01S02[]",
@@ -6916,52 +6125,28 @@ regions = [
                 ]
             },
             {
-                "target": "RESCUED_CHERUB_23",
+                "target": "D02Z01S03[SW]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S08[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S02[SE]",
                 "logic": [
                     {
                         "item_requirements": [
                             "wallClimb",
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canCrossGap4"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "pillar"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canCrossGap4"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "pillar"
+                            "dash"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -6971,7 +6156,10 @@ regions = [
         ],
         "locations": [],
         "transitions": [
-            "D02Z01S03[SE]"
+            "D02Z01S03[SE]",
+            "D02Z01S02[NW]",
+            "D02Z02S01[E]",
+            "D02Z01S03[W]"
         ]
     },
     {
@@ -6982,25 +6170,6 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D02Z01S02[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "D02Z01S02[E]",
                 "logic": []
             },
@@ -7108,6 +6277,25 @@ regions = [
                         "item_requirements": [
                             "doubleJump",
                             "pillar"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z01S03[SE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -7124,16 +6312,24 @@ regions = [
         "name": "D02Z01S09[W]",
         "exits": [
             {
+                "target": "D02Z01S02[NE]",
+                "logic": []
+            },
+            {
                 "target": "RESCUED_CHERUB_23",
                 "logic": []
             },
             {
-                "target": "D02Z01S02[W]",
-                "logic": []
-            },
-            {
-                "target": "D02Z01S02[NW]",
+                "target": "D02Z01S03[SE]",
                 "logic": [
+                    {
+                        "item_requirements": [
+                            "canWalkOnRoot",
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
                     {
                         "item_requirements": [
                             "wallClimb"
@@ -7151,53 +6347,12 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z01S02[E]",
+                "target": "D02Z01S02[W]",
                 "logic": []
             },
             {
-                "target": "D02Z01S02[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyBounce"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canCrossGap10"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canCrossGap10"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "target": "D02Z01S02[E]",
+                "logic": []
             },
             {
                 "target": "D02Z01S02[]",
@@ -7286,97 +6441,11 @@ regions = [
         ]
     },
     {
-        "name": "D02Z01S02[NW]",
-        "exits": [
-            {
-                "target": "D02Z01S02[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canCrossGap10"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z01S03[W]",
-                "logic": []
-            },
-            {
-                "target": "RESCUED_CHERUB_23",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canCrossGap4"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "pillar"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z01S03[SW]",
-                "logic": []
-            },
-            {
-                "target": "D02Z01S03[SE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z01S02[NW]"
-        ]
-    },
-    {
         "name": "D02Z01S05[E]",
         "exits": [
             {
                 "target": "D02Z01S03[SW]",
                 "logic": []
-            },
-            {
-                "target": "D02Z01S03[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             },
             {
                 "target": "D02Z01S03[SE]",
@@ -7397,41 +6466,8 @@ regions = [
         ]
     },
     {
-        "name": "D02Z02S01[E]",
-        "exits": [
-            {
-                "target": "D02Z01S03[SE]",
-                "logic": []
-            },
-            {
-                "target": "D02Z01S03[SW]",
-                "logic": []
-            },
-            {
-                "target": "D02Z01S03[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z02S01[E]"
-        ]
-    },
-    {
         "name": "D02Z02S14[-Cherubs]",
         "exits": [
-            {
-                "target": "D02Z01S03[W]",
-                "logic": []
-            },
             {
                 "target": "D02Z01S03[SE]",
                 "logic": []
@@ -7507,19 +6543,6 @@ regions = [
             {
                 "target": "D02Z01S09",
                 "logic": []
-            },
-            {
-                "target": "D02Z01S02[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canWalkOnRoot",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
@@ -7554,14 +6577,22 @@ regions = [
         ]
     },
     {
-        "name": "D02Z01S03[W]",
+        "name": "D02Z02S02[SE]",
         "exits": [
             {
-                "target": "D02Z02S01[W]",
+                "target": "D02Z01S03[SE]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S08[E]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S02[-CherubsR]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "dash"
+                            "linen"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -7569,12 +6600,44 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z02S01[NW]",
+                "target": "RESCUED_CHERUB_24",
                 "logic": [
                     {
                         "item_requirements": [
                             "wallClimb",
-                            "dash"
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "pillar"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "cante"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "tirana"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "canDiveLaser"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -7582,7 +6645,7 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z02S01[E]",
+                "target": "D02Z02S03[SW]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -7590,65 +6653,29 @@ regions = [
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
                     }
                 ]
             }
         ],
         "locations": [],
         "transitions": [
-            "D02Z01S03[W]"
-        ]
-    },
-    {
-        "name": "D02Z02S02[SE]",
-        "exits": [
-            {
-                "target": "D02Z02S01[W]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S01[E]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S01[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z02S02[SE]"
+            "D02Z02S02[SE]",
+            "D02Z02S01[NW]"
         ]
     },
     {
         "name": "D02Z02S03[-Cherubs]",
         "exits": [
             {
-                "target": "D02Z02S01[W]",
+                "target": "D02Z01S03[SE]",
                 "logic": []
             },
             {
-                "target": "D02Z02S01[NW]",
+                "target": "D02Z02S08[E]",
                 "logic": []
             },
             {
-                "target": "D02Z02S01[E]",
+                "target": "D02Z02S02[SE]",
                 "logic": []
             }
         ],
@@ -7661,31 +6688,7 @@ regions = [
         "name": "D02Z02S08[E]",
         "exits": [
             {
-                "target": "D02Z02S01[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S01[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S01[E]",
+                "target": "D02Z01S03[SE]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -7702,119 +6705,9 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z02S08[E]"
-        ]
-    },
-    {
-        "name": "D02Z01S08",
-        "exits": [
-            {
-                "target": "D02Z01S08[E]",
-                "logic": []
-            }
-        ],
-        "locations": [
-            "PR04"
-        ],
-        "transitions": []
-    },
-    {
-        "name": "D02Z01S04[-N]",
-        "exits": [
-            {
-                "target": "D02Z01S08",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z01S04[-N]"
-        ]
-    },
-    {
-        "name": "D02Z01S06[W]",
-        "exits": [
-            {
-                "target": "D02Z01S08",
-                "logic": []
             },
-            {
-                "target": "RESCUED_CHERUB_27",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "pillar"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "cante"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canDiveLaser"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "lorquiana"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "aubade"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "cantina"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z01S06[W]"
-        ]
-    },
-    {
-        "name": "D02Z02S01[W]",
-        "exits": [
             {
                 "target": "D02Z02S08[W]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S08[E]",
                 "logic": []
             },
             {
@@ -7879,11 +6772,63 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D02Z02S02[SE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
         "transitions": [
+            "D02Z02S08[E]",
             "D02Z02S01[W]"
+        ]
+    },
+    {
+        "name": "D02Z01S08",
+        "exits": [
+            {
+                "target": "D02Z01S08[E]",
+                "logic": []
+            }
+        ],
+        "locations": [
+            "PR04"
+        ],
+        "transitions": []
+    },
+    {
+        "name": "D02Z01S04[-N]",
+        "exits": [
+            {
+                "target": "D02Z01S08",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D02Z01S04[-N]"
+        ]
+    },
+    {
+        "name": "D02Z01S06[W]",
+        "exits": [
+            {
+                "target": "D02Z01S08",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D02Z01S06[W]"
         ]
     },
     {
@@ -8156,555 +7101,9 @@ regions = [
         ]
     },
     {
-        "name": "D02Z02S01[NW]",
-        "exits": [
-            {
-                "target": "D02Z02S02[SE]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S02[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S02[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S02[-CherubsR]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RESCUED_CHERUB_24",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "pillar"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "cante"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "tirana"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canDiveLaser"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z02S01[NW]"
-        ]
-    },
-    {
         "name": "D02Z02S03[SW]",
         "exits": [
             {
-                "target": "D02Z02S02[NW]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S02[SE]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S02[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S02[-CherubsR]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RESCUED_CHERUB_24",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "pillar"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "cante"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "tirana"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canDiveLaser"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z02S03[SW]"
-        ]
-    },
-    {
-        "name": "D02Z02S04[SE]",
-        "exits": [
-            {
-                "target": "D02Z02S02[NE]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S04[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyUpslash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S04[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyUpslash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "CO01",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyUpslash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RESCUED_CHERUB_25",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "blood",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "doubleJump",
-                            "canEnemyBounce"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "lorquiana"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "cante"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "verdiales"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "aubade"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "cantina"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyUpslash",
-                            "blood",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyUpslash",
-                            "canEnemyBounce"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyUpslash",
-                            "lorquiana"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyUpslash",
-                            "cante"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyUpslash",
-                            "verdiales"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyUpslash",
-                            "aubade"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyUpslash",
-                            "cantina"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "pillar"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S02[SE]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S02[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S02[-CherubsR]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RESCUED_CHERUB_24",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "pillar"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "cante"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "tirana"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canDiveLaser"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z02S04[SE]"
-        ]
-    },
-    {
-        "name": "D02Z02S05[-CherubsL]",
-        "exits": [
-            {
-                "target": "D02Z02S02[NW]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S02[NE]",
-                "logic": []
-            },
-            {
-                "target": "RESCUED_CHERUB_24",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S02[SE]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S02[-CherubsR]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z02S05[-CherubsL]"
-        ]
-    },
-    {
-        "name": "D02Z02S05[-CherubsR]",
-        "exits": [
-            {
-                "target": "D02Z02S02[NW]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S02[NE]",
-                "logic": []
-            },
-            {
-                "target": "RESCUED_CHERUB_24",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S02[SE]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S02[-CherubsR]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z02S05[-CherubsR]"
-        ]
-    },
-    {
-        "name": "D02Z02S02[NW]",
-        "exits": [
-            {
-                "target": "D02Z02S04[-CherubsL]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "RESCUED_CHERUB_24",
                 "logic": [
                     {
@@ -8745,391 +7144,15 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z02S04[SE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[SW]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z02S02[NW]"
-        ]
-    },
-    {
-        "name": "D02Z02S05[SW]",
-        "exits": [
-            {
-                "target": "D02Z02S04[SE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S04[-CherubsL]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S04[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S04[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "CO01",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RESCUED_CHERUB_25",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canEnemyBounce"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "lorquiana"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "cante"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "verdiales"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "aubade"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "cantina"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "pillar"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyBounce"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[SE]",
+                "target": "D02Z02S02[SE]",
                 "logic": []
             },
             {
-                "target": "D02Z02S05[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[-CherubsL]",
+                "target": "D02Z02S02[-CherubsR]",
                 "logic": [
                     {
                         "item_requirements": [
                             "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[-CherubsR]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB15",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [
-            "RB32"
-        ],
-        "transitions": [
-            "D02Z02S05[SW]",
-            "D02Z02S04[E]"
-        ]
-    },
-    {
-        "name": "D02Z02S05[W]",
-        "exits": [
-            {
-                "target": "D02Z02S04[W]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S04[SE]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S04[-CherubsL]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "CO01",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S05[SW]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z02S05[W]"
-        ]
-    },
-    {
-        "name": "D02Z02S09[E]",
-        "exits": [
-            {
-                "target": "D02Z02S04[SE]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S04[-CherubsL]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[SW]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z02S09[E]"
-        ]
-    },
-    {
-        "name": "D02Z02S02[NE]",
-        "exits": [
-            {
-                "target": "RESCUED_CHERUB_24",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "pillar"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "cante"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "tirana"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canDiveLaser"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S03[SW]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S03[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -9263,30 +7286,195 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z02S02[NE]"
-        ]
-    },
-    {
-        "name": "D02Z02S05[SE]",
-        "exits": [
-            {
-                "target": "QI46",
-                "logic": []
             },
             {
-                "target": "CO29",
-                "logic": []
+                "target": "D02Z02S04[-CherubsL]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
-                "target": "D02Z02S03[SW]",
-                "logic": []
+                "target": "CO01",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canEnemyUpslash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
-                "target": "D02Z02S03[NW]",
+                "target": "RESCUED_CHERUB_25",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "blood",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "doubleJump",
+                            "canEnemyBounce"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "lorquiana"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "cante"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "verdiales"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "aubade"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "cantina"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canEnemyUpslash",
+                            "blood",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canEnemyUpslash",
+                            "canEnemyBounce"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canEnemyUpslash",
+                            "lorquiana"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canEnemyUpslash",
+                            "cante"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canEnemyUpslash",
+                            "verdiales"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canEnemyUpslash",
+                            "aubade"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canEnemyUpslash",
+                            "cantina"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "pillar"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S05[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canEnemyUpslash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S05[SW]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -9303,6 +7491,298 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D02Z02S09[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canEnemyUpslash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D02Z02S03[SW]",
+            "D02Z02S02[NE]",
+            "D02Z02S04[SE]",
+            "D02Z02S02[NW]"
+        ]
+    },
+    {
+        "name": "D02Z02S05[-CherubsL]",
+        "exits": [
+            {
+                "target": "RESCUED_CHERUB_24",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S02[SE]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S02[-CherubsR]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S03[SW]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D02Z02S05[-CherubsL]"
+        ]
+    },
+    {
+        "name": "D02Z02S05[-CherubsR]",
+        "exits": [
+            {
+                "target": "RESCUED_CHERUB_24",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S02[SE]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S02[-CherubsR]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S03[SW]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D02Z02S05[-CherubsR]"
+        ]
+    },
+    {
+        "name": "D02Z02S05[SW]",
+        "exits": [
+            {
+                "target": "CO01",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_25",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "doubleJump",
+                            "canEnemyBounce"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "lorquiana"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "cante"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "verdiales"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "aubade"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "cantina"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "pillar"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S05[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "EnemySkips",
+                            "doubleJump",
+                            "canEnemyBounce"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S04[-CherubsL]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S03[SW]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S05[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S05[-CherubsL]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S05[-CherubsR]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB15",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI46",
+                "logic": []
+            },
+            {
+                "target": "CO29",
+                "logic": []
             },
             {
                 "target": "D02Z02S03[NE]",
@@ -9393,38 +7873,13 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z02S05[SE]"
-        ]
-    },
-    {
-        "name": "D02Z02S14[W]",
-        "exits": [
-            {
-                "target": "QI46",
-                "logic": []
             },
             {
-                "target": "CO29",
-                "logic": []
-            },
-            {
-                "target": "QI08",
+                "target": "D02Z02S09[E]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "canClimbOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "blood",
-                            "doubleJump"
+                            "dash"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -9432,169 +7887,7 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z02S03[SW]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S03[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S03[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canCrossGap11"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "blood",
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "blood",
-                            "canCrossGap7"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canWalkOnRoot",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canWalkOnRoot",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S03[-Cherubs]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z02S14[W]"
-        ]
-    },
-    {
-        "name": "D02Z02S03[NW]",
-        "exits": [
-            {
-                "target": "D02Z02S05[SW]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S05[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyBounce"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[SE]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S05[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[-CherubsL]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[-CherubsR]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB15",
+                "target": "D02Z02S07[E]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -9606,14 +7899,35 @@ regions = [
                 ]
             }
         ],
-        "locations": [],
+        "locations": [
+            "RB32"
+        ],
         "transitions": [
+            "D02Z02S05[SW]",
+            "D02Z02S04[E]",
+            "D02Z02S05[SE]",
             "D02Z02S03[NW]"
         ]
     },
     {
-        "name": "D02Z02S04[NE]",
+        "name": "D02Z02S05[W]",
         "exits": [
+            {
+                "target": "D02Z02S04[-CherubsL]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO01",
+                "logic": []
+            },
             {
                 "target": "RESCUED_CHERUB_25",
                 "logic": [
@@ -9678,40 +7992,15 @@ regions = [
                 ]
             },
             {
+                "target": "D02Z02S03[SW]",
+                "logic": []
+            },
+            {
                 "target": "D02Z02S05[SW]",
                 "logic": []
             },
             {
-                "target": "D02Z02S05[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyBounce"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[SE]",
-                "logic": []
-            },
-            {
                 "target": "D02Z02S05[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[NW]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -9757,244 +8046,39 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D02Z02S09[E]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S07[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
         "transitions": [
+            "D02Z02S05[W]",
             "D02Z02S04[NE]"
         ]
     },
     {
-        "name": "D02Z02S07[E]",
+        "name": "D02Z02S09[E]",
         "exits": [
             {
-                "target": "D02Z02S05[E]",
-                "logic": []
-            },
-            {
-                "target": "RB15",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S05[SW]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S05[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyBounce"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[SE]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S05[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[-CherubsL]",
+                "target": "D02Z02S04[-CherubsL]",
                 "logic": [
                     {
                         "item_requirements": [
                             "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[-CherubsR]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z02S07[E]"
-        ]
-    },
-    {
-        "name": "D02Z02S10[W]",
-        "exits": [
-            {
-                "target": "D02Z02S05[SW]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S05[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyBounce"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[SE]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S05[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[-CherubsL]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[-CherubsR]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB15",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z02S10[W]"
-        ]
-    },
-    {
-        "name": "D02Z02S14",
-        "exits": [
-            {
-                "target": "D02Z02S14[W]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S14[-Cherubs]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [
-            "RB106",
-            "Amanecida[D02Z02S14]"
-        ],
-        "transitions": []
-    },
-    {
-        "name": "D02Z02S03[NE]",
-        "exits": [
-            {
-                "target": "D02Z02S14",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S03[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z02S03[NE]"
-        ]
-    },
-    {
-        "name": "D02Z02S04[W]",
-        "exits": [
-            {
-                "target": "D02Z02S04[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -10084,13 +8168,345 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z02S09[E]",
+                "target": "D02Z02S05[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S03[SW]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
+            "D02Z02S09[E]",
             "D02Z02S04[W]"
+        ]
+    },
+    {
+        "name": "D02Z02S14[W]",
+        "exits": [
+            {
+                "target": "D02Z02S03[NE]",
+                "logic": []
+            },
+            {
+                "target": "QI46",
+                "logic": []
+            },
+            {
+                "target": "CO29",
+                "logic": []
+            },
+            {
+                "target": "QI08",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canClimbOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "blood",
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S03[SW]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S03[-Cherubs]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S05[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canWalkOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D02Z02S14[W]"
+        ]
+    },
+    {
+        "name": "D02Z02S07[E]",
+        "exits": [
+            {
+                "target": "D02Z02S05[E]",
+                "logic": []
+            },
+            {
+                "target": "RB15",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S05[SW]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S05[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "EnemySkips",
+                            "doubleJump",
+                            "canEnemyBounce"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S05[-CherubsL]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S05[-CherubsR]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z03S08[SW]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S11",
+                "logic": []
+            },
+            {
+                "target": "D01Z02S03[NW]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S11[E]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S11[NE]",
+                "logic": []
+            },
+            {
+                "target": "D02Z03S02[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D02Z02S07[E]",
+            "D02Z02S05[NW]",
+            "D02Z03S01[E]",
+            "D02Z02S07[W]",
+            "D02Z03S08[E]",
+            "D02Z03S01[W]",
+            "D02Z03S08[SE]",
+            "D02Z03S14[W]",
+            "D02Z03S14[E]",
+            "D02Z02S11[NW]",
+            "D02Z03S16[W]",
+            "D02Z03S08[NE]",
+            "D02Z03S02[S]",
+            "D02Z03S16[N]"
+        ]
+    },
+    {
+        "name": "D02Z02S10[W]",
+        "exits": [
+            {
+                "target": "D02Z02S05[E]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S05[SW]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S05[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "EnemySkips",
+                            "doubleJump",
+                            "canEnemyBounce"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S05[-CherubsL]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S05[-CherubsR]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB15",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S07[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D02Z02S10[W]"
+        ]
+    },
+    {
+        "name": "D02Z02S14",
+        "exits": [
+            {
+                "target": "D02Z02S14[W]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S14[-Cherubs]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [
+            "RB106",
+            "Amanecida[D02Z02S14]"
+        ],
+        "transitions": []
+    },
+    {
+        "name": "D02Z02S03[NE]",
+        "exits": [
+            {
+                "target": "D02Z02S14",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D02Z02S03[NE]"
         ]
     },
     {
@@ -10120,104 +8536,10 @@ regions = [
         ]
     },
     {
-        "name": "D02Z02S05[NW]",
-        "exits": [
-            {
-                "target": "D02Z02S07[E]",
-                "logic": []
-            },
-            {
-                "target": "D02Z03S01[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z02S05[NW]"
-        ]
-    },
-    {
-        "name": "D02Z03S01[E]",
-        "exits": [
-            {
-                "target": "D02Z02S07[E]",
-                "logic": []
-            },
-            {
-                "target": "D02Z03S08[SW]",
-                "logic": []
-            },
-            {
-                "target": "D02Z03S08[W]",
-                "logic": []
-            },
-            {
-                "target": "D02Z03S14[E]",
-                "logic": []
-            },
-            {
-                "target": "D02Z03S02[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z03S02[NW]",
-                "logic": []
-            },
-            {
-                "target": "D02Z03S02[NE]",
-                "logic": []
-            },
-            {
-                "target": "D02Z03S02[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "openedConventLadder"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z03S01[E]",
-            "D02Z02S07[W]",
-            "D02Z03S08[E]",
-            "D02Z03S01[W]",
-            "D02Z03S08[SE]",
-            "D02Z03S14[W]",
-            "D02Z03S16[W]",
-            "D02Z03S08[NE]",
-            "D02Z03S02[S]",
-            "D02Z03S16[N]"
-        ]
-    },
-    {
         "name": "D02Z03S10[-Cherubs]",
         "exits": [
             {
                 "target": "D02Z02S07[E]",
-                "logic": []
-            },
-            {
-                "target": "D02Z03S01[E]",
                 "logic": []
             }
         ],
@@ -10250,14 +8572,6 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z02S11[NW]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S11[NE]",
-                "logic": []
-            },
-            {
                 "target": "D02Z02S11[-Cherubs]",
                 "logic": [
                     {
@@ -10282,6 +8596,10 @@ regions = [
             {
                 "target": "D02Z02S11",
                 "logic": []
+            },
+            {
+                "target": "D01Z02S03[NW]",
+                "logic": []
             }
         ],
         "locations": [],
@@ -10295,6 +8613,10 @@ regions = [
             {
                 "target": "D02Z02S11",
                 "logic": []
+            },
+            {
+                "target": "D01Z02S03[NW]",
+                "logic": []
             }
         ],
         "locations": [],
@@ -10307,6 +8629,14 @@ regions = [
         "exits": [
             {
                 "target": "D02Z02S11",
+                "logic": []
+            },
+            {
+                "target": "D01Z02S03[NW]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S11[E]",
                 "logic": []
             }
         ],
@@ -10323,30 +8653,25 @@ regions = [
                 "logic": []
             },
             {
+                "target": "D01Z02S03[NW]",
+                "logic": []
+            },
+            {
                 "target": "D02Z02S11[E]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S11[NE]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S07[E]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
             "D02Z02S13[W]"
-        ]
-    },
-    {
-        "name": "D02Z03S14[E]",
-        "exits": [
-            {
-                "target": "D02Z02S11",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S11[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z03S14[E]"
         ]
     },
     {
@@ -10430,23 +8755,6 @@ regions = [
         ]
     },
     {
-        "name": "D02Z02S11[NW]",
-        "exits": [
-            {
-                "target": "D02Z03S14[E]",
-                "logic": []
-            },
-            {
-                "target": "D02Z03S01[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z02S11[NW]"
-        ]
-    },
-    {
         "name": "D02Z02S13",
         "exits": [
             {
@@ -10476,15 +8784,15 @@ regions = [
         "name": "D02Z03S07[E]",
         "exits": [
             {
-                "target": "D02Z03S08[SW]",
-                "logic": []
-            },
-            {
                 "target": "D02Z03S08[W]",
                 "logic": []
             },
             {
-                "target": "D02Z03S01[E]",
+                "target": "D02Z03S08[SW]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S07[E]",
                 "logic": []
             }
         ],
@@ -10501,11 +8809,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D02Z03S08[W]",
-                "logic": []
-            },
-            {
-                "target": "D02Z03S01[E]",
+                "target": "D02Z02S07[E]",
                 "logic": []
             }
         ],
@@ -10518,29 +8822,6 @@ regions = [
         "name": "D02Z03S02[W]",
         "exits": [
             {
-                "target": "D02Z03S03[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canCrossGap3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z03S03[E]",
-                "logic": []
-            },
-            {
                 "target": "CO05",
                 "logic": [
                     {
@@ -10560,20 +8841,7 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z03S05[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z03S02[W]"
-        ]
-    },
-    {
-        "name": "D02Z03S05[E]",
-        "exits": [
-            {
-                "target": "D02Z03S03[NW]",
+                "target": "D02Z03S05[NE]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -10588,26 +8856,17 @@ regions = [
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z03S03[E]",
-                "logic": []
-            },
-            {
-                "target": "CO05",
-                "logic": [
+                    },
                     {
                         "item_requirements": [
-                            "blood"
+                            "wallClimb"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     },
                     {
                         "item_requirements": [
-                            "canCrossGap3"
+                            "doubleJump"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -10620,25 +8879,6 @@ regions = [
                     {
                         "item_requirements": [
                             "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z03S05[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -10665,10 +8905,16 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D02Z02S07[E]",
+                "logic": []
             }
         ],
         "locations": [],
         "transitions": [
+            "D02Z03S02[W]",
+            "D02Z03S03[E]",
             "D02Z03S05[E]",
             "D02Z03S03[W]"
         ]
@@ -10681,18 +8927,15 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D02Z03S03[NW]",
+                "target": "D02Z03S05[S]",
+                "logic": []
+            },
+            {
+                "target": "RB08",
                 "logic": [
                     {
                         "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canCrossGap3"
+                            "dash"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -10700,17 +8943,14 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z03S03[E]",
-                "logic": []
-            },
-            {
-                "target": "D02Z03S05[E]",
+                "target": "D02Z03S02[W]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D02Z03S05[NE]"
+            "D02Z03S05[NE]",
+            "D02Z03S03[NW]"
         ]
     },
     {
@@ -10899,57 +9139,13 @@ regions = [
         ]
     },
     {
-        "name": "D02Z03S03[NW]",
-        "exits": [
-            {
-                "target": "D02Z03S05[S]",
-                "logic": []
-            },
-            {
-                "target": "RB08",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z03S05[E]",
-                "logic": []
-            },
-            {
-                "target": "D02Z03S05[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z03S03[NW]"
-        ]
-    },
-    {
         "name": "D02Z03S07[N]",
         "exits": [
             {
+                "target": "D02Z03S05[S]",
+                "logic": []
+            },
+            {
                 "target": "D02Z03S05[NE]",
                 "logic": []
             },
@@ -10966,77 +9162,13 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z03S05[S]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z03S05[E]",
+                "target": "D02Z03S02[W]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
             "D02Z03S07[N]"
-        ]
-    },
-    {
-        "name": "D02Z03S03[E]",
-        "exits": [
-            {
-                "target": "D02Z03S02[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z03S02[NW]",
-                "logic": []
-            },
-            {
-                "target": "D02Z03S02[NE]",
-                "logic": []
-            },
-            {
-                "target": "D02Z03S02[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "openedConventLadder"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z03S01[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z03S03[E]"
         ]
     },
     {
@@ -11067,7 +9199,7 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z03S01[E]",
+                "target": "D02Z02S07[E]",
                 "logic": []
             }
         ],
@@ -11104,7 +9236,7 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z03S01[E]",
+                "target": "D02Z02S07[E]",
                 "logic": []
             }
         ],
@@ -11141,7 +9273,7 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z03S01[E]",
+                "target": "D02Z02S07[E]",
                 "logic": []
             }
         ],
@@ -11198,19 +9330,6 @@ regions = [
             {
                 "target": "D02Z03S07",
                 "logic": []
-            },
-            {
-                "target": "RB19",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "redWax1",
-                            "D05Z01S02[W]"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
@@ -11260,19 +9379,6 @@ regions = [
     {
         "name": "D02Z03S06[W]",
         "exits": [
-            {
-                "target": "RB19",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "redWax1",
-                            "D05Z01S02[W]"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
             {
                 "target": "D02Z03S18[NW]",
                 "logic": [
@@ -11329,15 +9435,7 @@ regions = [
             },
             {
                 "target": "D02Z03S18[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "logic": []
             },
             {
                 "target": "D02Z03S06[W]",
@@ -11353,20 +9451,12 @@ regions = [
         "name": "D02Z03S23[E]",
         "exits": [
             {
-                "target": "D02Z03S18[NE]",
+                "target": "D02Z03S18[NW]",
                 "logic": []
             },
             {
-                "target": "D02Z03S18[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "target": "D02Z03S18[NE]",
+                "logic": []
             },
             {
                 "target": "D02Z03S06[W]",
@@ -11511,6 +9601,10 @@ regions = [
             {
                 "target": "D02Z03S20",
                 "logic": []
+            },
+            {
+                "target": "D02Z03S20[W]",
+                "logic": []
             }
         ],
         "locations": [],
@@ -11523,6 +9617,10 @@ regions = [
         "exits": [
             {
                 "target": "D02Z03S20",
+                "logic": []
+            },
+            {
+                "target": "D02Z03S20[E]",
                 "logic": []
             }
         ],
@@ -11690,7 +9788,7 @@ regions = [
         ]
     },
     {
-        "name": "D02Z03S18[NE]",
+        "name": "D02Z03S09",
         "exits": [
             {
                 "target": "D02Z03S09[W]",
@@ -11698,6 +9796,17 @@ regions = [
             },
             {
                 "target": "D02Z03S09[E]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": []
+    },
+    {
+        "name": "D02Z03S18[NE]",
+        "exits": [
+            {
+                "target": "D02Z03S09",
                 "logic": []
             }
         ],
@@ -11710,11 +9819,7 @@ regions = [
         "name": "D02Z03S20[W]",
         "exits": [
             {
-                "target": "D02Z03S09[W]",
-                "logic": []
-            },
-            {
-                "target": "D02Z03S09[E]",
+                "target": "D02Z03S09",
                 "logic": []
             }
         ],
@@ -11727,7 +9832,11 @@ regions = [
         "name": "D03Z01S01[W]",
         "exits": [
             {
-                "target": "D03Z01S02[W]",
+                "target": "D03Z01S02[E]",
+                "logic": []
+            },
+            {
+                "target": "D03Z01S06[E]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -11739,25 +9848,6 @@ regions = [
                     {
                         "item_requirements": [
                             "canCrossGap3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z01S02[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canCrossGap7"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -11774,23 +9864,8 @@ regions = [
         "name": "D03Z01S06[E]",
         "exits": [
             {
-                "target": "D03Z01S02[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canCrossGap3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "target": "D03Z01S06",
+                "logic": []
             },
             {
                 "target": "D03Z01S02[E]",
@@ -11814,24 +9889,8 @@ regions = [
         ],
         "locations": [],
         "transitions": [
-            "D03Z01S06[E]"
-        ]
-    },
-    {
-        "name": "D03Z01S01[S]",
-        "exits": [
-            {
-                "target": "D20Z01S03[W]",
-                "logic": []
-            },
-            {
-                "target": "D20Z01S03[N]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z01S01[S]"
+            "D03Z01S06[E]",
+            "D03Z01S02[W]"
         ]
     },
     {
@@ -11918,7 +9977,7 @@ regions = [
         "name": "D03Z01S06",
         "exits": [
             {
-                "target": "D03Z01S06[W]",
+                "target": "D03Z01S06[E]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -11930,7 +9989,7 @@ regions = [
                 ]
             },
             {
-                "target": "D03Z01S06[E]",
+                "target": "D03Z01S03[E]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -11949,29 +10008,155 @@ regions = [
         "transitions": []
     },
     {
-        "name": "D03Z01S02[W]",
-        "exits": [
-            {
-                "target": "D03Z01S06",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z01S02[W]"
-        ]
-    },
-    {
         "name": "D03Z01S03[E]",
         "exits": [
             {
                 "target": "D03Z01S06",
                 "logic": []
+            },
+            {
+                "target": "D03Z01S03[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "canCrossGap9"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z01S03[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canCrossGap9"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z01S03[SE]",
+                "logic": []
+            },
+            {
+                "target": "D03Z01S03[-WestL]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "canCrossGap9"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z01S03[-WestR]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "canCrossGap9"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z01S03[-EastL]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z01S03[-EastR]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI47",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "blood",
+                            "canCrossGap9"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canCrossGap9"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB22",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canCrossGap9"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canCrossGap9"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "Amanecida[D03Z01S03]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canBeatJondoBoss",
+                            "canCrossGap9"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
         "transitions": [
-            "D03Z01S03[E]"
+            "D03Z01S03[E]",
+            "D03Z01S06[W]"
         ]
     },
     {
@@ -12123,45 +10308,6 @@ regions = [
         "name": "D03Z02S01",
         "exits": [
             {
-                "target": "D03Z02S01[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyBounce"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z02S01[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "PR10",
                 "logic": [
                     {
@@ -12187,6 +10333,45 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D03Z02S02[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canEnemyBounce"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z01S03[SE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [
@@ -12200,11 +10385,158 @@ regions = [
             {
                 "target": "D03Z02S01",
                 "logic": []
+            },
+            {
+                "target": "D03Z01S03[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "canCrossGap9"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z01S03[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z01S03[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canCrossGap9"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z01S03[-WestL]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "canCrossGap9"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z01S03[-WestR]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "canCrossGap9"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z01S03[-EastL]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z01S03[-EastR]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI47",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "blood",
+                            "canCrossGap9"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canCrossGap9"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB22",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canCrossGap9"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canCrossGap9"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "Amanecida[D03Z01S03]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canBeatJondoBoss",
+                            "canCrossGap9"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
         "transitions": [
-            "D03Z01S03[SE]"
+            "D03Z01S03[SE]",
+            "D03Z02S01[N]"
         ]
     },
     {
@@ -12230,11 +10562,28 @@ regions = [
             {
                 "target": "D03Z02S01",
                 "logic": []
+            },
+            {
+                "target": "D03Z02S02[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z02S03[N]",
+                "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D03Z02S02[E]"
+            "D03Z02S02[E]",
+            "D03Z02S01[W]"
         ]
     },
     {
@@ -12265,7 +10614,7 @@ regions = [
                 ]
             },
             {
-                "target": "D03Z02S02[S]",
+                "target": "D03Z02S03[N]",
                 "logic": []
             }
         ],
@@ -12310,58 +10659,13 @@ regions = [
                 ]
             },
             {
-                "target": "D03Z02S02[S]",
+                "target": "D03Z02S03[N]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
             "D03Z01S03[-EastL]"
-        ]
-    },
-    {
-        "name": "D03Z02S01[W]",
-        "exits": [
-            {
-                "target": "D03Z02S02[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z02S02[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyBounce"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z02S02[S]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z02S01[W]"
         ]
     },
     {
@@ -12409,13 +10713,99 @@ regions = [
                 ]
             },
             {
-                "target": "D03Z02S02[S]",
-                "logic": []
+                "target": "D03Z02S03[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z02S06[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "brokeJondoBellW",
+                            "brokeJondoBellE"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z02S05[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "boots"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z02S04[NE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z02S04[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO33",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
         "transitions": [
-            "D03Z02S03[N]"
+            "D03Z02S03[N]",
+            "D03Z02S02[S]",
+            "D03Z02S04[NW]",
+            "D03Z02S03[SE2]"
         ]
     },
     {
@@ -12423,24 +10813,7 @@ regions = [
         "exits": [
             {
                 "target": "D03Z02S02[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyBounce"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "logic": []
             },
             {
                 "target": "D03Z02S02[E]",
@@ -12463,7 +10836,7 @@ regions = [
                 ]
             },
             {
-                "target": "D03Z02S02[S]",
+                "target": "D03Z02S03[N]",
                 "logic": []
             }
         ],
@@ -12519,6 +10892,10 @@ regions = [
         "name": "D03Z01S04[E]",
         "exits": [
             {
+                "target": "D03Z01S03[W]",
+                "logic": []
+            },
+            {
                 "target": "D03Z01S03[SW]",
                 "logic": []
             },
@@ -12591,19 +10968,6 @@ regions = [
                     {
                         "item_requirements": [
                             "canBeatJondoBoss"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z01S03[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canCrossGap9"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -12645,324 +11009,6 @@ regions = [
         ]
     },
     {
-        "name": "D03Z01S06[W]",
-        "exits": [
-            {
-                "target": "D03Z01S03[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canCrossGap9"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z01S03[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z01S03[SW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canCrossGap9"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z01S03[SE]",
-                "logic": []
-            },
-            {
-                "target": "D03Z01S03[-WestL]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap9"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z01S03[-WestR]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap9"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z01S03[-EastL]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z01S03[-EastR]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "QI47",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood",
-                            "canCrossGap9"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canCrossGap9"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB22",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canCrossGap9"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RESCUED_CHERUB_16",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canCrossGap9"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "Amanecida[D03Z01S03]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canBeatJondoBoss",
-                            "canCrossGap9"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z01S06[W]"
-        ]
-    },
-    {
-        "name": "D03Z02S01[N]",
-        "exits": [
-            {
-                "target": "D03Z01S03[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canCrossGap9"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z01S03[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z01S03[SW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canCrossGap9"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z01S03[SE]",
-                "logic": []
-            },
-            {
-                "target": "D03Z01S03[-WestL]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap9"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z01S03[-WestR]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap9"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z01S03[-EastL]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z01S03[-EastR]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "QI47",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood",
-                            "canCrossGap9"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canCrossGap9"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB22",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canCrossGap9"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RESCUED_CHERUB_16",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canCrossGap9"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "Amanecida[D03Z01S03]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canBeatJondoBoss",
-                            "canCrossGap9"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z02S01[N]"
-        ]
-    },
-    {
         "name": "D03Z02S10[N]",
         "exits": [
             {
@@ -12976,6 +11022,10 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D03Z01S03[SW]",
+                "logic": []
             },
             {
                 "target": "D03Z01S03[-WestL]",
@@ -13058,18 +11108,6 @@ regions = [
                     {
                         "item_requirements": [
                             "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z01S03[SW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canCrossGap9"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -13141,186 +11179,6 @@ regions = [
         ]
     },
     {
-        "name": "D03Z02S02[S]",
-        "exits": [
-            {
-                "target": "D03Z02S03[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z02S03[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "boots"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z02S03[SE2]",
-                "logic": []
-            },
-            {
-                "target": "D03Z02S03[SW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "brokeJondoBellW",
-                            "brokeJondoBellE"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z02S03[SE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "brokeJondoBellW",
-                            "brokeJondoBellE"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z03S01[NL]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "brokeJondoBellW",
-                            "brokeJondoBellE"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z02S02[S]"
-        ]
-    },
-    {
-        "name": "D03Z02S04[NW]",
-        "exits": [
-            {
-                "target": "D03Z02S03[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z02S03[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "boots"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z02S03[N]",
-                "logic": []
-            },
-            {
-                "target": "D03Z02S03[SW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "brokeJondoBellW",
-                            "brokeJondoBellE"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z02S03[SE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "brokeJondoBellW",
-                            "brokeJondoBellE"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z03S01[NL]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "brokeJondoBellW",
-                            "brokeJondoBellE"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z02S04[NW]"
-        ]
-    },
-    {
         "name": "D03Z02S05[W]",
         "exits": [
             {
@@ -13340,11 +11198,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D03Z02S03[SE2]",
-                "logic": []
-            },
-            {
-                "target": "D03Z02S03[SW]",
+                "target": "D03Z02S06[W]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -13357,12 +11211,19 @@ regions = [
                 ]
             },
             {
-                "target": "D03Z02S03[SE]",
+                "target": "RESCUED_CHERUB_18",
                 "logic": [
                     {
                         "item_requirements": [
-                            "brokeJondoBellW",
-                            "brokeJondoBellE"
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canEnemyBounce",
+                            "canCrossGap3"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -13370,12 +11231,19 @@ regions = [
                 ]
             },
             {
-                "target": "D03Z03S01[NL]",
+                "target": "D03Z02S04[NE]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "brokeJondoBellW",
-                            "brokeJondoBellE"
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canEnemyBounce",
+                            "canCrossGap3"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -13385,52 +11253,19 @@ regions = [
         ],
         "locations": [],
         "transitions": [
-            "D03Z02S05[W]"
+            "D03Z02S05[W]",
+            "D03Z02S03[E]"
         ]
     },
     {
         "name": "D03Z02S06[W]",
         "exits": [
             {
-                "target": "D03Z02S03[SW]",
+                "target": "D03Z02S06",
                 "logic": []
             },
             {
-                "target": "D03Z03S01[NL]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z02S06[W]"
-        ]
-    },
-    {
-        "name": "D03Z02S07[E]",
-        "exits": [
-            {
-                "target": "D03Z02S03[SE]",
-                "logic": []
-            },
-            {
-                "target": "D03Z03S01[NL]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z02S07[E]"
-        ]
-    },
-    {
-        "name": "D03Z03S01[NL]",
-        "exits": [
-            {
-                "target": "D03Z02S03[SW]",
-                "logic": []
-            },
-            {
-                "target": "D03Z02S03[SE]",
+                "target": "D03Z02S07",
                 "logic": []
             },
             {
@@ -13440,37 +11275,22 @@ regions = [
         ],
         "locations": [],
         "transitions": [
+            "D03Z02S06[W]",
+            "D03Z02S03[SE]",
+            "D03Z02S07[E]",
+            "D03Z02S03[SW]",
             "D03Z03S01[NL]",
+            "D03Z02S03[SSL]",
             "D03Z02S03[SSC]",
             "D03Z02S03[SSR]",
-            "D03Z03S01[NR]",
-            "D03Z02S03[SSL]"
+            "D03Z03S01[NR]"
         ]
     },
     {
-        "name": "D03Z02S07",
+        "name": "D03Z02S07[N]",
         "exits": [
             {
-                "target": "D03Z02S07[W]",
-                "logic": []
-            },
-            {
-                "target": "D03Z02S07[E]",
-                "logic": []
-            }
-        ],
-        "locations": [
-            "CO07"
-        ],
-        "transitions": [
-            "D03Z02S07[N]"
-        ]
-    },
-    {
-        "name": "D03Z02S03[W]",
-        "exits": [
-            {
-                "target": "D03Z02S07",
+                "target": "D03Z02S03[W]",
                 "logic": []
             },
             {
@@ -13486,47 +11306,7 @@ regions = [
                 ]
             },
             {
-                "target": "D03Z02S03[SE2]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z02S03[SW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "brokeJondoBellW",
-                            "brokeJondoBellE",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z02S03[SE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "brokeJondoBellW",
-                            "brokeJondoBellE",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z03S01[NL]",
+                "target": "D03Z02S06[W]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -13542,11 +11322,28 @@ regions = [
         ],
         "locations": [],
         "transitions": [
-            "D03Z02S03[W]"
+            "D03Z02S07[N]"
         ]
     },
     {
-        "name": "D03Z02S03[SW]",
+        "name": "D03Z02S07",
+        "exits": [
+            {
+                "target": "D03Z02S07[W]",
+                "logic": []
+            },
+            {
+                "target": "D03Z02S07[N]",
+                "logic": []
+            }
+        ],
+        "locations": [
+            "CO07"
+        ],
+        "transitions": []
+    },
+    {
+        "name": "D03Z02S03[W]",
         "exits": [
             {
                 "target": "D03Z02S07",
@@ -13555,7 +11352,7 @@ regions = [
         ],
         "locations": [],
         "transitions": [
-            "D03Z02S03[SW]"
+            "D03Z02S03[W]"
         ]
     },
     {
@@ -13572,128 +11369,18 @@ regions = [
         ]
     },
     {
-        "name": "D03Z02S03[E]",
-        "exits": [
-            {
-                "target": "D03Z02S05[W]",
-                "logic": []
-            },
-            {
-                "target": "D03Z02S05[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canEnemyBounce",
-                            "canCrossGap3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z02S05[S]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canEnemyBounce",
-                            "canCrossGap3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RESCUED_CHERUB_18",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canEnemyBounce",
-                            "canCrossGap3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z02S03[E]"
-        ]
-    },
-    {
         "name": "D03Z02S04[NE]",
         "exits": [
             {
-                "target": "D03Z02S05[E]",
-                "logic": []
-            },
-            {
                 "target": "RESCUED_CHERUB_18",
                 "logic": []
             },
             {
-                "target": "D03Z02S05[W]",
+                "target": "D03Z02S04[S]",
                 "logic": []
             },
             {
-                "target": "D03Z02S05[S]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canEnemyBounce",
-                            "canCrossGap3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z02S04[NE]"
-        ]
-    },
-    {
-        "name": "D03Z02S11[W]",
-        "exits": [
-            {
-                "target": "D03Z02S05[S]",
-                "logic": []
-            },
-            {
-                "target": "RESCUED_CHERUB_18",
+                "target": "CO33",
                 "logic": []
             },
             {
@@ -13750,36 +11437,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D03Z02S05[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canEnemyBounce",
-                            "canCrossGap3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z02S11[W]"
-        ]
-    },
-    {
-        "name": "D03Z02S03[SE2]",
-        "exits": [
-            {
-                "target": "D03Z02S04[NW]",
+                "target": "D03Z02S03[N]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -13798,63 +11456,11 @@ regions = [
                 ]
             },
             {
-                "target": "D03Z02S04[NE]",
+                "target": "D03Z02S11[E]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z02S04[S]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "CO33",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z02S03[SE2]"
-        ]
-    },
-    {
-        "name": "D03Z02S05[S]",
-        "exits": [
-            {
-                "target": "D03Z02S04[S]",
-                "logic": []
-            },
-            {
-                "target": "CO33",
-                "logic": []
-            },
-            {
-                "target": "D03Z02S04[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
+                            "dash",
                             "wallClimb"
                         ],
                         "location_requirements": [],
@@ -13862,19 +11468,17 @@ regions = [
                     },
                     {
                         "item_requirements": [
+                            "dash",
                             "doubleJump"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z02S04[NE]",
-                "logic": [
+                    },
                     {
                         "item_requirements": [
-                            "wallClimb"
+                            "dash",
+                            "canCrossGap2",
+                            "canEnemyBounce"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -13884,38 +11488,25 @@ regions = [
         ],
         "locations": [],
         "transitions": [
-            "D03Z02S05[S]"
+            "D03Z02S04[NE]",
+            "D03Z02S05[S]",
+            "D03Z02S11[W]",
+            "D03Z02S05[E]"
         ]
     },
     {
         "name": "D03Z02S06[N]",
         "exits": [
             {
-                "target": "CO33",
-                "logic": []
-            },
-            {
-                "target": "D03Z02S04[NW]",
+                "target": "D03Z02S04[NE]",
                 "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
                     {
                         "item_requirements": [
                             "doubleJump"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z02S04[NE]",
-                "logic": [
+                    },
                     {
                         "item_requirements": [
                             "wallClimb"
@@ -13927,10 +11518,25 @@ regions = [
             },
             {
                 "target": "D03Z02S04[S]",
+                "logic": []
+            },
+            {
+                "target": "CO33",
+                "logic": []
+            },
+            {
+                "target": "D03Z02S03[N]",
                 "logic": [
                     {
                         "item_requirements": [
                             "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -13947,10 +11553,6 @@ regions = [
         "name": "D03Z02S06",
         "exits": [
             {
-                "target": "D03Z02S06[W]",
-                "logic": []
-            },
-            {
                 "target": "D03Z02S06[N]",
                 "logic": []
             }
@@ -13961,36 +11563,11 @@ regions = [
         "transitions": []
     },
     {
-        "name": "D03Z02S03[SE]",
-        "exits": [
-            {
-                "target": "D03Z02S06",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z02S03[SE]"
-        ]
-    },
-    {
         "name": "D03Z02S04[S]",
         "exits": [
             {
                 "target": "D03Z02S06",
                 "logic": []
-            },
-            {
-                "target": "D03Z02S04[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
@@ -14002,7 +11579,7 @@ regions = [
         "name": "D03Z03S12[W]",
         "exits": [
             {
-                "target": "D03Z03S01[NL]",
+                "target": "D03Z02S06[W]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -14021,7 +11598,7 @@ regions = [
                 ]
             },
             {
-                "target": "D03Z03S12[E]",
+                "target": "D03Z03S02",
                 "logic": []
             }
         ],
@@ -14030,83 +11607,20 @@ regions = [
             "D03Z03S12[W]",
             "D03Z03S01[S]",
             "D03Z03S18[E]",
-            "D03Z03S01[W]"
-        ]
-    },
-    {
-        "name": "D03Z02S05[E]",
-        "exits": [
-            {
-                "target": "D03Z02S11[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "canCrossGap2"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "preciseSkipsAllowed",
-                            "canCrossGap1"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z02S11[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "canCrossGap2",
-                            "canEnemyBounce"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z02S05[E]"
+            "D03Z03S01[W]",
+            "D03Z03S02[W]",
+            "D03Z03S12[E]"
         ]
     },
     {
         "name": "D03Z02S15[W]",
         "exits": [
             {
-                "target": "D03Z02S11[W]",
+                "target": "D03Z02S11[E]",
+                "logic": []
+            },
+            {
+                "target": "HE06",
                 "logic": [
                     {
                         "item_requirements": [
@@ -14136,7 +11650,36 @@ regions = [
                 ]
             },
             {
-                "target": "D03Z02S11[E]",
+                "target": "RESCUED_CHERUB_37",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "canCrossGap1"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "canEnemyBounce"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z02S04[NE]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -14149,7 +11692,7 @@ regions = [
                     {
                         "item_requirements": [
                             "dash",
-                            "doubleJump"
+                            "canCrossGap2"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -14157,8 +11700,8 @@ regions = [
                     {
                         "item_requirements": [
                             "dash",
-                            "canCrossGap2",
-                            "canEnemyBounce"
+                            "preciseSkipsAllowed",
+                            "canCrossGap1"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -14175,30 +11718,11 @@ regions = [
         "name": "D03Z02S07[W]",
         "exits": [
             {
-                "target": "D03Z02S08[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "D03Z02S08[E]",
                 "logic": []
             },
             {
-                "target": "D03Z02S08[N]",
+                "target": "QI41",
                 "logic": [
                     {
                         "item_requirements": [
@@ -14217,7 +11741,7 @@ regions = [
                 ]
             },
             {
-                "target": "QI41",
+                "target": "D03Z02S09[S]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -14245,100 +11769,15 @@ regions = [
         "name": "D03Z02S09[S]",
         "exits": [
             {
-                "target": "D03Z02S08[W]",
-                "logic": []
-            },
-            {
                 "target": "QI41",
                 "logic": []
             },
-            {
-                "target": "D03Z02S08[E]",
-                "logic": []
-            },
-            {
-                "target": "D03Z02S08[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z02S09[S]"
-        ]
-    },
-    {
-        "name": "D03Z02S14[E]",
-        "exits": [
-            {
-                "target": "D03Z02S08[N]",
-                "logic": []
-            },
-            {
-                "target": "QI41",
-                "logic": []
-            },
-            {
-                "target": "D03Z02S08[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z02S08[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z02S14[E]"
-        ]
-    },
-    {
-        "name": "D03Z02S08[W]",
-        "exits": [
-            {
-                "target": "D03Z02S14[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z02S08[W]"
-        ]
-    },
-    {
-        "name": "D03Z02S08[N]",
-        "exits": [
             {
                 "target": "D03Z02S09[N]",
+                "logic": []
+            },
+            {
+                "target": "D03Z02S08[E]",
                 "logic": []
             },
             {
@@ -14352,46 +11791,29 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
-            },
-            {
-                "target": "D03Z02S09[S]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
         "transitions": [
-            "D03Z02S08[N]"
+            "D03Z02S09[S]",
+            "D03Z02S08[N]",
+            "D03Z02S14[E]",
+            "D03Z02S08[W]"
         ]
     },
     {
         "name": "D03Z02S10[S]",
         "exits": [
             {
+                "target": "D03Z02S09[N]",
+                "logic": []
+            },
+            {
                 "target": "D03Z02S09[S]",
                 "logic": []
             },
             {
                 "target": "D03Z02S09[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z02S09[N]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -14442,15 +11864,7 @@ regions = [
         "exits": [
             {
                 "target": "D03Z02S09[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "logic": []
             },
             {
                 "target": "D03Z02S09[N]",
@@ -14582,65 +11996,6 @@ regions = [
             {
                 "target": "D03Z02S15",
                 "logic": []
-            },
-            {
-                "target": "HE06",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "canCrossGap2"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "preciseSkipsAllowed",
-                            "canCrossGap1"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RESCUED_CHERUB_37",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "canCrossGap1"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "canEnemyBounce"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
@@ -14662,33 +12017,21 @@ regions = [
         ]
     },
     {
-        "name": "D03Z03S02[W]",
-        "exits": [
-            {
-                "target": "D03Z03S12[W]",
-                "logic": []
-            },
-            {
-                "target": "D03Z03S12[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z03S02[W]"
-        ]
-    },
-    {
         "name": "D03Z03S02[NE]",
         "exits": [
             {
-                "target": "D03Z03S14[W]",
+                "target": "D03Z03S02",
+                "logic": []
+            },
+            {
+                "target": "D03Z03S12[W]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D03Z03S02[NE]"
+            "D03Z03S02[NE]",
+            "D03Z03S14[W]"
         ]
     },
     {
@@ -14696,10 +12039,6 @@ regions = [
         "exits": [
             {
                 "target": "D03Z03S03[W]",
-                "logic": []
-            },
-            {
-                "target": "D03Z03S03[SE]",
                 "logic": []
             },
             {
@@ -14720,11 +12059,11 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D03Z03S03[SE]",
+                "target": "D03Z03S04[SW]",
                 "logic": []
             },
             {
-                "target": "D03Z03S04[NE]",
+                "target": "D03Z03S05[NW]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -14737,6 +12076,102 @@ regions = [
                         "item_requirements": [
                             "doubleJump",
                             "canEnemyBounce"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z03S05[SW]",
+                "logic": []
+            },
+            {
+                "target": "D03Z03S04[SE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z03S04[-Cherubs]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D03Z03S04[NW]",
+            "D03Z03S03[NE]"
+        ]
+    },
+    {
+        "name": "D03Z03S04[SW]",
+        "exits": [
+            {
+                "target": "D03Z03S04[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z03S05[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canEnemyBounce"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z03S05[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -14766,59 +12201,17 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
-            },
-            {
-                "target": "D03Z03S05[SE]",
-                "logic": []
-            },
-            {
-                "target": "D03Z03S05[NE]",
-                "logic": []
-            },
-            {
-                "target": "D03Z03S05[SW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
         "transitions": [
-            "D03Z03S04[NW]",
             "D03Z03S04[SW]",
-            "D03Z03S03[NE]",
-            "D03Z03S05[NW]",
-            "D03Z03S04[E]"
+            "D03Z03S03[SE]"
         ]
     },
     {
         "name": "D03Z03S02",
         "exits": [
-            {
-                "target": "D03Z03S02[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
             {
                 "target": "D03Z03S02[NE]",
                 "logic": [
@@ -14841,6 +12234,25 @@ regions = [
             {
                 "target": "D03Z03S02[E]",
                 "logic": []
+            },
+            {
+                "target": "D03Z03S12[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [
@@ -14862,40 +12274,26 @@ regions = [
         ]
     },
     {
-        "name": "D03Z03S12[E]",
-        "exits": [
-            {
-                "target": "D03Z03S02",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z03S12[E]"
-        ]
-    },
-    {
-        "name": "D03Z03S14[W]",
-        "exits": [
-            {
-                "target": "D03Z03S02",
-                "logic": []
-            },
-            {
-                "target": "D03Z03S02[W]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z03S14[W]"
-        ]
-    },
-    {
-        "name": "D03Z03S03[SE]",
+        "name": "D03Z03S05[NW]",
         "exits": [
             {
                 "target": "D03Z03S04[NW]",
+                "logic": []
+            },
+            {
+                "target": "D03Z03S04[SW]",
+                "logic": []
+            },
+            {
+                "target": "D03Z03S05[NE]",
+                "logic": []
+            },
+            {
+                "target": "D03Z03S05[SW]",
+                "logic": []
+            },
+            {
+                "target": "D03Z03S04[SE]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -14903,14 +12301,34 @@ regions = [
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
-                    },
+                    }
+                ]
+            },
+            {
+                "target": "D03Z03S04[-Cherubs]",
+                "logic": [
                     {
                         "item_requirements": [
-                            "canCrossGap10"
+                            "linen"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
-                    },
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D03Z03S05[NW]",
+            "D03Z03S04[NE]"
+        ]
+    },
+    {
+        "name": "D03Z03S05[SW]",
+        "exits": [
+            {
+                "target": "D03Z03S04[NW]",
+                "logic": [
                     {
                         "item_requirements": [
                             "wallClimb"
@@ -14928,64 +12346,11 @@ regions = [
                 ]
             },
             {
-                "target": "D03Z03S04[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyBounce"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z03S04[SE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z03S04[-Cherubs]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z03S03[SE]"
-        ]
-    },
-    {
-        "name": "D03Z03S05[SW]",
-        "exits": [
-            {
-                "target": "D03Z03S04[NW]",
+                "target": "D03Z03S04[SW]",
                 "logic": []
             },
             {
-                "target": "D03Z03S04[NE]",
+                "target": "D03Z03S05[NW]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -15027,40 +12392,74 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D03Z03S07[NE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z03S07[E]",
+                "logic": []
+            },
+            {
+                "target": "D03Z03S07[S]",
+                "logic": []
+            },
+            {
+                "target": "D03Z03S19[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
         "transitions": [
-            "D03Z03S05[SW]"
+            "D03Z03S05[SW]",
+            "D03Z03S04[E]",
+            "D03Z03S07[SW]",
+            "D03Z03S05[SE]"
         ]
     },
     {
         "name": "D03Z03S13[W]",
         "exits": [
             {
+                "target": "D03Z03S04[SE]",
+                "logic": []
+            },
+            {
                 "target": "D03Z03S04[NW]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canCrossGap10"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z03S04[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
                             "wallClimb",
                             "blood"
                         ],
@@ -15078,7 +12477,6 @@ regions = [
                     {
                         "item_requirements": [
                             "doubleJump",
-                            "canEnemyBounce",
                             "blood"
                         ],
                         "location_requirements": [],
@@ -15087,7 +12485,6 @@ regions = [
                     {
                         "item_requirements": [
                             "doubleJump",
-                            "canEnemyBounce",
                             "canCrossGap10"
                         ],
                         "location_requirements": [],
@@ -15096,11 +12493,18 @@ regions = [
                 ]
             },
             {
-                "target": "D03Z03S04[SE]",
+                "target": "D03Z03S04[SW]",
                 "logic": [
                     {
                         "item_requirements": [
                             "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canCrossGap10"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -15113,6 +12517,82 @@ regions = [
                     {
                         "item_requirements": [
                             "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z03S05[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "canCrossGap10"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canEnemyBounce",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canEnemyBounce",
+                            "canCrossGap10"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z03S05[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "canCrossGap10"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canCrossGap10"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -15126,50 +12606,13 @@ regions = [
         ]
     },
     {
-        "name": "D03Z03S04[NE]",
-        "exits": [
-            {
-                "target": "D03Z03S05[NE]",
-                "logic": []
-            },
-            {
-                "target": "D03Z03S05[SW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z03S05[SE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z03S04[NW]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z03S04[NE]"
-        ]
-    },
-    {
         "name": "D03Z03S06[W]",
         "exits": [
             {
+                "target": "D03Z03S05[NW]",
+                "logic": []
+            },
+            {
                 "target": "D03Z03S05[NE]",
                 "logic": []
             },
@@ -15184,60 +12627,11 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
-            },
-            {
-                "target": "D03Z03S05[SE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z03S04[NW]",
-                "logic": []
             }
         ],
         "locations": [],
         "transitions": [
             "D03Z03S06[W]"
-        ]
-    },
-    {
-        "name": "D03Z03S07[SW]",
-        "exits": [
-            {
-                "target": "D03Z03S05[SW]",
-                "logic": []
-            },
-            {
-                "target": "D03Z03S05[NE]",
-                "logic": []
-            },
-            {
-                "target": "D03Z03S05[SE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z03S04[NW]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z03S07[SW]"
         ]
     },
     {
@@ -15334,92 +12728,14 @@ regions = [
         ]
     },
     {
-        "name": "D03Z03S05[SE]",
-        "exits": [
-            {
-                "target": "D03Z03S07[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z03S07[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z03S07[SW]",
-                "logic": []
-            },
-            {
-                "target": "D03Z03S07[S]",
-                "logic": []
-            },
-            {
-                "target": "D03Z03S11[W]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D03Z03S05[SE]"
-        ]
-    },
-    {
         "name": "D03Z03S08[W]",
         "exits": [
             {
-                "target": "D03Z03S07[NW]",
+                "target": "D03Z03S07[NE]",
                 "logic": []
             },
             {
-                "target": "D03Z03S07[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z03S07[SW]",
+                "target": "D03Z03S07[E]",
                 "logic": []
             },
             {
@@ -15427,7 +12743,11 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D03Z03S11[W]",
+                "target": "D03Z03S05[SW]",
+                "logic": []
+            },
+            {
+                "target": "D03Z03S19[E]",
                 "logic": []
             }
         ],
@@ -15440,25 +12760,6 @@ regions = [
         "name": "D03Z03S09[N]",
         "exits": [
             {
-                "target": "D03Z03S07[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "D03Z03S07[NE]",
                 "logic": [
                     {
@@ -15478,7 +12779,7 @@ regions = [
                 ]
             },
             {
-                "target": "D03Z03S07[SW]",
+                "target": "D03Z03S07[E]",
                 "logic": []
             },
             {
@@ -15486,8 +12787,27 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D03Z03S11[W]",
+                "target": "D03Z03S05[SW]",
                 "logic": []
+            },
+            {
+                "target": "D03Z03S19[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
@@ -15499,25 +12819,6 @@ regions = [
         "name": "D03Z03S11[W]",
         "exits": [
             {
-                "target": "D03Z03S07[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "D03Z03S07[NE]",
                 "logic": [
                     {
@@ -15537,7 +12838,7 @@ regions = [
                 ]
             },
             {
-                "target": "D03Z03S07[SW]",
+                "target": "D03Z03S07[E]",
                 "logic": []
             },
             {
@@ -15545,14 +12846,32 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D03Z03S11[E]",
+                "target": "D03Z03S05[SW]",
                 "logic": []
+            },
+            {
+                "target": "D03Z03S19[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
         "transitions": [
-            "D03Z03S11[W]",
-            "D03Z03S07[E]"
+            "D03Z03S11[W]"
         ]
     },
     {
@@ -15563,26 +12882,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D03Z03S07[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z03S07[SW]",
+                "target": "D03Z03S07[E]",
                 "logic": []
             },
             {
@@ -15590,25 +12890,13 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D03Z03S11[W]",
+                "target": "D03Z03S05[SW]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D03Z03S19[E]"
-        ]
-    },
-    {
-        "name": "D03Z03S07[NW]",
-        "exits": [
-            {
-                "target": "D03Z03S19[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
+            "D03Z03S19[E]",
             "D03Z03S07[NW]"
         ]
     },
@@ -15664,7 +12952,7 @@ regions = [
         ]
     },
     {
-        "name": "D03Z03S08[-CherubsL]",
+        "name": "D03Z03S11",
         "exits": [
             {
                 "target": "D03Z03S11[W]",
@@ -15672,6 +12960,30 @@ regions = [
             },
             {
                 "target": "D03Z03S11[E]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": []
+    },
+    {
+        "name": "D03Z03S07[E]",
+        "exits": [
+            {
+                "target": "D03Z03S11",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D03Z03S07[E]"
+        ]
+    },
+    {
+        "name": "D03Z03S08[-CherubsL]",
+        "exits": [
+            {
+                "target": "D03Z03S11",
                 "logic": []
             }
         ],
@@ -15684,11 +12996,7 @@ regions = [
         "name": "D03Z03S08[-CherubsR]",
         "exits": [
             {
-                "target": "D03Z03S11[W]",
-                "logic": []
-            },
-            {
-                "target": "D03Z03S11[E]",
+                "target": "D03Z03S11",
                 "logic": []
             }
         ],
@@ -15701,11 +13009,7 @@ regions = [
         "name": "D03Z03S15[W]",
         "exits": [
             {
-                "target": "D03Z03S11[W]",
-                "logic": []
-            },
-            {
-                "target": "D03Z03S11[E]",
+                "target": "D03Z03S11",
                 "logic": []
             }
         ],
@@ -16001,10 +13305,6 @@ regions = [
         "name": "D04Z01S01[N]",
         "exits": [
             {
-                "target": "D04Z01S05[S]",
-                "logic": []
-            },
-            {
                 "target": "D04Z01S05[N]",
                 "logic": [
                     {
@@ -16044,48 +13344,32 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D04Z01S01",
+                "logic": []
+            },
+            {
+                "target": "D04Z01S01[NE]",
+                "logic": []
+            },
+            {
+                "target": "CO23",
+                "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D04Z01S01[N]"
+            "D04Z01S01[N]",
+            "D04Z01S05[S]"
         ]
     },
     {
         "name": "D04Z01S06[S]",
         "exits": [
             {
-                "target": "D04Z01S05[S]",
-                "logic": []
-            },
-            {
                 "target": "D04Z01S05[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood",
-                            "canClimbOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canClimbOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "logic": []
             },
             {
                 "target": "D04Z01S05[-Cherubs]",
@@ -16098,6 +13382,10 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D04Z01S01[N]",
+                "logic": []
             }
         ],
         "locations": [],
@@ -16109,10 +13397,6 @@ regions = [
         "name": "D04Z01S06[Cherubs]",
         "exits": [
             {
-                "target": "D04Z01S05[S]",
-                "logic": []
-            },
-            {
                 "target": "D04Z01S05[N]",
                 "logic": [
                     {
@@ -16152,6 +13436,10 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D04Z01S01[N]",
+                "logic": []
             }
         ],
         "locations": [],
@@ -16233,6 +13521,10 @@ regions = [
                 "logic": []
             },
             {
+                "target": "D04Z01S01[NE]",
+                "logic": []
+            },
+            {
                 "target": "D04Z01S01[N]",
                 "logic": []
             },
@@ -16244,27 +13536,6 @@ regions = [
         "locations": [],
         "transitions": [
             "D04Z01S02[NW]"
-        ]
-    },
-    {
-        "name": "D04Z01S05[S]",
-        "exits": [
-            {
-                "target": "D04Z01S01",
-                "logic": []
-            },
-            {
-                "target": "D04Z01S01[NE]",
-                "logic": []
-            },
-            {
-                "target": "CO23",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D04Z01S05[S]"
         ]
     },
     {
@@ -16302,10 +13573,6 @@ regions = [
             },
             {
                 "target": "D04Z01S03[E]",
-                "logic": []
-            },
-            {
-                "target": "D04Z01S03[S]",
                 "logic": []
             }
         ],
@@ -16348,11 +13615,48 @@ regions = [
             {
                 "target": "D04Z01S03",
                 "logic": []
+            },
+            {
+                "target": "D05Z01S07[E]",
+                "logic": []
+            },
+            {
+                "target": "D05Z01S08[NE]",
+                "logic": []
+            },
+            {
+                "target": "D05Z01S06[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canSurvivePoison3"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB31",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canSurvivePoison3"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
         "transitions": [
-            "D05Z01S20[N]"
+            "D05Z01S20[N]",
+            "D04Z01S03[S]",
+            "D05Z01S06[E]",
+            "D05Z01S20[W]",
+            "D05Z01S07[NW]",
+            "D05Z01S20[E]"
         ]
     },
     {
@@ -16413,73 +13717,14 @@ regions = [
         ]
     },
     {
-        "name": "D04Z01S03[S]",
-        "exits": [
-            {
-                "target": "D05Z01S20[W]",
-                "logic": []
-            },
-            {
-                "target": "D05Z01S20[E]",
-                "logic": []
-            },
-            {
-                "target": "D05Z01S20[N]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D04Z01S03[S]"
-        ]
-    },
-    {
-        "name": "D05Z01S06[E]",
-        "exits": [
-            {
-                "target": "D05Z01S20[W]",
-                "logic": []
-            },
-            {
-                "target": "D05Z01S20[E]",
-                "logic": []
-            },
-            {
-                "target": "D05Z01S20[N]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D05Z01S06[E]"
-        ]
-    },
-    {
-        "name": "D05Z01S07[NW]",
-        "exits": [
-            {
-                "target": "D05Z01S20[W]",
-                "logic": []
-            },
-            {
-                "target": "D05Z01S20[E]",
-                "logic": []
-            },
-            {
-                "target": "D05Z01S20[N]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D05Z01S07[NW]"
-        ]
-    },
-    {
         "name": "D04Z01S04[E]",
         "exits": [
             {
                 "target": "D04Z02S01[W]",
+                "logic": []
+            },
+            {
+                "target": "D04Z02S01[E]",
                 "logic": []
             },
             {
@@ -16500,10 +13745,6 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
-            },
-            {
-                "target": "D04Z03S01[W]",
-                "logic": []
             }
         ],
         "locations": [],
@@ -16514,6 +13755,10 @@ regions = [
     {
         "name": "D04Z02S02[S]",
         "exits": [
+            {
+                "target": "D04Z02S01[N]",
+                "logic": []
+            },
             {
                 "target": "RE402",
                 "logic": []
@@ -16527,1093 +13772,11 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D04Z03S01[W]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D04Z02S02[S]"
-        ]
-    },
-    {
-        "name": "D04Z02S03[W]",
-        "exits": [
-            {
-                "target": "D04Z02S01[W]",
+                "target": "D04Z02S01[E]",
                 "logic": []
             },
             {
-                "target": "RESCUED_CHERUB_30",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "pillar"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D04Z03S01[W]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D04Z02S03[W]"
-        ]
-    },
-    {
-        "name": "D04Z03S01[W]",
-        "exits": [
-            {
-                "target": "D04Z02S01[W]",
-                "logic": []
-            },
-            {
-                "target": "RESCUED_CHERUB_30",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "pillar"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D04Z02S04[SW]",
-                "logic": []
-            },
-            {
-                "target": "D04Z02S04[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D04Z02S04[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D04Z02S04[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "doubleJump",
-                            "openedMoMLadder"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D04Z02S05[E]",
-                "logic": []
-            },
-            {
-                "target": "D05Z01S02[W]",
-                "logic": []
-            },
-            {
-                "target": "D05Z01S03[W]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D04Z03S01[W]",
-            "D04Z02S01[E]",
-            "D04Z02S04[W]",
-            "D04Z03S01[E]",
-            "D05Z01S01[NW]",
-            "D04Z02S04[SE]",
-            "D04Z02S05[W]",
-            "D04Z02S04[E]",
-            "D05Z01S02[E]",
-            "D05Z01S01[W]",
-            "D05Z01S16[W]",
-            "D05Z01S01[E]",
-            "D05Z01S03[E]",
-            "D05Z01S02[NW]"
-        ]
-    },
-    {
-        "name": "D04Z01S06",
-        "exits": [
-            {
-                "target": "D04Z01S06[S]",
-                "logic": []
-            },
-            {
-                "target": "D04Z01S06[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D04Z01S06[Cherubs]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [
-            "QI102"
-        ],
-        "transitions": []
-    },
-    {
-        "name": "D04Z01S05[N]",
-        "exits": [
-            {
-                "target": "D04Z01S06",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D04Z01S05[N]"
-        ]
-    },
-    {
-        "name": "D09Z01S09[SW]",
-        "exits": [
-            {
-                "target": "D04Z01S06",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S09[SW]"
-        ]
-    },
-    {
-        "name": "D04Z01S06[E]",
-        "exits": [
-            {
-                "target": "D09Z01S09[E]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[SW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S09[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S09[Cell24]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "silverKey",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "goldKey",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB16",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09BZ01S01[Cell21]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S02[Cell2]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB11",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canAirStall",
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump",
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "silverKey",
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "goldKey",
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D04Z01S06[E]"
-        ]
-    },
-    {
-        "name": "D09Z01S07[SW]",
-        "exits": [
-            {
-                "target": "D09Z01S09[SW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S09[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S09[Cell24]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "silverKey",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "goldKey",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB16",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09BZ01S01[Cell21]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S02[Cell2]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB11",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canAirStall",
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump",
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "silverKey",
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "goldKey",
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S07[SW]"
-        ]
-    },
-    {
-        "name": "D09Z01S12[E]",
-        "exits": [
-            {
-                "target": "D09Z01S09[Cell24]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB16",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[SW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[NW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[E]",
-                "logic": []
-            },
-            {
-                "target": "D09BZ01S01[Cell21]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S02[Cell2]",
-                "logic": []
-            },
-            {
-                "target": "RB11",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S12[E]"
-        ]
-    },
-    {
-        "name": "D09BZ01S01[Cell21]",
-        "exits": [
-            {
-                "target": "D09Z01S09[SW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[E]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "goldKey",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S09[Cell24]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "silverKey",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "goldKey",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB16",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "goldKey",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S02[Cell2]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "goldKey",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB11",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canAirStall",
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump",
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "silverKey",
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "goldKey",
-                            "dash",
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [
-            "CO02"
-        ],
-        "transitions": []
-    },
-    {
-        "name": "D04Z02S02",
-        "exits": [
-            {
-                "target": "D04Z02S02[S]",
-                "logic": []
-            },
-            {
-                "target": "D04Z02S02[SE]",
-                "logic": []
-            },
-            {
-                "target": "D04Z02S02[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "upwarpSkipsAllowed"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyUpslash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canEnemyUpslash",
-                            "upwarpSkipsAllowed",
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D04Z02S02[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [
-            "CO17"
-        ],
-        "transitions": []
-    },
-    {
-        "name": "D04Z02S01[N]",
-        "exits": [
-            {
-                "target": "D04Z02S02",
-                "logic": []
-            },
-            {
-                "target": "D04Z02S01[NE]",
+                "target": "D04Z02S03[W]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -17628,67 +13791,11 @@ regions = [
         ],
         "locations": [],
         "transitions": [
-            "D04Z02S01[N]"
+            "D04Z02S02[S]"
         ]
     },
     {
-        "name": "D04Z02S15[W]",
-        "exits": [
-            {
-                "target": "D04Z02S02",
-                "logic": []
-            },
-            {
-                "target": "D04Z02S02[N]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D04Z02S15[W]"
-        ]
-    },
-    {
-        "name": "D04Z02S17[W]",
-        "exits": [
-            {
-                "target": "D04Z02S02",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D04Z02S17[W]"
-        ]
-    },
-    {
-        "name": "D06Z01S02[S]",
-        "exits": [
-            {
-                "target": "D04Z02S02",
-                "logic": []
-            },
-            {
-                "target": "D04Z02S02[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canEnemyUpslash",
-                            "upwarpSkipsAllowed"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S02[S]"
-        ]
-    },
-    {
-        "name": "D04Z02S01[NE]",
+        "name": "D04Z02S03[W]",
         "exits": [
             {
                 "target": "D04Z02S01[N]",
@@ -17750,26 +13857,31 @@ regions = [
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "pillar"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
                     }
                 ]
             },
             {
-                "target": "D04Z02S03[W]",
+                "target": "D04Z02S01[W]",
                 "logic": []
             },
             {
-                "target": "D04Z02S03[E]",
+                "target": "D04Z02S01[E]",
                 "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D04Z02S01[NE]"
-        ]
-    },
-    {
-        "name": "D04Z02S04[NW]",
-        "exits": [
+            },
             {
                 "target": "D04Z02S04[N]",
                 "logic": [
@@ -17783,17 +13895,1100 @@ regions = [
                 ]
             },
             {
-                "target": "D04Z02S03[W]",
+                "target": "D04Z02S04[SW]",
                 "logic": []
             },
             {
-                "target": "D04Z02S03[E]",
+                "target": "D04Z02S04[W]",
+                "logic": []
+            },
+            {
+                "target": "D04Z02S05[W]",
+                "logic": []
+            },
+            {
+                "target": "D04Z02S19[E]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D04Z02S04[NW]"
+            "D04Z02S03[W]",
+            "D04Z02S01[NE]",
+            "D04Z02S04[NW]",
+            "D04Z02S03[E]",
+            "D04Z02S19[W]",
+            "D04Z02S04[NE]"
+        ]
+    },
+    {
+        "name": "D04Z03S01[W]",
+        "exits": [
+            {
+                "target": "D04Z02S01[W]",
+                "logic": []
+            },
+            {
+                "target": "D04Z02S01[E]",
+                "logic": []
+            },
+            {
+                "target": "RESCUED_CHERUB_30",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "pillar"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D04Z03S01[W]"
+        ]
+    },
+    {
+        "name": "D04Z01S06",
+        "exits": [
+            {
+                "target": "D04Z01S06[S]",
+                "logic": []
+            },
+            {
+                "target": "D04Z01S06[Cherubs]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [
+            "QI102"
+        ],
+        "transitions": []
+    },
+    {
+        "name": "D04Z01S05[N]",
+        "exits": [
+            {
+                "target": "D04Z01S06",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D04Z01S05[N]"
+        ]
+    },
+    {
+        "name": "D09Z01S09[SW]",
+        "exits": [
+            {
+                "target": "D04Z01S06",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S09[Cell20]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell21]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell15]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell16]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell18]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell12]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell10]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell11]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO27",
+                "logic": []
+            },
+            {
+                "target": "D09BZ01S01[Cell3]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S09[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "NormalLogic",
+                            "dash",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "NormalLogic",
+                            "dash",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "NormalLogic",
+                            "dash",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "NormalLogic",
+                            "dash",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "NormalLogic",
+                            "dash",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "NormalLogic",
+                            "dash",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[N]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09Z01S09[SW]",
+            "D04Z01S06[E]",
+            "D09Z01S07[SW]",
+            "D09Z01S09[E]",
+            "D09Z01S02[SW]",
+            "D09Z01S07[E]",
+            "D09Z01S08[SE]",
+            "D09Z01S07[W]",
+            "D09Z01S10[W]",
+            "D09Z01S07[SE]",
+            "D09Z01S02[Cell2]",
+            "D09BZ01S01[Cell2]"
+        ]
+    },
+    {
+        "name": "D09Z01S12[E]",
+        "exits": [
+            {
+                "target": "D09Z01S09[NW]",
+                "logic": []
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": []
+            },
+            {
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell20]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell21]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09Z01S12[E]"
+        ]
+    },
+    {
+        "name": "D09BZ01S01[Cell19]",
+        "exits": [
+            {
+                "target": "D09Z01S09[NW]",
+                "logic": []
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell20]",
+                "logic": []
+            },
+            {
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell20]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell21]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09BZ01S01[Cell19]",
+            "D09Z01S09[Cell19]"
+        ]
+    },
+    {
+        "name": "D09BZ01S01[Cell20]",
+        "exits": [
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S09[Cell20]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell21]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "NormalLogic",
+                            "dash",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "NormalLogic",
+                            "dash",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "NormalLogic",
+                            "dash",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "NormalLogic",
+                            "dash",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "NormalLogic",
+                            "dash",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "NormalLogic",
+                            "dash",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09BZ01S01[Cell20]"
+        ]
+    },
+    {
+        "name": "D09BZ01S01[Cell21]",
+        "exits": [
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S09[Cell20]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell21]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "NormalLogic",
+                            "dash",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "NormalLogic",
+                            "dash",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "NormalLogic",
+                            "dash",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "NormalLogic",
+                            "dash",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "NormalLogic",
+                            "dash",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "NormalLogic",
+                            "dash",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09BZ01S01[Cell21]"
+        ]
+    },
+    {
+        "name": "D09BZ01S01[Cell24]",
+        "exits": [
+            {
+                "target": "D09Z01S09[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S12[E]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell19]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": []
+            },
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S12[E]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell19]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell20]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell21]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09BZ01S01[Cell24]",
+            "D09Z01S09[Cell24]"
+        ]
+    },
+    {
+        "name": "D04Z02S02",
+        "exits": [
+            {
+                "target": "D04Z02S02[S]",
+                "logic": []
+            },
+            {
+                "target": "D04Z02S02[SE]",
+                "logic": []
+            },
+            {
+                "target": "D04Z02S02[NE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "HardLogic",
+                            "EnemySkips",
+                            "upwarpSkipsAllowed"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "HardLogic",
+                            "EnemySkips",
+                            "canEnemyUpslash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S02[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [
+            "CO17"
+        ],
+        "transitions": []
+    },
+    {
+        "name": "D04Z02S01[N]",
+        "exits": [
+            {
+                "target": "D04Z02S02",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D04Z02S01[N]"
+        ]
+    },
+    {
+        "name": "D04Z02S15[W]",
+        "exits": [
+            {
+                "target": "D04Z02S02",
+                "logic": []
+            },
+            {
+                "target": "D04Z02S02[NE]",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S02[S]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D04Z02S15[W]"
+        ]
+    },
+    {
+        "name": "D04Z02S17[W]",
+        "exits": [
+            {
+                "target": "D04Z02S02",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D04Z02S17[W]"
+        ]
+    },
+    {
+        "name": "D06Z01S02[S]",
+        "exits": [
+            {
+                "target": "D04Z02S02",
+                "logic": []
+            },
+            {
+                "target": "D04Z02S02[NE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "HardLogic",
+                            "EnemySkips",
+                            "canEnemyUpslash",
+                            "upwarpSkipsAllowed"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S18[-Cherubs]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S01[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D06Z01S02[S]",
+            "D04Z02S02[N]",
+            "D06Z01S18[E]",
+            "D06Z01S02[W]",
+            "D06Z01S08[W]",
+            "D06Z01S02[E]"
+        ]
+    },
+    {
+        "name": "D04Z03S01",
+        "exits": [
+            {
+                "target": "D04Z03S01[W]",
+                "logic": []
+            },
+            {
+                "target": "D04Z03S01[E]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": []
+    },
+    {
+        "name": "D04Z02S01[E]",
+        "exits": [
+            {
+                "target": "D04Z03S01",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D04Z02S01[E]"
+        ]
+    },
+    {
+        "name": "D04Z02S04[W]",
+        "exits": [
+            {
+                "target": "D04Z03S01",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D04Z02S04[W]"
         ]
     },
     {
@@ -17853,39 +15048,24 @@ regions = [
         ]
     },
     {
-        "name": "D04Z02S02[N]",
+        "name": "D04Z02S05[W]",
         "exits": [
             {
-                "target": "D06Z01S02[S]",
+                "target": "D04Z02S04[SW]",
                 "logic": []
             },
             {
-                "target": "D06Z01S08[W]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D04Z02S02[N]"
-        ]
-    },
-    {
-        "name": "D06Z01S08[W]",
-        "exits": [
-            {
-                "target": "D06Z01S02[S]",
+                "target": "D04Z02S04[W]",
                 "logic": []
             },
             {
-                "target": "D06Z01S08[E]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S18[-Cherubs]",
+                "target": "D04Z02S04[N]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "linen"
+                            "wallClimb",
+                            "doubleJump",
+                            "openedMoMLadder"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -17893,39 +15073,7 @@ regions = [
                 ]
             },
             {
-                "target": "D06Z01S13[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S13[E]",
-                "logic": []
-            }
-        ],
-        "locations": [
-            "PR11"
-        ],
-        "transitions": [
-            "D06Z01S08[W]",
-            "D06Z01S02[E]",
-            "D06Z01S18[E]",
-            "D06Z01S02[W]",
-            "D06Z01S13[S]",
-            "D06Z01S08[N]"
-        ]
-    },
-    {
-        "name": "D04Z02S03[E]",
-        "exits": [
-            {
-                "target": "D04Z02S04[NE]",
-                "logic": []
-            },
-            {
-                "target": "D04Z02S04[SW]",
-                "logic": []
-            },
-            {
-                "target": "D04Z02S04[NW]",
+                "target": "D04Z02S03[W]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -17938,12 +15086,36 @@ regions = [
                 ]
             },
             {
+                "target": "D04Z02S05[E]",
+                "logic": []
+            },
+            {
+                "target": "D05Z01S03[W]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D04Z02S05[W]",
+            "D04Z02S04[E]",
+            "D05Z01S01[NW]",
+            "D04Z02S04[SE]",
+            "D05Z01S02[E]",
+            "D05Z01S01[W]",
+            "D05Z01S16[W]",
+            "D05Z01S01[E]",
+            "D05Z01S03[E]",
+            "D05Z01S02[NW]"
+        ]
+    },
+    {
+        "name": "D04Z02S06[S]",
+        "exits": [
+            {
                 "target": "D04Z02S04[N]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "wallClimb",
-                            "doubleJump",
                             "openedMoMLadder"
                         ],
                         "location_requirements": [],
@@ -17952,24 +15124,7 @@ regions = [
                 ]
             },
             {
-                "target": "D04Z03S01[W]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D04Z02S03[E]"
-        ]
-    },
-    {
-        "name": "D04Z02S06[S]",
-        "exits": [
-            {
-                "target": "D04Z02S04[NW]",
-                "logic": []
-            },
-            {
-                "target": "D04Z02S04[NE]",
+                "target": "D04Z02S03[W]",
                 "logic": []
             },
             {
@@ -17977,21 +15132,11 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D04Z02S04[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "doubleJump",
-                            "openedMoMLadder"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "target": "D04Z02S04[W]",
+                "logic": []
             },
             {
-                "target": "D04Z03S01[W]",
+                "target": "D04Z02S05[W]",
                 "logic": []
             }
         ],
@@ -18004,24 +15149,10 @@ regions = [
         "name": "D04Z02S06[-Cherubs]",
         "exits": [
             {
-                "target": "D04Z02S04[NW]",
-                "logic": []
-            },
-            {
-                "target": "D04Z02S04[NE]",
-                "logic": []
-            },
-            {
-                "target": "D04Z02S04[SW]",
-                "logic": []
-            },
-            {
                 "target": "D04Z02S04[N]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "wallClimb",
-                            "doubleJump",
                             "openedMoMLadder"
                         ],
                         "location_requirements": [],
@@ -18030,7 +15161,19 @@ regions = [
                 ]
             },
             {
-                "target": "D04Z03S01[W]",
+                "target": "D04Z02S03[W]",
+                "logic": []
+            },
+            {
+                "target": "D04Z02S04[SW]",
+                "logic": []
+            },
+            {
+                "target": "D04Z02S04[W]",
+                "logic": []
+            },
+            {
+                "target": "D04Z02S05[W]",
                 "logic": []
             }
         ],
@@ -18047,30 +15190,8 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D04Z02S04[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D04Z02S04[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "target": "D04Z02S04[W]",
+                "logic": []
             },
             {
                 "target": "D04Z02S04[N]",
@@ -18087,7 +15208,20 @@ regions = [
                 ]
             },
             {
-                "target": "D04Z03S01[W]",
+                "target": "D04Z02S03[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D04Z02S05[W]",
                 "logic": []
             }
         ],
@@ -18097,28 +15231,15 @@ regions = [
         ]
     },
     {
-        "name": "D04Z02S19[W]",
+        "name": "D04Z03S01[E]",
         "exits": [
-            {
-                "target": "D04Z02S04[NW]",
-                "logic": []
-            },
             {
                 "target": "D04Z02S04[SW]",
                 "logic": []
             },
             {
-                "target": "D04Z02S04[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "target": "D04Z02S04[W]",
+                "logic": []
             },
             {
                 "target": "D04Z02S04[N]",
@@ -18135,13 +15256,26 @@ regions = [
                 ]
             },
             {
-                "target": "D04Z03S01[W]",
+                "target": "D04Z02S03[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D04Z02S05[W]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D04Z02S19[W]"
+            "D04Z03S01[E]"
         ]
     },
     {
@@ -18174,11 +15308,11 @@ regions = [
         "name": "D04Z02S07[SW]",
         "exits": [
             {
-                "target": "D04Z02S05[E]",
+                "target": "D04Z02S05[W]",
                 "logic": []
             },
             {
-                "target": "D04Z03S01[W]",
+                "target": "D04Z02S05[E]",
                 "logic": []
             }
         ],
@@ -18188,43 +15322,14 @@ regions = [
         ]
     },
     {
-        "name": "D04Z02S04[NE]",
-        "exits": [
-            {
-                "target": "D04Z02S04[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "openedMoMLadder"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D04Z02S19[W]",
-                "logic": []
-            },
-            {
-                "target": "D04Z02S19[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D04Z02S04[NE]"
-        ]
-    },
-    {
         "name": "D04Z02S07[W]",
         "exits": [
             {
-                "target": "D04Z02S19[W]",
+                "target": "D04Z02S19[E]",
                 "logic": []
             },
             {
-                "target": "D04Z02S19[E]",
+                "target": "D04Z02S03[W]",
                 "logic": []
             }
         ],
@@ -18266,18 +15371,6 @@ regions = [
                 ]
             },
             {
-                "target": "D04Z02S06[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "D04Z02S06[-Cherubs]",
                 "logic": [
                     {
@@ -18309,6 +15402,18 @@ regions = [
                 ]
             },
             {
+                "target": "D04Z02S09[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D04Z02S10[W]",
                 "logic": []
             }
@@ -18326,19 +15431,10 @@ regions = [
                 "logic": []
             },
             {
-                "target": "CO34",
-                "logic": []
-            },
-            {
-                "target": "D04Z02S06[S]",
-                "logic": []
-            },
-            {
                 "target": "D04Z02S06[N]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "wallClimb",
                             "openedARLadder"
                         ],
                         "location_requirements": [],
@@ -18347,16 +15443,12 @@ regions = [
                 ]
             },
             {
-                "target": "D04Z02S06[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "target": "CO34",
+                "logic": []
+            },
+            {
+                "target": "D04Z02S06[S]",
+                "logic": []
             },
             {
                 "target": "D04Z02S06[-Cherubs]",
@@ -18371,13 +15463,46 @@ regions = [
                 ]
             },
             {
+                "target": "D04Z02S09[NE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D04Z02S10[W]",
                 "logic": []
+            },
+            {
+                "target": "D04Z02S08[S]",
+                "logic": []
+            },
+            {
+                "target": "D04Z02S20[Redento]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "redentoRooms5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
         "transitions": [
-            "D04Z02S09[W]"
+            "D04Z02S09[W]",
+            "D04Z02S06[NE]",
+            "D04Z02S08[W]",
+            "D04Z02S09[E]",
+            "D04Z02S20[W]",
+            "D04Z02S08[E]"
         ]
     },
     {
@@ -18413,18 +15538,6 @@ regions = [
                 ]
             },
             {
-                "target": "D04Z02S06[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "D04Z02S06[-Cherubs]",
                 "logic": [
                     {
@@ -18454,10 +15567,23 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D04Z02S09[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [
-            "QI01"
+            "QI01",
+            "PR11"
         ],
         "transitions": [
             "D04Z02S10[W]",
@@ -18468,8 +15594,20 @@ regions = [
         "name": "D04Z02S11[E]",
         "exits": [
             {
-                "target": "D04Z02S06[NE]",
+                "target": "D04Z02S06[NW]",
                 "logic": []
+            },
+            {
+                "target": "D04Z02S06[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "openedARLadder"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
                 "target": "CO34",
@@ -18478,31 +15616,6 @@ regions = [
             {
                 "target": "D04Z02S06[S]",
                 "logic": []
-            },
-            {
-                "target": "D04Z02S06[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D04Z02S06[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "openedARLadder"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             },
             {
                 "target": "D04Z02S06[-Cherubs]",
@@ -18515,6 +15628,10 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D04Z02S09[W]",
+                "logic": []
             },
             {
                 "target": "D04Z02S10[W]",
@@ -18534,8 +15651,16 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D04Z02S06[NE]",
-                "logic": []
+                "target": "D04Z02S06[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "openedARLadder"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
                 "target": "CO34",
@@ -18544,19 +15669,6 @@ regions = [
             {
                 "target": "D04Z02S06[S]",
                 "logic": []
-            },
-            {
-                "target": "D04Z02S06[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "openedARLadder"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             },
             {
                 "target": "D04Z02S06[-Cherubs]",
@@ -18569,6 +15681,10 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D04Z02S09[W]",
+                "logic": []
             },
             {
                 "target": "D04Z02S10[W]",
@@ -18699,18 +15815,6 @@ regions = [
             {
                 "target": "D04Z02S11",
                 "logic": []
-            },
-            {
-                "target": "D04Z02S06[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "openedARLadder"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
@@ -18785,12 +15889,15 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D06Z01S04[W]",
-                "logic": []
-            },
-            {
                 "target": "D06Z01S04[Health]",
                 "logic": [
+                    {
+                        "item_requirements": [
+                            "D06Z01S24[W]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
                     {
                         "item_requirements": [
                             "wallClimb",
@@ -18813,72 +15920,8 @@ regions = [
                 ]
             },
             {
-                "target": "D06Z01S04[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "doubleJump",
-                            "canClimbOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S04[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "doubleJump",
-                            "canClimbOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "target": "D06Z01S03",
+                "logic": []
             }
         ],
         "locations": [],
@@ -18886,7 +15929,9 @@ regions = [
             "D06Z01S20[W]",
             "D06Z01S23[E]",
             "D06Z01S20[E]",
-            "D06Z01S04[SW]"
+            "D06Z01S04[SW]",
+            "D06Z01S04[W]",
+            "D06Z01S03[E]"
         ]
     },
     {
@@ -18911,111 +15956,14 @@ regions = [
         ]
     },
     {
-        "name": "D04Z02S06[NE]",
-        "exits": [
-            {
-                "target": "D04Z02S06[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "openedARLadder"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D04Z02S09[W]",
-                "logic": []
-            },
-            {
-                "target": "D04Z02S09[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D04Z02S08[W]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D04Z02S06[NE]"
-        ]
-    },
-    {
-        "name": "D04Z02S08[W]",
-        "exits": [
-            {
-                "target": "D04Z02S09[W]",
-                "logic": []
-            },
-            {
-                "target": "D04Z02S09[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D04Z02S08[S]",
-                "logic": []
-            },
-            {
-                "target": "D04Z02S20[Redento]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "redentoRooms5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D04Z02S08[W]",
-            "D04Z02S09[E]",
-            "D04Z02S20[W]",
-            "D04Z02S08[E]"
-        ]
-    },
-    {
         "name": "D04Z02S16[W]",
         "exits": [
             {
-                "target": "D04Z02S09[W]",
+                "target": "D04Z02S09[NE]",
                 "logic": []
             },
             {
-                "target": "D04Z02S09[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D04Z02S08[W]",
+                "target": "D04Z02S09[W]",
                 "logic": []
             }
         ],
@@ -19028,11 +15976,11 @@ regions = [
         "name": "D04Z02S07[N]",
         "exits": [
             {
-                "target": "D04Z02S08[W]",
+                "target": "D04Z02S08[S]",
                 "logic": []
             },
             {
-                "target": "D04Z02S08[S]",
+                "target": "D04Z02S09[W]",
                 "logic": []
             }
         ],
@@ -19045,11 +15993,11 @@ regions = [
         "name": "D04Z02S16[-Cherubs]",
         "exits": [
             {
-                "target": "D04Z02S08[W]",
+                "target": "D04Z02S08[S]",
                 "logic": []
             },
             {
-                "target": "D04Z02S08[S]",
+                "target": "D04Z02S09[W]",
                 "logic": []
             }
         ],
@@ -19104,10 +16052,6 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D20Z02S03[W]",
-                "logic": []
-            },
-            {
                 "target": "D20Z02S03[NE]",
                 "logic": [
                     {
@@ -19125,6 +16069,18 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D20Z02S05[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
@@ -19136,7 +16092,9 @@ regions = [
             "D04Z02S25[W]",
             "D04Z02S24[SE]",
             "D20Z02S03[SE]",
-            "D20Z02S01[W]"
+            "D20Z02S01[W]",
+            "D20Z02S04[E]",
+            "D20Z02S03[W]"
         ]
     },
     {
@@ -19176,7 +16134,7 @@ regions = [
                 ]
             },
             {
-                "target": "D04Z02S08[W]",
+                "target": "D04Z02S09[W]",
                 "logic": []
             }
         ],
@@ -19227,7 +16185,11 @@ regions = [
         "name": "D04Z02S11[W]",
         "exits": [
             {
-                "target": "D04Z02S21[W]",
+                "target": "D04Z02S21[SE]",
+                "logic": []
+            },
+            {
+                "target": "D04Z02S21[NE]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -19246,11 +16208,7 @@ regions = [
                 ]
             },
             {
-                "target": "D04Z02S21[SE]",
-                "logic": []
-            },
-            {
-                "target": "D04Z02S21[NE]",
+                "target": "D04Z02S22[E]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -19278,31 +16236,16 @@ regions = [
         "name": "D04Z02S12[W]",
         "exits": [
             {
-                "target": "D04Z02S21[W]",
+                "target": "D04Z02S21[NE]",
+                "logic": []
+            },
+            {
+                "target": "D04Z02S22[E]",
                 "logic": []
             },
             {
                 "target": "D04Z02S21[SE]",
                 "logic": []
-            },
-            {
-                "target": "D04Z02S21[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
@@ -19314,23 +16257,8 @@ regions = [
         "name": "D04Z02S22[E]",
         "exits": [
             {
-                "target": "D04Z02S21[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "target": "D04Z02S22",
+                "logic": []
             },
             {
                 "target": "D04Z02S21[SE]",
@@ -19358,7 +16286,8 @@ regions = [
         ],
         "locations": [],
         "transitions": [
-            "D04Z02S22[E]"
+            "D04Z02S22[E]",
+            "D04Z02S21[W]"
         ]
     },
     {
@@ -19400,24 +16329,15 @@ regions = [
             {
                 "target": "D04Z02S22",
                 "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D04Z02S15[E]"
-        ]
-    },
-    {
-        "name": "D04Z02S21[W]",
-        "exits": [
+            },
             {
-                "target": "D04Z02S22",
+                "target": "D04Z02S22[W]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D04Z02S21[W]"
+            "D04Z02S15[E]"
         ]
     },
     {
@@ -19567,6 +16487,10 @@ regions = [
         "name": "D05Z01S15[E]",
         "exits": [
             {
+                "target": "D05Z01S02[W]",
+                "logic": []
+            },
+            {
                 "target": "RB18",
                 "logic": [
                     {
@@ -19579,15 +16503,13 @@ regions = [
                 ]
             },
             {
-                "target": "D05Z01S02[W]",
-                "logic": []
-            },
-            {
-                "target": "D04Z03S01[W]",
+                "target": "D04Z02S05[W]",
                 "logic": []
             }
         ],
-        "locations": [],
+        "locations": [
+            "RB19"
+        ],
         "transitions": [
             "D05Z01S15[E]"
         ]
@@ -19643,7 +16565,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D04Z03S01[W]",
+                "target": "D04Z02S05[W]",
                 "logic": []
             }
         ],
@@ -19660,7 +16582,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D04Z03S01[W]",
+                "target": "D04Z02S05[W]",
                 "logic": []
             }
         ],
@@ -19768,18 +16690,6 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D05Z01S05[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "CO22",
                 "logic": [
                     {
@@ -19793,6 +16703,18 @@ regions = [
                     {
                         "item_requirements": [
                             "doubleJump",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D05Z01S17[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
                             "blood"
                         ],
                         "location_requirements": [],
@@ -19861,14 +16783,19 @@ regions = [
         ],
         "locations": [],
         "transitions": [
-            "D05Z01S17[W]"
+            "D05Z01S17[W]",
+            "D05Z01S05[NE]"
         ]
     },
     {
         "name": "D05Z01S05[SW]",
         "exits": [
             {
-                "target": "D05Z01S07[NW]",
+                "target": "D05Z01S07[E]",
+                "logic": []
+            },
+            {
+                "target": "D05Z01S20[N]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -19902,10 +16829,6 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
-            },
-            {
-                "target": "D05Z01S07[E]",
-                "logic": []
             },
             {
                 "target": "D05Z01S08[NE]",
@@ -19921,7 +16844,11 @@ regions = [
         "name": "D05Z01S08[NE]",
         "exits": [
             {
-                "target": "D05Z01S07[NW]",
+                "target": "D05Z01S07[E]",
+                "logic": []
+            },
+            {
+                "target": "D05Z01S20[N]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -19955,10 +16882,6 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
-            },
-            {
-                "target": "D05Z01S07[E]",
-                "logic": []
             },
             {
                 "target": "D05Z01S08[W]",
@@ -19984,82 +16907,29 @@ regions = [
         ]
     },
     {
-        "name": "D05Z01S20[E]",
+        "name": "D05Z01S06[W]",
         "exits": [
             {
-                "target": "D05Z01S07[NW]",
+                "target": "RB31",
+                "logic": []
+            },
+            {
+                "target": "D05Z01S20[N]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "blood",
-                            "canClimbOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "blood",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canClimbOnRoot",
-                            "canCrossGap3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canCrossGap7"
+                            "canSurvivePoison3"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     }
                 ]
-            },
-            {
-                "target": "D05Z01S07[E]",
-                "logic": []
-            },
-            {
-                "target": "D05Z01S08[NE]",
-                "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D05Z01S20[E]"
-        ]
-    },
-    {
-        "name": "D05Z01S05[NE]",
-        "exits": [
-            {
-                "target": "D05Z01S17[W]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D05Z01S05[NE]"
-        ]
-    },
-    {
-        "name": "D05Z01S06[W]",
-        "exits": [
-            {
-                "target": "D05Z01S24[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D05Z01S06[W]"
+            "D05Z01S06[W]",
+            "D05Z01S24[E]"
         ]
     },
     {
@@ -20144,19 +17014,6 @@ regions = [
             {
                 "target": "D05Z01S10",
                 "logic": []
-            },
-            {
-                "target": "D05Z01S03[Frontal]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "woodKey",
-                            "D05Z01S23[E]"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
@@ -20254,6 +17111,7 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
+                            "HardLogic",
                             "tirana",
                             "obscureSkipsAllowed"
                         ],
@@ -20261,14 +17119,6 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
-            },
-            {
-                "target": "D05Z01S11[NW]",
-                "logic": []
-            },
-            {
-                "target": "D05Z01S11[NE]",
-                "logic": []
             },
             {
                 "target": "D05Z01S11[SE]",
@@ -20306,7 +17156,27 @@ regions = [
                 "logic": []
             },
             {
+                "target": "D05Z01S11[NE]",
+                "logic": []
+            },
+            {
+                "target": "RB203",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D05Z01S11[NW]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "CO28",
+                "logic": []
+            },
+            {
+                "target": "D05Z01S23[E]",
                 "logic": []
             }
         ],
@@ -20320,6 +17190,10 @@ regions = [
         "exits": [
             {
                 "target": "D05Z01S11",
+                "logic": []
+            },
+            {
+                "target": "D05Z01S11[SW]",
                 "logic": []
             }
         ],
@@ -20336,15 +17210,51 @@ regions = [
                 "logic": []
             },
             {
+                "target": "D05Z01S11[NE]",
+                "logic": []
+            },
+            {
+                "target": "RB203",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D05Z01S11[NW]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "CO28",
                 "logic": []
+            },
+            {
+                "target": "D05Z01S03[Frontal]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "woodKey",
+                            "D05Z01S23[E]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "woodKey",
+                            "D05Z01S10[NW]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
-        "locations": [
-            "RB203"
-        ],
+        "locations": [],
         "transitions": [
-            "D05Z01S23[E]"
+            "D05Z01S23[E]",
+            "D05Z01S11[NW]"
         ]
     },
     {
@@ -20401,32 +17311,6 @@ regions = [
         "locations": [],
         "transitions": [
             "D05Z02S15[E]"
-        ]
-    },
-    {
-        "name": "D05Z01S11[NW]",
-        "exits": [
-            {
-                "target": "D05Z01S03[Frontal]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "woodKey",
-                            "D05Z01S23[E]"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D05Z01S23[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D05Z01S11[NW]"
         ]
     },
     {
@@ -20579,92 +17463,10 @@ regions = [
         ]
     },
     {
-        "name": "D05Z01S20[W]",
-        "exits": [
-            {
-                "target": "D05Z01S06[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canSurvivePoison3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D05Z01S06[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canSurvivePoison3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB31",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canSurvivePoison3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D05Z01S20[W]"
-        ]
-    },
-    {
-        "name": "D05Z01S24[E]",
-        "exits": [
-            {
-                "target": "RB31",
-                "logic": []
-            },
-            {
-                "target": "D05Z01S06[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canSurvivePoison3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D05Z01S06[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canSurvivePoison3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D05Z01S24[E]"
-        ]
-    },
-    {
         "name": "D05Z02S14",
         "exits": [
             {
-                "target": "D05Z02S14[W]",
+                "target": "D05Z02S14[E]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -20676,7 +17478,7 @@ regions = [
                 ]
             },
             {
-                "target": "D05Z02S14[E]",
+                "target": "D05Z02S06[NE]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -20699,6 +17501,10 @@ regions = [
             {
                 "target": "D05Z02S14",
                 "logic": []
+            },
+            {
+                "target": "D05Z02S14[E]",
+                "logic": []
             }
         ],
         "locations": [],
@@ -20712,11 +17518,36 @@ regions = [
             {
                 "target": "D05Z02S14",
                 "logic": []
+            },
+            {
+                "target": "D05Z02S06[SE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "openedTSCGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D05Z02S05[W]",
+                "logic": []
+            },
+            {
+                "target": "D05Z02S07[W]",
+                "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D05Z02S06[NE]"
+            "D05Z02S06[NE]",
+            "D05Z02S14[W]",
+            "D05Z02S06[SW]",
+            "D05Z02S05[E]",
+            "D05Z02S07[E]",
+            "D05Z02S06[NW]"
         ]
     },
     {
@@ -20964,49 +17795,13 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D05Z02S06[SW]",
+                "target": "D05Z02S06[NE]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
             "D05Z02S02[NE]"
-        ]
-    },
-    {
-        "name": "D05Z02S06[SW]",
-        "exits": [
-            {
-                "target": "D05Z02S05[W]",
-                "logic": []
-            },
-            {
-                "target": "D05Z02S06[SE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "openedTSCGate"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D05Z02S06[NE]",
-                "logic": []
-            },
-            {
-                "target": "D05Z02S07[W]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D05Z02S06[SW]",
-            "D05Z02S05[E]",
-            "D05Z02S07[E]",
-            "D05Z02S06[NW]"
         ]
     },
     {
@@ -21058,10 +17853,6 @@ regions = [
         "name": "D05Z02S11[W]",
         "exits": [
             {
-                "target": "D05Z02S06[SW]",
-                "logic": []
-            },
-            {
                 "target": "D05Z02S06[SE]",
                 "logic": [
                     {
@@ -21084,35 +17875,6 @@ regions = [
         ]
     },
     {
-        "name": "D05Z02S14[W]",
-        "exits": [
-            {
-                "target": "D05Z02S06[SW]",
-                "logic": []
-            },
-            {
-                "target": "D05Z02S06[SE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "openedTSCGate"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D05Z02S06[NE]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D05Z02S14[W]"
-        ]
-    },
-    {
         "name": "D05Z02S10[E]",
         "exits": [
             {
@@ -21120,7 +17882,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D05Z02S06[SW]",
+                "target": "D05Z02S06[NE]",
                 "logic": []
             }
         ],
@@ -21232,58 +17994,15 @@ regions = [
         "name": "D06Z01S01[SW]",
         "exits": [
             {
-                "target": "D06Z01S14[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S14[E]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S12[S]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S01[SW]"
-        ]
-    },
-    {
-        "name": "D06Z01S08[E]",
-        "exits": [
-            {
-                "target": "D06Z01S14[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S14[E]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S12[S]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S08[E]"
-        ]
-    },
-    {
-        "name": "D06Z01S12[S]",
-        "exits": [
-            {
-                "target": "D06Z01S14[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S14[E]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S12[W]",
+                "target": "D06Z01S01[W]",
                 "logic": [
+                    {
+                        "item_requirements": [
+                            "masks1"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
                     {
                         "item_requirements": [
                             "wallClimb",
@@ -21295,12 +18014,11 @@ regions = [
                 ]
             },
             {
-                "target": "D06Z01S12[E]",
+                "target": "D06Z01S01[NNW]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "wallClimb",
-                            "doubleJump"
+                            "masks2"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21308,18 +18026,11 @@ regions = [
                 ]
             },
             {
-                "target": "D06Z01S12[NW]",
+                "target": "D06Z01S01[NNE]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
+                            "masks2"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21327,18 +18038,11 @@ regions = [
                 ]
             },
             {
-                "target": "D06Z01S12[NE]",
+                "target": "D06Z01S01[N]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
+                            "masks3"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21346,16 +18050,24 @@ regions = [
                 ]
             },
             {
-                "target": "D06Z01S12[NE2]",
+                "target": "D06Z01S01[-Cherubs]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "doubleJump"
+                            "linen"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D06Z01S03",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S02[S]",
+                "logic": []
             },
             {
                 "target": "CO06",
@@ -21393,6 +18105,12 @@ regions = [
         ],
         "locations": [],
         "transitions": [
+            "D06Z01S01[SW]",
+            "D06Z01S14[E]",
+            "D06Z01S01[SE]",
+            "D06Z01S03[W]",
+            "D06Z01S08[E]",
+            "D06Z01S14[W]",
             "D06Z01S12[S]",
             "D06Z01S14[N]"
         ]
@@ -21401,7 +18119,7 @@ regions = [
         "name": "D06Z01S03",
         "exits": [
             {
-                "target": "D06Z01S03[W]",
+                "target": "D06Z01S01[SW]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -21413,7 +18131,7 @@ regions = [
                 ]
             },
             {
-                "target": "D06Z01S03[E]",
+                "target": "D06Z01S20[W]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -21431,170 +18149,60 @@ regions = [
         "transitions": []
     },
     {
-        "name": "D06Z01S01[SE]",
-        "exits": [
-            {
-                "target": "D06Z01S03",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S01[SE]"
-        ]
-    },
-    {
-        "name": "D06Z01S04[W]",
-        "exits": [
-            {
-                "target": "D06Z01S03",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S04[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "doubleJump",
-                            "canClimbOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S04[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "doubleJump",
-                            "canClimbOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S04[W]"
-        ]
-    },
-    {
         "name": "D06Z01S01[W]",
         "exits": [
             {
-                "target": "D06Z01S07[W]",
+                "target": "D06Z01S01[SW]",
                 "logic": []
             },
             {
-                "target": "D06Z01S07[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S01[W]"
-        ]
-    },
-    {
-        "name": "D06Z01S12[E]",
-        "exits": [
-            {
-                "target": "D06Z01S07[W]",
-                "logic": []
+                "target": "D06Z01S01[NNW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "masks2"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
-                "target": "D06Z01S07[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S12[E]"
-        ]
-    },
-    {
-        "name": "D06Z01S16[-CherubsL]",
-        "exits": [
-            {
-                "target": "D06Z01S07[W]",
-                "logic": []
+                "target": "D06Z01S01[NNE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "masks2"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
-                "target": "D06Z01S07[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S16[-CherubsL]"
-        ]
-    },
-    {
-        "name": "D06Z01S16[-CherubsR]",
-        "exits": [
-            {
-                "target": "D06Z01S07[W]",
-                "logic": []
+                "target": "D06Z01S01[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "masks3"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
-                "target": "D06Z01S07[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S16[-CherubsR]"
-        ]
-    },
-    {
-        "name": "D06Z01S01[E]",
-        "exits": [
+                "target": "D06Z01S01[-Cherubs]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
             {
                 "target": "QI03",
                 "logic": [
@@ -21608,8 +18216,15 @@ regions = [
                 ]
             },
             {
-                "target": "D06Z01S06[WW]",
+                "target": "D06Z01S04[NW]",
                 "logic": [
+                    {
+                        "item_requirements": [
+                            "D06Z01S04[NW]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
                     {
                         "item_requirements": [
                             "canBeatLegionary"
@@ -21620,29 +18235,60 @@ regions = [
                 ]
             },
             {
-                "target": "D06Z01S06[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canBeatLegionary"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S06[W]",
+                "target": "CO06",
                 "logic": []
             },
             {
-                "target": "D06Z01S15[SW]",
+                "target": "RESCUED_CHERUB_36",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S13[W]",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S02[S]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D06Z01S01[E]"
+            "D06Z01S01[W]",
+            "D06Z01S07[E]",
+            "D06Z01S01[E]",
+            "D06Z01S06[WW]",
+            "D06Z01S12[E]",
+            "D06Z01S07[W]",
+            "D06Z01S13[E]",
+            "D06Z01S12[W]",
+            "D06Z01S13[S]",
+            "D06Z01S08[N]"
+        ]
+    },
+    {
+        "name": "D06Z01S16[-CherubsL]",
+        "exits": [
+            {
+                "target": "D06Z01S01[W]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D06Z01S16[-CherubsL]"
+        ]
+    },
+    {
+        "name": "D06Z01S16[-CherubsR]",
+        "exits": [
+            {
+                "target": "D06Z01S01[W]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D06Z01S16[-CherubsR]"
         ]
     },
     {
@@ -21661,8 +18307,123 @@ regions = [
                 ]
             },
             {
-                "target": "D06Z01S06[WW]",
+                "target": "D06Z01S04[NE]",
                 "logic": [
+                    {
+                        "item_requirements": [
+                            "D06Z01S06[W]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S20[E]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S20[E]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S20[E]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "doubleJump",
+                            "canClimbOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S03[E]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S03[E]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S03[E]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "doubleJump",
+                            "canClimbOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S24[W]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S24[W]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S24[W]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "doubleJump",
+                            "canClimbOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S01[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D06Z01S01[E]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
                     {
                         "item_requirements": [
                             "canBeatLegionary"
@@ -21671,134 +18432,139 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
-            },
-            {
-                "target": "D06Z01S06[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canBeatLegionary"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S06[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S15[SW]",
-                "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D06Z01S04[NW]"
+            "D06Z01S04[NW]",
+            "D06Z01S06[E]"
         ]
     },
     {
         "name": "D06Z01S04[NE]",
         "exits": [
             {
-                "target": "D06Z01S06[WW]",
+                "target": "D06Z01S04[NW]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "canBeatLegionary"
+                            "D06Z01S06[E]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S17[-Cherubs]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S20[E]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S20[E]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S20[E]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "doubleJump",
+                            "canClimbOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S03[E]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S03[E]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S03[E]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "doubleJump",
+                            "canClimbOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S24[W]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S24[W]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S24[W]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "doubleJump",
+                            "canClimbOnRoot"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     }
                 ]
-            },
-            {
-                "target": "D06Z01S06[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canBeatLegionary"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S06[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S15[SW]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S04[NE]"
-        ]
-    },
-    {
-        "name": "D06Z01S15[SW]",
-        "exits": [
-            {
-                "target": "D06Z01S15[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S15[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S06[WW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canBeatLegionary"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S06[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canBeatLegionary"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S06[W]",
-                "logic": []
             }
         ],
         "locations": [
             "CO40"
         ],
         "transitions": [
+            "D06Z01S04[NE]",
+            "D06Z01S06[W]",
             "D06Z01S15[SW]",
             "D06Z01S06[EE]"
         ]
@@ -21807,7 +18573,7 @@ regions = [
         "name": "D06Z01S01[NW]",
         "exits": [
             {
-                "target": "D06Z01S01[E]",
+                "target": "D06Z01S16[-CherubsL]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -21820,7 +18586,43 @@ regions = [
                     {
                         "item_requirements": [
                             "linen",
-                            "canCrossGap1"
+                            "canCrossGap7"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S16[-CherubsR]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S01[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S01[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21847,7 +18649,46 @@ regions = [
                 ]
             },
             {
-                "target": "D06Z01S16[-CherubsR]",
+                "target": "D06Z01S01[NNW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "masks2",
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S01[NNE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "masks2",
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S01[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "masks3",
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S01[-Cherubs]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -21857,11 +18698,49 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D06Z01S12[NE2]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canWalkOnRoot",
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canWalkOnRoot",
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canCrossGap7",
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canCrossGap7",
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
         "transitions": [
-            "D06Z01S01[NW]"
+            "D06Z01S01[NW]",
+            "D06Z01S16[E]"
         ]
     },
     {
@@ -21878,6 +18757,82 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D06Z01S16[-CherubsR]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "canWalkOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S01[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canWalkOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S12[NE2]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "canWalkOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
@@ -21889,11 +18844,118 @@ regions = [
         "name": "D06Z01S09[-CherubsR]",
         "exits": [
             {
+                "target": "D06Z01S16[-CherubsL]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "canAirStall",
+                            "canWalkOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "canAirStall",
+                            "wheel"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D06Z01S16[-CherubsR]",
                 "logic": [
                     {
                         "item_requirements": [
                             "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S01[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canAirStall",
+                            "canWalkOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canAirStall",
+                            "wheel"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S12[NE2]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canAirStall",
+                            "canWalkOnRoot",
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canAirStall",
+                            "canWalkOnRoot",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canAirStall",
+                            "wheel",
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canAirStall",
+                            "wheel",
+                            "canDawnJump"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21920,18 +18982,9 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S12[NE2]"
-        ]
-    },
-    {
-        "name": "D06Z01S01[NE]",
-        "exits": [
+            },
             {
-                "target": "D06Z01S01[W]",
+                "target": "D06Z01S16[-CherubsR]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -21963,6 +19016,145 @@ regions = [
                     },
                     {
                         "item_requirements": [
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S12[NE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D06Z01S05[E]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S09[W]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO06",
+                "logic": []
+            },
+            {
+                "target": "PR12",
+                "logic": []
+            },
+            {
+                "target": "RESCUED_CHERUB_36",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S01[W]",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S01[SW]",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S05[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D06Z01S05[E]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S09[W]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D06Z01S12[NE2]",
+            "D06Z01S16[W]"
+        ]
+    },
+    {
+        "name": "D06Z01S01[NE]",
+        "exits": [
+            {
+                "target": "D06Z01S01[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S01[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S01[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canWalkOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
                             "canCrossGap8"
                         ],
                         "location_requirements": [],
@@ -21971,7 +19163,175 @@ regions = [
                 ]
             },
             {
-                "target": "D06Z01S17[E]",
+                "target": "D06Z01S01[NNW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "masks2",
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S01[NNE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "masks2",
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S01[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "masks3",
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S01[-Cherubs]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S17[-Cherubs]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S26[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D06Z01S01[NE]",
+            "D06Z01S17[W]"
+        ]
+    },
+    {
+        "name": "D06Z01S10[-CherubsL]",
+        "exits": [
+            {
+                "target": "D06Z01S01[NE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S17[-Cherubs]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S26[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "blood",
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D06Z01S10[-CherubsL]"
+        ]
+    },
+    {
+        "name": "D06Z01S10[-CherubsR]",
+        "exits": [
+            {
+                "target": "D06Z01S01[NE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S17[-Cherubs]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S26[W]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D06Z01S10[-CherubsR]"
+        ]
+    },
+    {
+        "name": "D06Z01S26[W]",
+        "exits": [
+            {
+                "target": "D06Z01S01[NE]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -21997,60 +19357,35 @@ regions = [
         ],
         "locations": [],
         "transitions": [
-            "D06Z01S01[NE]"
+            "D06Z01S26[W]",
+            "D06Z01S17[E]"
         ]
     },
     {
-        "name": "D06Z01S10[-CherubsL]",
+        "name": "D06Z01S09",
         "exits": [
             {
-                "target": "D06Z01S17[-Cherubs]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S10[-CherubsL]"
-        ]
-    },
-    {
-        "name": "D06Z01S10[-CherubsR]",
-        "exits": [
-            {
-                "target": "D06Z01S17[E]",
+                "target": "D06Z01S09[W]",
                 "logic": []
             },
             {
-                "target": "D06Z01S17[-Cherubs]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S10[-CherubsR]"
-        ]
-    },
-    {
-        "name": "D06Z01S26[W]",
-        "exits": [
+                "target": "D06Z01S09[E]",
+                "logic": []
+            },
             {
-                "target": "D06Z01S17[-Cherubs]",
+                "target": "D06Z01S09[-CherubsL]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S09[-CherubsR]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -22063,13 +19398,201 @@ regions = [
             }
         ],
         "locations": [],
-        "transitions": [
-            "D06Z01S26[W]"
-        ]
+        "transitions": []
     },
     {
         "name": "D06Z01S01[NNW]",
         "exits": [
+            {
+                "target": "D06Z01S09",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D06Z01S01[NNW]"
+        ]
+    },
+    {
+        "name": "D06Z01S12[NE]",
+        "exits": [
+            {
+                "target": "D06Z01S09",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D06Z01S12[NE]"
+        ]
+    },
+    {
+        "name": "D06Z01S01[NNE]",
+        "exits": [
+            {
+                "target": "D06Z01S10[-CherubsL]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S10[-CherubsR]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S01[SW]",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S01[W]",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S01[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "canWalkOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "canCrossGap3"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S01[NE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S01[NNW]",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S01[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "masks3"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S01[-Cherubs]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S21",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D06Z01S01[NNE]",
+            "D06Z01S10[W]",
+            "D06Z01S21[W]",
+            "D06Z01S10[E]"
+        ]
+    },
+    {
+        "name": "D06Z01S01[N]",
+        "exits": [
+            {
+                "target": "D06Z01S19[S]",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S25[W]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D06Z01S01[N]"
+        ]
+    },
+    {
+        "name": "D06Z01S25[W]",
+        "exits": [
+            {
+                "target": "D06Z01S19[S]",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S25",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D06Z01S25[W]",
+            "D06Z01S19[E]"
+        ]
+    },
+    {
+        "name": "D06Z01S09[E]",
+        "exits": [
+            {
+                "target": "D06Z01S01[SW]",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S01[W]",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S01[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
             {
                 "target": "D06Z01S01[NE]",
                 "logic": [
@@ -22092,511 +19615,8 @@ regions = [
                 ]
             },
             {
-                "target": "D06Z01S09[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S09[E]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S09[-CherubsL]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S09[-CherubsR]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S01[NNW]"
-        ]
-    },
-    {
-        "name": "D06Z01S12[NE]",
-        "exits": [
-            {
-                "target": "PR12",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S09[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S09[E]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S09[-CherubsL]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S09[-CherubsR]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S12[NE]"
-        ]
-    },
-    {
-        "name": "D06Z01S01[NNE]",
-        "exits": [
-            {
-                "target": "D06Z01S01[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S10[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S10[E]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S10[-CherubsL]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S10[-CherubsR]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S01[NNE]"
-        ]
-    },
-    {
-        "name": "D06Z01S21[W]",
-        "exits": [
-            {
-                "target": "D06Z01S10[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S10[E]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S10[-CherubsL]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S10[-CherubsR]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S21[W]"
-        ]
-    },
-    {
-        "name": "D06Z01S01[N]",
-        "exits": [
-            {
-                "target": "D06Z01S19[S]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S19[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S01[N]"
-        ]
-    },
-    {
-        "name": "D06Z01S25[W]",
-        "exits": [
-            {
-                "target": "D06Z01S19[S]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S19[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S25[W]"
-        ]
-    },
-    {
-        "name": "D06Z01S14[W]",
-        "exits": [
-            {
-                "target": "D06Z01S08[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S08[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S14[W]"
-        ]
-    },
-    {
-        "name": "D06Z01S03[W]",
-        "exits": [
-            {
-                "target": "D06Z01S01[SW]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S01[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks1"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks1"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "D06Z01S01[NNW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks2"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[NNE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks2"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[-Cherubs]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S03[W]"
-        ]
-    },
-    {
-        "name": "D06Z01S06[WW]",
-        "exits": [
-            {
-                "target": "D06Z01S01[SW]",
                 "logic": []
-            },
-            {
-                "target": "D06Z01S01[SE]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S01[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S01[NNW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks2"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[NNE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks2"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[-Cherubs]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S06[WW]"
-        ]
-    },
-    {
-        "name": "D06Z01S07[E]",
-        "exits": [
-            {
-                "target": "D06Z01S01[SW]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S01[SE]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S01[E]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S01[NNW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks2"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[NNE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks2"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[-Cherubs]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S07[E]"
-        ]
-    },
-    {
-        "name": "D06Z01S09[E]",
-        "exits": [
-            {
-                "target": "D06Z01S01[SW]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S01[SE]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S01[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S01[E]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S01[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             },
             {
                 "target": "D06Z01S01[NNE]",
@@ -22633,406 +19653,6 @@ regions = [
         ]
     },
     {
-        "name": "D06Z01S10[W]",
-        "exits": [
-            {
-                "target": "D06Z01S01[SW]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S01[SE]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S01[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S01[E]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S01[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[NNW]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S01[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[-Cherubs]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S10[W]"
-        ]
-    },
-    {
-        "name": "D06Z01S14[E]",
-        "exits": [
-            {
-                "target": "D06Z01S01[SE]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S01[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks1"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks1"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[NNW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks2"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[NNE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks2"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[-Cherubs]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S14[E]"
-        ]
-    },
-    {
-        "name": "D06Z01S16[E]",
-        "exits": [
-            {
-                "target": "D06Z01S01[SW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[SE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[NNW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks2",
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[NNE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks2",
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks3",
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[-Cherubs]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S16[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canWalkOnRoot",
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canWalkOnRoot",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canCrossGap7",
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canCrossGap7",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S16[-CherubsL]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap7"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S16[E]"
-        ]
-    },
-    {
-        "name": "D06Z01S17[W]",
-        "exits": [
-            {
-                "target": "D06Z01S01[SW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[SE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[NNW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks2",
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[NNE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks2",
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "masks3",
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S01[-Cherubs]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S17[W]"
-        ]
-    },
-    {
         "name": "D06Z01S19[S]",
         "exits": [
             {
@@ -23040,15 +19660,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D06Z01S01[SE]",
-                "logic": []
-            },
-            {
                 "target": "D06Z01S01[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S01[E]",
                 "logic": []
             },
             {
@@ -23058,134 +19670,23 @@ regions = [
             {
                 "target": "D06Z01S01[NNE]",
                 "logic": []
+            },
+            {
+                "target": "D06Z01S01[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "masks3"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
         "transitions": [
             "D06Z01S19[S]"
-        ]
-    },
-    {
-        "name": "D06Z01S03[E]",
-        "exits": [
-            {
-                "target": "D06Z01S04[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S04[Health]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "blood",
-                            "canClimbOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S20[W]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S03[E]"
-        ]
-    },
-    {
-        "name": "D06Z01S06[E]",
-        "exits": [
-            {
-                "target": "D06Z01S04[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S04[Health]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "blood",
-                            "canClimbOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S20[W]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S06[E]"
-        ]
-    },
-    {
-        "name": "D06Z01S06[W]",
-        "exits": [
-            {
-                "target": "D06Z01S04[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S04[Health]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "blood",
-                            "canClimbOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S20[W]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S06[W]"
         ]
     },
     {
@@ -23196,36 +19697,112 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D06Z01S04[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S04[Health]",
+                "target": "D06Z01S04[NE]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "doubleJump"
+                            "D06Z01S06[W]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     },
                     {
                         "item_requirements": [
+                            "D06Z01S20[E]",
                             "wallClimb",
                             "canSurvivePoison2",
-                            "blood",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S20[E]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S20[E]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "doubleJump",
+                            "canClimbOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S03[E]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S03[E]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S03[E]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "doubleJump",
+                            "canClimbOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S24[W]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S24[W]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S24[W]",
+                            "wallClimb",
+                            "canSurvivePoison2",
+                            "doubleJump",
                             "canClimbOnRoot"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     }
                 ]
-            },
-            {
-                "target": "D06Z01S20[W]",
-                "logic": []
             }
         ],
         "locations": [],
@@ -23237,32 +19814,8 @@ regions = [
         "name": "D06Z01S24[W]",
         "exits": [
             {
-                "target": "D06Z01S04[W]",
-                "logic": []
-            },
-            {
                 "target": "D06Z01S04[Health]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "blood",
-                            "canClimbOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "logic": []
             },
             {
                 "target": "D06Z01S20[W]",
@@ -23293,74 +19846,6 @@ regions = [
             {
                 "target": "D06Z01S24",
                 "logic": []
-            },
-            {
-                "target": "D06Z01S04[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "doubleJump",
-                            "canClimbOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S04[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canSurvivePoison2",
-                            "doubleJump",
-                            "canClimbOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
@@ -23372,104 +19857,15 @@ regions = [
         "name": "D06Z01S05[E]",
         "exits": [
             {
-                "target": "D06Z01S12[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S12[E]",
-                "logic": []
-            },
-            {
                 "target": "D06Z01S12[NE]",
                 "logic": []
-            },
-            {
-                "target": "CO06",
-                "logic": []
-            },
-            {
-                "target": "RESCUED_CHERUB_36",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S12[S]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S12[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             },
             {
                 "target": "D06Z01S12[NE2]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S05[E]"
-        ]
-    },
-    {
-        "name": "D06Z01S07[W]",
-        "exits": [
-            {
-                "target": "D06Z01S12[W]",
-                "logic": []
-            },
-            {
-                "target": "CO06",
-                "logic": []
-            },
-            {
-                "target": "RESCUED_CHERUB_36",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S12[S]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S12[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S12[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
+                            "D06Z01S16[W]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -23477,246 +19873,6 @@ regions = [
                     {
                         "item_requirements": [
                             "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S12[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S12[NE2]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S07[W]"
-        ]
-    },
-    {
-        "name": "D06Z01S09[W]",
-        "exits": [
-            {
-                "target": "D06Z01S12[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S12[E]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S12[NW]",
-                "logic": []
-            },
-            {
-                "target": "CO06",
-                "logic": []
-            },
-            {
-                "target": "RESCUED_CHERUB_36",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S12[S]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S12[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S12[NE2]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S09[W]"
-        ]
-    },
-    {
-        "name": "D06Z01S13[E]",
-        "exits": [
-            {
-                "target": "D06Z01S12[E]",
-                "logic": []
-            },
-            {
-                "target": "CO06",
-                "logic": []
-            },
-            {
-                "target": "RESCUED_CHERUB_36",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S12[S]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S12[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S12[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S12[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S12[NE2]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S13[E]"
-        ]
-    },
-    {
-        "name": "D06Z01S16[W]",
-        "exits": [
-            {
-                "target": "D06Z01S12[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S12[E]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S16[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S16[-CherubsR]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap1"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -23729,78 +19885,125 @@ regions = [
             },
             {
                 "target": "PR12",
-                "logic": []
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
                 "target": "RESCUED_CHERUB_36",
                 "logic": []
             },
             {
-                "target": "D06Z01S12[S]",
+                "target": "D06Z01S01[W]",
                 "logic": []
             },
             {
-                "target": "D06Z01S12[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
+                "target": "D06Z01S01[SW]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D06Z01S05[E]",
+            "D06Z01S12[NW]"
+        ]
+    },
+    {
+        "name": "D06Z01S09[W]",
+        "exits": [
             {
                 "target": "D06Z01S12[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "logic": []
             },
             {
                 "target": "D06Z01S12[NE2]",
                 "logic": [
                     {
                         "item_requirements": [
+                            "D06Z01S16[W]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
                             "doubleJump"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "CO06",
+                "logic": []
+            },
+            {
+                "target": "PR12",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_36",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S01[W]",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S01[SW]",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S05[E]",
+                "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D06Z01S16[W]"
+            "D06Z01S09[W]"
         ]
     },
     {
         "name": "D06Z01S11[W]",
         "exits": [
             {
-                "target": "D06Z01S15[SW]",
+                "target": "D06Z01S15[NE]",
                 "logic": []
+            },
+            {
+                "target": "D06Z01S21[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D06Z01S21[E]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S06[EE]",
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
@@ -23812,34 +20015,34 @@ regions = [
         "name": "D06Z01S21[E]",
         "exits": [
             {
-                "target": "D06Z01S15[SW]",
+                "target": "D06Z01S15[NE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D06Z01S11[W]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D06Z01S06[EE]",
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S21",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D06Z01S21[E]"
-        ]
-    },
-    {
-        "name": "D06Z01S12[W]",
-        "exits": [
-            {
-                "target": "D06Z01S13[W]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S13[E]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S08[W]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S12[W]"
+            "D06Z01S21[E]",
+            "D06Z01S15[NW]"
         ]
     },
     {
@@ -23850,11 +20053,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D06Z01S13[E]",
-                "logic": []
-            },
-            {
-                "target": "D06Z01S08[W]",
+                "target": "D06Z01S01[W]",
                 "logic": []
             }
         ],
@@ -23867,7 +20066,7 @@ regions = [
         "name": "D06Z01S21",
         "exits": [
             {
-                "target": "D06Z01S21[W]",
+                "target": "D06Z01S21[E]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -23879,7 +20078,7 @@ regions = [
                 ]
             },
             {
-                "target": "D06Z01S21[E]",
+                "target": "D06Z01S01[NNE]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -23895,57 +20094,6 @@ regions = [
             "QI04"
         ],
         "transitions": []
-    },
-    {
-        "name": "D06Z01S10[E]",
-        "exits": [
-            {
-                "target": "D06Z01S21",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S10[E]"
-        ]
-    },
-    {
-        "name": "D06Z01S15[NW]",
-        "exits": [
-            {
-                "target": "D06Z01S21",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S15[NW]"
-        ]
-    },
-    {
-        "name": "D06Z01S12[NW]",
-        "exits": [
-            {
-                "target": "PR12",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S05[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S12[NW]"
-        ]
     },
     {
         "name": "D09Z01S01",
@@ -24017,31 +20165,6 @@ regions = [
         ]
     },
     {
-        "name": "D06Z01S17[E]",
-        "exits": [
-            {
-                "target": "D06Z01S17[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S26[W]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S17[E]"
-        ]
-    },
-    {
         "name": "D06Z01S25",
         "exits": [
             {
@@ -24075,23 +20198,14 @@ regions = [
         "transitions": []
     },
     {
-        "name": "D06Z01S19[E]",
-        "exits": [
-            {
-                "target": "D06Z01S25",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D06Z01S19[E]"
-        ]
-    },
-    {
         "name": "D07Z01S01[W]",
         "exits": [
             {
                 "target": "D06Z01S25",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S25[E]",
                 "logic": []
             }
         ],
@@ -24231,7 +20345,7 @@ regions = [
         "name": "D08Z03S03",
         "exits": [
             {
-                "target": "D08Z03S03[W]",
+                "target": "D08Z01S02[NE]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -24243,7 +20357,7 @@ regions = [
                 ]
             },
             {
-                "target": "D08Z03S03[E]",
+                "target": "D08Z03S02[NW]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -24266,11 +20380,16 @@ regions = [
             {
                 "target": "D08Z03S03",
                 "logic": []
+            },
+            {
+                "target": "D08Z01S02",
+                "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D08Z01S02[NE]"
+            "D08Z01S02[NE]",
+            "D08Z03S03[W]"
         ]
     },
     {
@@ -24279,11 +20398,16 @@ regions = [
             {
                 "target": "D08Z03S03",
                 "logic": []
+            },
+            {
+                "target": "D08Z03S02[SW]",
+                "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D08Z03S02[NW]"
+            "D08Z03S02[NW]",
+            "D08Z03S03[E]"
         ]
     },
     {
@@ -24348,10 +20472,6 @@ regions = [
         "name": "D08Z01S02",
         "exits": [
             {
-                "target": "D08Z01S02[NE]",
-                "logic": []
-            },
-            {
                 "target": "D08Z01S02[SE]",
                 "logic": []
             },
@@ -24384,19 +20504,6 @@ regions = [
         "locations": [],
         "transitions": [
             "D08Z02S03[W]"
-        ]
-    },
-    {
-        "name": "D08Z03S03[W]",
-        "exits": [
-            {
-                "target": "D08Z01S02",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D08Z03S03[W]"
         ]
     },
     {
@@ -24476,31 +20583,6 @@ regions = [
         ]
     },
     {
-        "name": "D08Z03S03[E]",
-        "exits": [
-            {
-                "target": "D08Z03S02[SW]",
-                "logic": []
-            },
-            {
-                "target": "D08Z03S02[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D08Z03S03[E]"
-        ]
-    },
-    {
         "name": "D09Z01S01[W]",
         "exits": [
             {
@@ -24508,11 +20590,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D09Z01S11[S]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S04[E]",
+                "target": "D09Z01S02[N]",
                 "logic": []
             }
         ],
@@ -24526,507 +20604,6 @@ regions = [
         "exits": [
             {
                 "target": "D09Z01S11[E]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S11[S]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S04[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S02[N]"
-        ]
-    },
-    {
-        "name": "D09Z01S04[E]",
-        "exits": [
-            {
-                "target": "D09Z01S11[E]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S11[S]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S04[W]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[SW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[SE]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[W]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[E]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[NW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S04[E]",
-            "D09Z01S11[W]",
-            "D09Z01S04[S]",
-            "D09Z01S07[N]"
-        ]
-    },
-    {
-        "name": "D09Z01S02[SW]",
-        "exits": [
-            {
-                "target": "D09Z01S07[SW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[SE]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[W]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[E]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[NW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S04[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S02[SW]"
-        ]
-    },
-    {
-        "name": "D09Z01S02[NW]",
-        "exits": [
-            {
-                "target": "D09Z01S07[SW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[SE]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[W]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[E]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[NW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S04[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S02[NW]"
-        ]
-    },
-    {
-        "name": "D09Z01S08[SE]",
-        "exits": [
-            {
-                "target": "D09Z01S07[SW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[SE]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[W]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[E]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[NW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S04[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S08[SE]"
-        ]
-    },
-    {
-        "name": "D09Z01S08[NE]",
-        "exits": [
-            {
-                "target": "D09Z01S07[SW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[SE]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[W]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[E]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[NW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S04[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S08[NE]"
-        ]
-    },
-    {
-        "name": "D09Z01S09[E]",
-        "exits": [
-            {
-                "target": "D09Z01S07[SW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[SE]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[W]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[E]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[NW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S04[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S09[E]"
-        ]
-    },
-    {
-        "name": "D09Z01S10[W]",
-        "exits": [
-            {
-                "target": "D09Z01S07[SW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[SE]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[W]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[E]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[NW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S07[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S04[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S10[W]"
-        ]
-    },
-    {
-        "name": "D09Z01S02[Cell1]",
-        "exits": [
-            {
-                "target": "D09BZ01S01[Cell21]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[NW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[Cell24]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB16",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[SW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[E]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S02[Cell2]",
-                "logic": []
-            },
-            {
-                "target": "RB11",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [
-            "RESCUED_CHERUB_03"
-        ],
-        "transitions": []
-    },
-    {
-        "name": "D09Z01S02[Cell6]",
-        "exits": [
-            {
-                "target": "D09BZ01S01[Cell21]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[NW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[Cell24]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB16",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[SW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[E]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S02[Cell2]",
-                "logic": []
-            },
-            {
-                "target": "RB11",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [
-            "CO24"
-        ],
-        "transitions": []
-    },
-    {
-        "name": "D09Z01S02[Cell2]",
-        "exits": [
-            {
-                "target": "D09BZ01S01[Cell21]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[NW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[Cell24]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB16",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[SW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[E]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S02[SW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S02[NW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S02[N]",
                 "logic": []
             },
             {
@@ -25054,7 +20631,210 @@ regions = [
                 ]
             },
             {
+                "target": "D09Z01S02[Cell4]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell3]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell23]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "RB11",
+                "logic": []
+            },
+            {
+                "target": "D09BZ01S01[Cell23]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI69",
+                "logic": []
+            }
+        ],
+        "locations": [
+            "CO10",
+            "QI51"
+        ],
+        "transitions": [
+            "D09Z01S02[N]",
+            "D09Z01S11[S]",
+            "D09Z01S02[NW]",
+            "D09Z01S07[NE]",
+            "D09Z01S02[Cell22]",
+            "D09BZ01S01[Cell22]",
+            "D09Z01S02[Cell5]",
+            "D09BZ01S01[Cell4]",
+            "D09BZ01S01[Cell5]"
+        ]
+    },
+    {
+        "name": "D09Z01S04[E]",
+        "exits": [
+            {
+                "target": "D09Z01S11[E]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S02[N]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S04[W]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S08[Cell7]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09Z01S04[E]",
+            "D09Z01S11[W]",
+            "D09Z01S04[S]",
+            "D09Z01S07[N]",
+            "D09Z01S08[NE]",
+            "D09Z01S07[NW]"
+        ]
+    },
+    {
+        "name": "D09Z01S02[Cell1]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell1]",
+                "logic": []
+            }
+        ],
+        "locations": [
+            "RESCUED_CHERUB_03"
+        ],
+        "transitions": [
+            "D09Z01S02[Cell1]"
+        ]
+    },
+    {
+        "name": "D09Z01S02[Cell6]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell6]",
+                "logic": []
+            }
+        ],
+        "locations": [
+            "CO24"
+        ],
+        "transitions": [
+            "D09Z01S02[Cell6]"
+        ]
+    },
+    {
+        "name": "D09Z01S02[Cell4]",
+        "exits": [
+            {
+                "target": "D09Z01S02[N]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09Z01S02[Cell4]"
+        ]
+    },
+    {
+        "name": "D09Z01S02[Cell3]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell3]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09Z01S02[Cell3]"
+        ]
+    },
+    {
+        "name": "D09Z01S02[Cell23]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell23]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI69",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09Z01S02[Cell23]"
+        ]
+    },
+    {
+        "name": "D09Z01S08[Cell14]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell15]",
+                "logic": []
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
                 "logic": []
             },
             {
@@ -25072,25 +20852,116 @@ regions = [
             {
                 "target": "D09Z01S08[S]",
                 "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09Z01S08[Cell14]",
+            "D09BZ01S01[Cell14]"
+        ]
+    },
+    {
+        "name": "D09Z01S08[Cell15]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell15]",
+                "logic": []
             },
             {
                 "target": "RESCUED_CHERUB_34",
                 "logic": []
             },
             {
-                "target": "D09Z01S08[NE]",
+                "target": "D09Z01S08[Cell14]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09Z01S08[Cell15]"
+        ]
+    },
+    {
+        "name": "D09Z01S08[Cell7]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell7]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09Z01S08[Cell7]"
+        ]
+    },
+    {
+        "name": "D09Z01S08[Cell16]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell16]",
+                "logic": []
+            }
+        ],
+        "locations": [
+            "CO26"
+        ],
+        "transitions": [
+            "D09Z01S08[Cell16]"
+        ]
+    },
+    {
+        "name": "D09Z01S08[Cell18]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell18]",
                 "logic": []
             },
             {
-                "target": "D09Z01S08[SE]",
+                "target": "D09Z01S08[Cell17]",
                 "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09Z01S08[Cell18]"
+        ]
+    },
+    {
+        "name": "D09Z01S08[Cell17]",
+        "exits": [
+            {
+                "target": "D09Z01S08[Cell15]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell7]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
                 "target": "D09Z01S08[Cell16]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "goldKey"
+                            "goldKey",
+                            "dash"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -25098,12 +20969,12 @@ regions = [
                 ]
             },
             {
-                "target": "QI72",
+                "target": "D09Z01S08[Cell18]",
                 "logic": [
                     {
                         "item_requirements": [
                             "silverKey",
-                            "openedWotHPGate"
+                            "dash"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -25111,48 +20982,7 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S10[W]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S10[Cell10]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "CO27",
-                "logic": []
-            }
-        ],
-        "locations": [
-            "QI51",
-            "CO10",
-            "QI69",
-            "RESCUED_CHERUB_04",
-            "QI70"
-        ],
-        "transitions": []
-    },
-    {
-        "name": "D09Z01S08[Cell16]",
-        "exits": [
-            {
-                "target": "D09BZ01S01[Cell21]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[NW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[Cell24]",
+                "target": "D09Z01S09[SW]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -25164,72 +20994,11 @@ regions = [
                 ]
             },
             {
-                "target": "RB16",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[SW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[E]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S02[Cell2]",
-                "logic": []
-            },
-            {
-                "target": "RB11",
+                "target": "D09Z01S04[E]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [
-            "CO26"
-        ],
-        "transitions": []
-    },
-    {
-        "name": "D09Z01S09[Cell24]",
-        "exits": [
-            {
-                "target": "D09BZ01S01[Cell21]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[NW]",
-                "logic": []
-            },
-            {
-                "target": "RB16",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[SW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[E]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S02[Cell2]",
-                "logic": []
-            },
-            {
-                "target": "RB11",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "bronzeKey"
+                            "dash"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -25238,64 +21007,105 @@ regions = [
             }
         ],
         "locations": [],
-        "transitions": []
+        "transitions": [
+            "D09Z01S08[Cell17]",
+            "D09BZ01S01[Cell17]"
+        ]
+    },
+    {
+        "name": "D09Z01S09[Cell20]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": []
+            },
+            {
+                "target": "D09BZ01S01[Cell20]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09Z01S09[Cell20]"
+        ]
+    },
+    {
+        "name": "D09Z01S09[Cell21]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell21]",
+                "logic": []
+            }
+        ],
+        "locations": [
+            "CO02"
+        ],
+        "transitions": [
+            "D09Z01S09[Cell21]"
+        ]
+    },
+    {
+        "name": "D09Z01S10[Cell13]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell12]",
+                "logic": []
+            }
+        ],
+        "locations": [
+            "QI70"
+        ],
+        "transitions": [
+            "D09Z01S10[Cell13]",
+            "D09BZ01S01[Cell13]"
+        ]
+    },
+    {
+        "name": "D09Z01S10[Cell12]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell12]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S10[Cell13]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09Z01S10[Cell12]"
+        ]
     },
     {
         "name": "D09Z01S10[Cell10]",
         "exits": [
             {
-                "target": "D09BZ01S01[Cell21]",
+                "target": "D09BZ01S01[Cell10]",
                 "logic": []
-            },
-            {
-                "target": "D09Z01S09[NW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[Cell24]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB16",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[SW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[E]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S02[Cell2]",
-                "logic": []
-            },
-            {
-                "target": "RB11",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [
             "CO37"
         ],
-        "transitions": []
+        "transitions": [
+            "D09Z01S10[Cell10]"
+        ]
+    },
+    {
+        "name": "D09Z01S10[Cell11]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell11]",
+                "logic": []
+            }
+        ],
+        "locations": [
+            "RESCUED_CHERUB_04"
+        ],
+        "transitions": [
+            "D09Z01S10[Cell11]"
+        ]
     },
     {
         "name": "D09Z01S03[W]",
@@ -25321,18 +21131,6 @@ regions = [
     {
         "name": "D09Z01S08[W]",
         "exits": [
-            {
-                "target": "QI72",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "openedWotHPGate"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
             {
                 "target": "D09Z01S05[SE]",
                 "logic": []
@@ -25396,6 +21194,18 @@ regions = [
             {
                 "target": "D09Z01S03",
                 "logic": []
+            },
+            {
+                "target": "D09Z01S03[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canBeatPrisonBoss"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
@@ -25407,8 +21217,36 @@ regions = [
         "name": "D09Z01S05[NE]",
         "exits": [
             {
-                "target": "D09Z01S02[Cell2]",
+                "target": "D09Z01S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[S]",
                 "logic": []
+            },
+            {
+                "target": "D09Z01S08[Cell14]",
+                "logic": []
+            },
+            {
+                "target": "QI72",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
@@ -25417,8 +21255,45 @@ regions = [
         ]
     },
     {
-        "name": "D09Z01S07[W]",
+        "name": "D09BZ01S01[Cell7]",
         "exits": [
+            {
+                "target": "D09Z01S08[Cell7]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S04[E]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09BZ01S01[Cell7]"
+        ]
+    },
+    {
+        "name": "D09BZ01S01[Cell15]",
+        "exits": [
+            {
+                "target": "D09Z01S08[Cell15]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
             {
                 "target": "D09Z01S08[Cell16]",
                 "logic": [
@@ -25432,60 +21307,7 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S02[Cell2]",
-                "logic": []
-            },
-            {
-                "target": "RESCUED_CHERUB_34",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09BZ01S01[Cell21]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S09[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S09[Cell24]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "silverKey",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB16",
+                "target": "D09Z01S08[Cell18]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -25498,6 +21320,19 @@ regions = [
             },
             {
                 "target": "D09Z01S09[SW]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09BZ01S01[Cell15]"
+        ]
+    },
+    {
+        "name": "D09BZ01S01[Cell16]",
+        "exits": [
+            {
+                "target": "D09Z01S08[Cell15]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -25509,7 +21344,68 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S09[E]",
+                "target": "D09Z01S08[Cell16]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell18]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09BZ01S01[Cell16]"
+        ]
+    },
+    {
+        "name": "D09BZ01S01[Cell18]",
+        "exits": [
+            {
+                "target": "D09Z01S08[Cell15]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell16]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell18]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -25525,7 +21421,6 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
-                            "silverKey",
                             "openedWotHPGate"
                         ],
                         "location_requirements": [],
@@ -25534,121 +21429,13 @@ regions = [
                 ]
             },
             {
-                "target": "RB11",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "silverKey",
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S07[W]"
-        ]
-    },
-    {
-        "name": "D09Z01S07[NW]",
-        "exits": [
-            {
-                "target": "D09Z01S02[Cell2]",
-                "logic": []
-            },
-            {
-                "target": "D09BZ01S01[Cell21]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S09[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S09[Cell24]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "goldKey",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB16",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "D09Z01S09[SW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S09[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB11",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "goldKey",
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D09Z01S07[NW]"
+            "D09BZ01S01[Cell18]"
         ]
     },
     {
@@ -25669,67 +21456,470 @@ regions = [
         ]
     },
     {
-        "name": "D09Z01S07[SE]",
+        "name": "D09BZ01S01[Cell10]",
         "exits": [
+            {
+                "target": "D09Z01S10[Cell12]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell10]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell11]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
             {
                 "target": "CO27",
                 "logic": []
             },
             {
-                "target": "D09Z01S02[Cell2]",
+                "target": "D09Z01S09[SW]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D09Z01S07[SE]"
+            "D09BZ01S01[Cell10]"
         ]
     },
     {
-        "name": "D09Z01S07[E]",
+        "name": "D09BZ01S01[Cell11]",
         "exits": [
             {
-                "target": "D09Z01S02[Cell2]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S07[E]"
-        ]
-    },
-    {
-        "name": "D09Z01S07[NE]",
-        "exits": [
+                "target": "D09Z01S10[Cell12]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
             {
-                "target": "RB11",
+                "target": "D09Z01S10[Cell10]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell11]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO27",
                 "logic": []
             },
             {
-                "target": "D09Z01S02[Cell2]",
+                "target": "D09Z01S09[SW]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D09Z01S07[NE]"
+            "D09BZ01S01[Cell11]"
         ]
     },
     {
-        "name": "D09Z01S11[S]",
+        "name": "D09BZ01S01[Cell12]",
         "exits": [
             {
-                "target": "RB11",
+                "target": "D09Z01S10[Cell12]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell10]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell11]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO27",
                 "logic": []
             },
             {
-                "target": "D09Z01S02[Cell2]",
+                "target": "D09Z01S09[SW]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D09Z01S11[S]"
+            "D09BZ01S01[Cell12]"
+        ]
+    },
+    {
+        "name": "D09BZ01S01[Cell1]",
+        "exits": [
+            {
+                "target": "D09Z01S02[N]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell4]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell3]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell23]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09BZ01S01[Cell1]"
+        ]
+    },
+    {
+        "name": "D09BZ01S01[Cell3]",
+        "exits": [
+            {
+                "target": "D09Z01S02[N]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell4]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell3]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell23]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09BZ01S01[Cell3]"
+        ]
+    },
+    {
+        "name": "D09BZ01S01[Cell6]",
+        "exits": [
+            {
+                "target": "D09Z01S02[N]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell4]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell3]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell23]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09BZ01S01[Cell6]"
+        ]
+    },
+    {
+        "name": "D09BZ01S01[Cell23]",
+        "exits": [
+            {
+                "target": "D09Z01S02[N]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell4]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell3]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell23]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09BZ01S01[Cell23]"
         ]
     },
     {
@@ -25763,6 +21953,10 @@ regions = [
         "exits": [
             {
                 "target": "D17Z01S02[W]",
+                "logic": []
+            },
+            {
+                "target": "D17Z01S05[W]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -25774,10 +21968,11 @@ regions = [
                 ]
             },
             {
-                "target": "D17Z01S02[E]",
+                "target": "D17Z01S10[S]",
                 "logic": [
                     {
                         "item_requirements": [
+                            "blood",
                             "dash"
                         ],
                         "location_requirements": [],
@@ -25795,7 +21990,35 @@ regions = [
         "name": "D17Z01S05[W]",
         "exits": [
             {
-                "target": "D17Z01S02[N]",
+                "target": "D17Z01S02[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D17Z01S05[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "openedBotSSLadder"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D17Z01S11",
+                "logic": []
+            },
+            {
+                "target": "D17Z01S10[S]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -25805,45 +22028,20 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
-            },
-            {
-                "target": "D17Z01S02[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D17Z01S02[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
         "transitions": [
-            "D17Z01S05[W]"
+            "D17Z01S05[W]",
+            "D17Z01S02[E]",
+            "D17Z01S11[W]",
+            "D17Z01S05[E]"
         ]
     },
     {
         "name": "D17Z01S10[S]",
         "exits": [
             {
-                "target": "D17Z01S02[E]",
-                "logic": []
-            },
-            {
                 "target": "D17Z01S02[W]",
                 "logic": [
                     {
@@ -25854,11 +22052,35 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D17Z01S05[W]",
+                "logic": []
+            },
+            {
+                "target": "D17Z01S13[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
         "transitions": [
-            "D17Z01S10[S]"
+            "D17Z01S10[S]",
+            "D17Z01S02[N]"
         ]
     },
     {
@@ -25880,19 +22102,6 @@ regions = [
             {
                 "target": "D17Z01S01",
                 "logic": []
-            },
-            {
-                "target": "D17Z01S02[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
@@ -25942,43 +22151,10 @@ regions = [
         ]
     },
     {
-        "name": "D17Z01S02[E]",
-        "exits": [
-            {
-                "target": "D17Z01S05[W]",
-                "logic": []
-            },
-            {
-                "target": "D17Z01S05[E]",
-                "logic": []
-            },
-            {
-                "target": "D17Z01S05[S]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "openedBotSSLadder"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D17Z01S02[E]"
-        ]
-    },
-    {
         "name": "D17Z01S04[N]",
         "exits": [
             {
                 "target": "D17Z01S05[W]",
-                "logic": []
-            },
-            {
-                "target": "D17Z01S05[E]",
                 "logic": []
             },
             {
@@ -26000,82 +22176,27 @@ regions = [
         ]
     },
     {
-        "name": "D17Z01S11[W]",
-        "exits": [
-            {
-                "target": "D17Z01S05[W]",
-                "logic": []
-            },
-            {
-                "target": "D17Z01S05[E]",
-                "logic": []
-            },
-            {
-                "target": "D17Z01S05[S]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "openedBotSSLadder"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D17Z01S11[W]"
-        ]
-    },
-    {
-        "name": "D17Z01S02[N]",
-        "exits": [
-            {
-                "target": "D17Z01S10[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D17Z01S10[S]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D17Z01S02[N]"
-        ]
-    },
-    {
         "name": "D17Z01S13[E]",
         "exits": [
             {
-                "target": "D17Z01S10[W]",
+                "target": "D17Z01S10[S]",
+                "logic": []
+            },
+            {
+                "target": "D17Z01S14[-Cherubs2]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "blood"
+                            "linen",
+                            "canCrossGap8"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     },
                     {
                         "item_requirements": [
-                            "doubleJump"
+                            "linen",
+                            "blood"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -26083,20 +22204,77 @@ regions = [
                 ]
             },
             {
-                "target": "D17Z01S10[S]",
-                "logic": []
+                "target": "D17Z01S14[-Cherubs3]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D17Z01S14[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "scapular",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D17Z01S14[-Cherubs1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "canCrossGap11"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "PR203",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
         "transitions": [
-            "D17Z01S13[E]"
+            "D17Z01S13[E]",
+            "D17Z01S10[W]",
+            "D17Z01S14[E]",
+            "D17Z01S13[W]"
         ]
     },
     {
         "name": "D17Z01S11",
         "exits": [
             {
-                "target": "D17Z01S11[W]",
+                "target": "D17Z01S11[E]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -26108,7 +22286,7 @@ regions = [
                 ]
             },
             {
-                "target": "D17Z01S11[E]",
+                "target": "D17Z01S05[W]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -26124,32 +22302,6 @@ regions = [
             "BS13"
         ],
         "transitions": []
-    },
-    {
-        "name": "D17Z01S03[W]",
-        "exits": [
-            {
-                "target": "D17Z01S11",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D17Z01S03[W]"
-        ]
-    },
-    {
-        "name": "D17Z01S05[E]",
-        "exits": [
-            {
-                "target": "D17Z01S11",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D17Z01S05[E]"
-        ]
     },
     {
         "name": "D17BZ01S01",
@@ -26198,7 +22350,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D17BZ02S01[FrontR]",
+                "target": "CO25",
                 "logic": [
                     {
                         "item_requirements": [
@@ -26211,7 +22363,7 @@ regions = [
                 ]
             },
             {
-                "target": "CO25",
+                "target": "D17Z01S04[FrontR]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -26237,16 +22389,40 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D17BZ02S01[FrontL]",
+                "target": "D17Z01S04",
                 "logic": []
             },
             {
-                "target": "D17BZ02S01[FrontR]",
+                "target": "D17Z01S04[N]",
+                "logic": []
+            },
+            {
+                "target": "RB25",
                 "logic": [
                     {
                         "item_requirements": [
-                            "dash",
-                            "wallClimb"
+                            "blueWax1"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB26",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "blueWax1",
+                            "D01Z04S13[SE]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "blueWax1",
+                            "D05Z02S12[W]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -26256,7 +22432,8 @@ regions = [
         ],
         "locations": [],
         "transitions": [
-            "D17Z01S04[FrontR]"
+            "D17Z01S04[FrontR]",
+            "D17BZ02S01[FrontR]"
         ]
     },
     {
@@ -26273,14 +22450,6 @@ regions = [
             {
                 "target": "D17Z01S04[FrontL]",
                 "logic": []
-            },
-            {
-                "target": "D17Z01S04[N]",
-                "logic": []
-            },
-            {
-                "target": "D17Z01S04[FrontR]",
-                "logic": []
             }
         ],
         "locations": [
@@ -26296,11 +22465,40 @@ regions = [
                 "logic": []
             },
             {
+                "target": "D17Z01S04[N]",
+                "logic": []
+            },
+            {
+                "target": "D17Z01S04[FrontR]",
+                "logic": []
+            },
+            {
                 "target": "RB25",
                 "logic": [
                     {
                         "item_requirements": [
                             "blueWax1"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB26",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "blueWax1",
+                            "D01Z04S13[SE]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "blueWax1",
+                            "D05Z02S12[W]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -26353,31 +22551,6 @@ regions = [
         ]
     },
     {
-        "name": "D17BZ02S01[FrontR]",
-        "exits": [
-            {
-                "target": "D17Z01S04",
-                "logic": []
-            },
-            {
-                "target": "RB25",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blueWax1"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D17BZ02S01[FrontR]"
-        ]
-    },
-    {
         "name": "D17Z01S08",
         "exits": [
             {
@@ -26404,86 +22577,14 @@ regions = [
         ]
     },
     {
-        "name": "D17Z01S10[W]",
+        "name": "D17Z01S15[E]",
         "exits": [
-            {
-                "target": "D17Z01S13[W]",
-                "logic": []
-            },
-            {
-                "target": "D17Z01S13[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D17Z01S10[W]"
-        ]
-    },
-    {
-        "name": "D17Z01S14[E]",
-        "exits": [
-            {
-                "target": "D17Z01S14[-Cherubs2]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap8"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D17Z01S13[W]",
-                "logic": []
-            },
-            {
-                "target": "D17Z01S13[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D17Z01S14[E]"
-        ]
-    },
-    {
-        "name": "D17Z01S13[W]",
-        "exits": [
-            {
-                "target": "D17Z01S14[-Cherubs3]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
             {
                 "target": "D17Z01S14[W]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "scapular",
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D17Z01S14[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
+                            "scapular"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -26495,8 +22596,20 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D17Z01S14[-Cherubs2]",
+                "logic": [
+                    {
+                        "item_requirements": [
                             "linen",
-                            "blood"
+                            "canCrossGap10"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -26504,53 +22617,7 @@ regions = [
                     {
                         "item_requirements": [
                             "linen",
-                            "canCrossGap11"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D17Z01S14[-Cherubs2]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
                             "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "PR203",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D17Z01S13[W]"
-        ]
-    },
-    {
-        "name": "D17Z01S15[E]",
-        "exits": [
-            {
-                "target": "D17Z01S14[-Cherubs1]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -26562,49 +22629,23 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D17Z01S14[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "scapular",
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D17Z01S14[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D17Z01S14[-Cherubs2]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "D17Z01S14[-Cherubs3]",
                 "logic": [
                     {
                         "item_requirements": [
                             "linen",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D17Z01S13[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
                             "blood"
                         ],
                         "location_requirements": [],
@@ -26638,19 +22679,6 @@ regions = [
             {
                 "target": "D17Z01S15",
                 "logic": []
-            },
-            {
-                "target": "D17Z01S14[-Cherubs2]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canCrossGap10"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
@@ -26702,102 +22730,6 @@ regions = [
         ]
     },
     {
-        "name": "D20Z01S09[W]",
-        "exits": [
-            {
-                "target": "D20Z01S07[SE]",
-                "logic": []
-            },
-            {
-                "target": "D20Z01S01[S]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D20Z01S09[W]"
-        ]
-    },
-    {
-        "name": "D20Z01S10[E]",
-        "exits": [
-            {
-                "target": "D20Z01S11[W]",
-                "logic": []
-            },
-            {
-                "target": "D20Z01S12[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D20Z01S10[E]"
-        ]
-    },
-    {
-        "name": "D20Z01S12[E]",
-        "exits": [
-            {
-                "target": "D20Z01S11[W]",
-                "logic": []
-            },
-            {
-                "target": "D20Z01S13[E]",
-                "logic": []
-            },
-            {
-                "target": "D20Z02S12[E]",
-                "logic": []
-            },
-            {
-                "target": "D20Z01S14[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D20Z01S12[E]",
-            "D20Z01S11[NW]",
-            "D20Z01S13[W]",
-            "D20Z01S11[NE]",
-            "D20Z02S12[W]",
-            "D20Z01S11[SE]",
-            "D20Z01S14[S]",
-            "D20Z01S13[N]"
-        ]
-    },
-    {
-        "name": "D20Z02S11[NW]",
-        "exits": [
-            {
-                "target": "D20Z02S11[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "mourningSkipAllowed",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D20Z01S13[E]",
-                "logic": []
-            },
-            {
-                "target": "D20Z01S12[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D20Z02S11[NW]"
-        ]
-    },
-    {
         "name": "D20Z02S11[SW]",
         "exits": [
             {
@@ -26805,7 +22737,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D20Z01S12[E]",
+                "target": "D20Z01S11[W]",
                 "logic": []
             }
         ],
@@ -26822,10 +22754,11 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D20Z02S11[NW]",
+                "target": "D20Z01S11[W]",
                 "logic": [
                     {
                         "item_requirements": [
+                            "HardLogic",
                             "mourningSkipAllowed",
                             "doubleJump"
                         ],
@@ -26834,6 +22767,7 @@ regions = [
                     },
                     {
                         "item_requirements": [
+                            "HardLogic",
                             "mourningSkipAllowed",
                             "tirana",
                             "obscureSkipsAllowed"
@@ -26844,10 +22778,11 @@ regions = [
                 ]
             },
             {
-                "target": "D20Z02S11[E]",
+                "target": "D20Z02S10[W]",
                 "logic": [
                     {
                         "item_requirements": [
+                            "HardLogic",
                             "mourningSkipAllowed",
                             "doubleJump"
                         ],
@@ -26856,6 +22791,7 @@ regions = [
                     },
                     {
                         "item_requirements": [
+                            "HardLogic",
                             "mourningSkipAllowed",
                             "tirana",
                             "obscureSkipsAllowed"
@@ -26872,19 +22808,6 @@ regions = [
         "transitions": []
     },
     {
-        "name": "D20Z01S13[E]",
-        "exits": [
-            {
-                "target": "D20Z02S11",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D20Z01S13[E]"
-        ]
-    },
-    {
         "name": "D20Z02S10[W]",
         "exits": [
             {
@@ -26892,21 +22815,27 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D20Z02S11[NW]",
+                "target": "D20Z01S11[W]",
                 "logic": [
                     {
                         "item_requirements": [
+                            "HardLogic",
                             "mourningSkipAllowed"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D20Z02S10[E]",
+                "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D20Z02S10[W]"
+            "D20Z02S10[W]",
+            "D20Z02S11[E]"
         ]
     },
     {
@@ -26930,7 +22859,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D20Z01S12[E]",
+                "target": "D20Z01S11[W]",
                 "logic": []
             }
         ],
@@ -26969,27 +22898,8 @@ regions = [
         "name": "D20Z02S02[W]",
         "exits": [
             {
-                "target": "D20Z02S03[W]",
-                "logic": []
-            },
-            {
                 "target": "D20Z02S03[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "logic": []
             },
             {
                 "target": "D04Z02S24[NW]",
@@ -27002,25 +22912,54 @@ regions = [
         ]
     },
     {
-        "name": "D20Z02S04[E]",
+        "name": "D20Z02S05[E]",
         "exits": [
             {
-                "target": "D20Z02S03[W]",
-                "logic": []
-            },
-            {
-                "target": "D20Z02S03[NE]",
+                "target": "D04Z02S24[NW]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "canWalkOnRoot"
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D20Z02S06[NE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "nail"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     },
                     {
                         "item_requirements": [
-                            "canCrossGap5"
+                            "canCrossGap3"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canClimbOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canDiveLaser"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -27028,79 +22967,16 @@ regions = [
                 ]
             },
             {
-                "target": "D04Z02S24[NW]",
+                "target": "D20Z02S06[SW]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D20Z02S04[E]"
-        ]
-    },
-    {
-        "name": "D20Z02S03[W]",
-        "exits": [
-            {
-                "target": "D20Z02S04[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D20Z02S04[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D20Z02S03[W]"
-        ]
-    },
-    {
-        "name": "D20Z02S05[E]",
-        "exits": [
-            {
-                "target": "D20Z02S04[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D20Z02S04[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D20Z02S05[E]"
+            "D20Z02S05[E]",
+            "D20Z02S04[W]",
+            "D20Z02S06[SE]",
+            "D20Z02S05[SW]"
         ]
     },
     {
@@ -27130,150 +23006,56 @@ regions = [
         ]
     },
     {
-        "name": "D20Z02S04[W]",
-        "exits": [
-            {
-                "target": "D20Z02S05[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "nail"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canCrossGap3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D20Z02S05[E]",
-                "logic": []
-            },
-            {
-                "target": "D20Z02S06[SE]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D20Z02S04[W]"
-        ]
-    },
-    {
-        "name": "D20Z02S06[SE]",
-        "exits": [
-            {
-                "target": "D20Z02S05[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "nail"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canCrossGap3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D20Z02S05[E]",
-                "logic": []
-            },
-            {
-                "target": "D20Z02S06[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canClimbOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canDiveLaser"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D20Z02S06[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canClimbOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canDiveLaser"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D20Z02S10[W]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D20Z02S06[SE]",
-            "D20Z02S05[SW]",
-            "D20Z02S09[E]",
-            "D20Z02S06[SW]",
-            "D20Z02S10[E]",
-            "D20Z02S09[W]"
-        ]
-    },
-    {
         "name": "D20Z02S06[NE]",
         "exits": [
             {
-                "target": "D20Z02S05[NW]",
+                "target": "D20Z02S05[E]",
+                "logic": []
+            },
+            {
+                "target": "D20Z02S06[SW]",
+                "logic": []
+            },
+            {
+                "target": "D20Z02S07[W]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D20Z02S06[NE]",
+            "D20Z02S05[NW]",
+            "D20Z02S07[E]",
+            "D20Z02S06[NW]"
+        ]
+    },
+    {
+        "name": "D20Z02S09[E]",
+        "exits": [
+            {
+                "target": "D20Z02S06[SW]",
+                "logic": []
+            },
+            {
+                "target": "D20Z02S06[NE]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "nail"
+                            "doubleJump"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     },
                     {
                         "item_requirements": [
-                            "canCrossGap3"
+                            "canClimbOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canDiveLaser"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -27283,118 +23065,52 @@ regions = [
             {
                 "target": "D20Z02S05[E]",
                 "logic": []
-            },
-            {
-                "target": "D20Z02S06[SE]",
-                "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D20Z02S06[NE]"
+            "D20Z02S09[E]"
         ]
     },
     {
-        "name": "D20Z02S05[NW]",
+        "name": "D20Z02S09",
         "exits": [
             {
-                "target": "D20Z02S06[NW]",
+                "target": "D20Z02S09[W]",
                 "logic": []
             },
             {
-                "target": "D20Z02S06[SE]",
+                "target": "D20Z02S09[E]",
                 "logic": []
-            },
+            }
+        ],
+        "locations": [],
+        "transitions": []
+    },
+    {
+        "name": "D20Z02S06[SW]",
+        "exits": [
             {
-                "target": "D20Z02S06[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canClimbOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canDiveLaser"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "target": "D20Z02S09",
+                "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D20Z02S05[NW]"
+            "D20Z02S06[SW]"
         ]
     },
     {
-        "name": "D20Z02S07[E]",
+        "name": "D20Z02S10[E]",
         "exits": [
             {
-                "target": "D20Z02S06[NE]",
-                "logic": []
-            },
-            {
-                "target": "D20Z02S06[SE]",
-                "logic": []
-            },
-            {
-                "target": "D20Z02S06[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canClimbOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canDiveLaser"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D20Z02S07[E]"
-        ]
-    },
-    {
-        "name": "D20Z02S06[NW]",
-        "exits": [
-            {
-                "target": "D20Z02S07[W]",
-                "logic": []
-            },
-            {
-                "target": "D20Z02S07[E]",
+                "target": "D20Z02S09",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D20Z02S06[NW]"
+            "D20Z02S10[E]"
         ]
     },
     {
@@ -27405,7 +23121,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D20Z02S07[E]",
+                "target": "D20Z02S06[NE]",
                 "logic": []
             }
         ],
@@ -27442,377 +23158,21 @@ regions = [
         ]
     },
     {
-        "name": "D20Z02S11[E]",
+        "name": "D20Z02S09[W]",
         "exits": [
             {
                 "target": "D20Z02S10[W]",
                 "logic": []
             },
             {
-                "target": "D20Z02S06[SE]",
+                "target": "D20Z02S10[E]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D20Z02S11[E]"
+            "D20Z02S09[W]"
         ]
-    },
-    {
-        "name": "D02Z01S01[CherubsR]",
-        "exits": [
-            {
-                "target": "D02Z01S01[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z01S04[-N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "fullThimble",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "QI59",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB10",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "fullThimble",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "QI68",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "fullThimble",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": []
-    },
-    {
-        "name": "D04Z02S04[Cherubs]",
-        "exits": [
-            {
-                "target": "D04Z02S04[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "openedMoMLadder"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": []
-    },
-    {
-        "name": "D06Z01S16[CherubsL]",
-        "exits": [
-            {
-                "target": "D06Z01S16[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S16[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S16[-CherubsR]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": []
-    },
-    {
-        "name": "D06Z01S16[CherubsR]",
-        "exits": [
-            {
-                "target": "D06Z01S16[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canAirStall",
-                            "canWalkOnRoot",
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canAirStall",
-                            "canWalkOnRoot",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canAirStall",
-                            "wheel",
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canAirStall",
-                            "wheel",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S16[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canAirStall",
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canAirStall",
-                            "wheel"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S16[-CherubsL]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canAirStall",
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canAirStall",
-                            "wheel"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": []
-    },
-    {
-        "name": "D06Z01S17[CherubsR]",
-        "exits": [
-            {
-                "target": "D06Z01S17[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": []
-    },
-    {
-        "name": "D06Z01S17[CherubsL]",
-        "exits": [
-            {
-                "target": "D06Z01S17[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D06Z01S17[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": []
-    },
-    {
-        "name": "D09Z01S03[N]",
-        "exits": [
-            {
-                "target": "D09Z01S03[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canBeatPrisonBoss"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": []
     },
     {
         "name": "RESCUED_CHERUB_08",
@@ -28159,6 +23519,14 @@ regions = [
         "transitions": []
     },
     {
+        "name": "RB203",
+        "exits": [],
+        "locations": [
+            "RB203"
+        ],
+        "transitions": []
+    },
+    {
         "name": "CO28",
         "exits": [],
         "locations": [
@@ -28231,6 +23599,14 @@ regions = [
         "transitions": []
     },
     {
+        "name": "QI69",
+        "exits": [],
+        "locations": [
+            "QI69"
+        ],
+        "transitions": []
+    },
+    {
         "name": "RESCUED_CHERUB_34",
         "exits": [],
         "locations": [
@@ -28267,14 +23643,6 @@ regions = [
         "exits": [],
         "locations": [
             "RB18"
-        ],
-        "transitions": []
-    },
-    {
-        "name": "RB19",
-        "exits": [],
-        "locations": [
-            "RB19"
         ],
         "transitions": []
     },
@@ -28550,7 +23918,7 @@ locations = [
                 "item_requirements": [
                     "marksOfRefuge3",
                     "cord",
-                    "D04Z02S10[W]"
+                    "D06Z01S02[W]"
                 ],
                 "location_requirements": [],
                 "state_modifiers": []
@@ -29958,22 +25326,7 @@ locations = [
     },
     {
         "name": "RB203",
-        "logic": [
-            {
-                "item_requirements": [
-                    "D05Z01S11[NW]"
-                ],
-                "location_requirements": [],
-                "state_modifiers": []
-            },
-            {
-                "item_requirements": [
-                    "D05Z01S11[NE]"
-                ],
-                "location_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "CO28",
@@ -30565,7 +25918,24 @@ locations = [
     },
     {
         "name": "RB19",
-        "logic": []
+        "logic": [
+            {
+                "item_requirements": [
+                    "redWax1",
+                    "D02Z03S18[SE]"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "redWax1",
+                    "D02Z03S07[NW]"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            }
+        ]
     },
     {
         "name": "RB25",
@@ -32264,32 +27634,7 @@ transitions = [
     },
     {
         "name": "D03Z02S03[E]",
-        "logic": [
-            {
-                "item_requirements": [
-                    "canAirStall",
-                    "dash"
-                ],
-                "location_requirements": [],
-                "state_modifiers": []
-            },
-            {
-                "item_requirements": [
-                    "doubleJump",
-                    "dash"
-                ],
-                "location_requirements": [],
-                "state_modifiers": []
-            },
-            {
-                "item_requirements": [
-                    "boots",
-                    "dash"
-                ],
-                "location_requirements": [],
-                "state_modifiers": []
-            }
-        ]
+        "logic": []
     },
     {
         "name": "D03Z02S03[N]",
@@ -33764,6 +29109,38 @@ transitions = [
         "logic": []
     },
     {
+        "name": "D09Z01S02[Cell1]",
+        "logic": []
+    },
+    {
+        "name": "D09Z01S02[Cell6]",
+        "logic": []
+    },
+    {
+        "name": "D09Z01S02[Cell5]",
+        "logic": []
+    },
+    {
+        "name": "D09Z01S02[Cell4]",
+        "logic": []
+    },
+    {
+        "name": "D09Z01S02[Cell2]",
+        "logic": []
+    },
+    {
+        "name": "D09Z01S02[Cell3]",
+        "logic": []
+    },
+    {
+        "name": "D09Z01S02[Cell22]",
+        "logic": []
+    },
+    {
+        "name": "D09Z01S02[Cell23]",
+        "logic": []
+    },
+    {
         "name": "D09Z01S03[W]",
         "logic": []
     },
@@ -33844,6 +29221,30 @@ transitions = [
         "logic": []
     },
     {
+        "name": "D09Z01S08[Cell14]",
+        "logic": []
+    },
+    {
+        "name": "D09Z01S08[Cell15]",
+        "logic": []
+    },
+    {
+        "name": "D09Z01S08[Cell7]",
+        "logic": []
+    },
+    {
+        "name": "D09Z01S08[Cell16]",
+        "logic": []
+    },
+    {
+        "name": "D09Z01S08[Cell18]",
+        "logic": []
+    },
+    {
+        "name": "D09Z01S08[Cell17]",
+        "logic": []
+    },
+    {
         "name": "D09Z01S09[SW]",
         "logic": []
     },
@@ -33856,7 +29257,39 @@ transitions = [
         "logic": []
     },
     {
+        "name": "D09Z01S09[Cell24]",
+        "logic": []
+    },
+    {
+        "name": "D09Z01S09[Cell19]",
+        "logic": []
+    },
+    {
+        "name": "D09Z01S09[Cell20]",
+        "logic": []
+    },
+    {
+        "name": "D09Z01S09[Cell21]",
+        "logic": []
+    },
+    {
         "name": "D09Z01S10[W]",
+        "logic": []
+    },
+    {
+        "name": "D09Z01S10[Cell13]",
+        "logic": []
+    },
+    {
+        "name": "D09Z01S10[Cell12]",
+        "logic": []
+    },
+    {
+        "name": "D09Z01S10[Cell10]",
+        "logic": []
+    },
+    {
+        "name": "D09Z01S10[Cell11]",
         "logic": []
     },
     {
@@ -33877,6 +29310,94 @@ transitions = [
     },
     {
         "name": "D09Z01S13[E]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell1]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell2]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell3]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell4]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell5]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell6]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell7]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell10]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell11]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell12]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell13]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell14]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell15]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell16]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell17]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell18]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell19]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell20]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell21]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell22]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell23]",
+        "logic": []
+    },
+    {
+        "name": "D09BZ01S01[Cell24]",
         "logic": []
     },
     {
