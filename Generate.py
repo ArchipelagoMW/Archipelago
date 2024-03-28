@@ -482,8 +482,6 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
 
     for option_key, option in world_type.options_dataclass.type_hints.items():
         handle_option(ret, game_weights, option_key, option, plando_options)
-    if PlandoOptions.items in plando_options:
-        ret.plando_items = game_weights.get("plando_items", [])
     if ret.game == "A Link to the Past":
         roll_alttp_settings(ret, game_weights, plando_options)
     if PlandoOptions.connections in plando_options:
