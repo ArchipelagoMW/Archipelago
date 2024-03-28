@@ -194,7 +194,7 @@ joke_hints = [
     "Don't know why the Mountain King, Mountain King, Mountain King,\nDon't know why the Mountain King has such a stressful halllll...",
     "Fun Fact: If you laid out every line you've drawn end-to-end, then that would be weird. Why did you do that? That's not how this game works.",
     "Sorry, this hint was removed by an Eraser.",
-    "I hear the Elevator is a super-handy shortcut if you forgot anything in the Tutorial area. :)",
+    "I hear the Elevator is a super handy shortcut if you forgot anything in the Tutorial area. :)",
     "That thing you just found can be found in the location you just found it.",
     "If you stand in just the right spot, that pile of rocks will look like a completely different pile of rocks.",
     "Ouagadougou can be found by visiting Burkina Faso.",
