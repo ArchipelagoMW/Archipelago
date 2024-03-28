@@ -250,8 +250,7 @@ def shuffle_portals(world: "MessengerWorld") -> None:
     plando = world.multiworld.plando_connections[world.player]
     if plando and world.multiworld.plando_options & PlandoOptions.connections:
         handle_planned_portals(plando)
-        world.multiworld.plando_connections[world.player] = [connection for connection in plando
-                                                             if connection.entrance not in PORTALS]
+
     for portal in PORTALS:
         if portal in world.plando_portals:
             continue
