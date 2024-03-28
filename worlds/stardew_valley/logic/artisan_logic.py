@@ -21,9 +21,9 @@ class ArtisanLogicMixin(BaseLogicMixin):
 class ArtisanLogic(BaseLogic[Union[ArtisanLogicMixin, TimeLogicMixin, HasLogicMixin]]):
     def initialize_rules(self):
         self.registry.artisan_good_rules.update({ArtisanGood.specific_wine(fruit): self.can_keg(fruit) for fruit in all_fruits})
-        # self.registry.artisan_good_rules.update({ArtisanGood.specific_juice(vegetable): self.can_keg(vegetable) for vegetable in all_vegetables})
-        # self.registry.artisan_good_rules.update({ArtisanGood.specific_jelly(fruit): self.can_preserves_jar(fruit) for fruit in all_fruits})
-        # self.registry.artisan_good_rules.update({ArtisanGood.specific_pickle(vegetable): self.can_preserves_jar(vegetable) for vegetable in all_vegetables})
+        self.registry.artisan_good_rules.update({ArtisanGood.specific_juice(vegetable): self.can_keg(vegetable) for vegetable in all_vegetables})
+        self.registry.artisan_good_rules.update({ArtisanGood.specific_jelly(fruit): self.can_preserves_jar(fruit) for fruit in all_fruits})
+        self.registry.artisan_good_rules.update({ArtisanGood.specific_pickles(vegetable): self.can_preserves_jar(vegetable) for vegetable in all_vegetables})
         self.registry.artisan_good_rules.update({ArtisanGood.specific_smoked(fish): self.can_smoke(fish) for fish in all_fish})
         self.registry.artisan_good_rules.update({ArtisanGood.specific_dried(fruit): self.can_dehydrate(fruit) for fruit in all_fruits})
         self.registry.artisan_good_rules.update({ArtisanGood.specific_dried(mushroom): self.can_dehydrate(mushroom) for mushroom in all_edible_mushrooms})

@@ -410,7 +410,7 @@ class TestMinSanityHasAllExpectedLocations(SVTestBase):
     options = get_minsanity_options()
 
     def test_minsanity_has_fewer_than_locations(self):
-        expected_locations = 76
+        expected_locations = 84
         real_locations = self.get_real_locations()
         number_locations = len(real_locations)
         self.assertLessEqual(number_locations, expected_locations)

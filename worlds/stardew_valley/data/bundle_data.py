@@ -5,7 +5,7 @@ from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.bundle_names import CCRoom, BundleName
 from ..strings.craftable_names import Fishing, Craftable, Bomb, Consumable, Lighting
-from ..strings.crop_names import Fruit, Vegetable, all_fruits
+from ..strings.crop_names import Fruit, Vegetable, all_fruits, all_vegetables
 from ..strings.currency_names import Currency
 from ..strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
 from ..strings.fish_names import Fish, WaterItem, Trash
@@ -416,6 +416,45 @@ mystery_box = BundleItem(Consumable.mystery_box)
 gold_mystery_box = BundleItem(Consumable.gold_mystery_box, source=BundleItem.Sources.masteries)
 calico_egg = BundleItem(Currency.calico_egg)
 
+
+raccoon_crab_pot_fish_items = [periwinkle.as_amount(5), snail.as_amount(5), crayfish.as_amount(5), mussel.as_amount(5),
+                               oyster.as_amount(5), cockle.as_amount(5), clam.as_amount(5)]
+raccoon_smoked_fish_items = [BundleItem(ArtisanGood.specific_smoked(fish)) for fish in
+                             [Fish.largemouth_bass, Fish.bream, Fish.bullhead, Fish.chub, Fish.ghostfish, Fish.flounder, Fish.shad,
+                              Fish.rainbow_trout, Fish.tilapia, Fish.red_mullet, Fish.tuna, Fish.midnight_carp, Fish.salmon, Fish.perch]]
+raccoon_fish_items_flat = [*raccoon_crab_pot_fish_items, *raccoon_smoked_fish_items]
+raccoon_fish_items_deep = [raccoon_crab_pot_fish_items, raccoon_smoked_fish_items]
+raccoon_fish_bundle_vanilla = DeepBundleTemplate(CCRoom.raccoon_requests, BundleName.raccoon_fish, raccoon_fish_items_deep, 2, 2)
+raccoon_fish_bundle_thematic = BundleTemplate(CCRoom.raccoon_requests, BundleName.raccoon_fish, raccoon_fish_items_flat, 3, 2)
+
+all_specific_jellies = [BundleItem(ArtisanGood.specific_jelly(fruit)) for fruit in all_fruits]
+all_specific_pickles = [BundleItem(ArtisanGood.specific_pickles(vegetable)) for vegetable in all_vegetables]
+all_specific_dried_fruits = [BundleItem(ArtisanGood.specific_dried(fruit)) for fruit in all_fruits]
+all_specific_juices = [BundleItem(ArtisanGood.specific_juice(vegetable)) for vegetable in all_vegetables]
+raccoon_artisan_items = [*all_specific_jellies, *all_specific_pickles, *all_specific_dried_fruits, *all_specific_juices]
+raccoon_artisan_bundle_vanilla = BundleTemplate(CCRoom.raccoon_requests, BundleName.raccoon_artisan, raccoon_artisan_items, 2, 2)
+raccoon_artisan_bundle_thematic = BundleTemplate(CCRoom.raccoon_requests, BundleName.raccoon_artisan, raccoon_artisan_items, 3, 2)
+
+all_specific_dried_mushrooms = [BundleItem(ArtisanGood.specific_dried(mushroom)) for mushroom in all_edible_mushrooms]
+raccoon_food_items = [egg.as_amount(5), cave_carrot.as_amount(5), white_algae.as_amount(5)]
+raccoon_food_items_vanilla = [all_specific_dried_mushrooms, raccoon_food_items]
+raccoon_food_items_thematic = [*all_specific_dried_mushrooms, *raccoon_food_items, brown_egg.as_amount(5), large_egg.as_amount(2), large_brown_egg.as_amount(2), green_algae.as_amount(10)]
+raccoon_food_bundle_vanilla = DeepBundleTemplate(CCRoom.raccoon_requests, BundleName.raccoon_food, raccoon_food_items_vanilla, 2, 2)
+raccoon_food_bundle_thematic = BundleTemplate(CCRoom.raccoon_requests, BundleName.raccoon_food, raccoon_food_items_thematic, 3, 2)
+
+raccoon_foraging_items = [moss.as_amount(10), rusty_spoon, trash.as_amount(5), slime.as_amount(99), bat_wing.as_amount(10), geode.as_amount(8),
+                          frozen_geode.as_amount(5), magma_geode.as_amount(3), coral.as_amount(4), sea_urchin.as_amount(2), bug_meat.as_amount(10),
+                          diamond, topaz.as_amount(3), ghostfish.as_amount(3)]
+raccoon_foraging_bundle_vanilla = BundleTemplate(CCRoom.raccoon_requests, BundleName.raccoon_foraging, raccoon_foraging_items, 2, 2)
+raccoon_foraging_bundle_thematic = BundleTemplate(CCRoom.raccoon_requests, BundleName.raccoon_foraging, raccoon_foraging_items, 3, 2)
+
+raccoon_bundles_vanilla = [raccoon_fish_bundle_vanilla, raccoon_artisan_bundle_vanilla, raccoon_food_bundle_vanilla, raccoon_foraging_bundle_vanilla]
+raccoon_bundles_thematic = [raccoon_fish_bundle_thematic, raccoon_artisan_bundle_thematic, raccoon_food_bundle_thematic, raccoon_foraging_bundle_thematic]
+raccoon_bundles_remixed = raccoon_bundles_thematic
+raccoon_vanilla = BundleRoomTemplate(CCRoom.raccoon_requests, raccoon_bundles_vanilla, 8)
+raccoon_thematic = BundleRoomTemplate(CCRoom.raccoon_requests, raccoon_bundles_thematic, 8)
+raccoon_remixed = BundleRoomTemplate(CCRoom.raccoon_requests, raccoon_bundles_remixed, 8)
+
 # Crafts Room
 spring_foraging_items_vanilla = [wild_horseradish, daffodil, leek, dandelion]
 spring_foraging_items_thematic = [*spring_foraging_items_vanilla, spring_onion, salmonberry, morel]
@@ -770,9 +809,6 @@ calico_items = [calico_egg.as_amount(200), calico_egg.as_amount(200), calico_egg
                 mystery_box.as_amount(10), mixed_seeds.as_amount(50), eggplant_parmesan.as_amount(50)]
 calico_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.calico, calico_items, 2, 2)
 
-raccoon_foraging_items = [moss.as_amount(10), rusty_spoon, trash.as_amount(5), slime.as_amount(99), bat_wing.as_amount(10), geode.as_amount(8),
-                          frozen_geode.as_amount(5), magma_geode.as_amount(3), coral.as_amount(4), sea_urchin.as_amount(2), bug_meat.as_amount(10),
-                          diamond, topaz.as_amount(3), ghostfish.as_amount(3)]
 raccoon_bundle = BundleTemplate(CCRoom.bulletin_board, BundleName.raccoon, raccoon_foraging_items, 4, 4)
 
 bulletin_board_bundles_vanilla = [chef_bundle_vanilla, dye_bundle_vanilla, field_research_bundle_vanilla, fodder_bundle_vanilla, enchanter_bundle_vanilla]
@@ -801,7 +837,6 @@ abandoned_joja_mart_vanilla = BundleRoomTemplate(CCRoom.abandoned_joja_mart, aba
 abandoned_joja_mart_thematic = BundleRoomTemplate(CCRoom.abandoned_joja_mart, abandoned_joja_mart_bundles_thematic, 1)
 abandoned_joja_mart_remixed = abandoned_joja_mart_thematic
 
-# Make thematic with other currencies
 vault_2500_gold = BundleItem.money_bundle(2500)
 vault_5000_gold = BundleItem.money_bundle(5000)
 vault_10000_gold = BundleItem.money_bundle(10000)
@@ -833,7 +868,8 @@ vault_remixed = BundleRoomTemplate(CCRoom.vault, vault_bundles_remixed, 4)
 
 all_bundle_items_except_money = []
 all_remixed_bundles = [*crafts_room_bundles_remixed, *pantry_bundles_remixed, *fish_tank_bundles_remixed,
-                       *boiler_room_bundles_remixed, *bulletin_board_bundles_remixed, missing_bundle_thematic]
+                       *boiler_room_bundles_remixed, *bulletin_board_bundles_remixed, missing_bundle_thematic,
+                       *raccoon_bundles_remixed]
 for bundle in all_remixed_bundles:
     all_bundle_items_except_money.extend(bundle.items)
 

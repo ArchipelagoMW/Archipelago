@@ -1703,7 +1703,7 @@ id,region,name,tags,mod_name
 2969,Shipping,Shipsanity: Mango Sapling,"GINGER_ISLAND,SHIPSANITY",
 2970,Shipping,Shipsanity: Mushroom Tree Seed,"GINGER_ISLAND,SHIPSANITY,REQUIRES_QI_ORDERS",
 2971,Shipping,Shipsanity: Pineapple Seeds,"GINGER_ISLAND,SHIPSANITY",
-2972,Shipping,Shipsanity: Qi Bean,"GINGER_ISLAND,SHIPSANITY",
+2972,Shipping,Shipsanity: Qi Bean,"GINGER_ISLAND,SHIPSANITY,REQUIRES_QI_ORDERS",
 2973,Shipping,Shipsanity: Taro Tuber,"GINGER_ISLAND,SHIPSANITY",
 2974,Shipping,Shipsanity: Goby,"SHIPSANITY,SHIPSANITY_FISH",
 3001,Adventurer's Guild,Monster Eradication: Slimes,"MONSTERSANITY,MONSTERSANITY_GOALS",
@@ -2131,6 +2131,14 @@ id,region,name,tags,mod_name
 3578,Pierre's General Store,Dehydrator Recipe,CRAFTSANITY,
 3579,Carpenter Shop,Big Chest Recipe,CRAFTSANITY,
 3580,Mines Dwarf Shop,Big Stone Chest Recipe,CRAFTSANITY,
+3701,Raccoon Bundles,Raccoon Request 1,"BUNDLE,RACCOON_BUNDLE"
+3702,Raccoon Bundles,Raccoon Request 2,"BUNDLE,RACCOON_BUNDLE"
+3703,Raccoon Bundles,Raccoon Request 3,"BUNDLE,RACCOON_BUNDLE"
+3704,Raccoon Bundles,Raccoon Request 4,"BUNDLE,RACCOON_BUNDLE"
+3705,Raccoon Bundles,Raccoon Request 5,"BUNDLE,RACCOON_BUNDLE"
+3706,Raccoon Bundles,Raccoon Request 6,"BUNDLE,RACCOON_BUNDLE"
+3707,Raccoon Bundles,Raccoon Request 7,"BUNDLE,RACCOON_BUNDLE"
+3708,Raccoon Bundles,Raccoon Request 8,"BUNDLE,RACCOON_BUNDLE"
 5001,Stardew Valley,Level 1 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
 5002,Stardew Valley,Level 2 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
 5003,Stardew Valley,Level 3 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill

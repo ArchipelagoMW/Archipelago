@@ -168,6 +168,7 @@ class Region:
     festival_of_ice = "Festival of Ice"
     night_market = "Night Market"
     winter_star = "Feast of the Winter Star"
+    raccoon_daddy = "Raccoon Bundles"
     raccoon_shop = "Raccoon Shop"
 
 

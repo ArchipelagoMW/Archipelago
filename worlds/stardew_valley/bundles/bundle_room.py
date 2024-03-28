@@ -20,5 +20,8 @@ class BundleRoomTemplate:
 
     def create_bundle_room(self, bundle_price_option: BundlePrice, random: Random, options: StardewValleyOptions):
         filtered_bundles = [bundle for bundle in self.bundles if bundle.can_appear(options)]
-        chosen_bundles = random.sample(filtered_bundles, self.number_bundles)
+        if self.number_bundles > len(filtered_bundles):
+            chosen_bundles = random.choices(filtered_bundles, k=self.number_bundles)
+        else:
+            chosen_bundles = random.sample(filtered_bundles, self.number_bundles)
         return BundleRoom(self.name, [bundle.create_bundle(bundle_price_option, random, options) for bundle in chosen_bundles])

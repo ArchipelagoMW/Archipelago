@@ -51,6 +51,7 @@ class Entrance:
     buy_from_traveling_merchant_thursday = "Buy from Traveling Merchant Thursday"
     buy_from_traveling_merchant_friday = "Buy from Traveling Merchant Friday"
     buy_from_traveling_merchant_saturday = "Buy from Traveling Merchant Saturday"
+    complete_raccoon_requests = "Complete Raccoon Requests"
     buy_from_raccoon = "Buy From Raccoon"
     mountain_to_railroad = "Mountain to Railroad"
     mountain_to_tent = "Mountain to Tent"

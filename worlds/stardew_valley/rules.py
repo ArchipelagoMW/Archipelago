@@ -22,6 +22,7 @@ from .options import ToolProgression, BuildingProgression, ExcludeGingerIsland, 
 from .stardew_rule import And, StardewRule
 from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .stardew_rule.rule_explain import explain
+from .strings.ap_names.community_upgrade_names import CommunityUpgrade
 from .strings.ap_names.event_names import Event
 from .strings.ap_names.mods.mod_items import SVEQuestItem, SVERunes
 from .strings.ap_names.transport_names import Transportation
@@ -134,8 +135,13 @@ def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, multiw
             location = multiworld.get_location(bundle.name, player)
             bundle_rules = logic.bundle.can_complete_bundle(bundle)
             room_rules.append(bundle_rules)
+            if bundle_room.name == CCRoom.raccoon_requests:
+                num = int(bundle.name[-1])
+                bundle_rules = bundle_rules & logic.received(CommunityUpgrade.raccoon, 2)
+                if num > 1:
+                    bundle_rules = bundle_rules & logic.region.can_reach_location(f"Raccoon Request {num-1}")
             MultiWorldRules.set_rule(location, bundle_rules)
-        if bundle_room.name == CCRoom.abandoned_joja_mart:
+        if bundle_room.name == CCRoom.abandoned_joja_mart or bundle_room.name == CCRoom.raccoon_requests:
             continue
         room_location = f"Complete {bundle_room.name}"
         MultiWorldRules.add_rule(multiworld.get_location(room_location, player), And(*room_rules))

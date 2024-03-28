@@ -28,6 +28,18 @@ class ArtisanGood:
         return f"{fruit} Wine"
 
     @classmethod
+    def specific_juice(cls, vegetable: str) -> str:
+        return f"{vegetable} Juice"
+
+    @classmethod
+    def specific_jelly(cls, fruit: str) -> str:
+        return f"{fruit} Jelly"
+
+    @classmethod
+    def specific_pickles(cls, vegetable: str) -> str:
+        return f"Pickled {vegetable}"
+
+    @classmethod
     def specific_dried(cls, food: str) -> str:
         if food[-1] == "s":
             return f"Dried {food}"

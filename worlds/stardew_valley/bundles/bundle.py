@@ -145,6 +145,7 @@ class DeepBundleTemplate(BundleTemplate):
             number_required = 8
         else:
             number_required = self.number_required_items + bundle_price_option.value
+        number_required = max(1, number_required)
         number_categories = len(self.categories)
         number_chosen_categories = self.number_possible_items
         if number_chosen_categories < number_required:

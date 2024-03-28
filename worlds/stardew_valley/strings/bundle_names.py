@@ -6,6 +6,7 @@ class CCRoom:
     vault = "Vault"
     boiler_room = "Boiler Room"
     abandoned_joja_mart = "Abandoned Joja Mart"
+    raccoon_requests = "Raccoon Requests"
 
 
 class BundleName:
@@ -87,3 +88,7 @@ class BundleName:
     walnut_hunter = "Walnut Hunter Bundle"
     qi_helper = "Qi's Helper Bundle"
     missing_bundle = "The Missing Bundle"
+    raccoon_fish = "Raccoon Fish"
+    raccoon_artisan = "Raccoon Artisan"
+    raccoon_food = "Raccoon Food"
+    raccoon_foraging = "Raccoon Foraging"
