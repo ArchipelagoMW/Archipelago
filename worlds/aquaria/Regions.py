@@ -540,7 +540,7 @@ class AquariaRegions:
         self.__connect_one_way_regions("Open water bottom left area", "Abyss left area",
                                self.openwater_bl, self.abyss_l,
                                lambda state: _has_sun_form(state, self.player))
-        self.__connect_regions("Abyss left area", "Open water bottom left area",
+        self.__connect_one_way_regions("Abyss left area", "Open water bottom left area",
                                self.abyss_l, self.openwater_bl)
         self.__connect_regions("Skeleton path", "skeleton_path_sc",
                                self.skeleton_path, self.skeleton_path_sc,
