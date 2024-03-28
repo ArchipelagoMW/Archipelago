@@ -41,24 +41,7 @@ sub_tank = "Sub Tank"
 maverick_medal = "Maverick Medal"
 victory = "Sigma Defeated"
 
-# Zero
-zero = "Zero"
-
 # Junk
 small_hp = "Small HP Refill"
 large_hp = "Large HP Refill"
 life = "1-Up"
-
-# Events
-
-event_blast_hornet_defeated = "Event Blast Hornet Defeated"
-event_blizzard_buffalo_defeated = "Event Blizzard Buffalo Defeated"
-event_toxic_seahorse_defeated = "Event Toxic Seahorse Defeated"
-event_tunnel_rhino_defeated = "Event Tunnel Rhino Defeated"
-event_volt_catfish_defeated = "Event Volt Catfish Defeated"
-event_crush_crawfish_defeated = "Event Crush Crawfish Defeated"
-event_neon_tiger_defeated = "Event Neon Tiger Defeated"
-event_gravity_beetle_defeated = "Event Gravity Beetle Defeated"
-event_vile_defeated = "Event Vile Defeated"
-event_bit_defeated = "Event Bit Defeated"
-event_byte_defeated = "Event Byte Defeated"

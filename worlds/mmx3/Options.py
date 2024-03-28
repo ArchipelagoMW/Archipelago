@@ -19,6 +19,13 @@ class LogicBossWeakness(DefaultOnToggle):
     """
     display_name = "Boss Weakness Logic"
 
+class LogicRequireVileDefeatForDoppler(DefaultOnToggle):
+    """
+    Añade a la logica de Dr. Doppler's Lab que Vile sea derrotado para poder accesar.
+    No afecta a las opciones que realmente abren Dr. Doppler's Lab.
+    """
+    display_name = "Vile in logic for Lab Access"
+
 class LogicZSaber(Choice):
     """
     Adds the Z-Saber to the game's logic.
@@ -55,6 +62,15 @@ class Lab2Boss(Choice):
     option_volt_kurageil = 0
     option_vile = 1
     default = 0
+
+class Lab3BossRematchCount(Range):
+    """
+    Cuántos jefes se ocupan vencer para declarar como acabado el boss rush de Dr. Doppler's Lab 3
+    """
+    display_name = "Doppler Lab 2 Boss"
+    range_start = 0
+    range_end = 8
+    default = 8
 
 class DopplerOpen(Choice):
     """
@@ -184,16 +200,38 @@ class VileSubTankCount(Range):
     range_end = 4
     default = 2
 
+class BitMedalCount(Range):
+    """
+    How many Maverick Medals are required to access Bit's fight.
+    """
+    display_name = "Bit Medal Count"
+    range_start = 0
+    range_end = 6
+    default = 2
+
+class ByteMedalCount(Range):
+    """
+    How many Maverick Medals are required to access Byte's fight.
+    Nota: Si el conteo de medallas de Byte es igual o menor al de Bit, 
+          se usara la cantidad de Bit + 1
+    """
+    display_name = "Byte Medal Count"
+    range_start = 1
+    range_end = 7
+    default = 6
+
 @dataclass
 class MMX3Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     death_link: DeathLink
     starting_life_count: StartingLifeCount
     logic_boss_weakness: LogicBossWeakness
+    logic_vile_required: LogicRequireVileDefeatForDoppler
     logic_z_saber: LogicZSaber
     pickupsanity: PickupSanity
     doppler_lab_1_boss: Lab1Boss
     doppler_lab_2_boss: Lab2Boss
+    doppler_lab_3_boss_rematch_count: Lab3BossRematchCount
     doppler_open: DopplerOpen
     doppler_medal_count: DopplerMedalCount
     doppler_weapon_count: DopplerWeaponCount
@@ -206,4 +244,6 @@ class MMX3Options(PerGameCommonOptions):
     vile_upgrade_count: VileArmorUpgradeCount
     vile_heart_tank_count: VileHeartTankCount
     vile_sub_tank_count: VileSubTankCount
+    bit_medal_count: BitMedalCount
+    byte_medal_count: ByteMedalCount
 

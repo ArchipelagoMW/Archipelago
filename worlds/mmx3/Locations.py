@@ -26,7 +26,6 @@ stage_location_table = {
     LocationName.neon_tiger_mini_boss:              starting_id + 0x000A,
     LocationName.gravity_beetle_boss:               starting_id + 0x000B,
     LocationName.blast_hornet_boss:                 starting_id + 0x000C,
-    LocationName.blast_hornet_event:                starting_id + 0x003F,
     LocationName.blast_hornet_mini_boss:            starting_id + 0x000D,
     LocationName.doppler_lab_1_boss:                starting_id + 0x000E,
     LocationName.doppler_lab_1_mini_boss:           starting_id + 0x000F,

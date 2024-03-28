@@ -11,7 +11,7 @@ from worlds.AutoWorld import World, WebWorld
 from .Items import MMX3Item, ItemData, item_table, junk_table, item_groups
 from .Locations import MMX3Location, setup_locations, all_locations
 from .Regions import create_regions, connect_regions
-from .Names import ItemName, LocationName
+from .Names import ItemName, LocationName, EventName
 from .Options import MMX3Options
 from .Client import MMX3SNIClient
 from .Rom import LocalRom, patch_rom, get_base_rom_path, MMX3DeltaPatch
@@ -63,7 +63,7 @@ class MMX3World(World):
         itempool: typing.List[MMX3Item] = []
         
         connect_regions(self)
-
+        
         total_required_locations = 54
         if self.options.pickupsanity:
             total_required_locations += 58
