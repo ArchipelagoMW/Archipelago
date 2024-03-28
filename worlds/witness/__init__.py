@@ -11,7 +11,7 @@ from worlds.AutoWorld import World, WebWorld
 from .player_logic import WitnessPlayerLogic
 from .static_logic import StaticWitnessLogic, ItemCategory, DoorItemDefinition
 from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
-    get_priority_hint_items, make_always_and_priority_hints, generate_joke_hints, make_area_hints, get_hintable_areas, \
+    get_priority_hint_items, make_always_and_priority_hints, make_area_hints, get_hintable_areas, \
     make_extra_location_hints, create_all_hints, make_laser_hints, make_compact_hint_data, CompactItemData
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems, ItemData
@@ -339,11 +339,10 @@ class WitnessWorld(World):
             audio_log = audio_logs.pop()
             self.log_ids_to_hints[int(audio_log, 16)] = credits_hint
 
-        joke_hints = generate_joke_hints(self, len(audio_logs))
-
+        # Client will generate joke hints for these.
         while audio_logs:
             audio_log = audio_logs.pop()
-            self.log_ids_to_hints[int(audio_log, 16)] = joke_hints.pop()
+            self.log_ids_to_hints[int(audio_log, 16)] = ("", -1, -1)
 
         # Options for the client & auto-tracker
 
