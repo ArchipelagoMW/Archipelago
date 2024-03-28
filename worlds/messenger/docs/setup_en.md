@@ -18,7 +18,7 @@ Read changes to the base game on the [Game Info Page](/games/The%20Messenger/inf
 3. Click on "The Messenger"
 4. Follow the prompts
 
-These steps can be followed in the future to launch the game and check for mod updates.
+These steps can also be followed to launch the game and check for mod updates after the initial setup.
 
 ### Manual Installation
 

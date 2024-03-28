@@ -49,11 +49,10 @@ for it. The groups you can use for The Messenger are:
 ## Other changes
 
 * The player can return to the Tower of Time HQ at any point by selecting the button from the options menu
-    * This can cause issues if used at specific times. Current known:
+    * This can cause issues if used at specific times. If used in any of these known problematic areas, immediately
+quit to title and reload the save. The currently known areas include:
         * During Boss fights
         * After Courage Note collection (Corrupted Future chase)
-            * This is currently an expected action in logic. If you do need to teleport during this chase sequence, it
-is recommended to quit to title and reload the save
 * After reaching ninja village a teleport option is added to the menu to reach it quickly
 * Toggle Windmill Shuriken button is added to option menu once the item is received
 * The mod option menu will also have a hint item button, as well as a release and collect button that are all placed when
@@ -67,7 +66,7 @@ be entered in game.
 * If you receive the Magic Firefly while in Quillshroom Marsh, The De-curse Queen cutscene will not play. You can exit
 to Searing Crags and re-enter to get it to play correctly.
 * Teleporting back to HQ, then returning to the same level you just left through a Portal can cause Ninja to run left
-and enter a different portal than the one entered by the player or other incorrect inputs, causing a soft lock
+and enter a different portal than the one entered by the player or lead to other incorrect inputs, causing a soft lock
 * Text entry menus don't accept controller input
 * In power seal hunt mode, the chest must be opened by entering the shop from a level. Teleporting to HQ and opening the
 chest will not work.
