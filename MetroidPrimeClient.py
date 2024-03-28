@@ -7,15 +7,6 @@ import Utils
 from worlds.metroidprime.DolphinClient import DolphinException
 from worlds.metroidprime.MetroidPrimeInterface import MetroidPrimeInterface
 from enum import Enum
-
-
-class ConnectionStatus(Enum):
-  CONNECTED = "Connected"
-  DISCONNECTED = "Disconnected"
-  CONNECTING = "Connecting"
-  DISCONNECTING = "Disconnecting"
-  ERROR = "Error"
-
 class MetroidPrimeCommandProcessor(ClientCommandProcessor):
   def __init__(self, ctx: CommonContext):
     super().__init__(ctx)
@@ -26,12 +17,10 @@ class MetroidPrimeContext(CommonContext):
   game = "Metroid Prime"
   items_handling = 0b111
   dolphin_sync_task = None
-  connection_status = ConnectionStatus.DISCONNECTED
 
   def __init__(self, server_address, password):
     super().__init__(server_address, password)
     self.game_interface = MetroidPrimeInterface(logger)
-
 
   def on_deathlink(self, data: Utils.Dict[str, Utils.Any]) -> None:
     super().on_deathlink(data)
@@ -47,7 +36,7 @@ async def dolphin_sync_task(ctx: MetroidPrimeContext):
   logger.info("Starting Dolphin connector")
   while not ctx.exit_event.is_set():
     try:
-      if ctx.game_interface.is_connected() and ctx.game_interface.is_in_playable_game():
+      if ctx.game_interface.is_connected() and ctx.game_interface.is_in_playable_state():
         await _handle_game_ready(ctx)
       else:
         await _handle_game_not_ready(ctx)
@@ -70,18 +59,14 @@ async def _handle_game_ready(ctx: MetroidPrimeContext):
     # await check_locations(ctx)
   await asyncio.sleep(0.5)
 
-
 async def _handle_game_not_ready(ctx: MetroidPrimeContext):
   """If the game is not connected or not in a playable state, this will attempt to retry connecting to the game."""
   if not ctx.game_interface.is_connected():
     logger.info("Attempting to connect to Dolphin")
     ctx.game_interface.connect_to_game()
-  elif not ctx.game_interface.is_in_playable_game():
+  elif not ctx.game_interface.is_in_playable_state():
     logger.info("Waiting for player to load a save file or start a new game")
     await asyncio.sleep(3)
-
-
-
 
 def main(connect=None, password=None):
   Utils.init_logging("Metroid Prime Client")
