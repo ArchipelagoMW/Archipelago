@@ -176,7 +176,7 @@ item_table = {
     "Dual form": (698124, 1, ItemType.PROGRESSION, ItemGroup.SONG),  # song_dual
     "Transturtle Veil top left": (698125, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_veil01
     "Transturtle Veil top right": (698126, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_veil02
-    "Transturtle Open Water top left": (698127, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_openwater03
+    "Transturtle Open Water top right": (698127, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_openwater03
     "Transturtle Forest bottom left": (698128, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_forest04
     "Transturtle Home water": (698129, 1, ItemType.NORMAL, ItemGroup.TURTLE),  # transport_mainarea
     "Transturtle Abyss right": (698130, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_abyss03

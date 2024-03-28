@@ -400,7 +400,7 @@ class AquariaLocations:
     }
 
     locations_abyss_r = {
-        "Abyss right area, bulb behind the rock in the bottom left room": 698109,
+        "Abyss right area, bulb behind the rock in the whale room": 698109,
         "Abyss right area, bulb in the middle path": 698110,
         "Abyss right area, bulb behind the rock in the middle path": 698111,
         "Abyss right area, bulb in the left green room": 698112,

@@ -535,15 +535,21 @@ class AquariaRegions:
                                        lambda state: _has_beast_form(state, self.player))
         self.__connect_regions("Open water bottom left area", "Open water bottom right",
                                self.openwater_bl, self.openwater_br)
-        self.__connect_regions("Open water bottom left area", "sSkeleton path",
+        self.__connect_regions("Open water bottom left area", "Skeleton path",
                                self.openwater_bl, self.skeleton_path)
-        self.__connect_regions("Open water bottom left area", "Abyss left area",
-                               self.openwater_bl, self.abyss_l)
+        self.__connect_one_way_regions("Open water bottom left area", "Abyss left area",
+                               self.openwater_bl, self.abyss_l,
+                               lambda state: _has_sun_form(state, self.player))
+        self.__connect_regions("Abyss left area", "Open water bottom left area",
+                               self.abyss_l, self.openwater_bl)
         self.__connect_regions("Skeleton path", "skeleton_path_sc",
                                self.skeleton_path, self.skeleton_path_sc,
                                lambda state: _has_spirit_form(state, self.player))
-        self.__connect_regions("Open water bottom right", "Abyss right area",
-                               self.openwater_br, self.abyss_r)
+        self.__connect_one_way_regions("Open water bottom right", "Abyss right area",
+                               self.openwater_br, self.abyss_r,
+                               lambda state: _has_sun_form(state, self.player))
+        self.__connect_one_way_regions("Abyss right area", "Open water bottom right",
+                               self.abyss_r, self.openwater_br)
         self.__connect_one_way_regions("Open water bottom right", "Arnassi",
                                        self.openwater_br, self.arnassi,
                                        lambda state: _has_beast_form(state, self.player))
@@ -726,9 +732,13 @@ class AquariaRegions:
         self.__connect_regions("Abyss left bottom area", "Sunken city right area",
                                self.abyss_lb, self.sunken_city_r,
                                lambda state: _has_li(state, self.player))
-        self.__connect_regions("Abyss left bottom area", "Body center area",
+        self.__connect_one_way_regions("Abyss left bottom area", "Body center area",
                                self.abyss_lb, self.body_c,
                                lambda state: _has_tongue_cleared(state, self.player))
+        self.__connect_one_way_regions("Body center area", "Abyss left bottom area",
+                               self.body_c, self.abyss_lb,
+                               lambda state: _has_tongue_cleared(state, self.player) and
+                                             _has_sun_form(state, self.player))
         self.__connect_regions("Abyss left area", "King jellyfish cave",
                                self.abyss_l, self.king_jellyfish_cave,
                                lambda state: _has_energy_form(state, self.player) and
@@ -803,24 +813,24 @@ class AquariaRegions:
         """Connect a single transturtle to all others"""
         self.__connect_transturtle(item, "Transturtle Veil top left", region, self.veil_tl)
         self.__connect_transturtle(item, "Transturtle Veil top right", region, self.veil_tr_l)
-        self.__connect_one_way_regions(item, "Transturtle Open Water top left", region, self.openwater_tl)
-        self.__connect_one_way_regions(item, "Transturtle Forest bottom left", region, self.forest_bl)
-        self.__connect_one_way_regions(item, "Transturtle Home water", region, self.home_water)
-        self.__connect_one_way_regions(item, "Transturtle Abyss right", region, self.abyss_r,
+        self.__connect_transturtle(item, "Transturtle Open Water top right", region, self.openwater_tr_turtle)
+        self.__connect_transturtle(item, "Transturtle Forest bottom left", region, self.forest_bl)
+        self.__connect_transturtle(item, "Transturtle Home water", region, self.home_water_transturtle)
+        self.__connect_transturtle(item, "Transturtle Abyss right", region, self.abyss_r,
                                        lambda state: state.has("Transturtle Abyss right", self.player) and
                                                      _has_sun_form(state, self.player))
-        self.__connect_one_way_regions(item, "Transturtle Final Boss", region, self.final_boss_tube)
-        self.__connect_one_way_regions(item, "Transturtle Simon says", region, self.simon)
-        self.__connect_one_way_regions(item, "Transturtle Arnassi ruins", region, self.arnassi_path,
+        self.__connect_transturtle(item, "Transturtle Final Boss", region, self.final_boss_tube)
+        self.__connect_transturtle(item, "Transturtle Simon says", region, self.simon)
+        self.__connect_transturtle(item, "Transturtle Arnassi ruins", region, self.arnassi_path,
                                        lambda state: state.has("Transturtle Arnassi ruins", self.player) and
                                                      _has_fish_form(state, self.player))
     def __connect_transturtles(self) -> None:
         """Connect every transturtle with others"""
         self._connect_transturtle_to_other("Transturtle Veil top left", self.veil_tl)
         self._connect_transturtle_to_other("Transturtle Veil top right", self.veil_tr_l)
-        self._connect_transturtle_to_other("Transturtle Open Water top left", self.openwater_tl)
+        self._connect_transturtle_to_other("Transturtle Open Water top right", self.openwater_tr_turtle)
         self._connect_transturtle_to_other("Transturtle Forest bottom left", self.forest_bl)
-        self._connect_transturtle_to_other("Transturtle Home water", self.home_water)
+        self._connect_transturtle_to_other("Transturtle Home water", self.home_water_transturtle)
         self._connect_transturtle_to_other("Transturtle Abyss right", self.abyss_r)
         self._connect_transturtle_to_other("Transturtle Final Boss", self.final_boss_tube)
         self._connect_transturtle_to_other("Transturtle Simon says", self.simon)
@@ -991,6 +1001,35 @@ class AquariaRegions:
         add_rule(self.world.get_location("The veil top right area, bulb in the top of the water fall", self.player),
                  lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
 
+    def __adjusting_under_rock_location(self) -> None:
+        """
+        Modify rules implying bind song needed for bulb under rocks
+        """
+        add_rule(self.world.get_location("Naija's home, bulb under the rock at the right of the main path",
+                                         self.player), lambda state: _has_bind_song(state, self.player))
+        add_rule(self.world.get_location("Song cave, bulb under the rock in the path to the singing statues",
+                                         self.player), lambda state: _has_bind_song(state, self.player))
+        add_rule(self.world.get_location("Song cave, bulb under the rock close to the song door",
+                                         self.player), lambda state: _has_bind_song(state, self.player))
+        add_rule(self.world.get_location("Energy temple second area, bulb under the rock",
+                                         self.player), lambda state: _has_bind_song(state, self.player))
+        add_rule(self.world.get_location("Open water top left area, bulb under the rock in the right path",
+                                         self.player), lambda state: _has_bind_song(state, self.player))
+        add_rule(self.world.get_location("Open water top left area, bulb under the rock in the left path",
+                                         self.player), lambda state: _has_bind_song(state, self.player))
+        add_rule(self.world.get_location("Kelp Forest top right area, bulb under the rock in the right path",
+                                         self.player), lambda state: _has_bind_song(state, self.player))
+        add_rule(self.world.get_location("The veil top left area, bulb under the rock in the top right path",
+                                         self.player), lambda state: _has_bind_song(state, self.player))
+        add_rule(self.world.get_location("Abyss right area, bulb behind the rock in the whale room",
+                                         self.player), lambda state: _has_bind_song(state, self.player))
+        add_rule(self.world.get_location("Abyss right area, bulb in the middle path",
+                                         self.player), lambda state: _has_bind_song(state, self.player))
+        add_rule(self.world.get_location("The veil top left area, bulb under the rock in the top right path",
+                                         self.player), lambda state: _has_bind_song(state, self.player))
+
+
+
     def adjusting_rules(self, options: AquariaOptions) -> None:
         """
         Modify rules for single location or optional rules
@@ -998,6 +1037,7 @@ class AquariaRegions:
         self.__adjusting_urns_rules()
         self.__adjusting_crates_rules()
         self.__adjusting_soup_rules()
+        self.__adjusting_under_rock_location() # ToDo: Removing in hard mode
         add_rule(self.world.get_location("Mithalan Dress in the Mithalas cathedral", self.player),
                  lambda state: _has_beast_form(state, self.player))
         add_rule(self.world.get_location("Open water bottom left area, bulb inside the downest fish pass", self.player),
@@ -1016,6 +1056,8 @@ class AquariaRegions:
                  lambda state: _has_fish_form(state, self.player))
         add_rule(self.world.get_location("Anemone seed in the Song cave", self.player),
                  lambda state: _has_nature_form(state, self.player))
+        add_rule(self.world.get_location("Big Seed in the Verse cave right area", self.player),
+                 lambda state: _has_bind_song(state, self.player))
         if options.mini_bosses_to_beat.value > 0:
             add_rule(self.world.get_entrance("Before Final boss to Final boss", self.player),
                      lambda state: _has_mini_bosses(state, self.player))
