@@ -192,7 +192,7 @@ joke_hints = [
     "Oh, nice! I always forget to check this one.",
     "Progressive Dots can be found. Probably. Unless they can't.",
     "Don't know why the Mountain King, Mountain King, Mountain King,\nDon't know why the Mountain King has such a stressful halllll...",
-    "Fun Fact: If you laid out every line you've drawn end-to-end, then that would be weird. Why did you do that. That's not how this game works.",
+    "Fun Fact: If you laid out every line you've drawn end-to-end, then that would be weird. Why did you do that? That's not how this game works.",
     "Sorry, this hint was removed by an Eraser.",
     "I hear the Elevator is a super-handy shortcut if you forgot anything in the Tutorial area. :)",
     "That thing you just found can be found in the location you just found it.",
