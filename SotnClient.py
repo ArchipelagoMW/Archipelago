@@ -121,6 +121,7 @@ class SotnContext(CommonContext):
         self.checked_locations_sent: bool = False
         self.misplaced_items = []
         self.finished_game = False
+        self.slot_data = 0
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -136,6 +137,7 @@ class SotnContext(CommonContext):
         if cmd == 'Connected':
             self.locations_array = None
             self.misplaced_items = []
+            self.slot_data: NamedTuple = args['slot']
         elif cmd == 'Print':
             msg = args['text']
             if ': !' not in msg:
@@ -148,39 +150,52 @@ class SotnContext(CommonContext):
                 message_type: NamedTuple = args['type']
                 player: NamedTuple = args['receiving']
                 received: NamedTuple = args['item']
+                data: NamedTuple = args['data']
 
-                if message_type != "Hint" and (received.location == 127083080 or received.location == 127020003):
-                    # Holy glasses and CAT - Mormegil, send a library card, so player won't get stuck
-                    # If there are 2 SOTN players at the same time, both might receive a free library card
-                    self.misplaced_items.append(166)
-                    print("Sending Library Card")
+                if received.location == 127083080 or received.location == 127020003:
+                    if data[0]['text'] == self.slot_data:
+                        # Holy glasses and CAT - Mormegil, send a library card, so player won't get stuck
+                        # If there are 2 SOTN players at the same time, both might receive a free library card
+                        self.misplaced_items.append(166)
+                        print("Sending Library Card")
 
-                if message_type != "Hint" and received.player == player:
-                    # Check if it's our item first
-                    if base_item_id <= received.item <= base_item_id + 423:
-                        # Check if the item came from offworld
-                        if base_location_id <= received.location <= base_location_id + 310024:
-                            loc_data: LocationData = get_location_data(received.location)
-                        else:
-                            loc_data = None
+                # We only deal with misplaced if we are both sender and receiver
+                if message_type == "ItemSend" and data[1]['text'] == " found their ":
+                    if player == self.slot_data:
+                        """if received.location == 127083080 or received.location == 127020003:
+                            # Holy glasses and CAT - Mormegil, send a library card, so player won't get stuck
+                            # If there are 2 SOTN players at the same time, both might receive a free library card
+                            self.misplaced_items.append(166)
+                            print("Sending Library Card")"""
 
-                        item_data: ItemData = get_item_data(received.item)
-                        # Is a exploration token?
-                        if 127110031 <= received.location <= 127110050:
-                            self.misplaced_items.append(received.item - base_item_id)
-                            print("Exploration token")
-
-                        if loc_data is not None:
-                            if loc_data.can_be_relic:
-                                # There is a item on a relic spot, send it to the player
-                                if item_data.type != IType.RELIC:
-                                    self.misplaced_items.append(received.item - base_item_id)
+                        if base_item_id <= received.item <= base_item_id + 423:
+                            # Check if the item came from offworld
+                            if base_location_id <= received.location <= base_location_id + 310024:
+                                loc_data: LocationData = get_location_data(received.location)
                             else:
-                                # Normal location containing a relic
-                                if item_data.type == IType.RELIC:
-                                    self.misplaced_items.append(received.item - base_item_id)
+                                loc_data = None
+
+                            item_data: ItemData = get_item_data(received.item)
+                            # Is a exploration token?
+                            if 127110031 <= received.location <= 127110050:
+                                self.misplaced_items.append(received.item - base_item_id)
+                                print("Exploration token")
+
+                            if loc_data is not None:
+                                if loc_data.can_be_relic:
+                                    # There is a item on a relic spot, send it to the player
+                                    if item_data.type != IType.RELIC:
+                                        self.misplaced_items.append(received.item - base_item_id)
+                                else:
+                                    # Normal location containing a relic
+                                    if item_data.type == IType.RELIC:
+                                        self.misplaced_items.append(received.item - base_item_id)
         elif cmd == "RoomInfo":
             self.seed_name = args['seed_name']
+
+    def on_print_json(self, args: dict):
+        if not self.is_uninteresting_item_send(args):
+            super(SotnContext, self).on_print_json(args)
 
     def run_gui(self):
         import webbrowser
@@ -379,7 +394,7 @@ def diff_handler(diff_file: str):
             logger.info("Patching game")
             source1 = os.path.splitext(diff_file)[0]
             try:
-                name_start = source1.index("AP_")
+                name_start = source1.rindex("AP_")
             except ValueError:
                 logger.info("File not an AP format ")
                 return
