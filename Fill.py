@@ -279,8 +279,13 @@ def remaining_fill(multiworld: MultiWorld,
 
     if unplaced_items and locations:
         # There are leftover unplaceable items and locations that won't accept them
-        raise FillError(f'No more spots to place {unplaced_items}, locations {locations} are invalid. '
-                        f'Already placed {len(placements)}: {", ".join(str(place) for place in placements)}')
+        raise FillError(f"No more spots to place {len(unplaced_items)} items. Remaining locations are invalid.\n"
+                        f"Unplaced items:\n"
+                        f"{', '.join(str(item) for item in unplaced_items)}\n"
+                        f"Unfilled locations:\n"
+                        f"{', '.join(str(location) for location in locations)}\n"
+                        f"Already placed {len(placements)}:\n"
+                        f"{', '.join(str(place) for place in placements)}")
 
     itempool.extend(unplaced_items)
 
