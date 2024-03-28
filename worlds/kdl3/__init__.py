@@ -6,7 +6,7 @@ from Fill import fill_restrictive
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from .Items import item_table, item_names, copy_ability_table, animal_friend_table, filler_item_weights, KDL3Item, \
-    trap_item_table, copy_ability_access_table, star_item_weights, total_filler_weights
+    trap_item_table, copy_ability_access_table, star_item_weights, total_filler_weights, animal_friend_spawn_table
 from .Locations import location_table, KDL3Location, level_consumables, consumable_locations, star_locations
 from .Names.AnimalFriendSpawns import animal_friend_spawns
 from .Names.EnemyAbilities import vanilla_enemies, enemy_mapping, enemy_restrictive
@@ -117,6 +117,10 @@ class KDL3World(World):
         if any(self.copy_abilities[enemy] == copy_ability for enemy in placed_enemies):
             return None  # a valid enemy got placed by a more restrictive placement
         return self.random.choice(sorted([enemy for enemy in valid_enemies if enemy not in placed_enemies]))
+
+    def get_pre_fill_items(self) -> List[KDL3Item]:
+        return [self.create_item(item)
+                for item in [*copy_ability_access_table.keys(), *animal_friend_spawn_table.keys()]]
 
     def pre_fill(self) -> None:
         if self.options.copy_ability_randomization:
