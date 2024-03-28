@@ -1674,6 +1674,7 @@ if "Starcraft 2" in network_data_package["games"]:
             "Resource Efficiency (Spectre)":               github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
             "Juggernaut Plating (HERC)":                   organics_icon_base_url + "JuggernautPlating.png",
             "Kinetic Foam (HERC)":                         organics_icon_base_url + "KineticFoam.png",
+            "Resource Efficiency (HERC)":                  github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
 
             "Hellion":                                     "https://static.wikia.nocookie.net/starcraft/images/5/56/Hellion_SC2_Icon1.jpg",
             "Vulture":                                     github_icon_base_url + "blizzard/btn-unit-terran-vulture.png",
