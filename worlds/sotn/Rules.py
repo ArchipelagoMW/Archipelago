@@ -4,8 +4,6 @@ from BaseClasses import MultiWorld
 from .Items import vessel_table
 from .Locations import location_table
 
-# TODO: Set difficult on locations to enforce castle exploration. Can also be an option
-
 
 def set_rules(world: MultiWorld, player: int) -> None:
     no4 = world.opened_no4[player]
@@ -284,10 +282,11 @@ def set_rules(world: MultiWorld, player: int) -> None:
              state.has("Soul of bat", player) or state.has("Gravity boots", player) or
              (state.has("Form of mist", player) and state.has("Power of mist", player)))
 
-    set_rule(world.get_location("NO0 - Life Vessel(Left clock)", player), lambda state:
-             state.has("Leap stone", player) or state.has("Soul of bat", player) or
-             state.has("Gravity boots", player) or (state.has("Form of mist", player) and
-             state.has("Power of mist", player)))
+    if not are:
+        set_rule(world.get_location("NO0 - Life Vessel(Left clock)", player), lambda state:
+                 state.has("Leap stone", player) or state.has("Soul of bat", player) or
+                 state.has("Gravity boots", player) or (state.has("Form of mist", player) and
+                 state.has("Power of mist", player)))
 
     set_rule(world.get_location("NO0 - Hammer(Middle clock)", player), lambda state:
              state.has("Soul of bat", player) or (state.has("Form of mist", player) and
