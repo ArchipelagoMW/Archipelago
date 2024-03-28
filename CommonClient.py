@@ -26,6 +26,7 @@ from Utils import Version, stream_input, async_start
 from worlds import network_data_package, AutoWorldRegister
 import os
 import ssl
+import collections
 
 if typing.TYPE_CHECKING:
     import kvui
@@ -92,7 +93,12 @@ class ClientCommandProcessor(CommandProcessor):
             return False
         count = 0
         checked_count = 0
-        for location, location_id in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id.items():
+
+        if self.ctx.current_checksum[self.ctx.game]:
+            lookup = Utils.load_data_package_for_checksum(self.ctx.game, self.ctx.current_checksum[self.ctx.game]).get("location_name_to_id", {})
+        else:
+            lookup = AutoWorldRegister.world_types[self.ctx.game].location_name_to_id
+        for location, location_id in lookup.items():
             if filter_text and filter_text not in location:
                 continue
             if location_id < 0:
@@ -119,7 +125,12 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("No game set, cannot determine existing items.")
             return False
         self.output(f"Item Names for {self.ctx.game}")
-        for item_name in AutoWorldRegister.world_types[self.ctx.game].item_name_to_id:
+
+        if self.ctx.current_checksum[self.ctx.game]:
+            lookup = Utils.load_data_package_for_checksum(self.ctx.game, self.ctx.current_checksum[self.ctx.game]).get("item_name_to_id", {})
+        else:
+            lookup = AutoWorldRegister.world_types[self.ctx.game].item_name_to_id
+        for item_name in lookup:
             self.output(item_name)
 
     def _cmd_item_groups(self):
@@ -128,8 +139,11 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("No game set, cannot determine existing item groups.")
             return False
         self.output(f"Item Group Names for {self.ctx.game}")
-        for group_name in AutoWorldRegister.world_types[self.ctx.game].item_name_groups:
-            self.output(group_name)
+        try:
+            for group_name in AutoWorldRegister.world_types[self.ctx.game].item_name_groups:
+                self.output(group_name)
+        except KeyError:
+            self.output(f"Game {self.ctx.game} is not known locally so groups are unknown")
 
     def _cmd_locations(self):
         """List all location names for the currently running game."""
@@ -137,7 +151,12 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("No game set, cannot determine existing locations.")
             return False
         self.output(f"Location Names for {self.ctx.game}")
-        for location_name in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id:
+
+        if self.ctx.current_checksum[self.ctx.game]:
+            lookup = Utils.load_data_package_for_checksum(self.ctx.game, self.ctx.current_checksum[self.ctx.game]).get("location_name_to_id", {})
+        else:
+            lookup = AutoWorldRegister.world_types[self.ctx.game].location_name_to_id
+        for location_name in lookup:
             self.output(location_name)
 
     def _cmd_location_groups(self):
@@ -146,8 +165,11 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("No game set, cannot determine existing location groups.")
             return False
         self.output(f"Location Group Names for {self.ctx.game}")
-        for group_name in AutoWorldRegister.world_types[self.ctx.game].location_name_groups:
-            self.output(group_name)
+        try:
+            for group_name in AutoWorldRegister.world_types[self.ctx.game].location_name_groups:
+                self.output(group_name)
+        except KeyError:
+            self.output(f"Game {self.ctx.game} is not known locally so groups are unknown")
 
     def _cmd_ready(self):
         """Send ready status to server."""
@@ -177,6 +199,7 @@ class CommonContext:
     # Contents in flux until connection to server is made, to download correct data for this multiworld.
     item_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')
     location_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')
+    current_checksum: typing.Dict[str, str] = collections.defaultdict(str)
 
     # defaults
     starting_reconnect_delay: int = 5
@@ -465,6 +488,7 @@ class CommonContext:
 
             remote_version: int = remote_date_package_versions.get(game, 0)
             remote_checksum: typing.Optional[str] = remote_data_package_checksums.get(game)
+            self.current_checksum[game] = remote_checksum
 
             if remote_version == 0 and not remote_checksum:  # custom data package and no checksum for this game
                 needed_updates.add(game)
