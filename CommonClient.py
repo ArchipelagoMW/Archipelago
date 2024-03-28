@@ -119,12 +119,13 @@ class ClientCommandProcessor(CommandProcessor):
                     self.output('Checked: ' + location)
                     count += 1
                     checked_count += 1
-
+        filter_match = f" matching '{filter_text}'" if filter_text else ""
         if count:
+            check_str = f". {checked_count} location checks previously visited." if checked_count else ""
             self.output(
-                f"Found {count} missing location checks{f" matching '{filter_text}'" if filter_text else ""}{f'. {checked_count} location checks previously visited.' if checked_count else ''}")
+                f"Found {count} missing location checks{filter_match}{check_str}")
         else:
-            self.output(f"No missing location checks{f" matching '{filter_text}'" if filter_text else ""} found.")
+            self.output(f"No missing location checks{filter_match} found.")
         return True
 
     @mark_raw
