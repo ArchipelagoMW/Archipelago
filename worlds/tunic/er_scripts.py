@@ -4,7 +4,7 @@ from .locations import location_table
 from .er_data import Portal, tunic_er_regions, portal_mapping, \
     dependent_regions_restricted, dependent_regions_nmg, dependent_regions_ur
 from .er_rules import set_er_region_rules
-from worlds.generic import PlandoConnection
+from Options import PlandoConnection
 from random import Random
 
 if TYPE_CHECKING:
@@ -159,7 +159,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     start_region = "Overworld"
     connected_regions.update(add_dependent_regions(start_region, logic_rules))
 
-    plando_connections = world.multiworld.plando_connections[world.player]
+    plando_connections = world.options.plando_connections.value
 
     # universal tracker support stuff, don't need to care about region dependency
     if hasattr(world.multiworld, "re_gen_passthrough"):

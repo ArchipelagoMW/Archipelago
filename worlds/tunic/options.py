@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 
-from Options import DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PerGameCommonOptions
-
+from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
+                     PerGameCommonOptions)
+from .er_data import portal_mapping
 
 class SwordProgression(DefaultOnToggle):
     """Adds four sword upgrades to the item pool that will progressively grant stronger melee weapons, including two new swords with increased range and attack power."""
@@ -135,14 +136,20 @@ class LaurelsLocation(Choice):
     default = 0
 
 
+
 class ShuffleLadders(Toggle):
     """Turns several ladders in the game into items that must be found before they can be climbed on.
     Adds more layers of progression to the game by blocking access to many areas early on.
     "Ladders were a mistake." —Andrew Shouldice"""
     internal_name = "shuffle_ladders"
     display_name = "Shuffle Ladders"
+    
+    
+class TUNICPlandoConnections(PlandoConnections):
+    entrances = {portal.name for portal in portal_mapping}
+    exits = {portal.name for portal in portal_mapping}
 
-
+    
 @dataclass
 class TunicOptions(PerGameCommonOptions):
     sword_progression: SwordProgression
@@ -161,3 +168,4 @@ class TunicOptions(PerGameCommonOptions):
     maskless: Maskless
     laurels_location: LaurelsLocation
     start_inventory_from_pool: StartInventoryPool
+    plando_connections: TUNICPlandoConnections

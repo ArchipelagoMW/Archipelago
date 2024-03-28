@@ -69,9 +69,3 @@ class PlandoItem(NamedTuple):
             raise exception(warning)
         else:
             self.warn(warning)
-
-
-class PlandoConnection(NamedTuple):
-    entrance: str
-    exit: str
-    direction: str  # entrance, exit or both
