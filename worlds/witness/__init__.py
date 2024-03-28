@@ -310,13 +310,6 @@ class WitnessWorld(World):
         # Audio Log Hints
 
         hint_amount = self.options.hint_amount.value
-
-        credits_hint = (
-            "This Randomizer is brought to you by\n"
-            "NewSoupVi, Jarno, blastron,\n"
-            "jbzdarkid, sigma144, IHNN, oddGarrett, Exempt-Medic.", -1, -1
-        )
-
         audio_logs = get_audio_logs().copy()
 
         if hint_amount:
@@ -334,10 +327,6 @@ class WitnessWorld(World):
                 for _ in range(0, duplicates):
                     audio_log = audio_logs.pop()
                     self.log_ids_to_hints[int(audio_log, 16)] = compact_hint_data
-
-        if audio_logs:
-            audio_log = audio_logs.pop()
-            self.log_ids_to_hints[int(audio_log, 16)] = credits_hint
 
         # Client will generate joke hints for these.
         while audio_logs:
