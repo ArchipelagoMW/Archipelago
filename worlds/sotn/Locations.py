@@ -7,62 +7,76 @@ base_location_id = 127000000
 
 
 class ZoneData:
-    def __init__(self, abrev: str, name: str):
+    def __init__(self, abrev: str, name: str, start: int, loot_flag: int = 0, loot_size: int = 0):
         self.abrev = abrev
         self.name = name
+        self.start = start
+        self.loot_flag = 0
+        self.loot_size = 0
+        if loot_flag != 0 and loot_size != 0:
+            self.loot_flag = loot_flag
+            self.loot_size = loot_size
+
+    @staticmethod
+    def get_zone_data(zone_start):
+        for k, v in zones_dict.items():
+            if v.start == zone_start:
+                return k, v
+        return 50, ZoneData("UNK", "UNKNOWN", 0x00)
 
 
 zones_dict = {
-    0: ZoneData("ST0", "Final Stage: Bloodlines"),
-    1: ZoneData("ARE", "Colosseum"),
-    2: ZoneData("CAT", "Catacombs"),
-    3: ZoneData("CEN", "Center Cube"),
-    4: ZoneData("CHI", "Abandoned Mine"),
-    5: ZoneData("DAI", "Royal Chapel"),
-    6: ZoneData("DRE", "Nightmare"),
-    7: ZoneData("LIB", "Long Library"),
-    8: ZoneData("NO0", "Marble Gallery"),
-    9: ZoneData("NO1", "Outer Wall"),
-    10: ZoneData("NO2", "Olrox's Quarters"),
-    11: ZoneData("NO3", "Castle Entrance"),
-    12: ZoneData("NP3", "Castle Entrance (after visiting Alchemy Laboratory)"),
-    13: ZoneData("NO4", "Underground Caverns"),
-    14: ZoneData("NZ0", "Alchemy Laboratory"),
-    15: ZoneData("NZ1", "Clock Tower"),
-    16: ZoneData("TOP", "Castle Keep"),
-    17: ZoneData("WRP", "Warp rooms"),
-    18: ZoneData("RARE", "Reverse Colosseum"),
-    19: ZoneData("RCAT", "Floating Catacombs"),
-    20: ZoneData("RCEN", "Reverse Center Cube"),
-    21: ZoneData("RCHI", "Cave"),
-    22: ZoneData("RDAI", "Anti-Chapel"),
-    23: ZoneData("RLIB", "Forbidden Library"),
-    24: ZoneData("RNO0", "Black Marble Gallery"),
-    25: ZoneData("RNO1", "Reverse Outer Wall"),
-    26: ZoneData("RNO2", "Death Wing's Lair"),
-    27: ZoneData("RNO3", "Reverse Entrance"),
-    28: ZoneData("RNO4", "Reverse Caverns"),
-    29: ZoneData("RNZ0", "Necromancy Laboratory"),
-    30: ZoneData("RNZ1", "Reverse Clock Tower"),
-    31: ZoneData("RTOP", "Reverse Castle Keep"),
-    32: ZoneData("RWRP", "Reverse Warp rooms"),
-    33: ZoneData("BO0", "Olrox"),
-    34: ZoneData("BO1", "Legion"),  # or Granfaloon
-    35: ZoneData("BO2", "Werewolf & Minotaur"),
-    36: ZoneData("BO3", "Scylla"),
-    37: ZoneData("BO4", "Doppleganger10"),
-    38: ZoneData("BO5", "Hippogryph"),
-    39: ZoneData("BO6", "Richter"),
-    40: ZoneData("BO7", "Cerberus"),
-    41: ZoneData("RBO0", "Trio"),
-    42: ZoneData("RBO1", "Beezlebub"),
-    43: ZoneData("RBO2", "Death"),
-    44: ZoneData("RBO3", "Medusa"),
-    45: ZoneData("RBO4", "Creature"),
-    46: ZoneData("RBO5", "Doppleganger40"),
-    47: ZoneData("RBO6", "Shaft/Dracula"),
-    48: ZoneData("RBO7", "Akmodan II"),
-    49: ZoneData("RBO8", "Galamoth"),
+    0: ZoneData("ST0", "Final Stage: Bloodlines", 0x189c),
+    1: ZoneData("ARE", "Colosseum", 0x8704, 0x03bf06, 2),
+    2: ZoneData("CAT", "Catacombs", 0xb6d4, 0x03befc, 3),
+    3: ZoneData("CEN", "Center Cube", 0x0e7c, 0x03beec, 2),
+    4: ZoneData("CHI", "Abandoned Mine", 0xdea4, 0x03bf02, 2),
+    5: ZoneData("DAI", "Royal Chapel", 0x5fb8, 0x03beff, 3),
+    6: ZoneData("DRE", "Nightmare", 0x6fc0),
+    7: ZoneData("LIB", "Long Library", 0xf160, 0x03befa, 2),
+    8: ZoneData("NO0", "Marble Gallery", 0x37b8, 0x03beec, 2),
+    9: ZoneData("NO1", "Outer Wall", 0x1a20, 0x03beee, 2),
+    10: ZoneData("NO2", "Olrox's Quarters", 0x8744, 0x03bef0, 2),
+    11: ZoneData("NO3", "Castle Entrance", 0x187c, 0x03bef2, 2),
+    12: ZoneData("NO3", "Castle Entrance", 0x90ec, 0x03bef2, 2),
+    # 12: ZoneData("NP3", "Castle Entrance (after visiting Alchemy Laboratory)", 0x90ec, 0x03bef2, 2),
+    13: ZoneData("NO4", "Underground Caverns", 0xa620, 0x03bef4, 5),
+    14: ZoneData("NZ0", "Alchemy Laboratory", 0x9504, 0x03bf0b, 2),
+    15: ZoneData("NZ1", "Clock Tower", 0xc710, 0x03bf0d, 2),
+    16: ZoneData("TOP", "Castle Keep", 0xd660, 0x03bf08, 3),
+    17: ZoneData("WRP", "Warp rooms", 0x8218),
+    18: ZoneData("RARE", "Reverse Colosseum", 0x6b70, 0x03bf3b, 2),
+    19: ZoneData("RCAT", "Floating Catacombs", 0x3f80, 0x03bf2b, 4),
+    20: ZoneData("RCEN", "Reverse Center Cube", 0x049c),
+    21: ZoneData("RCHI", "Cave", 0xac24, 0x03bf33, 2),
+    22: ZoneData("RDAI", "Anti-Chapel", 0x465c, 0x03bf2f, 3),
+    23: ZoneData("RLIB", "Forbidden Library", 0x2b90, 0x03bf27, 2),
+    24: ZoneData("RNO0", "Black Marble Gallery", 0x7354, 0x03bf13, 2),
+    25: ZoneData("RNO1", "Reverse Outer Wall", 0x9ccc, 0x03bf17, 2),
+    26: ZoneData("RNO2", "Death Wing's Lair", 0x6d20, 0x03bf1b, 2),
+    27: ZoneData("RNO3", "Reverse Entrance", 0x3ee0, 0x03bf1f, 2),
+    28: ZoneData("RNO4", "Reverse Caverns", 0xa214, 0x03bf23, 4),
+    29: ZoneData("RNZ0", "Necromancy Laboratory", 0xcc34, 0x03bf43, 2),
+    30: ZoneData("RNZ1", "Reverse Clock Tower", 0xced0, 0x03bf47, 2),
+    31: ZoneData("RTOP", "Reverse Castle Keep", 0x2524, 0x03bf3f, 4),
+    32: ZoneData("RWRP", "Reverse Warp rooms", 0xa198),
+    33: ZoneData("BO0", "Olrox", 0xc10c, 0x03bef0, 2),
+    34: ZoneData("BO1", "Legion", 0x55d0, 0x03befc, 3),  # or Granfaloon
+    35: ZoneData("BO2", "Werewolf & Minotaur", 0x76a0, 0x03bf06, 2),
+    36: ZoneData("BO3", "Scylla", 0x6734, 0x03bef4, 5),
+    37: ZoneData("BO4", "Doppleganger10", 0x69ec, 0x03beee, 2),
+    38: ZoneData("BO5", "Hippogryph", 0x6be4, 0x03beff, 2),
+    39: ZoneData("BO6", "Richter", 0x9b84),
+    40: ZoneData("BO7", "Cerberus", 0x6678, 0x03bf02, 2),
+    41: ZoneData("RBO0", "Trio", 0xa094, 0x03bf3b, 2),
+    42: ZoneData("RBO1", "Beezlebub", 0x5174, 0x03bf43, 2),
+    43: ZoneData("RBO2", "Death", 0x1ab0, 0x03bf33, 2),
+    44: ZoneData("RBO3", "Medusa", 0x31c8, 0x03bf2f, 3),
+    45: ZoneData("RBO4", "Creature", 0x8e3c, 0x03bf17, 2),
+    46: ZoneData("RBO5", "Doppleganger40", 0x5920, 0x03bf23, 4),
+    47: ZoneData("RBO6", "Shaft/Dracula", 0x54ec),
+    48: ZoneData("RBO7", "Akmodan II", 0x5f04, 0x03bf1b, 2),
+    49: ZoneData("RBO8", "Galamoth", 0x9dc8, 0x03bf2b, 4),
 }
 
 
@@ -97,6 +111,15 @@ class LocationData:
 
     def get_zone(self):
         return self.zone
+
+    def get_location_id(self):
+        return self.location_id
+
+    @staticmethod
+    def get_location_name(id: int) -> str:
+        for k, v in location_table.items():
+            if v.location_id == id:
+                return k
 
 
 # Bosses, Relics and despawn item 3{zone}{n++}
@@ -493,9 +516,9 @@ rno1_locations = {
     "RNO1 - Shield potion": LocationData("Reverse Outer Wall", 5, [0x5050176]),
     "RNO1 - High potion": LocationData("Reverse Outer Wall", 6, [0x5050178]),
     "RNO1 - Garnet": LocationData("Reverse Outer Wall", 7, [0x505017a]),
-    "RNO1 - Dim Sum set": LocationData("Reverse Outer Wall", 3240, [0x507d08c], True),
-    "RNO1 - Creature kill": LocationData("Reverse Outer Wall", 3241),
-    "Tooth of Vlad": LocationData("Reverse Outer Wall", 3242,
+    "RNO1 - Dim Sum set": LocationData("Reverse Outer Wall", 3250, [0x507d08c], True),
+    "RNO1 - Creature kill": LocationData("Reverse Outer Wall", 3251),
+    "Tooth of Vlad": LocationData("Reverse Outer Wall", 3252,
                                   [0x5051d4a+8, 0x5052566+8, 0x67d1630], False, True,
                                   0x0016),
 }
