@@ -1,5 +1,5 @@
 item_table = (
-    'An Old GeoCities Profile'
+    'An Old GeoCities Profile',
     'Very Funny Joke',
     'Motivational Video',
     'Staples Easy Button',
