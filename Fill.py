@@ -463,7 +463,9 @@ def distribute_items_restrictive(multiworld: MultiWorld) -> None:
         fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool, name="Progression")
         if progitempool:
             raise FillError(
-                f'Not enough locations for progress items. There are {len(progitempool)} more items than locations')
+                f"Not enough locations for progression items. "
+                f"There are {len(progitempool)} more progression items than there are available locations."
+            )
         accessibility_corrections(multiworld, multiworld.state, defaultlocations)
 
     for location in lock_later:
@@ -476,7 +478,9 @@ def distribute_items_restrictive(multiworld: MultiWorld) -> None:
     remaining_fill(multiworld, excludedlocations, filleritempool, "Remaining Excluded")
     if excludedlocations:
         raise FillError(
-            f"Not enough filler items for excluded locations. There are {len(excludedlocations)} more locations than items")
+            f"Not enough filler items for excluded locations. "
+            f"There are {len(excludedlocations)} more excluded locations than filler or trap items."
+        )
 
     restitempool = filleritempool + usefulitempool
 
