@@ -221,7 +221,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             else:
                 # if not both, they're both dead ends
                 if not portal2:
-                    if world.options.entrance_rando.value in EntranceRando.options:
+                    if world.options.entrance_rando.value not in EntranceRando.options:
                         raise Exception(f"Tunic ER seed group {world.options.entrance_rando.value} paired a dead "
                                         "end to a dead end in their plando connections.")
                     else:
