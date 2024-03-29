@@ -28,13 +28,15 @@ def create_region(room: Room, world: "LingoWorld", player_logic: LingoPlayerLogi
 
 
 def is_acceptable_pilgrimage_entrance(entrance_type: EntranceType, world: "LingoWorld") -> bool:
-    if entrance_type == EntranceType.SUNWARP or entrance_type == EntranceType.WARP:
-        return False
-    
-    if entrance_type == EntranceType.PAINTING and not world.options.pilgrimage_allows_paintings:
-        return False
-    
-    if entrance_type == EntranceType.CROSSROADS_ROOF_ACCESS and not world.options.pilgrimage_allows_roof_access:
+    allowed_entrance_types = EntranceType.NORMAL
+
+    if world.options.pilgrimage_allows_paintings:
+        allowed_entrance_types |= EntranceType.PAINTING
+
+    if world.options.pilgrimage_allows_roof_access:
+        allowed_entrance_types |= EntranceType.CROSSROADS_ROOF_ACCESS
+
+    if not (entrance_type & allowed_entrance_types):
         return False
     
     return True
@@ -43,9 +45,6 @@ def is_acceptable_pilgrimage_entrance(entrance_type: EntranceType, world: "Lingo
 def connect_entrance(regions: Dict[str, Region], source_region: Region, target_region: Region, description: str,
                      door: Optional[RoomAndDoor], entrance_type: EntranceType, pilgrimage: bool, world: "LingoWorld",
                      player_logic: LingoPlayerLogic):
-    if description in world.multiworld.regions.entrance_cache[world.player]:
-        description += f" ({entrance_type.name})"
-
     connection = Entrance(world.player, description, source_region)
     connection.access_rule = lambda state: lingo_can_use_entrance(state, target_region.name, door, world, player_logic)
 
@@ -106,15 +105,20 @@ def create_regions(world: "LingoWorld", player_logic: LingoPlayerLogic) -> None:
                 regions[pilgrimage_region_name] = Region(pilgrimage_region_name, world.player, world.multiworld)
 
     # Connect all created regions now that they exist.
+    allowed_entrance_types = EntranceType.NORMAL | EntranceType.WARP | EntranceType.CROSSROADS_ROOF_ACCESS
+
+    if not painting_shuffle:
+        # Don't use the vanilla painting connections if we are shuffling paintings.
+        allowed_entrance_types |= EntranceType.PAINTING
+
+    if world.options.sunwarp_access != SunwarpAccess.option_disabled and not world.options.shuffle_sunwarps:
+        # Don't connect sunwarps if sunwarps are disabled or if we're shuffling sunwarps.
+        allowed_entrance_types |= EntranceType.SUNWARP
+
     for room in ALL_ROOMS:
         for entrance in room.entrances:
-            # Don't use the vanilla painting connections if we are shuffling paintings.
-            if entrance.type == EntranceType.PAINTING and painting_shuffle:
-                continue
-
-            # Don't connect sunwarps if sunwarps are disabled or if we're shuffling sunwarps.
-            if entrance.type == EntranceType.SUNWARP and (world.options.sunwarp_access == SunwarpAccess.option_disabled
-                                                          or world.options.shuffle_sunwarps):
+            effective_entrance_type = entrance.type & allowed_entrance_types
+            if not effective_entrance_type:
                 continue
 
             entrance_name = f"{entrance.room} to {room.name}"
@@ -129,7 +133,7 @@ def create_regions(world: "LingoWorld", player_logic: LingoPlayerLogic) -> None:
                 effective_door = None
 
             connect_entrance(regions, regions[entrance.room], regions[room.name], entrance_name, effective_door,
-                             entrance.type, False, world, player_logic)
+                             effective_entrance_type, False, world, player_logic)
 
     if world.options.enable_pilgrimage:
         # Connect the start of the pilgrimage. We check for all sunwarp items here.

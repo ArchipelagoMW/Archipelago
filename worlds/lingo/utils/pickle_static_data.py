@@ -1,4 +1,4 @@
-from typing import Dict, List, Set
+from typing import Dict, List, Set, Optional
 
 import os
 import sys
@@ -136,9 +136,15 @@ def process_entrance(source_room, doors, room_obj):
         room_obj.entrances.append(process_single_entrance(source_room, room_obj.name, doors))
     else:
         # If the value of an entrance is a list, then there are multiple possible doors that can give access to the
-        # entrance.
+        # entrance. If there are multiple connections with the same door (or lack of door) that differ only by entrance
+        # type, coalesce them into one entrance.
+        entrances: Dict[Optional[RoomAndDoor], EntranceType] = {}
         for door in doors:
-            room_obj.entrances.append(process_single_entrance(source_room, room_obj.name, door))
+            entrance = process_single_entrance(source_room, room_obj.name, door)
+            entrances[entrance.door] = entrances.get(entrance.door, EntranceType(0)) | entrance.type
+
+        for door, entrance_type in entrances.items():
+            room_obj.entrances.append(RoomEntrance(source_room, door, entrance_type))
 
 
 def process_panel(room_name, panel_name, panel_data):

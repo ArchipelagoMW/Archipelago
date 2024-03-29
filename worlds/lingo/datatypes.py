@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, Flag, auto
 from typing import List, NamedTuple, Optional
 
 
@@ -12,12 +12,12 @@ class RoomAndPanel(NamedTuple):
     panel: str
 
 
-class EntranceType(Enum):
-    NORMAL = 1
-    PAINTING = 2
-    SUNWARP = 3
-    WARP = 4
-    CROSSROADS_ROOF_ACCESS = 5
+class EntranceType(Flag):
+    NORMAL = auto()
+    PAINTING = auto()
+    SUNWARP = auto()
+    WARP = auto()
+    CROSSROADS_ROOF_ACCESS = auto()
 
 
 class RoomEntrance(NamedTuple):
