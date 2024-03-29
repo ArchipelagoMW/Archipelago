@@ -469,7 +469,7 @@ class World(metaclass=AutoWorldRegister):
         return self.multiworld.get_region(region_name, self.player)
 
     @property
-    def player_name(self):
+    def player_name(self) -> str:
         return self.multiworld.get_player_name(self.player)
 
     @classmethod
