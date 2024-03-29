@@ -76,6 +76,5 @@ artifact_table: dict[str, ItemData] = {
     "Artifact of Newborn": ItemData("Artifact of Newborn", 40, ItemClassification.progression),
 }
 
-item_table: dict[str, ItemData] = {**suit_upgrade_table, **artifact_table, **custom_suit_upgrade_table}
-
-print(item_table)
+item_table: dict[str, ItemData] = {
+    **suit_upgrade_table, **artifact_table, **custom_suit_upgrade_table}
