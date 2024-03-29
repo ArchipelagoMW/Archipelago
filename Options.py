@@ -1169,6 +1169,8 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
         return cls(value)
 
     def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
+        if not self.value:
+            return
         from BaseClasses import PlandoOptions
         if not (PlandoOptions.items & plando_options):
             # plando is disabled but plando options were given so overwrite the options
