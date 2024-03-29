@@ -36,10 +36,7 @@ def is_acceptable_pilgrimage_entrance(entrance_type: EntranceType, world: "Lingo
     if world.options.pilgrimage_allows_roof_access:
         allowed_entrance_types |= EntranceType.CROSSROADS_ROOF_ACCESS
 
-    if not (entrance_type & allowed_entrance_types):
-        return False
-    
-    return True
+    return bool(entrance_type & allowed_entrance_types)
 
 
 def connect_entrance(regions: Dict[str, Region], source_region: Region, target_region: Region, description: str,
