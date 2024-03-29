@@ -504,6 +504,15 @@ class World(metaclass=AutoWorldRegister):
     def get_region(self, region_name: str) -> "Region":
         return self.multiworld.get_region(region_name, self.player)
 
+    def region_exists(self, region_name: str) -> bool:
+        return region_name in self.multiworld.regions.region_cache[self.player]
+
+    def entrance_exists(self, entrance_name: str) -> bool:
+        return entrance_name in self.multiworld.regions.entrance_cache[self.player]
+
+    def location_exists(self, location_name: str) -> bool:
+        return location_name in self.multiworld.regions.location_cache[self.player]
+
     @classmethod
     def get_data_package_data(cls) -> "GamesPackage":
         sorted_item_name_groups = {

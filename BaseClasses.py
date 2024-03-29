@@ -390,6 +390,15 @@ class MultiWorld():
     def get_location(self, location_name: str, player: int) -> Location:
         return self.regions.location_cache[player][location_name]
 
+    def region_exists(self, region_name: str, player: int) -> bool:
+        return region_name in self.regions.region_cache[player]
+
+    def entrance_exists(self, entrance_name: str, player: int) -> bool:
+        return entrance_name in self.regions.entrance_cache[player]
+
+    def location_exists(self, location_name: str, player: int) -> bool:
+        return location_name in self.regions.location_cache[player]
+
     def get_all_state(self, use_cache: bool) -> CollectionState:
         cached = getattr(self, "_all_state", None)
         if use_cache and cached:
