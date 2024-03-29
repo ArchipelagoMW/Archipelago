@@ -124,13 +124,13 @@ class TunicWorld(World):
             if multiworld.plando_connections[tunic.player]:
                 # loop through the connections in the player's yaml
                 for cxn in multiworld.plando_connections[tunic.player]:
+                    new_cxn = True
                     for group_cxn in cls.seed_groups[group]["plando"]:
-                        
                         # if neither entrance nor exit match anything in the group, add to group
-                        if not (cxn.entrance == group_cxn.entrance or cxn.entrance == group_cxn.exit
-                                or cxn.exit == group_cxn.entrance or cxn.exit == group_cxn.exit):
-                            cls.seed_groups[group]["plando"].append(cxn)
-                            continue
+                        if ((cxn.entrance == group_cxn.entrance and cxn.exit == group_cxn.exit)
+                             or (cxn.exit == group_cxn.entrance and cxn.entrance == group_cxn.exit)):
+                            new_cxn = False
+                            break
                                    
                         # check if this pair is the same as a pair in the group already
                         is_mismatched = (
@@ -144,6 +144,8 @@ class TunicWorld(World):
                                             f"connection {group_cxn.entrance} <-> {group_cxn.exit} and "
                                             f"{tunic.multiworld.get_player_name(tunic.player)}'s plando "
                                             f"connection {cxn.entrance} <-> {cxn.exit}")
+                    if new_cxn:
+                        cls.seed_groups[group]["plando"].append(cxn)
 
     def create_item(self, name: str) -> TunicItem:
         item_data = item_table[name]
