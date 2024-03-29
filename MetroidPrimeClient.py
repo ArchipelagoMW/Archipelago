@@ -1,12 +1,10 @@
 import asyncio
 import traceback
 
-import dolphin_memory_engine
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, logger, server_loop, gui_enabled
 import Utils
 from worlds.metroidprime.DolphinClient import DolphinException
 from worlds.metroidprime.MetroidPrimeInterface import MetroidPrimeInterface
-from enum import Enum
 
 
 class MetroidPrimeCommandProcessor(ClientCommandProcessor):
@@ -62,7 +60,10 @@ async def _handle_game_ready(ctx: MetroidPrimeContext):
             logger.warn("DeathLink not implemented")
         # await give_items(ctx)
         # await check_locations(ctx)
-    await asyncio.sleep(0.5)
+        await asyncio.sleep(0.5)
+    else:
+        logger.info("Waiting for player to connect to server")
+        await asyncio.sleep(1)
 
 
 async def _handle_game_not_ready(ctx: MetroidPrimeContext):

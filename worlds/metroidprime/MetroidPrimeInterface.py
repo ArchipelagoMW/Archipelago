@@ -1,9 +1,11 @@
 from logging import Logger
 import struct
+from BaseClasses import ItemClassification
 from worlds.metroidprime.DolphinClient import GC_GAME_ID_ADDRESS, DolphinClient, DolphinException
 from enum import Enum
 from enum import Enum
 import py_randomprime
+from .Items import ItemData, item_table
 
 symbols = py_randomprime.symbols_for_version("0-00")
 game_state_pointer = symbols["g_GameState"]
@@ -13,7 +15,7 @@ cplayer_vtable = 0x803d96e8
 METROID_PRIME_ID = b"GM8E01"
 
 
-class World(Enum):
+class MetroidPrimeArea(Enum):
     """Game worlds with their corresponding IDs in memory"""
     Impact_Crater = 3241871825
     Phendrana_Drifts = 2831049361
@@ -25,11 +27,22 @@ class World(Enum):
     End_of_Game = 332894565
 
 
-def world_by_id(id) -> World:
-    for world in World:
+def world_by_id(id) -> MetroidPrimeArea:
+    for world in MetroidPrimeArea:
         if world.value == id:
             return world
     return None
+
+
+class InventoryItemData(ItemData):
+    """Class used to track the player'scurrent items and their quantities"""
+    current_amount: int
+    current_capacity: int
+
+    def __init__(self, item_data: ItemData, current_amount: int, current_capacity: int) -> None:
+        super().__init__(item_data.name, item_data.id, item_data.classification)
+        self.current_amount = current_amount
+        self.current_capacity = current_capacity
 
 
 class MetroidPrimeInterface:
@@ -48,10 +61,31 @@ class MetroidPrimeInterface:
     def check_for_new_locations(self):
         pass
 
-    def get_current_inventory(self) -> :
+    def get_item(self, item_id: int) -> InventoryItemData:
+        for item in item_table.values():
+            if item.id == item_id:
+                return self.get_item(item)
+        return None
 
+    def get_item(self, item: ItemData) -> InventoryItemData:
+        player_state_pointer = int.from_bytes(
+            self.dolphin_client.read_address(cstate_manager_global + 0x8B8, 4), "big")
+        result = self.dolphin_client.read_pointer(
+            player_state_pointer, self.__calculate_item_offset(item.id), 8)
+        if result is None:
+            return None
+        current_ammount, current_capacity = struct.unpack(">II", result)
+        return InventoryItemData(item, current_ammount, current_capacity)
 
-    def get_current_world(self) -> World:
+    def get_current_inventory(self) -> dict[str, InventoryItemData]:
+        MAX_VANILLA_ITEM_ID = 40
+        inventory: dict[str, InventoryItemData] = {}
+        for item in item_table.values():
+            if item.id <= MAX_VANILLA_ITEM_ID:
+                inventory[item.name] = self.get_item(item)
+        return inventory
+
+    def get_current_area(self) -> MetroidPrimeArea:
         """Returns the world that the player is currently in"""
         world_bytes = self.dolphin_client.read_pointer(
             game_state_pointer, 0x84, struct.calcsize(">I"))
@@ -78,7 +112,7 @@ class MetroidPrimeInterface:
 
     def is_in_playable_state(self) -> bool:
         """ Check if the player is in the actual game rather than the main menu """
-        return self.get_current_world() != None and self.__is_player_table_ready()
+        return self.get_current_area() != None and self.__is_player_table_ready()
 
     def __is_player_table_ready(self) -> bool:
         """Check if the player table is ready to be read from memory, indicating the game is in a playable state"""
@@ -89,3 +123,6 @@ class MetroidPrimeInterface:
             return True
         else:
             return False
+
+    def __calculate_item_offset(self, item_id):
+        return (0x24 + 0x4) + (item_id * 0x8)
