@@ -20,9 +20,13 @@ class BlasRules:
         # BrandenEK/Blasphemous.Randomizer/ItemRando/BlasphemousInventory.cs
         self.string_rules = {
             # Visibility flags
+            "DoubleJump": lambda state: self.world.options.purified_hand,
             "NormalLogic": lambda state: self.world.options.difficulty >= 1,
+            "NormalLogicAndDoubleJump": lambda state: self.world.options.difficulty >= 1 and self.world.options.purified_hand,
             "HardLogic": lambda state: self.world.options.difficulty >= 2,
+            "HardLogicAndDoubleJump": lambda state: self.world.options.difficulty >= 2 and self.world.options.purified_hand,
             "EnemySkips": self.enemy_skips_allowed,
+            "EnemySkipsAndDoubleJump": lambda state: self.enemy_skips_allowed(state) and self.world.options.purified_hand,
 
             # Relics
             "blood": self.blood,

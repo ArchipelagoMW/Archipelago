@@ -4193,6 +4193,54 @@ regions = [
                 ]
             },
             {
+                "target": "D20Z01S09[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canAirStall",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D20Z01S10[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canAirStall",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D03Z03S17[E]",
                 "logic": [
                     {
@@ -4590,6 +4638,54 @@ regions = [
                 ]
             },
             {
+                "target": "D20Z01S09[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canAirStall",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D20Z01S10[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canAirStall",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D01Z05S16[N]",
                 "logic": [
                     {
@@ -4721,6 +4817,54 @@ regions = [
                 ]
             },
             {
+                "target": "D20Z01S09[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canAirStall",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D20Z01S10[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canAirStall",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D03Z03S17[E]",
                 "logic": [
                     {
@@ -4819,6 +4963,54 @@ regions = [
                         "item_requirements": [
                             "linen",
                             "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D20Z01S09[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canAirStall",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D20Z01S10[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canAirStall",
+                            "blood"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -4938,6 +5130,54 @@ regions = [
                 ]
             },
             {
+                "target": "D20Z01S09[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canAirStall",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D20Z01S10[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canAirStall",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D01Z05S16[N]",
                 "logic": [
                     {
@@ -4967,6 +5207,40 @@ regions = [
         "name": "D20Z01S09[E]",
         "exits": [
             {
+                "target": "D20Z01S10[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D20Z01S10[W]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canCrossGap8"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D01Z05S25[NE]",
                 "logic": [
                     {
@@ -5069,17 +5343,76 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "RB202",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D20Z01S01[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
         "transitions": [
-            "D20Z01S09[E]"
+            "D20Z01S09[E]",
+            "D01Z05S25[EchoesW]"
         ]
     },
     {
         "name": "D20Z01S10[W]",
         "exits": [
             {
+                "target": "D20Z01S09[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D20Z01S09[E]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canCrossGap8"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D01Z05S25[NE]",
                 "logic": [
                     {
@@ -5182,11 +5515,25 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D20Z01S11[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "blood",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
         "transitions": [
-            "D20Z01S10[W]"
+            "D20Z01S10[W]",
+            "D01Z05S25[EchoesE]"
         ]
     },
     {
@@ -5433,69 +5780,6 @@ regions = [
         "locations": [],
         "transitions": [
             "D01Z05S25[SE]"
-        ]
-    },
-    {
-        "name": "D01Z05S25[EchoesW]",
-        "exits": [
-            {
-                "target": "D20Z01S09[E]",
-                "logic": []
-            },
-            {
-                "target": "RB202",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D20Z01S01[S]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D01Z05S25[EchoesW]"
-        ]
-    },
-    {
-        "name": "D01Z05S25[EchoesE]",
-        "exits": [
-            {
-                "target": "D20Z01S10[W]",
-                "logic": []
-            },
-            {
-                "target": "D20Z01S11[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D01Z05S25[EchoesE]"
         ]
     },
     {
@@ -7702,7 +7986,7 @@ regions = [
                     },
                     {
                         "item_requirements": [
-                            "EnemySkips",
+                            "EnemySkipsAndDoubleJump",
                             "doubleJump",
                             "canEnemyBounce"
                         ],
@@ -8300,7 +8584,7 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
-                            "EnemySkips",
+                            "EnemySkipsAndDoubleJump",
                             "doubleJump",
                             "canEnemyBounce"
                         ],
@@ -8407,7 +8691,7 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
-                            "EnemySkips",
+                            "EnemySkipsAndDoubleJump",
                             "doubleJump",
                             "canEnemyBounce"
                         ],
@@ -13981,6 +14265,7 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
+                            "DoubleJump",
                             "doubleJump"
                         ],
                         "location_requirements": [],
@@ -14123,9 +14408,9 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "NormalLogic",
+                            "NormalLogicAndDoubleJump",
                             "dash",
+                            "doubleJump",
                             "canAirStall"
                         ],
                         "location_requirements": [],
@@ -14133,9 +14418,9 @@ regions = [
                     },
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "NormalLogic",
+                            "NormalLogicAndDoubleJump",
                             "dash",
+                            "doubleJump",
                             "canDawnJump"
                         ],
                         "location_requirements": [],
@@ -14171,9 +14456,9 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "NormalLogic",
+                            "NormalLogicAndDoubleJump",
                             "dash",
+                            "doubleJump",
                             "canAirStall"
                         ],
                         "location_requirements": [],
@@ -14181,9 +14466,9 @@ regions = [
                     },
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "NormalLogic",
+                            "NormalLogicAndDoubleJump",
                             "dash",
+                            "doubleJump",
                             "canDawnJump"
                         ],
                         "location_requirements": [],
@@ -14196,9 +14481,9 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "NormalLogic",
+                            "NormalLogicAndDoubleJump",
                             "dash",
+                            "doubleJump",
                             "canAirStall"
                         ],
                         "location_requirements": [],
@@ -14206,9 +14491,9 @@ regions = [
                     },
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "NormalLogic",
+                            "NormalLogicAndDoubleJump",
                             "dash",
+                            "doubleJump",
                             "canDawnJump"
                         ],
                         "location_requirements": [],
@@ -14446,9 +14731,9 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "NormalLogic",
+                            "NormalLogicAndDoubleJump",
                             "dash",
+                            "doubleJump",
                             "canAirStall"
                         ],
                         "location_requirements": [],
@@ -14456,9 +14741,9 @@ regions = [
                     },
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "NormalLogic",
+                            "NormalLogicAndDoubleJump",
                             "dash",
+                            "doubleJump",
                             "canDawnJump"
                         ],
                         "location_requirements": [],
@@ -14494,9 +14779,9 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "NormalLogic",
+                            "NormalLogicAndDoubleJump",
                             "dash",
+                            "doubleJump",
                             "canAirStall"
                         ],
                         "location_requirements": [],
@@ -14504,9 +14789,9 @@ regions = [
                     },
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "NormalLogic",
+                            "NormalLogicAndDoubleJump",
                             "dash",
+                            "doubleJump",
                             "canDawnJump"
                         ],
                         "location_requirements": [],
@@ -14519,9 +14804,9 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "NormalLogic",
+                            "NormalLogicAndDoubleJump",
                             "dash",
+                            "doubleJump",
                             "canAirStall"
                         ],
                         "location_requirements": [],
@@ -14529,9 +14814,9 @@ regions = [
                     },
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "NormalLogic",
+                            "NormalLogicAndDoubleJump",
                             "dash",
+                            "doubleJump",
                             "canDawnJump"
                         ],
                         "location_requirements": [],
@@ -14581,9 +14866,9 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "NormalLogic",
+                            "NormalLogicAndDoubleJump",
                             "dash",
+                            "doubleJump",
                             "canAirStall"
                         ],
                         "location_requirements": [],
@@ -14591,9 +14876,9 @@ regions = [
                     },
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "NormalLogic",
+                            "NormalLogicAndDoubleJump",
                             "dash",
+                            "doubleJump",
                             "canDawnJump"
                         ],
                         "location_requirements": [],
@@ -14629,9 +14914,9 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "NormalLogic",
+                            "NormalLogicAndDoubleJump",
                             "dash",
+                            "doubleJump",
                             "canAirStall"
                         ],
                         "location_requirements": [],
@@ -14639,9 +14924,9 @@ regions = [
                     },
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "NormalLogic",
+                            "NormalLogicAndDoubleJump",
                             "dash",
+                            "doubleJump",
                             "canDawnJump"
                         ],
                         "location_requirements": [],
@@ -14654,9 +14939,9 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "NormalLogic",
+                            "NormalLogicAndDoubleJump",
                             "dash",
+                            "doubleJump",
                             "canAirStall"
                         ],
                         "location_requirements": [],
@@ -14664,9 +14949,9 @@ regions = [
                     },
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "NormalLogic",
+                            "NormalLogicAndDoubleJump",
                             "dash",
+                            "doubleJump",
                             "canDawnJump"
                         ],
                         "location_requirements": [],
@@ -14800,9 +15085,9 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "HardLogic",
+                            "HardLogicAndDoubleJump",
                             "EnemySkips",
+                            "doubleJump",
                             "upwarpSkipsAllowed"
                         ],
                         "location_requirements": [],
@@ -14810,10 +15095,21 @@ regions = [
                     },
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "HardLogic",
+                            "HardLogicAndDoubleJump",
                             "EnemySkips",
+                            "doubleJump",
                             "canEnemyUpslash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "HardLogicAndDoubleJump",
+                            "EnemySkips",
+                            "canEnemyUpslash",
+                            "upwarpSkipsAllowed",
+                            "wallClimb"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -14904,8 +15200,7 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
-                            "doubleJump",
-                            "HardLogic",
+                            "HardLogicAndDoubleJump",
                             "EnemySkips",
                             "canEnemyUpslash",
                             "upwarpSkipsAllowed"
