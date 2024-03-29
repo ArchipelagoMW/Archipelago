@@ -128,7 +128,7 @@ class TunicWorld(World):
                     for group_cxn in cls.seed_groups[group]["plando"]:
                         # if neither entrance nor exit match anything in the group, add to group
                         if ((cxn.entrance == group_cxn.entrance and cxn.exit == group_cxn.exit)
-                             or (cxn.exit == group_cxn.entrance and cxn.entrance == group_cxn.exit)):
+                                or (cxn.exit == group_cxn.entrance and cxn.entrance == group_cxn.exit)):
                             new_cxn = False
                             break
                                    
