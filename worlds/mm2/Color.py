@@ -6,7 +6,7 @@ import logging
 
 if TYPE_CHECKING:
     from . import MM2World
-    from .Rom import RomData
+    from .Rom import MM2ProcedurePatch
 
 HTML_TO_NES: Dict[str, int] = {
     'SNOW': 0x20,
@@ -169,7 +169,7 @@ def get_colors_for_item(name: str) -> Tuple[int, int]:
     return color_1, color_2
 
 
-def write_palette_shuffle(world: "MM2World", rom: "RomData"):
+def write_palette_shuffle(world: "MM2World", rom: "MM2ProcedurePatch"):
     palette_shuffle: Union[int, str] = world.options.palette_shuffle.value
     palettes_to_write: Dict[str, Tuple[int, int]] = {}
     if isinstance(palette_shuffle, str):
@@ -179,7 +179,8 @@ def write_palette_shuffle(world: "MM2World", rom: "RomData"):
             if "-" in color_set:
                 character, colors = color_set.split("-")
                 if character.title() not in palette_pointers:
-                    logging.warning(f"Player {world.multiworld.get_player_name(world.player)} attempted to set color for unrecognized option {character}")
+                    logging.warning(f"Player {world.multiworld.get_player_name(world.player)} "
+                                    f"attempted to set color for unrecognized option {character}")
                 colors = colors.split("|")
                 if len(colors) < 2:
                     colors = extrapolate_color(HTML_TO_NES[colors[0].upper()])
@@ -188,7 +189,8 @@ def write_palette_shuffle(world: "MM2World", rom: "RomData"):
                 palettes_to_write[character.title()] = tuple(colors)
             else:
                 # this is invalid
-                logging.warning(f"Player {world.multiworld.get_player_name(world.player)} provided improper color set {color_set}")
+                logging.warning(f"Player {world.multiworld.get_player_name(world.player)} "
+                                f"provided improper color set {color_set}")
 
         # Now we handle the real values
     if palette_shuffle != 0:

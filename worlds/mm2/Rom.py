@@ -1,11 +1,12 @@
 import pkgutil
+import typing
 from typing import Optional, TYPE_CHECKING
 import hashlib
 import Utils
 import os
 
 import settings
-from worlds.Files import APDeltaPatch
+from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 from . import Names
 from .Text import MM2TextEntry
 from .Color import get_colors_for_item, write_palette_shuffle
@@ -52,7 +53,25 @@ class RomData:
             outfile.write(self.file)
 
 
-def patch_rom(world: "MM2World", rom: RomData):
+class MM2ProcedurePatch(APProcedurePatch, APTokenMixin):
+    hash = [MM2LCHASH, MM2NESHASH, MM2VCHASH]
+    game = "Mega Man 2"
+    patch_file_ending = ".apmm2"
+    result_file_ending = ".nes"
+    name: bytearray
+
+    @classmethod
+    def get_source_data(cls) -> bytes:
+        return get_base_rom_bytes()
+
+    def write_byte(self, offset, value):
+        self.write_token(APTokenTypes.WRITE, offset, value.to_bytes(1, "little"))
+
+    def write_bytes(self, offset, value: typing.Iterable[int]):
+        self.write_token(APTokenTypes.WRITE, offset, bytes(value))
+
+
+def patch_rom(world: "MM2World", rom: MM2ProcedurePatch):
     rom.write_byte(0x3403C, 0x8A)  # Read for setting robot master face tiles
     rom.write_byte(0x34083, 0x8A)  # Read for setting robot master face sprites
     rom.write_bytes(0x340DD, [0x9B, 0xC9, 0x07])  # Dr. Wily checking for Items
@@ -253,7 +272,7 @@ def patch_rom(world: "MM2World", rom: RomData):
         else:
             rom.write_bytes(color_address + (i * 2), colors)
 
-    write_palette_shuffle(world, rom)
+    write_palette_shuffle(world, patch)
 
     if world.options.strict_weakness or world.options.random_weakness:
         # we need to write boss weaknesses
@@ -542,17 +561,6 @@ def patch_rom(world: "MM2World", rom: RomData):
     rom.name = bytearray(f'MM2{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x3FFC0, rom.name)
-
-
-class MM2DeltaPatch(APDeltaPatch):
-    hash = [MM2LCHASH, MM2NESHASH, MM2VCHASH]
-    game = "Mega Man 2"
-    patch_file_ending = ".apmm2"
-    result_file_ending = ".nes"
-
-    @classmethod
-    def get_source_data(cls) -> bytes:
-        return get_base_rom_bytes()
 
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:

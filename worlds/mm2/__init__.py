@@ -2,14 +2,14 @@ import hashlib
 import logging
 import typing
 
-from BaseClasses import Tutorial, ItemClassification, MultiWorld, Region, Entrance, Item, Location
+from BaseClasses import Tutorial, ItemClassification, MultiWorld, Region, Entrance, Item
 from worlds.AutoWorld import World, WebWorld
-from worlds.generic.Rules import set_rule, add_rule
+from worlds.generic.Rules import add_rule
 from .Names import *
 from .Items import item_table, item_names, MM2Item, filler_item_table, filler_item_weights, robot_master_weapon_table, \
     stage_access_table, item_item_table
 from .Locations import location_table, MM2Location, mm2_regions
-from .Rom import get_base_rom_bytes, get_base_rom_path, RomData, patch_rom, extract_mm2, MM2DeltaPatch, \
+from .Rom import get_base_rom_bytes, get_base_rom_path, RomData, patch_rom, extract_mm2, MM2ProcedurePatch, \
     MM2LCHASH, PROTEUSHASH, MM2VCHASH, MM2NESHASH
 from .Options import MM2Options
 from .Client import MegaMan2Client
@@ -18,7 +18,6 @@ import os
 import threading
 import base64
 import settings
-from worlds.LauncherComponents import components, SuffixIdentifier
 logger = logging.getLogger("Mega Man 2")
 
 if typing.TYPE_CHECKING:
@@ -63,14 +62,14 @@ class MM2WebWorld(WebWorld):
     theme = "partyTime"
     tutorials = [
 
-        # Tutorial(
-        #    "Multiworld Setup Guide",
-        #    "A guide to setting up the Mega Man 2 randomizer connected to an Archipelago Multiworld.",
-        #    "English",
-        #    "setup_en.md",
-        #    "setup/en",
-        #    ["Silvris"]
-        # )
+        Tutorial(
+           "Multiworld Setup Guide",
+           "A guide to setting up the Mega Man 2 randomizer connected to an Archipelago Multiworld.",
+           "English",
+           "setup_en.md",
+           "setup/en",
+           ["Silvris"]
+        )
     ]
 
 
@@ -91,8 +90,10 @@ class MM2World(World):
     data_version = 0
     web = MM2WebWorld()
     boss_requirements = dict()
+    rom_name: typing.Optional[bytearray]
 
     def __init__(self, world: MultiWorld, player: int):
+        self.rom_name = None
         self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
         self.weapon_damage = weapon_damage.copy()
@@ -181,18 +182,11 @@ class MM2World(World):
     def generate_output(self, output_directory: str):
         rompath = ""
         try:
-            world = self.multiworld
-            player = self.player
+            patch = MM2ProcedurePatch()
+            patch_rom(self, patch)
 
-            rom = RomData(get_base_rom_bytes())
-            patch_rom(self, rom)
+            self.rom_name = patch.name
 
-            rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.nes")
-            rom.write_to_file(rompath)
-            self.rom_name = rom.name
-
-            patch = MM2DeltaPatch(os.path.splitext(rompath)[0] + MM2DeltaPatch.patch_file_ending, player=player,
-                                  player_name=world.player_name[player], patched_path=rompath)
             patch.write()
         except Exception:
             raise
