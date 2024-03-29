@@ -100,7 +100,7 @@ class TunicWorld(World):
         tunic_worlds: Tuple[TunicWorld] = multiworld.get_game_worlds("TUNIC")
         for tunic in tunic_worlds:
             # if it's one of the options, then it isn't a custom seed group
-            if tunic.options.entrance_rando in EntranceRando.options:
+            if tunic.options.entrance_rando.value in EntranceRando.options:
                 continue
             group = tunic.options.entrance_rando.value
             # if this is the first world in the group, set the rules equal to its rules
