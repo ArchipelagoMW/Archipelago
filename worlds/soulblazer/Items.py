@@ -99,7 +99,7 @@ gem_values = [1, 12, 40, 50, 50, 50, 50, 50, 60, 60, 80, 80, 80, 80, 80, 100, 10
 exp_values = [1, 30, 80, 150, 180, 200, 250, 300, 300, 300, 300, 300, 400]
 """Exp reward values in vanilla item pool"""
 
-def create_itempool(world: SoulBlazerWorld):
+def create_itempool(world: SoulBlazerWorld) -> list[SoulBlazerItem]:
     itempool =  [SoulBlazerItem(name, world.player, itemData) for (name, itemData) in unique_items_table.items()]
     itempool += [SoulBlazerItem(ItemName.MEDICALHERB, world.player, repeatable_items_table[ItemName.MEDICALHERB]) for _ in range(herb_count)]
     itempool += [SoulBlazerItem(ItemName.STRANGEBOTTLE, world.player, repeatable_items_table[ItemName.STRANGEBOTTLE]) for _ in range(bottle_count)]
@@ -110,8 +110,9 @@ def create_itempool(world: SoulBlazerWorld):
     itempool += world.gem_items
     world.exp_items = [world.create_item(ItemName.EXP).set_operand(value) for value in exp_values]
     itempool += world.exp_items
-    world.multiworld.itempool += itempool
     
+    return itempool
+
 
 #TODO: Unsure which progression items should skip balancing
 swords_table = {
