@@ -30,6 +30,17 @@ weapons_to_name = {
     7: Names.metal_blade
 }
 
+minimum_weakness_requirement = {
+    0: 1,  # Mega Buster is free
+    1: 14,  # 2 shots of Atomic Fire
+    2: 1,  # 14 shots of Air Shooter, although you likely hit more than one shot
+    3: 4,  # 9 uses of Leaf Shield, 3 ends up 1 damage off
+    4: 1,  # 56 uses of Bubble Lead
+    5: 1,  # 224 uses of Quick Boomerang
+    6: 4,  # 7 uses of Crash Bomber
+    7: 1,  # 112 uses of Metal Blade
+}
+
 robot_masters = {
     0: "Heat Man Defeated",
     1: "Air Man Defeated",
@@ -67,7 +78,7 @@ def set_rules(world: "MM2World") -> None:
         for weapon in world.weapon_damage:
             world.weapon_damage[weapon].append(-1)
         weapon = world.random.choice(list(world.weapon_damage.keys()))
-        world.weapon_damage[weapon][boss] = 1 if weapon != 1 else 14
+        world.weapon_damage[weapon][boss] = minimum_weakness_requirement[weapon]
 
     if world.options.strict_weakness:
         for weapon in weapon_damage:
