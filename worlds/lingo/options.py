@@ -1,6 +1,9 @@
 from dataclasses import dataclass
 
-from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool
+from schema import And, Schema
+
+from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool, OptionDict
+from worlds.lingo.items import TRAP_ITEMS
 
 
 class ShuffleDoors(Choice):
@@ -107,6 +110,14 @@ class TrapPercentage(Range):
     default = 20
 
 
+class TrapWeights(OptionDict):
+    """Specify the distribution of traps that should be placed into the pool.
+    If you don't want a specific type of trap, set the weight to zero."""
+    display_name = "Trap Weights"
+    schema = Schema({trap_name: And(int, lambda n: n >= 0) for trap_name in TRAP_ITEMS})
+    default = {trap_name: 1 for trap_name in TRAP_ITEMS}
+
+
 class PuzzleSkipPercentage(Range):
     """Replaces junk items with puzzle skips, at the specified rate."""
     display_name = "Puzzle Skip Percentage"
@@ -134,6 +145,7 @@ class LingoOptions(PerGameCommonOptions):
     level_2_requirement: Level2Requirement
     early_color_hallways: EarlyColorHallways
     trap_percentage: TrapPercentage
+    trap_weights: TrapWeights
     puzzle_skip_percentage: PuzzleSkipPercentage
     death_link: DeathLink
     start_inventory_from_pool: StartInventoryPool

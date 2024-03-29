@@ -649,7 +649,7 @@ class ALTTPWorld(World):
             if not multiworld.ganonstower_vanilla[player] or \
                     world.options.glitches_required.current_key in {'overworld_glitches', 'hybrid_major_glitches', "no_logic"}:
                 pass
-            elif 'triforce_hunt' in world.options.goal.current_key and ('local' in world.options.goal.current_key or world.players == 1):
+            elif 'triforce_hunt' in world.options.goal.current_key and ('local' in world.options.goal.current_key or multiworld.players == 1):
                 trash_counts[player] = multiworld.random.randint(world.options.crystals_needed_for_gt * 2,
                                                             world.options.crystals_needed_for_gt * 4)
             else:

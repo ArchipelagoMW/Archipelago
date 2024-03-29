@@ -87,7 +87,7 @@ class PokemonEmeraldWorld(World):
     location_name_groups = LOCATION_GROUPS
 
     data_version = 2
-    required_client_version = (0, 4, 3)
+    required_client_version = (0, 4, 5)
 
     badge_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]]
     hm_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]]
@@ -300,6 +300,7 @@ class PokemonEmeraldWorld(World):
 
             # Locations which are directly unlocked by defeating Norman.
             exclude_locations([
+                "Petalburg Gym - Leader Norman",
                 "Petalburg Gym - Balance Badge",
                 "Petalburg Gym - TM42 from Norman",
                 "Petalburg City - HM03 from Wally's Uncle",
