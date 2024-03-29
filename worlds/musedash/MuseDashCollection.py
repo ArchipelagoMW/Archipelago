@@ -36,13 +36,13 @@ class MuseDashCollections:
         "Find this Month's Featured Playlist",
         "PeroPero in the Universe",
         "umpopoff",
-        "P E R O P E R O Brother Dance"
+        "P E R O P E R O Brother Dance",
     ]
     
     REMOVED_SONGS = [
         "CHAOS Glitch",
         "FM 17314 SUGAR RADIO",
-        "Yume Ou Mono Yo Secret"
+        "Yume Ou Mono Yo Secret",
     ]
 
     album_items: Dict[str, AlbumData] = {}
