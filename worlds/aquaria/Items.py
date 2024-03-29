@@ -125,7 +125,7 @@ item_table = {
     "Rotten meat": (698073, 5, ItemType.JUNK, ItemGroup.INGREDIENT),  # ingredient_rottenmeat
     "Royal soup": (698074, 1, ItemType.NORMAL, ItemGroup.RECIPE),  # ingredient_royalsoup
     "Sea cake": (698075, 4, ItemType.NORMAL, ItemGroup.RECIPE),  # ingredient_seacake
-    "Sea loaf": (698076, 1, ItemType.NORMAL, ItemGroup.RECIPE),  # ingredient_sealoaf
+    "Sea loaf": (698076, 1, ItemType.JUNK, ItemGroup.RECIPE),  # ingredient_sealoaf
     "Shark fin soup": (698077, 2, ItemType.NORMAL, ItemGroup.RECIPE),  # ingredient_sharkfinsoup
     "Sight poultice": (698078, 2, ItemType.NORMAL, ItemGroup.RECIPE),  # ingredient_sightpoultice
     "Small bone x 2": (698079, 1, ItemType.NORMAL, ItemGroup.INGREDIENT),  # ingredient_smallbone

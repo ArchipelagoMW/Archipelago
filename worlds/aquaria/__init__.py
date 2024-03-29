@@ -110,39 +110,60 @@ class AquariaWorld(World):
         self.regions.add_regions_to_world()
         self.regions.connect_regions()
 
-    def __pre_fill_item(self, item_name: str, location_name: str) -> None:
+    def create_item(self, name: str) -> AquariaItem:
+        """
+        Create an AquariaItem using `name' as item name.
+        """
+        result: AquariaItem
+        try:
+            data = item_table[name]
+            classification: ItemClassification = ItemClassification.useful
+            if data[2] == ItemType.JUNK:
+                classification = ItemClassification.filler
+            elif data[2] == ItemType.PROGRESSION:
+                classification = ItemClassification.progression
+            result = AquariaItem(name, classification, data[0], self.player)
+        except BaseException:
+            raise Exception('The item ' + name + ' is not valid.')
+
+        return result
+
+    def __pre_fill_item(self, item_name: str, location_name: str, precollected) -> None:
         """Pre-assign an item to a location"""
-        self.exclude.append(item_name)
-        data = item_table[item_name]
-        item = AquariaItem(item_name, ItemClassification.useful, data[0], self.player)
-        self.multiworld.get_location(location_name, self.player).place_locked_item(item)
+        if item_name not in precollected:
+            self.exclude.append(item_name)
+            data = item_table[item_name]
+            item = AquariaItem(item_name, ItemClassification.useful, data[0], self.player)
+            self.multiworld.get_location(location_name, self.player).place_locked_item(item)
 
     def create_items(self) -> None:
         """Create every item in the world"""
+        precollected = [item.name for item in self.multiworld.precollected_items[self.player]]
         if self.options.turtle_randomizer.value > 0:
             if self.options.turtle_randomizer.value == 2:
-                self.__pre_fill_item("Transturtle Final Boss", "Final boss area, Transturtle")
+                self.__pre_fill_item("Transturtle Final Boss", "Final boss area, Transturtle", precollected)
         else:
-            self.__pre_fill_item("Transturtle Veil top left", "The veil top left area, Transturtle")
-            self.__pre_fill_item("Transturtle Veil top right", "The veil top right area, Transturtle")
-            self.__pre_fill_item("Transturtle Open Water top left", "Open water top right area, Transturtle")
-            self.__pre_fill_item("Transturtle Forest bottom left", "Kelp Forest bottom left area, Transturtle")
-            self.__pre_fill_item("Transturtle Home water", "Home water, Transturtle")
-            self.__pre_fill_item("Transturtle Abyss right", "Abyss right area, Transturtle")
-            self.__pre_fill_item("Transturtle Final Boss", "Final boss area, Transturtle")
+            self.__pre_fill_item("Transturtle Veil top left", "The veil top left area, Transturtle", precollected)
+            self.__pre_fill_item("Transturtle Veil top right", "The veil top right area, Transturtle", precollected)
+            self.__pre_fill_item("Transturtle Open Water top left", "Open water top right area, Transturtle",
+                                 precollected)
+            self.__pre_fill_item("Transturtle Forest bottom left", "Kelp Forest bottom left area, Transturtle",
+                                 precollected)
+            self.__pre_fill_item("Transturtle Home water", "Home water, Transturtle", precollected)
+            self.__pre_fill_item("Transturtle Abyss right", "Abyss right area, Transturtle", precollected)
+            self.__pre_fill_item("Transturtle Final Boss", "Final boss area, Transturtle", precollected)
             # The last two are inverted because in the original game, they are special turtle that communicate directly
-            self.__pre_fill_item("Transturtle Simon says", "Arnassi Ruins, Transturtle")
-            self.__pre_fill_item("Transturtle Arnassi ruins", "Simon says area, Transturtle")
+            self.__pre_fill_item("Transturtle Simon says", "Arnassi Ruins, Transturtle", precollected)
+            self.__pre_fill_item("Transturtle Arnassi ruins", "Simon says area, Transturtle", precollected)
         for name, data in item_table.items():
-            if name not in self.exclude:
-                classification: ItemClassification = ItemClassification.useful
-                if data[2] == ItemType.JUNK:
-                    classification = ItemClassification.filler
-                elif data[2] == ItemType.PROGRESSION:
-                    classification = ItemClassification.progression
-                for i in range(data[1]):
-                    item = AquariaItem(name, classification, data[0], self.player)
-                    self.multiworld.itempool.append(item)
+            if name in precollected:
+                precollected.remove(name)
+                self.multiworld.itempool.append(self.create_item("Sea loaf"))
+            else:
+                if name not in self.exclude:
+                    for i in range(data[1]):
+                        item = self.create_item(name)
+                        self.multiworld.itempool.append(item)
 
     def __set_excluded_location(self) -> None:
         if self.options.big_bosses_to_beat.value > 0:
