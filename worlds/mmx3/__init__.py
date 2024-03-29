@@ -97,15 +97,30 @@ class MMX3World(World):
         itempool += [self.create_item(ItemName.ride_hawk)]
         itempool += [self.create_item(ItemName.ride_frog)]
         
-        itempool += [self.create_item(ItemName.z_saber)]
+        if self.options.logic_z_saber.value == 5:
+            itempool += [self.create_item(ItemName.z_saber, ItemClassification.useful)]
+        else:
+            itempool += [self.create_item(ItemName.z_saber)]
 
-        itempool += [self.create_item(ItemName.third_armor_helmet) for _ in range(2)]
-        itempool += [self.create_item(ItemName.third_armor_body) for _ in range(2)]
-        itempool += [self.create_item(ItemName.third_armor_arms) for _ in range(2)]
+        if self.options.doppler_open.value == 3 or self.options.vile_open.value == 3:
+            itempool += [self.create_item(ItemName.third_armor_helmet) for _ in range(2)]
+            itempool += [self.create_item(ItemName.third_armor_body) for _ in range(2)]
+            itempool += [self.create_item(ItemName.third_armor_arms) for _ in range(2)]
+        else:
+            itempool += [self.create_item(ItemName.third_armor_helmet, ItemClassification.useful) for _ in range(2)]
+            itempool += [self.create_item(ItemName.third_armor_body, ItemClassification.useful) for _ in range(2)]
+            itempool += [self.create_item(ItemName.third_armor_arms, ItemClassification.useful)]
+            itempool += [self.create_item(ItemName.third_armor_arms)]
         itempool += [self.create_item(ItemName.third_armor_legs) for _ in range(2)]
 
-        itempool += [self.create_item(ItemName.heart_tank) for _ in range(8)]
-        itempool += [self.create_item(ItemName.sub_tank) for _ in range(4)]
+        if self.options.doppler_open.value == 4 or self.options.vile_open.value == 4:
+            itempool += [self.create_item(ItemName.heart_tank) for _ in range(8)]
+        else:
+            itempool += [self.create_item(ItemName.heart_tank, ItemClassification.useful) for _ in range(8)]
+        if self.options.doppler_open.value == 5 or self.options.vile_open.value == 5:
+            itempool += [self.create_item(ItemName.sub_tank) for _ in range(4)]
+        else:
+            itempool += [self.create_item(ItemName.sub_tank, ItemClassification.useful) for _ in range(4)]
 
         # Setup junk items
         junk_count = total_required_locations - len(itempool)
@@ -142,15 +157,13 @@ class MMX3World(World):
         # Finish
         self.multiworld.itempool += itempool
 
-    def create_item(self, name: str, force_non_progression=False) -> Item:
+    def create_item(self, name: str, force_classification=False) -> Item:
         data = item_table[name]
 
-        if force_non_progression:
-            classification = ItemClassification.filler
+        if force_classification:
+            classification = force_classification
         elif data.progression:
             classification = ItemClassification.progression
-        elif data.useful:
-            classification = ItemClassification.useful
         elif data.trap:
             classification = ItemClassification.trap
         else:

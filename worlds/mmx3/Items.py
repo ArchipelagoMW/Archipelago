@@ -7,10 +7,8 @@ from .Names import ItemName
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
     progression: bool
-    useful: bool = False
     trap: bool = False
     quantity: int = 1
-    event: bool = False
 
 
 class MMX3Item(Item):
