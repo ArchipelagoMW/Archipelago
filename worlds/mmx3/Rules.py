@@ -56,7 +56,6 @@ def set_rules(world: MMX3World):
              lambda state: state.has(EventName.dr_doppler_lab_3_clear, player))
 
     # Set Boss rematch rules
-    print (world.options.doppler_lab_3_boss_rematch_count.value)
     set_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_3_rematches} -> {RegionName.dr_doppler_lab_3_boss}", player),
              lambda state: state.has(EventName.boss_rematch_clear, player, world.options.doppler_lab_3_boss_rematch_count.value))
 
