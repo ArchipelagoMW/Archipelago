@@ -18,10 +18,11 @@ When the world has parsed its options, a second function is called to finalize t
 import copy
 from collections import defaultdict
 from functools import lru_cache
-from typing import cast, TYPE_CHECKING, FrozenSet, Set, Dict, List, Tuple
 from logging import warning
+from typing import TYPE_CHECKING, Dict, FrozenSet, List, Set, Tuple, cast
 
-from .data import static_logic as StaticWitnessLogic, utils
+from .data import static_logic as StaticWitnessLogic
+from .data import utils
 from .data.item_definition_classes import DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
 
 if TYPE_CHECKING:
@@ -66,10 +67,10 @@ class WitnessPlayerLogic:
 
             all_options: Set[FrozenSet[str]] = set()
 
-            for dependentItem in door_items:
-                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(dependentItem)
+            for dependent_item in door_items:
+                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(dependent_item)
                 for items_option in these_items:
-                    all_options.add(items_option.union(dependentItem))
+                    all_options.add(items_option.union(dependent_item))
 
             # If this entity is not an EP, and it has an associated door item, ignore the original power dependencies
             if StaticWitnessLogic.ENTITIES_BY_HEX[entity_hex]["entityType"] != "EP":
@@ -125,8 +126,8 @@ class WitnessPlayerLogic:
                 dependent_items_for_option = utils.dnf_and([dependent_items_for_option, new_items])
 
             for items_option in these_items:
-                for dependentItem in dependent_items_for_option:
-                    all_options.add(items_option.union(dependentItem))
+                for dependent_item in dependent_items_for_option:
+                    all_options.add(items_option.union(dependent_item))
 
         return utils.dnf_remove_redundancies(frozenset(all_options))
 

@@ -3,14 +3,14 @@ Defines Region for The Witness, assigns locations to them,
 and connects them with the proper requirements
 """
 from collections import defaultdict
-from typing import FrozenSet, TYPE_CHECKING, Dict, Tuple, List
+from typing import TYPE_CHECKING, Dict, FrozenSet, List, Tuple
 
 from BaseClasses import Entrance, Region
-from .locations import WitnessPlayerLocations, StaticWitnessLocations
-from .player_logic import WitnessPlayerLogic
 from worlds.generic.Rules import CollectionRule
 
 from .data import static_logic as StaticWitnessLogic
+from .locations import StaticWitnessLocations, WitnessPlayerLocations
+from .player_logic import WitnessPlayerLogic
 
 if TYPE_CHECKING:
     from . import WitnessWorld

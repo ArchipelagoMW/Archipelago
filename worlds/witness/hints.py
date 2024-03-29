@@ -1,7 +1,9 @@
 import logging
 from dataclasses import dataclass
-from typing import Tuple, List, TYPE_CHECKING, Set, Dict, Optional, Union
-from BaseClasses import Item, Location, LocationProgressType, CollectionState
+from typing import TYPE_CHECKING, Dict, List, Optional, Set, Tuple, Union
+
+from BaseClasses import CollectionState, Item, Location, LocationProgressType
+
 from .data import static_logic as StaticWitnessLogic
 from .data.utils import weighted_sample
 

@@ -3,10 +3,9 @@ Defines constants for different types of locations in the game
 """
 from typing import TYPE_CHECKING
 
-from .player_logic import WitnessPlayerLogic
-
-from .data import static_logic as StaticWitnessLogic
 from .data import static_locations as StaticWitnessLocations
+from .data import static_logic as StaticWitnessLogic
+from .player_logic import WitnessPlayerLogic
 
 if TYPE_CHECKING:
     from . import WitnessWorld

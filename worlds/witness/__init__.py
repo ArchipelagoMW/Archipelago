@@ -2,25 +2,25 @@
 Archipelago init file for The Witness
 """
 import dataclasses
+from logging import error, warning
+from typing import Any, Dict, List, Optional, cast
 
-from typing import Dict, Optional, cast, List, Any
-from BaseClasses import Region, Location, Entrance, Tutorial, CollectionState
+from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial
 from Options import PerGameCommonOptions, Toggle
+from worlds.AutoWorld import WebWorld, World
+
+from .data import static_items as StaticWitnessItems
+from .data import static_logic as StaticWitnessLogic
 from .data.item_definition_classes import DoorItemDefinition, ItemData
-from .presets import witness_option_presets
-from worlds.AutoWorld import World, WebWorld
-from .player_logic import WitnessPlayerLogic
-from .hints import generate_joke_hints, create_all_hints, make_laser_hints, make_compact_hint_data, CompactItemData
-from .locations import WitnessPlayerLocations, StaticWitnessLocations
+from .data.utils import get_audio_logs
+from .hints import CompactItemData, create_all_hints, generate_joke_hints, make_compact_hint_data, make_laser_hints
+from .locations import StaticWitnessLocations, WitnessPlayerLocations
+from .options import TheWitnessOptions
 from .player_items import WitnessItem, WitnessPlayerItems
+from .player_logic import WitnessPlayerLogic
+from .presets import witness_option_presets
 from .regions import WitnessPlayerRegions
 from .rules import set_rules
-from .options import TheWitnessOptions
-from .data.utils import get_audio_logs
-from logging import warning, error
-
-from .data import static_logic as StaticWitnessLogic
-from .data import static_items as StaticWitnessItems
 
 
 class WitnessWebWorld(WebWorld):
@@ -368,7 +368,7 @@ class WitnessWorld(World):
         # If the player's plando options are malformed, the item_name parameter could be a dictionary containing the
         #   name of the item, rather than the item itself. This is a workaround to prevent a crash.
         if isinstance(item_name, dict):
-            item_name = list(item_name.keys())[0]
+            item_name = next(iter(item_name))
 
         # this conditional is purely for unit tests, which need to be able to create an item before generate_early
         item_data: ItemData

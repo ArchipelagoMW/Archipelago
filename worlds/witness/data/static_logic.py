@@ -1,10 +1,22 @@
 from functools import lru_cache
 from typing import Dict, List
 
-from .item_definition_classes import ItemCategory, CATEGORY_NAME_MAPPINGS, DoorItemDefinition, WeightedItemDefinition, \
-    ProgressiveItemDefinition, ItemDefinition
-from .utils import define_new_region, parse_lambda, get_items, get_sigma_normal_logic, get_sigma_expert_logic,\
-    get_vanilla_logic
+from .item_definition_classes import (
+    CATEGORY_NAME_MAPPINGS,
+    DoorItemDefinition,
+    ItemCategory,
+    ItemDefinition,
+    ProgressiveItemDefinition,
+    WeightedItemDefinition,
+)
+from .utils import (
+    define_new_region,
+    get_items,
+    get_sigma_expert_logic,
+    get_sigma_normal_logic,
+    get_vanilla_logic,
+    parse_lambda,
+)
 
 
 class StaticWitnessLogicObj:
@@ -110,7 +122,7 @@ class StaticWitnessLogicObj:
             }
 
             if location_type == "Obelisk Side":
-                eps = set(list(required_panels)[0])
+                eps = set(next(iter(required_panels)))
                 eps -= {"Theater to Tunnels"}
 
                 eps_ints = {int(h, 16) for h in eps}

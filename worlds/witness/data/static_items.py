@@ -1,11 +1,10 @@
 from typing import Dict, List
 
 from BaseClasses import ItemClassification
-from .item_definition_classes import ItemData, ItemCategory, DoorItemDefinition
 
 from . import static_logic as StaticWitnessLogic
+from .item_definition_classes import DoorItemDefinition, ItemCategory, ItemData
 from .static_locations import ID_START
-
 
 ITEM_DATA: Dict[str, ItemData] = {}
 ITEM_GROUPS: Dict[str, List[str]] = {}

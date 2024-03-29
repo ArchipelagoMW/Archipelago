@@ -6,11 +6,12 @@ depending on the items received
 from typing import TYPE_CHECKING, FrozenSet
 
 from BaseClasses import CollectionState
-from .player_logic import WitnessPlayerLogic
-from .locations import WitnessPlayerLocations
-from .data import static_logic as StaticWitnessLogic
+from worlds.generic.Rules import CollectionRule, set_rule
+
 from . import WitnessPlayerRegions
-from worlds.generic.Rules import set_rule, CollectionRule
+from .data import static_logic as StaticWitnessLogic
+from .locations import WitnessPlayerLocations
+from .player_logic import WitnessPlayerLogic
 
 if TYPE_CHECKING:
     from . import WitnessWorld

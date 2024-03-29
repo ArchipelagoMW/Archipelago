@@ -1,8 +1,8 @@
 from functools import lru_cache
 from math import floor
-from typing import List, Collection, FrozenSet, Tuple, Dict, Any, Set
 from pkgutil import get_data
 from random import random
+from typing import Any, Collection, Dict, FrozenSet, List, Set, Tuple
 
 
 def weighted_sample(world_random: random, population: List, weights: List[float], k: int) -> List:

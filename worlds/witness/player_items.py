@@ -2,18 +2,23 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
+from typing import TYPE_CHECKING, Dict, List, Set
 
-from typing import Dict, List, Set, TYPE_CHECKING
+from BaseClasses import Item, ItemClassification, MultiWorld
 
-from BaseClasses import Item, MultiWorld, ItemClassification
-from .data.item_definition_classes import ItemCategory, DoorItemDefinition, ItemDefinition, ProgressiveItemDefinition, \
-    WeightedItemDefinition, ItemData
+from .data import static_items as StaticWitnessItems
+from .data import static_logic as StaticWitnessLogic
+from .data.item_definition_classes import (
+    DoorItemDefinition,
+    ItemCategory,
+    ItemData,
+    ItemDefinition,
+    ProgressiveItemDefinition,
+    WeightedItemDefinition,
+)
+from .data.utils import build_weighted_int_list
 from .locations import WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
-from .data.utils import build_weighted_int_list
-
-from .data import static_logic as StaticWitnessLogic
-from .data import static_items as StaticWitnessItems
 
 if TYPE_CHECKING:
     from . import WitnessWorld
