@@ -126,24 +126,24 @@ class TunicWorld(World):
                 for cxn in multiworld.plando_connections[tunic.player]:
                     for group_cxn in cls.seed_groups[group]["plando"]:
                         
-                    # if neither entrance nor exit match anything in the group, add to group
-                    if not (cxn.entrance == group_cxn.entrance or cxn.entrance == group_cxn.exit
-                           or cxn.exit == group_cxn.entrance or cxn.exit == group_cxn.exit):
-                        cls.seed_groups[group]["plando"].append(cxn)
-                        continue
-                               
-                    # check if this pair is the same as a pair in the group already
-                    is_mismatched = (
-                        cxn.entrance == group_cxn.entrance and cxn.exit != group_cxn.exit
-                        or cxn.entrance == group_cxn.exit and cxn.exit != group_cxn.entrance
-                        or cxn.exit == group_cxn.entrance and cxn.entrance != group_cxn.exit
-                        or cxn.exit == group_cxn.exit and cxn.entrance != group_cxn.entrance
-                    )
-                    if is_mismatched:
-                        raise Exception(f"TUNIC: Conflict between seed group {group}'s plando "
-                                        f"connection {group_cxn.entrance} <-> {group_cxn.exit} and "
-                                        f"{tunic.multiworld.get_player_name(tunic.player)}'s plando "
-                                        f"connection {cxn.entrance} <-> {cxn.exit}")
+                        # if neither entrance nor exit match anything in the group, add to group
+                        if not (cxn.entrance == group_cxn.entrance or cxn.entrance == group_cxn.exit
+                                or cxn.exit == group_cxn.entrance or cxn.exit == group_cxn.exit):
+                            cls.seed_groups[group]["plando"].append(cxn)
+                            continue
+                                   
+                        # check if this pair is the same as a pair in the group already
+                        is_mismatched = (
+                            cxn.entrance == group_cxn.entrance and cxn.exit != group_cxn.exit
+                            or cxn.entrance == group_cxn.exit and cxn.exit != group_cxn.entrance
+                            or cxn.exit == group_cxn.entrance and cxn.entrance != group_cxn.exit
+                            or cxn.exit == group_cxn.exit and cxn.entrance != group_cxn.entrance
+                        )
+                        if is_mismatched:
+                            raise Exception(f"TUNIC: Conflict between seed group {group}'s plando "
+                                            f"connection {group_cxn.entrance} <-> {group_cxn.exit} and "
+                                            f"{tunic.multiworld.get_player_name(tunic.player)}'s plando "
+                                            f"connection {cxn.entrance} <-> {cxn.exit}")
 
     def create_item(self, name: str) -> TunicItem:
         item_data = item_table[name]
