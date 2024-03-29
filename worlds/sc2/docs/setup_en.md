@@ -1,4 +1,4 @@
-# StarCraft 2 Wings of Liberty Randomizer Setup Guide
+# StarCraft 2 Randomizer Setup Guide
 
 This guide contains instructions on how to install and troubleshoot the StarCraft 2 Archipelago client, as well as where
 to obtain a config file for StarCraft 2.
@@ -88,7 +88,7 @@ specific description of what's going wrong and attach your log file to your mess
 
 ## Running in macOS
 
-To run StarCraft 2 through Archipelago in macOS, you will need to run the client via source as seen here: [macOS Guide](https://archipelago.gg/tutorial/Archipelago/mac/en). Note: to lauch the client, you will need to run the command `python3 Starcraft2Client.py`.
+To run StarCraft 2 through Archipelago in macOS, you will need to run the client via source as seen here: [macOS Guide](https://archipelago.gg/tutorial/Archipelago/mac/en). Note: to launch the client, you will need to run the command `python3 Starcraft2Client.py`.
 
 ## Running in Linux
 

@@ -18,7 +18,7 @@ indications pour obtenir un fichier de configuration de *Starcraft 2 Archipelago
    - Uniquement pour cette étape, les utilisateurs de macOS devraient plutôt suivre les instructions qui se trouvent à 
 ["Exécuter sous macOS"](#exécuter-sous-macos).
 3. Dans le client de *StarCraft 2 Archipelago*, écrire la commande `/download_data`. Cette commande va lancer 
-l'installation des *Maps* et des *Data files* qui sont nécessaires pour jouer à *StarCraft 2 Archipelago*.
+l'installation des fichiers qui sont nécessaires pour jouer à *StarCraft 2 Archipelago*.
 
 ## Où est-ce que j'obtiens le fichier de configuration (i.e., le *yaml*) pour ce jeu?
 
@@ -47,7 +47,7 @@ Utilisez la page [*Weighted Options*](/weighted-options) pour avoir accès à ce
 Si vous désirez des informations et/ou instructions générales sur l'utilisation d'un fichier *yaml* pour Archipelago, 
 veuilliez consutler [*Creating a YAML*](/tutorial/Archipelago/setup/en#creating-a-yaml).
 
-### Questions récurrentes à propos du fichier yaml
+### Questions récurrentes à propos du fichier *yaml*
 #### Comment est-ce que je sais que mon *yaml* est bien défini?
 
 La manière la plus simple de valider est d'essayer. 

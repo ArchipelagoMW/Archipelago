@@ -9,15 +9,17 @@ jeu:
 campagnes génériques, comme le fait d'avoir les deux types d'évolution en même temps pour une unité *Zerg* et toutes 
 les améliorations de la Lance d'Adun simultanément pour les *Protoss*.
 3. L'accès aux améliorations génériques des unités, e.g. les améliorations d'attaque et d'armure.
-4. D'autres améliorations diverses telles que les améliorations de laboratoire et les mercenaires pour les *Terran*, les 
-niveaux et les améliorations de Kerrigan pour les *Zerg*, et les améliorations de la Lance d'Adun pour les *Protoss*.
+4. D'autres améliorations diverses telles que les améliorations de laboratoire et les mercenaires pour les *Terran*, 
+les niveaux et les améliorations de Kerrigan pour les *Zerg*, et les améliorations de la Lance d'Adun pour les 
+*Protoss*.
 5. Avoir des *minerals*, du *vespene gaz*, et du *supply* au début de chaque mission.
 
 Les *items* sont trouvés en accomplissant du progrès dans les catégories suivantes:
 * Accomplir des missions
 * Accomplir les objectifs supplémentaires (e.g., récolter le matériel pour les recherches dans *Wings of Liverty*)
 * Atteindre des étapes importantes dans la mission, e.g. accomplir des sous-objectifs
-* Accomplir des défis basés sur les succès du jeu de base, e.g. éliminer tous les *Zerg* dans la mission *Devil's Playground*
+* Accomplir des défis basés sur les succès du jeu de base, e.g. éliminer tous les *Zerg* dans la mission 
+*Devil's Playground*
 
 Ces catégories, outre la première, peuvent être désactivées dans les options du jeu. 
 Par exemple, vous pouvez désactiver le fait d'obtenir des *items*  lorsque des étapes importantes d'une mission sont 
@@ -75,13 +77,19 @@ Les fichiers existants vont être écrasés.
     * Les options sont *default*, *slower*, *slow*, *normal*, *fast*, and *faster*.
 * `/color [faction] [color]` Remplace la couleur d'une des *factions* qui est jouable. 
     * Les options de *faction*: raynor, kerrigan, primal, protoss, nova.
-    * Les options de couleur: *white*, *red*, *blue*, *teal*, *purple*, *yellow*, *orange*, *green*, *lightpink*, *violet*, *lightgrey*, *darkgreen*, *brown*, *lightgreen*, *darkgrey*, *pink*, *rainbow*, *random*, *default*.
+    * Les options de couleur: *white*, *red*, *blue*, *teal*, *purple*, *yellow*, *orange*, *green*, *lightpink*, 
+*violet*, *lightgrey*, *darkgreen*, *brown*, *lightgreen*, *darkgrey*, *pink*, *rainbow*, *random*, *default*.
 * `/option [option_name] [option_value]` Permet de changer un option normalement définit dans le *yaml*. 
     * Si la commande est lancée sans option, la liste des options qui sont modifiables va être affichée.
-    * Les options qui peuvent être changées avec cette commande incluent sauter les cinématiques  automatiquement, la présence de Kerrigan dans les missions, la disponibilité de la Lance d'Adun, la quantité de ressources supplémentaires données au début des missions, la capacité de contrôler les alliées IA, etc.
+    * Les options qui peuvent être changées avec cette commande incluent sauter les cinématiques  automatiquement, la 
+présence de Kerrigan dans les missions, la disponibilité de la Lance d'Adun, la quantité de ressources supplémentaires 
+données au début des missions, la capacité de contrôler les alliées IA, etc.
 * `/disable_mission_check` Désactive les requit pour lancer les missions.
-Cette option a pour but de permettre de jouer en mode coopératif en permettant à un joueur de jouer à la prochaine mission de la chaîne qu'un autre joueur est en train d'entamer.
+Cette option a pour but de permettre de jouer en mode coopératif en permettant à un joueur de jouer à la prochaine 
+mission de la chaîne qu'un autre joueur est en train d'entamer.
 * `/play [mission_id]` Lance la mission correspondant à l'identifiant donné.
 * `/available` Affiche les missions qui sont présentement accessibles.
-* `/unfinished` Affiche les missions qui sont présentement accessibles et dont certains des objectifs permettant l'accès à un *item* n'ont pas été accomplis.
-* `/set_path [path]` Permet de définir manuellement où *StarCraft 2* est installé ce qui est pertinent seulement si la détection automatique de cette dernière échoue.
+* `/unfinished` Affiche les missions qui sont présentement accessibles et dont certains des objectifs permettant 
+l'accès à un *item* n'ont pas été accomplis.
+* `/set_path [path]` Permet de définir manuellement où *StarCraft 2* est installé ce qui est pertinent seulement si la 
+détection automatique de cette dernière échoue.
