@@ -4,6 +4,7 @@ from .locations import location_table
 from .er_data import Portal, tunic_er_regions, portal_mapping, \
     dependent_regions_restricted, dependent_regions_nmg, dependent_regions_ur
 from .er_rules import set_er_region_rules
+from .options import EntranceRando
 from worlds.generic import PlandoConnection
 from random import Random
 
@@ -127,7 +128,8 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     fixed_shop = world.options.fixed_shop
     laurels_location = world.options.laurels_location
 
-    if isinstance(world.options.entrance_rando.value, str):
+    # if it's not one of the EntranceRando options, it's a custom seed
+    if world.options.entrance_rando not in EntranceRando.options:
         seed_group = world.seed_groups[world.options.entrance_rando.value]
         logic_rules = seed_group["logic_rules"]
         fixed_shop = seed_group["fixed_shop"]
@@ -202,7 +204,6 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         for connection in plando_connections:
             p_entrance = connection.entrance
             p_exit = connection.exit
-            entrance_dead_end = False
 
             portal1 = None
             portal2 = None
@@ -215,7 +216,18 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                     portal2 = portal
 
             # search dead_ends individually since we can't really remove items from two_plus during the loop
-            if not portal1:
+            if portal1:
+                two_plus.remove(portal1)
+            else:
+                # if not both, they're both dead ends
+                if not portal2:
+                    if world.options.entrance_rando in EntranceRando.options:
+                        raise Exception(f"Tunic ER seed group {world.options.entrance_rando.value} paired a dead "
+                                        "end to a dead end in their plando connections.")
+                    else:
+                        raise Exception(f"{player_name} paired a dead end to a dead end in their "
+                                        "plando connections.")
+                    
                 for portal in dead_ends:
                     if p_entrance == portal.name:
                         portal1 = portal
@@ -223,26 +235,19 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                 if not portal1:
                     raise Exception(f"Could not find entrance named {p_entrance} for "
                                     f"plando connections in {player_name}'s YAML.")
-                entrance_dead_end = True
                 dead_ends.remove(portal1)
-            else:
-                two_plus.remove(portal1)
 
-            if not portal2:
+            if portal2:
+                two_plus.remove(portal2)
+            else:
+                # check if portal2 is a dead end
                 for portal in dead_ends:
                     if p_exit == portal.name:
                         portal2 = portal
                         break
+                # if it's not a dead end, it might be a shop
                 if p_exit == "Shop Portal":
-                    # don't pair dead ends to dead ends, that's bad
-                    if entrance_dead_end:
-                        if isinstance(world.options.entrance_rando.value, str):
-                            raise Exception(f"Tunic ER seed group {world.options.entrance_rando.value} paired a dead "
-                                            "end to a dead end in their plando connections.")
-                        else:
-                            raise Exception(f"{player_name} paired a dead end to a dead end in their "
-                                            "plando connections.")
-                    portal2 = Portal(name="Shop Portal", region=f"Shop",
+                    portal2 = Portal(name="Shop Portal", region="Shop",
                                      destination="Previous Region", tag="_")
                     shop_count -= 1
                     if shop_count < 0:
@@ -251,21 +256,12 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                         if p.name == p_entrance:
                             shop_scenes.add(p.scene())
                             break
+                # and if it's neither shop nor dead end, it just isn't correct
                 else:
                     if not portal2:
                         raise Exception(f"Could not find entrance named {p_exit} for "
                                         f"plando connections in {player_name}'s YAML.")
-                    # don't pair dead ends to dead ends, that's bad
-                    if entrance_dead_end:
-                        if isinstance(world.options.entrance_rando.value, str):
-                            raise Exception(f"Tunic ER seed group {world.options.entrance_rando.value} paired a dead "
-                                            "end to a dead end in their plando connections.")
-                        else:
-                            raise Exception(f"{player_name} paired a dead end to a dead end in their "
-                                            "plando connections.")
                     dead_ends.remove(portal2)
-            else:
-                two_plus.remove(portal2)
 
             portal_pairs[portal1] = portal2
 
