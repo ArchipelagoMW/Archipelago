@@ -329,9 +329,7 @@ class WitnessWorld(World):
                     self.log_ids_to_hints[int(audio_log, 16)] = compact_hint_data
 
         # Client will generate joke hints for these.
-        while audio_logs:
-            audio_log = audio_logs.pop()
-            self.log_ids_to_hints[int(audio_log, 16)] = ("", -1, -1)
+        self.log_ids_to_hints.update({int(audio_log, 16): ("", -1, -1) for audio_log in audio_logs})
 
         # Options for the client & auto-tracker
 
