@@ -178,15 +178,12 @@ class LingoPlayerLogic:
                         if not world.options.enable_pilgrimage:
                             self.set_door_item(room_name, door_name, door_data.item_name)
                             self.real_items.append(door_data.item_name)
-        
-        for door_group in door_groups:
-            self.real_items.append(door_group)
+
+        self.real_items += door_groups
         
         # Create color items, if needed.
         if color_shuffle:
-            for name, item in ALL_ITEM_TABLE.items():
-                if item.type == ItemType.COLOR:
-                    self.real_items.append(name)
+            self.real_items += [name for name, item in ALL_ITEM_TABLE.items() if item.type == ItemType.COLOR]
 
         # Create events for each achievement panel, so that we can determine when THE MASTER is accessible.
         for room_name, room_data in PANELS_BY_ROOM.items():

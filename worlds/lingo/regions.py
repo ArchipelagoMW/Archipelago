@@ -58,13 +58,11 @@ def connect_entrance(regions: Dict[str, Region], source_region: Region, target_r
             for region in player_logic.calculate_door_requirements(effective_room, door.door, world).rooms:
                 world.multiworld.register_indirect_condition(regions[region], connection)
     
-    if not pilgrimage and world.options.enable_pilgrimage and is_acceptable_pilgrimage_entrance(entrance_type, world):
+    if not pilgrimage and world.options.enable_pilgrimage and is_acceptable_pilgrimage_entrance(entrance_type, world)\
+            and source_region.name != "Menu":
         for part in range(1, 6):
             pilgrimage_descriptor = f" (Pilgrimage Part {part})"
-            if source_region.name == "Menu":
-                pilgrim_source_region = source_region
-            else:
-                pilgrim_source_region = regions[f"{source_region.name}{pilgrimage_descriptor}"]
+            pilgrim_source_region = regions[f"{source_region.name}{pilgrimage_descriptor}"]
             pilgrim_target_region = regions[f"{target_region.name}{pilgrimage_descriptor}"]
 
             effective_door = door
