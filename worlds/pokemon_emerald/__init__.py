@@ -300,6 +300,7 @@ class PokemonEmeraldWorld(World):
 
             # Locations which are directly unlocked by defeating Norman.
             exclude_locations([
+                "Petalburg Gym - Leader Norman",
                 "Petalburg Gym - Balance Badge",
                 "Petalburg Gym - TM42 from Norman",
                 "Petalburg City - HM03 from Wally's Uncle",
