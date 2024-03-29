@@ -198,10 +198,16 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
         # There are leftover unplaceable items and locations that won't accept them
         if multiworld.can_beat_game():
             logging.warning(
-                f'Not all items placed. Game beatable anyway. (Could not place {unplaced_items})')
+                f"Not all items placed. Game beatable anyway.\nCould not place:\n"
+                f"{', '.join(str(item) for item in unplaced_items)}")
         else:
-            raise FillError(f'No more spots to place {unplaced_items}, locations {locations} are invalid. '
-                            f'Already placed {len(placements)}: {", ".join(str(place) for place in placements)}')
+            raise FillError(f"No more spots to place {len(unplaced_items)} items. Remaining locations are invalid.\n"
+                            f"Unplaced items:\n"
+                            f"{', '.join(str(item) for item in unplaced_items)}\n"
+                            f"Unfilled locations:\n"
+                            f"{', '.join(str(location) for location in locations)}\n"
+                            f"Already placed {len(placements)}:\n"
+                            f"{', '.join(str(place) for place in placements)}")
 
     item_pool.extend(unplaced_items)
 
@@ -273,8 +279,13 @@ def remaining_fill(multiworld: MultiWorld,
 
     if unplaced_items and locations:
         # There are leftover unplaceable items and locations that won't accept them
-        raise FillError(f'No more spots to place {unplaced_items}, locations {locations} are invalid. '
-                        f'Already placed {len(placements)}: {", ".join(str(place) for place in placements)}')
+        raise FillError(f"No more spots to place {len(unplaced_items)} items. Remaining locations are invalid.\n"
+                        f"Unplaced items:\n"
+                        f"{', '.join(str(item) for item in unplaced_items)}\n"
+                        f"Unfilled locations:\n"
+                        f"{', '.join(str(location) for location in locations)}\n"
+                        f"Already placed {len(placements)}:\n"
+                        f"{', '.join(str(place) for place in placements)}")
 
     itempool.extend(unplaced_items)
 
@@ -457,7 +468,9 @@ def distribute_items_restrictive(multiworld: MultiWorld) -> None:
         fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool, name="Progression")
         if progitempool:
             raise FillError(
-                f'Not enough locations for progress items. There are {len(progitempool)} more items than locations')
+                f"Not enough locations for progression items. "
+                f"There are {len(progitempool)} more progression items than there are available locations."
+            )
         accessibility_corrections(multiworld, multiworld.state, defaultlocations)
 
     for location in lock_later:
@@ -470,7 +483,9 @@ def distribute_items_restrictive(multiworld: MultiWorld) -> None:
     remaining_fill(multiworld, excludedlocations, filleritempool, "Remaining Excluded")
     if excludedlocations:
         raise FillError(
-            f"Not enough filler items for excluded locations. There are {len(excludedlocations)} more locations than items")
+            f"Not enough filler items for excluded locations. "
+            f"There are {len(excludedlocations)} more excluded locations than filler or trap items."
+        )
 
     restitempool = filleritempool + usefulitempool
 
@@ -481,13 +496,13 @@ def distribute_items_restrictive(multiworld: MultiWorld) -> None:
 
     if unplaced or unfilled:
         logging.warning(
-            f'Unplaced items({len(unplaced)}): {unplaced} - Unfilled Locations({len(unfilled)}): {unfilled}')
+            f"Unplaced items({len(unplaced)}): {unplaced} - Unfilled Locations({len(unfilled)}): {unfilled}")
         items_counter = Counter(location.item.player for location in multiworld.get_locations() if location.item)
         locations_counter = Counter(location.player for location in multiworld.get_locations())
         items_counter.update(item.player for item in unplaced)
         locations_counter.update(location.player for location in unfilled)
         print_data = {"items": items_counter, "locations": locations_counter}
-        logging.info(f'Per-Player counts: {print_data})')
+        logging.info(f"Per-Player counts: {print_data})")
 
 
 def flood_items(multiworld: MultiWorld) -> None:
