@@ -43,6 +43,8 @@ class ArtisanGood:
     def specific_dried(cls, food: str) -> str:
         if food[-1] == "s":
             return f"Dried {food}"
+        if food[-1] == "y":
+            return f"Dried {food[:-1]}ies"
         return f"Dried {food}s"
 
     @classmethod
