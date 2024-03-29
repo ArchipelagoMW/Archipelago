@@ -2,9 +2,11 @@ from typing import Callable
 
 from enum import IntEnum, auto
 from BaseClasses import CollectionState
+from . import SoulBlazerWorld
 from .Names import ItemName, ItemID, LairName, LairID, ChestName, ChestID, NPCRewardName, NPCRewardID, NPCName
 from .Items import emblems_table
 from .Locations import SoulBlazerLocationData
+
 
 class LocationFlag(IntEnum):
     NONE = 0
@@ -44,8 +46,7 @@ rule_for_flag = {
 
 # Many locations depend on one or two NPC releases so rather than create regions to hold one location,
 # we put these location-specific dependencies here.
-# TODO: Some of these NPCs are not locations and do not have checks. remove.
-# TODO: chests too
+# TODO: Add chests dependencies too
 location_dependencies = {
     # Act 1 - Grass Valley
     NPCRewardName.TOOL_SHOP_OWNER: [NPCName.TOOL_SHOP_OWNER],
@@ -141,5 +142,11 @@ def get_rule_for_location(name: str, player: int, flag: LocationFlag) -> Callabl
         )
     
     return rule
+
+def set_rules(world: SoulBlazerWorld) -> None:
+    # TODO: Replace "Test" with Deathtoll's Palace Region name?
+    world.multiworld.get_region("Test", world.player).locations += world.create_victory_event()
+    world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
+
 
 #TODO: access rule for region/entrance
