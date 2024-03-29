@@ -1,5 +1,5 @@
 from BaseClasses import Item, Tutorial, ItemClassification
-from .Items import MetroidPrimeItem, suit_upgrade_table, artifact_table, item_table
+from .Items import MetroidPrimeItem, suit_upgrade_table, artifact_table, item_table, custom_suit_upgrade_table
 from .PrimeOptions import MetroidPrimeOptions
 from .Locations import every_location
 from .Regions import create_regions
@@ -41,7 +41,7 @@ class MetroidPrimeWorld(World):
         createdthing = item_table[name]
         if override:
             return MetroidPrimeItem(name, ItemClassification.progression, createdthing.code, self.player)
-        return MetroidPrimeItem(name, createdthing.progression, createdthing.code, self.player)
+        return MetroidPrimeItem(name, createdthing.classification, createdthing.code, self.player)
 
     def create_items(self) -> None:
         # add artifacts
@@ -59,7 +59,7 @@ class MetroidPrimeWorld(World):
         if spring == 1:
             self.multiworld.itempool += [self.create_item("Spring Ball")]
             items_added += 1
-        for i in suit_upgrade_table:
+        for i in {*suit_upgrade_table, *custom_suit_upgrade_table}:
             if i == "Power Beam" or i == "Scan Visor" or i == "Power Suit" or i == "Combat Visor":
                 self.multiworld.push_precollected(self.create_item(i))
             elif i in excluded.keys():
