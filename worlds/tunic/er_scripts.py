@@ -129,7 +129,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     laurels_location = world.options.laurels_location
 
     # if it's not one of the EntranceRando options, it's a custom seed
-    if world.options.entrance_rando not in EntranceRando.options:
+    if world.options.entrance_rando.value not in EntranceRando.options:
         seed_group = world.seed_groups[world.options.entrance_rando.value]
         logic_rules = seed_group["logic_rules"]
         fixed_shop = seed_group["fixed_shop"]
@@ -221,7 +221,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             else:
                 # if not both, they're both dead ends
                 if not portal2:
-                    if world.options.entrance_rando in EntranceRando.options:
+                    if world.options.entrance_rando.value in EntranceRando.options:
                         raise Exception(f"Tunic ER seed group {world.options.entrance_rando.value} paired a dead "
                                         "end to a dead end in their plando connections.")
                     else:
