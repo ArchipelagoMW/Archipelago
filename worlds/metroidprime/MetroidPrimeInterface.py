@@ -94,6 +94,20 @@ class MetroidPrimeInterface:
             return world_by_id(world_asset_id)
         return None
 
+    def get_current_health(self) -> float:
+        player_state_pointer = int.from_bytes(
+            self.dolphin_client.read_address(cstate_manager_global + 0x8B8, 4), "big")
+        result = self.dolphin_client.read_pointer(player_state_pointer, 0xC, 4)
+        if result is None:
+            return None
+        return struct.unpack(">f", result)[0]
+
+    def set_current_health(self, new_health_amount: float):
+      player_state_pointer = int.from_bytes(self.dolphin_client.read_address(cstate_manager_global + 0x8B8, 4), "big")
+      self.dolphin_client.write_pointer(player_state_pointer, 0xC, 4, struct.pack(">f", new_health_amount))
+      return self.get_current_health()
+
+
     def connect_to_game(self):
         """Initializes the connection to dolphin and verifies it is connected to Metroid Prime"""
         self.dolphin_client.connect()

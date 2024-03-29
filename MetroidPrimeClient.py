@@ -55,6 +55,7 @@ async def dolphin_sync_task(ctx: MetroidPrimeContext):
 
 
 async def _handle_game_ready(ctx: MetroidPrimeContext):
+    print(ctx.game_interface.set_current_health(100))
     if ctx.server and ctx.slot:
         if "DeathLink" in ctx.tags:
             logger.warn("DeathLink not implemented")
