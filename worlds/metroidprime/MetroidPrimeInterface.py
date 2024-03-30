@@ -39,7 +39,8 @@ class InventoryItemData(ItemData):
     current_capacity: int
 
     def __init__(self, item_data: ItemData, current_amount: int, current_capacity: int) -> None:
-        super().__init__(item_data.name, item_data.id, item_data.classification, item_data.max_capacity)
+        super().__init__(item_data.name, item_data.id,
+                         item_data.classification, item_data.max_capacity)
         self.current_amount = current_amount
         self.current_capacity = current_capacity
 

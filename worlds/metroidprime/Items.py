@@ -27,7 +27,7 @@ suit_upgrade_table: dict[str, ItemData] = {
     "Ice Beam": ItemData("Ice Beam", 1, ItemClassification.progression),
     "Wave Beam": ItemData("Wave Beam", 2, ItemClassification.progression),
     "Plasma Beam": ItemData("Plasma Beam", 3, ItemClassification.progression),
-    "Missile Expansion": ItemData("Missile Expansion", 4, ItemClassification.useful, 999 ),
+    "Missile Expansion": ItemData("Missile Expansion", 4, ItemClassification.useful, 999),
     "Scan Visor": ItemData("Scan Visor", 5, ItemClassification.progression),
     "Morph Ball Bombs": ItemData("Morph Ball Bombs", 6, ItemClassification.progression),
     "Power Bomb Expansion": ItemData("Power Bomb Expansion", 7, ItemClassification.useful, 99),
