@@ -33,7 +33,6 @@ class ArchipIDLEWorld(World):
     """
     game = "ArchipIDLE"
     topology_present = False
-    data_version = 5
     hidden = (datetime.now().month != 4)  # ArchipIDLE is only visible during April
     web = ArchipIDLEWebWorld()
 
@@ -65,23 +64,25 @@ class ArchipIDLEWorld(World):
             )
         ]
 
-        for i in range(25):
+        for i in range(50):
             item_pool.append(ArchipIDLEItem(
                 item_table[1],
                 ItemClassification.progression,
                 self.item_name_to_id[item_table[1]],
                 self.player
             ))
+
+        for i in range(20):
             item_pool.append(ArchipIDLEItem(
                 item_table[2],
-                ItemClassification.progression,
+                ItemClassification.filler,
                 self.item_name_to_id[item_table[2]],
                 self.player
             ))
 
         item_table_copy = list(item_table[3:])
         self.random.shuffle(item_table_copy)
-        for i in range(150):
+        for i in range(129):
             item_pool.append(ArchipIDLEItem(
                 item_table_copy[i],
                 ItemClassification.progression if i < 9 else ItemClassification.filler,
