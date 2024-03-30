@@ -26,7 +26,7 @@ class MetroidPrimeContext(CommonContext):
 
     def on_deathlink(self, data: Utils.Dict[str, Utils.Any]) -> None:
         super().on_deathlink(data)
-        logger.info()
+        logger.debug("Death link not implemented")
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
