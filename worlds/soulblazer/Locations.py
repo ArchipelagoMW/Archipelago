@@ -7,8 +7,7 @@ from .Rules import LocationFlag, get_rule_for_location
 from .Names import LairID, LairName, ChestID, ChestName, NPCRewardID, NPCRewardName
 
 
-
-#TODO: Use IntEnum instead?
+# TODO: Use IntEnum instead?
 class LocationType(Enum):
     CHEST = "Chest"
     """Location checked by opening a chest."""
@@ -24,15 +23,16 @@ class SoulBlazerLocationData(namedtuple):
     """Internal location ID and index into ROM chest/lair/NPC reward table"""
     type: LocationType
     flag: LocationFlag = LocationFlag.NONE
-    #TODO: What other location properties are needed?
+    # TODO: What other location properties are needed?
 
     @property
     def code(self) -> int:
         """The unique ID used by archipelago for this location"""
         from . import lair_id_offset, base_id, npc_reward_offset
+
         if self.type == LocationType.LAIR:
             return base_id + lair_id_offset + self.id
-        if (self.type == LocationType.NPC_REWARD):
+        if self.type == LocationType.NPC_REWARD:
             return base_id + npc_reward_offset + self.id
         return base_id + self.id
 
@@ -41,7 +41,9 @@ class SoulBlazerLocation(Location):
     game = "Soul Blazer"
     _data: SoulBlazerLocationData
 
-    def __init__(self, player: int, name: str, data: SoulBlazerLocationData | None = None, parent: Region | None = None):
+    def __init__(
+        self, player: int, name: str, data: SoulBlazerLocationData | None = None, parent: Region | None = None
+    ):
         super().__init__(player, name, parent=parent)
         self._data = data
         self.access_rule = get_rule_for_location(name, player, data.flag)
@@ -356,4 +358,3 @@ all_locations_table = {
     **npc_reward_table,
     **lair_table,
 }
-

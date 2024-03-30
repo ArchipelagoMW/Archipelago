@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 
 
 @dataclass
-class SoulBlazerItemData():
+class SoulBlazerItemData:
     id: int
     """Internal item ID"""
 
@@ -16,11 +16,12 @@ class SoulBlazerItemData():
     """Either Gems/Exp Quantity or Lair ID"""
 
     classification: ItemClassification
-    
+
     @property
     def code(self) -> int:
         """The unique ID used by archipelago for this item"""
         from . import base_id, lair_id_offset
+
         if self.id == ItemID.LAIR_RELEASE:
             return base_id + lair_id_offset + self.operand
         return base_id + self.id
@@ -38,7 +39,7 @@ class SoulBlazerItemData():
             digit += 1
 
         return bcd
-    
+
     @operand_bcd.setter
     def operand_bcd(self, bcd: int):
         decimal = bcd % 0x10
@@ -53,9 +54,8 @@ class SoulBlazerItemData():
         operand = decimal
 
 
-
-class SoulBlazerItem(Item):  # or from Items import MyGameItem
-    game = "Soul Blazer"  # name of the game/world this item is from
+class SoulBlazerItem(Item):
+    game = "Soul Blazer"
 
     def __init__(self, name: str, player: int, itemData: SoulBlazerItemData):
         super().__init__(name, itemData.classification, itemData.code, player)
@@ -68,11 +68,11 @@ class SoulBlazerItem(Item):  # or from Items import MyGameItem
     @property
     def id(self) -> int:
         return self._itemData.id
-    
+
     @property
     def operand(self) -> int:
         return self._itemData.operand
-    
+
     @operand.setter
     def operand(self, value: int):
         self._itemData.operand = value
@@ -80,7 +80,7 @@ class SoulBlazerItem(Item):  # or from Items import MyGameItem
     @property
     def operand_bcd(self) -> int:
         return self._itemData.operand_bcd
-    
+
     @operand_bcd.setter
     def operand_bcd(self, bcd: int):
         self._itemData.operand_bcd = bcd
@@ -101,22 +101,32 @@ gem_values = [1, 12, 40, 50, 50, 50, 50, 50, 60, 60, 80, 80, 80, 80, 80, 100, 10
 exp_values = [1, 30, 80, 150, 180, 200, 250, 300, 300, 300, 300, 300, 400]
 """Exp reward values in vanilla item pool"""
 
-def create_itempool(world: 'SoulBlazerWorld') -> list[SoulBlazerItem]:
-    itempool =  [SoulBlazerItem(name, world.player, itemData) for (name, itemData) in unique_items_table.items()]
-    itempool += [SoulBlazerItem(ItemName.MEDICALHERB, world.player, repeatable_items_table[ItemName.MEDICALHERB]) for _ in range(herb_count)]
-    itempool += [SoulBlazerItem(ItemName.STRANGEBOTTLE, world.player, repeatable_items_table[ItemName.STRANGEBOTTLE]) for _ in range(bottle_count)]
+
+def create_itempool(world: "SoulBlazerWorld") -> list[SoulBlazerItem]:
+    itempool = [SoulBlazerItem(name, world.player, itemData) for (name, itemData) in unique_items_table.items()]
+    itempool += [
+        SoulBlazerItem(ItemName.MEDICALHERB, world.player, repeatable_items_table[ItemName.MEDICALHERB])
+        for _ in range(herb_count)
+    ]
+    itempool += [
+        SoulBlazerItem(ItemName.STRANGEBOTTLE, world.player, repeatable_items_table[ItemName.STRANGEBOTTLE])
+        for _ in range(bottle_count)
+    ]
     # TODO: Add option to replace nothings with... something
-    itempool += [SoulBlazerItem(ItemName.NOTHING, world.player, repeatable_items_table[ItemName.NOTHING]) for _ in range(nothing_count)]
+    itempool += [
+        SoulBlazerItem(ItemName.NOTHING, world.player, repeatable_items_table[ItemName.NOTHING])
+        for _ in range(nothing_count)
+    ]
     # TODO: Add option for modyfing exp/gem amounts
     world.gem_items = [world.create_item(ItemName.GEMS).set_operand(value) for value in gem_values]
     itempool += world.gem_items
     world.exp_items = [world.create_item(ItemName.EXP).set_operand(value) for value in exp_values]
     itempool += world.exp_items
-    
+
     return itempool
 
 
-#TODO: Unsure which progression items should skip balancing
+# TODO: Unsure which progression items should skip balancing
 swords_table = {
     ItemName.LIFESWORD     : SoulBlazerItemData(ItemID.LIFESWORD    , None, ItemClassification.progression_skip_balancing),
     ItemName.PSYCHOSWORD   : SoulBlazerItemData(ItemID.PSYCHOSWORD  , None, ItemClassification.progression_skip_balancing),
@@ -404,6 +414,4 @@ all_items_table = {
     **npc_release_table,
 }
 
-unique_items_table = {
-    k:v for k, v in all_items_table.items() if k not in repeatable_items_table
-}
+unique_items_table = {k: v for k, v in all_items_table.items() if k not in repeatable_items_table}
