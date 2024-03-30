@@ -79,9 +79,9 @@ class KH1World(World):
 
         level_up_locations = list(get_locations_by_category("Levels").keys())
         random.shuffle(level_up_item_pool)
-        i = 0
-        while i < len(level_up_item_pool):
-            self.multiworld.get_location(level_up_locations[i], self.player).place_locked_item(self.create_item(level_up_item_pool[i]))
+        i = self.options.force_stats_on_levels - 1
+        while len(level_up_item_pool) > 0 and i < self.options.level_checks:
+            self.multiworld.get_location(level_up_locations[i], self.player).place_locked_item(self.create_item(level_up_item_pool.pop()))
             i = i + 1
         total_locations = len(self.multiworld.get_unfilled_locations(self.player)) - 1
         if self.options.goal.current_key == "super_boss_hunt":
@@ -117,6 +117,9 @@ class KH1World(World):
         while i < reports_in_pool:
             item_pool += [self.create_item("Ansem's Report " + str(i+1))]
             i = i + 1
+        
+        while len(item_pool) < total_locations and len(level_up_item_pool) > 0:
+            item_pool += [self.create_item(level_up_item_pool.pop())]
         
         # Fill any empty locations with filler items.
         item_names = []
@@ -203,6 +206,4 @@ class KH1World(World):
         set_rules(self.multiworld, self.player, self.options, min(self.options.required_reports, reports_in_pool))
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player, self.options \
-                , min((self.options.strength_increase + self.options.defense_increase + self.options.hp_increase + self.options.mp_increase \
-                       + self.options.ap_increase + self.options.accessory_slot_increase + self.options.item_slot_increase), 100))
+        create_regions(self.multiworld, self.player, self.options)

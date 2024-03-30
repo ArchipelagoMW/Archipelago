@@ -527,6 +527,9 @@ def set_rules(multiworld: MultiWorld, player: int, options, required_reports):
 
     
    #multiworld.get_location("Final Ansem"                                                                  , player).access_rule = lambda state: has_item(state, player, "")
+   
+    for i in range(options.level_checks):
+        multiworld.get_location("Level " + str(i+1).rjust(3,'0')                                           , player).access_rule = lambda state, level_num=i: has_x_worlds(state, player, min((level_num//10), 8))
 
     # Region rules.
     multiworld.get_entrance("Wonderland"                                                                   , player).access_rule = lambda state: has_item(state, player,"Wonderland")

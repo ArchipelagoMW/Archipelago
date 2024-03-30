@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, Optional
+from typing import Dict, NamedTuple, Optional, Set
 
 from BaseClasses import Item, ItemClassification
 
@@ -524,3 +524,11 @@ item_table: Dict[str, KH1ItemData] = {
 
 event_item_table: Dict[str, KH1ItemData] = {
 }
+
+#Make item categories
+item_name_groups: Dict[str, Set[str]] = {}
+for item in item_table.keys():
+    category = item_table[item].category
+    if category not in item_name_groups.keys():
+        item_name_groups[category] = set([])
+    item_name_groups[category].add(item)

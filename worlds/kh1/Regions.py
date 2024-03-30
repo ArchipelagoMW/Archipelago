@@ -9,7 +9,7 @@ class KH1RegionData(NamedTuple):
     region_exits: Optional[List[str]]
 
 
-def create_regions(multiworld: MultiWorld, player: int, options, levels: int):
+def create_regions(multiworld: MultiWorld, player: int, options):
     regions: Dict[str, KH1RegionData] = {
         "Menu":             KH1RegionData(None, ["Awakening", "Levels"]),
         "Awakening":        KH1RegionData([],   ["Destiny Islands"]),
@@ -362,7 +362,7 @@ def create_regions(multiworld: MultiWorld, player: int, options, levels: int):
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Sephiroth Ansem's Report 12")
         regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown Ansem's Report 13")
    
-    for i in range(levels):
+    for i in range(options.level_checks):
         regions["Levels"].locations.append("Level " + str(i+1).rjust(3,'0'))
 
    

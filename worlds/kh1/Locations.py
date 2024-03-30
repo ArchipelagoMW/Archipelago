@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, Optional
+from typing import Dict, NamedTuple, Optional, Set
 import typing
 
 
@@ -203,7 +203,7 @@ location_table: Dict[str, KH1LocationData] = {
     "Hollow Bastion Great Crest After Battle Platform Chest":                           KH1LocationData("Chests",     265_4172),
     "Hollow Bastion High Tower 2nd Gravity Chest":                                      KH1LocationData("Chests",     265_4173),
     "Hollow Bastion High Tower 1st Gravity Chest":                                      KH1LocationData("Chests",     265_4174),
-    "Hollow Bastion High Tower Above Sliding Blocks Chest":                              KH1LocationData("Chests",     265_4211),
+    "Hollow Bastion High Tower Above Sliding Blocks Chest":                             KH1LocationData("Chests",     265_4211),
     "Hollow Bastion Library Top of Bookshelf Chest":                                    KH1LocationData("Chests",     265_4213),
     "Hollow Bastion Library 1st Floor Turn the Carousel Chest":                         KH1LocationData("Chests",     265_4214),
     "Hollow Bastion Library Top of Bookshelf Turn the Carousel Chest":                  KH1LocationData("Chests",     265_4251),
@@ -555,3 +555,13 @@ event_location_table: Dict[str, KH1LocationData] = {
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in location_table.items() if data.code}
+
+location_name_groups: Dict[str, Set[str]]
+
+#Make location categories
+location_name_groups: Dict[str, Set[str]] = {}
+for location in location_table.keys():
+    category = location_table[location].category
+    if category not in location_name_groups.keys():
+        location_name_groups[category] = set([])
+    location_name_groups[category].add(location)

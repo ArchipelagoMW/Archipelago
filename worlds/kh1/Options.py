@@ -196,6 +196,30 @@ class KeybladeMaxMP(Range):
     range_start = 1
     range_end = 5
 
+class LevelChecks(Range):
+    """
+    Determines the maximum level for which checks can be obtained.
+    """
+    display_name = "Level Checks"
+    default = 100
+    range_start = 0
+    range_end = 100
+
+class ForceStatsOnLevels(NamedRange):
+    """
+    If this value is less than the value for Level Checks, this determines the minimum level from which only stat ups are obtained at level up locations
+    For example, if you only want to find AP items from levels 1-50, set this value to 51.
+    """
+    display_name = "Force Stats on Level Starting From"
+    default = 1
+    range_start = 1
+    range_end = 101
+    special_range_names = {
+        "none": 101,
+        "ap-checks-to-level-50": 51,
+        "all": 1
+    }
+
 @dataclass
 class KH1Options(PerGameCommonOptions):
     goal: Goal
@@ -212,6 +236,8 @@ class KH1Options(PerGameCommonOptions):
     keyblade_min_str: KeybladeMinStrength
     keyblade_max_mp: KeybladeMaxMP
     keyblade_min_mp: KeybladeMinMP
+    level_checks: LevelChecks
+    force_stats_on_levels: ForceStatsOnLevels
     strength_increase: StrengthIncrease
     defense_increase: DefenseIncrease
     hp_increase: HPIncrease
@@ -219,3 +245,4 @@ class KH1Options(PerGameCommonOptions):
     mp_increase: MPIncrease
     accessory_slot_increase: AccessorySlotIncrease
     item_slot_increase: ItemSlotIncrease
+    
