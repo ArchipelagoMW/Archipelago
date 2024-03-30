@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 from BaseClasses import Region, Location, Entrance, Item, ItemClassification
-from typing import Optional
-
+from typing import Optional, TYPE_CHECKING
 from .Names import ItemID, ItemName, LairID, NPCName
-from . import SoulBlazerWorld
+
+if TYPE_CHECKING:
+    from . import SoulBlazerWorld
 
 
 @dataclass
@@ -19,9 +20,10 @@ class SoulBlazerItemData():
     @property
     def code(self) -> int:
         """The unique ID used by archipelago for this item"""
+        from . import base_id, lair_id_offset
         if self.id == ItemID.LAIR_RELEASE:
-            return SoulBlazerWorld.base_id + SoulBlazerWorld.lair_id_offset + self.operand
-        return SoulBlazerWorld.base_id + self.id
+            return base_id + lair_id_offset + self.operand
+        return base_id + self.id
 
     @property
     def operand_bcd(self) -> int:
@@ -99,7 +101,7 @@ gem_values = [1, 12, 40, 50, 50, 50, 50, 50, 60, 60, 80, 80, 80, 80, 80, 100, 10
 exp_values = [1, 30, 80, 150, 180, 200, 250, 300, 300, 300, 300, 300, 400]
 """Exp reward values in vanilla item pool"""
 
-def create_itempool(world: SoulBlazerWorld) -> list[SoulBlazerItem]:
+def create_itempool(world: 'SoulBlazerWorld') -> list[SoulBlazerItem]:
     itempool =  [SoulBlazerItem(name, world.player, itemData) for (name, itemData) in unique_items_table.items()]
     itempool += [SoulBlazerItem(ItemName.MEDICALHERB, world.player, repeatable_items_table[ItemName.MEDICALHERB]) for _ in range(herb_count)]
     itempool += [SoulBlazerItem(ItemName.STRANGEBOTTLE, world.player, repeatable_items_table[ItemName.STRANGEBOTTLE]) for _ in range(bottle_count)]
@@ -403,5 +405,5 @@ all_items_table = {
 }
 
 unique_items_table = {
-    **(x for x in all_items_table if x not in repeatable_items_table)
+    k:v for k, v in all_items_table.items() if k not in repeatable_items_table
 }

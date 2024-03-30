@@ -9,6 +9,18 @@ from worlds.AutoWorld import WebWorld, World
 from BaseClasses import MultiWorld, Region, Location, Entrance, Item, ItemClassification, Tutorial
 
 
+
+#Chosen randomly. Probably wont collide with any other game
+base_id = 374518970000
+"""Base ID for items and locations"""
+
+lair_id_offset = 1000
+"""ID offset for Lair IDs"""
+
+npc_reward_offset = 500
+"""ID offset for NPC rewards"""
+
+
 class SoulBlazerSettings(settings.Group):
     class RomFile(settings.SNESRomPath):
         """Insert help text for host.yaml here."""
@@ -39,16 +51,6 @@ class SoulBlazerWorld(World):
     options: SoulBlazerOptions  # typing hints for option results
     settings: typing.ClassVar[SoulBlazerSettings]  # will be automatically assigned from type hint
     # topology_present = True  # show path to required location checks in spoiler
-
-    #Chosen randomly. Probably wont collide with any other game
-    base_id = 374518970000
-    """Base ID for items and locations"""
-
-    lair_id_offset = 1000
-    """ID offset for Lair IDs"""
-
-    npc_reward_offset = 500
-    """ID offset for NPC rewards"""
 
     # The following two dicts are required for the generation to know which
     # items exist. They could be generated from json or something else. They can

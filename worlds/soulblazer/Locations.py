@@ -1,10 +1,11 @@
-from BaseClasses import Region, Location, Entrance, Item, ItemClassification
+from collections import namedtuple
 from dataclasses import dataclass
 from typing import Optional, Callable
 from enum import Enum
-from . import SoulBlazerWorld
-from Names import LairID, LairName, ChestID, ChestName, NPCRewardID, NPCRewardName
-from Rules import LocationFlag, get_rule_for_location
+from BaseClasses import Region, Location, Entrance, Item, ItemClassification
+from .Rules import LocationFlag, get_rule_for_location
+from .Names import LairID, LairName, ChestID, ChestName, NPCRewardID, NPCRewardName
+
 
 
 #TODO: Use IntEnum instead?
@@ -18,7 +19,7 @@ class LocationType(Enum):
 
 
 @dataclass
-class SoulBlazerLocationData():
+class SoulBlazerLocationData(namedtuple):
     id: int
     """Internal location ID and index into ROM chest/lair/NPC reward table"""
     type: LocationType
@@ -28,11 +29,12 @@ class SoulBlazerLocationData():
     @property
     def code(self) -> int:
         """The unique ID used by archipelago for this location"""
+        from . import lair_id_offset, base_id, npc_reward_offset
         if self.type == LocationType.LAIR:
-            return SoulBlazerWorld.base_id + SoulBlazerWorld.lair_id_offset + self.id
+            return base_id + lair_id_offset + self.id
         if (self.type == LocationType.NPC_REWARD):
-            return SoulBlazerWorld.base_id + SoulBlazerWorld.npc_reward_offset + self.id
-        return SoulBlazerWorld.base_id + self.id
+            return base_id + npc_reward_offset + self.id
+        return base_id + self.id
 
 
 class SoulBlazerLocation(Location):

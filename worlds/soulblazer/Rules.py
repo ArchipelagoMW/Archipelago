@@ -1,12 +1,12 @@
-from typing import Callable
+from typing import Callable, TYPE_CHECKING
 
 from enum import IntEnum, auto
 from BaseClasses import CollectionState
-from . import SoulBlazerWorld
 from .Names import ItemName, ItemID, LairName, LairID, ChestName, ChestID, NPCRewardName, NPCRewardID, NPCName
 from .Items import emblems_table
-from .Locations import SoulBlazerLocationData
 
+if TYPE_CHECKING:
+    from . import SoulBlazerWorld
 
 class LocationFlag(IntEnum):
     NONE = 0
@@ -41,7 +41,6 @@ rule_for_flag = {
     LocationFlag.CAN_CUT_SPIRIT : can_cut_spirit,
     LocationFlag.HAS_THUNDER : has_thunder,
     LocationFlag.HAS_MAGIC : has_magic,
-    LocationFlag.NEEDS_NPC : no_requirement, # TODO: implement?
 }
 
 # Many locations depend on one or two NPC releases so rather than create regions to hold one location,
@@ -143,7 +142,7 @@ def get_rule_for_location(name: str, player: int, flag: LocationFlag) -> Callabl
     
     return rule
 
-def set_rules(world: SoulBlazerWorld) -> None:
+def set_rules(world: 'SoulBlazerWorld') -> None:
     # TODO: Replace "Test" with Deathtoll's Palace Region name?
     world.multiworld.get_region("Test", world.player).locations += world.create_victory_event()
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
