@@ -71,6 +71,11 @@ org $9EDD60  ; name
 org $9FA900  ; sprite
     incbin "ap_logo/ap_logo.bin"
     warnpc $9FA980
+; sold out item
+org $96F9BA  ; properties
+    DB $00,$00,$00,$10,$00,$00,$00,$00,$00,$00,$00,$00,$00
+org $9EDD6C  ; name
+    DB "SOLD OUT    "       ; overwrites "Crown       "
 
 
 org $D08000  ; signature, start of expanded data area
@@ -165,6 +170,9 @@ pullpc
 
 ScriptTX:
     STA $7FD4F1             ; (overwritten instruction)
+    LDA $05AC               ; load map number
+    CMP.b #$F1              ; check if ancient cave final floor
+    BNE +
     REP #$20
     LDA $7FD4EF             ; read script item id
     CMP.w #$01C2            ; test for ancient key
@@ -256,6 +264,9 @@ SpecialItemGet:
     BRA ++
 +:  CMP.w #$01C2            ; ancient key
     BNE +
+    LDA.w #$0008
+    ORA $0796
+    STA $0796               ; set ancient key EV flag ($C3)
     LDA.w #$0200
     ORA $0797
     STA $0797               ; set boss item EV flag ($D1)
@@ -825,6 +836,119 @@ SpellRNG:
 
 
 
+; shops
+pushpc
+org $83B442
+    ; DB=$83, x=1, m=1
+    JSL Shop                ; overwrites STA $7FD0BF
+pullpc
+
+Shop:
+    STA $7FD0BF             ; (overwritten instruction)
+    LDY $05AC               ; load map number
+    CPY.b #$F0              ; check if ancient cave
+    BCC +
+    LDA $05B4               ; check if going to ancient cave entrance
+    BEQ +
+    LDA $7FE696             ; load next to next floor number
+    DEC
+    CPY.b #$F1              ; check if going to final floor
+    BCS ++                  ; skip a decrement because next floor number is not incremented on final floor
+    DEC
+++: CMP $D08015             ; check if past initial floor
+    BCC +
+    STA $4204               ; WRDIVL; dividend = floor number
+    STZ $4205               ; WRDIVH
+    TAX
+    LDA $D0801A
+    STA $4206               ; WRDIVB; divisor = shop_interval
+    STA $211C               ; M7B; second factor = shop_interval
+    JSL $8082C7             ; advance RNG (while waiting for division to complete)
+    LDY $4216               ; RDMPYL; skip if remainder (i.e., floor number mod shop_interval) is not 0
+    BNE +
+    STA $211B
+    STZ $211B               ; M7A; first factor = random number from 0 to 255
+    TXA
+    CLC
+    SBC $2135               ; MPYM; calculate (floor number) - (random number from 0 to shop_interval-1) - 1
+    STA $30                 ; set shop id
+    STZ $05A8               ; initialize variable for sold out item tracking
+    STZ $05A9
+    PHB
+    PHP
+    JML $80A33A             ; open shop menu
++:  RTL
+
+; shop item select
+pushpc
+org $82DF50
+    ; DB=$83, x=0, m=1
+    JML ShopItemSelected    ; overwrites JSR $8B08 : CMP.b #$01
+pullpc
+
+ShopItemSelected:
+    LDA $1548               ; check inventory free space
+    BEQ +
+    JSR LoadShopSlotAsFlag
+    BIT $05A8               ; test item not already sold
+    BNE +
+    JML $82DF79             ; skip quantity selection and go directly to buy/equip
++:  JML $82DF80             ; abort and go back to item selection
+
+; track bought shop items
+pushpc
+org $82E084
+    ; DB=$83, x=0, m=1
+    JSL ShopBuy             ; overwrites LDA.b #$05 : LDX.w #$0007
+    NOP
+org $82E10E
+    ; DB=$83, x=0, m=1
+    JSL ShopEquip           ; overwrites SEP #$10 : LDX $14DC
+    NOP
+pullpc
+
+ShopBuy:
+    JSR LoadShopSlotAsFlag
+    TSB $05A8               ; mark item as sold
+    LDA.b #$05              ; (overwritten instruction)
+    LDX.w #$0007            ; (overwritten instruction)
+    RTL
+
+ShopEquip:
+    JSR LoadShopSlotAsFlag
+    TSB $05A8               ; mark item as sold
+    SEP #$10                ; (overwritten instruction)
+    LDX $14DC               ; (overwritten instruction)
+    RTL
+
+LoadShopSlotAsFlag:
+    TDC
+    LDA $14EC               ; load currently selected shop slot number
+    ASL
+    TAX
+    LDA $8ED8C3,X           ; load predefined bitmask with a single bit set
+    RTS
+
+; mark bought items as sold out
+pushpc
+org $8285EA
+    ; DB=$83, x=0, m=0
+    JSL SoldOut             ; overwrites LDA [$FC],Y : AND #$01FF
+    NOP
+pullpc
+
+SoldOut:
+    LDA $8ED8C3,X           ; load predefined bitmask with a single bit set
+    BIT $05A8               ; test sold items
+    BEQ +
+    LDA.w #$01CB            ; load sold out item id
+    BRA ++
++:  LDA [$FC],Y             ; (overwritten instruction)
+    AND #$01FF              ; (overwritten instruction)
+++: RTL
+
+
+
 ; increase variety of red chest gear after B9
 pushpc
 org $839176
@@ -1009,6 +1133,53 @@ pullpc
 
 
 
+; door stairs fix
+pushpc
+org $839453
+    ; DB=$7F, x=0, m=1
+    JSL DoorStairsFix       ; overwrites JSR $9B18 : JSR $9D11
+    NOP #2
+pullpc
+
+DoorStairsFix:
+    CLC
+    LDY.w #$0000
+--: LDX.w #$00FF            ; loop through floor layout starting from the bottom right
+-:  LDA $EA00,X             ; read node contents
+    BEQ +                   ; always skip empty nodes
+    BCC ++                  ; 1st pass: skip all blocked nodes (would cause door stairs or rare stairs)
+    LDA $E9F0,X             ; 2nd pass: skip only if the one above is also blocked (would cause door stairs)
+++: BMI +
+    INY                     ; count usable nodes
++:  DEX
+    BPL -
+    TYA
+    BNE ++                  ; all nodes blocked?
+    SEC                     ; set up 2nd, less restrictive pass
+    BRA --
+++: JSL $8082C7             ; advance RNG
+    STA $00211B
+    TDC
+    STA $00211B             ; M7A; first factor = random number from 0 to 255
+    TYA
+    STA $00211C             ; M7B; second factor = number of possible stair positions
+    LDA $002135             ; MPYM; calculate random number from 0 to number of possible stair positions - 1
+    TAY
+    LDX.w #$00FF            ; loop through floor layout starting from the bottom right
+-:  LDA $EA00,X             ; read node contents
+    BEQ +                   ; always skip empty nodes
+    BCC ++                  ; if 1st pass was sufficient: skip all blocked nodes (prevent door stairs and rare stairs)
+    LDA $E9F0,X             ; if 2nd pass was needed: skip only if the one above is also blocked (prevent door stairs)
+++: BMI +
+    DEY                     ; count down to locate the (Y+1)th usable node
+    BMI ++
++:  DEX
+    BPL -
+++: TXA                     ; return selected stair node coordinate
+    RTL
+
+
+
 ; equipment text fix
 pushpc
 org $81F2E3
@@ -1054,6 +1225,7 @@ pullpc
 ; $F02017   1   iris treasures required
 ; $F02018   1   party members available
 ; $F02019   1   capsule monsters available
+; $F0201A   1   shop interval
 ; $F02030   1   selected goal
 ; $F02031   1   goal completion: boss
 ; $F02032   1   goal completion: iris_treasure_hunt

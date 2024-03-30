@@ -1,12 +1,10 @@
 # The Messenger
 
 ## Quick Links
-- [Setup](../../../../tutorial/The%20Messenger/setup/en)
-- [Settings Page](../../../../games/The%20Messenger/player-settings)
+- [Setup](/tutorial/The%20Messenger/setup/en)
+- [Options Page](/games/The%20Messenger/player-options)
 - [Courier Github](https://github.com/Brokemia/Courier)
-- [The Messenger Randomizer Github](https://github.com/minous27/TheMessengerRandomizerMod)
 - [The Messenger Randomizer AP Github](https://github.com/alwaysintreble/TheMessengerRandomizerModAP)
-- [Jacksonbird8237's Item Tracker](https://github.com/Jacksonbird8237/TheMessengerItemTracker)
 - [PopTracker Pack](https://github.com/alwaysintreble/TheMessengerTrackPack)
 
 ## What does randomization do in this game?
@@ -71,8 +69,8 @@ for it. The groups you can use for The Messenger are:
 * Sometimes upon teleporting back to HQ, Ninja will run left and enter a different portal than the one entered by the
   player. This may also cause a softlock.
 * Text entry menus don't accept controller input
-* Opening the shop chest in power seal hunt mode from the tower of time HQ will softlock the game.
-* If you are unable to reset file slots, load into a save slot, let the game save, and close it.
+* In power seal hunt mode, the chest must be opened by entering the shop from a level. Teleporting to HQ and opening the
+  chest will not work.
 
 ## What do I do if I have a problem?
 

@@ -83,7 +83,7 @@ chaque paramètre il faut au moins une option qui soit paramétrée sur un nombr
 ### Vérifier son fichier YAML
 
 Si vous voulez valider votre fichier YAML pour être sûr qu'il fonctionne, vous pouvez le vérifier sur la page du
-[Validateur de YAML](/mysterycheck).
+[Validateur de YAML](/check).
 
 ## Générer une partie pour un joueur
 

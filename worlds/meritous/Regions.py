@@ -54,12 +54,12 @@ def create_regions(world: MultiWorld, player: int):
         world.regions.append(boss_region)
 
     region_final_boss = Region("Final Boss", player, world)
-    region_final_boss.locations = [MeritousLocation(
+    region_final_boss.locations += [MeritousLocation(
         player, "Wervyn Anixil", None, region_final_boss)]
     world.regions.append(region_final_boss)
 
     region_tfb = Region("True Final Boss", player, world)
-    region_tfb.locations = [MeritousLocation(
+    region_tfb.locations += [MeritousLocation(
         player, "Wervyn Anixil?", None, region_tfb)]
     world.regions.append(region_tfb)
 

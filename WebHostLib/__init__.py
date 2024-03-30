@@ -50,7 +50,6 @@ app.config["PONY"] = {
 }
 app.config["MAX_ROLL"] = 20
 app.config["CACHE_TYPE"] = "SimpleCache"
-app.config["JSON_AS_ASCII"] = False
 app.config["HOST_ADDRESS"] = ""
 
 cache = Cache()
