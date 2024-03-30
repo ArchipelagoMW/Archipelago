@@ -2,9 +2,10 @@ import asyncio
 import traceback
 
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, logger, server_loop, gui_enabled
+from NetUtils import NetworkItem
 import Utils
 from worlds.metroidprime.DolphinClient import DolphinException
-from worlds.metroidprime.MetroidPrimeInterface import MetroidPrimeInterface
+from worlds.metroidprime.MetroidPrimeInterface import InventoryItemData, MetroidPrimeInterface
 
 
 class MetroidPrimeCommandProcessor(ClientCommandProcessor):
@@ -54,12 +55,101 @@ async def dolphin_sync_task(ctx: MetroidPrimeContext):
             continue
 
 
+def inventory_item_by_network_id(network_id: int, current_inventory: dict[str, InventoryItemData]) -> InventoryItemData:
+    for item in current_inventory.values():
+        if item.code == network_id:
+            return item
+    return None
+
+
+def get_total_count_of_item_received(network_id: int, items: list[NetworkItem]) -> int:
+    count = 0
+    for network_item in items:
+        if network_item.item == network_id:
+            count += 1
+    return count
+
+
+async def send_checked_locations(ctx: MetroidPrimeContext):
+    pass
+
+
+async def handle_receive_items(ctx: MetroidPrimeContext):
+    current_items = ctx.game_interface.get_current_inventory()
+
+    # Handle Single Item Upgrades
+    for network_item in ctx.items_received:
+        item_data = inventory_item_by_network_id(
+            network_item.item, current_items)
+        if item_data is None:
+            logger.debug(
+                f"Item with network id {network_item.item} not found in inventory. {network_item}")
+            continue
+        if item_data.max_capacity == 1 and item_data.current_amount == 0:
+            logger.debug(f"Giving item {item_data.name} to player")
+            ctx.game_interface.give_item_to_player(item_data.id, 1, 1)
+
+    # Handle Missile Expansions
+    amount_of_missiles_given_per_item = 5
+    missile_item = current_items["Missile Expansion"]
+    num_missile_expansions_received = get_total_count_of_item_received(
+        missile_item.code, ctx.items_received)
+    diff = num_missile_expansions_received * \
+        amount_of_missiles_given_per_item - missile_item.current_capacity
+    if diff > 0 and missile_item.current_capacity < missile_item.max_capacity:
+        new_capacity = min(num_missile_expansions_received *
+                           amount_of_missiles_given_per_item, missile_item.max_capacity)
+        new_amount = min(missile_item.current_amount + diff, new_capacity)
+        logger.debug(
+            f"Setting missile expansion to {new_amount}/{new_capacity} from {missile_item.current_amount}/{missile_item.current_capacity}")
+        ctx.game_interface.give_item_to_player(
+            missile_item.id, new_amount, new_capacity)
+
+    # Handle Power Bomb Expansions
+    power_bomb_item = current_items["Power Bomb Expansion"]
+    num_power_bombs_received = get_total_count_of_item_received(
+        power_bomb_item.code, ctx.items_received)
+    diff = num_power_bombs_received - power_bomb_item.current_capacity
+    if diff > 0 and power_bomb_item.current_capacity < power_bomb_item.max_capacity:
+        new_capacity = min(num_power_bombs_received,
+                           power_bomb_item.max_capacity)
+        new_amount = min(power_bomb_item.current_amount + diff, new_capacity)
+        logger.debug(
+            f"Setting power bomb expansions to {new_capacity} from {power_bomb_item.current_capacity}")
+        ctx.game_interface.give_item_to_player(
+            power_bomb_item.id, new_capacity, new_capacity)
+
+    # Handle Energy Tanks
+    energy_tank_item = current_items["Energy Tank"]
+    num_energy_tanks_received = get_total_count_of_item_received(
+        energy_tank_item.code, ctx.items_received)
+    diff = num_energy_tanks_received - energy_tank_item.current_capacity
+    if diff > 0 and energy_tank_item.current_capacity < energy_tank_item.max_capacity:
+        new_capacity = min(num_energy_tanks_received,
+                           energy_tank_item.max_capacity)
+        logger.debug(
+            f"Setting energy tanks to {new_capacity} from {energy_tank_item.current_capacity}")
+        ctx.game_interface.give_item_to_player(
+            energy_tank_item.id, new_capacity, new_capacity)
+
+        # Heal player when they receive a new energy tank
+        # Player starts with 99 health and each energy tank adds 100 additional
+        ctx.game_interface.set_current_health(new_capacity * 100.0 + 99)
+
+    # TODO: Handle setting Artifact flags so that the Artifact Temple State is updated accordingly
+
+
 async def _handle_game_ready(ctx: MetroidPrimeContext):
-    if ctx.server and ctx.slot:
+    if ctx.server:
+        if not ctx.slot:
+            await asyncio.sleep(1)
+            return
+
+        await send_checked_locations(ctx)
+        await handle_receive_items(ctx)
+
         if "DeathLink" in ctx.tags:
-            logger.warn("DeathLink not implemented")
-        # await give_items(ctx)
-        # await check_locations(ctx)
+            logger.debug("DeathLink not implemented")
         await asyncio.sleep(0.5)
     else:
         logger.info("Waiting for player to connect to server")
@@ -77,11 +167,12 @@ async def _handle_game_not_ready(ctx: MetroidPrimeContext):
         await asyncio.sleep(3)
 
 
-def main(connect=None, password=None):
+def main(connect=None, password=None, name=None):
     Utils.init_logging("Metroid Prime Client")
 
-    async def _main(connect, password):
+    async def _main(connect, password, name):
         ctx = MetroidPrimeContext(connect, password)
+        ctx.auth = name
         ctx.server_task = asyncio.create_task(
             server_loop(ctx), name="ServerLoop")
         if gui_enabled:
@@ -103,11 +194,13 @@ def main(connect=None, password=None):
     import colorama
 
     colorama.init()
-    asyncio.run(_main(connect, password))
+    asyncio.run(_main(connect, password, name))
     colorama.deinit()
 
 
 if __name__ == "__main__":
     parser = get_base_parser()
+    parser.add_argument('--name', default=None,
+                        help="Slot Name to connect as.")
     args = parser.parse_args()
-    main(args.connect, args.password)
+    main(args.connect, args.password, args.name)
