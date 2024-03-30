@@ -127,13 +127,6 @@ def randomize_enemies(data, random):
         i += 3
 
 
-def randomize_auto_scroll_levels(data, random, n):
-    eligible_levels = [0, 1, 2, 3, 5, 8, 9, 11, 13, 14, 16, 17, 19, 20, 23, 25, 30, 31]
-    auto_scroll_levels = random.sample(eligible_levels, n)
-    for i in eligible_levels:
-        data[rom_addresses["Auto_Scroll_Levels"] + i] = 1 if i in auto_scroll_levels else 0
-
-
 def randomize_platforms(data, random):
     level_list = [
         {"platforms": [0x28, 0x29, 0x2A, 0x2B, 0x2D, 0x2E], "start": 0xE1EF, "end": 0xE249},
@@ -171,25 +164,46 @@ def generate_output(self, output_directory: str):
 
     data = bytearray(bsdiff4.patch(data, base_patch))
 
-    random = self.multiworld.per_slot_randoms[self.player]
+    random = self.random
 
     if self.options.randomize_enemies:
         randomize_enemies(data, random)
     if self.options.randomize_platforms:
         randomize_platforms(data, random)
-    if self.options.auto_scroll_levels > -1:
-        randomize_auto_scroll_levels(data, random, self.options.auto_scroll_levels.value)
     if self.options.randomize_music:
         randomize_music(data, random)
 
     if self.options.auto_scroll_trap:
         data[rom_addresses["Auto_Scroll_Disable"]] = 0xAF
-    if self.options.coinsanity:
+    if self.options.shuffle_golden_coins:
         data[rom_addresses["Coin_Shuffle"]] = 0x40
     if self.options.shuffle_midway_bells:
         data[rom_addresses["Disable_Midway_Bell"]] = 0xC9
 
-    data[rom_addresses["Required_Golden_Coins"]] = self.options.required_golden_coins.value
+    if self.options.coinsanity:
+        for section in ("A", "B"):
+            for i in range(0, 30):
+                data[rom_addresses[f"Coinsanity_{section}"] + i] = 0x00
+
+    star_count = max(len([loc for loc in self.multiworld.get_filled_locations() if loc.item.player == self.player
+                          and loc.item.name == "Super Star Duration Increase"]), 1)
+    data[rom_addresses["Star_Count"]] = star_count // 256
+    data[rom_addresses["Star_Count"] + 1] = star_count - (star_count // 256)
+    if self.options.shuffle_golden_coins == "mario_coin_fragment_hunt":
+        data[rom_addresses["Coins_Required"]] = self.coin_fragments_required // 256
+        data[rom_addresses["Coins_Required"] + 1] = self.coin_fragments_required % 256
+        data[rom_addresses["Required_Golden_Coins"]] = 6
+    else:
+        data[rom_addresses["Coins_Required"] + 1] = self.options.required_golden_coins.value
+        data[rom_addresses["Required_Golden_Coins"]] = self.options.required_golden_coins.value
+    data[rom_addresses["Midway_Bells"]] = self.options.shuffle_midway_bells.value
+    data[rom_addresses["Energy_Link"]] = self.options.energy_link.value
+    data[rom_addresses["Difficulty_Mode"]] = self.options.difficulty_mode.value
+    data[rom_addresses["Coin_Mode"]] = self.options.shuffle_golden_coins.value
+
+    for i in range(32):
+        data[rom_addresses["Auto_Scroll_Levels"] + i] = 1 if i in self.auto_scroll_levels else 0
+
 
     if self.options.energy_link:
         # start with 1 life if Energy Link is on so that you don't deposit lives at the start of the game.

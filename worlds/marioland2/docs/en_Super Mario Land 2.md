@@ -16,8 +16,7 @@ Unlocking paths to new levels requires finding or receiving Zone Progression ite
 "Turtle Zone Progression" will unlock the path from Turtle Zone 1 to Turtle Zone 2. Paths to secret levels are separate
 items, so Turtle Zone Secret will open the path from Turtle Zone 2 to the Turtle Zone Secret Course.
 
-Mario Zone, Pumpkin Zone, Tree Zone, and Macro Zone each have one "Zone Progression x2" item that opens two paths at
-once.
+Depending on settings, there may be some "Zone Progression x2" item that opens two paths at once.
 
 The path from Tree Zone 2 to the branch to Tree Zone 3 and 4 is one unlock, so both levels will open at this point.
 
@@ -30,11 +29,13 @@ Mushroom, you will drop straight down to Small Mario.
 - Hippo Bubble: required to use the bubbles in Hippo Zone to fly.
 - Space Physics: the Space Zone levels will have normal gravity until this is obtained.
 - Super Star Duration Increase: you begin with a drastically lowered invincibility star duration, and these items will
-increase it. This is the main filler item and the number of them appearing in the item pool depends on your settings.
+increase it.
 
 Additionally, the following items can be shuffled depending on your YAML settings:
 - The 6 Golden Coins: note that the game will still show you the coin being sent to the castle when defeating a boss
 regardless of whether the coin is actually obtained in that location.
+- Mario Coin Fragments: As an alternative to shuffling the 6 Golden Coins, you can shuffle Mario Coin Fragments,
+a chosen percentage of which are needed to assemble the Mario Coin. You will start with the other 5 coins.
 - Midway Bells: ringing bells results in a location check, and the midway check points are shuffled as items.
 Note that you may have to backtrack from the midway point to reach some secret exits!
 - Normal Mode/Easy Mode: you can start the game in Normal Mode with an Easy Mode "upgrade" in the item pool, or start in
@@ -42,12 +43,14 @@ Easy Mode with a Normal Mode "trap" item, swapping the difficulty.
 - Auto Scroll: auto-scrolling levels can be set to not auto scroll until this trap item is received.
 - Pipe Traversal: required to enter pipes. Can also be split into 4 items, each enabling pipe entry from a different
 direction.
+- Coins: if Coinsanity is enabled, coins will be shuffled into the item pool. A number of checks will be added to each
+level for obtaining a specific number of coins within a single playthrough of the level.
 
 
 ## When the player receives an item, what happens?
 
-There is no in-game indication that an item has been received. You will need to watch the client to be sure you're aware
-of the items you've received.
+There is no in-game indication that an item has been received. You will need to watch the client or web tracker to be
+sure you're aware of the items you've received.
 
 ## Special Thanks to:
 

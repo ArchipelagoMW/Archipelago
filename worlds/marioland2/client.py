@@ -20,6 +20,7 @@ class MarioLand2Client(BizHawkClient):
     def __init__(self):
         super().__init__()
         self.locations_array = []
+        self.previous_level = None
 
     async def validate_rom(self, ctx):
         game_name = await read(ctx.bizhawk_ctx, [(0x134, 10, "ROM")])
@@ -38,29 +39,37 @@ class MarioLand2Client(BizHawkClient):
     async def game_watcher(self, ctx: BizHawkClientContext):
         from . import START_IDS
         from .items import items
-        from .locations import locations
+        from .locations import locations, level_id_to_name, coins_coords, location_name_to_id
 
         (game_loaded_check, level_data, music, auto_scroll_enabled, auto_scroll_levels, current_level, midway_point,
-         bcd_lives) = \
+         bcd_lives, num_items_received, coins, options) = \
             await read(ctx.bizhawk_ctx, [(0x0046, 10, "CartRAM"), (0x0848, 42, "CartRAM"), (0x0469, 1, "CartRAM"),
                                          (rom_addresses["Auto_Scroll_Disable"], 1, "ROM"),
                                          (rom_addresses["Auto_Scroll_Levels"], 32, "ROM"),
-                                         (0x0269, 1, "CartRAM"),
-                                         (0x02A0, 1, "CartRAM"),
-                                         (0x022C, 1, "CartRAM")])
+                                         (0x0269, 1, "CartRAM"), (0x02A0, 1, "CartRAM"), (0x022C, 1, "CartRAM"),
+                                         (0x00F0, 2, "CartRAM"), (0x0262, 2, "CartRAM"),
+                                         (rom_addresses["Coins_Required"], 8, "ROM")])
+
+        coins_required = int.from_bytes(options[:2], "big")
+        difficulty_mode = options[2]
+        star_count = int.from_bytes(options[3:5], "big")
+        midway_bells = options[5]
+        energy_link = options[6]
+        coin_mode = options[7]
 
         current_level = int.from_bytes(current_level, "big")
+
         midway_point = int.from_bytes(midway_point, "big")
         music = int.from_bytes(music, "big")
         auto_scroll_enabled = int.from_bytes(auto_scroll_enabled, "big")
         level_data = list(level_data)
         lives = bcd_lives.hex()
-
-        # there is no music in the title screen demos, this is how we guard against anything in the demos registering.
-        if game_loaded_check != b'\x124Vx\xff\xff\xff\xff\xff\xff' or music == 0:
-            return
+        num_items_received = int.from_bytes(num_items_received, "big")
+        if num_items_received == 0xFFFF:
+            num_items_received = 0
 
         items_received = [list(items.keys())[item.item - START_IDS] for item in ctx.items_received]
+        write_num_items_received = len(items_received).to_bytes(2, "big")
 
         level_progression = {
             "Space Zone Progression",
@@ -78,7 +87,55 @@ class MarioLand2Client(BizHawkClient):
             items_received += ["Pipe Traversal - Left", "Pipe Traversal - Right",
                                "Pipe Traversal - Up", "Pipe Traversal - Down"]
 
+        if coin_mode == 2 and items_received.count("Mario Coin Fragment") >= coins_required:
+            items_received.append("Mario Coin")
+
+        if current_level == 255 and self.previous_level != 255:
+            if coin_mode < 2:
+                logger.info(f"Golden Coins required: {coins_required}")
+            else:
+                logger.info(f"Mario Coin Fragments required: {coins_required}. "
+                            f"You have {items_received.count('Mario Coin Fragment')}")
+        self.previous_level = current_level
+
+        # There is no music in the title screen demos, this is how we guard against anything in the demos registering.
+        # There is also no music at the door to Mario's Castle, which is why the above is before this check.
+        if game_loaded_check != b'\x124Vx\xff\xff\xff\xff\xff\xff' or music == 0:
+            return
+
         locations_checked = []
+        if current_level in level_id_to_name:
+            level_name = level_id_to_name[current_level]
+            coin_tile_data = await read(ctx.bizhawk_ctx, [(0xB000 + ((coords[1] * 256) + coords[0]), 1, "System Bus")
+                                                          for coords in coins_coords[level_name]])
+            num_coins = len([tile[0] for tile in coin_tile_data if tile[0] in (0x7f, 0x60, 0x07)])
+            locations_checked = [location_name_to_id[f"{level_name} - {i} Coin{'s' if i > 1 else ''}"]
+                                 for i in range(1, num_coins + 1)]
+
+
+        new_lives = int(lives)
+        energy_link_add = None
+        if energy_link:
+            if new_lives == 0:
+                if (f"EnergyLink{ctx.team}" in ctx.stored_data
+                        and ctx.stored_data[f"EnergyLink{ctx.team}"]
+                        and ctx.stored_data[f"EnergyLink{ctx.team}"] >= BANK_EXCHANGE_RATE):
+                    new_lives = 1
+                    energy_link_add = -BANK_EXCHANGE_RATE
+            elif new_lives > 1:
+                energy_link_add = BANK_EXCHANGE_RATE * (new_lives - 1)
+                new_lives = 1
+        # Convert back to binary-coded-decimal
+        new_lives = int(str(new_lives), 16)
+
+        new_coins = coins.hex()
+        new_coins = int(new_coins[2:] + new_coins[:2])
+        for item in items_received[num_items_received:]:
+            if item.endswith("Coins") or item == "1 Coin":
+                new_coins += int(item.split(" ")[0])
+        # Limit to 999 and convert back to binary-coded-decimal
+        new_coins = int(str(min(new_coins, 999)), 16).to_bytes(2, "little")
+
         modified_level_data = level_data.copy()
         for ID, (location, data) in enumerate(locations.items(), START_IDS):
             if "clear_condition" in data:
@@ -93,37 +150,13 @@ class MarioLand2Client(BizHawkClient):
             elif data["type"] == "bell" and data["id"] == current_level and midway_point == 0xFF:
                 locations_checked.append(ID)
 
-        if ctx.slot_data:
-            total_stars = ctx.slot_data["stars"]
-        else:
-            total_stars = 5
-
-        invincibility_length = int((832.0 / (total_stars + 1))
+        invincibility_length = int((832.0 / (star_count + 1))
                                    * (items_received.count("Super Star Duration Increase") + 1))
 
         if "Easy Mode" in items_received:
             difficulty_mode = 1
         elif "Normal Mode" in items_received:
             difficulty_mode = 0
-        elif ctx.slot_data:
-            difficulty_mode = ctx.slot_data["mode"] & 1
-        else:
-            difficulty_mode = 0
-
-        new_lives = int(lives)
-        energy_link_add = None
-        if ctx.slot_data and ctx.slot_data["energy_link"]:
-            if new_lives == 0:
-                if (f"EnergyLink{ctx.team}" in ctx.stored_data
-                        and ctx.stored_data[f"EnergyLink{ctx.team}"]
-                        and ctx.stored_data[f"EnergyLink{ctx.team}"] >= BANK_EXCHANGE_RATE):
-                    new_lives = 1
-                    energy_link_add = -BANK_EXCHANGE_RATE
-            elif new_lives > 1:
-                energy_link_add = BANK_EXCHANGE_RATE * (new_lives - 1)
-                new_lives = 1
-        # convert back to binary-coded-decimal
-        new_lives = int(str(new_lives), 16)
 
         data_writes = [
             (rom_addresses["Space_Physics"], [0x7e] if "Space Physics" in items_received else [0xaf], "ROM"),
@@ -151,10 +184,14 @@ class MarioLand2Client(BizHawkClient):
             (rom_addresses["Pipe_Traversal_SFX_D"], [5] if "Pipe Traversal - Left" in items_received else [0], "ROM"),
             (0x022c, [new_lives], "CartRAM"),
             (0x02E4, [difficulty_mode], "CartRAM"),
-            (0x0848, modified_level_data, "CartRAM")
+            (0x0848, modified_level_data, "CartRAM"),
+            (0x0262, new_coins, "CartRAM"),
         ]
 
-        if midway_point == 0xFF and ctx.slot_data and ctx.slot_data["midway_bells"]:
+        if items_received:
+            data_writes.append((0x00F0, write_num_items_received, "CartRAM"))
+
+        if midway_point == 0xFF and midway_bells:
             # after registering the check for the midway bell, clear the value just for safety.
             data_writes.append((0x02A0, [0], "CartRAM"))
 
@@ -167,7 +204,8 @@ class MarioLand2Client(BizHawkClient):
 
         success = await guarded_write(ctx.bizhawk_ctx, data_writes, [(0x0848, level_data, "CartRAM"),
                                                                      (0x022C, [int.from_bytes(bcd_lives, "big")],
-                                                                      "CartRAM")])
+                                                                      "CartRAM"),
+                                                                     [0x0262, coins, "CartRAM"]])
 
         if success and energy_link_add is not None:
             await ctx.send_msgs([{

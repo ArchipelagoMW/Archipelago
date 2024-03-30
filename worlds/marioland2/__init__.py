@@ -9,11 +9,10 @@ from BaseClasses import Region, Location, Item, ItemClassification, Tutorial
 from . import client
 from .rom import generate_output, SuperMarioLand2DeltaPatch
 from .options import SML2Options
-from .locations import locations
+from .locations import locations, location_name_to_id, level_name_to_id, START_IDS, coins_coords, auto_scroll_max
 from .items import items
 from .logic import has_pipe_up, has_pipe_down, has_pipe_left, has_pipe_right, has_level_progression
-
-START_IDS = 7770000
+from . import coin_logic
 
 
 class MarioLand2Settings(settings.Group):
@@ -49,7 +48,7 @@ class MarioLand2World(World):
     settings_key = "sml2_options"
     settings: MarioLand2Settings
 
-    location_name_to_id = {location_name: ID for ID, location_name in enumerate(locations, START_IDS)}
+    location_name_to_id = location_name_to_id
     item_name_to_id = {item_name: ID for ID, item_name in enumerate(items, START_IDS)}
 
     web = MarioLand2WebWorld()
@@ -58,7 +57,8 @@ class MarioLand2World(World):
         "Level Progression": {item_name for item_name in items if item_name.endswith("Progression")
                               or item_name.endswith("Secret")},
         "Bells": {item_name for item_name in items if "Bell" in item_name},
-        "Coins": {item_name for item_name in items if "Coin" in item_name},
+        "Golden Coins": {"Mario Coin", "Macro Coin", "Space Coin", "Tree Coin", "Turtle Coin", "Pumpkin Coin"},
+        "Coins": {"1 Coin", *{f"{i} Coins" for i in range(2, 410)}},
         "Powerups": {"Mushroom", "Fire Flower", "Carrot"},
         "Difficulties": {"Easy Mode", "Normal Mode"}
     }
@@ -71,6 +71,7 @@ class MarioLand2World(World):
         "Normal Exits": {location for location in locations if locations[location]["type"] == "level"},
         "Secret Exits": {location for location in locations if locations[location]["type"] == "secret"},
         "Bells": {location for location in locations if locations[location]["type"] == "bell"},
+        "Coins": {location for location in location_name_to_id if "Coin" in location}
     }
 
     options_dataclass = SML2Options
@@ -78,36 +79,45 @@ class MarioLand2World(World):
 
     generate_output = generate_output
 
+    def __init__(self, world, player: int):
+        super().__init__(world, player)
+        self.auto_scroll_levels = []
+        self.num_coin_locations = []
+        self.max_coin_locations = {}
+        self.coin_fragments_required = 0
+
+    def generate_early(self):
+        if self.options.auto_scroll_levels > -1:
+            eligible_levels = [0, 1, 2, 3, 5, 8, 9, 11, 13, 14, 16, 19, 20, 23, 25, 30, 31]
+            self.auto_scroll_levels = self.random.sample(eligible_levels, self.options.auto_scroll_levels.value)
+        else:
+            self.auto_scroll_levels = [19, 25, 30]
+
     def create_regions(self):
         menu_region = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu_region)
         created_regions = []
         for location_name, data in locations.items():
-            if "Secret Course" in location_name:
-                region_name = location_name
-            elif "Mushroom Zone" in location_name:
-                region_name = "Mushroom Zone"
-            else:
-                region_name = location_name.split(" -")[0]
+            region_name = location_name.split(" -")[0]
             if region_name in created_regions:
                 region = self.multiworld.get_region(region_name, self.player)
             else:
                 region = Region(region_name, self.player, self.multiworld)
-                if location_name == "Tree Zone - Secret Course":
+                if region_name == "Tree Zone Secret Course":
                     region_to_connect = self.multiworld.get_region("Tree Zone 2", self.player)
-                elif location_name == "Space Zone - Secret Course":
+                elif region_name == "Space Zone Secret Course":
                     region_to_connect = self.multiworld.get_region("Space Zone 1", self.player)
-                elif location_name == "Macro Zone - Secret Course":
+                elif region_name == "Macro Zone Secret Course":
                     region_to_connect = self.multiworld.get_region("Macro Zone 1", self.player)
-                elif location_name == "Pumpkin Zone - Secret Course 1":
+                elif region_name == "Pumpkin Zone Secret Course 1":
                     region_to_connect = self.multiworld.get_region("Pumpkin Zone 2", self.player)
-                elif location_name == "Pumpkin Zone - Secret Course 2":
+                elif region_name == "Pumpkin Zone Secret Course 2":
                     region_to_connect = self.multiworld.get_region("Pumpkin Zone 3", self.player)
-                elif location_name == "Turtle Zone - Secret Course":
+                elif region_name == "Turtle Zone Secret Course":
                     region_to_connect = self.multiworld.get_region("Turtle Zone 2", self.player)
-                elif "-" in location_name and int(location_name.split(" ")[2]) > 1:
-                    region_to_connect = self.multiworld.get_region(" ".join(location_name.split(" ")[:2])
-                                                                   + f" {int(location_name.split(' ')[2]) - 1}",
+                elif region_name.split(" ")[-1].isdigit() and int(region_name.split(" ")[-1]) > 1:
+                    region_to_connect = self.multiworld.get_region(" ".join(region_name.split(" ")[:2])
+                                                                   + f" {int(region_name.split(' ')[2]) - 1}",
                                                                    self.player)
                 else:
                     region_to_connect = menu_region
@@ -119,137 +129,161 @@ class MarioLand2World(World):
                 continue
             region.locations.append(MarioLand2Location(self.player, location_name,
                                                        self.location_name_to_id[location_name], region))
-        self.multiworld.get_region("Macro Zone - Secret Course",
-                                   self.player).connect(self.multiworld.get_region("Macro Zone 4", self.player))
-        self.multiworld.get_region("Macro Zone 4",
-                                   self.player).connect(self.multiworld.get_region("Macro Zone - Secret Course",
-                                                                                   self.player))
+        self.multiworld.get_region("Macro Zone Secret Course", self.player).connect(
+            self.multiworld.get_region("Macro Zone 4", self.player))
+        self.multiworld.get_region("Macro Zone 4", self.player).connect(
+            self.multiworld.get_region("Macro Zone Secret Course", self.player))
         castle = Region("Mario's Castle", self.player, self.multiworld)
         menu_region.connect(castle)
         wario = MarioLand2Location(self.player, "Mario's Castle - Wario", parent=castle)
         castle.locations.append(wario)
         wario.place_locked_item(MarioLand2Item("Wario Defeated", ItemClassification.progression, None, self.player))
 
+        if self.options.coinsanity:
+            self.num_coin_locations = [[region, 1] for region in created_regions]
+            self.max_coin_locations = {region: len(coins_coords[region]) for region in created_regions}
+            if self.options.accessibility == "locations":
+                for level in self.max_coin_locations:
+                    if level in auto_scroll_max and level_name_to_id[level] in self.auto_scroll_levels:
+                        self.max_coin_locations[level] = min(self.max_coin_locations[level], auto_scroll_max[level])
+            for i in range(self.options.coinsanity_checks - 31):
+                self.num_coin_locations.sort(key=lambda region: self.max_coin_locations[region[0]] / region[1])
+                self.num_coin_locations[-1][1] += 1
+            coin_locations = []
+            for level, coins in self.num_coin_locations:
+                coin_locations += [f"{level} - " + str(int(self.max_coin_locations[level] / coins * i))
+                                   + f" Coin{'s' if int(self.max_coin_locations[level] / coins * i) > 1 else ''}"
+                                   for i in range(1, coins + 1)]
+            for location_name in coin_locations:
+                region = self.multiworld.get_region(location_name.split(" -")[0], self.player)
+                region.locations.append(MarioLand2Location(self.player, location_name,
+                                                           self.location_name_to_id[location_name], parent=region))
+
     def set_rules(self):
         entrance_rules = {
             "Menu -> Space Zone 1": lambda state: state.has_any(["Hippo Bubble", "Carrot"], self.player),
-            "Space Zone 1 -> Space Zone - Secret Course": lambda state: state.has("Space Zone Secret", self.player),
+            "Space Zone 1 -> Space Zone Secret Course": lambda state: state.has("Space Zone Secret", self.player),
             "Space Zone 1 -> Space Zone 2": lambda state: has_level_progression(state, "Space Zone Progression", self.player),
             "Tree Zone 1 -> Tree Zone 2": lambda state: has_level_progression(state, "Tree Zone Progression", self.player),
-            "Tree Zone 2 -> Tree Zone - Secret Course": lambda state: state.has("Tree Zone Secret", self.player),
+            "Tree Zone 2 -> Tree Zone Secret Course": lambda state: state.has("Tree Zone Secret", self.player),
             "Tree Zone 2 -> Tree Zone 3": lambda state: has_level_progression(state, "Tree Zone Progression", self.player, 2),
             "Tree Zone 4 -> Tree Zone 5": lambda state: has_level_progression(state, "Tree Zone Progression", self.player, 3),
-            "Macro Zone 1 -> Macro Zone - Secret Course": lambda state: state.has("Macro Zone Secret 1", self.player),
-            "Macro Zone - Secret Course -> Macro Zone 4": lambda state: state.has("Macro Zone Secret 2", self.player),
+            "Macro Zone 1 -> Macro Zone Secret Course": lambda state: state.has("Macro Zone Secret 1", self.player),
+            "Macro Zone Secret Course -> Macro Zone 4": lambda state: state.has("Macro Zone Secret 2", self.player),
             "Macro Zone 1 -> Macro Zone 2": lambda state: has_level_progression(state, "Macro Zone Progression", self.player),
             "Macro Zone 2 -> Macro Zone 3": lambda state: has_level_progression(state, "Macro Zone Progression", self.player, 2),
             "Macro Zone 3 -> Macro Zone 4": lambda state: has_level_progression(state, "Macro Zone Progression", self.player, 3),
-            "Macro Zone 4 -> Macro Zone - Secret Course": lambda state: state.has("Macro Zone Secret 2", self.player),
+            "Macro Zone 4 -> Macro Zone Secret Course": lambda state: state.has("Macro Zone Secret 2", self.player),
             "Pumpkin Zone 1 -> Pumpkin Zone 2": lambda state: has_level_progression(state, "Pumpkin Zone Progression", self.player),
-            "Pumpkin Zone 2 -> Pumpkin Zone - Secret Course 1": lambda state: state.has("Pumpkin Zone Secret 1", self.player),
+            "Pumpkin Zone 2 -> Pumpkin Zone Secret Course 1": lambda state: state.has("Pumpkin Zone Secret 1", self.player),
             "Pumpkin Zone 2 -> Pumpkin Zone 3": lambda state: has_level_progression(state, "Pumpkin Zone Progression", self.player, 2),
-            "Pumpkin Zone 3 -> Pumpkin Zone - Secret Course 2": lambda state: state.has("Pumpkin Zone Secret 2", self.player),
+            "Pumpkin Zone 3 -> Pumpkin Zone Secret Course 2": lambda state: state.has("Pumpkin Zone Secret 2", self.player),
             "Pumpkin Zone 3 -> Pumpkin Zone 4": lambda state: has_level_progression(state, "Pumpkin Zone Progression", self.player, 3),
             "Mario Zone 1 -> Mario Zone 2": lambda state: has_level_progression(state, "Mario Zone Progression", self.player),
             "Mario Zone 2 -> Mario Zone 3": lambda state: has_level_progression(state, "Mario Zone Progression", self.player, 2),
             "Mario Zone 3 -> Mario Zone 4": lambda state: has_level_progression(state, "Mario Zone Progression", self.player, 3),
             "Turtle Zone 1 -> Turtle Zone 2": lambda state: has_level_progression(state, "Turtle Zone Progression", self.player),
-            "Turtle Zone 2 -> Turtle Zone - Secret Course": lambda state: state.has("Turtle Zone Secret", self.player),
+            "Turtle Zone 2 -> Turtle Zone Secret Course": lambda state: state.has("Turtle Zone Secret", self.player),
             "Turtle Zone 2 -> Turtle Zone 3": lambda state: has_level_progression(state, "Turtle Zone Progression", self.player, 2),
-            "Menu -> Mario's Castle": lambda state: ([
+        }
+
+        if self.options.shuffle_golden_coins == "mario_coin_fragment_hunt":
+            # Require the other coins just to ensure they are being added to start inventory properly,
+            # and so they show up in Playthrough as required
+            entrance_rules["Menu -> Mario's Castle"] = lambda state: (state.has_all(
+                ["Tree Coin", "Space Coin", "Macro Coin", "Pumpkin Coin", "Turtle Coin"], self.player)
+                and state.has("Mario Coin Fragment", self.player, self.coin_fragments_required))
+        else:
+            entrance_rules["Menu -> Mario's Castle"] = lambda state: ([
                     state.has("Tree Coin", self.player), state.has("Space Coin", self.player),
                     state.has("Macro Coin", self.player), state.has("Pumpkin Coin", self.player),
                     state.has("Mario Coin", self.player), state.has("Turtle Coin", self.player)
                 ].count(True) >= self.options.required_golden_coins)
-        }
+
         location_rules = {
-            "Hippo Zone": lambda state: state.has_any(["Hippo Bubble", "Carrot", "Swim"], self.player),
+            "Hippo Zone - Normal or Secret Exit": lambda state: state.has_any(["Hippo Bubble", "Carrot", "Swim"], self.player),
             # It is possible, however tricky, to beat the Moon Stage without Carrot or Space Physics.
             # However, it requires somewhat precisely jumping off enemies. Enemy shuffle may make this impossible.
             # I have not done any testing there. Instead, I will just always make one or the other required, since
             # it is difficult without them anyway.
-            "Space Zone 1 - Moon Stage": lambda state: state.has_any(["Space Physics", "Carrot"], self.player),
+            "Space Zone 1 - Normal Exit": lambda state: state.has_any(["Space Physics", "Carrot"], self.player),
             # One or the other is actually necessary for the secret exit.
-            "Space Zone 1 - Moon Stage Secret Exit": lambda state: state.has_any(
+            "Space Zone 1 - Secret Exit": lambda state: state.has_any(
                 ["Space Physics", "Carrot"], self.player),
             # Without Space Physics, you must be able to take damage once to reach the bell, and again after the bell.
             # If bells are not shuffled, then any one powerup will do, as you can get the bell and come back.
             # Otherwise, you need the bell item from the item pool, or you need to be able to take damage twice in one
             # visit.
-            "Space Zone 2 - Star Stage": lambda state: has_pipe_right(state, self.player) and (state.has(
+            "Space Zone 2 - Boss": lambda state: has_pipe_right(state, self.player) and (state.has(
                 "Space Physics", self.player) or ((not
                 state.multiworld.worlds[self.player].options.shuffle_midway_bells) and state.has_any(["Mushroom",
                 "Fire Flower", "Carrot"], self.player)) or (state.has("Mushroom", self.player)
                 and state.has_any(["Fire Flower", "Carrot"], self.player))
-                or (state.has("Space Zone 2 - Star Stage Midway Bell", self.player) and state.has_any(["Mushroom",
+                or (state.has("Space Zone 2 Midway Bell", self.player) and state.has_any(["Mushroom",
                 "Fire Flower", "Carrot"], self.player))),
-            "Space Zone 2 - Star Stage Midway Bell": lambda state: state.has_any(
-                ["Space Physics", "Space Zone 2 - Star Stage Midway Bell", "Mushroom", "Fire Flower", "Carrot"],
+            "Space Zone 2 - Midway Bell": lambda state: state.has_any(
+                ["Space Physics", "Space Zone 2 Midway Bell", "Mushroom", "Fire Flower", "Carrot"],
                 self.player),
-            "Tree Zone 2 - In the Trees": lambda state: has_pipe_right(state, self.player) or state.has(
-                "Tree Zone 2 - In the Trees Midway Bell", self.player),
-            "Tree Zone 2 - In the Trees Midway Bell": lambda state: has_pipe_right(state, self.player) or state.has(
-                "Tree Zone 2 - In the Trees Midway Bell", self.player),
-            "Tree Zone 2 - In the Trees Secret Exit": lambda state: has_pipe_right(state, self.player)
-                                                                      and state.has("Carrot", self.player),
-            "Tree Zone 4 - Honeybees": lambda state: has_pipe_down(state, self.player)
+            "Tree Zone 2 - Normal Exit": lambda state: has_pipe_right(state, self.player) or state.has(
+                "Tree Zone 2 Midway Bell", self.player),
+            "Tree Zone 2 - Midway Bell": lambda state: has_pipe_right(state, self.player) or state.has(
+                "Tree Zone 2 Midway Bell", self.player),
+            "Tree Zone 2 - Secret Exit": lambda state: has_pipe_right(state, self.player)
+                                                       and state.has("Carrot", self.player),
+            "Tree Zone 4 - Normal Exit": lambda state: has_pipe_down(state, self.player)
                 and ((has_pipe_right(state, self.player) and has_pipe_up(state, self.player))
-                or state.has("Tree Zone 4 - Honeybees Midway Bell", self.player)),
-            "Tree Zone 4 - Honeybees Midway Bell": lambda state: ((has_pipe_right(state, self.player)
-                and has_pipe_up(state, self.player)) or state.has("Tree Zone 4 - Honeybees Midway Bell", self.player)),
-            "Tree Zone 5 - The Big Bird": lambda state: has_pipe_right(state, self.player)
-                                                     and (has_pipe_up(state, self.player)
-                                                          or state.has("Carrot", self.player)),
-            "Macro Zone 1 - The Ant Monsters": lambda state: has_pipe_down(state, self.player)
-                                                             or state.has("Macro Zone 1 - The Ant Monsters Midway Bell",
-                                                                          self.player),
-            "Macro Zone 1 - The Ant Monsters Midway Bell": lambda state: has_pipe_down(state, self.player)
-                                                             or state.has("Macro Zone 1 - The Ant Monsters Midway Bell",
-                                                                          self.player),
-            "Macro Zone 1 - The Ant Monsters Secret Exit": lambda state: (has_pipe_down(state, self.player)
-                or state.has("Macro Zone 1 - The Ant Monsters Midway Bell", self.player))
+                or state.has("Tree Zone 4 Midway Bell", self.player)),
+            "Tree Zone 4 - Midway Bell": lambda state: ((has_pipe_right(state, self.player)
+                and has_pipe_up(state, self.player)) or state.has("Tree Zone 4 Midway Bell", self.player)),
+            "Tree Zone 5 - Boss": lambda state: has_pipe_right(state, self.player) and (
+                        has_pipe_up(state, self.player) or state.has("Carrot", self.player)),
+            "Macro Zone 1 - Normal Exit": lambda state: has_pipe_down(state, self.player)
+                                                        or state.has("Macro Zone 1 Midway Bell", self.player),
+            "Macro Zone 1 - Midway Bell": lambda state: has_pipe_down(state, self.player)
+                                                        or state.has("Macro Zone 1 Midway Bell", self.player),
+            "Macro Zone 1 - Secret Exit": lambda state: (has_pipe_down(state, self.player)
+                or state.has("Macro Zone 1 Midway Bell", self.player))
                 and state.has("Fire Flower", self.player) and has_pipe_up(state, self.player),
-            "Macro Zone 2 - In the Syrup Sea": lambda state: (has_pipe_down(state, self.player) or state.has(
-                "Macro Zone 2 - In the Syrup Sea Midway Bell", self.player))
+            "Macro Zone 2 - Normal Exit": lambda state: (has_pipe_down(state, self.player) or state.has(
+                "Macro Zone 2 Midway Bell", self.player))
                 and state.has("Swim", self.player) and has_pipe_up(state, self.player),
-            "Macro Zone 2 - In the Syrup Sea Midway Bell": lambda state: (has_pipe_down(
+            "Macro Zone 2 - Midway Bell": lambda state: (has_pipe_down(
                 state, self.player) and state.has("Swim", self.player)) or state.has(
-                "Macro Zone 2 - In the Syrup Sea Midway Bell", self.player),
-            "Macro Zone 3 - Fiery Mario-Special Agent": lambda state: (has_pipe_down(state, self.player)
-                and has_pipe_down(state, self.player)) or state.has(
-                "Macro Zone 3 - Fiery Mario-Special Agent Midway Bell", self.player),
-            "Macro Zone 3 - Fiery Mario-Special Agent Midway Bell": lambda state: (has_pipe_down(state, self.player)
-                and has_pipe_down(state, self.player)) or state.has(
-                "Macro Zone 3 - Fiery Mario-Special Agent Midway Bell", self.player),
-            "Macro Zone 4 - One Mighty Mouse": lambda state: has_pipe_right(state, self.player),
-            "Pumpkin Zone 1 - Bat Course": lambda state: has_pipe_down(state, self.player) or state.has(
-                "Pumpkin Zone 1 - Bat Course Midway Bell", self.player),
-            "Pumpkin Zone 1 - Bat Course Midway Bell": lambda state: has_pipe_down(state, self.player) or state.has(
-                "Pumpkin Zone 1 - Bat Course Midway Bell", self.player),
-            "Pumpkin Zone 2 - Cyclops Course": lambda state: has_pipe_down(state, self.player) and has_pipe_up(
+                "Macro Zone 2 Midway Bell", self.player),
+            "Macro Zone 3 - Normal Exit": lambda state: (has_pipe_down(state, self.player)
+                and has_pipe_down(state, self.player)) or state.has("Macro Zone 3 Midway Bell", self.player),
+            "Macro Zone 3 - Midway Bell": lambda state: (has_pipe_down(state, self.player)
+                and has_pipe_down(state, self.player)) or state.has("Macro Zone 3 Midway Bell", self.player),
+            "Macro Zone 4 - Boss": lambda state: has_pipe_right(state, self.player),
+            "Pumpkin Zone 1 - Normal Exit": lambda state: has_pipe_down(state, self.player) or state.has(
+                "Pumpkin Zone 1 Midway Bell", self.player),
+            "Pumpkin Zone 1 - Midway Bell": lambda state: has_pipe_down(state, self.player) or state.has(
+                "Pumpkin Zone 1 Midway Bell", self.player),
+            "Pumpkin Zone 2 - Normal Exit": lambda state: has_pipe_down(state, self.player) and has_pipe_up(
                 state, self.player) and has_pipe_right(state, self.player) and state.has("Swim", self.player),
             # You can only spin jump as Big Mario or Fire Mario
-            "Pumpkin Zone 2 - Cyclops Course Secret Exit": lambda state: has_pipe_down(
+            "Pumpkin Zone 2 - Secret Exit": lambda state: has_pipe_down(
                 state, self.player) and has_pipe_up(state, self.player) and has_pipe_right(
                 state, self.player) and state.has("Swim", self.player) and state.has_any(
                 ["Mushroom", "Fire Flower"], self.player),
-            "Pumpkin Zone 3 - Ghost House Secret Exit": lambda state: state.has("Carrot", self.player),
-            "Pumpkin Zone 4 - Witch's Mansion": lambda state: has_pipe_right(state, self.player),
-            "Mario Zone 1 - Fiery Blocks": lambda state: has_pipe_right(state, self.player),
+            "Pumpkin Zone 3 - Secret Exit": lambda state: state.has("Carrot", self.player),
+            "Pumpkin Zone 4 - Boss": lambda state: has_pipe_right(state, self.player),
+            "Mario Zone 1 - Normal Exit": lambda state: has_pipe_right(state, self.player),
             # It is possible to get as small mario, but it is a very precise jump and you will die afterward.
-            "Mario Zone 1 - Fiery Blocks Midway Bell": lambda state: (state.has_any(
+            "Mario Zone 1 - Midway Bell": lambda state: (state.has_any(
                 ["Mushroom", "Fire Flower", "Carrot"], self.player) and has_pipe_right(state, self.player))
-                or state.has("Mario Zone 1 - Fiery Blocks Midway Bell", self.player),
-            "Mario Zone 4 - Three Mean Pigs!": lambda state: has_pipe_right(state, self.player),
-            "Turtle Zone 2 - Turtle Zone": lambda state: has_pipe_up(state, self.player) and has_pipe_down(
+                or state.has("Mario Zone 1 Midway Bell", self.player),
+            "Mario Zone 4 - Boss": lambda state: has_pipe_right(state, self.player),
+            "Turtle Zone 2 - Normal Exit": lambda state: has_pipe_up(state, self.player) and has_pipe_down(
                 state, self.player) and has_pipe_right(state, self.player) and has_pipe_left(state, self.player)
                 and state.has("Swim", self.player),
-            "Turtle Zone 2 - Turtle Zone Midway Bell": lambda state: state.has_any(
-                ["Swim", "Turtle Zone 2 - Turtle Zone Midway Bell"], self.player),
-            "Turtle Zone 2 - Turtle Zone Secret Exit": lambda state: has_pipe_up(
-                state, self.player) and state.has("Swim", self.player), #state.has_any(["Swim", "Turtle Zone 2 - Turtle Zone Midway Bell"], self.player),  # hard logic option?
-            "Turtle Zone - Secret Course": lambda state: state.has_any(["Fire Flower", "Carrot"], self.player),
-            "Turtle Zone 3 - Whale Course": lambda state: has_pipe_right(state, self.player),
+            "Turtle Zone 2 - Midway Bell": lambda state: state.has_any(
+                ["Swim", "Turtle Zone 2 Midway Bell"], self.player),
+            "Turtle Zone 2 - Secret Exit": lambda state: has_pipe_up(
+                state, self.player) and state.has("Swim", self.player), #state.has_any(["Swim", "Turtle Zone 2  Midway Bell"], self.player),  # hard logic option?
+            "Turtle Zone Secret Course - Normal Exit": lambda state: state.has_any(["Fire Flower", "Carrot"],
+                                                                                   self.player),
+            "Turtle Zone 3 - Boss": lambda state: has_pipe_right(state, self.player),
             "Mario's Castle - Wario": lambda state: has_pipe_right(
                 state, self.player) and has_pipe_left(state, self.player)
         }
@@ -257,29 +291,31 @@ class MarioLand2World(World):
         for entrance, rule in entrance_rules.items():
             self.multiworld.get_entrance(entrance, self.player).access_rule = rule
 
-        for level, rule in location_rules.items():
-            if ("Midway Bell" not in level) or self.options.shuffle_midway_bells:
-                self.multiworld.get_location(level, self.player).access_rule = rule
-
+        for location in self.multiworld.get_locations(self.player):
+            if location.name in location_rules:
+                location.access_rule = location_rules[location.name]
+            elif location.name.endswith("Coins"):
+                rule = getattr(coin_logic, location.parent_region.name.lower().replace(" ", "_") + "_coins", None)
+                if rule:
+                    coins = int(location.name.split(" ")[-2])
+                    auto_scroll = level_name_to_id[location.name.split(" -")[0]] in self.auto_scroll_levels
+                    location.access_rule = lambda state, coin_rule=rule, \
+                        num_coins=coins, scroll=auto_scroll: coin_rule(state, self.player, num_coins, scroll)
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Wario Defeated", self.player)
 
     def create_items(self):
         item_counts = {
             "Space Zone Progression": 1,
             "Space Zone Secret": 1,
-            "Tree Zone Progression": 1,
-            "Tree Zone Progression x2": 1,
+            "Tree Zone Progression": 3,
             "Tree Zone Secret": 1,
-            "Macro Zone Progression": 1,
-            "Macro Zone Progression x2": 1,
+            "Macro Zone Progression": 3,
             "Macro Zone Secret 1": 1,
             "Macro Zone Secret 2": 1,
-            "Pumpkin Zone Progression": 1,
-            "Pumpkin Zone Progression x2": 1,
+            "Pumpkin Zone Progression": 3,
             "Pumpkin Zone Secret 1": 1,
             "Pumpkin Zone Secret 2": 1,
-            "Mario Zone Progression": 1,
-            "Mario Zone Progression x2": 1,
+            "Mario Zone Progression": 3,
             "Turtle Zone Progression": 2,
             "Turtle Zone Secret": 1,
             "Mushroom": 1,
@@ -288,20 +324,53 @@ class MarioLand2World(World):
             "Space Physics": 1,
             "Hippo Bubble": 1,
             "Swim": 1,
-            "Super Star Duration Increase": 6,
+            "Super Star Duration Increase": 2,
+            "Mario Coin Fragment": 0,
         }
 
+        if self.options.shuffle_golden_coins == "mario_coin_fragment_hunt":
+            # There are 5 Zone Progression items that can be condensed.
+            item_counts["Mario Coin Fragment"] = 1 + ((5 * self.options.mario_coin_fragment_percentage) // 100)
+
         if self.options.coinsanity:
-            for item in self.item_name_groups["Coins"]:
+            coin_count = sum([level[1] for level in self.num_coin_locations])
+            max_coins = sum(self.max_coin_locations.values())
+            if self.options.shuffle_golden_coins == "mario_coin_fragment_hunt":
+                removed_coins = (coin_count * self.options.mario_coin_fragment_percentage) // 100
+                coin_count -= removed_coins
+                item_counts["Mario Coin Fragment"] += removed_coins
+                # Randomly remove some coin items for variety
+                coin_count -= (coin_count // self.random.randint(100, max(100, coin_count)))
+
+            if coin_count:
+                coin_bundle_sizes = [max_coins // coin_count] * coin_count
+                remainder = max_coins - sum(coin_bundle_sizes)
+                for i in range(remainder):
+                    coin_bundle_sizes[i] += 1
+                for a, b in zip(range(1, len(coin_bundle_sizes), 2), range(2, len(coin_bundle_sizes), 2)):
+                    split = self.random.randint(1, coin_bundle_sizes[a] + coin_bundle_sizes[b] - 1)
+                    coin_bundle_sizes[a], coin_bundle_sizes[b] = split, coin_bundle_sizes[a] + coin_bundle_sizes[b] - split
+                for coin_bundle_size in coin_bundle_sizes:
+                    item_name = f"{coin_bundle_size} Coin{'s' if coin_bundle_size > 1 else ''}"
+                    if item_name in item_counts:
+                        item_counts[item_name] += 1
+                    else:
+                        item_counts[item_name] = 1
+
+        if self.options.shuffle_golden_coins == "shuffle":
+            for item in self.item_name_groups["Golden Coins"]:
                 item_counts[item] = 1
+        elif self.options.shuffle_golden_coins == "mario_coin_fragment_hunt":
+            for item in ("Tree Coin", "Space Coin", "Macro Coin", "Pumpkin Coin", "Turtle Coin"):
+                self.multiworld.push_precollected(self.create_item(item))
         else:
             for item, location_name in (
-                    ("Mario Coin", "Mario Zone 4 - Three Mean Pigs!"),
-                    ("Tree Coin", "Tree Zone 5 - The Big Bird"),
-                    ("Space Coin", "Space Zone 2 - Star Stage"),
-                    ("Macro Coin", "Macro Zone 4 - One Mighty Mouse"),
-                    ("Pumpkin Coin", "Pumpkin Zone 4 - Witch's Mansion"),
-                    ("Turtle Coin", "Turtle Zone 3 - Whale Course")
+                    ("Mario Coin", "Mario Zone 4 - Boss"),
+                    ("Tree Coin", "Tree Zone 5 - Boss"),
+                    ("Space Coin", "Space Zone 2 - Boss"),
+                    ("Macro Coin", "Macro Zone 4 - Boss"),
+                    ("Pumpkin Coin", "Pumpkin Zone 4 - Boss"),
+                    ("Turtle Coin", "Turtle Zone 3 - Boss")
             ):
                 location = self.multiworld.get_location(location_name, self.player)
                 location.place_locked_item(self.create_item(item))
@@ -316,14 +385,10 @@ class MarioLand2World(World):
             item_counts["Normal Mode"] = 1
         elif self.options.difficulty_mode == "normal_to_easy":
             item_counts["Easy Mode"] = 1
-        else:
-            item_counts["Super Star Duration Increase"] += 1
 
         if self.options.shuffle_pipe_traversal == "single":
-            item_counts["Super Star Duration Increase"] -= 1
             item_counts["Pipe Traversal"] = 1
         elif self.options.shuffle_pipe_traversal == "split":
-            item_counts["Super Star Duration Increase"] -= 4
             item_counts["Pipe Traversal - Right"] = 1
             item_counts["Pipe Traversal - Left"] = 1
             item_counts["Pipe Traversal - Up"] = 1
@@ -332,23 +397,50 @@ class MarioLand2World(World):
             self.multiworld.push_precollected(self.create_item("Pipe Traversal"))
 
         if self.options.auto_scroll_trap:
-            item_counts["Super Star Duration Increase"] -= 1
             item_counts["Auto Scroll"] = 1
 
         for item in self.multiworld.precollected_items[self.player]:
             if item.name in item_counts and item_counts[item.name] > 0:
                 item_counts[item.name] -= 1
-                item_counts["Super Star Duration Increase"] += 1
+
+        location_count = len(self.multiworld.get_unfilled_locations(self.player))
+        items_to_add = location_count - sum(item_counts.values())
+        if items_to_add > 0:
+            mario_coin_frags = 0
+            if self.options.shuffle_golden_coins == "mario_coin_fragment_hunt":
+                mario_coin_frags = (items_to_add * self.options.mario_coin_fragment_percentage) // 100
+                item_counts["Mario Coin Fragment"] += mario_coin_frags
+            item_counts["Super Star Duration Increase"] += items_to_add - mario_coin_frags
+        elif items_to_add < 0:
+            if self.options.coinsanity:
+                for i in range(1, 168):
+                    coin_name = f"{i} Coin{'s' if i > 1 else ''}"
+                    if coin_name in item_counts:
+                        amount_to_remove = min(-items_to_add, item_counts[coin_name])
+                        item_counts[coin_name] -= amount_to_remove
+                        items_to_add += amount_to_remove
+                        if items_to_add >= 0:
+                            break
+
+            double_progression_items = ["Tree Zone Progression", "Macro Zone Progression", "Pumpkin Zone Progression",
+                                        "Mario Zone Progression", "Turtle Zone Progression"]
+            self.random.shuffle(double_progression_items)
+            while sum(item_counts.values()) > location_count:
+                if double_progression_items:
+                    double_progression_item = double_progression_items.pop()
+                    item_counts[double_progression_item] -= 2
+                    item_counts[double_progression_item + " x2"] = 1
+                    continue
+                raise Exception(f"Super Mario Land 2: Too many items for locations. Player: {self.player}")
+
+        self.coin_fragments_required = max((item_counts["Mario Coin Fragment"]
+                                           * self.options.mario_coin_fragments_required_percentage) // 100, 1)
 
         for item_name, count in item_counts.items():
             self.multiworld.itempool += [self.create_item(item_name) for _ in range(count)]
 
     def fill_slot_data(self):
         return {
-            "mode": self.options.difficulty_mode.value,
-            "stars": max(len([loc for loc in self.multiworld.get_filled_locations() if loc.item.player == self.player
-                              and loc.item.name == "Super Star Duration Increase"]), 1),
-            "midway_bells": self.options.shuffle_midway_bells.value,
             "energy_link": self.options.energy_link.value
         }
 
