@@ -319,41 +319,6 @@ class DarkSouls3World(World):
         # A list of items we can replace
         removable_items = [item for item in itempool if item.classification == ItemClassification.filler]
 
-        for item_name in guaranteed_items:
-            # Break early just in case nothing is removable (if user is trying to guarantee more
-            # items than the pool can hold, for example)
-            if len(removable_items) == 0 and num_required_extra_items == 0:
-                break
-
-            num_existing_copies = len([item for item in itempool if item.name == item_name])
-            for _ in range(guaranteed_items[item_name]):
-                if num_existing_copies > 0:
-                    num_existing_copies -= 1
-                    continue
-
-                if num_required_extra_items > 0:
-                    # We can just add them instead of using filler later
-                    num_required_extra_items -= 1
-                else:
-                    if len(removable_items) == 0:
-                        break
-
-                    # Try to construct a list of items with the same category that can be removed
-                    # If none exist, just remove something at random
-                    removable_shortlist = [
-                        item for item
-                        in removable_items
-                        if item_dictionary[item.name].category == item_dictionary[item_name].category
-                    ]
-                    if len(removable_shortlist) == 0:
-                        removable_shortlist = removable_items
-
-                    removed_item = self.multiworld.random.choice(removable_shortlist)
-                    removable_items.remove(removed_item) # To avoid trying to replace the same item twice
-                    itempool.remove(removed_item)
-
-                itempool.append(self.create_item(item_name))
-
         injectables = self._create_injectable_items(num_required_extra_items)
         num_required_extra_items -= len(injectables)
         itempool.extend(injectables)
@@ -378,11 +343,15 @@ class DarkSouls3World(World):
             in item_dictionary.values()
             if item.inject and (not item.is_dlc or self.options.enable_dlc)
         ]
-        injectable_progression = [
+        injectable_mandatory = [
             item for item in all_injectable_items
             if item.classification == ItemClassification.progression
+        ] + [
+            item
+            for (item, count) in self.options.guaranteed_items.items()
+            for _ in range(0, count)
         ]
-        injectable_non_progression = [
+        injectable_optional = [
             item for item in all_injectable_items
             if item.classification != ItemClassification.progression
         ]
@@ -390,17 +359,20 @@ class DarkSouls3World(World):
         number_to_inject = min(num_required_extra_items, len(all_injectable_items))
         items = (
             self.multiworld.random.sample(
-                injectable_progression,
-                k=min(len(injectable_progression), number_to_inject)
+                injectable_mandatory,
+                k=min(len(injectable_mandatory), number_to_inject)
             )
             + self.multiworld.random.sample(
-                injectable_non_progression,
-                k=max(0, number_to_inject - len(injectable_progression))
+                injectable_optional,
+                k=max(0, number_to_inject - len(injectable_mandatory))
             )
         )
 
-        if number_to_inject < len(injectable_progression):
-            for item in injectable_progression:
+        if number_to_inject < len(injectable_mandatory):
+            # It's worth considering the possibility of _removing_ unimportant
+            # items from the pool to inject these instead rather than just
+            # making them part of the starting health back
+            for item in injectable_mandatory:
                 if item in items: continue
                 self.multiworld.push_precollected(self.create_item(item))
                 warning(
