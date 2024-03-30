@@ -868,7 +868,9 @@ class DarkSouls3World(World):
             "IBV: Mirrah Chain Gloves - bridge after killing Creighton",
             "IBV: Mirrah Chain Leggings - bridge after killing Creighton",
             "IBV: Mirrah Chain Mail - bridge after killing Creighton",
-            "IBV: Dragonslayer's Axe - Creighton drop"
+            "IBV: Dragonslayer's Axe - Creighton drop",
+            # Killing Pontiff without progressing Sirris's quest will break it.
+            "IBV: Soul of Pontiff Sulyvahn"
         ], lambda state: (
             self._can_get(state, "US: Soul of the Rotted Greatwood")
             and state.has("Dreamchaser's Ashes", self.player)
