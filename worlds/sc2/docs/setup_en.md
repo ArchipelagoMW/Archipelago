@@ -36,7 +36,9 @@ Check out [Creating a YAML](https://archipelago.gg/tutorial/Archipelago/setup/en
 ### Common yaml questions
 #### How do I know I set my yaml up correctly?
 
-The simplest way to check is to test it out. Save your yaml to the Players/ folder within your Archipelago installation and run ArchipelagoGenerate.exe. You should see a new .zip file within the output/ folder of your Archipelago installation if things worked correctly. It's advisable to run ArchipelagoGenerate through a terminal so that you can see the printout, which will include any errors and the precise output file name if it's successful. If you don't like terminals, you can also check the log file in the logs/ folder.
+The simplest way to check is to use the website [validator](https://archipelago.gg/check). 
+
+You can also test it by attempting to generate a multiworld with your yaml. Save your yaml to the Players/ folder within your Archipelago installation and run ArchipelagoGenerate.exe. You should see a new .zip file within the output/ folder of your Archipelago installation if things worked correctly. It's advisable to run ArchipelagoGenerate through a terminal so that you can see the printout, which will include any errors and the precise output file name if it's successful. If you don't like terminals, you can also check the log file in the logs/ folder.
 
 #### What does Progression Balancing do?
 

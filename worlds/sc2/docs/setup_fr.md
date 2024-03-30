@@ -45,13 +45,16 @@ certaines unités ou de leurs améliorations.
 Utilisez la page [*Weighted Options*](/weighted-options) pour avoir accès à ces dernières.
 
 Si vous désirez des informations et/ou instructions générales sur l'utilisation d'un fichier *yaml* pour Archipelago, 
-veuilliez consutler [*Creating a YAML*](/tutorial/Archipelago/setup/en#creating-a-yaml).
+veuillez consulter [*Creating a YAML*](/tutorial/Archipelago/setup/en#creating-a-yaml).
 
 ### Questions récurrentes à propos du fichier *yaml*
 #### Comment est-ce que je sais que mon *yaml* est bien défini?
 
-La manière la plus simple de valider est d'essayer. 
-Sauvegarder votre *yaml* dans le dossier `Players/` de votre installation d'Archipelago et exécuter 
+La manière la plus simple de valider votre *yaml* est d'utiliser le 
+[système de validation](https://archipelago.gg/check) du site web.
+
+Vous pouvez aussi le tester en tentant de générer un *multiworld* avec votre *yaml*.
+Pour faire ça, sauvegardez votre *yaml* dans le dossier `Players/` de votre installation d'Archipelago et exécutez 
 `ArchipelagoGenerate.exe`. 
 Si votre *yaml* est bien défini, vous devriez voir un nouveau fichier, avec l'extension `.zip`, apparaître dans le 
 dossier `output/` de votre installation d'Archipelago.

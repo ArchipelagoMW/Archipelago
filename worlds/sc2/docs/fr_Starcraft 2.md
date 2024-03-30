@@ -2,21 +2,21 @@
 
 ## Quel est l'effet de la randomisation sur ce jeu ?
 
-Les éléments qui suivent sont les *items* qui sont randomisés et qui doivent être débloqués pour être utilisé dans le 
+Les éléments qui suivent sont les *items* qui sont randomisés et qui doivent être débloqués pour être utilisés dans le 
 jeu:
-1. La capacité de produire des unités, outre les drones/probes/scv.
+1. La capacité de produire des unités, excepté les drones/probes/scv.
 2. Des améliorations spécifiques à certaines unités incluant quelques combinaisons qui ne sont pas disponibles dans les 
 campagnes génériques, comme le fait d'avoir les deux types d'évolution en même temps pour une unité *Zerg* et toutes 
-les améliorations de la Lance d'Adun simultanément pour les *Protoss*.
+les améliorations de la *Spear of Adun* simultanément pour les *Protoss*.
 3. L'accès aux améliorations génériques des unités, e.g. les améliorations d'attaque et d'armure.
 4. D'autres améliorations diverses telles que les améliorations de laboratoire et les mercenaires pour les *Terran*, 
-les niveaux et les améliorations de Kerrigan pour les *Zerg*, et les améliorations de la Lance d'Adun pour les 
+les niveaux et les améliorations de Kerrigan pour les *Zerg*, et les améliorations de la *Spear of Adun* pour les 
 *Protoss*.
-5. Avoir des *minerals*, du *vespene gaz*, et du *supply* au début de chaque mission.
+5. Avoir des *minerals*, du *vespene gas*, et du *supply* au début de chaque mission.
 
 Les *items* sont trouvés en accomplissant du progrès dans les catégories suivantes:
 * Accomplir des missions
-* Accomplir les objectifs supplémentaires (e.g., récolter le matériel pour les recherches dans *Wings of Liverty*)
+* Accomplir les objectifs supplémentaires (e.g., récolter le matériel pour les recherches dans *Wings of Liberty*)
 * Atteindre des étapes importantes dans la mission, e.g. accomplir des sous-objectifs
 * Accomplir des défis basés sur les succès du jeu de base, e.g. éliminer tous les *Zerg* dans la mission 
 *Devil's Playground*
@@ -31,7 +31,7 @@ L'acquisition d'un *item* est aussi indiquée dans le client d'Archipelago.
 
 Les missions peuvent être lancées par le client *StarCraft 2 Archipelago*, via l'interface graphique de l'onglet 
 *StarCraft 2 Launcher*.
-Les segments qui se passent sur l'Hyperrion, le Léviathan et la Lance d'Adun ne sont pas inclus.
+Les segments qui se passent sur l'*Hyperion*, un Léviathan et la *Spear of Adun* ne sont pas inclus.
 De plus, les points de progression tels que les crédits ou la Solarite ne sont pas utilisés dans *StarCraft 2 
 Archipelago*.
 
@@ -42,11 +42,11 @@ Les choix faits dans le fichier *yaml* définissent la disposition des missions 
 
 ## Quelles sont les modifications non aléatoires comparativement à la version de base de *Starcraft 2*
 
-1. Certaines des missions ont plus de *vespene geyses* pour permettre l'utilisation d'une plus grande variété d'unités.
+1. Certaines des missions ont plus de *vespene geysers* pour permettre l'utilisation d'une plus grande variété d'unités.
 2. Plusieurs unités et améliorations ont été ajoutées sous la forme d*items*.
 Ils proviennent de la version *co-op*, *melee*, des autres campagnes, d'expansions ultérieures, de *Brood War*, ou de 
 l'imagination des développeurs de *StarCraft 2 Archipelago*.
-3. Les structures de production, e.g. *Factory*, *Starport*, *Robotics Facility*, and *Stargate*, n'ont plus de requis 
+3. Les structures de production, e.g. *Factory*, *Starport*, *Robotics Facility*, and *Stargate*, n'ont plus d'exigence 
 technologique.
 4. Les missions avec la race *Zerg* ont été modifiées pour que les joueurs débuttent avec un *Lair* lorsqu'elles 
 commençaient avec une *Hatchery*. 
@@ -63,7 +63,7 @@ autre joueur.
 Consulter [*Advanced YAML Guide*](https://archipelago.gg/tutorial/Archipelago/advanced_settings/en) pour savoir comment 
 changer ça.
 
-## Commandes du client qui sont uniques à ce jeux
+## Commandes du client qui sont uniques à ce jeu
 
 Les commandes qui suivent sont seulement disponibles uniquement pour le client de *StarCraft 2 Archipelago*.
 Vous pouvez les afficher en utilisant la commande `/help` dans le client de *StarCraft 2 Archipelago*.
@@ -82,8 +82,8 @@ Les fichiers existants vont être écrasés.
 * `/option [option_name] [option_value]` Permet de changer un option normalement définit dans le *yaml*. 
     * Si la commande est lancée sans option, la liste des options qui sont modifiables va être affichée.
     * Les options qui peuvent être changées avec cette commande incluent sauter les cinématiques  automatiquement, la 
-présence de Kerrigan dans les missions, la disponibilité de la Lance d'Adun, la quantité de ressources supplémentaires 
-données au début des missions, la capacité de contrôler les alliées IA, etc.
+présence de Kerrigan dans les missions, la disponibilité de la *Spear of Adun*, la quantité de ressources 
+supplémentaires données au début des missions, la capacité de contrôler les alliées IA, etc.
 * `/disable_mission_check` Désactive les requit pour lancer les missions.
 Cette option a pour but de permettre de jouer en mode coopératif en permettant à un joueur de jouer à la prochaine 
 mission de la chaîne qu'un autre joueur est en train d'entamer.
