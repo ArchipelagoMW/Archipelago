@@ -43,7 +43,7 @@ files are, and how they are used.
 
 ### Where do I get a YAML?
 
-You can use the [game settings page for Terraria](/games/Terraria/player-settings) here
+You can use the [game options page for Terraria](/games/Terraria/player-options) here
 on the Archipelago website to generate a YAML using a graphical interface.
 
 ## Joining an Archipelago Game in Terraria
