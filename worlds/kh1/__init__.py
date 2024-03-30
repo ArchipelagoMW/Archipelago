@@ -2,8 +2,8 @@ from typing import List
 
 from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld, World
-from .Items import KH1Item, KH1ItemData, event_item_table, get_items_by_category, item_table
-from .Locations import KH1Location, location_table, get_locations_by_category
+from .Items import KH1Item, KH1ItemData, event_item_table, get_items_by_category, item_table, item_name_groups
+from .Locations import KH1Location, location_table, get_locations_by_category, location_name_groups
 from .Options import KH1Options
 from .Regions import create_regions
 from .Rules import set_rules
@@ -46,6 +46,8 @@ class KH1World(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in location_table.items()}
+    item_name_groups = item_name_groups
+    location_name_groups = location_name_groups
 
     def create_items(self):
         if self.options.reports_in_pool < self.options.required_reports:
