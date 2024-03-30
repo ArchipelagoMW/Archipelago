@@ -444,25 +444,49 @@ class DarkSouls3World(World):
         self._add_early_item_rules(randomized_items)
 
         self._add_entrance_rule("Firelink Shrine Bell Tower", "Tower Key")
-        self._add_entrance_rule("Undead Settlement", "Small Lothric Banner")
+        self._add_entrance_rule("Undead Settlement", lambda state: (
+            state.has("Small Lothric Banner", self.player)
+            and self._can_get(state, "HWL: Soul of Boreal Valley Vordt")
+        ))
         self._add_entrance_rule("Road of Sacrifices", "US -> RS")
-        self._add_entrance_rule("Cathedral of the Deep", "RS -> CD")
-        self._add_entrance_rule("Farron Keep", "RS -> FK")
-        self._add_entrance_rule("Catacombs of Carthus", "FK -> CC")
-        self._add_entrance_rule("Irithyll Dungeon", "IBV -> ID")
-        self._add_entrance_rule("Lothric Castle", "Basin of Vows")
-        self._add_entrance_rule("Untended Graves", "CKG -> UG")
-        self._add_entrance_rule("Irithyll of the Boreal Valley", "Small Doll")
-        self._add_entrance_rule("Anor Londo", "IBV -> AL")
-        self._add_entrance_rule("Archdragon Peak", "Path of the Dragon")
-        self._add_entrance_rule("Grand Archives", "Grand Archives Key")
         self._add_entrance_rule(
-            "Kiln of the First Flame",
-            lambda state: state.has("Cinders of a Lord - Abyss Watcher", self.player) and
-                          state.has("Cinders of a Lord - Yhorm the Giant", self.player) and
-                          state.has("Cinders of a Lord - Aldrich", self.player) and
-                          state.has("Cinders of a Lord - Lothric Prince", self.player) and
-                          state.has("Transposing Kiln", self.player))
+            "Cathedral of the Deep",
+            lambda state: self._can_get(state, "RS: Soul of a Crystal Sage")
+        )
+        self._add_entrance_rule("Farron Keep", "RS -> FK")
+        self._add_entrance_rule(
+            "Catacombs of Carthus",
+            lambda state: self._can_get(state, "FK: Soul of the Blood of the Wolf")
+        )
+        self._add_entrance_rule("Irithyll Dungeon", "IBV -> ID")
+        self._add_entrance_rule(
+            "Lothric Castle",
+            lambda state: self._can_get(state, "HWL: Soul of the Dancer")
+        )
+        self._add_entrance_rule(
+            "Untended Graves",
+            lambda state: self._can_get(state, "CKG: Soul of Consumed Oceiros")
+        )
+        self._add_entrance_rule("Irithyll of the Boreal Valley", lambda state: (
+            state.has("Small Doll", self.player)
+            and self._can_get(state, "CC: Soul of High Lord Wolnir")
+        ))
+        self._add_entrance_rule(
+            "Anor Londo",
+            lambda state: self._can_get(state, "IBV: Soul of Pontiff Sulyvahn")
+        )
+        self._add_entrance_rule("Archdragon Peak", "Path of the Dragon")
+        self._add_entrance_rule("Grand Archives", lambda state: (
+            state.has("Grand Archives Key", self.player)
+            and self._can_get(state, "LC: Soul of Dragonslayer Armour")
+        ))
+        self._add_entrance_rule("Kiln of the First Flame", lambda state: (
+            state.has("Cinders of a Lord - Abyss Watcher", self.player)
+            and state.has("Cinders of a Lord - Yhorm the Giant", self.player)
+            and state.has("Cinders of a Lord - Aldrich", self.player)
+            and state.has("Cinders of a Lord - Lothric Prince", self.player)
+            and state.has("Transposing Kiln", self.player)
+        ))
 
         if self.options.late_basin_of_vows:
             self._add_entrance_rule("Lothric Castle", lambda state: (
@@ -485,8 +509,14 @@ class DarkSouls3World(World):
         if self.options.enable_dlc:
             self._add_entrance_rule("Painted World of Ariandel (Before Contraption)", "CD -> PW1")
             self._add_entrance_rule("Painted World of Ariandel (After Contraption)", "Contraption Key")
-            self._add_entrance_rule("Dreg Heap", "PW2 -> DH")
-            self._add_entrance_rule("Ringed City", "Small Envoy Banner")
+            self._add_entrance_rule(
+                "Dreg Heap",
+                lambda state: self._can_get(state, "PW2: Soul of Sister Friede")
+            )
+            self._add_entrance_rule("Ringed City", lambda state: (
+                state.has("Small Envoy Banner", self.player)
+                and self._can_get(state, "DH: Soul of the Demon Prince")
+            ))
 
             if self.options.late_dlc:
                 self._add_entrance_rule(
@@ -599,8 +629,11 @@ class DarkSouls3World(World):
             )
         
         # Make sure the Storm Ruler is available BEFORE Yhorm the Giant
-        if self.yhorm_location.region:
-            self._add_entrance_rule(self.yhorm_location.region, "Storm Ruler")
+        if self.yhorm_location.name == "Ancient Wyvern":
+            # This is a white lie, you can get to a bunch of items in AP before you beat the Wyvern,
+            # but this saves us from having to split the entire region in two just to mark which
+            # specific items are before and after.
+            self._add_entrance_rule("Archdragon Peak", "Storm Ruler")
         for location in self.yhorm_location.locations:
             self._add_location_rule(location, "Storm Ruler")
 
@@ -950,7 +983,6 @@ class DarkSouls3World(World):
             "UG: Wolf Knight Leggings - shop after killing FK boss",
         ], self._has_any_scroll)
 
-        self._add_entrance_rule("Catacombs of Carthus", self._has_any_scroll)
         # Not really necessary but ensures players can decide which way to go
         if self.options.enable_dlc:
             self._add_entrance_rule(

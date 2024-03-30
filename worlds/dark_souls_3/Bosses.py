@@ -7,7 +7,7 @@ from typing import Optional, Set
 
 @dataclass
 class DS3BossInfo:
-    """The set of locations and regions a given boss location blocks access to."""
+    """The set of locations a given boss location blocks access to."""
 
     name: str
     """The boss's name."""
@@ -25,9 +25,6 @@ class DS3BossInfo:
     aren't randomized.
     """
 
-    region: Optional[str] = None
-    """The name the region that can't be accessed until the boss is dead, if one exists."""
-
     locations: Optional[str] = field(default_factory=set)
     """Additional individual locations that can't be accessed until the boss is dead."""
 
@@ -35,10 +32,10 @@ class DS3BossInfo:
 # Note: the offline randomizer splits up some bosses into separate fights for separate phases, each
 # of which can be individually replaced by Yhorm.
 all_bosses = [
-    DS3BossInfo("Iudex Gundyr", 4000800, before_storm_ruler = True, region = "Firelink Shrine",
+    DS3BossInfo("Iudex Gundyr", 4000800, before_storm_ruler = True,
         locations = {"CA: Coiled Sword - boss drop"}),
     DS3BossInfo("Vordt of the Boreal Valley", 3000800, before_storm_ruler = True,
-        region = "Undead Settlement", locations = {"HWL: Soul of Boreal Valley Vordt"}),
+        locations = {"HWL: Soul of Boreal Valley Vordt"}),
     DS3BossInfo("Curse-rotted Greatwood", 3100800, locations = {
         "US: Soul of the Rotted Greatwood",
         "US: Transposing Kiln - boss drop",
@@ -55,7 +52,7 @@ all_bosses = [
         "FS: Sunless Gauntlets - shop, Sirris quest, kill GA boss",
         "FS: Sunless Leggings - shop, Sirris quest, kill GA boss",
     }),
-    DS3BossInfo("Crystal Sage", 3300850, region = "Cathedral of the Deep", locations = {
+    DS3BossInfo("Crystal Sage", 3300850, locations = {
         "RS: Soul of a Crystal Sage",
         "FS: Sage's Big Hat - shop after killing RS boss",
         "FS: Hawkwood's Shield - gravestone after Hawkwood leaves",
@@ -65,8 +62,7 @@ all_bosses = [
         "CD: Small Doll - boss drop",
         "FS: Hawkwood's Shield - gravestone after Hawkwood leaves",
     }),
-    DS3BossInfo("Abyss Watchers", 3300801, before_storm_ruler = True,
-            region = "Catacombs of Carthus", locations = {
+    DS3BossInfo("Abyss Watchers", 3300801, before_storm_ruler = True, locations = {
         "FK: Soul of the Blood of the Wolf",
         "FK: Cinders of a Lord - Abyss Watcher",
         "FS: Undead Legion Helm - shop after killing FK boss",
@@ -76,14 +72,13 @@ all_bosses = [
         "FS: Farron Ring - Hawkwood",
         "FS: Hawkwood's Shield - gravestone after Hawkwood leaves",
     }),
-    DS3BossInfo("High Lord Wolnir", 3800800, before_storm_ruler = True,
-            region = "Irithyll of the Boreal Valley", locations = {
+    DS3BossInfo("High Lord Wolnir", 3800800, before_storm_ruler = True, locations = {
         "CC: Soul of High Lord Wolnir",
         "FS: Wolnir's Crown - shop after killing CC boss",
         "CC: Homeward Bone - Irithyll bridge",
         "CC: Pontiff's Right Eye - Irithyll bridge, miniboss drop",
     }),
-    DS3BossInfo("Pontiff Sulyvahn", 3700850, region = "Anor Londo", locations = {
+    DS3BossInfo("Pontiff Sulyvahn", 3700850, locations = {
         "IBV: Soul of Pontiff Sulyvahn",
     }),
     DS3BossInfo("Old Demon King", 3800830, locations = {
@@ -101,14 +96,14 @@ all_bosses = [
         "FS: Leonhard's Gauntlets - shop after killing Leonhard",
         "FS: Leonhard's Trousers - shop after killing Leonhard",
     }),
-    DS3BossInfo("Dancer of the Boreal Valley", 3000899, region = "Lothric Castle", locations = {
+    DS3BossInfo("Dancer of the Boreal Valley", 3000899, locations = {
         "HWL: Soul of the Dancer",
         "FS: Dancer's Crown - shop after killing LC entry boss",
         "FS: Dancer's Armor - shop after killing LC entry boss",
         "FS: Dancer's Gauntlets - shop after killing LC entry boss",
         "FS: Dancer's Leggings - shop after killing LC entry boss",
     }),
-    DS3BossInfo("Dragonslayer Armour", 3010800, region = "Grand Archives", locations = {
+    DS3BossInfo("Dragonslayer Armour", 3010800, locations = {
         "LC: Soul of Dragonslayer Armour",
         "FS: Morne's Helm - shop after killing Eygon or LC boss",
         "FS: Morne's Armor - shop after killing Eygon or LC boss",
@@ -116,7 +111,7 @@ all_bosses = [
         "FS: Morne's Leggings - shop after killing Eygon or LC boss",
         "LC: Titanite Chunk - down stairs after boss",
     }),
-    DS3BossInfo("Consumed King Oceiros", 3000830, region = "Untended Graves", locations = {
+    DS3BossInfo("Consumed King Oceiros", 3000830, locations = {
         "CKG: Soul of Consumed Oceiros",
         "CKG: Titanite Scale - tomb, chest #1",
         "CKG: Titanite Scale - tomb, chest #2",
@@ -147,10 +142,7 @@ all_bosses = [
         "UG: Wolf Knight Gauntlets - shop after killing FK boss",
         "UG: Wolf Knight Leggings - shop after killing FK boss",
     }),
-    # This is a white lie, you can get to a bunch of items in AP before you beat the Wyvern, but
-    # this saves us from having to split the entire region in two just to mark which specific items
-    # are before and after.
-    DS3BossInfo("Ancient Wyvern", 3200800, region = "Archdragon Peak"),
+    DS3BossInfo("Ancient Wyvern", 3200800),
     DS3BossInfo("King of the Storm", 3200850, locations = {
         "AP: Soul of the Nameless King",
         "FS: Golden Crown - shop after killing AP boss",
@@ -191,7 +183,7 @@ all_bosses = [
     }),
     DS3BossInfo("Champion's Gravetender and Gravetender Greatwolf", 4500860, dlc = True,
                 locations = {"PW1: Valorheart - boss drop"}),
-    DS3BossInfo("Sister Friede", 4500801, dlc = True, region = "Dreg Heap", locations = {
+    DS3BossInfo("Sister Friede", 4500801, dlc = True, locations = {
         "PW2: Soul of Sister Friede",
         "PW2: Titanite Slab - boss drop",
         "PW1: Titanite Slab - Corvian",
@@ -199,14 +191,14 @@ all_bosses = [
         "FS: Ordained Dress - shop after killing PW2 boss",
         "FS: Ordained Trousers - shop after killing PW2 boss",
     }),
-    DS3BossInfo("Blackflame Friede", 4500800, dlc = True, region = "Dreg Heap", locations = {
+    DS3BossInfo("Blackflame Friede", 4500800, dlc = True, locations = {
         "PW2: Soul of Sister Friede",
         "PW1: Titanite Slab - Corvian",
         "FS: Ordained Hood - shop after killing PW2 boss",
         "FS: Ordained Dress - shop after killing PW2 boss",
         "FS: Ordained Trousers - shop after killing PW2 boss",
     }),
-    DS3BossInfo("Demon Prince", 5000801, dlc = True, region = "Ringed City", locations = {
+    DS3BossInfo("Demon Prince", 5000801, dlc = True, locations = {
         "DH: Soul of the Demon Prince",
         "DH: Small Envoy Banner - boss drop",
     }),
