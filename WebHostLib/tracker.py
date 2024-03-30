@@ -124,10 +124,13 @@ class TrackerData:
     @_cache_results
     def get_player_inventory_counts(self, team: int, player: int) -> collections.Counter:
         """Retrieves a dictionary of all items received by their id and their received count."""
-        items = self.get_player_received_items(team, player)
+        received_items = self.get_player_received_items(team, player)
+        starting_items = self.get_player_starting_inventory(team, player)
         inventory = collections.Counter()
-        for item in items:
+        for item in received_items:
             inventory[item.item] += 1
+        for item in starting_items:
+            inventory[item] += 1
 
         return inventory
 
@@ -358,10 +361,13 @@ def get_enabled_multiworld_trackers(room: Room) -> Dict[str, Callable]:
 def render_generic_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
     game = tracker_data.get_player_game(team, player)
 
-    # Add received index to all received items, excluding starting inventory.
     received_items_in_order = {}
-    for received_index, network_item in enumerate(tracker_data.get_player_received_items(team, player), start=1):
-        received_items_in_order[network_item.item] = received_index
+    starting_inventory = tracker_data.get_player_starting_inventory(team, player)
+    for index, item in enumerate(starting_inventory):
+        received_items_in_order[item] = index
+    for index, network_item in enumerate(tracker_data.get_player_received_items(team, player),
+                                         start=len(starting_inventory)):
+        received_items_in_order[network_item.item] = index
 
     return render_template(
         template_name_or_list="genericTracker.html",
