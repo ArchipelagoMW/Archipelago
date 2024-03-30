@@ -389,8 +389,11 @@ class DarkSouls3World(World):
 
         number_to_inject = min(num_required_extra_items, len(all_injectable_items))
         items = (
-            self.multiworld.random.sample(injectable_progression, k=min(3, number_to_inject)) +
             self.multiworld.random.sample(
+                injectable_progression,
+                k=min(len(injectable_progression), number_to_inject)
+            )
+            + self.multiworld.random.sample(
                 injectable_non_progression,
                 k=max(0, number_to_inject - len(injectable_progression))
             )
