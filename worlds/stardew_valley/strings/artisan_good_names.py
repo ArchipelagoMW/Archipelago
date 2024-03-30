@@ -25,31 +25,27 @@ class ArtisanGood:
 
     @classmethod
     def specific_wine(cls, fruit: str) -> str:
-        return f"{fruit} Wine"
+        return f"Wine [{fruit}]"
 
     @classmethod
     def specific_juice(cls, vegetable: str) -> str:
-        return f"{vegetable} Juice"
+        return f"Juice [{vegetable}]"
 
     @classmethod
     def specific_jelly(cls, fruit: str) -> str:
-        return f"{fruit} Jelly"
+        return f"Jelly [{fruit}]"
 
     @classmethod
     def specific_pickles(cls, vegetable: str) -> str:
-        return f"Pickled {vegetable}"
+        return f"Pickles [{vegetable}]"
 
     @classmethod
     def specific_dried(cls, food: str) -> str:
-        if food[-1] == "s":
-            return f"Dried {food}"
-        if food[-1] == "y":
-            return f"Dried {food[:-1]}ies"
-        return f"Dried {food}s"
+        return f"Dried [{food}]"
 
     @classmethod
     def specific_smoked(cls, fish: str) -> str:
-        return f"Smoked {fish}"
+        return f"Smoked [{fish}]"
 
 
 class ModArtisanGood:

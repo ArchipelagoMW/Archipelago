@@ -47,16 +47,22 @@ class BundleItem:
     amount: int = 1
     quality: str = CropQuality.basic
     source: BundleItemSource = Sources.vanilla
+    flavor: str = None
 
     @staticmethod
     def money_bundle(amount: int) -> BundleItem:
         return BundleItem(Currency.money, amount)
 
+    def get_item(self) -> str:
+        if self.flavor is None:
+            return self.item_name
+        return f"{self.item_name} [{self.flavor}]"
+
     def as_amount(self, amount: int) -> BundleItem:
-        return BundleItem(self.item_name, amount, self.quality, self.source)
+        return BundleItem(self.item_name, amount, self.quality, self.source, self.flavor)
 
     def as_quality(self, quality: str) -> BundleItem:
-        return BundleItem(self.item_name, self.amount, quality, self.source)
+        return BundleItem(self.item_name, self.amount, quality, self.source, self.flavor)
 
     def as_quality_crop(self) -> BundleItem:
         amount = 5
@@ -73,7 +79,8 @@ class BundleItem:
 
     def __repr__(self):
         quality = "" if self.quality == CropQuality.basic else self.quality
-        return f"{self.amount} {quality} {self.item_name}"
+        return f"{self.amount} {quality} {self.get_item()}"
 
     def can_appear(self, options: StardewValleyOptions) -> bool:
         return self.source.can_appear(options)
+

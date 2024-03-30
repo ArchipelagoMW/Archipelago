@@ -34,10 +34,10 @@ class BundleLogic(BaseLogic[Union[ReceivedLogicMixin, HasLogicMixin, RegionLogic
         qualities = []
         can_speak_junimo = self.logic.region.can_reach(Region.wizard_tower)
         for bundle_item in bundle.items:
-            if Currency.is_currency(bundle_item.item_name):
-                return can_speak_junimo & self.logic.money.can_trade(bundle_item.item_name, bundle_item.amount)
+            if Currency.is_currency(bundle_item.get_item()):
+                return can_speak_junimo & self.logic.money.can_trade(bundle_item.get_item(), bundle_item.amount)
 
-            item_rules.append(bundle_item.item_name)
+            item_rules.append(bundle_item.get_item())
             qualities.append(bundle_item.quality)
         quality_rules = self.get_quality_rules(qualities)
         item_rules = self.logic.has_n(*item_rules, count=bundle.number_required)

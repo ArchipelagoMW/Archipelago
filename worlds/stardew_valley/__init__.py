@@ -361,7 +361,7 @@ class StardewValleyWorld(World):
                         quality = ""
                     else:
                         quality = f" ({item.quality.split(' ')[0]})"
-                    spoiler_handle.write(f"\t\t{item.amount}x {item.item_name}{quality}\n")
+                    spoiler_handle.write(f"\t\t{item.amount}x {item.get_item()}{quality}\n")
 
     def add_entrances_to_spoiler_log(self):
         if self.options.entrance_randomization == EntranceRandomization.option_disabled:
@@ -376,7 +376,7 @@ class StardewValleyWorld(World):
             for bundle in room.bundles:
                 bundles[room.name][bundle.name] = {"number_required": bundle.number_required}
                 for i, item in enumerate(bundle.items):
-                    bundles[room.name][bundle.name][i] = f"{item.item_name}|{item.amount}|{item.quality}"
+                    bundles[room.name][bundle.name][i] = f"{item.get_item()}|{item.amount}|{item.quality}"
 
         excluded_options = [BundleRandomization, NumberOfMovementBuffs, NumberOfLuckBuffs]
         excluded_option_names = [option.internal_name for option in excluded_options]
