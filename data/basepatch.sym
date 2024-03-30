@@ -52,6 +52,7 @@
 03006298 abilitiesinthislevel
 03006299 hasfullhealthitem
 0300629A hasfullhealthitem2
+0300629B lastcollectedbox
 0300629C queuedfullhealthitem
 0300629C queuedjunk
 0300629D queuedformtraps
@@ -73,6 +74,7 @@
 030062B8 cdboxextdata
 030062BC healthboxextdata
 030062C0 healthbox2extdata
+030062C4 vblkstatus
 0878F97C playername
 0878F9BC playerid
 0878F9BE seedname
@@ -85,5 +87,5 @@
 0878FD73 sendmultiworlditemsimmediately
 0878FD74 goaltype
 0878FD75 goldentreasuresneeded
-08792D1C multiworldstringdump
+08793114 multiworldstringdump
 

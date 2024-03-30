@@ -371,7 +371,7 @@ def patch_rom(rom: LocalRom, world: WL4World):
     player_name = world.multiworld.player_name[world.player].encode('utf-8')
     seed_name = world.multiworld.seed_name.encode('utf-8')[:64]
     rom.write_bytes(get_symbol('PlayerName'), player_name)
-    rom.write_byte(get_symbol('PlayerID'), world.player)
+    rom.write_word(get_symbol('PlayerID'), world.player)
     rom.write_bytes(get_symbol('SeedName'), seed_name)
 
     rom.write_byte(get_symbol('GoalType'), world.options.goal.value)
