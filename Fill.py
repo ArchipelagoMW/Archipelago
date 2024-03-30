@@ -790,7 +790,7 @@ def distribute_planned(multiworld: MultiWorld) -> None:
     player_ids = set(multiworld.player_ids)
     for player in player_ids:
         for block in multiworld.worlds[player].options.plando_items:
-            new_block = {"player": player}
+            new_block: typing.Dict[str, typing.Any] = {"player": player}
             if not isinstance(block.from_pool, bool):
                 from_pool_type = type(block.from_pool)
                 raise Exception(f"Plando 'from_pool' has to be boolean, not {from_pool_type} for player {player}.")
@@ -870,13 +870,17 @@ def distribute_planned(multiworld: MultiWorld) -> None:
                 new_block["count"]["max"] = (min(len(new_block["items"]), len(new_block["locations"])) if
                                              len(new_block["locations"]) > 0 else len(new_block["items"]))
             if new_block["count"]["max"] > len(new_block["items"]):
-                count = new_block["count"]
+                count = new_block["count"]["max"]
                 failed(f"Plando count {count} greater than items specified", block.force)
-                new_block["count"] = len(new_block["items"])
+                new_block["count"]["max"] = len(new_block["items"])
+                if new_block["count"]["min"] > len(new_block["items"]):
+                    new_block["count"]["min"] = len(new_block["items"])
             if new_block["count"]["max"] > len(new_block["locations"]) > 0:
-                count = new_block["count"]
+                count = new_block["count"]["max"]
                 failed(f"Plando count {count} greater than locations specified", block.force)
-                new_block["count"] = len(new_block["locations"])
+                new_block["count"]["max"] = len(new_block["locations"])
+                if new_block["count"]["min"] > len(new_block["locations"]):
+                    new_block["count"]["min"] = len(new_block["locations"])
             new_block["count"]["target"] = multiworld.random.randint(new_block["count"]["min"],
                                                                      new_block["count"]["max"])
 
