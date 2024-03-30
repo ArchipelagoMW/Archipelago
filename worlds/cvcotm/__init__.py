@@ -15,8 +15,8 @@ from .rules import CVCotMRules
 from .data import iname
 from ..AutoWorld import WebWorld, World
 
-
-from .aesthetics import shuffle_sub_weapons, get_start_inventory_data, get_location_data, get_countdown_numbers
+from .aesthetics import shuffle_sub_weapons, get_start_inventory_data, get_location_data, get_countdown_numbers, \
+    populate_enemy_drops
 from .rom import RomData, patch_rom, get_base_rom_path, CVCotMProcedurePatch, CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH
 from .client import CastlevaniaCotMClient
 
@@ -160,6 +160,9 @@ class CVCotMWorld(World):
     # Sub-weapons
         if self.options.sub_weapon_shuffle:
             offset_data.update(shuffle_sub_weapons(self))
+    # Item drop randomization
+        if self.options.item_drop_randomization:
+            offset_data.update(populate_enemy_drops(self))
     # Countdown
         #if self.options.countdown:
         #    offset_data.update(get_countdown_numbers(self.options, active_locations))

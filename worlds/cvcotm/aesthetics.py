@@ -2,7 +2,7 @@ import logging
 
 from BaseClasses import ItemClassification, Location, Item
 from .data import iname
-from .options import CVCotMOptions, Countdown
+from .options import CVCotMOptions, Countdown, ItemDropRandomization
 from .locations import get_location_info, base_id
 from .regions import get_region_info
 from .items import get_item_info, item_info
@@ -117,6 +117,171 @@ rom_sub_weapon_offsets = {
     0xD7D46: b"\x00",
     0xD7D52: b"\x00",
 }
+
+easy_items = [
+    1,  # Leather Armor
+    12,  # Cotton Robe
+    17,  # Cotton Clothes
+    34,  # Wristband
+    41,  # Potion
+    46,  # Antidote
+    47,  # Cure Curse
+    48,  # Mind Restore
+    51  # Heart
+]
+
+common_items = easy_items + [
+    2,  # Bronze Armor
+    3,  # Gold Armor
+    4,  # Chainmail
+    5,  # Steel Armor
+
+    13,  # Silk Robe
+    14,  # Rainbow Robe
+
+    18,  # Prison Garb
+    19,  # Stylish Suit
+
+    23,  # Double Grips
+    24,  # Star Bracelet
+    25,  # Strength Ring
+    26,  # Hard Ring
+    27,  # Intelligence Ring
+    28,  # Luck Ring
+    29,  # Cursed Ring
+
+    35,  # Gauntlet
+    36,  # Arm Guard
+    37,  # Magic Gauntlet
+    38,  # Miracle Armband
+
+    39,  # Toy Ring
+
+    42,  # Meat
+    43,  # Spiced Meat
+
+    52,  # Heart High
+]
+
+rare_items = common_items + [
+    40,  # Bear Ring
+
+    6,  # Platinum Armor
+    7,  # Diamond Armor
+    8,  # Mirror Armor
+    9,  # Needle Armor
+    10,  # Dark Armor
+
+    15,  # Magic Robe
+    16,  # Sage Robe
+
+    20,  # Nightsuit
+    21,  # Ninja Garb
+    22,  # Soldier Fatigues
+
+    30,  # Strength Armband
+    31,  # Defense Armband
+    32,  # Sage Armband
+    33,  # Gambler Armband
+
+    44,  # Potion High
+    45,  # Potion Ex
+
+    49,  # Mind High
+    50,  # Mind Ex
+
+    53,  # Heart Ex
+    54,  # Heart Mega
+]
+
+easily_farmable_enemies = [
+    0,  # Medusa Head
+    1,  # Zombie
+    2,  # Ghoul
+    3,  # Wight
+    7,  # Skeleton Bomber
+    14,  # Fleaman
+    16,  # Bat
+    17,  # Spirit
+    18,  # Ectoplasm
+    19,  # Specter
+    40,  # Devil Tower
+    46,  # Gargoyle
+    50,  # Poison Worm
+    51,  # Myconid
+    54,  # Merman
+    58,  # Gremlin
+    59,  # Hopper
+    82,  # Evil Hand
+    87,  # Mummy
+]
+
+below_150_hp_enemies = easily_farmable_enemies + [
+    4,  # Clinking Man
+    5,  # Zombie Thief
+    8,  # Electric Skeleton
+    9,  # Skeleton Spear
+    10,  # Skeleton Boomerang
+    11,  # Skeleton Soldier
+    12,  # Skeleton Knight
+    13,  # Bone Tower
+    15,  # Poltergeist
+    20,  # Axe Armor
+    26,  # Earth Armor
+    29,  # Stone Armor
+    35,  # Bloody Sword
+    41,  # Skeleton Athlete
+    42,  # Harpy
+    44,  # Imp
+    45,  # Mudman
+    47,  # Slime
+    48,  # Frozen Shade
+    49,  # Heat Shade
+    52,  # Will-O-Wisp
+    53,  # Spearfish
+    57,  # Marionette
+    60,  # Evil Pillar
+    63,  # Bone Head
+    64,  # Fox Archer
+    65,  # Fox Hunter
+    77,  # Hyena
+    78,  # Fishhead
+    79,  # Dryad
+    81,  # Brain Float
+    83,  # Abiondarg
+    86,  # Witch
+    93,  # King Moth
+    94,  # Killer Bee
+    96,  # Lizard-man
+    113,  # Devil Tower (Battle Arena)
+    119,  # Bone Tower (Battle Arena)
+    122,  # Bloody Sword (Battle Arena)
+    133,  # Evil Pillar (Battle Arena)
+]
+
+bosses = [
+    68,  # Cerberus
+    76,  # Necromancer
+    84,  # Iron Golem
+    89,  # Adramelech
+    95,  # Zombie Dragon
+    100,  # Death
+    101,  # Camilla
+    102,  # Hugh
+    103,  # Dracula I
+]
+
+candles = [
+    136,  # Scary Candle
+    137,  # Trick Candle
+    80,  # Mimic Candle
+]
+
+NUMBER_ENEMIES = 141
+NUMBER_ITEMS = 55
+NUMBER_EASY_ITEMS = 9
+NUMBER_COMMON_ITEMS = 32
+NUMBER_RARE_ITEMS = 20
 
 
 def shuffle_sub_weapons(world: "CVCotMWorld") -> Dict[int, bytes]:
@@ -247,3 +412,121 @@ def get_start_inventory_data(player: int, options: CVCotMOptions, precollected_i
         start_inventory_data[0xBFE515] = total_money
 
     return start_inventory_data
+
+
+def populate_enemy_drops(world: "CVCotMWorld") -> Dict[int, bytes]:
+    placed_easy_items = [0] * NUMBER_EASY_ITEMS
+    placed_common_items = [0] * NUMBER_COMMON_ITEMS
+    placed_rare_items = [0] * (NUMBER_COMMON_ITEMS + NUMBER_RARE_ITEMS)
+
+    regular_drops = [0] * NUMBER_ENEMIES
+    regular_drop_chances = [0] * NUMBER_ENEMIES
+    rare_drops = [0] * NUMBER_ENEMIES
+    rare_drop_chances = [0] * NUMBER_ENEMIES
+
+    # Set boss and candle items first to prevent boss drop duplicates.
+    # If item hard mode is enabled, make these items exclusive to these enemies by adding an arbitrary integer larger
+    # than could be reached normally (e.g.the total number of enemies).
+    # Bosses
+    for boss_id in bosses:
+        regular_drops[boss_id] = select_drop(world, rare_items[NUMBER_COMMON_ITEMS:],
+                                             placed_rare_items[NUMBER_COMMON_ITEMS:], NUMBER_RARE_ITEMS, True)
+
+    # Candles
+    for candle_id in candles:
+        regular_drops[candle_id] = select_drop(world, rare_items[NUMBER_COMMON_ITEMS:],
+                                               placed_rare_items[NUMBER_COMMON_ITEMS:], NUMBER_RARE_ITEMS, True)
+        rare_drops[candle_id] = select_drop(world, rare_items[NUMBER_COMMON_ITEMS:],
+                                            placed_rare_items[NUMBER_COMMON_ITEMS:], NUMBER_RARE_ITEMS, True)
+
+    for i in range(NUMBER_ENEMIES):
+        # Give Dracula II Shining Armor occasionally as a joke
+        if i == 104:
+            regular_drops[i] = rare_drops[i] = 11
+            regular_drop_chances[i] = rare_drop_chances[i] = 5000
+        # Set bosses' secondary item to none since we already set the primary item earlier
+        elif i in bosses:
+            # Set rare drop to none
+            rare_drops[i] = 0
+
+            # Max out rare boss drops (normally, drops are hard capped to 50 % and 25 % respectively regardless of drop
+            # rate, but fusecavator's patch AllowAlwaysDrop.ips allows setting the regular item drop chance to 10000 to
+            # force a drop always)
+            regular_drop_chances[i] = 10000
+            rare_drop_chances[i] = 0
+
+        # Trivially easy enemies that can be easily farmed AND we are NOT using the hard mode option
+        # OR
+        # We ARE using the hard mode option and the enemy is below 150 HP.
+        elif (world.options.item_drop_randomization == ItemDropRandomization.option_normal and i in
+              easily_farmable_enemies) or (world.options.item_drop_randomization == ItemDropRandomization.option_hard
+                                           and i in below_150_hp_enemies):
+            regular_drops[i] = select_drop(world, easy_items, placed_easy_items, NUMBER_EASY_ITEMS, False)
+            rare_drops[i] = select_drop(world, easy_items, placed_easy_items, NUMBER_EASY_ITEMS, False)
+
+            # Level 1 rate between 5-10 % and rare between 3-8%.
+            regular_drop_chances[i] = 500 + world.random.randint(0, 500)
+            rare_drop_chances[i] = 300 + world.random.randint(0, 500)
+
+        # It is a "Candle" enemy
+        elif i in candles:
+            # Set a regular drop chance between 20-30 % and a rare drop chance between 15-20%.
+            regular_drop_chances[i] = 2000 + world.random.randint(0, 1000)
+            rare_drop_chances[i] = 1500 + world.random.randint(0, 500)
+
+        # Regular enemies
+        else:
+            # Select a random regular and rare drop for every enemy from their respective lists
+            regular_drops[i] = select_drop(world, common_items, placed_common_items, NUMBER_COMMON_ITEMS, False)
+            rare_drops[i] = select_drop(world, rare_items, placed_rare_items, NUMBER_COMMON_ITEMS + NUMBER_RARE_ITEMS,
+                                        False)
+
+            # Otherwise, set a regular drop chance between 5-10 % and a rare drop chance between 3-5%.
+            regular_drop_chances[i] = 500 + world.random.randint(0, 500)
+            rare_drop_chances[i] = 300 + world.random.randint(0, 200)
+
+    # Return the randomized drop data as bytes with their respective offsets.
+    enemy_address = 0xCB2C4
+    drop_data = {}
+    for i in range(NUMBER_ENEMIES):
+        drop_data[enemy_address] = bytes([regular_drops[i], 0, regular_drop_chances[i] & 0xFF,
+                                          regular_drop_chances[i] >> 8, rare_drops[i], 0, rare_drop_chances[i] & 0xFF,
+                                          rare_drop_chances[i] >> 8])
+        enemy_address += 20
+
+    return drop_data
+
+
+def select_drop(world: "CVCotMWorld", drop_list: List[int], drops_placed: List[int], number_drops: int,
+                exclusive_drop: bool) -> int:
+    number_valid_drops = 0
+    eligible_items = [0] * NUMBER_ITEMS
+    lowest_number = drops_placed[0]
+
+    # Only make eligible drops which we have placed the least
+    for i in range(number_drops):
+        # A drop with the priority we are expecting is available to add as a candidate
+        if drops_placed[i] == lowest_number:
+            eligible_items[number_valid_drops] = i
+            number_valid_drops += 1
+
+        # If this condition is met, there is at least one item that hasn't been placed as many times as the others.
+        # We have to lower the lowest number and start from the beginning of the loop to capture all the valid indices.
+        elif drops_placed[i] < lowest_number:
+            lowest_number = drops_placed[i]
+            number_valid_drops = i = 0
+
+    # Post-condition: Our array eligible_items has number_valid_drops many valid item indices as its elements
+
+    # Select a random valid item from the index of valid choices
+    random_result = world.random.randint(0, number_valid_drops)
+
+    # Increment the number of this item placed, unless it should be exclusive to the boss / candle, in which case
+    # set it to an arbitrarily large number to make it exclusive (use NUMBER_ENEMIES for simplicity)
+    if world.options.item_drop_randomization == ItemDropRandomization.option_hard and exclusive_drop:
+        drops_placed[eligible_items[random_result]] += NUMBER_ENEMIES
+    else:
+        drops_placed[eligible_items[random_result]] += 1
+
+    # Return the item ID
+    return drop_list[eligible_items[random_result]]
