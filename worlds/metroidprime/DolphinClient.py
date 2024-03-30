@@ -73,7 +73,7 @@ class DolphinClient:
         result = self.dolphin.read_bytes(address, bytes_to_read)
         return result
 
-    def write_pointer(self, pointer, offset, byte_count, data):
+    def write_pointer(self, pointer, offset, data):
         self.__assert_connected()
         address = None
         try:
@@ -86,10 +86,9 @@ class DolphinClient:
             raise DolphinException("Dolphin no longer connected")
 
         address += offset
-        return self.write_address(address, byte_count, data)
+        return self.write_address(address, data)
 
-    def write_address(self, address, bytes_to_write, data):
+    def write_address(self, address, data):
         self.__assert_connected()
-        self.verify_target_address(address, bytes_to_write)
         result = self.dolphin.write_bytes(address, data)
         return result

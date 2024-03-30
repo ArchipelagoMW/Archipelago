@@ -1,6 +1,5 @@
 from logging import Logger
 import struct
-from BaseClasses import ItemClassification
 from worlds.metroidprime.DolphinClient import GC_GAME_ID_ADDRESS, DolphinClient, DolphinException
 from enum import Enum
 from enum import Enum
@@ -55,8 +54,9 @@ class MetroidPrimeInterface:
         self.logger = logger
         self.dolphin_client = DolphinClient(logger)
 
-    def give_item_to_player(self, item_id):
-        pass
+    def give_item_to_player(self, item_id: int, new_amount: int, new_capacity: int):
+        self.dolphin_client.write_pointer(self.__get_player_state_pointer(),
+                                          self.__calculate_item_offset(item_id), struct.pack(">II", new_amount, new_capacity))
 
     def check_for_new_locations(self):
         pass
@@ -71,7 +71,7 @@ class MetroidPrimeInterface:
         player_state_pointer = int.from_bytes(
             self.dolphin_client.read_address(cstate_manager_global + 0x8B8, 4), "big")
         result = self.dolphin_client.read_pointer(
-            player_state_pointer, self.__calculate_item_offset(item.id), 8)
+            self.__get_player_state_pointer(), self.__calculate_item_offset(item.id), 8)
         if result is None:
             return None
         current_ammount, current_capacity = struct.unpack(">II", result)
@@ -95,18 +95,16 @@ class MetroidPrimeInterface:
         return None
 
     def get_current_health(self) -> float:
-        player_state_pointer = int.from_bytes(
-            self.dolphin_client.read_address(cstate_manager_global + 0x8B8, 4), "big")
-        result = self.dolphin_client.read_pointer(player_state_pointer, 0xC, 4)
+        result = self.dolphin_client.read_pointer(
+            self.__get_player_state_pointer(), 0xC, 4)
         if result is None:
             return None
         return struct.unpack(">f", result)[0]
 
     def set_current_health(self, new_health_amount: float):
-      player_state_pointer = int.from_bytes(self.dolphin_client.read_address(cstate_manager_global + 0x8B8, 4), "big")
-      self.dolphin_client.write_pointer(player_state_pointer, 0xC, 4, struct.pack(">f", new_health_amount))
-      return self.get_current_health()
-
+        self.dolphin_client.write_pointer(
+            self.__get_player_state_pointer(), 0xC, struct.pack(">f", new_health_amount))
+        return self.get_current_health()
 
     def connect_to_game(self):
         """Initializes the connection to dolphin and verifies it is connected to Metroid Prime"""
@@ -137,6 +135,9 @@ class MetroidPrimeInterface:
             return True
         else:
             return False
+
+    def __get_player_state_pointer(self):
+        return int.from_bytes(self.dolphin_client.read_address(cstate_manager_global + 0x8B8, 4), "big")
 
     def __calculate_item_offset(self, item_id):
         return (0x24 + 0x4) + (item_id * 0x8)
