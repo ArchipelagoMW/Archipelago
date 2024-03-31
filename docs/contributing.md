@@ -1,7 +1,7 @@
 # Contributing
 
-Contributions are welcome.
-We have a few asks of contributors, whether they be for core, webhost, or new game contributions:
+All contributions are welcome, though we have a few requests of contributors, whether they be for core, webhost, or new 
+game contributions:
 
 * **Follow styling guidelines.**
   Please take a look at the [code style documentation](/docs/style.md)
@@ -40,8 +40,8 @@ If you want to contribute to the core, you will be subject to stricter review on
 that you get in touch with other core maintainers via the [Discord](https://archipelago.gg/discord).
 
 If you want to add Archipelago support for a new game, please take a look at
-the [adding games documentation](/docs/adding%20games.md),
-which details what is required to implement support for a game, as well as tips for how to get started.
+the [adding games documentation](/docs/adding%20games.md)
+which details what is required to implement support for a game, and has tips on to get started.
 If you want to merge a new game into the main Archipelago repo, please make sure to read the responsibilities as a
 [world maintainer](/docs/world%20maintainer.md).
 

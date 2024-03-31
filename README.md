@@ -120,12 +120,12 @@ contributions of their developers, past and present.
 ## Contributing
 
 To contribute to Archipelago, including the WebHost, core program, or by adding a new game, see our
-[Contributing guidelines.](/docs/contributing.md)
+[Contributing guidelines](/docs/contributing.md).
 
 ## FAQ
 
-For Frequently asked questions, please see the website's [FAQ Page.](https://archipelago.gg/faq/en/)
+For Frequently asked questions, please see the website's [FAQ Page](https://archipelago.gg/faq/en/).
 
 ## Code of Conduct
 
-Please refer to our [code of conduct.](/docs/code_of_conduct.md)
+Please refer to our [code of conduct](/docs/code_of_conduct.md).
