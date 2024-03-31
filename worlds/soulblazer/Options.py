@@ -1,7 +1,21 @@
 from dataclasses import dataclass
 from Options import Toggle, Range, Choice, PerGameCommonOptions
 
+class StartingSword(Choice):
+    """
+    Determines the sword you will get in the first chest.
+    Vanilla: You will get the Sword of Life.
+    Randomized: You will get a random sword.
+    """
+    display_name = "Starting Sword"
+    option_vanilla = 0
+    option_randomized = 1
+    default = 0
+    pass
 
+# TODO: Create/implement option for modifying Gem/Exp values
+
+# TODO: Delete these
 class Difficulty(Choice):
     """Sets overall game difficulty."""
     display_name = "Difficulty"
@@ -30,6 +44,7 @@ class FixXYZGlitch(Toggle):
 # It has to be derived from 'PerGameCommonOptions'.
 @dataclass
 class SoulBlazerOptions(PerGameCommonOptions):
-    difficulty: Difficulty
-    final_boss_hp: FinalBossHP
-    fix_xyz_glitch: FixXYZGlitch
+    starting_sword: StartingSword
+    #difficulty: Difficulty
+    #final_boss_hp: FinalBossHP
+    #fix_xyz_glitch: FixXYZGlitch

@@ -3,18 +3,31 @@ from typing import Callable, TYPE_CHECKING
 from enum import IntEnum, auto
 from BaseClasses import CollectionState
 from .Names import ItemName, ItemID, LairName, LairID, ChestName, ChestID, NPCRewardName, NPCRewardID, NPCName
-from .Items import emblems_table
+from .Items import emblems_table, swords_table
 
 if TYPE_CHECKING:
     from . import SoulBlazerWorld
 
 
-class LocationFlag(IntEnum):
+class RuleFlag(IntEnum):
     NONE = 0
+    """No special requirement preventing access."""
     CAN_CUT_METAL = auto()
+    """Requires a way to damage metal enemies (Zantestu Sword|Soul Blade)."""
     CAN_CUT_SPIRIT = auto()
+    """Requires a way to damage metal enemies (Spirit Sword|Soul Blade)."""
     HAS_THUNDER = auto()
+    """
+    Requires a way to damage metal enemies in the presence of a thunder pyramids
+    (Thunder Ring|Zantestu Sword|Soul Blade).
+    """
     HAS_MAGIC = auto()
+    """Requires a way to damage enemies outside of sword range."""
+    HAS_SWORD = auto()
+    """
+    Requires any sword. Only used as a sanity check at the start of the game
+    since we prefill the first chest with a sword.
+    """
 
 
 metal_items = [ItemName.ZANTETSUSWORD, ItemName.SOULBLADE]
@@ -29,6 +42,7 @@ magic_items = [
     ItemName.FLAMEPILLAR,
     ItemName.TORNADO,
 ]
+sword_items = [*swords_table.keys()]
 
 
 def no_requirement(state: CollectionState, player: int) -> bool:
@@ -51,12 +65,17 @@ def has_magic(state: CollectionState, player: int) -> bool:
     return state.has_any(magic_items, player)
 
 
+def has_sword(state: CollectionState, player: int) -> bool:
+    return state.has_any(sword_items, player)
+
+
 rule_for_flag = {
-    LocationFlag.NONE: no_requirement,
-    LocationFlag.CAN_CUT_METAL: can_cut_metal,
-    LocationFlag.CAN_CUT_SPIRIT: can_cut_spirit,
-    LocationFlag.HAS_THUNDER: has_thunder,
-    LocationFlag.HAS_MAGIC: has_magic,
+    RuleFlag.NONE: no_requirement,
+    RuleFlag.CAN_CUT_METAL: can_cut_metal,
+    RuleFlag.CAN_CUT_SPIRIT: can_cut_spirit,
+    RuleFlag.HAS_THUNDER: has_thunder,
+    RuleFlag.HAS_MAGIC: has_magic,
+    RuleFlag.HAS_SWORD: has_sword,
 }
 
 # Many locations depend on one or two NPC releases so rather than create regions to hold one location,
@@ -74,11 +93,10 @@ location_dependencies = {
     NPCRewardName.TILE_IN_CHILDS_SECRET_CAVE: [NPCName.BOY_CAVE, ItemName.APASS],
     NPCRewardName.RECOVERY_SWORD_CRYSTAL: [NPCName.IVY_RECOVERY_SWORD, NPCName.BOY_CAVE, ItemName.APASS],
     NPCRewardName.VILLAGE_CHIEF: [NPCName.VILLAGE_CHIEF, NPCName.OLD_WOMAN],
-    NPCRewardName.MAGICIAN: [],  # TODO: delete
-    NPCRewardName.GRASS_VALLEY_SECRET_ROOM_CRYSTAL: [
-        NPCName.IVY_CHEST_ROOM
-    ],  # TODO: put this and two chests into region and delete.
-    NPCRewardName.UNDERGROUND_CASTLE_CRYSTAL: [],  # TODO: delete
+    #NPCRewardName.MAGICIAN: [],  # TODO: delete
+    # TODO: put this and two chests into region and delete.
+    #NPCRewardName.GRASS_VALLEY_SECRET_ROOM_CRYSTAL: [NPCName.IVY_CHEST_ROOM],
+    #NPCRewardName.UNDERGROUND_CASTLE_CRYSTAL: [],  # TODO: delete
     # Act 2 - Greenwood
     NPCRewardName.REDHOT_MIRROR_BIRD: [NPCName.BIRD_RED_HOT_MIRROR],
     NPCRewardName.MAGIC_BELL_CRYSTAL: [*emblems_table.keys(), NPCName.DEER_MAGIC_BELL, NPCName.CROCODILE3],
@@ -94,11 +112,12 @@ location_dependencies = {
     NPCRewardName.SHIELD_BRACELET_MOLE: [NPCName.MOLE, NPCName.MOLE_SHIELD_BRACELET, ItemName.MOLESRIBBON],
     NPCRewardName.PSYCHO_SWORD_SQUIRREL: [NPCName.SQUIRREL_PSYCHO_SWORD, ItemName.DELICIOUSSEEDS],
     NPCRewardName.EMBLEM_C_SQUIRREL: [NPCName.SQUIRREL_EMBLEM_C, NPCName.SQUIRREL_PSYCHO_SWORD],
-    NPCRewardName.WATER_SHRINE_STRANGE_BOTTLE: [],  # TODO: delete
+    NPCRewardName.WATER_SHRINE_TILE: [],  # TODO: delete
     NPCRewardName.LIGHT_ARROW_CRYSTAL: [],  # TODO: delete
     NPCRewardName.LOST_MARSH_CRYSTAL: [],  # TODO: delete
     NPCRewardName.WATER_SHRINE_CRYSTAL: [],  # TODO: delete
     NPCRewardName.FIRE_SHRINE_CRYSTAL: [],  # TODO: delete
+    ChestName.GREENWOOD_ICE_ARMOR: [NPCName.MOLE, NPCName.SQUIRREL_ICE_ARMOR, ItemName.DREAMROD],
     # Act 3 - St Elles
     # Notes:
     # Mermaid 4: unlocks path to West Seabed Sanctuary (make region?)
@@ -146,7 +165,7 @@ location_dependencies = {
 }
 
 
-def get_rule_for_location(name: str, player: int, flag: LocationFlag) -> Callable[[CollectionState], bool]:
+def get_rule_for_location(name: str, player: int, flag: RuleFlag) -> Callable[[CollectionState], bool]:
     """Returns the access rule for the given location."""
 
     def rule(state: CollectionState) -> bool:

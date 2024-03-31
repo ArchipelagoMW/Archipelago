@@ -10,6 +10,7 @@ from .Items import (
     create_itempool,
 )  # data used below to add items to the World
 from .Locations import SoulBlazerLocation, all_locations_table  # same as above
+from .Regions import create_regions
 from .Rules import set_rules
 from worlds.AutoWorld import WebWorld, World
 from BaseClasses import MultiWorld, Region, Location, Entrance, Item, ItemClassification, Tutorial
@@ -77,6 +78,7 @@ class SoulBlazerWorld(World):
         self.gem_items: list[SoulBlazerItem]
         self.pre_fill_items: list[Item] = []
         self.set_rules = set_rules
+        self.create_regions = create_regions
 
     def create_item(self, item: str) -> SoulBlazerItem:
         if item in repeatable_items_table:
@@ -102,14 +104,17 @@ class SoulBlazerWorld(World):
     def generate_early(self) -> None:
         pass
 
-    def create_regions(self) -> None:
-        pass
+    #def create_regions(self) -> None:
+    #    pass
 
     def create_items(self) -> None:
         itempool = create_itempool(self)
 
-        # TODO: add option to randomize starting sword
-        starting_sword_name = Items.ItemName.LIFESWORD
+        if self.options.starting_sword == "randomized":
+            starting_sword_name = self.random.choice(Items.swords_table.keys())
+        else:
+            starting_sword_name = Items.ItemName.LIFESWORD
+
         starting_sword = next(x for x in itempool if x.name == starting_sword_name)
         self.pre_fill_items += starting_sword
         itempool.remove(starting_sword)
@@ -120,8 +125,7 @@ class SoulBlazerWorld(World):
         self.multiworld.itempool += itempool
 
     # def set_rules(self) -> None:
-    #    # TODO: Move to Rules.py?
-    #    # TODO: Replace "Test" with Deathtoll's Palace Region name?
+    #    # TODO: Delete
     #    self.multiworld.get_region("Test", self.player).locations += self.create_victory_event()
     #    self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
