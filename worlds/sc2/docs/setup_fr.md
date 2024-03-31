@@ -1,7 +1,7 @@
 # Guide d'installation du *StarCraft 2 Randomizer*
 
 Ce guide contient les instructions pour installer et dépanner le client de *StarCraft 2 Archipelago*, ainsi que des 
-indications pour obtenir un fichier de configuration de *Starcraft 2 Archipelago* et comment modifier ce dernier.
+indications pour obtenir un fichier de configuration de *StarCraft 2 Archipelago* et comment modifier ce dernier.
 
 ## Logiciels requis
 
@@ -51,7 +51,7 @@ veuillez consulter [*Creating a YAML*](/tutorial/Archipelago/setup/en#creating-a
 #### Comment est-ce que je sais que mon *yaml* est bien défini?
 
 La manière la plus simple de valider votre *yaml* est d'utiliser le 
-[système de validation](https://archipelago.gg/check) du site web.
+[système de validation](/check) du site web.
 
 Vous pouvez aussi le tester en tentant de générer un *multiworld* avec votre *yaml*.
 Pour faire ça, sauvegardez votre *yaml* dans le dossier `Players/` de votre installation d'Archipelago et exécutez 
@@ -65,16 +65,16 @@ dans le dossier `logs/`.
 
 #### À quoi sert l'option *Progression Balancing*?
 
-Pour un monde *Starcraft 2* seule, cette option ne fait rien. 
+Pour un monde *StarCraft 2* seule, cette option ne fait rien. 
 Il s'agit d'une option d'Archipelago qui permet de balancer la progression d'un monde relativement aux autres mondes en 
 interchangeant les *items* de progression dans les *sphères*.
 Si le *Progression Balancing* d'un monde est plus grand que ceux des autres, les *items* de progression de ce monde ont 
 plus de chance d'être obtenus tôt et vice-versa si sa valeur est plus petite que celle des autres mondes.
-Cependant, *Starcraft 2* est beaucoup plus permissif en termes d'*items* qui sont nécessaires pour progresser.
+Cependant, *StarCraft 2* est beaucoup plus permissif en termes d'*items* qui sont nécessaires pour progresser.
 Pour cette raison, cet ajustement a souvent peu d'influence sur la capacité de progresser dans un monde de 
 *StarCraft 2*. 
-Notez que l'utilisation de cette option, i.e. au moins un monde avec une valeur différente de *Progression Balancing*, 
-augmente le temps de génération d'un *MultiWorld*, alors certains recommandent de ne pas toucher à cette option.
+De plus, cette option augmente le temps de génération d'un *MultiWorld*, alors certains recommandent de le définir à 
+zéro pour *StartCraft 2*.
 
 #### Comment est-ce que je définis une liste d'*items*, e.g. pour l'option *excluded items*?
 
@@ -109,10 +109,17 @@ Un *map* vide est représenté par une paire d'accolades: `{}`.
 Il s'agit de la valeur par défaut dans le modèle de base, ce qui devrait vous aider à apprendre à utiliser cette 
 syntaxe.
 
-#### Comment est-ce que je fais pour connaître le nom des *items* dans *StarCraft 2 Archipelago*? 
+#### Comment est-ce que je fais pour connaître le nom des *items* et des *locations* dans *StarCraft 2 Archipelago*? 
 
-Vous trouverez la liste complète des *items* de *StarCraft 2 Archipelago* à la page 
-[*Icon Repository*](https://matthewmarinets.github.io/ap_sc2_icons/).
+La page [*datapackage*](/datapackage) d'Archipelago liste l'ensemble des *items* et des *locations* de tous les jeux 
+que le site web prend en charge actuellement, dont ceux de *StarCraft 2*.
+
+Vous trouverez aussi la liste complète des *items* de *StarCraft 2 Archipelago* à la page 
+[*Icon Repository*](https://matthewmarinets.github.io/ap_sc2_icons/). 
+Notez que cette page contient diverses informations supplémentaires sur chacun des *items*.
+Cependant, l'information présente dans cette dernière peut différer de celle du *datapackage* d'Archipelago puisqu'elle 
+est générée, habituellement, à partir des développements récents de *StarCraft 2 Archipelago* qui n'ont peut-être pas 
+encore été inclus dans le site web d'Archipelago.
 
 ## Comment est-ce que je peux joindre un *MultiWorld*?
 

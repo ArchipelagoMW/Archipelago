@@ -1,9 +1,9 @@
-# *Starcraft 2*
+# *StarCraft 2*
 
-## Quel est l'effet de la randomisation sur ce jeu ?
+## Quel est l'effet de la *randomization* sur ce jeu ?
 
-Les éléments qui suivent sont les *items* qui sont randomisés et qui doivent être débloqués pour être utilisés dans le 
-jeu:
+Les éléments qui suivent sont les *items* qui sont *randomized* et qui doivent être débloqués pour être utilisés dans 
+le jeu:
 1. La capacité de produire des unités, excepté les drones/probes/scv.
 2. Des améliorations spécifiques à certaines unités incluant quelques combinaisons qui ne sont pas disponibles dans les 
 campagnes génériques, comme le fait d'avoir les deux types d'évolution en même temps pour une unité *Zerg* et toutes 
@@ -15,10 +15,10 @@ les niveaux et les améliorations de Kerrigan pour les *Zerg*, et les améliorat
 5. Avoir des *minerals*, du *vespene gas*, et du *supply* au début de chaque mission.
 
 Les *items* sont trouvés en accomplissant du progrès dans les catégories suivantes:
-* Accomplir des missions
-* Accomplir les objectifs supplémentaires (e.g., récolter le matériel pour les recherches dans *Wings of Liberty*)
-* Atteindre des étapes importantes dans la mission, e.g. accomplir des sous-objectifs
-* Accomplir des défis basés sur les succès du jeu de base, e.g. éliminer tous les *Zerg* dans la mission 
+* Terminer des missions
+* Réussir des objectifs supplémentaires (e.g., récolter le matériel pour les recherches dans *Wings of Liberty*)
+* Atteindre des étapes importantes dans la mission, e.g. réussir des sous-objectifs
+* Réussir des défis basés sur les succès du jeu de base, e.g. éliminer tous les *Zerg* dans la mission 
 *Devil's Playground*
 
 Ces catégories, outre la première, peuvent être désactivées dans les options du jeu. 
@@ -35,19 +35,19 @@ Les segments qui se passent sur l'*Hyperion*, un Léviathan et la *Spear of Adun
 De plus, les points de progression tels que les crédits ou la Solarite ne sont pas utilisés dans *StarCraft 2 
 Archipelago*.
 
-## Quel est le but de ce jeu quand il est randomisé?
+## Quel est le but de ce jeu quand il est *randomized*?
 
 Le but est de réussir la mission finale dans la disposition des missions (e.g. *blitz*, *grid*, etc.).
 Les choix faits dans le fichier *yaml* définissent la disposition des missions et comment elles sont mélangées.
 
-## Quelles sont les modifications non aléatoires comparativement à la version de base de *Starcraft 2*
+## Quelles sont les modifications non aléatoires comparativement à la version de base de *StarCraft 2*
 
 1. Certaines des missions ont plus de *vespene geysers* pour permettre l'utilisation d'une plus grande variété d'unités.
 2. Plusieurs unités et améliorations ont été ajoutées sous la forme d*items*.
 Ils proviennent de la version *co-op*, *melee*, des autres campagnes, d'expansions ultérieures, de *Brood War*, ou de 
 l'imagination des développeurs de *StarCraft 2 Archipelago*.
-3. Les structures de production, e.g. *Factory*, *Starport*, *Robotics Facility*, and *Stargate*, n'ont plus d'exigence 
-technologique.
+3. Les structures de production, e.g. *Factory*, *Starport*, *Robotics Facility*, and *Stargate*, n'ont plus 
+d'exigences technologiques.
 4. Les missions avec la race *Zerg* ont été modifiées pour que les joueurs débuttent avec un *Lair* lorsqu'elles 
 commençaient avec une *Hatchery*. 
 5. Les désavantages des améliorations ont été enlevés, e.g. *automated refinery* qui coûte plus cher ou les *tech 
@@ -60,7 +60,7 @@ plus larges de les traverser sans être coincés dans des endroits étranges.
 
 Par défaut, tous les *items* de *StarCraft 2 Archipelago* (voir la section précédente) peuvent être dans le monde d'un 
 autre joueur.
-Consulter [*Advanced YAML Guide*](https://archipelago.gg/tutorial/Archipelago/advanced_settings/en) pour savoir comment 
+Consulter [*Advanced YAML Guide*](/tutorial/Archipelago/advanced_settings/en) pour savoir comment 
 changer ça.
 
 ## Commandes du client qui sont uniques à ce jeu
