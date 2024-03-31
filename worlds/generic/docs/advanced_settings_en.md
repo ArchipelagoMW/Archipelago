@@ -11,7 +11,7 @@ game you would like.
 * Supported games page: [Archipelago Games List](/games)
 * Weighted settings page: [Archipelago Weighted Settings](/weighted-settings)
 
-Clicking on the "Export Optionss" button at the bottom-left will provide you with a pre-filled YAML with your options.
+Clicking on the "Export Options" button at the bottom-left will provide you with a pre-filled YAML with your options.
 The player options page also has a link to download a full template file for that game which will have every option
 possible for the game including some that don't display correctly on the site.
 
