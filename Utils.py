@@ -101,8 +101,7 @@ def cache_self1(function: typing.Callable[[S, T], RetType]) -> typing.Callable[[
 
     @functools.wraps(function)
     def wrap(self: S, arg: T) -> RetType:
-        cache: Optional[Dict[T, RetType]] = typing.cast(Optional[Dict[T, RetType]],
-                                                        getattr(self, cache_name, None))
+        cache: Optional[Dict[T, RetType]] = getattr(self, cache_name, None)
         if cache is None:
             res = function(self, arg)
             setattr(self, cache_name, {arg: res})
@@ -209,10 +208,11 @@ def output_path(*path: str) -> str:
 
 def open_file(filename: typing.Union[str, "pathlib.Path"]) -> None:
     if is_windows:
-        os.startfile(filename)
+        os.startfile(filename)  # type: ignore
     else:
         from shutil import which
         open_command = which("open") if is_macos else (which("xdg-open") or which("gnome-open") or which("kde-open"))
+        assert open_command, "Really!? What kind of system are you running?"
         subprocess.call([open_command, filename])
 
 
@@ -572,7 +572,7 @@ class VersionException(Exception):
     pass
 
 
-def chaining_prefix(index: int, labels: typing.Tuple[str]) -> str:
+def chaining_prefix(index: int, labels: typing.Sequence[str]) -> str:
     text = ""
     max_label = len(labels) - 1
     while index > max_label:
@@ -595,7 +595,7 @@ def format_SI_prefix(value, power=1000, power_labels=("", "k", "M", "G", "T", "P
     return f"{value.quantize(decimal.Decimal('1.00'))} {chaining_prefix(n, power_labels)}"
 
 
-def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: typing.Optional[int] = None) \
+def get_fuzzy_results(input_word: str, word_list: typing.Collection[str], limit: typing.Optional[int] = None) \
         -> typing.List[typing.Tuple[str, int]]:
     import jellyfish
 
@@ -603,21 +603,20 @@ def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: ty
         return (1 - jellyfish.damerau_levenshtein_distance(word1.lower(), word2.lower())
                 / max(len(word1), len(word2)))
 
-    limit: int = limit if limit else len(wordlist)
+    limit = limit if limit else len(word_list)
     return list(
         map(
             lambda container: (container[0], int(container[1]*100)),  # convert up to limit to int %
             sorted(
-                map(lambda candidate:
-                    (candidate,  get_fuzzy_ratio(input_word, candidate)),
-                    wordlist),
+                map(lambda candidate: (candidate, get_fuzzy_ratio(input_word, candidate)), word_list),
                 key=lambda element: element[1],
-                reverse=True)[0:limit]
+                reverse=True
+            )[0:limit]
         )
     )
 
 
-def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typing.Sequence[str]]], suggest: str = "") \
+def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typing.Iterable[str]]], suggest: str = "") \
         -> typing.Optional[str]:
     def run(*args: str):
         return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
@@ -732,7 +731,7 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         root.update()
 
 
-def title_sorted(data: typing.Sequence, key=None, ignore: typing.Set = frozenset(("a", "the"))):
+def title_sorted(data: typing.Iterable, key=None, ignore: typing.AbstractSet[str] = frozenset(("a", "the"))):
     """Sorts a sequence of text ignoring typical articles like "a" or "the" in the beginning."""
     def sorter(element: Union[str, Dict[str, Any]]) -> str:
         if (not isinstance(element, str)):
