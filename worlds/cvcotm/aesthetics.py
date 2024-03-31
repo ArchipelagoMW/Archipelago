@@ -119,7 +119,7 @@ rom_sub_weapon_offsets = {
 }
 
 easy_items = [
-    1,  # Leather Armor
+    1,   # Leather Armor
     12,  # Cotton Robe
     17,  # Cotton Clothes
     34,  # Wristband
@@ -127,14 +127,14 @@ easy_items = [
     46,  # Antidote
     47,  # Cure Curse
     48,  # Mind Restore
-    51  # Heart
+    51   # Heart
 ]
 
 common_items = easy_items + [
-    2,  # Bronze Armor
-    3,  # Gold Armor
-    4,  # Chainmail
-    5,  # Steel Armor
+    2,   # Bronze Armor
+    3,   # Gold Armor
+    4,   # Chainmail
+    5,   # Steel Armor
 
     13,  # Silk Robe
     14,  # Rainbow Robe
@@ -154,7 +154,7 @@ common_items = easy_items + [
     36,  # Arm Guard
     37,  # Magic Gauntlet
     38,  # Miracle Armband
-
+    40,  # Bear Ring
     39,  # Toy Ring
 
     42,  # Meat
@@ -163,13 +163,11 @@ common_items = easy_items + [
     52,  # Heart High
 ]
 
-rare_items = common_items + [
-    40,  # Bear Ring
-
-    6,  # Platinum Armor
-    7,  # Diamond Armor
-    8,  # Mirror Armor
-    9,  # Needle Armor
+rare_items = [
+    6,   # Platinum Armor
+    7,   # Diamond Armor
+    8,   # Mirror Armor
+    9,   # Needle Armor
     10,  # Dark Armor
 
     15,  # Magic Robe
@@ -194,12 +192,14 @@ rare_items = common_items + [
     54,  # Heart Mega
 ]
 
+all_items = rare_items + common_items
+
 easily_farmable_enemies = [
-    0,  # Medusa Head
-    1,  # Zombie
-    2,  # Ghoul
-    3,  # Wight
-    7,  # Skeleton Bomber
+    0,   # Medusa Head
+    1,   # Zombie
+    2,   # Ghoul
+    3,   # Wight
+    7,   # Skeleton Bomber
     14,  # Fleaman
     16,  # Bat
     17,  # Spirit
@@ -217,42 +217,42 @@ easily_farmable_enemies = [
 ]
 
 below_150_hp_enemies = easily_farmable_enemies + [
-    4,  # Clinking Man
-    5,  # Zombie Thief
-    8,  # Electric Skeleton
-    9,  # Skeleton Spear
-    10,  # Skeleton Boomerang
-    11,  # Skeleton Soldier
-    12,  # Skeleton Knight
-    13,  # Bone Tower
-    15,  # Poltergeist
-    20,  # Axe Armor
-    26,  # Earth Armor
-    29,  # Stone Armor
-    35,  # Bloody Sword
-    41,  # Skeleton Athlete
-    42,  # Harpy
-    44,  # Imp
-    45,  # Mudman
-    47,  # Slime
-    48,  # Frozen Shade
-    49,  # Heat Shade
-    52,  # Will-O-Wisp
-    53,  # Spearfish
-    57,  # Marionette
-    60,  # Evil Pillar
-    63,  # Bone Head
-    64,  # Fox Archer
-    65,  # Fox Hunter
-    77,  # Hyena
-    78,  # Fishhead
-    79,  # Dryad
-    81,  # Brain Float
-    83,  # Abiondarg
-    86,  # Witch
-    93,  # King Moth
-    94,  # Killer Bee
-    96,  # Lizard-man
+    4,    # Clinking Man
+    5,    # Zombie Thief
+    8,    # Electric Skeleton
+    9,    # Skeleton Spear
+    10,   # Skeleton Boomerang
+    11,   # Skeleton Soldier
+    12,   # Skeleton Knight
+    13,   # Bone Tower
+    15,   # Poltergeist
+    20,   # Axe Armor
+    26,   # Earth Armor
+    29,   # Stone Armor
+    35,   # Bloody Sword
+    41,   # Skeleton Athlete
+    42,   # Harpy
+    44,   # Imp
+    45,   # Mudman
+    47,   # Slime
+    48,   # Frozen Shade
+    49,   # Heat Shade
+    52,   # Will-O-Wisp
+    53,   # Spearfish
+    57,   # Marionette
+    60,   # Evil Pillar
+    63,   # Bone Head
+    64,   # Fox Archer
+    65,   # Fox Hunter
+    77,   # Hyena
+    78,   # Fishhead
+    79,   # Dryad
+    81,   # Brain Float
+    83,   # Abiondarg
+    86,   # Witch
+    93,   # King Moth
+    94,   # Killer Bee
+    96,   # Lizard-man
     113,  # Devil Tower (Battle Arena)
     119,  # Bone Tower (Battle Arena)
     122,  # Bloody Sword (Battle Arena)
@@ -260,11 +260,11 @@ below_150_hp_enemies = easily_farmable_enemies + [
 ]
 
 bosses = [
-    68,  # Cerberus
-    76,  # Necromancer
-    84,  # Iron Golem
-    89,  # Adramelech
-    95,  # Zombie Dragon
+    68,   # Cerberus
+    76,   # Necromancer
+    84,   # Iron Golem
+    89,   # Adramelech
+    95,   # Zombie Dragon
     100,  # Death
     101,  # Camilla
     102,  # Hugh
@@ -274,14 +274,11 @@ bosses = [
 candles = [
     136,  # Scary Candle
     137,  # Trick Candle
-    80,  # Mimic Candle
+    80,   # Mimic Candle
 ]
 
 NUMBER_ENEMIES = 141
 NUMBER_ITEMS = 55
-NUMBER_EASY_ITEMS = 9
-NUMBER_COMMON_ITEMS = 32
-NUMBER_RARE_ITEMS = 20
 
 
 def shuffle_sub_weapons(world: "CVCotMWorld") -> Dict[int, bytes]:
@@ -415,9 +412,9 @@ def get_start_inventory_data(player: int, options: CVCotMOptions, precollected_i
 
 
 def populate_enemy_drops(world: "CVCotMWorld") -> Dict[int, bytes]:
-    placed_easy_items = [0] * NUMBER_EASY_ITEMS
-    placed_common_items = [0] * NUMBER_COMMON_ITEMS
-    placed_rare_items = [0] * (NUMBER_COMMON_ITEMS + NUMBER_RARE_ITEMS)
+    placed_easy_items = [0] * len(easy_items)
+    placed_common_items = [0] * len(common_items)
+    forced_rares = [0] * len(rare_items)
 
     regular_drops = [0] * NUMBER_ENEMIES
     regular_drop_chances = [0] * NUMBER_ENEMIES
@@ -429,15 +426,15 @@ def populate_enemy_drops(world: "CVCotMWorld") -> Dict[int, bytes]:
     # than could be reached normally (e.g.the total number of enemies).
     # Bosses
     for boss_id in bosses:
-        regular_drops[boss_id] = select_drop(world, rare_items[NUMBER_COMMON_ITEMS:],
-                                             placed_rare_items[NUMBER_COMMON_ITEMS:], NUMBER_RARE_ITEMS, True)
+        regular_drops[boss_id] = select_drop(world, rare_items, forced_rares, len(rare_items), True)
 
     # Candles
     for candle_id in candles:
-        regular_drops[candle_id] = select_drop(world, rare_items[NUMBER_COMMON_ITEMS:],
-                                               placed_rare_items[NUMBER_COMMON_ITEMS:], NUMBER_RARE_ITEMS, True)
-        rare_drops[candle_id] = select_drop(world, rare_items[NUMBER_COMMON_ITEMS:],
-                                            placed_rare_items[NUMBER_COMMON_ITEMS:], NUMBER_RARE_ITEMS, True)
+        regular_drops[candle_id] = select_drop(world, rare_items, forced_rares, len(rare_items), True)
+        rare_drops[candle_id] = select_drop(world, rare_items, forced_rares, len(rare_items), True)
+
+    # Add the forced rare items onto the main placed rare items list.
+    placed_rare_items = ([0] * len(common_items)) + forced_rares
 
     for i in range(NUMBER_ENEMIES):
         # Give Dracula II Shining Armor occasionally as a joke
@@ -461,8 +458,8 @@ def populate_enemy_drops(world: "CVCotMWorld") -> Dict[int, bytes]:
         elif (world.options.item_drop_randomization == ItemDropRandomization.option_normal and i in
               easily_farmable_enemies) or (world.options.item_drop_randomization == ItemDropRandomization.option_hard
                                            and i in below_150_hp_enemies):
-            regular_drops[i] = select_drop(world, easy_items, placed_easy_items, NUMBER_EASY_ITEMS, False)
-            rare_drops[i] = select_drop(world, easy_items, placed_easy_items, NUMBER_EASY_ITEMS, False)
+            regular_drops[i] = select_drop(world, easy_items, placed_easy_items, len(easy_items), False)
+            rare_drops[i] = select_drop(world, easy_items, placed_easy_items, len(easy_items), False)
 
             # Level 1 rate between 5-10 % and rare between 3-8%.
             regular_drop_chances[i] = 500 + world.random.randint(0, 500)
@@ -477,8 +474,8 @@ def populate_enemy_drops(world: "CVCotMWorld") -> Dict[int, bytes]:
         # Regular enemies
         else:
             # Select a random regular and rare drop for every enemy from their respective lists
-            regular_drops[i] = select_drop(world, common_items, placed_common_items, NUMBER_COMMON_ITEMS, False)
-            rare_drops[i] = select_drop(world, rare_items, placed_rare_items, NUMBER_COMMON_ITEMS + NUMBER_RARE_ITEMS,
+            regular_drops[i] = select_drop(world, common_items, placed_common_items, len(common_items), False)
+            rare_drops[i] = select_drop(world, all_items, placed_rare_items, len(all_items),
                                         False)
 
             # Otherwise, set a regular drop chance between 5-10 % and a rare drop chance between 3-5%.
@@ -504,11 +501,13 @@ def select_drop(world: "CVCotMWorld", drop_list: List[int], drops_placed: List[i
     lowest_number = drops_placed[0]
 
     # Only make eligible drops which we have placed the least
-    for i in range(number_drops):
+    i = 0
+    while i < number_drops:
         # A drop with the priority we are expecting is available to add as a candidate
         if drops_placed[i] == lowest_number:
             eligible_items[number_valid_drops] = i
             number_valid_drops += 1
+            i += 1
 
         # If this condition is met, there is at least one item that hasn't been placed as many times as the others.
         # We have to lower the lowest number and start from the beginning of the loop to capture all the valid indices.
@@ -516,10 +515,13 @@ def select_drop(world: "CVCotMWorld", drop_list: List[int], drops_placed: List[i
             lowest_number = drops_placed[i]
             number_valid_drops = i = 0
 
+        else:
+            i += 1
+
     # Post-condition: Our array eligible_items has number_valid_drops many valid item indices as its elements
 
     # Select a random valid item from the index of valid choices
-    random_result = world.random.randint(0, number_valid_drops)
+    random_result = world.random.randrange(number_valid_drops)
 
     # Increment the number of this item placed, unless it should be exclusive to the boss / candle, in which case
     # set it to an arbitrarily large number to make it exclusive (use NUMBER_ENEMIES for simplicity)
