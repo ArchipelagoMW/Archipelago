@@ -57,8 +57,8 @@ def has_torn_pages(state: CollectionState, player: int, pages_required: int) -> 
         pages_available = pages_available + 1
     if has_puppies(state, player, 51):
         pages_available = pages_available + 1
-    pages_available = pages_available + state.count("Torn Page 1", player)
     pages_available = pages_available + state.count("Torn Page 2", player)
+    pages_available = pages_available + state.count("Torn Page 3", player)
     return pages_available >= pages_required
 
 def has_all_arts(state: CollectionState, player: int) -> bool:
