@@ -188,7 +188,10 @@ class KH1World(World):
             max_mp_bonus = max(self.options.keyblade_min_mp, self.options.keyblade_max_mp)
             slot_data["Keyblade Stats"] = ""
             for i in range(22):
-                slot_data["Keyblade Stats"] = slot_data["Keyblade Stats"] + str(int(self.random.randrange(min_str_bonus,max_str_bonus))) + "," + str(int(self.random.randrange(min_mp_bonus,max_mp_bonus))) + ","
+                if i < 4 and self.options.bad_starting_weapons:
+                    slot_data["Keyblade Stats"] = slot_data["Keyblade Stats"] + "1,0,"
+                else:
+                    slot_data["Keyblade Stats"] = slot_data["Keyblade Stats"] + str(int(self.random.randrange(min_str_bonus,max_str_bonus))) + "," + str(int(self.random.randrange(min_mp_bonus,max_mp_bonus))) + ","
             slot_data["Keyblade Stats"] = slot_data["Keyblade Stats"][:-1]
         return slot_data
     

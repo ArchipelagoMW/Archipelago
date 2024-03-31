@@ -220,6 +220,12 @@ class ForceStatsOnLevels(NamedRange):
         "all": 1
     }
 
+class BadStartingWeapons(Toggle):
+    """
+    Forces Kingdom Key, Dream Sword, Dream Shield, and Dream Staff to have bad stats
+    """
+    display_name = "Bad Starting Weapons"
+
 @dataclass
 class KH1Options(PerGameCommonOptions):
     goal: Goal
@@ -232,6 +238,7 @@ class KH1Options(PerGameCommonOptions):
     puppies: Puppies
     exp_multiplier: EXPMultiplier
     randomize_keyblade_stats: RandomizeKeybladeStats
+    bad_starting_weapons: BadStartingWeapons
     keyblade_max_str: KeybladeMaxStrength
     keyblade_min_str: KeybladeMinStrength
     keyblade_max_mp: KeybladeMaxMP
