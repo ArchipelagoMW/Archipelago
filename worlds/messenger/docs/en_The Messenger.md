@@ -55,8 +55,8 @@ quit to title and reload the save. The currently known areas include:
         * After Courage Note collection (Corrupted Future chase)
 * After reaching ninja village a teleport option is added to the menu to reach it quickly
 * Toggle Windmill Shuriken button is added to option menu once the item is received
-* The mod option menu will also have a hint item button, as well as a release and collect button that are all placed when
-the player fulfills the necessary conditions.
+* The mod option menu will also have a hint item button, as well as a release and collect button that are all placed
+when the player fulfills the necessary conditions.
 * After running the game with the mod, a config file (APConfig.toml) will be generated in your game folder that can be
 used to modify certain settings such as text size and color. This can also be used to specify a player name that can't
 be entered in game.
@@ -73,5 +73,5 @@ chest will not work.
 
 ## What do I do if I have a problem?
 
-If you believe something happened that isn't intended, please get the `log.txt` from the folder of your game installation
-and send a bug report either on GitHub or the [Archipelago Discord Server](http://archipelago.gg/discord)
+If you believe something happened that isn't intended, please get the `log.txt` from the folder of your game
+installation and send a bug report either on GitHub or the [Archipelago Discord Server](http://archipelago.gg/discord)
