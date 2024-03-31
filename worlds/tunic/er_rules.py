@@ -870,6 +870,9 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     regions["Rooted Ziggurat Portal Room Entrance"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Back"])
 
+    regions["Zig Skip Exit"].connect(
+        connecting_region=regions["Rooted Ziggurat Lower Front"])
+
     regions["Rooted Ziggurat Portal"].connect(
         connecting_region=regions["Rooted Ziggurat Portal Room Exit"],
         rule=lambda state: state.has("Activate Ziggurat Fuse", player))

@@ -1,4 +1,4 @@
-from typing import Dict, List, Set, TYPE_CHECKING
+from typing import Dict, List, Set, TYPE_CHECKING, Tuple
 from BaseClasses import Region, ItemClassification, Item, Location
 from .locations import location_table
 from .er_data import Portal, tunic_er_regions, portal_mapping, \
@@ -89,6 +89,11 @@ def place_event_items(world: "TunicWorld", regions: Dict[str, Region]) -> None:
 def vanilla_portals() -> Dict[Portal, Portal]:
     portal_pairs: Dict[Portal, Portal] = {}
     portal_map = portal_mapping.copy()
+    # we don't want this one for the vanilla mapping
+    for portal in portal_map:
+        if portal.name == "Ziggurat Lower Falling Entrance":
+            portal_map.remove(portal)
+            break
 
     while portal_map:
         portal1 = portal_map[0]
@@ -124,12 +129,19 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     two_plus: List[Portal] = []
     logic_rules = world.options.logic_rules.value
     player_name = world.multiworld.get_player_name(world.player)
+    portal_map = portal_mapping.copy()
 
     shop_scenes: Set[str] = set()
     shop_count = 6
-    if world.options.fixed_shop.value:
-        shop_count = 1
+    if world.options.fixed_shop:
+        shop_count = 0
         shop_scenes.add("Overworld Redux")
+    else:
+        # if fixed shop is off, remove this portal
+        for portal in portal_map:
+            if portal.name == "Ziggurat Lower Falling Entrance":
+                portal_map.remove(portal)
+                break
 
     if not logic_rules:
         dependent_regions = dependent_regions_restricted
@@ -140,13 +152,13 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
 
     # create separate lists for dead ends and non-dead ends
     if logic_rules:
-        for portal in portal_mapping:
+        for portal in portal_map:
             if tunic_er_regions[portal.region].dead_end == 1:
                 dead_ends.append(portal)
             else:
                 two_plus.append(portal)
     else:
-        for portal in portal_mapping:
+        for portal in portal_map:
             if tunic_er_regions[portal.region].dead_end:
                 dead_ends.append(portal)
             else:
@@ -155,7 +167,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     connected_regions: Set[str] = set()
     # make better start region stuff when/if implementing random start
     start_region = "Overworld"
-    connected_regions.update(add_dependent_regions(start_region, logic_rules))
+    connected_regions.update(add_dependent_regions(start_region, dependent_regions))
 
     plando_connections = world.multiworld.plando_connections[world.player]
 
@@ -182,6 +194,8 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
 
     non_dead_end_regions = set()
     for region_name, region_info in tunic_er_regions.items():
+        if region_name == "Zig Skip Exit" and not world.options.fixed_shop:
+            continue
         if not region_info.dead_end:
             non_dead_end_regions.add(region_name)
         elif region_info.dead_end == 2 and logic_rules:
@@ -244,7 +258,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
 
             portal_pairs[portal1] = portal2
 
-            # update dependent regions based on the plando'd connections, to ensure the portals connect well, logically
+            # update dependent regions based on the plando'd connections, to ensure the portals connect logically
             for origins, destinations in dependent_regions.items():
                 if portal1.region in origins:
                     if portal2.region in non_dead_end_regions:
@@ -257,7 +271,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         while True:
             test1 = len(connected_regions)
             for region in connected_regions.copy():
-                connected_regions.update(add_dependent_regions(region, logic_rules))
+                connected_regions.update(add_dependent_regions(region, dependent_regions))
             test2 = len(connected_regions)
             if test1 == test2:
                 break
@@ -300,6 +314,10 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         portal_pairs[portal1] = portal2
         two_plus.remove(portal1)
 
+        # add zig skip exit to the dependent regions
+        dependent_regions[("Zig Skip Exit",)] = ["Zig Skip Exit", "Rooted Ziggurat Lower Front",
+                                                 "Rooted Ziggurat Lower Back", "Rooted Ziggurat Portal Room Entrance"]
+
     random_object: Random = world.random
     if world.options.entrance_rando.value != 1:
         random_object = Random(world.options.entrance_rando.value)
@@ -311,10 +329,11 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     previous_conn_num = 0
     fail_count = 0
     while len(connected_regions) < len(non_dead_end_regions):
-        # if the connected regions length stays unchanged for too long, it's stuck in a loop
-        # should, hopefully, only ever occur if someone plandos connections poorly
+        # if this is universal tracker, just break immediately and move on
         if hasattr(world.multiworld, "re_gen_passthrough"):
             break
+        # if the connected regions length stays unchanged for too long, it's stuck in a loop
+        # should, hopefully, only ever occur if someone plandos connections poorly
         if previous_conn_num == len(connected_regions):
             fail_count += 1
             if fail_count >= 500:
@@ -351,7 +370,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
 
         # once we have both portals, connect them and add the new region(s) to connected_regions
         if check_success == 2:
-            connected_regions.update(add_dependent_regions(portal2.region, logic_rules))
+            connected_regions.update(add_dependent_regions(portal2.region, dependent_regions))
             portal_pairs[portal1] = portal2
             check_success = 0
             random_object.shuffle(two_plus)
@@ -411,16 +430,9 @@ def create_randomized_entrances(portal_pairs: Dict[Portal, Portal], regions: Dic
 
 
 # loop through the static connections, return regions you can reach from this region
-# todo: refactor to take region_name and dependent_regions
-def add_dependent_regions(region_name: str, logic_rules: int) -> Set[str]:
+def add_dependent_regions(region_name: str, dependent_regions: Dict[Tuple[str, ...], List[str]]) -> Set[str]:
     region_set = set()
-    if not logic_rules:
-        regions_to_add = dependent_regions_restricted
-    elif logic_rules == 1:
-        regions_to_add = dependent_regions_nmg
-    else:
-        regions_to_add = dependent_regions_ur
-    for origin_regions, destination_regions in regions_to_add.items():
+    for origin_regions, destination_regions in dependent_regions.items():
         if region_name in origin_regions:
             # if you matched something in the first set, you get the regions in its paired set
             region_set.update(destination_regions)

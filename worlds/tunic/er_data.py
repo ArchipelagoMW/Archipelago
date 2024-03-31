@@ -432,6 +432,9 @@ portal_mapping: List[Portal] = [
            destination="ziggurat2020_2", tag="_"),
     Portal(name="Ziggurat Portal Room Entrance", region="Rooted Ziggurat Portal Room Entrance",
            destination="ziggurat2020_FTRoom", tag="_"),
+    # only if fixed shop is on, removed otherwise
+    Portal(name="Ziggurat Lower Falling Entrance", region="Zig Skip Exit",
+           destination="ziggurat2020_1", tag="_zig2_skip"),
     
     Portal(name="Ziggurat Portal Room Exit", region="Rooted Ziggurat Portal Room Exit",
            destination="ziggurat2020_3", tag="_"),
@@ -687,6 +690,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Rooted Ziggurat Middle Bottom": RegionInfo("ziggurat2020_2"),
     "Rooted Ziggurat Lower Front": RegionInfo("ziggurat2020_3"),  # the vanilla entry point side
     "Rooted Ziggurat Lower Back": RegionInfo("ziggurat2020_3"),  # the boss side
+    "Zig Skip Exit": RegionInfo("ziggurat2020_3"),  # the exit from zig skip, for use with fixed shop on
     "Rooted Ziggurat Portal Room Entrance": RegionInfo("ziggurat2020_3"),  # the door itself on the zig 3 side
     "Rooted Ziggurat Portal": RegionInfo("ziggurat2020_FTRoom"),
     "Rooted Ziggurat Portal Room Exit": RegionInfo("ziggurat2020_FTRoom"),
