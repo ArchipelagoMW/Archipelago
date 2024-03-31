@@ -1000,7 +1000,6 @@ location_tables = {
                         "Young Dragon Ring",  missable = True, npc = True),
         DS3LocationData("FS: Slumbering Dragoncrest Ring - Orbeck for buying four specific spells",
                         "Slumbering Dragoncrest Ring",  missable = True, npc = True),
-        DS3LocationData("RS -> CD", None),
         DS3LocationData("RS -> FK", None),
 
         # Shrine Handmaid after killing exiles
@@ -1300,7 +1299,6 @@ location_tables = {
         DS3LocationData("US: Hawk Ring - Giant Archer", "Hawk Ring", drop = True,
                         npc = True), # Giant archer (kill or quest), here because you need to
                                      # collect all seven White Branch locations to get it peacefully
-        DS3LocationData("FK -> CC", None),
 
         # Hawkwood after killing Abyss Watchers
         DS3LocationData("FS: Farron Ring - Hawkwood", "Farron Ring",
@@ -1616,7 +1614,6 @@ location_tables = {
                         "Large Titanite Shard"),
         DS3LocationData("IBV: Siegbräu - Siegward", "Siegbräu", missable = True, npc = True),
         DS3LocationData("IBV: Emit Force - Siegward", "Emit Force", missable = True, npc = True),
-        DS3LocationData("IBV -> AL", None),
         DS3LocationData("IBV -> ID", None),
 
         # After winning both Londor Pale Shade invasions
@@ -2123,8 +2120,7 @@ location_tables = {
                         "Soul of a Weary Warrior"),
         DS3LocationData("CKG: Dark Gem - under lone stairway", "Dark Gem"),
         DS3LocationData("CKG: Titanite Scale - shortcut", "Titanite Scale"),
-        DS3LocationData("CKG: Human Pine Resin - by lone stairway bottom",
-                        "Human Pine Resin x2"),
+        DS3LocationData("CKG: Human Pine Resin - pool by lift", "Human Pine Resin x2"),
         DS3LocationData("CKG: Titanite Chunk - right of shortcut lift bottom", "Titanite Chunk"),
         DS3LocationData("CKG: Ring of Sacrifice - under balcony", "Ring of Sacrifice"),
         DS3LocationData("CKG: Wood Grain Ring+1 - by first elevator bottom", "Wood Grain Ring+1",
@@ -2136,7 +2132,6 @@ location_tables = {
         DS3LocationData("CKG: Magic Stoneplate Ring - mob drop before boss",
                         "Magic Stoneplate Ring", drop = True,
                         hidden = True), # Guaranteed drop from a normal-looking Cathedral Knight
-        DS3LocationData("CKG -> UG", None),
 
         # After Oceiros's boss room, only once the Drakeblood summon in AP has been killed
         DS3LocationData("CKG: Drakeblood Helm - tomb, after killing AP mausoleum NPC",
@@ -2643,7 +2638,6 @@ location_tables = {
                         lizard = True),
         DS3LocationData("PW2: Twinkling Titanite - B3, lizard #2", "Twinkling Titanite",
                         lizard = True),
-        DS3LocationData("PW2 -> DH", None),
 
         # Corvian Settler after killing Friede
         DS3LocationData("PW1: Titanite Slab - Corvian", "Titanite Slab", npc = True),
