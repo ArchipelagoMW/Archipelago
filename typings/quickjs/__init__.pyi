@@ -1,0 +1,6 @@
+from typing import Any, Callable
+
+
+class Context:
+    def eval(self, code: str) -> Any: ...
+    def add_callable(self, name: str, func: Callable[..., Any]) -> None: ...

@@ -111,6 +111,25 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
     return sorted_data
 
 
+def transpile_brython() -> None:
+    from pathlib import Path
+    from shutil import copy
+    from WebHostLib.brython_aot import BrythonAOT
+    aot = BrythonAOT()
+    source_path = Path(Utils.local_path("WebHostLib", "frontend"))
+    target_path = Path(Utils.local_path("WebHostLib", "static", "generated", "js"))
+    target_path.mkdir(0o755, exist_ok=True)
+    copy(aot.find_brython_js(), target_path / "brython.js")
+    for source in source_path.glob("*.py"):
+        if source.name == "__init__.py":
+            continue
+        with source.open() as fin:
+            js = aot.transpile(fin.read())
+            target = target_path / (source.name + ".js")
+            with target.open("w") as fout:
+                fout.write(js)
+
+
 if __name__ == "__main__":
     multiprocessing.freeze_support()
     multiprocessing.set_start_method('spawn')
@@ -128,6 +147,7 @@ if __name__ == "__main__":
     app = get_app()
     create_options_files()
     create_ordered_tutorials_file()
+    transpile_brython()
     if app.config["SELFLAUNCH"]:
         autohost(app.config)
     if app.config["SELFGEN"]:
