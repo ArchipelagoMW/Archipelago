@@ -12,11 +12,10 @@ from Utils import async_start
 
 import colorama
 
-from zilliandomizer.zri.memory import Memory
+from zilliandomizer.zri.memory import Memory, RescueInfo
 from zilliandomizer.zri import events
 from zilliandomizer.utils.loc_name_maps import id_to_loc
 from zilliandomizer.options import Chars
-from zilliandomizer.patch import RescueInfo
 
 from .id_maps import loc_name_to_id, make_id_to_others
 from .config import base_id

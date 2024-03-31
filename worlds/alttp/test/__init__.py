@@ -14,3 +14,4 @@ class LTTPTestBase(unittest.TestCase):
         for name, option in AutoWorldRegister.world_types["A Link to the Past"].options_dataclass.type_hints.items():
             setattr(args, name, {1: option.from_any(getattr(option, "default"))})
         self.multiworld.set_options(args)
+        self.world = self.multiworld.worlds[1]
