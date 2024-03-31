@@ -316,9 +316,6 @@ class DarkSouls3World(World):
                     item_set.add(location.data.default_item_name)
                     itempool.append(self.create_item(location.data.default_item_name))
 
-        # A list of items we can replace
-        removable_items = [item for item in itempool if item.classification == ItemClassification.filler]
-
         injectables = self._create_injectable_items(num_required_extra_items)
         num_required_extra_items -= len(injectables)
         itempool.extend(injectables)
