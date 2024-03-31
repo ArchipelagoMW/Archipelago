@@ -91,7 +91,7 @@ either filler, useful, or a trap.
 
 When you pick up someone else's item, you will not receive anything and the item textbox will show up to announce what you
 found and who it was for. The color of the text will tell you its classification:
-- <font color="moccasin">Light brown-ish</font>: Common
+- <font color="moccasin">Light brown-ish</font>: Filler
 - <font color="white">White</font>/<font color="yellow">Yellow</font>: Useful
 - <font color="yellow">Yellow</font>/<font color="lime">Green</font>: Progression
 - <font color="yellow">Yellow</font>/<font color="red">Red</font>: Trap

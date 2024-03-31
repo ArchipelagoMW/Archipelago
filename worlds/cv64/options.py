@@ -144,8 +144,9 @@ class HardLogic(Toggle):
 
 
 class MultiHitBreakables(Toggle):
-    """Adds the items that drop from the objects that break in three hits to the pool. There are 17 of these throughout
-    the game, adding up to 74 checks in total with all stages.
+    """Adds the items that drop from the objects that break in three hits to the pool. There are 18 of these throughout
+    the game, adding up to 79 or 80 checks (depending on sub-weapons
+    being shuffled anywhere or not) in total with all stages.
     The game will be modified to
     remember exactly which of their items you've picked up instead of simply whether they were broken or not."""
     display_name = "Multi-hit Breakables"
