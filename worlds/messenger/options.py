@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import date
 from typing import Dict
 
 from schema import And, Optional, Or, Schema
@@ -123,6 +124,11 @@ class RequiredSeals(Range):
     default = range_end
 
 
+class Traps(Toggle):
+    """Whether traps should be included in the itempool."""
+    display_name = "Include Traps"
+
+
 class ShopPrices(Range):
     """Percentage modifier for shuffled item prices in shops"""
     display_name = "Shop Prices Modifier"
@@ -199,3 +205,6 @@ class MessengerOptions(DeathLinkMixin, PerGameCommonOptions):
     percent_seals_required: RequiredSeals
     shop_price: ShopPrices
     shop_price_plan: PlannedShopPrices
+
+    if date.today() > date(2024, 4, 1):
+        traps: Traps
