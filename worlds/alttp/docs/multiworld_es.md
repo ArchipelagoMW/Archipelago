@@ -59,7 +59,7 @@ de multiworld puede tener diferentes opciones.
 
 ### Donde puedo obtener un fichero YAML?
 
-La página "[Generate Game](/games/A%20Link%20to%20the%20Past/player-settings)" en el sitio web te permite configurar tu
+La página "[Generate Game](/games/A%20Link%20to%20the%20Past/player-options)" en el sitio web te permite configurar tu
 configuración personal y descargar un fichero "YAML".
 
 ### Configuración YAML avanzada
