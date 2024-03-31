@@ -1249,7 +1249,7 @@ class DarkSouls3World(World):
         # Fill this manually so that, if very few slots are available in Cemetery of Ash, this
         # doesn't get locked out by bad rolls on the next two fills.
         if self.yhorm_location.name == 'Iudex Gundyr':
-            self._fill_local_item("Storm Ruler", {"Cemetery of Ash"},
+            self._fill_local_item("Storm Ruler", ["Cemetery of Ash"],
                                   lambda location: location.name != "CA: Coiled Sword - boss drop",
                                   mandatory = True)
 
