@@ -18,3 +18,6 @@ LOST_MARSHES_NORTH = "Act 2 - Lost Marshes North and Light Shrine"
 # Act 3 Regions
 SEABED_SANCTUARY_HUB = "Act 3 - Seabed Sanctuary Hub"
 SOTHERTA = "Act 3 - Southerta"
+
+# Act 7 Regions
+DEATHTOLL = "Act 7 - Deathtoll"

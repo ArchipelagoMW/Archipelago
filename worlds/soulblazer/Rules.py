@@ -2,7 +2,7 @@ from typing import Callable, TYPE_CHECKING
 
 from enum import IntEnum, auto
 from BaseClasses import CollectionState
-from .Names import ItemName, ItemID, LairName, LairID, ChestName, ChestID, NPCRewardName, NPCRewardID, NPCName
+from .Names import ItemName, ItemID, LairName, LairID, ChestName, ChestID, NPCRewardName, NPCRewardID, NPCName, RegionName
 from .Items import emblems_table, swords_table
 
 if TYPE_CHECKING:
@@ -81,7 +81,7 @@ rule_for_flag = {
 # Many locations depend on one or two NPC releases so rather than create regions to hold one location,
 # we put these location-specific dependencies here.
 # TODO: Add chests dependencies too
-location_dependencies = {
+location_dependencies: dict[str, list[str]] = {
     # Act 1 - Grass Valley
     NPCRewardName.TOOL_SHOP_OWNER: [NPCName.TOOL_SHOP_OWNER],
     # TODO: figure out if we can patch it to make emblem A tile activatable without turning the water wheel
@@ -136,47 +136,52 @@ location_dependencies = {
     NPCRewardName.SEABED_CRYSTAL_NEAR_DUREAN: [],
     # Act 4 - Mountain of Souls
     # TODO: Delete these once they are no longer useful.
-    LairID.DOG3: [LairID.DEER],
-    LairID.SQUIRREL3: [LairID.DEER],
-    LairID.DOLPHIN: [LairID.MERMAID_NANA],
-    LairID.ANGELFISH: [LairID.ANGELFISH_SOUL_OF_SHIELD],
-    LairID.MERMAID2: [LairID.MERMAID4],
-    LairID.MERMAID_RED_HOT_STICK: [LairID.MERMAID_BUBBLE_ARMOR],
-    LairID.MERMAID6: [LairID.MERMAID4],
-    LairID.MERMAID_TEARS: [LairID.MERMAID_BUBBLE_ARMOR],
-    LairID.MERMAID_MAGIC_FLARE: [LairID.MERMAID_BUBBLE_ARMOR],
-    LairID.ANGELFISH4: [LairID.MERMAID5],
-    LairID.MERMAID8: [LairID.MERMAID_BUBBLE_ARMOR],
-    LairID.MERMAID9: [LairID.MERMAID4],
-    LairID.NOME: [LairID.GRANDPA5],
-    LairID.BOY2: [LairID.GRANDPA5],
-    LairID.MUSHROOM_EMBLEM_F: [LairID.GRANDPA5],
-    LairID.GRANDMA: [LairID.GRANDPA2],
-    LairID.GIRL2: [LairID.BOY],
-    LairID.SNAIL: [LairID.BOY_MUSHROOM_SHOES],
-    LairID.SNAIL2: [LairID.GRANDPA4],
-    LairID.SOLDIER6: [LairID.SINGER_CONCERT_HALL],
-    LairID.SOLDIER_PLATINUM_CARD: [LairID.SINGER_CONCERT_HALL],
-    LairID.MAID2: [LairID.SINGER_CONCERT_HALL],
-    LairID.SOLDIER7: [LairID.MAID],
-    LairID.SOLDIER8: [LairID.SOLDIER_SOUL_OF_REALITY],
-    LairID.SOLDIER10: [LairID.MAID_HERB],
-    LairID.KING_MAGRIDD: [LairID.SOLDIER_CASTLE],
+    #LairID.DOG3: [LairID.DEER],
+    #LairID.SQUIRREL3: [LairID.DEER],
+    #LairID.DOLPHIN: [LairID.MERMAID_NANA],
+    #LairID.ANGELFISH: [LairID.ANGELFISH_SOUL_OF_SHIELD],
+    #LairID.MERMAID2: [LairID.MERMAID4],
+    #LairID.MERMAID_RED_HOT_STICK: [LairID.MERMAID_BUBBLE_ARMOR],
+    #LairID.MERMAID6: [LairID.MERMAID4],
+    #LairID.MERMAID_TEARS: [LairID.MERMAID_BUBBLE_ARMOR],
+    #LairID.MERMAID_MAGIC_FLARE: [LairID.MERMAID_BUBBLE_ARMOR],
+    #LairID.ANGELFISH4: [LairID.MERMAID5],
+    #LairID.MERMAID8: [LairID.MERMAID_BUBBLE_ARMOR],
+    #LairID.MERMAID9: [LairID.MERMAID4],
+    #LairID.NOME: [LairID.GRANDPA5],
+    #LairID.BOY2: [LairID.GRANDPA5],
+    #LairID.MUSHROOM_EMBLEM_F: [LairID.GRANDPA5],
+    #LairID.GRANDMA: [LairID.GRANDPA2],
+    #LairID.GIRL2: [LairID.BOY],
+    #LairID.SNAIL: [LairID.BOY_MUSHROOM_SHOES],
+    #LairID.SNAIL2: [LairID.GRANDPA4],
+    #LairID.SOLDIER6: [LairID.SINGER_CONCERT_HALL],
+    #LairID.SOLDIER_PLATINUM_CARD: [LairID.SINGER_CONCERT_HALL],
+    #LairID.MAID2: [LairID.SINGER_CONCERT_HALL],
+    #LairID.SOLDIER7: [LairID.MAID],
+    #LairID.SOLDIER8: [LairID.SOLDIER_SOUL_OF_REALITY],
+    #LairID.SOLDIER10: [LairID.MAID_HERB],
+    #LairID.KING_MAGRIDD: [LairID.SOLDIER_CASTLE],
 }
 
 
 def get_rule_for_location(name: str, player: int, flag: RuleFlag) -> Callable[[CollectionState], bool]:
     """Returns the access rule for the given location."""
 
+    dependencies = location_dependencies.get(name, [])
+
+    if flag == RuleFlag.NONE and not dependencies:
+        return no_requirement
+
     def rule(state: CollectionState) -> bool:
-        return rule_for_flag[flag](state, player) and state.has_all(location_dependencies.get(name, []), player)
+        return rule_for_flag[flag](state, player) and state.has_all(dependencies, player)
 
     return rule
 
 
 def set_rules(world: "SoulBlazerWorld") -> None:
     # TODO: Replace "Test" with Deathtoll's Palace Region name?
-    world.multiworld.get_region("Test", world.player).locations += world.create_victory_event()
+    world.multiworld.get_region(RegionName.DEATHTOLL, world.player).locations += world.create_victory_event()
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
 
 
