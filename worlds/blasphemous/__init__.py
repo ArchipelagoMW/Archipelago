@@ -290,8 +290,8 @@ class BlasphemousWorld(World):
             location = self.get_location(location_names[l["name"]])
             set_rule(location, blas_logic.load_rule(l))
 
-        from Utils import visualize_regions
-        visualize_regions(self.get_region("Menu"), "blasphemous_regions.puml")
+        #from Utils import visualize_regions
+        #visualize_regions(self.get_region("Menu"), "blasphemous_regions.puml")
         
         victory = Location(player, "His Holiness Escribar", None, self.get_region("D07Z01S03[W]"))
         victory.place_locked_item(self.create_event("Victory"))
