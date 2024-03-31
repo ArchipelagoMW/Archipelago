@@ -70,11 +70,11 @@ An empty mapping is just a matching pair of curly braces: `{}`. That's the defau
 
 #### How do I know the exact names of items and locations?
 
-The [*datapackage*](/datapackage) page of Archipelago website provides a complete list of the items and locations for each game that it currently supports, including StarCraft 2.
+The [*datapackage*](/datapackage) page of the Archipelago website provides a complete list of the items and locations for each game that it currently supports, including StarCraft 2.
 
 You can also look up a complete list of the item names in the [Icon Repository](https://matthewmarinets.github.io/ap_sc2_icons/) page.
 This page also contains supplementary information of each item.
-However, the items shown in that page might differ from those shown in the datapackage page of Archipelago since the former is generated, most of the time, from the most recent developments of StarCraft 2 Archipelago.
+However, the items shown in that page might differ from those shown in the datapackage page of Archipelago since the former is generated, most of the time, from beta versions of StarCraft 2 Archipelago undergoing development.
 
 As for the locations, you can see all the locations associated to a mission in your world by placing your cursor over the mission in the 'StarCraft 2 Launcher' tab in the client.
 
