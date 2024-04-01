@@ -65,7 +65,7 @@ Vous ne devez effectuer ces étapes qu'une seule fois. Note : RetroArch 1.9.x ne
 3. Allez dans Settings (Réglages) --> Network (Réseau). Réglez "Network Commands (Commandes réseau)" sur ON (Activé). (Il se trouve sous Request Device 16 (Demander le périphérique 16).) 
    Laissez le port de commande réseau par défaut à 55355.
 
-![Capture d'écran du réglage des commandes réseau](/static/generated/docs/A%20Link%20to%20the%20Past/retroarch-network-commands-en.png)
+![Capture d'écran du réglage des commandes réseau](/static/generated/docs/Links%20Awakening%20DX/retroarch-network-commands-fr.png)
 4. Allez dans le Main Menu (menu principal) --> Online Updater (Mise à jour en ligne) --> Core Downloader (Téléchargement des coeurs). Faites défiler vers le bas et sélectionnez "Nintendo - Gameboy / Color (SameBoy)".
 
 #### BizHawk 2.8 ou plus récent (les versions plus anciennes ne sont pas testées)
