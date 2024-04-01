@@ -373,7 +373,7 @@ class DarkSouls3World(World):
                 if item in items: continue
                 self.multiworld.push_precollected(self.create_item(item))
                 warning(
-                    f"Couldn't add \"{item}\" to the item pool for " + 
+                    f"Couldn't add \"{item.name}\" to the item pool for " + 
                     f"{self.multiworld.get_player_name(self.player)}. Adding it to the starting " +
                     f"inventory instead."
                 )
