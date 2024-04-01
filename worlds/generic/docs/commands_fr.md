@@ -36,7 +36,7 @@ including the exclamation point.
 ### Indices
 - `!hint` Liste tous les indices concernant votre monde, les points dont vous disposez pour les indices et le coût d'un indice.
 - `!hint <nom de l'objet>` Indique le monde du jeu et l'endroit où se trouve votre objet, en utilisant les points gagnés en complétant les emplacements.
-- `!hint_location <emplacement>` Indique où se trouve un objet dans un emplacement spécifique et utilise les points gagnés en validant les emplacements.
+- `!hint_location <emplacement>` Indique quel est l'objet qui se trouve dans un emplacement spécifique et utilise les points gagnés en validant les emplacements.
 
 ### Collecte/libération
 - `!collect` Vous permet d'obtenir tous les objets restants pour votre monde en les collectant dans tous les jeux. Généralement utilisé après l'accomplissement de l'objectif.

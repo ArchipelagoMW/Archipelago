@@ -22,9 +22,9 @@ des fichiers YAML et chaque monde en aura un contenant ses paramètres personnal
 
 ## Formatage YAML
 
-Les fichiers YAML sont un format de fichiers de configuration lisible par l'homme. La syntaxe de base d'un fichier YAML aura un nœud `racine` et ensuite différents niveaux de nœuds `imbriqués` que le générateur lira pour déterminer vos paramètres.
+Les fichiers YAML sont un format de fichiers de configuration lisible par un humain. La syntaxe de base d'un fichier YAML aura un nœud `racine` et ensuite différents niveaux de nœuds `imbriqués` que le générateur lira pour déterminer vos paramètres.
 
-Pour imbriquer du texte, la syntaxe correcte consiste à indenter de **deux espaces** à partir de son option racine.
+Pour imbriquer du texte, la syntaxe correcte consiste à indenter de **deux espaces** à partir du parent.
 Un fichier YAML peut être édité avec n'importe quel éditeur de texte que vous choisissez, bien que je recommande 
 personnellement l'utilisation de Sublime Text.
 Site: [Site SublimeText](https://www.sublimetext.com)
@@ -86,7 +86,7 @@ Si un plan est utilisé dans le fichier, le spécifier ici pour s'assurer qu'il 
 ## Options de jeu
 
 L'un de vos paramètres racines sera le nom du jeu pour lequel vous souhaitez remplir des paramètres. Comme il est possible
-de donner un poids à n'importe quelle option, il est possible d'avoir un fichier qui peut générer une graine pour vous
+de donner un poids à n'importe quelle option, il est possible d'avoir un fichier qui peut générer une partie pour vous
 où vous ne savez pas quel jeu vous allez jouer. Pour ces cas, vous voudrez remplir les options de jeu pour chaque jeu
 qui peut être généré par ces paramètres, même si un jeu peut être généré, il **doit** avoir une section de paramètres
 même si elle est vide.
@@ -105,7 +105,7 @@ Consultez le guide plando pour plus d'informations sur les options plando. Guide
   Cela prend en charge `items`, `locations`, et `minimal` et est réglé par défaut sur `locations`.
   * `locations` garantira que toutes les emplacements soient accessibles dans votre monde.
   * `items` garantira que vous pouvez acquérir tous les objets logiquement pertinents dans votre monde. Certains objets, tels que des clés, peuvent être auto-verrouillants.
-  * `minimal` garantira seulement que la graine est battable. Vous aurez la garantie de pouvoir terminer logiquement la graine, mais vous ne pourrez peut-être pas accéder à tous les emplacements ou acquérir tous les objets. Un bon exemple de cela est d'avoir une grosse clé dans le grand coffre d'un donjon dans ALTTP, ce qui le rend impossible à obtenir et à terminer le donjon.
+  * `minimal` garantira seulement que la partie est battable. Vous aurez la garantie de pouvoir terminer logiquement la partie, mais vous ne pourrez peut-être pas accéder à tous les emplacements ou acquérir tous les objets. Un bon exemple de cela est d'avoir une grosse clé dans le grand coffre d'un donjon dans ALTTP, ce qui le rend impossible à obtenir et à terminer le donjon.
 * `progression_balancing` est un système que le générateur Archipelago utilise pour essayer de réduire autant que possible le mode ["BK"](glossaire/en/#burger-king-/-bk-mode) (mode "Burger King").
   Cela implique principalement de déplacer les objets de progression nécessaires dans des sphères logiques antérieures pour rendre les jeux plus accessibles afin que les joueurs aient presque toujours quelque chose à faire. Cela peut être dans une plage de 0 à 99 et est de 50 par défaut. Ce nombre représente un pourcentage du joueur progressant le plus loin.
   * Par exemple : avec la valeur par défaut de 50%, si le joueur le plus avancé peut accéder à 40% de ses objets, le randomiseur essaie de vous permettre d'accéder à au moins 20% de vos objets. 50% de 40% est 20%.
@@ -214,8 +214,8 @@ Timespinner:
 * `game` a une chance égale d'être soit `A Link to the Past` ou `Timespinner` avec une chance de 10/20 pour chacun.
   Cela est dû au poids de chaque jeu, qui est de 10, et le total de tous les poids est de 20.
 * `requires` est défini sur la version requise 0.3.2 ou supérieure.
-* `accessibility` pour les deux jeux est définie sur `minimal`, ce qui rendra cette graine faisable uniquement,
-  certaines localités et objets pouvant être complètement inaccessibles mais la graine restera réalisable.
+* `accessibility` pour les deux jeux est définie sur `minimal`, ce qui rendra cette partie faisable uniquement,
+  certaines localités et objets pouvant être complètement inaccessibles mais la partie restera réalisable.
 * `progression_balancing` pour les deux jeux est fixé à 50, la valeur par défaut, ce qui signifie que nous recevrons probablement
   des objets importants plus tôt, augmentant la chance d'avoir des choses à faire.
 * `A Link to the Past` définit un emplacement pour imbriquer toutes les options de jeu que nous souhaitons

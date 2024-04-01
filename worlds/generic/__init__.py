@@ -27,7 +27,7 @@ class GenericWeb(WebWorld):
     triggers_en = Tutorial('Archipelago Triggers Guide', 'A guide to setting up and using triggers in your game settings.',
                         'English', 'triggers_en.md', 'triggers/en', ['alwaysintreble'])
     # French Language
-    advanced_settings_fr = Tutorial('Guide avancé YAML',
+    advanced_settings_fr = Tutorial('Guide YAML avancé',
                                  'Un guide pour lire les fichiers YAML et les éditer afin de personnaliser entièrement votre jeu.',
                                  'Français', 'advanced_settings_fr.md', 'advanced_settings/fr',
                                  ['Deoxis'])
@@ -39,7 +39,7 @@ class GenericWeb(WebWorld):
     plando_fr = Tutorial('Guide du Plando d\'Archipelago', 'Un guide pour comprendre et utiliser le plando pour votre jeu.',
                       'Français', 'plando_fr.md', 'plando/fr', ['Deoxis'])
     setup_fr = Tutorial('Pour commencer',
-                     'Un guide pour configurer le logiciel Archipelago, et générer, héberger et se connecter à des jeux MultiWorld.',
+                     'Un guide pour configurer le logiciel Archipelago, et générer, héberger et se connecter à des parties MultiWorld.',
                      'Français', 'setup_fr.md', 'setup/fr', ['Deoxis'])
     triggers_fr = Tutorial('Guide des Triggers d\'Archipelago', 'Un guide pour configurer et utiliser les triggers dans les paramètres de votre jeu.',
                         'Français', 'triggers_fr.md', 'triggers/fr', ['Deoxis'])
