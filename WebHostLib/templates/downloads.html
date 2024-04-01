@@ -1,21 +1,20 @@
 {% extends "faq.html" %}
 
 {% block head %}
-{% include "header/oceanHeader.html" %}
-<title>Downloads</title>
+    {% include "header/oceanHeader.html" %}
+    <title>Downloads</title>
 {% endblock %}
 
 {% block body %}
-<div id="downloads-wrapper">
-    <p>Latest Release: {{ version }}
-    <ul>
-        <li><a href="https://github.com/ArchipelagoMW/Archipelago/releases/tag/{{ version }}">Github</a></li>
-        <li><a href="{{ url_for("api.get_download", build="windows") }}">Windows Setup</a></li>
-        <li><a href="{{ url_for("api.get_download", build="windows7") }}">Windows 7 Setup</a></li>
-        <li><a href="{{ url_for("api.get_download", build="app") }}">Linux AppImage</a></li>
-        <li><a href="{{ url_for("api.get_download", build="tar") }}">Linux Tarball</a></li>
-    </ul>
-    </p>
-</div>
-{% include "islandFooter.html" %}
+    <div id="downloads-wrapper" style="text-align: center">
+        <h1>Latest Release: {{ version }}</h1>
+        <ul style="display: inline-block; text-align: left">
+            <li><a href="https://github.com/ArchipelagoMW/Archipelago/releases/tag/{{ version }}">Github</a></li>
+            <li><a href="{{ url_for("api.get_download", build="windows") }}">Windows Setup</a></li>
+            <li><a href="{{ url_for("api.get_download", build="windows7") }}">Windows 7 Setup</a></li>
+            <li><a href="{{ url_for("api.get_download", build="app") }}">Linux AppImage</a></li>
+            <li><a href="{{ url_for("api.get_download", build="tar") }}">Linux Tarball</a></li>
+        </ul>
+    </div>
+    {% include "islandFooter.html" %}
 {% endblock %}
