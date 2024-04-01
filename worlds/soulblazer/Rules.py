@@ -119,35 +119,51 @@ location_dependencies: dict[str, list[str]] = {
     NPCRewardName.FIRE_SHRINE_CRYSTAL: [],  # TODO: delete
     ChestName.GREENWOOD_ICE_ARMOR: [NPCName.MOLE, NPCName.SQUIRREL_ICE_ARMOR, ItemName.DREAMROD],
     # Act 3 - St Elles
-    # Notes:
-    # Mermaid 4: unlocks path to West Seabed Sanctuary (make region?)
-    # Dolphin 2: unlocks path to east seabed sanctuary (make region?)
-    # Bubble Armor mermaid: unlocks path to south seabed sanctuary
     NPCRewardName.NORTHEASTERN_MERMAID_HERB: [NPCName.MERMAID, NPCName.DOLPHIN2],
     NPCRewardName.BUBBLE_ARMOR_MERMAID: [],  # TODO: delete
     NPCRewardName.MAGIC_FLARE_MERMAID: [NPCName.MERMAID_MAGIC_FLARE, NPCName.MERMAID_BUBBLE_ARMOR],
     NPCRewardName.MERMAID_QUEEN: [],  # TODO: delete
-    NPCRewardName.REDHOT_STICK_MERMAID: [NPCName.MERMAID_BUBBLE_ARMOR],
+    NPCRewardName.REDHOT_STICK_MERMAID: [NPCName.MERMAID_RED_HOT_STICK],
     # TODO: Lue also needs 1 of Bubble mermaid or Dolphin 4. gonna need regions for those
     # MERMAID_PEARL should probably be a region too. gonna need to to do a little mapping
     NPCRewardName.LUE: [NPCName.LUE, NPCName.DOLPHIN_SAVES_LUE, NPCName.MERMAID_PEARL],
     NPCRewardName.ROCKBIRD_CRYSTAL: [],
     NPCRewardName.SEABED_CRYSTAL_NEAR_BLESTER: [],
     NPCRewardName.SEABED_CRYSTAL_NEAR_DUREAN: [],
+    # Logical mermaids tears. TODO: move to separate list for optional logic toggle
+    LairName.MERMAID_PEARL: [ItemName.MERMAIDSTEARS],
+    LairName.MERMAID_STATUE_BLESTER: [ItemName.MERMAIDSTEARS],
+    ChestName.DUREAN_CRITICAL_SWORD: [ItemName.MERMAIDSTEARS],
     # Act 4 - Mountain of Souls
+    NPCRewardName.EMBLEM_E_SNAIL: [NPCName.SNAIL_EMBLEM_E],
+    NPCRewardName.MOUNTAIN_KING: [],  
+    NPCRewardName.MUSHROOM_SHOES_BOY: [NPCName.BOY_MUSHROOM_SHOES],
+    NPCRewardName.NOME: [], 
+    NPCRewardName.EMBLEM_E_SNAIL: [NPCName.SNAIL_EMBLEM_E],
+     # Also includes path from lune to sleeping mushroom
+    NPCRewardName.EMBLEM_F_TILE: [NPCName.MUSHROOM_EMBLEM_F, NPCName.GRANDPA5, NPCName.MUSHROOM2, ItemName.DREAMROD], 
+    NPCRewardName.MOUNTAIN_OF_SOULS_CRYSTAL: [],
+    NPCRewardName.LUNE_CRYSTAL: [],
+    # Notes:
+    # Mushroom: CB: Nothing
+    # Mushroom 2: EE: south tunnel to prison. mush2-grandpa4, mush2-grandpa5
+    # Girl: CA: Nothing
+    # Girl 3: F2: east tunnel hub-girl3, girl3-grandpa4, girl3-mushboy (extraneous)
+    # Boy: CC: more west tunnel boy-grandpa, boy-grandpa3
+    # Boy 2: D7: nothing
+    #
+    # Snail E: E8: in hub.
+    #
+    # Boy mushroom: E9: Hub-mushboy, mushboy-boy
+    # Grandpa: C9: nw tunnel. hub-grandpa, grandpa-boy
+    # Grandpa 2: D3: Nothing
+    # Grandpa 3: F8: south-west tunnel grandpa3-boy, grandpa3-king
+    # Grandpa 4: FC: southeast lake, grandpa4-lune grandpa4-girl3, grandpa4-mush2
+    # Grandpa 5: FF: unlocks prison (Locks Nome, mushroom emblem f) grandpa5-mush2
+    # grandpa lune: FE: just lune
+    # mountain king: 103: needs a lot of npcs to reach
+
     # TODO: Delete these once they are no longer useful.
-    #LairID.DOG3: [LairID.DEER],
-    #LairID.SQUIRREL3: [LairID.DEER],
-    #LairID.DOLPHIN: [LairID.MERMAID_NANA],
-    #LairID.ANGELFISH: [LairID.ANGELFISH_SOUL_OF_SHIELD],
-    #LairID.MERMAID2: [LairID.MERMAID4],
-    #LairID.MERMAID_RED_HOT_STICK: [LairID.MERMAID_BUBBLE_ARMOR],
-    #LairID.MERMAID6: [LairID.MERMAID4],
-    #LairID.MERMAID_TEARS: [LairID.MERMAID_BUBBLE_ARMOR],
-    #LairID.MERMAID_MAGIC_FLARE: [LairID.MERMAID_BUBBLE_ARMOR],
-    #LairID.ANGELFISH4: [LairID.MERMAID5],
-    #LairID.MERMAID8: [LairID.MERMAID_BUBBLE_ARMOR],
-    #LairID.MERMAID9: [LairID.MERMAID4],
     #LairID.NOME: [LairID.GRANDPA5],
     #LairID.BOY2: [LairID.GRANDPA5],
     #LairID.MUSHROOM_EMBLEM_F: [LairID.GRANDPA5],
@@ -155,6 +171,7 @@ location_dependencies: dict[str, list[str]] = {
     #LairID.GIRL2: [LairID.BOY],
     #LairID.SNAIL: [LairID.BOY_MUSHROOM_SHOES],
     #LairID.SNAIL2: [LairID.GRANDPA4],
+
     #LairID.SOLDIER6: [LairID.SINGER_CONCERT_HALL],
     #LairID.SOLDIER_PLATINUM_CARD: [LairID.SINGER_CONCERT_HALL],
     #LairID.MAID2: [LairID.SINGER_CONCERT_HALL],
@@ -184,5 +201,3 @@ def set_rules(world: "SoulBlazerWorld") -> None:
     world.multiworld.get_region(RegionName.DEATHTOLL, world.player).locations += world.create_victory_event()
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
 
-
-# TODO: access rule for region/entrance

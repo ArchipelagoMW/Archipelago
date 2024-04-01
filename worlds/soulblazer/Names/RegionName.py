@@ -7,17 +7,39 @@ GRASS_VALLEY_WEST = "Act 1 - Grass Valley West"
 GRASS_VALLEY_EAST = "Act 1 - Grass Valley East"
 GRASS_VALLEY_TREASURE_ROOM = "Act 1 - Grass Valley Treasure Room"
 UNDERGROUND_CASTLE_WEST = "Act 1 - Underground Castle West"
-UNDERGROUND_CASTLE_EAST = "Act 1 - Underground Castle Post-Elevator"
+UNDERGROUND_CASTLE_EAST = "Act 1 - Underground Castle East/Post-Elevator"
 LEOS_PAINTING = "Act 1 - Leo's Painting"
 
 # Act 2 Regions
 GREENWOOD = "Act 2 - Greenwood"
 LOST_MARSHES_SOUTH = "Act 2 - Lost Marshes South and Water/Fire Shrines"
 LOST_MARSHES_NORTH = "Act 2 - Lost Marshes North and Light Shrine"
+# TODO: use this region
+LIGHT_SHRINE_DARK = "Act 2 - Light Shrine Dark Rooms and Boss"
 
 # Act 3 Regions
-SEABED_SANCTUARY_HUB = "Act 3 - Seabed Sanctuary Hub"
-SOTHERTA = "Act 3 - Southerta"
+SEABED_SANCTUARY_HUB_SOUTHERTA = "Act 3 - Seabed Sanctuary Hub and Southerta"
+SEABED_SANCTUARY_SOUTH = "Act 3 - Seabed Sanctuary South"
+SEABED_SANCTUARY_WEST  = "Act 3 - Seabed Sanctuary West and Lue's Prison"
+SEABED_SANCTUARY_SOUTHWEST = "Act 3 - Seabed Sanctuary Southwest"
+SEABED_SANCTUARY_EAST = "Act 3 - Seabed Sanctuary East"
+SEABED_SANCTUARY_SOUTHEAST = "Act 3 - Seabed Sanctuary Southeast"
+SEABED_HUB = "Act 3 - Seabed Hub"
+ROCKBIRD = "Act 3 - Rockbird"
+DUREAN = "Act 3 - Durean"
+BLESTER = "Act 3 - Seabed Northeast and Blester"
+GHOST_SHIP = "Act 3 - Seabed Northwest and Ghost Ship"
+SEABED_SECRET_CAVE = "Act 3 - Seabed Secret Cave"
+
+# Act 4 Regions
+MOUNTAIN_HUB_NORTH_SLOPE = "Act 4 - Mountain Town Hub and North Slope"
+MOUNTAIN_KING = "Act 4 - Mountain King"
+NOME = "Act 4 - Nome"
+LAYNOLE = "Act 4 - Icehill and Laynole 1"
+LUNE = "Act 4 - Laynole 2 and Lune"
+
+# Act 5 Regions
+LEOS_LAB_START = "Act 5 - Leo's Lab Start"
 
 # Act 7 Regions
 DEATHTOLL = "Act 7 - Deathtoll"

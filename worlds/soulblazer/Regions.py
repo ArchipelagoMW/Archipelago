@@ -136,6 +136,134 @@ locations_for_region: dict[str, list[str]] = {
         NPCRewardName.LOST_MARSH_CRYSTAL,
         ChestName.LIGHT_SHRINE,
     ],
+    RegionName.SEABED_SANCTUARY_HUB_SOUTHERTA: [
+        LairName.DOLPHIN2,
+        LairName.MERMAID4,
+        LairName.MERMAID5,
+        LairName.MERMAID6,
+        LairName.MERMAID_BUBBLE_ARMOR,
+        NPCRewardName.MERMAID_QUEEN,
+        ChestName.SOUTHERTA,
+    ],
+    RegionName.SEABED_SANCTUARY_SOUTH: [
+        NPCRewardName.BUBBLE_ARMOR_MERMAID,
+        NPCRewardName.REDHOT_STICK_MERMAID,
+        ChestName.ST_ELLIS_MERMAIDS_TEARS,
+    ],
+    RegionName.SEABED_SANCTUARY_WEST: [
+        NPCRewardName.LUE,
+    ],
+    RegionName.SEABED_SANCTUARY_SOUTHWEST: [
+        NPCRewardName.MAGIC_FLARE_MERMAID,
+        ChestName.ST_ELLIS_BIG_PEARL,
+    ],
+    RegionName.SEABED_SANCTUARY_EAST: [NPCRewardName.NORTHEASTERN_MERMAID_HERB],
+    RegionName.SEABED_SANCTUARY_SOUTHEAST: [
+        # Unused for now, but you need to reach here to get soul of shield.
+    ],
+    RegionName.SEABED_HUB: [
+        #TODO: make bubble armor rquirement for this lair optional toggle
+        LairName.MERMAID_STATUE_ROCKBIRD,
+    ],
+    RegionName.ROCKBIRD: [
+        LairName.MERMAID9,
+        LairName.MERMAID_TEARS,
+        LairName.MERMAID_MAGIC_FLARE,
+        LairName.ANGELFISH_SOUL_OF_SHIELD,
+        LairName.MERMAID_STATUE_DUREAN,
+        NPCRewardName.ROCKBIRD_CRYSTAL,
+        ChestName.ROCKBIRD_60GEM,
+        ChestName.ROCKBIRD_HERB,
+    ],
+    RegionName.DUREAN: [
+        LairName.DOLPHIN_PEARL,
+        LairName.LUE,
+        LairName.MERMAID2,
+        LairName.MERMAID_NANA,
+        LairName.DOLPHIN_SAVES_LUE,
+        LairName.MERMAID3,
+        LairName.MERMAID_RED_HOT_STICK,
+        LairName.MERMAID_PEARL,
+        LairName.MERMAID_STATUE_BLESTER,
+        NPCRewardName.SEABED_CRYSTAL_NEAR_DUREAN,
+        ChestName.DUREAN_STRANGE_BOTTLE,
+        ChestName.DUREAN_CRITICAL_SWORD,
+    ],
+    RegionName.BLESTER: [
+        LairName.ANGELFISH,
+        LairName.ANGELFISH2,
+        LairName.MERMAID,
+        LairName.MERMAID7,
+        LairName.ANGELFISH4,
+        LairName.MERMAID8,
+        LairName.DOLPHIN_SECRET_CAVE,
+        LairName.MERMAID_STATUE_GHOST_SHIP,
+        NPCRewardName.SEABED_CRYSTAL_NEAR_BLESTER,
+    ],
+    RegionName.GHOST_SHIP: [
+        LairName.ANGELFISH3,
+        LairName.DOLPHIN,
+        LairName.MERMAID_QUEEN,
+        ChestName.SEABED_POWER_BRACELET,
+        ChestName.GHOST_SHIP,
+    ],
+    RegionName.SEABED_SECRET_CAVE: [
+        ChestName.SEABED_SECRET_TL,
+        ChestName.SEABED_SECRET_TR,
+        ChestName.SEABED_SECRET_BL,
+        ChestName.SEABED_SECRET_TR,
+    ],
+    RegionName.MOUNTAIN_HUB_NORTH_SLOPE: [
+        LairName.GIRL,
+        LairName.GRANDPA,
+        LairName.MUSHROOM,
+        LairName.BOY,
+        LairName.GRANDPA2,
+        LairName.SNAIL_JOCKEY,
+        LairName.BOY_MUSHROOM_SHOES,
+        LairName.GIRL2,
+        NPCRewardName.MOUNTAIN_OF_SOULS_CRYSTAL,
+        NPCRewardName.EMBLEM_E_SNAIL,
+        NPCRewardName.MUSHROOM_SHOES_BOY,
+        ChestName.MOUNTAIN_OF_SOULS_1,
+        ChestName.MOUNTAIN_OF_SOULS_2_L,
+        ChestName.MOUNTAIN_OF_SOULS_2_LL,
+        ChestName.MOUNTAIN_OF_SOULS_2_R,
+        ChestName.MOUNTAIN_OF_SOULS_2_RR,
+    ],
+    RegionName.MOUNTAIN_KING: [
+        NPCRewardName.MOUNTAIN_KING,
+    ],
+    RegionName.NOME: [
+        NPCRewardName.NOME,
+    ],
+    RegionName.LAYNOLE: [
+        LairName.GRANDMA,
+        LairName.MUSHROOM2,
+        LairName.SNAIL_RACER,
+        LairName.SNAIL_RACER2,
+        LairName.GIRL3,
+        LairName.MUSHROOM3,
+        LairName.SNAIL,
+        LairName.GRANDPA3,
+        LairName.GRANDPA4,
+        LairName.GRANDPA_LUNE,
+        LairName.SNAIL2,
+        LairName.GRANDPA5,
+        ChestName.LAYNOLE_LUCKY_BLADE
+    ],
+    RegionName.LUNE: [
+        LairName.BOY2,
+        LairName.NOME,
+        LairName.MUSHROOM_EMBLEM_F,
+        LairName.DANCING_GRANDMA,
+        LairName.DANCING_GRANDMA2,
+        LairName.MOUNTAIN_KING,
+        NPCRewardName.LUNE_CRYSTAL,
+        NPCRewardName.EMBLEM_F_TILE,
+        ChestName.LAYNOLE_HERB,
+        ChestName.LAYNOLE_ROTATOR,
+    ],
 }
 
 
@@ -145,6 +273,7 @@ class ExitData(NamedTuple):
     has_all: list[str] = []
     """List of item names, all of which are required to use this exit."""
     # TODO: Might need to refactor this data structure if any location has multiple 'any' dependencies
+    # TODO: if the only any ends up being swords/magic then change this to flag instead?
     has_any: list[str] = []
     """List of item names, where only one are required to use this exit."""
     # TODO: May have to refactor data structure if location reachable requirements are needed
@@ -175,9 +304,55 @@ exits_for_region: dict[str, ExitData] = {
     # TODO: Add region/exit for Light Shrine Dark rooms?
     RegionName.GREENWOOD: [
         ExitData(RegionName.LOST_MARSHES_SOUTH),
-        ExitData(RegionName.SEABED_SANCTUARY_HUB, [NPCName.GREENWOODS_GUARDIAN]),
+        ExitData(RegionName.SEABED_SANCTUARY_HUB_SOUTHERTA, [NPCName.GREENWOODS_GUARDIAN]),
     ],
-    RegionName.LOST_MARSHES_SOUTH: [ExitData(RegionName.LOST_MARSHES_NORTH, [ItemName.TURBOSLEAVES])],
+    RegionName.LOST_MARSHES_SOUTH: [
+        ExitData(RegionName.LOST_MARSHES_NORTH, [ItemName.TURBOSLEAVES]),
+    ],
+    # Act 3 Exits
+    RegionName.SEABED_SANCTUARY_HUB_SOUTHERTA: [
+        ExitData(RegionName.SEABED_SANCTUARY_SOUTH, [NPCName.MERMAID_BUBBLE_ARMOR]),
+        ExitData(RegionName.SEABED_SANCTUARY_WEST, [NPCName.MERMAID_PEARL, NPCName.MERMAID4]),
+        ExitData(RegionName.SEABED_SANCTUARY_EAST, [NPCName.DOLPHIN2]),
+        ExitData(RegionName.MOUNTAIN_HUB_NORTH_SLOPE, [NPCName.MERMAID_QUEEN])
+    ],
+    RegionName.SEABED_SANCTUARY_SOUTH: [
+        ExitData(RegionName.SEABED_SANCTUARY_WEST, [NPCName.MERMAID_PEARL]),
+        ExitData(RegionName.SEABED_SANCTUARY_SOUTHEAST, [NPCName.ANGELFISH_SOUL_OF_SHIELD]),
+        ExitData(RegionName.SEABED_HUB, [ItemName.BUBBLEARMOR]),
+    ],
+    RegionName.SEABED_SANCTUARY_WEST: [
+        ExitData(RegionName.SEABED_SANCTUARY_SOUTHWEST, [NPCName.DOLPHIN_PEARL]),
+    ],
+    RegionName.SEABED_SANCTUARY_EAST: [
+        ExitData(RegionName.SEABED_SANCTUARY_SOUTHEAST, [NPCName.ANGELFISH_SOUL_OF_SHIELD, NPCName.MERMAID5])
+    ],
+    # RegionName.SEABED_SANCTUARY_SOUTHEAST: [
+    #    # TODO: if putting soul of shield in logic, have this connect to durean?
+    # ],
+    RegionName.SEABED_HUB: [
+        ExitData(RegionName.ROCKBIRD, [NPCName.MERMAID_STATUE_ROCKBIRD]),
+        ExitData(RegionName.DUREAN, [NPCName.MERMAID_STATUE_DUREAN]),
+        ExitData(RegionName.BLESTER, [NPCName.MERMAID_STATUE_BLESTER]),
+        ExitData(RegionName.GHOST_SHIP, [NPCName.MERMAID_STATUE_GHOST_SHIP]),
+    ],
+    RegionName.GHOST_SHIP: [
+        ExitData(
+            RegionName.SEABED_SECRET_CAVE,
+            [NPCName.MERMAID_PEARL, NPCName.DOLPHIN_SECRET_CAVE, ItemName.DREAMROD, ItemName.BIGPEARL],
+        ),
+    ],
+    RegionName.MOUNTAIN_HUB_NORTH_SLOPE: [
+        ExitData(RegionName.LUNE, [NPCName.GIRL3, NPCName.GRANDPA4, NPCName.GRANDPA_LUNE, ItemName.LUCKYBLADE]),
+        ExitData(RegionName.MOUNTAIN_KING, [NPCName.BOY, NPCName.GRANDPA3, NPCName.MOUNTAIN_KING], [NPCName.BOY_MUSHROOM_SHOES, NPCName.GRANDPA]),
+    ],
+    RegionName.MOUNTAIN_KING: [
+        ExitData(RegionName.NOME, [NPCName.GIRL3, NPCName.GRANDPA4, NPCName.MUSHROOM2, NPCName.GRANDPA5, NPCName.NOME])
+    ],
+    RegionName.NOME: [
+        ExitData(RegionName.LEOS_LAB_START, [])
+    ]
+    
 }
 
 
@@ -222,5 +397,5 @@ def create_regions(world: "SoulBlazerWorld") -> None:
 
     # All of the locations should have been placed in regions.
     # TODO: Delete once confident that all locations are in or move into a test instead?
-    if len(all_locations_table) != len(all_locations):
+    if len(all_locations) < len(all_locations_table):
         logging.warning("Soulblazer: Regions do not contain all locations. Something is likely broken with the logic.")
