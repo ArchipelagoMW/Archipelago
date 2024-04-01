@@ -158,8 +158,39 @@ plando_items:
 
 ## Boss Plando
 
-Étant donné que cela est actuellement pris en charge uniquement par A Link to the Past,
-au lieu de trouver une explication ici, veuillez vous référer au guide pertinent : [Guide Plando A Link to the Past](/tutorial/A%20Link%20to%20the%20Past/plando/en)
+Cette fonction est actuellement supportée uniquement par A Link to the Past et Kirby's Dream Land 3. Le boss plando permet à un joueur de placer un 
+un boss donné dans une arène. 
+Des informations plus spécifiques sur le Boss Plando de A Link to the Past est disponibles sur la page  [Le guide plando](/tutorial/A%20Link%20to%20the%20Past/plando/en#connections).
+
+Le Boss plando prend en compte une liste d'instructions pour placer des boss, séparées par un point-virgule `;`.
+Il existe trois types de placement : direct, complet et aléatoire.
+* Le placement direct prend une arène et un boss, et place le boss dans cette arène.
+  * `Palais de l'Est-Trinexx`
+* Le placement complet prend un boss et le place dans autant d'arènes restantes que possible.
+  * Roi Dedede
+* Aléatoire remplit toutes les arènes restantes en utilisant l'option de shuffle du boss, typiquement à utiliser comme dernière instruction.
+  * `full`
+
+### Exemples
+
+```yaml
+A Link to the Past:
+  boss_shuffle:
+    # Basic boss shuffle, but prevent Trinexx from being outside Turtle Rock
+    Turtle Rock-Trinexx;basic: 1
+    # Place as many Arrghus as possible, then let the rest be random
+    Arrghus;chaos: 1
+    
+Kirby's Dream Land 3:
+  boss_shuffle:
+    # Ensure Iceberg's boss will be King Dedede, but randomize the rest
+    Iceberg-King Dedede;full: 1
+    # Have all bosses be Whispy Woods
+    Whispy Woods: 1
+    # Ensure Ripple Field's boss is Pon & Con, but let the method others
+    # are placed with be random
+    Ripple Field-Pon & Con;random: 1
+```
 
 ## Text Plando
 
@@ -168,10 +199,9 @@ au lieu de trouver une explication ici, veuillez vous référer au guide pertine
 
 ## Connections Plando
 
-Ceci est actuellement pris en charge uniquement par Minecraft et A Link to the Past. Comme la manière dont ces jeux
-interagissent avec leurs connexions est différente, je n'expliquerai que les bases ici, tandis que des détails plus
-spécifiques pour la planification de connexions d'A Link to the Past peuvent être trouvés dans son guide Plando.
-
+Cette fonctionnalité n'est actuellement prise en charge que par quelques jeux, dont A Link to the Past, Minecraft et Ocarina of Time.
+Comme la façon dont ces jeux interagissent avec leurs connexions est différente, seules les bases sont expliquées ici.
+Des informations plus spécifiques sur le Connections Plando de A Link to the Past est disponibles sur la page  [Le guide plando](/tutorial/A%20Link%20to%20the%20Past/plando/en#connections).
 * Les options pour les connexions sont `percentage`, `entrance`, `exit` et `direction`. Chacune de ces options prend en charge des sous-poids.
 * `percentage` est la probabilité de cette connexion de 0 à 100 et par défaut à 100.
 * Chaque connexion a une `entrance` et une `exit`. Celles-ci peuvent être déliées comme dans le mélange d'entrées d'insanité d'A Link to the Past.

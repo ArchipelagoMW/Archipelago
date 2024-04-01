@@ -44,7 +44,7 @@ Chaque trigger se compose de quatre parties :
     start_inventory: 
       Rupees (300): 2
   ```
-
+  
 Le format général est le suivant :
 
   ```yaml
@@ -123,9 +123,33 @@ Par exemple :
           difficulty: mystery
   ```
 
-Dans cet exemple (grâce à @Black-Sliver), si l'option `pupdunk` est tirée, alors les valeurs
+Dans cet exemple (Merci à @Black-Sliver), si l'option `pupdunk` est tirée, alors les valeurs
 de difficulté seront à nouveau tirées en utilisant les nouvelles options `normal`, `pupdunk_hard`,
 et `pupdunk_mystery`, et le modificateur d'expérience sera à nouveau tiré avec de nouveaux poids
 pour 150 et 200. Cela permet d'avoir deux autres triggers qui ne seront utilisés que pour les
 nouvelles options `pupdunk_hard` et `pupdunk_mystery`, de sorte qu'ils ne seront déclenchés que
 sur "pupdunk ET hard/mystery".
+
+Par exemple :
+
+```yaml
+Super Metroid:
+  start_location: 
+    landing_site: 50
+    aqueduct: 50
+  start_hints:
+    - Morph Ball
+triggers:
+  - option_category: Super Metroid
+    option_name: start_location
+    option_result: aqueduct
+    options:
+      Super Metroid:
+        +start_hints:
+          - Gravity Suit
+```
+Dans cet exemple, si l'option `start_location` est `landing_site`, seul un indice de départ pour Morph Ball sera créé.
+Si `aqueduct` est obtenu, un indice de départ pour Gravity Suit sera également créé en même temps que l'indice pour Morph Ball.
+
+Notez que pour les listes, les éléments peuvent uniquement être ajoutés, et non supprimés ou remplacés. 
+Pour les dicts, la définition d'une valeur pour une clé présente remplacera cette valeur dans le dict. 
