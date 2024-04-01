@@ -58,7 +58,7 @@ class MarioLand2World(World):
                               or item_name.endswith("Secret")},
         "Bells": {item_name for item_name in items if "Bell" in item_name},
         "Golden Coins": {"Mario Coin", "Macro Coin", "Space Coin", "Tree Coin", "Turtle Coin", "Pumpkin Coin"},
-        "Coins": {"1 Coin", *{f"{i} Coins" for i in range(2, 410)}},
+        "Coins": {"1 Coin", *{f"{i} Coins" for i in range(2, 169)}},
         "Powerups": {"Mushroom", "Fire Flower", "Carrot"},
         "Difficulties": {"Easy Mode", "Normal Mode"}
     }
