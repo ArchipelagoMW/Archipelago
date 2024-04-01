@@ -127,7 +127,7 @@ class StardewValleyWorld(World):
         pass
 
     def setup_player_events(self):
-        # Don't worry, the canon events always happenn
+        # Don't worry, the canon events always happen
         pass
 
     def setup_victory(self):
