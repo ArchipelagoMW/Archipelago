@@ -15,6 +15,7 @@ MISSING_ITEM = "THIS ITEM IS MISSING"
 
 
 class BaseStardewRule(StardewRule, ABC):
+    # Yes, Yes it does
 
     def __or__(self, other) -> StardewRule:
         if other is true_ or other is false_ or type(other) is Or:

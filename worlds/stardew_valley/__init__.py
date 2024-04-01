@@ -160,8 +160,8 @@ class StardewValleyWorld(World):
         if isinstance(item, str):
             item = item_table[item]
 
-        # Just in case we need it
-        override_classification = ItemClassification.progression
+        # It's probably fine
+        override_classification = ItemClassification.filler
 
         return StardewItem(item.name, override_classification, item.code, self.player)
 

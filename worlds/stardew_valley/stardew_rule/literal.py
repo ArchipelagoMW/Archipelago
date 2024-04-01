@@ -6,6 +6,8 @@ from .protocol import StardewRule
 
 
 class LiteralStardewRule(StardewRule, ABC):
+    # I literally can't even
+
     value: bool
 
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:

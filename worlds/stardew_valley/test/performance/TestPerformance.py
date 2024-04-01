@@ -166,7 +166,6 @@ class TestDefaultOptions(SVPerformanceTestCase):
         multiworld_options = [self.options] * number_players
         self.performance_test_multiworld(multiworld_options)
 
-    @unittest.skip
     def test_10_player(self):
         if self.skip_performance_tests:
             return
@@ -235,7 +234,6 @@ class TestAllsanityWithoutMods(SVPerformanceTestCase):
         multiworld_options = [self.options] * number_players
         self.performance_test_multiworld(multiworld_options)
 
-    @unittest.skip
     def test_5_player(self):
         if self.skip_performance_tests:
             return
@@ -244,7 +242,6 @@ class TestAllsanityWithoutMods(SVPerformanceTestCase):
         multiworld_options = [self.options] * number_players
         self.performance_test_multiworld(multiworld_options)
 
-    @unittest.skip
     def test_10_player(self):
         if self.skip_performance_tests:
             return
@@ -272,5 +269,21 @@ class TestAllsanityWithMods(SVPerformanceTestCase):
             return
 
         number_players = 2
+        multiworld_options = [self.options] * number_players
+        self.performance_test_multiworld(multiworld_options)
+
+    def test_5_player(self):
+        if self.skip_performance_tests:
+            return
+
+        number_players = 5
+        multiworld_options = [self.options] * number_players
+        self.performance_test_multiworld(multiworld_options)
+
+    def test_10_player(self):
+        if self.skip_performance_tests:
+            return
+
+        number_players = 10
         multiworld_options = [self.options] * number_players
         self.performance_test_multiworld(multiworld_options)

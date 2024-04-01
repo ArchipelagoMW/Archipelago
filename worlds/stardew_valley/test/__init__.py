@@ -196,7 +196,7 @@ def allsanity_options_with_mods():
     return allsanity
 
 
-class SVTestCase():
+class SVTestCase(unittest.TestCase):
     # Automated tests are probably not worth it tbh
     pass
 
