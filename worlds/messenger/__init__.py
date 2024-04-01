@@ -1,4 +1,5 @@
 import logging
+from datetime import date
 from typing import Any, ClassVar, Dict, List, Optional, TextIO
 
 from BaseClasses import CollectionState, Entrance, Item, ItemClassification, MultiWorld, Tutorial
@@ -9,7 +10,8 @@ from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components
 from .client_setup import launch_game
 from .connections import CONNECTIONS, RANDOMIZED_CONNECTIONS, TRANSITIONS
-from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS, PROG_ITEMS, USEFUL_ITEMS
+from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS, PROG_ITEMS, TRAPS, \
+    USEFUL_ITEMS
 from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded, ShuffleTransitions
 from .portals import PORTALS, add_closed_portal_reqs, disconnect_portals, shuffle_portals, validate_portals
 from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
@@ -110,7 +112,7 @@ class MessengerWorld(World):
         },
     }
 
-    required_client_version = (0, 4, 3)
+    required_client_version = (0, 4, 4)
 
     web = MessengerWeb()
 
@@ -127,6 +129,7 @@ class MessengerWorld(World):
     portal_mapping: List[int]
     transitions: List[Entrance]
     reachable_locs: int = 0
+    filler: Dict[str, int]
 
     def generate_early(self) -> None:
         if self.options.goal == Goal.option_power_seal_hunt:
@@ -146,14 +149,19 @@ class MessengerWorld(World):
         self.starting_portals = [f"{portal} Portal"
                                  for portal in starting_portals[:3] +
                                  self.random.sample(starting_portals[3:], k=self.options.available_portals - 3)]
+
         # super complicated method for adding searing crags to starting portals if it wasn't chosen
-        # need to add a check for transition shuffle when that gets added back in
+        # TODO add a check for transition shuffle when that gets added back in
         if not self.options.shuffle_portals and "Searing Crags Portal" not in self.starting_portals:
             self.starting_portals.append("Searing Crags Portal")
             if len(self.starting_portals) > 4:
                 portals_to_strip = [portal for portal in ["Riviere Turquoise Portal", "Sunken Shrine Portal"]
                                     if portal in self.starting_portals]
                 self.starting_portals.remove(self.random.choice(portals_to_strip))
+
+        self.filler = FILLER.copy()
+        if (not hasattr(self.options, "traps") and date.today() < date(2024, 4, 2)) or self.options.traps:
+            self.filler.update(TRAPS)
 
         self.plando_portals = []
         self.portal_mapping = []
@@ -182,12 +190,13 @@ class MessengerWorld(World):
     def create_items(self) -> None:
         # create items that are always in the item pool
         main_movement_items = ["Rope Dart", "Wingsuit"]
+        precollected_names = [item.name for item in self.multiworld.precollected_items[self.player]]
         itempool: List[MessengerItem] = [
             self.create_item(item)
             for item in self.item_name_to_id
-            if "Time Shard" not in item and item not in {
+            if item not in {
                 "Power Seal", *NOTES, *FIGURINES, *main_movement_items,
-                *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]},
+                *precollected_names, *FILLER, *TRAPS,
             }
         ]
 
@@ -199,7 +208,7 @@ class MessengerWorld(World):
         if self.options.goal == Goal.option_open_music_box:
             # make a list of all notes except those in the player's defined starting inventory, and adjust the
             # amount we need to put in the itempool and precollect based on that
-            notes = [note for note in NOTES if note not in self.multiworld.precollected_items[self.player]]
+            notes = [note for note in NOTES if note not in precollected_names]
             self.random.shuffle(notes)
             precollected_notes_amount = NotesNeeded.range_end - \
                                         self.options.notes_needed - \
@@ -228,8 +237,8 @@ class MessengerWorld(World):
         remaining_fill = len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool)
         if remaining_fill < 10:
             self._filler_items = self.random.choices(
-                list(FILLER)[2:],
-                weights=list(FILLER.values())[2:],
+                list(self.filler)[2:],
+                weights=list(self.filler.values())[2:],
                 k=remaining_fill
             )
         filler = [self.create_filler() for _ in range(remaining_fill)]
@@ -300,8 +309,8 @@ class MessengerWorld(World):
     def get_filler_item_name(self) -> str:
         if not getattr(self, "_filler_items", None):
             self._filler_items = [name for name in self.random.choices(
-                list(FILLER),
-                weights=list(FILLER.values()),
+                list(self.filler),
+                weights=list(self.filler.values()),
                 k=20
             )]
         return self._filler_items.pop(0)
@@ -335,6 +344,9 @@ class MessengerWorld(World):
 
         if name in {*USEFUL_ITEMS, *USEFUL_SHOP_ITEMS}:
             return ItemClassification.useful
+        
+        if name in TRAPS:
+            return ItemClassification.trap
 
         return ItemClassification.filler
 
