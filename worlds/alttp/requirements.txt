@@ -1,2 +1,0 @@
-maseya-z3pr>=1.0.0rc1
-xxtea>=3.0.0
