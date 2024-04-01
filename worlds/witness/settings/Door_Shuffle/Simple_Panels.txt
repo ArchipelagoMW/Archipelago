@@ -1,6 +1,6 @@
 Items:
 Symmetry Island Panels
-Tutorial Outpost Panels
+Outside Tutorial Outpost Panels
 Desert Panels
 Quarry Outside Panels
 Quarry Stoneworks Panels
@@ -10,7 +10,7 @@ Monastery Panels
 Town Church & RGB House Panels
 Town Maze Panels
 Windmill & Theater Panels
-Town Cargo Box Entry (Panel)
+Town Dockside House Panels
 Treehouse Panels
 Bunker Panels
 Swamp Panels
