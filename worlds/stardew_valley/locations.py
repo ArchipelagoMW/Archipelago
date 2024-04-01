@@ -5,7 +5,6 @@ from random import Random
 from typing import Optional, Dict, Protocol, List, FrozenSet, Iterable
 
 from . import data
-from .bundles.bundle_room import BundleRoom
 from .data.fish_data import special_fish, get_fish_for_mods
 from .data.museum_data import all_museum_items
 from .data.villagers_data import get_villagers_for_mods
@@ -337,13 +336,9 @@ def extend_situational_quest_locations(randomized_locations: List[LocationData],
             randomized_locations.append(location_table[ModQuest.CorruptedCropsTask])
 
 
-def extend_bundle_locations(randomized_locations: List[LocationData], bundle_rooms: List[BundleRoom]):
-    for room in bundle_rooms:
-        room_location = f"Complete {room.name}"
-        if room_location in location_table:
-            randomized_locations.append(location_table[room_location])
-        for bundle in room.bundles:
-            randomized_locations.append(location_table[bundle.name])
+def extend_bundle_locations(randomized_locations: List[LocationData]):
+    # They're in the Community center
+    pass
 
 
 def extend_backpack_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
@@ -445,13 +440,12 @@ def extend_craftsanity_locations(randomized_locations: List[LocationData], optio
 
 
 def create_locations(location_collector: StardewLocationCollector,
-                     bundle_rooms: List[BundleRoom],
                      options: StardewValleyOptions,
                      random: Random):
     randomized_locations = []
 
     extend_mandatory_locations(randomized_locations, options)
-    extend_bundle_locations(randomized_locations, bundle_rooms)
+    extend_bundle_locations(randomized_locations)
     extend_backpack_locations(randomized_locations, options)
 
     if options.tool_progression & ToolProgression.option_progressive:

@@ -5,8 +5,6 @@ from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassifi
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from . import rules
-from .bundles.bundle_room import BundleRoom
-from .bundles.bundles import get_all_bundles
 from .early_items import setup_early_items
 from .items import item_table, create_items, ItemData, Group, items_by_group, get_all_filler_items, remove_limited_amount_packs
 from .locations import location_table, create_locations, LocationData, locations_by_tag
@@ -79,7 +77,6 @@ class StardewValleyWorld(World):
     options: StardewValleyOptions
 
     web = StardewWebWorld()
-    modified_bundles: List[BundleRoom]
     randomized_entrances: Dict[str, str]
 
     # all_progression_items: Dict[str, int] # If you need to debug total_progression_items, uncommenting this will help tremendously
@@ -102,34 +99,22 @@ class StardewValleyWorld(World):
 
         world_regions, world_entrances, self.randomized_entrances = create_regions(create_region, self.random, self.options)
 
-        self.modified_bundles = get_all_bundles(self.random,
-                                                self.options)
-
         def add_location(name: str, code: Optional[int], region: str):
             region = world_regions[region]
             location = StardewLocation(self.player, name, code, region)
             region.locations.append(location)
 
-        create_locations(add_location, self.modified_bundles, self.options, self.random)
+        create_locations(add_location, self.options, self.random)
         self.multiworld.regions.extend(world_regions.values())
 
     def create_items(self):
         self.precollect_starting_season()
-        items_to_exclude = [excluded_items
-                            for excluded_items in self.multiworld.precollected_items[self.player]
-                            if not item_table[excluded_items.name].has_any_group(Group.RESOURCE_PACK,
-                                                                                 Group.FRIENDSHIP_PACK)]
-
-        if self.options.season_randomization == SeasonRandomization.option_disabled:
-            items_to_exclude = [item for item in items_to_exclude
-                                if item_table[item.name] not in items_by_group[Group.SEASON]]
 
         locations_count = len([location
                                for location in self.multiworld.get_locations(self.player)
                                if not location.event])
 
-        created_items = create_items(self.create_item, self.delete_item, locations_count, items_to_exclude, self.options,
-                                     self.random)
+        created_items = create_items(self.create_item, locations_count, self.options, self.random)
 
         self.multiworld.itempool += created_items
 
@@ -209,14 +194,6 @@ class StardewValleyWorld(World):
         spoiler_handle.write(f"https://www.google.ca/maps")
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        bundles = dict()
-        for room in self.modified_bundles:
-            bundles[room.name] = dict()
-            for bundle in room.bundles:
-                bundles[room.name][bundle.name] = {"number_required": bundle.number_required}
-                for i, item in enumerate(bundle.items):
-                    bundles[room.name][bundle.name][i] = f"{item.item_name}|{item.amount}|{item.quality}"
-
         excluded_options = [BundleRandomization, NumberOfMovementBuffs, NumberOfLuckBuffs]
         excluded_option_names = [option.internal_name for option in excluded_options]
         generic_option_names = [option_name for option_name in PerGameCommonOptions.type_hints]
@@ -226,7 +203,7 @@ class StardewValleyWorld(World):
         slot_data.update({
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
             "randomized_entrances": self.randomized_entrances,
-            "modified_bundles": bundles,
+            "modified_bundles": "Junimos are like dogs, they'll eat what you give them, don't sweat it.",
             "client_version": "5.0.0",
             "Difficulty": "Good Luck"
         })

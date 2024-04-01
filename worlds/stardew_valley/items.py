@@ -167,21 +167,13 @@ def get_too_many_items_error_message(locations_count: int, items_count: int) -> 
     return f"There should be at least as many locations [{locations_count}] as there are mandatory items [{items_count}]"
 
 
-def create_items(item_factory: StardewItemFactory, item_deleter: StardewItemDeleter, locations_count: int, items_to_exclude: List[Item],
+def create_items(item_factory: StardewItemFactory, locations_count: int,
                  options: StardewValleyOptions, random: Random) -> List[Item]:
     items = []
     unique_items = create_unique_items(item_factory, options, random)
 
-    remove_items(item_deleter, items_to_exclude, unique_items)
-
-    remove_items_if_no_room_for_them(item_deleter, unique_items, locations_count, random)
-
     items += unique_items
     logger.debug(f"Created {len(unique_items)} unique items")
-
-    unique_filler_items = create_unique_filler_items(item_factory, options, random, locations_count - len(items))
-    items += unique_filler_items
-    logger.debug(f"Created {len(unique_filler_items)} unique filler items")
 
     resource_pack_items = fill_with_resource_packs_and_traps(item_factory, options, random, items, locations_count)
     items += resource_pack_items
@@ -218,40 +210,35 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
 
     items.extend(item_factory(item) for item in items_by_group[Group.COMMUNITY_REWARD])
     items.append(item_factory(CommunityUpgrade.movie_theater))  # It is a community reward, but we need two of them
-    items.append(item_factory(Wallet.metal_detector))  # Always offer at least one metal detector
+    # Nice Try, Magneto
 
-    create_backpack_items(item_factory, options, items)
-    create_weapons(item_factory, options, items)
+    # Just lift, bro
     items.append(item_factory("Skull Key"))
-    create_elevators(item_factory, options, items)
+    # In case of emergency, use stairs
     create_tools(item_factory, options, items)
     create_skills(item_factory, options, items)
-    create_wizard_buildings(item_factory, options, items)
+    # Use your lunch money
     create_carpenter_buildings(item_factory, options, items)
     items.append(item_factory("Railroad Boulder Removed"))
-    items.append(item_factory(CommunityUpgrade.fruit_bats))
-    items.append(item_factory(CommunityUpgrade.mushroom_boxes))
+    # Demetrius realized this was a very bad time investment
     items.append(item_factory("Beach Bridge"))
-    create_tv_channels(item_factory, options, items)
+    # Just use Netflix
     create_special_quest_rewards(item_factory, options, items)
-    create_stardrops(item_factory, options, items)
+    # Have a redbull instead
     create_museum_items(item_factory, options, items)
     create_arcade_machine_items(item_factory, options, items)
-    create_player_buffs(item_factory, options, items)
+    # No pain no gain
     create_traveling_merchant_items(item_factory, items)
-    items.append(item_factory("Return Scepter"))
+    # Diogee, go home
     create_seasons(item_factory, options, items)
     create_seeds(item_factory, options, items)
-    create_friendsanity_items(item_factory, options, items, random)
+    # Nobody likes you
     create_festival_rewards(item_factory, options, items)
-    create_special_order_board_rewards(item_factory, options, items)
-    create_special_order_qi_rewards(item_factory, options, items)
-    create_walnut_purchase_rewards(item_factory, options, items)
     create_crafting_recipes(item_factory, options, items)
     create_cooking_recipes(item_factory, options, items)
     create_shipsanity_items(item_factory, options, items)
     create_goal_items(item_factory, options, items)
-    items.append(item_factory("Golden Egg"))
+    # Is this show still running?
     create_magic_mod_spells(item_factory, options, items)
     create_deepwoods_pendants(item_factory, options, items)
     create_archaeology_items(item_factory, options, items)
