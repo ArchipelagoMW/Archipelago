@@ -32,7 +32,7 @@ de profiter d'une expérience personnalisée selon ses goûts, et les différent
 
 ### Où puis-je obtenir un fichier de configuration ?
 
-La page [Paramètres du joueur](/games/Links%20Awakening%20DX/player-settings) du site web vous permet de configurer vos paramètres personnels et d'exporter le fichier.
+La page [Paramètres du joueur](/games/Links%20Awakening%20DX/player-option) du site web vous permet de configurer vos paramètres personnels et d'exporter le fichier.
 
 ### Vérification du fichier de configuration
 
@@ -40,7 +40,7 @@ Si vous souhaitez valider votre fichier de configuration pour vous assurer qu'il
 
 ## Génération d'un jeu à un seul joueur
 
-1. Accédez à la page [Paramètres du joueur] (/games/Links%20Awakening%20DX/player-settings), configurez vos paramètres, et cliquez sur le bouton "Generate Game".
+1. Accédez à la page [Paramètres du joueur] (/games/Links%20Awakening%20DX/player-option), configurez vos paramètres, et cliquez sur le bouton "Generate Game".
 2. Une page "Seed Info" s'affichera.
 3. Cliquez sur le lien "Create New Room".
 4. Une page serveur s'affichera, à partir de laquelle vous pourrez télécharger votre fichier patch.5. Double-cliquez sur votre fichier patch, et Links Awakening DX se lancera automatiquement, et créera votre ROM à partir du fichier patch.
