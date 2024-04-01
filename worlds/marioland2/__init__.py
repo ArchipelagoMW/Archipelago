@@ -140,20 +140,21 @@ class MarioLand2World(World):
         wario.place_locked_item(MarioLand2Item("Wario Defeated", ItemClassification.progression, None, self.player))
 
         if self.options.coinsanity:
+            coinsanity_checks = self.options.coinsanity_checks.value
             self.num_coin_locations = [[region, 1] for region in created_regions]
             self.max_coin_locations = {region: len(coins_coords[region]) for region in created_regions}
             if self.options.accessibility == "locations":
                 for level in self.max_coin_locations:
                     if level in auto_scroll_max and level_name_to_id[level] in self.auto_scroll_levels:
-                        self.max_coin_locations[level] = min(self.max_coin_locations[level], auto_scroll_max[level])
-            for i in range(self.options.coinsanity_checks - 31):
+                        self.max_coin_locations[level] = min(auto_scroll_max[level], self.max_coin_locations[level])
+            coinsanity_checks = min(sum(self.max_coin_locations.values()), coinsanity_checks)
+            for i in range(coinsanity_checks - 31):
                 self.num_coin_locations.sort(key=lambda region: self.max_coin_locations[region[0]] / region[1])
                 self.num_coin_locations[-1][1] += 1
             coin_locations = []
             for level, coins in self.num_coin_locations:
-                coin_locations += [f"{level} - " + str(int(self.max_coin_locations[level] / coins * i))
-                                   + f" Coin{'s' if int(self.max_coin_locations[level] / coins * i) > 1 else ''}"
-                                   for i in range(1, coins + 1)]
+                coin_thresholds = self.random.sample(range(1, self.max_coin_locations[level] + 1), coins)
+                coin_locations += [f"{level} - {i} Coin{'s' if i > 1 else ''}" for i in coin_thresholds]
             for location_name in coin_locations:
                 region = self.multiworld.get_region(location_name.split(" -")[0], self.player)
                 region.locations.append(MarioLand2Location(self.player, location_name,
