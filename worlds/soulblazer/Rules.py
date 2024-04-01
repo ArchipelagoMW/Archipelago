@@ -93,10 +93,10 @@ location_dependencies: dict[str, list[str]] = {
     NPCRewardName.TILE_IN_CHILDS_SECRET_CAVE: [NPCName.BOY_CAVE, ItemName.APASS],
     NPCRewardName.RECOVERY_SWORD_CRYSTAL: [NPCName.IVY_RECOVERY_SWORD, NPCName.BOY_CAVE, ItemName.APASS],
     NPCRewardName.VILLAGE_CHIEF: [NPCName.VILLAGE_CHIEF, NPCName.OLD_WOMAN],
-    #NPCRewardName.MAGICIAN: [],  # TODO: delete
+    # NPCRewardName.MAGICIAN: [],  # TODO: delete
     # TODO: put this and two chests into region and delete.
-    #NPCRewardName.GRASS_VALLEY_SECRET_ROOM_CRYSTAL: [NPCName.IVY_CHEST_ROOM],
-    #NPCRewardName.UNDERGROUND_CASTLE_CRYSTAL: [],  # TODO: delete
+    # NPCRewardName.GRASS_VALLEY_SECRET_ROOM_CRYSTAL: [NPCName.IVY_CHEST_ROOM],
+    # NPCRewardName.UNDERGROUND_CASTLE_CRYSTAL: [],  # TODO: delete
     # Act 2 - Greenwood
     NPCRewardName.REDHOT_MIRROR_BIRD: [NPCName.BIRD_RED_HOT_MIRROR],
     NPCRewardName.MAGIC_BELL_CRYSTAL: [*emblems_table.keys(), NPCName.DEER_MAGIC_BELL, NPCName.CROCODILE3],
@@ -136,12 +136,18 @@ location_dependencies: dict[str, list[str]] = {
     ChestName.DUREAN_CRITICAL_SWORD: [ItemName.MERMAIDSTEARS],
     # Act 4 - Mountain of Souls
     NPCRewardName.EMBLEM_E_SNAIL: [NPCName.SNAIL_EMBLEM_E],
-    NPCRewardName.MOUNTAIN_KING: [],  
+    NPCRewardName.MOUNTAIN_KING: [
+        NPCName.DANCING_GRANDMA,
+        NPCName.DANCING_GRANDMA2,
+        ItemName.REDHOTBALL,
+        ItemName.REDHOTMIRROR,
+        ItemName.REDHOTSTICK,
+    ],
     NPCRewardName.MUSHROOM_SHOES_BOY: [NPCName.BOY_MUSHROOM_SHOES],
-    NPCRewardName.NOME: [], 
+    NPCRewardName.NOME: [],
     NPCRewardName.EMBLEM_E_SNAIL: [NPCName.SNAIL_EMBLEM_E],
-     # Also includes path from lune to sleeping mushroom
-    NPCRewardName.EMBLEM_F_TILE: [NPCName.MUSHROOM_EMBLEM_F, NPCName.GRANDPA5, NPCName.MUSHROOM2, ItemName.DREAMROD], 
+    # Also includes path from lune to sleeping mushroom
+    NPCRewardName.EMBLEM_F_TILE: [NPCName.MUSHROOM_EMBLEM_F, NPCName.GRANDPA5, NPCName.MUSHROOM2, ItemName.DREAMROD],
     NPCRewardName.MOUNTAIN_OF_SOULS_CRYSTAL: [],
     NPCRewardName.LUNE_CRYSTAL: [],
     # Notes:
@@ -162,23 +168,28 @@ location_dependencies: dict[str, list[str]] = {
     # Grandpa 5: FF: unlocks prison (Locks Nome, mushroom emblem f) grandpa5-mush2
     # grandpa lune: FE: just lune
     # mountain king: 103: needs a lot of npcs to reach
+    NPCRewardName.EMBLEM_G_UNDER_CHEST_OF_DRAWERS: [NPCName.CHEST_OF_DRAWERS_MYSTIC_ARMOR, NPCName.GREAT_DOOR, ItemName.DOORKEY],
+    NPCRewardName.CHEST_OF_DRAWERS_MYSTIC_ARMOR: [NPCName.CHEST_OF_DRAWERS_MYSTIC_ARMOR, NPCName.GREAT_DOOR, ItemName.DOORKEY],
+    NPCRewardName.HERB_PLANT_IN_LEOS_LAB: [NPCName.PLANT_HERB, NPCName.MOUSE, NPCName.CAT, NPCName.CAT2, ItemName.ACTINIDIALEAVES],
+    NPCRewardName.SPARK_BOMB_MOUSE: [NPCName.MOUSE_SPARK_BOMB, NPCName.MOUSE, NPCName.CAT, NPCName.CAT2, ItemName.ACTINIDIALEAVES],
+    NPCRewardName.LEOS_CAT_DOOR_KEY: [NPCName.CAT_DOOR_KEY, ItemName.DREAMROD],
+    NPCRewardName.ACTINIDIA_PLANT: [NPCName.PLANT_ACTINIDIA_LEAVES],
+    NPCRewardName.CHEST_OF_DRAWERS_HERB: [NPCName.CHEST_OF_DRAWERS2],
+    NPCRewardName.MARIE: [NPCName.MARIE],
+    
+    # Potentially optional icearmor requirement.
+    NPCRewardName.POWER_PLANT_CRYSTAL: [ItemName.ICEARMOR],
+    LairName.DOLL: [ItemName.ICEARMOR],
+    LairName.MARIE: [ItemName.ICEARMOR],
 
     # TODO: Delete these once they are no longer useful.
-    #LairID.NOME: [LairID.GRANDPA5],
-    #LairID.BOY2: [LairID.GRANDPA5],
-    #LairID.MUSHROOM_EMBLEM_F: [LairID.GRANDPA5],
-    #LairID.GRANDMA: [LairID.GRANDPA2],
-    #LairID.GIRL2: [LairID.BOY],
-    #LairID.SNAIL: [LairID.BOY_MUSHROOM_SHOES],
-    #LairID.SNAIL2: [LairID.GRANDPA4],
-
-    #LairID.SOLDIER6: [LairID.SINGER_CONCERT_HALL],
-    #LairID.SOLDIER_PLATINUM_CARD: [LairID.SINGER_CONCERT_HALL],
-    #LairID.MAID2: [LairID.SINGER_CONCERT_HALL],
-    #LairID.SOLDIER7: [LairID.MAID],
-    #LairID.SOLDIER8: [LairID.SOLDIER_SOUL_OF_REALITY],
-    #LairID.SOLDIER10: [LairID.MAID_HERB],
-    #LairID.KING_MAGRIDD: [LairID.SOLDIER_CASTLE],
+    # LairID.SOLDIER6: [LairID.SINGER_CONCERT_HALL],
+    # LairID.SOLDIER_PLATINUM_CARD: [LairID.SINGER_CONCERT_HALL],
+    # LairID.MAID2: [LairID.SINGER_CONCERT_HALL],
+    # LairID.SOLDIER7: [LairID.MAID],
+    # LairID.SOLDIER8: [LairID.SOLDIER_SOUL_OF_REALITY],
+    # LairID.SOLDIER10: [LairID.MAID_HERB],
+    # LairID.KING_MAGRIDD: [LairID.SOLDIER_CASTLE],
 }
 
 
@@ -200,4 +211,3 @@ def set_rules(world: "SoulBlazerWorld") -> None:
     # TODO: Replace "Test" with Deathtoll's Palace Region name?
     world.multiworld.get_region(RegionName.DEATHTOLL, world.player).locations += world.create_victory_event()
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
-

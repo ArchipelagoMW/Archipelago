@@ -324,7 +324,7 @@ npc_release_table = {
     NPCName.MERMAID8                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, LairID.MERMAID8                     , ItemClassification.filler),
     NPCName.DOLPHIN_PEARL                 : SoulBlazerItemData(ItemID.LAIR_RELEASE, LairID.DOLPHIN_PEARL                , ItemClassification.progression),
     NPCName.MERMAID9                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, LairID.MERMAID9                     , ItemClassification.filler),
-    NPCName.GRANDPA                       : SoulBlazerItemData(ItemID.LAIR_RELEASE, LairID.GRANDPA                      , ItemClassification.filler),
+    NPCName.GRANDPA                       : SoulBlazerItemData(ItemID.LAIR_RELEASE, LairID.GRANDPA                      , ItemClassification.progression),
     NPCName.GIRL                          : SoulBlazerItemData(ItemID.LAIR_RELEASE, LairID.GIRL                         , ItemClassification.filler),
     NPCName.MUSHROOM                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, LairID.MUSHROOM                     , ItemClassification.filler),
     NPCName.BOY                           : SoulBlazerItemData(ItemID.LAIR_RELEASE, LairID.BOY                          , ItemClassification.progression),

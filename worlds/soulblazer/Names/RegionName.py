@@ -39,7 +39,18 @@ LAYNOLE = "Act 4 - Icehill and Laynole 1"
 LUNE = "Act 4 - Laynole 2 and Lune"
 
 # Act 5 Regions
-LEOS_LAB_START = "Act 5 - Leo's Lab Start"
+LEOS_LAB_START = "Act 5 - Leo's Lab Entrance and Basement 1"
+LEOS_LAB_MAIN = "Act 5 - Leo's Lab Main Floor"
+LEOS_LAB_2ND_FLOOR = "Act 5 - Leo's Lab Second Floor"
+LEOS_LAB_ATTIC = "Act 5 - Leo's Lab Attic"
+LEOS_LAB_BASEMENT_1_METAL = "Act 5 - Leo's Lab Basement 1 Metal-locked"
+LEOS_LAB_BASEMENT_2 = "Act 5 - Leo's Lab Basement 2"
+LEOS_LAB_MODEL_TOWN_1 = "Act 5 - Leo's Lab Model Town 1"
+LEOS_LAB_MODEL_TOWN_2 = "Act 5 - Leo's Lab Model Town 2"
+LEOS_LAB_POWER_PLANT = "Act 5 - Leo's Lab Power Plant"
+
+# Act 6 Regions
+MAGRIDD_CASTLE_TOWN = "Act 6 - Magridd Castle Town"
 
 # Act 7 Regions
 DEATHTOLL = "Act 7 - Deathtoll"

@@ -136,6 +136,7 @@ locations_for_region: dict[str, list[str]] = {
         NPCRewardName.LOST_MARSH_CRYSTAL,
         ChestName.LIGHT_SHRINE,
     ],
+    # Act 3 Regions
     RegionName.SEABED_SANCTUARY_HUB_SOUTHERTA: [
         LairName.DOLPHIN2,
         LairName.MERMAID4,
@@ -213,6 +214,7 @@ locations_for_region: dict[str, list[str]] = {
         ChestName.SEABED_SECRET_BL,
         ChestName.SEABED_SECRET_TR,
     ],
+    # Act 4 Regions
     RegionName.MOUNTAIN_HUB_NORTH_SLOPE: [
         LairName.GIRL,
         LairName.GRANDPA,
@@ -264,6 +266,77 @@ locations_for_region: dict[str, list[str]] = {
         ChestName.LAYNOLE_HERB,
         ChestName.LAYNOLE_ROTATOR,
     ],
+    # Act 5 Regions
+    RegionName.LEOS_LAB_START: [
+        LairName.PLANT,
+        LairName.CAT,
+        LairName.GREAT_DOOR_ZANTETSU_SWORD,
+    ],
+    RegionName.LEOS_LAB_MAIN: [
+        NPCRewardName.CHEST_OF_DRAWERS_MYSTIC_ARMOR,
+        NPCRewardName.EMBLEM_G_UNDER_CHEST_OF_DRAWERS,
+        NPCRewardName.SPARK_BOMB_MOUSE,
+        NPCRewardName.HERB_PLANT_IN_LEOS_LAB,
+        ChestName.LEOS_LAB_ZANTETSU,
+    ],
+    RegionName.LEOS_LAB_2ND_FLOOR: [
+        NPCRewardName.LEOS_CAT_DOOR_KEY,
+        NPCRewardName.ACTINIDIA_PLANT,
+    ],
+    RegionName.LEOS_LAB_ATTIC: [
+        NPCRewardName.MARIE,
+        NPCRewardName.CHEST_OF_DRAWERS_HERB,
+    ],
+    RegionName.LEOS_LAB_BASEMENT_1_METAL: [
+        LairName.PLANT_HERB,
+        LairName.CAT2,
+        LairName.CAT3,
+        LairName.GREAT_DOOR,
+        LairName.CHEST_OF_DRAWERS_MYSTIC_ARMOR
+    ],
+    RegionName.LEOS_LAB_BASEMENT_2: [
+        LairName.CAT_DOOR_KEY,
+        LairName.STEPS_UPSTAIRS,
+        LairName.MOUSE,
+        LairName.GREAT_DOOR_MODEL_TOWNS,
+        LairName.MODEL_TOWN1,
+        NPCRewardName.LEOS_LAB_BASEMENT_CRYSTAL,
+    ],
+    RegionName.LEOS_LAB_MODEL_TOWN_1: [
+        LairName.CHEST_OF_DRAWERS,
+        LairName.PLANT2,
+        LairName.MOUSE2,
+        LairName.MOUSE3, # magic required
+        LairName.MOUSE4, # Magic required
+        LairName.MOUSE_SPARK_BOMB, # Magic required
+        LairName.GREAT_DOOR_SOUL_OF_DETECTION,
+        LairName.MODEL_TOWN2, # Magic required
+        LairName.STEPS_MARIE, # magic required
+        NPCRewardName.MODEL_TOWN_1_CRYSTAL,
+        ChestName.MODEL_TOWN_1_SE,
+        ChestName.MODEL_TOWN_1_NL,
+        ChestName.MODEL_TOWN_1_NR,
+    ],
+    RegionName.LEOS_LAB_MODEL_TOWN_2: [
+        LairName.CHEST_OF_DRAWERS2,
+        LairName.PLANT_ACTINIDIA_LEAVES,
+        LairName.MOUSE5,
+        LairName.CAT4,
+        LairName.STAIRS_POWER_PLANT,
+        ChestName.MODEL_TOWN_2_TOP,
+        ChestName.MODEL_TOWN_2_BOT,
+    ],
+    # TODO: all locations except chest need ice armor + metal.
+    RegionName.LEOS_LAB_POWER_PLANT: [
+        LairName.DOLL,
+        LairName.MARIE,
+        NPCRewardName.POWER_PLANT_CRYSTAL,
+        ChestName.POWER_PLANT_LIGHT_ARMOR,
+    ],
+    # Act 6 Regions
+    RegionName.MAGRIDD_CASTLE_TOWN: [
+        # TODO: fill
+    ]
 }
 
 
@@ -342,6 +415,7 @@ exits_for_region: dict[str, ExitData] = {
             [NPCName.MERMAID_PEARL, NPCName.DOLPHIN_SECRET_CAVE, ItemName.DREAMROD, ItemName.BIGPEARL],
         ),
     ],
+    # Act 4 Exits
     RegionName.MOUNTAIN_HUB_NORTH_SLOPE: [
         ExitData(RegionName.LUNE, [NPCName.GIRL3, NPCName.GRANDPA4, NPCName.GRANDPA_LUNE, ItemName.LUCKYBLADE]),
         ExitData(RegionName.MOUNTAIN_KING, [NPCName.BOY, NPCName.GRANDPA3, NPCName.MOUNTAIN_KING], [NPCName.BOY_MUSHROOM_SHOES, NPCName.GRANDPA]),
@@ -351,8 +425,27 @@ exits_for_region: dict[str, ExitData] = {
     ],
     RegionName.NOME: [
         ExitData(RegionName.LEOS_LAB_START, [])
-    ]
-    
+    ],
+    # Act 5 Exits
+    RegionName.LEOS_LAB_START: [
+        ExitData(RegionName.LEOS_LAB_BASEMENT_1_METAL, [], [ItemName.ZANTETSUSWORD, ItemName.SOULBLADE]),
+        ExitData(RegionName.LEOS_LAB_MAIN, [NPCName.GREAT_DOOR_ZANTETSU_SWORD]),
+        ExitData(RegionName.LEOS_LAB_2ND_FLOOR, [NPCName.STEPS_UPSTAIRS, NPCName.GREAT_DOOR_MODEL_TOWNS]),
+        ExitData(RegionName.LEOS_LAB_POWER_PLANT, [NPCName.STAIRS_POWER_PLANT]), # Anything else?
+    ],
+    RegionName.LEOS_LAB_BASEMENT_1_METAL: [
+        ExitData(RegionName.LEOS_LAB_BASEMENT_2, [ItemName.ICEARMOR]),
+    ],
+    RegionName.LEOS_LAB_2ND_FLOOR: [
+        ExitData(RegionName.LEOS_LAB_MODEL_TOWN_1, [NPCName.MODEL_TOWN1]),
+        ExitData(RegionName.LEOS_LAB_MODEL_TOWN_2, [NPCName.MODEL_TOWN2]),
+        ExitData(RegionName.LEOS_LAB_ATTIC, [NPCName.STEPS_MARIE]),
+    ],
+    RegionName.LEOS_LAB_ATTIC: [
+        ExitData(RegionName.MAGRIDD_CASTLE_TOWN, [NPCName.MARIE]),
+    ],
+    # Act 6 Exits
+
 }
 
 
