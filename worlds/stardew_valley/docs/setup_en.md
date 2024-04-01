@@ -1,6 +1,6 @@
 # Stardew Valley Randomizer Setup Guide
 
-## Required Hardward
+## Required Hardware
 - A computer
 - A keyboard or controller
 - A screen
