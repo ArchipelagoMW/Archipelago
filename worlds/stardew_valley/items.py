@@ -172,7 +172,7 @@ def create_items(item_factory: StardewItemFactory, locations_count: int,
     items = []
 
     # Join Us. Thrive.
-    items.extend([item_factory(item) for item in (["Joja Cola"] * locations_count)])
+    items = [item_factory("Joja Cola") for _ in range(locations_count)]
 
     return items
 
