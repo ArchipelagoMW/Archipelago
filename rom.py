@@ -243,20 +243,17 @@ def write_multiworld_table(rom: LocalRom,
 
 
 def set_difficulty_level(rom: LocalRom, difficulty: Difficulty):
-    mov_r0 = 0x2000 | difficulty.value     # mov r0, #difficulty
-    cmp_r0 = 0x2800 | difficulty.value     # cmp r0, #difficulty
-
     # SramtoWork_Load()
-    rom.write_halfword(0x8091558, mov_r0)  # Force difficulty (anti-cheese)
+    hardcode_difficulty = 0x2000 | difficulty.value  # mov r0, #difficulty
+    rom.write_halfword(0x8091558, hardcode_difficulty)
+    rom.write_halfword(0x8091590, hardcode_difficulty)
 
-    # ReadySub_Level()
-    rom.write_halfword(0x8091F8E, 0x2001)  # movs r0, r1  ; Allow selecting S-Hard
-    rom.write_halfword(0x8091FCC, 0x46C0)  # nop  ; Force cursor to difficulty
-    rom.write_halfword(0x8091FD2, 0xE007)  # b 0x8091FE4
-    rom.write_halfword(0x8091FE4, cmp_r0)
-
-    # ReadyObj_Win1Set()
-    rom.write_halfword(0x8092268, 0x2001)  # movs r0, #1  ; Display S-Hard
+    # Difficulty graphics tiles
+    for i in range(3):
+        english_addr = 0x8742992 + 2 * i
+        japanese_addr = 0x8742992 + 2 * (3 + i)
+        rom.write_halfword(english_addr, 0x2C0 + 5 * difficulty.value)
+        rom.write_halfword(japanese_addr, 0x2CF + 5 * difficulty.value)
 
 
 # https://github.com/wario-land/Toge-Docs/blob/master/Steaks/music_and_sound_effects.md#sfx-indices
