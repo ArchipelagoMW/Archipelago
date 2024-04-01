@@ -21,7 +21,8 @@
   can only be used with later releases of the world generator, that are not hosted on archipelago.gg yet.
 
 ## Optional Software
-- I highly recommend Notepad++, Winrar and Clippy
+- I highly recommend Notepad, Winrar and Clippy
+
 
 ## Configuring your YAML file
 
