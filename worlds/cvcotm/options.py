@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, Range, Toggle, PerGameCommonOptions, StartInventoryPool
+from Options import Choice, Range, Toggle, PerGameCommonOptions, StartInventoryPool, DefaultOnToggle
 
 
 class IgnoreCleansing(Toggle):
@@ -100,6 +100,12 @@ class RequireAllBosses(Toggle):
     display_name = "Require All Bosses"
 
 
+class EarlyDouble(DefaultOnToggle):
+    """Ensures the Double will be placed somewhere within the Catacombs in your own game, accessible with nothing."""
+    display_name = "Early Double"
+
+
+
 @dataclass
 class CVCotMOptions(PerGameCommonOptions):
     ignore_cleansing: IgnoreCleansing
@@ -118,4 +124,5 @@ class CVCotMOptions(PerGameCommonOptions):
     sub_weapon_shuffle: SubWeaponShuffle
     disable_battle_arena_mp_drain: DisableBattleArenaMPDrain
     require_all_bosses: RequireAllBosses
+    early_double: EarlyDouble
     start_inventory_from_pool: StartInventoryPool

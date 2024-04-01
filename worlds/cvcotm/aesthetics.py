@@ -280,6 +280,8 @@ candles = [
 NUMBER_ENEMIES = 141
 NUMBER_ITEMS = 55
 
+COUNTDOWN_TABLE_ADDR = 0x673400
+
 
 def shuffle_sub_weapons(world: "CVCotMWorld") -> Dict[int, bytes]:
     """Shuffles the sub-weapons amongst themselves."""
@@ -288,26 +290,38 @@ def shuffle_sub_weapons(world: "CVCotMWorld") -> Dict[int, bytes]:
     return dict(zip(rom_sub_weapon_offsets, sub_bytes))
 
 
-def get_countdown_numbers(options: CVCotMOptions, active_locations: Iterable[Location]) -> Dict[int, int]:
+def get_countdown_flags(world: "CVCotMWorld", active_locations: Iterable[Location]) -> Dict[int, bytes]:
     """Figures out which Countdown numbers to increase for each Location after verifying the Item on the Location should
-    increase a number.
+    count towards a number.
 
     The exact number to increase is determined by the Location's "countdown" key in the location_info dict."""
-    countdown_list = [0 for _ in range(15)]
-    for loc in active_locations:
-        if loc.address is not None and (options.countdown == Countdown.option_all_locations or
-                                        (options.countdown == Countdown.option_majors
-                                         and loc.item.advancement)):
 
-            countdown_number = get_location_info(loc.name, "countdown")
-
-            if countdown_number is not None:
-                countdown_list[countdown_number] += 1
-
-    # Convert the Countdown list into a data dict
+    next_pos = COUNTDOWN_TABLE_ADDR + 0x40
+    countdown_flags = [[] for _ in range(16)]
     countdown_dict = {}
-    for i in range(len(countdown_list)):
-        countdown_dict[0xBFD818 + i] = countdown_list[i]
+    ptr_offset = COUNTDOWN_TABLE_ADDR
+
+    # Loop over every Location and add the correct flag values of all Useful and Progression-classified Items to the
+    # array of flags the Countdown will track.
+    for loc in active_locations:
+        if (loc.item.advancement or loc.item.classification == ItemClassification.useful) and loc.address is not None:
+            countdown_index = get_location_info(loc.name, "countdown")
+            # If we're looking at a locally-placed DSS Card, take the card's parameter value for the flag.
+            if (loc.item.player == world.player or (loc.item.player in world.multiworld.groups and world.player in
+                                                    world.multiworld.groups[loc.item.player]['players'])) \
+                    and "Card" in loc.item.name:
+                countdown_flags[countdown_index] += [loc.item.code & 0xFF, 0x80]
+            # Otherwise, just use the Location's address.
+            else:
+                countdown_flags[countdown_index] += [loc.address & 0xFF, 0]
+
+    # Write the Countdown flag arrays and array pointers correctly. Each flag list should end with a 0xFFFF to indicate
+    # the end of an area's list.
+    for area_flags in countdown_flags:
+        countdown_dict[ptr_offset] = int.to_bytes(next_pos | 0x08000000, 4, "little")
+        countdown_dict[next_pos] = bytes(area_flags + [0xFF, 0xFF])
+        ptr_offset += 4
+        next_pos += len(area_flags) + 2
 
     return countdown_dict
 
@@ -412,6 +426,13 @@ def get_start_inventory_data(player: int, options: CVCotMOptions, precollected_i
 
 
 def populate_enemy_drops(world: "CVCotMWorld") -> Dict[int, bytes]:
+    """Randomizes the enemy-dropped items throughout the game within each other. There are three tiers of drops: Easy,
+    Common, and Rare. Easier enemies will only have Easy drops, bosses and candle enemies will be guaranteed to have
+    Rare drops, and everything else can have Easy or Common items in its Common drop slot and any item in its Rare drop
+    slot.
+
+    If Item Drop Randomization is set to Hard, more enemies will be considered "easy" in addition to the ones that
+    already are, and all Rare drops assigned to candles and bosses will be exclusive to them."""
     placed_easy_items = [0] * len(easy_items)
     placed_common_items = [0] * len(common_items)
     forced_rares = [0] * len(rare_items)
@@ -426,29 +447,29 @@ def populate_enemy_drops(world: "CVCotMWorld") -> Dict[int, bytes]:
     # than could be reached normally (e.g.the total number of enemies).
     # Bosses
     for boss_id in bosses:
-        regular_drops[boss_id] = select_drop(world, rare_items, forced_rares, len(rare_items), True)
+        regular_drops[boss_id] = select_drop(world, rare_items, forced_rares, True)
 
     # Candles
     for candle_id in candles:
-        regular_drops[candle_id] = select_drop(world, rare_items, forced_rares, len(rare_items), True)
-        rare_drops[candle_id] = select_drop(world, rare_items, forced_rares, len(rare_items), True)
+        regular_drops[candle_id] = select_drop(world, rare_items, forced_rares, True)
+        rare_drops[candle_id] = select_drop(world, rare_items, forced_rares, True)
 
     # Add the forced rare items onto the main placed rare items list.
     placed_rare_items = ([0] * len(common_items)) + forced_rares
 
     for i in range(NUMBER_ENEMIES):
-        # Give Dracula II Shining Armor occasionally as a joke
+        # Give Dracula II Shining Armor occasionally as a joke.
         if i == 104:
             regular_drops[i] = rare_drops[i] = 11
             regular_drop_chances[i] = rare_drop_chances[i] = 5000
-        # Set bosses' secondary item to none since we already set the primary item earlier
+        # Set bosses' secondary item to none since we already set the primary item earlier.
         elif i in bosses:
-            # Set rare drop to none
+            # Set rare drop to none.
             rare_drops[i] = 0
 
             # Max out rare boss drops (normally, drops are hard capped to 50 % and 25 % respectively regardless of drop
             # rate, but fusecavator's patch AllowAlwaysDrop.ips allows setting the regular item drop chance to 10000 to
-            # force a drop always)
+            # force a drop always).
             regular_drop_chances[i] = 10000
             rare_drop_chances[i] = 0
 
@@ -458,14 +479,14 @@ def populate_enemy_drops(world: "CVCotMWorld") -> Dict[int, bytes]:
         elif (world.options.item_drop_randomization == ItemDropRandomization.option_normal and i in
               easily_farmable_enemies) or (world.options.item_drop_randomization == ItemDropRandomization.option_hard
                                            and i in below_150_hp_enemies):
-            regular_drops[i] = select_drop(world, easy_items, placed_easy_items, len(easy_items), False)
-            rare_drops[i] = select_drop(world, easy_items, placed_easy_items, len(easy_items), False)
+            regular_drops[i] = select_drop(world, easy_items, placed_easy_items)
+            rare_drops[i] = select_drop(world, easy_items, placed_easy_items)
 
             # Level 1 rate between 5-10 % and rare between 3-8%.
             regular_drop_chances[i] = 500 + world.random.randint(0, 500)
             rare_drop_chances[i] = 300 + world.random.randint(0, 500)
 
-        # It is a "Candle" enemy
+        # It is a "Candle" enemy.
         elif i in candles:
             # Set a regular drop chance between 20-30 % and a rare drop chance between 15-20%.
             regular_drop_chances[i] = 2000 + world.random.randint(0, 1000)
@@ -473,10 +494,9 @@ def populate_enemy_drops(world: "CVCotMWorld") -> Dict[int, bytes]:
 
         # Regular enemies
         else:
-            # Select a random regular and rare drop for every enemy from their respective lists
-            regular_drops[i] = select_drop(world, common_items, placed_common_items, len(common_items), False)
-            rare_drops[i] = select_drop(world, all_items, placed_rare_items, len(all_items),
-                                        False)
+            # Select a random regular and rare drop for every enemy from their respective lists.
+            regular_drops[i] = select_drop(world, common_items, placed_common_items)
+            rare_drops[i] = select_drop(world, all_items, placed_rare_items)
 
             # Otherwise, set a regular drop chance between 5-10 % and a rare drop chance between 3-5%.
             regular_drop_chances[i] = 500 + world.random.randint(0, 500)
@@ -494,15 +514,22 @@ def populate_enemy_drops(world: "CVCotMWorld") -> Dict[int, bytes]:
     return drop_data
 
 
-def select_drop(world: "CVCotMWorld", drop_list: List[int], drops_placed: List[int], number_drops: int,
-                exclusive_drop: bool) -> int:
+def select_drop(world: "CVCotMWorld", drop_list: List[int], drops_placed: List[int], exclusive_drop: bool = False) \
+        -> int:
+    """Chooses a drop from a given list of drops based on another given list of how many drops from that list were
+    selected before. In order to ensure an even number of drops are distributed, drops that were selected the least are
+    the ones that will be picked from.
+
+    If Item Drop Randomization is set to Hard, calling this with True as the exclusive_drop param will force the number
+    of the chosen item really high to ensure it will never be picked again."""
+
     number_valid_drops = 0
     eligible_items = [0] * NUMBER_ITEMS
     lowest_number = drops_placed[0]
 
     # Only make eligible drops which we have placed the least
     i = 0
-    while i < number_drops:
+    while i < len(drop_list):
         # A drop with the priority we are expecting is available to add as a candidate
         if drops_placed[i] == lowest_number:
             eligible_items[number_valid_drops] = i
