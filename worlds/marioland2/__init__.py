@@ -65,8 +65,8 @@ class MarioLand2World(World):
 
     location_name_groups = {
         "Bosses": {
-            "Tree Zone 5 - The Big Bird", "Space Zone 2 - Star Stage", "Macro Zone 4 - One Mighty Mouse",
-            "Pumpkin Zone 4 - Witch's Mansion", "Mario Zone 4 - Three Mean Pigs!", "Turtle Zone 3 - Whale Course"
+            "Tree Zone 5 - Boss", "Space Zone 2 - Boss", "Macro Zone 4 - Boss",
+            "Pumpkin Zone 4 - Boss", "Mario Zone 4 - Boss", "Turtle Zone 3 - Boss"
                    },
         "Normal Exits": {location for location in locations if locations[location]["type"] == "level"},
         "Secret Exits": {location for location in locations if locations[location]["type"] == "secret"},
