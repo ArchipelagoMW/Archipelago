@@ -36,6 +36,7 @@ VALID_GAME_STATES = [0x0F, 0x10, 0x2C]
 
 class YoshisIslandSNIClient(SNIClient):
     game = "Yoshi's Island"
+    patch_suffix = ".apyi"
 
     async def deathlink_kill_player(self, ctx: "SNIContext") -> None:
         from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
