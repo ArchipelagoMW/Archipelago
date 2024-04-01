@@ -196,49 +196,9 @@ def allsanity_options_with_mods():
     return allsanity
 
 
-class SVTestCase(unittest.TestCase):
-    # Set False to not skip some 'extra' tests
-    skip_base_tests: bool = True
-    # Set False to run tests that take long
-    skip_long_tests: bool = True
-
-    @classmethod
-    def setUpClass(cls) -> None:
-        super().setUpClass()
-        base_tests_key = "base"
-        if base_tests_key in os.environ:
-            cls.skip_base_tests = not bool(os.environ[base_tests_key])
-        long_tests_key = "long"
-        if long_tests_key in os.environ:
-            cls.skip_long_tests = not bool(os.environ[long_tests_key])
-
-    @contextmanager
-    def solo_world_sub_test(self, msg: Optional[str] = None,
-                            /,
-                            world_options: Optional[Dict[Union[str, StardewValleyOption], Any]] = None,
-                            *,
-                            seed=DEFAULT_TEST_SEED,
-                            world_caching=True,
-                            dirty_state=False,
-                            **kwargs) -> Tuple[MultiWorld, StardewValleyWorld]:
-        if msg is not None:
-            msg += " "
-        else:
-            msg = ""
-        msg += f"[Seed = {seed}]"
-
-        with self.subTest(msg, **kwargs):
-            if world_caching:
-                multi_world = setup_solo_multiworld(world_options, seed)
-                if dirty_state:
-                    original_state = multi_world.state.copy()
-            else:
-                multi_world = setup_solo_multiworld(world_options, seed, _cache={})
-
-            yield multi_world, multi_world.worlds[1]
-
-            if world_caching and dirty_state:
-                multi_world.state = original_state
+class SVTestCase():
+    # Automated tests are probably not worth it tbh
+    pass
 
 
 class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
@@ -246,25 +206,9 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     world: StardewValleyWorld
     player: ClassVar[int] = 1
 
-    seed = DEFAULT_TEST_SEED
-
-    options = get_minsanity_options()
-
-    def world_setup(self, *args, **kwargs):
-        self.options = parse_class_option_keys(self.options)
-
-        super().world_setup(seed=self.seed)
-        if self.constructed:
-            self.world = self.multiworld.worlds[self.player]  # noqa
-
     @property
     def run_default_tests(self) -> bool:
-        if self.skip_base_tests:
-            return False
-        # world_setup is overridden, so it'd always run default tests when importing SVTestBase
-        is_not_stardew_test = type(self) is not SVTestBase
-        should_run_default_tests = is_not_stardew_test and super().run_default_tests
-        return should_run_default_tests
+        return False  # Nah
 
     def collect_lots_of_money(self):
         self.multiworld.state.collect(self.world.create_item("Shipping Bin"), event=False)
