@@ -133,8 +133,8 @@ class SML2Options(PerGameCommonOptions):
     coinsanity: Coinsanity
     coinsanity_checks: CoinsanityChecks
     shuffle_midway_bells: ShuffleMidwayBells
-    difficulty_mode: DifficultyMode
     shuffle_pipe_traversal: ShufflePipeTraversal
+    difficulty_mode: DifficultyMode
     randomize_enemies: RandomizeEnemies
     randomize_platforms: RandomizePlatforms
     auto_scroll_levels: AutoScrollLevels
