@@ -67,7 +67,7 @@ class AutoWorldRegister(type):
 
         # move away from get_required_client_version function
         if "game" in dct:
-            assert dct["game"] == "Clique"
+            assert dct["game"] in {"Archipelago", "Clique"}
             assert "get_required_client_version" not in dct, f"{name}: required_client_version is an attribute now"
         # set minimum required_client_version from bases
         if "required_client_version" in dct and bases:
