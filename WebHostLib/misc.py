@@ -9,6 +9,7 @@ from pony.orm import count, commit, db_session
 from worlds.AutoWorld import AutoWorldRegister
 from . import app, cache
 from .models import Seed, Room, Command, UUID, uuid4
+from Utils import __version__
 
 
 def get_world_theme(game_name: str):
@@ -102,6 +103,12 @@ def faq(lang):
 @cache.cached()
 def terms(lang):
     return render_template("glossary.html", lang=lang)
+
+
+@app.route("/downloads")
+@cache.cached()
+def downloads():
+    return render_template("downloads.html", version=__version__)
 
 
 @app.route('/seed/<suuid:seed>')

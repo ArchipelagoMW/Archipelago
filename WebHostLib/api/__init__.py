@@ -1,11 +1,14 @@
 """API endpoints package."""
+import urllib.request
+from io import BytesIO
 from typing import List, Tuple
 from uuid import UUID
 
-from flask import Blueprint, abort
+from flask import Blueprint, abort, send_file
+from pony.orm import flush
 
 from .. import cache
-from ..models import Room, Seed
+from ..models import ArchipelagoInstaller, Room, Seed
 
 api_endpoints = Blueprint('api', __name__, url_prefix="/api")
 
@@ -54,6 +57,37 @@ def get_datapackage_checksums():
         game: game_data["checksum"] for game, game_data in network_data_package["games"].items()
     }
     return version_package
+
+
+@api_endpoints.route("/downloads/<string:build>")
+def get_download(build: str):
+    download_data = ArchipelagoInstaller.get(id=build)
+    if download_data is None:
+        get_latest_release()
+        download_data = ArchipelagoInstaller.get(id=build)
+    return send_file(BytesIO(download_data.data), as_attachment=True, download_name=download_data.name)
+
+
+def get_latest_release() -> None:
+    """Pulls the latest release from the Archipelago GitHub and saves them to the db."""
+    import requests
+    response = requests.get("https://api.github.com/repos/ArchipelagoMW/Archipelago/releases/latest")
+    response.raise_for_status()
+    data = response.json()
+    for asset in data["assets"]:
+        filename = asset["name"]
+        if "App" in filename:
+            name = "app"
+        elif "tar" in filename:
+            name = "tar"
+        elif "Win7" in filename:
+            name = "windows7"
+        elif "exe" in filename:
+            name = "windows"
+        else:
+            break
+        ArchipelagoInstaller(id=name, name=filename, data=urllib.request.urlopen(asset["browser_download_url"]).read())
+        flush()
 
 
 from . import generate, user  # trigger registration
