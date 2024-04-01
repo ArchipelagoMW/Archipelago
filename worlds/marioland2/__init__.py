@@ -291,7 +291,7 @@ class MarioLand2World(World):
             "Super Star Duration Increase": 6,
         }
 
-        if self.options.coinsanity:
+        if self.options.shuffle_golden_coins:
             for item in self.item_name_groups["Coins"]:
                 item_counts[item] = 1
         else:

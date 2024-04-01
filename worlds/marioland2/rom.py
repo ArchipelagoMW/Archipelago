@@ -184,7 +184,7 @@ def generate_output(self, output_directory: str):
 
     if self.options.auto_scroll_trap:
         data[rom_addresses["Auto_Scroll_Disable"]] = 0xAF
-    if self.options.coinsanity:
+    if self.options.shuffle_golden_coins:
         data[rom_addresses["Coin_Shuffle"]] = 0x40
     if self.options.shuffle_midway_bells:
         data[rom_addresses["Disable_Midway_Bell"]] = 0xC9

@@ -5,7 +5,7 @@ from dataclasses import dataclass
 class GoldenCoins(Toggle):
     """Shuffle the Golden Coins into the item pool.
     You will see a Golden Coin being received when defeating bosses regardless of whether you are actually getting a coin."""
-    display_name = "Coinsanity"
+    display_name = "Shuffle Golden Coins"
     default = 0
 
 
@@ -84,7 +84,7 @@ class EnergyLink(Toggle):
 
 @dataclass
 class SML2Options(PerGameCommonOptions):
-    coinsanity: GoldenCoins
+    shuffle_golden_coins: GoldenCoins
     required_golden_coins: GoldenCoinsRequired
     difficulty_mode: DifficultyMode
     shuffle_midway_bells: ShuffleMidwayBells
