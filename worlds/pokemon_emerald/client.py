@@ -664,8 +664,10 @@ class PokemonEmeraldClient(BizHawkClient):
                 "cmd": "SetNotify",
                 "keys": [f"pokemon_wonder_trades_{ctx.team}"],
             }, {
-                "cmd": "Get",
-                "keys": [f"pokemon_wonder_trades_{ctx.team}"],
+                "cmd": "Set",
+                "key": f"pokemon_wonder_trades_{ctx.team}",
+                "default": {"_lock": 0},
+                "operations": [{"operation": "default", "value": None}]  # value is ignored
             }]))
         elif cmd == "SetReply":
             if args.get("key", "") == f"pokemon_wonder_trades_{ctx.team}":
