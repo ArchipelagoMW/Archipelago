@@ -1,7 +1,12 @@
+# 2.1.0
+
+### Features
+
+- You no longer need a copy of Pokemon Emerald to generate a game, patch files generate much faster.
+
 # 2.0.0
 
 ### Features
-- You no longer need a copy of Pokemon Emerald to generate a game. (You still need a copy to patch and play.)
 - Picking up items for other players will display the actual item name and receiving player in-game instead of
 "ARCHIPELAGO ITEM". (This does have a limit, but you're unlikely to reach it in all but the largest multiworlds.)
 - New goal `legendary_hunt`. Your goal is to catch/defeat some number of legendary encounters. That is, the static
