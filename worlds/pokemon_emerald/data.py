@@ -646,7 +646,7 @@ def _init() -> None:
         ("SPECIES_CHIKORITA", "Chikorita", 152),
         ("SPECIES_BAYLEEF", "Bayleef", 153),
         ("SPECIES_MEGANIUM", "Meganium", 154),
-        ("SPECIES_CYNDAQUIL", "Cindaquil", 155),
+        ("SPECIES_CYNDAQUIL", "Cyndaquil", 155),
         ("SPECIES_QUILAVA", "Quilava", 156),
         ("SPECIES_TYPHLOSION", "Typhlosion", 157),
         ("SPECIES_TOTODILE", "Totodile", 158),

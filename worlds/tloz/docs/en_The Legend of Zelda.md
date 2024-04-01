@@ -1,8 +1,8 @@
 # The Legend of Zelda (NES)
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What does randomization do to this game?
@@ -41,7 +41,6 @@ filler and useful items will cost less, and uncategorized items will be in the m
 - Pressing Select will cycle through your inventory.
 - Shop purchases are tracked within sessions, indicated by the item being elevated from its normal position.
 - What slots from a Take Any Cave have been chosen are similarly tracked.
--
 
 ## Local Unique Commands
 
