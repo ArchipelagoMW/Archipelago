@@ -206,6 +206,8 @@ class KDL3World(World):
             locations = [self.multiworld.get_location(spawn, self.player) for spawn in spawns]
             items = [self.create_item(animal) for animal in animal_pool]
             allstate = self.multiworld.get_all_state(False)
+            self.random.shuffle(locations)
+            self.random.shuffle(items)
             fill_restrictive(self.multiworld, allstate, locations, items, True, True)
         else:
             animal_friends = animal_friend_spawns.copy()
