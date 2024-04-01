@@ -170,45 +170,16 @@ def get_too_many_items_error_message(locations_count: int, items_count: int) -> 
 def create_items(item_factory: StardewItemFactory, locations_count: int,
                  options: StardewValleyOptions, random: Random) -> List[Item]:
     items = []
-    unique_items = create_unique_items(item_factory, options, random)
 
-    items += unique_items
-    logger.debug(f"Created {len(unique_items)} unique items")
-
-    resource_pack_items = fill_with_resource_packs_and_traps(item_factory, options, random, items, locations_count)
-    items += resource_pack_items
-    logger.debug(f"Created {len(resource_pack_items)} resource packs")
+    # Join Us. Thrive.
+    items.extend([item_factory(item) for item in (["Joja Cola"] * locations_count)])
 
     return items
-
-
-def remove_items(item_deleter: StardewItemDeleter, items_to_remove, items):
-    for item in items_to_remove:
-        if item in items:
-            items.remove(item)
-            item_deleter(item)
-
-
-def remove_items_if_no_room_for_them(item_deleter: StardewItemDeleter, unique_items: List[Item], locations_count: int, random: Random):
-    if len(unique_items) <= locations_count:
-        return
-
-    number_of_items_to_remove = len(unique_items) - locations_count
-    removable_items = [item for item in unique_items if item.classification == ItemClassification.filler or item.classification == ItemClassification.trap]
-    if len(removable_items) < number_of_items_to_remove:
-        logger.debug(f"Player has more items than locations, trying to remove {number_of_items_to_remove} random non-progression items")
-        removable_items = [item for item in unique_items if not item.classification & ItemClassification.progression]
-    else:
-        logger.debug(f"Player has more items than locations, trying to remove {number_of_items_to_remove} random filler items")
-    assert len(removable_items) >= number_of_items_to_remove, get_too_many_items_error_message(locations_count, len(unique_items))
-    items_to_remove = random.sample(removable_items, number_of_items_to_remove)
-    remove_items(item_deleter, items_to_remove, unique_items)
-
 
 def create_unique_items(item_factory: StardewItemFactory, options: StardewValleyOptions, random: Random) -> List[Item]:
     items = []
 
-    items.extend(item_factory(item) for item in items_by_group[Group.COMMUNITY_REWARD])
+    # Communities are communist propaganda
     items.append(item_factory(CommunityUpgrade.movie_theater))  # It is a community reward, but we need two of them
     # Nice Try, Magneto
 
@@ -216,7 +187,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     items.append(item_factory("Skull Key"))
     # In case of emergency, use stairs
     create_tools(item_factory, options, items)
-    create_skills(item_factory, options, items)
+    # Skill Issue
     # Use your lunch money
     create_carpenter_buildings(item_factory, options, items)
     items.append(item_factory("Railroad Boulder Removed"))

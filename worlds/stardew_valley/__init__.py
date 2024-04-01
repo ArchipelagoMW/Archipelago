@@ -165,7 +165,8 @@ class StardewValleyWorld(World):
         location = StardewLocation(self.player, location_data.name, None, region)
         location.access_rule = rule
         region.locations.append(location)
-        location.place_locked_item(self.create_item(item))
+        item = item_table[item]
+        location.place_locked_item(StardewItem(item.name, ItemClassification.progression, item.code, self.player))
 
     def set_rules(self):
         set_rules(self)
