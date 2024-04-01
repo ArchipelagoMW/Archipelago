@@ -41,7 +41,7 @@ an experience customized for their taste, and different players in the same mult
 
 ### Where do I get a YAML file?
 
-You can generate a yaml or download a template by visiting the [Adventure Settings Page](/games/Adventure/player-settings)
+You can generate a yaml or download a template by visiting the [Adventure Options Page](/games/Adventure/player-options)
 
 ### What are recommended settings to tweak for beginners to the rando?
 Setting difficulty_switch_a and lowering the dragons' speeds makes the dragons easier to avoid.  Adding Chalice to 

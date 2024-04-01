@@ -48,9 +48,9 @@ class CV64Web(WebWorld):
 
 class CV64World(World):
     """
-    Castlevania for the Nintendo 64 is the first 3D game in the franchise. As either whip-wielding Belmont descendant
-    Reinhardt Schneider or powerful sorceress Carrie Fernandez, brave many terrifying traps and foes as you make your
-    way to Dracula's chamber and stop his rule of terror!
+    Castlevania for the Nintendo 64 is the first 3D game in the Castlevania franchise. As either whip-wielding Belmont
+    descendant Reinhardt Schneider or powerful sorceress Carrie Fernandez, brave many terrifying traps and foes as you
+    make your way to Dracula's chamber and stop his rule of terror!
     """
     game = "Castlevania 64"
     item_name_groups = {
