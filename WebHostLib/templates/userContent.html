@@ -25,6 +25,7 @@
                             <th class="center">Players</th>
                             <th>Created (UTC)</th>
                             <th>Last Activity (UTC)</th>
+                            <th>Mark for deletion</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -35,6 +36,7 @@
                                 <td>{{ room.seed.slots|length }}</td>
                                 <td>{{ room.creation_time.strftime("%Y-%m-%d %H:%M") }}</td>
                                 <td>{{ room.last_activity.strftime("%Y-%m-%d %H:%M") }}</td>
+                                <td><a href="{{ url_for("disown_room", room=room.id) }}">Delete next maintenance.</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -51,6 +53,7 @@
                             <th>Seed</th>
                             <th class="center">Players</th>
                             <th>Created (UTC)</th>
+                            <th>Mark for deletion</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -60,6 +63,7 @@
                                 <td>{% if seed.multidata %}{{ seed.slots|length }}{% else %}1{% endif %}
                                 </td>
                                 <td>{{ seed.creation_time.strftime("%Y-%m-%d %H:%M") }}</td>
+                                <td><a href="{{ url_for("disown_seed", seed=seed.id) }}">Delete next maintenance.</td>
                             </tr>
                         {% endfor %}
                     </tbody>
