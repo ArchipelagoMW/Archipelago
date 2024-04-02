@@ -1,5 +1,5 @@
 from typing import Dict, List, Any
-
+from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
 from .locations import location_table, location_name_groups, location_name_to_id, hexagon_locations
@@ -248,7 +248,11 @@ class TunicWorld(World):
                 try:
                     name, connection = paths[location.parent_region]
                 except:
-                    # if there is a logic bug, probably better to not just make it fail
+                    # logic bug, proceed with warning since it takes a long time to update AP
+                    warning(f"{location.name} is not logically accessible for "
+                            f"{self.multiworld.get_file_safe_player_name(self.player)}. "
+                            "Creating entrance hint Inaccessible. "
+                            "Please report this to the Tunic rando devs.")
                     hint_text = "Inaccessible"
                 else:
                     while connection != ("Menu", None):
