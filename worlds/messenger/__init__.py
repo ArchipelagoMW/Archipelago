@@ -349,6 +349,17 @@ class MessengerWorld(World):
 
         return ItemClassification.filler
 
+    @classmethod
+    def create_group(cls, multiworld: "MultiWorld", new_player_id: int, players: Set[int]) -> World:
+        group = super().create_group(multiworld, new_player_id, players)
+        assert isinstance(group, MessengerWorld)
+        
+        group.filler = FILLER.copy()
+        group.options.traps.value = all(multiworld.worlds[player].options.traps for player in players)
+        if group.options.traps:
+            group.filler.update(TRAPS)
+        return group
+
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         change = super().collect(state, item)
         if change and "Time Shard" in item.name:
