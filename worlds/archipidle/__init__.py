@@ -64,7 +64,7 @@ class ArchipIDLEWorld(World):
             )
         ]
 
-        for i in range(50):
+        for i in range(40):
             item_pool.append(ArchipIDLEItem(
                 item_table[1],
                 ItemClassification.progression,
@@ -72,7 +72,7 @@ class ArchipIDLEWorld(World):
                 self.player
             ))
 
-        for i in range(20):
+        for i in range(40):
             item_pool.append(ArchipIDLEItem(
                 item_table[2],
                 ItemClassification.filler,
@@ -82,7 +82,7 @@ class ArchipIDLEWorld(World):
 
         item_table_copy = list(item_table[3:])
         self.random.shuffle(item_table_copy)
-        for i in range(129):
+        for i in range(119):
             item_pool.append(ArchipIDLEItem(
                 item_table_copy[i],
                 ItemClassification.progression if i < 9 else ItemClassification.filler,
