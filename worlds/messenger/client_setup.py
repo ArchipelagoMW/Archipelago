@@ -4,10 +4,9 @@ import os.path
 import subprocess
 import urllib.request
 from shutil import which
-from tkinter.messagebox import askyesnocancel
 from typing import Any, Optional
 from zipfile import ZipFile
-from Utils import open_file
+from Utils import open_file, askyesnocancel
 
 import requests
 

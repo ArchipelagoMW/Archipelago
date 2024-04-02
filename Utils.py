@@ -732,6 +732,15 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         root.update()
 
 
+def askyesnocancel(title: str, text: str) -> Optional[bool]:
+    from tkinter import Tk, messagebox
+    root = Tk()
+    root.withdraw()
+    ret = messagebox.askyesnocancel(title, text)
+    root.update()
+    return ret
+
+
 def title_sorted(data: typing.Sequence, key=None, ignore: typing.Set = frozenset(("a", "the"))):
     """Sorts a sequence of text ignoring typical articles like "a" or "the" in the beginning."""
     def sorter(element: Union[str, Dict[str, Any]]) -> str:
