@@ -3,11 +3,11 @@ import logging
 import traceback
 
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, logger, server_loop, gui_enabled
-from NetUtils import NetworkItem
+from NetUtils import ClientStatus, NetworkItem
 import Utils
 from worlds.metroidprime.DolphinClient import DolphinException
 from worlds.metroidprime.Locations import METROID_PRIME_LOCATION_BASE, every_location
-from worlds.metroidprime.MetroidPrimeInterface import InventoryItemData, MetroidPrimeInterface
+from worlds.metroidprime.MetroidPrimeInterface import InventoryItemData, MetroidPrimeInterface, MetroidPrimeLevel
 
 
 class MetroidPrimeCommandProcessor(ClientCommandProcessor):
@@ -79,7 +79,8 @@ async def handle_checked_location(ctx: MetroidPrimeContext, current_inventory: d
     unknown_item1 = current_inventory["UnknownItem1"]
     if (unknown_item1.current_amount == 0):
         return
-    checked_location_id = METROID_PRIME_LOCATION_BASE + unknown_item1.current_amount - 1
+    checked_location_id = METROID_PRIME_LOCATION_BASE + \
+        unknown_item1.current_amount - 1
     logger.debug(
         f"Checked location: {checked_location_id} with amount: {unknown_item1.current_amount} ")
     await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [checked_location_id]}])
@@ -150,6 +151,13 @@ async def handle_receive_items(ctx: MetroidPrimeContext, current_items: dict[str
     ctx.game_interface.sync_artifact_layers()
 
 
+async def handle_check_goal_complete(ctx: MetroidPrimeContext):
+    current_level = ctx.game_interface.get_current_level()
+    if current_level == MetroidPrimeLevel.End_of_Game:
+        logger.debug("Sending Goal Complete")
+        await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+
+
 async def _handle_game_ready(ctx: MetroidPrimeContext):
     if ctx.server:
         if not ctx.slot:
@@ -158,6 +166,7 @@ async def _handle_game_ready(ctx: MetroidPrimeContext):
         current_inventory = ctx.game_interface.get_current_inventory()
         await handle_receive_items(ctx, current_inventory)
         await handle_checked_location(ctx, current_inventory)
+        await handle_check_goal_complete(ctx)
 
         if "DeathLink" in ctx.tags:
             logger.debug("DeathLink not implemented")
