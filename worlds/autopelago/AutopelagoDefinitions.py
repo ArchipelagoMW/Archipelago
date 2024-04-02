@@ -14,14 +14,17 @@ class AutopelagoItemDefinitionCls(TypedDict):
     flavor_text: NotRequired[str]
 
 
-AutopelagoItemDefinition = str | AutopelagoItemDefinitionCls
+AutopelagoItemDefinition = str | list[str, list[str]] | AutopelagoItemDefinitionCls
 AutopelagoItemDefinitionsSimple = dict[str, AutopelagoItemDefinition]
-AutopelagoGameSpecificItemGroup = dict[Literal['game_specific'], dict[str, list[str]]]
-AutopelagoNonProgressionGroupItems = list[str | AutopelagoGameSpecificItemGroup]
+AutopelagoGameSpecificItemGroup = dict[Literal['game_specific'], dict[str, list[AutopelagoItemDefinition]]]
+AutopelagoNonProgressionGroupItems = list[AutopelagoItemDefinition | AutopelagoGameSpecificItemGroup]
 AutopelagoNonProgressionItemType = Literal['useful_nonprogression', 'trap', 'filler', 'uncategorized']
 
 def _name_of(item: AutopelagoItemDefinition):
-    return item if isinstance(item, str) else item['name']
+    return \
+        item if isinstance(item, str) else \
+        item[0] if isinstance(item, list) else \
+        item['name']
 
 def _rat_count_of(item: AutopelagoItemDefinition):
     return item['rat_count'] if isinstance(item, dict) and 'rat_count' in item else None
@@ -163,14 +166,27 @@ def _append_nonprogression(k: AutopelagoNonProgressionItemType):
             item_name_to_defined_classification[i] = item_classification
             continue
 
+        if isinstance(i, list):
+            generic_nonprogression_item_table[k].append(i[0])
+            item_name_to_id[i[0]] = next(_item_id_gen)
+            item_name_to_defined_classification[i[0]] = item_classification
+            continue
+
         for g, v in i['game_specific'].items():
             if g not in game_specific_nonprogression_items:
                 game_specific_nonprogression_items[g] = { }
             game_specific_nonprogression_items[g][k] = []
             for it in v:
-                game_specific_nonprogression_items[g][k].append(it)
-                item_name_to_id[it] = next(_item_id_gen)
-                item_name_to_defined_classification[it] = item_classification
+                if isinstance(it, str):
+                    game_specific_nonprogression_items[g][k].append(it)
+                    item_name_to_id[it] = next(_item_id_gen)
+                    item_name_to_defined_classification[it] = item_classification
+                    continue
+
+                if isinstance(it, list):
+                    game_specific_nonprogression_items[g][k].append(it[0])
+                    item_name_to_id[it[0]] = next(_item_id_gen)
+                    item_name_to_defined_classification[it[0]] = item_classification
 
 _append_nonprogression('useful_nonprogression')
 _append_nonprogression('trap')
