@@ -153,10 +153,9 @@ class MessengerWorld(World):
         # TODO add a check for transition shuffle when that gets added back in
         if not self.options.shuffle_portals and "Searing Crags Portal" not in self.starting_portals:
             self.starting_portals.append("Searing Crags Portal")
-            if len(self.starting_portals) > 4:
-                portals_to_strip = [portal for portal in ["Riviere Turquoise Portal", "Sunken Shrine Portal"]
-                                    if portal in self.starting_portals]
-                self.starting_portals.remove(self.random.choice(portals_to_strip))
+            portals_to_strip = [portal for portal in ["Riviere Turquoise Portal", "Sunken Shrine Portal"]
+                                if portal in self.starting_portals]
+            self.starting_portals.remove(self.random.choice(portals_to_strip))
 
         self.filler = FILLER.copy()
         if self.options.traps:
