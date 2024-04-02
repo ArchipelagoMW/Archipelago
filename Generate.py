@@ -429,6 +429,7 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
             raise Exception(f"Error generating option {option_key} in {ret.game}") from e
         else:
             player_option.verify(AutoWorldRegister.world_types[ret.game], ret.name, plando_options)
+            del game_weights[option_key]
     else:
         setattr(ret, option_key, option.from_any(option.default))  # call the from_any here to support default "random"
 
@@ -488,6 +489,10 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
 
     for option_key, option in world_type.options_dataclass.type_hints.items():
         handle_option(ret, game_weights, option_key, option, plando_options)
+    for option_key in game_weights:
+        if option_key in {"triggers", *valid_trigger_names}:
+            continue
+        logging.warning(f"{option_key} not a valid option name for {ret.game} and not present in triggers.")
     if PlandoOptions.items in plando_options:
         ret.plando_items = game_weights.get("plando_items", [])
     if ret.game == "A Link to the Past":
