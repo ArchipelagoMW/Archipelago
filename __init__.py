@@ -62,6 +62,23 @@ class WL4World(World):
                        if data[1] is not None}
     location_name_to_id = location_name_to_id
 
+    item_name_groups = {
+        'Golden Treasure': {
+            'Golden Tree Pot',
+            'Golden Apple',
+            'Golden Fish',
+            'Golden Candle Holder'
+            'Golden Lamp',
+            'Golden Crescent Moon Bed',
+            'Golden Teddy Bear',
+            'Golden Lollipop',
+            'Golden Game Boy Advance',
+            'Golden Robot',
+            'Golden Rocket',
+            'Golden Rocking Horse',
+        },
+    }
+
     web = WL4Web()
 
     def generate_early(self):
