@@ -45,314 +45,314 @@ items:
   # they are in the file that I'm replacing with this, but we really ought to
   # have a way to specify the auras that they grant in this file...
   useful_nonprogression:
-    - 'Refreshing Glass of Lemonade'
-    - 'Bag of Powdered Sugar'
-    - 'Organic Apple Core'
-    - 'An Entire Roast Chicken'
-    - 'Plate of Spaghetti'
-    - 'Freshly Baked Bread'
-    - 'Taco Salad that is Only Tacos'
-    - 'Subscription to the Cheese of the Month Club'
-    - 'Soup with a Hair in it'
-    - 'Can of Spam'
-    - 'Fruit Rollup'
-    - 'Fresh-baked Apple Pie'
-    - 'Dark Blue Ghost'
-    - 'Mundane Pickle'
-    - 'Finest Potion'
-    - 'Extra Crunchy Peanutbutter'
-    - 'Cheesnado'
-    - 'Bowl of Cereal'
-    - 'Cake'
-    - 'Dungeon Bread'
-    - 'Gallon of Diet Soda'
-    - 'Apple wearing Jeans'
-    - 'Macaroni and Cheese'
-    - 'Pint of Ice Cream'
-    - 'Protein Shake'
-    - 'Tray of Lasagna'
-    - 'Best Burgers in Town'
-    - 'Pack of Pickled Peppers'
-    - 'Sword made out of Chocolate'
-    - 'Lovely Bunch of Coconuts'
-    - 'Faux Dalmation-Skin Coat'
-    - 'Bedazzled Cowboy Boots'
-    - 'Fancy Rat-sized Tophat'
-    - 'Tin-Foil Hat'
-    - 'Backwards Cap'
-    - 'Fake Moustache'
-    - 'Pair of 3D Glasses'
-    - 'Comfy Shorts'
-    - 'Jetpack'
-    - 'Plague Doctor''s Mask'
-    - '5th Ace'
-    - 'Get Out of Jail Free Card'
-    - 'Winning Lottery Ticket'
-    - 'Holographic Draw Four Card'
-    - 'Letter from a Secret Admirer'
-    - 'Line-shaped Tetris Block'
-    - 'Inspiring Montage'
+    - ['Refreshing Glass of Lemonade', [well_fed]]
+    - ['Bag of Powdered Sugar', [well_fed, energized, energized, energized]]
+    - ['Organic Apple Core', [well_fed]]
+    - ['An Entire Roast Chicken', [well_fed]]
+    - ['Plate of Spaghetti', [well_fed]]
+    - ['Freshly Baked Bread', [well_fed]]
+    - ['Taco Salad that is Only Tacos', [well_fed]]
+    - ['Subscription to the Cheese of the Month Club', [well_fed, well_fed, well_fed]]
+    - ['Soup with a Hair in it', [well_fed, startled]]
+    - ['Can of Spam', [well_fed]]
+    - ['Fruit Roll-Up', [well_fed]]
+    - ['Fresh-baked Apple Pie', [well_fed]]
+    - ['Dark Blue Ghost', [well_fed, confident]]
+    - ['Mundane Pickle', [well_fed]]
+    - ['Finest Potion', [energized, lucky]]
+    - ['Extra Crunchy Peanut Butter', [well_fed]]
+    - ['Cheesenado', [well_fed, well_fed, well_fed, startled]]
+    - ['Bowl of Cereal', [well_fed]]
+    - ['Cake', [well_fed]]
+    - ['Dungeon Bread', [well_fed]]
+    - ['Gallon of Diet Soda', [well_fed, energized]]
+    - ['Apple wearing Jeans', [well_fed, stylish]]
+    - ['Macaroni and Cheese', [well_fed]]
+    - ['Pint of Ice Cream', [well_fed]]
+    - ['Protein Shake', [well_fed, confident]]
+    - ['Tray of Lasagna', [well_fed]]
+    - ['Best Burgers in Town', [well_fed, well_fed]]
+    - ['Pack of Pickled Peppers', [well_fed]]
+    - ['Sword made out of Chocolate', [well_fed, confident]]
+    - ['Lovely Bunch of Coconuts', [well_fed]]
+    - ['Faux Dalmatian-Skin Coat', [stylish]]
+    - ['Bedazzled Cowboy Boots', [stylish]]
+    - ['Fancy Rat-sized Tophat', [stylish]]
+    - ['Tin-Foil Hat', [stylish, conspiratorial]]
+    - ['Backwards Cap', [stylish, confident]]
+    - ['Fake Moustache', [stylish]]
+    - ['Pair of 3D Glasses', [stylish, smart]]
+    - ['Comfy Shorts', [stylish]]
+    - ['Jetpack', [stylish, energized]]
+    - ['Plague Doctor''s Mask', [stylish, confident]]
+    - ['5th Ace', [lucky]]
+    - ['Get Out of Jail Free Card', [confident]]
+    - ['Winning Lottery Ticket', [lucky, lucky]]
+    - ['Holographic Draw Four Card', [lucky, lucky]]
+    - ['Letter from a Secret Admirer', [lucky]]
+    - ['Line-shaped Tetris Block', [lucky]]
+    - ['Inspiring Montage', [lucky]]
+    - ['Suprisingly Tiny Knife', [confident]]
     - game_specific:
         'Pokemon Red and Blue':
-          - 'Very Common Candy'
-          - 'Icy Blue Feather'
-          - 'Burning Orange Feather'
-          - 'Charged Yellow Feather'
+          - ['Very Common Candy', [well_fed]]
+          - ['Icy Blue Feather', [lucky]]
+          - ['Burning Orange Feather', [lucky]]
+          - ['Charged Yellow Feather', [lucky]]
 
         'Ocarina of Time':
-          - 'Silver Skulltula Token'
-          - 'Pickled Cucco Feet'
+          - ['Silver Skulltula Token', [lucky]]
+          - ['Pickled Cucco Feet', [well_fed]]
 
         'Stardew Valley':
-          - 'Prismatic Chard'
-          - 'Cheese Seeds'
+          - ['Prismatic Chard', [well_fed]]
+          - ['Cheese Seeds', [well_fed]]
 
   trap:
-    - 'Half of a Worm'
-    - 'Extra-welldone Steak'
-    - 'Your Friendly Neighborhood Tapeworm'
-    - 'Honey Roasted Packing Peanuts'
-    - 'Rat Poison'
-    - 'Poisonous Mushroom'
-    - 'Too Much Eggnog'
-    - 'Peanut Boulder and Jelly Sandwich'
-    - 'Forgotten Moldy Fruitbasket'
-    - 'Pie with a Bird Hiding Inside'
-    - 'Expired Health Potion'
-    - 'Gas Station Sushi'
-    - 'Carbon Monoxide'
-    - 'Circus Flea'
-    - 'Game Bug'
-    - 'Too Many Crabs'
-    - 'Ticket for the Off-broadway Musical Rats'
-    - 'Polybius Arcade Cabinet'
-    - 'An Illusion'
-    - 'Cartoonishly Large Bomb'
-    - 'Hungry Hippopotamus'
-    - 'Malfunctioning Boomerang'
-    - 'Song that Never Ends'
-    - 'Bubble Wrap'
-    - 'Box of Fireworks'
-    - 'Cabin Fever'
-    - 'Self-destruct Button'
-    - 'Train with a Scary Face'
-    - 'Greater White Shark'
-    - 'Rude Internet Comment'
-    - 'Extra Premium Currency best value'
-    - 'Distracting Squirrel'
-    - 'Itchy Iron Wool Sweater'
-    - 'Mail-in Rebate for 11 cents'
-    - 'Spicy Magazine'
-    - 'Wooden Splinters'
-    - 'Box Set of a Canceled TV Show'
-    - 'Burning Phone'
-    - 'One-way Ticket to Ohio'
-    - 'Deceased Pet Rock'
-    - 'Cursed Slab'
+    - ['Half of a Worm', [upset_tummy]]
+    - ['Extra-Well-Done Steak', [upset_tummy]]
+    - ['Your Friendly Neighborhood Tapeworm', [upset_tummy, upset_tummy, upset_tummy]]
+    - ['Honey Roasted Packing Peanuts', [upset_tummy]]
+    - ['Rat Poison', [upset_tummy, upset_tummy, upset_tummy, unlucky, startled, startled, startled, sluggish]]
+    - ['Poisonous Mushroom', [upset_tummy, upset_tummy, unlucky]]
+    - ['Too Much Eggnog', [upset_tummy]]
+    - ['Peanut Boulder and Jelly Sandwich', [upset_tummy, sluggish]]
+    - ['Forgotten Moldy Fruit Basket', [upset_tummy]]
+    - ['Pie with a Bird Hiding Inside', [upset_tummy, startled]]
+    - ['Expired Health Potion', [upset_tummy, sluggish]]
+    - ['Gas Station Sushi', [upset_tummy]]
+    - ['Carbon Monoxide', [sluggish, startled]]
+    - ['Circus Flea', [distracted]]
+    - ['Game Bug', [conspiratorial]]
+    - ['Too Many Crabs', [startled]]
+    - ['Ticket for the Off-Broadway Musical Rats', [distracted]]
+    - ['Polybius Arcade Cabinet', [conspiratorial, distracted]]
+    - ['An Illusion', [distracted]]
+    - ['Cartoonishly Large Bomb', [startled, startled, startled]]
+    - ['Hungry Hippopotamus', [startled]]
+    - ['Malfunctioning Boomerang', [distracted, unlucky]]
+    - ['Song that Never Ends', [distracted]]
+    - ['Bubble Wrap', [distracted]]
+    - ['Box of Fireworks', [startled, startled]]
+    - ['Cabin Fever', [sluggish]]
+    - ['Self-destruct Button', [startled, startled]]
+    - ['Train with a Scary Face', [startled]]
+    - ['Greater White Shark', [startled]]
+    - ['Rude Internet Comment', [unlucky, distracted]]
+    - ['Extra Premium Currency best value', [conspiratorial, distracted]]
+    - ['Distracting Squirrel', [distracted]]
+    - ['Itchy Iron Wool Sweater', [stylish, distracted, sluggish]]
+    - ['Mail-in Rebate for 11 cents', [distracted]]
+    - ['Spicy Magazine', [distracted, upset_tummy]]
+    - ['Wooden Splinters', [sluggish]]
+    - ['Box Set of a Canceled TV Show', [distracted]]
+    - ['Burning Phone', [startled]]
+    - ['One-way Ticket to Ohio', [startled, startled, startled, distracted]]
+    - ['Deceased Pet Rock', [sluggish, unlucky]]
+    - ['Cursed Slab', [unlucky, unlucky, unlucky]]
     - game_specific:
         'Pokemon Red and Blue':
-          - 'Item-Hider'
+          - ['Item-Hider', [distracted]]
 
         'Ocarina of Time':
-          - 'Overly-Talkative Fairy in a Bottle'
+          - ['Overly-Talkative Fairy in a Bottle', [distracted]]
 
         'Stardew Valley':
-          - 'Rotten Parsnip'
+          - ['Rotten Parsnip', [upset_tummy]]
 
   filler:
-    - 'Empty Snail Shell'
-    - 'Loose Screw'
-    - 'Set of Car Keys'
-    - 'Not Very Sharp Tool'
-    - 'Busted Flute'
-    - 'Beartrap'
-    - 'Unmagic 8-ball'
-    - 'Carpentry for Ants'
-    - 'Partially Used Blockbuster Gift Card'
-    - 'Year-supply of Calanders'
-    - 'Human-sized Skateboard'
-    - 'Loose Staples'
-    - 'Old Boot'
-    - 'Clump of Hair'
-    - 'Collectable Plate'
-    - 'Roll of Toilet Paper'
-    - 'Misplaced Pixel'
-    - 'Lost Puzzle Piece'
-    - 'Cubic Piece of Dirt'
-    - 'Plank of Wood'
-    - 'Scented Candle'
-    - 'Broken Pottery'
-    - 'World''s Smallest Violin'
-    - 'Crumpled Paper Airplane'
-    - 'Half-eaten Pencil'
-    - 'Headlight Fluid'
-    - 'Help I''m Trapped in This Game and this is the only Way i Know how to Contact you Please get Me Out'
-    - 'Broken Fishing Rod'
-    - 'Toy Boat Toy Boat Toy Boat'
-    - 'Twenty Matches'
-    - 'Cracked Monopoly Board'
-    - 'AAAAAA battery'
-    - 'Cat-shaped Wall Clock'
-    - 'Printer Driver Disc'
-    - 'Off-brand Soda Can'
+    - ['Empty Snail Shell', []]
+    - ['Loose Screw', []]
+    - ['Set of Car Keys', []]
+    - ['Not Very Sharp Tool', []]
+    - ['Busted Flute', []]
+    - ['Beartrap', []]
+    - ['Nonmagic 8-ball', []]
+    - ['Carpentry for Ants', []]
+    - ['Partially Used Blockbuster Gift Card', []]
+    - ['Year-supply of Calendars', []]
+    - ['Human-sized Skateboard', []]
+    - ['Loose Staples', []]
+    - ['Old Boot', []]
+    - ['Clump of Hair', []]
+    - ['Collectable Plate', []]
+    - ['Roll of Toilet Paper', []]
+    - ['Misplaced Pixel', []]
+    - ['Lost Puzzle Piece', []]
+    - ['Cubic Piece of Dirt', []]
+    - ['Plank of Wood', []]
+    - ['Scented Candle', []]
+    - ['Broken Pottery', []]
+    - ['World''s Smallest Violin', []]
+    - ['Crumpled Paper Airplane', []]
+    - ['Half-eaten Pencil', []]
+    - ['Headlight Fluid', []]
+    - ['Help I''m Trapped in This Game and this is the only Way i Know how to Contact you Please get Me Out', []]
+    - ['Broken Fishing Rod', []]
+    - ['Toy Boat Toy Boat Toy Boat', []]
+    - ['Twenty Matches', []]
+    - ['Cracked Monopoly Board', []]
+    - ['AAAAAA battery', []]
+    - ['Cat-shaped Wall Clock', []]
+    - ['Printer Driver Disc', []]
+    - ['Off-brand Soda Can', []]
 
   uncategorized:
-    - 'Set of Three Seashells'
-    - 'Chewed Bar of Soap'
-    - 'Generic Green Slime'
-    - 'Handful of Loose Marbles'
-    - 'Discarded Video Game Cartridge'
-    - 'Packet of Ketchup'
-    - 'Suprisingly Tiny Knife'
-    - 'Lit Candle'
-    - 'Hilarious Mushroom'
-    - 'The Hit Boardgame Mousetrap'
-    - 'Michelin Star'
-    - 'Blue-eyes White Alligator Trading Card'
-    - 'Rusty Pocketwatch'
-    - 'Damp Pineapple'
-    - 'Right Sock'
-    - 'Microplastic Pile'
-    - 'Foreign Coin'
-    - 'USB Containing Government Secrets'
-    - 'Monkey''s Paw'
-    - 'Smelly Vintage T-Shirt'
-    - 'McRib'
-    - 'Phylactery'
-    - 'Cool Ninja Weapons'
-    - 'Shrimp in a Bottle'
-    - 'Bowl of Computer Chips'
-    - 'Golden Ticket'
-    - 'Enchanted Guitar Pick'
-    - 'Copy of E.T. the Extraterrestrial for Atari 2600'
-    - '3 Dollar Bill'
-    - 'Hallpass'
-    - 'Limited Edition Vintage Superhero Lunch Box Complete with Thermos'
-    - 'Sweet Roadtrip Mixtape'
-    - 'HD Photo of Bigfoot'
-    - 'Lost Ctrl Key'
-    - 'Not a Doll, but an Action Figure'
-    - 'Bright Idea'
-    - 'Small chain of Islands'
-    - 'Pluto'
-    - 'Autographed Copy of the Bible'
-    - 'School Photo'
-    - 'Sack with a Dollar Sign Painted on it'
-    - 'Overdue Library Book'
-    - 'Statue of David''s Dog'
-    - 'Yesterday''s Horoscope'
-    - 'Actual Lava Lamp'
-    - 'Proof that Aliens Exist'
-    - 'Oxford Comma'
-    - 'Bottled Toilet Water'
-    - 'Beanie Baby in a Pot of Chili'
-    - 'Radio Controlled Car'
-    - 'Dihydrogen Monoxide'
-    - 'Rubber Duck'
-    - '98 Red Balloons'
-    - 'Red Balloon'
-    - 'My Little Capybara'
-    - 'The Titanic'
-    - 'Canned Soup'
-    - 'Left Sock'
-    - 'Nintendo 65'
-    - 'Fake Dog Poop'
-    - 'Real Dog Poop'
-    - 'Elephant in the Room'
-    - '5g Wireless Tachnology'
-    - 'Helical Fossil'
-    - 'Theodore Roosevelt Plushie'
-    - '4th-Dimensional Hypercube'
-    - 'Bag of Wires You Might Need One of These Days'
-    - 'Naughty Coal'
-    - 'RGB Lighting'
-    - 'Rave Reviews'
-    - 'Aggressive Post-it Notes'
-    - 'Chaotic Emerald'
-    - 'Mushroom Princess'
-    - 'Pinball Wizard''s Spellbook'
-    - 'Novelty Keychain'
-    - 'Spare Axel'
-    - 'Brand New Car'
-    - 'Little White Lie'
-    - 'Coffee Mug Full of Pencils'
-    - 'Elevator Music'
-    - 'Radical Rock'
-    - 'Sizzlin Scissors'
-    - 'Just Paper'
-    - 'Annoying Fairy'
-    - 'Trash Can Lid'
-    - 'Crystal Skull'
-    - 'Scary Babydoll'
-    - 'Hairless Yak'
-    - 'Squeaky Mallet'
-    - 'Starting Equipment'
-    - 'Someone Else''s Shoes'
-    - 'Pocket'
-    - 'Spilled Bag of Rice'
-    - 'Magic Bathmat'
-    - 'Probably Decomissioned Warhead'
-    - 'Waldo''s Home Address'
-    - 'Player 2'
-    - 'Frog-shapped Chair'
-    - 'Evil Plans'
-    - 'Cardboard Box'
-    - 'Stapler in Jello'
-    - 'Radioactive Green Ooze'
-    - '5 Elemental-themed Rings'
-    - 'Wardrobe of Alternate Dimensions'
-    - 'Lawn Flamingo'
-    - 'Withered Bonsi Tree'
-    - 'Sassy Robot Companion'
-    - 'Defeated Punching Bag'
-    - '3 Easy Payments of 19.95'
-    - 'Bag of Normal Beans'
-    - 'Bottle of Spilled Milk'
-    - 'The Krebs Cycle'
-    - 'Ring of Visibility'
-    - 'Just Some Sludge'
-    - 'Sticky Video Game Controller'
-    - 'Bomb-proof Refrigerator'
-    - 'Lice-filled Wig'
-    - 'Drawing of a Cool S'
-    - 'Handful of Glitter'
-    - 'Forklift Driver Certification'
-    - 'Neat Rock'
-    - 'Dijkstra''s Algorithm'
-    - 'Fire Destinguisher'
-    - 'Censor Bar'
-    - 'Greasy Paper Bag'
-    - 'Extended Warranty'
-    - 'Legally Distinct Red Laser Sword'
-    - 'Weapons-grade Folding Chair'
-    - 'Whatever a Credenza Is'
-    - 'Corpse-pokin'' Stick'
-    - 'CD containing ''Sounds of the Sewer'''
-    - 'Squeeky Vent Flap'
-    - 'Rule stating that Rats Cannot Play Basketball'
+    - ['Set of Three Seashells', []]
+    - ['Chewed Bar of Soap', []]
+    - ['Generic Green Slime', []]
+    - ['Handful of Loose Marbles', []]
+    - ['Discarded Video Game Cartridge', []]
+    - ['Packet of Ketchup', [well_fed]]
+    - ['Lit Candle', []]
+    - ['Hilarious Mushroom', [energized, upset_tummy]]
+    - ['The Hit Board Game Mouse Trap', []]
+    - ['Michelin Star', [lucky]]
+    - ['Blue-eyes White Alligator Trading Card', [lucky]]
+    - ['Rusty Pocketwatch', []]
+    - ['Damp Pineapple', [well_fed]]
+    - ['Right Sock', []]
+    - ['Microplastic Pile', [upset_tummy]]
+    - ['Foreign Coin', [lucky]]
+    - ['USB Containing Government Secrets', [smart]]
+    - ['Monkey''s Paw', [lucky, conspiratorial, startled]]
+    - ['Smelly Vintage T-Shirt', [stylish]]
+    - ['McRib', [well_fed]]
+    - ['Phylactery', [lucky, smart]]
+    - ['Cool Ninja Weapons', [confident]]
+    - ['Shrimp in a Bottle', []]
+    - ['Bowl of Computer Chips', [smart]]
+    - ['Golden Ticket', [lucky]]
+    - ['Enchanted Guitar Pick', [lucky, confident]]
+    - ['Copy of E.T. the Extra-Terrestrial for Atari 2600', [distracted]]
+    - ['3 Dollar Bill', [conspiratorial]]
+    - ['Hall Pass', [energized]]
+    - ['Limited Edition Vintage Superhero Lunch Box Complete with Thermos', [stylish]]
+    - ['Sweet Roadtrip Mixtape', [energized]]
+    - ['HD Photo of Bigfoot', [conspiratorial]]
+    - ['Lost Ctrl Key', [startled]]
+    - ['Not a Doll, but an Action Figure', []]
+    - ['Bright Idea', [smart]]
+    - ['Small chain of Islands', []]
+    - ['Pluto', [smart]]
+    - ['Autographed Copy of the Bible', [lucky]]
+    - ['School Photo', []]
+    - ['Sack with a Dollar Sign Painted on it', []]
+    - ['Overdue Library Book', [smart]]
+    - ['Statue of David''s Dog', []]
+    - ['Yesterday''s Horoscope', [conspiratorial]]
+    - ['Actual Lava Lamp', [startled]]
+    - ['Proof that Aliens Exist', [conspiratorial]]
+    - ['Oxford Comma', [smart]]
+    - ['Bottled Toilet Water', [upset_tummy]]
+    - ['Beanie Baby in a Pot of Chili', [upset_tummy]]
+    - ['Radio Controlled Car', []]
+    - ['Dihydrogen Monoxide', []]
+    - ['Rubber Duck', []]
+    - ['98 Red Balloons', []]
+    - ['Red Balloon', []]
+    - ['My Little Capybara', []]
+    - ['The Titanic', []]
+    - ['Canned Soup', []]
+    - ['Left Sock', []]
+    - ['Nintendo 65', []]
+    - ['Fake Dog Poop', []]
+    - ['Real Dog Poop', [upset_tummy]]
+    - ['Elephant in the Room', []]
+    - ['5G Wireless Tachnology', [conspiratorial]]
+    - ['Helical Fossil', []]
+    - ['Theodore Roosevelt Plushie', []]
+    - ['4th-Dimensional Hypercube', [smart]]
+    - ['Bag of Wires You Might Need One of These Days', []]
+    - ['Naughty Coal', []]
+    - ['RGB Lighting', [smart]]
+    - ['Rave Reviews', [confident]]
+    - ['Aggressive Post-it Notes', [startled, distracted]]
+    - ['Chaotic Emerald', [energized]]
+    - ['Mushroom Princess', []]
+    - ['Pinball Wizard''s Spellbook', [smart, distracted]]
+    - ['Novelty Keychain', []]
+    - ['Spare Axle', []]
+    - ['Brand New Car', [energized]]
+    - ['Little White Lie', [conspiratorial]]
+    - ['Coffee Mug Full of Pencils', [smart]]
+    - ['Elevator Music', []]
+    - ['Radical Rock', []]
+    - ['Sizzlin Scissors', []]
+    - ['Just Paper', []]
+    - ['Annoying Fairy', [distracted]]
+    - ['Trash Can Lid', []]
+    - ['Crystal Skull', []]
+    - ['Scary Baby Doll', [startled]]
+    - ['Hairless Yak', []]
+    - ['Squeaky Mallet', [confident]]
+    - ['Starting Equipment', [confident, stylish]]
+    - ['Someone Else''s Shoes', [stylish]]
+    - ['Pocket', []]
+    - ['Spilled Bag of Rice', [well_fed, distracted]]
+    - ['Magic Bath Mat', [energized]]
+    - ['Probably Decomissioned Warhead', [startled]]
+    - ['Waldo''s Home Address', [conspiratorial]]
+    - ['Player 2', []]
+    - ['Frog-shaped Chair', [stylish]]
+    - ['Evil Plans', []]
+    - ['Cardboard Box', []]
+    - ['Stapler in Jell-O', [sluggish]]
+    - ['Radioactive Green Ooze', [startled, sluggish, upset_tummy]]
+    - ['5 Elemental-themed Rings', [confident]]
+    - ['Wardrobe of Alternate Dimensions', [energized]]
+    - ['Lawn Flamingo', []]
+    - ['Withered Bonsai Tree', []]
+    - ['Sassy Robot Companion', [smart]]
+    - ['Defeated Punching Bag', []]
+    - ['3 Easy Payments of 19.95', []]
+    - ['Bag of Normal Beans', []]
+    - ['Bottle of Spilled Milk', [unlucky]]
+    - ['The Krebs Cycle', []]
+    - ['Ring of Visibility', []]
+    - ['Just Some Sludge', [sluggish]]
+    - ['Sticky Video Game Controller', [sluggish]]
+    - ['Bomb-proof Refrigerator', [confident]]
+    - ['Lice-filled Wig', [distracted]]
+    - ['Drawing of a Cool S', []]
+    - ['Handful of Glitter', []]
+    - ['Forklift Driver Certification', []]
+    - ['Neat Rock', []]
+    - ['Dijkstra''s Algorithm', []]
+    - ['Fire Distinguisher', []]
+    - ['Censor Bar', []]
+    - ['Greasy Paper Bag', [upset_tummy]]
+    - ['Extended Warranty', []]
+    - ['Legally Distinct Red Laser Sword', [confident]]
+    - ['Weapons-grade Folding Chair', [confident]]
+    - ['Whatever a Credenza Is', []]
+    - ['Corpse-pokin'' Stick', []]
+    - ['CD containing ''Sounds of the Sewer''', []]
+    - ['Squeaky Vent Flap', [startled]]
+    - ['Rule stating that Rats Cannot Play Basketball', []]
     - game_specific:
         'Pokemon Red and Blue':
-          - 'Oak''s Other Parcel'
-          - 'Silph Scoop'
-          - 'Mustard Ball'
-          - 'HM02.5 Walk'
-          - 'Team Rocket Membership Card'
-          - 'Vermillion City Truck Keys'
+          - ['Oak''s Other Parcel', []]
+          - ['Silph Scoop', []]
+          - ['Mustard Ball', [well_fed]]
+          - ['HM02.5 Walk', []]
+          - ['Team Rocket Membership Card', [conspiratorial]]
+          - ['Vermilion City Truck Keys', [confident]]
 
         'Ocarina of Time':
-          - 'Broken Boss Key'
-          - 'Jabu Jabu''s Missing Kidney'
-          - 'Lite Brite Arrow'
-          - 'Song of Thyme'
-          - 'Ganondorf''s Tennis Racket'
-          - 'Goron Rock Candy'
+          - ['Broken Boss Key', []]
+          - ['Jabu-Jabu''s Missing Kidney', []]
+          - ['Lite Brite Arrow', []]
+          - ['Song of Thyme', []]
+          - ['Ganondorf''s Tennis Racket', [confident]]
+          - ['Goron Rock Candy', [well_fed]]
 
         'Stardew Valley':
-          - 'JojaMart Sale Coupon'
-          - 'Pickled Dust Sprite'
-          - 'Rotten Walnut'
-          - 'Abigail''s Birth Certificate'
-          - 'Mayor''s Tax Returns'
+          - ['JojaMart Sale Coupon', []]
+          - ['Pickled Dust Sprite', [well_fed]]
+          - ['Rotten Walnut', [upset_tummy]]
+          - ['Abigail''s Birth Certificate', [conspiratorial]]
+          - ['Mayor''s Tax Returns', []]
 
 # exit to the automatic region 'Victory' to win. one MUST be called 'Menu'
 # ability_check_with_dc is intended to make intuitive sense to those who are
