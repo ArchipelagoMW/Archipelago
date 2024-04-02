@@ -20,7 +20,7 @@ LIGHT_SHRINE_DARK = "Act 2 - Light Shrine Dark Rooms and Boss"
 # Act 3 Regions
 SEABED_SANCTUARY_HUB_SOUTHERTA = "Act 3 - Seabed Sanctuary Hub and Southerta"
 SEABED_SANCTUARY_SOUTH = "Act 3 - Seabed Sanctuary South"
-SEABED_SANCTUARY_WEST  = "Act 3 - Seabed Sanctuary West and Lue's Prison"
+SEABED_SANCTUARY_WEST = "Act 3 - Seabed Sanctuary West and Lue's Prison"
 SEABED_SANCTUARY_SOUTHWEST = "Act 3 - Seabed Sanctuary Southwest"
 SEABED_SANCTUARY_EAST = "Act 3 - Seabed Sanctuary East"
 SEABED_SANCTUARY_SOUTHEAST = "Act 3 - Seabed Sanctuary Southeast"
@@ -50,7 +50,11 @@ LEOS_LAB_MODEL_TOWN_2 = "Act 5 - Leo's Lab Model Town 2"
 LEOS_LAB_POWER_PLANT = "Act 5 - Leo's Lab Power Plant"
 
 # Act 6 Regions
-MAGRIDD_CASTLE_TOWN = "Act 6 - Magridd Castle Town"
+MAGRIDD_CASTLE_TOWN = "Act 6 - Magridd Castle Town and Basement Start"
+MAGRIDD_CASTLE_BASEMENT = "Act 6 - Magridd Castle Basement Spirit-locked"
+MAGRIDD_CASTLE_LEFT_TOWER = "Act 6 - Magridd Castle Left Tower"
+MAGRIDD_CASTLE_RIGHT_TOWER = "Act 6 - Magridd Castle Right Tower"
 
 # Act 7 Regions
+WORLD_OF_EVIL = "Act 7 - World of Evil"
 DEATHTOLL = "Act 7 - Deathtoll"

@@ -1,7 +1,7 @@
 import logging
 from typing import Callable, TYPE_CHECKING, NamedTuple
 from BaseClasses import MultiWorld, Region, Entrance, CollectionState
-from .Items import swords_table
+from .Items import swords_table, stones_table, redhots_table
 from .Names import RegionName, ItemName, LairName, ChestName, NPCName, NPCRewardName
 from .Locations import SoulBlazerLocation, all_locations_table
 from .Rules import no_requirement
@@ -163,7 +163,7 @@ locations_for_region: dict[str, list[str]] = {
         # Unused for now, but you need to reach here to get soul of shield.
     ],
     RegionName.SEABED_HUB: [
-        #TODO: make bubble armor rquirement for this lair optional toggle
+        # TODO: make bubble armor requirement for this lair optional toggle
         LairName.MERMAID_STATUE_ROCKBIRD,
     ],
     RegionName.ROCKBIRD: [
@@ -252,7 +252,7 @@ locations_for_region: dict[str, list[str]] = {
         LairName.GRANDPA_LUNE,
         LairName.SNAIL2,
         LairName.GRANDPA5,
-        ChestName.LAYNOLE_LUCKY_BLADE
+        ChestName.LAYNOLE_LUCKY_BLADE,
     ],
     RegionName.LUNE: [
         LairName.BOY2,
@@ -292,7 +292,7 @@ locations_for_region: dict[str, list[str]] = {
         LairName.CAT2,
         LairName.CAT3,
         LairName.GREAT_DOOR,
-        LairName.CHEST_OF_DRAWERS_MYSTIC_ARMOR
+        LairName.CHEST_OF_DRAWERS_MYSTIC_ARMOR,
     ],
     RegionName.LEOS_LAB_BASEMENT_2: [
         LairName.CAT_DOOR_KEY,
@@ -306,12 +306,12 @@ locations_for_region: dict[str, list[str]] = {
         LairName.CHEST_OF_DRAWERS,
         LairName.PLANT2,
         LairName.MOUSE2,
-        LairName.MOUSE3, # magic required
-        LairName.MOUSE4, # Magic required
-        LairName.MOUSE_SPARK_BOMB, # Magic required
+        LairName.MOUSE3,
+        LairName.MOUSE4,
+        LairName.MOUSE_SPARK_BOMB,
         LairName.GREAT_DOOR_SOUL_OF_DETECTION,
-        LairName.MODEL_TOWN2, # Magic required
-        LairName.STEPS_MARIE, # magic required
+        LairName.MODEL_TOWN2,
+        LairName.STEPS_MARIE,
         NPCRewardName.MODEL_TOWN_1_CRYSTAL,
         ChestName.MODEL_TOWN_1_SE,
         ChestName.MODEL_TOWN_1_NL,
@@ -335,8 +335,71 @@ locations_for_region: dict[str, list[str]] = {
     ],
     # Act 6 Regions
     RegionName.MAGRIDD_CASTLE_TOWN: [
-        # TODO: fill
-    ]
+        LairName.SOLDIER,
+        NPCRewardName.HARP_STRING_TILE,
+        ChestName.CASTLE_BASEMENT_1_W,
+        ChestName.CASTLE_BASEMENT_1_SPIRIT_SWORD,
+        NPCRewardName.ELEMENTAL_MAIL_SOLDIER,
+        NPCRewardName.QUEEN_MAGRIDD_VIP_CARD,
+        NPCRewardName.PLATINUM_CARD_SOLDIER,
+        NPCRewardName.MAID_HERB,
+        NPCRewardName.EMBLEM_H_TILE,
+        NPCRewardName.KING_MAGRIDD,
+    ],
+    RegionName.MAGRIDD_CASTLE_BASEMENT: [
+        LairName.SOLDIER2,
+        LairName.SINGER_CONCERT_HALL,
+        LairName.SOLDIER3,
+        LairName.SOLDIER4,
+        LairName.SOLDIER5,
+        LairName.SOLDIER6,
+        LairName.SOLDIER_ELEMENTAL_MAIL,
+        LairName.MAID,
+        LairName.SOLDIER_LEFT_TOWER,
+        LairName.SOLDIER_DOK,
+        LairName.SOLDIER_PLATINUM_CARD,
+        LairName.SINGER,
+        ChestName.CASTLE_BASEMENT_2_N,
+        ChestName.CASTLE_BASEMENT_2_SW,
+        ChestName.CASTLE_BASEMENT_2_MIDDLE,
+        ChestName.CASTLE_BASEMENT_3,
+    ],
+    RegionName.MAGRIDD_CASTLE_LEFT_TOWER: [
+        LairName.SOLDIER_SOUL_OF_REALITY,
+        LairName.QUEEN_MAGRIDD,
+        LairName.MAID2,
+        LairName.SOLDIER_WITH_LEO,
+        LairName.SOLDIER_RIGHT_TOWER,
+        LairName.DR_LEO,
+        LairName.SOLDIER7,
+    ],
+    RegionName.MAGRIDD_CASTLE_RIGHT_TOWER: [
+        LairName.MAID_HERB,
+        LairName.SOLDIER8,
+        LairName.SOLDIER_CASTLE,
+        LairName.SOLDIER9,
+        LairName.SOLDIER10,
+        LairName.SOLDIER11,
+        LairName.KING_MAGRIDD,
+        ChestName.CASTLE_RIGHT_TOWER_2_L,
+        ChestName.CASTLE_RIGHT_TOWER_2_R,
+        ChestName.CASTLE_RIGHT_TOWER_3_TL,
+        ChestName.CASTLE_RIGHT_TOWER_3_BR,
+        NPCRewardName.LEO_ON_THE_AIRSHIP_DECK,
+        NPCRewardName.SUPER_BRACELET_TILE,
+    ],
+    # Act 7 Regions
+    RegionName.WORLD_OF_EVIL: [
+        ChestName.WOE_1_SE,
+        ChestName.WOE_1_SW,
+        ChestName.WOE_1_REDHOT_BALL,
+        ChestName.WOE_2,
+        ChestName.DAZZLING_SPACE_SE,
+        ChestName.DAZZLING_SPACE_SW,
+    ],
+    RegionName.DEATHTOLL: [
+        # Victory event is placed here later.
+    ],
 }
 
 
@@ -387,7 +450,7 @@ exits_for_region: dict[str, ExitData] = {
         ExitData(RegionName.SEABED_SANCTUARY_SOUTH, [NPCName.MERMAID_BUBBLE_ARMOR]),
         ExitData(RegionName.SEABED_SANCTUARY_WEST, [NPCName.MERMAID_PEARL, NPCName.MERMAID4]),
         ExitData(RegionName.SEABED_SANCTUARY_EAST, [NPCName.DOLPHIN2]),
-        ExitData(RegionName.MOUNTAIN_HUB_NORTH_SLOPE, [NPCName.MERMAID_QUEEN])
+        ExitData(RegionName.MOUNTAIN_HUB_NORTH_SLOPE, [NPCName.MERMAID_QUEEN]),
     ],
     RegionName.SEABED_SANCTUARY_SOUTH: [
         ExitData(RegionName.SEABED_SANCTUARY_WEST, [NPCName.MERMAID_PEARL]),
@@ -418,20 +481,22 @@ exits_for_region: dict[str, ExitData] = {
     # Act 4 Exits
     RegionName.MOUNTAIN_HUB_NORTH_SLOPE: [
         ExitData(RegionName.LUNE, [NPCName.GIRL3, NPCName.GRANDPA4, NPCName.GRANDPA_LUNE, ItemName.LUCKYBLADE]),
-        ExitData(RegionName.MOUNTAIN_KING, [NPCName.BOY, NPCName.GRANDPA3, NPCName.MOUNTAIN_KING], [NPCName.BOY_MUSHROOM_SHOES, NPCName.GRANDPA]),
+        ExitData(
+            RegionName.MOUNTAIN_KING,
+            [NPCName.BOY, NPCName.GRANDPA3, NPCName.MOUNTAIN_KING],
+            [NPCName.BOY_MUSHROOM_SHOES, NPCName.GRANDPA],
+        ),
     ],
     RegionName.MOUNTAIN_KING: [
         ExitData(RegionName.NOME, [NPCName.GIRL3, NPCName.GRANDPA4, NPCName.MUSHROOM2, NPCName.GRANDPA5, NPCName.NOME])
     ],
-    RegionName.NOME: [
-        ExitData(RegionName.LEOS_LAB_START, [])
-    ],
+    RegionName.NOME: [ExitData(RegionName.LEOS_LAB_START, [])],
     # Act 5 Exits
     RegionName.LEOS_LAB_START: [
         ExitData(RegionName.LEOS_LAB_BASEMENT_1_METAL, [], [ItemName.ZANTETSUSWORD, ItemName.SOULBLADE]),
         ExitData(RegionName.LEOS_LAB_MAIN, [NPCName.GREAT_DOOR_ZANTETSU_SWORD]),
         ExitData(RegionName.LEOS_LAB_2ND_FLOOR, [NPCName.STEPS_UPSTAIRS, NPCName.GREAT_DOOR_MODEL_TOWNS]),
-        ExitData(RegionName.LEOS_LAB_POWER_PLANT, [NPCName.STAIRS_POWER_PLANT]), # Anything else?
+        ExitData(RegionName.LEOS_LAB_POWER_PLANT, [NPCName.STAIRS_POWER_PLANT]),
     ],
     RegionName.LEOS_LAB_BASEMENT_1_METAL: [
         ExitData(RegionName.LEOS_LAB_BASEMENT_2, [ItemName.ICEARMOR]),
@@ -445,7 +510,26 @@ exits_for_region: dict[str, ExitData] = {
         ExitData(RegionName.MAGRIDD_CASTLE_TOWN, [NPCName.MARIE]),
     ],
     # Act 6 Exits
-
+    RegionName.MAGRIDD_CASTLE_TOWN: [
+        ExitData(RegionName.MAGRIDD_CASTLE_BASEMENT, [], [ItemName.SPIRITSWORD, ItemName.SOULBLADE]),
+        ExitData(RegionName.MAGRIDD_CASTLE_LEFT_TOWER, [NPCName.SOLDIER_LEFT_TOWER, ItemName.PLATINUMCARD]),
+        ExitData(RegionName.MAGRIDD_CASTLE_RIGHT_TOWER, [NPCName.SOLDIER_RIGHT_TOWER, ItemName.VIPCARD]),
+        ExitData(RegionName.WORLD_OF_EVIL, [NPCName.SOLDIER_CASTLE, NPCName.KING_MAGRIDD, *stones_table.keys()]),
+    ],
+    # Act 7 Exits
+    RegionName.WORLD_OF_EVIL: [
+        ExitData(
+            RegionName.DEATHTOLL,
+            [
+                NPCName.DANCING_GRANDMA,
+                NPCName.DANCING_GRANDMA2,
+                ItemName.SOULARMOR,
+                ItemName.SOULBLADE,
+                ItemName.PHOENIX,
+                *redhots_table.keys(),
+            ],
+        )
+    ],
 }
 
 

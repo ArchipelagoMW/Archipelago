@@ -150,24 +150,8 @@ location_dependencies: dict[str, list[str]] = {
     NPCRewardName.EMBLEM_F_TILE: [NPCName.MUSHROOM_EMBLEM_F, NPCName.GRANDPA5, NPCName.MUSHROOM2, ItemName.DREAMROD],
     NPCRewardName.MOUNTAIN_OF_SOULS_CRYSTAL: [],
     NPCRewardName.LUNE_CRYSTAL: [],
-    # Notes:
-    # Mushroom: CB: Nothing
-    # Mushroom 2: EE: south tunnel to prison. mush2-grandpa4, mush2-grandpa5
-    # Girl: CA: Nothing
-    # Girl 3: F2: east tunnel hub-girl3, girl3-grandpa4, girl3-mushboy (extraneous)
-    # Boy: CC: more west tunnel boy-grandpa, boy-grandpa3
-    # Boy 2: D7: nothing
-    #
-    # Snail E: E8: in hub.
-    #
-    # Boy mushroom: E9: Hub-mushboy, mushboy-boy
-    # Grandpa: C9: nw tunnel. hub-grandpa, grandpa-boy
-    # Grandpa 2: D3: Nothing
-    # Grandpa 3: F8: south-west tunnel grandpa3-boy, grandpa3-king
-    # Grandpa 4: FC: southeast lake, grandpa4-lune grandpa4-girl3, grandpa4-mush2
-    # Grandpa 5: FF: unlocks prison (Locks Nome, mushroom emblem f) grandpa5-mush2
-    # grandpa lune: FE: just lune
-    # mountain king: 103: needs a lot of npcs to reach
+
+    # Act 5 - Leo's Lab
     NPCRewardName.EMBLEM_G_UNDER_CHEST_OF_DRAWERS: [NPCName.CHEST_OF_DRAWERS_MYSTIC_ARMOR, NPCName.GREAT_DOOR, ItemName.DOORKEY],
     NPCRewardName.CHEST_OF_DRAWERS_MYSTIC_ARMOR: [NPCName.CHEST_OF_DRAWERS_MYSTIC_ARMOR, NPCName.GREAT_DOOR, ItemName.DOORKEY],
     NPCRewardName.HERB_PLANT_IN_LEOS_LAB: [NPCName.PLANT_HERB, NPCName.MOUSE, NPCName.CAT, NPCName.CAT2, ItemName.ACTINIDIALEAVES],
@@ -182,14 +166,21 @@ location_dependencies: dict[str, list[str]] = {
     LairName.DOLL: [ItemName.ICEARMOR],
     LairName.MARIE: [ItemName.ICEARMOR],
 
-    # TODO: Delete these once they are no longer useful.
-    # LairID.SOLDIER6: [LairID.SINGER_CONCERT_HALL],
-    # LairID.SOLDIER_PLATINUM_CARD: [LairID.SINGER_CONCERT_HALL],
-    # LairID.MAID2: [LairID.SINGER_CONCERT_HALL],
-    # LairID.SOLDIER7: [LairID.MAID],
-    # LairID.SOLDIER8: [LairID.SOLDIER_SOUL_OF_REALITY],
-    # LairID.SOLDIER10: [LairID.MAID_HERB],
-    # LairID.KING_MAGRIDD: [LairID.SOLDIER_CASTLE],
+    # Act 6 - Magridd Castle
+    NPCRewardName.ELEMENTAL_MAIL_SOLDIER: [NPCName.SOLDIER_ELEMENTAL_MAIL, ItemName.DREAMROD],
+    NPCRewardName.SUPER_BRACELET_TILE: [NPCName.DR_LEO, NPCName.SOLDIER_WITH_LEO, NPCName.SOLDIER_DOK, NPCName.QUEEN_MAGRIDD],
+    NPCRewardName.QUEEN_MAGRIDD_VIP_CARD: [NPCName.QUEEN_MAGRIDD],
+    NPCRewardName.PLATINUM_CARD_SOLDIER: [NPCName.SOLDIER_PLATINUM_CARD, NPCName.SINGER_CONCERT_HALL, ItemName.HARPSTRING],
+    NPCRewardName.MAID_HERB: [NPCName.MAID_HERB], # anything else?
+    NPCRewardName.EMBLEM_H_TILE: [NPCName.SOLDIER_CASTLE],
+    NPCRewardName.KING_MAGRIDD: [NPCName.KING_MAGRIDD, NPCName.SOLDIER_CASTLE],
+    NPCRewardName.LEO_ON_THE_AIRSHIP_DECK: [NPCName.DR_LEO, NPCName.SOLDIER_WITH_LEO, NPCName.SOLDIER_DOK], # TODO: anything else?
+    NPCRewardName.HARP_STRING_TILE: [],
+    LairName.KING_MAGRIDD: [ItemName.AIRSHIPKEY],
+
+    # Act 7 - World of Evil 
+    ChestName.DAZZLING_SPACE_SE: [ItemName.SOULARMOR],
+    ChestName.DAZZLING_SPACE_SW: [ItemName.SOULARMOR],
 }
 
 
@@ -208,6 +199,5 @@ def get_rule_for_location(name: str, player: int, flag: RuleFlag) -> Callable[[C
 
 
 def set_rules(world: "SoulBlazerWorld") -> None:
-    # TODO: Replace "Test" with Deathtoll's Palace Region name?
     world.multiworld.get_region(RegionName.DEATHTOLL, world.player).locations += world.create_victory_event()
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
