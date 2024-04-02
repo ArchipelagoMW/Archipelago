@@ -220,10 +220,30 @@ all_bosses = [
     DS3BossInfo("Slave Knight Gael 1", 5110801, dlc = True, locations = {
         "RC: Soul of Slave Knight Gael",
         "RC: Blood of the Dark Soul - end boss drop",
+        # These are accessible before you trigger the boss, but once you do you
+        # have to beat it before getting them.
+        "RC: Titanite Slab - ashes, mob drop",
+        "RC: Titanite Slab - ashes, NPC drop",
+        "RC: Sacred Chime of Filianore - ashes, NPC drop",
+        "RC: Crucifix of the Mad King - ashes, NPC drop",
+        "RC: Shira's Crown - Shira's room after killing ashes NPC",
+        "RC: Shira's Armor - Shira's room after killing ashes NPC",
+        "RC: Shira's Gloves - Shira's room after killing ashes NPC",
+        "RC: Shira's Trousers - Shira's room after killing ashes NPC",
     }),
     DS3BossInfo("Slave Knight Gael 2", 5110800, dlc = True, locations = {
         "RC: Soul of Slave Knight Gael",
         "RC: Blood of the Dark Soul - end boss drop",
+        # These are accessible before you trigger the boss, but once you do you
+        # have to beat it before getting them.
+        "RC: Titanite Slab - ashes, mob drop",
+        "RC: Titanite Slab - ashes, NPC drop",
+        "RC: Sacred Chime of Filianore - ashes, NPC drop",
+        "RC: Crucifix of the Mad King - ashes, NPC drop",
+        "RC: Shira's Crown - Shira's room after killing ashes NPC",
+        "RC: Shira's Armor - Shira's room after killing ashes NPC",
+        "RC: Shira's Gloves - Shira's room after killing ashes NPC",
+        "RC: Shira's Trousers - Shira's room after killing ashes NPC",
     }),
     DS3BossInfo("Lords of Cinder", 4100800, locations = {
         "KFF: Soul of the Lords",

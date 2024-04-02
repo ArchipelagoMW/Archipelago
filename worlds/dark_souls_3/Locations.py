@@ -1530,7 +1530,7 @@ location_tables = {
         DS3LocationData("IBV: Ring of the Sun's First Born - fall from in front of cathedral",
                         "Ring of the Sun's First Born",
                         hidden = True), # Hidden fall
-        DS3LocationData("IBV: Large Soul of a Nameless Soldier - stairs to plaza",
+        DS3LocationData("IBV: Large Soul of a Nameless Soldier - path to plaza",
                         "Large Soul of a Nameless Soldier"),
         DS3LocationData("IBV: Large Titanite Shard - plaza, balcony overlooking ascent",
                         "Large Titanite Shard"),
@@ -1589,7 +1589,7 @@ location_tables = {
         DS3LocationData("IBV: Divine Blessing - great hall, chest", "Divine Blessing"),
         DS3LocationData("IBV: Smough's Great Hammer - great hall, chest",
                         "Smough's Great Hammer"),
-        DS3LocationData("IBV: Yorshka's Spear - descent, dark room rafers chest", "Yorshka's Spear"),
+        DS3LocationData("IBV: Yorshka's Spear - descent, dark room rafters chest", "Yorshka's Spear"),
         DS3LocationData("IBV: Leo Ring - great hall, chest", "Leo Ring"),
         DS3LocationData("IBV: Dorhys' Gnawing - Dorhys drop", "Dorhys' Gnawing",
                         hidden = True), # Behind illusory wall
@@ -1652,7 +1652,7 @@ location_tables = {
                         npc = True),
         DS3LocationData("ID: Murakumo - Alva drop", "Murakumo", missable = True,
                         hostile_npc = True),
-        DS3LocationData("ID: Large Titanite Shard - after bonfire, second cell on right",
+        DS3LocationData("ID: Large Titanite Shard - after bonfire, second cell on left",
                         "Large Titanite Shard"),
         DS3LocationData("ID: Fading Soul - B1 near, main hall", "Fading Soul"),
         DS3LocationData("ID: Large Soul of a Nameless Soldier - B2, hall by stairs",
@@ -2218,7 +2218,7 @@ location_tables = {
                         "Witch's Locks", hidden = True), # Switch in darkened room
         DS3LocationData("GA: Titanite Slab - 1F, after pulling 2F switch", "Titanite Slab",
                         hidden = True),
-        DS3LocationData("GA: Titanite Scale - 5F, chest by exit", "Titanite Scale x3"),
+        DS3LocationData("GA: Titanite Scale - 4F, chest by exit", "Titanite Scale x3"),
         DS3LocationData("GA: Soul Stream - 3F, behind illusory wall", "Soul Stream",
                         hidden = True), # Behind illusory wall
         DS3LocationData("GA: Scholar Ring - 2F, between late and early", "Scholar Ring"),
@@ -2266,15 +2266,15 @@ location_tables = {
         # Shrine Handmaid after killing NPCs
         DS3LocationData("FS: Faraam Helm - shop after killing GA NPC", "Faraam Helm",
                         hidden = True, hostile_npc = True, shop = True),
-        DS3LocationData("GA: Faraam Armor - shop after killing GA NPC", "Faraam Armor",
+        DS3LocationData("FS: Faraam Armor - shop after killing GA NPC", "Faraam Armor",
                         hidden = True, hostile_npc = True, shop = True),
-        DS3LocationData("GA: Faraam Gauntlets - shop after killing GA NPC", "Faraam Gauntlets",
+        DS3LocationData("FS: Faraam Gauntlets - shop after killing GA NPC", "Faraam Gauntlets",
                         hidden = True, hostile_npc = True, shop = True),
-        DS3LocationData("GA: Faraam Boots - shop after killing GA NPC", "Faraam Boots",
+        DS3LocationData("FS: Faraam Boots - shop after killing GA NPC", "Faraam Boots",
                         hidden = True, hostile_npc = True, shop = True),
-        DS3LocationData("GA: Black Hand Hat - shop after killing GA NPC", "Black Hand Hat",
+        DS3LocationData("FS: Black Hand Hat - shop after killing GA NPC", "Black Hand Hat",
                         hidden = True, hostile_npc = True, shop = True),
-        DS3LocationData("GA: Black Hand Armor - shop after killing GA NPC", "Black Hand Armor",
+        DS3LocationData("FS: Black Hand Armor - shop after killing GA NPC", "Black Hand Armor",
                         hidden = True, hostile_npc = True, shop = True),
 
         # Shrine Handmaid after killing Lothric, Younger Prince
@@ -2754,9 +2754,12 @@ location_tables = {
         DS3LocationData("RC: Crucifix of the Mad King - ashes, NPC drop",
                         "Crucifix of the Mad King", hostile_npc = True), # Shira drop
         DS3LocationData("RC: Ledo's Great Hammer - streets high, opposite building, NPC drop",
-                        "Ledo's Great Hammer", hostile_npc = True), # Silver Knight Ledo drop
+                        "Ledo's Great Hammer", hostile_npc = True,
+                        missable = True), # Silver Knight Ledo drop, doesn't invade once Halflight
+                                          # is defeated
         DS3LocationData("RC: Wolf Ring+3 - street gardens, NPC drop", "Wolf Ring+3",
-                        hostile_npc = True), # Alva drop
+                        hostile_npc = True,
+                        missable = True), # Alva drop, doesn't invade once Halflight is defeated
         DS3LocationData("RC: Blindfold Mask - grave, NPC drop", "Blindfold Mask",
                         hostile_npc = True), # Moaning Knight drop
         DS3LocationData("RC: Titanite Scale - wall top, behind spawn", "Titanite Scale"), # wrong
