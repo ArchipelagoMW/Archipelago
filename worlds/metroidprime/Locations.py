@@ -1,4 +1,5 @@
 from BaseClasses import Location, MultiWorld
+METROID_PRIME_LOCATION_BASE = 5031100
 
 
 class MetroidPrimeLocation(Location):
@@ -120,7 +121,7 @@ magmoor_location_table = {
     'MC Magmoor Workstation': 5031199
 }
 
-every_location = {
+every_location: dict[str, int] = {
     **chozo_location_table,
     **phen_location_table,
     **tallon_location_table,

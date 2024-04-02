@@ -6,7 +6,8 @@ from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser,
 from NetUtils import NetworkItem
 import Utils
 from worlds.metroidprime.DolphinClient import DolphinException
-from worlds.metroidprime.MetroidPrimeInterface import InventoryItemData, MetroidPrimeInterface, MetroidPrimeLevel
+from worlds.metroidprime.Locations import METROID_PRIME_LOCATION_BASE, every_location
+from worlds.metroidprime.MetroidPrimeInterface import InventoryItemData, MetroidPrimeInterface
 
 
 class MetroidPrimeCommandProcessor(ClientCommandProcessor):
@@ -73,13 +74,19 @@ def get_total_count_of_item_received(network_id: int, items: list[NetworkItem]) 
     return count
 
 
-async def send_checked_locations(ctx: MetroidPrimeContext):
-    pass
+async def handle_checked_location(ctx: MetroidPrimeContext, current_inventory: dict[str, InventoryItemData]):
+    """Uses the current amount of UnknownItem1 in inventory as an indicator of which location was checked. This will break if the player collects more than one pickup without having the AP client hooked to the game and server"""
+    unknown_item1 = current_inventory["UnknownItem1"]
+    if (unknown_item1.current_amount == 0):
+        return
+    checked_location_id = METROID_PRIME_LOCATION_BASE + unknown_item1.current_amount - 1
+    logger.debug(
+        f"Checked location: {checked_location_id} with amount: {unknown_item1.current_amount} ")
+    await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [checked_location_id]}])
+    ctx.game_interface.give_item_to_player(unknown_item1.id, 0, 999)
 
 
-async def handle_receive_items(ctx: MetroidPrimeContext):
-    current_items = ctx.game_interface.get_current_inventory()
-
+async def handle_receive_items(ctx: MetroidPrimeContext, current_items: dict[str, InventoryItemData]):
     # Handle Single Item Upgrades
     for network_item in ctx.items_received:
         item_data = inventory_item_by_network_id(
@@ -148,9 +155,9 @@ async def _handle_game_ready(ctx: MetroidPrimeContext):
         if not ctx.slot:
             await asyncio.sleep(1)
             return
-
-        await send_checked_locations(ctx)
-        await handle_receive_items(ctx)
+        current_inventory = ctx.game_interface.get_current_inventory()
+        await handle_receive_items(ctx, current_inventory)
+        await handle_checked_location(ctx, current_inventory)
 
         if "DeathLink" in ctx.tags:
             logger.debug("DeathLink not implemented")
