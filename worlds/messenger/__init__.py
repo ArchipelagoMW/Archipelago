@@ -1,6 +1,5 @@
 import logging
-from datetime import date
-from typing import Any, ClassVar, Dict, List, Optional, TextIO
+from typing import Any, ClassVar, Dict, List, Optional, Set, TextIO
 
 from BaseClasses import CollectionState, Entrance, Item, ItemClassification, MultiWorld, Tutorial
 from Options import Accessibility
@@ -160,7 +159,7 @@ class MessengerWorld(World):
                 self.starting_portals.remove(self.random.choice(portals_to_strip))
 
         self.filler = FILLER.copy()
-        if (not hasattr(self.options, "traps") and date.today() < date(2024, 4, 2)) or self.options.traps:
+        if self.options.traps:
             self.filler.update(TRAPS)
 
         self.plando_portals = []
