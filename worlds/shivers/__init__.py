@@ -22,6 +22,10 @@ class ShiversWorld(World):
     Shivers is a horror themed point and click adventure. Explore the mysteries of Windlenot's Museum of the Strange and Unusual.
     """
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.pot_completed_list = []
+
     game: str = "Shivers"
     topology_present = False
     web = ShiversWeb()
@@ -30,7 +34,6 @@ class ShiversWorld(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = Constants.location_name_to_id
-    pot_completed_list = []
     shivers_item_id_offset = 27000
     
     def create_item(self, name: str) -> Item:
@@ -189,15 +192,12 @@ class ShiversWorld(World):
             for i in range(10):
                 #Pieces
                 if self.pot_completed_list[i] == 0:
-                    self.pot_completed_list.append(0)
                     storageitems += [self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 70 + i])]
                     storageitems += [self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 80 + i])]
                 #Complete
                 else:
-                    self.pot_completed_list.append(1)
                     storageitems += [self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 140 + i])]
                     storageitems += [self.create_item("Empty")]
-
 
         storageitems += [self.create_item("Empty") for i in range(3)]
 
