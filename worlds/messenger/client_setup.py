@@ -56,27 +56,33 @@ def launch_game(url: Optional[str] = None) -> None:
         if not is_windows:
             mono_exe = which("mono")
             if not mono_exe:
-                # steam deck support but doesn't currently work
-                messagebox("Failure", "Failed to install Courier", True)
-                raise RuntimeError("Failed to install Courier")
-                # # download and use mono kickstart
-                # # this allows steam deck support
-                # mono_kick_url = "https://github.com/flibitijibibo/MonoKickstart/archive/refs/heads/master.zip"
-                # target = os.path.join(folder, "monoKickstart")
-                # os.makedirs(target, exist_ok=True)
-                # with urllib.request.urlopen(mono_kick_url) as download:
-                #     with ZipFile(io.BytesIO(download.read()), "r") as zf:
-                #         for member in zf.infolist():
-                #             zf.extract(member, path=target)
-                # installer = subprocess.Popen([os.path.join(target, "precompiled"),
-                #                               os.path.join(folder, "MiniInstaller.exe")], shell=False)
-                # os.remove(target)
+                # download and use mono kickstart
+                # this allows steam deck support
+                mono_kick_url = "https://github.com/flibitijibibo/MonoKickstart/archive/refs/heads/master.zip"
+                files = []
+                with urllib.request.urlopen(mono_kick_url) as download:
+                    with ZipFile(io.BytesIO(download.read()), "r") as zf:
+                        for member in zf.infolist():
+                            if "precompiled/" not in member.filename or member.filename.endswith("/"):
+                                continue
+                            member.filename = member.filename.split("/")[-1]
+                            if member.filename.endswith("bin.x86_64"):
+                                member.filename = "MiniInstaller.bin.x86_64"
+                            zf.extract(member, path=game_folder)
+                            files.append(member.filename)
+                mono_installer = os.path.join(game_folder, "MiniInstaller.bin.x86_64")
+                os.chmod(mono_installer, 0o755)
+                installer = subprocess.Popen(mono_installer, shell=False)
+                failure = installer.wait()
+                for file in files:
+                    os.remove(file)
             else:
                 installer = subprocess.Popen([mono_exe, os.path.join(game_folder, "MiniInstaller.exe")], shell=False)
+                failure = installer.wait()
         else:
             installer = subprocess.Popen(os.path.join(game_folder, "MiniInstaller.exe"), shell=False)
+            failure = installer.wait()
 
-        failure = installer.wait()
         if failure:
             messagebox("Failure", "Failed to install Courier", True)
             os.chdir(working_directory)
@@ -126,6 +132,17 @@ def launch_game(url: Optional[str] = None) -> None:
     from . import MessengerWorld
     game_folder = os.path.dirname(MessengerWorld.settings.game_path)
     working_directory = os.getcwd()
+    # setup ssl context
+    try:
+        import certifi
+        import ssl
+        context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=certifi.where())
+        context.set_alpn_protocols(["http/1.1"])
+        https_handler = urllib.request.HTTPSHandler(context=context)
+        opener = urllib.request.build_opener(https_handler)
+        urllib.request.install_opener(opener)
+    except ImportError:
+        pass
     if not courier_installed():
         should_install = askyesnocancel("Install Courier",
                                         "No Courier installation detected. Would you like to install now?")
@@ -151,6 +168,8 @@ def launch_game(url: Optional[str] = None) -> None:
             elif should_update is None:
                 return
     if not is_windows:
+        if not which("mono"):
+            return
         if url:
             open_file(f"steam://rungameid/764790//{url}/")
         else:
