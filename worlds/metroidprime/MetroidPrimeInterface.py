@@ -10,11 +10,14 @@ symbols = py_randomprime.symbols_for_version("0-00")
 game_state_pointer = symbols["g_GameState"]
 cstate_manager_global = symbols["g_StateManager"]
 cplayer_vtable = 0x803d96e8
-
+AREA_SIZE = 16
+ITEM_SIZE = 0x8
+RTSL_VECTOR_OFFSET = 0x4
 METROID_PRIME_ID = b"GM8E01"
+ARTIFACT_TEMPLE_ROOM_INDEX = 16
 
 
-class MetroidPrimeArea(Enum):
+class MetroidPrimeLevel(Enum):
     """Game worlds with their corresponding IDs in memory"""
     Impact_Crater = 3241871825
     Phendrana_Drifts = 2831049361
@@ -26,11 +29,27 @@ class MetroidPrimeArea(Enum):
     End_of_Game = 332894565
 
 
-def world_by_id(id) -> MetroidPrimeArea:
-    for world in MetroidPrimeArea:
+def world_by_id(id) -> MetroidPrimeLevel:
+    for world in MetroidPrimeLevel:
         if world.value == id:
             return world
     return None
+
+
+class Area:
+    layerCount: int
+    startNameIdx: int
+    layerBitsLo: int
+    layerBitsHi: int
+
+    def __init__(self, startNameIdx, layerCount, layerBitsHi, layerBitsLo):
+        self.layerCount = layerCount
+        self.startNameIdx = startNameIdx
+        self.layerBitsHi = layerBitsHi
+        self.layerBitsLo = layerBitsLo
+
+    def __str__(self):
+        return f"LayerCount: {self.layerCount}, LayerStartIndex: {self.startNameIdx}, LayerBitsHi: {self.layerBitsHi}, LayerBitsLo: {self.layerBitsLo}"
 
 
 class InventoryItemData(ItemData):
@@ -56,6 +75,7 @@ class MetroidPrimeInterface:
         self.dolphin_client = DolphinClient(logger)
 
     def give_item_to_player(self, item_id: int, new_amount: int, new_capacity: int):
+        """Gives the player an item with the specified amount and capacity"""
         self.dolphin_client.write_pointer(self.__get_player_state_pointer(),
                                           self.__calculate_item_offset(item_id), struct.pack(">II", new_amount, new_capacity))
 
@@ -86,7 +106,7 @@ class MetroidPrimeInterface:
                 inventory[item.name] = self.get_item(item)
         return inventory
 
-    def get_current_area(self) -> MetroidPrimeArea:
+    def get_current_area(self) -> MetroidPrimeLevel:
         """Returns the world that the player is currently in"""
         world_bytes = self.dolphin_client.read_pointer(
             game_state_pointer, 0x84, struct.calcsize(">I"))
@@ -141,4 +161,54 @@ class MetroidPrimeInterface:
         return int.from_bytes(self.dolphin_client.read_address(cstate_manager_global + 0x8B8, 4), "big")
 
     def __calculate_item_offset(self, item_id):
-        return (0x24 + 0x4) + (item_id * 0x8)
+        return (0x24 + RTSL_VECTOR_OFFSET) + (item_id * ITEM_SIZE)
+
+    def __get_world_layer_state_pointer(self):
+        return int.from_bytes(self.dolphin_client.read_address(cstate_manager_global + 0x8c8, 4), "big")
+
+    def __get_vector_item_offset(self):
+        # Calculate the address of the Area at index area_idx
+        vector_offset = 4
+        vector_item_ptr = (0x0 + vector_offset)
+        return vector_item_ptr
+
+    def __get_area_address(self, area_index: int):
+        """Gets the address of an area from the world layer state areas vector"""
+        vector_bytes = self.dolphin_client.read_pointer(self.__get_world_layer_state_pointer(),
+                                                        self.__get_vector_item_offset(), 12)  # 0x4 is count, 0x8 is max, 0xC is start address of the items in the vector
+        # Unpack the bytes into the fields of the Area
+        _count, _max, start_address = struct.unpack(
+            ">iiI", vector_bytes)
+        return start_address + AREA_SIZE * area_index
+
+    def __get_area(self, area_index: int) -> Area:
+        """Loads an area at the given index for the level the player is currently in"""
+        address = self.__get_area_address(area_index)
+        item_bytes = self.dolphin_client.read_address(address, AREA_SIZE)
+        return Area(*struct.unpack(
+            ">IIII", item_bytes))
+
+    def set_layer_active(self, area_index: int, layer_id: int, active: bool):
+        area = self.__get_area(area_index)
+        if active:
+            flag = 1 << layer_id
+            area.layerBitsLo = area.layerBitsLo | flag
+            area.layerBitsHi = area.layerBitsHi | (flag >> 0x1f)
+        else:
+            flag = ~(1 << layer_id)
+            area.layerBitsLo = area.layerBitsLo & flag
+            area.layerBitsHi = area.layerBitsHi & (flag >> 0x1f)
+
+        new_bytes = struct.pack(
+            ">IIII", area.startNameIdx, area.layerCount, area.layerBitsHi, area.layerBitsLo)
+
+        self.dolphin_client.write_address(
+            self.__get_area_address(area_index), new_bytes)
+
+    def get_artifact_layer(self, item_id):
+        # Artifact of truth is handled differently since it is the first thing you interact with in the room
+        return item_id - 28 if item_id > 29 else 23
+
+    def get_layer_active(self, area_index: int, layer_id: int):
+        area = self.__get_area(area_index)
+        return area.layerBitsLo & (1 << layer_id) != 0
