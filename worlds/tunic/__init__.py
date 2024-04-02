@@ -245,17 +245,23 @@ class TunicWorld(World):
                     continue
                 path_to_loc = []
                 previous_name = "placeholder"
-                name, connection = paths[location.parent_region]
-                while connection != ("Menu", None):
-                    name, connection = connection
-                    # for LS entrances, we just want to give the portal name
-                    if "(LS)" in name:
-                        name, _ = name.split(" (LS) ")
-                    # was getting some cases like Library Grave -> Library Grave -> other place
-                    if name in portal_names and name != previous_name:
-                        previous_name = name
-                        path_to_loc.append(name)
-                hint_text = " -> ".join(reversed(path_to_loc))
+                try:
+                    name, connection = paths[location.parent_region]
+                except:
+                    # if there is a logic bug, probably better to not just make it fail
+                    hint_text = "Inaccessible"
+                else:
+                    while connection != ("Menu", None):
+                        name, connection = connection
+                        # for LS entrances, we just want to give the portal name
+                        if "(LS)" in name:
+                            name, _ = name.split(" (LS) ")
+                        # was getting some cases like Library Grave -> Library Grave -> other place
+                        if name in portal_names and name != previous_name:
+                            previous_name = name
+                            path_to_loc.append(name)
+                    hint_text = " -> ".join(reversed(path_to_loc))
+
                 if hint_text:
                     hint_data[self.player][location.address] = hint_text
 
