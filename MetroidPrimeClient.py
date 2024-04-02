@@ -1,11 +1,12 @@
 import asyncio
+import logging
 import traceback
 
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, logger, server_loop, gui_enabled
 from NetUtils import NetworkItem
 import Utils
 from worlds.metroidprime.DolphinClient import DolphinException
-from worlds.metroidprime.MetroidPrimeInterface import InventoryItemData, MetroidPrimeInterface
+from worlds.metroidprime.MetroidPrimeInterface import InventoryItemData, MetroidPrimeInterface, MetroidPrimeLevel
 
 
 class MetroidPrimeCommandProcessor(ClientCommandProcessor):
@@ -14,6 +15,8 @@ class MetroidPrimeCommandProcessor(ClientCommandProcessor):
 
 
 class MetroidPrimeContext(CommonContext):
+    current_level_id = 0
+    previous_level_id = 0
     command_processor = MetroidPrimeCommandProcessor
     game_interface: MetroidPrimeInterface
     game = "Metroid Prime"
@@ -136,7 +139,8 @@ async def handle_receive_items(ctx: MetroidPrimeContext):
         # Player starts with 99 health and each energy tank adds 100 additional
         ctx.game_interface.set_current_health(new_capacity * 100.0 + 99)
 
-    # TODO: Handle setting Artifact flags so that the Artifact Temple State is updated accordingly
+    # Handle Artifacts
+    ctx.game_interface.sync_artifact_layers()
 
 
 async def _handle_game_ready(ctx: MetroidPrimeContext):
@@ -203,4 +207,5 @@ if __name__ == "__main__":
     parser.add_argument('--name', default=None,
                         help="Slot Name to connect as.")
     args = parser.parse_args()
+    logger.setLevel(logging.DEBUG)
     main(args.connect, args.password, args.name)

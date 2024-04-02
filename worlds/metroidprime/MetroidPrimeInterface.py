@@ -106,7 +106,7 @@ class MetroidPrimeInterface:
                 inventory[item.name] = self.get_item(item)
         return inventory
 
-    def get_current_area(self) -> MetroidPrimeLevel:
+    def get_current_level(self) -> MetroidPrimeLevel:
         """Returns the world that the player is currently in"""
         world_bytes = self.dolphin_client.read_pointer(
             game_state_pointer, 0x84, struct.calcsize(">I"))
@@ -145,7 +145,7 @@ class MetroidPrimeInterface:
 
     def is_in_playable_state(self) -> bool:
         """ Check if the player is in the actual game rather than the main menu """
-        return self.get_current_area() != None and self.__is_player_table_ready()
+        return self.get_current_level() != None and self.__is_player_table_ready()
 
     def __is_player_table_ready(self) -> bool:
         """Check if the player table is ready to be read from memory, indicating the game is in a playable state"""
@@ -212,3 +212,20 @@ class MetroidPrimeInterface:
     def get_layer_active(self, area_index: int, layer_id: int):
         area = self.__get_area(area_index)
         return area.layerBitsLo & (1 << layer_id) != 0
+
+    def sync_artifact_layers(self) -> bool:
+        """Looks at the artifacts the player currently has and updates the layers in the artifact temple to match, only works if the player is in Tallon Overworld"""
+        if self.get_current_level() == MetroidPrimeLevel.Tallon_Overworld:
+            current_inventory = self.get_current_inventory()
+            # for each item in the inventory, check if it is an artifact and update the layer
+            for item in current_inventory.values():
+                if item.id >= 29 and item.id <= 40:
+                    layer_id = self.get_artifact_layer(item.id)
+                    active = self.get_layer_active(
+                        ARTIFACT_TEMPLE_ROOM_INDEX, layer_id)
+                    if active != (item.current_amount > 0):
+                        self.logger.debug(
+                            f"Setting Artifact layer for {item.name} to {item.current_amount > 0}")
+                        self.set_layer_active(
+                            ARTIFACT_TEMPLE_ROOM_INDEX, layer_id, item.current_amount > 0)
+                        changed = True
