@@ -48,6 +48,11 @@ FILLER = {
     "Time Shard (500)": 5,
 }
 
+TRAPS = {
+    "Teleport Trap": 5,
+    "Prophecy Trap": 10,
+}
+
 # item_name_to_id needs to be deterministic and match upstream
 ALL_ITEMS = [
     *NOTES,
@@ -71,6 +76,8 @@ ALL_ITEMS = [
     *SHOP_ITEMS,
     *FIGURINES,
     "Money Wrench",
+    "Teleport Trap",
+    "Prophecy Trap",
 ]
 
 # locations

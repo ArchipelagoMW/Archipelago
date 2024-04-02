@@ -86,3 +86,5 @@ Notes:
 - There is no limit to the number of Shops hard-coded into place.
 - If you have more than one shop in a scene, you may be wrong warped when exiting a shop.
 - If you have a shop in every scene, and you have an odd number of shops, it will error out.
+
+See the [Archipelago Plando Guide](../../../tutorial/Archipelago/plando/en) for more information on Plando and Connection Plando.
