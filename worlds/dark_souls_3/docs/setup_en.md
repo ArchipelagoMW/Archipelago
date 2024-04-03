@@ -12,7 +12,7 @@
 ## Setting Up
 
 First, download the client from the link above. It doesn't need to go into any particular directory;
-it'll automatically locate _Dark Souls III_ in your Steam in your Steam installation folder.
+it'll automatically locate _Dark Souls III_ in your Steam installation folder.
 
 Version 3.0.0 of the randomizer _only_ supports the latest version of _Dark Souls III_, 1.15.2. This
 is the latest version, so you don't need to do any downpatching! However, if you've already
@@ -42,7 +42,7 @@ To run _Dark Souls III_ in Archipelago mode:
    you can use to interact with the Archipelago server.
 
 3. Type `/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME}` into the command prompt, with the
-   appropriate values filled in.
+   appropriate values filled in. For example: `/connect archipelago.gg:24242 PlayerName`.
 
 4. Start playing as normal. An "Archipelago connected" message will appear onscreen once you have
    control of your character and the connection is established.
@@ -51,5 +51,5 @@ To run _Dark Souls III_ in Archipelago mode:
 
 ### Where do I get a config file?
 
-The [Player Settings](/games/Dark%20Souls%20III/player-settings) page on the website allows you to
-configure your personal settings and export them into a config file.
+The [Player Options](/games/Dark%20Souls%20III/player-options) page on the website allows you to
+configure your personal options and export them into a config file.
