@@ -6,12 +6,12 @@ See full instructions on [the setup page].
 
 [the setup page]: /tutorial/Dark%20Souls%20III/setup/en
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game] contains all the options you need to
-configure and export a config file.
+The [player options page for this game][options] contains all the options you
+need to configure and export a config file.
 
-[player settings page for this game]: ../player-settings
+[options]: ../player-options
 
 ## What does randomization do to this game?
 
@@ -27,6 +27,10 @@ configure and export a config file.
 
 4. By setting the "Randomize Weapon Level" or "Randomize Infusion" options, you
    can randomize whether the weapons you find will be upgraded or infused.
+
+There are also other settings that can make playing the game more convenient or
+bring a new experience, like removing equip loads or auto-equipping weapons as
+you pick them up. Check out [the options page][options] for more!
 
 ## What's the goal?
 
