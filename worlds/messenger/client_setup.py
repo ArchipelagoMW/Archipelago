@@ -22,9 +22,10 @@ def launch_game(url: Optional[str] = None) -> None:
         """Check if Courier is installed"""
         assembly_path = os.path.join(game_folder, "TheMessenger_Data", "Managed", "Assembly-CSharp.dll")
         with open(assembly_path, "rb") as assembly:
-            courier = bytearray("Courier", "utf-8")
-            installed = courier in assembly.read()
-        return installed
+            for line in assembly:
+                if b"Courier" in line:
+                    return True
+        return False
 
     def mod_installed() -> bool:
         """Check if the mod is installed"""
