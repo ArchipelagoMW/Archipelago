@@ -139,6 +139,32 @@ def patch_rom(world: World, rom, player):
     rom.write_byte(0x17FFEC, world.options.vile_heart_tank_count.value)
     rom.write_byte(0x17FFED, world.options.vile_sub_tank_count.value)
 
+    rom.write_byte(0x17FFEE, world.options.logic_boss_weakness.value)
+    rom.write_byte(0x17FFEF, world.options.logic_vile_required.value)
+    rom.write_byte(0x17FFF0, world.options.logic_z_saber.value)
+    
+    #rom.write_byte(0x17FFF1, world.options.doppler_lab_1_boss.value)
+    rom.write_byte(0x17FFF1, 0x00)
+    rom.write_byte(0x17FFF2, world.options.doppler_lab_2_boss.value)
+    rom.write_byte(0x17FFF3, world.options.doppler_lab_3_boss_rematch_count.value)
+
+    bit_medal_count = world.options.bit_medal_count.value
+    byte_medal_count = world.options.byte_medal_count.value
+    if bit_medal_count == 0 and byte_medal_count == 0:
+        byte_medal_count = 1
+    elif bit_medal_count >= byte_medal_count:
+        if bit_medal_count == 7:
+            bit_medal_count = 6
+        byte_medal_count = bit_medal_count + 1
+    rom.write_byte(0x17FFF4, bit_medal_count)
+    rom.write_byte(0x17FFF5, byte_medal_count)
+
+    # QoL
+    rom.write_byte(0x17FFF6, world.options.disable_charge_freeze.value)
+
+    # EnergyLink
+    rom.write_byte(0x17FFF7, world.options.energy_link.value)
+    
     # Setup starting life count
     rom.write_byte(0x0019B1, world.options.starting_life_count.value)
     rom.write_byte(0x0072C3, world.options.starting_life_count.value)

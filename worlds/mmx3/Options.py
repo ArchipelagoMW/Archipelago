@@ -3,6 +3,13 @@ import typing
 
 from Options import Choice, Range, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions, StartInventoryPool
 
+
+class EnergyLink(DefaultOnToggle):
+    """
+    Energy Link
+    """
+    display_name = "Energy Link"
+
 class StartingLifeCount(Range):
     """
     How many lives to start the game with. 
@@ -12,6 +19,12 @@ class StartingLifeCount(Range):
     range_start = 0
     range_end = 9
     default = 2
+
+class DisableChargeFreeze(DefaultOnToggle):
+    """
+    wea
+    """
+    display_name = "Disable Level 3 Charge freeze after shooting"
 
 class LogicBossWeakness(DefaultOnToggle):
     """
@@ -45,18 +58,10 @@ class PickupSanity(Toggle):
     """
     display_name = "Pickupsanity"
 
-class Lab1Boss(Choice):
-    """
-    Cuál jefe estará en Doppler Lab 1
-    """
-    display_name = "Doppler Lab 1 Boss"
-    option_press_disposer = 0
-    option_godkarmachine = 1
-    default = 0
-
 class Lab2Boss(Choice):
     """
-    Cuál jefe estará en Doppler Lab 2
+    Which boss will be featured in second Dr Doppler's Lab stage
+    Note: Also affects the stage.
     """
     display_name = "Doppler Lab 2 Boss"
     option_volt_kurageil = 0
@@ -65,7 +70,7 @@ class Lab2Boss(Choice):
 
 class Lab3BossRematchCount(Range):
     """
-    Cuántos jefes se ocupan vencer para declarar como acabado el boss rush de Dr. Doppler's Lab 3
+    How many boss rematches are needed in the third Dr. Doppler's Lab stage
     """
     display_name = "Doppler Lab 2 Boss"
     range_start = 0
@@ -206,30 +211,31 @@ class BitMedalCount(Range):
     """
     display_name = "Bit Medal Count"
     range_start = 0
-    range_end = 6
+    range_end = 5
     default = 2
 
 class ByteMedalCount(Range):
     """
     How many Maverick Medals are required to access Byte's fight.
-    Nota: Si el conteo de medallas de Byte es igual o menor al de Bit, 
-          se usara la cantidad de Bit + 1
+    Note: If Byte's medal count is less or equal than Bit's the
+          value will be adjusted to Bit's + 1 
     """
     display_name = "Byte Medal Count"
     range_start = 1
-    range_end = 7
-    default = 6
+    range_end = 6
+    default = 5
 
 @dataclass
 class MMX3Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     death_link: DeathLink
+    energy_link: EnergyLink
+    disable_charge_freeze: DisableChargeFreeze
     starting_life_count: StartingLifeCount
+    pickupsanity: PickupSanity
     logic_boss_weakness: LogicBossWeakness
     logic_vile_required: LogicRequireVileDefeatForDoppler
     logic_z_saber: LogicZSaber
-    pickupsanity: PickupSanity
-    doppler_lab_1_boss: Lab1Boss
     doppler_lab_2_boss: Lab2Boss
     doppler_lab_3_boss_rematch_count: Lab3BossRematchCount
     doppler_open: DopplerOpen
