@@ -17,6 +17,17 @@ METROID_PRIME_ID = b"GM8E01"
 ARTIFACT_TEMPLE_ROOM_INDEX = 16
 
 
+class MetroidPrimeSuit(Enum):
+    Power = 0
+    Gravity = 1
+    Varia = 2
+    Phazon = 3
+    FusionPower = 4
+    FusionGravity = 5
+    FusionVaria = 6
+    FusionPhazon = 7
+
+
 class MetroidPrimeLevel(Enum):
     """Game worlds with their corresponding IDs in memory"""
     Impact_Crater = 3241871825
@@ -78,6 +89,17 @@ class MetroidPrimeInterface:
         """Gives the player an item with the specified amount and capacity"""
         self.dolphin_client.write_pointer(self.__get_player_state_pointer(),
                                           self.__calculate_item_offset(item_id), struct.pack(">II", new_amount, new_capacity))
+        if item_id > 20 and item_id <= 23:
+          current_suit = self.get_current_suit()
+          if current_suit == MetroidPrimeSuit.Phazon:
+            return
+          elif item_id == 23:
+            self.set_current_suit(MetroidPrimeSuit.Phazon)
+          elif item_id == 21:
+            self.set_current_suit(MetroidPrimeSuit.Gravity)
+          elif item_id == 22 and current_suit != MetroidPrimeSuit.Gravity:
+            self.set_current_suit(MetroidPrimeSuit.Varia)
+
 
     def check_for_new_locations(self):
         pass
@@ -105,6 +127,27 @@ class MetroidPrimeInterface:
             if item.id <= MAX_VANILLA_ITEM_ID:
                 inventory[item.name] = self.get_item(item)
         return inventory
+
+    def get_current_suit(self) -> MetroidPrimeSuit:
+        player_state_pointer = self.__get_player_state_pointer()
+        result = self.dolphin_client.read_pointer(
+            player_state_pointer, 0x20, 4)
+        suit_id = struct.unpack(">I", result)[0]
+        return MetroidPrimeSuit(suit_id)
+
+    def set_current_suit(self, suit: MetroidPrimeSuit):
+        player_state_pointer = self.__get_player_state_pointer()
+        self.dolphin_client.write_pointer(
+            player_state_pointer, 0x20, struct.pack(">I", suit.value))
+
+    def get_alive(self) -> bool:
+      # player_state_pointer = self.__get_player_state_pointer()
+      # value = struct.unpack(">I", self.dolphin_client.read_pointer(player_state_pointer, 0x0, 4))[0]
+      # Isolate the x0_24_alive bit and return it as a boolean
+      # return bool(value & (1 << 24))
+      # For some reason the above method does not work as expected.
+      return self.get_current_health() > 0
+
 
     def get_current_level(self) -> MetroidPrimeLevel:
         """Returns the world that the player is currently in"""
