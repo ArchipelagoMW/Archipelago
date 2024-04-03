@@ -14,7 +14,6 @@ location_id_to_level_id = {
     LocationName.blast_hornet_heart_tank:       [0x01, 0x002, 0x01],
     LocationName.blast_hornet_chimera_ride:     [0x01, 0x005, 0x01],
     LocationName.blast_hornet_helmet:           [0x01, 0x006, 0x10],
-    LocationName.blast_hornet_event:            [0x01, 0x00F, 0x00],
     LocationName.blast_hornet_hp_1:             [0x01, 0x102, 0x00],
     LocationName.blast_hornet_hp_2:             [0x01, 0x103, 0x00],
 
@@ -122,7 +121,7 @@ location_id_to_level_id = {
     LocationName.doppler_lab_1_hp_2:            [0x0A, 0x138, 0x00],
 
     LocationName.doppler_lab_2_boss:            [0x0B, 0x210, 0x00],
-    LocationName.doppler_lab_2_mini_boss:       [0x0B, 0x211, 0x00],
+    #LocationName.doppler_lab_2_mini_boss:       [0x0B, 0x211, 0x00],
 
     LocationName.doppler_lab_3_boss:            [0x0C, 0x212, 0x00],
     LocationName.doppler_lab_3_blizzard_buffalo: [0x0C, 0x213, 0x00],

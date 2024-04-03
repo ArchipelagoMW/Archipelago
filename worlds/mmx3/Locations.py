@@ -30,7 +30,7 @@ stage_location_table = {
     LocationName.doppler_lab_1_boss:                starting_id + 0x000E,
     LocationName.doppler_lab_1_mini_boss:           starting_id + 0x000F,
     LocationName.doppler_lab_2_boss:                starting_id + 0x0010,
-    LocationName.doppler_lab_2_mini_boss:           starting_id + 0x0011,
+    #LocationName.doppler_lab_2_mini_boss:           starting_id + 0x0011,
     LocationName.doppler_lab_3_boss:                starting_id + 0x0012,
     LocationName.doppler_lab_3_blizzard_buffalo:    starting_id + 0x0013,
     LocationName.doppler_lab_3_toxic_seahorse:      starting_id + 0x0014,

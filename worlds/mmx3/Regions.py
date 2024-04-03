@@ -220,7 +220,7 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
 
     # Dr. Doppler Lab 2
     add_location_to_region(multiworld, player, active_locations, RegionName.dr_doppler_lab_2, LocationName.doppler_lab_2_boss)
-    add_location_to_region(multiworld, player, active_locations, RegionName.dr_doppler_lab_2, LocationName.doppler_lab_2_mini_boss)
+    #add_location_to_region(multiworld, player, active_locations, RegionName.dr_doppler_lab_2, LocationName.doppler_lab_2_mini_boss)
     add_event_to_region(multiworld, player, RegionName.dr_doppler_lab_2, EventName.dr_doppler_lab_2_clear)
 
     # Dr. Doppler Lab 3
