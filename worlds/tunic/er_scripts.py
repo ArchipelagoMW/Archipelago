@@ -88,12 +88,8 @@ def place_event_items(world: "TunicWorld", regions: Dict[str, Region]) -> None:
 
 def vanilla_portals() -> Dict[Portal, Portal]:
     portal_pairs: Dict[Portal, Portal] = {}
-    portal_map = portal_mapping.copy()
-    # we don't want this one for the vanilla mapping
-    for portal in portal_map:
-        if portal.name == "Ziggurat Lower Falling Entrance":
-            portal_map.remove(portal)
-            break
+    # we don't want the zig skip exit for vanilla portals, since it shouldn't be considered for logic here
+    portal_map = [portal for portal in portal_mapping if portal.name != "Ziggurat Lower Falling Entrance"]
 
     while portal_map:
         portal1 = portal_map[0]
@@ -144,11 +140,11 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                 break
 
     if not logic_rules:
-        dependent_regions = dependent_regions_restricted
+        dependent_regions = dependent_regions_restricted.copy()
     elif logic_rules == 1:
-        dependent_regions = dependent_regions_nmg
+        dependent_regions = dependent_regions_nmg.copy()
     else:
-        dependent_regions = dependent_regions_ur
+        dependent_regions = dependent_regions_ur.copy()
 
     # create separate lists for dead ends and non-dead ends
     if logic_rules:
