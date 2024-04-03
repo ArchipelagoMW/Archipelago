@@ -34,11 +34,13 @@ class TurtleRandomizer(Choice):
     option_randomize_turtle_other_than_the_final_one = 2
     default = 2
 
+
 class EarlyEnergyForm(DefaultOnToggle):
     """
     Force the Energy Form to be in a location before leaving the areas around the Home Water.
     """
     display_name = "Early Energy Form"
+
 
 class AquarianTranslation(Toggle):
     """Translate to English the Aquarian scripture in the game."""
@@ -90,6 +92,36 @@ class Objective(Choice):
     option_obtain_secrets_and_kill_the_creator = 1
     default = 0
 
+class SkipFirstVision(Toggle):
+    """
+    The first vision in the game; where Naija transform to Energy Form and get fload by enemy; is quite cool but
+    can be quite long when you already know what is going on. This option can be used to skip this vision.
+    """
+    display_name = "Skip first Naija's vision"
+
+class ExcludeHardOrHiddenLocation(Toggle):
+    """
+    Make sure that there is no progression items at hard to get or hard to find locations.
+    Locations that will be excluded are very High location (that need beast form, soup and skill to get), every
+    location in the bubble cave, locations that need you to cross a false wall without any indication, Arnassi
+    race, bosses and mini-bosses. Usefull for those that want a casual run.
+    """
+    display_name = "Exclude hard or hidden locations"
+
+class LightNeededToGetToDarkPlaces(DefaultOnToggle):
+    """
+    Make sure that the sun form or the dumbo pet can be aquired before getting to dark places. Be aware that navigating
+    in dark place without light is extremely difficult.
+    """
+    display_name = "Light needed to get to dark places"
+
+class BindSongNeededToGetUnderRockBulb(Toggle):
+    """
+    Make sure that the bind song can be aquired before having to obtain sing bulb under rocks.
+    """
+    display_name = "Bind song needed to get sing bulbs under rocks"
+
+
 
 @dataclass
 class AquariaOptions(PerGameCommonOptions):
@@ -104,4 +136,8 @@ class AquariaOptions(PerGameCommonOptions):
     early_energy_form: EarlyEnergyForm
     big_bosses_to_beat: BigBossesToBeat
     mini_bosses_to_beat: MiniBossesToBeat
+    skip_first_vision: SkipFirstVision
+    exclude_hard_or_hidden_locations: ExcludeHardOrHiddenLocation
+    light_needed_to_get_to_dark_places: LightNeededToGetToDarkPlaces
+    bind_song_needed_to_get_under_rock_bulb: BindSongNeededToGetUnderRockBulb
     death_link: DeathLink

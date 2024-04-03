@@ -161,7 +161,7 @@ item_table = {
     "Plant leaf x 3": (698109, 4, ItemType.NORMAL, ItemGroup.INGREDIENT),  # ingredient_plantleaf
     "Rotten meat x 2": (698110, 1, ItemType.JUNK, ItemGroup.INGREDIENT),  # ingredient_rottenmeat
     "Rotten meat x 8": (698111, 1, ItemType.JUNK, ItemGroup.INGREDIENT),  # ingredient_rottenmeat
-    "Sea loaf x 2": (698112, 1, ItemType.NORMAL, ItemGroup.RECIPE),  # ingredient_sealoaf
+    "Sea loaf x 2": (698112, 1, ItemType.JUNK, ItemGroup.RECIPE),  # ingredient_sealoaf
     "Small bone x 3": (698113, 3, ItemType.NORMAL, ItemGroup.INGREDIENT),  # ingredient_smallbone
     "Small egg x 2": (698114, 1, ItemType.NORMAL, ItemGroup.INGREDIENT),  # ingredient_smallegg
     "Li and Li song": (698115, 1, ItemType.PROGRESSION, ItemGroup.SONG),  # song_li
