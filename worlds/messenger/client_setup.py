@@ -20,7 +20,11 @@ def launch_game(url: Optional[str] = None) -> None:
     """Check the game installation, then launch it"""
     def courier_installed() -> bool:
         """Check if Courier is installed"""
-        return os.path.exists(os.path.join(game_folder, "TheMessenger_Data", "Managed", "Assembly-CSharp.Courier.mm.dll"))
+        assembly_path = os.path.join(game_folder, "TheMessenger_Data", "Managed", "Assembly-CSharp.dll")
+        with open(assembly_path, "rb") as assembly:
+            courier = bytearray("Courier", "utf-8")
+            installed = courier in assembly.read()
+        return installed
 
     def mod_installed() -> bool:
         """Check if the mod is installed"""
@@ -76,12 +80,13 @@ def launch_game(url: Optional[str] = None) -> None:
                 for file in files:
                     os.remove(file)
             else:
-                installer = subprocess.Popen([mono_exe, os.path.join(game_folder, "MiniInstaller.exe")], shell=False)
+                installer = subprocess.Popen([mono_exe, os.path.join(game_folder, "MiniInstaller.exe")], shell=True)
                 failure = installer.wait()
         else:
-            installer = subprocess.Popen(os.path.join(game_folder, "MiniInstaller.exe"), shell=False)
+            installer = subprocess.Popen(os.path.join(game_folder, "MiniInstaller.exe"), shell=True)
             failure = installer.wait()
 
+        print(failure)
         if failure:
             messagebox("Failure", "Failed to install Courier", True)
             os.chdir(working_directory)
