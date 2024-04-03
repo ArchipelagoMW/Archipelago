@@ -252,7 +252,7 @@ class TunicWorld(World):
                     warning(f"{location.name} is not logically accessible for "
                             f"{self.multiworld.get_file_safe_player_name(self.player)}. "
                             "Creating entrance hint Inaccessible. "
-                            "Please report this to the Tunic rando devs.")
+                            "Please report this to the TUNIC rando devs.")
                     hint_text = "Inaccessible"
                 else:
                     while connection != ("Menu", None):
