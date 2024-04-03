@@ -28,9 +28,7 @@ class MessengerSettings(Group):
     class GamePath(FilePath):
         description = "The Messenger game executable"
         is_exe = True
-        steam_hash = "1b53534569060bc06179356cd968ed1d"  # apparently twitch prime uses this hash too
-        epic_hash = ""
-        md5s = [steam_hash, epic_hash]
+        md5s = ["1b53534569060bc06179356cd968ed1d"]
 
     game_path: GamePath = GamePath("TheMessenger.exe")
 
