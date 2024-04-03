@@ -1,6 +1,7 @@
 import settings
 import typing
 import copy
+import os
 from .Options import SoulBlazerOptions  # the options we defined earlier
 from .Items import (
     SoulBlazerItem,
@@ -12,6 +13,7 @@ from .Items import (
 from .Locations import SoulBlazerLocation, all_locations_table  # same as above
 from .Regions import create_regions
 from .Rules import set_rules
+from .Rom import SoulBlazerDeltaPatch, LocalRom, patch_rom, get_base_rom_path
 from worlds.AutoWorld import WebWorld, World
 from BaseClasses import MultiWorld, Region, Location, Entrance, Item, ItemClassification, Tutorial
 
@@ -29,10 +31,12 @@ npc_reward_offset: int = 500
 
 class SoulBlazerSettings(settings.Group):
     class RomFile(settings.SNESRomPath):
-        """Insert help text for host.yaml here."""
+        """File name of the Soul Blazer US rom"""
+        copy_to = "Soul Blazer (U).sfc"
+        description = "Soul blazer (US) ROM File"
+        md5s = [SoulBlazerDeltaPatch.hash]
 
-    rom_file: RomFile = RomFile("Soul Blazer (U) [!].smc")  # TODO: use sfc instead?
-
+    rom_file: RomFile = RomFile(RomFile.copy_to)
 
 class SoulBlazerWeb(WebWorld):
     theme = "grass"
@@ -47,7 +51,7 @@ class SoulBlazerWeb(WebWorld):
         ["AuthorName"],
     )
 
-    tutorials = [setup_en]
+    #tutorials = [setup_en]
 
 
 class SoulBlazerWorld(World):
@@ -147,8 +151,23 @@ class SoulBlazerWorld(World):
     def post_fill(self) -> None:
         pass
 
-    def generate_output(self, output_directory: str) -> None:
-        pass
+    def generate_output(self, output_directory: str):
+        try:
+            rom = LocalRom(get_base_rom_path())
+            patch_rom(self, rom, self.active_level_list)
+
+            rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
+            rom.write_to_file(rompath)
+            self.rom_name = rom.name
+
+            patch = SoulBlazerDeltaPatch(os.path.splitext(rompath)[0]+SoulBlazerDeltaPatch.patch_file_ending, player=self.player,
+                                   player_name=self.multiworld.player_name[self.player], patched_path=rompath)
+            patch.write()
+        except:
+            raise
+        finally:
+            if os.path.exists(rompath):
+                os.unlink(rompath)
 
     def fill_slot_data(self) -> typing.Dict[str, typing.Any]:  # json of WebHostLib.models.Slot
         return {}
@@ -156,5 +175,5 @@ class SoulBlazerWorld(World):
     def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
         pass
 
-    def modify_multidata(self, multidata: typing.Dict[str, typing.Any]) -> None:  # TODO: TypedDict for multidata?
+    def modify_multidata(self, multidata: typing.Dict[str, typing.Any]) -> None:
         pass

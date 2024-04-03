@@ -39,14 +39,13 @@ class SoulBlazerLocationData(namedtuple):
 
 class SoulBlazerLocation(Location):
     game = "Soul Blazer"
-    _data: SoulBlazerLocationData
 
     def __init__(
-        self, player: int, name: str, data: SoulBlazerLocationData | None = None, parent: Region | None = None
+        self, player: int, name: str, data: SoulBlazerLocationData, parent: Region | None = None
     ):
         super().__init__(player, name, parent=parent)
-        self._data = data
-        self.access_rule = get_rule_for_location(name, player, data.flag)
+        self.data: SoulBlazerLocationData = data
+        self.access_rule = get_rule_for_location(name, player, self.data.flag)
 
 
 # TODO: move data into yaml or json

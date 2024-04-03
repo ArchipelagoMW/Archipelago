@@ -85,6 +85,12 @@ class SoulBlazerItem(Item):
     def operand_bcd(self, bcd: int):
         self._itemData.operand_bcd = bcd
 
+    @property
+    def operand_for_id(self) -> int:
+        if self.id == ItemID.GEMS or ItemID == ItemID.EXP:
+            return self.operand_bcd
+        return self.operand
+
 
 herb_count = 20
 """Number of Herbs in vanilla item pool"""
