@@ -166,9 +166,11 @@ def launch_game(url: Optional[str] = None) -> None:
                 install_mod()
             elif should_update is None:
                 return
+    should_launch = askyesnocancel("Launch Game",
+                                   "Mod installed and up to date. Would you like to launch the game now?")
+    if not should_launch:
+        return
     if not is_windows:
-        if not which("mono"):
-            return
         if url:
             open_file(f"steam://rungameid/764790//{url}/")
         else:
