@@ -583,6 +583,9 @@ class DarkSouls3World(World):
                 and self._has_any_scroll(state)
             ))
 
+            if self.options.late_basin_of_vows > 1: # After Small Doll
+                self._add_entrance_rule("Lothric Castle", "Small Doll")
+
         # DLC Access Rules Below
         if self.options.enable_dlc:
             self._add_entrance_rule("Painted World of Ariandel (Before Contraption)", "CD -> PW1")
@@ -600,6 +603,9 @@ class DarkSouls3World(World):
                 self._add_entrance_rule(
                     "Painted World of Ariandel (Before Contraption)",
                     lambda state: state.has("Small Doll", self.player) and self._has_any_scroll(state))
+
+            if self.options.late_dlc > 1: # After Basin
+                self._add_entrance_rule("Painted World of Ariandel (Before Contraption)", "Basin of Vows")
 
         # Define the access rules to some specific locations
         if self._is_location_available("FS: Lift Chamber Key - Leonhard"):
@@ -645,6 +651,9 @@ class DarkSouls3World(World):
                 # useful for smooth item placement.
                 and self._has_any_scroll(state)
             ))
+
+            if self.options.late_basin_of_vows > 1: # After Small Doll
+                self._add_location_rule("HWL: Soul of the Dancer", "Small Doll")
 
         self._add_location_rule([
             "LC: Grand Archives Key - by Grand Archives door, after PC and AL bosses",

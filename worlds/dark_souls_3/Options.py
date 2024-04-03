@@ -308,14 +308,30 @@ class EarlySmallLothricBanner(Choice):
     default = option_off
 
 
-class LateBasinOfVowsOption(Toggle):
-    """This option makes it so the Basin of Vows is still randomized, but guarantees you that you wont have to venture into Lothric Castle to find your Small Lothric Banner to get out of High Wall of Lothric. So you may find Basin of Vows early, but you wont have to fight Dancer to find your Small Lothric Banner."""
+class LateBasinOfVowsOption(Choice):
+    """This option makes it so the Basin of Vows is still randomized, but you can choose the requirements to venture into Lothric Castle.
+    "Off": You may have to enter Lothric Castle and the areas beyond it before finding your Small Lothric Banner.
+    "After Small Lothric Banner": You are guaranteed to find your Small Lothric Banner before needing to enter Lothric Castle.
+    "After Small Doll": You are guaranteed to find your Small Lothric Banner and your Small Doll before needing to enter Lothric Castle."""
     display_name = "Late Basin of Vows"
+    option_off = 0
+    alias_false = 0
+    option_after_small_lothric_banner = 1
+    alias_true = 1
+    option_after_small_doll = 2
 
 
-class LateDLCOption(Toggle):
-    """This option makes it so you are guaranteed to find your Small Doll without having to venture off into the DLC, effectively putting anything in the DLC in logic after finding both Contraption Key and Small Doll, and being able to get into Irithyll of the Boreal Valley."""
+class LateDLCOption(Choice):
+    """This option makes it so the Small Doll is still randomized, but you can choose the requirements to venture into Painted World of Ariandel.
+    "Off": You may have to enter Ariandel and the areas beyond it before finding your Small Doll.
+    "After Small Doll": You are guaranteed to find your Small Doll before needing to enter Ariandel.
+    "After Basin": You are guaranteed to find your Small Doll and your Basin of Vows before needing to enter Ariandel."""
     display_name = "Late DLC"
+    option_off = 0
+    alias_false = 0
+    option_after_small_doll = 1
+    alias_true = 1
+    option_after_basin = 2
 
 
 class EnableDLCOption(Toggle):
