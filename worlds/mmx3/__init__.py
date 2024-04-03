@@ -64,7 +64,7 @@ class MMX3World(World):
         
         connect_regions(self)
         
-        total_required_locations = 54
+        total_required_locations = 53
         if self.options.pickupsanity:
             total_required_locations += 58
         
@@ -176,13 +176,18 @@ class MMX3World(World):
     def set_rules(self):
         from .Rules import set_rules
         set_rules(self)
-
     
-    def _get_slot_data(self):
-        return
+    def fill_slot_data(self):
+        slot_data = {}
+        for option_name in (attr.name for attr in dataclasses.fields(MMX3Options)
+                            if attr not in dataclasses.fields(PerGameCommonOptions)):
+            option = getattr(self.options, option_name)
+            slot_data[option_name] = option.value
+        return slot_data
     
     def generate_early(self):
-        return
+        early_stage = self.random.choice(list(item_groups["Access Codes"]))
+        self.multiworld.local_early_items[self.player][early_stage] = 1
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(list(junk_table.keys()))
