@@ -87,9 +87,7 @@ class MM2World(World):
     item_name_to_id = {item: item_table[item].code for item in item_table}
     location_name_to_id = location_table
     item_name_groups = item_names
-    data_version = 0
     web = MM2WebWorld()
-    boss_requirements = dict()
     rom_name: typing.Optional[bytearray]
 
     def __init__(self, world: MultiWorld, player: int):
@@ -97,12 +95,6 @@ class MM2World(World):
         self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
         self.weapon_damage = weapon_damage.copy()
-
-    @classmethod
-    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
-        rom_file: str = get_base_rom_path()
-        if not os.path.exists(rom_file):
-            raise FileNotFoundError(f"Could not find base ROM for {cls.game}: {rom_file}")
 
     def create_regions(self):
         menu = Region("Menu", self.player, self.multiworld)
@@ -180,20 +172,18 @@ class MM2World(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def generate_output(self, output_directory: str):
-        rompath = ""
         try:
             patch = MM2ProcedurePatch()
             patch_rom(self, patch)
 
             self.rom_name = patch.name
 
-            patch.write()
+            patch.write(os.path.join(output_directory,
+                                     f"{self.multiworld.get_out_file_name_base(self.player)}{patch.patch_file_ending}"))
         except Exception:
             raise
         finally:
             self.rom_name_available_event.set()  # make sure threading continues and errors are collected
-            if os.path.exists(rompath):
-                os.unlink(rompath)
 
     def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
         return {

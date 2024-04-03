@@ -1,3 +1,4 @@
+import typing
 from typing import Dict, Tuple, List, TYPE_CHECKING, Union
 from . import Names
 from zlib import crc32
@@ -169,12 +170,35 @@ def get_colors_for_item(name: str) -> Tuple[int, int]:
     return color_1, color_2
 
 
+def parse_color(colors: typing.List[str]):
+    color_1 = colors[0]
+    if color_1.startswith("$"):
+        color_1 = int(color_1[1:], 16)
+    else:
+        # assume it's in our list of colors
+        color_1 = HTML_TO_NES[color_1.upper()]
+
+    if len(colors) == 1:
+        color_2 = extrapolate_color(color_1)
+    else:
+        color_2 = colors[1]
+        if color_2.startswith("$"):
+            color_2 = int(color_2[1:])
+        else:
+            color_2 = HTML_TO_NES[color_2.upper()]
+    return color_1, color_2
+
+
 def write_palette_shuffle(world: "MM2World", rom: "MM2ProcedurePatch"):
     palette_shuffle: Union[int, str] = world.options.palette_shuffle.value
     palettes_to_write: Dict[str, Tuple[int, int]] = {}
     if isinstance(palette_shuffle, str):
         color_sets = palette_shuffle.split(";")
-        palette_shuffle = world.options.palette_shuffle.options[color_sets.pop()]
+        if len(color_sets) == 1:
+            palette_shuffle = world.options.palette_shuffle.option_none
+            # singularity is more correct, but this is faster
+        else:
+            palette_shuffle = world.options.palette_shuffle.options[color_sets.pop()]
         for color_set in color_sets:
             if "-" in color_set:
                 character, colors = color_set.split("-")
@@ -182,16 +206,14 @@ def write_palette_shuffle(world: "MM2World", rom: "MM2ProcedurePatch"):
                     logging.warning(f"Player {world.multiworld.get_player_name(world.player)} "
                                     f"attempted to set color for unrecognized option {character}")
                 colors = colors.split("|")
-                if len(colors) < 2:
-                    colors = extrapolate_color(HTML_TO_NES[colors[0].upper()])
-                else:
-                    colors = map(lambda s: HTML_TO_NES[s.upper()], colors)
-                palettes_to_write[character.title()] = tuple(colors)
+                colors = parse_color(colors)
+                palettes_to_write[character.title()] = colors
             else:
-                # this is invalid
-                logging.warning(f"Player {world.multiworld.get_player_name(world.player)} "
-                                f"provided improper color set {color_set}")
-
+                # If color is provided with no character, assume singularity
+                colors = color_set.split("|")
+                colors = parse_color(colors)
+                for character in palette_pointers:
+                    palettes_to_write[character] = colors
         # Now we handle the real values
     if palette_shuffle != 0:
         if palette_shuffle > 1:
@@ -214,6 +236,11 @@ def write_palette_shuffle(world: "MM2World", rom: "MM2ProcedurePatch"):
                 if character not in palettes_to_write:
                     palettes_to_write[character] = colors.pop()
 
-        for character in palettes_to_write:
-            for pointer in palette_pointers[character]:
-                rom.write_bytes(pointer, bytes(palettes_to_write[character]))
+    for character in palettes_to_write:
+        for pointer in palette_pointers[character]:
+            rom.write_bytes(pointer, bytes(palettes_to_write[character]))
+
+        if character == "Atomic Fire":
+            # special case, we need to update Atomic Fire's flashing routine
+            rom.write_byte(0x3DE4A, palettes_to_write[character][1])
+            rom.write_byte(0x3DE4C, palettes_to_write[character][1])

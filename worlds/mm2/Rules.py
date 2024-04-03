@@ -69,7 +69,8 @@ def set_rules(world: "MM2World") -> None:
         for boss in range(13):
             for weapon in world.weapon_damage:
                 world.weapon_damage[weapon].append(min(14, max(-1, int(world.random.normalvariate(3, 3)))))
-            if not any([world.weapon_damage[weapon][boss] > 4 for weapon in range(1, 7)]):
+            if not any([world.weapon_damage[weapon][boss] > 4
+                        for weapon in range(1, 7)]):
                 # failsafe, there should be at least one defined non-Buster weakness
                 weapon = world.random.randint(1, 7)
                 world.weapon_damage[weapon][boss] = world.random.randint(4, 14)  # Force weakness
@@ -83,16 +84,32 @@ def set_rules(world: "MM2World") -> None:
     if world.options.strict_weakness:
         for weapon in weapon_damage:
             for i in range(13):
-                if i == 8 and not world.options.random_weakness:
-                    continue
-                if weapon == 0 or 4 > world.weapon_damage[weapon][i] > 0:
+                if weapon == 0:
                     world.weapon_damage[weapon][i] = 0
-        # handle atomic fire
+                elif i == 8 and not world.options.random_weakness:
+                    continue  # Mecha Dragon only has damage range of 0-1, so allow the 1
+                elif 4 > world.weapon_damage[weapon][i] > 0:
+                    world.weapon_damage[weapon][i] = 0
+        # handle special cases
         for boss in range(14):
-            if world.weapon_damage[1][boss] >= 4 and not any(world.weapon_damage[i][boss] > 0 for i in range(2, 8)):
-                # Atomic Fire can only shoot two fully powered shots
-                # So we need to be able to kill the boss in 2 hits
-                world.weapon_damage[1][boss] = 14
+            for weapon in (1, 3, 6):
+                if (0 < world.weapon_damage[weapon][boss] < minimum_weakness_requirement[weapon] and
+                        not any(world.weapon_damage[i][boss] > 0 for i in range(1, 8) if i != weapon)):
+                    # Weapon does not have enough possible ammo to kill the boss, raise the damage
+                    if boss == 9:
+                        if weapon != 3:
+                            # Atomic Fire and Crash Bomber cannot be Picopico-kun's only weakness
+                            world.weapon_damage[weapon][boss] = 0
+                            weakness = world.random.choice((2, 3, 4, 5, 7))
+                            world.weapon_damage[weakness][boss] = minimum_weakness_requirement[weakness]
+                    elif boss == 11:
+                        if weapon == 1:
+                            # Atomic Fire cannot be Boobeam Trap's only weakness
+                            world.weapon_damage[weapon][boss] = 0
+                            weakness = world.random.choice((2, 3, 4, 5, 6, 7))
+                            world.weapon_damage[weakness][boss] = minimum_weakness_requirement[weakness]
+                    else:
+                        world.weapon_damage[weapon][boss] = minimum_weakness_requirement[weapon]
         starting = world.options.starting_robot_master.value
         world.weapon_damage[0][starting] = 1
 
@@ -114,12 +131,10 @@ def set_rules(world: "MM2World") -> None:
     ]):
         if world.weapon_damage[0][i] > 0:
             continue  # this can always be in logic
-        if i == 11:
-            continue  # Boobeam Trap is handled after
         weapons = []
         for weapon in range(1, 8):
             if world.weapon_damage[weapon][i] > 0:
-                if weapon == 1 and world.weapon_damage[weapon][i] < 14:
+                if world.weapon_damage[weapon][i] < minimum_weakness_requirement[weapon]:
                     continue  # Atomic Fire can only be considered logical for bosses it can kill in 2 hits
                 weapons.append(weapons_to_name[weapon])
         if not weapons:
