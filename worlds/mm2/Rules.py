@@ -64,54 +64,57 @@ def can_defeat_enough_rbms(state: "CollectionState", player: int, required: int)
 def set_rules(world: "MM2World") -> None:
     # most rules are set on region, so we only worry about rules required within stage access
     # or rules variable on settings
-    if world.options.random_weakness:
-        world.weapon_damage = {i: [] for i in range(8)}
-        for boss in range(13):
+    if hasattr(world.multiworld, "generation_is_fake"):
+        pass  # we've already grabbed slot data equivalents
+    else:
+        if world.options.random_weakness:
+            world.weapon_damage = {i: [] for i in range(8)}
+            for boss in range(13):
+                for weapon in world.weapon_damage:
+                    world.weapon_damage[weapon].append(min(14, max(-1, int(world.random.normalvariate(3, 3)))))
+                if not any([world.weapon_damage[weapon][boss] > 4
+                            for weapon in range(1, 7)]):
+                    # failsafe, there should be at least one defined non-Buster weakness
+                    weapon = world.random.randint(1, 7)
+                    world.weapon_damage[weapon][boss] = world.random.randint(4, 14)  # Force weakness
+            # handle the alien
+            boss = 13
             for weapon in world.weapon_damage:
-                world.weapon_damage[weapon].append(min(14, max(-1, int(world.random.normalvariate(3, 3)))))
-            if not any([world.weapon_damage[weapon][boss] > 4
-                        for weapon in range(1, 7)]):
-                # failsafe, there should be at least one defined non-Buster weakness
-                weapon = world.random.randint(1, 7)
-                world.weapon_damage[weapon][boss] = world.random.randint(4, 14)  # Force weakness
-        # handle the alien
-        boss = 13
-        for weapon in world.weapon_damage:
-            world.weapon_damage[weapon].append(-1)
-        weapon = world.random.choice(list(world.weapon_damage.keys()))
-        world.weapon_damage[weapon][boss] = minimum_weakness_requirement[weapon]
+                world.weapon_damage[weapon].append(-1)
+            weapon = world.random.choice(list(world.weapon_damage.keys()))
+            world.weapon_damage[weapon][boss] = minimum_weakness_requirement[weapon]
 
-    if world.options.strict_weakness:
-        for weapon in weapon_damage:
-            for i in range(13):
-                if weapon == 0:
-                    world.weapon_damage[weapon][i] = 0
-                elif i == 8 and not world.options.random_weakness:
-                    continue  # Mecha Dragon only has damage range of 0-1, so allow the 1
-                elif 4 > world.weapon_damage[weapon][i] > 0:
-                    world.weapon_damage[weapon][i] = 0
-        # handle special cases
-        for boss in range(14):
-            for weapon in (1, 3, 6):
-                if (0 < world.weapon_damage[weapon][boss] < minimum_weakness_requirement[weapon] and
-                        not any(world.weapon_damage[i][boss] > 0 for i in range(1, 8) if i != weapon)):
-                    # Weapon does not have enough possible ammo to kill the boss, raise the damage
-                    if boss == 9:
-                        if weapon != 3:
-                            # Atomic Fire and Crash Bomber cannot be Picopico-kun's only weakness
-                            world.weapon_damage[weapon][boss] = 0
-                            weakness = world.random.choice((2, 3, 4, 5, 7))
-                            world.weapon_damage[weakness][boss] = minimum_weakness_requirement[weakness]
-                    elif boss == 11:
-                        if weapon == 1:
-                            # Atomic Fire cannot be Boobeam Trap's only weakness
-                            world.weapon_damage[weapon][boss] = 0
-                            weakness = world.random.choice((2, 3, 4, 5, 6, 7))
-                            world.weapon_damage[weakness][boss] = minimum_weakness_requirement[weakness]
-                    else:
-                        world.weapon_damage[weapon][boss] = minimum_weakness_requirement[weapon]
-        starting = world.options.starting_robot_master.value
-        world.weapon_damage[0][starting] = 1
+        if world.options.strict_weakness:
+            for weapon in weapon_damage:
+                for i in range(13):
+                    if weapon == 0:
+                        world.weapon_damage[weapon][i] = 0
+                    elif i == 8 and not world.options.random_weakness:
+                        continue  # Mecha Dragon only has damage range of 0-1, so allow the 1
+                    elif 4 > world.weapon_damage[weapon][i] > 0:
+                        world.weapon_damage[weapon][i] = 0
+            # handle special cases
+            for boss in range(14):
+                for weapon in (1, 3, 6):
+                    if (0 < world.weapon_damage[weapon][boss] < minimum_weakness_requirement[weapon] and
+                            not any(world.weapon_damage[i][boss] > 0 for i in range(1, 8) if i != weapon)):
+                        # Weapon does not have enough possible ammo to kill the boss, raise the damage
+                        if boss == 9:
+                            if weapon != 3:
+                                # Atomic Fire and Crash Bomber cannot be Picopico-kun's only weakness
+                                world.weapon_damage[weapon][boss] = 0
+                                weakness = world.random.choice((2, 3, 4, 5, 7))
+                                world.weapon_damage[weakness][boss] = minimum_weakness_requirement[weakness]
+                        elif boss == 11:
+                            if weapon == 1:
+                                # Atomic Fire cannot be Boobeam Trap's only weakness
+                                world.weapon_damage[weapon][boss] = 0
+                                weakness = world.random.choice((2, 3, 4, 5, 6, 7))
+                                world.weapon_damage[weakness][boss] = minimum_weakness_requirement[weakness]
+                        else:
+                            world.weapon_damage[weapon][boss] = minimum_weakness_requirement[weapon]
+            starting = world.options.starting_robot_master.value
+            world.weapon_damage[0][starting] = 1
 
     for i, boss in zip(range(14), [
         heat_man_locations,

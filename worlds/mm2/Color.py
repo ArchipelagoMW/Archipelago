@@ -179,7 +179,7 @@ def parse_color(colors: typing.List[str]):
         color_1 = HTML_TO_NES[color_1.upper()]
 
     if len(colors) == 1:
-        color_2 = extrapolate_color(color_1)
+        color_1, color_2 = extrapolate_color(color_1)
     else:
         color_2 = colors[1]
         if color_2.startswith("$"):

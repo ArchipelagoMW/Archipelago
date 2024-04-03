@@ -187,8 +187,15 @@ class MM2World(World):
 
     def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
         return {
-            "death_link": self.options.death_link.value
+            "death_link": self.options.death_link.value,
+            "weapon_damage": self.weapon_damage
         }
+
+    def interpret_slot_data(self, slot_data: typing.Dict[str, typing.Any]):
+        if "weapon_damage" in slot_data:
+            self.weapon_damage = slot_data["weapon_damage"]
+
+        return None  # return the none explicitly
 
     def modify_multidata(self, multidata: dict):
         # wait for self.rom_name to be available.
