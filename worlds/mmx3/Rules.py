@@ -62,7 +62,7 @@ def set_rules(world: MMX3World):
     # Vile entrance rules
     vile_open = world.options.vile_open
     entrance_blizzard = multiworld.get_entrance(f"{RegionName.blizzard_buffalo_start} -> {RegionName.vile}", player)
-    entrance_toxic = multiworld.get_entrance(f"{RegionName.toxic_seahorse_start} -> {RegionName.vile}", player)
+    entrance_toxic = multiworld.get_entrance(f"{RegionName.volt_catfish_start} -> {RegionName.vile}", player)
     entrance_crush = multiworld.get_entrance(f"{RegionName.crush_crawfish_start} -> {RegionName.vile}", player)
     if vile_open == "multiworld":
         set_rule(entrance_blizzard, lambda state: state.has(ItemName.stage_vile, player))
@@ -326,24 +326,22 @@ def add_boss_weakness_logic(world):
                 state.has(ItemName.ray_splasher, player)
              ))
 
-    if world.options.doppler_lab_1_boss == "press_disposer":
-        # Set Press Disposer rules
-        add_rule(multiworld.get_location(EventName.dr_doppler_lab_1_clear, player),
-                 lambda state: (
-                    state.has(ItemName.tornado_fang, player) or
-                    state.has(ItemName.ray_splasher, player)
-                 ))
-        add_rule(multiworld.get_location(LocationName.doppler_lab_1_boss, player),
-                 lambda state: (
-                    state.has(ItemName.tornado_fang, player) or
-                    state.has(ItemName.ray_splasher, player)
-                 ))
-    elif world.options.doppler_lab_1_boss == "godkarmachine":
-        # Set Godkarmachine O' Inary rules
-        add_rule(multiworld.get_location(EventName.dr_doppler_lab_1_clear, player),
-                 lambda state: state.has(ItemName.ray_splasher, player))
-        add_rule(multiworld.get_location(LocationName.doppler_lab_1_boss, player),
-                 lambda state: state.has(ItemName.ray_splasher, player))
+    # Set Press Disposer rules
+    add_rule(multiworld.get_location(EventName.dr_doppler_lab_1_clear, player),
+                lambda state: (
+                state.has(ItemName.tornado_fang, player) or
+                state.has(ItemName.ray_splasher, player)
+            ))
+    add_rule(multiworld.get_location(LocationName.doppler_lab_1_boss, player),
+                lambda state: (
+                state.has(ItemName.tornado_fang, player) or
+                state.has(ItemName.ray_splasher, player)
+            ))
+    # Set Godkarmachine O' Inary rules
+    add_rule(multiworld.get_location(EventName.dr_doppler_lab_1_clear, player),
+                lambda state: state.has(ItemName.ray_splasher, player))
+    add_rule(multiworld.get_location(LocationName.doppler_lab_1_boss, player),
+                lambda state: state.has(ItemName.ray_splasher, player))
 
     if world.options.doppler_lab_2_boss == "volt_kurageil":
         # Set Volt Kurageil rules
@@ -399,19 +397,19 @@ def add_z_saber_logic(world):
 
     logic_z_saber = world.options.logic_z_saber
     if logic_z_saber == 0:
-        add_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab} -> {RegionName.dr_doppler_lab_1}"),
+        add_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab} -> {RegionName.dr_doppler_lab_1}", player),
                  lambda state: state.has(ItemName.z_saber, player))
     elif logic_z_saber == 1:
-        add_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_1} -> {RegionName.dr_doppler_lab_2}"), 
+        add_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_1} -> {RegionName.dr_doppler_lab_2}", player), 
                  lambda state: state.has(ItemName.z_saber, player))
     elif logic_z_saber == 2:
-        add_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_2} -> {RegionName.dr_doppler_lab_3}"), 
+        add_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_2} -> {RegionName.dr_doppler_lab_3}", player), 
                  lambda state: state.has(ItemName.z_saber, player))
     elif logic_z_saber == 3:
         add_rule(multiworld.get_location(LocationName.doppler_lab_3_boss, player), 
                  lambda state: state.has(ItemName.z_saber, player))
     elif logic_z_saber == 4:
-        add_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_3} -> {RegionName.dr_doppler_lab_4}"), 
+        add_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_3} -> {RegionName.dr_doppler_lab_4}", player), 
                  lambda state: state.has(ItemName.z_saber, player))
 
 
