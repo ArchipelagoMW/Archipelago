@@ -135,7 +135,13 @@ def launch_game(url: Optional[str] = None) -> None:
         return "alpha" in latest_version or tuplize_version(latest_version) > tuplize_version(installed_version)
 
     from . import MessengerWorld
-    game_folder = os.path.dirname(MessengerWorld.settings.game_path)
+    try:
+        game_folder = os.path.dirname(MessengerWorld.settings.game_path)
+    except ValueError as e:
+        logging.error(e)
+        messagebox("Invalid File", "Selected file did not match expected hash. "
+                                   "Please try again and ensure you select The Messenger.exe.")
+        return
     working_directory = os.getcwd()
     # setup ssl context
     try:
