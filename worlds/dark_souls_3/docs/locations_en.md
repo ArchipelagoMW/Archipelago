@@ -53,6 +53,8 @@ at once:
 * **Friendly NPC Rewards:** Items given by friendly NPCs as part of their quests
   or from non-violent interaction.
 
+* **Small Crystal Lizards:** Drops from small crystal lizards.
+
 * **Upgrade:** Locations that contain upgrade items in vanilla, including
   titanite, gems, and Shriving Stones.
 
