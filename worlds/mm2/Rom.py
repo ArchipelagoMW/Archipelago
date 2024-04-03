@@ -59,6 +59,9 @@ class MM2ProcedurePatch(APProcedurePatch, APTokenMixin):
     patch_file_ending = ".apmm2"
     result_file_ending = ".nes"
     name: bytearray
+    procedure = [
+        ("apply_tokens", ["token_patch.bin"]),
+    ]
 
     @classmethod
     def get_source_data(cls) -> bytes:
@@ -567,6 +570,7 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch):
     patch.name.extend([0] * (21 - len(patch.name)))
     patch.write_bytes(0x3FFC0, patch.name)
 
+    patch.write_file("token_patch.bin", patch.get_token_binary())
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes: Optional[bytes] = getattr(get_base_rom_bytes, "base_rom_bytes", None)
