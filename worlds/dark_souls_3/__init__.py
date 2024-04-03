@@ -904,6 +904,17 @@ class DarkSouls3World(World):
         ], "Pale Tongue")
 
         self._add_location_rule([
+            "CD: Black Eye Orb - Rosaria from Leonhard's quest",
+        ], lambda state: (
+            # The Black Eye Orb location won't spawn until you kill the HWL miniboss and resting at
+            # the Profaned Capital bonfire.
+            self._can_get(state, "HWL: Red Eye Orb - wall tower, miniboss")
+            and self._can_go_to(state, "Profaned Capital")
+        ))
+
+        # Perhaps counterintuitively, you CAN fight Leonhard before you access the location that
+        # would normally give you the Black Eye Orb.
+        self._add_location_rule([
             "AL: Crescent Moon Sword - Leonhard drop",
             "AL: Silver Mask - Leonhard drop",
             "AL: Soul of Rosaria - Leonhard drop",
