@@ -79,7 +79,7 @@ class DarkSouls3World(World):
         self.locked_locations = []
         self.main_path_locations = []
         self.enabled_location_categories = set()
-
+        self.all_excluded_locations = set()
 
     def generate_early(self):
         if not self.options.enable_weapon_locations:
@@ -98,6 +98,8 @@ class DarkSouls3World(World):
             self._exclude_location_group("Unique")
         if not self.options.enable_health_upgrade_locations:
             self._exclude_location_group("Healing")
+
+        self.all_excluded_locations.update(self.options.exclude_locations.value)
 
         # Randomize Yhorm manually so that we know where to place the Storm Ruler.
         if self.options.randomize_enemies:
@@ -326,6 +328,8 @@ class DarkSouls3World(World):
         # Add items to itempool
         self.multiworld.itempool += itempool
 
+        self._fill_local_items()
+
 
     def _create_injectable_items(self, num_required_extra_items: int) -> List[Item]:
         """Returns a list of items to inject into the multiworld instead of skipped items.
@@ -421,6 +425,83 @@ class DarkSouls3World(World):
                 data = data.infuse(self.random.choice(list(Infusion)))
 
         return DarkSouls3Item(self.player, data, classification=classification)
+
+
+    def _fill_local_items(self) -> None:
+        """Removes certain items from the item pool and manually places them in the local world.
+
+        We can't do this in pre_fill because the itempool may not be modified after create_items.
+        """
+        # If Yhorm is at Iudex Gundyr, Storm Ruler must be randomized, so it can always be moved.
+        # Fill this manually so that, if very few slots are available in Cemetery of Ash, this
+        # doesn't get locked out by bad rolls on the next two fills.
+        if self.yhorm_location.name == 'Iudex Gundyr':
+            self._fill_local_item("Storm Ruler", ["Cemetery of Ash"],
+                                  lambda location: location.name != "CA: Coiled Sword - boss drop")
+
+        # If the Coiled Sword is vanilla, it is early enough and doesn't need to be placed.
+        # Don't place this in the multiworld because it's necessary almost immediately, and don't
+        # mark it as a blocker for HWL because having a miniscule Sphere 1 screws with progression balancing.
+        if self._is_location_available("CA: Coiled Sword - boss drop"):
+            self._fill_local_item("Coiled Sword", ["Cemetery of Ash", "Firelink Shrine"])
+
+        # If the HWL Raw Gem is vanilla, it is early enough and doesn't need to be removed. If
+        # upgrade smoothing is enabled, make sure one raw gem is available early for SL1 players
+        if (
+            self._is_location_available("HWL: Raw Gem - fort roof, lizard")
+            and self.options.smooth_upgrade_items
+        ):
+            self._fill_local_item("Raw Gem", [
+                "Cemetery of Ash",
+                "Firelink Shrine",
+                "High Wall of Lothric"
+            ])
+
+
+    def _fill_local_item(
+        self, name: str,
+        regions: List[str],
+        additional_condition: Optional[Callable[[DarkSouls3Location], bool]] = None,
+    ) -> None:
+        """Chooses a valid location for the item with the given name and places it there.
+        
+        This always chooses a local location among the given regions. If additional_condition is
+        passed, only locations meeting that condition will be considered.
+
+        If the item could not be placed, it will be added to starting inventory.
+        """
+        item = next(
+            (
+                item for item in self.multiworld.itempool
+                if item.player == self.player and item.name == name
+            ),
+            None
+        )
+        if not item: return
+
+        candidate_locations = [
+            location for location in (
+                self.multiworld.get_location(location.name, self.player)
+                for region in regions
+                for location in location_tables[region]
+                if self._is_location_available(location)
+                and not location.missable
+                and not location.conditional
+                and (not additional_condition or additional_condition(location))
+            )
+            if not location.item and location.progress_type != LocationProgressType.EXCLUDED
+            and location.item_rule(item)
+        ]
+
+        if not candidate_locations:
+            warning(f"Couldn't place \"{name}\" in a valid location for {self.multiworld.get_player_name(self.player)}. Adding it to starting inventory instead.")
+            self.multiworld.push_precollected(self.create_item(name))
+            return
+
+        location = self.random.choice(candidate_locations)
+        location.place_locked_item(item)
+        self.multiworld.itempool.remove(item)
+        
 
 
     def get_filler_item_name(self) -> str:
@@ -1229,7 +1310,7 @@ class DarkSouls3World(World):
             and (not data.ngp or self.options.enable_ngp)
             and not (
                 self.options.excluded_locations == "unrandomized"
-                and data.name in self.options.exclude_locations
+                and data.name in self.all_excluded_locations
             )
             and not (
                 self.options.missable_locations == "unrandomized"
@@ -1244,73 +1325,6 @@ class DarkSouls3World(World):
                 f"Yhorm takes the place of {self.yhorm_location.name} in " +
                 f"{self.multiworld.get_player_name(self.player)}'s world\n")
 
-
-    def pre_fill(self) -> None:
-        # Fill this manually so that, if very few slots are available in Cemetery of Ash, this
-        # doesn't get locked out by bad rolls on the next two fills.
-        if self.yhorm_location.name == 'Iudex Gundyr':
-            self._fill_local_item("Storm Ruler", ["Cemetery of Ash"],
-                                  lambda location: location.name != "CA: Coiled Sword - boss drop",
-                                  mandatory = True)
-
-        # Don't place this in the multiworld because it's necessary almost immediately, and don't
-        # mark it as a blocker for HWL because having a miniscule Sphere 1 screws with progression
-        # balancing.
-        self._fill_local_item("Coiled Sword", ["Cemetery of Ash", "Firelink Shrine"])
-
-        # If upgrade smoothing is enabled, make sure one raw gem is available early for SL1 players
-        if self.options.smooth_upgrade_items:
-            self._fill_local_item("Raw Gem", [
-                "Cemetery of Ash",
-                "Firelink Shrine",
-                "High Wall of Lothric"
-            ])
-
-
-    def _fill_local_item(
-        self, name: str,
-        regions: List[str],
-        additional_condition: Optional[Callable[[DarkSouls3Location], bool]] = None,
-        mandatory = False,
-    ) -> None:
-        """Chooses a valid location for the item with the given name and places it there.
-        
-        This always chooses a local location among the given regions. If additional_condition is
-        passed, only locations meeting that condition will be considered.
-
-        If mandatory is True, this will throw an error if the item could not be filled in.
-        """
-        item = next(
-            (
-                item for item in self.multiworld.itempool
-                if item.player == self.player and item.name == name
-            ),
-            None
-        )
-        if not item: return
-
-        candidate_locations = [
-            location for location in (
-                self.multiworld.get_location(location.name, self.player)
-                for region in regions
-                for location in location_tables[region]
-                if self._is_location_available(location)
-                and not location.missable
-                and not location.conditional
-                and (not additional_condition or additional_condition(location))
-            )
-            if not location.item and location.progress_type != LocationProgressType.EXCLUDED
-            and location.item_rule(item)
-        ]
-
-        if not candidate_locations:
-            if not mandatory: return
-            warning(f"Couldn't place \"{name}\" in a valid location for {self.multiworld.get_player_name(self.player)}. Adding it to starting inventory instead.")
-            self.multiworld.push_precollected(self.create_item(name))
-
-        location = self.random.choice(candidate_locations)
-        location.place_locked_item(item)
-        self.multiworld.itempool.remove(item)
 
     def post_fill(self):
         """If item smoothing is enabled, rearrange items so they scale up smoothly through the run.
