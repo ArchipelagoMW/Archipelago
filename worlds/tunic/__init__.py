@@ -123,7 +123,7 @@ class TunicWorld(World):
         # Filler items in the item pool
         available_filler: List[str] = [filler for filler in items_to_create if items_to_create[filler] > 0 and
                                        item_table[filler].classification == ItemClassification.filler]
-        
+
         # Remove filler to make room for other items
         def remove_filler(amount: int):
             for _ in range(0, amount):
@@ -150,7 +150,7 @@ class TunicWorld(World):
             hexagon_goal = self.options.hexagon_goal
             extra_hexagons = self.options.extra_hexagon_percentage
             items_to_create[gold_hexagon] += int((Decimal(100 + extra_hexagons) / 100 * hexagon_goal).to_integral_value(rounding=ROUND_HALF_UP))
-            
+
             # Replace pages and normal hexagons with filler
             for replaced_item in list(filter(lambda item: "Pages" in item or item in hexagon_locations, items_to_create)):
                 filler_name = self.get_filler_item_name()
@@ -184,7 +184,7 @@ class TunicWorld(World):
         self.tunic_portal_pairs = {}
         self.er_portal_hints = {}
         self.ability_unlocks = randomize_ability_unlocks(self.random, self.options)
-        
+
         # stuff for universal tracker support, can be ignored for standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "TUNIC" in self.multiworld.re_gen_passthrough:
@@ -247,7 +247,7 @@ class TunicWorld(World):
                 previous_name = "placeholder"
                 try:
                     name, connection = paths[location.parent_region]
-                except:
+                except KeyError:
                     # logic bug, proceed with warning since it takes a long time to update AP
                     warning(f"{location.name} is not logically accessible for "
                             f"{self.multiworld.get_file_safe_player_name(self.player)}. "
