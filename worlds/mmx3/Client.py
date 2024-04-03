@@ -5,6 +5,7 @@ import time
 from NetUtils import ClientStatus, color
 from worlds.AutoSNIClient import SNIClient
 
+logger = logging.getLogger("Client")
 snes_logger = logging.getLogger("SNES")
 
 # FXPAK Pro protocol memory mapping used by SNI
@@ -30,12 +31,16 @@ MMX3_ACTIVE_CHARACTER   = WRAM_START + 0x00A8E
 MMX3_ZSABER             = WRAM_START + 0x01FB2
 MMX3_CAN_MOVE           = WRAM_START + 0x01F45
 MMX3_GOING_THROUGH_GATE = WRAM_START + 0x01F25
+MMX3_HYPER_CANNON       = WRAM_START + 0x01FCC
 
 MMX3_ENABLE_HEART_TANK  = WRAM_START + 0x0F4E0
 MMX3_ENABLE_HP_REFILL   = WRAM_START + 0x0F4E4
 MMX3_HP_REFILL_AMOUNT   = WRAM_START + 0x0F4E5
 MMX3_ENABLE_GIVE_1UP    = WRAM_START + 0x0F4E7
 MMX3_RECEIVING_ITEM     = WRAM_START + 0x0F4FF
+
+MMX3_SFX_FLAG   = WRAM_START + 0x0F469
+MMX3_SFX_NUMBER = WRAM_START + 0x0F46A
 
 MMX3_VALIDATION_CHECK = WRAM_START + 0x0F43D
 
@@ -50,18 +55,35 @@ MMX3_COLLECTED_UPGRADES     = WRAM_START + 0x0F463
 MMX3_COLLECTED_RIDE_CHIPS   = WRAM_START + 0x0F464
 MMX3_COLLECTED_SUB_TANKS    = WRAM_START + 0x0F465
 MMX3_COLLECTED_PICKUPS      = WRAM_START + 0x0F480
+MMX3_COMPLETED_REMATCHES    = WRAM_START + 0x01FDA
+MMX3_ENERGY_LINK_PACKET     = WRAM_START + 0x0F467
 
-MMX3_PICKUPSANITY_ACTIVE    = ROM_START + 0x17FFF7
+MMX3_PICKUPSANITY_ACTIVE    = ROM_START + 0x17FFE7
+MMX3_REQUIRED_REMATCHES     = ROM_START + 0x17FFF3
+MMX3_ENERGY_LINK_ENABLED    = ROM_START + 0x17FFF7
+
+HP_EXCHANGE_RATE = 1500000
 
 MMX3_RECV_INDEX = WRAM_START + 0x0F460
 
 MMX3_ROMHASH_START = 0x7FC0
 ROMHASH_SIZE = 0x15
 
-X_Z_ITEMS = ["small hp refill", "large hp refill", "1up"]
+X_Z_ITEMS = ["small hp refill", "large hp refill", "1up", "hp refill"]
+HP_REFILLS = ["small hp refill", "large hp refill", "hp refill"]
 
 class MMX3SNIClient(SNIClient):
     game = "Mega Man X3"
+
+    def __init__(self):
+        super().__init__()
+        self.game_state = False
+        self.last_death_link = 0
+        self.auto_heal = False
+        self.energy_link_enabled = False
+        self.heal_request_command = None
+        self.item_queue = []
+
 
     async def deathlink_kill_player(self, ctx):
         from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
@@ -91,20 +113,31 @@ class MMX3SNIClient(SNIClient):
         ctx.death_state = DeathState.dead
         ctx.last_death_link = time.time()
 
+
     async def validate_rom(self, ctx):
         from SNIClient import snes_read
 
         rom_name = await snes_read(ctx, MMX3_ROMHASH_START, ROMHASH_SIZE)
         if rom_name is None or rom_name == bytes([0] * ROMHASH_SIZE) or rom_name[:4] != b"MMX3":
+            if "pool" in ctx.command_processor.commands:
+                ctx.command_processor.commands.pop("pool")
+            if "heal" in ctx.command_processor.commands:
+                ctx.command_processor.commands.pop("heal")
+            if "autoheal" in ctx.command_processor.commands:
+                ctx.command_processor.commands.pop("autoheal")
             return False
         
         ctx.game = self.game
         ctx.items_handling = 0b111
-
         ctx.receive_option = 0
         ctx.send_option = 0
-
         ctx.allow_collect = True
+        if "pool" not in ctx.command_processor.commands:
+            ctx.command_processor.commands["pool"] = cmd_pool
+        if "heal" not in ctx.command_processor.commands:
+            ctx.command_processor.commands["heal"] = cmd_heal
+        if "autoheal" not in ctx.command_processor.commands:
+            ctx.command_processor.commands["autoheal"] = cmd_autoheal
 
         death_link = False
         if death_link:
@@ -114,14 +147,103 @@ class MMX3SNIClient(SNIClient):
 
         return True
     
+            
+    async def handle_energy_link(self, ctx):
+        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+        
+        # Deposit heals into the pool regardless of energy_link setting
+        energy_packet = await snes_read(ctx, MMX3_ENERGY_LINK_PACKET, 0x2)
+        if energy_packet is None:
+            return
+        energy_packet_raw = energy_packet[0] | (energy_packet[1] << 8)
+        energy_packet = (energy_packet_raw * HP_EXCHANGE_RATE) >> 4
+        if energy_packet != 0:
+            await ctx.send_msgs([{
+                "cmd": "Set", "key": f"EnergyLink{ctx.team}", "operations":
+                    [{"operation": "add", "value": energy_packet},
+                    {"operation": "max", "value": 0}],
+            }])
+            pool = (ctx.stored_data[f"EnergyLink{ctx.team}"] / HP_EXCHANGE_RATE) + (energy_packet_raw / 16)
+            logger.info(f"Deposited {energy_packet_raw / 16:.2f} into the healing pool. Healing available: {pool:.2f}")
+            snes_buffered_write(ctx, MMX3_ENERGY_LINK_PACKET, bytearray([0x00, 0x00]))
+            await snes_flush_writes(ctx)
 
-    def add_item_to_queue(self, item_type, item_id):
+        energy_link = await snes_read(ctx, MMX3_ENERGY_LINK_ENABLED, 0x1)
+        if energy_link is None:
+            return
 
+        if energy_link[0]:
+            validation = await snes_read(ctx, MMX3_VALIDATION_CHECK, 0x2)
+            if validation is None:
+                return
+            validation = validation[0] | (validation[1] << 8)
+            if validation != 0xDEAD:
+                return
+
+            receiving_item = await snes_read(ctx, MMX3_RECEIVING_ITEM, 0x1)
+            menu_state = await snes_read(ctx, MMX3_MENU_STATE, 0x1)
+            gameplay_state = await snes_read(ctx, MMX3_GAMEPLAY_STATE, 0x1)
+            can_move = await snes_read(ctx, MMX3_CAN_MOVE, 0x1)
+            going_through_gate = await snes_read(ctx, MMX3_GOING_THROUGH_GATE, 0x4)
+            pause_state = await snes_read(ctx, MMX3_PAUSE_STATE, 0x1)
+            if menu_state[0] != 0x04 or \
+                gameplay_state[0] != 0x04 or \
+                can_move[0] != 0x00 or \
+                pause_state[0] != 0x00 or \
+                receiving_item[0] != 0x00 or \
+                (
+                    going_through_gate[0] != 0x00 and \
+                    going_through_gate[1] != 0x00 and \
+                    going_through_gate[2] != 0x00 and \
+                    going_through_gate[3] != 0x00 \
+                ):
+                return
+
+            if any(item in self.item_queue for item in HP_REFILLS):
+                logger.info(f"Can't provide a heal. You already have a heal in queue.")
+                self.heal_request_command = None
+                return
+
+            # Perform auto heals
+            if self.auto_heal:
+                if self.heal_request_command is None:
+                    if ctx.stored_data[f"EnergyLink{ctx.team}"] < HP_EXCHANGE_RATE:
+                        return
+                    current_hp = await snes_read(ctx, MMX3_CURRENT_HP, 0x1)
+                    max_hp = await snes_read(ctx, MMX3_MAX_HP, 0x1)
+                    if max_hp[0] > current_hp[0]:
+                        self.heal_request_command = max_hp[0] - current_hp[0]
+
+            # Handle manual heal requests
+            if self.heal_request_command:
+                heal_needed = self.heal_request_command
+                heal_needed_rate = heal_needed * HP_EXCHANGE_RATE
+                if f"EnergyLink{ctx.team}" in ctx.stored_data and ctx.stored_data[f"EnergyLink{ctx.team}"]:
+                    if ctx.stored_data[f"EnergyLink{ctx.team}"] < heal_needed_rate:
+                        heal_needed = int(ctx.stored_data[f"EnergyLink{ctx.team}"] / HP_EXCHANGE_RATE)
+                        if heal_needed == 0:
+                            logger.info(f"There's not enough healing for your request ({heal_needed}). Healing available: 0")
+                            self.heal_request_command = None
+                            return 
+                        heal_needed_rate = heal_needed * HP_EXCHANGE_RATE
+                    await ctx.send_msgs([{
+                        "cmd": "Set", "key": f"EnergyLink{ctx.team}", "operations":
+                            [{"operation": "add", "value": -heal_needed_rate},
+                            {"operation": "max", "value": 0}],
+                    }])
+                    self.add_item_to_queue("hp refill", None, self.heal_request_command)
+                    pool = (ctx.stored_data[f"EnergyLink{ctx.team}"] / HP_EXCHANGE_RATE) - heal_needed
+                    logger.info(f"Healed by {heal_needed}. Healing available: {pool:.2f}")
+                else: 
+                    logger.info(f"Failed to initialize EnergyLink.")
+                self.heal_request_command = None
+
+
+    def add_item_to_queue(self, item_type, item_id, item_additional = None):
         if not hasattr(self, "item_queue"):
             self.item_queue = []
+        self.item_queue.append([item_type, item_id, item_additional])
 
-        self.item_queue.append([item_type, item_id])
-            
     async def handle_item_queue(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
         from worlds.mmx3.Rom import weapon_rom_data, ride_armor_rom_data, upgrades_rom_data
@@ -140,7 +262,8 @@ class MMX3SNIClient(SNIClient):
         item_id = next_item[1]
         
         if next_item[0] == "boss access":
-            # TODO: Send a signal to playback a SFX
+            snes_buffered_write(ctx, MMX3_SFX_FLAG, bytearray([0x01]))
+            snes_buffered_write(ctx, MMX3_SFX_NUMBER, bytearray([0x1D]))
             self.item_queue.pop(0)
             return
         
@@ -167,7 +290,7 @@ class MMX3SNIClient(SNIClient):
         # Handle items that Zero can also get
         if next_item[0] in X_Z_ITEMS:
             backup_item = self.item_queue.pop(0)
-            if next_item[0] == "small hp refill" or next_item[0] == "large hp refill":
+            if "hp refill" in next_item[0]:
                 current_hp = await snes_read(ctx, MMX3_CURRENT_HP, 0x1)
                 max_hp = await snes_read(ctx, MMX3_MAX_HP, 0x1)
 
@@ -175,8 +298,10 @@ class MMX3SNIClient(SNIClient):
                     snes_buffered_write(ctx, MMX3_ENABLE_HP_REFILL, bytearray([0x02]))
                     if next_item[0] == "small hp refill":
                         snes_buffered_write(ctx, MMX3_HP_REFILL_AMOUNT, bytearray([0x02]))
-                    else:
+                    elif next_item[0] == "large hp refill":
                         snes_buffered_write(ctx, MMX3_HP_REFILL_AMOUNT, bytearray([0x08]))
+                    else:
+                        snes_buffered_write(ctx, MMX3_HP_REFILL_AMOUNT, bytearray([next_item[2]]))
                     snes_buffered_write(ctx, MMX3_RECEIVING_ITEM, bytearray([0x01]))
                 else:
                     # TODO: Sub Tank logic
@@ -200,6 +325,8 @@ class MMX3SNIClient(SNIClient):
             # TODO: Send a signal to play back a SFX
             weapon = weapon_rom_data[item_id]
             snes_buffered_write(ctx, WRAM_START + weapon[0], bytearray([weapon[1]]))
+            snes_buffered_write(ctx, MMX3_SFX_FLAG, bytearray([0x01]))
+            snes_buffered_write(ctx, MMX3_SFX_NUMBER, bytearray([0x16]))
             self.item_queue.pop(0)
             
         elif next_item[0] == "heart tank":
@@ -226,11 +353,12 @@ class MMX3SNIClient(SNIClient):
                 sub_tanks[sub_tank_count] = 0x8E
                 snes_buffered_write(ctx, MMX3_UPGRADES, bytearray([upgrade]))
                 snes_buffered_write(ctx, MMX3_SUB_TANK_ARRAY, bytearray(sub_tanks))
+                snes_buffered_write(ctx, MMX3_SFX_FLAG, bytearray([0x01]))
+                snes_buffered_write(ctx, MMX3_SFX_NUMBER, bytearray([0x17]))
                 #snes_buffered_write(ctx, MMX3_RECEIVING_ITEM, bytearray([0x01]))
             self.item_queue.pop(0)
         
         elif next_item[0] == "upgrade":
-            # TODO: Send a signal to play back a SFX and fix visual bugs
             upgrades = await snes_read(ctx, MMX3_UPGRADES, 0x1)
             chips = await snes_read(ctx, MMX3_RIDE_CHIPS, 0x1)
 
@@ -243,18 +371,47 @@ class MMX3SNIClient(SNIClient):
                 upgrades = upgrades[0]
                 upgrades |= bit
                 snes_buffered_write(ctx, MMX3_UPGRADES, bytearray([upgrades]))
+                if bit == 0x01:
+                    snes_buffered_write(ctx, WRAM_START + 0x09EE, bytearray([0x18]))
+                elif bit == 0x02:
+                    value = await snes_read(ctx, WRAM_START + 0x0B28, 0x1)
+                    snes_buffered_write(ctx, WRAM_START + 0x0AE8, bytearray([value[0] + 1]))
+                    snes_buffered_write(ctx, WRAM_START + 0x0AF2, bytearray([0x00]))
+                    snes_buffered_write(ctx, WRAM_START + 0x0AF3, bytearray([0x00]))
+                    snes_buffered_write(ctx, WRAM_START + 0x0AE9, bytearray([0x00]))
+                    snes_buffered_write(ctx, WRAM_START + 0x0AF8, bytearray([0x5D]))
+                elif bit == 0x04:
+                    value = await snes_read(ctx, WRAM_START + 0x0B28, 0x1)
+                    snes_buffered_write(ctx, WRAM_START + 0x0B08, bytearray([value[0] + 1]))
+                    snes_buffered_write(ctx, WRAM_START + 0x0B12, bytearray([0x00]))
+                    snes_buffered_write(ctx, WRAM_START + 0x0B13, bytearray([0x01]))
+                    snes_buffered_write(ctx, WRAM_START + 0x0B09, bytearray([0x00]))
+                    snes_buffered_write(ctx, WRAM_START + 0x0B18, bytearray([0x5D]))
+                elif bit == 0x08:
+                    value = await snes_read(ctx, WRAM_START + 0x0B28, 0x1)
+                    snes_buffered_write(ctx, WRAM_START + 0x0B28, bytearray([value[0] + 1]))
+                    snes_buffered_write(ctx, WRAM_START + 0x0B32, bytearray([0x00]))
+                    snes_buffered_write(ctx, WRAM_START + 0x0B33, bytearray([0x02]))
+                    snes_buffered_write(ctx, WRAM_START + 0x0B29, bytearray([0x00]))
+                    snes_buffered_write(ctx, WRAM_START + 0x0B38, bytearray([0x5D]))
+                snes_buffered_write(ctx, MMX3_SFX_FLAG, bytearray([0x01]))
+                snes_buffered_write(ctx, MMX3_SFX_NUMBER, bytearray([0x1B]))
                 #snes_buffered_write(ctx, MMX3_RECEIVING_ITEM, bytearray([0x01]))
             else:
                 # Chip
                 bit = bit << 4
+                if bit == 0x20:
+                    snes_buffered_write(ctx, MMX3_HYPER_CANNON, bytearray([0xFF]))
+                    snes_buffered_write(ctx, WRAM_START + 0x0A84, bytearray([0x02]))
                 chips = chips[0]
                 chips |= bit
                 snes_buffered_write(ctx, MMX3_RIDE_CHIPS, bytearray([chips]))
+                snes_buffered_write(ctx, MMX3_SFX_FLAG, bytearray([0x01]))
+                snes_buffered_write(ctx, MMX3_SFX_NUMBER, bytearray([0x1B]))
                 #snes_buffered_write(ctx, MMX3_RECEIVING_ITEM, bytearray([0x01]))
             self.item_queue.pop(0)
 
         elif next_item[0] == "ride":
-            # TODO: Send a signal to play back a SFX
             ride = await snes_read(ctx, MMX3_RIDE_CHIPS, 0x1)
             ride = ride[0]
             upgrade = ride_armor_rom_data[item_id]
@@ -264,6 +421,8 @@ class MMX3SNIClient(SNIClient):
                 ride |= bit
                 snes_buffered_write(ctx, MMX3_RIDE_CHIPS, bytearray([ride]))
                 #snes_buffered_write(ctx, MMX3_RECEIVING_ITEM, bytearray([0x01]))
+                snes_buffered_write(ctx, MMX3_SFX_FLAG, bytearray([0x01]))
+                snes_buffered_write(ctx, MMX3_SFX_NUMBER, bytearray([0x32]))
             self.item_queue.pop(0)
 
         await snes_flush_writes(ctx)
@@ -278,17 +437,30 @@ class MMX3SNIClient(SNIClient):
 
         # Discard uninitialized ROMs
         if menu_state is None:
+            self.game_state = False
             ctx.item_queue = []
             return
     
         if game_state[0] == 0:
+            self.game_state = False
             return
         
         validation = await snes_read(ctx, MMX3_VALIDATION_CHECK, 0x2)
         validation = validation[0] | (validation[1] << 8)
         if validation != 0xDEAD:
             snes_logger.info(f'ROM not properly validated.')
+            self.game_state = False
             return
+        
+        # Enable notifications on EnergyLink
+        # TODO: Determine if this is an actual good spot for setting up this notification
+        if ctx.server and ctx.slot:
+            if not self.energy_link_enabled:
+                ctx.set_notify(f"EnergyLink{ctx.team}")
+                self.energy_link_enabled = True
+                logger.info("EnergyLink connected")
+
+        self.game_state = True
         
         if "DeathLink" in ctx.tags and menu_state == 0x04 and ctx.last_death_link + 1 < time.time():
             currently_dead = gameplay_state[0] == 0x06
@@ -300,6 +472,7 @@ class MMX3SNIClient(SNIClient):
             ctx.finished_game = True
             return
 
+        await self.handle_energy_link(ctx)
         await self.handle_item_queue(ctx)
         
         from worlds.mmx3.Rom import weapon_rom_data, ride_armor_rom_data, upgrades_rom_data, boss_access_rom_data, refill_rom_data
@@ -308,6 +481,10 @@ class MMX3SNIClient(SNIClient):
 
         bit_byte_vile_data = await snes_read(ctx, MMX3_BIT_BYTE_VILE, 0x01)
         defeated_bosses_data = await snes_read(ctx, MMX3_DEFEATED_BOSSES, 0x20)
+        completed_rematches = await snes_read(ctx, MMX3_COMPLETED_REMATCHES, 0x1)
+        completed_rematches = completed_rematches[0]
+        required_rematches = await snes_read(ctx, MMX3_REQUIRED_REMATCHES, 0x1)
+        required_rematches = required_rematches[0]
         defeated_bosses = list(defeated_bosses_data)
         cleared_levels_data = await snes_read(ctx, MMX3_LEVEL_CLEARED, 0x20)
         cleared_levels = list(cleared_levels_data)
@@ -378,6 +555,13 @@ class MMX3SNIClient(SNIClient):
                     boss_id = internal_id & 0x1F
                     if defeated_bosses_data[boss_id] != 0:
                         new_checks.append(loc_id)
+                    else:
+                        if boss_id >= 0x13 and boss_id <= 0x1A: 
+                            # Auto complete every rematch boss if the required amount was reached
+                            if completed_rematches.bit_count() >= required_rematches:
+                                defeated_bosses[boss_id] = 0xFF
+                                completed_rematches = 0xFF
+                                new_checks.append(loc_id)
                 elif internal_id >= 0x100:
                     # Pickups
                     if not pickupsanity_enabled or pickupsanity_enabled[0] == 0:
@@ -386,6 +570,10 @@ class MMX3SNIClient(SNIClient):
                     if collected_pickups_data[pickup_id] != 0:
                         new_checks.append(loc_id)
         
+        snes_buffered_write(ctx, MMX3_COMPLETED_REMATCHES, bytearray([completed_rematches]))
+        snes_buffered_write(ctx, MMX3_DEFEATED_BOSSES, bytes(defeated_bosses))
+        await snes_flush_writes(ctx)
+                        
         verify_game_state = await snes_read(ctx, MMX3_GAMEPLAY_STATE, 1)
         if verify_game_state is None:
             snes_logger.info(f'Exit Game.')
@@ -408,7 +596,7 @@ class MMX3SNIClient(SNIClient):
         if recv_count is None:
             # Add a small failsafe in case we get a None. Other SNI games do this...
             return
-        
+
         recv_index = recv_count[0]
 
         if recv_index < len(ctx.items_received):
@@ -456,6 +644,25 @@ class MMX3SNIClient(SNIClient):
                 self.add_item_to_queue(refill_rom_data[item.item][0], item.item)
 
         # Handle collected locations
+        # Do not collect locations if you can't move, are in pause state, not in the correct mode or not in gameplay state
+        receiving_item = await snes_read(ctx, MMX3_RECEIVING_ITEM, 0x1)
+        menu_state = await snes_read(ctx, MMX3_MENU_STATE, 0x1)
+        gameplay_state = await snes_read(ctx, MMX3_GAMEPLAY_STATE, 0x1)
+        can_move = await snes_read(ctx, MMX3_CAN_MOVE, 0x1)
+        going_through_gate = await snes_read(ctx, MMX3_GOING_THROUGH_GATE, 0x4)
+        pause_state = await snes_read(ctx, MMX3_PAUSE_STATE, 0x1)
+        if menu_state[0] != 0x04 or \
+            gameplay_state[0] != 0x04 or \
+            can_move[0] != 0x00 or \
+            pause_state[0] != 0x00 or \
+            receiving_item[0] != 0x00 or \
+            (
+                going_through_gate[0] != 0x00 and \
+                going_through_gate[1] != 0x00 and \
+                going_through_gate[2] != 0x00 and \
+                going_through_gate[3] != 0x00 \
+            ):
+            return
         new_boss_clears = False
         new_cleared_level = False
         new_heart_tank = False
@@ -529,6 +736,8 @@ class MMX3SNIClient(SNIClient):
                     boss_id = internal_id & 0x1F
                     defeated_bosses[boss_id] = 0xFF
                     new_boss_clears = True
+                    if boss_id >= 0x13 and boss_id <= 0x1A: 
+                        completed_rematches |= 0x1 << (boss_id - 0x13)
                 elif internal_id >= 0x100:
                     # Pickups
                     pickup_id = internal_id & 0x3F
@@ -537,20 +746,70 @@ class MMX3SNIClient(SNIClient):
                     
             if new_cleared_level:
                 snes_buffered_write(ctx, MMX3_LEVEL_CLEARED, bytes(cleared_levels))
-                await snes_flush_writes(ctx)
-            if menu_state[0] == 0x04:
-                if new_boss_clears:
-                    snes_buffered_write(ctx, MMX3_DEFEATED_BOSSES, bytes(defeated_bosses))
-                if new_bit_byte_vile:
-                    snes_buffered_write(ctx, MMX3_BIT_BYTE_VILE, bytes(bit_byte_vile_data))
-                if new_pickup:
-                    snes_buffered_write(ctx, MMX3_COLLECTED_PICKUPS, bytearray(collected_pickups))
-                if new_upgrade:
-                    snes_buffered_write(ctx, MMX3_UPGRADES, bytearray(collected_upgrades_data))
-                if new_heart_tank:
-                    snes_buffered_write(ctx, MMX3_HEART_TANKS, bytearray(collected_heart_tanks_data))
-                if new_upgrade:
-                    snes_buffered_write(ctx, MMX3_UPGRADES, bytearray(collected_upgrades_data))
-                if new_ride_chip:
-                    snes_buffered_write(ctx, MMX3_RIDE_CHIPS, bytearray(collected_ride_chips_data))
-                await snes_flush_writes(ctx)
+            if new_boss_clears:
+                snes_buffered_write(ctx, MMX3_DEFEATED_BOSSES, bytes(defeated_bosses))
+                snes_buffered_write(ctx, MMX3_COMPLETED_REMATCHES, bytearray([completed_rematches]))
+            if new_bit_byte_vile:
+                snes_buffered_write(ctx, MMX3_BIT_BYTE_VILE, bytearray([bit_byte_vile_data]))
+            if new_pickup:
+                snes_buffered_write(ctx, MMX3_COLLECTED_PICKUPS, bytes(collected_pickups))
+            if new_upgrade:
+                snes_buffered_write(ctx, MMX3_COLLECTED_UPGRADES, bytearray([collected_upgrades_data]))
+            if new_heart_tank:
+                snes_buffered_write(ctx, MMX3_COLLECTED_HEART_TANKS, bytearray([collected_heart_tanks_data]))
+            if new_ride_chip:
+                snes_buffered_write(ctx, MMX3_COLLECTED_RIDE_CHIPS, bytearray([collected_ride_chips_data]))
+            await snes_flush_writes(ctx)
+
+def cmd_pool(self):
+    """
+    Check how much healing is in the pool.
+    """
+    if self.ctx.game != "Mega Man X3":
+        logger.warning("This command can only be used while playing Mega Man X3")
+    if (not self.ctx.server) or self.ctx.server.socket.closed or not self.ctx.client_handler.game_state:
+        logger.info(f"Must be connected to server and in game.")
+    else:
+        pool = self.ctx.stored_data[f'EnergyLink{self.ctx.team}'] / HP_EXCHANGE_RATE
+        logger.info(f"Healing available: {pool:.2f}")
+
+def cmd_heal(self, amount: str = ""):
+    """
+    Request healing from EnergyLink.
+    """
+    if self.ctx.game != "Mega Man X3":
+        logger.warning("This command can only be used while playing Mega Man X3")
+    if (not self.ctx.server) or self.ctx.server.socket.closed or not self.ctx.client_handler.game_state:
+        logger.info(f"Must be connected to server and in game.")
+    else:
+        if self.ctx.client_handler.heal_request_command is not None:
+            logger.info(f"You already placed a healing request.")
+            return
+        if amount:
+            try:
+                amount = int(amount)
+            except:
+                logger.info(f"You need to specify how much HP you will recover.")
+                return
+            if amount > 16:
+                self.ctx.client_handler.heal_request_command = 16
+            self.ctx.client_handler.heal_request_command = amount
+            logger.info(f"Requested {amount} HP from the healing pool.")
+        else:
+            logger.info(f"You need to specify how much HP you will request.")
+
+def cmd_autoheal(self):
+    """
+    Enable auto heal from EnergyLink.
+    """
+    if self.ctx.game != "Mega Man X3":
+        logger.warning("This command can only be used while playing Mega Man X3")
+    if (not self.ctx.server) or self.ctx.server.socket.closed or not self.ctx.client_handler.game_state:
+        logger.info(f"Must be connected to server and in game.")
+    else:
+        if self.ctx.client_handler.auto_heal:
+            self.ctx.client_handler.auto_heal = False
+            logger.info(f"Auto healing disabled.")
+        else:
+            self.ctx.client_handler.auto_heal = True
+            logger.info(f"Auto healing enabled.")
