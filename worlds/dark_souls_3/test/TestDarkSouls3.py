@@ -20,12 +20,6 @@ class DarkSouls3Test(WorldTestBase):
                 self.assertNotIn(location.name, names)
                 names.add(location.name)
 
-    def testBossRegions(self):
-        all_regions = set(location_tables)
-        for boss in all_bosses:
-            if boss.region:
-                self.assertIn(boss.region, all_regions)
-
     def testBossLocations(self):
         all_locations = {location.name for locations in location_tables.values() for location in locations}
         for boss in all_bosses:

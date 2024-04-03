@@ -316,9 +316,6 @@ class DarkSouls3World(World):
                     item_set.add(location.data.default_item_name)
                     itempool.append(self.create_item(location.data.default_item_name))
 
-        # A list of items we can replace
-        removable_items = [item for item in itempool if item.classification == ItemClassification.filler]
-
         injectables = self._create_injectable_items(num_required_extra_items)
         num_required_extra_items -= len(injectables)
         itempool.extend(injectables)
@@ -376,7 +373,7 @@ class DarkSouls3World(World):
                 if item in items: continue
                 self.multiworld.push_precollected(self.create_item(item))
                 warning(
-                    f"Couldn't add \"{item}\" to the item pool for " + 
+                    f"Couldn't add \"{item.name}\" to the item pool for " + 
                     f"{self.multiworld.get_player_name(self.player)}. Adding it to the starting " +
                     f"inventory instead."
                 )
@@ -403,7 +400,7 @@ class DarkSouls3World(World):
             and data.category.upgrade_level
             # Because we require the Pyromancy Flame to be available early, don't upgrade it so it
             # doesn't get shuffled around by weapon smoothing.
-            and not data.name == "Pyromancy FLame"
+            and not data.name == "Pyromancy Flame"
         ):
             # if the user made an error and set a min higher than the max we default to the max
             max_5 = self.options.max_levels_in_5
@@ -521,7 +518,7 @@ class DarkSouls3World(World):
             if self.options.late_dlc:
                 self._add_entrance_rule(
                     "Painted World of Ariandel (Before Contraption)",
-                    lambda state: state.has("Small Doll") and self._has_any_scroll(state))
+                    lambda state: state.has("Small Doll", self.player) and self._has_any_scroll(state))
 
         # Define the access rules to some specific locations
         if self._is_location_available("FS: Lift Chamber Key - Leonhard"):
@@ -1252,7 +1249,7 @@ class DarkSouls3World(World):
         # Fill this manually so that, if very few slots are available in Cemetery of Ash, this
         # doesn't get locked out by bad rolls on the next two fills.
         if self.yhorm_location.name == 'Iudex Gundyr':
-            self._fill_local_item("Storm Ruler", {"Cemetery of Ash"},
+            self._fill_local_item("Storm Ruler", ["Cemetery of Ash"],
                                   lambda location: location.name != "CA: Coiled Sword - boss drop",
                                   mandatory = True)
 
