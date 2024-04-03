@@ -14,7 +14,7 @@ from .Regions import create_regions, connect_regions
 from .Names import ItemName, LocationName, EventName
 from .Options import MMX3Options
 from .Client import MMX3SNIClient
-from .Rom import LocalRom, patch_rom, get_base_rom_path, MMX3DeltaPatch
+from .Rom import LocalRom, patch_rom, get_base_rom_path, MMX3DeltaPatch, HASH_US, HASH_LEGACY
 from worlds.generic.Rules import add_rule, exclusion_rules
 
 class MMX3Settings(settings.Group):
@@ -22,7 +22,7 @@ class MMX3Settings(settings.Group):
         """File name of the SMW US rom"""
         description = "Mega Man X3 (USA) ROM File"
         copy_to = "Mega Man X3 (USA).sfc"
-        md5s = [MMX3DeltaPatch.hash]
+        md5s = [HASH_US, HASH_LEGACY]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
 

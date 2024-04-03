@@ -7,7 +7,8 @@ import hashlib
 import os
 from pkgutil import get_data
 
-USHASH = 'cfe8c11f0dce19e4fa5f3fd75775e47c'
+HASH_US = 'cfe8c11f0dce19e4fa5f3fd75775e47c'
+HASH_LEGACY = 'ff683b75e75e9b59f0c713c7512a016b'
 ROM_PLAYER_LIMIT = 65535
 
 weapon_rom_data = {
@@ -57,7 +58,7 @@ refill_rom_data = {
 }
 
 class MMX3DeltaPatch(APDeltaPatch):
-    hash = USHASH
+    hash = [HASH_US, HASH_LEGACY]
     game = "Mega Man X3"
     patch_file_ending = ".apmmx3"
 
@@ -184,8 +185,8 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
-        if USHASH != basemd5.hexdigest():
-            raise Exception('Supplied Base Rom does not match known MD5 for US release. '
+        if basemd5.hexdigest() not in {HASH_US, HASH_LEGACY}:
+            raise Exception('Supplied Base Rom does not match known MD5 for US or Legacy Collection release. '
                             'Get the correct game and version, then dump it')
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes
