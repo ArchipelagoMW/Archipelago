@@ -101,7 +101,7 @@ class DarkSouls3World(World):
 
         # Randomize Yhorm manually so that we know where to place the Storm Ruler.
         if self.options.randomize_enemies:
-            self.yhorm_location = self.multiworld.random.choice(
+            self.yhorm_location = self.random.choice(
                 [boss for boss in all_bosses if self._allow_boss_for_yhorm(boss)])
 
             # If Yhorm is early, make sure the Storm Ruler is easily available to avoid BK
@@ -355,11 +355,11 @@ class DarkSouls3World(World):
 
         number_to_inject = min(num_required_extra_items, len(all_injectable_items))
         items = (
-            self.multiworld.random.sample(
+            self.random.sample(
                 injectable_mandatory,
                 k=min(len(injectable_mandatory), number_to_inject)
             )
-            + self.multiworld.random.sample(
+            + self.random.sample(
                 injectable_optional,
                 k=max(0, number_to_inject - len(injectable_mandatory))
             )
@@ -409,22 +409,22 @@ class DarkSouls3World(World):
             min_10 = min(self.options.min_levels_in_10, max_10)
             weapon_level_percentage = self.options.randomize_weapon_level_percentage
 
-            if self.multiworld.random.randint(0, 99) < weapon_level_percentage:
+            if self.random.randint(0, 99) < weapon_level_percentage:
                 if data.category.upgrade_level == 5:
-                    data = data.upgrade(self.multiworld.random.randint(min_5, max_5))
+                    data = data.upgrade(self.random.randint(min_5, max_5))
                 elif data.category.upgrade_level == 10:
-                    data = data.upgrade(self.multiworld.random.randint(min_10, max_10))
+                    data = data.upgrade(self.random.randint(min_10, max_10))
 
         if self.options.randomize_infusion and data.category.is_infusible:
             infusion_percentage = self.options.randomize_infusion_percentage
-            if self.multiworld.random.randint(0, 99) < infusion_percentage:
-                data = data.infuse(self.multiworld.random.choice(list(Infusion)))
+            if self.random.randint(0, 99) < infusion_percentage:
+                data = data.infuse(self.random.choice(list(Infusion)))
 
         return DarkSouls3Item(self.player, data, classification=classification)
 
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice(filler_item_names)
+        return self.random.choice(filler_item_names)
 
 
     def set_rules(self) -> None:
@@ -1308,7 +1308,7 @@ class DarkSouls3World(World):
             warning(f"Couldn't place \"{name}\" in a valid location for {self.multiworld.get_player_name(self.player)}. Adding it to starting inventory instead.")
             self.multiworld.push_precollected(self.create_item(name))
 
-        location = self.multiworld.random.choice(candidate_locations)
+        location = self.random.choice(candidate_locations)
         location.place_locked_item(item)
         self.multiworld.itempool.remove(item)
 
@@ -1441,7 +1441,7 @@ class DarkSouls3World(World):
     def _shuffle(self, seq: Sequence) -> List:
         """Returns a shuffled copy of a sequence."""
         copy = list(seq)
-        self.multiworld.random.shuffle(copy)
+        self.random.shuffle(copy)
         return copy
 
 
