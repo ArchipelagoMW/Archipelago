@@ -40,13 +40,23 @@
 
 3. Launch the game at least once without mods.
 
-4. Install SA Mod Manager as per [its instructions](https://github.com/X-Hax/SA-Mod-Manager/tree/master?tab=readme-ov-file). To launch it, add ``SAModManager.exe`` as a non-Steam game. In the properties on Steam for SA Mod Manager, set it to use Proton as the compatibility tool.
+4. Create both a `/mods` directory and a `/SAManager` directory in the folder into which you installed Sonic Adventure 2: Battle.
 
-5. Unpack the Archipelago Mod into the `/mods` folder in the Sonic Adventure 2 install folder, so that `/mods/SA2B_Archipelago` is a valid path.
+5. Install SA Mod Manager as per [its instructions](https://github.com/X-Hax/SA-Mod-Manager/tree/master?tab=readme-ov-file). Specifically, extract SAModManager.exe file to the folder that Sonic Adventure 2: Battle is installed to. To launch it, add ``SAModManager.exe`` as a non-Steam game. In the properties on Steam for SA Mod Manager, set it to use Proton as the compatibility tool.
 
-6. In the SA2B_Archipelago folder, copy the `APCpp.dll` file and paste it in the Sonic Adventure 2 install folder (where `sonic2app.exe` is).
+6. Run SAModManager.exe from Steam once. It should produce an error popup for a missing dependency, close the error.
 
-7. Launch the `SAModManager.exe` from Steam and make sure the SA2B_Archipelago mod is listed and enabled.
+7. Install protontricks, on the Steam Deck this can be done via the Discover store, on other distros instructions vary, [see its github page](https://github.com/Matoking/protontricks).
+
+8. Download the [.NET 7 Desktop Runtime for x64 Windows](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-7.0.17-windows-x64-installer}. If this link does not work, the download can be found on [this page](https://dotnet.microsoft.com/en-us/download/dotnet/7.0).
+
+9. Right click the .NET 7 Desktop Runtime exe, and assuming protontricks was installed correctly, the option to "Open with Protontricks Launcher" should be available. Click that, and in the popup window that opens, select SAModManager.exe. Follow the prompts after this to install the .NET 7 Desktop Runtime for SAModManager. Once it is done, you should be able to successfully launch SAModManager to steam.
+
+6. Unpack the Archipelago Mod into this folder, so that `/mods/SA2B_Archipelago` is a valid path.
+
+7. In the SA2B_Archipelago folder, copy the `APCpp.dll` file and paste it in the Sonic Adventure 2 install folder (where `sonic2app.exe` is).
+
+8. Launch `SAModManager.exe` from Steam and make sure the SA2B_Archipelago mod is listed and enabled.
 
 Note: Ensure that you launch Sonic Adventure 2 from Steam directly on Linux, rather than launching using the `Save & Play` button in SA Mod Manager.
 
