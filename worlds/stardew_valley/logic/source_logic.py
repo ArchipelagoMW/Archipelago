@@ -9,7 +9,7 @@ from .money_logic import MoneyLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from ..data.artisan import MachineSource
-from ..data.game_item import PermanentSource, ItemSource, GameItem, ItemTag
+from ..data.game_item import PermanentSource, ItemSource, GameItem
 from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, SeasonalForagingSource, HarvestCropSource, HarvestFruitTreeSource
 from ..data.shop import ShopSource
 from ..stardew_rule import true_
@@ -27,9 +27,7 @@ ArtisanLogicMixin]]):
     def has_access_to_item(self, item: GameItem):
         rules = []
 
-        # TODO I don't like having to check both the tag and the feature. Tag should not be applied if the feature is not enabled.
-        #  Tags should be applied by the feature.
-        if ItemTag.CROPSANITY_SEED in item.tags and self.content.features.cropsanity.is_enabled:
+        if self.content.features.cropsanity.is_included(item):
             rules.append(self.logic.received(item.name))
 
         rules.append(self.logic.source.has_access_to_any(item.sources))

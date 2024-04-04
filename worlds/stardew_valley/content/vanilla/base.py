@@ -44,7 +44,7 @@ class BaseGameContentPack(ContentPack):
             content.tag_item(edible_mushroom, ItemTag.EDIBLE_MUSHROOM)
 
     def finalize_hook(self, content: StardewContent):
-        # FIXME I have this design. A listener design pattern would be more appropriate to artisan good are register at the exact moment a FRUIT tag is added.
+        # FIXME I have this design. A listener design pattern would be more appropriate so artisan good are register at the exact moment a FRUIT tag is added.
         for fruit in tuple(content.find_tagged_items(ItemTag.FRUIT)):
             wine = ArtisanGood.specific_wine(fruit.name)
             content.source_item(wine, MachineSource(item=fruit.name, machine=Machine.keg))

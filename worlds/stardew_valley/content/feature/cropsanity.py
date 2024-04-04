@@ -24,14 +24,14 @@ class CropsanityFeature(ABC):
     extract_crop_from_location_name = staticmethod(extract_crop_from_location_name)
 
     @abstractmethod
-    def is_included(self, crop: str) -> bool:
+    def is_included(self, crop: GameItem) -> bool:
         ...
 
 
 class CropsanityDisabled(CropsanityFeature):
     is_enabled = False
 
-    def is_included(self, crop: str) -> bool:
+    def is_included(self, crop: GameItem) -> bool:
         return False
 
 
