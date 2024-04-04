@@ -83,3 +83,7 @@ class SNIClient(abc.ABC, metaclass=AutoSNIClientRegister):
     async def deathlink_kill_player(self, ctx: SNIContext) -> None:
         """ override this with implementation to kill player """
         pass
+
+    async def on_package(self, ctx: SNIContext, cmd: str, args: dict) -> None:
+        """ override this with code to handle packages from the server """
+        pass
