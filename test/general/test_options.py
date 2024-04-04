@@ -24,18 +24,18 @@ class TestOptions(unittest.TestCase):
     def test_item_links_name_groups(self):
         """Tests that item links successfully unfold item_name_groups"""
         item_link_groups = [
-            {
+            [{
                 "name": "ItemLinkGroup",
                 "item_pool": ["Everything"],
                 "link_replacement": False,
                 "replacement_item": None,
-            },
-            {
+            }],
+            [{
                 "name": "ItemLinkGroup",
                 "item_pool": ["Hammer", "Bow"],
                 "link_replacement": False,
                 "replacement_item": None,
-            }
+            }]
         ]
         # we really need some sort of test world but generic doesn't have enough items for this
         world = AutoWorldRegister.world_types["A Link to the Past"]
