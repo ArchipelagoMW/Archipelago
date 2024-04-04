@@ -9,9 +9,9 @@ from worlds.generic.Rules import add_rule
 
 from BaseClasses import CollectionState
 from .SubClasses import ALttPLocation
-from .EntranceShuffle import door_addresses
+
 from .Items import item_name_groups
-from .Options import small_key_shuffle, RandomizeShopInventories
+
 from .StateHelpers import has_hearts, can_use_bombs, can_hold_arrows
 
 logger = logging.getLogger("Shops")
@@ -66,6 +66,7 @@ class Shop:
         return 0
 
     def get_bytes(self) -> List[int]:
+        from .EntranceShuffle import door_addresses
         # [id][roomID-low][roomID-high][doorID][zero][shop_config][shopkeeper_config][sram_index]
         entrances = self.region.entrances
         config = self.item_count
@@ -181,7 +182,7 @@ def push_shop_inventories(multiworld):
 
 
 def create_shops(multiworld, player: int):
-
+    from .Options import RandomizeShopInventories
     player_shop_table = shop_table.copy()
     if multiworld.include_witch_hut[player]:
         player_shop_table["Potion Shop"] = player_shop_table["Potion Shop"]._replace(locked=False)
@@ -304,6 +305,7 @@ shop_generation_types = {
 
 
 def set_up_shops(multiworld, player: int):
+    from .Options import small_key_shuffle
     # TODO: move hard+ mode changes for shields here, utilizing the new shops
 
     if multiworld.retro_bow[player]:
@@ -426,7 +428,7 @@ def get_price_modifier(item):
 
 def get_price(multiworld, item, player: int, price_type=None):
     """Converts a raw Rupee price into a special price type"""
-
+    from .Options import small_key_shuffle
     if price_type:
         price_types = [price_type]
     else:
