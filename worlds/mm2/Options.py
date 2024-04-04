@@ -1,6 +1,36 @@
 from dataclasses import dataclass
 
-from Options import Choice, Toggle, DeathLink, DefaultOnToggle, TextChoice, Range, PerGameCommonOptions
+from Options import Choice, Toggle, DeathLink, DefaultOnToggle, TextChoice, Range, OptionDict, PerGameCommonOptions
+from schema import Schema, And, Use, Optional
+
+bosses = {
+    "Heat Man": 0,
+    "Air Man": 1,
+    "Wood Man": 2,
+    "Bubble Man": 3,
+    "Quick Man": 4,
+    "Flash Man": 5,
+    "Metal Man": 6,
+    "Crash Man": 7,
+    "Mecha Dragon": 8,
+    "Picopico-kun": 9,
+    "Guts Tank": 10,
+    "Boobeam Trap": 11,
+    "Wily Machine 2": 12,
+    "Alien": 13
+}
+
+weapons_to_id = {
+    "Mega Buster": 0,
+    "Atomic Fire": 1,
+    "Air Shooter": 2,
+    "Leaf Shield": 3,
+    "Bubble Lead": 4,
+    "Quick Boomerang": 5,
+    "Metal Blade": 7,
+    "Crash Bomber": 6,
+    "Time Stopper": 8,
+}
 
 
 class StartingRobotMaster(Choice):
@@ -64,27 +94,6 @@ class PaletteShuffle(TextChoice):
     option_randomized = 2
     option_singularity = 3
 
-    """
-    Valid Targets:
-    Mega Buster
-    Atomic Fire
-    Air Shooter
-    Leaf Shield
-    Bubble Lead
-    Quick Boomerang
-    Metal Blade
-    Crash Bomber
-    Time Stopper
-    Heat Man
-    Air Man
-    Wood Man
-    Bubble Man
-    Metal Man
-    Quick Man
-    Flash Man
-    Crash Man
-    """
-
 
 class StrictWeaknesses(Toggle):
     """Only your starting Robot Master will take damage from the Mega Buster, the rest must be defeated with weapons.
@@ -104,6 +113,23 @@ class Wily5Requirement(Range):
     range_start = 1
     range_end = 8
 
+
+class WeaknessPlando(OptionDict):
+    """
+    Specify specific damage numbers for boss damage. Can be used even without strict/random weaknesses.
+    plando_weakness:
+        Robot Master:
+            Weapon: Damage
+    """
+    display_name = "Plando Weaknesses"
+    schema = Schema({
+        Optional(And(str, Use(str.title), lambda s: s in bosses)): {
+            And(str, Use(str.title), lambda s: s in weapons_to_id): And(int, lambda i: i in range(-1, 14))
+        }
+    })
+    default = {}
+
+
 @dataclass
 class MM2Options(PerGameCommonOptions):
     death_link: DeathLink
@@ -116,3 +142,4 @@ class MM2Options(PerGameCommonOptions):
     strict_weakness: StrictWeaknesses
     random_weakness: RandomWeaknesses
     wily_5_requirement: Wily5Requirement
+    plando_weakness: WeaknessPlando

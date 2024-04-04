@@ -26,6 +26,7 @@ MM2_HEALTH = 0x6C0
 MM2_DEATHLINK = 0x8F
 MM2_DIFFICULTY = 0xCB
 
+
 MM2_CONSUMABLE_TABLE: Dict[int, Tuple[int, int]] = {
     # Item: (byte offset, bit mask)
     0x880201: (0, 8),
@@ -79,6 +80,8 @@ class MegaMan2Client(BizHawkClient):
     sending_death_link: bool = True
     death_link: bool = False
     rom: typing.Optional[bytes] = None
+    weapon_energy: int = 0
+    health_energy: int = 0
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from worlds._bizhawk import RequestFailedError, read
@@ -205,6 +208,37 @@ class MegaMan2Client(BizHawkClient):
             recv_amount += 1
             writes.append((MM2_RECEIVED_ITEMS, recv_amount.to_bytes(1, 'little'), "RAM"))
 
+        if self.weapon_energy:
+            # Weapon Energy
+            # We parse the whole thing to spread it as thin as possible
+            current_energy = self.weapon_energy
+            weapon_energy = bytearray(weapon_energy)
+            for i, weapon in zip(range(len(weapon_energy)), weapon_energy):
+                if weapon < 0x1C:
+                    missing = 0x1C - weapon
+                    if missing > self.weapon_energy:
+                        missing = self.weapon_energy
+                    self.weapon_energy -= missing
+                    weapon_energy[i] = weapon + missing
+                    if not self.weapon_energy:
+                        writes.append((MM2_WEAPON_ENERGY, weapon_energy, "RAM"))
+                        break
+            else:
+                if current_energy != self.weapon_energy:
+                    writes.append((MM2_WEAPON_ENERGY, weapon_energy, "RAM"))
+
+        if self.health_energy:
+            # Health Energy
+            # We save this if the player has not taken any damage
+            current_health = health[0]
+            if current_health < 0x1C:
+                health_diff = 0x1C - current_health
+                if health_diff > self.health_energy:
+                    health_diff = self.health_energy
+                self.health_energy -= health_diff
+                current_health += health_diff
+                writes.append((MM2_HEALTH, current_health.to_bytes(1, 'little'), "RAM"))
+
         if len(self.item_queue):
             item = self.item_queue.pop(0)
             idx = item.item & 0xF
@@ -217,35 +251,9 @@ class MegaMan2Client(BizHawkClient):
                     current_lives += 1
                     writes.append((MM2_LIVES, current_lives.to_bytes(1, 'little'), "RAM"))
             elif idx == 1:
-                # Weapon Energy
-                # We parse the whole thing to spread it as thin as possible
-                remaining_energy = 0xE
-                weapon_energy = bytearray(weapon_energy)
-                for i, weapon in zip(range(len(weapon_energy)), weapon_energy):
-                    if weapon < 0x1C:
-                        missing = 0x1C - weapon
-                        if missing > remaining_energy:
-                            missing = remaining_energy
-                        remaining_energy -= missing
-                        weapon_energy[i] = weapon + missing
-                        if not remaining_energy:
-                            writes.append((MM2_WEAPON_ENERGY, weapon_energy, "RAM"))
-                            break
-                else:
-                    if remaining_energy == 0x1C:
-                        self.item_queue.append(item)
-                    else:
-                        writes.append((MM2_WEAPON_ENERGY, weapon_energy, "RAM"))
-
+                self.weapon_energy += 0xE
             elif idx == 2:
-                # Health Energy
-                # We save this if the player has not taken any damage
-                current_health = health[0]
-                if current_health < 0x1C:
-                    current_health = min(0x1C, current_health + 0xE)
-                    writes.append((MM2_HEALTH, current_health.to_bytes(1, 'little'), "RAM"))
-                else:
-                    self.item_queue.append(item)
+                self.health_energy += 0xE
             elif idx == 3:
                 # E-Tank
                 # visuals only allow 4, but we're gonna go up to 9 anyway? May change
@@ -274,7 +282,7 @@ class MegaMan2Client(BizHawkClient):
                 if itm_id not in ctx.checked_locations:
                     new_checks.append(itm_id)
 
-        for i in range(0xE):
+        for i in range(0xD):
             rbm_id = 0x880001 + i
             if completed_stages[i] != 0:
                 if rbm_id not in ctx.checked_locations:

@@ -3,6 +3,7 @@ from . import Names
 from .Locations import heat_man_locations, air_man_locations, wood_man_locations, bubble_man_locations, \
     quick_man_locations, flash_man_locations, metal_man_locations, crash_man_locations, wily_1_locations, \
     wily_2_locations, wily_3_locations, wily_4_locations, wily_5_locations, wily_6_locations
+from .Options import bosses, weapons_to_id
 from worlds.generic.Rules import set_rule, add_rule
 
 if typing.TYPE_CHECKING:
@@ -18,6 +19,7 @@ weapon_damage: typing.Dict[int, typing.List[int]] = {
     5: [2, 2, 0, 2, 0, 0, 4, 1, 1, 7, 2, 0, 1, -1],  # Quick Boomerang
     6: [-1, 0, 2, 2, 4, 3, 0, 0, 1, 0, 1, 0x14, 1, -1],  # Crash Bomber
     7: [1, 0, 2, 4, 0, 4, 0xE, 0, 0, 7, 0, 0, 1, -1],  # Metal Blade
+    8: [0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0], # Time Stopper
 }
 
 weapons_to_name = {
@@ -27,7 +29,8 @@ weapons_to_name = {
     4: Names.bubble_lead,
     5: Names.quick_boomerang,
     6: Names.crash_bomber,
-    7: Names.metal_blade
+    7: Names.metal_blade,
+    8: Names.time_stopper
 }
 
 minimum_weakness_requirement = {
@@ -39,6 +42,7 @@ minimum_weakness_requirement = {
     5: 1,  # 224 uses of Quick Boomerang
     6: 4,  # 7 uses of Crash Bomber
     7: 1,  # 112 uses of Metal Blade
+    8: 4,  # 1 use of Time Stopper, but setting to 4 means we shave the entire HP bar
 }
 
 robot_masters = {
@@ -69,11 +73,11 @@ def set_rules(world: "MM2World") -> None:
         world.weapon_damage = slot_data["weapon_damage"]
     else:
         if world.options.random_weakness:
-            world.weapon_damage = {i: [] for i in range(8)}
+            world.weapon_damage = {i: [] for i in range(9)}
             for boss in range(13):
                 for weapon in world.weapon_damage:
                     world.weapon_damage[weapon].append(min(14, max(-1, int(world.random.normalvariate(3, 3)))))
-                if not any([world.weapon_damage[weapon][boss] > 4
+                if not any([world.weapon_damage[weapon][boss] >= 4
                             for weapon in range(1, 7)]):
                     # failsafe, there should be at least one defined non-Buster weakness
                     weapon = world.random.randint(1, 7)
@@ -106,18 +110,28 @@ def set_rules(world: "MM2World") -> None:
                             if weapon != 3:
                                 # Atomic Fire and Crash Bomber cannot be Picopico-kun's only weakness
                                 world.weapon_damage[weapon][boss] = 0
-                                weakness = world.random.choice((2, 3, 4, 5, 7))
+                                weakness = world.random.choice((2, 3, 4, 5, 7, 8))
                                 world.weapon_damage[weakness][boss] = minimum_weakness_requirement[weakness]
                         elif boss == 11:
                             if weapon == 1:
                                 # Atomic Fire cannot be Boobeam Trap's only weakness
                                 world.weapon_damage[weapon][boss] = 0
-                                weakness = world.random.choice((2, 3, 4, 5, 6, 7))
+                                weakness = world.random.choice((2, 3, 4, 5, 6, 7, 8))
                                 world.weapon_damage[weakness][boss] = minimum_weakness_requirement[weakness]
                         else:
                             world.weapon_damage[weapon][boss] = minimum_weakness_requirement[weapon]
             starting = world.options.starting_robot_master.value
             world.weapon_damage[0][starting] = 1
+
+    for boss in world.options.plando_weakness:
+        for weapon in world.options.plando_weakness[boss]:
+            if not any(w for w in world.weapon_damage[bosses[boss]]
+                       if w != weapon and world.weapon_damage[bosses[boss]][w] > minimum_weakness_requirement[w]):
+                # we need to replace this weakness
+                weakness = world.random.choice()
+            world.weapon_damage[weapons_to_id[weapon]][bosses[boss]] = world.options.plando_weakness[boss][weapon]
+
+    time_stopper_logical = False
 
     for i, boss in zip(range(14), [
         heat_man_locations,
@@ -138,16 +152,28 @@ def set_rules(world: "MM2World") -> None:
         if world.weapon_damage[0][i] > 0:
             continue  # this can always be in logic
         weapons = []
-        for weapon in range(1, 8):
+        for weapon in range(1, 9):
             if world.weapon_damage[weapon][i] > 0:
                 if world.weapon_damage[weapon][i] < minimum_weakness_requirement[weapon]:
                     continue  # Atomic Fire can only be considered logical for bosses it can kill in 2 hits
                 weapons.append(weapons_to_name[weapon])
+        if i in (*list(range(8)), 12) and Names.time_stopper in weapons:
+            if not time_stopper_logical:
+                # Time Stopper only gets one use, and needs the full bar to kill
+                # So we can only consider it logical for one of the RBMs/Wily Machine
+                time_stopper_logical = True
+            else:
+                weapons.remove(Names.time_stopper)
         if not weapons:
             raise Exception(f"Attempted to have boss {i} with no weakness! Seed: {world.multiworld.seed}")
         for location in boss:
-            add_rule(world.multiworld.get_location(location, world.player),
-                     lambda state, weps=tuple(weapons): state.has_any(weps, world.player))
+            if i == 12:
+                add_rule(world.multiworld.get_location(location, world.player),
+                         lambda state, weps=tuple(weapons): state.has_all(weps, world.player))
+                # TODO: when has_list gets added, check for a subset of possible weaknesses
+            else:
+                add_rule(world.multiworld.get_location(location, world.player),
+                         lambda state, weps=tuple(weapons): state.has_any(weps, world.player))
 
     # Always require Crash Bomber for Boobeam Trap
     add_rule(world.multiworld.get_location(Names.wily_4, world.player),

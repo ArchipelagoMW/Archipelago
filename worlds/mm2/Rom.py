@@ -8,6 +8,7 @@ import os
 import settings
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 from . import Names
+from .Rules import minimum_weakness_requirement
 from .Text import MM2TextEntry
 from .Color import get_colors_for_item, write_palette_shuffle
 
@@ -277,30 +278,49 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch):
 
     write_palette_shuffle(world, patch)
 
-    if world.options.strict_weakness or world.options.random_weakness:
+    if world.options.strict_weakness or world.options.random_weakness or world.options.plando_weakness:
         # we need to write boss weaknesses
         output = bytearray()
         for weapon in world.weapon_damage:
+            if weapon == 8:
+                continue  # Time Stopper is a special case
             weapon_damage = [world.weapon_damage[weapon][i]
                              if world.weapon_damage[weapon][i] >= 0
                              else 256 + world.weapon_damage[weapon][i]
                              for i in range(14)]
             output.extend(weapon_damage)
         patch.write_bytes(0x2E952, bytes(output))
-        wily_5_weaknesses = [i for i in range(8) if world.weapon_damage[i][12] > 4]
-        world.random.shuffle(wily_5_weaknesses)
-        if len(wily_5_weaknesses) >= 3:
-            weak1 = wily_5_weaknesses.pop()
-            weak2 = wily_5_weaknesses.pop()
-            weak3 = wily_5_weaknesses.pop()
-        elif len(wily_5_weaknesses) == 2:
-            weak1 = weak2 = wily_5_weaknesses.pop()
-            weak3 = wily_5_weaknesses.pop()
-        else:
-            weak1 = weak2 = weak3 = 0
-        patch.write_byte(0x2DA2E, weak1)
-        patch.write_byte(0x2DA32, weak2)
-        patch.write_byte(0x2DA3A, weak3)
+        time_stopper_damage = world.weapon_damage[8]
+        time_offset = 0x2C03B
+        damage_table = {
+            4: 0xF,
+            3: 0x17,
+            2: 0x1E,
+            1: 0x25
+        }
+        for boss, damage in enumerate(time_stopper_damage):
+            if damage > 4:
+                damage = 4  # 4 is a guaranteed kill, no need to exceed
+            if damage <= 0:
+                patch.write_byte(time_offset + 14 + boss, 0)
+            else:
+                patch.write_byte(time_offset + 14 + boss, 1)
+                patch.write_byte(time_offset + boss, damage_table[damage])
+        if world.options.random_weakness:
+            wily_5_weaknesses = [i for i in range(8) if world.weapon_damage[i][12] > minimum_weakness_requirement[i]]
+            world.random.shuffle(wily_5_weaknesses)
+            if len(wily_5_weaknesses) >= 3:
+                weak1 = wily_5_weaknesses.pop()
+                weak2 = wily_5_weaknesses.pop()
+                weak3 = wily_5_weaknesses.pop()
+            elif len(wily_5_weaknesses) == 2:
+                weak1 = weak2 = wily_5_weaknesses.pop()
+                weak3 = wily_5_weaknesses.pop()
+            else:
+                weak1 = weak2 = weak3 = 0
+            patch.write_byte(0x2DA2E, weak1)
+            patch.write_byte(0x2DA32, weak2)
+            patch.write_byte(0x2DA3A, weak3)
         for weapon in picopico_weakness_ptrs:
             p_damage = world.weapon_damage[weapon][9]
             if p_damage < 0:
