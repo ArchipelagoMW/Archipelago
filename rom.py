@@ -378,14 +378,6 @@ def patch_rom(rom: LocalRom, world: WL4World):
     rom.write_byte(get_symbol('DeathLinkFlag'), world.options.death_link.value)
 
     if (world.options.goal == Goal.option_golden_treasure_hunt):
-        # BossSave() - Set check locations on boss kill times
-        rom.write_halfword(0x80813F0, 0x7848)  # ldrb r0, [r1, #1]
-        rom.write_halfword(0x80813F6, 0x7048)  # strb r0, [r1, #1]
-        rom.write_halfword(0x8081410, 0x7848)  # ldrb r0, [r1, #1]
-        rom.write_halfword(0x8081416, 0x7048)  # strb r0, [r1, #1]
-        rom.write_halfword(0x8081430, 0x7848)  # ldrb r0, [r1, #1]
-        rom.write_halfword(0x8081436, 0x7048)  # strb r0, [r1, #1]
-
         # SelectBossDoorInit01() - Check for golden passage instead of boss defeated
         rom.write_halfword(0x80863C2, 0x46C0)  # nop
         rom.write_halfword(0x80863C4, 0x4660)  # mov r0, r12
