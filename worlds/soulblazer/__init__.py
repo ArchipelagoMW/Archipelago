@@ -11,8 +11,8 @@ from .Items import (
     create_itempool,
 )  # data used below to add items to the World
 from .Locations import SoulBlazerLocation, all_locations_table  # same as above
-from .Regions import create_regions
-from .Rules import set_rules
+from .Regions import create_regions as region_create_regions
+from .Rules import set_rules as rules_set_rules
 from .Rom import SoulBlazerDeltaPatch, LocalRom, patch_rom, get_base_rom_path
 from worlds.AutoWorld import WebWorld, World
 from BaseClasses import MultiWorld, Region, Location, Entrance, Item, ItemClassification, Tutorial
@@ -81,8 +81,8 @@ class SoulBlazerWorld(World):
         self.exp_items: list[SoulBlazerItem]
         self.gem_items: list[SoulBlazerItem]
         self.pre_fill_items: list[Item] = []
-        self.set_rules = set_rules
-        self.create_regions = create_regions
+        #self.set_rules = set_rules
+        #self.create_regions = create_regions
 
     def create_item(self, item: str) -> SoulBlazerItem:
         if item in repeatable_items_table:
@@ -95,9 +95,9 @@ class SoulBlazerWorld(World):
     def get_pre_fill_items(self) -> typing.List[Item]:
         return self.pre_fill_items
 
-    def create_victory_event(self) -> Location:
+    def create_victory_event(self, region: Region) -> Location:
         """Creates the `"Victory"` item/location event pair"""
-        victory_loc = Location(self.player, "Victory", None)
+        victory_loc = Location(self.player, "Victory", None, region)
         victory_loc.place_locked_item(Item("Victory", ItemClassification.progression, None, self.player))
         return victory_loc
 
@@ -110,6 +110,7 @@ class SoulBlazerWorld(World):
 
     #def create_regions(self) -> None:
     #    pass
+    create_regions = region_create_regions
 
     def create_items(self) -> None:
         itempool = create_itempool(self)
@@ -120,7 +121,7 @@ class SoulBlazerWorld(World):
             starting_sword_name = Items.ItemName.LIFESWORD
 
         starting_sword = next(x for x in itempool if x.name == starting_sword_name)
-        self.pre_fill_items += starting_sword
+        self.pre_fill_items.append(starting_sword)
         itempool.remove(starting_sword)
         self.multiworld.get_location(Locations.ChestName.TRIAL_ROOM, self.player).place_locked_item(starting_sword)
 
@@ -132,6 +133,8 @@ class SoulBlazerWorld(World):
     #    # TODO: Delete
     #    self.multiworld.get_region("Test", self.player).locations += self.create_victory_event()
     #    self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+    set_rules = rules_set_rules
+
 
     def generate_basic(self) -> None:
         pass
@@ -153,10 +156,12 @@ class SoulBlazerWorld(World):
 
     def generate_output(self, output_directory: str):
         try:
-            rom = LocalRom(get_base_rom_path())
-            patch_rom(self, rom, self.active_level_list)
-
             rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
+
+            rom = LocalRom(get_base_rom_path())
+            patch_rom(self, rom)
+
+            
             rom.write_to_file(rompath)
             self.rom_name = rom.name
 

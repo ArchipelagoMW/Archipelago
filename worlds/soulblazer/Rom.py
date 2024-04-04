@@ -4,6 +4,7 @@ import math
 
 import bsdiff4
 import Utils
+from typing import Callable
 from BaseClasses import ItemClassification
 from Utils import read_snes_rom
 from worlds.AutoWorld import World
@@ -12,7 +13,7 @@ from .Names import Addresses, ItemID
 from .Items import SoulBlazerItem, SoulBlazerItemData
 from .Locations import SoulBlazerLocation, LocationType, SoulBlazerLocationData
 
-USHASH = "83CF41D53A1B94AEEA1A645037A24004"
+USHASH = "83cf41d53a1b94aeea1a645037a24004"
 
 
 class LocalRom(object):
@@ -57,47 +58,56 @@ class LocalRom(object):
     def apply_basepatch(self):
         with open(os.path.join(os.path.dirname(__file__), "patches", "basepatch.bsdiff4"), "rb") as basepatch:
             delta: bytes = basepatch.read()
-        buffer = bsdiff4.patch(self.buffer, delta)
+        buffer = bytearray(bsdiff4.patch(bytes(self.buffer), delta))
 
     def apply_patch(self, name: str):
         with open(os.path.join(os.path.dirname(__file__), "patches", name), "rb") as basepatch:
             delta: bytes = basepatch.read()
         buffer = bsdiff4.patch(self.buffer, delta)
 
-    def place_lair(self, index: int, id, operand):
-        pass
+    def place_lair(self, index: int, id: int, operand: int):
+        # Compute address of our lair entry
+        lair_addr = Addresses.LAIR_DATA + 0x18 + (0x20 * index)
+        self.write_bytes(lair_addr, [id, *operand.to_bytes(2, "little")])
 
-    def place_chest(self, index, id, operand):
-        pass
+    def place_chest(self, index: int, id: int, operand: int):
+        # Pull chest address from table
+        for chest_addr in Addresses.CHEST_ADDRESSES[index]:
+            self.write_bytes(chest_addr + 0x03, [id, *operand.to_bytes(2, "little")])
 
-    def place_npcreward(self, index, id, operand):
-        pass
+    def place_npcreward(self, index: int, id: int, operand: int):
+        npcreward_addr = Addresses.NPC_REWARD_DATA + (0x04 * index)
+        self.write_bytes(npcreward_addr, [id, 0x00, *operand.to_bytes(2, "little")])
 
-    place_dict: dict[LocationType:function] = {
+    place_dict: dict[LocationType: Callable] = {
         LocationType.CHEST: place_chest,
         LocationType.LAIR: place_lair,
         LocationType.NPC_REWARD: place_npcreward,
     }
 
     def place(self, location: SoulBlazerLocation):
+        if location.event:
+            return
         location_data = location.data
         if location.item.player == location.player:
             item: SoulBlazerItem = location.item
-            LocalRom.place_dict[location_data.type](location_data.id, item.id, item.operand_for_id)
+            LocalRom.place_dict[location_data.type](self, location_data.id, item.id, item.operand_for_id)
         else:
-            #TODO: Better handling of remote items item and player name stored in ROM somewhere.
-            #Or let the client communicate when something was sent?
+            # TODO: Better handling of remote items item and player name stored in ROM somewhere.
+            # Or let the client populate info in RAM?
             LocalRom.place_dict[location_data.type](
+                self,
                 location_data.id,
                 ItemID.REMOTE_ITEM,
                 1 if location.item.classification == ItemClassification.progression else 0,
             )
-        pass
 
 
-def patch_rom(world: World, rom: LocalRom, active_level_list):
-    # TODO: this
-    pass
+def patch_rom(world: World, rom: LocalRom):
+    # TODO: check options and patch based on results.
+
+    for location in world.multiworld.get_locations(world.player):
+        rom.place(location)
 
 
 class SoulBlazerDeltaPatch(APDeltaPatch):

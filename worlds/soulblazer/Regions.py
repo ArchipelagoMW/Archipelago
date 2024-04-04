@@ -212,7 +212,7 @@ locations_for_region: dict[str, list[str]] = {
         ChestName.SEABED_SECRET_TL,
         ChestName.SEABED_SECRET_TR,
         ChestName.SEABED_SECRET_BL,
-        ChestName.SEABED_SECRET_TR,
+        ChestName.SEABED_SECRET_BR,
     ],
     # Act 4 Regions
     RegionName.MOUNTAIN_HUB_NORTH_SLOPE: [
@@ -260,6 +260,7 @@ locations_for_region: dict[str, list[str]] = {
         LairName.MUSHROOM_EMBLEM_F,
         LairName.DANCING_GRANDMA,
         LairName.DANCING_GRANDMA2,
+        LairName.SNAIL_EMBLEM_E,
         LairName.MOUNTAIN_KING,
         NPCRewardName.LUNE_CRYSTAL,
         NPCRewardName.EMBLEM_F_TILE,
@@ -416,7 +417,7 @@ class ExitData(NamedTuple):
 
 
 # TODO: move this to rules?
-exits_for_region: dict[str, ExitData] = {
+exits_for_region: dict[str, list[ExitData]] = {
     RegionName.MENU: [
         ExitData(RegionName.TRIAL_ROOM),
     ],
@@ -552,27 +553,32 @@ def create_regions(world: "SoulBlazerWorld") -> None:
     """
 
     # Create all regions
-    regions = [Region(k, world.player, world.multiworld) for k in locations_for_region.keys()]
-    world.multiworld.regions += regions
+    regions = {k: Region(k, world.player, world.multiworld) for k in locations_for_region.keys()}
+    world.multiworld.regions += regions.values()
 
-    all_locations = []
+    all_locations: list[SoulBlazerLocation] = []
 
     # Populate each region with locations and exits
-    for region in regions:
+    for region in regions.values():
         locations = [
             SoulBlazerLocation(world.player, loc, data, region)
             for loc in locations_for_region[region.name]
-            for data in all_locations_table[loc]
+            for data in [all_locations_table[loc]]
         ]
 
         region.locations += locations
         all_locations += locations
 
-        for exit_name, exit_data in exits_for_region[region.name].items():
-            connect_to = regions[exit_name]
+        for exit_data in exits_for_region.get(region.name, []):
+            connect_to = regions[exit_data.destination]
             region.connect(connect_to, None, get_rule_for_exit(exit_data, world.player))
 
     # All of the locations should have been placed in regions.
     # TODO: Delete once confident that all locations are in or move into a test instead?
     if len(all_locations) < len(all_locations_table):
+        all_location_names = {loc.name for loc in all_locations}
+        all_locations_table_names = {*all_locations_table.keys()}
+        unplaced = all_locations_table_names - all_location_names
         logging.warning("Soulblazer: Regions do not contain all locations. Something is likely broken with the logic.")
+        for loc in unplaced:
+            logging.warning(loc)

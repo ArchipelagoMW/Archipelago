@@ -12,7 +12,7 @@ class SoulBlazerItemData:
     id: int
     """Internal item ID"""
 
-    operand: Optional[int]
+    operand: int
     """Either Gems/Exp Quantity or Lair ID"""
 
     classification: ItemClassification
@@ -35,7 +35,7 @@ class SoulBlazerItemData:
 
         while remainder != 0:
             bcd += (remainder % 10) * (0x10**digit)
-            remainder // 10
+            remainder //= 10
             digit += 1
 
         return bcd
@@ -48,7 +48,7 @@ class SoulBlazerItemData:
 
         while remainder != 0:
             decimal += (remainder % 10) * (10**digit)
-            remainder // 0x10
+            remainder //= 0x10
             digit += 1
 
         operand = decimal
@@ -134,96 +134,96 @@ def create_itempool(world: "SoulBlazerWorld") -> list[SoulBlazerItem]:
 
 # TODO: Unsure which progression items should skip balancing
 swords_table = {
-    ItemName.LIFESWORD     : SoulBlazerItemData(ItemID.LIFESWORD    , None, ItemClassification.progression_skip_balancing),
-    ItemName.PSYCHOSWORD   : SoulBlazerItemData(ItemID.PSYCHOSWORD  , None, ItemClassification.progression_skip_balancing),
-    ItemName.CRITICALSWORD : SoulBlazerItemData(ItemID.CRITICALSWORD, None, ItemClassification.progression_skip_balancing),
-    ItemName.LUCKYBLADE    : SoulBlazerItemData(ItemID.LUCKYBLADE   , None, ItemClassification.progression),
-    ItemName.ZANTETSUSWORD : SoulBlazerItemData(ItemID.ZANTETSUSWORD, None, ItemClassification.progression),
-    ItemName.SPIRITSWORD   : SoulBlazerItemData(ItemID.SPIRITSWORD  , None, ItemClassification.progression),
-    ItemName.RECOVERYSWORD : SoulBlazerItemData(ItemID.RECOVERYSWORD, None, ItemClassification.progression_skip_balancing),
-    ItemName.SOULBLADE     : SoulBlazerItemData(ItemID.SOULBLADE    , None, ItemClassification.progression),
+    ItemName.LIFESWORD     : SoulBlazerItemData(ItemID.LIFESWORD    , 0x00, ItemClassification.progression_skip_balancing),
+    ItemName.PSYCHOSWORD   : SoulBlazerItemData(ItemID.PSYCHOSWORD  , 0x00, ItemClassification.progression_skip_balancing),
+    ItemName.CRITICALSWORD : SoulBlazerItemData(ItemID.CRITICALSWORD, 0x00, ItemClassification.progression_skip_balancing),
+    ItemName.LUCKYBLADE    : SoulBlazerItemData(ItemID.LUCKYBLADE   , 0x00, ItemClassification.progression),
+    ItemName.ZANTETSUSWORD : SoulBlazerItemData(ItemID.ZANTETSUSWORD, 0x00, ItemClassification.progression),
+    ItemName.SPIRITSWORD   : SoulBlazerItemData(ItemID.SPIRITSWORD  , 0x00, ItemClassification.progression),
+    ItemName.RECOVERYSWORD : SoulBlazerItemData(ItemID.RECOVERYSWORD, 0x00, ItemClassification.progression_skip_balancing),
+    ItemName.SOULBLADE     : SoulBlazerItemData(ItemID.SOULBLADE    , 0x00, ItemClassification.progression),
 }
 
 armors_table = {
-    ItemName.IRONARMOR      : SoulBlazerItemData(ItemID.IRONARMOR     , None, ItemClassification.useful),
-    ItemName.ICEARMOR       : SoulBlazerItemData(ItemID.ICEARMOR      , None, ItemClassification.progression),
-    ItemName.BUBBLEARMOR    : SoulBlazerItemData(ItemID.BUBBLEARMOR   , None, ItemClassification.progression),
-    ItemName.MAGICARMOR     : SoulBlazerItemData(ItemID.MAGICARMOR    , None, ItemClassification.useful),
-    ItemName.MYSTICARMOR    : SoulBlazerItemData(ItemID.MYSTICARMOR   , None, ItemClassification.useful),
-    ItemName.LIGHTARMOR     : SoulBlazerItemData(ItemID.LIGHTARMOR    , None, ItemClassification.useful),
-    ItemName.ELEMENTALARMOR : SoulBlazerItemData(ItemID.ELEMENTALARMOR, None, ItemClassification.useful),
-    ItemName.SOULARMOR      : SoulBlazerItemData(ItemID.SOULARMOR     , None, ItemClassification.progression),
+    ItemName.IRONARMOR      : SoulBlazerItemData(ItemID.IRONARMOR     , 0x00, ItemClassification.useful),
+    ItemName.ICEARMOR       : SoulBlazerItemData(ItemID.ICEARMOR      , 0x00, ItemClassification.progression),
+    ItemName.BUBBLEARMOR    : SoulBlazerItemData(ItemID.BUBBLEARMOR   , 0x00, ItemClassification.progression),
+    ItemName.MAGICARMOR     : SoulBlazerItemData(ItemID.MAGICARMOR    , 0x00, ItemClassification.useful),
+    ItemName.MYSTICARMOR    : SoulBlazerItemData(ItemID.MYSTICARMOR   , 0x00, ItemClassification.useful),
+    ItemName.LIGHTARMOR     : SoulBlazerItemData(ItemID.LIGHTARMOR    , 0x00, ItemClassification.useful),
+    ItemName.ELEMENTALARMOR : SoulBlazerItemData(ItemID.ELEMENTALARMOR, 0x00, ItemClassification.useful),
+    ItemName.SOULARMOR      : SoulBlazerItemData(ItemID.SOULARMOR     , 0x00, ItemClassification.progression),
 }
 
 magic_table = {
-    ItemName.FLAMEBALL   : SoulBlazerItemData(ItemID.FLAMEBALL  , None, ItemClassification.progression),
-    ItemName.LIGHTARROW  : SoulBlazerItemData(ItemID.LIGHTARROW , None, ItemClassification.progression_skip_balancing),
-    ItemName.MAGICFLARE  : SoulBlazerItemData(ItemID.MAGICFLARE , None, ItemClassification.progression_skip_balancing),
-    ItemName.ROTATOR     : SoulBlazerItemData(ItemID.ROTATOR    , None, ItemClassification.progression_skip_balancing),
-    ItemName.SPARKBOMB   : SoulBlazerItemData(ItemID.SPARKBOMB  , None, ItemClassification.progression_skip_balancing),
-    ItemName.FLAMEPILLAR : SoulBlazerItemData(ItemID.FLAMEPILLAR, None, ItemClassification.progression_skip_balancing),
-    ItemName.TORNADO     : SoulBlazerItemData(ItemID.TORNADO    , None, ItemClassification.progression_skip_balancing),
-    ItemName.PHOENIX     : SoulBlazerItemData(ItemID.PHOENIX    , None, ItemClassification.progression_skip_balancing),
+    ItemName.FLAMEBALL   : SoulBlazerItemData(ItemID.FLAMEBALL  , 0x00, ItemClassification.progression),
+    ItemName.LIGHTARROW  : SoulBlazerItemData(ItemID.LIGHTARROW , 0x00, ItemClassification.progression_skip_balancing),
+    ItemName.MAGICFLARE  : SoulBlazerItemData(ItemID.MAGICFLARE , 0x00, ItemClassification.progression_skip_balancing),
+    ItemName.ROTATOR     : SoulBlazerItemData(ItemID.ROTATOR    , 0x00, ItemClassification.progression_skip_balancing),
+    ItemName.SPARKBOMB   : SoulBlazerItemData(ItemID.SPARKBOMB  , 0x00, ItemClassification.progression_skip_balancing),
+    ItemName.FLAMEPILLAR : SoulBlazerItemData(ItemID.FLAMEPILLAR, 0x00, ItemClassification.progression_skip_balancing),
+    ItemName.TORNADO     : SoulBlazerItemData(ItemID.TORNADO    , 0x00, ItemClassification.progression_skip_balancing),
+    ItemName.PHOENIX     : SoulBlazerItemData(ItemID.PHOENIX    , 0x00, ItemClassification.progression_skip_balancing),
 }
 
 emblems_table = {
-    ItemName.EMBLEMA         : SoulBlazerItemData(ItemID.EMBLEMA, None, ItemClassification.progression_skip_balancing),
-    ItemName.EMBLEMB         : SoulBlazerItemData(ItemID.EMBLEMB, None, ItemClassification.progression_skip_balancing),
-    ItemName.EMBLEMC         : SoulBlazerItemData(ItemID.EMBLEMC, None, ItemClassification.progression_skip_balancing),
-    ItemName.EMBLEMD         : SoulBlazerItemData(ItemID.EMBLEMD, None, ItemClassification.progression_skip_balancing),
-    ItemName.EMBLEME         : SoulBlazerItemData(ItemID.EMBLEME, None, ItemClassification.progression_skip_balancing),
-    ItemName.EMBLEMF         : SoulBlazerItemData(ItemID.EMBLEMF, None, ItemClassification.progression_skip_balancing),
-    ItemName.EMBLEMG         : SoulBlazerItemData(ItemID.EMBLEMG, None, ItemClassification.progression_skip_balancing),
-    ItemName.EMBLEMH         : SoulBlazerItemData(ItemID.EMBLEMH, None, ItemClassification.progression_skip_balancing),
+    ItemName.EMBLEMA         : SoulBlazerItemData(ItemID.EMBLEMA, 0x00, ItemClassification.progression_skip_balancing),
+    ItemName.EMBLEMB         : SoulBlazerItemData(ItemID.EMBLEMB, 0x00, ItemClassification.progression_skip_balancing),
+    ItemName.EMBLEMC         : SoulBlazerItemData(ItemID.EMBLEMC, 0x00, ItemClassification.progression_skip_balancing),
+    ItemName.EMBLEMD         : SoulBlazerItemData(ItemID.EMBLEMD, 0x00, ItemClassification.progression_skip_balancing),
+    ItemName.EMBLEME         : SoulBlazerItemData(ItemID.EMBLEME, 0x00, ItemClassification.progression_skip_balancing),
+    ItemName.EMBLEMF         : SoulBlazerItemData(ItemID.EMBLEMF, 0x00, ItemClassification.progression_skip_balancing),
+    ItemName.EMBLEMG         : SoulBlazerItemData(ItemID.EMBLEMG, 0x00, ItemClassification.progression_skip_balancing),
+    ItemName.EMBLEMH         : SoulBlazerItemData(ItemID.EMBLEMH, 0x00, ItemClassification.progression_skip_balancing),
 }
 
 redhots_table = {
-    ItemName.REDHOTMIRROR    : SoulBlazerItemData(ItemID.REDHOTMIRROR, None, ItemClassification.progression),
-    ItemName.REDHOTBALL      : SoulBlazerItemData(ItemID.REDHOTBALL  , None, ItemClassification.progression),
-    ItemName.REDHOTSTICK     : SoulBlazerItemData(ItemID.REDHOTSTICK , None, ItemClassification.progression),
+    ItemName.REDHOTMIRROR    : SoulBlazerItemData(ItemID.REDHOTMIRROR, 0x00, ItemClassification.progression),
+    ItemName.REDHOTBALL      : SoulBlazerItemData(ItemID.REDHOTBALL  , 0x00, ItemClassification.progression),
+    ItemName.REDHOTSTICK     : SoulBlazerItemData(ItemID.REDHOTSTICK , 0x00, ItemClassification.progression),
 }
 
 stones_table = {
-    ItemName.BROWNSTONE      : SoulBlazerItemData(ItemID.BROWNSTONE , None, ItemClassification.progression),
-    ItemName.GREENSTONE      : SoulBlazerItemData(ItemID.GREENSTONE , None, ItemClassification.progression),
-    ItemName.BLUESTONE       : SoulBlazerItemData(ItemID.BLUESTONE  , None, ItemClassification.progression),
-    ItemName.SILVERSTONE     : SoulBlazerItemData(ItemID.SILVERSTONE, None, ItemClassification.progression),
-    ItemName.PURPLESTONE     : SoulBlazerItemData(ItemID.PURPLESTONE, None, ItemClassification.progression),
-    ItemName.BLACKSTONE      : SoulBlazerItemData(ItemID.BLACKSTONE , None, ItemClassification.progression),
+    ItemName.BROWNSTONE      : SoulBlazerItemData(ItemID.BROWNSTONE , 0x00, ItemClassification.progression),
+    ItemName.GREENSTONE      : SoulBlazerItemData(ItemID.GREENSTONE , 0x00, ItemClassification.progression),
+    ItemName.BLUESTONE       : SoulBlazerItemData(ItemID.BLUESTONE  , 0x00, ItemClassification.progression),
+    ItemName.SILVERSTONE     : SoulBlazerItemData(ItemID.SILVERSTONE, 0x00, ItemClassification.progression),
+    ItemName.PURPLESTONE     : SoulBlazerItemData(ItemID.PURPLESTONE, 0x00, ItemClassification.progression),
+    ItemName.BLACKSTONE      : SoulBlazerItemData(ItemID.BLACKSTONE , 0x00, ItemClassification.progression),
 }
 
 inventory_items_table = {
-    ItemName.GOATSFOOD       : SoulBlazerItemData(ItemID.GOATSFOOD      , None, ItemClassification.useful),
-    ItemName.HARPSTRING      : SoulBlazerItemData(ItemID.HARPSTRING     , None, ItemClassification.progression),
-    ItemName.APASS           : SoulBlazerItemData(ItemID.APASS          , None, ItemClassification.progression),
-    ItemName.DREAMROD        : SoulBlazerItemData(ItemID.DREAMROD       , None, ItemClassification.progression),
-    ItemName.LEOSBRUSH       : SoulBlazerItemData(ItemID.LEOSBRUSH      , None, ItemClassification.progression),
-    ItemName.TURBOSLEAVES    : SoulBlazerItemData(ItemID.TURBOSLEAVES   , None, ItemClassification.progression),
-    ItemName.MOLESRIBBON     : SoulBlazerItemData(ItemID.MOLESRIBBON    , None, ItemClassification.progression),
-    ItemName.BIGPEARL        : SoulBlazerItemData(ItemID.BIGPEARL       , None, ItemClassification.progression),
-    ItemName.MERMAIDSTEARS   : SoulBlazerItemData(ItemID.MERMAIDSTEARS  , None, ItemClassification.progression),
-    ItemName.MUSHROOMSHOES   : SoulBlazerItemData(ItemID.MUSHROOMSHOES  , None, ItemClassification.progression),
-    ItemName.AIRSHIPKEY      : SoulBlazerItemData(ItemID.AIRSHIPKEY     , None, ItemClassification.progression),
-    ItemName.THUNDERRING     : SoulBlazerItemData(ItemID.THUNDERRING    , None, ItemClassification.progression),
-    ItemName.DELICIOUSSEEDS  : SoulBlazerItemData(ItemID.DELICIOUSSEEDS , None, ItemClassification.progression),
-    ItemName.ACTINIDIALEAVES : SoulBlazerItemData(ItemID.ACTINIDIALEAVES, None, ItemClassification.progression),
-    ItemName.DOORKEY         : SoulBlazerItemData(ItemID.DOORKEY        , None, ItemClassification.progression),
-    ItemName.PLATINUMCARD    : SoulBlazerItemData(ItemID.PLATINUMCARD   , None, ItemClassification.progression),
-    ItemName.VIPCARD         : SoulBlazerItemData(ItemID.VIPCARD        , None, ItemClassification.progression),
+    ItemName.GOATSFOOD       : SoulBlazerItemData(ItemID.GOATSFOOD      , 0x00, ItemClassification.useful),
+    ItemName.HARPSTRING      : SoulBlazerItemData(ItemID.HARPSTRING     , 0x00, ItemClassification.progression),
+    ItemName.APASS           : SoulBlazerItemData(ItemID.APASS          , 0x00, ItemClassification.progression),
+    ItemName.DREAMROD        : SoulBlazerItemData(ItemID.DREAMROD       , 0x00, ItemClassification.progression),
+    ItemName.LEOSBRUSH       : SoulBlazerItemData(ItemID.LEOSBRUSH      , 0x00, ItemClassification.progression),
+    ItemName.TURBOSLEAVES    : SoulBlazerItemData(ItemID.TURBOSLEAVES   , 0x00, ItemClassification.progression),
+    ItemName.MOLESRIBBON     : SoulBlazerItemData(ItemID.MOLESRIBBON    , 0x00, ItemClassification.progression),
+    ItemName.BIGPEARL        : SoulBlazerItemData(ItemID.BIGPEARL       , 0x00, ItemClassification.progression),
+    ItemName.MERMAIDSTEARS   : SoulBlazerItemData(ItemID.MERMAIDSTEARS  , 0x00, ItemClassification.progression),
+    ItemName.MUSHROOMSHOES   : SoulBlazerItemData(ItemID.MUSHROOMSHOES  , 0x00, ItemClassification.progression),
+    ItemName.AIRSHIPKEY      : SoulBlazerItemData(ItemID.AIRSHIPKEY     , 0x00, ItemClassification.progression),
+    ItemName.THUNDERRING     : SoulBlazerItemData(ItemID.THUNDERRING    , 0x00, ItemClassification.progression),
+    ItemName.DELICIOUSSEEDS  : SoulBlazerItemData(ItemID.DELICIOUSSEEDS , 0x00, ItemClassification.progression),
+    ItemName.ACTINIDIALEAVES : SoulBlazerItemData(ItemID.ACTINIDIALEAVES, 0x00, ItemClassification.progression),
+    ItemName.DOORKEY         : SoulBlazerItemData(ItemID.DOORKEY        , 0x00, ItemClassification.progression),
+    ItemName.PLATINUMCARD    : SoulBlazerItemData(ItemID.PLATINUMCARD   , 0x00, ItemClassification.progression),
+    ItemName.VIPCARD         : SoulBlazerItemData(ItemID.VIPCARD        , 0x00, ItemClassification.progression),
     **emblems_table,
     **redhots_table,
-    ItemName.POWERBRACELET   : SoulBlazerItemData(ItemID.POWERBRACELET  , None, ItemClassification.useful),
-    ItemName.SHIELDBRACELET  : SoulBlazerItemData(ItemID.SHIELDBRACELET , None, ItemClassification.useful),
-    ItemName.SUPERBRACELET   : SoulBlazerItemData(ItemID.SUPERBRACELET  , None, ItemClassification.useful),
-    ItemName.MEDICALHERB     : SoulBlazerItemData(ItemID.MEDICALHERB    , None, ItemClassification.filler),
-    ItemName.STRANGEBOTTLE   : SoulBlazerItemData(ItemID.STRANGEBOTTLE  , None, ItemClassification.filler),
+    ItemName.POWERBRACELET   : SoulBlazerItemData(ItemID.POWERBRACELET  , 0x00, ItemClassification.useful),
+    ItemName.SHIELDBRACELET  : SoulBlazerItemData(ItemID.SHIELDBRACELET , 0x00, ItemClassification.useful),
+    ItemName.SUPERBRACELET   : SoulBlazerItemData(ItemID.SUPERBRACELET  , 0x00, ItemClassification.useful),
+    ItemName.MEDICALHERB     : SoulBlazerItemData(ItemID.MEDICALHERB    , 0x00, ItemClassification.filler),
+    ItemName.STRANGEBOTTLE   : SoulBlazerItemData(ItemID.STRANGEBOTTLE  , 0x00, ItemClassification.filler),
     **stones_table,
-    ItemName.MAGICBELL       : SoulBlazerItemData(ItemID.MAGICBELL      , None, ItemClassification.useful),
+    ItemName.MAGICBELL       : SoulBlazerItemData(ItemID.MAGICBELL      , 0x00, ItemClassification.useful),
 }
 
 
 misc_table = {
-    ItemName.NOTHING : SoulBlazerItemData(ItemID.NOTHING, None, ItemClassification.trap),
+    ItemName.NOTHING : SoulBlazerItemData(ItemID.NOTHING, 0x00, ItemClassification.trap),
     ItemName.GEMS    : SoulBlazerItemData(ItemID.GEMS   , 100 , ItemClassification.filler),
     ItemName.EXP     : SoulBlazerItemData(ItemID.EXP    , 250 , ItemClassification.filler),
 }

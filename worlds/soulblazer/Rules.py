@@ -45,7 +45,7 @@ magic_items = [
 sword_items = [*swords_table.keys()]
 
 
-def no_requirement(state: CollectionState, player: int) -> bool:
+def no_requirement(state: CollectionState, player: int | None = None) -> bool:
     return True
 
 
@@ -199,5 +199,6 @@ def get_rule_for_location(name: str, player: int, flag: RuleFlag) -> Callable[[C
 
 
 def set_rules(world: "SoulBlazerWorld") -> None:
-    world.multiworld.get_region(RegionName.DEATHTOLL, world.player).locations += world.create_victory_event()
+    region = world.multiworld.get_region(RegionName.DEATHTOLL, world.player)
+    region.locations.append(world.create_victory_event(region))
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)

@@ -18,7 +18,7 @@ class LocationType(Enum):
 
 
 @dataclass
-class SoulBlazerLocationData(namedtuple):
+class SoulBlazerLocationData():
     id: int
     """Internal location ID and index into ROM chest/lair/NPC reward table"""
     type: LocationType
