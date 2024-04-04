@@ -457,7 +457,7 @@ class LocalRom(object):
     def read_byte(self, address: int) -> int:
         return self.buffer[address]
 
-    def read_bytes(self, startaddress: int, length: int) -> bytes:
+    def read_bytes(self, startaddress: int, length: int) -> bytearray:
         return self.buffer[startaddress:startaddress + length]
 
     def write_byte(self, address: int, value: int):
