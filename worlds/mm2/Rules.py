@@ -64,8 +64,9 @@ def can_defeat_enough_rbms(state: "CollectionState", player: int, required: int)
 def set_rules(world: "MM2World") -> None:
     # most rules are set on region, so we only worry about rules required within stage access
     # or rules variable on settings
-    if hasattr(world.multiworld, "generation_is_fake"):
-        pass  # we've already grabbed slot data equivalents
+    if hasattr(world.multiworld, "re_gen_passthrough"):
+        slot_data = getattr(world.multiworld, "re_gen_passthrough")["Mega Man 2"]
+        world.weapon_damage = slot_data["weapon_damage"]
     else:
         if world.options.random_weakness:
             world.weapon_damage = {i: [] for i in range(8)}
@@ -89,8 +90,10 @@ def set_rules(world: "MM2World") -> None:
                 for i in range(13):
                     if weapon == 0:
                         world.weapon_damage[weapon][i] = 0
-                    elif i == 8 and not world.options.random_weakness:
-                        continue  # Mecha Dragon only has damage range of 0-1, so allow the 1
+                    elif i in (8, 12) and not world.options.random_weakness:
+                        continue
+                        # Mecha Dragon only has damage range of 0-1, so allow the 1
+                        # Wily Machine needs all three weaknesses present, so allow
                     elif 4 > world.weapon_damage[weapon][i] > 0:
                         world.weapon_damage[weapon][i] = 0
             # handle special cases

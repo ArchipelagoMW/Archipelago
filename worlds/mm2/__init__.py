@@ -192,10 +192,8 @@ class MM2World(World):
         }
 
     def interpret_slot_data(self, slot_data: typing.Dict[str, typing.Any]):
-        if "weapon_damage" in slot_data:
-            self.weapon_damage = slot_data["weapon_damage"]
-
-        return None  # return the none explicitly
+        local_weapon = {int(key): value for key, value in slot_data["weapon_damage"].items()}
+        return {"weapon_damage": local_weapon}
 
     def modify_multidata(self, multidata: dict):
         # wait for self.rom_name to be available.
