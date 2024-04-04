@@ -26,6 +26,8 @@ MM2_HEALTH = 0x6C0
 MM2_DEATHLINK = 0x8F
 MM2_DIFFICULTY = 0xCB
 
+MM2_SFX_QUEUE = 0x580
+MM2_SFX_STROBE = 0x66
 
 MM2_CONSUMABLE_TABLE: Dict[int, Tuple[int, int]] = {
     # Item: (byte offset, bit mask)
@@ -68,6 +70,10 @@ MM2_CONSUMABLE_TABLE: Dict[int, Tuple[int, int]] = {
     0x880225: (46, 4),
     0x880226: (46, 8),
 }
+
+
+def get_sfx_writes(sfx: int):
+    return (MM2_SFX_QUEUE, sfx.to_bytes(1, 'little'), "RAM"), (MM2_SFX_STROBE, 0x01.to_bytes(1, "little"), "RAM")
 
 
 class MegaMan2Client(BizHawkClient):
@@ -192,16 +198,19 @@ class MegaMan2Client(BizHawkClient):
                 # Robot Master Weapon
                 new_weapons = weapons_unlocked[0] | (1 << ((item.item & 0xF) - 1))
                 writes.append((MM2_WEAPONS_UNLOCKED, new_weapons.to_bytes(1, 'little'), "RAM"))
+                writes.extend(get_sfx_writes(0x21))
             elif item.item & 0x30 == 0:
                 # Robot Master Stage Access
-                print(robot_masters_unlocked[0])
+                # print(robot_masters_unlocked[0])
                 new_stages = robot_masters_unlocked[0] ^ (1 << ((item.item & 0xF) - 1))
-                print(new_stages)
+                # print(new_stages)
                 writes.append((MM2_ROBOT_MASTERS_UNLOCKED, new_stages.to_bytes(1, 'little'), "RAM"))
+                writes.extend(get_sfx_writes(0x3a))
             elif item.item & 0x20 == 0:
                 # Items
                 new_items = items_unlocked[0] | (1 << ((item.item & 0xF) - 1))
                 writes.append((MM2_ITEMS_UNLOCKED, new_items.to_bytes(1, 'little'), "RAM"))
+                writes.extend(get_sfx_writes(0x21))
             else:
                 # append to the queue, so we handle it later
                 self.item_queue.append(item)
@@ -250,10 +259,13 @@ class MegaMan2Client(BizHawkClient):
                 else:
                     current_lives += 1
                     writes.append((MM2_LIVES, current_lives.to_bytes(1, 'little'), "RAM"))
+                    writes.extend(get_sfx_writes(0x42))
             elif idx == 1:
                 self.weapon_energy += 0xE
+                writes.extend(get_sfx_writes(0x28))
             elif idx == 2:
                 self.health_energy += 0xE
+                writes.extend(get_sfx_writes(0x28))
             elif idx == 3:
                 # E-Tank
                 # visuals only allow 4, but we're gonna go up to 9 anyway? May change
@@ -261,6 +273,7 @@ class MegaMan2Client(BizHawkClient):
                 if current_tanks < 9:
                     current_tanks += 1
                     writes.append((MM2_E_TANKS, current_tanks.to_bytes(1, 'little'), "RAM"))
+                    writes.extend(get_sfx_writes(0x42))
                 else:
                     self.item_queue.append(item)
 

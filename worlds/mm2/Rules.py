@@ -125,10 +125,11 @@ def set_rules(world: "MM2World") -> None:
 
     for boss in world.options.plando_weakness:
         for weapon in world.options.plando_weakness[boss]:
-            if not any(w for w in world.weapon_damage[bosses[boss]]
-                       if w != weapon and world.weapon_damage[bosses[boss]][w] > minimum_weakness_requirement[w]):
+            if not any(w for w in world.weapon_damage
+                       if w != weapon and world.weapon_damage[w][bosses[boss]] > minimum_weakness_requirement[w]):
                 # we need to replace this weakness
-                weakness = world.random.choice()
+                weakness = world.random.choice([key for key in world.weapon_damage if key != weapon])
+                world.weapon_damage[weakness][bosses[boss]] = minimum_weakness_requirement[weakness]
             world.weapon_damage[weapons_to_id[weapon]][bosses[boss]] = world.options.plando_weakness[boss][weapon]
 
     time_stopper_logical = False
@@ -164,6 +165,10 @@ def set_rules(world: "MM2World") -> None:
                 time_stopper_logical = True
             else:
                 weapons.remove(Names.time_stopper)
+                if not weapons:
+                    weakness = world.random.choice([key for key in world.weapon_damage if key != 8])
+                    world.weapon_damage[weakness][bosses[boss]] = minimum_weakness_requirement[weakness]
+                    weapons.append(weapons_to_name[weapon])
         if not weapons:
             raise Exception(f"Attempted to have boss {i} with no weakness! Seed: {world.multiworld.seed}")
         for location in boss:
