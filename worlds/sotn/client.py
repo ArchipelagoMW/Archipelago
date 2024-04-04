@@ -14,7 +14,6 @@ from .Items import ItemData, IType, base_item_id
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
 
-EXPECTED_ROM_NAME = "Castlevania"
 logger = logging.getLogger("Client")
 
 
@@ -26,8 +25,13 @@ class STATUS(Enum):
     ON_RICHTER = 3
     ALUCARD_LOAD = 4
     ON_ALUCARD = 5
-    DEAD = 6
     RESET = 7
+
+
+class HEALTH(Enum):
+    UNKNOWN = 0
+    ALIVE = 1
+    DEAD = 2
 
 
 class SotNClient(BizHawkClient):
@@ -52,6 +56,7 @@ class SotNClient(BizHawkClient):
         self.misplaced_changed = False
         self.message_queue = []
         self.player_status = STATUS.START
+        self.player_health = HEALTH.UNKNOWN
         self.received_queue = []
         self.misplaced_queue = []
         self.misplaced_load = []
@@ -68,6 +73,7 @@ class SotNClient(BizHawkClient):
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
             # Check ROM name/patch version
+            # @ ROM 0x00009340
             # 53 4C 55 53 5F 30 30 30 2E 36 37
             # SLUS_00067
             # Does not show on BIOS loading
@@ -98,14 +104,18 @@ class SotNClient(BizHawkClient):
             if ctx.auth_status == AuthStatus.AUTHENTICATED:
                 zone_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(0x180000, 2, "MainRAM")]))[0],
                                             "little")
+                player_hp = 100
+                pause_screen = 0
                 if self.player_status == STATUS.ON_ALUCARD or self.player_status == STATUS.ON_RICHTER:
-                    player_hp = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(0x097ba0, 4, "MainRAM")]))[0],
-                                               "little")
+                    local_player_hp = int.from_bytes(
+                        (await bizhawk.read(ctx.bizhawk_ctx, [(0x097ba0, 4, "MainRAM")]))[0],"little")
                     pause_screen = int.from_bytes(
                         (await bizhawk.read(ctx.bizhawk_ctx, [(0x09794c, 1, "MainRAM")]))[0], "little")
-                else:
-                    player_hp = 100
-                    pause_screen = 0
+                    if self.player_health == HEALTH.ALIVE:
+                        player_hp = local_player_hp
+                    elif self.player_health == HEALTH.UNKNOWN and local_player_hp != 0:
+                        self.player_health = HEALTH.ALIVE
+
                 self.cur_zone = (ZoneData.get_zone_data(zone_value)[1].abrev,
                                  ZoneData.get_zone_data(zone_value)[1].name)
 
@@ -168,20 +178,19 @@ class SotNClient(BizHawkClient):
                 if self.cur_zone[0] != "UNK" and not self.just_died and player_hp <= 0:
                     if self.player_status == STATUS.ON_RICHTER or self.player_status == STATUS.ON_ALUCARD:
                         print("DEBUG: Just died!")
-                        self.player_status = STATUS.DEAD
+                        self.player_status = STATUS.SERVER_CONNECT
+                        self.player_health = HEALTH.DEAD
                         self.just_died = True
                         self.dracula_loaded = False
                         self.not_patched = True
                         # We might have died without a save. Flag to read received from the memory
                         self.update_variables = True
-                        if self.cur_zone[0] == "ST0":
-                            # Actually, I think this is impossible
-                            logger.info("You died at Richter? Seriously?")
 
                 if not self.title_screen and self.just_died and self.cur_zone[0] == "UNK":
                     print(f"DEBUG: At title screen")
                     self.title_screen = True
                     self.player_status = STATUS.SERVER_CONNECT
+                    self.player_health = HEALTH.UNKNOWN
 
                 if self.title_screen and self.cur_zone[0] != "UNK":
                     print("DEBUG: Reload game.")
@@ -271,6 +280,7 @@ class SotNClient(BizHawkClient):
                         if self.player_status == STATUS.ON_ALUCARD or self.player_status == STATUS.ON_RICHTER:
                             print(f"DEBUG: Reset detected")
                             self.player_status = STATUS.SERVER_CONNECT
+                            self.player_health = HEALTH.UNKNOWN
                             self.load_timer = 0
                             self.last_time = 0
                     else:
@@ -331,7 +341,8 @@ class SotNClient(BizHawkClient):
                     sec_now = cur_time[8]
                     now = hour_now + min_now + sec_now
 
-                    if self.cur_zone != "UNK" and self.last_time != 0 and self.last_time - now > 2:
+                    if ((self.cur_zone[0] != "UNK" and self.last_time != 0 and self.last_time - now > 2) or
+                            (self.player_health == HEALTH.DEAD and self.cur_zone[0] != "UNK")):
                         print(f"DEBUG: Load state! {self.last_time} / {now}")
                         self.last_item_received = (
                             int.from_bytes((await bizhawk.read(
@@ -407,13 +418,15 @@ class SotNClient(BizHawkClient):
 
                         if loc_data is not None:
                             if loc_data.can_be_relic:
-                                # There is a item on a relic spot, send it to the player
-                                if item_data[1].type != IType.RELIC:
-                                    self.message_queue.append(f"Misplaced item: {item_data[0]}")
-                                    self.misplaced_queue.append(item_data[1])
-                                    self.add_misplaced(ctx, item_data[1].index)
-                                    self.last_misplaced += 1
-                                    self.misplaced_changed = True
+                                # if loc_data.game_id == 3074 or loc_data.game_id == 3141 or loc_data.game_id == 3142:
+                                # Item on a relic spot,  only bat card, skill of wolf, jewel of open and relics of vlad
+                                if loc_data.game_id in [3074, 3141, 3142, 3211, 3221, 3252, 3261, 3305]:
+                                    if item_data[1].type != IType.RELIC:
+                                        self.message_queue.append(f"Misplaced item: {item_data[0]}")
+                                        self.misplaced_queue.append(item_data[1])
+                                        self.add_misplaced(ctx, item_data[1].index)
+                                        self.last_misplaced += 1
+                                        self.misplaced_changed = True
                             else:
                                 # Normal location containing a relic
                                 if item_data[1].type == IType.RELIC:
@@ -500,7 +513,7 @@ class SotNClient(BizHawkClient):
         check(type, name)
         boss,       name, kill time flag
         boss_relic, name, kill time flag
-        relic,      name, offset, [relic pos()]
+        relic,      name, offset, loot_flag, loot_size, relic_index, [relic pos()]
         wall,       name, flag, bit to check
         """
 
@@ -509,7 +522,8 @@ class SotNClient(BizHawkClient):
             if game_id == 3010:
                 check.append(("boss", "ARE - Minotaurus/Werewolf kill", 0x03ca38))
             if room == 0x2e90:
-                check.append(("relic", "Form of Mist", 10, [(222, 135)]))
+                check.append(("relic", "Form of Mist", 10, zones_dict[1].loot_flag, zones_dict[1].loot_size, 8,
+                              [(222, 135)]))
 
         if zone_abbreviation == "CAT" or zone_abbreviation == "BO1":
             if game_id == 3020:
@@ -522,7 +536,8 @@ class SotNClient(BizHawkClient):
             elif game_id == 3041:
                 check.append(("boss", "CHI - Cerberos kill", 0x03ca5c))
             if room == 0x19b8:
-                check.append(("relic", "Demon Card", 10, [(88, 167)]))
+                check.append(("relic", "Demon Card", 10, zones_dict[4].loot_flag, zones_dict[4].loot_size, 13,
+                              [(88, 167)]))
 
         if zone_abbreviation == "DAI" or zone_abbreviation == "BO5":
             if game_id == 3050:
@@ -533,22 +548,27 @@ class SotNClient(BizHawkClient):
             if game_id == 3070:
                 check.append(("boss", "LIB - Lesser Demon kill", 0x03ca6c))
             if room == 0x2ec4:
-                check.append(("relic", "Soul of Bat", 10, [(1051, 919)]))
+                check.append(("relic", "Soul of Bat", 10, zones_dict[7].loot_flag, zones_dict[7].loot_size, 11,
+                              [(1051, 919)]))
             elif room == 0x2f0c:
-                check.append(("relic", "Faerie Scroll", 80, [(1681, 167)]))
+                check.append(("relic", "Faerie Scroll", 80, zones_dict[7].loot_flag, zones_dict[7].loot_size, 12,
+                              [(1681, 167)]))
             elif room == 0x2ee4:
-                check.append(("relic", "Jewel of Open", 10, [(230, 135)]))
+                check.append(("relic", "Jewel of Open", 10, 0, 0, 0, [(230, 135)]))
             elif room == 0x2efc:
-                check.append(("relic", "Faerie Card", 10, [(48, 167)]))
+                check.append(("relic", "Faerie Card", 10, zones_dict[7].loot_flag, zones_dict[7].loot_size, 13,
+                              [(48, 167)]))
 
         if zone_abbreviation == "NO0" or zone_abbreviation == "CEN":
             room = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(0x1375bc, 2, "MainRAM")]))[0], "little")
             if game_id == 3080:
                 check.append(("wall", "NO0 - Holy glasses", 0x03bec4, 0))
             if room == 0x27f4:
-                check.append(("relic", "Spirit Orb", 10, [(130, 1080)]))
+                check.append(("relic", "Spirit Orb", 10, zones_dict[8].loot_flag, zones_dict[8].loot_size, 14,
+                              [(130, 1080)]))
             elif room == 0x2884:
-                check.append(("relic", "Gravity Boots", 10, [(1170, 167)]))
+                check.append(("relic", "Gravity Boots", 10, zones_dict[8].loot_flag, zones_dict[8].loot_size, 15,
+                              [(1170, 167)]))
 
         if zone_abbreviation == "NO1" or zone_abbreviation == "BO4":
             room = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(0x1375bc, 2, "MainRAM")]))[0], "little")
@@ -557,16 +577,19 @@ class SotNClient(BizHawkClient):
             elif game_id == 3091:
                 check.append(("boss", "NO1 - Doppleganger 10 kill", 0x03ca30))
             if room == 0x34f4:
-                check.append(("relic", "Soul of Wolf", 15, [(360, 807), (375, 807)]))
+                check.append(("relic", "Soul of Wolf", 15, zones_dict[9].loot_flag, zones_dict[9].loot_size, 7,
+                              [(360, 807), (375, 807)]))
 
         if zone_abbreviation == "NO2" or zone_abbreviation == "BO0":
             room = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(0x1375bc, 2, "MainRAM")]))[0], "little")
             if game_id == 3100:
                 check.append(("boss", "NO2 - Olrox kill", 0x03ca2c))
             if room == 0x330c:
-                check.append(("relic", "Echo of Bat", 10, [(130, 135), (130, 165)]))
+                check.append(("relic", "Echo of Bat", 10, zones_dict[10].loot_flag, zones_dict[10].loot_size, 13,
+                              [(130, 135), (130, 165)]))
             elif room == 0x3314:
-                check.append(("relic", "Sword Card", 10, [(367, 135)]))
+                check.append(("relic", "Sword Card", 10, zones_dict[10].loot_flag, zones_dict[10].loot_size, 14,
+                              [(367, 135)]))
 
         if zone_abbreviation == "NO3":
             room = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(0x1375bc, 2, "MainRAM")]))[0], "little")
@@ -575,9 +598,11 @@ class SotNClient(BizHawkClient):
             elif game_id == 3111:
                 check.append(("wall", "NO3 - Turkey", 0x03be24, 0))
             if room == 0x3d40 or room == 0x3af8:
-                check.append(("relic", "Cube of Zoe", 10, [(270, 103)]))
+                check.append(("relic", "Cube of Zoe", 10, zones_dict[11].loot_flag, zones_dict[11].loot_size, 10,
+                              [(270, 103)]))
             elif room == 0x3cc8 or room == 0x3a80:
-                check.append(("relic", "Power of Wolf", 10, [(245, 183), (270, 183)]))
+                check.append(("relic", "Power of Wolf", 10, zones_dict[11].loot_flag, zones_dict[11].loot_size, 11,
+                              [(245, 183), (270, 183)]))
 
         if zone_abbreviation == "NO4" or zone_abbreviation == "BO3" or zone_abbreviation == "DRE":
             room = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(0x1375bc, 2, "MainRAM")]))[0], "little")
@@ -586,18 +611,20 @@ class SotNClient(BizHawkClient):
             elif game_id == 3131:
                 check.append(("boss", "NO4 - Succubus kill", 0x03ca4c))
             if room == 0x315c:
-                check.append(("relic", "Holy Symbol", 10, [(141, 167)]))
+                check.append(("relic", "Holy Symbol", 10, zones_dict[13].loot_flag, zones_dict[13].loot_size, 37,
+                              [(141, 167)]))
             elif room == 0x319c:
-                check.append(("relic", "Merman Statue", 10, [(92, 167)]))
+                check.append(("relic", "Merman Statue", 10, zones_dict[13].loot_flag, zones_dict[13].loot_size,
+                              38, [(92, 167)]))
 
         if zone_abbreviation == "NZ0":
             room = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(0x1375bc, 2, "MainRAM")]))[0], "little")
             if game_id == 3140:
                 check.append(("boss", "NZ0 - Slogra and Gaibon kill", 0x03ca40))
             if room == 0x2770:
-                check.append(("relic", "Skill of Wolf", 25, [(120, 167)]))
+                check.append(("relic", "Skill of Wolf", 25, 0, 0, 0, [(120, 167)]))
             elif room == 0x2730:
-                check.append(("relic", "Bat Card", 25, [(114, 167), (159, 119)]))
+                check.append(("relic", "Bat Card", 25, 0, 0, 0, [(114, 167), (159, 119)]))
 
         if zone_abbreviation == "NZ1":
             room = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(0x1375bc, 2, "MainRAM")]))[0], "little")
@@ -612,15 +639,19 @@ class SotNClient(BizHawkClient):
             elif game_id == 3154:
                 check.append(("boss", "NZ1 - Karasuman kill", 0x03ca50))
             if room == 0x23a0:
-                check.append(("relic", "Fire of Bat", 10, [(198, 183)]))
+                check.append(("relic", "Fire of Bat", 10, zones_dict[15].loot_flag, zones_dict[15].loot_size, 12,
+                              [(198, 183)]))
 
         if zone_abbreviation == "TOP":
             room = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(0x1375bc, 2, "MainRAM")]))[0], "little")
             if room == 0x1b8c:
-                check.append(("relic", "Leap Stone", 10, [(424, 1815)]))
-                check.append(("relic", "Power of Mist", 10, [(417, 1207)]))
+                check.append(("relic", "Leap Stone", 10, zones_dict[16].loot_flag, zones_dict[16].loot_size, 19,
+                              [(424, 1815)]))
+                check.append(("relic", "Power of Mist", 10, zones_dict[16].loot_flag, zones_dict[16].loot_size,
+                              20, [(417, 1207)]))
             elif room == 0x1b94:
-                check.append(("relic", "Ghost Card", 10, [(350, 663)]))
+                check.append(("relic", "Ghost Card", 10, zones_dict[16].loot_flag, zones_dict[16].loot_size, 21,
+                              [(350, 663)]))
 
         if zone_abbreviation == "RARE" or zone_abbreviation == "RBO0":
             if game_id == 3180:
@@ -631,7 +662,8 @@ class SotNClient(BizHawkClient):
             if game_id == 3190:
                 check.append(("boss", "RCAT - Galamoth kill", 0x03ca7c))
             if room == 0x2429 or room == 0x2490:
-                check.append(("relic", "Gas Cloud", 10, [(38, 173), (62, 190)]))
+                check.append(("relic", "Gas Cloud", 10, zones_dict[19].loot_flag, zones_dict[19].loot_size, 18,
+                              [(38, 173), (62, 190)]))
 
         if zone_abbreviation == "RCHI" or zone_abbreviation == "RBO2":
             if game_id == 3210 or game_id == 3211:
@@ -664,7 +696,8 @@ class SotNClient(BizHawkClient):
             if game_id == 3280:
                 check.append(("boss", "RNO4 - Doppleganger40 kill", 0x03ca70))
             if room == 0x2c6c:
-                check.append(("relic", "Force of Echo", 10, [(110, 167), (132, 167)]))
+                check.append(("relic", "Force of Echo", 10, zones_dict[28].loot_flag, zones_dict[28].loot_size,
+                              27, [(110, 167), (132, 167)]))
 
         if zone_abbreviation == "RNZ0" or zone_abbreviation == "RBO1":
             if game_id == 3290:
@@ -697,15 +730,37 @@ class SotNClient(BizHawkClient):
                                               "little")
                     player_y = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(0x0973f4, 2, "MainRAM")]))[0],
                                               "little")
+
                     if loc_data.get_location_id() not in self.checked_locations:
-                        for point in c[3]:
-                            o = c[2]
-                            x = abs(int(point[0]) - player_x)
-                            y = abs(int(point[1]) - player_y)
-                            if 0 <= x <= o and 0 <= y <= o:
+                        if c[1] not in ["Jewel of Open", "Bat Card", "Skill of Wolf"]:
+                            loot_flag = int.from_bytes(
+                                (await bizhawk.read(ctx.bizhawk_ctx, [(c[3], c[4], "MainRAM")]))[0],
+                                "little")
+                            if loot_flag & (1 << c[5]):
+                                # We get an item on relic location
                                 self.checked_locations.append(loc_data.get_location_id())
                                 self.message_queue.append(f"{c[1]} checked")
-                                break
+                                print("DEBUG: Checked by item")
+                            else:
+                                # Are we close to a relic location?
+                                # TODO: Add a better check for a relic
+                                for point in c[6]:
+                                    o = c[2]
+                                    x = abs(int(point[0]) - player_x)
+                                    y = abs(int(point[1]) - player_y)
+                                    if 0 <= x <= o and 0 <= y <= o:
+                                        self.checked_locations.append(loc_data.get_location_id())
+                                        self.message_queue.append(f"{c[1]} checked")
+                                        break
+                        else:
+                            for point in c[6]:
+                                o = c[2]
+                                x = abs(int(point[0]) - player_x)
+                                y = abs(int(point[1]) - player_y)
+                                if 0 <= x <= o and 0 <= y <= o:
+                                    self.checked_locations.append(loc_data.get_location_id())
+                                    self.message_queue.append(f"{c[1]} checked")
+                                    break
                 elif c[0] == "wall":
                     loot_flag = int.from_bytes(
                         (await bizhawk.read(ctx.bizhawk_ctx, [(c[2], 1, "MainRAM")]))[0], "little")
