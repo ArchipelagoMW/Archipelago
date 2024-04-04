@@ -939,7 +939,7 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
 
     def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
         from BaseClasses import PlandoOptions
-        if not (PlandoOptions.texts & plando_options):
+        if self.value and not (PlandoOptions.texts & plando_options):
             # plando is disabled but plando options were given so overwrite the options
             self.value = []
             logging.warning(f"The plando texts module is turned off, "
@@ -1109,7 +1109,7 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
 
     def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
         from BaseClasses import PlandoOptions
-        if not (PlandoOptions.connections & plando_options):
+        if self.value and not (PlandoOptions.connections & plando_options):
             # plando is disabled but plando options were given so overwrite the options
             self.value = []
             logging.warning(f"The plando connections module is turned off, "
