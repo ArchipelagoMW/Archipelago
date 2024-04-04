@@ -3,7 +3,9 @@ import os
 import sys
 import warnings
 import zipimport
-from typing import Dict, List, NamedTuple, TypedDict
+import time
+import dataclasses
+from typing import Dict, List, TypedDict, Optional
 
 from Utils import local_path, user_path
 
@@ -18,7 +20,11 @@ __all__ = {
     "user_folder",
     "GamesPackage",
     "DataPackage",
+    "failed_world_loads",
 }
+
+
+failed_world_loads: List[str] = []
 
 
 class GamesPackage(TypedDict, total=False):
@@ -34,10 +40,12 @@ class DataPackage(TypedDict):
     games: Dict[str, GamesPackage]
 
 
-class WorldSource(NamedTuple):
+@dataclasses.dataclass(order=True)
+class WorldSource:
     path: str  # typically relative path from this module
     is_zip: bool = False
     relative: bool = True  # relative to regular world import folder
+    time_taken: Optional[float] = None
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.path}, is_zip={self.is_zip}, relative={self.relative})"
@@ -50,6 +58,7 @@ class WorldSource(NamedTuple):
 
     def load(self) -> bool:
         try:
+            start = time.perf_counter()
             if self.is_zip:
                 importer = zipimport.zipimporter(self.resolved_path)
                 if hasattr(importer, "find_spec"):  # new in Python 3.10
@@ -69,6 +78,7 @@ class WorldSource(NamedTuple):
                         importer.exec_module(mod)
             else:
                 importlib.import_module(f".{self.path}", "worlds")
+            self.time_taken = time.perf_counter()-start
             return True
 
         except Exception:
@@ -81,6 +91,7 @@ class WorldSource(NamedTuple):
             file_like.seek(0)
             import logging
             logging.exception(file_like.read())
+            failed_world_loads.append(os.path.basename(self.path).rsplit(".", 1)[0])
             return False
 
 
