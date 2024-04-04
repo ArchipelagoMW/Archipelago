@@ -81,6 +81,7 @@ class ExpNeed(Range):
 class ExtraPool(FreeText):
     """Extra item added to the pool"""
     display_name = "Extra items"
+    default = {}
 
 
 sotn_option_definitions: Dict[str, type(Option)] = {
