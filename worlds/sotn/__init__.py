@@ -97,6 +97,7 @@ class SotnWorld(World):
         extra = self.options.extra_pool
         added_items = 0
         itempool: typing.List[SotnItem] = []
+        remove_offset = 0
         weapon_list = ['Shield rod', 'Sword of dawn', 'Basilard', 'Short sword', 'Combat knife', 'Nunchaku',
                        'Were bane', 'Rapier', 'Red rust', 'Takemitsu', 'Shotel', 'Tyrfing', 'Namakura',
                        'Knuckle duster', 'Gladius', 'Scimitar', 'Cutlass', 'Saber', 'Falchion', 'Broadsword',
@@ -123,11 +124,11 @@ class SotnWorld(World):
                       'Alucart mail']
         cloak_list = ['Cloth cape', 'Reverse cloak', 'Elven cloak', 'Crystal cloak', 'Royal cloak', 'Blood cloak',
                       "Joseph's cloak", 'Twilight cloak']
-        accessory_list = ['Moonstone', 'Sunstone', 'Bloodstone', 'Ring of pales', 'Lapis lazuli', 'Ring of ares',
-                          'Ring of varda', 'Ring of arcana', 'Mystic pendant', 'Heart broach',
+        accessory_list = ['Moonstone', 'Sunstone', 'Bloodstone', 'Staurolite', 'Ring of pales', 'Lapis lazuli',
+                          'Ring of ares', 'Ring of varda', 'Ring of arcana', 'Mystic pendant', 'Heart broach',
                           'Necklace of j', 'Gauntlet', 'Ankh of life', 'Ring of feanor', 'Medal', 'Talisman',
                           'Duplicator', "King's stone", 'Covenant stone', 'Nauglamir', 'Secret boots']
-        salable_list = ['Aquamarine', 'Diamond', 'Staurolite', 'Zircon', 'Turquoise', 'Onyx', 'Garnet', 'Opal']
+        salable_list = ['Aquamarine', 'Diamond', 'Zircon', 'Turquoise', 'Onyx', 'Garnet', 'Opal']
         usable_list = ['Monster vial 1', 'Monster vial 2', 'Monster vial 3', 'Karma coin', 'Magic missile', 'Orange',
                        'Apple', 'Banana', 'Grapes', 'Strawberry', 'Pineapple', 'Peanuts', 'Toadstool', 'Shiitake',
                        'Cheesecake', 'Shortcake', 'Tart', 'Parfait', 'Pudding', 'Ice cream', 'Frankfurter', 'Hamburger',
@@ -247,6 +248,7 @@ class SotnWorld(World):
             itempool += [self.create_item("Life Vessel") for _ in range(32)]
             itempool += [self.create_item("Heart Vessel") for _ in range(33)]
             added_items += 65
+            remove_offset = 20
 
             for r in relic_table:
                 itempool += [self.create_item(r)]
@@ -258,6 +260,7 @@ class SotnWorld(World):
             itempool += [self.create_item("Life Vessel") for _ in range(17)]
             itempool += [self.create_item("Heart Vessel") for _ in range(17)]
             added_items += 34
+            remove_offset = 100
 
             for r in prog_relics:
                 itempool += [self.create_item(r)]
@@ -266,12 +269,13 @@ class SotnWorld(World):
 
         if difficult == 3:
             print("Insane difficult")
+            remove_offset = 200
             for r in prog_relics:
                 itempool += [self.create_item(r)]
                 added_items += 1
                 self.added_pool.append(r)
         self.added_pool.append(")")
-        remaining = total_location - added_items - difficult * 20
+        remaining = total_location - added_items - remove_offset
 
         print(f"{remaining}/{total_location}/{added_items}/{difficult}")
 
