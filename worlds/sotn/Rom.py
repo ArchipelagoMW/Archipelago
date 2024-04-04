@@ -75,7 +75,6 @@ class SOTNDeltaPatch(APDeltaPatch):
         return get_base_rom_bytes()
 
     def patch(self, target: str):
-        print(f"Patching SOTN {target} {self.delta}")
         """Base + Delta -> Patched"""
         patch_path = target[:-4] + ".apsotn"
 
@@ -266,8 +265,15 @@ def patch_rom(world: World, output_directory: str) -> None:
                                 elif loc.name in relics_vlad:
                                     write_short(patched_rom, address, 0x0013)
                                 else:
+                                    write_short(patched_rom, address, loc_data.relic_index)
                                     write_short(patched_rom, address - 4, 0x000c)
-                                    write_word(patched_rom, address - 2, loc_data.get_delete())
+                                    for a in loc_data.item_address:
+                                        if loc.item.name == "Life Vessel":
+                                            write_short(patched_rom, a, 0x0017)
+                                        elif loc.item.name == "Heart Vessel":
+                                            write_short(patched_rom, a, 0x000c)
+                                        else:
+                                            write_short(patched_rom, a, item_data.get_item_id())
                         else:
                             if item_data.type == IType.RELIC:
                                 write_short(patched_rom, address, 0x0007)
@@ -290,8 +296,15 @@ def patch_rom(world: World, output_directory: str) -> None:
                             elif loc.name in relics_vlad:
                                 write_short(patched_rom, address, 0x0013)
                             else:
+                                write_short(patched_rom, address, loc_data.relic_index)
                                 write_short(patched_rom, address - 4, 0x000c)
-                                write_word(patched_rom, address - 2, loc_data.get_delete())
+                                if (loc.item.classification == ItemClassification.filler or
+                                        loc.item.classification == ItemClassification.trap):
+                                    for a in loc_data.item_address:
+                                        write_short(patched_rom, a, 0x0004)
+                                else:
+                                    for a in loc_data.item_address:
+                                        write_short(patched_rom, a, 0x0003)
                         else:
                             if loc.item.classification == ItemClassification.filler:
                                 write_short(patched_rom, address, 0x0004)
