@@ -27,7 +27,6 @@
 Si todo fue instalado correctamente, un botón aparecerá en la parte inferior derecha del juego una vez abierto, que te permitirá conectarte al servidor de Archipelago.
 
 ## Generar un juego MultiWorld
-
 1. Entra a la página de [configuraciones de jugador](/games/Muse%20Dash/player-options) y configura las opciones del
    juego a tu gusto.
 2. Genera tu archivo YAML y úsalo para generar un juego nuevo en el radomizer
