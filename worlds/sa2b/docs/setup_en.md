@@ -24,15 +24,13 @@
 
 2. Launch the game at least once without mods.
 
-3. Create a `/mods` directory in the folder into which you installed Sonic Adventure 2: Battle.
+3. Install SA Mod Manager as per [its instructions](https://github.com/X-Hax/SA-Mod-Manager/tree/master?tab=readme-ov-file).
 
-4. Install SA Mod Manager as per [its instructions](https://github.com/X-Hax/SA-Mod-Manager/tree/master?tab=readme-ov-file).
+4. Unpack the Archipelago Mod into the `/mods` directory in the folder into which you installed Sonic Adventure 2: Battle, so that `/mods/SA2B_Archipelago` is a valid path.
 
-5. Unpack the Archipelago Mod into this folder, so that `/mods/SA2B_Archipelago` is a valid path.
+5. In the SA2B_Archipelago folder, run the `CopyAPCppDLL.bat` script (a window will very quickly pop up and go away).
 
-6. In the SA2B_Archipelago folder, run the `CopyAPCppDLL.bat` script (a window will very quickly pop up and go away).
-
-7. Launch the `SAModManager.exe` and make sure the SA2B_Archipelago mod is listed and enabled.
+6. Launch the `SAModManager.exe` and make sure the SA2B_Archipelago mod is listed and enabled.
 
 ## Installation Procedures (Linux and Steam Deck)
 
@@ -42,15 +40,13 @@
 
 3. Launch the game at least once without mods.
 
-4. Create a `/mods` directory in the folder into which you installed Sonic Adventure 2: Battle.
+4. Install SA Mod Manager as per [its instructions](https://github.com/X-Hax/SA-Mod-Manager/tree/master?tab=readme-ov-file). To launch it, add ``SAModManager.exe`` as a non-Steam game. In the properties on Steam for SA Mod Manager, set it to use Proton as the compatibility tool.
 
-5. Install SA Mod Manager as per [its instructions](https://github.com/X-Hax/SA-Mod-Manager/tree/master?tab=readme-ov-file). To launch it, add ``SAModManager.exe`` as a non-Steam game. In the properties on Steam for SA Mod Manager, set it to use Proton as the compatibility tool.
+5. Unpack the Archipelago Mod into the `/mods` folder in the Sonic Adventure 2 install folder, so that `/mods/SA2B_Archipelago` is a valid path.
 
-6. Unpack the Archipelago Mod into this folder, so that `/mods/SA2B_Archipelago` is a valid path.
+6. In the SA2B_Archipelago folder, copy the `APCpp.dll` file and paste it in the Sonic Adventure 2 install folder (where `sonic2app.exe` is).
 
-7. In the SA2B_Archipelago folder, copy the `APCpp.dll` file and paste it in the Sonic Adventure 2 install folder (where `sonic2app.exe` is).
-
-8. Launch the `SAModManager.exe` from Steam and make sure the SA2B_Archipelago mod is listed and enabled.
+7. Launch the `SAModManager.exe` from Steam and make sure the SA2B_Archipelago mod is listed and enabled.
 
 Note: Ensure that you launch Sonic Adventure 2 from Steam directly on Linux, rather than launching using the `Save & Play` button in SA Mod Manager.
 
