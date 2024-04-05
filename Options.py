@@ -373,7 +373,8 @@ class Toggle(NumericOption):
     default = 0
 
     def __init__(self, value: int):
-        assert value == 0 or value == 1, "value of Toggle can only be 0 or 1"
+        if not (value == 0 or value == 1):
+            raise Exception(f"Value of {self.__class__.__name__} can only be 0 or 1")
         self.value = value
 
     @classmethod
