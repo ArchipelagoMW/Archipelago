@@ -26,7 +26,7 @@ class SoulBlazerLocationData():
     # TODO: What other location properties are needed?
 
     @property
-    def code(self) -> int:
+    def address(self) -> int:
         """The unique ID used by archipelago for this location"""
         from . import lair_id_offset, base_id, npc_reward_offset
 
@@ -43,7 +43,7 @@ class SoulBlazerLocation(Location):
     def __init__(
         self, player: int, name: str, data: SoulBlazerLocationData, parent: Region | None = None
     ):
-        super().__init__(player, name, parent=parent)
+        super().__init__(player, name, data.address, parent)
         self.data: SoulBlazerLocationData = data
         self.access_rule = get_rule_for_location(name, player, self.data.flag)
 

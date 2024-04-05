@@ -58,12 +58,12 @@ class LocalRom(object):
     def apply_basepatch(self):
         with open(os.path.join(os.path.dirname(__file__), "patches", "basepatch.bsdiff4"), "rb") as basepatch:
             delta: bytes = basepatch.read()
-        buffer = bytearray(bsdiff4.patch(bytes(self.buffer), delta))
+        self.buffer = bytearray(bsdiff4.patch(bytes(self.buffer), delta))
 
     def apply_patch(self, name: str):
         with open(os.path.join(os.path.dirname(__file__), "patches", name), "rb") as basepatch:
             delta: bytes = basepatch.read()
-        buffer = bsdiff4.patch(self.buffer, delta)
+        self.buffer = bytearray(bsdiff4.patch(bytes(self.buffer, delta)))
 
     def place_lair(self, index: int, id: int, operand: int):
         # Compute address of our lair entry
@@ -86,7 +86,7 @@ class LocalRom(object):
     }
 
     def place(self, location: SoulBlazerLocation):
-        if location.event:
+        if location.address == None:
             return
         location_data = location.data
         if location.item.player == location.player:

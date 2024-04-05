@@ -2,7 +2,18 @@ from typing import Callable, TYPE_CHECKING
 
 from enum import IntEnum, auto
 from BaseClasses import CollectionState
-from .Names import ItemName, ItemID, LairName, LairID, ChestName, ChestID, NPCRewardName, NPCRewardID, NPCName, RegionName
+from .Names import (
+    ItemName,
+    ItemID,
+    LairName,
+    LairID,
+    ChestName,
+    ChestID,
+    NPCRewardName,
+    NPCRewardID,
+    NPCName,
+    RegionName,
+)
 from .Items import emblems_table, swords_table
 
 if TYPE_CHECKING:
@@ -80,7 +91,6 @@ rule_for_flag = {
 
 # Many locations depend on one or two NPC releases so rather than create regions to hold one location,
 # we put these location-specific dependencies here.
-# TODO: Add chests dependencies too
 location_dependencies: dict[str, list[str]] = {
     # Act 1 - Grass Valley
     NPCRewardName.TOOL_SHOP_OWNER: [NPCName.TOOL_SHOP_OWNER],
@@ -89,19 +99,13 @@ location_dependencies: dict[str, list[str]] = {
     NPCRewardName.GOAT_PEN_CORNER: [NPCName.GOAT_HERB],
     NPCRewardName.TEDDY: [NPCName.TOOL_SHOP_OWNER, NPCName.TEDDY],
     NPCRewardName.PASS_TILE: [NPCName.IVY, NPCName.TULIP_PASS],
-    # TODO: put these two in a region?
     NPCRewardName.TILE_IN_CHILDS_SECRET_CAVE: [NPCName.BOY_CAVE, ItemName.APASS],
     NPCRewardName.RECOVERY_SWORD_CRYSTAL: [NPCName.IVY_RECOVERY_SWORD, NPCName.BOY_CAVE, ItemName.APASS],
     NPCRewardName.VILLAGE_CHIEF: [NPCName.VILLAGE_CHIEF, NPCName.OLD_WOMAN],
-    # NPCRewardName.MAGICIAN: [],  # TODO: delete
-    # TODO: put this and two chests into region and delete.
-    # NPCRewardName.GRASS_VALLEY_SECRET_ROOM_CRYSTAL: [NPCName.IVY_CHEST_ROOM],
-    # NPCRewardName.UNDERGROUND_CASTLE_CRYSTAL: [],  # TODO: delete
     # Act 2 - Greenwood
     NPCRewardName.REDHOT_MIRROR_BIRD: [NPCName.BIRD_RED_HOT_MIRROR],
     NPCRewardName.MAGIC_BELL_CRYSTAL: [*emblems_table.keys(), NPCName.DEER_MAGIC_BELL, NPCName.CROCODILE3],
     NPCRewardName.WOODSTIN_TRIO: [NPCName.DEER, NPCName.SQUIRREL3, NPCName.DOG3],
-    NPCRewardName.GREENWOODS_GUARDIAN: [],  # TODO: delete
     NPCRewardName.GREENWOOD_LEAVES_TILE: [
         NPCName.MOLE_SOUL_OF_LIGHT,
         NPCName.CROCODILE,
@@ -112,24 +116,13 @@ location_dependencies: dict[str, list[str]] = {
     NPCRewardName.SHIELD_BRACELET_MOLE: [NPCName.MOLE, NPCName.MOLE_SHIELD_BRACELET, ItemName.MOLESRIBBON],
     NPCRewardName.PSYCHO_SWORD_SQUIRREL: [NPCName.SQUIRREL_PSYCHO_SWORD, ItemName.DELICIOUSSEEDS],
     NPCRewardName.EMBLEM_C_SQUIRREL: [NPCName.SQUIRREL_EMBLEM_C, NPCName.SQUIRREL_PSYCHO_SWORD],
-    NPCRewardName.WATER_SHRINE_TILE: [],  # TODO: delete
-    NPCRewardName.LIGHT_ARROW_CRYSTAL: [],  # TODO: delete
-    NPCRewardName.LOST_MARSH_CRYSTAL: [],  # TODO: delete
-    NPCRewardName.WATER_SHRINE_CRYSTAL: [],  # TODO: delete
-    NPCRewardName.FIRE_SHRINE_CRYSTAL: [],  # TODO: delete
     ChestName.GREENWOOD_ICE_ARMOR: [NPCName.MOLE, NPCName.SQUIRREL_ICE_ARMOR, ItemName.DREAMROD],
+    ChestName.GREENWOOD_TUNNELS: [NPCName.MONMO, NPCName.MOLE3],
     # Act 3 - St Elles
     NPCRewardName.NORTHEASTERN_MERMAID_HERB: [NPCName.MERMAID, NPCName.DOLPHIN2],
-    NPCRewardName.BUBBLE_ARMOR_MERMAID: [],  # TODO: delete
     NPCRewardName.MAGIC_FLARE_MERMAID: [NPCName.MERMAID_MAGIC_FLARE, NPCName.MERMAID_BUBBLE_ARMOR],
-    NPCRewardName.MERMAID_QUEEN: [],  # TODO: delete
     NPCRewardName.REDHOT_STICK_MERMAID: [NPCName.MERMAID_RED_HOT_STICK],
-    # TODO: Lue also needs 1 of Bubble mermaid or Dolphin 4. gonna need regions for those
-    # MERMAID_PEARL should probably be a region too. gonna need to to do a little mapping
     NPCRewardName.LUE: [NPCName.LUE, NPCName.DOLPHIN_SAVES_LUE, NPCName.MERMAID_PEARL],
-    NPCRewardName.ROCKBIRD_CRYSTAL: [],
-    NPCRewardName.SEABED_CRYSTAL_NEAR_BLESTER: [],
-    NPCRewardName.SEABED_CRYSTAL_NEAR_DUREAN: [],
     # Logical mermaids tears. TODO: move to separate list for optional logic toggle
     LairName.MERMAID_PEARL: [ItemName.MERMAIDSTEARS],
     LairName.MERMAID_STATUE_BLESTER: [ItemName.MERMAIDSTEARS],
@@ -144,41 +137,62 @@ location_dependencies: dict[str, list[str]] = {
         ItemName.REDHOTSTICK,
     ],
     NPCRewardName.MUSHROOM_SHOES_BOY: [NPCName.BOY_MUSHROOM_SHOES],
-    NPCRewardName.NOME: [],
     NPCRewardName.EMBLEM_E_SNAIL: [NPCName.SNAIL_EMBLEM_E],
     # Also includes path from lune to sleeping mushroom
     NPCRewardName.EMBLEM_F_TILE: [NPCName.MUSHROOM_EMBLEM_F, NPCName.GRANDPA5, NPCName.MUSHROOM2, ItemName.DREAMROD],
-    NPCRewardName.MOUNTAIN_OF_SOULS_CRYSTAL: [],
-    NPCRewardName.LUNE_CRYSTAL: [],
-
     # Act 5 - Leo's Lab
-    NPCRewardName.EMBLEM_G_UNDER_CHEST_OF_DRAWERS: [NPCName.CHEST_OF_DRAWERS_MYSTIC_ARMOR, NPCName.GREAT_DOOR, ItemName.DOORKEY],
-    NPCRewardName.CHEST_OF_DRAWERS_MYSTIC_ARMOR: [NPCName.CHEST_OF_DRAWERS_MYSTIC_ARMOR, NPCName.GREAT_DOOR, ItemName.DOORKEY],
-    NPCRewardName.HERB_PLANT_IN_LEOS_LAB: [NPCName.PLANT_HERB, NPCName.MOUSE, NPCName.CAT, NPCName.CAT2, ItemName.ACTINIDIALEAVES],
-    NPCRewardName.SPARK_BOMB_MOUSE: [NPCName.MOUSE_SPARK_BOMB, NPCName.MOUSE, NPCName.CAT, NPCName.CAT2, ItemName.ACTINIDIALEAVES],
+    NPCRewardName.EMBLEM_G_UNDER_CHEST_OF_DRAWERS: [
+        NPCName.CHEST_OF_DRAWERS_MYSTIC_ARMOR,
+        NPCName.GREAT_DOOR,
+        ItemName.DOORKEY,
+    ],
+    NPCRewardName.CHEST_OF_DRAWERS_MYSTIC_ARMOR: [
+        NPCName.CHEST_OF_DRAWERS_MYSTIC_ARMOR,
+        NPCName.GREAT_DOOR,
+        ItemName.DOORKEY,
+    ],
+    NPCRewardName.HERB_PLANT_IN_LEOS_LAB: [
+        NPCName.PLANT_HERB,
+        NPCName.MOUSE,
+        NPCName.CAT,
+        NPCName.CAT2,
+        ItemName.ACTINIDIALEAVES,
+    ],
+    NPCRewardName.SPARK_BOMB_MOUSE: [
+        NPCName.MOUSE_SPARK_BOMB,
+        NPCName.MOUSE,
+        NPCName.CAT,
+        NPCName.CAT2,
+        ItemName.ACTINIDIALEAVES,
+    ],
     NPCRewardName.LEOS_CAT_DOOR_KEY: [NPCName.CAT_DOOR_KEY, ItemName.DREAMROD],
     NPCRewardName.ACTINIDIA_PLANT: [NPCName.PLANT_ACTINIDIA_LEAVES],
     NPCRewardName.CHEST_OF_DRAWERS_HERB: [NPCName.CHEST_OF_DRAWERS2],
     NPCRewardName.MARIE: [NPCName.MARIE],
-    
     # Potentially optional icearmor requirement.
     NPCRewardName.POWER_PLANT_CRYSTAL: [ItemName.ICEARMOR],
     LairName.DOLL: [ItemName.ICEARMOR],
     LairName.MARIE: [ItemName.ICEARMOR],
-
     # Act 6 - Magridd Castle
     NPCRewardName.ELEMENTAL_MAIL_SOLDIER: [NPCName.SOLDIER_ELEMENTAL_MAIL, ItemName.DREAMROD],
-    NPCRewardName.SUPER_BRACELET_TILE: [NPCName.DR_LEO, NPCName.SOLDIER_WITH_LEO, NPCName.SOLDIER_DOK, NPCName.QUEEN_MAGRIDD],
+    NPCRewardName.SUPER_BRACELET_TILE: [
+        NPCName.DR_LEO,
+        NPCName.SOLDIER_WITH_LEO,
+        NPCName.SOLDIER_DOK,
+        NPCName.QUEEN_MAGRIDD,
+    ],
     NPCRewardName.QUEEN_MAGRIDD_VIP_CARD: [NPCName.QUEEN_MAGRIDD],
-    NPCRewardName.PLATINUM_CARD_SOLDIER: [NPCName.SOLDIER_PLATINUM_CARD, NPCName.SINGER_CONCERT_HALL, ItemName.HARPSTRING],
-    NPCRewardName.MAID_HERB: [NPCName.MAID_HERB], # anything else?
+    NPCRewardName.PLATINUM_CARD_SOLDIER: [
+        NPCName.SOLDIER_PLATINUM_CARD,
+        NPCName.SINGER_CONCERT_HALL,
+        ItemName.HARPSTRING,
+    ],
+    NPCRewardName.MAID_HERB: [NPCName.MAID_HERB],  # anything else?
     NPCRewardName.EMBLEM_H_TILE: [NPCName.SOLDIER_CASTLE],
     NPCRewardName.KING_MAGRIDD: [NPCName.KING_MAGRIDD, NPCName.SOLDIER_CASTLE],
-    NPCRewardName.LEO_ON_THE_AIRSHIP_DECK: [NPCName.DR_LEO, NPCName.SOLDIER_WITH_LEO, NPCName.SOLDIER_DOK], # TODO: anything else?
-    NPCRewardName.HARP_STRING_TILE: [],
+    NPCRewardName.LEO_ON_THE_AIRSHIP_DECK: [NPCName.DR_LEO, NPCName.SOLDIER_WITH_LEO, NPCName.SOLDIER_DOK],
     LairName.KING_MAGRIDD: [ItemName.AIRSHIPKEY],
-
-    # Act 7 - World of Evil 
+    # Act 7 - World of Evil
     ChestName.DAZZLING_SPACE_SE: [ItemName.SOULARMOR],
     ChestName.DAZZLING_SPACE_SW: [ItemName.SOULARMOR],
 }

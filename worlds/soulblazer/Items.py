@@ -87,7 +87,7 @@ class SoulBlazerItem(Item):
 
     @property
     def operand_for_id(self) -> int:
-        if self.id == ItemID.GEMS or ItemID == ItemID.EXP:
+        if self.id == ItemID.GEMS or self.id == ItemID.EXP:
             return self.operand_bcd
         return self.operand
 
