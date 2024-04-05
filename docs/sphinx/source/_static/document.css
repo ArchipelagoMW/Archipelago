@@ -34,6 +34,10 @@ dl.field-list > dd{
     background-color: gray;
 }
 
+dt:target, span.highlighted{
+    background-color: #ffc518;
+}
+
 .documentwrapper img{
     max-width: 100%;
     border-radius: 6px;

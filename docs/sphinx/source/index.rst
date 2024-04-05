@@ -1,22 +1,42 @@
-.. Archipelago documentation master file, created by
-   sphinx-quickstart on Mon Mar  4 21:31:50 2024.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Archipelago API Reference
 =========================
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+Archipelago is still under development, so the API is subject to change. As such, there exists both
+`stable <https://archipelago.gg/docs>`_ and `bleeding edge <https://ArchipelagoMW.github.io/Archipelago>`_ versions of
+this reference document.
 
-   baseclasses
-   autoworld
-   options
-   rules
-   fill
-   netutils
-   world api
-   options api
-   network protocol
-   tests
+============
+Get Started
+============
+
+The first thing you should do to get started with Archipelago is to read the :doc:`contributing` which cover
+the requirements of not only contributing to the main project, but the requirements and expectations of a world as well.
+
+
+.. toctree::
+    :maxdepth: 2
+    :caption: Get Started:
+
+    contributing
+    world maintainer
+    style
+    running from source
+    adding games
+    apworld specification
+    world api
+    options api
+    settings api
+    network protocol
+    tests
+
+
+.. toctree::
+    :maxdepth: 2
+    :caption: Code Reference:
+
+    baseclasses
+    autoworld
+    options
+    rules
+    fill
+    netutils
