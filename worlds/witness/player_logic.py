@@ -140,7 +140,7 @@ class WitnessPlayerLogic:
             item_name = line_split[0]
 
             if item_name not in static_witness_items.ITEM_DATA:
-                raise RuntimeError('Item "' + item_name + '" does not exist.')
+                raise RuntimeError(f'Item "{item_name}" does not exist.')
 
             self.THEORETICAL_ITEMS.add(item_name)
             if isinstance(static_witness_logic.ALL_ITEMS[item_name], ProgressiveItemDefinition):
