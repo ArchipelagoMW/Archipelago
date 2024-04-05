@@ -250,7 +250,7 @@ def create_vanilla_regions(
         connect(world, names, "Enemy Intelligence", "Trouble In Paradise",
                 lambda state: state.has("Beat Enemy Intelligence", player))
         connect(world, names, "Trouble In Paradise", "Night Terrors",
-                lambda state: state.has("Beat Evacuation", player))
+                lambda state: state.has("Beat Trouble In Paradise", player))
         connect(world, names, "Night Terrors", "Flashpoint",
                 lambda state: state.has("Beat Night Terrors", player))
         connect(world, names, "Flashpoint", "In the Enemy's Shadow",
