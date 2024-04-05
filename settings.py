@@ -597,8 +597,8 @@ class ServerOptions(Group):
     disable_item_cheat: Union[DisableItemCheat, bool] = False
     location_check_points: LocationCheckPoints = LocationCheckPoints(1)
     hint_cost: HintCost = HintCost(10)
-    release_mode: ReleaseMode = ReleaseMode("goal")
-    collect_mode: CollectMode = CollectMode("goal")
+    release_mode: ReleaseMode = ReleaseMode("auto")
+    collect_mode: CollectMode = CollectMode("auto")
     remaining_mode: RemainingMode = RemainingMode("goal")
     auto_shutdown: AutoShutdown = AutoShutdown(0)
     compatibility: Compatibility = Compatibility(2)
@@ -673,7 +673,7 @@ class GeneratorOptions(Group):
     spoiler: Spoiler = Spoiler(3)
     glitch_triforce_room: GlitchTriforceRoom = GlitchTriforceRoom(1)  # why is this here?
     race: Race = Race(0)
-    plando_options: PlandoOptions = PlandoOptions("bosses")
+    plando_options: PlandoOptions = PlandoOptions("bosses, connections, texts")
 
 
 class SNIOptions(Group):
