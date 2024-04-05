@@ -1,8 +1,9 @@
 import platform
 from pathlib import Path
 
-from worlds._sc2common.bot import logger
 from s2clientprotocol import sc2api_pb2 as sc_pb
+
+from worlds._sc2common.bot import logger
 
 from .player import Computer
 from .protocol import Protocol

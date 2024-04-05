@@ -1,8 +1,8 @@
+from typing import Any, Dict, Iterable, List, Optional, Tuple
+
 import orjson
-from typing import Any, Dict, List, Optional, Tuple, Iterable
 
 from .data import NATIONAL_ID_TO_SPECIES_ID, data
-
 
 CHARACTER_DECODING_MAP = {
     0x00: " ", 0x01: "À", 0x02: "Á", 0x03: "Â", 0x04: "Ç",
@@ -38,13 +38,13 @@ CHARACTER_DECODING_MAP = {
 CHARACTER_ENCODING_MAP = {value: key for key, value in CHARACTER_DECODING_MAP.items()}
 CHARACTER_ENCODING_MAP.update({
     "'": CHARACTER_ENCODING_MAP["’"],
-    "\"": CHARACTER_ENCODING_MAP["”"],
+    '"': CHARACTER_ENCODING_MAP["”"],
     "_": CHARACTER_ENCODING_MAP[" "],
 })
 
 ALLOWED_TRAINER_NAME_CHARACTERS = frozenset({
     " ", "0", "1", "2", "3", "4", "5", "6", "7", "8",
-    "9", "!", "?", ".", "-", "…", "“", "”", "‘", "’",    
+    "9", "!", "?", ".", "-", "…", "“", "”", "‘", "’",
     "♂", "♀", ",", "/", "A", "B", "C", "D", "E", "F",
     "G", "H", "I", "J", "K", "L", "M", "N", "O", "P",
     "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",

@@ -1,7 +1,7 @@
-from . import SVTestCase, setup_multiworld
 from .. import True_
 from ..options import FestivalLocations, StartingMoney
 from ..strings.festival_check_names import FestivalCheck
+from . import SVTestCase, setup_multiworld
 
 
 def get_access_rule(multiworld, player: int, location_name: str):
@@ -74,7 +74,7 @@ class TestDifferentSettings(SVTestCase):
 
     def check_location_rule(self, multiworld, player: int, location_name: str, should_exist: bool, should_be_true: bool = False):
         has = "has" if should_exist else "doesn't have"
-        rule = "without access rule" if should_be_true else f"with access rule"
+        rule = "without access rule" if should_be_true else "with access rule"
         rule_text = f" {rule}" if should_exist else ""
         with self.subTest(f"Player {player} {has} {location_name}{rule_text}"):
             locations = multiworld.get_locations(player)

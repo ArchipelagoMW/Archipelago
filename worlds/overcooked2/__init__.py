@@ -1,14 +1,28 @@
 from enum import IntEnum
-from typing import Any, List, Dict, Set, Callable, Optional, TextIO
+from typing import Any, Callable, Dict, List, Optional, Set, TextIO
 
-from BaseClasses import ItemClassification, CollectionState, Region, Entrance, Location, Tutorial, LocationProgressType
-from worlds.AutoWorld import World, WebWorld
+from BaseClasses import CollectionState, Entrance, ItemClassification, Location, LocationProgressType, Region, Tutorial
+from worlds.AutoWorld import WebWorld, World
 
-from .Overcooked2Levels import Overcooked2Dlc, Overcooked2Level, Overcooked2GenericLevel
-from .Locations import Overcooked2Location, oc2_location_name_to_id, oc2_location_id_to_name
-from .Options import OC2Options, OC2OnToggle, LocationBalancingMode, DeathLinkMode
-from .Items import item_table, Overcooked2Item, item_name_to_id, item_id_to_name, item_to_unlock_event, item_frequencies, dlc_exclusives
-from .Logic import has_requirements_for_level_star, has_requirements_for_level_access, level_shuffle_factory, is_item_progression, is_useful
+from .Items import (
+    Overcooked2Item,
+    dlc_exclusives,
+    item_frequencies,
+    item_id_to_name,
+    item_name_to_id,
+    item_table,
+    item_to_unlock_event,
+)
+from .Locations import Overcooked2Location, oc2_location_id_to_name, oc2_location_name_to_id
+from .Logic import (
+    has_requirements_for_level_access,
+    has_requirements_for_level_star,
+    is_item_progression,
+    is_useful,
+    level_shuffle_factory,
+)
+from .Options import DeathLinkMode, LocationBalancingMode, OC2OnToggle, OC2Options
+from .Overcooked2Levels import Overcooked2Dlc, Overcooked2GenericLevel, Overcooked2Level
 
 
 class Overcooked2Web(WebWorld):
@@ -342,12 +356,12 @@ class Overcooked2World(World):
         # useful = list()
         # filler = list()
         # progression = list()
-        for item_name in item_table:            
+        for item_name in item_table:
             if item_name in item_frequencies:
                 freq = item_frequencies[item_name]
             else:
                 freq = 1
-            
+
             if freq <= 0:
                 # not used
                 continue
@@ -594,7 +608,7 @@ class Overcooked2World(World):
         for overworld_id in world.level_mapping:
             overworld_name = Overcooked2GenericLevel(overworld_id).shortname.split("Story ")[1]
             kitchen_name = world.level_mapping[overworld_id].shortname
-            spoiler_handle.write(f'{overworld_name} | {kitchen_name}\n')
+            spoiler_handle.write(f"{overworld_name} | {kitchen_name}\n")
 
 
 def level_unlock_requirement_factory(stars_to_win: int) -> Dict[int, int]:

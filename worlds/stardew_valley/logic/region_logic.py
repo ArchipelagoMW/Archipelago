@@ -1,11 +1,12 @@
 from typing import Tuple, Union
 
 from Utils import cache_self1
+
+from ..options import EntranceRandomization
+from ..stardew_rule import And, Or, Reach, StardewRule, false_, true_
+from ..strings.region_names import Region
 from .base_logic import BaseLogic, BaseLogicMixin
 from .has_logic import HasLogicMixin
-from ..options import EntranceRandomization
-from ..stardew_rule import StardewRule, And, Or, Reach, false_, true_
-from ..strings.region_names import Region
 
 main_outside_area = {Region.menu, Region.stardew_valley, Region.farm_house, Region.farm, Region.town, Region.beach, Region.mountain, Region.forest,
                      Region.bus_stop, Region.backwoods, Region.bus_tunnel, Region.tunnel_entrance}

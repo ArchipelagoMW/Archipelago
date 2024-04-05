@@ -1,13 +1,12 @@
 import inspect
-from pydoc import describe
-
-from BaseClasses import Item, ItemClassification, MultiWorld
 import typing
 
-from .Options import get_option_value, RequiredTactics
-from .MissionTables import SC2Mission, SC2Race, SC2Campaign, campaign_mission_table
-from . import ItemNames
+from BaseClasses import Item, ItemClassification
 from worlds.AutoWorld import World
+
+from . import ItemNames
+from .MissionTables import SC2Race
+from .Options import RequiredTactics, get_option_value
 
 
 class ItemData(typing.NamedTuple):
@@ -1289,19 +1288,19 @@ item_table = {
         ItemData(700 + SC2WOL_ITEM_ID_OFFSET, "Unit", 0, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"wol", "lotv"},
                  description="Powerful melee warrior. Can use the charge ability."),
-    ItemNames.STALKER: 
-        ItemData(701 + SC2WOL_ITEM_ID_OFFSET, "Unit", 1, SC2Race.PROTOSS, 
+    ItemNames.STALKER:
+        ItemData(701 + SC2WOL_ITEM_ID_OFFSET, "Unit", 1, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"wol", "lotv"},
                  description="Ranged attack strider. Can use the Blink ability."),
-    ItemNames.HIGH_TEMPLAR: 
-        ItemData(702 + SC2WOL_ITEM_ID_OFFSET, "Unit", 2, SC2Race.PROTOSS, 
+    ItemNames.HIGH_TEMPLAR:
+        ItemData(702 + SC2WOL_ITEM_ID_OFFSET, "Unit", 2, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"wol", "lotv"},
-                 description="Potent psionic master. Can use the Feedback and Psionic Storm abilities. Can merge into an Archon."),             
-    ItemNames.DARK_TEMPLAR: 
-        ItemData(703 + SC2WOL_ITEM_ID_OFFSET, "Unit", 3, SC2Race.PROTOSS, 
+                 description="Potent psionic master. Can use the Feedback and Psionic Storm abilities. Can merge into an Archon."),
+    ItemNames.DARK_TEMPLAR:
+        ItemData(703 + SC2WOL_ITEM_ID_OFFSET, "Unit", 3, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"wol", "lotv"},
                  description="Deadly warrior-assassin. Permanently cloaked. Can use the Shadow Fury ability."),
-    ItemNames.IMMORTAL: 
+    ItemNames.IMMORTAL:
         ItemData(704 + SC2WOL_ITEM_ID_OFFSET, "Unit", 4, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"wol", "lotv"},
                  description="Assault strider. Can use Barrier to absorb damage."),
@@ -1855,94 +1854,94 @@ item_table = {
 
 
     # Protoss Units (those that aren't as items in WoL (Prophecy))
-    ItemNames.OBSERVER: ItemData(0 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 9, SC2Race.PROTOSS, 
+    ItemNames.OBSERVER: ItemData(0 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 9, SC2Race.PROTOSS,
                  classification=ItemClassification.filler, origin={"wol"},
                  description="Flying spy. Cloak renders the unit invisible to enemies without detection."),
-    ItemNames.CENTURION: ItemData(1 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 10, SC2Race.PROTOSS, 
+    ItemNames.CENTURION: ItemData(1 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 10, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"},
                  description="Powerful melee warrior. Has the Shadow Charge and Darkcoil abilities."),
-    ItemNames.SENTINEL: ItemData(2 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 11, SC2Race.PROTOSS, 
+    ItemNames.SENTINEL: ItemData(2 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 11, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"},
                  description="Powerful melee warrior. Has the Charge and Reconstruction abilities."),
-    ItemNames.SUPPLICANT: ItemData(3 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 12, SC2Race.PROTOSS, 
+    ItemNames.SUPPLICANT: ItemData(3 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 12, SC2Race.PROTOSS,
                  classification=ItemClassification.filler, important_for_filtering=True, origin={"ext"},
                  description="Powerful melee warrior. Has powerful damage resistant shields."),
-    ItemNames.INSTIGATOR: ItemData(4 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 13, SC2Race.PROTOSS, 
+    ItemNames.INSTIGATOR: ItemData(4 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 13, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"ext"},
                  description="Ranged support strider. Can store multiple Blink charges."),
-    ItemNames.SLAYER: ItemData(5 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 14, SC2Race.PROTOSS, 
+    ItemNames.SLAYER: ItemData(5 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 14, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"ext"},
                  description="Ranged attack strider. Can use the Phase Blink and Phasing Armor abilities."),
-    ItemNames.SENTRY: ItemData(6 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 15, SC2Race.PROTOSS, 
+    ItemNames.SENTRY: ItemData(6 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 15, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"},
                  description="Robotic support unit can use the Guardian Shield ability and restore the shields of nearby Protoss units."),
-    ItemNames.ENERGIZER: ItemData(7 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 16, SC2Race.PROTOSS, 
+    ItemNames.ENERGIZER: ItemData(7 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 16, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"},
                  description="Robotic support unit. Can use the Chrono Beam ability and become stationary to power nearby structures."),
     ItemNames.HAVOC: ItemData(8 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 17, SC2Race.PROTOSS,
                  origin={"lotv"}, important_for_filtering=True,
                  description="Robotic support unit. Can use the Target Lock and Force Field abilities and increase the range of nearby Protoss units."),
-    ItemNames.SIGNIFIER: ItemData(9 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 18, SC2Race.PROTOSS, 
+    ItemNames.SIGNIFIER: ItemData(9 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 18, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"ext"},
                  description="Potent permanently cloaked psionic master. Can use the Feedback and Crippling Psionic Storm abilities. Can merge into an Archon."),
-    ItemNames.ASCENDANT: ItemData(10 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 19, SC2Race.PROTOSS, 
+    ItemNames.ASCENDANT: ItemData(10 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 19, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"},
                  description="Potent psionic master. Can use the Psionic Orb, Mind Blast, and Sacrifice abilities."),
-    ItemNames.AVENGER: ItemData(11 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 20, SC2Race.PROTOSS, 
+    ItemNames.AVENGER: ItemData(11 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 20, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"},
                  description="Deadly warrior-assassin. Permanently cloaked. Recalls to the nearest Dark Shrine upon death."),
-    ItemNames.BLOOD_HUNTER: ItemData(12 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 21, SC2Race.PROTOSS, 
+    ItemNames.BLOOD_HUNTER: ItemData(12 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 21, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"},
                  description="Deadly warrior-assassin. Permanently cloaked. Can use the Void Stasis ability."),
-    ItemNames.DRAGOON: ItemData(13 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 22, SC2Race.PROTOSS, 
+    ItemNames.DRAGOON: ItemData(13 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 22, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"},
                  description="Ranged assault strider. Has enhanced health and damage."),
-    ItemNames.DARK_ARCHON: ItemData(14 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 23, SC2Race.PROTOSS, 
+    ItemNames.DARK_ARCHON: ItemData(14 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 23, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"},
                  description="Potent psionic master. Can use the Confuse and Mind Control abilities."),
-    ItemNames.ADEPT: ItemData(15 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 24, SC2Race.PROTOSS, 
+    ItemNames.ADEPT: ItemData(15 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 24, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"},
                  description="Ranged specialist. Can use the Psionic Transfer ability."),
-    ItemNames.WARP_PRISM: ItemData(16 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 25, SC2Race.PROTOSS, 
+    ItemNames.WARP_PRISM: ItemData(16 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 25, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"ext"},
                  description="Flying transport. Can carry units and become stationary to deploy a power field."),
-    ItemNames.ANNIHILATOR: ItemData(17 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 26, SC2Race.PROTOSS, 
+    ItemNames.ANNIHILATOR: ItemData(17 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 26, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"},
                  description="Assault Strider. Can use the Shadow Cannon ability to damage air and ground units."),
-    ItemNames.VANGUARD: ItemData(18 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 27, SC2Race.PROTOSS, 
+    ItemNames.VANGUARD: ItemData(18 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 27, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"},
                  description="Assault Strider. Deals splash damage around the primary target."),
-    ItemNames.WRATHWALKER: ItemData(19 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 28, SC2Race.PROTOSS, 
+    ItemNames.WRATHWALKER: ItemData(19 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 28, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"},
                  description="Battle strider with a powerful single target attack.  Can walk up and down cliffs."),
-    ItemNames.REAVER: ItemData(20 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 29, SC2Race.PROTOSS, 
+    ItemNames.REAVER: ItemData(20 + SC2LOTV_ITEM_ID_OFFSET, "Unit", 29, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"},
                  description="Area damage siege unit. Builds and launches explosive Scarabs for high burst damage."),
-    ItemNames.DISRUPTOR: ItemData(21 + SC2LOTV_ITEM_ID_OFFSET, "Unit 2", 0, SC2Race.PROTOSS, 
+    ItemNames.DISRUPTOR: ItemData(21 + SC2LOTV_ITEM_ID_OFFSET, "Unit 2", 0, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"ext"},
                  description="Robotic disruption unit. Can use the Purification Nova ability to deal heavy area damage."),
-    ItemNames.MIRAGE: ItemData(22 + SC2LOTV_ITEM_ID_OFFSET, "Unit 2", 1, SC2Race.PROTOSS, 
+    ItemNames.MIRAGE: ItemData(22 + SC2LOTV_ITEM_ID_OFFSET, "Unit 2", 1, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"},
                  description="Air superiority starfighter. Can use Graviton Beam and Phasing Armor abilities."),
-    ItemNames.CORSAIR: ItemData(23 + SC2LOTV_ITEM_ID_OFFSET, "Unit 2", 2, SC2Race.PROTOSS, 
+    ItemNames.CORSAIR: ItemData(23 + SC2LOTV_ITEM_ID_OFFSET, "Unit 2", 2, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"},
                  description="Air superiority starfighter. Can use the Disruption Web ability."),
-    ItemNames.DESTROYER: ItemData(24 + SC2LOTV_ITEM_ID_OFFSET, "Unit 2", 3, SC2Race.PROTOSS, 
+    ItemNames.DESTROYER: ItemData(24 + SC2LOTV_ITEM_ID_OFFSET, "Unit 2", 3, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"},
                  description="Area assault craft. Can use the Destruction Beam ability to attack multiple units at once."),
-    ItemNames.SCOUT: ItemData(25 + SC2LOTV_ITEM_ID_OFFSET, "Unit 2", 4, SC2Race.PROTOSS, 
+    ItemNames.SCOUT: ItemData(25 + SC2LOTV_ITEM_ID_OFFSET, "Unit 2", 4, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"ext"},
                  description="Versatile high-speed fighter."),
-    ItemNames.TEMPEST: ItemData(26 + SC2LOTV_ITEM_ID_OFFSET, "Unit 2", 5, SC2Race.PROTOSS, 
+    ItemNames.TEMPEST: ItemData(26 + SC2LOTV_ITEM_ID_OFFSET, "Unit 2", 5, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"},
                  description="Siege artillery craft. Attacks from long range. Can use the Disintegration ability."),
-    ItemNames.MOTHERSHIP: ItemData(27 + SC2LOTV_ITEM_ID_OFFSET, "Unit 2", 6, SC2Race.PROTOSS, 
+    ItemNames.MOTHERSHIP: ItemData(27 + SC2LOTV_ITEM_ID_OFFSET, "Unit 2", 6, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"},
                  description="Ultimate Protoss vessel, Can use the Vortex and Mass Recall abilities. Cloaks nearby units and structures."),
-    ItemNames.ARBITER: ItemData(28 + SC2LOTV_ITEM_ID_OFFSET, "Unit 2", 7, SC2Race.PROTOSS, 
+    ItemNames.ARBITER: ItemData(28 + SC2LOTV_ITEM_ID_OFFSET, "Unit 2", 7, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"lotv"},
                  description="Army support craft. Has the Stasis Field and Recall abilities. Cloaks nearby units."),
-    ItemNames.ORACLE: ItemData(29 + SC2LOTV_ITEM_ID_OFFSET, "Unit 2", 8, SC2Race.PROTOSS, 
+    ItemNames.ORACLE: ItemData(29 + SC2LOTV_ITEM_ID_OFFSET, "Unit 2", 8, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"ext"},
                  description="Flying caster. Can use the Revelation and Stasis Ward abilities."),
 
@@ -2219,7 +2218,7 @@ not_balanced_starting_units = {
 
 
 def get_basic_units(world: World, race: SC2Race) -> typing.Set[str]:
-    logic_level = get_option_value(world, 'required_tactics')
+    logic_level = get_option_value(world, "required_tactics")
     if logic_level == RequiredTactics.option_no_logic:
         return no_logic_starting_units[race]
     elif logic_level == RequiredTactics.option_advanced:

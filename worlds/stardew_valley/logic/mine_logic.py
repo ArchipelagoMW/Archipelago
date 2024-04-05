@@ -1,19 +1,20 @@
 from typing import Union
 
 from Utils import cache_self1
-from .base_logic import BaseLogicMixin, BaseLogic
+
+from .. import options
+from ..options import ToolProgression
+from ..stardew_rule import And, StardewRule, True_
+from ..strings.performance_names import Performance
+from ..strings.region_names import Region
+from ..strings.skill_names import Skill
+from ..strings.tool_names import Tool, ToolMaterial
+from .base_logic import BaseLogic, BaseLogicMixin
 from .combat_logic import CombatLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .skill_logic import SkillLogicMixin
 from .tool_logic import ToolLogicMixin
-from .. import options
-from ..options import ToolProgression
-from ..stardew_rule import StardewRule, And, True_
-from ..strings.performance_names import Performance
-from ..strings.region_names import Region
-from ..strings.skill_names import Skill
-from ..strings.tool_names import Tool, ToolMaterial
 
 
 class MineLogicMixin(BaseLogicMixin):

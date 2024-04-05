@@ -2,6 +2,7 @@ from typing import List
 
 from BaseClasses import Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
+
 from .Items import CliqueItem, item_data_table, item_table
 from .Locations import CliqueLocation, location_data_table, location_table, locked_locations
 from .Options import clique_options
@@ -11,7 +12,7 @@ from .Rules import get_button_rule
 
 class CliqueWebWorld(WebWorld):
     theme = "partyTime"
-    
+
     setup_en = Tutorial(
         tutorial_name="Start Guide",
         description="A guide to playing Clique.",
@@ -29,7 +30,7 @@ class CliqueWebWorld(WebWorld):
         link="guide/de",
         authors=["Held_der_Zeit"]
     )
-    
+
     tutorials = [setup_en, setup_de]
 
 

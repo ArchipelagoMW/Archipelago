@@ -1,8 +1,7 @@
 
-from worlds.AutoWorld import World
-
 import math
 
+from worlds.AutoWorld import World
 
 text_mapping = {
     "A": 0x00, "B": 0x01, "C": 0x02, "D": 0x03, "E": 0x04, "F": 0x05, "G": 0x06, "H": 0x07, "I": 0x08, "J": 0x09,
@@ -71,9 +70,9 @@ def generate_goal_text(world: World):
         out_array += bytearray([0x9F, 0x9F])
         out_array += string_to_bytes(" You must acquire")
         out_array[-1] += 0x80
-        out_array += string_to_bytes(f'    {required_yoshi_eggs:03} of {actual_yoshi_eggs:03}')
+        out_array += string_to_bytes(f"    {required_yoshi_eggs:03} of {actual_yoshi_eggs:03}")
         out_array[-1] += 0x80
-        out_array += string_to_bytes(f'    Yoshi Eggs,')
+        out_array += string_to_bytes("    Yoshi Eggs,")
         out_array[-1] += 0x80
         out_array += string_to_bytes("then return here.")
         out_array[-1] += 0x80
@@ -83,7 +82,7 @@ def generate_goal_text(world: World):
         out_array += bytearray([0x9F, 0x9F])
         out_array += string_to_bytes(" You must defeat")
         out_array[-1] += 0x80
-        out_array += string_to_bytes(f'    {bosses_required:02} Bosses,')
+        out_array += string_to_bytes(f"    {bosses_required:02} Bosses,")
         out_array[-1] += 0x80
         out_array += string_to_bytes("then defeat Bowser")
         out_array[-1] += 0x80

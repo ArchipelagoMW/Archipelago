@@ -1,10 +1,38 @@
 from typing import Dict, List
 
-from ..strings.entrance_names import Entrance, DeepWoodsEntrance, EugeneEntrance, LaceyEntrance, BoardingHouseEntrance, \
-    JasperEntrance, AlecEntrance, YobaEntrance, JunaEntrance, MagicEntrance, AyeishaEntrance, RileyEntrance, SVEEntrance, AlectoEntrance
-from ..strings.region_names import Region, DeepWoodsRegion, EugeneRegion, JasperRegion, BoardingHouseRegion, \
-    AlecRegion, YobaRegion, JunaRegion, MagicRegion, AyeishaRegion, RileyRegion, SVERegion, AlectoRegion, LaceyRegion
-from ..region_classes import RegionData, ConnectionData, ModificationFlag, RandomizationFlag, ModRegionData
+from ..region_classes import ConnectionData, ModificationFlag, ModRegionData, RandomizationFlag, RegionData
+from ..strings.entrance_names import (
+    AlecEntrance,
+    AlectoEntrance,
+    AyeishaEntrance,
+    BoardingHouseEntrance,
+    DeepWoodsEntrance,
+    Entrance,
+    EugeneEntrance,
+    JasperEntrance,
+    JunaEntrance,
+    LaceyEntrance,
+    MagicEntrance,
+    RileyEntrance,
+    SVEEntrance,
+    YobaEntrance,
+)
+from ..strings.region_names import (
+    AlecRegion,
+    AlectoRegion,
+    AyeishaRegion,
+    BoardingHouseRegion,
+    DeepWoodsRegion,
+    EugeneRegion,
+    JasperRegion,
+    JunaRegion,
+    LaceyRegion,
+    MagicRegion,
+    Region,
+    RileyRegion,
+    SVERegion,
+    YobaRegion,
+)
 from .mod_data import ModNames
 
 deep_woods_regions = [

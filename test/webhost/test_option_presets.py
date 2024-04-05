@@ -1,7 +1,7 @@
 import unittest
 
+from Options import Choice, NamedRange, Range, Toggle
 from worlds import AutoWorldRegister
-from Options import Choice, NamedRange, Toggle, Range
 
 
 class TestOptionPresets(unittest.TestCase):

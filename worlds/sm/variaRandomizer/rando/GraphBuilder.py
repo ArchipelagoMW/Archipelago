@@ -1,23 +1,34 @@
 
-import random, copy
-from ..utils import log
-from ..graph.graph_utils import GraphUtils, vanillaTransitions, vanillaBossesTransitions, escapeSource, escapeTargets, graphAreas, getAccessPoint
-from ..logic.logic import Logic
-from ..graph.graph import AccessGraphRando as AccessGraph
-from ..logic.smbool import SMBool
-from ..utils.objectives import Objectives
-from ..rando.ItemLocContainer import getItemLocStr
+import copy
+import random
 from collections import defaultdict
 
+from ..graph.graph import AccessGraphRando as AccessGraph
+from ..graph.graph_utils import (
+    GraphUtils,
+    escapeSource,
+    escapeTargets,
+    getAccessPoint,
+    graphAreas,
+    vanillaBossesTransitions,
+    vanillaTransitions,
+)
+from ..logic.logic import Logic
+from ..logic.smbool import SMBool
+from ..rando.ItemLocContainer import getItemLocStr
+from ..utils import log
+from ..utils.objectives import Objectives
+
+
 # creates graph and handles randomized escape
-class GraphBuilder(object):
+class GraphBuilder:
     def __init__(self, graphSettings):
         self.graphSettings = graphSettings
         self.areaRando = graphSettings.areaRando
         self.bossRando = graphSettings.bossRando
         self.escapeRando = graphSettings.escapeRando
         self.minimizerN = graphSettings.minimizerN
-        self.log = log.get('GraphBuilder')
+        self.log = log.get("GraphBuilder")
 
     # builds everything but escape transitions
     def createGraph(self, maxDiff):
@@ -31,7 +42,7 @@ class GraphBuilder(object):
                 # (well we could do two different transitions on both sides of doors, but that would just be confusing)
                 # so we force crateria to be in the graph
                 if self.graphSettings.startAP == "Golden Four" and self.graphSettings.tourian == "Disabled":
-                    forcedAreas.add('Crateria')
+                    forcedAreas.add("Crateria")
                 # force areas required by objectives
                 # 1st the 'clear area' ones
                 forcedAreas = forcedAreas.union({goal.area for goal in Objectives.objDict[self.graphSettings.player].activeGoals if goal.area is not None})
@@ -63,7 +74,7 @@ class GraphBuilder(object):
         ret = AccessGraph(Logic.accessPoints, transitions, self.graphSettings.dotFile)
         Objectives.objDict[self.graphSettings.player].setGraph(ret, maxDiff)
         return ret
-    
+
     def addForeignItems(self, container, itemLocs):
         itemPoolCounts = {}
         for item in container.itemPool:
@@ -98,18 +109,18 @@ class GraphBuilder(object):
                 return False
         # get timer value
         self.escapeTimer(graph, paths, self.areaRando or escapeTrigger is not None)
-        self.log.debug("escapeGraph: ({}, {}) timer: {}".format(escapeSource, dst, graph.EscapeAttributes['Timer']))
+        self.log.debug("escapeGraph: ({}, {}) timer: {}".format(escapeSource, dst, graph.EscapeAttributes["Timer"]))
         # animals
         GraphUtils.escapeAnimalsTransitions(graph, possibleTargets, dst)
         return True
 
     def _getTargets(self, sm, graph, maxDiff):
-        possibleTargets = [target for target in escapeTargets if graph.accessPath(sm, target, 'Landing Site', maxDiff) is not None]
-        self.log.debug('_getTargets. targets='+str(possibleTargets))
+        possibleTargets = [target for target in escapeTargets if graph.accessPath(sm, target, "Landing Site", maxDiff) is not None]
+        self.log.debug("_getTargets. targets="+str(possibleTargets))
         # failsafe
         if len(possibleTargets) == 0:
             self.log.debug("Can't randomize escape, fallback to vanilla")
-            possibleTargets.append('Climb Bottom Left')
+            possibleTargets.append("Climb Bottom Left")
         random.shuffle(possibleTargets)
         return possibleTargets
 
@@ -119,12 +130,12 @@ class GraphBuilder(object):
         # - Ice not usable because of hyper beam
         # - remove energy to avoid hell runs
         # - (will add bosses as well)
-        sm.addItems([item.Type for item in emptyContainer.itemPool if item.Type != 'Ice' and item.Category != 'Energy'])
-        sm.addItem('Hyper')
+        sm.addItems([item.Type for item in emptyContainer.itemPool if item.Type != "Ice" and item.Category != "Energy"])
+        sm.addItem("Hyper")
         possibleTargets = self._getTargets(sm, graph, maxDiff)
         # pick one
         dst = possibleTargets.pop()
-        path = graph.accessPath(sm, dst, 'Landing Site', maxDiff)
+        path = graph.accessPath(sm, dst, "Landing Site", maxDiff)
         return (possibleTargets, dst, path)
 
     def escapeTrigger(self, emptyContainer, graph, maxDiff, escapeTrigger):
@@ -136,15 +147,15 @@ class GraphBuilder(object):
         if not any(il.Location.GraphArea == "Crateria" for il in allItemLocs):
             escapeAttr = graph.EscapeAttributes
             if "patches" not in escapeAttr:
-                escapeAttr['patches'] = []
-            escapeAttr['patches'] += ['climb_disable_bomb_blocks.ips', "Climb_Asleep"]
+                escapeAttr["patches"] = []
+            escapeAttr["patches"] += ["climb_disable_bomb_blocks.ips", "Climb_Asleep"]
             src, _ = next(t for t in graph.InterAreaTransitions if t[1].Name == "Golden Four")
             graph.removeTransitions("Golden Four")
             graph.addTransition(src.Name, "Climb Bottom Left")
             # disconnect the other side of G4
             graph.addTransition("Golden Four", "Golden Four")
         # remove vanilla escape transition
-        graph.addTransition('Tourian Escape Room 4 Top Right', 'Tourian Escape Room 4 Top Right')
+        graph.addTransition("Tourian Escape Room 4 Top Right", "Tourian Escape Room 4 Top Right")
         # filter garbage itemLocs
         ilCheck = lambda il: not il.Location.isBoss() and not il.Location.restricted and il.Item.Category != "Nothing"
         # update item% objectives
@@ -187,7 +198,7 @@ class GraphBuilder(object):
             count = 0
             for ap in possibleAccessPoints:
                 self.log.debug("escapeTrigger. testing AP " + ap)
-                path = graph.accessPath(sm, ap, 'Landing Site', maxDiff)
+                path = graph.accessPath(sm, ap, "Landing Site", maxDiff)
                 if path is not None:
                     self.log.debug("escapeTrigger. add path from "+ap)
                     possiblePaths.append(path)
@@ -198,7 +209,7 @@ class GraphBuilder(object):
                 return (None, None)
         # try and get a path from all possible areas
         self.log.debug("escapeTrigger. completing paths")
-        allAreas = {il.Location.GraphArea for il in allItemLocs if not il.Location.restricted and not il.Location.GraphArea in ["Tourian", "Ceres"]}
+        allAreas = {il.Location.GraphArea for il in allItemLocs if not il.Location.restricted and il.Location.GraphArea not in ["Tourian", "Ceres"]}
         def getStartArea(path):
             return path[0].GraphArea
         def apCheck(ap):
@@ -207,7 +218,7 @@ class GraphBuilder(object):
             return apObj.GraphArea not in [getStartArea(path) for path in possiblePaths]
         escapeAPs = [ap for ap in collectedLocsAccessPoints if apCheck(ap)]
         for ap in escapeAPs:
-            path = graph.accessPath(sm, ap, 'Landing Site', maxDiff)
+            path = graph.accessPath(sm, ap, "Landing Site", maxDiff)
             if path is not None:
                 self.log.debug("escapeTrigger. add path from "+ap)
                 possiblePaths.append(path)
@@ -223,7 +234,7 @@ class GraphBuilder(object):
             container.collect(il)
             ap = il.Location.accessPoint
             if apCheck(ap):
-                path = graph.accessPath(sm, ap, 'Landing Site', maxDiff)
+                path = graph.accessPath(sm, ap, "Landing Site", maxDiff)
                 if path is not None:
                     self.log.debug("escapeTrigger. add path from "+ap)
                     possiblePaths.append(path)
@@ -237,18 +248,18 @@ class GraphBuilder(object):
         # rough estimates of navigation within areas to reach "borders"
         # (can obviously be completely off wrt to actual path, but on the generous side)
         traversals = {
-            'Crateria':90,
-            'GreenPinkBrinstar':90,
-            'WreckedShip':120,
-            'LowerNorfair':135,
-            'WestMaridia':75,
-            'EastMaridia':100,
-            'RedBrinstar':75,
-            'Norfair': 120,
-            'Kraid': 40,
-            'Crocomire': 40,
+            "Crateria":90,
+            "GreenPinkBrinstar":90,
+            "WreckedShip":120,
+            "LowerNorfair":135,
+            "WestMaridia":75,
+            "EastMaridia":100,
+            "RedBrinstar":75,
+            "Norfair": 120,
+            "Kraid": 40,
+            "Crocomire": 40,
             # can't be on the path
-            'Tourian': 0,
+            "Tourian": 0,
         }
         t = 90 if self.areaRando else 0
         for area in traversedAreas:
@@ -262,26 +273,26 @@ class GraphBuilder(object):
         if len(paths) == 1:
             path = paths.pop()
             if compute == True:
-                if path[0].Name == 'Climb Bottom Left':
-                    graph.EscapeAttributes['Timer'] = None
+                if path[0].Name == "Climb Bottom Left":
+                    graph.EscapeAttributes["Timer"] = None
                     return
                 t = self._computeTimer(graph, path)
             else:
                 escapeTargetsTimer = {
-                    'Climb Bottom Left': None, # vanilla
-                    'Green Brinstar Main Shaft Top Left': 210, # brinstar
-                    'Basement Left': 210, # wrecked ship
-                    'Business Center Mid Left': 270, # norfair
-                    'Crab Hole Bottom Right': 270 # maridia
+                    "Climb Bottom Left": None, # vanilla
+                    "Green Brinstar Main Shaft Top Left": 210, # brinstar
+                    "Basement Left": 210, # wrecked ship
+                    "Business Center Mid Left": 270, # norfair
+                    "Crab Hole Bottom Right": 270 # maridia
                 }
                 t = escapeTargetsTimer[path[0].Name]
             self.log.debug("escapeTimer. t="+str(t))
-            graph.EscapeAttributes['Timer'] = t
+            graph.EscapeAttributes["Timer"] = t
         else:
             assert compute
-            graph.EscapeAttributes['Timer'] = 0
+            graph.EscapeAttributes["Timer"] = 0
             timerValues = {}
-            graph.EscapeAttributes['TimerTable'] = timerValues
+            graph.EscapeAttributes["TimerTable"] = timerValues
             for path in paths:
                 area = path[0].GraphArea
                 prev = timerValues.get(area, 0)

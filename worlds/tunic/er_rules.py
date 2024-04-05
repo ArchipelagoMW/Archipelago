@@ -1,9 +1,11 @@
-from typing import Dict, Set, List, Tuple, TYPE_CHECKING
-from worlds.generic.Rules import set_rule, forbid_item
-from .rules import has_ability, has_sword, has_stick, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage
+from typing import TYPE_CHECKING, Dict, List, Set, Tuple
+
+from BaseClasses import CollectionState, Region
+from worlds.generic.Rules import forbid_item, set_rule
+
 from .er_data import Portal
 from .options import TunicOptions
-from BaseClasses import Region, CollectionState
+from .rules import can_ladder_storage, has_ability, has_ice_grapple_logic, has_lantern, has_mask, has_stick, has_sword
 
 if TYPE_CHECKING:
     from . import TunicWorld
@@ -219,12 +221,12 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld after Envoy"],
-        rule=lambda state: state.has_any({laurels, grapple}, player) 
+        rule=lambda state: state.has_any({laurels, grapple}, player)
         or state.has("Sword Upgrade", player, 4)
         or options.logic_rules)
     regions["Overworld after Envoy"].connect(
         connecting_region=regions["Overworld"],
-        rule=lambda state: state.has_any({laurels, grapple}, player) 
+        rule=lambda state: state.has_any({laurels, grapple}, player)
         or state.has("Sword Upgrade", player, 4)
         or options.logic_rules)
 
@@ -858,8 +860,8 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     # nmg: can ice grapple on the voidlings to the double admin fight, still need to pray at the fuse
     regions["Rooted Ziggurat Lower Back"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Front"],
-        rule=lambda state: ((state.has(laurels, player) 
-                             or has_ice_grapple_logic(True, state, player, options, ability_unlocks)) 
+        rule=lambda state: ((state.has(laurels, player)
+                             or has_ice_grapple_logic(True, state, player, options, ability_unlocks))
                             and has_ability(state, player, prayer, options, ability_unlocks)
                             and has_sword(state, player))
         or can_ladder_storage(state, player, options))
@@ -892,7 +894,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     # nmg: ice grapple through cathedral door, can do it both ways
     regions["Swamp Mid"].connect(
         connecting_region=regions["Swamp to Cathedral Main Entrance Region"],
-        rule=lambda state: (has_ability(state, player, prayer, options, ability_unlocks) 
+        rule=lambda state: (has_ability(state, player, prayer, options, ability_unlocks)
                             and state.has(laurels, player))
         or has_ice_grapple_logic(False, state, player, options, ability_unlocks))
     regions["Swamp to Cathedral Main Entrance Region"].connect(

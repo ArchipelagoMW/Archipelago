@@ -1,12 +1,11 @@
 import asyncio
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 import CommonClient
 import NetUtils
 import Utils
 
-from typing import Any, Dict, List, Optional, Set, Tuple
-
-from .data_funcs import item_names_to_id, location_names_to_id, id_to_items, id_to_locations, id_to_goals
+from .data_funcs import id_to_goals, id_to_items, id_to_locations, item_names_to_id, location_names_to_id
 from .enums import ZorkGrandInquisitorItems, ZorkGrandInquisitorLocations
 from .game_controller import GameController
 

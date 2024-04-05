@@ -1,6 +1,8 @@
 import unittest
 from collections import Counter
+
 from worlds.AutoWorld import AutoWorldRegister, call_all
+
 from . import setup_solo_multiworld
 
 
@@ -56,7 +58,7 @@ class TestBase(unittest.TestCase):
                                  f"{game_name} modified region count during pre_fill")
                 self.assertGreaterEqual(location_count, len(multiworld.get_locations()),
                                         f"{game_name} modified locations count during pre_fill")
-    
+
     def test_location_group(self):
         """Test that all location name groups contain valid locations and don't share names."""
         for game_name, world_type in AutoWorldRegister.world_types.items():

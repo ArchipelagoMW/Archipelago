@@ -1,6 +1,7 @@
 from .Rom import Rom
 from .Utils import *
 
+
 # Read a ci4 texture from rom and convert to rgba16
 # rom - Rom
 # address - address of the ci4 texture in Rom
@@ -66,19 +67,19 @@ def apply_rgba16_patch(rgba16_texture, rgba16_patch):
 
 # Save a rgba16 texture to a file
 def save_rgba16_texture(rgba16_texture, fileStr):
-    file = open(fileStr, 'wb')
+    file = open(fileStr, "wb")
     bytes = bytearray()
     for pixel in rgba16_texture:
-        bytes.extend(pixel.to_bytes(2, 'big'))
+        bytes.extend(pixel.to_bytes(2, "big"))
     file.write(bytes)
     file.close()
 
 # Save a ci8 texture to a file
 def save_ci8_texture(ci8_texture, fileStr):
-    file = open(fileStr, 'wb')
+    file = open(fileStr, "wb")
     bytes = bytearray()
     for pixel in ci8_texture:
-        bytes.extend(pixel.to_bytes(1, 'big'))
+        bytes.extend(pixel.to_bytes(1, "big"))
     file.write(bytes)
     file.close()
 
@@ -90,7 +91,7 @@ def save_ci8_texture(ci8_texture, fileStr):
 def load_rgba16_texture_from_rom(rom: Rom, base_texture_address, size):
     texture = []
     for i in range(0, size):
-        texture.append(int.from_bytes(rom.read_bytes(base_texture_address + 2 * i, 2), 'big'))
+        texture.append(int.from_bytes(rom.read_bytes(base_texture_address + 2 * i, 2), "big"))
     return texture
 
 # Load an rgba16 texture from a binary file.
@@ -98,9 +99,9 @@ def load_rgba16_texture_from_rom(rom: Rom, base_texture_address, size):
 # size - number of 16-bit pixels in the texture.
 def load_rgba16_texture(fileStr, size):
     texture = []
-    file = open(fileStr, 'rb')
+    file = open(fileStr, "rb")
     for i in range(0, size):
-        texture.append(int.from_bytes(file.read(2), 'big'))
+        texture.append(int.from_bytes(file.read(2), "big"))
 
     file.close()
     return(texture)
@@ -116,7 +117,7 @@ def rgba16_from_file(rom: Rom, base_texture_address, base_palette_address, size,
     new_texture = load_rgba16_texture(patchfile, size)
     bytes = bytearray()
     for pixel in new_texture:
-        bytes.extend(int.to_bytes(pixel, 2, 'big'))
+        bytes.extend(int.to_bytes(pixel, 2, "big"))
     return bytes
 
 # Create a new rgba16 texture from a original rgba16 texture and a rgba16 patch file
@@ -134,7 +135,7 @@ def rgba16_patch(rom: Rom, base_texture_address, base_palette_address, size, pat
     new_texture_rgba16 = apply_rgba16_patch(base_texture_rgba16, patch_rgba16)
     bytes = bytearray()
     for pixel in new_texture_rgba16:
-        bytes.extend(int.to_bytes(pixel, 2, 'big'))
+        bytes.extend(int.to_bytes(pixel, 2, "big"))
     return bytes
 
 # Create a new ci8 texture from a ci4 texture/palette and a rgba16 patch file
@@ -155,9 +156,9 @@ def ci4_rgba16patch_to_ci8(rom, base_texture_address, base_palette_address, size
     # merge the palette and the texture
     bytes = bytearray()
     for pixel in ci8_palette:
-        bytes.extend(int.to_bytes(pixel, 2, 'big'))
+        bytes.extend(int.to_bytes(pixel, 2, "big"))
     for pixel in ci8_texture:
-        bytes.extend(int.to_bytes(pixel, 1, 'big'))
+        bytes.extend(int.to_bytes(pixel, 1, "big"))
     return bytes
 
 # Function to create rgba16 texture patches for crates
@@ -170,10 +171,10 @@ def build_crate_ci8_patches():
     crate_texture_rgba16 = ci4_to_rgba16(rom, object_kibako2_addr + 0x20, SIZE_CI4_32X128, crate_palette)
 
     # load new textures
-    crate_texture_gold_rgba16 = load_rgba16_texture('crate_gold_rgba16.bin', 0x1000)
-    crate_texture_skull_rgba16 = load_rgba16_texture('crate_skull_rgba16.bin', 0x1000)
-    crate_texture_key_rgba16 = load_rgba16_texture('crate_key_rgba16.bin', 0x1000)
-    crate_texture_bosskey_rgba16 = load_rgba16_texture('crate_bosskey_rgba16.bin', 0x1000)
+    crate_texture_gold_rgba16 = load_rgba16_texture("crate_gold_rgba16.bin", 0x1000)
+    crate_texture_skull_rgba16 = load_rgba16_texture("crate_skull_rgba16.bin", 0x1000)
+    crate_texture_key_rgba16 = load_rgba16_texture("crate_key_rgba16.bin", 0x1000)
+    crate_texture_bosskey_rgba16 = load_rgba16_texture("crate_bosskey_rgba16.bin", 0x1000)
 
     # create patches
     gold_patch = apply_rgba16_patch(crate_texture_rgba16, crate_texture_gold_rgba16)
@@ -182,10 +183,10 @@ def build_crate_ci8_patches():
     bosskey_patch = apply_rgba16_patch(crate_texture_rgba16, crate_texture_bosskey_rgba16)
 
     # save patches
-    save_rgba16_texture(gold_patch, 'crate_gold_rgba16_patch.bin')
-    save_rgba16_texture(key_patch, 'crate_key_rgba16_patch.bin')
-    save_rgba16_texture(skull_patch, 'crate_skull_rgba16_patch.bin')
-    save_rgba16_texture(bosskey_patch, 'crate_bosskey_rgba16_patch.bin')
+    save_rgba16_texture(gold_patch, "crate_gold_rgba16_patch.bin")
+    save_rgba16_texture(key_patch, "crate_key_rgba16_patch.bin")
+    save_rgba16_texture(skull_patch, "crate_skull_rgba16_patch.bin")
+    save_rgba16_texture(bosskey_patch, "crate_bosskey_rgba16_patch.bin")
 
     # create ci8s
     default_ci8, default_palette = rgba16_to_ci8(crate_texture_rgba16)
@@ -195,30 +196,30 @@ def build_crate_ci8_patches():
     bosskey_ci8, bosskey_palette = rgba16_to_ci8(crate_texture_bosskey_rgba16)
 
     # save ci8 textures
-    save_ci8_texture(default_ci8, 'crate_default_ci8.bin')
-    save_ci8_texture(gold_ci8, 'crate_gold_ci8.bin')
-    save_ci8_texture(key_ci8, 'crate_key_ci8.bin')
-    save_ci8_texture(skull_ci8, 'crate_skull_ci8.bin')
-    save_ci8_texture(bosskey_ci8, 'crate_bosskey_ci8.bin')
+    save_ci8_texture(default_ci8, "crate_default_ci8.bin")
+    save_ci8_texture(gold_ci8, "crate_gold_ci8.bin")
+    save_ci8_texture(key_ci8, "crate_key_ci8.bin")
+    save_ci8_texture(skull_ci8, "crate_skull_ci8.bin")
+    save_ci8_texture(bosskey_ci8, "crate_bosskey_ci8.bin")
 
     # save palettes
-    save_rgba16_texture(default_palette, 'crate_default_palette.bin')
-    save_rgba16_texture(gold_palette, 'crate_gold_palette.bin')
-    save_rgba16_texture(key_palette, 'crate_key_palette.bin')
-    save_rgba16_texture(skull_palette, 'crate_skull_palette.bin')
-    save_rgba16_texture(bosskey_palette, 'crate_bosskey_palette.bin')
+    save_rgba16_texture(default_palette, "crate_default_palette.bin")
+    save_rgba16_texture(gold_palette, "crate_gold_palette.bin")
+    save_rgba16_texture(key_palette, "crate_key_palette.bin")
+    save_rgba16_texture(skull_palette, "crate_skull_palette.bin")
+    save_rgba16_texture(bosskey_palette, "crate_bosskey_palette.bin")
 
     crate_textures = [
-        (5, 'texture_crate_default', 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, None),
-        (6, 'texture_crate_gold'   , 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, 'crate_gold_rgba16_patch.bin'),
-        (7, 'texture_crate_key', 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, 'crate_key_rgba16_patch.bin'),
-        (8, 'texture_crate_skull',  0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, 'crate_skull_rgba16_patch.bin'),
-        (9, 'texture_crate_bosskey', 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, 'crate_bosskey_rgba16_patch.bin'),
+        (5, "texture_crate_default", 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, None),
+        (6, "texture_crate_gold"   , 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, "crate_gold_rgba16_patch.bin"),
+        (7, "texture_crate_key", 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, "crate_key_rgba16_patch.bin"),
+        (8, "texture_crate_skull",  0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, "crate_skull_rgba16_patch.bin"),
+        (9, "texture_crate_bosskey", 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, "crate_bosskey_rgba16_patch.bin"),
     ]
 
     for texture_id, texture_name, rom_address_base, rom_address_palette, size,func, patchfile in crate_textures:
         texture = func(rom, rom_address_base, rom_address_palette, size, patchfile)
-        file = open(texture_name, 'wb')
+        file = open(texture_name, "wb")
         file.write(texture)
         file.close()
         print(texture)
@@ -231,10 +232,10 @@ def build_pot_patches():
     rom = Rom("ZOOTDEC.z64")
 
     pot_default_rgba16 = load_rgba16_texture_from_rom(rom, object_tsubo_side_addr, SIZE_32X64)
-    pot_gold_rgba16 = load_rgba16_texture('pot_gold_rgba16.bin', SIZE_32X64)
-    pot_key_rgba16 = load_rgba16_texture('pot_key_rgba16.bin', SIZE_32X64)
-    pot_skull_rgba16 = load_rgba16_texture('pot_skull_rgba16.bin', SIZE_32X64)
-    pot_bosskey_rgba16 = load_rgba16_texture('pot_bosskey_rgba16.bin', SIZE_32X64)
+    pot_gold_rgba16 = load_rgba16_texture("pot_gold_rgba16.bin", SIZE_32X64)
+    pot_key_rgba16 = load_rgba16_texture("pot_key_rgba16.bin", SIZE_32X64)
+    pot_skull_rgba16 = load_rgba16_texture("pot_skull_rgba16.bin", SIZE_32X64)
+    pot_bosskey_rgba16 = load_rgba16_texture("pot_bosskey_rgba16.bin", SIZE_32X64)
 
     # create patches
     gold_patch = apply_rgba16_patch(pot_default_rgba16, pot_gold_rgba16)
@@ -243,10 +244,10 @@ def build_pot_patches():
     bosskey_patch = apply_rgba16_patch(pot_default_rgba16, pot_bosskey_rgba16)
 
     # save patches
-    save_rgba16_texture(gold_patch, 'pot_gold_rgba16_patch.bin')
-    save_rgba16_texture(key_patch, 'pot_key_rgba16_patch.bin')
-    save_rgba16_texture(skull_patch, 'pot_skull_rgba16_patch.bin')
-    save_rgba16_texture(bosskey_patch, 'pot_bosskey_rgba16_patch.bin')
+    save_rgba16_texture(gold_patch, "pot_gold_rgba16_patch.bin")
+    save_rgba16_texture(key_patch, "pot_key_rgba16_patch.bin")
+    save_rgba16_texture(skull_patch, "pot_skull_rgba16_patch.bin")
+    save_rgba16_texture(bosskey_patch, "pot_bosskey_rgba16_patch.bin")
 
 def build_smallcrate_patches():
     # load small crate texture from rom
@@ -257,12 +258,12 @@ def build_smallcrate_patches():
 
     # Load textures
     smallcrate_default_rgba16 = load_rgba16_texture_from_rom(rom, object_kibako_texture_addr, SIZE_32X64)
-    smallcrate_gold_rgba16 = load_rgba16_texture('smallcrate_gold_rgba16.bin', SIZE_32X64)
-    smallcrate_key_rgba16 = load_rgba16_texture('smallcrate_key_rgba16.bin', SIZE_32X64)
-    smallcrate_skull_rgba16 = load_rgba16_texture('smallcrate_skull_rgba16.bin', SIZE_32X64)
-    smallcrate_bosskey_rgba16 = load_rgba16_texture('smallcrate_bosskey_rgba16.bin', SIZE_32X64)
+    smallcrate_gold_rgba16 = load_rgba16_texture("smallcrate_gold_rgba16.bin", SIZE_32X64)
+    smallcrate_key_rgba16 = load_rgba16_texture("smallcrate_key_rgba16.bin", SIZE_32X64)
+    smallcrate_skull_rgba16 = load_rgba16_texture("smallcrate_skull_rgba16.bin", SIZE_32X64)
+    smallcrate_bosskey_rgba16 = load_rgba16_texture("smallcrate_bosskey_rgba16.bin", SIZE_32X64)
 
-    save_rgba16_texture(smallcrate_default_rgba16, 'smallcrate_default_rgba16.bin')
+    save_rgba16_texture(smallcrate_default_rgba16, "smallcrate_default_rgba16.bin")
     # Create patches
     gold_patch = apply_rgba16_patch(smallcrate_default_rgba16, smallcrate_gold_rgba16)
     key_patch = apply_rgba16_patch(smallcrate_default_rgba16, smallcrate_key_rgba16)
@@ -270,10 +271,10 @@ def build_smallcrate_patches():
     bosskey_patch = apply_rgba16_patch(smallcrate_default_rgba16, smallcrate_bosskey_rgba16)
 
     # save patches
-    save_rgba16_texture(gold_patch, 'smallcrate_gold_rgba16_patch.bin')
-    save_rgba16_texture(key_patch, 'smallcrate_key_rgba16_patch.bin')
-    save_rgba16_texture(skull_patch, 'smallcrate_skull_rgba16_patch.bin')
-    save_rgba16_texture(bosskey_patch, 'smallcrate_bosskey_rgba16_patch.bin')
+    save_rgba16_texture(gold_patch, "smallcrate_gold_rgba16_patch.bin")
+    save_rgba16_texture(key_patch, "smallcrate_key_rgba16_patch.bin")
+    save_rgba16_texture(skull_patch, "smallcrate_skull_rgba16_patch.bin")
+    save_rgba16_texture(bosskey_patch, "smallcrate_bosskey_rgba16_patch.bin")
 
 
 #build_crate_ci8_patches()

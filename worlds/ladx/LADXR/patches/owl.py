@@ -1,5 +1,5 @@
-from ..roomEditor import RoomEditor
 from ..assembler import ASM
+from ..roomEditor import RoomEditor
 from ..utils import formatText
 
 
@@ -17,7 +17,7 @@ def removeOwlEvents(rom):
     # 1 used by item for other player message
     # 2 used by arrow chest messages
     # 2 used by tunics
-    
+
     # Undoing this, we use it for text shuffle now
     #rom.texts[0x0D9] = b'\xff'  # used by boomerang
     # for idx in range(0x0BE, 0x0CE):

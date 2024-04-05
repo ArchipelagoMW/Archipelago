@@ -1,11 +1,12 @@
 from typing import List
 from unittest import TestCase
 
-from BaseClasses import MultiWorld, ItemClassification
-from .rule_assert import RuleAssertMixin
+from BaseClasses import ItemClassification, MultiWorld
+
 from ... import StardewItem
-from ...items import items_by_group, Group
+from ...items import Group, items_by_group
 from ...locations import LocationTags, locations_by_tag
+from .rule_assert import RuleAssertMixin
 
 
 def get_all_item_names(multiworld: MultiWorld) -> List[str]:

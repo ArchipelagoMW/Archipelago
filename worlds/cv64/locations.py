@@ -1,8 +1,9 @@
-from BaseClasses import Location
-from .data import lname, iname
-from .options import CV64Options, SubWeaponShuffle, DraculasCondition, RenonFightCondition, VincentFightCondition
+from typing import Dict, List, Optional, Tuple, Union
 
-from typing import Dict, Optional, Union, List, Tuple
+from BaseClasses import Location
+
+from .data import iname, lname
+from .options import CV64Options, DraculasCondition, RenonFightCondition, SubWeaponShuffle, VincentFightCondition
 
 base_id = 0xC64000
 

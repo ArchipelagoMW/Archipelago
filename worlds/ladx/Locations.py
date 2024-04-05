@@ -1,11 +1,9 @@
-from BaseClasses import Region, Entrance, Location, CollectionState
-
-
-from .LADXR.checkMetadata import checkMetadataTable
-from .Common import *
+from BaseClasses import CollectionState, Entrance, Location, Region
 from worlds.generic.Rules import add_item_rule
-from .Items import ladxr_item_to_la_item_name
 
+from .Common import *
+from .Items import ladxr_item_to_la_item_name
+from .LADXR.checkMetadata import checkMetadataTable
 
 prefilled_events = ["ANGLER_KEYHOLE", "RAFT", "MEDICINE2", "CASTLE_BUTTON"]
 

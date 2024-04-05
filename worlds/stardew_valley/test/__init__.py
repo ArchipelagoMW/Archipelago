@@ -2,18 +2,20 @@ import os
 import unittest
 from argparse import Namespace
 from contextlib import contextmanager
-from typing import Dict, ClassVar, Iterable, Hashable, Tuple, Optional, List, Union, Any
+from test.bases import WorldTestBase
+from test.general import gen_steps
+from test.general import setup_solo_multiworld as setup_base_solo_multiworld
+from typing import Any, ClassVar, Dict, Hashable, Iterable, List, Optional, Tuple, Union
 
-from BaseClasses import MultiWorld, CollectionState, get_seed, Location
+from BaseClasses import CollectionState, Location, MultiWorld, get_seed
 from Options import VerifyKeys
 from Utils import cache_argsless
-from test.bases import WorldTestBase
-from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
 from worlds.AutoWorld import call_all
-from .assertion import RuleAssertMixin
+
 from .. import StardewValleyWorld, options
 from ..mods.mod_data import all_mods
-from ..options import StardewValleyOptions, StardewValleyOption
+from ..options import StardewValleyOption, StardewValleyOptions
+from .assertion import RuleAssertMixin
 
 DEFAULT_TEST_SEED = get_seed()
 
@@ -255,7 +257,7 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
 
         super().world_setup(seed=self.seed)
         if self.constructed:
-            self.world = self.multiworld.worlds[self.player]  # noqa
+            self.world = self.multiworld.worlds[self.player]
 
     @property
     def run_default_tests(self) -> bool:
@@ -289,7 +291,7 @@ pre_generated_worlds = {}
 # Mostly a copy of test.general.setup_solo_multiworld, I just don't want to change the core.
 def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOption], str]] = None,
                           seed=DEFAULT_TEST_SEED,
-                          _cache: Dict[Hashable, MultiWorld] = {},  # noqa
+                          _cache: Dict[Hashable, MultiWorld] = {},
                           _steps=gen_steps) -> MultiWorld:
     test_options = parse_class_option_keys(test_options)
 

@@ -1,12 +1,13 @@
 from random import Random
-from typing import Iterable, Dict, Protocol, List, Tuple, Set
+from typing import Dict, Iterable, List, Protocol, Set, Tuple
 
-from BaseClasses import Region, Entrance
-from .options import EntranceRandomization, ExcludeGingerIsland, Museumsanity, StardewValleyOptions
+from BaseClasses import Entrance, Region
+
+from .mods.mod_regions import ModDataList, vanilla_connections_to_remove_by_mod
+from .options import EntranceRandomization, ExcludeGingerIsland, StardewValleyOptions
+from .region_classes import ConnectionData, ModificationFlag, RandomizationFlag, RegionData
 from .strings.entrance_names import Entrance
 from .strings.region_names import Region
-from .region_classes import RegionData, ConnectionData, RandomizationFlag, ModificationFlag
-from .mods.mod_regions import ModDataList, vanilla_connections_to_remove_by_mod
 
 
 class RegionFactory(Protocol):

@@ -6,13 +6,14 @@ import multiprocessing
 import threading
 import time
 import typing
+from datetime import datetime, timedelta
 from uuid import UUID
-from datetime import timedelta, datetime
 
-from pony.orm import db_session, select, commit
+from pony.orm import commit, db_session, select
 
 from Utils import restricted_loads
-from .locker import Locker, AlreadyRunningException
+
+from .locker import AlreadyRunningException, Locker
 
 
 def launch_room(room: Room, config: dict):
@@ -131,7 +132,7 @@ def autogen(config: dict):
 multiworlds: typing.Dict[type(Room.id), MultiworldInstance] = {}
 
 
-class MultiworldInstance():
+class MultiworldInstance:
     def __init__(self, room: Room, config: dict):
         self.room_id = room.id
         self.process: typing.Optional[multiprocessing.Process] = None
@@ -202,6 +203,6 @@ def run_guardian():
             guardian = threading.Thread(name="Guardian", target=guard)
 
 
-from .models import Room, Generation, STATE_QUEUED, STATE_STARTED, STATE_ERROR, db, Seed, Slot
-from .customserver import run_server_process, get_static_server_data
+from .customserver import get_static_server_data, run_server_process
 from .generate import gen_game
+from .models import STATE_ERROR, STATE_QUEUED, STATE_STARTED, Generation, Room, Seed, Slot, db

@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, Set, Optional, List
+from typing import Dict, List, NamedTuple, Optional, Set
 
 
 class TunicLocationData(NamedTuple):

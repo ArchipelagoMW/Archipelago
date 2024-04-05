@@ -1,7 +1,9 @@
-from typing import Dict, Union, List
+from typing import Dict, List, Union
+
+from schema import And, Optional, Or, Schema
+
 from BaseClasses import MultiWorld
-from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Option, OptionDict, OptionList
-from schema import Schema, And, Optional, Or
+from Options import Choice, DeathLink, DefaultOnToggle, Option, OptionDict, OptionList, Range, Toggle
 
 
 class StartWithJewelryBox(Toggle):
@@ -90,85 +92,85 @@ class DamageRandoOverrides(OptionDict):
     """Manual +/-/normal odds for an orb. Put 0 if you don't want a certain nerf or buff to be a possibility. Orbs that
     you don't specify will roll with 1/1/1 as odds"""
     schema = Schema({
-        Optional("Blue"): { 
-            "MinusOdds": And(int, lambda n: n >= 0), 
-            "NormalOdds": And(int, lambda n: n >= 0), 
-            "PlusOdds": And(int, lambda n: n >= 0) 
+        Optional("Blue"): {
+            "MinusOdds": And(int, lambda n: n >= 0),
+            "NormalOdds": And(int, lambda n: n >= 0),
+            "PlusOdds": And(int, lambda n: n >= 0)
         },
-        Optional("Blade"): { 
-            "MinusOdds": And(int, lambda n: n >= 0), 
-            "NormalOdds": And(int, lambda n: n >= 0), 
-            "PlusOdds": And(int, lambda n: n >= 0) 
+        Optional("Blade"): {
+            "MinusOdds": And(int, lambda n: n >= 0),
+            "NormalOdds": And(int, lambda n: n >= 0),
+            "PlusOdds": And(int, lambda n: n >= 0)
         },
-        Optional("Fire"): { 
-            "MinusOdds": And(int, lambda n: n >= 0), 
-            "NormalOdds": And(int, lambda n: n >= 0), 
-            "PlusOdds": And(int, lambda n: n >= 0) 
+        Optional("Fire"): {
+            "MinusOdds": And(int, lambda n: n >= 0),
+            "NormalOdds": And(int, lambda n: n >= 0),
+            "PlusOdds": And(int, lambda n: n >= 0)
         },
-        Optional("Plasma"): { 
-            "MinusOdds": And(int, lambda n: n >= 0), 
-            "NormalOdds": And(int, lambda n: n >= 0), 
-            "PlusOdds": And(int, lambda n: n >= 0) 
+        Optional("Plasma"): {
+            "MinusOdds": And(int, lambda n: n >= 0),
+            "NormalOdds": And(int, lambda n: n >= 0),
+            "PlusOdds": And(int, lambda n: n >= 0)
         },
-        Optional("Iron"): { 
-            "MinusOdds": And(int, lambda n: n >= 0), 
-            "NormalOdds": And(int, lambda n: n >= 0), 
-            "PlusOdds": And(int, lambda n: n >= 0) 
+        Optional("Iron"): {
+            "MinusOdds": And(int, lambda n: n >= 0),
+            "NormalOdds": And(int, lambda n: n >= 0),
+            "PlusOdds": And(int, lambda n: n >= 0)
         },
-        Optional("Ice"): { 
-            "MinusOdds": And(int, lambda n: n >= 0), 
-            "NormalOdds": And(int, lambda n: n >= 0), 
-            "PlusOdds": And(int, lambda n: n >= 0) 
+        Optional("Ice"): {
+            "MinusOdds": And(int, lambda n: n >= 0),
+            "NormalOdds": And(int, lambda n: n >= 0),
+            "PlusOdds": And(int, lambda n: n >= 0)
         },
-        Optional("Wind"): { 
-            "MinusOdds": And(int, lambda n: n >= 0), 
-            "NormalOdds": And(int, lambda n: n >= 0), 
-            "PlusOdds": And(int, lambda n: n >= 0) 
+        Optional("Wind"): {
+            "MinusOdds": And(int, lambda n: n >= 0),
+            "NormalOdds": And(int, lambda n: n >= 0),
+            "PlusOdds": And(int, lambda n: n >= 0)
         },
-        Optional("Gun"): { 
-            "MinusOdds": And(int, lambda n: n >= 0), 
-            "NormalOdds": And(int, lambda n: n >= 0), 
-            "PlusOdds": And(int, lambda n: n >= 0) 
+        Optional("Gun"): {
+            "MinusOdds": And(int, lambda n: n >= 0),
+            "NormalOdds": And(int, lambda n: n >= 0),
+            "PlusOdds": And(int, lambda n: n >= 0)
         },
-        Optional("Umbra"): { 
-            "MinusOdds": And(int, lambda n: n >= 0), 
-            "NormalOdds": And(int, lambda n: n >= 0), 
-            "PlusOdds": And(int, lambda n: n >= 0) 
+        Optional("Umbra"): {
+            "MinusOdds": And(int, lambda n: n >= 0),
+            "NormalOdds": And(int, lambda n: n >= 0),
+            "PlusOdds": And(int, lambda n: n >= 0)
         },
-        Optional("Empire"): { 
-            "MinusOdds": And(int, lambda n: n >= 0), 
-            "NormalOdds": And(int, lambda n: n >= 0), 
-            "PlusOdds": And(int, lambda n: n >= 0) 
+        Optional("Empire"): {
+            "MinusOdds": And(int, lambda n: n >= 0),
+            "NormalOdds": And(int, lambda n: n >= 0),
+            "PlusOdds": And(int, lambda n: n >= 0)
         },
-        Optional("Eye"): { 
-            "MinusOdds": And(int, lambda n: n >= 0), 
-            "NormalOdds": And(int, lambda n: n >= 0), 
-            "PlusOdds": And(int, lambda n: n >= 0) 
+        Optional("Eye"): {
+            "MinusOdds": And(int, lambda n: n >= 0),
+            "NormalOdds": And(int, lambda n: n >= 0),
+            "PlusOdds": And(int, lambda n: n >= 0)
         },
-        Optional("Blood"): { 
-            "MinusOdds": And(int, lambda n: n >= 0), 
-            "NormalOdds": And(int, lambda n: n >= 0), 
-            "PlusOdds": And(int, lambda n: n >= 0) 
+        Optional("Blood"): {
+            "MinusOdds": And(int, lambda n: n >= 0),
+            "NormalOdds": And(int, lambda n: n >= 0),
+            "PlusOdds": And(int, lambda n: n >= 0)
         },
-        Optional("ForbiddenTome"): { 
-            "MinusOdds": And(int, lambda n: n >= 0), 
-            "NormalOdds": And(int, lambda n: n >= 0), 
-            "PlusOdds": And(int, lambda n: n >= 0) 
+        Optional("ForbiddenTome"): {
+            "MinusOdds": And(int, lambda n: n >= 0),
+            "NormalOdds": And(int, lambda n: n >= 0),
+            "PlusOdds": And(int, lambda n: n >= 0)
         },
-        Optional("Shattered"): { 
-            "MinusOdds": And(int, lambda n: n >= 0), 
-            "NormalOdds": And(int, lambda n: n >= 0), 
-            "PlusOdds": And(int, lambda n: n >= 0) 
+        Optional("Shattered"): {
+            "MinusOdds": And(int, lambda n: n >= 0),
+            "NormalOdds": And(int, lambda n: n >= 0),
+            "PlusOdds": And(int, lambda n: n >= 0)
         },
-        Optional("Nether"): { 
-            "MinusOdds": And(int, lambda n: n >= 0), 
-            "NormalOdds": And(int, lambda n: n >= 0), 
-            "PlusOdds": And(int, lambda n: n >= 0) 
+        Optional("Nether"): {
+            "MinusOdds": And(int, lambda n: n >= 0),
+            "NormalOdds": And(int, lambda n: n >= 0),
+            "PlusOdds": And(int, lambda n: n >= 0)
         },
-        Optional("Radiant"): { 
-            "MinusOdds": And(int, lambda n: n >= 0), 
-            "NormalOdds": And(int, lambda n: n >= 0), 
-            "PlusOdds": And(int, lambda n: n >= 0) 
+        Optional("Radiant"): {
+            "MinusOdds": And(int, lambda n: n >= 0),
+            "NormalOdds": And(int, lambda n: n >= 0),
+            "PlusOdds": And(int, lambda n: n >= 0)
         },
     })
     display_name = "Damage Rando Overrides"
@@ -214,7 +216,7 @@ class ExtraEarringsXP(Range):
     range_start = 0
     range_end = 24
     default = 0
-    
+
 
 class BossHealing(DefaultOnToggle):
     "Enables/disables healing after boss fights. NOTE: Currently only applicable when Boss Rando is enabled."

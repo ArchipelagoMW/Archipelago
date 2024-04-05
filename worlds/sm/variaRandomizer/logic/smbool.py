@@ -6,7 +6,7 @@ def flatten(l):
 
 # super metroid boolean
 class SMBool:
-    __slots__ = ('bool', 'difficulty', '_knows', '_items')
+    __slots__ = ("bool", "difficulty", "_knows", "_items")
     def __init__(self, boolean, difficulty=0, knows=[], items=[]):
         self.bool = boolean
         self.difficulty = difficulty
@@ -33,7 +33,7 @@ class SMBool:
 
     def __repr__(self):
         # to display the smbool as a string
-        return 'SMBool({}, {}, {}, {})'.format(self.bool, self.difficulty, sorted(self.knows), sorted(self.items))
+        return f"SMBool({self.bool}, {self.difficulty}, {sorted(self.knows)}, {sorted(self.items)})"
 
     def __getitem__(self, index):
         # to acces the smbool as [0] for the bool and [1] for the difficulty.
@@ -68,7 +68,7 @@ class SMBool:
 
     def json(self):
         # as we have slots instead of dict
-        return {'bool': self.bool, 'difficulty': self.difficulty, 'knows': self.knows, 'items': self.items}
+        return {"bool": self.bool, "difficulty": self.difficulty, "knows": self.knows, "items": self.items}
 
     def wand(*args):
         # looping here is faster than using "if ... in" construct

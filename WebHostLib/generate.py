@@ -17,8 +17,9 @@ from Main import main as ERmain
 from Utils import __version__
 from WebHostLib import app
 from worlds.alttp.EntranceRandomizer import parse_arguments
+
 from .check import get_yaml_data, roll_options
-from .models import Generation, STATE_ERROR, STATE_QUEUED, Seed, UUID
+from .models import STATE_ERROR, STATE_QUEUED, UUID, Generation, Seed
 from .upload import upload_zip_to_db
 
 
@@ -56,15 +57,15 @@ def get_meta(options_source: dict, race: bool = False) -> Dict[str, Union[List[s
     }
 
 
-@app.route('/generate', methods=['GET', 'POST'])
-@app.route('/generate/<race>', methods=['GET', 'POST'])
+@app.route("/generate", methods=["GET", "POST"])
+@app.route("/generate/<race>", methods=["GET", "POST"])
 def generate(race=False):
-    if request.method == 'POST':
+    if request.method == "POST":
         # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
+        if "file" not in request.files:
+            flash("No file part")
         else:
-            files = request.files.getlist('file')
+            files = request.files.getlist("file")
             options = get_yaml_data(files)
             if isinstance(options, str):
                 flash(options)
@@ -120,7 +121,7 @@ def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=Non
 
         seedname = "W" + (f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits))
 
-        erargs = parse_arguments(['--multi', str(playercount)])
+        erargs = parse_arguments(["--multi", str(playercount)])
         erargs.seed = seed
         erargs.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwritten in mystery
         erargs.spoiler = meta["generator_options"].get("spoiler", 0)
@@ -180,7 +181,7 @@ def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=Non
         raise
 
 
-@app.route('/wait/<suuid:seed>')
+@app.route("/wait/<suuid:seed>")
 def wait_seed(seed: UUID):
     seed_id = seed
     seed = Seed.get(id=seed_id)

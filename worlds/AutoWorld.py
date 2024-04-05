@@ -8,17 +8,33 @@ import re
 import sys
 import time
 from dataclasses import make_dataclass
-from typing import (Any, Callable, ClassVar, Dict, FrozenSet, List, Mapping,
-                    Optional, Set, TextIO, Tuple, TYPE_CHECKING, Type, Union)
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    ClassVar,
+    Dict,
+    FrozenSet,
+    List,
+    Mapping,
+    Optional,
+    Set,
+    TextIO,
+    Tuple,
+    Type,
+    Union,
+)
 
-from Options import PerGameCommonOptions
 from BaseClasses import CollectionState
+from Options import PerGameCommonOptions
 
 if TYPE_CHECKING:
     import random
-    from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance
-    from . import GamesPackage
+
+    from BaseClasses import Entrance, Item, Location, MultiWorld, Region, Tutorial
     from settings import Group
+
+    from . import GamesPackage
 
 perf_logger = logging.getLogger("performance")
 
@@ -119,7 +135,7 @@ class AutoLogicRegister(type):
 
 
 def _timed_call(method: Callable[..., Any], *args: Any,
-                multiworld: Optional["MultiWorld"] = None, player: Optional[int] = None) -> Any:
+                multiworld: Optional[MultiWorld] = None, player: Optional[int] = None) -> Any:
     start = time.perf_counter()
     ret = method(*args)
     taken = time.perf_counter() - start
@@ -132,7 +148,7 @@ def _timed_call(method: Callable[..., Any], *args: Any,
     return ret
 
 
-def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: Any) -> Any:
+def call_single(multiworld: MultiWorld, method_name: str, player: int, *args: Any) -> Any:
     method = getattr(multiworld.worlds[player], method_name)
     try:
         ret = _timed_call(method, *args, multiworld=multiworld, player=player)
@@ -147,7 +163,7 @@ def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: 
         return ret
 
 
-def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
+def call_all(multiworld: MultiWorld, method_name: str, *args: Any) -> None:
     world_types: Set[AutoWorldRegister] = set()
     for player in multiworld.player_ids:
         prev_item_count = len(multiworld.itempool)
@@ -158,13 +174,13 @@ def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
             for i, item in enumerate(new_items):
                 for other in new_items[i+1:]:
                     assert item is not other, (
-                        f"Duplicate item reference of \"{item.name}\" in \"{multiworld.worlds[player].game}\" "
-                        f"of player \"{multiworld.player_name[player]}\". Please make a copy instead.")
+                        f'Duplicate item reference of "{item.name}" in "{multiworld.worlds[player].game}" '
+                        f'of player "{multiworld.player_name[player]}". Please make a copy instead.')
 
     call_stage(multiworld, method_name, *args)
 
 
-def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
+def call_stage(multiworld: MultiWorld, method_name: str, *args: Any) -> None:
     world_types = {multiworld.worlds[player].__class__ for player in multiworld.player_ids}
     for world_type in sorted(world_types, key=lambda world: world.__name__):
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
@@ -178,10 +194,10 @@ class WebWorld:
     options_page: Union[bool, str] = True
     """display a settings page. Can be a link to a specific page or external tool."""
 
-    game_info_languages: List[str] = ['en']
+    game_info_languages: List[str] = ["en"]
     """docs folder will be scanned for game info pages using this list in the format '{language}_{game_name}.md'"""
 
-    tutorials: List["Tutorial"]
+    tutorials: List[Tutorial]
     """docs folder will also be scanned for tutorial guides. Each Tutorial class is to be used for one guide."""
 
     theme = "grass"
@@ -268,7 +284,7 @@ class World(metaclass=AutoWorldRegister):
     web: ClassVar[WebWorld] = WebWorld()
     """see WebWorld for options"""
 
-    multiworld: "MultiWorld"
+    multiworld: MultiWorld
     """autoset on creation. The MultiWorld object for the currently generating multiworld."""
     player: int
     """autoset on creation. The player number for this World"""
@@ -288,7 +304,7 @@ class World(metaclass=AutoWorldRegister):
 
     settings_key: ClassVar[str]
     """name of the section in host.yaml for world-specific settings, will default to {folder}_options"""
-    settings: ClassVar[Optional["Group"]]
+    settings: ClassVar[Optional[Group]]
     """loaded settings from host.yaml"""
 
     zip_path: ClassVar[Optional[pathlib.Path]] = None
@@ -296,7 +312,7 @@ class World(metaclass=AutoWorldRegister):
     __file__: ClassVar[str]
     """path it was loaded from"""
 
-    def __init__(self, multiworld: "MultiWorld", player: int):
+    def __init__(self, multiworld: MultiWorld, player: int):
         assert multiworld is not None
         self.multiworld = multiworld
         self.player = player
@@ -314,7 +330,7 @@ class World(metaclass=AutoWorldRegister):
     # An example of this can be found in alttp as stage_pre_fill
 
     @classmethod
-    def stage_assert_generate(cls, multiworld: "MultiWorld") -> None:
+    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
         """
         Checks that a game is capable of generating, such as checking for some base file like a ROM.
         This gets called once per present world type. Not run for unittests since they don't produce output.
@@ -355,10 +371,10 @@ class World(metaclass=AutoWorldRegister):
         pass
 
     def fill_hook(self,
-                  progitempool: List["Item"],
-                  usefulitempool: List["Item"],
-                  filleritempool: List["Item"],
-                  fill_locations: List["Location"]) -> None:
+                  progitempool: List[Item],
+                  usefulitempool: List[Item],
+                  filleritempool: List[Item],
+                  fill_locations: List[Location]) -> None:
         """Special method that gets called as part of distribute_items_restrictive (main fill)."""
         pass
 
@@ -424,7 +440,7 @@ class World(metaclass=AutoWorldRegister):
 
     # end of ordered Main.py calls
 
-    def create_item(self, name: str) -> "Item":
+    def create_item(self, name: str) -> Item:
         """
         Create an item for this world type and player.
         Warning: this may be called with self.world = None, for example by MultiServer
@@ -437,7 +453,7 @@ class World(metaclass=AutoWorldRegister):
         return self.multiworld.random.choice(tuple(self.item_name_to_id.keys()))
 
     @classmethod
-    def create_group(cls, multiworld: "MultiWorld", new_player_id: int, players: Set[int]) -> World:
+    def create_group(cls, multiworld: MultiWorld, new_player_id: int, players: Set[int]) -> World:
         """
         Creates a group, which is an instance of World that is responsible for multiple others.
         An example case is ItemLinks creating these.
@@ -452,7 +468,7 @@ class World(metaclass=AutoWorldRegister):
         return group
 
     # decent place to implement progressive items, in most cases can stay as-is
-    def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:
+    def collect_item(self, state: CollectionState, item: Item, remove: bool = False) -> Optional[str]:
         """
         Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
         Collect None to skip item.
@@ -464,7 +480,7 @@ class World(metaclass=AutoWorldRegister):
             return item.name
         return None
 
-    def get_pre_fill_items(self) -> List["Item"]:
+    def get_pre_fill_items(self) -> List[Item]:
         """
         Used to return items that need to be collected when creating a fresh all_state, but don't exist in the
         multiworld itempool.
@@ -472,7 +488,7 @@ class World(metaclass=AutoWorldRegister):
         return []
 
     # these two methods can be extended for pseudo-items on state
-    def collect(self, state: "CollectionState", item: "Item") -> bool:
+    def collect(self, state: CollectionState, item: Item) -> bool:
         """Called when an item is collected in to state. Useful for things such as progressive items or currency."""
         name = self.collect_item(state, item)
         if name:
@@ -480,7 +496,7 @@ class World(metaclass=AutoWorldRegister):
             return True
         return False
 
-    def remove(self, state: "CollectionState", item: "Item") -> bool:
+    def remove(self, state: CollectionState, item: Item) -> bool:
         """Called when an item is removed from to state. Useful for things such as progressive items or currency."""
         name = self.collect_item(state, item, True)
         if name:
@@ -491,28 +507,28 @@ class World(metaclass=AutoWorldRegister):
         return False
 
     # following methods should not need to be overridden.
-    def create_filler(self) -> "Item":
+    def create_filler(self) -> Item:
         return self.create_item(self.get_filler_item_name())
 
     # convenience methods
-    def get_location(self, location_name: str) -> "Location":
+    def get_location(self, location_name: str) -> Location:
         return self.multiworld.get_location(location_name, self.player)
 
-    def get_entrance(self, entrance_name: str) -> "Entrance":
+    def get_entrance(self, entrance_name: str) -> Entrance:
         return self.multiworld.get_entrance(entrance_name, self.player)
 
-    def get_region(self, region_name: str) -> "Region":
+    def get_region(self, region_name: str) -> Region:
         return self.multiworld.get_region(region_name, self.player)
 
     @classmethod
-    def get_data_package_data(cls) -> "GamesPackage":
+    def get_data_package_data(cls) -> GamesPackage:
         sorted_item_name_groups = {
             name: sorted(cls.item_name_groups[name]) for name in sorted(cls.item_name_groups)
         }
         sorted_location_name_groups = {
             name: sorted(cls.location_name_groups[name]) for name in sorted(cls.location_name_groups)
         }
-        res: "GamesPackage" = {
+        res: GamesPackage = {
             # sorted alphabetically
             "item_name_groups": sorted_item_name_groups,
             "item_name_to_id": cls.item_name_to_id,
@@ -530,7 +546,7 @@ class LogicMixin(metaclass=AutoLogicRegister):
     pass
 
 
-def data_package_checksum(data: "GamesPackage") -> str:
+def data_package_checksum(data: GamesPackage) -> str:
     """Calculates the data package checksum for a game from a dict"""
     assert "checksum" not in data, "Checksum already in data"
     assert sorted(data) == list(data), "Data not ordered"
@@ -546,8 +562,8 @@ def _normalize_description(description):
     definitions without having it affect the rendered format.
     """
     # First, collapse the whitespace around newlines and the ends of the description.
-    description = re.sub(r' *\n *', '\n', description.strip())
+    description = re.sub(r" *\n *", "\n", description.strip())
     # Next, condense individual newlines into spaces.
-    description = re.sub(r'(?<!\n)\n(?!\n)', ' ', description)
+    description = re.sub(r"(?<!\n)\n(?!\n)", " ", description)
     return description
 

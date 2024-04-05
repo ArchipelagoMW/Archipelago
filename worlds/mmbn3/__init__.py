@@ -1,21 +1,27 @@
 import os
-import settings
-import typing
 import threading
+import typing
 
-from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, Entrance, \
-    LocationProgressType
-
+import settings
+from BaseClasses import Entrance, Item, ItemClassification, LocationProgressType, MultiWorld, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from .Rom import MMBN3DeltaPatch, LocalRom, get_base_rom_path
-from .Items import MMBN3Item, ItemData, item_table, all_items, item_frequencies, items_by_id, ItemType
-from .Locations import Location, MMBN3Location, all_locations, location_table, location_data_table, \
-    always_excluded_locations, jobs
-from .Options import MMBN3Options
-from .Regions import regions, RegionName
+from worlds.generic.Rules import add_item_rule
+
+from .Items import ItemData, ItemType, MMBN3Item, all_items, item_frequencies, item_table, items_by_id
+from .Locations import (
+    Location,
+    MMBN3Location,
+    all_locations,
+    always_excluded_locations,
+    jobs,
+    location_data_table,
+    location_table,
+)
 from .Names.ItemName import ItemName
 from .Names.LocationName import LocationName
-from worlds.generic.Rules import add_item_rule
+from .Options import MMBN3Options
+from .Regions import RegionName, regions
+from .Rom import LocalRom, MMBN3DeltaPatch, get_base_rom_path
 
 
 class MMBN3Settings(settings.Group):
@@ -59,7 +65,7 @@ class MMBN3World(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
-    
+
     excluded_locations: typing.List[str]
     item_frequencies: typing.Dict[str, int]
 
@@ -424,13 +430,13 @@ class MMBN3World(World):
                             else:
                                 item_name_text = "Garbage"
 
-                            if item.recipient == 'Myself':
+                            if item.recipient == "Myself":
                                 item_name_text = "Your " + item_name_text
                             else:
                                 item_name_text = item.recipient + "'s " + item_name_text
                         # Full item hinting
                         else:
-                            owners_name = "Your" if item.recipient == 'Myself' else item.recipient + "'s"
+                            owners_name = "Your" if item.recipient == "Myself" else item.recipient + "'s"
                             long_item_text = f"It's {owners_name} \n\"{item.itemName}\"!!"
 
                         rom.insert_hint_text(location_data, item_name_text, long_item_text)

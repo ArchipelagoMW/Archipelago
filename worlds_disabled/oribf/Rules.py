@@ -1,9 +1,9 @@
 from typing import Set
 
-from .RulesData import location_rules
+from BaseClasses import CollectionState, Location
 from worlds.generic.Rules import set_rule
-from BaseClasses import Location, CollectionState
 
+from .RulesData import location_rules
 
 # TODO: implement Mapstone counting, Open, OpenWorld, connection rules
 
@@ -43,9 +43,9 @@ def temp_base_rule(world, player):
 
 
 def base_rule(world, player):
-    if world.logic[player] != 'nologic':
+    if world.logic[player] != "nologic":
         # Victory gets placed on Escaped Horu Event
-        world.completion_condition[player] = lambda state: state.has('Victory', player)
+        world.completion_condition[player] = lambda state: state.has("Victory", player)
     # Events
     # Also add: can complete goal
     set_rule(world.get_location("Escaped Horu", player),

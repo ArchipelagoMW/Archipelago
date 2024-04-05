@@ -1,6 +1,7 @@
-import os
 import json
+import os
 import pkgutil
+
 
 def load_data_file(*args) -> dict:
     fname = os.path.join("data", *args)

@@ -1,7 +1,6 @@
 from typing import Union
 
-from ..mod_regions import SVERegion
-from ...logic.base_logic import BaseLogicMixin, BaseLogic
+from ...logic.base_logic import BaseLogic, BaseLogicMixin
 from ...logic.combat_logic import CombatLogicMixin
 from ...logic.cooking_logic import CookingLogicMixin
 from ...logic.has_logic import HasLogicMixin
@@ -13,13 +12,13 @@ from ...logic.relationship_logic import RelationshipLogicMixin
 from ...logic.season_logic import SeasonLogicMixin
 from ...logic.time_logic import TimeLogicMixin
 from ...logic.tool_logic import ToolLogicMixin
-from ...strings.ap_names.mods.mod_items import SVELocation, SVERunes, SVEQuestItem
-from ...strings.quest_names import Quest
+from ...stardew_rule import Or
+from ...strings.ap_names.mods.mod_items import SVELocation, SVEQuestItem, SVERunes
+from ...strings.quest_names import ModQuest, Quest
 from ...strings.region_names import Region
 from ...strings.tool_names import Tool, ToolMaterial
 from ...strings.wallet_item_names import Wallet
-from ...stardew_rule import Or
-from ...strings.quest_names import ModQuest
+from ..mod_regions import SVERegion
 
 
 class SVELogicMixin(BaseLogicMixin):

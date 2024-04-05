@@ -1,6 +1,6 @@
 from BaseClasses import CollectionState, ItemClassification
 from worlds.alttp.Dungeons import get_dungeon_item_pool
-from worlds.alttp.EntranceShuffle import mandatory_connections, connect_simple
+from worlds.alttp.EntranceShuffle import connect_simple, mandatory_connections
 from worlds.alttp.ItemPool import difficulties
 from worlds.alttp.Items import item_factory
 from worlds.alttp.Regions import create_regions
@@ -13,7 +13,7 @@ class TestDungeon(LTTPTestBase):
         self.world_setup()
         self.starting_regions = []  # Where to start exploring
         self.remove_exits = []      # Block dungeon exits
-        self.multiworld.difficulty_requirements[1] = difficulties['normal']
+        self.multiworld.difficulty_requirements[1] = difficulties["normal"]
         self.multiworld.bombless_start[1].value = True
         self.multiworld.shuffle_capacity_upgrades[1].value = True
         create_regions(self.multiworld, 1)
@@ -21,17 +21,17 @@ class TestDungeon(LTTPTestBase):
         create_shops(self.multiworld, 1)
         for exitname, regionname in mandatory_connections:
             connect_simple(self.multiworld, exitname, regionname, 1)
-        connect_simple(self.multiworld, 'Big Bomb Shop', 'Big Bomb Shop', 1)
-        self.multiworld.get_region('Menu', 1).exits = []
+        connect_simple(self.multiworld, "Big Bomb Shop", "Big Bomb Shop", 1)
+        self.multiworld.get_region("Menu", 1).exits = []
         self.multiworld.swamp_patch_required[1] = True
         self.world.set_rules()
         self.world.create_items()
         self.multiworld.itempool.extend(get_dungeon_item_pool(self.multiworld))
-        self.multiworld.itempool.extend(item_factory(['Green Pendant', 'Red Pendant', 'Blue Pendant', 'Beat Agahnim 1', 'Beat Agahnim 2', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 5', 'Crystal 6', 'Crystal 7'], self.world))
+        self.multiworld.itempool.extend(item_factory(["Green Pendant", "Red Pendant", "Blue Pendant", "Beat Agahnim 1", "Beat Agahnim 2", "Crystal 1", "Crystal 2", "Crystal 3", "Crystal 4", "Crystal 5", "Crystal 6", "Crystal 7"], self.world))
 
     def run_tests(self, access_pool):
         for exit in self.remove_exits:
-            self.multiworld.get_entrance(exit, 1).connected_region = self.multiworld.get_region('Menu', 1)
+            self.multiworld.get_entrance(exit, 1).connected_region = self.multiworld.get_region("Menu", 1)
 
         for location, access, *item_pool in access_pool:
             items = item_pool[0]
@@ -44,7 +44,7 @@ class TestDungeon(LTTPTestBase):
                 else:
                     items = item_factory(items, self.world)
                 state = CollectionState(self.multiworld)
-                state.reachable_regions[1].add(self.multiworld.get_region('Menu', 1))
+                state.reachable_regions[1].add(self.multiworld.get_region("Menu", 1))
                 for region_name in self.starting_regions:
                     region = self.multiworld.get_region(region_name, 1)
                     state.reachable_regions[1].add(region)

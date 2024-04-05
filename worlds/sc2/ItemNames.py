@@ -441,7 +441,7 @@ ROACH_RAVAGER_ASPECT                    = "Ravager Aspect (Roach)"
 INFESTED_MEDICS      = "Infested Medics"
 INFESTED_SIEGE_TANKS = "Infested Siege Tanks"
 INFESTED_BANSHEES    = "Infested Banshees"
-    
+
 # Kerrigan Upgrades
 KERRIGAN_KINETIC_BLAST           = "Kinetic Blast (Kerrigan Tier 1)"
 KERRIGAN_HEROIC_FORTITUDE        = "Heroic Fortitude (Kerrigan Tier 1)"

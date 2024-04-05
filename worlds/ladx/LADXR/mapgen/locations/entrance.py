@@ -1,8 +1,8 @@
-from ...locations.items import BOMB
-from .base import LocationBase
-from ...roomEditor import RoomEditor, Object, ObjectWarp
-from ...entranceInfo import ENTRANCE_INFO
 from ...assembler import ASM
+from ...entranceInfo import ENTRANCE_INFO
+from ...locations.items import BOMB
+from ...roomEditor import Object, ObjectWarp, RoomEditor
+from .base import LocationBase
 from .entrance_info import INFO
 
 

@@ -6,6 +6,7 @@ from BaseClasses import CollectionState, Location, MultiWorld
 from Fill import distribute_items_restrictive
 from Options import Accessibility
 from worlds.AutoWorld import AutoWorldRegister, call_all, call_single
+
 from ..general import gen_steps, setup_multiworld
 
 

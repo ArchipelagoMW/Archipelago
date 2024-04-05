@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
+
 from .datatypes import RoomAndDoor
 from .player_logic import AccessRequirements, LingoPlayerLogic, PlayerLocation
 from .static_logic import PROGRESSION_BY_ROOM, PROGRESSIVE_ITEMS

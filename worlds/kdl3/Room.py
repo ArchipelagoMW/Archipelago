@@ -1,6 +1,7 @@
 import struct
 import typing
-from BaseClasses import Region, ItemClassification
+
+from BaseClasses import ItemClassification, Region
 
 if typing.TYPE_CHECKING:
     from .Rom import RomData

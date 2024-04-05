@@ -1,17 +1,18 @@
 from typing import Union
 
 from Utils import cache_self1
-from .base_logic import BaseLogicMixin, BaseLogic
+
+from ..options import SpecialOrderLocations
+from ..stardew_rule import False_, HasProgressionPercent, StardewRule, True_
+from ..strings.ap_names.event_names import Event
+from ..strings.currency_names import Currency
+from ..strings.region_names import Region
+from .base_logic import BaseLogic, BaseLogicMixin
 from .buff_logic import BuffLogicMixin
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .time_logic import TimeLogicMixin
-from ..options import SpecialOrderLocations
-from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_
-from ..strings.ap_names.event_names import Event
-from ..strings.currency_names import Currency
-from ..strings.region_names import Region
 
 qi_gem_rewards = ("100 Qi Gems", "50 Qi Gems", "40 Qi Gems", "35 Qi Gems", "25 Qi Gems",
                   "20 Qi Gems", "15 Qi Gems", "10 Qi Gems")

@@ -1,7 +1,6 @@
 from .layout import Layout
 from .widget import Widget
 
-
 class TabbedPanel(Layout):
     pass
 

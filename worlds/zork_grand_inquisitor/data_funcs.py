@@ -1,9 +1,8 @@
 from typing import Dict, Set, Tuple, Union
 
 from .data.entrance_rule_data import entrance_rule_data
-from .data.item_data import item_data, ZorkGrandInquisitorItemData
-from .data.location_data import location_data, ZorkGrandInquisitorLocationData
-
+from .data.item_data import ZorkGrandInquisitorItemData, item_data
+from .data.location_data import ZorkGrandInquisitorLocationData, location_data
 from .enums import (
     ZorkGrandInquisitorEvents,
     ZorkGrandInquisitorGoals,
@@ -166,14 +165,14 @@ def location_access_rule_for(location: ZorkGrandInquisitorLocations, player: int
             ii: int
             sub_requirement: Union[ZorkGrandInquisitorEvents, ZorkGrandInquisitorItems]
             for ii, sub_requirement in enumerate(requirement):
-                lambda_string += f"state.has(\"{sub_requirement.value}\", {player})"
+                lambda_string += f'state.has("{sub_requirement.value}", {player})'
 
                 if ii < len(requirement) - 1:
                     lambda_string += " or "
 
             lambda_string += ")"
         else:
-            lambda_string += f"state.has(\"{requirement.value}\", {player})"
+            lambda_string += f'state.has("{requirement.value}", {player})'
 
         if i < len(data.requirements) - 1:
             lambda_string += " and "
@@ -232,9 +231,9 @@ def entrance_access_rule_for(
             ] = type(requirement)
 
             if requirement_type in (ZorkGrandInquisitorEvents, ZorkGrandInquisitorItems):
-                lambda_string += f"state.has(\"{requirement.value}\", {player})"
+                lambda_string += f'state.has("{requirement.value}", {player})'
             elif requirement_type == ZorkGrandInquisitorRegions:
-                lambda_string += f"state.can_reach(\"{requirement.value}\", \"Region\", {player})"
+                lambda_string += f'state.can_reach("{requirement.value}", "Region", {player})'
 
             if ii < len(requirement_group) - 1:
                 lambda_string += " and "

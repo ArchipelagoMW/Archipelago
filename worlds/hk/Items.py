@@ -1,5 +1,6 @@
-from typing import Dict, Set, NamedTuple
-from .ExtractedData import items, logic_items, item_effects
+from typing import Dict, NamedTuple, Set
+
+from .ExtractedData import item_effects, items, logic_items
 
 item_table = {}
 
@@ -19,7 +20,7 @@ lookup_type_to_names: Dict[str, Set[str]] = {}
 for item, item_data in item_table.items():
     lookup_type_to_names.setdefault(item_data.type, set()).add(item)
 
-directionals = ('', 'Left_', 'Right_')
+directionals = ("", "Left_", "Right_")
 item_name_groups = ({
     "BossEssence": lookup_type_to_names["DreamWarrior"] | lookup_type_to_names["DreamBoss"],
     "BossGeo": lookup_type_to_names["Boss_Geo"],
@@ -58,5 +59,5 @@ item_name_groups = ({
     "WhisperingRoots": lookup_type_to_names["Root"],
     "WhiteFragments": {"Queen_Fragment", "King_Fragment", "Void_Heart"},
 })
-item_name_groups['Horizontal'] = item_name_groups['Cloak'] | item_name_groups['CDash']
-item_name_groups['Vertical'] = item_name_groups['Claw'] | {'Monarch_Wings'}
+item_name_groups["Horizontal"] = item_name_groups["Cloak"] | item_name_groups["CDash"]
+item_name_groups["Vertical"] = item_name_groups["Claw"] | {"Monarch_Wings"}

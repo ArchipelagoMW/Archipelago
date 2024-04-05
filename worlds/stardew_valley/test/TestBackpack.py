@@ -1,5 +1,5 @@
-from . import SVTestBase
 from .. import options
+from . import SVTestBase
 
 
 class TestBackpackVanilla(SVTestBase):

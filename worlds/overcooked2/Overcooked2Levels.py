@@ -127,7 +127,7 @@ class Overcooked2GameWorld(IntEnum):
         return "World " + self.as_str
 
 
-class Overcooked2GenericLevel():
+class Overcooked2GenericLevel:
     dlc: Overcooked2Dlc
     level_id: int
 

@@ -1,6 +1,6 @@
-from .requirements import *
-from .location import Location
 from ..locations.all import *
+from .location import Location
+from .requirements import *
 
 
 class Dungeon5:
@@ -31,13 +31,13 @@ class Dungeon5:
         third_arena = Location(dungeon=5).connect(north_of_crossroads, AND(SWORD, BOMB)) # can beat 3rd m.stalfos
         stone_tablet = Location(dungeon=5).add(DungeonChest(0x183)).connect(north_of_crossroads, AND(POWER_BRACELET, r.attack_skeleton))  # stone tablet
         boss_key = Location(dungeon=5).add(DungeonChest(0x186)).connect(after_stalfos, AND(FLIPPERS, HOOKSHOT))  # nightmare key
-        before_boss = Location(dungeon=5).connect(after_keyblock_boss, HOOKSHOT) 
+        before_boss = Location(dungeon=5).connect(after_keyblock_boss, HOOKSHOT)
         boss = Location(dungeon=5).add(HeartContainer(0x185), Instrument(0x182)).connect(before_boss, AND(r.boss_requirements[world_setup.boss_mapping[4]], NIGHTMARE_KEY5))
 
         # When we can reach the stone tablet chest, we can also reach the final location of master stalfos
         m_stalfos_drop = Location(dungeon=5).add(HookshotDrop()).connect(third_arena, AND(FEATHER, SWORD, BOMB)) # can reach fourth arena from entrance with feather and sword
 
-        if options.logic == 'hard' or options.logic == 'glitched' or options.logic == 'hell':
+        if options.logic == "hard" or options.logic == "glitched" or options.logic == "hell":
             blade_trap_chest.connect(area2, AND(FEATHER, r.attack_hookshot_powder)) # jump past the blade traps
             boss_key.connect(after_stalfos, AND(FLIPPERS, FEATHER, PEGASUS_BOOTS)) # boots jump across
             after_stalfos.connect(after_keyblock_boss, AND(FEATHER, r.attack_hookshot_powder)) # circumvent stalfos by going past gohma and backwards from boss door
@@ -47,18 +47,18 @@ class Dungeon5:
             staircase_before_boss.connect(post_gohma, AND(PEGASUS_BOOTS, HOOKSHOT)) # boots bonk in 2d section to skip feather
             north_of_crossroads.connect(after_stalfos, HOOKSHOT) # hookshot to the right block to cross pits
             first_bridge_chest.connect(north_of_crossroads, FEATHER) # tight jump from bottom wall clipped to make it over the pits
-            after_keyblock_boss.connect(after_stalfos, AND(FEATHER, r.attack_hookshot_powder)) # jump from bottom left to top right, skipping the keyblock 
+            after_keyblock_boss.connect(after_stalfos, AND(FEATHER, r.attack_hookshot_powder)) # jump from bottom left to top right, skipping the keyblock
             before_boss.connect(after_stalfos, AND(FEATHER, PEGASUS_BOOTS, r.attack_hookshot_powder)) # cross pits room from bottom left to top left with boots jump
-            
-        if options.logic == 'glitched' or options.logic == 'hell':
+
+        if options.logic == "glitched" or options.logic == "hell":
             start_hookshot_chest.connect(entrance, FEATHER) # 1 pit buffer to clip bottom wall and jump across the pits
             post_gohma.connect(area2, HOOKSHOT) # glitch through the blocks/pots with hookshot. Zoomerang can be used but has no logical implications because of 2d section requiring hookshot
             north_bridge_chest.connect(north_of_crossroads, FEATHER) # 1 pit buffer to clip bottom wall and jump across the pits
             east_bridge_chest.connect(first_bridge_chest, FEATHER) # 1 pit buffer to clip bottom wall and jump across the pits
             #after_stalfos.connect(staircase_before_boss, AND(FEATHER, OR(SWORD, BOW, MAGIC_ROD))) # use the keyblock to get a wall clip in right wall to perform a superjump over the pushable block TODO: nagmessages
             after_stalfos.connect(staircase_before_boss, AND(PEGASUS_BOOTS, FEATHER, OR(SWORD, BOW, MAGIC_ROD))) # charge a boots dash in bottom right corner to the right, jump before hitting the wall and use weapon to the left side before hitting the wall
-         
-        if  options.logic == 'hell':
+
+        if  options.logic == "hell":
             start_hookshot_chest.connect(entrance, PEGASUS_BOOTS) # use pit buffer to clip into the bottom wall and boots bonk off the wall again
             fourth_stalfos_area.connect(compass, AND(PEGASUS_BOOTS, SWORD)) # do an incredibly hard boots bonk setup to get across the hanging platforms in the 2d section
             blade_trap_chest.connect(area2, AND(PEGASUS_BOOTS, r.attack_hookshot_powder)) # boots bonk + pit buffer past the blade traps
@@ -75,7 +75,7 @@ class Dungeon5:
             boss_key.connect(after_stalfos, FLIPPERS) # pit buffer across
             if butterfly_owl:
                 after_keyblock_boss.connect(butterfly_owl, STONE_BEAK5, one_way=True) # pit buffer from top right to bottom in right pits room
-            before_boss.connect(after_stalfos, AND(FEATHER, SWORD)) # cross pits room from bottom left to top left by unclipped superjump on bottom wall on top of side wall, then jump across            
+            before_boss.connect(after_stalfos, AND(FEATHER, SWORD)) # cross pits room from bottom left to top left by unclipped superjump on bottom wall on top of side wall, then jump across
 
         self.entrance = entrance
 

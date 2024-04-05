@@ -1,9 +1,10 @@
-from BaseClasses import Region, Entrance, Item, Tutorial, ItemClassification
+from BaseClasses import Entrance, Item, ItemClassification, Region, Tutorial
+
+from ..AutoWorld import WebWorld, World
 from .Items import ChecksFinderItem, item_table, required_items
 from .Locations import ChecksFinderAdvancement, advancement_table, exclusion_table
 from .Options import checksfinder_options
-from .Rules import set_rules, set_completion_rules
-from ..AutoWorld import World, WebWorld
+from .Rules import set_completion_rules, set_rules
 
 client_version = 7
 
@@ -37,12 +38,12 @@ class ChecksFinderWorld(World):
 
     def _get_checksfinder_data(self):
         return {
-            'world_seed': self.multiworld.per_slot_randoms[self.player].getrandbits(32),
-            'seed_name': self.multiworld.seed_name,
-            'player_name': self.multiworld.get_player_name(self.player),
-            'player_id': self.player,
-            'client_version': client_version,
-            'race': self.multiworld.is_race,
+            "world_seed": self.multiworld.per_slot_randoms[self.player].getrandbits(32),
+            "seed_name": self.multiworld.seed_name,
+            "player_name": self.multiworld.get_player_name(self.player),
+            "player_id": self.player,
+            "client_version": client_version,
+            "race": self.multiworld.is_race,
         }
 
     def create_items(self):

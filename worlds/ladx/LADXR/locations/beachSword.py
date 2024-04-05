@@ -1,9 +1,10 @@
+from typing import Optional
+
+from ..assembler import ASM
+from ..rom import ROM
+from ..roomEditor import RoomEditor
 from .droppedKey import DroppedKey
 from .items import *
-from ..roomEditor import RoomEditor
-from ..assembler import ASM
-from typing import Optional
-from ..rom import ROM
 
 
 class BeachSword(DroppedKey):

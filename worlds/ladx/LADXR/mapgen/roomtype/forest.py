@@ -1,6 +1,7 @@
-from .base import RoomType
-from ..tileset import open_tiles
 import random
+
+from ..tileset import open_tiles
+from .base import RoomType
 
 
 class Forest(RoomType):

@@ -7,7 +7,7 @@ class Plan:
         self.item_pool = {}
         item_group = {}
 
-        for line in open(filename, "rt"):
+        for line in open(filename):
             line = line.strip()
             if ";" in line:
                 line = line[:line.find(";")]

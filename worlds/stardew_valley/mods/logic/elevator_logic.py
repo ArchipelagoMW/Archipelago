@@ -1,4 +1,4 @@
-from ...logic.base_logic import BaseLogicMixin, BaseLogic
+from ...logic.base_logic import BaseLogic, BaseLogicMixin
 from ...logic.received_logic import ReceivedLogicMixin
 from ...mods.mod_data import ModNames
 from ...options import ElevatorProgression

@@ -1,4 +1,5 @@
-from BaseClasses import ItemClassification, CollectionState
+from BaseClasses import CollectionState, ItemClassification
+
 from . import MessengerTestBase
 
 

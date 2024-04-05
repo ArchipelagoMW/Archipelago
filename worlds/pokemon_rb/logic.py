@@ -85,9 +85,9 @@ def has_pokemon(state, count, player):
 
 
 def fossil_checks(state, count, player):
-    return (state.can_reach('Mt Moon B2F', 'Region', player) and
-            state.can_reach('Cinnabar Lab Fossil Room', 'Region', player) and
-            state.can_reach('Cinnabar Island', 'Region', player) and len(
+    return (state.can_reach("Mt Moon B2F", "Region", player) and
+            state.can_reach("Cinnabar Lab Fossil Room", "Region", player) and
+            state.can_reach("Cinnabar Island", "Region", player) and len(
         [item for item in ["Dome Fossil", "Helix Fossil", "Old Amber"] if state.has(item, player)]) >= count)
 
 

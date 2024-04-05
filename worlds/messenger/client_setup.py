@@ -7,12 +7,10 @@ from shutil import which
 from tkinter.messagebox import askyesnocancel
 from typing import Any, Optional
 from zipfile import ZipFile
-from Utils import open_file
 
 import requests
 
-from Utils import is_windows, messagebox, tuplize_version
-
+from Utils import is_windows, messagebox, open_file, tuplize_version
 
 MOD_URL = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases/latest"
 
@@ -45,12 +43,12 @@ def launch_game(url: Optional[str] = None) -> None:
         # can't use latest since courier uses pre-release tags
         courier_url = "https://api.github.com/repos/Brokemia/Courier/releases"
         latest_download = request_data(courier_url)[0]["assets"][-1]["browser_download_url"]
-    
+
         with urllib.request.urlopen(latest_download) as download:
             with ZipFile(io.BytesIO(download.read()), "r") as zf:
                 for member in zf.infolist():
                     zf.extract(member, path=game_folder)
-    
+
         os.chdir(game_folder)
         # linux and mac handling
         if not is_windows:
@@ -82,7 +80,7 @@ def launch_game(url: Optional[str] = None) -> None:
             os.chdir(working_directory)
             raise RuntimeError("Failed to install Courier")
         os.chdir(working_directory)
-    
+
         if courier_installed():
             messagebox("Success!", "Courier successfully installed!")
             return
@@ -116,8 +114,8 @@ def launch_game(url: Optional[str] = None) -> None:
         """Check if there's an available update"""
         latest_version = latest_version.lstrip("v")
         toml_path = os.path.join(game_folder, "Mods", "TheMessengerRandomizerAP", "courier.toml")
-        with open(toml_path, "r") as f:
-            installed_version = f.read().splitlines()[1].strip("version = \"")
+        with open(toml_path) as f:
+            installed_version = f.read().splitlines()[1].strip('version = "')
 
         logging.info(f"Installed version: {installed_version}. Latest version: {latest_version}")
         # one of the alpha builds

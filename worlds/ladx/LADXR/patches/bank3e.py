@@ -1,9 +1,9 @@
 import os
-import binascii
+import pkgutil
+
 from ..assembler import ASM
 from ..utils import formatText
 
-import pkgutil
 
 def hasBank3E(rom):
     return rom.banks[0x3E][0] != 0x00
@@ -15,7 +15,7 @@ def generate_name(l, i):
         name = f"player {i}"
     name = name[:16]
     assert(len(name) <= 16)
-    return 'db "' + name + '"' + ', $ff' * (17 - len(name)) + '\n'
+    return 'db "' + name + '"' + ", $ff" * (17 - len(name)) + "\n"
 
 
 # Bank $3E is used for large chunks of custom code.
@@ -219,10 +219,10 @@ LocalOnlyItemAndMessage:
     # 3E:3300-3616: Multiworld flags per room (for both chests and dropped keys)
     # 3E:3800-3B16: DroppedKey item types
     # 3E:3B16-3E2C: Owl statue or trade quest items
-    
+
     # Put 20 rupees in all owls by default.
     rom.patch(0x3E, 0x3B16, "00" * 0x316, "1C" * 0x316)
-   
+
 
     # Prevent the photo album from crashing due to serial interrupts
     rom.patch(0x28, 0x00D2, ASM("ld a, $09"), ASM("ld a, $01"))

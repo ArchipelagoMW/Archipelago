@@ -18,7 +18,7 @@ class AlreadyRunningException(Exception):
     pass
 
 
-if sys.platform == 'win32':
+if sys.platform == "win32":
     class Locker(CommonLocker):
         def __enter__(self):
             try:

@@ -1,16 +1,17 @@
-from .SubClasses import LTTPRegion
 from BaseClasses import CollectionState
+
+from .SubClasses import LTTPRegion
 
 
 def is_not_bunny(state: CollectionState, region: LTTPRegion, player: int) -> bool:
-    if state.has('Moon Pearl', player):
+    if state.has("Moon Pearl", player):
         return True
 
-    return region.is_light_world if state.multiworld.mode[player] != 'inverted' else region.is_dark_world
+    return region.is_light_world if state.multiworld.mode[player] != "inverted" else region.is_dark_world
 
 
 def can_bomb_clip(state: CollectionState, region: LTTPRegion, player: int) -> bool:
-    return can_use_bombs(state, player) and is_not_bunny(state, region, player) and state.has('Pegasus Boots', player)
+    return can_use_bombs(state, player) and is_not_bunny(state, region, player) and state.has("Pegasus Boots", player)
 
 
 def can_buy_unlimited(state: CollectionState, item: str, player: int) -> bool:
@@ -25,13 +26,13 @@ def can_buy(state: CollectionState, item: str, player: int) -> bool:
 
 def can_shoot_arrows(state: CollectionState, player: int) -> bool:
     if state.multiworld.retro_bow[player]:
-        return (state.has('Bow', player) or state.has('Silver Bow', player)) and can_buy(state, 'Single Arrow', player)
-    return state.has('Bow', player) or state.has('Silver Bow', player)
+        return (state.has("Bow", player) or state.has("Silver Bow", player)) and can_buy(state, "Single Arrow", player)
+    return state.has("Bow", player) or state.has("Silver Bow", player)
 
 
 def has_triforce_pieces(state: CollectionState, player: int) -> bool:
     count = state.multiworld.treasure_hunt_count[player]
-    return state.count('Triforce Piece', player) + state.count('Power Star', player) >= count
+    return state.count("Triforce Piece", player) + state.count("Power Star", player) >= count
 
 
 def has_crystals(state: CollectionState, count: int, player: int) -> bool:
@@ -40,11 +41,11 @@ def has_crystals(state: CollectionState, count: int, player: int) -> bool:
 
 
 def can_lift_rocks(state: CollectionState, player: int):
-    return state.has('Power Glove', player) or state.has('Titans Mitts', player)
+    return state.has("Power Glove", player) or state.has("Titans Mitts", player)
 
 
 def can_lift_heavy_rocks(state: CollectionState, player: int) -> bool:
-    return state.has('Titans Mitts', player)
+    return state.has("Titans Mitts", player)
 
 
 def bottle_count(state: CollectionState, player: int) -> int:
@@ -60,23 +61,23 @@ def has_hearts(state: CollectionState, player: int, count: int) -> int:
 def heart_count(state: CollectionState, player: int) -> int:
     # Warning: This only considers items that are marked as advancement items
     diff = state.multiworld.difficulty_requirements[player]
-    return min(state.count('Boss Heart Container', player), diff.boss_heart_container_limit) \
-            + state.count('Sanctuary Heart Container', player) \
-        + min(state.count('Piece of Heart', player), diff.heart_piece_limit) // 4 \
+    return min(state.count("Boss Heart Container", player), diff.boss_heart_container_limit) \
+            + state.count("Sanctuary Heart Container", player) \
+        + min(state.count("Piece of Heart", player), diff.heart_piece_limit) // 4 \
             + 3  # starting hearts
 
 
 def can_extend_magic(state: CollectionState, player: int, smallmagic: int = 16,
                         fullrefill: bool = False):  # This reflects the total magic Link has, not the total extra he has.
     basemagic = 8
-    if state.has('Magic Upgrade (1/4)', player):
+    if state.has("Magic Upgrade (1/4)", player):
         basemagic = 32
-    elif state.has('Magic Upgrade (1/2)', player):
+    elif state.has("Magic Upgrade (1/2)", player):
         basemagic = 16
-    if can_buy_unlimited(state, 'Green Potion', player) or can_buy_unlimited(state, 'Blue Potion', player):
-        if state.multiworld.item_functionality[player] == 'hard' and not fullrefill:
+    if can_buy_unlimited(state, "Green Potion", player) or can_buy_unlimited(state, "Blue Potion", player):
+        if state.multiworld.item_functionality[player] == "hard" and not fullrefill:
             basemagic = basemagic + int(basemagic * 0.5 * bottle_count(state, player))
-        elif state.multiworld.item_functionality[player] == 'expert' and not fullrefill:
+        elif state.multiworld.item_functionality[player] == "expert" and not fullrefill:
             basemagic = basemagic + int(basemagic * 0.25 * bottle_count(state, player))
         else:
             basemagic = basemagic + basemagic * bottle_count(state, player)
@@ -111,61 +112,61 @@ def can_kill_most_things(state: CollectionState, player: int, enemies: int = 5) 
         # I don't fully understand Enemizer's logic for placing enemies in spots where they need to be killable, if any.
         # Just go with maximal requirements for now.
         return (has_melee_weapon(state, player)
-                and state.has('Cane of Somaria', player)
-                and state.has('Cane of Byrna', player) and can_extend_magic(state, player)
+                and state.has("Cane of Somaria", player)
+                and state.has("Cane of Byrna", player) and can_extend_magic(state, player)
                 and can_shoot_arrows(state, player)
-                and state.has('Fire Rod', player)
+                and state.has("Fire Rod", player)
                 and can_use_bombs(state, player, enemies * 4))
     else:
         return (has_melee_weapon(state, player)
-                or state.has('Cane of Somaria', player)
-                or (state.has('Cane of Byrna', player) and (enemies < 6 or can_extend_magic(state, player)))
+                or state.has("Cane of Somaria", player)
+                or (state.has("Cane of Byrna", player) and (enemies < 6 or can_extend_magic(state, player)))
                 or can_shoot_arrows(state, player)
-                or state.has('Fire Rod', player)
+                or state.has("Fire Rod", player)
                 or (state.multiworld.enemy_health[player] in ("easy", "default")
                     and can_use_bombs(state, player, enemies * 4)))
 
 
 def can_get_good_bee(state: CollectionState, player: int) -> bool:
-    cave = state.multiworld.get_region('Good Bee Cave', player)
+    cave = state.multiworld.get_region("Good Bee Cave", player)
     return (
             state.has_group("Bottles", player) and
-            state.has('Bug Catching Net', player) and
-            (state.has('Pegasus Boots', player) or (has_sword(state, player) and state.has('Quake', player))) and
+            state.has("Bug Catching Net", player) and
+            (state.has("Pegasus Boots", player) or (has_sword(state, player) and state.has("Quake", player))) and
             cave.can_reach(state) and
             is_not_bunny(state, cave, player)
     )
 
 
 def can_retrieve_tablet(state: CollectionState, player: int) -> bool:
-    return state.has('Book of Mudora', player) and (has_beam_sword(state, player) or
+    return state.has("Book of Mudora", player) and (has_beam_sword(state, player) or
                                                     (state.multiworld.swordless[player] and
                                                     state.has("Hammer", player)))
 
 
 def has_sword(state: CollectionState, player: int) -> bool:
-    return state.has('Fighter Sword', player) \
-            or state.has('Master Sword', player) \
-            or state.has('Tempered Sword', player) \
-            or state.has('Golden Sword', player)
+    return state.has("Fighter Sword", player) \
+            or state.has("Master Sword", player) \
+            or state.has("Tempered Sword", player) \
+            or state.has("Golden Sword", player)
 
 
 def has_beam_sword(state: CollectionState, player: int) -> bool:
-    return state.has('Master Sword', player) or state.has('Tempered Sword', player) or state.has('Golden Sword',
+    return state.has("Master Sword", player) or state.has("Tempered Sword", player) or state.has("Golden Sword",
                                                                                                 player)
 
 
 def has_melee_weapon(state: CollectionState, player: int) -> bool:
-    return has_sword(state, player) or state.has('Hammer', player)
+    return has_sword(state, player) or state.has("Hammer", player)
 
 
 def has_fire_source(state: CollectionState, player: int) -> bool:
-    return state.has('Fire Rod', player) or state.has('Lamp', player)
+    return state.has("Fire Rod", player) or state.has("Lamp", player)
 
 
 def can_melt_things(state: CollectionState, player: int) -> bool:
-    return state.has('Fire Rod', player) or \
-            (state.has('Bombos', player) and
+    return state.has("Fire Rod", player) or \
+            (state.has("Bombos", player) and
             (state.multiworld.swordless[player] or
                 has_sword(state, player)))
 
@@ -178,19 +179,19 @@ def has_turtle_rock_medallion(state: CollectionState, player: int) -> bool:
 
 
 def can_boots_clip_lw(state: CollectionState, player: int) -> bool:
-    if state.multiworld.mode[player] == 'inverted':
-        return state.has('Pegasus Boots', player) and state.has('Moon Pearl', player)
-    return state.has('Pegasus Boots', player)
+    if state.multiworld.mode[player] == "inverted":
+        return state.has("Pegasus Boots", player) and state.has("Moon Pearl", player)
+    return state.has("Pegasus Boots", player)
 
 
 def can_boots_clip_dw(state: CollectionState, player: int) -> bool:
-    if state.multiworld.mode[player] != 'inverted':
-        return state.has('Pegasus Boots', player) and state.has('Moon Pearl', player)
-    return state.has('Pegasus Boots', player)
+    if state.multiworld.mode[player] != "inverted":
+        return state.has("Pegasus Boots", player) and state.has("Moon Pearl", player)
+    return state.has("Pegasus Boots", player)
 
 
 def can_get_glitched_speed_dw(state: CollectionState, player: int) -> bool:
-    rules = [state.has('Pegasus Boots', player), any([state.has('Hookshot', player), has_sword(state, player)])]
-    if state.multiworld.mode[player] != 'inverted':
-        rules.append(state.has('Moon Pearl', player))
+    rules = [state.has("Pegasus Boots", player), any([state.has("Hookshot", player), has_sword(state, player)])]
+    if state.multiworld.mode[player] != "inverted":
+        rules.append(state.has("Moon Pearl", player))
     return all(rules)

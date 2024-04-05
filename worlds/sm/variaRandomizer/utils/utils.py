@@ -1,14 +1,27 @@
 import io
-import os, json, re, random
+import json
+import os
 import pathlib
+import random
+import re
 import sys
-from typing import Any
 import zipfile
 
-from ..utils.parameters import Knows, Settings, Controller, isKnows, isSettings, isButton
-from ..utils.parameters import easy, medium, hard, harder, hardcore, mania, text2diff
 from ..logic.smbool import SMBool
-
+from ..utils.parameters import (
+    Controller,
+    Knows,
+    Settings,
+    easy,
+    hard,
+    hardcore,
+    harder,
+    isButton,
+    isKnows,
+    isSettings,
+    mania,
+    medium,
+)
 
 # support for AP world
 isAPWorld = ".apworld" in sys.modules[__name__].__file__
@@ -16,7 +29,7 @@ isAPWorld = ".apworld" in sys.modules[__name__].__file__
 def getZipFile():
     filename = sys.modules[__name__].__file__
     apworldExt = ".apworld"
-    zipPath = pathlib.Path(filename[:filename.index(apworldExt) + len(apworldExt)])    
+    zipPath = pathlib.Path(filename[:filename.index(apworldExt) + len(apworldExt)])
     return (zipfile.ZipFile(zipPath), zipPath.stem)
 
 def openFile(resource: str, mode: str = "r", encoding: None = None):
@@ -24,13 +37,13 @@ def openFile(resource: str, mode: str = "r", encoding: None = None):
         (zipFile, stem) = getZipFile()
         with zipFile as zf:
             zipFilePath = resource[resource.index(stem + "/"):]
-            if mode == 'rb':
-                return zf.open(zipFilePath, 'r')
+            if mode == "rb":
+                return zf.open(zipFilePath, "r")
             else:
                 return io.TextIOWrapper(zf.open(zipFilePath, mode), encoding)
     else:
         return open(resource, mode)
-    
+
 def listDir(resource: str):
     if isAPWorld:
         (zipFile, stem) = getZipFile()
@@ -40,8 +53,8 @@ def listDir(resource: str):
             files = [f.at[len(zipFilePath)+1:] for f in path.iterdir()]
             return files
     else:
-        return os.listdir(resource)    
-    
+        return os.listdir(resource)
+
 def exists(resource: str):
     if isAPWorld:
         (zipFile, stem) = getZipFile()
@@ -53,19 +66,19 @@ def exists(resource: str):
             else:
                 return False
     else:
-        return os.path.exists(resource)   
+        return os.path.exists(resource)
 
 def isStdPreset(preset):
-    return preset in ['newbie', 'casual', 'regular', 'veteran', 'expert', 'master', 'samus', 'solution', 'Season_Races', 'SMRAT2021', 'Torneio_SGPT3']
+    return preset in ["newbie", "casual", "regular", "veteran", "expert", "master", "samus", "solution", "Season_Races", "SMRAT2021", "Torneio_SGPT3"]
 
 def getPresetDir(preset) -> str:
     if isStdPreset(preset):
-        return 'worlds/sm/variaRandomizer/standard_presets'
+        return "worlds/sm/variaRandomizer/standard_presets"
     else:
-        return 'worlds/sm/variaRandomizer/community_presets'
+        return "worlds/sm/variaRandomizer/community_presets"
 
 def removeChars(string, toRemove):
-    return re.sub('[{}]+'.format(toRemove), '', string)
+    return re.sub(f"[{toRemove}]+", "", string)
 
 def range_union(ranges):
     ret = []
@@ -82,7 +95,7 @@ def normalizeRounding(n):
     # Normalizes rounding as Python 2 and Python 3 handing the rounding of halves (0.5, 1.5, etc) differently.
     # This normalizes rounding to be the same in both environments.
     if round(0.5) != 1 and n % 1 == .5 and not int(n) % 2:
-        return int((round(n) + (abs(n) / n) * 1))
+        return int(round(n) + (abs(n) / n) * 1)
     else:
         return int(round(n))
 
@@ -120,38 +133,38 @@ def chooseFromRange(rangeDict):
             return v
     return val
 
-class PresetLoader(object):
+class PresetLoader:
     @staticmethod
     def factory(params):
         # can be a json, a python file or a dict with the parameters
         if type(params) == str:
             ext = os.path.splitext(params)
-            if ext[1].lower() == '.json':
+            if ext[1].lower() == ".json":
                 return PresetLoaderJson(params)
             else:
-                raise Exception("PresetLoader: wrong parameters file type: {}".format(ext[1]))
+                raise Exception(f"PresetLoader: wrong parameters file type: {ext[1]}")
         elif type(params) is dict:
             return PresetLoaderDict(params)
         else:
-            raise Exception("wrong parameters input, is neither a string nor a json file name: {}::{}".format(params, type(params)))
+            raise Exception(f"wrong parameters input, is neither a string nor a json file name: {params}::{type(params)}")
 
     def __init__(self):
-        if 'Knows' not in self.params:
-            if 'knows' in self.params:     
-                self.params['Knows'] = self.params['knows']
+        if "Knows" not in self.params:
+            if "knows" in self.params:
+                self.params["Knows"] = self.params["knows"]
             else:
-                self.params['Knows'] = {}
-        if 'Settings' not in self.params:
-            if 'settings' in self.params:     
-                self.params['Settings'] = self.params['settings']
+                self.params["Knows"] = {}
+        if "Settings" not in self.params:
+            if "settings" in self.params:
+                self.params["Settings"] = self.params["settings"]
             else:
-                self.params['Settings'] = {}
-        if 'Controller' not in self.params:
-            if 'controller' in self.params:     
-                self.params['Controller'] = self.params['controller']
+                self.params["Settings"] = {}
+        if "Controller" not in self.params:
+            if "controller" in self.params:
+                self.params["Controller"] = self.params["controller"]
             else:
-                self.params['Controller'] = {}
-        self.params['score'] = self.computeScore()
+                self.params["Controller"] = {}
+        self.params["score"] = self.computeScore()
 
     def load(self, player):
         # update the parameters in the parameters classes: Knows, Settings
@@ -160,52 +173,52 @@ class PresetLoader(object):
         Controller.ControllerDict[player] = Controller()
 
         # Knows
-        for param in self.params['Knows']:
+        for param in self.params["Knows"]:
             if isKnows(param) and hasattr(Knows, param):
-                setattr(Knows.knowsDict[player], param, SMBool(  self.params['Knows'][param][0],
-                                                    self.params['Knows'][param][1],
-                                                    ['{}'.format(param)]))
+                setattr(Knows.knowsDict[player], param, SMBool(  self.params["Knows"][param][0],
+                                                    self.params["Knows"][param][1],
+                                                    [f"{param}"]))
         # Settings
         ## hard rooms
-        for hardRoom in ['X-Ray', 'Gauntlet']:
-            if hardRoom in self.params['Settings']:
-                Settings.SettingsDict[player].hardRooms[hardRoom] = Settings.hardRoomsPresets[hardRoom][self.params['Settings'][hardRoom]]
+        for hardRoom in ["X-Ray", "Gauntlet"]:
+            if hardRoom in self.params["Settings"]:
+                Settings.SettingsDict[player].hardRooms[hardRoom] = Settings.hardRoomsPresets[hardRoom][self.params["Settings"][hardRoom]]
 
         ## bosses
-        for boss in ['Kraid', 'Phantoon', 'Draygon', 'Ridley', 'MotherBrain']:
-            if boss in self.params['Settings']:
-                Settings.SettingsDict[player].bossesDifficulty[boss] = Settings.bossesDifficultyPresets[boss][self.params['Settings'][boss]]
+        for boss in ["Kraid", "Phantoon", "Draygon", "Ridley", "MotherBrain"]:
+            if boss in self.params["Settings"]:
+                Settings.SettingsDict[player].bossesDifficulty[boss] = Settings.bossesDifficultyPresets[boss][self.params["Settings"][boss]]
 
         ## hellruns
-        for hellRun in ['Ice', 'MainUpperNorfair', 'LowerNorfair']:
-            if hellRun in self.params['Settings']:
-                Settings.SettingsDict[player].hellRuns[hellRun] = Settings.hellRunPresets[hellRun][self.params['Settings'][hellRun]]
+        for hellRun in ["Ice", "MainUpperNorfair", "LowerNorfair"]:
+            if hellRun in self.params["Settings"]:
+                Settings.SettingsDict[player].hellRuns[hellRun] = Settings.hellRunPresets[hellRun][self.params["Settings"][hellRun]]
 
         # Controller
-        for button in self.params['Controller']:
+        for button in self.params["Controller"]:
             if isButton(button):
-                setattr(Controller.ControllerDict[player], button, self.params['Controller'][button])
+                setattr(Controller.ControllerDict[player], button, self.params["Controller"][button])
 
     def dump(self, fileName):
-        with open(fileName, 'w') as jsonFile:
+        with open(fileName, "w") as jsonFile:
             json.dump(self.params, jsonFile)
 
     def printToScreen(self):
-        print("self.params: {}".format(self.params))
+        print(f"self.params: {self.params}")
 
         print("loaded knows: ")
         for knows in Knows.__dict__:
             if isKnows(knows):
-                print("{}: {}".format(knows, Knows.__dict__[knows]))
+                print(f"{knows}: {Knows.__dict__[knows]}")
         print("loaded settings:")
         for setting in Settings.__dict__:
             if isSettings(setting):
-                print("{}: {}".format(setting, Settings.__dict__[setting]))
+                print(f"{setting}: {Settings.__dict__[setting]}")
         print("loaded controller:")
         for button in Controller.__dict__:
             if isButton(button):
-                print("{}: {}".format(button, Controller.__dict__[button]))
-        print("loaded score: {}".format(self.params['score']))
+                print(f"{button}: {Controller.__dict__[button]}")
+        print("loaded score: {}".format(self.params["score"]))
 
     def computeScore(self):
         # the more techniques you know and the smaller the difficulty of the techniques, the higher the score
@@ -220,47 +233,47 @@ class PresetLoader(object):
 
         boss2score = {
             "He's annoying": 1,
-            'A lot of trouble': 1,
+            "A lot of trouble": 1,
             "I'm scared!": 1,
             "It can get ugly": 1,
-            'Default': 2,
-            'Quick Kill': 3,
-            'Used to it': 3,
-            'Is this really the last boss?': 3,
-            'No problemo': 4,
-            'Piece of cake': 4,
-            'Nice cutscene bro': 4
+            "Default": 2,
+            "Quick Kill": 3,
+            "Used to it": 3,
+            "Is this really the last boss?": 3,
+            "No problemo": 4,
+            "Piece of cake": 4,
+            "Nice cutscene bro": 4
         }
 
         hellrun2score = {
-            'No thanks': 0,
-            'Solution': 0,
-            'Gimme energy': 2,
-            'Default': 4,
-            'Bring the heat': 6,
-            'I run RBO': 8
+            "No thanks": 0,
+            "Solution": 0,
+            "Gimme energy": 2,
+            "Default": 4,
+            "Bring the heat": 6,
+            "I run RBO": 8
         }
 
         hellrunLN2score = {
-            'Default': 0,
-            'Solution': 0,
-            'Bring the heat': 6,
-            'I run RBO': 12
+            "Default": 0,
+            "Solution": 0,
+            "Bring the heat": 6,
+            "I run RBO": 12
         }
 
         xray2score = {
-            'Aarghh': 0,
-            'Solution': 0,
+            "Aarghh": 0,
+            "Solution": 0,
             "I don't like spikes": 1,
-            'Default': 2,
+            "Default": 2,
             "I don't mind spikes": 3,
-            'D-Boost master': 4
+            "D-Boost master": 4
         }
 
         gauntlet2score = {
-            'Aarghh': 0,
+            "Aarghh": 0,
             "I don't like acid": 1,
-            'Default': 2
+            "Default": 2
         }
 
         score = 0
@@ -268,36 +281,36 @@ class PresetLoader(object):
         # knows
         for know in Knows.__dict__:
             if isKnows(know):
-                if know in self.params['Knows']:
-                    if self.params['Knows'][know][0] == True:
-                        score += diff2score[self.params['Knows'][know][1]]
+                if know in self.params["Knows"]:
+                    if self.params["Knows"][know][0] == True:
+                        score += diff2score[self.params["Knows"][know][1]]
                 else:
                     # if old preset with not all the knows, use default values for the know
                     if Knows.__dict__[know].bool == True:
                         score += diff2score[Knows.__dict__[know].difficulty]
 
         # hard rooms
-        hardRoom = 'X-Ray'
-        if hardRoom in self.params['Settings']:
-            score += xray2score[self.params['Settings'][hardRoom]]
+        hardRoom = "X-Ray"
+        if hardRoom in self.params["Settings"]:
+            score += xray2score[self.params["Settings"][hardRoom]]
 
-        hardRoom = 'Gauntlet'
-        if hardRoom in self.params['Settings']:
-            score += gauntlet2score[self.params['Settings'][hardRoom]]
+        hardRoom = "Gauntlet"
+        if hardRoom in self.params["Settings"]:
+            score += gauntlet2score[self.params["Settings"][hardRoom]]
 
         # bosses
-        for boss in ['Kraid', 'Phantoon', 'Draygon', 'Ridley', 'MotherBrain']:
-            if boss in self.params['Settings']:
-                score += boss2score[self.params['Settings'][boss]]
+        for boss in ["Kraid", "Phantoon", "Draygon", "Ridley", "MotherBrain"]:
+            if boss in self.params["Settings"]:
+                score += boss2score[self.params["Settings"][boss]]
 
         # hellruns
-        for hellRun in ['Ice', 'MainUpperNorfair']:
-            if hellRun in self.params['Settings']:
-                score += hellrun2score[self.params['Settings'][hellRun]]
+        for hellRun in ["Ice", "MainUpperNorfair"]:
+            if hellRun in self.params["Settings"]:
+                score += hellrun2score[self.params["Settings"][hellRun]]
 
-        hellRun = 'LowerNorfair'
-        if hellRun in self.params['Settings']:
-            score += hellrunLN2score[self.params['Settings'][hellRun]]
+        hellRun = "LowerNorfair"
+        if hellRun in self.params["Settings"]:
+            score += hellrunLN2score[self.params["Settings"][hellRun]]
 
         return score
 
@@ -318,16 +331,16 @@ def getDefaultMultiValues():
     from ..graph.graph_utils import GraphUtils
     from ..utils.objectives import Objectives
     defaultMultiValues = {
-        'startLocation': GraphUtils.getStartAccessPointNames(),
-        'majorsSplit': ['Full', 'FullWithHUD', 'Major', 'Chozo', 'Scavenger'],
-        'progressionSpeed': ['slowest', 'slow', 'medium', 'fast', 'fastest', 'basic', 'VARIAble', 'speedrun'],
-        'progressionDifficulty': ['easier', 'normal', 'harder'],
-        'morphPlacement': ['early', 'normal'], #['early', 'late', 'normal'],
-        'energyQty': ['ultra sparse', 'sparse', 'medium', 'vanilla'],
-        'gravityBehaviour': ['Vanilla', 'Balanced', 'Progressive'],
-        'areaRandomization': ['off', 'full', 'light'],
-        'objective': Objectives.getAllGoals(removeNothing=True),
-        'tourian': ['Vanilla', 'Fast', 'Disabled']
+        "startLocation": GraphUtils.getStartAccessPointNames(),
+        "majorsSplit": ["Full", "FullWithHUD", "Major", "Chozo", "Scavenger"],
+        "progressionSpeed": ["slowest", "slow", "medium", "fast", "fastest", "basic", "VARIAble", "speedrun"],
+        "progressionDifficulty": ["easier", "normal", "harder"],
+        "morphPlacement": ["early", "normal"], #['early', 'late', 'normal'],
+        "energyQty": ["ultra sparse", "sparse", "medium", "vanilla"],
+        "gravityBehaviour": ["Vanilla", "Balanced", "Progressive"],
+        "areaRandomization": ["off", "full", "light"],
+        "objective": Objectives.getAllGoals(removeNothing=True),
+        "tourian": ["Vanilla", "Fast", "Disabled"]
     }
     return defaultMultiValues
 
@@ -356,7 +369,7 @@ def convertParam(randoParams, param, inverse=False):
         return False if inverse == False else True
     elif value == "random":
         return "random"
-    raise Exception("invalid value for parameter {}".format(param))
+    raise Exception(f"invalid value for parameter {param}")
 
 def loadRandoPreset(world, player, args):
     defaultMultiValues = getDefaultMultiValues()
@@ -387,23 +400,23 @@ def loadRandoPreset(world, player, args):
     if world.fun_movement[player].value:
         args.superFun.append("Movement")
     if world.fun_suits[player].value:
-        args.superFun.append("Suits") 
+        args.superFun.append("Suits")
 
-    ipsPatches = {  "spin_jump_restart":"spinjumprestart", 
-                    "rando_speed":"rando_speed", 
+    ipsPatches = {  "spin_jump_restart":"spinjumprestart",
+                    "rando_speed":"rando_speed",
                     "elevators_speed":"elevators_speed",
                     "fast_doors":"fast_doors",
                     "refill_before_save":"refill_before_save",
                     "relaxed_round_robin_cf":"relaxed_round_robin_cf"}
     for settingName, patchName in ipsPatches.items():
         if hasattr(world, settingName) and getattr(world, settingName)[player].value:
-            args.patches.append(patchName + '.ips')
+            args.patches.append(patchName + ".ips")
 
     patches = {"no_music":"No_Music", "infinite_space_jump":"Infinite_Space_Jump"}
     for settingName, patchName in patches.items():
         if hasattr(world, settingName) and getattr(world, settingName)[player].value:
             args.patches.append(patchName)
-             
+
     args.hud = world.hud[player].value
     args.morphPlacement = defaultMultiValues["morphPlacement"][world.morph_placement[player].value]
     #args.majorsSplit
@@ -431,78 +444,78 @@ def getRandomizerDefaultParameters():
     defaultParams = {}
     defaultMultiValues = getDefaultMultiValues()
 
-    defaultParams['complexity'] = "simple"
-    defaultParams['preset'] = 'regular'
-    defaultParams['randoPreset'] = ""
-    defaultParams['raceMode'] = "off"
-    defaultParams['majorsSplit'] = "Full"
-    defaultParams['majorsSplitMultiSelect'] = defaultMultiValues['majorsSplit']
-    defaultParams['scavNumLocs'] = "10"
-    defaultParams['scavRandomized'] = "off"
-    defaultParams['startLocation'] = "Landing Site"
-    defaultParams['startLocationMultiSelect'] = defaultMultiValues['startLocation']
-    defaultParams['maxDifficulty'] = 'hardcore'
-    defaultParams['progressionSpeed'] = "medium"
-    defaultParams['progressionSpeedMultiSelect'] = defaultMultiValues['progressionSpeed']
-    defaultParams['progressionDifficulty'] = 'normal'
-    defaultParams['progressionDifficultyMultiSelect'] = defaultMultiValues['progressionDifficulty']
-    defaultParams['morphPlacement'] = "early"
-    defaultParams['morphPlacementMultiSelect'] = defaultMultiValues['morphPlacement']
-    defaultParams['suitsRestriction'] = "on"
-    defaultParams['hideItems'] = "off"
-    defaultParams['strictMinors'] = "off"
-    defaultParams['missileQty'] = "3"
-    defaultParams['superQty'] = "2"
-    defaultParams['powerBombQty'] = "1"
-    defaultParams['minorQty'] = "100"
-    defaultParams['energyQty'] = "vanilla"
-    defaultParams['energyQtyMultiSelect'] = defaultMultiValues['energyQty']
-    defaultParams['objectiveRandom'] = "off"
-    defaultParams['nbObjective'] = "4"
-    defaultParams['objective'] = ["kill all G4"]
-    defaultParams['objectiveMultiSelect'] = defaultMultiValues['objective']
-    defaultParams['tourian'] = "Vanilla"
-    defaultParams['areaRandomization'] = "off"
-    defaultParams['areaLayout'] = "off"
-    defaultParams['doorsColorsRando'] = "off"
-    defaultParams['allowGreyDoors'] = "off"
-    defaultParams['escapeRando'] = "off"
-    defaultParams['removeEscapeEnemies'] = "off"
-    defaultParams['bossRandomization'] = "off"
-    defaultParams['minimizer'] = "off"
-    defaultParams['minimizerQty'] = "45"
-    defaultParams['funCombat'] = "off"
-    defaultParams['funMovement'] = "off"
-    defaultParams['funSuits'] = "off"
-    defaultParams['layoutPatches'] = "on"
-    defaultParams['variaTweaks'] = "on"
-    defaultParams['gravityBehaviour'] = "Balanced"
-    defaultParams['gravityBehaviourMultiSelect'] = defaultMultiValues['gravityBehaviour']
-    defaultParams['nerfedCharge'] = "off"
-    defaultParams['relaxed_round_robin_cf'] = "off"
-    defaultParams['itemsounds'] = "on"
-    defaultParams['elevators_speed'] = "on"
-    defaultParams['fast_doors'] = "on"
-    defaultParams['spinjumprestart'] = "off"
-    defaultParams['rando_speed'] = "off"
-    defaultParams['Infinite_Space_Jump'] = "off"
-    defaultParams['refill_before_save'] = "off"
-    defaultParams['hud'] = "off"
-    defaultParams['animals'] = "off"
-    defaultParams['No_Music'] = "off"
-    defaultParams['random_music'] = "off"
+    defaultParams["complexity"] = "simple"
+    defaultParams["preset"] = "regular"
+    defaultParams["randoPreset"] = ""
+    defaultParams["raceMode"] = "off"
+    defaultParams["majorsSplit"] = "Full"
+    defaultParams["majorsSplitMultiSelect"] = defaultMultiValues["majorsSplit"]
+    defaultParams["scavNumLocs"] = "10"
+    defaultParams["scavRandomized"] = "off"
+    defaultParams["startLocation"] = "Landing Site"
+    defaultParams["startLocationMultiSelect"] = defaultMultiValues["startLocation"]
+    defaultParams["maxDifficulty"] = "hardcore"
+    defaultParams["progressionSpeed"] = "medium"
+    defaultParams["progressionSpeedMultiSelect"] = defaultMultiValues["progressionSpeed"]
+    defaultParams["progressionDifficulty"] = "normal"
+    defaultParams["progressionDifficultyMultiSelect"] = defaultMultiValues["progressionDifficulty"]
+    defaultParams["morphPlacement"] = "early"
+    defaultParams["morphPlacementMultiSelect"] = defaultMultiValues["morphPlacement"]
+    defaultParams["suitsRestriction"] = "on"
+    defaultParams["hideItems"] = "off"
+    defaultParams["strictMinors"] = "off"
+    defaultParams["missileQty"] = "3"
+    defaultParams["superQty"] = "2"
+    defaultParams["powerBombQty"] = "1"
+    defaultParams["minorQty"] = "100"
+    defaultParams["energyQty"] = "vanilla"
+    defaultParams["energyQtyMultiSelect"] = defaultMultiValues["energyQty"]
+    defaultParams["objectiveRandom"] = "off"
+    defaultParams["nbObjective"] = "4"
+    defaultParams["objective"] = ["kill all G4"]
+    defaultParams["objectiveMultiSelect"] = defaultMultiValues["objective"]
+    defaultParams["tourian"] = "Vanilla"
+    defaultParams["areaRandomization"] = "off"
+    defaultParams["areaLayout"] = "off"
+    defaultParams["doorsColorsRando"] = "off"
+    defaultParams["allowGreyDoors"] = "off"
+    defaultParams["escapeRando"] = "off"
+    defaultParams["removeEscapeEnemies"] = "off"
+    defaultParams["bossRandomization"] = "off"
+    defaultParams["minimizer"] = "off"
+    defaultParams["minimizerQty"] = "45"
+    defaultParams["funCombat"] = "off"
+    defaultParams["funMovement"] = "off"
+    defaultParams["funSuits"] = "off"
+    defaultParams["layoutPatches"] = "on"
+    defaultParams["variaTweaks"] = "on"
+    defaultParams["gravityBehaviour"] = "Balanced"
+    defaultParams["gravityBehaviourMultiSelect"] = defaultMultiValues["gravityBehaviour"]
+    defaultParams["nerfedCharge"] = "off"
+    defaultParams["relaxed_round_robin_cf"] = "off"
+    defaultParams["itemsounds"] = "on"
+    defaultParams["elevators_speed"] = "on"
+    defaultParams["fast_doors"] = "on"
+    defaultParams["spinjumprestart"] = "off"
+    defaultParams["rando_speed"] = "off"
+    defaultParams["Infinite_Space_Jump"] = "off"
+    defaultParams["refill_before_save"] = "off"
+    defaultParams["hud"] = "off"
+    defaultParams["animals"] = "off"
+    defaultParams["No_Music"] = "off"
+    defaultParams["random_music"] = "off"
 
     return defaultParams
 
 def fixEnergy(items):
     # display number of energy used
-    energies = [i for i in items if i.find('ETank') != -1]
+    energies = [i for i in items if i.find("ETank") != -1]
     if len(energies) > 0:
         (maxETank, maxReserve, maxEnergy) = (0, 0, 0)
         for energy in energies:
-            nETank = int(energy[0:energy.find('-ETank')])
-            if energy.find('-Reserve') != -1:
-                nReserve = int(energy[energy.find(' - ')+len(' - '):energy.find('-Reserve')])
+            nETank = int(energy[0:energy.find("-ETank")])
+            if energy.find("-Reserve") != -1:
+                nReserve = int(energy[energy.find(" - ")+len(" - "):energy.find("-Reserve")])
             else:
                 nReserve = 0
             nEnergy = nETank + nReserve
@@ -511,25 +524,25 @@ def fixEnergy(items):
                 maxETank = nETank
                 maxReserve = nReserve
             items.remove(energy)
-        items.append('{}-ETank'.format(maxETank))
+        items.append(f"{maxETank}-ETank")
         if maxReserve > 0:
-            items.append('{}-Reserve'.format(maxReserve))
-    
-    
+            items.append(f"{maxReserve}-Reserve")
+
+
     # keep biggest crystal flash
-    cfs = [i for i in items if i.find('CrystalFlash') != -1]
+    cfs = [i for i in items if i.find("CrystalFlash") != -1]
     if len(cfs) > 1:
         maxCf = 0
         for cf in cfs:
-            nCf = int(cf[0:cf.find('-CrystalFlash')])
+            nCf = int(cf[0:cf.find("-CrystalFlash")])
             if nCf > maxCf:
                 maxCf = nCf
             items.remove(cf)
-        items.append('{}-CrystalFlash'.format(maxCf))
+        items.append(f"{maxCf}-CrystalFlash")
     return items
 
 def dumpErrorMsg(outFileName, msg):
     print("DIAG: " + msg)
     if outFileName is not None:
-        with open(outFileName, 'w') as jsonFile:
+        with open(outFileName, "w") as jsonFile:
             json.dump({"errorMsg": msg}, jsonFile)

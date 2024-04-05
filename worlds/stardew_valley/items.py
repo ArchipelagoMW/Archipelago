@@ -4,16 +4,38 @@ import logging
 from dataclasses import dataclass, field
 from pathlib import Path
 from random import Random
-from typing import Dict, List, Protocol, Union, Set, Optional
+from typing import Dict, List, Optional, Protocol, Set, Union
 
 from BaseClasses import Item, ItemClassification
+
 from . import data
 from .data.villagers_data import get_villagers_for_mods
 from .mods.mod_data import ModNames
-from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Cropsanity, \
-    Friendsanity, Museumsanity, \
-    Fishsanity, BuildingProgression, SkillProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
-    Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity
+from .options import (
+    ArcadeMachineLocations,
+    BackpackProgression,
+    BuildingProgression,
+    BundleRandomization,
+    Chefsanity,
+    Craftsanity,
+    Cropsanity,
+    ElevatorProgression,
+    EntranceRandomization,
+    ExcludeGingerIsland,
+    FestivalLocations,
+    Fishsanity,
+    Friendsanity,
+    Goal,
+    Monstersanity,
+    Museumsanity,
+    SeasonRandomization,
+    Shipsanity,
+    SkillProgression,
+    SpecialOrderLocations,
+    StardewValleyOptions,
+    ToolProgression,
+    TrapItems,
+)
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.buff_names import Buff
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade
@@ -120,7 +142,7 @@ def load_item_csv():
     try:
         from importlib.resources import files
     except ImportError:
-        from importlib_resources import files  # noqa
+        from importlib_resources import files
 
     items = []
     with files(data).joinpath("items.csv").open() as file:
@@ -435,7 +457,7 @@ def create_friendsanity_items(item_factory: StardewItemFactory, options: Stardew
         need_pet = options.goal == Goal.option_grandpa_evaluation
         for heart in range(1, 6):
             if heart % heart_size == 0 or heart == 5:
-                items.append(item_factory(f"Pet <3", ItemClassification.progression_skip_balancing if need_pet else ItemClassification.useful))
+                items.append(item_factory("Pet <3", ItemClassification.progression_skip_balancing if need_pet else ItemClassification.useful))
 
 
 def create_babies(item_factory: StardewItemFactory, items: List[Item], random: Random):

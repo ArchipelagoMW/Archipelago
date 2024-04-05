@@ -1,39 +1,55 @@
 from __future__ import annotations
 
 import asyncio
+import concurrent.futures
 import copy
 import ctypes
 import enum
 import inspect
+import io
 import logging
 import multiprocessing
 import os.path
+import queue
+import random
 import re
 import sys
 import tempfile
 import typing
-import queue
 import zipfile
-import io
-import random
-import concurrent.futures
 from pathlib import Path
 
 # CommonClient import first to trigger ModuleUpdater
-from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
-from Utils import init_logging, is_windows, async_start
-from worlds.sc2 import ItemNames
-from worlds.sc2.ItemGroups import item_name_groups, unlisted_item_name_groups
-from worlds.sc2 import Options
+from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, server_loop
+from Utils import async_start, init_logging, is_windows
+from worlds.sc2 import ItemNames, Options
+from worlds.sc2.ItemGroups import item_name_groups
 from worlds.sc2.Options import (
-    MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence,
-    GameSpeed, GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions,
-    LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations,
-    DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
-    SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
-    SpearOfAdunAutonomouslyCastPresentInNoBuild
+    ChallengeLocations,
+    ColorChoice,
+    DisableForcedCamera,
+    ExtraLocations,
+    GameSpeed,
+    GenericUpgradeItems,
+    GenericUpgradeMissions,
+    GenericUpgradeResearch,
+    GrantStoryLevels,
+    GrantStoryTech,
+    KerriganPresence,
+    KerriganPrimalStatus,
+    LocationInclusion,
+    MasteryLocations,
+    MissionOrder,
+    RequiredTactics,
+    SkipCutscenes,
+    SpearOfAdunAutonomouslyCastAbilityPresence,
+    SpearOfAdunAutonomouslyCastPresentInNoBuild,
+    SpearOfAdunPresence,
+    SpearOfAdunPresentInNoBuild,
+    TakeOverAIAllies,
+    VanillaLocations,
+    kerrigan_unit_available,
 )
-
 
 if __name__ == "__main__":
     init_logging("SC2Client", exception_logger="Client")
@@ -41,21 +57,45 @@ if __name__ == "__main__":
 logger = logging.getLogger("Client")
 sc2_logger = logging.getLogger("Starcraft2")
 
+import colorama
 import nest_asyncio
+
+from MultiServer import mark_raw
+from NetUtils import (
+    ClientStatus,
+    JSONMessagePart,
+    JSONtoTextParser,
+    JSONTypes,
+    NetworkItem,
+    add_json_item,
+    add_json_location,
+    add_json_text,
+)
+from Options import Option
 from worlds._sc2common import bot
 from worlds._sc2common.bot.data import Race
 from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
-from worlds.sc2.Items import lookup_id_to_name, get_full_item_list, ItemData, type_flaggroups, upgrade_numbers, upgrade_numbers_all
-from worlds.sc2.Locations import SC2WOL_LOC_ID_OFFSET, LocationType, SC2HOTS_LOC_ID_OFFSET
-from worlds.sc2.MissionTables import lookup_id_to_mission, SC2Campaign, lookup_name_to_mission, \
-    lookup_id_to_campaign, MissionConnection, SC2Mission, campaign_mission_table, SC2Race, get_no_build_missions
+from worlds.sc2.Items import (
+    ItemData,
+    get_full_item_list,
+    lookup_id_to_name,
+    type_flaggroups,
+    upgrade_numbers,
+    upgrade_numbers_all,
+)
+from worlds.sc2.Locations import SC2HOTS_LOC_ID_OFFSET, SC2WOL_LOC_ID_OFFSET, LocationType
+from worlds.sc2.MissionTables import (
+    MissionConnection,
+    SC2Campaign,
+    SC2Mission,
+    SC2Race,
+    campaign_mission_table,
+    lookup_id_to_campaign,
+    lookup_id_to_mission,
+    lookup_name_to_mission,
+)
 from worlds.sc2.Regions import MissionInfo
-
-import colorama
-from Options import Option
-from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart, add_json_item, add_json_location, add_json_text, JSONTypes
-from MultiServer import mark_raw
 
 pool = concurrent.futures.ThreadPoolExecutor(1)
 loop = asyncio.get_event_loop_policy().new_event_loop()
@@ -97,23 +137,23 @@ class ConfigurableOptionInfo(typing.NamedTuple):
 
 
 class ColouredMessage:
-    def __init__(self, text: str = '') -> None:
+    def __init__(self, text: str = "") -> None:
         self.parts: typing.List[dict] = []
         if text:
             self(text)
-    def __call__(self, text: str) -> 'ColouredMessage':
+    def __call__(self, text: str) -> ColouredMessage:
         add_json_text(self.parts, text)
         return self
-    def coloured(self, text: str, colour: str) -> 'ColouredMessage':
+    def coloured(self, text: str, colour: str) -> ColouredMessage:
         add_json_text(self.parts, text, type="color", color=colour)
         return self
-    def location(self, location_id: int, player_id: int = 0) -> 'ColouredMessage':
+    def location(self, location_id: int, player_id: int = 0) -> ColouredMessage:
         add_json_location(self.parts, location_id, player_id)
         return self
-    def item(self, item_id: int, player_id: int = 0, flags: int = 0) -> 'ColouredMessage':
+    def item(self, item_id: int, player_id: int = 0, flags: int = 0) -> ColouredMessage:
         add_json_item(self.parts, item_id, player_id, flags)
         return self
-    def player(self, player_id: int) -> 'ColouredMessage':
+    def player(self, player_id: int) -> ColouredMessage:
         add_json_text(self.parts, str(player_id), type=JSONTypes.player_id)
         return self
     def send(self, ctx: SC2Context) -> None:
@@ -204,7 +244,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             self.output("To change the game speed, add the name of the speed after the command,"
                         " or Default to select based on difficulty.")
             return False
-    
+
     @mark_raw
     def _cmd_received(self, filter_search: str = "") -> bool:
         """List received items.
@@ -242,7 +282,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             def print_faction_title():
                 if not has_printed_faction_title:
                     self.formatted_print(f" [u]{faction.name}[/u] ")
-            
+
             for item_id in categorized_items[faction]:
                 item_name = self.ctx.item_names[item_id]
                 received_child_items = items_received_set.intersection(parent_to_child.get(item_id, []))
@@ -257,11 +297,11 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                     for item in received_items_of_this_type:
                         print_faction_title()
                         has_printed_faction_title = True
-                        (ColouredMessage('* ').item(item.item, flags=item.flags)
+                        (ColouredMessage("* ").item(item.item, flags=item.flags)
                             (" from ").location(item.location, self.ctx.slot)
                             (" by ").player(item.player)
                         ).send(self.ctx)
-                
+
                 if received_child_items:
                     # We have this item's children
                     if len(matching_children) == 0:
@@ -273,61 +313,61 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                         print_faction_title()
                         has_printed_faction_title = True
                         ColouredMessage("- ").coloured(item_name, "black")(" - not obtained").send(self.ctx)
-                    
+
                     for child_item in matching_children:
                         received_items_of_this_type = items_received.get(child_item, [])
                         for item in received_items_of_this_type:
                             filter_match_count += len(received_items_of_this_type)
-                            (ColouredMessage('  * ').item(item.item, flags=item.flags)
+                            (ColouredMessage("  * ").item(item.item, flags=item.flags)
                                 (" from ").location(item.location, self.ctx.slot)
                                 (" by ").player(item.player)
                             ).send(self.ctx)
-                    
+
                     non_matching_children = len(received_child_items) - len(matching_children)
                     if non_matching_children > 0:
                         self.formatted_print(f"  + {non_matching_children} child items that don't match the filter")
         if filter_search == "":
             self.formatted_print(f"[b]Obtained: {len(self.ctx.items_received)} items[/b]")
         else:
-            self.formatted_print(f"[b]Filter \"{filter_search}\" found {filter_match_count} out of {len(self.ctx.items_received)} obtained items[/b]")
+            self.formatted_print(f'[b]Filter "{filter_search}" found {filter_match_count} out of {len(self.ctx.items_received)} obtained items[/b]')
         return True
-    
+
     def _cmd_option(self, option_name: str = "", option_value: str = "") -> None:
         """Sets a Starcraft game option that can be changed after generation. Use "/option list" to see all options."""
 
-        LOGIC_WARNING = f"  *Note changing this may result in logically unbeatable games*\n"
+        LOGIC_WARNING = "  *Note changing this may result in logically unbeatable games*\n"
 
         options = (
-            ConfigurableOptionInfo('kerrigan_presence', 'kerrigan_presence', Options.KerriganPresence, can_break_logic=True),
-            ConfigurableOptionInfo('soa_presence', 'spear_of_adun_presence', Options.SpearOfAdunPresence, can_break_logic=True),
-            ConfigurableOptionInfo('soa_in_nobuilds', 'spear_of_adun_present_in_no_build', Options.SpearOfAdunPresentInNoBuild, can_break_logic=True),
-            ConfigurableOptionInfo('control_ally', 'take_over_ai_allies', Options.TakeOverAIAllies, can_break_logic=True),
-            ConfigurableOptionInfo('minerals_per_item', 'minerals_per_item', Options.MineralsPerItem, ConfigurableOptionType.INTEGER),
-            ConfigurableOptionInfo('gas_per_item', 'vespene_per_item', Options.VespenePerItem, ConfigurableOptionType.INTEGER),
-            ConfigurableOptionInfo('supply_per_item', 'starting_supply_per_item', Options.StartingSupplyPerItem, ConfigurableOptionType.INTEGER),
-            ConfigurableOptionInfo('no_forced_camera', 'disable_forced_camera', Options.DisableForcedCamera),
-            ConfigurableOptionInfo('skip_cutscenes', 'skip_cutscenes', Options.SkipCutscenes),
+            ConfigurableOptionInfo("kerrigan_presence", "kerrigan_presence", Options.KerriganPresence, can_break_logic=True),
+            ConfigurableOptionInfo("soa_presence", "spear_of_adun_presence", Options.SpearOfAdunPresence, can_break_logic=True),
+            ConfigurableOptionInfo("soa_in_nobuilds", "spear_of_adun_present_in_no_build", Options.SpearOfAdunPresentInNoBuild, can_break_logic=True),
+            ConfigurableOptionInfo("control_ally", "take_over_ai_allies", Options.TakeOverAIAllies, can_break_logic=True),
+            ConfigurableOptionInfo("minerals_per_item", "minerals_per_item", Options.MineralsPerItem, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo("gas_per_item", "vespene_per_item", Options.VespenePerItem, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo("supply_per_item", "starting_supply_per_item", Options.StartingSupplyPerItem, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo("no_forced_camera", "disable_forced_camera", Options.DisableForcedCamera),
+            ConfigurableOptionInfo("skip_cutscenes", "skip_cutscenes", Options.SkipCutscenes),
         )
 
         WARNING_COLOUR = "salmon"
         CMD_COLOUR = "slateblue"
         boolean_option_map = {
-            'y': 'true', 'yes': 'true', 'n': 'false', 'no': 'false',
+            "y": "true", "yes": "true", "n": "false", "no": "false",
         }
 
         help_message = ColouredMessage(inspect.cleandoc("""
             Options
         --------------------
-        """))('\n')
+        """))("\n")
         for option in options:
-            option_help_text = inspect.cleandoc(option.option_class.__doc__ or "No description provided.").split('\n', 1)[0]
+            option_help_text = inspect.cleandoc(option.option_class.__doc__ or "No description provided.").split("\n", 1)[0]
             help_message.coloured(option.name, CMD_COLOUR)(": " + " | ".join(option.option_class.options)
                 + f" -- {option_help_text}\n")
             if option.can_break_logic:
                 help_message.coloured(LOGIC_WARNING, WARNING_COLOUR)
         help_message("--------------------\nEnter an option without arguments to see its current value.\n")
 
-        if not option_name or option_name == 'list' or option_name == 'help':
+        if not option_name or option_name == "list" or option_name == "help":
             help_message.send(self.ctx)
             return
         for option in options:
@@ -360,32 +400,32 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             "Rainbow", "Random", "Default"
         ]
         var_names = {
-            'raynor': 'player_color_raynor',
-            'kerrigan': 'player_color_zerg',
-            'primal': 'player_color_zerg_primal',
-            'protoss': 'player_color_protoss',
-            'nova': 'player_color_nova',
+            "raynor": "player_color_raynor",
+            "kerrigan": "player_color_zerg",
+            "primal": "player_color_zerg_primal",
+            "protoss": "player_color_protoss",
+            "nova": "player_color_nova",
         }
         faction = faction.lower()
         if not faction:
             for faction_name, key in var_names.items():
                 self.output(f"Current player color for {faction_name}: {player_colors[self.ctx.__dict__[key]]}")
             self.output("To change your color, add the faction name and color after the command.")
-            self.output("Available factions: " + ', '.join(var_names))
-            self.output("Available colors: " + ', '.join(player_colors))
+            self.output("Available factions: " + ", ".join(var_names))
+            self.output("Available colors: " + ", ".join(player_colors))
             return
         elif faction not in var_names:
             self.output(f"Unknown faction '{faction}'.")
-            self.output("Available factions: " + ', '.join(var_names))
+            self.output("Available factions: " + ", ".join(var_names))
             return
         match_colors = [player_color.lower() for player_color in player_colors]
         if not color:
             self.output(f"Current player color for {faction}: {player_colors[self.ctx.__dict__[var_names[faction]]]}")
             self.output("To change this faction's colors, add the name of the color after the command.")
-            self.output("Available colors: " + ', '.join(player_colors))
+            self.output("Available colors: " + ", ".join(player_colors))
         else:
             if color.lower() not in match_colors:
-                self.output(color + " is not a valid color.  Available colors: " + ', '.join(player_colors))
+                self.output(color + " is not a valid color.  Available colors: " + ", ".join(player_colors))
                 return
             if color.lower() == "random":
                 color = random.choice(player_colors[:16])
@@ -431,7 +471,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         return True
 
     @mark_raw
-    def _cmd_set_path(self, path: str = '') -> bool:
+    def _cmd_set_path(self, path: str = "") -> bool:
         """Manually set the SC2 install directory (if the automatic detection fails)."""
         if path:
             os.environ["SC2PATH"] = path
@@ -453,7 +493,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             check_game_install_path()
 
         if os.path.exists(get_metadata_file()):
-            with open(get_metadata_file(), "r") as f:
+            with open(get_metadata_file()) as f:
                 metadata = f.read()
         else:
             metadata = None
@@ -464,7 +504,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if tempzip:
             try:
                 zipfile.ZipFile(tempzip).extractall(path=os.environ["SC2PATH"])
-                sc2_logger.info(f"Download complete. Package installed.")
+                sc2_logger.info("Download complete. Package installed.")
                 if metadata is not None:
                     with open(get_metadata_file(), "w") as f:
                         f.write(metadata)
@@ -488,7 +528,7 @@ class SC2JSONtoTextParser(JSONtoTextParser):
     def _handle_color(self, node: JSONMessagePart) -> str:
         codes = node["color"].split(";")
         buffer = "".join(self.color_code(code) for code in codes if code in self.color_codes)
-        return buffer + self._handle_text(node) + '</c>'
+        return buffer + self._handle_text(node) + "</c>"
 
     def color_code(self, code: str) -> str:
         return '<c val="' + self.color_codes[code] + '">'
@@ -645,7 +685,7 @@ class SC2Context(CommonContext):
             # Looks for the required maps and mods for SC2. Runs check_game_install_path.
             maps_present = is_mod_installed_correctly()
             if os.path.exists(get_metadata_file()):
-                with open(get_metadata_file(), "r") as f:
+                with open(get_metadata_file()) as f:
                     current_ver = f.read()
                     sc2_logger.debug(f"Current version: {current_ver}")
                 if is_mod_update_available(DATA_REPO_OWNER, DATA_REPO_NAME, DATA_API_VERSION, current_ver):
@@ -750,7 +790,7 @@ class CompatItemHolder(typing.NamedTuple):
 async def main():
     multiprocessing.freeze_support()
     parser = get_base_parser()
-    parser.add_argument('--name', default=None, help="Slot Name to connect as.")
+    parser.add_argument("--name", default=None, help="Slot Name to connect as.")
     args = parser.parse_args()
 
     ctx = SC2Context(args.connect, args.password)
@@ -878,15 +918,15 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
 
 def calc_difficulty(difficulty: int):
     if difficulty == 0:
-        return 'C'
+        return "C"
     elif difficulty == 1:
-        return 'N'
+        return "N"
     elif difficulty == 2:
-        return 'H'
+        return "H"
     elif difficulty == 3:
-        return 'B'
+        return "B"
 
-    return 'X'
+    return "X"
 
 
 def get_kerrigan_level(ctx: SC2Context, items: typing.Dict[SC2Race, typing.List[int]], missions_beaten: int) -> int:
@@ -984,15 +1024,15 @@ async def starcraft_launch(ctx: SC2Context, mission_id: int):
 
 class ArchipelagoBot(bot.bot_ai.BotAI):
     __slots__ = [
-        'game_running',
-        'mission_completed',
-        'boni',
-        'setup_done',
-        'ctx',
-        'mission_id',
-        'want_close',
-        'can_read_game',
-        'last_received_update',
+        "game_running",
+        "mission_completed",
+        "boni",
+        "setup_done",
+        "ctx",
+        "mission_id",
+        "want_close",
+        "can_read_game",
+        "last_received_update",
     ]
 
     def __init__(self, ctx: SC2Context, mission_id: int):
@@ -1030,26 +1070,8 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 game_speed = self.ctx.game_speed_override
             else:
                 game_speed = self.ctx.game_speed
-            await self.chat_send("?SetOptions {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
-                difficulty,
-                self.ctx.generic_upgrade_research,
-                self.ctx.all_in_choice,
-                game_speed,
-                self.ctx.disable_forced_camera,
-                self.ctx.skip_cutscenes,
-                kerrigan_options,
-                self.ctx.grant_story_tech,
-                self.ctx.take_over_ai_allies,
-                soa_options,
-                self.ctx.mission_order,
-                1 if self.ctx.nova_covert_ops_only else 0,
-                self.ctx.grant_story_levels
-            ))
-            await self.chat_send("?GiveResources {} {} {}".format(
-                start_items[SC2Race.ANY][0],
-                start_items[SC2Race.ANY][1],
-                start_items[SC2Race.ANY][2]
-            ))
+            await self.chat_send(f"?SetOptions {difficulty} {self.ctx.generic_upgrade_research} {self.ctx.all_in_choice} {game_speed} {self.ctx.disable_forced_camera} {self.ctx.skip_cutscenes} {kerrigan_options} {self.ctx.grant_story_tech} {self.ctx.take_over_ai_allies} {soa_options} {self.ctx.mission_order} {1 if self.ctx.nova_covert_ops_only else 0} {self.ctx.grant_story_levels}")
+            await self.chat_send(f"?GiveResources {start_items[SC2Race.ANY][0]} {start_items[SC2Race.ANY][1]} {start_items[SC2Race.ANY][2]}")
             await self.updateTerranTech(start_items)
             await self.updateZergTech(start_items, kerrigan_level)
             await self.updateProtossTech(start_items)
@@ -1101,18 +1123,18 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                         if self.mission_id != self.ctx.final_mission:
                             print("Mission Completed")
                             await self.ctx.send_msgs(
-                                [{"cmd": 'LocationChecks',
+                                [{"cmd": "LocationChecks",
                                   "locations": [get_location_offset(self.mission_id) + VICTORY_MODULO * self.mission_id]}])
                             self.mission_completed = True
                         else:
                             print("Game Complete")
-                            await self.ctx.send_msgs([{"cmd": 'StatusUpdate', "status": ClientStatus.CLIENT_GOAL}])
+                            await self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                             self.mission_completed = True
 
                     for x, completed in enumerate(self.boni):
                         if not completed and game_state & (1 << (x + 2)):
                             await self.ctx.send_msgs(
-                                [{"cmd": 'LocationChecks',
+                                [{"cmd": "LocationChecks",
                                   "locations": [get_location_offset(self.mission_id) + VICTORY_MODULO * self.mission_id + x + 1]}])
                             self.boni[x] = True
                 else:
@@ -1131,26 +1153,17 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
     async def updateTerranTech(self, current_items):
         terran_items = current_items[SC2Race.TERRAN]
-        await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
-            terran_items[0], terran_items[1], terran_items[2], terran_items[3], terran_items[4],
-            terran_items[5], terran_items[6], terran_items[7], terran_items[8], terran_items[9], terran_items[10],
-            terran_items[11], terran_items[12], terran_items[13]))
+        await self.chat_send(f"?GiveTerranTech {terran_items[0]} {terran_items[1]} {terran_items[2]} {terran_items[3]} {terran_items[4]} {terran_items[5]} {terran_items[6]} {terran_items[7]} {terran_items[8]} {terran_items[9]} {terran_items[10]} {terran_items[11]} {terran_items[12]} {terran_items[13]}")
 
     async def updateZergTech(self, current_items, kerrigan_level):
         zerg_items = current_items[SC2Race.ZERG]
         kerrigan_primal_by_items = kerrigan_primal(self.ctx, current_items)
         kerrigan_primal_bot_value = 1 if kerrigan_primal_by_items else 0
-        await self.chat_send("?GiveZergTech {} {} {} {} {} {} {} {} {} {} {} {}".format(
-            kerrigan_level, kerrigan_primal_bot_value, zerg_items[0], zerg_items[1], zerg_items[2],
-            zerg_items[3], zerg_items[4], zerg_items[5], zerg_items[6], zerg_items[9], zerg_items[10], zerg_items[11]
-        ))
+        await self.chat_send(f"?GiveZergTech {kerrigan_level} {kerrigan_primal_bot_value} {zerg_items[0]} {zerg_items[1]} {zerg_items[2]} {zerg_items[3]} {zerg_items[4]} {zerg_items[5]} {zerg_items[6]} {zerg_items[9]} {zerg_items[10]} {zerg_items[11]}")
 
     async def updateProtossTech(self, current_items):
         protoss_items = current_items[SC2Race.PROTOSS]
-        await self.chat_send("?GiveProtossTech {} {} {} {} {} {} {} {} {} {}".format(
-            protoss_items[0], protoss_items[1], protoss_items[2], protoss_items[3], protoss_items[4],
-            protoss_items[5], protoss_items[6], protoss_items[7], protoss_items[8], protoss_items[9]
-        ))
+        await self.chat_send(f"?GiveProtossTech {protoss_items[0]} {protoss_items[1]} {protoss_items[2]} {protoss_items[3]} {protoss_items[4]} {protoss_items[5]} {protoss_items[6]} {protoss_items[7]} {protoss_items[8]} {protoss_items[9]}")
 
 
 def request_unfinished_missions(ctx: SC2Context) -> None:
@@ -1184,8 +1197,8 @@ def request_unfinished_missions(ctx: SC2Context) -> None:
                              for mission in unfinished_missions)
 
         if ctx.ui:
-            ctx.ui.log_panels['All'].on_message_markup(message)
-            ctx.ui.log_panels['Starcraft2'].on_message_markup(message)
+            ctx.ui.log_panels["All"].on_message_markup(message)
+            ctx.ui.log_panels["Starcraft2"].on_message_markup(message)
         else:
             sc2_logger.info(message)
     else:
@@ -1247,7 +1260,7 @@ def mark_up_mission_name(ctx: SC2Context, mission_name: str, unlock_table: typin
         if len(unlocks) > 0:
             pre_message = f"[ref={mission_info.mission.id}|Unlocks: "
             pre_message += ", ".join(f"{unlock}({ctx.mission_req_table[ctx.find_campaign(unlock)][unlock].mission.id})" for unlock in unlocks)
-            pre_message += f"]"
+            pre_message += "]"
             message = pre_message + message + "[/ref]"
 
     return message
@@ -1262,7 +1275,7 @@ def mark_up_objectives(message, ctx, unfinished_locations, mission):
 
         pre_message = f"[ref={list(ctx.mission_req_table[campaign]).index(mission) + 30}|"
         pre_message += "<br>".join(location for location in locations)
-        pre_message += f"]"
+        pre_message += "]"
         formatted_message = pre_message + message + "[/ref]"
 
     return formatted_message
@@ -1282,8 +1295,8 @@ def request_available_missions(ctx: SC2Context):
                       for mission in missions)
 
         if ctx.ui:
-            ctx.ui.log_panels['All'].on_message_markup(message)
-            ctx.ui.log_panels['Starcraft2'].on_message_markup(message)
+            ctx.ui.log_panels["All"].on_message_markup(message)
+            ctx.ui.log_panels["Starcraft2"].on_message_markup(message)
         else:
             sc2_logger.info(message)
     else:
@@ -1354,7 +1367,7 @@ def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete
             # Check if required mission has been completed
             mission_id = ctx.mission_req_table[parsed_req_mission.campaign][
                 list(ctx.mission_req_table[parsed_req_mission.campaign])[parsed_req_mission.connect_to - 1]].mission.id
-            if not (mission_id * VICTORY_MODULO + get_location_offset(mission_id)) in ctx.checked_locations:
+            if (mission_id * VICTORY_MODULO + get_location_offset(mission_id)) not in ctx.checked_locations:
                 if not ctx.mission_req_table[campaign][mission_name].or_requirements:
                     return False
                 else:
@@ -1462,7 +1475,7 @@ def is_mod_installed_correctly() -> bool:
     if "SC2PATH" not in os.environ:
         check_game_install_path()
     sc2_path: str = os.environ["SC2PATH"]
-    mapdir = sc2_path / Path('Maps/ArchipelagoCampaign')
+    mapdir = sc2_path / Path("Maps/ArchipelagoCampaign")
     mods = ["ArchipelagoCore", "ArchipelagoPlayer", "ArchipelagoPlayerSuper", "ArchipelagoPatches",
             "ArchipelagoTriggers", "ArchipelagoPlayerWoL", "ArchipelagoPlayerHotS",
             "ArchipelagoPlayerLotV", "ArchipelagoPlayerLotVPrologue", "ArchipelagoPlayerNCO"]
@@ -1502,10 +1515,10 @@ def is_mod_installed_correctly() -> bool:
 
     # Final verdict.
     if needs_files:
-        sc2_logger.warning(f"Required files are missing. Run /download_data to acquire them.")
+        sc2_logger.warning("Required files are missing. Run /download_data to acquire them.")
         return False
     else:
-        sc2_logger.debug(f"All map/mod files are properly installed.")
+        sc2_logger.debug("All map/mod files are properly installed.")
         return True
 
 
@@ -1555,7 +1568,7 @@ def download_latest_release_zip(
     """Downloads the latest release of a GitHub repo to the current directory as a .zip file."""
     import requests
 
-    headers = {"Accept": 'application/vnd.github.v3+json'}
+    headers = {"Accept": "application/vnd.github.v3+json"}
     url = f"https://api.github.com/repos/{owner}/{repo}/releases/tags/{api_version}"
 
     r1 = requests.get(url, headers=headers)
@@ -1566,7 +1579,7 @@ def download_latest_release_zip(
         # sc2_logger.info(f"Latest version: {latest_metadata}.")
     else:
         sc2_logger.warning(f"Status code: {r1.status_code}")
-        sc2_logger.warning(f"Failed to reach GitHub. Could not find download link.")
+        sc2_logger.warning("Failed to reach GitHub. Could not find download link.")
         sc2_logger.warning(f"text: {r1.text}")
         return "", metadata
 
@@ -1593,14 +1606,14 @@ def download_latest_release_zip(
 
 
 def cleanup_downloaded_metadata(medatada_json: dict) -> None:
-    for asset in medatada_json['assets']:
-        del asset['download_count']
+    for asset in medatada_json["assets"]:
+        del asset["download_count"]
 
 
 def is_mod_update_available(owner: str, repo: str, api_version: str, metadata: str) -> bool:
     import requests
 
-    headers = {"Accept": 'application/vnd.github.v3+json'}
+    headers = {"Accept": "application/vnd.github.v3+json"}
     url = f"https://api.github.com/repos/{owner}/{repo}/releases/tags/{api_version}"
 
     r1 = requests.get(url, headers=headers)
@@ -1614,7 +1627,7 @@ def is_mod_update_available(owner: str, repo: str, api_version: str, metadata: s
             return False
 
     else:
-        sc2_logger.warning(f"Failed to reach GitHub while checking for updates.")
+        sc2_logger.warning("Failed to reach GitHub while checking for updates.")
         sc2_logger.warning(f"Status code: {r1.status_code}")
         sc2_logger.warning(f"text: {r1.text}")
         return False

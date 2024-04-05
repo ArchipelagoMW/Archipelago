@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, Range, Toggle, ItemDict, PerGameCommonOptions, StartInventoryPool
+from Options import Choice, ItemDict, PerGameCommonOptions, Range, StartInventoryPool, Toggle
 
 from . import default_itempool_option
 

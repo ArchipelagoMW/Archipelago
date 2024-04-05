@@ -1,10 +1,10 @@
 from dataclasses import dataclass
-from typing import List, Tuple, Optional, Dict, Callable, Set
+from typing import Callable, Dict, List, Optional, Set, Tuple
 
 from ..mods.mod_data import ModNames
 from ..strings.food_names import Beverage
 from ..strings.generic_names import Generic
-from ..strings.region_names import Region, SVERegion, AlectoRegion, BoardingHouseRegion, LaceyRegion
+from ..strings.region_names import AlectoRegion, BoardingHouseRegion, LaceyRegion, Region, SVERegion
 from ..strings.season_names import Season
 from ..strings.villager_names import NPC, ModNPC
 

@@ -1,6 +1,9 @@
+from typing import Dict, NamedTuple
+
 from BaseClasses import Item
-from typing import NamedTuple, Dict
+
 from .Overcooked2Levels import Overcooked2Dlc
+
 
 class ItemData(NamedTuple):
     code: int

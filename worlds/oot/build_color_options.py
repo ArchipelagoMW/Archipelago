@@ -1,14 +1,14 @@
 # Quick script to build top-level color and sfx options for pickling
 
-from Colors import *
 import Sounds as sfx
+from Colors import *
 
 
 def assemble_color_option(f, internal_name: str, func, display_name: str, default_option: str, outer=False):
     color_options = func()
     if outer:
         color_options.append("Match Inner")
-    format_color = lambda color: color.replace(' ', '_').lower()
+    format_color = lambda color: color.replace(" ", "_").lower()
     color_to_id = {format_color(color): index for index, color in enumerate(color_options)}
 
     docstring = 'Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.'
@@ -16,28 +16,28 @@ def assemble_color_option(f, internal_name: str, func, display_name: str, defaul
         docstring += ' "match_inner" copies the inner color for this option.'
 
     f.write(f"class {internal_name}(Choice):\n")
-    f.write(f"    \"\"\"{docstring}\"\"\"\n")
-    f.write(f"    display_name = \"{display_name}\"\n")
+    f.write(f'    """{docstring}"""\n')
+    f.write(f'    display_name = "{display_name}"\n')
     for color, id in color_to_id.items():
         f.write(f"    option_{color} = {id}\n")
     f.write(f"    default = {color_options.index(default_option)}")
-    f.write(f"\n\n\n")
+    f.write("\n\n\n")
 
 
 def assemble_sfx_option(f, internal_name: str, sound_hook: sfx.SoundHooks, display_name: str):
     options = sfx.get_setting_choices(sound_hook).keys()
-    sfx_to_id = {sound.replace('-', '_'): index for index, sound in enumerate(options)}
+    sfx_to_id = {sound.replace("-", "_"): index for index, sound in enumerate(options)}
     docstring = 'Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option. "completely_random" selects any random sound.'
 
     f.write(f"class {internal_name}(Choice):\n")
-    f.write(f"    \"\"\"{docstring}\"\"\"\n")
-    f.write(f"    display_name = \"{display_name}\"\n")
+    f.write(f'    """{docstring}"""\n')
+    f.write(f'    display_name = "{display_name}"\n')
     for sound, id in sfx_to_id.items():
         f.write(f"    option_{sound} = {id}\n")
-    f.write(f"\n\n\n")
+    f.write("\n\n\n")
 
 
-with open('ColorSFXOptions.py', 'w') as f:
+with open("ColorSFXOptions.py", "w") as f:
 
     f.write("# Auto-generated color and sound-effect options from Colors.py and Sounds.py \n")
     f.write("from Options import Choice\n\n\n")
@@ -78,4 +78,4 @@ with open('ColorSFXOptions.py', 'w') as f:
     assemble_sfx_option(f, "sfx_horse_neigh", sfx.SoundHooks.HORSE_NEIGH, "Horse")
     assemble_sfx_option(f, "sfx_hover_boots", sfx.SoundHooks.BOOTS_HOVER, "Hover Boots")
 
-print('all done')
+print("all done")

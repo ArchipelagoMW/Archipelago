@@ -1,6 +1,7 @@
-from typing import List, TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 from BaseClasses import CollectionState
+
 from .data.world_path import WORLD_PATHS_JSON
 from .Locations import LandstalkerLocation
 from .Regions import LandstalkerRegion

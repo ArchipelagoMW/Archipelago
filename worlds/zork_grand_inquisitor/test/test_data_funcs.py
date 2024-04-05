@@ -1,6 +1,6 @@
 import unittest
 
-from ..data_funcs import location_access_rule_for, entrance_access_rule_for
+from ..data_funcs import entrance_access_rule_for, location_access_rule_for
 from ..enums import ZorkGrandInquisitorLocations, ZorkGrandInquisitorRegions
 
 

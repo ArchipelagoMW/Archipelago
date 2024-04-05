@@ -1,26 +1,24 @@
 import asyncio
 import hashlib
 import json
-import time
 import os
-import bsdiff4
 import subprocess
+import time
 import zipfile
-from asyncio import StreamReader, StreamWriter, CancelledError
+from asyncio import CancelledError, StreamReader, StreamWriter
 from typing import List
 
+import bsdiff4
 
 import Utils
+from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus
 from Utils import async_start
-from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, \
-    get_base_parser
 from worlds.adventure import AdventureDeltaPatch
-
+from worlds.adventure.Items import base_adventure_item_id, item_table, standard_item_max
 from worlds.adventure.Locations import base_location_id
-from worlds.adventure.Rom import AdventureForeignItemInfo, AdventureAutoCollectLocation, BatNoTouchLocation
-from worlds.adventure.Items import base_adventure_item_id, standard_item_max, item_table
-from worlds.adventure.Offsets import static_item_element_size, connector_port_offset
+from worlds.adventure.Offsets import connector_port_offset, static_item_element_size
+from worlds.adventure.Rom import AdventureAutoCollectLocation, AdventureForeignItemInfo, BatNoTouchLocation
 
 SYSTEM_MESSAGE_ID = 0
 
@@ -54,7 +52,7 @@ class AdventureCommandProcessor(ClientCommandProcessor):
 
 class AdventureContext(CommonContext):
     command_processor = AdventureCommandProcessor
-    game = 'Adventure'
+    game = "Adventure"
     lua_connector_port: int = 17242
 
     def __init__(self, server_address, password):
@@ -90,7 +88,7 @@ class AdventureContext(CommonContext):
             self.auth = self.player_name
         if not self.auth:
             self.awaiting_rom = True
-            logger.info('Awaiting connection to adventure_connector to get Player information')
+            logger.info("Awaiting connection to adventure_connector to get Player information")
             return
 
         await self.send_connect()
@@ -100,16 +98,16 @@ class AdventureContext(CommonContext):
             self.messages[(time.time(), msg_id)] = msg
 
     def on_package(self, cmd: str, args: dict):
-        if cmd == 'Connected':
+        if cmd == "Connected":
             self.locations_array = None
             if Utils.get_options()["adventure_options"].get("death_link", False):
                 self.set_deathlink = True
             async_start(self.get_freeincarnates_used())
         elif cmd == "RoomInfo":
-            self.seed_name = args['seed_name']
-        elif cmd == 'Print':
-            msg = args['text']
-            if ': !' not in msg:
+            self.seed_name = args["seed_name"]
+        elif cmd == "Print":
+            msg = args["text"]
+            if ": !" not in msg:
                 self._set_message(msg, SYSTEM_MESSAGE_ID)
         elif cmd == "ReceivedItems":
             msg = f"Received {', '.join([self.item_names[item.item] for item in args['items']])}"
@@ -204,7 +202,7 @@ def get_payload(ctx: AdventureContext):
     ret = json.dumps(
         {
             "items": items,
-            "messages": {f'{key[0]}:{key[1]}': value for key, value in ctx.messages.items()
+            "messages": {f"{key[0]}:{key[1]}": value for key, value in ctx.messages.items()
                          if key[0] > current_time - 10},
             "deathlink": ctx.deathlink_pending,
             "dragon_speeds": dragon_speed_update,
@@ -258,7 +256,7 @@ def send_ap_foreign_items(adventure_context):
     msg = payload.encode()
     (reader, writer) = adventure_context.atari_streams
     writer.write(msg)
-    writer.write(b'\n')
+    writer.write(b"\n")
 
 
 def send_checked_locations_if_needed(adventure_context):
@@ -277,7 +275,7 @@ def send_checked_locations_if_needed(adventure_context):
         msg = payload.encode()
         (reader, writer) = adventure_context.atari_streams
         writer.write(msg)
-        writer.write(b'\n')
+        writer.write(b"\n")
         adventure_context.checked_locations_sent = True
 
 
@@ -290,7 +288,7 @@ async def atari_sync_task(ctx: AdventureContext):
                 (reader, writer) = ctx.atari_streams
                 msg = get_payload(ctx).encode()
                 writer.write(msg)
-                writer.write(b'\n')
+                writer.write(b"\n")
                 try:
                     await asyncio.wait_for(writer.drain(), timeout=1.5)
                     try:
@@ -301,49 +299,49 @@ async def atari_sync_task(ctx: AdventureContext):
                         # 4. freeincarnate, to indicate a freeincarnate was used
                         data = await asyncio.wait_for(reader.readline(), timeout=5)
                         data_decoded = json.loads(data.decode())
-                        if 'scriptVersion' not in data_decoded or data_decoded['scriptVersion'] != SCRIPT_VERSION:
+                        if "scriptVersion" not in data_decoded or data_decoded["scriptVersion"] != SCRIPT_VERSION:
                             msg = "You are connecting with an incompatible Lua script version. Ensure your connector " \
                                   "Lua and AdventureClient are from the same Archipelago installation."
-                            logger.info(msg, extra={'compact_gui': True})
-                            ctx.gui_error('Error', msg)
+                            logger.info(msg, extra={"compact_gui": True})
+                            ctx.gui_error("Error", msg)
                             error_status = CONNECTION_RESET_STATUS
-                        if ctx.seed_name and bytes(ctx.seed_name, encoding='ASCII') != ctx.seed_name_from_data:
+                        if ctx.seed_name and bytes(ctx.seed_name, encoding="ASCII") != ctx.seed_name_from_data:
                             msg = "The server is running a different multiworld than your client is. " \
                                   "(invalid seed_name)"
-                            logger.info(msg, extra={'compact_gui': True})
-                            ctx.gui_error('Error', msg)
+                            logger.info(msg, extra={"compact_gui": True})
+                            ctx.gui_error("Error", msg)
                             error_status = CONNECTION_RESET_STATUS
-                        if 'romhash' in data_decoded:
-                            if ctx.rom_hash.upper() != data_decoded['romhash'].upper():
+                        if "romhash" in data_decoded:
+                            if ctx.rom_hash.upper() != data_decoded["romhash"].upper():
                                 msg = "The rom hash does not match the client rom hash data"
-                                print("got " + data_decoded['romhash'])
+                                print("got " + data_decoded["romhash"])
                                 print("expected " + str(ctx.rom_hash))
-                                logger.info(msg, extra={'compact_gui': True})
-                                ctx.gui_error('Error', msg)
+                                logger.info(msg, extra={"compact_gui": True})
+                                ctx.gui_error("Error", msg)
                                 error_status = CONNECTION_RESET_STATUS
                                 if ctx.auth is None:
                                     ctx.auth = ctx.player_name
                             if ctx.awaiting_rom:
                                 await ctx.server_auth(False)
-                        if 'locations' in data_decoded and ctx.game and ctx.atari_status == CONNECTION_CONNECTED_STATUS \
+                        if "locations" in data_decoded and ctx.game and ctx.atari_status == CONNECTION_CONNECTED_STATUS \
                                 and not error_status and ctx.auth:
                             # Not just a keep alive ping, parse
-                            async_start(parse_locations(data_decoded['locations'], ctx))
-                        if 'deathLink' in data_decoded and data_decoded['deathLink'] > 0 and 'DeathLink' in ctx.tags:
+                            async_start(parse_locations(data_decoded["locations"], ctx))
+                        if "deathLink" in data_decoded and data_decoded["deathLink"] > 0 and "DeathLink" in ctx.tags:
                             dragon_name = "a dragon"
-                            if data_decoded['deathLink'] == 1:
+                            if data_decoded["deathLink"] == 1:
                                 dragon_name = "Rhindle"
-                            elif data_decoded['deathLink'] == 2:
+                            elif data_decoded["deathLink"] == 2:
                                 dragon_name = "Yorgle"
-                            elif data_decoded['deathLink'] == 3:
+                            elif data_decoded["deathLink"] == 3:
                                 dragon_name = "Grundle"
                             print (ctx.auth + " has been eaten by " + dragon_name )
                             await ctx.send_death(ctx.auth + " has been eaten by " + dragon_name)
                             # TODO - also if player reincarnates with a dragon onscreen ' dies to avoid being eaten by '
-                        if 'victory' in data_decoded and not ctx.finished_game:
+                        if "victory" in data_decoded and not ctx.finished_game:
                             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                             ctx.finished_game = True
-                        if 'freeincarnate' in data_decoded:
+                        if "freeincarnate" in data_decoded:
                             await ctx.used_freeincarnate()
                         if ctx.set_deathlink:
                             await ctx.update_death_link(True)
@@ -353,7 +351,7 @@ async def atari_sync_task(ctx: AdventureContext):
                         error_status = CONNECTION_TIMING_OUT_STATUS
                         writer.close()
                         ctx.atari_streams = None
-                    except ConnectionResetError as e:
+                    except ConnectionResetError:
                         logger.debug("Read failed due to Connection Lost, Reconnecting")
                         error_status = CONNECTION_RESET_STATUS
                         writer.close()
@@ -430,19 +428,19 @@ async def run_game(romfile):
 
 async def patch_and_run_game(patch_file, ctx):
     base_name = os.path.splitext(patch_file)[0]
-    comp_path = base_name + '.a26'
+    comp_path = base_name + ".a26"
     try:
         base_rom = AdventureDeltaPatch.get_source_data()
     except Exception as msg:
-        logger.info(msg, extra={'compact_gui': True})
-        ctx.gui_error('Error', msg)
+        logger.info(msg, extra={"compact_gui": True})
+        ctx.gui_error("Error", msg)
 
     with open(Utils.local_path("data", "adventure_basepatch.bsdiff4"), "rb") as file:
         basepatch = bytes(file.read())
 
     base_patched_rom_data = bsdiff4.patch(base_rom, basepatch)
 
-    with zipfile.ZipFile(patch_file, 'r') as patch_archive:
+    with zipfile.ZipFile(patch_file, "r") as patch_archive:
         if not AdventureDeltaPatch.check_version(patch_archive):
             logger.error("apadvn version doesn't match this client.  Make sure your generator and client are the same")
             raise Exception("apadvn version doesn't match this client.")
@@ -470,16 +468,16 @@ async def patch_and_run_game(patch_file, ctx):
     async_start(run_game(comp_path))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     Utils.init_logging("AdventureClient")
 
     async def main():
         parser = get_base_parser()
-        parser.add_argument('patch_file', default="", type=str, nargs="?",
-                            help='Path to an ADVNTURE.BIN rom file')
-        parser.add_argument('port', default=17242, type=int, nargs="?",
-                            help='port for adventure_connector connection')
+        parser.add_argument("patch_file", default="", type=str, nargs="?",
+                            help="Path to an ADVNTURE.BIN rom file")
+        parser.add_argument("port", default=17242, type=int, nargs="?",
+                            help="port for adventure_connector connection")
         args = parser.parse_args()
 
         ctx = AdventureContext(args.connect, args.password)

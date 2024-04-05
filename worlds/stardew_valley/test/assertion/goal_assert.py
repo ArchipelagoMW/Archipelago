@@ -1,8 +1,9 @@
 from unittest import TestCase
 
 from BaseClasses import MultiWorld
+
+from ... import ExcludeGingerIsland, options
 from .option_assert import get_stardew_options
-from ... import options, ExcludeGingerIsland
 
 
 def is_goal(multiworld: MultiWorld, goal: int) -> bool:

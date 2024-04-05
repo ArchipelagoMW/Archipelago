@@ -1,16 +1,18 @@
-from ..utils.parameters import infinity
 import copy
+
+from ..utils.parameters import infinity
+
 
 class Location:
     graph_slots = (
-        'distance', 'accessPoint', 'difficulty', 'path',
-        'pathDifficulty', 'locDifficulty' )
-    
+        "distance", "accessPoint", "difficulty", "path",
+        "pathDifficulty", "locDifficulty" )
+
     rando_slots = (
-        'restricted', )
+        "restricted", )
 
     solver_slots = (
-        'itemName', 'comeBack', 'areaWeight' )
+        "itemName", "comeBack", "areaWeight" )
 
     __slots__ = graph_slots + rando_slots + solver_slots
 
@@ -51,11 +53,11 @@ class Location:
 
     def setClass(self, _class):
         self.Class = _class
-        self._isChozo = 'Chozo' in _class
-        self._isMajor = 'Major' in _class
-        self._isMinor = 'Minor' in _class
-        self._isBoss = 'Boss' in _class
-        self._isScavenger = 'Scavenger' in _class
+        self._isChozo = "Chozo" in _class
+        self._isMajor = "Major" in _class
+        self._isMinor = "Minor" in _class
+        self._isBoss = "Boss" in _class
+        self._isScavenger = "Scavenger" in _class
 
     def evalPostAvailable(self, smbm):
         if self.difficulty.bool == True and self.PostAvailable is not None:
@@ -77,15 +79,15 @@ class Location:
 
     def json(self):
         # to return after plando rando
-        ret = {'Name': self.Name, 'accessPoint': self.accessPoint}
+        ret = {"Name": self.Name, "accessPoint": self.accessPoint}
         if self.difficulty is not None:
-            ret['difficulty'] = self.difficulty.json()
+            ret["difficulty"] = self.difficulty.json()
         return ret
 
     def __repr__(self):
         return "Location({}: {})".format(self.Name,
-            '. '.join(
-                (repr(getattr(self, slot)) for slot in Location.__slots__ if getattr(self, slot) is not None)))
+            ". ".join(
+                repr(getattr(self, slot)) for slot in Location.__slots__ if getattr(self, slot) is not None))
 
     def __copy__(self):
         d = self.difficulty
@@ -108,29 +110,29 @@ class Location:
 def define_location(
         Area, GraphArea, SolveArea, Name, Class, CanHidden, Address, Id,
         Visibility, Room, VanillaItemType=None, BossItemType=None, AccessFrom=None, Available=None, PostAvailable=None, HUD=None):
-    name = Name.replace(' ', '').replace(',', '') + 'Location'
+    name = Name.replace(" ", "").replace(",", "") + "Location"
     subclass = type(name, (Location,), {
-        'Area': Area,
-        'GraphArea': GraphArea,
-        'SolveArea': SolveArea,
-        'Name': Name,
-        'Class': Class,
-        'CanHidden': CanHidden,
-        'Address': Address,
-        'Id': Id,
-        'Visibility': Visibility,
-        'Room': Room,
-        'VanillaItemType': VanillaItemType,
-        'BossItemType': BossItemType,
-        'HUD': HUD,
-        'AccessFrom': AccessFrom,
-        'Available': Available,
-        'PostAvailable': PostAvailable,
-        '_isMajor': 'Major' in Class,
-        '_isChozo': 'Chozo' in Class,
-        '_isMinor': 'Minor' in Class,
-        '_isBoss': 'Boss' in Class,
-        '_isScavenger': 'Scavenger' in Class
+        "Area": Area,
+        "GraphArea": GraphArea,
+        "SolveArea": SolveArea,
+        "Name": Name,
+        "Class": Class,
+        "CanHidden": CanHidden,
+        "Address": Address,
+        "Id": Id,
+        "Visibility": Visibility,
+        "Room": Room,
+        "VanillaItemType": VanillaItemType,
+        "BossItemType": BossItemType,
+        "HUD": HUD,
+        "AccessFrom": AccessFrom,
+        "Available": Available,
+        "PostAvailable": PostAvailable,
+        "_isMajor": "Major" in Class,
+        "_isChozo": "Chozo" in Class,
+        "_isMinor": "Minor" in Class,
+        "_isBoss": "Boss" in Class,
+        "_isScavenger": "Scavenger" in Class
     })
     return subclass()
 
@@ -148,7 +150,7 @@ define_location(
     Address=0x78264,
     Id=0x5,
     Visibility="Visible",
-    Room='Gauntlet Energy Tank Room',
+    Room="Gauntlet Energy Tank Room",
 ),
     "Bomb":
 define_location(
@@ -161,8 +163,8 @@ define_location(
     Class=["Major", "Chozo", "Scavenger"],
     CanHidden=False,
     Visibility="Chozo",
-    Room='Bomb Torizo Room',
-    VanillaItemType='Bomb',
+    Room="Bomb Torizo Room",
+    VanillaItemType="Bomb",
     HUD=1,
 ),
     "Energy Tank, Terminator":
@@ -176,7 +178,7 @@ define_location(
     Address=0x78432,
     Id=0x8,
     Visibility="Visible",
-    Room='Terminator Room',
+    Room="Terminator Room",
 ),
     "Reserve Tank, Brinstar":
 define_location(
@@ -189,7 +191,7 @@ define_location(
     Address=0x7852C,
     Id=0x11,
     Visibility="Chozo",
-    Room='Brinstar Reserve Tank Room',
+    Room="Brinstar Reserve Tank Room",
 ),
     "Charge Beam":
 define_location(
@@ -202,8 +204,8 @@ define_location(
     Address=0x78614,
     Id=0x17,
     Visibility="Chozo",
-    Room='Big Pink',
-    VanillaItemType='Charge',
+    Room="Big Pink",
+    VanillaItemType="Charge",
     HUD=2,
 ),
     "Morphing Ball":
@@ -217,8 +219,8 @@ define_location(
     Address=0x786DE,
     Id=0x1a,
     Visibility="Visible",
-    Room='Morph Ball Room',
-    VanillaItemType='Morph',
+    Room="Morph Ball Room",
+    VanillaItemType="Morph",
     HUD=0,
 ),
     "Energy Tank, Brinstar Ceiling":
@@ -232,7 +234,7 @@ define_location(
     Address=0x7879E,
     Id=0x1d,
     Visibility="Hidden",
-    Room='Blue Brinstar Energy Tank Room',
+    Room="Blue Brinstar Energy Tank Room",
 ),
     "Energy Tank, Etecoons":
 define_location(
@@ -245,7 +247,7 @@ define_location(
     Address=0x787C2,
     Id=0x1e,
     Visibility="Visible",
-    Room='Etecoon Energy Tank Room',
+    Room="Etecoon Energy Tank Room",
 ),
     "Energy Tank, Waterway":
 define_location(
@@ -258,7 +260,7 @@ define_location(
     Address=0x787FA,
     Id=0x21,
     Visibility="Visible",
-    Room='Waterway Energy Tank Room',
+    Room="Waterway Energy Tank Room",
 ),
     "Energy Tank, Brinstar Gate":
 define_location(
@@ -271,7 +273,7 @@ define_location(
     Address=0x78824,
     Id=0x23,
     Visibility="Visible",
-    Room='Hopper Energy Tank Room',
+    Room="Hopper Energy Tank Room",
 ),
     "X-Ray Scope":
 define_location(
@@ -284,8 +286,8 @@ define_location(
     Address=0x78876,
     Id=0x26,
     Visibility="Chozo",
-    Room='X-Ray Scope Room',
-    VanillaItemType='XRayScope',
+    Room="X-Ray Scope Room",
+    VanillaItemType="XRayScope",
     HUD=10,
 ),
     "Spazer":
@@ -299,8 +301,8 @@ define_location(
     Address=0x7896E,
     Id=0x2a,
     Visibility="Chozo",
-    Room='Spazer Room',
-    VanillaItemType='Spazer',
+    Room="Spazer Room",
+    VanillaItemType="Spazer",
     HUD=3,
 ),
     "Energy Tank, Kraid":
@@ -314,7 +316,7 @@ define_location(
     Address=0x7899C,
     Id=0x2b,
     Visibility="Hidden",
-    Room='Warehouse Energy Tank Room',
+    Room="Warehouse Energy Tank Room",
 ),
     "Kraid":
 define_location(
@@ -327,7 +329,7 @@ define_location(
     Address=0xB055B055,
     Id=None,
     Visibility="Hidden",
-    Room='Kraid Room',
+    Room="Kraid Room",
     BossItemType="Kraid"
 ),
     "Varia Suit":
@@ -341,8 +343,8 @@ define_location(
     Address=0x78ACA,
     Id=0x30,
     Visibility="Chozo",
-    Room='Varia Suit Room',
-    VanillaItemType='Varia',
+    Room="Varia Suit Room",
+    VanillaItemType="Varia",
     HUD=4,
 ),
     "Ice Beam":
@@ -356,8 +358,8 @@ define_location(
     Address=0x78B24,
     Id=0x32,
     Visibility="Chozo",
-    Room='Ice Beam Room',
-    VanillaItemType='Ice',
+    Room="Ice Beam Room",
+    VanillaItemType="Ice",
     HUD=6,
 ),
     "Energy Tank, Crocomire":
@@ -384,8 +386,8 @@ define_location(
     Address=0x78BAC,
     Id=0x35,
     Visibility="Chozo",
-    Room='Hi Jump Boots Room',
-    VanillaItemType='HiJump',
+    Room="Hi Jump Boots Room",
+    VanillaItemType="HiJump",
     HUD=5,
 ),
     "Grapple Beam":
@@ -399,8 +401,8 @@ define_location(
     Address=0x78C36,
     Id=0x3c,
     Visibility="Chozo",
-    Room='Grapple Beam Room',
-    VanillaItemType='Grapple',
+    Room="Grapple Beam Room",
+    VanillaItemType="Grapple",
     HUD=9,
 ),
     "Reserve Tank, Norfair":
@@ -414,7 +416,7 @@ define_location(
     Address=0x78C3E,
     Id=0x3d,
     Visibility="Chozo",
-    Room='Norfair Reserve Tank Room',
+    Room="Norfair Reserve Tank Room",
 ),
     "Speed Booster":
 define_location(
@@ -427,8 +429,8 @@ define_location(
     Address=0x78C82,
     Id=0x42,
     Visibility="Chozo",
-    Room='Speed Booster Room',
-    VanillaItemType='SpeedBooster',
+    Room="Speed Booster Room",
+    VanillaItemType="SpeedBooster",
     HUD=7,
 ),
     "Wave Beam":
@@ -442,8 +444,8 @@ define_location(
     Address=0x78CCA,
     Id=0x44,
     Visibility="Chozo",
-    Room='Wave Beam Room',
-    VanillaItemType='Wave',
+    Room="Wave Beam Room",
+    VanillaItemType="Wave",
     HUD=8,
 ),
     "Ridley":
@@ -473,7 +475,7 @@ define_location(
     Address=0x79108,
     Id=0x4e,
     Visibility="Hidden",
-    Room='Ridley Tank Room',
+    Room="Ridley Tank Room",
 ),
     "Screw Attack":
 define_location(
@@ -486,8 +488,8 @@ define_location(
     Address=0x79110,
     Id=0x4f,
     Visibility="Chozo",
-    Room='Screw Attack Room',
-    VanillaItemType='ScrewAttack',
+    Room="Screw Attack Room",
+    VanillaItemType="ScrewAttack",
     HUD=15,
 ),
     "Energy Tank, Firefleas":
@@ -501,7 +503,7 @@ define_location(
     Address=0x79184,
     Id=0x50,
     Visibility="Visible",
-    Room='Lower Norfair Fireflea Room',
+    Room="Lower Norfair Fireflea Room",
 ),
     "Reserve Tank, Wrecked Ship":
 define_location(
@@ -514,7 +516,7 @@ define_location(
     Address=0x7C2E9,
     Id=0x81,
     Visibility="Chozo",
-    Room='Bowling Alley',
+    Room="Bowling Alley",
 ),
     "Energy Tank, Wrecked Ship":
 define_location(
@@ -527,7 +529,7 @@ define_location(
     Address=0x7C337,
     Id=0x84,
     Visibility="Visible",
-    Room='Wrecked Ship Energy Tank Room',
+    Room="Wrecked Ship Energy Tank Room",
 ),
     "Phantoon":
 define_location(
@@ -554,7 +556,7 @@ define_location(
     Address=0x7C365,
     Id=0x86,
     Visibility="Visible",
-    Room='Wrecked Ship East Super Room',
+    Room="Wrecked Ship East Super Room",
 ),
     "Gravity Suit":
 define_location(
@@ -567,8 +569,8 @@ define_location(
     Address=0x7C36D,
     Id=0x87,
     Visibility="Chozo",
-    Room='Gravity Suit Room',
-    VanillaItemType='Gravity',
+    Room="Gravity Suit Room",
+    VanillaItemType="Gravity",
     HUD=11,
 ),
     "Energy Tank, Mama turtle":
@@ -582,7 +584,7 @@ define_location(
     Address=0x7C47D,
     Id=0x8a,
     Visibility="Visible",
-    Room='Mama Turtle Room',
+    Room="Mama Turtle Room",
 ),
     "Plasma Beam":
 define_location(
@@ -595,8 +597,8 @@ define_location(
     Address=0x7C559,
     Id=0x8f,
     Visibility="Chozo",
-    Room='Plasma Room',
-    VanillaItemType='Plasma',
+    Room="Plasma Room",
+    VanillaItemType="Plasma",
     HUD=14,
 ),
     "Reserve Tank, Maridia":
@@ -610,7 +612,7 @@ define_location(
     Address=0x7C5E3,
     Id=0x91,
     Visibility="Chozo",
-    Room='West Sand Hole',
+    Room="West Sand Hole",
 ),
     "Spring Ball":
 define_location(
@@ -623,8 +625,8 @@ define_location(
     Address=0x7C6E5,
     Id=0x96,
     Visibility="Chozo",
-    Room='Spring Ball Room',
-    VanillaItemType='SpringBall',
+    Room="Spring Ball Room",
+    VanillaItemType="SpringBall",
     HUD=13,
 ),
     "Energy Tank, Botwoon":
@@ -638,7 +640,7 @@ define_location(
     Address=0x7C755,
     Id=0x98,
     Visibility="Visible",
-    Room='Botwoon Energy Tank Room',
+    Room="Botwoon Energy Tank Room",
 ),
     "Draygon":
 define_location(
@@ -665,8 +667,8 @@ define_location(
     Address=0x7C7A7,
     Id=0x9a,
     Visibility="Chozo",
-    Room='Space Jump Room',
-    VanillaItemType='SpaceJump',
+    Room="Space Jump Room",
+    VanillaItemType="SpaceJump",
     HUD=12,
 ),
     "Mother Brain":
@@ -680,7 +682,7 @@ define_location(
     Id=None,
     Visibility="Hidden",
     CanHidden=False,
-    Room='Mother Brain Room',
+    Room="Mother Brain Room",
     BossItemType="MotherBrain"
 ),
     "Spore Spawn":
@@ -694,7 +696,7 @@ define_location(
     Address=0xB055B055,
     Id=None,
     Visibility="Hidden",
-    Room='Spore Spawn Room',
+    Room="Spore Spawn Room",
     BossItemType="SporeSpawn"
 ),
     "Botwoon":
@@ -751,7 +753,7 @@ define_location(
     Address=0x781CC,
     Id=0x0,
     Visibility="Visible",
-    Room='Crateria Power Bomb Room',
+    Room="Crateria Power Bomb Room",
 ),
     "Missile (outside Wrecked Ship bottom)":
 define_location(
@@ -764,7 +766,7 @@ define_location(
     Address=0x781E8,
     Id=0x1,
     Visibility="Visible",
-    Room='West Ocean',
+    Room="West Ocean",
 ),
     "Missile (outside Wrecked Ship top)":
 define_location(
@@ -777,7 +779,7 @@ define_location(
     Address=0x781EE,
     Id=0x2,
     Visibility="Hidden",
-    Room='West Ocean',
+    Room="West Ocean",
 ),
     "Missile (outside Wrecked Ship middle)":
 define_location(
@@ -790,7 +792,7 @@ define_location(
     Address=0x781F4,
     Id=0x3,
     Visibility="Visible",
-    Room='West Ocean',
+    Room="West Ocean",
 ),
     "Missile (Crateria moat)":
 define_location(
@@ -803,7 +805,7 @@ define_location(
     Address=0x78248,
     Id=0x4,
     Visibility="Visible",
-    Room='The Moat',
+    Room="The Moat",
 ),
     "Missile (Crateria bottom)":
 define_location(
@@ -816,7 +818,7 @@ define_location(
     Address=0x783EE,
     Id=0x6,
     Visibility="Visible",
-    Room='Pit Room',
+    Room="Pit Room",
 ),
     "Missile (Crateria gauntlet right)":
 define_location(
@@ -829,7 +831,7 @@ define_location(
     Address=0x78464,
     Id=0x9,
     Visibility="Visible",
-    Room='Green Pirates Shaft',
+    Room="Green Pirates Shaft",
 ),
     "Missile (Crateria gauntlet left)":
 define_location(
@@ -842,7 +844,7 @@ define_location(
     Address=0x7846A,
     Id=0xa,
     Visibility="Visible",
-    Room='Green Pirates Shaft',
+    Room="Green Pirates Shaft",
 ),
     "Super Missile (Crateria)":
 define_location(
@@ -855,7 +857,7 @@ define_location(
     Address=0x78478,
     Id=0xb,
     Visibility="Visible",
-    Room='Crateria Super Room',
+    Room="Crateria Super Room",
 ),
     "Missile (Crateria middle)":
 define_location(
@@ -868,7 +870,7 @@ define_location(
     Address=0x78486,
     Id=0xc,
     Visibility="Visible",
-    Room='The Final Missile',
+    Room="The Final Missile",
 ),
     "Power Bomb (green Brinstar bottom)":
 define_location(
@@ -881,7 +883,7 @@ define_location(
     Address=0x784AC,
     Id=0xd,
     Visibility="Chozo",
-    Room='Green Brinstar Main Shaft',
+    Room="Green Brinstar Main Shaft",
 ),
     "Super Missile (pink Brinstar)":
 define_location(
@@ -894,7 +896,7 @@ define_location(
     Address=0x784E4,
     Id=0xe,
     Visibility="Chozo",
-    Room='Spore Spawn Super Room',
+    Room="Spore Spawn Super Room",
 ),
     "Missile (green Brinstar below super missile)":
 define_location(
@@ -907,7 +909,7 @@ define_location(
     Address=0x78518,
     Id=0xf,
     Visibility="Visible",
-    Room='Early Supers Room',
+    Room="Early Supers Room",
 ),
     "Super Missile (green Brinstar top)":
 define_location(
@@ -920,7 +922,7 @@ define_location(
     Address=0x7851E,
     Id=0x10,
     Visibility="Visible",
-    Room='Early Supers Room',
+    Room="Early Supers Room",
 ),
     "Missile (green Brinstar behind missile)":
 define_location(
@@ -933,7 +935,7 @@ define_location(
     Address=0x78532,
     Id=0x12,
     Visibility="Hidden",
-    Room='Brinstar Reserve Tank Room',
+    Room="Brinstar Reserve Tank Room",
 ),
     "Missile (green Brinstar behind reserve tank)":
 define_location(
@@ -946,7 +948,7 @@ define_location(
     Address=0x78538,
     Id=0x13,
     Visibility="Visible",
-    Room='Brinstar Reserve Tank Room',
+    Room="Brinstar Reserve Tank Room",
 ),
     "Missile (pink Brinstar top)":
 define_location(
@@ -959,7 +961,7 @@ define_location(
     Address=0x78608,
     Id=0x15,
     Visibility="Visible",
-    Room='Big Pink',
+    Room="Big Pink",
 ),
     "Missile (pink Brinstar bottom)":
 define_location(
@@ -972,7 +974,7 @@ define_location(
     Address=0x7860E,
     Id=0x16,
     Visibility="Visible",
-    Room='Big Pink',
+    Room="Big Pink",
 ),
     "Power Bomb (pink Brinstar)":
 define_location(
@@ -985,7 +987,7 @@ define_location(
     Address=0x7865C,
     Id=0x18,
     Visibility="Visible",
-    Room='Pink Brinstar Power Bomb Room',
+    Room="Pink Brinstar Power Bomb Room",
 ),
     "Missile (green Brinstar pipe)":
 define_location(
@@ -998,7 +1000,7 @@ define_location(
     Address=0x78676,
     Id=0x19,
     Visibility="Visible",
-    Room='Green Hill Zone',
+    Room="Green Hill Zone",
 ),
     "Power Bomb (blue Brinstar)":
 define_location(
@@ -1011,7 +1013,7 @@ define_location(
     Address=0x7874C,
     Id=0x1b,
     Visibility="Visible",
-    Room='Morph Ball Room',
+    Room="Morph Ball Room",
 ),
     "Missile (blue Brinstar middle)":
 define_location(
@@ -1024,7 +1026,7 @@ define_location(
     Class=["Minor"],
     CanHidden=True,
     Visibility="Visible",
-    Room='Blue Brinstar Energy Tank Room',
+    Room="Blue Brinstar Energy Tank Room",
 ),
     "Super Missile (green Brinstar bottom)":
 define_location(
@@ -1037,7 +1039,7 @@ define_location(
     Address=0x787D0,
     Id=0x1f,
     Visibility="Visible",
-    Room='Etecoon Super Room',
+    Room="Etecoon Super Room",
 ),
     "Missile (blue Brinstar bottom)":
 define_location(
@@ -1050,7 +1052,7 @@ define_location(
     Address=0x78802,
     Id=0x22,
     Visibility="Chozo",
-    Room='First Missile Room',
+    Room="First Missile Room",
 ),
     "Missile (blue Brinstar top)":
 define_location(
@@ -1063,7 +1065,7 @@ define_location(
     Address=0x78836,
     Id=0x24,
     Visibility="Visible",
-    Room='Billy Mays Room',
+    Room="Billy Mays Room",
 ),
     "Missile (blue Brinstar behind missile)":
 define_location(
@@ -1076,7 +1078,7 @@ define_location(
     Address=0x7883C,
     Id=0x25,
     Visibility="Hidden",
-    Room='Billy Mays Room',
+    Room="Billy Mays Room",
 ),
     "Power Bomb (red Brinstar sidehopper room)":
 define_location(
@@ -1089,7 +1091,7 @@ define_location(
     Address=0x788CA,
     Id=0x27,
     Visibility="Visible",
-    Room='Beta Power Bomb Room',
+    Room="Beta Power Bomb Room",
 ),
     "Power Bomb (red Brinstar spike room)":
 define_location(
@@ -1102,7 +1104,7 @@ define_location(
     Address=0x7890E,
     Id=0x28,
     Visibility="Chozo",
-    Room='Alpha Power Bomb Room',
+    Room="Alpha Power Bomb Room",
 ),
     "Missile (red Brinstar spike room)":
 define_location(
@@ -1115,7 +1117,7 @@ define_location(
     Address=0x78914,
     Id=0x29,
     Visibility="Visible",
-    Room='Alpha Power Bomb Room',
+    Room="Alpha Power Bomb Room",
 ),
     "Missile (Kraid)":
 define_location(
@@ -1128,7 +1130,7 @@ define_location(
     Address=0x789EC,
     Id=0x2c,
     Visibility="Hidden",
-    Room='Warehouse Keyhunter Room',
+    Room="Warehouse Keyhunter Room",
 ),
     "Missile (lava room)":
 define_location(
@@ -1141,7 +1143,7 @@ define_location(
     Address=0x78AE4,
     Id=0x31,
     Visibility="Hidden",
-    Room='Cathedral',
+    Room="Cathedral",
 ),
     "Missile (below Ice Beam)":
 define_location(
@@ -1154,7 +1156,7 @@ define_location(
     Address=0x78B46,
     Id=0x33,
     Visibility="Hidden",
-    Room='Crumble Shaft',
+    Room="Crumble Shaft",
 ),
     "Missile (above Crocomire)":
 define_location(
@@ -1167,7 +1169,7 @@ define_location(
     Address=0x78BC0,
     Id=0x36,
     Visibility="Visible",
-    Room='Crocomire Escape',
+    Room="Crocomire Escape",
 ),
     "Missile (Hi-Jump Boots)":
 define_location(
@@ -1180,7 +1182,7 @@ define_location(
     Address=0x78BE6,
     Id=0x37,
     Visibility="Visible",
-    Room='Hi Jump Energy Tank Room',
+    Room="Hi Jump Energy Tank Room",
 ),
     "Energy Tank (Hi-Jump Boots)":
 define_location(
@@ -1193,7 +1195,7 @@ define_location(
     Address=0x78BEC,
     Id=0x38,
     Visibility="Visible",
-    Room='Hi Jump Energy Tank Room',
+    Room="Hi Jump Energy Tank Room",
 ),
     "Power Bomb (Crocomire)":
 define_location(
@@ -1206,7 +1208,7 @@ define_location(
     Address=0x78C04,
     Id=0x39,
     Visibility="Visible",
-    Room='Post Crocomire Power Bomb Room',
+    Room="Post Crocomire Power Bomb Room",
 ),
     "Missile (below Crocomire)":
 define_location(
@@ -1219,7 +1221,7 @@ define_location(
     Address=0x78C14,
     Id=0x3a,
     Visibility="Visible",
-    Room='Post Crocomire Missile Room',
+    Room="Post Crocomire Missile Room",
 ),
     "Missile (Grapple Beam)":
 define_location(
@@ -1232,7 +1234,7 @@ define_location(
     Address=0x78C2A,
     Id=0x3b,
     Visibility="Visible",
-    Room='Post Crocomire Jump Room',
+    Room="Post Crocomire Jump Room",
 ),
     "Missile (Norfair Reserve Tank)":
 define_location(
@@ -1245,7 +1247,7 @@ define_location(
     Address=0x78C44,
     Id=0x3e,
     Visibility="Hidden",
-    Room='Norfair Reserve Tank Room',
+    Room="Norfair Reserve Tank Room",
 ),
     "Missile (bubble Norfair green door)":
 define_location(
@@ -1258,7 +1260,7 @@ define_location(
     Address=0x78C52,
     Id=0x3f,
     Visibility="Visible",
-    Room='Green Bubbles Missile Room',
+    Room="Green Bubbles Missile Room",
 ),
     "Missile (bubble Norfair)":
 define_location(
@@ -1271,7 +1273,7 @@ define_location(
     Address=0x78C66,
     Id=0x40,
     Visibility="Visible",
-    Room='Bubble Mountain',
+    Room="Bubble Mountain",
 ),
     "Missile (Speed Booster)":
 define_location(
@@ -1284,7 +1286,7 @@ define_location(
     Address=0x78C74,
     Id=0x41,
     Visibility="Hidden",
-    Room='Speed Booster Hall',
+    Room="Speed Booster Hall",
 ),
     "Missile (Wave Beam)":
 define_location(
@@ -1297,7 +1299,7 @@ define_location(
     Address=0x78CBC,
     Id=0x43,
     Visibility="Visible",
-    Room='Double Chamber',
+    Room="Double Chamber",
 ),
     "Missile (Gold Torizo)":
 define_location(
@@ -1336,7 +1338,7 @@ define_location(
     Address=0x78F30,
     Id=0x49,
     Visibility="Visible",
-    Room='Mickey Mouse Room',
+    Room="Mickey Mouse Room",
 ),
     "Missile (lower Norfair above fire flea room)":
 define_location(
@@ -1349,7 +1351,7 @@ define_location(
     Address=0x78FCA,
     Id=0x4a,
     Visibility="Visible",
-    Room='Lower Norfair Spring Ball Maze Room',
+    Room="Lower Norfair Spring Ball Maze Room",
 ),
     "Power Bomb (lower Norfair above fire flea room)":
 define_location(
@@ -1362,7 +1364,7 @@ define_location(
     Address=0x78FD2,
     Id=0x4b,
     Visibility="Visible",
-    Room='Lower Norfair Escape Power Bomb Room',
+    Room="Lower Norfair Escape Power Bomb Room",
 ),
     "Power Bomb (Power Bombs of shame)":
 define_location(
@@ -1375,7 +1377,7 @@ define_location(
     Address=0x790C0,
     Id=0x4c,
     Visibility="Visible",
-    Room='Wasteland',
+    Room="Wasteland",
 ),
     "Missile (lower Norfair near Wave Beam)":
 define_location(
@@ -1401,7 +1403,7 @@ define_location(
     Address=0x7C265,
     Id=0x80,
     Visibility="Visible",
-    Room='Wrecked Ship Main Shaft',
+    Room="Wrecked Ship Main Shaft",
 ),
     "Missile (Gravity Suit)":
 define_location(
@@ -1414,7 +1416,7 @@ define_location(
     Address=0x7C2EF,
     Id=0x82,
     Visibility="Visible",
-    Room='Bowling Alley',
+    Room="Bowling Alley",
 ),
     "Missile (Wrecked Ship top)":
 define_location(
@@ -1427,7 +1429,7 @@ define_location(
     Address=0x7C319,
     Id=0x83,
     Visibility="Visible",
-    Room='Wrecked Ship East Missile Room',
+    Room="Wrecked Ship East Missile Room",
 ),
     "Super Missile (Wrecked Ship left)":
 define_location(
@@ -1440,7 +1442,7 @@ define_location(
     Address=0x7C357,
     Id=0x85,
     Visibility="Visible",
-    Room='Wrecked Ship West Super Room',
+    Room="Wrecked Ship West Super Room",
 ),
     "Missile (green Maridia shinespark)":
 define_location(
@@ -1453,7 +1455,7 @@ define_location(
     Address=0x7C437,
     Id=0x88,
     Visibility="Visible",
-    Room='Main Street',
+    Room="Main Street",
 ),
     "Super Missile (green Maridia)":
 define_location(
@@ -1466,7 +1468,7 @@ define_location(
     Address=0x7C43D,
     Id=0x89,
     Visibility="Visible",
-    Room='Main Street',
+    Room="Main Street",
 ),
     "Missile (green Maridia tatori)":
 define_location(
@@ -1479,7 +1481,7 @@ define_location(
     Address=0x7C483,
     Id=0x8b,
     Visibility="Hidden",
-    Room='Mama Turtle Room',
+    Room="Mama Turtle Room",
 ),
     "Super Missile (yellow Maridia)":
 define_location(
@@ -1492,7 +1494,7 @@ define_location(
     Address=0x7C4AF,
     Id=0x8c,
     Visibility="Visible",
-    Room='Watering Hole',
+    Room="Watering Hole",
 ),
     "Missile (yellow Maridia super missile)":
 define_location(
@@ -1505,7 +1507,7 @@ define_location(
     Address=0x7C4B5,
     Id=0x8d,
     Visibility="Visible",
-    Room='Watering Hole',
+    Room="Watering Hole",
 ),
     "Missile (yellow Maridia false wall)":
 define_location(
@@ -1518,7 +1520,7 @@ define_location(
     Address=0x7C533,
     Id=0x8e,
     Visibility="Visible",
-    Room='Pseudo Plasma Spark Room',
+    Room="Pseudo Plasma Spark Room",
 ),
     "Missile (left Maridia sand pit room)":
 define_location(
@@ -1531,7 +1533,7 @@ define_location(
     Address=0x7C5DD,
     Id=0x90,
     Visibility="Visible",
-    Room='West Sand Hole',
+    Room="West Sand Hole",
 ),
     "Missile (right Maridia sand pit room)":
 define_location(
@@ -1544,7 +1546,7 @@ define_location(
     Address=0x7C5EB,
     Id=0x92,
     Visibility="Visible",
-    Room='East Sand Hole',
+    Room="East Sand Hole",
 ),
     "Power Bomb (right Maridia sand pit room)":
 define_location(
@@ -1557,7 +1559,7 @@ define_location(
     Address=0x7C5F1,
     Id=0x93,
     Visibility="Visible",
-    Room='East Sand Hole',
+    Room="East Sand Hole",
 ),
     "Missile (pink Maridia)":
 define_location(
@@ -1570,7 +1572,7 @@ define_location(
     Class=["Minor"],
     CanHidden=True,
     Visibility="Visible",
-    Room='Aqueduct',
+    Room="Aqueduct",
 ),
     "Super Missile (pink Maridia)":
 define_location(
@@ -1583,7 +1585,7 @@ define_location(
     Address=0x7C609,
     Id=0x95,
     Visibility="Visible",
-    Room='Aqueduct',
+    Room="Aqueduct",
 ),
     "Missile (Draygon)":
 define_location(
@@ -1596,6 +1598,6 @@ define_location(
     Address=0x7C74D,
     Id=0x97,
     Visibility="Hidden",
-    Room='The Precious Room',
+    Room="The Precious Room",
 )
 }

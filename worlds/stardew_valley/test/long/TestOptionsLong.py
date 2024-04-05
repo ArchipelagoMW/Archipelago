@@ -1,9 +1,9 @@
 from itertools import combinations
 
-from .option_names import all_option_choices
-from .. import setup_solo_multiworld, SVTestCase
-from ..assertion.world_assert import WorldAssertMixin
 from ... import options
+from .. import SVTestCase, setup_solo_multiworld
+from ..assertion.world_assert import WorldAssertMixin
+from .option_names import all_option_choices
 
 
 class TestGenerateDynamicOptions(WorldAssertMixin, SVTestCase):

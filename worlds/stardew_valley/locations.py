@@ -2,17 +2,35 @@ import csv
 import enum
 from dataclasses import dataclass
 from random import Random
-from typing import Optional, Dict, Protocol, List, FrozenSet, Iterable
+from typing import Dict, FrozenSet, Iterable, List, Optional, Protocol
 
 from . import data
 from .bundles.bundle_room import BundleRoom
-from .data.fish_data import special_fish, get_fish_for_mods
+from .data.fish_data import get_fish_for_mods, special_fish
 from .data.museum_data import all_museum_items
 from .data.villagers_data import get_villagers_for_mods
 from .mods.mod_data import ModNames
-from .options import ExcludeGingerIsland, Friendsanity, ArcadeMachineLocations, SpecialOrderLocations, Cropsanity, Fishsanity, Museumsanity, FestivalLocations, \
-    SkillProgression, BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression
-from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
+from .options import (
+    ArcadeMachineLocations,
+    BackpackProgression,
+    BuildingProgression,
+    Chefsanity,
+    Cooksanity,
+    Craftsanity,
+    Cropsanity,
+    ElevatorProgression,
+    ExcludeGingerIsland,
+    FestivalLocations,
+    Fishsanity,
+    Friendsanity,
+    Monstersanity,
+    Museumsanity,
+    Shipsanity,
+    SkillProgression,
+    SpecialOrderLocations,
+    StardewValleyOptions,
+    ToolProgression,
+)
 from .strings.goal_names import Goal
 from .strings.quest_names import ModQuest
 from .strings.region_names import Region
@@ -245,7 +263,7 @@ def extend_friendsanity_locations(randomized_locations: List[LocationData], opti
     if options.friendsanity == Friendsanity.option_none:
         return
 
-    randomized_locations.append(location_table[f"Spouse Stardrop"])
+    randomized_locations.append(location_table["Spouse Stardrop"])
     extend_baby_locations(randomized_locations)
     exclude_ginger_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
     exclude_non_bachelors = options.friendsanity == Friendsanity.option_bachelors

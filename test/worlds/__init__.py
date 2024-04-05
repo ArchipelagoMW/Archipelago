@@ -1,8 +1,10 @@
 def load_tests(loader, standard_tests, pattern):
     import os
     import unittest
-    from .. import file_path
+
     from worlds.AutoWorld import AutoWorldRegister
+
+    from .. import file_path
 
     suite = unittest.TestSuite()
     suite.addTests(standard_tests)

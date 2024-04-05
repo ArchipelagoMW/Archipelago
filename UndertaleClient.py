@@ -1,19 +1,18 @@
 from __future__ import annotations
-import os
-import sys
+
 import asyncio
-import typing
-import bsdiff4
+import os
 import shutil
+import typing
+
+import bsdiff4
 
 import Utils
-
-from NetUtils import NetworkItem, ClientStatus
-from worlds import undertale
+from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, server_loop
 from MultiServer import mark_raw
-from CommonClient import CommonContext, server_loop, \
-    gui_enabled, ClientCommandProcessor, logger, get_base_parser
+from NetUtils import ClientStatus, NetworkItem
 from Utils import async_start
+from worlds import undertale
 
 
 class UndertaleCommandProcessor(ClientCommandProcessor):
@@ -23,7 +22,7 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
     def _cmd_resync(self):
         """Manually trigger a resync."""
         if isinstance(self.ctx, UndertaleContext):
-            self.output(f"Syncing items.")
+            self.output("Syncing items.")
             self.ctx.syncing = True
 
     def _cmd_patch(self):
@@ -57,7 +56,7 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
                     tempInstall = "C:\\Program Files\\Steam\\steamapps\\common\\Undertale"
             if not os.path.exists(tempInstall) or not os.path.exists(tempInstall) or not os.path.isfile(os.path.join(tempInstall, "data.win")):
                 self.output("ERROR: Cannot find Undertale. Please rerun the command with the correct folder."
-                            " command. \"/auto_patch (Steam directory)\".")
+                            ' command. "/auto_patch (Steam directory)".')
             else:
                 for file_name in os.listdir(tempInstall):
                     if file_name != "steam_api.dll":
@@ -69,20 +68,20 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
     def _cmd_online(self):
         """Toggles seeing other Undertale players."""
         if isinstance(self.ctx, UndertaleContext):
-            self.ctx.update_online_mode(not ("Online" in self.ctx.tags))
+            self.ctx.update_online_mode("Online" not in self.ctx.tags)
             if "Online" in self.ctx.tags:
-                self.output(f"Now online.")
+                self.output("Now online.")
             else:
-                self.output(f"Now offline.")
+                self.output("Now offline.")
 
     def _cmd_deathlink(self):
         """Toggles deathlink"""
         if isinstance(self.ctx, UndertaleContext):
             self.ctx.deathlink_status = not self.ctx.deathlink_status
             if self.ctx.deathlink_status:
-                self.output(f"Deathlink enabled.")
+                self.output("Deathlink enabled.")
             else:
-                self.output(f"Deathlink disabled.")
+                self.output("Deathlink disabled.")
 
 
 class UndertaleContext(CommonContext):
@@ -135,7 +134,7 @@ class UndertaleContext(CommonContext):
             for file in files:
                 if "check.spot" == file or "scout" == file:
                     os.remove(os.path.join(root, file))
-                elif file.endswith((".item", ".victory", ".route", ".playerspot", ".mad", 
+                elif file.endswith((".item", ".victory", ".route", ".playerspot", ".mad",
                                             ".youDied", ".LV", ".mine", ".flag", ".hint")):
                     os.remove(os.path.join(root, file))
 
@@ -225,17 +224,17 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         if not args["slot_data"]["key_hunt"]:
             ctx.pieces_needed = 0
         if args["slot_data"]["rando_love"]:
-            filename = f"LOVErando.LV"
+            filename = "LOVErando.LV"
             with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
                 f.close()
         if args["slot_data"]["rando_stats"]:
-            filename = f"STATrando.LV"
+            filename = "STATrando.LV"
             with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
                 f.close()
         filename = f"{ctx.route}.route"
         with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
             f.close()
-        filename = f"check.spot"
+        filename = "check.spot"
         with open(os.path.join(ctx.save_game_folder, filename), "a") as f:
             for ss in set(args["checked_locations"]):
                 f.write(str(ss-12000)+"\n")
@@ -243,7 +242,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
     elif cmd == "LocationInfo":
         for l in args["locations"]:
             locationid = l.location
-            filename = f"{str(locationid-12000)}.hint"
+            filename = f"{locationid-12000!s}.hint"
             with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
                 toDraw = ""
                 for i in range(20):
@@ -293,7 +292,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                     id -= 1
                 if NetworkItem(*item).location < 0:
                     counter -= 1
-                filename = f"{str(id)}PLR{str(NetworkItem(*item).player)}.item"
+                filename = f"{id!s}PLR{NetworkItem(*item).player!s}.item"
                 with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
                     if NetworkItem(*item).item == 77701:
                         if placedWeapon == 0:
@@ -349,11 +348,11 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
                     f.close()
                 ctx.items_received.append(NetworkItem(*item))
                 if [item.item for item in ctx.items_received].count(77000) >= ctx.pieces_needed > 0:
-                    filename = f"{str(-99999)}PLR{str(0)}.item"
+                    filename = f"{-99999!s}PLR{0!s}.item"
                     with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
                         f.write(str(77787 - 11000))
                         f.close()
-                    filename = f"{str(-99998)}PLR{str(0)}.item"
+                    filename = f"{-99998!s}PLR{0!s}.item"
                     with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
                         f.write(str(77789 - 11000))
                         f.close()
@@ -361,7 +360,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
 
     elif cmd == "RoomUpdate":
         if "checked_locations" in args:
-            filename = f"check.spot"
+            filename = "check.spot"
             with open(os.path.join(ctx.save_game_folder, filename), "a") as f:
                 for ss in set(args["checked_locations"]):
                     f.write(str(ss-12000)+"\n")
@@ -372,7 +371,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         if "Online" in tags:
             data = args.get("data", {})
             if data["player"] != ctx.slot and data["player"] is not None:
-                filename = f"FRISK" + str(data["player"]) + ".playerspot"
+                filename = "FRISK" + str(data["player"]) + ".playerspot"
                 with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
                     f.write(str(data["x"]) + str(data["y"]) + str(data["room"]) + str(
                         data["spr"]) + str(data["frm"]))
@@ -385,7 +384,7 @@ async def multi_watcher(ctx: UndertaleContext):
         for root, dirs, files in os.walk(path):
             for file in files:
                 if "spots.mine" in file and "Online" in ctx.tags:
-                    with open(os.path.join(root, file), "r") as mine:
+                    with open(os.path.join(root, file)) as mine:
                         this_x = mine.readline()
                         this_y = mine.readline()
                         this_room = mine.readline()
@@ -430,22 +429,22 @@ async def game_watcher(ctx: UndertaleContext):
                 if "scout" == file:
                     sending = []
                     try:
-                        with open(os.path.join(root, file), "r") as f:
+                        with open(os.path.join(root, file)) as f:
                             lines = f.readlines()
                         for l in lines:
                             if ctx.server_locations.__contains__(int(l)+12000):
-                                sending = sending + [int(l.rstrip('\n'))+12000]
+                                sending = sending + [int(l.rstrip("\n"))+12000]
                     finally:
                         await ctx.send_msgs([{"cmd": "LocationScouts", "locations": sending,
-                                                          "create_as_hint": int(2)}])
+                                                          "create_as_hint": 2}])
                         os.remove(os.path.join(root, file))
                 if "check.spot" in file:
                     sending = []
                     try:
-                        with open(os.path.join(root, file), "r") as f:
+                        with open(os.path.join(root, file)) as f:
                             lines = f.readlines()
                         for l in lines:
-                            sending = sending+[(int(l.rstrip('\n')))+12000]
+                            sending = sending+[(int(l.rstrip("\n")))+12000]
                     finally:
                         await ctx.send_msgs([{"cmd": "LocationChecks", "locations": sending}])
                 if "victory" in file and str(ctx.route) in file:

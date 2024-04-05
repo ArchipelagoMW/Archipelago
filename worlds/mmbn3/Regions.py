@@ -1,4 +1,5 @@
 import typing
+
 from .Names.LocationName import LocationName
 
 

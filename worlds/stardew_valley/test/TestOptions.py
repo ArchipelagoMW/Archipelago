@@ -1,16 +1,25 @@
 import itertools
 
 from Options import NamedRange
-from . import setup_solo_multiworld, SVTestCase, allsanity_options_without_mods, allsanity_options_with_mods
-from .assertion import WorldAssertMixin
-from .long.option_names import all_option_choices
-from .. import items_by_group, Group, StardewValleyWorld
-from ..locations import locations_by_tag, LocationTags, location_table
-from ..options import ExcludeGingerIsland, ToolProgression, Goal, SeasonRandomization, TrapItems, SpecialOrderLocations, ArcadeMachineLocations
+
+from .. import Group, StardewValleyWorld, items_by_group
+from ..locations import LocationTags, location_table, locations_by_tag
+from ..options import (
+    ArcadeMachineLocations,
+    ExcludeGingerIsland,
+    Goal,
+    SeasonRandomization,
+    SpecialOrderLocations,
+    ToolProgression,
+    TrapItems,
+)
 from ..strings.goal_names import Goal as GoalName
 from ..strings.season_names import Season
 from ..strings.special_order_names import SpecialOrder
-from ..strings.tool_names import ToolMaterial, Tool
+from ..strings.tool_names import Tool, ToolMaterial
+from . import SVTestCase, allsanity_options_with_mods, allsanity_options_without_mods, setup_solo_multiworld
+from .assertion import WorldAssertMixin
+from .long.option_names import all_option_choices
 
 SEASONS = {Season.spring, Season.summer, Season.fall, Season.winter}
 TOOLS = {"Hoe", "Pickaxe", "Axe", "Watering Can", "Trash Can", "Fishing Rod"}

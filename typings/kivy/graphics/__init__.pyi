@@ -1,6 +1,5 @@
 from .texture import FillType_Drawable, FillType_Vec, Texture
 
-
 class FillType_Shape(FillType_Drawable):
     texture: Texture
 

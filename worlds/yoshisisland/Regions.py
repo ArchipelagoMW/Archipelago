@@ -1,9 +1,12 @@
-from typing import List, Dict, TYPE_CHECKING
-from BaseClasses import Region, Location
+from typing import TYPE_CHECKING, Dict, List
+
+from BaseClasses import Location, Region
+
+from .level_logic import YoshiLogic
 from .Locations import LocationData
 from .Options import MinigameChecks
-from .level_logic import YoshiLogic
 from .setup_bosses import BossReqs
+
 if TYPE_CHECKING:
     from . import YoshisIslandWorld
 

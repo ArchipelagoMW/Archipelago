@@ -1,16 +1,17 @@
 import logging
 from typing import List
 
-from BaseClasses import Tutorial, ItemClassification
+from BaseClasses import ItemClassification, Tutorial
 from Fill import fill_restrictive
-from worlds.LauncherComponents import Component, components, Type, launch_subprocess
-from worlds.AutoWorld import World, WebWorld
+from worlds.AutoWorld import WebWorld, World
+from worlds.LauncherComponents import Component, Type, components, launch_subprocess
+
 from .Items import *
 from .Locations import *
 from .Names import ItemName, LocationName, RegionName
 from .OpenKH import patch_kh2
 from .Options import KingdomHearts2Options
-from .Regions import create_regions, connect_regions
+from .Regions import connect_regions, create_regions
 from .Rules import *
 from .Subclasses import KH2Item
 

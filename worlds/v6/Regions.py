@@ -1,5 +1,5 @@
-import typing
-from BaseClasses import MultiWorld, Region, Entrance, Location
+from BaseClasses import MultiWorld, Region
+
 from .Locations import V6Location, location_table
 
 v6areas = ["Laboratory", "The Tower", "Space Station 2", "Warp Zone"]

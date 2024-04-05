@@ -1,13 +1,14 @@
 import hashlib
+import json
 import os
 
-import json
 import Utils
 from Utils import read_snes_rom
 from worlds.Files import APDeltaPatch
+
 from .variaRandomizer.utils.utils import openFile
 
-SMJUHASH = '21f3e98df4780ee1c667b84e57d88675'
+SMJUHASH = "21f3e98df4780ee1c667b84e57d88675"
 SM_ROM_MAX_PLAYERID = 65535
 SM_ROM_PLAYERDATA_COUNT = 202
 
@@ -29,8 +30,8 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
         if SMJUHASH != basemd5.hexdigest():
-            raise Exception('Supplied Base Rom does not match known MD5 for Japan+US release. '
-                            'Get the correct game and version, then dump it')
+            raise Exception("Supplied Base Rom does not match known MD5 for Japan+US release. "
+                            "Get the correct game and version, then dump it")
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes
 

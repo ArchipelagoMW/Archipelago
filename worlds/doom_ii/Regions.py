@@ -1,7 +1,9 @@
 # This file is auto generated. More info: https://github.com/Daivuk/apdoom
 
 from typing import List
+
 from BaseClasses import TypedDict
+
 
 class ConnectionDict(TypedDict, total=False):
     target: str

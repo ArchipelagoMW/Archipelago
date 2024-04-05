@@ -1,6 +1,5 @@
 from .locations.items import *
 
-
 DEFAULT_ITEM_POOL = {
     SWORD: 2,
     FEATHER: 1,
@@ -45,7 +44,7 @@ DEFAULT_ITEM_POOL = {
     MAP1: 1, MAP2: 1, MAP3: 1, MAP4: 1, MAP5: 1, MAP6: 1, MAP7: 1, MAP8: 1, MAP9: 1,
     NIGHTMARE_KEY1: 1, NIGHTMARE_KEY2: 1, NIGHTMARE_KEY3: 1, NIGHTMARE_KEY4: 1, NIGHTMARE_KEY5: 1, NIGHTMARE_KEY6: 1, NIGHTMARE_KEY7: 1, NIGHTMARE_KEY8: 1, NIGHTMARE_KEY9: 1,
     STONE_BEAK1: 1, STONE_BEAK2: 1, STONE_BEAK3: 1, STONE_BEAK4: 1, STONE_BEAK5: 1, STONE_BEAK6: 1, STONE_BEAK7: 1, STONE_BEAK8: 1, STONE_BEAK9: 1,
-    
+
     INSTRUMENT1: 1, INSTRUMENT2: 1, INSTRUMENT3: 1, INSTRUMENT4: 1, INSTRUMENT5: 1, INSTRUMENT6: 1, INSTRUMENT7: 1, INSTRUMENT8: 1,
 
     TRADING_ITEM_YOSHI_DOLL: 1,
@@ -107,35 +106,35 @@ class ItemPool:
             default_item_pool = logic.world.map.get_item_pool()
         for item, count in default_item_pool.items():
             self.add(item, count)
-        if settings.boomerang != 'default' and settings.overworld != "random":
+        if settings.boomerang != "default" and settings.overworld != "random":
             self.add(BOOMERANG)
-        if settings.owlstatues == 'both':
+        if settings.owlstatues == "both":
             self.add(RUPEES_20, 9 + 24)
-        elif settings.owlstatues == 'dungeon':
+        elif settings.owlstatues == "dungeon":
             self.add(RUPEES_20, 24)
-        elif settings.owlstatues == 'overworld':
+        elif settings.owlstatues == "overworld":
             self.add(RUPEES_20, 9)
 
-        if settings.bowwow == 'always':
+        if settings.bowwow == "always":
             # Bowwow mode takes a sword from the pool to give as bowwow. So we need to fix that.
             self.add(SWORD)
             self.remove(BOWWOW)
-        elif settings.bowwow == 'swordless':
+        elif settings.bowwow == "swordless":
             # Bowwow mode takes a sword from the pool to give as bowwow, we need to remove all swords and Bowwow except for 1
             self.add(RUPEES_20, self.get(BOWWOW) + self.get(SWORD) - 1)
             self.remove(SWORD, self.get(SWORD) - 1)
             self.remove(BOWWOW, self.get(BOWWOW))
-        if settings.hpmode == 'inverted':
+        if settings.hpmode == "inverted":
             self.add(BAD_HEART_CONTAINER, self.get(HEART_CONTAINER))
             self.remove(HEART_CONTAINER, self.get(HEART_CONTAINER))
-        elif settings.hpmode == 'low':
+        elif settings.hpmode == "low":
             self.add(HEART_PIECE, self.get(HEART_CONTAINER))
             self.remove(HEART_CONTAINER, self.get(HEART_CONTAINER))
-        elif settings.hpmode == 'extralow':
+        elif settings.hpmode == "extralow":
             self.add(RUPEES_20, self.get(HEART_CONTAINER))
             self.remove(HEART_CONTAINER, self.get(HEART_CONTAINER))
 
-        if settings.itempool == 'casual':
+        if settings.itempool == "casual":
             self.add(FLIPPERS)
             self.add(FEATHER)
             self.add(HOOKSHOT)
@@ -155,13 +154,13 @@ class ItemPool:
                 self.remove("COMPASS%d" % (n + 1))
                 self.add("KEY%d" % (n + 1))
                 self.add("NIGHTMARE_KEY%d" % (n +1))
-        elif settings.itempool == 'pain':
+        elif settings.itempool == "pain":
             self.add(BAD_HEART_CONTAINER, 12)
             self.remove(BLUE_TUNIC)
             self.remove(MEDICINE, 2)
             self.remove(HEART_PIECE, 4)
             self.removeRupees(5)
-        elif settings.itempool == 'keyup':
+        elif settings.itempool == "keyup":
             for n in range(9):
                 self.remove("MAP%d" % (n + 1))
                 self.remove("COMPASS%d" % (n + 1))
@@ -255,7 +254,7 @@ class ItemPool:
         #     rupees50 = self.__pool.get(RUPEES_50, 0)
         #     self.add(RUPEES_200, rupees50 // 5)
         #     self.remove(RUPEES_50, rupees50 // 5)
-        
+
     def __randomizeRupees(self, options, rnd):
         # Remove rupees from the item pool and replace them with other items to create more variety
         rupee_item = []

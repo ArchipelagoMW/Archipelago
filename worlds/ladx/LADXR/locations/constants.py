@@ -104,7 +104,7 @@ CHEST_ITEMS = {
     SONG1: 0x8B,
     SONG2: 0x8C,
     SONG3: 0x8D,
-    
+
     INSTRUMENT1: 0x8E,
     INSTRUMENT2: 0x8F,
     INSTRUMENT3: 0x90,

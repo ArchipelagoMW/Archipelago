@@ -1,19 +1,20 @@
 from typing import Dict, Union
 
 from Utils import cache_self1
-from .base_logic import BaseLogic, BaseLogicMixin
-from .has_logic import HasLogicMixin
-from .money_logic import MoneyLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
+
 from ..options import BuildingProgression
-from ..stardew_rule import StardewRule, True_, False_, Has
+from ..stardew_rule import False_, Has, StardewRule, True_
 from ..strings.ap_names.event_names import Event
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.building_names import Building
 from ..strings.fish_names import WaterItem
 from ..strings.material_names import Material
 from ..strings.metal_names import MetalBar
+from .base_logic import BaseLogic, BaseLogicMixin
+from .has_logic import HasLogicMixin
+from .money_logic import MoneyLogicMixin
+from .received_logic import ReceivedLogicMixin
+from .region_logic import RegionLogicMixin
 
 
 class BuildingLogicMixin(BaseLogicMixin):
@@ -83,7 +84,7 @@ class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, MoneyLogicMixin, RegionL
 
         carpenter_rule = self.logic.received(Event.can_construct_buildings)
         if self.options.building_progression & BuildingProgression.option_progressive:
-            return carpenter_rule & self.logic.received(f"Progressive House", upgrade_level)
+            return carpenter_rule & self.logic.received("Progressive House", upgrade_level)
 
         if upgrade_level == 1:
             return carpenter_rule & Has(Building.kitchen, self.registry.building_rules)

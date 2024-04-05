@@ -19,26 +19,35 @@ import sys
 import webbrowser
 from os.path import isfile
 from shutil import which
-from typing import Sequence, Union, Optional
+from typing import Optional, Sequence, Union
 
-import Utils
 import settings
-from worlds.LauncherComponents import Component, components, Type, SuffixIdentifier, icon_paths
+import Utils
+from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, icon_paths
 
 if __name__ == "__main__":
     import ModuleUpdate
     ModuleUpdate.update()
 
-from Utils import is_frozen, user_path, local_path, init_logging, open_filename, messagebox, \
-    is_windows, is_macos, is_linux
+from Utils import (
+    init_logging,
+    is_frozen,
+    is_linux,
+    is_macos,
+    is_windows,
+    local_path,
+    messagebox,
+    open_filename,
+    user_path,
+)
 
 
 def open_host_yaml():
     file = settings.get_settings().filename
     assert file, "host.yaml missing"
     if is_linux:
-        exe = which('sensible-editor') or which('gedit') or \
-              which('xdg-open') or which('gnome-open') or which('kde-open')
+        exe = which("sensible-editor") or which("gedit") or \
+              which("xdg-open") or which("gnome-open") or which("kde-open")
         subprocess.Popen([exe, file])
     elif is_macos:
         exe = which("open")
@@ -82,7 +91,7 @@ def browse_files():
 
 def open_folder(folder_path):
     if is_linux:
-        exe = which('xdg-open') or which('gnome-open') or which('kde-open')
+        exe = which("xdg-open") or which("gnome-open") or which("kde-open")
         subprocess.Popen([exe, folder_path])
     elif is_macos:
         exe = which("open")
@@ -146,24 +155,25 @@ def get_exe(component: Union[str, Component]) -> Optional[Sequence[str]]:
 def launch(exe, in_terminal=False):
     if in_terminal:
         if is_windows:
-            subprocess.Popen(['start', *exe], shell=True)
+            subprocess.Popen(["start", *exe], shell=True)
             return
         elif is_linux:
-            terminal = which('x-terminal-emulator') or which('gnome-terminal') or which('xterm')
+            terminal = which("x-terminal-emulator") or which("gnome-terminal") or which("xterm")
             if terminal:
-                subprocess.Popen([terminal, '-e', shlex.join(exe)])
+                subprocess.Popen([terminal, "-e", shlex.join(exe)])
                 return
         elif is_macos:
-            terminal = [which('open'), '-W', '-a', 'Terminal.app']
+            terminal = [which("open"), "-W", "-a", "Terminal.app"]
             subprocess.Popen([*terminal, *exe])
             return
     subprocess.Popen(exe)
 
 
 def run_gui():
-    from kvui import App, ContainerLayout, GridLayout, Button, Label, ScrollBox, Widget
     from kivy.uix.image import AsyncImage
     from kivy.uix.relativelayout import RelativeLayout
+
+    from kvui import App, Button, ContainerLayout, GridLayout, Label, ScrollBox, Widget
 
     class Launcher(App):
         base_title: str = "Archipelago Launcher"
@@ -262,27 +272,27 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
     if "Patch|Game|Component" in args:
         file, component = identify(args["Patch|Game|Component"])
         if file:
-            args['file'] = file
+            args["file"] = file
         if component:
-            args['component'] = component
+            args["component"] = component
         if not component:
             logging.warning(f"Could not identify Component responsible for {args['Patch|Game|Component']}")
 
     if args["update_settings"]:
         update_settings()
-    if 'file' in args:
+    if "file" in args:
         run_component(args["component"], args["file"], *args["args"])
-    elif 'component' in args:
+    elif "component" in args:
         run_component(args["component"], *args["args"])
     elif not args["update_settings"]:
         run_gui()
 
 
-if __name__ == '__main__':
-    init_logging('Launcher')
+if __name__ == "__main__":
+    init_logging("Launcher")
     Utils.freeze_support()
     multiprocessing.set_start_method("spawn")  # if launched process uses kivy, fork won't work
-    parser = argparse.ArgumentParser(description='Archipelago Launcher')
+    parser = argparse.ArgumentParser(description="Archipelago Launcher")
     run_group = parser.add_argument_group("Run")
     run_group.add_argument("--update_settings", action="store_true",
                            help="Update host.yaml and exit.")

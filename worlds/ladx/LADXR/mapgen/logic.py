@@ -1,7 +1,7 @@
-from .map import Map
-from .locations.entrance import Entrance
 from ..logic import *
-from .tileset import walkable_tiles, entrance_tiles
+from .locations.entrance import Entrance
+from .map import Map
+from .tileset import entrance_tiles, walkable_tiles
 
 
 class LogicGenerator:

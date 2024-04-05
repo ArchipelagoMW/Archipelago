@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from schema import And, Schema
 
-from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool, OptionDict
+from Options import Choice, DefaultOnToggle, OptionDict, PerGameCommonOptions, Range, StartInventoryPool, Toggle
 from worlds.lingo.items import TRAP_ITEMS
 
 

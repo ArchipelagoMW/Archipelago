@@ -1,8 +1,8 @@
-from .data import ename, iname, rname
-from .stages import get_stage_info
-from .options import CV64Options
-
 from typing import Dict, List, Tuple, Union
+
+from .data import ename, iname, rname
+from .options import CV64Options
+from .stages import get_stage_info
 
 # # #    KEY    # # #
 # "connection" = The name of the Region the Entrance connects into. If it's a Tuple[str, str], we take the stage in

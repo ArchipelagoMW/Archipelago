@@ -1,5 +1,7 @@
 import typing
+
 from BaseClasses import Location, Region
+
 from .Names import LocationName
 
 if typing.TYPE_CHECKING:

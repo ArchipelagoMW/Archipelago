@@ -1,35 +1,40 @@
 from __future__ import annotations
 
 import asyncio
-import json
-import typing
 import builtins
-import os
+import collections
+import functools
+import importlib
+import io
 import itertools
+import json
+import logging
+import os
+import pickle
 import subprocess
 import sys
-import pickle
-import functools
-import io
-import collections
-import importlib
-import logging
+import typing
 import warnings
-
 from argparse import Namespace
-from settings import Settings, get_settings
-from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
+from typing import Any, BinaryIO, Coroutine, Dict, Optional, Set, Union
+
 from typing_extensions import TypeGuard
-from yaml import load, load_all, dump
+from yaml import dump, load, load_all
+
+from settings import Settings, get_settings
 
 try:
-    from yaml import CLoader as UnsafeLoader, CSafeLoader as SafeLoader, CDumper as Dumper
+    from yaml import CDumper as Dumper
+    from yaml import CLoader as UnsafeLoader
+    from yaml import CSafeLoader as SafeLoader
 except ImportError:
-    from yaml import Loader as UnsafeLoader, SafeLoader, Dumper
+    from yaml import Dumper, SafeLoader
+    from yaml import Loader as UnsafeLoader
 
 if typing.TYPE_CHECKING:
-    import tkinter
     import pathlib
+    import tkinter
+
     from BaseClasses import Region
 
 
@@ -118,7 +123,7 @@ def cache_self1(function: typing.Callable[[S, T], RetType]) -> typing.Callable[[
 
 
 def is_frozen() -> bool:
-    return typing.cast(bool, getattr(sys, 'frozen', False))
+    return typing.cast(bool, getattr(sys, "frozen", False))
 
 
 def local_path(*path: str) -> str:
@@ -126,7 +131,7 @@ def local_path(*path: str) -> str:
     Returns path to a file in the local Archipelago installation or source.
     This might be read-only and user_path should be used instead for ROMs, configuration, etc.
     """
-    if hasattr(local_path, 'cached_path'):
+    if hasattr(local_path, "cached_path"):
         pass
     elif is_frozen():
         if hasattr(sys, "_MEIPASS"):
@@ -149,10 +154,10 @@ def local_path(*path: str) -> str:
 
 def home_path(*path: str) -> str:
     """Returns path to a file in the user home's Archipelago directory."""
-    if hasattr(home_path, 'cached_path'):
+    if hasattr(home_path, "cached_path"):
         pass
-    elif sys.platform.startswith('linux'):
-        home_path.cached_path = os.path.expanduser('~/Archipelago')
+    elif sys.platform.startswith("linux"):
+        home_path.cached_path = os.path.expanduser("~/Archipelago")
         os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
     else:
         # not implemented
@@ -199,7 +204,7 @@ def cache_path(*path: str) -> str:
 
 
 def output_path(*path: str) -> str:
-    if hasattr(output_path, 'cached_path'):
+    if hasattr(output_path, "cached_path"):
         return os.path.join(output_path.cached_path, *path)
     output_path.cached_path = user_path(get_options()["general_options"]["output_path"])
     path = os.path.join(output_path.cached_path, *path)
@@ -207,7 +212,7 @@ def output_path(*path: str) -> str:
     return path
 
 
-def open_file(filename: typing.Union[str, "pathlib.Path"]) -> None:
+def open_file(filename: typing.Union[str, pathlib.Path]) -> None:
     if is_windows:
         os.startfile(filename)
     else:
@@ -305,7 +310,7 @@ def persistent_store(category: str, key: typing.Any, value: typing.Any):
     storage: dict = persistent_load()
     category = storage.setdefault(category, {})
     category[key] = value
-    with open(path, "wt") as f:
+    with open(path, "w") as f:
         f.write(dump(storage, Dumper=Dumper))
 
 
@@ -317,7 +322,7 @@ def persistent_load() -> typing.Dict[str, dict]:
     storage: dict = {}
     if os.path.exists(path):
         try:
-            with open(path, "r") as f:
+            with open(path) as f:
                 storage = unsafe_parse_yaml(f.read())
         except Exception as e:
             logging.debug(f"Could not read store: {e}")
@@ -338,7 +343,7 @@ def load_data_package_for_checksum(game: str, checksum: typing.Optional[str]) ->
         path = cache_path("datapackage", get_file_safe_name(game), f"{checksum}.json")
         if os.path.exists(path):
             try:
-                with open(path, "r", encoding="utf-8-sig") as f:
+                with open(path, encoding="utf-8-sig") as f:
                     return json.load(f)
             except Exception as e:
                 logging.debug(f"Could not load data package: {e}")
@@ -399,8 +404,8 @@ def get_unique_identifier():
 
 
 safe_builtins = frozenset((
-    'set',
-    'frozenset',
+    "set",
+    "frozenset",
 ))
 
 
@@ -468,7 +473,7 @@ def get_text_after(text: str, start: str) -> str:
     return text[text.index(start) + len(start):]
 
 
-loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}
+loglevel_mapping = {"error": logging.ERROR, "info": logging.INFO, "warning": logging.WARNING, "debug": logging.DEBUG}
 
 
 def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
@@ -561,7 +566,7 @@ def stream_input(stream, queue):
     return thread
 
 
-def tkinter_center_window(window: "tkinter.Tk") -> None:
+def tkinter_center_window(window: tkinter.Tk) -> None:
     window.update()
     x = int(window.winfo_screenwidth() / 2 - window.winfo_reqwidth() / 2)
     y = int(window.winfo_screenheight() / 2 - window.winfo_reqheight() / 2)
@@ -627,7 +632,7 @@ def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typin
         from shutil import which
         kdialog = which("kdialog")
         if kdialog:
-            k_filters = '|'.join((f'{text} (*{" *".join(ext)})' for (text, ext) in filetypes))
+            k_filters = "|".join(f'{text} (*{" *".join(ext)})' for (text, ext) in filetypes)
             return run(kdialog, f"--title={title}", "--getopenfilename", suggest or ".", k_filters)
         zenity = which("zenity")
         if zenity:
@@ -649,7 +654,7 @@ def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typin
         except tkinter.TclError:
             return None  # GUI not available. None is the same as a user clicking "cancel"
         root.withdraw()
-        return tkinter.filedialog.askopenfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
+        return tkinter.filedialog.askopenfilename(title=title, filetypes=((t[0], " ".join(t[1])) for t in filetypes),
                                                   initialfile=suggest or None)
 
 
@@ -754,7 +759,7 @@ def read_snes_rom(stream: BinaryIO, strip_header: bool = True) -> bytearray:
     return buffer
 
 
-_faf_tasks: "Set[asyncio.Task[typing.Any]]" = set()
+_faf_tasks: Set[asyncio.Task[typing.Any]] = set()
 
 
 def async_start(co: Coroutine[None, None, typing.Any], name: Optional[str] = None) -> None:
@@ -816,10 +821,10 @@ def _extend_freeze_support() -> None:
 
         # Handle the first process that MP will create
         if (
-            len(sys.argv) >= 2 and sys.argv[-2] == '-c' and sys.argv[-1].startswith((
-                'from multiprocessing.semaphore_tracker import main',  # Py<3.8
-                'from multiprocessing.resource_tracker import main',  # Py>=3.8
-                'from multiprocessing.forkserver import main'
+            len(sys.argv) >= 2 and sys.argv[-2] == "-c" and sys.argv[-1].startswith((
+                "from multiprocessing.semaphore_tracker import main",  # Py<3.8
+                "from multiprocessing.resource_tracker import main",  # Py>=3.8
+                "from multiprocessing.forkserver import main"
             )) and set(sys.argv[1:-2]) == set(_args_from_interpreter_flags())
         ):
             exec(sys.argv[-1])
@@ -829,8 +834,8 @@ def _extend_freeze_support() -> None:
         if multiprocessing.spawn.is_forking(sys.argv):
             kwargs = {}
             for arg in sys.argv[2:]:
-                name, value = arg.split('=')
-                if value == 'None':
+                name, value = arg.split("=")
+                if value == "None":
                     kwargs[name] = None
                 else:
                     kwargs[name] = int(value)
@@ -877,9 +882,10 @@ def visualize_regions(root_region: Region, file_name: str, *,
         visualize_regions(multiworld.get_region("Menu", player), f"{multiworld.get_out_file_name_base(player)}.puml")
     """
     assert root_region.multiworld, "The multiworld attribute of root_region has to be filled"
-    from BaseClasses import Entrance, Item, Location, LocationProgressType, MultiWorld, Region
-    from collections import deque
     import re
+    from collections import deque
+
+    from BaseClasses import Entrance, Item, Location, LocationProgressType, MultiWorld
 
     uml: typing.List[str] = list()
     seen: typing.Set[Region] = set()
@@ -901,43 +907,43 @@ def visualize_regions(root_region: Region, file_name: str, *,
                 name = f"--{name}--"
             if obj.address is None:
                 name = f"//{name}//"
-        return re.sub("[\".:]", "", name)
+        return re.sub('[".:]', "", name)
 
     def visualize_exits(region: Region) -> None:
         for exit_ in region.exits:
             if exit_.connected_region:
                 if show_entrance_names:
-                    uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\" : \"{fmt(exit_)}\"")
+                    uml.append(f'"{fmt(region)}" --> "{fmt(exit_.connected_region)}" : "{fmt(exit_)}"')
                 else:
                     try:
-                        uml.remove(f"\"{fmt(exit_.connected_region)}\" --> \"{fmt(region)}\"")
-                        uml.append(f"\"{fmt(exit_.connected_region)}\" <--> \"{fmt(region)}\"")
+                        uml.remove(f'"{fmt(exit_.connected_region)}" --> "{fmt(region)}"')
+                        uml.append(f'"{fmt(exit_.connected_region)}" <--> "{fmt(region)}"')
                     except ValueError:
-                        uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\"")
+                        uml.append(f'"{fmt(region)}" --> "{fmt(exit_.connected_region)}"')
             else:
-                uml.append(f"circle \"unconnected exit:\\n{fmt(exit_)}\"")
-                uml.append(f"\"{fmt(region)}\" --> \"unconnected exit:\\n{fmt(exit_)}\"")
+                uml.append(f'circle "unconnected exit:\\n{fmt(exit_)}"')
+                uml.append(f'"{fmt(region)}" --> "unconnected exit:\\n{fmt(exit_)}"')
 
     def visualize_locations(region: Region) -> None:
         any_lock = any(location.locked for location in region.locations)
         for location in region.locations:
             lock = "<&lock-locked> " if location.locked else "<&lock-unlocked,color=transparent> " if any_lock else ""
             if location.item:
-                uml.append(f"\"{fmt(region)}\" : {{method}} {lock}{fmt(location)}: {fmt(location.item)}")
+                uml.append(f'"{fmt(region)}" : {{method}} {lock}{fmt(location)}: {fmt(location.item)}')
             else:
-                uml.append(f"\"{fmt(region)}\" : {{field}} {lock}{fmt(location)}")
+                uml.append(f'"{fmt(region)}" : {{field}} {lock}{fmt(location)}')
 
     def visualize_region(region: Region) -> None:
-        uml.append(f"class \"{fmt(region)}\"")
+        uml.append(f'class "{fmt(region)}"')
         if show_locations:
             visualize_locations(region)
         visualize_exits(region)
 
     def visualize_other_regions() -> None:
         if other_regions := [region for region in multiworld.get_regions(root_region.player) if region not in seen]:
-            uml.append("package \"other regions\" <<Cloud>> {")
+            uml.append('package "other regions" <<Cloud>> {')
             for region in other_regions:
-                uml.append(f"class \"{fmt(region)}\"")
+                uml.append(f'class "{fmt(region)}"')
             uml.append("}")
 
     uml.append("@startuml")
@@ -954,7 +960,7 @@ def visualize_regions(root_region: Region, file_name: str, *,
         visualize_other_regions()
     uml.append("@enduml")
 
-    with open(file_name, "wt", encoding="utf-8") as f:
+    with open(file_name, "w", encoding="utf-8") as f:
         f.write("\n".join(uml))
 
 

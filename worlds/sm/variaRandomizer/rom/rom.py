@@ -1,6 +1,4 @@
-import base64
 
-from ..rom.ips import IPS_Patch
 
 def pc_to_snes(pcaddress):
     snesaddress=(((pcaddress<<1)&0x7F0000)|(pcaddress&0x7FFF)|0x8000)|0x800000
@@ -21,7 +19,7 @@ def snes_to_pc(B):
 VANILLA_ROM_SIZE = 3145728
 BANK_SIZE = 0x8000
 
-class ROM(object):
+class ROM:
     def __init__(self, data={}):
         self.address = 0
         self.maxAddress = VANILLA_ROM_SIZE
@@ -58,8 +56,8 @@ class ROM(object):
     def readBytes(self, size, address=None):
         if address != None:
             self.seek(address)
-        return int.from_bytes(self.read(size), byteorder='little')
-    
+        return int.from_bytes(self.read(size), byteorder="little")
+
     def write(self, bytes):
         pass
 
@@ -75,7 +73,7 @@ class ROM(object):
     def writeBytes(self, value, size, address=None):
         if address != None:
             self.seek(address)
-        self.write(value.to_bytes(size, byteorder='little'))
+        self.write(value.to_bytes(size, byteorder="little"))
 
     def ipsPatch(self, ipsPatches):
         pass
@@ -86,7 +84,7 @@ class ROM(object):
             self.seek(self.maxAddress + BANK_SIZE - off - 1)
             self.writeByte(0xff)
         assert (self.maxAddress % BANK_SIZE) == 0
-        
+
 class RealROM(ROM):
     def __init__(self, name):
         super(RealROM, self).__init__()
@@ -99,7 +97,7 @@ class RealROM(ROM):
     def tell(self):
         self.address = self.romFile.tell()
         return super(RealROM, self).tell()
-    
+
     def write(self, bytes):
         self.romFile.write(bytes)
         self.tell()

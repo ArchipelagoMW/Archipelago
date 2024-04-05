@@ -1,6 +1,6 @@
-from enum import IntFlag
-from typing import Optional, List
 from dataclasses import dataclass, field
+from enum import IntFlag
+from typing import List, Optional
 
 connector_keyword = " to "
 

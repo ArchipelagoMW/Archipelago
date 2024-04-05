@@ -1,14 +1,15 @@
+import copy
 import json
 import os
 import platform
-import struct
 import subprocess
-import copy
 import threading
-from .Utils import subprocess_args, data_path, get_version_bytes, __version__
+
 from Utils import user_path
-from .ntype import BigStream
+
 from .crc import calculate_crc
+from .ntype import BigStream
+from .Utils import __version__, data_path, get_version_bytes, subprocess_args
 
 DMADATA_START = 0x7430
 
@@ -27,9 +28,9 @@ class Rom(BigStream):
         if file is None:
             return
 
-        decomp_file = user_path('ZOOTDEC.z64')
+        decomp_file = user_path("ZOOTDEC.z64")
 
-        with open(data_path('generated/symbols.json'), 'r') as stream:
+        with open(data_path("generated/symbols.json")) as stream:
             symbols = json.load(stream)
             self.symbols = {name: int(addr, 16) for name, addr in symbols.items()}
 
@@ -38,14 +39,14 @@ class Rom(BigStream):
             if os.path.exists(decomp_file):
                 file = decomp_file
 
-            if file == '':
+            if file == "":
                 # if not specified, try to read from the previously decompressed rom
                 file = decomp_file
                 try:
                     self.read_rom(file)
                 except FileNotFoundError:
                     # could not find the decompressed rom either
-                    raise FileNotFoundError('Must specify path to base ROM')
+                    raise FileNotFoundError("Must specify path to base ROM")
             else:
                 self.read_rom(file)
         else:
@@ -84,31 +85,31 @@ class Rom(BigStream):
         romCRC = list(self.buffer[0x10:0x18])
         if romCRC not in validCRC and not skip_crc_check:
             # Bad CRC validation
-            raise RuntimeError('ROM file %s is not a valid OoT 1.0 US ROM.' % file)
-        elif len(self.buffer) < 0x2000000 or len(self.buffer) > (0x4000000) or file_name[1].lower() not in ['.z64',
-                                                                                                            '.n64']:
+            raise RuntimeError("ROM file %s is not a valid OoT 1.0 US ROM." % file)
+        elif len(self.buffer) < 0x2000000 or len(self.buffer) > (0x4000000) or file_name[1].lower() not in [".z64",
+                                                                                                            ".n64"]:
             # ROM is too big, or too small, or not a bad type
-            raise RuntimeError('ROM file %s is not a valid OoT 1.0 US ROM.' % file)
+            raise RuntimeError("ROM file %s is not a valid OoT 1.0 US ROM." % file)
         elif len(self.buffer) == 0x2000000:
             # If Input ROM is compressed, then Decompress it
 
             sub_dir = data_path("Decompress")
 
-            if platform.system() == 'Windows':
+            if platform.system() == "Windows":
                 subcall = [sub_dir + "\\Decompress.exe", file, decomp_file]
-            elif platform.system() == 'Linux':
-                if platform.uname()[4] == 'aarch64' or platform.uname()[4] == 'arm64':
+            elif platform.system() == "Linux":
+                if platform.uname()[4] == "aarch64" or platform.uname()[4] == "arm64":
                     subcall = [sub_dir + "/Decompress_ARM64", file, decomp_file]
                 else:
                     subcall = [sub_dir + "/Decompress", file, decomp_file]
-            elif platform.system() == 'Darwin':
+            elif platform.system() == "Darwin":
                 subcall = [sub_dir + "/Decompress.out", file, decomp_file]
             else:
                 raise RuntimeError(
-                    'Unsupported operating system for decompression. Please supply an already decompressed ROM.')
+                    "Unsupported operating system for decompression. Please supply an already decompressed ROM.")
 
             if not os.path.exists(subcall[0]):
-                raise RuntimeError(f'Decompressor does not exist! Please place it at {subcall[0]}.')
+                raise RuntimeError(f"Decompressor does not exist! Please place it at {subcall[0]}.")
             subprocess.call(subcall, **subprocess_args())
             self.read_rom(decomp_file)
         else:
@@ -138,7 +139,7 @@ class Rom(BigStream):
     def write_to_file(self, file):
         self.verify_dmadata()
         self.update_header()
-        with open(file, 'wb') as outfile:
+        with open(file, "wb") as outfile:
             outfile.write(self.buffer)
 
     def update_header(self):
@@ -148,9 +149,9 @@ class Rom(BigStream):
     def read_rom(self, file):
         # "Reads rom into bytearray"
         try:
-            with open(file, 'rb') as stream:
+            with open(file, "rb") as stream:
                 self.buffer = bytearray(stream.read())
-        except FileNotFoundError as ex:
+        except FileNotFoundError:
             raise FileNotFoundError('Invalid path to Base ROM: "' + file + '"')
 
     # dmadata/file management helper functions
@@ -194,13 +195,13 @@ class Rom(BigStream):
 
             if this_end > next_start:
                 overlapping_records.append(
-                    '0x%08X - 0x%08X (Size: 0x%04X)\n0x%08X - 0x%08X (Size: 0x%04X)' % \
+                    "0x%08X - 0x%08X (Size: 0x%04X)\n0x%08X - 0x%08X (Size: 0x%04X)" % \
                     (this_start, this_end, this_size, next_start, next_end, next_size)
                 )
 
         if len(overlapping_records) > 0:
             raise Exception("Overlapping DMA Data Records!\n%s" % \
-                            '\n-------------------------------------\n'.join(overlapping_records))
+                            "\n-------------------------------------\n".join(overlapping_records))
 
     # update dmadata record with start vrom address "key"
     # if key is not found, then attempt to add a new dmadata entry
@@ -217,7 +218,7 @@ class Rom(BigStream):
             dma_start, dma_end, dma_size = self._get_dmadata_record(cur)
 
         if cur >= (dma_data_end - 0x10):
-            raise Exception('dmadata update failed: key {0:x} not found in dmadata and dma table is full.'.format(key))
+            raise Exception(f"dmadata update failed: key {key:x} not found in dmadata and dma table is full.")
         else:
             self.write_int32s(cur, [start, end, start, 0])
             if from_file == None:
@@ -232,7 +233,7 @@ class Rom(BigStream):
         dma_start, dma_end, dma_size = self._get_dmadata_record(cur)
         while True:
             if dma_start == 0 and dma_end == 0:
-                raise Exception('Bad DMA Table: DMA Table entry missing.')
+                raise Exception("Bad DMA Table: DMA Table entry missing.")
 
             if dma_start == DMADATA_START:
                 return (DMADATA_START, dma_end)
@@ -284,20 +285,20 @@ class Rom(BigStream):
 def compress_rom_file(input_file, output_file):
     compressor_path = "."
 
-    if platform.system() == 'Windows':
+    if platform.system() == "Windows":
         executable_path = "Compress.exe"
-    elif platform.system() == 'Linux':
-        if platform.uname()[4] == 'aarch64' or platform.uname()[4] == 'arm64':
+    elif platform.system() == "Linux":
+        if platform.uname()[4] == "aarch64" or platform.uname()[4] == "arm64":
             executable_path = "Compress_ARM64"
         else:
             executable_path = "Compress"
-    elif platform.system() == 'Darwin':
+    elif platform.system() == "Darwin":
         executable_path = "Compress.out"
     else:
-        raise RuntimeError('Unsupported operating system for compression.')
+        raise RuntimeError("Unsupported operating system for compression.")
     compressor_path = os.path.join(compressor_path, executable_path)
     if not os.path.exists(compressor_path):
-        raise RuntimeError(f'Compressor does not exist! Please place it at {compressor_path}.')
+        raise RuntimeError(f"Compressor does not exist! Please place it at {compressor_path}.")
     import logging
     logging.info(subprocess.check_output([compressor_path, input_file, output_file],
                                              **subprocess_args(include_stdout=False)))

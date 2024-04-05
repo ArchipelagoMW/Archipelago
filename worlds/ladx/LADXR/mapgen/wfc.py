@@ -1,7 +1,8 @@
-from .tileset import TileSet, solid_tiles, open_tiles, vertical_edge_tiles, horizontal_edge_tiles
-from .map import Map
-from typing import Set
 import random
+from typing import Set
+
+from .map import Map
+from .tileset import TileSet, horizontal_edge_tiles, open_tiles, solid_tiles, vertical_edge_tiles
 
 
 class ContradictionException(Exception):

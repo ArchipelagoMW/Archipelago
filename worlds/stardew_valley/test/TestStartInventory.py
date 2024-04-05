@@ -1,6 +1,6 @@
+from .. import options
 from . import SVTestBase
 from .assertion import WorldAssertMixin
-from .. import options
 
 
 class TestStartInventoryAllsanity(WorldAssertMixin, SVTestBase):

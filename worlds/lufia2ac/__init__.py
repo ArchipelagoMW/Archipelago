@@ -9,15 +9,24 @@ from BaseClasses import Item, ItemClassification, Location, MultiWorld, Region, 
 from Options import PerGameCommonOptions
 from Utils import __version__
 from worlds.AutoWorld import WebWorld, World
-from worlds.generic.Rules import add_rule, CollectionRule, set_rule
-from .Client import L2ACSNIClient  # noqa: F401
-from .Items import ItemData, ItemType, l2ac_item_name_to_id, l2ac_item_table, L2ACItem, start_id as items_start_id
-from .Locations import l2ac_location_name_to_id, L2ACLocation
-from .Options import CapsuleStartingLevel, DefaultParty, EnemyFloorNumbers, EnemyMovementPatterns, EnemySprites, \
-    Goal, L2ACOptions
-from .Rom import get_base_rom_bytes, get_base_rom_path, L2ACDeltaPatch
-from .Utils import constrained_choices, constrained_shuffle, weighted_sample
+from worlds.generic.Rules import CollectionRule, add_rule, set_rule
+
 from .basepatch import apply_basepatch
+from .Client import L2ACSNIClient  # noqa: F401
+from .Items import ItemData, ItemType, L2ACItem, l2ac_item_name_to_id, l2ac_item_table
+from .Items import start_id as items_start_id
+from .Locations import L2ACLocation, l2ac_location_name_to_id
+from .Options import (
+    CapsuleStartingLevel,
+    DefaultParty,
+    EnemyFloorNumbers,
+    EnemyMovementPatterns,
+    EnemySprites,
+    Goal,
+    L2ACOptions,
+)
+from .Rom import L2ACDeltaPatch, get_base_rom_bytes, get_base_rom_path
+from .Utils import constrained_choices, constrained_shuffle, weighted_sample
 
 CHESTS_PER_SPHERE: int = 5
 

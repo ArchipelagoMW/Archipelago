@@ -1,18 +1,18 @@
 from __future__ import annotations
-from enum import unique, IntEnum
-from typing import List, Optional, Set, NamedTuple, Dict
+
 import logging
-
-from Utils import int16_as_bytes
-
-from worlds.generic.Rules import add_rule
+from enum import IntEnum, unique
+from typing import Dict, List, NamedTuple, Optional, Set
 
 from BaseClasses import CollectionState
-from .SubClasses import ALttPLocation
+from Utils import int16_as_bytes
+from worlds.generic.Rules import add_rule
+
 from .EntranceShuffle import door_addresses
 from .Items import item_name_groups
-from .Options import small_key_shuffle, RandomizeShopInventories
-from .StateHelpers import has_hearts, can_use_bombs, can_hold_arrows
+from .Options import RandomizeShopInventories, small_key_shuffle
+from .StateHelpers import can_hold_arrows, can_use_bombs, has_hearts
+from .SubClasses import ALttPLocation
 
 logger = logging.getLogger("Shops")
 
@@ -84,10 +84,10 @@ class Shop:
         for inv in self.inventory:
             if inv is None:
                 continue
-            if inv['max']:
-                if inv['replacement'] == item:
+            if inv["max"]:
+                if inv["replacement"] == item:
                     return True
-            elif inv['item'] == item:
+            elif inv["item"] == item:
                 return True
 
         return False
@@ -96,9 +96,9 @@ class Shop:
         for inv in self.inventory:
             if inv is None:
                 continue
-            if inv['item'] == item:
+            if inv["item"] == item:
                 return True
-            if inv['replacement'] == item:
+            if inv["replacement"] == item:
                 return True
         return False
 
@@ -110,28 +110,28 @@ class Shop:
                       player: int = 0, price_type: int = ShopPriceType.Rupees,
                       replacement_price_type: int = ShopPriceType.Rupees):
         self.inventory[slot] = {
-            'item': item,
-            'price': price,
-            'price_type': price_type,
-            'max': max,
-            'replacement': replacement,
-            'replacement_price': replacement_price,
-            'replacement_price_type': replacement_price_type,
-            'player': player
+            "item": item,
+            "price": price,
+            "price_type": price_type,
+            "max": max,
+            "replacement": replacement,
+            "replacement_price": replacement_price,
+            "replacement_price_type": replacement_price_type,
+            "player": player
         }
 
     def push_inventory(self, slot: int, item: str, price: int, max: int = 1, player: int = 0,
                        price_type: int = ShopPriceType.Rupees):
 
         self.inventory[slot] = {
-            'item': item,
-            'price': price,
-            'price_type': price_type,
-            'max': max,
-            'replacement': self.inventory[slot]["item"] if self.inventory[slot] else None,
-            'replacement_price': self.inventory[slot]["price"] if self.inventory[slot] else 0,
-            'replacement_price_type': self.inventory[slot]["price_type"] if self.inventory[slot] else ShopPriceType.Rupees,
-            'player': player
+            "item": item,
+            "price": price,
+            "price_type": price_type,
+            "max": max,
+            "replacement": self.inventory[slot]["item"] if self.inventory[slot] else None,
+            "replacement_price": self.inventory[slot]["price"] if self.inventory[slot] else 0,
+            "replacement_price_type": self.inventory[slot]["price_type"] if self.inventory[slot] else ShopPriceType.Rupees,
+            "player": player
         }
 
 
@@ -197,8 +197,8 @@ def create_shops(multiworld, player: int):
 
     if multiworld.randomize_shop_inventories[player]:
         default_shop_table = [i for l in
-                              [shop_generation_types[x] for x in ['arrows', 'bombs', 'potions', 'shields', 'bottle'] if
-                               not multiworld.retro_bow[player] or x != 'arrows'] for i in l]
+                              [shop_generation_types[x] for x in ["arrows", "bombs", "potions", "shields", "bottle"] if
+                               not multiworld.retro_bow[player] or x != "arrows"] for i in l]
         new_basic_shop = multiworld.random.sample(default_shop_table, k=3)
         new_dark_shop = multiworld.random.sample(default_shop_table, k=3)
         for name, shop in player_shop_table.items():
@@ -255,24 +255,24 @@ class ShopData(NamedTuple):
 
 # (type, room_id, shopkeeper, custom, locked, [items], sram_offset)
 # item = (item, price, max=0, replacement=None, replacement_price=0)
-_basic_shop_defaults = [('Red Potion', 150), ('Small Heart', 10), ('Bombs (10)', 50)]
-_dark_world_shop_defaults = [('Red Potion', 150), ('Blue Shield', 50), ('Bombs (10)', 50)]
-_inverted_hylia_shop_defaults = [('Blue Potion', 160), ('Blue Shield', 50), ('Bombs (10)', 50)]
+_basic_shop_defaults = [("Red Potion", 150), ("Small Heart", 10), ("Bombs (10)", 50)]
+_dark_world_shop_defaults = [("Red Potion", 150), ("Blue Shield", 50), ("Bombs (10)", 50)]
+_inverted_hylia_shop_defaults = [("Blue Potion", 160), ("Blue Shield", 50), ("Bombs (10)", 50)]
 shop_table: Dict[str, ShopData] = {
-    'Cave Shop (Dark Death Mountain)': ShopData(0x0112, ShopType.Shop, 0xC1, True, False, _basic_shop_defaults, 0),
-    'Red Shield Shop': ShopData(0x0110, ShopType.Shop, 0xC1, True, False,
-                                [('Red Shield', 500), ('Bee', 10), ('Arrows (10)', 30)], 3),
-    'Dark Lake Hylia Shop': ShopData(0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults, 6),
-    'Dark World Lumberjack Shop': ShopData(0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults, 9),
-    'Village of Outcasts Shop': ShopData(0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults, 12),
-    'Dark World Potion Shop': ShopData(0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults, 15),
-    'Light World Death Mountain Shop': ShopData(0x00FF, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults, 18),
-    'Kakariko Shop': ShopData(0x011F, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults, 21),
-    'Cave Shop (Lake Hylia)': ShopData(0x0112, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults, 24),
-    'Potion Shop': ShopData(0x0109, ShopType.Shop, 0xA0, True, True,
-                            [('Red Potion', 120), ('Green Potion', 60), ('Blue Potion', 160)], 27),
-    'Capacity Upgrade': ShopData(0x0115, ShopType.UpgradeShop, 0x04, True, True,
-                                 [('Bomb Upgrade (+5)', 100, 7), ('Arrow Upgrade (+5)', 100, 7)], 30)
+    "Cave Shop (Dark Death Mountain)": ShopData(0x0112, ShopType.Shop, 0xC1, True, False, _basic_shop_defaults, 0),
+    "Red Shield Shop": ShopData(0x0110, ShopType.Shop, 0xC1, True, False,
+                                [("Red Shield", 500), ("Bee", 10), ("Arrows (10)", 30)], 3),
+    "Dark Lake Hylia Shop": ShopData(0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults, 6),
+    "Dark World Lumberjack Shop": ShopData(0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults, 9),
+    "Village of Outcasts Shop": ShopData(0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults, 12),
+    "Dark World Potion Shop": ShopData(0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults, 15),
+    "Light World Death Mountain Shop": ShopData(0x00FF, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults, 18),
+    "Kakariko Shop": ShopData(0x011F, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults, 21),
+    "Cave Shop (Lake Hylia)": ShopData(0x0112, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults, 24),
+    "Potion Shop": ShopData(0x0109, ShopType.Shop, 0xA0, True, True,
+                            [("Red Potion", 120), ("Green Potion", 60), ("Blue Potion", 160)], 27),
+    "Capacity Upgrade": ShopData(0x0115, ShopType.UpgradeShop, 0x04, True, True,
+                                 [("Bomb Upgrade (+5)", 100, 7), ("Arrow Upgrade (+5)", 100, 7)], 30)
 }
 
 total_shop_slots = len(shop_table) * 3
@@ -293,13 +293,13 @@ shop_table_by_location_id[(SHOP_ID_START + total_shop_slots + 4)] = "Take-Any #4
 shop_table_by_location = {y: x for x, y in shop_table_by_location_id.items()}
 
 shop_generation_types = {
-    'arrows': [('Single Arrow', 5), ('Arrows (10)', 50)],
-    'bombs': [('Single Bomb', 10), ('Bombs (3)', 30), ('Bombs (10)', 50)],
-    'shields': [('Red Shield', 500), ('Blue Shield', 50)],
-    'potions': [('Red Potion', 150), ('Green Potion', 90), ('Blue Potion', 190)],
-    'discount_potions': [('Red Potion', 120), ('Green Potion', 60), ('Blue Potion', 160)],
-    'bottle': [('Small Heart', 10), ('Apple', 50), ('Bee', 10), ('Good Bee', 100), ('Faerie', 100), ('Magic Jar', 100)],
-    'time': [('Red Clock', 100), ('Blue Clock', 200), ('Green Clock', 300)],
+    "arrows": [("Single Arrow", 5), ("Arrows (10)", 50)],
+    "bombs": [("Single Bomb", 10), ("Bombs (3)", 30), ("Bombs (10)", 50)],
+    "shields": [("Red Shield", 500), ("Blue Shield", 50)],
+    "potions": [("Red Potion", 150), ("Green Potion", 90), ("Blue Potion", 190)],
+    "discount_potions": [("Red Potion", 120), ("Green Potion", 60), ("Blue Potion", 160)],
+    "bottle": [("Small Heart", 10), ("Apple", 50), ("Bee", 10), ("Good Bee", 100), ("Faerie", 100), ("Magic Jar", 100)],
+    "time": [("Red Clock", 100), ("Blue Clock", 200), ("Green Clock", 300)],
 }
 
 
@@ -307,14 +307,14 @@ def set_up_shops(multiworld, player: int):
     # TODO: move hard+ mode changes for shields here, utilizing the new shops
 
     if multiworld.retro_bow[player]:
-        rss = multiworld.get_region('Red Shield Shop', player).shop
-        replacement_items = [['Red Potion', 150], ['Green Potion', 75], ['Blue Potion', 200], ['Bombs (10)', 50],
-                             ['Blue Shield', 50], ['Small Heart',
+        rss = multiworld.get_region("Red Shield Shop", player).shop
+        replacement_items = [["Red Potion", 150], ["Green Potion", 75], ["Blue Potion", 200], ["Bombs (10)", 50],
+                             ["Blue Shield", 50], ["Small Heart",
                                                    10]]  # Can't just replace the single arrow with 10 arrows as retro doesn't need them.
         if multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal:
-            replacement_items.append(['Small Key (Universal)', 100])
+            replacement_items.append(["Small Key (Universal)", 100])
         replacement_item = multiworld.random.choice(replacement_items)
-        rss.add_inventory(2, 'Single Arrow', 80, 1, replacement_item[0], replacement_item[1])
+        rss.add_inventory(2, "Single Arrow", 80, 1, replacement_item[0], replacement_item[1])
         rss.locked = True
 
     if multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal or multiworld.retro_bow[player]:
@@ -326,9 +326,9 @@ def set_up_shops(multiworld, player: int):
             multiworld.random.shuffle(slots)
             slots = iter(slots)
             if multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal:
-                shop.add_inventory(next(slots), 'Small Key (Universal)', 100)
+                shop.add_inventory(next(slots), "Small Key (Universal)", 100)
             if multiworld.retro_bow[player]:
-                shop.push_inventory(next(slots), 'Single Arrow', 80)
+                shop.push_inventory(next(slots), "Single Arrow", 80)
 
     if multiworld.shuffle_capacity_upgrades[player]:
         for shop in multiworld.shops:
@@ -360,11 +360,11 @@ def set_up_shops(multiworld, player: int):
 
 
 price_blacklist = {
-    ShopPriceType.Rupees: {'Rupees'},
-    ShopPriceType.Hearts: {'Small Heart', 'Apple'},
-    ShopPriceType.Magic: {'Magic Jar'},
-    ShopPriceType.Bombs: {'Bombs', 'Single Bomb'},
-    ShopPriceType.Arrows: {'Arrows', 'Single Arrow'},
+    ShopPriceType.Rupees: {"Rupees"},
+    ShopPriceType.Hearts: {"Small Heart", "Apple"},
+    ShopPriceType.Magic: {"Magic Jar"},
+    ShopPriceType.Bombs: {"Bombs", "Single Bomb"},
+    ShopPriceType.Arrows: {"Arrows", "Single Arrow"},
     ShopPriceType.HeartContainer: {},
     ShopPriceType.BombUpgrade: {"Bomb Upgrade"},
     ShopPriceType.ArrowUpgrade: {"Arrow Upgrade"},
@@ -407,12 +407,12 @@ price_rate_display = {
 def get_price_modifier(item):
     if item.game == "A Link to the Past":
         if any(x in item.name for x in
-               ['Compass', 'Map', 'Single Bomb', 'Single Arrow', 'Piece of Heart']):
+               ["Compass", "Map", "Single Bomb", "Single Arrow", "Piece of Heart"]):
             return 0.125
         elif any(x in item.name for x in
-                 ['Arrow', 'Bomb', 'Clock']) and item.name != "Bombos" and "(50)" not in item.name:
+                 ["Arrow", "Bomb", "Clock"]) and item.name != "Bombos" and "(50)" not in item.name:
             return 0.25
-        elif any(x in item.name for x in ['Small Key', 'Heart']):
+        elif any(x in item.name for x in ["Small Key", "Heart"]):
             return 0.5
         else:
             return 1
@@ -456,7 +456,7 @@ def get_price(multiworld, item, player: int, price_type=None):
             price = int((price / adjust) * (0.5 + multiworld.per_slot_randoms[player].random() * 1.5)) * adjust
         multiworld.per_slot_randoms[player].shuffle(price_types)
         for p_type in price_types:
-            if any(x in item['item'] for x in price_blacklist[p_type]):
+            if any(x in item["item"] for x in price_blacklist[p_type]):
                 continue
             return p_type, price_chart[p_type](price, diff)
     else:

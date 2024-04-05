@@ -1,6 +1,6 @@
-from .requirements import *
-from .location import Location
 from ..locations.all import *
+from .location import Location
+from .requirements import *
 
 
 class Dungeon6:
@@ -38,22 +38,22 @@ class Dungeon6:
 
         boss = Location(dungeon=6).add(HeartContainer(0x1BC), Instrument(0x1b5)).connect(center_1, AND(NIGHTMARE_KEY6, r.boss_requirements[world_setup.boss_mapping[5]]))
 
-        if options.logic == 'hard' or options.logic == 'glitched' or options.logic == 'hell':
+        if options.logic == "hard" or options.logic == "glitched" or options.logic == "hell":
             bracelet_chest.connect(entrance, BOMB) # get through 2d section by "fake" jumping to the ladders
             center_1.connect(miniboss, AND(COUNT(POWER_BRACELET, 2), PEGASUS_BOOTS)) # use a boots dash to get over the platforms
-            
-        if options.logic == 'glitched' or options.logic == 'hell':
+
+        if options.logic == "glitched" or options.logic == "hell":
             entrance.connect(left_side, AND(POWER_BRACELET, FEATHER), one_way=True) # path from entrance to left_side: use superjumps to pass raised blocks
             lower_right_side.connect(center_2_and_upper_right_side, AND(FEATHER, OR(SWORD, BOW, MAGIC_ROD)), one_way=True) # path from lower_right_side to center_2:  superjump from waterway towards dodongos. superjump next to corner block, so weapons added
             center_2_and_upper_right_side.connect(center_1, AND(POWER_BRACELET, FEATHER), one_way=True) # going backwards from dodongos, use a shaq jump to pass by keyblock at tile room
             boss_key.connect(lower_right_side, FEATHER) # superjump from waterway to the left. POWER_BRACELET is implied from lower_right_side
 
-        if options.logic == 'hell':
+        if options.logic == "hell":
             entrance.connect(left_side, AND(POWER_BRACELET, PEGASUS_BOOTS, OR(BOW, MAGIC_ROD)), one_way=True) # can boots superhop off the top right corner in 3 wizrobe raised blocks room
             medicine_chest.connect(lower_right_side, AND(PEGASUS_BOOTS, OR(MAGIC_ROD, BOW))) # can boots superhop off the top wall with bow or magic rod
             center_1.connect(miniboss, AND(COUNT(POWER_BRACELET, 2))) # use a double damage boost from the sparks to get across (first one is free, second one needs to buffer while in midair for spark to get close enough)
             lower_right_side.connect(center_2_and_upper_right_side, FEATHER, one_way=True) # path from lower_right_side to center_2:  superjump from waterway towards dodongos. superjump next to corner block is super tight to get enough horizontal distance
-            
+
         self.entrance = entrance
 
 

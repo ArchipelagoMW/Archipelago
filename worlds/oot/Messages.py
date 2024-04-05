@@ -1,6 +1,7 @@
 # text details: https://wiki.cloudmodding.com/oot/Text_Format
 
 import random
+
 from .HintList import misc_item_hint_table, misc_location_hint_table
 from .TextBox import line_wrap
 from .Utils import find_last
@@ -21,49 +22,49 @@ EXTENDED_TABLE_SIZE = JPN_TABLE_SIZE + ENG_TABLE_SIZE # 0x8360 bytes, 4204 entri
 
 # name of type, followed by number of additional bytes to read, follwed by a function that prints the code
 CONTROL_CODES = {
-    0x00: ('pad', 0, lambda _: '<pad>' ),
-    0x01: ('line-break', 0, lambda _: '\n' ),
-    0x02: ('end', 0, lambda _: '' ),
-    0x04: ('box-break', 0, lambda _: '\n▼\n' ),
-    0x05: ('color', 1, lambda d: '<color ' + "{:02x}".format(d) + '>' ),
-    0x06: ('gap', 1, lambda d: '<' + str(d) + 'px gap>' ),
-    0x07: ('goto', 2, lambda d: '<goto ' + "{:04x}".format(d) + '>' ),
-    0x08: ('instant', 0, lambda _: '<allow instant text>' ),
-    0x09: ('un-instant', 0, lambda _: '<disallow instant text>' ),
-    0x0A: ('keep-open', 0, lambda _: '<keep open>' ),
-    0x0B: ('event', 0, lambda _: '<event>' ),
-    0x0C: ('box-break-delay', 1, lambda d: '\n▼<wait ' + str(d) + ' frames>\n' ),
-    0x0E: ('fade-out', 1, lambda d: '<fade after ' + str(d) + ' frames?>' ),
-    0x0F: ('name', 0, lambda _: '<name>' ),
-    0x10: ('ocarina', 0, lambda _: '<ocarina>' ),
-    0x12: ('sound', 2, lambda d: '<play SFX ' + "{:04x}".format(d) + '>' ),
-    0x13: ('icon', 1, lambda d: '<icon ' + "{:02x}".format(d) + '>' ),
-    0x14: ('speed', 1, lambda d: '<delay each character by ' + str(d) + ' frames>' ),
-    0x15: ('background', 3, lambda d: '<set background to ' + "{:06x}".format(d) + '>' ),
-    0x16: ('marathon', 0, lambda _: '<marathon time>' ),
-    0x17: ('race', 0, lambda _: '<race time>' ),
-    0x18: ('points', 0, lambda _: '<points>' ),
-    0x19: ('skulltula', 0, lambda _: '<skulltula count>' ),
-    0x1A: ('unskippable', 0, lambda _: '<text is unskippable>' ),
-    0x1B: ('two-choice', 0, lambda _: '<start two choice>' ),
-    0x1C: ('three-choice', 0, lambda _: '<start three choice>' ),
-    0x1D: ('fish', 0, lambda _: '<fish weight>' ),
-    0x1E: ('high-score', 1, lambda d: '<high-score ' + "{:02x}".format(d) + '>' ),
-    0x1F: ('time', 0, lambda _: '<current time>' ),
+    0x00: ("pad", 0, lambda _: "<pad>" ),
+    0x01: ("line-break", 0, lambda _: "\n" ),
+    0x02: ("end", 0, lambda _: "" ),
+    0x04: ("box-break", 0, lambda _: "\n▼\n" ),
+    0x05: ("color", 1, lambda d: "<color " + f"{d:02x}" + ">" ),
+    0x06: ("gap", 1, lambda d: "<" + str(d) + "px gap>" ),
+    0x07: ("goto", 2, lambda d: "<goto " + f"{d:04x}" + ">" ),
+    0x08: ("instant", 0, lambda _: "<allow instant text>" ),
+    0x09: ("un-instant", 0, lambda _: "<disallow instant text>" ),
+    0x0A: ("keep-open", 0, lambda _: "<keep open>" ),
+    0x0B: ("event", 0, lambda _: "<event>" ),
+    0x0C: ("box-break-delay", 1, lambda d: "\n▼<wait " + str(d) + " frames>\n" ),
+    0x0E: ("fade-out", 1, lambda d: "<fade after " + str(d) + " frames?>" ),
+    0x0F: ("name", 0, lambda _: "<name>" ),
+    0x10: ("ocarina", 0, lambda _: "<ocarina>" ),
+    0x12: ("sound", 2, lambda d: "<play SFX " + f"{d:04x}" + ">" ),
+    0x13: ("icon", 1, lambda d: "<icon " + f"{d:02x}" + ">" ),
+    0x14: ("speed", 1, lambda d: "<delay each character by " + str(d) + " frames>" ),
+    0x15: ("background", 3, lambda d: "<set background to " + f"{d:06x}" + ">" ),
+    0x16: ("marathon", 0, lambda _: "<marathon time>" ),
+    0x17: ("race", 0, lambda _: "<race time>" ),
+    0x18: ("points", 0, lambda _: "<points>" ),
+    0x19: ("skulltula", 0, lambda _: "<skulltula count>" ),
+    0x1A: ("unskippable", 0, lambda _: "<text is unskippable>" ),
+    0x1B: ("two-choice", 0, lambda _: "<start two choice>" ),
+    0x1C: ("three-choice", 0, lambda _: "<start three choice>" ),
+    0x1D: ("fish", 0, lambda _: "<fish weight>" ),
+    0x1E: ("high-score", 1, lambda d: "<high-score " + f"{d:02x}" + ">" ),
+    0x1F: ("time", 0, lambda _: "<current time>" ),
 }
 
 # Maps unicode characters to corresponding bytes in OOTR's character set.
 CHARACTER_MAP = {
-    'Ⓐ': 0x9F,
-    'Ⓑ': 0xA0,
-    'Ⓒ': 0xA1,
-    'Ⓛ': 0xA2,
-    'Ⓡ': 0xA3,
-    'Ⓩ': 0xA4,
-    '⯅': 0xA5,
-    '⯆': 0xA6,
-    '⯇': 0xA7,
-    '⯈': 0xA8,
+    "Ⓐ": 0x9F,
+    "Ⓑ": 0xA0,
+    "Ⓒ": 0xA1,
+    "Ⓛ": 0xA2,
+    "Ⓡ": 0xA3,
+    "Ⓩ": 0xA4,
+    "⯅": 0xA5,
+    "⯆": 0xA6,
+    "⯇": 0xA7,
+    "⯈": 0xA8,
     chr(0xA9): 0xA9,  # Down arrow   -- not sure what best supports this
     chr(0xAA): 0xAA,  # Analog stick -- not sure what best supports this
 }
@@ -77,26 +78,26 @@ CHARACTER_MAP.update((chr(c), c) for c in range(0x20, 0x7e))
 # Other characters, source: https://wiki.cloudmodding.com/oot/Text_Format
 CHARACTER_MAP.update((c, ix) for ix, c in enumerate(
         (
-            '\u203e'             # 0x7f
-            'ÀîÂÄÇÈÉÊËÏÔÖÙÛÜß'   # 0x80 .. #0x8f
-            'àáâäçèéêëïôöùûü'    # 0x90 .. #0x9e
+            "\u203e"             # 0x7f
+            "ÀîÂÄÇÈÉÊËÏÔÖÙÛÜß"   # 0x80 .. #0x8f
+            "àáâäçèéêëïôöùûü"    # 0x90 .. #0x9e
         ),
         start=0x7f
 ))
 
 SPECIAL_CHARACTERS = {
-    0x9F: '[A]',
-    0xA0: '[B]',
-    0xA1: '[C]',
-    0xA2: '[L]',
-    0xA3: '[R]',
-    0xA4: '[Z]',
-    0xA5: '[C Up]',
-    0xA6: '[C Down]',
-    0xA7: '[C Left]',
-    0xA8: '[C Right]',
-    0xA9: '[Triangle]',
-    0xAA: '[Control Stick]',
+    0x9F: "[A]",
+    0xA0: "[B]",
+    0xA1: "[C]",
+    0xA2: "[L]",
+    0xA3: "[R]",
+    0xA4: "[Z]",
+    0xA5: "[C Up]",
+    0xA6: "[C Down]",
+    0xA7: "[C Left]",
+    0xA8: "[C Right]",
+    0xA9: "[Triangle]",
+    0xAA: "[Control Stick]",
 }
 
 REVERSE_MAP = list(chr(x) for x in range(256))
@@ -308,14 +309,14 @@ KEYSANITY_MESSAGES = {
 }
 
 COLOR_MAP = {
-    'White':      '\x40',
-    'Red':        '\x41',
-    'Green':      '\x42',
-    'Blue':       '\x43',
-    'Light Blue': '\x44',
-    'Pink':       '\x45',
-    'Yellow':     '\x46',
-    'Black':      '\x47',
+    "White":      "\x40",
+    "Red":        "\x41",
+    "Green":      "\x42",
+    "Blue":       "\x43",
+    "Light Blue": "\x44",
+    "Pink":       "\x45",
+    "Yellow":     "\x46",
+    "Black":      "\x47",
 }
 
 MISC_MESSAGES = {
@@ -345,12 +346,12 @@ MISC_MESSAGES = {
 
 # convert byte array to an integer
 def bytes_to_int(bytes, signed=False):
-    return int.from_bytes(bytes, byteorder='big', signed=signed)
+    return int.from_bytes(bytes, byteorder="big", signed=signed)
 
 
 # convert int to an array of bytes of the given width
 def int_to_bytes(num, width, signed=False):
-    return int.to_bytes(num, width, byteorder='big', signed=signed)
+    return int.to_bytes(num, width, byteorder="big", signed=signed)
 
 
 def display_code_list(codes):
@@ -416,29 +417,29 @@ class Text_Code:
         elif self.code in SPECIAL_CHARACTERS:
             return SPECIAL_CHARACTERS[self.code]
         elif self.code >= 0x7F:
-            return '?'
+            return "?"
         else:
             return chr(self.code)
 
     def get_python_string(self):
         if self.code in CONTROL_CODES:
-            ret = ''
+            ret = ""
             subdata = self.data
             for _ in range(0, CONTROL_CODES[self.code][1]):
-                ret = ('\\x%02X' % (subdata & 0xFF)) + ret
+                ret = ("\\x%02X" % (subdata & 0xFF)) + ret
                 subdata = subdata >> 8
-            ret = '\\x%02X' % self.code + ret
+            ret = "\\x%02X" % self.code + ret
             return ret
         elif self.code in SPECIAL_CHARACTERS:
-            return '\\x%02X' % self.code
+            return "\\x%02X" % self.code
         elif self.code >= 0x7F:
-            return '?'
+            return "?"
         else:
             return chr(self.code)
 
     def get_string(self):
         if self.code in CONTROL_CODES:
-            ret = ''
+            ret = ""
             subdata = self.data
             for _ in range(0, CONTROL_CODES[self.code][1]):
                 ret = chr(subdata & 0xFF) + ret
@@ -473,7 +474,7 @@ class Text_Code:
         if code in CONTROL_CODES:
             self.type = CONTROL_CODES[code][0]
         else:
-            self.type = 'character'
+            self.type = "character"
         self.data = data
 
     __str__ = __repr__ = display
@@ -484,16 +485,16 @@ class Message:
     def display(self):
         meta_data = [
             "#" + str(self.index),
-            "ID: 0x" + "{:04x}".format(self.id),
-            "Offset: 0x" + "{:06x}".format(self.offset),
-            "Length: 0x" + "{:04x}".format(self.unpadded_length) + "/0x" + "{:04x}".format(self.length),
+            "ID: 0x" + f"{self.id:04x}",
+            "Offset: 0x" + f"{self.offset:06x}",
+            "Length: 0x" + f"{self.unpadded_length:04x}" + "/0x" + f"{self.length:04x}",
             "Box Type: " + str(self.box_type),
             "Postion: " + str(self.position)
         ]
-        return ', '.join(meta_data) + '\n' + self.text
+        return ", ".join(meta_data) + "\n" + self.text
 
     def get_python_string(self):
-        ret = ''
+        ret = ""
         for code in self.text_codes:
             ret = ret + code.get_python_string()
         return ret
@@ -505,9 +506,9 @@ class Message:
         for i in range(4):
             code = self.text_codes[i].code
             if not (
-                    code in range(ord('0'), ord('9')+1)
-                    or code in range(ord('A'), ord('F')+1)
-                    or code in range(ord('a'), ord('f')+1)
+                    code in range(ord("0"), ord("9")+1)
+                    or code in range(ord("A"), ord("F")+1)
+                    or code in range(ord("a"), ord("f")+1)
             ):
                 return False
         return True
@@ -555,7 +556,7 @@ class Message:
         size = (size + 3) & -4 # align to nearest 4 bytes
 
         return size
-    
+
     # applies whatever transformations we want to the dialogs
     def transform(self, replace_ending=False, ending=None, always_allow_skip=True, speed_up_text=True):
         ending_codes = [0x02, 0x07, 0x0A, 0x0B, 0x0E, 0x10]
@@ -720,23 +721,23 @@ def add_message(messages, text, id=0, opts=0x00):
     messages[-1].index = len(messages) - 1
 
 # holds a row in the shop item table (which contains pointers to the description and purchase messages)
-class Shop_Item():
+class Shop_Item:
 
     def display(self):
         meta_data = ["#" + str(self.index),
-         "Item: 0x" + "{:04x}".format(self.get_item_id),
+         "Item: 0x" + f"{self.get_item_id:04x}",
          "Price: " + str(self.price),
          "Amount: " + str(self.pieces),
-         "Object: 0x" + "{:04x}".format(self.object),
-         "Model: 0x" + "{:04x}".format(self.model),
-         "Description: 0x" + "{:04x}".format(self.description_message),
-         "Purchase: 0x" + "{:04x}".format(self.purchase_message),]
+         "Object: 0x" + f"{self.object:04x}",
+         "Model: 0x" + f"{self.model:04x}",
+         "Description: 0x" + f"{self.description_message:04x}",
+         "Purchase: 0x" + f"{self.purchase_message:04x}",]
         func_data = [
-         "func1: 0x" + "{:08x}".format(self.func1),
-         "func2: 0x" + "{:08x}".format(self.func2),
-         "func3: 0x" + "{:08x}".format(self.func3),
-         "func4: 0x" + "{:08x}".format(self.func4),]
-        return ', '.join(meta_data) + '\n' + ', '.join(func_data)
+         "func1: 0x" + f"{self.func1:08x}",
+         "func2: 0x" + f"{self.func2:08x}",
+         "func3: 0x" + f"{self.func3:08x}",
+         "func4: 0x" + f"{self.func4:08x}",]
+        return ", ".join(meta_data) + "\n" + ", ".join(func_data)
 
     # write the shop item back
     def write(self, rom, shop_table_address, index):
@@ -838,7 +839,7 @@ def move_shop_item_messages(messages, shop_items):
             shop.purchase_message |= 0x8000
 
 def make_player_message(text):
-    player_text = '\x05\x42\x0F\x05\x40'
+    player_text = "\x05\x42\x0F\x05\x40"
     pronoun_mapping = {
         "You have ": player_text + " ",
         "You are ":  player_text + " is ",
@@ -854,18 +855,18 @@ def make_player_message(text):
     }
 
     verb_mapping = {
-        'obtained ': 'got ',
-        'received ': 'got ',
-        'learned ':  'got ',
-        'borrowed ': 'got ',
-        'found ':    'got ',
+        "obtained ": "got ",
+        "received ": "got ",
+        "learned ":  "got ",
+        "borrowed ": "got ",
+        "found ":    "got ",
     }
 
     new_text = text
 
     # Replace the first instance of a 'You' with the player name
     lower_text = text.lower()
-    you_index = lower_text.find('you')
+    you_index = lower_text.find("you")
     if you_index != -1:
         for find_text, replace_text in pronoun_mapping.items():
             # if the index do not match, then it is not the first 'You'
@@ -955,7 +956,7 @@ def repack_messages(rom, messages, permutation=None, always_allow_skip=True, spe
     # raise an exception if too much is written
     # we raise it at the end so that we know how much overflow there is
     if offset > text_size_limit:
-        raise(TypeError("Message Text table is too large: 0x" + "{:x}".format(offset) + " written / 0x" + "{:x}".format(ENG_TEXT_SIZE_LIMIT) + " allowed."))
+        raise(TypeError("Message Text table is too large: 0x" + f"{offset:x}" + " written / 0x" + f"{ENG_TEXT_SIZE_LIMIT:x}" + " allowed."))
 
     # end the table
     table_index = len(messages)
@@ -965,7 +966,7 @@ def repack_messages(rom, messages, permutation=None, always_allow_skip=True, spe
     table_index += 1
     entry_offset = EXTENDED_TABLE_START + 8 * table_index
     if 8 * (table_index + 1) > EXTENDED_TABLE_SIZE:
-        raise(TypeError("Message ID table is too large: 0x" + "{:x}".format(8 * (table_index + 1)) + " written / 0x" + "{:x}".format(EXTENDED_TABLE_SIZE) + " allowed."))
+        raise(TypeError("Message ID table is too large: 0x" + f"{8 * (table_index + 1):x}" + " written / 0x" + f"{EXTENDED_TABLE_SIZE:x}" + " allowed."))
     rom.write_bytes(entry_offset, [0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
 
 # shuffles the messages in the game, making sure to keep various message types in their own group
@@ -976,8 +977,8 @@ def shuffle_messages(messages, except_hints=True, always_allow_skip=True):
     def is_exempt(m):
         hint_ids = (
             GOSSIP_STONE_MESSAGES + TEMPLE_HINTS_MESSAGES +
-            [data['id'] for data in misc_item_hint_table.values()] +
-            [data['id'] for data in misc_location_hint_table.values()] +
+            [data["id"] for data in misc_item_hint_table.values()] +
+            [data["id"] for data in misc_location_hint_table.values()] +
             list(KEYSANITY_MESSAGES.keys()) + shuffle_messages.shop_item_messages +
             shuffle_messages.scrubs_message_ids +
             [0x5036, 0x70F5] # Chicken count and poe count respectively
@@ -1022,25 +1023,25 @@ def update_warp_song_text(messages, world):
     from .Hints import HintArea
 
     msg_list = {
-        0x088D: 'Minuet of Forest Warp -> Sacred Forest Meadow',
-        0x088E: 'Bolero of Fire Warp -> DMC Central Local',
-        0x088F: 'Serenade of Water Warp -> Lake Hylia',
-        0x0890: 'Requiem of Spirit Warp -> Desert Colossus',
-        0x0891: 'Nocturne of Shadow Warp -> Graveyard Warp Pad Region',
-        0x0892: 'Prelude of Light Warp -> Temple of Time',
+        0x088D: "Minuet of Forest Warp -> Sacred Forest Meadow",
+        0x088E: "Bolero of Fire Warp -> DMC Central Local",
+        0x088F: "Serenade of Water Warp -> Lake Hylia",
+        0x0890: "Requiem of Spirit Warp -> Desert Colossus",
+        0x0891: "Nocturne of Shadow Warp -> Graveyard Warp Pad Region",
+        0x0892: "Prelude of Light Warp -> Temple of Time",
     }
 
     if world.logic_rules != "glitched": # Entrances not set on glitched logic so following code will error
         for id, entr in msg_list.items():
-            if 'warp_songs' in world.misc_hints or not world.warp_songs:
+            if "warp_songs" in world.misc_hints or not world.warp_songs:
                 destination = world.get_entrance(entr).connected_region
                 destination_name = HintArea.at(destination)
                 color = COLOR_MAP[destination_name.color]
                 if destination_name.preposition(True) is not None:
-                    destination_name = f'to {destination_name}'
+                    destination_name = f"to {destination_name}"
             else:
-                destination_name = 'to a mysterious place'
-                color = COLOR_MAP['White']
+                destination_name = "to a mysterious place"
+                color = COLOR_MAP["White"]
 
             new_msg = f"\x08\x05{color}Warp {destination_name}?\x05\40\x09\x01\x01\x1b\x05\x42OK\x01No\x05\40"
             update_message_by_id(messages, id, new_msg)

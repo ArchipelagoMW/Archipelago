@@ -1,9 +1,9 @@
 #Much of this is heavily inspired from and/or based on az64's / Deathbasket's MM randomizer
 
-import random
 import os
-from .Utils import compare_version, data_path
+import random
 
+from .Utils import data_path
 
 # Format: (Title, Sequence ID)
 bgm_sequence_ids = [
@@ -90,7 +90,7 @@ ocarina_sequence_ids = [
 ]
 
 # Represents the information associated with a sequence, aside from the sequence data itself
-class TableEntry(object):
+class TableEntry:
     def __init__(self, name, cosmetic_name, type = 0x0202, instrument_set = 0x03, replaces = -1, vanilla_id = -1):
         self.name = name
         self.cosmetic_name = cosmetic_name
@@ -106,14 +106,14 @@ class TableEntry(object):
 
 
 # Represents actual sequence data, along with metadata for the sequence data block
-class Sequence(object):
+class Sequence:
     def __init__(self):
         self.address = -1
         self.size = -1
         self.data = []
 
 
-def process_sequences(rom, sequences, target_sequences, disabled_source_sequences, disabled_target_sequences, ids, seq_type = 'bgm'):
+def process_sequences(rom, sequences, target_sequences, disabled_source_sequences, disabled_target_sequences, ids, seq_type = "bgm"):
     # Process vanilla music data
     for bgm in ids:
         # Get sequence metadata
@@ -135,39 +135,39 @@ def process_sequences(rom, sequences, target_sequences, disabled_source_sequence
 
     # If present, load the file containing custom music to exclude
     try:
-        with open(os.path.join(data_path(), u'custom_music_exclusion.txt')) as excl_in:
+        with open(os.path.join(data_path(), "custom_music_exclusion.txt")) as excl_in:
             seq_exclusion_list = excl_in.readlines()
-        seq_exclusion_list = [seq.rstrip() for seq in seq_exclusion_list if seq[0] != '#']
-        seq_exclusion_list = [seq for seq in seq_exclusion_list if seq.endswith('.meta')]
+        seq_exclusion_list = [seq.rstrip() for seq in seq_exclusion_list if seq[0] != "#"]
+        seq_exclusion_list = [seq for seq in seq_exclusion_list if seq.endswith(".meta")]
     except FileNotFoundError:
         seq_exclusion_list = []
 
     # Process music data in data/Music/
     # Each sequence requires a valid .seq sequence file and a .meta metadata file
     # Current .meta format: Cosmetic Name\nInstrument Set\nPool
-    for dirpath, _, filenames in os.walk(u'./data/Music', followlinks=True):
+    for dirpath, _, filenames in os.walk("./data/Music", followlinks=True):
         for fname in filenames:
             # Skip if included in exclusion file
             if fname in seq_exclusion_list:
                 continue
 
             # Find meta file and check if corresponding seq file exists
-            if fname.endswith('.meta') and os.path.isfile(os.path.join(dirpath, fname.split('.')[0] + '.seq')):
+            if fname.endswith(".meta") and os.path.isfile(os.path.join(dirpath, fname.split(".")[0] + ".seq")):
                 # Read meta info
                 try:
-                    with open(os.path.join(dirpath, fname), 'r') as stream:
+                    with open(os.path.join(dirpath, fname)) as stream:
                         lines = stream.readlines()
                     # Strip newline(s)
                     lines = [line.rstrip() for line in lines]
-                except FileNotFoundError as ex:
+                except FileNotFoundError:
                     raise FileNotFoundError('No meta file for: "' + fname + '". This should never happen')
 
                 # Create new sequence, checking third line for correct type
-                if (len(lines) > 2 and (lines[2].lower() == seq_type.lower() or lines[2] == '')) or (len(lines) <= 2 and seq_type == 'bgm'):
-                    seq = TableEntry(os.path.join(dirpath, fname.split('.')[0]), lines[0], instrument_set = int(lines[1], 16))
+                if (len(lines) > 2 and (lines[2].lower() == seq_type.lower() or lines[2] == "")) or (len(lines) <= 2 and seq_type == "bgm"):
+                    seq = TableEntry(os.path.join(dirpath, fname.split(".")[0]), lines[0], instrument_set = int(lines[1], 16))
 
                     if seq.instrument_set < 0x00 or seq.instrument_set > 0x25:
-                        raise Exception('Sequence instrument must be in range [0x00, 0x25]')
+                        raise Exception("Sequence instrument must be in range [0x00, 0x25]")
 
                     if seq.cosmetic_name not in disabled_source_sequences:
                         sequences.append(seq)
@@ -183,7 +183,7 @@ def shuffle_music(sequences, target_sequences, music_mapping, log):
         if sequence.cosmetic_name == "None":
             raise Exception('Sequences should not be named "None" as that is used for disabled music. Sequence with improper name: %s' % sequence.name)
         if sequence.cosmetic_name in sequence_dict:
-            raise Exception('Sequence names should be unique. Duplicate sequence name: %s' % sequence.cosmetic_name)
+            raise Exception("Sequence names should be unique. Duplicate sequence name: %s" % sequence.cosmetic_name)
         sequence_dict[sequence.cosmetic_name] = sequence
         if sequence.cosmetic_name not in music_mapping.values():
             sequence_ids.append(sequence.cosmetic_name)
@@ -260,13 +260,13 @@ def rebuild_sequences(rom, sequences):
             else:
                 # Read sequence info
                 try:
-                    with open(s.name + '.seq', 'rb') as stream:
+                    with open(s.name + ".seq", "rb") as stream:
                         new_entry.data = bytearray(stream.read())
                     new_entry.size = len(new_entry.data)
                     if new_entry.size <= 0x10:
                         raise Exception('Invalid sequence file "' + s.name + '.seq"')
                     new_entry.data[1] = 0x20
-                except FileNotFoundError as ex:
+                except FileNotFoundError:
                     raise FileNotFoundError('No sequence file for: "' + s.name + '"')
         else:
             new_entry.size = old_sequences[i].size
@@ -385,13 +385,13 @@ def randomize_music(rom, ootworld, music_mapping):
 
     # Flag sequence locations that are set to off for disabling.
     disabled_ids = []
-    if ootworld.background_music == 'off':
+    if ootworld.background_music == "off":
         disabled_ids += [music_id for music_id in bgm_ids]
-    if ootworld.fanfares == 'off':
+    if ootworld.fanfares == "off":
         disabled_ids += [music_id for music_id in ff_ids]
         disabled_ids += [music_id for music_id in ocarina_sequence_ids]
     for bgm in [music_id for music_id in bgm_ids + ff_ids + ocarina_sequence_ids]:
-        if music_mapping.get(bgm[0], '') == "None":
+        if music_mapping.get(bgm[0], "") == "None":
             disabled_target_sequences[bgm[0]] = bgm
     for bgm in disabled_ids:
         if bgm[0] not in music_mapping:
@@ -400,11 +400,11 @@ def randomize_music(rom, ootworld, music_mapping):
 
     # Map music to itself if music is set to normal.
     normal_ids = []
-    if ootworld.background_music == 'normal' and bgm_mapped:
+    if ootworld.background_music == "normal" and bgm_mapped:
         normal_ids += [music_id for music_id in bgm_ids]
-    if ootworld.fanfares == 'normal' and (ff_mapped or ocarina_mapped):
+    if ootworld.fanfares == "normal" and (ff_mapped or ocarina_mapped):
         normal_ids += [music_id for music_id in ff_ids]
-    if not ootworld.ocarina_fanfares and ootworld.fanfares == 'normal' and ocarina_mapped:
+    if not ootworld.ocarina_fanfares and ootworld.fanfares == "normal" and ocarina_mapped:
         normal_ids += [music_id for music_id in ocarina_sequence_ids]
     for bgm in normal_ids:
         if bgm[0] not in music_mapping:
@@ -437,10 +437,10 @@ def randomize_music(rom, ootworld, music_mapping):
 
     #     rebuild_sequences(rom, sequences + fanfare_sequences)
     # else:
-    if ootworld.background_music == 'randomized' or bgm_mapped:
+    if ootworld.background_music == "randomized" or bgm_mapped:
         log = shuffle_pointers_table(rom, bgm_ids, music_mapping, log)
 
-    if ootworld.fanfares == 'randomized' or ff_mapped or ocarina_mapped:
+    if ootworld.fanfares == "randomized" or ff_mapped or ocarina_mapped:
         log = shuffle_pointers_table(rom, ff_ids, music_mapping, log)
     # end_else
     if disabled_target_sequences:

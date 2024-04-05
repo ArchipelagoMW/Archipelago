@@ -1,7 +1,8 @@
 from dataclasses import dataclass
-from typing import Protocol, ClassVar
+from typing import ClassVar, Protocol
 
-from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink
+from Options import Choice, DeathLink, NamedRange, OptionSet, PerGameCommonOptions, Range, Toggle
+
 from .mods.mod_data import ModNames
 
 

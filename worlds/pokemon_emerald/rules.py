@@ -7,7 +7,7 @@ from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 
 from .data import NATIONAL_ID_TO_SPECIES_ID, NUM_REAL_SPECIES, data
-from .options import DarkCavesRequireFlash, EliteFourRequirement, NormanRequirement, Goal
+from .options import DarkCavesRequireFlash, EliteFourRequirement, Goal, NormanRequirement
 
 if TYPE_CHECKING:
     from . import PokemonEmeraldWorld
@@ -30,7 +30,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
 
     def has_mach_bike(state: CollectionState):
         return state.has("Mach Bike", world.player)
-    
+
     def defeated_n_gym_leaders(state: CollectionState, n: int) -> bool:
         return sum([state.has(event, world.player) for event in [
             "EVENT_DEFEAT_ROXANNE",
@@ -1536,7 +1536,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         # can be tracked, and also guarantees that the roamer is a Latios.
         if world.options.goal == Goal.option_legendary_hunt:
             set_rule(
-                get_location(f"Pokedex - Latios"),
+                get_location("Pokedex - Latios"),
                 lambda state: state.has("EVENT_ENCOUNTER_LATIOS", world.player)
             )
 

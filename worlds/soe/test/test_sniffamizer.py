@@ -1,9 +1,9 @@
 import typing
 from unittest import TestCase, skipUnless
 
-from . import SoETestBase
 from .. import pyevermizer
 from ..options import Sniffamizer
+from . import SoETestBase
 
 
 class TestCount(TestCase):

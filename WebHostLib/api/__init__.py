@@ -7,7 +7,7 @@ from flask import Blueprint, abort
 from .. import cache
 from ..models import Room, Seed
 
-api_endpoints = Blueprint('api', __name__, url_prefix="/api")
+api_endpoints = Blueprint("api", __name__, url_prefix="/api")
 
 # unsorted/misc endpoints
 
@@ -16,7 +16,7 @@ def get_players(seed: Seed) -> List[Tuple[str, str]]:
     return [(slot.player_name, slot.game) for slot in seed.slots]
 
 
-@api_endpoints.route('/room_status/<suuid:room>')
+@api_endpoints.route("/room_status/<suuid:room>")
 def room_info(room: UUID):
     room = Room.get(id=room)
     if room is None:
@@ -30,14 +30,14 @@ def room_info(room: UUID):
     }
 
 
-@api_endpoints.route('/datapackage')
+@api_endpoints.route("/datapackage")
 @cache.cached()
 def get_datapackage():
     from worlds import network_data_package
     return network_data_package
 
 
-@api_endpoints.route('/datapackage_version')
+@api_endpoints.route("/datapackage_version")
 @cache.cached()
 def get_datapackage_versions():
     from worlds import AutoWorldRegister
@@ -46,7 +46,7 @@ def get_datapackage_versions():
     return version_package
 
 
-@api_endpoints.route('/datapackage_checksum')
+@api_endpoints.route("/datapackage_checksum")
 @cache.cached()
 def get_datapackage_checksums():
     from worlds import network_data_package

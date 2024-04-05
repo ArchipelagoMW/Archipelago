@@ -1,22 +1,47 @@
 import itertools
-from typing import List, Dict, Set
+from typing import Dict, List, Set
 
 from BaseClasses import MultiWorld
 from worlds.generic import Rules as MultiWorldRules
+
 from . import locations
 from .bundles.bundle_room import BundleRoom
 from .data.craftable_data import all_crafting_recipes_by_name
-from .data.museum_data import all_museum_items, dwarf_scrolls, skeleton_front, skeleton_middle, skeleton_back, all_museum_items_by_name, all_museum_minerals, \
-    all_museum_artifacts, Artifact
+from .data.museum_data import (
+    Artifact,
+    all_museum_artifacts,
+    all_museum_items,
+    all_museum_items_by_name,
+    all_museum_minerals,
+    dwarf_scrolls,
+    skeleton_back,
+    skeleton_front,
+    skeleton_middle,
+)
 from .data.recipe_data import all_cooking_recipes_by_name
 from .locations import LocationTags
 from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
 from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
-from .options import StardewValleyOptions, Friendsanity
-from .options import ToolProgression, BuildingProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
-    Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, Cropsanity, SkillProgression
+from .options import (
+    ArcadeMachineLocations,
+    BackpackProgression,
+    BuildingProgression,
+    Chefsanity,
+    Cooksanity,
+    Craftsanity,
+    Cropsanity,
+    ExcludeGingerIsland,
+    Friendsanity,
+    Monstersanity,
+    Museumsanity,
+    Shipsanity,
+    SkillProgression,
+    SpecialOrderLocations,
+    StardewValleyOptions,
+    ToolProgression,
+)
 from .stardew_rule import And, StardewRule
 from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .strings.ap_names.event_names import Event
@@ -28,8 +53,17 @@ from .strings.bundle_names import CCRoom
 from .strings.calendar_names import Weekday
 from .strings.craftable_names import Bomb
 from .strings.crop_names import Fruit
-from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entrance, move_to_woods_depth, DeepWoodsEntrance, AlecEntrance, \
-    SVEEntrance, LaceyEntrance, BoardingHouseEntrance
+from .strings.entrance_names import (
+    AlecEntrance,
+    BoardingHouseEntrance,
+    DeepWoodsEntrance,
+    Entrance,
+    LaceyEntrance,
+    SVEEntrance,
+    dig_to_mines_floor,
+    dig_to_skull_floor,
+    move_to_woods_depth,
+)
 from .strings.generic_names import Generic
 from .strings.material_names import Material
 from .strings.metal_names import MetalBar
@@ -774,7 +808,7 @@ def set_friendsanity_rules(all_location_names: Set[str], logic: StardewLogic, mu
     friend_prefix = "Friendsanity: "
     friend_suffix = " <3"
     for friend_location in locations.locations_by_tag[LocationTags.FRIENDSANITY]:
-        if not friend_location.name in all_location_names:
+        if friend_location.name not in all_location_names:
             continue
         friend_location_without_prefix = friend_location.name[len(friend_prefix):]
         friend_location_trimmed = friend_location_without_prefix[:friend_location_without_prefix.index(friend_suffix)]

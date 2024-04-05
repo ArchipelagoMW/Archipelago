@@ -1,7 +1,8 @@
-﻿from ...Region import SMRegion, IReward, RewardType
-from ...Config import Config, SMLogic
-from ...Location import Location, LocationType
+﻿from ...Config import Config, SMLogic
 from ...Item import Progression
+from ...Location import Location, LocationType
+from ...Region import IReward, RewardType, SMRegion
+
 
 class WreckedShip(SMRegion, IReward):
     Name = "Wrecked Ship"
@@ -12,14 +13,14 @@ class WreckedShip(SMRegion, IReward):
         self.Weight = 4
         self.Reward = RewardType.Null
         self.Locations = [
-            Location(self, 128, 0x8FC265, LocationType.Visible, "Missile (Wrecked Ship middle)", 
+            Location(self, 128, 0x8FC265, LocationType.Visible, "Missile (Wrecked Ship middle)",
                 lambda items: items.CanPassBombPassages()),
             Location(self, 129, 0x8FC2E9, LocationType.Chozo, "Reserve Tank, Wrecked Ship",
                 lambda items: self.CanUnlockShip(items) and items.CardWreckedShipL1 and items.CanUsePowerBombs() and items.SpeedBooster and
                     (items.Grapple or items.SpaceJump or items.Varia and items.HasEnergyReserves(2) or items.HasEnergyReserves(3)) if self.Logic == SMLogic.Normal else \
                 lambda items: self.CanUnlockShip(items) and items.CardWreckedShipL1 and items.CanUsePowerBombs() and items.SpeedBooster and
                     (items.Varia or items.HasEnergyReserves(2))),
-            Location(self, 130, 0x8FC2EF, LocationType.Visible, "Missile (Gravity Suit)", 
+            Location(self, 130, 0x8FC2EF, LocationType.Visible, "Missile (Gravity Suit)",
                 lambda items: self.CanUnlockShip(items) and items.CardWreckedShipL1 and
                     (items.Grapple or items.SpaceJump or items.Varia and items.HasEnergyReserves(2) or items.HasEnergyReserves(3)) if self.Logic == SMLogic.Normal else \
                 lambda items: self.CanUnlockShip(items) and items.CardWreckedShipL1 and (items.Varia or items.HasEnergyReserves(1))),
@@ -34,7 +35,7 @@ class WreckedShip(SMRegion, IReward):
                 lambda items: self.CanUnlockShip(items)),
             Location(self, 134, 0x8FC365, LocationType.Visible, "Right Super, Wrecked Ship",
                 lambda items: self.CanUnlockShip(items)),
-            Location(self, 135, 0x8FC36D, LocationType.Chozo, "Gravity Suit", 
+            Location(self, 135, 0x8FC36D, LocationType.Chozo, "Gravity Suit",
                 lambda items: self.CanUnlockShip(items) and items.CardWreckedShipL1 and
                     (items.Grapple or items.SpaceJump or items.Varia and items.HasEnergyReserves(2) or items.HasEnergyReserves(3)) if self.Logic == SMLogic.Normal else \
                 lambda items: self.CanUnlockShip(items) and items.CardWreckedShipL1 and (items.Varia or items.HasEnergyReserves(1)))
@@ -68,7 +69,7 @@ class WreckedShip(SMRegion, IReward):
                         items.HiJump and (items.Ice or items.CanSpringBallJump()) and items.Grapple and items.CardMaridiaL1
                     ) or
                     # /* From Maridia portal -> Forgotten Highway */
-                    items.CanAccessMaridiaPortal(self.world) and ( 
+                    items.CanAccessMaridiaPortal(self.world) and (
                         items.HiJump and items.CanPassBombPassages() and items.CardMaridiaL2 or
                         items.Gravity and (
                             items.CanDestroyBombWalls() and items.CardMaridiaL2 or

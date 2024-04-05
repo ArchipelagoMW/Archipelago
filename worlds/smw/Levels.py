@@ -1,9 +1,10 @@
 
 from worlds.AutoWorld import World
+
 from .Names import LocationName
 
 
-class BowserRoom():
+class BowserRoom:
     name: str
     exitAddress: int
     roomID: int
@@ -45,7 +46,7 @@ standard_bowser_rooms = [
 ]
 
 
-class BossRoom():
+class BossRoom:
     name: str
     exitAddress: int
     exitAddressAlt: int
@@ -173,7 +174,7 @@ level_blocks_data = {
     ]
 }
 
-class SMWPath():
+class SMWPath:
     thisEndDirection: int
     otherLevelID: int
     otherEndDirection: int
@@ -184,7 +185,7 @@ class SMWPath():
         self.otherEndDirection = otherEndDirection
 
 
-class SMWLevel():
+class SMWLevel:
     levelName: str
     levelIDAddress: int
     #eventIDAddress: int
@@ -406,7 +407,7 @@ hard_double_levels = [
     0x3E,
     0x3C,
     0x2D,
-    0x0F, 
+    0x0F,
     0x44,
     0x47,
     0x41,

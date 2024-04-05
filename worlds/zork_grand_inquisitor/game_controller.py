@@ -1,26 +1,21 @@
 import collections
 import functools
 import logging
-
 from typing import Dict, Optional, Set, Tuple, Union
 
-from .data.item_data import item_data, ZorkGrandInquisitorItemData
-from .data.location_data import location_data, ZorkGrandInquisitorLocationData
-
+from .data.item_data import ZorkGrandInquisitorItemData, item_data
+from .data.location_data import ZorkGrandInquisitorLocationData, location_data
 from .data.missable_location_grant_conditions_data import (
-    missable_location_grant_conditions_data,
     ZorkGrandInquisitorMissableLocationGrantConditionsData,
+    missable_location_grant_conditions_data,
 )
-
 from .data_funcs import game_id_to_items, items_with_tag, locations_with_tag
-
 from .enums import (
     ZorkGrandInquisitorGoals,
     ZorkGrandInquisitorItems,
     ZorkGrandInquisitorLocations,
     ZorkGrandInquisitorTags,
 )
-
 from .game_state_manager import GameStateManager
 
 

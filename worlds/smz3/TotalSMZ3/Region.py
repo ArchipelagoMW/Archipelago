@@ -1,6 +1,8 @@
 ﻿from enum import Enum
 from typing import Dict, List
+
 from .Config import *
+
 
 class RewardType(Enum):
     Null = 0
@@ -37,7 +39,7 @@ class Region:
     Config: Config
 
     locationLookup: Dict[str, Location.Location]
-    
+
     def GetLocation(self, name: str):
         return self.locationLookup[name]
 

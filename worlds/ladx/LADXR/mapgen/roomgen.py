@@ -1,10 +1,11 @@
-from .map import Map
-from .roomtype.town import Town
-from .roomtype.mountain import Mountain, MountainEgg
-from .roomtype.forest import Forest
-from .roomtype.base import RoomType
-from .roomtype.water import Water, Beach
 import random
+
+from .map import Map
+from .roomtype.base import RoomType
+from .roomtype.forest import Forest
+from .roomtype.mountain import Mountain, MountainEgg
+from .roomtype.town import Town
+from .roomtype.water import Beach
 
 
 def is_area_clear(the_map: Map, x, y, w, h):

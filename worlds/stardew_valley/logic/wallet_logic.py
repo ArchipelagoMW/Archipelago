@@ -1,7 +1,7 @@
-from .base_logic import BaseLogic, BaseLogicMixin
-from .received_logic import ReceivedLogicMixin
 from ..stardew_rule import StardewRule
 from ..strings.wallet_item_names import Wallet
+from .base_logic import BaseLogic, BaseLogicMixin
+from .received_logic import ReceivedLogicMixin
 
 
 class WalletLogicMixin(BaseLogicMixin):

@@ -1,6 +1,7 @@
 from typing import Dict, List, Set
-from worlds.generic.Rules import set_rule, add_rule
+
 from BaseClasses import CollectionState
+from worlds.generic.Rules import add_rule, set_rule
 
 
 def total_fervour(state: CollectionState, player: int) -> int:
@@ -39,7 +40,7 @@ def can_water_jump(state: CollectionState, player: int) -> bool:
 
 def can_break_holes(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any({"Charged Skill", "Dive Skill"}, player) 
+        state.has_any({"Charged Skill", "Dive Skill"}, player)
         or (
             state.has("Lunge Skill", player, 3)
             and state.has("Dash Ability", player)
@@ -280,12 +281,12 @@ def can_beat_boss(state: CollectionState, boss: str, logic: int, player: int) ->
         flasks: int = state.count("Empty Bile Flask", player) if \
             state.has_any({"D01Z05S18[E]", "D02Z02S09[E]", "D03Z02S14[E]", "D03Z03S03[SE]", "D04Z02S13[W]", \
                 "D05Z01S12[E]", "D20Z01S08[W]"}, player) else 0
-        
+
 
         playerStrength: float = state.count("Life Upgrade", player) * 0.25 / 6 + \
             state.count("Mea Culpa Upgrade", player) * 0.25 / 7 + state.count("Fervour Upgrade", player) * 0.20 \
                 / 6 + flasks * 0.15 / 8 + silver * 0.15 / 5
-        
+
         bosses: Dict[str, int] = {
             "warden": -0.10,
             "ten-piedad": 0.05,
@@ -307,7 +308,7 @@ def can_beat_boss(state: CollectionState, boss: str, logic: int, player: int) ->
         bossStrength: int = bosses[name]
 
         return playerStrength >= (bossStrength - 0.10 if logic >= 2 else (bossStrength if logic >= 1 else bossStrength + 0.10))
-    
+
     if boss == "Brotherhood":
         return (
             has_boss_strength("warden")
@@ -576,7 +577,7 @@ def rules(blasphemousworld):
             or pillar(state, player)
             or state.has("Cante Jondo of the Three Sisters", player)
             or state.has("Purified Hand of the Nun", player)
-            or state.has("D01Z02S03[NW]", player) 
+            or state.has("D01Z02S03[NW]", player)
             and (
                 can_cross_gap(state, logic, player, 2)
                 or state.has("Lorquiana", player)
@@ -714,7 +715,7 @@ def rules(blasphemousworld):
     set_rule(world.get_entrance("D01Z03S07[-Cherubs]", player),
         lambda state: state.has("Linen of Golden Thread", player))
 
-    
+
     # D01Z04S01 (Mercy Dreams)
     # No items
     # Doors
@@ -896,7 +897,7 @@ def rules(blasphemousworld):
                 or can_cross_gap(state, logic, player, 5)
             )
         ))
-    
+
 
     # D01Z05S20 (Desecrated Cistern)
     # Event
@@ -919,7 +920,7 @@ def rules(blasphemousworld):
             chalice_rooms(state, player, 3)
             and state.has("Chalice of Inverted Verses", player)
         ))
-    
+
 
     # D01Z05S24 (Desecrated Cistern)
     # Event
@@ -1206,7 +1207,7 @@ def rules(blasphemousworld):
                     (
                         state.has("D02Z01S01[SW]", player)
                         or state.has("D02Z01S01[CherubsR]", player)
-                    ) 
+                    )
                     and can_dawn_jump(state, logic, player)
                 )
             )
@@ -1450,7 +1451,7 @@ def rules(blasphemousworld):
             )
         ))
     set_rule(world.get_location("GotP: West shaft Child of Moonlight", player),
-        lambda state: 
+        lambda state:
         (
             (
                 state.has("D02Z02S04[NE]", player)
@@ -1681,7 +1682,7 @@ def rules(blasphemousworld):
     # Doors
     set_rule(world.get_entrance("D02Z03S10[-Cherubs]", player),
         lambda state: state.has("Linen of Golden Thread", player))
-    
+
 
     # D02Z03S11 (Convent of Our Lady of the Charred Visage)
     # Event
@@ -1901,7 +1902,7 @@ def rules(blasphemousworld):
             or state.has("Purified Hand of the Nun", player)
             and can_enemy_bounce(logic, enemy)
         ))
-    
+
     # D03Z02S03 (Jondo)
     # No items
     # Doors
@@ -2855,7 +2856,7 @@ def rules(blasphemousworld):
     # Doors
     set_rule(world.get_entrance("D05Z02S10[W]", player),
         lambda state: state.has("Dash Ability", player))
-    
+
 
     # D05Z02S11 (The Sleeping Canvases)
     # Event
@@ -3104,7 +3105,7 @@ def rules(blasphemousworld):
         ))
     add_rule(world.get_entrance("D06Z01S04[Health]", player),
         lambda state: (
-            (
+
                 state.has("Wall Climb Ability", player)
                 and can_survive_poison(state, logic, player, 2)
                 and (
@@ -3114,7 +3115,7 @@ def rules(blasphemousworld):
                         and can_climb_on_root(state, player)
                     )
                 )
-            )
+
         ))
     set_rule(world.get_entrance("D06Z01S04[NW]", player),
         lambda state: (
@@ -3354,7 +3355,7 @@ def rules(blasphemousworld):
                     or can_cross_gap(state, logic, player, 7)
                 )
                 and (
-                    state.has("Wall Climb Ability", player) or 
+                    state.has("Wall Climb Ability", player) or
                     can_cross_gap(state, logic, player, 5)
                 )
             )
@@ -3474,7 +3475,7 @@ def rules(blasphemousworld):
         lambda state: can_beat_boss(state, "Legionary", logic, player))
     set_rule(world.get_entrance("D06Z01S21[E]", player),
         lambda state: can_beat_boss(state, "Legionary", logic, player))
-    
+
 
     # D06Z01S23 (Archcathedral Rooftops)
     # Event
@@ -3689,7 +3690,7 @@ def rules(blasphemousworld):
             state.has("D09Z01S03[N]", player)
             and can_beat_boss(state, "Prison", logic, player)
         ))
-    
+
 
     # D09Z01S05 (Wall of the Holy Prohibitions)
     # Event
@@ -3975,7 +3976,7 @@ def rules(blasphemousworld):
         ))
     add_rule(world.get_entrance("D09Z01S10[Cell11]", player),
         lambda state: state.has("Key of the Scribe", player))
-    
+
     # D09BZ01S01 (Wall of the Holy Prohibitions - Inside cells)
     # Items
     set_rule(world.get_location("WotHP: Upper east room, center cell ledge", player),
@@ -4197,7 +4198,7 @@ def rules(blasphemousworld):
         lambda state: (
             #state.has("D17BZ02S01[FrontR]", player) or
             # TODO: actually fix this once door rando is real
-            state.has_all({"Dash Ability", "Wall Climb Ability"}, player) 
+            state.has_all({"Dash Ability", "Wall Climb Ability"}, player)
         ))
     # Doors
     set_rule(world.get_entrance("D17BZ02S01[FrontR]", player),
@@ -4315,7 +4316,7 @@ def rules(blasphemousworld):
                 and can_cross_gap(state, logic, player, 5)
             )
         ))
-    
+
 
     # Misc Items
     set_rule(world.get_location("Second red candle", player),

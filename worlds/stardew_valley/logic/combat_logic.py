@@ -2,13 +2,14 @@ from functools import cached_property
 from typing import Union
 
 from Utils import cache_self1
-from .base_logic import BaseLogicMixin, BaseLogic
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
+
 from ..mods.logic.magic_logic import MagicLogicMixin
-from ..stardew_rule import StardewRule, Or, False_
+from ..stardew_rule import False_, Or, StardewRule
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.performance_names import Performance
+from .base_logic import BaseLogic, BaseLogicMixin
+from .received_logic import ReceivedLogicMixin
+from .region_logic import RegionLogicMixin
 
 valid_weapons = (APWeapon.weapon, APWeapon.sword, APWeapon.club, APWeapon.dagger)
 

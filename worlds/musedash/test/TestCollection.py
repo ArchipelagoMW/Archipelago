@@ -1,4 +1,5 @@
 import unittest
+
 from ..MuseDashCollection import MuseDashCollections
 
 
@@ -45,7 +46,7 @@ class CollectionsTest(unittest.TestCase):
             songs_with_dlc = collection.get_songs_with_settings({dlc}, False, 0, 12)
             self.assertGreater(len(songs_with_dlc), free_song_count, f"DLC {dlc} did not include extra songs.")
             if dlc == collection.MUSE_PLUS_DLC:
-                self.assertIn(known_mp_song, songs_with_dlc, f"Muse Plus missing muse plus song.")
+                self.assertIn(known_mp_song, songs_with_dlc, "Muse Plus missing muse plus song.")
             else:
                 self.assertNotIn(known_mp_song, songs_with_dlc, f"DLC {dlc} includes Muse Plus songs.")
 

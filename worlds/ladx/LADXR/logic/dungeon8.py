@@ -1,6 +1,6 @@
-from .requirements import *
-from .location import Location
 from ..locations.all import *
+from .location import Location
+from .requirements import *
 
 
 class Dungeon8:
@@ -15,7 +15,7 @@ class Dungeon8:
         vire_drop_key = Location(dungeon=8).add(DroppedKey(0x24C)).connect(entrance_left, r.attack_hookshot_no_bomb) # vire drop key
         sparks_chest = Location(dungeon=8).add(DungeonChest(0x255)).connect(entrance_left, OR(HOOKSHOT, FEATHER))  # chest before lvl1 miniboss
         Location(dungeon=8).add(DungeonChest(0x246)).connect(entrance_left, MAGIC_ROD)  # key chest that spawns after creating fire
-        
+
         # right side
         if options.owlstatues == "both" or options.owlstatues == "dungeon":
             bottomright_owl = Location(dungeon=8).add(OwlStatue(0x253)).connect(entrance, AND(STONE_BEAK8, FEATHER, POWER_BRACELET)) # Two ways to reach this owl statue, but both require the same (except that one route requires bombs as well)
@@ -43,7 +43,7 @@ class Dungeon8:
         up_left = Location(dungeon=8).connect(upper_center, AND(r.attack_hookshot_powder, AND(KEY8, FOUND(KEY8, 4))))
         entrance_up.connect(up_left, AND(FEATHER, MAGIC_ROD), one_way=True) # alternate path with fire rod through 2d section to nightmare key
         up_left.add(DungeonChest(0x240)) # beamos blocked chest
-        up_left.connect(entrance_left, None, one_way=True) # path from up_left to entrance_left by dropping of the ledge in torch room 
+        up_left.connect(entrance_left, None, one_way=True) # path from up_left to entrance_left by dropping of the ledge in torch room
         Location(dungeon=8).add(DungeonChest(0x23D)).connect(up_left, BOMB) # dodongo chest
         up_left.connect(upper_center, None, one_way=True) # use the outside path of the dungeon to get to the right side
         if back_entrance_heartpiece:
@@ -53,7 +53,7 @@ class Dungeon8:
             Location(dungeon=8).add(OwlStatue(0x241)).connect(up_left, STONE_BEAK8)
         Location(dungeon=8).add(DungeonChest(0x23A)).connect(up_left, HOOKSHOT) # ledge chest left of boss door
 
-        top_left_stairs = Location(dungeon=8).connect(entrance_up, AND(FEATHER, MAGIC_ROD)) 
+        top_left_stairs = Location(dungeon=8).connect(entrance_up, AND(FEATHER, MAGIC_ROD))
         top_left_stairs.connect(up_left, None, one_way=True) # jump down from the staircase to the right
         nightmare_key = Location(dungeon=8).add(DungeonChest(0x232)).connect(top_left_stairs, AND(FEATHER, SWORD, KEY8, FOUND(KEY8, 7)))
 
@@ -63,15 +63,15 @@ class Dungeon8:
 
         bossdoor = Location(dungeon=8).connect(entrance_up, AND(FEATHER, MAGIC_ROD))
         boss = Location(dungeon=8).add(HeartContainer(0x234), Instrument(0x230)).connect(bossdoor, AND(NIGHTMARE_KEY8, r.boss_requirements[world_setup.boss_mapping[7]]))
-        
-        if options.logic == 'hard' or options.logic == 'glitched' or options.logic == 'hell':
+
+        if options.logic == "hard" or options.logic == "glitched" or options.logic == "hell":
             entrance_left.connect(entrance, BOMB) # use bombs to kill vire and hinox
             vire_drop_key.connect(entrance_left, BOMB) # use bombs to kill rolling bones and vire
             bottom_right.connect(slime_chest, FEATHER) # diagonal jump over the pits to reach rolling rock / zamboni
             up_left.connect(lower_center, AND(BOMB, FEATHER)) # blow up hidden walls from peahat room -> dark room -> eye statue room
-            slime_chest.connect(entrance, AND(r.attack_hookshot_powder, POWER_BRACELET))  # kill vire with powder or bombs 
-        
-        if options.logic == 'glitched' or options.logic == 'hell':
+            slime_chest.connect(entrance, AND(r.attack_hookshot_powder, POWER_BRACELET))  # kill vire with powder or bombs
+
+        if options.logic == "glitched" or options.logic == "hell":
             sparks_chest.connect(entrance_left, OR(r.attack_hookshot, FEATHER, PEGASUS_BOOTS)) # 1 pit buffer across the pit. Add requirements for all the options to get to this area
             lower_center.connect(entrance_up, None) # sideways block push in peahat room to get past keyblock
             miniboss_entrance.connect(lower_center, AND(BOMB, FEATHER, HOOKSHOT)) # blow up hidden wall for darkroom, use feather + hookshot to clip past keyblock in front of stairs
@@ -82,7 +82,7 @@ class Dungeon8:
             medicine_chest.connect(upper_center, FEATHER) # jesus super jump
             up_left.connect(bossdoor, FEATHER, one_way=True) # superjump off the bottom or right wall to jump over to the boss door
 
-        if options.logic == 'hell':
+        if options.logic == "hell":
             if bottomright_owl:
                 bottomright_owl.connect(entrance, AND(SWORD, POWER_BRACELET, PEGASUS_BOOTS, STONE_BEAK8)) # underground section past mimics, boots bonking across the gap to the ladder
             bottomright_pot_chest.connect(entrance, AND(SWORD, POWER_BRACELET, PEGASUS_BOOTS)) # underground section past mimics, boots bonking across the gap to the ladder
@@ -93,7 +93,7 @@ class Dungeon8:
             nightmare_key.connect(top_left_stairs, AND(PEGASUS_BOOTS, SWORD, FOUND(KEY8, 7))) # use a boots bonk to cross the 2d section + the lava in cueball room
             bottom_right.connect(entrance_up, AND(POWER_BRACELET, PEGASUS_BOOTS), one_way=True) # take staircase to NW zamboni room, boots bonk onto the lava and water buffer all the way down to push the zamboni
             bossdoor.connect(entrance_up, AND(PEGASUS_BOOTS, MAGIC_ROD)) # boots bonk through 2d section
-            
+
         self.entrance = entrance
 
 

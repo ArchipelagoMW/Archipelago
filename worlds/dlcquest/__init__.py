@@ -1,9 +1,10 @@
 from typing import Union
 
-from BaseClasses import Tutorial, CollectionState, ItemClassification
+from BaseClasses import CollectionState, ItemClassification, Tutorial
 from worlds.AutoWorld import WebWorld, World
+
 from . import Options
-from .Items import DLCQuestItem, ItemData, create_items, item_table, items_by_group, Group
+from .Items import DLCQuestItem, Group, ItemData, create_items, item_table, items_by_group
 from .Locations import DLCQuestLocation, location_table
 from .Options import DLCQuestOptions
 from .Regions import create_regions

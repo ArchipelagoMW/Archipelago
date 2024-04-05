@@ -1,19 +1,21 @@
-import copy, logging
-from operator import attrgetter
-from ..utils import log
-from ..logic.smbool import SMBool, smboolFalse
-from ..utils.parameters import infinity
-from ..logic.helpers import Bosses
+import copy
+import logging
 
-class Path(object):
-    __slots__ = ( 'path', 'pdiff', 'distance' )
+from ..logic.helpers import Bosses
+from ..logic.smbool import SMBool, smboolFalse
+from ..utils import log
+from ..utils.parameters import infinity
+
+
+class Path:
+    __slots__ = ( "path", "pdiff", "distance" )
 
     def __init__(self, path, pdiff, distance):
         self.path = path
         self.pdiff = pdiff
         self.distance = distance
 
-class AccessPoint(object):
+class AccessPoint:
     # name : AccessPoint name
     # graphArea : graph area the node is located in
     # transitions : intra-area transitions
@@ -29,7 +31,7 @@ class AccessPoint(object):
                  exitInfo=None, entryInfo=None, roomInfo=None,
                  internal=False, boss=False, escape=False,
                  start=None,
-                 dotOrientation='w'):
+                 dotOrientation="w"):
         self.Name = name
         self.GraphArea = graphArea
         self.ExitInfo = exitInfo
@@ -100,18 +102,18 @@ class AccessPoint(object):
     def isLoop(self):
         return self.ConnectedTo == self.Name
 
-class AccessGraph(object):
-    __slots__ = ( 'log', 'accessPoints', 'InterAreaTransitions',
-                  'EscapeAttributes', 'apCache', '_useCache',
-                  'availAccessPoints' )
+class AccessGraph:
+    __slots__ = ( "log", "accessPoints", "InterAreaTransitions",
+                  "EscapeAttributes", "apCache", "_useCache",
+                  "availAccessPoints" )
 
     def __init__(self, accessPointList, transitions, dotFile=None):
-        self.log = log.get('Graph')
+        self.log = log.get("Graph")
         self.accessPoints = {}
         self.InterAreaTransitions = []
         self.EscapeAttributes = {
-            'Timer': None,
-            'Animals': None
+            "Timer": None,
+            "Animals": None
         }
         for ap in accessPointList:
             self.addAccessPoint(ap)
@@ -136,23 +138,23 @@ class AccessGraph(object):
         if self.log.getEffectiveLevel() == logging.DEBUG:
             self.log.debug("Area graph:")
             for s, d in self.InterAreaTransitions:
-                self.log.debug("{} -> {}".format(s.Name, d.Name))
+                self.log.debug(f"{s.Name} -> {d.Name}")
 
     def addAccessPoint(self, ap):
         ap.distance = 0
         self.accessPoints[ap.Name] = copy.deepcopy(ap)
 
     def toDot(self, dotFile):
-        colors = ['red', 'blue', 'green', 'yellow', 'skyblue', 'violet', 'orange',
-                  'lawngreen', 'crimson', 'chocolate', 'turquoise', 'tomato',
-                  'navyblue', 'darkturquoise', 'green', 'blue', 'maroon', 'magenta',
-                  'bisque', 'coral', 'chartreuse', 'chocolate', 'cyan']
+        colors = ["red", "blue", "green", "yellow", "skyblue", "violet", "orange",
+                  "lawngreen", "crimson", "chocolate", "turquoise", "tomato",
+                  "navyblue", "darkturquoise", "green", "blue", "maroon", "magenta",
+                  "bisque", "coral", "chartreuse", "chocolate", "cyan"]
         with open(dotFile, "w") as f:
             f.write("digraph {\n")
             f.write('size="30,30!";\n')
-            f.write('rankdir=LR;\n')
-            f.write('ranksep=2.2;\n')
-            f.write('overlap=scale;\n')
+            f.write("rankdir=LR;\n")
+            f.write("ranksep=2.2;\n")
+            f.write("overlap=scale;\n")
             f.write('edge [dir="both",arrowhead="box",arrowtail="box",arrowsize=0.5,fontsize=7,style=dotted];\n')
             f.write('node [shape="box",fontsize=10];\n')
             for area in set([ap.GraphArea for ap in self.accessPoints.values()]):
@@ -213,7 +215,7 @@ class AccessGraph(object):
                         dst.distance = src.distance + 0.01
                     else:
                         dst.distance = src.distance + 1
-                    newAvailNodes[dst] = { 'difficulty': diff, 'from': src }
+                    newAvailNodes[dst] = { "difficulty": diff, "from": src }
 
                 #self.log.debug("{} -> {}: {}".format(src.Name, dstName, diff))
         return newAvailNodes
@@ -224,7 +226,7 @@ class AccessGraph(object):
     # smbm: if None, discard logic check, assume we can reach everything
     # return available AccessPoint list
     def getAvailableAccessPoints(self, rootNode, smbm, maxDiff, item=None):
-        availNodes = { rootNode : { 'difficulty' : SMBool(True, 0), 'from' : None } }
+        availNodes = { rootNode : { "difficulty" : SMBool(True, 0), "from" : None } }
         newAvailNodes = availNodes
         rootNode.distance = 0
         while len(newAvailNodes) > 0:
@@ -238,7 +240,7 @@ class AccessGraph(object):
         root = dstAp
         while root != None:
             path = [root] + path
-            root = availAps[root]['from']
+            root = availAps[root]["from"]
 
         return path
 
@@ -247,7 +249,7 @@ class AccessGraph(object):
         for ap in availAccessPoints:
             if ap.Name in locsAPs:
                 path = self.getPath(ap, availAccessPoints)
-                pdiff = SMBool.wandmax(*(availAccessPoints[ap]['difficulty'] for ap in path))
+                pdiff = SMBool.wandmax(*(availAccessPoints[ap]["difficulty"] for ap in path))
                 paths[ap.Name] = Path(path, pdiff, len(path))
         return paths
 
@@ -268,7 +270,7 @@ class AccessGraph(object):
     # maxDiff: difficulty limit
     # rootNode: starting AccessPoint
     # return available locations list, also stores difficulty in locations
-    def getAvailableLocations(self, locations, smbm, maxDiff, rootNode='Landing Site'):
+    def getAvailableLocations(self, locations, smbm, maxDiff, rootNode="Landing Site"):
         rootAp = self.accessPoints[rootNode]
         self.availAccessPoints = self.getAvailableAccessPoints(rootAp, smbm, maxDiff)
         availAreas = set([ap.GraphArea for ap in self.availAccessPoints.keys()])
@@ -389,18 +391,18 @@ class AccessGraph(object):
         return self.getPath(destAccessPoint, availAccessPoints)
 
     # gives theoretically accessible APs in the graph (no logic check)
-    def getAccessibleAccessPoints(self, rootNode='Landing Site'):
+    def getAccessibleAccessPoints(self, rootNode="Landing Site"):
         rootAp = self.accessPoints[rootNode]
         inBossChk = lambda ap: ap.Boss and ap.Name.endswith("In")
         allAreas = {dst.GraphArea for (src, dst) in self.InterAreaTransitions if not inBossChk(dst) and not dst.isLoop()}
         self.log.debug("allAreas="+str(allAreas))
         nonBossAPs = [ap for ap in self.getAvailableAccessPoints(rootAp, None, 0) if ap.GraphArea in allAreas]
-        bossesAPs = [self.accessPoints[boss+'RoomIn'] for boss in Bosses.Golden4()] + [self.accessPoints['Draygon Room Bottom']]
+        bossesAPs = [self.accessPoints[boss+"RoomIn"] for boss in Bosses.Golden4()] + [self.accessPoints["Draygon Room Bottom"]]
         return nonBossAPs + bossesAPs
 
     # gives theoretically accessible locations within a base list
     # returns locations with accessible GraphArea in this graph (no logic considered)
-    def getAccessibleLocations(self, locations, rootNode='Landing Site'):
+    def getAccessibleLocations(self, locations, rootNode="Landing Site"):
         availAccessPoints = self.getAccessibleAccessPoints(rootNode)
         self.log.debug("availAccessPoints="+str([ap.Name for ap in availAccessPoints]))
         return [loc for loc in locations if any(ap.Name in loc.AccessFrom for ap in availAccessPoints)]

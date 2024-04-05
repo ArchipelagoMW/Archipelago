@@ -1,15 +1,14 @@
 # world/dark_souls_3/__init__.py
-from typing import Dict, Set, List
+from typing import Dict, List, Set
 
-from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification
+from BaseClasses import Entrance, Item, ItemClassification, MultiWorld, Region, Tutorial
 from Options import Toggle
+from worlds.AutoWorld import WebWorld, World
+from worlds.generic.Rules import add_item_rule, add_rule, set_rule
 
-from worlds.AutoWorld import World, WebWorld
-from worlds.generic.Rules import set_rule, add_rule, add_item_rule
-
-from .Items import DarkSouls3Item, DS3ItemCategory, item_dictionary, key_item_names, item_descriptions
-from .Locations import DarkSouls3Location, DS3LocationCategory, location_tables, location_dictionary
-from .Options import RandomizeWeaponLevelOption, PoolTypeOption, EarlySmallLothricBanner, dark_souls_options
+from .Items import DarkSouls3Item, DS3ItemCategory, item_descriptions, item_dictionary, key_item_names
+from .Locations import DarkSouls3Location, DS3LocationCategory, location_dictionary, location_tables
+from .Options import EarlySmallLothricBanner, PoolTypeOption, RandomizeWeaponLevelOption, dark_souls_options
 
 
 class DarkSouls3Web(WebWorld):
@@ -88,9 +87,9 @@ class DarkSouls3World(World):
         if self.multiworld.enable_key_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.KEY)
             if self.multiworld.early_banner[self.player] == EarlySmallLothricBanner.option_early_global:
-                self.multiworld.early_items[self.player]['Small Lothric Banner'] = 1
+                self.multiworld.early_items[self.player]["Small Lothric Banner"] = 1
             elif self.multiworld.early_banner[self.player] == EarlySmallLothricBanner.option_early_local:
-                self.multiworld.local_early_items[self.player]['Small Lothric Banner'] = 1
+                self.multiworld.local_early_items[self.player]["Small Lothric Banner"] = 1
         if self.multiworld.enable_boss_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.BOSS)
         if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:

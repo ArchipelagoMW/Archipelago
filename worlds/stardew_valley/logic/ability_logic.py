@@ -1,16 +1,16 @@
 from typing import Union
 
-from .base_logic import BaseLogicMixin, BaseLogic
+from ..mods.logic.magic_logic import MagicLogicMixin
+from ..stardew_rule import StardewRule
+from ..strings.region_names import Region
+from ..strings.skill_names import ModSkill, Skill
+from ..strings.tool_names import Tool, ToolMaterial
+from .base_logic import BaseLogic, BaseLogicMixin
 from .mine_logic import MineLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .skill_logic import SkillLogicMixin
 from .tool_logic import ToolLogicMixin
-from ..mods.logic.magic_logic import MagicLogicMixin
-from ..stardew_rule import StardewRule
-from ..strings.region_names import Region
-from ..strings.skill_names import Skill, ModSkill
-from ..strings.tool_names import ToolMaterial, Tool
 
 
 class AbilityLogicMixin(BaseLogicMixin):

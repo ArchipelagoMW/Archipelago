@@ -2,6 +2,7 @@
 import typing
 import unittest
 import warnings
+
 from NetUtils import LocationStore, _LocationStore
 
 State = typing.Dict[typing.Tuple[int, int], typing.Set[int]]

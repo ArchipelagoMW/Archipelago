@@ -1,9 +1,10 @@
-import logging
 import asyncio
+import logging
 import time
 
 from NetUtils import ClientStatus, color
 from worlds.AutoSNIClient import SNIClient
+
 from .Rom import SM_ROM_MAX_PLAYERID
 
 snes_logger = logging.getLogger("SNES")
@@ -59,7 +60,7 @@ class SMSNIClient(SNIClient):
 
 
     async def validate_rom(self, ctx):
-        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+        from SNIClient import snes_read
 
         rom_name = await snes_read(ctx, SM_ROMNAME_START, ROMNAME_SIZE)
         if rom_name is None or rom_name == bytes([0] * ROMNAME_SIZE) or rom_name[:2] != b"SM" or rom_name[2] not in b"1234567890":
@@ -68,7 +69,7 @@ class SMSNIClient(SNIClient):
         ctx.game = self.game
 
         # versions lower than 0.3.0 dont have item handling flag nor remote item support
-        romVersion = int(rom_name[2:5].decode('UTF-8'))
+        romVersion = int(rom_name[2:5].decode("UTF-8"))
         if romVersion < 30:
             ctx.items_handling = 0b001 # full local
         else:
@@ -125,8 +126,8 @@ class SMSNIClient(SNIClient):
             ctx.locations_checked.add(location_id)
             location = ctx.location_names[location_id]
             snes_logger.info(
-                f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
-            await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
+                f"New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})")
+            await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [location_id]}])
 
         data = await snes_read(ctx, SM_RECV_QUEUE_WCOUNT, 2)
         if data is None:
@@ -134,8 +135,7 @@ class SMSNIClient(SNIClient):
 
         item_out_ptr = data[0] | (data[1] << 8)
 
-        from . import items_start_id
-        from . import locations_start_id
+        from . import items_start_id, locations_start_id
         if item_out_ptr < len(ctx.items_received):
             item = ctx.items_received[item_out_ptr]
             item_id = item.item - items_start_id
@@ -150,9 +150,9 @@ class SMSNIClient(SNIClient):
             item_out_ptr += 1
             snes_buffered_write(ctx, SM_RECV_QUEUE_WCOUNT,
                                 bytes([item_out_ptr & 0xFF, (item_out_ptr >> 8) & 0xFF]))
-            logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                color(ctx.item_names[item.item], 'red', 'bold'),
-                color(ctx.player_names[item.player], 'yellow'),
+            logging.info("Received %s from %s (%s) (%d/%d in list)" % (
+                color(ctx.item_names[item.item], "red", "bold"),
+                color(ctx.player_names[item.player], "yellow"),
                 ctx.location_names[item.location], item_out_ptr, len(ctx.items_received)))
 
         await snes_flush_writes(ctx)

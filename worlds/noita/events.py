@@ -1,5 +1,7 @@
-from typing import Dict, TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict
+
 from BaseClasses import Item, ItemClassification, Location, Region
+
 from . import items, locations
 
 if TYPE_CHECKING:

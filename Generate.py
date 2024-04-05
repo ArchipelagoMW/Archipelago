@@ -15,18 +15,18 @@ import ModuleUpdate
 ModuleUpdate.update()
 
 import copy
-import Utils
+
 import Options
-from BaseClasses import seeddigits, get_seed, PlandoOptions
+import Utils
+from BaseClasses import PlandoOptions, get_seed, seeddigits
 from Main import main as ERmain
 from settings import get_settings
-from Utils import parse_yamls, version_tuple, __version__, tuplize_version
-from worlds.alttp import Options as LttPOptions
+from Utils import __version__, parse_yamls, tuplize_version, version_tuple
+from worlds import failed_world_loads
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from worlds.alttp.Text import TextTable
 from worlds.AutoWorld import AutoWorldRegister
 from worlds.generic import PlandoConnection
-from worlds import failed_world_loads
 
 
 def mystery_argparse():
@@ -34,23 +34,23 @@ def mystery_argparse():
     defaults = options.generator
 
     parser = argparse.ArgumentParser(description="CMD Generation Interface, defaults come from host.yaml.")
-    parser.add_argument('--weights_file_path', default=defaults.weights_file_path,
-                        help='Path to the weights file to use for rolling game settings, urls are also valid')
-    parser.add_argument('--samesettings', help='Rolls settings per weights file rather than per player',
-                        action='store_true')
-    parser.add_argument('--player_files_path', default=defaults.player_files_path,
+    parser.add_argument("--weights_file_path", default=defaults.weights_file_path,
+                        help="Path to the weights file to use for rolling game settings, urls are also valid")
+    parser.add_argument("--samesettings", help="Rolls settings per weights file rather than per player",
+                        action="store_true")
+    parser.add_argument("--player_files_path", default=defaults.player_files_path,
                         help="Input directory for player files.")
-    parser.add_argument('--seed', help='Define seed number to generate.', type=int)
-    parser.add_argument('--multi', default=defaults.players, type=lambda value: max(int(value), 1))
-    parser.add_argument('--spoiler', type=int, default=defaults.spoiler)
-    parser.add_argument('--outputpath', default=options.general_options.output_path,
+    parser.add_argument("--seed", help="Define seed number to generate.", type=int)
+    parser.add_argument("--multi", default=defaults.players, type=lambda value: max(int(value), 1))
+    parser.add_argument("--spoiler", type=int, default=defaults.spoiler)
+    parser.add_argument("--outputpath", default=options.general_options.output_path,
                         help="Path to output folder. Absolute or relative to cwd.")  # absolute or relative to cwd
-    parser.add_argument('--race', action='store_true', default=defaults.race)
-    parser.add_argument('--meta_file_path', default=defaults.meta_file_path)
-    parser.add_argument('--log_level', default='info', help='Sets log level')
-    parser.add_argument('--yaml_output', default=0, type=lambda value: max(int(value), 0),
-                        help='Output rolled mystery results to yaml up to specified number (made for async multiworld)')
-    parser.add_argument('--plando', default=defaults.plando_options,
+    parser.add_argument("--race", action="store_true", default=defaults.race)
+    parser.add_argument("--meta_file_path", default=defaults.meta_file_path)
+    parser.add_argument("--log_level", default="info", help="Sets log level")
+    parser.add_argument("--yaml_output", default=0, type=lambda value: max(int(value), 0),
+                        help="Output rolled mystery results to yaml up to specified number (made for async multiworld)")
+    parser.add_argument("--plando", default=defaults.plando_options,
                         help='List of options that can be set manually. Can be combined, for example "bosses, items"')
     parser.add_argument("--skip_prog_balancing", action="store_true",
                         help="Skip progression balancing step during generation.")
@@ -145,7 +145,7 @@ def main(args=None, callback=ERmain):
         raise Exception(f"No weights found. "
                         f"Provide a general weights file ({args.weights_file_path}) or individual player files. "
                         f"A mix is also permitted.")
-    erargs = parse_arguments(['--multi', str(args.multi)])
+    erargs = parse_arguments(["--multi", str(args.multi)])
     erargs.seed = seed
     erargs.plando_options = args.plando
     erargs.glitch_triforce = options.generator.glitch_triforce_room
@@ -210,7 +210,7 @@ def main(args=None, callback=ERmain):
             except Exception as e:
                 raise ValueError(f"File {path} is invalid. Please fix your yaml.") from e
         else:
-            raise RuntimeError(f'No weights specified for player {player}')
+            raise RuntimeError(f"No weights specified for player {player}")
 
     if len(set(name.lower() for name in erargs.name.values())) != len(erargs.name):
         raise Exception(f"Names have to be unique. Names: {Counter(name.lower() for name in erargs.name.values())}")
@@ -234,7 +234,7 @@ def main(args=None, callback=ERmain):
                     logging.debug(f"No player settings defined for option '{option}'")
         if args.outputpath:
             os.makedirs(args.outputpath, exist_ok=True)
-        with open(os.path.join(args.outputpath if args.outputpath else ".", f"generate_{seed_name}.yaml"), "wt") as f:
+        with open(os.path.join(args.outputpath if args.outputpath else ".", f"generate_{seed_name}.yaml"), "w") as f:
             yaml.dump(important, f)
 
     return callback(erargs, seed)
@@ -242,10 +242,10 @@ def main(args=None, callback=ERmain):
 
 def read_weights_yamls(path) -> Tuple[Any, ...]:
     try:
-        if urllib.parse.urlparse(path).scheme in ('https', 'file'):
+        if urllib.parse.urlparse(path).scheme in ("https", "file"):
             yaml = str(urllib.request.urlopen(path).read(), "utf-8-sig")
         else:
-            with open(path, 'rb') as f:
+            with open(path, "rb") as f:
                 yaml = str(f.read(), "utf-8-sig")
     except Exception as e:
         raise Exception(f"Failed to read weights ({path})") from e
@@ -273,7 +273,7 @@ def get_choice_legacy(option, root, value=None) -> Any:
     if any(root[option].values()):
         return interpret_on_off(
             random.choices(list(root[option].keys()), weights=list(map(int, root[option].values())))[0])
-    raise RuntimeError(f"All options specified in \"{option}\" are weighted as zero.")
+    raise RuntimeError(f'All options specified in "{option}" are weighted as zero.')
 
 
 def get_choice(option, root, value=None) -> Any:
@@ -287,12 +287,12 @@ def get_choice(option, root, value=None) -> Any:
         return value
     if any(root[option].values()):
         return random.choices(list(root[option].keys()), weights=list(map(int, root[option].values())))[0]
-    raise RuntimeError(f"All options specified in \"{option}\" are weighted as zero.")
+    raise RuntimeError(f'All options specified in "{option}" are weighted as zero.')
 
 
 class SafeDict(dict):
     def __missing__(self, key):
-        return '{' + key + '}'
+        return "{" + key + "}"
 
 
 def handle_name(name: str, player: int, name_counter: Counter):
@@ -300,14 +300,14 @@ def handle_name(name: str, player: int, name_counter: Counter):
     number = name_counter[name.lower()]
     new_name = "%".join([x.replace("%number%", "{number}").replace("%player%", "{player}") for x in name.split("%%")])
     new_name = string.Formatter().vformat(new_name, (), SafeDict(number=number,
-                                                                 NUMBER=(number if number > 1 else ''),
+                                                                 NUMBER=(number if number > 1 else ""),
                                                                  player=player,
-                                                                 PLAYER=(player if player > 1 else '')))
+                                                                 PLAYER=(player if player > 1 else "")))
     # Run .strip twice for edge case where after the initial .slice new_name has a leading whitespace.
     # Could cause issues for some clients that cannot handle the additional whitespace.
     new_name = new_name.strip()[:16].strip()
     if new_name == "Archipelago":
-        raise Exception(f"You cannot name yourself \"{new_name}\"")
+        raise Exception(f'You cannot name yourself "{new_name}"')
     return new_name
 
 
@@ -325,7 +325,7 @@ def roll_percentage(percentage: Union[int, float]) -> bool:
 
 
 def update_weights(weights: dict, new_weights: dict, update_type: str, name: str) -> dict:
-    logging.debug(f'Applying {new_weights}')
+    logging.debug(f"Applying {new_weights}")
     cleaned_weights = {}
     for option in new_weights:
         option_name = option.lstrip("+")
@@ -449,7 +449,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         required_plando_options = PlandoOptions.from_option_string(requirements.get("plando", ""))
         if required_plando_options not in plando_options:
             if required_plando_options:
-                raise Exception(f"Settings reports required plando module {str(required_plando_options)}, "
+                raise Exception(f"Settings reports required plando module {required_plando_options!s}, "
                                 f"which is not enabled.")
 
     ret = argparse.Namespace()
@@ -468,20 +468,20 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
                         f"Check your spelling or installation of that world.")
 
     if ret.game not in weights:
-        raise Exception(f"No game options for selected game \"{ret.game}\" found.")
+        raise Exception(f'No game options for selected game "{ret.game}" found.')
 
     world_type = AutoWorldRegister.world_types[ret.game]
     game_weights = weights[ret.game]
 
     if any(weight.startswith("+") for weight in game_weights) or \
        any(weight.startswith("+") for weight in weights):
-        raise Exception(f"Merge tag cannot be used outside of trigger contexts.")
+        raise Exception("Merge tag cannot be used outside of trigger contexts.")
 
     if "triggers" in game_weights:
         weights = roll_triggers(weights, game_weights["triggers"])
         game_weights = weights[ret.game]
 
-    ret.name = get_choice('name', weights)
+    ret.name = get_choice("name", weights)
     for option_key, option in Options.CommonOptions.type_hints.items():
         setattr(ret, option_key, option.from_any(get_choice(option_key, weights, option.default)))
 
@@ -516,34 +516,34 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
             if roll_percentage(get_choice_legacy("percentage", placement, 100)):
                 at = str(get_choice_legacy("at", placement))
                 if at not in tt:
-                    raise Exception(f"No text target \"{at}\" found.")
+                    raise Exception(f'No text target "{at}" found.')
                 ret.plando_texts[at] = str(get_choice_legacy("text", placement))
 
-    ret.sprite_pool = weights.get('sprite_pool', [])
-    ret.sprite = get_choice_legacy('sprite', weights, "Link")
-    if 'random_sprite_on_event' in weights:
-        randomoneventweights = weights['random_sprite_on_event']
-        if get_choice_legacy('enabled', randomoneventweights, False):
-            ret.sprite = 'randomon'
-            ret.sprite += '-hit' if get_choice_legacy('on_hit', randomoneventweights, True) else ''
-            ret.sprite += '-enter' if get_choice_legacy('on_enter', randomoneventweights, False) else ''
-            ret.sprite += '-exit' if get_choice_legacy('on_exit', randomoneventweights, False) else ''
-            ret.sprite += '-slash' if get_choice_legacy('on_slash', randomoneventweights, False) else ''
-            ret.sprite += '-item' if get_choice_legacy('on_item', randomoneventweights, False) else ''
-            ret.sprite += '-bonk' if get_choice_legacy('on_bonk', randomoneventweights, False) else ''
-            ret.sprite = 'randomonall' if get_choice_legacy('on_everything', randomoneventweights, False) else ret.sprite
-            ret.sprite = 'randomonnone' if ret.sprite == 'randomon' else ret.sprite
+    ret.sprite_pool = weights.get("sprite_pool", [])
+    ret.sprite = get_choice_legacy("sprite", weights, "Link")
+    if "random_sprite_on_event" in weights:
+        randomoneventweights = weights["random_sprite_on_event"]
+        if get_choice_legacy("enabled", randomoneventweights, False):
+            ret.sprite = "randomon"
+            ret.sprite += "-hit" if get_choice_legacy("on_hit", randomoneventweights, True) else ""
+            ret.sprite += "-enter" if get_choice_legacy("on_enter", randomoneventweights, False) else ""
+            ret.sprite += "-exit" if get_choice_legacy("on_exit", randomoneventweights, False) else ""
+            ret.sprite += "-slash" if get_choice_legacy("on_slash", randomoneventweights, False) else ""
+            ret.sprite += "-item" if get_choice_legacy("on_item", randomoneventweights, False) else ""
+            ret.sprite += "-bonk" if get_choice_legacy("on_bonk", randomoneventweights, False) else ""
+            ret.sprite = "randomonall" if get_choice_legacy("on_everything", randomoneventweights, False) else ret.sprite
+            ret.sprite = "randomonnone" if ret.sprite == "randomon" else ret.sprite
 
-            if (not ret.sprite_pool or get_choice_legacy('use_weighted_sprite_pool', randomoneventweights, False)) \
-                    and 'sprite' in weights:  # Use sprite as a weighted sprite pool, if a sprite pool is not already defined.
-                for key, value in weights['sprite'].items():
-                    if key.startswith('random'):
-                        ret.sprite_pool += ['random'] * int(value)
+            if (not ret.sprite_pool or get_choice_legacy("use_weighted_sprite_pool", randomoneventweights, False)) \
+                    and "sprite" in weights:  # Use sprite as a weighted sprite pool, if a sprite pool is not already defined.
+                for key, value in weights["sprite"].items():
+                    if key.startswith("random"):
+                        ret.sprite_pool += ["random"] * int(value)
                     else:
                         ret.sprite_pool += [key] * int(value)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import atexit
     confirmation = atexit.register(input, "Press enter to close.")
     multiworld = main()

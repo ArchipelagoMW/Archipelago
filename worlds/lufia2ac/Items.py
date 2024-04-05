@@ -1,4 +1,4 @@
-from enum import auto, Enum
+from enum import Enum, auto
 from typing import Dict, NamedTuple, Optional
 
 from BaseClasses import Item, ItemClassification

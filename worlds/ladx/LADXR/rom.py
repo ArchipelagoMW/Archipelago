@@ -1,5 +1,7 @@
-import bsdiff4
 import binascii
+
+import bsdiff4
+
 import Utils
 
 b2h = binascii.hexlify
@@ -28,7 +30,7 @@ class ROM:
                 old = h2b(old)
             if fill_nop:
                 assert len(old) >= len(new), "Length mismatch: %d != %d (%s != %s)" % (len(old), len(new), b2h(old), b2h(new))
-                new += b'\x00' * (len(old) - len(new))
+                new += b"\x00" * (len(old) - len(new))
             else:
                 assert len(old) == len(new), "Length mismatch: %d != %d (%s != %s)" % (len(old), len(new), b2h(old), b2h(new))
             assert addr >= 0 and addr + len(old) <= 16*1024

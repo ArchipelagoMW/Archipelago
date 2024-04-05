@@ -5,22 +5,23 @@ import typing
 import uuid
 import zipfile
 import zlib
-
 from io import BytesIO
-from flask import request, flash, redirect, url_for, session, render_template, abort
-from markupsafe import Markup
-from pony.orm import commit, flush, select, rollback
-from pony.orm.core import TransactionIntegrityError
+
 import schema
+from flask import abort, flash, redirect, render_template, request, session, url_for
+from markupsafe import Markup
+from pony.orm import commit, flush, rollback, select
+from pony.orm.core import TransactionIntegrityError
 
 import MultiServer
 from NetUtils import SlotType
 from Utils import VersionException, __version__
 from worlds import GamesPackage
-from worlds.Files import AutoPatchRegister
 from worlds.AutoWorld import data_package_checksum
+from worlds.Files import AutoPatchRegister
+
 from . import app
-from .models import Seed, Room, Slot, GameDataPackage
+from .models import GameDataPackage, Room, Seed, Slot
 
 banned_extensions = (".sfc", ".z64", ".n64", ".nes", ".smc", ".sms", ".gb", ".gbc", ".gba")
 allowed_options_extensions = (".yaml", ".json", ".yml", ".txt", ".zip")
@@ -143,7 +144,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
         # Factorio
         elif file.filename.endswith(".zip"):
             try:
-                _, _, slot_id, *_ = file.filename.split('_')[0].split('-', 3)
+                _, _, slot_id, *_ = file.filename.split("_")[0].split("-", 3)
             except ValueError:
                 flash("Error: Unexpected file found in .zip: " + file.filename)
                 return
@@ -153,7 +154,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
         # All other files using the standard MultiWorld.get_out_file_name_base method
         else:
             try:
-                _, _, slot_id, *_ = file.filename.split('.')[0].split('_', 3)
+                _, _, slot_id, *_ = file.filename.split(".")[0].split("_", 3)
             except ValueError:
                 flash("Error: Unexpected file found in .zip: " + file.filename)
                 return
@@ -191,7 +192,7 @@ def uploads():
                         try:
                             res = upload_zip_to_db(zfile)
                         except VersionException:
-                            flash(f"Could not load multidata. Wrong Version detected.")
+                            flash("Could not load multidata. Wrong Version detected.")
                         else:
                             if res is str:
                                 return res
@@ -214,7 +215,7 @@ def uploads():
     return render_template("hostGame.html", version=__version__)
 
 
-@app.route('/user-content', methods=['GET'])
+@app.route("/user-content", methods=["GET"])
 def user_content():
     rooms = select(room for room in Room if room.owner == session["_id"])
     seeds = select(seed for seed in Seed if seed.owner == session["_id"])
@@ -228,7 +229,7 @@ def disown_seed(seed):
         return abort(404)
     if seed.owner !=  session["_id"]:
         return abort(403)
-    
+
     seed.owner = 0
 
     return redirect(url_for("user_content"))

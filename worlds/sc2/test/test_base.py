@@ -1,8 +1,8 @@
+from test.TestBase import WorldTestBase
 from typing import *
 
-from test.TestBase import WorldTestBase
-from .. import SC2World
-from .. import Client
+from .. import Client, SC2World
+
 
 class Sc2TestBase(WorldTestBase):
     game = Client.SC2Context.game

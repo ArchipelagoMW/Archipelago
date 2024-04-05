@@ -1,7 +1,9 @@
-import typing
 from dataclasses import dataclass
-from Options import DefaultOnToggle, Range, Toggle, DeathLink, Choice, PerGameCommonOptions, OptionSet
+
+from Options import Choice, DeathLink, DefaultOnToggle, OptionSet, PerGameCommonOptions, Range, Toggle
+
 from .Items import action_item_table
+
 
 class EnableCoinStars(DefaultOnToggle):
     """Disable to Ignore 100 Coin Stars. You can still collect them, but they don't do anything.
@@ -38,7 +40,7 @@ class BasementStarDoorCost(Range):
 
 class SecondFloorStarDoorCost(Range):
     """What percent of the total stars are required to access the third floor"""
-    display_name = 'Second Floor Star Door %'
+    display_name = "Second Floor Star Door %"
     range_start = 0
     range_end = 70
     default = 42
@@ -125,7 +127,7 @@ class MoveRandomizerActions(OptionSet):
     """Which actions to randomize when Move Randomizer is enabled"""
     display_name = "Randomized Moves"
     # HACK: Disable randomization for double jump
-    valid_keys = [action for action in action_item_table if action != 'Double Jump']
+    valid_keys = [action for action in action_item_table if action != "Double Jump"]
     default = valid_keys
 
 @dataclass

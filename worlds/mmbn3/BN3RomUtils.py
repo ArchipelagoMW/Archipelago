@@ -9,20 +9,20 @@ ArchiveToReferences = {0x684F9C: [0x02E38C, 0x12BC7C, 0x1301B8], 0x7043EC: [0x00
 
 
 charDict = {
-    ' ': 0x00, '0': 0x01, '1': 0x02, '2': 0x03, '3': 0x04, '4': 0x05, '5': 0x06, '6': 0x07, '7': 0x08, '8': 0x09, '9': 0x0A,
-    'A': 0x0B, 'B': 0x0C, 'C': 0x0D, 'D': 0x0E, 'E': 0x0F, 'F': 0x10, 'G': 0x11, 'H': 0x12, 'I': 0x13, 'J': 0x14, 'K': 0x15,
-    'L': 0x16, 'M': 0x17, 'N': 0x18, 'O': 0x19, 'P': 0x1A, 'Q': 0x1B, 'R': 0x1C, 'S': 0x1D, 'T': 0x1E, 'U': 0x1F, 'V': 0x20,
-    'W': 0x21, 'X': 0x22, 'Y': 0x23, 'Z': 0x24, 'a': 0x25, 'b': 0x26, 'c': 0x27, 'd': 0x28, 'e': 0x29, 'f': 0x2A, 'g': 0x2B,
-    'h': 0x2C, 'i': 0x2D, 'j': 0x2E, 'k': 0x2F, 'l': 0x30, 'm': 0x31, 'n': 0x32, 'o': 0x33, 'p': 0x34, 'q': 0x35, 'r': 0x36,
-    's': 0x37, 't': 0x38, 'u': 0x39, 'v': 0x3A, 'w': 0x3B, 'x': 0x3C, 'y': 0x3D, 'z': 0x3E, '-': 0x3F, '×': 0x40, '=': 0x41,
-    ':': 0x42, '+': 0x43, '÷': 0x44, '※': 0x45, '*': 0x46, '!': 0x47, '?': 0x48, '%': 0x49, '&': 0x4A, ',': 0x4B, '⋯': 0x4C,
-    '.': 0x4D, '・': 0x4E, ';': 0x4F, '\'': 0x50, '\"': 0x51, '~': 0x52, '/': 0x53, '(': 0x54, ')': 0x55, '「': 0x56, '」': 0x57,
-    "V2": 0x58, "V3": 0x59, "V4": 0x5A, "V5": 0x5B, '@': 0x5C, '♥': 0x5D, '♪': 0x5E, "MB": 0x5F, '■': 0x60, '_': 0x61,
+    " ": 0x00, "0": 0x01, "1": 0x02, "2": 0x03, "3": 0x04, "4": 0x05, "5": 0x06, "6": 0x07, "7": 0x08, "8": 0x09, "9": 0x0A,
+    "A": 0x0B, "B": 0x0C, "C": 0x0D, "D": 0x0E, "E": 0x0F, "F": 0x10, "G": 0x11, "H": 0x12, "I": 0x13, "J": 0x14, "K": 0x15,
+    "L": 0x16, "M": 0x17, "N": 0x18, "O": 0x19, "P": 0x1A, "Q": 0x1B, "R": 0x1C, "S": 0x1D, "T": 0x1E, "U": 0x1F, "V": 0x20,
+    "W": 0x21, "X": 0x22, "Y": 0x23, "Z": 0x24, "a": 0x25, "b": 0x26, "c": 0x27, "d": 0x28, "e": 0x29, "f": 0x2A, "g": 0x2B,
+    "h": 0x2C, "i": 0x2D, "j": 0x2E, "k": 0x2F, "l": 0x30, "m": 0x31, "n": 0x32, "o": 0x33, "p": 0x34, "q": 0x35, "r": 0x36,
+    "s": 0x37, "t": 0x38, "u": 0x39, "v": 0x3A, "w": 0x3B, "x": 0x3C, "y": 0x3D, "z": 0x3E, "-": 0x3F, "×": 0x40, "=": 0x41,
+    ":": 0x42, "+": 0x43, "÷": 0x44, "※": 0x45, "*": 0x46, "!": 0x47, "?": 0x48, "%": 0x49, "&": 0x4A, ",": 0x4B, "⋯": 0x4C,
+    ".": 0x4D, "・": 0x4E, ";": 0x4F, "'": 0x50, '"': 0x51, "~": 0x52, "/": 0x53, "(": 0x54, ")": 0x55, "「": 0x56, "」": 0x57,
+    "V2": 0x58, "V3": 0x59, "V4": 0x5A, "V5": 0x5B, "@": 0x5C, "♥": 0x5D, "♪": 0x5E, "MB": 0x5F, "■": 0x60, "_": 0x61,
     "circle1": 0x62, "circle2": 0x63, "cross1": 0x64, "cross2": 0x65, "bracket1": 0x66, "bracket2": 0x67, "ModTools1": 0x68,
-    "ModTools2": 0x69, "ModTools3": 0x6A, 'Σ': 0x6B, 'Ω': 0x6C, 'α': 0x6D, 'β': 0x6E, '#': 0x6F, '…': 0x70, '>': 0x71,
-    '<': 0x72, 'エ': 0x73, "BowneGlobal1": 0x74, "BowneGlobal2": 0x75, "BowneGlobal3": 0x76, "BowneGlobal4": 0x77,
+    "ModTools2": 0x69, "ModTools3": 0x6A, "Σ": 0x6B, "Ω": 0x6C, "α": 0x6D, "β": 0x6E, "#": 0x6F, "…": 0x70, ">": 0x71,
+    "<": 0x72, "エ": 0x73, "BowneGlobal1": 0x74, "BowneGlobal2": 0x75, "BowneGlobal3": 0x76, "BowneGlobal4": 0x77,
     "BowneGlobal5": 0x78, "BowneGlobal6": 0x79, "BowneGlobal7": 0x7A, "BowneGlobal8": 0x7B, "BowneGlobal9": 0x7C,
-    "BowneGlobal10": 0x7D, "BowneGlobal11": 0x7E, '\n': 0xE8, 'ω': 0x6C
+    "BowneGlobal10": 0x7D, "BowneGlobal11": 0x7E, "\n": 0xE8, "ω": 0x6C
 }
 
 dictChar = {v: k for k, v in charDict.items()}
@@ -45,14 +45,14 @@ def read_u32_le(data, offset) -> int:
 
 
 def int32_to_byte_list_le(x) -> bytearray:
-    byte32_string = "{:08x}".format(x)
+    byte32_string = f"{x:08x}"
     data = bytearray.fromhex(byte32_string)
     data.reverse()
     return data
 
 
 def int16_to_byte_list_le(x) -> bytearray:
-    byte32_string = "{:04x}".format(x)
+    byte32_string = f"{x:04x}"
     data = bytearray.fromhex(byte32_string)
     data.reverse()
     return data
@@ -73,17 +73,17 @@ def char_to_hex(c) -> int:
 def generate_chip_get(chip, code, amt) -> bytearray:
     chip_bytes = int16_to_byte_list_le(chip)
     byte_list = [0xF6, 0x10, chip_bytes[0], chip_bytes[1], code, amt]
-    byte_list.extend(generate_text_bytes("Got a chip for\n\""))
+    byte_list.extend(generate_text_bytes('Got a chip for\n"'))
     byte_list.extend([0xF9, 0x00, chip_bytes[0], 0x01 if chip < 256 else 0x02, 0x00, 0xF9, 0x00, code, 0x03])
-    byte_list.extend(generate_text_bytes("\"!!"))
+    byte_list.extend(generate_text_bytes('"!!'))
     return bytearray(byte_list)
 
 
 def generate_key_item_get(item, amt) -> bytearray:
     byte_list = [0xF6, 0x00, item, amt]
-    byte_list.extend(generate_text_bytes("Got a \n\""))
+    byte_list.extend(generate_text_bytes('Got a \n"'))
     byte_list.extend([0xF9, 0x00, item, 0x00])
-    byte_list.extend(generate_text_bytes("\"!!"))
+    byte_list.extend(generate_text_bytes('"!!'))
     return bytearray(byte_list)
 
 
@@ -93,23 +93,23 @@ def generate_sub_chip_get(subchip, amt) -> bytearray:
     # Instead, I'm going to just let it get eaten. Script indices are at a premium and I can't always add one
     # It's more important to use them for progressive Undernet
     byte_list = [0xF6, 0x20, subchip, amt, 0xFF, 0xFF, 0xFF]
-    byte_list.extend(generate_text_bytes("Got a \nSubChip for\n\""))
+    byte_list.extend(generate_text_bytes('Got a \nSubChip for\n"'))
     byte_list.extend([0xF9, 0x00, subchip, 0x00])
-    byte_list.extend(generate_text_bytes("\"!!"))
+    byte_list.extend(generate_text_bytes('"!!'))
     return bytearray(byte_list)
 
 
 def generate_zenny_get(amt) -> bytearray:
     zenny_bytes = int32_to_byte_list_le(amt)
     byte_list = [0xF6, 0x30, *zenny_bytes, 0xFF, 0xFF, 0xFF]
-    byte_list.extend(generate_text_bytes(f"Got \n\"{amt} Zennys\"!!"))
+    byte_list.extend(generate_text_bytes(f'Got \n"{amt} Zennys"!!'))
     return bytearray(byte_list)
 
 
 def generate_program_get(program, color, amt) -> bytearray:
     # Programs are bit shifted twice to generate the "give" bit
     byte_list = [0xF6, 0x40, program << 2, amt, color]
-    byte_list.extend(generate_text_bytes("Got a Navi\nCustomizer Program:\n\""))
+    byte_list.extend(generate_text_bytes('Got a Navi\nCustomizer Program:\n"'))
     byte_list.extend([0xF9, 0x00, program, 0x05])
     return bytearray(byte_list)
 
@@ -117,7 +117,7 @@ def generate_program_get(program, color, amt) -> bytearray:
 def generate_bugfrag_get(amt) -> bytearray:
     frag_bytes = int32_to_byte_list_le(amt)
     byte_list = [0xF6, 0x50, frag_bytes[0], frag_bytes[1], frag_bytes[2], frag_bytes[3], 0xFF, 0xFF, 0xFF]
-    byte_list.extend(generate_text_bytes("Got:\n\"" + str(amt) + " BugFrags\"!!"))
+    byte_list.extend(generate_text_bytes('Got:\n"' + str(amt) + ' BugFrags"!!'))
     return bytearray(byte_list)
 
 
@@ -128,7 +128,7 @@ def generate_progressive_undernet(progression_index, next_script) -> bytearray:
         # If we're at max rank, give bugfrags instead
         frag_bytes = int32_to_byte_list_le(20)
         byte_list = [0xF6, 0x50, frag_bytes[0], frag_bytes[1], frag_bytes[2], frag_bytes[3], 0xFF, 0xFF, 0xFF]
-        byte_list.extend(generate_text_bytes("The extra data\ndecompiles into:\n\"20 BugFrags\"!!"))
+        byte_list.extend(generate_text_bytes('The extra data\ndecompiles into:\n"20 BugFrags"!!'))
     else:
         # F6 03 - Check for item. If you have it, load next_script, otherwise, continue
         byte_list = [0xf6, 0x03, undernet_item_indices[progression_index], 0x01, next_script, next_script, 0xFF, 0xE9]
@@ -141,7 +141,7 @@ def generate_progressive_undernet(progression_index, next_script) -> bytearray:
 
 def generate_get_for_item(item) -> bytearray:
     if item.type == ItemType.Undernet:
-        return generate_text_bytes("Got the next\n\"Undernet Rank\"!!")
+        return generate_text_bytes('Got the next\n"Undernet Rank"!!')
     elif item.type == ItemType.Chip:
         return generate_chip_get(item.itemID, item.subItemID, item.count)
     elif item.type == ItemType.KeyItem:
@@ -190,7 +190,7 @@ def shorten_item_name(item_name):
     if len(item_name) <= maxLength:
         return item_name
     # If it's still too long, start removing vowels till it's short enough or we run out
-    while len(item_name) > maxLength and any(c in item_name for c in ['a', 'e', 'i', 'o', 'u']):
+    while len(item_name) > maxLength and any(c in item_name for c in ["a", "e", "i", "o", "u"]):
         item_name = re.sub("[aeiou]", "", item_name, 1)
     # If it's somehow still too long, truncate and return
     return item_name[0:maxLength]

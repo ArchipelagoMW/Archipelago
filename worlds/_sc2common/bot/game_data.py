@@ -3,8 +3,7 @@ from __future__ import annotations
 
 from bisect import bisect_left
 from dataclasses import dataclass
-from functools import lru_cache
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional
 
 from .data import Attribute, Race
 

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PerGameCommonOptions
+from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, StartInventoryPool, TextChoice, Toggle
 
 
 class SwordProgression(DefaultOnToggle):

@@ -1,8 +1,10 @@
-from worlds.generic.Rules import set_rule, add_rule
+from typing import TYPE_CHECKING, Set
+
 from BaseClasses import MultiWorld
+from worlds.generic.Rules import add_rule, set_rule
+
 from .locations import get_locations
-from .ror2environments import environment_vanilla_orderedstages_table, environment_sotv_orderedstages_table
-from typing import Set, TYPE_CHECKING
+from .ror2environments import environment_sotv_orderedstages_table, environment_vanilla_orderedstages_table
 
 if TYPE_CHECKING:
     from . import RiskOfRainWorld

@@ -2,18 +2,28 @@
 Functions related to pokemon species and moves
 """
 import functools
-from typing import TYPE_CHECKING, Dict, List, Set, Optional, Tuple
+from typing import TYPE_CHECKING, Dict, List, Optional, Set, Tuple
 
 from Options import Toggle
 
 from .data import NUM_REAL_SPECIES, POSTGAME_MAPS, EncounterTableData, LearnsetMove, MiscPokemonData, SpeciesData, data
-from .options import (Goal, HmCompatibility, LevelUpMoves, RandomizeAbilities, RandomizeLegendaryEncounters,
-                      RandomizeMiscPokemon, RandomizeStarters, RandomizeTypes, RandomizeWildPokemon,
-                      TmTutorCompatibility)
+from .options import (
+    Goal,
+    HmCompatibility,
+    LevelUpMoves,
+    RandomizeAbilities,
+    RandomizeLegendaryEncounters,
+    RandomizeMiscPokemon,
+    RandomizeStarters,
+    RandomizeTypes,
+    RandomizeWildPokemon,
+    TmTutorCompatibility,
+)
 from .util import bool_array_to_int, get_easter_egg, int_to_bool_array
 
 if TYPE_CHECKING:
     from random import Random
+
     from . import PokemonEmeraldWorld
 
 
@@ -478,7 +488,7 @@ def randomize_learnsets(world: "PokemonEmeraldWorld") -> None:
 
         species.learnset = new_learnset
 
-        
+
 def randomize_starters(world: "PokemonEmeraldWorld") -> None:
     if world.options.starters == RandomizeStarters.option_vanilla:
         return
@@ -663,7 +673,7 @@ def randomize_misc_pokemon(world: "PokemonEmeraldWorld") -> None:
                 ]
             if should_match_bst:
                 candidates = filter_species_by_nearby_bst(candidates, sum(original_species.base_stats))
-            
+
             player_filtered_candidates = [
                 species
                 for species in candidates

@@ -1,5 +1,7 @@
-from BaseClasses import Item, ItemClassification as IC
 from zilliandomizer.logic_components.items import Item as ZzItem
+
+from BaseClasses import Item
+from BaseClasses import ItemClassification as IC
 
 
 class ZillionItem(Item):

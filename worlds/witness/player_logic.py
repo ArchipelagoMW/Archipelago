@@ -17,10 +17,10 @@ When the world has parsed its options, a second function is called to finalize t
 
 import copy
 from collections import defaultdict
-from typing import cast, TYPE_CHECKING
 from logging import warning
+from typing import TYPE_CHECKING, cast
 
-from .static_logic import StaticWitnessLogic, DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
+from .static_logic import DoorItemDefinition, ItemCategory, ProgressiveItemDefinition, StaticWitnessLogic
 from .utils import *
 
 if TYPE_CHECKING:
@@ -138,7 +138,7 @@ class WitnessPlayerLogic:
             item_name = line_split[0]
 
             if item_name not in StaticWitnessItems.item_data:
-                raise RuntimeError("Item \"" + item_name + "\" does not exist.")
+                raise RuntimeError('Item "' + item_name + '" does not exist.')
 
             self.THEORETICAL_ITEMS.add(item_name)
             if isinstance(StaticWitnessLogic.all_items[item_name], ProgressiveItemDefinition):
@@ -604,7 +604,7 @@ class WitnessPlayerLogic:
 
         name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel]["checkName"] + action
         if panel not in self.USED_EVENT_NAMES_BY_HEX:
-            warning("Panel \"" + name + "\" does not have an associated event name.")
+            warning('Panel "' + name + '" does not have an associated event name.')
             self.USED_EVENT_NAMES_BY_HEX[panel] = name + " Event"
         pair = (name, self.USED_EVENT_NAMES_BY_HEX[panel])
         return pair

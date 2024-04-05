@@ -1,4 +1,5 @@
 from copy import deepcopy
+
 from . import poke_data
 from .locations import location_data
 

@@ -1,6 +1,7 @@
-from typing import Dict, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, Optional
 
 from BaseClasses import Entrance, ItemClassification, Region
+
 from .datatypes import Room, RoomAndDoor
 from .items import LingoItem
 from .locations import LingoLocation

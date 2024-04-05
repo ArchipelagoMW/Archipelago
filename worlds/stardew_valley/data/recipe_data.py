@@ -1,15 +1,15 @@
 from typing import Dict, List, Optional
+
 from ..mods.mod_data import ModNames
-from .recipe_source import RecipeSource, FriendshipSource, SkillSource, QueenOfSauceSource, ShopSource, StarterSource, ShopTradeSource, ShopFriendshipSource
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
-from ..strings.craftable_names import ModEdible, Edible
-from ..strings.crop_names import Fruit, Vegetable, SVEFruit, DistantLandsCrop
-from ..strings.fish_names import Fish, SVEFish, WaterItem, DistantLandsFish
+from ..strings.craftable_names import Edible, ModEdible
+from ..strings.crop_names import DistantLandsCrop, Fruit, SVEFruit, Vegetable
+from ..strings.fish_names import DistantLandsFish, Fish, SVEFish, WaterItem
 from ..strings.flower_names import Flower
-from ..strings.forageable_names import Forageable, SVEForage, DistantLandsForageable
+from ..strings.food_names import Beverage, BoardingHouseMeal, DistantLandsMeal, Meal, SVEMeal
+from ..strings.forageable_names import Forageable, SVEForage
 from ..strings.ingredient_names import Ingredient
-from ..strings.food_names import Meal, SVEMeal, Beverage, DistantLandsMeal, BoardingHouseMeal
 from ..strings.material_names import Material
 from ..strings.metal_names import Fossil
 from ..strings.monster_drop_names import Loot
@@ -17,6 +17,16 @@ from ..strings.region_names import Region, SVERegion
 from ..strings.season_names import Season
 from ..strings.skill_names import Skill
 from ..strings.villager_names import NPC, ModNPC
+from .recipe_source import (
+    FriendshipSource,
+    QueenOfSauceSource,
+    RecipeSource,
+    ShopFriendshipSource,
+    ShopSource,
+    ShopTradeSource,
+    SkillSource,
+    StarterSource,
+)
 
 
 class CookingRecipe:

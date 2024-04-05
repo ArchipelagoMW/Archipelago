@@ -1,7 +1,7 @@
 import unittest
 from argparse import Namespace
 
-from BaseClasses import MultiWorld, CollectionState
+from BaseClasses import CollectionState, MultiWorld
 from worlds import AutoWorldRegister
 
 

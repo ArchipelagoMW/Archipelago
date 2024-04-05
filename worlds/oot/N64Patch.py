@@ -1,10 +1,8 @@
-import struct
-import random
-import io
-import array
-import zlib
 import copy
+import random
 import zipfile
+import zlib
+
 from .ntype import BigStream
 
 
@@ -93,7 +91,7 @@ def create_patch_file(rom, xor_range=(0x00B8AD30, 0x00F029A0)):
 
     # add header
     patch_data = BigStream([])
-    patch_data.append_bytes(list(map(ord, 'ZPFv1')))
+    patch_data.append_bytes(list(map(ord, "ZPFv1")))
     patch_data.append_int32(dma_start)
     patch_data.append_int32(xor_range[0])
     patch_data.append_int32(xor_range[1])
@@ -156,7 +154,7 @@ def create_patch_file(rom, xor_range=(0x00B8AD30, 0x00F029A0)):
         # start a new block
         if not block_start:
             block_start = address
-            block_end = address - 1             
+            block_end = address - 1
 
         # save the new data
         data += rom.buffer[block_end+1:address+1]
@@ -176,21 +174,21 @@ def create_patch_file(rom, xor_range=(0x00B8AD30, 0x00F029A0)):
 def apply_patch_file(rom, file, sub_file=None):
     # load the patch file and decompress
     if sub_file:
-        with zipfile.ZipFile(file, 'r') as patch_archive:
+        with zipfile.ZipFile(file, "r") as patch_archive:
             try:
-                with patch_archive.open(sub_file, 'r') as stream:
+                with patch_archive.open(sub_file, "r") as stream:
                     patch_data = stream.read()
-            except KeyError as ex:
-                raise FileNotFoundError('Patch file missing from archive. Invalid Player ID.')
+            except KeyError:
+                raise FileNotFoundError("Patch file missing from archive. Invalid Player ID.")
     else:
-        with open(file, 'rb') as stream:
+        with open(file, "rb") as stream:
             patch_data = stream.read()
     patch_data = BigStream(zlib.decompress(patch_data))
 
     # make sure the header is correct
-    if patch_data.read_bytes(length=4) != b'ZPFv':
+    if patch_data.read_bytes(length=4) != b"ZPFv":
         raise Exception("File is not in a Zelda Patch Format")
-    if patch_data.read_byte() != ord('1'):
+    if patch_data.read_byte() != ord("1"):
         # in the future we might want to have revisions for this format
         raise Exception("Unsupported patch version.")
 

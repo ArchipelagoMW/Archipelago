@@ -1,8 +1,10 @@
 ﻿from typing import List
-from ...Region import Z3Region, RewardType
-from ...Config import Config, GameMode, KeyShuffle
+
+from ...Config import Config
+from ...Item import Item, ItemType, Progression
 from ...Location import Location, LocationType
-from ...Item import Item, Progression, ItemType
+from ...Region import RewardType, Z3Region
+
 
 class GanonsTower(Z3Region):
     Name = "Ganon's Tower"
@@ -124,7 +126,7 @@ class GanonsTower(Z3Region):
 
     def TowerAscend(self, items: Progression):
         return items.BigKeyGT and items.KeyGT >= 3 and items.Bow and items.CanLightTorches()
-        
+
     def CanBeatArmos(self, items: Progression):
         return items.Sword or items.Hammer or items.Bow or \
             items.CanExtendMagic(2) and (items.Somaria or items.Byrna) or \

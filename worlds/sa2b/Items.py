@@ -1,8 +1,9 @@
 import typing
 
 from BaseClasses import Item, ItemClassification
-from .Names import ItemName
 from worlds.alttp import ALTTPWorld
+
+from .Names import ItemName
 
 
 class ItemData(typing.NamedTuple):
@@ -33,7 +34,7 @@ upgrades_table = {
     ItemName.sonic_bounce_bracelet: ItemData(0xFF0004, True),
     ItemName.sonic_flame_ring:      ItemData(0xFF0005, True),
     ItemName.sonic_mystic_melody:   ItemData(0xFF0006, True),
-    
+
     ItemName.tails_laser_blaster: ItemData(0xFF0007, False),
     ItemName.tails_booster:       ItemData(0xFF0008, True),
     ItemName.tails_mystic_melody: ItemData(0xFF0009, True),
@@ -44,12 +45,12 @@ upgrades_table = {
     ItemName.knuckles_air_necklace:  ItemData(0xFF000D, True),
     ItemName.knuckles_hammer_gloves: ItemData(0xFF000E, True),
     ItemName.knuckles_sunglasses:    ItemData(0xFF000F, True),
-    
+
     ItemName.shadow_flame_ring:    ItemData(0xFF0010, True),
     ItemName.shadow_air_shoes:     ItemData(0xFF0011, True),
     ItemName.shadow_ancient_light: ItemData(0xFF0012, False),
     ItemName.shadow_mystic_melody: ItemData(0xFF0013, True),
-    
+
     ItemName.eggman_laser_blaster:    ItemData(0xFF0014, False),
     ItemName.eggman_mystic_melody:    ItemData(0xFF0015, True),
     ItemName.eggman_jet_engine:       ItemData(0xFF0016, True),

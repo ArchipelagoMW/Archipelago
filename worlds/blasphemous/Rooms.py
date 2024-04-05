@@ -1,6 +1,5 @@
 from typing import List, TypedDict
 
-
 room_table: List[str] = [
     "D01Z01S01", # THL
     "D01Z01S02", # THL
@@ -520,7 +519,7 @@ door_table: List[DoorDict] = [
 		"Direction": 1,
 		"OriginalDoor": "D01BZ06S01[E]"
 	},
-	
+
 	{
 		"Id": "D01Z03S01[W]",
 		"Direction": 1,
@@ -647,7 +646,7 @@ door_table: List[DoorDict] = [
 		"OriginalDoor": "D01Z03S03[Cherubs]",
 		"Logic": "linen"
 	},
-	
+
 	{
 		"Id": "D01Z04S01[NW]",
 		"Direction": 1,
@@ -889,7 +888,7 @@ door_table: List[DoorDict] = [
 		"Direction": 7,
 		"OriginalDoor": "D01Z04S09[C]"
 	},
-	
+
 	{
 		"Id": "D01Z05S01[N]",
 		"Direction": 1,
@@ -1278,7 +1277,7 @@ door_table: List[DoorDict] = [
 		"Direction": 1,
 		"OriginalDoor": "D01Z05S17[E]"
 	},
-	
+
 	{
 		"Id": "D01Z06S01[N]",
 		"Direction": 1,
@@ -1296,7 +1295,7 @@ door_table: List[DoorDict] = [
 		"Direction": 7,
 		"OriginalDoor": "D01Z06S01[Santos]"
 	},
-	
+
 	{
 		"Id": "D02Z01S01[SW]",
 		"Direction": 1,
@@ -1431,7 +1430,7 @@ door_table: List[DoorDict] = [
 		"OriginalDoor": "D02Z01S01[CherubsR]",
 		"Logic": "linen && (canWalkOnRoot || canCrossGap2 || canEnemyBounce && canAirStall)"
 	},
-	
+
 	{
 		"Id": "D02Z02S01[W]",
 		"Direction": 1,
@@ -1696,7 +1695,7 @@ door_table: List[DoorDict] = [
 		"Direction": 7,
 		"OriginalDoor": "D02Z02S08[C]"
 	},
-	
+
 	{
 		"Id": "D02Z03S01[W]",
 		"Direction": 1,
@@ -1987,7 +1986,7 @@ door_table: List[DoorDict] = [
 		"Direction": 2,
 		"OriginalDoor": "D02Z03S07[NWW]"
 	},
-	
+
 	{
 		"Id": "D03Z01S01[W]",
 		"Direction": 1,
@@ -2110,7 +2109,7 @@ door_table: List[DoorDict] = [
 		"OriginalDoor": "D03Z01S02[W]",
 		"Logic": "D03Z01S06[E] || canBeatPerpetua"
 	},
-	
+
 	{
 		"Id": "D03Z02S01[W]",
 		"Direction": 1,
@@ -2394,7 +2393,7 @@ door_table: List[DoorDict] = [
 		"OriginalDoor": "D20Z01S01[W]",
 		"Type": 1
 	},
-	
+
 	{
 		"Id": "D03Z03S01[W]",
 		"Direction": 1,
@@ -2672,7 +2671,7 @@ door_table: List[DoorDict] = [
 		"Direction": 2,
 		"OriginalDoor": "D03Z03S07[NW]"
 	},
-	
+
 	{
 		"Id": "D04Z01S01[W]",
 		"Direction": 1,
@@ -3144,7 +3143,7 @@ door_table: List[DoorDict] = [
 		"Direction": 7,
 		"OriginalDoor": "D04Z02S20[Redento]"
 	},
-	
+
 	{
 		"Id": "D04Z03S01[W]",
 		"Direction": 1,
@@ -3163,7 +3162,7 @@ door_table: List[DoorDict] = [
 		"OriginalDoor": "D05Z01S22[E]",
 		"Type": 1
 	},
-	
+
 	{
 		"Id": "D04Z04S01[W]",
 		"Direction": 1,
@@ -3182,7 +3181,7 @@ door_table: List[DoorDict] = [
 		"OriginalDoor": "D04Z04S01[E]",
 		"Type": 9
 	},
-	
+
 	{
 		"Id": "D05Z01S01[W]",
 		"Direction": 1,
@@ -4239,7 +4238,7 @@ door_table: List[DoorDict] = [
 		"OriginalDoor": "D08Z01S01[Cherubs]",
 		"Logic": "linen"
 	},
-	
+
 	{
 		"Id": "D08Z02S01[W]",
 		"Direction": 1,
@@ -4285,7 +4284,7 @@ door_table: List[DoorDict] = [
 		"Direction": 3,
 		"OriginalDoor": "D08Z02S01[N]"
 	},
-	
+
 	{
 		"Id": "D08Z03S01[W]",
 		"Direction": 1,
@@ -4322,7 +4321,7 @@ door_table: List[DoorDict] = [
 		"OriginalDoor": "D08Z03S02[NW]",
 		"Logic": "D08Z03S03[E] || canBeatHallBoss"
 	},
-	
+
 	{
 		"Id": "D09Z01S01[W]",
 		"Direction": 1,
@@ -4838,7 +4837,7 @@ door_table: List[DoorDict] = [
 		"OriginalDoor": "D09Z01S09[Cell24]",
 		"VisibilityFlags": 1
 	},
-	
+
 	{
 		"Id": "D17Z01S01[E]",
 		"Direction": 2,
@@ -5067,7 +5066,7 @@ door_table: List[DoorDict] = [
 		"OriginalDoor": "D17Z01S04[FrontR]",
 		"Logic": "D17BZ02S01[FrontR] || dash && wallClimb"
 	},
-	
+
 	{
 		"Id": "D20Z01S01[W]",
 		"Direction": 1,
@@ -5245,7 +5244,7 @@ door_table: List[DoorDict] = [
 		"OriginalDoor": "D20Z03S01[W]",
 		"Type": 1
 	},
-	
+
 	{
 		"Id": "D20Z02S01[W]",
 		"Direction": 1,
@@ -5395,7 +5394,7 @@ door_table: List[DoorDict] = [
 		"Direction": 2,
 		"OriginalDoor": "D20Z02S11[SW]"
 	},
-	
+
 	{
 		"Id": "D20Z03S01[W]",
 		"Direction": 1,

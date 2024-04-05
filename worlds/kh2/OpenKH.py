@@ -1,18 +1,19 @@
 import logging
-
-import yaml
 import os
-import Utils
 import zipfile
 
-from .Items import item_dictionary_table
-from .Locations import all_locations, SoraLevels, exclusion_table
-from .XPValues import lvlStats, formExp, soraExp
+import yaml
+
+import Utils
 from worlds.Files import APContainer
+
+from .Items import item_dictionary_table
+from .Locations import SoraLevels, all_locations, exclusion_table
+from .XPValues import formExp, lvlStats, soraExp
 
 
 class KH2Container(APContainer):
-    game: str = 'Kingdom Hearts 2'
+    game: str = "Kingdom Hearts 2"
 
     def __init__(self, patch_data: dict, base_path: str, output_directory: str,
         player=None, player_name: str = "", server: str = ""):
@@ -240,136 +241,136 @@ def patch_kh2(self, output_directory):
     self.mod_yml = {
         "assets": [
             {
-                'method': 'binarc',
-                'name':   '00battle.bin',
-                'source': [
+                "method": "binarc",
+                "name":   "00battle.bin",
+                "source": [
                     {
-                        'method': 'listpatch',
-                        'name':   'fmlv',
-                        'source': [
+                        "method": "listpatch",
+                        "name":   "fmlv",
+                        "source": [
                             {
-                                'name': 'FmlvList.yml',
-                                'type': 'fmlv'
+                                "name": "FmlvList.yml",
+                                "type": "fmlv"
                             }
                         ],
-                        'type':   'List'
+                        "type":   "List"
                     },
                     {
-                        'method': 'listpatch',
-                        'name':   'lvup',
-                        'source': [
+                        "method": "listpatch",
+                        "name":   "lvup",
+                        "source": [
                             {
-                                'name': 'LvupList.yml',
-                                'type': 'lvup'
+                                "name": "LvupList.yml",
+                                "type": "lvup"
                             }
                         ],
-                        'type':   'List'
+                        "type":   "List"
                     },
                     {
-                        'method': 'listpatch',
-                        'name':   'bons',
-                        'source': [
+                        "method": "listpatch",
+                        "name":   "bons",
+                        "source": [
                             {
-                                'name': 'BonsList.yml',
-                                'type': 'bons'
+                                "name": "BonsList.yml",
+                                "type": "bons"
                             }
                         ],
-                        'type':   'List'
+                        "type":   "List"
                     }
                 ]
             },
             {
-                'method': 'binarc',
-                'name':   '03system.bin',
-                'source': [
+                "method": "binarc",
+                "name":   "03system.bin",
+                "source": [
                     {
-                        'method': 'listpatch',
-                        'name':   'trsr',
-                        'source': [
+                        "method": "listpatch",
+                        "name":   "trsr",
+                        "source": [
                             {
-                                'name': 'TrsrList.yml',
-                                'type': 'trsr'
+                                "name": "TrsrList.yml",
+                                "type": "trsr"
                             }
                         ],
-                        'type':   'List'
+                        "type":   "List"
                     },
                     {
-                        'method': 'listpatch',
-                        'name':   'item',
-                        'source': [
+                        "method": "listpatch",
+                        "name":   "item",
+                        "source": [
                             {
-                                'name': 'ItemList.yml',
-                                'type': 'item'
+                                "name": "ItemList.yml",
+                                "type": "item"
                             }
                         ],
-                        'type':   'List'
+                        "type":   "List"
                     }
                 ]
             },
             {
-                'name':   'msg/us/po.bar',
-                'multi':  [
+                "name":   "msg/us/po.bar",
+                "multi":  [
                     {
-                        'name': 'msg/fr/po.bar'
+                        "name": "msg/fr/po.bar"
                     },
                     {
-                        'name': 'msg/gr/po.bar'
+                        "name": "msg/gr/po.bar"
                     },
                     {
-                        'name': 'msg/it/po.bar'
+                        "name": "msg/it/po.bar"
                     },
                     {
-                        'name': 'msg/sp/po.bar'
+                        "name": "msg/sp/po.bar"
                     }
                 ],
-                'method': 'binarc',
-                'source': [
+                "method": "binarc",
+                "source": [
                     {
-                        'name':   'po',
-                        'type':   'list',
-                        'method': 'kh2msg',
-                        'source': [
+                        "name":   "po",
+                        "type":   "list",
+                        "method": "kh2msg",
+                        "source": [
                             {
-                                'name':     'po.yml',
-                                'language': 'en'
+                                "name":     "po.yml",
+                                "language": "en"
                             }
                         ]
                     }
                 ]
             },
             {
-                'name':   'msg/us/sys.bar',
-                'multi':  [
+                "name":   "msg/us/sys.bar",
+                "multi":  [
                     {
-                        'name': 'msg/fr/sys.bar'
+                        "name": "msg/fr/sys.bar"
                     },
                     {
-                        'name': 'msg/gr/sys.bar'
+                        "name": "msg/gr/sys.bar"
                     },
                     {
-                        'name': 'msg/it/sys.bar'
+                        "name": "msg/it/sys.bar"
                     },
                     {
-                        'name': 'msg/sp/sys.bar'
+                        "name": "msg/sp/sys.bar"
                     }
                 ],
-                'method': 'binarc',
-                'source': [
+                "method": "binarc",
+                "source": [
                     {
-                        'name':   'sys',
-                        'type':   'list',
-                        'method': 'kh2msg',
-                        'source': [
+                        "name":   "sys",
+                        "type":   "list",
+                        "method": "kh2msg",
+                        "source": [
                             {
-                                'name':     'sys.yml',
-                                'language': 'en'
+                                "name":     "sys.yml",
+                                "language": "en"
                             }
                         ]
                     }
                 ]
             },
         ],
-        'title':  'Randomizer Seed'
+        "title":  "Randomizer Seed"
     }
 
     goal_to_text = {
@@ -393,22 +394,22 @@ def patch_kh2(self, output_directory):
 
     self.pooh_text = [
         {
-            'id': 18326,
-            'en': f"Your goal is {goal_to_text[self.options.Goal.value]}"
+            "id": 18326,
+            "en": f"Your goal is {goal_to_text[self.options.Goal.value]}"
         },
         {
-            'id': 18327,
-            'en': lucky_emblem_text[self.options.Goal.value]
+            "id": 18327,
+            "en": lucky_emblem_text[self.options.Goal.value]
         },
         {
-            'id': 18328,
-            'en': hitlist_text[self.options.Goal.value]
+            "id": 18328,
+            "en": hitlist_text[self.options.Goal.value]
         }
     ]
     self.level_depth_text = [
         {
-            'id': 0x3BF1,
-            'en': f"Your Level Depth is {self.options.LevelDepth.current_option_name}"
+            "id": 0x3BF1,
+            "en": f"Your Level Depth is {self.options.LevelDepth.current_option_name}"
         }
     ]
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)

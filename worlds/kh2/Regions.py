@@ -1,11 +1,10 @@
 import typing
 
-from BaseClasses import MultiWorld, Region
-from . import Locations
+from BaseClasses import Region
 
-from .Subclasses import KH2Location
+from . import Locations
 from .Names import LocationName, RegionName
-from .Items import Events_Table
+from .Subclasses import KH2Location
 
 KH2REGIONS: typing.Dict[str, typing.List[str]] = {
     "Menu":                        [],

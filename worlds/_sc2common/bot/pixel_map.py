@@ -1,4 +1,4 @@
-from typing import Callable, FrozenSet, List, Set, Tuple, Union
+from typing import Callable, FrozenSet, List, Set, Tuple
 
 from .position import Point2
 

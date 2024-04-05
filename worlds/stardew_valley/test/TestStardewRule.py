@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, Mock
 
-from ..stardew_rule import Received, And, Or, HasProgressionPercent, false_, true_
+from ..stardew_rule import And, HasProgressionPercent, Or, Received, false_, true_
 
 
 class TestSimplification(unittest.TestCase):
@@ -10,30 +10,30 @@ class TestSimplification(unittest.TestCase):
     """
 
     def test_simplify_and_and_and(self):
-        rule = And(Received('Summer', 0, 1), Received('Fall', 0, 1)) & And(Received('Winter', 0, 1), Received('Spring', 0, 1))
+        rule = And(Received("Summer", 0, 1), Received("Fall", 0, 1)) & And(Received("Winter", 0, 1), Received("Spring", 0, 1))
 
-        self.assertEqual(And(Received('Summer', 0, 1), Received('Fall', 0, 1), Received('Winter', 0, 1), Received('Spring', 0, 1)), rule)
+        self.assertEqual(And(Received("Summer", 0, 1), Received("Fall", 0, 1), Received("Winter", 0, 1), Received("Spring", 0, 1)), rule)
 
     def test_simplify_and_in_and(self):
-        rule = And(And(Received('Summer', 0, 1), Received('Fall', 0, 1)), And(Received('Winter', 0, 1), Received('Spring', 0, 1)))
-        self.assertEqual(And(Received('Summer', 0, 1), Received('Fall', 0, 1), Received('Winter', 0, 1), Received('Spring', 0, 1)), rule)
+        rule = And(And(Received("Summer", 0, 1), Received("Fall", 0, 1)), And(Received("Winter", 0, 1), Received("Spring", 0, 1)))
+        self.assertEqual(And(Received("Summer", 0, 1), Received("Fall", 0, 1), Received("Winter", 0, 1), Received("Spring", 0, 1)), rule)
 
     def test_simplify_duplicated_and(self):
         # This only works because "Received"s are combinable.
-        rule = And(And(Received('Summer', 0, 1), Received('Fall', 0, 1)), And(Received('Summer', 0, 1), Received('Fall', 0, 1)))
-        self.assertEqual(And(Received('Summer', 0, 1), Received('Fall', 0, 1)), rule)
+        rule = And(And(Received("Summer", 0, 1), Received("Fall", 0, 1)), And(Received("Summer", 0, 1), Received("Fall", 0, 1)))
+        self.assertEqual(And(Received("Summer", 0, 1), Received("Fall", 0, 1)), rule)
 
     def test_simplify_or_or_or(self):
-        rule = Or(Received('Summer', 0, 1), Received('Fall', 0, 1)) | Or(Received('Winter', 0, 1), Received('Spring', 0, 1))
-        self.assertEqual(Or(Received('Summer', 0, 1), Received('Fall', 0, 1), Received('Winter', 0, 1), Received('Spring', 0, 1)), rule)
+        rule = Or(Received("Summer", 0, 1), Received("Fall", 0, 1)) | Or(Received("Winter", 0, 1), Received("Spring", 0, 1))
+        self.assertEqual(Or(Received("Summer", 0, 1), Received("Fall", 0, 1), Received("Winter", 0, 1), Received("Spring", 0, 1)), rule)
 
     def test_simplify_or_in_or(self):
-        rule = Or(Or(Received('Summer', 0, 1), Received('Fall', 0, 1)), Or(Received('Winter', 0, 1), Received('Spring', 0, 1)))
-        self.assertEqual(Or(Received('Summer', 0, 1), Received('Fall', 0, 1), Received('Winter', 0, 1), Received('Spring', 0, 1)), rule)
+        rule = Or(Or(Received("Summer", 0, 1), Received("Fall", 0, 1)), Or(Received("Winter", 0, 1), Received("Spring", 0, 1)))
+        self.assertEqual(Or(Received("Summer", 0, 1), Received("Fall", 0, 1), Received("Winter", 0, 1), Received("Spring", 0, 1)), rule)
 
     def test_simplify_duplicated_or(self):
-        rule = Or(Or(Received('Summer', 0, 1), Received('Fall', 0, 1)), Or(Received('Summer', 0, 1), Received('Fall', 0, 1)))
-        self.assertEqual(Or(Received('Summer', 0, 1), Received('Fall', 0, 1)), rule)
+        rule = Or(Or(Received("Summer", 0, 1), Received("Fall", 0, 1)), Or(Received("Summer", 0, 1), Received("Fall", 0, 1)))
+        self.assertEqual(Or(Received("Summer", 0, 1), Received("Fall", 0, 1)), rule)
 
 
 class TestHasProgressionPercentSimplification(unittest.TestCase):
@@ -52,7 +52,7 @@ class TestHasProgressionPercentSimplification(unittest.TestCase):
             And(HasProgressionPercent(1, 20)) & And(HasProgressionPercent(1, 10)),
         ]
         for i, case in enumerate(cases):
-            with self.subTest(f"{i} {repr(case)}"):
+            with self.subTest(f"{i} {case!r}"):
                 self.assertEqual(case, And(HasProgressionPercent(1, 20)))
 
     def test_or_between_progression_percent_and_other_progression_percent_uses_max(self):
@@ -62,7 +62,7 @@ class TestHasProgressionPercentSimplification(unittest.TestCase):
             Or(HasProgressionPercent(1, 20)) | Or(HasProgressionPercent(1, 10))
         ]
         for i, case in enumerate(cases):
-            with self.subTest(f"{i} {repr(case)}"):
+            with self.subTest(f"{i} {case!r}"):
                 self.assertEqual(case, Or(HasProgressionPercent(1, 10)))
 
 

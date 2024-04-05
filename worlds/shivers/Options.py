@@ -1,5 +1,6 @@
-from Options import Choice, DefaultOnToggle, Toggle, PerGameCommonOptions
 from dataclasses import dataclass
+
+from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Toggle
 
 
 class LobbyAccess(Choice):

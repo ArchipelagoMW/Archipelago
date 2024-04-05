@@ -1,25 +1,41 @@
-import os
-import typing
-import settings
 import base64
 import logging
+import os
+import typing
 
-from BaseClasses import Item, Region, MultiWorld, Tutorial, ItemClassification
-from .items import CV64Item, filler_item_names, get_item_info, get_item_names_to_ids, get_item_counts
-from .locations import CV64Location, get_location_info, verify_locations, get_location_names_to_ids, base_id
-from .entrances import verify_entrances, get_warp_entrances
-from .options import CV64Options, CharacterStages, DraculasCondition, SubWeaponShuffle
-from .stages import get_locations_from_stage, get_normal_stage_exits, vanilla_stage_order, \
-    shuffle_stages, generate_warps, get_region_names
-from .regions import get_region_info
-from .rules import CV64Rules
-from .data import iname, rname, ename
+import settings
+from BaseClasses import Item, ItemClassification, MultiWorld, Region, Tutorial
+
 from ..AutoWorld import WebWorld, World
-from .aesthetics import randomize_lighting, shuffle_sub_weapons, rom_empty_breakables_flags, rom_sub_weapon_flags, \
-    randomize_music, get_start_inventory_data, get_location_data, randomize_shop_prices, get_loading_zone_bytes, \
-    get_countdown_numbers
-from .rom import LocalRom, patch_rom, get_base_rom_path, CV64DeltaPatch
+from .aesthetics import (
+    get_countdown_numbers,
+    get_loading_zone_bytes,
+    get_location_data,
+    get_start_inventory_data,
+    randomize_lighting,
+    randomize_music,
+    randomize_shop_prices,
+    rom_empty_breakables_flags,
+    rom_sub_weapon_flags,
+    shuffle_sub_weapons,
+)
 from .client import Castlevania64Client
+from .data import ename, iname, rname
+from .entrances import get_warp_entrances, verify_entrances
+from .items import CV64Item, filler_item_names, get_item_counts, get_item_info, get_item_names_to_ids
+from .locations import CV64Location, base_id, get_location_info, get_location_names_to_ids, verify_locations
+from .options import CharacterStages, CV64Options, DraculasCondition, SubWeaponShuffle
+from .regions import get_region_info
+from .rom import CV64DeltaPatch, LocalRom, get_base_rom_path, patch_rom
+from .rules import CV64Rules
+from .stages import (
+    generate_warps,
+    get_locations_from_stage,
+    get_normal_stage_exits,
+    get_region_names,
+    shuffle_stages,
+    vanilla_stage_order,
+)
 
 
 class CV64Settings(settings.Group):

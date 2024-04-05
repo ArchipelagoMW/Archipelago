@@ -1,9 +1,8 @@
-from typing import Optional
 from ..locations.items import *
 
 
 class OR:
-    __slots__ = ('__items', '__children')
+    __slots__ = ("__items", "__children")
 
     def __new__(cls, *args):
         if True in args:
@@ -70,7 +69,7 @@ class OR:
 
 
 class AND:
-    __slots__ = ('__items', '__children')
+    __slots__ = ("__items", "__children")
 
     def __new__(cls, *args):
         if False in args:
@@ -131,7 +130,7 @@ class AND:
 
 
 class COUNT:
-    __slots__ = ('__item', '__amount')
+    __slots__ = ("__item", "__amount")
 
     def __init__(self, item: str, amount: int) -> None:
         self.__item = item
@@ -165,7 +164,7 @@ class COUNT:
 
 
 class COUNTS:
-    __slots__ = ('__items', '__amount')
+    __slots__ = ("__items", "__amount")
 
     def __init__(self, items, amount):
         self.__items = items
@@ -206,7 +205,7 @@ class COUNTS:
 
 
 class FOUND:
-    __slots__ = ('__item', '__amount')
+    __slots__ = ("__item", "__amount")
 
     def __init__(self, item: str, amount: int) -> None:
         self.__item = item
@@ -293,7 +292,7 @@ class RequirementsSettings:
         }
 
         # Adjust for options
-        if options.bowwow != 'normal':
+        if options.bowwow != "normal":
             # We cheat in bowwow mode, we pretend we have the sword, as bowwow can pretty much do all what the sword ca$            # Except for taking out bushes (and crystal pillars are removed)
             self.bush.remove(SWORD)
         if options.logic == "casual":

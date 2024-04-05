@@ -1,12 +1,12 @@
 from typing import Union
 
+from ..stardew_rule import StardewRule
+from ..strings.crop_names import Fruit, Vegetable, all_fruits, all_vegetables
+from ..strings.generic_names import Generic
+from ..strings.machine_names import Machine
 from .base_logic import BaseLogic, BaseLogicMixin
 from .has_logic import HasLogicMixin
 from .time_logic import TimeLogicMixin
-from ..stardew_rule import StardewRule
-from ..strings.crop_names import all_vegetables, all_fruits, Vegetable, Fruit
-from ..strings.generic_names import Generic
-from ..strings.machine_names import Machine
 
 
 class ArtisanLogicMixin(BaseLogicMixin):

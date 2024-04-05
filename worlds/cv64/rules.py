@@ -1,10 +1,11 @@
-from typing import Dict, TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict
 
 from BaseClasses import CollectionState
-from worlds.generic.Rules import allow_self_locking_items, CollectionRule
-from .options import DraculasCondition
-from .entrances import get_entrance_info
+from worlds.generic.Rules import CollectionRule, allow_self_locking_items
+
 from .data import iname, rname
+from .entrances import get_entrance_info
+from .options import DraculasCondition
 
 if TYPE_CHECKING:
     from . import CV64World

@@ -1,12 +1,13 @@
 from typing import Set
 
+from BaseClasses import Entrance, Item, ItemClassification, Location, Region
 from worlds.AutoWorld import World
-from .Items import item_table, default_pool
+
+from .Items import default_pool, item_table
 from .Locations import lookup_name_to_id
-from .Rules import set_rules, location_rules
-from .Regions import locations_by_region, connectors
 from .Options import options
-from BaseClasses import Region, Item, Location, Entrance, ItemClassification
+from .Regions import connectors, locations_by_region
+from .Rules import location_rules, set_rules
 
 
 class OriBlindForest(World):

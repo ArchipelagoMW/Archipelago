@@ -1,16 +1,19 @@
-import os
 import hashlib
-import Utils
-import bsdiff4
+import os
 import pkgutil
+
+import bsdiff4
+
+import Utils
 from worlds.Files import APDeltaPatch
-from .text import encode_text
+
+from . import poke_data
 from .items import item_table
 from .pokemon import set_mon_palettes
+from .regions import PokemonRBWarp, map_ids, town_map_coords
 from .rock_tunnel import randomize_rock_tunnel
 from .rom_addresses import rom_addresses
-from .regions import PokemonRBWarp, map_ids, town_map_coords
-from . import poke_data
+from .text import encode_text
 
 
 def write_quizzes(self, data, random):
@@ -52,15 +55,15 @@ def write_quizzes(self, data, random):
             if player_name == self.multiworld.player_name[self.player]:
                 player_name = "yourself"
             player_name = encode_text(player_name, force=True, safety=True)
-            return encode_text(f"The Secret Key was<LINE>found by<CONT>") + player_name + encode_text("<DONE>")
+            return encode_text("The Secret Key was<LINE>found by<CONT>") + player_name + encode_text("<DONE>")
         elif q == 2:
             if a:
-                return encode_text(f"#mon is<LINE>pronounced<CONT>Po-kay-mon?<DONE>")
+                return encode_text("#mon is<LINE>pronounced<CONT>Po-kay-mon?<DONE>")
             else:
                 if random.randint(0, 1):
-                    return encode_text(f"#mon is<LINE>pronounced<CONT>Po-key-mon?<DONE>")
+                    return encode_text("#mon is<LINE>pronounced<CONT>Po-key-mon?<DONE>")
                 else:
-                    return encode_text(f"#mon is<LINE>pronounced<CONT>Po-kuh-mon?<DONE>")
+                    return encode_text("#mon is<LINE>pronounced<CONT>Po-kuh-mon?<DONE>")
         elif q == 3:
             starters = [" ".join(self.multiworld.get_location(
                 f"Oak's Lab - Starter {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 4)]
@@ -176,7 +179,7 @@ def write_quizzes(self, data, random):
             return encode_text(f"{type1} deals<LINE>{eff}damage to<CONT>{type2} type?<DONE>")
         elif q == 14:
             fossil_level = self.multiworld.get_location("Fossil Level - Trainer Parties",
-                                                        self.player).party_data[0]['level']
+                                                        self.player).party_data[0]["level"]
             if not a:
                 fossil_level += random.choice((-5, 5))
             return encode_text(f"Fossil #MON<LINE>revive at level<CONT>{fossil_level}?<DONE>")
@@ -198,7 +201,7 @@ def generate_output(self, output_directory: str):
     game_version = self.multiworld.game_version[self.player].current_key
     data = bytes(get_base_rom_bytes(game_version))
 
-    base_patch = pkgutil.get_data(__name__, f'basepatch_{game_version}.bsdiff4')
+    base_patch = pkgutil.get_data(__name__, f"basepatch_{game_version}.bsdiff4")
 
     data = bytearray(bsdiff4.patch(data, base_patch))
 
@@ -282,8 +285,8 @@ def generate_output(self, output_directory: str):
     set_trade_mon("Trade_Doris", "Cerulean Cave 1F - Wild Pokemon - 9")
     set_trade_mon("Trade_Crinkles", "Route 12 - Wild Pokemon - 4")
 
-    data[rom_addresses['Fly_Location']] = self.fly_map_code
-    data[rom_addresses['Map_Fly_Location']] = self.town_map_fly_map_code
+    data[rom_addresses["Fly_Location"]] = self.fly_map_code
+    data[rom_addresses["Map_Fly_Location"]] = self.town_map_fly_map_code
 
     if self.multiworld.fix_combat_bugs[self.player]:
         data[rom_addresses["Option_Fix_Combat_Bugs"]] = 1
@@ -331,46 +334,46 @@ def generate_output(self, output_directory: str):
     data[rom_addresses["Option_Lose_Money"]] = int(not self.multiworld.lose_money_on_blackout[self.player].value)
 
     if self.multiworld.extra_key_items[self.player]:
-        data[rom_addresses['Option_Extra_Key_Items_A']] = 1
-        data[rom_addresses['Option_Extra_Key_Items_B']] = 1
-        data[rom_addresses['Option_Extra_Key_Items_C']] = 1
-        data[rom_addresses['Option_Extra_Key_Items_D']] = 1
+        data[rom_addresses["Option_Extra_Key_Items_A"]] = 1
+        data[rom_addresses["Option_Extra_Key_Items_B"]] = 1
+        data[rom_addresses["Option_Extra_Key_Items_C"]] = 1
+        data[rom_addresses["Option_Extra_Key_Items_D"]] = 1
     data[rom_addresses["Option_Split_Card_Key"]] = self.multiworld.split_card_key[self.player].value
     data[rom_addresses["Option_Blind_Trainers"]] = round(self.multiworld.blind_trainers[self.player].value * 2.55)
     data[rom_addresses["Option_Cerulean_Cave_Badges"]] = self.multiworld.cerulean_cave_badges_condition[self.player].value
     data[rom_addresses["Option_Cerulean_Cave_Key_Items"]] = self.multiworld.cerulean_cave_key_items_condition[self.player].total
     write_bytes(data, encode_text(str(self.multiworld.cerulean_cave_badges_condition[self.player].value)), rom_addresses["Text_Cerulean_Cave_Badges"])
     write_bytes(data, encode_text(str(self.multiworld.cerulean_cave_key_items_condition[self.player].total) + " key items."), rom_addresses["Text_Cerulean_Cave_Key_Items"])
-    data[rom_addresses['Option_Encounter_Minimum_Steps']] = self.multiworld.minimum_steps_between_encounters[self.player].value
-    data[rom_addresses['Option_Route23_Badges']] = self.multiworld.victory_road_condition[self.player].value
-    data[rom_addresses['Option_Victory_Road_Badges']] = self.multiworld.route_22_gate_condition[self.player].value
-    data[rom_addresses['Option_Elite_Four_Pokedex']] = self.multiworld.elite_four_pokedex_condition[self.player].total
-    data[rom_addresses['Option_Elite_Four_Key_Items']] = self.multiworld.elite_four_key_items_condition[self.player].total
-    data[rom_addresses['Option_Elite_Four_Badges']] = self.multiworld.elite_four_badges_condition[self.player].value
+    data[rom_addresses["Option_Encounter_Minimum_Steps"]] = self.multiworld.minimum_steps_between_encounters[self.player].value
+    data[rom_addresses["Option_Route23_Badges"]] = self.multiworld.victory_road_condition[self.player].value
+    data[rom_addresses["Option_Victory_Road_Badges"]] = self.multiworld.route_22_gate_condition[self.player].value
+    data[rom_addresses["Option_Elite_Four_Pokedex"]] = self.multiworld.elite_four_pokedex_condition[self.player].total
+    data[rom_addresses["Option_Elite_Four_Key_Items"]] = self.multiworld.elite_four_key_items_condition[self.player].total
+    data[rom_addresses["Option_Elite_Four_Badges"]] = self.multiworld.elite_four_badges_condition[self.player].value
     write_bytes(data, encode_text(str(self.multiworld.elite_four_badges_condition[self.player].value)), rom_addresses["Text_Elite_Four_Badges"])
     write_bytes(data, encode_text(str(self.multiworld.elite_four_key_items_condition[self.player].total) + " key items, and"), rom_addresses["Text_Elite_Four_Key_Items"])
     write_bytes(data, encode_text(str(self.multiworld.elite_four_pokedex_condition[self.player].total) + " #MON"), rom_addresses["Text_Elite_Four_Pokedex"])
     write_bytes(data, encode_text(str(self.total_key_items), length=2), rom_addresses["Trainer_Screen_Total_Key_Items"])
 
-    data[rom_addresses['Option_Viridian_Gym_Badges']] = self.multiworld.viridian_gym_condition[self.player].value
-    data[rom_addresses['Option_EXP_Modifier']] = self.multiworld.exp_modifier[self.player].value
+    data[rom_addresses["Option_Viridian_Gym_Badges"]] = self.multiworld.viridian_gym_condition[self.player].value
+    data[rom_addresses["Option_EXP_Modifier"]] = self.multiworld.exp_modifier[self.player].value
     if not self.multiworld.require_item_finder[self.player]:
-        data[rom_addresses['Option_Itemfinder']] = 0  # nop
+        data[rom_addresses["Option_Itemfinder"]] = 0  # nop
     if self.multiworld.extra_strength_boulders[self.player]:
         for i in range(0, 3):
-            data[rom_addresses['Option_Boulders'] + (i * 3)] = 0x15
+            data[rom_addresses["Option_Boulders"] + (i * 3)] = 0x15
     if self.multiworld.extra_key_items[self.player]:
         for i in range(0, 4):
-            data[rom_addresses['Option_Rock_Tunnel_Extra_Items'] + (i * 3)] = 0x15
+            data[rom_addresses["Option_Rock_Tunnel_Extra_Items"] + (i * 3)] = 0x15
     if self.multiworld.old_man[self.player] == "open_viridian_city":
-        data[rom_addresses['Option_Old_Man']] = 0x11
-        data[rom_addresses['Option_Old_Man_Lying']] = 0x15
-    data[rom_addresses['Option_Route3_Guard_B']] = self.multiworld.route_3_condition[self.player].value
+        data[rom_addresses["Option_Old_Man"]] = 0x11
+        data[rom_addresses["Option_Old_Man_Lying"]] = 0x15
+    data[rom_addresses["Option_Route3_Guard_B"]] = self.multiworld.route_3_condition[self.player].value
     if self.multiworld.route_3_condition[self.player] == "open":
-        data[rom_addresses['Option_Route3_Guard_A']] = 0x11
+        data[rom_addresses["Option_Route3_Guard_A"]] = 0x11
     if not self.multiworld.robbed_house_officer[self.player]:
-        data[rom_addresses['Option_Trashed_House_Guard_A']] = 0x15
-        data[rom_addresses['Option_Trashed_House_Guard_B']] = 0x11
+        data[rom_addresses["Option_Trashed_House_Guard_A"]] = 0x15
+        data[rom_addresses["Option_Trashed_House_Guard_B"]] = 0x11
     if self.multiworld.require_pokedex[self.player]:
         data[rom_addresses["Require_Pokedex_A"]] = 1
         data[rom_addresses["Require_Pokedex_B"]] = 1
@@ -440,7 +443,7 @@ def generate_output(self, output_directory: str):
     if self.multiworld.normalize_encounter_chances[self.player].value:
         chances = [25, 51, 77, 103, 129, 155, 180, 205, 230, 255]
         for i, chance in enumerate(chances):
-            data[rom_addresses['Encounter_Chances'] + (i * 2)] = chance
+            data[rom_addresses["Encounter_Chances"] + (i * 2)] = chance
 
     for mon, mon_data in self.local_poke_data.items():
         if mon == "Mew":
@@ -460,7 +463,7 @@ def generate_output(self, output_directory: str):
         data[address + 17] = poke_data.moves[self.local_poke_data[mon]["start move 3"]]["id"]
         data[address + 18] = poke_data.moves[self.local_poke_data[mon]["start move 4"]]["id"]
         write_bytes(data, self.local_poke_data[mon]["tms"], address + 20)
-        if mon in self.learnsets and self.learnsets[mon]:
+        if self.learnsets.get(mon):
                 address = rom_addresses["Learnset_" + mon.replace(" ", "")]
                 for i, move in enumerate(self.learnsets[mon]):
                     data[(address + 1) + i * 2] = poke_data.moves[move]["id"]
@@ -493,7 +496,7 @@ def generate_output(self, output_directory: str):
         for shop in range(1, 11):
             write_bytes(data, shop_data, rom_addresses[f"Shop{shop}"])
     if self.multiworld.stonesanity[self.player]:
-        write_bytes(data, bytearray([0xFE, 1, item_table["Poke Doll"].id - 172000000, 0xFF]), rom_addresses[f"Shop_Stones"])
+        write_bytes(data, bytearray([0xFE, 1, item_table["Poke Doll"].id - 172000000, 0xFF]), rom_addresses["Shop_Stones"])
 
     price = str(self.multiworld.master_ball_price[self.player].value).zfill(6)
     price = bytearray([int(price[:2], 16), int(price[2:4], 16), int(price[4:], 16)])
@@ -521,9 +524,9 @@ def generate_output(self, output_directory: str):
 
     mons = [mon["id"] for mon in poke_data.pokemon_data.values()]
     random.shuffle(mons)
-    data[rom_addresses['Title_Mon_First']] = mons.pop()
+    data[rom_addresses["Title_Mon_First"]] = mons.pop()
     for mon in range(0, 16):
-        data[rom_addresses['Title_Mons'] + mon] = mons.pop()
+        data[rom_addresses["Title_Mons"] + mon] = mons.pop()
     if self.multiworld.game_version[self.player].value:
         mons.sort(key=lambda mon: 0 if mon == self.multiworld.get_location("Oak's Lab - Starter 1", self.player).item.name
                   else 1 if mon == self.multiworld.get_location("Oak's Lab - Starter 2", self.player).item.name else
@@ -532,26 +535,26 @@ def generate_output(self, output_directory: str):
         mons.sort(key=lambda mon: 0 if mon == self.multiworld.get_location("Oak's Lab - Starter 2", self.player).item.name
                   else 1 if mon == self.multiworld.get_location("Oak's Lab - Starter 1", self.player).item.name else
                   2 if mon == self.multiworld.get_location("Oak's Lab - Starter 3", self.player).item.name else 3)
-    write_bytes(data, encode_text(self.multiworld.seed_name[-20:], 20, True), rom_addresses['Title_Seed'])
+    write_bytes(data, encode_text(self.multiworld.seed_name[-20:], 20, True), rom_addresses["Title_Seed"])
 
     slot_name = self.multiworld.player_name[self.player]
     slot_name.replace("@", " ")
     slot_name.replace("<", " ")
     slot_name.replace(">", " ")
-    write_bytes(data, encode_text(slot_name, 16, True, True), rom_addresses['Title_Slot_Name'])
+    write_bytes(data, encode_text(slot_name, 16, True, True), rom_addresses["Title_Slot_Name"])
 
     if self.trainer_name == "choose_in_game":
         data[rom_addresses["Skip_Player_Name"]] = 0
     else:
-        write_bytes(data, self.trainer_name, rom_addresses['Player_Name'])
+        write_bytes(data, self.trainer_name, rom_addresses["Player_Name"])
     if self.rival_name == "choose_in_game":
         data[rom_addresses["Skip_Rival_Name"]] = 0
     else:
-        write_bytes(data, self.rival_name, rom_addresses['Rival_Name'])
+        write_bytes(data, self.rival_name, rom_addresses["Rival_Name"])
 
     data[0xFF00] = 2  # client compatibility version
     rom_name = bytearray(f'AP{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0',
-                         'utf8')[:21]
+                         "utf8")[:21]
     rom_name.extend([0] * (21 - len(rom_name)))
     write_bytes(data, rom_name, 0xFFC6)
     write_bytes(data, self.multiworld.seed_name.encode(), 0xFFDB)
@@ -613,11 +616,11 @@ def generate_output(self, output_directory: str):
             for address in rom_address:
                 data[address] = 0x2C  # AP Item
 
-    outfilepname = f'_P{self.player}'
+    outfilepname = f"_P{self.player}"
     outfilepname += f"_{self.multiworld.get_file_safe_player_name(self.player).replace(' ', '_')}" \
-        if self.multiworld.player_name[self.player] != 'Player%d' % self.player else ''
-    rompath = os.path.join(output_directory, f'AP_{self.multiworld.seed_name}{outfilepname}.gb')
-    with open(rompath, 'wb') as outfile:
+        if self.multiworld.player_name[self.player] != "Player%d" % self.player else ""
+    rompath = os.path.join(output_directory, f"AP_{self.multiworld.seed_name}{outfilepname}.gb")
+    with open(rompath, "wb") as outfile:
         outfile.write(data)
     if self.multiworld.game_version[self.player].current_key == "red":
         patch = RedDeltaPatch(os.path.splitext(rompath)[0] + RedDeltaPatch.patch_file_ending, player=self.player,

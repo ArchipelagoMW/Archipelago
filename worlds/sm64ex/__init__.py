@@ -1,13 +1,15 @@
-import typing
-import os
 import json
-from .Items import item_table, action_item_table, cannon_item_table, SM64Item
-from .Locations import location_table, SM64Location
+import os
+import typing
+
+from BaseClasses import Item, ItemClassification, Region, Tutorial
+
+from ..AutoWorld import WebWorld, World
+from .Items import SM64Item, action_item_table, cannon_item_table, item_table
+from .Locations import SM64Location, location_table
 from .Options import SM64Options
+from .Regions import SM64Levels, create_regions, sm64_level_to_entrances
 from .Rules import set_rules
-from .Regions import create_regions, sm64_level_to_entrances, SM64Levels
-from BaseClasses import Item, Tutorial, ItemClassification, Region
-from ..AutoWorld import World, WebWorld
 
 
 class SM64Web(WebWorld):
@@ -55,22 +57,22 @@ class SM64World(World):
         if self.options.enable_move_rando:
             for action in self.options.move_rando_actions.value:
                 max_stars -= 1
-                self.move_rando_bitvec |= (1 << (action_item_table[action] - action_item_table['Double Jump']))
+                self.move_rando_bitvec |= (1 << (action_item_table[action] - action_item_table["Double Jump"]))
         if (self.options.exclamation_boxes > 0):
             max_stars += 29
         self.number_of_stars = min(self.options.amount_of_stars, max_stars)
         self.filler_count = max_stars - self.number_of_stars
         self.star_costs = {
-            'FirstBowserDoorCost': round(self.options.first_bowser_star_door_cost * self.number_of_stars / 100),
-            'BasementDoorCost': round(self.options.basement_star_door_cost * self.number_of_stars / 100),
-            'SecondFloorDoorCost': round(self.options.second_floor_star_door_cost * self.number_of_stars / 100),
-            'MIPS1Cost': round(self.options.mips1_cost * self.number_of_stars / 100),
-            'MIPS2Cost': round(self.options.mips2_cost * self.number_of_stars / 100),
-            'StarsToFinish': round(self.options.stars_to_finish * self.number_of_stars / 100)
+            "FirstBowserDoorCost": round(self.options.first_bowser_star_door_cost * self.number_of_stars / 100),
+            "BasementDoorCost": round(self.options.basement_star_door_cost * self.number_of_stars / 100),
+            "SecondFloorDoorCost": round(self.options.second_floor_star_door_cost * self.number_of_stars / 100),
+            "MIPS1Cost": round(self.options.mips1_cost * self.number_of_stars / 100),
+            "MIPS2Cost": round(self.options.mips2_cost * self.number_of_stars / 100),
+            "StarsToFinish": round(self.options.stars_to_finish * self.number_of_stars / 100)
         }
         # Nudge MIPS 1 to match vanilla on default percentage
         if self.number_of_stars == 120 and self.options.mips1_cost == 12:
-            self.star_costs['MIPS1Cost'] = 15
+            self.star_costs["MIPS1Cost"] = 15
         self.topology_present = self.options.area_rando
 
     def create_regions(self):
@@ -85,7 +87,7 @@ class SM64World(World):
                 self.multiworld.spoiler.set_entrance(
                     sm64_level_to_entrances[entrance] + " Entrance",
                     sm64_level_to_entrances[destination],
-                    'entrance', self.player)
+                    "entrance", self.player)
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
@@ -119,7 +121,7 @@ class SM64World(World):
         # Moves
         self.multiworld.itempool += [self.create_item(action)
                                      for action, itemid in action_item_table.items()
-                                     if self.move_rando_bitvec & (1 << itemid - action_item_table['Double Jump'])]
+                                     if self.move_rando_bitvec & (1 << itemid - action_item_table["Double Jump"])]
 
     def generate_basic(self):
         if not (self.options.buddy_checks):
@@ -195,7 +197,7 @@ class SM64World(World):
             }
         }
         filename = f"{self.multiworld.get_out_file_name_base(self.player)}.apsm64ex"
-        with open(os.path.join(output_directory, filename), 'w') as f:
+        with open(os.path.join(output_directory, filename), "w") as f:
             json.dump(data, f)
 
     def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
@@ -207,7 +209,7 @@ class SM64World(World):
                     # Special rules for Tiny-Huge Island's dual entrances
                     reverse_area_connections = {destination: entrance for entrance, destination in self.area_connections.items()}
                     entrance_name = sm64_level_to_entrances[reverse_area_connections[SM64Levels.TINY_HUGE_ISLAND_HUGE]] \
-                                    + ' or ' + sm64_level_to_entrances[reverse_area_connections[SM64Levels.TINY_HUGE_ISLAND_TINY]]
+                                    + " or " + sm64_level_to_entrances[reverse_area_connections[SM64Levels.TINY_HUGE_ISLAND_TINY]]
                     regions[0] = self.multiworld.get_region("Tiny-Huge Island", self.player)
                 else:
                     entrance_name = sm64_level_to_entrances[entrance]

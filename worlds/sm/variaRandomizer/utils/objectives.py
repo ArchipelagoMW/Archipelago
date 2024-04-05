@@ -1,18 +1,18 @@
 import copy
 import random
+
+from ..graph.location import locationsDict
+from ..logic.helpers import Bosses
+from ..logic.logic import Logic
+from ..logic.smbool import SMBool
 from ..rom.addresses import Addresses
 from ..rom.rom import pc_to_snes
-from ..logic.helpers import Bosses
-from ..logic.smbool import SMBool
-from ..logic.logic import Logic
-from ..graph.location import locationsDict
-from ..utils.parameters import Knows
 from ..utils import log
-import logging
+from ..utils.parameters import Knows
 
-LOG = log.get('Objectives')
+LOG = log.get("Objectives")
 
-class Synonyms(object):
+class Synonyms:
     killSynonyms = [
         "defeat",
         "massacre",
@@ -28,14 +28,14 @@ class Synonyms(object):
     ]
     alreadyUsed = []
     @staticmethod
-    def getVerb(): 
+    def getVerb():
         verb = random.choice(Synonyms.killSynonyms)
         while verb in Synonyms.alreadyUsed:
             verb = random.choice(Synonyms.killSynonyms)
         Synonyms.alreadyUsed.append(verb)
         return verb
 
-class Goal(object):
+class Goal:
     def __init__(self, name, gtype, logicClearFunc, romClearFunc,
                  escapeAccessPoints=None, objCompletedFuncAPs=lambda ap: [ap],
                  exclusion=None, items=None, text=None, introText=None,
@@ -89,12 +89,12 @@ class Goal(object):
         return self.clearFunc(smbm, ap)
 
     def getText(self):
-        out = "{}. ".format(self.rank)
+        out = f"{self.rank}. "
         if self.useSynonym:
             out += self.text.format(Synonyms.getVerb())
         else:
             out += self.text
-        assert len(out) <= 28, "Goal text '{}' is too long: {}, max 28".format(out, len(out))
+        assert len(out) <= 28, f"Goal text '{out}' is too long: {len(out)}, max 28"
         if self.introText is not None:
             self.introText = "%d. %s" % (self.rank, self.introText)
         else:
@@ -124,25 +124,25 @@ def getAreaEscapeAccessPoints(area):
     return (1, list({list(loc.AccessFrom.keys())[0] for loc in Logic.locations if loc.GraphArea == area}))
 
 _goalsList = [
-    Goal("kill kraid", "boss", lambda sm, ap: Bosses.bossDead(sm, 'Kraid'), "kraid_is_dead",
+    Goal("kill kraid", "boss", lambda sm, ap: Bosses.bossDead(sm, "Kraid"), "kraid_is_dead",
          escapeAccessPoints=getBossEscapeAccessPoint("Kraid"),
          exclusion={"list": ["kill all G4", "kill one G4"]},
          items=["Kraid"],
          text="{} kraid",
          category="Bosses"),
-    Goal("kill phantoon", "boss", lambda sm, ap: Bosses.bossDead(sm, 'Phantoon'), "phantoon_is_dead",
+    Goal("kill phantoon", "boss", lambda sm, ap: Bosses.bossDead(sm, "Phantoon"), "phantoon_is_dead",
          escapeAccessPoints=getBossEscapeAccessPoint("Phantoon"),
          exclusion={"list": ["kill all G4", "kill one G4"]},
          items=["Phantoon"],
          text="{} phantoon",
          category="Bosses"),
-    Goal("kill draygon", "boss", lambda sm, ap: Bosses.bossDead(sm, 'Draygon'), "draygon_is_dead",
+    Goal("kill draygon", "boss", lambda sm, ap: Bosses.bossDead(sm, "Draygon"), "draygon_is_dead",
          escapeAccessPoints=getBossEscapeAccessPoint("Draygon"),
          exclusion={"list": ["kill all G4", "kill one G4"]},
          items=["Draygon"],
          text="{} draygon",
          category="Bosses"),
-    Goal("kill ridley", "boss", lambda sm, ap: Bosses.bossDead(sm, 'Ridley'), "ridley_is_dead",
+    Goal("kill ridley", "boss", lambda sm, ap: Bosses.bossDead(sm, "Ridley"), "ridley_is_dead",
          escapeAccessPoints=getBossEscapeAccessPoint("Ridley"),
          exclusion={"list": ["kill all G4", "kill one G4"]},
          items=["Ridley"],
@@ -177,31 +177,31 @@ _goalsList = [
          text="{} all golden4",
          expandableList=["kill kraid", "kill phantoon", "kill draygon", "kill ridley"],
          category="Bosses"),
-    Goal("kill spore spawn", "miniboss", lambda sm, ap: Bosses.bossDead(sm, 'SporeSpawn'), "spore_spawn_is_dead",
+    Goal("kill spore spawn", "miniboss", lambda sm, ap: Bosses.bossDead(sm, "SporeSpawn"), "spore_spawn_is_dead",
          escapeAccessPoints=getBossEscapeAccessPoint("SporeSpawn"),
          exclusion={"list": ["kill all mini bosses", "kill one miniboss"]},
          items=["SporeSpawn"],
          text="{} spore spawn",
          category="Minibosses"),
-    Goal("kill botwoon", "miniboss", lambda sm, ap: Bosses.bossDead(sm, 'Botwoon'), "botwoon_is_dead",
+    Goal("kill botwoon", "miniboss", lambda sm, ap: Bosses.bossDead(sm, "Botwoon"), "botwoon_is_dead",
          escapeAccessPoints=getBossEscapeAccessPoint("Botwoon"),
          exclusion={"list": ["kill all mini bosses", "kill one miniboss"]},
          items=["Botwoon"],
          text="{} botwoon",
          category="Minibosses"),
-    Goal("kill crocomire", "miniboss", lambda sm, ap: Bosses.bossDead(sm, 'Crocomire'), "crocomire_is_dead",
+    Goal("kill crocomire", "miniboss", lambda sm, ap: Bosses.bossDead(sm, "Crocomire"), "crocomire_is_dead",
          escapeAccessPoints=getBossEscapeAccessPoint("Crocomire"),
          exclusion={"list": ["kill all mini bosses", "kill one miniboss"]},
          items=["Crocomire"],
          text="{} crocomire",
          category="Minibosses"),
-    Goal("kill golden torizo", "miniboss", lambda sm, ap: Bosses.bossDead(sm, 'GoldenTorizo'), "golden_torizo_is_dead",
+    Goal("kill golden torizo", "miniboss", lambda sm, ap: Bosses.bossDead(sm, "GoldenTorizo"), "golden_torizo_is_dead",
          escapeAccessPoints=getBossEscapeAccessPoint("GoldenTorizo"),
          exclusion={"list": ["kill all mini bosses", "kill one miniboss"]},
          items=["GoldenTorizo"],
          text="{} golden torizo",
          category="Minibosses",
-         conflictFunc=lambda settings, player: settings.qty['energy'] == 'ultra sparse' and (not Knows.knowsDict[player].LowStuffGT or (Knows.knowsDict[player].LowStuffGT.difficulty > settings.maxDiff))),
+         conflictFunc=lambda settings, player: settings.qty["energy"] == "ultra sparse" and (not Knows.knowsDict[player].LowStuffGT or (Knows.knowsDict[player].LowStuffGT.difficulty > settings.maxDiff))),
     Goal("kill one miniboss", "other", lambda sm, ap: Bosses.xMiniBossesDead(sm, 1), "miniboss_1_killed",
          escapeAccessPoints=getMiniBossesEscapeAccessPoints(1),
          exclusion={"list": ["kill spore spawn", "kill botwoon", "kill crocomire", "kill golden torizo",
@@ -232,7 +232,7 @@ _goalsList = [
          text="{} all mini bosses",
          expandableList=["kill spore spawn", "kill botwoon", "kill crocomire", "kill golden torizo"],
          category="Minibosses",
-         conflictFunc=lambda settings, player: settings.qty['energy'] == 'ultra sparse' and (not Knows.knowsDict[player].LowStuffGT or (Knows.knowsDict[player].LowStuffGT.difficulty > settings.maxDiff))),
+         conflictFunc=lambda settings, player: settings.qty["energy"] == "ultra sparse" and (not Knows.knowsDict[player].LowStuffGT or (Knows.knowsDict[player].LowStuffGT.difficulty > settings.maxDiff))),
     # not available in AP
     #Goal("finish scavenger hunt", "other", lambda sm, ap: SMBool(True), "scavenger_hunt_completed",
     #     exclusion={"list": []}, # will be auto-completed
@@ -288,14 +288,14 @@ _goalsList = [
          category="Items",
          area="EastMaridia"),
     Goal("tickle the red fish", "other",
-         lambda sm, ap: sm.wand(sm.haveItem('Grapple'), Objectives.objDict[sm.player].canAccess(sm, ap, "Red Fish Room Bottom")),
+         lambda sm, ap: sm.wand(sm.haveItem("Grapple"), Objectives.objDict[sm.player].canAccess(sm, ap, "Red Fish Room Bottom")),
          "fish_tickled",
          escapeAccessPoints=(1, ["Red Fish Room Bottom"]),
          objCompletedFuncAPs=lambda ap: ["Red Fish Room Bottom"],
          category="Memes"),
     Goal("kill the orange geemer", "other",
          lambda sm, ap: sm.wand(Objectives.objDict[sm.player].canAccess(sm, ap, "Bowling"), # XXX this unnecessarily adds canPassBowling as requirement
-                                sm.wor(sm.haveItem('Wave'), sm.canUsePowerBombs())),
+                                sm.wor(sm.haveItem("Wave"), sm.canUsePowerBombs())),
          "orange_geemer",
          escapeAccessPoints=(1, ["Bowling"]),
          objCompletedFuncAPs=lambda ap: ["Bowling"],
@@ -319,7 +319,7 @@ _goalsList = [
          escapeAccessPoints=(3, ["Landing Site", "Screw Attack Bottom", "Bowling"]),
          objCompletedFuncAPs=lambda ap: ["Landing Site", "Screw Attack Bottom", "Bowling"],
          exclusion={"list": ["kill golden torizo"]},
-         conflictFunc=lambda settings, player: settings.qty['energy'] == 'ultra sparse' and (not Knows.knowsDict[player].LowStuffGT or (Knows.knowsDict[player].LowStuffGT.difficulty > settings.maxDiff))),
+         conflictFunc=lambda settings, player: settings.qty["energy"] == "ultra sparse" and (not Knows.knowsDict[player].LowStuffGT or (Knows.knowsDict[player].LowStuffGT.difficulty > settings.maxDiff))),
     Goal("visit the animals", "other", lambda sm, ap: sm.wand(Objectives.objDict[sm.player].canAccess(sm, ap, "Big Pink"), sm.haveItem("SpeedBooster"), # dachora
                                                               Objectives.objDict[sm.player].canAccess(sm, ap, "Etecoons Bottom")), # Etecoons
          "visited_animals",
@@ -327,11 +327,11 @@ _goalsList = [
          escapeAccessPoints=(2, ["Big Pink", "Etecoons Bottom"]),
          objCompletedFuncAPs=lambda ap: ["Big Pink", "Etecoons Bottom"]),
     Goal("kill king cacatac", "other",
-         lambda sm, ap: Objectives.objDict[sm.player].canAccess(sm, ap, 'Bubble Mountain Top'),
+         lambda sm, ap: Objectives.objDict[sm.player].canAccess(sm, ap, "Bubble Mountain Top"),
          "king_cac_dead",
          category="Memes",
-         escapeAccessPoints=(1, ['Bubble Mountain Top']),
-         objCompletedFuncAPs=lambda ap: ['Bubble Mountain Top'])
+         escapeAccessPoints=(1, ["Bubble Mountain Top"]),
+         objCompletedFuncAPs=lambda ap: ["Bubble Mountain Top"])
 ]
 
 
@@ -349,11 +349,11 @@ def completeGoalData():
     # remove clear area goals if disabled tourian, as escape can trigger as soon as an area is cleared,
     # even if ship is not currently reachable
     for goal in areaGoals:
-        _goals[goal].exclusion['tourian'] = "Disabled"
+        _goals[goal].exclusion["tourian"] = "Disabled"
 
 completeGoalData()
 
-class Objectives(object):
+class Objectives:
     maxActiveGoals = 5
     vanillaGoals = ["kill kraid", "kill phantoon", "kill draygon", "kill ridley"]
     scavHuntGoal = ["finish scavenger hunt"]
@@ -380,17 +380,17 @@ class Objectives(object):
         self.nbActiveGoals = 0
 
     def conflict(self, newGoal):
-        if newGoal.exclusion.get('tourian') == "Disabled" and self.tourianRequired == False:
+        if newGoal.exclusion.get("tourian") == "Disabled" and self.tourianRequired == False:
             LOG.debug("new goal %s conflicts with disabled Tourian" % newGoal.name)
             return True
-        LOG.debug("check if new goal {} conflicts with existing active goals".format(newGoal.name))
+        LOG.debug(f"check if new goal {newGoal.name} conflicts with existing active goals")
         count = 0
         for goal in self.activeGoals:
             if newGoal.name in goal.exclusion["list"]:
-                LOG.debug("new goal {} in exclusion list of active goal {}".format(newGoal.name, goal.name))
+                LOG.debug(f"new goal {newGoal.name} in exclusion list of active goal {goal.name}")
                 return True
             if goal.name in newGoal.exclusion["list"]:
-                LOG.debug("active goal {} in exclusion list of new goal {}".format(goal.name, newGoal.name))
+                LOG.debug(f"active goal {goal.name} in exclusion list of new goal {newGoal.name}")
                 return True
             # count bosses/minibosses already active if new goal has a limit
             if newGoal.exclusion.get("type") == goal.gtype:
@@ -399,7 +399,7 @@ class Objectives(object):
         if count > newGoal.exclusion.get("limit", 0):
             LOG.debug("new goal {} limit {} is lower than active goals of type: {}".format(newGoal.name, newGoal.exclusion["limit"], newGoal.exclusion["type"]))
             return True
-        LOG.debug("no direct conflict detected for new goal {}".format(newGoal.name))
+        LOG.debug(f"no direct conflict detected for new goal {newGoal.name}")
 
         # if at least one active goal has a limit and new goal has the same type of one of the existing limit
         # check that new goal doesn't exceed the limit
@@ -415,18 +415,18 @@ class Objectives(object):
                     LOG.debug("new Goal {} would excess limit {} of active goal {}".format(newGoal.name, goal.exclusion["limit"], goal.name))
                     return True
 
-        LOG.debug("no backward conflict detected for new goal {}".format(newGoal.name))
+        LOG.debug(f"no backward conflict detected for new goal {newGoal.name}")
 
         if self.randoSettings is not None and newGoal.conflictFunc is not None:
             if newGoal.conflictFunc(self.randoSettings, self.player):
-                LOG.debug("new Goal {} is conflicting with rando settings".format(newGoal.name))
+                LOG.debug(f"new Goal {newGoal.name} is conflicting with rando settings")
                 return True
-            LOG.debug("no conflict with rando settings detected for new goal {}".format(newGoal.name))
+            LOG.debug(f"no conflict with rando settings detected for new goal {newGoal.name}")
 
         return False
 
     def addGoal(self, goalName, completed=False):
-        LOG.debug("addGoal: {}".format(goalName))
+        LOG.debug(f"addGoal: {goalName}")
         goal = self.goals[goalName]
         if self.conflict(goal):
             return
@@ -493,7 +493,7 @@ class Objectives(object):
 
     def updateScavengerEscapeAccess(self, ap):
         assert self.isGoalActive("finish scavenger hunt")
-        (_, apList) = self.goals['finish scavenger hunt'].escapeAccessPoints
+        (_, apList) = self.goals["finish scavenger hunt"].escapeAccessPoints
         apList.append(ap)
 
     def _replaceEscapeAccessPoints(self, goal, aps):
@@ -503,7 +503,7 @@ class Objectives(object):
 
     def updateItemPercentEscapeAccess(self, collectedLocsAccessPoints):
         for pct in [25,50,75,100]:
-            goal = 'collect %d%% items' % pct
+            goal = "collect %d%% items" % pct
             self._replaceEscapeAccessPoints(goal, collectedLocsAccessPoints)
         # not exactly accurate, but player has all upgrades to escape
         self._replaceEscapeAccessPoints("collect all upgrades", collectedLocsAccessPoints)
@@ -521,7 +521,7 @@ class Objectives(object):
 
         # AP: now based on location checks instead of local item
         for pct in [25,50,75,100]:
-            goal = 'collect %d%% items' % pct
+            goal = "collect %d%% items" % pct
             self.goals[goal].clearFunc = getPctFunc(totalItemsCount * pct / 100, container)
         if allUpgradeTypes is not None:
             self.goals["collect all upgrades"].clearFunc = lambda sm, ap: sm.haveItems(allUpgradeTypes)
@@ -561,7 +561,7 @@ class Objectives(object):
         if expandable is None:
             return
 
-        LOG.debug("replace {} with {}".format(expandable.name, expandable.expandableList))
+        LOG.debug(f"replace {expandable.name} with {expandable.expandableList}")
         self.removeGoal(expandable)
         for name in expandable.expandableList:
             self.addGoal(name)
@@ -594,7 +594,7 @@ class Objectives(object):
             if goal.name == goalName:
                 goal.completed = completed
                 return
-        assert False, "Can't set goal {} completion to {}, goal not active".format(goalName, completed)
+        assert False, f"Can't set goal {goalName} completion to {completed}, goal not active"
 
     def allGoalsCompleted(self):
         for goal in self.activeGoals:
@@ -606,7 +606,7 @@ class Objectives(object):
         for name, goal in self.goals.items():
             if goal.checkAddr == checkFunction:
                 return goal
-        assert True, "Goal with check function {} not found".format(hex(checkFunction))
+        assert True, f"Goal with check function {hex(checkFunction)} not found"
 
     def getTotalItemsCount(self):
         return self.totalItemsCount
@@ -616,7 +616,7 @@ class Objectives(object):
         terminator = 1
         objectiveSize = 2
         bytesToRead = (self.maxActiveGoals + terminator) * objectiveSize
-        return [Addresses.getOne('objectivesList')+i for i in range(0, bytesToRead+1)] + Addresses.getWeb('totalItems') + Addresses.getWeb("itemsMask") + Addresses.getWeb("beamsMask")
+        return [Addresses.getOne("objectivesList")+i for i in range(0, bytesToRead+1)] + Addresses.getWeb("totalItems") + Addresses.getWeb("itemsMask") + Addresses.getWeb("beamsMask")
 
     def getExclusions(self):
         # to compute exclusions in the front end
@@ -624,7 +624,7 @@ class Objectives(object):
 
     def getObjectivesTypes(self):
         # to compute exclusions in the front end
-        types = {'boss': [], 'miniboss': []}
+        types = {"boss": [], "miniboss": []}
         for goalName, goal in self.goals.items():
             if goal.gtype in types:
                 types[goal.gtype].append(goalName)
@@ -685,7 +685,7 @@ class Objectives(object):
     # call from solver
     def readGoals(self, romReader):
         self.resetGoals()
-        romReader.romFile.seek(Addresses.getOne('objectivesList'))
+        romReader.romFile.seek(Addresses.getOne("objectivesList"))
         checkFunction = romReader.romFile.readWord()
         while checkFunction != 0x0000:
             goal = self.getGoalFromCheckFunction(checkFunction)
@@ -693,18 +693,18 @@ class Objectives(object):
             checkFunction = romReader.romFile.readWord()
 
         # read number of available items for items % objectives
-        self.totalItemsCount = romReader.romFile.readByte(Addresses.getOne('totalItems'))
+        self.totalItemsCount = romReader.romFile.readByte(Addresses.getOne("totalItems"))
 
         for goal in self.activeGoals:
-            LOG.debug("active goal: {}".format(goal.name))
+            LOG.debug(f"active goal: {goal.name}")
 
-        self._tourianRequired = not romReader.patchPresent('Escape_Trigger')
-        LOG.debug("tourianRequired: {}".format(self.tourianRequired))
+        self._tourianRequired = not romReader.patchPresent("Escape_Trigger")
+        LOG.debug(f"tourianRequired: {self.tourianRequired}")
 
     # call from rando
     def writeGoals(self, romFile):
         # write check functions
-        romFile.seek(Addresses.getOne('objectivesList'))
+        romFile.seek(Addresses.getOne("objectivesList"))
         for goal in self.activeGoals:
             romFile.writeWord(goal.checkAddr)
         # list terminator
@@ -712,26 +712,26 @@ class Objectives(object):
 
         # compute chars
         char2tile = {
-            '.': 0x4A,
-            '?': 0x4B,
-            '!': 0x4C,
-            ' ': 0x00,
-            '%': 0x02,
-            '*': 0x03,
-            '0': 0x04,
-            'a': 0x30,
+            ".": 0x4A,
+            "?": 0x4B,
+            "!": 0x4C,
+            " ": 0x00,
+            "%": 0x02,
+            "*": 0x03,
+            "0": 0x04,
+            "a": 0x30,
         }
-        for i in range(1, ord('z')-ord('a')+1):
-            char2tile[chr(ord('a')+i)] = char2tile['a']+i
-        for i in range(1, ord('9')-ord('0')+1):
-            char2tile[chr(ord('0')+i)] = char2tile['0']+i
+        for i in range(1, ord("z")-ord("a")+1):
+            char2tile[chr(ord("a")+i)] = char2tile["a"]+i
+        for i in range(1, ord("9")-ord("0")+1):
+            char2tile[chr(ord("0")+i)] = char2tile["0"]+i
 
         # write text
         tileSize = 2
         lineLength = 32 * tileSize
         firstChar = 3 * tileSize
         # start at 8th line
-        baseAddr = Addresses.getOne('objectivesText') + lineLength * 8 + firstChar
+        baseAddr = Addresses.getOne("objectivesText") + lineLength * 8 + firstChar
         # space between two lines of text
         space = 3 if self.nbActiveGoals == 5 else 4
         for i, goal in enumerate(self.activeGoals):
@@ -745,7 +745,7 @@ class Objectives(object):
         Synonyms.alreadyUsed = []
         # write goal completed positions y in sprites OAM
         baseY = 0x40
-        addr = Addresses.getOne('objectivesSpritesOAM')
+        addr = Addresses.getOne("objectivesSpritesOAM")
         spritemapSize = 5 + 2
         for i, goal in enumerate(self.activeGoals):
             y = baseY + i * space * 8
@@ -770,25 +770,25 @@ class Objectives(object):
     def _writeIntroText(self, rom, text, startX=1, startY=2):
         # for character translation
         charCodes = {
-            ' ': 0xD67D,
-            '.': 0xD75D,
-            '!': 0xD77B,
+            " ": 0xD67D,
+            ".": 0xD75D,
+            "!": 0xD77B,
             "'": 0xD76F,
-            '0': 0xD721,
-            'A': 0xD685
+            "0": 0xD721,
+            "A": 0xD685
         }
         def addCharRange(start, end, base): # inclusive range
             for c in range(ord(start), ord(end)+1):
                 offset = c - ord(base)
                 charCodes[chr(c)] = charCodes[base]+offset*6
-        addCharRange('B', 'Z', 'A')
-        addCharRange('1', '9', '0')
+        addCharRange("B", "Z", "A")
+        addCharRange("1", "9", "0")
         # actually write chars
         x, y = startX, startY
         def writeChar(c, frameDelay=2):
             nonlocal rom, x, y
             assert x <= 0x1F and y <= 0x18, "Intro text formatting error (x=0x%x, y=0x%x):\n%s" % (x, y, text)
-            if c == '\n':
+            if c == "\n":
                 x = startX
                 y += 1
             else:
@@ -798,7 +798,7 @@ class Objectives(object):
                 rom.writeByte(y)
                 rom.writeWord(charCodes[c])
                 x += 1
-        rom.seek(Addresses.getOne('introText'))
+        rom.seek(Addresses.getOne("introText"))
         for c in text:
             writeChar(c)
         # write trailer, see intro_text.asm

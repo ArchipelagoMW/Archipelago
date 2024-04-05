@@ -1,7 +1,6 @@
-from enum import Enum
 
 
-class LocationName():
+class LocationName:
     ## Blue Mystery Datas
     # ACDC Area
     ACDC_1_Southwest_BMD = "ACDC 1 Southwest BMD"

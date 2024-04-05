@@ -1,14 +1,28 @@
-from typing import List, Dict, Tuple, Optional, Callable, NamedTuple, Union
 import math
+from typing import Callable, Dict, List, NamedTuple, Optional, Tuple, Union
 
-from BaseClasses import MultiWorld, Region, Entrance, Location, CollectionState
-from .Locations import LocationData
-from .Options import get_option_value, MissionOrder, get_enabled_campaigns, campaign_depending_orders, \
-    GridTwoStartPositions
-from .MissionTables import MissionInfo, mission_orders, vanilla_mission_req_table, \
-    MissionPools, SC2Campaign, get_goal_location, SC2Mission, MissionConnection
-from .PoolFilter import filter_missions
+from BaseClasses import CollectionState, Entrance, Location, Region
 from worlds.AutoWorld import World
+
+from .Locations import LocationData
+from .MissionTables import (
+    MissionConnection,
+    MissionInfo,
+    MissionPools,
+    SC2Campaign,
+    SC2Mission,
+    get_goal_location,
+    mission_orders,
+    vanilla_mission_req_table,
+)
+from .Options import (
+    GridTwoStartPositions,
+    MissionOrder,
+    campaign_depending_orders,
+    get_enabled_campaigns,
+    get_option_value,
+)
+from .PoolFilter import filter_missions
 
 
 class SC2MissionSlot(NamedTuple):
@@ -58,122 +72,122 @@ def create_vanilla_regions(
 
     def wol_cleared_missions(state: CollectionState, mission_count: int) -> bool:
         return state.has_group("WoL Missions", world.player, mission_count)
-    
+
     player: int = world.player
     if SC2Campaign.WOL in enabled_campaigns:
-        connect(world, names, 'Menu', 'Liberation Day')
-        connect(world, names, 'Liberation Day', 'The Outlaws',
+        connect(world, names, "Menu", "Liberation Day")
+        connect(world, names, "Liberation Day", "The Outlaws",
                 lambda state: state.has("Beat Liberation Day", player))
-        connect(world, names, 'The Outlaws', 'Zero Hour',
+        connect(world, names, "The Outlaws", "Zero Hour",
                 lambda state: state.has("Beat The Outlaws", player))
-        connect(world, names, 'Zero Hour', 'Evacuation',
+        connect(world, names, "Zero Hour", "Evacuation",
                 lambda state: state.has("Beat Zero Hour", player))
-        connect(world, names, 'Evacuation', 'Outbreak',
+        connect(world, names, "Evacuation", "Outbreak",
                 lambda state: state.has("Beat Evacuation", player))
         connect(world, names, "Outbreak", "Safe Haven",
                 lambda state: wol_cleared_missions(state, 7) and state.has("Beat Outbreak", player))
         connect(world, names, "Outbreak", "Haven's Fall",
                 lambda state: wol_cleared_missions(state, 7) and state.has("Beat Outbreak", player))
-        connect(world, names, 'Zero Hour', 'Smash and Grab',
+        connect(world, names, "Zero Hour", "Smash and Grab",
                 lambda state: state.has("Beat Zero Hour", player))
-        connect(world, names, 'Smash and Grab', 'The Dig',
+        connect(world, names, "Smash and Grab", "The Dig",
                 lambda state: wol_cleared_missions(state, 8) and state.has("Beat Smash and Grab", player))
-        connect(world, names, 'The Dig', 'The Moebius Factor',
+        connect(world, names, "The Dig", "The Moebius Factor",
                 lambda state: wol_cleared_missions(state, 11) and state.has("Beat The Dig", player))
-        connect(world, names, 'The Moebius Factor', 'Supernova',
+        connect(world, names, "The Moebius Factor", "Supernova",
                 lambda state: wol_cleared_missions(state, 14) and state.has("Beat The Moebius Factor", player))
-        connect(world, names, 'Supernova', 'Maw of the Void',
+        connect(world, names, "Supernova", "Maw of the Void",
                 lambda state: state.has("Beat Supernova", player))
-        connect(world, names, 'Zero Hour', "Devil's Playground",
+        connect(world, names, "Zero Hour", "Devil's Playground",
                 lambda state: wol_cleared_missions(state, 4) and state.has("Beat Zero Hour", player))
-        connect(world, names, "Devil's Playground", 'Welcome to the Jungle',
+        connect(world, names, "Devil's Playground", "Welcome to the Jungle",
                 lambda state: state.has("Beat Devil's Playground", player))
-        connect(world, names, "Welcome to the Jungle", 'Breakout',
+        connect(world, names, "Welcome to the Jungle", "Breakout",
                 lambda state: wol_cleared_missions(state, 8) and state.has("Beat Welcome to the Jungle", player))
-        connect(world, names, "Welcome to the Jungle", 'Ghost of a Chance',
+        connect(world, names, "Welcome to the Jungle", "Ghost of a Chance",
                 lambda state: wol_cleared_missions(state, 8) and state.has("Beat Welcome to the Jungle", player))
-        connect(world, names, "Zero Hour", 'The Great Train Robbery',
+        connect(world, names, "Zero Hour", "The Great Train Robbery",
                 lambda state: wol_cleared_missions(state, 6) and state.has("Beat Zero Hour", player))
-        connect(world, names, 'The Great Train Robbery', 'Cutthroat',
+        connect(world, names, "The Great Train Robbery", "Cutthroat",
                 lambda state: state.has("Beat The Great Train Robbery", player))
-        connect(world, names, 'Cutthroat', 'Engine of Destruction',
+        connect(world, names, "Cutthroat", "Engine of Destruction",
                 lambda state: state.has("Beat Cutthroat", player))
-        connect(world, names, 'Engine of Destruction', 'Media Blitz',
+        connect(world, names, "Engine of Destruction", "Media Blitz",
                 lambda state: state.has("Beat Engine of Destruction", player))
-        connect(world, names, 'Media Blitz', 'Piercing the Shroud',
+        connect(world, names, "Media Blitz", "Piercing the Shroud",
                 lambda state: state.has("Beat Media Blitz", player))
-        connect(world, names, 'Maw of the Void', 'Gates of Hell',
+        connect(world, names, "Maw of the Void", "Gates of Hell",
                 lambda state: state.has("Beat Maw of the Void", player))
-        connect(world, names, 'Gates of Hell', 'Belly of the Beast',
+        connect(world, names, "Gates of Hell", "Belly of the Beast",
                 lambda state: state.has("Beat Gates of Hell", player))
-        connect(world, names, 'Gates of Hell', 'Shatter the Sky',
+        connect(world, names, "Gates of Hell", "Shatter the Sky",
                 lambda state: state.has("Beat Gates of Hell", player))
-        connect(world, names, 'Gates of Hell', 'All-In',
-                lambda state: state.has('Beat Gates of Hell', player) and (
-                        state.has('Beat Shatter the Sky', player) or state.has('Beat Belly of the Beast', player)))
+        connect(world, names, "Gates of Hell", "All-In",
+                lambda state: state.has("Beat Gates of Hell", player) and (
+                        state.has("Beat Shatter the Sky", player) or state.has("Beat Belly of the Beast", player)))
 
     if SC2Campaign.PROPHECY in enabled_campaigns:
         if SC2Campaign.WOL in enabled_campaigns:
-            connect(world, names, 'The Dig', 'Whispers of Doom',
+            connect(world, names, "The Dig", "Whispers of Doom",
                     lambda state: state.has("Beat The Dig", player)),
         else:
             vanilla_mission_reqs[SC2Campaign.PROPHECY] = vanilla_mission_reqs[SC2Campaign.PROPHECY].copy()
             vanilla_mission_reqs[SC2Campaign.PROPHECY][SC2Mission.WHISPERS_OF_DOOM.mission_name] = MissionInfo(
                 SC2Mission.WHISPERS_OF_DOOM, [], SC2Mission.WHISPERS_OF_DOOM.area)
-            connect(world, names, 'Menu', 'Whispers of Doom'),
-        connect(world, names, 'Whispers of Doom', 'A Sinister Turn',
+            connect(world, names, "Menu", "Whispers of Doom"),
+        connect(world, names, "Whispers of Doom", "A Sinister Turn",
                 lambda state: state.has("Beat Whispers of Doom", player))
-        connect(world, names, 'A Sinister Turn', 'Echoes of the Future',
+        connect(world, names, "A Sinister Turn", "Echoes of the Future",
                 lambda state: state.has("Beat A Sinister Turn", player))
-        connect(world, names, 'Echoes of the Future', 'In Utter Darkness',
+        connect(world, names, "Echoes of the Future", "In Utter Darkness",
                 lambda state: state.has("Beat Echoes of the Future", player))
 
     if SC2Campaign.HOTS in enabled_campaigns:
-        connect(world, names, 'Menu', 'Lab Rat'),
-        connect(world, names, 'Lab Rat', 'Back in the Saddle',
+        connect(world, names, "Menu", "Lab Rat"),
+        connect(world, names, "Lab Rat", "Back in the Saddle",
                 lambda state: state.has("Beat Lab Rat", player)),
-        connect(world, names, 'Back in the Saddle', 'Rendezvous',
+        connect(world, names, "Back in the Saddle", "Rendezvous",
                 lambda state: state.has("Beat Back in the Saddle", player)),
-        connect(world, names, 'Rendezvous', 'Harvest of Screams',
+        connect(world, names, "Rendezvous", "Harvest of Screams",
                 lambda state: state.has("Beat Rendezvous", player)),
-        connect(world, names, 'Harvest of Screams', 'Shoot the Messenger',
+        connect(world, names, "Harvest of Screams", "Shoot the Messenger",
                 lambda state: state.has("Beat Harvest of Screams", player)),
-        connect(world, names, 'Shoot the Messenger', 'Enemy Within',
+        connect(world, names, "Shoot the Messenger", "Enemy Within",
                 lambda state: state.has("Beat Shoot the Messenger", player)),
-        connect(world, names, 'Rendezvous', 'Domination',
+        connect(world, names, "Rendezvous", "Domination",
                 lambda state: state.has("Beat Rendezvous", player)),
-        connect(world, names, 'Domination', 'Fire in the Sky',
+        connect(world, names, "Domination", "Fire in the Sky",
                 lambda state: state.has("Beat Domination", player)),
-        connect(world, names, 'Fire in the Sky', 'Old Soldiers',
+        connect(world, names, "Fire in the Sky", "Old Soldiers",
                 lambda state: state.has("Beat Fire in the Sky", player)),
-        connect(world, names, 'Old Soldiers', 'Waking the Ancient',
+        connect(world, names, "Old Soldiers", "Waking the Ancient",
                 lambda state: state.has("Beat Old Soldiers", player)),
-        connect(world, names, 'Enemy Within', 'Waking the Ancient',
+        connect(world, names, "Enemy Within", "Waking the Ancient",
                 lambda state: state.has("Beat Enemy Within", player)),
-        connect(world, names, 'Waking the Ancient', 'The Crucible',
+        connect(world, names, "Waking the Ancient", "The Crucible",
                 lambda state: state.has("Beat Waking the Ancient", player)),
-        connect(world, names, 'The Crucible', 'Supreme',
+        connect(world, names, "The Crucible", "Supreme",
                 lambda state: state.has("Beat The Crucible", player)),
-        connect(world, names, 'Supreme', 'Infested',
+        connect(world, names, "Supreme", "Infested",
                 lambda state: state.has("Beat Supreme", player) and
                             state.has("Beat Old Soldiers", player) and
                             state.has("Beat Enemy Within", player)),
-        connect(world, names, 'Infested', 'Hand of Darkness',
+        connect(world, names, "Infested", "Hand of Darkness",
                 lambda state: state.has("Beat Infested", player)),
-        connect(world, names, 'Hand of Darkness', 'Phantoms of the Void',
+        connect(world, names, "Hand of Darkness", "Phantoms of the Void",
                 lambda state: state.has("Beat Hand of Darkness", player)),
-        connect(world, names, 'Supreme', 'With Friends Like These',
+        connect(world, names, "Supreme", "With Friends Like These",
                 lambda state: state.has("Beat Supreme", player) and
                             state.has("Beat Old Soldiers", player) and
                             state.has("Beat Enemy Within", player)),
-        connect(world, names, 'With Friends Like These', 'Conviction',
+        connect(world, names, "With Friends Like These", "Conviction",
                 lambda state: state.has("Beat With Friends Like These", player)),
-        connect(world, names, 'Conviction', 'Planetfall',
+        connect(world, names, "Conviction", "Planetfall",
                 lambda state: state.has("Beat Conviction", player) and
                             state.has("Beat Phantoms of the Void", player)),
-        connect(world, names, 'Planetfall', 'Death From Above',
+        connect(world, names, "Planetfall", "Death From Above",
                 lambda state: state.has("Beat Planetfall", player)),
-        connect(world, names, 'Death From Above', 'The Reckoning',
+        connect(world, names, "Death From Above", "The Reckoning",
                 lambda state: state.has("Beat Death From Above", player)),
 
     if SC2Campaign.PROLOGUE in enabled_campaigns:
@@ -354,7 +368,7 @@ def create_grid_regions(
         mission_req_table[mission.mission_name] = MissionInfo(
             mission,
             connections,
-            category=f'_{coords[0] + 1}',
+            category=f"_{coords[0] + 1}",
             or_requirements=True,
             ui_vertical_padding=prepend_vertical,
         )
@@ -642,7 +656,7 @@ def connect(world: World, used_names: Dict[str, int], source: str, target: str,
         name = target
     else:
         used_names[target] += 1
-        name = target + (' ' * used_names[target])
+        name = target + (" " * used_names[target])
 
     connection = Entrance(world.player, name, source_region)
 

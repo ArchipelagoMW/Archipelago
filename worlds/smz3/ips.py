@@ -2,6 +2,7 @@ import itertools
 
 from .TotalSMZ3.Text.Texts import openFile
 
+
 def range_union(ranges):
     ret = []
     for rg in sorted([[r.start, r.stop] for r in ranges]):
@@ -13,7 +14,7 @@ def range_union(ranges):
     return [range(r[0], r[1]) for r in ret]
 
 # adapted from ips-util for python 3.2 (https://pypi.org/project/ips-util/)
-class IPS_Patch(object):
+class IPS_Patch:
     def __init__(self, patchDict=None):
         self.records = []
         self.truncate_length = None
@@ -26,28 +27,28 @@ class IPS_Patch(object):
     def toDict(self):
         ret = {}
         for record in self.records:
-            if 'rle_count' in record:
-                ret[record['address']] = [int.from_bytes(record['data'],'little')]*record['rle_count']
+            if "rle_count" in record:
+                ret[record["address"]] = [int.from_bytes(record["data"],"little")]*record["rle_count"]
             else:
-                ret[record['address']] = [int(b) for b in record['data']]
+                ret[record["address"]] = [int(b) for b in record["data"]]
         return ret
 
     @staticmethod
     def load(filename):
         loaded_patch = IPS_Patch()
-        with openFile(filename, 'rb') as file:
+        with openFile(filename, "rb") as file:
             header = file.read(5)
-            if header != b'PATCH':
-                raise Exception('Not a valid IPS patch file!')
+            if header != b"PATCH":
+                raise Exception("Not a valid IPS patch file!")
             while True:
                 address_bytes = file.read(3)
-                if address_bytes == b'EOF':
+                if address_bytes == b"EOF":
                     break
-                address = int.from_bytes(address_bytes, byteorder='big')
-                length = int.from_bytes(file.read(2), byteorder='big')
+                address = int.from_bytes(address_bytes, byteorder="big")
+                length = int.from_bytes(file.read(2), byteorder="big")
                 rle_count = 0
                 if length == 0:
-                    rle_count = int.from_bytes(file.read(2), byteorder='big')
+                    rle_count = int.from_bytes(file.read(2), byteorder="big")
                     length = 1
                 data = file.read(length)
                 if rle_count > 0:
@@ -57,7 +58,7 @@ class IPS_Patch(object):
 
             truncate_bytes = file.read(3)
             if len(truncate_bytes) == 3:
-                loaded_patch.set_truncate_length(int.from_bytes(truncate_bytes, byteorder='big'))
+                loaded_patch.set_truncate_length(int.from_bytes(truncate_bytes, byteorder="big"))
         return loaded_patch
 
     @staticmethod
@@ -98,16 +99,16 @@ class IPS_Patch(object):
             runs.append((current_run_start, current_run_data))
 
         for start, data in runs:
-            if start == int.from_bytes(b'EOF', byteorder='big'):
+            if start == int.from_bytes(b"EOF", byteorder="big"):
                 start -= 1
                 data = bytes([patched_data[start - 1]]) + data
 
             grouped_byte_data = list([
-                {'val': key, 'count': sum(1 for _ in group), 'is_last': False}
+                {"val": key, "count": sum(1 for _ in group), "is_last": False}
                 for key,group in itertools.groupby(data)
             ])
 
-            grouped_byte_data[-1]['is_last'] = True
+            grouped_byte_data[-1]["is_last"] = True
 
             record_in_progress = bytearray()
             pos = start
@@ -116,31 +117,31 @@ class IPS_Patch(object):
                 if len(record_in_progress) > 0:
                     # We don't want to interrupt a record in progress with a new header unless
                     # this group is longer than two complete headers.
-                    if group['count'] > 13:
+                    if group["count"] > 13:
                         patch.add_record(pos, record_in_progress)
                         pos += len(record_in_progress)
                         record_in_progress = bytearray()
 
-                        patch.add_rle_record(pos, bytes([group['val']]), group['count'])
-                        pos += group['count']
+                        patch.add_rle_record(pos, bytes([group["val"]]), group["count"])
+                        pos += group["count"]
                     else:
-                        record_in_progress += bytes([group['val']] * group['count'])
-                elif (group['count'] > 3 and group['is_last']) or group['count'] > 8:
+                        record_in_progress += bytes([group["val"]] * group["count"])
+                elif (group["count"] > 3 and group["is_last"]) or group["count"] > 8:
                     # We benefit from making this an RLE record if the length is at least 8,
                     # or the length is at least 3 and we know it to be the last part of this diff.
 
                     # Make sure not to overflow the maximum length. Split it up if necessary.
-                    remaining_length = group['count']
+                    remaining_length = group["count"]
                     while remaining_length > 0xffff:
-                        patch.add_rle_record(pos, bytes([group['val']]), 0xffff)
+                        patch.add_rle_record(pos, bytes([group["val"]]), 0xffff)
                         remaining_length -= 0xffff
                         pos += 0xffff
 
-                    patch.add_rle_record(pos, bytes([group['val']]), remaining_length)
+                    patch.add_rle_record(pos, bytes([group["val"]]), remaining_length)
                     pos += remaining_length
                 else:
                     # Just begin a new standard record.
-                    record_in_progress += bytes([group['val']] * group['count'])
+                    record_in_progress += bytes([group["val"]] * group["count"])
 
                 if len(record_in_progress) > 0xffff:
                     patch.add_record(pos, record_in_progress[:0xffff])
@@ -154,31 +155,31 @@ class IPS_Patch(object):
         return patch
 
     def add_record(self, address, data):
-        if address == int.from_bytes(b'EOF', byteorder='big'):
-            raise RuntimeError('Start address {0:x} is invalid in the IPS format. Please shift your starting address back by one byte to avoid it.'.format(address))
+        if address == int.from_bytes(b"EOF", byteorder="big"):
+            raise RuntimeError(f"Start address {address:x} is invalid in the IPS format. Please shift your starting address back by one byte to avoid it.")
         if address > 0xffffff:
-            raise RuntimeError('Start address {0:x} is too large for the IPS format. Addresses must fit into 3 bytes.'.format(address))
+            raise RuntimeError(f"Start address {address:x} is too large for the IPS format. Addresses must fit into 3 bytes.")
         if len(data) > 0xffff:
-            raise RuntimeError('Record with length {0} is too large for the IPS format. Records must be less than 65536 bytes.'.format(len(data)))
+            raise RuntimeError(f"Record with length {len(data)} is too large for the IPS format. Records must be less than 65536 bytes.")
         if len(data) == 0: # ignore empty records
             return
-        record = {'address': address, 'data': data, 'size':len(data)}
+        record = {"address": address, "data": data, "size":len(data)}
         self.appendRecord(record)
 
     def add_rle_record(self, address, data, count):
-        if address == int.from_bytes(b'EOF', byteorder='big'):
-            raise RuntimeError('Start address {0:x} is invalid in the IPS format. Please shift your starting address back by one byte to avoid it.'.format(address))
+        if address == int.from_bytes(b"EOF", byteorder="big"):
+            raise RuntimeError(f"Start address {address:x} is invalid in the IPS format. Please shift your starting address back by one byte to avoid it.")
         if address > 0xffffff:
-            raise RuntimeError('Start address {0:x} is too large for the IPS format. Addresses must fit into 3 bytes.'.format(address))
+            raise RuntimeError(f"Start address {address:x} is too large for the IPS format. Addresses must fit into 3 bytes.")
         if count > 0xffff:
-            raise RuntimeError('RLE record with length {0} is too large for the IPS format. RLE records must be less than 65536 bytes.'.format(count))
+            raise RuntimeError(f"RLE record with length {count} is too large for the IPS format. RLE records must be less than 65536 bytes.")
         if len(data) != 1:
-            raise RuntimeError('Data for RLE record must be exactly one byte! Received {0}.'.format(data))
-        record = {'address': address, 'data': data, 'rle_count': count, 'size': count}
+            raise RuntimeError(f"Data for RLE record must be exactly one byte! Received {data}.")
+        record = {"address": address, "data": data, "rle_count": count, "size": count}
         self.appendRecord(record)
 
     def appendRecord(self, record):
-        sz = record['address'] + record['size']
+        sz = record["address"] + record["size"]
         if sz > self.max_size:
             self.max_size = sz
         self.records.append(record)
@@ -189,27 +190,27 @@ class IPS_Patch(object):
     def encode(self):
         encoded_bytes = bytearray()
 
-        encoded_bytes += 'PATCH'.encode('ascii')
+        encoded_bytes += "PATCH".encode("ascii")
 
         for record in self.records:
-            encoded_bytes += record['address'].to_bytes(3, byteorder='big')
-            if 'rle_count' in record:
-                encoded_bytes += (0).to_bytes(2, byteorder='big')
-                encoded_bytes += record['rle_count'].to_bytes(2, byteorder='big')
+            encoded_bytes += record["address"].to_bytes(3, byteorder="big")
+            if "rle_count" in record:
+                encoded_bytes += (0).to_bytes(2, byteorder="big")
+                encoded_bytes += record["rle_count"].to_bytes(2, byteorder="big")
             else:
-                encoded_bytes += len(record['data']).to_bytes(2, byteorder='big')
-            encoded_bytes += record['data']
+                encoded_bytes += len(record["data"]).to_bytes(2, byteorder="big")
+            encoded_bytes += record["data"]
 
-        encoded_bytes += 'EOF'.encode('ascii')
+        encoded_bytes += "EOF".encode("ascii")
 
         if self.truncate_length is not None:
-            encoded_bytes += self.truncate_length.to_bytes(3, byteorder='big')
+            encoded_bytes += self.truncate_length.to_bytes(3, byteorder="big")
 
         return encoded_bytes
 
     # save patch into IPS file
     def save(self, path):
-        with open(path, 'wb') as ipsFile:
+        with open(path, "wb") as ipsFile:
             ipsFile.write(self.encode())
 
     # applies patch on an existing bytearray
@@ -217,13 +218,13 @@ class IPS_Patch(object):
         out_data = bytearray(in_data)
 
         for record in self.records:
-            if record['address'] >= len(out_data):
-                out_data += bytes([0] * (record['address'] - len(out_data) + 1))
+            if record["address"] >= len(out_data):
+                out_data += bytes([0] * (record["address"] - len(out_data) + 1))
 
-            if 'rle_count' in record:
-                out_data[record['address'] : record['address'] + record['rle_count']] = b''.join([record['data']] * record['rle_count'])
+            if "rle_count" in record:
+                out_data[record["address"] : record["address"] + record["rle_count"]] = b"".join([record["data"]] * record["rle_count"])
             else:
-                out_data[record['address'] : record['address'] + len(record['data'])] = record['data']
+                out_data[record["address"] : record["address"] + len(record["data"])] = record["data"]
 
         if self.truncate_length is not None:
             out_data = out_data[:self.truncate_length]
@@ -233,22 +234,22 @@ class IPS_Patch(object):
     # applies patch on an opened file
     def applyFile(self, handle):
         for record in self.records:
-            handle.seek(record['address'])
-            if 'rle_count' in record:
-                handle.write(bytearray(b'').join([record['data']]) * record['rle_count'])
+            handle.seek(record["address"])
+            if "rle_count" in record:
+                handle.write(bytearray(b"").join([record["data"]]) * record["rle_count"])
             else:
-                handle.write(record['data'])
+                handle.write(record["data"])
 
     # appends an IPS_Patch on top of this one
     def append(self, patch):
         if patch.truncate_length is not None and (self.truncate_length is None or patch.truncate_length > self.truncate_length):
             self.set_truncate_length(patch.truncate_length)
         for record in patch.records:
-            if record['size'] > 0: # ignore empty records
+            if record["size"] > 0: # ignore empty records
                 self.appendRecord(record)
 
     # gets address ranges written to by this patch
     def getRanges(self):
         def getRange(record):
-            return range(record['address'], record['address']+record['size'])
+            return range(record["address"], record["address"]+record["size"])
         return range_union([getRange(record) for record in self.records])

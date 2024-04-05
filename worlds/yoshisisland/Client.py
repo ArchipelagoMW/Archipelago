@@ -1,7 +1,7 @@
 import logging
 import struct
-import typing
 import time
+import typing
 from struct import pack
 
 from NetUtils import ClientStatus, color

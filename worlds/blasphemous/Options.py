@@ -1,5 +1,6 @@
-from Options import Choice, Toggle, DefaultOnToggle, DeathLink, StartInventoryPool
 import random
+
+from Options import Choice, DeathLink, DefaultOnToggle, StartInventoryPool, Toggle
 
 
 class ChoiceIsRandom(Choice):

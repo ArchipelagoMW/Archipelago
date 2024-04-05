@@ -9,16 +9,20 @@ import subprocess
 import time
 import typing
 from asyncio import StreamReader, StreamWriter
-from typing import List
 
 import Utils
+from CommonClient import (
+    ClientCommandProcessor,
+    CommonContext,
+    get_base_parser,
+    gui_enabled,
+    logger,
+    server_loop,
+)
 from Utils import async_start
-from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, ClientCommandProcessor, logger, \
-    get_base_parser
-
+from worlds.tloz import Locations, Rom
 from worlds.tloz.Items import item_game_ids
 from worlds.tloz.Locations import location_ids
-from worlds.tloz import Items, Locations, Rom
 
 SYSTEM_MESSAGE_ID = 0
 
@@ -66,7 +70,7 @@ class ZeldaContext(CommonContext):
         self.messages = {}
         self.locations_array = None
         self.nes_status = CONNECTION_INITIAL_STATUS
-        self.game = 'The Legend of Zelda'
+        self.game = "The Legend of Zelda"
         self.awaiting_rom = False
         self.shop_slots_left = 0
         self.shop_slots_middle = 0
@@ -79,7 +83,7 @@ class ZeldaContext(CommonContext):
             await super(ZeldaContext, self).server_auth(password_requested)
         if not self.auth:
             self.awaiting_rom = True
-            logger.info('Awaiting connection to NES to get Player information')
+            logger.info("Awaiting connection to NES to get Player information")
             return
 
         await self.send_connect()
@@ -89,12 +93,12 @@ class ZeldaContext(CommonContext):
             self.messages[(time.time(), msg_id)] = msg
 
     def on_package(self, cmd: str, args: dict):
-        if cmd == 'Connected':
+        if cmd == "Connected":
             self.slot_data = args.get("slot_data", {})
             asyncio.create_task(parse_locations(self.locations_array, self, True))
-        elif cmd == 'Print':
-            msg = args['text']
-            if ': !' not in msg:
+        elif cmd == "Print":
+            msg = args["text"]
+            if ": !" not in msg:
                 self._set_message(msg, SYSTEM_MESSAGE_ID)
 
     def on_print_json(self, args: dict):
@@ -139,7 +143,7 @@ def get_payload(ctx: ZeldaContext):
     return json.dumps(
         {
             "items": [item.item for item in ctx.items_received],
-            "messages": {f'{key[0]}:{key[1]}': value for key, value in ctx.messages.items()
+            "messages": {f"{key[0]}:{key[1]}": value for key, value in ctx.messages.items()
                          if key[0] > current_time - 10},
             "shops": {
                 "left": ctx.shop_slots_left,
@@ -256,7 +260,7 @@ async def nes_sync_task(ctx: ZeldaContext):
             (reader, writer) = ctx.nes_streams
             msg = get_payload(ctx).encode()
             writer.write(msg)
-            writer.write(b'\n')
+            writer.write(b"\n")
             try:
                 await asyncio.wait_for(writer.drain(), timeout=1.5)
                 try:
@@ -269,24 +273,24 @@ async def nes_sync_task(ctx: ZeldaContext):
                         ctx.overworld_item = data_decoded["overworldHC"]
                     if data_decoded["overworldPB"] is not None:
                         ctx.armos_item = data_decoded["overworldPB"]
-                    if data_decoded['gameMode'] == 19 and ctx.finished_game == False:
+                    if data_decoded["gameMode"] == 19 and ctx.finished_game == False:
                         await ctx.send_msgs([
                             {"cmd": "StatusUpdate",
                              "status": 30}
                         ])
                         ctx.finished_game = True
-                    if ctx.game is not None and 'overworld' in data_decoded:
+                    if ctx.game is not None and "overworld" in data_decoded:
                         # Not just a keep alive ping, parse
-                        asyncio.create_task(parse_locations(data_decoded['overworld'], ctx, False, "overworld"))
-                    if ctx.game is not None and 'underworld1' in data_decoded:
-                        asyncio.create_task(parse_locations(data_decoded['underworld1'], ctx, False, "underworld1"))
-                    if ctx.game is not None and 'underworld2' in data_decoded:
-                        asyncio.create_task(parse_locations(data_decoded['underworld2'], ctx, False, "underworld2"))
-                    if ctx.game is not None and 'caves' in data_decoded:
-                        asyncio.create_task(parse_locations(data_decoded['caves'], ctx, False, "caves"))
+                        asyncio.create_task(parse_locations(data_decoded["overworld"], ctx, False, "overworld"))
+                    if ctx.game is not None and "underworld1" in data_decoded:
+                        asyncio.create_task(parse_locations(data_decoded["underworld1"], ctx, False, "underworld1"))
+                    if ctx.game is not None and "underworld2" in data_decoded:
+                        asyncio.create_task(parse_locations(data_decoded["underworld2"], ctx, False, "underworld2"))
+                    if ctx.game is not None and "caves" in data_decoded:
+                        asyncio.create_task(parse_locations(data_decoded["caves"], ctx, False, "caves"))
                     if not ctx.auth:
-                        ctx.auth = ''.join([chr(i) for i in data_decoded['playerName'] if i != 0])
-                        if ctx.auth == '':
+                        ctx.auth = "".join([chr(i) for i in data_decoded["playerName"] if i != 0])
+                        if ctx.auth == "":
                             logger.info("Invalid ROM detected. No player name built into the ROM. Please regenerate"
                                         "the ROM using the same link but adding your slot name")
                         if ctx.awaiting_rom:
@@ -297,7 +301,7 @@ async def nes_sync_task(ctx: ZeldaContext):
                     error_status = CONNECTION_TIMING_OUT_STATUS
                     writer.close()
                     ctx.nes_streams = None
-                except ConnectionResetError as e:
+                except ConnectionResetError:
                     logger.debug("Read failed due to Connection Lost, Reconnecting")
                     error_status = CONNECTION_RESET_STATUS
                     writer.close()
@@ -336,7 +340,7 @@ async def nes_sync_task(ctx: ZeldaContext):
                 continue
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Text Mode to use !hint and such with games that have no text entry
     Utils.init_logging("ZeldaClient")
 
@@ -383,8 +387,8 @@ if __name__ == '__main__':
     import colorama
 
     parser = get_base_parser()
-    parser.add_argument('diff_file', default="", type=str, nargs="?",
-                        help='Path to a Archipelago Binary Patch file')
+    parser.add_argument("diff_file", default="", type=str, nargs="?",
+                        help="Path to a Archipelago Binary Patch file")
     args = parser.parse_args()
     colorama.init()
 

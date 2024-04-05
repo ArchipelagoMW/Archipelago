@@ -1,6 +1,9 @@
-from .level_logic import YoshiLogic
-from worlds.generic.Rules import set_rule
 from typing import TYPE_CHECKING
+
+from worlds.generic.Rules import set_rule
+
+from .level_logic import YoshiLogic
+
 if TYPE_CHECKING:
     from . import YoshisIslandWorld
 
@@ -373,7 +376,7 @@ def set_normal_rules(world: "YoshisIslandWorld") -> None:
 
     set_rule(world.multiworld.get_location("Sluggy The Unshaven's Fort: Red Coins", player), lambda state: state.has_all({"Dashed Stairs", "Dashed Platform", "Platform Ghost"}, player))
     set_rule(world.multiworld.get_location("Sluggy The Unshaven's Fort: Flowers", player), lambda state: state.has_all({"Dashed Stairs", "Platform Ghost", "Dashed Platform"}, player))
-    set_rule(world.multiworld.get_location("Sluggy The Unshaven's Fort: Stars", player), lambda state: ((state.has_all({"Dashed Stairs", "Platform Ghost"}, player))) or (logic.cansee_clouds(state) and state.has("Dashed Stairs", player)))
+    set_rule(world.multiworld.get_location("Sluggy The Unshaven's Fort: Stars", player), lambda state: (state.has_all({"Dashed Stairs", "Platform Ghost"}, player)) or (logic.cansee_clouds(state) and state.has("Dashed Stairs", player)))
 
     set_rule(world.multiworld.get_location("Goonie Rides!: Red Coins", player), lambda state: state.has("Helicopter Morph", player))
     set_rule(world.multiworld.get_location("Goonie Rides!: Flowers", player), lambda state: state.has_all({"Helicopter Morph", "! Switch"}, player))

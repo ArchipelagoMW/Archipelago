@@ -4,17 +4,27 @@ from typing import Any, ClassVar, Dict, List, Optional, TextIO
 
 from BaseClasses import CollectionState, Entrance, Item, ItemClassification, MultiWorld, Tutorial
 from Options import Accessibility
-from Utils import output_path
 from settings import FilePath, Group
+from Utils import output_path
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components
+
 from .client_setup import launch_game
 from .connections import CONNECTIONS, RANDOMIZED_CONNECTIONS, TRANSITIONS
-from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS, PROG_ITEMS, TRAPS, \
-    USEFUL_ITEMS
+from .constants import (
+    ALL_ITEMS,
+    ALWAYS_LOCATIONS,
+    BOSS_LOCATIONS,
+    FILLER,
+    NOTES,
+    PHOBEKINS,
+    PROG_ITEMS,
+    TRAPS,
+    USEFUL_ITEMS,
+)
 from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded, ShuffleTransitions
 from .portals import PORTALS, add_closed_portal_reqs, disconnect_portals, shuffle_portals, validate_portals
-from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
+from .regions import LEVELS, LOCATIONS, MEGA_SHARDS, REGION_CONNECTIONS
 from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
 from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS, shuffle_shop_prices
 from .subclasses import MessengerEntrance, MessengerItem, MessengerRegion, MessengerShopLocation
@@ -273,7 +283,7 @@ class MessengerWorld(World):
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         if self.options.available_portals < 6:
-            spoiler_handle.write(f"\nStarting Portals:\n\n")
+            spoiler_handle.write("\nStarting Portals:\n\n")
             for portal in self.starting_portals:
                 spoiler_handle.write(f"{portal}\n")
 
@@ -344,7 +354,7 @@ class MessengerWorld(World):
 
         if name in {*USEFUL_ITEMS, *USEFUL_SHOP_ITEMS}:
             return ItemClassification.useful
-        
+
         if name in TRAPS:
             return ItemClassification.trap
 
@@ -379,7 +389,7 @@ class MessengerWorld(World):
             "loc_data": {loc.address: {loc.item.name: [loc.item.code, loc.item.flags]}
                          for loc in multiworld.get_filled_locations() if loc.address},
         }
-    
+
         output = orjson.dumps(data, option=orjson.OPT_NON_STR_KEYS)
         with open(out_path, "wb") as f:
             f.write(output)

@@ -13,7 +13,7 @@ class TestNameGroups(TestCase):
                 continue  # ignore worlds without items
             with self.subTest(game=game_name):
                 for name, group in world_type.item_name_groups.items():
-                    self.assertTrue(group, f"Item name group \"{name}\" of \"{game_name}\" is empty")
+                    self.assertTrue(group, f'Item name group "{name}" of "{game_name}" is empty')
 
     def test_location_name_groups_not_empty(self) -> None:
         """
@@ -24,4 +24,4 @@ class TestNameGroups(TestCase):
                 continue  # ignore worlds without locations
             with self.subTest(game=game_name):
                 for name, group in world_type.location_name_groups.items():
-                    self.assertTrue(group, f"Location name group \"{name}\" of \"{game_name}\" is empty")
+                    self.assertTrue(group, f'Location name group "{name}" of "{game_name}" is empty')

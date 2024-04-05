@@ -1,10 +1,12 @@
 from __future__ import annotations
-import os
-import sys
+
 import asyncio
+import os
 import shutil
+import sys
 
 import ModuleUpdate
+
 ModuleUpdate.update()
 
 import Utils
@@ -12,15 +14,14 @@ import Utils
 if __name__ == "__main__":
     Utils.init_logging("ChecksFinderClient", exception_logger="Client")
 
-from NetUtils import NetworkItem, ClientStatus
-from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProcessor, \
-    CommonContext, server_loop
+from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
+from NetUtils import ClientStatus, NetworkItem
 
 
 class ChecksFinderClientCommandProcessor(ClientCommandProcessor):
     def _cmd_resync(self):
         """Manually trigger a resync."""
-        self.output(f"Syncing items.")
+        self.output("Syncing items.")
         self.ctx.syncing = True
 
 
@@ -86,14 +87,14 @@ class ChecksFinderContext(CommonContext):
                 os.makedirs(self.game_communication_path)
             for ss in self.checked_locations:
                 filename = f"send{ss}"
-                with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+                with open(os.path.join(self.game_communication_path, filename), "w") as f:
                     f.close()
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
             if start_index != len(self.items_received):
-                for item in args['items']:
-                    filename = f"AP_{str(NetworkItem(*item).location)}PLR{str(NetworkItem(*item).player)}.item"
-                    with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+                for item in args["items"]:
+                    filename = f"AP_{NetworkItem(*item).location!s}PLR{NetworkItem(*item).player!s}.item"
+                    with open(os.path.join(self.game_communication_path, filename), "w") as f:
                         f.write(str(NetworkItem(*item).item))
                         f.close()
 
@@ -101,7 +102,7 @@ class ChecksFinderContext(CommonContext):
             if "checked_locations" in args:
                 for ss in self.checked_locations:
                     filename = f"send{ss}"
-                    with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+                    with open(os.path.join(self.game_communication_path, filename), "w") as f:
                         f.close()
 
     def run_gui(self):
@@ -119,10 +120,9 @@ class ChecksFinderContext(CommonContext):
 
 
 async def game_watcher(ctx: ChecksFinderContext):
-    from worlds.checksfinder.Locations import lookup_id_to_name
     while not ctx.exit_event.is_set():
         if ctx.syncing == True:
-            sync_msg = [{'cmd': 'Sync'}]
+            sync_msg = [{"cmd": "Sync"}]
             if ctx.locations_checked:
                 sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
             await ctx.send_msgs(sync_msg)
@@ -137,7 +137,7 @@ async def game_watcher(ctx: ChecksFinderContext):
                 if file.find("victory") > -1:
                     victory = True
         ctx.locations_checked = sending
-        message = [{"cmd": 'LocationChecks', "locations": sending}]
+        message = [{"cmd": "LocationChecks", "locations": sending}]
         await ctx.send_msgs(message)
         if not ctx.finished_game and victory:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
@@ -145,7 +145,7 @@ async def game_watcher(ctx: ChecksFinderContext):
         await asyncio.sleep(0.1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     async def main(args):
         ctx = ChecksFinderContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")

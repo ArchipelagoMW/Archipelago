@@ -1,6 +1,6 @@
 from dataclasses import dataclass
-from Options import Toggle, DefaultOnToggle, DeathLink, Range, Choice, PerGameCommonOptions
 
+from Options import Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, Range, Toggle
 
 # NOTE be aware that since the range of item ids that RoR2 uses is based off of the maximums of checks
 # Be careful when changing the range_end values not to go into another game's IDs

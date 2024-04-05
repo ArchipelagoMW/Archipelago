@@ -1,7 +1,7 @@
-from .itemInfo import ItemInfo
-from .constants import *
 from ..assembler import ASM
 from ..utils import formatText
+from .constants import *
+from .itemInfo import ItemInfo
 
 
 class BoomerangGuy(ItemInfo):
@@ -9,13 +9,13 @@ class BoomerangGuy(ItemInfo):
 
     def __init__(self):
         super().__init__(0x1F5)
-        self.setting = 'trade'
+        self.setting = "trade"
 
     def configure(self, options):
         self.MULTIWORLD = False
 
         self.setting = options.boomerang
-        if self.setting == 'gift':
+        if self.setting == "gift":
             self.MULTIWORLD = True
 
     # Cannot trade:
@@ -29,7 +29,7 @@ class BoomerangGuy(ItemInfo):
         rom.patch(0x00, 0x3199, ASM("ld a, [wTradeSequenceItem]\ncp $0E"), ASM("ld a, $0E\ncp $0E"), fill_nop=True)  # load the proper room layout
         rom.patch(0x19, 0x05F4, ASM("ld a, [wTradeSequenceItem2]\nand a"), ASM("xor a"), fill_nop=True)
 
-        if self.setting == 'trade':
+        if self.setting == "trade":
             inv = INVENTORY_MAP[option]
             # Patch the check if you traded back the boomerang (so traded twice)
             rom.patch(0x19, 0x063F, ASM("cp $0D"), ASM("cp $%s" % (inv)))

@@ -1,7 +1,8 @@
-﻿from ....Region import SMRegion
-from ....Config import Config, SMLogic
-from ....Location import Location, LocationType
+﻿from ....Config import Config, SMLogic
 from ....Item import Progression
+from ....Location import Location, LocationType
+from ....Region import SMRegion
+
 
 class Pink(SMRegion):
     Name = "Brinstar Pink"
@@ -11,21 +12,21 @@ class Pink(SMRegion):
         super().__init__(world, config)
         self.Weight = -4
         self.Locations = [
-            Location(self, 14, 0x8F84E4, LocationType.Chozo, "Super Missile (pink Brinstar)", 
+            Location(self, 14, 0x8F84E4, LocationType.Chozo, "Super Missile (pink Brinstar)",
                 lambda items: items.CardBrinstarBoss and items.CanPassBombPassages() and items.Super if self.Logic == SMLogic.Normal else \
                 lambda items: (items.CardBrinstarBoss or items.CardBrinstarL2) and items.CanPassBombPassages() and items.Super),
             Location(self, 21, 0x8F8608, LocationType.Visible, "Missile (pink Brinstar top)"),
             Location(self, 22, 0x8F860E, LocationType.Visible, "Missile (pink Brinstar bottom)"),
-            Location(self, 23, 0x8F8614, LocationType.Chozo, "Charge Beam", 
+            Location(self, 23, 0x8F8614, LocationType.Chozo, "Charge Beam",
                 lambda items: items.CanPassBombPassages()),
-            Location(self, 24, 0x8F865C, LocationType.Visible, "Power Bomb (pink Brinstar)", 
+            Location(self, 24, 0x8F865C, LocationType.Visible, "Power Bomb (pink Brinstar)",
                 lambda items: items.CanUsePowerBombs() and items.Super and items.HasEnergyReserves(1) if self.Logic == SMLogic.Normal else \
                 lambda items: items.CanUsePowerBombs() and items.Super),
-            Location(self, 25, 0x8F8676, LocationType.Visible, "Missile (green Brinstar pipe)", 
+            Location(self, 25, 0x8F8676, LocationType.Visible, "Missile (green Brinstar pipe)",
                 lambda items: items.Morph and (items.PowerBomb or items.Super or items.CanAccessNorfairUpperPortal())),
-            Location(self, 33, 0x8F87FA, LocationType.Visible, "Energy Tank, Waterway", 
+            Location(self, 33, 0x8F87FA, LocationType.Visible, "Energy Tank, Waterway",
                 lambda items: items.CanUsePowerBombs() and items.CanOpenRedDoors() and items.SpeedBooster and (items.HasEnergyReserves(1) or items.Gravity)),
-            Location(self, 35, 0x8F8824, LocationType.Visible, "Energy Tank, Brinstar Gate", 
+            Location(self, 35, 0x8F8824, LocationType.Visible, "Energy Tank, Brinstar Gate",
                 lambda items: items.CardBrinstarL2 and items.CanUsePowerBombs() and items.Wave and items.HasEnergyReserves(1) if self.Logic == SMLogic.Normal else \
                 lambda items: items.CardBrinstarL2 and items.CanUsePowerBombs() and (items.Wave or items.Super))
         ]

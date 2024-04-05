@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Range, DeathLink, PerGameCommonOptions
+from Options import DeathLink, PerGameCommonOptions, Range
 
 
 class StrawberriesRequired(Range):

@@ -9,7 +9,6 @@ import random
 import re
 import string
 import subprocess
-
 import sys
 import time
 import typing
@@ -18,9 +17,9 @@ from queue import Queue
 import factorio_rcon
 
 import Utils
-from CommonClient import ClientCommandProcessor, CommonContext, logger, server_loop, gui_enabled, get_base_parser
+from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from MultiServer import mark_raw
-from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart
+from NetUtils import ClientStatus, JSONMessagePart, JSONtoTextParser, NetworkItem
 from Utils import async_start, get_file_safe_name
 
 
@@ -105,8 +104,8 @@ class FactorioContext(CommonContext):
     def on_print(self, args: dict):
         super(FactorioContext, self).on_print(args)
         if self.rcon_client:
-            if not args['text'].startswith(self.player_names[self.slot] + ":"):
-                self.print_to_game(args['text'])
+            if not args["text"].startswith(self.player_names[self.slot] + ":"):
+                self.print_to_game(args["text"])
 
     def on_print_json(self, args: dict):
         if self.rcon_client:
@@ -143,8 +142,8 @@ class FactorioContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected", "RoomUpdate"}:
             # catch up sync anything that is already cleared.
-            if "checked_locations" in args and args["checked_locations"]:
-                self.rcon_client.send_commands({item_name: f'/ap-get-technology ap-{item_name}-\t-1' for
+            if args.get("checked_locations"):
+                self.rcon_client.send_commands({item_name: f"/ap-get-technology ap-{item_name}-\t-1" for
                                                 item_name in args["checked_locations"]})
             if cmd == "Connected" and self.energy_link_increment:
                 async_start(self.send_msgs([{
@@ -249,7 +248,7 @@ async def game_watcher(ctx: FactorioContext):
                             f"New researches done: "
                             f"{[ctx.location_names[rid] for rid in research_data - ctx.locations_checked]}")
                         ctx.locations_checked = research_data
-                        await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(research_data)}])
+                        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": tuple(research_data)}])
                     death_link_tick = data.get("death_link_tick", 0)
                     if death_link_tick != ctx.death_link_tick:
                         ctx.death_link_tick = death_link_tick
@@ -512,13 +511,13 @@ class FactorioJSONtoTextParser(JSONtoTextParser):
 parser = get_base_parser(description="Optional arguments to FactorioClient follow. "
                                      "Remaining arguments get passed into bound Factorio instance."
                                      "Refer to Factorio --help for those.")
-parser.add_argument('--rcon-port', default='24242', type=int, help='Port to use to communicate with Factorio')
-parser.add_argument('--rcon-password', help='Password to authenticate with RCON.')
-parser.add_argument('--server-settings', help='Factorio server settings configuration file.')
+parser.add_argument("--rcon-port", default="24242", type=int, help="Port to use to communicate with Factorio")
+parser.add_argument("--rcon-password", help="Password to authenticate with RCON.")
+parser.add_argument("--server-settings", help="Factorio server settings configuration file.")
 
 args, rest = parser.parse_known_args()
 rcon_port = args.rcon_port
-rcon_password = args.rcon_password if args.rcon_password else ''.join(
+rcon_password = args.rcon_password if args.rcon_password else "".join(
     random.choice(string.ascii_letters) for x in range(32))
 factorio_server_logger = logging.getLogger("FactorioServer")
 options = Utils.get_options()
@@ -536,10 +535,10 @@ def launch():
     if server_settings:
         server_settings = os.path.abspath(server_settings)
     if not isinstance(options["factorio_options"]["filter_item_sends"], bool):
-        logging.warning(f"Warning: Option filter_item_sends should be a bool.")
+        logging.warning("Warning: Option filter_item_sends should be a bool.")
     initial_filter_item_sends = bool(options["factorio_options"]["filter_item_sends"])
     if not isinstance(options["factorio_options"]["bridge_chat_out"], bool):
-        logging.warning(f"Warning: Option bridge_chat_out should be a bool.")
+        logging.warning("Warning: Option bridge_chat_out should be a bool.")
     initial_bridge_chat_out = bool(options["factorio_options"]["bridge_chat_out"])
 
     if not os.path.exists(os.path.dirname(executable)):

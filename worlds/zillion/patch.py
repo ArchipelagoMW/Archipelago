@@ -1,17 +1,16 @@
 import os
-from typing import Any, BinaryIO, Optional, cast
 import zipfile
+from typing import Any, BinaryIO, Optional, cast
 
 from typing_extensions import override
+from zilliandomizer.patch import Patcher
 
 import Utils
 from worlds.Files import APAutoPatchInterface
 
-from zilliandomizer.patch import Patcher
-
 from .gen_data import GenData
 
-USHASH = 'd4bf9e7bcf9a48da53785d2ae7bc4270'
+USHASH = "d4bf9e7bcf9a48da53785d2ae7bc4270"
 
 
 class ZillionPatch(APAutoPatchInterface):

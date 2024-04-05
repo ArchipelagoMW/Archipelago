@@ -1,8 +1,11 @@
-from BaseClasses import Item, ItemClassification
-from . import Common
 import typing
 from enum import IntEnum
+
+from BaseClasses import Item, ItemClassification
+
+from . import Common
 from .LADXR.locations.constants import CHEST_ITEMS
+
 
 class ItemData(typing.NamedTuple):
     item_name: str
@@ -26,7 +29,7 @@ class DungeonItemData(ItemData):
     @property
     def dungeon_index(self):
         return int(self.ladxr_id[-1])
-    
+
     @property
     def dungeon_item_type(self):
         s = self.ladxr_id[:-1]
@@ -175,7 +178,7 @@ class ItemName:
     TRADING_ITEM_SCALE = "Scale"
     TRADING_ITEM_MAGNIFYING_GLASS = "Magnifying Glass"
 
-trade_item_prog = ItemClassification.progression 
+trade_item_prog = ItemClassification.progression
 
 links_awakening_items = [
     ItemData(ItemName.POWER_BRACELET, "POWER_BRACELET", ItemClassification.progression),

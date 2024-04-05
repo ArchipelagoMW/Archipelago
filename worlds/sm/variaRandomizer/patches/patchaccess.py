@@ -1,28 +1,30 @@
 import importlib
-from ..logic.logic import Logic
-from ..patches.common.patches import patches, additional_PLMs
-from ..utils.parameters import appDir
-from ..utils.utils import listDir, exists
 
-class PatchAccess(object):
+from ..logic.logic import Logic
+from ..patches.common.patches import additional_PLMs, patches
+from ..utils.parameters import appDir
+from ..utils.utils import exists, listDir
+
+
+class PatchAccess:
     def __init__(self):
         # load all ips patches
         self.patchesPath = {}
-        commonDir = "/".join((appDir, 'worlds/sm/variaRandomizer/patches/common/ips'))
+        commonDir = "/".join((appDir, "worlds/sm/variaRandomizer/patches/common/ips"))
         for patch in listDir(commonDir):
             self.patchesPath[patch] = commonDir
-        logicDir = "/".join((appDir, 'worlds/sm/variaRandomizer/patches/{}/ips'.format(Logic.patches)))
+        logicDir = "/".join((appDir, f"worlds/sm/variaRandomizer/patches/{Logic.patches}/ips"))
         for patch in listDir(logicDir):
             self.patchesPath[patch] = logicDir
 
         # load dict patches
         self.dictPatches = patches
-        logicPatches = importlib.import_module("worlds.sm.variaRandomizer.patches.{}.patches".format(Logic.patches)).patches
+        logicPatches = importlib.import_module(f"worlds.sm.variaRandomizer.patches.{Logic.patches}.patches").patches
         self.dictPatches.update(logicPatches)
 
         # load additional PLMs
         self.additionalPLMs = additional_PLMs
-        logicPLMs = importlib.import_module("worlds.sm.variaRandomizer.patches.{}.patches".format(Logic.patches)).additional_PLMs
+        logicPLMs = importlib.import_module(f"worlds.sm.variaRandomizer.patches.{Logic.patches}.patches").additional_PLMs
         self.additionalPLMs.update(logicPLMs)
 
     def getPatchPath(self, patch):
@@ -34,7 +36,7 @@ class PatchAccess(object):
             if exists(patch):
                 return patch
             else:
-                raise Exception("unknown patch: {}".format(patch))
+                raise Exception(f"unknown patch: {patch}")
 
     def getDictPatches(self):
         return self.dictPatches

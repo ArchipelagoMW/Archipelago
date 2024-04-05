@@ -1,7 +1,8 @@
 from typing import cast
-from . import ZillionTestBase
 
 from worlds.zillion import ZillionWorld
+
+from . import ZillionTestBase
 
 
 class SeedTest(ZillionTestBase):

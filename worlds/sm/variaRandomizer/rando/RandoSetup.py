@@ -1,21 +1,23 @@
-import copy, random
+import copy
+import random
 
-from ..utils import log
-from ..utils.utils import randGaussBounds
+from ..graph.graph_utils import GraphUtils, getAccessPoint
+from ..logic.helpers import Bosses
 from ..logic.smbool import SMBool, smboolFalse
 from ..logic.smboolmanager import SMBoolManager
-from ..logic.helpers import Bosses
-from ..graph.graph_utils import getAccessPoint, GraphUtils
 from ..rando.Filler import FrontFiller
-from ..rando.ItemLocContainer import ItemLocContainer, getLocListStr, ItemLocation, getItemListStr
+from ..rando.ItemLocContainer import ItemLocation, ItemLocContainer, getItemListStr, getLocListStr
 from ..rando.Restrictions import Restrictions
+from ..rom.rom_patches import RomPatches
+from ..utils import log
 from ..utils.objectives import Objectives
 from ..utils.parameters import infinity
-from ..rom.rom_patches import RomPatches
+from ..utils.utils import randGaussBounds
+
 
 # checks init conditions for the randomizer: processes super fun settings, graph, start location, special restrictions
 # the entry point is createItemLocContainer
-class RandoSetup(object):
+class RandoSetup:
     def __init__(self, graphSettings, locations, services, player):
         self.sm = SMBoolManager(player, services.settings.maxDiff)
         self.settings = services.settings
@@ -35,26 +37,26 @@ class RandoSetup(object):
         self.forbiddenItems = []
         self.restrictedLocs = []
         self.lastRestricted = []
-        self.bossesLocs = sorted(['Draygon', 'Kraid', 'Ridley', 'Phantoon', 'Mother Brain'])
-        self.suits = ['Varia', 'Gravity']
+        self.bossesLocs = sorted(["Draygon", "Kraid", "Ridley", "Phantoon", "Mother Brain"])
+        self.suits = ["Varia", "Gravity"]
         # organized by priority
-        self.movementItems = ['SpaceJump', 'HiJump', 'SpeedBooster', 'Bomb', 'Grapple', 'SpringBall']
+        self.movementItems = ["SpaceJump", "HiJump", "SpeedBooster", "Bomb", "Grapple", "SpringBall"]
         # organized by priority
-        self.combatItems = ['ScrewAttack', 'Plasma', 'Wave', 'Spazer']
+        self.combatItems = ["ScrewAttack", "Plasma", "Wave", "Spazer"]
         # OMG
         self.bossChecks = {
-            'Kraid' : self.sm.enoughStuffsKraid,
-            'Phantoon' : self.sm.enoughStuffsPhantoon,
-            'Draygon' : self.sm.enoughStuffsDraygon,
-            'Ridley' : self.sm.enoughStuffsRidley,
-            'Mother Brain': self.sm.enoughStuffsMotherbrain
+            "Kraid" : self.sm.enoughStuffsKraid,
+            "Phantoon" : self.sm.enoughStuffsPhantoon,
+            "Draygon" : self.sm.enoughStuffsDraygon,
+            "Ridley" : self.sm.enoughStuffsRidley,
+            "Mother Brain": self.sm.enoughStuffsMotherbrain
         }
         self.okay = lambda: SMBool(True, 0)
         exclude = self.settings.getExcludeItems(self.locations)
         # we have to use item manager only once, otherwise pool will change
         self.itemManager.createItemPool(exclude)
         self.basePool = self.itemManager.getItemPool()[:]
-        self.log = log.get('RandoSetup')
+        self.log = log.get("RandoSetup")
         if len(locations) != len(self.locations):
             self.log.debug("inaccessible locations :"+getLocListStr([loc for loc in locations if loc not in self.locations]))
 
@@ -69,14 +71,14 @@ class RandoSetup(object):
         for loc in self.locations:
             loc.restricted = False
         for loc in self.restrictedLocs:
-            self.log.debug("createItemLocContainer: loc is restricted: {}".format(loc.Name))
+            self.log.debug(f"createItemLocContainer: loc is restricted: {loc.Name}")
             loc.restricted = True
-        
+
         # checkDoorBeams calls checkPool, so save error messages
         errorMsgsBck = self.errorMsgs[:]
         self.checkDoorBeams()
         self.errorMsgs = errorMsgsBck
-        
+
         self.container = ItemLocContainer(self.sm, self.getItemPool(), self.locations)
         if self.restrictions.isLateMorph():
             self.restrictions.lateMorphInit(self.startAP, self.container, self.services)
@@ -110,16 +112,16 @@ class RandoSetup(object):
             for loc in poss:
                 restrictionDict[loc.GraphArea][itemType].add(loc.Name)
         if self.restrictions.isEarlyMorph() and GraphUtils.isStandardStart(self.startAP):
-            morphLocs = ['Morphing Ball']
-            if self.restrictions.split in ['Full', 'Major']:
+            morphLocs = ["Morphing Ball"]
+            if self.restrictions.split in ["Full", "Major"]:
                 dboost = self.sm.knowsCeilingDBoost()
                 if dboost.bool == True and dboost.difficulty <= self.settings.maxDiff:
-                    morphLocs.append('Energy Tank, Brinstar Ceiling')
+                    morphLocs.append("Energy Tank, Brinstar Ceiling")
             for area, locDict in restrictionDict.items():
-                if area == 'Crateria':
-                    locDict['Morph'] = set(morphLocs)
+                if area == "Crateria":
+                    locDict["Morph"] = set(morphLocs)
                 else:
-                    locDict['Morph'] = set()
+                    locDict["Morph"] = set()
         return restrictionDict
 
     # fill up unreachable locations with "junk" to maximize the chance of the ROM
@@ -133,23 +135,23 @@ class RandoSetup(object):
             itemLocation = ItemLocation(None, loc)
             if loc.BossItemType is not None:
                 itemLocation.Item = self.container.getNextItemInPoolMatching(getPred(loc.BossItemType, loc))
-            elif self.container.hasItemInPool(getPred('Nothing', loc)):
-                itemLocation.Item = self.container.getNextItemInPoolMatching(getPred('Nothing', loc))
-            elif self.container.hasItemInPool(getPred('NoEnergy', loc)):
-                itemLocation.Item = self.container.getNextItemInPoolMatching(getPred('NoEnergy', loc))
-            elif self.container.countItems(getPred('Missile', loc)) > 3:
-                itemLocation.Item = self.container.getNextItemInPoolMatching(getPred('Missile', loc))
-            elif self.container.countItems(getPred('Super', loc)) > 2:
-                itemLocation.Item = self.container.getNextItemInPoolMatching(getPred('Super', loc))
-            elif self.container.countItems(getPred('PowerBomb', loc)) > 1:
-                itemLocation.Item = self.container.getNextItemInPoolMatching(getPred('PowerBomb', loc))
-            elif self.container.countItems(getPred('Reserve', loc)) > 1:
-                itemLocation.Item = self.container.getNextItemInPoolMatching(getPred('Reserve', loc))
-            elif self.container.countItems(getPred('ETank', loc)) > 3:
-                itemLocation.Item = self.container.getNextItemInPoolMatching(getPred('ETank', loc))
+            elif self.container.hasItemInPool(getPred("Nothing", loc)):
+                itemLocation.Item = self.container.getNextItemInPoolMatching(getPred("Nothing", loc))
+            elif self.container.hasItemInPool(getPred("NoEnergy", loc)):
+                itemLocation.Item = self.container.getNextItemInPoolMatching(getPred("NoEnergy", loc))
+            elif self.container.countItems(getPred("Missile", loc)) > 3:
+                itemLocation.Item = self.container.getNextItemInPoolMatching(getPred("Missile", loc))
+            elif self.container.countItems(getPred("Super", loc)) > 2:
+                itemLocation.Item = self.container.getNextItemInPoolMatching(getPred("Super", loc))
+            elif self.container.countItems(getPred("PowerBomb", loc)) > 1:
+                itemLocation.Item = self.container.getNextItemInPoolMatching(getPred("PowerBomb", loc))
+            elif self.container.countItems(getPred("Reserve", loc)) > 1:
+                itemLocation.Item = self.container.getNextItemInPoolMatching(getPred("Reserve", loc))
+            elif self.container.countItems(getPred("ETank", loc)) > 3:
+                itemLocation.Item = self.container.getNextItemInPoolMatching(getPred("ETank", loc))
             else:
                 raise RuntimeError("Cannot fill restricted locations")
-            self.log.debug("Fill: {}/{} at {}".format(itemLocation.Item.Type, itemLocation.Item.Class, itemLocation.Location.Name))
+            self.log.debug(f"Fill: {itemLocation.Item.Type}/{itemLocation.Item.Class} at {itemLocation.Location.Name}")
             self.container.collect(itemLocation, False)
 
     def getItemPool(self, forbidden=[]):
@@ -160,8 +162,8 @@ class RandoSetup(object):
     def checkStart(self):
         ap = getAccessPoint(self.startAP)
         if not self.graphSettings.areaRando or ap.Start is None or \
-           (('needsPreRando' not in ap.Start or not ap.Start['needsPreRando']) and\
-            ('areaMode' not in ap.Start or not ap.Start['areaMode'])):
+           (("needsPreRando" not in ap.Start or not ap.Start["needsPreRando"]) and\
+            ("areaMode" not in ap.Start or not ap.Start["areaMode"])):
             return True
         self.log.debug("********* PRE RANDO START")
         container = copy.copy(self.container)
@@ -174,7 +176,7 @@ class RandoSetup(object):
     # in door color rando, determine mandatory beams
     def checkDoorBeams(self):
         if self.restrictions.isLateDoors():
-            doorBeams = ['Wave','Ice','Spazer','Plasma']
+            doorBeams = ["Wave","Ice","Spazer","Plasma"]
             self.restrictions.mandatoryBeams = [beam for beam in doorBeams if not self.checkPool(forbidden=[beam])]
             self.log.debug("checkDoorBeams. mandatoryBeams="+str(self.restrictions.mandatoryBeams))
 
@@ -184,7 +186,7 @@ class RandoSetup(object):
         if not self.graphSettings.isMinimizer() and not self.settings.isPlandoRando() and len(self.allLocations) > len(self.locations):
             # invalid graph with looped areas
             msg = "not all areas are connected, but minimizer param is off / not a plando rando"
-            self.log.debug("checkPool: {}".format(msg))
+            self.log.debug(f"checkPool: {msg}")
             self.errorMsgs.append(msg)
             return False
         ret = True
@@ -199,8 +201,8 @@ class RandoSetup(object):
             container = ItemLocContainer(self.sm, pool, self.locations)
         except AssertionError as e:
             # invalid graph altogether
-            msg = "AssertionError when creating ItemLocContainer: {}".format(e)
-            self.log.debug("checkPool: {}".format(msg))
+            msg = f"AssertionError when creating ItemLocContainer: {e}"
+            self.log.debug(f"checkPool: {msg}")
             self.errorMsgs.append(msg)
             return False
         # restrict item pool in chozo: game should be finishable with chozo items only
@@ -210,7 +212,7 @@ class RandoSetup(object):
         self.disableBossChecks()
         self.sm.resetItems()
         self.sm.addItems([item.Type for item in contPool]) # will add bosses as well
-        self.log.debug('pool={}'.format(getItemListStr(container.itemPool)))
+        self.log.debug(f"pool={getItemListStr(container.itemPool)}")
         locs = self.services.currentLocations(self.startAP, container, post=True)
         self.areaGraph.useCache(True)
         for loc in locs:
@@ -219,7 +221,7 @@ class RandoSetup(object):
                 # we chose Golden Four because it is always there.
                 # Start APs might not have comeback transitions
                 # possible start AP issues are handled in checkStart
-                comeBack[ap] = self.areaGraph.canAccess(self.sm, ap, 'Golden Four', self.settings.maxDiff)
+                comeBack[ap] = self.areaGraph.canAccess(self.sm, ap, "Golden Four", self.settings.maxDiff)
             if comeBack[ap]:
                 totalAvailLocs.append(loc)
         self.areaGraph.useCache(False)
@@ -237,15 +239,15 @@ class RandoSetup(object):
             escAPs = [ap for ap in aps if ap in availAPs]
             self.log.debug("escAPs="+str(escAPs))
             if len(escAPs) < n:
-                msg = "goal '{}' impossible to complete due to area layout".format(goal.name)
-                self.log.debug("checkPool. {}".format(msg))
+                msg = f"goal '{goal.name}' impossible to complete due to area layout"
+                self.log.debug(f"checkPool. {msg}")
                 self.errorMsgs.append(msg)
                 ret = False
                 continue
             for ap in escAPs:
                 if not self.areaGraph.canAccess(self.sm, ap, "Golden Four", self.settings.maxDiff):
-                    msg = "goal '{}' impossible to complete due to area layout".format(goal.name)
-                    self.log.debug("checkPool. {}".format(msg))
+                    msg = f"goal '{goal.name}' impossible to complete due to area layout"
+                    self.log.debug(f"checkPool. {msg}")
                     self.errorMsgs.append(msg)
                     ret = False
                     break
@@ -255,12 +257,12 @@ class RandoSetup(object):
             for startAp in interAPs:
                 availAccessPoints = self.areaGraph.getAvailableAccessPoints(startAp, self.sm, self.settings.maxDiff)
                 for ap in interAPs:
-                    if not ap in availAccessPoints:
-                        self.log.debug("checkPool: ap {} non accessible from {}".format(ap.Name, startAp.Name))
+                    if ap not in availAccessPoints:
+                        self.log.debug(f"checkPool: ap {ap.Name} non accessible from {startAp.Name}")
                         ret = False
             if not ret:
                 msg = "inter-area APs check failed"
-                self.log.debug("checkPool. {}".format(msg))
+                self.log.debug(f"checkPool. {msg}")
                 self.errorMsgs.append(msg)
         # cleanup
         self.sm.resetItems()
@@ -273,36 +275,36 @@ class RandoSetup(object):
             for loc in self.lastRestricted:
                 if loc.Name in self.bossesLocs:
                     ret = False
-                    msg = "unavail Boss: {}".format(loc.Name)
-                    self.log.debug("checkPool. {}".format(msg))
+                    msg = f"unavail Boss: {loc.Name}"
+                    self.log.debug(f"checkPool. {msg}")
             if ret:
                 # revive bosses
-                self.sm.addItems([item.Type for item in contPool if item.Category != 'Boss'])
+                self.sm.addItems([item.Type for item in contPool if item.Category != "Boss"])
                 maxDiff = self.settings.maxDiff
                 # see if phantoon doesn't block himself, and if we can reach draygon if she's alive
-                ret = self.areaGraph.canAccess(self.sm, self.startAP, 'PhantoonRoomIn', maxDiff)\
-                      and self.areaGraph.canAccess(self.sm, self.startAP, 'DraygonRoomIn', maxDiff)
+                ret = self.areaGraph.canAccess(self.sm, self.startAP, "PhantoonRoomIn", maxDiff)\
+                      and self.areaGraph.canAccess(self.sm, self.startAP, "DraygonRoomIn", maxDiff)
                 if ret:
                     # see if we can beat bosses with this equipment (infinity as max diff for a "onlyBossesLeft" type check
                     beatableBosses = sorted([loc.BossItemType for loc in self.services.currentLocations(self.startAP, container, diff=infinity) if loc.isBoss()])
                     self.log.debug("checkPool. beatableBosses="+str(beatableBosses))
-                    self.log.debug("checkPool. mandatoryBosses: {}".format(mandatoryBosses))
+                    self.log.debug(f"checkPool. mandatoryBosses: {mandatoryBosses}")
                     ret = mandatoryBosses.issubset(set(beatableBosses)) and Objectives.objDict[self.sm.player].checkLimitObjectives(beatableBosses)
                     if ret:
                         # check that we can then kill mother brain
                         self.sm.addItems(Bosses.Golden4() + Bosses.miniBosses())
-                        beatableMotherBrain = [loc.Name for loc in self.services.currentLocations(self.startAP, container, diff=infinity) if loc.Name == 'Mother Brain']
+                        beatableMotherBrain = [loc.Name for loc in self.services.currentLocations(self.startAP, container, diff=infinity) if loc.Name == "Mother Brain"]
                         ret = len(beatableMotherBrain) > 0
-                        self.log.debug("checkPool. beatable Mother Brain={}".format(ret))
+                        self.log.debug(f"checkPool. beatable Mother Brain={ret}")
                     else:
-                        msg = "can't kill all mandatory bosses/minibosses: {}".format(', '.join(list(mandatoryBosses - set(beatableBosses))))
-                        self.log.debug("checkPool. {}".format(msg))
+                        msg = "can't kill all mandatory bosses/minibosses: {}".format(", ".join(list(mandatoryBosses - set(beatableBosses))))
+                        self.log.debug(f"checkPool. {msg}")
                         self.errorMsgs.append(msg)
                 else:
                     msg = "locked by Phantoon or Draygon"
-                    self.log.debug('checkPool. {}'.format(msg))
+                    self.log.debug(f"checkPool. {msg}")
                     self.errorMsgs.append(msg)
-                self.log.debug('checkPool. boss access sanity check: '+str(ret))
+                self.log.debug("checkPool. boss access sanity check: "+str(ret))
 
         if self.restrictions.isChozo() or self.restrictions.isScavenger():
             # in chozo or scavenger, we cannot put other items than NoEnergy in the restricted locations,
@@ -311,10 +313,10 @@ class RandoSetup(object):
             # FIXME something to do there for chozo/ultra sparse, it gives us up to 3 more spots for nothing items
             restrictedLocs = self.restrictedLocs + [loc for loc in self.lastRestricted if loc not in self.restrictedLocs]
             nRestrictedMajor = sum(1 for loc in restrictedLocs if self.restrictions.isLocMajor(loc))
-            nNothingMajor = sum(1 for item in pool if self.restrictions.isItemMajor(item) and item.Category == 'Nothing')
+            nNothingMajor = sum(1 for item in pool if self.restrictions.isItemMajor(item) and item.Category == "Nothing")
             ret &= nRestrictedMajor <= nNothingMajor
-            self.log.debug('checkPool. nRestrictedMajor='+str(nRestrictedMajor)+', nNothingMajor='+str(nNothingMajor))
-        self.log.debug('checkPool. result: '+str(ret))
+            self.log.debug("checkPool. nRestrictedMajor="+str(nRestrictedMajor)+", nNothingMajor="+str(nNothingMajor))
+        self.log.debug("checkPool. result: "+str(ret))
         return ret
 
     def disableBossChecks(self):
@@ -330,11 +332,11 @@ class RandoSetup(object):
         self.sm.enoughStuffsMotherbrain = mbCheck
 
     def restoreBossChecks(self):
-        self.sm.enoughStuffsKraid = self.bossChecks['Kraid']
-        self.sm.enoughStuffsPhantoon = self.bossChecks['Phantoon']
-        self.sm.enoughStuffsDraygon = self.bossChecks['Draygon']
-        self.sm.enoughStuffsRidley = self.bossChecks['Ridley']
-        self.sm.enoughStuffsMotherbrain = self.bossChecks['Mother Brain']
+        self.sm.enoughStuffsKraid = self.bossChecks["Kraid"]
+        self.sm.enoughStuffsPhantoon = self.bossChecks["Phantoon"]
+        self.sm.enoughStuffsDraygon = self.bossChecks["Draygon"]
+        self.sm.enoughStuffsRidley = self.bossChecks["Ridley"]
+        self.sm.enoughStuffsMotherbrain = self.bossChecks["Mother Brain"]
 
     def addRestricted(self):
         self.checkPool()
@@ -343,7 +345,7 @@ class RandoSetup(object):
                 self.restrictedLocs.append(r)
 
     def getForbiddenItemsFromList(self, itemList):
-        self.log.debug('getForbiddenItemsFromList: ' + str(itemList))
+        self.log.debug("getForbiddenItemsFromList: " + str(itemList))
         remove = []
         n = randGaussBounds(len(itemList))
         for i in range(n):
@@ -378,9 +380,9 @@ class RandoSetup(object):
     def getForbiddenSuits(self):
         self.log.debug("getForbiddenSuits BEGIN. forbidden="+str(self.forbiddenItems)+",ap="+self.startAP)
         removableSuits = [suit for suit in self.suits if self.checkPool([suit])]
-        if 'Varia' in removableSuits and self.startAP in ['Bubble Mountain', 'Firefleas Top']:
+        if "Varia" in removableSuits and self.startAP in ["Bubble Mountain", "Firefleas Top"]:
             # Varia has to be first item there, and checkPool can't detect it
-            removableSuits.remove('Varia')
+            removableSuits.remove("Varia")
         self.log.debug("getForbiddenSuits removable="+str(removableSuits))
         if len(removableSuits) > 0:
             # remove at least one
@@ -389,24 +391,24 @@ class RandoSetup(object):
                 self.checkPool()
                 self.addRestricted()
         else:
-            self.superFun.remove('Suits')
+            self.superFun.remove("Suits")
             self.log.debug("Super Fun : Could not remove any suit")
         self.log.debug("getForbiddenSuits END. forbidden="+str(self.forbiddenItems))
 
     def getForbiddenMovement(self):
         self.log.debug("getForbiddenMovement BEGIN. forbidden="+str(self.forbiddenItems))
         removableMovement = [mvt for mvt in self.movementItems if self.checkPool([mvt])]
-        if 'Bomb' in removableMovement and not RomPatches.has(self.sm.player, RomPatches.BombTorizoWake) and Objectives.objDict[self.sm.player].isGoalActive("activate chozo robots"):
+        if "Bomb" in removableMovement and not RomPatches.has(self.sm.player, RomPatches.BombTorizoWake) and Objectives.objDict[self.sm.player].isGoalActive("activate chozo robots"):
             # in this objective, without VARIA tweaks, BT has to wake so give bombs
-            removableMovement.remove('Bomb')
+            removableMovement.remove("Bomb")
         self.log.debug("getForbiddenMovement removable="+str(removableMovement))
         if len(removableMovement) > 0:
             # remove at least the most important
             self.forbiddenItems.append(removableMovement.pop(0))
             self.addForbidden(removableMovement + [None])
         else:
-            self.superFun.remove('Movement')
-            self.log.debug('Super Fun : Could not remove any movement item')
+            self.superFun.remove("Movement")
+            self.log.debug("Super Fun : Could not remove any movement item")
         self.log.debug("getForbiddenMovement END. forbidden="+str(self.forbiddenItems))
 
     def getForbiddenCombat(self):
@@ -420,27 +422,27 @@ class RandoSetup(object):
                 self.forbiddenItems.append(removableCombat.pop(0))
                 fake.append(None)
             # if plasma is still available, remove it as well if we can
-            if len(removableCombat) > 0 and removableCombat[0] == 'Plasma' and self.checkPool([removableCombat[0]]):
+            if len(removableCombat) > 0 and removableCombat[0] == "Plasma" and self.checkPool([removableCombat[0]]):
                 self.forbiddenItems.append(removableCombat.pop(0))
                 fake.append(None)
             self.addForbidden(removableCombat + fake)
         else:
-            self.superFun.remove('Combat')
-            self.log.debug('Super Fun : Could not remove any combat item')
+            self.superFun.remove("Combat")
+            self.log.debug("Super Fun : Could not remove any combat item")
         self.log.debug("getForbiddenCombat END. forbidden="+str(self.forbiddenItems))
 
     def getForbidden(self):
         self.forbiddenItems = []
         self.restrictedLocs = []
         self.errorMsgs = []
-        if 'Suits' in self.superFun: # impact on movement item
+        if "Suits" in self.superFun: # impact on movement item
             self.getForbiddenSuits()
-        if 'Movement' in self.superFun:
+        if "Movement" in self.superFun:
             self.getForbiddenMovement()
-        if 'Combat' in self.superFun:
+        if "Combat" in self.superFun:
             self.getForbiddenCombat()
         # if no super fun, check that there's no restricted locations (for ultra sparse)
         if len(self.superFun) == 0:
             self.addRestricted()
-        self.log.debug("forbiddenItems: {}".format(self.forbiddenItems))
-        self.log.debug("restrictedLocs: {}".format([loc.Name for loc in self.restrictedLocs]))
+        self.log.debug(f"forbiddenItems: {self.forbiddenItems}")
+        self.log.debug(f"restrictedLocs: {[loc.Name for loc in self.restrictedLocs]}")

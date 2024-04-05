@@ -1,11 +1,11 @@
 import json
 from pathlib import Path
-from typing import Dict, NamedTuple, List, Optional
+from typing import Dict, List, NamedTuple, Optional
 
-from BaseClasses import Region, Location, MultiWorld
+from BaseClasses import Location, MultiWorld, Region
 
 EventId: Optional[int] = None
-CHAOS_TERMINATED_EVENT = 'Terminated Chaos'
+CHAOS_TERMINATED_EVENT = "Terminated Chaos"
 
 
 class LocationData(NamedTuple):

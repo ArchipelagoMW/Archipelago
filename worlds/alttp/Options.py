@@ -1,8 +1,17 @@
 import typing
 
 from BaseClasses import MultiWorld
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, StartInventoryPool, PlandoBosses,\
-    FreeText
+from Options import (
+    Choice,
+    DeathLink,
+    DefaultOnToggle,
+    FreeText,
+    Option,
+    PlandoBosses,
+    Range,
+    StartInventoryPool,
+    Toggle,
+)
 
 
 class GlitchesRequired(Choice):
@@ -153,10 +162,10 @@ class OpenPyramid(Choice):
 
     def to_bool(self, world: MultiWorld, player: int) -> bool:
         if self.value == self.option_goal:
-            return world.goal[player].current_key in {'crystals', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'ganon_pedestal'}
+            return world.goal[player].current_key in {"crystals", "ganon_triforce_hunt", "local_ganon_triforce_hunt", "ganon_pedestal"}
         elif self.value == self.option_auto:
-            return world.goal[player].current_key in {'crystals', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'ganon_pedestal'} \
-            and (world.entrance_shuffle[player].current_key in {'vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed'} or not
+            return world.goal[player].current_key in {"crystals", "ganon_triforce_hunt", "local_ganon_triforce_hunt", "ganon_pedestal"} \
+            and (world.entrance_shuffle[player].current_key in {"vanilla", "dungeons_simple", "dungeons_full", "dungeons_crossed"} or not
                  world.shuffle_ganon)
         elif self.value == self.option_open:
             return True
@@ -484,7 +493,7 @@ class LTTPBosses(PlandoBosses):
     @classmethod
     def can_place_boss(cls, boss: str, location: str) -> bool:
         from worlds.alttp.Bosses import can_place_boss
-        level = ''
+        level = ""
         words = location.split(" ")
         if words[-1] in ("top", "middle", "bottom"):
             level = words[-1]

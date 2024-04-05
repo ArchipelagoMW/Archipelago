@@ -1,11 +1,47 @@
 from typing import Any, Dict
 
-from Options import Accessibility, ProgressionBalancing, DeathLink
-from .options import Goal, StartingMoney, ProfitMargin, BundleRandomization, BundlePrice, EntranceRandomization, SeasonRandomization, Cropsanity, \
-    BackpackProgression, ToolProgression, ElevatorProgression, SkillProgression, BuildingProgression, FestivalLocations, ArcadeMachineLocations, \
-    SpecialOrderLocations, QuestLocations, Fishsanity, Museumsanity, Friendsanity, FriendsanityHeartSize, NumberOfMovementBuffs, NumberOfLuckBuffs, \
-    ExcludeGingerIsland, TrapItems, MultipleDaySleepEnabled, MultipleDaySleepCost, ExperienceMultiplier, FriendshipMultiplier, DebrisMultiplier, QuickStart, \
-    Gifting, FarmType, Monstersanity, Shipsanity, Cooksanity, Chefsanity, Craftsanity
+from Options import Accessibility, DeathLink, ProgressionBalancing
+
+from .options import (
+    ArcadeMachineLocations,
+    BackpackProgression,
+    BuildingProgression,
+    BundlePrice,
+    BundleRandomization,
+    Chefsanity,
+    Cooksanity,
+    Craftsanity,
+    Cropsanity,
+    DebrisMultiplier,
+    ElevatorProgression,
+    EntranceRandomization,
+    ExcludeGingerIsland,
+    ExperienceMultiplier,
+    FarmType,
+    FestivalLocations,
+    Fishsanity,
+    Friendsanity,
+    FriendsanityHeartSize,
+    FriendshipMultiplier,
+    Gifting,
+    Goal,
+    Monstersanity,
+    MultipleDaySleepCost,
+    MultipleDaySleepEnabled,
+    Museumsanity,
+    NumberOfLuckBuffs,
+    NumberOfMovementBuffs,
+    ProfitMargin,
+    QuestLocations,
+    QuickStart,
+    SeasonRandomization,
+    Shipsanity,
+    SkillProgression,
+    SpecialOrderLocations,
+    StartingMoney,
+    ToolProgression,
+    TrapItems,
+)
 
 all_random_settings = {
     "progression_balancing":                "random",

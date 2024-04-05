@@ -1,5 +1,5 @@
+from .. import Group, item_table, options
 from . import SVTestBase
-from .. import options, item_table, Group
 
 max_iterations = 2000
 

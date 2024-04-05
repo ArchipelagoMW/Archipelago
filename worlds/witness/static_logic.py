@@ -2,8 +2,15 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, List
 
-from .utils import define_new_region, parse_lambda, lazy, get_items, get_sigma_normal_logic, get_sigma_expert_logic,\
-    get_vanilla_logic
+from .utils import (
+    define_new_region,
+    get_items,
+    get_sigma_expert_logic,
+    get_sigma_normal_logic,
+    get_vanilla_logic,
+    lazy,
+    parse_lambda,
+)
 
 
 class ItemCategory(Enum):

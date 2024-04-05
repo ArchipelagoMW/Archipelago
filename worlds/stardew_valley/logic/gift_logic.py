@@ -1,10 +1,10 @@
 from functools import cached_property
 
-from .base_logic import BaseLogic, BaseLogicMixin
-from .has_logic import HasLogicMixin
 from ..stardew_rule import StardewRule
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.gift_names import Gift
+from .base_logic import BaseLogic, BaseLogicMixin
+from .has_logic import HasLogicMixin
 
 
 class GiftLogicMixin(BaseLogicMixin):

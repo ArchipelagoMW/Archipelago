@@ -1,25 +1,22 @@
 from typing import Any, Dict, List, Set, Tuple
 
 from BaseClasses import Item, ItemClassification, Location, Region, Tutorial
-
 from worlds.AutoWorld import WebWorld, World
 
-from .data.item_data import item_data, ZorkGrandInquisitorItemData
-from .data.location_data import location_data, ZorkGrandInquisitorLocationData
+from .data.item_data import ZorkGrandInquisitorItemData, item_data
+from .data.location_data import ZorkGrandInquisitorLocationData, location_data
 from .data.region_data import region_data
-
 from .data_funcs import (
+    entrance_access_rule_for,
+    item_groups,
     item_names_to_id,
     item_names_to_item,
-    location_names_to_id,
-    item_groups,
     items_with_tag,
-    location_groups,
-    locations_by_region,
     location_access_rule_for,
-    entrance_access_rule_for,
+    location_groups,
+    location_names_to_id,
+    locations_by_region,
 )
-
 from .enums import (
     ZorkGrandInquisitorEvents,
     ZorkGrandInquisitorItems,
@@ -27,7 +24,6 @@ from .enums import (
     ZorkGrandInquisitorRegions,
     ZorkGrandInquisitorTags,
 )
-
 from .options import ZorkGrandInquisitorOptions
 
 

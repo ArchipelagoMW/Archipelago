@@ -1,7 +1,6 @@
 from typing import Dict, Union
 
-from ..mod_data import ModNames
-from ...logic.base_logic import BaseLogicMixin, BaseLogic
+from ...logic.base_logic import BaseLogic, BaseLogicMixin
 from ...logic.has_logic import HasLogicMixin
 from ...logic.money_logic import MoneyLogicMixin
 from ...stardew_rule import StardewRule
@@ -9,6 +8,7 @@ from ...strings.artisan_good_names import ArtisanGood
 from ...strings.building_names import ModBuilding
 from ...strings.metal_names import MetalBar
 from ...strings.region_names import Region
+from ..mod_data import ModNames
 
 
 class ModBuildingLogicMixin(BaseLogicMixin):

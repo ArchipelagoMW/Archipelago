@@ -1,14 +1,16 @@
-from typing import Dict, List, Set, Any
 from collections import Counter
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
-from worlds.AutoWorld import World, WebWorld
-from .Items import base_id, item_table, group_table, tears_set, reliquary_set, event_table
+from typing import Any, Dict, List, Set
+
+from BaseClasses import Entrance, Item, ItemClassification, Location, Region, Tutorial
+from worlds.AutoWorld import WebWorld, World
+from worlds.generic.Rules import add_rule, set_rule
+
+from .Items import base_id, event_table, group_table, item_table, reliquary_set, tears_set
 from .Locations import location_table
-from .Rooms import room_table, door_table
-from .Rules import rules
-from worlds.generic.Rules import set_rule, add_rule
 from .Options import blasphemous_options
-from .Vanilla import unrandomized_dict, junk_locations, thorn_set, skill_dict
+from .Rooms import door_table, room_table
+from .Rules import rules
+from .Vanilla import junk_locations, skill_dict, thorn_set, unrandomized_dict
 
 
 class BlasphemousWeb(WebWorld):
@@ -85,7 +87,7 @@ class BlasphemousWorld(World):
                 and world.dash_shuffle[player]:
                     raise Exception(f"[Blasphemous - '{world.get_player_name(player)}'] {world.starting_location[player]}"
                                     " cannot be chosen if Shuffle Dash is enabled.")
-            
+
             if world.starting_location[player].value == 3 and world.wall_climb_shuffle[player]:
                 raise Exception(f"[Blasphemous - '{world.get_player_name(player)}'] {world.starting_location[player]}"
                                 " cannot be chosen if Shuffle Wall Climb is enabled.")
@@ -110,14 +112,14 @@ class BlasphemousWorld(World):
             if (world.starting_location[player].value == 0 or world.starting_location[player].value == 6) \
                 and world.dash_shuffle[player]:
                     invalid = True
-            
+
             if world.starting_location[player].value == 3 and world.wall_climb_shuffle[player]:
                 invalid = True
 
             if invalid:
                 world.starting_location[player].value = world.random.choice(locations)
-            
-        
+
+
         if not world.dash_shuffle[player]:
             world.push_precollected(self.create_item("Dash Ability"))
 
@@ -205,7 +207,7 @@ class BlasphemousWorld(World):
 
         for item in item_table:
             count = item["count"] - counter[item["name"]]
-            
+
             if count <= 0:
                 continue
             else:
@@ -236,14 +238,14 @@ class BlasphemousWorld(World):
 
         if world.thorn_shuffle[player] == 1:
             world.local_items[player].value.add("Thorn Upgrade")
-        
+
 
     def place_items_from_set(self, location_set: Set[str], name: str):
         for loc in location_set:
             self.multiworld.get_location(loc, self.player)\
                 .place_locked_item(self.create_item(name))
 
-    
+
     def place_items_from_dict(self, option_dict: Dict[str, str]):
         for loc, item in option_dict.items():
             self.multiworld.get_location(loc, self.player)\
@@ -253,7 +255,7 @@ class BlasphemousWorld(World):
     def create_regions(self) -> None:
         player = self.player
         world = self.multiworld
-        
+
         menu_region = Region("Menu", player, world)
         misc_region = Region("Misc", player, world)
         world.regions += [menu_region, misc_region]
@@ -269,7 +271,7 @@ class BlasphemousWorld(World):
             if door.get("OriginalDoor") is None:
                 continue
             else:
-                if not door["Id"] in self.door_connections.keys():
+                if door["Id"] not in self.door_connections.keys():
                     self.door_connections[door["Id"]] = door["OriginalDoor"]
                     self.door_connections[door["OriginalDoor"]] = door["Id"]
 
@@ -305,7 +307,7 @@ class BlasphemousWorld(World):
             event.show_in_spoiler = False
             event.place_locked_item(self.create_event(door["Id"]))
             region.locations.append(event)
-        
+
         victory = Location(player, "His Holiness Escribar", None, world.get_region("D07Z01S03", player))
         victory.place_locked_item(self.create_event("Victory"))
         world.get_region("D07Z01S03", player).locations.append(victory)
@@ -317,16 +319,16 @@ class BlasphemousWorld(World):
                 state.has("Holy Wound of Abnegation", player))
 
         world.completion_condition[self.player] = lambda state: state.has("Victory", player)
-        
+
 
     def get_room_from_door(self, door: str) -> Region:
         return self.multiworld.get_region(door.split("[")[0], self.player)
 
-    
+
     def get_connected_door(self, door: str) -> Entrance:
         return self.multiworld.get_entrance(self.door_connections[door], self.player)
-    
-    
+
+
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {}
         locations = []
@@ -357,17 +359,17 @@ class BlasphemousWorld(World):
             "LogicDifficulty": world.difficulty[player].value,
             "StartingLocation": world.starting_location[player].value,
             "VersionCreated": "AP",
-            
+
             "UnlockTeleportation": bool(world.prie_dieu_warp[player].value),
             "AllowHints": bool(world.corpse_hints[player].value),
             "AllowPenitence": bool(world.penitence[player].value),
-            
+
             "ShuffleReliquaries": bool(world.reliquary_shuffle[player].value),
             "ShuffleBootsOfPleading": bool(world.boots_of_pleading[player].value),
             "ShufflePurifiedHand": bool(world.purified_hand[player].value),
             "ShuffleDash": bool(world.dash_shuffle[player].value),
             "ShuffleWallClimb": bool(world.wall_climb_shuffle[player].value),
-            
+
             "ShuffleSwordSkills": bool(world.skill_randomizer[player].value),
             "ShuffleThorns": thorns,
             "JunkLongQuests": bool(world.skip_long_quests[player].value),
@@ -380,7 +382,7 @@ class BlasphemousWorld(World):
             "BossShuffleType": 0,
             "DoorShuffleType": 0
         }
-    
+
         slot_data = {
             "locations": locations,
             "doors": doors,
@@ -388,7 +390,7 @@ class BlasphemousWorld(World):
             "ending": world.ending[self.player].value,
             "death_link": bool(world.death_link[self.player].value)
         }
-    
+
         return slot_data
 
 

@@ -2,8 +2,9 @@ import functools
 import logging
 from typing import Any, Dict, List
 
-from BaseClasses import Entrance, CollectionState, Item, Location, MultiWorld, Region, Tutorial
+from BaseClasses import CollectionState, Entrance, Item, Location, MultiWorld, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
+
 from . import Items, Locations, Maps, Regions, Rules
 from .Options import DOOM2Options
 
@@ -129,7 +130,7 @@ class DOOM2World(World):
                 if connection_dict["pro"] and not pro:
                     continue
                 connections.append((region, connection_dict["target"]))
-        
+
         # Connect main regions to Hub
         hub_region.add_exits(main_regions)
 
@@ -149,7 +150,7 @@ class DOOM2World(World):
         for map_name in Maps.map_names:
             if map_name + " - Exit" not in self.location_name_to_id:
                 continue
-            
+
             # Exit location names are in form: Entryway (MAP01) - Exit
             loc = Locations.location_table[self.location_name_to_id[map_name + " - Exit"]]
             if not self.included_episodes[loc["episode"] - 1]:
@@ -158,7 +159,7 @@ class DOOM2World(World):
             # Map complete item names are in form: Entryway (MAP01) - Complete
             if not state.has(map_name + " - Complete", self.player, 1):
                 return False
-            
+
         return True
 
     def set_rules(self):
@@ -173,7 +174,7 @@ class DOOM2World(World):
         if not allow_death_logic:
             for death_logic_location in Locations.death_logic_locations:
                 self.multiworld.exclude_locations[self.player].value.add(death_logic_location)
-    
+
     def create_item(self, name: str) -> DOOM2Item:
         item_id: int = self.item_name_to_id[name]
         return DOOM2Item(name, Items.item_table[item_id]["classification"], item_id, self.player)
@@ -218,7 +219,7 @@ class DOOM2World(World):
         for i in range(len(self.starting_level_for_episode)):
             if self.included_episodes[i]:
                 self.multiworld.push_precollected(self.create_item(self.starting_level_for_episode[i]))
-        
+
         # Give Computer area maps if option selected
         if start_with_computer_area_maps:
             for item_id, item_dict in Items.item_table.items():

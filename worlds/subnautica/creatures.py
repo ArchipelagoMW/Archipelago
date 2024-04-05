@@ -1,5 +1,5 @@
 import functools
-from typing import Dict, Set, List
+from typing import Dict, List, Set
 
 # EN Locale Creature Name to rough depth in meters found at
 all_creatures: Dict[str, int] = {

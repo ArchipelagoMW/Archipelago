@@ -17,7 +17,7 @@ def gba_decompress(data: bytearray):
     else:
         raise DecompressionError("not as lzss-compressed file")
 
-    decompressed_size, = unpack("<L", header[1:] + b'\x00')
+    decompressed_size, = unpack("<L", header[1:] + b"\x00")
 
     data = data[4:]
     return decompress_raw(data, decompressed_size)
@@ -51,7 +51,7 @@ def gba_compress(data: bytearray):
     # padding
     padding = 4 - (length % 4 or 4)
     if padding:
-        byteOut.extend(b'\xff' * padding)
+        byteOut.extend(b"\xff" * padding)
     return byteOut
 
 

@@ -6,8 +6,7 @@ import time
 import warnings
 from abc import ABC
 from collections import Counter
-from typing import TYPE_CHECKING, Any
-from typing import Dict, Generator, Iterable, List, Set, Tuple, Union, final
+from typing import TYPE_CHECKING, Any, Dict, Generator, Iterable, List, Set, Tuple, Union, final
 
 from s2clientprotocol import sc2api_pb2 as sc_pb
 

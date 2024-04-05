@@ -4,8 +4,8 @@
 # https://opensource.org/licenses/MIT
 
 import typing
-from Options import Option, DeathLink, Toggle, DefaultOnToggle, Choice
 
+from Options import Choice, DeathLink, DefaultOnToggle, Option, Toggle
 
 cost_scales = {
     0: [80, 5, 4],

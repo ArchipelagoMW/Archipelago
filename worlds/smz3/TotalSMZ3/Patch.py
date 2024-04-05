@@ -1,39 +1,38 @@
-﻿from enum import Enum
+﻿import random
+from enum import Enum
 from logging import exception
 from typing import Any, Callable, List, Sequence
-import random
-import typing
+
 from BaseClasses import Location
+
+from .Config import Config, Goal, OpenTourian
 from .Item import Item, ItemType, lookup_id_to_name
 from .Location import LocationType
 from .Region import IReward, RewardType, SMRegion, Z3Region
-from .Regions.Zelda.EasternPalace import EasternPalace
-from .Regions.Zelda.DesertPalace import DesertPalace
-from .Regions.Zelda.TowerOfHera import TowerOfHera
-from .Regions.Zelda.PalaceOfDarkness import PalaceOfDarkness
-from .Regions.Zelda.SwampPalace import SwampPalace
-from .Regions.Zelda.SkullWoods import SkullWoods
-from .Regions.Zelda.ThievesTown import ThievesTown
-from .Regions.Zelda.IcePalace import IcePalace
-from .Regions.Zelda.MiseryMire import MiseryMire
-from .Regions.Zelda.TurtleRock import TurtleRock
-from .Regions.Zelda.GanonsTower import GanonsTower
 from .Regions.SuperMetroid.Brinstar.Kraid import Kraid
-from .Regions.SuperMetroid.WreckedShip import WreckedShip
 from .Regions.SuperMetroid.Maridia.Inner import Inner
 from .Regions.SuperMetroid.NorfairLower.East import East
+from .Regions.SuperMetroid.WreckedShip import WreckedShip
+from .Regions.Zelda.DesertPalace import DesertPalace
+from .Regions.Zelda.EasternPalace import EasternPalace
+from .Regions.Zelda.IcePalace import IcePalace
+from .Regions.Zelda.MiseryMire import MiseryMire
+from .Regions.Zelda.PalaceOfDarkness import PalaceOfDarkness
+from .Regions.Zelda.SkullWoods import SkullWoods
+from .Regions.Zelda.SwampPalace import SwampPalace
+from .Regions.Zelda.ThievesTown import ThievesTown
+from .Regions.Zelda.TowerOfHera import TowerOfHera
+from .Regions.Zelda.TurtleRock import TurtleRock
 from .Text.StringTable import StringTable
-
-from .World import World
-from .Config import Config, OpenTourian, Goal
 from .Text.Texts import Texts
-from .Text.Dialog import Dialog
+from .World import World
+
 
 class KeycardPlaque:
     Level1 = 0xe0
     Level2 = 0xe1
     Boss = 0xe2
-    Null = 0x00  
+    Null = 0x00
     Zero = 0xe3
     One = 0xe4
     Two = 0xe5
@@ -117,7 +116,7 @@ class Patch:
 
         self.WritePrizeShuffle(self.myWorld.WorldState.DropPrizes)
 
-        self.WriteRemoveEquipmentFromUncle( self.myWorld.GetLocation("Link's Uncle").APLocation.item.item if 
+        self.WriteRemoveEquipmentFromUncle( self.myWorld.GetLocation("Link's Uncle").APLocation.item.item if
                                             self.myWorld.GetLocation("Link's Uncle").APLocation.item.game == "SMZ3" else
                                             Item(ItemType.Something))
 
@@ -146,7 +145,7 @@ class Patch:
         self.WriteCommonFlags()
 
         return {patch[0]:patch[1] for patch in self.patches}
-    
+
     def WriteMedallions(self):
         from .WorldState import Medallion
         turtleRock = next(region for region in self.myWorld.Regions if isinstance(region, TurtleRock))
@@ -272,7 +271,7 @@ class Patch:
             raise exception(f"Tried using {token} as a boss token number")
         else:
             return result
-    
+
     def WriteSMLocations(self, locations: List[Location]):
         def GetSMItemPLM(location:Location):
             itemMap = {
@@ -341,7 +340,7 @@ class Patch:
             itemDungeon = None
             if item.IsKey():
                 itemDungeon = ItemType.Key
-            elif item.IsBigKey(): 
+            elif item.IsBigKey():
                 itemDungeon = ItemType.BigKey
             elif item.IsMap():
                 itemDungeon = ItemType.Map
@@ -350,7 +349,7 @@ class Patch:
 
             value = item.Type if location.Type == LocationType.NotInDungeon or \
                 not (item.IsDungeonItem() and location.Region.IsRegionItem(item) and item.World == self.myWorld) else itemDungeon
-            
+
             return value.value
         elif (location.APLocation.item.game == "A Link to the Past"):
             if location.APLocation.item.code + 84000 in lookup_id_to_name:
@@ -385,7 +384,7 @@ class Patch:
 
     def WriteDungeonMusic(self, keysanity: bool):
         if (not keysanity):
-            regions = [region for region in self.myWorld.Regions if isinstance(region, Z3Region) and isinstance(region, IReward) and 
+            regions = [region for region in self.myWorld.Regions if isinstance(region, Z3Region) and isinstance(region, IReward) and
                                                                     region.Reward != None and region.Reward != RewardType.Agahnim]
             pendantRegions = [region for region in regions if region.Reward in [RewardType.PendantGreen, RewardType.PendantNonGreen]]
             crystalRegions = [region for region in regions if region.Reward in [RewardType.CrystalBlue, RewardType.CrystalRed]]
@@ -555,7 +554,7 @@ class Patch:
         self.stringTable.SetGanonFirstPhaseText(ganon)
 
         silversLocation = [loc for world in self.allWorlds for loc in world.Locations if loc.ItemIs(ItemType.SilverArrows, self.myWorld)]
-        if len(silversLocation) == 0:      
+        if len(silversLocation) == 0:
             silvers = Texts.GanonThirdPhaseMulti(None, self.myWorld, self.silversWorldID, self.playerIDToNames[self.silversWorldID])
         else:
             silvers = Texts.GanonThirdPhaseMulti(silversLocation[0].Region, self.myWorld) if config.Multiworld else \
@@ -575,7 +574,7 @@ class Patch:
 
     def PlayerNameBytes(self, name: str):
         name = (name[:16] if len(name) > 16 else name).center(16)
-        return bytearray(name, 'utf8') 
+        return bytearray(name, "utf8")
 
     def WriteSeedData(self):
         configField1 =                                                                           \
@@ -590,7 +589,7 @@ class Patch:
         configField2 =                                                                           \
             ((1 if self.myWorld.Config.SwordLocation else 0) << 14) |                            \
             ((1 if self.myWorld.Config.MorphLocation else 0) << 12) |                            \
-            ((1 if self.myWorld.Config.Goal else 0) << 8)     
+            ((1 if self.myWorld.Config.Goal else 0) << 8)
 
         self.patches.append((Snes(0x80FF50), getWordArray(self.myWorld.Id)))
         self.patches.append((Snes(0x80FF52), getWordArray(configField1)))
@@ -598,8 +597,8 @@ class Patch:
         self.patches.append((Snes(0x80FF58), getWordArray(configField2)))
         #/* Reserve the rest of the space for future use */
         self.patches.append((Snes(0x80FF5A), [0x00] * 6))
-        self.patches.append((Snes(0x80FF60), bytearray(self.seedGuid, 'utf8')))
-        self.patches.append((Snes(0x80FF80), bytearray(self.myWorld.Guid, 'utf8')))
+        self.patches.append((Snes(0x80FF60), bytearray(self.seedGuid, "utf8")))
+        self.patches.append((Snes(0x80FF80), bytearray(self.myWorld.Guid, "utf8")))
 
     def WriteCommonFlags(self):
         #/* Common Combo Configuration flags at [asm]/config.asm */
@@ -618,9 +617,9 @@ class Patch:
 
         from Utils import __version__
         self.title = f"ZSM{Patch.Major}{Patch.Minor}{Patch.Patch}{__version__.replace('.', '')[0:3]}{z3Glitch}{smGlitch}{self.myWorld.Id}{self.seed:08x}".ljust(21)[:21]
-        self.patches.append((Snes(0x00FFC0), bytearray(self.title, 'utf8')))
-        self.patches.append((Snes(0x80FFC0), bytearray(self.title, 'utf8')))
-    
+        self.patches.append((Snes(0x00FFC0), bytearray(self.title, "utf8")))
+        self.patches.append((Snes(0x80FFC0), bytearray(self.title, "utf8")))
+
     def WriteZ3KeysanityFlags(self):
         if (self.myWorld.Config.Keysanity):
             self.patches.append((Snes(0x40003B), [ 1 ])) #// MapMode #$00 = Always On (default) - #$01 = Require Map Item
@@ -640,12 +639,12 @@ class Patch:
                             [ 0x948C, KeycardDoors.Left,       0x062E, KeycardEvents.CrateriaLevel2,        KeycardPlaque.Level2,   0x042F, 0x8222 ], #// Crateria - Before Moat - Door to moat (overwrite PB door)
                             [ 0x99BD, KeycardDoors.Left,       0x660E, KeycardEvents.CrateriaBoss,          KeycardPlaque.Boss,     0x640F, 0x8470 ], #// Crateria - Before G4 - Door to G4
                             [ 0x9879, KeycardDoors.Left,       0x062E, KeycardEvents.CrateriaBoss,          KeycardPlaque.Boss,     0x042F, 0x8420 ], #// Crateria - Before BT - Door to Bomb Torizo
-                            
+
                             #// Brinstar
                             [ 0x9F11, KeycardDoors.Left,       0x060E, KeycardEvents.BrinstarLevel1,        KeycardPlaque.Level1,   0x040F, 0x8784 ], #// Brinstar - Blue Brinstar - Door to ceiling e-tank room
 
-                            [ 0x9AD9, KeycardDoors.Right,      0xA601, KeycardEvents.BrinstarLevel2,        KeycardPlaque.Level2,   0xA400, 0x0000 ], #// Brinstar - Green Brinstar - Door to etecoon area                
-                            [ 0x9D9C, KeycardDoors.Down,       0x0336, KeycardEvents.BrinstarBoss,          KeycardPlaque.Boss,     0x0234, 0x863A ], #// Brinstar - Pink Brinstar - Door to spore spawn                
+                            [ 0x9AD9, KeycardDoors.Right,      0xA601, KeycardEvents.BrinstarLevel2,        KeycardPlaque.Level2,   0xA400, 0x0000 ], #// Brinstar - Green Brinstar - Door to etecoon area
+                            [ 0x9D9C, KeycardDoors.Down,       0x0336, KeycardEvents.BrinstarBoss,          KeycardPlaque.Boss,     0x0234, 0x863A ], #// Brinstar - Pink Brinstar - Door to spore spawn
                             [ 0xA130, KeycardDoors.Left,       0x161E, KeycardEvents.BrinstarLevel2,        KeycardPlaque.Level2,   0x141F, 0x881C ], #// Brinstar - Pink Brinstar - Door to wave gate e-tank
                             [ 0xA0A4, KeycardDoors.Left,       0x062E, KeycardEvents.BrinstarLevel2,        KeycardPlaque.Level2,   0x042F, 0x0000 ], #// Brinstar - Pink Brinstar - Door to spore spawn super
 
@@ -659,7 +658,7 @@ class Patch:
                             [ 0xAF72, KeycardDoors.Left,       0x061E, KeycardEvents.NorfairLevel2,         KeycardPlaque.Level2,   0x041F, 0x0000 ], #// Norfair - After frog speedway - Door to Bubble Mountain
                             [ 0xAEDF, KeycardDoors.Down,       0x0206, KeycardEvents.NorfairLevel2,         KeycardPlaque.Level2,   0x0204, 0x0000 ], #// Norfair - Below bubble mountain - Door to Bubble Mountain
                             [ 0xAD5E, KeycardDoors.Right,      0x0601, KeycardEvents.NorfairLevel2,         KeycardPlaque.Level2,   0x0400, 0x0000 ], #// Norfair - LN Escape - Door to Bubble Mountain
-                            
+
                             [ 0xA923, KeycardDoors.Up,         0x2DC6, KeycardEvents.NorfairBoss,           KeycardPlaque.Boss,     0x2EC4, 0x8B96 ], #// Norfair - Pre-Crocomire - Door to Crocomire
 
                             #// Lower Norfair
@@ -683,7 +682,7 @@ class Patch:
                             [ 0x968F, KeycardDoors.Left,       0x060E, KeycardEvents.WreckedShipLevel1,     KeycardPlaque.Level1,   0x040F, 0x0000 ], #// Wrecked Ship - Outside Wrecked Ship West - Door to Bowling Alley
                             [ 0xCE40, KeycardDoors.Left,       0x060E, KeycardEvents.WreckedShipLevel1,     KeycardPlaque.Level1,   0x040F, 0x0000 ], #// Wrecked Ship - Gravity Suit - Door to Bowling Alley
 
-                            [ 0xCC6F, KeycardDoors.Left,       0x064E, KeycardEvents.WreckedShipBoss,       KeycardPlaque.Boss,     0x044F, 0xC29D ], #// Wrecked Ship - Pre-Phantoon - Door to Phantoon   
+                            [ 0xCC6F, KeycardDoors.Left,       0x064E, KeycardEvents.WreckedShipBoss,       KeycardPlaque.Boss,     0x044F, 0xC29D ], #// Wrecked Ship - Pre-Phantoon - Door to Phantoon
             ]
 
             doorId = 0x0000
@@ -784,7 +783,7 @@ class Patch:
 
         self.stringTable.SetTowerRequirementText(f"You need {towerCrystals} crystals to enter Ganon's Tower.")
         if (goal == Goal.AllDungeonsDefeatMotherBrain):
-            self.stringTable.SetGanonRequirementText(f"You need to complete all the dungeons and bosses to defeat Ganon.")
+            self.stringTable.SetGanonRequirementText("You need to complete all the dungeons and bosses to defeat Ganon.")
         else:
             self.stringTable.SetGanonRequirementText(f"You need {ganonCrystals} crystals to defeat Ganon.")
 

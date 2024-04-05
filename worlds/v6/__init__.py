@@ -1,12 +1,15 @@
+import json
+import os
 import typing
-import os, json
-from .Items import item_table, V6Item
-from .Locations import location_table, V6Location
-from .Options import V6Options
-from .Rules import set_rules
-from .Regions import create_regions
+
 from BaseClasses import Item, ItemClassification, Tutorial
-from ..AutoWorld import World, WebWorld
+
+from ..AutoWorld import WebWorld, World
+from .Items import V6Item, item_table
+from .Locations import V6Location, location_table
+from .Options import V6Options
+from .Regions import create_regions
+from .Rules import set_rules
 
 client_version = 1
 
@@ -93,5 +96,5 @@ class V6World(World):
             }
         }
         filename = f"{self.multiworld.get_out_file_name_base(self.player)}.apv6"
-        with open(os.path.join(output_directory, filename), 'w') as f:
+        with open(os.path.join(output_directory, filename), "w") as f:
             json.dump(data, f)

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Tuple, Dict, Set, Callable
+from typing import Callable, Dict, List, Set, Tuple
 
 from ..mods.mod_data import ModNames
 from ..mods.mod_monster_locations import modded_monsters_locations

@@ -23,9 +23,9 @@ class CastleWallTest(CV64TestBase):
     }
 
     def test_doors(self) -> None:
-        self.assertFalse(self.can_reach_entrance(f"Left Tower door"))
+        self.assertFalse(self.can_reach_entrance("Left Tower door"))
         self.collect([self.get_item_by_name("Left Tower Key")] * 1)
-        self.assertTrue(self.can_reach_entrance(f"Left Tower door"))
+        self.assertTrue(self.can_reach_entrance("Left Tower door"))
 
 
 class VillaTest(CV64TestBase):

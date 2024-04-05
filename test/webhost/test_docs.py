@@ -1,7 +1,7 @@
-import unittest
-import Utils
 import os
+import unittest
 
+import Utils
 import WebHost
 from worlds.AutoWorld import AutoWorldRegister
 
@@ -34,6 +34,6 @@ class TestDocs(unittest.TestCase):
                 for game_info_lang in world_type.web.game_info_languages:
                     with self.subTest(game_name):
                         self.assertTrue(
-                            os.path.isfile(Utils.local_path(target_path, f'{game_info_lang}_{game_name}.md')),
+                            os.path.isfile(Utils.local_path(target_path, f"{game_info_lang}_{game_name}.md")),
                             f'{game_name} missing game info file for "{game_info_lang}" language.'
                         )

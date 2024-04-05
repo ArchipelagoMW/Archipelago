@@ -1,7 +1,7 @@
 from typing import Union
 
 from ... import options
-from ...logic.base_logic import BaseLogicMixin, BaseLogic
+from ...logic.base_logic import BaseLogic, BaseLogicMixin
 from ...logic.combat_logic import CombatLogicMixin
 from ...logic.cooking_logic import CookingLogicMixin
 from ...logic.has_logic import HasLogicMixin
@@ -10,7 +10,7 @@ from ...logic.skill_logic import SkillLogicMixin
 from ...logic.tool_logic import ToolLogicMixin
 from ...mods.mod_data import ModNames
 from ...options import ElevatorProgression
-from ...stardew_rule import StardewRule, True_, And, true_
+from ...stardew_rule import And, StardewRule, True_, true_
 from ...strings.ap_names.mods.mod_items import DeepWoodsItem, SkillLevel
 from ...strings.ap_names.transport_names import ModTransportation
 from ...strings.craftable_names import Bomb

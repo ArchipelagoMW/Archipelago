@@ -1,14 +1,16 @@
 ﻿import io
-from pathlib import Path
+import os
+import random
 import sys
-from typing import Any, List
 import zipfile
+from pathlib import Path
+from typing import Any, List
+
+from Utils import unsafe_parse_yaml
+
+from ..Item import Item, ItemType
 from ..Region import Region
 from ..Regions.Zelda.GanonsTower import GanonsTower
-from ..Item import Item, ItemType
-from Utils import unsafe_parse_yaml
-import random
-import os
 
 text_folder = Path(__file__).parents[3]
 
@@ -20,24 +22,24 @@ def openFile(resource: str, mode: str = "r", encoding: str = None):
         zip_path = Path(filename[:filename.index(apworldExt) + len(apworldExt)])
         with zipfile.ZipFile(zip_path) as zf:
             zipFilePath = resource[resource.index(game):]
-            if mode == 'rb':
-                return zf.open(zipFilePath, 'r')
+            if mode == "rb":
+                return zf.open(zipFilePath, "r")
             else:
-                return io.TextIOWrapper(zf.open(zipFilePath, 'r'), encoding)
+                return io.TextIOWrapper(zf.open(zipFilePath, "r"), encoding)
     else:
         return open(os.path.join(text_folder, resource), mode, encoding=encoding)
 
 class Texts:
     @staticmethod
     def ParseYamlScripts(resource: str):
-        with openFile(resource, 'rb') as f:
+        with openFile(resource, "rb") as f:
             yaml = str(f.read(), "utf-8")
         return unsafe_parse_yaml(yaml)
 
-    @staticmethod        
+    @staticmethod
     def ParseTextScript(resource: str):
-        with openFile(resource, 'r', encoding="utf-8-sig") as file:
-            return [text.rstrip('\n') for text in file.read().replace("\r", "").split("---\n") if text]
+        with openFile(resource, "r", encoding="utf-8-sig") as file:
+            return [text.rstrip("\n") for text in file.read().replace("\r", "").split("---\n") if text]
 
     scripts: Any = ParseYamlScripts.__func__("smz3/TotalSMZ3/Text/Scripts/General.yaml")
     blind: List[str] = ParseTextScript.__func__("smz3/TotalSMZ3/Text/Scripts/Blind.txt")

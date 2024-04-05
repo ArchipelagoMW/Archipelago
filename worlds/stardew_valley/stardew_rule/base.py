@@ -5,10 +5,11 @@ from collections import deque
 from functools import cached_property
 from itertools import chain
 from threading import Lock
-from typing import Iterable, Dict, List, Union, Sized, Hashable, Callable, Tuple, Set, Optional
+from typing import Callable, Dict, Hashable, Iterable, List, Optional, Set, Sized, Tuple, Union
 
 from BaseClasses import CollectionState
-from .literal import true_, false_, LiteralStardewRule
+
+from .literal import LiteralStardewRule, false_, true_
 from .protocol import StardewRule
 
 MISSING_ITEM = "THIS ITEM IS MISSING"
@@ -137,7 +138,7 @@ class AggregatingStardewRule(BaseStardewRule, ABC):
 
     def __init__(self, *rules: StardewRule, _combinable_rules=None, _simplification_state=None):
         if _combinable_rules is None:
-            assert rules, f"Can't create an aggregating condition without rules"
+            assert rules, "Can't create an aggregating condition without rules"
             rules, _combinable_rules = self.split_rules(rules)
             _simplification_state = _SimplificationState(rules)
 
@@ -170,8 +171,8 @@ class AggregatingStardewRule(BaseStardewRule, ABC):
                 continue
 
             if type(rule) is cls:
-                other_rules.extend(rule.simplification_state.original_simplifiable_rules)  # noqa
-                reduced_rules = cls.merge(reduced_rules, rule.combinable_rules)  # noqa
+                other_rules.extend(rule.simplification_state.original_simplifiable_rules)
+                reduced_rules = cls.merge(reduced_rules, rule.combinable_rules)
                 continue
 
             other_rules.append(rule)
@@ -392,7 +393,7 @@ class Count(BaseStardewRule):
         return self.rules[self.count - 1].get_difficulty()
 
     def __repr__(self):
-        return f"Received {self.count} {repr(self.rules)}"
+        return f"Received {self.count} {self.rules!r}"
 
 
 class Has(BaseStardewRule):
@@ -421,7 +422,7 @@ class Has(BaseStardewRule):
     def __repr__(self):
         if self.item not in self.other_rules:
             return f"Has {self.item} -> {MISSING_ITEM}"
-        return f"Has {self.item} -> {repr(self.other_rules[self.item])}"
+        return f"Has {self.item} -> {self.other_rules[self.item]!r}"
 
     def __hash__(self):
         return hash(self.item)

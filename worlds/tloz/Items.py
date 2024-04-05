@@ -1,6 +1,7 @@
-from BaseClasses import ItemClassification
 import typing
 from typing import Dict
+
+from BaseClasses import ItemClassification
 
 progression = ItemClassification.progression
 filler = ItemClassification.filler

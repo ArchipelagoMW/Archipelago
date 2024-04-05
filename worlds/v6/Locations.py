@@ -1,5 +1,6 @@
 from BaseClasses import Location
 
+
 class V6Location(Location):
     game: str = "VVVVVV"
 

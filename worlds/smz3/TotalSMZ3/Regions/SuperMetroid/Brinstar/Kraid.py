@@ -1,7 +1,8 @@
-﻿from ....Region import SMRegion, IReward, RewardType
-from ....Config import Config
-from ....Location import Location, LocationType
+﻿from ....Config import Config
 from ....Item import Progression
+from ....Location import Location, LocationType
+from ....Region import IReward, RewardType, SMRegion
+
 
 class Kraid(SMRegion, IReward):
     Name = "Brinstar Kraid"

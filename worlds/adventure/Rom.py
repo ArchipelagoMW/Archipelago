@@ -2,14 +2,15 @@ import hashlib
 import json
 import os
 import zipfile
-from typing import Optional, Any
+from typing import Any
+
+import bsdiff4
 
 import Utils
-from .Locations import AdventureLocation, LocationData
 from settings import get_settings
 from worlds.Files import APPatch, AutoPatchRegister
 
-import bsdiff4
+from .Locations import LocationData
 
 ADVENTUREHASH: str = "157bddb7192754a45372be196797f284"
 
@@ -306,7 +307,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
     basemd5 = hashlib.md5()
     basemd5.update(base_rom_bytes)
     if ADVENTUREHASH != basemd5.hexdigest():
-        raise Exception(f"Supplied Base Rom does not match known MD5 for Adventure. "
+        raise Exception("Supplied Base Rom does not match known MD5 for Adventure. "
                         "Get the correct game and version, then dump it")
     return base_rom_bytes
 

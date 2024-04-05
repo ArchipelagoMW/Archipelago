@@ -1,5 +1,5 @@
-from . import MessengerTestBase
 from ..constants import NOTES
+from . import MessengerTestBase
 
 
 class PrecollectedNotesTestBase(MessengerTestBase):

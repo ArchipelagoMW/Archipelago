@@ -15,9 +15,10 @@ from schema import And, Optional, Or, Schema
 from Utils import get_fuzzy_results, is_iterable_except_str
 
 if typing.TYPE_CHECKING:
+    import pathlib
+
     from BaseClasses import PlandoOptions
     from worlds.AutoWorld import World
-    import pathlib
 
 
 class AssembleOptions(abc.ABCMeta):
@@ -96,7 +97,7 @@ class AssembleOptions(abc.ABCMeta):
         return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
 
 
-T = typing.TypeVar('T')
+T = typing.TypeVar("T")
 
 
 class Option(typing.Generic[T], metaclass=AssembleOptions):
@@ -325,7 +326,7 @@ class NumericOption(Option[int], numbers.Integral, abc.ABC):
         return +(self.value)
 
     def __pow__(self, exponent: numbers.Complex, modulus: typing.Optional[numbers.Integral] = None) -> int:
-        if not (modulus is None):
+        if modulus is not None:
             assert isinstance(exponent, numbers.Integral)
             return pow(self.value, exponent, modulus)  # type: ignore
         return self.value ** exponent  # type: ignore
@@ -510,9 +511,9 @@ class BossMeta(AssembleOptions):
     def __new__(mcs, name, bases, attrs):
         if name != "PlandoBosses":
             assert "bosses" in attrs, f"Please define valid bosses for {name}"
-            attrs["bosses"] = frozenset((boss.lower() for boss in attrs["bosses"]))
+            attrs["bosses"] = frozenset(boss.lower() for boss in attrs["bosses"])
             assert "locations" in attrs, f"Please define valid locations for {name}"
-            attrs["locations"] = frozenset((location.lower() for location in attrs["locations"]))
+            attrs["locations"] = frozenset(location.lower() for location in attrs["locations"])
         cls = super().__new__(mcs, name, bases, attrs)
         assert not cls.duplicate_bosses or "singularity" in cls.options, f"Please define option_singularity for {name}"
         return cls
@@ -611,7 +612,7 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
     def valid_location_name(cls, value: str) -> bool:
         return value in cls.locations
 
-    def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
+    def verify(self, world: typing.Type[World], player_name: str, plando_options: PlandoOptions) -> None:
         if isinstance(self.value, int):
             return
         from BaseClasses import PlandoOptions
@@ -669,7 +670,7 @@ class Range(NumericOption):
         elif text == "random":
             return cls(random.randint(cls.range_start, cls.range_end))
         else:
-            raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. "
+            raise Exception(f'random text "{text}" did not resolve to a recognized pattern. '
                             f"Acceptable values are: random, random-high, random-middle, random-low, "
                             f"random-range-low-<min>-<max>, random-range-middle-<min>-<max>, "
                             f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
@@ -759,7 +760,7 @@ class SpecialRange(NamedRange):
         elif text == "random":
             return cls(random.randint(cls.special_range_cutoff, cls.range_end))
         else:
-            raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. "
+            raise Exception(f'random text "{text}" did not resolve to a recognized pattern. '
                             f"Acceptable values are: random, random-high, random-middle, random-low, "
                             f"random-range-low-<min>-<max>, random-range-middle-<min>-<max>, "
                             f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
@@ -791,7 +792,7 @@ class VerifyKeys(metaclass=FreezeValidKeys):
                 raise Exception(f"Found unexpected key {', '.join(extra)} in {cls}. "
                                 f"Allowed keys: {cls._valid_keys}.")
 
-    def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
+    def verify(self, world: typing.Type[World], player_name: str, plando_options: PlandoOptions) -> None:
         if self.convert_name_groups and self.verify_item_name:
             new_value = type(self.value)()  # empty container of whatever value is
             for item_name in self.value:
@@ -947,7 +948,7 @@ class OptionsMetaProperty(type):
     def __new__(mcs,
                 name: str,
                 bases: typing.Tuple[type, ...],
-                attrs: typing.Dict[str, typing.Any]) -> "OptionsMetaProperty":
+                attrs: typing.Dict[str, typing.Any]) -> OptionsMetaProperty:
         for attr_type in attrs.values():
             assert not isinstance(attr_type, AssembleOptions), \
                 f"Options for {name} should be type hinted on the class, not assigned"
@@ -1084,7 +1085,7 @@ class ItemLinks(OptionList):
                 pool |= {item_name}
         return pool
 
-    def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
+    def verify(self, world: typing.Type[World], player_name: str, plando_options: PlandoOptions) -> None:
         link: dict
         super(ItemLinks, self).verify(world, player_name, plando_options)
         existing_links = set()
@@ -1132,14 +1133,14 @@ class DeathLinkMixin:
     death_link: DeathLink
 
 
-def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True):
+def generate_yaml_templates(target_folder: typing.Union[str, pathlib.Path], generate_hidden: bool = True):
     import os
 
     import yaml
     from jinja2 import Template
 
+    from Utils import __version__, local_path
     from worlds import AutoWorldRegister
-    from Utils import local_path, __version__
 
     full_path: str
 
@@ -1188,8 +1189,9 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
 if __name__ == "__main__":
 
-    from worlds.alttp.Options import Logic
     import argparse
+
+    from worlds.alttp.Options import Logic
 
     map_shuffle = Toggle
     compass_shuffle = Toggle
@@ -1199,7 +1201,7 @@ if __name__ == "__main__":
     test = argparse.Namespace()
     test.logic = Logic.from_text("no_logic")
     test.map_shuffle = map_shuffle.from_text("ON")
-    test.hints = hints.from_text('OFF')
+    test.hints = hints.from_text("OFF")
     try:
         test.logic = Logic.from_text("overworld_glitches_typo")
     except KeyError as e:

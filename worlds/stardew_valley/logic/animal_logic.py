@@ -1,15 +1,15 @@
 from typing import Union
 
-from .base_logic import BaseLogicMixin, BaseLogic
-from .building_logic import BuildingLogicMixin
-from .has_logic import HasLogicMixin
-from .money_logic import MoneyLogicMixin
 from ..stardew_rule import StardewRule, true_
-from ..strings.animal_names import Animal, coop_animals, barn_animals
+from ..strings.animal_names import Animal, barn_animals, coop_animals
 from ..strings.building_names import Building
 from ..strings.forageable_names import Forageable
 from ..strings.generic_names import Generic
 from ..strings.region_names import Region
+from .base_logic import BaseLogic, BaseLogicMixin
+from .building_logic import BuildingLogicMixin
+from .has_logic import HasLogicMixin
+from .money_logic import MoneyLogicMixin
 
 cost_and_building_by_animal = {
     Animal.chicken: (800, Building.coop),

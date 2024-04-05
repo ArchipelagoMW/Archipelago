@@ -1,6 +1,7 @@
 import unittest
 
 from worlds.AutoWorld import AutoWorldRegister, call_all
+
 from . import setup_solo_multiworld
 
 

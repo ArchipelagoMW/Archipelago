@@ -1,4 +1,4 @@
-class ItemName():
+class ItemName:
     ## Chips
     AirShoes_star = "AirShoes *"
     AirShot3_star = "AirShot3 *"

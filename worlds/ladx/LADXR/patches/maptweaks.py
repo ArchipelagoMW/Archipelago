@@ -1,4 +1,4 @@
-from ..roomEditor import RoomEditor, ObjectWarp, ObjectVertical
+from ..roomEditor import ObjectVertical, ObjectWarp, RoomEditor
 
 
 def tweakMap(rom):

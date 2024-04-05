@@ -1,13 +1,14 @@
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 
 from flask import render_template
 from pony.orm import count
 
 from WebHostLib import app, cache
+
 from .models import Room, Seed
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route("/", methods=["GET", "POST"])
 @cache.cached(timeout=300)  # cache has to appear under app route for caching to work
 def landing():
     rooms = count(room for room in Room if room.creation_time >= datetime.utcnow() - timedelta(days=7))

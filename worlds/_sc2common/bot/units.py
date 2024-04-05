@@ -19,7 +19,7 @@ class Units(list):
     @classmethod
     def from_proto(cls, units, bot_object: BotAI):
         # pylint: disable=E1120
-        return cls((Unit(raw_unit, bot_object=bot_object) for raw_unit in units))
+        return cls(Unit(raw_unit, bot_object=bot_object) for raw_unit in units)
 
     def __init__(self, units: Iterable[Unit], bot_object: BotAI):
         """

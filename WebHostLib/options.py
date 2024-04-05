@@ -82,7 +82,7 @@ def create():
                 }
 
                 if issubclass(option, Options.NamedRange):
-                    game_options[option_name]["type"] = 'named_range'
+                    game_options[option_name]["type"] = "named_range"
                     game_options[option_name]["value_names"] = {}
                     for key, val in option.special_range_names.items():
                         game_options[option_name]["value_names"][key] = val
@@ -154,10 +154,10 @@ def create():
                     # int and bool values are fine, just resolve them to the current key for webhost.
                     player_options["presetOptions"][preset_name][option_name] = option.current_key
 
-        os.makedirs(os.path.join(target_folder, 'player-options'), exist_ok=True)
+        os.makedirs(os.path.join(target_folder, "player-options"), exist_ok=True)
 
-        with open(os.path.join(target_folder, 'player-options', game_name + ".json"), "w") as f:
-            json.dump(player_options, f, indent=2, separators=(',', ': '))
+        with open(os.path.join(target_folder, "player-options", game_name + ".json"), "w") as f:
+            json.dump(player_options, f, indent=2, separators=(",", ": "))
 
         if not world.hidden and world.web.options_page is True:
             # Add the random option to Choice, TextChoice, and Toggle options
@@ -183,6 +183,6 @@ def create():
                 "gameLocationDescriptions": world.location_descriptions,
             }
 
-    with open(os.path.join(target_folder, 'weighted-options.json'), "w") as f:
-        json.dump(weighted_options, f, indent=2, separators=(',', ': '))
+    with open(os.path.join(target_folder, "weighted-options.json"), "w") as f:
+        json.dump(weighted_options, f, indent=2, separators=(",", ": "))
 

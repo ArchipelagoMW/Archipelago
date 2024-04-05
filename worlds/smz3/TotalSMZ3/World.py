@@ -1,51 +1,47 @@
 ﻿from typing import Dict, List
-import random
 
-from . import Region
-from . import Config
-from . import Item
-from . import Location
-
-from .Regions.Zelda.CastleTower import CastleTower
-from .Regions.Zelda.EasternPalace import EasternPalace
-from .Regions.Zelda.DesertPalace import DesertPalace
-from .Regions.Zelda.TowerOfHera import TowerOfHera
-from .Regions.Zelda.PalaceOfDarkness import PalaceOfDarkness
-from .Regions.Zelda.SwampPalace import SwampPalace
-from .Regions.Zelda.SkullWoods import SkullWoods
-from .Regions.Zelda.ThievesTown import ThievesTown
-from .Regions.Zelda.IcePalace import IcePalace
-from .Regions.Zelda.MiseryMire import MiseryMire
-from .Regions.Zelda.TurtleRock import TurtleRock
-from .Regions.Zelda.GanonsTower import GanonsTower
-from .Regions.Zelda.LightWorld.DeathMountain.West import West as LightWorldDeathMountainWest
-from .Regions.Zelda.LightWorld.DeathMountain.East import East as LightWorldDeathMountainEast
-from .Regions.Zelda.LightWorld.NorthWest import NorthWest as LightWorldNorthWest
-from .Regions.Zelda.LightWorld.NorthEast import NorthEast as LightWorldNorthEast
-from .Regions.Zelda.LightWorld.South import South as LightWorldSouth
-from .Regions.Zelda.HyruleCastle import HyruleCastle
-from .Regions.Zelda.DarkWorld.DeathMountain.West import West as DarkWorldDeathMountainWest
-from .Regions.Zelda.DarkWorld.DeathMountain.East import East as DarkWorldDeathMountainEast
-from .Regions.Zelda.DarkWorld.NorthWest import NorthWest as DarkWorldNorthWest
-from .Regions.Zelda.DarkWorld.NorthEast import NorthEast as DarkWorldNorthEast
-from .Regions.Zelda.DarkWorld.South import South as DarkWorldSouth
-from .Regions.Zelda.DarkWorld.Mire import Mire as DarkWorldMire
-from .Regions.SuperMetroid.Crateria.Central import Central
-from .Regions.SuperMetroid.Crateria.West import West as CrateriaWest 
-from .Regions.SuperMetroid.Crateria.East import East as CrateriaEast
+from . import Config, Item, Location, Region
 from .Regions.SuperMetroid.Brinstar.Blue import Blue
 from .Regions.SuperMetroid.Brinstar.Green import Green
 from .Regions.SuperMetroid.Brinstar.Kraid import Kraid
 from .Regions.SuperMetroid.Brinstar.Pink import Pink
 from .Regions.SuperMetroid.Brinstar.Red import Red
-from .Regions.SuperMetroid.Maridia.Outer import Outer
+from .Regions.SuperMetroid.Crateria.Central import Central
+from .Regions.SuperMetroid.Crateria.East import East as CrateriaEast
+from .Regions.SuperMetroid.Crateria.West import West as CrateriaWest
 from .Regions.SuperMetroid.Maridia.Inner import Inner
-from .Regions.SuperMetroid.NorfairUpper.West import West as NorfairUpperWest
-from .Regions.SuperMetroid.NorfairUpper.East import East as NorfairUpperEast
-from .Regions.SuperMetroid.NorfairUpper.Crocomire import Crocomire
-from .Regions.SuperMetroid.NorfairLower.West import West as NorfairLowerWest
+from .Regions.SuperMetroid.Maridia.Outer import Outer
 from .Regions.SuperMetroid.NorfairLower.East import East as NorfairLowerEast
+from .Regions.SuperMetroid.NorfairLower.West import West as NorfairLowerWest
+from .Regions.SuperMetroid.NorfairUpper.Crocomire import Crocomire
+from .Regions.SuperMetroid.NorfairUpper.East import East as NorfairUpperEast
+from .Regions.SuperMetroid.NorfairUpper.West import West as NorfairUpperWest
 from .Regions.SuperMetroid.WreckedShip import WreckedShip
+from .Regions.Zelda.CastleTower import CastleTower
+from .Regions.Zelda.DarkWorld.DeathMountain.East import East as DarkWorldDeathMountainEast
+from .Regions.Zelda.DarkWorld.DeathMountain.West import West as DarkWorldDeathMountainWest
+from .Regions.Zelda.DarkWorld.Mire import Mire as DarkWorldMire
+from .Regions.Zelda.DarkWorld.NorthEast import NorthEast as DarkWorldNorthEast
+from .Regions.Zelda.DarkWorld.NorthWest import NorthWest as DarkWorldNorthWest
+from .Regions.Zelda.DarkWorld.South import South as DarkWorldSouth
+from .Regions.Zelda.DesertPalace import DesertPalace
+from .Regions.Zelda.EasternPalace import EasternPalace
+from .Regions.Zelda.GanonsTower import GanonsTower
+from .Regions.Zelda.HyruleCastle import HyruleCastle
+from .Regions.Zelda.IcePalace import IcePalace
+from .Regions.Zelda.LightWorld.DeathMountain.East import East as LightWorldDeathMountainEast
+from .Regions.Zelda.LightWorld.DeathMountain.West import West as LightWorldDeathMountainWest
+from .Regions.Zelda.LightWorld.NorthEast import NorthEast as LightWorldNorthEast
+from .Regions.Zelda.LightWorld.NorthWest import NorthWest as LightWorldNorthWest
+from .Regions.Zelda.LightWorld.South import South as LightWorldSouth
+from .Regions.Zelda.MiseryMire import MiseryMire
+from .Regions.Zelda.PalaceOfDarkness import PalaceOfDarkness
+from .Regions.Zelda.SkullWoods import SkullWoods
+from .Regions.Zelda.SwampPalace import SwampPalace
+from .Regions.Zelda.ThievesTown import ThievesTown
+from .Regions.Zelda.TowerOfHera import TowerOfHera
+from .Regions.Zelda.TurtleRock import TurtleRock
+
 
 class World:
     Locations: List[Location.Location]
@@ -135,7 +131,7 @@ class World:
 
         self.regionLookup = {r.Name:r for r in self.Regions}
         self.locationLookup = {loc.Name:loc for loc in self.Locations}
-        
+
         for region in self.Regions:
             region.GenerateLocationLookup()
 
@@ -143,7 +139,7 @@ class World:
     def CanEnter(self, regionName: str, items: Item.Progression):
         region = self.regionLookup[regionName]
         if (region == None):
-            raise Exception(f"World.CanEnter: Invalid region name {regionName}", f'{regionName=}'.partition('=')[0])
+            raise Exception(f"World.CanEnter: Invalid region name {regionName}", f"{regionName=}".partition("=")[0])
         return region.CanEnter(items)
 
     def CanAcquire(self, items: Item.Progression, reward: Region.RewardType):

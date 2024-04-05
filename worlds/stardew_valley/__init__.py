@@ -1,24 +1,45 @@
 import logging
-from typing import Dict, Any, Iterable, Optional, Union, List, TextIO
+from typing import Any, Dict, Iterable, List, Optional, TextIO, Union
 
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld
+from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
 from Options import PerGameCommonOptions
-from worlds.AutoWorld import World, WebWorld
+from worlds.AutoWorld import WebWorld, World
+
 from . import rules
 from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles
 from .early_items import setup_early_items
-from .items import item_table, create_items, ItemData, Group, items_by_group, get_all_filler_items, remove_limited_amount_packs
-from .locations import location_table, create_locations, LocationData, locations_by_tag
+from .items import (
+    Group,
+    ItemData,
+    create_items,
+    get_all_filler_items,
+    item_table,
+    items_by_group,
+    remove_limited_amount_packs,
+)
+from .locations import LocationData, create_locations, location_table, locations_by_tag
 from .logic.bundle_logic import BundleLogic
 from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
-from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, BundlePrice, NumberOfLuckBuffs, NumberOfMovementBuffs, \
-    BackpackProgression, BuildingProgression, ExcludeGingerIsland, TrapItems, EntranceRandomization
+from .options import (
+    BackpackProgression,
+    BuildingProgression,
+    BundlePrice,
+    BundleRandomization,
+    EntranceRandomization,
+    ExcludeGingerIsland,
+    Goal,
+    NumberOfLuckBuffs,
+    NumberOfMovementBuffs,
+    SeasonRandomization,
+    StardewValleyOptions,
+    TrapItems,
+)
 from .presets import sv_options_presets
 from .regions import create_regions
 from .rules import set_rules
-from .stardew_rule import True_, StardewRule, HasProgressionPercent
+from .stardew_rule import HasProgressionPercent, StardewRule, True_
 from .strings.ap_names.event_names import Event
 from .strings.entrance_names import Entrance as EntranceName
 from .strings.goal_names import Goal as GoalName

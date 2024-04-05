@@ -8,18 +8,18 @@ import logging
 import pickle
 import random
 import socket
+import sys
 import threading
 import time
 import typing
-import sys
 
 import websockets
 from pony.orm import commit, db_session, select
 
 import Utils
+from MultiServer import ClientMessageProcessor, Context, ServerCommandProcessor, auto_shutdown, load_server_cert, server
+from Utils import cache_argsless, restricted_loads
 
-from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor, load_server_cert
-from Utils import restricted_loads, cache_argsless
 from .locker import Locker
 from .models import Command, GameDataPackage, Room, db
 
@@ -195,7 +195,7 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
             elif wssocket.family == socket.AF_INET:
                 port = socketname[1]
         if port:
-            logging.info(f'Hosting game at {host}:{port}')
+            logging.info(f"Hosting game at {host}:{port}")
             with db_session:
                 room = Room.get(id=ctx.room_id)
                 room.last_port = port

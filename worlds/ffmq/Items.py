@@ -1,4 +1,4 @@
-from BaseClasses import ItemClassification, Item
+from BaseClasses import Item, ItemClassification
 
 fillers = {"Cure Potion": 61, "Heal Potion": 52, "Refresher": 17, "Seed": 2, "Bomb Refill": 19,
            "Projectile Refill": 50}

@@ -1,19 +1,20 @@
-from typing import Union, Iterable
+from typing import Iterable, Union
 
 from Utils import cache_self1
-from .base_logic import BaseLogicMixin, BaseLogic
+
+from ..mods.logic.magic_logic import MagicLogicMixin
+from ..options import ToolProgression
+from ..stardew_rule import False_, StardewRule, True_
+from ..strings.ap_names.skill_level_names import ModSkillLevel
+from ..strings.region_names import Region
+from ..strings.spells import MagicSpell
+from ..strings.tool_names import Tool, ToolMaterial
+from .base_logic import BaseLogic, BaseLogicMixin
 from .has_logic import HasLogicMixin
 from .money_logic import MoneyLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .season_logic import SeasonLogicMixin
-from ..mods.logic.magic_logic import MagicLogicMixin
-from ..options import ToolProgression
-from ..stardew_rule import StardewRule, True_, False_
-from ..strings.ap_names.skill_level_names import ModSkillLevel
-from ..strings.region_names import Region
-from ..strings.spells import MagicSpell
-from ..strings.tool_names import ToolMaterial, Tool
 
 fishing_rod_prices = {
     3: 1800,

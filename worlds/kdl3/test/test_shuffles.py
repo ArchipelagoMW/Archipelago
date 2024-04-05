@@ -1,6 +1,7 @@
 from typing import List, Tuple
-from . import KDL3TestBase
+
 from ..Room import KDL3Room
+from . import KDL3TestBase
 
 
 class TestCopyAbilityShuffle(KDL3TestBase):
@@ -68,10 +69,10 @@ class TestCopyAbilityShuffle(KDL3TestBase):
         self.collect_by_name(["Heart Star", "Kine", "Coo"])  # we will guaranteed need Coo, Kine, and Heart Stars to reach
         # first we need to identify our bukiset requirements
         groups = [
-            ({"Parasol Ability", "Cutter Ability"}, {'Bukiset (Parasol)', 'Bukiset (Cutter)'}),
-            ({"Spark Ability", "Clean Ability"}, {'Bukiset (Spark)', 'Bukiset (Clean)'}),
-            ({"Ice Ability", "Needle Ability"}, {'Bukiset (Ice)', 'Bukiset (Needle)'}),
-            ({"Stone Ability", "Burning Ability"}, {'Bukiset (Stone)', 'Bukiset (Burning)'}),
+            ({"Parasol Ability", "Cutter Ability"}, {"Bukiset (Parasol)", "Bukiset (Cutter)"}),
+            ({"Spark Ability", "Clean Ability"}, {"Bukiset (Spark)", "Bukiset (Clean)"}),
+            ({"Ice Ability", "Needle Ability"}, {"Bukiset (Ice)", "Bukiset (Needle)"}),
+            ({"Stone Ability", "Burning Ability"}, {"Bukiset (Stone)", "Bukiset (Burning)"}),
         ]
         copy_abilities = self.multiworld.worlds[1].copy_abilities
         required_abilities: List[Tuple[str]] = []
@@ -96,7 +97,7 @@ class TestCopyAbilityShuffle(KDL3TestBase):
             self.collect_by_name(["Cutter"])
 
         self.assertTrue(self.can_reach_location("Sand Canyon 6 - Professor Hector & R.O.B"),
-                        ''.join(str(self.multiworld.seed)).join(collected_abilities))
+                        "".join(str(self.multiworld.seed)).join(collected_abilities))
 
 
 class TestAnimalShuffle(KDL3TestBase):
@@ -214,10 +215,10 @@ class TestAllShuffle(KDL3TestBase):
         self.collect_by_name(["Heart Star", "Kine", "Coo"])  # we will guaranteed need Coo, Kine, and Heart Stars to reach
         # first we need to identify our bukiset requirements
         groups = [
-            ({"Parasol Ability", "Cutter Ability"}, {'Bukiset (Parasol)', 'Bukiset (Cutter)'}),
-            ({"Spark Ability", "Clean Ability"}, {'Bukiset (Spark)', 'Bukiset (Clean)'}),
-            ({"Ice Ability", "Needle Ability"}, {'Bukiset (Ice)', 'Bukiset (Needle)'}),
-            ({"Stone Ability", "Burning Ability"}, {'Bukiset (Stone)', 'Bukiset (Burning)'}),
+            ({"Parasol Ability", "Cutter Ability"}, {"Bukiset (Parasol)", "Bukiset (Cutter)"}),
+            ({"Spark Ability", "Clean Ability"}, {"Bukiset (Spark)", "Bukiset (Clean)"}),
+            ({"Ice Ability", "Needle Ability"}, {"Bukiset (Ice)", "Bukiset (Needle)"}),
+            ({"Stone Ability", "Burning Ability"}, {"Bukiset (Stone)", "Bukiset (Burning)"}),
         ]
         copy_abilities = self.multiworld.worlds[1].copy_abilities
         required_abilities: List[Tuple[str]] = []
@@ -242,4 +243,4 @@ class TestAllShuffle(KDL3TestBase):
             self.collect_by_name(["Cutter"])
 
         self.assertTrue(self.can_reach_location("Sand Canyon 6 - Professor Hector & R.O.B"),
-                        ''.join(str(self.multiworld.seed)).join(collected_abilities))
+                        "".join(str(self.multiworld.seed)).join(collected_abilities))

@@ -1,5 +1,4 @@
-from typing import List, Dict
-
+from typing import Dict, List
 
 region_exit_table: Dict[int, List[str]] = {
     0: ["New Game"],
@@ -34,39 +33,39 @@ region_exit_table: Dict[int, List[str]] = {
     4: ["To World",
         "To Afterlife",
         "To New Muldul Vault"],
-    
+
     5: ["To New Muldul"],
-    
+
     6: ["To World",
         "To Afterlife"],
-    
+
     7: ["To World"],
-    
+
     8: ["To World"],
-    
+
     9: ["To World",
         "To Afterlife"],
-    
+
     10: ["To World"],
-    
+
     11: ["To World",
             "To Afterlife",
             "To Worm Pod"],
-    
+
     12: ["To Shield Facility",
             "To Afterlife"],
-    
+
     13: ["To World",
             "To Afterlife"],
-    
+
     14: ["To World",
             "To Sage Labyrinth"],
-    
+
     15: ["To Drill Castle",
             "To Afterlife"],
-    
+
     16: ["To World"],
-    
+
     17: ["To World",
         "To Afterlife"]
 }

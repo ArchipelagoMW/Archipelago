@@ -1,5 +1,5 @@
-from typing import Dict, List, Set, TYPE_CHECKING
 from collections import deque
+from typing import TYPE_CHECKING, Dict, List, Set
 
 from .Options import TechTreeLayout
 

@@ -1,23 +1,33 @@
 
-import Utils
-
-from BaseClasses import Location
-from worlds.Files import APDeltaPatch
-from typing import List, Dict, Union, Iterable, Collection, TYPE_CHECKING
-
 import hashlib
 import os
 import pkgutil
+from typing import TYPE_CHECKING, Collection, Dict, Iterable, List, Union
+
+import Utils
+from BaseClasses import Location
+from settings import get_settings
+from worlds.Files import APDeltaPatch
 
 from . import lzkn64
+from .aesthetics import get_item_text_color, renon_item_dialogue
 from .data import patches
+from .locations import get_location_info
+from .options import (
+    BadEndingCondition,
+    CharacterStages,
+    Countdown,
+    DeathLink,
+    DraculasCondition,
+    InvisibleItems,
+    PantherDash,
+    PostBehemothBoss,
+    RenonFightCondition,
+    RoomOfClocksBoss,
+    VincentFightCondition,
+)
 from .stages import get_stage_info
 from .text import cv64_string_to_bytearray, cv64_text_truncate, cv64_text_wrap
-from .aesthetics import renon_item_dialogue, get_item_text_color
-from .locations import get_location_info
-from .options import CharacterStages, VincentFightCondition, RenonFightCondition, PostBehemothBoss, RoomOfClocksBoss, \
-    BadEndingCondition, DeathLink, DraculasCondition, InvisibleItems, Countdown, PantherDash
-from settings import get_settings
 
 if TYPE_CHECKING:
     from . import CV64World
@@ -435,10 +445,10 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
     if options.draculas_condition == DraculasCondition.option_crystal:
         rom.write_int32(0x6C8A54, 0x0C0FF0C1)  # JAL 0x803FC304
         rom.write_int32s(0xBFC304, patches.crystal_special2_giver)
-        rom.write_bytes(0xBFCC6E, cv64_string_to_bytearray(f"It won't budge!\n"
-                                                           f"You'll need the power\n"
-                                                           f"of the basement crystal\n"
-                                                           f"to undo the seal.", True))
+        rom.write_bytes(0xBFCC6E, cv64_string_to_bytearray("It won't budge!\n"
+                                                           "You'll need the power\n"
+                                                           "of the basement crystal\n"
+                                                           "to undo the seal.", True))
         special2_name = "Crystal "
         special2_text = "The crystal is on!\n" \
                         "Time to teach the old man\n" \
@@ -861,7 +871,7 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
             rom.write_int32(offset, item_id)
 
     # Write the secondary name the client will use to distinguish a vanilla ROM from an AP one.
-    rom.write_bytes(0xBFBFD0, "ARCHIPELAGO1".encode("utf-8"))
+    rom.write_bytes(0xBFBFD0, b"ARCHIPELAGO1")
     # Write the slot authentication
     rom.write_bytes(0xBFBFE0, world.auth)
 

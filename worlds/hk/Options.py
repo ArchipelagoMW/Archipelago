@@ -1,10 +1,12 @@
-import typing
 import re
-from .ExtractedData import logic_options, starts, pool_options
-from .Rules import cost_terms
+import typing
 
-from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, NamedRange, DeathLink
-from .Charms import vanilla_costs, names as charm_names
+from Options import Choice, DeathLink, DefaultOnToggle, NamedRange, Option, OptionDict, Range, Toggle
+
+from .Charms import names as charm_names
+from .Charms import vanilla_costs
+from .ExtractedData import logic_options, pool_options, starts
+from .Rules import cost_terms
 
 if typing.TYPE_CHECKING:
     # avoid import during runtime
@@ -125,7 +127,7 @@ shop_to_option = {
 
 hollow_knight_randomize_options: typing.Dict[str, type(Option)] = {}
 
-splitter_pattern = re.compile(r'(?<!^)(?=[A-Z])')
+splitter_pattern = re.compile(r"(?<!^)(?=[A-Z])")
 for option_name, option_data in pool_options.items():
     extra_data = {"__module__": __name__, "items": option_data[0], "locations": option_data[1]}
     if option_name in option_docstrings:
@@ -501,7 +503,7 @@ for term, cost in cost_terms.items():
         ),
         "default": cost.weight
     }
-    if cost == 'GEO':
+    if cost == "GEO":
         extra_data["__doc__"] += " Geo costs will never be chosen for Grubfather, Seer, or Egg Shop."
 
     option = type(option_name, (Range,), extra_data)

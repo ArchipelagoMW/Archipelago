@@ -1,5 +1,6 @@
 from typing import Optional
-from BaseClasses import ItemClassification, Item
+
+from BaseClasses import Item, ItemClassification
 
 base_adventure_item_id = 118000000
 

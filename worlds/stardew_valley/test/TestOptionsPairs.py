@@ -1,7 +1,7 @@
-from . import SVTestBase
-from .assertion import WorldAssertMixin
 from .. import options
 from ..options import Goal, QuestLocations
+from . import SVTestBase
+from .assertion import WorldAssertMixin
 
 
 class TestCrypticNoteNoQuests(WorldAssertMixin, SVTestBase):

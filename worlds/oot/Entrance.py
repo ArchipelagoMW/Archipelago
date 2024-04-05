@@ -1,9 +1,10 @@
 from BaseClasses import Entrance
 
-class OOTEntrance(Entrance): 
-    game: str = 'Ocarina of Time'
 
-    def __init__(self, player, world, name='', parent=None): 
+class OOTEntrance(Entrance):
+    game: str = "Ocarina of Time"
+
+    def __init__(self, player, world, name="", parent=None):
         super(OOTEntrance, self).__init__(player, name, parent)
         self.multiworld = world
         self.access_rules = []
@@ -28,8 +29,8 @@ class OOTEntrance(Entrance):
         return previously_connected
 
     def get_new_target(self, pool_type):
-        root = self.multiworld.get_region('Root Exits', self.player)
-        target_entrance = OOTEntrance(self.player, self.multiworld, f'Root -> ({self.name}) ({pool_type})', root)
+        root = self.multiworld.get_region("Root Exits", self.player)
+        target_entrance = OOTEntrance(self.player, self.multiworld, f"Root -> ({self.name}) ({pool_type})", root)
         target_entrance.connect(self.connected_region)
         target_entrance.replaces = self
         root.exits.append(target_entrance)

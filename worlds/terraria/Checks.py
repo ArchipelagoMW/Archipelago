@@ -1,7 +1,8 @@
-from BaseClasses import Item, Location
-from typing import Tuple, Union, Set, List, Dict
-import string
 import pkgutil
+import string
+from typing import Dict, List, Set, Tuple, Union
+
+from BaseClasses import Item, Location
 
 
 class TerrariaItem(Item):

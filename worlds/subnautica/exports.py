@@ -3,8 +3,8 @@
 if __name__ == "__main__":
     import json
     import math
-    import sys
     import os
+    import sys
 
     # makes this module runnable from its world folder.
     sys.path.remove(os.path.dirname(__file__))
@@ -12,9 +12,9 @@ if __name__ == "__main__":
     os.chdir(new_home)
     sys.path.append(new_home)
 
-    from worlds.subnautica.locations import Vector, location_table
-    from worlds.subnautica.items import item_table, group_items, items_by_type
     from NetUtils import encode
+    from worlds.subnautica.items import group_items, item_table, items_by_type
+    from worlds.subnautica.locations import Vector, location_table
 
     export_folder = os.path.join(new_home, "Subnautica Export")
     os.makedirs(export_folder, exist_ok=True)

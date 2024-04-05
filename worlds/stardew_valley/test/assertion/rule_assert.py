@@ -1,8 +1,9 @@
 from unittest import TestCase
 
 from BaseClasses import CollectionState
+
+from ...stardew_rule import MISSING_ITEM, StardewRule, false_
 from .rule_explain import explain
-from ...stardew_rule import StardewRule, false_, MISSING_ITEM
 
 
 class RuleAssertMixin(TestCase):

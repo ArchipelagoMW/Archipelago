@@ -1,71 +1,18 @@
 import binascii
-import importlib.util
 import importlib.machinery
+import importlib.util
 import os
-import pkgutil
 from collections import defaultdict
 
-from .romTables import ROMWithTables
-from . import assembler
-from . import mapgen
-from . import patches
-from .patches import overworld as _
-from .patches import dungeon as _
-from .patches import entrances as _
-from .patches import enemies as _
-from .patches import titleScreen as _
-from .patches import aesthetics as _
-from .patches import music as _
-from .patches import core as _
-from .patches import phone as _
-from .patches import photographer as _
-from .patches import owl as _
-from .patches import bank3e as _
-from .patches import bank3f as _
-from .patches import inventory as _
-from .patches import witch as _
-from .patches import tarin as _
-from .patches import fishingMinigame as _
-from .patches import softlock as _
-from .patches import maptweaks as _
-from .patches import chest as _
-from .patches import bomb as _
-from .patches import rooster as _
-from .patches import shop as _
-from .patches import trendy as _
-from .patches import goal as _
-from .patches import hardMode as _
-from .patches import weapons as _
-from .patches import health as _
-from .patches import heartPiece as _
-from .patches import droppedKey as _
-from .patches import goldenLeaf as _
-from .patches import songs as _
-from .patches import bowwow as _
-from .patches import desert as _
-from .patches import reduceRNG as _
-from .patches import madBatter as _
-from .patches import tunicFairy as _
-from .patches import seashell as _
-from .patches import instrument as _
-from .patches import endscreen as _
-from .patches import save as _
-from .patches import bingo as _
-from .patches import multiworld as _
-from .patches import tradeSequence as _
-from . import hints
-
-from .patches import bank34
-from .utils import formatText
-from ..Options import TrendyGame, Palette
-from .roomEditor import RoomEditor, Object
-from .patches.aesthetics import rgb_to_bin, bin_to_rgb
-
-from .locations.keyLocation import KeyLocation
-
 from BaseClasses import ItemClassification
+
 from ..Locations import LinksAwakeningLocation
-from ..Options import TrendyGame, Palette, MusicChangeCondition
+from ..Options import MusicChangeCondition, Palette, TrendyGame
+from . import assembler, hints, mapgen, patches
+from .locations.keyLocation import KeyLocation
+from .patches.aesthetics import bin_to_rgb, rgb_to_bin
+from .romTables import ROMWithTables
+from .roomEditor import Object, RoomEditor
 
 
 # Function to generate a final rom, this patches the rom with all required patches
@@ -139,7 +86,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     patches.core.alwaysAllowSecretBook(rom)
     patches.core.injectMainLoop(rom)
 
-    from ..Options import ShuffleSmallKeys, ShuffleNightmareKeys
+    from ..Options import ShuffleNightmareKeys, ShuffleSmallKeys
 
     if ap_settings["shuffle_small_keys"] != ShuffleSmallKeys.option_original_dungeon or  ap_settings["shuffle_nightmare_keys"] != ShuffleNightmareKeys.option_original_dungeon:
         patches.inventory.advancedInventorySubscreen(rom)
@@ -175,16 +122,16 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     else:
         # Monkey bridge patch, always have the bridge there.
         rom.patch(0x00, 0x333D, assembler.ASM("bit 4, e\njr Z, $05"), b"", fill_nop=True)
-    patches.bowwow.fixBowwow(rom, everywhere=settings.bowwow != 'normal')
-    if settings.bowwow != 'normal':
+    patches.bowwow.fixBowwow(rom, everywhere=settings.bowwow != "normal")
+    if settings.bowwow != "normal":
         patches.bowwow.bowwowMapPatches(rom)
     patches.desert.desertAccess(rom)
-    if settings.overworld == 'dungeondive':
+    if settings.overworld == "dungeondive":
         patches.overworld.patchOverworldTilesets(rom)
         patches.overworld.createDungeonOnlyOverworld(rom)
-    elif settings.overworld == 'nodungeons':
+    elif settings.overworld == "nodungeons":
         patches.dungeon.patchNoDungeons(rom)
-    elif settings.overworld == 'random':
+    elif settings.overworld == "random":
         patches.overworld.patchOverworldTilesets(rom)
         mapgen.store_map(rom, logic.world.map)
     #if settings.dungeon_items == 'keysy':
@@ -192,13 +139,13 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     # patches.reduceRNG.slowdownThreeOfAKind(rom)
     patches.reduceRNG.fixHorseHeads(rom)
     patches.bomb.onlyDropBombsWhenHaveBombs(rom)
-    if ap_settings['music_change_condition'] == MusicChangeCondition.option_always:
+    if ap_settings["music_change_condition"] == MusicChangeCondition.option_always:
         patches.aesthetics.noSwordMusic(rom)
     patches.aesthetics.reduceMessageLengths(rom, rnd)
     patches.aesthetics.allowColorDungeonSpritesEverywhere(rom)
-    if settings.music == 'random':
+    if settings.music == "random":
         patches.music.randomizeMusic(rom, rnd)
-    elif settings.music == 'off':
+    elif settings.music == "off":
         patches.music.noMusic(rom)
     if settings.noflash:
         patches.aesthetics.removeFlashingLights(rom)
@@ -210,16 +157,16 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
         patches.hardMode.oneHitKO(rom)
     if settings.superweapons:
         patches.weapons.patchSuperWeapons(rom)
-    if settings.textmode == 'fast':
+    if settings.textmode == "fast":
         patches.aesthetics.fastText(rom)
-    if settings.textmode == 'none':
+    if settings.textmode == "none":
         patches.aesthetics.fastText(rom)
         patches.aesthetics.noText(rom)
     if not settings.nagmessages:
         patches.aesthetics.removeNagMessages(rom)
-    if settings.lowhpbeep == 'slow':
+    if settings.lowhpbeep == "slow":
         patches.aesthetics.slowLowHPBeep(rom)
-    if settings.lowhpbeep == 'none':
+    if settings.lowhpbeep == "none":
         patches.aesthetics.removeLowHPBeep(rom)
     if 0 <= int(settings.linkspalette):
         patches.aesthetics.forceLinksPalette(rom, int(settings.linkspalette))
@@ -228,20 +175,20 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
         rom.patch(0, 0x0003, "00", "01")
 
     # Patch the sword check on the shopkeeper turning around.
-    if settings.steal == 'never':
+    if settings.steal == "never":
         rom.patch(4, 0x36F9, "FA4EDB", "3E0000")
-    elif settings.steal == 'always':
+    elif settings.steal == "always":
         rom.patch(4, 0x36F9, "FA4EDB", "3E0100")
 
-    if settings.hpmode == 'inverted':
+    if settings.hpmode == "inverted":
         patches.health.setStartHealth(rom, 9)
-    elif settings.hpmode == '1':
+    elif settings.hpmode == "1":
         patches.health.setStartHealth(rom, 1)
 
     patches.inventory.songSelectAfterOcarinaSelect(rom)
-    if settings.quickswap == 'a':
+    if settings.quickswap == "a":
         patches.core.quickswap(rom, 1)
-    elif settings.quickswap == 'b':
+    elif settings.quickswap == "b":
         patches.core.quickswap(rom, 0)
 
     world_setup = logic.world_setup
@@ -328,7 +275,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
         # For each ROM bank, shuffle text within the bank
         for n, data in enumerate(rom.texts._PointerTable__data):
             # Don't muck up which text boxes are questions and which are statements
-            if type(data) != int and data and data != b'\xFF':
+            if type(data) != int and data and data != b"\xFF":
                 buckets[(rom.texts._PointerTable__banks[n], data[len(data) - 1] == 0xfe)].append((n, data))
         for bucket in buckets.values():
             # For each bucket, make a copy and shuffle
@@ -337,7 +284,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
             # Then put new text in
             for bucket_idx, (orig_idx, data) in enumerate(bucket):
                 rom.texts[shuffled[bucket_idx][0]] = data
-    
+
 
     if ap_settings["trendy_game"] != TrendyGame.option_normal:
 

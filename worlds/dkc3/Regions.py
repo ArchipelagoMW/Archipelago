@@ -1,14 +1,14 @@
 import typing
 
-from BaseClasses import MultiWorld, Region, Entrance
-from .Items import DKC3Item
-from .Locations import DKC3Location
-from .Names import LocationName, ItemName
+from BaseClasses import Entrance, Region
 from worlds.AutoWorld import World
+
+from .Locations import DKC3Location
+from .Names import ItemName, LocationName
 
 
 def create_regions(world: World, active_locations):
-    menu_region = create_region(world, active_locations, 'Menu', None)
+    menu_region = create_region(world, active_locations, "Menu", None)
 
     overworld_1_region_locations = {}
     if world.options.goal != "knautilus":
@@ -685,7 +685,7 @@ def create_regions(world: World, active_locations):
         cifftop_cache_region,
         sewer_stockpile_region,
     ]
-    
+
     bazaar_region_locations = {}
     bramble_region_locations = {}
     flower_spot_region_locations = {}
@@ -741,7 +741,7 @@ def connect_regions(world: World, level_list):
     names: typing.Dict[str, int] = {}
 
     # Overworld
-    connect(world, world.player, names, 'Menu', LocationName.overworld_1_region)
+    connect(world, world.player, names, "Menu", LocationName.overworld_1_region)
     connect(world, world.player, names, LocationName.overworld_1_region, LocationName.overworld_2_region,
             lambda state: (state.has(ItemName.progressive_boat, world.player, 1)))
     connect(world, world.player, names, LocationName.overworld_2_region, LocationName.overworld_3_region,
@@ -833,7 +833,7 @@ def connect_regions(world: World, level_list):
 
     for i in range(0, len(mekanos_levels)):
         connect(world, world.player, names, LocationName.mekanos_region, mekanos_levels[i])
-        
+
     if False:#world.options.include_trade_sequence:
         connect(world, world.player, names, LocationName.mekanos_region, LocationName.sky_high_secret_region,
                 lambda state: (state.has(ItemName.bowling_ball, world.player, 1)))
@@ -868,7 +868,7 @@ def connect_regions(world: World, level_list):
 
     for i in range(0, len(razor_ridge_levels)):
         connect(world, world.player, names, LocationName.razor_ridge_region, razor_ridge_levels[i])
-        
+
     if False:#world.options.include_trade_sequence:
         connect(world, world.player, names, LocationName.razor_ridge_region, LocationName.cifftop_cache_region,
                 lambda state: (state.has(ItemName.wrench, world.player, 1)))
@@ -938,7 +938,7 @@ def connect(world: World, player: int, used_names: typing.Dict[str, int], source
         name = target
     else:
         used_names[target] += 1
-        name = target + (' ' * used_names[target])
+        name = target + (" " * used_names[target])
 
     connection = Entrance(player, name, source_region)
 

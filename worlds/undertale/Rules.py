@@ -1,5 +1,5 @@
-from worlds.generic.Rules import set_rule, add_rule, add_item_rule
-from BaseClasses import MultiWorld, CollectionState
+from BaseClasses import CollectionState, MultiWorld
+from worlds.generic.Rules import add_rule, set_rule
 
 
 def _undertale_is_route(state: CollectionState, player: int, route: int):
@@ -83,9 +83,9 @@ def set_rules(multiworld: MultiWorld, player: int):
                             state.has("Right Home Key", player)) or
                            state.has("Key Piece", player, state.multiworld.key_pieces[player].value))
     if _undertale_is_route(multiworld.state, player, 1):
-        set_rule(multiworld.get_entrance("Papyrus\" Home Entrance", player),
+        set_rule(multiworld.get_entrance('Papyrus" Home Entrance', player),
                  lambda state: _undertale_has_plot(state, player, "Complete Skeleton"))
-        set_rule(multiworld.get_entrance("Undyne\"s Home Entrance", player),
+        set_rule(multiworld.get_entrance('Undyne"s Home Entrance', player),
                  lambda state: _undertale_has_plot(state, player, "Fish") and state.has("Papyrus Date", player))
         set_rule(multiworld.get_entrance("Lab Elevator", player),
                  lambda state: state.has("Alphys Date", player) and state.has("DT Extractor", player) and

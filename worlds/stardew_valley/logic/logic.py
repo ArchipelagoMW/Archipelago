@@ -3,6 +3,59 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Collection
 
+from ..data import all_crops, all_purchasable_seeds
+from ..data.craftable_data import all_crafting_recipes
+from ..data.crops_data import crops_by_name
+from ..data.fish_data import get_fish_for_mods
+from ..data.museum_data import all_museum_items
+from ..data.recipe_data import all_cooking_recipes
+from ..mods.logic.magic_logic import MagicLogicMixin
+from ..mods.logic.mod_logic import ModLogicMixin
+from ..mods.mod_data import ModNames
+from ..options import (
+    Cropsanity,
+    ExcludeGingerIsland,
+    FestivalLocations,
+    Fishsanity,
+    Friendsanity,
+    SpecialOrderLocations,
+    StardewValleyOptions,
+)
+from ..stardew_rule import And, False_, Or, StardewRule, True_
+from ..strings.animal_names import Animal
+from ..strings.animal_product_names import AnimalProduct
+from ..strings.ap_names.ap_weapon_names import APWeapon
+from ..strings.ap_names.buff_names import Buff
+from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
+from ..strings.artisan_good_names import ArtisanGood
+from ..strings.building_names import Building
+from ..strings.craftable_names import Consumable, Fishing, Furniture, Lighting, Ring, WildSeeds
+from ..strings.crop_names import Fruit, Vegetable
+from ..strings.currency_names import Currency
+from ..strings.decoration_names import Decoration
+from ..strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
+from ..strings.festival_check_names import FestivalCheck
+from ..strings.fish_names import Fish, Trash, WaterChest, WaterItem
+from ..strings.flower_names import Flower
+from ..strings.food_names import Beverage, Meal
+from ..strings.forageable_names import Forageable
+from ..strings.fruit_tree_names import Sapling
+from ..strings.generic_names import Generic
+from ..strings.geode_names import Geode
+from ..strings.gift_names import Gift
+from ..strings.ingredient_names import Ingredient
+from ..strings.machine_names import Machine
+from ..strings.material_names import Material
+from ..strings.metal_names import Fossil, MetalBar, Mineral, Ore
+from ..strings.monster_drop_names import Loot
+from ..strings.monster_names import Monster
+from ..strings.region_names import Region
+from ..strings.season_names import Season
+from ..strings.seed_names import Seed, TreeSeed
+from ..strings.skill_names import Skill
+from ..strings.tool_names import Tool, ToolMaterial
+from ..strings.villager_names import NPC
+from ..strings.wallet_item_names import Wallet
 from .ability_logic import AbilityLogicMixin
 from .action_logic import ActionLogicMixin
 from .animal_logic import AnimalLogicMixin
@@ -37,51 +90,6 @@ from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
 from .traveling_merchant_logic import TravelingMerchantLogicMixin
 from .wallet_logic import WalletLogicMixin
-from ..data import all_purchasable_seeds, all_crops
-from ..data.craftable_data import all_crafting_recipes
-from ..data.crops_data import crops_by_name
-from ..data.fish_data import get_fish_for_mods
-from ..data.museum_data import all_museum_items
-from ..data.recipe_data import all_cooking_recipes
-from ..mods.logic.magic_logic import MagicLogicMixin
-from ..mods.logic.mod_logic import ModLogicMixin
-from ..mods.mod_data import ModNames
-from ..options import Cropsanity, SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, Fishsanity, Friendsanity, StardewValleyOptions
-from ..stardew_rule import False_, Or, True_, And, StardewRule
-from ..strings.animal_names import Animal
-from ..strings.animal_product_names import AnimalProduct
-from ..strings.ap_names.ap_weapon_names import APWeapon
-from ..strings.ap_names.buff_names import Buff
-from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
-from ..strings.artisan_good_names import ArtisanGood
-from ..strings.building_names import Building
-from ..strings.craftable_names import Consumable, Furniture, Ring, Fishing, Lighting, WildSeeds
-from ..strings.crop_names import Fruit, Vegetable
-from ..strings.currency_names import Currency
-from ..strings.decoration_names import Decoration
-from ..strings.fertilizer_names import Fertilizer, SpeedGro, RetainingSoil
-from ..strings.festival_check_names import FestivalCheck
-from ..strings.fish_names import Fish, Trash, WaterItem, WaterChest
-from ..strings.flower_names import Flower
-from ..strings.food_names import Meal, Beverage
-from ..strings.forageable_names import Forageable
-from ..strings.fruit_tree_names import Sapling
-from ..strings.generic_names import Generic
-from ..strings.geode_names import Geode
-from ..strings.gift_names import Gift
-from ..strings.ingredient_names import Ingredient
-from ..strings.machine_names import Machine
-from ..strings.material_names import Material
-from ..strings.metal_names import Ore, MetalBar, Mineral, Fossil
-from ..strings.monster_drop_names import Loot
-from ..strings.monster_names import Monster
-from ..strings.region_names import Region
-from ..strings.season_names import Season
-from ..strings.seed_names import Seed, TreeSeed
-from ..strings.skill_names import Skill
-from ..strings.tool_names import Tool, ToolMaterial
-from ..strings.villager_names import NPC
-from ..strings.wallet_item_names import Wallet
 
 
 @dataclass(frozen=False, repr=False)
@@ -546,7 +554,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
     def can_succeed_grange_display(self) -> StardewRule:
         if self.options.festival_locations != FestivalLocations.option_hard:
             return True_()
-        
+
         animal_rule = self.animal.has_animal(Generic.any)
         artisan_rule = self.artisan.can_keg(Generic.any) | self.artisan.can_preserves_jar(Generic.any)
         cooking_rule = self.money.can_spend_at(Region.saloon, 220)  # Salads at the bar are good enough

@@ -1,7 +1,8 @@
-﻿from ....Region import SMRegion
-from ....Config import Config, SMLogic
-from ....Location import Location, LocationType
+﻿from ....Config import Config, SMLogic
 from ....Item import Progression
+from ....Location import Location, LocationType
+from ....Region import SMRegion
+
 
 class West(SMRegion):
     Name = "Crateria West"

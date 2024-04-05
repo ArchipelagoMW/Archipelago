@@ -6,7 +6,7 @@ class TestEntrances(TestMinor):
     def testDungeonEntrances(self):
         self.run_entrance_tests([
             ["Hyrule Castle Entrance (South)", True, []],
-        
+
             ["Eastern Palace", True, []],
 
             ["Desert Palace Entrance (South)", False, []],
@@ -31,7 +31,7 @@ class TestEntrances(TestMinor):
             ["Tower of Hera", True, ["Progressive Glove", "Lamp", "Magic Mirror"]],
             ["Tower of Hera", True, ["Flute", "Hookshot", "Hammer"]],
             ["Tower of Hera", True, ["Progressive Glove", "Lamp", "Magic Mirror"]],
-            
+
             ["Agahnims Tower", False, []],
             ["Agahnims Tower", False, ["Progressive Sword"], ["Cape", "Progressive Sword", "Beat Agahnim 1"]],
             ["Agahnims Tower", True, ["Cape"]],

@@ -1,31 +1,61 @@
 """
 Archipelago World definition for Pokemon Emerald Version
 """
-from collections import Counter
 import copy
 import logging
 import os
-from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar, TextIO, Union
+from collections import Counter
+from typing import Any, ClassVar, Dict, List, Optional, Set, TextIO, Tuple, Union
 
-from BaseClasses import ItemClassification, MultiWorld, Tutorial, LocationProgressType
+import settings
+from BaseClasses import ItemClassification, LocationProgressType, MultiWorld, Tutorial
 from Fill import FillError, fill_restrictive
 from Options import Toggle
-import settings
 from worlds.AutoWorld import WebWorld, World
 
 from .client import PokemonEmeraldClient  # Unused, but required to register with BizHawkClient
-from .data import LEGENDARY_POKEMON, MapData, SpeciesData, TrainerData, data as emerald_data
-from .items import (ITEM_GROUPS, PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification,
-                    offset_item_value)
-from .locations import (LOCATION_GROUPS, PokemonEmeraldLocation, create_location_label_to_id_map,
-                        create_locations_with_tags, set_free_fly, set_legendary_cave_entrances)
+from .data import LEGENDARY_POKEMON, MapData, SpeciesData, TrainerData
+from .data import data as emerald_data
+from .items import (
+    ITEM_GROUPS,
+    PokemonEmeraldItem,
+    create_item_label_to_code_map,
+    get_item_classification,
+    offset_item_value,
+)
+from .locations import (
+    LOCATION_GROUPS,
+    PokemonEmeraldLocation,
+    create_location_label_to_id_map,
+    create_locations_with_tags,
+    set_free_fly,
+    set_legendary_cave_entrances,
+)
 from .opponents import randomize_opponent_parties
-from .options import (Goal, DarkCavesRequireFlash, HmRequirements, ItemPoolType, PokemonEmeraldOptions,
-                      RandomizeWildPokemon, RandomizeBadges, RandomizeHms, NormanRequirement)
-from .pokemon import (get_random_move, get_species_id_by_label, randomize_abilities, randomize_learnsets,
-                      randomize_legendary_encounters, randomize_misc_pokemon, randomize_starters,
-                      randomize_tm_hm_compatibility,randomize_types, randomize_wild_encounters)
-from .rom import PokemonEmeraldDeltaPatch, create_patch 
+from .options import (
+    DarkCavesRequireFlash,
+    Goal,
+    HmRequirements,
+    ItemPoolType,
+    NormanRequirement,
+    PokemonEmeraldOptions,
+    RandomizeBadges,
+    RandomizeHms,
+    RandomizeWildPokemon,
+)
+from .pokemon import (
+    get_random_move,
+    get_species_id_by_label,
+    randomize_abilities,
+    randomize_learnsets,
+    randomize_legendary_encounters,
+    randomize_misc_pokemon,
+    randomize_starters,
+    randomize_tm_hm_compatibility,
+    randomize_types,
+    randomize_wild_encounters,
+)
+from .rom import PokemonEmeraldDeltaPatch, create_patch
 
 
 class PokemonEmeraldWebWorld(WebWorld):
@@ -459,7 +489,7 @@ class PokemonEmeraldWorld(World):
 
             # Sort order makes `fill_restrictive` try to place important badges later, which
             # makes it less likely to have to swap at all, and more likely for swaps to work.
-            badge_locations, badge_items = [list(l) for l in zip(*self.badge_shuffle_info)]
+            badge_locations, badge_items = (list(l) for l in zip(*self.badge_shuffle_info))
             badge_priority = {
                 "Knuckle Badge": 3,
                 "Balance Badge": 1,
@@ -518,7 +548,7 @@ class PokemonEmeraldWorld(World):
 
             # Sort order makes `fill_restrictive` try to place important HMs later, which
             # makes it less likely to have to swap at all, and more likely for swaps to work.
-            hm_locations, hm_items = [list(l) for l in zip(*self.hm_shuffle_info)]
+            hm_locations, hm_items = (list(l) for l in zip(*self.hm_shuffle_info))
             hm_priority = {
                 "HM05 Flash": 3,
                 "HM03 Surf": 1,

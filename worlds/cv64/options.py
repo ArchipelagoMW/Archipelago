@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from Options import Choice, DefaultOnToggle, Range, Toggle, PerGameCommonOptions, StartInventoryPool
+
+from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, StartInventoryPool, Toggle
 
 
 class CharacterStages(Choice):

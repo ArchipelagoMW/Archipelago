@@ -1,14 +1,16 @@
-from typing import TYPE_CHECKING, Dict, Callable, Optional
-
-from worlds.generic.Rules import set_rule, add_rule
-from .locations import location_table, LocationDict
-from .creatures import all_creatures, aggressive, suffix, hatchable, containment
-from .options import AggressiveScanLogic, SwimRule
 import math
+from typing import TYPE_CHECKING, Callable, Dict, Optional
+
+from worlds.generic.Rules import add_rule, set_rule
+
+from .creatures import aggressive, all_creatures, containment, hatchable, suffix
+from .locations import LocationDict, location_table
+from .options import AggressiveScanLogic, SwimRule
 
 if TYPE_CHECKING:
-    from . import SubnauticaWorld
     from BaseClasses import CollectionState, Location
+
+    from . import SubnauticaWorld
 
 
 def has_seaglide(state: "CollectionState", player: int) -> bool:
@@ -244,7 +246,7 @@ def can_access_location(state: "CollectionState", player: int, loc: LocationDict
     if need_radiation_suit and not state.has("Radiation Suit", player):
         return False
 
-    # Seaglide doesn't unlock anything specific, but just allows for faster movement. 
+    # Seaglide doesn't unlock anything specific, but just allows for faster movement.
     # Otherwise the game is painfully slow.
     map_center_dist = math.sqrt(pos_x ** 2 + pos_z ** 2)
     if (map_center_dist > 800 or pos_y < -200) and not has_seaglide(state, player):

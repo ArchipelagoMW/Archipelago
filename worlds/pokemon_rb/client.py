@@ -3,8 +3,8 @@ import logging
 import time
 
 from NetUtils import ClientStatus
+from worlds._bizhawk import guarded_write, read, write
 from worlds._bizhawk.client import BizHawkClient
-from worlds._bizhawk import read, write, guarded_write
 
 from .locations import location_data
 
@@ -41,11 +41,11 @@ for location in location_data:
     if location.ram_address is not None:
         if type(location.ram_address) == list:
             location_map[type(location.ram_address).__name__][(location.ram_address[0].flag, location.ram_address[1].flag)] = location.address
-            location_bytes_bits[location.address] = [{'byte': location.ram_address[0].byte, 'bit': location.ram_address[0].bit},
-                                                     {'byte': location.ram_address[1].byte, 'bit': location.ram_address[1].bit}]
+            location_bytes_bits[location.address] = [{"byte": location.ram_address[0].byte, "bit": location.ram_address[0].bit},
+                                                     {"byte": location.ram_address[1].byte, "bit": location.ram_address[1].bit}]
         else:
             location_map[type(location.ram_address).__name__][location.ram_address.flag] = location.address
-            location_bytes_bits[location.address] = {'byte': location.ram_address.byte, 'bit': location.ram_address.bit}
+            location_bytes_bits[location.address] = {"byte": location.ram_address.byte, "bit": location.ram_address.bit}
 
 location_name_to_id = {location.name: location.address for location in location_data if location.type == "Item"
                        and location.address is not None}
@@ -108,7 +108,7 @@ class PokemonRBClient(BizHawkClient):
             self.disconnect_pending = False
             await ctx.disconnect()
 
-        if data["GameStatus"][0] == 0 or data["ResetCheck"] == b'\xff\xff\xff\x7f':
+        if data["GameStatus"][0] == 0 or data["ResetCheck"] == b"\xff\xff\xff\x7f":
             # Do not handle anything before game save is loaded
             self.game_state = False
             return
@@ -142,12 +142,12 @@ class PokemonRBClient(BizHawkClient):
         for flag_type, loc_map in location_map.items():
             for flag, loc_id in loc_map.items():
                 if flag_type == "list":
-                    if (data["EventFlag"][location_bytes_bits[loc_id][0]['byte']] & 1 <<
-                            location_bytes_bits[loc_id][0]['bit']
-                            and data["Missable"][location_bytes_bits[loc_id][1]['byte']] & 1 <<
-                            location_bytes_bits[loc_id][1]['bit']):
+                    if (data["EventFlag"][location_bytes_bits[loc_id][0]["byte"]] & 1 <<
+                            location_bytes_bits[loc_id][0]["bit"]
+                            and data["Missable"][location_bytes_bits[loc_id][1]["byte"]] & 1 <<
+                            location_bytes_bits[loc_id][1]["bit"]):
                         locations.add(loc_id)
-                elif data[flag_type][location_bytes_bits[loc_id]['byte']] & 1 << location_bytes_bits[loc_id]['bit']:
+                elif data[flag_type][location_bytes_bits[loc_id]["byte"]] & 1 << location_bytes_bits[loc_id]["bit"]:
                     locations.add(loc_id)
 
         if locations != self.locations_array:
@@ -237,12 +237,12 @@ class PokemonRBClient(BizHawkClient):
             ctx.finished_game = True
 
     def on_package(self, ctx, cmd, args):
-        if cmd == 'Connected':
-            if 'death_link' in args['slot_data'] and args['slot_data']['death_link']:
+        if cmd == "Connected":
+            if "death_link" in args["slot_data"] and args["slot_data"]["death_link"]:
                 self.set_deathlink = True
                 self.last_death_link = time.time()
             ctx.set_notify(f"EnergyLink{ctx.team}")
-        elif cmd == 'RoomInfo':
+        elif cmd == "RoomInfo":
             if ctx.seed_name and ctx.seed_name != args["seed_name"]:
                 # CommonClient's on_package displays an error to the user in this case, but connection is not cancelled.
                 self.game_state = False
@@ -259,7 +259,7 @@ def cmd_bank(self, cmd: str = "", amount: str = ""):
         logger.warning("This command can only be used while playing Pokémon Red and Blue")
         return
     if (not self.ctx.server) or self.ctx.server.socket.closed or not self.ctx.client_handler.game_state:
-        logger.info(f"Must be connected to server and in game.")
+        logger.info("Must be connected to server and in game.")
         return
     elif not cmd:
         logger.info(f"Money available: {int((self.ctx.stored_data[f'EnergyLink{self.ctx.team}'] or 0) / BANK_EXCHANGE_RATE)}")

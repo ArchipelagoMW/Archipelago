@@ -1,10 +1,11 @@
 from math import ceil
 from typing import List
 
-from BaseClasses import MultiWorld, Item
+from BaseClasses import Item
 from worlds.AutoWorld import World
 
 from . import Constants
+
 
 def get_junk_item_names(rand, k: int) -> str:
 	junk_weights = Constants.item_info["junk_weights"]

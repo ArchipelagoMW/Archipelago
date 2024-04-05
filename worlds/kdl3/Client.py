@@ -1,20 +1,21 @@
 import logging
+import random
 import struct
 import time
 import typing
 import uuid
-from struct import unpack, pack
 from collections import defaultdict
-import random
+from struct import pack, unpack
+from typing import TYPE_CHECKING
 
 from MultiServer import mark_raw
 from NetUtils import ClientStatus, color
 from Utils import async_start
 from worlds.AutoSNIClient import SNIClient
-from .Locations import boss_locations
-from .Gifting import kdl3_gifting_options, kdl3_trap_gifts, kdl3_gifts, update_object, pop_object, initialize_giftboxes
+
 from .ClientAddrs import consumable_addrs, star_addrs
-from typing import TYPE_CHECKING
+from .Gifting import initialize_giftboxes, kdl3_gifting_options, kdl3_gifts, kdl3_trap_gifts, pop_object, update_object
+from .Locations import boss_locations
 
 if TYPE_CHECKING:
     from SNIClient import SNIClientCommandProcessor
@@ -170,7 +171,7 @@ class KDL3SNIClient(SNIClient):
 
     async def pop_gift(self, ctx):
         if ctx.stored_data[self.giftbox_key]:
-            from SNIClient import snes_read, snes_buffered_write
+            from SNIClient import snes_buffered_write, snes_read
             key, gift = ctx.stored_data[self.giftbox_key].popitem()
             await pop_object(ctx, self.giftbox_key, key)
             # first, special cases
@@ -209,8 +210,8 @@ class KDL3SNIClient(SNIClient):
                 # check if it's tasty
                 if any(x in traits for x in ["Consumable", "Food", "Drink", "Heal", "Health"]):
                     # it's tasty!, use quality to decide how much to heal
-                    quality = max((trait["Quality"] for trait in gift["Traits"]
-                                   if trait["Trait"] in ["Consumable", "Food", "Drink", "Heal", "Health"]))
+                    quality = max(trait["Quality"] for trait in gift["Traits"]
+                                   if trait["Trait"] in ["Consumable", "Food", "Drink", "Heal", "Health"])
                     quality = min(10, quality * 2)
                 else:
                     # it's not really edible, but he'll eat it anyway
@@ -329,9 +330,9 @@ class KDL3SNIClient(SNIClient):
             if recv_amount < len(ctx.items_received):
                 item = ctx.items_received[recv_amount]
                 recv_amount += 1
-                logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                    color(ctx.item_names[item.item], 'red', 'bold'),
-                    color(ctx.player_names[item.player], 'yellow'),
+                logging.info("Received %s from %s (%s) (%d/%d in list)" % (
+                    color(ctx.item_names[item.item], "red", "bold"),
+                    color(ctx.player_names[item.player], "yellow"),
                     ctx.location_names[item.location], recv_amount, len(ctx.items_received)))
 
                 snes_buffered_write(ctx, KDL3_RECV_COUNT, pack("H", recv_amount))
@@ -417,9 +418,9 @@ class KDL3SNIClient(SNIClient):
                 ctx.locations_checked.add(new_check_id)
                 location = ctx.location_names[new_check_id]
                 snes_logger.info(
-                    f'New Check: {location} ({len(ctx.locations_checked)}/'
-                    f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')
-                await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
+                    f"New Check: {location} ({len(ctx.locations_checked)}/"
+                    f"{len(ctx.missing_locations) + len(ctx.checked_locations)})")
+                await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [new_check_id]}])
         except Exception as ex:
             # we crashed, so print log and clean up
             snes_logger.error("", exc_info=ex)

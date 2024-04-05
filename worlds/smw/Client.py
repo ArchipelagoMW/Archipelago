@@ -3,6 +3,7 @@ import time
 
 from NetUtils import ClientStatus, color
 from worlds.AutoSNIClient import SNIClient
+
 from .Names.TextBox import generate_received_text
 
 snes_logger = logging.getLogger("SNES")
@@ -112,7 +113,7 @@ class SMWSNIClient(SNIClient):
 
 
     async def validate_rom(self, ctx):
-        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+        from SNIClient import snes_read
 
         rom_name = await snes_read(ctx, SMW_ROMHASH_START, ROMHASH_SIZE)
         if rom_name is None or rom_name == bytes([0] * ROMHASH_SIZE) or rom_name[:3] != b"SMW":
@@ -204,7 +205,7 @@ class SMWSNIClient(SNIClient):
 
 
     async def handle_trap_queue(self, ctx):
-        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+        from SNIClient import snes_buffered_write, snes_read
 
         if not hasattr(self, "trap_queue") or len(self.trap_queue) == 0:
             return
@@ -275,7 +276,7 @@ class SMWSNIClient(SNIClient):
 
     async def game_watcher(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
-        
+
         boss_state = await snes_read(ctx, SMW_BOSS_STATE_ADDR, 0x1)
         game_state = await snes_read(ctx, SMW_GAME_STATE_ADDR, 0x1)
         mario_state = await snes_read(ctx, SMW_MARIO_STATE_ADDR, 0x1)
@@ -349,9 +350,9 @@ class SMWSNIClient(SNIClient):
         blocksanity_flags = bytearray(await snes_read(ctx, SMW_BLOCKSANITY_FLAGS, 0xC))
         blocksanity_active = await snes_read(ctx, SMW_BLOCKSANITY_ACTIVE_ADDR, 0x1)
         level_clear_flags = bytearray(await snes_read(ctx, SMW_LEVEL_CLEAR_FLAGS, 0x60))
-        from worlds.smw.Rom import item_rom_data, ability_rom_data, trap_rom_data, icon_rom_data
-        from worlds.smw.Levels import location_id_to_level_id, level_info_dict, level_blocks_data
         from worlds import AutoWorldRegister
+        from worlds.smw.Levels import level_blocks_data, level_info_dict, location_id_to_level_id
+        from worlds.smw.Rom import ability_rom_data, icon_rom_data, item_rom_data, trap_rom_data
         for loc_name, level_data in location_id_to_level_id.items():
             loc_id = AutoWorldRegister.world_types[ctx.game].location_name_to_id[loc_name]
             if loc_id not in ctx.locations_checked:
@@ -450,8 +451,8 @@ class SMWSNIClient(SNIClient):
             ctx.locations_checked.add(new_check_id)
             location = ctx.location_names[new_check_id]
             snes_logger.info(
-                f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
-            await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
+                f"New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})")
+            await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [new_check_id]}])
 
         # Send Current Room for Tracker
         current_sublevel_data = await snes_read(ctx, SMW_CURRENT_SUBLEVEL_ADDR, 2)
@@ -485,7 +486,7 @@ class SMWSNIClient(SNIClient):
             # Don't receive items or collect locations outside of in-level mode
             ctx.current_sublevel_value = 0
             return
-        
+
         if boss_state[0] in SMW_BOSS_STATES:
             # Don't receive items or collect locations inside boss battles
             return
@@ -499,9 +500,9 @@ class SMWSNIClient(SNIClient):
         if recv_index < len(ctx.items_received):
             item = ctx.items_received[recv_index]
             recv_index += 1
-            logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                color(ctx.item_names[item.item], 'red', 'bold'),
-                color(ctx.player_names[item.player], 'yellow'),
+            logging.info("Received %s from %s (%s) (%d/%d in list)" % (
+                color(ctx.item_names[item.item], "red", "bold"),
+                color(ctx.player_names[item.player], "yellow"),
                 ctx.location_names[item.location], recv_index, len(ctx.items_received)))
 
             if self.should_show_message(ctx, item):
@@ -573,8 +574,9 @@ class SMWSNIClient(SNIClient):
                     pass
             elif item.item == 0xBC0015:
                 # Handle Literature Trap
-                from .Names.LiteratureTrap import lit_trap_text_list
                 import random
+
+                from .Names.LiteratureTrap import lit_trap_text_list
                 rand_trap = random.choice(lit_trap_text_list)
 
                 for message in rand_trap:
@@ -672,7 +674,7 @@ class SMWSNIClient(SNIClient):
 
                     # Handle map indicators
                     flag = 1 if level_data[1] == 0 else 2
-                    level_clear_flags[level_data[0]] |= flag 
+                    level_clear_flags[level_data[0]] |= flag
 
                     event_id = event_data[level_data[0]]
                     event_id_value = event_id + level_data[1]

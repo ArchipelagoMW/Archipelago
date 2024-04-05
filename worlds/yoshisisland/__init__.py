@@ -1,20 +1,21 @@
 import base64
 import os
-import typing
 import threading
+import typing
+from typing import Dict, List, Set, TextIO
 
-from typing import List, Set, TextIO, Dict
-from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
-from worlds.AutoWorld import World, WebWorld
 import settings
-from .Items import get_item_names_per_category, item_table, filler_items, trap_items
-from .Locations import get_locations
-from .Regions import init_areas
-from .Options import YoshisIslandOptions, PlayerGoal, ObjectVis, StageLogic, MinigameChecks
-from .setup_game import setup_gamevars
+from BaseClasses import Item, ItemClassification, MultiWorld, Tutorial
+from worlds.AutoWorld import WebWorld, World
+
 from .Client import YoshisIslandSNIClient
-from .Rules import set_easy_rules, set_normal_rules, set_hard_rules
-from .Rom import LocalRom, patch_rom, get_base_rom_path, YoshisIslandDeltaPatch, USHASH
+from .Items import filler_items, get_item_names_per_category, item_table, trap_items
+from .Locations import get_locations
+from .Options import MinigameChecks, ObjectVis, PlayerGoal, StageLogic, YoshisIslandOptions
+from .Regions import init_areas
+from .Rom import USHASH, LocalRom, YoshisIslandDeltaPatch, get_base_rom_path, patch_rom
+from .Rules import set_easy_rules, set_hard_rules, set_normal_rules
+from .setup_game import setup_gamevars
 
 
 class YoshisIslandSettings(settings.Group):

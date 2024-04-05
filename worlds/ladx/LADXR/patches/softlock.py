@@ -1,5 +1,5 @@
-from ..roomEditor import RoomEditor, Object
 from ..assembler import ASM
+from ..roomEditor import Object, RoomEditor
 
 
 def fixAll(rom):

@@ -1,6 +1,6 @@
 from ..assembler import ASM
-from ..utils import formatText
 from ..locations.constants import CHEST_ITEMS
+from ..utils import formatText
 
 
 def fixChests(rom):

@@ -1,5 +1,5 @@
-from worlds.generic.Rules import add_rule
 from BaseClasses import CollectionState
+from worlds.generic.Rules import add_rule
 
 
 def air_dash(state: CollectionState, player: int) -> bool:

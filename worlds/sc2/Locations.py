@@ -1,13 +1,19 @@
 from enum import IntEnum
-from typing import List, Tuple, Optional, Callable, NamedTuple, Set, Any
-from BaseClasses import MultiWorld
-from . import ItemNames
-from .Options import get_option_value, kerrigan_unit_available, RequiredTactics, GrantStoryTech, LocationInclusion, \
-    EnableHotsMissions
-from .Rules import SC2Logic
+from typing import Any, Callable, List, NamedTuple, Optional, Set, Tuple
 
 from BaseClasses import Location
 from worlds.AutoWorld import World
+
+from . import ItemNames
+from .Options import (
+    EnableHotsMissions,
+    GrantStoryTech,
+    LocationInclusion,
+    RequiredTactics,
+    get_option_value,
+    kerrigan_unit_available,
+)
+from .Rules import SC2Logic
 
 SC2WOL_LOC_ID_OFFSET = 1000
 SC2HOTS_LOC_ID_OFFSET = 20000000  # Avoid clashes with The Legend of Zelda
@@ -77,9 +83,9 @@ def get_plando_locations(world: World) -> List[str]:
 
 def get_locations(world: Optional[World]) -> Tuple[LocationData, ...]:
     # Note: rules which are ended with or True are rules identified as needed later when restricted units is an option
-    logic_level = get_option_value(world, 'required_tactics')
+    logic_level = get_option_value(world, "required_tactics")
     adv_tactics = logic_level != RequiredTactics.option_standard
-    kerriganless = get_option_value(world, 'kerrigan_presence') not in kerrigan_unit_available \
+    kerriganless = get_option_value(world, "kerrigan_presence") not in kerrigan_unit_available \
         or get_option_value(world, "enable_hots_missions") == EnableHotsMissions.option_false
     story_tech_granted = get_option_value(world, "grant_story_tech") == GrantStoryTech.option_true
     logic = SC2Logic(world)

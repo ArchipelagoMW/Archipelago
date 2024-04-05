@@ -12,7 +12,6 @@ import json
 import sys
 import typing
 
-
 BIZHAWK_SOCKET_PORT_RANGE_START = 43055
 BIZHAWK_SOCKET_PORT_RANGE_SIZE = 5
 
@@ -103,7 +102,7 @@ async def connect(ctx: BizHawkContext) -> bool:
             return True
         except (TimeoutError, ConnectionRefusedError):
             continue
-    
+
     # No ports worked
     ctx.streams = None
     ctx.connection_status = ConnectionStatus.NOT_CONNECTED
@@ -135,7 +134,7 @@ async def send_requests(ctx: BizHawkContext, req_list: typing.List[typing.Dict[s
 
     if errors:
         if sys.version_info >= (3, 11, 0):
-            raise ExceptionGroup("Connector script returned errors", errors)  # noqa
+            raise ExceptionGroup("Connector script returned errors", errors)
         else:
             raise errors[0]
 

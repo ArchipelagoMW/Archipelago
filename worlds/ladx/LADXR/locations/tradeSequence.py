@@ -1,4 +1,3 @@
-from .itemInfo import ItemInfo
 from .constants import *
 from .droppedKey import DroppedKey
 
@@ -22,7 +21,7 @@ class TradeSequenceItem(DroppedKey):
     def __init__(self, room, default_item):
         self.unadjusted_room = room
         if room == 0x2B2:
-            # Offset room for trade items to avoid collisions 
+            # Offset room for trade items to avoid collisions
             roomLo = room & 0xFF
             roomHi = room ^ roomLo
             roomLo = (roomLo + 2) & 0xFF

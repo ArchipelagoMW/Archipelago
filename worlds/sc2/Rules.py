@@ -1,14 +1,31 @@
 from typing import Set
 
-from BaseClasses import  CollectionState
-from .Options import get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap, \
-    GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, SpearOfAdunAutonomouslyCastAbilityPresence, \
-    get_enabled_campaigns, MissionOrder
-from .Items import get_basic_units, defense_ratings, zerg_defense_ratings, kerrigan_actives, air_defense_ratings, \
-    kerrigan_levels, get_full_item_list
-from .MissionTables import SC2Race, SC2Campaign
-from . import ItemNames
+from BaseClasses import CollectionState
 from worlds.AutoWorld import World
+
+from . import ItemNames
+from .Items import (
+    air_defense_ratings,
+    defense_ratings,
+    get_basic_units,
+    get_full_item_list,
+    kerrigan_actives,
+    kerrigan_levels,
+    zerg_defense_ratings,
+)
+from .MissionTables import SC2Campaign, SC2Race
+from .Options import (
+    AllInMap,
+    GrantStoryLevels,
+    GrantStoryTech,
+    MissionOrder,
+    RequiredTactics,
+    SpearOfAdunAutonomouslyCastAbilityPresence,
+    TakeOverAIAllies,
+    get_enabled_campaigns,
+    get_option_value,
+    kerrigan_unit_available,
+)
 
 
 class SC2Logic:
@@ -133,7 +150,7 @@ class SC2Logic:
         :param air_enemy:
         :return:
         """
-        defense_score = sum((defense_ratings[item] for item in defense_ratings if state.has(item, self.player)))
+        defense_score = sum(defense_ratings[item] for item in defense_ratings if state.has(item, self.player))
         # Manned Bunker
         if state.has_any({ItemNames.MARINE, ItemNames.MARAUDER}, self.player) and state.has(ItemNames.BUNKER, self.player):
             defense_score += 3
@@ -153,9 +170,9 @@ class SC2Logic:
 
         # General enemy-based rules
         if zerg_enemy:
-            defense_score += sum((zerg_defense_ratings[item] for item in zerg_defense_ratings if state.has(item, self.player)))
+            defense_score += sum(zerg_defense_ratings[item] for item in zerg_defense_ratings if state.has(item, self.player))
         if air_enemy:
-            defense_score += sum((air_defense_ratings[item] for item in air_defense_ratings if state.has(item, self.player)))
+            defense_score += sum(air_defense_ratings[item] for item in air_defense_ratings if state.has(item, self.player))
         if air_enemy and zerg_enemy and state.has(ItemNames.VALKYRIE, self.player):
             # Valkyries shred mass Mutas, most common air enemy that's massed in these cases
             defense_score += 2
@@ -325,7 +342,7 @@ class SC2Logic:
         :return:
         """
         beats_kerrigan = state.has_any({ItemNames.MARINE, ItemNames.BANSHEE, ItemNames.GHOST}, self.player) or self.advanced_tactics
-        if get_option_value(self.world, 'all_in_map') == AllInMap.option_ground:
+        if get_option_value(self.world, "all_in_map") == AllInMap.option_ground:
             # Ground
             defense_rating = self.terran_defense_rating(state, True, False)
             if state.has_any({ItemNames.BATTLECRUISER, ItemNames.BANSHEE}, self.player):
@@ -351,11 +368,11 @@ class SC2Logic:
     def zerg_basic_anti_air(self, state: CollectionState) -> bool:
         return self.zerg_competent_anti_air(state) or self.kerrigan_unit_available in kerrigan_unit_available or \
                state.has_any({ItemNames.SWARM_QUEEN, ItemNames.SCOURGE}, self.player) or (self.advanced_tactics and state.has(ItemNames.SPORE_CRAWLER, self.player))
-    
+
     def morph_brood_lord(self, state: CollectionState) -> bool:
         return state.has_any({ItemNames.MUTALISK, ItemNames.CORRUPTOR}, self.player) \
             and state.has(ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT, self.player)
-    
+
     def morph_viper(self, state: CollectionState) -> bool:
         return state.has_any({ItemNames.MUTALISK, ItemNames.CORRUPTOR}, self.player) \
             and state.has(ItemNames.MUTALISK_CORRUPTOR_VIPER_ASPECT, self.player)
@@ -377,7 +394,7 @@ class SC2Logic:
 
     def spread_creep(self, state: CollectionState) -> bool:
         return self.advanced_tactics or state.has(ItemNames.SWARM_QUEEN, self.player)
-    
+
     def zerg_competent_defense(self, state: CollectionState) -> bool:
         return (
             self.zerg_common_unit(state)
@@ -934,10 +951,10 @@ class SC2Logic:
     def __init__(self, world: World):
         self.world: World = world
         self.player = None if world is None else world.player
-        self.logic_level = get_option_value(world, 'required_tactics')
+        self.logic_level = get_option_value(world, "required_tactics")
         self.advanced_tactics = self.logic_level != RequiredTactics.option_standard
         self.take_over_ai_allies = get_option_value(world, "take_over_ai_allies") == TakeOverAIAllies.option_true
-        self.kerrigan_unit_available = get_option_value(world, 'kerrigan_presence') in kerrigan_unit_available \
+        self.kerrigan_unit_available = get_option_value(world, "kerrigan_presence") in kerrigan_unit_available \
             and SC2Campaign.HOTS in get_enabled_campaigns(world)
         self.kerrigan_levels_per_mission_completed = get_option_value(world, "kerrigan_levels_per_mission_completed")
         self.kerrigan_levels_per_mission_completed_cap = get_option_value(world, "kerrigan_levels_per_mission_completed_cap")

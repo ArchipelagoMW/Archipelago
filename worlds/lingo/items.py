@@ -1,8 +1,16 @@
-from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
+from typing import Dict, List, NamedTuple, Optional
 
 from BaseClasses import Item, ItemClassification
-from .static_logic import DOORS_BY_ROOM, PROGRESSION_BY_ROOM, PROGRESSIVE_ITEMS, get_door_group_item_id, \
-    get_door_item_id, get_progressive_item_id, get_special_item_id
+
+from .static_logic import (
+    DOORS_BY_ROOM,
+    PROGRESSION_BY_ROOM,
+    PROGRESSIVE_ITEMS,
+    get_door_group_item_id,
+    get_door_item_id,
+    get_progressive_item_id,
+    get_special_item_id,
+)
 
 
 class ItemData(NamedTuple):

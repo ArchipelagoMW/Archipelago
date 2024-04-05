@@ -1,16 +1,22 @@
 import string
-
-from .items import RiskOfRainItem, item_table, item_pool_weights, offset, filler_table, environment_offset
-from .locations import RiskOfRainLocation, item_pickups, get_locations
-from .rules import set_rules
-from .ror2environments import environment_vanilla_table, environment_vanilla_orderedstages_table, \
-    environment_sotv_orderedstages_table, environment_sotv_table, collapse_dict_list_vertical, shift_by_offset
+from typing import Any, Dict, List
 
 from BaseClasses import Item, ItemClassification, Tutorial
+from worlds.AutoWorld import WebWorld, World
+
+from .items import RiskOfRainItem, environment_offset, filler_table, item_pool_weights, item_table, offset
+from .locations import RiskOfRainLocation, get_locations, item_pickups
 from .options import ItemWeights, ROR2Options
-from worlds.AutoWorld import World, WebWorld
-from .regions import create_explore_regions, create_classic_regions
-from typing import List, Dict, Any
+from .regions import create_classic_regions, create_explore_regions
+from .ror2environments import (
+    collapse_dict_list_vertical,
+    environment_sotv_orderedstages_table,
+    environment_sotv_table,
+    environment_vanilla_orderedstages_table,
+    environment_vanilla_table,
+    shift_by_offset,
+)
+from .rules import set_rules
 
 
 class RiskOfWeb(WebWorld):

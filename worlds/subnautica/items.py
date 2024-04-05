@@ -1,6 +1,7 @@
-from BaseClasses import ItemClassification as IC
-from typing import NamedTuple, Dict, Set, List
 from enum import IntEnum
+from typing import Dict, List, NamedTuple, Set
+
+from BaseClasses import ItemClassification as IC
 
 
 class ItemType(IntEnum):

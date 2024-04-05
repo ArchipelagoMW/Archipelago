@@ -1,17 +1,26 @@
-from BaseClasses import ItemClassification
-from worlds.Files import APDeltaPatch
+import hashlib
+import os
+
+import bsdiff4
 
 import Utils
-import os
-import hashlib
-import bsdiff4
-from .lz10 import gba_decompress, gba_compress
+from worlds.Files import APDeltaPatch
 
-from .BN3RomUtils import ArchiveToReferences, read_u16_le, read_u32_le, int16_to_byte_list_le, int32_to_byte_list_le, \
-    generate_progressive_undernet, ArchiveToSizeComp, ArchiveToSizeUncomp, generate_item_message, \
-    generate_external_item_message, generate_text_bytes, dictChar
-
+from .BN3RomUtils import (
+    ArchiveToReferences,
+    ArchiveToSizeComp,
+    ArchiveToSizeUncomp,
+    generate_external_item_message,
+    generate_item_message,
+    generate_progressive_undernet,
+    generate_text_bytes,
+    int16_to_byte_list_le,
+    int32_to_byte_list_le,
+    read_u16_le,
+    read_u32_le,
+)
 from .Items import ItemType
+from .lz10 import gba_compress, gba_decompress
 
 CHECKSUM_BLUE = "6fe31df0144759b34ad666badaacc442"
 
@@ -86,9 +95,9 @@ class ArchiveScript:
             self.messageBoxes.append(message_box)
 
     def __str__(self):
-        s = str(self.index)+' - \n'
+        s = str(self.index)+" - \n"
         for messageBox in self.messageBoxes:
-            s += '  '+str(["{:02x}".format(x) for x in messageBox])+'\n'
+            s += "  "+str([f"{x:02x}" for x in messageBox])+"\n"
 
 
 class TextArchive:
@@ -295,8 +304,8 @@ class LocalRom:
 
     def inject_name(self, player):
         authname = player
-        authname = authname+('\x00' * (63 - len(player)))
-        self.rom_data[0x7FFFC0:0x7FFFFF] = bytes(authname, 'utf8')
+        authname = authname+("\x00" * (63 - len(player)))
+        self.rom_data[0x7FFFC0:0x7FFFFF] = bytes(authname, "utf8")
 
     def write_changed_rom(self):
         for archive in self.changed_archives.values():
@@ -340,8 +349,8 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
         if CHECKSUM_BLUE != basemd5.hexdigest():
-            raise Exception('Supplied Base Rom does not match US GBA Blue Version.'
-                            'Please provide the correct ROM version')
+            raise Exception("Supplied Base Rom does not match US GBA Blue Version."
+                            "Please provide the correct ROM version")
 
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes

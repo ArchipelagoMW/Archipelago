@@ -1,14 +1,24 @@
 import typing
 from enum import Enum
 
-from BaseClasses import MultiWorld, Region, Entrance, Location
+from BaseClasses import Entrance, MultiWorld, Region
+
+from .Locations import (
+    SM64Location,
+    location_table,
+    locBitDW_table,
+    locBitFS_table,
+    locCCM_table,
+    locCotMC_table,
+    locPSS_table,
+    locSA_table,
+    locSL_table,
+    locSS_table,
+    locTotWC_table,
+    locVCutM_table,
+    locWMotR_table,
+)
 from .Options import SM64Options
-from .Locations import SM64Location, location_table, locBoB_table, locWhomp_table, locJRB_table, locCCM_table, \
-    locBBH_table, \
-    locHMC_table, locLLL_table, locSSL_table, locDDD_table, locSL_table, \
-    locWDW_table, locTTM_table, locTHI_table, locTTC_table, locRR_table, \
-    locPSS_table, locSA_table, locBitDW_table, locTotWC_table, locCotMC_table, \
-    locVCutM_table, locBitFS_table, locWMotR_table, locBitS_table, locSS_table
 
 
 class SM64Levels(int, Enum):
@@ -103,7 +113,7 @@ def create_regions(world: MultiWorld, options: SM64Options, player: int):
     regJRB = create_region("Jolly Roger Bay", player, world)
     create_locs(regJRB, "JRB: Plunder in the Sunken Ship", "JRB: Can the Eel Come Out to Play?", "JRB: Treasure of the Ocean Cave",
                         "JRB: Blast to the Stone Pillar", "JRB: Through the Jet Stream", "JRB: Bob-omb Buddy")
-    jrb_upper = create_subregion(regJRB, 'JRB: Upper', "JRB: Red Coins on the Ship Afloat")
+    jrb_upper = create_subregion(regJRB, "JRB: Upper", "JRB: Red Coins on the Ship Afloat")
     regJRB.subregions = [jrb_upper]
     if options.enable_coin_stars:
         create_locs(jrb_upper, "JRB: 100 Coins")

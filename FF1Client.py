@@ -5,11 +5,9 @@ import time
 from asyncio import StreamReader, StreamWriter
 from typing import List
 
-
 import Utils
+from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from Utils import async_start
-from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, \
-    get_base_parser
 
 SYSTEM_MESSAGE_ID = 0
 
@@ -41,7 +39,7 @@ class FF1CommandProcessor(ClientCommandProcessor):
 
 class FF1Context(CommonContext):
     command_processor = FF1CommandProcessor
-    game = 'Final Fantasy'
+    game = "Final Fantasy"
     items_handling = 0b111  # full remote
 
     def __init__(self, server_address, password):
@@ -59,7 +57,7 @@ class FF1Context(CommonContext):
             await super(FF1Context, self).server_auth(password_requested)
         if not self.auth:
             self.awaiting_rom = True
-            logger.info('Awaiting connection to NES to get Player information')
+            logger.info("Awaiting connection to NES to get Player information")
             return
 
         await self.send_connect()
@@ -69,11 +67,11 @@ class FF1Context(CommonContext):
             self.messages[time.time(), msg_id] = msg
 
     def on_package(self, cmd: str, args: dict):
-        if cmd == 'Connected':
+        if cmd == "Connected":
             async_start(parse_locations(self.locations_array, self, True))
-        elif cmd == 'Print':
-            msg = args['text']
-            if ': !' not in msg:
+        elif cmd == "Print":
+            msg = args["text"]
+            if ": !" not in msg:
                 self._set_message(msg, SYSTEM_MESSAGE_ID)
 
     def on_print_json(self, args: dict):
@@ -117,7 +115,7 @@ def get_payload(ctx: FF1Context):
     return json.dumps(
         {
             "items": [item.item for item in ctx.items_received],
-            "messages": {f'{key[0]}:{key[1]}': value for key, value in ctx.messages.items()
+            "messages": {f"{key[0]}:{key[1]}": value for key, value in ctx.messages.items()
                          if key[0] > current_time - 10}
         }
     )
@@ -169,7 +167,7 @@ async def nes_sync_task(ctx: FF1Context):
             (reader, writer) = ctx.nes_streams
             msg = get_payload(ctx).encode()
             writer.write(msg)
-            writer.write(b'\n')
+            writer.write(b"\n")
             try:
                 await asyncio.wait_for(writer.drain(), timeout=1.5)
                 try:
@@ -179,12 +177,12 @@ async def nes_sync_task(ctx: FF1Context):
                     data = await asyncio.wait_for(reader.readline(), timeout=5)
                     data_decoded = json.loads(data.decode())
                     # print(data_decoded)
-                    if ctx.game is not None and 'locations' in data_decoded:
+                    if ctx.game is not None and "locations" in data_decoded:
                         # Not just a keep alive ping, parse
-                        async_start(parse_locations(data_decoded['locations'], ctx, False))
+                        async_start(parse_locations(data_decoded["locations"], ctx, False))
                     if not ctx.auth:
-                        ctx.auth = ''.join([chr(i) for i in data_decoded['playerName'] if i != 0])
-                        if ctx.auth == '':
+                        ctx.auth = "".join([chr(i) for i in data_decoded["playerName"] if i != 0])
+                        if ctx.auth == "":
                             logger.info("Invalid ROM detected. No player name built into the ROM. Please regenerate"
                                         "the ROM using the same link but adding your slot name")
                         if ctx.awaiting_rom:
@@ -194,7 +192,7 @@ async def nes_sync_task(ctx: FF1Context):
                     error_status = CONNECTION_TIMING_OUT_STATUS
                     writer.close()
                     ctx.nes_streams = None
-                except ConnectionResetError as e:
+                except ConnectionResetError:
                     logger.debug("Read failed due to Connection Lost, Reconnecting")
                     error_status = CONNECTION_RESET_STATUS
                     writer.close()
@@ -233,7 +231,7 @@ async def nes_sync_task(ctx: FF1Context):
                 continue
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Text Mode to use !hint and such with games that have no text entry
     Utils.init_logging("FF1Client")
 

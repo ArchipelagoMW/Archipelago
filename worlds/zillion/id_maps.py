@@ -2,19 +2,27 @@ from collections import defaultdict
 from typing import Dict, Iterable, Mapping, Tuple, TypedDict
 
 from zilliandomizer.logic_components.items import (
-    Item as ZzItem,
     KEYWORD,
     NORMAL,
     RESCUE,
+)
+from zilliandomizer.logic_components.items import (
+    Item as ZzItem,
+)
+from zilliandomizer.logic_components.items import (
     item_name_to_id as zz_item_name_to_zz_id,
-    items as zz_items,
+)
+from zilliandomizer.logic_components.items import (
     item_name_to_item as zz_item_name_to_zz_item,
+)
+from zilliandomizer.logic_components.items import (
+    items as zz_items,
 )
 from zilliandomizer.logic_components.regions import RegionData
 from zilliandomizer.low_resources.item_rooms import item_room_codes
 from zilliandomizer.options import Chars
-from zilliandomizer.utils.loc_name_maps import loc_to_id as pretty_loc_name_to_id
 from zilliandomizer.utils import parse_loc_name, parse_reg_name
+from zilliandomizer.utils.loc_name_maps import loc_to_id as pretty_loc_name_to_id
 from zilliandomizer.zri.memory import RescueInfo
 
 from .config import base_id as base_id
@@ -98,7 +106,7 @@ loc_name_to_id: Dict[str, int] = {
 
 
 def zz_reg_name_to_reg_name(zz_reg_name: str) -> str:
-    if zz_reg_name[0] == 'r' and zz_reg_name[3] == 'c':
+    if zz_reg_name[0] == "r" and zz_reg_name[3] == "c":
         row, col = parse_reg_name(zz_reg_name)
         end = zz_reg_name[5:]
         return f"{make_room_name(row, col)} {end.upper()}"

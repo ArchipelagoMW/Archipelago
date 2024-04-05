@@ -2,6 +2,7 @@ import math
 
 from BaseClasses import ItemClassification
 from worlds.generic.Rules import add_rule, item_name_in_locations, set_rule
+
 from . import Options
 from .Items import DLCQuestItem
 
@@ -286,9 +287,9 @@ def set_lfod_self_obtained_items_rules(world_options, player, world):
     set_rule(world.get_entrance("Vines", player),
              lambda state: state.has("Incredibly Important Pack", player))
     set_rule(world.get_entrance("Behind Rocks", player),
-             lambda state: state.can_reach("Cut Content", 'region', player))
+             lambda state: state.can_reach("Cut Content", "region", player))
     set_rule(world.get_entrance("Pickaxe Hard Cave", player),
-             lambda state: state.can_reach("Cut Content", 'region', player) and
+             lambda state: state.can_reach("Cut Content", "region", player) and
                            state.has("Name Change Pack", player))
 
 
@@ -308,9 +309,9 @@ def set_lfod_shuffled_items_rules(world_options, player, world):
              lambda state: state.has("Humble Indie Bindle", player))
     set_rule(world.get_location("Humble Indie Bindle", player),
              lambda state: state.has("Box of Various Supplies", player) and
-                           state.can_reach("Cut Content", 'region', player))
+                           state.can_reach("Cut Content", "region", player))
     set_rule(world.get_location("Box of Various Supplies", player),
-             lambda state: state.can_reach("Cut Content", 'region', player))
+             lambda state: state.can_reach("Cut Content", "region", player))
 
 
 def self_lfod_coinsanity_funded_purchase_rules(world_options, player, world):

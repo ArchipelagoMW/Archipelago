@@ -1,5 +1,5 @@
 ﻿from enum import Enum
-from typing import Dict, List
+
 
 class GameMode(Enum):
         Normal = 0
@@ -17,7 +17,7 @@ class SMLogic(Enum):
 class SwordLocation(Enum):
         Randomized = 0
         Early = 1
-        Uncle = 2   
+        Uncle = 2
 
 class MorphLocation(Enum):
         Randomized = 0
@@ -80,7 +80,7 @@ class Config:
     @property
     def SingleWorld(self) -> bool:
         return self.GameMode == GameMode.Normal
-    
+
     @property
     def Multiworld(self) -> bool:
         return self.GameMode == GameMode.Multiworld

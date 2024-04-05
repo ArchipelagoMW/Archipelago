@@ -1,24 +1,40 @@
 from __future__ import annotations
 
+import itertools
 import logging
+import operator
 import typing
 from copy import deepcopy
-import itertools
-import operator
 
 logger = logging.getLogger("Hollow Knight")
 
-from .Items import item_table, lookup_type_to_names, item_name_groups
-from .Regions import create_regions
-from .Rules import set_rules, cost_terms
-from .Options import hollow_knight_options, hollow_knight_randomize_options, Goal, WhitePalace, CostSanity, \
-    shop_to_option
-from .ExtractedData import locations, starts, multi_locations, location_to_region_lookup, \
-    event_names, item_effects, connectors, one_ways, vanilla_shop_costs, vanilla_location_costs
-from .Charms import names as charm_names
+from BaseClasses import Item, ItemClassification, Location, LocationProgressType, MultiWorld, Region, Tutorial
+from worlds.AutoWorld import LogicMixin, WebWorld, World
 
-from BaseClasses import Region, Location, MultiWorld, Item, LocationProgressType, Tutorial, ItemClassification
-from worlds.AutoWorld import World, LogicMixin, WebWorld
+from .Charms import names as charm_names
+from .ExtractedData import (
+    connectors,
+    event_names,
+    item_effects,
+    location_to_region_lookup,
+    locations,
+    multi_locations,
+    one_ways,
+    starts,
+    vanilla_location_costs,
+    vanilla_shop_costs,
+)
+from .Items import item_name_groups, item_table, lookup_type_to_names
+from .Options import (
+    CostSanity,
+    Goal,
+    WhitePalace,
+    hollow_knight_options,
+    hollow_knight_randomize_options,
+    shop_to_option,
+)
+from .Regions import create_regions
+from .Rules import cost_terms, set_rules
 
 path_of_pain_locations = {
     "Soul_Totem-Path_of_Pain_Below_Thornskip",
@@ -105,7 +121,7 @@ logicless_options = {
 randomizable_starting_items: typing.Dict[str, typing.Tuple[str, ...]] = {
     "RandomizeFocus": ("Focus",),
     "RandomizeSwim": ("Swim",),
-    "RandomizeNail": ('Upslash', 'Leftslash', 'Rightslash')
+    "RandomizeNail": ("Upslash", "Leftslash", "Rightslash")
 }
 
 # Shop cost types.
@@ -195,7 +211,7 @@ class HKWorld(World):
         return exclusions
 
     def create_regions(self):
-        menu_region: Region = create_region(self.multiworld, self.player, 'Menu')
+        menu_region: Region = create_region(self.multiworld, self.player, "Menu")
         self.multiworld.regions.append(menu_region)
         # wp_exclusions = self.white_palace_exclusions()
 
@@ -244,7 +260,7 @@ class HKWorld(World):
             excluded = False
 
             if not vanilla and location_name in wp_exclusions:
-                if location_name == 'King_Fragment':
+                if location_name == "King_Fragment":
                     excluded = True
                 else:
                     vanilla = True
@@ -320,7 +336,7 @@ class HKWorld(World):
         if additional_shop_items > 0:
             shops = list(shop for shop, locations in self.created_multi_locations.items() if len(locations) < 16)
             if not self.multiworld.EggShopSlots[self.player].value:  # No eggshop, so don't place items there
-                shops.remove('Egg_Shop')
+                shops.remove("Egg_Shop")
 
             if shops:
                 for _ in range(additional_shop_items):
@@ -365,7 +381,7 @@ class HKWorld(World):
             return {k: v for k, v in weights.items() if v}
 
         random = self.multiworld.random
-        hybrid_chance = getattr(self.multiworld, f"CostSanityHybridChance")[self.player].value
+        hybrid_chance = getattr(self.multiworld, "CostSanityHybridChance")[self.player].value
         weights = {
             data.term: getattr(self.multiworld, f"CostSanity{data.option}Weight")[self.player].value
             for data in cost_terms.values()
@@ -400,7 +416,7 @@ class HKWorld(World):
                     continue
                 if setting == CostSanity.option_shopsonly and location.basename not in multi_locations:
                     continue
-                if location.basename in {'Grubfather', 'Seer', 'Eggshop'}:
+                if location.basename in {"Grubfather", "Seer", "Eggshop"}:
                     our_weights = dict(weights_geoless)
                 else:
                     our_weights = dict(weights)
@@ -532,8 +548,8 @@ class HKWorld(World):
             for effect_name, effect_value in item_effects.get(item.name, {}).items():
                 state.prog_items[item.player][effect_name] += effect_value
         if item.name in {"Left_Mothwing_Cloak", "Right_Mothwing_Cloak"}:
-            if state.prog_items[item.player].get('RIGHTDASH', 0) and \
-                    state.prog_items[item.player].get('LEFTDASH', 0):
+            if state.prog_items[item.player].get("RIGHTDASH", 0) and \
+                    state.prog_items[item.player].get("LEFTDASH", 0):
                 (state.prog_items[item.player]["RIGHTDASH"], state.prog_items[item.player]["LEFTDASH"]) = \
                     ([max(state.prog_items[item.player]["RIGHTDASH"], state.prog_items[item.player]["LEFTDASH"])] * 2)
         return change
@@ -552,18 +568,18 @@ class HKWorld(World):
     @classmethod
     def stage_write_spoiler(cls, world: MultiWorld, spoiler_handle):
         hk_players = world.get_game_players(cls.game)
-        spoiler_handle.write('\n\nCharm Notches:')
+        spoiler_handle.write("\n\nCharm Notches:")
         for player in hk_players:
             name = world.get_player_name(player)
-            spoiler_handle.write(f'\n{name}\n')
+            spoiler_handle.write(f"\n{name}\n")
             hk_world: HKWorld = world.worlds[player]
             for charm_number, cost in enumerate(hk_world.charm_costs):
                 spoiler_handle.write(f"\n{charm_names[charm_number]}: {cost}")
 
-        spoiler_handle.write('\n\nShop Prices:')
+        spoiler_handle.write("\n\nShop Prices:")
         for player in hk_players:
             name = world.get_player_name(player)
-            spoiler_handle.write(f'\n{name}\n')
+            spoiler_handle.write(f"\n{name}\n")
             hk_world: HKWorld = world.worlds[player]
 
             if world.CostSanity[player].value:
@@ -571,7 +587,7 @@ class HKWorld(World):
                     (
                         loc for loc in itertools.chain(*(region.locations for region in world.get_regions(player)))
                         if loc.costs
-                    ), key=operator.attrgetter('name')
+                    ), key=operator.attrgetter("name")
                 ):
                     spoiler_handle.write(f"\n{loc}: {loc.item} costing {loc.cost_text()}")
             else:
@@ -590,8 +606,8 @@ class HKWorld(World):
             fillers = ["One_Geo", "Soul_Refill"]
             exclusions = self.white_palace_exclusions()
             for group in (
-                    'RandomizeGeoRocks', 'RandomizeSoulTotems', 'RandomizeLoreTablets', 'RandomizeJunkPitChests',
-                    'RandomizeRancidEggs'
+                    "RandomizeGeoRocks", "RandomizeSoulTotems", "RandomizeLoreTablets", "RandomizeJunkPitChests",
+                    "RandomizeRancidEggs"
             ):
                 if getattr(self.multiworld, group):
                     fillers.extend(item for item in hollow_knight_randomize_options[group].items if item not in
@@ -678,36 +694,36 @@ class HKLogicMixin(LogicMixin):
         return self.multiworld.StartLocation[player] == start_location
 
     def _hk_nail_combat(self, player: int) -> bool:
-        return self.has_any({'LEFTSLASH', 'RIGHTSLASH', 'UPSLASH'}, player)
+        return self.has_any({"LEFTSLASH", "RIGHTSLASH", "UPSLASH"}, player)
 
     def _hk_can_beat_thk(self, player: int) -> bool:
         return (
-            self.has('Opened_Black_Egg_Temple', player)
-            and (self.count('FIREBALL', player) + self.count('SCREAM', player) + self.count('QUAKE', player)) > 1
+            self.has("Opened_Black_Egg_Temple", player)
+            and (self.count("FIREBALL", player) + self.count("SCREAM", player) + self.count("QUAKE", player)) > 1
             and self._hk_nail_combat(player)
             and (
-                self.has_any({'LEFTDASH', 'RIGHTDASH'}, player)
-                or self._hk_option(player, 'ProficientCombat')
+                self.has_any({"LEFTDASH", "RIGHTDASH"}, player)
+                or self._hk_option(player, "ProficientCombat")
             )
-            and self.has('FOCUS', player)
+            and self.has("FOCUS", player)
         )
 
     def _hk_siblings_ending(self, player: int) -> bool:
-        return self._hk_can_beat_thk(player) and self.has('WHITEFRAGMENT', player, 3)
+        return self._hk_can_beat_thk(player) and self.has("WHITEFRAGMENT", player, 3)
 
     def _hk_can_beat_radiance(self, player: int) -> bool:
         return (
-            self.has('Opened_Black_Egg_Temple', player)
+            self.has("Opened_Black_Egg_Temple", player)
             and self._hk_nail_combat(player)
-            and self.has('WHITEFRAGMENT', player, 3)
-            and self.has('DREAMNAIL', player)
+            and self.has("WHITEFRAGMENT", player, 3)
+            and self.has("DREAMNAIL", player)
             and (
-                (self.has('LEFTCLAW', player) and self.has('RIGHTCLAW', player))
-                or self.has('WINGS', player)
+                (self.has("LEFTCLAW", player) and self.has("RIGHTCLAW", player))
+                or self.has("WINGS", player)
             )
-            and (self.count('FIREBALL', player) + self.count('SCREAM', player) + self.count('QUAKE', player)) > 1
+            and (self.count("FIREBALL", player) + self.count("SCREAM", player) + self.count("QUAKE", player)) > 1
             and (
-                (self.has('LEFTDASH', player, 2) and self.has('RIGHTDASH', player, 2))  # Both Shade Cloaks
-                or (self._hk_option(player, 'ProficientCombat') and self.has('QUAKE', player))  # or Dive
+                (self.has("LEFTDASH", player, 2) and self.has("RIGHTDASH", player, 2))  # Both Shade Cloaks
+                or (self._hk_option(player, "ProficientCombat") and self.has("QUAKE", player))  # or Dive
             )
         )

@@ -1,5 +1,5 @@
-from ..assembler import ASM
 from .. import utils
+from ..assembler import ASM
 
 
 def addBank3F(rom):
@@ -295,18 +295,18 @@ blockBadEmu:
     # Zol sprites, so we can have zol anywhere from a chest
     rom.banks[0x3F][0x2E00:0x2E60] = rom.banks[0x2E][0x1120:0x1180]
     # Patch gel(zol) entity to load sprites from the 2nd bank
-    rom.patch(0x06, 0x3C09, "5202522254025422" "5200522054005420", "600A602A620A622A" "6008602862086228")
-    rom.patch(0x07, 0x329B, "FFFFFFFF" "FFFFFFFF" "54005420" "52005220" "56005600",
-                            "FFFFFFFF" "FFFFFFFF" "62086228" "60086028" "64086408")
-    rom.patch(0x06, 0x3BFA, "56025622", "640A642A");
+    rom.patch(0x06, 0x3C09, "52025222540254225200522054005420", "600A602A620A622A6008602862086228")
+    rom.patch(0x07, 0x329B, "FFFFFFFFFFFFFFFF540054205200522056005600",
+                            "FFFFFFFFFFFFFFFF620862286008602864086408")
+    rom.patch(0x06, 0x3BFA, "56025622", "640A642A")
 
 
     # Cucco
     rom.banks[0x3F][0x2E80:0x2F00] = rom.banks[0x32][0x2500:0x2580]
     # Patch the cucco graphics to load from 2nd vram bank
     rom.patch(0x05, 0x0514,
-              "5001" "5201" "5401" "5601" "5221" "5021" "5621" "5421",
-              "6809" "6A09" "6C09" "6E09" "6A29" "6829" "6E29" "6C29")
+              "50015201540156015221502156215421",
+              "68096A096C096E096A2968296E296C29")
     # Song symbols
     rom.banks[0x3F][0x2F00:0x2F60] = utils.createTileData("""
 
@@ -377,8 +377,8 @@ blockBadEmu:
     # Rooster
     rom.banks[0x3F][0x3200:0x3300] = rom.banks[0x32][0x1D00:0x1E00]
     rom.patch(0x19, 0x19BC,
-              "42234023" "46234423" "40034203" "44034603" "4C034C23" "4E034E23" "48034823" "4A034A23",
-              "A22BA02B" "A62BA42B" "A00BA20B" "A40BA60B" "AC0BAC2B" "AE0BAE2B" "A80BA82B" "AA0BAA2B")
+              "422340234623442340034203440346034C034C234E034E23480348234A034A23",
+              "A22BA02BA62BA42BA00BA20BA40BA60BAC0BAC2BAE0BAE2BA80BA82BAA0BAA2B")
     # Replace some main item graphics with the rooster
     rom.banks[0x2C][0x0900:0x0940] = utils.createTileData(utils.tileDataToString(rom.banks[0x32][0x1D00:0x1D40]), " 321")
 

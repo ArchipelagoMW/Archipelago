@@ -1,7 +1,8 @@
 import typing
 
-from Options import Choice, Range, DeathLink, Toggle, DefaultOnToggle, StartInventoryPool
-from .creatures import all_creatures, Definitions
+from Options import Choice, DeathLink, DefaultOnToggle, Range, StartInventoryPool, Toggle
+
+from .creatures import Definitions, all_creatures
 
 
 class SwimRule(Choice):

@@ -1,8 +1,8 @@
 import typing
 from dataclasses import fields
 
-from . import SoETestBase
 from ..options import SoEOptions
+from . import SoETestBase
 
 if typing.TYPE_CHECKING:
     from .. import SoEWorld

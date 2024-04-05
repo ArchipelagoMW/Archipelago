@@ -1,8 +1,10 @@
-from typing import Dict, List, Any
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
-from worlds.generic.Rules import set_rule
-from . import Exits, Items, Locations, Options, Rules
+from typing import Any, Dict, List
+
+from BaseClasses import Entrance, Item, ItemClassification, Location, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
+from worlds.generic.Rules import set_rule
+
+from . import Exits, Items, Locations, Options, Rules
 
 
 class Hylics2Web(WebWorld):

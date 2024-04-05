@@ -1,24 +1,30 @@
-from typing import *
 import asyncio
+from typing import *
 
-from kvui import GameManager, HoverBehavior, ServerToolTip
 from kivy.app import App
 from kivy.clock import Clock
-from kivy.uix.tabbedpanel import TabbedPanelItem
-from kivy.uix.gridlayout import GridLayout
 from kivy.lang import Builder
-from kivy.uix.label import Label
+from kivy.properties import StringProperty
 from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
-from kivy.properties import StringProperty
+from kivy.uix.tabbedpanel import TabbedPanelItem
 
-from worlds.sc2.Client import SC2Context, calc_unfinished_missions, parse_unlock
-from worlds.sc2.MissionTables import lookup_id_to_mission, lookup_name_to_mission, campaign_race_exceptions, \
-    SC2Mission, SC2Race, SC2Campaign
-from worlds.sc2.Locations import LocationType, lookup_location_id_to_type
-from worlds.sc2.Options import LocationInclusion
+from kvui import GameManager, HoverBehavior, ServerToolTip
 from worlds.sc2 import SC2World, get_first_mission
+from worlds.sc2.Client import SC2Context, calc_unfinished_missions, parse_unlock
+from worlds.sc2.Locations import LocationType, lookup_location_id_to_type
+from worlds.sc2.MissionTables import (
+    SC2Campaign,
+    SC2Mission,
+    SC2Race,
+    campaign_race_exceptions,
+    lookup_id_to_mission,
+    lookup_name_to_mission,
+)
+from worlds.sc2.Options import LocationInclusion
 
 
 class HoverableButton(HoverBehavior, Button):
@@ -153,8 +159,8 @@ class SC2Manager(GameManager):
                     for category in categories:
                         category_name_height = 0
                         category_spacing = 3
-                        if category.startswith('_'):
-                            category_display_name = ''
+                        if category.startswith("_"):
+                            category_display_name = ""
                         else:
                             category_display_name = category
                             category_name_height += 25
@@ -181,7 +187,7 @@ class SC2Manager(GameManager):
                             # Map requirements not met
                             else:
                                 text = f"[color=a9a9a9]{text}[/color]"
-                                tooltip = f"Requires: "
+                                tooltip = "Requires: "
                                 if mission_data.required_world:
                                     tooltip += ", ".join(list(self.ctx.mission_req_table[parse_unlock(req_mission).campaign])[parse_unlock(req_mission).connect_to - 1] for
                                                             req_mission in
@@ -204,7 +210,7 @@ class SC2Manager(GameManager):
                             if remaining_count > 0:
                                 if tooltip:
                                     tooltip += "\n\n"
-                                tooltip += f"-- Uncollected locations --"
+                                tooltip += "-- Uncollected locations --"
                                 for loctype in LocationType:
                                     if len(remaining_locations[loctype]) > 0:
                                         if loctype == LocationType.VICTORY:
@@ -213,12 +219,12 @@ class SC2Manager(GameManager):
                                             tooltip += f"\n{self.get_location_type_title(loctype)}:\n- "
                                             tooltip += "\n- ".join(remaining_locations[loctype])
                                 if len(plando_locations) > 0:
-                                    tooltip += f"\nPlando:\n- "
+                                    tooltip += "\nPlando:\n- "
                                     tooltip += "\n- ".join(plando_locations)
-                            
+
                             MISSION_BUTTON_HEIGHT = 50
                             for pad in range(mission_data.ui_vertical_padding):
-                                column_spacer = Label(text='', size_hint_y=None, height=MISSION_BUTTON_HEIGHT)
+                                column_spacer = Label(text="", size_hint_y=None, height=MISSION_BUTTON_HEIGHT)
                                 category_panel.add_widget(column_spacer)
                             mission_button = MissionButton(text=text, size_hint_y=None, height=MISSION_BUTTON_HEIGHT)
                             mission_race = mission_obj.race
@@ -262,7 +268,7 @@ class SC2Manager(GameManager):
 
     def finish_launching(self, dt):
         self.launching = False
-    
+
     def sort_unfinished_locations(self, mission_name: str) -> Tuple[Dict[LocationType, List[str]], List[str], int]:
         locations: Dict[LocationType, List[str]] = {loctype: [] for loctype in LocationType}
         count = 0

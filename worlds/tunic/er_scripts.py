@@ -1,11 +1,19 @@
-from typing import Dict, List, Set, TYPE_CHECKING
-from BaseClasses import Region, ItemClassification, Item, Location
-from .locations import location_table
-from .er_data import Portal, tunic_er_regions, portal_mapping, \
-    dependent_regions_restricted, dependent_regions_nmg, dependent_regions_ur
-from .er_rules import set_er_region_rules
-from worlds.generic import PlandoConnection
 from random import Random
+from typing import TYPE_CHECKING, Dict, List, Set
+
+from BaseClasses import Item, ItemClassification, Location, Region
+from worlds.generic import PlandoConnection
+
+from .er_data import (
+    Portal,
+    dependent_regions_nmg,
+    dependent_regions_restricted,
+    dependent_regions_ur,
+    portal_mapping,
+    tunic_er_regions,
+)
+from .er_rules import set_er_region_rules
+from .locations import location_table
 
 if TYPE_CHECKING:
     from . import TunicWorld
@@ -39,7 +47,7 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
         region = regions[location_table[location_name].er_region]
         location = TunicERLocation(world.player, location_name, location_id, region)
         region.locations.append(location)
-    
+
     create_randomized_entrances(portal_pairs, regions)
 
     for region in regions.values():
@@ -225,7 +233,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                         portal2 = portal
                         break
                 if p_exit in ["Shop Portal", "Shop"]:
-                    portal2 = Portal(name="Shop Portal", region=f"Shop",
+                    portal2 = Portal(name="Shop Portal", region="Shop",
                                      destination="Previous Region", tag="_")
                     shop_count -= 1
                     if shop_count < 0:
@@ -261,7 +269,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             test2 = len(connected_regions)
             if test1 == test2:
                 break
-    
+
     # need to plando fairy cave, or it could end up laurels locked
     # fix this later to be random after adding some item logic to dependent regions
     if world.options.laurels_location == "10_fairies" and not hasattr(world.multiworld, "re_gen_passthrough"):
@@ -360,7 +368,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     if hasattr(world.multiworld, "re_gen_passthrough"):
         if "TUNIC" in world.multiworld.re_gen_passthrough:
             shop_count = 0
-    
+
     for i in range(shop_count):
         portal1 = None
         for portal in two_plus:
@@ -372,7 +380,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         if portal1 is None:
             raise Exception("Too many shops in the pool, or something else went wrong.")
         portal2 = Portal(name="Shop Portal", region="Shop", destination="Previous Region", tag="_")
-        
+
         portal_pairs[portal1] = portal2
 
     # connect dead ends to random non-dead ends

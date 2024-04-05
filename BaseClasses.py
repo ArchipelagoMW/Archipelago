@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import copy
-import itertools
 import functools
 import logging
 import random
@@ -11,8 +10,22 @@ from argparse import Namespace
 from collections import Counter, deque
 from collections.abc import Collection, MutableSequence
 from enum import IntEnum, IntFlag
-from typing import Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, Optional, Set, Tuple, TypedDict, Union, \
-    Type, ClassVar
+from typing import (
+    Any,
+    Callable,
+    ClassVar,
+    Dict,
+    Iterable,
+    Iterator,
+    List,
+    NamedTuple,
+    Optional,
+    Set,
+    Tuple,
+    Type,
+    TypedDict,
+    Union,
+)
 
 import NetUtils
 import Options
@@ -25,7 +38,7 @@ if typing.TYPE_CHECKING:
 class Group(TypedDict, total=False):
     name: str
     game: str
-    world: "AutoWorld.World"
+    world: AutoWorld.World
     players: Set[int]
     item_pool: Set[str]
     replacement_items: Dict[int, Optional[str]]
@@ -48,7 +61,7 @@ class ThreadBarrierProxy:
                                "Please use multiworld.per_slot_randoms[player] or randomize ahead of output.")
 
 
-class MultiWorld():
+class MultiWorld:
     debug_types = False
     player_name: Dict[int, str]
     difficulty_requirements: dict
@@ -58,7 +71,7 @@ class MultiWorld():
     plando_texts: List[Dict[str, str]]
     plando_items: List[List[Dict[str, Any]]]
     plando_connections: List
-    worlds: Dict[int, "AutoWorld.World"]
+    worlds: Dict[int, AutoWorld.World]
     groups: Dict[int, Group]
     regions: RegionManager
     itempool: List[Item]
@@ -88,7 +101,7 @@ class MultiWorld():
     per_slot_randoms: Utils.DeprecateDict[int, random.Random]
     """Deprecated. Please use `self.random` instead."""
 
-    class AttributeProxy():
+    class AttributeProxy:
         def __init__(self, rule):
             self.rule = rule
 
@@ -138,7 +151,7 @@ class MultiWorld():
         self.players = players
         self.player_types = {player: NetUtils.SlotType.player for player in self.player_ids}
         self.glitch_triforce = False
-        self.algorithm = 'balanced'
+        self.algorithm = "balanced"
         self.groups = {}
         self.regions = self.RegionManager(players)
         self.shops = []
@@ -161,61 +174,61 @@ class MultiWorld():
         self.indirect_connections = {}
         self.start_inventory_from_pool: Dict[int, Options.StartInventoryPool] = {}
         self.fix_trock_doors = self.AttributeProxy(
-            lambda player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted')
+            lambda player: self.shuffle[player] != "vanilla" or self.mode[player] == "inverted")
         self.fix_skullwoods_exit = self.AttributeProxy(
-            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeons_simple'])
+            lambda player: self.shuffle[player] not in ["vanilla", "simple", "restricted", "dungeons_simple"])
         self.fix_palaceofdarkness_exit = self.AttributeProxy(
-            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeons_simple'])
+            lambda player: self.shuffle[player] not in ["vanilla", "simple", "restricted", "dungeons_simple"])
         self.fix_trock_exit = self.AttributeProxy(
-            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeons_simple'])
+            lambda player: self.shuffle[player] not in ["vanilla", "simple", "restricted", "dungeons_simple"])
 
         for player in range(1, players + 1):
             def set_player_attr(attr, val):
                 self.__dict__.setdefault(attr, {})[player] = val
 
-            set_player_attr('shuffle', "vanilla")
-            set_player_attr('logic', "noglitches")
-            set_player_attr('mode', 'open')
-            set_player_attr('difficulty', 'normal')
-            set_player_attr('item_functionality', 'normal')
-            set_player_attr('timer', False)
-            set_player_attr('goal', 'ganon')
-            set_player_attr('required_medallions', ['Ether', 'Quake'])
-            set_player_attr('swamp_patch_required', False)
-            set_player_attr('powder_patch_required', False)
-            set_player_attr('ganon_at_pyramid', True)
-            set_player_attr('ganonstower_vanilla', True)
-            set_player_attr('can_access_trock_eyebridge', None)
-            set_player_attr('can_access_trock_front', None)
-            set_player_attr('can_access_trock_big_chest', None)
-            set_player_attr('can_access_trock_middle', None)
-            set_player_attr('fix_fake_world', True)
-            set_player_attr('difficulty_requirements', None)
-            set_player_attr('boss_shuffle', 'none')
-            set_player_attr('enemy_health', 'default')
-            set_player_attr('enemy_damage', 'default')
-            set_player_attr('beemizer_total_chance', 0)
-            set_player_attr('beemizer_trap_chance', 0)
-            set_player_attr('escape_assist', [])
-            set_player_attr('treasure_hunt_icon', 'Triforce Piece')
-            set_player_attr('treasure_hunt_count', 0)
-            set_player_attr('clock_mode', False)
-            set_player_attr('countdown_start_time', 10)
-            set_player_attr('red_clock_time', -2)
-            set_player_attr('blue_clock_time', 2)
-            set_player_attr('green_clock_time', 4)
-            set_player_attr('can_take_damage', True)
-            set_player_attr('triforce_pieces_available', 30)
-            set_player_attr('triforce_pieces_required', 20)
-            set_player_attr('shop_shuffle', 'off')
-            set_player_attr('shuffle_prizes', "g")
-            set_player_attr('sprite_pool', [])
-            set_player_attr('dark_room_logic', "lamp")
-            set_player_attr('plando_items', [])
-            set_player_attr('plando_texts', {})
-            set_player_attr('plando_connections', [])
-            set_player_attr('game', "A Link to the Past")
-            set_player_attr('completion_condition', lambda state: True)
+            set_player_attr("shuffle", "vanilla")
+            set_player_attr("logic", "noglitches")
+            set_player_attr("mode", "open")
+            set_player_attr("difficulty", "normal")
+            set_player_attr("item_functionality", "normal")
+            set_player_attr("timer", False)
+            set_player_attr("goal", "ganon")
+            set_player_attr("required_medallions", ["Ether", "Quake"])
+            set_player_attr("swamp_patch_required", False)
+            set_player_attr("powder_patch_required", False)
+            set_player_attr("ganon_at_pyramid", True)
+            set_player_attr("ganonstower_vanilla", True)
+            set_player_attr("can_access_trock_eyebridge", None)
+            set_player_attr("can_access_trock_front", None)
+            set_player_attr("can_access_trock_big_chest", None)
+            set_player_attr("can_access_trock_middle", None)
+            set_player_attr("fix_fake_world", True)
+            set_player_attr("difficulty_requirements", None)
+            set_player_attr("boss_shuffle", "none")
+            set_player_attr("enemy_health", "default")
+            set_player_attr("enemy_damage", "default")
+            set_player_attr("beemizer_total_chance", 0)
+            set_player_attr("beemizer_trap_chance", 0)
+            set_player_attr("escape_assist", [])
+            set_player_attr("treasure_hunt_icon", "Triforce Piece")
+            set_player_attr("treasure_hunt_count", 0)
+            set_player_attr("clock_mode", False)
+            set_player_attr("countdown_start_time", 10)
+            set_player_attr("red_clock_time", -2)
+            set_player_attr("blue_clock_time", 2)
+            set_player_attr("green_clock_time", 4)
+            set_player_attr("can_take_damage", True)
+            set_player_attr("triforce_pieces_available", 30)
+            set_player_attr("triforce_pieces_required", 20)
+            set_player_attr("shop_shuffle", "off")
+            set_player_attr("shuffle_prizes", "g")
+            set_player_attr("sprite_pool", [])
+            set_player_attr("dark_room_logic", "lamp")
+            set_player_attr("plando_items", [])
+            set_player_attr("plando_texts", {})
+            set_player_attr("plando_connections", [])
+            set_player_attr("game", "A Link to the Past")
+            set_player_attr("completion_condition", lambda state: True)
         self.worlds = {}
         self.per_slot_randoms = Utils.DeprecateDict("Using per_slot_randoms is now deprecated. Please use the "
                                                       "world's random object instead (usually self.random)")
@@ -362,7 +375,7 @@ class MultiWorld():
                      player not in self.groups and self.game[player] == game_name)
 
     def get_name_string_for_object(self, obj) -> str:
-        return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_name(obj.player)})'
+        return obj.name if self.players == 1 else f"{obj.name} ({self.get_player_name(obj.player)})"
 
     def get_player_name(self, player: int) -> str:
         return self.player_name[player]
@@ -447,7 +460,7 @@ class MultiWorld():
         if collect:
             self.state.collect(item, location.event, location)
 
-        logging.debug('Placed %s at %s', item, location)
+        logging.debug("Placed %s at %s", item, location)
 
     def get_entrances(self, player: Optional[int] = None) -> Iterable[Entrance]:
         if player is not None:
@@ -506,7 +519,7 @@ class MultiWorld():
         if player:
             return self.completion_condition[player](state)
         else:
-            return all((self.has_beaten_game(state, p) for p in range(1, self.players + 1)))
+            return all(self.has_beaten_game(state, p) for p in range(1, self.players + 1))
 
     def can_beat_game(self, starting_state: Optional[CollectionState] = None) -> bool:
         if starting_state:
@@ -635,7 +648,7 @@ class MultiWorld():
 PathValue = Tuple[str, Optional["PathValue"]]
 
 
-class CollectionState():
+class CollectionState:
     prog_items: Dict[int, Counter[str]]
     multiworld: MultiWorld
     reachable_regions: Dict[int, Set[Region]]
@@ -682,7 +695,7 @@ class CollectionState():
             if new_region in reachable_regions:
                 blocked_connections.remove(connection)
             elif connection.can_reach(self):
-                assert new_region, f"tried to search through an Entrance \"{connection}\" with no Region"
+                assert new_region, f'tried to search through an Entrance "{connection}" with no Region'
                 reachable_regions.add(new_region)
                 blocked_connections.remove(connection)
                 blocked_connections.update(new_region.exits)
@@ -715,9 +728,9 @@ class CollectionState():
         if isinstance(spot, str):
             assert isinstance(player, int), "can_reach: player is required if spot is str"
             # try to resolve a name
-            if resolution_hint == 'Location':
+            if resolution_hint == "Location":
                 return self.can_reach_location(spot, player)
-            elif resolution_hint == 'Entrance':
+            elif resolution_hint == "Entrance":
                 return self.can_reach_entrance(spot, player)
             else:
                 # default to Region
@@ -822,14 +835,14 @@ class Entrance:
     addresses = None
     target = None
 
-    def __init__(self, player: int, name: str = '', parent: Region = None):
+    def __init__(self, player: int, name: str = "", parent: Region = None):
         self.name = name
         self.parent_region = parent
         self.player = player
 
     def can_reach(self, state: CollectionState) -> bool:
         if self.parent_region.can_reach(state) and self.access_rule(state):
-            if not self.hide_path and not self in state.path:
+            if not self.hide_path and self not in state.path:
                 state.path[self] = (self.name, state.path.get(self.parent_region, (self.parent_region.name, None)))
             return True
 
@@ -846,7 +859,7 @@ class Entrance:
 
     def __str__(self):
         multiworld = self.parent_region.multiworld if self.parent_region else None
-        return multiworld.get_name_string_for_object(self) if multiworld else f'{self.name} (Player {self.player})'
+        return multiworld.get_name_string_for_object(self) if multiworld else f"{self.name} (Player {self.player})"
 
 
 class Region:
@@ -1013,7 +1026,7 @@ class Region:
         return self.__str__()
 
     def __str__(self):
-        return self.multiworld.get_name_string_for_object(self) if self.multiworld else f'{self.name} (Player {self.player})'
+        return self.multiworld.get_name_string_for_object(self) if self.multiworld else f"{self.name} (Player {self.player})"
 
 
 class LocationProgressType(IntEnum):
@@ -1037,7 +1050,7 @@ class Location:
     item_rule = staticmethod(lambda item: True)
     item: Optional[Item] = None
 
-    def __init__(self, player: int, name: str = '', address: Optional[int] = None, parent: Optional[Region] = None):
+    def __init__(self, player: int, name: str = "", address: Optional[int] = None, parent: Optional[Region] = None):
         self.player = player
         self.name = name
         self.address = address
@@ -1067,7 +1080,7 @@ class Location:
 
     def __str__(self):
         multiworld = self.parent_region.multiworld if self.parent_region and self.parent_region.multiworld else None
-        return multiworld.get_name_string_for_object(self) if multiworld else f'{self.name} (Player {self.player})'
+        return multiworld.get_name_string_for_object(self) if multiworld else f"{self.name} (Player {self.player})"
 
     def __hash__(self):
         return hash((self.name, self.player))
@@ -1210,7 +1223,7 @@ class Spoiler:
         collection_spheres: List[Set[Location]] = []
         state = CollectionState(multiworld)
         sphere_candidates = set(prog_locations)
-        logging.debug('Building up collection spheres.')
+        logging.debug("Building up collection spheres.")
         while sphere_candidates:
 
             # build up spheres of collection radius.
@@ -1225,16 +1238,16 @@ class Spoiler:
             collection_spheres.append(sphere)
             state_cache.append(state.copy())
 
-            logging.debug('Calculated sphere %i, containing %i of %i progress items.', len(collection_spheres),
+            logging.debug("Calculated sphere %i, containing %i of %i progress items.", len(collection_spheres),
                           len(sphere),
                           len(prog_locations))
             if not sphere:
-                logging.debug('The following items could not be reached: %s', ['%s (Player %d) at %s (Player %d)' % (
+                logging.debug("The following items could not be reached: %s", ["%s (Player %d) at %s (Player %d)" % (
                     location.item.name, location.item.player, location.name, location.player) for location in
                                                                                sphere_candidates])
-                if any([multiworld.accessibility[location.item.player] != 'minimal' for location in sphere_candidates]):
-                    raise RuntimeError(f'Not all progression items reachable ({sphere_candidates}). '
-                                       f'Something went terribly wrong here.')
+                if any([multiworld.accessibility[location.item.player] != "minimal" for location in sphere_candidates]):
+                    raise RuntimeError(f"Not all progression items reachable ({sphere_candidates}). "
+                                       f"Something went terribly wrong here.")
                 else:
                     self.unreachables = sphere_candidates
                     break
@@ -1246,7 +1259,7 @@ class Spoiler:
             to_delete = set()
             for location in sphere:
                 # we remove the item at location and check if game is still beatable
-                logging.debug('Checking if %s (Player %d) is required to beat the game.', location.item.name,
+                logging.debug("Checking if %s (Player %d) is required to beat the game.", location.item.name,
                               location.item.player)
                 old_item = location.item
                 location.item = None
@@ -1263,7 +1276,7 @@ class Spoiler:
         # second phase, sphere 0
         removed_precollected = []
         for item in (i for i in chain.from_iterable(multiworld.precollected_items.values()) if i.advancement):
-            logging.debug('Checking if %s (Player %d) is required to beat the game.', item.name, item.player)
+            logging.debug("Checking if %s (Player %d) is required to beat the game.", item.name, item.player)
             multiworld.precollected_items[item.player].remove(item)
             multiworld.state.remove(item)
             if not multiworld.can_beat_game():
@@ -1290,12 +1303,12 @@ class Spoiler:
 
             collection_spheres.append(sphere)
 
-            logging.debug('Calculated final sphere %i, containing %i of %i progress items.', len(collection_spheres),
+            logging.debug("Calculated final sphere %i, containing %i of %i progress items.", len(collection_spheres),
                           len(sphere), len(required_locations))
 
             required_locations -= sphere
             if not sphere:
-                raise RuntimeError(f'Not all required items reachable. Unreachable locations: {required_locations}')
+                raise RuntimeError(f"Not all required items reachable. Unreachable locations: {required_locations}")
 
         # we can finally output our playthrough
         self.playthrough = {"0": sorted([self.multiworld.get_name_string_for_object(item) for item in
@@ -1342,14 +1355,14 @@ class Spoiler:
             if player in multiworld.get_game_players("A Link to the Past"):
                 # If Pyramid Fairy Entrance needs to be reached, also path to Big Bomb Shop
                 # Maybe move the big bomb over to the Event system instead?
-                if any(exit_path == 'Pyramid Fairy' for path in self.paths.values()
+                if any(exit_path == "Pyramid Fairy" for path in self.paths.values()
                        for (_, exit_path) in path):
-                    if multiworld.mode[player] != 'inverted':
-                        self.paths[str(multiworld.get_region('Big Bomb Shop', player))] = \
-                            get_path(state, multiworld.get_region('Big Bomb Shop', player))
+                    if multiworld.mode[player] != "inverted":
+                        self.paths[str(multiworld.get_region("Big Bomb Shop", player))] = \
+                            get_path(state, multiworld.get_region("Big Bomb Shop", player))
                     else:
-                        self.paths[str(multiworld.get_region('Inverted Big Bomb Shop', player))] = \
-                            get_path(state, multiworld.get_region('Inverted Big Bomb Shop', player))
+                        self.paths[str(multiworld.get_region("Inverted Big Bomb Shop", player))] = \
+                            get_path(state, multiworld.get_region("Inverted Big Bomb Shop", player))
 
     def to_file(self, filename: str) -> None:
         from worlds import AutoWorld
@@ -1359,19 +1372,19 @@ class Spoiler:
             display_name = getattr(option_obj, "display_name", option_key)
             outfile.write(f"{display_name + ':':33}{res.current_option_name}\n")
 
-        with open(filename, 'w', encoding="utf-8-sig") as outfile:
+        with open(filename, "w", encoding="utf-8-sig") as outfile:
             outfile.write(
-                'Archipelago Version %s  -  Seed: %s\n\n' % (
+                "Archipelago Version %s  -  Seed: %s\n\n" % (
                     Utils.__version__, self.multiworld.seed))
-            outfile.write('Filling Algorithm:               %s\n' % self.multiworld.algorithm)
-            outfile.write('Players:                         %d\n' % self.multiworld.players)
-            outfile.write(f'Plando Options:                  {self.multiworld.plando_options}\n')
+            outfile.write("Filling Algorithm:               %s\n" % self.multiworld.algorithm)
+            outfile.write("Players:                         %d\n" % self.multiworld.players)
+            outfile.write(f"Plando Options:                  {self.multiworld.plando_options}\n")
             AutoWorld.call_stage(self.multiworld, "write_spoiler_header", outfile)
 
             for player in range(1, self.multiworld.players + 1):
                 if self.multiworld.players > 1:
-                    outfile.write('\nPlayer %d: %s\n' % (player, self.multiworld.get_player_name(player)))
-                outfile.write('Game:                            %s\n' % self.multiworld.game[player])
+                    outfile.write("\nPlayer %d: %s\n" % (player, self.multiworld.get_player_name(player)))
+                outfile.write("Game:                            %s\n" % self.multiworld.game[player])
 
                 for f_option, option in self.multiworld.worlds[player].options_dataclass.type_hints.items():
                     write_option(f_option, option)
@@ -1379,43 +1392,43 @@ class Spoiler:
                 AutoWorld.call_single(self.multiworld, "write_spoiler_header", player, outfile)
 
             if self.entrances:
-                outfile.write('\n\nEntrances:\n\n')
-                outfile.write('\n'.join(['%s%s %s %s' % (f'{self.multiworld.get_player_name(entry["player"])}: '
-                                                         if self.multiworld.players > 1 else '', entry['entrance'],
-                                                         '<=>' if entry['direction'] == 'both' else
-                                                         '<=' if entry['direction'] == 'exit' else '=>',
-                                                         entry['exit']) for entry in self.entrances.values()]))
+                outfile.write("\n\nEntrances:\n\n")
+                outfile.write("\n".join(["%s%s %s %s" % (f'{self.multiworld.get_player_name(entry["player"])}: '
+                                                         if self.multiworld.players > 1 else "", entry["entrance"],
+                                                         "<=>" if entry["direction"] == "both" else
+                                                         "<=" if entry["direction"] == "exit" else "=>",
+                                                         entry["exit"]) for entry in self.entrances.values()]))
 
             AutoWorld.call_all(self.multiworld, "write_spoiler", outfile)
 
             locations = [(str(location), str(location.item) if location.item is not None else "Nothing")
                          for location in self.multiworld.get_locations() if location.show_in_spoiler]
-            outfile.write('\n\nLocations:\n\n')
-            outfile.write('\n'.join(
-                ['%s: %s' % (location, item) for location, item in locations]))
+            outfile.write("\n\nLocations:\n\n")
+            outfile.write("\n".join(
+                ["%s: %s" % (location, item) for location, item in locations]))
 
-            outfile.write('\n\nPlaythrough:\n\n')
-            outfile.write('\n'.join(['%s: {\n%s\n}' % (sphere_nr, '\n'.join(
+            outfile.write("\n\nPlaythrough:\n\n")
+            outfile.write("\n".join(["%s: {\n%s\n}" % (sphere_nr, "\n".join(
                 [f"  {location}: {item}" for (location, item) in sphere.items()] if isinstance(sphere, dict) else
                 [f"  {item}" for item in sphere])) for (sphere_nr, sphere) in self.playthrough.items()]))
             if self.unreachables:
-                outfile.write('\n\nUnreachable Items:\n\n')
+                outfile.write("\n\nUnreachable Items:\n\n")
                 outfile.write(
-                    '\n'.join(['%s: %s' % (unreachable.item, unreachable) for unreachable in self.unreachables]))
+                    "\n".join(["%s: %s" % (unreachable.item, unreachable) for unreachable in self.unreachables]))
 
             if self.paths:
-                outfile.write('\n\nPaths:\n\n')
+                outfile.write("\n\nPaths:\n\n")
                 path_listings = []
                 for location, path in sorted(self.paths.items()):
                     path_lines = []
                     for region, exit in path:
                         if exit is not None:
-                            path_lines.append("{} -> {}".format(region, exit))
+                            path_lines.append(f"{region} -> {exit}")
                         else:
                             path_lines.append(region)
                     path_listings.append("{}\n        {}".format(location, "\n   =>   ".join(path_lines)))
 
-                outfile.write('\n'.join(path_listings))
+                outfile.write("\n".join(path_listings))
             AutoWorld.call_all(self.multiworld, "write_spoiler_end", outfile)
 
 

@@ -1,5 +1,4 @@
 from ..assembler import ASM
-from ..roomEditor import RoomEditor
 
 
 def updateFinishingMinigame(rom):

@@ -1,13 +1,13 @@
-from typing import ClassVar
-
-from typing import Dict, FrozenSet, Tuple, Any
 from argparse import Namespace
+from test.general import gen_steps
+from test.general import setup_solo_multiworld as setup_base_solo_multiworld
+from test.TestBase import WorldTestBase
+from typing import Any, ClassVar, Dict, FrozenSet, Tuple
 
 from BaseClasses import MultiWorld
-from test.TestBase import WorldTestBase
-from .. import DLCqworld
-from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
 from worlds.AutoWorld import call_all
+
+from .. import DLCqworld
 
 
 class DLCQuestTestBase(WorldTestBase):
@@ -18,7 +18,7 @@ class DLCQuestTestBase(WorldTestBase):
     def world_setup(self, *args, **kwargs):
         super().world_setup(*args, **kwargs)
         if self.constructed:
-            self.world = self.multiworld.worlds[self.player]  # noqa
+            self.world = self.multiworld.worlds[self.player]
 
     @property
     def run_default_tests(self) -> bool:

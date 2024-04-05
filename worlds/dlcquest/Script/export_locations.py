@@ -16,5 +16,5 @@ if not os.path.isdir("output"):
 if __name__ == "__main__":
     with open("output/dlc_quest_location_table.json", "w+") as f:
         locations = location_table
-           
+
         json.dump({"locations": locations}, f)

@@ -1,7 +1,7 @@
 """
 Classes and functions related to AP locations for Pokemon Emerald
 """
-from typing import TYPE_CHECKING, Dict, Optional, FrozenSet, Iterable
+from typing import TYPE_CHECKING, Dict, FrozenSet, Iterable, Optional
 
 from BaseClasses import Location, Region
 
@@ -203,7 +203,7 @@ def set_legendary_cave_entrances(world: "PokemonEmeraldWorld") -> None:
     terra_cave_location_location = world.multiworld.get_location("TERRA_CAVE_LOCATION", world.player)
     terra_cave_location_location.item = None
     terra_cave_location_location.place_locked_item(world.create_event(terra_cave_location_name))
-    
+
     marine_cave_location_name = world.random.choice([
         "MARINE_CAVE_ROUTE_105_1",
         "MARINE_CAVE_ROUTE_105_2",

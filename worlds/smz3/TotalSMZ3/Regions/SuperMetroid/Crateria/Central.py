@@ -1,6 +1,7 @@
-﻿from ....Region import SMRegion
-from ....Config import Config, SMLogic
+﻿from ....Config import Config, SMLogic
 from ....Location import Location, LocationType
+from ....Region import SMRegion
+
 
 class Central(SMRegion):
     Name = "Crateria Central"
@@ -15,7 +16,7 @@ class Central(SMRegion):
                 lambda items: items.CanPassBombPassages()),
             Location(self, 6, 0x8F83EE, LocationType.Visible, "Missile (Crateria bottom)",
                 lambda items: items.CanDestroyBombWalls()),
-            Location(self, 11, 0x8F8478, LocationType.Visible, "Super Missile (Crateria)", 
+            Location(self, 11, 0x8F8478, LocationType.Visible, "Super Missile (Crateria)",
                 lambda items: items.CanUsePowerBombs() and items.HasEnergyReserves(2) and items.SpeedBooster),
             Location(self, 7, 0x8F8404, LocationType.Chozo, "Bombs",
                 lambda items: (items.CardCrateriaBoss if config.Keysanity else items.CanOpenRedDoors()) and items.CanPassBombPassages() if self.Logic == SMLogic.Normal else \

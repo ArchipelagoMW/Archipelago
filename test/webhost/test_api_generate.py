@@ -1,14 +1,15 @@
 import io
-import unittest
 import json
+import unittest
+
 import yaml
 
 
 class TestDocs(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        from WebHostLib import app as raw_app
         from WebHost import get_app
+        from WebHostLib import app as raw_app
         raw_app.config["PONY"] = {
             "provider": "sqlite",
             "filename": ":memory:",
@@ -37,7 +38,7 @@ class TestDocs(unittest.TestCase):
         response = self.client.post(
             "/api/generate",
             data=json.dumps({"weights": options}),
-            content_type='application/json'
+            content_type="application/json"
         )
         json_data = response.get_json()
         self.assertTrue(json_data["text"].startswith("Generation of seed "))
@@ -52,7 +53,7 @@ class TestDocs(unittest.TestCase):
         response = self.client.post(
             "/api/generate",
             data={
-                'file': (io.BytesIO(yaml.dump(options, encoding="utf-8")), "test.yaml")
+                "file": (io.BytesIO(yaml.dump(options, encoding="utf-8")), "test.yaml")
             },
         )
         json_data = response.get_json()

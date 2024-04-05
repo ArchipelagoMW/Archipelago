@@ -38,15 +38,15 @@ class TestHelpers(unittest.TestCase):
             "TestRegion1": {"TestRegion2": "connection"},
             "TestRegion2": {"TestRegion1": None},
         }
-        
+
         reg_exit_set: Dict[str, set[str]] = {
             "TestRegion1": {"TestRegion3"}
         }
-        
+
         exit_rules: Dict[str, Callable[[CollectionState], bool]] = {
             "TestRegion1": lambda state: state.has("test_item", self.player)
         }
-        
+
         self.multiworld.regions += [Region(region, self.player, self.multiworld, regions[region]) for region in regions]
 
         with self.subTest("Test Location Creation Helper"):
@@ -73,7 +73,7 @@ class TestHelpers(unittest.TestCase):
                         entrance_name = exit_name if exit_name else f"{parent} -> {exit_reg}"
                         self.assertEqual(exit_rules[exit_reg],
                                          self.multiworld.get_entrance(entrance_name, self.player).access_rule)
-            
+
             for region in reg_exit_set:
                 current_region = self.multiworld.get_region(region, self.player)
                 current_region.add_exits(reg_exit_set[region])

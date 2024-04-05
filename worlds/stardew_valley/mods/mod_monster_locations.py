@@ -1,8 +1,8 @@
 from typing import Dict, Tuple
 
-from .mod_data import ModNames
 from ..strings.monster_names import Monster
-from ..strings.region_names import SVERegion, DeepWoodsRegion, BoardingHouseRegion
+from ..strings.region_names import BoardingHouseRegion, DeepWoodsRegion, SVERegion
+from .mod_data import ModNames
 
 sve_monsters_locations: Dict[str, Tuple[str, ...]] = {
     Monster.shadow_brute_dangerous: (SVERegion.highlands_cavern,),

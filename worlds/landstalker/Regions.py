@@ -1,6 +1,7 @@
-from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, List, NamedTuple, Optional
 
 from BaseClasses import MultiWorld, Region
+
 from .data.world_node import WORLD_NODES_JSON
 from .data.world_path import WORLD_PATHS_JSON
 from .data.world_region import WORLD_REGIONS_JSON
@@ -107,12 +108,12 @@ def load_teleport_trees():
     pairs = []
     for pair in WORLD_TELEPORT_TREES_JSON:
         first_tree = {
-            'name':   pair[0]["name"],
-            'region': pair[0]["nodeId"]
+            "name":   pair[0]["name"],
+            "region": pair[0]["nodeId"]
         }
         second_tree = {
-            'name':   pair[1]["name"],
-            'region': pair[1]["nodeId"]
+            "name":   pair[1]["name"],
+            "region": pair[1]["nodeId"]
         }
         pairs.append([first_tree, second_tree])
     return pairs

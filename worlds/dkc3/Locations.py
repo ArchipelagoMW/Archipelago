@@ -1,8 +1,9 @@
 import typing
 
 from BaseClasses import Location
-from .Names import LocationName
 from worlds.AutoWorld import World
+
+from .Names import LocationName
 
 
 class DKC3Location(Location):
@@ -12,7 +13,7 @@ class DKC3Location(Location):
     progress_bit:  int = 0
     inverted_bit: bool = False
 
-    def __init__(self, player: int, name: str = '', address: int = None, parent=None, prog_byte: int = None, prog_bit: int = None, invert: bool = False):
+    def __init__(self, player: int, name: str = "", address: int = None, parent=None, prog_byte: int = None, prog_bit: int = None, invert: bool = False):
         super().__init__(player, name, address, parent)
         self.progress_byte = prog_byte
         self.progress_bit  = prog_bit
@@ -29,7 +30,7 @@ level_location_table = {
     LocationName.doorstop_dash_bonus_1: 0xDC3005,
     LocationName.doorstop_dash_bonus_2: 0xDC3006,
     LocationName.doorstop_dash_dk:      0xDC3007,
-    
+
     LocationName.tidal_trouble_flag:    0xDC3008,
     LocationName.tidal_trouble_bonus_1: 0xDC3009,
     LocationName.tidal_trouble_bonus_2: 0xDC300A,
@@ -39,7 +40,7 @@ level_location_table = {
     LocationName.skiddas_row_bonus_1: 0xDC300D,
     LocationName.skiddas_row_bonus_2: 0xDC300E,
     LocationName.skiddas_row_dk:      0xDC300F,
-    
+
     LocationName.murky_mill_flag:    0xDC3010,
     LocationName.murky_mill_bonus_1: 0xDC3011,
     LocationName.murky_mill_bonus_2: 0xDC3012,
@@ -49,7 +50,7 @@ level_location_table = {
     LocationName.barrel_shield_bust_up_bonus_1: 0xDC3015,
     LocationName.barrel_shield_bust_up_bonus_2: 0xDC3016,
     LocationName.barrel_shield_bust_up_dk:      0xDC3017,
-    
+
     LocationName.riverside_race_flag:    0xDC3018,
     LocationName.riverside_race_bonus_1: 0xDC3019,
     LocationName.riverside_race_bonus_2: 0xDC301A,
@@ -59,7 +60,7 @@ level_location_table = {
     LocationName.squeals_on_wheels_bonus_1: 0xDC301D,
     LocationName.squeals_on_wheels_bonus_2: 0xDC301E,
     LocationName.squeals_on_wheels_dk:      0xDC301F,
-    
+
     LocationName.springin_spiders_flag:    0xDC3020,
     LocationName.springin_spiders_bonus_1: 0xDC3021,
     LocationName.springin_spiders_bonus_2: 0xDC3022,
@@ -69,7 +70,7 @@ level_location_table = {
     LocationName.bobbing_barrel_brawl_bonus_1: 0xDC3025,
     LocationName.bobbing_barrel_brawl_bonus_2: 0xDC3026,
     LocationName.bobbing_barrel_brawl_dk:      0xDC3027,
-    
+
     LocationName.bazzas_blockade_flag:    0xDC3028,
     LocationName.bazzas_blockade_bonus_1: 0xDC3029,
     LocationName.bazzas_blockade_bonus_2: 0xDC302A,
@@ -79,7 +80,7 @@ level_location_table = {
     LocationName.rocket_barrel_ride_bonus_1: 0xDC302D,
     LocationName.rocket_barrel_ride_bonus_2: 0xDC302E,
     LocationName.rocket_barrel_ride_dk:      0xDC302F,
-    
+
     LocationName.kreeping_klasps_flag:    0xDC3030,
     LocationName.kreeping_klasps_bonus_1: 0xDC3031,
     LocationName.kreeping_klasps_bonus_2: 0xDC3032,
@@ -89,7 +90,7 @@ level_location_table = {
     LocationName.tracker_barrel_trek_bonus_1: 0xDC3035,
     LocationName.tracker_barrel_trek_bonus_2: 0xDC3036,
     LocationName.tracker_barrel_trek_dk:      0xDC3037,
-    
+
     LocationName.fish_food_frenzy_flag:    0xDC3038,
     LocationName.fish_food_frenzy_bonus_1: 0xDC3039,
     LocationName.fish_food_frenzy_bonus_2: 0xDC303A,
@@ -99,7 +100,7 @@ level_location_table = {
     LocationName.fire_ball_frenzy_bonus_1: 0xDC303D,
     LocationName.fire_ball_frenzy_bonus_2: 0xDC303E,
     LocationName.fire_ball_frenzy_dk:      0xDC303F,
-    
+
     LocationName.demolition_drain_pipe_flag:    0xDC3040,
     LocationName.demolition_drain_pipe_bonus_1: 0xDC3041,
     LocationName.demolition_drain_pipe_bonus_2: 0xDC3042,
@@ -109,7 +110,7 @@ level_location_table = {
     LocationName.ripsaw_rage_bonus_1: 0xDC3045,
     LocationName.ripsaw_rage_bonus_2: 0xDC3046,
     LocationName.ripsaw_rage_dk:      0xDC3047,
-    
+
     LocationName.blazing_bazookas_flag:    0xDC3048,
     LocationName.blazing_bazookas_bonus_1: 0xDC3049,
     LocationName.blazing_bazookas_bonus_2: 0xDC304A,
@@ -119,7 +120,7 @@ level_location_table = {
     LocationName.low_g_labyrinth_bonus_1: 0xDC304D,
     LocationName.low_g_labyrinth_bonus_2: 0xDC304E,
     LocationName.low_g_labyrinth_dk:      0xDC304F,
-    
+
     LocationName.krevice_kreepers_flag:    0xDC3050,
     LocationName.krevice_kreepers_bonus_1: 0xDC3051,
     LocationName.krevice_kreepers_bonus_2: 0xDC3052,
@@ -129,7 +130,7 @@ level_location_table = {
     LocationName.tearaway_toboggan_bonus_1: 0xDC3055,
     LocationName.tearaway_toboggan_bonus_2: 0xDC3056,
     LocationName.tearaway_toboggan_dk:      0xDC3057,
-    
+
     LocationName.barrel_drop_bounce_flag:    0xDC3058,
     LocationName.barrel_drop_bounce_bonus_1: 0xDC3059,
     LocationName.barrel_drop_bounce_bonus_2: 0xDC305A,
@@ -139,7 +140,7 @@ level_location_table = {
     LocationName.krack_shot_kroc_bonus_1: 0xDC305D,
     LocationName.krack_shot_kroc_bonus_2: 0xDC305E,
     LocationName.krack_shot_kroc_dk:      0xDC305F,
-    
+
     LocationName.lemguin_lunge_flag:    0xDC3060,
     LocationName.lemguin_lunge_bonus_1: 0xDC3061,
     LocationName.lemguin_lunge_bonus_2: 0xDC3062,
@@ -149,7 +150,7 @@ level_location_table = {
     LocationName.buzzer_barrage_bonus_1: 0xDC3065,
     LocationName.buzzer_barrage_bonus_2: 0xDC3066,
     LocationName.buzzer_barrage_dk:      0xDC3067,
-    
+
     LocationName.kong_fused_cliffs_flag:    0xDC3068,
     LocationName.kong_fused_cliffs_bonus_1: 0xDC3069,
     LocationName.kong_fused_cliffs_bonus_2: 0xDC306A,
@@ -159,7 +160,7 @@ level_location_table = {
     LocationName.floodlit_fish_bonus_1: 0xDC306D,
     LocationName.floodlit_fish_bonus_2: 0xDC306E,
     LocationName.floodlit_fish_dk:      0xDC306F,
-    
+
     LocationName.pothole_panic_flag:    0xDC3070,
     LocationName.pothole_panic_bonus_1: 0xDC3071,
     LocationName.pothole_panic_bonus_2: 0xDC3072,
@@ -169,7 +170,7 @@ level_location_table = {
     LocationName.ropey_rumpus_bonus_1: 0xDC3075,
     LocationName.ropey_rumpus_bonus_2: 0xDC3076,
     LocationName.ropey_rumpus_dk:      0xDC3077,
-    
+
     LocationName.konveyor_rope_clash_flag:    0xDC3078,
     LocationName.konveyor_rope_clash_bonus_1: 0xDC3079,
     LocationName.konveyor_rope_clash_bonus_2: 0xDC307A,
@@ -179,7 +180,7 @@ level_location_table = {
     LocationName.creepy_caverns_bonus_1: 0xDC307D,
     LocationName.creepy_caverns_bonus_2: 0xDC307E,
     LocationName.creepy_caverns_dk:      0xDC307F,
-    
+
     LocationName.lightning_lookout_flag:    0xDC3080,
     LocationName.lightning_lookout_bonus_1: 0xDC3081,
     LocationName.lightning_lookout_bonus_2: 0xDC3082,
@@ -189,7 +190,7 @@ level_location_table = {
     LocationName.koindozer_klamber_bonus_1: 0xDC3085,
     LocationName.koindozer_klamber_bonus_2: 0xDC3086,
     LocationName.koindozer_klamber_dk:      0xDC3087,
-    
+
     LocationName.poisonous_pipeline_flag:    0xDC3088,
     LocationName.poisonous_pipeline_bonus_1: 0xDC3089,
     LocationName.poisonous_pipeline_bonus_2: 0xDC308A,
@@ -200,7 +201,7 @@ level_location_table = {
     LocationName.stampede_sprint_bonus_2: 0xDC308E,
     LocationName.stampede_sprint_bonus_3: 0xDC308F,
     LocationName.stampede_sprint_dk:      0xDC3090,
-    
+
     LocationName.criss_cross_cliffs_flag:    0xDC3091,
     LocationName.criss_cross_cliffs_bonus_1: 0xDC3092,
     LocationName.criss_cross_cliffs_bonus_2: 0xDC3093,
@@ -211,7 +212,7 @@ level_location_table = {
     LocationName.tyrant_twin_tussle_bonus_2: 0xDC3097,
     LocationName.tyrant_twin_tussle_bonus_3: 0xDC3098,
     LocationName.tyrant_twin_tussle_dk:      0xDC3099,
-    
+
     LocationName.swoopy_salvo_flag:    0xDC309A,
     LocationName.swoopy_salvo_bonus_1: 0xDC309B,
     LocationName.swoopy_salvo_bonus_2: 0xDC309C,

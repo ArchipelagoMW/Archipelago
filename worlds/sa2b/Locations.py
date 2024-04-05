@@ -1,9 +1,10 @@
 import typing
 
-from BaseClasses import Location, MultiWorld
+from BaseClasses import Location
 from worlds.AutoWorld import World
+
+from .Missions import mission_orders, stage_name_prefixes
 from .Names import LocationName
-from .Missions import stage_name_prefixes, mission_orders
 
 
 class SA2BLocation(Location):

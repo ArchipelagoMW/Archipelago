@@ -1,8 +1,10 @@
-import typing
 import random
-from Options import Option, DefaultOnToggle, Toggle, Range, OptionList, OptionSet, DeathLink
-from .LogicTricks import normalized_name_tricks
+import typing
+
+from Options import DeathLink, DefaultOnToggle, Option, OptionList, OptionSet, Range, Toggle
+
 from .ColorSFXOptions import *
+from .LogicTricks import normalized_name_tricks
 
 
 class TrackRandomRange(Range):
@@ -26,10 +28,10 @@ class TrackRandomRange(Range):
             if not isinstance(val, int) or len(list(filter(bool, map(int, data.values())))) > 1:
                 ret.randomized = True
             return ret
-        raise RuntimeError(f"All options specified in \"{cls.display_name}\" are weighted as zero.")
+        raise RuntimeError(f'All options specified in "{cls.display_name}" are weighted as zero.')
 
 
-class Logic(Choice): 
+class Logic(Choice):
     """Set the logic used for the generator.
     Glitchless: Normal gameplay. Can enable more difficult logical paths using the Logic Tricks option.
     Glitched: Many powerful glitches expected, such as bomb hovering and clipping.
@@ -52,7 +54,7 @@ class NightTokens(Toggle):
     display_name = "Nighttime Skulltulas Expect Sun's Song"
 
 
-class Forest(Choice): 
+class Forest(Choice):
     """Set the state of Kokiri Forest and the path to Deku Tree.
     Open: Neither the forest exit nor the path to Deku Tree is blocked.
     Closed Deku: The forest exit is not blocked; the path to Deku Tree requires Kokiri Sword and Deku Shield.
@@ -66,7 +68,7 @@ class Forest(Choice):
     alias_closed_forest = 2
 
 
-class Gate(Choice): 
+class Gate(Choice):
     """Set the state of the Kakariko Village gate for child. The gate is always open as adult.
     Open: The gate starts open. Happy Mask Shop opens upon receiving Zelda's Letter.
     Zelda: The gate and Mask Shop open upon receiving Zelda's Letter, without needing to show it to the guard.
@@ -82,7 +84,7 @@ class DoorOfTime(DefaultOnToggle):
     display_name = "Open Door of Time"
 
 
-class Fountain(Choice): 
+class Fountain(Choice):
     """Set the state of King Zora, blocking the way to Zora's Fountain.
     Open: King Zora starts moved as both ages. Ruto's Letter is removed.
     Adult: King Zora must be moved as child, but is always moved for adult.
@@ -94,7 +96,7 @@ class Fountain(Choice):
     default = 2
 
 
-class Fortress(Choice): 
+class Fortress(Choice):
     """Set the requirements for access to Gerudo Fortress.
     Normal: Vanilla behavior; all four carpenters must be rescued.
     Fast: Only one carpenter must be rescued, which is the one in the bottom-left of the fortress.
@@ -106,7 +108,7 @@ class Fortress(Choice):
     default = 1
 
 
-class Bridge(Choice): 
+class Bridge(Choice):
     """Set the requirements for the Rainbow Bridge.
     Open: The bridge is always present.
     Vanilla: Bridge requires Shadow Medallion, Spirit Medallion, and Light Arrows.
@@ -138,20 +140,20 @@ open_options: typing.Dict[str, type(Option)] = {
     "open_kakariko": Gate,
     "open_door_of_time": DoorOfTime,
     "zora_fountain": Fountain,
-    "gerudo_fortress": Fortress, 
+    "gerudo_fortress": Fortress,
     "bridge": Bridge,
     "trials": Trials,
 }
 
 
-class StartingAge(Choice): 
+class StartingAge(Choice):
     """Choose which age Link will start as."""
     display_name = "Starting Age"
     option_child = 0
     option_adult = 1
 
 
-class InteriorEntrances(Choice): 
+class InteriorEntrances(Choice):
     """Shuffles interior entrances.
     Simple: Houses and Great Fairies are shuffled.
     All: In addition to Simple, includes Windmill, Link's House, Temple of Time, and the Kakariko potion shop."""
@@ -366,7 +368,7 @@ world_options: typing.Dict[str, type(Option)] = {
     "shuffle_bosses": BossEntrances,
     # "mix_entrance_pools": MixEntrancePools,
     # "decouple_entrances": DecoupleEntrances,
-    "triforce_hunt": TriforceHunt, 
+    "triforce_hunt": TriforceHunt,
     "triforce_goal": TriforceGoal,
     "extra_triforce_percentage": ExtraTriforces,
     "bombchus_in_logic": LogicalChus,
@@ -427,13 +429,13 @@ class BridgeHearts(Range):
 bridge_options: typing.Dict[str, type(Option)] = {
     "bridge_stones": BridgeStones,
     "bridge_medallions": BridgeMedallions,
-    "bridge_rewards": BridgeRewards, 
+    "bridge_rewards": BridgeRewards,
     "bridge_tokens": BridgeTokens,
     "bridge_hearts": BridgeHearts,
 }
 
 
-class SongShuffle(Choice): 
+class SongShuffle(Choice):
     """Set where songs can appear.
     Song: Songs are shuffled into other song locations.
     Dungeon: Songs are placed into end-of-dungeon locations:
@@ -449,7 +451,7 @@ class SongShuffle(Choice):
     option_any = 2
 
 
-class ShopShuffle(Choice): 
+class ShopShuffle(Choice):
     """Randomizes shop contents.
     Off: Shops are not randomized at all.
     Fixed Number: Shop contents are shuffled, and a specific number of multiworld locations exist in each shop, controlled by the "shop_slots" option.
@@ -484,7 +486,7 @@ class ShopPrices(Choice):
     option_tycoons_wallet = 5
 
 
-class TokenShuffle(Choice): 
+class TokenShuffle(Choice):
     """Token rewards from Gold Skulltulas can be shuffled into the pool.
     Dungeons: Only skulltulas in dungeons are shuffled.
     Overworld: Only skulltulas on the overworld (all skulltulas not in dungeons) are shuffled.
@@ -496,7 +498,7 @@ class TokenShuffle(Choice):
     option_all = 3
 
 
-class ScrubShuffle(Choice): 
+class ScrubShuffle(Choice):
     """Shuffle the items sold by Business Scrubs, and set the prices.
     Off: Only the three business scrubs that sell one-time upgrades in vanilla will have items at their vanilla prices.
     Low/"Affordable": All scrub prices are 10 rupees.
@@ -623,7 +625,7 @@ shuffle_options: typing.Dict[str, type(Option)] = {
 }
 
 
-class ShuffleMapCompass(Choice): 
+class ShuffleMapCompass(Choice):
     """Control where to shuffle dungeon maps and compasses.
     Remove: There will be no maps or compasses in the itempool.
     Startwith: You start with all maps and compasses.
@@ -646,7 +648,7 @@ class ShuffleMapCompass(Choice):
     alias_anywhere = 7
 
 
-class ShuffleKeys(Choice): 
+class ShuffleKeys(Choice):
     """Control where to shuffle dungeon small keys.
     Remove/"Keysy": There will be no small keys in the itempool. All small key doors are automatically unlocked.
     Vanilla: Small keys remain vanilla. You may start with extra small keys in some dungeons to prevent softlocks.
@@ -668,7 +670,7 @@ class ShuffleKeys(Choice):
     alias_anywhere = 7
 
 
-class ShuffleGerudoKeys(Choice): 
+class ShuffleGerudoKeys(Choice):
     """Control where to shuffle the Thieves' Hideout small keys.
     Vanilla: Hideout keys remain vanilla.
     Regional: Hideout keys are shuffled only in the Gerudo Valley/Desert Colossus area.
@@ -684,7 +686,7 @@ class ShuffleGerudoKeys(Choice):
     alias_anywhere = 4
 
 
-class ShuffleBossKeys(Choice): 
+class ShuffleBossKeys(Choice):
     """Control where to shuffle boss keys, except the Ganon's Castle Boss Key.
     Remove/"Keysy": There will be no boss keys in the itempool. All boss key doors are automatically unlocked.
     Vanilla: Boss keys remain vanilla. You may start with extra small keys in some dungeons to prevent softlocks.
@@ -814,8 +816,8 @@ class KeyRingList(OptionSet):
 
 
 dungeon_items_options: typing.Dict[str, type(Option)] = {
-    "shuffle_mapcompass": ShuffleMapCompass, 
-    "shuffle_smallkeys": ShuffleKeys, 
+    "shuffle_mapcompass": ShuffleMapCompass,
+    "shuffle_smallkeys": ShuffleKeys,
     "shuffle_hideoutkeys": ShuffleGerudoKeys,
     "shuffle_bosskeys": ShuffleBossKeys,
     "enhance_map_compass": EnhanceMC,
@@ -907,14 +909,14 @@ class FAETorchCount(Range):
 
 
 timesavers_options: typing.Dict[str, type(Option)] = {
-    "no_escape_sequence": SkipEscape, 
-    "no_guard_stealth": SkipStealth, 
-    "no_epona_race": SkipEponaRace, 
-    "skip_some_minigame_phases": SkipMinigamePhases, 
-    "complete_mask_quest": CompleteMaskQuest, 
-    "useful_cutscenes": UsefulCutscenes, 
-    "fast_chests": FastChests, 
-    "free_scarecrow": FreeScarecrow, 
+    "no_escape_sequence": SkipEscape,
+    "no_guard_stealth": SkipStealth,
+    "no_epona_race": SkipEponaRace,
+    "skip_some_minigame_phases": SkipMinigamePhases,
+    "complete_mask_quest": CompleteMaskQuest,
+    "useful_cutscenes": UsefulCutscenes,
+    "fast_chests": FastChests,
+    "free_scarecrow": FreeScarecrow,
     "fast_bunny_hood": FastBunny,
     "plant_beans": PlantBeans,
     "chicken_count": ChickenCount,
@@ -959,7 +961,7 @@ class CorrectPotCrateAppearance(Choice):
     default = 2
 
 
-class Hints(Choice): 
+class Hints(Choice):
     """Gossip Stones can give hints about item locations.
     None: Gossip Stones do not give hints.
     Mask: Gossip Stones give hints with Mask of Truth.
@@ -996,7 +998,7 @@ class HintDistribution(Choice):
     default = 9
 
 
-class TextShuffle(Choice): 
+class TextShuffle(Choice):
     """Randomizes text in the game for comedic effect.
     Except Hints: does not randomize important text such as hints, small/boss key information, and item prices.
     Complete: randomizes every textbox, including the useful ones."""
@@ -1007,7 +1009,7 @@ class TextShuffle(Choice):
     alias_false = 0
 
 
-class DamageMultiplier(Choice): 
+class DamageMultiplier(Choice):
     """Controls the amount of damage Link takes."""
     display_name = "Damage Multiplier"
     option_half = 0
@@ -1084,11 +1086,11 @@ misc_options: typing.Dict[str, type(Option)] = {
     "starting_tod": StartingToD,
     "blue_fire_arrows": BlueFireArrows,
     "fix_broken_drops": FixBrokenDrops,
-    "start_with_consumables": ConsumableStart, 
+    "start_with_consumables": ConsumableStart,
     "start_with_rupees": RupeeStart,
 }
 
-class ItemPoolValue(Choice): 
+class ItemPoolValue(Choice):
     """Changes the number of items available in the game.
     Plentiful: One extra copy of every major item.
     Balanced: Original item pool.
@@ -1102,7 +1104,7 @@ class ItemPoolValue(Choice):
     default = 1
 
 
-class IceTraps(Choice): 
+class IceTraps(Choice):
     """Adds ice traps to the item pool.
     Off: All ice traps are removed.
     Normal: The vanilla quantity of ice traps are placed.
@@ -1119,7 +1121,7 @@ class IceTraps(Choice):
     alias_extra = 2
 
 
-class IceTrapVisual(Choice): 
+class IceTrapVisual(Choice):
     """Changes the appearance of traps, including other games' traps, as freestanding items."""
     display_name = "Trap Appearance"
     option_major_only = 0
@@ -1144,15 +1146,15 @@ class AdultTradeStart(Choice):
 
 
 itempool_options: typing.Dict[str, type(Option)] = {
-    "item_pool_value": ItemPoolValue, 
+    "item_pool_value": ItemPoolValue,
     "junk_ice_traps": IceTraps,
-    "ice_trap_appearance": IceTrapVisual, 
+    "ice_trap_appearance": IceTrapVisual,
     "adult_trade_start": AdultTradeStart,
 }
 
 # Start of cosmetic options
 
-class Targeting(Choice): 
+class Targeting(Choice):
     """Default targeting option."""
     display_name = "Default Targeting Option"
     option_hold = 0
@@ -1174,7 +1176,7 @@ class CorrectColors(DefaultOnToggle):
     display_name = "Item Model Colors Match Cosmetics"
 
 
-class Music(Choice): 
+class Music(Choice):
     option_normal = 0
     option_off = 1
     option_randomized = 2
@@ -1277,15 +1279,15 @@ class LogicTricks(OptionList):
 
 # All options assembled into a single dict
 oot_options: typing.Dict[str, type(Option)] = {
-    "logic_rules": Logic, 
-    "logic_no_night_tokens_without_suns_song": NightTokens, 
-    **open_options, 
-    **world_options, 
+    "logic_rules": Logic,
+    "logic_no_night_tokens_without_suns_song": NightTokens,
+    **open_options,
+    **world_options,
     **bridge_options,
     **dungeon_items_options,
     **shuffle_options,
     **timesavers_options,
-    **misc_options, 
+    **misc_options,
     **itempool_options,
     **cosmetic_options,
     **sfx_options,

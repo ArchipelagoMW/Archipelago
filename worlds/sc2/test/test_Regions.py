@@ -1,7 +1,8 @@
 import unittest
+
+from .. import MissionTables, Options, Regions
 from .test_base import Sc2TestBase
-from .. import Regions
-from .. import Options, MissionTables
+
 
 class TestGridsizes(unittest.TestCase):
     def test_grid_sizes_meet_specs(self):

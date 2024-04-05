@@ -2,11 +2,12 @@ import unittest
 from itertools import combinations, product
 
 from BaseClasses import get_seed
-from .option_names import all_option_choices
-from .. import SVTestCase
-from ..assertion import WorldAssertMixin, ModAssertMixin
+
 from ... import options
-from ...mods.mod_data import all_mods, ModNames
+from ...mods.mod_data import ModNames, all_mods
+from .. import SVTestCase
+from ..assertion import ModAssertMixin, WorldAssertMixin
+from .option_names import all_option_choices
 
 assert unittest
 

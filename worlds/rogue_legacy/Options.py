@@ -1,6 +1,6 @@
 from typing import Dict
 
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionSet
+from Options import Choice, DeathLink, DefaultOnToggle, Option, OptionSet, Range, Toggle
 
 
 class StartingGender(Choice):

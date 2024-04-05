@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-import typing
 import enum
+import typing
 import warnings
-from json import JSONEncoder, JSONDecoder
+from json import JSONDecoder, JSONEncoder
 
 import websockets
 
@@ -97,7 +97,7 @@ def _scan_for_TypedTuples(obj: typing.Any) -> typing.Any:
 _encode = JSONEncoder(
     ensure_ascii=False,
     check_circular=False,
-    separators=(',', ':'),
+    separators=(",", ":"),
 ).encode
 
 
@@ -155,10 +155,10 @@ class HandlerMeta(type):
         handlers.update({handler_name[len(trigger):]: method for handler_name, method in attrs.items() if
                          handler_name.startswith(trigger)})
 
-        orig_init = attrs.get('__init__', None)
+        orig_init = attrs.get("__init__", None)
         if not orig_init:
             for base in bases:
-                orig_init = getattr(base, '__init__', None)
+                orig_init = getattr(base, "__init__", None)
                 if orig_init:
                     break
 
@@ -169,7 +169,7 @@ class HandlerMeta(type):
             self.handlers = {name: method.__get__(self, type(self)) for name, method in
                              handlers.items()}
 
-        attrs['__init__'] = __init__
+        attrs["__init__"] = __init__
         return super(HandlerMeta, mcs).__new__(mcs, name, bases, attrs)
 
 
@@ -222,27 +222,27 @@ class JSONtoTextParser(metaclass=HandlerMeta):
 
     def _handle_player_id(self, node: JSONMessagePart):
         player = int(node["text"])
-        node["color"] = 'magenta' if player == self.ctx.slot else 'yellow'
+        node["color"] = "magenta" if player == self.ctx.slot else "yellow"
         node["text"] = self.ctx.player_names[player]
         return self._handle_color(node)
 
     # for other teams, spectators etc.? Only useful if player isn't in the clientside mapping
     def _handle_player_name(self, node: JSONMessagePart):
-        node["color"] = 'yellow'
+        node["color"] = "yellow"
         return self._handle_color(node)
 
     def _handle_item_name(self, node: JSONMessagePart):
         flags = node.get("flags", 0)
         if flags == 0:
-            node["color"] = 'cyan'
+            node["color"] = "cyan"
         elif flags & 0b001:  # advancement
-            node["color"] = 'plum'
+            node["color"] = "plum"
         elif flags & 0b010:  # useful
-            node["color"] = 'slateblue'
+            node["color"] = "slateblue"
         elif flags & 0b100:  # trap
-            node["color"] = 'salmon'
+            node["color"] = "salmon"
         else:
-            node["color"] = 'cyan'
+            node["color"] = "cyan"
         return self._handle_color(node)
 
     def _handle_item_id(self, node: JSONMessagePart):
@@ -251,7 +251,7 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         return self._handle_item_name(node)
 
     def _handle_location_name(self, node: JSONMessagePart):
-        node["color"] = 'green'
+        node["color"] = "green"
         return self._handle_color(node)
 
     def _handle_location_id(self, node: JSONMessagePart):
@@ -260,7 +260,7 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         return self._handle_location_name(node)
 
     def _handle_entrance_name(self, node: JSONMessagePart):
-        node["color"] = 'blue'
+        node["color"] = "blue"
         return self._handle_color(node)
 
 
@@ -269,17 +269,17 @@ class RawJSONtoTextParser(JSONtoTextParser):
         return self._handle_text(node)
 
 
-color_codes = {'reset': 0, 'bold': 1, 'underline': 4, 'black': 30, 'red': 31, 'green': 32, 'yellow': 33, 'blue': 34,
-               'magenta': 35, 'cyan': 36, 'white': 37, 'black_bg': 40, 'red_bg': 41, 'green_bg': 42, 'yellow_bg': 43,
-               'blue_bg': 44, 'magenta_bg': 45, 'cyan_bg': 46, 'white_bg': 47}
+color_codes = {"reset": 0, "bold": 1, "underline": 4, "black": 30, "red": 31, "green": 32, "yellow": 33, "blue": 34,
+               "magenta": 35, "cyan": 36, "white": 37, "black_bg": 40, "red_bg": 41, "green_bg": 42, "yellow_bg": 43,
+               "blue_bg": 44, "magenta_bg": 45, "cyan_bg": 46, "white_bg": 47}
 
 
 def color_code(*args):
-    return '\033[' + ';'.join([str(color_codes[arg]) for arg in args]) + 'm'
+    return "\033[" + ";".join([str(color_codes[arg]) for arg in args]) + "m"
 
 
 def color(text, *args):
-    return color_code(*args) + text + color_code('reset')
+    return color_code(*args) + text + color_code("reset")
 
 
 def add_json_text(parts: list, text: typing.Any, **kwargs) -> None:
@@ -351,7 +351,7 @@ class _LocationStore(dict, typing.MutableMapping[int, typing.Dict[int, typing.Tu
         super().__init__(values)
 
         if not self:
-            raise ValueError(f"Rejecting game with 0 players")
+            raise ValueError("Rejecting game with 0 players")
 
         if len(self) != max(self):
             raise ValueError("Player IDs not continuous")
@@ -408,9 +408,10 @@ if typing.TYPE_CHECKING:  # type-check with pure python implementation until we 
     LocationStore = _LocationStore
 else:
     try:
-        from _speedups import LocationStore
-        import _speedups
         import os.path
+
+        import _speedups
+        from _speedups import LocationStore
         if os.path.isfile("_speedups.pyx") and os.path.getctime(_speedups.__file__) < os.path.getctime("_speedups.pyx"):
             warnings.warn(f"{_speedups.__file__} outdated! "
                           f"Please rebuild with `cythonize -b -i _speedups.pyx` or delete it!")

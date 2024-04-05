@@ -1,9 +1,8 @@
 import logging
-import asyncio
-import time
 
 from NetUtils import ClientStatus, color
 from worlds.AutoSNIClient import SNIClient
+
 from .Rom import ROM_PLAYER_LIMIT as SMZ3_ROM_PLAYER_LIMIT
 
 snes_logger = logging.getLogger("SNES")
@@ -35,7 +34,7 @@ class SMZ3SNIClient(SNIClient):
     patch_suffix = ".apsmz3"
 
     async def validate_rom(self, ctx):
-        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+        from SNIClient import snes_read
 
         rom_name = await snes_read(ctx, SMZ3_ROMNAME_START, ROMNAME_SIZE)
         if rom_name is None or rom_name == bytes([0] * ROMNAME_SIZE) or rom_name[:3] != b"ZSM":
@@ -55,7 +54,7 @@ class SMZ3SNIClient(SNIClient):
         if ctx.server is None or ctx.slot is None:
             # not successfully connected to a multiworld server, cannot process the game sending items
             return
-        
+
         send_progress_addr_ptr_offset = 0x680
         send_progress_size = 8
         send_progress_message_byte_offset = 4
@@ -104,14 +103,14 @@ class SMZ3SNIClient(SNIClient):
             recv_index += 1
             snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + send_progress_addr_ptr_offset, bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
 
-            from .TotalSMZ3.Location import locations_start_id
             from . import convertLocSMZ3IDToAPID
+            from .TotalSMZ3.Location import locations_start_id
             location_id = locations_start_id + convertLocSMZ3IDToAPID(item_index)
 
             ctx.locations_checked.add(location_id)
             location = ctx.location_names[location_id]
-            snes_logger.info(f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
-            await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
+            snes_logger.info(f"New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})")
+            await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [location_id]}])
 
         data = await snes_read(ctx, SMZ3_RECV_PROGRESS_ADDR + recv_progress_addr_ptr_offset, 4)
         if data is None:
@@ -125,14 +124,14 @@ class SMZ3SNIClient(SNIClient):
             item_id = item.item - items_start_id
 
             player_id = item.player if item.player < SMZ3_ROM_PLAYER_LIMIT else 0
-            snes_buffered_write(ctx, 
-                                SMZ3_RECV_PROGRESS_ADDR + item_out_ptr * recv_progress_size, 
-                                bytes([player_id, item_id]) if ctx.smz3_new_message_queue else 
+            snes_buffered_write(ctx,
+                                SMZ3_RECV_PROGRESS_ADDR + item_out_ptr * recv_progress_size,
+                                bytes([player_id, item_id]) if ctx.smz3_new_message_queue else
                                 bytes([player_id & 0xFF, (player_id >> 8) & 0xFF, item_id & 0xFF, (item_id >> 8) & 0xFF]))
             item_out_ptr += 1
             snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + recv_progress_addr_table_offset, bytes([item_out_ptr & 0xFF, (item_out_ptr >> 8) & 0xFF]))
-            logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                color(ctx.item_names[item.item], 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
+            logging.info("Received %s from %s (%s) (%d/%d in list)" % (
+                color(ctx.item_names[item.item], "red", "bold"), color(ctx.player_names[item.player], "yellow"),
                 ctx.location_names[item.location], item_out_ptr, len(ctx.items_received)))
 
         await snes_flush_writes(ctx)

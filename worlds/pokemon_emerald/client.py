@@ -1,20 +1,21 @@
 import asyncio
 import copy
-import orjson
 import random
 import time
-from typing import TYPE_CHECKING, Optional, Dict, Set, Tuple
 import uuid
+from typing import TYPE_CHECKING, Dict, Optional, Set, Tuple
 
-from NetUtils import ClientStatus
-from Options import Toggle
+import orjson
+
 import Utils
 import worlds._bizhawk as bizhawk
+from NetUtils import ClientStatus
+from Options import Toggle
 from worlds._bizhawk.client import BizHawkClient
 
 from .data import BASE_OFFSET, POKEDEX_OFFSET, data
 from .options import Goal, RemoteItems
-from .util import pokemon_data_to_json, json_to_pokemon_data
+from .util import json_to_pokemon_data, pokemon_data_to_json
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext

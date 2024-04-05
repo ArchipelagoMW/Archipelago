@@ -1,5 +1,7 @@
-from BaseClasses import Item, ItemClassification
 import typing
+
+from BaseClasses import Item, ItemClassification
+
 
 class ShiversItem(Item):
     game: str = "Shivers"

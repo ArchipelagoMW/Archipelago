@@ -1,10 +1,11 @@
 from __future__ import annotations
-import typing
-import datetime
 
-from Options import Choice, OptionDict, OptionSet, Option, DefaultOnToggle, Range, DeathLink, Toggle, \
-    StartInventoryPool
-from schema import Schema, Optional, And, Or
+import datetime
+import typing
+
+from schema import And, Optional, Or, Schema
+
+from Options import Choice, DeathLink, DefaultOnToggle, Option, OptionDict, OptionSet, Range, StartInventoryPool, Toggle
 
 # schema helpers
 FloatRange = lambda low, high: And(Or(int, float), lambda f: low <= f <= high)

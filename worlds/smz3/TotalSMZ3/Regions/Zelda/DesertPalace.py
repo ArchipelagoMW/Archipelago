@@ -1,7 +1,8 @@
-﻿from ...Region import Z3Region, RewardType, IReward
-from ...Config import Config
-from ...Location import Location, LocationType
+﻿from ...Config import Config
 from ...Item import ItemType, Progression
+from ...Location import Location, LocationType
+from ...Region import IReward, RewardType, Z3Region
+
 
 class DesertPalace(Z3Region, IReward):
     Name = "Desert Palace"

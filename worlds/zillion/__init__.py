@@ -1,33 +1,34 @@
-from collections import deque, Counter
-from contextlib import redirect_stdout
 import functools
-import settings
+import logging
+import os
 import threading
 import typing
-from typing import Any, Dict, List, Set, Tuple, Optional
-import os
-import logging
+from collections import Counter, deque
+from contextlib import redirect_stdout
+from typing import Any, Dict, List, Optional, Set, Tuple
 
-from BaseClasses import ItemClassification, LocationProgressType, \
-    MultiWorld, Item, CollectionState, Entrance, Tutorial
-
-from .gen_data import GenData
-from .logic import cs_to_zz_locs
-from .region import ZillionLocation, ZillionRegion
-from .options import ZillionOptions, validate
-from .id_maps import ZillionSlotInfo, get_slot_info, item_name_to_id as _item_name_to_id, \
-    loc_name_to_id as _loc_name_to_id, make_id_to_others, \
-    zz_reg_name_to_reg_name, base_id
-from .item import ZillionItem
-from .patch import ZillionPatch
-
+from zilliandomizer.logic_components.items import RESCUE
+from zilliandomizer.logic_components.items import Item as ZzItem
+from zilliandomizer.logic_components.items import items as zz_items
+from zilliandomizer.logic_components.locations import Location as ZzLocation
+from zilliandomizer.logic_components.locations import Req
+from zilliandomizer.options import Chars
 from zilliandomizer.randomizer import Randomizer as ZzRandomizer
 from zilliandomizer.system import System
-from zilliandomizer.logic_components.items import RESCUE, items as zz_items, Item as ZzItem
-from zilliandomizer.logic_components.locations import Location as ZzLocation, Req
-from zilliandomizer.options import Chars
 
-from worlds.AutoWorld import World, WebWorld
+import settings
+from BaseClasses import CollectionState, Entrance, Item, ItemClassification, LocationProgressType, MultiWorld, Tutorial
+from worlds.AutoWorld import WebWorld, World
+
+from .gen_data import GenData
+from .id_maps import ZillionSlotInfo, base_id, get_slot_info, make_id_to_others, zz_reg_name_to_reg_name
+from .id_maps import item_name_to_id as _item_name_to_id
+from .id_maps import loc_name_to_id as _loc_name_to_id
+from .item import ZillionItem
+from .logic import cs_to_zz_locs
+from .options import ZillionOptions, validate
+from .patch import ZillionPatch
+from .region import ZillionLocation, ZillionRegion
 
 
 class ZillionSettings(settings.Group):
@@ -100,7 +101,7 @@ class ZillionWorld(World):
             self.buffer = []
 
         def write(self, msg: str) -> None:
-            if msg.endswith('\n'):
+            if msg.endswith("\n"):
                 self.buffer.append(msg[:-1])
                 self.logger.debug("".join(self.buffer))
                 self.buffer = []
@@ -156,7 +157,7 @@ class ZillionWorld(World):
         # just in case the options changed anything (I don't think they do)
         assert self.zz_system.randomizer, "init failed"
         for zz_name in self.zz_system.randomizer.locations:
-            if zz_name != 'main':
+            if zz_name != "main":
                 assert self.zz_system.randomizer.loc_name_2_pretty[zz_name] in self.location_name_to_id, \
                     f"{self.zz_system.randomizer.loc_name_2_pretty[zz_name]} not in location map"
 
@@ -181,7 +182,7 @@ class ZillionWorld(World):
                 zz_loc.req.gun = 1
             assert len(self.zz_system.randomizer.get_locations(Req(gun=1, jump=1))) != 0
 
-        start = self.zz_system.randomizer.regions['start']
+        start = self.zz_system.randomizer.regions["start"]
 
         all: Dict[str, ZillionRegion] = {}
         for here_zz_name, zz_r in self.zz_system.randomizer.regions.items():
@@ -224,7 +225,7 @@ class ZillionWorld(World):
                     self.my_locations.append(loc)
 
             for zz_dest in zz_here.connections.keys():
-                dest_name = "Menu" if zz_dest.name == 'start' else zz_reg_name_to_reg_name(zz_dest.name)
+                dest_name = "Menu" if zz_dest.name == "start" else zz_reg_name_to_reg_name(zz_dest.name)
                 dest = all[dest_name]
                 exit = Entrance(p, f"{here_name} to {dest_name}", here)
                 here.exits.append(exit)
@@ -263,7 +264,7 @@ class ZillionWorld(World):
     def generate_basic(self) -> None:
         assert self.zz_system.randomizer, "generate_early hasn't been called"
         # main location name is an alias
-        main_loc_name = self.zz_system.randomizer.loc_name_2_pretty[self.zz_system.randomizer.locations['main'].name]
+        main_loc_name = self.zz_system.randomizer.loc_name_2_pretty[self.zz_system.randomizer.locations["main"].name]
 
         self.multiworld.get_location(main_loc_name, self.player)\
             .place_locked_item(self.create_item("Win"))
@@ -365,7 +366,7 @@ class ZillionWorld(World):
                 f"in world {self.player} didn't get an item"
             )
 
-        game_id = self.multiworld.player_name[self.player].encode() + b'\x00' + self.multiworld.seed_name[-6:].encode()
+        game_id = self.multiworld.player_name[self.player].encode() + b"\x00" + self.multiworld.seed_name[-6:].encode()
 
         return GenData(multi_items, self.zz_system.get_game(), game_id)
 

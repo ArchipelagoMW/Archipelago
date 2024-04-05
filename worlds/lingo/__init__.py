@@ -5,6 +5,7 @@ from logging import warning
 
 from BaseClasses import Item, ItemClassification, Tutorial
 from worlds.AutoWorld import WebWorld, World
+
 from .datatypes import Room, RoomEntrance
 from .items import ALL_ITEM_TABLE, ITEMS_BY_GROUP, TRAP_ITEMS, LingoItem
 from .locations import ALL_LOCATION_TABLE, LOCATIONS_BY_GROUP
@@ -98,7 +99,7 @@ class LingoWorld(World):
 
                 trap_counts = {name: int(weight * traps / total_weight)
                                for name, weight in self.options.trap_weights.items()}
-                
+
                 trap_difference = traps - sum(trap_counts.values())
                 if trap_difference > 0:
                     allowed_traps = [name for name in TRAP_ITEMS if self.options.trap_weights[name] > 0]

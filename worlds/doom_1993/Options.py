@@ -1,6 +1,6 @@
 import typing
 
-from Options import AssembleOptions, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
+from Options import AssembleOptions, Choice, DeathLink, DefaultOnToggle, StartInventoryPool, Toggle
 
 
 class Goal(Choice):
@@ -98,7 +98,7 @@ class AllowDeathLogic(Toggle):
     Get killed in the current map. The map will reset, you can now attempt the puzzle again."""
     display_name = "Allow Death Logic"
 
-    
+
 class Pro(Toggle):
     """Include difficult tricks into rules. Mostly employed by speed runners.
     i.e.: Leaps across to a locked area, trigger a switch behind a window at the right angle, etc."""

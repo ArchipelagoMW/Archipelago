@@ -1,14 +1,14 @@
 import argparse
-import json
-import os
-import sys
-import re
 import atexit
-import shutil
-from subprocess import Popen
-from shutil import copyfile
-from time import strftime
+import json
 import logging
+import os
+import re
+import shutil
+import sys
+from shutil import copyfile
+from subprocess import Popen
+from time import strftime
 
 import requests
 
@@ -22,13 +22,13 @@ max_heap_re = re.compile(r"^\d+[mMgG][bB]?$")
 
 
 def prompt_yes_no(prompt):
-    yes_inputs = {'yes', 'ye', 'y'}
-    no_inputs = {'no', 'n'}
+    yes_inputs = {"yes", "ye", "y"}
+    no_inputs = {"no", "n"}
     while True:
         choice = input(prompt + " [y/n] ").lower()
-        if choice in yes_inputs: 
+        if choice in yes_inputs:
             return True
-        elif choice in no_inputs: 
+        elif choice in no_inputs:
             return False
         else:
             print('Please respond with "y" or "n".')
@@ -36,7 +36,7 @@ def prompt_yes_no(prompt):
 
 def find_ap_randomizer_jar(forge_dir):
     """Create mods folder if needed; find AP randomizer jar; return None if not found."""
-    mods_dir = os.path.join(forge_dir, 'mods')
+    mods_dir = os.path.join(forge_dir, "mods")
     if os.path.isdir(mods_dir):
         for entry in os.scandir(mods_dir):
             if entry.name.startswith("aprandomizer") and entry.name.endswith(".jar"):
@@ -53,7 +53,7 @@ def replace_apmc_files(forge_dir, apmc_file):
     """Create APData folder if needed; clean .apmc files from APData; copy given .apmc into directory."""
     if apmc_file is None:
         return
-    apdata_dir = os.path.join(forge_dir, 'APData')
+    apdata_dir = os.path.join(forge_dir, "APData")
     copy_apmc = True
     if not os.path.isdir(apdata_dir):
         os.mkdir(apdata_dir)
@@ -73,7 +73,7 @@ def replace_apmc_files(forge_dir, apmc_file):
 def read_apmc_file(apmc_file):
     from base64 import b64decode
 
-    with open(apmc_file, 'r') as f:
+    with open(apmc_file) as f:
         return json.loads(b64decode(f.read()))
 
 
@@ -84,18 +84,18 @@ def update_mod(forge_dir, url: str):
     if ap_randomizer is not None:
         logging.info(f"Your current mod is {ap_randomizer}.")
     else:
-        logging.info(f"You do not have the AP randomizer mod installed.")
+        logging.info("You do not have the AP randomizer mod installed.")
 
     if ap_randomizer != os.path.basename(url):
         logging.info(f"A new release of the Minecraft AP randomizer mod was found: "
                      f"{os.path.basename(url)}")
         if prompt_yes_no("Would you like to update?"):
-            old_ap_mod = os.path.join(forge_dir, 'mods', ap_randomizer) if ap_randomizer is not None else None
-            new_ap_mod = os.path.join(forge_dir, 'mods', os.path.basename(url))
+            old_ap_mod = os.path.join(forge_dir, "mods", ap_randomizer) if ap_randomizer is not None else None
+            new_ap_mod = os.path.join(forge_dir, "mods", os.path.basename(url))
             logging.info("Downloading AP randomizer mod. This may take a moment...")
             apmod_resp = requests.get(url)
             if apmod_resp.status_code == 200:
-                with open(new_ap_mod, 'wb') as f:
+                with open(new_ap_mod, "wb") as f:
                     f.write(apmod_resp.content)
                     logging.info(f"Wrote new mod file to {new_ap_mod}")
                 if old_ap_mod is not None:
@@ -103,7 +103,7 @@ def update_mod(forge_dir, url: str):
                     logging.info(f"Removed old mod file from {old_ap_mod}")
             else:
                 logging.error(f"Error retrieving the randomizer mod (status code {apmod_resp.status_code}).")
-                logging.error(f"Please report this issue on the Archipelago Discord server.")
+                logging.error("Please report this issue on the Archipelago Discord server.")
                 sys.exit(1)
 
 
@@ -112,19 +112,19 @@ def check_eula(forge_dir):
     eula_path = os.path.join(forge_dir, "eula.txt")
     if not os.path.isfile(eula_path):
         # Create eula.txt
-        with open(eula_path, 'w') as f:
+        with open(eula_path, "w") as f:
             f.write("#By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula).\n")
             f.write(f"#{strftime('%a %b %d %X %Z %Y')}\n")
             f.write("eula=false\n")
-    with open(eula_path, 'r+') as f:
+    with open(eula_path, "r+") as f:
         text = f.read()
-        if 'false' in text:
+        if "false" in text:
             # Prompt user to agree to the EULA
             logging.info("You need to agree to the Minecraft EULA in order to run the server.")
             logging.info("The EULA can be found at https://account.mojang.com/documents/minecraft_eula")
             if prompt_yes_no("Do you agree to the EULA?"):
                 f.seek(0)
-                f.write(text.replace('false', 'true'))
+                f.write(text.replace("false", "true"))
                 f.truncate()
                 logging.info(f"Set {eula_path} to true")
             else:
@@ -158,22 +158,22 @@ def download_java(java: str):
 
     jdk = find_jdk_dir(java)
     if jdk is not None:
-        print(f"Removing old JDK...")
+        print("Removing old JDK...")
         from shutil import rmtree
         rmtree(jdk)
 
-    print(f"Downloading Java...")
+    print("Downloading Java...")
     jdk_url = f"https://corretto.aws/downloads/latest/amazon-corretto-{java}-x64-windows-jdk.zip"
     resp = requests.get(jdk_url)
     if resp.status_code == 200:  # OK
-        print(f"Extracting...")
+        print("Extracting...")
         import zipfile
         from io import BytesIO
         with zipfile.ZipFile(BytesIO(resp.content)) as zf:
             zf.extractall()
     else:
         print(f"Error downloading Java (status code {resp.status_code}).")
-        print(f"If this was not expected, please report this issue on the Archipelago Discord server.")
+        print("If this was not expected, please report this issue on the Archipelago Discord server.")
         if not prompt_yes_no("Continue anyways?"):
             sys.exit(0)
 
@@ -190,9 +190,9 @@ def install_forge(directory: str, forge_version: str, java_version: str):
             forge_install_jar = os.path.join(directory, "forge_install.jar")
             if not os.path.exists(directory):
                 os.mkdir(directory)
-            with open(forge_install_jar, 'wb') as f:
+            with open(forge_install_jar, "wb") as f:
                 f.write(resp.content)
-            print(f"Installing Forge...")
+            print("Installing Forge...")
             install_process = Popen([java_exe, "-jar", forge_install_jar, "--installServer", directory])
             install_process.wait()
             os.remove(forge_install_jar)
@@ -206,7 +206,7 @@ def run_forge_server(forge_dir: str, java_version: str, heap_arg: str) -> Popen:
         java_exe = "java"  # try to fall back on java in the PATH
 
     heap_arg = max_heap_re.match(heap_arg).group()
-    if heap_arg[-1] in ['b', 'B']:
+    if heap_arg[-1] in ["b", "B"]:
         heap_arg = heap_arg[:-1]
     heap_arg = "-Xmx" + heap_arg
 
@@ -238,10 +238,10 @@ def get_minecraft_versions(version, release_channel="release"):
         local = True
 
     if local:
-        with open(Utils.user_path("minecraft_versions.json"), 'r') as f:
+        with open(Utils.user_path("minecraft_versions.json")) as f:
             data = json.load(f)
     else:
-        with open(Utils.user_path("minecraft_versions.json"), 'w') as f:
+        with open(Utils.user_path("minecraft_versions.json"), "w") as f:
             json.dump(data, f)
 
     try:
@@ -250,11 +250,11 @@ def get_minecraft_versions(version, release_channel="release"):
         else:
             return resp.json()[release_channel][0]
     except (StopIteration, KeyError):
-        logging.error(f"No compatible mod version found for client version {version} on \"{release_channel}\" channel.")
+        logging.error(f'No compatible mod version found for client version {version} on "{release_channel}" channel.')
         if release_channel != "release":
-            logging.error("Consider switching \"release_channel\" to \"release\" in your Host.yaml file")
+            logging.error('Consider switching "release_channel" to "release" in your Host.yaml file')
         else:
-            logging.error("No suitable mod found on the \"release\" channel. Please Contact us on discord to report this error.")
+            logging.error('No suitable mod found on the "release" channel. Please Contact us on discord to report this error.')
         sys.exit(0)
 
 
@@ -264,19 +264,19 @@ def is_correct_forge(forge_dir) -> bool:
     return False
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     Utils.init_logging("MinecraftClient")
     parser = argparse.ArgumentParser()
-    parser.add_argument("apmc_file", default=None, nargs='?', help="Path to an Archipelago Minecraft data file (.apmc)")
-    parser.add_argument('--install', '-i', dest='install', default=False, action='store_true',
+    parser.add_argument("apmc_file", default=None, nargs="?", help="Path to an Archipelago Minecraft data file (.apmc)")
+    parser.add_argument("--install", "-i", dest="install", default=False, action="store_true",
                         help="Download and install Java and the Forge server. Does not launch the client afterwards.")
-    parser.add_argument('--release_channel', '-r', dest="channel", type=str, action='store',
+    parser.add_argument("--release_channel", "-r", dest="channel", type=str, action="store",
                         help="Specify release channel to use.")
-    parser.add_argument('--java', '-j', metavar='17', dest='java', type=str, default=False, action='store',
+    parser.add_argument("--java", "-j", metavar="17", dest="java", type=str, default=False, action="store",
                         help="specify java version.")
-    parser.add_argument('--forge', '-f', metavar='1.18.2-40.1.0', dest='forge', type=str, default=False, action='store',
+    parser.add_argument("--forge", "-f", metavar="1.18.2-40.1.0", dest="forge", type=str, default=False, action="store",
                         help="specify forge version. (Minecraft Version-Forge Version)")
-    parser.add_argument('--version', '-v', metavar='9', dest='data_version', type=int, action='store',
+    parser.add_argument("--version", "-v", metavar="9", dest="data_version", type=int, action="store",
                         help="specify Mod data version to download.")
 
     args = parser.parse_args()
@@ -291,11 +291,11 @@ if __name__ == '__main__':
     data_version = args.data_version or None
 
     if apmc_file is None and not args.install:
-        apmc_file = Utils.open_filename('Select APMC file', (('APMC File', ('.apmc',)),))
+        apmc_file = Utils.open_filename("Select APMC file", (("APMC File", (".apmc",)),))
 
     if apmc_file is not None and data_version is None:
         apmc_data = read_apmc_file(apmc_file)
-        data_version = apmc_data.get('client_version', '')
+        data_version = apmc_data.get("client_version", "")
 
     versions = get_minecraft_versions(data_version, channel)
 

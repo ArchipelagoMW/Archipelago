@@ -2,6 +2,7 @@ from typing import List
 
 from BaseClasses import ItemClassification, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
+
 from .Items import Celeste64Item, item_data_table, item_table
 from .Locations import Celeste64Location, location_data_table, location_table
 from .Names import ItemName

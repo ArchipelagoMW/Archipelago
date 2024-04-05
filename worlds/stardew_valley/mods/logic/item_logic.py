@@ -1,9 +1,8 @@
 from typing import Dict, Union
 
-from ..mod_data import ModNames
 from ... import options
 from ...data.craftable_data import all_crafting_recipes_by_name
-from ...logic.base_logic import BaseLogicMixin, BaseLogic
+from ...logic.base_logic import BaseLogic, BaseLogicMixin
 from ...logic.combat_logic import CombatLogicMixin
 from ...logic.cooking_logic import CookingLogicMixin
 from ...logic.crafting_logic import CraftingLogicMixin
@@ -24,24 +23,25 @@ from ...options import Cropsanity
 from ...stardew_rule import StardewRule, True_
 from ...strings.artisan_good_names import ModArtisanGood
 from ...strings.craftable_names import ModCraftable, ModEdible, ModMachine
-from ...strings.crop_names import SVEVegetable, SVEFruit, DistantLandsCrop, Fruit
+from ...strings.crop_names import DistantLandsCrop, Fruit, SVEFruit, SVEVegetable
 from ...strings.fish_names import WaterItem
 from ...strings.flower_names import Flower
-from ...strings.food_names import SVEMeal, SVEBeverage
-from ...strings.forageable_names import SVEForage, DistantLandsForageable, Forageable
+from ...strings.food_names import SVEBeverage, SVEMeal
+from ...strings.forageable_names import DistantLandsForageable, Forageable, SVEForage
 from ...strings.gift_names import SVEGift
 from ...strings.ingredient_names import Ingredient
 from ...strings.material_names import Material
-from ...strings.metal_names import all_fossils, all_artifacts, Ore, ModFossil
-from ...strings.monster_drop_names import ModLoot, Loot
+from ...strings.metal_names import ModFossil, Ore, all_artifacts, all_fossils
+from ...strings.monster_drop_names import Loot, ModLoot
 from ...strings.performance_names import Performance
 from ...strings.quest_names import ModQuest
-from ...strings.region_names import Region, SVERegion, DeepWoodsRegion, BoardingHouseRegion
+from ...strings.region_names import BoardingHouseRegion, DeepWoodsRegion, Region, SVERegion
 from ...strings.season_names import Season
-from ...strings.seed_names import SVESeed, DistantLandsSeed
+from ...strings.seed_names import DistantLandsSeed, SVESeed
 from ...strings.skill_names import Skill
 from ...strings.tool_names import Tool, ToolMaterial
 from ...strings.villager_names import ModNPC
+from ..mod_data import ModNames
 
 display_types = [ModCraftable.wooden_display, ModCraftable.hardwood_display]
 display_items = all_artifacts + all_fossils

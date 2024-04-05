@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 
-from schema import Schema, And, Optional
+from schema import And, Schema
 
-from Options import Toggle, DefaultOnToggle, Range, Choice, PerGameCommonOptions, OptionDict
+from Options import Choice, DefaultOnToggle, OptionDict, PerGameCommonOptions, Range, Toggle
 
-from .static_logic import WeightedItemDefinition, ItemCategory, StaticWitnessLogic
+from .static_logic import ItemCategory, StaticWitnessLogic, WeightedItemDefinition
 
 
 class DisableNonRandomizedPuzzles(Toggle):

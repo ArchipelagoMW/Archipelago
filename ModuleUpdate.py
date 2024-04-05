@@ -1,9 +1,8 @@
-import os
-import sys
-import subprocess
 import multiprocessing
+import os
+import subprocess
+import sys
 import warnings
-
 
 if sys.version_info < (3, 8, 6):
     raise RuntimeError("Incompatible Python Version. 3.8.7+ is supported.")
@@ -26,7 +25,7 @@ class RequirementsSet(set):
 
 
 local_dir = os.path.dirname(__file__)
-requirements_files = RequirementsSet((os.path.join(local_dir, 'requirements.txt'),))
+requirements_files = RequirementsSet((os.path.join(local_dir, "requirements.txt"),))
 
 if not update_ran:
     for entry in os.scandir(os.path.join(local_dir, "worlds")):
@@ -101,7 +100,7 @@ def update(yes=False, force=False):
                     prev = ""
                     if line.startswith(("https://", "git+https://")):
                         # extract name and version for url
-                        rest = line.split('/')[-1]
+                        rest = line.split("/")[-1]
                         line = ""
                         if "#egg=" in rest:
                             # from egg info
@@ -119,7 +118,7 @@ def update(yes=False, force=False):
                             # from filename
                             rest = rest.replace(".zip", "-").replace(".tar.gz", "-")
                             name, version, _ = rest.split("-", 2)
-                            line = f'{egg or name}=={version}'
+                            line = f"{egg or name}=={version}"
                     elif "@" in line and "#" in line:
                         # PEP 508 does not allow us to specify a version, so we use custom syntax
                         # name @ url#version ; marker
@@ -144,11 +143,11 @@ def update(yes=False, force=False):
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description='Install archipelago requirements')
-    parser.add_argument('-y', '--yes', dest='yes', action='store_true', help='answer "yes" to all questions')
-    parser.add_argument('-f', '--force', dest='force', action='store_true', help='force update')
-    parser.add_argument('-a', '--append', nargs="*", dest='additional_requirements',
-                        help='List paths to additional requirement files.')
+    parser = argparse.ArgumentParser(description="Install archipelago requirements")
+    parser.add_argument("-y", "--yes", dest="yes", action="store_true", help='answer "yes" to all questions')
+    parser.add_argument("-f", "--force", dest="force", action="store_true", help="force update")
+    parser.add_argument("-a", "--append", nargs="*", dest="additional_requirements",
+                        help="List paths to additional requirement files.")
     args = parser.parse_args()
     if args.additional_requirements:
         requirements_files.update(args.additional_requirements)

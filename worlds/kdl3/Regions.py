@@ -1,10 +1,12 @@
-import orjson
 import os
 import typing
 from pkgutil import get_data
 
+import orjson
+
 from BaseClasses import Region
 from worlds.generic.Rules import add_item_rule
+
 from .Locations import KDL3Location
 from .Names import LocationName
 from .Options import BossShuffle

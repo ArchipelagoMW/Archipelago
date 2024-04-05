@@ -1,5 +1,5 @@
 from ..assembler import ASM
-from ..roomEditor import RoomEditor, Object, ObjectVertical, ObjectHorizontal, ObjectWarp
+from ..roomEditor import Object, ObjectHorizontal, ObjectVertical, ObjectWarp, RoomEditor
 from ..utils import formatText
 
 

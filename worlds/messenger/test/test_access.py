@@ -1,7 +1,6 @@
-import typing
 
+from ..constants import NOTES
 from . import MessengerTestBase
-from ..constants import NOTES, PHOBEKINS
 
 
 class AccessTest(MessengerTestBase):

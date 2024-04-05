@@ -6,6 +6,7 @@ from random import Random
 from typing import Dict, List, Set
 
 from BaseClasses import Item, ItemClassification
+
 from . import Options, data
 
 
@@ -55,7 +56,7 @@ def load_item_csv():
     try:
         from importlib.resources import files
     except ImportError:
-        from importlib_resources import files  # noqa
+        from importlib_resources import files
 
     items = []
     with files(data).joinpath("items.csv").open() as file:

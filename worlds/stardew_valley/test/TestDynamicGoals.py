@@ -1,13 +1,13 @@
 from typing import List, Tuple
 
-from . import SVTestBase
-from .assertion import WorldAssertMixin
-from .. import options, StardewItem
+from .. import StardewItem, options
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.transport_names import Transportation
 from ..strings.fish_names import Fish
 from ..strings.tool_names import APTool
 from ..strings.wallet_item_names import Wallet
+from . import SVTestBase
+from .assertion import WorldAssertMixin
 
 
 def collect_fishing_abilities(tester: SVTestBase):

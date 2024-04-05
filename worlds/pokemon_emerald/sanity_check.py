@@ -5,8 +5,7 @@ duplicate claims and give warnings for unused and unignored locations or warps.
 import logging
 from typing import List
 
-from .data import load_json_data, data
-
+from .data import data, load_json_data
 
 _IGNORABLE_LOCATIONS = frozenset({
     "HIDDEN_ITEM_TRICK_HOUSE_NUGGET",  # Is permanently mssiable and has special behavior that sets the flag early

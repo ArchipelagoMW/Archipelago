@@ -1,7 +1,8 @@
-﻿from ....Region import SMRegion
-from ....Config import Config, SMLogic
-from ....Location import Location, LocationType
+﻿from ....Config import Config, SMLogic
 from ....Item import Progression
+from ....Location import Location, LocationType
+from ....Region import SMRegion
+
 
 class West(SMRegion):
     Name = "Norfair Upper West"
@@ -25,18 +26,18 @@ class West(SMRegion):
             Location(self, 50, 0x8F8B24, LocationType.Chozo, "Ice Beam",
                 lambda items: (items.CardNorfairL1 if config.Keysanity else items.Super) and items.CanPassBombPassages() and items.Varia and items.SpeedBooster if self.Logic == SMLogic.Normal else \
                 lambda items: (items.CardNorfairL1 if config.Keysanity else items.Super) and items.Morph and (items.Varia or items.HasEnergyReserves(3))),
-            Location(self, 51, 0x8F8B46, LocationType.Hidden, "Missile (below Ice Beam)", 
+            Location(self, 51, 0x8F8B46, LocationType.Hidden, "Missile (below Ice Beam)",
                 lambda items: (items.CardNorfairL1 if config.Keysanity else items.Super) and items.CanUsePowerBombs() and items.Varia and items.SpeedBooster if self.Logic == SMLogic.Normal else \
-                lambda items: 
+                lambda items:
                     (items.CardNorfairL1 if config.Keysanity else items.Super) and items.CanUsePowerBombs() and (items.Varia or items.HasEnergyReserves(3)) or
                     (items.Missile or items.Super or items.Wave) and items.Varia and items.SpeedBooster and # /* Blue Gate */
                     # /* Access to Croc's room to get spark */
                     (items.CardNorfairBoss if config.Keysanity else items.Super) and items.CardNorfairL1),
-            Location(self, 53, 0x8F8BAC, LocationType.Chozo, "Hi-Jump Boots", 
+            Location(self, 53, 0x8F8BAC, LocationType.Chozo, "Hi-Jump Boots",
                 lambda items: items.CanOpenRedDoors() and items.CanPassBombPassages()),
             Location(self, 55, 0x8F8BE6, LocationType.Visible, "Missile (Hi-Jump Boots)",
                 lambda items: items.CanOpenRedDoors() and items.Morph),
-            Location(self, 56, 0x8F8BEC, LocationType.Visible, "Energy Tank (Hi-Jump Boots)", 
+            Location(self, 56, 0x8F8BEC, LocationType.Visible, "Energy Tank (Hi-Jump Boots)",
                 lambda items: items.CanOpenRedDoors())
             ]
 

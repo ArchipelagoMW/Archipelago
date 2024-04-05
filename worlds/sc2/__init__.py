@@ -1,24 +1,49 @@
 import typing
 from dataclasses import fields
+from math import ceil, floor
+from typing import Callable, Dict, Iterable, List, Sequence, Set, Union
 
-from typing import List, Set, Iterable, Sequence, Dict, Callable, Union
-from math import floor, ceil
-from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
+from BaseClasses import Item, ItemClassification, Location, MultiWorld, Tutorial
 from worlds.AutoWorld import WebWorld, World
+
 from . import ItemNames
-from .Items import StarcraftItem, filler_items, get_item_table, get_full_item_list, \
-    get_basic_units, ItemData, upgrade_included_names, progressive_if_nco, kerrigan_actives, kerrigan_passives, \
-    kerrigan_only_passives, progressive_if_ext, not_balanced_starting_units, spear_of_adun_calldowns, \
-    spear_of_adun_castable_passives, nova_equipment
 from .ItemGroups import item_name_groups
-from .Locations import get_locations, LocationType, get_location_types, get_plando_locations
+from .Items import (
+    ItemData,
+    StarcraftItem,
+    filler_items,
+    get_basic_units,
+    get_full_item_list,
+    get_item_table,
+    kerrigan_actives,
+    kerrigan_only_passives,
+    kerrigan_passives,
+    not_balanced_starting_units,
+    nova_equipment,
+    progressive_if_ext,
+    progressive_if_nco,
+    spear_of_adun_calldowns,
+    spear_of_adun_castable_passives,
+    upgrade_included_names,
+)
+from .Locations import LocationType, get_location_types, get_locations, get_plando_locations
+from .MissionTables import MissionInfo, SC2Campaign, SC2Mission, SC2Race, lookup_name_to_mission
+from .Options import (
+    KerriganLevelItemDistribution,
+    KerriganPresence,
+    KerriganPrimalStatus,
+    LocationInclusion,
+    RequiredTactics,
+    SpearOfAdunAutonomouslyCastAbilityPresence,
+    SpearOfAdunPresence,
+    Starcraft2Options,
+    StarterUnit,
+    get_enabled_campaigns,
+    get_option_value,
+    kerrigan_unit_available,
+)
+from .PoolFilter import UPGRADABLE_ITEMS, filter_items, get_item_upgrades, get_used_races, missions_in_mission_table
 from .Regions import create_regions
-from .Options import get_option_value, LocationInclusion, KerriganLevelItemDistribution, \
-    KerriganPresence, KerriganPrimalStatus, RequiredTactics, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence, \
-    get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence, Starcraft2Options
-from .PoolFilter import filter_items, get_item_upgrades, UPGRADABLE_ITEMS, missions_in_mission_table, get_used_races
-from .MissionTables import MissionInfo, SC2Campaign, lookup_name_to_mission, SC2Mission, \
-    SC2Race
 
 
 class Starcraft2WebWorld(WebWorld):
@@ -137,12 +162,12 @@ def setup_events(player: int, locked_locations: typing.List[str], location_cache
 
 
 def get_excluded_items(world: World) -> Set[str]:
-    excluded_items: Set[str] = set(get_option_value(world, 'excluded_items'))
+    excluded_items: Set[str] = set(get_option_value(world, "excluded_items"))
     for item in world.multiworld.precollected_items[world.player]:
         excluded_items.add(item.name)
-    locked_items: Set[str] = set(get_option_value(world, 'locked_items'))
+    locked_items: Set[str] = set(get_option_value(world, "locked_items"))
     # Starter items are also excluded items
-    starter_items: Set[str] = set(get_option_value(world, 'start_inventory'))
+    starter_items: Set[str] = set(get_option_value(world, "start_inventory"))
     item_table = get_full_item_list()
     soa_presence = get_option_value(world, "spear_of_adun_presence")
     soa_autocast_presence = get_option_value(world, "spear_of_adun_autonomously_cast_ability_presence")
@@ -279,8 +304,8 @@ def assign_starter_items(world: World, excluded_items: Set[str], locked_location
                                      ]))
             if enabled_campaigns == {SC2Campaign.NCO}:
                 starter_items.append(add_starter_item(world, excluded_items, [ItemNames.LIBERATOR_RAID_ARTILLERY]))
-    
-    starter_abilities = get_option_value(world, 'start_primary_abilities')
+
+    starter_abilities = get_option_value(world, "start_primary_abilities")
     assert isinstance(starter_abilities, int)
     if starter_abilities:
         ability_count = starter_abilities
@@ -331,32 +356,32 @@ def get_item_pool(world: World, mission_req_table: Dict[SC2Campaign, Dict[str, M
     locked_items = []
 
     # YAML items
-    yaml_locked_items = get_option_value(world, 'locked_items')
+    yaml_locked_items = get_option_value(world, "locked_items")
     assert not isinstance(yaml_locked_items, int)
 
     # Adjust generic upgrade availability based on options
-    include_upgrades = get_option_value(world, 'generic_upgrade_missions') == 0
-    upgrade_items = get_option_value(world, 'generic_upgrade_items')
+    include_upgrades = get_option_value(world, "generic_upgrade_missions") == 0
+    upgrade_items = get_option_value(world, "generic_upgrade_items")
     assert isinstance(upgrade_items, int)
 
     # Include items from outside main campaigns
-    item_sets = {'wol', 'hots', 'lotv'}
-    if get_option_value(world, 'nco_items') \
+    item_sets = {"wol", "hots", "lotv"}
+    if get_option_value(world, "nco_items") \
             or SC2Campaign.NCO in get_enabled_campaigns(world):
-        item_sets.add('nco')
-    if get_option_value(world, 'bw_items'):
-        item_sets.add('bw')
-    if get_option_value(world, 'ext_items'):
-        item_sets.add('ext')
+        item_sets.add("nco")
+    if get_option_value(world, "bw_items"):
+        item_sets.add("bw")
+    if get_option_value(world, "ext_items"):
+        item_sets.add("ext")
 
     def allowed_quantity(name: str, data: ItemData) -> int:
         if name in excluded_items \
                 or data.type == "Upgrade" and (not include_upgrades or name not in upgrade_included_names[upgrade_items]) \
                 or not data.origin.intersection(item_sets):
             return 0
-        elif name in progressive_if_nco and 'nco' not in item_sets:
+        elif name in progressive_if_nco and "nco" not in item_sets:
             return 1
-        elif name in progressive_if_ext and 'ext' not in item_sets:
+        elif name in progressive_if_ext and "ext" not in item_sets:
             return 1
         else:
             return data.quantity
@@ -450,7 +475,7 @@ def fill_pool_with_kerrigan_levels(world: World, item_pool: List[Item]):
             or total_levels == 0 \
             or SC2Campaign.HOTS not in get_enabled_campaigns(world):
         return
-    
+
     def add_kerrigan_level_items(level_amount: int, item_amount: int):
         name = f"{level_amount} Kerrigan Level"
         if level_amount > 1:

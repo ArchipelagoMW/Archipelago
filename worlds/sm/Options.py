@@ -1,6 +1,9 @@
 import typing
-from Options import Choice, Range, OptionDict, OptionList, OptionSet, Option, Toggle, DefaultOnToggle
+
+from Options import Choice, DefaultOnToggle, Option, OptionDict, OptionList, OptionSet, Range, Toggle
+
 from .variaRandomizer.utils.objectives import _goals
+
 
 class StartItemsRemovesFromPool(Toggle):
     """Remove items in starting inventory from pool."""
@@ -56,7 +59,7 @@ class DeathLink(Choice):
 
 class RemoteItems(Toggle):
     """Indicates you get items sent from your own world. This allows coop play of a world."""
-    display_name = "Remote Items"  
+    display_name = "Remote Items"
 
 class MaxDifficulty(Choice):
     """Depending on the perceived difficulties of the techniques, bosses, hell runs etc. from the preset, it will
@@ -246,7 +249,7 @@ class CustomPreset(OptionDict):
 
 class VariaCustomPreset(OptionList):
     """use an entry from the preset list on https://randommetroidsolver.pythonanywhere.com/presets"""
-    display_name = "Varia Custom Preset"  
+    display_name = "Varia Custom Preset"
     default = {}
 
 
@@ -275,7 +278,7 @@ class EscapeRando(Toggle):
 
 class RemoveEscapeEnemies(Toggle):
     """Remove enemies during escape sequence, disable it to blast through enemies with your Hyper Beam and cause lag."""
-    display_name = "Remove enemies during escape"   
+    display_name = "Remove enemies during escape"
 
 class Tourian(Choice):
     """
@@ -288,7 +291,7 @@ class Tourian(Choice):
     option_Vanilla = 0
     option_Fast = 1
     option_Disabled = 2
-    default = 0  
+    default = 0
 
 class CustomObjective(Toggle):
     """

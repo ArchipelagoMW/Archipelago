@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import Optional, NamedTuple, Dict
+from typing import Dict, NamedTuple, Optional
 
 from BaseClasses import Location, Region
 
@@ -83,7 +83,7 @@ class DarkSouls3Location(Location):
         output = {}
         for i, region_name in enumerate(table_order):
             if len(location_tables[region_name]) > table_offset:
-                raise Exception("A location table has {} entries, that is more than {} entries (table #{})".format(len(location_tables[region_name]), table_offset, i))
+                raise Exception(f"A location table has {len(location_tables[region_name])} entries, that is more than {table_offset} entries (table #{i})")
 
             output.update({location_data.name: id for id, location_data in enumerate(location_tables[region_name], base_id + (table_offset * i))})
 
@@ -494,7 +494,7 @@ location_tables = {
         DS3LocationData("PW: Onyx Blade",                          "Onyx Blade",                              DS3LocationCategory.WEAPON),
         DS3LocationData("PW: Contraption Key",                     "Contraption Key",                         DS3LocationCategory.KEY),
     ],
-    "Painted World of Ariandel 2": [  
+    "Painted World of Ariandel 2": [
         DS3LocationData("PW: Quakestone Hammer",                   "Quakestone Hammer",                       DS3LocationCategory.WEAPON),
         DS3LocationData("PW: Earth Seeker",                        "Earth Seeker",                            DS3LocationCategory.WEAPON),
         DS3LocationData("PW: Follower Torch",                      "Follower Torch",                          DS3LocationCategory.SHIELD),

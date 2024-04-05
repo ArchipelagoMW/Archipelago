@@ -1,7 +1,7 @@
-from ..backgroundEditor import BackgroundEditor
-from ..roomEditor import RoomEditor, ObjectWarp
 from ..assembler import ASM
+from ..backgroundEditor import BackgroundEditor
 from ..locations.constants import *
+from ..roomEditor import ObjectWarp, RoomEditor
 from ..utils import formatText
 
 # Few unused rooms that we can use the room status variables for to store data.
@@ -945,7 +945,7 @@ checkGoalDiagonal1:
 messageTable:
 """.format(mode=1 if mode == "bingo-full" else 0) +
     "\n".join(["dw message_%d" % (n) for n in range(25)]) + "\n" +
-    "\n".join(["message_%d:\n  db m\"%s\"" % (n, goal.description) for n, goal in
+    "\n".join(['message_%d:\n  db m"%s"' % (n, goal.description) for n, goal in
                enumerate(goals)]) + "\n" +
     """
     goalCheck:
@@ -996,8 +996,8 @@ done:   ; Return to normal item drop handler
 
     # Add graphics for our bingo board to 2nd WRAM bank.
     rom.banks[0x3F][0x3700:0x3780] = rom.banks[0x32][0x1500:0x1580]
-    rom.banks[0x3F][0x3728:0x373A] = b'\x55\xAA\x00\xFF\x55\xAA\x00\xFF\x55\xAA\x00\xFF\x55\xAA\x00\xFF\x00\xFF'
-    rom.banks[0x3F][0x3748:0x375A] = b'\x55\xAA\x00\xFF\x55\xAA\x00\xFF\x55\xAA\x00\xFF\x55\xAA\x00\xFF\x00\xFF'
+    rom.banks[0x3F][0x3728:0x373A] = b"\x55\xAA\x00\xFF\x55\xAA\x00\xFF\x55\xAA\x00\xFF\x55\xAA\x00\xFF\x00\xFF"
+    rom.banks[0x3F][0x3748:0x375A] = b"\x55\xAA\x00\xFF\x55\xAA\x00\xFF\x55\xAA\x00\xFF\x55\xAA\x00\xFF\x00\xFF"
     rom.patch(0x18, 0x1E0B,
               "00F85003" + "00005203" + "00085403" + "00105603",
               "00F8F00B" + "0000F20B" + "0008F40B" + "0010F60B")

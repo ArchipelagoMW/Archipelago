@@ -26,13 +26,13 @@ def patchSuperWeapons(rom):
 
     # Projectile speed (arrows, firerod)
     rom.patch(0x00, 0x13AD,
-        "30D0000040C00000" "0000D0300000C040",
-        "60A0000060A00000" "0000A0600000A060")
+        "30D0000040C000000000D0300000C040",
+        "60A0000060A000000000A0600000A060")
 
     # Hookshot shoot speed
     rom.patch(0x02, 0x024C,
-        "30D00000" "0000D030",
-        "60A00000" "0000A060")
+        "30D000000000D030",
+        "60A000000000A060")
     # Hookshot retract speed
     rom.patch(0x18, 0x3C41, ASM("ld a, $30"), ASM("ld a, $60"))
     # Hookshot pull speed

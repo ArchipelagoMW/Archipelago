@@ -1,9 +1,8 @@
 import typing
 
-from BaseClasses import Location
-from .Names import LocationName, ItemName, RegionName
-from .Subclasses import LocationData
+from .Names import ItemName, LocationName
 from .Regions import KH2REGIONS
+from .Subclasses import LocationData
 
 # data's addrcheck sys3 addr obtained roomid bit index is eventid
 LoD_Checks = {

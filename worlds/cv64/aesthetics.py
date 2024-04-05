@@ -1,14 +1,14 @@
 import logging
+from typing import TYPE_CHECKING, Dict, Iterable, List, Tuple, Union
 
-from BaseClasses import ItemClassification, Location, Item
+from BaseClasses import Item, ItemClassification, Location
+
 from .data import iname, rname
-from .options import CV64Options, BackgroundMusic, Countdown, IceTrapAppearance, InvisibleItems, CharacterStages
-from .stages import vanilla_stage_order, get_stage_info
-from .locations import get_location_info, base_id
-from .regions import get_region_info
 from .items import get_item_info, item_info
-
-from typing import TYPE_CHECKING, Dict, List, Tuple, Union, Iterable
+from .locations import base_id, get_location_info
+from .options import BackgroundMusic, CharacterStages, Countdown, CV64Options, IceTrapAppearance, InvisibleItems
+from .regions import get_region_info
+from .stages import get_stage_info, vanilla_stage_order
 
 if TYPE_CHECKING:
     from . import CV64World
@@ -211,7 +211,7 @@ renon_item_dialogue = {
     0x0E: "Night Creatures handle\n"
           "with care!",
     0x0F: "Some may call it a\n"
-          "\"Banshee Boomerang.\"",
+          '"Banshee Boomerang."',
     0x10: "No weapon triangle\n"
           "advantages with this.",
     0x12: "It looks sus? Trust me,"
@@ -226,7 +226,7 @@ renon_item_dialogue = {
           "night. Devils love it!",
     0x1A: "Want to study here?\n"
           "It will cost you.",
-    0x1B: "\"Let them eat cake!\"\n"
+    0x1B: '"Let them eat cake!"\n'
           "Said no princess ever.",
     0x1C: "Why do I suspect this\n"
           "was a toilet room?",
@@ -450,7 +450,7 @@ def get_location_data(world: "CV64World", active_locations: Iterable[Location]) 
         # Figure out the item ID bytes to put in each Location here. Write the item itself if either it's the player's
         # very own, or it belongs to an Item Link that the player is a part of.
         if loc.item.player == world.player or (loc.item.player in world.multiworld.groups and
-                                               world.player in world.multiworld.groups[loc.item.player]['players']):
+                                               world.player in world.multiworld.groups[loc.item.player]["players"]):
             if loc_type not in ["npc", "shop"] and get_item_info(loc.item.name, "pickup actor id") is not None:
                 location_bytes[get_location_info(loc.name, "offset")] = get_item_info(loc.item.name, "pickup actor id")
             else:

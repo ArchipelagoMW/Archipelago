@@ -1,4 +1,5 @@
 import ModuleUpdate
+
 ModuleUpdate.update()
 
 import Utils
@@ -9,7 +10,6 @@ if __name__ == "__main__":
 import asyncio
 import base64
 import binascii
-import colorama
 import io
 import os
 import re
@@ -17,14 +17,14 @@ import select
 import shlex
 import socket
 import struct
-import sys
 import subprocess
+import sys
 import time
 import typing
 
+import colorama
 
-from CommonClient import (CommonContext, get_base_parser, gui_enabled, logger,
-                          server_loop)
+from CommonClient import CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus
 from worlds.ladx.Common import BASE_ID as LABaseID
 from worlds.ladx.GpsTracker import GpsTracker
@@ -105,7 +105,7 @@ class LAClientConstants:
     VictoryGameplayAndSub = 0x0102
 
 
-class RAGameboy():
+class RAGameboy:
     cache = []
     cache_start = 0
     cache_size = 0
@@ -120,7 +120,7 @@ class RAGameboy():
         self.socket.setblocking(False)
 
     async def send_command(self, command, timeout=1.0):
-        self.send(f'{command}\n')
+        self.send(f"{command}\n")
         response_str = await self.async_recv()
         self.check_command_response(command, response_str)
         return response_str.rstrip()
@@ -137,7 +137,7 @@ class RAGameboy():
 
     def send(self, b):
         if type(b) is str:
-            b = b.encode('ascii')
+            b = b.encode("ascii")
         self.socket.sendto(b, (self.address, self.port))
 
     def recv(self):
@@ -235,7 +235,7 @@ class RAGameboy():
 
     def check_command_response(self, command: str, response: bytes):
         if command == "VERSION":
-            ok = re.match("\d+\.\d+\.\d+", response.decode('ascii')) is not None
+            ok = re.match(r"\d+\.\d+\.\d+", response.decode("ascii")) is not None
         else:
             ok = response.startswith(command.encode())
         if not ok:
@@ -245,7 +245,7 @@ class RAGameboy():
     def read_memory(self, address, size=1):
         command = "READ_CORE_MEMORY"
 
-        self.send(f'{command} {hex(address)} {size}\n')
+        self.send(f"{command} {hex(address)} {size}\n")
         response = self.recv()
 
         self.check_command_response(command, response)
@@ -262,7 +262,7 @@ class RAGameboy():
     async def async_read_memory(self, address, size=1):
         command = "READ_CORE_MEMORY"
 
-        self.send(f'{command} {hex(address)} {size}\n')
+        self.send(f"{command} {hex(address)} {size}\n")
         response = await self.async_recv()
         self.check_command_response(command, response)
         response = response[:-1]
@@ -295,7 +295,7 @@ class RAGameboy():
             logger.info(splits[3])
 
 
-class LinksAwakeningClient():
+class LinksAwakeningClient:
     socket = None
     gameboy = None
     tracker = None
@@ -474,9 +474,10 @@ class LinksAwakeningContext(CommonContext):
 
     def run_gui(self) -> None:
         import webbrowser
-        import kvui
-        from kvui import Button, GameManager
+
         from kivy.uix.image import Image
+
+        from kvui import Button, GameManager
 
         class LADXManager(GameManager):
             logging_pairs = [
@@ -490,7 +491,7 @@ class LinksAwakeningContext(CommonContext):
 
                 if self.ctx.magpie_enabled:
                     button = Button(text="", size=(30, 30), size_hint_x=None,
-                                    on_press=lambda _: webbrowser.open('https://magpietracker.us/?enable_autotracker=1'))
+                                    on_press=lambda _: webbrowser.open("https://magpietracker.us/?enable_autotracker=1"))
                     image = Image(size=(16, 16), texture=magpie_logo())
                     button.add_widget(image)
 
@@ -505,7 +506,7 @@ class LinksAwakeningContext(CommonContext):
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
     async def send_checks(self):
-        message = [{"cmd": 'LocationChecks', "locations": self.found_checks}]
+        message = [{"cmd": "LocationChecks", "locations": self.found_checks}]
         await self.send_msgs(message)
 
     had_invalid_slot_data = None
@@ -520,9 +521,9 @@ class LinksAwakeningContext(CommonContext):
     ENABLE_DEATHLINK = False
     async def send_deathlink(self):
         if self.ENABLE_DEATHLINK:
-            message = [{"cmd": 'Deathlink',
-                        'time': time.time(),
-                        'cause': 'Had a nightmare',
+            message = [{"cmd": "Deathlink",
+                        "time": time.time(),
+                        "cause": "Had a nightmare",
                         # 'source': self.slot_info[self.slot].name,
                         }]
             await self.send_msgs(message)
@@ -570,7 +571,7 @@ class LinksAwakeningContext(CommonContext):
                 self.client.recvd_checks[index] = item
 
     async def sync(self):
-        sync_msg = [{'cmd': 'Sync'}]
+        sync_msg = [{"cmd": "Sync"}]
         await self.send_msgs(sync_msg)
 
     item_id_lookup = get_locations_to_id()
@@ -650,7 +651,7 @@ def run_game(romfile: str) -> None:
         args.append(full_rom_path)
         try:
             # set cwd so that paths to lua scripts are always relative to our client
-            if getattr(sys, 'frozen', False):
+            if getattr(sys, "frozen", False):
                 # The application is frozen
                 script_dir = os.path.dirname(sys.executable)
             else:
@@ -663,9 +664,9 @@ def run_game(romfile: str) -> None:
 async def main():
     parser = get_base_parser(description="Link's Awakening Client.")
     parser.add_argument("--url", help="Archipelago connection url")
-    parser.add_argument("--no-magpie", dest='magpie', default=True, action='store_false', help="Disable magpie bridge")
-    parser.add_argument('diff_file', default="", type=str, nargs="?",
-                        help='Path to a .apladx Archipelago Binary Patch file')
+    parser.add_argument("--no-magpie", dest="magpie", default=True, action="store_false", help="Disable magpie bridge")
+    parser.add_argument("diff_file", default="", type=str, nargs="?",
+                        help="Path to a .apladx Archipelago Binary Patch file")
 
     args = parser.parse_args()
 
@@ -695,7 +696,7 @@ async def main():
     await ctx.exit_event.wait()
     await ctx.shutdown()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     colorama.init()
     asyncio.run(main())
     colorama.deinit()

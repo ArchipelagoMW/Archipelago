@@ -3,17 +3,17 @@ from __future__ import annotations
 import typing
 from typing import List, Optional
 
-from BaseClasses import CollectionState, Region, MultiWorld
+from BaseClasses import CollectionState, MultiWorld, Region
 from Fill import fill_restrictive
 
-from .Bosses import BossFactory, Boss
+from .Bosses import Boss, BossFactory
 from .Items import item_factory
-from .Regions import lookup_boss_drops, key_drop_data
 from .Options import small_key_shuffle
+from .Regions import key_drop_data, lookup_boss_drops
 
 if typing.TYPE_CHECKING:
-    from .SubClasses import ALttPLocation, ALttPItem
     from . import ALTTPWorld
+    from .SubClasses import ALttPItem, ALttPLocation
 
 
 class Dungeon:
@@ -57,10 +57,10 @@ class Dungeon:
 
     def __str__(self):
         return self.multiworld.get_name_string_for_object(self) if self.multiworld \
-            else f'{self.name} (Player {self.player})'
+            else f"{self.name} (Player {self.player})"
 
 
-def create_dungeons(world: "ALTTPWorld"):
+def create_dungeons(world: ALTTPWorld):
     multiworld = world.multiworld
     player = world.player
 
@@ -80,95 +80,95 @@ def create_dungeons(world: "ALTTPWorld"):
         dungeon.regions = regions
         return dungeon
 
-    ES = make_dungeon('Hyrule Castle', None, ['Hyrule Castle', 'Sewers', 'Sewer Drop', 'Sewers (Dark)', 'Sanctuary'],
-                      item_factory('Big Key (Hyrule Castle)', world),
-                      item_factory(['Small Key (Hyrule Castle)'] * 4, world),
-                      [item_factory('Map (Hyrule Castle)', world)])
-    EP = make_dungeon('Eastern Palace', 'Armos Knights', ['Eastern Palace'],
-                      item_factory('Big Key (Eastern Palace)', world),
-                      item_factory(['Small Key (Eastern Palace)'] * 2, world),
-                      item_factory(['Map (Eastern Palace)', 'Compass (Eastern Palace)'], world))
-    DP = make_dungeon('Desert Palace', 'Lanmolas',
-                      ['Desert Palace North', 'Desert Palace Main (Inner)', 'Desert Palace Main (Outer)',
-                       'Desert Palace East'], item_factory('Big Key (Desert Palace)', world),
-                      item_factory(['Small Key (Desert Palace)'] * 4, world),
-                      item_factory(['Map (Desert Palace)', 'Compass (Desert Palace)'], world))
-    ToH = make_dungeon('Tower of Hera', 'Moldorm',
-                       ['Tower of Hera (Bottom)', 'Tower of Hera (Basement)', 'Tower of Hera (Top)'],
-                       item_factory('Big Key (Tower of Hera)', world),
-                       [item_factory('Small Key (Tower of Hera)', world)],
-                       item_factory(['Map (Tower of Hera)', 'Compass (Tower of Hera)'], world))
-    PoD = make_dungeon('Palace of Darkness', 'Helmasaur King',
-                       ['Palace of Darkness (Entrance)', 'Palace of Darkness (Center)',
-                        'Palace of Darkness (Big Key Chest)', 'Palace of Darkness (Bonk Section)',
-                        'Palace of Darkness (North)', 'Palace of Darkness (Maze)',
-                        'Palace of Darkness (Harmless Hellway)', 'Palace of Darkness (Final Section)'],
-                       item_factory('Big Key (Palace of Darkness)', world),
-                       item_factory(['Small Key (Palace of Darkness)'] * 6, world),
-                       item_factory(['Map (Palace of Darkness)', 'Compass (Palace of Darkness)'], world))
-    TT = make_dungeon('Thieves Town', 'Blind', ['Thieves Town (Entrance)', 'Thieves Town (Deep)', 'Blind Fight'],
-                      item_factory('Big Key (Thieves Town)', world),
-                      item_factory(['Small Key (Thieves Town)'] * 3, world),
-                      item_factory(['Map (Thieves Town)', 'Compass (Thieves Town)'], world))
-    SW = make_dungeon('Skull Woods', 'Mothula', ['Skull Woods Final Section (Entrance)', 'Skull Woods First Section',
-                                                 'Skull Woods Second Section', 'Skull Woods Second Section (Drop)',
-                                                 'Skull Woods Final Section (Mothula)',
-                                                 'Skull Woods First Section (Right)',
-                                                 'Skull Woods First Section (Left)', 'Skull Woods First Section (Top)'],
-                      item_factory('Big Key (Skull Woods)', world),
-                      item_factory(['Small Key (Skull Woods)'] * 5, world),
-                      item_factory(['Map (Skull Woods)', 'Compass (Skull Woods)'], world))
-    SP = make_dungeon('Swamp Palace', 'Arrghus',
-                      ['Swamp Palace (Entrance)', 'Swamp Palace (First Room)', 'Swamp Palace (Starting Area)',
-                       'Swamp Palace (West)', 'Swamp Palace (Center)', 'Swamp Palace (North)'],
-                      item_factory('Big Key (Swamp Palace)', world),
-                      item_factory(['Small Key (Swamp Palace)'] * 6, world),
-                      item_factory(['Map (Swamp Palace)', 'Compass (Swamp Palace)'], world))
-    IP = make_dungeon('Ice Palace', 'Kholdstare',
-                      ['Ice Palace (Entrance)', 'Ice Palace (Second Section)', 'Ice Palace (Main)', 'Ice Palace (East)',
-                       'Ice Palace (East Top)', 'Ice Palace (Kholdstare)'], item_factory('Big Key (Ice Palace)', world),
-                      item_factory(['Small Key (Ice Palace)'] * 6, world),
-                      item_factory(['Map (Ice Palace)', 'Compass (Ice Palace)'], world))
-    MM = make_dungeon('Misery Mire', 'Vitreous',
-                      ['Misery Mire (Entrance)', 'Misery Mire (Main)', 'Misery Mire (West)', 'Misery Mire (Final Area)',
-                       'Misery Mire (Vitreous)'], item_factory('Big Key (Misery Mire)', world),
-                      item_factory(['Small Key (Misery Mire)'] * 6, world),
-                      item_factory(['Map (Misery Mire)', 'Compass (Misery Mire)'], world))
-    TR = make_dungeon('Turtle Rock', 'Trinexx',
-                      ['Turtle Rock (Entrance)', 'Turtle Rock (First Section)', 'Turtle Rock (Chain Chomp Room)',
-                       'Turtle Rock (Pokey Room)',
-                       'Turtle Rock (Second Section)', 'Turtle Rock (Big Chest)', 'Turtle Rock (Crystaroller Room)',
-                       'Turtle Rock (Dark Room)', 'Turtle Rock (Eye Bridge)', 'Turtle Rock (Trinexx)'],
-                      item_factory('Big Key (Turtle Rock)', world),
-                      item_factory(['Small Key (Turtle Rock)'] * 6, world),
-                      item_factory(['Map (Turtle Rock)', 'Compass (Turtle Rock)'], world))
+    ES = make_dungeon("Hyrule Castle", None, ["Hyrule Castle", "Sewers", "Sewer Drop", "Sewers (Dark)", "Sanctuary"],
+                      item_factory("Big Key (Hyrule Castle)", world),
+                      item_factory(["Small Key (Hyrule Castle)"] * 4, world),
+                      [item_factory("Map (Hyrule Castle)", world)])
+    EP = make_dungeon("Eastern Palace", "Armos Knights", ["Eastern Palace"],
+                      item_factory("Big Key (Eastern Palace)", world),
+                      item_factory(["Small Key (Eastern Palace)"] * 2, world),
+                      item_factory(["Map (Eastern Palace)", "Compass (Eastern Palace)"], world))
+    DP = make_dungeon("Desert Palace", "Lanmolas",
+                      ["Desert Palace North", "Desert Palace Main (Inner)", "Desert Palace Main (Outer)",
+                       "Desert Palace East"], item_factory("Big Key (Desert Palace)", world),
+                      item_factory(["Small Key (Desert Palace)"] * 4, world),
+                      item_factory(["Map (Desert Palace)", "Compass (Desert Palace)"], world))
+    ToH = make_dungeon("Tower of Hera", "Moldorm",
+                       ["Tower of Hera (Bottom)", "Tower of Hera (Basement)", "Tower of Hera (Top)"],
+                       item_factory("Big Key (Tower of Hera)", world),
+                       [item_factory("Small Key (Tower of Hera)", world)],
+                       item_factory(["Map (Tower of Hera)", "Compass (Tower of Hera)"], world))
+    PoD = make_dungeon("Palace of Darkness", "Helmasaur King",
+                       ["Palace of Darkness (Entrance)", "Palace of Darkness (Center)",
+                        "Palace of Darkness (Big Key Chest)", "Palace of Darkness (Bonk Section)",
+                        "Palace of Darkness (North)", "Palace of Darkness (Maze)",
+                        "Palace of Darkness (Harmless Hellway)", "Palace of Darkness (Final Section)"],
+                       item_factory("Big Key (Palace of Darkness)", world),
+                       item_factory(["Small Key (Palace of Darkness)"] * 6, world),
+                       item_factory(["Map (Palace of Darkness)", "Compass (Palace of Darkness)"], world))
+    TT = make_dungeon("Thieves Town", "Blind", ["Thieves Town (Entrance)", "Thieves Town (Deep)", "Blind Fight"],
+                      item_factory("Big Key (Thieves Town)", world),
+                      item_factory(["Small Key (Thieves Town)"] * 3, world),
+                      item_factory(["Map (Thieves Town)", "Compass (Thieves Town)"], world))
+    SW = make_dungeon("Skull Woods", "Mothula", ["Skull Woods Final Section (Entrance)", "Skull Woods First Section",
+                                                 "Skull Woods Second Section", "Skull Woods Second Section (Drop)",
+                                                 "Skull Woods Final Section (Mothula)",
+                                                 "Skull Woods First Section (Right)",
+                                                 "Skull Woods First Section (Left)", "Skull Woods First Section (Top)"],
+                      item_factory("Big Key (Skull Woods)", world),
+                      item_factory(["Small Key (Skull Woods)"] * 5, world),
+                      item_factory(["Map (Skull Woods)", "Compass (Skull Woods)"], world))
+    SP = make_dungeon("Swamp Palace", "Arrghus",
+                      ["Swamp Palace (Entrance)", "Swamp Palace (First Room)", "Swamp Palace (Starting Area)",
+                       "Swamp Palace (West)", "Swamp Palace (Center)", "Swamp Palace (North)"],
+                      item_factory("Big Key (Swamp Palace)", world),
+                      item_factory(["Small Key (Swamp Palace)"] * 6, world),
+                      item_factory(["Map (Swamp Palace)", "Compass (Swamp Palace)"], world))
+    IP = make_dungeon("Ice Palace", "Kholdstare",
+                      ["Ice Palace (Entrance)", "Ice Palace (Second Section)", "Ice Palace (Main)", "Ice Palace (East)",
+                       "Ice Palace (East Top)", "Ice Palace (Kholdstare)"], item_factory("Big Key (Ice Palace)", world),
+                      item_factory(["Small Key (Ice Palace)"] * 6, world),
+                      item_factory(["Map (Ice Palace)", "Compass (Ice Palace)"], world))
+    MM = make_dungeon("Misery Mire", "Vitreous",
+                      ["Misery Mire (Entrance)", "Misery Mire (Main)", "Misery Mire (West)", "Misery Mire (Final Area)",
+                       "Misery Mire (Vitreous)"], item_factory("Big Key (Misery Mire)", world),
+                      item_factory(["Small Key (Misery Mire)"] * 6, world),
+                      item_factory(["Map (Misery Mire)", "Compass (Misery Mire)"], world))
+    TR = make_dungeon("Turtle Rock", "Trinexx",
+                      ["Turtle Rock (Entrance)", "Turtle Rock (First Section)", "Turtle Rock (Chain Chomp Room)",
+                       "Turtle Rock (Pokey Room)",
+                       "Turtle Rock (Second Section)", "Turtle Rock (Big Chest)", "Turtle Rock (Crystaroller Room)",
+                       "Turtle Rock (Dark Room)", "Turtle Rock (Eye Bridge)", "Turtle Rock (Trinexx)"],
+                      item_factory("Big Key (Turtle Rock)", world),
+                      item_factory(["Small Key (Turtle Rock)"] * 6, world),
+                      item_factory(["Map (Turtle Rock)", "Compass (Turtle Rock)"], world))
 
-    if multiworld.mode[player] != 'inverted':
-        AT = make_dungeon('Agahnims Tower', 'Agahnim', ['Agahnims Tower', 'Agahnim 1'], None,
-                          item_factory(['Small Key (Agahnims Tower)'] * 4, world), [])
-        GT = make_dungeon('Ganons Tower', 'Agahnim2',
-                          ['Ganons Tower (Entrance)', 'Ganons Tower (Tile Room)', 'Ganons Tower (Compass Room)',
-                           'Ganons Tower (Hookshot Room)', 'Ganons Tower (Map Room)', 'Ganons Tower (Firesnake Room)',
-                           'Ganons Tower (Teleport Room)', 'Ganons Tower (Bottom)', 'Ganons Tower (Top)',
-                           'Ganons Tower (Before Moldorm)', 'Ganons Tower (Moldorm)', 'Agahnim 2'],
-                          item_factory('Big Key (Ganons Tower)', world),
-                          item_factory(['Small Key (Ganons Tower)'] * 8, world),
-                          item_factory(['Map (Ganons Tower)', 'Compass (Ganons Tower)'], world))
+    if multiworld.mode[player] != "inverted":
+        AT = make_dungeon("Agahnims Tower", "Agahnim", ["Agahnims Tower", "Agahnim 1"], None,
+                          item_factory(["Small Key (Agahnims Tower)"] * 4, world), [])
+        GT = make_dungeon("Ganons Tower", "Agahnim2",
+                          ["Ganons Tower (Entrance)", "Ganons Tower (Tile Room)", "Ganons Tower (Compass Room)",
+                           "Ganons Tower (Hookshot Room)", "Ganons Tower (Map Room)", "Ganons Tower (Firesnake Room)",
+                           "Ganons Tower (Teleport Room)", "Ganons Tower (Bottom)", "Ganons Tower (Top)",
+                           "Ganons Tower (Before Moldorm)", "Ganons Tower (Moldorm)", "Agahnim 2"],
+                          item_factory("Big Key (Ganons Tower)", world),
+                          item_factory(["Small Key (Ganons Tower)"] * 8, world),
+                          item_factory(["Map (Ganons Tower)", "Compass (Ganons Tower)"], world))
     else:
-        AT = make_dungeon('Inverted Agahnims Tower', 'Agahnim', ['Inverted Agahnims Tower', 'Agahnim 1'], None,
-                          item_factory(['Small Key (Agahnims Tower)'] * 4, world), [])
-        GT = make_dungeon('Inverted Ganons Tower', 'Agahnim2',
-                          ['Inverted Ganons Tower (Entrance)', 'Ganons Tower (Tile Room)',
-                           'Ganons Tower (Compass Room)', 'Ganons Tower (Hookshot Room)', 'Ganons Tower (Map Room)',
-                           'Ganons Tower (Firesnake Room)', 'Ganons Tower (Teleport Room)', 'Ganons Tower (Bottom)',
-                           'Ganons Tower (Top)', 'Ganons Tower (Before Moldorm)', 'Ganons Tower (Moldorm)',
-                           'Agahnim 2'], item_factory('Big Key (Ganons Tower)', world),
-                          item_factory(['Small Key (Ganons Tower)'] * 8, world),
-                          item_factory(['Map (Ganons Tower)', 'Compass (Ganons Tower)'], world))
+        AT = make_dungeon("Inverted Agahnims Tower", "Agahnim", ["Inverted Agahnims Tower", "Agahnim 1"], None,
+                          item_factory(["Small Key (Agahnims Tower)"] * 4, world), [])
+        GT = make_dungeon("Inverted Ganons Tower", "Agahnim2",
+                          ["Inverted Ganons Tower (Entrance)", "Ganons Tower (Tile Room)",
+                           "Ganons Tower (Compass Room)", "Ganons Tower (Hookshot Room)", "Ganons Tower (Map Room)",
+                           "Ganons Tower (Firesnake Room)", "Ganons Tower (Teleport Room)", "Ganons Tower (Bottom)",
+                           "Ganons Tower (Top)", "Ganons Tower (Before Moldorm)", "Ganons Tower (Moldorm)",
+                           "Agahnim 2"], item_factory("Big Key (Ganons Tower)", world),
+                          item_factory(["Small Key (Ganons Tower)"] * 8, world),
+                          item_factory(["Map (Ganons Tower)", "Compass (Ganons Tower)"], world))
 
-    GT.bosses['bottom'] = BossFactory('Armos Knights', player)
-    GT.bosses['middle'] = BossFactory('Lanmolas', player)
-    GT.bosses['top'] = BossFactory('Moldorm', player)
+    GT.bosses["bottom"] = BossFactory("Armos Knights", player)
+    GT.bosses["middle"] = BossFactory("Lanmolas", player)
+    GT.bosses["top"] = BossFactory("Moldorm", player)
 
     for dungeon in [ES, EP, DP, ToH, AT, PoD, TT, SW, SP, IP, MM, TR, GT]:
         world.dungeons[dungeon.name] = dungeon
@@ -211,7 +211,7 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
         if in_dungeon_items:
             restricted_players = {player for player, restricted in multiworld.restrict_dungeon_item_on_boss.items() if
                                   restricted}
-            locations: typing.List["ALttPLocation"] = [
+            locations: typing.List[ALttPLocation] = [
                 location for location in get_unfilled_dungeon_locations(multiworld)
                 # filter boss
                 if not (location.player in restricted_players and location.name in lookup_boss_drops)]
@@ -220,7 +220,7 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
                     dungeon = location.parent_region.dungeon
                     orig_rule = location.item_rule
                     location.item_rule = lambda item, dungeon=dungeon, orig_rule=orig_rule: \
-                        (not (item.player, item.name) in dungeon_specific or item.dungeon is dungeon) and orig_rule(item)
+                        ((item.player, item.name) not in dungeon_specific or item.dungeon is dungeon) and orig_rule(item)
 
             multiworld.random.shuffle(locations)
             # Dungeon-locked items have to be placed first, to not run out of spaces for dungeon-locked items
@@ -268,15 +268,15 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
                              name="LttP Dungeon Items")
 
 
-dungeon_music_addresses = {'Eastern Palace - Prize': [0x1559A],
-                           'Desert Palace - Prize': [0x1559B, 0x1559C, 0x1559D, 0x1559E],
-                           'Tower of Hera - Prize': [0x155C5, 0x1107A, 0x10B8C],
-                           'Palace of Darkness - Prize': [0x155B8],
-                           'Swamp Palace - Prize': [0x155B7],
-                           'Thieves\' Town - Prize': [0x155C6],
-                           'Skull Woods - Prize': [0x155BA, 0x155BB, 0x155BC, 0x155BD, 0x15608, 0x15609, 0x1560A,
+dungeon_music_addresses = {"Eastern Palace - Prize": [0x1559A],
+                           "Desert Palace - Prize": [0x1559B, 0x1559C, 0x1559D, 0x1559E],
+                           "Tower of Hera - Prize": [0x155C5, 0x1107A, 0x10B8C],
+                           "Palace of Darkness - Prize": [0x155B8],
+                           "Swamp Palace - Prize": [0x155B7],
+                           "Thieves' Town - Prize": [0x155C6],
+                           "Skull Woods - Prize": [0x155BA, 0x155BB, 0x155BC, 0x155BD, 0x15608, 0x15609, 0x1560A,
                                                    0x1560B],
-                           'Ice Palace - Prize': [0x155BF],
-                           'Misery Mire - Prize': [0x155B9],
-                           'Turtle Rock - Prize': [0x155C7, 0x155A7, 0x155AA, 0x155AB]}
+                           "Ice Palace - Prize": [0x155BF],
+                           "Misery Mire - Prize": [0x155B9],
+                           "Turtle Rock - Prize": [0x155C7, 0x155A7, 0x155AA, 0x155AB]}
 

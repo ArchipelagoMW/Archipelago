@@ -1,5 +1,6 @@
 from itertools import groupby
-from typing import Dict, List, Set, NamedTuple
+from typing import Dict, List, NamedTuple, Set
+
 from BaseClasses import ItemClassification
 
 
@@ -143,7 +144,7 @@ item_table: Dict[str, TunicItemData] = {
     "Pages 50-51": TunicItemData(ItemClassification.useful, 1, 127, "pages"),
     "Pages 52-53 (Icebolt)": TunicItemData(ItemClassification.progression, 1, 128, "pages"),
     "Pages 54-55": TunicItemData(ItemClassification.useful, 1, 129, "pages"),
-    
+
     "Ladders near Weathervane": TunicItemData(ItemClassification.progression, 0, 130, "ladders"),
     "Ladders near Overworld Checkpoint": TunicItemData(ItemClassification.progression, 0, 131, "ladders"),
     "Ladders near Patrol Cave": TunicItemData(ItemClassification.progression, 0, 132, "ladders"),

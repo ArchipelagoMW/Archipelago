@@ -1,6 +1,7 @@
 import typing
-from . import Items, ItemNames
-from .MissionTables import campaign_mission_table, SC2Campaign, SC2Mission
+
+from . import ItemNames, Items
+from .MissionTables import SC2Campaign, SC2Mission, campaign_mission_table
 
 """
 Item name groups, given to Archipelago and used in YAMLs and /received filtering.
@@ -35,8 +36,8 @@ unlisted_item_name_groups = {
 # These items are ambiguous for short-hand name groups
 bracketless_duplicates: typing.Set[str]
 # This is a list of names in ItemNames with bracketed parts removed, for internal use
-_shortened_names = [(name[:name.find(' (')] if '(' in name else name)
-      for name in [ItemNames.__dict__[name] for name in ItemNames.__dir__() if not name.startswith('_')]]
+_shortened_names = [(name[:name.find(" (")] if "(" in name else name)
+      for name in [ItemNames.__dict__[name] for name in ItemNames.__dir__() if not name.startswith("_")]]
 # Remove the first instance of every short-name from the full item list
 bracketless_duplicates = set(_shortened_names)
 for name in bracketless_duplicates:
@@ -57,8 +58,8 @@ for item, data in Items.get_full_item_list().items():
         # Flaggroups with numbers are unlisted
         unlisted_item_name_groups.add(data.type)
     # Items with a bracket get a short-hand name group for ease of use in YAMLs
-    if '(' in item:
-        short_name = item[:item.find(' (')]
+    if "(" in item:
+        short_name = item[:item.find(" (")]
         # Ambiguous short-names are dropped
         if short_name not in bracketless_duplicates:
             item_name_groups[short_name] = [item]

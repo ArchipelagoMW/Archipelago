@@ -2,6 +2,7 @@ import math
 from typing import List
 
 from BaseClasses import Entrance, MultiWorld, Region
+
 from . import Options
 from .Locations import DLCQuestLocation, location_table
 from .Rules import create_event

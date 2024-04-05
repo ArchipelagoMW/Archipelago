@@ -1,6 +1,4 @@
 import typing
-
-from BaseClasses import Item
 from typing import Dict
 
 
@@ -11,24 +9,24 @@ class ItemData(typing.NamedTuple):
 
 
 item_table: Dict[str, ItemData] = {
-    'Card Draw': ItemData(8000, True),
-    'Rare Card Draw': ItemData(8001, True),
-    'Relic': ItemData(8002, True),
-    'Boss Relic': ItemData(8003, True),
+    "Card Draw": ItemData(8000, True),
+    "Rare Card Draw": ItemData(8001, True),
+    "Relic": ItemData(8002, True),
+    "Boss Relic": ItemData(8003, True),
 
     # Event Items
-    'Victory': ItemData(None, True, True),
-    'Beat Act 1 Boss': ItemData(None, True, True),
-    'Beat Act 2 Boss': ItemData(None, True, True),
-    'Beat Act 3 Boss': ItemData(None, True, True),
+    "Victory": ItemData(None, True, True),
+    "Beat Act 1 Boss": ItemData(None, True, True),
+    "Beat Act 2 Boss": ItemData(None, True, True),
+    "Beat Act 3 Boss": ItemData(None, True, True),
 
 }
 
 item_pool: Dict[str, int] = {
-    'Card Draw': 15,
-    'Rare Card Draw': 2,
-    'Relic': 10,
-    'Boss Relic': 2
+    "Card Draw": 15,
+    "Rare Card Draw": 2,
+    "Relic": 10,
+    "Boss Relic": 2
 }
 
 event_item_pairs: Dict[str, str] = {

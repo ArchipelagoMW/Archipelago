@@ -2,8 +2,8 @@ import os
 import unittest
 from tempfile import TemporaryFile
 
-from settings import Settings
 import Utils
+from settings import Settings
 
 
 class TestIDs(unittest.TestCase):

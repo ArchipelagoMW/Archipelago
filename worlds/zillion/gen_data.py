@@ -1,5 +1,5 @@
-from dataclasses import dataclass
 import json
+from dataclasses import dataclass
 from typing import Dict, Tuple
 
 from zilliandomizer.game import Game as ZzGame

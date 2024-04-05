@@ -1,4 +1,5 @@
 from test.TestBase import TestBase, WorldTestBase
+
 from .. import MinecraftWorld
 
 
@@ -30,4 +31,4 @@ class MCTestBase(WorldTestBase, TestBase):
         new_items.remove(missing_item)
         items = self._create_items(new_items, 1)
         return self.get_state(items)
-            
+

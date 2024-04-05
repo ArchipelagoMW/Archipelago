@@ -1,5 +1,5 @@
-from .droppedKey import DroppedKey
 from .constants import *
+from .droppedKey import DroppedKey
 
 
 class FishingMinigame(DroppedKey):

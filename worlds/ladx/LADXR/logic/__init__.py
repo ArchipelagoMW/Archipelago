@@ -1,20 +1,10 @@
-from . import overworld
-from . import dungeon1
-from . import dungeon2
-from . import dungeon3
-from . import dungeon4
-from . import dungeon5
-from . import dungeon6
-from . import dungeon7
-from . import dungeon8
-from . import dungeonColor
-from .requirements import AND, OR, COUNT, COUNTS, FOUND, RequirementsSettings
-from .location import Location
+from .. import itempool, mapgen
 from ..locations.items import *
 from ..locations.keyLocation import KeyLocation
 from ..worldSetup import WorldSetup
-from .. import itempool
-from .. import mapgen
+from . import dungeon1, dungeon2, dungeon3, dungeon4, dungeon5, dungeon6, dungeon7, dungeon8, dungeonColor, overworld
+from .location import Location
+from .requirements import AND, COUNT, COUNTS, FOUND, OR, RequirementsSettings
 
 
 class Logic:
@@ -66,7 +56,7 @@ class Logic:
                         world.indoor_location[indoor].connect(exterior.location, exterior.one_way_exit_requirement, one_way=True)
 
         egg_trigger = AND(OCARINA, SONG1)
-        if configuration_options.logic == 'glitched' or configuration_options.logic == 'hell':
+        if configuration_options.logic == "glitched" or configuration_options.logic == "hell":
             egg_trigger = OR(AND(OCARINA, SONG1), BOMB)
 
         if world_setup.goal == "seashells":
@@ -251,17 +241,17 @@ class MultiworldItemInfoWrapper:
     # Return true if the item is allowed to be placed in any world, or false if it is
     # world specific for this check.
     def canMultiworld(self, option):
-        if self.dungeon_items in {'', 'smallkeys'}:
+        if self.dungeon_items in {"", "smallkeys"}:
             if option.startswith("MAP"):
                 return False
             if option.startswith("COMPASS"):
                 return False
             if option.startswith("STONE_BEAK"):
                 return False
-        if self.dungeon_items in {'', 'localkeys'}:
+        if self.dungeon_items in {"", "localkeys"}:
             if option.startswith("KEY"):
                 return False
-        if self.dungeon_items in {'', 'localkeys', 'localnightmarekey', 'smallkeys'}:
+        if self.dungeon_items in {"", "localkeys", "localnightmarekey", "smallkeys"}:
             if option.startswith("NIGHTMARE_KEY"):
                 return False
         return True

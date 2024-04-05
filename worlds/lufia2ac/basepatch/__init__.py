@@ -12,8 +12,12 @@ def apply_basepatch(base_rom_bytes: bytes) -> bytes:
 
 
 def create_basepatch() -> None:
-    from .asar import close as asar_close, geterrors as asar_errors, getprints as asar_prints, \
-        getwarnings as asar_warnings, init as asar_init, patch as asar_patch
+    from .asar import close as asar_close
+    from .asar import geterrors as asar_errors
+    from .asar import getprints as asar_prints
+    from .asar import getwarnings as asar_warnings
+    from .asar import init as asar_init
+    from .asar import patch as asar_patch
 
     os.add_dll_directory(os.path.dirname(__file__))
     print("Initializing Asar library")

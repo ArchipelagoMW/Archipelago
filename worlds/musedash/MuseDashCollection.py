@@ -1,6 +1,7 @@
-from .Items import SongData, AlbumData
-from typing import Dict, List, Set, Optional
 from collections import ChainMap
+from typing import Dict, List, Optional, Set
+
+from .Items import AlbumData, SongData
 
 
 def load_text_file(name: str) -> str:
@@ -37,7 +38,7 @@ class MuseDashCollections:
         "PeroPero in the Universe",
         "umpopoff"
     ]
-    
+
     REMOVED_SONGS = [
         "CHAOS Glitch",
         "FM 17314 SUGAR RADIO",
@@ -91,17 +92,17 @@ class MuseDashCollections:
             if song_name in self.DIFF_OVERRIDES:
                 # These songs use non-standard difficulty values. Which are being overriden with standard values.
                 # But also avoid filling any missing difficulties (i.e. 0s) with a difficulty value.
-                if sections[4] != '0':
+                if sections[4] != "0":
                     diff_of_easy = 4
                 else:
                     diff_of_easy = None
 
-                if sections[5] != '0':
+                if sections[5] != "0":
                     diff_of_hard = 7
                 else:
                     diff_of_hard = None
 
-                if sections[6] != '0':
+                if sections[6] != "0":
                     diff_of_master = 10
                 else:
                     diff_of_master = None
@@ -136,7 +137,7 @@ class MuseDashCollections:
         for songKey, songData in self.song_items.items():
             if not self.song_matches_dlc_filter(songData, dlc_songs):
                 continue
-                
+
             if songKey in self.REMOVED_SONGS:
                 continue
 

@@ -1,9 +1,9 @@
 from typing import Union
 
-from .base_logic import BaseLogicMixin, BaseLogic
-from .received_logic import ReceivedLogicMixin
 from ..stardew_rule import StardewRule
 from ..strings.ap_names.buff_names import Buff
+from .base_logic import BaseLogic, BaseLogicMixin
+from .received_logic import ReceivedLogicMixin
 
 
 class BuffLogicMixin(BaseLogicMixin):

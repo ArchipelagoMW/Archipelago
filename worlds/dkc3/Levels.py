@@ -1,12 +1,13 @@
 
 from .Names import LocationName
 
-class DKC3Level():
+
+class DKC3Level:
     nameIDAddress: int
     levelIDAddress: int
     nameID: int
     levelID: int
-    
+
     def __init__(self, nameIDAddress: int, levelIDAddress: int, nameID: int, levelID: int):
         self.nameIDAddress = nameIDAddress
         self.levelIDAddress  = levelIDAddress

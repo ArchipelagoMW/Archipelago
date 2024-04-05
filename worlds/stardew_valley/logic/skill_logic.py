@@ -1,8 +1,21 @@
 from functools import cached_property
-from typing import Union, Tuple
+from typing import Tuple, Union
 
 from Utils import cache_self1
-from .base_logic import BaseLogicMixin, BaseLogic
+
+from .. import options
+from ..data import all_crops
+from ..mods.logic.magic_logic import MagicLogicMixin
+from ..mods.logic.mod_skills_levels import get_mod_skill_levels
+from ..stardew_rule import False_, Or, StardewRule, True_
+from ..strings.craftable_names import Fishing
+from ..strings.machine_names import Machine
+from ..strings.performance_names import Performance
+from ..strings.quality_names import ForageQuality
+from ..strings.region_names import Region
+from ..strings.skill_names import Skill, all_mod_skills
+from ..strings.tool_names import Tool, ToolMaterial
+from .base_logic import BaseLogic, BaseLogicMixin
 from .combat_logic import CombatLogicMixin
 from .crop_logic import CropLogicMixin
 from .has_logic import HasLogicMixin
@@ -11,18 +24,6 @@ from .region_logic import RegionLogicMixin
 from .season_logic import SeasonLogicMixin
 from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
-from .. import options
-from ..data import all_crops
-from ..mods.logic.magic_logic import MagicLogicMixin
-from ..mods.logic.mod_skills_levels import get_mod_skill_levels
-from ..stardew_rule import StardewRule, True_, Or, False_
-from ..strings.craftable_names import Fishing
-from ..strings.machine_names import Machine
-from ..strings.performance_names import Performance
-from ..strings.quality_names import ForageQuality
-from ..strings.region_names import Region
-from ..strings.skill_names import Skill, all_mod_skills
-from ..strings.tool_names import ToolMaterial, Tool
 
 fishing_regions = (Region.beach, Region.town, Region.forest, Region.mountain, Region.island_south, Region.island_west)
 

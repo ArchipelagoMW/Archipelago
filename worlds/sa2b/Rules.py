@@ -2,12 +2,12 @@ import typing
 
 from BaseClasses import MultiWorld
 from worlds.AutoWorld import World
-from .Names import LocationName, ItemName
-from .Locations import boss_gate_set
-from worlds.AutoWorld import LogicMixin
-from worlds.generic.Rules import add_rule, set_rule, CollectionRule
+from worlds.generic.Rules import CollectionRule, add_rule, set_rule
+
 from .GateBosses import boss_has_requirement
-from .Missions import stage_name_prefixes, mission_orders
+from .Locations import boss_gate_set
+from .Missions import mission_orders, stage_name_prefixes
+from .Names import ItemName, LocationName
 
 
 def add_rule_safe(multiworld: MultiWorld, spot_name: str, player: int, rule: CollectionRule):

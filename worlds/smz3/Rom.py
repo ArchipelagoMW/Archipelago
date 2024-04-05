@@ -5,8 +5,8 @@ import Utils
 from Utils import read_snes_rom
 from worlds.Files import APDeltaPatch
 
-SMJUHASH = '21f3e98df4780ee1c667b84e57d88675'
-LTTPJPN10HASH = '03a63945398191337e896e5771f77173'
+SMJUHASH = "21f3e98df4780ee1c667b84e57d88675"
+LTTPJPN10HASH = "03a63945398191337e896e5771f77173"
 ROM_PLAYER_LIMIT = 256
 
 
@@ -29,16 +29,16 @@ def get_base_rom_bytes() -> bytes:
         basemd5 = hashlib.md5()
         basemd5.update(sm_base_rom_bytes)
         if SMJUHASH != basemd5.hexdigest():
-            raise Exception('Supplied Base Rom does not match known MD5 for SM Japan+US release. '
-                            'Get the correct game and version, then dump it')
+            raise Exception("Supplied Base Rom does not match known MD5 for SM Japan+US release. "
+                            "Get the correct game and version, then dump it")
         lttp_file_name = get_lttp_base_rom_path()
         lttp_base_rom_bytes = bytes(read_snes_rom(open(lttp_file_name, "rb")))
 
         basemd5 = hashlib.md5()
         basemd5.update(lttp_base_rom_bytes)
         if LTTPJPN10HASH != basemd5.hexdigest():
-            raise Exception('Supplied Base Rom does not match known MD5 for LttP Japan(1.0) release. '
-                            'Get the correct game and version, then dump it')
+            raise Exception("Supplied Base Rom does not match known MD5 for LttP Japan(1.0) release. "
+                            "Get the correct game and version, then dump it")
 
         get_base_rom_bytes.base_rom_bytes = bytes(combine_smz3_rom(sm_base_rom_bytes, lttp_base_rom_bytes))
     return get_base_rom_bytes.base_rom_bytes

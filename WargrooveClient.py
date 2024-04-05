@@ -1,29 +1,29 @@
 from __future__ import annotations
 
+import asyncio
 import atexit
 import os
-import sys
-import asyncio
 import random
 import shutil
-from typing import Tuple, List, Iterable, Dict
-
-from worlds.wargroove import WargrooveWorld
-from worlds.wargroove.Items import item_table, faction_table, CommanderData, ItemData
+import sys
+from typing import Dict, Iterable, List, Tuple
 
 import ModuleUpdate
+from worlds.wargroove import WargrooveWorld
+from worlds.wargroove.Items import CommanderData, ItemData, faction_table, item_table
+
 ModuleUpdate.update()
 
-import Utils
 import json
 import logging
+
+import Utils
 
 if __name__ == "__main__":
     Utils.init_logging("WargrooveClient", exception_logger="Client")
 
-from NetUtils import NetworkItem, ClientStatus
-from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProcessor, \
-    CommonContext, server_loop
+from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
+from NetUtils import ClientStatus
 
 wg_logger = logging.getLogger("WG")
 
@@ -31,22 +31,22 @@ wg_logger = logging.getLogger("WG")
 class WargrooveClientCommandProcessor(ClientCommandProcessor):
     def _cmd_resync(self):
         """Manually trigger a resync."""
-        self.output(f"Syncing items.")
+        self.output("Syncing items.")
         self.ctx.syncing = True
 
     def _cmd_commander(self, *commander_name: Iterable[str]):
         """Set the current commander to the given commander."""
         if commander_name:
-            self.ctx.set_commander(' '.join(commander_name))
+            self.ctx.set_commander(" ".join(commander_name))
         else:
             if self.ctx.can_choose_commander:
                 commanders = self.ctx.get_commanders()
-                wg_logger.info('Unlocked commanders: ' +
-                               ', '.join((commander.name for commander, unlocked in commanders if unlocked)))
-                wg_logger.info('Locked commanders: ' +
-                               ', '.join((commander.name for commander, unlocked in commanders if not unlocked)))
+                wg_logger.info("Unlocked commanders: " +
+                               ", ".join((commander.name for commander, unlocked in commanders if unlocked)))
+                wg_logger.info("Locked commanders: " +
+                               ", ".join((commander.name for commander, unlocked in commanders if not unlocked)))
             else:
-                wg_logger.error('Cannot set commanders in this game mode.')
+                wg_logger.error("Cannot set commanders in this game mode.")
 
 
 class WargrooveContext(CommonContext):
@@ -59,17 +59,17 @@ class WargrooveContext(CommonContext):
     income_boost_multiplier: int = 0
     starting_groove_multiplier: float
     faction_item_ids = {
-        'Starter': 0,
-        'Cherrystone': 52025,
-        'Felheim': 52026,
-        'Floran': 52027,
-        'Heavensong': 52028,
-        'Requiem': 52029,
-        'Outlaw': 52030
+        "Starter": 0,
+        "Cherrystone": 52025,
+        "Felheim": 52026,
+        "Floran": 52027,
+        "Heavensong": 52028,
+        "Requiem": 52029,
+        "Outlaw": 52030
     }
     buff_item_ids = {
-        'Income Boost': 52023,
-        'Commander Defense Boost': 52024,
+        "Income Boost": 52023,
+        "Commander Defense Boost": 52024,
     }
 
     def __init__(self, server_address, password):
@@ -138,19 +138,19 @@ class WargrooveContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
-            filename = f"AP_settings.json"
-            with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+            filename = "AP_settings.json"
+            with open(os.path.join(self.game_communication_path, filename), "w") as f:
                 slot_data = args["slot_data"]
                 json.dump(args["slot_data"], f)
                 self.can_choose_commander = slot_data["can_choose_commander"]
-                print('can choose commander:', self.can_choose_commander)
+                print("can choose commander:", self.can_choose_commander)
                 self.starting_groove_multiplier = slot_data["starting_groove_multiplier"]
                 self.income_boost_multiplier = slot_data["income_boost"]
                 self.commander_defense_boost_multiplier = slot_data["commander_defense_boost"]
                 f.close()
             for ss in self.checked_locations:
                 filename = f"send{ss}"
-                with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+                with open(os.path.join(self.game_communication_path, filename), "w") as f:
                     f.close()
             self.update_commander_data()
             self.ui.update_tracker()
@@ -159,7 +159,7 @@ class WargrooveContext(CommonContext):
             # Our indexes start at 1 and we have 24 levels
             for i in range(1, 25):
                 filename = f"seed{i}"
-                with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+                with open(os.path.join(self.game_communication_path, filename), "w") as f:
                     f.write(str(random.randint(0, 4294967295)))
                     f.close()
 
@@ -169,19 +169,19 @@ class WargrooveContext(CommonContext):
         if cmd in {"ReceivedItems"}:
             received_ids = [item.item for item in self.items_received]
             for network_item in self.items_received:
-                filename = f"AP_{str(network_item.item)}.item"
+                filename = f"AP_{network_item.item!s}.item"
                 path = os.path.join(self.game_communication_path, filename)
 
                 # Newly-obtained items
                 if not os.path.isfile(path):
-                    open(path, 'w').close()
+                    open(path, "w").close()
                     # Announcing commander unlocks
                     item_name = self.item_names[network_item.item]
                     if item_name in faction_table.keys():
                         for commander in faction_table[item_name]:
                             logger.info(f"{commander.name} has been unlocked!")
 
-                with open(path, 'w') as f:
+                with open(path, "w") as f:
                     item_count = received_ids.count(network_item.item)
                     if self.buff_item_ids["Income Boost"] == network_item.item:
                         f.write(f"{item_count * self.income_boost_multiplier}")
@@ -191,11 +191,11 @@ class WargrooveContext(CommonContext):
                         f.write(f"{item_count}")
                     f.close()
 
-                print_filename = f"AP_{str(network_item.item)}.item.print"
+                print_filename = f"AP_{network_item.item!s}.item.print"
                 print_path = os.path.join(self.game_communication_path, print_filename)
                 if not os.path.isfile(print_path):
-                    open(print_path, 'w').close()
-                    with open(print_path, 'w') as f:
+                    open(print_path, "w").close()
+                    with open(print_path, "w") as f:
                         f.write("Received " +
                                 self.item_names[network_item.item] +
                                 " from " +
@@ -208,24 +208,20 @@ class WargrooveContext(CommonContext):
             if "checked_locations" in args:
                 for ss in self.checked_locations:
                     filename = f"send{ss}"
-                    with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+                    with open(os.path.join(self.game_communication_path, filename), "w") as f:
                         f.close()
 
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
-        from kvui import GameManager, HoverBehavior, ServerToolTip
-        from kivy.uix.tabbedpanel import TabbedPanelItem
-        from kivy.lang import Builder
-        from kivy.uix.button import Button
-        from kivy.uix.togglebutton import ToggleButton
-        from kivy.uix.boxlayout import BoxLayout
-        from kivy.uix.gridlayout import GridLayout
-        from kivy.uix.image import AsyncImage, Image
-        from kivy.uix.stacklayout import StackLayout
-        from kivy.uix.label import Label
-        from kivy.properties import ColorProperty
-        from kivy.uix.image import Image
         import pkgutil
+
+        from kivy.lang import Builder
+        from kivy.uix.boxlayout import BoxLayout
+        from kivy.uix.label import Label
+        from kivy.uix.tabbedpanel import TabbedPanelItem
+        from kivy.uix.togglebutton import ToggleButton
+
+        from kvui import GameManager
 
         class TrackerLayout(BoxLayout):
             pass
@@ -290,7 +286,7 @@ class WargrooveContext(CommonContext):
                             commander_buttons.append(commander_button)
                             commander_group.add_widget(commander_button)
                         self.commander_buttons[faction] = commander_buttons
-                        faction_box.add_widget(Label(text=faction, size_hint_x=None, pos_hint={'left': 1}, size_hint_y=None, height=10))
+                        faction_box.add_widget(Label(text=faction, size_hint_x=None, pos_hint={"left": 1}, size_hint_y=None, height=10))
                         faction_box.add_widget(commander_group)
                         commander_select.add_widget(faction_box)
                     item_tracker = ItemTracker(padding=[0,20])
@@ -340,7 +336,7 @@ class WargrooveContext(CommonContext):
     def update_commander_data(self):
         if self.can_choose_commander:
             faction_items = 0
-            faction_item_names = [faction + ' Commanders' for faction in faction_table.keys()]
+            faction_item_names = [faction + " Commanders" for faction in faction_table.keys()]
             for network_item in self.items_received:
                 if self.item_names[network_item.item] in faction_item_names:
                     faction_items += 1
@@ -356,8 +352,8 @@ class WargrooveContext(CommonContext):
                 "commander": "seed",
                 "starting_groove": 0
             }
-        filename = 'commander.json'
-        with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+        filename = "commander.json"
+        with open(os.path.join(self.game_communication_path, filename), "w") as f:
             json.dump(data, f)
         if self.ui:
             self.ui.update_tracker()
@@ -387,16 +383,15 @@ class WargrooveContext(CommonContext):
         commanders = []
         received_ids = [item.item for item in self.items_received]
         for faction in faction_table.keys():
-            unlocked = faction == 'Starter' or self.faction_item_ids[faction] in received_ids
+            unlocked = faction == "Starter" or self.faction_item_ids[faction] in received_ids
             commanders += [(commander, unlocked) for commander in faction_table[faction]]
         return commanders
 
 
 async def game_watcher(ctx: WargrooveContext):
-    from worlds.wargroove.Locations import location_table
     while not ctx.exit_event.is_set():
         if ctx.syncing == True:
-            sync_msg = [{'cmd': 'Sync'}]
+            sync_msg = [{"cmd": "Sync"}]
             if ctx.locations_checked:
                 sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
             await ctx.send_msgs(sync_msg)
@@ -413,7 +408,7 @@ async def game_watcher(ctx: WargrooveContext):
                     victory = True
                     os.remove(os.path.join(ctx.game_communication_path, file))
         ctx.locations_checked = sending
-        message = [{"cmd": 'LocationChecks', "locations": sending}]
+        message = [{"cmd": "LocationChecks", "locations": sending}]
         await ctx.send_msgs(message)
         if not ctx.finished_game and victory:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
@@ -426,7 +421,7 @@ def print_error_and_close(msg):
     Utils.messagebox("Error", msg, error=True)
     sys.exit(1)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     async def main(args):
         ctx = WargrooveContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")

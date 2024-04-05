@@ -1,6 +1,6 @@
 # the caching decorator for helpers functions
-class VersionedCache(object):
-    __slots__ = ( 'cache', 'masterCache', 'nextSlot', 'size')
+class VersionedCache:
+    __slots__ = ( "cache", "masterCache", "nextSlot", "size")
 
     def __init__(self):
         self.cache = []
@@ -46,12 +46,12 @@ class VersionedCache(object):
 
 Cache = VersionedCache()
 
-class RequestCache(object):
+class RequestCache:
     def __init__(self):
         self.results = {}
 
     def request(self, request, *args):
-        return ''.join([request] + [str(arg) for arg in args])
+        return "".join([request] + [str(arg) for arg in args])
 
     def store(self, request, result):
         self.results[request] = result

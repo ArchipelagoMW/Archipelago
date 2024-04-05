@@ -3,7 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-from ..options import StardewValleyOptions, ExcludeGingerIsland, FestivalLocations
+from ..options import ExcludeGingerIsland, FestivalLocations, StardewValleyOptions
 from ..strings.crop_names import Fruit
 from ..strings.currency_names import Currency
 from ..strings.quality_names import CropQuality, FishQuality, ForageQuality

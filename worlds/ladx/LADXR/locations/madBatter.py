@@ -1,5 +1,5 @@
-from .itemInfo import ItemInfo
 from .constants import *
+from .itemInfo import ItemInfo
 
 
 class MadBatter(ItemInfo):

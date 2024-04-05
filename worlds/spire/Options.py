@@ -1,5 +1,6 @@
 import typing
-from Options import TextChoice, Option, Range, Toggle
+
+from Options import Option, Range, TextChoice, Toggle
 
 
 class Character(TextChoice):

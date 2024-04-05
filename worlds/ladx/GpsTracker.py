@@ -1,4 +1,5 @@
 import json
+
 roomAddress = 0xFFF6
 mapIdAddress = 0xFFF7
 indoorFlagAddress = 0xDBA5
@@ -56,12 +57,12 @@ class GpsTracker:
 
         if indoors != self.indoors and self.indoors != None:
             self.indoorsChanged = True
-        
+
         self.indoors = indoors
 
         mapId = await self.read_byte(mapIdAddress)
         if mapId not in mapMap:
-            print(f'Unknown map ID {hex(mapId)}')
+            print(f"Unknown map ID {hex(mapId)}")
             return
 
         mapDigit = mapMap[mapId] << 8 if indoors else 0
@@ -74,16 +75,16 @@ class GpsTracker:
 
         if (self.room != last_room):
             self.location_changed = True
-    
+
     last_message = {}
     async def send_location(self, socket, diff=False):
-        if self.room is None: 
+        if self.room is None:
             return
         message = {
             "type":"location",
             "refresh": True,
             "version":"1.0",
-            "room": f'0x{self.room:02X}',
+            "room": f"0x{self.room:02X}",
             "x": self.screenX,
             "y": self.screenY,
         }

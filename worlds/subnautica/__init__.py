@@ -1,16 +1,14 @@
 from __future__ import annotations
 
-import logging
 import itertools
-from typing import List, Dict, Any, cast
+import logging
+from typing import Any, Dict, List, cast
 
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
-from worlds.AutoWorld import World, WebWorld
-from . import items
-from . import locations
-from . import creatures
-from . import options
-from .items import item_table, group_items, items_by_type, ItemType
+from BaseClasses import Entrance, Item, ItemClassification, Location, Region, Tutorial
+from worlds.AutoWorld import WebWorld, World
+
+from . import creatures, items, locations, options
+from .items import ItemType, group_items, item_table, items_by_type
 from .rules import set_rules
 
 logger = logging.getLogger("Subnautica")

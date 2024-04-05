@@ -1,7 +1,8 @@
-from typing import Dict, TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import CollectionRule, add_rule, allow_self_locking_items
+
 from .constants import NOTES, PHOBEKINS
 from .options import MessengerAccessibility
 
@@ -477,7 +478,7 @@ class MessengerHardRules(MessengerRules):
 
     def can_dboost(self, state: CollectionState) -> bool:
         return state.has("Second Wind", self.player)  # who really needs meditation
-    
+
     def can_destroy_projectiles(self, state: CollectionState) -> bool:
         return super().can_destroy_projectiles(state) or self.has_windmill(state)
 

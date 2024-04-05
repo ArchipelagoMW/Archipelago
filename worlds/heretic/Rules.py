@@ -1,6 +1,7 @@
 # This file is auto generated. More info: https://github.com/Daivuk/apdoom
 
 from typing import TYPE_CHECKING
+
 from worlds.generic.Rules import set_rule
 
 if TYPE_CHECKING:

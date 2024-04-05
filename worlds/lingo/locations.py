@@ -2,6 +2,7 @@ from enum import Flag, auto
 from typing import Dict, List, NamedTuple
 
 from BaseClasses import Location
+
 from .datatypes import RoomAndPanel
 from .static_logic import DOORS_BY_ROOM, PANELS_BY_ROOM, get_door_location_id, get_panel_location_id
 

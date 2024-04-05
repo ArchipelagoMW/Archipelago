@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Dict
 
-from Options import Choice, Option, DefaultOnToggle, DeathLink, Range, Toggle
+from Options import Choice, DeathLink, DefaultOnToggle, Option, Range, Toggle
 
 
 class FreeincarnateMax(Range):

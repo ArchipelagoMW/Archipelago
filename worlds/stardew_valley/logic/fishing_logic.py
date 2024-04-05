@@ -1,21 +1,21 @@
-from typing import Union, List
+from typing import List, Union
 
 from Utils import cache_self1
-from .base_logic import BaseLogicMixin, BaseLogic
+
+from ..data import FishItem, fish_data
+from ..locations import LocationTags, locations_by_tag
+from ..options import ExcludeGingerIsland, Fishsanity, SpecialOrderLocations
+from ..stardew_rule import And, False_, StardewRule, True_
+from ..strings.fish_names import SVEFish
+from ..strings.quality_names import FishQuality
+from ..strings.region_names import Region
+from ..strings.skill_names import Skill
+from .base_logic import BaseLogic, BaseLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .season_logic import SeasonLogicMixin
 from .skill_logic import SkillLogicMixin
 from .tool_logic import ToolLogicMixin
-from ..data import FishItem, fish_data
-from ..locations import LocationTags, locations_by_tag
-from ..options import ExcludeGingerIsland, Fishsanity
-from ..options import SpecialOrderLocations
-from ..stardew_rule import StardewRule, True_, False_, And
-from ..strings.fish_names import SVEFish
-from ..strings.quality_names import FishQuality
-from ..strings.region_names import Region
-from ..strings.skill_names import Skill
 
 
 class FishingLogicMixin(BaseLogicMixin):

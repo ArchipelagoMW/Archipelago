@@ -1,9 +1,8 @@
 import os
+import pickle
 import pkgutil
 from io import BytesIO
 from typing import Dict, List, Set
-
-import pickle
 
 from .datatypes import Door, Painting, Panel, Progression, Room
 
@@ -86,7 +85,7 @@ def load_static_data_from_file():
 
     file = pkgutil.get_data(__name__, os.path.join("data", "generated.dat"))
     pickdata = RenameUnpickler(BytesIO(file)).load()
-        
+
     HASHES.update(pickdata["HASHES"])
     PAINTINGS.update(pickdata["PAINTINGS"])
     ALL_ROOMS.extend(pickdata["ALL_ROOMS"])

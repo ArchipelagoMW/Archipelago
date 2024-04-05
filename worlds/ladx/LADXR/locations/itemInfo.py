@@ -1,4 +1,3 @@
-import typing
 from ..checkMetadata import checkMetadataTable
 from .constants import *
 
@@ -14,7 +13,7 @@ class ItemInfo:
         self.metadata = checkMetadataTable.get(self.nameId, checkMetadataTable["None"])
         self.forced_item = None
         self.custom_item_name = None
-        
+
         self.event = None
     @property
     def location(self):
@@ -37,7 +36,7 @@ class ItemInfo:
 
     def __repr__(self):
         return self.__class__.__name__
-    
+
     @property
     def nameId(self):
         return "0x%03X" % self.room if self.room is not None else "None"

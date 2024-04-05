@@ -1,12 +1,21 @@
-from typing import Dict, List, Set, Tuple, TextIO, Union
-from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
-from .Items import get_item_names_per_category
-from .Items import item_table, starter_melee_weapons, starter_spells, filler_items, starter_progression_items
-from .Locations import get_location_datas, EventId
-from .Options import is_option_enabled, get_option_value, timespinner_options
+from typing import Dict, List, Set, TextIO, Tuple, Union
+
+from BaseClasses import Item, ItemClassification, MultiWorld, Tutorial
+from worlds.AutoWorld import WebWorld, World
+
+from .Items import (
+    filler_items,
+    get_item_names_per_category,
+    item_table,
+    starter_melee_weapons,
+    starter_progression_items,
+    starter_spells,
+)
+from .Locations import EventId, get_location_datas
+from .Options import get_option_value, is_option_enabled, timespinner_options
 from .PreCalculatedWeights import PreCalculatedWeights
 from .Regions import create_regions_and_locations
-from worlds.AutoWorld import World, WebWorld
+
 
 class TimespinnerWebWorld(WebWorld):
     theme = "ice"
@@ -53,17 +62,17 @@ class TimespinnerWorld(World):
         self.precalculated_weights = PreCalculatedWeights(self.multiworld, self.player)
 
         # in generate_early the start_inventory isnt copied over to precollected_items yet, so we can still modify the options directly
-        if self.multiworld.start_inventory[self.player].value.pop('Meyef', 0) > 0:
+        if self.multiworld.start_inventory[self.player].value.pop("Meyef", 0) > 0:
             self.multiworld.StartWithMeyef[self.player].value = self.multiworld.StartWithMeyef[self.player].option_true
-        if self.multiworld.start_inventory[self.player].value.pop('Talaria Attachment', 0) > 0:
+        if self.multiworld.start_inventory[self.player].value.pop("Talaria Attachment", 0) > 0:
             self.multiworld.QuickSeed[self.player].value = self.multiworld.QuickSeed[self.player].option_true
-        if self.multiworld.start_inventory[self.player].value.pop('Jewelry Box', 0) > 0:
+        if self.multiworld.start_inventory[self.player].value.pop("Jewelry Box", 0) > 0:
             self.multiworld.StartWithJewelryBox[self.player].value = self.multiworld.StartWithJewelryBox[self.player].option_true
 
-    def create_regions(self) -> None: 
+    def create_regions(self) -> None:
         create_regions_and_locations(self.multiworld, self.player, self.precalculated_weights)
 
-    def create_items(self) -> None: 
+    def create_items(self) -> None:
         self.create_and_assign_event_items()
 
         excluded_items: Set[str] = self.get_excluded_items()
@@ -80,7 +89,7 @@ class TimespinnerWorld(World):
         else:
             final_boss = "Killed Nightmare"
 
-        self.multiworld.completion_condition[self.player] = lambda state: state.has(final_boss, self.player) 
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(final_boss, self.player)
 
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {}
@@ -116,14 +125,14 @@ class TimespinnerWorld(World):
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         if self.is_option_enabled("UnchainedKeys"):
-            spoiler_handle.write(f'Modern Warp Beacon unlock:       {self.precalculated_weights.present_key_unlock}\n')
-            spoiler_handle.write(f'Timeworn Warp Beacon unlock:     {self.precalculated_weights.past_key_unlock}\n')
+            spoiler_handle.write(f"Modern Warp Beacon unlock:       {self.precalculated_weights.present_key_unlock}\n")
+            spoiler_handle.write(f"Timeworn Warp Beacon unlock:     {self.precalculated_weights.past_key_unlock}\n")
 
             if self.is_option_enabled("EnterSandman"):
-                spoiler_handle.write(f'Mysterious Warp Beacon unlock:   {self.precalculated_weights.time_key_unlock}\n')
+                spoiler_handle.write(f"Mysterious Warp Beacon unlock:   {self.precalculated_weights.time_key_unlock}\n")
         else:
-            spoiler_handle.write(f'Twin Pyramid Keys unlock:        {self.precalculated_weights.pyramid_keys_unlock}\n')
-       
+            spoiler_handle.write(f"Twin Pyramid Keys unlock:        {self.precalculated_weights.pyramid_keys_unlock}\n")
+
         if self.is_option_enabled("RisingTides"):
             flooded_areas: List[str] = []
 
@@ -158,7 +167,7 @@ class TimespinnerWorld(World):
             else:
                 flooded_areas_string: str = ", ".join(flooded_areas)
 
-            spoiler_handle.write(f'Flooded Areas:                   {flooded_areas_string}\n')
+            spoiler_handle.write(f"Flooded Areas:                   {flooded_areas_string}\n")
 
     def create_item(self, name: str) -> Item:
         data = item_table[name]
@@ -171,17 +180,17 @@ class TimespinnerWorld(World):
             classification = ItemClassification.trap
         else:
             classification = ItemClassification.filler
-            
+
         item = Item(name, classification, data.code, self.player)
 
         if not item.advancement:
             return item
 
-        if (name == 'Tablet' or name == 'Library Keycard V') and not self.is_option_enabled("DownloadableItems"):
+        if (name == "Tablet" or name == "Library Keycard V") and not self.is_option_enabled("DownloadableItems"):
             item.classification = ItemClassification.filler
-        elif name == 'Oculus Ring' and not self.is_option_enabled("EyeSpy"):
+        elif name == "Oculus Ring" and not self.is_option_enabled("EyeSpy"):
             item.classification = ItemClassification.filler
-        elif (name == 'Kobo' or name == 'Merchant Crow') and not self.is_option_enabled("GyreArchives"):
+        elif (name == "Kobo" or name == "Merchant Crow") and not self.is_option_enabled("GyreArchives"):
             item.classification = ItemClassification.filler
         elif name in {"Timeworn Warp Beacon", "Modern Warp Beacon", "Mysterious Warp Beacon"} \
                 and not self.is_option_enabled("UnchainedKeys"):
@@ -196,30 +205,30 @@ class TimespinnerWorld(World):
         if self.multiworld.random.random() < (trap_chance / 100) and enabled_traps:
             return self.multiworld.random.choice(enabled_traps)
         else:
-            return self.multiworld.random.choice(filler_items) 
+            return self.multiworld.random.choice(filler_items)
 
     def get_excluded_items(self) -> Set[str]:
         excluded_items: Set[str] = set()
 
         if self.is_option_enabled("StartWithJewelryBox"):
-            excluded_items.add('Jewelry Box')
+            excluded_items.add("Jewelry Box")
         if self.is_option_enabled("StartWithMeyef"):
-            excluded_items.add('Meyef')
+            excluded_items.add("Meyef")
         if self.is_option_enabled("QuickSeed"):
-            excluded_items.add('Talaria Attachment')
+            excluded_items.add("Talaria Attachment")
 
         if self.is_option_enabled("UnchainedKeys"):
-            excluded_items.add('Twin Pyramid Key')
+            excluded_items.add("Twin Pyramid Key")
 
             if not self.is_option_enabled("EnterSandman"):
-                excluded_items.add('Mysterious Warp Beacon')
+                excluded_items.add("Mysterious Warp Beacon")
         else:
-            excluded_items.add('Timeworn Warp Beacon')
-            excluded_items.add('Modern Warp Beacon')
-            excluded_items.add('Mysterious Warp Beacon')
+            excluded_items.add("Timeworn Warp Beacon")
+            excluded_items.add("Modern Warp Beacon")
+            excluded_items.add("Mysterious Warp Beacon")
 
         for item in self.multiworld.precollected_items[self.player]:
-            if item.name not in self.item_name_groups['UseItem']:
+            if item.name not in self.item_name_groups["UseItem"]:
                 excluded_items.add(item.name)
 
         return excluded_items
@@ -228,24 +237,24 @@ class TimespinnerWorld(World):
         non_local_items: Set[str] = self.multiworld.non_local_items[self.player].value
         local_items: Set[str] = self.multiworld.local_items[self.player].value
 
-        local_starter_melee_weapons = tuple(item for item in starter_melee_weapons if 
-                                            item in local_items or not item in non_local_items)
+        local_starter_melee_weapons = tuple(item for item in starter_melee_weapons if
+                                            item in local_items or item not in non_local_items)
         if not local_starter_melee_weapons:
-            if 'Plasma Orb' in non_local_items:
+            if "Plasma Orb" in non_local_items:
                 raise Exception("Atleast one melee orb must be local")
             else:
-                local_starter_melee_weapons = ('Plasma Orb',)
+                local_starter_melee_weapons = ("Plasma Orb",)
 
         local_starter_spells = tuple(item for item in starter_spells if
-                                     item in local_items or not item in non_local_items)
+                                     item in local_items or item not in non_local_items)
         if not local_starter_spells:
-            if 'Lightwall' in non_local_items:
+            if "Lightwall" in non_local_items:
                 raise Exception("Atleast one spell must be local")
             else:
-                local_starter_spells = ('Lightwall',)
+                local_starter_spells = ("Lightwall",)
 
-        self.assign_starter_item(excluded_items, 'Tutorial: Yo Momma 1', local_starter_melee_weapons)
-        self.assign_starter_item(excluded_items, 'Tutorial: Yo Momma 2', local_starter_spells)
+        self.assign_starter_item(excluded_items, "Tutorial: Yo Momma 1", local_starter_melee_weapons)
+        self.assign_starter_item(excluded_items, "Tutorial: Yo Momma 2", local_starter_spells)
 
     def assign_starter_item(self, excluded_items: Set[str], location: str, item_list: Tuple[str, ...]) -> None:
         item_name = self.multiworld.random.choice(item_list)
@@ -258,11 +267,11 @@ class TimespinnerWorld(World):
             return
 
         for item in self.multiworld.precollected_items[self.player]:
-            if item.name in starter_progression_items and not item.name in excluded_items:
+            if item.name in starter_progression_items and item.name not in excluded_items:
                 return
 
         local_starter_progression_items = tuple(
-            item for item in starter_progression_items 
+            item for item in starter_progression_items
                 if item not in excluded_items and item not in self.multiworld.non_local_items[self.player].value)
 
         if not local_starter_progression_items:
@@ -308,7 +317,7 @@ class TimespinnerWorld(World):
                 personal_items[location.address] = location.item.code
 
         return personal_items
-    
+
     def is_option_enabled(self, option: str) -> bool:
         return is_option_enabled(self.multiworld, self.player, option)
 

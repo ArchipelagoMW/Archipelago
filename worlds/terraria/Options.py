@@ -1,5 +1,6 @@
-from Options import Choice, Option, Toggle, DeathLink
 import typing
+
+from Options import Choice, DeathLink, Option
 
 
 class Goal(Choice):

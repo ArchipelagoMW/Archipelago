@@ -1,7 +1,8 @@
-﻿from ....Region import SMRegion
-from ....Config import Config, SMLogic
-from ....Location import Location, LocationType
+﻿from ....Config import Config, SMLogic
 from ....Item import Progression
+from ....Location import Location, LocationType
+from ....Region import SMRegion
+
 
 class Red(SMRegion):
     Name = "Brinstar Red"
@@ -23,7 +24,7 @@ class Red(SMRegion):
                 lambda items: items.Super),
             Location(self, 41, 0x8F8914, LocationType.Visible, "Missile (red Brinstar spike room)",
                 lambda items: items.CanUsePowerBombs() and items.Super),
-            Location(self, 42, 0x8F896E, LocationType.Chozo, "Spazer", 
+            Location(self, 42, 0x8F896E, LocationType.Chozo, "Spazer",
                 lambda items: items.CanPassBombPassages() and items.Super)
         ]
 

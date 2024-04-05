@@ -1,6 +1,6 @@
-from .RulesData import location_rules
 from Options import Toggle
 
+from .RulesData import location_rules
 
 options = {
     "open" : Toggle,

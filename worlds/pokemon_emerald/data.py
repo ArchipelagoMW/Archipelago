@@ -4,15 +4,15 @@ This also includes marrying automatically extracted data with manually
 defined data (like location labels or usable pokemon species), some cleanup
 and sorting, and Warp methods.
 """
+import pkgutil
 from dataclasses import dataclass
 from enum import IntEnum
+from typing import Any, Dict, FrozenSet, List, NamedTuple, Optional, Set, Tuple, Union
+
 import orjson
-from typing import Dict, List, NamedTuple, Optional, Set, FrozenSet, Tuple, Any, Union
-import pkgutil
 import pkg_resources
 
 from BaseClasses import ItemClassification
-
 
 BASE_OFFSET = 3860000
 POKEDEX_OFFSET = 10000

@@ -1,14 +1,21 @@
-from ..bundles.bundle import BundleTemplate, IslandBundleTemplate, DeepBundleTemplate, CurrencyBundleTemplate, MoneyBundleTemplate, FestivalBundleTemplate
+from ..bundles.bundle import (
+    BundleTemplate,
+    CurrencyBundleTemplate,
+    DeepBundleTemplate,
+    FestivalBundleTemplate,
+    IslandBundleTemplate,
+    MoneyBundleTemplate,
+)
 from ..bundles.bundle_item import BundleItem
 from ..bundles.bundle_room import BundleRoomTemplate
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
-from ..strings.bundle_names import CCRoom, BundleName
-from ..strings.craftable_names import Fishing, Craftable, Bomb
+from ..strings.bundle_names import BundleName, CCRoom
+from ..strings.craftable_names import Bomb, Craftable, Fishing
 from ..strings.crop_names import Fruit, Vegetable
 from ..strings.currency_names import Currency
 from ..strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
-from ..strings.fish_names import Fish, WaterItem, Trash
+from ..strings.fish_names import Fish, Trash, WaterItem
 from ..strings.flower_names import Flower
 from ..strings.food_names import Beverage, Meal
 from ..strings.forageable_names import Forageable
@@ -16,9 +23,9 @@ from ..strings.geode_names import Geode
 from ..strings.gift_names import Gift
 from ..strings.ingredient_names import Ingredient
 from ..strings.material_names import Material
-from ..strings.metal_names import MetalBar, Artifact, Fossil, Ore, Mineral
+from ..strings.metal_names import Artifact, Fossil, MetalBar, Mineral, Ore
 from ..strings.monster_drop_names import Loot
-from ..strings.quality_names import ForageQuality, ArtisanQuality, FishQuality
+from ..strings.quality_names import ArtisanQuality, FishQuality, ForageQuality
 from ..strings.seed_names import Seed
 
 wild_horseradish = BundleItem(Forageable.wild_horseradish)

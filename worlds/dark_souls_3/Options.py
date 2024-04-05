@@ -1,6 +1,6 @@
 import typing
 
-from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, DeathLink
+from Options import Choice, DeathLink, DefaultOnToggle, ItemDict, Option, Range, Toggle
 
 
 class RandomizeWeaponLocations(DefaultOnToggle):

@@ -1,8 +1,8 @@
 from typing import Dict, NamedTuple, Optional
 
 from BaseClasses import Item, ItemClassification
-from .Names import ItemName
 
+from .Names import ItemName
 
 celeste_64_base_id: int = 0xCA0000
 

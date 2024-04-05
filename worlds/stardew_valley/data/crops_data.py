@@ -24,7 +24,7 @@ def load_crop_csv():
     try:
         from importlib.resources import files
     except ImportError:
-        from importlib_resources import files  # noqa
+        from importlib_resources import files
 
     with files(data).joinpath("crops.csv").open() as file:
         reader = csv.DictReader(file)

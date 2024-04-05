@@ -2,6 +2,7 @@ from typing import List
 
 from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld, World
+
 from .Items import RLItem, RLItemData, event_item_table, get_items_by_category, item_table
 from .Locations import RLLocation, location_table
 from .Options import rl_options

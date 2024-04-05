@@ -1,10 +1,11 @@
+from test.general import setup_solo_multiworld
 from typing import Optional
 
 from Fill import distribute_planned
-from test.general import setup_solo_multiworld
 from worlds.AutoWorld import call_all
-from . import LADXTestBase
+
 from .. import LinksAwakeningWorld
+from . import LADXTestBase
 
 
 class PlandoTest(LADXTestBase):
@@ -19,7 +20,7 @@ class PlandoTest(LADXTestBase):
             ],
         }],
     }
-    
+
     def world_setup(self, seed: Optional[int] = None) -> None:
         self.multiworld = setup_solo_multiworld(
             LinksAwakeningWorld,
@@ -28,7 +29,7 @@ class PlandoTest(LADXTestBase):
         self.multiworld.plando_items[1] = self.options["plando_items"]
         distribute_planned(self.multiworld)
         call_all(self.multiworld, "pre_fill")
-        
+
     def test_planned(self):
         """Tests plandoing swords in the shop."""
         location_names = ["Shop 200 Item (Mabe Village)", "Shop 980 Item (Mabe Village)"]

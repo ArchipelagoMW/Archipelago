@@ -1,8 +1,9 @@
 import math
 
-from .Names import LocationName, ItemName
-from worlds.AutoWorld import LogicMixin, World
-from worlds.generic.Rules import add_rule, set_rule
+from worlds.AutoWorld import World
+from worlds.generic.Rules import add_rule
+
+from .Names import ItemName, LocationName
 
 
 def set_rules(world: World):

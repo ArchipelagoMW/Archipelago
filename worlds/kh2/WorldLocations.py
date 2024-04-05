@@ -1,4 +1,5 @@
 import typing
+
 from .Names import LocationName
 
 
@@ -97,9 +98,9 @@ DC_Checks = {
     LocationName.LingeringWillProofofConnection: WorldLocationData(0x370C, 6),
     LocationName.LingeringWillManifestIllusion:  WorldLocationData(0x370C, 6),
 
-    'Lingering Will Bonus: Sora Slot 1':         WorldLocationData(14092, 6),
-    'Lingering Will Proof of Connection':        WorldLocationData(14092, 6),
-    'Lingering Will Manifest Illusion':          WorldLocationData(14092, 6),
+    "Lingering Will Bonus: Sora Slot 1":         WorldLocationData(14092, 6),
+    "Lingering Will Proof of Connection":        WorldLocationData(14092, 6),
+    "Lingering Will Manifest Illusion":          WorldLocationData(14092, 6),
 }
 TR_Checks = {
     LocationName.CornerstoneHillMap:        WorldLocationData(0x23B2, 0),
@@ -231,7 +232,7 @@ BC_Checks = {
     LocationName.SecretAnsemReport4:            WorldLocationData(0x1D31, 2),
     LocationName.XaldinDataDefenseBoost:        WorldLocationData(0x1D34, 7),
 
-    'Data Xaldin':                              WorldLocationData(7476, 7),
+    "Data Xaldin":                              WorldLocationData(7476, 7),
 }
 SP_Checks = {
     LocationName.PitCellAreaMap:                    WorldLocationData(0x23CA, 2),
@@ -357,7 +358,7 @@ HB_Checks = {
     LocationName.RestorationSiteMoonRecipe:                    WorldLocationData(0x23C9, 3),
     LocationName.RestorationSiteAPBoost:                       WorldLocationData(0x23DB, 2),
     LocationName.DemyxHB:                                      WorldLocationData(0x3707, 4),
-    '(HB) Demyx Bonus: Donald Slot 1':                         WorldLocationData(14087, 4),
+    "(HB) Demyx Bonus: Donald Slot 1":                         WorldLocationData(14087, 4),
     LocationName.DemyxHBGetBonus:                              WorldLocationData(0x3707, 4),
     LocationName.DonaldDemyxHBGetBonus:                        WorldLocationData(0x3707, 4),
     LocationName.FFFightsCureElement:                          WorldLocationData(0x1D14, 6),
@@ -417,23 +418,23 @@ HB_Checks = {
     LocationName.VexenDataLostIllusion:                        WorldLocationData(0x370C, 0),  #
     LocationName.DemyxDataAPBoost:                             WorldLocationData(0x1D26, 5),
 
-    'Lexaeus Bonus: Sora Slot 1':                              WorldLocationData(14092, 1),
-    'AS Lexaeus':                                              WorldLocationData(14092, 1),
-    'Data Lexaeus':                                            WorldLocationData(14092, 1),
-    'Marluxia Bonus: Sora Slot 1':                             WorldLocationData(14092, 3),
-    'AS Marluxia':                                             WorldLocationData(14092, 3),
-    'Data Marluxia':                                           WorldLocationData(14092, 3),
-    'Zexion Bonus: Sora Slot 1':                               WorldLocationData(14092, 2),
-    'Zexion Bonus: Goofy Slot 1':                              WorldLocationData(14092, 2),
-    'AS Zexion':                                               WorldLocationData(14092, 2),
-    'Data Zexion':                                             WorldLocationData(14092, 2),
-    'Larxene Bonus: Sora Slot 1':                              WorldLocationData(14092, 4),
-    'AS Larxene':                                              WorldLocationData(14092, 4),
-    'Data Larxene':                                            WorldLocationData(14092, 4),
-    'Vexen Bonus: Sora Slot 1':                                WorldLocationData(14092, 0),
-    'AS Vexen':                                                WorldLocationData(14092, 0),
-    'Data Vexen':                                              WorldLocationData(14092, 0),
-    'Data Demyx':                                              WorldLocationData(7462, 5),
+    "Lexaeus Bonus: Sora Slot 1":                              WorldLocationData(14092, 1),
+    "AS Lexaeus":                                              WorldLocationData(14092, 1),
+    "Data Lexaeus":                                            WorldLocationData(14092, 1),
+    "Marluxia Bonus: Sora Slot 1":                             WorldLocationData(14092, 3),
+    "AS Marluxia":                                             WorldLocationData(14092, 3),
+    "Data Marluxia":                                           WorldLocationData(14092, 3),
+    "Zexion Bonus: Sora Slot 1":                               WorldLocationData(14092, 2),
+    "Zexion Bonus: Goofy Slot 1":                              WorldLocationData(14092, 2),
+    "AS Zexion":                                               WorldLocationData(14092, 2),
+    "Data Zexion":                                             WorldLocationData(14092, 2),
+    "Larxene Bonus: Sora Slot 1":                              WorldLocationData(14092, 4),
+    "AS Larxene":                                              WorldLocationData(14092, 4),
+    "Data Larxene":                                            WorldLocationData(14092, 4),
+    "Vexen Bonus: Sora Slot 1":                                WorldLocationData(14092, 0),
+    "AS Vexen":                                                WorldLocationData(14092, 0),
+    "Data Vexen":                                              WorldLocationData(14092, 0),
+    "Data Demyx":                                              WorldLocationData(7462, 5),
 
     LocationName.GardenofAssemblageMap:                        WorldLocationData(0x23DF, 1),
     LocationName.GoALostIllusion:                              WorldLocationData(0x23DF, 2),
@@ -576,7 +577,7 @@ TT_Checks = {
     LocationName.BetwixtandBetweenBondofFlame:          WorldLocationData(0x1CE9, 1),
     LocationName.AxelDataMagicBoost:                    WorldLocationData(0x1CEB, 4),
 
-    'Data Axel':                                        WorldLocationData(7403, 4),
+    "Data Axel":                                        WorldLocationData(7403, 4),
 }
 TWTNW_Checks = {
     LocationName.FragmentCrossingMythrilStone:             WorldLocationData(0x23CB, 4),

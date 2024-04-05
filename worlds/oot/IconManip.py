@@ -10,7 +10,7 @@ def add_hue(image, color, tiff=False):
         try:
             for x in range(3):
                 image[i+x] = int(((image[i+x]/255) * (color[x]/255)) * 255)
-        except: 
+        except:
             pass
     return image
 
@@ -31,7 +31,7 @@ def add_belt(tunic, belt, tiff=False):
 
 # Function for putting tunic colors together
 def generate_tunic_icon(color):
-    with open(data_path('icons/grey.tiff'), 'rb') as grey_fil, open(data_path('icons/belt.tiff'), 'rb') as belt_fil:
+    with open(data_path("icons/grey.tiff"), "rb") as grey_fil, open(data_path("icons/belt.tiff"), "rb") as belt_fil:
         grey = list(grey_fil.read())
         belt = list(belt_fil.read())
         return add_belt(add_hue(grey, color, True), belt, True)[154:]
@@ -60,7 +60,7 @@ def greyscaleRGB(rgbValues, intensity: int = 2):
 def rgb5a1ToRGB(rgb5a1Bytes):
     pixels = []
     for i in range(0, len(rgb5a1Bytes), 2):
-        bits = format(rgb5a1Bytes[i], '#010b')[2:] + format(rgb5a1Bytes[i+1], '#010b')[2:]
+        bits = format(rgb5a1Bytes[i], "#010b")[2:] + format(rgb5a1Bytes[i+1], "#010b")[2:]
         r = int(int(bits[0:5], 2) * (255/31))
         g = int(int(bits[5:10], 2) * (255/31))
         b = int(int(bits[10:15], 2) * (255/31))
@@ -89,7 +89,7 @@ def rgbToRGB5a1(rgbValues):
         b = b if b <= 31 else 31
         b = b if b >= 0 else 0
         a = int(rgb[3] / 255)
-        bits = format(r, '#07b')[2:] + format(g, '#07b')[2:] + format(b, '#07b')[2:] + format(a, '#03b')[2:]
+        bits = format(r, "#07b")[2:] + format(g, "#07b")[2:] + format(b, "#07b")[2:] + format(a, "#03b")[2:]
         rgb5a1.append(int(bits[:8], 2))
         rgb5a1.append(int(bits[8:], 2))
     for i in rgb5a1:

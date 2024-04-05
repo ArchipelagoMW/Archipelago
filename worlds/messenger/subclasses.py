@@ -1,7 +1,8 @@
 from functools import cached_property
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, Region
+
 from .regions import LOCATIONS, MEGA_SHARDS
 from .shop import FIGURINES, SHOP_ITEMS
 

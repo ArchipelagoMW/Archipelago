@@ -1,6 +1,6 @@
-from ..assembler import ASM
-from ..roomEditor import RoomEditor, ObjectHorizontal, ObjectVertical, Object
 from .. import entityData
+from ..assembler import ASM
+from ..roomEditor import Object, ObjectHorizontal, RoomEditor
 
 
 def addMultiworldShop(rom, this_player, player_count):

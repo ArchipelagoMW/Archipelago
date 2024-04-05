@@ -1,5 +1,6 @@
 from test.bases import WorldTestBase
 from typing import Iterable
+
 from .. import SoEWorld
 
 

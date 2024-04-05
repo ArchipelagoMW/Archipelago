@@ -1,8 +1,9 @@
-from . import MCTestBase
+from BaseClasses import ItemClassification
+
 from ..Constants import region_info
 from ..Options import minecraft_options
+from . import MCTestBase
 
-from BaseClasses import ItemClassification
 
 class AdvancementTestBase(MCTestBase):
     options = {

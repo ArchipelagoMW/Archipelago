@@ -2,15 +2,21 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
-
 from dataclasses import dataclass
-from typing import Optional, Dict, List, Set, TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, List, Optional, Set
 
-from BaseClasses import Item, MultiWorld, ItemClassification
+from BaseClasses import Item, ItemClassification, MultiWorld
+
 from .locations import ID_START, WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
-from .static_logic import ItemDefinition, DoorItemDefinition, ProgressiveItemDefinition, ItemCategory, \
-    StaticWitnessLogic, WeightedItemDefinition
+from .static_logic import (
+    DoorItemDefinition,
+    ItemCategory,
+    ItemDefinition,
+    ProgressiveItemDefinition,
+    StaticWitnessLogic,
+    WeightedItemDefinition,
+)
 from .utils import build_weighted_int_list
 
 if TYPE_CHECKING:

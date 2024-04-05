@@ -1,19 +1,19 @@
 from functools import cached_property
-from typing import Union, List
+from typing import List, Union
 
-from .base_logic import BaseLogicMixin, BaseLogic
+from ..bundles.bundle import Bundle
+from ..stardew_rule import And, StardewRule, True_
+from ..strings.currency_names import Currency
+from ..strings.machine_names import Machine
+from ..strings.quality_names import ArtisanQuality, CropQuality, FishQuality, ForageQuality
+from ..strings.region_names import Region
+from .base_logic import BaseLogic, BaseLogicMixin
 from .farming_logic import FarmingLogicMixin
 from .fishing_logic import FishingLogicMixin
 from .has_logic import HasLogicMixin
 from .money_logic import MoneyLogicMixin
 from .region_logic import RegionLogicMixin
 from .skill_logic import SkillLogicMixin
-from ..bundles.bundle import Bundle
-from ..stardew_rule import StardewRule, And, True_
-from ..strings.currency_names import Currency
-from ..strings.machine_names import Machine
-from ..strings.quality_names import CropQuality, ForageQuality, FishQuality, ArtisanQuality
-from ..strings.region_names import Region
 
 
 class BundleLogicMixin(BaseLogicMixin):

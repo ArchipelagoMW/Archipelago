@@ -9,14 +9,23 @@ import enum
 import subprocess
 from typing import Any, Dict, Optional
 
-from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, server_loop, logger, gui_enabled
 import Patch
 import Utils
+from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 
-from . import BizHawkContext, ConnectionStatus, NotConnectedError, RequestFailedError, connect, disconnect, get_hash, \
-    get_script_version, get_system, ping
-from .client import BizHawkClient, AutoBizHawkClientRegister
-
+from . import (
+    BizHawkContext,
+    ConnectionStatus,
+    NotConnectedError,
+    RequestFailedError,
+    connect,
+    disconnect,
+    get_hash,
+    get_script_version,
+    get_system,
+    ping,
+)
+from .client import AutoBizHawkClientRegister, BizHawkClient
 
 EXPECTED_SCRIPT_VERSION = 1
 
@@ -163,7 +172,7 @@ async def _game_watcher(ctx: BizHawkClientContext):
             rom_hash = await get_hash(ctx.bizhawk_ctx)
             if ctx.rom_hash is not None and ctx.rom_hash != rom_hash:
                 if ctx.server is not None and not ctx.server.socket.closed:
-                    logger.info(f"ROM changed. Disconnecting from server.")
+                    logger.info("ROM changed. Disconnecting from server.")
 
                 ctx.auth = None
                 ctx.username = None

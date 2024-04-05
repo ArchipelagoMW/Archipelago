@@ -1,5 +1,6 @@
-from BaseClasses import Item, ItemClassification
 import typing
+
+from BaseClasses import Item, ItemClassification
 
 
 class ItemData(typing.NamedTuple):

@@ -1,6 +1,7 @@
-from enum import unique, Enum
+from enum import Enum, unique
 
-from BaseClasses import Region, MultiWorld
+from BaseClasses import MultiWorld, Region
+
 from .Hints import HintArea
 
 
@@ -20,7 +21,7 @@ class RegionType(Enum):
         return self in (RegionType.Interior, RegionType.Dungeon, RegionType.Grotto)
 
 # Pretends to be an enum, but when the values are raw ints, it's much faster
-class TimeOfDay(object):
+class TimeOfDay:
     NONE = 0
     DAY = 1
     DAMPE = 2
@@ -56,11 +57,11 @@ class OOTRegion(Region):
         self._oot_hint = value
 
     def get_scene(self):
-        if self.scene: 
+        if self.scene:
             return self.scene
-        elif self.dungeon: 
+        elif self.dungeon:
             return self.dungeon.name
-        else: 
+        else:
             return None
 
     def can_reach(self, state):
@@ -68,9 +69,9 @@ class OOTRegion(Region):
             stored_age = state.age[self.player]
             state._oot_update_age_reachable_regions(self.player)
             state.age[self.player] = stored_age
-        if state.age[self.player] == 'child': 
+        if state.age[self.player] == "child":
             return self in state.child_reachable_regions[self.player]
-        elif state.age[self.player] == 'adult': 
+        elif state.age[self.player] == "adult":
             return self in state.adult_reachable_regions[self.player]
         else: # we don't care about age
             return self in state.child_reachable_regions[self.player] or self in state.adult_reachable_regions[self.player]

@@ -1,7 +1,8 @@
-﻿from ....Region import SMRegion, IReward, RewardType
-from ....Config import Config, SMLogic
-from ....Location import Location, LocationType
+﻿from ....Config import Config, SMLogic
 from ....Item import Progression
+from ....Location import Location, LocationType
+from ....Region import IReward, RewardType, SMRegion
+
 
 class Inner(SMRegion, IReward):
     Name = "Maridia Inner"
@@ -39,7 +40,7 @@ class Inner(SMRegion, IReward):
             Location(self, 147, 0x8FC5F1, LocationType.Visible, "Power Bomb (right Maridia sand pit room)",
                 lambda items: self.CanReachAqueduct(items) and items.Super) if self.Logic == SMLogic.Normal else \
                 lambda items: self.CanReachAqueduct(items) and items.Super and (items.Gravity or items.HiJump and items.CanSpringBallJump()),
-            Location(self, 148, 0x8FC603, LocationType.Visible, "Missile (pink Maridia)", 
+            Location(self, 148, 0x8FC603, LocationType.Visible, "Missile (pink Maridia)",
                 lambda items: self.CanReachAqueduct(items) and items.SpeedBooster if self.Logic == SMLogic.Normal else \
                 lambda items: self.CanReachAqueduct(items) and items.Gravity),
             Location(self, 149, 0x8FC609, LocationType.Visible, "Super Missile (pink Maridia)",
@@ -51,7 +52,7 @@ class Inner(SMRegion, IReward):
                     items.Gravity and (items.CanFly() or items.HiJump) or
                     items.Ice and items.HiJump and items.CanSpringBallJump() and items.SpaceJump)),
             Location(self, 151, 0x8FC74D, LocationType.Hidden, "Missile (Draygon)",
-                lambda items: 
+                lambda items:
                     items.CardMaridiaL1 and items.CardMaridiaL2 and self.CanDefeatBotwoon(items) or
                     items.CanAccessMaridiaPortal(self.world) if self.Logic == SMLogic.Normal else \
                 lambda items: (
@@ -59,7 +60,7 @@ class Inner(SMRegion, IReward):
                         items.CanAccessMaridiaPortal(self.world)
                     ) and items.Gravity),
             Location(self, 152, 0x8FC755, LocationType.Visible, "Energy Tank, Botwoon",
-                lambda items: 
+                lambda items:
                     items.CardMaridiaL1 and items.CardMaridiaL2 and self.CanDefeatBotwoon(items) or
                     items.CanAccessMaridiaPortal(self.world) and items.CardMaridiaL2),
             Location(self, 154, 0x8FC7A7, LocationType.Chozo, "Space Jump",

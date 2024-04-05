@@ -1,5 +1,7 @@
+from typing import Dict, List, Set, TypedDict
+
 from BaseClasses import ItemClassification
-from typing import TypedDict, Dict, List, Set
+
 
 class ItemDict(TypedDict):
     name: str
@@ -37,7 +39,7 @@ item_table: List[ItemDict] = [
     {"name": "Running Shoes", "id": base_id + 25, "count": 1, "classification": ItemClassification.useful},
     {"name": "Camping Permit", "id": base_id + 26, "count": 1, "classification": ItemClassification.progression},
     {"name": "Walkie Talkie", "id": base_id + 27, "count": 1, "classification": ItemClassification.useful},
-    
+
     # Not in the item pool for now
     #{"name": "Boating Manual", "id": base_id + ~, "count": 1, "classification": ItemClassification.filler},
 

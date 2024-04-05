@@ -1,16 +1,16 @@
-from typing import Union, List, Tuple
+from typing import List, Tuple, Union
 
 
 class RecipeSource:
 
     def __repr__(self):
-        return f"RecipeSource"
+        return "RecipeSource"
 
 
 class StarterSource(RecipeSource):
 
     def __repr__(self):
-        return f"StarterSource"
+        return "StarterSource"
 
 
 class ArchipelagoSource(RecipeSource):

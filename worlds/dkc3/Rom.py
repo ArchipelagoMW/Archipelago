@@ -2,16 +2,15 @@ import Utils
 from Utils import read_snes_rom
 from worlds.AutoWorld import World
 from worlds.Files import APDeltaPatch
-from .Locations import lookup_id_to_name, all_locations
-from .Levels import level_list, level_dict
 
-USHASH = '120abf304f0c40fe059f6a192ed4f947'
+from .Levels import level_dict, level_list
+
+USHASH = "120abf304f0c40fe059f6a192ed4f947"
 ROM_PLAYER_LIMIT = 65535
 
 import hashlib
-import os
 import math
-
+import os
 
 level_unlock_map = {
     0x657: [0x65A],
@@ -434,14 +433,14 @@ level_music_ids = [
     0x21,
 ]
 
-class LocalRom(object):
+class LocalRom:
 
     def __init__(self, file, patch=True, vanillaRom=None, name=None, hash=None):
         self.name = name
         self.hash = hash
         self.orig_buffer = None
 
-        with open(file, 'rb') as stream:
+        with open(file, "rb") as stream:
             self.buffer = read_snes_rom(stream)
         #if patch:
         #    self.patch_rom()
@@ -449,7 +448,7 @@ class LocalRom(object):
         #if vanillaRom:
         #    with open(vanillaRom, 'rb') as vanillaStream:
         #        self.orig_buffer = read_snes_rom(vanillaStream)
-        
+
     def read_bit(self, address: int, bit_number: int) -> bool:
         bitflag = (1 << bit_number)
         return ((self.buffer[address] & bitflag) != 0)
@@ -467,11 +466,11 @@ class LocalRom(object):
         self.buffer[startaddress:startaddress + len(values)] = values
 
     def write_to_file(self, file):
-        with open(file, 'wb') as outfile:
+        with open(file, "wb") as outfile:
             outfile.write(self.buffer)
 
     def read_from_file(self, file):
-        with open(file, 'rb') as stream:
+        with open(file, "rb") as stream:
             self.buffer = bytearray(stream.read())
 
 
@@ -668,7 +667,7 @@ def patch_rom(world: World, rom: LocalRom, active_level_list):
     rom.write_bytes(0x32A5EE, bytearray([0x00, 0x03, 0x50, 0x4F, 0x52, 0x59, 0x47, 0x4F, 0x4E, 0xC5])) # "PORYGONE"
 
     from Utils import __version__
-    rom.name = bytearray(f'D3{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
+    rom.name = bytearray(f'D3{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0', "utf8")[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x7FC0, rom.name)
 
@@ -730,8 +729,8 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
         if USHASH != basemd5.hexdigest():
-            raise Exception('Supplied Base Rom does not match known MD5 for US(1.0) release. '
-                            'Get the correct game and version, then dump it')
+            raise Exception("Supplied Base Rom does not match known MD5 for US(1.0) release. "
+                            "Get the correct game and version, then dump it")
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes
 

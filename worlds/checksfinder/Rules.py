@@ -1,10 +1,11 @@
+from BaseClasses import CollectionState, MultiWorld
+
 from ..generic.Rules import set_rule
-from BaseClasses import MultiWorld, CollectionState
 
 
 def _has_total(state: CollectionState, player: int, total: int):
-    return (state.count('Map Width', player) + state.count('Map Height', player) +
-            state.count('Map Bombs', player)) >= total
+    return (state.count("Map Width", player) + state.count("Map Height", player) +
+            state.count("Map Bombs", player)) >= total
 
 
 # Sets rules on entrances and advancements that are always applied

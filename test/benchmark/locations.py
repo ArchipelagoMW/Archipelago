@@ -1,15 +1,15 @@
 def run_locations_benchmark():
     import argparse
-    import logging
-    import gc
     import collections
-    import typing
+    import gc
+    import logging
     import sys
+    import typing
 
     from time_it import TimeIt
 
+    from BaseClasses import CollectionState, Location, MultiWorld
     from Utils import init_logging
-    from BaseClasses import MultiWorld, CollectionState, Location
     from worlds import AutoWorld
     from worlds.AutoWorld import call_all
 

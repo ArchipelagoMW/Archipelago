@@ -547,14 +547,14 @@ class EntityData:
             dmg = bytearray()
             for m in range(16):
                 dmg.append(damage_per_damage_type[m*8+group_damage_type[n*16+m]])
-            import binascii
             #print(binascii.hexlify(group_damage_type[n*16:n*16+16]))
             #print(binascii.hexlify(dmg))
 
 
 if __name__ == "__main__":
-    from rom import ROM
     import sys
+
+    from rom import ROM
     rom = ROM(sys.argv[1])
     ed = EntityData(rom)
     for e in ed.entities:

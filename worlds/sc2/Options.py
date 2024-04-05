@@ -1,10 +1,17 @@
-from dataclasses import dataclass, fields, Field
-from typing import FrozenSet, Union, Set
+from dataclasses import Field, dataclass, fields
+from typing import FrozenSet, Set, Union
 
-from Options import Choice, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range, PerGameCommonOptions
-from .MissionTables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_no_build_missions, \
-    campaign_mission_table
+from Options import Choice, DefaultOnToggle, ItemSet, OptionSet, PerGameCommonOptions, Range, Toggle
 from worlds.AutoWorld import World
+
+from .MissionTables import (
+    MissionPools,
+    SC2Campaign,
+    SC2Mission,
+    campaign_mission_table,
+    get_no_build_missions,
+    lookup_name_to_mission,
+)
 
 
 class GameDifficulty(Choice):

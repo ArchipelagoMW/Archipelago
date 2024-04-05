@@ -1,10 +1,10 @@
 from dataclasses import dataclass
-from typing import List, Tuple, Union, Optional, Set
+from typing import List, Optional, Set, Tuple, Union
 
-from . import season_data as season
-from ..strings.fish_names import Fish, SVEFish, DistantLandsFish
-from ..strings.region_names import Region, SVERegion
 from ..mods.mod_data import ModNames
+from ..strings.fish_names import DistantLandsFish, Fish, SVEFish
+from ..strings.region_names import Region, SVERegion
+from . import season_data as season
 
 
 @dataclass(frozen=True)

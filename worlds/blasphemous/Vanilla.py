@@ -1,4 +1,4 @@
-from typing import Set, Dict
+from typing import Dict, Set
 
 unrandomized_dict: Dict[str, str] = {
     "CoOLotCV: Fountain of burning oil": "Golden Thimble Filled with Burning Oil",

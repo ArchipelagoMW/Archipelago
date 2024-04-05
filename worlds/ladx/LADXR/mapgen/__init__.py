@@ -1,17 +1,17 @@
-from ..romTables import ROMWithTables
-from ..roomEditor import RoomEditor, ObjectWarp
-from ..patches import overworld, core
-from .tileset import loadTileInfo
-from .map import Map, MazeGen
-from .wfc import WFCMap, ContradictionException
-from .roomgen import setup_room_types
-from .imagegenerator import ImageGen
-from .util import xyrange
-from .locations.entrance import DummyEntrance
-from .locationgen import LocationGenerator
-from .logic import LogicGenerator
-from .enemygen import generate_enemies
 from ..assembler import ASM
+from ..patches import core, overworld
+from ..romTables import ROMWithTables
+from ..roomEditor import ObjectWarp, RoomEditor
+from .enemygen import generate_enemies
+from .imagegenerator import ImageGen
+from .locationgen import LocationGenerator
+from .locations.entrance import DummyEntrance
+from .logic import LogicGenerator
+from .map import Map, MazeGen
+from .roomgen import setup_room_types
+from .tileset import loadTileInfo
+from .util import xyrange
+from .wfc import ContradictionException, WFCMap
 
 
 def store_map(rom, the_map: Map):

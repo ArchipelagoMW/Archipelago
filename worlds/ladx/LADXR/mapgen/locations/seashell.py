@@ -1,10 +1,11 @@
-from ..logic import Location, PEGASUS_BOOTS, SHOVEL
-from .base import LocationBase
-from ..tileset import solid_tiles, open_tiles, walkable_tiles
-from ...roomEditor import RoomEditor
+import random
+
 from ...assembler import ASM
 from ...locations.all import Seashell
-import random
+from ...roomEditor import RoomEditor
+from ..logic import PEGASUS_BOOTS, SHOVEL, Location
+from ..tileset import walkable_tiles
+from .base import LocationBase
 
 
 class HiddenSeashell(LocationBase):

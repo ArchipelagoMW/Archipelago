@@ -1,20 +1,21 @@
-import requests
-import PIL.Image
 import re
+
+import PIL.Image
+import requests
 
 url = "https://raw.githubusercontent.com/CrystalSaver/Z4RandomizerBeta2/master/"
 
-for k, v in requests.get(url + "asset-manifest.json").json()['files'].items():
+for k, v in requests.get(url + "asset-manifest.json").json()["files"].items():
     m = re.match("static/media/Graphics(.+)\\.bin", k)
     assert m is not None
     if not k.startswith("static/media/Graphics") or not k.endswith(".bin"):
         continue
     name = m.group(1)
-    
+
     data = requests.get(url + v).content
-    
+
     icon = PIL.Image.new("P", (16, 16))
-    buffer = bytearray(b'\x00' * 16 * 8)
+    buffer = bytearray(b"\x00" * 16 * 8)
     for idx in range(0x0C0, 0x0C2):
         for y in range(16):
             a = data[idx * 32 + y * 2]
@@ -26,7 +27,7 @@ for k, v in requests.get(url + "asset-manifest.json").json()['files'].items():
                 if b & (0x80 >> x):
                     v |= 2
                 buffer[x+y*8] = v
-        tile = PIL.Image.frombytes('P', (8, 16), bytes(buffer))
+        tile = PIL.Image.frombytes("P", (8, 16), bytes(buffer))
         x = (idx % 16) * 8
         icon.paste(tile, (x, 0))
     pal = icon.getpalette()

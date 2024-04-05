@@ -1,3 +1,4 @@
+from ...logic.base_logic import BaseLogicMixin
 from .buildings_logic import ModBuildingLogicMixin
 from .deepwoods_logic import DeepWoodsLogicMixin
 from .elevator_logic import ModElevatorLogicMixin
@@ -7,7 +8,6 @@ from .quests_logic import ModQuestLogicMixin
 from .skills_logic import ModSkillLogicMixin
 from .special_orders_logic import ModSpecialOrderLogicMixin
 from .sve_logic import SVELogicMixin
-from ...logic.base_logic import BaseLogicMixin
 
 
 class ModLogicMixin(BaseLogicMixin):

@@ -1,9 +1,10 @@
+import logging
 import os.path
 import typing
-import logging
-from Options import Choice, Option, Toggle, DefaultOnToggle, Range, FreeText
 from collections import defaultdict
+
 import Utils
+from Options import Choice, DefaultOnToggle, FreeText, Option, Range, Toggle
 
 DefaultOffToggle = Toggle
 
@@ -14,7 +15,7 @@ class LADXROption:
     def to_ladxr_option(self, all_options):
         if not self.ladxr_name:
             return None, None
-        
+
         return (self.ladxr_name, self.name_lookup[self.value].replace("_", ""))
 
 
@@ -32,7 +33,7 @@ class Logic(Choice, LADXROption):
     option_hard = 2
     option_glitched = 3
     option_hell = 4
-    
+
     default = option_normal
 
 class TradeQuest(DefaultOffToggle, LADXROption):
@@ -82,7 +83,7 @@ class EntranceShuffle(Choice, LADXROption):
     option_none = 0
     option_simple = 1
     #option_advanced = 2
-    #option_expert = 3    
+    #option_expert = 3
     #option_insanity = 4
     default = option_none
     display_name = "Experimental Entrance Shuffle"
@@ -207,7 +208,7 @@ class Goal(Choice, LADXROption):
     option_instruments = 1
     option_seashells = 2
     option_open = 3
-    
+
     default = option_instruments
 
     def to_ladxr_option(self, all_options):
@@ -362,10 +363,10 @@ class GfxMod(FreeText, LADXROption):
     """
     display_name = "GFX Modification"
     ladxr_name = "gfxmod"
-    normal = ''
-    default = 'Link'
+    normal = ""
+    default = "Link"
 
-    __spriteDir: str = Utils.local_path(os.path.join('data', 'sprites','ladx'))
+    __spriteDir: str = Utils.local_path(os.path.join("data", "sprites","ladx"))
     __spriteFiles: typing.DefaultDict[str, typing.List[str]] = defaultdict(list)
 
     extensions = [".bin", ".bdiff", ".png", ".bmp"]
@@ -374,16 +375,16 @@ class GfxMod(FreeText, LADXROption):
         name, extension = os.path.splitext(file)
         if extension in extensions:
             __spriteFiles[name].append(file)
-            
+
     def __init__(self, value: str):
         super().__init__(value)
 
-                    
+
     def verify(self, world, player_name: str, plando_options) -> None:
         if self.value == "Link" or self.value in GfxMod.__spriteFiles:
             return
         raise Exception(f"LADX Sprite '{self.value}' not found. Possible sprites are: {['Link'] + list(GfxMod.__spriteFiles.keys())}")
-            
+
 
     def to_ladxr_option(self, all_options):
         if self.value == -1 or self.value == "Link":
@@ -426,7 +427,7 @@ class Music(Choice, LADXROption):
     option_shuffled = 1
     option_off = 2
 
-    
+
     def to_ladxr_option(self, all_options):
         s = ""
         if self.value == self.option_shuffled:
@@ -446,44 +447,44 @@ class AdditionalWarpPoints(DefaultOffToggle):
     [On] (requires warp improvements) Adds a warp point at Crazy Tracy's house (the Mambo teleport spot) and Eagle's Tower
     [Off] No change
     """
-     
+
 
 links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
-    'logic': Logic,
-    # 'heartpiece': DefaultOnToggle, # description='Includes heart pieces in the item pool'),                
-    # 'seashells': DefaultOnToggle, # description='Randomizes the secret sea shells hiding in the ground/trees. (chest are always randomized)'),                
-    # 'heartcontainers': DefaultOnToggle, # description='Includes boss heart container drops in the item pool'),                
-    # 'instruments': DefaultOffToggle, # description='Instruments are placed on random locations, dungeon goal will just contain a random item.'),                
-    'tradequest': TradeQuest, # description='Trade quest items are randomized, each NPC takes its normal trade quest item, but gives a random item'),                
-    # 'witch': DefaultOnToggle, # description='Adds both the toadstool and the reward for giving the toadstool to the witch to the item pool'),                
-    'rooster': Rooster, # description='Adds the rooster to the item pool. Without this option, the rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.'),                
+    "logic": Logic,
+    # 'heartpiece': DefaultOnToggle, # description='Includes heart pieces in the item pool'),
+    # 'seashells': DefaultOnToggle, # description='Randomizes the secret sea shells hiding in the ground/trees. (chest are always randomized)'),
+    # 'heartcontainers': DefaultOnToggle, # description='Includes boss heart container drops in the item pool'),
+    # 'instruments': DefaultOffToggle, # description='Instruments are placed on random locations, dungeon goal will just contain a random item.'),
+    "tradequest": TradeQuest, # description='Trade quest items are randomized, each NPC takes its normal trade quest item, but gives a random item'),
+    # 'witch': DefaultOnToggle, # description='Adds both the toadstool and the reward for giving the toadstool to the witch to the item pool'),
+    "rooster": Rooster, # description='Adds the rooster to the item pool. Without this option, the rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.'),
     # 'boomerang': Boomerang,
     # 'randomstartlocation': DefaultOffToggle, # 'Randomize where your starting house is located'),
-    'experimental_dungeon_shuffle': DungeonShuffle, # 'Randomizes the dungeon that each dungeon entrance leads to'),
-    'experimental_entrance_shuffle': EntranceShuffle,
+    "experimental_dungeon_shuffle": DungeonShuffle, # 'Randomizes the dungeon that each dungeon entrance leads to'),
+    "experimental_entrance_shuffle": EntranceShuffle,
     # 'bossshuffle': BossShuffle,
     # 'minibossshuffle': BossShuffle,
-    'goal': Goal,
-    'instrument_count': InstrumentCount,
+    "goal": Goal,
+    "instrument_count": InstrumentCount,
     # 'itempool': ItemPool,
     # 'bowwow': Bowwow,
     # 'overworld': Overworld,
-    'link_palette': LinkPalette,
-    'warp_improvements': WarpImprovements,
-    'additional_warp_points': AdditionalWarpPoints,
-    'trendy_game': TrendyGame,
-    'gfxmod': GfxMod,
-    'palette': Palette,
-    'text_shuffle': TextShuffle,
-    'shuffle_nightmare_keys': ShuffleNightmareKeys,
-    'shuffle_small_keys': ShuffleSmallKeys,
-    'shuffle_maps': ShuffleMaps,
-    'shuffle_compasses': ShuffleCompasses,
-    'shuffle_stone_beaks': ShuffleStoneBeaks,
-    'music': Music,
-    'shuffle_instruments': ShuffleInstruments,
-    'music_change_condition': MusicChangeCondition,
-    'nag_messages': NagMessages,
-    'ap_title_screen': APTitleScreen,
-    
+    "link_palette": LinkPalette,
+    "warp_improvements": WarpImprovements,
+    "additional_warp_points": AdditionalWarpPoints,
+    "trendy_game": TrendyGame,
+    "gfxmod": GfxMod,
+    "palette": Palette,
+    "text_shuffle": TextShuffle,
+    "shuffle_nightmare_keys": ShuffleNightmareKeys,
+    "shuffle_small_keys": ShuffleSmallKeys,
+    "shuffle_maps": ShuffleMaps,
+    "shuffle_compasses": ShuffleCompasses,
+    "shuffle_stone_beaks": ShuffleStoneBeaks,
+    "music": Music,
+    "shuffle_instruments": ShuffleInstruments,
+    "music_change_condition": MusicChangeCondition,
+    "nag_messages": NagMessages,
+    "ap_title_screen": APTitleScreen,
+
 }

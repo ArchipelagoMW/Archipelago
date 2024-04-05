@@ -1,8 +1,10 @@
 from enum import Enum
-from .LocationList import location_table
+
 from BaseClasses import Location
 
-non_indexed_location_types = {'Boss', 'Event', 'Drop', 'HintStone', 'Hint'}
+from .LocationList import location_table
+
+non_indexed_location_types = {"Boss", "Event", "Drop", "HintStone", "Hint"}
 
 location_id_offset = 67000
 locnames_pre_70 = {
@@ -13,13 +15,13 @@ locnames_pre_70 = {
     "ZR Frogs Suns Song",
     "ZR Frogs Song of Time",
 }
-loctypes_70 = {'Beehive', 'Pot', 'FlyingPot', 'Crate', 'SmallCrate', 'RupeeTower', 'Freestanding', 'ActorOverride'}
+loctypes_70 = {"Beehive", "Pot", "FlyingPot", "Crate", "SmallCrate", "RupeeTower", "Freestanding", "ActorOverride"}
 new_name_order = sorted(location_table.keys(),
     key=lambda name: 2 if location_table[name][0] in loctypes_70
                 else 1 if name in locnames_pre_70
                 else 0)
 
-location_name_to_id = {name: (location_id_offset + index) for (index, name) in enumerate(new_name_order) 
+location_name_to_id = {name: (location_id_offset + index) for (index, name) in enumerate(new_name_order)
     if location_table[name][0] not in non_indexed_location_types}
 
 class DisableType(Enum):
@@ -27,11 +29,11 @@ class DisableType(Enum):
     PENDING = 1
     DISABLED = 2
 
-class OOTLocation(Location): 
-    game: str = 'Ocarina of Time'
+class OOTLocation(Location):
+    game: str = "Ocarina of Time"
 
-    def __init__(self, player, name='', code=None, address1=None, address2=None,
-        default=None, type='Chest', scene=None, parent=None, filter_tags=None,
+    def __init__(self, player, name="", code=None, address1=None, address2=None,
+        default=None, type="Chest", scene=None, parent=None, filter_tags=None,
         internal=False, vanilla_item=None
     ):
         super(OOTLocation, self).__init__(player, name, code, parent)
@@ -42,14 +44,14 @@ class OOTLocation(Location):
         self.scene = scene
         self.internal = internal
         self.vanilla_item = vanilla_item
-        if filter_tags is None: 
+        if filter_tags is None:
             self.filter_tags = None
-        else: 
+        else:
             self.filter_tags = list(filter_tags)
         self.never = False # no idea what this does
         self.disabled = DisableType.ENABLED
 
-        if type == 'Event': 
+        if type == "Event":
             self.event = True
 
     @property
@@ -78,7 +80,7 @@ def LocationFactory(locations, player: int):
                 address1, address2, default, type, scene,
                 filter_tags=filter_tags, vanilla_item=vanilla_item))
         else:
-            raise KeyError('Unknown Location: %s', location)
+            raise KeyError("Unknown Location: %s", location)
 
     if singleton:
         return ret[0]
@@ -114,28 +116,28 @@ def build_location_name_groups() -> dict:
     }
 
     # Delete tags which are a combination of other tags
-    del ret['Death Mountain']
-    del ret['Forest']
-    del ret['Gerudo']
-    del ret['Kakariko']
-    del ret['Market']
+    del ret["Death Mountain"]
+    del ret["Forest"]
+    del ret["Gerudo"]
+    del ret["Kakariko"]
+    del ret["Market"]
 
     # Delete Vanilla and MQ tags because they are just way too broad
-    del ret['Vanilla']
-    del ret['Master Quest']
+    del ret["Vanilla"]
+    del ret["Master Quest"]
 
-    rename(ret, 'Beehive', 'Beehives')
-    rename(ret, 'Cow', 'Cows')
-    rename(ret, 'Crate', 'Crates')
-    rename(ret, 'Deku Scrub', 'Deku Scrubs')
-    rename(ret, 'FlyingPot', 'Flying Pots')
-    rename(ret, 'Freestanding', 'Freestanding Items')
-    rename(ret, 'Pot', 'Pots')
-    rename(ret, 'RupeeTower', 'Rupee Groups')
-    rename(ret, 'SmallCrate', 'Small Crates')
-    rename(ret, 'the Market', 'Market')
-    rename(ret, 'the Graveyard', 'Graveyard')
-    rename(ret, 'the Lost Woods', 'Lost Woods')
+    rename(ret, "Beehive", "Beehives")
+    rename(ret, "Cow", "Cows")
+    rename(ret, "Crate", "Crates")
+    rename(ret, "Deku Scrub", "Deku Scrubs")
+    rename(ret, "FlyingPot", "Flying Pots")
+    rename(ret, "Freestanding", "Freestanding Items")
+    rename(ret, "Pot", "Pots")
+    rename(ret, "RupeeTower", "Rupee Groups")
+    rename(ret, "SmallCrate", "Small Crates")
+    rename(ret, "the Market", "Market")
+    rename(ret, "the Graveyard", "Graveyard")
+    rename(ret, "the Lost Woods", "Lost Woods")
 
     return ret
 

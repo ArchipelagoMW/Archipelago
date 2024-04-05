@@ -1,5 +1,6 @@
 import typing
-from Options import Choice, Option, Toggle, DefaultOnToggle, Range, OptionList, DeathLink
+
+from Options import Choice, DeathLink, DefaultOnToggle, Option, OptionList, Range, Toggle
 
 
 class AdvancementGoal(Range):
@@ -54,7 +55,7 @@ class StructureCompasses(DefaultOnToggle):
     display_name = "Structure Compasses"
 
 
-class BeeTraps(Range): 
+class BeeTraps(Range):
     """Replaces a percentage of junk items with bee traps, which spawn multiple angered bees around every player when
     received."""
     display_name = "Bee Trap Percentage"

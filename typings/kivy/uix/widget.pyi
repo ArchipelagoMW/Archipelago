@@ -1,8 +1,8 @@
 """ FillType_* is not a real kivy type - just something to fill unknown typing. """
 
 from typing import Any, Optional, Protocol
-from ..graphics import FillType_Drawable, FillType_Vec
 
+from ..graphics import FillType_Drawable, FillType_Vec
 
 class FillType_BindCallback(Protocol):
     def __call__(self, *args: Any) -> None: ...

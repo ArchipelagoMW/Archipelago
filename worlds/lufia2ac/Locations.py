@@ -1,6 +1,7 @@
 from typing import Dict
 
 from BaseClasses import Location
+
 from .Options import BlueChestCount
 
 start_id: int = 0xAC0000

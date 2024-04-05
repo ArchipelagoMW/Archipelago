@@ -2,7 +2,6 @@ from typing import Dict, Tuple, Union
 
 from ..enums import ZorkGrandInquisitorEvents, ZorkGrandInquisitorItems, ZorkGrandInquisitorRegions
 
-
 entrance_rule_data: Dict[
     Tuple[
         ZorkGrandInquisitorRegions,

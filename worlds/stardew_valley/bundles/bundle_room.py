@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from random import Random
 from typing import List
 
-from .bundle import Bundle, BundleTemplate
 from ..options import BundlePrice, StardewValleyOptions
+from .bundle import Bundle, BundleTemplate
 
 
 @dataclass

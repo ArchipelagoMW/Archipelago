@@ -1,4 +1,5 @@
-from worlds.generic.Rules import forbid_items_for_player, add_rule
+from worlds.generic.Rules import add_rule, forbid_items_for_player
+
 
 def create_rules(self, location_table):
     multiworld = self.multiworld
@@ -8,11 +9,11 @@ def create_rules(self, location_table):
     # Shovel Rules
     for loc in location_table:
         if loc["needsShovel"]:
-            forbid_items_for_player(multiworld.get_location(loc["name"], player), self.item_name_groups['Maps'], player)
+            forbid_items_for_player(multiworld.get_location(loc["name"], player), self.item_name_groups["Maps"], player)
             add_rule(multiworld.get_location(loc["name"], player),
                 lambda state: state.has("Shovel", player))
         if loc["purchase"] and not options.coins_in_shops:
-            forbid_items_for_player(multiworld.get_location(loc["name"], player), self.item_name_groups['Coins'], player)
+            forbid_items_for_player(multiworld.get_location(loc["name"], player), self.item_name_groups["Coins"], player)
 
         # Minimum Feather Rules
         if options.golden_feather_progression != 2:

@@ -1,9 +1,8 @@
-import os
 import binascii
+import os
 import pkgutil
 
 from ..assembler import ASM
-from ..utils import formatText
 
 ItemNameLookupTable = 0x0100
 ItemNameLookupSize = 2

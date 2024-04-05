@@ -1,8 +1,11 @@
-from BaseClasses import Region, MultiWorld, Entrance, Location, LocationProgressType, ItemClassification
-from worlds.generic.Rules import add_rule
-from .Items import item_groups, yaml_item
 import pkgutil
+
 import yaml
+
+from BaseClasses import Entrance, ItemClassification, Location, LocationProgressType, MultiWorld, Region
+from worlds.generic.Rules import add_rule
+
+from .Items import item_groups, yaml_item
 
 rooms = yaml.load(pkgutil.get_data(__name__, "data/rooms.yaml"), yaml.Loader)
 entrance_names = {entrance["id"]: entrance["name"] for entrance in yaml.load(pkgutil.get_data(__name__, "data/entrances.yaml"), yaml.Loader)}
@@ -78,7 +81,7 @@ def create_regions(self):
     dark_king.place_locked_item(self.create_item("Dark King"))
     dark_king_room.locations.append(dark_king)
 
-    connection = Entrance(self.player, f"Enter Overworld", menu_region)
+    connection = Entrance(self.player, "Enter Overworld", menu_region)
     connection.connect(self.multiworld.get_region("Overworld", self.player))
     menu_region.exits.append(connection)
 
@@ -104,7 +107,7 @@ def create_regions(self):
 
                         if spoiler:
                             self.multiworld.spoiler.set_entrance(entrance_names[link["entrance"]], connect_room.name,
-                                                                 'both', self.player)
+                                                                 "both", self.player)
                     if link["access"]:
                         process_rules(connection, link["access"])
                     region.exits.append(connection)
@@ -112,18 +115,18 @@ def create_regions(self):
                     break
 
 non_dead_end_crest_rooms = [
-    'Libra Temple', 'Aquaria Gemini Room', "GrenadeMan's Mobius Room", 'Fireburg Gemini Room',
-    'Sealed Temple', 'Alive Forest', 'Kaidge Temple Upper Ledge',
-    'Windia Kid House Basement', 'Windia Old People House Basement'
+    "Libra Temple", "Aquaria Gemini Room", "GrenadeMan's Mobius Room", "Fireburg Gemini Room",
+    "Sealed Temple", "Alive Forest", "Kaidge Temple Upper Ledge",
+    "Windia Kid House Basement", "Windia Old People House Basement"
 ]
 
 non_dead_end_crest_warps = [
-    'Libra Temple - Libra Tile Script', 'Aquaria Gemini Room - Gemini Script',
-    'GrenadeMan Mobius Room - Mobius Teleporter Script', 'Fireburg Gemini Room - Gemini Teleporter Script',
-    'Sealed Temple - Gemini Tile Script', 'Alive Forest - Libra Teleporter Script',
-    'Alive Forest - Gemini Teleporter Script', 'Alive Forest - Mobius Teleporter Script',
-    'Kaidge Temple - Mobius Teleporter Script', 'Windia Kid House Basement - Mobius Teleporter',
-    'Windia Old People House Basement - Mobius Teleporter Script',
+    "Libra Temple - Libra Tile Script", "Aquaria Gemini Room - Gemini Script",
+    "GrenadeMan Mobius Room - Mobius Teleporter Script", "Fireburg Gemini Room - Gemini Teleporter Script",
+    "Sealed Temple - Gemini Tile Script", "Alive Forest - Libra Teleporter Script",
+    "Alive Forest - Gemini Teleporter Script", "Alive Forest - Mobius Teleporter Script",
+    "Kaidge Temple - Mobius Teleporter Script", "Windia Kid House Basement - Mobius Teleporter",
+    "Windia Old People House Basement - Mobius Teleporter Script",
 ]
 
 

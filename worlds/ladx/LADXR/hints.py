@@ -1,7 +1,6 @@
 from .locations.items import *
 from .utils import formatText
 
-
 hint_text_ids = [
     # Overworld owl statues
     0x1B6, 0x1B7, 0x1B8, 0x1B9, 0x1BA, 0x1BB, 0x1BC, 0x1BD, 0x1BE, 0x22D,

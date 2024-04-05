@@ -1,8 +1,8 @@
 """Module extending BaseClasses.py for aLttP"""
-from typing import Optional, TYPE_CHECKING
 from enum import IntEnum
+from typing import TYPE_CHECKING, Optional
 
-from BaseClasses import Location, Item, ItemClassification, Region, MultiWorld
+from BaseClasses import Item, ItemClassification, Location, MultiWorld, Region
 
 if TYPE_CHECKING:
     from .Dungeons import Dungeon
@@ -53,23 +53,23 @@ class ALttPItem(Item):
 
     @property
     def crystal(self) -> bool:
-        return self.type == 'Crystal'
+        return self.type == "Crystal"
 
     @property
     def smallkey(self) -> bool:
-        return self.type == 'SmallKey'
+        return self.type == "SmallKey"
 
     @property
     def bigkey(self) -> bool:
-        return self.type == 'BigKey'
+        return self.type == "BigKey"
 
     @property
     def map(self) -> bool:
-        return self.type == 'Map'
+        return self.type == "Map"
 
     @property
     def compass(self) -> bool:
-        return self.type == 'Compass'
+        return self.type == "Compass"
 
     @property
     def dungeon_item(self) -> Optional[str]:

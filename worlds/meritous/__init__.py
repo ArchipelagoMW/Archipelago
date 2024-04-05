@@ -5,12 +5,13 @@
 
 from BaseClasses import Item, MultiWorld, Tutorial
 from Fill import fill_restrictive
-from .Items import item_table, item_groups, MeritousItem
-from .Locations import location_table, MeritousLocation
-from .Options import meritous_options, cost_scales
+
+from ..AutoWorld import WebWorld, World
+from .Items import MeritousItem, item_groups, item_table
+from .Locations import MeritousLocation, location_table
+from .Options import cost_scales, meritous_options
 from .Regions import create_regions
 from .Rules import set_rules
-from ..AutoWorld import World, WebWorld
 
 client_version = 1
 

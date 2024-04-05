@@ -1,5 +1,6 @@
 from ..logic.smbool import SMBool
 
+
 # layout patches added by randomizers
 class RomPatches:
     #### Patches definitions

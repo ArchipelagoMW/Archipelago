@@ -2,6 +2,7 @@ import unittest
 
 from Fill import distribute_items_restrictive
 from worlds.AutoWorld import AutoWorldRegister, call_all
+
 from . import setup_solo_multiworld
 
 

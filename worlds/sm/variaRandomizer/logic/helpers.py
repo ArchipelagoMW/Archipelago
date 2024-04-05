@@ -3,12 +3,12 @@ import math
 
 from ..logic.cache import Cache
 from ..logic.smbool import SMBool, smboolFalse
-from ..utils.parameters import Settings, easy, medium, diff2text
 from ..rom.rom_patches import RomPatches
+from ..utils.parameters import Settings, diff2text, easy, medium
 from ..utils.utils import normalizeRounding
 
 
-class Helpers(object):
+class Helpers:
     def __init__(self, smbm):
         self.smbm = smbm
 
@@ -19,7 +19,7 @@ class Helpers(object):
     # return integer
     @Cache.decorator
     def energyReserveCount(self):
-        return self.smbm.itemCount('ETank') + self.smbm.itemCount('Reserve')
+        return self.smbm.itemCount("ETank") + self.smbm.itemCount("Reserve")
 
     def energyReserveCountOkDiff(self, difficulties, mult=1.0):
         if difficulties is None or len(difficulties) == 0:
@@ -38,7 +38,7 @@ class Helpers(object):
         result = self.energyReserveCountOkDiff(difficulties, mult)
 
         if result == True:
-            result.knows = [hellRunName+'HellRun']
+            result.knows = [hellRunName+"HellRun"]
 
         return result
 
@@ -47,33 +47,33 @@ class Helpers(object):
     def getDmgReduction(self, envDmg=True):
         ret = 1.0
         sm = self.smbm
-        hasVaria = sm.haveItem('Varia')
-        hasGrav = sm.haveItem('Gravity')
+        hasVaria = sm.haveItem("Varia")
+        hasGrav = sm.haveItem("Gravity")
         items = []
         if RomPatches.has(sm.player, RomPatches.NoGravityEnvProtection):
             if hasVaria:
-                items = ['Varia']
+                items = ["Varia"]
                 if envDmg:
                     ret = 4.0
                 else:
                     ret = 2.0
             if hasGrav and not envDmg:
                 ret = 4.0
-                items = ['Gravity']
+                items = ["Gravity"]
         elif RomPatches.has(sm.player, RomPatches.ProgressiveSuits):
             if hasVaria:
-                items.append('Varia')
+                items.append("Varia")
                 ret *= 2
             if hasGrav:
-                items.append('Gravity')
+                items.append("Gravity")
                 ret *= 2
         else:
             if hasVaria:
                 ret = 2.0
-                items = ['Varia']
+                items = ["Varia"]
             if hasGrav:
                 ret = 4.0
-                items = ['Gravity']
+                items = ["Gravity"]
         return (ret, items)
 
     # higher values for mult means room is that much "easier" (HP mult)
@@ -84,7 +84,7 @@ class Helpers(object):
         result = self.energyReserveCountOkDiff(difficulties, mult)
 
         if result == True:
-            result.knows = ['HardRoom-'+roomName]
+            result.knows = ["HardRoom-"+roomName]
             if dmgRed != 1.0:
                 result._items.append(items)
         return result
@@ -92,10 +92,10 @@ class Helpers(object):
     @Cache.decorator
     def heatProof(self):
         sm = self.smbm
-        return sm.wor(sm.haveItem('Varia'),
+        return sm.wor(sm.haveItem("Varia"),
                       sm.wand(sm.wnot(RomPatches.has(sm.player, RomPatches.NoGravityEnvProtection)),
                               sm.wnot(RomPatches.has(sm.player, RomPatches.ProgressiveSuits)),
-                              sm.haveItem('Gravity')))
+                              sm.haveItem("Gravity")))
 
     # helper here because we can't define "sublambdas" in locations
     def getPiratesPseudoScrewCoeff(self):
@@ -108,7 +108,7 @@ class Helpers(object):
     @Cache.decorator
     def canFireChargedShots(self):
         sm = self.smbm
-        return sm.wor(sm.haveItem('Charge'), RomPatches.has(sm.player, RomPatches.NerfedCharge))
+        return sm.wor(sm.haveItem("Charge"), RomPatches.has(sm.player, RomPatches.NerfedCharge))
 
     # higher values for mult means hell run is that much "easier" (HP mult)
     def canHellRun(self, hellRun, mult=1.0, minE=2):
@@ -118,13 +118,13 @@ class Helpers(object):
         isHeatProof = sm.heatProof()
         if isHeatProof == True:
             return isHeatProof
-        if sm.wand(RomPatches.has(sm.player, RomPatches.ProgressiveSuits), sm.haveItem('Gravity')).bool == True:
+        if sm.wand(RomPatches.has(sm.player, RomPatches.ProgressiveSuits), sm.haveItem("Gravity")).bool == True:
             # half heat protection
             mult *= 2.0
             minE /= 2.0
-            items.append('Gravity')
+            items.append("Gravity")
         if self.energyReserveCount() >= minE:
-            if hellRun != 'LowerNorfair':
+            if hellRun != "LowerNorfair":
                 ret = self.energyReserveCountOkHellRun(hellRun, mult)
                 if ret.bool == True:
                     ret._items.append(items)
@@ -138,12 +138,12 @@ class Helpers(object):
                 ret = sm.wand(self.energyReserveCountOkHellRun(hellRun, mult),
                               self.canCrystalFlash(nCF))
                 if ret.bool == True:
-                    if sm.haveItem('Gravity') == True:
+                    if sm.haveItem("Gravity") == True:
                         ret.difficulty *= 0.7
-                        ret._items.append('Gravity')
-                    elif sm.haveItem('ScrewAttack') == True:
+                        ret._items.append("Gravity")
+                    elif sm.haveItem("ScrewAttack") == True:
                         ret.difficulty *= 0.7
-                        ret._items.append('ScrewAttack')
+                        ret._items.append("ScrewAttack")
                 #nPB = self.smbm.itemCount('PowerBomb')
                 #print("canHellRun LN. tanks=" + str(tanks) + ", nCF=" + str(nCF) + ", nPB=" + str(nPB) + ", mult=" + str(mult) + ", heatProof=" + str(isHeatProof.bool) + ", ret=" + str(ret))
                 return ret
@@ -153,53 +153,53 @@ class Helpers(object):
     @Cache.decorator
     def canMockball(self):
         sm = self.smbm
-        return sm.wand(sm.haveItem('Morph'),
+        return sm.wand(sm.haveItem("Morph"),
                        sm.knowsMockball())
 
     @Cache.decorator
     def canFly(self):
         sm = self.smbm
-        return sm.wor(sm.haveItem('SpaceJump'),
+        return sm.wor(sm.haveItem("SpaceJump"),
                       sm.canInfiniteBombJump())
 
     @Cache.decorator
     def canSimpleShortCharge(self):
         sm = self.smbm
-        return sm.wand(sm.haveItem('SpeedBooster'),
+        return sm.wand(sm.haveItem("SpeedBooster"),
                        sm.wor(sm.knowsSimpleShortCharge(),
                               sm.knowsShortCharge()))
 
     @Cache.decorator
     def canShortCharge(self):
         sm = self.smbm
-        return sm.wand(sm.haveItem('SpeedBooster'), sm.knowsShortCharge())
+        return sm.wand(sm.haveItem("SpeedBooster"), sm.knowsShortCharge())
 
     @Cache.decorator
     def canUseBombs(self):
         sm = self.smbm
-        return sm.wand(sm.haveItem('Morph'), sm.haveItem('Bomb'))
+        return sm.wand(sm.haveItem("Morph"), sm.haveItem("Bomb"))
 
     @Cache.decorator
     def canInfiniteBombJump(self):
         sm = self.smbm
-        return sm.wand(sm.haveItem('Morph'), sm.haveItem('Bomb'), sm.knowsInfiniteBombJump())
+        return sm.wand(sm.haveItem("Morph"), sm.haveItem("Bomb"), sm.knowsInfiniteBombJump())
 
     @Cache.decorator
     def canInfiniteBombJumpSuitless(self):
         sm = self.smbm
-        return sm.wand(sm.haveItem('Morph'), sm.haveItem('Bomb'), sm.knowsInfiniteBombJumpSuitless())
+        return sm.wand(sm.haveItem("Morph"), sm.haveItem("Bomb"), sm.knowsInfiniteBombJumpSuitless())
 
     @Cache.decorator
     def haveMissileOrSuper(self):
         sm = self.smbm
-        return sm.wor(sm.haveItem('Missile'), sm.haveItem('Super'))
+        return sm.wor(sm.haveItem("Missile"), sm.haveItem("Super"))
 
     @Cache.decorator
     def canOpenRedDoors(self):
         sm = self.smbm
         return sm.wor(sm.wand(sm.wnot(RomPatches.has(sm.player, RomPatches.RedDoorsMissileOnly)),
                               sm.haveMissileOrSuper()),
-                      sm.haveItem('Missile'))
+                      sm.haveItem("Missile"))
 
     @Cache.decorator
     def canOpenEyeDoors(self):
@@ -209,12 +209,12 @@ class Helpers(object):
 
     @Cache.decorator
     def canOpenGreenDoors(self):
-        return self.smbm.haveItem('Super')
+        return self.smbm.haveItem("Super")
 
     @Cache.decorator
     def canGreenGateGlitch(self):
         sm = self.smbm
-        return sm.wand(sm.haveItem('Super'),
+        return sm.wand(sm.haveItem("Super"),
                        sm.knowsGreenGateGlitch())
 
     @Cache.decorator
@@ -225,15 +225,15 @@ class Helpers(object):
     @Cache.decorator
     def canUsePowerBombs(self):
         sm = self.smbm
-        return sm.wand(sm.haveItem('Morph'), sm.haveItem('PowerBomb'))
+        return sm.wand(sm.haveItem("Morph"), sm.haveItem("PowerBomb"))
 
     canOpenYellowDoors = canUsePowerBombs
 
     @Cache.decorator
     def canUseSpringBall(self):
         sm = self.smbm
-        return sm.wand(sm.haveItem('Morph'),
-                       sm.haveItem('SpringBall'))
+        return sm.wand(sm.haveItem("Morph"),
+                       sm.haveItem("SpringBall"))
 
     @Cache.decorator
     def canSpringBallJump(self):
@@ -245,7 +245,7 @@ class Helpers(object):
     def canDoubleSpringBallJump(self):
         sm = self.smbm
         return sm.wand(sm.canUseSpringBall(),
-                       sm.haveItem('HiJump'),
+                       sm.haveItem("HiJump"),
                        sm.knowsDoubleSpringBallJump())
 
     @Cache.decorator
@@ -257,19 +257,19 @@ class Helpers(object):
     @Cache.decorator
     def canDestroyBombWalls(self):
         sm = self.smbm
-        return sm.wor(sm.wand(sm.haveItem('Morph'),
-                              sm.wor(sm.haveItem('Bomb'),
-                                     sm.haveItem('PowerBomb'))),
-                      sm.haveItem('ScrewAttack'))
+        return sm.wor(sm.wand(sm.haveItem("Morph"),
+                              sm.wor(sm.haveItem("Bomb"),
+                                     sm.haveItem("PowerBomb"))),
+                      sm.haveItem("ScrewAttack"))
 
     @Cache.decorator
     def canDestroyBombWallsUnderwater(self):
         sm = self.smbm
-        return sm.wor(sm.wand(sm.haveItem('Gravity'),
+        return sm.wor(sm.wand(sm.haveItem("Gravity"),
                               sm.canDestroyBombWalls()),
-                      sm.wand(sm.haveItem('Morph'),
-                              sm.wor(sm.haveItem('Bomb'),
-                                     sm.haveItem('PowerBomb'))))
+                      sm.wand(sm.haveItem("Morph"),
+                              sm.wor(sm.haveItem("Bomb"),
+                                     sm.haveItem("PowerBomb"))))
 
     @Cache.decorator
     def canPassBombPassages(self):
@@ -287,76 +287,76 @@ class Helpers(object):
         sm = self.smbm
         if not RomPatches.has(sm.player, RomPatches.RoundRobinCF).bool:
             ret = sm.wand(sm.canUsePowerBombs(),
-                          sm.itemCountOk('Missile', 2*n),
-                          sm.itemCountOk('Super', 2*n),
-                          sm.itemCountOk('PowerBomb', 2*n+1))
+                          sm.itemCountOk("Missile", 2*n),
+                          sm.itemCountOk("Super", 2*n),
+                          sm.itemCountOk("PowerBomb", 2*n+1))
         else:
             # simplified view of actual patch behavior: only count full refills to stick with base CF logic
-            nAmmo = 5 * (sm.itemCount('Missile') + sm.itemCount('Super') + sm.itemCount('PowerBomb'))
+            nAmmo = 5 * (sm.itemCount("Missile") + sm.itemCount("Super") + sm.itemCount("PowerBomb"))
             ret = sm.wand(sm.canUsePowerBombs(),
                           SMBool(nAmmo >= 30*n))
         if ret:
-            ret._items.append("{}-CrystalFlash".format(n))
+            ret._items.append(f"{n}-CrystalFlash")
         return ret
 
     @Cache.decorator
     def canCrystalFlashClip(self):
         sm = self.smbm
         return sm.wand(sm.canCrystalFlash(),
-                       sm.wor(sm.wand(sm.haveItem('Gravity'),
+                       sm.wor(sm.wand(sm.haveItem("Gravity"),
                                       sm.canUseBombs(),
                                       sm.knowsCrystalFlashClip()),
                               sm.wand(sm.knowsSuitlessCrystalFlashClip(),
-                                      sm.itemCountOk('PowerBomb', 4))))
+                                      sm.itemCountOk("PowerBomb", 4))))
 
     @Cache.decorator
     def canDoLowGauntlet(self):
         sm = self.smbm
         return sm.wand(sm.canShortCharge(),
                        sm.canUsePowerBombs(),
-                       sm.itemCountOk('ETank', 1),
+                       sm.itemCountOk("ETank", 1),
                        sm.knowsLowGauntlet())
 
     @Cache.decorator
     def canUseHyperBeam(self):
         sm = self.smbm
-        return sm.haveItem('Hyper')
+        return sm.haveItem("Hyper")
 
     @Cache.decorator
     def getBeamDamage(self):
         sm = self.smbm
         standardDamage = 20
 
-        if sm.wand(sm.haveItem('Ice'),
-                   sm.haveItem('Wave'),
-                   sm.haveItem('Plasma')) == True:
+        if sm.wand(sm.haveItem("Ice"),
+                   sm.haveItem("Wave"),
+                   sm.haveItem("Plasma")) == True:
             standardDamage = 300
-        elif sm.wand(sm.haveItem('Wave'),
-                     sm.haveItem('Plasma')) == True:
+        elif sm.wand(sm.haveItem("Wave"),
+                     sm.haveItem("Plasma")) == True:
             standardDamage = 250
-        elif sm.wand(sm.haveItem('Ice'),
-                     sm.haveItem('Plasma')) == True:
+        elif sm.wand(sm.haveItem("Ice"),
+                     sm.haveItem("Plasma")) == True:
             standardDamage = 200
-        elif sm.haveItem('Plasma') == True:
+        elif sm.haveItem("Plasma") == True:
             standardDamage = 150
-        elif sm.wand(sm.haveItem('Ice'),
-                     sm.haveItem('Wave'),
-                     sm.haveItem('Spazer')) == True:
+        elif sm.wand(sm.haveItem("Ice"),
+                     sm.haveItem("Wave"),
+                     sm.haveItem("Spazer")) == True:
             standardDamage = 100
-        elif sm.wand(sm.haveItem('Wave'),
-                     sm.haveItem('Spazer')) == True:
+        elif sm.wand(sm.haveItem("Wave"),
+                     sm.haveItem("Spazer")) == True:
             standardDamage = 70
-        elif sm.wand(sm.haveItem('Ice'),
-                     sm.haveItem('Spazer')) == True:
+        elif sm.wand(sm.haveItem("Ice"),
+                     sm.haveItem("Spazer")) == True:
             standardDamage = 60
-        elif sm.wand(sm.haveItem('Ice'),
-                     sm.haveItem('Wave')) == True:
+        elif sm.wand(sm.haveItem("Ice"),
+                     sm.haveItem("Wave")) == True:
             standardDamage = 60
-        elif sm.haveItem('Wave') == True:
+        elif sm.haveItem("Wave") == True:
             standardDamage = 50
-        elif sm.haveItem('Spazer') == True:
+        elif sm.haveItem("Spazer") == True:
             standardDamage = 40
-        elif sm.haveItem('Ice') == True:
+        elif sm.haveItem("Ice") == True:
             standardDamage = 30
 
         return standardDamage
@@ -381,36 +381,36 @@ class Helpers(object):
         standardDamage = 0
         if sm.canFireChargedShots().bool == True and charge == True:
             standardDamage = self.getBeamDamage()
-            items.append('Charge')
+            items.append("Charge")
         # charge triples the damage
         chargeDamage = standardDamage
-        if sm.haveItem('Charge').bool == True:
+        if sm.haveItem("Charge").bool == True:
             chargeDamage *= 3.0
 
         # missile 100 damages, super missile 300 damages, PBs 200 dmg, 5 in each extension
-        missilesAmount = max(0, (sm.itemCount('Missile') - missilesOffset)) * 5
+        missilesAmount = max(0, (sm.itemCount("Missile") - missilesOffset)) * 5
         if ignoreMissiles == True:
             missilesDamage = 0
         else:
             missilesDamage = missilesAmount * 100
             if missilesAmount > 0:
-                items.append('Missile')
-        supersAmount = max(0, (sm.itemCount('Super') - supersOffset)) * 5
+                items.append("Missile")
+        supersAmount = max(0, (sm.itemCount("Super") - supersOffset)) * 5
         if ignoreSupers == True:
             oneSuper = 0
         else:
             oneSuper = 300.0
             if supersAmount > 0:
-                items.append('Super')
+                items.append("Super")
         if doubleSuper == True:
             oneSuper *= 2
         supersDamage = supersAmount * oneSuper
         powerDamage = 0
         powerAmount = 0
-        if power == True and sm.haveItem('PowerBomb') == True:
-            powerAmount = max(0, (sm.itemCount('PowerBomb') - powerBombsOffset)) * 5
+        if power == True and sm.haveItem("PowerBomb") == True:
+            powerAmount = max(0, (sm.itemCount("PowerBomb") - powerBombsOffset)) * 5
             powerDamage = powerAmount * 200
-            items.append('PowerBomb')
+            items.append("PowerBomb")
 
         canBeatBoss = chargeDamage > 0 or givesDrops or (missilesDamage + supersDamage + powerDamage) >= bossEnergy
         if not canBeatBoss:
@@ -420,15 +420,15 @@ class Helpers(object):
         if chargeDamage > 0:
             ammoMargin += 2
 
-        missilesDPS = Settings.algoSettings['missilesPerSecond'] * 100.0
-        supersDPS = Settings.algoSettings['supersPerSecond'] * 300.0
+        missilesDPS = Settings.algoSettings["missilesPerSecond"] * 100.0
+        supersDPS = Settings.algoSettings["supersPerSecond"] * 300.0
         if doubleSuper == True:
             supersDPS *= 2
         if powerDamage > 0:
-            powerDPS = Settings.algoSettings['powerBombsPerSecond'] * 200.0
+            powerDPS = Settings.algoSettings["powerBombsPerSecond"] * 200.0
         else:
             powerDPS = 0.0
-        chargeDPS = chargeDamage * Settings.algoSettings['chargedShotsPerSecond']
+        chargeDPS = chargeDamage * Settings.algoSettings["chargedShotsPerSecond"]
         # print("chargeDPS=" + str(chargeDPS))
         dpsDict = {
             missilesDPS: (missilesAmount, 100.0),
@@ -450,7 +450,7 @@ class Helpers(object):
                 break
         if bossEnergy > 0:
             # print ('!! drops !! ')
-            secs += bossEnergy * Settings.algoSettings['missileDropsPerMinute'] * 100 / 60
+            secs += bossEnergy * Settings.algoSettings["missileDropsPerMinute"] * 100 / 60
             # print('ammoMargin = ' + str(ammoMargin) + ', secs = ' + str(secs))
 
         return (ammoMargin, secs, items)
@@ -461,8 +461,8 @@ class Helpers(object):
 
         # actual fight duration :
         rate = None
-        if 'Rate' in diffTbl:
-            rate = float(diffTbl['Rate'])
+        if "Rate" in diffTbl:
+            rate = float(diffTbl["Rate"])
         if rate is None:
             duration = 120.0
         else:
@@ -478,8 +478,8 @@ class Helpers(object):
         items += sm.energyReserveCountOk(energyCount).items
 
         energyDict = None
-        if 'Energy' in diffTbl:
-            energyDict = diffTbl['Energy']
+        if "Energy" in diffTbl:
+            energyDict = diffTbl["Energy"]
         difficulty = medium
         # get difficulty by energy
         if energyDict:
@@ -507,7 +507,7 @@ class Helpers(object):
         # only augment difficulty in case of no charge, don't lower it.
         # if we have charge, ammoMargin will have a huge value (see canInflictEnoughDamages),
         # so this does not apply
-        diffAdjust = (1 - (ammoMargin - Settings.algoSettings['ammoMarginIfNoCharge']))
+        diffAdjust = (1 - (ammoMargin - Settings.algoSettings["ammoMarginIfNoCharge"]))
         if diffAdjust > 1:
             difficulty *= diffAdjust
 #        print("final diff: "+str(round(difficulty, 2)))
@@ -517,7 +517,7 @@ class Helpers(object):
     @Cache.decorator
     def enoughStuffSporeSpawn(self):
         sm = self.smbm
-        return sm.wor(sm.haveItem('Missile'), sm.haveItem('Super'), sm.haveItem('Charge'))
+        return sm.wor(sm.haveItem("Missile"), sm.haveItem("Super"), sm.haveItem("Charge"))
 
     @Cache.decorator
     def enoughStuffCroc(self):
@@ -527,8 +527,8 @@ class Helpers(object):
         if ammoMargin == 0:
             return sm.wand(sm.knowsLowAmmoCroc(),
                            sm.wor(sm.itemCountOk("Missile", 2),
-                                  sm.wand(sm.haveItem('Missile'),
-                                          sm.haveItem('Super'))))
+                                  sm.wand(sm.haveItem("Missile"),
+                                          sm.haveItem("Super"))))
         else:
             return SMBool(True, easy, items=items)
 
@@ -550,7 +550,7 @@ class Helpers(object):
     @Cache.decorator
     def enoughStuffGT(self):
         sm = self.smbm
-        hasBeams = sm.wand(sm.haveItem('Charge'), sm.haveItem('Plasma')).bool
+        hasBeams = sm.wand(sm.haveItem("Charge"), sm.haveItem("Plasma")).bool
         (ammoMargin, secs, items) = self.canInflictEnoughDamages(9000, ignoreMissiles=True, givesDrops=hasBeams)
         diff = SMBool(True, easy, [], items)
         lowStuff = sm.knowsLowStuffGT()
@@ -566,7 +566,7 @@ class Helpers(object):
     @Cache.decorator
     def enoughStuffsRidley(self):
         sm = self.smbm
-        if not sm.haveItem('Morph') and not sm.haveItem('ScrewAttack'):
+        if not sm.haveItem("Morph") and not sm.haveItem("ScrewAttack"):
             return smboolFalse
         (ammoMargin, secs, ammoItems) = self.canInflictEnoughDamages(18000, doubleSuper=True, power=True, givesDrops=False)
         if ammoMargin == 0:
@@ -574,7 +574,7 @@ class Helpers(object):
 
         # print('RIDLEY', ammoMargin, secs)
         (diff, defenseItems) = self.computeBossDifficulty(ammoMargin, secs,
-                                                          Settings.bossesDifficulty['Ridley'])
+                                                          Settings.bossesDifficulty["Ridley"])
         if (sm.onlyBossLeft):
             diff = 1
         if diff < 0:
@@ -590,7 +590,7 @@ class Helpers(object):
             return smboolFalse
         #print('KRAID True ', ammoMargin, secs)
         (diff, defenseItems) = self.computeBossDifficulty(ammoMargin, secs,
-                                                          Settings.bossesDifficulty['Kraid'])
+                                                          Settings.bossesDifficulty["Kraid"])
         if (sm.onlyBossLeft):
             diff = 1
         if diff < 0:
@@ -603,15 +603,15 @@ class Helpers(object):
         # 2 is Varia suit, considered standard eqt for boss fights
         # there's certainly a smarter way to do this but...
         if dmgRed < 2:
-            difficulty *= Settings.algoSettings['dmgReductionDifficultyFactor']
+            difficulty *= Settings.algoSettings["dmgReductionDifficultyFactor"]
         elif dmgRed > 2:
-            difficulty /= Settings.algoSettings['dmgReductionDifficultyFactor']
+            difficulty /= Settings.algoSettings["dmgReductionDifficultyFactor"]
         return difficulty
 
     @Cache.decorator
     def enoughStuffsDraygon(self):
         sm = self.smbm
-        if not sm.haveItem('Morph') and not sm.haveItem('Gravity'):
+        if not sm.haveItem("Morph") and not sm.haveItem("Gravity"):
             return smboolFalse
         # some ammo to destroy the turrets during the fight
         if not sm.haveMissileOrSuper():
@@ -622,19 +622,19 @@ class Helpers(object):
         # print('DRAY', ammoMargin, secs)
         if ammoMargin > 0:
             (diff, defenseItems) = self.computeBossDifficulty(ammoMargin, secs,
-                                                              Settings.bossesDifficulty['Draygon'])
+                                                              Settings.bossesDifficulty["Draygon"])
             if diff < 0:
                 fight = smboolFalse
             else:
                 fight = SMBool(True, diff, items=ammoItems+defenseItems)
-            if sm.haveItem('Gravity') == False:
-                fight.difficulty *= Settings.algoSettings['draygonNoGravityMalus']
+            if sm.haveItem("Gravity") == False:
+                fight.difficulty *= Settings.algoSettings["draygonNoGravityMalus"]
             else:
-                fight._items.append('Gravity')
-            if not sm.haveItem('Morph'):
-                fight.difficulty *= Settings.algoSettings['draygonNoMorphMalus']
-            if sm.haveItem('Gravity') and sm.haveItem('ScrewAttack'):
-                fight.difficulty /= Settings.algoSettings['draygonScrewBonus']
+                fight._items.append("Gravity")
+            if not sm.haveItem("Morph"):
+                fight.difficulty *= Settings.algoSettings["draygonNoMorphMalus"]
+            if sm.haveItem("Gravity") and sm.haveItem("ScrewAttack"):
+                fight.difficulty /= Settings.algoSettings["draygonScrewBonus"]
             fight.difficulty = self.adjustHealthDropDiff(fight.difficulty)
             if (sm.onlyBossLeft):
                 fight.difficulty = 1
@@ -645,16 +645,16 @@ class Helpers(object):
         nTanksGrapple = (240/sm.getDmgReduction(envDmg=True)[0] + 2*160/sm.getDmgReduction(envDmg=False)[0])/100
         return sm.wor(fight,
                       sm.wand(sm.knowsDraygonGrappleKill(),
-                              sm.haveItem('Grapple'),
+                              sm.haveItem("Grapple"),
                               sm.energyReserveCountOk(nTanksGrapple)),
                       sm.wand(sm.knowsMicrowaveDraygon(),
-                              sm.haveItem('Plasma'),
+                              sm.haveItem("Plasma"),
                               sm.canFireChargedShots(),
-                              sm.haveItem('XRayScope')),
-                      sm.wand(sm.haveItem('Gravity'),
+                              sm.haveItem("XRayScope")),
+                      sm.wand(sm.haveItem("Gravity"),
                               sm.energyReserveCountOk(3),
                               sm.knowsDraygonSparkKill(),
-                              sm.haveItem('SpeedBooster')))
+                              sm.haveItem("SpeedBooster")))
 
     @Cache.decorator
     def enoughStuffsPhantoon(self):
@@ -664,19 +664,19 @@ class Helpers(object):
             return smboolFalse
         # print('PHANTOON', ammoMargin, secs)
         (difficulty, defenseItems) = self.computeBossDifficulty(ammoMargin, secs,
-                                                                Settings.bossesDifficulty['Phantoon'])
+                                                                Settings.bossesDifficulty["Phantoon"])
         if difficulty < 0:
             return smboolFalse
         hasCharge = sm.canFireChargedShots()
-        hasScrew = sm.haveItem('ScrewAttack')
+        hasScrew = sm.haveItem("ScrewAttack")
         if hasScrew:
-            difficulty /= Settings.algoSettings['phantoonFlamesAvoidBonusScrew']
+            difficulty /= Settings.algoSettings["phantoonFlamesAvoidBonusScrew"]
             defenseItems += hasScrew.items
         elif hasCharge:
-            difficulty /= Settings.algoSettings['phantoonFlamesAvoidBonusCharge']
+            difficulty /= Settings.algoSettings["phantoonFlamesAvoidBonusCharge"]
             defenseItems += hasCharge.items
-        elif not hasCharge and sm.itemCount('Missile') <= 2: # few missiles is harder
-            difficulty *= Settings.algoSettings['phantoonLowMissileMalus']
+        elif not hasCharge and sm.itemCount("Missile") <= 2: # few missiles is harder
+            difficulty *= Settings.algoSettings["phantoonLowMissileMalus"]
         difficulty = self.adjustHealthDropDiff(difficulty)
         if (sm.onlyBossLeft):
             difficulty = 1
@@ -684,19 +684,19 @@ class Helpers(object):
 
         return sm.wor(fight,
                       sm.wand(sm.knowsMicrowavePhantoon(),
-                              sm.haveItem('Plasma'),
+                              sm.haveItem("Plasma"),
                               sm.canFireChargedShots(),
-                              sm.haveItem('XRayScope')))
+                              sm.haveItem("XRayScope")))
 
     def mbEtankCheck(self):
         sm = self.smbm
         if sm.wor(RomPatches.has(sm.player, RomPatches.NerfedRainbowBeam), RomPatches.has(sm.player, RomPatches.TourianSpeedup)):
             # "add" energy for difficulty calculations
-            energy = 2.8 if sm.haveItem('Varia') else 2.6
+            energy = 2.8 if sm.haveItem("Varia") else 2.6
             return (True, energy)
         nTanks = sm.energyReserveCount()
         energyDiff = 0
-        if sm.haveItem('Varia') == False:
+        if sm.haveItem("Varia") == False:
             # "remove" 3 etanks (accounting for rainbow beam damage without varia)
             if nTanks < 6:
                 return (False, 0)
@@ -713,7 +713,7 @@ class Helpers(object):
         if ammoMargin == 0:
             return smboolFalse
         # requires 10-10 to break the glass
-        if sm.itemCount('Missile') <= 1 or sm.itemCount('Super') <= 1:
+        if sm.itemCount("Missile") <= 1 or sm.itemCount("Super") <= 1:
             return smboolFalse
         # we actually don't give a shit about MB1 difficulty,
         # since we embark its health in the following calc
@@ -725,7 +725,7 @@ class Helpers(object):
             return smboolFalse
         # print('MB2', ammoMargin, secs)
         #print("ammoMargin: {}, secs: {}, settings: {}, energyDiff: {}".format(ammoMargin, secs, Settings.bossesDifficulty['MotherBrain'], energyDiff))
-        (diff, defenseItems) = self.computeBossDifficulty(ammoMargin, secs, Settings.bossesDifficulty['MotherBrain'], energyDiff)
+        (diff, defenseItems) = self.computeBossDifficulty(ammoMargin, secs, Settings.bossesDifficulty["MotherBrain"], energyDiff)
         if (sm.onlyBossLeft):
             diff = 1
         if diff < 0:
@@ -735,15 +735,15 @@ class Helpers(object):
     @Cache.decorator
     def canPassMetroids(self):
         sm = self.smbm
-        return sm.wor(sm.wand(sm.haveItem('Ice'), sm.haveMissileOrSuper()),
+        return sm.wor(sm.wand(sm.haveItem("Ice"), sm.haveMissileOrSuper()),
                       # to avoid leaving tourian to refill power bombs
-                      sm.itemCountOk('PowerBomb', 3))
+                      sm.itemCountOk("PowerBomb", 3))
 
     @Cache.decorator
     def canPassZebetites(self):
         sm = self.smbm
-        return sm.wor(sm.wand(sm.haveItem('Ice'), sm.knowsIceZebSkip()),
-                      sm.wand(sm.haveItem('SpeedBooster'), sm.knowsSpeedZebSkip()),
+        return sm.wor(sm.wand(sm.haveItem("Ice"), sm.knowsIceZebSkip()),
+                      sm.wand(sm.haveItem("SpeedBooster"), sm.knowsSpeedZebSkip()),
                       # account for one zebetite, refill may be necessary
                       SMBool(self.canInflictEnoughDamages(1100, charge=False, givesDrops=False, ignoreSupers=True)[0] >= 1, 0))
 
@@ -754,7 +754,7 @@ class Helpers(object):
                                     sm.wand(sm.canPassMetroids(), sm.canPassZebetites())),
                              sm.canOpenRedDoors(),
                              sm.enoughStuffsMotherbrain(),
-                             sm.wor(RomPatches.has(sm.player, RomPatches.OpenZebetites), sm.haveItem('Morph')))
+                             sm.wor(RomPatches.has(sm.player, RomPatches.OpenZebetites), sm.haveItem("Morph")))
         return ret
 
 class Pickup:
@@ -764,14 +764,14 @@ class Pickup:
 
     # don't count end game location in the mix as it's now in the available locations
     def enoughMinors(self, smbm, minorLocations):
-        if self.itemsPickup in ('all', 'all_strict'):
+        if self.itemsPickup in ("all", "all_strict"):
             return (len(minorLocations) == 0
                     or (len(minorLocations) == 1 and minorLocations[0].Name in self.endGameLocations))
         else:
             return True
 
     def enoughMajors(self, smbm, majorLocations):
-        if self.itemsPickup in ('all', 'all_strict'):
+        if self.itemsPickup in ("all", "all_strict"):
             return (len(majorLocations) == 0
                     or (len(majorLocations) == 1 and majorLocations[0].Name in self.endGameLocations))
         else:
@@ -781,49 +781,49 @@ class Bosses:
     # bosses helpers to know if they are dead
     areaBosses = {
         # classic areas
-        'Brinstar': 'Kraid',
-        'Norfair': 'Ridley',
-        'LowerNorfair': 'Ridley',
-        'WreckedShip': 'Phantoon',
-        'Maridia': 'Draygon',
+        "Brinstar": "Kraid",
+        "Norfair": "Ridley",
+        "LowerNorfair": "Ridley",
+        "WreckedShip": "Phantoon",
+        "Maridia": "Draygon",
         # solver areas
-        'Blue Brinstar': 'Kraid',
-        'Brinstar Hills': 'Kraid',
-        'Bubble Norfair': 'Ridley',
-        'Bubble Norfair Bottom': 'Ridley',
-        'Bubble Norfair Reserve': 'Ridley',
-        'Bubble Norfair Speed': 'Ridley',
-        'Bubble Norfair Wave': 'Ridley',
-        'Draygon Boss': 'Draygon',
-        'Green Brinstar': 'Kraid',
-        'Green Brinstar Reserve': 'Kraid',
-        'Kraid': 'Kraid',
-        'Kraid Boss': 'Kraid',
-        'Left Sandpit': 'Draygon',
-        'Lower Norfair After Amphitheater': 'Ridley',
-        'Lower Norfair Before Amphitheater': 'Ridley',
-        'Lower Norfair Screw Attack': 'Ridley',
-        'Maridia Forgotten Highway': 'Draygon',
-        'Maridia Green': 'Draygon',
-        'Maridia Pink Bottom': 'Draygon',
-        'Maridia Pink Top': 'Draygon',
-        'Maridia Sandpits': 'Draygon',
-        'Norfair Entrance': 'Ridley',
-        'Norfair Grapple Escape': 'Ridley',
-        'Norfair Ice': 'Ridley',
-        'Phantoon Boss': 'Phantoon',
-        'Pink Brinstar': 'Kraid',
-        'Red Brinstar': 'Kraid',
-        'Red Brinstar Top': 'Kraid',
-        'Ridley Boss': 'Ridley',
-        'Right Sandpit': 'Draygon',
-        'Warehouse': 'Kraid',
-        'WreckedShip': 'Phantoon',
-        'WreckedShip Back': 'Phantoon',
-        'WreckedShip Bottom': 'Phantoon',
-        'WreckedShip Gravity': 'Phantoon',
-        'WreckedShip Main': 'Phantoon',
-        'WreckedShip Top': 'Phantoon'
+        "Blue Brinstar": "Kraid",
+        "Brinstar Hills": "Kraid",
+        "Bubble Norfair": "Ridley",
+        "Bubble Norfair Bottom": "Ridley",
+        "Bubble Norfair Reserve": "Ridley",
+        "Bubble Norfair Speed": "Ridley",
+        "Bubble Norfair Wave": "Ridley",
+        "Draygon Boss": "Draygon",
+        "Green Brinstar": "Kraid",
+        "Green Brinstar Reserve": "Kraid",
+        "Kraid": "Kraid",
+        "Kraid Boss": "Kraid",
+        "Left Sandpit": "Draygon",
+        "Lower Norfair After Amphitheater": "Ridley",
+        "Lower Norfair Before Amphitheater": "Ridley",
+        "Lower Norfair Screw Attack": "Ridley",
+        "Maridia Forgotten Highway": "Draygon",
+        "Maridia Green": "Draygon",
+        "Maridia Pink Bottom": "Draygon",
+        "Maridia Pink Top": "Draygon",
+        "Maridia Sandpits": "Draygon",
+        "Norfair Entrance": "Ridley",
+        "Norfair Grapple Escape": "Ridley",
+        "Norfair Ice": "Ridley",
+        "Phantoon Boss": "Phantoon",
+        "Pink Brinstar": "Kraid",
+        "Red Brinstar": "Kraid",
+        "Red Brinstar Top": "Kraid",
+        "Ridley Boss": "Ridley",
+        "Right Sandpit": "Draygon",
+        "Warehouse": "Kraid",
+        "WreckedShip": "Phantoon",
+        "WreckedShip Back": "Phantoon",
+        "WreckedShip Bottom": "Phantoon",
+        "WreckedShip Gravity": "Phantoon",
+        "WreckedShip Main": "Phantoon",
+        "WreckedShip Top": "Phantoon"
     }
 
     accessPoints = {
@@ -839,11 +839,11 @@ class Bosses:
 
     @staticmethod
     def Golden4():
-        return ['Draygon', 'Kraid', 'Phantoon', 'Ridley']
-    
+        return ["Draygon", "Kraid", "Phantoon", "Ridley"]
+
     @staticmethod
     def miniBosses():
-        return ['SporeSpawn', 'Crocomire', 'Botwoon', 'GoldenTorizo']
+        return ["SporeSpawn", "Crocomire", "Botwoon", "GoldenTorizo"]
 
     @staticmethod
     def bossDead(sm, boss):
@@ -857,17 +857,17 @@ class Bosses:
 
     @staticmethod
     def allBossesDead(smbm):
-        return smbm.wand(Bosses.bossDead(smbm, 'Kraid'),
-                         Bosses.bossDead(smbm, 'Phantoon'),
-                         Bosses.bossDead(smbm, 'Draygon'),
-                         Bosses.bossDead(smbm, 'Ridley'))
-    
+        return smbm.wand(Bosses.bossDead(smbm, "Kraid"),
+                         Bosses.bossDead(smbm, "Phantoon"),
+                         Bosses.bossDead(smbm, "Draygon"),
+                         Bosses.bossDead(smbm, "Ridley"))
+
     @staticmethod
     def allMiniBossesDead(smbm):
-        return smbm.wand(Bosses.bossDead(smbm, 'SporeSpawn'),
-                         Bosses.bossDead(smbm, 'Botwoon'),
-                         Bosses.bossDead(smbm, 'Crocomire'),
-                         Bosses.bossDead(smbm, 'GoldenTorizo'))
+        return smbm.wand(Bosses.bossDead(smbm, "SporeSpawn"),
+                         Bosses.bossDead(smbm, "Botwoon"),
+                         Bosses.bossDead(smbm, "Crocomire"),
+                         Bosses.bossDead(smbm, "GoldenTorizo"))
 
     @staticmethod
     def xBossesDead(smbm, target):

@@ -1,13 +1,14 @@
-from typing import Dict, FrozenSet, Tuple, List, Counter as _Counter
-
-from BaseClasses import CollectionState
+from typing import Counter as _Counter
+from typing import Dict, FrozenSet, List, Tuple
 
 from zilliandomizer.logic_components.items import Item, items
 from zilliandomizer.logic_components.locations import Location
 from zilliandomizer.randomizer import Randomizer
 
-from .item import ZillionItem
+from BaseClasses import CollectionState
+
 from .id_maps import item_name_to_id
+from .item import ZillionItem
 
 zz_empty = items[4]
 

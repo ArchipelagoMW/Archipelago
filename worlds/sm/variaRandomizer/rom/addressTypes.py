@@ -1,27 +1,28 @@
-from .rom import snes_to_pc, pc_to_snes
+from .rom import snes_to_pc
 
-class Byte(object):
+
+class Byte:
     def __init__(self, value):
         self.value = value
 
     def expand(self):
         return [self.value]
 
-class Word(object):
+class Word:
     def __init__(self, value):
         self.value = value
 
     def expand(self):
         return [self.value, self.value+1]
 
-class Long(object):
+class Long:
     def __init__(self, value):
         self.value = value
 
     def expand(self):
         return [self.value, self.value+1, self.value+2]
 
-class ValueSingle(object):
+class ValueSingle:
     def __init__(self, value, storage=Word):
         self.value = snes_to_pc(value)
         self.storage = storage
@@ -35,7 +36,7 @@ class ValueSingle(object):
     def getWeb(self):
         return self.storage(self.value).expand()
 
-class ValueList(object):
+class ValueList:
     def __init__(self, values, storage=Word):
         self.values = [snes_to_pc(value) for value in values]
         self.storage = storage
@@ -52,7 +53,7 @@ class ValueList(object):
             out += self.storage(value).expand()
         return out
 
-class ValueRange(object):
+class ValueRange:
     def __init__(self, start, length=-1, end=-1):
         self.start = snes_to_pc(start)
         if length != -1:

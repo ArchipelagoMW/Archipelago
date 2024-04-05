@@ -1,5 +1,7 @@
-from typing import Dict, Set, Tuple, NamedTuple, Optional
+from typing import Dict, NamedTuple, Optional, Set, Tuple
+
 from BaseClasses import ItemClassification
+
 
 class ItemData(NamedTuple):
     category: str

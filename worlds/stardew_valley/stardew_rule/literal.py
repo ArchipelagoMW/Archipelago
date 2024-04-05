@@ -2,6 +2,7 @@ from abc import ABC
 from typing import Tuple
 
 from BaseClasses import CollectionState
+
 from .protocol import StardewRule
 
 
@@ -21,7 +22,7 @@ class LiteralStardewRule(StardewRule, ABC):
 class True_(LiteralStardewRule):  # noqa
     value = True
 
-    def __new__(cls, _cache=[]):  # noqa
+    def __new__(cls, _cache=[]):
         # Only one single instance will be ever created.
         if not _cache:
             _cache.append(super(True_, cls).__new__(cls))
@@ -40,7 +41,7 @@ class True_(LiteralStardewRule):  # noqa
 class False_(LiteralStardewRule):  # noqa
     value = False
 
-    def __new__(cls, _cache=[]):  # noqa
+    def __new__(cls, _cache=[]):
         # Only one single instance will be ever created.
         if not _cache:
             _cache.append(super(False_, cls).__new__(cls))

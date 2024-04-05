@@ -1,14 +1,15 @@
-import settings
 import string
 import typing
 
-from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial, ItemClassification
-from .Items import item_table, faction_table
+import settings
+from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
+
+from ..AutoWorld import WebWorld, World
+from .Items import faction_table, item_table
 from .Locations import location_table
+from .Options import wargroove_options
 from .Regions import create_regions
 from .Rules import set_rules
-from ..AutoWorld import World, WebWorld
-from .Options import wargroove_options
 
 
 class WargrooveSettings(settings.Group):
@@ -50,18 +51,18 @@ class WargrooveWorld(World):
 
     def _get_slot_data(self):
         return {
-            'seed': "".join(self.multiworld.per_slot_randoms[self.player].choice(string.ascii_letters) for i in range(16)),
-            'income_boost': self.multiworld.income_boost[self.player],
-            'commander_defense_boost': self.multiworld.commander_defense_boost[self.player],
-            'can_choose_commander': self.multiworld.commander_choice[self.player] != 0,
-            'starting_groove_multiplier': 20  # Backwards compatibility in case this ever becomes an option
+            "seed": "".join(self.multiworld.per_slot_randoms[self.player].choice(string.ascii_letters) for i in range(16)),
+            "income_boost": self.multiworld.income_boost[self.player],
+            "commander_defense_boost": self.multiworld.commander_defense_boost[self.player],
+            "can_choose_commander": self.multiworld.commander_choice[self.player] != 0,
+            "starting_groove_multiplier": 20  # Backwards compatibility in case this ever becomes an option
         }
 
     def generate_early(self):
         # Selecting a random starting faction
         if self.multiworld.commander_choice[self.player] == 2:
             factions = [faction for faction in faction_table.keys() if faction != "Starter"]
-            starting_faction = WargrooveItem(self.multiworld.random.choice(factions) + ' Commanders', self.player)
+            starting_faction = WargrooveItem(self.multiworld.random.choice(factions) + " Commanders", self.player)
             self.multiworld.push_precollected(starting_faction)
 
     def create_items(self):
@@ -71,7 +72,7 @@ class WargrooveWorld(World):
         ignore_faction_items = self.multiworld.commander_choice[self.player] == 0
         for name, data in item_table.items():
             if data.code is not None and name not in precollected_item_names and not data.classification == ItemClassification.filler:
-                if name.endswith(' Commanders') and ignore_faction_items:
+                if name.endswith(" Commanders") and ignore_faction_items:
                     continue
                 item = WargrooveItem(name, self.player)
                 pool.append(item)

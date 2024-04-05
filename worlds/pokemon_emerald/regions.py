@@ -58,7 +58,7 @@ def create_regions(world: "PokemonEmeraldWorld") -> Dict[str, Region]:
                         # encounter_categories includes info on which slots belong to which subcategory
                         unique_species = []
                         for j, species_id in enumerate(encounter_slots):
-                            if j in subcategory[1] and not species_id in unique_species:
+                            if j in subcategory[1] and species_id not in unique_species:
                                 unique_species.append(species_id)
 
                         # Create a location for the species

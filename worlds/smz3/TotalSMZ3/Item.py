@@ -1,9 +1,10 @@
-﻿from enum import Enum
+﻿import copy
 import re
-import copy
+from enum import Enum
 from typing import List
 
 from .Config import Config, SMLogic
+
 
 class ItemType(Enum):
     Nothing = 0
@@ -42,8 +43,8 @@ class ItemType(Enum):
     BigKeyIP = 0x96
     BigKeyMM = 0x98
     BigKeyTR = 0x93
-    BigKeyGT = 0x92       
-    
+    BigKeyGT = 0x92
+
     KeyHC = 0xA0
     KeyCT = 0xA4
     KeyDP = 0xA3
@@ -679,7 +680,7 @@ class Progression:
                 self.Glove = True
             elif (item.Type == ItemType.PowerBomb):
                 self.TwoPowerBombs = self.PowerBomb
-                self.PowerBomb = True     
+                self.PowerBomb = True
 
     def Remove(self, items:List[Item]):
         for item in items:
@@ -716,7 +717,7 @@ class Progression:
                 self.Mitt = False
             elif (item.Type == ItemType.PowerBomb):
                 self.PowerBomb = self.TwoPowerBombs
-                self.TwoPowerBombs = False           
+                self.TwoPowerBombs = False
 
     def CanLiftLight(self): return self.Glove
 
@@ -734,7 +735,7 @@ class Progression:
 
     def CanAccessDeathMountainPortal(self):
         return (self.CanDestroyBombWalls() or self.SpeedBooster) and self.Super and self.Morph
-        
+
 
     def CanAccessDarkWorldPortal(self, config: Config):
         if (config.SMLogic == SMLogic.Normal):
@@ -752,7 +753,7 @@ class Progression:
         else:
             return (self.CardNorfairL2 or self.SpeedBooster) and self.Varia and self.Super and \
                     (self.CanFly() or self.HiJump or self.SpeedBooster or self.CanSpringBallJump() or self.Ice) \
-                    and (self.Gravity or self.HiJump) and self.CanUsePowerBombs() 
+                    and (self.Gravity or self.HiJump) and self.CanUsePowerBombs()
 
     def CanIbj(self):
             return self.Morph and self.Bombs

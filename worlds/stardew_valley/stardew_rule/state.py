@@ -1,10 +1,11 @@
 from dataclasses import dataclass
-from typing import Iterable, Union, List, Tuple, Hashable
+from typing import Hashable, Iterable, List, Tuple, Union
 
-from BaseClasses import ItemClassification, CollectionState
+from BaseClasses import CollectionState, ItemClassification
+
+from ..items import item_table
 from .base import BaseStardewRule, CombinableStardewRule
 from .protocol import StardewRule
-from ..items import item_table
 
 
 class TotalReceived(BaseStardewRule):
@@ -87,7 +88,7 @@ class Reach(BaseStardewRule):
     player: int
 
     def __call__(self, state: CollectionState) -> bool:
-        if self.resolution_hint == 'Region' and self.spot not in state.multiworld.regions.region_cache[self.player]:
+        if self.resolution_hint == "Region" and self.spot not in state.multiworld.regions.region_cache[self.player]:
             return False
         return state.can_reach(self.spot, self.resolution_hint, self.player)
 

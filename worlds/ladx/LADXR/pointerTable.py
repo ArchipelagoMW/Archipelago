@@ -55,9 +55,9 @@ class PointerTable:
         while self.__mergeStorage():
             pass
         self.__storage.sort(key=lambda n: n["start"])
-        if "claim_storage_gaps" in info and info["claim_storage_gaps"]:
+        if info.get("claim_storage_gaps"):
             self.__storage = [{"bank": self.__storage[0]["bank"], "start": self.__storage[0]["start"], "end": self.__storage[-1]["end"]}]
-        if "expand_to_end_of_bank" in info and info["expand_to_end_of_bank"]:
+        if info.get("expand_to_end_of_bank"):
             for st in self.__storage:
                 if info["expand_to_end_of_bank"] == True or st["bank"] in info["expand_to_end_of_bank"]:
                     expand = True
@@ -116,7 +116,7 @@ class PointerTable:
             rom.banks[ptr_bank][ptr_addr] = pointer & 0xFF
             rom.banks[ptr_bank][ptr_addr + 1] = (pointer >> 8) | 0x40
 
-        data = list(enumerate(self.__data))        
+        data = list(enumerate(self.__data))
         data.sort(key=lambda t: type(t[1]) == int or -len(t[1]))
 
         for n, s in data:

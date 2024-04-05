@@ -1,5 +1,6 @@
 from BaseClasses import CollectionState
-from .locations import level_name_list, level_list
+
+from .locations import level_list, level_name_list
 
 
 def level_scaling(multiworld):
@@ -47,18 +48,18 @@ def level_scaling(multiworld):
                     return True
                 if (("Rock Tunnel 1F - Wild Pokemon" in location.name
                         and any([multiworld.get_entrance(e, location.player).connected_region.can_reach(state)
-                                 for e in ['Rock Tunnel 1F-NE 1 to Route 10-N',
-                                           'Rock Tunnel 1F-NE 2 to Rock Tunnel B1F-E 1',
-                                           'Rock Tunnel 1F-NW 1 to Rock Tunnel B1F-E 2',
-                                           'Rock Tunnel 1F-NW 2 to Rock Tunnel B1F-W 1',
-                                           'Rock Tunnel 1F-S 1 to Route 10-S',
-                                           'Rock Tunnel 1F-S 2 to Rock Tunnel B1F-W 2']])) or
+                                 for e in ["Rock Tunnel 1F-NE 1 to Route 10-N",
+                                           "Rock Tunnel 1F-NE 2 to Rock Tunnel B1F-E 1",
+                                           "Rock Tunnel 1F-NW 1 to Rock Tunnel B1F-E 2",
+                                           "Rock Tunnel 1F-NW 2 to Rock Tunnel B1F-W 1",
+                                           "Rock Tunnel 1F-S 1 to Route 10-S",
+                                           "Rock Tunnel 1F-S 2 to Rock Tunnel B1F-W 2"]])) or
                         ("Rock Tunnel B1F - Wild Pokemon" in location.name and
                          any([multiworld.get_entrance(e, location.player).connected_region.can_reach(state)
-                             for e in ['Rock Tunnel B1F-E 1 to Rock Tunnel 1F-NE 2',
-                                       'Rock Tunnel B1F-E 2 to Rock Tunnel 1F-NW 1',
-                                       'Rock Tunnel B1F-W 1 to Rock Tunnel 1F-NW 2',
-                                       'Rock Tunnel B1F-W 2 to Rock Tunnel 1F-S 2']]))):
+                             for e in ["Rock Tunnel B1F-E 1 to Rock Tunnel 1F-NE 2",
+                                       "Rock Tunnel B1F-E 2 to Rock Tunnel 1F-NW 1",
+                                       "Rock Tunnel B1F-W 1 to Rock Tunnel 1F-NW 2",
+                                       "Rock Tunnel B1F-W 2 to Rock Tunnel 1F-S 2"]]))):
                     # Even if checks in Rock Tunnel are out of logic due to lack of Flash, it is very easy to
                     # wander in the dark and encounter wild Pokémon, even unintentionally while attempting to
                     # leave the way you entered. We'll count the wild Pokémon as reachable as soon as the Rock

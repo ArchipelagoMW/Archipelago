@@ -3,9 +3,10 @@ from typing import Dict
 
 from BaseClasses import MultiWorld, get_seed
 from Options import NamedRange, Range
-from .option_names import options_to_include
-from .. import setup_solo_multiworld, SVTestCase
+
+from .. import SVTestCase, setup_solo_multiworld
 from ..assertion import GoalAssertMixin, OptionAssertMixin, WorldAssertMixin
+from .option_names import options_to_include
 
 
 def get_option_choices(option) -> Dict[str, int]:

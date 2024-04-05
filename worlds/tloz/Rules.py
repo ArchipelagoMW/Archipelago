@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING
 
 from worlds.generic.Rules import add_rule
-from .Locations import food_locations, shop_locations, gleeok_locations
+
 from .ItemPool import dangerous_weapon_locations
+from .Locations import food_locations, gleeok_locations, shop_locations
 from .Options import StartingPosition
 
 if TYPE_CHECKING:

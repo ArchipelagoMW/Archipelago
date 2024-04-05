@@ -6,7 +6,8 @@ from typing import Iterable
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import CollectionRule
-from ...stardew_rule import StardewRule, AggregatingStardewRule, Count, Has, TotalReceived, Received, Reach
+
+from ...stardew_rule import AggregatingStardewRule, Count, Has, Reach, Received, StardewRule, TotalReceived
 
 max_explanation_depth = 10
 
@@ -19,7 +20,7 @@ class RuleExplanation:
     sub_rules: Iterable[StardewRule] = field(default_factory=list)
 
     def summary(self, depth=0):
-        return "  " * depth + f"{str(self.rule)} -> {self.result}"
+        return "  " * depth + f"{self.rule!s} -> {self.result}"
 
     def __str__(self, depth=0):
         if not self.sub_rules or depth >= max_explanation_depth:
@@ -80,13 +81,13 @@ def _(rule: TotalReceived, state: CollectionState, expected=True) -> RuleExplana
 @_explain.register
 def _(rule: Reach, state: CollectionState, expected=True) -> RuleExplanation:
     access_rules = None
-    if rule.resolution_hint == 'Location':
+    if rule.resolution_hint == "Location":
         spot = state.multiworld.get_location(rule.spot, rule.player)
 
         if isinstance(spot.access_rule, StardewRule):
             access_rules = [spot.access_rule, Reach(spot.parent_region.name, "Region", rule.player)]
 
-    elif rule.resolution_hint == 'Entrance':
+    elif rule.resolution_hint == "Entrance":
         spot = state.multiworld.get_entrance(rule.spot, rule.player)
 
         if isinstance(spot.access_rule, StardewRule):

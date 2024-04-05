@@ -1,4 +1,5 @@
 from BaseClasses import MultiWorld
+
 from ..AutoWorld import LogicMixin
 from ..generic.Rules import set_rule
 

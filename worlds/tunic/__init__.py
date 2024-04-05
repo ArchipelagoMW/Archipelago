@@ -1,16 +1,17 @@
-from typing import Dict, List, Any
+from decimal import ROUND_HALF_UP, Decimal
+from typing import Any, Dict, List
 
-from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
-from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
-from .locations import location_table, location_name_groups, location_name_to_id, hexagon_locations
-from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
-from .er_rules import set_er_location_rules
-from .regions import tunic_regions
-from .er_scripts import create_er_regions
-from .er_data import portal_mapping
-from .options import TunicOptions
+from BaseClasses import Item, ItemClassification, Location, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from decimal import Decimal, ROUND_HALF_UP
+
+from .er_data import portal_mapping
+from .er_rules import set_er_location_rules
+from .er_scripts import create_er_regions
+from .items import filler_items, fool_tiers, item_name_groups, item_name_to_id, item_table, slot_data_item_names
+from .locations import hexagon_locations, location_name_groups, location_name_to_id, location_table
+from .options import TunicOptions
+from .regions import tunic_regions
+from .rules import gold_hexagon, randomize_ability_unlocks, set_location_rules, set_region_rules
 
 
 class TunicWeb(WebWorld):
@@ -123,7 +124,7 @@ class TunicWorld(World):
         # Filler items in the item pool
         available_filler: List[str] = [filler for filler in items_to_create if items_to_create[filler] > 0 and
                                        item_table[filler].classification == ItemClassification.filler]
-        
+
         # Remove filler to make room for other items
         def remove_filler(amount: int):
             for _ in range(0, amount):
@@ -150,7 +151,7 @@ class TunicWorld(World):
             hexagon_goal = self.options.hexagon_goal
             extra_hexagons = self.options.extra_hexagon_percentage
             items_to_create[gold_hexagon] += int((Decimal(100 + extra_hexagons) / 100 * hexagon_goal).to_integral_value(rounding=ROUND_HALF_UP))
-            
+
             # Replace pages and normal hexagons with filler
             for replaced_item in list(filter(lambda item: "Pages" in item or item in hexagon_locations, items_to_create)):
                 filler_name = self.get_filler_item_name()
@@ -184,7 +185,7 @@ class TunicWorld(World):
         self.tunic_portal_pairs = {}
         self.er_portal_hints = {}
         self.ability_unlocks = randomize_ability_unlocks(self.random, self.options)
-        
+
         # stuff for universal tracker support, can be ignored for standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "TUNIC" in self.multiworld.re_gen_passthrough:

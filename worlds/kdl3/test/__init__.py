@@ -1,9 +1,9 @@
 import typing
 from argparse import Namespace
-
-from BaseClasses import MultiWorld, PlandoOptions, CollectionState
-from test.TestBase import WorldTestBase
 from test.general import gen_steps
+from test.TestBase import WorldTestBase
+
+from BaseClasses import CollectionState, MultiWorld, PlandoOptions
 from worlds import AutoWorld
 from worlds.AutoWorld import call_all
 

@@ -1,14 +1,25 @@
 from collections import Counter
 
-from . import SVTestBase
-from .. import options, HasProgressionPercent
+from .. import HasProgressionPercent, options
 from ..data.craftable_data import all_crafting_recipes_by_name
-from ..locations import locations_by_tag, LocationTags, location_table
-from ..options import ToolProgression, BuildingProgression, ExcludeGingerIsland, Chefsanity, Craftsanity, Shipsanity, SeasonRandomization, Friendsanity, \
-    FriendsanityHeartSize, BundleRandomization, SkillProgression
+from ..locations import LocationTags, location_table, locations_by_tag
+from ..options import (
+    BuildingProgression,
+    BundleRandomization,
+    Chefsanity,
+    Craftsanity,
+    ExcludeGingerIsland,
+    Friendsanity,
+    FriendsanityHeartSize,
+    SeasonRandomization,
+    Shipsanity,
+    SkillProgression,
+    ToolProgression,
+)
 from ..strings.entrance_names import Entrance
 from ..strings.region_names import Region
 from ..strings.tool_names import Tool, ToolMaterial
+from . import SVTestBase
 
 
 class TestProgressiveToolsLogic(SVTestBase):
@@ -119,19 +130,19 @@ class TestBuildingLogic(SVTestBase):
     def test_big_coop_blueprint(self):
         big_coop_blueprint_rule = self.world.logic.region.can_reach_location("Big Coop Blueprint")
         self.assertFalse(big_coop_blueprint_rule(self.multiworld.state),
-                         f"Rule is {repr(self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule)}")
+                         f"Rule is {self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule!r}")
 
         self.collect_lots_of_money()
         self.assertFalse(big_coop_blueprint_rule(self.multiworld.state),
-                         f"Rule is {repr(self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule)}")
+                         f"Rule is {self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule!r}")
 
         self.multiworld.state.collect(self.world.create_item("Can Construct Buildings"), event=True)
         self.assertFalse(big_coop_blueprint_rule(self.multiworld.state),
-                         f"Rule is {repr(self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule)}")
+                         f"Rule is {self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule!r}")
 
         self.multiworld.state.collect(self.world.create_item("Progressive Coop"), event=False)
         self.assertTrue(big_coop_blueprint_rule(self.multiworld.state),
-                        f"Rule is {repr(self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule)}")
+                        f"Rule is {self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule!r}")
 
     def test_deluxe_coop_blueprint(self):
         self.assertFalse(self.world.logic.region.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
@@ -149,19 +160,19 @@ class TestBuildingLogic(SVTestBase):
     def test_big_shed_blueprint(self):
         big_shed_rule = self.world.logic.region.can_reach_location("Big Shed Blueprint")
         self.assertFalse(big_shed_rule(self.multiworld.state),
-                         f"Rule is {repr(self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule)}")
+                         f"Rule is {self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule!r}")
 
         self.collect_lots_of_money()
         self.assertFalse(big_shed_rule(self.multiworld.state),
-                         f"Rule is {repr(self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule)}")
+                         f"Rule is {self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule!r}")
 
         self.multiworld.state.collect(self.world.create_item("Can Construct Buildings"), event=True)
         self.assertFalse(big_shed_rule(self.multiworld.state),
-                         f"Rule is {repr(self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule)}")
+                         f"Rule is {self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule!r}")
 
         self.multiworld.state.collect(self.world.create_item("Progressive Shed"), event=True)
         self.assertTrue(big_shed_rule(self.multiworld.state),
-                        f"Rule is {repr(self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule)}")
+                        f"Rule is {self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule!r}")
 
 
 class TestArcadeMachinesLogic(SVTestBase):

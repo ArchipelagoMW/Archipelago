@@ -1,7 +1,8 @@
-from BaseClasses import CollectionState
 from typing import TYPE_CHECKING
 
-from .Options import StageLogic, BowserDoor, ObjectVis
+from BaseClasses import CollectionState
+
+from .Options import BowserDoor, ObjectVis, StageLogic
 
 if TYPE_CHECKING:
     from . import YoshisIslandWorld

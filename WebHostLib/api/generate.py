@@ -9,18 +9,19 @@ from pony.orm import commit
 from WebHostLib import app
 from WebHostLib.check import get_yaml_data, roll_options
 from WebHostLib.generate import get_meta
-from WebHostLib.models import Generation, STATE_QUEUED, Seed, STATE_ERROR
+from WebHostLib.models import STATE_ERROR, STATE_QUEUED, Generation, Seed
+
 from . import api_endpoints
 
 
-@api_endpoints.route('/generate', methods=['POST'])
+@api_endpoints.route("/generate", methods=["POST"])
 def generate_api():
     try:
         options = {}
         race = False
         meta_options_source = {}
-        if 'file' in request.files:
-            files = request.files.getlist('file')
+        if "file" in request.files:
+            files = request.files.getlist("file")
             options = get_yaml_data(files)
             if isinstance(options, Markup):
                 return {"text": options.striptags()}, 400
@@ -36,7 +37,7 @@ def generate_api():
 
         if json_data:
             meta_options_source = json_data
-            if 'weights' in json_data:
+            if "weights" in json_data:
                 # example: options = {"player1weights" : {<weightsdata>}}
                 options = json_data["weights"]
             if "race" in json_data:
@@ -70,7 +71,7 @@ def generate_api():
         return {"text": "Uncaught Exception:" + str(e)}, 500
 
 
-@api_endpoints.route('/status/<suuid:seed>')
+@api_endpoints.route("/status/<suuid:seed>")
 def wait_seed_api(seed: UUID):
     seed_id = seed
     seed = Seed.get(id=seed_id)

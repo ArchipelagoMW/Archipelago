@@ -1,16 +1,49 @@
-from typing import Callable, Dict, List, Set, Union, Tuple
-from BaseClasses import  Item, Location
-from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items, progressive_if_nco, \
-    progressive_if_ext, spear_of_adun_calldowns, spear_of_adun_castable_passives, nova_equipment
-from .MissionTables import mission_orders, MissionInfo, MissionPools, \
-    get_campaign_goal_priority, campaign_final_mission_locations, campaign_alt_final_mission_locations, \
-    SC2Campaign, SC2Race, SC2CampaignGoalPriority, SC2Mission
-from .Options import get_option_value, MissionOrder, \
-    get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech, \
-    TakeOverAIAllies, SpearOfAdunPresence, SpearOfAdunAutonomouslyCastAbilityPresence, campaign_depending_orders, \
-    ShuffleCampaigns, get_excluded_missions, ShuffleNoBuild, ExtraLocations, GrantStoryLevels
-from . import ItemNames
+from typing import Callable, Dict, List, Set, Tuple, Union
+
+from BaseClasses import Item, Location
 from worlds.AutoWorld import World
+
+from . import ItemNames
+from .Items import (
+    get_full_item_list,
+    nova_equipment,
+    progressive_if_ext,
+    progressive_if_nco,
+    second_pass_placeable_items,
+    spear_of_adun_calldowns,
+    spear_of_adun_castable_passives,
+    spider_mine_sources,
+)
+from .MissionTables import (
+    MissionInfo,
+    MissionPools,
+    SC2Campaign,
+    SC2CampaignGoalPriority,
+    SC2Mission,
+    SC2Race,
+    campaign_alt_final_mission_locations,
+    campaign_final_mission_locations,
+    get_campaign_goal_priority,
+    mission_orders,
+)
+from .Options import (
+    ExtraLocations,
+    GrantStoryLevels,
+    GrantStoryTech,
+    MissionOrder,
+    RequiredTactics,
+    ShuffleCampaigns,
+    ShuffleNoBuild,
+    SpearOfAdunAutonomouslyCastAbilityPresence,
+    SpearOfAdunPresence,
+    TakeOverAIAllies,
+    campaign_depending_orders,
+    get_disabled_campaigns,
+    get_enabled_campaigns,
+    get_excluded_missions,
+    get_option_value,
+    kerrigan_unit_available,
+)
 
 # Items with associated upgrades
 UPGRADABLE_ITEMS = {item.parent_item for item in get_full_item_list().values() if item.parent_item}

@@ -1,5 +1,6 @@
 import typing
-from Options import Choice, Option, Toggle, Range
+
+from Options import Choice, Option, Range, Toggle
 
 
 class RouteRequired(Choice):

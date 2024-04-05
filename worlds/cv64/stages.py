@@ -1,11 +1,10 @@
 import logging
+from typing import TYPE_CHECKING, Dict, List, Tuple, Union
 
 from .data import rname
-from .regions import get_region_info
 from .locations import get_location_info
 from .options import WarpOrder
-
-from typing import TYPE_CHECKING, Dict, List, Tuple, Union
+from .regions import get_region_info
 
 if TYPE_CHECKING:
     from . import CV64World

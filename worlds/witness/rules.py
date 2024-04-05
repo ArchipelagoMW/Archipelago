@@ -6,10 +6,11 @@ depending on the items received
 from typing import TYPE_CHECKING, Callable, FrozenSet
 
 from BaseClasses import CollectionState
-from .player_logic import WitnessPlayerLogic
-from .locations import WitnessPlayerLocations
-from . import StaticWitnessLogic, WitnessRegions
 from worlds.generic.Rules import set_rule
+
+from . import StaticWitnessLogic, WitnessRegions
+from .locations import WitnessPlayerLocations
+from .player_logic import WitnessPlayerLogic
 
 if TYPE_CHECKING:
     from . import WitnessWorld
@@ -224,4 +225,4 @@ def set_rules(world: "WitnessWorld"):
 
         set_rule(location, rule)
 
-    world.multiworld.completion_condition[world.player] = lambda state: state.has('Victory', world.player)
+    world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)

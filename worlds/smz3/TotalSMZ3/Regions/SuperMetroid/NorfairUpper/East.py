@@ -1,7 +1,8 @@
-﻿from ....Region import SMRegion
-from ....Config import Config, SMLogic
-from ....Location import Location, LocationType
+﻿from ....Config import Config, SMLogic
 from ....Item import Progression
+from ....Location import Location, LocationType
+from ....Region import SMRegion
+
 
 class East(SMRegion):
     Name = "Norfair Upper East"
@@ -10,7 +11,7 @@ class East(SMRegion):
     def __init__(self, world, config: Config):
         super().__init__(world, config)
         self.Locations = [
-            Location(self, 61, 0x8F8C3E, LocationType.Chozo, "Reserve Tank, Norfair", 
+            Location(self, 61, 0x8F8C3E, LocationType.Chozo, "Reserve Tank, Norfair",
                 lambda items: items.CardNorfairL2 and items.Morph and (
                     items.CanFly() or
                     items.Grapple and (items.SpeedBooster or items.CanPassBombPassages()) or
@@ -31,7 +32,7 @@ class East(SMRegion):
                     items.HiJump or items.Ice
                 ) if self.Logic == SMLogic.Normal else \
                 lambda items: items.CardNorfairL2 and items.Super),
-            Location(self, 64, 0x8F8C66, LocationType.Visible, "Missile (bubble Norfair)", 
+            Location(self, 64, 0x8F8C66, LocationType.Visible, "Missile (bubble Norfair)",
                 lambda items: items.CardNorfairL2),
             Location(self, 65, 0x8F8C74, LocationType.Hidden, "Missile (Speed Booster)",
                 lambda items: items.CardNorfairL2 and (

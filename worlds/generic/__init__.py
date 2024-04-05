@@ -1,30 +1,30 @@
-from typing import NamedTuple, Union
 import logging
+from typing import NamedTuple, Union
 
-from BaseClasses import Item, Tutorial, ItemClassification
-
-from ..AutoWorld import World, WebWorld
+from BaseClasses import Item, ItemClassification, Tutorial
 from NetUtils import SlotType
+
+from ..AutoWorld import WebWorld, World
 
 
 class GenericWeb(WebWorld):
-    advanced_settings = Tutorial('Advanced YAML Guide',
-                                 'A guide to reading YAML files and editing them to fully customize your game.',
-                                 'English', 'advanced_settings_en.md', 'advanced_settings/en',
-                                 ['alwaysintreble', 'Alchav'])
-    commands = Tutorial('Archipelago Server and Client Commands',
-                        'A guide detailing the commands available to the user when participating in an Archipelago session.',
-                        'English', 'commands_en.md', 'commands/en', ['jat2980', 'Ijwu'])
-    mac = Tutorial('Archipelago Setup Guide for Mac', 'A guide detailing how to run Archipelago clients on macOS.', 
-                   'English', 'mac_en.md','mac/en', ['Bicoloursnake'])
-    plando = Tutorial('Archipelago Plando Guide', 'A guide to understanding and using plando for your game.',
-                      'English', 'plando_en.md', 'plando/en', ['alwaysintreble', 'Alchav'])
-    setup = Tutorial('Getting Started',
-                     'A guide to setting up the Archipelago software, and generating, hosting, and connecting to '
-                     'multiworld games.',
-                     'English', 'setup_en.md', 'setup/en', ['alwaysintreble'])
-    triggers = Tutorial('Archipelago Triggers Guide', 'A guide to setting up and using triggers in your game settings.',
-                        'English', 'triggers_en.md', 'triggers/en', ['alwaysintreble'])
+    advanced_settings = Tutorial("Advanced YAML Guide",
+                                 "A guide to reading YAML files and editing them to fully customize your game.",
+                                 "English", "advanced_settings_en.md", "advanced_settings/en",
+                                 ["alwaysintreble", "Alchav"])
+    commands = Tutorial("Archipelago Server and Client Commands",
+                        "A guide detailing the commands available to the user when participating in an Archipelago session.",
+                        "English", "commands_en.md", "commands/en", ["jat2980", "Ijwu"])
+    mac = Tutorial("Archipelago Setup Guide for Mac", "A guide detailing how to run Archipelago clients on macOS.",
+                   "English", "mac_en.md","mac/en", ["Bicoloursnake"])
+    plando = Tutorial("Archipelago Plando Guide", "A guide to understanding and using plando for your game.",
+                      "English", "plando_en.md", "plando/en", ["alwaysintreble", "Alchav"])
+    setup = Tutorial("Getting Started",
+                     "A guide to setting up the Archipelago software, and generating, hosting, and connecting to "
+                     "multiworld games.",
+                     "English", "setup_en.md", "setup/en", ["alwaysintreble"])
+    triggers = Tutorial("Archipelago Triggers Guide", "A guide to setting up and using triggers in your game settings.",
+                        "English", "triggers_en.md", "triggers/en", ["alwaysintreble"])
     tutorials = [setup, mac, commands, advanced_settings, triggers, plando]
 
 
@@ -56,16 +56,16 @@ class PlandoItem(NamedTuple):
     location: str
     world: Union[bool, str] = False  # False -> own world, True -> not own world
     from_pool: bool = True  # if item should be removed from item pool
-    force: str = 'silent'  # false -> warns if item not successfully placed. true -> errors out on failure to place item.
+    force: str = "silent"  # false -> warns if item not successfully placed. true -> errors out on failure to place item.
 
     def warn(self, warning: str):
-        if self.force in ['true', 'fail', 'failure', 'none', 'false', 'warn', 'warning']:
-            logging.warning(f'{warning}')
+        if self.force in ["true", "fail", "failure", "none", "false", "warn", "warning"]:
+            logging.warning(f"{warning}")
         else:
-            logging.debug(f'{warning}')
+            logging.debug(f"{warning}")
 
     def failed(self, warning: str, exception=Exception):
-        if self.force in ['true', 'fail', 'failure']:
+        if self.force in ["true", "fail", "failure"]:
             raise exception(warning)
         else:
             self.warn(warning)

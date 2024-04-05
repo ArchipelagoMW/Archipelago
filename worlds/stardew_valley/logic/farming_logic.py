@@ -1,11 +1,11 @@
 from typing import Union
 
-from .base_logic import BaseLogicMixin, BaseLogic
-from .has_logic import HasLogicMixin
-from .skill_logic import SkillLogicMixin
-from ..stardew_rule import StardewRule, True_, False_
+from ..stardew_rule import False_, StardewRule, True_
 from ..strings.fertilizer_names import Fertilizer
 from ..strings.quality_names import CropQuality
+from .base_logic import BaseLogic, BaseLogicMixin
+from .has_logic import HasLogicMixin
+from .skill_logic import SkillLogicMixin
 
 
 class FarmingLogicMixin(BaseLogicMixin):

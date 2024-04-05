@@ -1,11 +1,11 @@
 import argparse
 import json
 
-from ...test import setup_solo_multiworld, allsanity_options_with_mods
+from ...test import allsanity_options_with_mods, setup_solo_multiworld
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--seed', help='Define seed number to generate.', type=int, required=True)
+    parser.add_argument("--seed", help="Define seed number to generate.", type=int, required=True)
 
     args = parser.parse_args()
     seed = args.seed

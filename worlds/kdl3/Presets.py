@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Any, Dict
 
 all_random = {
     "progression_balancing": "random",

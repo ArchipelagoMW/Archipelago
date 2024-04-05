@@ -1,8 +1,8 @@
-import os
 import logging
+import os
+import re
 import sys
 import typing
-import re
 
 if sys.platform == "win32":
     import ctypes
@@ -30,40 +30,40 @@ Config.set("input", "mouse", "mouse,disable_multitouch")
 Config.set("kivy", "exit_on_escape", "0")
 Config.set("graphics", "multisamples", "0")  # multisamples crash old intel drivers
 
+from kivy.animation import Animation
 from kivy.app import App
-from kivy.core.window import Window
-from kivy.core.clipboard import Clipboard
-from kivy.core.text.markup import MarkupLabel
 from kivy.base import ExceptionHandler, ExceptionManager
 from kivy.clock import Clock
-from kivy.factory import Factory
-from kivy.properties import BooleanProperty, ObjectProperty
-from kivy.metrics import dp
+from kivy.core.clipboard import Clipboard
+from kivy.core.text.markup import MarkupLabel
+from kivy.core.window import Window
 from kivy.effects.scroll import ScrollEffect
-from kivy.uix.widget import Widget
-from kivy.uix.button import Button
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.layout import Layout
-from kivy.uix.textinput import TextInput
-from kivy.uix.scrollview import ScrollView
-from kivy.uix.recycleview import RecycleView
-from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.label import Label
-from kivy.uix.progressbar import ProgressBar
-from kivy.utils import escape_markup
+from kivy.factory import Factory
 from kivy.lang import Builder
-from kivy.uix.recycleview.views import RecycleDataViewBehavior
+from kivy.metrics import dp
+from kivy.properties import BooleanProperty, ObjectProperty
 from kivy.uix.behaviors import FocusBehavior
-from kivy.uix.recycleboxlayout import RecycleBoxLayout
-from kivy.uix.recycleview.layout import LayoutSelectionBehavior
-from kivy.animation import Animation
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.label import Label
+from kivy.uix.layout import Layout
 from kivy.uix.popup import Popup
+from kivy.uix.progressbar import ProgressBar
+from kivy.uix.recycleboxlayout import RecycleBoxLayout
+from kivy.uix.recycleview import RecycleView
+from kivy.uix.recycleview.layout import LayoutSelectionBehavior
+from kivy.uix.recycleview.views import RecycleDataViewBehavior
+from kivy.uix.scrollview import ScrollView
+from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
+from kivy.uix.textinput import TextInput
+from kivy.uix.widget import Widget
+from kivy.utils import escape_markup
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
-from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType
+from NetUtils import JSONMessagePart, JSONtoTextParser, SlotType
 from Utils import async_start
 
 if typing.TYPE_CHECKING:
@@ -77,7 +77,7 @@ remove_between_brackets = re.compile(r"\[.*?]")
 
 
 # I was surprised to find this didn't already exist in kivy :(
-class HoverBehavior(object):
+class HoverBehavior:
     """originally from https://stackoverflow.com/a/605348110"""
     hovered = BooleanProperty(False)
     border_point = ObjectProperty(None)
@@ -241,7 +241,7 @@ class ServerLabel(HovererableLabel):
                 elif ctx.hint_cost == 0:
                     text += "\n!hint is free to use."
             else:
-                text += f"\nYou are not authenticated yet."
+                text += "\nYou are not authenticated yet."
 
             return text
 
@@ -344,8 +344,8 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
                 if self.selected:
                     self.parent.clear_selection()
                 else:
-                    text = "".join((self.receiving_text, "\'s ", self.item_text, " is at ", self.location_text, " in ",
-                                    self.finding_text, "\'s World", (" at " + self.entrance_text)
+                    text = "".join((self.receiving_text, "'s ", self.item_text, " is at ", self.location_text, " in ",
+                                    self.finding_text, "'s World", (" at " + self.entrance_text)
                                     if self.entrance_text != "Vanilla"
                                     else "", ". (", self.found_text.lower(), ")"))
                     temp = MarkupLabel(text).markup
@@ -758,7 +758,7 @@ class KivyJSONtoTextParser(JSONtoTextParser):
             text = f"Game: {slot_info.game}<br>" \
                    f"Type: {SlotType(slot_info.type).name}"
             if slot_info.group_members:
-                text += f"<br>Members:<br> " + "<br> ".join(
+                text += "<br>Members:<br> " + "<br> ".join(
                     escape_markup(self.ctx.player_names[player])
                     for player in slot_info.group_members
                 )

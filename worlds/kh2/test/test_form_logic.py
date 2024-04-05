@@ -1,5 +1,5 @@
-from . import KH2TestBase
 from ..Names import ItemName, LocationName
+from . import KH2TestBase
 
 global_all_possible_forms = [ItemName.ValorForm, ItemName.WisdomForm, ItemName.LimitForm, ItemName.MasterForm, ItemName.FinalForm] + [ItemName.AutoValor, ItemName.AutoWisdom, ItemName.AutoLimit, ItemName.AutoMaster, ItemName.AutoFinal]
 
@@ -84,9 +84,9 @@ class TestDefaultForms(KH2TestFormBase):
         allPossibleForms = global_all_possible_forms
         self.collect_all_but(allPossibleForms)
         self.collect_by_name(ItemName.FinalForm)
-        self.assertTrue((self.can_reach_location(LocationName.Finallvl2)))
-        self.assertTrue((self.can_reach_location(LocationName.Finallvl3)))
-        self.assertFalse((self.can_reach_location(LocationName.Finallvl4)))
+        self.assertTrue(self.can_reach_location(LocationName.Finallvl2))
+        self.assertTrue(self.can_reach_location(LocationName.Finallvl3))
+        self.assertFalse(self.can_reach_location(LocationName.Finallvl4))
 
     def test_default_without_LnD(self):
         allPossibleForms = self.allForms
@@ -113,14 +113,14 @@ class TestDefaultForms(KH2TestFormBase):
                 for _ in range(self.count(ItemName.LightDarkness)):
                     self.remove(self.get_item_by_name(ItemName.LightDarkness))
 
-                self.assertTrue((self.can_reach_location(levels[2 + i])))
+                self.assertTrue(self.can_reach_location(levels[2 + i]))
                 if i < 2:
-                    self.assertFalse((self.can_reach_location(levels[3 + i])))
+                    self.assertFalse(self.can_reach_location(levels[3 + i]))
                 else:
                     self.collect(self.get_item_by_name(allFormsCopy[i + 1]))
                     for _ in range(self.count(ItemName.LightDarkness)):
                         self.remove(self.get_item_by_name(ItemName.LightDarkness))
-                    self.assertTrue((self.can_reach_location(levels[3 + i])))
+                    self.assertTrue(self.can_reach_location(levels[3 + i]))
 
     def test_default_with_lnd(self):
         allPossibleForms = self.allForms
@@ -133,18 +133,18 @@ class TestDefaultForms(KH2TestFormBase):
                 allFormsCopy = self.allForms.copy()
                 allFormsCopy.remove(form)
                 self.collect(self.get_item_by_name(ItemName.LightDarkness))
-                self.assertFalse((self.can_reach_location(levels[0])))
+                self.assertFalse(self.can_reach_location(levels[0]))
                 self.collect(self.get_item_by_name(form))
 
-                self.assertTrue((self.can_reach_location(levels[0])))
-                self.assertTrue((self.can_reach_location(levels[1])))
-                self.assertTrue((self.can_reach_location(levels[2])))
-                self.assertFalse((self.can_reach_location(levels[3])))
+                self.assertTrue(self.can_reach_location(levels[0]))
+                self.assertTrue(self.can_reach_location(levels[1]))
+                self.assertTrue(self.can_reach_location(levels[2]))
+                self.assertFalse(self.can_reach_location(levels[3]))
                 for i in range(2):
                     self.collect(self.get_item_by_name(allFormsCopy[i]))
-                    self.assertTrue((self.can_reach_location(levels[i + 3])))
+                    self.assertTrue(self.can_reach_location(levels[i + 3]))
                     if i <= 2:
-                        self.assertFalse((self.can_reach_location(levels[i + 4])))
+                        self.assertFalse(self.can_reach_location(levels[i + 4]))
 
 
 class TestJustAForm(KH2TestFormBase):
@@ -166,14 +166,14 @@ class TestJustAForm(KH2TestFormBase):
                 # reset the forms
                 allFormsCopy = self.allForms.copy()
                 allFormsCopy.remove(form)
-                self.assertFalse((self.can_reach_location(levels[0])))
+                self.assertFalse(self.can_reach_location(levels[0]))
                 self.collect(self.get_item_by_name(form))
-                self.assertTrue((self.can_reach_location(levels[0])))
-                self.assertTrue((self.can_reach_location(levels[1])))
-                self.assertTrue((self.can_reach_location(levels[2])))
+                self.assertTrue(self.can_reach_location(levels[0]))
+                self.assertTrue(self.can_reach_location(levels[1]))
+                self.assertTrue(self.can_reach_location(levels[2]))
 
                 # level 4 of a form. This tests if the player can unlock final form.
-                self.assertFalse((self.can_reach_location(levels[3])))
+                self.assertFalse(self.can_reach_location(levels[3]))
                 # amount of forms left in the pool are 3. 1 already collected and one is final form.
                 for i in range(3):
                     allFormsCopy.remove(allFormsCopy[0])

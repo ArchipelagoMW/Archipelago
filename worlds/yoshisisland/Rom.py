@@ -1,11 +1,12 @@
 import hashlib
 import os
-import Utils
-from worlds.Files import APDeltaPatch
-from settings import get_settings
 from typing import TYPE_CHECKING
 
-from .Options import YoshiColors, BowserDoor, PlayerGoal, MinigameChecks
+import Utils
+from settings import get_settings
+from worlds.Files import APDeltaPatch
+
+from .Options import BowserDoor, MinigameChecks, PlayerGoal, YoshiColors
 
 if TYPE_CHECKING:
     from . import YoshisIslandWorld
@@ -396,7 +397,7 @@ location_table = {
     0x30510B: [0x14B2, 4]
 }
 
-class LocalRom(object):
+class LocalRom:
 
     def __init__(self, file: str) -> None:
         self.name = None

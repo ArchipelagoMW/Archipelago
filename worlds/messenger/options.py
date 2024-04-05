@@ -4,8 +4,17 @@ from typing import Dict
 
 from schema import And, Optional, Or, Schema
 
-from Options import Accessibility, Choice, DeathLinkMixin, DefaultOnToggle, OptionDict, PerGameCommonOptions, Range, \
-    StartInventoryPool, Toggle
+from Options import (
+    Accessibility,
+    Choice,
+    DeathLinkMixin,
+    DefaultOnToggle,
+    OptionDict,
+    PerGameCommonOptions,
+    Range,
+    StartInventoryPool,
+    Toggle,
+)
 
 
 class MessengerAccessibility(Accessibility):

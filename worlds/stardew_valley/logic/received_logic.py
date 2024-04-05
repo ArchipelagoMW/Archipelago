@@ -1,8 +1,8 @@
 from typing import Optional
 
+from ..stardew_rule import And, Or, Received, StardewRule, TotalReceived
 from .base_logic import BaseLogic, BaseLogicMixin
 from .has_logic import HasLogicMixin
-from ..stardew_rule import StardewRule, Received, And, Or, TotalReceived
 
 
 class ReceivedLogicMixin(BaseLogic[HasLogicMixin], BaseLogicMixin):

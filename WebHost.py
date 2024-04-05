@@ -1,6 +1,6 @@
-import os
-import multiprocessing
 import logging
+import multiprocessing
+import os
 import typing
 
 import ModuleUpdate
@@ -9,18 +9,19 @@ ModuleUpdate.requirements_files.add(os.path.join("WebHostLib", "requirements.txt
 ModuleUpdate.update()
 
 # in case app gets imported by something like gunicorn
-import Utils
 import settings
+import Utils
 
 Utils.local_path.cached_path = os.path.dirname(__file__) or "."  # py3.8 is not abs. remove "." when dropping 3.8
 settings.no_gui = True
 configpath = os.path.abspath("config.yaml")
 if not os.path.exists(configpath):  # fall back to config.yaml in home
-    configpath = os.path.abspath(Utils.user_path('config.yaml'))
+    configpath = os.path.abspath(Utils.user_path("config.yaml"))
 
 
 def get_app():
-    from WebHostLib import register, cache, app as raw_app
+    from WebHostLib import app as raw_app
+    from WebHostLib import cache, register
     from WebHostLib.models import db
 
     register()
@@ -51,7 +52,7 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
     worlds = {}
     data = []
     for game, world in AutoWorldRegister.world_types.items():
-        if hasattr(world.web, 'tutorials') and (not world.hidden or game == 'Archipelago'):
+        if hasattr(world.web, "tutorials") and (not world.hidden or game == "Archipelago"):
             worlds[game] = world
 
     base_target_path = Utils.local_path("WebHostLib", "static", "generated", "docs")
@@ -78,33 +79,33 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
                 shutil.copyfile(Utils.local_path(source_path, file), Utils.local_path(target_path, file))
 
         # build a json tutorial dict per game
-        game_data = {'gameTitle': game, 'tutorials': []}
+        game_data = {"gameTitle": game, "tutorials": []}
         for tutorial in world.web.tutorials:
             # build dict for the json file
             current_tutorial = {
-                'name': tutorial.tutorial_name,
-                'description': tutorial.description,
-                'files': [{
-                    'language': tutorial.language,
-                    'filename': game + '/' + tutorial.file_name,
-                    'link': f'{game}/{tutorial.link}',
-                    'authors': tutorial.authors
+                "name": tutorial.tutorial_name,
+                "description": tutorial.description,
+                "files": [{
+                    "language": tutorial.language,
+                    "filename": game + "/" + tutorial.file_name,
+                    "link": f"{game}/{tutorial.link}",
+                    "authors": tutorial.authors
                 }]
             }
 
             # check if the name of the current guide exists already
-            for guide in game_data['tutorials']:
-                if guide and tutorial.tutorial_name == guide['name']:
-                    guide['files'].append(current_tutorial['files'][0])
+            for guide in game_data["tutorials"]:
+                if guide and tutorial.tutorial_name == guide["name"]:
+                    guide["files"].append(current_tutorial["files"][0])
                     break
             else:
-                game_data['tutorials'].append(current_tutorial)
+                game_data["tutorials"].append(current_tutorial)
 
         data.append(game_data)
-    with open(Utils.local_path("WebHostLib", "static", "generated", "tutorials.json"), 'w', encoding='utf-8-sig') as json_target:
+    with open(Utils.local_path("WebHostLib", "static", "generated", "tutorials.json"), "w", encoding="utf-8-sig") as json_target:
         generic_data = {}
         for games in data:
-            if 'Archipelago' in games['gameTitle']:
+            if "Archipelago" in games["gameTitle"]:
                 generic_data = data.pop(data.index(games))
         sorted_data = [generic_data] + Utils.title_sorted(data, key=lambda entry: entry["gameTitle"])
         json.dump(sorted_data, json_target, indent=2, ensure_ascii=False)
@@ -113,11 +114,11 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
 
 if __name__ == "__main__":
     multiprocessing.freeze_support()
-    multiprocessing.set_start_method('spawn')
-    logging.basicConfig(format='[%(asctime)s] %(message)s', level=logging.INFO)
+    multiprocessing.set_start_method("spawn")
+    logging.basicConfig(format="[%(asctime)s] %(message)s", level=logging.INFO)
 
+    from WebHostLib.autolauncher import autogen, autohost
     from WebHostLib.lttpsprites import update_sprites_lttp
-    from WebHostLib.autolauncher import autohost, autogen
     from WebHostLib.options import create as create_options_files
 
     try:

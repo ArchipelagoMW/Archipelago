@@ -1,26 +1,25 @@
+import base64
 import os
 import zipfile
-import base64
-from typing import Union, Dict, Set, Tuple
+from typing import Dict, Set, Tuple, Union
 
-from flask import request, flash, redirect, url_for, render_template
+from flask import flash, redirect, render_template, request, url_for
 from markupsafe import Markup
 
+from Generate import PlandoOptions, roll_settings
+from Utils import parse_yamls
 from WebHostLib import app
 from WebHostLib.upload import allowed_options, allowed_options_extensions, banned_file
 
-from Generate import roll_settings, PlandoOptions
-from Utils import parse_yamls
 
-
-@app.route('/check', methods=['GET', 'POST'])
+@app.route("/check", methods=["GET", "POST"])
 def check():
-    if request.method == 'POST':
+    if request.method == "POST":
         # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
+        if "file" not in request.files:
+            flash("No file part")
         else:
-            files = request.files.getlist('file')
+            files = request.files.getlist("file")
             options = get_yaml_data(files)
             if isinstance(options, str):
                 flash(options)
@@ -38,7 +37,7 @@ def check():
     return render_template("check.html")
 
 
-@app.route('/mysterycheck')
+@app.route("/mysterycheck")
 def mysterycheck():
     return redirect(url_for("check"), 301)
 

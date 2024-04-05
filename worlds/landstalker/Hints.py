@@ -1,10 +1,12 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import Location
+
 from .data.hint_source import HINT_SOURCES_JSON
 
 if TYPE_CHECKING:
     from random import Random
+
     from . import LandstalkerWorld
 
 
@@ -95,7 +97,7 @@ def generate_random_hints(world: "LandstalkerWorld"):
             if word_1 == "mysterious" and word_2 == "place":
                 continue
             hint_texts.append(f"Looking for {item.name}? I read something about {other_player}'s world... "
-                              f"Does \"{word_1} {word_2}\" remind you anything?")
+                              f'Does "{word_1} {word_2}" remind you anything?')
 
     # Hint-type #4: Remote progression item in remote location
     for item in remote_unowned_progression_items:
@@ -108,7 +110,7 @@ def generate_random_hints(world: "LandstalkerWorld"):
         if word_1 == "mysterious" and word_2 == "place":
             continue
         hint_texts.append(f"I once found {owner_name}'s {item.name} in {world_name}. "
-                          f"I remember \"{word_1} {word_2}\"... Does that make any sense?")
+                          f'I remember "{word_1} {word_2}"... Does that make any sense?')
 
     # Hint-type #5: Jokes
     other_player_names = [multiworld.get_player_name(player) for player in multiworld.player_ids if

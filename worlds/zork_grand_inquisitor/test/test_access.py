@@ -1,13 +1,12 @@
 from typing import List
 
-from . import ZorkGrandInquisitorTestBase
-
 from ..enums import (
     ZorkGrandInquisitorEvents,
     ZorkGrandInquisitorItems,
     ZorkGrandInquisitorLocations,
     ZorkGrandInquisitorRegions,
 )
+from . import ZorkGrandInquisitorTestBase
 
 
 class AccessTestRegions(ZorkGrandInquisitorTestBase):

@@ -1,12 +1,14 @@
 
 import copy
-from ..utils import log
-from ..logic.smbool import SMBool, smboolFalse
-from ..logic.smboolmanager import SMBoolManager
 from collections import Counter
 
-class ItemLocation(object):
-    __slots__ = ( 'Item', 'Location', 'Accessible', 'player' )
+from ..logic.smbool import smboolFalse
+from ..logic.smboolmanager import SMBoolManager
+from ..utils import log
+
+
+class ItemLocation:
+    __slots__ = ( "Item", "Location", "Accessible", "player" )
 
     def __init__(self, Item=None, Location=None, player=0, accessible=True):
         self.Item = Item
@@ -15,7 +17,7 @@ class ItemLocation(object):
         self.player = player
 
     def json(self):
-        return {'Item': self.Item.json(), 'Location': self.Location.json()}
+        return {"Item": self.Item.json(), "Location": self.Location.json()}
 
 def getItemListStr(items):
     return str(dict(Counter(["%s/%s" % (item.Type,item.Class) for item in items])))
@@ -29,7 +31,7 @@ def getItemLocStr(itemLoc):
 def getItemLocationsStr(itemLocations):
     return str([getItemLocStr(il) for il in itemLocations])
 
-class ContainerSoftBackup(object):
+class ContainerSoftBackup:
     def __init__(self, container):
         self.itemLocations = container.itemLocations[:]
         self.itemPool = container.itemPool[:]
@@ -50,7 +52,7 @@ class ContainerSoftBackup(object):
 # placed items/locations (itemLocations).
 # If logic is needed, also holds a SMBoolManager (sm) and collected items so far
 # (collectedItems)
-class ItemLocContainer(object):
+class ItemLocContainer:
     def __init__(self, sm, itemPool, locations):
         self.sm = sm
         self.itemLocations = []
@@ -59,11 +61,11 @@ class ItemLocContainer(object):
         self.itemPool = itemPool
         self.itemPoolBackup = None
         self.unrestrictedItems = set()
-        self.log = log.get('ItemLocContainer')
+        self.log = log.get("ItemLocContainer")
         self.checkConsistency()
 
     def checkConsistency(self):
-        assert len(self.unusedLocations) == len(self.itemPool), "Item({})/Locs({}) count mismatch".format(len(self.itemPool), len(self.unusedLocations))
+        assert len(self.unusedLocations) == len(self.itemPool), f"Item({len(self.itemPool)})/Locs({len(self.unusedLocations)}) count mismatch"
 
     def __eq__(self, rhs):
         eq = self.currentItems == rhs.currentItems
@@ -227,10 +229,10 @@ class ItemLocContainer(object):
         locs = []
         for il in self.itemLocations:
             loc = il.Location
-            self.log.debug("getLocsForSolver: {}".format(loc.Name))
+            self.log.debug(f"getLocsForSolver: {loc.Name}")
             # filter out restricted locations
             if loc.restricted:
-                self.log.debug("getLocsForSolver: restricted, remove {}".format(loc.Name))
+                self.log.debug(f"getLocsForSolver: restricted, remove {loc.Name}")
                 continue
             loc.itemName = il.Item.Type
             locs.append(loc)

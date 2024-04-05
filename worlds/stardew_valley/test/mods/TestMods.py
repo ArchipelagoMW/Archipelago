@@ -1,13 +1,20 @@
 import random
 
 from BaseClasses import get_seed
-from .. import setup_solo_multiworld, SVTestBase, SVTestCase, allsanity_options_without_mods, allsanity_options_with_mods, complete_options_with_default
-from ..assertion import ModAssertMixin, WorldAssertMixin
-from ... import items, Group, ItemClassification
-from ... import options
+
+from ... import Group, ItemClassification, items, options
 from ...items import items_by_group
 from ...mods.mod_data import all_mods
-from ...regions import RandomizationFlag, randomize_connections, create_final_connections_and_regions
+from ...regions import RandomizationFlag, create_final_connections_and_regions, randomize_connections
+from .. import (
+    SVTestBase,
+    SVTestCase,
+    allsanity_options_with_mods,
+    allsanity_options_without_mods,
+    complete_options_with_default,
+    setup_solo_multiworld,
+)
+from ..assertion import ModAssertMixin, WorldAssertMixin
 
 
 class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
@@ -134,7 +141,7 @@ class TestModEntranceRando(SVTestCase):
                         self.assertTrue(reverse_in_randomized, f"Connection {connection.reverse} should be randomized but it is not in the output.")
 
                 self.assertEqual(len(set(randomized_connections.values())), len(randomized_connections.values()),
-                                 f"Connections are duplicated in randomization.")
+                                 "Connections are duplicated in randomization.")
 
 
 class TestModTraps(SVTestCase):

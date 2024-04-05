@@ -1,7 +1,8 @@
-from typing import Union, List
+from typing import List, Union
 from unittest import TestCase
 
 from BaseClasses import MultiWorld
+
 from ... import item_table, location_table
 from ...mods.mod_data import ModNames
 

@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, Optional, Tuple, Union
+from typing import Dict, NamedTuple, Optional, Tuple
 
 from BaseClasses import ItemClassification
 

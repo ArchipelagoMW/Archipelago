@@ -1,8 +1,8 @@
-from ..roomEditor import RoomEditor, Object, ObjectWarp, ObjectHorizontal
-from ..assembler import ASM
-from ..locations import constants
 from typing import List
 
+from ..assembler import ASM
+from ..locations import constants
+from ..roomEditor import Object, ObjectHorizontal, ObjectWarp, RoomEditor
 
 # Room containing the boss
 BOSS_ROOMS = [

@@ -1,16 +1,33 @@
 from typing import List
 
-from BaseClasses import ItemClassification, Item
-from . import SVTestBase, allsanity_options_without_mods, \
-    allsanity_options_with_mods, minimal_locations_maximal_items, minimal_locations_maximal_items_with_island, get_minsanity_options, default_options
+from BaseClasses import Item, ItemClassification
+
 from .. import items, location_table, options
-from ..data.villagers_data import all_villagers_by_name, all_villagers_by_mod_by_name
+from ..data.villagers_data import all_villagers_by_mod_by_name, all_villagers_by_name
 from ..items import Group, item_table
 from ..locations import LocationTags
 from ..mods.mod_data import ModNames
-from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, ToolProgression, \
-    FriendsanityHeartSize
+from ..options import (
+    Chefsanity,
+    Craftsanity,
+    ExcludeGingerIsland,
+    Friendsanity,
+    FriendsanityHeartSize,
+    SeasonRandomization,
+    Shipsanity,
+    SpecialOrderLocations,
+    ToolProgression,
+)
 from ..strings.region_names import Region
+from . import (
+    SVTestBase,
+    allsanity_options_with_mods,
+    allsanity_options_without_mods,
+    default_options,
+    get_minsanity_options,
+    minimal_locations_maximal_items,
+    minimal_locations_maximal_items_with_island,
+)
 
 
 class TestBaseItemGeneration(SVTestBase):

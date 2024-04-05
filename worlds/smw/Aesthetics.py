@@ -239,7 +239,7 @@ valid_sfxs = [
     [0x0B, 0],      # ON/OFF switch
     [0x0C, 0],      # Carry item past the goal
     [0x0D, 0],      # Get cape
-    [0x0E, 0],      # Swim 
+    [0x0E, 0],      # Swim
     [0x0F, 0],      # Hurt while flying
     [0x10, 0],      # Magikoopa shoot magic
     [0x13, 0],      # Enemy stomp #1
@@ -692,7 +692,7 @@ def generate_curated_level_palette_data(rom, world: World):
     rom.write_bytes(0x0165B, bytearray([0x20, 0x30, 0xA3]))       # org $00965B : jmp $A330
     rom.write_bytes(0x02DD9, bytearray([0x20, 0x30, 0xA3]))       # org $00ADD9 : jmp $A330
     rom.write_bytes(0x02E1F, bytearray([0x20, 0x30, 0xA3]))       # org $00AE1F : jmp $A330
-    
+
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0000, bytearray([0x80, 0x09]))                #                     bra custom_palettes
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0002, bytearray([0xC2, 0x30]))                # .original           rep #$30
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0004, bytearray([0xA9, 0xDD, 0x7F]))          #                     lda #$7FDD
@@ -711,17 +711,17 @@ def generate_curated_level_palette_data(rom, world: World):
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0026, bytearray([0xAE, 0x0B, 0x01]))          # .get_index          ldx $010B
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0029, bytearray([0xBF, 0x00, 0xF2, 0x11]))    #                     lda.l level_tilesets,x
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x002D, bytearray([0x29, 0xFF, 0x00]))          #                     and #$00FF
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0030, bytearray([0xEB]))                      #                     xba 
+    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0030, bytearray([0xEB]))                      #                     xba
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0031, bytearray([0x85, 0x00]))                #                     sta !_tileset
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0033, bytearray([0xBF, 0x00, 0xF0, 0x11]))    #                     lda.l level_index,x
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0037, bytearray([0x29, 0xFF, 0x00]))          #                     and #$00FF
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x003A, bytearray([0x05, 0x00]))                #                     ora !_tileset
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x003C, bytearray([0x85, 0x0A]))                #                     sta !_ptr
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x003E, bytearray([0x0A]))                      #                     asl 
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x003F, bytearray([0x18]))                      #                     clc 
+    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x003E, bytearray([0x0A]))                      #                     asl
+    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x003F, bytearray([0x18]))                      #                     clc
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0040, bytearray([0x65, 0x0A]))                #                     adc !_ptr
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0042, bytearray([0x85, 0x0E]))                #                     sta !_num
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0044, bytearray([0xAA]))                      #                     tax 
+    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0044, bytearray([0xAA]))                      #                     tax
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0045, snes_level_palette_pointers_1)          # .back_color         lda.l palette_pointers,x
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0049, bytearray([0x85, 0x0A]))                #                     sta !_ptr
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x004B, snes_level_palette_pointers_2)          #                     lda.l palette_pointers+$02,x
@@ -751,9 +751,9 @@ def generate_curated_level_palette_data(rom, world: World):
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0088, bytearray([0xA9, 0x02, 0x00]))          #                     lda #$0002
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x008B, bytearray([0x85, 0x08]))                #                     sta !_y_span
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x008D, bytearray([0xA5, 0x0A]))                #                     lda !_ptr
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x008F, bytearray([0x48]))                      #                     pha 
+    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x008F, bytearray([0x48]))                      #                     pha
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0090, bytearray([0x20, 0xE4, 0x80]))          #                     jsr load_colors
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0093, bytearray([0x68]))                      #                     pla 
+    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0093, bytearray([0x68]))                      #                     pla
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0094, bytearray([0x85, 0x0A]))                #                     sta !_ptr
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0096, bytearray([0xA9, 0x32, 0x01]))          #                     lda.w #$0099*$02
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0099, bytearray([0x85, 0x04]))                #                     sta !_index
@@ -771,7 +771,7 @@ def generate_curated_level_palette_data(rom, world: World):
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00B7, bytearray([0x20, 0xE4, 0x80]))          #                     jsr load_colors
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00BA, bytearray([0xA5, 0x00]))                # .sprite_specific    lda !_tileset
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00BC, bytearray([0xC9, 0x00, 0x05]))          #                     cmp #$0500
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00BF, bytearray([0xD0, 0x1D]))                #                     bne .end 
+    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00BF, bytearray([0xD0, 0x1D]))                #                     bne .end
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00C1, bytearray([0xAD, 0x2E, 0x19]))          #                     lda $192E
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00C4, bytearray([0x29, 0x0F, 0x00]))          #                     and #$000F
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00C7, bytearray([0xC9, 0x02, 0x00]))          #                     cmp #$0002
@@ -785,27 +785,27 @@ def generate_curated_level_palette_data(rom, world: World):
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00DB, bytearray([0x20, 0xE4, 0x80]))          #                     jsr load_colors
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00DE, bytearray([0xE2, 0x30]))                # .end                sep #$30
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00E0, bytearray([0x5C, 0xEC, 0xAC, 0x00]))    #                     jml $00ACEC
-    
+
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00E4, bytearray([0xA6, 0x04]))                # load_colors:        ldx !_index
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00E6, bytearray([0xA4, 0x06]))                #                     ldy !_x_span
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00E8, bytearray([0xA7, 0x0A]))                # .x_loop             lda [!_ptr]
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00EA, bytearray([0x9D, 0x03, 0x07]))          #                     sta $0703,x
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00ED, bytearray([0xE6, 0x0A]))                #                     inc !_ptr
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00EF, bytearray([0xE6, 0x0A]))                #                     inc !_ptr
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F1, bytearray([0xE8]))                      #                     inx 
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F2, bytearray([0xE8]))                      #                     inx 
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F3, bytearray([0x88]))                      #                     dey 
+    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F1, bytearray([0xE8]))                      #                     inx
+    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F2, bytearray([0xE8]))                      #                     inx
+    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F3, bytearray([0x88]))                      #                     dey
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F4, bytearray([0x10, 0xF2]))                #                     bpl .x_loop
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F6, bytearray([0xA5, 0x04]))                #                     lda !_index
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F8, bytearray([0x18]))                      #                     clc 
+    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F8, bytearray([0x18]))                      #                     clc
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F9, bytearray([0x69, 0x20, 0x00]))          #                     adc #$0020
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00FC, bytearray([0x85, 0x04]))                #                     sta !_index
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00FE, bytearray([0xC6, 0x08]))                #                     dec !_y_span
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0100, bytearray([0x10, 0xE2]))                #                     bpl load_colors
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0102, bytearray([0x60]))                      #                     rts 
+    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0102, bytearray([0x60]))                      #                     rts
 
     # Load palette paths
-    data = pkgutil.get_data(__name__, f"data/palettes/level/palettes.json").decode("utf-8")
+    data = pkgutil.get_data(__name__, "data/palettes/level/palettes.json").decode("utf-8")
     tilesets = json.loads(data)
 
     # Writes the level tileset index to ROM
@@ -820,7 +820,7 @@ def generate_curated_level_palette_data(rom, world: World):
             tileset = tileset_names[0x19]
         palette = world.random.randint(0, len(tilesets[tileset])-1)
         rom.write_bytes(PALETTE_INDEX_ADDR + level_id, bytearray([palette]))
-        
+
     # Writes the actual level palette data and pointer to said data to the ROM
     pal_offset = 0x0000
     tileset_num = 0
@@ -872,18 +872,18 @@ def generate_curated_map_palette_data(rom, world: World):
     rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0009, bytearray([0xC2, 0x30]))                  # map_palettes:       rep #$30
     rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x000B, bytearray([0xAD, 0x31, 0x19]))            # .prepare_index      lda $1931
     rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x000E, bytearray([0x29, 0x0F, 0x00]))            #                     and #$000F
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0011, bytearray([0x3A]))                        #                     dec 
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0012, bytearray([0xAA]))                        #                     tax 
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0013, bytearray([0xEB]))                        #                     xba 
+    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0011, bytearray([0x3A]))                        #                     dec
+    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0012, bytearray([0xAA]))                        #                     tax
+    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0013, bytearray([0xEB]))                        #                     xba
     rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0014, bytearray([0x85, 0x0E]))                  #                     sta !_num
     rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0016, bytearray([0xBF, 0x00, 0xF4, 0x11]))      #                     lda.l map_index,x
     rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x001A, bytearray([0x29, 0xFF, 0x00]))            #                     and #$00FF
     rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x001D, bytearray([0x05, 0x0E]))                  #                     ora !_num
     rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x001F, bytearray([0x85, 0x0A]))                  #                     sta !_ptr
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0021, bytearray([0x0A]))                        #                     asl 
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0022, bytearray([0x18]))                        #                     clc 
+    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0021, bytearray([0x0A]))                        #                     asl
+    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0022, bytearray([0x18]))                        #                     clc
     rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0023, bytearray([0x65, 0x0A]))                  #                     adc !_ptr
-    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0025, bytearray([0xAA]))                        #                     tax 
+    rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0025, bytearray([0xAA]))                        #                     tax
     rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x0026, snes_map_palette_pointers_1)              #                     lda.l map_palette_pointers,x
     rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x002A, bytearray([0x85, 0x0A]))                  #                     sta !_ptr
     rom.write_bytes(PALETTE_MAP_CODE_ADDR + 0x002C, snes_map_palette_pointers_2)              #                     lda.l map_palette_pointers+$02,x
@@ -942,7 +942,7 @@ def generate_curated_map_palette_data(rom, world: World):
     rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0028, bytearray([0xA2, 0x06]))                  #                     ldx #$06
     rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x002A, bytearray([0xBD, 0x49, 0x92]))            # .loop               lda.w $9249,x
     rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x002D, bytearray([0x9D, 0x20, 0x43]))            #                     sta $4320,x
-    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0030, bytearray([0xCA]))                        #                     dex 
+    rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0030, bytearray([0xCA]))                        #                     dex
     rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0031, bytearray([0x10, 0xF7]))                  #                     bpl .loop
     rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0033, bytearray([0xA9, 0x04]))                  #                     lda #$04
     rom.write_bytes(PALETTE_UPLOADER_EDIT + 0x0035, bytearray([0x8D, 0x0B, 0x42]))            #                     sta $420B
@@ -956,20 +956,20 @@ def generate_curated_map_palette_data(rom, world: World):
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00EA, bytearray([0x9D, 0x03, 0x07]))          #                     sta $0703,x
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00ED, bytearray([0xE6, 0x0A]))                #                     inc !_ptr
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00EF, bytearray([0xE6, 0x0A]))                #                     inc !_ptr
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F1, bytearray([0xE8]))                      #                     inx 
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F2, bytearray([0xE8]))                      #                     inx 
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F3, bytearray([0x88]))                      #                     dey 
+    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F1, bytearray([0xE8]))                      #                     inx
+    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F2, bytearray([0xE8]))                      #                     inx
+    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F3, bytearray([0x88]))                      #                     dey
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F4, bytearray([0x10, 0xF2]))                #                     bpl .x_loop
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F6, bytearray([0xA5, 0x04]))                #                     lda !_index
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F8, bytearray([0x18]))                      #                     clc 
+    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F8, bytearray([0x18]))                      #                     clc
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00F9, bytearray([0x69, 0x20, 0x00]))          #                     adc #$0020
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00FC, bytearray([0x85, 0x04]))                #                     sta !_index
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x00FE, bytearray([0xC6, 0x08]))                #                     dec !_y_span
     rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0100, bytearray([0x10, 0xE2]))                #                     bpl load_colors
-    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0102, bytearray([0x60]))                      #                     rts 
+    rom.write_bytes(PALETTE_LEVEL_CODE_ADDR + 0x0102, bytearray([0x60]))                      #                     rts
 
     # Load palette paths
-    data = pkgutil.get_data(__name__, f"data/palettes/map/palettes.json").decode("utf-8")
+    data = pkgutil.get_data(__name__, "data/palettes/map/palettes.json").decode("utf-8")
     maps = json.loads(data)
 
     for map_id in range(0x07):
@@ -1041,7 +1041,7 @@ def read_palette_file(tileset, filename, type_):
         colors += bytearray([palette_file[(0xF1*2)+(i)] for i in range(14)])
         colors += bytearray([palette_file[(0xE9*2)+(i)] for i in range(14)])
         colors += bytearray([palette_file[(0xF9*2)+(i)] for i in range(14)])
-    
+
     elif type_ == "map":
         # Copy layer 2 colors
         colors += bytearray([palette_file[(0x41*2)+(i)] for i in range(14)])

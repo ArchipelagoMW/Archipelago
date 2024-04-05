@@ -1,4 +1,5 @@
 from test.bases import WorldTestBase
+
 from .. import MessengerWorld
 
 

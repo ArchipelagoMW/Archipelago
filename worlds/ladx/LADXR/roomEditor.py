@@ -1,6 +1,6 @@
 import json
-from . import entityData
 
+from . import entityData
 
 WARP_TYPE_IDS = {0xE1, 0xE2, 0xE3, 0xBA, 0xA8, 0xBE, 0xCB, 0xC2, 0xC6}
 ALT_ROOM_OVERLAYS = {"Alt06": 0x1040, "Alt0E": 0x1090, "Alt1B": 0x10E0, "Alt2B": 0x1130, "Alt79": 0x1180, "Alt8C": 0x11D0}
@@ -190,9 +190,9 @@ class RoomEditor:
         self.animation_id = 0
         self.tileset_index = 0x0F
         self.palette_index = 0x01
-        
+
         data = json.load(open(filename))
-        
+
         for prop in data.get("properties", []):
             if prop["name"] == "palette":
                 self.palette_index = int(prop["value"], 16)

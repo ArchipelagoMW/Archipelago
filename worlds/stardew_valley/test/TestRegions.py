@@ -3,11 +3,18 @@ import unittest
 from typing import Set
 
 from BaseClasses import get_seed
-from . import SVTestCase, complete_options_with_default
+
 from ..options import EntranceRandomization, ExcludeGingerIsland
-from ..regions import vanilla_regions, vanilla_connections, randomize_connections, RandomizationFlag, create_final_connections_and_regions
+from ..regions import (
+    RandomizationFlag,
+    create_final_connections_and_regions,
+    randomize_connections,
+    vanilla_connections,
+    vanilla_regions,
+)
 from ..strings.entrance_names import Entrance as EntranceName
 from ..strings.region_names import Region as RegionName
+from . import SVTestCase, complete_options_with_default
 
 connections_by_name = {connection.name for connection in vanilla_connections}
 regions_by_name = {region.name for region in vanilla_regions}
@@ -75,7 +82,7 @@ class TestEntranceRando(SVTestCase):
                         self.assertTrue(reverse_in_randomized, f"Connection {connection.reverse} should be randomized but it is not in the output.")
 
                 self.assertEqual(len(set(randomized_connections.values())), len(randomized_connections.values()),
-                                 f"Connections are duplicated in randomization.")
+                                 "Connections are duplicated in randomization.")
 
     def test_entrance_randomization_without_island(self):
         for option, flag in [(EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
@@ -106,7 +113,7 @@ class TestEntranceRando(SVTestCase):
                                           f"Connection {connection.reverse} should be randomized but it is not in the output.")
 
                 self.assertEqual(len(set(randomized_connections.values())), len(randomized_connections.values()),
-                                 f"Connections are duplicated in randomization.")
+                                 "Connections are duplicated in randomization.")
 
     def test_cannot_put_island_access_on_island(self):
         sv_options = complete_options_with_default({

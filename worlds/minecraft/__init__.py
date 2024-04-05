@@ -1,18 +1,18 @@
-import os
 import json
-import settings
+import os
 import typing
-from base64 import b64encode, b64decode
-from typing import Dict, Any
+from base64 import b64decode, b64encode
+from typing import Any, Dict
 
-from BaseClasses import Region, Entrance, Item, Tutorial, ItemClassification, Location
-from worlds.AutoWorld import World, WebWorld
+import settings
+from BaseClasses import Entrance, Item, ItemClassification, Location, Region, Tutorial
+from worlds.AutoWorld import WebWorld, World
 
 from . import Constants
-from .Options import minecraft_options
-from .Structures import shuffle_structures
 from .ItemPool import build_item_pool, get_junk_item_names
+from .Options import minecraft_options
 from .Rules import set_rules
+from .Structures import shuffle_structures
 
 client_version = 9
 
@@ -97,21 +97,21 @@ class MinecraftWorld(World):
     def _get_mc_data(self) -> Dict[str, Any]:
         exits = [connection[0] for connection in Constants.region_info["default_connections"]]
         return {
-            'world_seed': self.multiworld.per_slot_randoms[self.player].getrandbits(32),
-            'seed_name': self.multiworld.seed_name,
-            'player_name': self.multiworld.get_player_name(self.player),
-            'player_id': self.player,
-            'client_version': client_version,
-            'structures': {exit: self.multiworld.get_entrance(exit, self.player).connected_region.name for exit in exits},
-            'advancement_goal': self.multiworld.advancement_goal[self.player].value,
-            'egg_shards_required': min(self.multiworld.egg_shards_required[self.player].value,
+            "world_seed": self.multiworld.per_slot_randoms[self.player].getrandbits(32),
+            "seed_name": self.multiworld.seed_name,
+            "player_name": self.multiworld.get_player_name(self.player),
+            "player_id": self.player,
+            "client_version": client_version,
+            "structures": {exit: self.multiworld.get_entrance(exit, self.player).connected_region.name for exit in exits},
+            "advancement_goal": self.multiworld.advancement_goal[self.player].value,
+            "egg_shards_required": min(self.multiworld.egg_shards_required[self.player].value,
                                        self.multiworld.egg_shards_available[self.player].value),
-            'egg_shards_available': self.multiworld.egg_shards_available[self.player].value,
-            'required_bosses': self.multiworld.required_bosses[self.player].current_key,
-            'MC35': bool(self.multiworld.send_defeated_mobs[self.player].value),
-            'death_link': bool(self.multiworld.death_link[self.player].value),
-            'starting_items': str(self.multiworld.starting_items[self.player].value),
-            'race': self.multiworld.is_race,
+            "egg_shards_available": self.multiworld.egg_shards_available[self.player].value,
+            "required_bosses": self.multiworld.required_bosses[self.player].current_key,
+            "MC35": bool(self.multiworld.send_defeated_mobs[self.player].value),
+            "death_link": bool(self.multiworld.death_link[self.player].value),
+            "starting_items": str(self.multiworld.starting_items[self.player].value),
+            "race": self.multiworld.is_race,
         }
 
     def create_item(self, name: str) -> Item:
@@ -174,8 +174,8 @@ class MinecraftWorld(World):
     def generate_output(self, output_directory: str) -> None:
         data = self._get_mc_data()
         filename = f"{self.multiworld.get_out_file_name_base(self.player)}.apmc"
-        with open(os.path.join(output_directory, filename), 'wb') as f:
-            f.write(b64encode(bytes(json.dumps(data), 'utf-8')))
+        with open(os.path.join(output_directory, filename), "wb") as f:
+            f.write(b64encode(bytes(json.dumps(data), "utf-8")))
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_mc_data()
@@ -198,6 +198,6 @@ class MinecraftItem(Item):
 
 def mc_update_output(raw_data, server, port):
     data = json.loads(b64decode(raw_data))
-    data['server'] = server
-    data['port'] = port
-    return b64encode(bytes(json.dumps(data), 'utf-8'))
+    data["server"] = server
+    data["port"] = port
+    return b64encode(bytes(json.dumps(data), "utf-8"))

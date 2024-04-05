@@ -1,6 +1,7 @@
-﻿from ....Region import Z3Region, RewardType
-from ....Config import Config
+﻿from ....Config import Config
 from ....Location import Location, LocationType
+from ....Region import RewardType, Z3Region
+
 
 class NorthEast(Z3Region):
     Name = "Light World North East"

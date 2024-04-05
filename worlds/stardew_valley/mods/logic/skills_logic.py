@@ -1,9 +1,8 @@
 from typing import Union
 
-from .magic_logic import MagicLogicMixin
 from ...data.villagers_data import all_villagers
 from ...logic.action_logic import ActionLogicMixin
-from ...logic.base_logic import BaseLogicMixin, BaseLogic
+from ...logic.base_logic import BaseLogic, BaseLogicMixin
 from ...logic.building_logic import BuildingLogicMixin
 from ...logic.cooking_logic import CookingLogicMixin
 from ...logic.fishing_logic import FishingLogicMixin
@@ -14,16 +13,16 @@ from ...logic.relationship_logic import RelationshipLogicMixin
 from ...logic.tool_logic import ToolLogicMixin
 from ...mods.mod_data import ModNames
 from ...options import SkillProgression
-from ...stardew_rule import StardewRule, False_, True_
-from ...strings.ap_names.mods.mod_items import SkillLevel
-from ...strings.craftable_names import ModCraftable, ModMachine
+from ...stardew_rule import False_, StardewRule, True_
 from ...strings.building_names import Building
+from ...strings.craftable_names import ModCraftable, ModMachine
 from ...strings.geode_names import Geode
 from ...strings.machine_names import Machine
 from ...strings.region_names import Region
 from ...strings.skill_names import ModSkill
 from ...strings.spells import MagicSpell
 from ...strings.tool_names import Tool, ToolMaterial
+from .magic_logic import MagicLogicMixin
 
 
 class ModSkillLogicMixin(BaseLogicMixin):

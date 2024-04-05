@@ -1,18 +1,18 @@
 from functools import cached_property
-from typing import Union, List
+from typing import List, Union
 
 from Utils import cache_self1
+
+from ..locations import LocationTags, locations_by_tag
+from ..options import ExcludeGingerIsland, Shipsanity, SpecialOrderLocations
+from ..stardew_rule import And, StardewRule
+from ..strings.ap_names.event_names import Event
+from ..strings.building_names import Building
 from .base_logic import BaseLogic, BaseLogicMixin
 from .building_logic import BuildingLogicMixin
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
-from ..locations import LocationTags, locations_by_tag
-from ..options import ExcludeGingerIsland, Shipsanity
-from ..options import SpecialOrderLocations
-from ..stardew_rule import StardewRule, And
-from ..strings.ap_names.event_names import Event
-from ..strings.building_names import Building
 
 
 class ShippingLogicMixin(BaseLogicMixin):

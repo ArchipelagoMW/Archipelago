@@ -3,6 +3,7 @@ Application settings / host.yaml interface using type hints.
 This is different from player settings.
 """
 
+import os
 import os.path
 import shutil
 import sys
@@ -10,8 +11,7 @@ import typing
 import warnings
 from enum import IntEnum
 from threading import Lock
-from typing import cast, Any, BinaryIO, ClassVar, Dict, Iterator, List, Optional, TextIO, Tuple, Union, TypeVar
-import os
+from typing import Any, BinaryIO, ClassVar, Dict, Iterator, List, Optional, TextIO, Tuple, TypeVar, Union, cast
 
 __all__ = [
     "get_settings", "fmt_doc", "no_gui",
@@ -199,7 +199,8 @@ class Group:
     @classmethod
     def _dump_value(cls, value: Any, f: TextIO, indent: str) -> None:
         """Write a single yaml line to f"""
-        from Utils import dump, Dumper as BaseDumper
+        from Utils import Dumper as BaseDumper
+        from Utils import dump
         yaml_line: str = dump(value, Dumper=cast(BaseDumper, cls._dumper))
         assert yaml_line.count("\n") == 1, f"Unexpected input for yaml dumper: {value}"
         f.write(f"{indent}{yaml_line}")
@@ -209,8 +210,9 @@ class Group:
         """Write a group, dict or sequence item to f, where attr can be a scalar or a collection"""
 
         # lazy construction of yaml Dumper to avoid loading Utils early
+        from yaml import MappingNode, ScalarNode
+
         from Utils import Dumper as BaseDumper
-        from yaml import ScalarNode, MappingNode
         if not hasattr(cls, "_dumper"):
             if cls is Group or not hasattr(Group, "_dumper"):
                 class Dumper(BaseDumper):
@@ -364,7 +366,7 @@ class FilePath(Path):
     def browse(self: T,
                filetypes: Optional[typing.Sequence[typing.Tuple[str, typing.Sequence[str]]]] = None, **kwargs: Any)\
             -> Optional[T]:
-        from Utils import open_filename, is_windows
+        from Utils import is_windows, open_filename
         if not filetypes:
             if self.is_exe:
                 name, ext = "Program", ".exe" if is_windows else ""
@@ -836,7 +838,8 @@ def get_settings() -> Settings:
         res = getattr(get_settings, "_cache", None)
         if not res:
             import os
-            from Utils import user_path, local_path
+
+            from Utils import local_path, user_path
             filenames = ("options.yaml", "host.yaml")
             locations: List[str] = []
             if os.path.join(os.getcwd()) != local_path():

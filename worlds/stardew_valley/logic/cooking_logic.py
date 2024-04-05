@@ -2,8 +2,27 @@ from functools import cached_property
 from typing import Union
 
 from Utils import cache_self1
+
+from ..data.recipe_data import (
+    CookingRecipe,
+    FriendshipSource,
+    QueenOfSauceSource,
+    RecipeSource,
+    ShopFriendshipSource,
+    ShopSource,
+    SkillSource,
+    StarterSource,
+    all_cooking_recipes_by_name,
+)
+from ..data.recipe_source import CutsceneSource, ShopTradeSource
+from ..locations import LocationTags, locations_by_tag
+from ..options import Chefsanity, ExcludeGingerIsland
+from ..stardew_rule import And, False_, StardewRule, True_
+from ..strings.region_names import Region
+from ..strings.skill_names import Skill
+from ..strings.tv_channel_names import Channel
 from .action_logic import ActionLogicMixin
-from .base_logic import BaseLogicMixin, BaseLogic
+from .base_logic import BaseLogic, BaseLogicMixin
 from .building_logic import BuildingLogicMixin
 from .has_logic import HasLogicMixin
 from .money_logic import MoneyLogicMixin
@@ -12,17 +31,6 @@ from .region_logic import RegionLogicMixin
 from .relationship_logic import RelationshipLogicMixin
 from .season_logic import SeasonLogicMixin
 from .skill_logic import SkillLogicMixin
-from ..data.recipe_data import RecipeSource, StarterSource, ShopSource, SkillSource, FriendshipSource, \
-    QueenOfSauceSource, CookingRecipe, ShopFriendshipSource, \
-    all_cooking_recipes_by_name
-from ..data.recipe_source import CutsceneSource, ShopTradeSource
-from ..locations import locations_by_tag, LocationTags
-from ..options import Chefsanity
-from ..options import ExcludeGingerIsland
-from ..stardew_rule import StardewRule, True_, False_, And
-from ..strings.region_names import Region
-from ..strings.skill_names import Skill
-from ..strings.tv_channel_names import Channel
 
 
 class CookingLogicMixin(BaseLogicMixin):

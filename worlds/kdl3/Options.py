@@ -1,8 +1,8 @@
 import random
 from dataclasses import dataclass
 
-from Options import DeathLink, Choice, Toggle, OptionDict, Range, PlandoBosses, DefaultOnToggle, \
-    PerGameCommonOptions
+from Options import Choice, DeathLink, DefaultOnToggle, OptionDict, PerGameCommonOptions, PlandoBosses, Range, Toggle
+
 from .Names import LocationName
 
 

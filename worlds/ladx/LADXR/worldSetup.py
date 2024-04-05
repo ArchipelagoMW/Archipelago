@@ -1,8 +1,6 @@
-from .patches import enemies, bingo
-from .locations.items import *
 from .entranceInfo import ENTRANCE_INFO
-
-
+from .locations.items import *
+from .patches import bingo
 
 MULTI_CHEST_OPTIONS = [MAGIC_POWDER, BOMB, MEDICINE, RUPEES_50, RUPEES_20, RUPEES_100, RUPEES_200, RUPEES_500, SEASHELL, GEL, ARROWS_10, SINGLE_ARROW]
 MULTI_CHEST_WEIGHTS = [20,           20,   20,       50,        50,        20,         10,         5,          5,        20,  10,        10]
@@ -46,7 +44,7 @@ class WorldSetup:
         if connectorsOnly:
             if settings.entranceshuffle in ("advanced", "expert", "insanity"):
                 entrances = [k for k, v in ENTRANCE_INFO.items() if v.type == "connector"]
-            
+
             return entrances
 
         if settings.dungeonshuffle and settings.entranceshuffle == "none":
@@ -75,7 +73,7 @@ class WorldSetup:
             if start_location != "start_house":
                 self.entrance_mapping[start_location] = "start_house"
                 self.entrance_mapping["start_house"] = start_location
-        
+
         entrances = self.getEntrancePool(settings)
         for entrance in entrances.copy():
             self.entrance_mapping[entrance] = entrances.pop(rnd.randrange(len(entrances)))
@@ -103,12 +101,12 @@ class WorldSetup:
             values = [name for name in self.miniboss_mapping.values()]
             for key in self.miniboss_mapping.keys():
                 self.miniboss_mapping[key] = rnd.choice(values)
-                if settings.miniboss == 'shuffle':
+                if settings.miniboss == "shuffle":
                     values.remove(self.miniboss_mapping[key])
 
-        if settings.goal == 'random':
+        if settings.goal == "random":
             self.goal = rnd.randint(-1, 8)
-        elif settings.goal == 'open':
+        elif settings.goal == "open":
             self.goal = -1
         elif settings.goal in {"seashells", "bingo", "bingo-full"}:
             self.goal = settings.goal

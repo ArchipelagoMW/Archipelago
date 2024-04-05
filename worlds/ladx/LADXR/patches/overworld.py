@@ -1,8 +1,9 @@
-from ..assembler import ASM
-from ..roomEditor import RoomEditor, ObjectWarp, Object, WARP_TYPE_IDS
-from .. import entityData
-import os
 import json
+import os
+
+from .. import entityData
+from ..assembler import ASM
+from ..roomEditor import WARP_TYPE_IDS, ObjectWarp, RoomEditor
 
 
 def patchOverworldTilesets(rom):
@@ -157,9 +158,9 @@ def exportOverworld(rom):
             ]
         }
         if isinstance(room_index, str):
-            json.dump(data, open("%s/overworld/export/%s.json" % (path, room_index), "wt"))
+            json.dump(data, open("%s/overworld/export/%s.json" % (path, room_index), "w"))
         else:
-            json.dump(data, open("%s/overworld/export/%02X.json" % (path, room_index), "wt"))
+            json.dump(data, open("%s/overworld/export/%02X.json" % (path, room_index), "w"))
 
         if not os.path.exists("%s/overworld/export/%s" % (path, image_filename)):
             tilemap = rom.banks[0x2F][tileset_index*0x100:tileset_index*0x100+0x200]
@@ -217,7 +218,7 @@ def exportOverworld(rom):
         "onlyShowAdjacentMaps": False,
         "type": "world"
     }
-    json.dump(world, open("%s/overworld/export/world.world" % (path), "wt"))
+    json.dump(world, open("%s/overworld/export/world.world" % (path), "w"))
 
 
 def isNormalOverworld(rom):

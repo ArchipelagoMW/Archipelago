@@ -3,14 +3,13 @@ import sys
 import typing
 import unittest
 from argparse import Namespace
-
-from Generate import get_seed_name
 from test.general import gen_steps
-from worlds import AutoWorld
-from worlds.AutoWorld import World, call_all
 
-from BaseClasses import Location, MultiWorld, CollectionState, ItemClassification, Item
+from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld
+from Generate import get_seed_name
+from worlds import AutoWorld
 from worlds.alttp.Items import item_factory
+from worlds.AutoWorld import World, call_all
 
 
 class TestBase(unittest.TestCase):
@@ -209,7 +208,7 @@ class WorldTestBase(unittest.TestCase):
             items = (items,)
         for item in items:
             self.multiworld.state.collect(item)
-    
+
     def remove_by_name(self, item_names: typing.Union[str, typing.Iterable[str]]) -> typing.List[Item]:
         """Remove all of the items in the item pool with the given names from state"""
         items = self.get_items_by_name(item_names)
@@ -232,7 +231,7 @@ class WorldTestBase(unittest.TestCase):
     def can_reach_entrance(self, entrance: str) -> bool:
         """Determines if the current state can reach the provided entrance name"""
         return self.multiworld.state.can_reach(entrance, "Entrance", self.player)
-    
+
     def can_reach_region(self, region: str) -> bool:
         """Determines if the current state can reach the provided region name"""
         return self.multiworld.state.can_reach(region, "Region", self.player)

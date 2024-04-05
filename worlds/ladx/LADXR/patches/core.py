@@ -1,8 +1,8 @@
-from ..assembler import ASM
-from ..entranceInfo import ENTRANCE_INFO
-from ..roomEditor import RoomEditor, ObjectWarp, ObjectHorizontal
-from ..backgroundEditor import BackgroundEditor
 from .. import utils
+from ..assembler import ASM
+from ..backgroundEditor import BackgroundEditor
+from ..entranceInfo import ENTRANCE_INFO
+from ..roomEditor import ObjectHorizontal, ObjectWarp, RoomEditor
 
 
 def bugfixWrittingWrongRoomStatus(rom):
@@ -75,7 +75,7 @@ def cleanup(rom):
     re.store(rom, 0x1ED)
     re.store(rom, 0x1FC)  # Beta room
 
-    rom.texts[0x02B] = b'' # unused text
+    rom.texts[0x02B] = b"" # unused text
 
 
 def disablePhotoPrint(rom):
@@ -183,21 +183,21 @@ noWrapDown:
     y = warp.target_y
 
     one_way = [
-        'd0',
-        'd1',
-        'd3',
-        'd4',
-        'd6',
-        'd8',
-        'animal_cave',
-        'right_fairy',
-        'rooster_grave',
-        'prairie_left_cave2',
-        'prairie_left_fairy',
-        'armos_fairy',
-        'boomerang_cave',
-        'madbatter_taltal',
-        'forest_madbatter',
+        "d0",
+        "d1",
+        "d3",
+        "d4",
+        "d6",
+        "d8",
+        "animal_cave",
+        "right_fairy",
+        "rooster_grave",
+        "prairie_left_cave2",
+        "prairie_left_fairy",
+        "armos_fairy",
+        "boomerang_cave",
+        "madbatter_taltal",
+        "forest_madbatter",
     ]
 
     one_way = {ENTRANCE_INFO[x].room for x in one_way}
@@ -348,7 +348,7 @@ increaseSecMinHours:
     rom.patch(0x17, 0x2E9E, ASM("res 2, [hl]"), "", fill_nop=True)
     # We need to completely reorder link sitting on the raft to work with 16x8 sprites.
     sprites = rom.banks[0x38][0x1600:0x1800]
-    sprites[0x1F0:0x200] = b'\x00' * 16
+    sprites[0x1F0:0x200] = b"\x00" * 16
     for index, position in enumerate(
             (0, 0x1F,
              1, 0x1F, 2, 0x1F,
@@ -551,10 +551,10 @@ def addWarpImprovements(rom, extra_warps):
 10230020
 10000000""", key="0231")
     MINIMAP_BASE = 0x3800
-    
+
     # This is replacing a junk tile never used on the minimap
     rom.banks[0x2C][MINIMAP_BASE + len(tile) * 0x65 : MINIMAP_BASE + len(tile) * 0x66] = tile
-    
+
     # Allow using ENTITY_WARP for finding which map sections are warps
     # Interesting - 3CA0 should be free, but something has pushed all the code forward a byte
     rom.patch(0x02, 0x3CA1, None, ASM("""
@@ -608,7 +608,7 @@ def addWarpImprovements(rom, extra_warps):
         ret
     """), fill_nop=True)
 
-    # Patch over some instructions that decided if we are in debug mode holding some 
+    # Patch over some instructions that decided if we are in debug mode holding some
     # buttons with instead checking for FFDD (why FFDD? It appears to be never used anywhere, so we repurpose it for "is in teleport mode")
     rom.banks[0x01][0x17B8] = 0xDD
     rom.banks[0x01][0x17B9] = 0xFF
@@ -629,7 +629,7 @@ def addWarpImprovements(rom, extra_warps):
 
     # This disables the arrows around the selection bubble
     #rom.patch(0x01, 0x1B6F, None, ASM("ret"), fill_nop=True)
-    
+
     # Fix lag when moving the cursor
     # One option - just disable the delay code
     #rom.patch(0x01, 0x1A76, 0x1A76+3, ASM("xor a"), fill_nop=True)
@@ -677,7 +677,7 @@ def addWarpImprovements(rom, extra_warps):
                 room.overlay[object.x + object.count + object.y * 10] = object.type_id
                 object.count += 1
         room.store(rom)
-    
+
     for warp in all_warps:
         # Set icon
         rom.banks[0x20][0x168B + warp] = 0x55
@@ -685,18 +685,18 @@ def addWarpImprovements(rom, extra_warps):
         if not rom.banks[0x01][0x1959 + warp]:
             rom.banks[0x01][0x1959 + warp] = 0x42
         # Set palette
-        # rom.banks[0x20][0x178B + 0x95] = 0x1      
+        # rom.banks[0x20][0x178B + 0x95] = 0x1
 
     # Setup [?!] icon on map and associated text
     rom.banks[0x01][0x1909 + 0x42] = 0x2B
-    rom.texts[0x02B] = utils.formatText('Warp')
+    rom.texts[0x02B] = utils.formatText("Warp")
 
     # call warp function (why not just jmp?!)
     rom.patch(0x01, 0x17C3, None, ASM("""
     call $7E7B
     ret
     """))
-    
+
     # Build a switch statement by hand
     warp_jump = "".join(f"cp ${hex(warp)[2:]}\njr z, success\n" for warp in all_warps)
 

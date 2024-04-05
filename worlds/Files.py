@@ -2,12 +2,11 @@ from __future__ import annotations
 
 import abc
 import json
-import zipfile
-from enum import IntEnum
 import os
 import threading
-
-from typing import ClassVar, Dict, List, Literal, Tuple, Any, Optional, Union, BinaryIO, overload, Sequence
+import zipfile
+from enum import IntEnum
+from typing import Any, BinaryIO, ClassVar, Dict, List, Literal, Optional, Sequence, Tuple, Union, overload
 
 import bsdiff4
 
@@ -264,7 +263,7 @@ class APProcedurePatch(APAutoPatchInterface):
                 base_data = extension(self, base_data, *args)
             else:
                 raise NotImplementedError(f"Unknown procedure {step} for {self.game}.")
-        with open(target, 'wb') as f:
+        with open(target, "wb") as f:
             f.write(base_data)
 
 

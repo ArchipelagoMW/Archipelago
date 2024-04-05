@@ -1,10 +1,9 @@
 # Tests that yaml wrappers in Utils.py do what they should
 
 import unittest
-from typing import cast, Any, ClassVar, Dict
+from typing import Any, ClassVar, Dict, cast
 
-from Utils import dump, Dumper  # type: ignore[attr-defined]
-from Utils import parse_yaml, parse_yamls, unsafe_parse_yaml
+from Utils import Dumper, dump, parse_yaml, parse_yamls, unsafe_parse_yaml  # type: ignore[attr-defined]
 
 
 class AClass:

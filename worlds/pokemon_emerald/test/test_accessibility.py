@@ -1,8 +1,8 @@
 from Options import Toggle
 
-from . import PokemonEmeraldTestBase
-from ..util import location_name_to_label
 from ..options import NormanRequirement
+from ..util import location_name_to_label
+from . import PokemonEmeraldTestBase
 
 
 class TestBasic(PokemonEmeraldTestBase):

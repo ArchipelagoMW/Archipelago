@@ -1,7 +1,9 @@
-from . import KDL3TestBase
-from worlds.generic import PlandoConnection
-from ..Names import LocationName
 import typing
+
+from worlds.generic import PlandoConnection
+
+from ..Names import LocationName
+from . import KDL3TestBase
 
 
 class TestLocations(KDL3TestBase):

@@ -1,4 +1,4 @@
-from Options import Choice, FreeText, Toggle, Range
+from Options import Choice, FreeText, Range, Toggle
 
 
 class Logic(Choice):

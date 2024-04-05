@@ -1,6 +1,9 @@
-from typing import Tuple, Dict, Union, List
+from typing import Dict, List, Tuple, Union
+
 from BaseClasses import MultiWorld
-from .Options import timespinner_options, is_option_enabled, get_option_value
+
+from .Options import get_option_value, is_option_enabled, timespinner_options
+
 
 class PreCalculatedWeights:
     pyramid_keys_unlock: str
@@ -47,7 +50,7 @@ class PreCalculatedWeights:
             self.flood_moat = False
             self.flood_courtyard = False
             self.flood_lake_desolation = False
-            self.flood_lake_serene = True 
+            self.flood_lake_serene = True
             self.flood_lake_serene_bridge = False
             self.flood_lab = False
 
@@ -82,9 +85,9 @@ class PreCalculatedWeights:
 
         if not world:
             return (
-                present_teleportation_gates[0], 
-                present_teleportation_gates[0], 
-                past_teleportation_gates[0], 
+                present_teleportation_gates[0],
+                present_teleportation_gates[0],
+                past_teleportation_gates[0],
                 ancient_pyramid_teleportation_gates[0]
             )
 
@@ -117,10 +120,10 @@ class PreCalculatedWeights:
             weights_overrides_option = default_weights
         else:
             for key, weights in default_weights.items():
-                if not key in weights_overrides_option:
+                if key not in weights_overrides_option:
                     weights_overrides_option[key] = weights
 
-        return weights_overrides_option 
+        return weights_overrides_option
 
     @staticmethod
     def roll_flood_setting(world: MultiWorld, player: int,
@@ -132,7 +135,7 @@ class PreCalculatedWeights:
             result: str = world.random.choices(list(weights.keys()), weights=list(map(int, weights.values())))[0]
         else:
             result: str = weights
-        
+
         if result == "Dry":
             return False, False
         elif result == "Flooded":

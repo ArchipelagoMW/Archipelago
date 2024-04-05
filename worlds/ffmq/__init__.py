@@ -1,18 +1,27 @@
-import Utils
-import settings
 import base64
 import threading
+
 import requests
 import yaml
-from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Tutorial
-from .Regions import create_regions, location_table, set_rules, stage_set_rules, rooms, non_dead_end_crest_rooms,\
-    non_dead_end_crest_warps
-from .Items import item_table, item_groups, create_items, FFMQItem, fillers
-from .Output import generate_output
-from .Options import option_definitions
-from .Client import FFMQClient
 
+import settings
+import Utils
+from BaseClasses import Tutorial
+from worlds.AutoWorld import WebWorld, World
+
+from .Client import FFMQClient
+from .Items import FFMQItem, create_items, fillers, item_groups, item_table
+from .Options import option_definitions
+from .Output import generate_output
+from .Regions import (
+    create_regions,
+    location_table,
+    non_dead_end_crest_rooms,
+    non_dead_end_crest_warps,
+    rooms,
+    set_rules,
+    stage_set_rules,
+)
 
 # removed until lists are supported
 # class FFMQSettings(settings.Group):
@@ -58,7 +67,7 @@ class FFMQWorld(World):
     stage_set_rules = stage_set_rules
 
     data_version = 1
-    
+
     web = FFMQWebWorld()
     # settings: FFMQSettings
 
@@ -205,8 +214,8 @@ class FFMQWorld(World):
                                 if location.address:
                                     hint = []
                                     if self.multiworld.map_shuffle[self.player] != "dungeons":
-                                        hint.append((subregion.split("Subregion ")[-1] + (" Region" if subregion not
-                                                    in single_location_regions else "")))
+                                        hint.append(subregion.split("Subregion ")[-1] + (" Region" if subregion not
+                                                    in single_location_regions else ""))
                                     if self.multiworld.map_shuffle[self.player] != "overworld" and subregion not in \
                                             ("Subregion Mac's Ship", "Subregion Doom Castle"):
                                         hint.append(overworld_spot.name.split("Overworld - ")[-1].replace("Pazuzu",

@@ -102,7 +102,7 @@ ENTRANCE_INFO = {
     "prairie_right_cave_high":      EntranceInfo(0xB8, target=0x295, type="connector", index=0),
     "prairie_to_animal_connector":  EntranceInfo(0xAA, target=0x2d0, type="connector"),
     "animal_to_prairie_connector":  EntranceInfo(0xAB, target=0x2d1, type="connector"),
-    
+
     "d6":                           EntranceInfo(0x8C, "Alt8C", target=0x1d4, dungeon=6, instrument_room=0x1B5),
     "d6_connector_exit":            EntranceInfo(0x9C, target=0x1f0, type="connector"),
     "d6_connector_entrance":        EntranceInfo(0x9D, target=0x1f1, type="connector"),

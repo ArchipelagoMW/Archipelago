@@ -1,12 +1,13 @@
 import string
 
 from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
+
+from ..AutoWorld import WebWorld, World
 from .Items import event_item_pairs, item_pool, item_table
 from .Locations import location_table
 from .Options import spire_options
 from .Regions import create_regions
 from .Rules import set_rules
-from ..AutoWorld import WebWorld, World
 
 
 class SpireWeb(WebWorld):
@@ -64,7 +65,7 @@ class SpireWorld(World):
 
     def fill_slot_data(self) -> dict:
         slot_data = {
-            'seed': "".join(self.multiworld.per_slot_randoms[self.player].choice(string.ascii_letters) for i in range(16))
+            "seed": "".join(self.multiworld.per_slot_randoms[self.player].choice(string.ascii_letters) for i in range(16))
         }
         for option_name in spire_options:
             option = getattr(self.multiworld, option_name)[self.player]

@@ -1,7 +1,8 @@
 # Regions are areas in your game that you travel to.
-from typing import Dict, List, TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, List
 
 from BaseClasses import Entrance, Region
+
 from . import locations
 from .events import create_all_events
 

@@ -1,4 +1,4 @@
-class Dungeon(object):
+class Dungeon:
 
     def __init__(self, world, name, hint, font_color):
 
@@ -14,7 +14,7 @@ class Dungeon(object):
         for region in world.multiworld.regions:
             if region.player == world.player and region.dungeon == self.name:
                 region.dungeon = self
-                self.regions.append(region)                
+                self.regions.append(region)
 
 
     def copy(self, new_world):
@@ -50,5 +50,5 @@ class Dungeon(object):
 
 
     def __unicode__(self):
-        return '%s' % self.name
+        return "%s" % self.name
 

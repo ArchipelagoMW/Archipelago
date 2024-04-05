@@ -6,14 +6,13 @@ If it works, you can watch replays with it.
 # pylint: disable=W0201,W0212
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List, Union
+from typing import TYPE_CHECKING, List
 
 from .bot_ai_internal import BotAIInternal
 from .data import Alert, Result
 from .game_data import GameData
 from .position import Point2
 from .unit import Unit
-from .units import Units
 
 if TYPE_CHECKING:
     from .client import Client

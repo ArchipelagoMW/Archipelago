@@ -1,5 +1,5 @@
-import datetime
 import collections
+import datetime
 from dataclasses import dataclass
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 from uuid import UUID
@@ -9,7 +9,8 @@ from werkzeug.exceptions import abort
 
 from MultiServer import Context, get_saving_second
 from NetUtils import ClientStatus, Hint, NetworkItem, NetworkSlot, SlotType
-from Utils import restricted_loads, KeyedDefaultDict
+from Utils import KeyedDefaultDict, restricted_loads
+
 from . import app, cache
 from .models import GameDataPackage, Room
 
@@ -418,7 +419,6 @@ def render_generic_multiworld_tracker(tracker_data: TrackerData, enabled_tracker
 #       live in their respective world folders.
 
 from worlds import network_data_package
-
 
 if "Factorio" in network_data_package["games"]:
     def render_Factorio_multiworld_tracker(tracker_data: TrackerData, enabled_trackers: List[str]):
@@ -1401,28 +1401,28 @@ if "Super Metroid" in network_data_package["games"]:
         }
 
         supermetroid_location_ids = {
-            'Crateria/Blue Brinstar': [82005, 82007, 82008, 82026, 82029,
+            "Crateria/Blue Brinstar": [82005, 82007, 82008, 82026, 82029,
                                        82000, 82004, 82006, 82009, 82010,
                                        82011, 82012, 82027, 82028, 82034,
                                        82036, 82037],
-            'Green/Pink Brinstar':    [82017, 82023, 82030, 82033, 82035,
+            "Green/Pink Brinstar":    [82017, 82023, 82030, 82033, 82035,
                                        82013, 82014, 82015, 82016, 82018,
                                        82019, 82021, 82022, 82024, 82025,
                                        82031],
-            'Red Brinstar':           [82038, 82042, 82039, 82040, 82041],
-            'Kraid':                  [82043, 82048, 82044],
-            'Norfair':                [82050, 82053, 82061, 82066, 82068,
+            "Red Brinstar":           [82038, 82042, 82039, 82040, 82041],
+            "Kraid":                  [82043, 82048, 82044],
+            "Norfair":                [82050, 82053, 82061, 82066, 82068,
                                        82049, 82051, 82054, 82055, 82056,
                                        82062, 82063, 82064, 82065, 82067],
-            'Lower Norfair':          [82078, 82079, 82080, 82070, 82071,
+            "Lower Norfair":          [82078, 82079, 82080, 82070, 82071,
                                        82073, 82074, 82075, 82076, 82077],
-            'Crocomire':              [82052, 82060, 82057, 82058, 82059],
-            'Wrecked Ship':           [82129, 82132, 82134, 82135, 82001,
+            "Crocomire":              [82052, 82060, 82057, 82058, 82059],
+            "Wrecked Ship":           [82129, 82132, 82134, 82135, 82001,
                                        82002, 82003, 82128, 82130, 82131,
                                        82133],
-            'West Maridia':           [82138, 82136, 82137, 82139, 82140,
+            "West Maridia":           [82138, 82136, 82137, 82139, 82140,
                                        82141, 82142],
-            'East Maridia':           [82143, 82145, 82150, 82152, 82154,
+            "East Maridia":           [82143, 82145, 82150, 82152, 82154,
                                        82144, 82146, 82147, 82148, 82149,
                                        82151],
         }
@@ -1445,9 +1445,9 @@ if "Super Metroid" in network_data_package["games"]:
                          for tab_name, tab_locations in supermetroid_location_ids.items()}
         checks_done = {tab_name: len([id for id in tab_locations if id in checked_locations])
                        for tab_name, tab_locations in supermetroid_location_ids.items()}
-        checks_done['Total'] = len(checked_locations)
+        checks_done["Total"] = len(checked_locations)
         checks_in_area = {tab_name: len(tab_locations) for tab_name, tab_locations in supermetroid_location_ids.items()}
-        checks_in_area['Total'] = sum(checks_in_area.values())
+        checks_in_area["Total"] = sum(checks_in_area.values())
 
         lookup_any_item_id_to_name = tracker_data.item_id_to_name["Super Metroid"]
         return render_template(
@@ -1530,7 +1530,7 @@ if "ChecksFinder" in network_data_package["games"]:
                          tile_location in set(locations)}
         checks_done = {tile_name: len([tile_location]) for tile_name, tile_location in checksfinder_location_ids.items()
                        if tile_location in checked_locations and tile_location in set(locations)}
-        checks_done['Total'] = len(checked_locations)
+        checks_done["Total"] = len(checked_locations)
         checks_in_area = checks_done
 
         # Calculate checks available
@@ -2456,29 +2456,29 @@ if "Starcraft 2" in network_data_package["games"]:
         }
         # Format: L0, L1, L2, L3
         progressive_names = {
-            "Progressive Terran Infantry Weapon":               ["Terran Infantry Weapons Level 1", 
+            "Progressive Terran Infantry Weapon":               ["Terran Infantry Weapons Level 1",
                                                                  "Terran Infantry Weapons Level 1",
-                                                                 "Terran Infantry Weapons Level 2", 
+                                                                 "Terran Infantry Weapons Level 2",
                                                                  "Terran Infantry Weapons Level 3"],
-            "Progressive Terran Infantry Armor":                ["Terran Infantry Armor Level 1", 
+            "Progressive Terran Infantry Armor":                ["Terran Infantry Armor Level 1",
                                                                  "Terran Infantry Armor Level 1",
-                                                                 "Terran Infantry Armor Level 2", 
+                                                                 "Terran Infantry Armor Level 2",
                                                                  "Terran Infantry Armor Level 3"],
-            "Progressive Terran Vehicle Weapon":                ["Terran Vehicle Weapons Level 1", 
+            "Progressive Terran Vehicle Weapon":                ["Terran Vehicle Weapons Level 1",
                                                                  "Terran Vehicle Weapons Level 1",
-                                                                 "Terran Vehicle Weapons Level 2", 
+                                                                 "Terran Vehicle Weapons Level 2",
                                                                  "Terran Vehicle Weapons Level 3"],
-            "Progressive Terran Vehicle Armor":                 ["Terran Vehicle Armor Level 1", 
+            "Progressive Terran Vehicle Armor":                 ["Terran Vehicle Armor Level 1",
                                                                  "Terran Vehicle Armor Level 1",
-                                                                 "Terran Vehicle Armor Level 2", 
+                                                                 "Terran Vehicle Armor Level 2",
                                                                  "Terran Vehicle Armor Level 3"],
             "Progressive Terran Ship Weapon":                   ["Terran Ship Weapons Level 1",
                                                                  "Terran Ship Weapons Level 1",
                                                                  "Terran Ship Weapons Level 2",
                                                                  "Terran Ship Weapons Level 3"],
-            "Progressive Terran Ship Armor":                    ["Terran Ship Armor Level 1", 
+            "Progressive Terran Ship Armor":                    ["Terran Ship Armor Level 1",
                                                                  "Terran Ship Armor Level 1",
-                                                                 "Terran Ship Armor Level 2", 
+                                                                 "Terran Ship Armor Level 2",
                                                                  "Terran Ship Armor Level 3"],
             "Progressive Fire-Suppression System":              ["Fire-Suppression System Level 1",
                                                                  "Fire-Suppression System Level 1",
@@ -2574,7 +2574,7 @@ if "Starcraft 2" in network_data_package["games"]:
             level = min(inventory[item_id], len(progressive_names[item_name]) - 1)
             display_name = progressive_names[item_name][level]
             base_name = (item_name.split(maxsplit=1)[1].lower()
-                         .replace(' ', '_')
+                         .replace(" ", "_")
                          .replace("-", "")
                          .replace("(", "")
                          .replace(")", ""))
@@ -2650,10 +2650,10 @@ if "Starcraft 2" in network_data_package["games"]:
         checks_done = {mission_name: len(
             [id for id in mission_locations if id in checked_locations and id in set(locations)]) for
                        mission_name, mission_locations in sc2wol_location_ids.items()}
-        checks_done['Total'] = len(checked_locations)
+        checks_done["Total"] = len(checked_locations)
         checks_in_area = {mission_name: len([id for id in mission_locations if id in set(locations)]) for
                           mission_name, mission_locations in sc2wol_location_ids.items()}
-        checks_in_area['Total'] = sum(checks_in_area.values())
+        checks_in_area["Total"] = sum(checks_in_area.values())
 
         lookup_any_item_id_to_name = tracker_data.item_id_to_name["Starcraft 2"]
         return render_template(

@@ -1,4 +1,4 @@
-from ..roomEditor import RoomEditor, ObjectWarp
+from ..roomEditor import ObjectWarp, RoomEditor
 from ..worldSetup import ENTRANCE_INFO
 
 

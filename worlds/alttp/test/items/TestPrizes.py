@@ -1,7 +1,7 @@
+from test.TestBase import WorldTestBase
 from typing import List
 
 from BaseClasses import Item, Location
-from test.TestBase import WorldTestBase
 
 
 class TestPrizes(WorldTestBase):
@@ -14,7 +14,7 @@ class TestPrizes(WorldTestBase):
             self.multiworld.get_location("Tower of Hera - Prize", 1),
             self.multiworld.get_location("Palace of Darkness - Prize", 1),
             self.multiworld.get_location("Swamp Palace - Prize", 1),
-            self.multiworld.get_location("Thieves\' Town - Prize", 1),
+            self.multiworld.get_location("Thieves' Town - Prize", 1),
             self.multiworld.get_location("Skull Woods - Prize", 1),
             self.multiworld.get_location("Ice Palace - Prize", 1),
             self.multiworld.get_location("Misery Mire - Prize", 1),

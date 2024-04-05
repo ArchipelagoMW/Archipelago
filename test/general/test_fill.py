@@ -1,13 +1,26 @@
-from typing import List, Iterable
 import unittest
+from typing import Iterable, List
 
 import Options
+from BaseClasses import (
+    CollectionState,
+    Entrance,
+    Item,
+    ItemClassification,
+    Location,
+    LocationProgressType,
+    MultiWorld,
+    Region,
+)
+from Fill import (
+    FillError,
+    balance_multiworld_progression,
+    distribute_early_items,
+    distribute_items_restrictive,
+    fill_restrictive,
+)
 from Options import Accessibility
 from worlds.AutoWorld import World
-from Fill import FillError, balance_multiworld_progression, fill_restrictive, \
-    distribute_early_items, distribute_items_restrictive
-from BaseClasses import Entrance, LocationProgressType, MultiWorld, Region, Item, Location, \
-    ItemClassification, CollectionState
 from worlds.generic.Rules import CollectionRule, add_item_rule, locality_rules, set_rule
 
 
@@ -36,7 +49,7 @@ def generate_multiworld(players: int = 1) -> MultiWorld:
     return multiworld
 
 
-class PlayerDefinition(object):
+class PlayerDefinition:
     multiworld: MultiWorld
     id: int
     menu: Region
@@ -246,7 +259,7 @@ class TestFillRestrictive(unittest.TestCase):
         # all of player2's locations and items should be accessible (not all of player1's)
         for item in player2.prog_items:
             self.assertTrue(multiworld.state.has(item.name, player2.id),
-                            f'{item} is unreachable in {item.location}')
+                            f"{item} is unreachable in {item.location}")
 
     def test_reversed_fill(self):
         """Test a different set of rules can be satisfied"""

@@ -1,5 +1,5 @@
+from ..stardew_rule import And, Count, Has, Or, StardewRule
 from .base_logic import BaseLogic
-from ..stardew_rule import StardewRule, And, Or, Has, Count
 
 
 class HasLogicMixin(BaseLogic[None]):

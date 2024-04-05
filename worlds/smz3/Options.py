@@ -1,5 +1,7 @@
 import typing
-from Options import Choice, Option, Toggle, DefaultOnToggle, Range
+
+from Options import Choice, DefaultOnToggle, Option, Range, Toggle
+
 
 class SMLogic(Choice):
     """This option selects what kind of logic to use for item placement inside
@@ -45,7 +47,7 @@ class MorphLocation(Choice):
     option_Original = 2
     default = 0
 
-    
+
 class Goal(Choice):
     """This option decides what goal is required to finish the randomizer.
     Defeat Ganon and Mother Brain - Find the required crystals and boss tokens kill both bosses.
@@ -133,12 +135,12 @@ smz3_options: typing.Dict[str, type(Option)] = {
     "morph_location": MorphLocation,
     "goal": Goal,
     "key_shuffle": KeyShuffle,
-    "open_tower": OpenTower, 
+    "open_tower": OpenTower,
     "ganon_vulnerable": GanonVulnerable,
     "open_tourian": OpenTourian,
     "spin_jumps_animation": SpinJumpsAnimation,
     "heart_beep_speed": HeartBeepSpeed,
-    "heart_color": HeartColor, 
+    "heart_color": HeartColor,
     "quick_swap": QuickSwap,
     "energy_beep": EnergyBeep
     }

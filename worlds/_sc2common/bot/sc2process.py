@@ -12,6 +12,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 import aiohttp
 import portpicker
+
 from worlds._sc2common.bot import logger
 
 from . import paths, wsl

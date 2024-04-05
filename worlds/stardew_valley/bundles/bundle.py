@@ -2,9 +2,9 @@ from dataclasses import dataclass
 from random import Random
 from typing import List
 
-from .bundle_item import BundleItem
-from ..options import BundlePrice, StardewValleyOptions, ExcludeGingerIsland, FestivalLocations
+from ..options import BundlePrice, ExcludeGingerIsland, FestivalLocations, StardewValleyOptions
 from ..strings.currency_names import Currency
+from .bundle_item import BundleItem
 
 
 @dataclass
@@ -15,7 +15,7 @@ class Bundle:
     number_required: int
 
     def __repr__(self):
-        return f"{self.name} -> {self.number_required} from {repr(self.items)}"
+        return f"{self.name} -> {self.number_required} from {self.items!r}"
 
 
 @dataclass

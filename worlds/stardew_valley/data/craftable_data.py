@@ -1,29 +1,61 @@
 from typing import Dict, List, Optional
 
 from ..mods.mod_data import ModNames
-from .recipe_source import RecipeSource, StarterSource, QueenOfSauceSource, ShopSource, SkillSource, FriendshipSource, ShopTradeSource, CutsceneSource, \
-    ArchipelagoSource, LogicSource, SpecialOrderSource, FestivalShopSource, QuestSource
 from ..strings.artisan_good_names import ArtisanGood
-from ..strings.craftable_names import Bomb, Fence, Sprinkler, WildSeeds, Floor, Fishing, Ring, Consumable, Edible, Lighting, Storage, Furniture, Sign, Craftable, \
-    ModEdible, ModCraftable, ModMachine, ModFloor, ModConsumable
+from ..strings.craftable_names import (
+    Bomb,
+    Consumable,
+    Craftable,
+    Edible,
+    Fence,
+    Fishing,
+    Floor,
+    Furniture,
+    Lighting,
+    ModConsumable,
+    ModCraftable,
+    ModEdible,
+    ModFloor,
+    ModMachine,
+    Ring,
+    Sign,
+    Sprinkler,
+    Storage,
+    WildSeeds,
+)
 from ..strings.crop_names import Fruit, Vegetable
 from ..strings.currency_names import Currency
 from ..strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
 from ..strings.fish_names import Fish, WaterItem
 from ..strings.flower_names import Flower
 from ..strings.food_names import Meal
-from ..strings.forageable_names import Forageable, SVEForage, DistantLandsForageable
+from ..strings.forageable_names import DistantLandsForageable, Forageable, SVEForage
 from ..strings.ingredient_names import Ingredient
 from ..strings.machine_names import Machine
 from ..strings.material_names import Material
-from ..strings.metal_names import Ore, MetalBar, Fossil, Artifact, Mineral, ModFossil
+from ..strings.metal_names import Artifact, Fossil, MetalBar, Mineral, ModFossil, Ore
 from ..strings.monster_drop_names import Loot
 from ..strings.quest_names import Quest
 from ..strings.region_names import Region, SVERegion
 from ..strings.seed_names import Seed, TreeSeed
-from ..strings.skill_names import Skill, ModSkill
+from ..strings.skill_names import ModSkill, Skill
 from ..strings.special_order_names import SpecialOrder
 from ..strings.villager_names import NPC, ModNPC
+from .recipe_source import (
+    ArchipelagoSource,
+    CutsceneSource,
+    FestivalShopSource,
+    FriendshipSource,
+    LogicSource,
+    QueenOfSauceSource,
+    QuestSource,
+    RecipeSource,
+    ShopSource,
+    ShopTradeSource,
+    SkillSource,
+    SpecialOrderSource,
+    StarterSource,
+)
 
 
 class CraftingRecipe:

@@ -7,6 +7,7 @@ from typing import Dict, List, Optional
 
 from NetUtils import ClientStatus, NetworkItem
 from worlds.AutoSNIClient import SNIClient
+
 from .Enemies import enemy_id_to_name
 from .Items import start_id as items_start_id
 from .Locations import start_id as locations_start_id

@@ -1,7 +1,8 @@
-﻿from ....Region import SMRegion
-from ....Config import Config, SMLogic
-from ....Location import Location, LocationType
+﻿from ....Config import Config, SMLogic
 from ....Item import Progression
+from ....Location import Location, LocationType
+from ....Region import SMRegion
+
 
 class East(SMRegion):
     Name = "Crateria East"
@@ -55,5 +56,5 @@ class East(SMRegion):
                     # /* Draygon -> Cactus Alley -> Forgotten Highway */
                     items.Gravity and self.world.GetLocation("Space Jump").Available(items)) or (
                 # /*Through Maridia from Pipe*/
-                items.CanUsePowerBombs()) and items.Super and (items.Gravity or items.HiJump and (items.Ice or items.CanSpringBallJump()) 
+                items.CanUsePowerBombs()) and items.Super and (items.Gravity or items.HiJump and (items.Ice or items.CanSpringBallJump())
                                                             and items.Grapple and items.CardMaridiaL1)

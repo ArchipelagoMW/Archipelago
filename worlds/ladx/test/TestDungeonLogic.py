@@ -1,6 +1,6 @@
+from ..Items import ItemName
 from . import LADXTestBase
 
-from ..Items import ItemName
 
 class TestD6(LADXTestBase):
     # Force keys into pool for testing

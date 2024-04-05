@@ -1,7 +1,8 @@
 from typing import Dict, List, NamedTuple, Optional
 
-from BaseClasses import MultiWorld, Region, Entrance
-from .Locations import RLLocation, location_table, get_locations_by_category
+from BaseClasses import Entrance, MultiWorld, Region
+
+from .Locations import RLLocation, get_locations_by_category, location_table
 
 
 class RLRegionData(NamedTuple):

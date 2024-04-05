@@ -1,14 +1,15 @@
 import json
 import os
 
+
 def createResourcePackName(amount: int, itemName: str):
     return "Resource Pack: " + str(amount) + " " + itemName
 
-with open(os.path.join(os.path.dirname(__file__), 'items.json'), 'r') as file:
+with open(os.path.join(os.path.dirname(__file__), "items.json")) as file:
     item_table = json.loads(file.read())
-with open(os.path.join(os.path.dirname(__file__), 'progressives.json'), 'r') as file:
+with open(os.path.join(os.path.dirname(__file__), "progressives.json")) as file:
     progressive_table = json.loads(file.read())
-with open(os.path.join(os.path.dirname(__file__), 'resourcepacks.json'), 'r') as file:
+with open(os.path.join(os.path.dirname(__file__), "resourcepacks.json")) as file:
     resourcepack_items = json.loads(file.read())
 
 lookup_id_to_name = {}

@@ -10,7 +10,7 @@ def hal_decompress(comp: bytes) -> bytes:
     while inval != 0xFF:
         remaining = 65536 - inpos
         if remaining < 1:
-            return bytes()
+            return b""
         inval = comp[inpos]
         inpos += 1
         if inval == 0xFF:
@@ -23,7 +23,7 @@ def hal_decompress(comp: bytes) -> bytes:
             command = inval >> 5
             length = (inval & 0x1F) + 1
         if (command == 2 and ((len(output) + 2*length) > 65536)) or (len(output) + length) > 65536:
-            return bytes()
+            return b""
         if command == 0:
             output.extend(comp[inpos:inpos+length])
             inpos += length
@@ -39,19 +39,19 @@ def hal_decompress(comp: bytes) -> bytes:
         elif command == 4 or command == 7:
             offset = (comp[inpos] << 8) | comp[inpos + 1]
             if (offset + length) > 65536:
-                return bytes()
+                return b""
             output.extend(output[offset:offset+length])
             inpos += 2
         elif command == 5:
             offset = (comp[inpos] << 8) | comp[inpos + 1]
             if (offset + length) > 65536:
-                return bytes()
-            output.extend([int('{:08b}'.format(x)[::-1], 2) for x in output[offset:offset+length]])
+                return b""
+            output.extend([int(f"{x:08b}"[::-1], 2) for x in output[offset:offset+length]])
             inpos += 2
         elif command == 6:
             offset = (comp[inpos] << 8) | comp[inpos + 1]
             if offset < length - 1:
-                return bytes()
+                return b""
             output.extend([output[offset - x] for x in range(length)])
             inpos += 2
     return bytes(output)

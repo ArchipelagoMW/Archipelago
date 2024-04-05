@@ -1,7 +1,8 @@
 
 from __future__ import annotations
+
 import abc
-from typing import TYPE_CHECKING, ClassVar, Dict, Iterable, Tuple, Any, Optional, Union
+from typing import TYPE_CHECKING, Any, ClassVar, Dict, Iterable, Optional, Tuple, Union
 
 from typing_extensions import TypeGuard
 
@@ -10,7 +11,7 @@ from worlds.LauncherComponents import Component, SuffixIdentifier, Type, compone
 if TYPE_CHECKING:
     from SNIClient import SNIContext
 
-component = Component('SNI Client', 'SNIClient', component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".apsoe"))
+component = Component("SNI Client", "SNIClient", component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".apsoe"))
 components.append(component)
 
 

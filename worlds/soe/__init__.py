@@ -12,12 +12,13 @@ from BaseClasses import Item, ItemClassification, Location, LocationProgressType
 from Utils import output_path
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_item_rule, set_rule
+
 from .logic import SoEPlayerLogic
 from .options import Difficulty, EnergyCore, Sniffamizer, SniffIngredients, SoEOptions
 from .patch import SoEDeltaPatch, get_base_rom_path
 
 if typing.TYPE_CHECKING:
-    from BaseClasses import MultiWorld, CollectionState
+    from BaseClasses import CollectionState, MultiWorld
 
 __all__ = ["pyevermizer", "SoEWorld"]
 
@@ -88,18 +89,18 @@ del _loc
 
 # item helpers
 _ingredients = (
-    'Wax', 'Water', 'Vinegar', 'Root', 'Oil', 'Mushroom', 'Mud Pepper', 'Meteorite', 'Limestone', 'Iron',
-    'Gunpowder', 'Grease', 'Feather', 'Ethanol', 'Dry Ice', 'Crystal', 'Clay', 'Brimstone', 'Bone', 'Atlas Medallion',
-    'Ash', 'Acorn'
+    "Wax", "Water", "Vinegar", "Root", "Oil", "Mushroom", "Mud Pepper", "Meteorite", "Limestone", "Iron",
+    "Gunpowder", "Grease", "Feather", "Ethanol", "Dry Ice", "Crystal", "Clay", "Brimstone", "Bone", "Atlas Medallion",
+    "Ash", "Acorn"
 )
 _other_items = (
-    'Call bead', 'Petal', 'Biscuit', 'Pixie Dust', 'Nectar', 'Honey', 'Moniez'
+    "Call bead", "Petal", "Biscuit", "Pixie Dust", "Nectar", "Honey", "Moniez"
 )
 
 
 def _match_item_name(item: pyevermizer.Item, substr: str) -> bool:
-    sub: str = item.name.split(' ', 1)[1] if item.name[0].isdigit() else item.name
-    return sub == substr or sub == substr+'s'
+    sub: str = item.name.split(" ", 1)[1] if item.name[0].isdigit() else item.name
+    return sub == substr or sub == substr+"s"
 
 
 def _get_location_mapping() -> typing.Tuple[typing.Dict[str, int], typing.Dict[int, pyevermizer.Location]]:
@@ -109,7 +110,7 @@ def _get_location_mapping() -> typing.Tuple[typing.Dict[str, int], typing.Dict[i
         ap_id = _id_offset[loc.type] + loc.index
         id_to_raw[ap_id] = loc
         name_to_id[loc.name] = ap_id
-    name_to_id['Done'] = None
+    name_to_id["Done"] = None
     return name_to_id, id_to_raw
 
 
@@ -122,7 +123,7 @@ def _get_item_mapping() -> typing.Tuple[typing.Dict[str, int], typing.Dict[int, 
         ap_id = _id_offset[item.type] + item.index
         id_to_raw[ap_id] = item
         name_to_id[item.name] = ap_id
-    name_to_id['Victory'] = None
+    name_to_id["Victory"] = None
     return name_to_id, id_to_raw
 
 
@@ -131,20 +132,20 @@ def _get_item_grouping() -> typing.Dict[str, typing.Set[str]]:
     ingredients_group = set()
     for ingredient in _ingredients:
         group = set(item.name for item in _items if _match_item_name(item, ingredient))
-        groups[f'Any {ingredient}'] = group
+        groups[f"Any {ingredient}"] = group
         ingredients_group |= group
-    groups['Ingredients'] = ingredients_group
+    groups["Ingredients"] = ingredients_group
     for other in _other_items:
-        groups[f'Any {other}'] = set(item.name for item in _items if _match_item_name(item, other))
-    groups['Alchemy'] = set(item.name for item in _items if item.type == pyevermizer.CHECK_ALCHEMY)
-    groups['Weapons'] = {'Spider Claw', 'Horn Spear', 'Gladiator Sword', 'Bronze Axe', 'Bronze Spear', 'Crusader Sword',
-                         'Lance (Weapon)', 'Knight Basher', 'Atom Smasher', 'Laser Lance'}
-    groups['Traps'] = {trap.name for trap in _traps}
+        groups[f"Any {other}"] = set(item.name for item in _items if _match_item_name(item, other))
+    groups["Alchemy"] = set(item.name for item in _items if item.type == pyevermizer.CHECK_ALCHEMY)
+    groups["Weapons"] = {"Spider Claw", "Horn Spear", "Gladiator Sword", "Bronze Axe", "Bronze Spear", "Crusader Sword",
+                         "Lance (Weapon)", "Knight Basher", "Atom Smasher", "Laser Lance"}
+    groups["Traps"] = {trap.name for trap in _traps}
     return groups
 
 
 class SoEWebWorld(WebWorld):
-    theme = 'jungle'
+    theme = "jungle"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide to playing Secret of Evermore randomizer. This guide covers single-player, multiworld and related"
@@ -188,7 +189,7 @@ class SoEWorld(World):
     evermizer_seed: int
     connect_name: str
 
-    _halls_ne_chest_names: typing.List[str] = [loc.name for loc in _locations if 'Halls NE' in loc.name]
+    _halls_ne_chest_names: typing.List[str] = [loc.name for loc in _locations if "Halls NE" in loc.name]
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         self.connect_name_available_event = threading.Event()
@@ -228,7 +229,7 @@ class SoEWorld(World):
         max_difficulty = 1 if self.options.difficulty == Difficulty.option_easy else 256
 
         # TODO: generate *some* regions from locations' requirements?
-        menu = Region('Menu', self.player, self.multiworld)
+        menu = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions += [menu]
 
         def get_sphere_index(evermizer_loc: pyevermizer.Location) -> int:
@@ -238,7 +239,7 @@ class SoEWorld(World):
             return min(2, len(evermizer_loc.requires))
 
         # create ingame region
-        ingame = Region('Ingame', self.player, self.multiworld)
+        ingame = Region("Ingame", self.player, self.multiworld)
 
         # group locations into spheres (1, 2, 3+ at index 0, 1, 2)
         spheres: typing.Dict[int, typing.Dict[int, typing.List[SoELocation]]] = {}
@@ -303,7 +304,7 @@ class SoEWorld(World):
                     if location.name in late_locations:
                         location.progress_type = LocationProgressType.PRIORITY
 
-        ingame.locations.append(SoELocation(self.player, 'Done', None, ingame))
+        ingame.locations.append(SoELocation(self.player, "Done", None, ingame))
         menu.connect(ingame, "New Game")
         self.multiworld.regions += [ingame]
 
@@ -367,11 +368,11 @@ class SoEWorld(World):
         self.multiworld.itempool += items
 
     def set_rules(self) -> None:
-        self.multiworld.completion_condition[self.player] = lambda state: state.has('Victory', self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
         # set Done from goal option once we have multiple goals
-        set_rule(self.multiworld.get_location('Done', self.player),
+        set_rule(self.multiworld.get_location("Done", self.player),
                  lambda state: self.logic.has(state, pyevermizer.P_FINAL_BOSS))
-        set_rule(self.multiworld.get_entrance('New Game', self.player), lambda state: True)
+        set_rule(self.multiworld.get_entrance("New Game", self.player), lambda state: True)
         locations: typing.Iterable[pyevermizer.Location]
         if hasattr(Sniffamizer, "option_everywhere") and self.options.sniffamizer == Sniffamizer.option_everywhere:
             locations = itertools.chain(_locations, _sniff_locations)
@@ -392,22 +393,22 @@ class SoEWorld(World):
 
     def generate_basic(self) -> None:
         # place Victory event
-        self.multiworld.get_location('Done', self.player).place_locked_item(self.create_event('Victory'))
+        self.multiworld.get_location("Done", self.player).place_locked_item(self.create_event("Victory"))
         # place wings in halls NE to avoid softlock
         wings_location = self.random.choice(self._halls_ne_chest_names)
-        wings_item = self.create_item('Wings')
+        wings_item = self.create_item("Wings")
         self.multiworld.get_location(wings_location, self.player).place_locked_item(wings_item)
         # place energy core at vanilla location for vanilla mode
         if self.options.energy_core == EnergyCore.option_vanilla:
-            energy_core = self.create_item('Energy Core')
-            self.multiworld.get_location('Energy Core #285', self.player).place_locked_item(energy_core)
+            energy_core = self.create_item("Energy Core")
+            self.multiworld.get_location("Energy Core #285", self.player).place_locked_item(energy_core)
         # generate stuff for later
         self.evermizer_seed = self.random.randint(0, 2 ** 16 - 1)  # TODO: make this an option for "full" plando?
 
     def generate_output(self, output_directory: str) -> None:
         player_name = self.multiworld.get_player_name(self.player)
         self.connect_name = player_name[:32]
-        while len(self.connect_name.encode('utf-8')) > 32:
+        while len(self.connect_name.encode("utf-8")) > 32:
             self.connect_name = self.connect_name[:-1]
         self.connect_name_available_event.set()
         placement_file = ""
@@ -419,14 +420,14 @@ class SoEWorld(World):
             if self.options.death_link.value:
                 switches.append("--death-link")
             if self.options.energy_core == EnergyCore.option_fragments:
-                switches.extend(('--available-fragments', str(self.options.available_fragments.value),
-                                 '--required-fragments', str(self.options.required_fragments.value)))
+                switches.extend(("--available-fragments", str(self.options.available_fragments.value),
+                                 "--required-fragments", str(self.options.required_fragments.value)))
             rom_file = get_base_rom_path()
             out_base = output_path(output_directory, self.multiworld.get_out_file_name_base(self.player))
-            out_file = out_base + '.sfc'
-            placement_file = out_base + '.txt'
-            patch_file = out_base + '.apsoe'
-            flags = 'l'  # spoiler log
+            out_file = out_base + ".sfc"
+            placement_file = out_base + ".txt"
+            patch_file = out_base + ".apsoe"
+            flags = "l"  # spoiler log
             flags += self.options.flags
 
             with open(placement_file, "wb") as f:  # generate placement file
@@ -437,11 +438,11 @@ class SoEWorld(World):
                         continue  # skip events
                     loc = self.location_id_to_raw[location.address]
                     if item.player != self.player:
-                        line = f'{loc.type},{loc.index}:{pyevermizer.CHECK_NONE},{item.code},{item.player}\n'
+                        line = f"{loc.type},{loc.index}:{pyevermizer.CHECK_NONE},{item.code},{item.player}\n"
                     else:
                         soe_item = self.item_id_to_raw[item.code]
-                        line = f'{loc.type},{loc.index}:{soe_item.type},{soe_item.index}\n'
-                    f.write(line.encode('utf-8'))
+                        line = f"{loc.type},{loc.index}:{soe_item.type},{soe_item.index}\n"
+                    f.write(line.encode("utf-8"))
 
             if not os.path.exists(rom_file):
                 raise FileNotFoundError(rom_file)
@@ -457,7 +458,7 @@ class SoEWorld(World):
             try:
                 os.unlink(placement_file)
                 os.unlink(out_file)
-                os.unlink(out_file[:-4] + '_SPOILER.log')
+                os.unlink(out_file[:-4] + "_SPOILER.log")
             except FileNotFoundError:
                 pass
 

@@ -1,6 +1,5 @@
 from typing import Dict, List
 
-
 LOCATIONS: Dict[str, List[str]] = {
     "Ninja Village - Nest": [
         "Ninja Village - Candle",

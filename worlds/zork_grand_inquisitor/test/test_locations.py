@@ -1,9 +1,8 @@
 from typing import Dict, Set
 
-from . import ZorkGrandInquisitorTestBase
-
 from ..data_funcs import location_names_to_location, locations_with_tag
 from ..enums import ZorkGrandInquisitorLocations, ZorkGrandInquisitorTags
+from . import ZorkGrandInquisitorTestBase
 
 
 class LocationsTestNoDeathsanity(ZorkGrandInquisitorTestBase):

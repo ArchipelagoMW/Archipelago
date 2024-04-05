@@ -1,7 +1,8 @@
-﻿from ....Region import SMRegion
-from ....Config import Config, SMLogic
-from ....Location import Location, LocationType
+﻿from ....Config import Config, SMLogic
 from ....Item import Progression
+from ....Location import Location, LocationType
+from ....Region import SMRegion
+
 
 class Outer(SMRegion):
     Name = "Maridia Outer"
@@ -14,7 +15,7 @@ class Outer(SMRegion):
                 lambda items: items.SpeedBooster if self.Logic == SMLogic.Normal else \
                 lambda items: items.Gravity and items.SpeedBooster),
             Location(self, 137, 0x8FC43D, LocationType.Visible, "Super Missile (green Maridia)"),
-            Location(self, 138, 0x8FC47D, LocationType.Visible, "Energy Tank, Mama turtle", 
+            Location(self, 138, 0x8FC47D, LocationType.Visible, "Energy Tank, Mama turtle",
                 lambda items: items.CanOpenRedDoors() and (items.CanFly() or items.SpeedBooster or items.Grapple) if self.Logic == SMLogic.Normal else \
                 lambda items: items.CanOpenRedDoors() and (
                     items.CanFly() or items.SpeedBooster or items.Grapple or

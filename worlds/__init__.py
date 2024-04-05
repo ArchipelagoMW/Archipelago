@@ -1,11 +1,11 @@
+import dataclasses
 import importlib
 import os
 import sys
+import time
 import warnings
 import zipimport
-import time
-import dataclasses
-from typing import Dict, List, TypedDict, Optional
+from typing import Dict, List, Optional, TypedDict
 
 from Utils import local_path, user_path
 
@@ -83,8 +83,8 @@ class WorldSource:
 
         except Exception:
             # A single world failing can still mean enough is working for the user, log and carry on
-            import traceback
             import io
+            import traceback
             file_like = io.StringIO()
             print(f"Could not load world {self}:", file=file_like)
             traceback.print_exc(file=file_like)

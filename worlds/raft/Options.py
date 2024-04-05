@@ -1,4 +1,5 @@
-from Options import Range, Toggle, DefaultOnToggle, Choice, DeathLink
+from Options import Choice, DeathLink, DefaultOnToggle, Range, Toggle
+
 
 class MinimumResourcePackAmount(Range):
     """The minimum amount of resources available in a resource pack"""

@@ -1,28 +1,30 @@
-from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial, ItemClassification
+from datetime import datetime
+
+from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
+
+from ..AutoWorld import WebWorld, World
 from .Items import item_table
 from .Rules import set_rules
-from ..AutoWorld import World, WebWorld
-from datetime import datetime
 
 
 class ArchipIDLEWebWorld(WebWorld):
-    theme = 'partyTime'
+    theme = "partyTime"
     tutorials = [
         Tutorial(
-            tutorial_name='Setup Guide',
-            description='A guide to playing Archipidle',
-            language='English',
-            file_name='guide_en.md',
-            link='guide/en',
-            authors=['Farrak Kilhn']
+            tutorial_name="Setup Guide",
+            description="A guide to playing Archipidle",
+            language="English",
+            file_name="guide_en.md",
+            link="guide/en",
+            authors=["Farrak Kilhn"]
         ),
         Tutorial(
-            tutorial_name='Guide d installation',
-            description='Un guide pour jouer à Archipidle',
-            language='Français',
-            file_name='guide_fr.md',
-            link='guide/fr',
-            authors=['TheLynk']
+            tutorial_name="Guide d installation",
+            description="Un guide pour jouer à Archipidle",
+            language="Français",
+            file_name="guide_fr.md",
+            link="guide/fr",
+            authors=["TheLynk"]
         )
     ]
 
@@ -73,13 +75,13 @@ class ArchipIDLEWorld(World):
 
     def create_regions(self):
         self.multiworld.regions += [
-            create_region(self.multiworld, self.player, 'Menu', None, ['Entrance to IDLE Zone']),
-            create_region(self.multiworld, self.player, 'IDLE Zone', self.location_name_to_id)
+            create_region(self.multiworld, self.player, "Menu", None, ["Entrance to IDLE Zone"]),
+            create_region(self.multiworld, self.player, "IDLE Zone", self.location_name_to_id)
         ]
 
         # link up our region with the entrance we just made
-        self.multiworld.get_entrance('Entrance to IDLE Zone', self.player)\
-            .connect(self.multiworld.get_region('IDLE Zone', self.player))
+        self.multiworld.get_entrance("Entrance to IDLE Zone", self.player)\
+            .connect(self.multiworld.get_region("IDLE Zone", self.player))
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice(item_table)

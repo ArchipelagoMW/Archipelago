@@ -1,4 +1,4 @@
-from Options import Choice, Range, DefaultOnToggle
+from Options import Choice, DefaultOnToggle, Range
 
 
 class ExtraRanks(Range):

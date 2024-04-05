@@ -1,13 +1,16 @@
-from ..assembler import ASM
-from ..utils import formatText, setReplacementName
-from ..roomEditor import RoomEditor
-from .. import entityData
 import os
+
 import bsdiff4
+
+from .. import entityData
+from ..assembler import ASM
+from ..roomEditor import RoomEditor
+from ..utils import formatText, setReplacementName
+
 
 def imageTo2bpp(filename):
     import PIL.Image
-    baseimg = PIL.Image.new('P', (1,1))
+    baseimg = PIL.Image.new("P", (1,1))
     baseimg.putpalette((
         128, 0, 128,
         0, 0, 0,
@@ -54,7 +57,7 @@ def updateGraphics(rom, bank, offset, data):
 
 def gfxMod(rom, filename):
     if os.path.exists(filename + ".names"):
-        for line in open(filename + ".names", "rt"):
+        for line in open(filename + ".names"):
             if ":" in line:
                 k, v = line.strip().split(":", 1)
                 setReplacementName(k, v)
@@ -68,7 +71,7 @@ def gfxMod(rom, filename):
         updateGraphics(rom, 0x2C, 0, prepatch(rom, 0x2C, 0, filename))
     elif ext == ".json":
         import json
-        data = json.load(open(filename, "rt"))
+        data = json.load(open(filename))
 
         for patch in data:
             if "gfx" in patch:
@@ -282,7 +285,7 @@ def allowColorDungeonSpritesEverywhere(rom):
     # Disable color dungeon specific tile load hacks
     rom.patch(0x00, 0x06A7, ASM("jr nz, $22"), ASM("jr $22"))
     rom.patch(0x00, 0x2E77, ASM("jr nz, $0B"), ASM("jr $0B"))
-    
+
     # Finally fill in the sprite data for the color dungeon
     for n in range(22):
         data = bytearray()

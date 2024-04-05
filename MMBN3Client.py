@@ -1,22 +1,20 @@
 import asyncio
 import hashlib
 import json
-import os
 import multiprocessing
+import os
 import subprocess
 import zipfile
-
 from asyncio import StreamReader, StreamWriter
 
 import bsdiff4
 
-from CommonClient import CommonContext, server_loop, gui_enabled, \
-    ClientCommandProcessor, logger, get_base_parser
 import Utils
+from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus
 from worlds.mmbn3.Items import items_by_id
-from worlds.mmbn3.Rom import get_base_rom_path
 from worlds.mmbn3.Locations import all_locations, scoutable_locations
+from worlds.mmbn3.Rom import get_base_rom_path
 
 SYSTEM_MESSAGE_ID = 0
 
@@ -84,7 +82,7 @@ class MMBN3Context(CommonContext):
 
         logger.info("Attempting to decode from ROM... ")
         self.awaiting_rom = False
-        self.auth = self.auth_name.decode("utf8").replace('\x00', '')
+        self.auth = self.auth_name.decode("utf8").replace("\x00", "")
         logger.info("Connecting as "+self.auth)
         await self.send_connect(name=self.auth)
 
@@ -101,7 +99,7 @@ class MMBN3Context(CommonContext):
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
     def on_package(self, cmd: str, args: dict):
-        if cmd == 'Connected':
+        if cmd == "Connected":
             self.slot_data = args.get("slot_data", {})
             print(self.slot_data)
 
@@ -210,14 +208,14 @@ def check_location_scouted(location, memory):
 async def gba_sync_task(ctx: MMBN3Context):
     logger.info("Starting GBA connector. Use /gba for status information.")
     if ctx.patching_error:
-        logger.error('Unable to Patch ROM. No ROM provided or ROM does not match US GBA Blue Version.')
+        logger.error("Unable to Patch ROM. No ROM provided or ROM does not match US GBA Blue Version.")
     while not ctx.exit_event.is_set():
         error_status = None
         if ctx.gba_streams:
             (reader, writer) = ctx.gba_streams
             msg = get_payload(ctx).encode()
             writer.write(msg)
-            writer.write(b'\n')
+            writer.write(b"\n")
             try:
                 await asyncio.wait_for(writer.drain(), timeout=1.5)
                 try:
@@ -232,7 +230,7 @@ async def gba_sync_task(ctx: MMBN3Context):
                     if reported_version >= script_version:
                         if ctx.game is not None and "locations" in data_decoded:
                             # Not just a keep alive ping, parse
-                            asyncio.create_task((parse_payload(data_decoded, ctx, False)))
+                            asyncio.create_task(parse_payload(data_decoded, ctx, False))
                         if not ctx.auth:
                             ctx.auth_name = bytes(data_decoded["playerName"])
 
@@ -306,20 +304,20 @@ async def run_game(romfile):
 async def patch_and_run_game(apmmbn3_file):
     base_name = os.path.splitext(apmmbn3_file)[0]
 
-    with zipfile.ZipFile(apmmbn3_file, 'r') as patch_archive:
+    with zipfile.ZipFile(apmmbn3_file, "r") as patch_archive:
         try:
-            with patch_archive.open("delta.bsdiff4", 'r') as stream:
+            with patch_archive.open("delta.bsdiff4", "r") as stream:
                 patch_data = stream.read()
         except KeyError:
             raise FileNotFoundError("Patch file missing from archive.")
     rom_file = get_base_rom_path()
 
-    with open(rom_file, 'rb') as rom:
+    with open(rom_file, "rb") as rom:
         rom_bytes = rom.read()
 
     patched_bytes = bsdiff4.patch(rom_bytes, patch_data)
     patched_rom_file = base_name+".gba"
-    with open(patched_rom_file, 'wb') as patched_rom:
+    with open(patched_rom_file, "wb") as patched_rom:
         patched_rom.write(patched_bytes)
 
     asyncio.create_task(run_game(patched_rom_file))
@@ -330,7 +328,7 @@ def confirm_checksum():
     if not os.path.exists(rom_file):
         return False
 
-    with open(rom_file, 'rb') as rom:
+    with open(rom_file, "rb") as rom:
         rom_bytes = rom.read()
 
     basemd5 = hashlib.md5()

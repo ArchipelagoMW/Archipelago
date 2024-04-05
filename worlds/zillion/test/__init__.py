@@ -1,5 +1,6 @@
-from typing import cast
 from test.bases import WorldTestBase
+from typing import cast
+
 from worlds.zillion import ZillionWorld
 
 

@@ -1,29 +1,31 @@
 # Look at `Rules.dsv` first to get an idea for how this works
 
-from typing import Union, Tuple, List, Dict, Set
+from typing import Dict, List, Set, Tuple, Union
+
+from BaseClasses import CollectionState, ItemClassification, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from BaseClasses import Region, ItemClassification, Tutorial, CollectionState
+
 from .Checks import (
-    TerrariaItem,
-    TerrariaLocation,
-    goals,
-    rules,
-    rule_indices,
-    labels,
-    rewards,
-    item_name_to_id,
-    location_name_to_id,
-    COND_ITEM,
-    COND_LOC,
     COND_FN,
     COND_GROUP,
+    COND_ITEM,
+    COND_LOC,
+    TerrariaItem,
+    TerrariaLocation,
+    accessory_minions,
+    armor_minions,
+    goals,
+    hammers,
+    item_name_to_id,
+    labels,
+    location_name_to_id,
+    mech_bosses,
     npcs,
     pickaxes,
-    hammers,
-    mech_bosses,
     progression,
-    armor_minions,
-    accessory_minions,
+    rewards,
+    rule_indices,
+    rules,
 )
 from .Options import options
 

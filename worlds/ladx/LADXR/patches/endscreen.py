@@ -1,6 +1,7 @@
-from ..assembler import ASM
-import os
 import pkgutil
+
+from ..assembler import ASM
+
 
 def updateEndScreen(rom):
     # Call our custom data loader in bank 3F
@@ -14,7 +15,7 @@ def updateEndScreen(rom):
         jp   $4200
     """))
     rom.patch(0x17, 0x2FCE, "B170", "D070") # Ignore the final tile data load
-    
+
     rom.patch(0x3F, 0x0200, None, ASM("""
     ; Disable LCD
     xor a
@@ -132,8 +133,8 @@ loadLoop2:
     ldh [$97], a
     ret
     """))
-    
+
     addr = 0x1000
-    data = pkgutil.get_data(__name__, "nyan.bin")    
+    data = pkgutil.get_data(__name__, "nyan.bin")
     rom.banks[0x3F][addr : addr + len(data)] = data
 

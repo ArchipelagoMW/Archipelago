@@ -1,4 +1,4 @@
-from .Names import ItemName, RegionName, LocationName
+from .Names import ItemName, LocationName, RegionName
 
 # this file contains the dicts,lists and sets used for making rules in rules.py
 base_tools = [

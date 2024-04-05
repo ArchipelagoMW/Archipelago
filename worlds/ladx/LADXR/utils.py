@@ -150,21 +150,21 @@ def formatText(instr: str, *, center: bool = False, ask: Optional[str] = None) -
     s = s.replace(b"'", b"^")
 
     def padLine(line: bytes) -> bytes:
-        return line + b' ' * (16 - len(line))
+        return line + b" " * (16 - len(line))
     if center:
         def padLine(line: bytes) -> bytes:
             padding = (16 - len(line))
-            return b' ' * (padding // 2) + line + b' ' * (padding - padding // 2)
+            return b" " * (padding // 2) + line + b" " * (padding - padding // 2)
 
-    result = b''
-    for line in s.split(b'\n'):
-        result_line = b''
-        for word in line.split(b' '):
+    result = b""
+    for line in s.split(b"\n"):
+        result_line = b""
+        for word in line.split(b" "):
             if len(result_line) + 1 + len(word) > 16:
                 result += padLine(result_line)
-                result_line = b''
+                result_line = b""
             elif result_line:
-                result_line += b' '
+                result_line += b" "
             result_line += word
         if result_line:
             result += padLine(result_line)
@@ -172,9 +172,9 @@ def formatText(instr: str, *, center: bool = False, ask: Optional[str] = None) -
         askbytes = ask.encode("ascii", errors="replace")
         result = result.rstrip()
         while len(result) % 32 != 16:
-            result += b' '
-        return result + b'    ' + askbytes + b'\xfe'
-    return result.rstrip() + b'\xff'
+            result += b" "
+        return result + b"    " + askbytes + b"\xfe"
+    return result.rstrip() + b"\xff"
 
 
 def tileDataToString(data: bytes, key: str = " 123") -> str:

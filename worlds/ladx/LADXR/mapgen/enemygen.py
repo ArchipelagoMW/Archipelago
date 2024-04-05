@@ -1,6 +1,6 @@
-from .tileset import walkable_tiles, entrance_tiles
 import random
 
+from .tileset import entrance_tiles, walkable_tiles
 
 ENEMIES = {
     "mountains": [

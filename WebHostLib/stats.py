@@ -1,13 +1,13 @@
 import typing
 from collections import Counter, defaultdict
 from colorsys import hsv_to_rgb
-from datetime import datetime, timedelta, date
+from datetime import date, datetime, timedelta
 from math import tau
 
 from bokeh.colors import RGB
 from bokeh.embed import components
 from bokeh.models import HoverTool
-from bokeh.plotting import figure, ColumnDataSource
+from bokeh.plotting import ColumnDataSource, figure
 from bokeh.resources import INLINE
 from flask import render_template
 from pony.orm import select
@@ -59,7 +59,7 @@ def create_game_played_figure(all_games_data: typing.Dict[datetime.date, typing.
     }
 
     plot = figure(
-        title=f"{game} Played Per Day", x_axis_type='datetime', x_axis_label="Date",
+        title=f"{game} Played Per Day", x_axis_type="datetime", x_axis_label="Date",
         y_axis_label="Games Played", sizing_mode="scale_both", width=PLOT_WIDTH, height=500,
         toolbar_location=None, tools="",
         # setting legend to False seems broken in bokeh currently?
@@ -72,12 +72,12 @@ def create_game_played_figure(all_games_data: typing.Dict[datetime.date, typing.
     return plot
 
 
-@app.route('/stats')
+@app.route("/stats")
 @cache.memoize(timeout=60 * 60)  # regen once per hour should be plenty
 def stats():
     from worlds import network_data_package
     known_games = set(network_data_package["games"])
-    plot = figure(title="Games Played Per Day", x_axis_type='datetime', x_axis_label="Date",
+    plot = figure(title="Games Played Per Day", x_axis_type="datetime", x_axis_label="Date",
                   y_axis_label="Games Played", sizing_mode="scale_both", width=PLOT_WIDTH, height=500)
 
     total_games, games_played = get_db_data(known_games)

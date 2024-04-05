@@ -3,7 +3,9 @@ from __future__ import annotations
 
 import math
 from functools import cached_property
-from typing import TYPE_CHECKING, Dict, List, Optional, Set, Tuple, Union
+from typing import TYPE_CHECKING, Dict, List, Optional, Tuple, Union
+
+from worlds._sc2common.bot import logger
 
 from .bot_ai_internal import BotAIInternal
 from .cache import property_cache_once_per_frame
@@ -11,8 +13,6 @@ from .data import Alert, Result
 from .position import Point2
 from .unit import Unit
 from .units import Units
-
-from worlds._sc2common.bot import logger
 
 if TYPE_CHECKING:
     from .game_info import Ramp

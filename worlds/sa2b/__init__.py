@@ -1,22 +1,59 @@
-import typing
-import math
 import logging
+import math
+import typing
 
-from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
-from .Items import SA2BItem, ItemData, item_table, upgrades_table, emeralds_table, junk_table, trap_table, item_groups, \
-                   eggs_table, fruits_table, seeds_table, hats_table, animals_table, chaos_drives_table
-from .Locations import SA2BLocation, all_locations, setup_locations, chao_animal_event_location_table, black_market_location_table
-from .Options import sa2b_options
-from .Regions import create_regions, shuffleable_regions, connect_regions, LevelGate, gate_0_whitelist_regions, \
-    gate_0_blacklist_regions
-from .Rules import set_rules
-from .Names import ItemName, LocationName
-from .AestheticData import chao_name_conversion, sample_chao_names, totally_real_item_names, \
-                           all_exits, all_destinations, multi_rooms, single_rooms, room_to_exits_map, exit_to_room_map, valid_kindergarten_exits
-from worlds.AutoWorld import WebWorld, World
-from .GateBosses import get_gate_bosses, get_boss_rush_bosses, get_boss_name
-from .Missions import get_mission_table, get_mission_count_table, get_first_and_last_cannons_core_missions
 import Patch
+from BaseClasses import Item, ItemClassification, MultiWorld, Tutorial
+from worlds.AutoWorld import WebWorld, World
+
+from .AestheticData import (
+    all_destinations,
+    all_exits,
+    chao_name_conversion,
+    exit_to_room_map,
+    multi_rooms,
+    room_to_exits_map,
+    sample_chao_names,
+    single_rooms,
+    totally_real_item_names,
+    valid_kindergarten_exits,
+)
+from .GateBosses import get_boss_name, get_boss_rush_bosses, get_gate_bosses
+from .Items import (
+    ItemData,
+    SA2BItem,
+    animals_table,
+    chaos_drives_table,
+    eggs_table,
+    emeralds_table,
+    fruits_table,
+    hats_table,
+    item_groups,
+    item_table,
+    junk_table,
+    seeds_table,
+    trap_table,
+    upgrades_table,
+)
+from .Locations import (
+    SA2BLocation,
+    all_locations,
+    black_market_location_table,
+    chao_animal_event_location_table,
+    setup_locations,
+)
+from .Missions import get_first_and_last_cannons_core_missions, get_mission_count_table, get_mission_table
+from .Names import ItemName, LocationName
+from .Options import sa2b_options
+from .Regions import (
+    LevelGate,
+    connect_regions,
+    create_regions,
+    gate_0_blacklist_regions,
+    gate_0_whitelist_regions,
+    shuffleable_regions,
+)
+from .Rules import set_rules
 
 
 class SA2BWeb(WebWorld):
@@ -30,7 +67,7 @@ class SA2BWeb(WebWorld):
         "setup/en",
         ["RaspberrySpaceJam", "PoryGone", "Entiss"]
     )
-    
+
     tutorials = [setup_en]
 
 
@@ -196,7 +233,7 @@ class SA2BWorld(World):
 
         # First Missions
         total_required_locations = len(self.location_table)
-        total_required_locations -= 1; # Locked Victory Location
+        total_required_locations -= 1 # Locked Victory Location
 
         if self.options.goal.value != 3:
             # Fill item pool with all required items
@@ -447,7 +484,7 @@ class SA2BWorld(World):
     def stage_fill_hook(cls, multiworld: MultiWorld, progitempool, usefulitempool, filleritempool, fill_locations):
         if multiworld.get_game_players("Sonic Adventure 2 Battle"):
             progitempool.sort(
-                key=lambda item: 0 if (item.name != 'Emblem') else 1)
+                key=lambda item: 0 if (item.name != "Emblem") else 1)
 
     def get_levels_per_gate(self) -> list:
         levels_per_gate = list()
@@ -492,7 +529,7 @@ class SA2BWorld(World):
            self.options.chao_animal_parts or \
            self.options.chao_kindergarten or \
            self.options.black_market_slots.value > 0:
-            return True;
+            return True
 
         return False
 

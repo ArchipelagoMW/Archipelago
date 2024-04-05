@@ -1,18 +1,24 @@
-import typing
-from pkgutil import get_data
-
-import Utils
-from typing import Optional, TYPE_CHECKING
 import hashlib
 import os
 import struct
+import typing
+from pkgutil import get_data
+from typing import TYPE_CHECKING, Optional
+
+import bsdiff4
 
 import settings
+import Utils
 from worlds.Files import APDeltaPatch
-from .Aesthetics import get_palette_bytes, kirby_target_palettes, get_kirby_palette, gooey_target_palettes, \
-    get_gooey_palette
+
+from .Aesthetics import (
+    get_gooey_palette,
+    get_kirby_palette,
+    get_palette_bytes,
+    gooey_target_palettes,
+    kirby_target_palettes,
+)
 from .Compression import hal_decompress
-import bsdiff4
 
 if TYPE_CHECKING:
     from . import KDL3World
@@ -275,11 +281,11 @@ class RomData:
         self.file[offset:offset + len(values)] = values
 
     def write_to_file(self, file: str):
-        with open(file, 'wb') as outfile:
+        with open(file, "wb") as outfile:
             outfile.write(self.file)
 
     def read_from_file(self, file: str):
-        with open(file, 'rb') as stream:
+        with open(file, "rb") as stream:
             self.file = bytearray(stream.read())
 
     def apply_patch(self, patch: bytes):
@@ -534,7 +540,7 @@ def patch_rom(world: "KDL3World", rom: RomData):
 
     from Utils import __version__
     rom.name = bytearray(
-        f'KDL3{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
+        f'KDL3{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0', "utf8")[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x3C000, rom.name)
     rom.write_byte(0x3C020, world.options.game_language.value)

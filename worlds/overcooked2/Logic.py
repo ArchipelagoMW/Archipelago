@@ -1,7 +1,16 @@
-from BaseClasses import CollectionState
-from .Overcooked2Levels import Overcooked2GenericLevel, Overcooked2Dlc, Overcooked2Level, OverworldRegion, overworld_region_by_level
-from typing import Dict, Set
 from random import Random
+from typing import Dict, Set
+
+from BaseClasses import CollectionState
+
+from .Overcooked2Levels import (
+    Overcooked2Dlc,
+    Overcooked2GenericLevel,
+    Overcooked2Level,
+    OverworldRegion,
+    overworld_region_by_level,
+)
+
 
 def has_requirements_for_level_access(state: CollectionState, level_name: str, previous_level_completed_event_name: str,
                                       required_star_count: int, allow_ramp_tricks: bool, player: int) -> bool:
@@ -282,7 +291,7 @@ def can_reach_stonehenge_mountain(state: CollectionState, player: int, allow_tri
 
     if state.has("Blue Ramp", player):
         return True
-    
+
     if can_reach_out_of_bounds(state, player, allow_tricks, visited):
         return True
 
@@ -317,7 +326,7 @@ def can_reach_pink_island(state: CollectionState, player: int, allow_tricks: boo
 
     if allow_tricks and state.has("Progressive Dash", player) and can_reach_sky_shelf(state, player, allow_tricks, visited):
         return True
-    
+
     return False
 
 def can_reach_tip_of_the_map(state: CollectionState, player: int, allow_tricks: bool, visited: list) -> bool:
@@ -327,7 +336,7 @@ def can_reach_tip_of_the_map(state: CollectionState, player: int, allow_tricks: 
 
     if state.has_all({"5-1 Level Complete", "Purple Ramp"}, player):
         return True
-    
+
     if can_reach_out_of_bounds(state, player, allow_tricks, visited):
         return True
 

@@ -1,5 +1,6 @@
-from .itemInfo import ItemInfo
 from .constants import *
+from .itemInfo import ItemInfo
+
 patched_already = {}
 
 class DroppedKey(ItemInfo):
@@ -20,7 +21,7 @@ class DroppedKey(ItemInfo):
         super().__init__(room, extra)
     def patch(self, rom, option, *, multiworld=None):
         if (option.startswith(MAP) and option != MAP) or (option.startswith(COMPASS) and option != COMPASS) or option.startswith(STONE_BEAK) or (option.startswith(NIGHTMARE_KEY) and option != NIGHTMARE_KEY )or (option.startswith(KEY) and option != KEY):
-            if option[-1] == 'P':
+            if option[-1] == "P":
                 print(option)
             if self._location.dungeon == int(option[-1]) and multiworld is None and self.room not in {0x166, 0x223}:
                 option = option[:-1]
@@ -35,7 +36,7 @@ class DroppedKey(ItemInfo):
 
         if multiworld is not None:
             rom.banks[0x3E][0x3300 + self.room] = multiworld
-            
+
             if self.extra:
                 rom.banks[0x3E][0x3300 + self.extra] = multiworld
 

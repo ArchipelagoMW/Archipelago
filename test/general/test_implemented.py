@@ -3,6 +3,7 @@ import unittest
 from Fill import distribute_items_restrictive
 from NetUtils import encode
 from worlds.AutoWorld import AutoWorldRegister, call_all
+
 from . import setup_solo_multiworld
 
 

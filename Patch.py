@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import os
 import sys
-from typing import Tuple, Optional, TypedDict
+from typing import Optional, Tuple, TypedDict
 
 if __name__ == "__main__":
     import ModuleUpdate
     ModuleUpdate.update()
 
-from worlds.Files import AutoPatchRegister, APAutoPatchInterface
+from worlds.Files import APAutoPatchInterface, AutoPatchRegister
 
 
 class RomMeta(TypedDict):

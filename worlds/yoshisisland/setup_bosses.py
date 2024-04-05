@@ -1,5 +1,7 @@
-from BaseClasses import CollectionState
 from typing import TYPE_CHECKING
+
+from BaseClasses import CollectionState
+
 if TYPE_CHECKING:
     from . import YoshisIslandWorld
 

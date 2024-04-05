@@ -1,10 +1,11 @@
 import copy
 import random
-from ..logic.logic import Logic
-from ..utils.parameters import Knows
+
 from ..graph.location import locationsDict
+from ..logic.logic import Logic
 from ..rom.rom import snes_to_pc
 from ..utils import log
+from ..utils.parameters import Knows
 
 # order expected by ROM patches
 graphAreas = [
@@ -23,50 +24,50 @@ graphAreas = [
 ]
 
 vanillaTransitions = [
-    ('Lower Mushrooms Left', 'Green Brinstar Elevator'),
-    ('Morph Ball Room Left', 'Green Hill Zone Top Right'),
-    ('Moat Right', 'West Ocean Left'),
-    ('Keyhunter Room Bottom', 'Red Brinstar Elevator'),
-    ('Noob Bridge Right', 'Red Tower Top Left'),
-    ('Crab Maze Left', 'Le Coude Right'),
-    ('Kronic Boost Room Bottom Left', 'Lava Dive Right'),
-    ('Crocomire Speedway Bottom', 'Crocomire Room Top'),
-    ('Three Muskateers Room Left', 'Single Chamber Top Right'),
-    ('Warehouse Entrance Left', 'East Tunnel Right'),
-    ('East Tunnel Top Right', 'Crab Hole Bottom Left'),
-    ('Caterpillar Room Top Right', 'Red Fish Room Left'),
-    ('Glass Tunnel Top', 'Main Street Bottom'),
-    ('Green Pirates Shaft Bottom Right', 'Golden Four'),
-    ('Warehouse Entrance Right', 'Warehouse Zeela Room Left'),
-    ('Crab Shaft Right', 'Aqueduct Top Left')
+    ("Lower Mushrooms Left", "Green Brinstar Elevator"),
+    ("Morph Ball Room Left", "Green Hill Zone Top Right"),
+    ("Moat Right", "West Ocean Left"),
+    ("Keyhunter Room Bottom", "Red Brinstar Elevator"),
+    ("Noob Bridge Right", "Red Tower Top Left"),
+    ("Crab Maze Left", "Le Coude Right"),
+    ("Kronic Boost Room Bottom Left", "Lava Dive Right"),
+    ("Crocomire Speedway Bottom", "Crocomire Room Top"),
+    ("Three Muskateers Room Left", "Single Chamber Top Right"),
+    ("Warehouse Entrance Left", "East Tunnel Right"),
+    ("East Tunnel Top Right", "Crab Hole Bottom Left"),
+    ("Caterpillar Room Top Right", "Red Fish Room Left"),
+    ("Glass Tunnel Top", "Main Street Bottom"),
+    ("Green Pirates Shaft Bottom Right", "Golden Four"),
+    ("Warehouse Entrance Right", "Warehouse Zeela Room Left"),
+    ("Crab Shaft Right", "Aqueduct Top Left")
 ]
 
 vanillaBossesTransitions = [
-    ('KraidRoomOut', 'KraidRoomIn'),
-    ('PhantoonRoomOut', 'PhantoonRoomIn'),
-    ('DraygonRoomOut', 'DraygonRoomIn'),
-    ('RidleyRoomOut', 'RidleyRoomIn')
+    ("KraidRoomOut", "KraidRoomIn"),
+    ("PhantoonRoomOut", "PhantoonRoomIn"),
+    ("DraygonRoomOut", "DraygonRoomIn"),
+    ("RidleyRoomOut", "RidleyRoomIn")
 ]
 
 # vanilla escape transition in first position
 vanillaEscapeTransitions = [
-    ('Tourian Escape Room 4 Top Right', 'Climb Bottom Left'),
-    ('Brinstar Pre-Map Room Right', 'Green Brinstar Main Shaft Top Left'),
-    ('Wrecked Ship Map Room', 'Basement Left'),
-    ('Norfair Map Room', 'Business Center Mid Left'),
-    ('Maridia Map Room', 'Crab Hole Bottom Right')
+    ("Tourian Escape Room 4 Top Right", "Climb Bottom Left"),
+    ("Brinstar Pre-Map Room Right", "Green Brinstar Main Shaft Top Left"),
+    ("Wrecked Ship Map Room", "Basement Left"),
+    ("Norfair Map Room", "Business Center Mid Left"),
+    ("Maridia Map Room", "Crab Hole Bottom Right")
 ]
 
 vanillaEscapeAnimalsTransitions = [
-    ('Flyway Right 0', 'Bomb Torizo Room Left'),
-    ('Flyway Right 1', 'Bomb Torizo Room Left'),
-    ('Flyway Right 2', 'Bomb Torizo Room Left'),
-    ('Flyway Right 3', 'Bomb Torizo Room Left'),
-    ('Bomb Torizo Room Left Animals', 'Flyway Right')
+    ("Flyway Right 0", "Bomb Torizo Room Left"),
+    ("Flyway Right 1", "Bomb Torizo Room Left"),
+    ("Flyway Right 2", "Bomb Torizo Room Left"),
+    ("Flyway Right 3", "Bomb Torizo Room Left"),
+    ("Bomb Torizo Room Left Animals", "Flyway Right")
 ]
 
-escapeSource = 'Tourian Escape Room 4 Top Right'
-escapeTargets = ['Green Brinstar Main Shaft Top Left', 'Basement Left', 'Business Center Mid Left', 'Crab Hole Bottom Right']
+escapeSource = "Tourian Escape Room 4 Top Right"
+escapeTargets = ["Green Brinstar Main Shaft Top Left", "Basement Left", "Business Center Mid Left", "Crab Hole Bottom Right"]
 
 locIdsByAreaAddresses = {
     "Ceres": snes_to_pc(0xA1F568),
@@ -89,26 +90,26 @@ def getAccessPoint(apName, apList=None):
     return next(ap for ap in apList if ap.Name == apName)
 
 class GraphUtils:
-    log = log.get('GraphUtils')
+    log = log.get("GraphUtils")
 
     def getStartAccessPointNames():
         return [ap.Name for ap in Logic.accessPoints if ap.Start is not None]
 
     def getStartAccessPointNamesCategory():
-        ret = {'regular': [], 'custom': [], 'area': []}
+        ret = {"regular": [], "custom": [], "area": []}
         for ap in Logic.accessPoints:
             if ap.Start == None:
                 continue
-            elif 'areaMode' in ap.Start and ap.Start['areaMode'] == True:
-                ret['area'].append(ap.Name)
+            elif "areaMode" in ap.Start and ap.Start["areaMode"] == True:
+                ret["area"].append(ap.Name)
             elif GraphUtils.isStandardStart(ap.Name):
-                ret['regular'].append(ap.Name)
+                ret["regular"].append(ap.Name)
             else:
-                ret['custom'].append(ap.Name)
+                ret["custom"].append(ap.Name)
         return ret
 
     def isStandardStart(startApName):
-        return startApName == 'Ceres' or startApName == 'Landing Site'
+        return startApName == "Ceres" or startApName == "Landing Site"
 
     def getPossibleStartAPs(areaMode, maxDiff, morphPlacement, player):
         ret = []
@@ -118,16 +119,16 @@ class GraphUtils:
             start = getAccessPoint(apName).Start
             ok = True
             cause = ""
-            if 'knows' in start:
-                for k in start['knows']:
+            if "knows" in start:
+                for k in start["knows"]:
                     if not Knows.knowsDict[player].knows(k, maxDiff):
                         ok = False
-                        cause += Knows.desc[k]['display']+" is not known. "
+                        cause += Knows.desc[k]["display"]+" is not known. "
                         break
-            if 'areaMode' in start and start['areaMode'] != areaMode:
+            if "areaMode" in start and start["areaMode"] != areaMode:
                 ok = False
                 cause += "Start location available only with area randomization enabled. "
-            if 'forcedEarlyMorph' in start and start['forcedEarlyMorph'] == True and morphPlacement == 'late':
+            if "forcedEarlyMorph" in start and start["forcedEarlyMorph"] == True and morphPlacement == "late":
                 ok = False
                 cause += "Start location unavailable with late morph placement. "
             if ok:
@@ -150,7 +151,7 @@ class GraphUtils:
             loc = possLocs.pop(random.randint(0,len(possLocs)-1))
             newLocs.append(loc)
             loc.setClass([split])
-            if not loc in preserveMajLocs:
+            if loc not in preserveMajLocs:
                 GraphUtils.log.debug("newMajor="+loc.Name)
                 loc = candidates.pop(random.randint(0,len(candidates)-1))
                 loc.setClass(["Minor"])
@@ -158,7 +159,7 @@ class GraphUtils:
 
     def getGraphPatches(startApName):
         ap = getAccessPoint(startApName)
-        return ap.Start['patches'] if 'patches' in ap.Start else []
+        return ap.Start["patches"] if "patches" in ap.Start else []
 
     def createBossesTransitions():
         transitions = vanillaBossesTransitions
@@ -242,8 +243,8 @@ class GraphUtils:
     def createMinimizerTransitions(startApName, locLimit, forcedAreas=None):
         if forcedAreas is None:
             forcedAreas = []
-        if startApName == 'Ceres':
-            startApName = 'Landing Site'
+        if startApName == "Ceres":
+            startApName = "Landing Site"
         startAp = getAccessPoint(startApName)
         def getNLocs(locsPredicate, locList=None):
             if locList is None:
@@ -254,9 +255,9 @@ class GraphUtils:
         areas = [startAp.GraphArea]
         if startAp.GraphArea in forcedAreas:
             forcedAreas.remove(startAp.GraphArea)
-        GraphUtils.log.debug("availAreas: {}".format(availAreas))
-        GraphUtils.log.debug("forcedAreas: {}".format(forcedAreas))
-        GraphUtils.log.debug("areas: {}".format(areas))
+        GraphUtils.log.debug(f"availAreas: {availAreas}")
+        GraphUtils.log.debug(f"forcedAreas: {forcedAreas}")
+        GraphUtils.log.debug(f"areas: {areas}")
         inBossCheck = lambda ap: ap.Boss and ap.Name.endswith("In")
         nLocs = 0
         transitions = []
@@ -265,7 +266,7 @@ class GraphUtils:
         locLimit -= 3 # 3 "post boss" locs will always be available, and are filtered out in getNLocs
         def openTransitions():
             nonlocal areas, inBossCheck, usedAPs
-            return GraphUtils.getAPs(lambda ap: ap.GraphArea in areas and not ap.isInternal() and not inBossCheck(ap) and not ap in usedAPs)
+            return GraphUtils.getAPs(lambda ap: ap.GraphArea in areas and not ap.isInternal() and not inBossCheck(ap) and ap not in usedAPs)
         while nLocs < locLimit or len(openTransitions()) < trLimit or len(forcedAreas) > 0:
             GraphUtils.log.debug("openTransitions="+str([ap.Name for ap in openTransitions()]))
             fromAreas = availAreas
@@ -294,23 +295,23 @@ class GraphUtils:
             src = random.choice(possibleSources)
             dst = random.choice(possibleTargets)
             usedAPs += [src,dst]
-            GraphUtils.log.debug("add transition: (src: {}, dst: {})".format(src.Name, dst.Name))
+            GraphUtils.log.debug(f"add transition: (src: {src.Name}, dst: {dst.Name})")
             transitions.append((src.Name,dst.Name))
             availAreas.remove(nextArea)
             areas.append(nextArea)
-            GraphUtils.log.debug("areas: {}".format(areas))
+            GraphUtils.log.debug(f"areas: {areas}")
             nLocs = getNLocs(lambda loc:loc.GraphArea in areas)
-            GraphUtils.log.debug("nLocs: {}".format(nLocs))
+            GraphUtils.log.debug(f"nLocs: {nLocs}")
         # we picked the areas, add transitions (bosses and tourian first)
         sourceAPs = openTransitions()
         random.shuffle(sourceAPs)
-        targetAPs = GraphUtils.getAPs(lambda ap: (inBossCheck(ap) or ap.Name == "Golden Four") and not ap in usedAPs)
+        targetAPs = GraphUtils.getAPs(lambda ap: (inBossCheck(ap) or ap.Name == "Golden Four") and ap not in usedAPs)
         random.shuffle(targetAPs)
         assert len(sourceAPs) >= len(targetAPs), "Minimizer: less source than target APs"
         while len(targetAPs) > 0:
             transitions.append((sourceAPs.pop().Name, targetAPs.pop().Name))
         transitions += GraphUtils.createRegularAreaTransitions(sourceAPs, lambda ap: not ap.isInternal())
-        GraphUtils.log.debug("FINAL MINIMIZER transitions: {}".format(transitions))
+        GraphUtils.log.debug(f"FINAL MINIMIZER transitions: {transitions}")
         GraphUtils.loopUnusedTransitions(transitions)
         GraphUtils.log.debug("FINAL MINIMIZER nLocs: "+str(nLocs+3))
         GraphUtils.log.debug("FINAL MINIMIZER areas: "+str(areas))
@@ -323,45 +324,45 @@ class GraphUtils:
         for ap in Logic.accessPoints:
             if not ap.isArea():
                 continue
-            if not ap.GraphArea in aps:
-                aps[ap.GraphArea] = {'totalCount': 0, 'transCount': {}, 'apNames': []}
-            aps[ap.GraphArea]['apNames'].append(ap.Name)
+            if ap.GraphArea not in aps:
+                aps[ap.GraphArea] = {"totalCount": 0, "transCount": {}, "apNames": []}
+            aps[ap.GraphArea]["apNames"].append(ap.Name)
         # count number of vanilla transitions between each area
         for (srcName, destName) in vanillaTransitions:
             srcAP = getAccessPoint(srcName)
             destAP = getAccessPoint(destName)
-            aps[srcAP.GraphArea]['transCount'][destAP.GraphArea] = aps[srcAP.GraphArea]['transCount'].get(destAP.GraphArea, 0) + 1
-            aps[srcAP.GraphArea]['totalCount'] += 1
-            aps[destAP.GraphArea]['transCount'][srcAP.GraphArea] = aps[destAP.GraphArea]['transCount'].get(srcAP.GraphArea, 0) + 1
-            aps[destAP.GraphArea]['totalCount'] += 1
+            aps[srcAP.GraphArea]["transCount"][destAP.GraphArea] = aps[srcAP.GraphArea]["transCount"].get(destAP.GraphArea, 0) + 1
+            aps[srcAP.GraphArea]["totalCount"] += 1
+            aps[destAP.GraphArea]["transCount"][srcAP.GraphArea] = aps[destAP.GraphArea]["transCount"].get(srcAP.GraphArea, 0) + 1
+            aps[destAP.GraphArea]["totalCount"] += 1
             totalCount += 1
 
         transitions = []
         while totalCount > 0:
             # choose transition
             srcArea = random.choice(list(aps.keys()))
-            srcName = random.choice(aps[srcArea]['apNames'])
+            srcName = random.choice(aps[srcArea]["apNames"])
             src = getAccessPoint(srcName)
-            destArea = random.choice(list(aps[src.GraphArea]['transCount'].keys()))
-            destName = random.choice(aps[destArea]['apNames'])
+            destArea = random.choice(list(aps[src.GraphArea]["transCount"].keys()))
+            destName = random.choice(aps[destArea]["apNames"])
             transitions.append((srcName, destName))
 
             # update counts
             totalCount -= 1
-            aps[srcArea]['totalCount'] -= 1
-            aps[destArea]['totalCount'] -= 1
-            aps[srcArea]['transCount'][destArea] -= 1
-            if aps[srcArea]['transCount'][destArea] == 0:
-                del aps[srcArea]['transCount'][destArea]
-            aps[destArea]['transCount'][srcArea] -= 1
-            if aps[destArea]['transCount'][srcArea] == 0:
-                del aps[destArea]['transCount'][srcArea]
-            aps[srcArea]['apNames'].remove(srcName)
-            aps[destArea]['apNames'].remove(destName)
+            aps[srcArea]["totalCount"] -= 1
+            aps[destArea]["totalCount"] -= 1
+            aps[srcArea]["transCount"][destArea] -= 1
+            if aps[srcArea]["transCount"][destArea] == 0:
+                del aps[srcArea]["transCount"][destArea]
+            aps[destArea]["transCount"][srcArea] -= 1
+            if aps[destArea]["transCount"][srcArea] == 0:
+                del aps[destArea]["transCount"][srcArea]
+            aps[srcArea]["apNames"].remove(srcName)
+            aps[destArea]["apNames"].remove(destName)
 
-            if aps[srcArea]['totalCount'] == 0:
+            if aps[srcArea]["totalCount"] == 0:
                 del aps[srcArea]
-            if aps[destArea]['totalCount'] == 0:
+            if aps[destArea]["totalCount"] == 0:
                 del aps[destArea]
 
         return transitions
@@ -376,7 +377,7 @@ class GraphUtils:
         return None
 
     def isEscapeAnimals(apName):
-        return 'Flyway Right' in apName or 'Bomb Torizo Room Left' in apName
+        return "Flyway Right" in apName or "Bomb Torizo Room Left" in apName
 
     # gets dict like
     # (RoomPtr, (vanilla entry screen X, vanilla entry screen Y)): AP
@@ -389,7 +390,7 @@ class GraphUtils:
             if GraphUtils.isEscapeAnimals(ap.Name):
                 continue
 
-            roomPtr = ap.RoomInfo['RoomPtr']
+            roomPtr = ap.RoomInfo["RoomPtr"]
 
             vanillaExitName = GraphUtils.getVanillaExit(ap.Name)
             # special ap for random escape animals surprise
@@ -398,10 +399,10 @@ class GraphUtils:
 
             connAP = getAccessPoint(vanillaExitName)
             entryInfo = connAP.ExitInfo
-            rooms[(roomPtr, entryInfo['screen'], entryInfo['direction'])] = ap
-            rooms[(roomPtr, entryInfo['screen'], (ap.EntryInfo['SamusX'], ap.EntryInfo['SamusY']))] = ap
+            rooms[(roomPtr, entryInfo["screen"], entryInfo["direction"])] = ap
+            rooms[(roomPtr, entryInfo["screen"], (ap.EntryInfo["SamusX"], ap.EntryInfo["SamusY"]))] = ap
             # for boss rando with incompatible ridley transition, also register this one
-            if ap.Name == 'RidleyRoomIn':
+            if ap.Name == "RidleyRoomIn":
                 rooms[(roomPtr, (0x0, 0x1), 0x5)] = ap
                 rooms[(roomPtr, (0x0, 0x1), (0xbf, 0x198))] = ap
 
@@ -415,9 +416,9 @@ class GraphUtils:
             # complete possibleTargets. we need at least 2: one to
             # hide the animals in, and one to connect the vanilla
             # animals door to
-            if not any(t[1].Name == 'Climb Bottom Left' for t in graph.InterAreaTransitions):
+            if not any(t[1].Name == "Climb Bottom Left" for t in graph.InterAreaTransitions):
                 # add standard Climb if not already in graph: it can be in Crateria-less minimizer + Disabled Tourian case
-                possibleTargets.append('Climb Bottom Left')
+                possibleTargets.append("Climb Bottom Left")
             # make the escape possibilities loop by adding back the first escape
             if firstEscape is not None:
                 possibleTargets.append(firstEscape)
@@ -429,7 +430,7 @@ class GraphUtils:
         if n >= 2:
             # get actual animals: pick the first of the remaining targets (will contain a map room AP)
             animalsAccess = possibleTargets.pop(0)
-            graph.EscapeAttributes['Animals'] = animalsAccess
+            graph.EscapeAttributes["Animals"] = animalsAccess
             # poss will contain the remaining map room AP(s) + optional AP(s) added above, to
             # get the cycling 4 escapes from vanilla animals room
             poss = possibleTargets[:]
@@ -443,25 +444,25 @@ class GraphUtils:
 
         else:
             # failsafe: if not enough targets left, abort and do vanilla animals
-            animalsAccess = 'Flyway Right'
-            possibleTargets = ['Bomb Torizo Room Left'] * 4
+            animalsAccess = "Flyway Right"
+            possibleTargets = ["Bomb Torizo Room Left"] * 4
         GraphUtils.log.debug("escapeAnimalsTransitions. animalsAccess="+animalsAccess)
         assert len(possibleTargets) == 4, "Invalid possibleTargets list: " + str(possibleTargets)
         # actually add the 4 connections for successive escapes challenge
         basePtr = 0xADAC
-        btDoor = getAccessPoint('Flyway Right')
+        btDoor = getAccessPoint("Flyway Right")
         for i in range(len(possibleTargets)):
             ap = copy.copy(btDoor)
             ap.Name += " " + str(i)
-            ap.ExitInfo['DoorPtr'] = basePtr + i*24
+            ap.ExitInfo["DoorPtr"] = basePtr + i*24
             graph.addAccessPoint(ap)
             target = possibleTargets[i]
             graph.addTransition(ap.Name, target)
         # add the connection for animals access
-        bt = getAccessPoint('Bomb Torizo Room Left')
+        bt = getAccessPoint("Bomb Torizo Room Left")
         btCpy = copy.copy(bt)
         btCpy.Name += " Animals"
-        btCpy.ExitInfo['DoorPtr'] = 0xAE00
+        btCpy.ExitInfo["DoorPtr"] = 0xAE00
         graph.addAccessPoint(btCpy)
         graph.addTransition(animalsAccess, btCpy.Name)
 
@@ -478,8 +479,8 @@ class GraphUtils:
         return dir - 4
 
     def getDirection(src, dst):
-        exitDir = src.ExitInfo['direction']
-        entryDir = dst.EntryInfo['direction']
+        exitDir = src.ExitInfo["direction"]
+        entryDir = dst.EntryInfo["direction"]
         # compatible transition
         if exitDir == entryDir:
             return exitDir
@@ -527,34 +528,34 @@ class GraphUtils:
                     continue
 
             conn = {}
-            conn['ID'] = str(src) + ' -> ' + str(dst)
+            conn["ID"] = str(src) + " -> " + str(dst)
             # remove duplicates (loop transitions)
-            if any(c['ID'] == conn['ID'] for c in connections):
+            if any(c["ID"] == conn["ID"] for c in connections):
                 continue
 #            print(conn['ID'])
             # where to write
-            conn['DoorPtr'] = src.ExitInfo['DoorPtr']
+            conn["DoorPtr"] = src.ExitInfo["DoorPtr"]
             # door properties
-            conn['RoomPtr'] = dst.RoomInfo['RoomPtr']
-            conn['doorAsmPtr'] = dst.EntryInfo['doorAsmPtr']
-            if 'exitAsmPtr' in src.ExitInfo:
-                conn['exitAsmPtr'] = src.ExitInfo['exitAsmPtr']
-            conn['direction'] = GraphUtils.getDirection(src, dst)
-            conn['bitFlag'] = GraphUtils.getBitFlag(src.RoomInfo['area'], dst.RoomInfo['area'],
-                                                    dst.EntryInfo['bitFlag'])
-            conn['cap'] = dst.EntryInfo['cap']
-            conn['screen'] = dst.EntryInfo['screen']
-            if conn['direction'] != src.ExitInfo['direction']: # incompatible transition
-                conn['distanceToSpawn'] = 0
-                conn['SamusX'] = dst.EntryInfo['SamusX']
-                conn['SamusY'] = dst.EntryInfo['SamusY']
-                if dst.Name == 'RidleyRoomIn': # special case: spawn samus on ridley platform
-                    conn['screen'] = (0x0, 0x1)
+            conn["RoomPtr"] = dst.RoomInfo["RoomPtr"]
+            conn["doorAsmPtr"] = dst.EntryInfo["doorAsmPtr"]
+            if "exitAsmPtr" in src.ExitInfo:
+                conn["exitAsmPtr"] = src.ExitInfo["exitAsmPtr"]
+            conn["direction"] = GraphUtils.getDirection(src, dst)
+            conn["bitFlag"] = GraphUtils.getBitFlag(src.RoomInfo["area"], dst.RoomInfo["area"],
+                                                    dst.EntryInfo["bitFlag"])
+            conn["cap"] = dst.EntryInfo["cap"]
+            conn["screen"] = dst.EntryInfo["screen"]
+            if conn["direction"] != src.ExitInfo["direction"]: # incompatible transition
+                conn["distanceToSpawn"] = 0
+                conn["SamusX"] = dst.EntryInfo["SamusX"]
+                conn["SamusY"] = dst.EntryInfo["SamusY"]
+                if dst.Name == "RidleyRoomIn": # special case: spawn samus on ridley platform
+                    conn["screen"] = (0x0, 0x1)
             else:
-                conn['distanceToSpawn'] = dst.EntryInfo['distanceToSpawn']
-            if 'song' in dst.EntryInfo:
-                conn['song'] = dst.EntryInfo['song']
-                conn['songs'] = dst.RoomInfo['songs']
+                conn["distanceToSpawn"] = dst.EntryInfo["distanceToSpawn"]
+            if "song" in dst.EntryInfo:
+                conn["song"] = dst.EntryInfo["song"]
+                conn["songs"] = dst.RoomInfo["songs"]
             connections.append(conn)
         return connections
 

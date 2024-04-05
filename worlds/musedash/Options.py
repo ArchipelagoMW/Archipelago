@@ -1,8 +1,9 @@
-from typing import Dict
-from Options import Toggle, Option, Range, Choice, DeathLink, ItemSet, OptionSet, PerGameCommonOptions
 from dataclasses import dataclass
 
+from Options import Choice, DeathLink, ItemSet, OptionSet, PerGameCommonOptions, Range, Toggle
+
 from .MuseDashCollection import MuseDashCollections
+
 
 class AllowJustAsPlannedDLCSongs(Toggle):
     """Whether [Muse Plus] DLC Songs, and all the albums included in it, can be chosen as randomised songs.

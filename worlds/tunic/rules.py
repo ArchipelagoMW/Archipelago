@@ -1,9 +1,11 @@
 from random import Random
-from typing import Dict, TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict
 
-from worlds.generic.Rules import set_rule, forbid_item
 from BaseClasses import CollectionState
+from worlds.generic.Rules import forbid_item, set_rule
+
 from .options import TunicOptions
+
 if TYPE_CHECKING:
     from . import TunicWorld
 

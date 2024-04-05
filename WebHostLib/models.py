@@ -1,6 +1,7 @@
 from datetime import datetime
 from uuid import UUID, uuid4
-from pony.orm import Database, PrimaryKey, Required, Set, Optional, buffer, LongStr
+
+from pony.orm import Database, LongStr, Optional, PrimaryKey, Required, Set, buffer
 
 db = Database()
 
@@ -14,7 +15,7 @@ class Slot(db.Entity):
     player_id = Required(int)
     player_name = Required(str)
     data = Optional(bytes, lazy=True)
-    seed = Optional('Seed')
+    seed = Optional("Seed")
     game = Required(str)
 
 
@@ -23,8 +24,8 @@ class Room(db.Entity):
     last_activity = Required(datetime, default=lambda: datetime.utcnow(), index=True)
     creation_time = Required(datetime, default=lambda: datetime.utcnow(), index=True)  # index used by landing page
     owner = Required(UUID, index=True)
-    commands = Set('Command')
-    seed = Required('Seed', index=True)
+    commands = Set("Command")
+    seed = Required("Seed", index=True)
     multisave = Optional(buffer, lazy=True)
     show_spoiler = Required(int, default=0)  # 0 -> never, 1 -> after completion, -> 2 always
     timeout = Required(int, default=lambda: 2 * 60 * 60)  # seconds since last activity to shutdown
@@ -41,7 +42,7 @@ class Seed(db.Entity):
     creation_time = Required(datetime, default=lambda: datetime.utcnow(), index=True)  # index used by landing page
     slots = Set(Slot)
     spoiler = Optional(LongStr, lazy=True)
-    meta = Required(LongStr, default=lambda: "{\"race\": false}")  # additional meta information/tags
+    meta = Required(LongStr, default=lambda: '{"race": false}')  # additional meta information/tags
 
 
 class Command(db.Entity):
@@ -54,7 +55,7 @@ class Generation(db.Entity):
     id = PrimaryKey(UUID, default=uuid4)
     owner = Required(UUID)
     options = Required(buffer, lazy=True)
-    meta = Required(LongStr, default=lambda: "{\"race\": false}")
+    meta = Required(LongStr, default=lambda: '{"race": false}')
     state = Required(int, default=0, index=True)
 
 

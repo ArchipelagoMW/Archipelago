@@ -1,30 +1,40 @@
+import base64
 import logging
+import math
+import os
+import threading
 import typing
+from typing import Dict, List, Optional, TextIO
 
-from BaseClasses import Tutorial, ItemClassification, MultiWorld
+import settings
+from BaseClasses import ItemClassification, MultiWorld, Tutorial
 from Fill import fill_restrictive
 from Options import PerGameCommonOptions
-from worlds.AutoWorld import World, WebWorld
-from .Items import item_table, item_names, copy_ability_table, animal_friend_table, filler_item_weights, KDL3Item, \
-    trap_item_table, copy_ability_access_table, star_item_weights, total_filler_weights
-from .Locations import location_table, KDL3Location, level_consumables, consumable_locations, star_locations
+from worlds.AutoWorld import WebWorld, World
+
+from .Client import KDL3SNIClient
+from .Items import (
+    KDL3Item,
+    animal_friend_table,
+    copy_ability_access_table,
+    copy_ability_table,
+    filler_item_weights,
+    item_names,
+    item_table,
+    star_item_weights,
+    total_filler_weights,
+    trap_item_table,
+)
+from .Locations import KDL3Location, consumable_locations, level_consumables, location_table, star_locations
+from .Names import LocationName
 from .Names.AnimalFriendSpawns import animal_friend_spawns
-from .Names.EnemyAbilities import vanilla_enemies, enemy_mapping, enemy_restrictive
-from .Regions import create_levels, default_levels
+from .Names.EnemyAbilities import enemy_mapping, enemy_restrictive, vanilla_enemies
 from .Options import KDL3Options
 from .Presets import kdl3_options_presets
-from .Names import LocationName
+from .Regions import create_levels, default_levels
+from .Rom import KDL3JHASH, KDL3UHASH, KDL3DeltaPatch, RomData, get_base_rom_path, patch_rom
 from .Room import KDL3Room
 from .Rules import set_rules
-from .Rom import KDL3DeltaPatch, get_base_rom_path, RomData, patch_rom, KDL3JHASH, KDL3UHASH
-from .Client import KDL3SNIClient
-
-from typing import Dict, TextIO, Optional, List
-import os
-import math
-import threading
-import base64
-import settings
 
 logger = logging.getLogger("Kirby's Dream Land 3")
 

@@ -2,9 +2,10 @@ from functools import cached_property
 from typing import Union
 
 from Utils import cache_self1
+
+from ..stardew_rule import HasProgressionPercent, StardewRule, True_
 from .base_logic import BaseLogic, BaseLogicMixin
 from .received_logic import ReceivedLogicMixin
-from ..stardew_rule import StardewRule, HasProgressionPercent, True_
 
 MAX_MONTHS = 12
 MONTH_COEFFICIENT = 24 // MAX_MONTHS

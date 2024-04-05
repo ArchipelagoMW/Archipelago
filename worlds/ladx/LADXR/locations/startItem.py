@@ -1,9 +1,7 @@
-from .itemInfo import ItemInfo
-from .constants import *
-from .droppedKey import DroppedKey
 from ..assembler import ASM
 from ..utils import formatText
-from ..roomEditor import RoomEditor
+from .constants import *
+from .droppedKey import DroppedKey
 
 
 class StartItem(DroppedKey):
@@ -18,11 +16,11 @@ class StartItem(DroppedKey):
         self.give_bowwow = False
 
     def configure(self, options):
-        if options.bowwow != 'normal':
+        if options.bowwow != "normal":
             # When we have bowwow mode, we pretend to be a sword for logic reasons
             self.OPTIONS = [SWORD]
             self.give_bowwow = True
-        if options.randomstartlocation and options.entranceshuffle != 'none':
+        if options.randomstartlocation and options.entranceshuffle != "none":
             self.OPTIONS.append(FLIPPERS)
 
     def patch(self, rom, option, *, multiworld=None):

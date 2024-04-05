@@ -1,18 +1,31 @@
-from .Items import UndertaleItem, item_table, required_armor, required_weapons, non_key_items, key_items, \
-    junk_weights_all, plot_items, junk_weights_neutral, junk_weights_pacifist, junk_weights_genocide
-from .Locations import UndertaleAdvancement, advancement_table, exclusion_table
-from .Regions import undertale_regions, link_undertale_areas
-from .Rules import set_rules, set_completion_rules
-from worlds.generic.Rules import exclusion_rules
-from BaseClasses import Region, Entrance, Tutorial, Item
-from .Options import undertale_options
-from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import Component, components, Type
 from multiprocessing import Process
+
+from BaseClasses import Entrance, Item, Region, Tutorial
+from worlds.AutoWorld import WebWorld, World
+from worlds.generic.Rules import exclusion_rules
+from worlds.LauncherComponents import Component, Type, components
+
+from .Items import (
+    UndertaleItem,
+    item_table,
+    junk_weights_all,
+    junk_weights_genocide,
+    junk_weights_neutral,
+    junk_weights_pacifist,
+    key_items,
+    non_key_items,
+    plot_items,
+    required_armor,
+    required_weapons,
+)
+from .Locations import UndertaleAdvancement, advancement_table, exclusion_table
+from .Options import undertale_options
+from .Regions import link_undertale_areas, undertale_regions
+from .Rules import set_completion_rules, set_rules
 
 
 def run_client():
-    print('running undertale client')
+    print("running undertale client")
     from .UndertaleClient import main  # lazy import
     p = Process(target=main)
     p.start()

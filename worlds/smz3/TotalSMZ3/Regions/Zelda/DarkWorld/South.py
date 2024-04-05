@@ -1,7 +1,8 @@
-﻿from ....Region import Z3Region, RewardType
-from ....Config import Config
-from ....Location import Location, LocationType
+﻿from ....Config import Config
 from ....Item import Progression
+from ....Location import Location, LocationType
+from ....Region import RewardType, Z3Region
+
 
 class South(Z3Region):
     Name = "Dark World South"

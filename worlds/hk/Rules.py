@@ -1,7 +1,8 @@
-from ..generic.Rules import set_rule, add_rule
-from ..AutoWorld import World
-from .GeneratedRules import set_generated_rules
 from typing import NamedTuple
+
+from ..AutoWorld import World
+from ..generic.Rules import add_rule, set_rule
+from .GeneratedRules import set_generated_rules
 
 
 class CostTerm(NamedTuple):

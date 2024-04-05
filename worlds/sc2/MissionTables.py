@@ -1,5 +1,5 @@
-from typing import NamedTuple, Dict, List, Set, Union, Literal, Iterable, Callable
-from enum import IntEnum, Enum
+from enum import Enum, IntEnum
+from typing import Callable, Dict, Iterable, List, Literal, NamedTuple, Set, Union
 
 
 class SC2Race(IntEnum):

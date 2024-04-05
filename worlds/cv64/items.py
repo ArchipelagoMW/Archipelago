@@ -1,9 +1,10 @@
+from typing import TYPE_CHECKING, Dict, Union
+
 from BaseClasses import Item
+
 from .data import iname
 from .locations import base_id, get_location_info
 from .options import DraculasCondition, SpareKeys
-
-from typing import TYPE_CHECKING, Dict, Union
 
 if TYPE_CHECKING:
     from . import CV64World

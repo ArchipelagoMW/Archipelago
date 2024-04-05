@@ -76,7 +76,7 @@ class ExpiringDict(OrderedDict):
         with self.lock:
             for key, value in OrderedDict.items(self):
                 if self.frame - value[1] < self.max_age:
-                    print_list.append(f"{repr(key)}: {repr(value)}")
+                    print_list.append(f"{key!r}: {value!r}")
         print_str = ", ".join(print_list)
         return f"ExpiringDict({print_str})"
 

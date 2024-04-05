@@ -1,7 +1,8 @@
-from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, List, NamedTuple, Optional
 
-from BaseClasses import Region, Entrance, MultiWorld
-from .locations import location_table, RiskOfRainLocation, get_classic_item_pickups
+from BaseClasses import Entrance, MultiWorld, Region
+
+from .locations import RiskOfRainLocation, get_classic_item_pickups, location_table
 
 if TYPE_CHECKING:
     from . import RiskOfRainWorld

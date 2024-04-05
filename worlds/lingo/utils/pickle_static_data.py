@@ -1,18 +1,17 @@
-from typing import Dict, List, Set
-
 import os
 import sys
+from typing import Dict, List, Set
 
 sys.path.append(os.path.join("worlds", "lingo"))
 sys.path.append(".")
 sys.path.append("..")
-from datatypes import Door, Painting, Panel, Progression, Room, RoomAndDoor, RoomAndPanel, RoomEntrance
-
 import hashlib
 import pickle
 import sys
-import Utils
 
+from datatypes import Door, Painting, Panel, Progression, Room, RoomAndDoor, RoomAndPanel, RoomEntrance
+
+import Utils
 
 ALL_ROOMS: List[Room] = []
 DOORS_BY_ROOM: Dict[str, Dict[str, Door]] = {}
@@ -38,12 +37,12 @@ PROGRESSIVE_ITEM_IDS: Dict[str, int] = {}
 
 def hash_file(path):
     md5 = hashlib.md5()
-    
-    with open(path, 'rb') as f:
+
+    with open(path, "rb") as f:
         content = f.read()
-        content = content.replace(b'\r\n', b'\n')
+        content = content.replace(b"\r\n", b"\n")
         md5.update(content)
-    
+
     return md5.hexdigest()
 
 
@@ -52,7 +51,7 @@ def load_static_data(ll1_path, ids_path):
         DOOR_GROUP_ITEM_IDS, PROGRESSIVE_ITEM_IDS
 
     # Load in all item and location IDs. These are broken up into groups based on the type of item/location.
-    with open(ids_path, "r") as file:
+    with open(ids_path) as file:
         config = Utils.parse_yaml(file)
 
         if "special_items" in config:
@@ -87,7 +86,7 @@ def load_static_data(ll1_path, ids_path):
                 PROGRESSIVE_ITEM_IDS[item_name] = item_id
 
     # Process the main world file.
-    with open(ll1_path, "r") as file:
+    with open(ll1_path) as file:
         config = Utils.parse_yaml(file)
 
         for room_name, room_data in config.items():
@@ -111,7 +110,7 @@ def process_entrance(source_room, doors, room_obj):
 
             room_obj.entrances.append(RoomEntrance(source_room, None, True))
         else:
-            if "painting" in doors and doors["painting"]:
+            if doors.get("painting"):
                 PAINTING_EXIT_ROOMS.add(room_obj.name)
                 PAINTING_ENTRANCES += 1
 
@@ -123,7 +122,7 @@ def process_entrance(source_room, doors, room_obj):
         # If the value of an entrance is a list, then there are multiple possible doors that can give access to the
         # entrance.
         for door in doors:
-            if "painting" in door and door["painting"]:
+            if door.get("painting"):
                 PAINTING_EXIT_ROOMS.add(room_obj.name)
                 PAINTING_ENTRANCES += 1
 
@@ -429,7 +428,7 @@ def process_room(room_name, room_data):
     ALL_ROOMS.append(room_obj)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     if len(sys.argv) == 1:
         ll1_path = os.path.join("worlds", "lingo", "data", "LL1.yaml")
         ids_path = os.path.join("worlds", "lingo", "data", "ids.yaml")
@@ -441,20 +440,20 @@ if __name__ == '__main__':
         print(" - Path to LL1.yaml")
         print(" - Path to ids.yaml")
         print(" - Path to output file")
-        
+
         exit()
     else:
         ll1_path = sys.argv[1]
         ids_path = sys.argv[2]
         output_path = sys.argv[3]
-        
+
     load_static_data(ll1_path, ids_path)
-    
+
     hashes = {
         "LL1.yaml": hash_file(ll1_path),
         "ids.yaml": hash_file(ids_path),
     }
-    
+
     pickdata = {
         "HASHES": hashes,
         "PAINTINGS": PAINTINGS,
@@ -475,6 +474,6 @@ if __name__ == '__main__':
         "DOOR_GROUP_ITEM_IDS": DOOR_GROUP_ITEM_IDS,
         "PROGRESSIVE_ITEM_IDS": PROGRESSIVE_ITEM_IDS,
     }
-    
+
     with open(output_path, "wb") as file:
         pickle.dump(pickdata, file)
