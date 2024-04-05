@@ -376,7 +376,7 @@ def hint_from_item(world: "WitnessWorld", item_name: str, own_itempool: List[Ite
 
 def hint_from_location(world: "WitnessWorld", location: str) -> Optional[WitnessLocationHint]:
     location_obj = world.get_location(location)
-    item_obj = world.get_location(location).item
+    item_obj = location_obj.item
     item_name = item_obj.name
     if item_obj.player != world.player:
         item_name += " (" + world.multiworld.get_player_name(item_obj.player) + ")"
