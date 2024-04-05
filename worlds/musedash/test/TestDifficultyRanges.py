@@ -68,7 +68,7 @@ class DifficultyRanges(MuseDashTestBase):
 
             # umpopoff is a one time weird song. Its currently the only song in the game
             # with non-standard difficulties and also doesn't have 3 or more difficulties.
-            if song_name == "umpopoff" or song_name == "P E R O P E R O Brother Dance":
+            if song_name in ("umpopoff", "P E R O P E R O Brother Dance"):
                 self.assertTrue(song.easy is None and song.hard is not None and song.master is None,
                                 f"Song '{song_name}' difficulty not set when it should be.")
             else:
