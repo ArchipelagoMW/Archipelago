@@ -13,9 +13,9 @@ from ..strings.villager_names import NPC, ModNPC
 class Villager:
     name: str
     bachelor: bool
-    locations: Tuple[str]
+    locations: Tuple[str, ...]
     birthday: str
-    gifts: Tuple[str]
+    gifts: Tuple[str, ...]
     available: bool
     mod_name: str
 
@@ -366,10 +366,11 @@ def villager(name: str, bachelor: bool, locations: Tuple[str, ...], birthday: st
     return npc
 
 
-def make_bachelor(mod_name: str, npc: Villager):
+def adapt_wizard_to_sve(mod_name: str, npc: Villager):
     if npc.mod_name:
         mod_name = npc.mod_name
-    return Villager(npc.name, True, npc.locations, npc.birthday, npc.gifts, npc.available, mod_name)
+    # The wizard leaves his tower on sunday, for like 1 hour... Good enough to meet him!
+    return Villager(npc.name, True, npc.locations + forest, npc.birthday, npc.gifts, npc.available, mod_name)
 
 
 def register_villager_modification(mod_name: str, npc: Villager, modification_function):
@@ -452,7 +453,7 @@ morris = villager(ModNPC.morris, False, jojamart, Season.spring, universal_loves
 
 # Modified villagers; not included in all villagers
 
-register_villager_modification(ModNames.sve, wizard, make_bachelor)
+register_villager_modification(ModNames.sve, wizard, adapt_wizard_to_sve)
 
 all_villagers_by_name: Dict[str, Villager] = {villager.name: villager for villager in all_villagers}
 all_villagers_by_mod: Dict[str, List[Villager]] = {}
