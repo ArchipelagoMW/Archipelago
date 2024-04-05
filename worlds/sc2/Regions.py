@@ -180,7 +180,7 @@ def create_vanilla_regions(
         connect(world, names, "Menu", "Dark Whispers")
         connect(world, names, "Dark Whispers", "Ghosts in the Fog",
                 lambda state: state.has("Beat Dark Whispers", player))
-        connect(world, names, "Dark Whispers", "Evil Awoken",
+        connect(world, names, "Ghosts in the Fog", "Evil Awoken",
                 lambda state: state.has("Beat Ghosts in the Fog", player))
 
     if SC2Campaign.LOTV in enabled_campaigns:
