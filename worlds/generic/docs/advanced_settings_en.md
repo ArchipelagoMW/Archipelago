@@ -30,7 +30,7 @@ website: [SublimeText Website](https://www.sublimetext.com)
 
 This program out of the box supports the correct formatting for the YAML file, so you will be able to use the tab key
 and get proper highlighting for any potential errors made while editing the file. If using any other text editor you
-should ensure your indentation is done correctly with two spaces. After editing your YAML file you can validate it at
+should ensure your indentation is done correctly with two spaces. After editing your YAML file, you can validate it at
 the website's [validation page](/check).
 
 A typical YAML file will look like:
