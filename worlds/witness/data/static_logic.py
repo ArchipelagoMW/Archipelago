@@ -223,7 +223,7 @@ def get_parent_progressive_item(item_name: str) -> str:
 
 @lru_cache
 def get_vanilla() -> StaticWitnessLogicObj:
-    return StaticWitnessLogicObj(get_sigma_expert_logic())
+    return StaticWitnessLogicObj(get_vanilla_logic())
 
 
 @lru_cache
@@ -233,7 +233,7 @@ def get_sigma_normal() -> StaticWitnessLogicObj:
 
 @lru_cache
 def get_sigma_expert() -> StaticWitnessLogicObj:
-    return StaticWitnessLogicObj(get_vanilla_logic())
+    return StaticWitnessLogicObj(get_sigma_expert_logic())
 
 
 def __getattr__(name):
