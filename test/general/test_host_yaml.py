@@ -2,18 +2,23 @@ import os
 import unittest
 from io import StringIO
 from tempfile import TemporaryFile
+from typing import Any, Dict, List, cast
 
 import Utils
 from settings import Settings, Group
 
 
 class TestIDs(unittest.TestCase):
+    yaml_options: Dict[Any, Any]
+
     @classmethod
     def setUpClass(cls) -> None:
         with TemporaryFile("w+", encoding="utf-8") as f:
             Settings(None).dump(f)
             f.seek(0, os.SEEK_SET)
-            cls.yaml_options = Utils.parse_yaml(f.read())
+            yaml_options = Utils.parse_yaml(f.read())
+            assert isinstance(yaml_options, dict)
+            cls.yaml_options = yaml_options
 
     def test_utils_in_yaml(self) -> None:
         """Tests that the auto generated host.yaml has default settings in it"""
@@ -49,10 +54,13 @@ class TestSettingsDumper(unittest.TestCase):
                              "dumped string has unexpected formatting")
 
     def test_indentation(self) -> None:
-        """Test that dumping a item will add indentation"""
+        """Test that dumping items will add indentation"""
         # NOTE: we don't care how many spaces there are, but it has to be a multiple of level
+        class AList(List[Any]):
+            __doc__ = None  # make sure we get no doc string
+
         class AGroup(Group):
-            key: list = ["a", "b", [1]]
+            key: AList = cast(AList, ["a", "b", [1]])
 
         for level in range(3):
             with StringIO() as writer:
