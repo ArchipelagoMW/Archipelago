@@ -606,7 +606,7 @@ class WitnessPlayerLogic:
 
         name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel]["checkName"] + action
         if panel not in self.USED_EVENT_NAMES_BY_HEX:
-            warning('Panel "' + name + '" does not have an associated event name.')
+            warning(f'Panel "{name}" does not have an associated event name.')
             self.USED_EVENT_NAMES_BY_HEX[panel] = name + " Event"
         pair = (name, self.USED_EVENT_NAMES_BY_HEX[panel])
         return pair
