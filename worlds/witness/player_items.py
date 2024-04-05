@@ -6,8 +6,8 @@ from typing import TYPE_CHECKING, Dict, List, Set
 
 from BaseClasses import Item, ItemClassification, MultiWorld
 
-from .data import static_items as StaticWitnessItems
-from .data import static_logic as StaticWitnessLogic
+from .data import static_items as static_witness_items
+from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import (
     DoorItemDefinition,
     ItemCategory,
@@ -49,7 +49,7 @@ class WitnessPlayerItems:
         self._locations: WitnessPlayerLocations = player_locations
 
         # Duplicate the static item data, then make any player-specific adjustments to classification.
-        self.item_data: Dict[str, ItemData] = copy.deepcopy(StaticWitnessItems.ITEM_DATA)
+        self.item_data: Dict[str, ItemData] = copy.deepcopy(static_witness_items.ITEM_DATA)
 
         # Remove all progression items that aren't actually in the game.
         self.item_data = {
@@ -85,7 +85,7 @@ class WitnessPlayerItems:
         # Add setting-specific useful items to the mandatory item list.
         for item_name, item_data in {name: data for (name, data) in self.item_data.items()
                                      if data.classification == ItemClassification.useful}.items():
-            if item_name in StaticWitnessItems._special_usefuls:
+            if item_name in static_witness_items._special_usefuls:
                 continue
             elif item_name == "Energy Capacity":
                 self._mandatory_items[item_name] = NUM_ENERGY_UPGRADES
@@ -166,7 +166,7 @@ class WitnessPlayerItems:
                     output.add("Triangles")
 
             # Replace progressive items with their parents.
-            output = {StaticWitnessLogic.get_parent_progressive_item(item) for item in output}
+            output = {static_witness_logic.get_parent_progressive_item(item) for item in output}
 
         # Remove items that are mentioned in any plando options. (Hopefully, in the future, plando will get resolved
         #   before create_items so that we'll be able to check placed items instead of just removing all items mentioned
@@ -204,7 +204,7 @@ class WitnessPlayerItems:
         """
         Returns the item IDs of symbol items that were defined in the configuration file but are not in the pool.
         """
-        return [data.ap_code for name, data in StaticWitnessItems.ITEM_DATA.items()
+        return [data.ap_code for name, data in static_witness_items.ITEM_DATA.items()
                 if name not in self.item_data.keys() and data.definition.category is ItemCategory.SYMBOL]
 
     def get_progressive_item_ids_in_pool(self) -> Dict[int, List[int]]:
@@ -214,7 +214,7 @@ class WitnessPlayerItems:
             if isinstance(item.definition, ProgressiveItemDefinition):
                 # Note: we need to reference the static table here rather than the player-specific one because the child
                 #   items were removed from the pool when we pruned out all progression items not in the settings.
-                output[item.ap_code] = [StaticWitnessItems.ITEM_DATA[child_item].ap_code
+                output[item.ap_code] = [static_witness_items.ITEM_DATA[child_item].ap_code
                                         for child_item in item.definition.child_item_names]
         return output
 

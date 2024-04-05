@@ -2,7 +2,7 @@ from typing import Dict, List
 
 from BaseClasses import ItemClassification
 
-from . import static_logic as StaticWitnessLogic
+from . import static_logic as static_witness_logic
 from .item_definition_classes import DoorItemDefinition, ItemCategory, ItemData
 from .static_locations import ID_START
 
@@ -15,7 +15,7 @@ _special_usefuls: List[str] = ["Puzzle Skip"]
 
 
 def populate_items() -> None:
-    for item_name, definition in StaticWitnessLogic.ALL_ITEMS.items():
+    for item_name, definition in static_witness_logic.ALL_ITEMS.items():
         ap_item_code = definition.local_code + ID_START
         classification: ItemClassification = ItemClassification.filler
         local_only: bool = False

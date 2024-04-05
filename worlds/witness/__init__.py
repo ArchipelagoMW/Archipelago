@@ -6,15 +6,16 @@ from logging import error, warning
 from typing import Any, Dict, List, Optional, cast
 
 from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial
+
 from Options import PerGameCommonOptions, Toggle
 from worlds.AutoWorld import WebWorld, World
 
-from .data import static_items as StaticWitnessItems
-from .data import static_logic as StaticWitnessLogic
+from .data import static_items as static_witness_items
+from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import DoorItemDefinition, ItemData
 from .data.utils import get_audio_logs
 from .hints import CompactItemData, create_all_hints, generate_joke_hints, make_compact_hint_data, make_laser_hints
-from .locations import StaticWitnessLocations, WitnessPlayerLocations
+from .locations import WitnessPlayerLocations, static_witness_locations
 from .options import TheWitnessOptions
 from .player_items import WitnessItem, WitnessPlayerItems
 from .player_logic import WitnessPlayerLogic
@@ -51,11 +52,11 @@ class WitnessWorld(World):
     options: TheWitnessOptions
 
     item_name_to_id = {
-        name: data.ap_code for name, data in StaticWitnessItems.ITEM_DATA.items()
+        name: data.ap_code for name, data in static_witness_items.ITEM_DATA.items()
     }
-    location_name_to_id = StaticWitnessLocations.ALL_LOCATIONS_TO_ID
-    item_name_groups = StaticWitnessItems.ITEM_GROUPS
-    location_name_groups = StaticWitnessLocations.AREA_LOCATION_GROUPS
+    location_name_to_id = static_witness_locations.ALL_LOCATIONS_TO_ID
+    item_name_groups = static_witness_items.ITEM_GROUPS
+    location_name_groups = static_witness_locations.AREA_LOCATION_GROUPS
 
     required_client_version = (0, 4, 5)
 
@@ -75,16 +76,16 @@ class WitnessWorld(World):
             "seed": self.random.randrange(0, 1000000),
             "victory_location": int(self.player_logic.VICTORY_LOCATION, 16),
             "panelhex_to_id": self.player_locations.CHECK_PANELHEX_TO_ID,
-            "item_id_to_door_hexes": StaticWitnessItems.get_item_to_door_mappings(),
+            "item_id_to_door_hexes": static_witness_items.get_item_to_door_mappings(),
             "door_hexes_in_the_pool": self.player_items.get_door_ids_in_pool(),
             "symbols_not_in_the_game": self.player_items.get_symbol_ids_not_in_pool(),
             "disabled_entities": [int(h, 16) for h in self.player_logic.COMPLETELY_DISABLED_ENTITIES],
             "log_ids_to_hints": self.log_ids_to_hints,
             "laser_ids_to_hints": self.laser_ids_to_hints,
             "progressive_item_lists": self.player_items.get_progressive_item_ids_in_pool(),
-            "obelisk_side_id_to_EPs": StaticWitnessLogic.OBELISK_SIDE_ID_TO_EP_HEXES,
+            "obelisk_side_id_to_EPs": static_witness_logic.OBELISK_SIDE_ID_TO_EP_HEXES,
             "precompleted_puzzles": [int(h, 16) for h in self.player_logic.EXCLUDED_LOCATIONS],
-            "entity_to_name": StaticWitnessLogic.ENTITY_ID_TO_NAME,
+            "entity_to_name": static_witness_logic.ENTITY_ID_TO_NAME,
         }
 
     def determine_sufficient_progression(self) -> None:
@@ -308,10 +309,10 @@ class WitnessWorld(World):
         # Laser hints
 
         if self.options.laser_hints:
-            laser_hints = make_laser_hints(self, StaticWitnessItems.ITEM_GROUPS["Lasers"])
+            laser_hints = make_laser_hints(self, static_witness_items.ITEM_GROUPS["Lasers"])
 
             for item_name, hint in laser_hints.items():
-                item_def = cast(DoorItemDefinition, StaticWitnessLogic.ALL_ITEMS[item_name])
+                item_def = cast(DoorItemDefinition, static_witness_logic.ALL_ITEMS[item_name])
                 self.laser_ids_to_hints[int(item_def.panel_id_hexes[0], 16)] = make_compact_hint_data(hint, self.player)
                 already_hinted_locations.add(hint.location)
 
@@ -375,7 +376,7 @@ class WitnessWorld(World):
         if hasattr(self, "player_items") and self.player_items and item_name in self.player_items.item_data:
             item_data = self.player_items.item_data[item_name]
         else:
-            item_data = StaticWitnessItems.ITEM_DATA[item_name]
+            item_data = static_witness_items.ITEM_DATA[item_name]
 
         return WitnessItem(item_name, item_data.classification, item_data.ap_code, player=self.player)
 
@@ -407,9 +408,9 @@ def create_region(world: WitnessWorld, name: str, player_locations: WitnessPlaye
             loc_id = player_locations.CHECK_LOCATION_TABLE[location]
 
             entity_hex = -1
-            if location in StaticWitnessLogic.ENTITIES_BY_NAME:
+            if location in static_witness_logic.ENTITIES_BY_NAME:
                 entity_hex = int(
-                    StaticWitnessLogic.ENTITIES_BY_NAME[location]["entity_hex"], 0
+                    static_witness_logic.ENTITIES_BY_NAME[location]["entity_hex"], 0
                 )
             location = WitnessLocation(
                 world.player, location, loc_id, ret, entity_hex

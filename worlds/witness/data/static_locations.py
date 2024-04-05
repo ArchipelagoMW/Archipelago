@@ -1,4 +1,4 @@
-from . import static_logic as StaticWitnessLogic
+from . import static_logic as static_witness_logic
 
 ID_START = 158000
 
@@ -451,7 +451,7 @@ def get_id(entity_hex: str) -> str:
     Calculates the location ID for any given location
     """
 
-    return StaticWitnessLogic.ENTITIES_BY_HEX[entity_hex]["id"]
+    return static_witness_logic.ENTITIES_BY_HEX[entity_hex]["id"]
 
 
 def get_event_name(entity_hex: str) -> str:
@@ -459,14 +459,14 @@ def get_event_name(entity_hex: str) -> str:
     Returns the event name of any given panel.
     """
 
-    action = " Opened" if StaticWitnessLogic.ENTITIES_BY_HEX[entity_hex]["entityType"] == "Door" else " Solved"
+    action = " Opened" if static_witness_logic.ENTITIES_BY_HEX[entity_hex]["entityType"] == "Door" else " Solved"
 
-    return StaticWitnessLogic.ENTITIES_BY_HEX[entity_hex]["checkName"] + action
+    return static_witness_logic.ENTITIES_BY_HEX[entity_hex]["checkName"] + action
 
 
 ALL_LOCATIONS_TO_IDS = {
     panel_obj["checkName"]: get_id(chex)
-    for chex, panel_obj in StaticWitnessLogic.ENTITIES_BY_HEX.items()
+    for chex, panel_obj in static_witness_logic.ENTITIES_BY_HEX.items()
     if panel_obj["id"]
 }
 
@@ -478,5 +478,5 @@ for key, item in ALL_LOCATIONS_TO_IDS.items():
     ALL_LOCATIONS_TO_ID[key] = item
 
 for loc in ALL_LOCATIONS_TO_IDS:
-    area = StaticWitnessLogic.ENTITIES_BY_NAME[loc]["area"]["name"]
+    area = static_witness_logic.ENTITIES_BY_NAME[loc]["area"]["name"]
     AREA_LOCATION_GROUPS.setdefault(area, []).append(loc)

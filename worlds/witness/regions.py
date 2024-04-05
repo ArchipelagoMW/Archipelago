@@ -6,10 +6,11 @@ from collections import defaultdict
 from typing import TYPE_CHECKING, Dict, FrozenSet, List, Tuple
 
 from BaseClasses import Entrance, Region
+
 from worlds.generic.Rules import CollectionRule
 
-from .data import static_logic as StaticWitnessLogic
-from .locations import StaticWitnessLocations, WitnessPlayerLocations
+from .data import static_logic as static_witness_logic
+from .locations import WitnessPlayerLocations, static_witness_locations
 from .player_logic import WitnessPlayerLogic
 
 if TYPE_CHECKING:
@@ -100,8 +101,8 @@ class WitnessPlayerRegions:
                 in self.player_locations.CHECK_LOCATION_TABLE
             ]
             locations_for_this_region += [
-                StaticWitnessLocations.get_event_name(panel) for panel in region["panels"]
-                if StaticWitnessLocations.get_event_name(panel) in self.player_locations.EVENT_LOCATION_TABLE
+                static_witness_locations.get_event_name(panel) for panel in region["panels"]
+                if static_witness_locations.get_event_name(panel) in self.player_locations.EVENT_LOCATION_TABLE
             ]
 
             all_locations = all_locations | set(locations_for_this_region)
@@ -140,11 +141,11 @@ class WitnessPlayerRegions:
         difficulty = world.options.puzzle_randomization
 
         if difficulty == "sigma_normal":
-            self.reference_logic = StaticWitnessLogic.sigma_normal
+            self.reference_logic = static_witness_logic.sigma_normal
         elif difficulty == "sigma_expert":
-            self.reference_logic = StaticWitnessLogic.sigma_expert
+            self.reference_logic = static_witness_logic.sigma_expert
         elif difficulty == "none":
-            self.reference_logic = StaticWitnessLogic.vanilla
+            self.reference_logic = static_witness_logic.vanilla
 
         self.player_locations = player_locations
         self.created_entrances: Dict[Tuple[str, str], List[Entrance]] = defaultdict(lambda: [])

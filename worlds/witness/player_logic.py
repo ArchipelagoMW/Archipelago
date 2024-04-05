@@ -21,7 +21,7 @@ from functools import lru_cache
 from logging import warning
 from typing import TYPE_CHECKING, Dict, FrozenSet, List, Set, Tuple, cast
 
-from .data import static_logic as StaticWitnessLogic
+from .data import static_logic as static_witness_logic
 from .data import utils
 from .data.item_definition_classes import DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
 
@@ -73,7 +73,7 @@ class WitnessPlayerLogic:
                     all_options.add(items_option.union(dependent_item))
 
             # If this entity is not an EP, and it has an associated door item, ignore the original power dependencies
-            if StaticWitnessLogic.ENTITIES_BY_HEX[entity_hex]["entityType"] != "EP":
+            if static_witness_logic.ENTITIES_BY_HEX[entity_hex]["entityType"] != "EP":
                 # 0x28A0D depends on another entity for *non-power* reasons -> This dependency needs to be preserved,
                 # except in Expert, where that dependency doesn't exist, but now there *is* a power dependency.
                 # In the future, it'd be wise to make a distinction between "power dependencies" and other dependencies.
@@ -132,25 +132,25 @@ class WitnessPlayerLogic:
         return utils.dnf_remove_redundancies(frozenset(all_options))
 
     def make_single_adjustment(self, adj_type: str, line: str) -> None:
-        from .data import static_items as StaticWitnessItems
+        from .data import static_items as static_witness_items
         """Makes a single logic adjustment based on additional logic file"""
 
         if adj_type == "Items":
             line_split = line.split(" - ")
             item_name = line_split[0]
 
-            if item_name not in StaticWitnessItems.ITEM_DATA:
+            if item_name not in static_witness_items.ITEM_DATA:
                 raise RuntimeError('Item "' + item_name + '" does not exist.')
 
             self.THEORETICAL_ITEMS.add(item_name)
-            if isinstance(StaticWitnessLogic.ALL_ITEMS[item_name], ProgressiveItemDefinition):
+            if isinstance(static_witness_logic.ALL_ITEMS[item_name], ProgressiveItemDefinition):
                 self.THEORETICAL_ITEMS_NO_MULTI.update(cast(ProgressiveItemDefinition,
-                                                            StaticWitnessLogic.ALL_ITEMS[item_name]).child_item_names)
+                                                            static_witness_logic.ALL_ITEMS[item_name]).child_item_names)
             else:
                 self.THEORETICAL_ITEMS_NO_MULTI.add(item_name)
 
-            if StaticWitnessLogic.ALL_ITEMS[item_name].category in [ItemCategory.DOOR, ItemCategory.LASER]:
-                entity_hexes = cast(DoorItemDefinition, StaticWitnessLogic.ALL_ITEMS[item_name]).panel_id_hexes
+            if static_witness_logic.ALL_ITEMS[item_name].category in [ItemCategory.DOOR, ItemCategory.LASER]:
+                entity_hexes = cast(DoorItemDefinition, static_witness_logic.ALL_ITEMS[item_name]).panel_id_hexes
                 for entity_hex in entity_hexes:
                     self.DOOR_ITEMS_BY_ID.setdefault(entity_hex, []).append(item_name)
 
@@ -160,15 +160,15 @@ class WitnessPlayerLogic:
             item_name = line
 
             self.THEORETICAL_ITEMS.discard(item_name)
-            if isinstance(StaticWitnessLogic.ALL_ITEMS[item_name], ProgressiveItemDefinition):
+            if isinstance(static_witness_logic.ALL_ITEMS[item_name], ProgressiveItemDefinition):
                 self.THEORETICAL_ITEMS_NO_MULTI.difference_update(
-                    cast(ProgressiveItemDefinition, StaticWitnessLogic.ALL_ITEMS[item_name]).child_item_names
+                    cast(ProgressiveItemDefinition, static_witness_logic.ALL_ITEMS[item_name]).child_item_names
                 )
             else:
                 self.THEORETICAL_ITEMS_NO_MULTI.discard(item_name)
 
-            if StaticWitnessLogic.ALL_ITEMS[item_name].category in [ItemCategory.DOOR, ItemCategory.LASER]:
-                entity_hexes = cast(DoorItemDefinition, StaticWitnessLogic.ALL_ITEMS[item_name]).panel_id_hexes
+            if static_witness_logic.ALL_ITEMS[item_name].category in [ItemCategory.DOOR, ItemCategory.LASER]:
+                entity_hexes = cast(DoorItemDefinition, static_witness_logic.ALL_ITEMS[item_name]).panel_id_hexes
                 for entity_hex in entity_hexes:
                     if entity_hex in self.DOOR_ITEMS_BY_ID and item_name in self.DOOR_ITEMS_BY_ID[entity_hex]:
                         self.DOOR_ITEMS_BY_ID[entity_hex].remove(item_name)
@@ -197,7 +197,7 @@ class WitnessPlayerLogic:
             if len(line_split) > 2:
                 required_items = utils.parse_lambda(line_split[2])
                 items_actually_in_the_game = [
-                    item_name for item_name, item_definition in StaticWitnessLogic.ALL_ITEMS.items()
+                    item_name for item_name, item_definition in static_witness_logic.ALL_ITEMS.items()
                     if item_definition.category is ItemCategory.SYMBOL
                 ]
                 required_items = frozenset(
@@ -494,10 +494,10 @@ class WitnessPlayerLogic:
 
         for item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI:
             if item not in self.THEORETICAL_ITEMS:
-                progressive_item_name = StaticWitnessLogic.get_parent_progressive_item(item)
+                progressive_item_name = static_witness_logic.get_parent_progressive_item(item)
                 self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(progressive_item_name)
                 child_items = cast(ProgressiveItemDefinition,
-                                   StaticWitnessLogic.ALL_ITEMS[progressive_item_name]).child_item_names
+                                   static_witness_logic.ALL_ITEMS[progressive_item_name]).child_item_names
                 multi_list = [child_item for child_item in child_items
                               if child_item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI]
                 self.MULTI_AMOUNTS[item] = multi_list.index(item) + 1
@@ -648,11 +648,11 @@ class WitnessPlayerLogic:
         self.DIFFICULTY = world.options.puzzle_randomization
 
         if self.DIFFICULTY == "sigma_normal":
-            self.REFERENCE_LOGIC = StaticWitnessLogic.sigma_normal
+            self.REFERENCE_LOGIC = static_witness_logic.sigma_normal
         elif self.DIFFICULTY == "sigma_expert":
-            self.REFERENCE_LOGIC = StaticWitnessLogic.sigma_expert
+            self.REFERENCE_LOGIC = static_witness_logic.sigma_expert
         elif self.DIFFICULTY == "none":
-            self.REFERENCE_LOGIC = StaticWitnessLogic.vanilla
+            self.REFERENCE_LOGIC = static_witness_logic.vanilla
 
         self.CONNECTIONS_BY_REGION_NAME = copy.copy(self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME)
         self.DEPENDENT_REQUIREMENTS_BY_HEX = copy.copy(self.REFERENCE_LOGIC.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)

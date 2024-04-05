@@ -6,10 +6,11 @@ depending on the items received
 from typing import TYPE_CHECKING, FrozenSet
 
 from BaseClasses import CollectionState
+
 from worlds.generic.Rules import CollectionRule, set_rule
 
 from . import WitnessPlayerRegions
-from .data import static_logic as StaticWitnessLogic
+from .data import static_logic as static_witness_logic
 from .locations import WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
 
@@ -176,7 +177,7 @@ def _has_item(item: str, world: "WitnessWorld", player: int,
     if item in player_logic.USED_EVENT_NAMES_BY_HEX:
         return _can_solve_panel(item, world, player, player_logic, player_locations)
 
-    prog_item = StaticWitnessLogic.get_parent_progressive_item(item)
+    prog_item = static_witness_logic.get_parent_progressive_item(item)
     return lambda state: state.has(prog_item, player, player_logic.MULTI_AMOUNTS[item])
 
 

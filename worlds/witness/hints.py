@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Dict, List, Optional, Set, Tuple, Union
 
 from BaseClasses import CollectionState, Item, Location, LocationProgressType
 
-from .data import static_logic as StaticWitnessLogic
+from .data import static_logic as static_witness_logic
 from .data.utils import weighted_sample
 
 if TYPE_CHECKING:
@@ -536,7 +536,7 @@ def choose_areas(world: "WitnessWorld", amount: int, locations_per_area: Dict[st
 
 
 def get_hintable_areas(world: "WitnessWorld") -> Tuple[Dict[str, List[Location]], Dict[str, List[Item]]]:
-    potential_areas = list(StaticWitnessLogic.ALL_AREAS_BY_NAME.keys())
+    potential_areas = list(static_witness_logic.ALL_AREAS_BY_NAME.keys())
 
     locations_per_area = dict()
     items_per_area = dict()
@@ -544,7 +544,7 @@ def get_hintable_areas(world: "WitnessWorld") -> Tuple[Dict[str, List[Location]]
     for area in potential_areas:
         regions = [
             world.player_regions.created_regions[region]
-            for region in StaticWitnessLogic.ALL_AREAS_BY_NAME[area]["regions"]
+            for region in static_witness_logic.ALL_AREAS_BY_NAME[area]["regions"]
             if region in world.player_regions.created_regions
         ]
         locations = [location for region in regions for location in region.get_locations() if location.address]
@@ -670,7 +670,7 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int,
 
     already_hinted_locations |= {
         loc for loc in world.multiworld.get_reachable_locations(state, world.player)
-        if loc.address and StaticWitnessLogic.ENTITIES_BY_NAME[loc.name]["area"]["name"] == "Tutorial (Inside)"
+        if loc.address and static_witness_logic.ENTITIES_BY_NAME[loc.name]["area"]["name"] == "Tutorial (Inside)"
     }
 
     intended_location_hints = hint_amount - area_hints
