@@ -3,6 +3,7 @@ import os
 import typing
 import math
 import settings
+import hashlib
 import threading
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
@@ -22,7 +23,7 @@ class MMX3Settings(settings.Group):
         """File name of the SMW US rom"""
         description = "Mega Man X3 (USA) ROM File"
         copy_to = "Mega Man X3 (USA).sfc"
-        md5s = [HASH_US, HASH_LEGACY]
+        md5s = [HASH_US]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
 

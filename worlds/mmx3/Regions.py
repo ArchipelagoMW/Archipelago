@@ -419,7 +419,7 @@ def connect_regions(world: World):
     
     # Connect Vile
     connect(world, RegionName.blizzard_buffalo_start, RegionName.vile)
-    connect(world, RegionName.toxic_seahorse_start, RegionName.vile)
+    connect(world, RegionName.volt_catfish_start, RegionName.vile)
     connect(world, RegionName.crush_crawfish_start, RegionName.vile)
     connect(world, RegionName.vile, RegionName.vile_before)
     connect(world, RegionName.vile_before, RegionName.vile_boss)

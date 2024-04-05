@@ -135,5 +135,7 @@ location_id_to_level_id = {
     LocationName.doppler_lab_3_hp:              [0x0C, 0x139, 0x00],
 
     LocationName.bit_defeat:                    [0xFF, 0x00B, 0x00],
-    LocationName.byte_defeat:                   [0xFF, 0x00A, 0x00]
+    LocationName.byte_defeat:                   [0xFF, 0x00A, 0x00],
+
+    LocationName.victory:                       [0x0C, 0x00E, 0x00],
 }

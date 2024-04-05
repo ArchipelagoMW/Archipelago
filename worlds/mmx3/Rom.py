@@ -9,7 +9,6 @@ from pkgutil import get_data
 
 HASH_US = 'cfe8c11f0dce19e4fa5f3fd75775e47c'
 HASH_LEGACY = 'ff683b75e75e9b59f0c713c7512a016b'
-ROM_PLAYER_LIMIT = 65535
 
 weapon_rom_data = {
     0xBD000B: [0x1FC8, 0xFF],
@@ -65,7 +64,6 @@ class MMX3DeltaPatch(APDeltaPatch):
     @classmethod
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes()
-
 
 class LocalRom:
 
@@ -165,6 +163,9 @@ def patch_rom(world: World, rom, player):
 
     # EnergyLink
     rom.write_byte(0x17FFF7, world.options.energy_link.value)
+
+    # DeathLink
+    rom.write_byte(0x17FFF8, world.options.death_link.value)
     
     # Setup starting life count
     rom.write_byte(0x0019B1, world.options.starting_life_count.value)
@@ -185,8 +186,8 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
-        if basemd5.hexdigest() not in {HASH_US, HASH_LEGACY}:
-            raise Exception('Supplied Base Rom does not match known MD5 for US or Legacy Collection release. '
+        if basemd5.hexdigest() not in {HASH_US}:
+            raise Exception('Supplied Base Rom does not match known MD5 for US or LC release. '
                             'Get the correct game and version, then dump it')
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes
