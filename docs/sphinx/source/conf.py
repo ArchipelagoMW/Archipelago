@@ -5,18 +5,15 @@
 import os
 import sys
 
+from Utils import __version__
+
 
 # if this is being built via the workflow action Archipelago isn't in path but needs to be for autodocs
 base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-if base_dir not in sys.path:
+stable = base_dir in sys.path  # generated from webhost
+if not stable:
     sys.path.append(base_dir)
 
-
-from Utils import __version__
-
-# get important paths for adding stuff to context
-templates_dir = os.path.join(base_dir, "WebHostLib", "templates")
-static_dir = os.path.join(base_dir, "WebHostLib", "static")
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -35,18 +32,24 @@ source_suffix = {
     ".md": "markdown",
 }
 
-# we need to copy over the AP templates in order to use them in the generated html
-templates_path = [
-    "_templates",
-]
-exclude_patterns = []
-
-
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
+exclude_patterns = []
+html_theme = "bizstyle"
+html_theme_options = {
+    "sidebarwidth": "15%",
+}
 
-html_theme = "alabaster"
-html_static_path = [
-    "_static",
-    static_dir,
-]
+if stable:
+    # pull in custom template and styling for stable doc
+    static_dir = os.path.join(base_dir, "WebHostLib", "static")
+    templates_path = ["_templates"]
+    html_static_path = [
+        "_static",
+        os.path.join(static_dir, "styles", "themes", "base.css"),
+        os.path.join(static_dir, "static", "backgrounds", "header", "stone-header.png"),
+        os.path.join(static_dir, "static", "backgrounds", "stone.png"),
+    ]
+else:
+    html_logo = "_static/header-logo.svg"
+    html_favicon = "_static/favicon.ico"
