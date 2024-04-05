@@ -6,7 +6,9 @@ from Options import Choice, Range, Toggle, DefaultOnToggle, DeathLink, PerGameCo
 
 class EnergyLink(DefaultOnToggle):
     """
-    Energy Link
+    Enable EnergyLink support.
+    EnergyLink works as a big Sub Tank/HP pool where players can request HP manually or automatically when
+    they lose HP. You make use of this feature by typing /pool, /heal <amount> or /autoheal in the client.
     """
     display_name = "Energy Link"
 
