@@ -995,10 +995,11 @@ def build_sphinx_docs(stable: bool = False) -> None:
         if file.name.endswith(".md"):
             shutil.copy(file, sphinx_input)
 
-    # copy AP header logo and favicon
-    static_dir = os.path.join(base_dir, "WebHostLib", "static", "static")
-    logos = [os.path.join(static_dir, "branding", "header-logo.svg"), os.path.join(static_dir, "favicon.ico")]
-    for file in logos:
-        shutil.copy(file, os.path.join(sphinx_input, "_static"))
+    if not stable:
+        # copy AP header logo and favicon
+        static_dir = os.path.join(base_dir, "WebHostLib", "static", "static")
+        logos = [os.path.join(static_dir, "branding", "header-logo.svg"), os.path.join(static_dir, "favicon.ico")]
+        for file in logos:
+            shutil.copy(file, os.path.join(sphinx_input, "_static"))
 
     sphinx_main(["-M", "html", sphinx_input, sphinx_output])
