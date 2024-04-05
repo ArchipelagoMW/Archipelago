@@ -1,8 +1,7 @@
 # Guide de configuration d'ArchipIdle
 
 ## Rejoindre une partie MultiWorld
-1. Générez un fichier `.yaml` à partir de
-   la [page des paramètres du lecteur ArchipIDLE](/games/ArchipIDLE/player-options)
+1. Générez un fichier `.yaml` à partir de la [page des paramètres du lecteur ArchipIDLE](/games/ArchipIDLE/player-options)
 2. Ouvrez le client ArchipIDLE dans votre navigateur Web en :
     - Accédez au [Client ArchipIDLE](http://idle.multiworld.link)
     - Téléchargez le client et exécutez-le localement à partir du [Page des versions d'ArchipIDLE GitHub](https://github.com/ArchipelagoMW/archipidle/releases)
