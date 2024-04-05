@@ -101,7 +101,7 @@ def main(args=None, callback=ERmain):
             raise ValueError(f"File {args.meta_file_path} is invalid. Please fix your yaml.") from e
         logging.info(f"Meta: {args.meta_file_path} >> {get_choice('meta_description', meta_weights)}")
         try:  # meta description allows us to verify that the file named meta.yaml is intentionally a meta file
-            del (meta_weights["meta_description"])
+            del(meta_weights["meta_description"])
         except Exception as e:
             raise ValueError("No meta description found for meta.yaml. Unable to verify.") from e
         if args.sameoptions:

@@ -16,8 +16,7 @@ guide : [Guide de configuration de base de Multiworld](/tutorial/Archipelago/se
 
 ### Où puis-je obtenir un fichier YAML ?
 
-Vous pouvez personnaliser vos paramètres Minecraft en allant sur
-la [page des paramètres de joueur](/games/Minecraft/player-options)
+Vous pouvez personnaliser vos paramètres Minecraft en allant sur la [page des paramètres de joueur](/games/Minecraft/player-options)
 
 ## Rejoindre une partie MultiWorld
 
