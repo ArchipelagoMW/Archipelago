@@ -6,8 +6,6 @@
 Archipelago API Reference
 =========================
 
-This is an auto-generated doc and may not currently reflect Main.
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -22,11 +20,3 @@ This is an auto-generated doc and may not currently reflect Main.
    options api
    network protocol
    tests
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
