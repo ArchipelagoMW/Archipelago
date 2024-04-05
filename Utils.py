@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import shutil
 import typing
 import builtins
 import os
@@ -984,8 +985,14 @@ def build_sphinx_docs(stable: bool = False) -> None:
     from sphinx.cmd.build import main as sphinx_main
 
     base_dir = os.path.dirname(__file__)
-    sphinx_input = os.path.join(base_dir, "docs", "sphinx", "source")
+    docs_path = os.path.join(base_dir, "docs")
+    sphinx_input = os.path.join(docs_path, "sphinx", "source")
     sphinx_output = os.path.join(base_dir, "WebHostLib", "templates", "sphinx") if stable \
         else os.path.join(base_dir, "build")
 
+    # copy markdown files to sphinx directory to get rendered
+    for file in os.scandir(docs_path):
+        if file.name.endswith(".md"):
+            shutil.copy(file, sphinx_input)
+    
     sphinx_main(["-M", "html", sphinx_input, sphinx_output])
