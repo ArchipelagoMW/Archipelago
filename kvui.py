@@ -132,6 +132,8 @@ class ScrollBox(ScrollView):
         self.layout.bind(minimum_height=self.layout.setter("height"))
         self.add_widget(self.layout)
         self.effect_cls = ScrollEffect
+        self.bar_width = dp(12)
+        self.scroll_type = ["content", "bars"]
 
 
 class HovererableLabel(HoverBehavior, Label):
@@ -702,6 +704,12 @@ class HintLog(RecycleView):
     @staticmethod
     def hint_sorter(element: dict) -> str:
         return ""
+
+    def fix_heights(self):
+        """Workaround fix for divergent texture and layout heights"""
+        for element in self.children[0].children:
+            max_height = max(child.texture_size[1] for child in element.children)
+            element.height = max_height
 
 
 class E(ExceptionHandler):

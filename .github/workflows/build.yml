@@ -76,14 +76,14 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       # - copy code below to release.yml -
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install base dependencies
         run: |
           sudo apt update
           sudo apt -y install build-essential p7zip xz-utils wget libglib2.0-0
           sudo apt -y install python3-gi libgirepository1.0-dev  # should pull dependencies for gi installation below
       - name: Get a recent python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       - name: Install build-time dependencies
@@ -119,13 +119,13 @@ jobs:
           source venv/bin/activate
           python setup.py build_exe --yes
       - name: Store AppImage
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APPIMAGE_NAME }}
           path: dist/${{ env.APPIMAGE_NAME }}
           retention-days: 7
       - name: Store .tar.gz
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.TAR_NAME }}
           path: dist/${{ env.TAR_NAME }}
