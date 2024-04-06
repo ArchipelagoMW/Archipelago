@@ -163,6 +163,50 @@ all_locations = {
 }
 
 location_table = {}
+
+location_groups = {
+    "Bosses": {
+            LocationName.intro_stage_boss,
+            LocationName.intro_stage_mini_boss,
+            LocationName.blizzard_buffalo_boss,
+            LocationName.toxic_seahorse_boss,
+            LocationName.toxic_seahorse_mini_boss,
+            LocationName.tunnel_rhino_boss,
+            LocationName.tunnel_rhino_mini_boss,
+            LocationName.volt_catfish_boss,
+            LocationName.crush_crawfish_boss,
+            LocationName.neon_tiger_boss,
+            LocationName.neon_tiger_mini_boss,
+            LocationName.gravity_beetle_boss,
+            LocationName.blast_hornet_boss,
+            LocationName.blast_hornet_mini_boss,
+            LocationName.doppler_lab_1_boss,
+            LocationName.doppler_lab_1_mini_boss,
+            LocationName.doppler_lab_2_boss,
+            LocationName.doppler_lab_3_boss,
+            LocationName.vile_stage_boss,
+            LocationName.bit_defeat,
+            LocationName.byte_defeat,
+        },
+    "Heart Tanks": {location for location in all_locations.keys() if "Heart Tank" in location},
+    "Sub Tanks": {location for location in all_locations.keys() if "Sub Tank" in location},
+    "Upgrade Capsules": {location for location in all_locations.keys() if "Capsule" in location},
+    "Ride Armors": {location for location in all_locations.keys() if "Ride Armor" in location},
+    "Intro Stage": {location for location in all_locations.keys() if "Hunter Base Stage - " in location},
+    "Hunter Base Stage": {location for location in all_locations.keys() if "Hunter Base Stage - " in location},
+    "Blast Hornet Stage": {location for location in all_locations.keys() if "Blast Hornet Stage - " in location},
+    "Blizzard Buffalo Stage": {location for location in all_locations.keys() if "Blizzard Buffalo Stage - " in location},
+    "Gravity Beetle Stage": {location for location in all_locations.keys() if "Gravity Beetle Stage - " in location},
+    "Toxic Seahorse Stage": {location for location in all_locations.keys() if "Toxic Seahorse Stage - " in location},
+    "Volt Catfish Stage": {location for location in all_locations.keys() if "Volt Catfish Stage - " in location},
+    "Crush Crawfish Stage": {location for location in all_locations.keys() if "Crush Crawfish Stage - " in location},
+    "Tunnel Rhino Stage": {location for location in all_locations.keys() if "Tunnel Rhino Stage - " in location},
+    "Neon Tiger Stage": {location for location in all_locations.keys() if "Neon Tiger Stage - " in location},
+    "Vile's Stage": {location for location in all_locations.keys() if "Vile's Stage - " in location},
+    "Dr. Doppler's Lab 1": {location for location in all_locations.keys() if "Dr. Doppler's Lab 1 - " in location},
+    "Dr. Doppler's Lab 2": {location for location in all_locations.keys() if "Dr. Doppler's Lab 2 - " in location},
+    "Dr. Doppler's Lab 3": {location for location in all_locations.keys() if "Dr. Doppler's Lab 3 - " in location},
+}
     
 def setup_locations(world: World):
     location_table = {
