@@ -4,14 +4,14 @@
 
 - Stardew Valley sur PC (Recommandée: [Version Steam](https://store.steampowered.com/app/413150/Stardew_Valley/))
 - SMAPI ([Chargeur de mods pour Stardew Valley](https://smapi.io/))
-- [Version 4.x.x du mod StardewArchipelago](https://github.com/agilbert1412/StardewArchipelago/releases)
-    - Il est important d'utiliser une version 4.x.x du mod pour jouer à des "seeds" qui y ont été générées. Les versions les plus récentes ne peuvent être utilisées qu'avec les versions les plus récentes du générateur de monde, qui ne sont pas encore supportées par archiepalgo.gg.
+- [Version 5.x.x du mod StardewArchipelago](https://github.com/agilbert1412/StardewArchipelago/releases)
+    - Il est important d'utiliser une version 5.x.x du mod pour jouer à des "seeds" qui y ont été générées. Les versions les plus récentes ne peuvent être utilisées qu'avec les versions les plus récentes du générateur de monde, qui ne sont pas encore supportées par archiepalgo.gg.
 
 ## Logiciels facultatifs
-- Archipelago depuis la [page des versions Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
+- Archipelago via la [page des versions Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
     - (Uniquement pour le textclient)
 - Autres mods de Stardew Valley depuis [Nexus Mods](https://www.nexusmods.com/stardewvalley)
-    - Il y a des [mods supportés](https://github.com/agilbert1412/StardewArchipelago/blob/4.x.x/Documentation/Supported%20Mods.md) que vous pouvez ajouter à votre dossier YAML pour les inclure avec la randomisation de Archipelago.
+    - Il y a des [mods supportés](https://github.com/agilbert1412/StardewArchipelago/blob/5.x.x/Documentation/Supported%20Mods.md) que vous pouvez ajouter à votre dossier YAML pour les inclure avec la randomisation de Archipelago.
 
     - Il n'est cependant **pas** recommandé d'ajouter des mods non supportés, même s'il est possible de le faire. Les intéractions entre les mods peuvent être imprévisibles, et aucune assistance ne sera proposée si des problèmes surviennent.
     - Plus vous avez de mods non supportés, et plus ils sont lourds, plus vous avez de chance de causer des problèmes.
@@ -26,7 +26,7 @@ Voir le guide pour configurer un YAML basique: [Guide basique de configuration d
 
 Vous pouvez customiser vos paramètres en visitant la [page de paramètres de joueur de Stardew Valley](/games/Stardew%20Valley/player-settings)
 
-## Rejoindre une partie Multiworld
+## Rejoindre une partie Multimondes
 
 ### Installation du mod
 
@@ -58,17 +58,17 @@ Le mot de passe est facultatif.
 Votre partie se connectera automatiquement à Archipelago, et se reconnectera automatiquement en chargeant la partie, plus tard.
 
 Vous n'aurez jamais besoin d'entrer ces informations de nouveau pour ce personnage, à moins que vous ne changiez l'adresse ip ou le port de la salle/page.
-Si l'adresse ip ou le port de la salle/page **change**, vous pouvez suivre les instructions suivantes pour modifier les informations de connection de votre partie.
-- Lancez la version mod de Stradew Valley
+Si l'adresse ip ou le port de la salle/page change, vous pouvez suivre les instructions suivantes pour modifier les informations de connection de votre partie.
+- Lancez la version modifiée de Stardew Valley
 - En étant **sur le menu principal** du jeu, entrez la commande suivante **dans la console SMAPI**:
 - `connect_override ip:port slot password`
 - Exemple: `connect_override archipelago.gg:38281 StardewPlayer`
-- Chargez votre partie. Les nouvelles informations de connexion seront utilisées, à la place des anciennes.
+- Sauvegardez la partie. Les nouvelles informations de connexion seront utilisées, à la place des anciennes.
 - Jouer un jour complet, dormez, et sauvegardez le jeu. Ces informations de connexions remplaceront les anciennes et deviendront permanentes.
 
 ### Intéragir avec le MultiWorld depuis le jeu
 
-Lorsque vous vous connectez, vous devriez voir un message dans le chat vous informant de la commande `!!help`. Cette comande listera d'autres commandes de chat exclusives à Stardew Valley, que vous pouvez utiliser.
+Lorsque vous vous connectez, vous devriez voir un message dans le clavardage vous informant de la commande `!!help`. Cette comande listera d'autres commandes de chat exclusives à Stardew Valley, que vous pouvez utiliser.
 
 En outre, vous pouvez utiliser le chat du jeu pour communiquer à d'autres joueurs du MultiWorld, à condition qu'ils jouent à un jeu ayant la fontion "chat".
 
@@ -79,8 +79,8 @@ Pour une meilleure expérience de chat, vous pouvez aussi utiliser le Client de 
 
 ### Jouer avec des mods supportés
 
-Voir la [documentation des mods supportés](https://github.com/agilbert1412/StardewArchipelago/blob/4.x.x/Documentation/Supported%20Mods.md)
+Voir la [documentation des mods supportés](https://github.com/agilbert1412/StardewArchipelago/blob/5.x.x/Documentation/Supported%20Mods.md)
 
 ### Multijoueur
 
-Le mode multijoueur de Stardew Valley n'est pas compatible avec Archipelago pour le moment. Il n'y aucun projet à court-terme pour supporter cette fonctionnalité.
+Le mode multijoueur de Stardew Valley n'est pas compatible avec Archipelago pour le moment. Il n'y aucun projet pour supporter cette fonctionnalité.
