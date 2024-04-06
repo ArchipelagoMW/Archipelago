@@ -11,7 +11,7 @@ from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from .Items import MMX3Item, ItemData, item_table, junk_table, item_groups
-from .Locations import MMX3Location, setup_locations, all_locations
+from .Locations import MMX3Location, setup_locations, all_locations, location_groups
 from .Regions import create_regions, connect_regions
 from .Names import ItemName, LocationName, EventName
 from .Options import MMX3Options
@@ -20,7 +20,7 @@ from .Rom import patch_rom, MMX3ProcedurePatch, HASH_US, HASH_LEGACY
 
 class MMX3Settings(settings.Group):
     class RomFile(settings.SNESRomPath):
-        """File name of the MMX3 US rom"""
+        """File name of the Mega Man X3 US ROM"""
         description = "Mega Man X3 (USA) ROM File"
         copy_to = "Mega Man X3 (USA).sfc"
         md5s = [HASH_US, HASH_LEGACY]
@@ -29,18 +29,24 @@ class MMX3Settings(settings.Group):
 
 
 class MMX3Web(WebWorld):
+    theme = "ice"
+
     setup_en = Tutorial(
-        "setup",
-        "description here",
-        "en",
+        "Multiworld Setup Guide",
+        "A guide to playing Mega Man X3 with Archipelago",
+        "English",
         "setup_en.md",
         "setup/en",
         ["lx5"]
     )
+
     tutorials = [setup_en]
 
 
 class MMX3World(World):
+    """
+    Mega Man X3 WIP
+    """
     game = "Mega Man X3"
     web = MMX3Web()
 
@@ -52,6 +58,7 @@ class MMX3World(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = all_locations
     item_name_groups = item_groups
+    location_name_groups = location_groups
 
     def __init__(self, multiworld: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
