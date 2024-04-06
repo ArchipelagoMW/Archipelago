@@ -80,7 +80,6 @@ item_groups = {
         ItemName.ray_splasher,
         ItemName.gravity_well,
         ItemName.parasitic_bomb,
-        ItemName.z_saber,
     },
     "Ride Armors": {
         ItemName.ride_chimera,
