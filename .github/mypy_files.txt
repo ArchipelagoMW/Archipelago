@@ -1,0 +1,2 @@
+./worlds/AutoSNIClient.py
+./Patch.py
