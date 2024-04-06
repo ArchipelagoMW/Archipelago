@@ -1,6 +1,7 @@
 from logging import Logger
 import dolphin_memory_engine
 
+
 GC_GAME_ID_ADDRESS = 0x80000000
 
 

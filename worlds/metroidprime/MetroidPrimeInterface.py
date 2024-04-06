@@ -141,12 +141,21 @@ class MetroidPrimeInterface:
             player_state_pointer, 0x20, struct.pack(">I", suit.value))
 
     def get_alive(self) -> bool:
-      # player_state_pointer = self.__get_player_state_pointer()
-      # value = struct.unpack(">I", self.dolphin_client.read_pointer(player_state_pointer, 0x0, 4))[0]
-      # Isolate the x0_24_alive bit and return it as a boolean
-      # return bool(value & (1 << 24))
-      # For some reason the above method does not work as expected.
-      return self.get_current_health() > 0
+        player_state_pointer = self.__get_player_state_pointer()
+        value = struct.unpack(">I", self.dolphin_client.read_pointer(
+            player_state_pointer, 0, 4))[0]
+        return bool(value & (1 << 31))
+
+    def set_alive(self, alive: bool):
+        player_state_pointer = self.__get_player_state_pointer()
+        value = struct.unpack(">I", self.dolphin_client.read_pointer(
+            player_state_pointer, 0, 4))[0]
+        if alive:
+            value |= (1 << 31)
+        else:
+            value &= ~(1 << 31)
+        self.dolphin_client.write_pointer(
+            player_state_pointer, 0, struct.pack(">I", value))
 
 
     def get_current_level(self) -> MetroidPrimeLevel:
