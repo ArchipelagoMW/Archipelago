@@ -126,7 +126,7 @@ class WitnessWorld(World):
         elif not interacts_sufficiently_with_multiworld and self.multiworld.players > 1:
             raise Exception(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have enough"
                             f" progression items that can be placed in other players' worlds. Please turn on Symbol"
-                            f" Shuffle, Door Shuffle or Obelisk Keys.")
+                            f" Shuffle, Door Shuffle, or Obelisk Keys.")
 
     def generate_early(self) -> None:
         disabled_locations = self.options.exclude_locations.value
