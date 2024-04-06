@@ -227,7 +227,7 @@ class Omosanity(Toggle):
 
 class Animalsanity(Toggle):
     """
-    Determines whether unique counted animals grants checks.
+    Determines whether unique counts of animals grant checks.
     ALL animals must be collected in a single run of a mission to get all checks.
     (421 Locations)
     """
