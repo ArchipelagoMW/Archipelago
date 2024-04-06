@@ -1266,7 +1266,7 @@ item_table = {
                  )),
     ItemNames.HIVE_MIND_EMULATOR:
         ItemData(618 + SC2WOL_ITEM_ID_OFFSET, "Building", 5, SC2Race.TERRAN,
-                 ItemClassification.progression,
+                 classification=ItemClassification.progression,
                  description="Defensive structure. Can permanently Mind Control Zerg units."),
     ItemNames.PSI_DISRUPTER:
         ItemData(619 + SC2WOL_ITEM_ID_OFFSET, "Building", 6, SC2Race.TERRAN,
