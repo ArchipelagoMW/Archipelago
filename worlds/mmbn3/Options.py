@@ -47,3 +47,4 @@ class MMBN3Options(PerGameCommonOptions):
     extra_ranks: ExtraRanks
     include_jobs: IncludeJobs
     trade_quest_hinting: TradeQuestHinting
+    
