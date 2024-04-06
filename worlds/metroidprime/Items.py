@@ -48,7 +48,7 @@ suit_upgrade_table: dict[str, ItemData] = {
     "Varia Suit": ItemData("Varia Suit", 22, ItemClassification.progression),
     "Phazon Suit": ItemData("Phazon Suit", 23, ItemClassification.progression),
     "Energy Tank": ItemData("Energy Tank", 24, ItemClassification.useful, 14),
-    "Spring Ball": ItemData("Spring Ball", 25, ItemClassification.useful),
+    "UnknownItem1": ItemData("UnknownItem1", 25, ItemClassification.useful),
     # item 026 is a health refill
     "Ice Trap": ItemData("Ice Trap", 27, ItemClassification.trap),
     "Wavebuster": ItemData("Wavebuster", 28, ItemClassification.filler),
