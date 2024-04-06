@@ -8,6 +8,11 @@ from . import ItemNames
 WEAPON_ARMOR_UPGRADE_NOTE = inspect.cleandoc("""
     Must be researched during the mission if the mission type isn't set to auto-unlock generic upgrades.
 """)
+GENERIC_UPGRADE_TEMPLATE = "Increases {} of {} {}.\n" + WEAPON_ARMOR_UPGRADE_NOTE
+TERRAN = "Terran"
+ZERG = "Zerg"
+PROTOSS = "Protoss"
+
 LASER_TARGETING_SYSTEMS_DESCRIPTION = "Increases vision by 2 and weapon range by 1."
 STIMPACK_SMALL_COST = 10
 STIMPACK_SMALL_HEAL = 30
@@ -21,10 +26,7 @@ STIMPACK_SMALL_DESCRIPTION = STIMPACK_TEMPLATE.format(STIMPACK_SMALL_COST, STIMP
 STIMPACK_LARGE_DESCRIPTION = STIMPACK_TEMPLATE.format(STIMPACK_LARGE_COST, STIMPACK_LARGE_HEAL)
 SMART_SERVOS_DESCRIPTION = "Increases transformation speed between modes."
 INTERNAL_TECH_MODULE_DESCRIPTION_TEMPLATE = "{} can be trained from a {} without an attached Tech Lab."
-RESOURCE_EFFICIENCY_DESCRIPTION_TEMPLATE = "Reduces {} resource and supply cost."
-RESOURCE_EFFICIENCY_NO_SUPPLY_DESCRIPTION_TEMPLATE = "Reduces {} resource cost."
 CLOAK_DESCRIPTION_TEMPLATE = "Allows {} to use the Cloak ability."
-GENERIC_UPGRADE_DESCRIPTION_TEMPLATE = "Unlocks the {} upgrades for {} units"
 
 DISPLAY_NAME_BROOD_LORD = "Brood Lord"
 DISPLAY_NAME_CLOAKED_ASSASSIN = "Dark Templar, Avenger, and Blood Hunter"
@@ -119,36 +121,18 @@ item_descriptions = {
     ItemNames.WARHOUND: inspect.cleandoc("""
                      Anti-vehicle mech. Haywire missiles do bonus damage to mechanical units.
                      """),
-    ItemNames.PROGRESSIVE_TERRAN_INFANTRY_WEAPON: inspect.cleandoc(f"""
-                     Increases damage of Terran infantry units. 
-                     {WEAPON_ARMOR_UPGRADE_NOTE}
-                     """),
-    ItemNames.PROGRESSIVE_TERRAN_INFANTRY_ARMOR: inspect.cleandoc(f"""
-                     Increases armor of Terran infantry units. 
-                     {WEAPON_ARMOR_UPGRADE_NOTE}
-                     """),
-    ItemNames.PROGRESSIVE_TERRAN_VEHICLE_WEAPON: inspect.cleandoc(f"""
-                     Increases damage of Terran vehicle units. 
-                     {WEAPON_ARMOR_UPGRADE_NOTE}
-                     """),
-    ItemNames.PROGRESSIVE_TERRAN_VEHICLE_ARMOR: inspect.cleandoc(f"""
-                     Increases armor of Terran vehicle units. 
-                     {WEAPON_ARMOR_UPGRADE_NOTE}
-                     """),
-    ItemNames.PROGRESSIVE_TERRAN_SHIP_WEAPON: inspect.cleandoc(f"""
-                     Increases damage of Terran starship units. 
-                     {WEAPON_ARMOR_UPGRADE_NOTE}
-                     """),
-    ItemNames.PROGRESSIVE_TERRAN_SHIP_ARMOR: inspect.cleandoc(f"""
-                     Increases armor of Terran starship units. 
-                     {WEAPON_ARMOR_UPGRADE_NOTE}
-                     """),
-    ItemNames.PROGRESSIVE_TERRAN_WEAPON_UPGRADE: None,
-    ItemNames.PROGRESSIVE_TERRAN_ARMOR_UPGRADE: None,
-    ItemNames.PROGRESSIVE_TERRAN_INFANTRY_UPGRADE: None,
-    ItemNames.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE: None,
-    ItemNames.PROGRESSIVE_TERRAN_SHIP_UPGRADE: None,
-    ItemNames.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE: None,
+    ItemNames.PROGRESSIVE_TERRAN_INFANTRY_WEAPON: GENERIC_UPGRADE_TEMPLATE.format("damage", TERRAN, "infantry"),
+    ItemNames.PROGRESSIVE_TERRAN_INFANTRY_ARMOR: GENERIC_UPGRADE_TEMPLATE.format("armor", TERRAN, "infantry"),
+    ItemNames.PROGRESSIVE_TERRAN_VEHICLE_WEAPON: GENERIC_UPGRADE_TEMPLATE.format("damage", TERRAN, "vehicles"),
+    ItemNames.PROGRESSIVE_TERRAN_VEHICLE_ARMOR: GENERIC_UPGRADE_TEMPLATE.format("armor", TERRAN, "vehicles"),
+    ItemNames.PROGRESSIVE_TERRAN_SHIP_WEAPON: GENERIC_UPGRADE_TEMPLATE.format("damage", TERRAN, "starships"),
+    ItemNames.PROGRESSIVE_TERRAN_SHIP_ARMOR: GENERIC_UPGRADE_TEMPLATE.format("armor", TERRAN, "starships"),
+    ItemNames.PROGRESSIVE_TERRAN_WEAPON_UPGRADE: GENERIC_UPGRADE_TEMPLATE.format("damage", TERRAN, "units"),
+    ItemNames.PROGRESSIVE_TERRAN_ARMOR_UPGRADE: GENERIC_UPGRADE_TEMPLATE.format("armor", TERRAN, "units"),
+    ItemNames.PROGRESSIVE_TERRAN_INFANTRY_UPGRADE: GENERIC_UPGRADE_TEMPLATE.format("damage and armor", TERRAN, "infantry"),
+    ItemNames.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE: GENERIC_UPGRADE_TEMPLATE.format("damage and armor", TERRAN, "vehicles"),
+    ItemNames.PROGRESSIVE_TERRAN_SHIP_UPGRADE: GENERIC_UPGRADE_TEMPLATE.format("damage and armor", TERRAN, "starships"),
+    ItemNames.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE: GENERIC_UPGRADE_TEMPLATE.format("damage and armor", TERRAN, "units"),
     ItemNames.BUNKER_PROJECTILE_ACCELERATOR: "Increases range of all units in the Bunker by 1.",
     ItemNames.BUNKER_NEOSTEEL_BUNKER: "Increases the number of Bunker slots by 2.",
     ItemNames.MISSILE_TURRET_TITANIUM_HOUSING: "Increases Missile Turret life by 75.",
@@ -505,16 +489,16 @@ item_descriptions = {
     ItemNames.SCOURGE: "Flying anti-air suicide unit. Hatches in pairs from a single larva.",
     ItemNames.BROOD_QUEEN: "Flying support caster. Can cast the Ocular Symbiote and Spawn Broodlings abilities.",
     ItemNames.DEFILER: "Support caster. Can use the Dark Swarm, Consume, and Plague abilities.",
-    ItemNames.PROGRESSIVE_ZERG_MELEE_ATTACK: None,
-    ItemNames.PROGRESSIVE_ZERG_MISSILE_ATTACK: None,
-    ItemNames.PROGRESSIVE_ZERG_GROUND_CARAPACE: None,
-    ItemNames.PROGRESSIVE_ZERG_FLYER_ATTACK: None,
-    ItemNames.PROGRESSIVE_ZERG_FLYER_CARAPACE: None,
-    ItemNames.PROGRESSIVE_ZERG_WEAPON_UPGRADE: None,
-    ItemNames.PROGRESSIVE_ZERG_ARMOR_UPGRADE: None,
-    ItemNames.PROGRESSIVE_ZERG_GROUND_UPGRADE: None,
-    ItemNames.PROGRESSIVE_ZERG_FLYER_UPGRADE: None,
-    ItemNames.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE: None,
+    ItemNames.PROGRESSIVE_ZERG_MELEE_ATTACK: GENERIC_UPGRADE_TEMPLATE.format("damage", ZERG, "melee ground units"),
+    ItemNames.PROGRESSIVE_ZERG_MISSILE_ATTACK: GENERIC_UPGRADE_TEMPLATE.format("damage", ZERG, "ranged ground units"),
+    ItemNames.PROGRESSIVE_ZERG_GROUND_CARAPACE: GENERIC_UPGRADE_TEMPLATE.format("armor", ZERG, "ground units"),
+    ItemNames.PROGRESSIVE_ZERG_FLYER_ATTACK: GENERIC_UPGRADE_TEMPLATE.format("damage", ZERG, "flyers"),
+    ItemNames.PROGRESSIVE_ZERG_FLYER_CARAPACE: GENERIC_UPGRADE_TEMPLATE.format("armor", ZERG, "flyers"),
+    ItemNames.PROGRESSIVE_ZERG_WEAPON_UPGRADE: GENERIC_UPGRADE_TEMPLATE.format("damage", ZERG, "units"),
+    ItemNames.PROGRESSIVE_ZERG_ARMOR_UPGRADE: GENERIC_UPGRADE_TEMPLATE.format("armor", ZERG, "units"),
+    ItemNames.PROGRESSIVE_ZERG_GROUND_UPGRADE: GENERIC_UPGRADE_TEMPLATE.format("damage and armor", ZERG, "ground units"),
+    ItemNames.PROGRESSIVE_ZERG_FLYER_UPGRADE: GENERIC_UPGRADE_TEMPLATE.format("damage and armor", ZERG, "flyers"),
+    ItemNames.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE: GENERIC_UPGRADE_TEMPLATE.format("damage and armor", ZERG, "units"),
     ItemNames.ZERGLING_HARDENED_CARAPACE: "Increases Zergling health by +10.",
     ItemNames.ZERGLING_ADRENAL_OVERLOAD: "Increases Zergling attack speed.",
     ItemNames.ZERGLING_METABOLIC_BOOST: "Increases Zergling movement speed.",
@@ -678,16 +662,16 @@ item_descriptions = {
     ItemNames.MOTHERSHIP: "Ultimate Protoss vessel, Can use the Vortex and Mass Recall abilities. Cloaks nearby units and structures.",
     ItemNames.ARBITER: "Army support craft. Has the Stasis Field and Recall abilities. Cloaks nearby units.",
     ItemNames.ORACLE: "Flying caster. Can use the Revelation and Stasis Ward abilities.",
-    ItemNames.PROGRESSIVE_PROTOSS_GROUND_WEAPON: None,
-    ItemNames.PROGRESSIVE_PROTOSS_GROUND_ARMOR: None,
-    ItemNames.PROGRESSIVE_PROTOSS_SHIELDS: None,
-    ItemNames.PROGRESSIVE_PROTOSS_AIR_WEAPON: None,
-    ItemNames.PROGRESSIVE_PROTOSS_AIR_ARMOR: None,
-    ItemNames.PROGRESSIVE_PROTOSS_WEAPON_UPGRADE: None,
-    ItemNames.PROGRESSIVE_PROTOSS_ARMOR_UPGRADE: None,
-    ItemNames.PROGRESSIVE_PROTOSS_GROUND_UPGRADE: None,
-    ItemNames.PROGRESSIVE_PROTOSS_AIR_UPGRADE: None,
-    ItemNames.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE: None,
+    ItemNames.PROGRESSIVE_PROTOSS_GROUND_WEAPON: GENERIC_UPGRADE_TEMPLATE.format("damage", PROTOSS, "ground units"),
+    ItemNames.PROGRESSIVE_PROTOSS_GROUND_ARMOR: GENERIC_UPGRADE_TEMPLATE.format("armor", PROTOSS, "ground units"),
+    ItemNames.PROGRESSIVE_PROTOSS_SHIELDS: GENERIC_UPGRADE_TEMPLATE.format("shields", PROTOSS, "units"),
+    ItemNames.PROGRESSIVE_PROTOSS_AIR_WEAPON: GENERIC_UPGRADE_TEMPLATE.format("damage", PROTOSS, "starships"),
+    ItemNames.PROGRESSIVE_PROTOSS_AIR_ARMOR: GENERIC_UPGRADE_TEMPLATE.format("armor", PROTOSS, "starships"),
+    ItemNames.PROGRESSIVE_PROTOSS_WEAPON_UPGRADE: GENERIC_UPGRADE_TEMPLATE.format("damage", PROTOSS, "units"),
+    ItemNames.PROGRESSIVE_PROTOSS_ARMOR_UPGRADE: GENERIC_UPGRADE_TEMPLATE.format("armor", PROTOSS, "units"),
+    ItemNames.PROGRESSIVE_PROTOSS_GROUND_UPGRADE: GENERIC_UPGRADE_TEMPLATE.format("damage and armor", PROTOSS, "ground units"),
+    ItemNames.PROGRESSIVE_PROTOSS_AIR_UPGRADE: GENERIC_UPGRADE_TEMPLATE.format("damage and armor", PROTOSS, "starships"),
+    ItemNames.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE: GENERIC_UPGRADE_TEMPLATE.format("damage and armor", PROTOSS, "units"),
     ItemNames.PHOTON_CANNON: None,
     ItemNames.KHAYDARIN_MONOLITH: None,
     ItemNames.SHIELD_BATTERY: None,
