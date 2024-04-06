@@ -1,6 +1,6 @@
 """
 Application settings / host.yaml interface using type hints.
-This is different from player settings.
+This is different from player options.
 """
 
 import os.path
