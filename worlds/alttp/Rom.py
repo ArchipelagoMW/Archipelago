@@ -4,7 +4,7 @@ import Utils
 import worlds.Files
 
 LTTPJPN10HASH: str = "03a63945398191337e896e5771f77173"
-RANDOMIZERBASEHASH: str = "75676bd6ad840acd39e26df4c583222e"
+RANDOMIZERBASEHASH: str = "8704fb9b9fa4fad52d4d2f9a95fb5360"
 ROM_PLAYER_LIMIT: int = 255
 
 import io
@@ -34,7 +34,7 @@ from .Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmith
     DeathMountain_texts, \
     LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, \
     SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
-from .Items import ItemFactory, item_table, item_name_groups, progression_items
+from .Items import item_table, item_name_groups, progression_items
 from .EntranceShuffle import door_addresses
 from .Options import small_key_shuffle
 
@@ -1003,7 +1003,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     rom.write_byte(0x18003A, 0x01 if world.dark_world_light_cone else 0x00)
 
     GREEN_TWENTY_RUPEES = 0x47
-    GREEN_CLOCK = ItemFactory('Green Clock', player).code
+    GREEN_CLOCK = item_table["Green Clock"].item_code
 
     rom.write_byte(0x18004F, 0x01)  # Byrna Invulnerability: on
 
@@ -1785,13 +1785,13 @@ def write_custom_shops(rom, world, player):
                 item_code = get_nonnative_item_sprite(world.worlds[item['player']].item_name_to_id[item['item']],
                                                       world.star_scams[player] or shop.region.locations[index].item.advancement)
             else:
-                item_code = ItemFactory(item['item'], player).code
+                item_code = item_table[item["item"]].item_code
                 if item['item'] == 'Single Arrow' and item['player'] == 0 and world.retro_bow[player]:
                     rom.write_byte(0x186500 + shop.sram_offset + slot, arrow_mask)
 
             item_data = [shop_id, item_code] + price_data + \
-                        [item['max'], ItemFactory(item['replacement'], player).code if item['replacement'] else 0xFF] + \
-                        replacement_price_data + [0 if item['player'] == player else min(ROM_PLAYER_LIMIT, item['player'])]
+                        [item["max"], item_table[item["replacement"]].item_code if item["replacement"] else 0xFF] + \
+                        replacement_price_data + [0 if item["player"] == player else min(ROM_PLAYER_LIMIT, item["player"])]
             items_data.extend(item_data)
 
     rom.write_bytes(0x184800, shop_data)

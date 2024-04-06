@@ -3,22 +3,22 @@ Archipelago init file for The Witness
 """
 import dataclasses
 
-from typing import Dict, Optional
+from typing import Dict, Optional, cast
 from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial, CollectionState
 from Options import PerGameCommonOptions, Toggle
 from .presets import witness_option_presets
 from worlds.AutoWorld import World, WebWorld
 from .player_logic import WitnessPlayerLogic
-from .static_logic import StaticWitnessLogic
+from .static_logic import StaticWitnessLogic, ItemCategory, DoorItemDefinition
 from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
     get_priority_hint_items, make_always_and_priority_hints, generate_joke_hints, make_area_hints, get_hintable_areas, \
-    make_extra_location_hints, create_all_hints
+    make_extra_location_hints, create_all_hints, make_laser_hints, make_compact_hint_data, CompactItemData
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems, ItemData
 from .regions import WitnessRegions
 from .rules import set_rules
 from .options import TheWitnessOptions
-from .utils import get_audio_logs
+from .utils import get_audio_logs, get_laser_shuffle
 from logging import warning, error
 
 
@@ -56,7 +56,7 @@ class WitnessWorld(World):
     item_name_groups = StaticWitnessItems.item_groups
     location_name_groups = StaticWitnessLocations.AREA_LOCATION_GROUPS
 
-    required_client_version = (0, 4, 4)
+    required_client_version = (0, 4, 5)
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
@@ -66,7 +66,8 @@ class WitnessWorld(World):
         self.items = None
         self.regio = None
 
-        self.log_ids_to_hints = None
+        self.log_ids_to_hints: Dict[int, CompactItemData] = dict()
+        self.laser_ids_to_hints: Dict[int, CompactItemData] = dict()
 
         self.items_placed_early = []
         self.own_itempool = []
@@ -81,11 +82,52 @@ class WitnessWorld(World):
             'symbols_not_in_the_game': self.items.get_symbol_ids_not_in_pool(),
             'disabled_entities': [int(h, 16) for h in self.player_logic.COMPLETELY_DISABLED_ENTITIES],
             'log_ids_to_hints': self.log_ids_to_hints,
+            'laser_ids_to_hints': self.laser_ids_to_hints,
             'progressive_item_lists': self.items.get_progressive_item_ids_in_pool(),
             'obelisk_side_id_to_EPs': StaticWitnessLogic.OBELISK_SIDE_ID_TO_EP_HEXES,
             'precompleted_puzzles': [int(h, 16) for h in self.player_logic.EXCLUDED_LOCATIONS],
             'entity_to_name': StaticWitnessLogic.ENTITY_ID_TO_NAME,
         }
+
+    def determine_sufficient_progression(self):
+        """
+        Determine whether there are enough progression items in this world to consider it "interactive".
+        In the case of singleplayer, this just outputs a warning.
+        In the case of multiplayer, the requirements are a bit stricter and an Exception is raised.
+        """
+
+        # A note on Obelisk Keys:
+        # Obelisk Keys are never relevant in singleplayer, because the locations they lock are irrelevant to in-game
+        # progress and irrelevant to all victory conditions. Thus, I consider them "fake progression" for singleplayer.
+        # However, those locations could obviously contain big items needed for other players, so I consider
+        # "Obelisk Keys only" valid for multiworld.
+
+        # A note on Laser Shuffle:
+        # In singleplayer, I don't mind "Ice Rod Hunt" type gameplay, so "laser shuffle only" is valid.
+        # However, I do not want to allow "Ice Rod Hunt" style gameplay in multiworld, so "laser shuffle only" is
+        # not considered interactive enough for multiworld.
+
+        interacts_sufficiently_with_multiworld = (
+            self.options.shuffle_symbols
+            or self.options.shuffle_doors
+            or self.options.obelisk_keys and self.options.shuffle_EPs
+        )
+
+        has_locally_relevant_progression = (
+            self.options.shuffle_symbols
+            or self.options.shuffle_doors
+            or self.options.shuffle_lasers
+            or self.options.shuffle_boat
+            or self.options.early_caves == "add_to_pool" and self.options.victory_condition == "challenge"
+        )
+
+        if not has_locally_relevant_progression and self.multiworld.players == 1:
+            warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any progression"
+                    f" items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle if that doesn't seem right.")
+        elif not interacts_sufficiently_with_multiworld and self.multiworld.players > 1:
+            raise Exception(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have enough"
+                            f" progression items that can be placed in other players' worlds. Please turn on Symbol"
+                            f" Shuffle, Door Shuffle or Obelisk Keys.")
 
     def generate_early(self):
         disabled_locations = self.options.exclude_locations.value
@@ -102,26 +144,7 @@ class WitnessWorld(World):
 
         self.log_ids_to_hints = dict()
 
-        interacts_with_multiworld = (
-                self.options.shuffle_symbols or
-                self.options.shuffle_doors or
-                self.options.shuffle_lasers == "anywhere"
-        )
-
-        has_progression = (
-                interacts_with_multiworld
-                or self.options.shuffle_lasers == "local"
-                or self.options.shuffle_boat
-                or self.options.early_caves == "add_to_pool"
-        )
-
-        if not has_progression and self.multiworld.players == 1:
-            warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any progression"
-                    f" items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle if that doesn't seem right.")
-        elif not interacts_with_multiworld and self.multiworld.players > 1:
-            raise Exception(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have enough"
-                            f" progression items that can be placed in other players' worlds. Please turn on Symbol"
-                            f" Shuffle, Door Shuffle or non-local Laser Shuffle.")
+        self.determine_sufficient_progression()
 
         if self.options.shuffle_lasers == "local":
             self.options.local_items.value |= self.item_name_groups["Lasers"]
@@ -272,11 +295,25 @@ class WitnessWorld(World):
                 self.options.local_items.value.add(item_name)
 
     def fill_slot_data(self) -> dict:
+        already_hinted_locations = set()
+
+        # Laser hints
+
+        if self.options.laser_hints:
+            laser_hints = make_laser_hints(self, StaticWitnessItems.item_groups["Lasers"])
+
+            for item_name, hint in laser_hints.items():
+                item_def = cast(DoorItemDefinition, StaticWitnessLogic.all_items[item_name])
+                self.laser_ids_to_hints[int(item_def.panel_id_hexes[0], 16)] = make_compact_hint_data(hint, self.player)
+                already_hinted_locations.add(hint.location)
+
+        # Audio Log Hints
+
         hint_amount = self.options.hint_amount.value
 
         credits_hint = (
             "This Randomizer is brought to you by\n"
-            "NewSoupVi, Jarno, blastron,\n",
+            "NewSoupVi, Jarno, blastron,\n"
             "jbzdarkid, sigma144, IHNN, oddGarrett, Exempt-Medic.", -1, -1
         )
 
@@ -285,25 +322,18 @@ class WitnessWorld(World):
         if hint_amount:
             area_hints = round(self.options.area_hint_percentage / 100 * hint_amount)
 
-            generated_hints = create_all_hints(self, hint_amount, area_hints)
+            generated_hints = create_all_hints(self, hint_amount, area_hints, already_hinted_locations)
 
             self.random.shuffle(audio_logs)
 
             duplicates = min(3, len(audio_logs) // hint_amount)
 
             for hint in generated_hints:
-                location = hint.location
-                area_amount = hint.area_amount
-
-                # None if junk hint, address if location hint, area string if area hint
-                arg_1 = location.address if location else (hint.area if hint.area else None)
-
-                # self.player if junk hint, player if location hint, progression amount if area hint
-                arg_2 = area_amount if area_amount is not None else (location.player if location else self.player)
+                compact_hint_data = make_compact_hint_data(hint, self.player)
 
                 for _ in range(0, duplicates):
                     audio_log = audio_logs.pop()
-                    self.log_ids_to_hints[int(audio_log, 16)] = (hint.wording, arg_1, arg_2)
+                    self.log_ids_to_hints[int(audio_log, 16)] = compact_hint_data
 
         if audio_logs:
             audio_log = audio_logs.pop()
@@ -315,7 +345,7 @@ class WitnessWorld(World):
             audio_log = audio_logs.pop()
             self.log_ids_to_hints[int(audio_log, 16)] = joke_hints.pop()
 
-        # generate hints done
+        # Options for the client & auto-tracker
 
         slot_data = self._get_slot_data()
 

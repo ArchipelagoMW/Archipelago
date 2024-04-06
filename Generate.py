@@ -26,6 +26,7 @@ from worlds.alttp.EntranceRandomizer import parse_arguments
 from worlds.alttp.Text import TextTable
 from worlds.AutoWorld import AutoWorldRegister
 from worlds.generic import PlandoConnection
+from worlds import failed_world_loads
 
 
 def mystery_argparse():
@@ -34,8 +35,8 @@ def mystery_argparse():
 
     parser = argparse.ArgumentParser(description="CMD Generation Interface, defaults come from host.yaml.")
     parser.add_argument('--weights_file_path', default=defaults.weights_file_path,
-                        help='Path to the weights file to use for rolling game settings, urls are also valid')
-    parser.add_argument('--samesettings', help='Rolls settings per weights file rather than per player',
+                        help='Path to the weights file to use for rolling game options, urls are also valid')
+    parser.add_argument('--sameoptions', help='Rolls options per weights file rather than per player',
                         action='store_true')
     parser.add_argument('--player_files_path', default=defaults.player_files_path,
                         help="Input directory for player files.")
@@ -103,8 +104,8 @@ def main(args=None, callback=ERmain):
             del(meta_weights["meta_description"])
         except Exception as e:
             raise ValueError("No meta description found for meta.yaml. Unable to verify.") from e
-        if args.samesettings:
-            raise Exception("Cannot mix --samesettings with --meta")
+        if args.sameoptions:
+            raise Exception("Cannot mix --sameoptions with --meta")
     else:
         meta_weights = None
     player_id = 1
@@ -156,7 +157,7 @@ def main(args=None, callback=ERmain):
     erargs.skip_output = args.skip_output
 
     settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
-        {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.samesettings else None)
+        {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.sameoptions else None)
          for fname, yamls in weights_cache.items()}
 
     if meta_weights:
@@ -302,7 +303,9 @@ def handle_name(name: str, player: int, name_counter: Counter):
                                                                  NUMBER=(number if number > 1 else ''),
                                                                  player=player,
                                                                  PLAYER=(player if player > 1 else '')))
-    new_name = new_name.strip()[:16]
+    # Run .strip twice for edge case where after the initial .slice new_name has a leading whitespace.
+    # Could cause issues for some clients that cannot handle the additional whitespace.
+    new_name = new_name.strip()[:16].strip()
     if new_name == "Archipelago":
         raise Exception(f"You cannot name yourself \"{new_name}\"")
     return new_name
@@ -321,13 +324,29 @@ def roll_percentage(percentage: Union[int, float]) -> bool:
     return random.random() < (float(percentage) / 100)
 
 
-def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> dict:
+def update_weights(weights: dict, new_weights: dict, update_type: str, name: str) -> dict:
     logging.debug(f'Applying {new_weights}')
-    new_options = set(new_weights) - set(weights)
-    weights.update(new_weights)
+    cleaned_weights = {}
+    for option in new_weights:
+        option_name = option.lstrip("+")
+        if option.startswith("+") and option_name in weights:
+            cleaned_value = weights[option_name]
+            new_value = new_weights[option]
+            if isinstance(new_value, (set, dict)):
+                cleaned_value.update(new_value)
+            elif isinstance(new_value, list):
+                cleaned_value.extend(new_value)
+            else:
+                raise Exception(f"Cannot apply merge to non-dict, set, or list type {option_name},"
+                                f" received {type(new_value).__name__}.")
+            cleaned_weights[option_name] = cleaned_value
+        else:
+            cleaned_weights[option_name] = new_weights[option]
+    new_options = set(cleaned_weights) - set(weights)
+    weights.update(cleaned_weights)
     if new_options:
         for new_option in new_options:
-            logging.warning(f'{type} Suboption "{new_option}" of "{name}" did not '
+            logging.warning(f'{update_type} Suboption "{new_option}" of "{name}" did not '
                             f'overwrite a root option. '
                             f'This is probably in error.')
     return weights
@@ -440,7 +459,11 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
 
     ret.game = get_choice("game", weights)
     if ret.game not in AutoWorldRegister.world_types:
-        picks = Utils.get_fuzzy_results(ret.game, AutoWorldRegister.world_types, limit=1)[0]
+        picks = Utils.get_fuzzy_results(ret.game, list(AutoWorldRegister.world_types) + failed_world_loads, limit=1)[0]
+        if picks[0] in failed_world_loads:
+            raise Exception(f"No functional world found to handle game {ret.game}. "
+                            f"Did you mean '{picks[0]}' ({picks[1]}% sure)? "
+                            f"If so, it appears the world failed to initialize correctly.")
         raise Exception(f"No world found to handle game {ret.game}. Did you mean '{picks[0]}' ({picks[1]}% sure)? "
                         f"Check your spelling or installation of that world.")
 
@@ -449,6 +472,10 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
 
     world_type = AutoWorldRegister.world_types[ret.game]
     game_weights = weights[ret.game]
+
+    if any(weight.startswith("+") for weight in game_weights) or \
+       any(weight.startswith("+") for weight in weights):
+        raise Exception(f"Merge tag cannot be used outside of trigger contexts.")
 
     if "triggers" in game_weights:
         weights = roll_triggers(weights, game_weights["triggers"])
