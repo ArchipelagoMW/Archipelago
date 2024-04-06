@@ -1,2 +1,2 @@
-./worlds/AutoSNIClient.py
-./Patch.py
+worlds/AutoSNIClient.py
+Patch.py
