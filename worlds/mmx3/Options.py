@@ -3,6 +3,28 @@ import typing
 
 from Options import Choice, Range, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions, StartInventoryPool
 
+class ROMVersion(Choice):
+    """
+    Which ROM version will be used to generate a patch.
+    Note: Legacy collection users must dump the game themselves from the collection.
+    """
+    display_name = "ROM Version"
+    option_snes = 0
+    option_legacy_collection = 1
+    default = 1
+
+class LogicZSaber(Choice):
+    """
+    Adds the Z-Saber to the game's logic.
+    """
+    display_name = "Z-Saber Logic"
+    option_not_required = 5
+    option_required_for_lab_1 = 0
+    option_required_for_lab_2 = 1
+    option_required_for_lab_3 = 2
+    option_required_for_doppler = 3
+    option_only_sigma = 4
+    default = 2
 
 class EnergyLink(DefaultOnToggle):
     """
@@ -231,6 +253,7 @@ class MMX3Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     death_link: DeathLink
     energy_link: EnergyLink
+    rom_version: ROMVersion
     disable_charge_freeze: DisableChargeFreeze
     starting_life_count: StartingLifeCount
     pickupsanity: PickupSanity

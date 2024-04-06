@@ -1,11 +1,13 @@
-import Utils
-from worlds.AutoWorld import World
-from worlds.Files import APDeltaPatch
-
+import typing
 import bsdiff4
+import Utils
 import hashlib
 import os
+from typing import Optional, TYPE_CHECKING
 from pkgutil import get_data
+
+from worlds.AutoWorld import World
+from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 
 HASH_US = 'cfe8c11f0dce19e4fa5f3fd75775e47c'
 HASH_LEGACY = 'ff683b75e75e9b59f0c713c7512a016b'
@@ -56,96 +58,96 @@ refill_rom_data = {
     #0xBD0033: ["large weapon refill"]
 }
 
-class MMX3DeltaPatch(APDeltaPatch):
+class MMX3ProcedurePatch(APProcedurePatch, APTokenMixin):
     hash = [HASH_US, HASH_LEGACY]
     game = "Mega Man X3"
     patch_file_ending = ".apmmx3"
+    result_file_ending = ".sfc"
+    name: bytearray
+    procedure = [
+        ("apply_tokens", ["token_patch.bin"]),
+        ("apply_bsdiff4", ["mmx3_basepatch.bsdiff4"]),
+    ]
 
     @classmethod
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes()
 
-class LocalRom:
+    def write_byte(self, offset, value):
+        self.write_token(APTokenTypes.WRITE, offset, value.to_bytes(1, "little"))
 
-    def __init__(self, file, patch=True, vanillaRom=None, name=None, hash=None):
-        self.name = name
-        self.hash = hash
-        self.orig_buffer = None
+    def write_bytes(self, offset, value: typing.Iterable[int]):
+        self.write_token(APTokenTypes.WRITE, offset, bytes(value))
 
-        with open(file, 'rb') as stream:
-            self.buffer = Utils.read_snes_rom(stream)
-        
-    def read_bit(self, address: int, bit_number: int) -> bool:
-        bitflag = (1 << bit_number)
-        return ((self.buffer[address] & bitflag) != 0)
-
-    def read_byte(self, address: int) -> int:
-        return self.buffer[address]
-
-    def read_bytes(self, startaddress: int, length: int) -> bytes:
-        return self.buffer[startaddress:startaddress + length]
-
-    def write_byte(self, address: int, value: int):
-        self.buffer[address] = value
-
-    def write_bytes(self, startaddress: int, values):
-        self.buffer[startaddress:startaddress + len(values)] = values
-
-    def write_to_file(self, file):
-        with open(file, 'wb') as outfile:
-            outfile.write(self.buffer)
-
-    def read_from_file(self, file):
-        with open(file, 'rb') as stream:
-            self.buffer = bytearray(stream.read())
-
-    def apply_patch(self, patch: bytes):
-        self.buffer = bytearray(bsdiff4.patch(bytes(self.buffer), patch))
-
-    def write_crc(self):
-        crc = (sum(self.buffer[:0x7FDC] + self.buffer[0x7FE0:]) + 0x01FE) & 0xFFFF
-        inv = crc ^ 0xFFFF
-        self.write_bytes(0x7FDC, [inv & 0xFF, (inv >> 8) & 0xFF, crc & 0xFF, (crc >> 8) & 0xFF])
-
-
-def patch_rom(world: World, rom, player):
+def patch_rom(world: World, patch: MMX3ProcedurePatch):
     from Utils import __version__
 
-    # Apply base patch
-    rom.apply_patch(get_data(__name__, os.path.join("data", "mmx3_basepatch.bsdiff4")))
+    # Prepare some ROM locations to receive the basepatch output
+    patch.write_bytes(0x00638, bytearray([0x85,0xB4,0x8A]))
+    patch.write_bytes(0x0065A, bytearray([0x85,0xB4,0x8A]))
+    patch.write_bytes(0x00EFD, bytearray([0xA9,0x10,0x20,0x91,0x86]))
+    patch.write_bytes(0x00F36, bytearray([0xA5,0xAD,0x89,0x08,0xF0,0x09,0xA5,0x3C,
+                                          0x3A,0x10,0x11,0xA9,0x02,0x80,0x0D,0x89,
+                                          0x24,0xF0,0x24,0xA5,0x3C,0x1A,0xC9,0x03,
+                                          0xD0,0x02,0xA9,0x00,0x85,0x3C,0xAA,0xBD,
+                                          0xF8,0x87,0x8D,0xE0,0x09,0xA5,0x3C,0x18,
+                                          0x69,0x10,0x20,0x91,0x86,0xA9,0xF0,0x85,
+                                          0x3B,0xA9,0x1C,0x22,0x2B,0x80,0x01]))
+    patch.write_bytes(0x00FF2, bytearray([0x9C,0xD9,0x09,0x9C,0xDA,0x09]))
+    patch.write_bytes(0x01034, bytearray([0x64,0x38,0x64,0x39]))
+    patch.write_bytes(0x03118, bytearray([0xA9,0x08,0x85,0xD5]))
+    patch.write_bytes(0x06A0B, bytearray([0x62,0x81]))
+    patch.write_bytes(0x06C4C, bytearray([0x85,0x00,0x0A]))
+    patch.write_bytes(0x06E76, bytearray([0x9F,0xCB,0xFF,0x7E]))
+    patch.write_bytes(0x06F28, bytearray([0x41,0x88]))
+    patch.write_bytes(0x0F242, bytearray([0xA9,0x02,0x85]))
+    patch.write_bytes(0x16900, bytearray([0xA9,0x04,0x85,0x01]))
+    patch.write_bytes(0x19604, bytearray([0xA9,0x01,0x0C,0xD7,0x1F]))
+    patch.write_bytes(0x1B34D, bytearray([0xA9,0xC0,0x0C,0xB2,0x1F]))
+    patch.write_bytes(0x24E01, bytearray([0xED,0x00,0x00,0x8D,0xFF,0x09]))
+    patch.write_bytes(0x24F44, bytearray([0x85,0x27,0xA9,0x20]))
+    patch.write_bytes(0x24F5C, bytearray([0x64,0x27,0xA9,0x06]))
+    patch.write_bytes(0x25095, bytearray([0xED,0x00,0x00,0x8D,0xFF,0x09]))
+    patch.write_bytes(0x29B83, bytearray([0xA9,0x04,0x85,0x01]))
+    patch.write_bytes(0x2C81D, bytearray([0xBD,0xFD,0xBB,0x0C,0xD1,0x1F,0x60,0xA9,
+                                          0xFF,0x0C,0xCC,0x1F]))
+    patch.write_bytes(0x30E4A, bytearray([0xAD,0x97,0xAD,0x97]))
+    patch.write_bytes(0x395EA, bytearray([0xA9,0x04,0x85,0x01]))
+    patch.write_bytes(0x0FF84, bytearray([0xFF for _ in range(0x007C)]))
+    patch.write_bytes(0x1FA80, bytearray([0xFF for _ in range(0x0580)]))
 
     # Edit the ROM header
-    rom.name = bytearray(f'MMX3{__version__.replace(".", "")[0:3]}_{player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
-    rom.name.extend([0] * (21 - len(rom.name)))
-    rom.write_bytes(0x7FC0, rom.name)
+    patch.name = bytearray(f'MMX3{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
+    patch.name.extend([0] * (21 - len(patch.name)))
+    patch.write_bytes(0x7FC0, patch.name)
 
     # Write options to the ROM
-    rom.write_byte(0x17FFE0, world.options.doppler_open.value)
-    rom.write_byte(0x17FFE1, world.options.doppler_medal_count.value)
-    rom.write_byte(0x17FFE2, world.options.doppler_weapon_count.value)
-    rom.write_byte(0x17FFE3, world.options.doppler_upgrade_count.value)
-    rom.write_byte(0x17FFE4, world.options.doppler_heart_tank_count.value)
-    rom.write_byte(0x17FFE5, world.options.doppler_sub_tank_count.value)
-    rom.write_byte(0x17FFE6, world.options.starting_life_count.value)
+    patch.write_byte(0x17FFE0, world.options.doppler_open.value)
+    patch.write_byte(0x17FFE1, world.options.doppler_medal_count.value)
+    patch.write_byte(0x17FFE2, world.options.doppler_weapon_count.value)
+    patch.write_byte(0x17FFE3, world.options.doppler_upgrade_count.value)
+    patch.write_byte(0x17FFE4, world.options.doppler_heart_tank_count.value)
+    patch.write_byte(0x17FFE5, world.options.doppler_sub_tank_count.value)
+    patch.write_byte(0x17FFE6, world.options.starting_life_count.value)
     if world.options.pickupsanity.value:
-        rom.write_byte(0x17FFE7, 0x01)
+        patch.write_byte(0x17FFE7, 0x01)
     else:
-        rom.write_byte(0x17FFE7, 0x00)
-    rom.write_byte(0x17FFE8, world.options.vile_open.value)
-    rom.write_byte(0x17FFE9, world.options.vile_medal_count.value)
-    rom.write_byte(0x17FFEA, world.options.vile_weapon_count.value)
-    rom.write_byte(0x17FFEB, world.options.vile_upgrade_count.value)
-    rom.write_byte(0x17FFEC, world.options.vile_heart_tank_count.value)
-    rom.write_byte(0x17FFED, world.options.vile_sub_tank_count.value)
+        patch.write_byte(0x17FFE7, 0x00)
+    patch.write_byte(0x17FFE8, world.options.vile_open.value)
+    patch.write_byte(0x17FFE9, world.options.vile_medal_count.value)
+    patch.write_byte(0x17FFEA, world.options.vile_weapon_count.value)
+    patch.write_byte(0x17FFEB, world.options.vile_upgrade_count.value)
+    patch.write_byte(0x17FFEC, world.options.vile_heart_tank_count.value)
+    patch.write_byte(0x17FFED, world.options.vile_sub_tank_count.value)
 
-    rom.write_byte(0x17FFEE, world.options.logic_boss_weakness.value)
-    rom.write_byte(0x17FFEF, world.options.logic_vile_required.value)
-    rom.write_byte(0x17FFF0, world.options.logic_z_saber.value)
+    patch.write_byte(0x17FFEE, world.options.logic_boss_weakness.value)
+    patch.write_byte(0x17FFEF, world.options.logic_vile_required.value)
+    patch.write_byte(0x17FFF0, world.options.logic_z_saber.value)
     
-    #rom.write_byte(0x17FFF1, world.options.doppler_lab_1_boss.value)
-    rom.write_byte(0x17FFF1, 0x00)
-    rom.write_byte(0x17FFF2, world.options.doppler_lab_2_boss.value)
-    rom.write_byte(0x17FFF3, world.options.doppler_lab_3_boss_rematch_count.value)
+    #patch.write_byte(0x17FFF1, world.options.doppler_lab_1_boss.value)
+    patch.write_byte(0x17FFF1, 0x00)
+    patch.write_byte(0x17FFF2, world.options.doppler_lab_2_boss.value)
+    patch.write_byte(0x17FFF3, world.options.doppler_lab_3_boss_rematch_count.value)
 
     bit_medal_count = world.options.bit_medal_count.value
     byte_medal_count = world.options.byte_medal_count.value
@@ -155,27 +157,27 @@ def patch_rom(world: World, rom, player):
         if bit_medal_count == 7:
             bit_medal_count = 6
         byte_medal_count = bit_medal_count + 1
-    rom.write_byte(0x17FFF4, bit_medal_count)
-    rom.write_byte(0x17FFF5, byte_medal_count)
+    patch.write_byte(0x17FFF4, bit_medal_count)
+    patch.write_byte(0x17FFF5, byte_medal_count)
 
     # QoL
-    rom.write_byte(0x17FFF6, world.options.disable_charge_freeze.value)
+    patch.write_byte(0x17FFF6, world.options.disable_charge_freeze.value)
 
     # EnergyLink
-    rom.write_byte(0x17FFF7, world.options.energy_link.value)
+    patch.write_byte(0x17FFF7, world.options.energy_link.value)
 
     # DeathLink
-    rom.write_byte(0x17FFF8, world.options.death_link.value)
+    patch.write_byte(0x17FFF8, world.options.death_link.value)
     
     # Setup starting life count
-    rom.write_byte(0x0019B1, world.options.starting_life_count.value)
-    rom.write_byte(0x0072C3, world.options.starting_life_count.value)
-    rom.write_byte(0x0021BE, world.options.starting_life_count.value)
+    patch.write_byte(0x0019B1, world.options.starting_life_count.value)
+    patch.write_byte(0x0072C3, world.options.starting_life_count.value)
+    patch.write_byte(0x0021BE, world.options.starting_life_count.value)
 
     # Debug option
-    rom.write_byte(0x17FFFF, 0x00)
+    patch.write_byte(0x17FFFF, 0x00)
 
-    rom.write_crc()
+    patch.write_file("token_patch.bin", patch.get_token_binary())
 
     
 def get_base_rom_bytes(file_name: str = "") -> bytes:
@@ -186,7 +188,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
-        if basemd5.hexdigest() not in {HASH_US}:
+        if basemd5.hexdigest() not in {HASH_US, HASH_LEGACY}:
             raise Exception('Supplied Base Rom does not match known MD5 for US or LC release. '
                             'Get the correct game and version, then dump it')
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes

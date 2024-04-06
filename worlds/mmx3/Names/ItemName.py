@@ -1,7 +1,7 @@
 # Stages
 stage_toxic_seahorse = "Toxic Seahorse Access Codes"
-stage_volt_catfish = "Volt Catfish Stage Access Codes"
-stage_tunnel_rhino = "Tunnel Rhino Stage Access Codes"
+stage_volt_catfish = "Volt Catfish Access Codes"
+stage_tunnel_rhino = "Tunnel Rhino Access Codes"
 stage_blizzard_buffalo = "Blizzard Buffalo Access Codes"
 stage_crush_crawfish = "Crush Crawfish Access Codes"
 stage_neon_tiger = "Neon Tiger Access Codes"
