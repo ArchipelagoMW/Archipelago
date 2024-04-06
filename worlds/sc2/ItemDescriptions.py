@@ -26,6 +26,49 @@ RESOURCE_EFFICIENCY_NO_SUPPLY_DESCRIPTION_TEMPLATE = "Reduces {} resource cost."
 CLOAK_DESCRIPTION_TEMPLATE = "Allows {} to use the Cloak ability."
 GENERIC_UPGRADE_DESCRIPTION_TEMPLATE = "Unlocks the {} upgrades for {} units"
 
+DISPLAY_NAME_BROOD_LORD = "Brood Lord"
+DISPLAY_NAME_CLOAKED_ASSASSIN = "Dark Templar, Avenger, and Blood Hunter"
+
+resource_efficiency_cost_reduction = {
+    ItemNames.MEDIC: (25, 25, 1),
+    ItemNames.FIREBAT: (50, 0, 1),
+    ItemNames.GOLIATH: (50, 0, 1),
+    ItemNames.SIEGE_TANK: (0, 25, 1),
+    ItemNames.DIAMONDBACK: (0, 50, 1),
+    ItemNames.PREDATOR: (0, 75, 1),
+    ItemNames.WARHOUND: (75, 0, 0),
+    ItemNames.HERC: (25, 25, 1),
+    ItemNames.WRAITH: (0, 50, 0),
+    ItemNames.GHOST: (125, 75, 1),
+    ItemNames.SPECTRE: (125, 75, 1),
+    ItemNames.RAVEN: (0, 50, 0),
+    ItemNames.CYCLONE: (25, 50, 1),
+    ItemNames.LIBERATOR: (25, 25, 0),
+    ItemNames.VALKYRIE: (100, 25, 1),
+    ItemNames.SCOURGE: (0, 50, 0),
+    ItemNames.HYDRALISK: (25, 25, 1),
+    ItemNames.SWARM_HOST: (100, 25, 0),
+    ItemNames.ULTRALISK: (100, 0, 2),
+    DISPLAY_NAME_BROOD_LORD: (0, 75, 0),
+    ItemNames.SWARM_QUEEN: (0, 50, 0),
+    ItemNames.ARBITER: (50, 0, 0),
+    ItemNames.REAVER: (100, 100, 2),
+    DISPLAY_NAME_CLOAKED_ASSASSIN: (0, 50, 0),
+}
+
+def get_resource_efficiency_desc(item_name: str) -> str:
+    cost = resource_efficiency_cost_reduction[item_name]
+    parts = [f"{cost[0]} minerals"] if cost[0] else []
+    parts += [f"{cost[1]} gas"] if cost[1] else []
+    parts += [f"{cost[2]} supply"] if cost[2] else []
+    assert parts, f"{item_name} doesn't reduce cost by anything"
+    if len(parts) == 1:
+        amount = parts[0]
+    elif len(parts) == 2:
+        amount = " and ".join(parts)
+    else:
+        amount = ", ".join(parts[:-1]) + ", and " + parts[-1]
+    return (f"Reduces {item_name} cost by {amount}")
 
 item_descriptions = {
     ItemNames.MARINE: "General-purpose infantry.",
@@ -140,9 +183,9 @@ item_descriptions = {
     ItemNames.MARINE_OPTIMIZED_LOGISTICS: "Increases Marine training speed.",
     ItemNames.MEDIC_RESTORATION: "Removes negative status effects from target allied unit.",
     ItemNames.MEDIC_OPTICAL_FLARE: "Reduces vision range of target enemy unit. Disables detection.",
-    ItemNames.MEDIC_RESOURCE_EFFICIENCY: None,
+    ItemNames.MEDIC_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.MEDIC),
     ItemNames.FIREBAT_PROGRESSIVE_STIMPACK: STIMPACK_LARGE_DESCRIPTION,
-    ItemNames.FIREBAT_RESOURCE_EFFICIENCY: None,
+    ItemNames.FIREBAT_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.FIREBAT),
     ItemNames.MARAUDER_PROGRESSIVE_STIMPACK: STIMPACK_LARGE_DESCRIPTION,
     ItemNames.MARAUDER_LASER_TARGETING_SYSTEM: LASER_TARGETING_SYSTEMS_DESCRIPTION,
     ItemNames.MARAUDER_MAGRAIL_MUNITIONS: "Deals 20 damage to target unit. Autocast on attack with a cooldown.",
@@ -161,10 +204,10 @@ item_descriptions = {
     ItemNames.HELLION_INFERNAL_PLATING: "Increases Hellion and Hellbat armor by 2.",
     ItemNames.VULTURE_AUTO_REPAIR: "Vultures regenerate life.",
     ItemNames.GOLIATH_SHAPED_HULL: "Increases Goliath life by 25.",
-    ItemNames.GOLIATH_RESOURCE_EFFICIENCY: None,
+    ItemNames.GOLIATH_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.GOLIATH),
     ItemNames.GOLIATH_INTERNAL_TECH_MODULE: INTERNAL_TECH_MODULE_DESCRIPTION_TEMPLATE.format("Goliaths", "Factory"),
     ItemNames.SIEGE_TANK_SHAPED_HULL: "Increases Siege Tank life by 25.",
-    ItemNames.SIEGE_TANK_RESOURCE_EFFICIENCY: None,
+    ItemNames.SIEGE_TANK_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.SIEGE_TANK),
     ItemNames.PREDATOR_CLOAK: CLOAK_DESCRIPTION_TEMPLATE.format("Predators"),
     ItemNames.PREDATOR_CHARGE: "Allows Predators to intercept enemy ground units.",
     ItemNames.MEDIVAC_SCATTER_VEIL: "Medivacs get 100 shields.",
@@ -191,7 +234,7 @@ item_descriptions = {
                      While not attacking, the Diamondback charges its weapon. 
                      The next attack does 10 additional damage.
                      """),
-    ItemNames.DIAMONDBACK_RESOURCE_EFFICIENCY: None,
+    ItemNames.DIAMONDBACK_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.DIAMONDBACK),
     ItemNames.SIEGE_TANK_JUMP_JETS: inspect.cleandoc("""
                      Repositions Siege Tank to a target location. 
                      Can be used in either mode and to jump up and down cliffs. 
@@ -208,7 +251,7 @@ item_descriptions = {
     ItemNames.SIEGE_TANK_LASER_TARGETING_SYSTEM: LASER_TARGETING_SYSTEMS_DESCRIPTION,
     ItemNames.SIEGE_TANK_ADVANCED_SIEGE_TECH: "Siege Tanks gain +3 armor in Siege Mode.",
     ItemNames.SIEGE_TANK_INTERNAL_TECH_MODULE: INTERNAL_TECH_MODULE_DESCRIPTION_TEMPLATE.format("Siege Tanks", "Factory"),
-    ItemNames.PREDATOR_RESOURCE_EFFICIENCY: "Decreases Predator resource and supply cost.",
+    ItemNames.PREDATOR_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.PREDATOR),
     ItemNames.MEDIVAC_EXPANDED_HULL: "Increases Medivac cargo space by 4.",
     ItemNames.MEDIVAC_AFTERBURNERS: "Ability. Temporarily increases the Medivac's movement speed by 70%.",
     ItemNames.WRAITH_ADVANCED_LASER_TECHNOLOGY: inspect.cleandoc("""
@@ -218,9 +261,9 @@ item_descriptions = {
     ItemNames.VIKING_SMART_SERVOS: SMART_SERVOS_DESCRIPTION,
     ItemNames.VIKING_ANTI_MECHANICAL_MUNITION: "Increases Viking damage to mechanical units while in Assault Mode.",
     ItemNames.DIAMONDBACK_ION_THRUSTERS: "Increases Diamondback movement speed.",
-    ItemNames.WARHOUND_RESOURCE_EFFICIENCY: None,
+    ItemNames.WARHOUND_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.WARHOUND),
     ItemNames.WARHOUND_REINFORCED_PLATING: "Increases Warhound armor by 2.",
-    ItemNames.HERC_RESOURCE_EFFICIENCY: None,
+    ItemNames.HERC_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.HERC),
     ItemNames.HERC_JUGGERNAUT_PLATING: "Increases HERC armor by 2.",
     ItemNames.HERC_KINETIC_FOAM: "Increases HERC life by 50.",
     ItemNames.HELLION_TWIN_LINKED_FLAMETHROWER: "Doubles the width of the Hellion's flame attack.",
@@ -277,23 +320,23 @@ item_descriptions = {
     ItemNames.MEDIVAC_ADVANCED_CLOAKING_FIELD: "Medivacs are permanently cloaked.",
     ItemNames.WRAITH_TRIGGER_OVERRIDE: "Wraith attack speed increases by 10% with each attack, up to a maximum of 100%.",
     ItemNames.WRAITH_INTERNAL_TECH_MODULE: INTERNAL_TECH_MODULE_DESCRIPTION_TEMPLATE.format("Wraiths", "Starport"),
-    ItemNames.WRAITH_RESOURCE_EFFICIENCY: None,
+    ItemNames.WRAITH_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.WRAITH),
     ItemNames.VIKING_SHREDDER_ROUNDS: "Attacks in Assault mode do line splash damage.",
     ItemNames.VIKING_WILD_MISSILES: "Launches 5 rockets at the target unit. Each rocket does 25 (40 vs armored) damage.",
     ItemNames.BANSHEE_SHAPED_HULL: "Increases Banshee life by 100.",
     ItemNames.BANSHEE_ADVANCED_TARGETING_OPTICS: "Increases Banshee attack range by 2 while cloaked.",
     ItemNames.BANSHEE_DISTORTION_BLASTERS: "Increases Banshee attack damage by 25% while cloaked.",
     ItemNames.BANSHEE_ROCKET_BARRAGE: "Deals 75 damage to enemy ground units in the target area.",
-    ItemNames.GHOST_RESOURCE_EFFICIENCY: None,
-    ItemNames.SPECTRE_RESOURCE_EFFICIENCY: None,
+    ItemNames.GHOST_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.GHOST),
+    ItemNames.SPECTRE_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.SPECTRE),
     ItemNames.THOR_BUTTON_WITH_A_SKULL_ON_IT: "Allows Thors to launch nukes.",
     ItemNames.THOR_LASER_TARGETING_SYSTEM: LASER_TARGETING_SYSTEMS_DESCRIPTION,
     ItemNames.THOR_LARGE_SCALE_FIELD_CONSTRUCTION: "Allows Thors to be built by SCVs like a structure.",
-    ItemNames.RAVEN_RESOURCE_EFFICIENCY: None,
+    ItemNames.RAVEN_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.RAVEN),
     ItemNames.RAVEN_DURABLE_MATERIALS: "Extends timed life duration of Raven's summoned objects.",
     ItemNames.SCIENCE_VESSEL_IMPROVED_NANO_REPAIR: "Nano-Repair no longer requires energy to use.",
     ItemNames.SCIENCE_VESSEL_ADVANCED_AI_SYSTEMS: "Science Vessel can use Nano-Repair at two targets at once.",
-    ItemNames.CYCLONE_RESOURCE_EFFICIENCY: None,
+    ItemNames.CYCLONE_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.CYCLONE),
     ItemNames.BANSHEE_HYPERFLIGHT_ROTORS: "Increases Banshee movement speed.",
     ItemNames.BANSHEE_LASER_TARGETING_SYSTEM: LASER_TARGETING_SYSTEMS_DESCRIPTION,
     ItemNames.BANSHEE_INTERNAL_TECH_MODULE: INTERNAL_TECH_MODULE_DESCRIPTION_TEMPLATE.format("Banshees", "Starport"),
@@ -349,7 +392,7 @@ item_descriptions = {
     ItemNames.VALKYRIE_AFTERBURNERS: "Ability. Temporarily increases the Valkyries's movement speed by 70%.",
     ItemNames.CYCLONE_INTERNAL_TECH_MODULE: INTERNAL_TECH_MODULE_DESCRIPTION_TEMPLATE.format("Cyclones", "Factory"),
     ItemNames.LIBERATOR_SMART_SERVOS: SMART_SERVOS_DESCRIPTION,
-    ItemNames.LIBERATOR_RESOURCE_EFFICIENCY: None,
+    ItemNames.LIBERATOR_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.LIBERATOR),
     ItemNames.HERCULES_INTERNAL_FUSION_MODULE: "Hercules can be trained from a Starport without having a Fusion Core.",
     ItemNames.HERCULES_TACTICAL_JUMP: inspect.cleandoc("""
                      Allows Hercules to warp to a target location anywhere on the map.
@@ -360,7 +403,7 @@ item_descriptions = {
                     """),
     ItemNames.PLANETARY_FORTRESS_ADVANCED_TARGETING: "Planetary Fortress can attack air units.",
     ItemNames.VALKYRIE_LAUNCHING_VECTOR_COMPENSATOR: "Allows Valkyries to shoot air while moving.",
-    ItemNames.VALKYRIE_RESOURCE_EFFICIENCY: None,
+    ItemNames.VALKYRIE_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.VALKYRIE),
     ItemNames.PREDATOR_PREDATOR_S_FURY: "Predators can use an attack that jumps between targets.",
     ItemNames.BATTLECRUISER_BEHEMOTH_PLATING: "Increases Battlecruiser armor by 2.",
     ItemNames.BATTLECRUISER_COVERT_OPS_ENGINES: "Increases Battlecruiser movement speed.",
@@ -496,13 +539,13 @@ item_descriptions = {
     ItemNames.CORRUPTOR_CAUSTIC_SPRAY: "Allows Corruptors to use the Caustic Spray ability, which deals ramping damage to buildings over time.",
     ItemNames.CORRUPTOR_CORRUPTION: "Allows Corruptors to use the Corruption ability, which causes a target enemy unit to take increased damage.",
     ItemNames.SCOURGE_VIRULENT_SPORES: "Scourge will deal splash damage.",
-    ItemNames.SCOURGE_RESOURCE_EFFICIENCY: "Reduces the cost of Scourge by 50 gas per egg.",
+    ItemNames.SCOURGE_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.SCOURGE),
     ItemNames.SCOURGE_SWARM_SCOURGE: "An extra Scourge will be built from each egg at no additional cost.",
     ItemNames.ZERGLING_SHREDDING_CLAWS: "Zergling attacks will temporarily reduce their target's armour to 0.",
     ItemNames.ROACH_GLIAL_RECONSTITUTION: "Increases Roach movement speed.",
     ItemNames.ROACH_ORGANIC_CARAPACE: "Increases Roach health by +25.",
     ItemNames.HYDRALISK_MUSCULAR_AUGMENTS: "Increases Hydralisk movement speed.",
-    ItemNames.HYDRALISK_RESOURCE_EFFICIENCY: "Reduces Hydralisk resource cost by 25/25 and supply cost by 1.",
+    ItemNames.HYDRALISK_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.HYDRALISK),
     ItemNames.BANELING_CENTRIFUGAL_HOOKS: "Increases the movement speed of Banelings.",
     ItemNames.BANELING_TUNNELING_JAWS: "Allows Banelings to move while burrowed.",
     ItemNames.BANELING_RAPID_METAMORPH: "Banelings morph faster.",
@@ -511,11 +554,11 @@ item_descriptions = {
     ItemNames.SWARM_HOST_LOCUST_METABOLIC_BOOST: "Increases Locust movement speed.",
     ItemNames.SWARM_HOST_ENDURING_LOCUSTS: "Increases the duration of Swarm Hosts' Locusts by 10s.",
     ItemNames.SWARM_HOST_ORGANIC_CARAPACE: "Increases Swarm Host health by +40.",
-    ItemNames.SWARM_HOST_RESOURCE_EFFICIENCY: "Reduces Swarm Host resource cost by 100/25.",
+    ItemNames.SWARM_HOST_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.SWARM_HOST),
     ItemNames.ULTRALISK_ANABOLIC_SYNTHESIS: None,
     ItemNames.ULTRALISK_CHITINOUS_PLATING: None,
     ItemNames.ULTRALISK_ORGANIC_CARAPACE: None,
-    ItemNames.ULTRALISK_RESOURCE_EFFICIENCY: None,
+    ItemNames.ULTRALISK_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.ULTRALISK),
     ItemNames.DEVOURER_CORROSIVE_SPRAY: None,
     ItemNames.DEVOURER_GAPING_MAW: None,
     ItemNames.DEVOURER_IMPROVED_OSMOSIS: None,
@@ -537,14 +580,14 @@ item_descriptions = {
     ItemNames.BROOD_LORD_POROUS_CARTILAGE: None,
     ItemNames.BROOD_LORD_EVOLVED_CARAPACE: None,
     ItemNames.BROOD_LORD_SPLITTER_MITOSIS: None,
-    ItemNames.BROOD_LORD_RESOURCE_EFFICIENCY: None,
+    ItemNames.BROOD_LORD_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(DISPLAY_NAME_BROOD_LORD),
     ItemNames.INFESTOR_INFESTED_TERRAN: None,
     ItemNames.INFESTOR_MICROBIAL_SHROUD: None,
     ItemNames.SWARM_QUEEN_SPAWN_LARVAE: None,
     ItemNames.SWARM_QUEEN_DEEP_TUNNEL: None,
     ItemNames.SWARM_QUEEN_ORGANIC_CARAPACE: None,
     ItemNames.SWARM_QUEEN_BIO_MECHANICAL_TRANSFUSION: None,
-    ItemNames.SWARM_QUEEN_RESOURCE_EFFICIENCY: None,
+    ItemNames.SWARM_QUEEN_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.SWARM_QUEEN),
     ItemNames.SWARM_QUEEN_INCUBATOR_CHAMBER: None,
     ItemNames.BROOD_QUEEN_FUNGAL_GROWTH: None,
     ItemNames.BROOD_QUEEN_ENSNARE: None,
@@ -679,7 +722,7 @@ item_descriptions = {
     ItemNames.ARBITER_CHRONOSTATIC_REINFORCEMENT: None,
     ItemNames.ARBITER_KHAYDARIN_CORE: None,
     ItemNames.ARBITER_SPACETIME_ANCHOR: None,
-    ItemNames.ARBITER_RESOURCE_EFFICIENCY: None,
+    ItemNames.ARBITER_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.ARBITER),
     ItemNames.ARBITER_ENHANCED_CLOAK_FIELD: None,
     ItemNames.CARRIER_GRAVITON_CATAPULT: "Carriers can launch Interceptors more quickly.",
     ItemNames.CARRIER_HULL_OF_PAST_GLORIES: "Carriers gain +2 armour.",
@@ -693,7 +736,7 @@ item_descriptions = {
     ItemNames.REAVER_SCARAB_DAMAGE: None,
     ItemNames.REAVER_SOLARITE_PAYLOAD: None,
     ItemNames.REAVER_REAVER_CAPACITY: None,
-    ItemNames.REAVER_RESOURCE_EFFICIENCY: None,
+    ItemNames.REAVER_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(ItemNames.REAVER),
     ItemNames.VANGUARD_AGONY_LAUNCHERS: None,
     ItemNames.VANGUARD_MATTER_DISPERSION: None,
     ItemNames.IMMORTAL_ANNIHILATOR_SINGULARITY_CHARGE: None,
@@ -704,7 +747,7 @@ item_descriptions = {
     ItemNames.DARK_TEMPLAR_AVENGER_BLOOD_HUNTER_SHROUD_OF_ADUN: None,
     ItemNames.DARK_TEMPLAR_AVENGER_BLOOD_HUNTER_SHADOW_GUARD_TRAINING: None,
     ItemNames.DARK_TEMPLAR_AVENGER_BLOOD_HUNTER_BLINK: None,
-    ItemNames.DARK_TEMPLAR_AVENGER_BLOOD_HUNTER_RESOURCE_EFFICIENCY: None,
+    ItemNames.DARK_TEMPLAR_AVENGER_BLOOD_HUNTER_RESOURCE_EFFICIENCY: get_resource_efficiency_desc(DISPLAY_NAME_CLOAKED_ASSASSIN),
     ItemNames.DARK_TEMPLAR_DARK_ARCHON_MELD: None,
     ItemNames.HIGH_TEMPLAR_SIGNIFIER_UNSHACKLED_PSIONIC_STORM: None,
     ItemNames.HIGH_TEMPLAR_SIGNIFIER_HALLUCINATION: None,
