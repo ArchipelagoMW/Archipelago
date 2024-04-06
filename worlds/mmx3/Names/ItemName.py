@@ -39,7 +39,7 @@ sub_tank = "Sub Tank"
 
 # Medals
 maverick_medal = "Maverick Medal"
-victory = "Sigma Defeated"
+victory = "Sigma Virus Destroyed"
 
 # Junk
 small_hp = "Small HP Refill"
