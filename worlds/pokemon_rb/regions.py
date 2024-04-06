@@ -1948,7 +1948,7 @@ def create_regions(self):
                 for entrance in reversed(region.exits):
                     if isinstance(entrance, PokemonRBWarp):
                         region.exits.remove(entrance)
-            multiworld.regions.entrance_cache[self.player] = cache
+            multiworld.regions.entrance_cache[self.player] = cache.copy()
             if badge_locs:
                 for loc in badge_locs:
                     loc.item = None
