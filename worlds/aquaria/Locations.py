@@ -376,7 +376,7 @@ class AquariaLocations:
     locations_sun_temple_r = {
         "Sun temple, first bulb of the temple": 698091,
         "Sun temple, bulb on the left part": 698092,
-        "Sun temple, bulb in the hidden room of the left part": 698093,
+        "Sun temple, bulb in the hidden room of the right part": 698093,
         "Sun key in the Sun temple": 698182,
     }
 

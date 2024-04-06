@@ -219,6 +219,10 @@ class AquariaWorld(World):
             LocationProgressType.EXCLUDED)
         self.multiworld.get_location("Mutant Costume in the body bottom area", self.player).progress_type = (
             LocationProgressType.EXCLUDED)
+        self.multiworld.get_location("Sun temple, bulb in the hidden room of the right part",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+
+
 
 
 
