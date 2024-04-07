@@ -404,7 +404,7 @@ def place_local_victory_items(multiworld: MultiWorld, world: World, pool: list):
     victory_locations = [location for location in multiworld.get_unfilled_locations(world.player)
                          if is_victory_location(location.name)]
     for location in victory_locations:
-        add_item_rule(location, lambda state: location.player == world.player)
+        add_item_rule(location, lambda item: location.player == item.player)
     world.random.shuffle(pool)
     fill_restrictive(multiworld, multiworld.state, victory_locations, pool, single_player_placement=True, lock=False,
                      swap=False)
