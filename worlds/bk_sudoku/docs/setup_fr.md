@@ -12,7 +12,7 @@ Comme le client Sudoku peut se connecter à n'importe quel slot, il n'est pas n�
 
 ## Procédures d'installation
 
-Allez à la dernière version sur [BK Sudoku Releases] (https://github.com/Jarno458/sudoku/releases). Téléchargez et extrayez le fichier `Bk_Sudoku.zip`.
+Allez à la dernière version sur [BK Sudoku Releases](https://github.com/Jarno458/sudoku/releases). Téléchargez et extrayez le fichier `Bk_Sudoku.zip`.
 
 ## Rejoindre une partie multi-monde
 
