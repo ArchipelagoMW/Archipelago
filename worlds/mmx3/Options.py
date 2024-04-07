@@ -77,7 +77,7 @@ class Lab2Boss(Choice):
     Which boss will appear in the second Dr Doppler's Lab stage.
     Note: Also affects the stage variation.
     """
-    display_name = "Doppler Lab 2 Boss"
+    display_name = "Dr. Doppler Lab 2 Boss"
     option_volt_kurageil = 0
     option_vile = 1
     default = 0
@@ -86,7 +86,7 @@ class Lab3BossRematchCount(Range):
     """
     How many boss rematches are needed in the third Dr. Doppler's Lab stage.
     """
-    display_name = "Doppler Lab 2 Boss"
+    display_name = "Dr. Doppler Lab 3 Rematch count"
     range_start = 0
     range_end = 8
     default = 8
