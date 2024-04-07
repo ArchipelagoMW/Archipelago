@@ -1,7 +1,7 @@
 import logging
 from dataclasses import dataclass
 from typing import Tuple, List, TYPE_CHECKING, Set, Dict, Optional, Union
-from BaseClasses import Item, ItemClassification, Location, LocationProgressType, CollectionState
+from BaseClasses import Item, ItemClassification, Location, LocationProgressType, CollectionState, MultiWorld
 from . import StaticWitnessLogic
 from .utils import weighted_sample
 
@@ -357,17 +357,25 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint):
 
 
 def hint_from_item(world: "WitnessWorld", item_name: str, own_itempool: List[Item]) -> Optional[WitnessLocationHint]:
+    def get_real_location(multiworld: MultiWorld, location: Location):
+        """If this location is from an item_link pseudo-world, get the location that the item_link item is on."""
+        if location.player not in world.multiworld.groups:
+            return location
 
-    locations = [item.location for item in own_itempool if item.name == item_name and item.location]
+        try:
+            return multiworld.find_item(location.item.name, location.player)
+        except StopIteration:
+            return location
+
+    locations = [
+        get_real_location(world.multiworld, item.location)
+        for item in own_itempool if item.name == item_name and item.location
+    ]
 
     if not locations:
         return None
 
     location_obj = world.random.choice(locations)
-    location_name = location_obj.name
-
-    if location_obj.player != world.player:
-        location_name += " (" + world.multiworld.get_player_name(location_obj.player) + ")"
 
     return WitnessLocationHint(location_obj, False)
 
