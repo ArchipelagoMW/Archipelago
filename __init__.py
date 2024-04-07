@@ -67,7 +67,7 @@ class WL4World(World):
             'Golden Tree Pot',
             'Golden Apple',
             'Golden Fish',
-            'Golden Candle Holder'
+            'Golden Candle Holder',
             'Golden Lamp',
             'Golden Crescent Moon Bed',
             'Golden Teddy Bear',

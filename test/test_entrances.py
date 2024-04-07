@@ -352,7 +352,7 @@ class TestBossAccessNoJewels(TestEntrances):
     options = {'required_jewels': 0}
 
     def test_bosses(self):
-        self.starting_regions = ['Entry Minigame Shop', 'Emerald Minigame Shop',
+        self.starting_regions = ['Emerald Minigame Shop',
                                  'Ruby Minigame Shop', 'Topaz Minigame Shop',
                                  'Sapphire Minigame Shop', 'Golden Minigame Shop']
         self.run_entrance_tests([
