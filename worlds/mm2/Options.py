@@ -130,6 +130,14 @@ class WeaknessPlando(OptionDict):
     default = {}
 
 
+class ReduceFlashing(Choice):
+    """
+    Reduce flashing seen in gameplay, such as the stage select and when defeating a Wily boss.
+    """
+    option_none = 0
+    option_virtual_console = 1
+    default = 1
+
 @dataclass
 class MM2Options(PerGameCommonOptions):
     death_link: DeathLink
@@ -137,9 +145,10 @@ class MM2Options(PerGameCommonOptions):
     consumables: Consumables
     yoku_jumps: YokuJumps
     enable_lasers: EnableLasers
-    quickswap: Quickswap
-    palette_shuffle: PaletteShuffle
     strict_weakness: StrictWeaknesses
     random_weakness: RandomWeaknesses
     wily_5_requirement: Wily5Requirement
     plando_weakness: WeaknessPlando
+    palette_shuffle: PaletteShuffle
+    quickswap: Quickswap
+    reduce_flashing: ReduceFlashing

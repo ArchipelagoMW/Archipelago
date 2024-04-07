@@ -59,6 +59,7 @@ robot_masters = {
 
 def can_defeat_enough_rbms(state: "CollectionState", player: int, required: int):
     can_defeat = 0
+
     for boss in robot_masters:
         if state.has(robot_masters[boss], player):
             can_defeat += 1
@@ -168,7 +169,7 @@ def set_rules(world: "MM2World") -> None:
                 if not weapons:
                     weakness = world.random.choice([key for key in world.weapon_damage if key != 8])
                     world.weapon_damage[weakness][bosses[boss]] = minimum_weakness_requirement[weakness]
-                    weapons.append(weapons_to_name[weapon])
+                    weapons.append(weapons_to_name[weakness])
         if not weapons:
             raise Exception(f"Attempted to have boss {i} with no weakness! Seed: {world.multiworld.seed}")
         for location in boss:

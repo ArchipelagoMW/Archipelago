@@ -125,7 +125,7 @@ def extrapolate_color(color: int):
     return color_1, color_2
 
 
-def validate_colors(color_1: int, color_2: int):
+def validate_colors(color_1: int, color_2: int, allow_match=False):
     # Black should be reserved for outlines, a gray should suffice
     if color_1 in [0x0D, 0x0E, 0x0F, 0x1E, 0x2E, 0x3E, 0x1F, 0x2F, 0x3F]:
         color_1 = 0x10
@@ -133,7 +133,7 @@ def validate_colors(color_1: int, color_2: int):
         color_2 = 0x10
 
     # one final check, make sure we don't have two matching
-    if color_1 == color_2:
+    if not allow_match and color_1 == color_2:
         color_1 = 0x30  # color 1 to white works with about any paired color
 
     return color_1, color_2
@@ -206,12 +206,12 @@ def write_palette_shuffle(world: "MM2World", rom: "MM2ProcedurePatch"):
                     logging.warning(f"Player {world.multiworld.get_player_name(world.player)} "
                                     f"attempted to set color for unrecognized option {character}")
                 colors = colors.split("|")
-                colors = parse_color(colors)
+                colors = validate_colors(*parse_color(colors), allow_match=True)
                 palettes_to_write[character.title()] = colors
             else:
                 # If color is provided with no character, assume singularity
                 colors = color_set.split("|")
-                colors = parse_color(colors)
+                colors = validate_colors(*parse_color(colors), allow_match=True)
                 for character in palette_pointers:
                     palettes_to_write[character] = colors
         # Now we handle the real values
