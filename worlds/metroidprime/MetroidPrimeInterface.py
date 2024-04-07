@@ -203,6 +203,8 @@ class MetroidPrimeInterface:
         """Check if the player table is ready to be read from memory, indicating the game is in a playable state"""
         player_table_bytes = self.dolphin_client.read_pointer(
             cstate_manager_global + 0x84C, 0, 4)
+        if(player_table_bytes is None):
+            return False
         player_table = struct.unpack(">I", player_table_bytes)[0]
         if player_table == cplayer_vtable:
             return True
