@@ -1,14 +1,15 @@
 import logging
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Dict, List, Optional, Set, Tuple, Union, Any
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Set, Tuple, Union
 
 from BaseClasses import CollectionState, Item, Location, LocationProgressType
 
 from .data import static_logic as static_witness_logic
 from .data.utils import weighted_sample
+from .player_items import WitnessItem
 
 if TYPE_CHECKING:
-    from . import WitnessWorld, WitnessItem
+    from . import WitnessWorld
 
 CompactItemData = Tuple[str, Union[str, int], int]
 

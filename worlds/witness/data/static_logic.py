@@ -1,5 +1,5 @@
 from functools import lru_cache
-from typing import Dict, List, Optional, Any, FrozenSet, Tuple, Set
+from typing import Any, Dict, FrozenSet, List, Optional, Set, Tuple
 
 from .item_definition_classes import (
     CATEGORY_NAME_MAPPINGS,
