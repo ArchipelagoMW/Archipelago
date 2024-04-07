@@ -24,8 +24,16 @@ class Bk_SudokuWebWorld(WebWorld):
         link='setup/de',
         authors=['Held_der_Zeit']
     )
+    setup_fr = Tutorial(
+        tutorial_name='Guide de configuration',
+        description='Un guide pour jouer à BK Sudoku',
+        language='Français',
+        file_name='setup_fr.md',
+        link='setup/fr',
+        authors=['Deoxis']
+    )
     
-    tutorials = [setup_en, setup_de]
+    tutorials = [setup_en, setup_de,setup_fr]
 
 
 class Bk_SudokuWorld(World):
