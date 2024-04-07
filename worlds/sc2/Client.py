@@ -550,9 +550,9 @@ class SC2Context(CommonContext):
         self.spear_of_adun_present_in_no_build = SpearOfAdunPresentInNoBuild.option_false
         self.spear_of_adun_autonomously_cast_ability_presence = SpearOfAdunAutonomouslyCastAbilityPresence.option_not_present
         self.spear_of_adun_autonomously_cast_present_in_no_build = SpearOfAdunAutonomouslyCastPresentInNoBuild.option_false
-        self.minerals_per_item: int = MineralsPerItem.default
-        self.vespene_per_item: int = VespenePerItem.default
-        self.starting_supply_per_item: int = StartingSupplyPerItem.default
+        self.minerals_per_item: int = 15  # For backwards compat with games generated pre-0.4.5
+        self.vespene_per_item: int =  15  # For backwards compat with games generated pre-0.4.5
+        self.starting_supply_per_item: int = 2  # For backwards compat with games generated pre-0.4.5
         self.nova_covert_ops_only = False
         self.kerrigan_levels_per_mission_completed = 0
 
