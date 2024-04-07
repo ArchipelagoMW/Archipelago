@@ -174,9 +174,6 @@ def patch_rom(world: World, patch: MMX3ProcedurePatch):
     patch.write_byte(0x0072C3, world.options.starting_life_count.value)
     patch.write_byte(0x0021BE, world.options.starting_life_count.value)
 
-    # Debug option
-    patch.write_byte(0x17FFFF, 0x00)
-
     patch.write_file("token_patch.bin", patch.get_token_binary())
 
     
