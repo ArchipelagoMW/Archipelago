@@ -70,7 +70,7 @@ def _get_resource_efficiency_desc(item_name: str) -> str:
         amount = " and ".join(parts)
     else:
         amount = ", ".join(parts[:-1]) + ", and " + parts[-1]
-    return (f"Reduces {item_name} cost by {amount}")
+    return (f"Reduces {item_name} cost by {amount}.")
 
 def _get_start_and_max_energy_desc(unit_name_plural: str, starting_amount_increase: int = 150, maximum_amount_increase: int = 50) -> str:
     return f"{unit_name_plural} gain +{starting_amount_increase} starting energy and +{maximum_amount_increase} maximum energy."
@@ -145,7 +145,7 @@ item_descriptions = {
     ItemNames.SCV_DUAL_FUSION_WELDERS: "SCVs repair twice as fast.",
     ItemNames.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM: inspect.cleandoc("""
                      Level 1: While on low health, Terran structures are repaired to half health instead of burning down.
-                     Level 2: Terran structures are repaired to full health instead of half health
+                     Level 2: Terran structures are repaired to full health instead of half health.
                      """),
     ItemNames.PROGRESSIVE_ORBITAL_COMMAND: inspect.cleandoc("""
                      Level 1: Allows Command Centers to use Scanner Sweep and Calldown: MULE abilities.
@@ -155,7 +155,7 @@ item_descriptions = {
     ItemNames.MARINE_COMBAT_SHIELD: "Increases Marine life by 10.",
     ItemNames.MEDIC_ADVANCED_MEDIC_FACILITIES: INTERNAL_TECH_MODULE_DESCRIPTION_TEMPLATE.format("Medics", "Barracks"),
     ItemNames.MEDIC_STABILIZER_MEDPACKS: "Increases Medic heal speed. Reduces the amount of energy required for each heal.",
-    ItemNames.FIREBAT_INCINERATOR_GAUNTLETS: "Increases Firebat's damage radius by 40%",
+    ItemNames.FIREBAT_INCINERATOR_GAUNTLETS: "Increases Firebat's damage radius by 40%.",
     ItemNames.FIREBAT_JUGGERNAUT_PLATING: "Increases Firebat's armor by 2.",
     ItemNames.MARAUDER_CONCUSSIVE_SHELLS: "Marauder attack temporarily slows all units in target area.",
     ItemNames.MARAUDER_KINETIC_FOAM: "Increases Marauder life by 25.",
@@ -164,7 +164,7 @@ item_descriptions = {
                      Reaper pistols do additional 3 damage to Light Armor.
                      """),
     ItemNames.REAPER_G4_CLUSTERBOMB: "Timed explosive that does heavy area damage.",
-    ItemNames.CYCLONE_MAG_FIELD_ACCELERATORS: "Increases Cyclone Lock On damage",
+    ItemNames.CYCLONE_MAG_FIELD_ACCELERATORS: "Increases Cyclone Lock-On damage.",
     ItemNames.CYCLONE_MAG_FIELD_LAUNCHERS: "Increases Cyclone attack range by 2.",
     ItemNames.MARINE_LASER_TARGETING_SYSTEM: LASER_TARGETING_SYSTEMS_DESCRIPTION,
     ItemNames.MARINE_MAGRAIL_MUNITIONS: "Deals 20 damage to target unit. Autocast on attack with a cooldown.",
@@ -183,7 +183,7 @@ item_descriptions = {
     ItemNames.MEDIC_NANO_PROJECTOR: "Increases Medic heal range by 2.",
     ItemNames.FIREBAT_INFERNAL_PRE_IGNITER: "Firebats do an additional 4 damage to Light Armor.",
     ItemNames.FIREBAT_KINETIC_FOAM: "Increases Firebat life by 100.",
-    ItemNames.FIREBAT_NANO_PROJECTORS: "Increases Firebat attack range by 2",
+    ItemNames.FIREBAT_NANO_PROJECTORS: "Increases Firebat attack range by 2.",
     ItemNames.MARAUDER_JUGGERNAUT_PLATING: "Increases Marauder's armor by 2.",
     ItemNames.REAPER_JET_PACK_OVERDRIVE: inspect.cleandoc("""
                      Allows the Reaper to fly for 10 seconds.
@@ -229,7 +229,7 @@ item_descriptions = {
                      """),
     ItemNames.SIEGE_TANK_SPIDER_MINES: inspect.cleandoc("""
                      Allows Siege Tanks to lay Spider Mines. 
-                     Lays 3 Spider Mines at once. 3 charges
+                     Lays 3 Spider Mines at once. 3 charges.
                      """),
     ItemNames.SIEGE_TANK_SMART_SERVOS: SMART_SERVOS_DESCRIPTION,
     ItemNames.SIEGE_TANK_GRADUATING_RANGE: inspect.cleandoc("""
@@ -277,7 +277,7 @@ item_descriptions = {
                      Level 2: Unregistered Cloaking Module: Wraiths do not require energy to cloak and remain cloaked.
                      """),
     ItemNames.WRAITH_DISPLACEMENT_FIELD: "Wraiths evade 20% of incoming attacks while cloaked.",
-    ItemNames.VIKING_RIPWAVE_MISSILES: "Vikings do area damage while in Fighter Mode",
+    ItemNames.VIKING_RIPWAVE_MISSILES: "Vikings do area damage while in Fighter Mode.",
     ItemNames.VIKING_PHOBOS_CLASS_WEAPONS_SYSTEM: "Increases Viking attack range by 1 in Assault mode and 2 in Fighter mode.",
     ItemNames.BANSHEE_PROGRESSIVE_CROSS_SPECTRUM_DAMPENERS: inspect.cleandoc("""
                      Level 1: Banshees can remain cloaked twice as long.
@@ -362,7 +362,7 @@ item_descriptions = {
     ItemNames.RAVEN_INTERNAL_TECH_MODULE: INTERNAL_TECH_MODULE_DESCRIPTION_TEMPLATE.format("Ravens", "Starport"),
     ItemNames.SCIENCE_VESSEL_EMP_SHOCKWAVE: "Spell. Depletes all energy and shields of all units in a target area.",
     ItemNames.SCIENCE_VESSEL_DEFENSIVE_MATRIX: inspect.cleandoc("""
-                     Spell. Provides a target unit with a defensive barrier that can absorb up to 250 damage
+                     Spell. Provides a target unit with a defensive barrier that can absorb up to 250 damage.
                      """),
     ItemNames.CYCLONE_TARGETING_OPTICS: "Increases Cyclone Lock On casting range and the range while Locked On.",
     ItemNames.CYCLONE_RAPID_FIRE_LAUNCHERS: "The first 12 shots of Lock On are fired more quickly.",
@@ -398,20 +398,20 @@ item_descriptions = {
     ItemNames.BUNKER: "Defensive structure. Able to load infantry units, giving them +1 range to their attacks.",
     ItemNames.MISSILE_TURRET: "Anti-air defensive structure.",
     ItemNames.SENSOR_TOWER: "Reveals locations of enemy units at long range.",
-    ItemNames.WAR_PIGS: "Mercenary Marines",
-    ItemNames.DEVIL_DOGS: "Mercenary Firebats",
-    ItemNames.HAMMER_SECURITIES: "Mercenary Marauders",
-    ItemNames.SPARTAN_COMPANY: "Mercenary Goliaths",
-    ItemNames.SIEGE_BREAKERS: "Mercenary Siege Tanks",
-    ItemNames.HELS_ANGELS: "Mercenary Vikings",
-    ItemNames.DUSK_WINGS: "Mercenary Banshees",
-    ItemNames.JACKSONS_REVENGE: "Mercenary Battlecruiser",
-    ItemNames.SKIBIS_ANGELS: "Mercenary Medics",
-    ItemNames.DEATH_HEADS: "Mercenary Reapers",
-    ItemNames.WINGED_NIGHTMARES: "Mercenary Wraiths",
-    ItemNames.MIDNIGHT_RIDERS: "Mercenary Liberators",
-    ItemNames.BRYNHILDS: "Mercenary Valkyries",
-    ItemNames.JOTUN: "Mercenary Thor",
+    ItemNames.WAR_PIGS: "Mercenary Marines.",
+    ItemNames.DEVIL_DOGS: "Mercenary Firebats.",
+    ItemNames.HAMMER_SECURITIES: "Mercenary Marauders.",
+    ItemNames.SPARTAN_COMPANY: "Mercenary Goliaths.",
+    ItemNames.SIEGE_BREAKERS: "Mercenary Siege Tanks.",
+    ItemNames.HELS_ANGELS: "Mercenary Vikings.",
+    ItemNames.DUSK_WINGS: "Mercenary Banshees.",
+    ItemNames.JACKSONS_REVENGE: "Mercenary Battlecruiser.",
+    ItemNames.SKIBIS_ANGELS: "Mercenary Medics.",
+    ItemNames.DEATH_HEADS: "Mercenary Reapers.",
+    ItemNames.WINGED_NIGHTMARES: "Mercenary Wraiths.",
+    ItemNames.MIDNIGHT_RIDERS: "Mercenary Liberators.",
+    ItemNames.BRYNHILDS: "Mercenary Valkyries.",
+    ItemNames.JOTUN: "Mercenary Thor.",
     ItemNames.ULTRA_CAPACITORS: "Increases attack speed of units by 5% per weapon upgrade.",
     ItemNames.VANADIUM_PLATING: "Increases the life of units by 5% per armor upgrade.",
     ItemNames.ORBITAL_DEPOTS: "Supply depots are built instantly.",
