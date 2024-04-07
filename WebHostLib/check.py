@@ -28,7 +28,7 @@ def check():
                 results, _ = roll_options(options)
                 if len(options) > 1:
                     # offer combined file back
-                    combined_yaml = "---\n".join(f"# original filename: {file_name}\n{file_content.decode('utf-8-sig')}"
+                    combined_yaml = "\n---\n".join(f"# original filename: {file_name}\n{file_content.decode('utf-8-sig')}"
                                                  for file_name, file_content in options.items())
                     combined_yaml = base64.b64encode(combined_yaml.encode("utf-8-sig")).decode()
                 else:
