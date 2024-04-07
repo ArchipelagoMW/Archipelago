@@ -1,3 +1,5 @@
+from typing import Dict, List, Set
+
 from . import static_logic as static_witness_logic
 
 ID_START = 158000
@@ -441,12 +443,12 @@ OBELISK_SIDES = {
     "Town Obelisk Side 6",
 }
 
-ALL_LOCATIONS_TO_ID = dict()
+ALL_LOCATIONS_TO_ID: Dict[str, int] = dict()
 
-AREA_LOCATION_GROUPS = dict()
+AREA_LOCATION_GROUPS: Dict[str, Set[str]] = dict()
 
 
-def get_id(entity_hex: str) -> str:
+def get_id(entity_hex: str) -> int:
     """
     Calculates the location ID for any given location
     """
@@ -479,4 +481,4 @@ for key, item in ALL_LOCATIONS_TO_IDS.items():
 
 for loc in ALL_LOCATIONS_TO_IDS:
     area = static_witness_logic.ENTITIES_BY_NAME[loc]["area"]["name"]
-    AREA_LOCATION_GROUPS.setdefault(area, []).append(loc)
+    AREA_LOCATION_GROUPS.setdefault(area, set()).add(loc)

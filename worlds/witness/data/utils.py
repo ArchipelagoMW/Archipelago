@@ -1,13 +1,15 @@
 from functools import lru_cache
 from math import floor
 from pkgutil import get_data
-from random import random
-from typing import Any, Collection, Dict, FrozenSet, List, Set, Tuple
+from random import Random
+from typing import Any, Collection, Dict, FrozenSet, List, Set, Tuple, TypeVar
+
+T = TypeVar("T")
 
 
-def weighted_sample(world_random: random, population: List, weights: List[float], k: int) -> List:
+def weighted_sample(world_random: Random, population: List[T], weights: List[float], k: int) -> List[T]:
     positions = range(len(population))
-    indices = []
+    indices: List[int] = []
     while True:
         needed = k - len(indices)
         if not needed:
@@ -81,7 +83,7 @@ def define_new_region(region_string: str) -> Tuple[Dict[str, Any], Set[Tuple[str
     return region_obj, options
 
 
-def parse_lambda(lambda_string) -> FrozenSet[FrozenSet[str]]:
+def parse_lambda(lambda_string: str) -> FrozenSet[FrozenSet[str]]:
     """
     Turns a lambda String literal like this: a | b & c
     into a set of sets like this: {{a}, {b, c}}
@@ -97,8 +99,10 @@ def parse_lambda(lambda_string) -> FrozenSet[FrozenSet[str]]:
 
 @lru_cache(maxsize=None)
 def get_adjustment_file(adjustment_file: str) -> List[str]:
-    data = get_data(__name__, adjustment_file).decode("utf-8")
-    return [line.strip() for line in data.split("\n")]
+    data = get_data(__name__, adjustment_file)
+    if data is None:
+        raise FileNotFoundError(f"Could not find {adjustment_file}")
+    return [line.strip() for line in data.decode("utf-8").split("\n")]
 
 
 def get_disable_unrandomized_list() -> List[str]:
@@ -253,7 +257,7 @@ def dnf_and(dnf_requirements: List[FrozenSet[FrozenSet[str]]]) -> FrozenSet[Froz
     A logical formula might look like this: {{a, b}, {c, d}}, which would mean "a & b | c & d".
     These can be easily and-ed by just using the boolean distributive law: (a | b) & c = a & c | a & b.
     """
-    current_overall_requirement = frozenset({frozenset()})
+    current_overall_requirement: FrozenSet[FrozenSet[str]] = frozenset({frozenset()})
 
     for next_dnf_requirement in dnf_requirements:
         new_requirement: Set[FrozenSet[str]] = set()

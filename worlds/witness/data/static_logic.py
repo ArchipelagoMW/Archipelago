@@ -1,5 +1,5 @@
 from functools import lru_cache
-from typing import Dict, List
+from typing import Dict, List, Optional, Any, FrozenSet, Tuple, Set
 
 from .item_definition_classes import (
     CATEGORY_NAME_MAPPINGS,
@@ -20,13 +20,13 @@ from .utils import (
 
 
 class StaticWitnessLogicObj:
-    def read_logic_file(self, lines) -> None:
+    def read_logic_file(self, lines: List[str]) -> None:
         """
         Reads the logic file and does the initial population of data structures
         """
 
         current_region = dict()
-        current_area = {
+        current_area: Dict[str, Any] = {
             "name": "Misc",
             "regions": [],
         }
@@ -147,24 +147,24 @@ class StaticWitnessLogicObj:
 
             current_region["panels"].append(entity_hex)
 
-    def __init__(self, lines=None) -> None:
+    def __init__(self, lines: Optional[List[str]] = None) -> None:
         if lines is None:
             lines = get_sigma_normal_logic()
 
         # All regions with a list of panels in them and the connections to other regions, before logic adjustments
-        self.ALL_REGIONS_BY_NAME = dict()
-        self.ALL_AREAS_BY_NAME = dict()
-        self.STATIC_CONNECTIONS_BY_REGION_NAME = dict()
+        self.ALL_REGIONS_BY_NAME: Dict[str, Dict[str, Any]] = dict()
+        self.ALL_AREAS_BY_NAME: Dict[str, Dict[str, Any]] = dict()
+        self.STATIC_CONNECTIONS_BY_REGION_NAME: Dict[str, Set[Tuple[str, FrozenSet[FrozenSet[str]]]]] = dict()
 
-        self.ENTITIES_BY_HEX = dict()
-        self.ENTITIES_BY_NAME = dict()
-        self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX = dict()
+        self.ENTITIES_BY_HEX: Dict[str, Dict[str, Any]] = dict()
+        self.ENTITIES_BY_NAME: Dict[str, Dict[str, Any]] = dict()
+        self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX: Dict[str, Any] = dict()
 
-        self.OBELISK_SIDE_ID_TO_EP_HEXES = dict()
+        self.OBELISK_SIDE_ID_TO_EP_HEXES: Dict[int, Set[int]] = dict()
 
-        self.EP_TO_OBELISK_SIDE = dict()
+        self.EP_TO_OBELISK_SIDE: Dict[str, str] = dict()
 
-        self.ENTITY_ID_TO_NAME = dict()
+        self.ENTITY_ID_TO_NAME: Dict[str, str] = dict()
 
         self.read_logic_file(lines)
 
@@ -236,7 +236,7 @@ def get_sigma_expert() -> StaticWitnessLogicObj:
     return StaticWitnessLogicObj(get_sigma_expert_logic())
 
 
-def __getattr__(name):
+def __getattr__(name: str) -> StaticWitnessLogicObj:
     if name == "vanilla":
         return get_vanilla()
     elif name == "sigma_normal":

@@ -2,7 +2,7 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
-from typing import TYPE_CHECKING, Dict, List, Set
+from typing import TYPE_CHECKING, Dict, List, Set, cast
 
 from BaseClasses import Item, ItemClassification, MultiWorld
 
@@ -194,8 +194,9 @@ class WitnessPlayerItems:
         Returns the total set of all door IDs that are controlled by items in the pool.
         """
         output: List[int] = []
-        for item_name, item_data in {name: data for name, data in self.item_data.items()
-                                     if isinstance(data.definition, DoorItemDefinition)}.items():
+        for item_name, item_data in {name: data for name, data in self.item_data.items()}.items():
+            if not isinstance(item_data.definition, DoorItemDefinition):
+                continue
             output += [int(hex_string, 16) for hex_string in item_data.definition.panel_id_hexes]
 
         return output
@@ -204,8 +205,11 @@ class WitnessPlayerItems:
         """
         Returns the item IDs of symbol items that were defined in the configuration file but are not in the pool.
         """
-        return [data.ap_code for name, data in static_witness_items.ITEM_DATA.items()
-                if name not in self.item_data.keys() and data.definition.category is ItemCategory.SYMBOL]
+        return [
+            # data.ap_code is guaranteed for a symbol definition
+            cast(int, data.ap_code) for name, data in static_witness_items.ITEM_DATA.items()
+            if name not in self.item_data.keys() and data.definition.category is ItemCategory.SYMBOL
+        ]
 
     def get_progressive_item_ids_in_pool(self) -> Dict[int, List[int]]:
         output: Dict[int, List[int]] = {}
@@ -214,8 +218,8 @@ class WitnessPlayerItems:
             if isinstance(item.definition, ProgressiveItemDefinition):
                 # Note: we need to reference the static table here rather than the player-specific one because the child
                 #   items were removed from the pool when we pruned out all progression items not in the settings.
-                output[item.ap_code] = [static_witness_items.ITEM_DATA[child_item].ap_code
-                                        for child_item in item.definition.child_item_names]
+                output[cast(int, item.ap_code)] = [cast(int, static_witness_items.ITEM_DATA[child_item].ap_code)
+                                                   for child_item in item.definition.child_item_names]
         return output
 
 

@@ -80,5 +80,5 @@ class WitnessPlayerLocations:
 
     def add_location_late(self, entity_name: str) -> None:
         entity_hex = static_witness_logic.ENTITIES_BY_NAME[entity_name]["entity_hex"]
-        self.CHECK_LOCATION_TABLE[entity_hex] = entity_name
+        self.CHECK_LOCATION_TABLE[entity_hex] = static_witness_locations.get_id(entity_hex)
         self.CHECK_PANELHEX_TO_ID[entity_hex] = static_witness_locations.get_id(entity_hex)

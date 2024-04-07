@@ -24,6 +24,7 @@ from typing import TYPE_CHECKING, Dict, FrozenSet, List, Set, Tuple, cast
 from .data import static_logic as static_witness_logic
 from .data import utils
 from .data.item_definition_classes import DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
+from .data.static_logic import StaticWitnessLogicObj
 
 if TYPE_CHECKING:
     from . import WitnessWorld
@@ -31,6 +32,74 @@ if TYPE_CHECKING:
 
 class WitnessPlayerLogic:
     """WITNESS LOGIC CLASS"""
+
+    def __init__(self, world: "WitnessWorld", disabled_locations: Set[str], start_inv: Dict[str, int]) -> None:
+        self.YAML_DISABLED_LOCATIONS: Set[str] = disabled_locations
+        self.YAML_ADDED_ITEMS: Dict[str, int] = start_inv
+
+        self.EVENT_PANELS_FROM_PANELS: Set[str] = set()
+        self.EVENT_PANELS_FROM_REGIONS: Set[str] = set()
+
+        self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES: Set[str] = set()
+
+        self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY: Set[str] = set()
+
+        self.THEORETICAL_ITEMS: Set[str] = set()
+        self.THEORETICAL_ITEMS_NO_MULTI: Set[str] = set()
+        self.MULTI_AMOUNTS: Dict[str, int] = defaultdict(lambda: 1)
+        self.MULTI_LISTS: Dict[str, List[str]] = dict()
+        self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI: Set[str] = set()
+        self.PROG_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()
+        self.DOOR_ITEMS_BY_ID: Dict[str, List[str]] = {}
+        self.STARTING_INVENTORY: Set[str] = set()
+
+        self.DIFFICULTY = world.options.puzzle_randomization
+
+        self.REFERENCE_LOGIC: StaticWitnessLogicObj
+        if self.DIFFICULTY == "sigma_expert":
+            self.REFERENCE_LOGIC = static_witness_logic.sigma_expert
+        elif self.DIFFICULTY == "none":
+            self.REFERENCE_LOGIC = static_witness_logic.vanilla
+        else:
+            self.REFERENCE_LOGIC = static_witness_logic.sigma_normal
+
+        self.CONNECTIONS_BY_REGION_NAME = copy.deepcopy(self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME)
+        self.DEPENDENT_REQUIREMENTS_BY_HEX = copy.deepcopy(self.REFERENCE_LOGIC.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)
+        self.REQUIREMENTS_BY_HEX: Dict[str, FrozenSet[FrozenSet[str]]] = dict()
+
+        # Determining which panels need to be events is a difficult process.
+        # At the end, we will have EVENT_ITEM_PAIRS for all the necessary ones.
+        self.EVENT_ITEM_PAIRS: Dict[str, str] = dict()
+        self.COMPLETELY_DISABLED_ENTITIES: Set[str] = set()
+        self.PRECOMPLETED_LOCATIONS: Set[str] = set()
+        self.EXCLUDED_LOCATIONS: Set[str] = set()
+        self.ADDED_CHECKS: Set[str] = set()
+        self.VICTORY_LOCATION = "0x0356B"
+
+        self.USED_EVENT_NAMES_BY_HEX: Dict[str, str] = dict()
+        self.CONDITIONAL_EVENTS: Dict[Tuple[str, str], str] = dict()
+
+        self.ALWAYS_EVENT_NAMES_BY_HEX: Dict[str, str] = {
+            "0x00509": "+1 Laser (Symmetry Laser)",
+            "0x012FB": "+1 Laser (Desert Laser)",
+            "0x09F98": "Desert Laser Redirection",
+            "0x01539": "+1 Laser (Quarry Laser)",
+            "0x181B3": "+1 Laser (Shadows Laser)",
+            "0x014BB": "+1 Laser (Keep Laser)",
+            "0x17C65": "+1 Laser (Monastery Laser)",
+            "0x032F9": "+1 Laser (Town Laser)",
+            "0x00274": "+1 Laser (Jungle Laser)",
+            "0x0C2B2": "+1 Laser (Bunker Laser)",
+            "0x00BF6": "+1 Laser (Swamp Laser)",
+            "0x028A4": "+1 Laser (Treehouse Laser)",
+            "0x17C34": "Mountain Entry",
+            "0xFFF00": "Bottom Floor Discard Turns On",
+        }
+
+        self.make_options_adjustments(world)
+        self.determine_unrequired_entities(world)
+        self.make_dependency_reduced_checklist()
+        self.make_event_panel_lists()
 
     @lru_cache(maxsize=None)
     def reduce_req_within_region(self, entity_hex: str) -> FrozenSet[FrozenSet[str]]:
@@ -47,7 +116,7 @@ class WitnessPlayerLogic:
 
         entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity_hex]
 
-        these_items = frozenset({frozenset()})
+        these_items: FrozenSet[FrozenSet[str]] = frozenset({frozenset()})
 
         if entity_obj["id"]:
             these_items = self.DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex]["items"]
@@ -60,7 +129,7 @@ class WitnessPlayerLogic:
         for subset in these_items:
             self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(subset)
 
-        these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex]["panels"]
+        these_panels: FrozenSet[FrozenSet[str]] = self.DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex]["panels"]
 
         if entity_hex in self.DOOR_ITEMS_BY_ID:
             door_items = frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[entity_hex]})
@@ -78,17 +147,17 @@ class WitnessPlayerLogic:
                 # except in Expert, where that dependency doesn't exist, but now there *is* a power dependency.
                 # In the future, it'd be wise to make a distinction between "power dependencies" and other dependencies.
                 if entity_hex == "0x28A0D" and not any("0x28998" in option for option in these_panels):
-                    these_items = all_options
+                    these_items = frozenset(all_options)
 
                 # Another dependency that is not power-based: The Symmetry Island Upper Panel latches
                 elif entity_hex == "0x1C349":
-                    these_items = all_options
+                    these_items = frozenset(all_options)
 
                 else:
                     return frozenset(all_options)
 
             else:
-                these_items = all_options
+                these_items = frozenset(all_options)
 
         disabled_eps = {eHex for eHex in self.COMPLETELY_DISABLED_ENTITIES
                         if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[eHex]["entityType"] == "EP"}
@@ -102,11 +171,9 @@ class WitnessPlayerLogic:
         all_options = set()
 
         for option in these_panels:
-            dependent_items_for_option = frozenset({frozenset()})
+            dependent_items_for_option: FrozenSet[FrozenSet[str]] = frozenset({frozenset()})
 
             for option_entity in option:
-                dep_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX.get(option_entity)
-
                 if option_entity in self.ALWAYS_EVENT_NAMES_BY_HEX:
                     new_items = frozenset({frozenset([option_entity])})
                 elif (entity_hex, option_entity) in self.CONDITIONAL_EVENTS:
@@ -116,6 +183,7 @@ class WitnessPlayerLogic:
                                        "PP2 Weirdness", "Theater to Tunnels"}:
                     new_items = frozenset({frozenset([option_entity])})
                 else:
+                    dep_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[option_entity]
                     new_items = self.reduce_req_within_region(option_entity)
                     if dep_obj["region"] and entity_obj["region"] != dep_obj["region"]:
                         new_items = frozenset(
@@ -476,6 +544,9 @@ class WitnessPlayerLogic:
                     current_adjustment_type = line[:-1]
                     continue
 
+                if current_adjustment_type is None:
+                    raise ValueError(f"Adjustment lineset {adjustment_lineset} is malformed")
+
                 self.make_single_adjustment(current_adjustment_type, line)
 
         for entity_id in self.COMPLETELY_DISABLED_ENTITIES:
@@ -506,10 +577,10 @@ class WitnessPlayerLogic:
                 self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(item)
 
         for region, connections in self.CONNECTIONS_BY_REGION_NAME.items():
-            new_connections = []
+            new_connections = set()
 
             for connection in connections:
-                overall_requirement = frozenset()
+                overall_requirement: FrozenSet[FrozenSet[str]] = frozenset()
 
                 for option in connection[1]:
                     individual_entity_requirements = []
@@ -528,7 +599,7 @@ class WitnessPlayerLogic:
 
                     overall_requirement |= utils.dnf_and(individual_entity_requirements)
 
-                new_connections.append((connection[0], overall_requirement))
+                new_connections.add((connection[0], overall_requirement))
 
             self.CONNECTIONS_BY_REGION_NAME[region] = new_connections
 
@@ -624,70 +695,3 @@ class WitnessPlayerLogic:
         for panel in self.USED_EVENT_NAMES_BY_HEX:
             pair = self.make_event_item_pair(panel)
             self.EVENT_ITEM_PAIRS[pair[0]] = pair[1]
-
-    def __init__(self, world: "WitnessWorld", disabled_locations: Set[str], start_inv: Dict[str, int]) -> None:
-        self.YAML_DISABLED_LOCATIONS = disabled_locations
-        self.YAML_ADDED_ITEMS = start_inv
-
-        self.EVENT_PANELS_FROM_PANELS = set()
-        self.EVENT_PANELS_FROM_REGIONS = set()
-
-        self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES = set()
-
-        self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY = set()
-
-        self.THEORETICAL_ITEMS = set()
-        self.THEORETICAL_ITEMS_NO_MULTI = set()
-        self.MULTI_AMOUNTS = defaultdict(lambda: 1)
-        self.MULTI_LISTS = dict()
-        self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI = set()
-        self.PROG_ITEMS_ACTUALLY_IN_THE_GAME = set()
-        self.DOOR_ITEMS_BY_ID: Dict[str, List[str]] = {}
-        self.STARTING_INVENTORY = set()
-
-        self.DIFFICULTY = world.options.puzzle_randomization
-
-        if self.DIFFICULTY == "sigma_normal":
-            self.REFERENCE_LOGIC = static_witness_logic.sigma_normal
-        elif self.DIFFICULTY == "sigma_expert":
-            self.REFERENCE_LOGIC = static_witness_logic.sigma_expert
-        elif self.DIFFICULTY == "none":
-            self.REFERENCE_LOGIC = static_witness_logic.vanilla
-
-        self.CONNECTIONS_BY_REGION_NAME = copy.deepcopy(self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME)
-        self.DEPENDENT_REQUIREMENTS_BY_HEX = copy.deepcopy(self.REFERENCE_LOGIC.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)
-        self.REQUIREMENTS_BY_HEX = dict()
-
-        # Determining which panels need to be events is a difficult process.
-        # At the end, we will have EVENT_ITEM_PAIRS for all the necessary ones.
-        self.EVENT_ITEM_PAIRS = dict()
-        self.COMPLETELY_DISABLED_ENTITIES = set()
-        self.PRECOMPLETED_LOCATIONS = set()
-        self.EXCLUDED_LOCATIONS = set()
-        self.ADDED_CHECKS = set()
-        self.VICTORY_LOCATION = "0x0356B"
-
-        self.ALWAYS_EVENT_NAMES_BY_HEX = {
-            "0x00509": "+1 Laser (Symmetry Laser)",
-            "0x012FB": "+1 Laser (Desert Laser)",
-            "0x09F98": "Desert Laser Redirection",
-            "0x01539": "+1 Laser (Quarry Laser)",
-            "0x181B3": "+1 Laser (Shadows Laser)",
-            "0x014BB": "+1 Laser (Keep Laser)",
-            "0x17C65": "+1 Laser (Monastery Laser)",
-            "0x032F9": "+1 Laser (Town Laser)",
-            "0x00274": "+1 Laser (Jungle Laser)",
-            "0x0C2B2": "+1 Laser (Bunker Laser)",
-            "0x00BF6": "+1 Laser (Swamp Laser)",
-            "0x028A4": "+1 Laser (Treehouse Laser)",
-            "0x17C34": "Mountain Entry",
-            "0xFFF00": "Bottom Floor Discard Turns On",
-        }
-
-        self.USED_EVENT_NAMES_BY_HEX = {}
-        self.CONDITIONAL_EVENTS = {}
-
-        self.make_options_adjustments(world)
-        self.determine_unrequired_entities(world)
-        self.make_dependency_reduced_checklist()
-        self.make_event_panel_lists()
