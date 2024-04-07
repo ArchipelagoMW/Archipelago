@@ -351,7 +351,7 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint) -> Witnes
     item = hint.location.item
 
     item_name = "Nothing"
-    if item_name is None:
+    if item is not None:
         item_name = item.name
 
         if item.player != world.player:
