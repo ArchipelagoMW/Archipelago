@@ -1,9 +1,11 @@
-from typing import Dict, FrozenSet, Tuple, cast, List, Counter as _Counter
+from typing import Dict, FrozenSet, Tuple, List, Counter as _Counter
+
 from BaseClasses import CollectionState
+
+from zilliandomizer.logic_components.items import Item, items
 from zilliandomizer.logic_components.locations import Location
 from zilliandomizer.randomizer import Randomizer
-from zilliandomizer.logic_components.items import Item, items
-from .region import ZillionLocation
+
 from .item import ZillionItem
 from .id_maps import item_name_to_id
 
@@ -18,11 +20,12 @@ def set_randomizer_locs(cs: CollectionState, p: int, zz_r: Randomizer) -> int:
 
     returns a hash of the player and of the set locations with their items
     """
+    from . import ZillionWorld
     z_world = cs.multiworld.worlds[p]
-    my_locations = cast(List[ZillionLocation], getattr(z_world, "my_locations"))
+    assert isinstance(z_world, ZillionWorld)
 
     _hash = p
-    for z_loc in my_locations:
+    for z_loc in z_world.my_locations:
         zz_name = z_loc.zz_loc.name
         zz_item = z_loc.item.zz_item \
             if isinstance(z_loc.item, ZillionItem) and z_loc.item.player == p \
