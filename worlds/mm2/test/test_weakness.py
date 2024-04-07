@@ -11,7 +11,7 @@ class StrictWeaknessTests(MM2TestBase):
         world = self.multiworld.worlds[self.player]
         weapon_damage = world.weapon_damage
         for boss in range(14):
-            if not any(weapon_damage[weapon][boss] for weapon in range(8)):
+            if not any(weapon_damage[weapon][boss] for weapon in range(9)):
                 self.fail(f"Boss {boss} generated without weakness! Seed: {self.multiworld.seed}")
 
 
@@ -25,5 +25,5 @@ class RandomStrictWeaknessTests(MM2TestBase):
         world = self.multiworld.worlds[self.player]
         weapon_damage = world.weapon_damage
         for boss in range(14):
-            if not any(weapon_damage[weapon][boss] for weapon in range(8)):
+            if not any(weapon_damage[weapon][boss] for weapon in range(9)):
                 self.fail(f"Boss {boss} generated without weakness! Seed: {self.multiworld.seed}")
