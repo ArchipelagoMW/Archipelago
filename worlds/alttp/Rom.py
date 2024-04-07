@@ -4,7 +4,7 @@ import Utils
 import worlds.Files
 
 LTTPJPN10HASH: str = "03a63945398191337e896e5771f77173"
-RANDOMIZERBASEHASH: str = "8704fb9b9fa4fad52d4d2f9a95fb5360"
+RANDOMIZERBASEHASH: str = "528c9298ff37e6d13cb8c1d5b8bd8f79"
 ROM_PLAYER_LIMIT: int = 255
 
 import io
