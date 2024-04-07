@@ -484,13 +484,17 @@ class MMX3SNIClient(SNIClient):
             await ctx.handle_deathlink_state(currently_dead)
             
         await self.handle_item_queue(ctx)
-        if self.energy_link_enabled and f'EnergyLink{ctx.team}' in ctx.stored_data:
-            await self.handle_energy_link(ctx)
 
-        if ctx.server and ctx.server.socket.open and not self.energy_link_enabled and ctx.team is not None:
-            self.energy_link_enabled = True
-            ctx.set_notify(f"EnergyLink{ctx.team}")
-            logger.info(f"Initialized EnergyLink{ctx.team}")
+        # This is going to be rewritten whenever SNIClient supports on_package
+        energy_link = await snes_read(ctx, MMX3_ENERGY_LINK_ENABLED, 0x1)
+        if energy_link[0] != 0:
+            if self.energy_link_enabled and f'EnergyLink{ctx.team}' in ctx.stored_data:
+                await self.handle_energy_link(ctx)
+
+            if ctx.server and ctx.server.socket.open and not self.energy_link_enabled and ctx.team is not None:
+                self.energy_link_enabled = True
+                ctx.set_notify(f"EnergyLink{ctx.team}")
+                logger.info(f"Initialized EnergyLink{ctx.team}")
 
         from worlds.mmx3.Rom import weapon_rom_data, ride_armor_rom_data, upgrades_rom_data, boss_access_rom_data, refill_rom_data
         from worlds.mmx3.Levels import location_id_to_level_id
@@ -575,12 +579,13 @@ class MMX3SNIClient(SNIClient):
                     if defeated_bosses_data[boss_id] != 0:
                         new_checks.append(loc_id)
                     else:
-                        if boss_id >= 0x13 and boss_id <= 0x1A: 
-                            # Auto complete every rematch boss if the required amount was reached
-                            if completed_rematches.bit_count() >= required_rematches:
-                                defeated_bosses[boss_id] = 0xFF
-                                completed_rematches = 0xFF
-                                new_checks.append(loc_id)
+                        if required_rematches != 0:
+                            if boss_id >= 0x13 and boss_id <= 0x1A: 
+                                # Auto complete every rematch boss if the required amount was reached
+                                if completed_rematches.bit_count() >= required_rematches:
+                                    defeated_bosses[boss_id] = 0xFF
+                                    completed_rematches = 0xFF
+                                    new_checks.append(loc_id)
                 elif internal_id >= 0x100:
                     # Pickups
                     if not pickupsanity_enabled or pickupsanity_enabled[0] == 0:

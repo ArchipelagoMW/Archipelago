@@ -32,6 +32,13 @@ stage_location_table = {
     LocationName.doppler_lab_2_boss:                starting_id + 0x0010,
     #LocationName.doppler_lab_2_mini_boss:           starting_id + 0x0011,
     LocationName.doppler_lab_3_boss:                starting_id + 0x0012,
+    LocationName.victory:                           starting_id + 0x001C,
+    LocationName.vile_stage_boss:                   starting_id + 0x001D,
+    LocationName.bit_defeat:                        starting_id + 0x001E,
+    LocationName.byte_defeat:                       starting_id + 0x001F
+}
+
+boss_rematches = {
     LocationName.doppler_lab_3_blizzard_buffalo:    starting_id + 0x0013,
     LocationName.doppler_lab_3_toxic_seahorse:      starting_id + 0x0014,
     LocationName.doppler_lab_3_tunnel_rhino:        starting_id + 0x0015,
@@ -40,10 +47,6 @@ stage_location_table = {
     LocationName.doppler_lab_3_neon_tiger:          starting_id + 0x0018,
     LocationName.doppler_lab_3_gravity_beetle:      starting_id + 0x0019,
     LocationName.doppler_lab_3_blast_hornet:        starting_id + 0x001A,
-    LocationName.victory:                           starting_id + 0x001C,
-    LocationName.vile_stage_boss:                   starting_id + 0x001D,
-    LocationName.bit_defeat:                        starting_id + 0x001E,
-    LocationName.byte_defeat:                       starting_id + 0x001F
 }
 
 tank_pickups = {
@@ -155,6 +158,7 @@ stage_clears = {
 
 all_locations = {
     **stage_clears,
+    **boss_rematches,
     **stage_location_table,
     **tank_pickups,
     **upgrade_pickups,
@@ -217,6 +221,8 @@ def setup_locations(world: World):
         **ride_armor_pickups,
     }
 
+    if world.options.doppler_lab_3_boss_rematch_count.value != 0:
+        location_table.update({**boss_rematches})
     if world.options.pickupsanity.value:
         location_table.update({**pickup_sanity})
 

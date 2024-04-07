@@ -72,7 +72,9 @@ class MMX3World(World):
         
         connect_regions(self)
         
-        total_required_locations = 53
+        total_required_locations = 45
+        if self.options.doppler_lab_3_boss_rematch_count != 0:
+            total_required_locations += 8
         if self.options.pickupsanity:
             total_required_locations += 58
         

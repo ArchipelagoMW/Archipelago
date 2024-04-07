@@ -229,19 +229,11 @@ def add_boss_weakness_logic(world):
              lambda state: state.has(ItemName.parasitic_bomb, player))
     set_rule(multiworld.get_location(LocationName.blizzard_buffalo_clear, player),
              lambda state: state.has(ItemName.parasitic_bomb, player))
-    set_rule(multiworld.get_location(LocationName.doppler_lab_3_blizzard_buffalo, player),
-             lambda state: state.has(ItemName.parasitic_bomb, player))
-    set_rule(multiworld.get_location(EventName.blizzard_buffalo_rematch, player),
-             lambda state: state.has(ItemName.parasitic_bomb, player))
 
     # Set Toxic Seahorse rules
     set_rule(multiworld.get_location(LocationName.toxic_seahorse_boss, player),
              lambda state: state.has(ItemName.frost_shield, player))
     set_rule(multiworld.get_location(LocationName.toxic_seahorse_clear, player),
-             lambda state: state.has(ItemName.frost_shield, player))
-    set_rule(multiworld.get_location(LocationName.doppler_lab_3_toxic_seahorse, player),
-             lambda state: state.has(ItemName.frost_shield, player))
-    set_rule(multiworld.get_location(EventName.toxic_seahorse_rematch, player),
              lambda state: state.has(ItemName.frost_shield, player))
     
     # Set Tunnel Rhino rules
@@ -249,19 +241,11 @@ def add_boss_weakness_logic(world):
              lambda state: state.has(ItemName.acid_burst, player))
     set_rule(multiworld.get_location(LocationName.tunnel_rhino_clear, player),
              lambda state: state.has(ItemName.acid_burst, player))
-    set_rule(multiworld.get_location(LocationName.doppler_lab_3_tunnel_rhino, player),
-             lambda state: state.has(ItemName.acid_burst, player))
-    set_rule(multiworld.get_location(EventName.tunnel_rhino_rematch, player),
-             lambda state: state.has(ItemName.acid_burst, player))
     
     # Set Volt Catfish rules
     set_rule(multiworld.get_location(LocationName.volt_catfish_boss, player),
              lambda state: state.has(ItemName.tornado_fang, player))
     set_rule(multiworld.get_location(LocationName.volt_catfish_clear, player),
-             lambda state: state.has(ItemName.tornado_fang, player))
-    set_rule(multiworld.get_location(LocationName.doppler_lab_3_volt_catfish, player),
-             lambda state: state.has(ItemName.tornado_fang, player))
-    set_rule(multiworld.get_location(EventName.volt_catfish_rematch, player),
              lambda state: state.has(ItemName.tornado_fang, player))
     
     # Set Crush Crawfish rules
@@ -269,19 +253,11 @@ def add_boss_weakness_logic(world):
              lambda state: state.has(ItemName.triad_thunder, player))
     set_rule(multiworld.get_location(LocationName.crush_crawfish_clear, player),
              lambda state: state.has(ItemName.triad_thunder, player))
-    set_rule(multiworld.get_location(LocationName.doppler_lab_3_crush_crawfish, player),
-             lambda state: state.has(ItemName.triad_thunder, player))
-    set_rule(multiworld.get_location(EventName.crush_crawfish_rematch, player),
-             lambda state: state.has(ItemName.triad_thunder, player))
     
     # Set Neon Tiger rules
     set_rule(multiworld.get_location(LocationName.neon_tiger_boss, player),
              lambda state: state.has(ItemName.spinning_blade, player))
     set_rule(multiworld.get_location(LocationName.neon_tiger_clear, player),
-             lambda state: state.has(ItemName.spinning_blade, player))
-    set_rule(multiworld.get_location(LocationName.doppler_lab_3_neon_tiger, player),
-             lambda state: state.has(ItemName.spinning_blade, player))
-    set_rule(multiworld.get_location(EventName.neon_tiger_rematch, player),
              lambda state: state.has(ItemName.spinning_blade, player))
     
     # Set Gravity Beetle rules
@@ -289,20 +265,47 @@ def add_boss_weakness_logic(world):
              lambda state: state.has(ItemName.ray_splasher, player))
     set_rule(multiworld.get_location(LocationName.gravity_beetle_clear, player),
              lambda state: state.has(ItemName.ray_splasher, player))
-    set_rule(multiworld.get_location(LocationName.doppler_lab_3_gravity_beetle, player), 
-             lambda state: state.has(ItemName.ray_splasher, player))
-    set_rule(multiworld.get_location(EventName.gravity_beetle_rematch, player),
-             lambda state: state.has(ItemName.ray_splasher, player))
     
     # Set Blast Hornet rules
     set_rule(multiworld.get_location(LocationName.blast_hornet_boss, player), 
              lambda state: state.has(ItemName.gravity_well, player))
     set_rule(multiworld.get_location(LocationName.blast_hornet_clear, player), 
              lambda state: state.has(ItemName.gravity_well, player)) 
-    set_rule(multiworld.get_location(LocationName.doppler_lab_3_blast_hornet, player), 
-             lambda state: state.has(ItemName.gravity_well, player))
-    set_rule(multiworld.get_location(EventName.blast_hornet_rematch, player),
-             lambda state: state.has(ItemName.gravity_well, player))
+    
+    # Set maverick rematch rules
+    if world.options.doppler_lab_3_boss_rematch_count.value != 0:
+        set_rule(multiworld.get_location(LocationName.doppler_lab_3_blizzard_buffalo, player),
+                lambda state: state.has(ItemName.parasitic_bomb, player))
+        set_rule(multiworld.get_location(EventName.blizzard_buffalo_rematch, player),
+                lambda state: state.has(ItemName.parasitic_bomb, player))
+        set_rule(multiworld.get_location(LocationName.doppler_lab_3_toxic_seahorse, player),
+                lambda state: state.has(ItemName.frost_shield, player))
+        set_rule(multiworld.get_location(EventName.toxic_seahorse_rematch, player),
+                lambda state: state.has(ItemName.frost_shield, player))
+        set_rule(multiworld.get_location(LocationName.doppler_lab_3_tunnel_rhino, player),
+                lambda state: state.has(ItemName.acid_burst, player))
+        set_rule(multiworld.get_location(EventName.tunnel_rhino_rematch, player),
+                lambda state: state.has(ItemName.acid_burst, player))
+        set_rule(multiworld.get_location(LocationName.doppler_lab_3_volt_catfish, player),
+                lambda state: state.has(ItemName.tornado_fang, player))
+        set_rule(multiworld.get_location(EventName.volt_catfish_rematch, player),
+                lambda state: state.has(ItemName.tornado_fang, player))
+        set_rule(multiworld.get_location(LocationName.doppler_lab_3_crush_crawfish, player),
+                lambda state: state.has(ItemName.triad_thunder, player))
+        set_rule(multiworld.get_location(EventName.crush_crawfish_rematch, player),
+                lambda state: state.has(ItemName.triad_thunder, player))
+        set_rule(multiworld.get_location(LocationName.doppler_lab_3_neon_tiger, player),
+                lambda state: state.has(ItemName.spinning_blade, player))
+        set_rule(multiworld.get_location(EventName.neon_tiger_rematch, player),
+                lambda state: state.has(ItemName.spinning_blade, player))
+        set_rule(multiworld.get_location(LocationName.doppler_lab_3_gravity_beetle, player), 
+                lambda state: state.has(ItemName.ray_splasher, player))
+        set_rule(multiworld.get_location(EventName.gravity_beetle_rematch, player),
+                lambda state: state.has(ItemName.ray_splasher, player))
+        set_rule(multiworld.get_location(LocationName.doppler_lab_3_blast_hornet, player), 
+                lambda state: state.has(ItemName.gravity_well, player))
+        set_rule(multiworld.get_location(EventName.blast_hornet_rematch, player),
+                lambda state: state.has(ItemName.gravity_well, player))
     
     # Set Bit rules
     add_rule(multiworld.get_location(LocationName.bit_defeat, player), 
