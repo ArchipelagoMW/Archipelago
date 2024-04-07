@@ -58,9 +58,9 @@ def create_main_regions(world: WL4World, location_table: Set[str]):
     menu_region = basic_region('Menu')
 
     passage_regions = (passage_region(passage) for passage in Passage)
-    minigame_shops = (minigame_shop(passage) for passage in Passage)
+    minigame_shops = (minigame_shop(passage) for passage in itertools.islice(Passage, 1, None))
 
-    spoiled_rotten = boss_region(Passage.ENTRY, 'Spoiled Rotten')
+    # spoiled_rotten = boss_region(Passage.ENTRY, 'Spoiled Rotten')
     cractus = boss_region(Passage.EMERALD, 'Cractus')
     cuckoo_condor = boss_region(Passage.RUBY, 'Cuckoo Condor')
     aerodent = boss_region(Passage.TOPAZ, 'Aerodent')
@@ -71,7 +71,7 @@ def create_main_regions(world: WL4World, location_table: Set[str]):
         menu_region,
         *passage_regions,
         *minigame_shops,
-        spoiled_rotten,
+        # spoiled_rotten,
         cractus,
         cuckoo_condor,
         aerodent,
