@@ -21,7 +21,6 @@ class LocationFlag(IntEnum):
     side_path = 2
     main_world = 3
     parallel_worlds = 4
-    beta_biome = 5
 
 
 # Mapping of items in each region.
@@ -183,8 +182,8 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Snow Chasm Orb": LocationData(110667, LocationFlag.main_world, "orb"),
     },
     "Meat Realm": {
-        "Meat Realm Chest": LocationData(110086, LocationFlag.beta_biome, "chest"),
-        "Meat Realm Pedestal": LocationData(110106, LocationFlag.beta_biome, "pedestal"),
+        "Meat Realm Chest": LocationData(110086, LocationFlag.main_world, "chest"),
+        "Meat Realm Pedestal": LocationData(110106, LocationFlag.main_world, "pedestal"),
         "Limatoukka": LocationData(110647, LocationFlag.main_world, "boss"),
     },
     "The Laboratory": {
