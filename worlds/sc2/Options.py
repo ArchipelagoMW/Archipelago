@@ -460,8 +460,9 @@ class KerriganLevelItemDistribution(Choice):
 
 class KerriganTotalLevelCap(Range):
     """
-    Limits how many total levels Kerrigan can gain from any source.  Depending on your other settings,
-    there may be more levels available in the world, but they will not affect Kerrigan.  
+    Limits how many total levels Kerrigan can gain from any source.
+    Depending on your other settings, there may be more levels available in the world,
+    but they will not affect Kerrigan.
     Set to -1 to disable this limit.
 
     NOTE: The following missions have these level requirements:
