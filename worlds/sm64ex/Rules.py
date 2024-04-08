@@ -181,8 +181,8 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
     # Rainbow Ride
     rf.assign_rule("RR: Maze", "WK | LJ & SF/BF/TJ | MOVELESS & LG/TJ")
     rf.assign_rule("RR: Bob-omb Buddy", "WK | MOVELESS & LG")
-    rf.assign_rule("RR: Swingin' in the Breeze", "LG/TJ/BF/SF")
-    rf.assign_rule("RR: Tricky Triangles!", "LG/TJ/BF/SF")
+    rf.assign_rule("RR: Swingin' in the Breeze", "LG/TJ/BF/SF | MOVELESS")
+    rf.assign_rule("RR: Tricky Triangles!", "LG/TJ/BF/SF | MOVELESS")
     rf.assign_rule("RR: Cruiser", "WK/SF/BF/LG/TJ")
     rf.assign_rule("RR: House", "TJ/SF/BF/LG")
     rf.assign_rule("RR: Somewhere Over the Rainbow", "CANN")
@@ -247,6 +247,7 @@ class RuleFactory:
 
     token_table = {
         "TJ": "Triple Jump",
+        "DJ": "Triple Jump",
         "LJ": "Long Jump",
         "BF": "Backflip",
         "SF": "Side Flip",
