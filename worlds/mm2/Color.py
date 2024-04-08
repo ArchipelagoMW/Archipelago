@@ -80,7 +80,18 @@ MM2_COLORS: Dict[str, Tuple[int, int]] = {
 }
 
 MM2_KNOWN_COLORS: Dict[str, Tuple[int, int]] = {
-    **MM2_COLORS
+    **MM2_COLORS,
+    # X Series
+    "Z-Saber": (0x20, 0x16),
+    # X3
+    "Acid Burst": (0x28, 0x2A),
+    "Tornado Fang": (0x28, 0x2C),
+    "Triad Thunder": (0x2B, 0x23),
+    "Spinning Blade": (0x20, 0x16),
+    "Ray Splasher": (0x28, 0x17),
+    "Gravity Well": (0x38, 0x14),
+    "Parasitic Bomb": (0x31, 0x28),
+    "Frost Shield": (0x23, 0x2C),
 }
 
 palette_pointers: Dict[str, List[int]] = {
@@ -183,7 +194,7 @@ def parse_color(colors: typing.List[str]):
     else:
         color_2 = colors[1]
         if color_2.startswith("$"):
-            color_2 = int(color_2[1:])
+            color_2 = int(color_2[1:], 16)
         else:
             color_2 = HTML_TO_NES[color_2.upper()]
     return color_1, color_2

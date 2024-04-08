@@ -584,6 +584,17 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch):
                                     0x60,
                                     ])
 
+    if world.options.reduce_flashing == world.options.reduce_flashing.option_virtual_console:
+        patch.write_byte(0x2D1B0, 0x2D)  # Change white to a dark gray, Mecha Dragon
+        patch.write_byte(0x2D397, 0x0F)  # Longer flash time, Mecha Dragon kill
+        patch.write_byte(0x2D3A0, 0x2D)  # Change white to a dark gray, Picopico-kun/Boobeam Trap
+        patch.write_byte(0x2D65F, 0x2D)  # Change white to a dark gray, Guts Tank
+        patch.write_byte(0x2DA94, 0x2D)  # Change white to a dark gray, Wily Machine
+        patch.write_byte(0x2DC97, 0x2D)  # Change white to a dark gray, Alien
+        patch.write_byte(0x2DD68, 0x10)  # Longer flash time, Alien kill
+        patch.write_bytes(0x2DF14, [0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA])  # Reduce final Alien flash to 1 big flash
+        patch.write_byte(0x34132, 0x08)  # Longer flash time, Stage Select
+
     from Utils import __version__
     patch.name = bytearray(f'MM2{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0',
                            'utf8')[:21]
