@@ -33,7 +33,7 @@ Key `Fruit`: `{ "Apple": 3, "Cherry": 7 }` it will be a lot more easy to safely 
 Lets look at a few examples:
 
 ### EnergyLink
-Energylink lets you share you excess energy with across multiple clients and games, it uses a team specific key of `EneryLink{team}`. The Energy value is a numeric value and its important that games can add and take energy from it in a thread safe way. A little side note, over the course of a long game, many clients can contribute to the energy value making it larger then an int64, while python and json have no issues with this, some programming languages might need to take extra care.
+Energylink lets you share you excess energy with across multiple clients and games, it uses a team specific key of `EneryLink{team}`. The Energy value is a numeric value and its important that games can add and take energy from it in a thread safe way. We will also provide our current `slot` number, this allows other clients to distinguish which client added or drained what. A little side note, over the course of a long game, many clients can contribute to the energy value making it larger then an int64, while python and json have no issues with this, some programming languages might need to take extra care.
 
 Adding is easy, just a `Set`-`add` operation, for example to add 20:
 ```json
@@ -41,6 +41,7 @@ Adding is easy, just a `Set`-`add` operation, for example to add 20:
     "cmd": "Set",
     "key": "EnergyLink0",
     "default": 0,
+    "slot": 5,
     "operations": [
         {"operation": "add", "value": 20},
     ]
@@ -54,6 +55,7 @@ First we subtract our value 50, then we set the value back to 0 if it went below
     "key": "EnergyLink0",
     "tag": "7cc04194-b491-4cba-a89e-ef754502f3ff",
     "default": 0,
+    "slot": 5,
     "want_reply": true,
     "operations": [
         {"operation": "add", "value": -50},
@@ -68,6 +70,7 @@ Response:
     "key": "EnergyLink0",
     "tag": "7cc04194-b491-4cba-a89e-ef754502f3ff",
     "default": 0,
+    "slot": 5,
     "want_reply": true,
     "operations": [
         {"operation": "add", "value": -50},
