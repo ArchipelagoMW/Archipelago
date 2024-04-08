@@ -348,7 +348,8 @@ class LinksAwakeningClient():
                         await asyncio.sleep(1.0)
                         continue
                 self.stop_bizhawk_spam = False
-                logger.info(f"Connected to Retroarch {version.decode('ascii')} running {rom_name.decode('ascii')}")
+                logger.info(f"Connected to Retroarch {version.decode('ascii', errors='replace')} "
+                            f"running {rom_name.decode('ascii', errors='replace')}")
                 return
             except (BlockingIOError, TimeoutError, ConnectionResetError):
                 await asyncio.sleep(1.0)
