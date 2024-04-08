@@ -31,7 +31,7 @@ from worlds.sc2.Options import (
     LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations,
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
-    SpearOfAdunAutonomouslyCastPresentInNoBuild
+    SpearOfAdunAutonomouslyCastPresentInNoBuild, MineralsPerItem, VespenePerItem, StartingSupplyPerItem,
 )
 
 
@@ -299,9 +299,18 @@ class StarcraftClientProcessor(ClientCommandProcessor):
 
         options = (
             ConfigurableOptionInfo('kerrigan_presence', 'kerrigan_presence', Options.KerriganPresence, can_break_logic=True),
+            ConfigurableOptionInfo('kerrigan_level_cap', 'kerrigan_total_level_cap', Options.KerriganTotalLevelCap, ConfigurableOptionType.INTEGER, can_break_logic=True),
+            ConfigurableOptionInfo('kerrigan_mission_level_cap', 'kerrigan_levels_per_mission_completed_cap', Options.KerriganLevelsPerMissionCompletedCap, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo('kerrigan_levels_per_mission', 'kerrigan_levels_per_mission_completed', Options.KerriganLevelsPerMissionCompleted, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo('grant_story_levels', 'grant_story_levels', Options.GrantStoryLevels, can_break_logic=True),
+            ConfigurableOptionInfo('grant_story_tech', 'grant_story_tech', Options.GrantStoryTech, can_break_logic=True),
+            ConfigurableOptionInfo('control_ally', 'take_over_ai_allies', Options.TakeOverAIAllies, can_break_logic=True),
             ConfigurableOptionInfo('soa_presence', 'spear_of_adun_presence', Options.SpearOfAdunPresence, can_break_logic=True),
             ConfigurableOptionInfo('soa_in_nobuilds', 'spear_of_adun_present_in_no_build', Options.SpearOfAdunPresentInNoBuild, can_break_logic=True),
-            ConfigurableOptionInfo('control_ally', 'take_over_ai_allies', Options.TakeOverAIAllies, can_break_logic=True),
+            # Note(mm): Technically SOA passive presence is in the logic for Amon's Fall if Takeover AI Allies is true,
+            # but that's edge case enough I don't think we should warn about it.
+            ConfigurableOptionInfo('soa_passive_presence', 'spear_of_adun_autonomously_cast_ability_presence', Options.SpearOfAdunAutonomouslyCastAbilityPresence),
+            ConfigurableOptionInfo('soa_passives_in_nobuilds', 'spear_of_adun_autonomously_cast_present_in_no_build', Options.SpearOfAdunAutonomouslyCastPresentInNoBuild),
             ConfigurableOptionInfo('minerals_per_item', 'minerals_per_item', Options.MineralsPerItem, ConfigurableOptionType.INTEGER),
             ConfigurableOptionInfo('gas_per_item', 'vespene_per_item', Options.VespenePerItem, ConfigurableOptionType.INTEGER),
             ConfigurableOptionInfo('supply_per_item', 'starting_supply_per_item', Options.StartingSupplyPerItem, ConfigurableOptionType.INTEGER),
@@ -515,10 +524,8 @@ class SC2Context(CommonContext):
         self.player_color_protoss = ColorChoice.option_blue
         self.player_color_nova = ColorChoice.option_dark_grey
         self.pending_color_update = False
-        self.kerrigan_presence = 0
+        self.kerrigan_presence: int = KerriganPresence.default
         self.kerrigan_primal_status = 0
-        self.levels_per_check = 0
-        self.checks_per_level = 1
         self.mission_req_table: typing.Dict[SC2Campaign, typing.Dict[str, MissionInfo]] = {}
         self.final_mission: int = 29
         self.announcements: queue.Queue = queue.Queue()
@@ -530,22 +537,22 @@ class SC2Context(CommonContext):
         self.location_inclusions: typing.Dict[LocationType, int] = {}
         self.plando_locations: typing.List[str] = []
         self.current_tooltip = None
-        self.last_loc_list = None
         self.difficulty_override = -1
         self.game_speed_override = -1
         self.mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
         self.last_bot: typing.Optional[ArchipelagoBot] = None
         self.slot_data_version = 2
-        self.grant_story_tech = 0
-        self.required_tactics = RequiredTactics.option_standard
-        self.take_over_ai_allies = TakeOverAIAllies.option_false
+        self.required_tactics: int = RequiredTactics.default
+        self.grant_story_tech: int = GrantStoryTech.default
+        self.grant_story_levels: int = GrantStoryLevels.default
+        self.take_over_ai_allies: int = TakeOverAIAllies.default
         self.spear_of_adun_presence = SpearOfAdunPresence.option_not_present
         self.spear_of_adun_present_in_no_build = SpearOfAdunPresentInNoBuild.option_false
         self.spear_of_adun_autonomously_cast_ability_presence = SpearOfAdunAutonomouslyCastAbilityPresence.option_not_present
         self.spear_of_adun_autonomously_cast_present_in_no_build = SpearOfAdunAutonomouslyCastPresentInNoBuild.option_false
-        self.minerals_per_item = 15
-        self.vespene_per_item = 15
-        self.starting_supply_per_item = 2
+        self.minerals_per_item: int = 15  # For backwards compat with games generated pre-0.4.5
+        self.vespene_per_item: int =  15  # For backwards compat with games generated pre-0.4.5
+        self.starting_supply_per_item: int = 2  # For backwards compat with games generated pre-0.4.5
         self.nova_covert_ops_only = False
         self.kerrigan_levels_per_mission_completed = 0
 
@@ -847,9 +854,6 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
         shield_upgrade_item = item_list[ItemNames.PROGRESSIVE_PROTOSS_SHIELDS]
         for _ in range(0, shield_upgrade_level):
             accumulators[shield_upgrade_item.race][type_flaggroups[shield_upgrade_item.race][shield_upgrade_item.type]] += 1 << shield_upgrade_item.number
-
-    # Kerrigan levels per check
-    accumulators[SC2Race.ZERG][type_flaggroups[SC2Race.ZERG]["Level"]] += (len(ctx.checked_locations) // ctx.checks_per_level) * ctx.levels_per_check
 
     # Upgrades from completed missions
     if ctx.generic_upgrade_missions > 0:
