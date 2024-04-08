@@ -1620,7 +1620,7 @@ def get_locations(world: Optional[World]) -> Tuple[LocationData, ...]:
         plando_locations = get_plando_locations(world)
         exclude_locations = get_option_value(world, "exclude_locations")
         location_table = [location for location in location_table
-                          if (LocationType is LocationType.VICTORY or location.name not in exclude_locations)
+                          if (location.type is LocationType.VICTORY or location.name not in exclude_locations)
                           and location.type not in excluded_location_types
                           or location.name in plando_locations]
     for i, location_data in enumerate(location_table):

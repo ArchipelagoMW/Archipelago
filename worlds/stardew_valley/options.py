@@ -197,7 +197,7 @@ class Cropsanity(Choice):
     """Formerly named "Seed Shuffle"
     Pierre now sells a random amount of seasonal seeds and Joja sells them without season requirements, but only in huge packs.
     Disabled: All the seeds are unlocked from the start, there are no location checks for growing and harvesting crops
-    Shuffled: Seeds are unlocked as archipelago items, for each seed there is a location check for growing and harvesting that crop
+    Enabled: Seeds are unlocked as archipelago items, for each seed there is a location check for growing and harvesting that crop
     """
     internal_name = "cropsanity"
     display_name = "Cropsanity"
