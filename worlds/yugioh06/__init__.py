@@ -1,4 +1,5 @@
 import os
+import pkgutil
 from typing import ClassVar, Dict, Any
 
 import bsdiff4
@@ -15,7 +16,7 @@ from .Locations import Bonuses, Limited_Duels, Theme_Duels, Campaign_Opponents, 
     get_beat_challenge_events, special, collection_events
 from .Opponents import get_opponents, get_opponent_locations, challenge_opponents
 from .Options import Yugioh06Options
-from .Rom import YGO06DeltaPatch, get_base_rom_path, MD5Europe, MD5America
+from .Rom import YGO06ProcedurePatch, get_base_rom_path, MD5Europe, MD5America, write_tokens
 from .Rules import set_rules
 from .logic import YuGiOh06Logic
 from .BoosterPacks import booster_contents, get_booster_locations
@@ -61,11 +62,6 @@ class Yugioh06World(World):
     settings_key = "yugioh06_settings"
     settings: ClassVar[Yugioh2006Setting]
 
-    @classmethod
-    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
-        if not os.path.exists(cls.settings.rom_file):
-            raise FileNotFoundError(cls.settings.rom_file)
-
     item_name_to_id = {}
     start_id = 5730000
     for k, v in item_to_index.items():
@@ -103,6 +99,7 @@ class Yugioh06World(World):
         self.starting_booster = None
         self.starting_opponent = None
         self.campaign_opponents = None
+        self.is_draft_mode = False
 
     def create_item(self, name: str) -> Item:
         return Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
@@ -301,6 +298,7 @@ class Yugioh06World(World):
 
     def generate_early(self):
         if self.options.structure_deck.current_key == "none":
+            self.is_draft_mode = True
             boosters = draft_boosters
             if self.options.campaign_opponents_shuffle.value:
                 opponents = tier_1_opponents
@@ -343,22 +341,6 @@ class Yugioh06World(World):
         self.removed_challenges = total[:noc]
         self.campaign_opponents = get_opponents(self.multiworld, self.player,
                                                 self.options.campaign_opponents_shuffle.value)
-
-    def apply_base_patch(self, rom):
-        base_patch_location = "/".join((os.path.dirname(self.__file__), "patch.bsdiff4"))
-        with openFile(base_patch_location, "rb") as base_patch:
-            rom_data = bsdiff4.patch(rom.read(), base_patch.read())
-        if self.options.ocg_arts:
-            ocg_patch_location = "/".join((os.path.dirname(self.__file__), "patches/ocg.bsdiff4"))
-            with openFile(ocg_patch_location, "rb") as ocg_patch:
-                rom_data = bsdiff4.patch(rom_data, ocg_patch.read())
-        structure_deck = self.options.structure_deck
-        if structure_deck.current_key == 'none':
-            draft_patch_location = "/".join((os.path.dirname(self.__file__), "patches/draft.bsdiff4"))
-            with openFile(draft_patch_location, "rb") as draft_patch:
-                rom_data = bsdiff4.patch(rom_data, draft_patch.read())
-        rom_data = bytearray(rom_data)
-        return rom_data
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
@@ -409,82 +391,10 @@ class Yugioh06World(World):
         self.starting_opponent = slot_data["starting_opponent"]
         all_state = self.multiworld.get_all_state(False)
 
-    def apply_randomizer(self):
-        with open(get_base_rom_path(), 'rb') as rom:
-            rom_data = self.apply_base_patch(rom)
-
-        structure_deck = self.options.structure_deck
-        # set structure deck
-        structure_deck_data_location = 0x000fd0aa
-        rom_data[structure_deck_data_location] = structure_deck_selection.get(structure_deck.value)
-        # set banlist
-        banlist = self.options.banlist
-        banlist_data_location = 0xf4496
-        rom_data[banlist_data_location] = banlist_ids.get(banlist.value)
-        # set items to locations map
-        randomizer_data_start = 0x0000f310
-        for location in self.multiworld.get_locations(self.player):
-            item = location.item.name
-            if location.item.player != self.player:
-                item = "Remote"
-            item_id = item_to_index.get(item)
-            if item_id is None:
-                continue
-            location_id = self.location_name_to_id[location.name] - 5730000
-            rom_data[randomizer_data_start + location_id] = item_id
-        # set starting inventory
-        inventory_map = [0 for i in range(32)]
-        starting_inventory = list(map(lambda i: i.name, self.multiworld.precollected_items[self.player]))
-        starting_inventory += self.options.start_inventory.value
-        for start_inventory in starting_inventory:
-            item_id = self.item_name_to_id[start_inventory] - 5730001
-            index = math.floor(item_id / 8)
-            bit = item_id % 8
-            inventory_map[index] = inventory_map[index] | (1 << bit)
-
-        rom_data[0xe9dc:0xe9fc] = inventory_map
-        # set unlock conditions for the last 3 campaign opponents
-        rom_data[0xeefa] = self.options.third_tier_5_campaign_boss_challenges.value \
-            if self.options.third_tier_5_campaign_boss_unlock_condition.value == 1 \
-            else self.options.third_tier_5_campaign_boss_campaign_opponents.value
-        rom_data[0xef10] = self.options.fourth_tier_5_campaign_boss_challenges.value \
-            if self.options.fourth_tier_5_campaign_boss_unlock_condition.value == 1 \
-            else self.options.fourth_tier_5_campaign_boss_campaign_opponents.value
-        rom_data[0xef22] = self.options.final_campaign_boss_challenges.value \
-            if self.options.final_campaign_boss_unlock_condition.value == 1 \
-            else self.options.final_campaign_boss_campaign_opponents.value
-        rom_data[0xeef8] = \
-            int((function_addresses.get(self.options.third_tier_5_campaign_boss_unlock_condition.value) - 0xeefa) / 2)
-        rom_data[0xef0e] = \
-            int((function_addresses.get(self.options.fourth_tier_5_campaign_boss_unlock_condition.value) - 0xef10) / 2)
-        rom_data[0xef20] = \
-            int((function_addresses.get(self.options.final_campaign_boss_unlock_condition.value) - 0xef22) / 2)
-        # set starting money
-        rom_data[0xf4734:0xf4738] = self.options.starting_money.value.to_bytes(4, 'little')
-        rom_data[0xe70c] = self.options.money_reward_multiplier.value
-        rom_data[0xe6e4] = self.options.money_reward_multiplier.value
-        # normalize booster packs if option is set
-        if self.options.normalize_boosters_packs.value:
-            booster_pack_price = self.options.booster_pack_prices.value.to_bytes(2, 'little')
-            for booster in range(51):
-                space = booster * 16
-                rom_data[0x1e5e2e8 + space] = booster_pack_price[0]
-                rom_data[0x1e5e2e9 + space] = booster_pack_price[1]
-                rom_data[0x1e5e2ea + space] = 5
-        # set shuffled campaign opponents if option is set
-        if self.options.campaign_opponents_shuffle.value:
-            i = 0
-            for opp in self.campaign_opponents:
-                space = i * 32
-                rom_data[0x000f3ba + i] = opp.id
-                rom_data[0x1e58d0e + space:0x1e58d10 + space] = opp.card_id.to_bytes(2, 'little')
-                rom_data[0x1e58d10 + space:0x1e58d12 + space] = opp.deck_name_id.to_bytes(2, 'little')
-                rom_data[0x1e58d12 + space:0x1e58d28 + space] = opp.deck_file.encode('ascii')
-                i = i+1
-        return rom_data
+        return all_state
 
     def generate_output(self, output_directory: str):
-        patched_rom = self.apply_randomizer()
+        #patched_rom = self.apply_randomizer()
         outfilebase = 'AP_' + self.multiworld.seed_name
         outfilepname = f'_P{self.player}'
         outfilepname += f"_{self.multiworld.get_file_safe_player_name(self.player).replace(' ', '_')}"
@@ -493,19 +403,21 @@ class Yugioh06World(World):
         self.romName = bytearray(self.rom_name_text, 'utf8')[:0x20]
         self.romName.extend([0] * (0x20 - len(self.romName)))
         self.rom_name = self.romName
-        patched_rom[0x10:0x30] = self.romName
         self.playerName = bytearray(self.multiworld.player_name[self.player], 'utf8')[:0x20]
         self.playerName.extend([0] * (0x20 - len(self.playerName)))
-        patched_rom[0x30:0x50] = self.playerName
-        patched_filename = os.path.join(output_directory, outputFilename)
-        with open(patched_filename, 'wb') as patched_rom_file:
-            patched_rom_file.write(patched_rom)
-        patch = YGO06DeltaPatch(os.path.splitext(outputFilename)[0] + YGO06DeltaPatch.patch_file_ending,
-                                player=self.player,
-                                player_name=self.multiworld.player_name[self.player],
-                                patched_path=outputFilename)
-        patch.write()
-        os.unlink(patched_filename)
+        patch = YGO06ProcedurePatch()
+        patch.write_file("base_patch.bsdiff4", pkgutil.get_data(__name__, "patch.bsdiff4"))
+        if self.is_draft_mode:
+            patch.procedure.insert(1, ("apply_bsdiff4", ["draft_patch.bsdiff4"]))
+            patch.write_file("draft_patch.bsdiff4", pkgutil.get_data(__name__, "patches/draft.bsdiff4"))
+        if self.options.ocg_arts:
+            patch.procedure.insert(1, ("apply_bsdiff4", ["ocg_patch.bsdiff4"]))
+            patch.write_file("ocg_patch.bsdiff4", pkgutil.get_data(__name__, "patches/ocg.bsdiff4"))
+        write_tokens(self, patch)
+
+        # Write Output
+        out_file_name = self.multiworld.get_out_file_name_base(self.player)
+        patch.write(os.path.join(output_directory, f"{out_file_name}{patch.patch_file_ending}"))
 
 
 def create_region(self, name: str, locations=None, exits=None):
