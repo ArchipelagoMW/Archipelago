@@ -224,7 +224,7 @@ class PokemonRBClient(BizHawkClient):
                     else:
                         logger.info(f"Withdrew ${-self.banking_command}.")
                     await ctx.send_msgs([{
-                        "cmd": "Set", "key": f"EnergyLink{ctx.team}", "operations":
+                        "cmd": "Set", "key": f"EnergyLink{ctx.team}", "slot": ctx.slot, "operations":
                             [{"operation": "add", "value": self.banking_command * BANK_EXCHANGE_RATE},
                              {"operation": "max", "value": 0}],
                     }])
