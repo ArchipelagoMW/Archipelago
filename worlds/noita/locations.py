@@ -186,7 +186,9 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Unohdettu":      LocationData(110653, LocationFlag.main_world, "boss"),
         "Snow Chasm Orb": LocationData(110667, LocationFlag.main_world, "orb"),
     },
-    "Deep Underground": {
+    "Meat Realm": {
+        "Meat Realm Chest": LocationData(110086, LocationFlag.main_world, "chest"),
+        "Meat Realm Pedestal": LocationData(110106, LocationFlag.main_world, "pedestal"),
         "Limatoukka": LocationData(110647, LocationFlag.main_world, "boss"),
     },
     "The Laboratory": {
