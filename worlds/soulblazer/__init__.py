@@ -11,6 +11,7 @@ from .Items import (
     create_itempool,
 )  # data used below to add items to the World
 from .Locations import SoulBlazerLocation, all_locations_table  # same as above
+from .Names import ItemName, ChestName
 from .Regions import create_regions as region_create_regions
 from .Rules import set_rules as rules_set_rules
 from .Rom import SoulBlazerDeltaPatch, LocalRom, patch_rom, get_base_rom_path
@@ -120,12 +121,12 @@ class SoulBlazerWorld(World):
         if self.options.starting_sword == "randomized":
             starting_sword_name = self.random.choice(Items.swords_table.keys())
         else:
-            starting_sword_name = Items.ItemName.LIFESWORD
+            starting_sword_name = ItemName.LIFESWORD
 
         starting_sword = next(x for x in itempool if x.name == starting_sword_name)
         self.pre_fill_items.append(starting_sword)
         itempool.remove(starting_sword)
-        self.multiworld.get_location(Locations.ChestName.TRIAL_ROOM, self.player).place_locked_item(starting_sword)
+        self.multiworld.get_location(ChestName.TRIAL_ROOM, self.player).place_locked_item(starting_sword)
 
         # TODO: anything else to pre-fill?
 
