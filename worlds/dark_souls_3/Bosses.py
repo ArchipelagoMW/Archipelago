@@ -84,7 +84,7 @@ all_bosses = [
     DS3BossInfo("Old Demon King", 3800830, locations = {
         "SL: Soul of the Old Demon King",
     }),
-    DS3BossInfo("Aldrich, Devourer of Men", 3700800, locations = {
+    DS3BossInfo("Aldrich, Devourer of Gods", 3700800, locations = {
         "AL: Soul of Aldrich",
         "AL: Cinders of a Lord - Aldrich",
         "FS: Smough's Helm - shop after killing AL boss",
