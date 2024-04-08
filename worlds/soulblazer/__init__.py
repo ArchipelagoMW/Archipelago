@@ -1,7 +1,7 @@
 import settings
-import typing
 import copy
 import os
+from typing import Any, List, Dict, Optional, ClassVar
 from .Options import SoulBlazerOptions  # the options we defined earlier
 from .Items import (
     SoulBlazerItem,
@@ -62,7 +62,7 @@ class SoulBlazerWorld(World):
     game = "Soul Blazer"  # name of the game/world
     options_dataclass = SoulBlazerOptions  # options the player can set
     options: SoulBlazerOptions  # typing hints for option results
-    settings: typing.ClassVar[SoulBlazerSettings]  # will be automatically assigned from type hint
+    settings: ClassVar[SoulBlazerSettings]  # will be automatically assigned from type hint
     # topology_present = True  # show path to required location checks in spoiler
 
     # The following two dicts are required for the generation to know which
@@ -80,9 +80,9 @@ class SoulBlazerWorld(World):
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
-        self.exp_items: list[SoulBlazerItem]
-        self.gem_items: list[SoulBlazerItem]
-        self.pre_fill_items: list[Item] = []
+        self.exp_items: List[SoulBlazerItem]
+        self.gem_items: List[SoulBlazerItem]
+        self.pre_fill_items: List[Item] = []
         # self.set_rules = set_rules
         # self.create_regions = create_regions
 
@@ -94,7 +94,7 @@ class SoulBlazerWorld(World):
             data = all_items_table[item]
         return SoulBlazerItem(item, self.player, data)
 
-    def get_pre_fill_items(self) -> typing.List[Item]:
+    def get_pre_fill_items(self) -> List[Item]:
         return self.pre_fill_items
 
     def create_victory_event(self, region: Region) -> Location:
@@ -145,10 +145,10 @@ class SoulBlazerWorld(World):
 
     def fill_hook(
         self,
-        progitempool: typing.List["Item"],
-        usefulitempool: typing.List["Item"],
-        filleritempool: typing.List["Item"],
-        fill_locations: typing.List["Location"],
+        progitempool: List["Item"],
+        usefulitempool: List["Item"],
+        filleritempool: List["Item"],
+        fill_locations: List["Location"],
     ) -> None:
         pass
 
@@ -178,11 +178,19 @@ class SoulBlazerWorld(World):
             if os.path.exists(rompath):
                 os.unlink(rompath)
 
-    def fill_slot_data(self) -> typing.Dict[str, typing.Any]:  # json of WebHostLib.models.Slot
-        return {}
+    def fill_slot_data(self) -> Dict[str, Any]:
+        gem_data = {
+            f"{item.code}:{item.location.address}:{item.location.player}": item.operand_for_id
+            for item in self.gem_items
+        }
+        exp_data = {
+            f"{item.code}:{item.location.address}:{item.location.player}": item.operand_for_id
+            for item in self.exp_items
+        }
+        return {'gem_data': gem_data, 'exp_data': exp_data}
 
-    def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
+    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
         pass
 
-    def modify_multidata(self, multidata: typing.Dict[str, typing.Any]) -> None:
+    def modify_multidata(self, multidata: Dict[str, Any]) -> None:
         pass

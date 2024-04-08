@@ -1,5 +1,5 @@
 import logging
-from typing import Callable, TYPE_CHECKING, NamedTuple
+from typing import Dict, List, Callable, TYPE_CHECKING, NamedTuple
 from BaseClasses import MultiWorld, Region, Entrance, CollectionState
 from .Items import swords_table, stones_table, redhots_table
 from .Names import RegionName, ItemName, LairName, ChestName, NPCName, NPCRewardName
@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from . import SoulBlazerWorld
 
 
-locations_for_region: dict[str, list[str]] = {
+locations_for_region: Dict[str, List[str]] = {
     RegionName.MENU: [],
     # Act 1 Regions
     # We could probably merge this region with Grass Valley West since we prefill the starting sword.
@@ -407,17 +407,17 @@ locations_for_region: dict[str, list[str]] = {
 class ExitData(NamedTuple):
     destination: str
     """The destination region name."""
-    has_all: list[str] = []
+    has_all: List[str] = []
     """List of item names, all of which are required to use this exit."""
     # TODO: Might need to refactor this data structure if any location has multiple 'any' dependencies
     # TODO: if the only any ends up being swords/magic then change this to flag instead?
-    has_any: list[str] = []
+    has_any: List[str] = []
     """List of item names, where only one are required to use this exit."""
     # TODO: May have to refactor data structure if location reachable requirements are needed
 
 
 # TODO: move this to rules?
-exits_for_region: dict[str, list[ExitData]] = {
+exits_for_region: Dict[str, List[ExitData]] = {
     RegionName.MENU: [
         ExitData(RegionName.TRIAL_ROOM),
     ],
@@ -556,7 +556,7 @@ def create_regions(world: "SoulBlazerWorld") -> None:
     regions = {k: Region(k, world.player, world.multiworld) for k in locations_for_region.keys()}
     world.multiworld.regions += regions.values()
 
-    all_locations: list[SoulBlazerLocation] = []
+    all_locations: List[SoulBlazerLocation] = []
 
     # Populate each region with locations and exits
     for region in regions.values():

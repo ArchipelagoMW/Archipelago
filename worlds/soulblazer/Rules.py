@@ -1,4 +1,4 @@
-from typing import Callable, TYPE_CHECKING
+from typing import Dict, List, Callable, Optional, TYPE_CHECKING
 
 from enum import IntEnum, auto
 from BaseClasses import CollectionState
@@ -56,7 +56,7 @@ magic_items = [
 sword_items = [*swords_table.keys()]
 
 
-def no_requirement(state: CollectionState, player: int | None = None) -> bool:
+def no_requirement(state: CollectionState, player: Optional[int] = None) -> bool:
     return True
 
 
@@ -91,7 +91,7 @@ rule_for_flag = {
 
 # Many locations depend on one or two NPC releases so rather than create regions to hold one location,
 # we put these location-specific dependencies here.
-location_dependencies: dict[str, list[str]] = {
+location_dependencies: Dict[str, List[str]] = {
     # Act 1 - Grass Valley
     NPCRewardName.TOOL_SHOP_OWNER: [NPCName.TOOL_SHOP_OWNER],
     # TODO: figure out if we can patch it to make emblem A tile activatable without turning the water wheel

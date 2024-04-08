@@ -4,7 +4,7 @@ import math
 
 import bsdiff4
 import Utils
-from typing import Callable
+from typing import Callable, Dict
 from BaseClasses import ItemClassification
 from Utils import read_snes_rom
 from worlds.AutoWorld import World
@@ -79,7 +79,7 @@ class LocalRom(object):
         npcreward_addr = Addresses.NPC_REWARD_DATA + (0x04 * index)
         self.write_bytes(npcreward_addr, [id, 0x00, *operand.to_bytes(2, "little")])
 
-    place_dict: dict[LocationType: Callable] = {
+    place_dict: Dict[LocationType, Callable] = {
         LocationType.CHEST: place_chest,
         LocationType.LAIR: place_lair,
         LocationType.NPC_REWARD: place_npcreward,

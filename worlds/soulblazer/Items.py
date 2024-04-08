@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from BaseClasses import Region, Location, Entrance, Item, ItemClassification
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING, List, Dict
 from .Names import ItemID, ItemName, LairID, NPCName
 
 if TYPE_CHECKING:
@@ -108,7 +108,7 @@ exp_values = [1, 30, 80, 150, 180, 200, 250, 300, 300, 300, 300, 300, 400]
 """Exp reward values in vanilla item pool"""
 
 
-def create_itempool(world: "SoulBlazerWorld") -> list[SoulBlazerItem]:
+def create_itempool(world: "SoulBlazerWorld") -> List[SoulBlazerItem]:
     itempool = [SoulBlazerItem(name, world.player, itemData) for (name, itemData) in unique_items_table.items()]
     itempool += [
         SoulBlazerItem(ItemName.MEDICALHERB, world.player, repeatable_items_table[ItemName.MEDICALHERB])

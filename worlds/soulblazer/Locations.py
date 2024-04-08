@@ -41,7 +41,7 @@ class SoulBlazerLocation(Location):
     game = "Soul Blazer"
 
     def __init__(
-        self, player: int, name: str, data: SoulBlazerLocationData, parent: Region | None = None
+        self, player: int, name: str, data: SoulBlazerLocationData, parent: Optional[Region] = None
     ):
         super().__init__(player, name, data.address, parent)
         self.data: SoulBlazerLocationData = data
