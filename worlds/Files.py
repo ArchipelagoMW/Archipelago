@@ -66,6 +66,7 @@ class AutoPatchExtensionRegister(abc.ABCMeta):
         else:
             return handler
 
+
 container_version: int = 6
 
 
