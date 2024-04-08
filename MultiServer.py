@@ -175,7 +175,7 @@ class Context:
     all_item_and_group_names: typing.Dict[str, typing.Set[str]]
     all_location_and_group_names: typing.Dict[str, typing.Set[str]]
     non_hintable_names: typing.Dict[str, typing.Set[str]]
-    public_stored_data_keys = typing.Set[str]  # keys that can be retrieved by a client that has not reached "auth" yet
+    public_stored_data_keys: typing.Set[str]  # keys that can be retrieved by a client that has not reached "auth" yet
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
