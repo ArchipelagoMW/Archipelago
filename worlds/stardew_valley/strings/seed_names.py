@@ -21,6 +21,7 @@ class Seed:
     kale = "Kale Seeds"
     melon = "Melon Seeds"
     mixed = "Mixed Seeds"
+    mixed_flower = "Mixed Flower Seeds"
     parsnip = "Parsnip Seeds"
     pepper = "Pepper Seeds"
     pineapple = "Pineapple Seeds"

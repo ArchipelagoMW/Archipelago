@@ -42,6 +42,7 @@ class Meal:
     maki_roll = "Maki Roll"
     maple_bar = "Maple Bar"
     miners_treat = "Miner's Treat"
+    moss_soup = "Moss Soup"
     omelet = "Omelet"
     pale_broth = "Pale Broth"
     pancakes = "Pancakes"

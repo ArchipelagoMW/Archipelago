@@ -160,6 +160,7 @@ class Region:
     fishing = "Fishing"
     egg_festival = "Egg Festival"
     desert_festival = "Desert Festival"
+    trout_derby = "Trout Derby"
     flower_dance = "Flower Dance"
     luau = "Luau"
     moonlight_jellies = "Dance of the Moonlight Jellies"

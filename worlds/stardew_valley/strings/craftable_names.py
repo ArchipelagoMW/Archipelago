@@ -95,6 +95,10 @@ class Consumable:
     mystery_box = "Mystery Box"
     gold_mystery_box = "Golden Mystery Box"
     treasure_totem = "Treasure Totem"
+    fireworks_red = "Fireworks (Red)"
+    fireworks_purple = "Fireworks (Purple)"
+    fireworks_green = "Fireworks (Green)"
+    far_away_stone = "Far Away Stone"
 
 
 class Lighting:

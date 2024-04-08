@@ -107,6 +107,7 @@ class Trash:
 
 class WaterChest:
     fishing_chest = "Fishing Chest"
+    golden_fishing_chest = "Golden Fishing Chest"
     treasure = "Treasure Chest"
 
 

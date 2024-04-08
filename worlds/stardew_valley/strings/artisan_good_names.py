@@ -22,6 +22,11 @@ class ArtisanGood:
     green_tea = "Green Tea"
     mead = "Mead"
     mystic_syrup = "Mystic Syrup"
+    dried_fruit = "Dried (Fruit)"
+    dried_mushroom = "Dried (Mushroom)"
+    raisins = "Raisins"
+    stardrop_tea = "Stardrop Tea"
+    smoked_fish = "Smoked"
 
     @classmethod
     def specific_wine(cls, fruit: str) -> str:

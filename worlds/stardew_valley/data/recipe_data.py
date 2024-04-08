@@ -130,6 +130,7 @@ maki_roll = queen_of_sauce_recipe(Meal.maki_roll, 1, Season.summer, 21, {Fish.an
 mango_sticky_rice = friendship_recipe(Meal.mango_sticky_rice, NPC.leo, 7, {Fruit.mango: 1, Forageable.coconut: 1, Ingredient.rice: 1})
 maple_bar = queen_of_sauce_recipe(Meal.maple_bar, 2, Season.summer, 14, {ArtisanGood.maple_syrup: 1, Ingredient.sugar: 1, Ingredient.wheat_flour: 1})
 miners_treat = skill_recipe(Meal.miners_treat, Skill.mining, 3, {Forageable.cave_carrot: 2, Ingredient.sugar: 1, AnimalProduct.cow_milk: 1})
+moss_soup = skill_recipe(Meal.moss_soup, Skill.foraging, 3, {Material.moss: 20})
 omelet = queen_of_sauce_recipe(Meal.omelet, 1, Season.spring, 28, {AnimalProduct.chicken_egg: 1, AnimalProduct.cow_milk: 1})
 pale_broth = friendship_recipe(Meal.pale_broth, NPC.marnie, 3, {WaterItem.white_algae: 2})
 pancakes = queen_of_sauce_recipe(Meal.pancakes, 1, Season.summer, 14, {Ingredient.wheat_flour: 1, AnimalProduct.chicken_egg: 1})

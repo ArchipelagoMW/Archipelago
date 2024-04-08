@@ -52,6 +52,9 @@ class ArtisanLogic(BaseLogic[Union[ArtisanLogicMixin, TimeLogicMixin, HasLogicMi
     def has_dried_mushrooms(self) -> StardewRule:
         return self.logic.artisan.can_dehydrate(Mushroom.any_edible)
 
+    def has_raisins(self) -> StardewRule:
+        return self.logic.artisan.can_dehydrate(Fruit.grape)
+
     def has_wine(self) -> StardewRule:
         return self.logic.artisan.can_keg(Fruit.any)
 
@@ -93,7 +96,8 @@ class ArtisanLogic(BaseLogic[Union[ArtisanLogicMixin, TimeLogicMixin, HasLogicMi
         if item == Generic.any:
             return machine_rule
         if item == Fruit.any:
-            return machine_rule & self.logic.has_any(*(fruit.name for fruit in self.content.find_tagged_items(ItemTag.FRUIT)))
+            # Grapes make raisins
+            return machine_rule & self.logic.has_any(*(fruit.name for fruit in self.content.find_tagged_items(ItemTag.FRUIT) if fruit.name != Fruit.grape))
         if item == Mushroom.any_edible:
             return machine_rule & self.logic.has_any(*(mushroom.name for mushroom in self.content.find_tagged_items(ItemTag.EDIBLE_MUSHROOM)))
         return machine_rule & self.logic.has(item)

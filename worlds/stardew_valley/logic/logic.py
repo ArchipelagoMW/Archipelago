@@ -71,7 +71,7 @@ from ..strings.gift_names import Gift
 from ..strings.ingredient_names import Ingredient
 from ..strings.machine_names import Machine
 from ..strings.material_names import Material
-from ..strings.metal_names import Ore, MetalBar, Mineral, Fossil
+from ..strings.metal_names import Ore, MetalBar, Mineral, Fossil, Artifact
 from ..strings.monster_drop_names import Loot
 from ..strings.monster_names import Monster
 from ..strings.region_names import Region
@@ -126,6 +126,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         self.registry.item_rules.update({
             "Energy Tonic": self.money.can_spend_at(Region.hospital, 1000),
             WaterChest.fishing_chest: self.fishing.can_fish_chests(),
+            WaterChest.golden_fishing_chest: self.fishing.can_fish_chests() & self.skill.has_mastery(Skill.fishing),
             WaterChest.treasure: self.fishing.can_fish_chests(),
             Ring.hot_java_ring: self.region.can_reach(Region.volcano_floor_10),
             "Galaxy Soul": self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 40),
@@ -185,6 +186,8 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             ArtisanGood.cheese: (self.has(AnimalProduct.cow_milk) & self.has(Machine.cheese_press)) | (self.region.can_reach(Region.desert) & self.has(Mineral.emerald)),
             ArtisanGood.cloth: (self.has(AnimalProduct.wool) & self.has(Machine.loom)) | (self.region.can_reach(Region.desert) & self.has(Mineral.aquamarine)),
             ArtisanGood.dinosaur_mayonnaise: self.artisan.can_mayonnaise(AnimalProduct.dinosaur_egg),
+            ArtisanGood.dried_fruit: self.artisan.has_dried_fruits(),
+            ArtisanGood.dried_mushroom: self.artisan.has_dried_mushrooms(),
             ArtisanGood.duck_mayonnaise: self.artisan.can_mayonnaise(AnimalProduct.duck_egg),
             ArtisanGood.goat_cheese: self.has(AnimalProduct.goat_milk) & self.has(Machine.cheese_press),
             ArtisanGood.green_tea: self.artisan.can_keg(Vegetable.tea_leaves),
@@ -199,6 +202,9 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             ArtisanGood.pale_ale: self.artisan.can_keg(Vegetable.hops),
             ArtisanGood.pickles: self.artisan.has_pickle(),
             ArtisanGood.pine_tar: self.has(Machine.tapper),
+            ArtisanGood.raisins: self.artisan.has_raisins(),
+            ArtisanGood.smoked_fish: self.artisan.has_smoked_fish(),
+            ArtisanGood.stardrop_tea: self.has(WaterChest.golden_fishing_chest),
             ArtisanGood.truffle_oil: self.has(AnimalProduct.truffle) & self.has(Machine.oil_maker),
             ArtisanGood.void_mayonnaise: (self.skill.can_fish(Region.witch_swamp)) | (self.artisan.can_mayonnaise(AnimalProduct.void_egg)),
             ArtisanGood.wine: self.artisan.has_wine(),
@@ -206,9 +212,14 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Beverage.coffee: self.artisan.can_keg(Seed.coffee) | self.has(Machine.coffee_maker) | (self.money.can_spend_at(Region.saloon, 300)) | self.has("Hot Java Ring"),
             Beverage.pina_colada: self.money.can_spend_at(Region.island_resort, 600),
             Beverage.triple_shot_espresso: self.has("Hot Java Ring"),
+            Consumable.far_away_stone: self.region.can_reach(Region.mines_floor_100) & self.has(Artifact.ancient_doll),
+            Consumable.fireworks_red: self.region.can_reach(Region.casino),
+            Consumable.fireworks_purple: self.region.can_reach(Region.casino),
+            Consumable.fireworks_green: self.region.can_reach(Region.casino),
             Consumable.mystery_box: self.time.has_lived_months(3) | self.has(Currency.prize_ticket),
             Consumable.gold_mystery_box: self.skill.has_mastery(Skill.foraging),
             Currency.calico_egg: self.region.can_reach(Region.desert_festival),
+            Currency.golden_tag: self.region.can_reach(Region.trout_derby),
             Currency.prize_ticket: self.time.has_lived_months(2),  # Time to do a few help wanted quests
             Decoration.rotten_plant: self.has(Lighting.jack_o_lantern) & self.season.has(Season.winter),
             Fertilizer.basic: self.money.can_spend_at(Region.pierre_store, 100),
@@ -257,7 +268,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Ingredient.qi_seasoning: self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 10),
             Ingredient.rice: self.money.can_spend_at(Region.pierre_store, 200) | (self.building.has_building(Building.mill) & self.has(Vegetable.unmilled_rice)),
             Ingredient.sugar: self.money.can_spend_at(Region.pierre_store, 100) | (self.building.has_building(Building.mill) & self.has(Vegetable.beet)),
-            Ingredient.vinegar: self.money.can_spend_at(Region.pierre_store, 200),
+            Ingredient.vinegar: self.money.can_spend_at(Region.pierre_store, 200) | (self.artisan.can_keg(Ingredient.rice)),
             Ingredient.wheat_flour: self.money.can_spend_at(Region.pierre_store, 100) | (self.building.has_building(Building.mill) & self.has(Vegetable.wheat)),
             Loot.bat_wing: self.mine.can_mine_in_the_mines_floor_41_80() | self.mine.can_mine_in_the_skull_cavern(),
             Loot.bug_meat: self.mine.can_mine_in_the_mines_floor_1_40(),

@@ -398,6 +398,7 @@ id,name,classification,groups,mod_name
 417,Tropical Curry Recipe,progression,"CHEFSANITY,GINGER_ISLAND,CHEFSANITY_PURCHASE",
 418,Trout Soup Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
 419,Vegetable Medley Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+420,Moss Soup Recipe,progression,"CHEFSANITY,CHEFSANITY_SKILL",
 425,Gate Recipe,progression,CRAFTSANITY,
 426,Wood Fence Recipe,progression,CRAFTSANITY,
 427,Deluxe Retaining Soil Recipe,progression,"CRAFTSANITY,GINGER_ISLAND",

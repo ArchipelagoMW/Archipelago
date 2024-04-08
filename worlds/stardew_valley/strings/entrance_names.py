@@ -200,6 +200,7 @@ class Entrance:
     attend_desert_festival = "Attend Desert Festival"
     attend_flower_dance = "Attend Flower Dance"
     attend_luau = "Attend Luau"
+    attend_trout_derby = "Attend Trout Derby"
     attend_moonlight_jellies = "Attend Dance of the Moonlight Jellies"
     attend_fair = "Attend Stardew Valley Fair"
     attend_spirit_eve = "Attend Spirit's Eve"

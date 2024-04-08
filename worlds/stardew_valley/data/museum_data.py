@@ -95,7 +95,7 @@ class Artifact:
                                       geodes=Geode.artifact_trove)
     arrowhead = create_artifact("Arrowhead", 8.5, (Region.mountain, Region.forest, Region.bus_stop),
                                 geodes=Geode.artifact_trove)
-    ancient_doll = create_artifact("Ancient Doll", 13.1, (Region.mountain, Region.forest, Region.bus_stop),
+    ancient_doll = create_artifact(Artifact.ancient_doll, 13.1, (Region.mountain, Region.forest, Region.bus_stop),
                                    geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
     elvish_jewelry = create_artifact("Elvish Jewelry", 5.3, Region.forest,
                                      geodes=(Geode.artifact_trove, WaterChest.fishing_chest))

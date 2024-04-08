@@ -7,6 +7,7 @@ class Currency:
     cinder_shard = "Cinder Shard"
     prize_ticket = "Prize Ticket"
     calico_egg = "Calico Egg"
+    golden_tag = "Golden Tag"
 
     @staticmethod
     def is_currency(item: str) -> bool:
