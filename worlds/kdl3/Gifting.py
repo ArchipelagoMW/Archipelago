@@ -1,9 +1,11 @@
 # Small subfile to handle gifting info such as desired traits and giftbox management
 import typing
-from CommonClient import CommonContext
+
+if typing.TYPE_CHECKING:
+    from CommonClient import CommonContext
 
 
-async def update_object(ctx: CommonContext, key: str, value: typing.Dict[str, typing.Any]) -> None:
+async def update_object(ctx: "CommonContext", key: str, value: typing.Dict[str, typing.Any]) -> None:
     await ctx.send_msgs([
         {
             "cmd": "Set",
@@ -17,7 +19,7 @@ async def update_object(ctx: CommonContext, key: str, value: typing.Dict[str, ty
     ])
 
 
-async def pop_object(ctx: CommonContext, key: str, value: str) -> None:
+async def pop_object(ctx: "CommonContext", key: str, value: str) -> None:
     await ctx.send_msgs([
         {
             "cmd": "Set",
@@ -31,7 +33,7 @@ async def pop_object(ctx: CommonContext, key: str, value: str) -> None:
     ])
 
 
-async def initialize_giftboxes(ctx: CommonContext, giftbox_key: str, motherbox_key: str, is_open: bool) -> None:
+async def initialize_giftboxes(ctx: "CommonContext", giftbox_key: str, motherbox_key: str, is_open: bool) -> None:
     ctx.set_notify(motherbox_key, giftbox_key)
     await update_object(ctx, f"Giftboxes;{ctx.team}", {f"{ctx.slot}":
         {
