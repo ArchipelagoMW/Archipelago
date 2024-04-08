@@ -446,12 +446,12 @@ def patch_rom(world: "KDL3World", patch: KDL3ProcedurePatch):
 
     if world.options.virtual_console in [1, 3]:
         # Flash Reduction
-        patch.write_token(APTokenTypes.WRITE, 0x9AE68, 0x10.to_bytes(1, "little"))
+        patch.write_token(APTokenTypes.WRITE, 0x9AE68, b"\x10")
         patch.write_token(APTokenTypes.WRITE, 0x9AE8E, bytes([0x08, 0x00, 0x22, 0x5D, 0xF7, 0x00, 0xA2, 0x08, ]))
-        patch.write_token(APTokenTypes.WRITE, 0x9AEA1, 0x08.to_bytes(1, "little"))
-        patch.write_token(APTokenTypes.WRITE, 0x9AEC9, 0x01.to_bytes(1, "little"))
+        patch.write_token(APTokenTypes.WRITE, 0x9AEA1, b"\x08")
+        patch.write_token(APTokenTypes.WRITE, 0x9AEC9, b"\x01")
         patch.write_token(APTokenTypes.WRITE, 0x9AED2, bytes([0xA9, 0x1F]))
-        patch.write_token(APTokenTypes.WRITE, 0x9AEE1, 0x08.to_bytes(1, "little"))
+        patch.write_token(APTokenTypes.WRITE, 0x9AEE1, b"\x08")
 
     if world.options.virtual_console in [2, 3]:
         # Hyper Zone BB colors
@@ -475,7 +475,7 @@ def patch_rom(world: "KDL3World", patch: KDL3ProcedurePatch):
     patch.write_token(APTokenTypes.WRITE, 0x3D018, world.options.consumables.value.to_bytes(2, "little"))
     patch.write_token(APTokenTypes.WRITE, 0x3D01A, world.options.starsanity.value.to_bytes(2, "little"))
     patch.write_token(APTokenTypes.WRITE, 0x3D01C, world.options.gifting.value.to_bytes(2, "little")
-                      if world.multiworld.players > 1 else bytes([0]))
+                      if world.multiworld.players > 1 else bytes([0, 0]))
     patch.write_token(APTokenTypes.WRITE, 0x3D01E, world.options.strict_bosses.value.to_bytes(2, "little"))
     # don't write gifting for solo game, since there's no one to send anything to
 
