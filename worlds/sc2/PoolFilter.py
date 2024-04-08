@@ -560,7 +560,7 @@ def filter_items(world: World, mission_req_table: Dict[SC2Campaign, Dict[str, Mi
 def get_used_races(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]], world: World) -> Set[SC2Race]:
     grant_story_tech = get_option_value(world, "grant_story_tech")
     take_over_ai_allies = get_option_value(world, "take_over_ai_allies")
-    kerrigan_presence = get_option_value(world, "kerrigan_presence") \
+    kerrigan_presence = get_option_value(world, "kerrigan_presence") in kerrigan_unit_available \
         and SC2Campaign.HOTS in get_enabled_campaigns(world)
     missions = missions_in_mission_table(mission_req_table)
 
@@ -572,7 +572,7 @@ def get_used_races(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]],
         if SC2Mission.ENEMY_WITHIN in missions:
             # Zerg units need to be unlocked
             races.add(SC2Race.ZERG)
-        if kerrigan_presence in kerrigan_unit_available \
+        if kerrigan_presence \
                 and not missions.isdisjoint({SC2Mission.BACK_IN_THE_SADDLE, SC2Mission.SUPREME, SC2Mission.CONVICTION, SC2Mission.THE_INFINITE_CYCLE}):
             # You need some Kerrigan abilities (they're granted if Kerriganless or story tech granted)
             races.add(SC2Race.ZERG)
