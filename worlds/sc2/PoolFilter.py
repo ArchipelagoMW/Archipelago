@@ -394,10 +394,11 @@ class ValidInventory:
                 if attempt_removal(item):
                     unused_items.append(item.name)
 
+        pool_items: List[str] = [item.name for item in (inventory + locked_items + self.existing_items)]
         unused_items = [
             unused_item for unused_item in unused_items
             if item_list[unused_item].parent_item is None
-               or item_list[unused_item].parent_item in (inventory + locked_items + self.existing_items)
+               or item_list[unused_item].parent_item in pool_items
         ]
 
         # Removing extra dependencies
