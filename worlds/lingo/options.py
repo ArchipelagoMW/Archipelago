@@ -1,6 +1,9 @@
 from dataclasses import dataclass
 
-from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions
+from schema import And, Schema
+
+from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool, OptionDict
+from worlds.lingo.items import TRAP_ITEMS
 
 
 class ShuffleDoors(Choice):
@@ -19,6 +22,13 @@ class ProgressiveOrangeTower(DefaultOnToggle):
     If on, there are six progressive items, which open up the tower from the bottom floor upward.
     """
     display_name = "Progressive Orange Tower"
+
+
+class ProgressiveColorful(DefaultOnToggle):
+    """When "Shuffle Doors" is on "complex", this setting governs the manner in which The Colorful opens up.
+    If off, there is an item for each room of The Colorful, meaning that random rooms in the middle of the sequence can open up without giving you access to them.
+    If on, there are ten progressive items, which open up the sequence from White forward."""
+    display_name = "Progressive Colorful"
 
 
 class LocationChecks(Choice):
@@ -100,6 +110,14 @@ class TrapPercentage(Range):
     default = 20
 
 
+class TrapWeights(OptionDict):
+    """Specify the distribution of traps that should be placed into the pool.
+    If you don't want a specific type of trap, set the weight to zero."""
+    display_name = "Trap Weights"
+    schema = Schema({trap_name: And(int, lambda n: n >= 0) for trap_name in TRAP_ITEMS})
+    default = {trap_name: 1 for trap_name in TRAP_ITEMS}
+
+
 class PuzzleSkipPercentage(Range):
     """Replaces junk items with puzzle skips, at the specified rate."""
     display_name = "Puzzle Skip Percentage"
@@ -117,6 +135,7 @@ class DeathLink(Toggle):
 class LingoOptions(PerGameCommonOptions):
     shuffle_doors: ShuffleDoors
     progressive_orange_tower: ProgressiveOrangeTower
+    progressive_colorful: ProgressiveColorful
     location_checks: LocationChecks
     shuffle_colors: ShuffleColors
     shuffle_panels: ShufflePanels
@@ -126,5 +145,7 @@ class LingoOptions(PerGameCommonOptions):
     level_2_requirement: Level2Requirement
     early_color_hallways: EarlyColorHallways
     trap_percentage: TrapPercentage
+    trap_weights: TrapWeights
     puzzle_skip_percentage: PuzzleSkipPercentage
     death_link: DeathLink
+    start_inventory_from_pool: StartInventoryPool

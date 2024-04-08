@@ -42,7 +42,7 @@ def dungeon_reentry_rules(world, player, clip: Entrance, dungeon_region: str, du
     fix_fake_worlds = world.fix_fake_world[player]
 
     dungeon_entrance = [r for r in world.get_region(dungeon_region, player).entrances if r.name != clip.name][0]
-    if not fix_dungeon_exits: # vanilla, simple, restricted, dungeonssimple; should never have fake worlds fix
+    if not fix_dungeon_exits: # vanilla, simple, restricted, dungeons_simple; should never have fake worlds fix
         # Dungeons are only shuffled among themselves. We need to check SW, MM, and AT because they can't be reentered trivially. 
         if dungeon_entrance.name == 'Skull Woods Final Section': 
             set_rule(clip, lambda state: False) # entrance doesn't exist until you fire rod it from the other side
@@ -52,12 +52,12 @@ def dungeon_reentry_rules(world, player, clip: Entrance, dungeon_region: str, du
             add_rule(clip, lambda state: state.has('Cape', player) or has_beam_sword(state, player) or state.has('Beat Agahnim 1', player)) # kill/bypass barrier
         # Then we set a restriction on exiting the dungeon, so you can't leave unless you got in normally. 
         add_rule(world.get_entrance(dungeon_exit, player), lambda state: dungeon_entrance.can_reach(state))
-    elif not fix_fake_worlds: # full, dungeonsfull; fixed dungeon exits, but no fake worlds fix
+    elif not fix_fake_worlds: # full, dungeons_full; fixed dungeon exits, but no fake worlds fix
         # Entry requires the entrance's requirements plus a fake pearl, but you don't gain logical access to the surrounding region. 
         add_rule(clip, lambda state: dungeon_entrance.access_rule(fake_pearl_state(state, player)))
         # exiting restriction
         add_rule(world.get_entrance(dungeon_exit, player), lambda state: dungeon_entrance.can_reach(state))
-    # Otherwise, the shuffle type is crossed, dungeonscrossed, or insanity; all of these do not need additional rules on where we can go, 
+    # Otherwise, the shuffle type is crossed, dungeons_crossed, or insanity; all of these do not need additional rules on where we can go, 
     # since the clip links directly to the exterior region. 
 
 
@@ -93,7 +93,7 @@ def underworld_glitches_rules(world, player):
     # We need to be able to s+q to old man, then go to either Mire or Hera at either Hera or GT. 
     # First we require a certain type of entrance shuffle, then build the rule from its pieces. 
     if not world.swamp_patch_required[player]:
-        if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed']: 
+        if world.entrance_shuffle[player] in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
             rule_map = {
                 'Misery Mire (Entrance)': (lambda state: True),
                 'Tower of Hera (Bottom)': (lambda state: state.can_reach('Tower of Hera Big Key Door', 'Entrance', player))

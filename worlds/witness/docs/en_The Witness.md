@@ -1,8 +1,8 @@
 # The Witness
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What does randomization do to this game?
@@ -16,7 +16,7 @@ Panels with puzzle symbols on them are now locked initially.
 ## What is a "check" in The Witness?
 
 Solving the last panel in a row of panels or an important standalone panel will count as a check, and send out an item.
-It is also possible to add Environmental Puzzles into the location pool via the "Shuffle Environmental Puzzles" setting.
+It is also possible to add Environmental Puzzles into the location pool via the "Shuffle Environmental Puzzles" option.
 
 ## What "items" can you unlock in The Witness?
 
@@ -25,7 +25,7 @@ This includes symbols such as "Dots", "Black/White Squares", "Colored Squares", 
 
 Alternatively (or additionally), you can play "Door shuffle", where some doors won't open until you receive their "key".
 
-Receiving lasers as items is also a possible setting.
+You can also set lasers to be items you can receive.
 
 ## What else can I find in the world?
 

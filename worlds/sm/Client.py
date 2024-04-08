@@ -37,6 +37,7 @@ SM_REMOTE_ITEM_FLAG_ADDR = ROM_START + 0x277F06    # 1 byte
 
 class SMSNIClient(SNIClient):
     game = "Super Metroid"
+    patch_suffix = [".apsm", ".apm3"]
 
     async def deathlink_kill_player(self, ctx):
         from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
