@@ -1,10 +1,10 @@
 import struct
-import typing
-from BaseClasses import Region, ItemClassification
+from typing import Optional, Dict, TYPE_CHECKING, List, Union
+from BaseClasses import Region, ItemClassification, MultiWorld
 from worlds.Files import APTokenTypes
 from .ClientAddrs import consumable_addrs, star_addrs
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from .Rom import KDL3ProcedurePatch
 
 animal_map = {
@@ -23,14 +23,18 @@ class KDL3Room(Region):
     stage: int = 0
     room: int = 0
     music: int = 0
-    default_exits: typing.List[typing.Dict[str, typing.Union[int, typing.List[str]]]]
-    animal_pointers: typing.List[int]
-    enemies: typing.List[str]
-    entity_load: typing.List[typing.List[int]]
-    consumables: typing.List[typing.Dict[str, typing.Union[int, str]]]
+    default_exits: List[Dict[str, Union[int, List[str]]]]
+    animal_pointers: List[int]
+    enemies: List[str]
+    entity_load: List[List[int]]
+    consumables: List[Dict[str, Union[int, str]]]
 
-    def __init__(self, name, player, multiworld, hint, level, stage, room, pointer, music, default_exits,
-                 animal_pointers, enemies, entity_load, consumables, consumable_pointer):
+    def __init__(self, name: str, player: int, multiworld: MultiWorld, hint: Optional[str], level: int,
+                 stage: int, room: int, pointer: int, music: int,
+                 default_exits: List[Dict[str, Union[int, List[str]]]],
+                 animal_pointers: List[int], enemies: List[str],
+                 entity_load: List[List[int]],
+                 consumables: List[Dict[str, Union[int, str]]], consumable_pointer: int) -> None:
         super().__init__(name, player, multiworld, hint)
         self.level = level
         self.stage = stage
@@ -44,16 +48,16 @@ class KDL3Room(Region):
         self.consumables = consumables
         self.consumable_pointer = consumable_pointer
 
-    def patch(self, patch: "KDL3ProcedurePatch", consumables: bool, local_items: bool):
+    def patch(self, patch: "KDL3ProcedurePatch", consumables: bool, local_items: bool) -> None:
         patch.write_token(APTokenTypes.WRITE, self.pointer + 2, self.music.to_bytes(1, "little"))
-        animals = [x.item.name for x in self.locations if "Animal" in x.name]
+        animals = [x.item.name for x in self.locations if "Animal" in x.name and x.item]
         if len(animals) > 0:
             for current_animal, address in zip(animals, self.animal_pointers):
                 patch.write_token(APTokenTypes.WRITE, self.pointer + address + 7,
                                   animal_map[current_animal].to_bytes(1, "little"))
         if local_items:
             for location in self.locations:
-                if not location.address or location.item.player != self.player:
+                if not location.address or not location.item or location.item.player != self.player:
                     continue
                 item = location.item.code
                 item_idx = item & 0x00000F

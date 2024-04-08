@@ -1,5 +1,9 @@
 import struct
 from .Options import KirbyFlavorPreset, GooeyFlavorPreset
+from typing import TYPE_CHECKING, Optional, Dict, List
+
+if TYPE_CHECKING:
+    from . import KDL3World
 
 kirby_flavor_presets = {
     1: {
@@ -398,21 +402,21 @@ gooey_target_palettes = {
 }
 
 
-def get_kirby_palette(world):
+def get_kirby_palette(world: "KDL3World") -> Optional[Dict[str, str]]:
     palette = world.options.kirby_flavor_preset.value
     if palette == KirbyFlavorPreset.option_custom:
         return world.options.kirby_flavor.value
     return kirby_flavor_presets.get(palette, None)
 
 
-def get_gooey_palette(world):
+def get_gooey_palette(world: "KDL3World") -> Optional[Dict[str, str]]:
     palette = world.options.gooey_flavor_preset.value
     if palette == GooeyFlavorPreset.option_custom:
         return world.options.gooey_flavor.value
     return gooey_flavor_presets.get(palette, None)
 
 
-def rgb888_to_bgr555(red, green, blue) -> bytes:
+def rgb888_to_bgr555(red: int, green: int, blue: int) -> bytes:
     red = red >> 3
     green = green >> 3
     blue = blue >> 3
@@ -420,7 +424,7 @@ def rgb888_to_bgr555(red, green, blue) -> bytes:
     return struct.pack("H", outcol)
 
 
-def get_palette_bytes(palette, target, offset, factor) -> bytes:
+def get_palette_bytes(palette: Dict[str, str], target: List[str], offset: int, factor: float) -> bytes:
     output_data = bytearray()
     for color in target:
         hexcol = palette[color]
