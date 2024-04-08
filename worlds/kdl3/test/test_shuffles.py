@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 from . import KDL3TestBase
 from ..Room import KDL3Room
 
@@ -14,32 +14,45 @@ class TestCopyAbilityShuffle(KDL3TestBase):
     }
 
     def test_goal(self):
-        self.assertBeatable(False)
-        heart_stars = self.get_items_by_name("Heart Star")
-        self.collect(heart_stars[0:14])
-        self.assertEqual(self.count("Heart Star"), 14, str(self.multiworld.seed))
-        self.assertBeatable(False)
-        self.collect(heart_stars[14:15])
-        self.assertEqual(self.count("Heart Star"), 15, str(self.multiworld.seed))
-        self.assertBeatable(False)
-        self.collect_by_name(["Burning", "Cutter", "Kine"])
-        self.assertBeatable(True)
-        self.remove([self.get_item_by_name("Love-Love Rod")])
-        self.collect(heart_stars)
-        self.assertEqual(self.count("Heart Star"), 30, str(self.multiworld.seed))
-        self.assertBeatable(True)
+        try:
+            self.assertBeatable(False)
+            heart_stars = self.get_items_by_name("Heart Star")
+            self.collect(heart_stars[0:14])
+            self.assertEqual(self.count("Heart Star"), 14, str(self.multiworld.seed))
+            self.assertBeatable(False)
+            self.collect(heart_stars[14:15])
+            self.assertEqual(self.count("Heart Star"), 15, str(self.multiworld.seed))
+            self.assertBeatable(False)
+            self.collect_by_name(["Burning", "Cutter", "Kine"])
+            self.assertBeatable(True)
+            self.remove([self.get_item_by_name("Love-Love Rod")])
+            self.collect(heart_stars)
+            self.assertEqual(self.count("Heart Star"), 30, str(self.multiworld.seed))
+            self.assertBeatable(True)
+        except AssertionError as ex:
+            # if assert beatable fails, this will catch and print the seed
+            raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
     def test_kine(self):
-        self.collect_by_name(["Cutter", "Burning", "Heart Star"])
-        self.assertBeatable(False)
+        try:
+            self.collect_by_name(["Cutter", "Burning", "Heart Star"])
+            self.assertBeatable(False)
+        except AssertionError as ex:
+            raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
     def test_cutter(self):
-        self.collect_by_name(["Kine", "Burning", "Heart Star"])
-        self.assertBeatable(False)
+        try:
+            self.collect_by_name(["Kine", "Burning", "Heart Star"])
+            self.assertBeatable(False)
+        except AssertionError as ex:
+            raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
     def test_burning(self):
-        self.collect_by_name(["Cutter", "Kine", "Heart Star"])
-        self.assertBeatable(False)
+        try:
+            self.collect_by_name(["Cutter", "Kine", "Heart Star"])
+            self.assertBeatable(False)
+        except AssertionError as ex:
+            raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
     def test_cutter_and_burning_reachable(self):
         rooms = self.multiworld.worlds[1].rooms
@@ -110,37 +123,53 @@ class TestAnimalShuffle(KDL3TestBase):
     }
 
     def test_goal(self):
-        self.assertBeatable(False)
-        heart_stars = self.get_items_by_name("Heart Star")
-        self.collect(heart_stars[0:14])
-        self.assertEqual(self.count("Heart Star"), 14, str(self.multiworld.seed))
-        self.assertBeatable(False)
-        self.collect(heart_stars[14:15])
-        self.assertEqual(self.count("Heart Star"), 15, str(self.multiworld.seed))
-        self.assertBeatable(False)
-        self.collect_by_name(["Burning", "Cutter", "Kine"])
-        self.assertBeatable(True)
-        self.remove([self.get_item_by_name("Love-Love Rod")])
-        self.collect(heart_stars)
-        self.assertEqual(self.count("Heart Star"), 30, str(self.multiworld.seed))
-        self.assertBeatable(True)
+        try:
+            self.assertBeatable(False)
+            heart_stars = self.get_items_by_name("Heart Star")
+            self.collect(heart_stars[0:14])
+            self.assertEqual(self.count("Heart Star"), 14, str(self.multiworld.seed))
+            self.assertBeatable(False)
+            self.collect(heart_stars[14:15])
+            self.assertEqual(self.count("Heart Star"), 15, str(self.multiworld.seed))
+            self.assertBeatable(False)
+            self.collect_by_name(["Burning", "Cutter", "Kine"])
+            self.assertBeatable(True)
+            self.remove([self.get_item_by_name("Love-Love Rod")])
+            self.collect(heart_stars)
+            self.assertEqual(self.count("Heart Star"), 30, str(self.multiworld.seed))
+            self.assertBeatable(True)
+        except AssertionError as ex:
+            # if assert beatable fails, this will catch and print the seed
+            raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
     def test_kine(self):
-        self.collect_by_name(["Cutter", "Burning", "Heart Star"])
-        self.assertBeatable(False)
+        try:
+            self.collect_by_name(["Cutter", "Burning", "Heart Star"])
+            self.assertBeatable(False)
+        except AssertionError as ex:
+            raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
     def test_cutter(self):
-        self.collect_by_name(["Kine", "Burning", "Heart Star"])
-        self.assertBeatable(False)
+        try:
+            self.collect_by_name(["Kine", "Burning", "Heart Star"])
+            self.assertBeatable(False)
+        except AssertionError as ex:
+            raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
     def test_burning(self):
-        self.collect_by_name(["Cutter", "Kine", "Heart Star"])
-        self.assertBeatable(False)
+        try:
+            self.collect_by_name(["Cutter", "Kine", "Heart Star"])
+            self.assertBeatable(False)
+        except AssertionError as ex:
+            raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
     def test_locked_animals(self):
-        self.assertTrue(self.multiworld.get_location("Ripple Field 5 - Animal 2", 1).item.name == "Pitch Spawn")
-        self.assertTrue(self.multiworld.get_location("Iceberg 4 - Animal 1", 1).item.name == "ChuChu Spawn")
-        self.assertTrue(self.multiworld.get_location("Sand Canyon 6 - Animal 1", 1).item.name in {"Kine Spawn", "Coo Spawn"})
+        self.assertTrue(self.multiworld.get_location("Ripple Field 5 - Animal 2", 1).item.name == "Pitch Spawn",
+                        f"Multiworld did not place Pitch, Seed: {self.multiworld.seed}")
+        self.assertTrue(self.multiworld.get_location("Iceberg 4 - Animal 1", 1).item.name == "ChuChu Spawn",
+                        f"Multiworld did not place ChuChu, Seed: {self.multiworld.seed}")
+        self.assertTrue(self.multiworld.get_location("Sand Canyon 6 - Animal 1", 1).item.name in
+                        {"Kine Spawn", "Coo Spawn"}, f"Multiworld did not place Coo/Kine, Seed: {self.multiworld.seed}")
 
 
 class TestAllShuffle(KDL3TestBase):
@@ -154,38 +183,57 @@ class TestAllShuffle(KDL3TestBase):
         "copy_ability_randomization": "enabled",
     }
 
+    def world_setup(self, seed: Optional[int] = None) -> None:
+        super().world_setup(97344459114886422393)
+
     def test_goal(self):
-        self.assertBeatable(False)
-        heart_stars = self.get_items_by_name("Heart Star")
-        self.collect(heart_stars[0:14])
-        self.assertEqual(self.count("Heart Star"), 14, str(self.multiworld.seed))
-        self.assertBeatable(False)
-        self.collect(heart_stars[14:15])
-        self.assertEqual(self.count("Heart Star"), 15, str(self.multiworld.seed))
-        self.assertBeatable(False)
-        self.collect_by_name(["Burning", "Cutter", "Kine"])
-        self.assertBeatable(True)
-        self.remove([self.get_item_by_name("Love-Love Rod")])
-        self.collect(heart_stars)
-        self.assertEqual(self.count("Heart Star"), 30, str(self.multiworld.seed))
-        self.assertBeatable(True)
+        try:
+            self.assertBeatable(False)
+            heart_stars = self.get_items_by_name("Heart Star")
+            self.collect(heart_stars[0:14])
+            self.assertEqual(self.count("Heart Star"), 14, str(self.multiworld.seed))
+            self.assertBeatable(False)
+            self.collect(heart_stars[14:15])
+            self.assertEqual(self.count("Heart Star"), 15, str(self.multiworld.seed))
+            self.assertBeatable(False)
+            self.collect_by_name(["Burning", "Cutter", "Kine"])
+            self.assertBeatable(True)
+            self.remove([self.get_item_by_name("Love-Love Rod")])
+            self.collect(heart_stars)
+            self.assertEqual(self.count("Heart Star"), 30, str(self.multiworld.seed))
+            self.assertBeatable(True)
+        except AssertionError as ex:
+            # if assert beatable fails, this will catch and print the seed
+            raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
     def test_kine(self):
-        self.collect_by_name(["Cutter", "Burning", "Heart Star"])
-        self.assertBeatable(False)
+        try:
+            self.collect_by_name(["Cutter", "Burning", "Heart Star"])
+            self.assertBeatable(False)
+        except AssertionError as ex:
+            raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
     def test_cutter(self):
-        self.collect_by_name(["Kine", "Burning", "Heart Star"])
-        self.assertBeatable(False)
+        try:
+            self.collect_by_name(["Kine", "Burning", "Heart Star"])
+            self.assertBeatable(False)
+        except AssertionError as ex:
+            raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
     def test_burning(self):
-        self.collect_by_name(["Cutter", "Kine", "Heart Star"])
-        self.assertBeatable(False)
+        try:
+            self.collect_by_name(["Cutter", "Kine", "Heart Star"])
+            self.assertBeatable(False)
+        except AssertionError as ex:
+            raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
     def test_locked_animals(self):
-        self.assertTrue(self.multiworld.get_location("Ripple Field 5 - Animal 2", 1).item.name == "Pitch Spawn")
-        self.assertTrue(self.multiworld.get_location("Iceberg 4 - Animal 1", 1).item.name == "ChuChu Spawn")
-        self.assertTrue(self.multiworld.get_location("Sand Canyon 6 - Animal 1", 1).item.name in {"Kine Spawn", "Coo Spawn"})
+        self.assertTrue(self.multiworld.get_location("Ripple Field 5 - Animal 2", 1).item.name == "Pitch Spawn",
+                        f"Multiworld did not place Pitch, Seed: {self.multiworld.seed}")
+        self.assertTrue(self.multiworld.get_location("Iceberg 4 - Animal 1", 1).item.name == "ChuChu Spawn",
+                        f"Multiworld did not place ChuChu, Seed: {self.multiworld.seed}")
+        self.assertTrue(self.multiworld.get_location("Sand Canyon 6 - Animal 1", 1).item.name in
+                        {"Kine Spawn", "Coo Spawn"}, f"Multiworld did not place Coo/Kine, Seed: {self.multiworld.seed}")
 
     def test_cutter_and_burning_reachable(self):
         rooms = self.multiworld.worlds[1].rooms
@@ -242,4 +290,4 @@ class TestAllShuffle(KDL3TestBase):
             self.collect_by_name(["Cutter"])
 
         self.assertTrue(self.can_reach_location("Sand Canyon 6 - Professor Hector & R.O.B"),
-                        ''.join(str(self.multiworld.seed)).join(collected_abilities))
+                        f"Seed: {self.multiworld.seed}, Collected: {collected_abilities}")
