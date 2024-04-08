@@ -9,6 +9,7 @@ from .Items import (
     all_items_table,
     repeatable_items_table,
     create_itempool,
+    swords_table,
 )  # data used below to add items to the World
 from .Locations import SoulBlazerLocation, all_locations_table  # same as above
 from .Names import ItemName, ChestName
@@ -119,7 +120,7 @@ class SoulBlazerWorld(World):
         itempool = create_itempool(self)
 
         if self.options.starting_sword == "randomized":
-            starting_sword_name = self.random.choice(Items.swords_table.keys())
+            starting_sword_name = self.random.choice(swords_table.keys())
         else:
             starting_sword_name = ItemName.LIFESWORD
 
