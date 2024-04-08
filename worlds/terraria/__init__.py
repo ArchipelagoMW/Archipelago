@@ -245,6 +245,10 @@ class TerrariaWorld(World):
                 return not condition.sign
             elif condition.condition == "calamity":
                 return condition.sign == self.calamity
+            elif condition == "grindy":
+                return condition.sign == (
+                    self.multiworld.achievements[self.player].value >= 2
+                )
             elif condition.condition == "pickaxe":
                 if type(condition.argument) is not int:
                     raise Exception("@pickaxe requires an integer argument")

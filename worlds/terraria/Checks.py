@@ -210,6 +210,7 @@ def validate_conditions(
             if condition.condition not in {
                 "npc",
                 "calamity",
+                "grindy",
                 "pickaxe",
                 "hammer",
                 "mech_boss",
