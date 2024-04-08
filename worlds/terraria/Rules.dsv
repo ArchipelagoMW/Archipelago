@@ -191,8 +191,8 @@ Evil Pickaxe;                       Pickaxe(65);                                
 Obsidian Armor;                     Armor Minions(1);                           Obsidian & Evil Boss Part;
 Tavernkeep;                         Npc;                                        Evil Boss;
 Old One's Army Tier 1;              Location | Item;                            Tavernkeep;
-Meteorite;                          ;                                           #Evil Boss | Evil Boss | Meteorite Bar | Astral Infection;
-Meteorite Bar;                      ;                                           Meteorite | Meteor Staff;
+Meteorite;                          ;                                           #Evil Boss | Evil Boss | Meteorite Bar | (@calamity & Astral Infection);
+Meteorite Bar;                      ;                                           Meteorite | (@calamity & Astral Infection) | Meteor Staff;
 Meteor Hamaxe;                      Hammer(60);                                 Meteorite Bar;
 Hellforge;                          ;                                           @pickaxe(60);
 Hellstone;                          ;                                           @pickaxe(65) | Wall of Flesh | Hellstone Bar;
@@ -233,7 +233,7 @@ Pygmy Necklace;                     Minions(1);                                 
 The Hive Mind;                      Calamity | Location | Item;
 The Perforators;                    Calamity | Location | Item;
 Blood Sample;                       Calamity;                                   #The Perforators;
-Aerialite Ore;                      Calamity;                                   ((The Hive Mind | The Perforators) & @pickaxe(65)) | Cobalt Ore | Aerialite Bar;
+Aerialite Ore;                      Calamity;                                   The Hive Mind | The Perforators | Cobalt Ore | Aerialite Bar; // No pick needed; can be fished
 Aerialite Bar;                      Calamity;                                   Aerialite Ore | Feather Crown;
 Aerial Hamaxe;                      Calamity | Hammer(70);                      Aerialite Bar;
 Skyfringe Pickaxe;                  Calamity | Pickaxe(75);                     Aerialite Bar;
@@ -390,14 +390,14 @@ Old One's Army Tier 2;              Location | Item;                            
 
 // Brimstone Elemental
 Infernal Suevite;                   Calamity;                                   @pickaxe(150) | Brimstone Elemental;
-Unholy Core;                        Calamity;                                   Infernal Suevite & Hellstone;
+Unholy Core;                        Calamity;                                   (Infernal Suevite & Hellstone) | Brimstone Elemental;
 
 // The Destroyer
 Soul of Might;                      ;                                           #The Destroyer | Avenger Emblem | Light Disc;
 
 // Cryogen
 Cryonic Ore;                        Calamity;                                   (Cryogen & (@pickaxe(180) | @mech_boss(2))) | Cryonic Bar;
-Cryonic Bar;                        Calamity;                                   (Hardmode Forge & Cryonic Ore) | Fleshy Geode | Necromantic Geode | Life Alloy;
+Cryonic Bar;                        Calamity;                                   (Hardmode Forge & Cryonic Ore) | Fleshy Geode | Necromantic Geode | (Cryogen & @mech_boss(2)) | Life Alloy;
 Abyssal Warhammer;                  Calamity | Hammer(88);                      Hardmode Anvil & Cryonic Bar;
 Shardlight Pickaxe;                 Calamity | Pickaxe(180);                    Hardmode Anvil & Cryonic Bar;
 Daedalus Armor;                     Calamity | Armor Minions(2);                Hardmode Anvil & Cryonic Bar & Essence of Eleum;
@@ -471,7 +471,7 @@ Big Booty;                          Achievement;                                
 Rainbow Gun;                        ;                                           Dungeon & Wall of Flesh & Plantera & Hallowed Key;
 Rainbows and Unicorns;              Achievement;                                Blessed Apple & Rainbow Gun;
 Perennial Ore;                      Calamity;                                   Plantera | Perennial Bar;
-Perennial Bar;                      Calamity;                                   (Hardmode Forge & Perennial Ore) | Life Alloy;
+Perennial Bar;                      Calamity;                                   (Hardmode Forge & Perennial Ore) | Plantera | Life Alloy;
 Beastial Pickaxe;                   Calamity | Pickaxe(200);                    Hardmode Anvil & Perennial Bar;
 
 // Solar Eclipse
@@ -501,7 +501,7 @@ Golem;                              Location | Item | Goal;                     
 Picksaw;                            Pickaxe(210);                               #Golem;
 Lihzahrd Brick;                     ;                                           @pickaxe(210) | (Lihzahrd Furniture & Golem) | (@calamity & Lihzahrd Temple);
 Scoria Ore;                         Calamity;                                   Golem | @pickaxe(210) | Astral Ore | Luminite | Scoria Bar;
-Scoria Bar;                         Calamity;                                   (Hardmode Forge & Scoria Ore) | Life Alloy | Sigil of Calamitas | Fire Gauntlet;
+Scoria Bar;                         Calamity;                                   (Hardmode Forge & Scoria Ore) | Golem | Life Alloy | Sigil of Calamitas | Fire Gauntlet;
 Seismic Hampick;                    Calamity | Pickaxe(210) | Hammer(95);       Hardmode Anvil & Scoria Bar;
 Hydrothermic Armor;                 Calamity | Armor Minions(2);                Hardmode Anvil & Scoria Bar & Core of Havoc;
 Sigil of Calamitas;                 Calamity;                                   Ethereal Talisman; // May also be crafted
@@ -569,7 +569,7 @@ Eye of Magnus;                      Calamity;                                   
 Stardust Fragment;                  ;                                           @calamity & Statis' Curse;
 Statis' Curse;                      Calamity;                                   Nucleogenesis;
 Galactica Singularity;              Calamity;                                   (Ancient Manipulator & Fragment) | Elemental Gauntlet | Elemental Quiver | Nucleogenesis | Nanotech | Ethereal Talisman;
-Meld Blob;                          Calamity;                                   #Lunar Events | #Astrum Deus | Meld Construct;
+Meld Blob;                          Calamity;                                   #Lunar Events | #Astrum Deus | (Astral Infection & Astrum Deus) | Meld Construct;
 Meld Construct;                     Calamity;                                   (Ancient Manipulator & Meld Blob & Stardust) | Dark Matter Sheath;
 Dark Matter Sheath;                 Calamity;                                   Eclipse Mirror; // May also be crafted
 
@@ -595,9 +595,9 @@ Terrarian;                          ;                                           
 Sick Throw;                         Achievement;                                Terrarian;
 Meowmere;                           ;                                           #Moon Lord;
 Star Wrath;                         ;                                           #Moon Lord;
-Exodium Cluster;                    Calamity;                                   (Moon Lord & @pickaxe(225)) | Uelibloom Ore;
+Exodium Cluster;                    Calamity;                                   Moon Lord | Uelibloom Ore; // No pick needed; can be fished
 Normality Relocator;                Calamity;                                   Ancient Manipulator & Rod of Discord & Exodium Cluster & Fragment;
-Unholy Essence;                     Calamity;                                   Moon Lord | #Providence, the Profaned Goddess | (@getfixedboi & Plantera);
+Unholy Essence;                     Calamity;                                   Moon Lord | #Providence, the Profaned Goddess | (Hallow & Providence, the Profaned Goddess) | (@getfixedboi & Plantera);
 Polterplasm;                        Calamity;                                   (Moon Lord & Wall of Flesh) | (Dungeon & (Polterghast | Moon Lord)) | #Polterghast;
 Eldritch Soul Artifact;             Calamity;                                   Exodium Cluster & Navyplate & Polterplasm;
 
@@ -615,7 +615,7 @@ Divine Geode;                       Calamity;                                   
 Profaned Soul Artifact;             Calamity | Minions(1);                      Exodium Cluster & Havocplate & Divine Geode;
 Rune of Kos;                        Calamity;                                   #Providence, the Profaned Goddess;
 Uelibloom Ore;                      Calamity;                                   Providence, the Profaned Goddess | Auric Ore | Uelibloom Bar;
-Uelibloom Bar;                      Calamity;                                   Hardmode Forge & Uelibloom Ore;
+Uelibloom Bar;                      Calamity;                                   (Hardmode Forge & Uelibloom Ore) | Providence, the Profaned Goddess;
 Grax;                               Calamity | Hammer(110);                     Ancient Manipulator & Inferna Cutter & Luminite Hamaxe & Uelibloom Bar;
 Blossom Pickaxe;                    Calamity | Pickaxe(250);                    Ancient Manipulator & Uelibloom Bar;
 Voltage Regulation System;          Calamity;                                   Ancient Manipulator & Mysterious Circuitry & Dubious Plating & Uelibloom Bar & Luminite Bar & Advanced Display;
@@ -670,7 +670,7 @@ Yharon, Dragon of Rebirth;          Calamity | Location | Item | Goal;          
 # yharon_dragon_of_rebirth
 Yharon Soul Fragment;               Calamity;                                   #Yharon, Dragon of Rebirth | The Wand | Auric Bar;
 The Wand;                           Calamity;                                   @getfixedboi & #The Devourer of Gods; // May also be crafted
-Auric Ore;                          Calamity;                                   (Yharon, Dragon of Rebirth & @pickaxe(250)) | Auric Bar;
+Auric Ore;                          Calamity;                                   (Yharon, Dragon of Rebirth & (@pickaxe(250) | Wall of Flesh)) | Auric Bar;
 Auric Bar;                          Calamity;                                   (Cosmic Anvil & Auric Ore & Yharon Soul Fragment) | Shadowspec Bar;
 Auric Tesla Armor;                  Calamity | Armor Minions(6);                Cosmic Anvil & Silva Armor & Bloodflare Armor & Tarragon Armor & Auric Bar;
 Zenith;                             Location | Item(Has Zenith) | Goal;         Hardmode Anvil & Terra Blade & Meowmere & Star Wrath & Influx Waver & The Horseman's Blade & Seedler & Starfury & Bee Keeper & Enchanted Sword & Copper Shortsword & (~@calamity | Auric Bar);
