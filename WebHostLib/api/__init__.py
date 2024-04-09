@@ -2,7 +2,7 @@
 from typing import List, Tuple
 from uuid import UUID
 
-from flask import Blueprint, abort, jsonify, url_for
+from flask import Blueprint, abort, url_for
 
 import worlds.Files
 from .. import cache
