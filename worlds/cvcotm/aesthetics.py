@@ -1,6 +1,5 @@
-from BaseClasses import ItemClassification, Location, Item
-from .data import iname
-from .options import CVCotMOptions, ItemDropRandomization
+from BaseClasses import ItemClassification, Location
+from .options import ItemDropRandomization
 from .locations import get_location_info
 from .items import get_item_info
 
@@ -338,8 +337,7 @@ def get_location_data(world: "CVCotMWorld", active_locations: Iterable[Location]
 
         # Figure out the item ID bytes to put in each Location here. Write the item itself if either it's the player's
         # very own, or it belongs to an Item Link that the player is a part of.
-        if loc.item.player == world.player or (loc.item.player in world.multiworld.groups and
-                                               world.player in world.multiworld.groups[loc.item.player]['players']):
+        if loc.item.player == world.player:
             code = get_item_info(loc.item.name, "code")
             location_bytes[get_location_info(loc.name, "offset")] = bytes([code >> 8, 0x01, code & 0x00FF, 0x00])
         else:

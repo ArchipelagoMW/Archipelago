@@ -77,7 +77,7 @@ class CastlevaniaCotMClient(BizHawkClient):
 
             game_state = int.from_bytes(read_state[0], "little")
             flag_bytes = read_state[1]
-            cards_array = read_state[2]
+            cards_array = list(read_state[2])
             max_ups_array = list(read_state[4])
             magic_items_array = list(read_state[5])
             num_received_items = int.from_bytes(bytearray(read_state[3]), "little")
@@ -85,7 +85,10 @@ class CastlevaniaCotMClient(BizHawkClient):
             # Make sure we are in the Gameplay or Credits states before detecting sent locations.
             # If we are in any other state, such as the Game Over state, reset the textbox buffers back to 0 so that we
             # don't receive the most recent item upon loading back in.
-            if game_state not in [0x6, 0x21]:
+            #
+            # If the intro cutscene floor broken flag is not set, then assume we are in the demo; at no point during
+            # regular gameplay will this flag not be set.
+            if game_state not in [0x6, 0x21] or not flag_bytes[6] & 0x02:
                 await bizhawk.write(ctx.bizhawk_ctx, [(0x25300, [0, 0, 0, 0, 0, 0, 0, 0], "Combined WRAM")])
                 return
 
@@ -103,27 +106,29 @@ class CastlevaniaCotMClient(BizHawkClient):
 
             if num_received_items < len(ctx.items_received):
                 next_item = ctx.items_received[num_received_items]
-                extra_data = []
-                item_type = next_item.item & 0xFF00
 
-                # Depending on what we received, set additional data.
+                # Figure out what inventory array and offset from said array to increment based on what we are
+                # receiving.
+                item_type = next_item.item & 0xFF00
+                item_index = next_item.item & 0xFF
                 if item_type == 0xE600:  # Card
-                    extra_data = [((0x25674 + (next_item.item & 0xFF)), [1], "Combined WRAM")]
+                    inv_offset = 0x25674
+                    inv_array = cards_array
                 elif item_type == 0xE800:  # Magic Item
-                    magic_item_index = next_item.item & 0xFF
-                    if magic_item_index > 5:  # The unused Map's index
-                        magic_item_index -= 1
-                    extra_data += [((0x2572F + magic_item_index), [magic_items_array[magic_item_index] + 1],
-                                    "Combined WRAM")]
+                    inv_offset = 0x2572F
+                    inv_array = magic_items_array
+                    if item_index > 5:  # The unused Map's index is skipped over.
+                        item_index -= 1
                 else:  # Max Up
-                    max_up_index = next_item.item & 0xFF
-                    extra_data += [((0x2572C + max_up_index), [max_ups_array[max_up_index] + 1], "Combined WRAM")]
+                    inv_offset = 0x2572C
+                    inv_array = max_ups_array
 
                 await bizhawk.guarded_write(ctx.bizhawk_ctx,
                                             [(0x25300, bytearray(int.to_bytes(get_item_info(ctx.item_names[
                                                                                                 next_item.item],
                                                                  "textbox id"), 2, "little")), "Combined WRAM"),
-                                             (0x25304, [1], "Combined WRAM")] + extra_data,
+                                             (0x25304, [1], "Combined WRAM"),
+                                             ((inv_offset + item_index), [inv_array[item_index] + 1], "Combined WRAM")],
                                             [(0x25300, [0], "Combined WRAM"),    # Textbox ID buffer
                                              (0x25304, [0], "Combined WRAM"),    # Received item index buffer
                                              (0x253D0, read_state[3], "Combined WRAM")])  # Received items index
