@@ -114,11 +114,7 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Mines Chest":    LocationData(110046, LocationFlag.main_path, "chest"),
         "Mines Pedestal": LocationData(110066, LocationFlag.main_path, "pedestal"),
     },
-    # Collapsed Mines is a very small area, combining it with the Mines. Leaving this here in case we change our minds.
-    # "Collapsed Mines": {
-    #     "Collapsed Mines Chest":    LocationData(110086, LocationFlag.main_path, "chest"),
-    #     "Collapsed Mines Pedestal": LocationData(110106, LocationFlag.main_path, "pedestal"),
-    # },
+    # Collapsed Mines is a very small area, combining it with the Mines. Leaving this here as a reminder
     "Ancient Laboratory": {
         "Ylialkemisti": LocationData(110656, LocationFlag.side_path, "boss"),
     },
