@@ -105,7 +105,6 @@ class EarlyDouble(DefaultOnToggle):
     display_name = "Early Double"
 
 
-
 @dataclass
 class CVCotMOptions(PerGameCommonOptions):
     ignore_cleansing: IgnoreCleansing

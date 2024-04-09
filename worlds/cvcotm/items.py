@@ -4,7 +4,7 @@ from BaseClasses import Item
 from .data import iname
 from .locations import base_id
 
-from typing import TYPE_CHECKING, Dict, Union, List
+from typing import TYPE_CHECKING, Dict, Union
 
 if TYPE_CHECKING:
     from . import CVCotMWorld
@@ -19,38 +19,40 @@ class CVCotMItem(Item):
 #          textbox" function with to give the Item in-game. Add this + base_id to get the actual AP code.
 # "default classification" = The AP Item Classification that gets assigned to instances of that Item in create_item
 #                            by default, unless I deliberately override it (as is the case for some Special1s).
+# "textbox id" = The ID of the textbox in-game that announces the item's receival.
 item_info = {
-    iname.heart_max:   {"code": 0xE400, "default classification": "filler"},
-    iname.hp_max:      {"code": 0xE401, "default classification": "filler"},
-    iname.mp_max:      {"code": 0xE402, "default classification": "filler"},
-    iname.salamander:  {"code": 0xE600, "default classification": "useful"},
-    iname.serpent:     {"code": 0xE601, "default classification": "progression"},
-    iname.mandragora:  {"code": 0xE602, "default classification": "useful"},
-    iname.golem:       {"code": 0xE603, "default classification": "useful"},
-    iname.cockatrice:  {"code": 0xE604, "default classification": "progression"},
-    iname.griffin:     {"code": 0xE605, "default classification": "useful"},
-    iname.manticore:   {"code": 0xE606, "default classification": "useful"},
-    iname.thunderbird: {"code": 0xE607, "default classification": "useful"},
-    iname.unicorn:     {"code": 0xE608, "default classification": "useful"},
-    iname.black_dog:   {"code": 0xE609, "default classification": "useful"},
-    iname.mercury:     {"code": 0xE60A, "default classification": "progression"},
-    iname.venus:       {"code": 0xE60B, "default classification": "useful"},
-    iname.jupiter:     {"code": 0xE60C, "default classification": "useful"},
-    iname.mars:        {"code": 0xE60D, "default classification": "progression"},
-    iname.diana:       {"code": 0xE60E, "default classification": "useful"},
-    iname.apollo:      {"code": 0xE60F, "default classification": "useful"},
-    iname.neptune:     {"code": 0xE610, "default classification": "useful"},
-    iname.saturn:      {"code": 0xE611, "default classification": "useful"},
-    iname.uranus:      {"code": 0xE612, "default classification": "useful"},
-    iname.pluto:       {"code": 0xE613, "default classification": "useful"},
-    iname.double:      {"code": 0xE801, "default classification": "progression"},
-    iname.tackle:      {"code": 0xE802, "default classification": "progression"},
-    iname.kick_boots:  {"code": 0xE803, "default classification": "progression"},
-    iname.heavy_ring:  {"code": 0xE804, "default classification": "progression"},
+    iname.heart_max:   {"code": 0xE400, "default classification": "filler", "textbox id": 0x8157},
+    iname.hp_max:      {"code": 0xE401, "default classification": "filler", "textbox id": 0x8155},
+    iname.mp_max:      {"code": 0xE402, "default classification": "filler", "textbox id": 0x8156},
+    iname.salamander:  {"code": 0xE600, "default classification": "useful", "textbox id": 0x821E},
+    iname.serpent:     {"code": 0xE601, "default classification": "progression", "textbox id": 0x821F},
+    iname.mandragora:  {"code": 0xE602, "default classification": "useful", "textbox id": 0x8220},
+    iname.golem:       {"code": 0xE603, "default classification": "useful", "textbox id": 0x8221},
+    iname.cockatrice:  {"code": 0xE604, "default classification": "progression", "textbox id": 0x8222},
+    iname.manticore:   {"code": 0xE605, "default classification": "useful", "textbox id": 0x8223},
+    iname.griffin:     {"code": 0xE606, "default classification": "useful", "textbox id": 0x8224},
+    iname.thunderbird: {"code": 0xE607, "default classification": "useful", "textbox id": 0x8225},
+    iname.unicorn:     {"code": 0xE608, "default classification": "useful", "textbox id": 0x8226},
+    iname.black_dog:   {"code": 0xE609, "default classification": "useful", "textbox id": 0x8227},
+    iname.mercury:     {"code": 0xE60A, "default classification": "progression", "textbox id": 0x8228},
+    iname.venus:       {"code": 0xE60B, "default classification": "useful", "textbox id": 0x8229},
+    iname.jupiter:     {"code": 0xE60C, "default classification": "useful", "textbox id": 0x822A},
+    iname.mars:        {"code": 0xE60D, "default classification": "progression", "textbox id": 0x822B},
+    iname.diana:       {"code": 0xE60E, "default classification": "useful", "textbox id": 0x822C},
+    iname.apollo:      {"code": 0xE60F, "default classification": "useful", "textbox id": 0x822D},
+    iname.neptune:     {"code": 0xE610, "default classification": "useful", "textbox id": 0x822E},
+    iname.saturn:      {"code": 0xE611, "default classification": "useful", "textbox id": 0x822F},
+    iname.uranus:      {"code": 0xE612, "default classification": "useful", "textbox id": 0x8230},
+    iname.pluto:       {"code": 0xE613, "default classification": "useful", "textbox id": 0x8231},
+    # Dash Boots
+    iname.double:      {"code": 0xE801, "default classification": "progression", "textbox id": 0x8159},
+    iname.tackle:      {"code": 0xE802, "default classification": "progression", "textbox id": 0x815A},
+    iname.kick_boots:  {"code": 0xE803, "default classification": "progression", "textbox id": 0x815B},
+    iname.heavy_ring:  {"code": 0xE804, "default classification": "progression", "textbox id": 0x815C},
     # Map
-    iname.cleansing:   {"code": 0xE806, "default classification": "progression"},
-    iname.roc_wing:    {"code": 0xE807, "default classification": "progression"},
-    iname.last_key:    {"code": 0xE808, "default classification": "progression_skip_balancing"},
+    iname.cleansing:   {"code": 0xE806, "default classification": "progression", "textbox id": 0x815D},
+    iname.roc_wing:    {"code": 0xE807, "default classification": "progression", "textbox id": 0x815E},
+    iname.last_key:    {"code": 0xE808, "default classification": "progression_skip_balancing", "textbox id": 0x815F},
     iname.ironmaidens: {"default classification": "progression"},
     iname.victory:     {"default classification": "progression"}
 }
@@ -176,6 +178,3 @@ def get_item_counts(world: "CVCotMWorld") -> Dict[str, Dict[str, int]]:
         total_items += 1
 
     return item_counts
-
-
-# //ENEMY DATA TABLE START: 0x000CB2B8

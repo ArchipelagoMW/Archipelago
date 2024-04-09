@@ -1,21 +1,17 @@
 
 import Utils
 import logging
-import dataclasses
 import json
 
-from Options import PerGameCommonOptions
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
-from typing import List, Dict, Optional, TYPE_CHECKING
+from typing import Dict, Optional, TYPE_CHECKING
 
 import hashlib
 import os
 import pkgutil
 
-# from .data import patches
-# from .text import cvcotm_string_to_bytearray, cvcotm_text_truncate, cvcotm_text_wrap
+from .data import patches
 from .locations import get_location_info, get_all_location_names
-from .options import CVCotMOptions
 from settings import get_settings
 
 if TYPE_CHECKING:
@@ -151,6 +147,10 @@ class CVCotMPatchExtensions(APPatchExtension):
         if options["disable_battle_arena_mp_drain"]:
             rom_data.apply_ips("NoMPDrain.ips")
 
+        # Write the textbox messaging system code
+        rom_data.write_bytes(0x6B1F8, [0x00, 0x48, 0x87, 0x46, 0x20, 0xFF, 0x7F, 0x08])
+        rom_data.write_bytes(0x7FFF20, patches.remote_textbox_shower)
+
         return rom_data.get_bytes()
 
     @staticmethod
@@ -185,7 +185,7 @@ class CVCotMPatchExtensions(APPatchExtension):
 
 
 class CVCotMProcedurePatch(APProcedurePatch, APTokenMixin):
-    hash = CVCOTM_CT_US_HASH
+    hash = [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH]
     patch_file_ending: str = ".apcvcotm"
     result_file_ending: str = ".gba"
 
@@ -207,6 +207,11 @@ def patch_rom(world: "CVCotMWorld", patch: CVCotMProcedurePatch, offset_data: Di
     # Write all the new item values
     for offset, data in offset_data.items():
         patch.write_token(APTokenTypes.WRITE, offset, data)
+
+    # Write the secondary name the client will use to distinguish a vanilla ROM from an AP one.
+    patch.write_token(APTokenTypes.WRITE, 0x7FFF00, "ARCHIPELAG01".encode("utf-8"))
+    # Write the slot authentication
+    patch.write_token(APTokenTypes.WRITE, 0x7FFF10, bytes(world.auth))
 
     patch.write_file("token_data.bin", patch.get_token_binary())
 

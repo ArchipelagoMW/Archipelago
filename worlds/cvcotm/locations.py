@@ -125,7 +125,7 @@ location_info = {
     lname.uw9:   {"code": 0x7E, "offset": 0xD53EC, "room gfx": 0xD8EDA, "countdown": 8},
     lname.uw10:  {"code": 0x78, "offset": 0xD4C84, "room gfx": 0xD8D1A, "countdown": 8, "rule": "Roc"},
     lname.uw11:  {"code": 0x79, "offset": 0xD4EC4, "room gfx": 0xD8D6E, "countdown": 8},
-    lname.uw14:  {"code": 0x7F, "offset": 0xD5410, "room gfx": 0xD8EF6, "countdown": 8},
+    lname.uw14:  {"code": 0x7F, "offset": 0xD5410, "room gfx": 0xD8EF6, "countdown": 8, "rule": "Freeze"},
     lname.uw16:  {"code": 0x7A, "offset": 0xD5050, "room gfx": 0xD8DC2, "countdown": 8},
     lname.uw16b: {"code": 0x7B, "offset": 0xD505C, "room gfx": 0xD8DC2, "countdown": 8, "rule": "Roc"},
     lname.uw19:  {"code": 0x7C, "offset": 0xD5344, "room gfx": 0xD8E4E, "countdown": 8},
@@ -161,7 +161,7 @@ location_info = {
     lname.ot20:  {"code": 0xB0, "offset": 0xD6E20, "room gfx": 0xD94A6, "countdown": 12, "type": "boss"},
     # Ceremonial Room
     lname.cr1:   {"code": 0xA7, "offset": 0xD7690, "room gfx": 0xD972A, "countdown": 13},
-    lname.victory: {"event": iname.victory}
+    lname.victory: {"event": iname.victory, "rule": "Roc"}
     # Battle Arena
     # lname.ba24:  {"code": 0xB2, "offset": 0xD7D20, "room gfx": 0xD99E6, "countdown": 15},
  }

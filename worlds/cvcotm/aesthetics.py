@@ -1,13 +1,10 @@
-import logging
-
 from BaseClasses import ItemClassification, Location, Item
 from .data import iname
-from .options import CVCotMOptions, Countdown, ItemDropRandomization
-from .locations import get_location_info, base_id
-from .regions import get_region_info
-from .items import get_item_info, item_info
+from .options import CVCotMOptions, ItemDropRandomization
+from .locations import get_location_info
+from .items import get_item_info
 
-from typing import TYPE_CHECKING, Dict, List, Tuple, Union, Iterable
+from typing import TYPE_CHECKING, Dict, List, Iterable
 
 if TYPE_CHECKING:
     from . import CVCotMWorld
@@ -350,79 +347,6 @@ def get_location_data(world: "CVCotMWorld", active_locations: Iterable[Location]
             location_bytes[get_location_info(loc.name, "offset")] = bytes([0xE8, 0x01, 0x05, 0x00])
 
     return location_bytes
-
-
-def get_start_inventory_data(player: int, options: CVCotMOptions, precollected_items: List[Item]) -> Dict[int, int]:
-    """Calculate and return the starting inventory values. Not every Item goes into the menu inventory, so everything
-    has to be handled appropriately."""
-    start_inventory_data = {0xBFD867: 0,  # Jewels
-                            0xBFD87B: 0,  # PowerUps
-                            0xBFD883: 0,  # Sub-weapon
-                            0xBFD88B: 0}  # Ice Traps
-
-    inventory_items_array = [0 for _ in range(35)]
-    total_money = 0
-
-    items_max = 10
-
-    # Raise the items max if Increase Item Limit is enabled.
-    if options.increase_item_limit:
-        items_max = 99
-
-    for item in precollected_items:
-        if item.player != player:
-            continue
-
-        inventory_offset = get_item_info(item.name, "inventory offset")
-        sub_equip_id = get_item_info(item.name, "sub equip id")
-        # Starting inventory items
-        if inventory_offset is not None:
-            inventory_items_array[inventory_offset] += 1
-            if inventory_items_array[inventory_offset] > items_max and "Special" not in item.name:
-                inventory_items_array[inventory_offset] = items_max
-            if item.name == iname.permaup:
-                if inventory_items_array[inventory_offset] > 2:
-                    inventory_items_array[inventory_offset] = 2
-        # Starting sub-weapon
-        elif sub_equip_id is not None:
-            start_inventory_data[0xBFD883] = sub_equip_id
-        # Starting PowerUps
-        elif item.name == iname.powerup:
-            start_inventory_data[0xBFD87B] += 1
-            if start_inventory_data[0xBFD87B] > 2:
-                start_inventory_data[0xBFD87B] = 2
-        # Starting Gold
-        elif "GOLD" in item.name:
-            total_money += int(item.name[0:4])
-            if total_money > 99999:
-                total_money = 99999
-        # Starting Jewels
-        elif "jewel" in item.name:
-            if "L" in item.name:
-                start_inventory_data[0xBFD867] += 10
-            else:
-                start_inventory_data[0xBFD867] += 5
-            if start_inventory_data[0xBFD867] > 99:
-                start_inventory_data[0xBFD867] = 99
-        # Starting Ice Traps
-        else:
-            start_inventory_data[0xBFD88B] += 1
-            if start_inventory_data[0xBFD88B] > 0xFF:
-                start_inventory_data[0xBFD88B] = 0xFF
-
-    # Convert the inventory items into data.
-    for i in range(len(inventory_items_array)):
-        start_inventory_data[0xBFE518 + i] = inventory_items_array[i]
-
-    # Convert the starting money into data. Which offset it starts from depends on how many bytes it takes up.
-    if total_money <= 0xFF:
-        start_inventory_data[0xBFE517] = total_money
-    elif total_money <= 0xFFFF:
-        start_inventory_data[0xBFE516] = total_money
-    else:
-        start_inventory_data[0xBFE515] = total_money
-
-    return start_inventory_data
 
 
 def populate_enemy_drops(world: "CVCotMWorld") -> Dict[int, bytes]:
