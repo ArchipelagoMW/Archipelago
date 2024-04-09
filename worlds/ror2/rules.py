@@ -15,6 +15,13 @@ def has_entrance_access_rule(multiworld: MultiWorld, stage: str, region: str, pl
         entrance.access_rule = rule
 
 
+def has_stage_access_rule(multiworld: MultiWorld, stage: str, amount: int, region: str, player: int) -> None:
+    rule = lambda state: state.has(region, player) and \
+        (state.has(stage, player) or state.count("Progressive Stage", player) >= amount)
+    for entrance in multiworld.get_region(region, player).entrances:
+        entrance.access_rule = rule
+
+
 def has_all_items(multiworld: MultiWorld, items: Set[str], region: str, player: int) -> None:
     rule = lambda state: state.has_all(items, player) and state.has(region, player)
     for entrance in multiworld.get_region(region, player).entrances:
@@ -41,15 +48,6 @@ def has_location_access_rule(multiworld: MultiWorld, environment: str, player: i
 
 def check_location(state, environment: str, player: int, item_number: int, item_name: str) -> bool:
     return state.can_reach(f"{environment}: {item_name} {item_number - 1}", "Location", player)
-
-
-# unlock event to next set of stages
-def get_stage_event(multiworld: MultiWorld, player: int, stage_number: int) -> None:
-    if stage_number == 4:
-        return
-    rule = lambda state: state.has(f"Stage {stage_number + 1}", player)
-    for entrance in multiworld.get_region(f"OrderedStage_{stage_number + 1}", player).entrances:
-        entrance.access_rule = rule
 
 
 def set_rules(ror2_world: "RiskOfRainWorld") -> None:
@@ -124,8 +122,7 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
                     for newt in range(1, newts + 1):
                         has_location_access_rule(multiworld, environment_name, player, newt, "Newt Altar")
                 if i > 0:
-                    has_entrance_access_rule(multiworld, f"Stage {i}", environment_name, player)
-            get_stage_event(multiworld, player, i)
+                    has_stage_access_rule(multiworld, f"Stage {i}", i, environment_name, player)
 
         if ror2_options.dlc_sotv:
             for i in range(len(environment_sotv_orderedstages_table)):
@@ -143,10 +140,10 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
                         for newt in range(1, newts + 1):
                             has_location_access_rule(multiworld, environment_name, player, newt, "Newt Altar")
                     if i > 0:
-                        has_entrance_access_rule(multiworld, f"Stage {i}", environment_name, player)
+                        has_stage_access_rule(multiworld, f"Stage {i}", i, environment_name, player)
         has_entrance_access_rule(multiworld, "Hidden Realm: A Moment, Fractured", "Hidden Realm: A Moment, Whole",
                                  player)
-        has_entrance_access_rule(multiworld, "Stage 1", "Hidden Realm: Bazaar Between Time", player)
+        has_stage_access_rule(multiworld, "Stage 1", 1, "Hidden Realm: Bazaar Between Time", player)
         has_entrance_access_rule(multiworld, "Hidden Realm: Bazaar Between Time", "Void Fields", player)
         has_entrance_access_rule(multiworld, "Stage 5", "Commencement", player)
         has_entrance_access_rule(multiworld, "Stage 5", "Hidden Realm: A Moment, Fractured", player)

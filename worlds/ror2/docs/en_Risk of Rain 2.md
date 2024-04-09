@@ -57,7 +57,6 @@ options apply, so each Risk of Rain 2 player slot in the multiworld needs to be 
 for example, have two players trade off hosting and making progress on each other's player slot, but a single co-op
 instance can't make progress towards multiple player slots in the multiworld.
 
-Explore mode is untested in multiplayer and will likely not work until a later release.
 
 ## What Risk of Rain items can appear in other players' worlds?
 
