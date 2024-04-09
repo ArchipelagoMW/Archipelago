@@ -173,8 +173,8 @@ def generate_output(self, output_directory: str):
     if self.options.randomize_music:
         randomize_music(data, random)
 
-    if self.options.auto_scroll_trap:
-        data[rom_addresses["Auto_Scroll_Disable"]] = 0xAF
+    # if self.options.auto_scroll_trap:
+    #     data[rom_addresses["Auto_Scroll_Disable"]] = 0xAF
     if self.options.shuffle_golden_coins:
         data[rom_addresses["Coin_Shuffle"]] = 0x40
     if self.options.shuffle_midway_bells:
@@ -203,7 +203,7 @@ def generate_output(self, output_directory: str):
 
     for i in range(32):
         data[rom_addresses["Auto_Scroll_Levels"] + i] = 1 if i in self.auto_scroll_levels else 0
-
+        # data[rom_addresses["Auto_Scroll_Levels_B"] + i] = 1 if i in self.auto_scroll_levels else 0
 
     if self.options.energy_link:
         # start with 1 life if Energy Link is on so that you don't deposit lives at the start of the game.

@@ -41,11 +41,10 @@ class MarioLand2Client(BizHawkClient):
         from .items import items
         from .locations import locations, level_id_to_name, coins_coords, location_name_to_id
 
-        (game_loaded_check, level_data, music, auto_scroll_enabled, auto_scroll_levels, current_level, midway_point,
-         bcd_lives, num_items_received, coins, options) = \
+        (game_loaded_check, level_data, music, auto_scroll_levels, current_level,
+         midway_point, bcd_lives, num_items_received, coins, options) = \
             await read(ctx.bizhawk_ctx, [(0x0046, 10, "CartRAM"), (0x0848, 42, "CartRAM"), (0x0469, 1, "CartRAM"),
-                                         (rom_addresses["Auto_Scroll_Disable"], 1, "ROM"),
-                                         (rom_addresses["Auto_Scroll_Levels"], 32, "ROM"),
+                                         (rom_addresses["Auto_Scroll_Levels_B"], 32, "ROM"),
                                          (0x0269, 1, "CartRAM"), (0x02A0, 1, "CartRAM"), (0x022C, 1, "CartRAM"),
                                          (0x00F0, 2, "CartRAM"), (0x0262, 2, "CartRAM"),
                                          (rom_addresses["Coins_Required"], 8, "ROM")])
@@ -58,10 +57,9 @@ class MarioLand2Client(BizHawkClient):
         coin_mode = options[7]
 
         current_level = int.from_bytes(current_level, "big")
-
+        auto_scroll_levels = list(auto_scroll_levels)
         midway_point = int.from_bytes(midway_point, "big")
         music = int.from_bytes(music, "big")
-        auto_scroll_enabled = int.from_bytes(auto_scroll_enabled, "big")
         level_data = list(level_data)
         lives = bcd_lives.hex()
         num_items_received = int.from_bytes(num_items_received, "big")
@@ -111,7 +109,6 @@ class MarioLand2Client(BizHawkClient):
             num_coins = len([tile[0] for tile in coin_tile_data if tile[0] in (0x7f, 0x60, 0x07)])
             locations_checked = [location_name_to_id[f"{level_name} - {i} Coin{'s' if i > 1 else ''}"]
                                  for i in range(1, num_coins + 1)]
-
 
         new_lives = int(lives)
         energy_link_add = None
@@ -195,12 +192,19 @@ class MarioLand2Client(BizHawkClient):
             # after registering the check for the midway bell, clear the value just for safety.
             data_writes.append((0x02A0, [0], "CartRAM"))
 
-        if "Auto Scroll" in items_received:
-            if auto_scroll_enabled == 0xaf:  # auto scroll has not yet been enabled
-                data_writes.append((rom_addresses["Auto_Scroll_Disable"], [0x7e], "ROM"))
-                # if the current level is an auto scroll level, turn on auto scrolling now
-                if auto_scroll_levels[current_level] == 1:
+        for i in range(32):
+            if i == 24:
+                continue
+            if "Auto Scroll" in items_received or f"Auto Scroll - {level_id_to_name[i]}" in items_received:
+                auto_scroll_levels[i] = 1
+                if i == current_level:
                     data_writes.append((0x02C8, [0x01], "CartRAM"))
+            elif ("Auto Scroll Cancel" in items_received
+                  or f"Auto Scroll Cancel - {level_id_to_name[i]}" in items_received):
+                auto_scroll_levels[i] = 0
+                if i == current_level:
+                    data_writes.append((0x02C8, [0x00], "CartRAM"))
+        data_writes.append((rom_addresses["Auto_Scroll_Levels"], auto_scroll_levels, "ROM"))
 
         success = await guarded_write(ctx.bizhawk_ctx, data_writes, [(0x0848, level_data, "CartRAM"),
                                                                      (0x022C, [int.from_bytes(bcd_lives, "big")],

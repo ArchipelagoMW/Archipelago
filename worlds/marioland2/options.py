@@ -97,19 +97,29 @@ class RandomizePlatforms(Toggle):
     display_name = "Randomize Platforms"
 
 
-class AutoScrollLevels(NamedRange):
-    """Keep auto scroll levels vanilla or choose a number of levels to be randomly selected to have auto-scrolling.
-    Certain levels are excluded."""
-    display_name = "Auto Scroll Levels"
+class AutoScrollChances(NamedRange):
+    """Chance per eligible level to be made into an auto scroll level. Can also set to Vanilla to leave them unchanged."""
+    display_name = "Auto Scroll Chance"
     range_start = 0
-    range_end = 17
-    special_range_names = {"vanilla": -1, "none": 0, "all": 17}
+    range_end = 100
+    special_range_names = {"vanilla": -1, "none": 0, "all": 100}
     default = -1
 
 
-class AutoScrollTrap(Toggle):
-    """If on, auto scroll levels will not auto scroll until you've received the Auto Scroll trap item."""
-    display_name = "Auto Scroll Trap"
+class AutoScrollMode(Choice):
+    """Always: Any auto scroll levels will always auto-scroll.
+    Trap Item: Auto scroll levels will only auto-scroll after obtaining the Auto Scroll trap item.
+    Trap Items: As with Trap Item, but there is a separate trap item for each auto scroll level.
+    Cancel Item: Auto Scroll levels will stop auto-scrolling after obtaining the Auto Scroll Cancel item.
+    Cancel Items: As with Cancel Item, but there is a separate cancel item for each auto scroll level.
+    The effects of Trap and Cancel items are permanent!"""
+    display_name = "Auto Scroll Mode"
+    option_always = 0
+    option_trap_item = 1
+    option_trap_items = 2
+    option_cancel_item = 3
+    option_cancel_items = 4
+    default = 0
 
 
 class RandomizeMusic(Toggle):
@@ -134,10 +144,10 @@ class SML2Options(PerGameCommonOptions):
     coinsanity_checks: CoinsanityChecks
     shuffle_midway_bells: ShuffleMidwayBells
     shuffle_pipe_traversal: ShufflePipeTraversal
+    auto_scroll_mode: AutoScrollMode
+    auto_scroll_chances: AutoScrollChances
     difficulty_mode: DifficultyMode
     randomize_enemies: RandomizeEnemies
     randomize_platforms: RandomizePlatforms
-    auto_scroll_levels: AutoScrollLevels
-    auto_scroll_trap: AutoScrollTrap
     randomize_music: RandomizeMusic
     energy_link: EnergyLink

@@ -455,6 +455,8 @@ for level, coin_coords in coins_coords.items():
         location_name_to_id[f"{level} - {i} Coin{'s' if i > 1 else ''}"] = loc_id
         loc_id += 1
 
+#            eligible_levels = [0, 1, 2, 3, 5, 8, 9, 11, 13, 14, 16, 19, 20, 22, 23, 25, 30, 31]
+
 level_id_to_name = {
     0: 'Mushroom Zone', 25: 'Scenic Course', 1: 'Tree Zone 1', 2: 'Tree Zone 2', 4: 'Tree Zone 3', 3: 'Tree Zone 4',
     5: 'Tree Zone 5', 29: 'Tree Zone Secret Course', 17: 'Hippo Zone', 18: 'Space Zone 1',
@@ -469,14 +471,26 @@ level_name_to_id = {name: level_id for level_id, name in level_id_to_name.items(
 
 auto_scroll_max = {
     "Mushroom Zone": 84,
+    "Hippo Zone": 160,
     "Tree Zone 1": 87,
     "Tree Zone 2": 68,
+    "Tree Zone 3": 4,
     "Tree Zone 4": 64,
     "Tree Zone 5": 22,
+    "Space Zone 1": 72,
     "Space Zone 2": 113,
     "Macro Zone 1": 74,
+    "Macro Zone 2": 27,
+    "Macro Zone 3": 63,
     "Macro Zone 4": 59,
+    "Pumpkin Zone 1": 12,
+    "Pumpkin Zone 2": 23,
     "Pumpkin Zone 3": 50,
     "Pumpkin Zone 4": 45,
+    "Pumpkin Zone Secret Course 1": 172,
+    "Mario Zone 1": 68,
+    "Mario Zone 3": 29,
+    "Mario Zone 4": 63,
     "Turtle Zone 1": 66,
+    "Turtle Zone 2": 8,
 }

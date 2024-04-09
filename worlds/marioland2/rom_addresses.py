@@ -12,6 +12,7 @@ rom_addresses = {
     "Enable_Swim": 0x1d17,
     "Coinsanity_B": 0x1d86,
     "Auto_Scroll_Levels": 0x1f71,
+    "Auto_Scroll_Levels_B": 0x80134,
     "Starting_Lives": 0x2920,
     "Get_Hurt_To_Big_Mario": 0x31c7,
     "Get_Mushroom_A": 0x345c,

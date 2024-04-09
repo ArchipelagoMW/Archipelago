@@ -9,10 +9,11 @@ from BaseClasses import Region, Location, Item, ItemClassification, Tutorial
 from . import client
 from .rom import generate_output, SuperMarioLand2DeltaPatch
 from .options import SML2Options
-from .locations import locations, location_name_to_id, level_name_to_id, START_IDS, coins_coords, auto_scroll_max
+from .locations import (locations, location_name_to_id, level_name_to_id, level_id_to_name, START_IDS, coins_coords,
+                        auto_scroll_max)
 from .items import items
-from .logic import has_pipe_up, has_pipe_down, has_pipe_left, has_pipe_right, has_level_progression
-from . import coin_logic
+from .logic import has_pipe_up, has_pipe_down, has_pipe_left, has_pipe_right, has_level_progression, is_auto_scroll
+from . import logic
 
 
 class MarioLand2Settings(settings.Group):
@@ -87,11 +88,19 @@ class MarioLand2World(World):
         self.coin_fragments_required = 0
 
     def generate_early(self):
-        if self.options.auto_scroll_levels > -1:
-            eligible_levels = [0, 1, 2, 3, 5, 8, 9, 11, 13, 14, 16, 19, 20, 23, 25, 30, 31]
-            self.auto_scroll_levels = self.random.sample(eligible_levels, self.options.auto_scroll_levels.value)
-        else:
+        if self.options.auto_scroll_chances == -1:
             self.auto_scroll_levels = [19, 25, 30]
+        else:
+            self.auto_scroll_levels = []
+            ineligible_levels = ["Mario's Castle"]
+            if self.options.auto_scroll_mode == "always" or (self.options.accessibility == "locations" and
+                                                             self.options.auto_scroll_mode in ("trap_item",
+                                                                                               "trap_items")):
+                ineligible_levels += ["Tree Zone 3", "Macro Zone 2", "Space Zone 1", "Turtle Zone 2", "Pumpkin Zone 2"]
+            for i in range(32):
+                if (level_id_to_name[i] not in ineligible_levels
+                        and self.random.randint(1, 100) < self.options.auto_scroll_chances):
+                    self.auto_scroll_levels.append(i)
 
     def create_regions(self):
         menu_region = Region("Menu", self.player, self.multiworld)
@@ -143,7 +152,7 @@ class MarioLand2World(World):
             coinsanity_checks = self.options.coinsanity_checks.value
             self.num_coin_locations = [[region, 1] for region in created_regions]
             self.max_coin_locations = {region: len(coins_coords[region]) for region in created_regions}
-            if self.options.accessibility == "locations":
+            if self.options.accessibility == "locations" or self.options.auto_scroll_mode == "always":
                 for level in self.max_coin_locations:
                     if level in auto_scroll_max and level_name_to_id[level] in self.auto_scroll_levels:
                         self.max_coin_locations[level] = min(auto_scroll_max[level], self.max_coin_locations[level])
@@ -162,7 +171,9 @@ class MarioLand2World(World):
 
     def set_rules(self):
         entrance_rules = {
-            "Menu -> Space Zone 1": lambda state: state.has_any(["Hippo Bubble", "Carrot"], self.player),
+            "Menu -> Space Zone 1": lambda state: state.has("Hippo Bubble", self.player)
+                                                  or (state.has("Carrot", self.player)
+                                                      and not is_auto_scroll(state, self.player, "Hippo Zone")),
             "Space Zone 1 -> Space Zone Secret Course": lambda state: state.has("Space Zone Secret", self.player),
             "Space Zone 1 -> Space Zone 2": lambda state: has_level_progression(state, "Space Zone Progression", self.player),
             "Tree Zone 1 -> Tree Zone 2": lambda state: has_level_progression(state, "Tree Zone Progression", self.player),
@@ -202,7 +213,8 @@ class MarioLand2World(World):
                 ].count(True) >= self.options.required_golden_coins)
 
         location_rules = {
-            "Hippo Zone - Normal or Secret Exit": lambda state: state.has_any(["Hippo Bubble", "Carrot", "Swim"], self.player),
+            "Hippo Zone - Normal or Secret Exit": lambda state: (state.has_any(["Hippo Bubble", "Swim"], self.player)
+                or (state.has("Carrot", self.player) and not is_auto_scroll(state, self.player, "Hippo Zone"))),
             # It is possible, however tricky, to beat the Moon Stage without Carrot or Space Physics.
             # However, it requires somewhat precisely jumping off enemies. Enemy shuffle may make this impossible.
             # I have not done any testing there. Instead, I will just always make one or the other required, since
@@ -210,7 +222,7 @@ class MarioLand2World(World):
             "Space Zone 1 - Normal Exit": lambda state: state.has_any(["Space Physics", "Carrot"], self.player),
             # One or the other is actually necessary for the secret exit.
             "Space Zone 1 - Secret Exit": lambda state: state.has_any(
-                ["Space Physics", "Carrot"], self.player),
+                ["Space Physics", "Carrot"], self.player) and not is_auto_scroll(state, self.player, "Space Zone 1"),
             # Without Space Physics, you must be able to take damage once to reach the bell, and again after the bell.
             # If bells are not shuffled, then any one powerup will do, as you can get the bell and come back.
             # Otherwise, you need the bell item from the item pool, or you need to be able to take damage twice in one
@@ -231,6 +243,7 @@ class MarioLand2World(World):
                 "Tree Zone 2 Midway Bell", self.player),
             "Tree Zone 2 - Secret Exit": lambda state: has_pipe_right(state, self.player)
                                                        and state.has("Carrot", self.player),
+            "Tree Zone 3 - Normal Exit": lambda state: not is_auto_scroll(state, self.player, "Tree Zone 3"),
             "Tree Zone 4 - Normal Exit": lambda state: has_pipe_down(state, self.player)
                 and ((has_pipe_right(state, self.player) and has_pipe_up(state, self.player))
                 or state.has("Tree Zone 4 Midway Bell", self.player)),
@@ -247,7 +260,8 @@ class MarioLand2World(World):
                 and state.has("Fire Flower", self.player) and has_pipe_up(state, self.player),
             "Macro Zone 2 - Normal Exit": lambda state: (has_pipe_down(state, self.player) or state.has(
                 "Macro Zone 2 Midway Bell", self.player))
-                and state.has("Swim", self.player) and has_pipe_up(state, self.player),
+                and state.has("Swim", self.player) and has_pipe_up(state,
+                self.player) and not is_auto_scroll(state, self.player, "Macro Zone 2"),
             "Macro Zone 2 - Midway Bell": lambda state: (has_pipe_down(
                 state, self.player) and state.has("Swim", self.player)) or state.has(
                 "Macro Zone 2 Midway Bell", self.player),
@@ -256,20 +270,24 @@ class MarioLand2World(World):
             "Macro Zone 3 - Midway Bell": lambda state: (has_pipe_down(state, self.player)
                 and has_pipe_down(state, self.player)) or state.has("Macro Zone 3 Midway Bell", self.player),
             "Macro Zone 4 - Boss": lambda state: has_pipe_right(state, self.player),
-            "Pumpkin Zone 1 - Normal Exit": lambda state: has_pipe_down(state, self.player) or state.has(
+            "Pumpkin Zone 1 - Normal Exit": lambda state: (has_pipe_down(state, self.player)
+                 and not is_auto_scroll(state, self.player, "Pumpkin Zone 1")) or state.has(
                 "Pumpkin Zone 1 Midway Bell", self.player),
-            "Pumpkin Zone 1 - Midway Bell": lambda state: has_pipe_down(state, self.player) or state.has(
+            "Pumpkin Zone 1 - Midway Bell": lambda state: (has_pipe_down(state, self.player)
+                 and not is_auto_scroll(state, self.player, "Pumpkin Zone 1")) or state.has(
                 "Pumpkin Zone 1 Midway Bell", self.player),
             "Pumpkin Zone 2 - Normal Exit": lambda state: has_pipe_down(state, self.player) and has_pipe_up(
-                state, self.player) and has_pipe_right(state, self.player) and state.has("Swim", self.player),
-            # You can only spin jump as Big Mario or Fire Mario
+                state, self.player) and has_pipe_right(state, self.player) and state.has("Swim",
+                self.player) and not is_auto_scroll(state, self.player, "Pumpkin Zone 2"),
             "Pumpkin Zone 2 - Secret Exit": lambda state: has_pipe_down(
                 state, self.player) and has_pipe_up(state, self.player) and has_pipe_right(
                 state, self.player) and state.has("Swim", self.player) and state.has_any(
-                ["Mushroom", "Fire Flower"], self.player),
+                ["Mushroom", "Fire Flower"], self.player) and not is_auto_scroll(state, self.player, "Pumpkin Zone 2"),
             "Pumpkin Zone 3 - Secret Exit": lambda state: state.has("Carrot", self.player),
             "Pumpkin Zone 4 - Boss": lambda state: has_pipe_right(state, self.player),
-            "Mario Zone 1 - Normal Exit": lambda state: has_pipe_right(state, self.player),
+            "Mario Zone 1 - Normal Exit": lambda state: has_pipe_right(state, self.player) and (
+                    state.has_any(["Mushroom", "Fire Flower", "Carrot", "Mario Zone 1 Midway Bell"], self.player)
+                    or not is_auto_scroll(state, self.player, "Mario Zone 1")),
             # It is possible to get as small mario, but it is a very precise jump and you will die afterward.
             "Mario Zone 1 - Midway Bell": lambda state: (state.has_any(
                 ["Mushroom", "Fire Flower", "Carrot"], self.player) and has_pipe_right(state, self.player))
@@ -277,11 +295,13 @@ class MarioLand2World(World):
             "Mario Zone 4 - Boss": lambda state: has_pipe_right(state, self.player),
             "Turtle Zone 2 - Normal Exit": lambda state: has_pipe_up(state, self.player) and has_pipe_down(
                 state, self.player) and has_pipe_right(state, self.player) and has_pipe_left(state, self.player)
-                and state.has("Swim", self.player),
+                and state.has("Swim", self.player) and not is_auto_scroll(state, self.player, "Turtle Zone 2"),
             "Turtle Zone 2 - Midway Bell": lambda state: state.has_any(
-                ["Swim", "Turtle Zone 2 Midway Bell"], self.player),
+                ["Swim", "Turtle Zone 2 Midway Bell"], self.player) and not is_auto_scroll(state,
+                self.player, "Turtle Zone 2"),
             "Turtle Zone 2 - Secret Exit": lambda state: has_pipe_up(
-                state, self.player) and state.has("Swim", self.player), #state.has_any(["Swim", "Turtle Zone 2  Midway Bell"], self.player),  # hard logic option?
+                state, self.player) and state.has("Swim", self.player) and not is_auto_scroll(state,
+                self.player, "Turtle Zone 2"), #state.has_any(["Swim", "Turtle Zone 2  Midway Bell"], self.player),  # hard logic option?
             "Turtle Zone Secret Course - Normal Exit": lambda state: state.has_any(["Fire Flower", "Carrot"],
                                                                                    self.player),
             "Turtle Zone 3 - Boss": lambda state: has_pipe_right(state, self.player),
@@ -296,12 +316,11 @@ class MarioLand2World(World):
             if location.name in location_rules:
                 location.access_rule = location_rules[location.name]
             elif location.name.endswith("Coins"):
-                rule = getattr(coin_logic, location.parent_region.name.lower().replace(" ", "_") + "_coins", None)
+                rule = getattr(logic, location.parent_region.name.lower().replace(" ", "_") + "_coins", None)
                 if rule:
                     coins = int(location.name.split(" ")[-2])
-                    auto_scroll = level_name_to_id[location.name.split(" -")[0]] in self.auto_scroll_levels
-                    location.access_rule = lambda state, coin_rule=rule, \
-                        num_coins=coins, scroll=auto_scroll: coin_rule(state, self.player, num_coins, scroll)
+                    location.access_rule = lambda state, coin_rule=rule, num_coins=coins: \
+                        coin_rule(state, self.player, num_coins)
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Wario Defeated", self.player)
 
     def create_items(self):
@@ -397,8 +416,18 @@ class MarioLand2World(World):
         else:
             self.multiworld.push_precollected(self.create_item("Pipe Traversal"))
 
-        if self.options.auto_scroll_trap:
+        if self.options.auto_scroll_mode == "trap_item":
             item_counts["Auto Scroll"] = 1
+        elif self.options.auto_scroll_mode == "trap_items":
+            for level, level_id in level_name_to_id.items():
+                if level_id in self.auto_scroll_levels:
+                    item_counts[f"Auto Scroll - {level}"] = 1
+        elif self.options.auto_scroll_mode == "cancel_item":
+            item_counts["Auto Scroll Cancel"] = 1
+        elif self.options.auto_scroll_mode == "cancel_items":
+            for level, level_id in level_name_to_id.items():
+                if level_id in self.auto_scroll_levels:
+                    item_counts[f"Auto Scroll Cancel - {level}"] = 1
 
         for item in self.multiworld.precollected_items[self.player]:
             if item.name in item_counts and item_counts[item.name] > 0:
@@ -432,7 +461,11 @@ class MarioLand2World(World):
                     item_counts[double_progression_item] -= 2
                     item_counts[double_progression_item + " x2"] = 1
                     continue
-                raise Exception(f"Super Mario Land 2: Too many items for locations. Player: {self.player}")
+                item = self.random.choice(list(item_counts))
+                item_counts[item] -= 1
+                if item_counts[item] == 0:
+                    del item_counts[item]
+                self.multiworld.push_precollected(self.create_item(item))
 
         self.coin_fragments_required = max((item_counts["Mario Coin Fragment"]
                                            * self.options.mario_coin_fragments_required_percentage) // 100, 1)

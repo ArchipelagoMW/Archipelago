@@ -1,4 +1,5 @@
 from BaseClasses import ItemClassification
+from .locations import level_name_to_id
 
 items = {
     "Space Zone Progression": ItemClassification.progression,
@@ -41,6 +42,10 @@ items = {
     "Easy Mode": ItemClassification.useful,
     "Normal Mode": ItemClassification.trap,
     "Auto Scroll": ItemClassification.trap,
+    **{f"Auto Scroll - {level}": ItemClassification.trap for level in level_name_to_id if level != "Wario's Castle"},
+    "Cancel Auto Scroll": ItemClassification.progression,
+    **{f"Cancel Auto Scroll - {level}": ItemClassification.progression for level in level_name_to_id
+       if level != "Wario's Castle"},
     "Mushroom Zone Midway Bell": ItemClassification.filler,
     "Tree Zone 1 Midway Bell": ItemClassification.filler,
     "Tree Zone 2 Midway Bell": ItemClassification.progression_skip_balancing,
@@ -66,3 +71,6 @@ items = {
     "1 Coin": ItemClassification.filler,
     **{f"{i} Coins": ItemClassification.filler for i in range(2, 169)}
 }
+
+for level in {"Turtle Zone Secret", "Macro Zone Secret", "Turtle Zone 3", "Scenic Course", "Mario Zone 2"}:
+    items[f"Cancel Auto Scroll - {level}"] = ItemClassification.useful
