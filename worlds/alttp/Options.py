@@ -2,7 +2,7 @@ import typing
 
 from BaseClasses import MultiWorld
 from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, StartInventoryPool, PlandoBosses,\
-    FreeText, Visibility
+    FreeText, Removed
 
 
 class GlitchesRequired(Choice):
@@ -721,15 +721,6 @@ class AllowCollect(Toggle):
     Off by default, because it currently crashes on real hardware."""
     display_name = "Allow Collection of checks for other players"
 
-
-class Removed(FreeText):
-    default = ""
-    visibility = Visibility.none
-
-    def __init__(self, value: str):
-        if value:
-            raise Exception("Option removed, please update your options file.")
-        super().__init__(value)
 
 alttp_options: typing.Dict[str, type(Option)] = {
     "start_inventory_from_pool": StartInventoryPool,

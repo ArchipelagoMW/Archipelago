@@ -1125,6 +1125,17 @@ class ItemLinks(OptionList):
             link.setdefault("link_replacement", None)
 
 
+class Removed(FreeText):
+    """This Option has been Removed."""
+    default = ""
+    visibility = Visibility.none
+
+    def __init__(self, value: str):
+        if value:
+            raise Exception("Option removed, please update your options file.")
+        super().__init__(value)
+
+
 @dataclass
 class PerGameCommonOptions(CommonOptions):
     local_items: LocalItems
