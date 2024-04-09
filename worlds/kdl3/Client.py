@@ -84,7 +84,7 @@ deathlink_messages = defaultdict(lambda: " was defeated.", {
 def cmd_gift(self: "SNIClientCommandProcessor"):
     """Toggles gifting for the current game."""
     if not getattr(self.ctx, "gifting", None):
-        self.ctx.gifting = True
+        setattr(self.ctx, "gifting", True)
     else:
         self.ctx.gifting = not self.ctx.gifting
     self.output(f"Gifting set to {self.ctx.gifting}")

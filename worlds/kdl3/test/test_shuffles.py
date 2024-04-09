@@ -13,7 +13,7 @@ class TestCopyAbilityShuffle(KDL3TestBase):
         "copy_ability_randomization": "enabled",
     }
 
-    def test_goal(self):
+    def test_goal(self) -> None:
         try:
             self.assertBeatable(False)
             heart_stars = self.get_items_by_name("Heart Star")
@@ -33,28 +33,28 @@ class TestCopyAbilityShuffle(KDL3TestBase):
             # if assert beatable fails, this will catch and print the seed
             raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
-    def test_kine(self):
+    def test_kine(self) -> None:
         try:
             self.collect_by_name(["Cutter", "Burning", "Heart Star"])
             self.assertBeatable(False)
         except AssertionError as ex:
             raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
-    def test_cutter(self):
+    def test_cutter(self) -> None:
         try:
             self.collect_by_name(["Kine", "Burning", "Heart Star"])
             self.assertBeatable(False)
         except AssertionError as ex:
             raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
-    def test_burning(self):
+    def test_burning(self) -> None:
         try:
             self.collect_by_name(["Cutter", "Kine", "Heart Star"])
             self.assertBeatable(False)
         except AssertionError as ex:
             raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
-    def test_cutter_and_burning_reachable(self):
+    def test_cutter_and_burning_reachable(self) -> None:
         rooms = self.multiworld.worlds[1].rooms
         copy_abilities = self.multiworld.worlds[1].copy_abilities
         sand_canyon_5 = self.multiworld.get_region("Sand Canyon 5 - 9", 1)
@@ -76,7 +76,7 @@ class TestCopyAbilityShuffle(KDL3TestBase):
         else:
             self.fail("Could not reach Burning Ability before Iceberg 4!")
 
-    def test_valid_abilities_for_ROB(self):
+    def test_valid_abilities_for_ROB(self) -> None:
         # there exists a subset of 4-7 abilities that will allow us access to ROB heart star on default settings
         self.collect_by_name(["Heart Star", "Kine", "Coo"])  # we will guaranteed need Coo, Kine, and Heart Stars to reach
         # first we need to identify our bukiset requirements
@@ -87,13 +87,13 @@ class TestCopyAbilityShuffle(KDL3TestBase):
             ({"Stone Ability", "Burning Ability"}, {'Bukiset (Stone)', 'Bukiset (Burning)'}),
         ]
         copy_abilities = self.multiworld.worlds[1].copy_abilities
-        required_abilities: List[Tuple[str]] = []
+        required_abilities: List[List[str]] = []
         for abilities, bukisets in groups:
             potential_abilities: List[str] = list()
             for bukiset in bukisets:
                 if copy_abilities[bukiset] in abilities:
                     potential_abilities.append(copy_abilities[bukiset])
-            required_abilities.append(tuple(potential_abilities))
+            required_abilities.append(potential_abilities)
         collected_abilities = list()
         for group in required_abilities:
             self.assertFalse(len(group) == 0, str(self.multiworld.seed))
@@ -122,7 +122,7 @@ class TestAnimalShuffle(KDL3TestBase):
         "animal_randomization": "full",
     }
 
-    def test_goal(self):
+    def test_goal(self) -> None:
         try:
             self.assertBeatable(False)
             heart_stars = self.get_items_by_name("Heart Star")
@@ -142,33 +142,36 @@ class TestAnimalShuffle(KDL3TestBase):
             # if assert beatable fails, this will catch and print the seed
             raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
-    def test_kine(self):
+    def test_kine(self) -> None:
         try:
             self.collect_by_name(["Cutter", "Burning", "Heart Star"])
             self.assertBeatable(False)
         except AssertionError as ex:
             raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
-    def test_cutter(self):
+    def test_cutter(self) -> None:
         try:
             self.collect_by_name(["Kine", "Burning", "Heart Star"])
             self.assertBeatable(False)
         except AssertionError as ex:
             raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
-    def test_burning(self):
+    def test_burning(self) -> None:
         try:
             self.collect_by_name(["Cutter", "Kine", "Heart Star"])
             self.assertBeatable(False)
         except AssertionError as ex:
             raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
-    def test_locked_animals(self):
-        self.assertTrue(self.multiworld.get_location("Ripple Field 5 - Animal 2", 1).item.name == "Pitch Spawn",
+    def test_locked_animals(self) -> None:
+        ripple_field_5 = self.multiworld.get_location("Ripple Field 5 - Animal 2", 1)
+        self.assertTrue(ripple_field_5.item is not None and ripple_field_5.item.name == "Pitch Spawn",
                         f"Multiworld did not place Pitch, Seed: {self.multiworld.seed}")
-        self.assertTrue(self.multiworld.get_location("Iceberg 4 - Animal 1", 1).item.name == "ChuChu Spawn",
+        iceberg_4 = self.multiworld.get_location("Iceberg 4 - Animal 1", 1)
+        self.assertTrue(iceberg_4.item is not None and iceberg_4.item.name == "ChuChu Spawn",
                         f"Multiworld did not place ChuChu, Seed: {self.multiworld.seed}")
-        self.assertTrue(self.multiworld.get_location("Sand Canyon 6 - Animal 1", 1).item.name in
+        sand_canyon_6 = self.multiworld.get_location("Sand Canyon 6 - Animal 1", 1)
+        self.assertTrue(sand_canyon_6.item is not None and sand_canyon_6.item.name in
                         {"Kine Spawn", "Coo Spawn"}, f"Multiworld did not place Coo/Kine, Seed: {self.multiworld.seed}")
 
 
@@ -183,10 +186,7 @@ class TestAllShuffle(KDL3TestBase):
         "copy_ability_randomization": "enabled",
     }
 
-    def world_setup(self, seed: Optional[int] = None) -> None:
-        super().world_setup(97344459114886422393)
-
-    def test_goal(self):
+    def test_goal(self) -> None:
         try:
             self.assertBeatable(False)
             heart_stars = self.get_items_by_name("Heart Star")
@@ -206,36 +206,39 @@ class TestAllShuffle(KDL3TestBase):
             # if assert beatable fails, this will catch and print the seed
             raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
-    def test_kine(self):
+    def test_kine(self) -> None:
         try:
             self.collect_by_name(["Cutter", "Burning", "Heart Star"])
             self.assertBeatable(False)
         except AssertionError as ex:
             raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
-    def test_cutter(self):
+    def test_cutter(self) -> None:
         try:
             self.collect_by_name(["Kine", "Burning", "Heart Star"])
             self.assertBeatable(False)
         except AssertionError as ex:
             raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
-    def test_burning(self):
+    def test_burning(self) -> None:
         try:
             self.collect_by_name(["Cutter", "Kine", "Heart Star"])
             self.assertBeatable(False)
         except AssertionError as ex:
             raise AssertionError(f"Test failed, Seed:{self.multiworld.seed}") from ex
 
-    def test_locked_animals(self):
-        self.assertTrue(self.multiworld.get_location("Ripple Field 5 - Animal 2", 1).item.name == "Pitch Spawn",
+    def test_locked_animals(self) -> None:
+        ripple_field_5 = self.multiworld.get_location("Ripple Field 5 - Animal 2", 1)
+        self.assertTrue(ripple_field_5.item is not None and ripple_field_5.item.name == "Pitch Spawn",
                         f"Multiworld did not place Pitch, Seed: {self.multiworld.seed}")
-        self.assertTrue(self.multiworld.get_location("Iceberg 4 - Animal 1", 1).item.name == "ChuChu Spawn",
+        iceberg_4 = self.multiworld.get_location("Iceberg 4 - Animal 1", 1)
+        self.assertTrue(iceberg_4.item is not None and iceberg_4.item.name == "ChuChu Spawn",
                         f"Multiworld did not place ChuChu, Seed: {self.multiworld.seed}")
-        self.assertTrue(self.multiworld.get_location("Sand Canyon 6 - Animal 1", 1).item.name in
+        sand_canyon_6 = self.multiworld.get_location("Sand Canyon 6 - Animal 1", 1)
+        self.assertTrue(sand_canyon_6.item is not None and sand_canyon_6.item.name in
                         {"Kine Spawn", "Coo Spawn"}, f"Multiworld did not place Coo/Kine, Seed: {self.multiworld.seed}")
 
-    def test_cutter_and_burning_reachable(self):
+    def test_cutter_and_burning_reachable(self) -> None:
         rooms = self.multiworld.worlds[1].rooms
         copy_abilities = self.multiworld.worlds[1].copy_abilities
         sand_canyon_5 = self.multiworld.get_region("Sand Canyon 5 - 9", 1)
@@ -257,7 +260,7 @@ class TestAllShuffle(KDL3TestBase):
         else:
             self.fail("Could not reach Burning Ability before Iceberg 4!")
 
-    def test_valid_abilities_for_ROB(self):
+    def test_valid_abilities_for_ROB(self) -> None:
         # there exists a subset of 4-7 abilities that will allow us access to ROB heart star on default settings
         self.collect_by_name(["Heart Star", "Kine", "Coo"])  # we will guaranteed need Coo, Kine, and Heart Stars to reach
         # first we need to identify our bukiset requirements
@@ -268,13 +271,13 @@ class TestAllShuffle(KDL3TestBase):
             ({"Stone Ability", "Burning Ability"}, {'Bukiset (Stone)', 'Bukiset (Burning)'}),
         ]
         copy_abilities = self.multiworld.worlds[1].copy_abilities
-        required_abilities: List[Tuple[str]] = []
+        required_abilities: List[List[str]] = []
         for abilities, bukisets in groups:
             potential_abilities: List[str] = list()
             for bukiset in bukisets:
                 if copy_abilities[bukiset] in abilities:
                     potential_abilities.append(copy_abilities[bukiset])
-            required_abilities.append(tuple(potential_abilities))
+            required_abilities.append(potential_abilities)
         collected_abilities = list()
         for group in required_abilities:
             self.assertFalse(len(group) == 0, str(self.multiworld.seed))

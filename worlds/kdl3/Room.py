@@ -56,10 +56,12 @@ class KDL3Room(Region):
                 patch.write_token(APTokenTypes.WRITE, self.pointer + address + 7,
                                   animal_map[current_animal].to_bytes(1, "little"))
         if local_items:
-            for location in self.locations:
-                if not location.address or not location.item or location.item.player != self.player:
+            for location in self.get_locations():
+                if location.item is None or location.item.player != self.player:
                     continue
                 item = location.item.code
+                if item is None:
+                    continue
                 item_idx = item & 0x00000F
                 location_idx = location.address & 0xFFFF
                 if location_idx & 0xF00 in (0x300, 0x400, 0x500, 0x600):
@@ -84,7 +86,7 @@ class KDL3Room(Region):
             load_len = len(self.entity_load)
             for consumable in self.consumables:
                 location = next(x for x in self.locations if x.name == consumable["name"])
-                assert location.item
+                assert location.item is not None
                 is_progression = location.item.classification & ItemClassification.progression
                 if load_len == 8:
                     # edge case, there is exactly 1 room with 8 entities and only 1 consumable among them
@@ -126,5 +128,6 @@ class KDL3Room(Region):
                         vtype = 3
                     else:
                         vtype = 2
+                assert isinstance(consumable["pointer"], int)
                 patch.write_token(APTokenTypes.WRITE, self.pointer + consumable["pointer"] + 7,
                                   vtype.to_bytes(1, "little"))

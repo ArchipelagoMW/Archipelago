@@ -1,6 +1,6 @@
 import struct
 from .Options import KirbyFlavorPreset, GooeyFlavorPreset
-from typing import TYPE_CHECKING, Optional, Dict, List
+from typing import TYPE_CHECKING, Optional, Dict, List, Tuple
 
 if TYPE_CHECKING:
     from . import KDL3World
@@ -431,7 +431,7 @@ def get_palette_bytes(palette: Dict[str, str], target: List[str], offset: int, f
         if hexcol.startswith("#"):
             hexcol = hexcol.replace("#", "")
         colint = int(hexcol, 16)
-        col = ((colint & 0xFF0000) >> 16, (colint & 0xFF00) >> 8, colint & 0xFF)
+        col: Tuple[int, ...] = ((colint & 0xFF0000) >> 16, (colint & 0xFF00) >> 8, colint & 0xFF)
         col = tuple(int(int(factor*x) + offset) for x in col)
         byte_data = rgb888_to_bgr555(col[0], col[1], col[2])
         output_data.extend(bytearray(byte_data))

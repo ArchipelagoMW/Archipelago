@@ -1,12 +1,13 @@
 import logging
 import typing
 
-from BaseClasses import Tutorial, ItemClassification, MultiWorld, CollectionState
+from BaseClasses import Tutorial, ItemClassification, MultiWorld, CollectionState, Item
 from Fill import fill_restrictive
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from .Items import item_table, item_names, copy_ability_table, animal_friend_table, filler_item_weights, KDL3Item, \
-    trap_item_table, copy_ability_access_table, star_item_weights, total_filler_weights, animal_friend_spawn_table
+    trap_item_table, copy_ability_access_table, star_item_weights, total_filler_weights, animal_friend_spawn_table,\
+    lookup_item_to_id
 from .Locations import location_table, KDL3Location, level_consumables, consumable_locations, star_locations
 from .Names.AnimalFriendSpawns import animal_friend_spawns
 from .Names.EnemyAbilities import vanilla_enemies, enemy_mapping, enemy_restrictive
@@ -19,7 +20,7 @@ from .Rules import set_rules
 from .Rom import KDL3ProcedurePatch, get_base_rom_path, patch_rom, KDL3JHASH, KDL3UHASH
 from .Client import KDL3SNIClient
 
-from typing import Dict, TextIO, Optional, List
+from typing import Dict, TextIO, Optional, List, Any
 import os
 import math
 import threading
@@ -63,27 +64,27 @@ class KDL3World(World):
     game = "Kirby's Dream Land 3"
     options_dataclass: typing.ClassVar[typing.Type[PerGameCommonOptions]] = KDL3Options
     options: KDL3Options
-    item_name_to_id = {item: item_table[item].code for item in item_table}
+    item_name_to_id = lookup_item_to_id
     location_name_to_id = {location_table[location]: location for location in location_table}
     item_name_groups = item_names
     web = KDL3WebWorld()
     settings: typing.ClassVar[KDL3Settings]
 
     def __init__(self, multiworld: MultiWorld, player: int):
-        self.rom_name = None
+        self.rom_name: bytearray = bytearray()
         self.rom_name_available_event = threading.Event()
         super().__init__(multiworld, player)
         self.copy_abilities: Dict[str, str] = vanilla_enemies.copy()
         self.required_heart_stars: int = 0  # we fill this during create_items
-        self.boss_requirements: Dict[int, int] = dict()
+        self.boss_requirements: List[int] = []
         self.player_levels = default_levels.copy()
         self.stage_shuffle_enabled = False
-        self.boss_butch_bosses: List[Optional[bool]] = list()
-        self.rooms: Optional[List[KDL3Room]] = None
+        self.boss_butch_bosses: List[Optional[bool]] = []
+        self.rooms: List[KDL3Room] = []
 
     create_regions = create_levels
 
-    def create_item(self, name: str, force_non_progression=False) -> KDL3Item:
+    def create_item(self, name: str, force_non_progression: bool = False) -> KDL3Item:
         item = item_table[name]
         classification = ItemClassification.filler
         if item.progression and not force_non_progression:
@@ -93,7 +94,7 @@ class KDL3World(World):
             classification = ItemClassification.trap
         return KDL3Item(name, classification, item.code, self.player)
 
-    def get_filler_item_name(self, include_stars=True) -> str:
+    def get_filler_item_name(self, include_stars: bool = True) -> str:
         if include_stars:
             return self.random.choices(list(total_filler_weights.keys()),
                                        weights=list(total_filler_weights.values()))[0]
@@ -107,7 +108,7 @@ class KDL3World(World):
                                             self.options.ability_trap_weight.value])[0]
 
     def get_restrictive_copy_ability_placement(self, copy_ability: str, enemies_to_set: typing.List[str],
-                                               level: int, stage: int):
+                                               level: int, stage: int) -> Optional[str]:
         valid_rooms = [room for room in self.rooms if (room.level < level)
                        or (room.level == level and room.stage < stage)]  # leave out the stage in question to avoid edge
         valid_enemies = set()
@@ -118,7 +119,7 @@ class KDL3World(World):
             return None  # a valid enemy got placed by a more restrictive placement
         return self.random.choice(sorted([enemy for enemy in valid_enemies if enemy not in placed_enemies]))
 
-    def get_pre_fill_items(self) -> List[KDL3Item]:
+    def get_pre_fill_items(self) -> List[Item]:
         return [self.create_item(item)
                 for item in [*copy_ability_access_table.keys(), *animal_friend_spawn_table.keys()]]
 
@@ -214,7 +215,7 @@ class KDL3World(World):
                 animal_pool.remove("Kine Spawn")  # should always have at least one in the pool
                 spawn.place_locked_item(self.create_item("Kine Spawn"))
             locations = [self.multiworld.get_location(spawn, self.player) for spawn in spawns]
-            items = [self.create_item(animal) for animal in animal_pool]
+            items: List[Item] = [self.create_item(animal) for animal in animal_pool]
             allstate = CollectionState(self.multiworld)
             for item in [*copy_ability_table, *animal_friend_table, *["Heart Star" for _ in range(50)]]:
                 self.collect(allstate, self.create_item(item))
@@ -290,7 +291,7 @@ class KDL3World(World):
 
     def generate_basic(self) -> None:
         self.stage_shuffle_enabled = self.options.stage_shuffle > 0
-        goal = self.options.goal
+        goal = self.options.goal.value
         goal_location = self.multiworld.get_location(LocationName.goals[goal], self.player)
         goal_location.place_locked_item(KDL3Item("Love-Love Rod", ItemClassification.progression, None, self.player))
         for level in range(1, 6):
@@ -310,7 +311,7 @@ class KDL3World(World):
         else:
             self.boss_butch_bosses = [False for _ in range(6)]
 
-    def generate_output(self, output_directory: str):
+    def generate_output(self, output_directory: str) -> None:
         try:
             patch = KDL3ProcedurePatch()
             patch_rom(self, patch)
@@ -324,9 +325,10 @@ class KDL3World(World):
         finally:
             self.rom_name_available_event.set()  # make sure threading continues and errors are collected
 
-    def modify_multidata(self, multidata: dict):
+    def modify_multidata(self, multidata: Dict[str, Any]) -> None:
         # wait for self.rom_name to be available.
         self.rom_name_available_event.wait()
+        assert isinstance(self.rom_name, bytes)
         rom_name = getattr(self, "rom_name", None)
         # we skip in case of error, so that the original error in the output thread is the one that gets raised
         if rom_name:
@@ -341,21 +343,22 @@ class KDL3World(World):
                     spoiler_handle.write(f"{level} {i}: {location_table[stage].replace(' - Complete', '')}\n")
         if self.options.animal_randomization:
             spoiler_handle.write(f"\nAnimal Friends ({self.multiworld.get_player_name(self.player)}):\n")
-            for level in self.player_levels:
+            for lvl in self.player_levels:
                 for stage in range(6):
-                    rooms = [room for room in self.rooms if room.level == level and room.stage == stage]
+                    rooms = [room for room in self.rooms if room.level == lvl and room.stage == stage]
                     animals = []
                     for room in rooms:
                         animals.extend([location.item.name.replace(" Spawn", "")
-                                        for location in room.locations if "Animal" in location.name])
-                    spoiler_handle.write(f"{location_table[self.player_levels[level][stage]].replace(' - Complete','')}"
+                                        for location in room.locations if "Animal" in location.name
+                                        and location.item is not None])
+                    spoiler_handle.write(f"{location_table[self.player_levels[lvl][stage]].replace(' - Complete','')}"
                                          f": {', '.join(animals)}\n")
         if self.options.copy_ability_randomization:
             spoiler_handle.write(f"\nCopy Abilities ({self.multiworld.get_player_name(self.player)}):\n")
             for enemy in self.copy_abilities:
                 spoiler_handle.write(f"{enemy}: {self.copy_abilities[enemy].replace('No Ability', 'None').replace(' Ability', '')}\n")
 
-    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
+    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]) -> None:
         if self.stage_shuffle_enabled:
             regions = {LocationName.level_names[level]: level for level in LocationName.level_names}
             level_hint_data = {}
@@ -365,6 +368,6 @@ class KDL3World(World):
                                                               self.player).name.replace(" - Complete", "")
                     stage_regions = [room for room in self.rooms if stage_name in room.name]
                     for region in stage_regions:
-                        for location in [location for location in region.locations if location.address]:
+                        for location in [location for location in list(region.get_locations()) if location.address]:
                             level_hint_data[location.address] = f"{regions[level]} {stage + 1 if stage < 6 else 'Boss'}"
             hint_data[self.player] = level_hint_data

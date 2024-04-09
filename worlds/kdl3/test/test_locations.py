@@ -12,7 +12,7 @@ class TestLocations(KDL3TestBase):
         # these ensure we can always reach all stages physically
     }
 
-    def test_simple_heart_stars(self):
+    def test_simple_heart_stars(self) -> None:
         self.run_location_test(LocationName.grass_land_muchi, ["ChuChu"])
         self.run_location_test(LocationName.grass_land_chao, ["Stone"])
         self.run_location_test(LocationName.grass_land_mine, ["Kine"])
@@ -23,9 +23,9 @@ class TestLocations(KDL3TestBase):
         self.run_location_test(LocationName.sand_canyon_auntie, ["Clean"])
         self.run_location_test(LocationName.sand_canyon_nyupun, ["ChuChu", "Cutter"])
         self.run_location_test(LocationName.sand_canyon_rob, ["Stone", "Kine", "Coo", "Parasol", "Spark", "Ice"])
-        self.run_location_test(LocationName.sand_canyon_rob, ["Stone", "Kine", "Coo", "Parasol", "Clean", "Ice"]),
-        self.run_location_test(LocationName.sand_canyon_rob, ["Stone", "Kine", "Coo", "Parasol", "Spark", "Needle"]),
-        self.run_location_test(LocationName.sand_canyon_rob, ["Stone", "Kine", "Coo", "Parasol", "Clean", "Needle"]),
+        self.run_location_test(LocationName.sand_canyon_rob, ["Stone", "Kine", "Coo", "Parasol", "Clean", "Ice"])
+        self.run_location_test(LocationName.sand_canyon_rob, ["Stone", "Kine", "Coo", "Parasol", "Spark", "Needle"])
+        self.run_location_test(LocationName.sand_canyon_rob, ["Stone", "Kine", "Coo", "Parasol", "Clean", "Needle"])
         self.run_location_test(LocationName.cloudy_park_hibanamodoki, ["Coo", "Clean"])
         self.run_location_test(LocationName.cloudy_park_piyokeko, ["Needle"])
         self.run_location_test(LocationName.cloudy_park_mikarin, ["Coo"])
@@ -36,7 +36,7 @@ class TestLocations(KDL3TestBase):
         self.run_location_test(LocationName.iceberg_angel, ["Cutter", "Burning", "Spark", "Parasol", "Needle", "Clean",
                                                             "Stone", "Ice"])
 
-    def run_location_test(self, location: str, itempool: typing.List[str]):
+    def run_location_test(self, location: str, itempool: typing.List[str]) -> None:
         items = itempool.copy()
         while len(itempool) > 0:
             self.assertFalse(self.can_reach_location(location), str(self.multiworld.seed))
@@ -59,7 +59,7 @@ class TestShiro(KDL3TestBase):
         "plando_options": "connections"
     }
 
-    def test_shiro(self):
+    def test_shiro(self) -> None:
         self.assertFalse(self.can_reach_location("Iceberg 5 - Shiro"), str(self.multiworld.seed))
         self.collect_by_name("Nago")
         self.assertFalse(self.can_reach_location("Iceberg 5 - Shiro"), str(self.multiworld.seed))

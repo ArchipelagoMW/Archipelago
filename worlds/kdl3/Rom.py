@@ -2,7 +2,7 @@ import typing
 from pkgutil import get_data
 
 import Utils
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING, Tuple, Dict, List
 import hashlib
 import os
 import struct
@@ -261,53 +261,56 @@ class RomData:
         self.file = bytearray(file)
         self.name = name
 
-    def read_byte(self, offset: int):
+    def read_byte(self, offset: int) -> int:
         return self.file[offset]
 
-    def read_bytes(self, offset: int, length: int):
+    def read_bytes(self, offset: int, length: int) -> bytearray:
         return self.file[offset:offset + length]
 
-    def write_byte(self, offset: int, value: int):
+    def write_byte(self, offset: int, value: int) -> None:
         self.file[offset] = value
 
-    def write_bytes(self, offset: int, values: typing.Sequence) -> None:
+    def write_bytes(self, offset: int, values: typing.Sequence[int]) -> None:
         self.file[offset:offset + len(values)] = values
 
     def get_bytes(self) -> bytes:
         return bytes(self.file)
 
 
-def handle_level_sprites(stages, sprites, palettes):
+def handle_level_sprites(stages: List[Tuple[int, ...]], sprites: List[bytearray], palettes: List[List[bytearray]]) \
+        -> Tuple[List[bytearray], List[bytearray]]:
     palette_by_level = list()
     for palette in palettes:
         palette_by_level.extend(palette[10:16])
+    out_palettes = list()
     for i in range(5):
         for j in range(6):
             palettes[i][10 + j] = palette_by_level[stages[i][j] - 1]
-        palettes[i] = [x for palette in palettes[i] for x in palette]
+        out_palettes.append(bytearray([x for palette in palettes[i] for x in palette]))
     tiles_by_level = list()
     for spritesheet in sprites:
         decompressed = hal_decompress(spritesheet)
         tiles = [decompressed[i:i + 32] for i in range(0, 2304, 32)]
         tiles_by_level.extend([[tiles[x] for x in stage_tiles[stage]] for stage in stage_tiles])
+    out_sprites = list()
     for world in range(5):
         levels = [stages[world][x] - 1 for x in range(6)]
-        world_tiles: typing.List[typing.Optional[bytes]] = [None for _ in range(72)]
+        world_tiles: typing.List[bytes] = [bytes() for _ in range(72)]
         for i in range(6):
             for x in range(12):
                 world_tiles[stage_tiles[i][x]] = tiles_by_level[levels[i]][x]
-        sprites[world] = list()
+        out_sprites.append(bytearray())
         for tile in world_tiles:
-            sprites[world].extend(tile)
+            out_sprites[world].extend(tile)
         # insert our fake compression
-        sprites[world][0:0] = [0xe3, 0xff]
-        sprites[world][1026:1026] = [0xe3, 0xff]
-        sprites[world][2052:2052] = [0xe0, 0xff]
-        sprites[world].append(0xff)
-    return sprites, palettes
+        out_sprites[world][0:0] = [0xe3, 0xff]
+        out_sprites[world][1026:1026] = [0xe3, 0xff]
+        out_sprites[world][2052:2052] = [0xe0, 0xff]
+        out_sprites[world].append(0xff)
+    return out_sprites, out_palettes
 
 
-def write_heart_star_sprites(rom: RomData):
+def write_heart_star_sprites(rom: RomData) -> None:
     compressed = rom.read_bytes(heart_star_address, heart_star_size)
     decompressed = hal_decompress(compressed)
     patch = get_data(__name__, os.path.join("data", "APHeartStar.bsdiff4"))
@@ -319,7 +322,7 @@ def write_heart_star_sprites(rom: RomData):
     rom.write_bytes(0x3F0EBF, [0x00, 0xD0, 0x39])
 
 
-def write_consumable_sprites(rom: RomData, consumables: bool, stars: bool):
+def write_consumable_sprites(rom: RomData, consumables: bool, stars: bool) -> None:
     compressed = rom.read_bytes(consumable_address, consumable_size)
     decompressed = hal_decompress(compressed)
     patched = bytearray(decompressed)
@@ -339,7 +342,7 @@ class KDL3PatchExtensions(APPatchExtension):
     game = "Kirby's Dream Land 3"
 
     @staticmethod
-    def apply_post_patch(_: APProcedurePatch, rom: bytes):
+    def apply_post_patch(_: APProcedurePatch, rom: bytes) -> bytes:
         rom_data = RomData(rom)
         target_language = rom_data.read_byte(0x3C020)
         rom_data.write_byte(0x7FD9, target_language)
@@ -347,9 +350,9 @@ class KDL3PatchExtensions(APPatchExtension):
         if rom_data.read_bytes(0x3D014, 1)[0] > 0:
             stages = [struct.unpack("HHHHHHH", rom_data.read_bytes(0x3D020 + x * 14, 14)) for x in range(5)]
             palettes = [rom_data.read_bytes(full_pal, 512) for full_pal in stage_palettes]
-            palettes = [[palette[i:i + 32] for i in range(0, 512, 32)] for palette in palettes]
+            read_palettes = [[palette[i:i + 32] for i in range(0, 512, 32)] for palette in palettes]
             sprites = [rom_data.read_bytes(offset, level_sprites[offset]) for offset in level_sprites]
-            sprites, palettes = handle_level_sprites(stages, sprites, palettes)
+            sprites, palettes = handle_level_sprites(stages, sprites, read_palettes)
             for addr, palette in zip(stage_palettes, palettes):
                 rom_data.write_bytes(addr, palette)
             for addr, level_sprite in zip([0x1CA000, 0x1CA920, 0x1CB230, 0x1CBB40, 0x1CC450], sprites):
@@ -377,7 +380,7 @@ class KDL3ProcedurePatch(APProcedurePatch, APTokenMixin):
         return get_base_rom_bytes()
 
 
-def patch_rom(world: "KDL3World", patch: KDL3ProcedurePatch):
+def patch_rom(world: "KDL3World", patch: KDL3ProcedurePatch) -> None:
     patch.write_file("kdl3_basepatch.bsdiff4",
                      get_data(__name__, os.path.join("data", "kdl3_basepatch.bsdiff4")))
 
@@ -415,8 +418,8 @@ def patch_rom(world: "KDL3World", patch: KDL3ProcedurePatch):
             music_map[8] = world.random.choice(music_choices)
             for room in rooms:
                 room.music = music_map[room.music]
-            for room in room_music:
-                patch.write_token(APTokenTypes.WRITE, room + 2, bytes([music_map[room_music[room]]]))
+            for room_ptr in room_music:
+                patch.write_token(APTokenTypes.WRITE, room_ptr + 2, bytes([music_map[room_music[room_ptr]]]))
             for i, old_music in zip(range(5), [25, 26, 28, 27, 30]):
                 # level themes
                 patch.write_token(APTokenTypes.WRITE, 0x133F2 + i, bytes([music_map[old_music]]))
@@ -563,13 +566,15 @@ def patch_rom(world: "KDL3World", patch: KDL3ProcedurePatch):
         for addr in kirby_target_palettes:
             target = kirby_target_palettes[addr]
             palette = get_kirby_palette(world)
-            patch.write_token(APTokenTypes.WRITE, addr, get_palette_bytes(palette, target[0], target[1], target[2]))
+            if palette is not None:
+                patch.write_token(APTokenTypes.WRITE, addr, get_palette_bytes(palette, target[0], target[1], target[2]))
 
     if world.options.gooey_flavor_preset.value != 0:
         for addr in gooey_target_palettes:
             target = gooey_target_palettes[addr]
             palette = get_gooey_palette(world)
-            patch.write_token(APTokenTypes.WRITE, addr, get_palette_bytes(palette, target[0], target[1], target[2]))
+            if palette is not None:
+                patch.write_token(APTokenTypes.WRITE, addr, get_palette_bytes(palette, target[0], target[1], target[2]))
 
     patch.write_file("token_patch.bin", patch.get_token_binary())
 

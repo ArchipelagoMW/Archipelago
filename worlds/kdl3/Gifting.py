@@ -36,10 +36,10 @@ async def pop_object(ctx: "CommonContext", key: str, value: str) -> None:
 async def initialize_giftboxes(ctx: "CommonContext", giftbox_key: str, motherbox_key: str, is_open: bool) -> None:
     ctx.set_notify(motherbox_key, giftbox_key)
     await update_object(ctx, f"Giftboxes;{ctx.team}", {f"{ctx.slot}":
-        {
-            "IsOpen": is_open,
-            **kdl3_gifting_options
-        }})
+                                                       {
+                                                           "IsOpen": is_open,
+                                                           **kdl3_gifting_options
+                                                       }})
     setattr(ctx, "gifting", is_open)
 
 
