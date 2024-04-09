@@ -1,6 +1,7 @@
 from ..generic.Rules import set_rule, add_rule
 from ..AutoWorld import World
 from .GeneratedRules import set_generated_rules
+from .GodhomeData import set_godhome_rules
 from typing import NamedTuple
 
 
@@ -39,6 +40,7 @@ def hk_set_rule(hk_world: World, location: str, rule):
 def set_rules(hk_world: World):
     player = hk_world.player
     set_generated_rules(hk_world, hk_set_rule)
+    set_godhome_rules(hk_world, hk_set_rule)
 
     # Shop costs
     for location in hk_world.multiworld.get_locations(player):
