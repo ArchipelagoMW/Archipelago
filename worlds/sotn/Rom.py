@@ -7,8 +7,11 @@ from Utils import home_path
 from settings import get_settings
 from worlds.AutoWorld import World
 from BaseClasses import ItemClassification
-from .Items import ItemData, item_table, IType, get_item_data_shop
+from .Items import (ItemData, item_table, IType, get_item_data_shop, tile_id_offset, hand_type_table, chest_type_table,
+                    helmet_type_table, cloak_type_table, acc_type_table)
 from .Locations import location_table
+from .Candles import Candles
+from .Enemies import Enemies
 
 import hashlib
 import os
@@ -76,6 +79,7 @@ class SOTNDeltaPatch(APDeltaPatch):
 
     def patch(self, target: str):
         """Base + Delta -> Patched"""
+        print("Patching")
         patch_path = target[:-4] + ".apsotn"
 
         with open(patch_path, "rb") as infile:
@@ -89,7 +93,7 @@ class SOTNDeltaPatch(APDeltaPatch):
             audio_rom = bytearray(infile.read())
 
         patched_rom = original_rom.copy()
-        music_slice = original_rom[0x000affd0:0x000b0c2c]  # Size 0xc5c / 3164
+        music_slice = original_rom[0x000affd0:0x000b9ea5]  # Size 0x9ed5 / 40661
         original_slice = music_slice + original_rom[0x04389c6c:0x06a868a4]
 
         patched_slice = bsdiff4.patch(bytes(original_slice), diff_patch)
@@ -101,8 +105,8 @@ class SOTNDeltaPatch(APDeltaPatch):
         # patchPowerOfSireFlashing Patches researched by MottZilla.
         write_word(patched_rom, 0x00136580, 0x03e00008)
 
-        patched_rom[0x000affd0:0x000b0c2c] = patched_slice[0:0xc5c]
-        patched_rom[0x04389c6c:0x06a868a4] = patched_slice[0xc5c:]
+        patched_rom[0x000affd0:0x000b9ea5] = patched_slice[0:0x9ed5]
+        patched_rom[0x04389c6c:0x06a868a4] = patched_slice[0x9ed5:]
 
         with open(target[:-4] + ".bin", "wb") as stream:
             stream.write(patched_rom)
@@ -211,8 +215,9 @@ def replace_shop_text(buffer, new_text):
     write_char(buffer, start_address + 1, 0x00)
 
 
-# TODO: ALWAYS REMEMBER that the slice will change if more addresses are added Slice: 0x04389c6c:0x06a868a4
-# Music extra slice 0x000affd0:0x000b0c2c
+# ALWAYS REMEMBER that the slice will change if more addresses are added Slice: 0x04389c6c:0x06a868a4
+# Music extra slice 0x000affd0:0x000b0c2c changed max to 0x000b9ea5 for enemy drop
+
 def patch_rom(world: World, output_directory: str) -> None:
     original_rom = bytearray(get_base_rom_bytes())
     patched_rom = original_rom.copy()
@@ -224,6 +229,8 @@ def patch_rom(world: World, output_directory: str) -> None:
     prices = world.options.rng_prices
     bosses = world.options.bosses_need
     exp = world.options.exp_need
+    candles = world.options.rng_candles
+    drops = world.options.rng_drops
     if bosses > 20:
         bosses = 20
     if exp > 20:
@@ -364,12 +371,11 @@ def patch_rom(world: World, output_directory: str) -> None:
     if prices != 0 and prices <= 3:
         randomize_prices(patched_rom, prices)
 
-    # Guess I don't need this anymore
-    # filename = os.path.join(output_directory, f"{world.multiworld.get_out_file_name_base(world.player)}.bin")
-    # write_to_file(patched_rom, filename)
+    randomize_candles(patched_rom, candles)
+    randomize_drops(patched_rom, drops)
 
-    music_slice = original_rom[0x000affd0:0x000b0c2c]
-    music_patched = patched_rom[0x000affd0:0x000b0c2c]
+    music_slice = original_rom[0x000affd0:0x000b9ea5]
+    music_patched = patched_rom[0x000affd0:0x000b9ea5]
 
     original_slice = music_slice + original_rom[0x04389c6c:0x06a868a4]
     patched_slice = music_patched + patched_rom[0x04389c6c:0x06a868a4]
@@ -382,10 +388,6 @@ def patch_rom(world: World, output_directory: str) -> None:
 
     with open(patch_path, 'wb') as outfile:
         outfile.write(patch)
-
-    # Delete created files
-    # if os.path.exists(filename):
-    #    os.unlink(filename)
 
 
 def write_seed(buffer, seed) -> None:
@@ -417,70 +419,6 @@ def write_to_file(buffer, filename=""):
 
     with open(output_file, 'wb') as outfile:
         outfile.write(buffer)
-
-
-def pos_patch(seed_name):
-    error_msg = "No error message"
-
-    with open(get_settings().sotn_settings.rom_file, "rb") as infile:
-        original_rom = bytearray(infile.read())
-
-    with open(seed_name + ".apsotn", "rb") as infile:
-        diff_patch = bytes(infile.read())
-
-    with open(get_settings().sotn_settings.audio_file, "rb") as infile:
-        audio_rom = bytearray(infile.read())
-
-    patched_rom = original_rom.copy()
-    music_slice = original_rom[0x000affd0:0x000b0c2c]  # Size 0xc5c / 3164
-    original_slice = music_slice + original_rom[0x04389c6c:0x06a868a4]
-
-    patched_slice = bsdiff4.patch(bytes(original_slice), diff_patch)
-
-    # Patch Clock Room cutscene
-    write_char(patched_rom, 0x0aeaa0, 0x00)
-    write_char(patched_rom, 0x119af4, 0x00)
-
-    # patchPowerOfSireFlashing Patches researched by MottZilla.
-    write_word(patched_rom, 0x00136580, 0x03e00008)
-
-    patched_rom[0x000affd0:0x000b0c2c] = patched_slice[0:0xc5c]
-    patched_rom[0x04389c6c:0x06a868a4] = patched_slice[0xc5c:]
-
-    file_name = seed_name + ".bin"
-    with open(file_name, "wb") as stream:
-        stream.write(patched_rom)
-
-    audio_name = file_name[0:file_name.rfind('\\') + 1]
-    audio_name += "Castlevania - Symphony of the Night (USA) (Track 2).bin"
-
-    if os.path.exists(audio_name):
-        print("Track 2 already exists!")
-    else:
-        print("Creating audio file!")
-        with open(audio_name, "wb") as stream:
-            stream.write(audio_rom)
-
-    if platform == "win32":
-        print("ERROR RECALC started. Please wait")
-        if os.path.exists("error_recalc.exe"):
-            error_recalc_path = "error_recalc.exe"
-        elif os.path.exists(f"{home_path('lib')}\\error_recalc.exe"):
-            error_recalc_path = f"{home_path('lib')}\\error_recalc.exe"
-        else:
-            error_recalc_path = ""
-
-        print(f"Path: {error_recalc_path}")
-        if error_recalc_path != "":
-            subprocess.call([error_recalc_path, f"{file_name}"])
-        else:
-            error_msg = "Couldn't find error_recalc.exe"
-            print("Couldn't find error_recalc.exe")
-    else:
-        error_msg = "EDC/ECC isn't implement on your OS"
-        print("ERROR RECALC FAILED!!!")
-
-    return error_msg
 
 
 def randomize_music(buffer):
@@ -577,3 +515,102 @@ def randomize_prices(buffer, prices):
     for key, value in shop_stock.items():
         rng_price = random.randrange(min_prices, max_prices)
         write_word(buffer, value + 4, rng_price)
+
+
+def randomize_candles(buffer, rng_choice=0):
+    if rng_choice == 0:
+        return
+
+    rng_item = 0
+    rng_type = 0
+    for candle in Candles:
+        if candle.name == "Stopwatch" and (candle.zone == "NO0" or candle.zone == "RNO0"):
+            continue
+        if rng_choice == 1:
+            if candle.name in ["Heart", "Big heart"]:
+                rng_item = random.choice([0, 1])
+            elif candle.name in ["$1", "$25", "$50", "$100", "$250", "$400", "$1000", "$2000"]:
+                rng_item = random.choice([2, 3, 4, 5, 6, 7, 9, 10])
+            elif (candle.name in
+                  ["Dagger", "Axe", "Cross", "Holy water", "Stopwatch", "Bible", "Rebound Stone", "Vibhuti", "Agunea"]):
+                rng_item = random.choice([14, 15, 16, 17, 18, 19, 20, 21, 22])
+            elif candle.name == "Uncurse":
+                rng_item = random.choice([i for i in range(1, 259) if i not in [169, 195, 217, 226]])
+                rng_type = 1
+            else:
+                print(f"DEBUG: ERROR {candle.name}")
+                pass
+        if rng_choice == 2:
+            rng_type = random.randrange(0, 2)
+
+            if rng_type == 0:
+                rng_item = random.choice([i for i in range(0, 24) if i not in [8, 11, 13]])
+            else:
+                rng_item = random.choice([i for i in range(1, 259) if i not in [169, 195, 217, 226]])
+
+        item_id = (candle.offset << 8) | rng_item
+        if candle.offset & rng_item >= tile_id_offset:
+            item_id += tile_id_offset
+        else:
+            if rng_type == 1:
+                item_id += tile_id_offset
+
+
+def randomize_drops(buffer, rng_choice=0):
+    if rng_choice == 0:
+        return
+
+    rng_item = 0
+    rng_type = 0
+
+    for enemy in Enemies:
+        if rng_choice == 1:
+                if enemy.name in ["Heart", "Big heart"]:
+                    rng_item = random.choice([0, 1])
+                elif enemy.name in ["$1", "$25", "$50", "$100", "$250", "$400", "$1000", "$2000"]:
+                    rng_item = random.choice([2, 3, 4, 5, 6, 7, 9, 10])
+                elif enemy.name in ["Dagger", "Axe", "Cross", "Holy water", "Stopwatch", "Bible", "Rebound Stone",
+                                    "Vibhuti", "Agunea"]:
+                    rng_item = random.choice([14, 15, 16, 17, 18, 19, 20, 21, 22])
+                elif enemy.name in hand_type_table:
+                    rng_item = random.randrange(1, 169)
+                elif enemy.name in chest_type_table:
+                    chest_table = [x for x in range(170, 195)]
+                    chest_table.append(258)
+                    rng_item = random.choice(chest_table)
+                elif enemy.name in helmet_type_table:
+                    rng_item = random.randrange(196, 217)
+                elif enemy.name in cloak_type_table:
+                    rng_item = random.randrange(218, 226)
+                elif enemy.name in acc_type_table:
+                    rng_item = random.randrange(227, 258)
+                else:
+                    print(f"DEBUG: ERROR {enemy.name}")
+
+                item_id = rng_item
+                if rng_item >= tile_id_offset:
+                    item_id += tile_id_offset
+                else:
+                    if rng_type == 1:
+                        item_id += tile_id_offset
+
+                write_short(buffer, a, item_id)
+
+        if rng_choice == 2:
+            for a in enemy.addresses:
+                rng_type = random.randrange(0, 2)
+
+                if rng_type == 0:
+                    rng_item = random.choice([i for i in range(0, 24) if i not in [8, 11, 13]])
+                else:
+                    rng_item = random.choice([i for i in range(1, 259) if i not in [169, 195, 217, 226]])
+
+                item_id = rng_item
+                if rng_item >= tile_id_offset:
+                    item_id += tile_id_offset
+                else:
+                    if rng_type == 1:
+                        item_id += tile_id_offset
+
+                write_short(buffer, a, item_id)
+
