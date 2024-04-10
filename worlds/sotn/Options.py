@@ -78,6 +78,28 @@ class ExpNeed(Range):
     default = 0
 
 
+class RngCandles(Choice):
+    """
+    Randomize candle drops
+    """
+    display_name = "Randomize candle drop"
+    option_off = 0
+    option_on = 1
+    option_crazy = 2
+    default = 0
+
+
+class RngDrops(Choice):
+    """
+    Randomize enemies drops
+    """
+    display_name = "Randomize enemy drop"
+    option_off = 0
+    option_on = 1
+    option_crazy = 2
+    default = 0
+
+
 class ExtraPool(FreeText):
     """Extra item added to the pool"""
     display_name = "Extra items"
@@ -94,6 +116,8 @@ sotn_option_definitions: Dict[str, type(Option)] = {
     "rng_shop": RngShop,
     "rng_prices": RngPrices,
     "exp_need": ExpNeed,
+    "rng_candles": RngCandles,
+    "rng_drops": RngDrops,
     "extra_pool": ExtraPool
 }
 
