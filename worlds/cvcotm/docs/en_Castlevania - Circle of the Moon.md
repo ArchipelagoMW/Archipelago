@@ -54,7 +54,24 @@ groups you can use for Castlevania: Circle of the Moon are as follows:
 In Castlevania: Circle of the Moon, every location is part of a location group under that location's area name.
 So if you want to exclude all of, say, Underground Waterway, you can do so by just excluding "Underground Waterway" as a whole.
 
-## Why do magic items sometimes look like a garbled mess?
+## Why do magic items sometimes look like a glitched mess?
 This is to do with the fact that the magic item's graphics cannot be loaded at the same time as some special action objects
 that might be in that same room, such as crumbling platforms and push/tackle blocks. It will still function like normal when
 picked up, it just looks weird.
+
+## Will the Castlevania Advance Collection and/or Wii U Virtual Console versions work?
+
+The Castlevania Advance Collection ROM is tested and known to technically work. However, there are some major caveats with the
+Advance Collection version; most notably the fact that the audio does not function when played in an emulator outside
+the collection, which is currently required in order to connect to a multiworld. This happens because Konami stripped out
+all the audio code from the ROM as they were making the collection, and all sound instead goes through the collection itself.
+
+For this reason, it is most recommended to acquire the ROM by dumping it from a cartridge of the game that you legally own.
+Though, the Advance Collection *can* still techinally be an option for one who does not wish to do that if they don't mind
+the lack of sound.
+
+The Wii U Virtual Console version is currently untested. If you happen to have bought it before the Wii U eShop shut down, you can try
+playing with it. However, please know that there are no guarantees that it will work well due to it being untested.
+
+Regardless of which release you are attempting to play with, the US version of the game is required.
+

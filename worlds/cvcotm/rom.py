@@ -17,8 +17,9 @@ from settings import get_settings
 if TYPE_CHECKING:
     from . import CVCotMWorld
 
-CVCOTM_CT_US_HASH = "50a1089600603a94e15ecf287f8d5a1f"  # GBA Cartridge version
+CVCOTM_CT_US_HASH = "50a1089600603a94e15ecf287f8d5a1f"  # GBA cartridge version
 CVCOTM_AC_US_HASH = "87a1bd6577b6702f97a60fc55772ad74"  # Castlevania Advance Collection version
+CVCotM_VC_US_HASH = "2cc38305f62b337281663bad8c901cf9"  # Wii U Virtual Console version
 
 AREA_LIST_START = 0xD9A40
 
@@ -185,7 +186,7 @@ class CVCotMPatchExtensions(APPatchExtension):
 
 
 class CVCotMProcedurePatch(APProcedurePatch, APTokenMixin):
-    hash = [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH]
+    hash = [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH, CVCotM_VC_US_HASH]
     patch_file_ending: str = ".apcvcotm"
     result_file_ending: str = ".gba"
 
@@ -241,9 +242,9 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
-        if basemd5.hexdigest() not in [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH]:
+        if basemd5.hexdigest() not in [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH, CVCotM_VC_US_HASH]:
             raise Exception("Supplied Base ROM does not match known MD5s for Castlevania: Circle of the Moon USA."
-                            "Get the correct cartridge, or the Castlevania Advance Collection, then extract it.")
+                            "Get the correct game and version, then dump it.")
         setattr(get_base_rom_bytes, "base_rom_bytes", base_rom_bytes)
     return base_rom_bytes
 
