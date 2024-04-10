@@ -106,7 +106,7 @@ class SotnWorld(World):
                        'Luminus', 'Harper', 'Obsidian sword', 'Gram', 'Jewel sword', 'Mormegil', 'Firebrand',
                        'Thunderbrand', 'Icebrand', 'Stone sword', 'Holy sword', 'Terminus est', 'Marsil',
                        'Dark blade', 'Heaven sword', 'Fist of tulkas', 'Gurthang', 'Mourneblade', 'Alucard sword',
-                       'Mablung Sword', 'Badelaire', 'Sword familiar', 'Great sword', 'Mace', 'Morningstar',
+                       'Mablung sword', 'Badelaire', 'Sword familiar', 'Great sword', 'Mace', 'Morningstar',
                        'Holy rod', 'Star flail', 'Moon rod', 'Chakram', 'Holbein dagger', 'Blue knuckles',
                        'Osafune katana', 'Masamune', 'Muramasa', 'Runesword', 'Vorpal blade', 'Crissaegrim',
                        'Yasutsuna', 'Alucart sword']
