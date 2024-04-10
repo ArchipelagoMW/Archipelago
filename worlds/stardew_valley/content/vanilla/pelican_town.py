@@ -120,8 +120,12 @@ pelican_town = ContentPack(
         ),
 
         Seed.mixed: (
-            PermanentSource(regions=(Region.town, Region.farm, Region.forest)),
-        )
+            ForagingSource(seasons=(Season.spring, Season.summer, Season.fall,), regions=(Region.town, Region.farm, Region.forest)),
+        ),
+
+        Seed.mixed_flower: (
+            ForagingSource(seasons=(Season.summer,), regions=(Region.town, Region.farm, Region.forest)),
+        ),
     },
     shop_sources={
         # Saplings

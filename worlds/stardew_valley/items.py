@@ -488,8 +488,7 @@ def create_player_buff(item_factory, buff: str, amount: int, need_all_buffs: boo
 
 def create_traveling_merchant_items(item_factory: StardewItemFactory, items: List[Item]):
     items.extend([*(item_factory(item) for item in items_by_group[Group.TRAVELING_MERCHANT_DAY]),
-                  *(item_factory(item) for item in ["Traveling Merchant Stock Size"] * 6),
-                  *(item_factory(item) for item in ["Traveling Merchant Discount"] * 8)])
+                  *(item_factory(item) for item in ["Traveling Merchant Stock Size"] * 6)])
 
 
 def create_seasons(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
