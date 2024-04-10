@@ -2,7 +2,7 @@
 
 ## Required Software
 
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Make sure to check the box for `SNI Client`
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).
 
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI such as:
@@ -19,8 +19,8 @@ The Archipelago community cannot supply you with this.
 
 ### Windows Setup
 
-1. During the installation of Archipelago, you will have been asked to install the SNI Client. If you did not do this,
-   or you are on an older version, you may run the installer again to install the SNI Client.
+1. Download and install [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). **The installer 
+   file is located in the assets section at the bottom of the version information.**
 2. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
    files.
     1. Extract your emulator's folder to your Desktop, or somewhere you will remember.
@@ -39,8 +39,8 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a config file?
 
-The Player Settings page on the website allows you to configure your personal settings and export a config file from
-them. Player settings page: [Final Fantasy Mystic Quest Player Settings Page](/games/Final%20Fantasy%20Mystic%20Quest/player-settings)
+The Player Options page on the website allows you to configure your personal options and export a config file from
+them. Player options page: [Final Fantasy Mystic Quest Player Options Page](/games/Final%20Fantasy%20Mystic%20Quest/player-options)
 
 ### Verifying your config file
 
@@ -49,8 +49,8 @@ validator page: [YAML Validation page](/mysterycheck)
 
 ## Generating a Single-Player Game
 
-1. Navigate to the Player Settings page, configure your options, and click the "Generate Game" button.
-    - Player Settings page: [Final Fantasy Mystic Quest Player Settings Page](/games/Final%20Fantasy%20Mystic%20Quest/player-settings)
+1. Navigate to the Player Options page, configure your options, and click the "Generate Game" button.
+    - Player Options page: [Final Fantasy Mystic Quest Player Options Page](/games/Final%20Fantasy%20Mystic%20Quest/player-options)
 2. You will be presented with a "Seed Info" page.
 3. Click the "Create New Room" link.
 4. You will be presented with a server page, from which you can download your `.apmq` patch file.
