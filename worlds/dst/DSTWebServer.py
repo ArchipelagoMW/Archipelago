@@ -18,7 +18,7 @@ authdirty = False
 receivequeue = []
 sendqueue = []
 connected = False
-serverstopsignel = False
+serverstopsignal = False
 
 lastping = time.time()
 frozencheck = time.time()
@@ -40,19 +40,19 @@ class DSTServer(BaseHTTPRequestHandler):
         # response = None
         # interfacelog.info("Reading data...")
         # data = codecs.decode(self.rfile.read(-1))[0:] #Why is rfile.read so slow!!!
-        data = ""
+        datastr:str = ""
         currentline = 1
         while True:
             newdata = codecs.decode(self.rfile.readline(currentline))
             newdata
             if newdata.endswith("EOF"):
                 newdata = newdata[:-3]
-                data += newdata
+                datastr += newdata
                 break
             else:
-                data = data + newdata
+                datastr = datastr + newdata
             currentline += 1
-        data = json.loads(data)
+        data:dict[str] = json.loads(datastr)
 
         datatype = dict.get(data, "datatype")
         if datatype == "Ping":
@@ -61,7 +61,6 @@ class DSTServer(BaseHTTPRequestHandler):
                     self.send_response(100)
                     self.end_headers()
                     event = sendqueue.pop(0)
-                    # print(event)
                     self.wfile.write(bytes(event, "utf-8"))
                 else:
                     self.send_response(200)
@@ -72,24 +71,23 @@ class DSTServer(BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(bytes(json.dumps({"datatype": "State", "connected": False}), "utf-8"))
         else:
-            if (datatype == "Chat" or datatype == "Join" or datatype == "Leave" or 
-                datatype == "Death" or datatype == "Item" or datatype == "Hint"):
-
-                receivequeue.append(data)
-                self.send_response(200)
-                self.end_headers()
-                self.wfile.write(bytes("Receaved " + datatype + " Signel", "utf-8"))
-            elif datatype == "Connect":
-                authname = dict.get(data, "name")
-                authip = dict.get(data, "ip")
-                authpassword = dict.get(data, "password")
-                authdirty = True
-                self.send_response(200)
-                self.end_headers()
-                self.wfile.write(bytes("Receaved Connect Signel", "utf-8"))
-            else:
-                self.send_response(400)
-                self.end_headers()
+            match datatype:
+                case "Chat" | "Join" | "Leave" | "Death" | "Item" | "Hint" | "State" | "Victory":
+                    receivequeue.append(data)
+                    self.send_response(200)
+                    self.end_headers()
+                    self.wfile.write(bytes("Recieved " + datatype + " Signal", "utf-8"))
+                case "Connect":
+                    authname = dict.get(data, "name")
+                    authip = dict.get(data, "ip")
+                    authpassword = dict.get(data, "password")
+                    authdirty = True
+                    self.send_response(200)
+                    self.end_headers()
+                    self.wfile.write(bytes("Recieved Connect Signal", "utf-8"))
+                case _:
+                    self.send_response(400)
+                    self.end_headers()
             
         # interfacelog.info("Done reading data.")
 
@@ -102,14 +100,14 @@ def getvariables():
             'receivequeue': receivequeue,
             'sendqueue': sendqueue,
             'connected': connected,
-            'serverstopsignel': serverstopsignel,
+            'serverstopsignal': serverstopsignal,
             'lastping': lastping,
             'frozencheck': frozencheck,
             }
 
 #Why do I do this instead of something like import? because I tried it and couldn't get it to work.
 def setvariables(dict: dict): 
-    global authname, authip, authpassword, authdirty, receivequeue, sendqueue, connected, serverstopsignel, lastping, frozencheck
+    global authname, authip, authpassword, authdirty, receivequeue, sendqueue, connected, serverstopsignal, lastping, frozencheck
     authname = authname if dict.get('authname') is None else dict.get('authname')
     authip = authip if dict.get('authip') is None else dict.get('authip')
     authpassword = authpassword if dict.get('authpassword') is None else dict.get('authpassword')
@@ -117,19 +115,19 @@ def setvariables(dict: dict):
     receivequeue = receivequeue if dict.get('receivequeue') is None else dict.get('receivequeue')
     sendqueue = sendqueue if dict.get('sendqueue') is None else dict.get('sendqueue')
     connected = connected if dict.get('connected') is None else dict.get('connected')
-    serverstopsignel = serverstopsignel if dict.get('serverstopsignel') is None else dict.get('serverstopsignel')
+    serverstopsignal = serverstopsignal if dict.get('serverstopsignal') is None else dict.get('serverstopsignal')
     lastping = lastping if dict.get('lastping') is None else dict.get('lastping')
     frozencheck = frozencheck if dict.get('frozencheck') is None else dict.get('frozencheck')
 
 # def stopserver():
-#     global serverstopsignel
-#     serverstopsignel = True
+#     global serverstopsignal
+#     serverstopsignal = True
 
 def startWebServer():
     webServer = HTTPServer((hostName, serverPort), DSTServer)
     interfacelog.info("Started DST WebServer http://%s:%s" % (hostName, serverPort))
 
-    while serverstopsignel != True and not (time.time() - frozencheck > 5):
+    while serverstopsignal != True and not (time.time() - frozencheck > 5):
         webServer.handle_request()
     if time.time() - frozencheck > 5:
         interfacelog.info("WebServer: Seems the client has frozen, panicing and shutting down!")
