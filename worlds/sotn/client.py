@@ -69,6 +69,8 @@ class SotNClient(BizHawkClient):
         self.goal_complete = False
         self.dracula_dead = False
         self.update_variables = False
+        self.received_relics = []
+        self.last_owned = []
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
@@ -352,6 +354,7 @@ class SotNClient(BizHawkClient):
                                 ctx.bizhawk_ctx, [(0x03bf1d, 2, "MainRAM")]))[0], "little"))
                         self.populate_misplaced(ctx)
                     self.last_time = now
+                    self.just_died = False
 
                     if self.misplaced_changed:
                         print("DEBUG: Misplaced changed")
@@ -418,7 +421,6 @@ class SotNClient(BizHawkClient):
 
                         if loc_data is not None:
                             if loc_data.can_be_relic:
-                                # if loc_data.game_id == 3074 or loc_data.game_id == 3141 or loc_data.game_id == 3142:
                                 # Item on a relic spot,  only bat card, skill of wolf, jewel of open and relics of vlad
                                 if loc_data.game_id in [3074, 3141, 3142, 3211, 3221, 3252, 3261, 3305]:
                                     if item_data[1].type != IType.RELIC:
@@ -742,16 +744,17 @@ class SotNClient(BizHawkClient):
                                 self.message_queue.append(f"{c[1]} checked")
                                 print("DEBUG: Checked by item")
                             else:
+                                owned_relics = await bizhawk.read(ctx.bizhawk_ctx, [(0x097964, 30, "MainRAM")])
                                 # Are we close to a relic location?
-                                # TODO: Add a better check for a relic
                                 for point in c[6]:
-                                    o = c[2]
                                     x = abs(int(point[0]) - player_x)
                                     y = abs(int(point[1]) - player_y)
-                                    if 0 <= x <= o and 0 <= y <= o:
-                                        self.checked_locations.append(loc_data.get_location_id())
-                                        self.message_queue.append(f"{c[1]} checked")
-                                        break
+                                    if 0 <= x <= 50 and 0 <= y <= 50:
+                                        result = await self.check_relic(owned_relics)
+                                        if result:
+                                            self.checked_locations.append(loc_data.get_location_id())
+                                            self.message_queue.append(f"{c[1]} checked")
+                                            break
                         else:
                             for point in c[6]:
                                 o = c[2]
@@ -768,6 +771,28 @@ class SotNClient(BizHawkClient):
                         if loc_data.get_location_id() not in self.checked_locations:
                             self.checked_locations.append(loc_data.get_location_id())
 
+    async def check_relic(self, owned: list) -> bool:
+        owned_list = list(bytes(owned[0]))
+
+        if self.last_owned:
+            for i in range(30):
+                if owned_list[i] != self.last_owned[i] and self.last_owned[i] == 0:
+                    # Did we just receive a relic?
+                    print(f"DEBUG: Testing relic {i}")
+                    for relic in self.received_relics:
+                        relic_index = 300 + i
+                        print(f"DEBUG: Relic testing {i}/{relic_index}/{relic}")
+                        if i > 22:
+                            relic_index = 300 + i + 2
+                        if relic_index == relic:
+                            continue
+                    print(f"DEBUG: Relic changed in {i}")
+                    self.last_owned = owned_list
+                    return True
+
+        self.last_owned = owned_list
+        return False
+
     def add_misplaced(self, ctx: "BizHawkClientContext", item_id: int):
         filename = f"{os.getcwd()}\\AP_{ctx.seed_name}_P{ctx.slot}_{ctx.username}.txt"
 
@@ -780,6 +805,10 @@ class SotNClient(BizHawkClient):
     def populate_misplaced(self, ctx: "BizHawkClientContext"):
         filename = f"{os.getcwd()}\\AP_{ctx.seed_name}_P{ctx.slot}_{ctx.username}.txt"
         self.misplaced_load = []
+
+        if not os.path.exists(filename):
+            with open(filename, "w") as stream:
+                stream.write(f"Save file for AP_{ctx.seed_name}_P{ctx.slot}_{ctx.username}\n")
 
         with open(filename, "r") as stream:
             next(stream)
@@ -795,11 +824,16 @@ class SotNClient(BizHawkClient):
 
         if 300 <= item_id < 400:
             relic = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(address, 1, "MainRAM")]))[0], "little")
+            self.received_relics.append(item_id)
+
             if relic == 0 or relic == 2 or relic > 3:
                 if 318 <= item_id <= 322:
                     await bizhawk.write(ctx.bizhawk_ctx, [(address, b'\x01', "MainRAM")])
                 else:
                     await bizhawk.write(ctx.bizhawk_ctx, [(address, b'\x03', "MainRAM")])
+            owned_relics = await bizhawk.read(ctx.bizhawk_ctx, [(0x097964, 30, "MainRAM")])
+            owned_list = list(bytes(owned_relics[0]))
+            self.last_owned = owned_list
             print("Relic granted")
         elif item_id == 412:
             cur_heart = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(address, 4, "MainRAM")]))[0], "little")
@@ -859,7 +893,7 @@ class SotNClient(BizHawkClient):
                 old_qty = qty_list[(old_item - start_byte) + offset - 1]
                 if old_qty == 0:
                     print(f"DEBUG: {old_item} Free found at {i} for {item}")
-                    for k in range(offset, 257, 1):
+                    for k in range(offset, 259, 1):
                         if inv_list[k] == item - offset + start_byte:
                             inv_list[i] = item - offset + start_byte
                             qty_list[item - 1] = 1
