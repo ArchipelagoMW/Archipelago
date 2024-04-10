@@ -200,7 +200,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, required_reports):
        #multiworld.get_location("Atlantica Ariel's Grotto High Chest"                                      , player).access_rule = lambda state: has_item(state, player, "")
        #multiworld.get_location("Atlantica Ariel's Grotto Middle Chest"                                    , player).access_rule = lambda state: has_item(state, player, "")
        #multiworld.get_location("Atlantica Ariel's Grotto Low Chest"                                       , player).access_rule = lambda state: has_item(state, player, "")
-        multiworld.get_location("Atlantica Ursula's Lair Use Fire on Urchin Chest"                         , player).access_rule = lambda state: has_item(state, player, "Progressive Fire") and has_item(state, player, "Mermaid Kick")
+        multiworld.get_location("Atlantica Ursula's Lair Use Fire on Urchin Chest"                         , player).access_rule = lambda state: has_item(state, player, "Progressive Fire")
        #multiworld.get_location("Atlantica Undersea Gorge Jammed by Ariel's Grotto Chest"                  , player).access_rule = lambda state: has_item(state, player, "")
         multiworld.get_location("Atlantica Triton's Palace White Trinity Chest"                            , player).access_rule = lambda state: has_item(state, player, "White Trinity")
     multiworld.get_location("Halloween Town Moonlight Hill White Trinity Chest"                            , player).access_rule = lambda state: has_item(state, player, "White Trinity")
@@ -529,7 +529,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, required_reports):
    #multiworld.get_location("Final Ansem"                                                                  , player).access_rule = lambda state: has_item(state, player, "")
    
     for i in range(options.level_checks):
-        multiworld.get_location("Level " + str(i+1).rjust(3,'0')                                           , player).access_rule = lambda state, level_num=i: has_x_worlds(state, player, min((level_num//10), 8))
+        multiworld.get_location("Level " + str(i+1).rjust(3,'0')                                           , player).access_rule = lambda state, level_num=i: has_x_worlds(state, player, min(((level_num//10)*2), 8))
 
     # Region rules.
     multiworld.get_entrance("Wonderland"                                                                   , player).access_rule = lambda state: has_item(state, player,"Wonderland")
