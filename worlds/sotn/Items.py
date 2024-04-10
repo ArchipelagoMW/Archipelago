@@ -192,7 +192,7 @@ hand_type_table = {
     "Gurthang": ItemData(121, IType.WEAPON1, 0x097a03, ItemClassification.useful),
     "Mourneblade": ItemData(122, IType.WEAPON1, 0x097a04, ItemClassification.useful),
     "Alucard sword": ItemData(123, IType.WEAPON1, 0x097a05, ItemClassification.useful),
-    "Mablung Sword": ItemData(124, IType.WEAPON1, 0x097a06, ItemClassification.useful),
+    "Mablung sword": ItemData(124, IType.WEAPON1, 0x097a06, ItemClassification.useful),
     "Badelaire": ItemData(125, IType.WEAPON1, 0x097a07, ItemClassification.useful),
     "Sword familiar": ItemData(126, IType.WEAPON1, 0x097a08, ItemClassification.useful),
     "Great sword": ItemData(127, IType.WEAPON2, 0x097a09, ItemClassification.useful),
