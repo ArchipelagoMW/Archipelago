@@ -158,7 +158,7 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
                     state.has("Power of mist", player)) or state.has("Gravity boots", player) or
                     state.has("Leap stone", player) or state.has("Soul of bat", player))
     else:
-        dai.connect(are, "ARE->DAI", lambda state: (state.has("Form of mist", player) and
+        dai.connect(are, "DAI->ARE", lambda state: (state.has("Form of mist", player) and
                     state.has("Power of mist", player)) or state.has("Gravity boots", player) or
                     state.has("Leap stone", player) or state.has("Soul of bat", player) or
                     state.has("Jewel of open", player))
