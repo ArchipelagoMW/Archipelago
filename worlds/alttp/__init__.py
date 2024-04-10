@@ -330,10 +330,6 @@ class ALTTPWorld(World):
                 self.dungeon_local_item_names |= self.item_name_groups[option.item_name_group]
                 if option == "original_dungeon":
                     self.dungeon_specific_item_names |= self.item_name_groups[option.item_name_group]
-                    if multiworld.master_keys[player] and dungeon_item == "small_key_shuffle":
-                        # The Ice Palace small key cannot be made reachable in the Ice Palace under these conditions
-                        self.dungeon_local_item_names.remove("Small Key (Ice Palace)")
-                        self.dungeon_specific_item_names.remove("Small Key (Ice Palace)")
 
         multiworld.difficulty_requirements[player] = difficulties[multiworld.item_pool[player].current_key]
 
