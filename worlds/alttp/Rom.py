@@ -2397,6 +2397,9 @@ def write_strings(rom, world, player):
             if hint_count:
                 locations = world.find_items_in_locations(items_to_hint, player, True)
                 local_random.shuffle(locations)
+                # make locked locations less likely to appear as hint,
+                # chances are the lock means the player already knows.
+                locations.sort(key=lambda sorting_location: not sorting_location.locked)
                 for x in range(min(hint_count, len(locations))):
                     this_location = locations.pop()
                     this_hint = this_location.item.hint_text + ' can be found ' + hint_text(this_location) + '.'
