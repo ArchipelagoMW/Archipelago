@@ -6,6 +6,7 @@ import multiprocessing
 import threading
 import time
 import typing
+from uuid import UUID
 from datetime import timedelta, datetime
 
 from pony.orm import db_session, select, commit
@@ -62,6 +63,16 @@ def autohost(config: dict):
     def keep_running():
         try:
             with Locker("autohost"):
+                # delete unowned user-content
+                with db_session:
+                    # >>> bool(uuid.UUID(int=0))
+                    # True
+                    rooms = Room.select(lambda room: room.owner == UUID(int=0)).delete(bulk=True)
+                    seeds = Seed.select(lambda seed: seed.owner == UUID(int=0) and not seed.rooms).delete(bulk=True)
+                    slots = Slot.select(lambda slot: not slot.seed).delete(bulk=True)
+                    # Command gets deleted by ponyorm Cascade Delete, as Room is Required
+                if rooms or seeds or slots:
+                    logging.info(f"{rooms} Rooms, {seeds} Seeds and {slots} Slots have been deleted.")
                 run_guardian()
                 while 1:
                     time.sleep(0.1)
@@ -191,6 +202,6 @@ def run_guardian():
             guardian = threading.Thread(name="Guardian", target=guard)
 
 
-from .models import Room, Generation, STATE_QUEUED, STATE_STARTED, STATE_ERROR, db, Seed
+from .models import Room, Generation, STATE_QUEUED, STATE_STARTED, STATE_ERROR, db, Seed, Slot
 from .customserver import run_server_process, get_static_server_data
 from .generate import gen_game

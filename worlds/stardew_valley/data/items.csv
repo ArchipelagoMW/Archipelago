@@ -7,48 +7,46 @@ id,name,classification,groups,mod_name
 19,Glittering Boulder Removed,progression,COMMUNITY_REWARD,
 20,Minecarts Repair,useful,COMMUNITY_REWARD,
 21,Bus Repair,progression,COMMUNITY_REWARD,
-22,Movie Theater,useful,,
+22,Progressive Movie Theater,progression,COMMUNITY_REWARD,
 23,Stardrop,progression,,
 24,Progressive Backpack,progression,,
-25,Rusty Sword,progression,WEAPON,
-26,Leather Boots,progression,"FOOTWEAR,MINES_FLOOR_10",
-27,Work Boots,useful,"FOOTWEAR,MINES_FLOOR_10",
-28,Wooden Blade,progression,"MINES_FLOOR_10,WEAPON",
-29,Iron Dirk,progression,"MINES_FLOOR_10,WEAPON",
-30,Wind Spire,progression,"MINES_FLOOR_10,WEAPON",
-31,Femur,progression,"MINES_FLOOR_10,WEAPON",
-32,Steel Smallsword,progression,"MINES_FLOOR_20,WEAPON",
-33,Wood Club,progression,"MINES_FLOOR_20,WEAPON",
-34,Elf Blade,progression,"MINES_FLOOR_20,WEAPON",
-35,Glow Ring,useful,"MINES_FLOOR_20,RING",
-36,Magnet Ring,useful,"MINES_FLOOR_20,RING",
-37,Slingshot,progression,WEAPON,
-38,Tundra Boots,useful,"FOOTWEAR,MINES_FLOOR_50",
-39,Thermal Boots,useful,"FOOTWEAR,MINES_FLOOR_50",
-40,Combat Boots,useful,"FOOTWEAR,MINES_FLOOR_50",
-41,Silver Saber,progression,"MINES_FLOOR_50,WEAPON",
-42,Pirate's Sword,progression,"MINES_FLOOR_50,WEAPON",
-43,Crystal Dagger,progression,"MINES_FLOOR_60,WEAPON",
-44,Cutlass,progression,"MINES_FLOOR_60,WEAPON",
-45,Iron Edge,progression,"MINES_FLOOR_60,WEAPON",
-46,Burglar's Shank,progression,"MINES_FLOOR_60,WEAPON",
-47,Wood Mallet,progression,"MINES_FLOOR_60,WEAPON",
-48,Master Slingshot,progression,WEAPON,
-49,Firewalker Boots,useful,"FOOTWEAR,MINES_FLOOR_80",
-50,Dark Boots,useful,"FOOTWEAR,MINES_FLOOR_80",
-51,Claymore,progression,"MINES_FLOOR_80,WEAPON",
-52,Templar's Blade,progression,"MINES_FLOOR_80,WEAPON",
-53,Kudgel,progression,"MINES_FLOOR_80,WEAPON",
-54,Shadow Dagger,progression,"MINES_FLOOR_80,WEAPON",
-55,Obsidian Edge,progression,"MINES_FLOOR_90,WEAPON",
-56,Tempered Broadsword,progression,"MINES_FLOOR_90,WEAPON",
-57,Wicked Kris,progression,"MINES_FLOOR_90,WEAPON",
-58,Bone Sword,progression,"MINES_FLOOR_90,WEAPON",
-59,Ossified Blade,progression,"MINES_FLOOR_90,WEAPON",
-60,Space Boots,useful,"FOOTWEAR,MINES_FLOOR_110",
-61,Crystal Shoes,useful,"FOOTWEAR,MINES_FLOOR_110",
-62,Steel Falchion,progression,"MINES_FLOOR_110,WEAPON",
-63,The Slammer,progression,"MINES_FLOOR_110,WEAPON",
+25,Rusty Sword,filler,"WEAPON,DEPRECATED",
+26,Leather Boots,filler,"FOOTWEAR,DEPRECATED",
+27,Work Boots,filler,"FOOTWEAR,DEPRECATED",
+28,Wooden Blade,filler,"WEAPON,DEPRECATED",
+29,Iron Dirk,filler,"WEAPON,DEPRECATED",
+30,Wind Spire,filler,"WEAPON,DEPRECATED",
+31,Femur,filler,"WEAPON,DEPRECATED",
+32,Steel Smallsword,filler,"WEAPON,DEPRECATED",
+33,Wood Club,filler,"WEAPON,DEPRECATED",
+34,Elf Blade,filler,"WEAPON,DEPRECATED",
+37,Slingshot,filler,"WEAPON,DEPRECATED",
+38,Tundra Boots,filler,"FOOTWEAR,DEPRECATED",
+39,Thermal Boots,filler,"FOOTWEAR,DEPRECATED",
+40,Combat Boots,filler,"FOOTWEAR,DEPRECATED",
+41,Silver Saber,filler,"WEAPON,DEPRECATED",
+42,Pirate's Sword,filler,"WEAPON,DEPRECATED",
+43,Crystal Dagger,filler,"WEAPON,DEPRECATED",
+44,Cutlass,filler,"WEAPON,DEPRECATED",
+45,Iron Edge,filler,"WEAPON,DEPRECATED",
+46,Burglar's Shank,filler,"WEAPON,DEPRECATED",
+47,Wood Mallet,filler,"WEAPON,DEPRECATED",
+48,Master Slingshot,filler,"WEAPON,DEPRECATED",
+49,Firewalker Boots,filler,"FOOTWEAR,DEPRECATED",
+50,Dark Boots,filler,"FOOTWEAR,DEPRECATED",
+51,Claymore,filler,"WEAPON,DEPRECATED",
+52,Templar's Blade,filler,"WEAPON,DEPRECATED",
+53,Kudgel,filler,"WEAPON,DEPRECATED",
+54,Shadow Dagger,filler,"WEAPON,DEPRECATED",
+55,Obsidian Edge,filler,"WEAPON,DEPRECATED",
+56,Tempered Broadsword,filler,"WEAPON,DEPRECATED",
+57,Wicked Kris,filler,"WEAPON,DEPRECATED",
+58,Bone Sword,filler,"WEAPON,DEPRECATED",
+59,Ossified Blade,filler,"WEAPON,DEPRECATED",
+60,Space Boots,filler,"FOOTWEAR,DEPRECATED",
+61,Crystal Shoes,filler,"FOOTWEAR,DEPRECATED",
+62,Steel Falchion,filler,"WEAPON,DEPRECATED",
+63,The Slammer,filler,"WEAPON,DEPRECATED",
 64,Skull Key,progression,,
 65,Progressive Hoe,progression,PROGRESSIVE_TOOLS,
 66,Progressive Pickaxe,progression,PROGRESSIVE_TOOLS,
@@ -63,40 +61,40 @@ id,name,classification,groups,mod_name
 75,Foraging Level,progression,SKILL_LEVEL_UP,
 76,Mining Level,progression,SKILL_LEVEL_UP,
 77,Combat Level,progression,SKILL_LEVEL_UP,
-78,Earth Obelisk,progression,,
-79,Water Obelisk,progression,,
-80,Desert Obelisk,progression,,
-81,Island Obelisk,progression,GINGER_ISLAND,
-82,Junimo Hut,useful,,
-83,Gold Clock,progression,,
-84,Progressive Coop,progression,,
-85,Progressive Barn,progression,,
-86,Well,useful,,
-87,Silo,progression,,
-88,Mill,progression,,
-89,Progressive Shed,progression,,
-90,Fish Pond,progression,,
-91,Stable,useful,,
-92,Slime Hutch,useful,,
-93,Shipping Bin,progression,,
+78,Earth Obelisk,progression,WIZARD_BUILDING,
+79,Water Obelisk,progression,WIZARD_BUILDING,
+80,Desert Obelisk,progression,WIZARD_BUILDING,
+81,Island Obelisk,progression,"WIZARD_BUILDING,GINGER_ISLAND",
+82,Junimo Hut,useful,WIZARD_BUILDING,
+83,Gold Clock,progression,WIZARD_BUILDING,
+84,Progressive Coop,progression,BUILDING,
+85,Progressive Barn,progression,BUILDING,
+86,Well,useful,BUILDING,
+87,Silo,progression,BUILDING,
+88,Mill,progression,BUILDING,
+89,Progressive Shed,progression,BUILDING,
+90,Fish Pond,progression,BUILDING,
+91,Stable,useful,BUILDING,
+92,Slime Hutch,progression,BUILDING,
+93,Shipping Bin,progression,BUILDING,
 94,Beach Bridge,progression,,
-95,Adventurer's Guild,progression,,
+95,Adventurer's Guild,progression,DEPRECATED,
 96,Club Card,progression,,
 97,Magnifying Glass,progression,,
 98,Bear's Knowledge,progression,,
-99,Iridium Snake Milk,progression,,
+99,Iridium Snake Milk,useful,,
 100,JotPK: Progressive Boots,progression,ARCADE_MACHINE_BUFFS,
 101,JotPK: Progressive Gun,progression,ARCADE_MACHINE_BUFFS,
 102,JotPK: Progressive Ammo,progression,ARCADE_MACHINE_BUFFS,
 103,JotPK: Extra Life,progression,ARCADE_MACHINE_BUFFS,
 104,JotPK: Increased Drop Rate,progression,ARCADE_MACHINE_BUFFS,
 105,Junimo Kart: Extra Life,progression,ARCADE_MACHINE_BUFFS,
-106,Galaxy Sword,progression,"GALAXY_WEAPONS,WEAPON",
-107,Galaxy Dagger,progression,"GALAXY_WEAPONS,WEAPON",
-108,Galaxy Hammer,progression,"GALAXY_WEAPONS,WEAPON",
+106,Galaxy Sword,filler,"WEAPON,DEPRECATED",
+107,Galaxy Dagger,filler,"WEAPON,DEPRECATED",
+108,Galaxy Hammer,filler,"WEAPON,DEPRECATED",
 109,Movement Speed Bonus,progression,,
 110,Luck Bonus,progression,,
-111,Lava Katana,progression,"MINES_FLOOR_110,WEAPON",
+111,Lava Katana,filler,"WEAPON,DEPRECATED",
 112,Progressive House,progression,,
 113,Traveling Merchant: Sunday,progression,TRAVELING_MERCHANT_DAY,
 114,Traveling Merchant: Monday,progression,TRAVELING_MERCHANT_DAY,
@@ -105,8 +103,8 @@ id,name,classification,groups,mod_name
 117,Traveling Merchant: Thursday,progression,TRAVELING_MERCHANT_DAY,
 118,Traveling Merchant: Friday,progression,TRAVELING_MERCHANT_DAY,
 119,Traveling Merchant: Saturday,progression,TRAVELING_MERCHANT_DAY,
-120,Traveling Merchant Stock Size,progression,,
-121,Traveling Merchant Discount,progression,,
+120,Traveling Merchant Stock Size,useful,,
+121,Traveling Merchant Discount,useful,,
 122,Return Scepter,useful,,
 123,Progressive Season,progression,,
 124,Spring,progression,SEASON,
@@ -223,7 +221,7 @@ id,name,classification,groups,mod_name
 235,Quality Bobber Recipe,progression,SPECIAL_ORDER_BOARD,
 236,Mini-Obelisk Recipe,progression,SPECIAL_ORDER_BOARD,
 237,Monster Musk Recipe,progression,SPECIAL_ORDER_BOARD,
-239,Sewing Machine,progression,"RESOURCE_PACK_USEFUL,SPECIAL_ORDER_BOARD",
+239,Sewing Machine,useful,"RESOURCE_PACK_USEFUL,SPECIAL_ORDER_BOARD",
 240,Coffee Maker,progression,"RESOURCE_PACK_USEFUL,SPECIAL_ORDER_BOARD",
 241,Mini-Fridge,useful,"RESOURCE_PACK_USEFUL,SPECIAL_ORDER_BOARD",
 242,Mini-Shipping Bin,progression,"RESOURCE_PACK_USEFUL,SPECIAL_ORDER_BOARD",
@@ -245,7 +243,7 @@ id,name,classification,groups,mod_name
 258,Banana Sapling,progression,"GINGER_ISLAND,RESOURCE_PACK,RESOURCE_PACK_USEFUL,CROPSANITY",
 259,Mango Sapling,progression,"GINGER_ISLAND,RESOURCE_PACK,RESOURCE_PACK_USEFUL,CROPSANITY",
 260,Boat Repair,progression,GINGER_ISLAND,
-261,Open Professor Snail Cave,progression,"GINGER_ISLAND",
+261,Open Professor Snail Cave,progression,GINGER_ISLAND,
 262,Island North Turtle,progression,"GINGER_ISLAND,WALNUT_PURCHASE",
 263,Island West Turtle,progression,"GINGER_ISLAND,WALNUT_PURCHASE",
 264,Island Farmhouse,progression,"GINGER_ISLAND,WALNUT_PURCHASE",
@@ -254,42 +252,218 @@ id,name,classification,groups,mod_name
 267,Dig Site Bridge,progression,"GINGER_ISLAND,WALNUT_PURCHASE",
 268,Island Trader,progression,"GINGER_ISLAND,WALNUT_PURCHASE",
 269,Volcano Bridge,progression,"GINGER_ISLAND,WALNUT_PURCHASE",
-270,Volcano Exit Shortcut,progression,"GINGER_ISLAND,WALNUT_PURCHASE",
+270,Volcano Exit Shortcut,useful,"GINGER_ISLAND,WALNUT_PURCHASE",
 271,Island Resort,progression,"GINGER_ISLAND,WALNUT_PURCHASE",
 272,Parrot Express,progression,"GINGER_ISLAND,WALNUT_PURCHASE",
 273,Qi Walnut Room,progression,"GINGER_ISLAND,WALNUT_PURCHASE",
 274,Pineapple Seeds,progression,"GINGER_ISLAND,CROPSANITY",
 275,Taro Tuber,progression,"GINGER_ISLAND,CROPSANITY",
-276,Weather Report,useful,"TV_CHANNEL",
-277,Fortune Teller,useful,"TV_CHANNEL",
-278,Livin' Off The Land,useful,"TV_CHANNEL",
-279,The Queen of Sauce,progression,"TV_CHANNEL",
-280,Fishing Information Broadcasting Service,useful,"TV_CHANNEL",
-281,Sinister Signal,useful,"TV_CHANNEL",
+276,Weather Report,useful,TV_CHANNEL,
+277,Fortune Teller,useful,TV_CHANNEL,
+278,Livin' Off The Land,useful,TV_CHANNEL,
+279,The Queen of Sauce,progression,TV_CHANNEL,
+280,Fishing Information Broadcasting Service,useful,TV_CHANNEL,
+281,Sinister Signal,filler,TV_CHANNEL,
 282,Dark Talisman,progression,,
-283,Ostrich Incubator Recipe,progression,"GINGER_ISLAND",
-284,Cute Baby,progression,"BABY",
-285,Ugly Baby,progression,"BABY",
-286,Deluxe Scarecrow Recipe,progression,"FESTIVAL,RARECROW",
-287,Treehouse,progression,"GINGER_ISLAND",
+283,Ostrich Incubator Recipe,progression,GINGER_ISLAND,
+284,Cute Baby,progression,BABY,
+285,Ugly Baby,progression,BABY,
+286,Deluxe Scarecrow Recipe,progression,RARECROW,
+287,Treehouse,progression,GINGER_ISLAND,
 288,Coffee Bean,progression,CROPSANITY,
-4001,Burnt,trap,TRAP,
-4002,Darkness,trap,TRAP,
-4003,Frozen,trap,TRAP,
-4004,Jinxed,trap,TRAP,
-4005,Nauseated,trap,TRAP,
-4006,Slimed,trap,TRAP,
-4007,Weakness,trap,TRAP,
-4008,Taxes,trap,TRAP,
-4009,Random Teleport,trap,TRAP,
-4010,The Crows,trap,TRAP,
-4011,Monsters,trap,TRAP,
-4012,Entrance Reshuffle,trap,"TRAP,DEPRECATED",
-4013,Debris,trap,TRAP,
-4014,Shuffle,trap,TRAP,
-4015,Temporary Winter,trap,"TRAP,DEPRECATED",
-4016,Pariah,trap,TRAP,
-4017,Drought,trap,TRAP,
+289,Progressive Weapon,progression,"WEAPON,WEAPON_GENERIC",
+290,Progressive Sword,progression,"WEAPON,WEAPON_SWORD",
+291,Progressive Club,progression,"WEAPON,WEAPON_CLUB",
+292,Progressive Dagger,progression,"WEAPON,WEAPON_DAGGER",
+293,Progressive Slingshot,progression,"WEAPON,WEAPON_SLINGSHOT",
+294,Progressive Footwear,useful,FOOTWEAR,
+295,Small Glow Ring,filler,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+296,Glow Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+297,Small Magnet Ring,filler,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+298,Magnet Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+299,Slime Charmer Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+300,Warrior Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+301,Vampire Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+302,Savage Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+303,Ring of Yoba,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+304,Sturdy Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+305,Burglar's Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+306,Iridium Band,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+307,Jukebox Ring,filler,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+308,Amethyst Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+309,Topaz Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+310,Aquamarine Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+311,Jade Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+312,Emerald Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+313,Ruby Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+314,Wedding Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+315,Crabshell Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+316,Napalm Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+317,Thorns Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+318,Lucky Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+319,Hot Java Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+320,Protection Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+321,Soul Sapper Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+322,Phoenix Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+323,Immunity Band,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+324,Glowstone Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
+325,Fairy Dust Recipe,progression,,
+326,Heavy Tapper Recipe,progression,"QI_CRAFTING_RECIPE,GINGER_ISLAND",
+327,Hyper Speed-Gro Recipe,progression,"QI_CRAFTING_RECIPE,GINGER_ISLAND",
+328,Deluxe Fertilizer Recipe,progression,QI_CRAFTING_RECIPE,
+329,Hopper Recipe,progression,"QI_CRAFTING_RECIPE,GINGER_ISLAND",
+330,Magic Bait Recipe,progression,"QI_CRAFTING_RECIPE,GINGER_ISLAND",
+331,Jack-O-Lantern Recipe,progression,FESTIVAL,
+333,Tub o' Flowers Recipe,progression,FESTIVAL,
+335,Moonlight Jellies Banner,filler,FESTIVAL,
+336,Starport Decal,filler,FESTIVAL,
+337,Golden Egg,progression,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
+340,Algae Soup Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+341,Artichoke Dip Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+342,Autumn's Bounty Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+343,Baked Fish Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+344,Banana Pudding Recipe,progression,"CHEFSANITY,GINGER_ISLAND,CHEFSANITY_PURCHASE",
+345,Bean Hotpot Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+346,Blackberry Cobbler Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+347,Blueberry Tart Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+348,Bread Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS,CHEFSANITY_FRIENDSHIP,CHEFSANITY_PURCHASE",
+349,Bruschetta Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+350,Carp Surprise Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+351,Cheese Cauliflower Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+352,Chocolate Cake Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+353,Chowder Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+354,Coleslaw Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+355,Complete Breakfast Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+356,Cookies Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+357,Crab Cakes Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+358,Cranberry Candy Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+359,Cranberry Sauce Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+360,Crispy Bass Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+361,Dish O' The Sea Recipe,progression,"CHEFSANITY,CHEFSANITY_SKILL",
+362,Eggplant Parmesan Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+363,Escargot Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+364,Farmer's Lunch Recipe,progression,"CHEFSANITY,CHEFSANITY_SKILL",
+365,Fiddlehead Risotto Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+366,Fish Stew Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+367,Fish Taco Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+368,Fried Calamari Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+369,Fried Eel Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+370,Fried Egg Recipe,progression,CHEFSANITY_STARTER,
+371,Fried Mushroom Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+372,Fruit Salad Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+373,Ginger Ale Recipe,progression,"CHEFSANITY,GINGER_ISLAND,CHEFSANITY_PURCHASE",
+374,Glazed Yams Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+375,Hashbrowns Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS,CHEFSANITY_PURCHASE",
+376,Ice Cream Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+377,Lobster Bisque Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS,CHEFSANITY_FRIENDSHIP",
+378,Lucky Lunch Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+379,Maki Roll Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS,CHEFSANITY_PURCHASE",
+380,Mango Sticky Rice Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP,GINGER_ISLAND",
+381,Maple Bar Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+382,Miner's Treat Recipe,progression,"CHEFSANITY,CHEFSANITY_SKILL",
+383,Omelet Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS,CHEFSANITY_PURCHASE",
+384,Pale Broth Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+385,Pancakes Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS,CHEFSANITY_PURCHASE",
+386,Parsnip Soup Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+387,Pepper Poppers Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+388,Pink Cake Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+389,Pizza Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS,CHEFSANITY_PURCHASE",
+390,Plum Pudding Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+391,Poi Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP,GINGER_ISLAND",
+392,Poppyseed Muffin Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+393,Pumpkin Pie Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+394,Pumpkin Soup Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+395,Radish Salad Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+396,Red Plate Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+397,Rhubarb Pie Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+398,Rice Pudding Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+399,Roasted Hazelnuts Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+400,Roots Platter Recipe,progression,"CHEFSANITY,CHEFSANITY_SKILL",
+401,Salad Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+402,Salmon Dinner Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+403,Sashimi Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+404,Seafoam Pudding Recipe,progression,"CHEFSANITY,CHEFSANITY_SKILL",
+405,Shrimp Cocktail Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+406,Spaghetti Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+407,Spicy Eel Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+408,Squid Ink Ravioli Recipe,progression,"CHEFSANITY,CHEFSANITY_SKILL",
+409,Stir Fry Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+410,Strange Bun Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+411,Stuffing Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+412,Super Meal Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+413,Survival Burger Recipe,progression,"CHEFSANITY,CHEFSANITY_SKILL",
+414,Tom Kha Soup Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+415,Tortilla Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS,CHEFSANITY_PURCHASE",
+416,Triple Shot Espresso Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",
+417,Tropical Curry Recipe,progression,"CHEFSANITY,GINGER_ISLAND,CHEFSANITY_PURCHASE",
+418,Trout Soup Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
+419,Vegetable Medley Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+425,Gate Recipe,progression,CRAFTSANITY,
+426,Wood Fence Recipe,progression,CRAFTSANITY,
+427,Deluxe Retaining Soil Recipe,progression,"CRAFTSANITY,GINGER_ISLAND",
+428,Grass Starter Recipe,progression,CRAFTSANITY,
+429,Wood Floor Recipe,progression,CRAFTSANITY,
+430,Rustic Plank Floor Recipe,progression,CRAFTSANITY,
+431,Straw Floor Recipe,progression,CRAFTSANITY,
+432,Weathered Floor Recipe,progression,CRAFTSANITY,
+433,Crystal Floor Recipe,progression,CRAFTSANITY,
+434,Stone Floor Recipe,progression,CRAFTSANITY,
+435,Stone Walkway Floor Recipe,progression,CRAFTSANITY,
+436,Brick Floor Recipe,progression,CRAFTSANITY,
+437,Wood Path Recipe,progression,CRAFTSANITY,
+438,Gravel Path Recipe,progression,CRAFTSANITY,
+439,Cobblestone Path Recipe,progression,CRAFTSANITY,
+440,Stepping Stone Path Recipe,progression,CRAFTSANITY,
+441,Crystal Path Recipe,progression,CRAFTSANITY,
+442,Wedding Ring Recipe,progression,CRAFTSANITY,
+443,Warp Totem: Desert Recipe,progression,CRAFTSANITY,
+444,Warp Totem: Island Recipe,progression,"CRAFTSANITY,GINGER_ISLAND",
+445,Torch Recipe,progression,CRAFTSANITY,
+446,Campfire Recipe,progression,CRAFTSANITY,
+447,Wooden Brazier Recipe,progression,CRAFTSANITY,
+448,Stone Brazier Recipe,progression,CRAFTSANITY,
+449,Gold Brazier Recipe,progression,CRAFTSANITY,
+450,Carved Brazier Recipe,progression,CRAFTSANITY,
+451,Stump Brazier Recipe,progression,CRAFTSANITY,
+452,Barrel Brazier Recipe,progression,CRAFTSANITY,
+453,Skull Brazier Recipe,progression,CRAFTSANITY,
+454,Marble Brazier Recipe,progression,CRAFTSANITY,
+455,Wood Lamp-post Recipe,progression,CRAFTSANITY,
+456,Iron Lamp-post Recipe,progression,CRAFTSANITY,
+457,Furnace Recipe,progression,CRAFTSANITY,
+458,Wicked Statue Recipe,progression,CRAFTSANITY,
+459,Chest Recipe,progression,CRAFTSANITY,
+460,Wood Sign Recipe,progression,CRAFTSANITY,
+461,Stone Sign Recipe,progression,CRAFTSANITY,
+469,Railroad Boulder Removed,progression,,
+470,Fruit Bats,progression,,
+471,Mushroom Boxes,progression,,
+475,The Gateway Gazette,progression,TV_CHANNEL,
+4001,Burnt Trap,trap,TRAP,
+4002,Darkness Trap,trap,TRAP,
+4003,Frozen Trap,trap,TRAP,
+4004,Jinxed Trap,trap,TRAP,
+4005,Nauseated Trap,trap,TRAP,
+4006,Slimed Trap,trap,TRAP,
+4007,Weakness Trap,trap,TRAP,
+4008,Taxes Trap,trap,TRAP,
+4009,Random Teleport Trap,trap,TRAP,
+4010,The Crows Trap,trap,TRAP,
+4011,Monsters Trap,trap,TRAP,
+4012,Entrance Reshuffle Trap,trap,"TRAP,DEPRECATED",
+4013,Debris Trap,trap,TRAP,
+4014,Shuffle Trap,trap,TRAP,
+4015,Temporary Winter Trap,trap,"TRAP,DEPRECATED",
+4016,Pariah Trap,trap,TRAP,
+4017,Drought Trap,trap,TRAP,
+4018,Time Flies Trap,trap,TRAP,
+4019,Babies Trap,trap,TRAP,
+4020,Meow Trap,trap,TRAP,
+4021,Bark Trap,trap,TRAP,
+4022,Depression Trap,trap,"TRAP,DEPRECATED",
+4023,Benjamin Budton Trap,trap,TRAP,
+4024,Inflation Trap,trap,TRAP,
+4025,Bomb Trap,trap,TRAP,
 5000,Resource Pack: 500 Money,useful,"BASE_RESOURCE,RESOURCE_PACK",
 5001,Resource Pack: 1000 Money,useful,"BASE_RESOURCE,RESOURCE_PACK",
 5002,Resource Pack: 1500 Money,useful,"BASE_RESOURCE,RESOURCE_PACK",
@@ -336,12 +510,12 @@ id,name,classification,groups,mod_name
 5043,Resource Pack: 7 Warp Totem: Farm,filler,"DEPRECATED,RESOURCE_PACK,WARP_TOTEM",
 5044,Resource Pack: 9 Warp Totem: Farm,filler,"DEPRECATED,RESOURCE_PACK,WARP_TOTEM",
 5045,Resource Pack: 10 Warp Totem: Farm,filler,"DEPRECATED,RESOURCE_PACK,WARP_TOTEM",
-5046,Resource Pack: 1 Warp Totem: Island,filler,"DEPRECATED,RESOURCE_PACK,WARP_TOTEM",
-5047,Resource Pack: 3 Warp Totem: Island,filler,"DEPRECATED,RESOURCE_PACK,WARP_TOTEM",
-5048,Resource Pack: 5 Warp Totem: Island,filler,"RESOURCE_PACK,WARP_TOTEM",
-5049,Resource Pack: 7 Warp Totem: Island,filler,"DEPRECATED,RESOURCE_PACK,WARP_TOTEM",
-5050,Resource Pack: 9 Warp Totem: Island,filler,"DEPRECATED,RESOURCE_PACK,WARP_TOTEM",
-5051,Resource Pack: 10 Warp Totem: Island,filler,"DEPRECATED,RESOURCE_PACK,WARP_TOTEM",
+5046,Resource Pack: 1 Warp Totem: Island,filler,"DEPRECATED,RESOURCE_PACK,WARP_TOTEM,GINGER_ISLAND",
+5047,Resource Pack: 3 Warp Totem: Island,filler,"DEPRECATED,RESOURCE_PACK,WARP_TOTEM,GINGER_ISLAND",
+5048,Resource Pack: 5 Warp Totem: Island,filler,"RESOURCE_PACK,WARP_TOTEM,GINGER_ISLAND",
+5049,Resource Pack: 7 Warp Totem: Island,filler,"DEPRECATED,RESOURCE_PACK,WARP_TOTEM,GINGER_ISLAND",
+5050,Resource Pack: 9 Warp Totem: Island,filler,"DEPRECATED,RESOURCE_PACK,WARP_TOTEM,GINGER_ISLAND",
+5051,Resource Pack: 10 Warp Totem: Island,filler,"DEPRECATED,RESOURCE_PACK,WARP_TOTEM,GINGER_ISLAND",
 5052,Resource Pack: 1 Warp Totem: Mountains,filler,"DEPRECATED,RESOURCE_PACK,WARP_TOTEM",
 5053,Resource Pack: 3 Warp Totem: Mountains,filler,"DEPRECATED,RESOURCE_PACK,WARP_TOTEM",
 5054,Resource Pack: 5 Warp Totem: Mountains,filler,"RESOURCE_PACK,WARP_TOTEM",
@@ -492,7 +666,7 @@ id,name,classification,groups,mod_name
 5199,Friendship Bonus (2 <3),useful,"FRIENDSHIP_PACK,COMMUNITY_REWARD",
 5200,Friendship Bonus (3 <3),useful,"DEPRECATED,FRIENDSHIP_PACK,RESOURCE_PACK",
 5201,Friendship Bonus (4 <3),useful,"DEPRECATED,FRIENDSHIP_PACK,RESOURCE_PACK",
-5202,30 Qi Gems,useful,"GINGER_ISLAND,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
+5202,15 Qi Gems,progression,"GINGER_ISLAND,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5203,Solar Panel,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5204,Geode Crusher,filler,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5205,Farm Computer,filler,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
@@ -507,36 +681,29 @@ id,name,classification,groups,mod_name
 5214,Quality Sprinkler,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5215,Iridium Sprinkler,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5216,Scarecrow,filler,RESOURCE_PACK,
-5217,Deluxe Scarecrow,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
+5217,Deluxe Scarecrow,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5218,Furnace,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5219,Charcoal Kiln,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5220,Lightning Rod,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5221,Resource Pack: 5000 Money,useful,"BASE_RESOURCE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5222,Resource Pack: 10000 Money,useful,"BASE_RESOURCE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5223,Junimo Chest,filler,"EXACTLY_TWO,RESOURCE_PACK",
-5224,Horse Flute,filler,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
-5225,Pierre's Missing Stocklist,filler,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
+5224,Horse Flute,useful,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
+5225,Pierre's Missing Stocklist,useful,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5226,Hopper,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5227,Enricher,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5228,Pressure Nozzle,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5229,Deconstructor,filler,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
-5230,Key To The Town,filler,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
+5230,Key To The Town,useful,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5231,Galaxy Soul,filler,"GINGER_ISLAND,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5232,Mushroom Tree Seed,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5233,Resource Pack: 20 Magic Bait,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5234,Resource Pack: 10 Qi Seasoning,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5235,Mr. Qi's Hat,filler,"MAXIMUM_ONE,RESOURCE_PACK",
 5236,Aquatic Sanctuary,filler,RESOURCE_PACK,
-5237,Heavy Tapper Recipe,filler,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
-5238,Hyper Speed-Gro Recipe,filler,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
-5239,Deluxe Fertilizer Recipe,filler,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
-5240,Hopper Recipe,filler,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
-5241,Magic Bait Recipe,filler,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5242,Exotic Double Bed,filler,RESOURCE_PACK,
-5243,Resource Pack: 2 Qi Gem,filler,"GINGER_ISLAND,RESOURCE_PACK",
-5244,Golden Egg,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
+5243,Resource Pack: 2 Qi Gem,filler,"GINGER_ISLAND,RESOURCE_PACK,DEPRECATED",
 5245,Golden Walnut,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL,GINGER_ISLAND",
-5246,Fairy Dust Recipe,useful,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5247,Fairy Dust,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5248,Seed Maker,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5249,Keg,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
@@ -552,10 +719,13 @@ id,name,classification,groups,mod_name
 5259,Worm Bin,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5260,Tapper,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5261,Heavy Tapper,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
-5262,Slime Incubator,useful,"RESOURCE_PACK",
-5263,Slime Egg-Press,useful,"RESOURCE_PACK",
+5262,Slime Incubator,useful,RESOURCE_PACK,
+5263,Slime Egg-Press,useful,RESOURCE_PACK,
 5264,Crystalarium,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5265,Ostrich Incubator,useful,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
+5266,Resource Pack: 5 Staircase,filler,"RESOURCE_PACK",
+5267,Auto-Petter,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
+5268,Auto-Grabber,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 10001,Luck Level,progression,SKILL_LEVEL_UP,Luck Skill
 10002,Magic Level,progression,SKILL_LEVEL_UP,Magic
 10003,Socializing Level,progression,SKILL_LEVEL_UP,Socializing Skill
@@ -569,14 +739,14 @@ id,name,classification,groups,mod_name
 10011,Spell: Water,progression,MAGIC_SPELL,Magic
 10012,Spell: Blink,progression,MAGIC_SPELL,Magic
 10013,Spell: Evac,useful,MAGIC_SPELL,Magic
-10014,Spell: Haste,filler,MAGIC_SPELL,Magic
+10014,Spell: Haste,useful,MAGIC_SPELL,Magic
 10015,Spell: Heal,progression,MAGIC_SPELL,Magic
 10016,Spell: Buff,useful,MAGIC_SPELL,Magic
 10017,Spell: Shockwave,progression,MAGIC_SPELL,Magic
 10018,Spell: Fireball,progression,MAGIC_SPELL,Magic
-10019,Spell: Frostbite,progression,MAGIC_SPELL,Magic
+10019,Spell: Frostbolt,progression,MAGIC_SPELL,Magic
 10020,Spell: Teleport,progression,MAGIC_SPELL,Magic
-10021,Spell: Lantern,filler,MAGIC_SPELL,Magic
+10021,Spell: Lantern,useful,MAGIC_SPELL,Magic
 10022,Spell: Tendrils,progression,MAGIC_SPELL,Magic
 10023,Spell: Photosynthesis,useful,MAGIC_SPELL,Magic
 10024,Spell: Descend,progression,MAGIC_SPELL,Magic
@@ -585,6 +755,9 @@ id,name,classification,groups,mod_name
 10027,Spell: Lucksteal,useful,MAGIC_SPELL,Magic
 10028,Spell: Spirit,progression,MAGIC_SPELL,Magic
 10029,Spell: Rewind,useful,MAGIC_SPELL,Magic
+10030,Pendant of Community,progression,,DeepWoods
+10031,Pendant of Elders,progression,,DeepWoods
+10032,Pendant of Depths,progression,,DeepWoods
 10101,Juna <3,progression,FRIENDSANITY,Juna - Roommate NPC
 10102,Jasper <3,progression,FRIENDSANITY,Professor Jasper Thomas
 10103,Alec <3,progression,FRIENDSANITY,Alec Revisited
@@ -596,5 +769,91 @@ id,name,classification,groups,mod_name
 10109,Delores <3,progression,FRIENDSANITY,Delores - Custom NPC
 10110,Ayeisha <3,progression,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
 10111,Riley <3,progression,FRIENDSANITY,Custom NPC - Riley
+10112,Claire <3,progression,FRIENDSANITY,Stardew Valley Expanded
+10113,Lance <3,progression,"FRIENDSANITY,GINGER_ISLAND",Stardew Valley Expanded
+10114,Olivia <3,progression,FRIENDSANITY,Stardew Valley Expanded
+10115,Sophia <3,progression,FRIENDSANITY,Stardew Valley Expanded
+10116,Victor <3,progression,FRIENDSANITY,Stardew Valley Expanded
+10117,Andy <3,progression,FRIENDSANITY,Stardew Valley Expanded
+10118,Apples <3,progression,FRIENDSANITY,Stardew Valley Expanded
+10119,Gunther <3,progression,FRIENDSANITY,Stardew Valley Expanded
+10120,Martin <3,progression,FRIENDSANITY,Stardew Valley Expanded
+10121,Marlon <3,progression,FRIENDSANITY,Stardew Valley Expanded
+10122,Morgan <3,progression,FRIENDSANITY,Stardew Valley Expanded
+10123,Scarlett <3,progression,FRIENDSANITY,Stardew Valley Expanded
+10124,Susan <3,progression,FRIENDSANITY,Stardew Valley Expanded
+10125,Morris <3,progression,FRIENDSANITY,Stardew Valley Expanded
+10126,Alecto <3,progression,FRIENDSANITY,Alecto the Witch
+10127,Zic <3,progression,FRIENDSANITY,Distant Lands - Witch Swamp Overhaul
+10128,Lacey <3,progression,FRIENDSANITY,Hat Mouse Lacey
+10129,Gregory <3,progression,FRIENDSANITY,Boarding House and Bus Stop Extension
+10130,Sheila <3,progression,FRIENDSANITY,Boarding House and Bus Stop Extension
+10131,Joel <3,progression,FRIENDSANITY,Boarding House and Bus Stop Extension
 10301,Progressive Woods Obelisk Sigils,progression,,DeepWoods
 10302,Progressive Skull Cavern Elevator,progression,,Skull Cavern Elevator
+10401,Baked Berry Oatmeal Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+10402,Big Bark Burger Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+10403,Flower Cookie Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+10404,Frog Legs Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+10405,Glazed Butterfish Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+10406,Mixed Berry Pie Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+10407,Mushroom Berry Rice Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+10408,Seaweed Salad Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+10409,Void Delight Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+10410,Void Salmon Sushi Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
+10411,Mushroom Kebab Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
+10412,Crayfish Soup Recipe,progression,,Distant Lands - Witch Swamp Overhaul
+10413,Pemmican Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
+10414,Void Mint Tea Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
+10415,Ginger Tincture Recipe,progression,GINGER_ISLAND,Distant Lands - Witch Swamp Overhaul
+10416,Special Pumpkin Soup Recipe,progression,,Boarding House and Bus Stop Extension
+10450,Void Mint Seeds,progression,DEPRECATED,Distant Lands - Witch Swamp Overhaul
+10451,Vile Ancient Fruit Seeds,progression,DEPRECATED,Distant Lands - Witch Swamp Overhaul
+10501,Marlon's Boat Paddle,progression,GINGER_ISLAND,Stardew Valley Expanded
+10502,Diamond Wand,filler,"WEAPON,DEPRECATED",Stardew Valley Expanded
+10503,Iridium Bomb,progression,,Stardew Valley Expanded
+10504,Void Spirit Peace Agreement,useful,GINGER_ISLAND,Stardew Valley Expanded
+10505,Kittyfish Spell,progression,,Stardew Valley Expanded
+10506,Nexus: Adventurer's Guild Runes,progression,MOD_WARP,Stardew Valley Expanded
+10507,Nexus: Junimo Woods Runes,progression,MOD_WARP,Stardew Valley Expanded
+10508,Nexus: Aurora Vineyard Runes,progression,MOD_WARP,Stardew Valley Expanded
+10509,Nexus: Sprite Spring Runes,progression,MOD_WARP,Stardew Valley Expanded
+10510,Nexus: Outpost Runes,progression,MOD_WARP,Stardew Valley Expanded
+10511,Nexus: Farm Runes,progression,MOD_WARP,Stardew Valley Expanded
+10512,Nexus: Wizard Runes,progression,MOD_WARP,Stardew Valley Expanded
+10513,Fable Reef Portal,progression,GINGER_ISLAND,Stardew Valley Expanded
+10514,Tempered Galaxy Sword,filler,"WEAPON,DEPRECATED",Stardew Valley Expanded
+10515,Tempered Galaxy Dagger,filler,"WEAPON,DEPRECATED",Stardew Valley Expanded
+10516,Tempered Galaxy Hammer,filler,"WEAPON,DEPRECATED",Stardew Valley Expanded
+10517,Grandpa's Shed,progression,,Stardew Valley Expanded
+10518,Aurora Vineyard Tablet,progression,,Stardew Valley Expanded
+10519,Scarlett's Job Offer,progression,,Stardew Valley Expanded
+10520,Morgan's Schooling,progression,,Stardew Valley Expanded
+10601,Magic Elixir Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Magic
+10602,Travel Core Recipe,progression,CRAFTSANITY,Magic
+10603,Haste Elixir Recipe,progression,CRAFTSANITY,Stardew Valley Expanded
+10604,Hero Elixir Recipe,progression,CRAFTSANITY,Stardew Valley Expanded
+10605,Armor Elixir Recipe,progression,CRAFTSANITY,Stardew Valley Expanded
+10606,Neanderthal Skeleton Recipe,progression,CRAFTSANITY,Boarding House and Bus Stop Extension
+10607,Pterodactyl Skeleton L Recipe,progression,CRAFTSANITY,Boarding House and Bus Stop Extension
+10608,Pterodactyl Skeleton M Recipe,progression,CRAFTSANITY,Boarding House and Bus Stop Extension
+10609,Pterodactyl Skeleton R Recipe,progression,CRAFTSANITY,Boarding House and Bus Stop Extension
+10610,T-Rex Skeleton L Recipe,progression,CRAFTSANITY,Boarding House and Bus Stop Extension
+10611,T-Rex Skeleton M Recipe,progression,CRAFTSANITY,Boarding House and Bus Stop Extension
+10612,T-Rex Skeleton R Recipe,progression,CRAFTSANITY,Boarding House and Bus Stop Extension
+10701,Resource Pack: 3 Magic Elixir,filler,RESOURCE_PACK,Magic
+10702,Resource Pack: 3 Travel Core,filler,RESOURCE_PACK,Magic
+10703,Preservation Chamber,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",Archaeology
+10704,Hardwood Preservation Chamber,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",Archaeology
+10705,Resource Pack: 3 Water Shifter,filler,RESOURCE_PACK,Archaeology
+10706,Resource Pack: 5 Hardwood Display,filler,RESOURCE_PACK,Archaeology
+10707,Resource Pack: 5 Wooden Display,filler,RESOURCE_PACK,Archaeology
+10708,Grinder,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",Archaeology
+10709,Ancient Battery Production Station,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",Archaeology
+10710,Hero Elixir,filler,RESOURCE_PACK,Starde Valley Expanded
+10711,Aegis Elixir,filler,RESOURCE_PACK,Stardew Valley Expanded
+10712,Haste Elixir,filler,RESOURCE_PACK,Stardew Valley Expanded
+10713,Lightning Elixir,filler,RESOURCE_PACK,Stardew Valley Expanded
+10714,Armor Elixir,filler,RESOURCE_PACK,Stardew Valley Expanded
+10715,Gravity Elixir,filler,RESOURCE_PACK,Stardew Valley Expanded
+10716,Barbarian Elixir,filler,RESOURCE_PACK,Stardew Valley Expanded

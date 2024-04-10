@@ -345,42 +345,43 @@ class ALTTPWorld(World):
 
     def create_regions(self):
         player = self.player
-        world = self.multiworld
+        multiworld = self.multiworld
 
-        if world.mode[player] != 'inverted':
-            create_regions(world, player)
+        if multiworld.mode[player] != 'inverted':
+            create_regions(multiworld, player)
         else:
-            create_inverted_regions(world, player)
-        create_shops(world, player)
+            create_inverted_regions(multiworld, player)
+        create_shops(multiworld, player)
         self.create_dungeons()
 
-        if world.glitches_required[player] not in ["no_glitches", "minor_glitches"] and world.entrance_shuffle[player] in \
-                {"vanilla", "dungeons_simple", "dungeons_full", "simple", "restricted", "full"}:
-            world.fix_fake_world[player] = False
+        if (multiworld.glitches_required[player] not in ["no_glitches", "minor_glitches"] and
+                multiworld.entrance_shuffle[player] in [
+                    "vanilla", "dungeons_simple", "dungeons_full", "simple", "restricted", "full"]):
+            multiworld.fix_fake_world[player] = False
 
         # seeded entrance shuffle
-        old_random = world.random
-        world.random = random.Random(self.er_seed)
+        old_random = multiworld.random
+        multiworld.random = random.Random(self.er_seed)
 
-        if world.mode[player] != 'inverted':
-            link_entrances(world, player)
-            mark_light_world_regions(world, player)
+        if multiworld.mode[player] != 'inverted':
+            link_entrances(multiworld, player)
+            mark_light_world_regions(multiworld, player)
             for region_name, entrance_name in indirect_connections_not_inverted.items():
-                world.register_indirect_condition(world.get_region(region_name, player),
-                                                  world.get_entrance(entrance_name, player))
+                multiworld.register_indirect_condition(multiworld.get_region(region_name, player),
+                                                  multiworld.get_entrance(entrance_name, player))
         else:
-            link_inverted_entrances(world, player)
-            mark_dark_world_regions(world, player)
+            link_inverted_entrances(multiworld, player)
+            mark_dark_world_regions(multiworld, player)
             for region_name, entrance_name in indirect_connections_inverted.items():
-                world.register_indirect_condition(world.get_region(region_name, player),
-                                                  world.get_entrance(entrance_name, player))
+                multiworld.register_indirect_condition(multiworld.get_region(region_name, player),
+                                                  multiworld.get_entrance(entrance_name, player))
 
-        world.random = old_random
-        plando_connect(world, player)
+        multiworld.random = old_random
+        plando_connect(multiworld, player)
 
         for region_name, entrance_name in indirect_connections.items():
-            world.register_indirect_condition(world.get_region(region_name, player),
-                                              world.get_entrance(entrance_name, player))
+            multiworld.register_indirect_condition(multiworld.get_region(region_name, player),
+                                              multiworld.get_entrance(entrance_name, player))
 
     def collect_item(self, state: CollectionState, item: Item, remove=False):
         item_name = item.name
@@ -642,17 +643,18 @@ class ALTTPWorld(World):
         return ALttPItem(name, self.player, **item_init_table[name])
 
     @classmethod
-    def stage_fill_hook(cls, world, progitempool, usefulitempool, filleritempool, fill_locations):
+    def stage_fill_hook(cls, multiworld, progitempool, usefulitempool, filleritempool, fill_locations):
         trash_counts = {}
-        for player in world.get_game_players("A Link to the Past"):
-            if not world.ganonstower_vanilla[player] or \
-                    world.glitches_required[player] in {'overworld_glitches', 'hybrid_major_glitches', "no_logic"}:
+        for player in multiworld.get_game_players("A Link to the Past"):
+            world = multiworld.worlds[player]
+            if not multiworld.ganonstower_vanilla[player] or \
+                    world.options.glitches_required.current_key in {'overworld_glitches', 'hybrid_major_glitches', "no_logic"}:
                 pass
-            elif 'triforce_hunt' in world.goal[player].current_key and ('local' in world.goal[player].current_key or world.players == 1):
-                trash_counts[player] = world.random.randint(world.crystals_needed_for_gt[player] * 2,
-                                                            world.crystals_needed_for_gt[player] * 4)
+            elif 'triforce_hunt' in world.options.goal.current_key and ('local' in world.options.goal.current_key or multiworld.players == 1):
+                trash_counts[player] = multiworld.random.randint(world.options.crystals_needed_for_gt * 2,
+                                                            world.options.crystals_needed_for_gt * 4)
             else:
-                trash_counts[player] = world.random.randint(0, world.crystals_needed_for_gt[player] * 2)
+                trash_counts[player] = multiworld.random.randint(0, world.options.crystals_needed_for_gt * 2)
 
         if trash_counts:
             locations_mapping = {player: [] for player in trash_counts}
@@ -662,14 +664,14 @@ class ALTTPWorld(World):
 
             for player, trash_count in trash_counts.items():
                 gtower_locations = locations_mapping[player]
-                world.random.shuffle(gtower_locations)
+                multiworld.random.shuffle(gtower_locations)
 
                 while gtower_locations and filleritempool and trash_count > 0:
                     spot_to_fill = gtower_locations.pop()
                     for index, item in enumerate(filleritempool):
                         if spot_to_fill.item_rule(item):
                             filleritempool.pop(index)  # remove from outer fill
-                            world.push_item(spot_to_fill, item, False)
+                            multiworld.push_item(spot_to_fill, item, False)
                             fill_locations.remove(spot_to_fill)  # very slow, unfortunately
                             trash_count -= 1
                             break
