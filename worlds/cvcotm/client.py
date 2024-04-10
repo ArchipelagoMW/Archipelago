@@ -68,12 +68,12 @@ class CastlevaniaCotMClient(BizHawkClient):
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
 
         try:
-            read_state = await bizhawk.read(ctx.bizhawk_ctx, [(0x45D8, 1, "Combined WRAM"),
-                                                              (0x25374, 32, "Combined WRAM"),
-                                                              (0x25674, 20, "Combined WRAM"),
-                                                              (0x253D0, 2, "Combined WRAM"),
-                                                              (0x2572C, 3, "Combined WRAM"),
-                                                              (0x2572F, 8, "Combined WRAM")])
+            read_state = await bizhawk.read(ctx.bizhawk_ctx, [(0x45D8, 1, "EWRAM"),
+                                                              (0x25374, 32, "EWRAM"),
+                                                              (0x25674, 20, "EWRAM"),
+                                                              (0x253D0, 2, "EWRAM"),
+                                                              (0x2572C, 3, "EWRAM"),
+                                                              (0x2572F, 8, "EWRAM")])
 
             game_state = int.from_bytes(read_state[0], "little")
             flag_bytes = read_state[1]
@@ -89,7 +89,7 @@ class CastlevaniaCotMClient(BizHawkClient):
             # If the intro cutscene floor broken flag is not set, then assume we are in the demo; at no point during
             # regular gameplay will this flag not be set.
             if game_state not in [0x6, 0x21] or not flag_bytes[6] & 0x02:
-                await bizhawk.write(ctx.bizhawk_ctx, [(0x25300, [0, 0, 0, 0, 0, 0, 0, 0], "Combined WRAM")])
+                await bizhawk.write(ctx.bizhawk_ctx, [(0x25300, [0, 0, 0, 0, 0, 0, 0, 0], "EWRAM")])
                 return
 
             # Scout all Locations and capture the ones with local DSS Cards.
@@ -126,12 +126,12 @@ class CastlevaniaCotMClient(BizHawkClient):
                 await bizhawk.guarded_write(ctx.bizhawk_ctx,
                                             [(0x25300, bytearray(int.to_bytes(get_item_info(ctx.item_names[
                                                                                                 next_item.item],
-                                                                 "textbox id"), 2, "little")), "Combined WRAM"),
-                                             (0x25304, [1], "Combined WRAM"),
-                                             ((inv_offset + item_index), [inv_array[item_index] + 1], "Combined WRAM")],
-                                            [(0x25300, [0], "Combined WRAM"),    # Textbox ID buffer
-                                             (0x25304, [0], "Combined WRAM"),    # Received item index buffer
-                                             (0x253D0, read_state[3], "Combined WRAM")])  # Received items index
+                                                                 "textbox id"), 2, "little")), "EWRAM"),
+                                             (0x25304, [1], "EWRAM"),
+                                             ((inv_offset + item_index), [inv_array[item_index] + 1], "EWRAM")],
+                                            [(0x25300, [0], "EWRAM"),    # Textbox ID buffer
+                                             (0x25304, [0], "EWRAM"),    # Received item index buffer
+                                             (0x253D0, read_state[3], "EWRAM")])  # Received items index
 
             locs_to_send = set()
 
