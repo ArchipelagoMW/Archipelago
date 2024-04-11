@@ -246,7 +246,7 @@ class AllowedLegendaryHuntEncounters(OptionSet):
     "Regirock"
     "Registeel"
     "Regice"
-    "Ho-oh"
+    "Ho-Oh"
     "Lugia"
     "Deoxys"
     "Mew"
@@ -261,7 +261,7 @@ class AllowedLegendaryHuntEncounters(OptionSet):
         "Regirock",
         "Registeel",
         "Regice",
-        "Ho-oh",
+        "Ho-Oh",
         "Lugia",
         "Deoxys",
         "Mew",
