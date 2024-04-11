@@ -1,5 +1,5 @@
 from typing import NamedTuple, Dict, List, Set, Union, Literal, Iterable, Callable
-from enum import IntEnum, Enum, IntFlag
+from enum import IntEnum, Enum, IntFlag, auto
 
 
 class SC2Race(IntEnum):
@@ -19,26 +19,29 @@ class MissionPools(IntEnum):
 
 
 class MissionFlags(IntFlag):
-    none        = 0
-    Terran      = 0x1
-    Zerg        = 0x2
-    Protoss     = 0x4
-    NoBuild     = 0x8
-    Defense     = 0x10
-    Timed       = 0x20   # The overall pace of the mission is guided by timers until victory or defeat
-    Kerrigan    = 0x40   # The player controls Kerrigan in the mission
-    VanillaSoa  = 0x80   # The player controls the Spear of Adun in the vanilla version of the mission
-    Nova        = 0x100  # The player controls NCO Nova in the mission
-    AiAlly      = 0x200  # The mission has an AI ally that can be taken over
-    VsTerran    = 0x1000
-    VsZerg      = 0x2000
-    VsProtoss   = 0x4000
+    none          = 0
+    Terran        = auto()
+    Zerg          = auto()
+    Protoss       = auto()
+    NoBuild       = auto()
+    Defense       = auto()
+    Timed         = auto()  # The overall pace of the mission is guided by timers until victory or defeat
+    Kerrigan      = auto()  # The player controls Kerrigan in the mission
+    VanillaSoa    = auto()  # The player controls the Spear of Adun in the vanilla version of the mission
+    Nova          = auto()  # The player controls NCO Nova in the mission
+    AiTerranAlly  = auto()  # The mission has a Terran AI ally that can be taken over
+    AiZergAlly    = auto()  # The mission has a Zerg AI ally that can be taken over
+    AiProtossAlly = auto()  # The mission has a Protoss AI ally that can be taken over
+    VsTerran      = auto()
+    VsZerg        = auto()
+    VsProtoss     = auto()
 
-    timedDefense = Timed|Defense
-    vsTZ = VsTerran|VsZerg
-    vsTP = VsTerran|VsProtoss
-    vsPZ = VsProtoss|VsZerg
-    vsAll = VsTerran|VsProtoss|VsZerg
+    aiAlly        = AiTerranAlly|AiZergAlly|AiProtossAlly
+    timedDefense  = Timed|Defense
+    vsTZ          = VsTerran|VsZerg
+    vsTP          = VsTerran|VsProtoss
+    vsPZ          = VsProtoss|VsZerg
+    vsAll         = VsTerran|VsProtoss|VsZerg
 
 class SC2CampaignGoalPriority(IntEnum):
     """
@@ -146,7 +149,7 @@ class SC2Mission(Enum):
     CONVICTION = 46, "Conviction", SC2Campaign.HOTS, "Dominion Space", SC2Race.ANY, MissionPools.MEDIUM, "ap_conviction", MissionFlags.Zerg|MissionFlags.Kerrigan|MissionFlags.NoBuild|MissionFlags.VsTerran
     PLANETFALL = 47, "Planetfall", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.HARD, "ap_planetfall", MissionFlags.Zerg|MissionFlags.Kerrigan|MissionFlags.VsTerran
     DEATH_FROM_ABOVE = 48, "Death From Above", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.HARD, "ap_death_from_above", MissionFlags.Zerg|MissionFlags.Kerrigan|MissionFlags.VsTerran
-    THE_RECKONING = 49, "The Reckoning", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.HARD, "ap_the_reckoning", MissionFlags.Zerg|MissionFlags.Kerrigan|MissionFlags.VsTerran|MissionFlags.AiAlly
+    THE_RECKONING = 49, "The Reckoning", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.HARD, "ap_the_reckoning", MissionFlags.Zerg|MissionFlags.Kerrigan|MissionFlags.VsTerran|MissionFlags.AiTerranAlly
 
     # Prologue
     DARK_WHISPERS = 50, "Dark Whispers", SC2Campaign.PROLOGUE, "_1", SC2Race.PROTOSS, MissionPools.EASY, "ap_dark_whispers", MissionFlags.Protoss|MissionFlags.Timed|MissionFlags.vsTZ
@@ -157,14 +160,14 @@ class SC2Mission(Enum):
     FOR_AIUR = 53, "For Aiur!", SC2Campaign.LOTV, "Aiur", SC2Race.ANY, MissionPools.STARTER, "ap_for_aiur", MissionFlags.Protoss|MissionFlags.NoBuild|MissionFlags.VsZerg
     THE_GROWING_SHADOW = 54, "The Growing Shadow", SC2Campaign.LOTV, "Aiur", SC2Race.PROTOSS, MissionPools.EASY, "ap_the_growing_shadow", MissionFlags.Protoss|MissionFlags.vsPZ
     THE_SPEAR_OF_ADUN = 55, "The Spear of Adun", SC2Campaign.LOTV, "Aiur", SC2Race.PROTOSS, MissionPools.EASY, "ap_the_spear_of_adun", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.vsPZ
-    SKY_SHIELD = 56, "Sky Shield", SC2Campaign.LOTV, "Korhal", SC2Race.PROTOSS, MissionPools.EASY, "ap_sky_shield", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.Timed|MissionFlags.VsTerran|MissionFlags.AiAlly
-    BROTHERS_IN_ARMS = 57, "Brothers in Arms", SC2Campaign.LOTV, "Korhal", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_brothers_in_arms", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.VsTerran|MissionFlags.AiAlly
+    SKY_SHIELD = 56, "Sky Shield", SC2Campaign.LOTV, "Korhal", SC2Race.PROTOSS, MissionPools.EASY, "ap_sky_shield", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.Timed|MissionFlags.VsTerran|MissionFlags.AiTerranAlly
+    BROTHERS_IN_ARMS = 57, "Brothers in Arms", SC2Campaign.LOTV, "Korhal", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_brothers_in_arms", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.VsTerran|MissionFlags.AiTerranAlly
     AMON_S_REACH = 58, "Amon's Reach", SC2Campaign.LOTV, "Shakuras", SC2Race.PROTOSS, MissionPools.EASY, "ap_amon_s_reach", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.VsZerg
     LAST_STAND = 59, "Last Stand", SC2Campaign.LOTV, "Shakuras", SC2Race.PROTOSS, MissionPools.HARD, "ap_last_stand", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.timedDefense|MissionFlags.VsZerg
     FORBIDDEN_WEAPON = 60, "Forbidden Weapon", SC2Campaign.LOTV, "Purifier", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_forbidden_weapon", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.Timed|MissionFlags.VsProtoss
     TEMPLE_OF_UNIFICATION = 61, "Temple of Unification", SC2Campaign.LOTV, "Ulnar", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_temple_of_unification", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.vsTP
     THE_INFINITE_CYCLE = 62, "The Infinite Cycle", SC2Campaign.LOTV, "Ulnar", SC2Race.ANY, MissionPools.HARD, "ap_the_infinite_cycle", MissionFlags.Protoss|MissionFlags.Kerrigan|MissionFlags.NoBuild|MissionFlags.vsTP
-    HARBINGER_OF_OBLIVION = 63, "Harbinger of Oblivion", SC2Campaign.LOTV, "Ulnar", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_harbinger_of_oblivion", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.Timed|MissionFlags.vsTP|MissionFlags.AiAlly
+    HARBINGER_OF_OBLIVION = 63, "Harbinger of Oblivion", SC2Campaign.LOTV, "Ulnar", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_harbinger_of_oblivion", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.Timed|MissionFlags.vsTP|MissionFlags.AiZergAlly
     UNSEALING_THE_PAST = 64, "Unsealing the Past", SC2Campaign.LOTV, "Purifier", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_unsealing_the_past", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.Timed|MissionFlags.VsZerg
     PURIFICATION = 65, "Purification", SC2Campaign.LOTV, "Purifier", SC2Race.PROTOSS, MissionPools.HARD, "ap_purification", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.VsZerg
     STEPS_OF_THE_RITE = 66, "Steps of the Rite", SC2Campaign.LOTV, "Tal'darim", SC2Race.PROTOSS, MissionPools.HARD, "ap_steps_of_the_rite", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.VsProtoss
@@ -172,12 +175,12 @@ class SC2Mission(Enum):
     TEMPLAR_S_CHARGE = 68, "Templar's Charge", SC2Campaign.LOTV, "Moebius", SC2Race.PROTOSS, MissionPools.HARD, "ap_templar_s_charge", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.VsTerran
     TEMPLAR_S_RETURN = 69, "Templar's Return", SC2Campaign.LOTV, "Return to Aiur", SC2Race.PROTOSS, MissionPools.EASY, "ap_templar_s_return", MissionFlags.Protoss|MissionFlags.NoBuild|MissionFlags.vsPZ
     THE_HOST = 70, "The Host", SC2Campaign.LOTV, "Return to Aiur", SC2Race.PROTOSS, MissionPools.HARD, "ap_the_host", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.vsAll
-    SALVATION = 71, "Salvation", SC2Campaign.LOTV, "Return to Aiur", SC2Race.PROTOSS, MissionPools.VERY_HARD, "ap_salvation", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.timedDefense|MissionFlags.vsPZ|MissionFlags.AiAlly
+    SALVATION = 71, "Salvation", SC2Campaign.LOTV, "Return to Aiur", SC2Race.PROTOSS, MissionPools.VERY_HARD, "ap_salvation", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.timedDefense|MissionFlags.vsPZ|MissionFlags.AiProtossAlly
 
     # Epilogue
-    INTO_THE_VOID = 72, "Into the Void", SC2Campaign.EPILOGUE, "_1", SC2Race.PROTOSS, MissionPools.VERY_HARD, "ap_into_the_void", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.vsAll|MissionFlags.AiAlly
-    THE_ESSENCE_OF_ETERNITY = 73, "The Essence of Eternity", SC2Campaign.EPILOGUE, "_2", SC2Race.TERRAN, MissionPools.VERY_HARD, "ap_the_essence_of_eternity", MissionFlags.Terran|MissionFlags.timedDefense|MissionFlags.vsAll|MissionFlags.AiAlly
-    AMON_S_FALL = 74, "Amon's Fall", SC2Campaign.EPILOGUE, "_3", SC2Race.ZERG, MissionPools.VERY_HARD, "ap_amon_s_fall", MissionFlags.Zerg|MissionFlags.Kerrigan|MissionFlags.vsAll|MissionFlags.AiAlly
+    INTO_THE_VOID = 72, "Into the Void", SC2Campaign.EPILOGUE, "_1", SC2Race.PROTOSS, MissionPools.VERY_HARD, "ap_into_the_void", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.vsAll|MissionFlags.AiTerranAlly|MissionFlags.AiZergAlly
+    THE_ESSENCE_OF_ETERNITY = 73, "The Essence of Eternity", SC2Campaign.EPILOGUE, "_2", SC2Race.TERRAN, MissionPools.VERY_HARD, "ap_the_essence_of_eternity", MissionFlags.Terran|MissionFlags.timedDefense|MissionFlags.vsAll|MissionFlags.AiZergAlly|MissionFlags.AiProtossAlly
+    AMON_S_FALL = 74, "Amon's Fall", SC2Campaign.EPILOGUE, "_3", SC2Race.ZERG, MissionPools.VERY_HARD, "ap_amon_s_fall", MissionFlags.Zerg|MissionFlags.Kerrigan|MissionFlags.vsAll|MissionFlags.AiTerranAlly|MissionFlags.AiProtossAlly
 
     # Nova Covert Ops
     THE_ESCAPE = 75, "The Escape", SC2Campaign.NCO, "_1", SC2Race.ANY, MissionPools.MEDIUM, "ap_the_escape", MissionFlags.Terran|MissionFlags.Nova|MissionFlags.NoBuild|MissionFlags.VsTerran
