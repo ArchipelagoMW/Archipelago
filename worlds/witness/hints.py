@@ -1,9 +1,11 @@
 import logging
 from dataclasses import dataclass
-from typing import Tuple, List, TYPE_CHECKING, Set, Dict, Optional, Union
-from BaseClasses import Item, ItemClassification, Location, LocationProgressType, CollectionState
-from . import StaticWitnessLogic
-from .utils import weighted_sample
+from typing import TYPE_CHECKING, Dict, List, Optional, Set, Tuple, Union
+
+from BaseClasses import CollectionState, Item, Location, LocationProgressType
+
+from .data import static_logic as static_witness_logic
+from .data.utils import weighted_sample
 
 if TYPE_CHECKING:
     from . import WitnessWorld
@@ -22,7 +24,7 @@ joke_hints = [
     "Have you tried Clique?\nIt's certainly a lot less complicated than this game!",
     "Have you tried Dark Souls III?\nA tough game like this feels better when friends are helping you!",
     "Have you tried Donkey Kong Country 3?\nA legendary game from a golden age of platformers!",
-    "Have you tried DLC Quest?\nI know you all like parody games.\nI got way too many requests to make a randomizer for \"The Looker\".",
+    'Have you tried DLC Quest?\nI know you all like parody games.\nI got way too many requests to make a randomizer for "The Looker".',
     "Have you tried Doom?\nI wonder if a smart fridge can connect to Archipelago.",
     "Have you tried Doom II?\nGot a good game on your hands? Just make it bigger and better.",
     "Have you tried Factorio?\nAlone in an unknown multiworld. Sound familiar?",
@@ -62,9 +64,9 @@ joke_hints = [
     "Have you tried Slay the Spire?\nExperience the thrill of combat without needing fast fingers!",
     "Have you tried Stardew Valley?\nThe Farming game that gave a damn. It's so easy to lose hours and days to it...",
     "Have you tried Subnautica?\nIf you like this game's lonely atmosphere, I would suggest you try it.",
-    "Have you tried Terraria?\nA prime example of a survival sandbox game that beats the \"Wide as an ocean, deep as a puddle\" allegations.",
+    'Have you tried Terraria?\nA prime example of a survival sandbox game that beats the "Wide as an ocean, deep as a puddle" allegations.',
     "Have you tried Timespinner?\nEveryone who plays it ends up loving it!",
-    "Have you tried The Legend of Zelda?\nIn some sense, it was the starting point of \"adventure\" in video games.",
+    'Have you tried The Legend of Zelda?\nIn some sense, it was the starting point of "adventure" in video games.',
     "Have you tried TUNC?\nWhat? No, I'm pretty sure I spelled that right.",
     "Have you tried TUNIC?\nRemember what discovering your first Environmental Puzzle was like?\nTUNIC will make you feel like that at least 5 times over.",
     "Have you tried Undertale?\nI hope I'm not the 10th person to ask you that. But it's, like, really good.",
@@ -72,7 +74,7 @@ joke_hints = [
     "Have you tried Wargroove?\nI'm glad that for every abandoned series, enough people are yearning for its return that one of them will know how to code.",
     "Have you tried The Witness?\nOh. I guess you already have. Thanks for playing!",
     "Have you tried Zillion?\nMe neither. But it looks fun. So, let's try something new together?",
-    "Have you tried Zork: Grand Inquisitor?\nThis 1997 game uses Z-Vision technology to simulate 3D environments.\nCome on, I know you wanna find out what \"Z-Vision\" is.",
+    'Have you tried Zork: Grand Inquisitor?\nThis 1997 game uses Z-Vision technology to simulate 3D environments.\nCome on, I know you wanna find out what "Z-Vision" is.',
 
     "Quaternions break my brain",
     "Eclipse has nothing, but you should do it anyway.",
@@ -136,10 +138,10 @@ joke_hints = [
     "In the future, war will break out between obelisk_sides and individual EP players.\nWhich side are you on?",
     "Droplets: Low, High, Mid.\nAmbience: Mid, Low, Mid, High.",
     "Name a better game involving lines. I'll wait.",
-    "\"You have to draw a line in the sand.\"\n- Arin \"Egoraptor\" Hanson",
+    '"You have to draw a line in the sand."\n- Arin "Egoraptor" Hanson',
     "Have you tried?\nThe puzzles tend to get easier if you do.",
     "Sorry, I accidentally left my phone in the Jungle.\nAnd also all my fragile dishes.",
-    "Winner of the \"Most Irrelevant PR in AP History\" award!",
+    'Winner of the "Most Irrelevant PR in AP History" award!',
     "I bet you wish this was a real hint :)",
     "\"This hint is an impostor.\"- Junk hint submitted by T1mshady.\n...wait, I'm not supposed to say that part?",
     "Wouldn't you like to know, weather buoy?",
@@ -192,10 +194,10 @@ class WitnessLocationHint:
     hint_came_from_location: bool
 
     # If a hint gets added to a set twice, but once as an item hint and once as a location hint, those are the same
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.location)
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return self.location == other.location
 
 
@@ -324,7 +326,7 @@ def get_priority_hint_locations(world: "WitnessWorld") -> List[str]:
         "Boat Shipwreck Green EP",
         "Quarry Stoneworks Control Room Left",
     ]
-    
+
     # Add Obelisk Sides that contain EPs that are meant to be hinted, if they are necessary to complete the Obelisk Side
     if "0x33A20" not in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
         priority.append("Town Obelisk Side 6")  # Theater Flowers EP
@@ -338,7 +340,7 @@ def get_priority_hint_locations(world: "WitnessWorld") -> List[str]:
     return priority
 
 
-def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint):
+def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint) -> WitnessWordedHint:
     location_name = hint.location.name
     if hint.location.player != world.player:
         location_name += " (" + world.multiworld.get_player_name(hint.location.player) + ")"
@@ -373,8 +375,8 @@ def hint_from_item(world: "WitnessWorld", item_name: str, own_itempool: List[Ite
 
 
 def hint_from_location(world: "WitnessWorld", location: str) -> Optional[WitnessLocationHint]:
-    location_obj = world.multiworld.get_location(location, world.player)
-    item_obj = world.multiworld.get_location(location, world.player).item
+    location_obj = world.get_location(location)
+    item_obj = location_obj.item
     item_name = item_obj.name
     if item_obj.player != world.player:
         item_name += " (" + world.multiworld.get_player_name(item_obj.player) + ")"
@@ -382,7 +384,8 @@ def hint_from_location(world: "WitnessWorld", location: str) -> Optional[Witness
     return WitnessLocationHint(location_obj, True)
 
 
-def get_items_and_locations_in_random_order(world: "WitnessWorld", own_itempool: List[Item]):
+def get_items_and_locations_in_random_order(world: "WitnessWorld",
+                                            own_itempool: List[Item]) -> Tuple[List[str], List[str]]:
     prog_items_in_this_world = sorted(
         item.name for item in own_itempool
         if item.advancement and item.code and item.location
@@ -455,7 +458,11 @@ def make_extra_location_hints(world: "WitnessWorld", hint_amount: int, own_itemp
     hints = []
 
     # This is a way to reverse a Dict[a,List[b]] to a Dict[b,a]
-    area_reverse_lookup = {v: k for k, l in unhinted_locations_for_hinted_areas.items() for v in l}
+    area_reverse_lookup = {
+        unhinted_location: hinted_area
+        for hinted_area, unhinted_locations in unhinted_locations_for_hinted_areas.items()
+        for unhinted_location in unhinted_locations
+    }
 
     while len(hints) < hint_amount:
         if not prog_items_in_this_world and not locations_in_this_world and not hints_to_use_first:
@@ -529,16 +536,16 @@ def choose_areas(world: "WitnessWorld", amount: int, locations_per_area: Dict[st
 
 
 def get_hintable_areas(world: "WitnessWorld") -> Tuple[Dict[str, List[Location]], Dict[str, List[Item]]]:
-    potential_areas = list(StaticWitnessLogic.ALL_AREAS_BY_NAME.keys())
+    potential_areas = list(static_witness_logic.ALL_AREAS_BY_NAME.keys())
 
     locations_per_area = dict()
     items_per_area = dict()
 
     for area in potential_areas:
         regions = [
-            world.regio.created_regions[region]
-            for region in StaticWitnessLogic.ALL_AREAS_BY_NAME[area]["regions"]
-            if region in world.regio.created_regions
+            world.player_regions.created_regions[region]
+            for region in static_witness_logic.ALL_AREAS_BY_NAME[area]["regions"]
+            if region in world.player_regions.created_regions
         ]
         locations = [location for region in regions for location in region.get_locations() if location.address]
 
@@ -596,7 +603,7 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items:
 
         if local_lasers == total_progression:
             sentence_end = (" for this world." if player_count > 1 else ".")
-            hint_string += f"\nAll of them are lasers" + sentence_end
+            hint_string += "\nAll of them are lasers" + sentence_end
 
         elif player_count > 1:
             if local_progression and non_local_progression:
@@ -663,7 +670,7 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int,
 
     already_hinted_locations |= {
         loc for loc in world.multiworld.get_reachable_locations(state, world.player)
-        if loc.address and StaticWitnessLogic.ENTITIES_BY_NAME[loc.name]["area"]["name"] == "Tutorial (Inside)"
+        if loc.address and static_witness_logic.ENTITIES_BY_NAME[loc.name]["area"]["name"] == "Tutorial (Inside)"
     }
 
     intended_location_hints = hint_amount - area_hints

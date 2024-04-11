@@ -51,7 +51,7 @@ opciones.
 
 ### ¿Dónde puedo obtener un archivo YAML?
 
-Puedes generar un archivo YAML or descargar su plantilla en la [página de configuración de jugador de Pokémon Red and Blue](/games/Pokemon%20Red%20and%20Blue/player-settings)
+Puedes generar un archivo YAML or descargar su plantilla en la [página de configuración de jugador de Pokémon Red and Blue](/games/Pokemon%20Red%20and%20Blue/player-options)
 
 Es importante tener en cuenta que la opción `game_version` determina el ROM que será parcheado.
 Tanto el jugador como la persona que genera (si está generando localmente) necesitarán el archivo del ROM
