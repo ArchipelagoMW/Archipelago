@@ -36,7 +36,7 @@ class RequiredBosses(OptionSet):
     Which boss(es) are required to be defeated to beat the game?
     """
     display_name = "Boss Defeat Requirement"
-    default = {"Ancient Fuelweaver", "Celestial Champion"}
+    default = {"Ancient Guardian"}
     valid_keys = {
         "Deerclops",
         "Moose/Goose",
