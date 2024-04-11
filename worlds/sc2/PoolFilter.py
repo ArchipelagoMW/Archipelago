@@ -58,7 +58,8 @@ def filter_missions(world: World) -> Dict[MissionPools, List[SC2Mission]]:
         # Vanilla uses the entire mission pool
         goal_priorities: Dict[SC2Campaign, SC2CampaignGoalPriority] = {campaign: get_campaign_goal_priority(campaign) for campaign in enabled_campaigns}
         goal_level = max(goal_priorities.values())
-        candidate_campaigns = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
+        candidate_campaigns: List[SC2Campaign] = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
+        candidate_campaigns.sort(key=lambda it: it.id)
         goal_campaign = world.random.choice(candidate_campaigns)
         if campaign_final_mission_locations[goal_campaign] is not None:
             mission_pools[MissionPools.FINAL] = [campaign_final_mission_locations[goal_campaign].mission]
@@ -70,7 +71,8 @@ def filter_missions(world: World) -> Dict[MissionPools, List[SC2Mission]]:
     # Finding the goal map
     goal_priorities = {campaign: get_campaign_goal_priority(campaign, excluded_missions) for campaign in enabled_campaigns}
     goal_level = max(goal_priorities.values())
-    candidate_campaigns = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
+    candidate_campaigns: List[SC2Campaign] = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
+    candidate_campaigns.sort(key=lambda it: it.id)
     goal_campaign = world.random.choice(candidate_campaigns)
     primary_goal = campaign_final_mission_locations[goal_campaign]
     if primary_goal is None or primary_goal.mission in excluded_missions:
