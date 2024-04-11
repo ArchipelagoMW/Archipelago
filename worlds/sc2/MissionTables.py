@@ -111,14 +111,14 @@ class SC2Mission(Enum):
     BREAKOUT = 15, "Breakout", SC2Campaign.WOL, "Covert", SC2Race.ANY, MissionPools.STARTER, "ap_breakout", MissionFlags.Terran|MissionFlags.NoBuild|MissionFlags.VsTerran
     GHOST_OF_A_CHANCE = 16, "Ghost of a Chance", SC2Campaign.WOL, "Covert", SC2Race.ANY, MissionPools.STARTER, "ap_ghost_of_a_chance", MissionFlags.Terran|MissionFlags.NoBuild|MissionFlags.VsTerran
     THE_GREAT_TRAIN_ROBBERY = 17, "The Great Train Robbery", SC2Campaign.WOL, "Rebellion", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_the_great_train_robbery", MissionFlags.Terran|MissionFlags.Timed|MissionFlags.VsTerran
-    CUTTHROAT = 18, "Cutthroat", SC2Campaign.WOL, "Rebellion", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_cutthroat", MissionFlags.Terran|MissionFlags.VsTerran
+    CUTTHROAT = 18, "Cutthroat", SC2Campaign.WOL, "Rebellion", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_cutthroat", MissionFlags.Terran|MissionFlags.Timed|MissionFlags.VsTerran
     ENGINE_OF_DESTRUCTION = 19, "Engine of Destruction", SC2Campaign.WOL, "Rebellion", SC2Race.TERRAN, MissionPools.HARD, "ap_engine_of_destruction", MissionFlags.Terran|MissionFlags.Timed|MissionFlags.VsTerran
     MEDIA_BLITZ = 20, "Media Blitz", SC2Campaign.WOL, "Rebellion", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_media_blitz", MissionFlags.Terran|MissionFlags.VsTerran
     PIERCING_OF_THE_SHROUD = 21, "Piercing the Shroud", SC2Campaign.WOL, "Rebellion", SC2Race.TERRAN, MissionPools.STARTER, "ap_piercing_the_shroud", MissionFlags.Terran|MissionFlags.NoBuild|MissionFlags.vsAll
     GATES_OF_HELL = 26, "Gates of Hell", SC2Campaign.WOL, "Char", SC2Race.TERRAN, MissionPools.HARD, "ap_gates_of_hell", MissionFlags.Terran|MissionFlags.VsZerg
     BELLY_OF_THE_BEAST = 27, "Belly of the Beast", SC2Campaign.WOL, "Char", SC2Race.ANY, MissionPools.STARTER, "ap_belly_of_the_beast", MissionFlags.Terran|MissionFlags.NoBuild|MissionFlags.VsZerg
     SHATTER_THE_SKY = 28, "Shatter the Sky", SC2Campaign.WOL, "Char", SC2Race.TERRAN, MissionPools.HARD, "ap_shatter_the_sky", MissionFlags.Terran|MissionFlags.VsZerg
-    ALL_IN = 29, "All-In", SC2Campaign.WOL, "Char", SC2Race.TERRAN, MissionPools.VERY_HARD, "ap_all_in", MissionFlags.Terran|MissionFlags.Defense|MissionFlags.VsZerg
+    ALL_IN = 29, "All-In", SC2Campaign.WOL, "Char", SC2Race.TERRAN, MissionPools.VERY_HARD, "ap_all_in", MissionFlags.Terran|MissionFlags.timedDefense|MissionFlags.VsZerg
 
     # Prophecy
     WHISPERS_OF_DOOM = 22, "Whispers of Doom", SC2Campaign.PROPHECY, "_1", SC2Race.ANY, MissionPools.STARTER, "ap_whispers_of_doom", MissionFlags.Protoss|MissionFlags.NoBuild|MissionFlags.VsZerg
@@ -163,8 +163,8 @@ class SC2Mission(Enum):
     LAST_STAND = 59, "Last Stand", SC2Campaign.LOTV, "Shakuras", SC2Race.PROTOSS, MissionPools.HARD, "ap_last_stand", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.timedDefense|MissionFlags.VsZerg
     FORBIDDEN_WEAPON = 60, "Forbidden Weapon", SC2Campaign.LOTV, "Purifier", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_forbidden_weapon", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.Timed|MissionFlags.VsProtoss
     TEMPLE_OF_UNIFICATION = 61, "Temple of Unification", SC2Campaign.LOTV, "Ulnar", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_temple_of_unification", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.vsTP
-    THE_INFINITE_CYCLE = 62, "The Infinite Cycle", SC2Campaign.LOTV, "Ulnar", SC2Race.ANY, MissionPools.HARD, "ap_the_infinite_cycle", MissionFlags.Protoss|MissionFlags.Kerrigan|MissionFlags.NoBuild|MissionFlags.VsTerran
-    HARBINGER_OF_OBLIVION = 63, "Harbinger of Oblivion", SC2Campaign.LOTV, "Ulnar", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_harbinger_of_oblivion", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.Timed|MissionFlags.VsProtoss|MissionFlags.AiAlly
+    THE_INFINITE_CYCLE = 62, "The Infinite Cycle", SC2Campaign.LOTV, "Ulnar", SC2Race.ANY, MissionPools.HARD, "ap_the_infinite_cycle", MissionFlags.Protoss|MissionFlags.Kerrigan|MissionFlags.NoBuild|MissionFlags.vsTP
+    HARBINGER_OF_OBLIVION = 63, "Harbinger of Oblivion", SC2Campaign.LOTV, "Ulnar", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_harbinger_of_oblivion", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.Timed|MissionFlags.vsTP|MissionFlags.AiAlly
     UNSEALING_THE_PAST = 64, "Unsealing the Past", SC2Campaign.LOTV, "Purifier", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_unsealing_the_past", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.Timed|MissionFlags.VsZerg
     PURIFICATION = 65, "Purification", SC2Campaign.LOTV, "Purifier", SC2Race.PROTOSS, MissionPools.HARD, "ap_purification", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.VsZerg
     STEPS_OF_THE_RITE = 66, "Steps of the Rite", SC2Campaign.LOTV, "Tal'darim", SC2Race.PROTOSS, MissionPools.HARD, "ap_steps_of_the_rite", MissionFlags.Protoss|MissionFlags.VanillaSoa|MissionFlags.VsProtoss
@@ -756,4 +756,4 @@ def get_campaign_potential_goal_missions(campaign: SC2Campaign) -> List[SC2Missi
 
 
 def get_no_build_missions() -> List[SC2Mission]:
-    return [mission for mission in SC2Mission if not mission.flags & MissionFlags.NoBuild]
+    return [mission for mission in SC2Mission if mission.flags & MissionFlags.NoBuild]
