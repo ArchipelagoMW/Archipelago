@@ -78,8 +78,9 @@ GetEquippedItem:
     ADC #$07
     JSR ItemGetEquipped
     JSR LoadItemsColor
+    NOP ; !!!! This is a load-bearing NOP. It gets branched to later in the function
     LDX $FF
-    NOP
+
 
 %org($BB08, $0D)
 WilyProgress:
@@ -175,7 +176,7 @@ CheckConsumable:
     CMP #$7C
     BPL .Store
     print "Consumables (replace 7a): ", hex(realbase())
-    CMP #$77
+    CMP #$76
     BMI .Store
     LDA #$00
     .Store:
