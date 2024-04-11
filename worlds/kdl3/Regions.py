@@ -110,7 +110,11 @@ def generate_rooms(world: "KDL3World", level_regions: typing.Dict[int, Region]):
             else:
                 world.multiworld.get_location(world.location_id_to_name[world.player_levels[level][stage - 1]],
                                               world.player).parent_region.add_exits([first_rooms[proper_stage].name])
-        level_regions[level].add_exits([first_rooms[0x770200 + level - 1].name])
+        if world.options.open_world:
+            level_regions[level].add_exits([first_rooms[0x770200 + level - 1].name])
+        else:
+            world.multiworld.get_location(world.location_id_to_name[world.player_levels[level][5]], world.player)\
+                .parent_region.add_exits([first_rooms[0x770200 + level - 1].name])
 
 
 def generate_valid_levels(world: "KDL3World", enforce_world: bool, enforce_pattern: bool) -> dict:
