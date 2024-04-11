@@ -279,7 +279,7 @@ class WL4Location(Location):
         return self.flag.bit_length() - (1 if self.flag < ItemFlag.KEYZER else 2)
 
     def level_offset(self):
-        return (self.passage * 4 + self.level) * (len(ItemFlag) - 1)
+        return (self.passage * 5 + self.level) * (len(ItemFlag) - 1)
 
 def get_level_locations(passage: Passage, level: int):
     return map(lambda l: l[0], get_level_location_data(passage, level))

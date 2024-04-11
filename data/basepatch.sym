@@ -79,13 +79,13 @@
 0878F9BC playerid
 0878F9BE seedname
 0878FA00 itemlocationtable
-0878FAA8 itemextdatatable
-0878FD48 startinginventoryitemstatus
-0878FD6C startinginventoryjunkcounts
-0878FD71 startinginventorywarioabilities
-0878FD72 deathlinkflag
-0878FD73 sendmultiworlditemsimmediately
-0878FD74 goaltype
-0878FD75 goldentreasuresneeded
-08793134 multiworldstringdump
+0878FAD4 itemextdatatable
+0878FE1C startinginventoryitemstatus
+0878FE40 startinginventoryjunkcounts
+0878FE45 startinginventorywarioabilities
+0878FE46 deathlinkflag
+0878FE47 sendmultiworlditemsimmediately
+0878FE48 goaltype
+0878FE49 goldentreasuresneeded
+087934E4 multiworldstringdump
 
