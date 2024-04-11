@@ -1,4 +1,4 @@
-from typing import Dict, Set
+from typing import Dict, Set, cast
 
 from . import static_logic as static_witness_logic
 
@@ -453,7 +453,7 @@ def get_id(entity_hex: str) -> int:
     Calculates the location ID for any given location
     """
 
-    return static_witness_logic.ENTITIES_BY_HEX[entity_hex]["id"]
+    return cast(int, static_witness_logic.ENTITIES_BY_HEX[entity_hex]["id"])
 
 
 def get_event_name(entity_hex: str) -> str:
@@ -463,7 +463,7 @@ def get_event_name(entity_hex: str) -> str:
 
     action = " Opened" if static_witness_logic.ENTITIES_BY_HEX[entity_hex]["entityType"] == "Door" else " Solved"
 
-    return static_witness_logic.ENTITIES_BY_HEX[entity_hex]["checkName"] + action
+    return cast(str, static_witness_logic.ENTITIES_BY_HEX[entity_hex]["checkName"]) + action
 
 
 ALL_LOCATIONS_TO_IDS = {
