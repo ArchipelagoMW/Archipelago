@@ -2,13 +2,15 @@
 Defines the rules by which locations can be accessed,
 depending on the items received
 """
-from typing import TYPE_CHECKING, FrozenSet, Generator
+from typing import TYPE_CHECKING, FrozenSet
 
-from BaseClasses import CollectionState, Entrance
-from .player_logic import WitnessPlayerLogic
+from BaseClasses import CollectionState
+
+from worlds.generic.Rules import CollectionRule, set_rule
+
+from .data import static_logic as static_witness_logic
 from .locations import WitnessPlayerLocations
-from . import StaticWitnessLogic, WitnessRegions
-from worlds.generic.Rules import set_rule, CollectionRule
+from .player_logic import WitnessPlayerLogic
 
 if TYPE_CHECKING:
     from . import WitnessWorld
@@ -32,11 +34,11 @@ def _has_laser(laser_hex: str, world: "WitnessWorld", player: int,
                redirect_required: bool) -> CollectionRule:
     if laser_hex == "0x012FB" and redirect_required:
         return lambda state: (
-            _can_solve_panel(laser_hex, world, world.player, world.player_logic, world.locat)(state)
+            _can_solve_panel(laser_hex, world, world.player, world.player_logic, world.player_locations)(state)
             and state.has("Desert Laser Redirection", player)
         )
     else:
-        return _can_solve_panel(laser_hex, world, world.player, world.player_logic, world.locat)
+        return _can_solve_panel(laser_hex, world, world.player, world.player_logic, world.player_locations)
 
 
 def _has_lasers(amount: int, world: "WitnessWorld", redirect_required: bool) -> CollectionRule:
@@ -51,7 +53,7 @@ def _has_lasers(amount: int, world: "WitnessWorld", redirect_required: bool) -> 
 
 
 def _can_solve_panel(panel: str, world: "WitnessWorld", player: int, player_logic: WitnessPlayerLogic,
-                     locat: WitnessPlayerLocations) -> CollectionRule:
+                     player_locations: WitnessPlayerLocations) -> CollectionRule:
     """
     Determines whether a panel can be solved
     """
@@ -59,7 +61,7 @@ def _can_solve_panel(panel: str, world: "WitnessWorld", player: int, player_logi
     panel_obj = player_logic.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel]
     entity_name = panel_obj["checkName"]
 
-    if entity_name + " Solved" in locat.EVENT_LOCATION_TABLE:
+    if entity_name + " Solved" in player_locations.EVENT_LOCATION_TABLE:
         return lambda state: state.has(player_logic.EVENT_ITEM_PAIRS[entity_name + " Solved"], player)
     else:
         return make_lambda(panel, world)
@@ -72,10 +74,10 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     """
 
     player = world.player
-    regio = world.regio
+    player_regions = world.player_regions
 
     front_access = (
-        any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Keep 2nd Pressure Plate", "Keep"])
+        any(e.can_reach(state) for e in player_regions.two_way_entrance_register["Keep 2nd Pressure Plate", "Keep"])
         and state.can_reach_region("Keep", player)
     )
 
@@ -86,7 +88,7 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     # Front access works. Now, we need to check for the many ways to access PP2 from the back.
     # All of those ways lead through the PP3 exit door from PP4. So we check this first.
 
-    fourth_to_third = any(e.can_reach(state) for e in world.regio.two_way_entrance_register[
+    fourth_to_third = any(e.can_reach(state) for e in player_regions.two_way_entrance_register[
         "Keep 3rd Pressure Plate", "Keep 4th Pressure Plate"
     ])
 
@@ -98,7 +100,7 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     # The shadows shortcut is the simplest way.
 
     shadows_shortcut = (
-        any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep 4th Pressure Plate", "Shadows"])
+        any(e.can_reach(state) for e in player_regions.two_way_entrance_register["Keep 4th Pressure Plate", "Shadows"])
     )
 
     if shadows_shortcut:
@@ -107,7 +109,7 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     # We don't have the Shadows shortcut. This means we need to come in through the PP4 exit door instead.
 
     tower_to_pp4 = any(
-        e.can_reach(state) for e in regio.two_way_entrance_register["Keep 4th Pressure Plate", "Keep Tower"]
+        e.can_reach(state) for e in player_regions.two_way_entrance_register["Keep 4th Pressure Plate", "Keep Tower"]
     )
 
     # If we don't have the PP4 exit door, we've run out of options.
@@ -117,7 +119,7 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     # We have the PP4 exit door. If we can get to Keep Tower from behind, we can do PP2.
     # The simplest way would be the Tower Shortcut.
 
-    tower_shortcut = any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep", "Keep Tower"])
+    tower_shortcut = any(e.can_reach(state) for e in player_regions.two_way_entrance_register["Keep", "Keep Tower"])
 
     if tower_shortcut:
         return True
@@ -127,7 +129,7 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     # No matter what, though, we would need Hedge Maze 4 Exit to Keep Tower.
 
     tower_access_from_hedges = any(
-        e.can_reach(state) for e in regio.two_way_entrance_register["Keep 4th Maze", "Keep Tower"]
+        e.can_reach(state) for e in player_regions.two_way_entrance_register["Keep 4th Maze", "Keep Tower"]
     )
 
     if not tower_access_from_hedges:
@@ -135,7 +137,9 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
 
     # We can reach Keep Tower from Hedge Maze 4. If we now have the Hedge 4 Shortcut, we are immediately good.
 
-    hedge_4_shortcut = any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep 4th Maze", "Keep"])
+    hedge_4_shortcut = any(
+        e.can_reach(state) for e in player_regions.two_way_entrance_register["Keep 4th Maze", "Keep"]
+    )
 
     # If we have the hedge 4 shortcut, that works.
     if hedge_4_shortcut:
@@ -143,7 +147,9 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
 
     # We don't have the hedge 4 shortcut. This means we would now need to come through Hedge Maze 3.
 
-    hedge_3_to_4 = any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep 4th Maze", "Keep 3rd Maze"])
+    hedge_3_to_4 = any(
+        e.can_reach(state) for e in player_regions.two_way_entrance_register["Keep 4th Maze", "Keep 3rd Maze"]
+    )
 
     if not hedge_3_to_4:
         return False
@@ -151,7 +157,7 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     # We can get to Hedge 4 from Hedge 3. If we have the Hedge 3 Shortcut, we're good.
 
     hedge_3_shortcut = any(
-        e.can_reach(state) for e in regio.two_way_entrance_register["Keep 3rd Maze", "Keep"]
+        e.can_reach(state) for e in player_regions.two_way_entrance_register["Keep 3rd Maze", "Keep"]
     )
 
     if hedge_3_shortcut:
@@ -159,15 +165,19 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
 
     # We don't have Hedge 3 Shortcut. This means we would now need to come through Hedge Maze 2.
 
-    hedge_2_to_3 = any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep 3rd Maze", "Keep 2nd Maze"])
+    hedge_2_to_3 = any(
+        e.can_reach(state) for e in player_regions.two_way_entrance_register["Keep 3rd Maze", "Keep 2nd Maze"]
+    )
 
     if not hedge_2_to_3:
         return False
 
     # We can get to Hedge 3 from Hedge 2. If we can get from Keep to Hedge 2, we're good.
-    # This covers both Hedge 1 Exit and Hedge 2 Shortcut, because Hedge 1 is just part of the Keep region.
+    # This covers both Hedge 1 Exit and Hedge 2 Shortcut, because Hedge 1 is just part of the Keep player_regionsn.
 
-    hedge_2_from_keep = any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep 2nd Maze", "Keep"])
+    hedge_2_from_keep = any(
+        e.can_reach(state) for e in player_regions.two_way_entrance_register["Keep 2nd Maze", "Keep"]
+    )
 
     return hedge_2_from_keep
 
@@ -181,9 +191,11 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
     # Checking for access to Theater is not necessary, as solvability of Tutorial Video is checked in the other half
     # of the Theater Flowers EP condition.
 
+    player_regions = world.player_regions
+
     direct_access = (
-        any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Tunnels", "Windmill Interior"])
-        and any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Theater", "Windmill Interior"])
+        any(e.can_reach(state) for e in player_regions.two_way_entrance_register["Tunnels", "Windmill Interior"])
+        and any(e.can_reach(state) for e in player_regions.two_way_entrance_register["Theater", "Windmill Interior"])
     )
 
     if direct_access:
@@ -200,19 +212,19 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
     # We also need a way from Town to Tunnels.
 
     tunnels_from_town = (
-        any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Tunnels", "Windmill Interior"])
-        and any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Town", "Windmill Interior"])
-        or any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Tunnels", "Town"])
+        any(e.can_reach(state) for e in player_regions.two_way_entrance_register["Tunnels", "Windmill Interior"])
+        and any(e.can_reach(state) for e in player_regions.two_way_entrance_register["Town", "Windmill Interior"])
+        or any(e.can_reach(state) for e in player_regions.two_way_entrance_register["Tunnels", "Town"])
     )
 
     return tunnels_from_town
 
 
 def _has_item(item: str, world: "WitnessWorld", player: int,
-              player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations) -> CollectionRule:
+              player_logic: WitnessPlayerLogic, player_locations: WitnessPlayerLocations) -> CollectionRule:
     if item in player_logic.REFERENCE_LOGIC.ALL_REGIONS_BY_NAME:
-        region = world.get_region(item)
-        return region.can_reach
+        player_regionsn = world.get_region(item)
+        return player_regionsn.can_reach
     if item == "7 Lasers":
         laser_req = world.options.mountain_lasers.value
         return _has_lasers(laser_req, world, False)
@@ -230,9 +242,9 @@ def _has_item(item: str, world: "WitnessWorld", player: int,
     elif item == "Theater to Tunnels":
         return lambda state: _can_do_theater_to_tunnels(state, world)
     if item in player_logic.USED_EVENT_NAMES_BY_HEX:
-        return _can_solve_panel(item, world, player, player_logic, locat)
+        return _can_solve_panel(item, world, player, player_logic, player_locations)
 
-    prog_item = StaticWitnessLogic.get_parent_progressive_item(item)
+    prog_item = static_witness_logic.get_parent_progressive_item(item)
     return lambda state: state.has(prog_item, player, player_logic.MULTI_AMOUNTS[item])
 
 
@@ -244,7 +256,7 @@ def _meets_item_requirements(requirements: FrozenSet[FrozenSet[str]],
     """
 
     lambda_conversion = [
-        [_has_item(item, world, world.player, world.player_logic, world.locat) for item in subset]
+        [_has_item(item, world, world.player, world.player_logic, world.player_locations) for item in subset]
         for subset in requirements
     ]
 
@@ -263,15 +275,15 @@ def make_lambda(entity_hex: str, world: "WitnessWorld") -> CollectionRule:
     return _meets_item_requirements(entity_req, world)
 
 
-def set_rules(world: "WitnessWorld"):
+def set_rules(world: "WitnessWorld") -> None:
     """
     Sets all rules for all locations
     """
 
-    for location in world.locat.CHECK_LOCATION_TABLE:
+    for location in world.player_locations.CHECK_LOCATION_TABLE:
         real_location = location
 
-        if location in world.locat.EVENT_LOCATION_TABLE:
+        if location in world.player_locations.EVENT_LOCATION_TABLE:
             real_location = location[:-7]
 
         associated_entity = world.player_logic.REFERENCE_LOGIC.ENTITIES_BY_NAME[real_location]
@@ -279,8 +291,8 @@ def set_rules(world: "WitnessWorld"):
 
         rule = make_lambda(entity_hex, world)
 
-        location = world.multiworld.get_location(location, world.player)
+        location = world.get_location(location)
 
         set_rule(location, rule)
 
-    world.multiworld.completion_condition[world.player] = lambda state: state.has('Victory', world.player)
+    world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)

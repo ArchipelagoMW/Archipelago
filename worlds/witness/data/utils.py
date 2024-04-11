@@ -1,11 +1,11 @@
 from functools import lru_cache
 from math import floor
-from typing import List, Collection, FrozenSet, Tuple, Dict, Any, Set
 from pkgutil import get_data
 from random import random
+from typing import Any, Collection, Dict, FrozenSet, List, Set, Tuple
 
 
-def weighted_sample(world_random: random, population: List, weights: List[float], k: int):
+def weighted_sample(world_random: random, population: List, weights: List[float], k: int) -> List:
     positions = range(len(population))
     indices = []
     while True:
@@ -95,25 +95,9 @@ def parse_lambda(lambda_string) -> FrozenSet[FrozenSet[str]]:
     return lambda_set
 
 
-class lazy(object):
-    def __init__(self, func, name=None):
-        self.func = func
-        self.name = name if name is not None else func.__name__
-        self.__doc__ = func.__doc__
-
-    def __get__(self, instance, class_):
-        if instance is None:
-            res = self.func(class_)
-            setattr(class_, self.name, res)
-            return res
-        res = self.func(instance)
-        setattr(instance, self.name, res)
-        return res
-
-
 @lru_cache(maxsize=None)
 def get_adjustment_file(adjustment_file: str) -> List[str]:
-    data = get_data(__name__, adjustment_file).decode('utf-8')
+    data = get_data(__name__, adjustment_file).decode("utf-8")
     return [line.strip() for line in data.split("\n")]
 
 
