@@ -92,6 +92,15 @@ wily_2_c2 = "Wily Stage 2 - Weapon Energy 2"  # 12
 wily_2_c3 = "Wily Stage 2 - E-Tank 1"  # 16
 wily_2_c4 = "Wily Stage 2 - 1-Up 1"  # 17
 # 18 - 27 are all small weapon energies, might force these local junk?
+wily_2_c8 = "Wily Stage 2 - Weapon Energy 3"  # 18
+wily_2_c9 = "Wily Stage 2 - Weapon Energy 4"  # 19
+wily_2_c10 = "Wily Stage 2 - Weapon Energy 5"  # 20
+wily_2_c11 = "Wily Stage 2 - Weapon Energy 6"  # 21
+wily_2_c12 = "Wily Stage 2 - Weapon Energy 7"  # 22
+wily_2_c13 = "Wily Stage 2 - Weapon Energy 8"  # 23
+wily_2_c14 = "Wily Stage 2 - Weapon Energy 9"  # 24
+wily_2_c15 = "Wily Stage 2 - Weapon Energy 10"  # 25
+wily_2_c16 = "Wily Stage 2 - Weapon Energy 11"  # 26
 wily_2_c5 = "Wily Stage 2 - 1-Up 2"  # 29, requires Crash Bomber
 wily_2_c6 = "Wily Stage 2 - E-Tank 2"  # 30, requires Crash Bomber
 wily_2_c7 = "Wily Stage 2 - Health Energy"  # 31, item 2 (already required to reach wily 2)

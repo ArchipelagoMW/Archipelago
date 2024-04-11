@@ -8,12 +8,12 @@ from worlds.generic.Rules import add_rule
 from .Names import *
 from .Items import item_table, item_names, MM2Item, filler_item_table, filler_item_weights, robot_master_weapon_table, \
     stage_access_table, item_item_table
-from .Locations import location_table, MM2Location, mm2_regions
+from .Locations import location_table, MM2Location, mm2_regions, MM2Region
 from .Rom import get_base_rom_bytes, get_base_rom_path, RomData, patch_rom, extract_mm2, MM2ProcedurePatch, \
     MM2LCHASH, PROTEUSHASH, MM2VCHASH, MM2NESHASH
 from .Options import MM2Options
 from .Client import MegaMan2Client
-from .Rules import set_rules, weapon_damage, robot_masters, weapons_to_name
+from .Rules import set_rules, weapon_damage, robot_masters, weapons_to_name, minimum_weakness_requirement
 import os
 import threading
 import base64
@@ -96,32 +96,32 @@ class MM2World(World):
         super().__init__(world, player)
         self.weapon_damage = weapon_damage.copy()
 
-    def create_regions(self):
-        menu = Region("Menu", self.player, self.multiworld)
+    def create_regions(self) -> None:
+        menu = MM2Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu)
         for region in mm2_regions:
-            stage = Region(region, self.player, self.multiworld)
+            stage = MM2Region(region, self.player, self.multiworld)
             required_items = mm2_regions[region][0]
             locations = mm2_regions[region][1]
-            prevStage = mm2_regions[region][2]
-            if prevStage is None:
-                entrance = Entrance(self.player, f"To {region}", menu)
-                menu.exits.append(entrance)
+            prev_stage = mm2_regions[region][2]
+            if prev_stage is None:
+                menu.connect(stage, f"To {region}",
+                             lambda state, items=required_items: state.has_all(items, self.player))
             else:
-                old_stage = self.multiworld.get_region(prevStage, self.player)
-                entrance = Entrance(self.player, f"To {region}", old_stage)
-                old_stage.exits.append(entrance)
-            entrance.connect(stage)
-            for item in required_items:
-                add_rule(entrance, lambda state, required_item=item: state.has(required_item, self.player))
+                old_stage = self.multiworld.get_region(prev_stage, self.player)
+                old_stage.connect(stage, f"To {region}",
+                                  lambda state, items=required_items: state.has_all(items, self.player))
             stage.add_locations(locations)
             for location in stage.get_locations():
                 if location.address is None and location.name is not Names.dr_wily:
                     location.place_locked_item(MM2Item(location.name, ItemClassification.progression,
                                                        None, self.player))
             if self.options.consumables:
-                if region in Locations.consumables:
-                    stage.add_locations(Locations.consumables[region], MM2Location)
+                if region in Locations.etank_1ups:
+                    stage.add_locations(Locations.etank_1ups[region], MM2Location)
+                if self.options.consumables == self.options.consumables.option_all:
+                    if region in Locations.energy_pickups:
+                        stage.add_locations(Locations.energy_pickups[region], MM2Location)
             self.multiworld.regions.append(stage)
 
     def create_item(self, name: str, force_non_progression=False) -> MM2Item:
@@ -145,9 +145,16 @@ class MM2World(World):
                          if name != robot_master])
         itempool.extend([self.create_item(name) for name in robot_master_weapon_table.keys()])
         itempool.extend([self.create_item(name) for name in item_item_table.keys()])
-        remaining = 24 + (38 if self.options.consumables else 0) - len(itempool)
-        itempool.extend([self.create_item(self.get_filler_item_name())
-                         for _ in range(remaining)])
+        total_checks = 24
+        if self.options.consumables:
+            total_checks += 20
+            if self.options.consumables == self.options.consumables.option_all:
+                total_checks += 27
+        remaining = total_checks - len(itempool)
+        itempool.extend([self.create_item(name)
+                         for name in self.multiworld.random.choices(list(filler_item_weights.keys()),
+                                                                    weights=list(filler_item_weights.values()),
+                                                                    k=remaining)])
         self.multiworld.itempool += itempool
 
     set_rules = set_rules
@@ -164,14 +171,15 @@ class MM2World(World):
                 robot_master_pool.append(4)
             self.options.starting_robot_master.value = self.random.choice(robot_master_pool)
             logger.warning(
-                f"Incompatible starting Robot Master, changing to {self.options.starting_robot_master.current_key.replace('_', ' ').title()}")
+                f"Incompatible starting Robot Master, changing to "
+                f"{self.options.starting_robot_master.current_key.replace('_', ' ').title()}")
 
     def generate_basic(self) -> None:
         goal_location = self.multiworld.get_location(Names.dr_wily, self.player)
         goal_location.place_locked_item(MM2Item("Victory", ItemClassification.progression, None, self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
-    def generate_output(self, output_directory: str):
+    def generate_output(self, output_directory: str) -> None:
         try:
             patch = MM2ProcedurePatch()
             patch_rom(self, patch)
@@ -191,11 +199,11 @@ class MM2World(World):
             "weapon_damage": self.weapon_damage
         }
 
-    def interpret_slot_data(self, slot_data: typing.Dict[str, typing.Any]):
+    def interpret_slot_data(self, slot_data: typing.Dict[str, typing.Any]) -> typing.Dict[str, typing.Any]:
         local_weapon = {int(key): value for key, value in slot_data["weapon_damage"].items()}
         return {"weapon_damage": local_weapon}
 
-    def modify_multidata(self, multidata: dict):
+    def modify_multidata(self, multidata: dict) -> None:
         # wait for self.rom_name to be available.
         self.rom_name_available_event.wait()
         rom_name = getattr(self, "rom_name", None)
@@ -211,7 +219,7 @@ class MM2World(World):
             weapon = next((wp for wp in weapons_to_name if weapons_to_name[wp] == item.name), None)
             if weapon:
                 for rbm in robot_masters:
-                    if (weapon != 1 and self.weapon_damage[weapon][rbm] > 0) or self.weapon_damage[weapon][rbm] >= 14:
+                    if self.weapon_damage[weapon][rbm] >= minimum_weakness_requirement[weapon]:
                         state.prog_items[self.player][robot_masters[rbm]] = 1
         return change
 
@@ -222,7 +230,8 @@ class MM2World(World):
             received_weapons = {weapon for weapon in weapons_to_name if weapons_to_name[weapon] in state.prog_items}
             if weapon:
                 for rbm in robot_masters:
-                    if self.weapon_damage[weapon][rbm] > 0 and not any(self.weapon_damage[wp][rbm] > 0
+                    if self.weapon_damage[weapon][rbm] > 0 and not any(self.weapon_damage[wp][rbm] >
+                                                                       minimum_weakness_requirement[wp]
                                                                        for wp in received_weapons):
                         state.prog_items[self.player][robot_masters[rbm]] = 0
         return change

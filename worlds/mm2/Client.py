@@ -58,6 +58,15 @@ MM2_CONSUMABLE_TABLE: Dict[int, Tuple[int, int]] = {
     0x880219: (37, 16),
     0x88021A: (38, 1),
     0x88021B: (38, 2),
+    0x880227: (38, 4),
+    0x880228: (38, 32),
+    0x880229: (38, 128),
+    0x88022A: (39, 4),
+    0x88022B: (39, 2),
+    0x88022C: (39, 1),
+    0x88022D: (38, 64),
+    0x88022E: (38, 16),
+    0x88022F: (38, 8),
     0x88021C: (39, 32),
     0x88021D: (39, 64),
     0x88021E: (39, 128),
@@ -303,7 +312,8 @@ class MegaMan2Client(BizHawkClient):
 
         for consumable in MM2_CONSUMABLE_TABLE:
             if consumable not in ctx.checked_locations:
-                is_checked = consumable_checks[MM2_CONSUMABLE_TABLE[consumable][0]] & MM2_CONSUMABLE_TABLE[consumable][1]
+                is_checked = consumable_checks[MM2_CONSUMABLE_TABLE[consumable][0]] \
+                             & MM2_CONSUMABLE_TABLE[consumable][1]
                 if is_checked:
                     new_checks.append(consumable)
 
@@ -311,5 +321,6 @@ class MegaMan2Client(BizHawkClient):
             ctx.locations_checked.add(new_check_id)
             location = ctx.location_names[new_check_id]
             nes_logger.info(
-                f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+                f'New Check: {location} ({len(ctx.locations_checked)}/'
+                f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])

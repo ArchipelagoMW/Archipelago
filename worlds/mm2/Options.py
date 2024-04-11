@@ -52,8 +52,9 @@ class StartingRobotMaster(Choice):
 class YokuJumps(Toggle):
     """
     When enabled, the player is expected to be able to perform the yoku block sequence in Heat Man's
-    stage without any of the Items.
+    stage without Item 2.
     """
+    display_name = "Yoku Block Jumps"
 
 
 class EnableLasers(Toggle):
@@ -61,18 +62,33 @@ class EnableLasers(Toggle):
     When enabled, the player is expected to complete (and acquire items within) the laser sections of Quick Man's
     stage without the Time Stopper.
     """
+    display_name = "Enable Lasers"
 
 
-class Consumables(DefaultOnToggle):
+class Consumables(Choice):
     """
     When enabled, e-tanks/1-ups/health/weapon energy will be added to the pool of items and included as checks.
     """
+    display_name = "Consumables"
+    option_none = 0
+    option_1up_etank = 1
+    option_all = 2
+    default = 1
+    alias_true = 2
+    alias_false = 0
+
+    @classmethod
+    def get_option_name(cls, value: int) -> str:
+        if value == 1:
+            return "1-Ups/E-Tanks"
+        return super().get_option_name(value)
 
 
 class Quickswap(DefaultOnToggle):
     """
     When enabled, the player can quickswap through all received weapons by pressing Select.
     """
+    display_name = "Quickswap"
 
 
 class PaletteShuffle(TextChoice):
@@ -109,6 +125,7 @@ class RandomWeaknesses(Toggle):
 class Wily5Requirement(Range):
     """Change the amount of Robot Masters that are required to be defeated for
     the teleporter to the Wily Machine to appear."""
+    display_name = "Wily 5 Requirement"
     default = 8
     range_start = 1
     range_end = 8
@@ -133,10 +150,14 @@ class WeaknessPlando(OptionDict):
 class ReduceFlashing(Choice):
     """
     Reduce flashing seen in gameplay, such as the stage select and when defeating a Wily boss.
+    NOTICE: Full reduction is experimental and may actually be worse than default.
     """
+    display_name = "Reduce Flashing"
     option_none = 0
     option_virtual_console = 1
+    option_full = 2
     default = 1
+
 
 @dataclass
 class MM2Options(PerGameCommonOptions):

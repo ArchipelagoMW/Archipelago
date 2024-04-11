@@ -204,10 +204,6 @@ def set_rules(world: "MM2World") -> None:
     if world.options.consumables:
         add_rule(world.multiworld.get_location(Names.flash_man_c2, world.player),
                  lambda state: state.has_any([Names.item_1, Names.item_2, Names.item_3], world.player))
-        add_rule(world.multiworld.get_location(Names.flash_man_c3, world.player),
-                 lambda state: state.has(Names.crash_bomber, world.player))
-        add_rule(world.multiworld.get_location(Names.flash_man_c4, world.player),
-                 lambda state: state.has(Names.crash_bomber, world.player))
         add_rule(world.multiworld.get_location(Names.quick_man_c1, world.player),
                  lambda state: state.has_any([Names.item_1, Names.item_2, Names.item_3], world.player))
         add_rule(world.multiworld.get_location(Names.metal_man_c2, world.player),
@@ -220,7 +216,12 @@ def set_rules(world: "MM2World") -> None:
                  lambda state: state.has(Names.crash_bomber, world.player))
         add_rule(world.multiworld.get_location(Names.wily_2_c6, world.player),
                  lambda state: state.has(Names.crash_bomber, world.player))
-        add_rule(world.multiworld.get_location(Names.wily_3_c1, world.player),
-                 lambda state: state.has(Names.crash_bomber, world.player))
         add_rule(world.multiworld.get_location(Names.wily_3_c2, world.player),
                  lambda state: state.has(Names.crash_bomber, world.player))
+        if world.options.consumables == world.options.consumables.option_all:
+            add_rule(world.multiworld.get_location(Names.flash_man_c3, world.player),
+                     lambda state: state.has(Names.crash_bomber, world.player))
+            add_rule(world.multiworld.get_location(Names.flash_man_c4, world.player),
+                     lambda state: state.has(Names.crash_bomber, world.player))
+            add_rule(world.multiworld.get_location(Names.wily_3_c1, world.player),
+                     lambda state: state.has(Names.crash_bomber, world.player))
