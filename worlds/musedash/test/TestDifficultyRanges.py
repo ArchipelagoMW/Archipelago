@@ -66,9 +66,9 @@ class DifficultyRanges(MuseDashTestBase):
         for song_name in muse_dash_world.md_collection.DIFF_OVERRIDES:
             song = muse_dash_world.md_collection.song_items[song_name]
 
-            # umpopoff is a one time weird song. Its currently the only song in the game
-            # with non-standard difficulties and also doesn't have 3 or more difficulties.
-            if song_name == 'umpopoff':
+            # Some songs are weird and have less than the usual 3 difficulties.
+            # So this override is to avoid failing on these songs.
+            if song_name in ("umpopoff", "P E R O P E R O Brother Dance"):
                 self.assertTrue(song.easy is None and song.hard is not None and song.master is None,
                                 f"Song '{song_name}' difficulty not set when it should be.")
             else:

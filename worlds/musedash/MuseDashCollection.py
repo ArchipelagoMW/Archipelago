@@ -35,13 +35,14 @@ class MuseDashCollections:
         "Rush-Hour",
         "Find this Month's Featured Playlist",
         "PeroPero in the Universe",
-        "umpopoff"
+        "umpopoff",
+        "P E R O P E R O Brother Dance",
     ]
     
     REMOVED_SONGS = [
         "CHAOS Glitch",
         "FM 17314 SUGAR RADIO",
-        "Yume Ou Mono Yo Secret"
+        "Yume Ou Mono Yo Secret",
     ]
 
     album_items: Dict[str, AlbumData] = {}
@@ -57,6 +58,7 @@ class MuseDashCollections:
         "Chromatic Aberration Trap": STARTING_CODE + 5,
         "Background Freeze Trap": STARTING_CODE + 6,
         "Gray Scale Trap": STARTING_CODE + 7,
+        "Focus Line Trap": STARTING_CODE + 10,
     }
 
     sfx_trap_items: Dict[str, int] = {
