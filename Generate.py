@@ -21,11 +21,11 @@ from BaseClasses import seeddigits, get_seed, PlandoOptions
 from Main import main as ERmain
 from settings import get_settings
 from Utils import parse_yamls, version_tuple, __version__, tuplize_version
-from worlds.alttp import Options as LttPOptions
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from worlds.alttp.Text import TextTable
 from worlds.AutoWorld import AutoWorldRegister
 from worlds.generic import PlandoConnection
+from worlds import failed_world_loads
 
 
 def mystery_argparse():
@@ -34,8 +34,8 @@ def mystery_argparse():
 
     parser = argparse.ArgumentParser(description="CMD Generation Interface, defaults come from host.yaml.")
     parser.add_argument('--weights_file_path', default=defaults.weights_file_path,
-                        help='Path to the weights file to use for rolling game settings, urls are also valid')
-    parser.add_argument('--samesettings', help='Rolls settings per weights file rather than per player',
+                        help='Path to the weights file to use for rolling game options, urls are also valid')
+    parser.add_argument('--sameoptions', help='Rolls options per weights file rather than per player',
                         action='store_true')
     parser.add_argument('--player_files_path', default=defaults.player_files_path,
                         help="Input directory for player files.")
@@ -103,8 +103,8 @@ def main(args=None, callback=ERmain):
             del(meta_weights["meta_description"])
         except Exception as e:
             raise ValueError("No meta description found for meta.yaml. Unable to verify.") from e
-        if args.samesettings:
-            raise Exception("Cannot mix --samesettings with --meta")
+        if args.sameoptions:
+            raise Exception("Cannot mix --sameoptions with --meta")
     else:
         meta_weights = None
     player_id = 1
@@ -156,7 +156,7 @@ def main(args=None, callback=ERmain):
     erargs.skip_output = args.skip_output
 
     settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
-        {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.samesettings else None)
+        {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.sameoptions else None)
          for fname, yamls in weights_cache.items()}
 
     if meta_weights:
@@ -310,13 +310,6 @@ def handle_name(name: str, player: int, name_counter: Counter):
     return new_name
 
 
-def prefer_int(input_data: str) -> Union[str, int]:
-    try:
-        return int(input_data)
-    except:
-        return input_data
-
-
 def roll_percentage(percentage: Union[int, float]) -> bool:
     """Roll a percentage chance.
     percentage is expected to be in range [0, 100]"""
@@ -458,7 +451,11 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
 
     ret.game = get_choice("game", weights)
     if ret.game not in AutoWorldRegister.world_types:
-        picks = Utils.get_fuzzy_results(ret.game, AutoWorldRegister.world_types, limit=1)[0]
+        picks = Utils.get_fuzzy_results(ret.game, list(AutoWorldRegister.world_types) + failed_world_loads, limit=1)[0]
+        if picks[0] in failed_world_loads:
+            raise Exception(f"No functional world found to handle game {ret.game}. "
+                            f"Did you mean '{picks[0]}' ({picks[1]}% sure)? "
+                            f"If so, it appears the world failed to initialize correctly.")
         raise Exception(f"No world found to handle game {ret.game}. Did you mean '{picks[0]}' ({picks[1]}% sure)? "
                         f"Check your spelling or installation of that world.")
 
