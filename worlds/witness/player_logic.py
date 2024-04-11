@@ -62,7 +62,7 @@ class WitnessPlayerLogic:
 
         these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex]["panels"]
 
-        if entity_hex in self.DOOR_ITEMS_BY_ID and not entity_hex in self.FORBIDDEN_DOORS:
+        if entity_hex in self.DOOR_ITEMS_BY_ID and entity_hex not in self.FORBIDDEN_DOORS:
             door_items = frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[entity_hex]})
 
             all_options: Set[FrozenSet[str]] = set()

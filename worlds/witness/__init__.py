@@ -3,7 +3,7 @@ Archipelago init file for The Witness
 """
 import dataclasses
 from logging import error, warning
-from typing import Dict, List, Optional, cast
+from typing import Any, Dict, List, Optional, cast
 
 from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial
 
@@ -71,7 +71,7 @@ class WitnessWorld(World):
     items_placed_early: List[str]
     own_itempool: List[WitnessItem]
 
-    def _get_slot_data(self):
+    def _get_slot_data(self) -> Dict[str, Any]:
         return {
             "seed": self.random.randrange(0, 1000000),
             "victory_location": int(self.player_logic.VICTORY_LOCATION, 16),
