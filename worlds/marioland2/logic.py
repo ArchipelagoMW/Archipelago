@@ -325,13 +325,21 @@ def macro_zone_1_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Macro Zone 1")
     reachable_coins = 0
     if has_pipe_down(state, player):
-        reachable_coins += 74
-        if not auto_scroll:
-            reachable_coins += 4
+        reachable_coins += 69
+        if auto_scroll:
+            if state.has_any(["Mushroom", "Fire Flower"], player):
+                reachable_coins += 5
+        else:
+            reachable_coins += 9
             if state.has("Fire Flower", player):
                 reachable_coins += 19
-    elif (not auto_scroll) and state.has("Macro Zone 1 Midway Bell", player):
-        reachable_coins += 67
+    elif state.has("Macro Zone 1 Midway Bell", player):
+        if auto_scroll:
+            reachable_coins += 16
+            if state.has_any(["Mushroom", "Fire Flower"], player):
+                reachable_coins += 5
+        else:
+            reachable_coins += 67
     return coins <= reachable_coins
 
 
