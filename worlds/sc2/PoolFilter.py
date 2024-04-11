@@ -58,7 +58,8 @@ def filter_missions(world: World) -> Dict[MissionPools, List[SC2Mission]]:
         # Vanilla uses the entire mission pool
         goal_priorities: Dict[SC2Campaign, SC2CampaignGoalPriority] = {campaign: get_campaign_goal_priority(campaign) for campaign in enabled_campaigns}
         goal_level = max(goal_priorities.values())
-        candidate_campaigns = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
+        candidate_campaigns: List[SC2Campaign] = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
+        candidate_campaigns.sort(key=lambda it: it.id)
         goal_campaign = world.random.choice(candidate_campaigns)
         if campaign_final_mission_locations[goal_campaign] is not None:
             mission_pools[MissionPools.FINAL] = [campaign_final_mission_locations[goal_campaign].mission]
@@ -70,7 +71,8 @@ def filter_missions(world: World) -> Dict[MissionPools, List[SC2Mission]]:
     # Finding the goal map
     goal_priorities = {campaign: get_campaign_goal_priority(campaign, excluded_missions) for campaign in enabled_campaigns}
     goal_level = max(goal_priorities.values())
-    candidate_campaigns = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
+    candidate_campaigns: List[SC2Campaign] = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
+    candidate_campaigns.sort(key=lambda it: it.id)
     goal_campaign = world.random.choice(candidate_campaigns)
     primary_goal = campaign_final_mission_locations[goal_campaign]
     if primary_goal is None or primary_goal.mission in excluded_missions:
@@ -560,7 +562,7 @@ def filter_items(world: World, mission_req_table: Dict[SC2Campaign, Dict[str, Mi
 def get_used_races(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]], world: World) -> Set[SC2Race]:
     grant_story_tech = get_option_value(world, "grant_story_tech")
     take_over_ai_allies = get_option_value(world, "take_over_ai_allies")
-    kerrigan_presence = get_option_value(world, "kerrigan_presence") \
+    kerrigan_presence = get_option_value(world, "kerrigan_presence") in kerrigan_unit_available \
         and SC2Campaign.HOTS in get_enabled_campaigns(world)
     missions = missions_in_mission_table(mission_req_table)
 
@@ -572,7 +574,7 @@ def get_used_races(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]],
         if SC2Mission.ENEMY_WITHIN in missions:
             # Zerg units need to be unlocked
             races.add(SC2Race.ZERG)
-        if kerrigan_presence in kerrigan_unit_available \
+        if kerrigan_presence \
                 and not missions.isdisjoint({SC2Mission.BACK_IN_THE_SADDLE, SC2Mission.SUPREME, SC2Mission.CONVICTION, SC2Mission.THE_INFINITE_CYCLE}):
             # You need some Kerrigan abilities (they're granted if Kerriganless or story tech granted)
             races.add(SC2Race.ZERG)

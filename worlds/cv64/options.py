@@ -144,8 +144,9 @@ class HardLogic(Toggle):
 
 
 class MultiHitBreakables(Toggle):
-    """Adds the items that drop from the objects that break in three hits to the pool. There are 17 of these throughout
-    the game, adding up to 74 checks in total with all stages.
+    """Adds the items that drop from the objects that break in three hits to the pool. There are 18 of these throughout
+    the game, adding up to 79 or 80 checks (depending on sub-weapons
+    being shuffled anywhere or not) in total with all stages.
     The game will be modified to
     remember exactly which of their items you've picked up instead of simply whether they were broken or not."""
     display_name = "Multi-hit Breakables"
@@ -337,13 +338,13 @@ class BigToss(Toggle):
     """Makes every non-immobilizing damage source launch you as if you got hit by Behemoth's charge.
     Press A while tossed to cancel the launch momentum and avoid being thrown off ledges.
     Hold Z to have all incoming damage be treated as it normally would.
-    Any tricks that might be possible with it are NOT considered in logic on any setting."""
+    Any tricks that might be possible with it are NOT considered in logic by any options."""
     display_name = "Big Toss"
 
 
 class PantherDash(Choice):
     """Hold C-right at any time to sprint way faster. Any tricks that might be
-    possible with it are NOT considered in logic on any setting and any boss
+    possible with it are NOT considered in logic by any options and any boss
     fights with boss health meters, if started, are expected to be finished
     before leaving their arenas if Dracula's Condition is bosses. Jumpless will
     prevent jumping while moving at the increased speed to ensure logic cannot be broken with it."""
