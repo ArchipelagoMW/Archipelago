@@ -484,8 +484,7 @@ def make_extra_location_hints(world: "WitnessWorld", hint_amount: int, own_itemp
         elif next_random_hint_is_location and locations_in_this_world:
             location_hint = hint_from_location(world, locations_in_this_world.pop())
         elif not next_random_hint_is_location and prog_items_in_this_world:
-            item_name = prog_items_in_this_world.pop()
-            location_hint = hint_from_item(world, item_name, own_itempool)
+            location_hint = hint_from_item(world, prog_items_in_this_world.pop(), own_itempool)
         # The list that the hint was supposed to be taken from was empty.
         # Try the other list, which has to still have something, as otherwise, all lists would be empty,
         # which would have triggered the guard condition above.
