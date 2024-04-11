@@ -212,7 +212,9 @@ def get_rule_for_location(name: str, player: int, flag: RuleFlag) -> Callable[[C
     return rule
 
 
-def set_rules(world: "SoulBlazerWorld") -> None:
-    region = world.multiworld.get_region(RegionName.DEATHTOLL, world.player)
-    region.locations.append(world.create_victory_event(region))
-    world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
+#def set_rules(world: "SoulBlazerWorld") -> None:
+#    # TODO: Cant create locations during rule generation. 
+#    # AssertionError: 295 != 296 : Soul Blazer modified locations count during rule creation
+#    region = world.multiworld.get_region(RegionName.DEATHTOLL, world.player)
+#    region.locations.append(world.create_victory_event(region))
+#    world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)

@@ -1,11 +1,18 @@
 import logging
 import asyncio
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, NamedTuple
 from . import base_id, lair_id_offset, npc_reward_offset
-from .Names import Addresses
-from .Locations import SoulBlazerLocationData, all_locations_table, LocationType, chest_table, npc_reward_table, lair_table
+from .Names import Addresses, ItemID
+from .Locations import (
+    SoulBlazerLocationData,
+    all_locations_table,
+    LocationType,
+    chest_table,
+    npc_reward_table,
+    lair_table,
+)
 from .Items import SoulBlazerItemData, all_items_table
-from NetUtils import ClientStatus, color
+from NetUtils import ClientStatus, color, NetworkItem
 from worlds.AutoSNIClient import SNIClient
 from SNIClient import SNIContext
 
@@ -19,6 +26,7 @@ SRAM_START = 0xE00000
 
 SOULBLAZER_ROM_NAME = b"SOULBLAZER - 1 USA    "
 
+
 def address_for_location(type: LocationType, id: int) -> int:
     if type == LocationType.LAIR:
         return base_id + lair_id_offset + id
@@ -26,24 +34,45 @@ def address_for_location(type: LocationType, id: int) -> int:
         return base_id + npc_reward_offset + id
     return base_id + id
 
+
 def is_bit_set(data: bytes, offset: int, index: int) -> bool:
-    return data[offset + (index // 8)] & 1<<(index % 8)
+    return data[offset + (index // 8)] & 1 << (index % 8)
+
+
+def encode_string(string: str, buffer_length: int) -> bytes:
+    # TODO: Also replace ascii chars missing from Soul Blazer's charmap
+    return str[:buffer_length].encode("ascii", "replace") + bytes([0x00])
+
+
+class ItemSend(NamedTuple):
+    receiving: int
+    item: NetworkItem
 
 
 class SoulBlazerContext(SNIContext):
-    """Extend SNIContext to provide needed Slot Data"""
+    """Extend SNIContext to provide more data"""
+
     def __init__(self, snes_address: str, server_address: str, password: str) -> None:
         super().__init__(snes_address, server_address, password)
         self.gem_data: Dict[str, int]
         self.exp_data: Dict[str, int]
+        self.item_send_queue: List[ItemSend]
 
     def on_package(self, cmd: str, args: Dict[str, logging.Any]) -> None:
         super().on_package(cmd, args)
-        if cmd == 'Connected':
-            slot_data = args.get('slot_data', None)
+        if cmd == "Connected":
+            slot_data = args.get("slot_data", None)
             if slot_data:
-                self.gem_data = slot_data.get('gem_data', {})
-                self.exp_data = slot_data.get('item_data', {})
+                self.gem_data = slot_data.get("gem_data", {})
+                self.exp_data = slot_data.get("item_data", {})
+
+    def on_print_json(self, args: Dict):
+        super().on_print_json(args)
+
+        # We want ItemSends from us to another player so we can print them in game
+        if args.get("type", "") == "ItemSend" and args["receiving"] != self.slot and args["item"].player == self.slot:
+            self.item_send_queue.append(ItemSend(args["receiving"], args["item"]))
+
 
 class SoulBlazerSNIClient(SNIClient):
     game = "Soul Blazer"
@@ -51,6 +80,25 @@ class SoulBlazerSNIClient(SNIClient):
 
     location_data_for_address = {data.address: data for data in all_locations_table.values()}
     item_data_for_code = {data.code: data for data in all_items_table.values()}
+
+    async def is_location_checked(self, ctx, location: int) -> bool:
+        """Returns True if the location is a local location which has been checked already indicating that the item has already been handled locally."""
+        # TODO: Should we also mark the location as checked if it was in our world and we were getting it again from the server?
+        from SNIClient import snes_read
+
+        location_data = self.location_data_for_address.get(location)
+        if location_data is None:
+            return False
+
+        if location_data.type == LocationType.CHEST:
+            chest_data = await snes_read(ctx, Addresses.CHEST_OPENED_TABLE, location_data.id // 8)
+            return is_bit_set(chest_data, 0, location_data.id)
+        if location_data.type == LocationType.NPC_REWARD:
+            npc_data = await snes_read(ctx, Addresses.NPC_REWARD_TABLE, location_data.id // 8)
+            return is_bit_set(npc_data, 0, location_data.id)
+        if location_data.type == LocationType.LAIR:
+            lair_byte = await snes_read(ctx, Addresses.LAIR_SPAWN_TABLE + location_data.id, 1)
+            return lair_byte[0] & 0x80
 
     async def deathlink_kill_player(self, ctx):
         pass
@@ -60,6 +108,7 @@ class SoulBlazerSNIClient(SNIClient):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
         rom_name = await snes_read(ctx, Addresses.SNES_ROMNAME_START, Addresses.ROMNAME_SIZE)
+        print(rom_name)
         if rom_name is None or rom_name == bytes([0] * Addresses.ROMNAME_SIZE) or rom_name != SOULBLAZER_ROM_NAME:
             return False
 
@@ -73,6 +122,7 @@ class SoulBlazerSNIClient(SNIClient):
         ctx.__class__ = SoulBlazerContext
         ctx.gem_data = {}
         ctx.exp_data = {}
+        ctx.item_send_queue = []
 
         # death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR, 1)
         ## TODO: Handle Deathlink
@@ -81,22 +131,23 @@ class SoulBlazerSNIClient(SNIClient):
         #    await ctx.update_death_link(bool(death_link[0] & 0b1))
         return True
 
-    async def game_watcher(self, ctx):
+    async def game_watcher(self, ctx: SoulBlazerContext):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+
         # TODO: Handle Deathlink
+
         save_file_name = await snes_read(ctx, Addresses.PLAYER_NAME, Addresses.PLAYER_NAME_SIZE)
         if save_file_name is None or save_file_name[0] == 0x00:
             # We haven't loaded a save file
             return
 
-        
         ram_misc_start = Addresses.EVENT_FLAGS_WIN
-        ram_misc_end = Addresses.TX_ADDR
+        ram_misc_end = Addresses.NPC_REWARD_TABLE + Addresses.NPC_REWARD_TABLE_SIZE
         # Misc values in LowRAM
         ram_misc = await snes_read(ctx, ram_misc_start + WRAM_START, ram_misc_end - ram_misc_start + 1)
         ram_lair_spawn = await snes_read(ctx, Addresses.LAIR_SPAWN_TABLE + WRAM_START, Addresses.LAIR_SPAWN_TABLE_SIZE)
 
-        # any new checks?
+        # Any new checks?
 
         # Chests
         new_checks: List[int] = [
@@ -119,12 +170,14 @@ class SoulBlazerSNIClient(SNIClient):
             loc.address
             for loc in lair_table.values()
             # Last bit set means the location has been checked.
-            if ram_lair_spawn[loc.id] & 0x80
-            and loc.address not in ctx.locations_checked
+            if ram_lair_spawn[loc.id] & 0x80 and loc.address not in ctx.locations_checked
         ]
 
+        # Did we win?
+        has_victory = is_bit_set(ram_misc, Addresses.EVENT_FLAGS_WIN - ram_misc_start, Addresses.EVENT_FLAGS_WIN_BIT)
+
         verify_save_file_name = await snes_read(ctx, Addresses.PLAYER_NAME, Addresses.PLAYER_NAME_SIZE)
-        if verify_save_file_name is None or verify_save_file_name[0] == 0x00 or verify_save_file_name == bytes([0x55] * 0x05) or verify_save_file_name != save_file_name:
+        if verify_save_file_name is None or verify_save_file_name[0] == 0x00 or verify_save_file_name != save_file_name:
             # We have somehow exited the save file (or worse)
             ctx.rom = None
             return
@@ -135,146 +188,56 @@ class SoulBlazerSNIClient(SNIClient):
             # We have somehow loaded a different ROM
             return
 
-        # for new_check_id in new_checks:
-        #    ctx.locations_checked.add(new_check_id)
-        #    location = ctx.location_names[new_check_id]
-        #    snes_logger.info(
-        #        f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
-        #    await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
-        #
-        # recv_count = await snes_read(ctx, DKC3_RECV_PROGRESS_ADDR, 1)
-        # recv_index = recv_count[0]
-        # ctx.slot_info[0]
-        # if recv_index < len(ctx.items_received):
-        #    item = ctx.items_received[recv_index]
-        #    recv_index += 1
-        #    logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-        #        color(ctx.item_names[item.item], 'red', 'bold'),
-        #        color(ctx.player_names[item.player], 'yellow'),
-        #        ctx.location_names[item.location], recv_index, len(ctx.items_received)))
-        #
-        #    snes_buffered_write(ctx, DKC3_RECV_PROGRESS_ADDR, bytes([recv_index]))
-        #    if item.item in item_rom_data:
-        #        item_count = await snes_read(ctx, WRAM_START + item_rom_data[item.item][0], 0x1)
-        #        new_item_count = item_count[0] + 1
-        #        for address in item_rom_data[item.item]:
-        #            snes_buffered_write(ctx, WRAM_START + address, bytes([new_item_count]))
-        #
-        #        # Handle Coin Displays
-        #        current_level = await snes_read(ctx, WRAM_START + 0x5E3, 0x5)
-        #        overworld_locked = ((await snes_read(ctx, WRAM_START + 0x5FC, 0x1))[0] == 0x01)
-        #        if item.item == 0xDC3002 and not overworld_locked and (current_level[0] == 0x0A and current_level[2] == 0x00 and current_level[4] == 0x03):
-        #            # Bazaar and Barter
-        #            item_count = await snes_read(ctx, WRAM_START + 0xB02, 0x1)
-        #            new_item_count = item_count[0] + 1
-        #            snes_buffered_write(ctx, WRAM_START + 0xB02, bytes([new_item_count]))
-        #        elif item.item == 0xDC3002 and not overworld_locked and current_level[0] == 0x04:
-        #            # Swanky
-        #            item_count = await snes_read(ctx, WRAM_START + 0xA26, 0x1)
-        #            new_item_count = item_count[0] + 1
-        #            snes_buffered_write(ctx, WRAM_START + 0xA26, bytes([new_item_count]))
-        #        elif item.item == 0xDC3003 and not overworld_locked and (current_level[0] == 0x0A and current_level[2] == 0x08 and current_level[4] == 0x01):
-        #            # Boomer
-        #            item_count = await snes_read(ctx, WRAM_START + 0xB02, 0x1)
-        #            new_item_count = item_count[0] + 1
-        #            snes_buffered_write(ctx, WRAM_START + 0xB02, bytes([new_item_count]))
-        #    else:
-        #        # Handle Patch and Skis
-        #        if item.item == 0xDC3007:
-        #            num_upgrades = 1
-        #            inventory = await snes_read(ctx, WRAM_START + 0x605, 0xF)
-        #
-        #            if (inventory[0] & 0x02):
-        #                num_upgrades = 3
-        #            elif (inventory[13] & 0x08) or (inventory[0] & 0x01):
-        #                num_upgrades = 2
-        #
-        #            if num_upgrades == 1:
-        #                snes_buffered_write(ctx, WRAM_START + 0x605, bytes([inventory[0] | 0x01]))
-        #                if inventory[4] == 0:
-        #                    snes_buffered_write(ctx, WRAM_START + 0x609, bytes([0x01]))
-        #                elif inventory[6] == 0:
-        #                    snes_buffered_write(ctx, WRAM_START + 0x60B, bytes([0x01]))
-        #                elif inventory[8] == 0:
-        #                    snes_buffered_write(ctx, WRAM_START + 0x60D, bytes([0x01]))
-        #                elif inventory[10] == 0:
-        #                    snes_buffered_write(ctx, WRAM_START + 0x60F, bytes([0x01]))
-        #
-        #                cove_mekanos_progress = await snes_read(ctx, WRAM_START + 0x691, 0x2)
-        #                snes_buffered_write(ctx, WRAM_START + 0x691, bytes([cove_mekanos_progress[0] | 0x01]))
-        #                snes_buffered_write(ctx, WRAM_START + 0x692, bytes([cove_mekanos_progress[1] | 0x01]))
-        #            elif num_upgrades == 2:
-        #                snes_buffered_write(ctx, WRAM_START + 0x605, bytes([inventory[0] | 0x02]))
-        #                if inventory[4] == 0:
-        #                    snes_buffered_write(ctx, WRAM_START + 0x609, bytes([0x02]))
-        #                elif inventory[6] == 0:
-        #                    snes_buffered_write(ctx, WRAM_START + 0x60B, bytes([0x02]))
-        #                elif inventory[8] == 0:
-        #                    snes_buffered_write(ctx, WRAM_START + 0x60D, bytes([0x02]))
-        #                elif inventory[10] == 0:
-        #                    snes_buffered_write(ctx, WRAM_START + 0x60F, bytes([0x02]))
-        #            elif num_upgrades == 3:
-        #                snes_buffered_write(ctx, WRAM_START + 0x606, bytes([inventory[1] | 0x20]))
-        #
-        #                k3_ridge_progress = await snes_read(ctx, WRAM_START + 0x693, 0x2)
-        #                snes_buffered_write(ctx, WRAM_START + 0x693, bytes([k3_ridge_progress[0] | 0x01]))
-        #                snes_buffered_write(ctx, WRAM_START + 0x694, bytes([k3_ridge_progress[1] | 0x01]))
-        #        elif item.item == 0xDC3000:
-        #            # Handle Victory
-        #            if not ctx.finished_game:
-        #                await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-        #                ctx.finished_game = True
-        #        else:
-        #            print("Item Not Recognized: ", item.item)
-        #        pass
-        #
-        #    await snes_flush_writes(ctx)
+        for new_check_id in new_checks:
+            ctx.locations_checked.add(new_check_id)
+            location = ctx.location_names[new_check_id]
+            snes_logger.info(
+                f"New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})"
+            )
 
-        ## Handle Collected Locations
-        # levels_to_tiles = await snes_read(ctx, ROM_START + 0x3FF800, 0x60)
-        # tiles_to_levels = await snes_read(ctx, ROM_START + 0x3FF860, 0x60)
-        # for loc_id in ctx.checked_locations:
-        #    if loc_id not in ctx.locations_checked and loc_id not in boss_location_ids:
-        #        loc_data = location_rom_data[loc_id]
-        #        data = await snes_read(ctx, WRAM_START + loc_data[0], 1)
-        #        invert_bit = ((len(loc_data) >= 3) and loc_data[2])
-        #        if not invert_bit:
-        #            masked_data = data[0] | (1 << loc_data[1])
-        #            snes_buffered_write(ctx, WRAM_START + loc_data[0], bytes([masked_data]))
-        #
-        #            if (loc_data[1] == 1):
-        #                # Make the next levels accessible
-        #                level_id = loc_data[0] - 0x632
-        #                tile_id = levels_to_tiles[level_id] if levels_to_tiles[level_id] != 0xFF else level_id
-        #                tile_id = tile_id + 0x632
-        #                if tile_id in level_unlock_map:
-        #                    for next_level_address in level_unlock_map[tile_id]:
-        #                        next_level_id = next_level_address - 0x632
-        #                        next_tile_id = tiles_to_levels[next_level_id] if tiles_to_levels[next_level_id] != 0xFF else next_level_id
-        #                        next_tile_id = next_tile_id + 0x632
-        #                        next_data = await snes_read(ctx, WRAM_START + next_tile_id, 1)
-        #                        snes_buffered_write(ctx, WRAM_START + next_tile_id, bytes([next_data[0] | 0x01]))
-        #
-        #            await snes_flush_writes(ctx)
-        #        else:
-        #            masked_data = data[0] & ~(1 << loc_data[1])
-        #            snes_buffered_write(ctx, WRAM_START + loc_data[0], bytes([masked_data]))
-        #            await snes_flush_writes(ctx)
-        #        ctx.locations_checked.add(loc_id)
-        #
-        ## Calculate Boomer Cost Text
-        # boomer_cost_text = await snes_read(ctx, WRAM_START + 0xAAFD, 2)
-        # if boomer_cost_text[0] == 0x31 and boomer_cost_text[1] == 0x35:
-        #    boomer_cost = await snes_read(ctx, ROM_START + 0x349857, 1)
-        #    boomer_cost_tens = int(boomer_cost[0]) // 10
-        #    boomer_cost_ones = int(boomer_cost[0]) % 10
-        #    snes_buffered_write(ctx, WRAM_START + 0xAAFD, bytes([0x30 + boomer_cost_tens, 0x30 + boomer_cost_ones]))
-        #    await snes_flush_writes(ctx)
-        #
-        # boomer_final_cost_text = await snes_read(ctx, WRAM_START + 0xAB9B, 2)
-        # if boomer_final_cost_text[0] == 0x32 and boomer_final_cost_text[1] == 0x35:
-        #    boomer_cost = await snes_read(ctx, ROM_START + 0x349857, 1)
-        #    boomer_cost_tens = boomer_cost[0] // 10
-        #    boomer_cost_ones = boomer_cost[0] % 10
-        #    snes_buffered_write(ctx, WRAM_START + 0xAB9B, bytes([0x30 + boomer_cost_tens, 0x30 + boomer_cost_ones]))
-        #    await snes_flush_writes(ctx)
+        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": new_checks}])
+
+        if has_victory and not ctx.finished_game:
+            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+            ctx.finished_game = True
+
+        # Check if there are any queued item sends that we are ready to display.
+        if bool(ctx.item_send_queue):
+            tx_status = await snes_read(ctx, Addresses.TX_STATUS, 1)
+            if tx_status is not None and tx_status[0] == 0x01:
+                send = ctx.item_send_queue.pop(0)
+                player_name = encode_string(ctx.player_names[send.receiving], Addresses.TX_ADDRESSEE_SIZE)
+                item_name = encode_string(ctx.item_names[send.item.item], Addresses.TX_NAME_SIZE)
+                snes_buffered_write(ctx, Addresses.TX_STATUS, bytes([0x02]))
+                snes_buffered_write(ctx, Addresses.TX_ADDRESSEE, player_name)
+                snes_buffered_write(ctx, Addresses.TX_ITEM_NAME, item_name)
+                await snes_flush_writes(ctx)
+
+        # TODO: also prevent receiving NPC unlocks when in a boss room to prevent the boss from regenerating to full health. Can happen either in the ROM or client, whichever is easiest to implement.
+        recv_index = int.from_bytes(await snes_read(ctx, Addresses.RECEIVE_COUNT, 2), "little")
+        if recv_index < len(ctx.items_received):
+            item = ctx.items_received[recv_index]
+            rx_status = await snes_read(ctx, Addresses.RX_STATUS, 1)
+            if (
+                rx_status is not None
+                and rx_status[0] == 0x01
+                and not await self.is_location_checked(ctx, item.location)
+            ):
+                player_name = encode_string(ctx.player_names[item.player], Addresses.RX_SENDER_SIZE)
+                item_data = self.item_data_for_code[item.item]
+                operand = item_data.operand
+                if item_data.id == ItemID.GEMS:
+                    operand = ctx.gem_data.get(f"{item.item}:{item.location}:{item.player}", operand)
+                if item_data.id == ItemID.EXP:
+                    operand = ctx.exp_data.get(f"{item.item}:{item.location}:{item.player}", operand)
+
+                snes_buffered_write(ctx, Addresses.RX_STATUS, bytes([0x02]))
+                snes_buffered_write(ctx, Addresses.RX_INCREMENT, bytes([0x01]))
+                snes_buffered_write(ctx, Addresses.RX_ID, item_data.id.to_bytes(1, "little"))
+                snes_buffered_write(ctx, Addresses.RX_OPERAND, operand.to_bytes(2, "little"))
+                snes_buffered_write(ctx, Addresses.RX_SENDER, player_name)
+                await snes_flush_writes(ctx)
+
+        # TODO: Anything else?
+
+        

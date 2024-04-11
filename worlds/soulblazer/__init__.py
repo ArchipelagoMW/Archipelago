@@ -14,7 +14,7 @@ from .Items import (
 from .Locations import SoulBlazerLocation, all_locations_table  # same as above
 from .Names import ItemName, ChestName
 from .Regions import create_regions as region_create_regions
-from .Rules import set_rules as rules_set_rules
+#from .Rules import set_rules as rules_set_rules
 from .Rom import SoulBlazerDeltaPatch, LocalRom, patch_rom, get_base_rom_path
 from worlds.AutoWorld import WebWorld, World
 from BaseClasses import MultiWorld, Region, Location, Entrance, Item, ItemClassification, Tutorial
@@ -35,7 +35,7 @@ class SoulBlazerSettings(settings.Group):
     class RomFile(settings.SNESRomPath):
         """File name of the Soul Blazer US rom"""
 
-        copy_to = "Soul Blazer (U).sfc"
+        copy_to = "Soul Blazer (USA).sfc"
         description = "Soul blazer (US) ROM File"
         md5s = [SoulBlazerDeltaPatch.hash]
 
@@ -45,17 +45,16 @@ class SoulBlazerSettings(settings.Group):
 class SoulBlazerWeb(WebWorld):
     theme = "grass"
 
-    # TODO: Make a guide
     setup_en = Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up the Soul Blazer randomizer connected to an Archipelago Multiworld.",
         "English",
         "setup_en.md",
         "setup/en",
-        ["AuthorName"],
+        ["Tranquilite"],
     )
 
-    # tutorials = [setup_en]
+    tutorials = [setup_en]
 
 
 class SoulBlazerWorld(World):
@@ -120,7 +119,7 @@ class SoulBlazerWorld(World):
         itempool = create_itempool(self)
 
         if self.options.starting_sword == "randomized":
-            starting_sword_name = self.random.choice(swords_table.keys())
+            starting_sword_name = self.random.choice(list(swords_table.keys()))
         else:
             starting_sword_name = ItemName.LIFESWORD
 
@@ -133,11 +132,10 @@ class SoulBlazerWorld(World):
 
         self.multiworld.itempool += itempool
 
-    # def set_rules(self) -> None:
-    #    # TODO: Delete
-    #    self.multiworld.get_region("Test", self.player).locations += self.create_victory_event()
-    #    self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
-    set_rules = rules_set_rules
+    def set_rules(self) -> None:
+        pass
+
+    #set_rules = rules_set_rules
 
     def generate_basic(self) -> None:
         pass

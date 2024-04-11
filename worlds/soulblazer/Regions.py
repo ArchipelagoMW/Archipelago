@@ -327,7 +327,6 @@ locations_for_region: Dict[str, List[str]] = {
         ChestName.MODEL_TOWN_2_TOP,
         ChestName.MODEL_TOWN_2_BOT,
     ],
-    # TODO: all locations except chest need ice armor + metal.
     RegionName.LEOS_LAB_POWER_PLANT: [
         LairName.DOLL,
         LairName.MARIE,
@@ -416,7 +415,6 @@ class ExitData(NamedTuple):
     # TODO: May have to refactor data structure if location reachable requirements are needed
 
 
-# TODO: move this to rules?
 exits_for_region: Dict[str, List[ExitData]] = {
     RegionName.MENU: [
         ExitData(RegionName.TRIAL_ROOM),
@@ -572,6 +570,11 @@ def create_regions(world: "SoulBlazerWorld") -> None:
         for exit_data in exits_for_region.get(region.name, []):
             connect_to = regions[exit_data.destination]
             region.connect(connect_to, None, get_rule_for_exit(exit_data, world.player))
+
+    # Also create our Victory Event
+    region_deathtoll = regions[RegionName.DEATHTOLL]
+    region_deathtoll.locations.append(world.create_victory_event(region_deathtoll))
+    world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
 
     # All of the locations should have been placed in regions.
     # TODO: Delete once confident that all locations are in or move into a test instead?

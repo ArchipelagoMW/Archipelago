@@ -73,8 +73,6 @@ BLACKSTONE      = "Black Stone"
 MAGICBELL       = "Magic Bell"
 
 # TODO: extend with more rewards (Traps/DeathLink)
-# TODO: Add ':' so it can chain together with the NPC Name/Gem/exp amount?
-# TODO: Do we even need these?
 # Special
 LAIR_RELEASE    = "Lair Release"
 EXP             = "EXP"

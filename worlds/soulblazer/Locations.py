@@ -37,6 +37,8 @@ class SoulBlazerLocationData():
         return base_id + self.id
 
 
+# TODO: Fix this:
+# execnet.gateway_base.DumpError: can't serialize <class 'worlds.soulblazer.Locations.SoulBlazerLocation'>
 class SoulBlazerLocation(Location):
     game = "Soul Blazer"
 
