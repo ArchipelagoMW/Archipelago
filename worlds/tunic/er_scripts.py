@@ -367,6 +367,16 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         # once we have both portals, connect them and add the new region(s) to connected_regions
         if check_success == 2:
             connected_regions.update(add_dependent_regions(portal2.region, dependent_regions))
+
+            # to deal with plando_connections modifying dependent_regions
+            while plando_connections:
+                test1 = len(connected_regions)
+                for region in connected_regions.copy():
+                    connected_regions.update(add_dependent_regions(region, dependent_regions))
+                test2 = len(connected_regions)
+                if test1 == test2:
+                    break
+
             portal_pairs[portal1] = portal2
             check_success = 0
             random_object.shuffle(two_plus)
