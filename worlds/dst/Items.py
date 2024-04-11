@@ -18,12 +18,12 @@ def generate_item_map() -> Dict[str, DSTItemData]:
 		name:str = v[1]
 		classification:IC = IC.filler
 		tags: set[str] = set()
-		match v[3]:
-			case "progression": classification = IC.progression
-			case "useful": classification = IC.useful
-			case "trap": classification = IC.trap; tags.update(["filler", "trap", "regulartrap"])
-			case "seasontrap": classification = IC.trap; tags.update(["filler", "trap", "seasontrap"])
-			case "junk": tags.add("filler")
+		type:str = v[3]
+		if   type == "progression": classification = IC.progression
+		elif type == "useful": classification = IC.useful
+		elif type == "trap": classification = IC.trap; tags.update(["filler", "trap", "regulartrap"])
+		elif type == "seasontrap": classification = IC.trap; tags.update(["filler", "trap", "seasontrap"])
+		elif type == "junk": tags.add("filler")
 
 		ret.setdefault(name, DSTItemData(code, classification, tags))
 	return ret

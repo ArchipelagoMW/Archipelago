@@ -39,11 +39,10 @@ class DSTWorld(World):
     item_name_groups = {"all": set(item_data_table.keys())}
 
     def generate_early(self):
-        match self.options.goal.value:
-            case Goal.option_bosses_any | Goal.option_bosses_all:
-                if not len(self.options.required_bosses.value):
-                    # You didn't choose a boss... Selecting one at random!
-                    self.options.required_bosses.value.add(random.choice(self.options.required_bosses.valid_keys))
+        if self.options.goal.value == Goal.option_bosses_any or self.options.goal.value == Goal.option_bosses_all:
+            if not len(self.options.required_bosses.value):
+                # You didn't choose a boss... Selecting one at random!
+                self.options.required_bosses.value.add(random.choice(self.options.required_bosses.valid_keys))
 
     filler_pool: List[str] = []
     trap_pool: List[str] = []

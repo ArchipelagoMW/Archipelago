@@ -57,104 +57,103 @@ class DSTContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         print("on_package", cmd)
-        match cmd:
-            case "RoomInfo":
-                self.seed_name = args.get('seed_name')
+        if cmd == "RoomInfo":
+            self.seed_name = args.get('seed_name')
 
-            case "Connected":
-                self.slotdata = args.get('slot_data')
-                self.SlotDataDirty = True
-                self.ConnectDataDirty = True
-                setvariables({'connected': True})
+        elif cmd == "Connected":
+            self.slotdata = args.get('slot_data')
+            self.SlotDataDirty = True
+            self.ConnectDataDirty = True
+            setvariables({'connected': True})
+            sendqueue = getvariables().get('sendqueue')
+            sendqueue.append(json.dumps({
+                "datatype": "State",
+                "connected": True,
+                "readyfortraps": True, 
+                "seed_name": self.seed_name,
+                "slot": self.slot,
+                "slot_name": self.player_names[self.slot],
+                "goal": self.slotdata.get("goal"),
+                "days_to_survive": self.slotdata.get("days_to_survive"),
+                "required_bosses": list(self.slotdata.get("required_bosses")),
+                "finished_game": self.finished_game,
+            }))
+            sendqueue.append(json.dumps({
+                "datatype": "Items", 
+                "items": [netitem.item for netitem in self.items_received],
+                "resync": True,
+            }))
+            sendqueue.append(json.dumps({
+                "datatype": "Locations", 
+                "missing_locations": list(self.missing_locations),
+            }))
+            self.QueueDSTState = True
+            # setvariables({"sendqueue": sendqueue})
+
+            # Scout missing locations
+            async_start(self.send_msgs([{"cmd": "LocationScouts", "locations": self.missing_locations}]))
+
+        elif cmd == "ReceivedItems":
+            sendqueue = getvariables().get('sendqueue')
+            items = [netitem.item for netitem in args['items']]
+            sendqueue.append(json.dumps({"datatype": "Items", "items": items}))
+            # setvariables({"sendqueue": sendqueue})
+        
+        elif cmd == "RoomUpdate":
+            if args.get("checked_locations"):
                 sendqueue = getvariables().get('sendqueue')
-                sendqueue.append(json.dumps({
-                    "datatype": "State",
-                    "connected": True,
-                    "readyfortraps": True, 
-                    "seed_name": self.seed_name,
-                    "slot": self.slot,
-                    "slot_name": self.player_names[self.slot],
-                    "goal": self.slotdata.get("goal"),
-                    "days_to_survive": self.slotdata.get("days_to_survive"),
-                    "required_bosses": list(self.slotdata.get("required_bosses")),
-                    "finished_game": self.finished_game,
-                }))
-                sendqueue.append(json.dumps({
-                    "datatype": "Items", 
-                    "items": [netitem.item for netitem in self.items_received],
-                    "resync": True,
-                }))
-                sendqueue.append(json.dumps({
-                    "datatype": "Locations", 
-                    "missing_locations": list(self.missing_locations),
-                }))
-                self.QueueDSTState = True
+                locations = [id for id in args.get("checked_locations")]
+                sendqueue.append(json.dumps({"datatype": "Locations", "checked_locations": locations}))
                 # setvariables({"sendqueue": sendqueue})
 
-                # Scout missing locations
-                async_start(self.send_msgs([{"cmd": "LocationScouts", "locations": self.missing_locations}]))
+        elif cmd == "ConnectionRefused": #Does not seem to get triggered when connection is refused
+            setvariables({'authname': "Nil", 'authip': "Nil"})
+            self.waitforconnect = False
+            # self.AbortDSTConnect = True
+            sendqueue = getvariables().get('sendqueue')
+            sendqueue.append(json.dumps({"datatype": "State", "connected": False}))
 
-            case "ReceivedItems":
+        elif cmd == "PrintJSON":
+            if (args.get('slot') != self.slot) or args.get('type') == "Goal":
                 sendqueue = getvariables().get('sendqueue')
-                items = [netitem.item for netitem in args['items']]
-                sendqueue.append(json.dumps({"datatype": "Items", "items": items}))
-                # setvariables({"sendqueue": sendqueue})
-            
-            case "RoomUpdate":
-                if args.get("checked_locations"):
-                    sendqueue = getvariables().get('sendqueue')
-                    locations = [id for id in args.get("checked_locations")]
-                    sendqueue.append(json.dumps({"datatype": "Locations", "checked_locations": locations}))
-                    # setvariables({"sendqueue": sendqueue})
-
-            case "ConnectionRefused": #Does not seem to get triggered when connection is refused
-                setvariables({'authname': "Nil", 'authip': "Nil"})
-                self.waitforconnect = False
-                # self.AbortDSTConnect = True
-                sendqueue = getvariables().get('sendqueue')
-                sendqueue.append(json.dumps({"datatype": "State", "connected": False}))
-
-            case "PrintJSON":
-                if (args.get('slot') != self.slot) or args.get('type') == "Goal":
-                    sendqueue = getvariables().get('sendqueue')
-                    text = self.json_text_parser(copy.deepcopy(args["data"]))
-                    sendqueue.append(json.dumps({"datatype": "Chat", "msg": text}))
-                    # setvariables({"sendqueue": sendqueue})
-
-            # case "Retrieved":
-            #     keys = args.get('keys')
-            #     scouted = keys.get(self.username + "_locations_scouted")
-            #     defeated_bosses = keys.get(self.username + "_defeated_bosses")
-            #     print(scouted)
-            #     if scouted is not None:
-            #         self.locations_scouted = set(scouted)
-            #     if defeated_bosses is not None:
-            #         self.defeated_bosses = set(defeated_bosses)
-            #     print(self.locations_scouted)
-            
-            case "LocationInfo":
-                locs = args.get('locations')
-                # relevant_names = {
-                #     "item": {},
-                #     "player": {},
-                # }
-                sendqueue = getvariables().get('sendqueue')
-                for loc in locs:
-                    sendqueue.append(json.dumps({
-                        "datatype": "LocationInfo", 
-                        "location_info": {
-                            "location": loc.location,
-                            "item": loc.item,
-                            "player": loc.player,
-                            "itemname": self.item_names[loc.item],
-                            "playername": self.player_names[loc.player],
-                            "flags": loc.flags,
-                        }, 
-                    }))
+                text = self.json_text_parser(copy.deepcopy(args["data"]))
+                sendqueue.append(json.dumps({"datatype": "Chat", "msg": text}))
                 # setvariables({"sendqueue": sendqueue})
 
-            case "InvalidPacket":
-                print(args)
+        # elif cmd == "Retrieved":
+        #     keys = args.get('keys')
+        #     scouted = keys.get(self.username + "_locations_scouted")
+        #     defeated_bosses = keys.get(self.username + "_defeated_bosses")
+        #     print(scouted)
+        #     if scouted is not None:
+        #         self.locations_scouted = set(scouted)
+        #     if defeated_bosses is not None:
+        #         self.defeated_bosses = set(defeated_bosses)
+        #     print(self.locations_scouted)
+        
+        elif cmd == "LocationInfo":
+            locs = args.get('locations')
+            # relevant_names = {
+            #     "item": {},
+            #     "player": {},
+            # }
+            sendqueue = getvariables().get('sendqueue')
+            for loc in locs:
+                sendqueue.append(json.dumps({
+                    "datatype": "LocationInfo", 
+                    "location_info": {
+                        "location": loc.location,
+                        "item": loc.item,
+                        "player": loc.player,
+                        "itemname": self.item_names[loc.item],
+                        "playername": self.player_names[loc.player],
+                        "flags": loc.flags,
+                    }, 
+                }))
+            # setvariables({"sendqueue": sendqueue})
+
+        elif cmd == "InvalidPacket":
+            print(args)
             
         return super().on_package(cmd, args)
     
@@ -216,46 +215,45 @@ async def timeoutdisconnect(ctx:DSTContext):
 async def manageevent(ctx:DSTContext, event):
     # interfacelog.info("Got event from DST:")
     eventtype = dict.get(event, "datatype")
-    match eventtype:
-        case "Chat" | "Join" | "Leave":
-            await ctx.send_msgs([{"cmd": "Say", "text": dict.get(event, "msg")}])
-        case "Death":
-            if "DeathLink" in ctx.tags:
-                await ctx.send_death(dict.get(event, "msg"))
-                ctx.interfacelog.info("...And so does everyone else.")
-            else:
-                ctx.interfacelog.info("Death Link is disabled. Everyone is safe... except you.")
-        case "Item":
-            loc_id:int = dict.get(event, "source")
-            print("  Item:", loc_id)
-            ctx.locations_checked.add(loc_id)
-            loc_name = ctx.location_names.get(loc_id)
-            if loc_name and loc_name in ctx.required_bosses:
-                # Boss kill
-                ctx.defeated_bosses.add(loc_name)
-                ctx.defeated_bosses_dirty = True
-            await ctx.send_msgs([{"cmd": "LocationChecks", "locations": ctx.locations_checked}])
-        case "Hint": #I think this should be deterministic enough for races, does not account for manual hints
-            if ctx.missing_locations.__len__() != 0:
-                # print(ctx.locations_scouted)
-                valid = ctx.missing_locations.difference(ctx.locations_scouted)
-                hints = list()
-                for _ in range(3):
-                    hint = valid.pop()
-                    ctx.locations_scouted.add(hint)
-                    hints.append(hint)
-                await ctx.send_msgs([{"cmd": "Set",
-                                    "key": ctx.username + "_locations_scouted",
-                                    #   "default":  ctx.locations_scouted,
-                                    "operations": [{"operation": "replace", "value": ctx.locations_scouted}]}])
-                await ctx.send_msgs([{"cmd": "LocationScouts", "locations": hints, "create_as_hint": 2}])
-        # case "DaysSurvived":
-        #     ctx.interfacelog.info("Lived for days:")
-        #     ctx.interfacelog.info(ctx.days_survived)
-        #     ctx.days_survived = dict.get(event, "num")
-        #     ctx.defeated_bosses_dirty = True
-        case "Victory":
-            await onwincondition(ctx)
+    if eventtype == "Chat" or eventtype == "Join" or eventtype == "Leave":
+        await ctx.send_msgs([{"cmd": "Say", "text": dict.get(event, "msg")}])
+    elif eventtype == "Death":
+        if "DeathLink" in ctx.tags:
+            await ctx.send_death(dict.get(event, "msg"))
+            ctx.interfacelog.info("...And so does everyone else.")
+        else:
+            ctx.interfacelog.info("Death Link is disabled. Everyone is safe... except you.")
+    elif eventtype == "Item":
+        loc_id:int = dict.get(event, "source")
+        print("  Item:", loc_id)
+        ctx.locations_checked.add(loc_id)
+        loc_name = ctx.location_names.get(loc_id)
+        if loc_name and loc_name in ctx.required_bosses:
+            # Boss kill
+            ctx.defeated_bosses.add(loc_name)
+            ctx.defeated_bosses_dirty = True
+        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": ctx.locations_checked}])
+    elif eventtype == "Hint": #I think this should be deterministic enough for races, does not account for manual hints
+        if ctx.missing_locations.__len__() != 0:
+            # print(ctx.locations_scouted)
+            valid = ctx.missing_locations.difference(ctx.locations_scouted)
+            hints = list()
+            for _ in range(3):
+                hint = valid.pop()
+                ctx.locations_scouted.add(hint)
+                hints.append(hint)
+            await ctx.send_msgs([{"cmd": "Set",
+                                "key": ctx.username + "_locations_scouted",
+                                #   "default":  ctx.locations_scouted,
+                                "operations": [{"operation": "replace", "value": ctx.locations_scouted}]}])
+            await ctx.send_msgs([{"cmd": "LocationScouts", "locations": hints, "create_as_hint": 2}])
+    # elif eventtype == "DaysSurvived":
+    #     ctx.interfacelog.info("Lived for days:")
+    #     ctx.interfacelog.info(ctx.days_survived)
+    #     ctx.days_survived = dict.get(event, "num")
+    #     ctx.defeated_bosses_dirty = True
+    elif eventtype == "Victory":
+        await onwincondition(ctx)
         
 async def onwincondition(ctx):
     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
@@ -301,41 +299,12 @@ async def interface(ctx:DSTContext):
                 print(ctx.slotdata)
                 print(ctx.slotdata.get('death_link'))
                 await ctx.update_death_link(ctx.slotdata.get('death_link'))
-                # ctx.required_bosses = ctx.slotdata.get('required_bosses',set())
-                # match ctx.slotdata.get('goal'):
-                #     case "bosses_any": ctx.victories_needed = 1
-                #     case "bosses_all": ctx.victories_needed = len(ctx.required_bosses)
-                #     case "survival": ctx.victories_needed = 1
                 ctx.SlotDataDirty = False
-
-            # elif not ctx.exit_event.is_set() and ctx.QueueDSTState == True:
-            #     sendqueue = getvariables().get('sendqueue')
-            #     sendqueue.append(json.dumps({"datatype": "State", "readyfortraps": True, "slot": ctx.slot}))
-            #     sendqueue.append(json.dumps({"datatype": "Locations", "locations": [id for id in ctx.missing_locations]}))
-
-            #     setvariables({"sendqueue": sendqueue})
-            #     ctx.QueueDSTState = False
 
             elif not ctx.exit_event.is_set() and ctx.ConnectDataDirty == True:
                 await ctx.send_msgs([{"cmd": "Get", "keys": [ctx.username + "_locations_scouted"]}])
                 await ctx.send_msgs([{"cmd": "Get", "keys": [ctx.username + "_defeated_bosses"]}])
                 ctx.ConnectDataDirty = False
-
-            # elif not ctx.exit_event.is_set() and ctx.defeated_bosses_dirty == True:
-            #     await ctx.send_msgs([{"cmd": "Set",
-            #                       "key": ctx.username + "_defeated_bosses",
-            #                       "operations": [{"operation": "replace", "value": ctx.defeated_bosses}]}])
-                
-            #     victory_count = 0
-            #     if ctx.slotdata.get('goal') == "survival":
-            #         if ctx.slotdata.get('days_to_survive') <= ctx.days_survived: victory_count += 1
-            #     else:
-            #         for boss_target in ctx.required_bosses:
-            #             if boss_target in ctx.defeated_bosses: victory_count += 1
-
-            #     if victory_count >= ctx.victories_needed:
-            #         await onwincondition(ctx)
-            #     ctx.defeated_bosses_dirty = False
 
             elif not ctx.exit_event.is_set() and receivequeue.__len__() > 0: # If Connected and has a event to process
                 event = receivequeue.pop(0)

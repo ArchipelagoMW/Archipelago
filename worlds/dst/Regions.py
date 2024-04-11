@@ -113,9 +113,10 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions):
 
    # Decide win conditions
    victory_targets:set = set()
-   match options.goal.current_key:
-      case "survival": victory_targets.add("Survival Goal")
-      case "bosses_any"|"bosses_all": victory_targets = options.required_bosses.value 
+   if options.goal.current_key == "survival": 
+      victory_targets.add("Survival Goal")
+   elif options.goal.current_key == "bosses_any" or options.goal.current_key == "bosses_all": 
+      victory_targets = options.required_bosses.value 
 
    # Make win events
    for name in victory_targets: create_event(name, "Victory")

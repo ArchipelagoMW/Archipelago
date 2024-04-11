@@ -71,23 +71,30 @@ class DSTServer(BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(bytes(json.dumps({"datatype": "State", "connected": False}), "utf-8"))
         else:
-            match datatype:
-                case "Chat" | "Join" | "Leave" | "Death" | "Item" | "Hint" | "State" | "Victory":
-                    receivequeue.append(data)
-                    self.send_response(200)
-                    self.end_headers()
-                    self.wfile.write(bytes("Recieved " + datatype + " Signal", "utf-8"))
-                case "Connect":
-                    authname = dict.get(data, "name")
-                    authip = dict.get(data, "ip")
-                    authpassword = dict.get(data, "password")
-                    authdirty = True
-                    self.send_response(200)
-                    self.end_headers()
-                    self.wfile.write(bytes("Recieved Connect Signal", "utf-8"))
-                case _:
-                    self.send_response(400)
-                    self.end_headers()
+            if (datatype == "Chat" 
+            or datatype == "Join" 
+            or datatype == "Leave" 
+            or datatype == "Death" 
+            or datatype == "Item" 
+            or datatype == "Hint" 
+            or datatype == "State" 
+            or datatype == "Victory"
+            ):
+                receivequeue.append(data)
+                self.send_response(200)
+                self.end_headers()
+                self.wfile.write(bytes("Recieved " + datatype + " Signal", "utf-8"))
+            elif datatype == "Connect":
+                authname = dict.get(data, "name")
+                authip = dict.get(data, "ip")
+                authpassword = dict.get(data, "password")
+                authdirty = True
+                self.send_response(200)
+                self.end_headers()
+                self.wfile.write(bytes("Recieved Connect Signal", "utf-8"))
+            else:
+                self.send_response(400)
+                self.end_headers()
             
         # interfacelog.info("Done reading data.")
 
