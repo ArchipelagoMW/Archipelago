@@ -131,3 +131,68 @@ individual location.
 Check out the [item guide], which explains the named groups available for items.
 
 [item guide]: /tutorial/Dark%20Souls%20III/items/en
+
+## What's the difference from 2.x.x?
+
+Version 3.0.0 and forward of the Dark Souls III Archipelago client has a number
+of substantial differences with the older 2.x.x versions. Improvements include:
+
+* Support for randomizing all item locations, not just unique items, without
+  needing progressive pickup lists.
+
+* Support for randomizing items in shops, starting loadouts, Path of the Dragon,
+  and more.
+
+* Built-in integration with the enemy randomizer, including consistent seeding
+  for races and configuration via the web interface and the standard Archipelago
+  YAML file.
+
+* Support for the latest patch for Dark Souls III, 1.15.2. Note that older
+  patches are currently *not* supported, although if [ModEngine2] ever adds
+  support they should work fine.
+
+  [ModEngine2]: https://github.com/soulsmods/ModEngine2
+
+* Optional smooth distribution for upgrade items, upgraded weapons, and soul
+  items so you're more likely to see weaker items earlier and more powerful
+  items later.
+
+* More detailed location names that indicate where a location is, not just what
+  it replaces.
+
+* Other players' item names are visible in DS3.
+
+* If you pick up items while offline, they'll still send once you reconnect.
+ 
+However, not all YAML fields from 2.x.x are supported as-is in 3.0.0, and some
+new fields are available. Consider [generating a new YAML configuration] for use
+with 3.x.x.
+
+[generating a new YAML configuration]: /games/Dark%20Souls%20III/player-options
+
+The following options have been removed:
+
+* `enable_boss_locations` is now controlled by the `soul_locations` option.
+
+* `enable_progressive_locations` was removed because all locations are now
+  individually randomized rather than replaced with a progressive list.
+
+* `pool_type` has been removed. Since there are no longer any non-randomized
+  items in randomized categories, there's not a meaningful distinction between
+  "shuffle" and "various" mode.
+
+In addition, the following options have changed:
+
+* `enable_*_locations` options have all been deprecated. Instead, you can now
+  add [location group names] to the `exclude_locations` option to prevent them
+  from containing important items.
+
+  [location group names]: /tutorial/Dark%20Souls%20III/locations/en#location-groups
+
+  By default, the Hidden, Small Crystal Lizards, Upgrade, Small Souls, and
+  Miscellaneous groups are in `exclude_locations`. Once you've chosen your
+  excluded locations, you can set `excluded_locations: unrandomized` to preserve
+  the default vanilla item placements for all excluded locations.
+
+* The location names used in options like `exclude_locations` have changed. See
+  the [location guide] for a full description.
