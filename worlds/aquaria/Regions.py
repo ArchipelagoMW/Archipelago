@@ -1083,6 +1083,8 @@ class AquariaRegions:
                  lambda state: _has_bind_song(state, self.player))
         add_rule(self.world.get_location("Arnassi ruins, Song plant spore on the top of the ruins", self.player),
                  lambda state: _has_beast_form(state, self.player))
+        add_rule(self.world.get_location("Energy temple first area, bulb in the bottom room blocked by a rock",
+                                         self.player), lambda state: _has_energy_form(state, self.player))
         if options.mini_bosses_to_beat.value > 0:
             add_rule(self.world.get_entrance("Before Final boss to Final boss", self.player),
                      lambda state: _has_mini_bosses(state, self.player))

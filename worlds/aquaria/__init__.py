@@ -222,10 +222,6 @@ class AquariaWorld(World):
         self.multiworld.get_location("Sun temple, bulb in the hidden room of the right part",
                                      self.player).progress_type = LocationProgressType.EXCLUDED
 
-
-
-
-
     def set_rules(self) -> None:
         """
         Launched when the Multiworld generator is ready to generate rules
