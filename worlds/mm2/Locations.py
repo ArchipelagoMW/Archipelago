@@ -233,5 +233,5 @@ location_groups = {
     "Crash Man Stage": {*crash_man_locations.keys(), *etank_1ups["Crash Man Stage"].keys(),
                         *energy_pickups["Crash Man Stage"].keys()},
     "Wily 2 Weapon Energy": {wily_2_c8, wily_2_c9, wily_2_c10, wily_2_c11, wily_2_c12, wily_2_c13, wily_2_c14,
-                             wily_2_c15, wily_2_c16, wily_2_c17}
+                             wily_2_c15, wily_2_c16}
 }
