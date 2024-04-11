@@ -28,16 +28,30 @@ first_stage_blacklist = {
     0x77001C,  # 5-4 needs Burning
 }
 
+first_world_limit = {
+    # We need to limit the number of very restrictive stages in level 1 on solo gens
+    *first_stage_blacklist,  # all three of the blacklist stages need 2+ items for both checks
+    0x770007,
+    0x770008,
+    0x770013,
+    0x77001E,
 
-def generate_valid_level(level, stage, possible_stages, slot_random):
-    new_stage = slot_random.choice(possible_stages)
-    if level == 1 and stage == 0 and new_stage in first_stage_blacklist:
-        return generate_valid_level(level, stage, possible_stages, slot_random)
-    else:
-        return new_stage
+}
 
 
-def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing.Dict[int, Region]):
+def generate_valid_level(world: "KDL3World", level, stage, possible_stages, placed_stages):
+    new_stage = world.random.choice(possible_stages)
+    if level == 1:
+        if stage == 0 and new_stage in first_stage_blacklist:
+            return generate_valid_level(world, level, stage, possible_stages, placed_stages)
+        elif not (world.multiworld.players > 1 or world.options.consumables or world.options.starsanity) and \
+                new_stage in first_world_limit and \
+                sum(p_stage in first_world_limit for p_stage in placed_stages) >= 2:
+            return generate_valid_level(world, level, stage, possible_stages, placed_stages)
+    return new_stage
+
+
+def generate_rooms(world: "KDL3World", level_regions: typing.Dict[int, Region]):
     level_names = {LocationName.level_names[level]: level for level in LocationName.level_names}
     room_data = orjson.loads(get_data(__name__, os.path.join("data", "Rooms.json")))
     rooms: typing.Dict[str, KDL3Room] = dict()
@@ -49,8 +63,8 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
         room.add_locations({location: world.location_name_to_id[location] if location in world.location_name_to_id else
                             None for location in room_entry["locations"]
                             if (not any(x in location for x in ["1-Up", "Maxim"]) or
-                            world.options.consumables.value) and ("Star" not in location
-                                                                  or world.options.starsanity.value)},
+                                world.options.consumables.value) and ("Star" not in location
+                                                                      or world.options.starsanity.value)},
                            KDL3Location)
         rooms[room.name] = room
         for location in room.locations:
@@ -62,33 +76,25 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
     world.multiworld.regions.extend(world.rooms)
 
     first_rooms: typing.Dict[int, KDL3Room] = dict()
-    if door_shuffle:
-        # first, we need to generate the notable edge cases
-        # 5-6 is the first, being the most restrictive
-        # half of its rooms are required to be vanilla, but can be in different orders
-        # the room before it *must* contain the copy ability required to unlock the room's goal
-
-        raise NotImplementedError()
-    else:
-        for name, room in rooms.items():
-            if room.room == 0:
-                if room.stage == 7:
-                    first_rooms[0x770200 + room.level - 1] = room
-                else:
-                    first_rooms[0x770000 + ((room.level - 1) * 6) + room.stage] = room
-            exits = dict()
-            for def_exit in room.default_exits:
-                target = f"{level_names[room.level]} {room.stage} - {def_exit['room']}"
-                access_rule = tuple(def_exit["access_rule"])
-                exits[target] = lambda state, rule=access_rule: state.has_all(rule, world.player)
-            room.add_exits(
-                exits.keys(),
-                exits
-            )
-            if world.options.open_world:
-                if any("Complete" in location.name for location in room.locations):
-                    room.add_locations({f"{level_names[room.level]} {room.stage} - Stage Completion": None},
-                                       KDL3Location)
+    for name, room in rooms.items():
+        if room.room == 0:
+            if room.stage == 7:
+                first_rooms[0x770200 + room.level - 1] = room
+            else:
+                first_rooms[0x770000 + ((room.level - 1) * 6) + room.stage] = room
+        exits = dict()
+        for def_exit in room.default_exits:
+            target = f"{level_names[room.level]} {room.stage} - {def_exit['room']}"
+            access_rule = tuple(def_exit["access_rule"])
+            exits[target] = lambda state, rule=access_rule: state.has_all(rule, world.player)
+        room.add_exits(
+            exits.keys(),
+            exits
+        )
+        if world.options.open_world:
+            if any("Complete" in location.name for location in room.locations):
+                room.add_locations({f"{level_names[room.level]} {room.stage} - Stage Completion": None},
+                                   KDL3Location)
 
     for level in world.player_levels:
         for stage in range(6):
@@ -102,9 +108,13 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
             if world.options.open_world or stage == 0:
                 level_regions[level].add_exits([first_rooms[proper_stage].name])
             else:
-                world.multiworld.get_location(world.location_id_to_name[world.player_levels[level][stage-1]],
+                world.multiworld.get_location(world.location_id_to_name[world.player_levels[level][stage - 1]],
                                               world.player).parent_region.add_exits([first_rooms[proper_stage].name])
-        level_regions[level].add_exits([first_rooms[0x770200 + level - 1].name])
+        if world.options.open_world:
+            level_regions[level].add_exits([first_rooms[0x770200 + level - 1].name])
+        else:
+            world.multiworld.get_location(world.location_id_to_name[world.player_levels[level][5]], world.player)\
+                .parent_region.add_exits([first_rooms[0x770200 + level - 1].name])
 
 
 def generate_valid_levels(world: "KDL3World", enforce_world: bool, enforce_pattern: bool) -> dict:
@@ -141,8 +151,7 @@ def generate_valid_levels(world: "KDL3World", enforce_world: bool, enforce_patte
                                         or (enforce_pattern and ((candidate - 1) & 0x00FFFF) % 6 == stage)
                                         or (enforce_pattern == enforce_world)
                                         ]
-                    new_stage = generate_valid_level(level, stage, stage_candidates,
-                                                     world.random)
+                    new_stage = generate_valid_level(world, level, stage, stage_candidates, levels[level])
                     possible_stages.remove(new_stage)
                     levels[level][stage] = new_stage
             except Exception:
@@ -218,7 +227,7 @@ def create_levels(world: "KDL3World") -> None:
             level_shuffle == 1,
             level_shuffle == 2)
 
-    generate_rooms(world, False, levels)
+    generate_rooms(world, levels)
 
     level6.add_locations({LocationName.goals[world.options.goal]: None}, KDL3Location)
 
