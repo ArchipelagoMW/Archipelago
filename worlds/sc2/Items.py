@@ -1283,6 +1283,7 @@ item_table = {
                  description="Increases attack range of all Terran mechanical units by 1."),
     ItemNames.ROGUE_FORCES:
         ItemData(623 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 12, SC2Race.TERRAN,
+                 origin={"ext"},
                  description="Mercenary calldowns are no longer limited by charges."),
 
     ItemNames.ZEALOT:
