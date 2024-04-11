@@ -786,6 +786,10 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
                                 0x00000000])  # NOP
     rom.write_int32s(0xBFE4C0, patches.freeze_verifier)
 
+    # Fix for the ice chunk model staying when getting bitten by the maze garden dogs
+    rom.write_int32(0xA2DC48, 0x803FE8E0)  # J 0x803FE808
+    rom.write_int32s(0xBFE8E0, patches.dog_bite_ice_trap_fix)
+
     # Initial Countdown numbers
     rom.write_int32(0xAD6A8, 0x080FF60A)  # J	0x803FD828
     rom.write_int32s(0xBFD828, patches.new_game_extras)

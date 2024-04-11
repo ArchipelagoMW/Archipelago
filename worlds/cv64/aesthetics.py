@@ -449,12 +449,11 @@ def get_location_data(world: "CV64World", active_locations: Iterable[Location]) 
 
         # Figure out the item ID bytes to put in each Location here. Write the item itself if either it's the player's
         # very own, or it belongs to an Item Link that the player is a part of.
-        if loc.item.player == world.player or (loc.item.player in world.multiworld.groups and
-                                               world.player in world.multiworld.groups[loc.item.player]['players']):
+        if loc.item.player == world.player:
             if loc_type not in ["npc", "shop"] and get_item_info(loc.item.name, "pickup actor id") is not None:
                 location_bytes[get_location_info(loc.name, "offset")] = get_item_info(loc.item.name, "pickup actor id")
             else:
-                location_bytes[get_location_info(loc.name, "offset")] = get_item_info(loc.item.name, "code")
+                location_bytes[get_location_info(loc.name, "offset")] = get_item_info(loc.item.name, "code") & 0xFF
         else:
             # Make the item the unused Wooden Stake - our multiworld item.
             location_bytes[get_location_info(loc.name, "offset")] = 0x11

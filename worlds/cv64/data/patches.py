@@ -2863,3 +2863,13 @@ big_tosser = [
     0xAD000814,  # SW    R0, 0x0814 (T0)
     0x03200008   # JR    T9
 ]
+
+dog_bite_ice_trap_fix = [
+    # Sets the freeze timer to 0 when a maze garden dog bites the player to ensure the ice chunk model will break if the
+    # player gets bitten while frozen via Ice Trap.
+    0x3C088039,  # LUI   T0, 0x8039
+    0xA5009E76,  # SH    R0, 0x9E76 (T0)
+    0x3C090F00,  # LUI   T1, 0x0F00
+    0x25291CB8,  # ADDIU T1, T1, 0x1CB8
+    0x01200008   # JR    T1
+]
