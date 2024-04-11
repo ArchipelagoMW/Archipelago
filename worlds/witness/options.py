@@ -1,10 +1,11 @@
 from dataclasses import dataclass
 
-from schema import Schema, And, Optional
+from schema import And, Schema
 
-from Options import Toggle, DefaultOnToggle, Range, Choice, PerGameCommonOptions, OptionDict
+from Options import Choice, DefaultOnToggle, OptionDict, PerGameCommonOptions, Range, Toggle
 
-from .static_logic import WeightedItemDefinition, ItemCategory, StaticWitnessLogic
+from .data import static_logic as static_witness_logic
+from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
 
 
 class DisableNonRandomizedPuzzles(Toggle):
@@ -232,12 +233,12 @@ class TrapWeights(OptionDict):
     display_name = "Trap Weights"
     schema = Schema({
         trap_name: And(int, lambda n: n >= 0)
-        for trap_name, item_definition in StaticWitnessLogic.all_items.items()
+        for trap_name, item_definition in static_witness_logic.ALL_ITEMS.items()
         if isinstance(item_definition, WeightedItemDefinition) and item_definition.category is ItemCategory.TRAP
     })
     default = {
         trap_name: item_definition.weight
-        for trap_name, item_definition in StaticWitnessLogic.all_items.items()
+        for trap_name, item_definition in static_witness_logic.ALL_ITEMS.items()
         if isinstance(item_definition, WeightedItemDefinition) and item_definition.category is ItemCategory.TRAP
     }
 
@@ -315,7 +316,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     shuffle_discarded_panels: ShuffleDiscardedPanels
     shuffle_vault_boxes: ShuffleVaultBoxes
     obelisk_keys: ObeliskKeys
-    shuffle_EPs: ShuffleEnvironmentalPuzzles
+    shuffle_EPs: ShuffleEnvironmentalPuzzles  # noqa: N815
     EP_difficulty: EnvironmentalPuzzlesDifficulty
     shuffle_postgame: ShufflePostgame
     victory_condition: VictoryCondition
