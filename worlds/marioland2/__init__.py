@@ -61,7 +61,10 @@ class MarioLand2World(World):
         "Golden Coins": {"Mario Coin", "Macro Coin", "Space Coin", "Tree Coin", "Turtle Coin", "Pumpkin Coin"},
         "Coins": {"1 Coin", *{f"{i} Coins" for i in range(2, 169)}},
         "Powerups": {"Mushroom", "Fire Flower", "Carrot"},
-        "Difficulties": {"Easy Mode", "Normal Mode"}
+        "Difficulties": {"Easy Mode", "Normal Mode"},
+        "Auto Scroll Traps": {item_name for item_name in items
+                              if "Auto Scroll" in item_name and "Cancel" not in item_name},
+        "Cancel Auto Scrolls": {item_name for item_name in items if "Cancel Auto Scroll" in item_name},
     }
 
     location_name_groups = {
