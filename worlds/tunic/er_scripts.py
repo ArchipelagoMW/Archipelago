@@ -255,13 +255,30 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             portal_pairs[portal1] = portal2
 
             # update dependent regions based on the plando'd connections, to ensure the portals connect logically
-            for origins, destinations in dependent_regions.items():
-                if portal1.region in origins:
-                    if portal2.region in non_dead_end_regions:
-                        destinations.append(portal2.region)
-                if portal2.region in origins:
-                    if portal1.region in non_dead_end_regions:
-                        destinations.append(portal1.region)
+            # todo: replace dependent regions with the slower thing from standalone
+            while True:
+                portal1_in_origins = False
+                portal2_in_origins = False
+                should_continue = False
+                for origins, destinations in dependent_regions.items():
+                    if portal1.region in origins:
+                        portal1_in_origins = True
+                        if portal2.region in non_dead_end_regions:
+                            destinations.append(portal2.region)
+                    if portal2.region in origins:
+                        portal2_in_origins = True
+                        if portal1.region in non_dead_end_regions:
+                            destinations.append(portal1.region)
+                if portal1.region in non_dead_end_regions and portal2.region in non_dead_end_regions:
+                    if not portal1_in_origins:
+                        dependent_regions[(portal1.region,)] = [portal1.region, portal2.region]
+                        should_continue = True
+                    if not portal2_in_origins:
+                        dependent_regions[(portal2.region,)] = [portal1.region, portal2.region]
+                        should_continue = True
+                    if should_continue:
+                        continue
+                break
 
         # if we have plando connections, our connected regions may change somewhat
         while True:
@@ -369,6 +386,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             connected_regions.update(add_dependent_regions(portal2.region, dependent_regions))
 
             # to deal with plando_connections modifying dependent_regions
+            # todo: replace dependent regions with the slower thing that standalone uses
             while plando_connections:
                 test1 = len(connected_regions)
                 for region in connected_regions.copy():
