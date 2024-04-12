@@ -203,7 +203,8 @@ def generate_output(self, output_directory: str):
 
     for i in range(32):
         data[rom_addresses["Auto_Scroll_Levels"] + i] = 1 if i in self.auto_scroll_levels else 0
-        # data[rom_addresses["Auto_Scroll_Levels_B"] + i] = 1 if i in self.auto_scroll_levels else 0
+        if self.options.auto_scroll_mode not in ("trap_item", "trap_items"):
+            data[rom_addresses["Auto_Scroll_Levels_B"] + i] = 1 if i in self.auto_scroll_levels else 0
 
     if self.options.energy_link:
         # start with 1 life if Energy Link is on so that you don't deposit lives at the start of the game.
