@@ -1,4 +1,4 @@
-# Archipelago Unit Testing API
+# Archipelago Unit Testing API Guide
 
 This document covers some of the generic tests available using Archipelago's unit testing system, as well as some basic
 steps on how to write your own.

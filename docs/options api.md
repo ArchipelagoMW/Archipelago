@@ -1,4 +1,4 @@
-# Archipelago Options API
+# Archipelago Options API Guide
 
 This document covers some of the generic options available using Archipelago's options handling system.
 

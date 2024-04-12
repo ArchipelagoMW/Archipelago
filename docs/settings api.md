@@ -1,4 +1,4 @@
-# Archipelago Settings API
+# Archipelago Settings API Guide
 
 The settings API describes how to use installation-wide config and let the user configure them, like paths, etc. using
 host.yaml. For the player settings / player yamls see [options api.md](options api.md).
