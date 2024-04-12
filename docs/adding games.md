@@ -1,3 +1,4 @@
+(adding-games)=
 # Adding Games
 
 Adding a new game to Archipelago has two major parts:
@@ -9,6 +10,7 @@ This document will attempt to illustrate the bare minimum requirements and expec
 integration. As game modification wildly varies by system and engine, and has no bearing on the Archipelago protocol,
 it will not be detailed here.
 
+(client)=
 ## Client
 
 The client is an intermediary program between the game and the Archipelago server. This can either be a direct
@@ -36,8 +38,9 @@ strictly required
 * Send a status update packet alerting the server that the player has completed their goal
 
 Libraries for most modern languages and the spec for various packets can be found in the
-[network protocol](/docs/network%20protocol.md) API reference document.
+[network protocol](network%20protocol.md) API reference document.
 
+(world)=
 ## World
 
 The world is your game integration for the Archipelago generator, webhost, and multiworld server. It contains all the
@@ -72,7 +75,7 @@ start of the game from anywhere
 * Regions are simply containers for locations that share similar access rules. They do not have to map to 
 concrete, physical areas within your game and can be more abstract like tech trees or a questline.
 
-The base World class can be found in [AutoWorld](/worlds/AutoWorld.py). Methods available for your world to call during
-generation can be found in [BaseClasses](/BaseClasses.py) and [Fill](/Fill.py). Some examples and documentation 
-regarding the API can be found in the [world api doc](/docs/world%20api.md).
-Before publishing, make sure to also check out [world maintainer.md](/docs/world%20maintainer.md).
+The base World class can be found in [AutoWorld](AutoWorld). Methods available for your world to call during
+generation can be found in [BaseClasses](BaseClasses.py) and [Fill](Fill). Some examples and documentation 
+regarding the API can be found in the [world api guide](world%20api.md).
+Before publishing, make sure to also check out [world maintainer.md](world%20maintainer.md).

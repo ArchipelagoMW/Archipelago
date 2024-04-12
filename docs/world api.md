@@ -6,8 +6,8 @@ a game.
 Client implementation is out of scope of this document. Please refer to an existing game that provides a similar API to
 yours, and the following documents:
 
-* [network protocol.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md)
-* [adding games.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/adding%20games.md)
+* [network protocol.md](network%20protocol.md)
+* [adding games.md](adding%20games.md)
 
 Archipelago will be abbreviated as "AP" from now on.
 
@@ -18,7 +18,7 @@ Clients that connect to the server to sync items can be in any language that all
 
 ## Coding style
 
-AP follows a [style guide](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/style.md).
+AP follows a [style guide](style.md).
 When in doubt, use an IDE with a code-style linter, for example PyCharm Community Edition.
 
 ## Docstrings
@@ -42,7 +42,7 @@ class MyGameWorld(World):
 
 This section covers various classes and objects you can use for your world. While some of the attributes and methods
 are mentioned here, not all of them are, but you can find them in
-[`BaseClasses.py`](https://github.com/ArchipelagoMW/Archipelago/blob/main/BaseClasses.py).
+[`BaseClasses.py`](baseclasses).
 
 ### World Class
 
@@ -160,7 +160,7 @@ These settings are accessible through `self.settings.<setting_name>` or `cls.set
 
 Users can set these in their `host.yaml` file. Some settings may automatically open a file browser if a file is missing.
 
-Refer to [settings api.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/settings%20api.md) for details.
+Refer to [settings api.md](settings%20api.md) for details.
 
 ### Locations
 
@@ -646,7 +646,7 @@ Entrance should be
 a [`CollectionRule`](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/generic/Rules.py#L9).
 Typically, this is done by defining a lambda expression on demand at the relevant bit, typically calling other
 functions, but this can also be achieved by defining a method with the appropriate format and assigning it directly.
-For an example, see [The Messenger](/worlds/messenger/rules.py).
+For an example, see [The Messenger](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/messenger/rules.py).
 
 ```python
 # logic.py

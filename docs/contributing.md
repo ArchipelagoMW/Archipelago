@@ -2,13 +2,13 @@
 Contributions are welcome. We have a few requests for new contributors:
 
 * **Follow styling guidelines.**
-  Please take a look at the [code style documentation](/docs/style.md)
+  Please take a look at the [code style documentation](style.md)
   to ensure ease of communication and uniformity.
 
 * **Ensure that critical changes are covered by tests.** 
 It is strongly recommended that unit tests are used to avoid regression and to ensure everything is still working.
-If you wish to contribute by adding a new game, please take a look at the [logic unit test documentation](/docs/tests.md).
-If you wish to contribute to the website, please take a look at [these tests](/test/webhost).
+If you wish to contribute by adding a new game, please take a look at the [logic unit test documentation](tests.md).
+If you wish to contribute to the website, please take a look at [these tests](webhost).
 
 * **Do not introduce unit test failures/regressions.**
 Archipelago supports multiple versions of Python. You may need to download older Python versions to fully test
@@ -29,15 +29,16 @@ We cannot determine what "LGTM" means without additional context, so that should
 
 Other than these requests, we tend to judge code on a case-by-case basis. 
 
-For contribution to the website, please refer to the [WebHost README](/WebHostLib/README.md).
+For contribution to the website, please refer to the [WebHost README](https://github.com/ArchipelagoMW/Archipelago/blob/main/WebHostLib/README.md).
 
 If you want to contribute to the core, you will be subject to stricter review on your pull requests. It is recommended
 that you get in touch with other core maintainers via the [Discord](https://archipelago.gg/discord).
 
-If you want to add Archipelago support for a new game, please take a look at the [adding games documentation](/docs/adding%20games.md), which details what is required 
+If you want to add Archipelago support for a new game, please take a look at the [adding games documentation](adding%20games.md), which details what is required 
 to implement support for a game, as well as tips for how to get started.
 If you want to merge a new game into the main Archipelago repo, please make sure to read the responsibilities as a 
-[world maintainer](/docs/world%20maintainer.md).  
+[world maintainer](world%20maintainer.md).  
 
-For other questions, feel free to explore the [main documentation folder](/docs/) and ask us questions in the #archipelago-dev channel 
+For other questions, feel free to explore the [main documentation folder](index) and ask us questions in the 
+#archipelago-dev channel 
 of the [Discord](https://archipelago.gg/discord).

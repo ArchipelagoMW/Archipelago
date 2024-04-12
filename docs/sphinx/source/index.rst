@@ -40,3 +40,4 @@ the requirements of not only contributing to the main project, but the requireme
     rules
     fill
     netutils
+    test

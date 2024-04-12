@@ -3,9 +3,9 @@
 A world maintainer is a person responsible for a world or part of a world in Archipelago.
 
 If a world author does not want to take on the responsibilities of a world maintainer, they can release their world as
-an unofficial [APWorld](/docs/apworld%20specification.md) or maintain their own fork instead.
+an unofficial [APWorld](apworld%20specification.md) or maintain their own fork instead.
 
-All current world maintainers are listed in the [CODEOWNERS](/docs/CODEOWNERS) document.
+All current world maintainers are listed in the [CODEOWNERS](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/CODEOWNERS) document.
 
 ## Responsibilities
 
@@ -27,7 +27,7 @@ Unless these are shared between multiple people, we expect the following from ea
 
 When we merge your world into the core Archipelago repository, you automatically become world maintainer unless you
 nominate someone else (i.e. there are multiple devs). You can define who is allowed to approve changes to your world
-in the [CODEOWNERS](/docs/CODEOWNERS) document.
+in the [CODEOWNERS](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/CODEOWNERS) document.
 
 ### Getting Voted
 
@@ -41,7 +41,7 @@ Voting shall be conducted on Discord in #archipelago-dev.
 
 ### Resigning
 
-A world maintainer can resign and have their username removed from the [CODEOWNERS](/docs/CODEOWNERS) document. If no
+A world maintainer can resign and have their username removed from the [CODEOWNERS](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/CODEOWNERS) document. If no
 new maintainer takes over management of the world, the world becomes unmaintained.
 
 ### Getting Voted out

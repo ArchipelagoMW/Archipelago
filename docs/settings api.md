@@ -1,7 +1,7 @@
 # Archipelago Settings API Guide
 
 The settings API describes how to use installation-wide config and let the user configure them, like paths, etc. using
-host.yaml. For the player settings / player yamls see [options api.md](options api.md).
+host.yaml. For the player settings / player yamls see [options api.md](options%20api.md).
 
 The settings API replaces `Utils.get_options()` and `Utils.get_default_options()`
 as well as the predefined `host.yaml` in the repository.
@@ -78,6 +78,7 @@ class MyGameWorld(World):
 ```
 
 
+(Types)=
 ## Types
 
 When writing the host.yaml, the code will down cast the values to builtins.
@@ -115,6 +116,7 @@ class MySettings(settings.Group):
     my_value: typing.Union[MyBool, bool] = True
 ```
 
+(UserFilePath)=
 ### UserFilePath
 
 Path to a single file. Automatically resolves as user_path:
@@ -123,7 +125,7 @@ Will open a file browser if the file is missing when in GUI mode.
 
 If the file is used in the world's `generate_output`, make sure to add a `stage_assert_generate` that checks if the
 file is available, otherwise generation may fail at the very end.
-See also [world api.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md#generation).
+See also [world api.md](world%20api.md#generation).
 
 #### class method validate(cls, path: str)
 
@@ -142,22 +144,26 @@ Human-readable name to use in file browser
 
 Instead of storing the path, copy the file.
 
+(md5s)=
 #### md5s: List[Union[str, bytes]]
 
 Provide md5 hashes as hex digests or raw bytes for automatic validation.
 
 
+(UserFolderPath)=
 ### UserFolderPath
 
 Same as [UserFilePath](#UserFilePath), but for a folder instead of a file.
 
 
+(LocalFilePath)=
 ### LocalFilePath
 
 Same as [UserFilePath](#UserFilePath), but resolves as local_path:
 path inside the AP dir or Appimage even if read-only.
 
 
+(LocalFolderPath)=
 ### LocalFolderPath
 
 Same as [LocalFilePath](#LocalFilePath), but for a folder instead of a file.
