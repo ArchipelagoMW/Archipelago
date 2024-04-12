@@ -7,11 +7,9 @@ import sys
 
 from Utils import __version__
 
-
 # if this is being built via the workflow action Archipelago isn't in path but needs to be for autodocs
 base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-stable = base_dir in sys.path  # generated from webhost
-if not stable:
+if base_dir not in sys.path:
     sys.path.append(base_dir)
 
 
@@ -40,16 +38,5 @@ html_theme_options = {
     "sidebarwidth": "15%",
 }
 
-if stable:
-    # pull in custom template and styling for stable doc
-    static_dir = os.path.join(base_dir, "WebHostLib", "static")
-    templates_path = ["_templates"]
-    html_static_path = [
-        "_static",
-        os.path.join(static_dir, "styles", "themes", "base.css"),
-        os.path.join(static_dir, "static", "backgrounds", "header", "stone-header.png"),
-        os.path.join(static_dir, "static", "backgrounds", "stone.png"),
-    ]
-else:
-    html_logo = "_static/header-logo.svg"
-    html_favicon = "_static/favicon.ico"
+html_logo = "_static/header-logo.svg"
+html_favicon = "_static/favicon.ico"

@@ -980,7 +980,7 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
     return isinstance(obj, typing.Iterable)
 
 
-def build_sphinx_docs(stable: bool = False) -> None:
+def build_sphinx_docs() -> None:
     """Build Sphinx autodocs."""
     from sphinx.cmd.build import main as sphinx_main
 
@@ -995,11 +995,10 @@ def build_sphinx_docs(stable: bool = False) -> None:
         if file.name.endswith(".md"):
             shutil.copy(file, sphinx_input)
 
-    if not stable:
-        # copy AP header logo and favicon
-        static_dir = os.path.join(base_dir, "WebHostLib", "static", "static")
-        logos = [os.path.join(static_dir, "branding", "header-logo.svg"), os.path.join(static_dir, "favicon.ico")]
-        for file in logos:
-            shutil.copy(file, os.path.join(sphinx_input, "_static"))
+    # copy AP header logo and favicon
+    static_dir = os.path.join(base_dir, "WebHostLib", "static", "static")
+    logos = [os.path.join(static_dir, "branding", "header-logo.svg"), os.path.join(static_dir, "favicon.ico")]
+    for file in logos:
+        shutil.copy(file, os.path.join(sphinx_input, "_static"))
 
     sphinx_main(["-M", "html", sphinx_input, sphinx_output])
