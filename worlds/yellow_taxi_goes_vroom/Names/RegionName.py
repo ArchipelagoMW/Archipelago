@@ -1,0 +1,5 @@
+MENU = "Menu"
+MORIOS_LAB = "Morio's Lab"
+GRANNYS_ISLAND = "Granny's Island"
+TOSLA_HQ = "Tosla HQ"
+MOON = "Moon"
