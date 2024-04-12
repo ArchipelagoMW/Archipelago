@@ -279,6 +279,9 @@ def global_rules(world, player):
                 (state.multiworld.can_take_damage[player] and (state.has('Pegasus Boots', player) or has_hearts(state, player, 4))))))
              )
 
+    set_rule(world.get_entrance('Hookshot Cave Bomb Wall (North)', player), lambda state: can_use_bombs(state, player))
+    set_rule(world.get_entrance('Hookshot Cave Bomb Wall (South)', player), lambda state: can_use_bombs(state, player))
+
     set_rule(world.get_location('Hookshot Cave - Top Right', player), lambda state: state.has('Hookshot', player))
     set_rule(world.get_location('Hookshot Cave - Top Left', player), lambda state: state.has('Hookshot', player))
     set_rule(world.get_location('Hookshot Cave - Bottom Right', player),
