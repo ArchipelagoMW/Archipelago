@@ -208,7 +208,7 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
         rf.assign_rule("HMC: 100 Coins", "GP")
         rf.assign_rule("SSL: 100 Coins", "{SSL: Upper Pyramid} | GP")
         rf.assign_rule("DDD: 100 Coins", "GP")
-        rf.assign_rule("SL: 100 Coins", "VC | MOVELESS")
+        rf.assign_rule("SL: 100 Coins", "VC | CAPLESS")
         rf.assign_rule("WDW: 100 Coins", "GP | {WDW: Downtown}")
         rf.assign_rule("TTC: 100 Coins", "GP")
         rf.assign_rule("THI: 100 Coins", "GP")
