@@ -14,10 +14,10 @@ from .Color import get_colors_for_item, write_palette_shuffle
 if TYPE_CHECKING:
     from . import MM2World
 
-MM2LCHASH = "19de63834393b5988d41441f83a36df5"
+MM2LCHASH = "37f2c36ce7592f1e16b3434b3985c497"
 PROTEUSHASH = "9ff045a3ca30018b6e874c749abb3ec4"
-MM2NESHASH = "302761a666ac89c21f185052d02127d3"
-MM2VCHASH = "77b51417eb66e8119c85689a093be857"
+MM2NESHASH = "0527a0ee512f69e08b8db6dc97964632"
+MM2VCHASH = "0c78dfe8e90fb8f3eed022ff01126ad3"
 
 picopico_weakness_ptrs: Dict[int, int] = {
     0: 0x3EA12,
@@ -239,11 +239,18 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
     patch.write_file("token_patch.bin", patch.get_token_binary())
 
 
+def read_headerless_nes_rom(rom: bytes) -> bytes:
+    if rom[:4] == b"NES\x1A":
+        return rom[16:]
+    else:
+        return rom
+
+
 def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes: Optional[bytes] = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
         file_name = get_base_rom_path(file_name)
-        base_rom_bytes = bytes(open(file_name, "rb").read())
+        base_rom_bytes = read_headerless_nes_rom(bytes(open(file_name, "rb").read()))
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
@@ -255,8 +262,10 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
             print(basemd5.hexdigest())
             raise Exception("Supplied Base Rom does not match known MD5 for US, LC, or US VC release. "
                             "Get the correct game and version, then dump it")
-        setattr(get_base_rom_bytes, "base_rom_bytes", base_rom_bytes)
-    return base_rom_bytes
+        base_rom_bytes = bytearray(base_rom_bytes)
+        base_rom_bytes[0:0] = header
+        setattr(get_base_rom_bytes, "base_rom_bytes", bytes(base_rom_bytes))
+    return bytes(base_rom_bytes)
 
 
 def get_base_rom_path(file_name: str = "") -> str:
@@ -268,7 +277,7 @@ def get_base_rom_path(file_name: str = "") -> str:
     return file_name
 
 
-header = b'\x4E\x45\x53\x1A\x10\x00\x10\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+header = b"\x4E\x45\x53\x1A\x10\x00\x10\x00\x00\x00\x00\x00\x00\x00\x00\x00"
 prg_offset = 0x8ED70
 prg_size = 0x40000
 
