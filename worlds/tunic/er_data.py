@@ -1094,23 +1094,21 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
         "Overworld West Garden Laurels Entry":
             [["Hyperdash"], ["UR"]],
         "Overworld Southeast Cross Door":
-            [["Holy Cross"]], 
+            [], 
         "Overworld Ruined Passage Door":
-            [["Key"], ["Hyperdash", "NMG"]], 
+            [], 
         "Overworld Temple Door":
-            [["Icebolt", "Techbow", "Wand", "Stundagger", "NMG"], ["Techbow", "Forest Belltower Upper", "NMG"],
-             ["Stick", "Forest Belltower Upper", "Overworld Belltower"],
-             ["Techbow", "Forest Belltower Upper", "Overworld Belltower"]],
+            [["NMG"], ["Forest Belltower Upper", "Overworld Belltower"]],
         "Overworld Fountain Cross Door":
-            [["Holy Cross"], ["Icebolt", "Techbow", "Wand", "Stundagger", "NMG"]], 
+            [], 
         "Overworld Town Portal":
-            [["Prayer"]],
+            [],
         "Overworld Spawn Portal":
-            [["Prayer"]],
+            [],
         "Overworld Well to Furnace Rail":
             [["UR"]], 
         "Overworld Old House Door":
-            [["Key (House)"], ["Stundagger", "Wand", "NMG"]],
+            [],
     },
     "Old House Front": {
         "Old House Back":
@@ -1144,9 +1142,9 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "East Forest": {
         "East Forest Dance Fox Spot":
-            [["Hyperdash"], ["Icebolt", "NMG"]],
+            [["Hyperdash"], ["NMG"]],
         "East Forest Portal":
-            [["Prayer"]],
+            [],
     },
     "Forest Belltower Upper": {
         "Forest Belltower Main":
@@ -1158,7 +1156,7 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "East Forest Dance Fox Spot": {
         "East Forest":
-            [["Hyperdash"], ["Icebolt", "NMG"]],
+            [["Hyperdash"], ["NMG"]],
     },
     "East Forest Portal": {
         "East Forest":
@@ -1176,11 +1174,11 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Forest Grave Path Upper": {
         "Forest Grave Path Main":
-            [["Hyperdash"], ["Icebolt", "NMG"]],
+            [["Hyperdash"], ["NMG"]],
     },
     "Forest Grave Path by Grave": {
         "Forest Hero's Grave":
-            [["Prayer"]], 
+            [], 
         "Forest Grave Path Main":
             [["Hyperdash", "NMG"]],
     },
@@ -1190,11 +1188,11 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Beneath the Well Front": {
         "Beneath the Well Main":
-            [["Stick", "Lantern"], ["Techbow", "Lantern"]],
+            [],
     },
     "Beneath the Well Back": {
         "Beneath the Well Main":
-            [["Stick"], ["Techbow"]],
+            [],
     },
     "Beneath the Well Main": {
         "Beneath the Well Front":
@@ -1212,7 +1210,7 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Dark Tomb Entry Point": {
         "Dark Tomb Main":
-            [["Lantern"]],
+            [],
     },
     "Dark Tomb Main": {
         "Dark Tomb Dark Exit":
@@ -1222,17 +1220,17 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Dark Tomb Dark Exit": {
         "Dark Tomb Main":
-            [["Lantern"]],
+            [],
     },
     "West Garden": {
         "West Garden Laurels Exit":
             [["Hyperdash"], ["UR"]],
         "West Garden after Boss":
-            [["Sword"], ["UR"]], 
+            [], 
         "West Garden Hero's Grave":
-            [["Prayer"]],
+            [],
         "West Garden Portal Item":
-            [["Icebolt", "Wand", "Stundagger", "Techbow", "NMG"]],
+            [["NMG"]],
     },
     "West Garden Laurels Exit": {
         "West Garden":
@@ -1244,9 +1242,9 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "West Garden Portal Item": {
         "West Garden":
-            [["Icebolt", "Wand", "Stundagger", "Techbow", "NMG"]], 
+            [["NMG"]], 
         "West Garden Portal":
-            [["Hyperdash", "Prayer", "West Garden"]],
+            [["Hyperdash", "West Garden"]],
     },
     "West Garden Portal": {
         "West Garden Portal Item":
@@ -1260,19 +1258,19 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
         "Ruined Atoll Lower Entry Area":
             [["Hyperdash"], ["UR"]],
         "Ruined Atoll Frog Mouth":
-            [["Hyperdash"], ["Wand"], ["UR"]],
+            [],
         "Ruined Atoll Portal":
-            [["Prayer"]],
+            [],
         "Ruined Atoll Statue":
-            [["Prayer"]],
+            [],
     },
     "Ruined Atoll Lower Entry Area": {
         "Ruined Atoll":
-            [["Hyperdash"], ["Wand"]],
+            [],
     },
     "Ruined Atoll Frog Mouth": {
         "Ruined Atoll":
-            [["Hyperdash"], ["Wand"]],
+            [],
     },
     "Ruined Atoll Portal": {
         "Ruined Atoll":
@@ -1284,19 +1282,19 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Frog's Domain": {
         "Frog's Domain Back":
-            [["Wand"]],
+            [],
     },
     "Library Exterior Ladder": {
         "Library Exterior Tree":
-            [["Hyperdash", "Prayer"], ["Wand", "Prayer"]],
+            [],
     },
     "Library Exterior Tree": {
         "Library Exterior Ladder":
-            [["Hyperdash"], ["Wand"]],
+            [],
     },
     "Library Hall": {
         "Library Hero's Grave":
-            [["Prayer"]],
+            [],
     },
     "Library Hero's Grave": {
         "Library Hall":
@@ -1304,13 +1302,13 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Library Lab Lower": {
         "Library Lab":
-            [["Hyperdash"], ["Wand"]],
+            [],
     },
     "Library Lab": {
         "Library Lab Lower":
             [["Hyperdash"]],
         "Library Portal":
-            [["Prayer"]],
+            [],
     },
     "Library Portal": {
         "Library Lab":
@@ -1318,7 +1316,7 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Fortress Exterior from East Forest": {
         "Fortress Exterior from Overworld":
-            [["Hyperdash"], ["Wand"], ["UR"]], 
+            [], 
         "Fortress Courtyard Upper":
             [["UR"]], 
         "Fortress Exterior near cave":
@@ -1330,9 +1328,9 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
         "Fortress Exterior from East Forest":
             [["Hyperdash"]], 
         "Fortress Exterior near cave":
-            [["Prayer"], ["Hyperdash"], ["UR"]], 
+            [], 
         "Fortress Courtyard":
-            [["Hyperdash"], ["Icebolt", "Techbow", "Wand", "Stundagger", "NMG"], ["UR"]],
+            [["Hyperdash"], ["NMG"]],
     },
     "Fortress Exterior near cave": {
         "Fortress Exterior from Overworld":
@@ -1344,7 +1342,7 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Fortress Courtyard": {
         "Fortress Courtyard Upper":
-            [["Icebolt", "Techbow", "Wand", "Stundagger", "NMG"]], 
+            [["NMG"]],
         "Fortress Exterior from Overworld":
             [["Hyperdash"]],
     },
@@ -1354,7 +1352,7 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Beneath the Vault Front": {
         "Beneath the Vault Back":
-            [["Lantern"]],
+            [],
     },
     "Beneath the Vault Back": {
         "Beneath the Vault Front":
@@ -1362,7 +1360,7 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Fortress East Shortcut Lower": {
         "Fortress East Shortcut Upper":
-            [["Icebolt", "Techbow", "Wand", "Stundagger", "NMG"]],
+            [["NMG"]],
     },
     "Fortress East Shortcut Upper": {
         "Fortress East Shortcut Lower":
@@ -1370,22 +1368,21 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Eastern Vault Fortress": {
         "Eastern Vault Fortress Gold Door":
-            [["Wand", "Stundagger", "NMG"],
-             ["Prayer", "Fortress Exterior from Overworld", "Beneath the Vault Back", "Fortress Courtyard Upper"]],
+            [["NMG"], ["Fortress Exterior from Overworld", "Beneath the Vault Back", "Fortress Courtyard Upper"]],
     },
     "Eastern Vault Fortress Gold Door": {
         "Eastern Vault Fortress":
-            [["Wand", "Stundagger", "NMG"]],
+            [["NMG"]],
     },
     "Fortress Grave Path": {
         "Fortress Hero's Grave":
-            [["Prayer"]], 
+            [], 
         "Fortress Grave Path Dusty Entrance":
             [["Hyperdash"]],
     },
     "Fortress Grave Path Upper": {
         "Fortress Grave Path":
-            [["Icebolt", "Stundagger", "Techbow", "Wand", "NMG"]],
+            [["NMG"]],
     },
     "Fortress Grave Path Dusty Entrance": {
         "Fortress Grave Path":
@@ -1397,7 +1394,7 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Fortress Arena": {
         "Fortress Arena Portal":
-            [["Prayer", "Fortress Exterior from Overworld", "Beneath the Vault Back", "Eastern Vault Fortress"]],
+            [["Fortress Exterior from Overworld", "Beneath the Vault Back", "Eastern Vault Fortress"]],
     },
     "Fortress Arena Portal": {
         "Fortress Arena":
@@ -1405,17 +1402,17 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Lower Mountain": {
         "Lower Mountain Stairs":
-            [["Holy Cross"]],
+            [],
     },
     "Lower Mountain Stairs": {
         "Lower Mountain":
-            [["Holy Cross"]],
+            [],
     },
     "Monastery Back": {
         "Monastery Front":
             [["Hyperdash", "NMG"]], 
         "Monastery Hero's Grave":
-            [["Prayer"]],
+            [],
     },
     "Monastery Hero's Grave": {
         "Monastery Back":
@@ -1423,13 +1420,13 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Monastery Front": {
         "Monastery Back":
-            [["Sword"], ["Techbow"]],
+            [],
     },
     "Quarry Entry": {
         "Quarry Portal":
-            [["Prayer", "Quarry Connector", "Wand"]], 
+            [["Quarry Connector"]], 
         "Quarry":
-            [["Techbow"], ["Sword"]],
+            [],
     },
     "Quarry Portal": {
         "Quarry Entry":
@@ -1437,7 +1434,7 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Quarry Monastery Entry": {
         "Quarry":
-            [["Techbow"], ["Sword"]],
+            [],
         "Quarry Back":
             [["Hyperdash"]],
         "Monastery Rope":
@@ -1445,13 +1442,13 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Quarry Back": {
         "Quarry":
-            [["Techbow"], ["Sword"]],
+            [],
         "Quarry Monastery Entry":
             [["Hyperdash"]],
     },
     "Quarry": {
         "Lower Quarry":
-            [["Mask"]],
+            [],
         "Quarry Entry":
             [],
         "Quarry Back":
@@ -1461,7 +1458,7 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Lower Quarry": {
         "Lower Quarry Zig Door":
-            [["Quarry", "Quarry Connector", "Wand"]],
+            [["Quarry", "Quarry Connector"]],
     },
     "Monastery Rope": {
         "Quarry Back":
@@ -1473,7 +1470,7 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Rooted Ziggurat Upper Front": {
         "Rooted Ziggurat Upper Back":
-            [["Sword"], ["Hyperdash"]],
+            [],
     },
     "Rooted Ziggurat Upper Back": {
         "Rooted Ziggurat Upper Front":
@@ -1485,13 +1482,13 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Rooted Ziggurat Lower Front": {
         "Rooted Ziggurat Lower Back":
-            [["Hyperdash"], ["Sword", "Prayer"]],
+            [],
     },
     "Rooted Ziggurat Lower Back": {
         "Rooted Ziggurat Lower Front":
-            [["Hyperdash", "Sword", "Prayer"], ["UR"]],
+            [["Hyperdash"], ["UR"]],
         "Rooted Ziggurat Portal Room Entrance":
-            [["Prayer"]],
+            [],
     },
     "Zig Skip Exit": {
         "Rooted Ziggurat Lower Front":
@@ -1503,17 +1500,17 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Rooted Ziggurat Portal Room Exit": {
         "Rooted Ziggurat Portal":
-            [["Prayer"]],
+            [],
     },
     "Rooted Ziggurat Portal": {
         "Rooted Ziggurat Portal Room Exit":
-            [["Prayer", "Rooted Ziggurat Lower Back"]],
+            [["Rooted Ziggurat Lower Back"]],
     },
     "Swamp": {
         "Swamp to Cathedral Main Entrance":
-            [["Prayer", "Hyperdash"], ["Stundagger", "Wand", "NMG"]],
+            [["Hyperdash"], ["NMG"]],
         "Swamp to Cathedral Treasure Room":
-            [["Holy Cross"]],
+            [],
         "Back of Swamp":
             [["UR"]],
     },
@@ -1523,19 +1520,19 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Swamp to Cathedral Main Entrance": {
         "Swamp":
-            [["Stundagger", "Wand", "NMG"]],
+            [["NMG"]],
     },
     "Back of Swamp": {
         "Back of Swamp Laurels Area":
             [["Hyperdash"], ["UR"]],
         "Swamp Hero's Grave":
-            [["Prayer"]],
+            [],
     },
     "Back of Swamp Laurels Area": {
         "Back of Swamp":
             [["Hyperdash"]],
         "Swamp":
-            [["Icebolt", "Wand", "Techbow", "Stundagger", "NMG"]],
+            [["NMG"]],
     },
     "Swamp Hero's Grave": {
         "Back of Swamp":
@@ -1559,13 +1556,13 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
         "Far Shore to East Forest":
             [["Hyperdash"]],
         "Far Shore to Quarry":
-            [["Prayer", "Quarry Connector", "Quarry", "Wand"]],
+            [["Quarry Connector", "Quarry"]],
         "Far Shore to Library":
-            [["Prayer", "Library Lab"]],
+            [["Library Lab"]],
         "Far Shore to West Garden":
-            [["Prayer", "West Garden"]],
+            [["West Garden"]],
         "Far Shore to Fortress":
-            [["Prayer", "Fortress Exterior from Overworld", "Beneath the Vault Back", "Eastern Vault Fortress"]],
+            [["Fortress Exterior from Overworld", "Beneath the Vault Back", "Eastern Vault Fortress"]],
     },
     "Far Shore to Spawn": {
         "Far Shore":
