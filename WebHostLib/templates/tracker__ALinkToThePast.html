@@ -148,7 +148,7 @@
 
             {% for region, locations in regions.items() %}
                 {% if locations | length > 0 %}
-                <details>
+                <details class="region-details">
                     <summary>
                         {% if region in dungeon_keys %}
                         <div class="region">
@@ -203,7 +203,15 @@
 
             const fakeDOM = parser.parseFromString(await response.text(), "text/html");
             document.querySelector(".inventory-grid").innerHTML = fakeDOM.querySelector(".inventory-grid").innerHTML;
-            document.querySelector(".regions-list").innerHTML = fakeDOM.querySelector(".regions-list").innerHTML;
+
+            const regionDetailElements = document.querySelectorAll(".region-details");
+            const fakeDetailElements = fakeDOM.querySelectorAll(".region-details");
+
+            for (let i = 0; i < regionDetailElements.length; ++i) {
+                const isOpen = regionDetailElements[i].open;
+                regionDetailElements[i].innerHTML = fakeDetailElements[i].innerHTML;
+                regionDetailElements[i].open = isOpen;
+            }
         }
     </script>
 </body>
