@@ -994,6 +994,8 @@ def build_sphinx_docs(stable: bool = False) -> None:
     for file in os.scandir(docs_path):
         if file.name.endswith(".md"):
             shutil.copy(file, sphinx_input)
+        elif "img" in file.name:
+            shutil.copytree(file, os.path.join(sphinx_input, "img"), dirs_exist_ok=True)
 
     # copy AP header logo and favicon
     static_dir = os.path.join(base_dir, "WebHostLib", "static", "static")

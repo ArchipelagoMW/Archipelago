@@ -58,9 +58,9 @@ webhost:
 
 * `theme` to be used for your game-specific AP pages. Available themes:
 
-  | dirt                                       | grass (default)                             | grassFlowers                                       | ice                                       | jungle                                       | ocean                                       | partyTime                                       | stone                                       |
-  |--------------------------------------------|---------------------------------------------|----------------------------------------------------|-------------------------------------------|----------------------------------------------|---------------------------------------------|-------------------------------------------------|---------------------------------------------|
-  | <img src="img/theme_dirt.JPG" width="100"> | <img src="img/theme_grass.JPG" width="100"> | <img src="img/theme_grassFlowers.JPG" width="100"> | <img src="img/theme_ice.JPG" width="100"> | <img src="img/theme_jungle.JPG" width="100"> | <img src="img/theme_ocean.JPG" width="100"> | <img src="img/theme_partyTime.JPG" width="100"> | <img src="img/theme_stone.JPG" width="100"> |
+  | dirt                        | grass (default)               | grassFlowers                                | ice                       | jungle                          | ocean                         | partyTime                             | stone                         |
+  |-----------------------------|-------------------------------|---------------------------------------------|---------------------------|---------------------------------|-------------------------------|---------------------------------------|-------------------------------|
+  | ![dirt](img/theme_dirt.JPG) | ![grass](img/theme_grass.JPG) | ![grassFlowers](img/theme_grassFlowers.JPG) | ![ice](img/theme_ice.JPG) | ![jungle](img/theme_jungle.JPG) | ![ocean](img/theme_ocean.JPG) | ![partyTime](img/theme_partyTime.JPG) | ![stone](img/theme_stone.JPG) |
 
 * `bug_report_page` (optional) can be a link to a bug reporting page, most likely a GitHub issue page, that will be
   placed by the site to help users report bugs.
