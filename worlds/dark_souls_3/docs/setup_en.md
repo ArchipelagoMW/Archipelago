@@ -11,7 +11,7 @@
 
 ## General Concept
 
-<span style="color:tomato">
+<span style="color:#ff7800">
 **This mod can ban you permanently from the FromSoftware servers if used online.** 
 </span>
 The Dark Souls III AP Client is a dinput8.dll triggered when launching Dark Souls III. This .dll file will launch a command 
@@ -51,5 +51,5 @@ add it at the root folder of your game (e.g. "SteamLibrary\steamapps\common\DARK
 
 ## Where do I get a config file?
 
-The [Player Settings](/games/Dark%20Souls%20III/player-settings) page on the website allows you to
-configure your personal settings and export them into a config file.
+The [Player Options](/games/Dark%20Souls%20III/player-options) page on the website allows you to
+configure your personal options and export them into a config file.
