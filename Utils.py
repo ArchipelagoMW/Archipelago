@@ -980,7 +980,7 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
     return isinstance(obj, typing.Iterable)
 
 
-def build_sphinx_docs() -> None:
+def build_sphinx_docs(stable: bool = False) -> None:
     """Build Sphinx autodocs."""
     from sphinx.cmd.build import main as sphinx_main
 
