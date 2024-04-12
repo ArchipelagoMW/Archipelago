@@ -1081,3 +1081,494 @@ dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
         ["Far Shore", "Far Shore to Spawn Region", "Far Shore to East Forest Region", "Far Shore to Quarry Region",
          "Far Shore to Fortress Region", "Far Shore to Library Region", "Far Shore to West Garden Region"]
 }
+
+
+final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
+    "Overworld": {
+        "Overworld Belltower":
+            [["Hyperdash", ], ["Ladder Storage", ], ], "Overworld Swamp Upper Entry":
+            [["Hyperdash", ], ["Ladder Storage", ], ], "Overworld Special Shop Entry":
+            [["Hyperdash", ], ["Ladder Storage", ], ], "Overworld West Garden Laurels Entry":
+            [["Hyperdash", ], ["Ladder Storage", ], ], "Overworld Southeast Cross Door":
+            [["21", ], ], "Overworld Ruined Passage Door":
+            [["Key", ], ["Hyperdash", "nmg", ], ], "Overworld Temple Door":
+            [["26", "Techbow", "Wand", "Stundagger", "nmg", ], ["Techbow", "Forest Belltower Upper", "nmg", ],
+             ["Stick", "Forest Belltower Upper", "Overworld Belltower", ],
+             ["Techbow", "Forest Belltower Upper", "Overworld Belltower", ], ], "Overworld Fountain Cross Door":
+            [["21", ], ["26", "Techbow", "Wand", "Stundagger", "nmg", ], ], "Overworld Town Portal":
+            [["12", ], ], "Overworld Spawn Portal":
+            [["12", ], ], "Overworld Well to Furnace Rail":
+            [["Ladder Storage", ], ], "Overworld Old House Door":
+            [["Key (House)", ], ["Stundagger", "Wand", "nmg", ], ],
+    },
+    "Old House Front": {
+        "Old House Back":
+            [],
+    },
+    "Old House Back": {
+        "Old House Front":
+            [["Hyperdash", "nmg", ], ],
+    },
+    "Furnace Fuse": {
+        "Furnace Ladder Area":
+            [["Hyperdash", ], ],
+    },
+    "Furnace Ladder Area": {
+        "Furnace Fuse":
+            [["Hyperdash", ], ["Ladder Storage", ], ], "Furnace Walking Path":
+            [["Hyperdash", ], ["Ladder Storage", ], ],
+    },
+    "Furnace Walking Path": {
+        "Furnace Ladder Area":
+            [["Hyperdash", ], ],
+    },
+    "Sealed Temple": {
+        "Sealed Temple Rafters":
+            [],
+    },
+    "Sealed Temple Rafters": {
+        "Sealed Temple":
+            [["Hyperdash", ], ],
+    },
+    "East Forest": {
+        "East Forest Dance Fox Spot":
+            [["Hyperdash", ], ["26", "nmg", ], ], "East Forest Portal":
+            [["12", ], ],
+    },
+    "Forest Belltower Upper": {
+        "Forest Belltower Main":
+            [],
+    },
+    "Forest Belltower Main": {
+        "Forest Belltower Lower":
+            [],
+    },
+    "East Forest Dance Fox Spot": {
+        "East Forest":
+            [["Hyperdash", ], ["26", "nmg", ], ],
+    },
+    "East Forest Portal": {
+        "East Forest":
+            [],
+    },
+    "Guard House 1 East": {
+        "Guard House 1 West":
+            [],
+    },
+    "Forest Grave Path Main": {
+        "Forest Grave Path Upper":
+            [["Hyperdash", ], ], "Forest Grave Path by Grave":
+            [],
+    },
+    "Forest Grave Path Upper": {
+        "Forest Grave Path Main":
+            [["Hyperdash", ], ["26", "nmg", ], ],
+    },
+    "Forest Grave Path by Grave": {
+        "Forest Hero's Grave":
+            [["12", ], ], "Forest Grave Path Main":
+            [["Hyperdash", "nmg", ], ],
+    },
+    "Forest Hero's Grave": {
+        "Forest Grave Path by Grave":
+            [],
+    },
+    "Beneath the Well Front": {
+        "Beneath the Well Main":
+            [["Stick", "Lantern", ], ["Techbow", "Lantern", ], ],
+    },
+    "Beneath the Well Back": {
+        "Beneath the Well Main":
+            [["Stick", ], ["Techbow", ], ],
+    },
+    "Beneath the Well Main": {
+        "Beneath the Well Front":
+            [], "Beneath the Well Back":
+            [],
+    },
+    "Well Boss": {
+        "Dark Tomb Checkpoint":
+            [],
+    },
+    "Dark Tomb Checkpoint": {
+        "Well Boss":
+            [["Hyperdash", "nmg", ], ],
+    },
+    "Dark Tomb Entry Point": {
+        "Dark Tomb Main":
+            [["Lantern", ], ],
+    },
+    "Dark Tomb Main": {
+        "Dark Tomb Dark Exit":
+            [], "Dark Tomb Entry Point":
+            [],
+    },
+    "Dark Tomb Dark Exit": {
+        "Dark Tomb Main":
+            [["Lantern", ], ],
+    },
+    "West Garden": {
+        "West Garden Laurels Exit":
+            [["Hyperdash", ], ["Ladder Storage", ], ], "West Garden after Boss":
+            [["Sword", ], ["Ladder Storage", ], ], "West Garden Hero's Grave":
+            [["12", ], ], "West Garden Portal Item":
+            [["26", "Wand", "Stundagger", "Techbow", "nmg", ], ],
+    },
+    "West Garden Laurels Exit": {
+        "West Garden":
+            [["Hyperdash", ], ],
+    },
+    "West Garden after Boss": {
+        "West Garden":
+            [["Hyperdash", ], ],
+    },
+    "West Garden Portal Item": {
+        "West Garden":
+            [["26", "Wand", "Stundagger", "Techbow", "nmg", ], ], "West Garden Portal":
+            [["Hyperdash", "12", "West Garden", ], ],
+    },
+    "West Garden Portal": {
+        "West Garden Portal Item":
+            [["Hyperdash", ], ],
+    },
+    "West Garden Hero's Grave": {
+        "West Garden":
+            [],
+    },
+    "Ruined Atoll": {
+        "Ruined Atoll Lower Entry Area":
+            [["Hyperdash", ], ["Ladder Storage", ], ], "Ruined Atoll Frog Mouth":
+            [["Hyperdash", ], ["Wand", ], ["Ladder Storage", ], ], "Ruined Atoll Portal":
+            [["12", ], ], "Ruined Atoll Statue":
+            [["12", ], ],
+    },
+    "Ruined Atoll Lower Entry Area": {
+        "Ruined Atoll":
+            [["Hyperdash", ], ["Wand", ], ],
+    },
+    "Ruined Atoll Frog Mouth": {
+        "Ruined Atoll":
+            [["Hyperdash", ], ["Wand", ], ],
+    },
+    "Ruined Atoll Portal": {
+        "Ruined Atoll":
+            [],
+    },
+    "Ruined Atoll Statue": {
+        "Ruined Atoll":
+            [],
+    },
+    "Frog's Domain": {
+        "Frog's Domain Back":
+            [["Wand", ], ],
+    },
+    "Library Exterior Ladder": {
+        "Library Exterior Tree":
+            [["Hyperdash", "12", ], ["Wand", "12", ], ],
+    },
+    "Library Exterior Tree": {
+        "Library Exterior Ladder":
+            [["Hyperdash", ], ["Wand", ], ],
+    },
+    "Library Hall": {
+        "Library Hero's Grave":
+            [["12", ], ],
+    },
+    "Library Hero's Grave": {
+        "Library Hall":
+            [],
+    },
+    "Library Lab Lower": {
+        "Library Lab":
+            [["Hyperdash", ], ["Wand", ], ],
+    },
+    "Library Lab": {
+        "Library Lab Lower":
+            [["Hyperdash", ], ], "Library Portal":
+            [["12", ], ],
+    },
+    "Library Portal": {
+        "Library Lab":
+            [],
+    },
+    "Fortress Exterior from East Forest": {
+        "Fortress Exterior from Overworld":
+            [["Hyperdash", ], ["Wand", ], ["Ladder Storage", ], ], "Fortress Courtyard Upper":
+            [["Ladder Storage", ], ], "Fortress Exterior near cave":
+            [["Ladder Storage", ], ], "Fortress Courtyard":
+            [["Ladder Storage", ], ],
+    },
+    "Fortress Exterior from Overworld": {
+        "Fortress Exterior from East Forest":
+            [["Hyperdash", ], ], "Fortress Exterior near cave":
+            [["12", ], ["Hyperdash", ], ["Ladder Storage", ], ], "Fortress Courtyard":
+            [["Hyperdash", ], ["26", "Techbow", "Wand", "Stundagger", "nmg", ], ["Ladder Storage", ], ],
+    },
+    "Fortress Exterior near cave": {
+        "Fortress Exterior from Overworld":
+            [["Hyperdash", ], ["Ladder Storage", ], ], "Fortress Courtyard":
+            [["Ladder Storage", ], ], "Fortress Courtyard Upper":
+            [["Ladder Storage", ], ],
+    },
+    "Fortress Courtyard": {
+        "Fortress Courtyard Upper":
+            [["26", "Techbow", "Wand", "Stundagger", "nmg", ], ], "Fortress Exterior from Overworld":
+            [["Hyperdash", ], ],
+    },
+    "Fortress Courtyard Upper": {
+        "Fortress Courtyard":
+            [],
+    },
+    "Beneath the Vault Front": {
+        "Beneath the Vault Back":
+            [["Lantern", ], ],
+    },
+    "Beneath the Vault Back": {
+        "Beneath the Vault Front":
+            [],
+    },
+    "Fortress East Shortcut Lower": {
+        "Fortress East Shortcut Upper":
+            [["26", "Techbow", "Wand", "Stundagger", "nmg", ], ],
+    },
+    "Fortress East Shortcut Upper": {
+        "Fortress East Shortcut Lower":
+            [],
+    },
+    "Eastern Vault Fortress": {
+        "Eastern Vault Fortress Gold Door":
+            [["Wand", "Stundagger", "nmg", ],
+             ["12", "Fortress Exterior from Overworld", "Beneath the Vault Back", "Fortress Courtyard Upper", ], ],
+    },
+    "Eastern Vault Fortress Gold Door": {
+        "Eastern Vault Fortress":
+            [["Wand", "Stundagger", "nmg", ], ],
+    },
+    "Fortress Grave Path": {
+        "Fortress Hero's Grave":
+            [["12", ], ], "Fortress Grave Path Dusty Entrance":
+            [["Hyperdash", ], ],
+    },
+    "Fortress Grave Path Upper": {
+        "Fortress Grave Path":
+            [["26", "Stundagger", "Techbow", "Wand", "nmg", ], ],
+    },
+    "Fortress Grave Path Dusty Entrance": {
+        "Fortress Grave Path":
+            [["Hyperdash", ], ],
+    },
+    "Fortress Hero's Grave": {
+        "Fortress Grave Path":
+            [],
+    },
+    "Fortress Arena": {
+        "Fortress Arena Portal":
+            [["12", "Fortress Exterior from Overworld", "Beneath the Vault Back", "Eastern Vault Fortress", ], ],
+    },
+    "Fortress Arena Portal": {
+        "Fortress Arena":
+            [],
+    },
+    "Lower Mountain": {
+        "Lower Mountain Stairs":
+            [["21", ], ],
+    },
+    "Lower Mountain Stairs": {
+        "Lower Mountain":
+            [["21", ], ],
+    },
+    "Monastery Back": {
+        "Monastery Front":
+            [["Hyperdash", "nmg", ], ], "Monastery Hero's Grave":
+            [["12", ], ],
+    },
+    "Monastery Hero's Grave": {
+        "Monastery Back":
+            [],
+    },
+    "Monastery Front": {
+        "Monastery Back":
+            [["Sword", ], ["Techbow", ], ],
+    },
+    "Quarry Entry": {
+        "Quarry Portal":
+            [["12", "Quarry Connector", "Wand", ], ], "Quarry":
+            [["Techbow", ], ["Sword", ], ],
+    },
+    "Quarry Portal": {
+        "Quarry Entry":
+            [],
+    },
+    "Quarry Monastery Entry": {
+        "Quarry":
+            [["Techbow", ], ["Sword", ], ], "Quarry Back":
+            [["Hyperdash", ], ], "Monastery Rope":
+            [["Ladder Storage", ], ],
+    },
+    "Quarry Back": {
+        "Quarry":
+            [["Techbow", ], ["Sword", ], ], "Quarry Monastery Entry":
+            [["Hyperdash", ], ],
+    },
+    "Quarry": {
+        "Lower Quarry":
+            [["Mask", ], ], "Quarry Entry":
+            [], "Quarry Back":
+            [], "Quarry Monastery Entry":
+            [],
+    },
+    "Lower Quarry": {
+        "Lower Quarry Zig Door":
+            [["Quarry", "Quarry Connector", "Wand", ], ],
+    },
+    "Monastery Rope": {
+        "Quarry Back":
+            [],
+    },
+    "Rooted Ziggurat Upper Entry": {
+        "Rooted Ziggurat Upper Front":
+            [],
+    },
+    "Rooted Ziggurat Upper Front": {
+        "Rooted Ziggurat Upper Back":
+            [["Sword", ], ["Hyperdash", ], ],
+    },
+    "Rooted Ziggurat Upper Back": {
+        "Rooted Ziggurat Upper Front":
+            [["Hyperdash", ], ],
+    },
+    "Rooted Ziggurat Middle Top": {
+        "Rooted Ziggurat Middle Bottom":
+            [],
+    },
+    "Rooted Ziggurat Lower Front": {
+        "Rooted Ziggurat Lower Back":
+            [["Hyperdash", ], ["Sword", "12", ], ],
+    },
+    "Rooted Ziggurat Lower Back": {
+        "Rooted Ziggurat Lower Front":
+            [["Hyperdash", "Sword", "12", ], ["Ladder Storage", ], ], "Rooted Ziggurat Portal Room Entrance":
+            [["12", ], ],
+    },
+    "Zig Skip Exit": {
+        "Rooted Ziggurat Lower Front":
+            [],
+    },
+    "Rooted Ziggurat Portal Room Entrance": {
+        "Rooted Ziggurat Lower Back":
+            [],
+    },
+    "Rooted Ziggurat Portal Room Exit": {
+        "Rooted Ziggurat Portal":
+            [["12", ], ],
+    },
+    "Rooted Ziggurat Portal": {
+        "Rooted Ziggurat Portal Room Exit":
+            [["12", "Rooted Ziggurat Lower Back", ], ],
+    },
+    "Swamp": {
+        "Swamp to Cathedral Main Entrance":
+            [["12", "Hyperdash", ], ["Stundagger", "Wand", "nmg", ], ], "Swamp to Cathedral Treasure Room":
+            [["21", ], ], "Back of Swamp":
+            [["Ladder Storage", ], ],
+    },
+    "Swamp to Cathedral Treasure Room Entrance": {
+        "Swamp":
+            [],
+    },
+    "Swamp to Cathedral Main Entrance": {
+        "Swamp":
+            [["Stundagger", "Wand", "nmg", ], ],
+    },
+    "Back of Swamp": {
+        "Back of Swamp Laurels Area":
+            [["Hyperdash", ], ["Ladder Storage", ], ], "Swamp Hero's Grave":
+            [["12", ], ],
+    },
+    "Back of Swamp Laurels Area": {
+        "Back of Swamp":
+            [["Hyperdash", ], ], "Swamp":
+            [["26", "Wand", "Techbow", "Stundagger", "nmg", ], ],
+    },
+    "Swamp Hero's Grave": {
+        "Back of Swamp":
+            [],
+    },
+    "Cathedral Gauntlet Checkpoint": {
+        "Cathedral Gauntlet":
+            [],
+    },
+    "Cathedral Gauntlet": {
+        "Cathedral Gauntlet Exit":
+            [["Hyperdash", ], ],
+    },
+    "Cathedral Gauntlet Exit": {
+        "Cathedral Gauntlet":
+            [["Hyperdash", ], ],
+    },
+    "Far Shore": {
+        "Far Shore to Spawn":
+            [["Hyperdash", ], ], "Far Shore to East Forest":
+            [["Hyperdash", ], ], "Far Shore to Quarry":
+            [["12", "Quarry Connector", "Quarry", "Wand", ], ], "Far Shore to Library":
+            [["12", "Library Lab", ], ], "Far Shore to West Garden":
+            [["12", "West Garden", ], ], "Far Shore to Fortress":
+            [["12", "Fortress Exterior from Overworld", "Beneath the Vault Back", "Eastern Vault Fortress", ], ],
+    },
+    "Far Shore to Spawn": {
+        "Far Shore":
+            [["Hyperdash", ], ],
+    },
+    "Far Shore to East Forest": {
+        "Far Shore":
+            [["Hyperdash", ], ],
+    },
+    "Far Shore to Quarry": {
+        "Far Shore":
+            [],
+    },
+    "Far Shore to Library": {
+        "Far Shore":
+            [],
+    },
+    "Far Shore to West Garden": {
+        "Far Shore":
+            [],
+    },
+    "Far Shore to Fortress": {
+        "Far Shore":
+            [],
+    },
+    "Shop Entrance 1": {
+        "Shop":
+            [],
+    },
+    "Shop Entrance 2": {
+        "Shop":
+            [],
+    },
+    "Shop Entrance 3": {
+        "Shop":
+            [],
+    },
+    "Shop Entrance 4": {
+        "Shop":
+            [],
+    },
+    "Shop Entrance 5": {
+        "Shop":
+            [],
+    },
+    "Shop Entrance 6": {
+        "Shop":
+            [],
+    },
+    "Shop Entrance 7": {
+        "Shop":
+            [],
+    },
+    "Shop Entrance 8": {
+        "Shop":
+            [],
+    },
+}
