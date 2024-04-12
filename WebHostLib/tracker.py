@@ -295,10 +295,9 @@ class TrackerData:
 @app.route("/tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>")
 def get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, generic: bool = False) -> str:
     key = f"{tracker}_{tracked_team}_{tracked_player}_{generic}"
-    # TODO: Remove this debug to bypass cache.
-    # tracker_page = cache.get(key)
-    # if tracker_page:
-    #     return tracker_page
+    tracker_page = cache.get(key)
+    if tracker_page:
+        return tracker_page
 
     timeout, tracker_page = get_timeout_and_tracker(tracker, tracked_team, tracked_player, generic)
     cache.set(key, tracker_page, timeout)

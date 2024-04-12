@@ -203,6 +203,7 @@
 
             const fakeDOM = parser.parseFromString(await response.text(), "text/html");
             document.querySelector(".inventory-grid").innerHTML = fakeDOM.querySelector(".inventory-grid").innerHTML;
+            document.querySelector(".regions-list").innerHTML = fakeDOM.querySelector(".regions-list").innerHTML;
         }
     </script>
 </body>
