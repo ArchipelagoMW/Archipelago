@@ -182,9 +182,9 @@ class KH1World(World):
             reports_in_pool = max(self.options.reports_in_pool, 5)
         else:
             reports_in_pool = self.options.reports_in_pool
-        required_reports = min(int(self.options.required_reports), reports_in_pool)
+        required_reports = min(int(self.options.required_reports.value), reports_in_pool)
         slot_data = {"EXP Multiplier": int(self.options.exp_multiplier)/16
-                    ,"Required Reports": required_reports}
+                    ,"Required Reports": int(required_reports)}
         if self.options.randomize_keyblade_stats:
             min_str_bonus = min(self.options.keyblade_min_str, self.options.keyblade_max_str)
             max_str_bonus = max(self.options.keyblade_min_str, self.options.keyblade_max_str)
