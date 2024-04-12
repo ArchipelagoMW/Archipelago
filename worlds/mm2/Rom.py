@@ -239,6 +239,9 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
     patch.write_file("token_patch.bin", patch.get_token_binary())
 
 
+header = b"\x4E\x45\x53\x1A\x10\x00\x10\x00\x00\x00\x00\x00\x00\x00\x00\x00"
+
+
 def read_headerless_nes_rom(rom: bytes) -> bytes:
     if rom[:4] == b"NES\x1A":
         return rom[16:]
@@ -277,12 +280,10 @@ def get_base_rom_path(file_name: str = "") -> str:
     return file_name
 
 
-header = b"\x4E\x45\x53\x1A\x10\x00\x10\x00\x00\x00\x00\x00\x00\x00\x00\x00"
 prg_offset = 0x8ED70
 prg_size = 0x40000
 
 
 def extract_mm2(proteus: bytes) -> bytes:
-    mm2 = bytearray(header)
-    mm2.extend(proteus[prg_offset:prg_offset + prg_size])
+    mm2 = bytearray(proteus[prg_offset:prg_offset + prg_size])
     return bytes(mm2)
