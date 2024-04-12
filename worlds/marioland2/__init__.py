@@ -97,8 +97,7 @@ class MarioLand2World(World):
             self.auto_scroll_levels = []
             ineligible_levels = ["Mario's Castle"]
             if self.options.auto_scroll_mode == "always" or (self.options.accessibility == "locations" and
-                                                             self.options.auto_scroll_mode in ("trap_item",
-                                                                                               "trap_items")):
+                                                             "trap" in self.options.auto_scroll_mode):
                 ineligible_levels += ["Tree Zone 3", "Macro Zone 2", "Space Zone 1", "Turtle Zone 2", "Pumpkin Zone 2"]
             for i in range(32):
                 if (level_id_to_name[i] not in ineligible_levels
@@ -226,7 +225,7 @@ class MarioLand2World(World):
             # One or the other is actually necessary for the secret exit.
             "Space Zone 1 - Secret Exit": lambda state: state.has_any(
                 ["Space Physics", "Carrot"], self.player) and not is_auto_scroll(state, self.player, "Space Zone 1"),
-            "Space Zone 2 - Boss": logic.space_zone_2_boss,
+            "Space Zone 2 - Boss": lambda state: logic.space_zone_2_boss(state, self.player),
             "Space Zone 2 - Midway Bell": lambda state: state.has_any(
                 ["Space Physics", "Space Zone 2 Midway Bell", "Mushroom", "Fire Flower", "Carrot"],
                 self.player),
@@ -409,18 +408,18 @@ class MarioLand2World(World):
         else:
             self.multiworld.push_precollected(self.create_item("Pipe Traversal"))
 
-        if self.options.auto_scroll_mode == "trap_item":
+        if self.options.auto_scroll_mode == "global_trap_item":
             item_counts["Auto Scroll"] = 1
-        elif self.options.auto_scroll_mode == "trap_items":
+        elif self.options.auto_scroll_mode == "level_trap_items":
             for level, level_id in level_name_to_id.items():
                 if level_id in self.auto_scroll_levels:
                     item_counts[f"Auto Scroll - {level}"] = 1
-        elif self.options.auto_scroll_mode == "cancel_item":
-            item_counts["Auto Scroll Cancel"] = 1
-        elif self.options.auto_scroll_mode == "cancel_items":
+        elif self.options.auto_scroll_mode == "global_cancel_item":
+            item_counts["Cancel Auto Scroll"] = 1
+        elif self.options.auto_scroll_mode == "level_cancel_items":
             for level, level_id in level_name_to_id.items():
                 if level_id in self.auto_scroll_levels:
-                    item_counts[f"Auto Scroll Cancel - {level}"] = 1
+                    item_counts[f"Cancel Auto Scroll - {level}"] = 1
 
         for item in self.multiworld.precollected_items[self.player]:
             if item.name in item_counts and item_counts[item.name] > 0:
@@ -454,11 +453,18 @@ class MarioLand2World(World):
                     item_counts[double_progression_item] -= 2
                     item_counts[double_progression_item + " x2"] = 1
                     continue
-                item = self.random.choice(list(item_counts))
-                item_counts[item] -= 1
-                if item_counts[item] == 0:
-                    del item_counts[item]
-                self.multiworld.push_precollected(self.create_item(item))
+                if self.options.auto_scroll_mode in ("level_trap_items", "level_cancel_items"):
+                    auto_scroll_item = self.random.choice([item for item in item_counts if "Auto Scroll" in item])
+                    level = auto_scroll_item.split("- ")[1]
+                    self.auto_scroll_levels.remove(level_name_to_id[level])
+                    del item_counts[auto_scroll_item]
+                    continue
+                raise Exception(f"Too many items in the item pool for Super Mario Land 2 player {self.multiworld.player_name[self.player]}")
+                # item = self.random.choice(list(item_counts))
+                # item_counts[item] -= 1
+                # if item_counts[item] == 0:
+                #     del item_counts[item]
+                # self.multiworld.push_precollected(self.create_item(item))
 
         self.coin_fragments_required = max((item_counts["Mario Coin Fragment"]
                                            * self.options.mario_coin_fragments_required_percentage) // 100, 1)

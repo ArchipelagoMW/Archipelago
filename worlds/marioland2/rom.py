@@ -203,7 +203,7 @@ def generate_output(self, output_directory: str):
 
     for i in range(32):
         data[rom_addresses["Auto_Scroll_Levels"] + i] = 1 if i in self.auto_scroll_levels else 0
-        if self.options.auto_scroll_mode not in ("trap_item", "trap_items"):
+        if "trap" not in self.options.auto_scroll_mode:
             data[rom_addresses["Auto_Scroll_Levels_B"] + i] = 1 if i in self.auto_scroll_levels else 0
 
     if self.options.energy_link:

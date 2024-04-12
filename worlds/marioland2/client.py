@@ -199,8 +199,8 @@ class MarioLand2Client(BizHawkClient):
                 auto_scroll_levels[i] = 1
                 if i == current_level:
                     data_writes.append((0x02C8, [0x01], "CartRAM"))
-            elif ("Auto Scroll Cancel" in items_received
-                  or f"Auto Scroll Cancel - {level_id_to_name[i]}" in items_received):
+            elif ("Cancel Auto Scroll" in items_received
+                  or f"Cancel Auto Scroll - {level_id_to_name[i]}" in items_received):
                 auto_scroll_levels[i] = 0
                 if i == current_level:
                     data_writes.append((0x02C8, [0x00], "CartRAM"))

@@ -56,9 +56,9 @@ class Coinsanity(Toggle):
 
 class CoinsanityChecks(Range):
     """Number of Coinsanity checks.
-     A higher number means more checks, and smaller coin amounts per coin item in the item pool.
-     If Accessibility is set to Locations, auto-scroll levels may have a lower maximum count, which may lead to this
-     value being limited."""
+    A higher number means more checks, and smaller coin amounts per coin item in the item pool.
+    If Accessibility is set to Locations, auto-scroll levels may have a lower maximum count, which may lead to this
+    value being limited."""
     default_name = "Coinsanity Checks"
     range_start = 31
     range_end = 2599
@@ -108,17 +108,20 @@ class AutoScrollChances(NamedRange):
 
 class AutoScrollMode(Choice):
     """Always: Any auto scroll levels will always auto-scroll.
-    Trap Item: Auto scroll levels will only auto-scroll after obtaining the Auto Scroll trap item.
-    Trap Items: As with Trap Item, but there is a separate trap item for each auto scroll level.
-    Cancel Item: Auto Scroll levels will stop auto-scrolling after obtaining the Auto Scroll Cancel item.
-    Cancel Items: As with Cancel Item, but there is a separate cancel item for each auto scroll level.
-    The effects of Trap and Cancel items are permanent!"""
+    Global Trap Item: Auto scroll levels will only auto-scroll after obtaining the Auto Scroll trap item.
+    Level Trap Items: As with Trap Item, but there is a separate trap item for each auto scroll level.
+    Global Cancel Item: Auto Scroll levels will stop auto-scrolling after obtaining the Auto Scroll Cancel item.
+    Level Cancel Items: As with Cancel Item, but there is a separate cancel item for each auto scroll level.
+    The effects of Trap and Cancel items are permanent! If Accessibility is not set to Locations,
+    Traps may cause locations to become permanently unreachable.
+    With Trap Items or Cancel Items, the number of auto scroll levels may be limited by the available space in the item
+    pool."""
     display_name = "Auto Scroll Mode"
     option_always = 0
-    option_trap_item = 1
-    option_trap_items = 2
-    option_cancel_item = 3
-    option_cancel_items = 4
+    option_global_trap_item = 1
+    option_level_trap_items = 2
+    option_global_cancel_item = 3
+    option_level_cancel_items = 4
     default = 0
 
 
