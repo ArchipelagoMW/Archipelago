@@ -64,7 +64,7 @@ For the Entrance Randomizer:
 - The elevator in Cathedral is immediately usable without activating the fuse. Activating the fuse does nothing.
 
 ## What item groups are there?
-Bombs, consumables (non-bomb ones), weapons, melee weapons (stick and sword), keys, hexagons, offerings, hero relics, cards, golden treasures, money, pages, abilities (the three ability pages), and ladders (for shuffle ladders). There are also a few groups being used for singular items: laurels, orb, dagger, magic rod, holy cross, prayer, icebolt, and progressive sword.
+Bombs, Consumables (non-bomb ones), Weapons, Melee Weapons (stick and sword), Keys, Hexagons, Offerings, Hero Relics, Cards, Golden Treasures, Money, Pages, Abilities (the three ability pages), and Ladders (for shuffle ladders).
 
 ## What location groups are there?
 Holy Cross (for all Holy Cross checks), Fairies (for the two fairy checks), Well (for the coin well checks), Shop, and Bosses (for the bosses with checks associated with them).
