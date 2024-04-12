@@ -272,7 +272,7 @@ class RuleFactory:
         self.area_randomizer = options.area_rando > 0
         self.capless = not options.strict_cap_requirements
         self.cannonless = not options.strict_cannon_requirements
-        self.moveless = not options.strict_move_requirements or not move_rando_bitvec > 0
+        self.moveless = not options.strict_move_requirements
 
     def assign_rule(self, target_name: str, rule_expr: str):
         target = self.world.get_location(target_name, self.player) if target_name in location_table else self.world.get_entrance(target_name, self.player)
