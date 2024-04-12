@@ -223,17 +223,7 @@ class MarioLand2World(World):
             # One or the other is actually necessary for the secret exit.
             "Space Zone 1 - Secret Exit": lambda state: state.has_any(
                 ["Space Physics", "Carrot"], self.player) and not is_auto_scroll(state, self.player, "Space Zone 1"),
-            # Without Space Physics, you must be able to take damage once to reach the bell, and again after the bell.
-            # If bells are not shuffled, then any one powerup will do, as you can get the bell and come back.
-            # Otherwise, you need the bell item from the item pool, or you need to be able to take damage twice in one
-            # visit.
-            "Space Zone 2 - Boss": lambda state: has_pipe_right(state, self.player) and (state.has(
-                "Space Physics", self.player) or ((not
-                state.multiworld.worlds[self.player].options.shuffle_midway_bells) and state.has_any(["Mushroom",
-                "Fire Flower", "Carrot"], self.player)) or (state.has("Mushroom", self.player)
-                and state.has_any(["Fire Flower", "Carrot"], self.player))
-                or (state.has("Space Zone 2 Midway Bell", self.player) and state.has_any(["Mushroom",
-                "Fire Flower", "Carrot"], self.player))),
+            "Space Zone 2 - Boss": logic.space_zone_2_boss,
             "Space Zone 2 - Midway Bell": lambda state: state.has_any(
                 ["Space Physics", "Space Zone 2 Midway Bell", "Mushroom", "Fire Flower", "Carrot"],
                 self.player),

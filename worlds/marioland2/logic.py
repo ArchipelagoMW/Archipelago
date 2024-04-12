@@ -300,6 +300,23 @@ def space_zone_1_coins(state, player, coins):
             or state.has_any(["Carrot", "Space Physics"], player))
 
 
+def space_zone_2_boss(state, player):
+    if has_pipe_right(state, player):
+        if state.has("Space Physics", player):
+            return True
+        if (state.has("Space Zone 2 Midway Bell", player)
+                or not state.multiworld.worlds[player].options.shuffle_midway_bells):
+            # Reaching the midway bell without space physics requires taking damage once. Reaching the end pipe from the
+            # midway bell also requires taking damage once.
+            if state.has_any(["Mushroom", "Fire Flower", "Carrot"], player):
+                return True
+        else:
+            # With no midway bell, you'll have to be able to take damage twice.
+            if state.has("Mushroom", player) and state.has_any(["Fire Flower", "Carrot"], player):
+                return True
+    return False
+
+
 def space_zone_2_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Space Zone 2")
     reachable_coins = 12
