@@ -1422,7 +1422,10 @@ class DarkSouls3World(World):
                 and loc.item.name in names
             ]
 
-            if len(item_order) != len(all_matching_locations):
+            # It's expected that there may be more total items than there are matching locations if
+            # the player has chosen a more limited accessibility option, since the matching
+            # locations *only* include items in the spheres of accessibility.
+            if len(item_order) < len(all_matching_locations):
                 raise Exception(
                     f"DS3 bug: there are {len(all_matching_locations)} locations that can " +
                     f"contain smoothed items, but only {len(item_order)} items to smooth."
