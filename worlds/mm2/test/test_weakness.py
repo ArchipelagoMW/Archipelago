@@ -26,7 +26,7 @@ class StrictWeaknessTests(MM2TestBase):
         "strict_weakness": True
     }
 
-    def test_that_every_boss_has_a_weakness(self):
+    def test_that_every_boss_has_a_weakness(self) -> None:
         world = self.multiworld.worlds[self.player]
         weapon_damage = world.weapon_damage
         for boss in range(14):
@@ -40,7 +40,7 @@ class RandomStrictWeaknessTests(MM2TestBase):
         "random_weakness": True
     }
 
-    def test_that_every_boss_has_a_weakness(self):
+    def test_that_every_boss_has_a_weakness(self) -> None:
         world = self.multiworld.worlds[self.player]
         weapon_damage = world.weapon_damage
         for boss in range(14):

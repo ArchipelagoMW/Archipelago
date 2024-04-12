@@ -1,6 +1,5 @@
 import pkgutil
-import typing
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING, Iterable, Dict, Sequence
 import hashlib
 import Utils
 import os
@@ -20,7 +19,7 @@ PROTEUSHASH = "9ff045a3ca30018b6e874c749abb3ec4"
 MM2NESHASH = "302761a666ac89c21f185052d02127d3"
 MM2VCHASH = "77b51417eb66e8119c85689a093be857"
 
-picopico_weakness_ptrs = {
+picopico_weakness_ptrs: Dict[int, int] = {
     0: 0x3EA12,
     1: 0x3EA8E,
     2: 0x3EB06,
@@ -32,29 +31,29 @@ picopico_weakness_ptrs = {
 }
 
 # addresses printed when assembling basepatch
-consumables_ptr = 0x3F2FE
-quickswap_ptr = 0x3F363
-wily_5_ptr = 0x3F3A1
+consumables_ptr: int = 0x3F2FE
+quickswap_ptr: int = 0x3F363
+wily_5_ptr: int = 0x3F3A1
 
 
 class RomData:
-    def __init__(self, file: bytes, name: str = None):
+    def __init__(self, file: bytes, name: str = "") -> None:
         self.file = bytearray(file)
         self.name = name
 
-    def read_byte(self, offset):
+    def read_byte(self, offset: int) -> int:
         return self.file[offset]
 
-    def read_bytes(self, offset, length):
+    def read_bytes(self, offset: int, length: int) -> bytearray:
         return self.file[offset:offset + length]
 
-    def write_byte(self, offset, value):
+    def write_byte(self, offset: int, value: int) -> None:
         self.file[offset] = value
 
-    def write_bytes(self, offset, values):
+    def write_bytes(self, offset: int, values: Sequence[int]) -> None:
         self.file[offset:offset + len(values)] = values
 
-    def write_to_file(self, file):
+    def write_to_file(self, file: str) -> None:
         with open(file, 'wb') as outfile:
             outfile.write(self.file)
 
@@ -74,14 +73,14 @@ class MM2ProcedurePatch(APProcedurePatch, APTokenMixin):
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes()
 
-    def write_byte(self, offset, value):
+    def write_byte(self, offset: int, value: int) -> None:
         self.write_token(APTokenTypes.WRITE, offset, value.to_bytes(1, "little"))
 
-    def write_bytes(self, offset, value: typing.Iterable[int]):
+    def write_bytes(self, offset: int, value: Iterable[int]) -> None:
         self.write_token(APTokenTypes.WRITE, offset, bytes(value))
 
 
-def patch_rom(world: "MM2World", patch: MM2ProcedurePatch):
+def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
     patch.write_file("mm2_basepatch.bsdiff4", pkgutil.get_data(__name__, os.path.join("data", "mm2_basepatch.bsdiff4")))
     # text writing
     patch.write_bytes(0x37E2A, MM2TextEntry("FOR           ", 0xCB).resolve())
@@ -104,36 +103,37 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch):
         Names.item_3_get
     ]):
         item = world.multiworld.get_location(location, world.player).item
-        if len(item.name) <= 14:
-            # we want to just place it in the center
-            first_str = ""
-            second_str = item.name
-            third_str = ""
-        elif len(item.name) <= 28:
-            # spread across second and third
-            first_str = ""
-            second_str = item.name[:14]
-            third_str = item.name[14:]
-        else:
-            # all three
-            first_str = item.name[:14]
-            second_str = item.name[14:28]
-            third_str = item.name[28:]
-            if len(third_str) > 16:
-                third_str = third_str[:16]
-        player_str = world.multiworld.get_player_name(item.player)
-        if len(player_str) > 14:
-            player_str = player_str[:14]
-        patch.write_bytes(base_address + (64 * i), MM2TextEntry(first_str, 0x4B).resolve())
-        patch.write_bytes(base_address + (64 * i) + 16, MM2TextEntry(second_str, 0x6B).resolve())
-        patch.write_bytes(base_address + (64 * i) + 32, MM2TextEntry(third_str, 0x8B).resolve())
-        patch.write_bytes(base_address + (64 * i) + 48, MM2TextEntry(player_str, 0xEB).resolve())
+        if item:
+            if len(item.name) <= 14:
+                # we want to just place it in the center
+                first_str = ""
+                second_str = item.name
+                third_str = ""
+            elif len(item.name) <= 28:
+                # spread across second and third
+                first_str = ""
+                second_str = item.name[:14]
+                third_str = item.name[14:]
+            else:
+                # all three
+                first_str = item.name[:14]
+                second_str = item.name[14:28]
+                third_str = item.name[28:]
+                if len(third_str) > 16:
+                    third_str = third_str[:16]
+            player_str = world.multiworld.get_player_name(item.player)
+            if len(player_str) > 14:
+                player_str = player_str[:14]
+            patch.write_bytes(base_address + (64 * i), MM2TextEntry(first_str, 0x4B).resolve())
+            patch.write_bytes(base_address + (64 * i) + 16, MM2TextEntry(second_str, 0x6B).resolve())
+            patch.write_bytes(base_address + (64 * i) + 32, MM2TextEntry(third_str, 0x8B).resolve())
+            patch.write_bytes(base_address + (64 * i) + 48, MM2TextEntry(player_str, 0xEB).resolve())
 
-        colors = get_colors_for_item(item.name)
-        if i > 7:
-            patch.write_bytes(color_address + 27 + ((i - 8) * 2), colors)
-        else:
-            patch.write_bytes(color_address + (i * 2), colors)
+            colors = get_colors_for_item(item.name)
+            if i > 7:
+                patch.write_bytes(color_address + 27 + ((i - 8) * 2), colors)
+            else:
+                patch.write_bytes(color_address + (i * 2), colors)
 
     write_palette_shuffle(world, patch)
 
@@ -242,7 +242,7 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch):
 def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes: Optional[bytes] = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
-        file_name: str = get_base_rom_path(file_name)
+        file_name = get_base_rom_path(file_name)
         base_rom_bytes = bytes(open(file_name, "rb").read())
 
         basemd5 = hashlib.md5()
@@ -255,7 +255,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
             print(basemd5.hexdigest())
             raise Exception("Supplied Base Rom does not match known MD5 for US, LC, or US VC release. "
                             "Get the correct game and version, then dump it")
-        get_base_rom_bytes.base_rom_bytes = base_rom_bytes
+        setattr(get_base_rom_bytes, "base_rom_bytes", base_rom_bytes)
     return base_rom_bytes
 
 

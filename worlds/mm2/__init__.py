@@ -1,16 +1,16 @@
 import hashlib
 import logging
-import typing
+from typing import Dict, Any, TYPE_CHECKING, Optional, Sequence, Tuple, ClassVar
 
-from BaseClasses import Tutorial, ItemClassification, MultiWorld, Region, Entrance, Item
+from BaseClasses import Tutorial, ItemClassification, MultiWorld, Item
 from worlds.AutoWorld import World, WebWorld
-from worlds.generic.Rules import add_rule
-from .Names import *
-from .Items import item_table, item_names, MM2Item, filler_item_table, filler_item_weights, robot_master_weapon_table, \
-    stage_access_table, item_item_table
-from .Locations import location_table, MM2Location, mm2_regions, MM2Region
-from .Rom import get_base_rom_bytes, get_base_rom_path, RomData, patch_rom, extract_mm2, MM2ProcedurePatch, \
-    MM2LCHASH, PROTEUSHASH, MM2VCHASH, MM2NESHASH
+from .Names import dr_wily
+from .Items import (item_table, item_names, MM2Item, filler_item_table, filler_item_weights, robot_master_weapon_table,
+                    stage_access_table, item_item_table, lookup_item_to_id)
+from .Locations import (location_table, MM2Location, mm2_regions, MM2Region,
+                        energy_pickups, etank_1ups, lookup_location_to_id)
+from .Rom import (get_base_rom_bytes, get_base_rom_path, RomData, patch_rom, extract_mm2, MM2ProcedurePatch,
+                  MM2LCHASH, PROTEUSHASH, MM2VCHASH, MM2NESHASH)
 from .Options import MM2Options
 from .Client import MegaMan2Client
 from .Rules import set_rules, weapon_damage, robot_masters, weapons_to_name, minimum_weakness_requirement
@@ -20,7 +20,7 @@ import base64
 import settings
 logger = logging.getLogger("Mega Man 2")
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from BaseClasses import CollectionState
 
 
@@ -28,12 +28,12 @@ class MM2Settings(settings.Group):
     class RomFile(settings.UserFilePath):
         """File name of the MM2 EN rom"""
         description = "Mega Man 2 ROM File"
-        copy_to = "Mega Man 2 (USA).nes"
+        copy_to: Optional[str] = "Mega Man 2 (USA).nes"
         md5s = [MM2NESHASH, MM2VCHASH, MM2LCHASH, PROTEUSHASH]
 
         def browse(self: settings.T,
-                   filetypes: typing.Optional[typing.Sequence[typing.Tuple[str, typing.Sequence[str]]]] = None,
-                   **kwargs: typing.Any) -> typing.Optional[settings.T]:
+                   filetypes: Optional[Sequence[Tuple[str, Sequence[str]]]] = None,
+                   **kwargs: Any) -> Optional[settings.T]:
             if not filetypes:
                 from Utils import is_windows
                 file_types = [("NES", [".nes"]), ("Program", [".exe"] if is_windows else [""])]
@@ -41,17 +41,18 @@ class MM2Settings(settings.Group):
             else:
                 return super().browse(filetypes, **kwargs)
 
-        def validate(self, path: str) -> None:
+        @classmethod
+        def validate(cls, path: str) -> None:
             """Try to open and validate file against hashes"""
             with open(path, "rb", buffering=0) as f:
                 try:
-                    self._validate_stream_hashes(f)
+                    cls._validate_stream_hashes(f)
                     base_rom_bytes = f.read()
                     basemd5 = hashlib.md5()
                     basemd5.update(base_rom_bytes)
                     if basemd5.hexdigest() == PROTEUSHASH:
                         # we need special behavior here
-                        self.copy_to = None
+                        cls.copy_to = None
                 except ValueError:
                     raise ValueError(f"File hash does not match for {path}")
 
@@ -81,17 +82,17 @@ class MM2World(World):
     """
 
     game = "Mega Man 2"
-    settings: typing.ClassVar[MM2Settings]
+    settings: ClassVar[MM2Settings]
     options_dataclass = MM2Options
     options: MM2Options
-    item_name_to_id = {item: item_table[item].code for item in item_table}
-    location_name_to_id = location_table
+    item_name_to_id = lookup_item_to_id
+    location_name_to_id = lookup_location_to_id
     item_name_groups = item_names
     web = MM2WebWorld()
-    rom_name: typing.Optional[bytearray]
+    rom_name: bytearray
 
     def __init__(self, world: MultiWorld, player: int):
-        self.rom_name = None
+        self.rom_name = bytearray()
         self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
         self.weapon_damage = weapon_damage.copy()
@@ -113,18 +114,18 @@ class MM2World(World):
                                   lambda state, items=required_items: state.has_all(items, self.player))
             stage.add_locations(locations)
             for location in stage.get_locations():
-                if location.address is None and location.name is not Names.dr_wily:
+                if location.address is None and location.name is not dr_wily:
                     location.place_locked_item(MM2Item(location.name, ItemClassification.progression,
                                                        None, self.player))
             if self.options.consumables:
-                if region in Locations.etank_1ups:
-                    stage.add_locations(Locations.etank_1ups[region], MM2Location)
+                if region in etank_1ups:
+                    stage.add_locations(etank_1ups[region], MM2Location)
                 if self.options.consumables == self.options.consumables.option_all:
-                    if region in Locations.energy_pickups:
-                        stage.add_locations(Locations.energy_pickups[region], MM2Location)
+                    if region in energy_pickups:
+                        stage.add_locations(energy_pickups[region], MM2Location)
             self.multiworld.regions.append(stage)
 
-    def create_item(self, name: str, force_non_progression=False) -> MM2Item:
+    def create_item(self, name: str, force_non_progression: bool = False) -> MM2Item:
         item = item_table[name]
         classification = ItemClassification.filler
         if item.progression and not force_non_progression:
@@ -175,7 +176,7 @@ class MM2World(World):
                 f"{self.options.starting_robot_master.current_key.replace('_', ' ').title()}")
 
     def generate_basic(self) -> None:
-        goal_location = self.multiworld.get_location(Names.dr_wily, self.player)
+        goal_location = self.multiworld.get_location(dr_wily, self.player)
         goal_location.place_locked_item(MM2Item("Victory", ItemClassification.progression, None, self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
@@ -193,17 +194,17 @@ class MM2World(World):
         finally:
             self.rom_name_available_event.set()  # make sure threading continues and errors are collected
 
-    def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
+    def fill_slot_data(self) -> Dict[str, Any]:
         return {
             "death_link": self.options.death_link.value,
             "weapon_damage": self.weapon_damage
         }
 
-    def interpret_slot_data(self, slot_data: typing.Dict[str, typing.Any]) -> typing.Dict[str, typing.Any]:
+    def interpret_slot_data(self, slot_data: Dict[str, Any]) -> Dict[str, Any]:
         local_weapon = {int(key): value for key, value in slot_data["weapon_damage"].items()}
         return {"weapon_damage": local_weapon}
 
-    def modify_multidata(self, multidata: dict) -> None:
+    def modify_multidata(self, multidata: Dict[str, Any]) -> None:
         # wait for self.rom_name to be available.
         self.rom_name_available_event.wait()
         rom_name = getattr(self, "rom_name", None)
@@ -226,12 +227,13 @@ class MM2World(World):
     def remove(self, state: "CollectionState", item: "Item") -> bool:
         change = super().remove(state, item)
         if change and item.name in self.item_name_groups["Weapons"]:
-            weapon = next((weapons_to_name[weapon] == item.name for weapon in weapons_to_name), None)
-            received_weapons = {weapon for weapon in weapons_to_name if weapons_to_name[weapon] in state.prog_items}
-            if weapon:
+            removed_weapon = next((weapons_to_name[weapon] == item.name for weapon in weapons_to_name), None)
+            received_weapons = {weapon for weapon in weapons_to_name
+                                if weapons_to_name[weapon] in state.prog_items[self.player]}
+            if removed_weapon:
                 for rbm in robot_masters:
-                    if self.weapon_damage[weapon][rbm] > 0 and not any(self.weapon_damage[wp][rbm] >
-                                                                       minimum_weakness_requirement[wp]
-                                                                       for wp in received_weapons):
+                    if self.weapon_damage[removed_weapon][rbm] > 0 and not any(self.weapon_damage[wp][rbm] >
+                                                                               minimum_weakness_requirement[wp]
+                                                                               for wp in received_weapons):
                         state.prog_items[self.player][robot_masters[rbm]] = 0
         return change

@@ -1,9 +1,8 @@
 import logging
 import time
-import typing
 from base64 import b64encode
-from typing import TYPE_CHECKING, Dict, Tuple
-from NetUtils import ClientStatus, color
+from typing import TYPE_CHECKING, Dict, Tuple, List, Optional, Any
+from NetUtils import ClientStatus, color, NetworkItem
 from worlds._bizhawk.client import BizHawkClient
 
 if TYPE_CHECKING:
@@ -81,7 +80,7 @@ MM2_CONSUMABLE_TABLE: Dict[int, Tuple[int, int]] = {
 }
 
 
-def get_sfx_writes(sfx: int):
+def get_sfx_writes(sfx: int) -> Tuple[Tuple[int, bytes, str], ...]:
     return (MM2_SFX_QUEUE, sfx.to_bytes(1, 'little'), "RAM"), (MM2_SFX_STROBE, 0x01.to_bytes(1, "little"), "RAM")
 
 
@@ -89,12 +88,12 @@ class MegaMan2Client(BizHawkClient):
     game = "Mega Man 2"
     system = "NES"
     patch_suffix = ".apmm2"
-    item_queue: typing.List = []
+    item_queue: List[NetworkItem] = []
     pending_death_link: bool = False
     # default to true, as we don't want to send a deathlink until Mega Man's HP is initialized once
     sending_death_link: bool = True
     death_link: bool = False
-    rom: typing.Optional[bytes] = None
+    rom: Optional[bytes] = None
     weapon_energy: int = 0
     health_energy: int = 0
 
@@ -120,18 +119,19 @@ class MegaMan2Client(BizHawkClient):
         if self.rom:
             ctx.auth = b64encode(self.rom).decode()
 
-    def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
+    def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: Dict[str, Any]) -> None:
         if cmd == "Bounced":
             if "tags" in args:
+                assert ctx.slot is not None
                 if "DeathLink" in args["tags"] and args["data"]["source"] != ctx.slot_info[ctx.slot].name:
                     self.on_deathlink(ctx)
 
-    async def send_deathlink(self, ctx: "BizHawkClientContext"):
+    async def send_deathlink(self, ctx: "BizHawkClientContext") -> None:
         self.sending_death_link = True
         ctx.last_death_link = time.time()
         await ctx.send_death("Mega Man was defeated.")
 
-    def on_deathlink(self, ctx: "BizHawkClientContext"):
+    def on_deathlink(self, ctx: "BizHawkClientContext") -> None:
         ctx.last_death_link = time.time()
         self.pending_death_link = True
 

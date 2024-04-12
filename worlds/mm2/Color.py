@@ -1,4 +1,3 @@
-import typing
 from typing import Dict, Tuple, List, TYPE_CHECKING, Union
 from . import Names
 from zlib import crc32
@@ -118,7 +117,7 @@ palette_pointers: Dict[str, List[int]] = {
 }
 
 
-def add_color_to_mm2(name: str, color: Tuple[int, int]):
+def add_color_to_mm2(name: str, color: Tuple[int, int]) -> None:
     """
     Add a color combo for Mega Man 2 to recognize as the color to display for a given item.
     For information on available colors: https://www.nesdev.org/wiki/PPU_palettes#2C02
@@ -126,7 +125,7 @@ def add_color_to_mm2(name: str, color: Tuple[int, int]):
     MM2_KNOWN_COLORS[name] = validate_colors(*color)
 
 
-def extrapolate_color(color: int):
+def extrapolate_color(color: int) -> Tuple[int, int]:
     if color > 0x1F:
         color_1 = color
         color_2 = color_1 - 0x10
@@ -136,7 +135,7 @@ def extrapolate_color(color: int):
     return color_1, color_2
 
 
-def validate_colors(color_1: int, color_2: int, allow_match=False):
+def validate_colors(color_1: int, color_2: int, allow_match: bool = False) -> Tuple[int, int]:
     # Black should be reserved for outlines, a gray should suffice
     if color_1 in [0x0D, 0x0E, 0x0F, 0x1E, 0x2E, 0x3E, 0x1F, 0x2F, 0x3F]:
         color_1 = 0x10
@@ -167,9 +166,9 @@ def get_colors_for_item(name: str) -> Tuple[int, int]:
     else:
         # generate hash
         crc_hash = crc32(name.encode('utf-8'))
-        colors = struct.pack("I", crc_hash)
-        color_1 = colors[0] % 0x3F
-        color_2 = colors[1] % 0x3F
+        hash_color = struct.pack("I", crc_hash)
+        color_1 = hash_color[0] % 0x3F
+        color_2 = hash_color[1] % 0x3F
 
         if color_1 < color_2:
             temp = color_1
@@ -181,26 +180,26 @@ def get_colors_for_item(name: str) -> Tuple[int, int]:
     return color_1, color_2
 
 
-def parse_color(colors: typing.List[str]):
-    color_1 = colors[0]
-    if color_1.startswith("$"):
-        color_1 = int(color_1[1:], 16)
+def parse_color(colors: List[str]) -> Tuple[int, int]:
+    color_a = colors[0]
+    if color_a.startswith("$"):
+        color_1 = int(color_a[1:], 16)
     else:
         # assume it's in our list of colors
-        color_1 = HTML_TO_NES[color_1.upper()]
+        color_1 = HTML_TO_NES[color_a.upper()]
 
     if len(colors) == 1:
         color_1, color_2 = extrapolate_color(color_1)
     else:
-        color_2 = colors[1]
-        if color_2.startswith("$"):
-            color_2 = int(color_2[1:], 16)
+        color_b = colors[1]
+        if color_b.startswith("$"):
+            color_2 = int(color_b[1:], 16)
         else:
-            color_2 = HTML_TO_NES[color_2.upper()]
+            color_2 = HTML_TO_NES[color_b.upper()]
     return color_1, color_2
 
 
-def write_palette_shuffle(world: "MM2World", rom: "MM2ProcedurePatch"):
+def write_palette_shuffle(world: "MM2World", rom: "MM2ProcedurePatch") -> None:
     palette_shuffle: Union[int, str] = world.options.palette_shuffle.value
     palettes_to_write: Dict[str, Tuple[int, int]] = {}
     if isinstance(palette_shuffle, str):
@@ -212,40 +211,40 @@ def write_palette_shuffle(world: "MM2World", rom: "MM2ProcedurePatch"):
             palette_shuffle = world.options.palette_shuffle.options[color_sets.pop()]
         for color_set in color_sets:
             if "-" in color_set:
-                character, colors = color_set.split("-")
+                character, color = color_set.split("-")
                 if character.title() not in palette_pointers:
                     logging.warning(f"Player {world.multiworld.get_player_name(world.player)} "
                                     f"attempted to set color for unrecognized option {character}")
-                colors = colors.split("|")
-                colors = validate_colors(*parse_color(colors), allow_match=True)
-                palettes_to_write[character.title()] = colors
+                colors = color.split("|")
+                real_colors = validate_colors(*parse_color(colors), allow_match=True)
+                palettes_to_write[character.title()] = real_colors
             else:
                 # If color is provided with no character, assume singularity
                 colors = color_set.split("|")
-                colors = validate_colors(*parse_color(colors), allow_match=True)
+                real_colors = validate_colors(*parse_color(colors), allow_match=True)
                 for character in palette_pointers:
-                    palettes_to_write[character] = colors
+                    palettes_to_write[character] = real_colors
         # Now we handle the real values
     if palette_shuffle != 0:
         if palette_shuffle > 1:
             if palette_shuffle == 3:
                 # singularity
-                colors = validate_colors(world.random.randint(0, 0x3F), world.random.randint(0, 0x3F))
+                real_colors = validate_colors(world.random.randint(0, 0x3F), world.random.randint(0, 0x3F))
                 for character in palette_pointers:
                     if character not in palettes_to_write:
-                        palettes_to_write[character] = colors
+                        palettes_to_write[character] = real_colors
             else:
                 for character in palette_pointers:
                     if character not in palettes_to_write:
-                        colors = validate_colors(world.random.randint(0, 0x3F), world.random.randint(0, 0x3F))
-                        palettes_to_write[character] = colors
+                        real_colors = validate_colors(world.random.randint(0, 0x3F), world.random.randint(0, 0x3F))
+                        palettes_to_write[character] = real_colors
         else:
-            colors = list(MM2_COLORS.values())
-            colors.append((0x2C, 0x11))  # Mega Buster
-            world.random.shuffle(colors)
+            shuffled_colors = list(MM2_COLORS.values())
+            shuffled_colors.append((0x2C, 0x11))  # Mega Buster
+            world.random.shuffle(shuffled_colors)
             for character in palette_pointers:
                 if character not in palettes_to_write:
-                    palettes_to_write[character] = colors.pop()
+                    palettes_to_write[character] = shuffled_colors.pop()
 
     for character in palettes_to_write:
         for pointer in palette_pointers[character]:

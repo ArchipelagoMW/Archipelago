@@ -1,10 +1,10 @@
 from BaseClasses import Item
-import typing
+from typing import NamedTuple, Dict
 from .Names import *
 
 
-class ItemData(typing.NamedTuple):
-    code: typing.Optional[int]
+class ItemData(NamedTuple):
+    code: int
     progression: bool
     skip_balancing: bool = False
 
@@ -68,4 +68,4 @@ item_names = {
     "Items": {name for name in item_item_table.keys()}
 }
 
-lookup_name_to_id: typing.Dict[str, int] = {item_name: data.code for item_name, data in item_table.items() if data.code}
+lookup_item_to_id: Dict[str, int] = {item_name: data.code for item_name, data in item_table.items() if data.code}

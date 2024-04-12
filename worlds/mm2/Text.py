@@ -75,7 +75,7 @@ MM2_WEAPON_ENCODING: Dict[str, int] = {
 
 
 class MM2TextEntry:
-    def __init__(self, text="", coords=0x0B):
+    def __init__(self, text: str = "", coords: int = 0x0B):
         self.target_area: int = 0x25  # don't change
         self.coords: int = coords  # 0xYX, Y can only be increments of 0x20
         self.text: str = text

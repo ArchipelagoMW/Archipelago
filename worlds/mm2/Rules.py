@@ -1,16 +1,16 @@
-import typing
+from typing import TYPE_CHECKING, Dict, List
 from . import Names
 from .Locations import heat_man_locations, air_man_locations, wood_man_locations, bubble_man_locations, \
     quick_man_locations, flash_man_locations, metal_man_locations, crash_man_locations, wily_1_locations, \
     wily_2_locations, wily_3_locations, wily_4_locations, wily_5_locations, wily_6_locations
 from .Options import bosses, weapons_to_id
-from worlds.generic.Rules import set_rule, add_rule
+from worlds.generic.Rules import add_rule
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from . import MM2World
     from BaseClasses import CollectionState
 
-weapon_damage: typing.Dict[int, typing.List[int]] = {
+weapon_damage: Dict[int, List[int]] = {
     0: [2, 2, 1, 1, 2, 2, 1, 1, 1, 7, 1, 0, 1, -1],  # Mega Buster
     1: [-1, 6, 0xE, 0, 0xA, 6, 4, 6, 8, 13, 8, 0, 0xE, -1],  # Atomic Fire
     2: [2, 0, 4, 0, 2, 0, 0, 0xA, 0, 0, 0, 0, 1, -1],  # Air Shooter
@@ -22,7 +22,7 @@ weapon_damage: typing.Dict[int, typing.List[int]] = {
     8: [0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0], # Time Stopper
 }
 
-weapons_to_name = {
+weapons_to_name: Dict[int, str] = {
     1: Names.atomic_fire,
     2: Names.air_shooter,
     3: Names.leaf_shield,
@@ -33,7 +33,7 @@ weapons_to_name = {
     8: Names.time_stopper
 }
 
-minimum_weakness_requirement = {
+minimum_weakness_requirement: Dict[int, int] = {
     0: 1,  # Mega Buster is free
     1: 14,  # 2 shots of Atomic Fire
     2: 1,  # 14 shots of Air Shooter, although you likely hit more than one shot
@@ -45,7 +45,7 @@ minimum_weakness_requirement = {
     8: 4,  # 1 use of Time Stopper, but setting to 4 means we shave the entire HP bar
 }
 
-robot_masters = {
+robot_masters: Dict[int, str] = {
     0: "Heat Man Defeated",
     1: "Air Man Defeated",
     2: "Wood Man Defeated",
@@ -57,7 +57,7 @@ robot_masters = {
 }
 
 
-def can_defeat_enough_rbms(state: "CollectionState", player: int, required: int):
+def can_defeat_enough_rbms(state: "CollectionState", player: int, required: int) -> bool:
     can_defeat = 0
 
     for boss in robot_masters:
@@ -124,18 +124,19 @@ def set_rules(world: "MM2World") -> None:
             starting = world.options.starting_robot_master.value
             world.weapon_damage[0][starting] = 1
 
-    for boss in world.options.plando_weakness:
-        for weapon in world.options.plando_weakness[boss]:
+    for p_boss in world.options.plando_weakness:
+        for p_weapon in world.options.plando_weakness[p_boss]:
             if not any(w for w in world.weapon_damage
-                       if w != weapon and world.weapon_damage[w][bosses[boss]] > minimum_weakness_requirement[w]):
+                       if w != p_weapon and world.weapon_damage[w][bosses[p_boss]] > minimum_weakness_requirement[w]):
                 # we need to replace this weakness
-                weakness = world.random.choice([key for key in world.weapon_damage if key != weapon])
-                world.weapon_damage[weakness][bosses[boss]] = minimum_weakness_requirement[weakness]
-            world.weapon_damage[weapons_to_id[weapon]][bosses[boss]] = world.options.plando_weakness[boss][weapon]
+                weakness = world.random.choice([key for key in world.weapon_damage if key != p_weapon])
+                world.weapon_damage[weakness][bosses[p_boss]] = minimum_weakness_requirement[weakness]
+            world.weapon_damage[weapons_to_id[p_weapon]][bosses[p_boss]] \
+                = world.options.plando_weakness[p_boss][p_weapon]
 
     time_stopper_logical = False
 
-    for i, boss in zip(range(14), [
+    for i, boss_locations in zip(range(14), [
         heat_man_locations,
         air_man_locations,
         wood_man_locations,
@@ -168,11 +169,11 @@ def set_rules(world: "MM2World") -> None:
                 weapons.remove(Names.time_stopper)
                 if not weapons:
                     weakness = world.random.choice([key for key in world.weapon_damage if key != 8])
-                    world.weapon_damage[weakness][bosses[boss]] = minimum_weakness_requirement[weakness]
+                    world.weapon_damage[weakness][i] = minimum_weakness_requirement[weakness]
                     weapons.append(weapons_to_name[weakness])
         if not weapons:
             raise Exception(f"Attempted to have boss {i} with no weakness! Seed: {world.multiworld.seed}")
-        for location in boss:
+        for location in boss_locations:
             if i == 12:
                 add_rule(world.multiworld.get_location(location, world.player),
                          lambda state, weps=tuple(weapons): state.has_all(weps, world.player))

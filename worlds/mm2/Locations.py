@@ -11,79 +11,79 @@ class MM2Region(Region):
     game = "Mega Man 2"
 
 
-heat_man_locations = {
+heat_man_locations: Dict[str, Optional[int]] = {
     heat_man: 0x880001,
     atomic_fire_get: 0x880101,
     item_1_get: 0x880111,
 }
 
-air_man_locations = {
+air_man_locations: Dict[str, Optional[int]] = {
     air_man: 0x880002,
     air_shooter_get: 0x880102,
     item_2_get: 0x880112
 }
 
-wood_man_locations = {
+wood_man_locations: Dict[str, Optional[int]] = {
     wood_man: 0x880003,
     leaf_shield_get: 0x880103
 }
 
-bubble_man_locations = {
+bubble_man_locations: Dict[str, Optional[int]] = {
     bubble_man: 0x880004,
     bubble_lead_get: 0x880104
 }
 
-quick_man_locations = {
+quick_man_locations: Dict[str, Optional[int]] = {
     quick_man: 0x880005,
     quick_boomerang_get: 0x880105,
 }
 
-flash_man_locations = {
+flash_man_locations: Dict[str, Optional[int]] = {
     flash_man: 0x880006,
     time_stopper_get: 0x880106,
     item_3_get: 0x880113,
 }
 
-metal_man_locations = {
+metal_man_locations: Dict[str, Optional[int]] = {
     metal_man: 0x880007,
     metal_blade_get: 0x880107
 }
 
-crash_man_locations = {
+crash_man_locations: Dict[str, Optional[int]] = {
     crash_man: 0x880008,
     crash_bomber_get: 0x880108
 }
 
-wily_1_locations = {
+wily_1_locations: Dict[str, Optional[int]] = {
     wily_1: 0x880009,
     wily_stage_1: None
 }
 
-wily_2_locations = {
+wily_2_locations: Dict[str, Optional[int]] = {
     wily_2: 0x88000A,
     wily_stage_2: None
 }
 
-wily_3_locations = {
+wily_3_locations: Dict[str, Optional[int]] = {
     wily_3: 0x88000B,
     wily_stage_3: None
 }
 
-wily_4_locations = {
+wily_4_locations: Dict[str, Optional[int]] = {
     wily_4: 0x88000C,
     wily_stage_4: None
 }
 
-wily_5_locations = {
+wily_5_locations: Dict[str, Optional[int]] = {
     wily_5: 0x88000D,
     wily_stage_5: None
 }
 
-wily_6_locations = {
+wily_6_locations: Dict[str, Optional[int]] = {
     dr_wily: None
 }
 
-etank_1ups = {
+etank_1ups: Dict[str, Dict[str, Optional[int]]] = {
     "Heat Man Stage": {
         heat_man_c1: 0x880201,
     },
@@ -124,7 +124,7 @@ etank_1ups = {
     }
 }
 
-energy_pickups = {
+energy_pickups: Dict[str, Dict[str, Optional[int]]] = {
     "Quick Man Stage": {
         quick_man_c4: 0x880205,
         quick_man_c5: 0x880206,
@@ -168,7 +168,7 @@ energy_pickups = {
     }
 }
 
-mm2_regions: Dict[str, Tuple[Tuple[str], Dict[str, int], Optional[str]]] = {
+mm2_regions: Dict[str, Tuple[Tuple[str, ...], Dict[str, Optional[int]], Optional[str]]] = {
     "Heat Man Stage": ((heat_man_stage,), heat_man_locations, None),
     "Air Man Stage": ((air_man_stage,), air_man_locations, None),
     "Wood Man Stage": ((wood_man_stage,), wood_man_locations, None),
@@ -235,3 +235,5 @@ location_groups = {
     "Wily 2 Weapon Energy": {wily_2_c8, wily_2_c9, wily_2_c10, wily_2_c11, wily_2_c12, wily_2_c13, wily_2_c14,
                              wily_2_c15, wily_2_c16}
 }
+
+lookup_location_to_id: Dict[str, int] = {location: idx for location, idx in location_table.items() if idx is not None}
