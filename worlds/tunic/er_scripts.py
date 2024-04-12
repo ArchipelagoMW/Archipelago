@@ -360,7 +360,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             for portal in two_plus:
                 if portal.region in connected_regions:
                     # if there's risk of self-locking, start over
-                    if gate_before_switch(portal, two_plus):
+                    if gate_before_switch(portal, two_plus, connected_regions):
                         random_object.shuffle(two_plus)
                         break
                     portal1 = portal
@@ -373,7 +373,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             for portal in two_plus:
                 if portal.region not in connected_regions:
                     # if there's risk of self-locking, shuffle and try again
-                    if gate_before_switch(portal, two_plus):
+                    if gate_before_switch(portal, two_plus, connected_regions):
                         random_object.shuffle(two_plus)
                         break
                     portal2 = portal
@@ -468,7 +468,7 @@ def add_dependent_regions(region_name: str, dependent_regions: Dict[Tuple[str, .
 
 # we're checking if an event-locked portal is being placed before the regions where its key(s) is/are
 # doing this ensures the keys will not be locked behind the event-locked portal
-def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
+def gate_before_switch(check_portal: Portal, two_plus: List[Portal], connected_regions: Set[str]) -> bool:
     # the western belltower cannot be locked since you can access it with laurels
     # so we only need to make sure the forest belltower isn't locked
     if check_portal.scene_destination() == "Overworld Redux, Temple_main":
@@ -478,6 +478,8 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
                 i += 1
                 break
         if i == 1:
+            return True
+        if "Forest Belltower Upper" not in connected_regions:
             return True
 
     # fortress big gold door needs 2 scenes and one of the two upper portals of the courtyard
@@ -492,6 +494,9 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
                 k += 1
         if i == 2 or j == 2 or k == 5:
             return True
+        for region in ["Fortress Courtyard Upper", "Beneath the Vault Back", "Eastern Vault Fortress"]:
+            if region not in connected_regions:
+                return True
 
     # fortress teleporter needs only the left fuses
     elif check_portal.scene_destination() in {"Fortress Arena, Transit_teleporter_spidertank",
@@ -506,6 +511,9 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
                 k += 1
         if i == 8 or j == 2 or k == 5:
             return True
+        for region in ["Beneath the Vault Back", "Eastern Vault Fortress", "Fortress Exterior from Overworld"]:
+            if region not in connected_regions:
+                return True
 
     # Cathedral door needs Overworld and the front of Swamp
     # Overworld is currently guaranteed, so no need to check it
@@ -517,6 +525,8 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
                 i += 1
         if i == 4:
             return True
+        if "Swamp Mid" not in connected_regions:
+            return True
 
     # Zig portal room exit needs Zig 3 to be accessible to hit the fuse
     elif check_portal.scene_destination() == "ziggurat2020_FTRoom, ziggurat2020_3_":
@@ -525,6 +535,9 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
             if portal.scene() == "ziggurat2020_3":
                 i += 1
         if i == 2:
+            return True
+        # to deal with if you plando'd all of lower zig
+        if "Rooted Ziggurat Lower Back" not in connected_regions:
             return True
 
     # Quarry teleporter needs you to hit the Darkwoods fuse
@@ -537,6 +550,8 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
                 i += 1
         if i == 2:
             return True
+        if "Quarry Connector" not in connected_regions:
+            return True
 
     # Same as above, but Quarry isn't guaranteed here
     elif check_portal.scene_destination() == "Transit, Quarry Redux_teleporter_quarry teleporter":
@@ -548,6 +563,9 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
                 j += 1
         if i == 2 or j == 7:
             return True
+        for region in ["Quarry Connector", "Quarry Entry"]:
+            if region not in connected_regions:
+                return True
 
     # Need Library fuse to use this teleporter
     elif check_portal.scene_destination() == "Transit, Library Lab_teleporter_library teleporter":
@@ -557,6 +575,8 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
                 i += 1
         if i == 3:
             return True
+        if "Library Lab" not in connected_regions:
+            return True
 
     # Need West Garden fuse to use this teleporter
     elif check_portal.scene_destination() == "Transit, Archipelagos Redux_teleporter_archipelagos_teleporter":
@@ -565,6 +585,8 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
             if portal.scene() == "Archipelagos Redux":
                 i += 1
         if i == 6:
+            return True
+        if "West Garden" not in connected_regions:
             return True
 
     # false means you're good to place the portal
