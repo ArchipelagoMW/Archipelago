@@ -28,7 +28,7 @@ class PokemonCrystalDeltaPatch(APDeltaPatch):
 
 
 def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
-    random = world.multiworld.per_slot_randoms[world.player]
+    random = world.random
     base_rom = get_base_rom_as_bytes()
     base_patch = pkgutil.get_data(__name__, "data/basepatch.bsdiff4")
     patched_rom = bytearray(bsdiff4.patch(base_rom, base_patch))
