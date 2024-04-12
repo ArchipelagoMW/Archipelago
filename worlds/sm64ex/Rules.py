@@ -150,7 +150,7 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
     rf.assign_rule("SSL: Stand Tall on the Four Pillars", "TJ+WC+GP | CANN+WC+GP | TJ/SF/BF & CAPLESS | MOVELESS")
     rf.assign_rule("SSL: Free Flying for 8 Red Coins", "TJ+WC | CANN+WC | TJ/SF/BF & CAPLESS | MOVELESS & CAPLESS")
     # Dire, Dire Docks
-    rf.assign_rule("DDD: Moving Poles", "CL & {{Bowser in the Fire Sea Key}} | TJ+DV+LG+WK & MOVELESS")
+    rf.assign_rule("DDD: Pole-Jumping for Red Coins", "CL & {{Bowser in the Fire Sea Key}} | TJ+DV+LG+WK & MOVELESS")
     rf.assign_rule("DDD: Through the Jet Stream", "MC | CAPLESS")
     rf.assign_rule("DDD: Collect the Caps...", "VC+MC | CAPLESS & VC")
     # Snowman's Land
@@ -207,7 +207,7 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
         rf.assign_rule("JRB: 100 Coins", "GP & {JRB: Upper}")
         rf.assign_rule("HMC: 100 Coins", "GP")
         rf.assign_rule("SSL: 100 Coins", "{SSL: Upper Pyramid} | GP")
-        rf.assign_rule("DDD: 100 Coins", "GP")
+        rf.assign_rule("DDD: 100 Coins", "GP & {{DDD: Pole-Jumping for Red Coins}}")
         rf.assign_rule("SL: 100 Coins", "VC | CAPLESS")
         rf.assign_rule("WDW: 100 Coins", "GP | {WDW: Downtown}")
         rf.assign_rule("TTC: 100 Coins", "GP")
