@@ -1,7 +1,9 @@
 import settings
 import copy
 import os
+from hashlib import blake2b
 from typing import Any, List, Dict, Optional, ClassVar
+from .Client import SoulBlazerSNIClient
 from .Options import SoulBlazerOptions  # the options we defined earlier
 from .Items import (
     SoulBlazerItem,
@@ -12,24 +14,12 @@ from .Items import (
     swords_table,
 )  # data used below to add items to the World
 from .Locations import SoulBlazerLocation, all_locations_table  # same as above
-from .Names import ItemName, ChestName
+from .Names import ItemName, ChestName, Addresses
 from .Regions import create_regions as region_create_regions
 #from .Rules import set_rules as rules_set_rules
 from .Rom import SoulBlazerDeltaPatch, LocalRom, patch_rom, get_base_rom_path
 from worlds.AutoWorld import WebWorld, World
 from BaseClasses import MultiWorld, Region, Location, Entrance, Item, ItemClassification, Tutorial
-
-
-# Chosen randomly. Probably wont collide with any other game
-base_id: int = 374518970000
-"""Base ID for items and locations"""
-
-lair_id_offset: int = 1000
-"""ID offset for Lair IDs"""
-
-npc_reward_offset: int = 500
-"""ID offset for NPC rewards"""
-
 
 class SoulBlazerSettings(settings.Group):
     class RomFile(settings.SNESRomPath):
@@ -84,6 +74,7 @@ class SoulBlazerWorld(World):
         self.exp_items: List[SoulBlazerItem]
         self.gem_items: List[SoulBlazerItem]
         self.pre_fill_items: List[Item] = []
+        self.rom_name: bytes
         # self.set_rules = set_rules
         # self.create_regions = create_regions
 
@@ -106,10 +97,18 @@ class SoulBlazerWorld(World):
 
     @classmethod
     def stage_assert_generate(cls, multiworld: "MultiWorld") -> None:
-        pass
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
 
     def generate_early(self) -> None:
-        pass
+        from Utils import __version__
+        data = bytes(f'SoulBlazer_{__version__}_{self.player}_{self.multiworld.seed}', 'ascii')
+       
+        hash = blake2b(data, digest_size=9, key=bytes(str(self.multiworld.seed), 'ascii'))
+        self.rom_name = b'SB_' + bytes(hash.hexdigest(), 'ascii')
+        # Should already be the correct length of 21 bytes, but ensure anyway.
+        self.rom_name = self.rom_name[:Addresses.ROMNAME_SIZE]
 
     # def create_regions(self) -> None:
     #    pass
@@ -159,11 +158,10 @@ class SoulBlazerWorld(World):
         try:
             rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
 
-            rom = LocalRom(get_base_rom_path())
+            rom = LocalRom(get_base_rom_path(), name=self.rom_name)
             patch_rom(self, rom)
 
             rom.write_to_file(rompath)
-            self.rom_name = rom.name
 
             patch = SoulBlazerDeltaPatch(
                 os.path.splitext(rompath)[0] + SoulBlazerDeltaPatch.patch_file_ending,
@@ -193,4 +191,6 @@ class SoulBlazerWorld(World):
         pass
 
     def modify_multidata(self, multidata: Dict[str, Any]) -> None:
-        pass
+        import base64
+        new_name = base64.b64encode(self.rom_name).decode()
+        multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]

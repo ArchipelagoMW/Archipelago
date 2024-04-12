@@ -1,8 +1,9 @@
 import logging
 import asyncio
-from typing import Dict, List, Optional, NamedTuple
-from . import base_id, lair_id_offset, npc_reward_offset
+from typing import Dict, List, Optional, NamedTuple, TYPE_CHECKING
+
 from .Names import Addresses, ItemID
+from .Names.ArchipelagoID import base_id, lair_id_offset, npc_reward_offset
 from .Locations import (
     SoulBlazerLocationData,
     all_locations_table,
@@ -14,7 +15,9 @@ from .Locations import (
 from .Items import SoulBlazerItemData, all_items_table
 from NetUtils import ClientStatus, color, NetworkItem
 from worlds.AutoSNIClient import SNIClient
-from SNIClient import SNIContext
+
+if TYPE_CHECKING:
+    from .Context import ItemSend, SoulBlazerContext
 
 snes_logger = logging.getLogger("SNES")
 
@@ -23,9 +26,6 @@ ROM_START = 0x000000
 WRAM_START = 0xF50000
 WRAM_SIZE = 0x20000
 SRAM_START = 0xE00000
-
-SOULBLAZER_ROM_NAME = b"SOULBLAZER - 1 USA    "
-
 
 def address_for_location(type: LocationType, id: int) -> int:
     if type == LocationType.LAIR:
@@ -42,36 +42,6 @@ def is_bit_set(data: bytes, offset: int, index: int) -> bool:
 def encode_string(string: str, buffer_length: int) -> bytes:
     # TODO: Also replace ascii chars missing from Soul Blazer's charmap
     return str[:buffer_length].encode("ascii", "replace") + bytes([0x00])
-
-
-class ItemSend(NamedTuple):
-    receiving: int
-    item: NetworkItem
-
-
-class SoulBlazerContext(SNIContext):
-    """Extend SNIContext to provide more data"""
-
-    def __init__(self, snes_address: str, server_address: str, password: str) -> None:
-        super().__init__(snes_address, server_address, password)
-        self.gem_data: Dict[str, int]
-        self.exp_data: Dict[str, int]
-        self.item_send_queue: List[ItemSend]
-
-    def on_package(self, cmd: str, args: Dict[str, logging.Any]) -> None:
-        super().on_package(cmd, args)
-        if cmd == "Connected":
-            slot_data = args.get("slot_data", None)
-            if slot_data:
-                self.gem_data = slot_data.get("gem_data", {})
-                self.exp_data = slot_data.get("item_data", {})
-
-    def on_print_json(self, args: Dict):
-        super().on_print_json(args)
-
-        # We want ItemSends from us to another player so we can print them in game
-        if args.get("type", "") == "ItemSend" and args["receiving"] != self.slot and args["item"].player == self.slot:
-            self.item_send_queue.append(ItemSend(args["receiving"], args["item"]))
 
 
 class SoulBlazerSNIClient(SNIClient):
@@ -104,12 +74,11 @@ class SoulBlazerSNIClient(SNIClient):
         pass
         # TODO: Handle Receiving Deathlink
 
-    async def validate_rom(self, ctx: SoulBlazerContext):
+    async def validate_rom(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
-
+        from .Context import SoulBlazerContext
         rom_name = await snes_read(ctx, Addresses.SNES_ROMNAME_START, Addresses.ROMNAME_SIZE)
-        print(rom_name)
-        if rom_name is None or rom_name == bytes([0] * Addresses.ROMNAME_SIZE) or rom_name != SOULBLAZER_ROM_NAME:
+        if rom_name is None or rom_name == bytes([0] * Addresses.ROMNAME_SIZE) or rom_name[:3] != b'SB_':
             return False
 
         ctx.game = self.game
@@ -119,11 +88,19 @@ class SoulBlazerSNIClient(SNIClient):
 
         ctx.want_slot_data = True
         # This feels hacky, but I cant figure out any other way to get the context to expose slot data.
-        ctx.__class__ = SoulBlazerContext
-        ctx.gem_data = {}
-        ctx.exp_data = {}
-        ctx.item_send_queue = []
+        if ctx.__class__ != SoulBlazerContext:
+            ctx.__class__ = SoulBlazerContext
+            ctx.gem_data = {}
+            ctx.exp_data = {}
+            ctx.item_send_queue = []
+            await ctx.send_msgs([{"cmd": "GetDataPackage", "games": ["Soul Blazer"]}])
 
+
+        #ctx.gem_data = {} if not hasattr(ctx, 'gem_data') else ctx.gem_data
+        #ctx.exp_data = {} if not hasattr(ctx, 'exp_data') else ctx.exp_data
+        #ctx.item_send_queue = [] if not hasattr(ctx, 'item_send_queue') else ctx.item_send_queue
+
+        # await ctx.send_msgs([{"cmd": "GetDataPackage", "games": ["Soul Blazer"]}])
         # death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR, 1)
         ## TODO: Handle Deathlink
         # if death_link:
@@ -131,7 +108,7 @@ class SoulBlazerSNIClient(SNIClient):
         #    await ctx.update_death_link(bool(death_link[0] & 0b1))
         return True
 
-    async def game_watcher(self, ctx: SoulBlazerContext):
+    async def game_watcher(self, ctx: "SoulBlazerContext"):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
         # TODO: Handle Deathlink
@@ -141,11 +118,18 @@ class SoulBlazerSNIClient(SNIClient):
             # We haven't loaded a save file
             return
 
+        if ctx.server is None or ctx.slot is None:
+            # not successfully connected to a multiworld server, cannot process the game sending items
+            return
+
         ram_misc_start = Addresses.EVENT_FLAGS_WIN
         ram_misc_end = Addresses.NPC_REWARD_TABLE + Addresses.NPC_REWARD_TABLE_SIZE
         # Misc values in LowRAM
         ram_misc = await snes_read(ctx, ram_misc_start + WRAM_START, ram_misc_end - ram_misc_start + 1)
         ram_lair_spawn = await snes_read(ctx, Addresses.LAIR_SPAWN_TABLE + WRAM_START, Addresses.LAIR_SPAWN_TABLE_SIZE)
+
+        if ram_misc is None or ram_lair_spawn is None:
+            return
 
         # Any new checks?
 
@@ -214,7 +198,11 @@ class SoulBlazerSNIClient(SNIClient):
                 await snes_flush_writes(ctx)
 
         # TODO: also prevent receiving NPC unlocks when in a boss room to prevent the boss from regenerating to full health. Can happen either in the ROM or client, whichever is easiest to implement.
-        recv_index = int.from_bytes(await snes_read(ctx, Addresses.RECEIVE_COUNT, 2), "little")
+        recv_bytes = await snes_read(ctx, Addresses.RECEIVE_COUNT, 2)
+        if recv_bytes is None:
+            return
+        
+        recv_index = int.from_bytes(recv_bytes, "little")
         if recv_index < len(ctx.items_received):
             item = ctx.items_received[recv_index]
             rx_status = await snes_read(ctx, Addresses.RX_STATUS, 1)

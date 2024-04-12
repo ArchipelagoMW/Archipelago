@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from BaseClasses import Region, Location, Entrance, Item, ItemClassification
 from typing import Optional, TYPE_CHECKING, List, Dict
 from .Names import ItemID, ItemName, LairID, NPCName
+from .Names.ArchipelagoID import base_id, lair_id_offset
 
 if TYPE_CHECKING:
     from . import SoulBlazerWorld
@@ -20,7 +21,6 @@ class SoulBlazerItemData:
     @property
     def code(self) -> int:
         """The unique ID used by archipelago for this item"""
-        from . import base_id, lair_id_offset
 
         if self.id == ItemID.LAIR_RELEASE:
             return base_id + lair_id_offset + self.operand

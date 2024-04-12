@@ -17,7 +17,7 @@ USHASH = "83cf41d53a1b94aeea1a645037a24004"
 
 
 class LocalRom(object):
-    def __init__(self, file, patch=True, vanillaRom=None, name=None, hash=None):
+    def __init__(self, file, patch=True, vanillaRom=None, name: bytes=None, hash=None):
         self.name = name
         self.hash = hash
         # self.orig_buffer = None
@@ -105,6 +105,8 @@ class LocalRom(object):
 
 def patch_rom(world: World, rom: LocalRom):
     # TODO: check options and patch based on results.
+
+    rom.write_bytes(Addresses.SNES_ROMNAME_START, rom.name)
 
     for location in world.multiworld.get_locations(world.player):
         rom.place(location)

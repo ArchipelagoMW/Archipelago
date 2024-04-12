@@ -5,6 +5,7 @@ from enum import Enum
 from BaseClasses import Region, Location, Entrance, Item, ItemClassification
 from .Rules import RuleFlag, get_rule_for_location
 from .Names import LairID, LairName, ChestID, ChestName, NPCRewardID, NPCRewardName
+from .Names.ArchipelagoID import lair_id_offset, base_id, npc_reward_offset
 
 
 # TODO: Use IntEnum instead?
@@ -28,7 +29,6 @@ class SoulBlazerLocationData():
     @property
     def address(self) -> int:
         """The unique ID used by archipelago for this location"""
-        from . import lair_id_offset, base_id, npc_reward_offset
 
         if self.type == LocationType.LAIR:
             return base_id + lair_id_offset + self.id
