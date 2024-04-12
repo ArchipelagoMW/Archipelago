@@ -265,10 +265,11 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
             print(basemd5.hexdigest())
             raise Exception("Supplied Base Rom does not match known MD5 for US, LC, or US VC release. "
                             "Get the correct game and version, then dump it")
-        base_rom_bytes = bytearray(base_rom_bytes)
-        base_rom_bytes[0:0] = header
-        setattr(get_base_rom_bytes, "base_rom_bytes", bytes(base_rom_bytes))
-    return bytes(base_rom_bytes)
+        headered_rom = bytearray(base_rom_bytes)
+        headered_rom[0:0] = header
+        setattr(get_base_rom_bytes, "base_rom_bytes", bytes(headered_rom))
+        return bytes(headered_rom)
+    return base_rom_bytes
 
 
 def get_base_rom_path(file_name: str = "") -> str:

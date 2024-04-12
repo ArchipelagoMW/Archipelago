@@ -5,12 +5,10 @@ from typing import Dict, Any, TYPE_CHECKING, Optional, Sequence, Tuple, ClassVar
 from BaseClasses import Tutorial, ItemClassification, MultiWorld, Item
 from worlds.AutoWorld import World, WebWorld
 from .Names import dr_wily
-from .Items import (item_table, item_names, MM2Item, filler_item_table, filler_item_weights, robot_master_weapon_table,
+from .Items import (item_table, item_names, MM2Item, filler_item_weights, robot_master_weapon_table,
                     stage_access_table, item_item_table, lookup_item_to_id)
-from .Locations import (location_table, MM2Location, mm2_regions, MM2Region,
-                        energy_pickups, etank_1ups, lookup_location_to_id)
-from .Rom import (get_base_rom_bytes, get_base_rom_path, RomData, patch_rom, extract_mm2, MM2ProcedurePatch,
-                  MM2LCHASH, PROTEUSHASH, MM2VCHASH, MM2NESHASH)
+from .Locations import MM2Location, mm2_regions, MM2Region, energy_pickups, etank_1ups, lookup_location_to_id
+from .Rom import patch_rom, MM2ProcedurePatch, MM2LCHASH, PROTEUSHASH, MM2VCHASH, MM2NESHASH
 from .Options import MM2Options
 from .Client import MegaMan2Client
 from .Rules import set_rules, weapon_damage, robot_masters, weapons_to_name, minimum_weakness_requirement
@@ -35,8 +33,7 @@ class MM2Settings(settings.Group):
                    filetypes: Optional[Sequence[Tuple[str, Sequence[str]]]] = None,
                    **kwargs: Any) -> Optional[settings.T]:
             if not filetypes:
-                from Utils import is_windows
-                file_types = [("NES", [".nes"]), ("Program", [".exe"] if is_windows else [""])]
+                file_types = [("NES", [".nes"]), ("Program", [".exe"])]  # LC1 is only a windows executable, no linux
                 return super().browse(file_types, **kwargs)
             else:
                 return super().browse(filetypes, **kwargs)

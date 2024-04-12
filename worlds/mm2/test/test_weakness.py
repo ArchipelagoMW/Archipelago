@@ -1,5 +1,4 @@
 from . import MM2TestBase
-import typing
 
 # Need to figure out how this test should work
 # def test_wily_5(base: MM2TestBase):

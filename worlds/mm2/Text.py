@@ -86,4 +86,4 @@ class MM2TextEntry:
         data.append(self.coords)
         data.extend([MM2_WEAPON_ENCODING[x] for x in self.text.upper()])
         data.extend([0x40] * (14 - len(self.text)))
-        return data
+        return bytes(data)
