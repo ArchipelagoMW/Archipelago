@@ -466,6 +466,54 @@ def add_dependent_regions(region_name: str, dependent_regions: Dict[Tuple[str, .
     return region_set
 
 
+def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[str, Dict[str, List[List[str]]]], has_laurels: bool) -> Set[str]:
+    # starting count, so we can run it again if this changes
+    region_count = len(connected_regions)
+    # checking each origin region
+    for origin, destinations in traversal_reqs.items():
+        # if the origin is not connected, skip it
+        if origin not in connected_regions:
+            continue
+        # check if we can traverse to any of the destinations
+        for destination, req_lists in destinations.items():
+            # if the destination already connected, skip it
+            if destination in connected_regions:
+                continue
+            # met meaning met the requirements to traverse
+            met = False
+            # if the list of requirement lists is empty, then you can freely connect this
+            if len(req_lists) == 0:
+                met = True
+            # loop through each set of possible requirements
+            for reqs in req_lists:
+                # if for some reason a list is empty, then you can freely connect it
+                if len(reqs) == 0:
+                    met = True
+                else:
+                    met_count = 0
+                    for req in reqs:
+                        # will need to change this if item plando gets evaluated earlier
+                        if req == "Hyperdash" and has_laurels:
+                            met_count += 1
+                        # check if we have the regions required for traversal
+                        if req in connected_regions:
+                            met_count += 1
+                    if met_count == len(reqs):
+                        met = True
+                # if we met one set of requirements, no need to check the next set
+                if met == True:
+                    break
+            # if we can reach it, we add it to connected_regions
+            if met == True:
+                connected_regions.update(destination)
+
+    # if the length of connected_regions changed, we got new regions, so we want to check those new origins
+    if region_count != len(connected_regions):
+        connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels)
+    
+    return connected_regions
+
+
 # we're checking if an event-locked portal is being placed before the regions where its key(s) is/are
 # doing this ensures the keys will not be locked behind the event-locked portal
 def gate_before_switch(check_portal: Portal, two_plus: List[Portal], connected_regions: Set[str]) -> bool:
