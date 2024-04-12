@@ -119,7 +119,7 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
     rf.assign_rule("BoB: Mario Wings to the Sky",  "CANN & WC | CAPLESS & CANN")
     rf.assign_rule("BoB: Behind Chain Chomp's Gate", "GP | MOVELESS")
     # Whomp's Fortress
-    rf.assign_rule("WF: Tower", "{{WF: Chip Off Whomp's Block}}")
+    rf.assign_rule("WF: Tower", "GP")
     rf.assign_rule("WF: Chip Off Whomp's Block", "GP")
     rf.assign_rule("WF: Shoot into the Wild Blue", "WK & TJ/SF | CANN")
     rf.assign_rule("WF: Fall onto the Caged Island", "CL & {WF: Tower} | MOVELESS & TJ | MOVELESS & LJ | MOVELESS & CANN")
