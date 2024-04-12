@@ -2536,7 +2536,7 @@
 		"script": "AP_NPC_RadioTower4F_PINK_BOW"
 	},
 	"BEAT_ROCKET_EXECUTIVEM_3": {
-		"label": "Radio Tower 5F - Basement Key from Rocket Exec",
+		"label": "Radio Tower 5F - Basement Key from False Director",
 		"flag": "EVENT_BEAT_ROCKET_EXECUTIVEM_3",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
@@ -2544,7 +2544,7 @@
 		"script": "AP_NPC_RadioTower5F_BASEMENT_KEY"
 	},
 	"CLEAR_BELL": {
-		"label": "Radio Tower 5F - Clear Bell from Director",
+		"label": "Radio Tower 5F - Clear Bell from Rocket Exec",
 		"flag": "EVENT_GOT_CLEAR_BELL",
 		"type": "giveitem",
 		"tags": ["NPCGift"],

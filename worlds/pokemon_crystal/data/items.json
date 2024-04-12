@@ -337,7 +337,7 @@
 	},
 	"PHONE_CARD": {
 		"name": "Phone Card", "classification": "PROGRESSION",
-		"tags": ["KeyItem", "Unique"]
+		"tags": ["KeyItem", "Unique", "INVALID"]
 	},
 	"EXPN_CARD": {
 		"name": "EXPN Card", "classification": "PROGRESSION",

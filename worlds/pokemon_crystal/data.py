@@ -77,6 +77,12 @@ class TrainerData(NamedTuple):
     name_length: int
 
 
+class FishData(NamedTuple):
+    old: List[str]
+    good: List[str]
+    super: List[str]
+
+
 class PokemonCrystalData:
     rom_addresses: Dict[str, int]
     ram_addresses: Dict[str, int]
@@ -87,6 +93,7 @@ class PokemonCrystalData:
     trainers: Dict[str, TrainerData]
     pokemon: Dict[str, PokemonData]
     moves: Dict[str, MoveData]
+    fish: Dict[str, FishData]
 
     def __init__(self) -> None:
         self.rom_addresses = {}
@@ -98,6 +105,7 @@ class PokemonCrystalData:
         self.trainers = {}
         self.pokemon = {}
         self.moves = {}
+        self.fish = {}
 
 
 def load_json_data(data_name: str) -> Union[List[Any], Dict[str, Any]]:
@@ -122,6 +130,7 @@ def _init() -> None:
     pokemon_data = data_json["pokemon"]
     move_data = data_json["moves"]
     trainer_data = data_json["trainers"]
+    wildfish_data = data_json["wilds"]["fish"]
 
     claimed_locations: Set[str] = set()
     claimed_warps: Set[str] = set()
@@ -225,6 +234,14 @@ def _init() -> None:
             trainer_attributes["trainer_type"],
             trainer_attributes["pokemon"],
             trainer_attributes["name_length"]
+        )
+
+    data.fish = {}
+    for fish_name, fish_data in wildfish_data.items():
+        data.fish[fish_name] = FishData(
+            fish_data["Old"],
+            fish_data["Good"],
+            fish_data["Super"]
         )
 
 

@@ -101,7 +101,8 @@ class PokemonCrystalWorld(World):
             return self.random.choice(move_pool)
 
         def get_random_move_from_learnset(pokemon, level):
-            move_pool = [move.move for move in crystal_data.pokemon[pokemon].learnset if move.level <= level]
+            move_pool = [move.move for move in crystal_data.pokemon[pokemon].learnset if
+                         move.level <= level and move.move != "NO_MOVE"]
             return self.random.choice(move_pool)
 
         def set_rival_fight(trainer_name, trainer, new_pokemon):

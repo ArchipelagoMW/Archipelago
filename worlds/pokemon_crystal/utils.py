@@ -24,8 +24,16 @@ def get_random_filler_item(random):
 
 
 def get_random_pokemon_id(random):
-    pokemon_pool = [i for i in range(1, 251) if i is not 0xC9]
+    pokemon_pool = [i for i in range(1, 251) if i != 0xC9]
     return random.choice(pokemon_pool)
+
+
+def convert_color(r: int, g: int, b: int):
+    color = 0
+    color += sorted((0, r, 31))[1]
+    color += (sorted((0, g, 31))[1] << 5)
+    color += (sorted((0, b, 31))[1] << 10)
+    return color
 
 
 def convert_to_ingame_text(text: str):

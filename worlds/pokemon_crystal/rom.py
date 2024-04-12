@@ -111,6 +111,21 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
             if address_name == "AP_Misc_Intro_Wooper":
                 write_bytes(patched_rom, [get_random_pokemon_id(random)], address + 1)
 
+        for fish_name, fish_data in data.fish.items():
+            cur_address = data.rom_addresses["AP_FishMons_" + fish_name] + 1
+            for poke in fish_data.old:
+                random_poke = get_random_pokemon_id(random)
+                write_bytes(patched_rom, [random_poke], cur_address)
+                cur_address += 3
+            for poke in fish_data.good:
+                random_poke = get_random_pokemon_id(random)
+                write_bytes(patched_rom, [random_poke], cur_address)
+                cur_address += 3
+            for poke in fish_data.super:
+                random_poke = get_random_pokemon_id(random)
+                write_bytes(patched_rom, [random_poke], cur_address)
+                cur_address += 3
+
     if world.options.normalize_encounter_rates:
         write_bytes(patched_rom, [14, 0, 28, 2, 42, 4, 57, 6, 71, 8, 86, 10, 100, 12],
                     data.rom_addresses["AP_Prob_GrassMon"])
@@ -137,8 +152,7 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
         address = data.rom_addresses["AP_TrainerParty_" + trainer_name]
         address += trainer_data.name_length + 1  # skip name and type
         for pokemon in trainer_data.pokemon:
-            pokemon_data = [pokemon[0]]
-            pokemon_data.append(data.pokemon[pokemon[1]].id)
+            pokemon_data = [pokemon[0], data.pokemon[pokemon[1]].id]
             if trainer_data.trainer_type in ["TRAINERTYPE_ITEM_MOVES", "TRAINERTYPE_ITEM"]:
                 item_id = item_const_name_to_id(pokemon[2])
                 pokemon_data.append(item_id)
