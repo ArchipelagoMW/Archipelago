@@ -1,5 +1,6 @@
 # Archipelago Network Protocol
 ## Archipelago General Client
+(Archipelago-Connection-Handshake)=
 ### Archipelago Connection Handshake
 These steps should be followed in order to establish a gameplay connection with an Archipelago session.
 
@@ -688,6 +689,7 @@ class Hint(typing.NamedTuple):
     item_flags: int = 0
 ```
 
+(Data-Package-Contents)=
 #### Data Package Contents
 A data package is a JSON object which may contain arbitrary metadata to enable a client to interact with the Archipelago server most easily. Currently, this package is used to send ID to name mappings so that clients need not maintain their own mappings.
 

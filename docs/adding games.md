@@ -75,7 +75,7 @@ start of the game from anywhere
 * Regions are simply containers for locations that share similar access rules. They do not have to map to 
 concrete, physical areas within your game and can be more abstract like tech trees or a questline.
 
-The base World class can be found in [AutoWorld](AutoWorld). Methods available for your world to call during
-generation can be found in [BaseClasses](BaseClasses.py) and [Fill](Fill). Some examples and documentation 
+The base World class can be found in [AutoWorld](autoworld). Methods available for your world to call during
+generation can be found in [BaseClasses](baseclasses) and [Fill](fill). Some examples and documentation 
 regarding the API can be found in the [world api guide](world%20api.md).
 Before publishing, make sure to also check out [world maintainer.md](world%20maintainer.md).
