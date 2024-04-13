@@ -4,9 +4,11 @@ from typing import Dict, List, Optional, NamedTuple
 from SNIClient import SNIContext
 from NetUtils import NetworkItem
 
+
 class ItemSend(NamedTuple):
     receiving: int
     item: NetworkItem
+
 
 class SoulBlazerContext(SNIContext):
     """Extend SNIContext to provide more data"""

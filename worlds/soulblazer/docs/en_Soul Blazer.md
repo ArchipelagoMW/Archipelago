@@ -34,4 +34,4 @@ While you are connected to the client, you will recieve in-game notifications of
 
 ## When the player receives an item, what happens?
 
-You will receive a notification in game when you are sent an item.
+You will receive an in-game notification when you are sent an item.

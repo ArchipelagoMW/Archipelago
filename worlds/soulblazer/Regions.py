@@ -159,9 +159,10 @@ locations_for_region: Dict[str, List[str]] = {
         ChestName.ST_ELLIS_BIG_PEARL,
     ],
     RegionName.SEABED_SANCTUARY_EAST: [NPCRewardName.NORTHEASTERN_MERMAID_HERB],
-    RegionName.SEABED_SANCTUARY_SOUTHEAST: [
-        # Unused for now, but you need to reach here to get soul of shield.
-    ],
+    # Unneded until there are locations or exits in this region.
+    # RegionName.SEABED_SANCTUARY_SOUTHEAST: [
+    #     # Unused for now, but you need to reach here to get soul of shield.
+    # ],
     RegionName.SEABED_HUB: [
         # TODO: make bubble armor requirement for this lair optional toggle
         LairName.MERMAID_STATUE_ROCKBIRD,
@@ -453,15 +454,18 @@ exits_for_region: Dict[str, List[ExitData]] = {
     ],
     RegionName.SEABED_SANCTUARY_SOUTH: [
         ExitData(RegionName.SEABED_SANCTUARY_WEST, [NPCName.MERMAID_PEARL]),
-        ExitData(RegionName.SEABED_SANCTUARY_SOUTHEAST, [NPCName.ANGELFISH_SOUL_OF_SHIELD]),
+        # Unneeded until there are any locations in SEABED_SANCTUARY_SOUTHEAST
+        # ExitData(RegionName.SEABED_SANCTUARY_SOUTHEAST, [NPCName.ANGELFISH_SOUL_OF_SHIELD]),
         ExitData(RegionName.SEABED_HUB, [ItemName.BUBBLEARMOR]),
     ],
     RegionName.SEABED_SANCTUARY_WEST: [
         ExitData(RegionName.SEABED_SANCTUARY_SOUTHWEST, [NPCName.DOLPHIN_PEARL]),
     ],
     RegionName.SEABED_SANCTUARY_EAST: [
-        ExitData(RegionName.SEABED_SANCTUARY_SOUTHEAST, [NPCName.ANGELFISH_SOUL_OF_SHIELD, NPCName.MERMAID5])
+        # Unneded until there are locations or exits in this region.
+        # ExitData(RegionName.SEABED_SANCTUARY_SOUTHEAST, [NPCName.ANGELFISH_SOUL_OF_SHIELD, NPCName.MERMAID5])
     ],
+    # Unneded until there are locations or exits in this region.
     # RegionName.SEABED_SANCTUARY_SOUTHEAST: [
     #    # TODO: if putting soul of shield in logic, have this connect to durean?
     # ],
@@ -479,6 +483,7 @@ exits_for_region: Dict[str, List[ExitData]] = {
     ],
     # Act 4 Exits
     RegionName.MOUNTAIN_HUB_NORTH_SLOPE: [
+        ExitData(RegionName.LAYNOLE, [ItemName.MUSHROOMSHOES]),
         ExitData(RegionName.LUNE, [NPCName.GIRL3, NPCName.GRANDPA4, NPCName.GRANDPA_LUNE, ItemName.LUCKYBLADE]),
         ExitData(
             RegionName.MOUNTAIN_KING,

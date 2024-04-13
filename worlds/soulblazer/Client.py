@@ -21,11 +21,6 @@ if TYPE_CHECKING:
 
 snes_logger = logging.getLogger("SNES")
 
-# FXPAK Pro protocol memory mapping used by SNI
-ROM_START = 0x000000
-WRAM_START = 0xF50000
-WRAM_SIZE = 0x20000
-SRAM_START = 0xE00000
 
 def address_for_location(type: LocationType, id: int) -> int:
     if type == LocationType.LAIR:
@@ -41,7 +36,7 @@ def is_bit_set(data: bytes, offset: int, index: int) -> bool:
 
 def encode_string(string: str, buffer_length: int) -> bytes:
     # TODO: Also replace ascii chars missing from Soul Blazer's charmap
-    return str[:buffer_length].encode("ascii", "replace") + bytes([0x00])
+    return string[:buffer_length].encode("ascii", "replace") + bytes([0x00])
 
 
 class SoulBlazerSNIClient(SNIClient):
@@ -51,20 +46,46 @@ class SoulBlazerSNIClient(SNIClient):
     location_data_for_address = {data.address: data for data in all_locations_table.values()}
     item_data_for_code = {data.code: data for data in all_items_table.values()}
 
-    async def is_location_checked(self, ctx, location: int) -> bool:
-        """Returns True if the location is a local location which has been checked already indicating that the item has already been handled locally."""
-        # TODO: Should we also mark the location as checked if it was in our world and we were getting it again from the server?
+    # async def is_location_checked(self, ctx, location: int) -> bool:
+    #    """Returns True if the location is a local location which has been checked already indicating that the item has already been handled locally."""
+    #    # TODO: Should we also mark the location as checked if it was in our world and we were getting it again from the server?
+    #    from SNIClient import snes_read
+    #
+    #    location_data = self.location_data_for_address.get(location)
+    #    if location_data is None:
+    #        return False
+    #
+    #    if location_data.type == LocationType.CHEST:
+    #        flag_index = Addresses.CHEST_FLAG_INDEXES[location_data.id]
+    #        chest_data = await snes_read(ctx, Addresses.CHEST_OPENED_TABLE, (flag_index // 8) + 1)
+    #        return is_bit_set(chest_data, 0, flag_index)
+    #    if location_data.type == LocationType.NPC_REWARD:
+    #        npc_data = await snes_read(ctx, Addresses.NPC_REWARD_TABLE, (location_data.id // 8) + 1)
+    #        return is_bit_set(npc_data, 0, location_data.id)
+    #    if location_data.type == LocationType.LAIR:
+    #        lair_byte = await snes_read(ctx, Addresses.LAIR_SPAWN_TABLE + location_data.id, 1)
+    #        return lair_byte[0] & 0x80
+
+    async def was_obtained_locally(self, ctx, item: NetworkItem) -> bool:
+        """Returns True if the item was a local item that has already been obtained."""
+
         from SNIClient import snes_read
 
-        location_data = self.location_data_for_address.get(location)
+        # If it came from someone else, then we couldn't have got it locally.
+        if item.player != ctx.slot:
+            return False
+
+        location_data = self.location_data_for_address.get(item.location)
+        # I dont think this should ever happen.
         if location_data is None:
             return False
 
         if location_data.type == LocationType.CHEST:
-            chest_data = await snes_read(ctx, Addresses.CHEST_OPENED_TABLE, location_data.id // 8)
-            return is_bit_set(chest_data, 0, location_data.id)
+            flag_index = Addresses.CHEST_FLAG_INDEXES[location_data.id]
+            chest_data = await snes_read(ctx, Addresses.CHEST_OPENED_TABLE, (flag_index // 8) + 1)
+            return is_bit_set(chest_data, 0, flag_index)
         if location_data.type == LocationType.NPC_REWARD:
-            npc_data = await snes_read(ctx, Addresses.NPC_REWARD_TABLE, location_data.id // 8)
+            npc_data = await snes_read(ctx, Addresses.NPC_REWARD_TABLE, (location_data.id // 8) + 1)
             return is_bit_set(npc_data, 0, location_data.id)
         if location_data.type == LocationType.LAIR:
             lair_byte = await snes_read(ctx, Addresses.LAIR_SPAWN_TABLE + location_data.id, 1)
@@ -77,8 +98,9 @@ class SoulBlazerSNIClient(SNIClient):
     async def validate_rom(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
         from .Context import SoulBlazerContext
+
         rom_name = await snes_read(ctx, Addresses.SNES_ROMNAME_START, Addresses.ROMNAME_SIZE)
-        if rom_name is None or rom_name == bytes([0] * Addresses.ROMNAME_SIZE) or rom_name[:3] != b'SB_':
+        if rom_name is None or rom_name == bytes([0] * Addresses.ROMNAME_SIZE) or rom_name[:3] != b"SB_":
             return False
 
         ctx.game = self.game
@@ -95,12 +117,6 @@ class SoulBlazerSNIClient(SNIClient):
             ctx.item_send_queue = []
             await ctx.send_msgs([{"cmd": "GetDataPackage", "games": ["Soul Blazer"]}])
 
-
-        #ctx.gem_data = {} if not hasattr(ctx, 'gem_data') else ctx.gem_data
-        #ctx.exp_data = {} if not hasattr(ctx, 'exp_data') else ctx.exp_data
-        #ctx.item_send_queue = [] if not hasattr(ctx, 'item_send_queue') else ctx.item_send_queue
-
-        # await ctx.send_msgs([{"cmd": "GetDataPackage", "games": ["Soul Blazer"]}])
         # death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR, 1)
         ## TODO: Handle Deathlink
         # if death_link:
@@ -125,8 +141,8 @@ class SoulBlazerSNIClient(SNIClient):
         ram_misc_start = Addresses.EVENT_FLAGS_WIN
         ram_misc_end = Addresses.NPC_REWARD_TABLE + Addresses.NPC_REWARD_TABLE_SIZE
         # Misc values in LowRAM
-        ram_misc = await snes_read(ctx, ram_misc_start + WRAM_START, ram_misc_end - ram_misc_start + 1)
-        ram_lair_spawn = await snes_read(ctx, Addresses.LAIR_SPAWN_TABLE + WRAM_START, Addresses.LAIR_SPAWN_TABLE_SIZE)
+        ram_misc = await snes_read(ctx, ram_misc_start, ram_misc_end - ram_misc_start + 1)
+        ram_lair_spawn = await snes_read(ctx, Addresses.LAIR_SPAWN_TABLE, Addresses.LAIR_SPAWN_TABLE_SIZE)
 
         if ram_misc is None or ram_lair_spawn is None:
             return
@@ -137,7 +153,7 @@ class SoulBlazerSNIClient(SNIClient):
         new_checks: List[int] = [
             loc.address
             for loc in chest_table.values()
-            if is_bit_set(ram_misc, Addresses.CHEST_OPENED_TABLE - ram_misc_start, loc.id)
+            if is_bit_set(ram_misc, Addresses.CHEST_OPENED_TABLE - ram_misc_start, Addresses.CHEST_FLAG_INDEXES[loc.id])
             and loc.address not in ctx.locations_checked
         ]
 
@@ -192,40 +208,41 @@ class SoulBlazerSNIClient(SNIClient):
                 send = ctx.item_send_queue.pop(0)
                 player_name = encode_string(ctx.player_names[send.receiving], Addresses.TX_ADDRESSEE_SIZE)
                 item_name = encode_string(ctx.item_names[send.item.item], Addresses.TX_NAME_SIZE)
-                snes_buffered_write(ctx, Addresses.TX_STATUS, bytes([0x02]))
                 snes_buffered_write(ctx, Addresses.TX_ADDRESSEE, player_name)
                 snes_buffered_write(ctx, Addresses.TX_ITEM_NAME, item_name)
+                # Write to Status last to ensure all the data is placed before signaling ready.
+                snes_buffered_write(ctx, Addresses.TX_STATUS, bytes([0x02]))
                 await snes_flush_writes(ctx)
 
         # TODO: also prevent receiving NPC unlocks when in a boss room to prevent the boss from regenerating to full health. Can happen either in the ROM or client, whichever is easiest to implement.
         recv_bytes = await snes_read(ctx, Addresses.RECEIVE_COUNT, 2)
         if recv_bytes is None:
             return
-        
+
         recv_index = int.from_bytes(recv_bytes, "little")
         if recv_index < len(ctx.items_received):
             item = ctx.items_received[recv_index]
             rx_status = await snes_read(ctx, Addresses.RX_STATUS, 1)
-            if (
-                rx_status is not None
-                and rx_status[0] == 0x01
-                and not await self.is_location_checked(ctx, item.location)
-            ):
+            if rx_status is not None and rx_status[0] == 0x01 and not await self.was_obtained_locally(ctx, item):
+                # TODO: Should we also mark the location as checked if it was in our world and we were getting it again from the server?
+                # This would remove the need to recheck things in case of resetting without saving, but you would lose out on lair monster exp.
                 player_name = encode_string(ctx.player_names[item.player], Addresses.RX_SENDER_SIZE)
                 item_data = self.item_data_for_code[item.item]
-                operand = item_data.operand
+                operand = item_data.operand_for_id
                 if item_data.id == ItemID.GEMS:
                     operand = ctx.gem_data.get(f"{item.item}:{item.location}:{item.player}", operand)
                 if item_data.id == ItemID.EXP:
                     operand = ctx.exp_data.get(f"{item.item}:{item.location}:{item.player}", operand)
 
-                snes_buffered_write(ctx, Addresses.RX_STATUS, bytes([0x02]))
                 snes_buffered_write(ctx, Addresses.RX_INCREMENT, bytes([0x01]))
                 snes_buffered_write(ctx, Addresses.RX_ID, item_data.id.to_bytes(1, "little"))
                 snes_buffered_write(ctx, Addresses.RX_OPERAND, operand.to_bytes(2, "little"))
                 snes_buffered_write(ctx, Addresses.RX_SENDER, player_name)
+                # Write to Status last to ensure all the data is placed before signaling ready.
+                snes_buffered_write(ctx, Addresses.RX_STATUS, bytes([0x02]))
                 await snes_flush_writes(ctx)
 
-        # TODO: Anything else?
+                if item.player == ctx.slot:
+                    ctx.locations_checked.add(item.location)
 
-        
+        # TODO: Anything else?

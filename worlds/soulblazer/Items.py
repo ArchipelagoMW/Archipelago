@@ -53,6 +53,12 @@ class SoulBlazerItemData:
 
         operand = decimal
 
+    @property
+    def operand_for_id(self) -> int:
+        if self.id == ItemID.GEMS or self.id == ItemID.EXP:
+            return self.operand_bcd
+        return self.operand
+
 
 class SoulBlazerItem(Item):
     game = "Soul Blazer"
@@ -87,9 +93,7 @@ class SoulBlazerItem(Item):
 
     @property
     def operand_for_id(self) -> int:
-        if self.id == ItemID.GEMS or self.id == ItemID.EXP:
-            return self.operand_bcd
-        return self.operand
+        return self._itemData.operand_for_id
 
 
 herb_count = 20

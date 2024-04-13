@@ -16,10 +16,12 @@ from .Items import (
 from .Locations import SoulBlazerLocation, all_locations_table  # same as above
 from .Names import ItemName, ChestName, Addresses
 from .Regions import create_regions as region_create_regions
-#from .Rules import set_rules as rules_set_rules
+
+# from .Rules import set_rules as rules_set_rules
 from .Rom import SoulBlazerDeltaPatch, LocalRom, patch_rom, get_base_rom_path
 from worlds.AutoWorld import WebWorld, World
 from BaseClasses import MultiWorld, Region, Location, Entrance, Item, ItemClassification, Tutorial
+
 
 class SoulBlazerSettings(settings.Group):
     class RomFile(settings.SNESRomPath):
@@ -33,7 +35,7 @@ class SoulBlazerSettings(settings.Group):
 
 
 class SoulBlazerWeb(WebWorld):
-    theme = "grass"
+    theme = "dirt"
 
     setup_en = Tutorial(
         "Multiworld Setup Guide",
@@ -48,22 +50,24 @@ class SoulBlazerWeb(WebWorld):
 
 
 class SoulBlazerWorld(World):
-    """Insert description of the world/game here."""
+    """
+    Soul Blazer is a classic SNES action RPG.
+    Free all the peoples.
+    Make Deathtoll pay!
+    """
 
-    game = "Soul Blazer"  # name of the game/world
-    options_dataclass = SoulBlazerOptions  # options the player can set
-    options: SoulBlazerOptions  # typing hints for option results
-    settings: ClassVar[SoulBlazerSettings]  # will be automatically assigned from type hint
-    # topology_present = True  # show path to required location checks in spoiler
+    game: str = "Soul Blazer"  # name of the game/world
+    settings: ClassVar[SoulBlazerSettings]
+    options_dataclass = SoulBlazerOptions
+    options: SoulBlazerOptions
 
-    # The following two dicts are required for the generation to know which
-    # items exist. They could be generated from json or something else. They can
-    # include events, but don't have to since events will be placed manually.
+    web = SoulBlazerWeb()
+
+    topology_present = False
+
     item_name_to_id = {name: data.code for name, data in all_items_table.items()}
     location_name_to_id = {name: data.address for name, data in all_locations_table.items()}
 
-    # Items can be grouped using their names to allow easy checking if any item
-    # from that group has been collected. Group names can also be used for !hint
     # TODO: Define groups?
     # item_name_groups = {
     #    "weapons": {"sword", "lance"},
@@ -103,15 +107,14 @@ class SoulBlazerWorld(World):
 
     def generate_early(self) -> None:
         from Utils import __version__
-        data = bytes(f'SoulBlazer_{__version__}_{self.player}_{self.multiworld.seed}', 'ascii')
-       
-        hash = blake2b(data, digest_size=9, key=bytes(str(self.multiworld.seed), 'ascii'))
-        self.rom_name = b'SB_' + bytes(hash.hexdigest(), 'ascii')
-        # Should already be the correct length of 21 bytes, but ensure anyway.
-        self.rom_name = self.rom_name[:Addresses.ROMNAME_SIZE]
 
-    # def create_regions(self) -> None:
-    #    pass
+        data = bytes(f"SoulBlazer_{__version__}_{self.player}_{self.multiworld.seed}", "ascii")
+
+        hash = blake2b(data, digest_size=9, key=bytes(str(self.multiworld.seed), "ascii"))
+        self.rom_name = b"SB_" + bytes(hash.hexdigest(), "ascii")
+        # Should already be the correct length of 21 bytes, but ensure anyway.
+        self.rom_name = self.rom_name[: Addresses.ROMNAME_SIZE]
+
     create_regions = region_create_regions
 
     def create_items(self) -> None:
@@ -133,8 +136,6 @@ class SoulBlazerWorld(World):
 
     def set_rules(self) -> None:
         pass
-
-    #set_rules = rules_set_rules
 
     def generate_basic(self) -> None:
         pass
@@ -185,12 +186,13 @@ class SoulBlazerWorld(World):
             f"{item.code}:{item.location.address}:{item.location.player}": item.operand_for_id
             for item in self.exp_items
         }
-        return {'gem_data': gem_data, 'exp_data': exp_data}
+        return {"gem_data": gem_data, "exp_data": exp_data}
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
         pass
 
     def modify_multidata(self, multidata: Dict[str, Any]) -> None:
         import base64
+
         new_name = base64.b64encode(self.rom_name).decode()
         multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
