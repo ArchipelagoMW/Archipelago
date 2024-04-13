@@ -60,6 +60,7 @@ class Entrance:
     mountain_to_the_mines = "Mountain to The Mines"
     enter_quarry = "Mountain to Quarry"
     mountain_to_adventurer_guild = "Mountain to Adventurer's Guild"
+    adventurer_guild_to_bedroom = "Adventurer's Guild to Marlon's Bedroom"
     mountain_to_town = "Mountain to Town"
     town_to_community_center = "Town to Community Center"
     access_crafts_room = "Access Crafts Room"
@@ -207,6 +208,9 @@ class Entrance:
     attend_festival_of_ice = "Attend Festival of Ice"
     attend_night_market = "Attend Night Market"
     attend_winter_star = "Attend Feast of the Winter Star"
+    buy_experience_books = "Buy Experience Books from the bookseller"
+    buy_year1_books = "Buy Year 1 Books from the Bookseller"
+    buy_year3_books = "Buy Year 3 Books from the Bookseller"
 
 
 # Skull Cavern Elevator

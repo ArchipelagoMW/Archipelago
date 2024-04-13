@@ -92,6 +92,7 @@ class Region:
     maru_room = "Maru's Room"
     sebastian_room = "Sebastian's Room"
     adventurer_guild = "Adventurer's Guild"
+    adventurer_guild_bedroom = "Marlon's bedroom"
     quarry = "Quarry"
     quarry_mine_entrance = "Quarry Mine Entrance"
     quarry_mine = "Quarry Mine"
@@ -171,6 +172,9 @@ class Region:
     winter_star = "Feast of the Winter Star"
     raccoon_daddy = "Raccoon Bundles"
     raccoon_shop = "Raccoon Shop"
+    bookseller_1 = "Bookseller Experience Books"
+    bookseller_2 = "Bookseller Year 1 Books"
+    bookseller_3 = "Bookseller Year 3 Books"
 
 
 class DeepWoodsRegion:

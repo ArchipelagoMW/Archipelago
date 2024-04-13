@@ -4,11 +4,12 @@ from ...data import villagers_data, fish_data
 from ...data.game_item import ItemTag
 from ...data.harvest import ForagingSource, HarvestFruitTreeSource, HarvestCropSource
 from ...data.shop import ShopSource
+from ...strings.book_names import Book
 from ...strings.crop_names import Fruit, Vegetable
 from ...strings.fish_names import Fish
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.fruit_tree_names import Sapling
-from ...strings.metal_names import Fossil
+from ...strings.metal_names import Fossil, Mineral
 from ...strings.region_names import Region
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed
@@ -55,6 +56,9 @@ ginger_island_content_pack = GingerIslandContentPack(
         Seed.pineapple: (ShopSource(items_price=(Fossil.bone_fragment,), shop_region=Region.island_trader),),
         Sapling.banana: (ShopSource(items_price=(Forageable.dragon_tooth,), shop_region=Region.island_trader),),
         Sapling.mango: (ShopSource(items_price=(Fish.mussel_node,), shop_region=Region.island_trader),),
+
+        # This one is 10 diamonds, should maybe add time?
+        Book.the_diamond_hunter: (ShopSource(items_price=(Mineral.diamond,), shop_region=Region.volcano_dwarf_shop),),
 
     },
     fishes=(

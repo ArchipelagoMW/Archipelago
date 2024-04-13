@@ -212,6 +212,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Beverage.coffee: self.artisan.can_keg(Seed.coffee) | self.has(Machine.coffee_maker) | (self.money.can_spend_at(Region.saloon, 300)) | self.has("Hot Java Ring"),
             Beverage.pina_colada: self.money.can_spend_at(Region.island_resort, 600),
             Beverage.triple_shot_espresso: self.has("Hot Java Ring"),
+            Consumable.butterfly_powder: self.money.can_spend_at(Region.sewer, 20000),
             Consumable.far_away_stone: self.region.can_reach(Region.mines_floor_100) & self.has(Artifact.ancient_doll),
             Consumable.fireworks_red: self.region.can_reach(Region.casino),
             Consumable.fireworks_purple: self.region.can_reach(Region.casino),

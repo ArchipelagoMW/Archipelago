@@ -3,11 +3,13 @@ from ...data import villagers_data, fish_data
 from ...data.game_item import PermanentSource
 from ...data.harvest import ForagingSource, SeasonalForagingSource
 from ...data.shop import ShopSource
+from ...strings.book_names import Book
 from ...strings.crop_names import Fruit
 from ...strings.fish_names import WaterItem
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.fruit_tree_names import Sapling
 from ...strings.material_names import Material
+from ...strings.metal_names import Mineral
 from ...strings.region_names import Region
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed, TreeSeed
@@ -126,6 +128,12 @@ pelican_town = ContentPack(
         Seed.mixed_flower: (
             ForagingSource(seasons=(Season.summer,), regions=(Region.town, Region.farm, Region.forest)),
         ),
+
+        # Books
+        Book.jack_be_nimble_jack_be_thick: (ForagingSource(regions=(Region.forest, Region.backwoods, Region.bus_stop, Region.farm, Region.mountain),
+                                                           seasons=Season.all, requires_hoe=True),),
+        # Needs a condition for owning an axe. Plus maybe the abysmal drop rate with a time gate?
+        Book.woodys_secret: (ForagingSource(regions=(Region.forest, Region.mountain), seasons=Season.all),),
     },
     shop_sources={
         # Saplings
@@ -177,6 +185,46 @@ pelican_town = ContentPack(
 
         Seed.strawberry: (ShopSource(money_price=100, shop_region=Region.egg_festival, seasons=(Season.spring,)),),
         Seed.rare_seed: (ShopSource(money_price=1000, shop_region=Region.traveling_cart, seasons=(Season.spring, Season.summer)),),
+
+        # Books
+        Book.animal_catalogue: (ShopSource(money_price=5000, shop_region=Region.ranch),),
+        Book.book_of_mysteries: (# Needs a MysteryBoxSource, THIS ONE IS INVALID RIGHT NOW
+                                 ShopSource(money_price=999999999, shop_region=Region.blacksmith),),
+        Book.dwarvish_safety_manual: (ShopSource(money_price=4000, shop_region=Region.mines_dwarf_shop),
+                                      ShopSource(money_price=20000, shop_region=Region.bookseller_3),),
+        Book.friendship_101: (# ShopSource(money_price=20000, shop_region=Region.bookseller_rares),  # You can get this one in the prize machine, but how do I logic that :(
+                              ShopSource(money_price=20000, shop_region=Region.bookseller_3),),
+        Book.horse_the_book: (ShopSource(money_price=25000, shop_region=Region.bookseller_2),),
+        Book.jack_be_nimble_jack_be_thick: (ShopSource(money_price=20000, shop_region=Region.bookseller_3),),
+        Book.jewels_of_the_sea: (# Needs a source for Fishing Treasure Chests
+                                  ShopSource(money_price=20000, shop_region=Region.bookseller_3),),
+        Book.mapping_cave_systems: (PermanentSource(regions=Region.adventurer_guild_bedroom),
+                                    ShopSource(money_price=20000, shop_region=Region.bookseller_3),),
+        Book.monster_compendium: (# Needs a source for monster drops
+                                  ShopSource(money_price=20000, shop_region=Region.bookseller_3),),
+        Book.ol_slitherlegs: (ShopSource(money_price=25000, shop_region=Region.bookseller_2),),
+        Book.price_catalogue: (ShopSource(money_price=3000, shop_region=Region.bookseller_2),),
+        Book.the_alleyway_buffet: (PermanentSource(regions=Region.town),
+                                   ShopSource(money_price=20000, shop_region=Region.bookseller_3),),
+        Book.the_art_o_crabbing: (# Needs a source for the SquidFest Iridium Tier,
+                                  ShopSource(money_price=20000, shop_region=Region.bookseller_3),),
+        Book.treasure_appraisal_guide: (# Needs a source for artifact troves and mystery boxes,
+                                        ShopSource(money_price=20000, shop_region=Region.bookseller_3),),
+        Book.raccoon_journal: (# Needs a source for the AP item you'll get for completion of the 2nd raccoon bundle,
+                               ShopSource(money_price=20000, shop_region=Region.bookseller_3),
+                               ShopSource(items_price=(Material.fiber,), shop_region=Region.raccoon_shop),), # This one is 999 Fiber, should maybe add time?
+        Book.way_of_the_wind_pt_1: (ShopSource(money_price=15000, shop_region=Region.bookseller_2),),
+        Book.way_of_the_wind_pt_2: (ShopSource(money_price=35000, shop_region=Region.bookseller_2),), # This one requires the first book. If randomized, should have logic?
+        Book.woodys_secret: (ShopSource(money_price=20000, shop_region=Region.bookseller_3),),
+        Book.queen_of_sauce_cookbook: (ShopSource(money_price=50000, shop_region=Region.bookseller_2),), # Worst book ever
+
+        # Experience Books
+        Book.book_of_stars: (ShopSource(money_price=5000, shop_region=Region.bookseller_1),),
+        Book.bait_and_bobber: (ShopSource(money_price=5000, shop_region=Region.bookseller_1),),
+        Book.combat_quarterly: (ShopSource(money_price=5000, shop_region=Region.bookseller_1),),
+        Book.mining_monthly: (ShopSource(money_price=5000, shop_region=Region.bookseller_1),),
+        Book.stardew_valley_almanac: (ShopSource(money_price=5000, shop_region=Region.bookseller_1),),
+        Book.woodcutters_weekly: (ShopSource(money_price=5000, shop_region=Region.bookseller_1),),
     },
     fishes=(
         fish_data.albacore,
