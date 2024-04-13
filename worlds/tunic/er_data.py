@@ -1447,7 +1447,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Swamp Front":
             [],
         "Swamp to Cathedral Main Entrance Region":
-            [],
+            [["Hyperdash"], ["NMG"]],
         "Swamp Ledge under Cathedral Door":
             [],
         "Back of Swamp":

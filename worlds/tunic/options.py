@@ -125,8 +125,7 @@ class FixedShop(Toggle):
 
 class LaurelsLocation(Choice):
     """Force the Hero's Laurels to be placed at a location in your world.
-    For if you want to avoid or specify early or late Laurels.
-    If you use the 10 Fairies option in Entrance Rando, Secret Gathering Place will be at its vanilla entrance."""
+    For if you want to avoid or specify early or late Laurels."""
     internal_name = "laurels_location"
     display_name = "Laurels Location"
     option_anywhere = 0

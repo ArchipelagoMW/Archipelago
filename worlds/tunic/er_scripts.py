@@ -125,8 +125,12 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     logic_rules = world.options.logic_rules.value
     player_name = world.multiworld.get_player_name(world.player)
     portal_map = portal_mapping.copy()
-    has_laurels = True
     traversal_reqs = traversal_requirements.copy()
+    has_laurels = True
+
+    # marking that you don't immediately have laurels
+    if world.options.laurels_location == 3 and not hasattr(world.multiworld, "re_gen_passthrough"):
+        has_laurels = False
 
     shop_scenes: Set[str] = set()
     shop_count = 6
@@ -181,7 +185,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     # make better start region stuff when/if implementing random start
     start_region = "Overworld"
     connected_regions.add(start_region)
-    connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels)
+    connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_rules)
 
     plando_connections = world.multiworld.plando_connections[world.player]
 
@@ -275,11 +279,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             portal_pairs[portal1] = portal2
 
         # if we have plando connections, our connected regions may change somewhat
-        connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels)
-
-    # marking that you don't immediately have laurels
-    if world.options.laurels_location == 3 and not hasattr(world.multiworld, "re_gen_passthrough"):
-        has_laurels = False
+        connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_rules)
 
     if world.options.fixed_shop and not hasattr(world.multiworld, "re_gen_passthrough"):
         portal1 = None
@@ -333,6 +333,9 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         if check_success == 1:
             for portal in two_plus:
                 if portal.region not in connected_regions:
+                    # if secret gathering place happens to get paired really late, you can end up running out
+                    if not has_laurels and portal.region != "Secret Gathering Place" and len(two_plus) < 80:
+                        continue
                     if portal.region == "Secret Gathering Place":
                         has_laurels = True
                     portal2 = portal
@@ -343,7 +346,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
 
         # once we have both portals, connect them and add the new region(s) to connected_regions
         if check_success == 2:
-            connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels)
+            connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_rules)
             portal_pairs[portal1] = portal2
             check_success = 0
             random_object.shuffle(two_plus)
@@ -402,7 +405,7 @@ def create_randomized_entrances(portal_pairs: Dict[Portal, Portal], regions: Dic
 
 
 def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[str, Dict[str, List[List[str]]]],
-                             has_laurels: bool) -> Set[str]:
+                             has_laurels: bool, logic: int) -> Set[str]:
     # starting count, so we can run it again if this changes
     region_count = len(connected_regions)
     # checking each origin region
@@ -431,6 +434,10 @@ def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[s
                         # will need to change this if item plando gets evaluated earlier
                         if req == "Hyperdash" and has_laurels:
                             met_count += 1
+                        if req == "NMG" and logic:
+                            met_count += 1
+                        if req == "UR" and logic == 2:
+                            met_count += 1
                         # check if we have the regions required for traversal
                         if req in connected_regions:
                             met_count += 1
@@ -445,6 +452,6 @@ def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[s
 
     # if the length of connected_regions changed, we got new regions, so we want to check those new origins
     if region_count != len(connected_regions):
-        connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels)
+        connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic)
     
     return connected_regions
