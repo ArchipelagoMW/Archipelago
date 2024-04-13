@@ -80,11 +80,11 @@ class DOOM1993World(World):
         "Energy cell pack": 10
     }
 
-    def __init__(self, world: MultiWorld, player: int):
+    def __init__(self, multiworld: MultiWorld, player: int):
         self.included_episodes = [1, 1, 1, 0]
         self.location_count = 0
 
-        super().__init__(world, player)
+        super().__init__(multiworld, player)
 
     def get_episode_count(self):
         return functools.reduce(lambda count, episode: count + episode, self.included_episodes)
