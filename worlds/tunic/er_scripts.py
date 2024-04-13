@@ -339,7 +339,8 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         if previous_conn_num == len(connected_regions):
             fail_count += 1
             if fail_count >= 500:
-                raise Exception(f"Failed to pair regions. Check plando connections for {player_name} for errors.")
+                raise Exception(f"Failed to pair regions. Check plando connections for {player_name} for errors. "
+                                "Unconnected regions:", non_dead_end_regions - connected_regions)
         else:
             fail_count = 0
         previous_conn_num = len(connected_regions)
