@@ -1,7 +1,7 @@
 import hashlib
 import os
 import math
-
+import pkgutil
 import bsdiff4
 import Utils
 from typing import Callable, Dict
@@ -12,12 +12,13 @@ from worlds.Files import APDeltaPatch
 from .Names import Addresses, ItemID
 from .Items import SoulBlazerItem, SoulBlazerItemData
 from .Locations import SoulBlazerLocation, LocationType, SoulBlazerLocationData
+from .patches import get_patch_bytes
 
 USHASH = "83cf41d53a1b94aeea1a645037a24004"
 
 
 class LocalRom(object):
-    def __init__(self, file, patch=True, vanillaRom=None, name: bytes=None, hash=None):
+    def __init__(self, file, patch=True, vanillaRom=None, name: bytes = None, hash=None):
         self.name = name
         self.hash = hash
         # self.orig_buffer = None
@@ -56,14 +57,12 @@ class LocalRom(object):
             self.buffer = bytearray(stream.read())
 
     def apply_basepatch(self):
-        with open(os.path.join(os.path.dirname(__file__), "patches", "basepatch.bsdiff4"), "rb") as basepatch:
-            delta: bytes = basepatch.read()
-        self.buffer = bytearray(bsdiff4.patch(bytes(self.buffer), delta))
+        basepatch = get_patch_bytes("basepatch")
+        self.buffer = bytearray(bsdiff4.patch(bytes(self.buffer), basepatch))
 
     def apply_patch(self, name: str):
-        with open(os.path.join(os.path.dirname(__file__), "patches", name), "rb") as basepatch:
-            delta: bytes = basepatch.read()
-        self.buffer = bytearray(bsdiff4.patch(bytes(self.buffer, delta)))
+        patch = get_patch_bytes(name)
+        self.buffer = bytearray(bsdiff4.patch(bytes(self.buffer, patch)))
 
     def place_lair(self, index: int, id: int, operand: int):
         # Compute address of our lair entry
