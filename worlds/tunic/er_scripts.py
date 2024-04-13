@@ -225,6 +225,8 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         for connection in plando_connections:
             p_entrance = connection.entrance
             p_exit = connection.exit
+            portal1_dead_end = True
+            portal2_dead_end = True
 
             if p_entrance.startswith("Shop"):
                 p_entrance = p_exit
@@ -251,6 +253,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                                     f"plando connections in {player_name}'s YAML.")
                 dead_ends.remove(portal1)
             else:
+                portal1_dead_end = False
                 two_plus.remove(portal1)
 
             if not portal2:
@@ -274,7 +277,24 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                                         f"plando connections in {player_name}'s YAML.")
                     dead_ends.remove(portal2)
             else:
+                portal2_dead_end = False
                 two_plus.remove(portal2)
+
+            if not portal1_dead_end and not portal2_dead_end:
+                if portal1.region not in traversal_reqs.keys():
+                    traversal_reqs[portal1.region] = {portal2.region: []}
+                else:
+                    if portal2.region not in traversal_reqs[portal1.region].keys():
+                        traversal_reqs[portal1.region].update({portal2.region: []})
+                    else:
+                        traversal_reqs[portal1.region][portal2.region] = []
+                if portal2.region not in traversal_reqs.keys():
+                    traversal_reqs[portal2.region] = {portal1.region: []}
+                else:
+                    if portal1.region not in traversal_reqs[portal2.region].keys():
+                        traversal_reqs[portal2.region].update({portal1.region: []})
+                    else:
+                        traversal_reqs[portal2.region][portal1.region] = []
 
             portal_pairs[portal1] = portal2
 
