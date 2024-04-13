@@ -193,17 +193,21 @@ class MarioLand2Client(BizHawkClient):
             data_writes.append((0x02A0, [0], "CartRAM"))
 
         for i in range(32):
-            if i == 24:
-                continue
-            if "Auto Scroll" in items_received or f"Auto Scroll - {level_id_to_name[i]}" in items_received:
-                auto_scroll_levels[i] = 1
-                if i == current_level:
-                    data_writes.append((0x02C8, [0x01], "CartRAM"))
-            elif ("Cancel Auto Scroll" in items_received
-                  or f"Cancel Auto Scroll - {level_id_to_name[i]}" in items_received):
-                auto_scroll_levels[i] = 0
-                if i == current_level:
-                    data_writes.append((0x02C8, [0x00], "CartRAM"))
+            if auto_scroll_levels[i] == 3:
+                if "Auto Scroll" in items_received or f"Auto Scroll - {level_id_to_name[i]}" in items_received:
+                    auto_scroll_levels[i] = 1
+                    if i == current_level:
+                        data_writes.append((0x02C8, [0x01], "CartRAM"))
+                else:
+                    auto_scroll_levels[i] = 0
+            elif auto_scroll_levels[i] == 2:
+                if ("Cancel Auto Scroll" in items_received
+                        or f"Cancel Auto Scroll - {level_id_to_name[i]}" in items_received):
+                    auto_scroll_levels[i] = 0
+                    if i == current_level:
+                        data_writes.append((0x02C8, [0x00], "CartRAM"))
+                else:
+                    auto_scroll_levels[i] = 1
         data_writes.append((rom_addresses["Auto_Scroll_Levels"], auto_scroll_levels, "ROM"))
 
         success = await guarded_write(ctx.bizhawk_ctx, data_writes, [(0x0848, level_data, "CartRAM"),

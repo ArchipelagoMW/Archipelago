@@ -92,17 +92,27 @@ class MarioLand2World(World):
 
     def generate_early(self):
         if self.options.auto_scroll_chances == -1:
-            self.auto_scroll_levels = [19, 25, 30]
+            self.auto_scroll_levels = [int(i in [19, 25, 30]) for i in range(32)]
         else:
-            self.auto_scroll_levels = []
-            ineligible_levels = ["Mario's Castle"]
-            if self.options.auto_scroll_mode == "always" or (self.options.accessibility == "locations" and
-                                                             "trap" in self.options.auto_scroll_mode):
-                ineligible_levels += ["Tree Zone 3", "Macro Zone 2", "Space Zone 1", "Turtle Zone 2", "Pumpkin Zone 2"]
-            for i in range(32):
-                if (level_id_to_name[i] not in ineligible_levels
-                        and self.random.randint(1, 100) < self.options.auto_scroll_chances):
-                    self.auto_scroll_levels.append(i)
+            self.auto_scroll_levels = [int(self.random.randint(1, 100) < self.options.auto_scroll_chances)
+                                       for _ in range(32)]
+
+        self.auto_scroll_levels[level_name_to_id["Mario's Castle"]] = 0
+        unbeatable_scroll_levels = ["Tree Zone 3", "Macro Zone 2", "Space Zone 1", "Turtle Zone 2", "Pumpkin Zone 2"]
+        for level, i in enumerate(self.auto_scroll_levels):
+            if i == 1:
+                if self.options.auto_scroll_mode in ("global_cancel_item", "level_cancel_items"):
+                    self.auto_scroll_levels[level] = 2
+                elif self.options.auto_scroll_mode == "level_cancel_or_trap_items":
+                    if ((self.options.accessibility == "locations"
+                         and level_id_to_name[level] in unbeatable_scroll_levels)
+                            or self.random.randint(0, 1)):
+                        self.auto_scroll_levels[level] = 2
+                elif (self.options.accessibility == "locations"
+                      and level_id_to_name[level] in unbeatable_scroll_levels):
+                    self.auto_scroll_levels[level] = 0
+                if self.auto_scroll_levels[level] == 1 and "trap" in self.options.auto_scroll_mode.current_key:
+                    self.auto_scroll_levels[level] = 3
 
     def create_regions(self):
         menu_region = Region("Menu", self.player, self.multiworld)
@@ -156,7 +166,7 @@ class MarioLand2World(World):
             self.max_coin_locations = {region: len(coins_coords[region]) for region in created_regions}
             if self.options.accessibility == "locations" or self.options.auto_scroll_mode == "always":
                 for level in self.max_coin_locations:
-                    if level in auto_scroll_max and level_name_to_id[level] in self.auto_scroll_levels:
+                    if level in auto_scroll_max and self.auto_scroll_levels[level_name_to_id[level]] in (1, 3):
                         self.max_coin_locations[level] = min(auto_scroll_max[level], self.max_coin_locations[level])
             coinsanity_checks = min(sum(self.max_coin_locations.values()), coinsanity_checks)
             for i in range(coinsanity_checks - 31):
@@ -315,6 +325,10 @@ class MarioLand2World(World):
                         coin_rule(state, self.player, num_coins)
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Wario Defeated", self.player)
 
+        from worlds.generic.Rules import add_item_rule
+        for location in self.multiworld.get_locations(self.player):
+            add_item_rule(location, lambda i, loc=location.name: "Auto Scroll" not in i.name or i.name.split("- ")[1] in loc)
+
     def create_items(self):
         item_counts = {
             "Space Zone Progression": 1,
@@ -410,16 +424,14 @@ class MarioLand2World(World):
 
         if self.options.auto_scroll_mode == "global_trap_item":
             item_counts["Auto Scroll"] = 1
-        elif self.options.auto_scroll_mode == "level_trap_items":
-            for level, level_id in level_name_to_id.items():
-                if level_id in self.auto_scroll_levels:
-                    item_counts[f"Auto Scroll - {level}"] = 1
         elif self.options.auto_scroll_mode == "global_cancel_item":
             item_counts["Cancel Auto Scroll"] = 1
-        elif self.options.auto_scroll_mode == "level_cancel_items":
-            for level, level_id in level_name_to_id.items():
-                if level_id in self.auto_scroll_levels:
-                    item_counts[f"Cancel Auto Scroll - {level}"] = 1
+        else:
+            for level, i in enumerate(self.auto_scroll_levels):
+                if i == 3:
+                    item_counts[f"Auto Scroll - {level_id_to_name[level]}"] = 1
+                elif i == 2:
+                    item_counts[f"Cancel Auto Scroll - {level_id_to_name[level]}"] = 1
 
         for item in self.multiworld.precollected_items[self.player]:
             if item.name in item_counts and item_counts[item.name] > 0:
@@ -453,10 +465,11 @@ class MarioLand2World(World):
                     item_counts[double_progression_item] -= 2
                     item_counts[double_progression_item + " x2"] = 1
                     continue
-                if self.options.auto_scroll_mode in ("level_trap_items", "level_cancel_items"):
+                if self.options.auto_scroll_mode in ("level_trap_items", "level_cancel_items",
+                                                     "level_cancel_or_trap_items"):
                     auto_scroll_item = self.random.choice([item for item in item_counts if "Auto Scroll" in item])
                     level = auto_scroll_item.split("- ")[1]
-                    self.auto_scroll_levels.remove(level_name_to_id[level])
+                    self.auto_scroll_levels[level_name_to_id[level]] = 0
                     del item_counts[auto_scroll_item]
                     continue
                 raise Exception(f"Too many items in the item pool for Super Mario Land 2 player {self.multiworld.player_name[self.player]}")

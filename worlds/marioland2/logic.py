@@ -5,7 +5,7 @@ def is_auto_scroll(state, player, level):
     level_id = level_name_to_id[level]
     if state.has_any(["Cancel Auto Scroll", f"Cancel Auto Scroll - {level}"], player):
         return False
-    return level_id in state.multiworld.worlds[player].auto_scroll_levels
+    return state.multiworld.worlds[player].auto_scroll_levels[level_id] > 0
 
 
 def has_pipe_right(state, player):

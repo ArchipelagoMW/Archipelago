@@ -112,9 +112,10 @@ class AutoScrollMode(Choice):
     Level Trap Items: As with Trap Item, but there is a separate trap item for each auto scroll level.
     Global Cancel Item: Auto Scroll levels will stop auto-scrolling after obtaining the Auto Scroll Cancel item.
     Level Cancel Items: As with Cancel Item, but there is a separate cancel item for each auto scroll level.
+    Level Cancel Or Trap Items: Levels will randomly have Auto Scroll Trap or Auto Scroll Cancel items.
     The effects of Trap and Cancel items are permanent! If Accessibility is not set to Locations,
     Traps may cause locations to become permanently unreachable.
-    With Trap Items or Cancel Items, the number of auto scroll levels may be limited by the available space in the item
+    With individual level items, the number of auto scroll levels may be limited by the available space in the item
     pool."""
     display_name = "Auto Scroll Mode"
     option_always = 0
@@ -122,6 +123,7 @@ class AutoScrollMode(Choice):
     option_level_trap_items = 2
     option_global_cancel_item = 3
     option_level_cancel_items = 4
+    option_level_cancel_or_trap_items = 5
     default = 0
 
 

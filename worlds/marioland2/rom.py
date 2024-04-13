@@ -201,10 +201,10 @@ def generate_output(self, output_directory: str):
     data[rom_addresses["Difficulty_Mode"]] = self.options.difficulty_mode.value
     data[rom_addresses["Coin_Mode"]] = self.options.shuffle_golden_coins.value
 
-    for i in range(32):
-        data[rom_addresses["Auto_Scroll_Levels"] + i] = 1 if i in self.auto_scroll_levels else 0
-        if "trap" not in self.options.auto_scroll_mode:
-            data[rom_addresses["Auto_Scroll_Levels_B"] + i] = 1 if i in self.auto_scroll_levels else 0
+    for level, i in enumerate(self.auto_scroll_levels):
+        # We set 0 if no auto scroll or auto scroll trap, so it defaults to no auto scroll. 1 if always or cancel items.
+        data[rom_addresses["Auto_Scroll_Levels"] + level] = max(0, i - 1)
+        data[rom_addresses["Auto_Scroll_Levels_B"] + level] = i
 
     if self.options.energy_link:
         # start with 1 life if Energy Link is on so that you don't deposit lives at the start of the game.
