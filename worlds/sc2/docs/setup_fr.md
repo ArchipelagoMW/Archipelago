@@ -14,6 +14,7 @@ indications pour obtenir un fichier de configuration de *StarCraft 2 Archipelago
 *StarCraft 2 Archipelago* est téléchargé par le programme d'installation d'Archipelago.
    - Les utilisateurs de Linux devraient aussi suivre les instructions qui se retrouvent à la fin de cette page 
 (["Exécuter sous Linux"](#exécuter-sous-linux)).
+   - Notez que votre jeu *StarCraft 2* doit être en anglais pour fonctionner avec Archipelago.
 2. Exécuter `ArchipelagoStarcraft2Client.exe`.
    - Uniquement pour cette étape, les utilisateurs de macOS devraient plutôt suivre les instructions qui se trouvent à 
 ["Exécuter sous macOS"](#exécuter-sous-macos).
@@ -143,6 +144,18 @@ Si vous ne comprenez pas le problème avec le fichier *log*, visitez notre
 [*Discord*](https://discord.com/invite/8Z65BR2) pour demander de l'aide dans le forum *tech-support*.
 Dans votre message, veuillez inclure une description détaillée de ce qui ne marche pas et ajouter en pièce jointe le 
 fichier *log*.
+
+## Mon profil de raccourcis clavier n'est pas disponibles quand je joue à *StarCraft 2 Archipelago*
+
+Pour que votre profil de raccourcis clavier fonctionne dans Archipelago, vous devez copier votre fichier de raccourcis 
+qui se trouve dans `Documents/StarCraft II/Accounts/######/Hotkeys` vers `Documents/StarCraft II/Hotkeys`.
+Si le dossier n'existe pas, créez-le.
+
+Pour que *StarCraft 2 Archipelago* utilise votre profil, suivez les étapes suivantes.
+Lancez *Starcraft 2* via l'application *Battle.net*. 
+Changez votre profil de raccourcis clavier pour le mode standard et acceptez, puis changez pour votre profil 
+personnalisé et acceptez. 
+Vous aurez juste besoin de faire ça une seule fois.
 
 ## Exécuter sous macOS
 

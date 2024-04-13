@@ -1,4 +1,4 @@
-# Starcraft 2
+# Starcraft 2 Wings of Liberty
 
 ## Game page in other languages:
 * [Français](/games/Starcraft%202/info/fr)
