@@ -96,7 +96,7 @@ def set_rules(world: Celeste64World):
                                           ItemName.double_dash_refill}, world.player))
 
     # Completion condition.
-    world.multiworld.completion_condition[world.player] = lambda state: (state.has(ItemName.strawberry,world.player,world.options.strawberries_required.value) and
+    world.multiworld.completion_condition[world.player] = lambda state: (state.has(ItemName.strawberry, world.player, world.strawberries_required) and
                                                                          state.has_all({ItemName.feather,
                                                                                         ItemName.traffic_block,
                                                                                         ItemName.breakables,

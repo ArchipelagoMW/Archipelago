@@ -1,4 +1,5 @@
 strawberry = "Strawberry"
+raspberry = "Raspberry"
 
 dash_refill        = "Dash Refills"
 double_dash_refill = "Double Dash Refills"
