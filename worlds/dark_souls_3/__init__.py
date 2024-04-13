@@ -520,7 +520,7 @@ class DarkSouls3World(World):
         for _ in range(0, 10):
             candidate = self.create_filler()
             if location.item_rule(candidate):
-                location.item = item
+                location.item = candidate
                 return
 
 
