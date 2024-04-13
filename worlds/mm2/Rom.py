@@ -34,6 +34,7 @@ picopico_weakness_ptrs: Dict[int, int] = {
 consumables_ptr: int = 0x3F2FE
 quickswap_ptr: int = 0x3F363
 wily_5_ptr: int = 0x3F3A1
+energylink_ptr: int = 0x3F46B
 
 
 class RomData:
@@ -202,6 +203,9 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
 
     patch.write_byte(wily_5_ptr + 1, world.options.wily_5_requirement.value)
 
+    if world.options.energy_link:
+        patch.write_byte(energylink_ptr + 1, 1)
+
     if world.options.reduce_flashing:
         if world.options.reduce_flashing.value == world.options.reduce_flashing.option_virtual_console:
             color = 0x2D  # Dark Gray
@@ -235,6 +239,24 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
                            'utf8')[:21]
     patch.name.extend([0] * (21 - len(patch.name)))
     patch.write_bytes(0x3FFC0, patch.name)
+    deathlink_byte = world.options.death_link.value | (world.options.energy_link.value << 1)
+    patch.write_byte(0x3FFD5, deathlink_byte)
+
+    version_map = {
+        "0": 0x90,
+        "1": 0x91,
+        "2": 0x92,
+        "3": 0x93,
+        "4": 0x94,
+        "5": 0x95,
+        "6": 0x96,
+        "7": 0x97,
+        "8": 0x98,
+        "9": 0x99,
+        ".": 0xDC
+    }
+
+    patch.write_bytes(0x36EFE, list(map(lambda c: version_map[c], __version__)))
 
     patch.write_file("token_patch.bin", patch.get_token_binary())
 

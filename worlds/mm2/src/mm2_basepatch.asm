@@ -8,8 +8,8 @@ norom
 !completed_stages = $8B
 !received_item_checks = $8C
 !last_wily = $8D
-; if we don't use $8E, use for energylink, else check 9C
 !deathlink = $8F
+!energylink_packet = $90
 !received_weapons = $9A
 !received_items = $9B
 !current_weapon = $A9
@@ -39,6 +39,9 @@ endmacro
 %org($8400, $08)
 incbin "mm2font.dat"
 
+%org($A900, $09)
+incbin "mm2titlefont.dat"
+
 %org($802B, $0D)
 PatchFaceTiles:
     LDA !received_stages
@@ -67,6 +70,12 @@ RemoveWeaponClear:
     NOP
     NOP
     NOP
+
+%org($AED0, $0D)
+db $C2, $D9, $C0, $D3, $C9, $CC, $D6, $D2, $C9, $D3 ; BY SILVRIS
+
+%org($AEE2, $0D)
+db $C1, $D2, $C3, $C8, $C9, $D0, $C5, $CC, $C1, $C7, $CF, $C0, $D8, $DC, $D8, $DC, $D8 ; ARCHIPELAGO X.X.X
 
 %org($BB74, $0D)
 GetEquippedStage:
@@ -161,6 +170,11 @@ WilyStageCompletion:
 NullDeathlink:
     STA $8F ; we null his HP later in the process
     NOP
+
+%org($E5D1, $0F)
+EnergylinkHook:
+    JSR Energylink
+    NOP #2 ; comment this out to enable item giving their usual reward alongside EL
 
 %org($E5E8, $0F)
 ConsumableHook:
@@ -412,6 +426,22 @@ LoadItemsColor:
     ADC #$1A
     STA $FF
     RTS
+
+Energylink:
+    LSR $0420, X
+    print "Energylink: ", hex(realbase())
+    LDA #$00
+    BEQ .ApplyDrop
+    LDA $04E0, X
+    BEQ .ApplyDrop ; This is a stage pickup, and not an enemy drop
+    STY !energylink_packet
+    SEC
+    BCS .Return
+    .ApplyDrop:
+    STY $AD
+    .Return:
+    RTS
+
 
 Quickswap:
     LDX #$0F

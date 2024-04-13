@@ -1,29 +1,34 @@
+import asyncio
 import logging
 import time
+from enum import IntEnum
 from base64 import b64encode
 from typing import TYPE_CHECKING, Dict, Tuple, List, Optional, Any
 from NetUtils import ClientStatus, color, NetworkItem
 from worlds._bizhawk.client import BizHawkClient
 
 if TYPE_CHECKING:
-    from worlds._bizhawk.context import BizHawkClientContext
+    from worlds._bizhawk.context import BizHawkClientContext, BizHawkClientCommandProcessor
 
 nes_logger = logging.getLogger("NES")
+logger = logging.getLogger("Client")
 
 MM2_ROBOT_MASTERS_UNLOCKED = 0x8A
 MM2_ROBOT_MASTERS_DEFEATED = 0x8B
 MM2_ITEMS_ACQUIRED = 0x8C
+# MM2_LAST_WILY = 0x8D
+MM2_RECEIVED_ITEMS = 0x8E
+MM2_DEATHLINK = 0x8F
+MM2_ENERGYLINK = 0x90
 MM2_WEAPONS_UNLOCKED = 0x9A
 MM2_ITEMS_UNLOCKED = 0x9B
-MM2_RECEIVED_ITEMS = 0x8E
-MM2_COMPLETED_STAGES = 0x770
-MM2_CONSUMABLES = 0x780
+MM2_WEAPON_ENERGY = 0x9C
 MM2_E_TANKS = 0xA7
 MM2_LIVES = 0xA8
-MM2_WEAPON_ENERGY = 0x9C
-MM2_HEALTH = 0x6C0
-MM2_DEATHLINK = 0x8F
 MM2_DIFFICULTY = 0xCB
+MM2_HEALTH = 0x6C0
+MM2_COMPLETED_STAGES = 0x770
+MM2_CONSUMABLES = 0x780
 
 MM2_SFX_QUEUE = 0x580
 MM2_SFX_STROBE = 0x66
@@ -80,6 +85,95 @@ MM2_CONSUMABLE_TABLE: Dict[int, Tuple[int, int]] = {
 }
 
 
+class MM2EnergyLinkType(IntEnum):
+    Life = 0
+    AtomicFire = 1
+    AirShooter = 2
+    LeafShield = 3
+    BubbleLead = 4
+    QuickBoomerang = 5
+    TimeStopper = 6
+    MetalBlade = 7
+    CrashBomber = 8
+    Item1 = 9
+    Item2 = 10
+    Item3 = 11
+    OneUP = 12
+
+
+HP_EXCHANGE_RATE = 500000000
+WEAPON_EXCHANGE_RATE = 250000000
+ONEUP_EXCHANGE_RATE = 1000000000
+
+
+def cmd_pool(self: "BizHawkClientCommandProcessor"):
+    """Check the current pool of EnergyLink, and requestable refills from it."""
+    if self.ctx.game != "Mega Man 2":
+        logger.warning("This command can only be used when playing Mega Man 2.")
+        return
+    if not self.ctx.server or not self.ctx.slot:
+        logger.warning("You must be connected to a server to use this command.")
+        return
+    energylink = self.ctx.stored_data.get(f"EnergyLink{self.ctx.team}", 0)
+    health_points = energylink // HP_EXCHANGE_RATE
+    weapon_points = energylink // WEAPON_EXCHANGE_RATE
+    lives = energylink // ONEUP_EXCHANGE_RATE
+    logger.info(f"Healing available:{health_points}\n"
+                f"Weapon refill available:{weapon_points}\n"
+                f"Lives available:{lives}")
+
+
+def cmd_request(self: "BizHawkClientCommandProcessor", amount: str, target: str):
+    from worlds._bizhawk.context import BizHawkClientContext
+    """Request a refill from EnergyLink."""
+    if self.ctx.game != "Mega Man 2":
+        logger.warning("This command can only be used when playing Mega Man 2.")
+        return
+    if not self.ctx.server or not self.ctx.slot:
+        logger.warning("You must be connected to a server to use this command.")
+        return
+    valid_targets: Dict[str, MM2EnergyLinkType] = {
+        "HP": MM2EnergyLinkType.Life,
+        "AF": MM2EnergyLinkType.AtomicFire,
+        "AS": MM2EnergyLinkType.AirShooter,
+        "LS": MM2EnergyLinkType.LeafShield,
+        "BL": MM2EnergyLinkType.BubbleLead,
+        "QB": MM2EnergyLinkType.QuickBoomerang,
+        "TS": MM2EnergyLinkType.TimeStopper,
+        "MB": MM2EnergyLinkType.MetalBlade,
+        "CB": MM2EnergyLinkType.CrashBomber,
+        "I1": MM2EnergyLinkType.Item1,
+        "I2": MM2EnergyLinkType.Item2,
+        "I3": MM2EnergyLinkType.Item3,
+        "1U": MM2EnergyLinkType.OneUP
+    }
+    if target not in valid_targets:
+        logger.warning(f"Unrecognized target {target}. Available targets: {', '.join(valid_targets.keys())}")
+    ctx = self.ctx
+    assert isinstance(ctx, BizHawkClientContext)
+    client = ctx.client_handler
+    assert isinstance(client, MegaMan2Client)
+    client.refill_queue.append((valid_targets[target], int(amount)))
+
+
+def cmd_autoheal(self):
+    """Enable auto heal from EnergyLink."""
+    if self.ctx.game != "Mega Man 2":
+        logger.warning("This command can only be used when playing Mega Man 2.")
+        return
+    if not self.ctx.server or not self.ctx.slot:
+        logger.warning("You must be connected to a server to use this command.")
+        return
+    else:
+        assert isinstance(self.ctx.client_handler, MegaMan2Client)
+        if self.ctx.client_handler.auto_heal:
+            self.ctx.client_handler.auto_heal = False
+            logger.info(f"Auto healing disabled.")
+        else:
+            self.ctx.client_handler.auto_heal = True
+            logger.info(f"Auto healing enabled.")
+
+
 def get_sfx_writes(sfx: int) -> Tuple[Tuple[int, bytes, str], ...]:
     return (MM2_SFX_QUEUE, sfx.to_bytes(1, 'little'), "RAM"), (MM2_SFX_STROBE, 0x01.to_bytes(1, "little"), "RAM")
 
@@ -93,9 +187,12 @@ class MegaMan2Client(BizHawkClient):
     # default to true, as we don't want to send a deathlink until Mega Man's HP is initialized once
     sending_death_link: bool = True
     death_link: bool = False
+    energy_link: bool = False
     rom: Optional[bytes] = None
     weapon_energy: int = 0
     health_energy: int = 0
+    auto_heal: bool = False
+    refill_queue: List[Tuple[MM2EnergyLinkType, int]] = []
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from worlds._bizhawk import RequestFailedError, read
@@ -103,6 +200,12 @@ class MegaMan2Client(BizHawkClient):
         try:
             game_name = ((await read(ctx.bizhawk_ctx, [(0x3FFB0, 21, "PRG ROM")]))[0])
             if game_name[:3] != b"MM2":
+                if "pool" in ctx.command_processor.commands:
+                    ctx.command_processor.commands.pop("pool")
+                if "request" in ctx.command_processor.commands:
+                    ctx.command_processor.commands.pop("request")
+                if "autoheal" in ctx.command_processor.commands:
+                    ctx.command_processor.commands.pop("autoheal")
                 return False
         except UnicodeDecodeError:
             return False
@@ -112,7 +215,21 @@ class MegaMan2Client(BizHawkClient):
         ctx.game = self.game
         self.rom = game_name
         ctx.items_handling = 0b111
-        ctx.want_slot_data = True
+        ctx.want_slot_data = False
+        deathlink = (await read(ctx.bizhawk_ctx, [(0x3FFC5, 1, "PRG ROM")]))[0][0]
+        if deathlink & 0x01:
+            self.death_link = True
+        if deathlink & 0x02:
+            self.energy_link = True
+
+        if self.energy_link:
+            if "pool" not in ctx.command_processor.commands:
+                ctx.command_processor.commands["pool"] = cmd_pool
+            if "request" not in ctx.command_processor.commands:
+                ctx.command_processor.commands["request"] = cmd_request
+            if "autoheal" not in ctx.command_processor.commands:
+                ctx.command_processor.commands["autoheal"] = cmd_autoheal
+
         return True
 
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
@@ -125,6 +242,11 @@ class MegaMan2Client(BizHawkClient):
                 assert ctx.slot is not None
                 if "DeathLink" in args["tags"] and args["data"]["source"] != ctx.slot_info[ctx.slot].name:
                     self.on_deathlink(ctx)
+        elif cmd == "Connected":
+            if self.energy_link:
+                ctx.set_notify(f"EnergyLink{ctx.team}")
+                if ctx.ui:
+                    ctx.ui.enable_energy_link()
 
     async def send_deathlink(self, ctx: "BizHawkClientContext") -> None:
         self.sending_death_link = True
@@ -142,16 +264,14 @@ class MegaMan2Client(BizHawkClient):
             return
 
         if ctx.slot is None:
-            await ctx.send_connect(name=ctx.auth)
-
-        if ctx.slot_data is None:
             return
 
         # get our relevant bytes
         robot_masters_unlocked, robot_masters_defeated, items_acquired, \
             weapons_unlocked, items_unlocked, items_received, \
             completed_stages, consumable_checks,\
-            e_tanks, lives, weapon_energy, health, difficulty, death_link_status = await read(ctx.bizhawk_ctx, [
+            e_tanks, lives, weapon_energy, health, difficulty, death_link_status,\
+            energy_link_packet = await read(ctx.bizhawk_ctx, [
                 (MM2_ROBOT_MASTERS_UNLOCKED, 1, "RAM"),
                 (MM2_ROBOT_MASTERS_DEFEATED, 1, "RAM"),
                 (MM2_ITEMS_ACQUIRED, 1, "RAM"),
@@ -165,7 +285,8 @@ class MegaMan2Client(BizHawkClient):
                 (MM2_WEAPON_ENERGY, 11, "RAM"),
                 (MM2_HEALTH, 1, "RAM"),
                 (MM2_DIFFICULTY, 1, "RAM"),
-                (MM2_DEATHLINK, 1, "RAM")
+                (MM2_DEATHLINK, 1, "RAM"),
+                (MM2_ENERGYLINK, 1, "RAM")
             ])
 
         if difficulty[0] not in (0, 1):
@@ -180,10 +301,8 @@ class MegaMan2Client(BizHawkClient):
         writes = []
 
         # deathlink
-        if ctx.slot_data["death_link"]:
-            if not self.death_link:
-                self.death_link = True
-                await ctx.update_death_link(self.death_link)
+        if self.death_link:
+            await ctx.update_death_link(self.death_link)
         if self.pending_death_link:
             writes.append((MM2_DEATHLINK, bytes([0x01]), "RAM"))
             self.pending_death_link = False
@@ -226,6 +345,38 @@ class MegaMan2Client(BizHawkClient):
             recv_amount += 1
             writes.append((MM2_RECEIVED_ITEMS, recv_amount.to_bytes(1, 'little'), "RAM"))
 
+        if energy_link_packet[0]:
+            pickup = energy_link_packet[0]
+            if pickup in (0x76, 0x77):
+                # Health pickups
+                if pickup == 0x77:
+                    value = 2
+                else:
+                    value = 10
+                exchange_rate = HP_EXCHANGE_RATE
+            elif pickup in (0x78, 0x79):
+                # Weapon Energy
+                if pickup == 0x79:
+                    value = 2
+                else:
+                    value = 10
+                exchange_rate = WEAPON_EXCHANGE_RATE
+            elif pickup == 0x7B:
+                # 1-Up
+                # if we managed to pickup something else, we should just fall through
+                value = 1
+                exchange_rate = ONEUP_EXCHANGE_RATE
+            else:
+                value = 0
+                exchange_rate = 0
+            contribution = value * exchange_rate
+            if contribution:
+                await ctx.send_msgs([{
+                 "cmd": "Set", "key": f"EnergyLink{ctx.team}", "operations":
+                 [{"operation": "add", "value": contribution},
+                  {"operation": "max", "value": 0}]}])
+            writes.append((MM2_ENERGYLINK, 0x00.to_bytes(1, "little"), "RAM"))
+
         if self.weapon_energy:
             # Weapon Energy
             # We parse the whole thing to spread it as thin as possible
@@ -245,17 +396,54 @@ class MegaMan2Client(BizHawkClient):
                 if current_energy != self.weapon_energy:
                     writes.append((MM2_WEAPON_ENERGY, weapon_energy, "RAM"))
 
-        if self.health_energy:
+        if self.health_energy or self.auto_heal:
             # Health Energy
             # We save this if the player has not taken any damage
             current_health = health[0]
-            if current_health < 0x1C:
+            if 0 < current_health < 0x1C:
                 health_diff = 0x1C - current_health
-                if health_diff > self.health_energy:
-                    health_diff = self.health_energy
-                self.health_energy -= health_diff
+                if self.health_energy:
+                    if health_diff > self.health_energy:
+                        health_diff = self.health_energy
+                    self.health_energy -= health_diff
+                else:
+                    pool = ctx.stored_data.get(f"EnergyLink{ctx.team}", 0)
+                    if health_diff * HP_EXCHANGE_RATE > pool:
+                        health_diff = pool // HP_EXCHANGE_RATE
+                    await ctx.send_msgs([{
+                        "cmd": "Set", "key": f"EnergyLink{ctx.team}", "operations":
+                        [{"operation": "add", "value": -health_diff * HP_EXCHANGE_RATE},
+                         {"operation": "max", "value": 0}]}])
                 current_health += health_diff
                 writes.append((MM2_HEALTH, current_health.to_bytes(1, 'little'), "RAM"))
+
+        if self.refill_queue:
+            refill_type, refill_amount = self.refill_queue.pop()
+            if refill_type == MM2EnergyLinkType.Life:
+                exchange_rate = HP_EXCHANGE_RATE
+            elif refill_type == MM2EnergyLinkType.OneUP:
+                exchange_rate = ONEUP_EXCHANGE_RATE
+            else:
+                exchange_rate = WEAPON_EXCHANGE_RATE
+            pool = ctx.stored_data.get(f"EnergyLink{ctx.team}", 0)
+            request = exchange_rate * refill_amount
+            if request > pool:
+                logger.warning(
+                    f"Not enough energy to fulfill the request. Maximum request: {pool // exchange_rate}")
+            else:
+                await ctx.send_msgs([{
+                    "cmd": "Set", "key": f"EnergyLink{ctx.team}", "operations":
+                        [{"operation": "add", "value": -request},
+                         {"operation": "max", "value": 0}]}])
+            if refill_type == MM2EnergyLinkType.Life:
+                refill_ptr = MM2_HEALTH
+            elif refill_type == MM2EnergyLinkType.OneUP:
+                refill_ptr = MM2_LIVES
+            else:
+                refill_ptr = MM2_WEAPON_ENERGY - 1 + refill_type
+            current_value = (await read(ctx.bizhawk_ctx, [(refill_ptr, 1, "RAM")]))[0][0]
+            new_value = max(0x1C if refill_type != MM2EnergyLinkType.OneUP else 99, current_value + refill_amount)
+            writes.append((refill_ptr, new_value.to_bytes(1, "little"), "RAM"))
 
         if len(self.item_queue):
             item = self.item_queue.pop(0)

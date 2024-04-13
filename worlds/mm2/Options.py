@@ -33,6 +33,14 @@ weapons_to_id = {
 }
 
 
+class EnergyLink(Toggle):
+    """
+    Enables EnergyLink support.
+    When enabled, pickups dropped from enemies are sent to the EnergyLink pool, and healing/weapon energy/1-Ups can
+    be requested from the EnergyLink pool.
+    """
+
+
 class StartingRobotMaster(Choice):
     """
     The initial stage unlocked at the start.
@@ -150,7 +158,6 @@ class WeaknessPlando(OptionDict):
 class ReduceFlashing(Choice):
     """
     Reduce flashing seen in gameplay, such as the stage select and when defeating a Wily boss.
-    NOTICE: Full reduction is experimental and may actually be worse than default.
     """
     display_name = "Reduce Flashing"
     option_none = 0
@@ -162,6 +169,7 @@ class ReduceFlashing(Choice):
 @dataclass
 class MM2Options(PerGameCommonOptions):
     death_link: DeathLink
+    energy_link: EnergyLink
     starting_robot_master: StartingRobotMaster
     consumables: Consumables
     yoku_jumps: YokuJumps
