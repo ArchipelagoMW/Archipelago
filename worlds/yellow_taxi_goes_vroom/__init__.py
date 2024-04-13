@@ -38,9 +38,6 @@ class YTGVWorld(World):
             print("#### DEBUG: creating region:", region_name)
             region = Region(region_name, self.player, self.multiworld);
 
-            if region.name == RegionName.MOON:
-                pass
-
             self.multiworld.regions.append(region)
         
         # Create locations
