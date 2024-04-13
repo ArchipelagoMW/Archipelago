@@ -268,7 +268,6 @@ class BuildingProgression(Choice):
     Vanilla: You can buy each building normally.
     Progressive: You will receive the buildings and will be able to build the first one of each type for free,
         once it is received. If you want more of the same building, it will cost the vanilla price.
-    Progressive early shipping bin: Same as Progressive, but the shipping bin will be placed early in the multiworld.
     Cheap: Buildings will cost half as much
     Very Cheap: Buildings will cost 1/5th as much
     """
