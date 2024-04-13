@@ -30,7 +30,10 @@ def has_level_progression(state, item, player, count=1):
 
 def mushroom_zone_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Mushroom Zone")
-    reachable_coins = 40
+    reachable_coins = 38
+    if state.has_any(["Mushroom", "Fire Flower"], player) or not auto_scroll:
+        # Was able to get all but 1, being lenient.
+        reachable_coins += 2
     if has_pipe_down(state, player):
         # There's 24 in each of the underground sections.
         # The first one requires missing some question mark blocks if auto scrolling (the last +4).
