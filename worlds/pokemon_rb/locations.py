@@ -175,7 +175,7 @@ location_data = [
     LocationData("Route 2-SE", "South Item", "Moon Stone", rom_addresses["Missable_Route_2_Item_1"],
                  Missable(25)),
     LocationData("Route 2-SE", "North Item", "HP Up", rom_addresses["Missable_Route_2_Item_2"], Missable(26)),
-    LocationData("Route 4-E", "Item", "TM04 Whirlwind", rom_addresses["Missable_Route_4_Item"], Missable(27)),
+    LocationData("Route 4-C", "Item", "TM04 Whirlwind", rom_addresses["Missable_Route_4_Item"], Missable(27)),
     LocationData("Route 9", "Item", "TM30 Teleport", rom_addresses["Missable_Route_9_Item"], Missable(28)),
     LocationData("Route 12-N", "Island Item", "TM16 Pay Day", rom_addresses["Missable_Route_12_Item_1"], Missable(30)),
     LocationData("Route 12-Grass", "Item Behind Cuttable Tree", "Iron", rom_addresses["Missable_Route_12_Item_2"], Missable(31)),
