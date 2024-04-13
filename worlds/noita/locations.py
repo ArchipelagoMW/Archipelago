@@ -12,7 +12,7 @@ class NoitaLocation(Location):
 class LocationData(NamedTuple):
     id: int
     flag: int = 0
-    ltype: Optional[str] = "Shop"
+    ltype: str = "Shop"
 
 
 class LocationFlag(IntEnum):
