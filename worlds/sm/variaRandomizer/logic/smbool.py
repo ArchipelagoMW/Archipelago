@@ -1,4 +1,8 @@
-from Utils import flatten
+def flatten(l):
+    if type(l) is list:
+        return [ y for x in l for y in flatten(x) ]
+    else:
+        return [ l ]
 
 # super metroid boolean
 class SMBool:
