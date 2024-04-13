@@ -21,9 +21,13 @@ class YTGVWorld(World):
     location_name_to_id = Locations.name_to_id
     item_name_to_id = Items.name_to_id
 
+    print("####!!!!####!!!! DEBUG")
+    print("location_name_to_id length:", len(location_name_to_id))
+    print("item_name_to_id length:", len(item_name_to_id))
+
     def create_item(self, name: str) -> YTGVItem:
         print("###### DEBUG: create item: " + name)
-        classification = ItemClassification.progression_skip_balancing
+        classification = ItemClassification.progression
         return YTGVItem(name, classification, Items.name_to_id[name], self.player)
 
     def create_regions(self) -> None:
@@ -55,10 +59,15 @@ class YTGVWorld(World):
     def create_items(self) -> None:
         item_pool: List[YTGVItem] = []
 
-        item_pool += [self.create_item(ItemName.GEAR) for _ in Locations.name_to_id.items()]
+        item_pool += [
+            self.create_item(ItemName.GEAR)
+            for location_data
+            in Locations.location_data_table.values()
+            if location_data.is_gear
+        ]
+
         from pprint import pprint
-        print("##### DEBUG: item_pool:")
-        pprint(item_pool)
+        print("##### DEBUG: item_pool size:", len(item_pool))
 
         self.multiworld.itempool += item_pool
 

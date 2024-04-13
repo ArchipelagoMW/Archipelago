@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-from .Names import ItemName, LocationName, EventName
+from .Names import LocationName, EventName
 
 if TYPE_CHECKING:
     from . import YTGVWorld
