@@ -1,5 +1,5 @@
 from typing import Dict, List, Any
-
+from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
 from .locations import location_table, location_name_groups, location_name_to_id, hexagon_locations
@@ -123,7 +123,7 @@ class TunicWorld(World):
         # Filler items in the item pool
         available_filler: List[str] = [filler for filler in items_to_create if items_to_create[filler] > 0 and
                                        item_table[filler].classification == ItemClassification.filler]
-        
+
         # Remove filler to make room for other items
         def remove_filler(amount: int):
             for _ in range(0, amount):
@@ -150,7 +150,7 @@ class TunicWorld(World):
             hexagon_goal = self.options.hexagon_goal
             extra_hexagons = self.options.extra_hexagon_percentage
             items_to_create[gold_hexagon] += int((Decimal(100 + extra_hexagons) / 100 * hexagon_goal).to_integral_value(rounding=ROUND_HALF_UP))
-            
+
             # Replace pages and normal hexagons with filler
             for replaced_item in list(filter(lambda item: "Pages" in item or item in hexagon_locations, items_to_create)):
                 filler_name = self.get_filler_item_name()
@@ -184,7 +184,7 @@ class TunicWorld(World):
         self.tunic_portal_pairs = {}
         self.er_portal_hints = {}
         self.ability_unlocks = randomize_ability_unlocks(self.random, self.options)
-        
+
         # stuff for universal tracker support, can be ignored for standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "TUNIC" in self.multiworld.re_gen_passthrough:
@@ -245,17 +245,27 @@ class TunicWorld(World):
                     continue
                 path_to_loc = []
                 previous_name = "placeholder"
-                name, connection = paths[location.parent_region]
-                while connection != ("Menu", None):
-                    name, connection = connection
-                    # for LS entrances, we just want to give the portal name
-                    if "(LS)" in name:
-                        name, _ = name.split(" (LS) ")
-                    # was getting some cases like Library Grave -> Library Grave -> other place
-                    if name in portal_names and name != previous_name:
-                        previous_name = name
-                        path_to_loc.append(name)
-                hint_text = " -> ".join(reversed(path_to_loc))
+                try:
+                    name, connection = paths[location.parent_region]
+                except KeyError:
+                    # logic bug, proceed with warning since it takes a long time to update AP
+                    warning(f"{location.name} is not logically accessible for "
+                            f"{self.multiworld.get_file_safe_player_name(self.player)}. "
+                            "Creating entrance hint Inaccessible. "
+                            "Please report this to the TUNIC rando devs.")
+                    hint_text = "Inaccessible"
+                else:
+                    while connection != ("Menu", None):
+                        name, connection = connection
+                        # for LS entrances, we just want to give the portal name
+                        if "(LS)" in name:
+                            name, _ = name.split(" (LS) ")
+                        # was getting some cases like Library Grave -> Library Grave -> other place
+                        if name in portal_names and name != previous_name:
+                            previous_name = name
+                            path_to_loc.append(name)
+                    hint_text = " -> ".join(reversed(path_to_loc))
+
                 if hint_text:
                     hint_data[self.player][location.address] = hint_text
 
