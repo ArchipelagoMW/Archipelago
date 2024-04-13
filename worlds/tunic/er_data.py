@@ -1476,8 +1476,8 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     "Back of Swamp Laurels Area": {
         "Back of Swamp":
             [["Hyperdash"]],
-        "Swamp Front":
-            [["NMG"]],
+        "Swamp Mid":
+            [["NMG", "Hyperdash"]],
     },
     "Swamp Hero's Grave Region": {
         "Back of Swamp":
