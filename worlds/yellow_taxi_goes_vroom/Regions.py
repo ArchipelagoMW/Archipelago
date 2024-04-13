@@ -6,6 +6,7 @@ from . import Locations
 
 from .Names.RegionName import *
 from .Names.ItemName import *
+from .Names.EventName import *
 
 if TYPE_CHECKING:
     from . import YTGVWorld
@@ -78,14 +79,15 @@ def create_region_data_table(world: YTGVWorld) -> Dict[str, YTGVRegionData]:
                 GYM_GEARS,
                 FECAL_MATTERS,
                 FLUSHED_AWAY,
-                # MOSKS_ROCKET, # accessable after beating Alien Mosk
-                # MOON, accessible after beating Alien Mosk
+                MOON, # accessible after beating Alien Mosk
+                MOSKS_ROCKET, # accessable after beating Granny
             ],
-            rules = [
-                # TODO: allow access to MOSKS_ROCKET after beating Alien Mosk
+            rules = {
+                MOON: lambda state: state.has(TO_THE_MOON, world.player),
+                MOSKS_ROCKET: lambda state: state.has(SHE_IS_FINE_NOW, world.player),
                 # TODO: allow access to MOON after beating Alien Mosk
                 # TODO: check other regions for conditions (FECAL_MATTERS, etc)
-            ]
+            }
         ),
         PIZZA_OVEN: YTGVRegionData(
             exits = [

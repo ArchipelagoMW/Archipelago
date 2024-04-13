@@ -27,7 +27,11 @@ for region_info in region_info_list:
         )
         location_data_table[location_name] = location_data
 
-# Goal event location
+location_data_table[LocationName.MUSK] = YTGVLocationData(
+    region = RegionName.TOSLA_HQ,
+    id = None,
+)
+
 location_data_table[LocationName.GRANNY] = YTGVLocationData(
     region = RegionName.MOON,
     id = None,
