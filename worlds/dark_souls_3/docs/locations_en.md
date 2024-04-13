@@ -193,7 +193,7 @@ General notes:
 * **Tower:** The tower at the end of the region with the giant archer at the
   top.
 
-* **Tower village:** The village reachable from the tower, where the Fire Giant
+* **Tower village:** The village reachable from the tower, where the Fire Demon
   patrols in vanilla.
 
 ### Road of Sacrifices
@@ -219,16 +219,15 @@ region.
   
   * "Right room" is the room up the stairs closer to Farron Keep.
 
-* **Keep perimiter:** The building with the Black Knight and the locked door to
+* **Keep perimeter:** The building with the Black Knight and the locked door to
   the Farron Keep Perimeter bonfire.
 
 ### Cathedral of the Deep
 
 * **Path:** The path from Road of Sacrifices to the cathedral proper.
 
-* **Moat:** The circular path around the base of the area in front of the
-  cathedral, with the Ravenous Crystal Lizard in vanilla. Only the lowest part
-  actually has any water.
+* **Moat:** The circular path around the base of the front of the
+  cathedral, with the Ravenous Crystal Lizard and Corpse-Grubs in vanilla.
 
 * **Graveyard:** The area with respawning enemies up the hill from the Cleansing
   Chapel bonfire.
@@ -296,8 +295,8 @@ Catacombs of Carthus region.
   * "Upper" is the floor the long stairway leads to that also contains the
     Catacombs of Carthus bonfire.
   * "Lower" is the floor with rats and bonewheels in vanilla.
-  * "Across" is the area reached by going up a different set of stairs from
-    downstairs.
+  * "Across" is the area reached by going up the set of stairs across from
+    the entrance downstairs.
 
 * **Cavern:** The even larger open area past the crypt with the rope bridge to
   the boss arena.
@@ -319,12 +318,12 @@ Catacombs of Carthus region.
 * **Ruins main:** The area you first enter after the Demon Ruins bonfire.
 
   * "Upper" is the floor you begin on.
-  * "Lower" is the floor down the stairs from upper.
+  * "Lower" is the floor down the stairs.
 
-* **Antechamber:** The area up a different flight of stairs from ruins main
-  lower, with the Old King's Antechamber bonfire.
+* **Antechamber:** The area up the flight of stairs near the 
+Old King's Antechamber bonfire.
 
-* **Ruins basement:** The area further down from ruins main lower, with a many
+* **Ruins basement:** The area further down from ruins main lower, with many
   basilisks and Knight Slayer Tsorig in vanilla.
 
 ### Irithyll of the Boreal Valley
@@ -386,7 +385,7 @@ from the "near" side of the floor to the "far" side.
   * "Far" is the opposite side with the mimic.
 
 * **B3 lift:** The elevator from B3 (near where you can use Path of the Dragon
-  to go to Archdragon Peak) up to B2 far.
+  to go to Archdragon Peak) up to B2.
 
 ### Profaned Capital
 
@@ -396,7 +395,7 @@ from the "near" side of the floor to the "far" side.
   lower floor of the tower, going into the corridor to the left, and falling
   down a hole.
 
-* **Chapel:** The building in the swamp, with Monstrosities of Sin in it in
+* **Chapel:** The building in the swamp containing Monstrosities of Sin in
   vanilla.
 
 * **Bridge:** The long bridge from the tower into the palace.
@@ -412,8 +411,7 @@ story.
 * **Light cathedral:** The cathedral in which you fight Pontiff Sulyvahn in
   vanilla.
 
-* **Plaza:** The wide open area filled with dead Giant Slaves and a couple live
-  ones in vanilla.
+* **Plaza:** The wide open area filled with Giant Slaves in vanilla.
 
 * **Walkway:** The path above the plaza leading to the second floor of the light
   cathedral, with Deacons in vanilla.
