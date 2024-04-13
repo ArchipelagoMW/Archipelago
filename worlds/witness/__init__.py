@@ -14,7 +14,7 @@ from .data import static_items as static_witness_items
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import DoorItemDefinition, ItemData
 from .data.utils import get_audio_logs
-from .hints import CompactItemData, create_all_hints, generate_joke_hints, make_compact_hint_data, make_laser_hints
+from .hints import CompactItemData, create_all_hints, make_compact_hint_data, make_laser_hints
 from .locations import WitnessPlayerLocations, static_witness_locations
 from .options import TheWitnessOptions
 from .player_items import WitnessItem, WitnessPlayerItems
@@ -319,13 +319,6 @@ class WitnessWorld(World):
         # Audio Log Hints
 
         hint_amount = self.options.hint_amount.value
-
-        credits_hint = (
-            "This Randomizer is brought to you by\n"
-            "NewSoupVi, Jarno, blastron,\n"
-            "jbzdarkid, sigma144, IHNN, oddGarrett, Exempt-Medic.", -1, -1
-        )
-
         audio_logs = get_audio_logs().copy()
 
         if hint_amount:
@@ -344,15 +337,8 @@ class WitnessWorld(World):
                     audio_log = audio_logs.pop()
                     self.log_ids_to_hints[int(audio_log, 16)] = compact_hint_data
 
-        if audio_logs:
-            audio_log = audio_logs.pop()
-            self.log_ids_to_hints[int(audio_log, 16)] = credits_hint
-
-        joke_hints = generate_joke_hints(self, len(audio_logs))
-
-        while audio_logs:
-            audio_log = audio_logs.pop()
-            self.log_ids_to_hints[int(audio_log, 16)] = joke_hints.pop()
+        # Client will generate joke hints for these.
+        self.log_ids_to_hints.update({int(audio_log, 16): ("", -1, -1) for audio_log in audio_logs})
 
         # Options for the client & auto-tracker
 
