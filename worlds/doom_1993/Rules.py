@@ -239,7 +239,12 @@ def set_episode2_rules(player, world, pro):
 
     # Tower of Babel (E2M8)
     set_rule(world.get_entrance("Hub -> Tower of Babel (E2M8) Main", player), lambda state:
-        state.has("Tower of Babel (E2M8)", player, 1))
+       (state.has("Tower of Babel (E2M8)", player, 1) and
+        state.has("Shotgun", player, 1) and
+        state.has("Chaingun", player, 1)) and
+       (state.has("Rocket launcher", player, 1) or
+        state.has("Plasma gun", player, 1) or
+        state.has("BFG9000", player, 1)))
 
     # Fortress of Mystery (E2M9)
     set_rule(world.get_entrance("Hub -> Fortress of Mystery (E2M9) Main", player), lambda state:
