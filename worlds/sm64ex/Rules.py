@@ -174,9 +174,8 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
     rf.assign_rule("THI: Make Wiggler Squirm", "GP | MOVELESS & DV")
     # Tick Tock Clock
     rf.assign_rule("TTC: Lower", "LG/TJ/SF/BF/WK")
-    rf.assign_rule("TTC: Upper", "CL | SF+WK")
-    rf.assign_rule("TTC: Top", "CL | SF+WK")
-    rf.assign_rule("TTC: Stomp on the Thwomp", "LG & TJ/SF/BF")
+    rf.assign_rule("TTC: Upper", "CL | MOVELESS & WK")
+    rf.assign_rule("TTC: Top", "TJ+LG | MOVELESS & WK/TJ")
     rf.assign_rule("TTC: Stop Time for Red Coins", "NAR | {TTC: Lower}")
     # Rainbow Ride
     rf.assign_rule("RR: Maze", "WK | LJ & SF/BF/TJ | MOVELESS & LG/TJ")
