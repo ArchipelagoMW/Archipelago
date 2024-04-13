@@ -120,5 +120,5 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions):
 
    # Make win events
    for name in victory_targets: create_event(name, "Victory")
-   multiworld.completion_condition[player] = lambda state: state.count("Victory", player) >= len(victory_targets) if options.goal.current_key == "bosses_all" else 1
+   multiworld.completion_condition[player] = lambda state: state.count("Victory", player) >= (len(victory_targets) if options.goal.current_key == "bosses_all" else 1)
    
