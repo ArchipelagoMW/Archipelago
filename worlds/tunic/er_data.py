@@ -1085,20 +1085,42 @@ dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
 
 final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     "Overworld": {
+        "Overworld Beach":
+            [],
+        "Overworld to Atoll Upper":
+            [["Hyperdash"]],
         "Overworld Belltower":
-            [["Hyperdash"], ["UR"]], 
+            [["Hyperdash"], ["UR"]],
         "Overworld Swamp Upper Entry":
             [["Hyperdash"], ["UR"]],
+        "Overworld Swamp Lower Entry":
+            [],
         "Overworld Special Shop Entry":
-            [["Hyperdash"], ["UR"]], 
-        "Overworld West Garden Laurels Entry":
             [["Hyperdash"], ["UR"]],
-        "Overworld Southeast Cross Door":
-            [], 
+        "Overworld Well Ladder":
+            [],
         "Overworld Ruined Passage Door":
-            [], 
+            [],
+        "After Ruined Passage":
+            [],
+        "Above Ruined Passage":
+            [],
+        "East Overworld":
+            [],
+        "Overworld above Patrol Cave":
+            [],
+        "Overworld above Quarry Entrance":
+            [],
+        "Overworld after Envoy":
+            [],
+        "Overworld Quarry Entry":
+            [["NMG"]],
+        "Overworld Tunnel Turret":
+            [["NMG"], ["Hyperdash"]],
         "Overworld Temple Door":
             [["NMG"], ["Forest Belltower Upper", "Overworld Belltower"]],
+        "Overworld Southeast Cross Door":
+            [],
         "Overworld Fountain Cross Door":
             [], 
         "Overworld Town Portal":
@@ -1108,6 +1130,150 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
         "Overworld Well to Furnace Rail":
             [["UR"]], 
         "Overworld Old House Door":
+            [],
+    },
+    "East Overworld": {
+        "Above Ruined Passage":
+            [],
+        "After Ruined Passage":
+            [["NMG"]],
+        "Overworld":
+            [],
+        "Overworld at Patrol Cave":
+            [],
+        "Overworld above Patrol Cave":
+            [],
+        "Overworld Special Shop Entry":
+            [["Hyperdash"], ["UR"]]
+    },
+    "Overworld Special Shop Entry": {
+        "East Overworld":
+            [["Hyperdash"]]
+    },
+    "Overworld Belltower": {
+        "Overworld Belltower at Bell":
+            [],
+        "Overworld":
+            [],
+        "Overworld to West Garden Upper":
+            [],
+    },
+    "Overworld to West Garden Upper": {
+        "Overworld Belltower":
+            [],
+    },
+    "Overworld Swamp Upper Entry": {
+        "Overworld":
+            [],
+    },
+    "Overworld Swamp Lower Entry": {
+        "Overworld":
+            [],
+    },
+    "Overworld Beach": {
+        "Overworld":
+            [],
+        "Overworld West Garden Laurels Entry":
+            [["Hyperdash"]],
+        "Overworld to Atoll Upper":
+            [],
+        "Overworld Tunnel Turret":
+            [],
+    },
+    "Overworld West Garden Laurels Entry": {
+        "Overworld Beach":
+            [["Hyperdash"]],
+    },
+    "Overworld to Atoll Upper": {
+        "Overworld":
+            [],
+        "Overworld Beach":
+            [],
+    },
+    "Overworld Tunnel Turret": {
+        "Overworld":
+            [],
+        "Overworld Beach":
+            [],
+    },
+    "Overworld Well Ladder": {
+        "Overworld":
+            [],
+    },
+    "Overworld at Patrol Cave": {
+        "East Overworld":
+            [["Hyperdash"]],
+        "Overworld above Patrol Cave":
+            [],
+    },
+    "Overworld above Patrol Cave": {
+        "Overworld":
+            [],
+        "East Overworld":
+            [],
+        "Upper Overworld":
+            [],
+        "Overworld at Patrol Cave":
+            [],
+        "Overworld Belltower at Bell":
+            [["NMG"]],
+    },
+    "Upper Overworld": {
+        "Overworld above Patrol Cave":
+            [],
+        "Overworld above Quarry Entrance":
+            [],
+        "Overworld after Temple Rafters":
+            [],
+    },
+    "Overworld after Temple Rafters": {
+        "Upper Overworld":
+            [],
+    },
+    "Overworld above Quarry Entrance": {
+        "Overworld":
+            [],
+        "Upper Overworld":
+            [],
+    },
+    "Overworld Quarry Entry": {
+        "Overworld after Envoy":
+            [],
+        "Overworld":
+            [["NMG"]],
+    },
+    "Overworld after Envoy": {
+        "Overworld":
+            [],
+        "Overworld Quarry Entry":
+            [],
+    },
+    "After Ruined Passage": {
+        "Overworld":
+            [],
+        "Above Ruined Passage":
+            [],
+        "East Overworld":
+            [["NMG"]],
+    },
+    "Above Ruined Passage": {
+        "Overworld":
+            [],
+        "After Ruined Passage":
+            [],
+        "East Overworld":
+            [],
+    },
+    "Overworld Ruined Passage Door": {
+        "Overworld":
+            [["Hyperdash", "NMG"]],
+    },
+    "Overworld Town Portal": {
+        "Overworld":
+            [],
+    },
+    "Overworld Spawn Portal": {
+        "Overworld":
             [],
     },
     "Old House Front": {
@@ -1140,10 +1306,8 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
         "Sealed Temple":
             [["Hyperdash"]],
     },
-    "East Forest": {
-        "East Forest Dance Fox Spot":
-            [["Hyperdash"], ["NMG"]],
-        "East Forest Portal":
+    "Hourglass Cave": {
+        "Hourglass Cave Tower":
             [],
     },
     "Forest Belltower Upper": {
@@ -1154,6 +1318,14 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
         "Forest Belltower Lower":
             [],
     },
+    "East Forest": {
+        "East Forest Dance Fox Spot":
+            [["Hyperdash"], ["NMG"]],
+        "East Forest Portal":
+            [],
+        "Lower Forest":
+            [],
+    },
     "East Forest Dance Fox Spot": {
         "East Forest":
             [["Hyperdash"], ["NMG"]],
@@ -1162,13 +1334,29 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
         "East Forest":
             [],
     },
+    "Lower Forest": {
+        "East Forest":
+            [],
+    },
     "Guard House 1 East": {
         "Guard House 1 West":
             [],
     },
+    "Guard House 1 West": {
+        "Guard House 1 East":
+            [["Hyperdash"], ["UR"]],
+    },
+    "Guard House 2 Upper": {
+        "Guard House 2 Lower":
+            [],
+    },
+    "Guard House 2 Lower": {
+        "Guard House 2 Upper":
+            [],
+    },
     "Forest Grave Path Main": {
         "Forest Grave Path Upper":
-            [["Hyperdash"]],
+            [["Hyperdash"], ["UR"]],
         "Forest Grave Path by Grave":
             [],
     },
@@ -1180,24 +1368,30 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
         "Forest Hero's Grave":
             [], 
         "Forest Grave Path Main":
-            [["Hyperdash", "NMG"]],
+            [["NMG"]],
     },
     "Forest Hero's Grave": {
         "Forest Grave Path by Grave":
             [],
     },
-    "Beneath the Well Front": {
-        "Beneath the Well Main":
+    "Beneath the Well Ladder Exit": {
+        "Beneath the Well Front":
             [],
     },
-    "Beneath the Well Back": {
+    "Beneath the Well Front": {
+        "Beneath the Well Ladder Exit":
+            [],
         "Beneath the Well Main":
             [],
     },
     "Beneath the Well Main": {
         "Beneath the Well Front":
-            [], 
+            [],
         "Beneath the Well Back":
+            [],
+    },
+    "Beneath the Well Back": {
+        "Beneath the Well Main":
             [],
     },
     "Well Boss": {
@@ -1209,13 +1403,19 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
             [["Hyperdash", "NMG"]],
     },
     "Dark Tomb Entry Point": {
+        "Dark Tomb Upper":
+            [],
+    },
+    "Dark Tomb Upper": {
+        "Dark Tomb Entry Point":
+            [],
         "Dark Tomb Main":
             [],
     },
     "Dark Tomb Main": {
+        "Dark Tomb Upper":
+            [],
         "Dark Tomb Dark Exit":
-            [], 
-        "Dark Tomb Entry Point":
             [],
     },
     "Dark Tomb Dark Exit": {
@@ -1223,16 +1423,16 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
             [],
     },
     "West Garden": {
-        "West Garden Laurels Exit":
+        "West Garden Laurels Exit Region":
             [["Hyperdash"], ["UR"]],
         "West Garden after Boss":
             [], 
-        "West Garden Hero's Grave":
+        "West Garden Hero's Grave Region":
             [],
         "West Garden Portal Item":
             [["NMG"]],
     },
-    "West Garden Laurels Exit": {
+    "West Garden Laurels Exit Region": {
         "West Garden":
             [["Hyperdash"]],
     },
@@ -1250,14 +1450,18 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
         "West Garden Portal Item":
             [["Hyperdash"]],
     },
-    "West Garden Hero's Grave": {
+    "West Garden Hero's Grave Region": {
         "West Garden":
             [],
     },
     "Ruined Atoll": {
         "Ruined Atoll Lower Entry Area":
             [["Hyperdash"], ["UR"]],
+        "Ruined Atoll Ladder Tops":
+            [],
         "Ruined Atoll Frog Mouth":
+            [],
+        "Ruined Atoll Frog Eye":
             [],
         "Ruined Atoll Portal":
             [],
@@ -1268,7 +1472,15 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
         "Ruined Atoll":
             [],
     },
+    "Ruined Atoll Ladder Tops": {
+        "Ruined Atoll":
+            [],
+    },
     "Ruined Atoll Frog Mouth": {
+        "Ruined Atoll":
+            [],
+    },
+    "Ruined Atoll Frog Eye": {
         "Ruined Atoll":
             [],
     },
@@ -1280,26 +1492,77 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
         "Ruined Atoll":
             [],
     },
+    "Frog Stairs Eye Exit": {
+        "Frog Stairs Upper":
+            [],
+    },
+    "Frog Stairs Upper": {
+        "Frog Stairs Eye Exit":
+            [],
+        "Frog Stairs Lower":
+            [],
+    },
+    "Frog Stairs Lower": {
+        "Frog Stairs Upper":
+            [],
+        "Frog Stairs to Frog's Domain":
+            [],
+    },
+    "Frog Stairs to Frog's Domain": {
+        "Frog Stairs Lower":
+            [],
+    },
+    "Frog's Domain Entry": {
+        "Frog's Domain":
+            [],
+    },
     "Frog's Domain": {
+        "Frog's Domain Entry":
+            [],
         "Frog's Domain Back":
             [],
     },
-    "Library Exterior Ladder": {
-        "Library Exterior Tree":
+    "Library Exterior Ladder Region": {
+        "Library Exterior Tree Region":
             [],
     },
-    "Library Exterior Tree": {
-        "Library Exterior Ladder":
+    "Library Exterior Tree Region": {
+        "Library Exterior Ladder Region":
             [],
     },
-    "Library Hall": {
-        "Library Hero's Grave":
-            [],
-    },
-    "Library Hero's Grave": {
+    "Library Hall Bookshelf": {
         "Library Hall":
             [],
     },
+    "Library Hall": {
+        "Library Hall Bookshelf":
+            [],
+        "Library Hero's Grave Region":
+            [],
+    },
+    "Library Hero's Grave Region": {
+        "Library Hall":
+            [],
+    },
+    "Library Hall to Rotunda": {
+        "Library Hall":
+            [],
+    },
+    "Library Rotunda to Hall": {
+        "Library Rotunda":
+            [],
+    },
+    "Library Rotunda": {
+        "Library Rotunda to Hall":
+            [],
+        "Library Rotunda to Lab":
+            [],
+    },
+    "Library Rotunda to Lab": {
+        "Library Rotunda":
+            [],
+    },
+
     "Library Lab Lower": {
         "Library Lab":
             [],
@@ -1309,8 +1572,14 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
             [["Hyperdash"]],
         "Library Portal":
             [],
+        "Library Lab to Librarian":
+            [],
     },
     "Library Portal": {
+        "Library Lab":
+            [],
+    },
+    "Library Lab to Librarian": {
         "Library Lab":
             [],
     },
@@ -1339,6 +1608,12 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
             [["UR"]], 
         "Fortress Courtyard Upper":
             [["UR"]],
+        "Beneath the Vault Entry":
+            [],
+    },
+    "Beneath the Vault Entry": {
+        "Fortress Courtyard near cave":
+            [],
     },
     "Fortress Courtyard": {
         "Fortress Courtyard Upper":
@@ -1350,7 +1625,13 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
         "Fortress Courtyard":
             [],
     },
+    "Beneath the Vault Ladder Exit": {
+        "Beneath the Vault Front":
+            [],
+    },
     "Beneath the Vault Front": {
+        "Beneath the Ladder Exit":
+            [],
         "Beneath the Vault Back":
             [],
     },
@@ -1375,20 +1656,20 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
             [["NMG"]],
     },
     "Fortress Grave Path": {
-        "Fortress Hero's Grave":
+        "Fortress Hero's Grave Region":
             [], 
-        "Fortress Grave Path Dusty Entrance":
+        "Fortress Grave Path Dusty Entrance Region":
             [["Hyperdash"]],
     },
     "Fortress Grave Path Upper": {
         "Fortress Grave Path":
             [["NMG"]],
     },
-    "Fortress Grave Path Dusty Entrance": {
+    "Fortress Grave Path Dusty Entrance Region": {
         "Fortress Grave Path":
             [["Hyperdash"]],
     },
-    "Fortress Hero's Grave": {
+    "Fortress Hero's Grave Region": {
         "Fortress Grave Path":
             [],
     },
@@ -1411,10 +1692,10 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     "Monastery Back": {
         "Monastery Front":
             [["Hyperdash", "NMG"]], 
-        "Monastery Hero's Grave":
+        "Monastery Hero's Grave Region":
             [],
     },
-    "Monastery Hero's Grave": {
+    "Monastery Hero's Grave Region": {
         "Monastery Back":
             [],
     },
@@ -1424,7 +1705,7 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Quarry Entry": {
         "Quarry Portal":
-            [["Quarry Connector"]], 
+            [["Quarry Connector"]],
         "Quarry":
             [],
     },
@@ -1455,10 +1736,18 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
             [],
         "Quarry Monastery Entry":
             [],
+        "Lower Quarry Zig Door":
+            [["NMG"]],
     },
     "Lower Quarry": {
+        "Even Lower Quarry":
+            [],
+    },
+    "Even Lower Quarry": {
+        "Lower Quarry":
+            [],
         "Lower Quarry Zig Door":
-            [["Quarry", "Quarry Connector"]],
+            [["Quarry", "Quarry Connector"], ["NMG"]],
     },
     "Monastery Rope": {
         "Quarry Back":
@@ -1506,35 +1795,47 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
         "Rooted Ziggurat Portal Room Exit":
             [["Rooted Ziggurat Lower Back"]],
     },
-    "Swamp": {
-        "Swamp to Cathedral Main Entrance":
-            [["Hyperdash"], ["NMG"]],
-        "Swamp to Cathedral Treasure Room":
+    "Swamp Front": {
+        "Swamp Mid":
+            [],
+    },
+    "Swamp Mid": {
+        "Swamp Front":
+            [],
+        "Swamp to Cathedral Main Entrance Region":
+            [],
+        "Swamp Ledge under Cathedral Door":
             [],
         "Back of Swamp":
             [["UR"]],
     },
-    "Swamp to Cathedral Treasure Room Entrance": {
-        "Swamp":
+    "Swamp Ledge under Cathedral Door": {
+        "Swamp Mid":
+            [],
+        "Swamp to Cathedral Treasure Room":
             [],
     },
-    "Swamp to Cathedral Main Entrance": {
-        "Swamp":
+    "Swamp to Cathedral Treasure Room": {
+        "Swamp Ledge under Cathedral Door":
+            [],
+    },
+    "Swamp to Cathedral Main Entrance Region": {
+        "Swamp Mid":
             [["NMG"]],
     },
     "Back of Swamp": {
         "Back of Swamp Laurels Area":
             [["Hyperdash"], ["UR"]],
-        "Swamp Hero's Grave":
+        "Swamp Hero's Grave Region":
             [],
     },
     "Back of Swamp Laurels Area": {
         "Back of Swamp":
             [["Hyperdash"]],
-        "Swamp":
+        "Swamp Front":
             [["NMG"]],
     },
-    "Swamp Hero's Grave": {
+    "Swamp Hero's Grave Region": {
         "Back of Swamp":
             [],
     },
@@ -1551,73 +1852,41 @@ final_dependent_regions: Dict[str, Dict[str, List[List[str]]]] = {
             [["Hyperdash"]],
     },
     "Far Shore": {
-        "Far Shore to Spawn":
+        "Far Shore to Spawn Region":
             [["Hyperdash"]],
-        "Far Shore to East Forest":
+        "Far Shore to East Forest Region":
             [["Hyperdash"]],
-        "Far Shore to Quarry":
+        "Far Shore to Quarry Region":
             [["Quarry Connector", "Quarry"]],
-        "Far Shore to Library":
+        "Far Shore to Library Region":
             [["Library Lab"]],
-        "Far Shore to West Garden":
+        "Far Shore to West Garden Region":
             [["West Garden"]],
-        "Far Shore to Fortress":
+        "Far Shore to Fortress Region":
             [["Fortress Exterior from Overworld", "Beneath the Vault Back", "Eastern Vault Fortress"]],
     },
-    "Far Shore to Spawn": {
+    "Far Shore to Spawn Region": {
         "Far Shore":
             [["Hyperdash"]],
     },
-    "Far Shore to East Forest": {
+    "Far Shore to East Forest Region": {
         "Far Shore":
             [["Hyperdash"]],
     },
-    "Far Shore to Quarry": {
+    "Far Shore to Quarry Region": {
         "Far Shore":
             [],
     },
-    "Far Shore to Library": {
+    "Far Shore to Library Region": {
         "Far Shore":
             [],
     },
-    "Far Shore to West Garden": {
+    "Far Shore to West Garden Region": {
         "Far Shore":
             [],
     },
-    "Far Shore to Fortress": {
+    "Far Shore to Fortress Region": {
         "Far Shore":
-            [],
-    },
-    "Shop Entrance 1": {
-        "Shop":
-            [],
-    },
-    "Shop Entrance 2": {
-        "Shop":
-            [],
-    },
-    "Shop Entrance 3": {
-        "Shop":
-            [],
-    },
-    "Shop Entrance 4": {
-        "Shop":
-            [],
-    },
-    "Shop Entrance 5": {
-        "Shop":
-            [],
-    },
-    "Shop Entrance 6": {
-        "Shop":
-            [],
-    },
-    "Shop Entrance 7": {
-        "Shop":
-            [],
-    },
-    "Shop Entrance 8": {
-        "Shop":
             [],
     },
 }
