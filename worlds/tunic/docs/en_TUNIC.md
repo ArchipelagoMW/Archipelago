@@ -67,4 +67,24 @@ For the Entrance Randomizer:
 Bombs, consumables (non-bomb ones), weapons, melee weapons (stick and sword), keys, hexagons, offerings, hero relics, cards, golden treasures, money, pages, and abilities (the three ability pages). There are also a few groups being used for singular items: laurels, orb, dagger, magic rod, holy cross, prayer, icebolt, and progressive sword.
 
 ## What location groups are there?
-Holy cross (for all holy cross checks), fairies (for the two fairy checks), well (for the coin well checks), and shop. Additionally, for checks that do not fall into the above categories, the name of the region is the name of the location group.
+Holy cross (for all holy cross checks), fairies (for the two fairy checks), well (for the coin well checks), shop, bosses (for the bosses with checks associated with them), hero relic (for the 6 hero grave checks), and ladders (for the ladder items when you have shuffle ladders enabled).
+
+## Is Connection Plando supported?
+Yes. The host needs to enable it in their `host.yaml`, and the player's yaml needs to contain a plando_connections block.
+Example:
+```
+plando_connections:
+  - entrance: Stick House Entrance
+    exit: Stick House Exit
+  - entrance: Special Shop Exit
+    exit: Stairs to Top of the Mountain
+```
+Notes:
+- The Entrance Randomizer option must be enabled for it to work.
+- The `direction` field is not supported. Connections are always coupled.
+- For a list of entrance names, check `er_data.py` in the TUNIC world folder or generate a game with the Entrance Randomizer option enabled and check the spoiler log.
+- There is no limit to the number of Shops hard-coded into place.
+- If you have more than one shop in a scene, you may be wrong warped when exiting a shop.
+- If you have a shop in every scene, and you have an odd number of shops, it will error out.
+
+See the [Archipelago Plando Guide](../../../tutorial/Archipelago/plando/en) for more information on Plando and Connection Plando.
