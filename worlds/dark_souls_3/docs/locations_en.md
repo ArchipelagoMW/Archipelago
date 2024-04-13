@@ -41,8 +41,10 @@ at once:
 * **Boss rewards:** Boss drops. Does not include soul transfusions or shop
   items.
 
-* **Miniboss Rewards:** Miniboss drops. Only includes enemies considered
-  minibosses by the enemy randomizer.
+* **Miniboss Rewards:** Miniboss drops. Minibosses are large enemies that don't
+  respawn after being killed and usually drop some sort of treasure, such as
+  Boreal Outrider Knights and Ravenous Crystal Lizards. Only includes enemies
+  considered minibosses by the enemy randomizer.
 
 * **Mimic Rewards:** Drops from enemies that are mimics in vanilla.
 
@@ -123,7 +125,7 @@ General notes:
 
 * "Miniboss" are large enemies that don't respawn after being killed and usually
   drop some sort of treasure, such as Boreal Outrider Knights and Ravenous
-  Crystal Lizards. They usually don't have boss bars, but a few of them do.
+  Crystal Lizards.
 
 * NPC quest items are always in the first location you can get them _without_
   killing the NPC or ending the quest early.
@@ -184,7 +186,8 @@ General notes:
 * **White tree:** The birch tree by the Dilapidated Bridge bonfire, where the
   giant shoots arrows.
 
-* **Sewer:** The underground passage between the 
+* **Sewer:** The underground passage between the chasm and the Dilapidated
+  Bridge bonfire.
 
 * **Chasm:** The chasm underneath the bridge on the way to the tower. It's
   possible to get into the chasm without a key by dropping down next to Eygon of
@@ -276,7 +279,7 @@ region.
   elevator from the Old Wolf of Farron bonfire.
 
 * **Perimeter:** The area from near the Farron Keep Perimeter bonfire, including
-  the stony section and the path to the boss.
+  the stone building and the path to the boss.
 
 ### Catacombs of Carthus
 
@@ -340,7 +343,7 @@ considered part of Anor Londo.
   crystal lizard just before the plaza.
 
 * **Plaza:** The area in front of and below the cathedral, with a locked door up
-  to it and a locked elevator to the ascent.
+  to the cathedral and a locked elevator to the Ascent.
 
 * **Descent:** The path from the Church of Yorshka bonfire down to the lake.
 
@@ -358,8 +361,9 @@ considered part of Anor Londo.
 
 ### Irithyll Dungeon
 
-In Irithyll Dungeon locations, "left" and "right" are always oriented facing
-from the "near" side of the floor to the "far" side.
+In Irithyll Dungeon locations, "left" and "right" are always oriented as though
+"near" is where you stand and "far" is where you're facing. (For example, you
+enter the dungeon from the bonfire on the near left.)
 
 * **B1:** The floor on which the player enters the dungeon, with the Irithyll
   Dungeon bonfire.
@@ -379,7 +383,7 @@ from the "near" side of the floor to the "far" side.
   Dungeon bonfire.
 
 * **B3:** The lowest floor, with Karla's cell, a lift back to B2, and the exit
-  onwards to Profaned Capital.
+  onwards to the Profaned Capital.
   
   * "Near" is the side with Karla's cell and the the path from the pit.
   * "Far" is the opposite side with the mimic.
