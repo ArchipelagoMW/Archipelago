@@ -429,8 +429,8 @@ def create_region_data_table(world: YTGVWorld) -> Dict[str, YTGVRegionData]:
 region_name_to_locations = {}
 
 for location_name, location_data in Locations.location_data_table.items():
-    items = region_name_to_locations.setdefault(location_data.region, {})
-    items[location_name] = location_data.id
+    locations = region_name_to_locations.setdefault(location_data.region, {})
+    locations[location_name] = location_data.id
 
 from pprint import pprint
 print("##### DEBUG: region_name_to_locations:")
