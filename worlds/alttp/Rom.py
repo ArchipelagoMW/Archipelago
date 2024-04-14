@@ -868,11 +868,11 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
                                 exit.name not in {'Palace of Darkness Exit', 'Tower of Hera Exit', 'Swamp Palace Exit'}):
                         # For exits that connot be reached from another, no need to apply offset fixes.
                         rom.write_int16(0x15DB5 + 2 * offset, link_y)  # same as final else
-                    elif room_id == 0x0059 and world.fix_skullwoods_exit[player]:
+                    elif room_id == 0x0059 and local_world.fix_skullwoods_exit:
                         rom.write_int16(0x15DB5 + 2 * offset, 0x00F8)
-                    elif room_id == 0x004a and world.fix_palaceofdarkness_exit[player]:
+                    elif room_id == 0x004a and local_world.fix_palaceofdarkness_exit:
                         rom.write_int16(0x15DB5 + 2 * offset, 0x0640)
-                    elif room_id == 0x00d6 and world.fix_trock_exit[player]:
+                    elif room_id == 0x00d6 and local_world.fix_trock_exit:
                         rom.write_int16(0x15DB5 + 2 * offset, 0x0134)
                     elif room_id == 0x000c and world.shuffle_ganon:  # fix ganons tower exit point
                         rom.write_int16(0x15DB5 + 2 * offset, 0x00A4)
@@ -1674,14 +1674,14 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         rom.write_byte(0x4E3BB, 0xEB)
 
     # fix trock doors for reverse entrances
-    if world.fix_trock_doors[player]:
+    if local_world.fix_trock_doors:
         rom.write_byte(0xFED31, 0x0E)  # preopen bombable exit
         rom.write_byte(0xFEE41, 0x0E)  # preopen bombable exit
         # included unconditionally in base2current
         # rom.write_byte(0xFE465, 0x1E)  # remove small key door on backside of big key door
     else:
-        rom.write_byte(0xFED31, 0x2A)  # preopen bombable exit
-        rom.write_byte(0xFEE41, 0x2A)  # preopen bombable exit
+        rom.write_byte(0xFED31, 0x2A)  # bombable exit
+        rom.write_byte(0xFEE41, 0x2A)  # bombable exit
 
     if world.tile_shuffle[player]:
         tile_set = TileSet.get_random_tile_set(world.per_slot_randoms[player])
