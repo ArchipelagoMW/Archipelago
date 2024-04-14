@@ -586,7 +586,7 @@ class Context:
             self.location_check_points = savedata["game_options"]["location_check_points"]
             self.server_password = savedata["game_options"]["server_password"]
             self.password = savedata["game_options"]["password"]
-            self.release_mode = savedata["game_options"].get("release_mode", savedata["game_options"].get("forfeit_mode", "goal"))
+            self.release_mode = savedata["game_options"]["release_mode"]
             self.remaining_mode = savedata["game_options"]["remaining_mode"]
             self.collect_mode = savedata["game_options"]["collect_mode"]
             self.item_cheat = savedata["game_options"]["item_cheat"]
@@ -631,8 +631,6 @@ class Context:
 
     def _set_options(self, server_options: dict):
         for key, value in server_options.items():
-            if key == "forfeit_mode":
-                key = "release_mode"
             data_type = self.simple_options.get(key, None)
             if data_type is not None:
                 if value not in {False, True, None}:  # some can be boolean OR text, such as password
@@ -2092,8 +2090,8 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
             if full_name.isnumeric():
                 location, usable, response = int(full_name), True, None
-            elif self.ctx.location_names_for_game(game) is not None:
-                location, usable, response = get_intended_text(full_name, self.ctx.location_names_for_game(game))
+            elif game in self.ctx.all_location_and_group_names:
+                location, usable, response = get_intended_text(full_name, self.ctx.all_location_and_group_names[game])
             else:
                 self.output("Can't look up location for unknown game. Hint for ID instead.")
                 return False
@@ -2101,6 +2099,11 @@ class ServerCommandProcessor(CommonCommandProcessor):
             if usable:
                 if isinstance(location, int):
                     hints = collect_hint_location_id(self.ctx, team, slot, location)
+                elif game in self.ctx.location_name_groups and location in self.ctx.location_name_groups[game]:
+                    hints = []
+                    for loc_name_from_group in self.ctx.location_name_groups[game][location]:
+                        if loc_name_from_group in self.ctx.location_names_for_game(game):
+                            hints.extend(collect_hint_location_name(self.ctx, team, slot, loc_name_from_group))
                 else:
                     hints = collect_hint_location_name(self.ctx, team, slot, location)
                 if hints:
