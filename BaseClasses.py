@@ -1395,7 +1395,7 @@ class Spoiler:
                                   else item.name
                                   for item in chain.from_iterable(self.multiworld.precollected_items.values())]
             if precollected_items:
-                outfile.write("\n\nPrecollected Items:\n\n")
+                outfile.write("\n\nStarting Items:\n\n")
                 outfile.write("\n".join([item for item in precollected_items]))
 
             locations = [(str(location), str(location.item) if location.item is not None else "Nothing")
