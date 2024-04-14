@@ -1345,6 +1345,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     "Sorry, !remaining requires you to have beaten the game on this server")
                 return False
 
+    @mark_raw
     def _cmd_missing(self, filter_text="") -> bool:
         """List all missing location checks from the server's perspective.
         Can be given text, which will be used as filter."""
@@ -1354,7 +1355,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if locations:
             names = [self.ctx.location_names[location] for location in locations]
             if filter_text:
-                names = [name for name in names if filter_text in name]
+                location_groups = self.ctx.location_name_groups[self.ctx.games[self.client.slot]]
+                if filter_text in location_groups:  # location group name
+                    names = [name for name in names if name in location_groups[filter_text]]
+                else:
+                    names = [name for name in names if filter_text in name]
             texts = [f'Missing: {name}' for name in names]
             if filter_text:
                 texts.append(f"Found {len(locations)} missing location checks, displaying {len(names)} of them.")
@@ -1365,6 +1370,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
             self.output("No missing location checks found.")
         return True
 
+    @mark_raw
     def _cmd_checked(self, filter_text="") -> bool:
         """List all done location checks from the server's perspective.
         Can be given text, which will be used as filter."""
@@ -1374,7 +1380,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if locations:
             names = [self.ctx.location_names[location] for location in locations]
             if filter_text:
-                names = [name for name in names if filter_text in name]
+                location_groups = self.ctx.location_name_groups[self.ctx.games[self.client.slot]]
+                if filter_text in location_groups:  # location group name
+                    names = [name for name in names if name in location_groups[filter_text]]
+                else:
+                    names = [name for name in names if filter_text in name]
             texts = [f'Checked: {name}' for name in names]
             if filter_text:
                 texts.append(f"Found {len(locations)} done location checks, displaying {len(names)} of them.")
