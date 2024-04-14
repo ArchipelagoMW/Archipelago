@@ -2,7 +2,7 @@ import typing
 
 from BaseClasses import MultiWorld
 from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, \
-    StartInventoryPool, PlandoBosses, PlandoConnections, PlandoTexts, FreeText
+    StartInventoryPool, PlandoBosses, PlandoConnections, PlandoTexts, FreeText, Removed
 from .EntranceShuffle import default_connections, default_dungeon_connections, \
     inverted_default_connections, inverted_default_dungeon_connections
 from .Text import TextTable
@@ -719,9 +719,8 @@ class BeemizerTrapChance(BeemizerRange):
     display_name = "Beemizer Trap Chance"
 
 
-class AllowCollect(Toggle):
-    """Allows for !collect / co-op to auto-open chests containing items for other players.
-    Off by default, because it currently crashes on real hardware."""
+class AllowCollect(DefaultOnToggle):
+    """Allows for !collect / co-op to auto-open chests containing items for other players."""
     display_name = "Allow Collection of checks for other players"
 
 
@@ -819,4 +818,9 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "music": Music,
     "reduceflashing": ReduceFlashing,
     "triforcehud": TriforceHud,
+
+    # removed:
+    "goals": Removed,
+    "smallkey_shuffle": Removed,
+    "bigkey_shuffle": Removed,
 }

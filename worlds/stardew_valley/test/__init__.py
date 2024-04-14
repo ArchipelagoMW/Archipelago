@@ -277,10 +277,10 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
             self.multiworld.state.collect(self.world.create_item("Stardrop"), event=False)
 
     def get_real_locations(self) -> List[Location]:
-        return [location for location in self.multiworld.get_locations(self.player) if not location.event]
+        return [location for location in self.multiworld.get_locations(self.player) if location.address is not None]
 
     def get_real_location_names(self) -> List[str]:
-        return [location.name for location in self.multiworld.get_locations(self.player) if not location.event]
+        return [location.name for location in self.get_real_locations()]
 
 
 pre_generated_worlds = {}

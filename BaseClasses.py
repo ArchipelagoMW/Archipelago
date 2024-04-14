@@ -160,14 +160,6 @@ class MultiWorld():
         self.local_early_items = {player: {} for player in self.player_ids}
         self.indirect_connections = {}
         self.start_inventory_from_pool: Dict[int, Options.StartInventoryPool] = {}
-        self.fix_trock_doors = self.AttributeProxy(
-            lambda player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted')
-        self.fix_skullwoods_exit = self.AttributeProxy(
-            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeons_simple'])
-        self.fix_palaceofdarkness_exit = self.AttributeProxy(
-            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeons_simple'])
-        self.fix_trock_exit = self.AttributeProxy(
-            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeons_simple'])
 
         for player in range(1, players + 1):
             def set_player_attr(attr, val):
@@ -445,7 +437,7 @@ class MultiWorld():
         location.item = item
         item.location = location
         if collect:
-            self.state.collect(item, location.event, location)
+            self.state.collect(item, location.advancement, location)
 
         logging.debug('Placed %s at %s', item, location)
 
@@ -592,8 +584,7 @@ class MultiWorld():
         def location_relevant(location: Location):
             """Determine if this location is relevant to sweep."""
             if location.progress_type != LocationProgressType.EXCLUDED \
-                and (location.player in players["locations"] or location.event
-                     or (location.item and location.item.advancement)):
+               and (location.player in players["locations"] or location.advancement):
                 return True
             return False
 
@@ -738,7 +729,7 @@ class CollectionState():
             locations = self.multiworld.get_filled_locations()
         reachable_events = True
         # since the loop has a good chance to run more than once, only filter the events once
-        locations = {location for location in locations if location.event and location not in self.events and
+        locations = {location for location in locations if location.advancement and location not in self.events and
                      not key_only or getattr(location.item, "locked_dungeon_item", False)}
         while reachable_events:
             reachable_events = {location for location in locations if location.can_reach(self)}
@@ -1028,7 +1019,6 @@ class Location:
     name: str
     address: Optional[int]
     parent_region: Optional[Region]
-    event: bool = False
     locked: bool = False
     show_in_spoiler: bool = True
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
@@ -1059,7 +1049,6 @@ class Location:
             raise Exception(f"Location {self} already filled.")
         self.item = item
         item.location = self
-        self.event = item.advancement
         self.locked = True
 
     def __repr__(self):
@@ -1074,6 +1063,15 @@ class Location:
 
     def __lt__(self, other: Location):
         return (self.player, self.name) < (other.player, other.name)
+
+    @property
+    def advancement(self) -> bool:
+        return self.item is not None and self.item.advancement
+
+    @property
+    def is_event(self) -> bool:
+        """Returns True if the address of this location is None, denoting it is an Event Location."""
+        return self.address is None
 
     @property
     def native_item(self) -> bool:
@@ -1352,12 +1350,15 @@ class Spoiler:
                             get_path(state, multiworld.get_region('Inverted Big Bomb Shop', player))
 
     def to_file(self, filename: str) -> None:
+        from itertools import chain
         from worlds import AutoWorld
+        from Options import Visibility
 
         def write_option(option_key: str, option_obj: Options.AssembleOptions) -> None:
             res = getattr(self.multiworld.worlds[player].options, option_key)
-            display_name = getattr(option_obj, "display_name", option_key)
-            outfile.write(f"{display_name + ':':33}{res.current_option_name}\n")
+            if res.visibility & Visibility.spoiler:
+                display_name = getattr(option_obj, "display_name", option_key)
+                outfile.write(f"{display_name + ':':33}{res.current_option_name}\n")
 
         with open(filename, 'w', encoding="utf-8-sig") as outfile:
             outfile.write(
@@ -1387,6 +1388,14 @@ class Spoiler:
                                                          entry['exit']) for entry in self.entrances.values()]))
 
             AutoWorld.call_all(self.multiworld, "write_spoiler", outfile)
+
+            precollected_items = [f"{item.name} ({self.multiworld.get_player_name(item.player)})"
+                                  if self.multiworld.players > 1
+                                  else item.name
+                                  for item in chain.from_iterable(self.multiworld.precollected_items.values())]
+            if precollected_items:
+                outfile.write("\n\nStarting Items:\n\n")
+                outfile.write("\n".join([item for item in precollected_items]))
 
             locations = [(str(location), str(location.item) if location.item is not None else "Nothing")
                          for location in self.multiworld.get_locations() if location.show_in_spoiler]
