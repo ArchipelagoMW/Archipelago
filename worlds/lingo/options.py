@@ -7,17 +7,23 @@ from worlds.lingo.items import TRAP_ITEMS
 
 
 class ShuffleDoors(Choice):
-    """If on, opening doors will require their respective "keys".
-    In "simple", doors are sorted into logical groups, which are all opened by receiving an item.
-    In "complex", the items are much more granular, and will usually only open a single door each."""
+    """On "none", doors in the game will open the way they do in vanilla.
+    On "panels", doors still open as in vanilla, but the panels that open the doors will be locked, and an item will be required to unlock the panels.
+    On "doors", the doors themselves are locked behind items, and will open automatically without needing to solve a panel once the key is obtained."""
     display_name = "Shuffle Doors"
     option_none = 0
-    option_simple = 1
-    option_complex = 2
+    option_panels = 1
+    option_doors = 2
+
+
+class GroupDoors(Toggle):
+    """By default, door shuffle in either panels or doors mode will create individual keys for every panel or door to be locked.
+    When group doors is on, some panels and doors are sorted into logical groups, which are opened together by receiving an item."""
+    display_name = "Group Doors"
 
 
 class ProgressiveOrangeTower(DefaultOnToggle):
-    """When "Shuffle Doors" is on, this setting governs the manner in which the Orange Tower floors open up.
+    """When door shuffle is on doors mode, this setting governs the manner in which the Orange Tower floors open up.
     If off, there is an item for each floor of the tower, and each floor's item is the only one needed to access that floor.
     If on, there are six progressive items, which open up the tower from the bottom floor upward.
     """
@@ -25,7 +31,7 @@ class ProgressiveOrangeTower(DefaultOnToggle):
 
 
 class ProgressiveColorful(DefaultOnToggle):
-    """When "Shuffle Doors" is on "complex", this setting governs the manner in which The Colorful opens up.
+    """When door shuffle is on in either panels or doors mode, and "Group Doors" is off, this setting governs the manner in which The Colorful opens up.
     If off, there is an item for each room of The Colorful, meaning that random rooms in the middle of the sequence can open up without giving you access to them.
     If on, there are ten progressive items, which open up the sequence from White forward."""
     display_name = "Progressive Colorful"
@@ -134,6 +140,7 @@ class DeathLink(Toggle):
 @dataclass
 class LingoOptions(PerGameCommonOptions):
     shuffle_doors: ShuffleDoors
+    group_doors: GroupDoors
     progressive_orange_tower: ProgressiveOrangeTower
     progressive_colorful: ProgressiveColorful
     location_checks: LocationChecks

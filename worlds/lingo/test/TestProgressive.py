@@ -3,7 +3,7 @@ from . import LingoTestBase
 
 class TestComplexProgressiveHallwayRoom(LingoTestBase):
     options = {
-        "shuffle_doors": "complex"
+        "shuffle_doors": "doors"
     }
 
     def test_item(self):
@@ -54,7 +54,8 @@ class TestComplexProgressiveHallwayRoom(LingoTestBase):
 
 class TestSimpleHallwayRoom(LingoTestBase):
     options = {
-        "shuffle_doors": "simple"
+        "shuffle_doors": "doors",
+        "group_doors": "true",
     }
 
     def test_item(self):
@@ -81,7 +82,7 @@ class TestSimpleHallwayRoom(LingoTestBase):
 
 class TestProgressiveArtGallery(LingoTestBase):
     options = {
-        "shuffle_doors": "complex",
+        "shuffle_doors": "doors",
         "shuffle_colors": "false",
     }
 

@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import CollectionState
 from .datatypes import RoomAndDoor
 from .player_logic import AccessRequirements, PlayerLocation
-from .static_logic import PROGRESSION_BY_ROOM, PROGRESSIVE_ITEMS
+from .static_logic import PROGRESSIVE_DOORS_BY_ROOM, PROGRESSIVE_ITEMS
 
 if TYPE_CHECKING:
     from . import LingoWorld
@@ -61,6 +61,12 @@ def _lingo_can_satisfy_requirements(state: CollectionState, access: AccessRequir
             if not state.has(color.capitalize(), world.player):
                 return False
 
+    if not all(state.has(item, world.player) for item in access.items):
+        return False
+
+    if not all(state.has(item, world.player, index) for item, index in access.progression.items()):
+        return False
+
     return True
 
 
@@ -73,7 +79,7 @@ def _lingo_can_open_door(state: CollectionState, room: str, door: str, world: "L
 
     item_name = world.player_logic.item_by_door[room][door]
     if item_name in PROGRESSIVE_ITEMS:
-        progression = PROGRESSION_BY_ROOM[room][door]
+        progression = PROGRESSIVE_DOORS_BY_ROOM[room][door]
         return state.has(item_name, world.player, progression.index)
 
     return state.has(item_name, world.player)

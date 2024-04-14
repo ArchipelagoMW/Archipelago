@@ -11,6 +11,11 @@ class RoomAndPanel(NamedTuple):
     panel: str
 
 
+class RoomAndPanelDoor(NamedTuple):
+    room: Optional[str]
+    panel_door: str
+
+
 class RoomEntrance(NamedTuple):
     room: str  # source room
     door: Optional[RoomAndDoor]
@@ -48,6 +53,12 @@ class Panel(NamedTuple):
     exclude_reduce: bool
     achievement: bool
     non_counting: bool
+    panel_door: Optional[RoomAndPanelDoor]  # This will always be fully specified.
+
+
+class PanelDoor(NamedTuple):
+    item_name: str
+    panel_group: Optional[str]
 
 
 class Painting(NamedTuple):

@@ -2,11 +2,12 @@ from enum import Enum
 from typing import Dict, List, NamedTuple, Optional, Set, Tuple, TYPE_CHECKING
 
 from .datatypes import Door, RoomAndDoor, RoomAndPanel
-from .items import ALL_ITEM_TABLE, ItemData
+from .items import ALL_ITEM_TABLE, ItemType
 from .locations import ALL_LOCATION_TABLE, LocationClassification
 from .options import LocationChecks, ShuffleDoors, VictoryCondition
 from .static_logic import DOORS_BY_ROOM, PAINTINGS, PAINTING_ENTRANCES, PAINTING_EXITS, \
-    PANELS_BY_ROOM, PROGRESSION_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS
+    PANELS_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, PROGRESSIVE_DOORS_BY_ROOM, \
+    PANEL_DOORS_BY_ROOM, PROGRESSIVE_PANELS_BY_ROOM
 
 if TYPE_CHECKING:
     from . import LingoWorld
@@ -16,19 +17,29 @@ class AccessRequirements:
     rooms: Set[str]
     doors: Set[RoomAndDoor]
     colors: Set[str]
+    items: Set[str]
+    progression: Dict[str, int]
 
     def __init__(self):
         self.rooms = set()
         self.doors = set()
         self.colors = set()
+        self.items = set()
+        self.progression = dict()
 
     def merge(self, other: "AccessRequirements"):
         self.rooms |= other.rooms
         self.doors |= other.doors
         self.colors |= other.colors
+        self.items |= other.items
+
+        for progression, index in other.progression.items():
+            if progression not in self.progression or index > self.progression[progression]:
+                self.progression[progression] = index
 
     def __str__(self):
-        return f"AccessRequirements(rooms={self.rooms}, doors={self.doors}, colors={self.colors})"
+        return f"AccessRequirements(rooms={self.rooms}, doors={self.doors}, colors={self.colors}, items={self.items}," \
+               f" progression={self.progression})"
 
 
 class PlayerLocation(NamedTuple):
@@ -56,21 +67,6 @@ def should_split_progression(progression_name: str, world: "LingoWorld") -> Prog
             return ProgressiveItemBehavior.SPLIT
 
     return ProgressiveItemBehavior.PROGRESSIVE
-
-
-def should_include_item(item: ItemData, world: "LingoWorld") -> bool:
-    if item.mode == "colors":
-        return world.options.shuffle_colors > 0
-    elif item.mode == "doors":
-        return world.options.shuffle_doors != ShuffleDoors.option_none
-    elif item.mode == "complex door":
-        return world.options.shuffle_doors == ShuffleDoors.option_complex
-    elif item.mode == "door group":
-        return world.options.shuffle_doors == ShuffleDoors.option_simple
-    elif item.mode == "special":
-        return False
-    else:
-        return True
 
 
 class LingoPlayerLogic:
@@ -119,19 +115,20 @@ class LingoPlayerLogic:
         self.item_by_door.setdefault(room, {})[door] = item
 
     def handle_non_grouped_door(self, room_name: str, door_data: Door, world: "LingoWorld"):
-        if room_name in PROGRESSION_BY_ROOM and door_data.name in PROGRESSION_BY_ROOM[room_name]:
-            progression_name = PROGRESSION_BY_ROOM[room_name][door_data.name].item_name
+        if room_name in PROGRESSIVE_DOORS_BY_ROOM and door_data.name in PROGRESSIVE_DOORS_BY_ROOM[room_name]:
+            progression_name = PROGRESSIVE_DOORS_BY_ROOM[room_name][door_data.name].item_name
             progression_handling = should_split_progression(progression_name, world)
 
             if progression_handling == ProgressiveItemBehavior.SPLIT:
                 self.set_door_item(room_name, door_data.name, door_data.item_name)
                 self.real_items.append(door_data.item_name)
             elif progression_handling == ProgressiveItemBehavior.PROGRESSIVE:
-                progressive_item_name = PROGRESSION_BY_ROOM[room_name][door_data.name].item_name
+                progressive_item_name = PROGRESSIVE_DOORS_BY_ROOM[room_name][door_data.name].item_name
                 self.set_door_item(room_name, door_data.name, progressive_item_name)
                 self.real_items.append(progressive_item_name)
         else:
             self.set_door_item(room_name, door_data.name, door_data.item_name)
+            self.real_items.append(door_data.item_name)
 
     def __init__(self, world: "LingoWorld"):
         self.item_by_door = {}
@@ -161,15 +158,45 @@ class LingoPlayerLogic:
                             "be enough locations for all of the door items.")
 
         # Create door items, where needed.
-        if door_shuffle != ShuffleDoors.option_none:
-            for room_name, room_data in DOORS_BY_ROOM.items():
-                for door_name, door_data in room_data.items():
-                    if door_data.skip_item is False and door_data.event is False:
-                        if door_data.door_group is not None and door_shuffle == ShuffleDoors.option_simple:
+        door_groups: Set[str] = set()
+        for room_name, room_data in DOORS_BY_ROOM.items():
+            for door_name, door_data in room_data.items():
+                if door_data.skip_item is False and door_data.event is False:
+                    if door_shuffle == ShuffleDoors.option_doors:
+                        if door_data.door_group is not None and world.options.group_doors:
                             # Grouped doors are handled differently if shuffle doors is on simple.
                             self.set_door_item(room_name, door_name, door_data.door_group)
+                            door_groups.add(door_data.door_group)
                         else:
                             self.handle_non_grouped_door(room_name, door_data, world)
+
+        self.real_items += door_groups
+
+        # Create panel items, where needed.
+        if world.options.shuffle_doors == ShuffleDoors.option_panels:
+            panel_groups: Set[str] = set()
+
+            for room_name, room_data in PANEL_DOORS_BY_ROOM.items():
+                for panel_door_name, panel_door_data in room_data.items():
+                    if panel_door_data.panel_group is not None and world.options.group_doors:
+                        panel_groups.add(panel_door_data.panel_group)
+                    elif room_name in PROGRESSIVE_PANELS_BY_ROOM \
+                            and panel_door_name in PROGRESSIVE_PANELS_BY_ROOM[room_name]:
+                        progression_obj = PROGRESSIVE_PANELS_BY_ROOM[room_name][panel_door_name]
+                        progression_handling = should_split_progression(progression_obj.item_name, world)
+
+                        if progression_handling == ProgressiveItemBehavior.SPLIT:
+                            self.real_items.append(panel_door_data.item_name)
+                        elif progression_handling == ProgressiveItemBehavior.PROGRESSIVE:
+                            self.real_items.append(progression_obj.item_name)
+                    else:
+                        self.real_items.append(panel_door_data.item_name)
+
+            self.real_items += panel_groups
+
+        # Create color items, if needed.
+        if color_shuffle:
+            self.real_items += [name for name, item in ALL_ITEM_TABLE.items() if item.type == ItemType.COLOR]
 
         # Create events for each achievement panel, so that we can determine when THE MASTER is accessible.
         for room_name, room_data in PANELS_BY_ROOM.items():
@@ -225,11 +252,6 @@ class LingoPlayerLogic:
                 self.add_location(location_data.room, location_name, location_data.code, location_data.panels, world)
                 self.real_locations.append(location_name)
 
-        # Instantiate all real items.
-        for name, item in ALL_ITEM_TABLE.items():
-            if should_include_item(item, world):
-                self.real_items.append(name)
-
         # Calculate the requirements for the fake pilgrimage.
         fake_pilgrimage = [
             ["Second Room", "Exit Door"], ["Crossroads", "Tower Entrance"],
@@ -242,7 +264,7 @@ class LingoPlayerLogic:
         pilgrimage_reqs = AccessRequirements()
         for door in fake_pilgrimage:
             door_object = DOORS_BY_ROOM[door[0]][door[1]]
-            if door_object.event or world.options.shuffle_doors == ShuffleDoors.option_none:
+            if door_object.event or world.options.shuffle_doors != ShuffleDoors.option_doors:
                 pilgrimage_reqs.merge(self.calculate_door_requirements(door[0], door[1], world))
             else:
                 pilgrimage_reqs.doors.add(RoomAndDoor(door[0], door[1]))
@@ -262,7 +284,7 @@ class LingoPlayerLogic:
                                 "iterations. This is very unlikely to happen on its own, and probably indicates some "
                                 "kind of logic error.")
 
-        if door_shuffle != ShuffleDoors.option_none and location_classification != LocationClassification.insanity \
+        if door_shuffle == ShuffleDoors.option_doors and location_classification != LocationClassification.insanity \
                 and not early_color_hallways and world.multiworld.players > 1:
             # Under the combination of door shuffle, normal location checks, and no early color hallways, sphere 1 is
             # only three checks. In a multiplayer situation, this can be frustrating for the player because they are
@@ -281,14 +303,14 @@ class LingoPlayerLogic:
                 # HOT CRUST and THIS.
                 good_item_options.append("Pilgrim Room - Sun Painting")
 
-                if door_shuffle == ShuffleDoors.option_simple:
+                if world.options.group_doors:
                     # WELCOME BACK, CLOCKWISE, and DRAWL + RUNS.
                     good_item_options.append("Welcome Back Doors")
                 else:
                     # WELCOME BACK and CLOCKWISE.
                     good_item_options.append("Welcome Back Area - Shortcut to Starting Room")
 
-            if door_shuffle == ShuffleDoors.option_simple:
+            if world.options.group_doors:
                 # Color hallways access (NOTE: reconsider when sunwarp shuffling exists).
                 good_item_options.append("Rhyme Room Doors")
 
@@ -334,13 +356,11 @@ class LingoPlayerLogic:
     def randomize_paintings(self, world: "LingoWorld") -> bool:
         self.painting_mapping.clear()
 
-        door_shuffle = world.options.shuffle_doors
-
         # First, assign mappings to the required-exit paintings. We ensure that req-blocked paintings do not lead to
         # required paintings.
         req_exits = []
         required_painting_rooms = REQUIRED_PAINTING_ROOMS
-        if door_shuffle == ShuffleDoors.option_none:
+        if world.options.shuffle_doors != ShuffleDoors.option_doors:
             required_painting_rooms += REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS
             req_exits = [painting_id for painting_id, painting in PAINTINGS.items() if painting.required_when_no_doors]
             req_enterable = [painting_id for painting_id, painting in PAINTINGS.items()
@@ -391,7 +411,7 @@ class LingoPlayerLogic:
         for painting_id, painting in PAINTINGS.items():
             if painting_id not in self.painting_mapping.values() \
                     and (painting.required or (painting.required_when_no_doors and
-                                               door_shuffle == ShuffleDoors.option_none)):
+                                               world.options.shuffle_doors != ShuffleDoors.option_doors)):
                 return False
 
         return True
@@ -406,12 +426,30 @@ class LingoPlayerLogic:
             access_reqs = AccessRequirements()
             panel_object = PANELS_BY_ROOM[room][panel]
 
+            if world.options.shuffle_doors == ShuffleDoors.option_panels and panel_object.panel_door is not None:
+                pd_ref = panel_object.panel_door
+                panel_door = PANEL_DOORS_BY_ROOM[pd_ref.room][pd_ref.panel_door]
+
+                if panel_door.panel_group is not None and world.options.group_doors:
+                    access_reqs.items.add(panel_door.panel_group)
+                elif pd_ref.room in PROGRESSIVE_PANELS_BY_ROOM\
+                        and pd_ref.panel_door in PROGRESSIVE_PANELS_BY_ROOM[pd_ref.room]:
+                    progression_obj = PROGRESSIVE_PANELS_BY_ROOM[pd_ref.room][pd_ref.panel_door]
+                    progression_handling = should_split_progression(progression_obj.item_name, world)
+
+                    if progression_handling == ProgressiveItemBehavior.SPLIT:
+                        access_reqs.items.add(panel_door.item_name)
+                    elif progression_handling == ProgressiveItemBehavior.PROGRESSIVE:
+                        access_reqs.progression[progression_obj.item_name] = progression_obj.index
+                else:
+                    access_reqs.items.add(panel_door.item_name)
+
             for req_room in panel_object.required_rooms:
                 access_reqs.rooms.add(req_room)
 
             for req_door in panel_object.required_doors:
                 door_object = DOORS_BY_ROOM[room if req_door.room is None else req_door.room][req_door.door]
-                if door_object.event or world.options.shuffle_doors == ShuffleDoors.option_none:
+                if door_object.event or world.options.shuffle_doors != ShuffleDoors.option_doors:
                     sub_access_reqs = self.calculate_door_requirements(
                         room if req_door.room is None else req_door.room, req_door.door, world)
                     access_reqs.merge(sub_access_reqs)

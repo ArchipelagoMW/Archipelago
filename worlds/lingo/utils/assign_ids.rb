@@ -73,6 +73,22 @@ if old_generated.include? "door_groups" then
     end
   end
 end
+if old_generated.include? "panel_doors" then
+  old_generated["panel_doors"].each do |room, panel_doors|
+    panel_doors.each do |name, id|
+      if id >= next_item_id then
+        next_item_id = id + 1
+      end
+    end
+  end
+end
+if old_generated.include? "panel_groups" then
+  old_generated["panel_groups"].each do |name, id|
+    if id >= next_item_id then
+      next_item_id = id + 1
+    end
+  end
+end
 if old_generated.include? "progression" then
   old_generated["progression"].each do |name, id|
     if id >= next_item_id then
@@ -82,6 +98,7 @@ if old_generated.include? "progression" then
 end
 
 door_groups = Set[]
+panel_groups = Set[]
 
 config = YAML.load_file(configpath)
 config.each do |room_name, room_data|
@@ -158,6 +175,29 @@ config.each do |room_name, room_data|
           old_generated["doors"][room_name][door_name]["location"] = next_location_id
   
           next_location_id += 1
+        end
+      end
+    end
+  end
+
+  if room_data.include? "panel_doors"
+    room_data["panel_doors"].each do |panel_door_name, panel_door|
+      unless old_generated.include? "panel_doors" and old_generated["panel_doors"].include? room_name and old_generated["panel_doors"][room_name].include? panel_door_name then
+        old_generated["panel_doors"] ||= {}
+        old_generated["panel_doors"][room_name] ||= {}
+        old_generated["panel_doors"][room_name][panel_door_name] = next_item_id
+
+        next_item_id += 1
+      end
+
+      if panel_door.include? "panel_group" and not panel_groups.include? panel_door["panel_group"] then
+        panel_groups.add(panel_door["panel_group"])
+
+        unless old_generated.include? "panel_groups" and old_generated["panel_groups"].include? panel_door["panel_group"] then
+          old_generated["panel_groups"] ||= {}
+          old_generated["panel_groups"][panel_door["panel_group"]] = next_item_id
+
+          next_item_id += 1
         end
       end
     end
