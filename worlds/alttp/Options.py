@@ -2,7 +2,7 @@ import typing
 
 from BaseClasses import MultiWorld
 from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, StartInventoryPool, PlandoBosses,\
-    FreeText
+    FreeText, Removed
 
 
 class GlitchesRequired(Choice):
@@ -795,4 +795,9 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "music": Music,
     "reduceflashing": ReduceFlashing,
     "triforcehud": TriforceHud,
+
+    # removed:
+    "goals": Removed,
+    "smallkey_shuffle": Removed,
+    "bigkey_shuffle": Removed,
 }

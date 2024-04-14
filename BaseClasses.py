@@ -1352,11 +1352,13 @@ class Spoiler:
     def to_file(self, filename: str) -> None:
         from itertools import chain
         from worlds import AutoWorld
+        from Options import Visibility
 
         def write_option(option_key: str, option_obj: Options.AssembleOptions) -> None:
             res = getattr(self.multiworld.worlds[player].options, option_key)
-            display_name = getattr(option_obj, "display_name", option_key)
-            outfile.write(f"{display_name + ':':33}{res.current_option_name}\n")
+            if res.visibility & Visibility.spoiler:
+                display_name = getattr(option_obj, "display_name", option_key)
+                outfile.write(f"{display_name + ':':33}{res.current_option_name}\n")
 
         with open(filename, 'w', encoding="utf-8-sig") as outfile:
             outfile.write(
