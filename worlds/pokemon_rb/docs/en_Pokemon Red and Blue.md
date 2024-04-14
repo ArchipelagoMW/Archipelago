@@ -1,8 +1,8 @@
 # Pokémon Red and Blue
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What does randomization do to this game?
@@ -12,7 +12,7 @@ always able to be completed, but because of the item shuffle the player may need
 would in the vanilla game.
 
 A great many things besides item placement can be randomized, such as the location of Pokémon, their stats, types, etc.,
-depending on your yaml settings.
+depending on your yaml options.
 
 Many baseline changes are made to the game, including:
 
@@ -21,13 +21,13 @@ Many baseline changes are made to the game, including:
 * You can hold B to run (or bike extra fast!).
 * You can hold select while talking to a trainer to re-battle them.
 * You can select "Pallet Warp" below the "Continue" option to warp to Pallet Town as you load your save.
-* Mew can be encountered at the S.S. Anne dock truck. This can be randomized depending on your settings.
+* Mew can be encountered at the S.S. Anne dock truck. This can be randomized depending on your options.
 * The S.S. Anne will never depart.
 * Seafoam Islands entrances are swapped. This means you need Strength to travel through from Cinnabar Island to Fuchsia
 City. You also cannot Surf onto the water from the end of Seafoam Islands going backwards if you have not yet dropped
 the boulders.
 * After obtaining one of the fossil item checks in Mt Moon, the remaining item can be received from the Cinnabar Lab
-fossil scientist. This may require reviving a number of fossils, depending on your settings.
+fossil scientist. This may require reviving a number of fossils, depending on your options.
 * Obedience depends on the total number of badges you have obtained instead of depending on specific badges.
 * Pokémon that evolve by trading can also evolve by reaching level 35.
 * Evolution stones are reusable key items.

@@ -42,7 +42,6 @@ class SC2World(World):
 
     game = "Starcraft 2"
     web = Starcraft2WebWorld()
-    data_version = 6
 
     item_name_to_id = {name: data.code for name, data in get_full_item_list().items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None)}
