@@ -1077,6 +1077,7 @@
           - FAR
     panel_doors:
       NEAR FAR:
+        item_name: Symmetry Room - NEAR, FAR (Panels)
         panel_group: Symmetry Room Panels
         panels:
           - NEAR
@@ -1110,6 +1111,7 @@
           - STRAW
     panel_doors:
       WARTS STRAW:
+        item_name: Symmetry Room - WARTS, STRAW (Panels)
         panel_group: Symmetry Room Panels
         panels:
           - WARTS
@@ -1143,6 +1145,7 @@
           - FEEL
     panel_doors:
       LEAF FEEL:
+        item_name: Symmetry Room - LEAF, FEEL (Panels)
         panel_group: Symmetry Room Panels
         panels:
           - LEAF
@@ -2740,6 +2743,7 @@
           - BEGIN
     panel_doors:
       BEGIN:
+        item_name: The Colorful - BEGIN (Panel)
         panel_group: Colorful Panels
         panels:
           - BEGIN
@@ -2765,6 +2769,7 @@
           - FOUND
     panel_doors:
       FOUND:
+        item_name: The Colorful - FOUND (Panel)
         panel_group: Colorful Panels
         panels:
           - FOUND
@@ -2790,6 +2795,7 @@
           - LOAF
     panel_doors:
       LOAF:
+        item_name: The Colorful - LOAF (Panel)
         panel_group: Colorful Panels
         panels:
           - LOAF
@@ -2815,6 +2821,7 @@
           - CREAM
     panel_doors:
       CREAM:
+        item_name: The Colorful - CREAM (Panel)
         panel_group: Colorful Panels
         panels:
           - CREAM
@@ -2840,6 +2847,7 @@
           - SUN
     panel_doors:
       SUN:
+        item_name: The Colorful - SUN (Panel)
         panel_group: Colorful Panels
         panels:
           - SUN
@@ -2865,6 +2873,7 @@
           - SPOON
     panel_doors:
       SPOON:
+        item_name: The Colorful - SPOON (Panel)
         panel_group: Colorful Panels
         panels:
           - SPOON
@@ -2890,6 +2899,7 @@
           - LETTERS
     panel_doors:
       LETTERS:
+        item_name: The Colorful - LETTERS (Panel)
         panel_group: Colorful Panels
         panels:
           - LETTERS
@@ -2915,6 +2925,7 @@
           - WALLS
     panel_doors:
       WALLS:
+        item_name: The Colorful - WALLS (Panel)
         panel_group: Colorful Panels
         panels:
           - WALLS
@@ -2940,6 +2951,7 @@
           - IRON
     panel_doors:
       IRON:
+        item_name: The Colorful - IRON (Panel)
         panel_group: Colorful Panels
         panels:
           - IRON
@@ -2965,6 +2977,7 @@
           - OBSTACLE
     panel_doors:
       OBSTACLE:
+        item_name: The Colorful - OBSTACLE (Panel)
         panel_group: Colorful Panels
         panels:
           - OBSTACLE
@@ -6562,6 +6575,7 @@
         include_reduce: True
     panel_doors:
       WHEELBARROW:
+        item_name: Hallway Room - WHEEL
         panel_group: Hallway Room Panels
         panels:
           - WHEEL
