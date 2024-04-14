@@ -20,7 +20,7 @@ class ModAssertMixin(TestCase):
             self.assertTrue(item.mod_name is None or item.mod_name in chosen_mods,
                             f"Item {item.name} has is from mod {item.mod_name}. Allowed mods are {chosen_mods}.")
         for multiworld_location in multiworld.get_locations():
-            if multiworld_location.event:
+            if multiworld_location.address is None:
                 continue
             location = location_table[multiworld_location.name]
             self.assertTrue(location.mod_name is None or location.mod_name in chosen_mods)

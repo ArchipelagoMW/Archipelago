@@ -717,7 +717,6 @@ class OOTWorld(World):
             item = self.create_item(name, allow_arbitrary_name=True)
         self.multiworld.push_item(location, item, collect=False)
         location.locked = True
-        location.event = True
         if name not in item_table:
             location.internal = True
         return item
@@ -842,7 +841,7 @@ class OOTWorld(World):
         all_state.sweep_for_events(locations=all_locations)
         reachable = self.multiworld.get_reachable_locations(all_state, self.player)
         unreachable = [loc for loc in all_locations if
-                       (loc.internal or loc.type == 'Drop') and loc.event and loc.locked and loc not in reachable]
+                       (loc.internal or loc.type == 'Drop') and loc.address is None and loc.locked and loc not in reachable]
         for loc in unreachable:
             loc.parent_region.locations.remove(loc)
         # Exception: Sell Big Poe is an event which is only reachable if Bottle with Big Poe is in the item pool.
@@ -972,7 +971,6 @@ class OOTWorld(World):
                     for location in song_locations:
                         location.item = None
                         location.locked = False
-                        location.event = False
                 else:
                     break
 

@@ -486,4 +486,3 @@ class SoELocation(Location):
         super().__init__(player, name, address, parent)
         # unconditional assignments favor a split dict, saving memory
         self.progress_type = LocationProgressType.EXCLUDED if exclude else LocationProgressType.DEFAULT
-        self.event = not address

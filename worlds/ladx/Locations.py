@@ -60,13 +60,11 @@ class LinksAwakeningLocation(Location):
 
     def __init__(self, player: int, region, ladxr_item):
         name = meta_to_name(ladxr_item.metadata)
-
-        self.event = ladxr_item.event is not None
-        if self.event:
-            name = ladxr_item.event
-
         address = None
-        if not self.event:
+
+        if ladxr_item.event is not None:
+            name = ladxr_item.event
+        else:
             address = locations_to_id[name]
         super().__init__(player, name, address)
         self.parent_region = region

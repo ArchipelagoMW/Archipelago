@@ -131,12 +131,6 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
 class WargrooveLocation(Location):
     game: str = "Wargroove"
 
-    def __init__(self, player: int, name: str, address=None, parent=None):
-        super(WargrooveLocation, self).__init__(player, name, address, parent)
-        if address is None:
-            self.event = True
-            self.locked = True
-
 
 class WargrooveItem(Item):
     game = "Wargroove"

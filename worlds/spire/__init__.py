@@ -92,12 +92,6 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
 class SpireLocation(Location):
     game: str = "Slay the Spire"
 
-    def __init__(self, player: int, name: str, address=None, parent=None):
-        super(SpireLocation, self).__init__(player, name, address, parent)
-        if address is None:
-            self.event = True
-            self.locked = True
-
 
 class SpireItem(Item):
     game = "Slay the Spire"

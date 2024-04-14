@@ -1193,7 +1193,6 @@ def set_trock_key_rules(world, player):
                     item = item_factory('Small Key (Turtle Rock)', world.worlds[player])
                     location = world.get_location('Turtle Rock - Big Key Chest', player)
                     location.place_locked_item(item)
-                    location.event = True
                     toss_junk_item(world, player)
 
     if world.accessibility[player] != 'locations':
