@@ -373,7 +373,7 @@ class MegaMan2Client(BizHawkClient):
             contribution = value * exchange_rate
             if contribution:
                 await ctx.send_msgs([{
-                 "cmd": "Set", "key": f"EnergyLink{ctx.team}", "operations":
+                 "cmd": "Set", "key": f"EnergyLink{ctx.team}", "slot": ctx.slot, "operations":
                  [{"operation": "add", "value": contribution},
                   {"operation": "max", "value": 0}]}])
             writes.append((MM2_ENERGYLINK, 0x00.to_bytes(1, "little"), "RAM"))
@@ -412,7 +412,7 @@ class MegaMan2Client(BizHawkClient):
                     if health_diff * HP_EXCHANGE_RATE > pool:
                         health_diff = pool // HP_EXCHANGE_RATE
                     await ctx.send_msgs([{
-                        "cmd": "Set", "key": f"EnergyLink{ctx.team}", "operations":
+                        "cmd": "Set", "key": f"EnergyLink{ctx.team}", "slot": ctx.slot, "operations":
                         [{"operation": "add", "value": -health_diff * HP_EXCHANGE_RATE},
                          {"operation": "max", "value": 0}]}])
                 current_health += health_diff
@@ -433,7 +433,7 @@ class MegaMan2Client(BizHawkClient):
                     f"Not enough energy to fulfill the request. Maximum request: {pool // exchange_rate}")
             else:
                 await ctx.send_msgs([{
-                    "cmd": "Set", "key": f"EnergyLink{ctx.team}", "operations":
+                    "cmd": "Set", "key": f"EnergyLink{ctx.team}", "slot": ctx.slot, "operations":
                         [{"operation": "add", "value": -request},
                          {"operation": "max", "value": 0}]}])
             if refill_type == MM2EnergyLinkType.Life:
