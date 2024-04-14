@@ -1,7 +1,7 @@
-from typing import Dict, List, Set, Tuple, TYPE_CHECKING
+from typing import Dict, List, Set, TYPE_CHECKING
 from BaseClasses import Region, ItemClassification, Item, Location
 from .locations import location_table
-from .er_data import Portal, tunic_er_regions, portal_mapping, hallway_helper, hallway_helper_ur, \
+from .er_data import Portal, tunic_er_regions, portal_mapping, \
     dependent_regions_restricted, dependent_regions_nmg, dependent_regions_ur
 from .er_rules import set_er_region_rules
 from worlds.generic import PlandoConnection
@@ -19,118 +19,26 @@ class TunicERLocation(Location):
     game: str = "TUNIC"
 
 
-def create_er_regions(world: "TunicWorld") -> Tuple[Dict[Portal, Portal], Dict[int, str]]:
+def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
     regions: Dict[str, Region] = {}
-    portal_pairs: Dict[Portal, Portal] = pair_portals(world)
-    logic_rules = world.options.logic_rules
+    if world.options.entrance_rando:
+        portal_pairs = pair_portals(world)
 
-    # output the entrances to the spoiler log here for convenience
-    for portal1, portal2 in portal_pairs.items():
-        world.multiworld.spoiler.set_entrance(portal1.name, portal2.name, "both", world.player)
+        # output the entrances to the spoiler log here for convenience
+        for portal1, portal2 in portal_pairs.items():
+            world.multiworld.spoiler.set_entrance(portal1.name, portal2.name, "both", world.player)
+    else:
+        portal_pairs = vanilla_portals()
 
-    # check if a portal leads to a hallway. if it does, update the hint text accordingly
-    def hint_helper(portal: Portal, hint_string: str = "") -> str:
-        # start by setting it as the name of the portal, for the case we're not using the hallway helper
-        if hint_string == "":
-            hint_string = portal.name
-
-        # unrestricted has fewer hallways, like the well rail
-        if logic_rules == "unrestricted":
-            hallways = hallway_helper_ur
-        else:
-            hallways = hallway_helper
-
-        if portal.scene_destination() in hallways:
-            # if we have a hallway, we want the region rather than the portal name
-            if hint_string == portal.name:
-                hint_string = portal.region
-                # library exterior is two regions, we just want to fix up the name
-                if hint_string in {"Library Exterior Tree", "Library Exterior Ladder"}:
-                    hint_string = "Library Exterior"
-
-            # search through the list for the other end of the hallway
-            for portala, portalb in portal_pairs.items():
-                if portala.scene_destination() == hallways[portal.scene_destination()]:
-                    # if we find that we have a chain of hallways, do recursion
-                    if portalb.scene_destination() in hallways:
-                        hint_region = portalb.region
-                        if hint_region in {"Library Exterior Tree", "Library Exterior Ladder"}:
-                            hint_region = "Library Exterior"
-                        hint_string = hint_region + " then " + hint_string
-                        hint_string = hint_helper(portalb, hint_string)
-                    else:
-                        # if we didn't find a chain, get the portal name for the end of the chain
-                        hint_string = portalb.name + " then " + hint_string
-                        return hint_string
-                # and then the same thing for the other portal, since we have to check each separately
-                if portalb.scene_destination() == hallways[portal.scene_destination()]:
-                    if portala.scene_destination() in hallways:
-                        hint_region = portala.region
-                        if hint_region in {"Library Exterior Tree", "Library Exterior Ladder"}:
-                            hint_region = "Library Exterior"
-                        hint_string = hint_region + " then " + hint_string
-                        hint_string = hint_helper(portala, hint_string)
-                    else:
-                        hint_string = portala.name + " then " + hint_string
-                        return hint_string
-        return hint_string
-
-    # create our regions, give them hint text if they're in a spot where it makes sense to
-    # we're limiting which ones get hints so that it still gets that ER feel with a little less BS
     for region_name, region_data in tunic_er_regions.items():
-        hint_text = "error"
-        if region_data.hint == 1:
-            for portal1, portal2 in portal_pairs.items():
-                if portal1.region == region_name:
-                    hint_text = hint_helper(portal2)
-                    break
-                if portal2.region == region_name:
-                    hint_text = hint_helper(portal1)
-                    break
-            regions[region_name] = Region(region_name, world.player, world.multiworld, hint_text)
-        elif region_data.hint == 2:
-            for portal1, portal2 in portal_pairs.items():
-                if portal1.scene() == tunic_er_regions[region_name].game_scene:
-                    hint_text = hint_helper(portal2)
-                    break
-                if portal2.scene() == tunic_er_regions[region_name].game_scene:
-                    hint_text = hint_helper(portal1)
-                    break
-            regions[region_name] = Region(region_name, world.player, world.multiworld, hint_text)
-        elif region_data.hint == 3:
-            # west garden portal item is at a dead end in restricted, otherwise just in west garden
-            if region_name == "West Garden Portal Item":
-                if world.options.logic_rules:
-                    for portal1, portal2 in portal_pairs.items():
-                        if portal1.scene() == "Archipelagos Redux":
-                            hint_text = hint_helper(portal2)
-                            break
-                        if portal2.scene() == "Archipelagos Redux":
-                            hint_text = hint_helper(portal1)
-                            break
-                    regions[region_name] = Region(region_name, world.player, world.multiworld, hint_text)
-                else:
-                    for portal1, portal2 in portal_pairs.items():
-                        if portal1.region == "West Garden Portal":
-                            hint_text = hint_helper(portal2)
-                            break
-                        if portal2.region == "West Garden Portal":
-                            hint_text = hint_helper(portal1)
-                            break
-                    regions[region_name] = Region(region_name, world.player, world.multiworld, hint_text)
-        else:
-            regions[region_name] = Region(region_name, world.player, world.multiworld)
+        regions[region_name] = Region(region_name, world.player, world.multiworld)
 
     set_er_region_rules(world, world.ability_unlocks, regions, portal_pairs)
 
-    er_hint_data: Dict[int, str] = {}
     for location_name, location_id in world.location_name_to_id.items():
         region = regions[location_table[location_name].er_region]
         location = TunicERLocation(world.player, location_name, location_id, region)
         region.locations.append(location)
-        if region.name == region.hint_text:
-            continue
-        er_hint_data[location.address] = region.hint_text
     
     create_randomized_entrances(portal_pairs, regions)
 
@@ -145,14 +53,12 @@ def create_er_regions(world: "TunicWorld") -> Tuple[Dict[Portal, Portal], Dict[i
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
     victory_region.locations.append(victory_location)
 
-    portals_and_hints = (portal_pairs, er_hint_data)
-
-    return portals_and_hints
+    return portal_pairs
 
 
 tunic_events: Dict[str, str] = {
     "Eastern Bell": "Forest Belltower Upper",
-    "Western Bell": "Overworld Belltower",
+    "Western Bell": "Overworld Belltower at Bell",
     "Furnace Fuse": "Furnace Fuse",
     "South and West Fortress Exterior Fuses": "Fortress Exterior from Overworld",
     "Upper and Central Fortress Exterior Fuses": "Fortress Courtyard Upper",
@@ -163,7 +69,7 @@ tunic_events: Dict[str, str] = {
     "Quarry Fuse": "Quarry",
     "Ziggurat Fuse": "Rooted Ziggurat Lower Back",
     "West Garden Fuse": "West Garden",
-    "Library Fuse": "Library Lab",
+    "Library Fuse": "Library Lab"
 }
 
 
@@ -178,6 +84,36 @@ def place_event_items(world: "TunicWorld", regions: Dict[str, Region]) -> None:
             location.place_locked_item(
                 TunicERItem("Activate " + event_name, ItemClassification.progression, None, world.player))
         region.locations.append(location)
+
+
+def vanilla_portals() -> Dict[Portal, Portal]:
+    portal_pairs: Dict[Portal, Portal] = {}
+    portal_map = portal_mapping.copy()
+
+    while portal_map:
+        portal1 = portal_map[0]
+        portal2 = None
+        # portal2 scene destination tag is portal1's destination scene tag
+        portal2_sdt = portal1.destination_scene()
+
+        if portal2_sdt.startswith("Shop,"):
+            portal2 = Portal(name="Shop", region="Shop",
+                             destination="Previous Region", tag="_")
+
+        elif portal2_sdt == "Purgatory, Purgatory_bottom":
+            portal2_sdt = "Purgatory, Purgatory_top"
+
+        for portal in portal_map:
+            if portal.scene_destination() == portal2_sdt:
+                portal2 = portal
+                break
+
+        portal_pairs[portal1] = portal2
+        portal_map.remove(portal1)
+        if not portal2_sdt.startswith("Shop,"):
+            portal_map.remove(portal2)
+
+    return portal_pairs
 
 
 # pairing off portals, starting with dead ends
@@ -290,7 +226,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                         break
                 if p_exit in ["Shop Portal", "Shop"]:
                     portal2 = Portal(name="Shop Portal", region=f"Shop",
-                                     destination="Previous Region_")
+                                     destination="Previous Region", tag="_")
                     shop_count -= 1
                     if shop_count < 0:
                         shop_count += 2
@@ -355,10 +291,12 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             if portal.scene_destination() == "Overworld Redux, Windmill_":
                 portal1 = portal
                 break
-        portal2 = Portal(name="Shop Portal", region="Shop", destination="Previous Region_")
         if not portal1:
             raise Exception(f"Failed to do Fixed Shop option. "
                             f"Did {player_name} plando connection the Windmill Shop entrance?")
+
+        portal2 = Portal(name="Shop Portal", region="Shop", destination="Previous Region", tag="_")
+
         portal_pairs[portal1] = portal2
         two_plus.remove(portal1)
 
@@ -433,7 +371,8 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                 break
         if portal1 is None:
             raise Exception("Too many shops in the pool, or something else went wrong.")
-        portal2 = Portal(name="Shop Portal", region="Shop", destination="Previous Region_")
+        portal2 = Portal(name="Shop Portal", region="Shop", destination="Previous Region", tag="_")
+        
         portal_pairs[portal1] = portal2
 
     # connect dead ends to random non-dead ends
@@ -465,10 +404,10 @@ def create_randomized_entrances(portal_pairs: Dict[Portal, Portal], regions: Dic
     for portal1, portal2 in portal_pairs.items():
         region1 = regions[portal1.region]
         region2 = regions[portal2.region]
-        region1.connect(region2, f"{portal1.name} -> {portal2.name}")
+        region1.connect(connecting_region=region2, name=portal1.name)
         # prevent the logic from thinking you can get to any shop-connected region from the shop
-        if not portal2.name.startswith("Shop"):
-            region2.connect(region1, f"{portal2.name} -> {portal1.name}")
+        if portal2.name not in {"Shop", "Shop Portal"}:
+            region2.connect(connecting_region=region1, name=portal2.name)
 
 
 # loop through the static connections, return regions you can reach from this region
@@ -519,8 +458,8 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
             return True
 
     # fortress teleporter needs only the left fuses
-    elif check_portal.scene_destination() in ["Fortress Arena, Transit_teleporter_spidertank",
-                                              "Transit, Fortress Arena_teleporter_spidertank"]:
+    elif check_portal.scene_destination() in {"Fortress Arena, Transit_teleporter_spidertank",
+                                              "Transit, Fortress Arena_teleporter_spidertank"}:
         i = j = k = 0
         for portal in two_plus:
             if portal.scene() == "Fortress Courtyard":
@@ -537,7 +476,8 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
     elif check_portal.scene_destination() == "Swamp Redux 2, Cathedral Redux_main":
         i = 0
         for portal in two_plus:
-            if portal.region == "Swamp":
+            if portal.region in {"Swamp Front", "Swamp to Cathedral Treasure Room",
+                                 "Swamp to Cathedral Main Entrance Region"}:
                 i += 1
         if i == 4:
             return True
@@ -553,8 +493,8 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
 
     # Quarry teleporter needs you to hit the Darkwoods fuse
     # Since it's physically in Quarry, we don't need to check for it
-    elif check_portal.scene_destination() in ["Quarry Redux, Transit_teleporter_quarry teleporter",
-                                              "Quarry Redux, ziggurat2020_0_"]:
+    elif check_portal.scene_destination() in {"Quarry Redux, Transit_teleporter_quarry teleporter",
+                                              "Quarry Redux, ziggurat2020_0_"}:
         i = 0
         for portal in two_plus:
             if portal.scene() == "Darkwoods Tunnel":

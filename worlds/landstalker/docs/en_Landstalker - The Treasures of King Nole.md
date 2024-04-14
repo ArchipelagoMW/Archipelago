@@ -1,8 +1,8 @@
 # Landstalker: The Treasures of King Nole
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains most of the options you need to 
+The [player options page for this game](../player-options) contains most of the options you need to 
 configure and export a config file.
 
 ## What does randomization do to this game?
@@ -35,7 +35,7 @@ All key doors are gone, except three of them :
 The secondary shop of Mercator requiring to do the traders sidequest in the original game is now unlocked by having
 **Buyer Card** in your inventory.
 
-You will need as many **jewels** as specified in the settings to use the teleporter to go to Kazalt and the final dungeon.
+You will need as many **jewels** as specified in the options to use the teleporter to go to Kazalt and the final dungeon.
 If you find and use the **Lithograph**, it will tell you in which world are each one of your jewels.
 
 Each seed, there is a random dungeon which is chosen to be the "dark dungeon" where you won't see anything unless you
@@ -54,7 +54,7 @@ be significantly harder, both combat-wise and logic-wise.
 Having fully open & shuffled teleportation trees is an interesting way to play, but is discouraged for beginners 
 as well since it can force you to go in late-game zones with few Life Stocks.
 
-Overall, the default settings are good for a beginner-friendly seed, and if you don't feel too confident, you can also
+Overall, the default options are good for a beginner-friendly seed, and if you don't feel too confident, you can also
 lower the combat difficulty to make it more forgiving.
 
 *Have fun on your adventure!*
