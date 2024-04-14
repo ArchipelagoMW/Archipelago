@@ -716,9 +716,8 @@ class BeemizerTrapChance(BeemizerRange):
     display_name = "Beemizer Trap Chance"
 
 
-class AllowCollect(Toggle):
-    """Allows for !collect / co-op to auto-open chests containing items for other players.
-    Off by default, because it currently crashes on real hardware."""
+class AllowCollect(DefaultOnToggle):
+    """Allows for !collect / co-op to auto-open chests containing items for other players."""
     display_name = "Allow Collection of checks for other players"
 
 
