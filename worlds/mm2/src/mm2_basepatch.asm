@@ -71,12 +71,6 @@ RemoveWeaponClear:
     NOP
     NOP
 
-%org($AED0, $0D)
-db $C2, $D9, $C0, $D3, $C9, $CC, $D6, $D2, $C9, $D3 ; BY SILVRIS
-
-%org($AEE2, $0D)
-db $C1, $D2, $C3, $C8, $C9, $D0, $C5, $CC, $C1, $C7, $CF, $C0, $D8, $DC, $D8, $DC, $D8 ; ARCHIPELAGO X.X.X
-
 %org($BB74, $0D)
 GetEquippedStage:
     JSR StageGetEquipped
