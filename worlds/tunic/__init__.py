@@ -125,7 +125,7 @@ class TunicWorld(World):
                                        item_table[filler].classification == ItemClassification.filler]
 
         # Remove filler to make room for other items
-        def remove_filler(amount: int):
+        def remove_filler(amount: int) -> None:
             for _ in range(0, amount):
                 if not available_filler:
                     fill = "Fool Trap"
@@ -231,7 +231,7 @@ class TunicWorld(World):
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)
 
-    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
+    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]) -> None:
         if self.options.entrance_rando:
             hint_data.update({self.player: {}})
             # all state seems to have efficient paths
