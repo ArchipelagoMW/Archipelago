@@ -1226,12 +1226,12 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
                     and (has_ladder("Ladders in Swamp", state, player, options)
                          or has_ice_grapple_logic(True, state, player, options, ability_unlocks)
                          or not options.entrance_rando))
+            # soft locked without this ladder
             elif portal_name == "West Garden Exit after Boss" and not options.entrance_rando:
                 regions[region_name].connect(
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
                     rule=lambda state: has_stick(state, player)
-                    and state.has_any(ladders, player)
                     and (state.has("Ladders to West Bell", player)))
             # soft locked unless you have either ladder. if you have laurels, you use the other Entrance
             elif portal_name in {"Furnace Exit towards West Garden", "Furnace Exit to Dark Tomb"} \
