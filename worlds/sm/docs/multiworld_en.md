@@ -2,16 +2,18 @@
 
 ## Required Software
 
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). 
-  
-  
-- Hardware or software capable of loading and playing SNES ROM files
-    - An emulator capable of connecting to SNI such as:
-        - snes9x-rr from: [snes9x rr](https://github.com/gocha/snes9x-rr/releases),
-        - BizHawk from: [TASVideos](https://tasvideos.org/BizHawk)
-        - RetroArch 1.10.1 or newer from: [RetroArch Website](https://retroarch.com?page=platforms). Or,
-    - An SD2SNES, FXPak Pro ([FXPak Pro Store Page](https://krikzz.com/store/home/54-fxpak-pro.html)), or other
-      compatible hardware
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).
+- [SNI](https://github.com/alttpo/sni/releases). This is automatically included with your Archipelago installation above.
+- SNI is not compatible with (Q)Usb2Snes.
+- Hardware or software capable of loading and playing SNES ROM files, including:
+    - An emulator capable of connecting to SNI
+      ([snes9x-nwa](https://github.com/Skarsnik/snes9x-emunwa/releases), [snes9x-rr](https://github.com/gocha/snes9x-rr/releases),
+      [BSNES-plus](https://github.com/black-sliver/bsnes-plus),
+      [BizHawk](http://tasvideos.org/BizHawk.html), or
+      [RetroArch](https://retroarch.com?page=platforms) 1.10.1 or newer)
+    - An SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), or other compatible hardware. **note:
+      modded SNES minis are currently not supported by SNI. Some users have claimed success with QUsb2Snes for this system,
+      but it is not supported.**
 - Your legally obtained Super Metroid ROM file, probably named `Super Metroid (Japan, USA).sfc`
 
 ## Installation Procedures
@@ -44,8 +46,8 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a config file?
 
-The Player Settings page on the website allows you to configure your personal settings and export a config file from
-them. Player settings page: [Super Metroid Player Settings Page](/games/Super%20Metroid/player-settings)
+The Player Options page on the website allows you to configure your personal options and export a config file from
+them. Player options page: [Super Metroid Player Options Page](/games/Super%20Metroid/player-options)
 
 ### Verifying your config file
 
@@ -54,8 +56,8 @@ validator page: [YAML Validation page](/check)
 
 ## Generating a Single-Player Game
 
-1. Navigate to the Player Settings page, configure your options, and click the "Generate Game" button.
-    - Player Settings page: [Super Metroid Player Settings Page](/games/Super%20Metroid/player-settings)
+1. Navigate to the Player Options page, configure your options, and click the "Generate Game" button.
+    - Player Options page: [Super Metroid Player Options Page](/games/Super%20Metroid/player-options)
 2. You will be presented with a "Seed Info" page.
 3. Click the "Create New Room" link.
 4. You will be presented with a server page, from which you can download your patch file.
@@ -81,6 +83,11 @@ client, and will also create your ROM in the same place as your patch file.
 When the client launched automatically, SNI should have also automatically launched in the background. If this is its
 first time launching, you may be prompted to allow it to communicate through the Windows Firewall.
 
+#### snes9x-nwa
+
+1. Click on the Network Menu and check **Enable Emu Network Control**
+2. Load your ROM file if it hasn't already been loaded.
+
 ##### snes9x-rr
 
 1. Load your ROM file if it hasn't already been loaded.
@@ -91,6 +98,12 @@ first time launching, you may be prompted to allow it to communicate through the
     - Look in the Archipelago folder for `/SNI/lua/Connector.lua`.
 6. If you see an error while loading the script that states `socket.dll missing` or similar, navigate to the folder of 
 the lua you are using in your file explorer and copy the `socket.dll` to the base folder of your snes9x install.
+
+#### BSNES-Plus
+
+1. Load your ROM file if it hasn't already been loaded.
+2. The emulator should automatically connect while SNI is running.
+
 
 ##### BizHawk
 

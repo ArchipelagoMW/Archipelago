@@ -240,7 +240,7 @@ class KH2World(World):
 
             self.hitlist_verify()
 
-            prio_hitlist = [location for location in self.multiworld.priority_locations[self.player].value if
+            prio_hitlist = [location for location in self.options.priority_locations.value if
                             location in self.random_super_boss_list]
             for bounty in range(self.options.BountyAmount.value):
                 if prio_hitlist:
@@ -261,11 +261,11 @@ class KH2World(World):
 
         if self.options.WeaponSlotStartHint:
             for location in all_weapon_slot:
-                self.multiworld.start_location_hints[self.player].value.add(location)
+                self.options.start_location_hints.value.add(location)
 
         if self.options.FillerItemsLocal:
             for item in filler_items:
-                self.multiworld.local_items[self.player].value.add(item)
+                self.options.local_items.value.add(item)
         # By imitating remote this doesn't have to be plandoded filler anymore
         #  for location in {LocationName.JunkMedal, LocationName.JunkMedal}:
         #    self.plando_locations[location] = random_stt_item
@@ -325,7 +325,7 @@ class KH2World(World):
             self.item_quantity_dict[random_ability] -= 1
             self.total_locations -= 1
         self.slot_data_donald_weapon = [item_name.name for item_name in self.donald_weapon_abilities]
-        if not self.multiworld.DonaldGoofyStatsanity[self.player]:
+        if not self.options.DonaldGoofyStatsanity:
             # pre plando donald get bonuses
             self.donald_get_bonus_abilities += [self.create_item(random_prog_ability)]
             self.total_locations -= 1
@@ -385,7 +385,7 @@ class KH2World(World):
             location.place_locked_item(random_ability)
             self.goofy_weapon_abilities.remove(random_ability)
 
-        if not self.multiworld.DonaldGoofyStatsanity[self.player]:
+        if not self.options.DonaldGoofyStatsanity:
             # plando goofy get bonuses
             goofy_get_bonus_location_pool = [self.multiworld.get_location(location, self.player) for location in
                                              Goofy_Checks.keys() if Goofy_Checks[location].yml != "Keyblade"]
@@ -406,7 +406,7 @@ class KH2World(World):
             location.place_locked_item(random_ability)
             self.donald_weapon_abilities.remove(random_ability)
 
-        if not self.multiworld.DonaldGoofyStatsanity[self.player]:
+        if not self.options.DonaldGoofyStatsanity:
             # plando goofy get bonuses
             donald_get_bonus_location_pool = [self.multiworld.get_location(location, self.player) for location in
                                               Donald_Checks.keys() if Donald_Checks[location].yml != "Keyblade"]
@@ -428,7 +428,7 @@ class KH2World(World):
         """
         Making sure the player doesn't put too many abilities in their starting inventory.
         """
-        for item, value in self.multiworld.start_inventory[self.player].value.items():
+        for item, value in self.options.start_inventory.value.items():
             if item in ActionAbility_Table \
                     or item in SupportAbility_Table or exclusion_item_table["StatUps"] \
                     or item in DonaldAbility_Table or item in GoofyAbility_Table:
@@ -461,7 +461,7 @@ class KH2World(World):
         """
         Making sure hitlist have amount>=required.
         """
-        for location in self.multiworld.exclude_locations[self.player].value:
+        for location in self.options.exclude_locations.value:
             if location in self.random_super_boss_list:
                 self.random_super_boss_list.remove(location)
 
@@ -491,7 +491,7 @@ class KH2World(World):
             self.options.BountyAmount.value = temp
 
         if self.options.BountyStartingHintToggle:
-            self.multiworld.start_hints[self.player].value.add(ItemName.Bounty)
+            self.options.start_hints.value.add(ItemName.Bounty)
 
         if ItemName.ProofofNonexistence in self.item_quantity_dict:
             del self.item_quantity_dict[ItemName.ProofofNonexistence]
@@ -503,19 +503,19 @@ class KH2World(World):
         # Option to turn off all superbosses. Can do this individually but its like 20+ checks
         if not self.options.SuperBosses:
             for superboss in exclusion_table["SuperBosses"]:
-                self.multiworld.exclude_locations[self.player].value.add(superboss)
+                self.options.exclude_locations.value.add(superboss)
 
         # Option to turn off Olympus Colosseum Cups.
         if self.options.Cups == "no_cups":
             for cup in exclusion_table["Cups"]:
-                self.multiworld.exclude_locations[self.player].value.add(cup)
+                self.options.exclude_locations.value.add(cup)
         # exclude only hades paradox. If cups and hades paradox then nothing is excluded
         elif self.options.Cups == "cups":
-            self.multiworld.exclude_locations[self.player].value.add(LocationName.HadesCupTrophyParadoxCups)
+            self.options.exclude_locations.value.add(LocationName.HadesCupTrophyParadoxCups)
 
         if not self.options.AtlanticaToggle:
             for loc in exclusion_table["Atlantica"]:
-                self.multiworld.exclude_locations[self.player].value.add(loc)
+                self.options.exclude_locations.value.add(loc)
 
     def level_subtraction(self):
         """
