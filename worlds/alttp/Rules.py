@@ -489,9 +489,10 @@ def global_rules(world, player):
     set_rule(world.get_location('Turtle Rock - Eye Bridge - Top Left', player), lambda state: state.has('Cane of Byrna', player) or state.has('Cape', player) or state.has('Mirror Shield', player))
     set_rule(world.get_location('Turtle Rock - Eye Bridge - Top Right', player), lambda state: state.has('Cane of Byrna', player) or state.has('Cape', player) or state.has('Mirror Shield', player))
     set_rule(world.get_entrance('Turtle Rock (Trinexx)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 6) and state.has('Big Key (Turtle Rock)', player) and state.has('Cane of Somaria', player))
+    set_rule(world.get_entrance('Turtle Rock Second Section Bomb Wall', player), lambda state: can_kill_most_things(state, player, 10))
 
     if not world.worlds[player].fix_trock_doors:
-        set_rule(world.get_entrance('Turtle Rock Second Section Bomb Wall', player), lambda state: can_use_bombs(state, player) and can_kill_most_things(state, player, 10))
+        add_rule(world.get_entrance('Turtle Rock Second Section Bomb Wall', player), lambda state: can_use_bombs(state, player) and can_kill_most_things(state, player, 10))
         set_rule(world.get_entrance('Turtle Rock Second Section from Bomb Wall', player), lambda state: can_use_bombs(state, player))
         set_rule(world.get_entrance('Turtle Rock Eye Bridge from Bomb Wall', player), lambda state: can_use_bombs(state, player))
         set_rule(world.get_entrance('Turtle Rock Eye Bridge Bomb Wall', player), lambda state: can_use_bombs(state, player))
