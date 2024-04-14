@@ -6,7 +6,7 @@ from .Names import *
 class ItemData(NamedTuple):
     code: int
     progression: bool
-    useful: bool = False  # primarily use this for incredibly useful items, like Metal Blade
+    useful: bool = False  # primarily use this for incredibly useful items of their class, like Metal Blade
     skip_balancing: bool = False
 
 
