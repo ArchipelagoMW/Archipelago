@@ -6,6 +6,7 @@ from .Names import *
 class ItemData(NamedTuple):
     code: int
     progression: bool
+    useful: bool = False  # primarily use this for incredibly useful items, like Metal Blade
     skip_balancing: bool = False
 
 
@@ -19,8 +20,8 @@ robot_master_weapon_table = {
     leaf_shield: ItemData(0x880003, True),
     bubble_lead: ItemData(0x880004, True),
     quick_boomerang: ItemData(0x880005, True),
-    time_stopper: ItemData(0x880006, True),
-    metal_blade: ItemData(0x880007, True),
+    time_stopper: ItemData(0x880006, True, True),
+    metal_blade: ItemData(0x880007, True, True),
     crash_bomber: ItemData(0x880008, True),
 }
 
@@ -36,16 +37,16 @@ stage_access_table = {
 }
 
 item_item_table = {
-    item_1: ItemData(0x880011, True, True),
-    item_2: ItemData(0x880012, True, True),
-    item_3: ItemData(0x880013, True, True)
+    item_1: ItemData(0x880011, True, True, True),
+    item_2: ItemData(0x880012, True, True, True),
+    item_3: ItemData(0x880013, True, True, True)
 }
 
 filler_item_table = {
     one_up: ItemData(0x880020, False),
     weapon_energy: ItemData(0x880021, False),
     health_energy: ItemData(0x880022, False),
-    e_tank: ItemData(0x880023, False),
+    e_tank: ItemData(0x880023, False, True),
 }
 
 filler_item_weights = {

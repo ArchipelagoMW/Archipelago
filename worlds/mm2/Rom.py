@@ -255,7 +255,13 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
         "9": 0x99,
         ".": 0xDC
     }
+    patch.write_token(APTokenTypes.RLE, 0x36EE0, (11, 0))
+    patch.write_token(APTokenTypes.RLE, 0x36EEE, (25, 0))
 
+    # BY SILVRIS
+    patch.write_bytes(0x36EE0, [0xC2, 0xD9, 0xC0, 0xD3, 0xC9, 0xCC, 0xD6, 0xD2, 0xC9, 0xD3])
+    # ARCHIPELAGO x.x.x
+    patch.write_bytes(0x36EF2, [0xC1, 0xD2, 0xC3, 0xC8, 0xC9, 0xD0, 0xC5, 0xCC, 0xC1, 0xC7, 0xCF, 0xC0])
     patch.write_bytes(0x36EFE, list(map(lambda c: version_map[c], __version__)))
 
     patch.write_file("token_patch.bin", patch.get_token_binary())

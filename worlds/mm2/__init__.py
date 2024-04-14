@@ -128,6 +128,8 @@ class MM2World(World):
         if item.progression and not force_non_progression:
             classification = ItemClassification.progression_skip_balancing \
                 if item.skip_balancing else ItemClassification.progression
+        if item.useful:
+            classification |= ItemClassification.useful
         return MM2Item(name, classification, item.code, self.player)
 
     def get_filler_item_name(self) -> str:
