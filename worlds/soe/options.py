@@ -1,4 +1,5 @@
 from dataclasses import dataclass, fields
+from datetime import datetime
 from typing import Any, ClassVar, cast, Dict, Iterator, List, Tuple, Protocol
 
 from Options import AssembleOptions, Choice, DeathLink, DefaultOnToggle, Option, PerGameCommonOptions, \
@@ -158,11 +159,28 @@ class Ingredienizer(EvermizerFlags, OffOnFullChoice):
     flags = ['i', '', 'I']
 
 
-class Sniffamizer(EvermizerFlags, OffOnFullChoice):
-    """On Shuffles, Full randomizes drops in sniff locations"""
+class Sniffamizer(EvermizerFlags, Choice):
+    """
+    Off: all vanilla items in sniff spots
+    Shuffle: sniff items shuffled into random sniff spots
+    """
     display_name = "Sniffamizer"
+    option_off = 0
+    option_shuffle = 1
+    if datetime.today().year > 2024 or datetime.today().month > 3:
+        option_everywhere = 2
+        __doc__ = __doc__ + "    Everywhere: add sniff spots to multiworld pool"
+    alias_true = 1
     default = 1
     flags = ['s', '', 'S']
+
+
+class SniffIngredients(EvermizerFlag, Choice):
+    """Select which items should be used as sniff items"""
+    display_name = "Sniff Ingredients"
+    option_vanilla_ingredients = 0
+    option_random_ingredients = 1
+    flag = 'v'
 
 
 class Callbeadamizer(EvermizerFlags, OffOnFullChoice):
@@ -207,7 +225,7 @@ class ItemChanceMeta(AssembleOptions):
             attrs["display_name"] = f"{attrs['item_name']} Chance"
         attrs["range_start"] = 0
         attrs["range_end"] = 100
-        cls = super(ItemChanceMeta, mcs).__new__(mcs, name, bases, attrs)
+        cls = super(ItemChanceMeta, mcs).__new__(mcs, name, bases, attrs)   # type: ignore[no-untyped-call]
         return cast(ItemChanceMeta, cls)
 
 
@@ -268,6 +286,7 @@ class SoEOptions(PerGameCommonOptions):
     short_boss_rush:       ShortBossRush
     ingredienizer:         Ingredienizer
     sniffamizer:           Sniffamizer
+    sniff_ingredients:     SniffIngredients
     callbeadamizer:        Callbeadamizer
     musicmizer:            Musicmizer
     doggomizer:            Doggomizer
