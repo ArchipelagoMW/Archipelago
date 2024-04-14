@@ -160,14 +160,6 @@ class MultiWorld():
         self.local_early_items = {player: {} for player in self.player_ids}
         self.indirect_connections = {}
         self.start_inventory_from_pool: Dict[int, Options.StartInventoryPool] = {}
-        self.fix_trock_doors = self.AttributeProxy(
-            lambda player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted')
-        self.fix_skullwoods_exit = self.AttributeProxy(
-            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeons_simple'])
-        self.fix_palaceofdarkness_exit = self.AttributeProxy(
-            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeons_simple'])
-        self.fix_trock_exit = self.AttributeProxy(
-            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeons_simple'])
 
         for player in range(1, players + 1):
             def set_player_attr(attr, val):
