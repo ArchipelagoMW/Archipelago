@@ -113,6 +113,7 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     value: T
     default: typing.ClassVar[typing.Any]  # something that __init__ will be able to convert to the correct type
     visibility = Visibility.all
+
     # convert option_name_long into Name Long as display_name, otherwise name_long is the result.
     # Handled in get_option_name()
     auto_display_name = False
