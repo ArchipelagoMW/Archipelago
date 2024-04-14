@@ -21,7 +21,6 @@ from BaseClasses import seeddigits, get_seed, PlandoOptions
 from Main import main as ERmain
 from settings import get_settings
 from Utils import parse_yamls, version_tuple, __version__, tuplize_version
-from worlds.alttp import Options as LttPOptions
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from worlds.alttp.Text import TextTable
 from worlds.AutoWorld import AutoWorldRegister
@@ -309,13 +308,6 @@ def handle_name(name: str, player: int, name_counter: Counter):
     if new_name == "Archipelago":
         raise Exception(f"You cannot name yourself \"{new_name}\"")
     return new_name
-
-
-def prefer_int(input_data: str) -> Union[str, int]:
-    try:
-        return int(input_data)
-    except:
-        return input_data
 
 
 def roll_percentage(percentage: Union[int, float]) -> bool:
