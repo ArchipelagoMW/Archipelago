@@ -1,5 +1,5 @@
 from typing import Any, Dict
-from BaseClasses import MultiWorld, Region, Location, Item, Tutorial, ItemClassification
+from BaseClasses import MultiWorld, Region, Location, Item, Tutorial, ItemClassification, CollectionState
 from worlds.AutoWorld import World, WebWorld
 from .Items import base_id, item_table, group_table, BRCType
 from .Locations import location_table, event_table
@@ -48,6 +48,22 @@ class BombRushCyberfunkWorld(World):
             BRCType.REP: ItemClassification.progression_skip_balancing,
             BRCType.Camera: ItemClassification.progression
         }
+
+
+    def collect(self, state: "CollectionState", item: "Item") -> bool:
+        change = super().collect(state, item)
+        if change and "REP" in item.name:
+            rep: int = int(item.name[0:len(item.name)-4])
+            state.prog_items[item.player]["rep"] += rep
+        return change
+    
+
+    def remove(self, state: "CollectionState", item: "Item") -> bool:
+        change = super().remove(state, item)
+        if change and "REP" in item.name:
+            rep: int = int(item.name[0:len(item.name)-4])
+            state.prog_items[item.player]["rep"] -= rep
+        return change
 
 
     def set_rules(self):

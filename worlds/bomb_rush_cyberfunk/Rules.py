@@ -1,5 +1,6 @@
 from worlds.generic.Rules import set_rule, add_rule
 from BaseClasses import CollectionState
+from typing import Dict
 
 
 def graffitiM(state: CollectionState, player: int, limit: bool, spots: int) -> bool:
@@ -54,33 +55,45 @@ def versum_hill_entrance(state: CollectionState, player: int, glitched: bool) ->
 
 def versum_hill_ch1_roadblock(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched:
-        if brink_terminal_entrance(state, player):
-            return hideout_tutorial(state, player, glitched) and graffitiL(state, player, limit, 103)
-        else:
-            return hideout_tutorial(state, player, glitched) and graffitiL(state, player, limit, 85)
+        return (
+            hideout_tutorial(state, player, glitched)
+            and graffitiL(state, player, limit, 103)
+        )
     else:
-        return hideout_tutorial(state, player, glitched) and graffitiL(state, player, limit, 10)
+        return (
+            hideout_tutorial(state, player, glitched)
+            and graffitiL(state, player, limit, 10)
+        )
     
 
 def versum_hill_challenge1(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched:
         return rep(state, player, 50)
     else:
-        return versum_hill_ch1_roadblock(state, player, limit, glitched) and rep(state, player, 50)
+        return (
+            versum_hill_ch1_roadblock(state, player, limit, glitched)
+            and rep(state, player, 50)
+        )
     
 
 def versum_hill_challenge2(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched:
         return rep(state, player, 58)
     else:
-        return versum_hill_ch1_roadblock(state, player, limit, glitched) and rep(state, player, 58)
+        return (
+            versum_hill_ch1_roadblock(state, player, limit, glitched)
+            and rep(state, player, 58)
+        )
     
 
 def versum_hill_challenge3(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched:
         return rep(state, player, 65)
     else: 
-        return versum_hill_ch1_roadblock(state, player, limit, glitched) and rep(state, player, 65)
+        return (
+            versum_hill_ch1_roadblock(state, player, limit, glitched)
+            and rep(state, player, 65)
+        )
     
 
 def versum_hill_all_challenges(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
@@ -91,33 +104,63 @@ def versum_hill_basketball_court(state: CollectionState, player: int, limit: boo
     if glitched:
         return True
     else:
-        return versum_hill_all_challenges(state, player, limit, glitched) and rep(state, player, 90)
+        return (
+            versum_hill_all_challenges(state, player, limit, glitched)
+            and rep(state, player, 90)
+        )
     
 
 def versum_hill_oldhead(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched:
         return True
     else:
-        return versum_hill_ch1_roadblock(state, player, limit, glitched) and rep(state, player, 120)
+        return (
+            versum_hill_ch1_roadblock(state, player, limit, glitched)
+            and rep(state, player, 120)
+        )
     
 
 def versum_hill_crew_battle(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched:
-        return versum_hill_all_challenges(state, player, limit, glitched) and rep(state, player, 90) and graffitiM(state, player, limit, 98)
+        return (
+            versum_hill_all_challenges(state, player, limit, glitched)
+            and rep(state, player, 90)
+            and graffitiM(state, player, limit, 98)
+        )
     else:
-        return versum_hill_all_challenges(state, player, limit, glitched) and rep(state, player, 90) and graffitiM(state, player, limit, 27)
+        return (
+            versum_hill_all_challenges(state, player, limit, glitched)
+            and rep(state, player, 90)
+            and graffitiM(state, player, limit, 27)
+        )
     
 
 def versum_hill_rave(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched:
         if current_chapter(state, player, 4):
-            return versum_hill_oldhead(state, player, limit, glitched) and graffitiL(state, player, limit, 90) and graffitiXL(state, player, limit, 51)
+            return (
+                versum_hill_oldhead(state, player, limit, glitched)
+                and graffitiL(state, player, limit, 90)
+                and graffitiXL(state, player, limit, 51)
+            )
         elif current_chapter(state, player, 3):
-            return versum_hill_oldhead(state, player, limit, glitched) and graffitiL(state, player, limit, 89) and graffitiXL(state, player, limit, 51)
+            return (
+                versum_hill_oldhead(state, player, limit, glitched)
+                and graffitiL(state, player, limit, 89)
+                and graffitiXL(state, player, limit, 51)
+            )
         else:
-            return versum_hill_oldhead(state, player, limit, glitched) and graffitiL(state, player, limit, 85) and graffitiXL(state, player, limit, 48)
+            return (
+                versum_hill_oldhead(state, player, limit, glitched)
+                and graffitiL(state, player, limit, 85)
+                and graffitiXL(state, player, limit, 48)
+            )
     else:
-        return versum_hill_oldhead(state, player, limit, glitched) and graffitiL(state, player, limit, 26) and graffitiXL(state, player, limit, 10)
+        return (
+            versum_hill_oldhead(state, player, limit, glitched)
+            and graffitiL(state, player, limit, 26)
+            and graffitiXL(state, player, limit, 10)
+        )
 
 
 def millennium_square_entrance(state: CollectionState, player: int, glitched: bool) -> bool:
@@ -128,19 +171,32 @@ def millennium_square_entrance(state: CollectionState, player: int, glitched: bo
 
 
 def brink_terminal_entrance(state: CollectionState, player: int) -> bool:
-    return is_girl(state, player) and rep(state, player, 180) and current_chapter(state, player, 2)
+    return (
+        is_girl(state, player)
+        and rep(state, player, 180)
+        and current_chapter(state, player, 2)
+    )
 
 
 def brink_terminal_challenge1(state: CollectionState, player: int) -> bool:
-    return rep(state, player, 188) and brink_terminal_entrance(state, player)
+    return (
+        rep(state, player, 188)
+        and brink_terminal_entrance(state, player)
+    )
 
 
 def brink_terminal_challenge2(state: CollectionState, player: int) -> bool:
-    return rep(state, player, 200) and brink_terminal_entrance(state, player)
+    return (
+        rep(state, player, 200)
+        and brink_terminal_entrance(state, player)
+    )
 
 
 def brink_terminal_challenge3(state: CollectionState, player: int) -> bool:
-    return rep(state, player, 220) and brink_terminal_entrance(state, player)
+    return (
+        rep(state, player, 220)
+        and brink_terminal_entrance(state, player)
+    )
 
 
 def brink_terminal_all_challenges(state: CollectionState, player: int) -> bool:
@@ -158,7 +214,10 @@ def brink_terminal_tower(state: CollectionState, player: int, glitched: bool) ->
     if glitched:
         return True
     else:
-        return brink_terminal_plaza(state, player, glitched) and rep(state, player, 280)
+        return (
+            brink_terminal_plaza(state, player, glitched)
+            and rep(state, player, 280)
+        )
     
 
 def brink_terminal_oldhead_underground(state: CollectionState, player: int, glitched: bool) -> bool:
@@ -177,40 +236,75 @@ def brink_terminal_oldhead_dock(state: CollectionState, player: int, glitched: b
 
 def brink_terminal_crew_battle(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched:
-        return brink_terminal_all_challenges(state, player) and rep(state, player, 280) and graffitiL(state, player, limit, 103)
+        return (
+            brink_terminal_all_challenges(state, player)
+            and rep(state, player, 280)
+            and graffitiL(state, player, limit, 103)
+        )
     else:
-        return brink_terminal_all_challenges(state, player) and rep(state, player, 280) and graffitiL(state, player, limit, 62)
+        return (
+            brink_terminal_all_challenges(state, player)
+            and rep(state, player, 280)
+            and graffitiL(state, player, limit, 62)
+        )
     
 
 def brink_terminal_mesh(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched:
         if current_chapter(state, player, 3):
-            return brink_terminal_plaza(state, player, glitched) and brink_terminal_oldhead_dock(state, player, glitched) and graffitiM(state, player, limit, 122) and graffitiXL(state, player, limit, 45)
+            return (
+                brink_terminal_plaza(state, player, glitched)
+                and brink_terminal_oldhead_dock(state, player, glitched)
+                and graffitiM(state, player, limit, 114)
+                and graffitiXL(state, player, limit, 45)
+            )
         else:
-            return brink_terminal_plaza(state, player, glitched) and brink_terminal_oldhead_dock(state, player, glitched) and graffitiM(state, player, limit, 119) and graffitiXL(state, player, limit, 45)
+            return (
+                brink_terminal_plaza(state, player, glitched)
+                and brink_terminal_oldhead_dock(state, player, glitched)
+                and graffitiM(state, player, limit, 119)
+                and graffitiXL(state, player, limit, 45)
+            )
     else:
-        return brink_terminal_plaza(state, player, glitched) and brink_terminal_oldhead_dock(state, player, glitched) and graffitiM(state, player, limit, 67) and graffitiXL(state, player, limit, 45)
+        return (
+            brink_terminal_plaza(state, player, glitched)
+            and brink_terminal_oldhead_dock(state, player, glitched)
+            and graffitiM(state, player, limit, 67)
+            and graffitiXL(state, player, limit, 45)
+        )
 
 
 def millennium_mall_entrance(state: CollectionState, player: int, glitched: bool) -> bool:
     if glitched:
         return True
     else:
-        return rep(state, player, 380) and current_chapter(state, player, 3)
+        return (
+            rep(state, player, 380)
+            and current_chapter(state, player, 3)
+        )
     
 
 def millennium_mall_oldhead_ceiling(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched:
         return True
     else:
-        return rep(state, player, 580) or millennium_mall_theater(state, player, limit, glitched)
+        return (
+            rep(state, player, 580)
+            or millennium_mall_theater(state, player, limit, glitched)
+        )
     
 
 def millennium_mall_switch(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched:
-        return graffitiM(state, player, limit, 122) and current_chapter(state, player, 3)
+        return (
+            graffitiM(state, player, limit, 114)
+            and current_chapter(state, player, 3)
+        )
     else:
-        return graffitiM(state, player, limit, 72) and current_chapter(state, player, 3)
+        return (
+            graffitiM(state, player, limit, 72)
+            and current_chapter(state, player, 3)
+        )
     
 
 def millennium_mall_big(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
@@ -224,23 +318,38 @@ def millennium_mall_oldhead_race(state: CollectionState, player: int, limit: boo
     if glitched:
         return True
     else:
-        return millennium_mall_big(state, player, limit, glitched) and rep(state, player, 530)
+        return (
+            millennium_mall_big(state, player, limit, glitched)
+            and rep(state, player, 530)
+        )
     
 
 def millennium_mall_challenge1(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
-    return millennium_mall_switch(state, player, limit, glitched) and rep(state, player, 434)
+    return (
+        millennium_mall_switch(state, player, limit, glitched)
+        and rep(state, player, 434)
+    )
 
 
 def millennium_mall_challenge2(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
-    return millennium_mall_switch(state, player, limit, glitched) and rep(state, player, 442)
+    return (
+        millennium_mall_switch(state, player, limit, glitched)
+        and rep(state, player, 442)
+    )
 
 
 def millennium_mall_challenge3(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
-    return millennium_mall_switch(state, player, limit, glitched) and rep(state, player, 450)
+    return (
+        millennium_mall_switch(state, player, limit, glitched)
+        and rep(state, player, 450)
+    )
 
 
 def millennium_mall_challenge4(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
-    return millennium_mall_switch(state, player, limit, glitched) and rep(state, player, 458)
+    return (
+        millennium_mall_switch(state, player, limit, glitched)
+        and rep(state, player, 458)
+    )
 
 
 def millennium_mall_all_challenges(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
@@ -251,14 +360,29 @@ def millennium_mall_theater(state: CollectionState, player: int, limit: bool, gl
     if glitched:
         return True
     else:
-        return millennium_mall_all_challenges(state, player, limit, glitched) and rep(state, player, 491) and graffitiM(state, player, limit, 78)
+        return (
+            millennium_mall_all_challenges(state, player, limit, glitched)
+            and rep(state, player, 491)
+            and graffitiM(state, player, limit, 78)
+        )
     
 
 def millennium_mall_crew_battle(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched:
-        return millennium_mall_all_challenges(state, player, limit, glitched) and millennium_mall_theater(state, player, limit, glitched) and rep(state, player, 491) and graffitiM(state, player, limit, 122) and graffitiL(state, player, limit, 107)
+        return (
+            millennium_mall_all_challenges(state, player, limit, glitched)
+            and millennium_mall_theater(state, player, limit, glitched)
+            and rep(state, player, 491)
+            and graffitiM(state, player, limit, 114)
+            and graffitiL(state, player, limit, 107)
+        )
     else:
-        return millennium_mall_all_challenges(state, player, limit, glitched) and millennium_mall_theater(state, player, limit, glitched) and rep(state, player, 491) and graffitiL(state, player, limit, 80)
+        return (
+            millennium_mall_all_challenges(state, player, limit, glitched)
+            and millennium_mall_theater(state, player, limit, glitched)
+            and rep(state, player, 491)
+            and graffitiL(state, player, limit, 80)
+        )
 
 
 def pyramid_island_entrance(state: CollectionState, player: int, glitched: bool) -> bool:
@@ -283,29 +407,50 @@ def pyramid_island_oldhead(state: CollectionState, player: int, glitched: bool) 
     
 
 def pyramid_island_challenge1(state: CollectionState, player: int) -> bool:
-    return rep(state, player, 630) and current_chapter(state, player, 4)
+    return (
+        rep(state, player, 630)
+        and current_chapter(state, player, 4)
+    )
 
 
 def pyramid_island_race(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched: 
-        return pyramid_island_challenge1(state, player) and graffitiL(state, player, limit, 108)
+        return (
+            pyramid_island_challenge1(state, player)
+            and graffitiL(state, player, limit, 108)
+        )
     else:
-        return pyramid_island_challenge1(state, player) and graffitiL(state, player, limit, 93)
+        return (
+            pyramid_island_challenge1(state, player)
+            and graffitiL(state, player, limit, 93)
+        )
 
 
 def pyramid_island_challenge2(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
-    return pyramid_island_race(state, player, limit, glitched) and rep(state, player, 650)
+    return (
+        pyramid_island_race(state, player, limit, glitched)
+        and rep(state, player, 650)
+    )
 
 
 def pyramid_island_challenge3(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
-    return pyramid_island_race(state, player, limit, glitched) and rep(state, player, 660)
+    return (
+        pyramid_island_race(state, player, limit, glitched)
+        and rep(state, player, 660)
+    )
 
 
 def pyramid_island_all_challenges(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched:
-        return pyramid_island_challenge3(state, player, limit, glitched) and graffitiM(state, player, limit, 122)
+        return (
+            pyramid_island_challenge3(state, player, limit, glitched)
+            and graffitiM(state, player, limit, 114)
+        )
     else:
-        return pyramid_island_challenge3(state, player, limit, glitched) and graffitiM(state, player, limit, 88)
+        return (
+            pyramid_island_challenge3(state, player, limit, glitched)
+            and graffitiM(state, player, limit, 88)
+        )
 
 
 def pyramid_island_upper_half(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
@@ -317,9 +462,17 @@ def pyramid_island_upper_half(state: CollectionState, player: int, limit: bool, 
 
 def pyramid_island_crew_battle(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched:
-        return pyramid_island_all_challenges(state, player, limit, glitched) and rep(state, player, 730) and graffitiL(state, player, limit, 108)
+        return (
+            pyramid_island_all_challenges(state, player, limit, glitched)
+            and rep(state, player, 730)
+            and graffitiL(state, player, limit, 108)
+        )
     else:
-        return pyramid_island_all_challenges(state, player, limit, glitched) and rep(state, player, 730) and graffitiL(state, player, limit, 97)
+        return (
+            pyramid_island_all_challenges(state, player, limit, glitched)
+            and rep(state, player, 730)
+            and graffitiL(state, player, limit, 97)
+        )
 
 
 def pyramid_island_top(state: CollectionState, player: int, glitched: bool) -> bool:
@@ -340,14 +493,25 @@ def mataan_smoke_wall(state: CollectionState, player: int, glitched: bool) -> bo
     if glitched:
         return True
     else:
-        return current_chapter(state, player, 5) and rep(state, player, 850)
+        return (
+            current_chapter(state, player, 5)
+            and rep(state, player, 850)
+        )
     
 
 def mataan_challenge1(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched:
-        return current_chapter(state, player, 5) and rep(state, player, 864) and graffitiL(state, player, limit, 108)
+        return (
+            current_chapter(state, player, 5)
+            and rep(state, player, 864)
+            and graffitiL(state, player, limit, 108)
+        )
     else:
-        return current_chapter(state, player, 5) and rep(state, player, 864) and graffitiL(state, player, limit, 98)
+        return (
+            current_chapter(state, player, 5)
+            and rep(state, player, 864)
+            and graffitiL(state, player, limit, 98)
+        )
 
 
 def mataan_deep_city(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
@@ -361,36 +525,64 @@ def mataan_oldhead(state: CollectionState, player: int, limit: bool, glitched: b
     if glitched:
         return True
     else:
-        return mataan_deep_city(state, player, limit, glitched) and rep(state, player, 935)
+        return (
+            mataan_deep_city(state, player, limit, glitched)
+            and rep(state, player, 935)
+        )
     
 
 def mataan_challenge2(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched:
-        return mataan_challenge1(state, player, limit, glitched) and rep(state, player, 880) and graffitiXL(state, player, limit, 59)
+        return (
+            mataan_challenge1(state, player, limit, glitched)
+            and rep(state, player, 880)
+            and graffitiXL(state, player, limit, 59)
+        )
     else:
-        return mataan_challenge1(state, player, limit, glitched) and rep(state, player, 880) and graffitiXL(state, player, limit, 57)
+        return (
+            mataan_challenge1(state, player, limit, glitched)
+            and rep(state, player, 880)
+            and graffitiXL(state, player, limit, 57)
+        )
 
 
 def mataan_challenge3(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
-    return mataan_challenge1(state, player, limit, glitched) and rep(state, player, 920)
+    return (
+        mataan_challenge1(state, player, limit, glitched)
+        and rep(state, player, 920)
+    )
 
 
 def mataan_all_challenges(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
-    return mataan_challenge2(state, player, limit, glitched) and mataan_challenge3(state, player, limit, glitched)
+    return (
+        mataan_challenge2(state, player, limit, glitched)
+        and mataan_challenge3(state, player, limit, glitched)
+    )
 
 
 def mataan_smoke_wall2(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched:
         return True
     else:
-        return mataan_all_challenges(state, player, limit, glitched) or rep(state, player, 960)
+        return (
+            mataan_all_challenges(state, player, limit, glitched)
+            or rep(state, player, 960)
+        )
 
 
 def mataan_crew_battle(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched:
-        return mataan_all_challenges(state, player, limit, glitched) and graffitiM(state, player, limit, 122) and graffitiXL(state, player, limit, 59)
+        return (
+            mataan_all_challenges(state, player, limit, glitched)
+            and graffitiM(state, player, limit, 122)
+            and graffitiXL(state, player, limit, 59)
+        )
     else:
-        return mataan_all_challenges(state, player, limit, glitched) and graffitiM(state, player, limit, 117) and graffitiXL(state, player, limit, 57)
+        return (
+            mataan_all_challenges(state, player, limit, glitched)
+            and graffitiM(state, player, limit, 117)
+            and graffitiXL(state, player, limit, 57)
+        )
     
 
 def mataan_deepest(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
@@ -401,20 +593,22 @@ def mataan_deepest(state: CollectionState, player: int, limit: bool, glitched: b
     
 
 def mataan_faux(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
-    return mataan_crew_battle(state, player, limit, glitched) and graffitiM(state, player, limit, 122)
+    return (
+        mataan_crew_battle(state, player, limit, glitched)
+        and graffitiM(state, player, limit, 122)
+    )
 
 
-def spots_s(state: CollectionState, player: int, limit: bool, glitched: bool) -> int:
-    sprayable: int = 5 + (state.count_group("characters", player) * 5)
+def spots_s(state: CollectionState, player: int, limit: bool, glitched: bool, access_cache: Dict[str, bool]) -> int:
     total: int = 0
 
     if glitched:
         total += 75
 
-        if brink_terminal_entrance(state, player):
+        if access_cache["brink_terminal_entrance"]:
             total += 13
 
-        if current_chapter(state, player, 3):
+        if access_cache["chapter3"]:
             total += 6
 
     else:
@@ -423,99 +617,100 @@ def spots_s(state: CollectionState, player: int, limit: bool, glitched: bool) ->
         total += 10
 
         # versum hill area 1
-        if versum_hill_entrance(state, player, glitched):
+        if access_cache["versum_hill_entrance"]:
             total += 1
 
             # versum hill area 2
-            if versum_hill_ch1_roadblock(state, player, limit, glitched):
+            if access_cache["versum_hill_ch1_roadblock"]:
                 total += 11
 
                 # versum hill OldHeadArea
-                if versum_hill_oldhead(state, player, limit, glitched):
+                if access_cache["versum_hill_oldhead"]:
                     total += 1
 
                 # versum hill area 4
-                if versum_hill_basketball_court(state, player, limit, glitched):
+                if access_cache["versum_hill_basketball_court"]:
 
                     # chapter 2
                     # millennium square + mataan
-                    if current_chapter(state, player, 2):
+                    if access_cache["chapter2"]:
                         # 7 in square, 5 in mataan
                         total += 12
                         
                         # brink terminal area 1
-                        if brink_terminal_entrance(state, player):
+                        if access_cache["brink_terminal_entrance"]:
                             total += 9
 
                             # brink terminal dock OldHeadArea
-                            if brink_terminal_oldhead_dock(state, player, glitched):
+                            if access_cache["brink_terminal_oldhead_dock"]:
                                 total += 1
 
                             # brink terminal tower area
-                            if brink_terminal_plaza(state, player, glitched):
+                            if access_cache["brink_terminal_plaza"]:
                                 total += 3
 
                                 # brink terminal inside tower
-                                if brink_terminal_tower(state, player, glitched):
+                                if access_cache["brink_terminal_tower"]:
 
                                     # chapter 3
                                     # millennium square 2
-                                    if current_chapter(state, player, 3):
+                                    if access_cache["chapter3"]:
                                         total += 6
 
                                         # millennium mall area 1
-                                        if millennium_mall_entrance(state, player, glitched):
+                                        if access_cache["millennium_mall_entrance"]:
                                             total += 3
 
                                             # millennium mall area 2
-                                            if millennium_mall_switch(state, player, limit, glitched):
+                                            if access_cache["millennium_mall_switch"]:
                                                 total += 4
 
                                                 # millennium mall area 3
-                                                if millennium_mall_theater(state, player, limit, glitched):
+                                                if access_cache["millennium_mall_theater"]:
                                                     total += 3
 
                                                     # chapter 4
                                                     # pyramid island area 1
-                                                    if current_chapter(state, player, 4):
+                                                    if access_cache["chapter4"]:
                                                         # 2 in pyramid
                                                         total += 2
 
                                                         # pyramid island area 2
-                                                        if pyramid_island_gate(state, player, glitched):
+                                                        if access_cache["pyramid_island_gate"]:
                                                             total += 5
 
                                                             # pyramid island OldHeadArea
-                                                            if pyramid_island_oldhead(state, player, glitched):
+                                                            if access_cache["pyramid_island_oldhead"]:
                                                                 total += 2
 
                                                             # pyramid island area 3
-                                                            if pyramid_island_upper_half(state, player, limit, glitched):
+                                                            if access_cache["pyramid_island_upper_half"]:
                                                                 total += 8
 
                                                                 # pyramid island area 4
-                                                                if pyramid_island_crew_battle(state, player, limit, glitched):
+                                                                if access_cache["pyramid_island_crew_battle"]:
 
                                                                     # chapter 5
                                                                     # pyramid island 2
-                                                                    if current_chapter(state, player, 5):
+                                                                    if access_cache["chapter5"]:
 
                                                                         # mataan area 2
-                                                                        if mataan_smoke_wall(state, player, glitched):
+                                                                        if access_cache["mataan_smoke_wall"]:
                                                                             total += 3
 
                                                                             # mataan area 3
-                                                                            if mataan_deep_city(state, player, limit, glitched):
+                                                                            if access_cache["mataan_deep_city"]:
                                                                                 total += 5
 
                                                                                 # mataan OldHeadArea
-                                                                                if mataan_oldhead(state, player, limit,  glitched):
+                                                                                if access_cache["mataan_oldhead"]:
                                                                                     total += 3
 
-                                                                                    if mataan_deepest(state, player, limit, glitched):
+                                                                                    if access_cache["mataan_deepest"]:
                                                                                         total += 2
 
     if limit:
+        sprayable: int = 5 + (state.count_group("characters", player) * 5)
         if total <= sprayable:
             return total
         else:
@@ -524,17 +719,16 @@ def spots_s(state: CollectionState, player: int, limit: bool, glitched: bool) ->
         return total
 
 
-def spots_m(state: CollectionState, player: int, movestyle: int, limit: bool, glitched: bool) -> int:
-    sprayable: int = state.count_group("graffitim", player) * 7
+def spots_m(state: CollectionState, player: int, limit: bool, glitched: bool, access_cache: Dict[str, bool]) -> int:
     total: int = 0
 
     if glitched:
         total += 99
 
-        if brink_terminal_entrance(state, player):
+        if access_cache["brink_terminal_entrance"]:
             total += 21
 
-        if current_chapter(state, player, 3):
+        if access_cache["chapter3"]:
             total += 3
         
     else:
@@ -543,115 +737,116 @@ def spots_m(state: CollectionState, player: int, movestyle: int, limit: bool, gl
         total += 4
 
         # versum hill area 1
-        if versum_hill_entrance(state, player, glitched):
+        if access_cache["versum_hill_entrance"]:
             total += 3
 
             # versum hill area 2
-            if versum_hill_ch1_roadblock(state, player, limit, glitched):
+            if access_cache["versum_hill_ch1_roadblock"]:
                 total += 13
 
                 # versum hill OldHeadArea
-                if versum_hill_oldhead(state, player, limit, glitched):
+                if access_cache["versum_hill_oldhead"]:
                     total += 4
 
                 # versum hill area 3
-                if versum_hill_all_challenges(state, player, limit, glitched):
+                if access_cache["versum_hill_all_challenges"]:
                     total += 3
 
                 # versum hill area 4
-                if versum_hill_basketball_court(state, player, limit, glitched):
+                if access_cache["versum_hill_basketball_court"]:
 
                     # chapter 2
                     # millennium square + mataan
-                    if current_chapter(state, player, 2):
+                    if access_cache["chapter2"]:
                         # 12 in square, 4 in mataan
                         total += 16
                         
                         # brink terminal area 1
-                        if brink_terminal_entrance(state, player):
+                        if access_cache["brink_terminal_entrance"]:
                             total += 13
 
                             # brink terminal dock OldHeadArea
-                            if brink_terminal_oldhead_dock(state, player, glitched):
+                            if access_cache["brink_terminal_oldhead_dock"]:
                                 total += 4
 
                             # brink terminal tower area
-                            if brink_terminal_plaza(state, player, glitched):
+                            if access_cache["brink_terminal_plaza"]:
                                 total += 4
 
                                 # brink terminal inside tower
-                                if brink_terminal_tower(state, player, glitched):
+                                if access_cache["brink_terminal_tower"]:
 
                                     # chapter 3
                                     # millennium square 2
-                                    if current_chapter(state, player, 3):
+                                    if access_cache["chapter3"]:
                                         total += 3
 
                                         # millennium mall area 1
-                                        if millennium_mall_entrance(state, player, glitched):
+                                        if access_cache["millennium_mall_entrance"]:
                                             total += 5
 
                                             # millennium mall OldHeadArea
-                                            if millennium_mall_oldhead_ceiling(state, player, limit, glitched):
+                                            if access_cache["millennium_mall_oldhead_ceiling"]:
                                                 total += 1
 
                                             # millennium mall area 2
-                                            if millennium_mall_big(state, player, limit, glitched):
+                                            if access_cache["millennium_mall_big"]:
                                                 total += 6
 
                                                 # millennium mall area 3
-                                                if millennium_mall_theater(state, player, limit, glitched):
+                                                if access_cache["millennium_mall_theater"]:
                                                     total += 4
 
                                                     # chapter 4
                                                     # pyramid island area 1
-                                                    if current_chapter(state, player, 4):
+                                                    if access_cache["chapter4"]:
                                                         # 2 in pyramid
                                                         total += 2
 
                                                         # pyramid island area 2
-                                                        if pyramid_island_gate(state, player, glitched):
+                                                        if access_cache["pyramid_island_gate"]:
                                                             total += 3
 
                                                             # pyramid island OldHeadArea
-                                                            if pyramid_island_oldhead(state, player, glitched):
+                                                            if access_cache["pyramid_island_oldhead"]:
                                                                 total += 5
 
                                                             # pyramid island area 3
-                                                            if pyramid_island_upper_half(state, player, limit, glitched):
+                                                            if access_cache["pyramid_island_upper_half"]:
                                                                 total += 8
 
                                                                 # pyramid island area 4
-                                                                if pyramid_island_crew_battle(state, player, limit, glitched):
+                                                                if access_cache["pyramid_island_crew_battle"]:
 
                                                                     # chapter 5
                                                                     # pyramid island 2
-                                                                    if current_chapter(state, player, 5):
+                                                                    if access_cache["chapter5"]:
                                                                         total += 2
 
                                                                         # mataan area 2
-                                                                        if mataan_smoke_wall(state, player, glitched):
+                                                                        if access_cache["mataan_smoke_wall"]:
 
                                                                             # mataan area 3
-                                                                            if mataan_deep_city(state, player, limit, glitched):
+                                                                            if access_cache["mataan_deep_city"]:
                                                                                 total += 7
 
                                                                                 # center island
-                                                                                if skateboard(state, player, movestyle):
+                                                                                if access_cache["skateboard"]:
                                                                                     total += 1
 
                                                                                 # mataan OldHeadArea
-                                                                                if mataan_oldhead(state, player, limit, glitched):
+                                                                                if access_cache["mataan_oldhead"]:
                                                                                     total += 1
 
                                                                                     # mataan area 4
-                                                                                    if mataan_smoke_wall2(state, player, limit, glitched):
+                                                                                    if access_cache["mataan_smoke_wall2"]:
                                                                                         total += 1
 
-                                                                                        if mataan_deepest(state, player, limit, glitched):
+                                                                                        if access_cache["mataan_deepest"]:
                                                                                             total += 10
 
     if limit:
+        sprayable: int = state.count_group("graffitim", player) * 7
         if total <= sprayable:
             return total
         else:
@@ -663,20 +858,19 @@ def spots_m(state: CollectionState, player: int, movestyle: int, limit: bool, gl
             return 0
         
 
-def spots_l(state: CollectionState, player: int, movestyle: int, limit: bool, glitched: bool) -> int:
-    sprayable: int = state.count_group("graffitil", player) * 6
+def spots_l(state: CollectionState, player: int, limit: bool, glitched: bool, access_cache: Dict[str, bool]) -> int:
     total: int = 0
 
     if glitched:
         total += 90
 
-        if brink_terminal_entrance(state, player):
+        if access_cache["brink_terminal_entrance"]:
             total += 18
 
-        if current_chapter(state, player, 3):
+        if access_cache["chapter3"]:
             total += 4
 
-        if current_chapter(state, player, 4):
+        if access_cache["chapter4"]:
             total += 1
 
     else:
@@ -684,127 +878,128 @@ def spots_l(state: CollectionState, player: int, movestyle: int, limit: bool, gl
         # hideout
         total += 7
 
-        if inline_skates(state, player, movestyle):
+        if access_cache["inline_skates"]:
             total += 1
 
         # versum hill area 1
-        if versum_hill_entrance(state, player, glitched):
+        if access_cache["versum_hill_entrance"]:
             total += 2
 
             # versum hill area 2
-            if versum_hill_ch1_roadblock(state, player, limit, glitched):
+            if access_cache["versum_hill_ch1_roadblock"]:
                 total += 13
 
                 # versum hill OldHeadArea
-                if versum_hill_oldhead(state, player, limit, glitched):
+                if access_cache["versum_hill_oldhead"]:
                     total += 2
 
                 # versum hill area 3
-                if versum_hill_all_challenges(state, player, limit, glitched):
+                if access_cache["versum_hill_all_challenges"]:
                     total += 1
 
                 # versum hill area 4
-                if versum_hill_basketball_court(state, player, limit, glitched):
+                if access_cache["versum_hill_basketball_court"]:
 
                     # chapter 2
                     # millennium square + mataan
-                    if current_chapter(state, player, 2):
+                    if access_cache["chapter2"]:
                         # 7 in square, 7 in mataan
                         total += 14
                         
                         # brink terminal area 1
-                        if brink_terminal_entrance(state, player):
+                        if access_cache["brink_terminal_entrance"]:
                             total += 10
 
                             # brink terminal underground OldHeadArea
-                            if brink_terminal_oldhead_underground(state, player, glitched):
+                            if access_cache["brink_terminal_oldhead_underground"]:
                                 total += 1
 
                             # brink terminal dock OldHeadArea
-                            if brink_terminal_oldhead_dock(state, player, glitched):
+                            if access_cache["brink_terminal_oldhead_dock"]:
                                 total += 4
 
                             # brink terminal tower area
-                            if brink_terminal_plaza(state, player, glitched):
+                            if access_cache["brink_terminal_plaza"]:
                                 total += 2
 
                                 # brink terminal inside tower
-                                if brink_terminal_tower(state, player, glitched):
+                                if access_cache["brink_terminal_tower"]:
                                     total += 1
 
                                     # chapter 3
                                     # millennium square 2
-                                    if current_chapter(state, player, 3):
+                                    if access_cache["chapter3"]:
                                         total += 4
 
                                         # millennium mall area 1
-                                        if millennium_mall_entrance(state, player, glitched):
+                                        if access_cache["millennium_mall_entrance"]:
                                             total += 3
                                             
                                             # millennium mall OldHeadArea
-                                            if millennium_mall_oldhead_ceiling(state, player, limit, glitched):
+                                            if access_cache["millennium_mall_oldhead_ceiling"]:
                                                 total += 3
 
                                             # millennium mall area 2
-                                            if millennium_mall_big(state, player, limit, glitched):
+                                            if access_cache["millennium_mall_big"]:
                                                 total += 8
 
                                                 # millennium mall area 3
-                                                if millennium_mall_theater(state, player, limit, glitched):
+                                                if access_cache["millennium_mall_theater"]:
                                                     total += 4
 
                                                     # chapter 4
                                                     # pyramid island area 1
-                                                    if current_chapter(state, player, 4):
+                                                    if access_cache["chapter4"]:
                                                         # 1 in square, 4 in pyramid
                                                         total += 5
 
                                                         # pyramid island area 2
-                                                        if pyramid_island_gate(state, player, glitched):
+                                                        if access_cache["pyramid_island_gate"]:
                                                             total += 4
 
                                                             # pyramid island OldHeadArea
-                                                            if pyramid_island_oldhead(state, player, glitched):
+                                                            if access_cache["pyramid_island_oldhead"]:
                                                                 total += 2
 
                                                             # pyramid island area 3
-                                                            if pyramid_island_upper_half(state, player, limit, glitched):
+                                                            if access_cache["pyramid_island_upper_half"]:
                                                                 total += 5
 
                                                                 # pyramid island area 4
-                                                                if pyramid_island_crew_battle(state, player, limit, glitched):
+                                                                if access_cache["pyramid_island_crew_battle"]:
                                                                     total += 1
 
                                                                     # chapter 5
                                                                     # pyramid island 2
-                                                                    if current_chapter(state, player, 5):
+                                                                    if access_cache["chapter5"]:
                                                                         total += 1
 
                                                                         # mataan area 2
-                                                                        if mataan_smoke_wall(state, player, glitched):
+                                                                        if access_cache["mataan_smoke_wall"]:
                                                                             total += 1
 
                                                                             # mataan area 3
-                                                                            if mataan_deep_city(state, player, limit, glitched):
+                                                                            if access_cache["mataan_deep_city"]:
                                                                                 total += 2
 
                                                                                 # center island
-                                                                                if skateboard(state, player, movestyle):
+                                                                                if access_cache["skateboard"]:
                                                                                     total += 1
 
                                                                                 # mataan OldHeadArea
-                                                                                if mataan_oldhead(state, player, limit, glitched):
+                                                                                if access_cache["mataan_oldhead"]:
                                                                                     total += 2
 
                                                                                     # mataan area 4
-                                                                                    if mataan_smoke_wall2(state, player, limit, glitched):
+                                                                                    if access_cache["mataan_smoke_wall2"]:
                                                                                         total += 2
 
                                                                                         # mataan area 4 part 2 + area 5
-                                                                                        if mataan_deepest(state, player, limit, glitched):
+                                                                                        if access_cache["mataan_deepest"]:
                                                                                             total += 7
 
     if limit:
+        sprayable: int = state.count_group("graffitil", player) * 6
         if total <= sprayable:
             return total
         else:
@@ -816,20 +1011,19 @@ def spots_l(state: CollectionState, player: int, movestyle: int, limit: bool, gl
             return 0
         
 
-def spots_xl(state: CollectionState, player: int, movestyle: int, limit: bool, glitched: bool) -> int:
-    sprayable: int = state.count_group("graffitixl", player) * 4
+def spots_xl(state: CollectionState, player: int, limit: bool, glitched: bool, access_cache: Dict[str, bool]) -> int:
     total: int = 0
 
     if glitched:
         total += 50
 
-        if brink_terminal_entrance(state, player):
+        if access_cache["brink_terminal_entrance"]:
             total += 7
 
-            if current_chapter(state, player, 4):
+            if access_cache["chapter4"]:
                 total += 1
 
-        if current_chapter(state, player, 3):
+        if access_cache["chapter3"]:
             total += 3
 
     else:
@@ -838,103 +1032,104 @@ def spots_xl(state: CollectionState, player: int, movestyle: int, limit: bool, g
         total += 3
 
         # versum hill area 1
-        if versum_hill_entrance(state, player, glitched):
+        if access_cache["versum_hill_entrance"]:
 
             # versum hill area 2
-            if versum_hill_ch1_roadblock(state, player, limit, glitched):
+            if access_cache["versum_hill_ch1_roadblock"]:
                 total += 6
 
                 # versum hill area 4
-                if versum_hill_basketball_court(state, player, limit, glitched):
+                if access_cache["versum_hill_basketball_court"]:
                     total += 1
 
                     # chapter 2
                     # millennium square + mataan
-                    if current_chapter(state, player, 2):
+                    if access_cache["chapter2"]:
                         # 4 in square, 5 in mataan
                         total += 9
                         
                         # brink terminal area 1
-                        if brink_terminal_entrance(state, player):
+                        if access_cache["brink_terminal_entrance"]:
                             total += 3
 
                             # brink terminal underground OldHeadArea
-                            if brink_terminal_oldhead_underground(state, player, glitched):
+                            if access_cache["brink_terminal_oldhead_underground"]:
                                 total += 1
 
                             # brink terminal dock OldHeadArea
-                            if brink_terminal_oldhead_dock(state, player, glitched):
+                            if access_cache["brink_terminal_oldhead_dock"]:
                                 total += 2
 
                             # brink terminal tower area
-                            if brink_terminal_plaza(state, player, glitched):
+                            if access_cache["brink_terminal_plaza"]:
                                 total += 1
 
                                 # brink terminal inside tower
-                                if brink_terminal_tower(state, player, glitched):
+                                if access_cache["brink_terminal_tower"]:
                                     total += 1
 
                                     # chapter 3
                                     # millennium square 2
-                                    if current_chapter(state, player, 3):
+                                    if access_cache["chapter3"]:
                                         total += 3
 
                                         # millennium mall area 1
-                                        if millennium_mall_entrance(state, player, glitched):
+                                        if access_cache["millennium_mall_entrance"]:
                                             total += 2
 
                                             # millennium mall OldHeadArea
-                                            if millennium_mall_oldhead_ceiling(state, player, limit, glitched):
+                                            if access_cache["millennium_mall_oldhead_ceiling"]:
                                                 total += 1
 
                                             # millennium mall area 2
-                                            if millennium_mall_big(state, player, limit, glitched):
+                                            if access_cache["millennium_mall_big"]:
                                                 total += 5
 
                                                 # millennium mall area 3
-                                                if millennium_mall_theater(state, player, limit, glitched):
+                                                if access_cache["millennium_mall_theater"]:
                                                     total += 5
 
                                                     # chapter 4
                                                     # pyramid island area 1
-                                                    if current_chapter(state, player, 4):
+                                                    if access_cache["chapter4"]:
                                                         # 1 in terminal, 2 in pyramid
                                                         total += 3
 
                                                         # pyramid island area 2
-                                                        if pyramid_island_gate(state, player, glitched):
+                                                        if access_cache["pyramid_island_gate"]:
 
                                                             # pyramid island OldHeadArea
-                                                            if pyramid_island_oldhead(state, player, glitched):
+                                                            if access_cache["pyramid_island_oldhead"]:
                                                                 total += 3
 
                                                             # pyramid island area 3
-                                                            if pyramid_island_upper_half(state, player, limit, glitched):
+                                                            if access_cache["pyramid_island_upper_half"]:
                                                                 total += 5
 
                                                                 # pyramid island area 4
-                                                                if pyramid_island_crew_battle(state, player, limit, glitched):
+                                                                if access_cache["pyramid_island_crew_battle"]:
 
                                                                     # chapter 5
                                                                     # pyramid island 2
-                                                                    if current_chapter(state, player, 5):
+                                                                    if access_cache["chapter5"]:
 
                                                                         # mataan area 2
-                                                                        if mataan_smoke_wall(state, player, glitched):
+                                                                        if access_cache["mataan_smoke_wall"]:
                                                                             total += 2
 
                                                                             # mataan area 3
-                                                                            if mataan_deep_city(state, player, limit, glitched):
+                                                                            if access_cache["mataan_deep_city"]:
                                                                                 total += 2
 
                                                                                 # mataan OldHeadArea
-                                                                                if mataan_oldhead(state, player, limit, glitched):
+                                                                                if access_cache["mataan_oldhead"]:
                                                                                     total += 2
 
-                                                                                    if mataan_deepest(state, player, limit, glitched):
+                                                                                    if access_cache["mataan_deepest"]:
                                                                                         total += 2
 
     if limit:
+        sprayable: int = state.count_group("graffitixl", player) * 4
         if total <= sprayable:
             return total
         else:
@@ -947,18 +1142,63 @@ def spots_xl(state: CollectionState, player: int, movestyle: int, limit: bool, g
 
 
 def graffiti_spots(state: CollectionState, player: int, movestyle: int, limit: int, glitched: bool, spots: int) -> bool:
-    total: int = spots_s(state, player, limit, glitched) + spots_m(state, player, movestyle, limit, glitched) \
-        + spots_l(state, player, movestyle, limit, glitched) + spots_xl(state, player, movestyle, limit, glitched)
+    funcs: Dict[str, tuple] = {
+        "versum_hill_entrance": (state, player, glitched),
+        "versum_hill_ch1_roadblock": (state, player, limit, glitched),
+        "versum_hill_oldhead": (state, player, limit, glitched),
+        "versum_hill_all_challenges": (state, player, limit, glitched),
+        "versum_hill_basketball_court": (state, player, limit, glitched),
+        "brink_terminal_entrance": (state, player),
+        "brink_terminal_oldhead_underground": (state, player, glitched),
+        "brink_terminal_oldhead_dock": (state, player, glitched),
+        "brink_terminal_plaza": (state, player, glitched),
+        "brink_terminal_tower": (state, player, glitched),
+        "millennium_mall_entrance": (state, player, glitched),
+        "millennium_mall_switch": (state, player, limit, glitched),
+        "millennium_mall_oldhead_ceiling": (state, player, limit, glitched),
+        "millennium_mall_big": (state, player, limit, glitched),
+        "millennium_mall_theater": (state, player, limit, glitched),
+        "pyramid_island_gate": (state, player, glitched),
+        "pyramid_island_oldhead": (state, player, glitched),
+        "pyramid_island_upper_half": (state, player, limit, glitched),
+        "pyramid_island_crew_battle": (state, player, limit, glitched),
+        "mataan_smoke_wall": (state, player, glitched),
+        "mataan_deep_city": (state, player, limit, glitched),
+        "mataan_oldhead": (state, player, limit, glitched),
+        "mataan_smoke_wall2": (state, player, limit, glitched),
+        "mataan_deepest": (state, player, limit, glitched)
+    }
+
+    access_cache: Dict[str, bool] = {
+        "skateboard": skateboard(state, player, movestyle),
+        "inline_skates": inline_skates(state, player, movestyle),
+        "chapter2": current_chapter(state, player, 2),
+        "chapter3": current_chapter(state, player, 3),
+        "chapter4": current_chapter(state, player, 4),
+        "chapter5": current_chapter(state, player, 5)
+    }
+    
+    stop: bool = False
+    for fname, fvars in funcs.items():
+        if stop:
+            access_cache[fname] = False
+            continue
+        func = globals()[fname]
+        access: bool = func(*fvars)
+        access_cache[fname] = access
+        if not access and not "oldhead" in fname:
+            stop = True
+
+    total: int = spots_s(state, player, limit, glitched, access_cache) \
+        + spots_m(state, player, limit, glitched, access_cache) \
+        + spots_l(state, player, limit, glitched, access_cache) \
+        + spots_xl(state, player, limit, glitched, access_cache)
 
     return total >= spots
 
 
 def rep(state: CollectionState, player: int, required: int) -> bool:
-    total: int = (state.count("8 REP", player) * 8) + (state.count("16 REP", player) * 16) \
-        + (state.count("24 REP", player) * 24) + (state.count("32 REP", player) * 32) \
-            + (state.count("48 REP", player) * 48)
-
-    return total >= required
+    return state.has("rep", player, required)
 
 
 def rules(brcworld):
