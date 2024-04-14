@@ -1409,21 +1409,20 @@ connecting_interior_entrances = [
     ['Route 2-E to Route 2 Gate', 'Route 2-SE to Route 2 Gate'],
     ['Cerulean City-Badge House Backyard to Cerulean Badge House',
      'Cerulean City to Cerulean Badge House'],
-    ['Cerulean City-T to Cerulean Trashed House',
-     'Cerulean City-Outskirts to Cerulean Trashed House'],
-    ['Fuchsia City to Fuchsia Good Rod House',
-     'Fuchsia City-Good Rod House Backyard to Fuchsia Good Rod House'],
-    ['Route 11-E to Route 11 Gate 1F', 'Route 11-C to Route 11 Gate 1F'],
-    ['Route 12-N to Route 12 Gate 1F', 'Route 12-L to Route 12 Gate 1F'],
-    ['Route 15 to Route 15 Gate 1F', 'Route 15-W to Route 15 Gate 1F'],
-    ['Route 16-NE to Route 16 Gate 1F-N', 'Route 16-NW to Route 16 Gate 1F-N'],
+    ['Cerulean City-Outskirts to Cerulean Trashed House',
+     'Cerulean City-T to Cerulean Trashed House',],
+    ['Fuchsia City-Good Rod House Backyard to Fuchsia Good Rod House', 'Fuchsia City to Fuchsia Good Rod House'],
+    ['Route 11-C to Route 11 Gate 1F', 'Route 11-E to Route 11 Gate 1F'],
+    ['Route 12-L to Route 12 Gate 1F', 'Route 12-N to Route 12 Gate 1F'],
+    ['Route 15-W to Route 15 Gate 1F', 'Route 15 to Route 15 Gate 1F'],
+    ['Route 16-NW to Route 16 Gate 1F-N', 'Route 16-NE to Route 16 Gate 1F-N'],
     ['Route 16-SW to Route 16 Gate 1F-W', 'Route 16-C to Route 16 Gate 1F-E'],
     ['Route 18-W to Route 18 Gate 1F-W', 'Route 18-E to Route 18 Gate 1F-E'],
     ['Route 5 to Route 5 Gate-N', 'Route 5-S to Route 5 Gate-S'],
-    ['Route 6 to Route 6 Gate-S', 'Route 6-N to Route 6 Gate-N'],
+    ['Route 6-N to Route 6 Gate-N', 'Route 6 to Route 6 Gate-S'],
     ['Route 7 to Route 7 Gate-W', 'Route 7-E to Route 7 Gate-E'],
-    ['Route 8 to Route 8 Gate-E', 'Route 8-W to Route 8 Gate-W'],
-    ['Route 22 to Route 22 Gate-S', 'Route 23-S to Route 22 Gate-N']
+    ['Route 8-W to Route 8 Gate-W', 'Route 8 to Route 8 Gate-E',],
+    ['Route 23-S to Route 22 Gate-N', 'Route 22 to Route 22 Gate-S']
 ]
 
 dungeons = [
