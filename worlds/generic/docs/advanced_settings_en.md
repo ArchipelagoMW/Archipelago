@@ -2,27 +2,28 @@
 This guide covers more the more advanced options available in YAML files. This guide is intended for the user who plans
 to edit their YAML file manually. This guide should take about 10 minutes to read.
 
-If you would like to generate a basic, fully playable YAML without editing a file, then visit the settings page for the
+If you would like to generate a basic, fully playable YAML without editing a file, then visit the options page for the
 game you intend to play. The weighted settings page can also handle most of the advanced settings discussed here.
 
-The settings page can be found on the supported games page, just click the "Settings Page" link under the name of the
-game you would like. 
+The options page can be found on the supported games page, just click the "Options Page" link under the name of the
+game you would like.
+
 * Supported games page: [Archipelago Games List](/games)
 * Weighted settings page: [Archipelago Weighted Settings](/weighted-settings)
 
-Clicking on the "Export Settings" button at the bottom-left will provide you with a pre-filled YAML with your options.
-The player settings page also has a link to download a full template file for that game which will have every option
+Clicking on the "Export Options" button at the bottom-left will provide you with a pre-filled YAML with your options.
+The player options page also has a link to download a full template file for that game which will have every option
 possible for the game including some that don't display correctly on the site.
 
 ## YAML Overview
 
 The Archipelago system generates games using player configuration files as input. These are going to be YAML files and
-each world will have one of these containing their custom settings for the game that world will play.
+each world will have one of these containing their custom options for the game that world will play.
 
 ## YAML Formatting
 
 YAML files are a format of human-readable config files. The basic syntax of a yaml file will have a `root` node and then
-different levels of `nested` nodes that the generator reads in order to determine your settings.
+different levels of `nested` nodes that the generator reads in order to determine your options.
 
 To nest text, the correct syntax is to indent **two spaces over** from its root option. A YAML file can be edited with
 whatever text editor you choose to use though I personally recommend that you use Sublime Text. Sublime text
@@ -53,13 +54,13 @@ so `option_one_setting_one` is guaranteed to occur.
 
 For `nested_option_two`, `option_two_setting_one` will be rolled 14 times and `option_two_setting_two` will be rolled 43
 times against each other. This means `option_two_setting_two` will be more likely to occur, but it isn't guaranteed,
-adding more randomness and "mystery" to your settings. Every configurable setting supports weights.
+adding more randomness and "mystery" to your options. Every configurable setting supports weights.
 
 ## Root Options
 
 Currently, there are only a few options that are root options. Everything else should be nested within one of these root
 options or in some cases nested within other nested options. The only options that should exist in root
-are `description`, `name`, `game`, `requires`, and the name of the games you want settings for.
+are `description`, `name`, `game`, `requires`, and the name of the games you want options for.
 
 * `description` is ignored by the generator and is simply a good way for you to organize if you have multiple files
   using this to detail the intention of the file.
@@ -79,15 +80,15 @@ are `description`, `name`, `game`, `requires`, and the name of the games you wan
 
 * `requires` details different requirements from the generator for the YAML to work as you expect it to. Generally this
   is good for detailing the version of Archipelago this YAML was prepared for as, if it is rolled on an older version,
-  settings may be missing and as such it will not work as expected. If any plando is used in the file then requiring it
+  options may be missing and as such it will not work as expected. If any plando is used in the file then requiring it
   here to ensure it will be used is good practice.
 
 ## Game Options
 
-One of your root settings will be the name of the game you would like to populate with settings. Since it is possible to
+One of your root options will be the name of the game you would like to populate with options. Since it is possible to
 give a weight to any option, it is possible to have one file that can generate a seed for you where you don't know which
 game you'll play. For these cases you'll want to fill the game options for every game that can be rolled by these
-settings. If a game can be rolled it **must** have a settings section even if it is empty.
+settings. If a game can be rolled it **must** have an options section even if it is empty.
 
 ### Universal Game Options
 
