@@ -492,7 +492,7 @@ def global_rules(world, player):
     set_rule(world.get_entrance('Turtle Rock Second Section Bomb Wall', player), lambda state: can_kill_most_things(state, player, 10))
 
     if not world.worlds[player].fix_trock_doors:
-        add_rule(world.get_entrance('Turtle Rock Second Section Bomb Wall', player), lambda state: can_use_bombs(state, player) and can_kill_most_things(state, player, 10))
+        add_rule(world.get_entrance('Turtle Rock Second Section Bomb Wall', player), lambda state: can_use_bombs(state, player))
         set_rule(world.get_entrance('Turtle Rock Second Section from Bomb Wall', player), lambda state: can_use_bombs(state, player))
         set_rule(world.get_entrance('Turtle Rock Eye Bridge from Bomb Wall', player), lambda state: can_use_bombs(state, player))
         set_rule(world.get_entrance('Turtle Rock Eye Bridge Bomb Wall', player), lambda state: can_use_bombs(state, player))
