@@ -63,7 +63,7 @@ class LingoWorld(World):
         self.player_logic = LingoPlayerLogic(self)
 
     def create_regions(self):
-        create_regions(self, self.player_logic)
+        create_regions(self)
 
     def create_items(self):
         pool = [self.create_item(name) for name in self.player_logic.real_items]

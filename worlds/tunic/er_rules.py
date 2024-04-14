@@ -602,8 +602,8 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     regions["Library Exterior Ladder Region"].connect(
         connecting_region=regions["Library Exterior Tree Region"],
         rule=lambda state: has_ability(state, player, prayer, options, ability_unlocks)
-        and state.has_any({grapple, laurels}, player)
-        and has_ladder("Ladders in Library", state, player, options))
+        and (state.has(grapple, player) or (state.has(laurels, player)
+                                            and has_ladder("Ladders in Library", state, player, options))))
 
     regions["Library Hall Bookshelf"].connect(
         connecting_region=regions["Library Hall"],
@@ -991,7 +991,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     # connecting the regions portals are in to other portals you can access via ladder storage
     # using has_stick instead of can_ladder_storage since it's already checking the logic rules
     if options.logic_rules == "unrestricted":
-        def get_portal_info(portal_sd: str) -> (str, str):
+        def get_portal_info(portal_sd: str) -> Tuple[str, str]:
             for portal1, portal2 in portal_pairs.items():
                 if portal1.scene_destination() == portal_sd:
                     return portal1.name, portal2.region
