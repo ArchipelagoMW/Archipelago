@@ -2,7 +2,7 @@
 
 ## Quick Links
 - [Main Page](../../../../games/Muse%20Dash/info/en)
-- [Settings Page](../../../../games/Muse%20Dash/player-settings)
+- [Options Page](../../../../games/Muse%20Dash/player-options)
 
 ## Required Software
 
@@ -27,7 +27,7 @@
 If you've successfully installed everything, a button will appear in the bottom right which will allow you to log into an Archipelago server.
 
 ## Generating a MultiWorld Game
-1. Visit the [Player Settings](/games/Muse%20Dash/player-settings) page and configure the game-specific settings to your taste.
+1. Visit the [Player Options](/games/Muse%20Dash/player-options) page and configure the game-specific options to your taste.
 2. Export your yaml file and use it to generate a new randomized game
   - (For instructions on how to generate an Archipelago game, refer to the [Archipelago Web Guide](/tutorial/Archipelago/setup/en))
 

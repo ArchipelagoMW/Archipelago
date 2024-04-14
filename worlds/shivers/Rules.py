@@ -71,6 +71,12 @@ def first_nine_ixupi_capturable(state: CollectionState, player: int) -> bool:
         and metal_capturable(state, player)
 
 
+def all_skull_dials_available(state: CollectionState, player: int) -> bool:
+    return state.can_reach("Prehistoric", "Region", player) and state.can_reach("Tar River", "Region", player) \
+        and state.can_reach("Egypt", "Region", player) and state.can_reach("Burial", "Region", player) \
+        and state.can_reach("Gods Room", "Region", player) and state.can_reach("Werewolf", "Region", player)
+
+
 def get_rules_lookup(player: int):
     rules_lookup: Dict[str, List[Callable[[CollectionState], bool]]] = {
         "entrances": {
@@ -116,10 +122,7 @@ def get_rules_lookup(player: int):
             "To Tar River From Lobby": lambda state: (state.has("Crawling", player) and oil_capturable(state, player) and state.can_reach("Tar River", "Region", player)),
             "To Burial From Egypt": lambda state: state.can_reach("Egypt", "Region", player),
             "To Gods Room From Anansi": lambda state: state.can_reach("Gods Room", "Region", player),
-            "To Slide Room": lambda state: (
-                        state.can_reach("Prehistoric", "Region", player) and state.can_reach("Tar River", "Region",player) and
-                        state.can_reach("Egypt", "Region", player) and state.can_reach("Burial", "Region", player) and
-                        state.can_reach("Gods Room", "Region", player) and state.can_reach("Werewolf", "Region", player)),
+            "To Slide Room": lambda state: all_skull_dials_available(state, player),
             "To Lobby From Slide Room": lambda state: (beths_body_available(state, player))
         },
         "locations_required": {
@@ -141,6 +144,7 @@ def get_rules_lookup(player: int):
             "Final Riddle: Norse God Stone Message": lambda state: (state.can_reach("Fortune Teller", "Region", player) and state.can_reach("UFO", "Region", player)),
             "Final Riddle: Beth's Body Page 17": lambda state: beths_body_available(state, player),
             "Final Riddle: Guillotine Dropped": lambda state: beths_body_available(state, player),
+            "Puzzle Solved Skull Dial Door": lambda state: all_skull_dials_available(state, player),
             },
         "locations_puzzle_hints": {
             "Puzzle Solved Clock Tower Door": lambda state: state.can_reach("Three Floor Elevator", "Region", player),

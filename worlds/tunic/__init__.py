@@ -1,5 +1,5 @@
 from typing import Dict, List, Any
-
+from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
 from .locations import location_table, location_name_groups, location_name_to_id, hexagon_locations
@@ -7,6 +7,7 @@ from .rules import set_location_rules, set_region_rules, randomize_ability_unloc
 from .er_rules import set_er_location_rules
 from .regions import tunic_regions
 from .er_scripts import create_er_regions
+from .er_data import portal_mapping
 from .options import TunicOptions
 from worlds.AutoWorld import WebWorld, World
 from decimal import Decimal, ROUND_HALF_UP
@@ -44,7 +45,6 @@ class TunicWorld(World):
     game = "TUNIC"
     web = TunicWeb()
 
-    data_version = 2
     options: TunicOptions
     options_dataclass = TunicOptions
     item_name_groups = item_name_groups
@@ -72,6 +72,7 @@ class TunicWorld(World):
                 self.options.maskless.value = passthrough["maskless"]
                 self.options.hexagon_quest.value = passthrough["hexagon_quest"]
                 self.options.entrance_rando.value = passthrough["entrance_rando"]
+                self.options.shuffle_ladders.value = passthrough["shuffle_ladders"]
 
     def create_item(self, name: str) -> TunicItem:
         item_data = item_table[name]
@@ -119,6 +120,31 @@ class TunicWorld(World):
                 items_to_create[rgb_hexagon] = 0
             items_to_create[gold_hexagon] -= 3
 
+        # Filler items in the item pool
+        available_filler: List[str] = [filler for filler in items_to_create if items_to_create[filler] > 0 and
+                                       item_table[filler].classification == ItemClassification.filler]
+
+        # Remove filler to make room for other items
+        def remove_filler(amount: int) -> None:
+            for _ in range(0, amount):
+                if not available_filler:
+                    fill = "Fool Trap"
+                else:
+                    fill = self.random.choice(available_filler)
+                if items_to_create[fill] == 0:
+                    raise Exception("No filler items left to accommodate options selected. Turn down fool trap amount.")
+                items_to_create[fill] -= 1
+                if items_to_create[fill] == 0:
+                    available_filler.remove(fill)
+
+        if self.options.shuffle_ladders:
+            ladder_count = 0
+            for item_name, item_data in item_table.items():
+                if item_data.item_group == "ladders":
+                    items_to_create[item_name] = 1
+                    ladder_count += 1
+            remove_filler(ladder_count)
+
         if hexagon_quest:
             # Calculate number of hexagons in item pool
             hexagon_goal = self.options.hexagon_goal
@@ -127,19 +153,13 @@ class TunicWorld(World):
 
             # Replace pages and normal hexagons with filler
             for replaced_item in list(filter(lambda item: "Pages" in item or item in hexagon_locations, items_to_create)):
-                items_to_create[self.get_filler_item_name()] += items_to_create[replaced_item]
+                filler_name = self.get_filler_item_name()
+                items_to_create[filler_name] += items_to_create[replaced_item]
+                if items_to_create[filler_name] >= 1 and filler_name not in available_filler:
+                    available_filler.append(filler_name)
                 items_to_create[replaced_item] = 0
 
-            # Filler items that are still in the item pool to swap out
-            available_filler: List[str] = [filler for filler in items_to_create if items_to_create[filler] > 0 and
-                                           item_table[filler].classification == ItemClassification.filler]
-
-            # Remove filler to make room for extra hexagons
-            for i in range(0, items_to_create[gold_hexagon]):
-                fill = self.random.choice(available_filler)
-                items_to_create[fill] -= 1
-                if items_to_create[fill] == 0:
-                    available_filler.remove(fill)
+            remove_filler(items_to_create[gold_hexagon])
 
         if self.options.maskless:
             mask_item = TunicItem("Scavenger Mask", ItemClassification.useful, self.item_name_to_id["Scavenger Mask"], self.player)
@@ -147,8 +167,8 @@ class TunicWorld(World):
             items_to_create["Scavenger Mask"] = 0
 
         if self.options.lanternless:
-            mask_item = TunicItem("Lantern", ItemClassification.useful, self.item_name_to_id["Lantern"], self.player)
-            tunic_items.append(mask_item)
+            lantern_item = TunicItem("Lantern", ItemClassification.useful, self.item_name_to_id["Lantern"], self.player)
+            tunic_items.append(lantern_item)
             items_to_create["Lantern"] = 0
 
         for item, quantity in items_to_create.items():
@@ -164,7 +184,7 @@ class TunicWorld(World):
         self.tunic_portal_pairs = {}
         self.er_portal_hints = {}
         self.ability_unlocks = randomize_ability_unlocks(self.random, self.options)
-        
+
         # stuff for universal tracker support, can be ignored for standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "TUNIC" in self.multiworld.re_gen_passthrough:
@@ -172,15 +192,16 @@ class TunicWorld(World):
                 self.ability_unlocks["Pages 24-25 (Prayer)"] = passthrough["Hexagon Quest Prayer"]
                 self.ability_unlocks["Pages 42-43 (Holy Cross)"] = passthrough["Hexagon Quest Holy Cross"]
                 self.ability_unlocks["Pages 52-53 (Icebolt)"] = passthrough["Hexagon Quest Icebolt"]
-            
-        if self.options.entrance_rando:
-            portal_pairs, portal_hints = create_er_regions(self)
-            for portal1, portal2 in portal_pairs.items():
-                self.tunic_portal_pairs[portal1.scene_destination()] = portal2.scene_destination()
 
-            self.er_portal_hints = portal_hints
-
+        # ladder rando uses ER with vanilla connections, so that we're not managing more rules files
+        if self.options.entrance_rando or self.options.shuffle_ladders:
+            portal_pairs = create_er_regions(self)
+            if self.options.entrance_rando:
+                # these get interpreted by the game to tell it which entrances to connect
+                for portal1, portal2 in portal_pairs.items():
+                    self.tunic_portal_pairs[portal1.scene_destination()] = portal2.scene_destination()
         else:
+            # for non-ER, non-ladders
             for region_name in tunic_regions:
                 region = Region(region_name, self.player, self.multiworld)
                 self.multiworld.regions.append(region)
@@ -201,7 +222,7 @@ class TunicWorld(World):
             victory_region.locations.append(victory_location)
 
     def set_rules(self) -> None:
-        if self.options.entrance_rando:
+        if self.options.entrance_rando or self.options.shuffle_ladders:
             set_er_location_rules(self, self.ability_unlocks)
         else:
             set_region_rules(self, self.ability_unlocks)
@@ -210,9 +231,43 @@ class TunicWorld(World):
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)
 
-    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
+    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]) -> None:
         if self.options.entrance_rando:
-            hint_data[self.player] = self.er_portal_hints
+            hint_data.update({self.player: {}})
+            # all state seems to have efficient paths
+            all_state = self.multiworld.get_all_state(True)
+            all_state.update_reachable_regions(self.player)
+            paths = all_state.path
+            portal_names = [portal.name for portal in portal_mapping]
+            for location in self.multiworld.get_locations(self.player):
+                # skipping event locations
+                if not location.address:
+                    continue
+                path_to_loc = []
+                previous_name = "placeholder"
+                try:
+                    name, connection = paths[location.parent_region]
+                except KeyError:
+                    # logic bug, proceed with warning since it takes a long time to update AP
+                    warning(f"{location.name} is not logically accessible for "
+                            f"{self.multiworld.get_file_safe_player_name(self.player)}. "
+                            "Creating entrance hint Inaccessible. "
+                            "Please report this to the TUNIC rando devs.")
+                    hint_text = "Inaccessible"
+                else:
+                    while connection != ("Menu", None):
+                        name, connection = connection
+                        # for LS entrances, we just want to give the portal name
+                        if "(LS)" in name:
+                            name, _ = name.split(" (LS) ")
+                        # was getting some cases like Library Grave -> Library Grave -> other place
+                        if name in portal_names and name != previous_name:
+                            previous_name = name
+                            path_to_loc.append(name)
+                    hint_text = " -> ".join(reversed(path_to_loc))
+
+                if hint_text:
+                    hint_data[self.player][location.address] = hint_text
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
@@ -226,7 +281,8 @@ class TunicWorld(World):
             "logic_rules": self.options.logic_rules.value,
             "lanternless": self.options.lanternless.value,
             "maskless": self.options.maskless.value,
-            "entrance_rando": bool(self.options.entrance_rando.value),
+            "entrance_rando": int(bool(self.options.entrance_rando.value)),
+            "shuffle_ladders": self.options.shuffle_ladders.value,
             "Hexagon Quest Prayer": self.ability_unlocks["Pages 24-25 (Prayer)"],
             "Hexagon Quest Holy Cross": self.ability_unlocks["Pages 42-43 (Holy Cross)"],
             "Hexagon Quest Icebolt": self.ability_unlocks["Pages 52-53 (Icebolt)"],
