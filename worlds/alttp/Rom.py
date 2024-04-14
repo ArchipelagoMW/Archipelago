@@ -1680,8 +1680,8 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         # included unconditionally in base2current
         # rom.write_byte(0xFE465, 0x1E)  # remove small key door on backside of big key door
     else:
-        rom.write_byte(0xFED31, 0x2A)  # preopen bombable exit
-        rom.write_byte(0xFEE41, 0x2A)  # preopen bombable exit
+        rom.write_byte(0xFED31, 0x2A)  # bombable exit
+        rom.write_byte(0xFEE41, 0x2A)  # bombable exit
 
     if world.tile_shuffle[player]:
         tile_set = TileSet.get_random_tile_set(world.per_slot_randoms[player])
