@@ -437,7 +437,7 @@ class MultiWorld():
         location.item = item
         item.location = location
         if collect:
-            self.state.collect(item, location.event, location)
+            self.state.collect(item, location.advancement, location)
 
         logging.debug('Placed %s at %s', item, location)
 
@@ -584,8 +584,7 @@ class MultiWorld():
         def location_relevant(location: Location):
             """Determine if this location is relevant to sweep."""
             if location.progress_type != LocationProgressType.EXCLUDED \
-                and (location.player in players["locations"] or location.event
-                     or (location.item and location.item.advancement)):
+               and (location.player in players["locations"] or location.advancement):
                 return True
             return False
 
@@ -730,7 +729,7 @@ class CollectionState():
             locations = self.multiworld.get_filled_locations()
         reachable_events = True
         # since the loop has a good chance to run more than once, only filter the events once
-        locations = {location for location in locations if location.event and location not in self.events and
+        locations = {location for location in locations if location.advancement and location not in self.events and
                      not key_only or getattr(location.item, "locked_dungeon_item", False)}
         while reachable_events:
             reachable_events = {location for location in locations if location.can_reach(self)}
@@ -1020,7 +1019,6 @@ class Location:
     name: str
     address: Optional[int]
     parent_region: Optional[Region]
-    event: bool = False
     locked: bool = False
     show_in_spoiler: bool = True
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
@@ -1051,7 +1049,6 @@ class Location:
             raise Exception(f"Location {self} already filled.")
         self.item = item
         item.location = self
-        self.event = item.advancement
         self.locked = True
 
     def __repr__(self):
@@ -1066,6 +1063,10 @@ class Location:
 
     def __lt__(self, other: Location):
         return (self.player, self.name) < (other.player, other.name)
+
+    @property
+    def advancement(self) -> bool:
+        return self.item is not None and self.item.advancement
 
     @property
     def is_event(self) -> bool:
