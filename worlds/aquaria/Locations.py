@@ -45,7 +45,7 @@ class AquariaLocations:
         "Home water, bulb below the grouper fish": 698058,
         "Home water, bulb in the path bellow Nautilus Prime": 698059,
         "Home water, bulb in the little room above the grouper fish": 698060,
-        "Home water, bulb in the end of the left path from the tutorial cave": 698061,
+        "Home water, bulb in the end of the left path from the verse cave": 698061,
         "Home water, bulb in the top left path": 698062,
         "Home water, bulb in the bottom left room": 698063,
         "Home water, bulb close to the Naija's home": 698064,

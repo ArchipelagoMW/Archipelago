@@ -12,7 +12,7 @@ The locations in the randomizer are:
 - All Mithalas Urns;
 - All Sunken City crates;
 - Collectible treasure locations (including pet eggs and costumes);
-- Beating Simom says;
+- Beating Simon says;
 - Li cave;
 - Every Transportation Turtle (also called transturtle);
 - Locations where you get songs,
@@ -22,7 +22,10 @@ The locations in the randomizer are:
   * Fish cave puzzle,
   * Beating Drunian God boss,
   * Beating Sun God boss,
-  * Breaking Li cage in the body,
+  * Breaking Li cage in the body
+
+Note that, unlike the vanilla game, when opening sing bulbs, Mithalas urns and Sunken city crates,
+nothing will come out of them. The moment those bulbs, urns and crates are opened, the location is considered received.
 
 The items in the randomizer are:
 - Dishes (used to learn recipes*);
@@ -55,4 +58,4 @@ what has been collected, and who will receive it.
 
 ## When the player receives an item, what happens?
 When you receive an item, a message will pop up to inform you where you received
-the Item from, and which one it is.
+the item from, and which one it is.

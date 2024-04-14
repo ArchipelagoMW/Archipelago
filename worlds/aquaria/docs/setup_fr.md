@@ -1,3 +1,3 @@
-# # Guide de configuration MultiWorld de DLCQuest
+# # Guide de configuration MultiWorld d'Aquaria
 
-À faire
+ToDo

@@ -25,6 +25,10 @@ Les localisations du "Ransomizer" sont:
   * battre le dieu du soleil,
   * détruire la cage de Li dans le corps,
 
+À noter que, contrairement au jeu original, lors de l'ouverture d'un bulbe musical, d'une urne de Mithalas ou 
+d'une caisse de la cité engloutie, aucun objet n'en sortira. La localisation représentée par l'objet ouvert est reçue
+dès l'ouverture.
+
 Les objets pouvant être obtenus sont:
 - les recettes (permettant d'apprendre les recettes*);
 - certains ingrédients;

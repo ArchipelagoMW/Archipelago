@@ -467,7 +467,7 @@ class AquariaRegions:
         self.__connect_regions("Home Water", "Song cave", self.home_water, self.song_cave)
         self.__connect_regions("Home Water", "Home water, nautilus nest",
                                self.home_water, self.home_water_nautilus,
-                               lambda state: _has_energy_form(state, self.player))
+                               lambda state: _has_energy_form(state, self.player) and _has_bind_song(state, self.player))
         self.__connect_regions("Home Water", "Home water transturtle room",
                                self.home_water, self.home_water_transturtle,
                                lambda state: _has_bind_song(state, self.player))
@@ -1085,6 +1085,12 @@ class AquariaRegions:
                  lambda state: _has_beast_form(state, self.player))
         add_rule(self.world.get_location("Energy temple first area, bulb in the bottom room blocked by a rock",
                                          self.player), lambda state: _has_energy_form(state, self.player))
+        add_rule(self.world.get_location("Home water, bulb in the bottom left room", self.player),
+                 lambda state: _has_bind_song(state, self.player))
+        add_rule(self.world.get_location("Home water, bulb in the path bellow Nautilus Prime", self.player),
+                 lambda state: _has_bind_song(state, self.player))
+        add_rule(self.world.get_location("Naija's home, bulb after the energy door", self.player),
+                 lambda state: _has_energy_form(state, self.player))
         if options.mini_bosses_to_beat.value > 0:
             add_rule(self.world.get_entrance("Before Final boss to Final boss", self.player),
                      lambda state: _has_mini_bosses(state, self.player))
