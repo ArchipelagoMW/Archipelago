@@ -147,8 +147,9 @@ def cmd_request(self: "BizHawkClientCommandProcessor", amount: str, target: str)
         "I3": MM2EnergyLinkType.Item3,
         "1U": MM2EnergyLinkType.OneUP
     }
-    if target not in valid_targets:
-        logger.warning(f"Unrecognized target {target}. Available targets: {', '.join(valid_targets.keys())}")
+    if target.upper() not in valid_targets:
+        logger.warning(f"Unrecognized target {target.upper()}. Available targets: {', '.join(valid_targets.keys())}")
+        return
     ctx = self.ctx
     assert isinstance(ctx, BizHawkClientContext)
     client = ctx.client_handler
@@ -442,7 +443,7 @@ class MegaMan2Client(BizHawkClient):
             else:
                 refill_ptr = MM2_WEAPON_ENERGY - 1 + refill_type
             current_value = (await read(ctx.bizhawk_ctx, [(refill_ptr, 1, "RAM")]))[0][0]
-            new_value = max(0x1C if refill_type != MM2EnergyLinkType.OneUP else 99, current_value + refill_amount)
+            new_value = min(0x1C if refill_type != MM2EnergyLinkType.OneUP else 99, current_value + refill_amount)
             writes.append((refill_ptr, new_value.to_bytes(1, "little"), "RAM"))
 
         if len(self.item_queue):
