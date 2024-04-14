@@ -261,6 +261,10 @@ class ALTTPWorld(World):
         self.dungeons = {}
         self.waterfall_fairy_bottle_fill = "Bottle"
         self.pyramid_fairy_bottle_fill = "Bottle"
+        self.fix_trock_doors = None
+        self.fix_skullwoods_exit = None
+        self.fix_palaceofdarkness_exit = None
+        self.fix_trock_exit = None
         super(ALTTPWorld, self).__init__(*args, **kwargs)
 
     @classmethod
@@ -279,6 +283,15 @@ class ALTTPWorld(World):
 
         player = self.player
         multiworld = self.multiworld
+
+        self.fix_trock_doors = (multiworld.entrance_shuffle[player] != 'vanilla'
+                                or multiworld.mode[player] == 'inverted')
+        self.fix_skullwoods_exit = multiworld.entrance_shuffle[player] not in ['vanilla', 'simple', 'restricted',
+                                                                               'dungeons_simple']
+        self.fix_palaceofdarkness_exit = multiworld.entrance_shuffle[player] not in ['dungeons_simple', 'vanilla',
+                                                                                     'simple', 'restricted']
+        self.fix_trock_exit = multiworld.entrance_shuffle[player] not in ['vanilla', 'simple', 'restricted',
+                                                                          'dungeons_simple']
 
         # fairy bottle fills
         bottle_options = [
