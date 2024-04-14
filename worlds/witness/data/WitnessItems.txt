@@ -72,7 +72,7 @@ Doors:
 1164 - Town RGB Control (Panel) - 0x334D8
 1166 - Town Maze Stairs (Panel) - 0x28A79
 1167 - Town Maze Rooftop Bridge (Panel) - 0x2896A
-1169 - Town Windmill Entry (Panel) - 0x17F5F
+1169 - Windmill Entry (Panel) - 0x17F5F
 1172 - Town Cargo Box Entry (Panel) - 0x0A0C8
 1173 - Town Desert Laser Redirect Control (Panel) - 0x09F98
 1182 - Windmill Turn Control (Panel) - 0x17D02
@@ -159,7 +159,7 @@ Doors:
 1723 - Town RGB House Entry (Door) - 0x28A61
 1726 - Town Church Entry (Door) - 0x03BB0
 1729 - Town Maze Stairs (Door) - 0x28AA2
-1732 - Town Windmill Entry (Door) - 0x1845B
+1732 - Windmill Entry (Door) - 0x1845B
 1735 - Town RGB House Stairs (Door) - 0x2897B
 1738 - Town Tower Second (Door) - 0x27798
 1741 - Town Tower First (Door) - 0x27799
