@@ -38,6 +38,7 @@ class EnergyLink(Toggle):
     Enables EnergyLink support.
     When enabled, pickups dropped from enemies are sent to the EnergyLink pool, and healing/weapon energy/1-Ups can
     be requested from the EnergyLink pool.
+    A quarter of the energy sent to the pool will be lost on transfer.
     """
 
 

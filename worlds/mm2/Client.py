@@ -103,7 +103,7 @@ class MM2EnergyLinkType(IntEnum):
 
 HP_EXCHANGE_RATE = 500000000
 WEAPON_EXCHANGE_RATE = 250000000
-ONEUP_EXCHANGE_RATE = 1000000000
+ONEUP_EXCHANGE_RATE = 25000000000
 
 
 def cmd_pool(self: "BizHawkClientCommandProcessor"):
@@ -364,13 +364,13 @@ class MegaMan2Client(BizHawkClient):
                 exchange_rate = WEAPON_EXCHANGE_RATE
             elif pickup == 0x7B:
                 # 1-Up
-                # if we managed to pickup something else, we should just fall through
                 value = 1
                 exchange_rate = ONEUP_EXCHANGE_RATE
             else:
+                # if we managed to pickup something else, we should just fall through
                 value = 0
                 exchange_rate = 0
-            contribution = value * exchange_rate
+            contribution = (0.75 * value) * exchange_rate
             if contribution:
                 await ctx.send_msgs([{
                  "cmd": "Set", "key": f"EnergyLink{ctx.team}", "slot": ctx.slot, "operations":
