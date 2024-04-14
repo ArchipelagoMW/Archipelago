@@ -137,6 +137,9 @@ class AquariaWorld(World):
             item = AquariaItem(item_name, ItemClassification.useful, data[0], self.player)
             self.multiworld.get_location(location_name, self.player).place_locked_item(item)
 
+    def get_filler_item_name(self):
+        filler_item_name = "Sea loaf"  # or write something if there's other filler items that could be genned
+        return filler_item_name
     def create_items(self) -> None:
         """Create every item in the world"""
         precollected = [item.name for item in self.multiworld.precollected_items[self.player]]
@@ -159,7 +162,7 @@ class AquariaWorld(World):
         for name, data in item_table.items():
             if name in precollected:
                 precollected.remove(name)
-                self.multiworld.itempool.append(self.create_item("Sea loaf"))
+                self.multiworld.itempool.append(self.create_item(self.get_filler_item_name()))
             else:
                 if name not in self.exclude:
                     for i in range(data[1]):

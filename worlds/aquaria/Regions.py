@@ -1001,6 +1001,10 @@ class AquariaRegions:
         """
         Modify rules implying bind song needed for bulb under rocks
         """
+        add_rule(self.world.get_location("Home water, bulb under the rock in the left path from the verse cave",
+                                         self.player), lambda state: _has_bind_song(state, self.player))
+        add_rule(self.world.get_location("Verse cave left area, bulb under the rock at the end of the path",
+                                         self.player), lambda state: _has_bind_song(state, self.player))
         add_rule(self.world.get_location("Naija's home, bulb under the rock at the right of the main path",
                                          self.player), lambda state: _has_bind_song(state, self.player))
         add_rule(self.world.get_location("Song cave, bulb under the rock in the path to the singing statues",
@@ -1054,17 +1058,7 @@ class AquariaRegions:
         add_rule(self.world.get_entrance("Open water bottom left area to Abyss left area", self.player),
                  lambda state: _has_light(state, self.player))
 
-    def adjusting_rules(self, options: AquariaOptions) -> None:
-        """
-        Modify rules for single location or optional rules
-        """
-        self.__adjusting_urns_rules()
-        self.__adjusting_crates_rules()
-        self.__adjusting_soup_rules()
-        if options.light_needed_to_get_to_dark_places:
-            self.__adjusting_light_in_dark_place_rules()
-        if options.bind_song_needed_to_get_under_rock_bulb:
-            self.__adjusting_under_rock_location()
+    def __adjusting_manual_rules(self) -> None:
         add_rule(self.world.get_location("Mithalan Dress in the Mithalas cathedral", self.player),
                  lambda state: _has_beast_form(state, self.player))
         add_rule(self.world.get_location("Open water bottom left area, bulb inside the downest fish pass", self.player),
@@ -1079,6 +1073,8 @@ class AquariaRegions:
                  lambda state: _has_fish_form(state, self.player))
         add_rule(self.world.get_location("Anemone seed in the Song cave", self.player),
                  lambda state: _has_nature_form(state, self.player))
+        add_rule(self.world.get_location("Verse egg in the Song cave", self.player),
+                 lambda state: _has_bind_song(state, self.player))
         add_rule(self.world.get_location("Big Seed in the Verse cave right area", self.player),
                  lambda state: _has_bind_song(state, self.player))
         add_rule(self.world.get_location("Arnassi ruins, Song plant spore on the top of the ruins", self.player),
@@ -1091,6 +1087,19 @@ class AquariaRegions:
                  lambda state: _has_bind_song(state, self.player))
         add_rule(self.world.get_location("Naija's home, bulb after the energy door", self.player),
                  lambda state: _has_energy_form(state, self.player))
+    def adjusting_rules(self, options: AquariaOptions) -> None:
+        """
+        Modify rules for single location or optional rules
+        """
+        self.__adjusting_urns_rules()
+        self.__adjusting_crates_rules()
+        self.__adjusting_soup_rules()
+        self.__adjusting_manual_rules()
+        if options.light_needed_to_get_to_dark_places:
+            self.__adjusting_light_in_dark_place_rules()
+        if options.bind_song_needed_to_get_under_rock_bulb:
+            self.__adjusting_under_rock_location()
+
         if options.mini_bosses_to_beat.value > 0:
             add_rule(self.world.get_entrance("Before Final boss to Final boss", self.player),
                      lambda state: _has_mini_bosses(state, self.player))
