@@ -217,7 +217,7 @@ location_rules: Mapping[str, Requirement] = {
     'Catbat - 0:15':        has('Ground Pound') & (has('Enemy Jump') | logic(advanced) & not_difficulty(s_hard)),
     'Catbat - 0:35':        has('Ground Pound') & (has('Enemy Jump') | logic(advanced) & not_difficulty(s_hard)),
     'Catbat - 0:55':        has('Ground Pound') & (has('Enemy Jump') | logic(advanced) & not_difficulty(s_hard)),
-    'Golden Diva':          has('Grab'),
+    'Golden Diva':          has('Heavy Grab'),
 
     'Sound Room - Emergency Exit': has_treasures(),
 

@@ -640,6 +640,6 @@ class TestNormal(WL4TestBase):
     def _test_golden_diva(self):
         self.run_location_tests([
             ['Golden Diva', False, []],
-            ['Golden Diva', False, [], ['Progressive Grab']],
-            ['Golden Diva', True, ['Progressive Grab']],
+            ['Golden Diva', False, ['Progressive Grab'], ['Progressive Grab']],
+            ['Golden Diva', True, ['Progressive Grab', 'Progressive Grab']],
         ])
