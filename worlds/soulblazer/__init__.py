@@ -83,12 +83,7 @@ class SoulBlazerWorld(World):
         # self.create_regions = create_regions
 
     def create_item(self, item: str) -> SoulBlazerItem:
-        if item in repeatable_items_table:
-            # Create shallow copy of repeatable items so we can change the operand if needed.
-            data = copy.copy(repeatable_items_table[item])
-        else:
-            data = all_items_table[item]
-        return SoulBlazerItem(item, self.player, data)
+        return SoulBlazerItem(item, self.player, all_items_table[item])
 
     def get_pre_fill_items(self) -> List[Item]:
         return self.pre_fill_items

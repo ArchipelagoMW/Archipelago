@@ -1,14 +1,15 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from BaseClasses import Region, Location, Entrance, Item, ItemClassification
 from typing import Optional, TYPE_CHECKING, List, Dict
 from .Names import ItemID, ItemName, LairID, NPCName
-from .Names.ArchipelagoID import base_id, lair_id_offset
+from .Names.ArchipelagoID import BASE_ID, LAIR_ID_OFFSET
+from .Util import int_to_bcd
 
 if TYPE_CHECKING:
     from . import SoulBlazerWorld
 
 
-@dataclass
+@dataclass(frozen=True)
 class SoulBlazerItemData:
     id: int
     """Internal item ID"""
@@ -18,40 +19,21 @@ class SoulBlazerItemData:
 
     classification: ItemClassification
 
+    def duplicate(self, **changes) -> "SoulBlazerItemData":
+        """Returns a copy of this ItemData with the specified changes."""
+        return replace(self, **changes)
+
     @property
     def code(self) -> int:
         """The unique ID used by archipelago for this item"""
 
         if self.id == ItemID.LAIR_RELEASE:
-            return base_id + lair_id_offset + self.operand
-        return base_id + self.id
+            return BASE_ID + LAIR_ID_OFFSET + self.operand
+        return BASE_ID + self.id
 
     @property
     def operand_bcd(self) -> int:
-        """Converts operand to/from SNES BCD"""
-        bcd = self.operand % 10
-        remainder = self.operand // 10
-        digit = 1
-
-        while remainder != 0:
-            bcd += (remainder % 10) * (0x10**digit)
-            remainder //= 10
-            digit += 1
-
-        return bcd
-
-    @operand_bcd.setter
-    def operand_bcd(self, bcd: int):
-        decimal = bcd % 0x10
-        remainder = bcd // 0x10
-        digit = 1
-
-        while remainder != 0:
-            decimal += (remainder % 10) * (10**digit)
-            remainder //= 0x10
-            digit += 1
-
-        operand = decimal
+        return int_to_bcd(self.operand)
 
     @property
     def operand_for_id(self) -> int:
@@ -67,8 +49,8 @@ class SoulBlazerItem(Item):
         super().__init__(name, itemData.classification, itemData.code, player)
         self._itemData = itemData
 
-    def set_operand(self, value: int):
-        self._itemData.operamd = value
+    def set_operand(self, value: int) -> 'SoulBlazerItem':
+        self._itemData = self._itemData.duplicate(operand=value)
         return self
 
     @property
@@ -138,13 +120,13 @@ def create_itempool(world: "SoulBlazerWorld") -> List[SoulBlazerItem]:
 
 # TODO: Unsure which progression items should skip balancing
 swords_table = {
-    ItemName.LIFESWORD     : SoulBlazerItemData(ItemID.LIFESWORD    , 0x00, ItemClassification.progression_skip_balancing),
-    ItemName.PSYCHOSWORD   : SoulBlazerItemData(ItemID.PSYCHOSWORD  , 0x00, ItemClassification.progression_skip_balancing),
-    ItemName.CRITICALSWORD : SoulBlazerItemData(ItemID.CRITICALSWORD, 0x00, ItemClassification.progression_skip_balancing),
+    ItemName.LIFESWORD     : SoulBlazerItemData(ItemID.LIFESWORD    , 0x00, ItemClassification.progression),
+    ItemName.PSYCHOSWORD   : SoulBlazerItemData(ItemID.PSYCHOSWORD  , 0x00, ItemClassification.progression),
+    ItemName.CRITICALSWORD : SoulBlazerItemData(ItemID.CRITICALSWORD, 0x00, ItemClassification.progression),
     ItemName.LUCKYBLADE    : SoulBlazerItemData(ItemID.LUCKYBLADE   , 0x00, ItemClassification.progression),
     ItemName.ZANTETSUSWORD : SoulBlazerItemData(ItemID.ZANTETSUSWORD, 0x00, ItemClassification.progression),
     ItemName.SPIRITSWORD   : SoulBlazerItemData(ItemID.SPIRITSWORD  , 0x00, ItemClassification.progression),
-    ItemName.RECOVERYSWORD : SoulBlazerItemData(ItemID.RECOVERYSWORD, 0x00, ItemClassification.progression_skip_balancing),
+    ItemName.RECOVERYSWORD : SoulBlazerItemData(ItemID.RECOVERYSWORD, 0x00, ItemClassification.progression),
     ItemName.SOULBLADE     : SoulBlazerItemData(ItemID.SOULBLADE    , 0x00, ItemClassification.progression),
 }
 
@@ -161,12 +143,12 @@ armors_table = {
 
 magic_table = {
     ItemName.FLAMEBALL   : SoulBlazerItemData(ItemID.FLAMEBALL  , 0x00, ItemClassification.progression),
-    ItemName.LIGHTARROW  : SoulBlazerItemData(ItemID.LIGHTARROW , 0x00, ItemClassification.progression_skip_balancing),
-    ItemName.MAGICFLARE  : SoulBlazerItemData(ItemID.MAGICFLARE , 0x00, ItemClassification.progression_skip_balancing),
-    ItemName.ROTATOR     : SoulBlazerItemData(ItemID.ROTATOR    , 0x00, ItemClassification.progression_skip_balancing),
-    ItemName.SPARKBOMB   : SoulBlazerItemData(ItemID.SPARKBOMB  , 0x00, ItemClassification.progression_skip_balancing),
-    ItemName.FLAMEPILLAR : SoulBlazerItemData(ItemID.FLAMEPILLAR, 0x00, ItemClassification.progression_skip_balancing),
-    ItemName.TORNADO     : SoulBlazerItemData(ItemID.TORNADO    , 0x00, ItemClassification.progression_skip_balancing),
+    ItemName.LIGHTARROW  : SoulBlazerItemData(ItemID.LIGHTARROW , 0x00, ItemClassification.progression),
+    ItemName.MAGICFLARE  : SoulBlazerItemData(ItemID.MAGICFLARE , 0x00, ItemClassification.progression),
+    ItemName.ROTATOR     : SoulBlazerItemData(ItemID.ROTATOR    , 0x00, ItemClassification.progression),
+    ItemName.SPARKBOMB   : SoulBlazerItemData(ItemID.SPARKBOMB  , 0x00, ItemClassification.progression),
+    ItemName.FLAMEPILLAR : SoulBlazerItemData(ItemID.FLAMEPILLAR, 0x00, ItemClassification.progression),
+    ItemName.TORNADO     : SoulBlazerItemData(ItemID.TORNADO    , 0x00, ItemClassification.progression),
     ItemName.PHOENIX     : SoulBlazerItemData(ItemID.PHOENIX    , 0x00, ItemClassification.progression_skip_balancing),
 }
 

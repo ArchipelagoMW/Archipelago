@@ -5,7 +5,7 @@ from enum import Enum
 from BaseClasses import Region, Location, Entrance, Item, ItemClassification
 from .Rules import RuleFlag, get_rule_for_location
 from .Names import LairID, LairName, ChestID, ChestName, NPCRewardID, NPCRewardName
-from .Names.ArchipelagoID import lair_id_offset, base_id, npc_reward_offset
+from .Names.ArchipelagoID import BASE_ID, LAIR_ID_OFFSET, NPC_REWARD_OFFSET
 
 
 # TODO: Use IntEnum instead?
@@ -18,7 +18,15 @@ class LocationType(Enum):
     """Location checked by sealing a monster lair."""
 
 
-@dataclass
+def address_for_location(type: LocationType, id: int) -> int:
+    if type == LocationType.LAIR:
+        return BASE_ID + LAIR_ID_OFFSET + id
+    if type == LocationType.NPC_REWARD:
+        return BASE_ID + NPC_REWARD_OFFSET + id
+    return BASE_ID + id
+
+
+@dataclass(frozen=True)
 class SoulBlazerLocationData():
     id: int
     """Internal location ID and index into ROM chest/lair/NPC reward table"""
@@ -31,14 +39,12 @@ class SoulBlazerLocationData():
         """The unique ID used by archipelago for this location"""
 
         if self.type == LocationType.LAIR:
-            return base_id + lair_id_offset + self.id
+            return BASE_ID + LAIR_ID_OFFSET + self.id
         if self.type == LocationType.NPC_REWARD:
-            return base_id + npc_reward_offset + self.id
-        return base_id + self.id
+            return BASE_ID + NPC_REWARD_OFFSET + self.id
+        return BASE_ID + self.id
 
 
-# TODO: Fix this:
-# execnet.gateway_base.DumpError: can't serialize <class 'worlds.soulblazer.Locations.SoulBlazerLocation'>
 class SoulBlazerLocation(Location):
     game = "Soul Blazer"
 
