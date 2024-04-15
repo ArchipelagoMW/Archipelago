@@ -48,6 +48,7 @@ class TestLocations(KDL3TestBase):
 class TestShiro(KDL3TestBase):
     options = {
         "open_world": False,
+        "strict_bosses": False,
         "plando_connections": [
             [],
             [
