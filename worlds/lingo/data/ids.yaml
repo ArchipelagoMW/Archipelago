@@ -1475,7 +1475,6 @@ panel_doors:
     NOPE: 444590
     WE ROT: 444591
     WORDS SWORD: 444593
-    RUNT TURN: 444594
     BEND HI: 444595
   Lost Area:
     LOST: 444596
@@ -1587,7 +1586,6 @@ panel_doors:
     OPEN: 444666
 panel_groups:
   Tenacious Entrance Panels: 444585
-  Crossroads - Tower Entrance Panels: 444592
   Symmetry Room Panels: 444600
   Hallway Room Panels: 444608
   Backside Entrance Panels: 444614

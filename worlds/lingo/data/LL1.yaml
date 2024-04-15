@@ -846,19 +846,12 @@
         panels:
           - NOPE
       WE ROT:
-        panel_group: Crossroads - Tower Entrance Panels
         panels:
           - WE ROT
       WORDS SWORD:
         panels:
           - WORDS
           - SWORD
-      RUNT TURN:
-        panel_group: Crossroads - Tower Entrance Panels
-        panels:
-          - TURN
-          - room: Orange Tower Fourth Floor
-            panel: RUNT (1)
       BEND HI:
         panels:
           - BEND HI
