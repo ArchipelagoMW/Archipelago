@@ -6,7 +6,10 @@ from .Regions import JakAndDaxterLevel, JakAndDaxterSubLevel, JakAndDaxterRegion
 from .Items import item_table
 
 def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int):
-    multiworld.get_region("Menu").connect(level_table[JakAndDaxterLevel.GEYSER_ROCK])
+
+    menuRegion = multiworld.get_region("Menu", player)
+    grRegion = multiworld.get_region(level_table[JakAndDaxterLevel.GEYSER_ROCK], player)
+    menuRegion.connect(grRegion)
 
     connect_regions(multiworld, player,
         JakAndDaxterLevel.GEYSER_ROCK,
@@ -63,7 +66,7 @@ def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int)
     connect_regions(multiworld, player,
         JakAndDaxterLevel.ROCK_VILLAGE,
         JakAndDaxterLevel.MOUNTAIN_PASS,
-        lambda state: state.has(item_table[2217], player) && state.has(item_table[0], player, 45))
+        lambda state: state.has(item_table[2217], player) and state.has(item_table[0], player, 45))
 
     assign_subregion_access_rule(multiworld, player, 
         JakAndDaxterSubLevel.MOUNTAIN_PASS_SHORTCUT,
@@ -100,7 +103,7 @@ def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int)
 
     assign_subregion_access_rule(multiworld, player, 
         JakAndDaxterSubLevel.GOL_AND_MAIAS_CITADEL_ROTATING_TOWER,
-        lambda state: state.has(item_table[96], player) && state.has(item_table[97], player) && state.has(item_table[98], player))
+        lambda state: state.has(item_table[96], player) and state.has(item_table[97], player) and state.has(item_table[98], player))
 
 def connect_regions(multiworld: MultiWorld, player: int, source: int, target: int, rule = None):
     sourceRegion = multiworld.get_region(level_table[source], player)
@@ -108,5 +111,5 @@ def connect_regions(multiworld: MultiWorld, player: int, source: int, target: in
     sourceRegion.connect(targetRegion, rule = rule)
 
 def assign_subregion_access_rule(multiworld: MultiWorld, player: int, target: int, rule = None):
-    targetEntrance = multiworld.get_entrance(multiworld, player, subLevel_table[target])
+    targetEntrance = multiworld.get_entrance(subLevel_table[target], player)
     targetEntrance.access_rule = rule
