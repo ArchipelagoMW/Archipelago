@@ -3,7 +3,7 @@ from BaseClasses import MultiWorld, Region, Location, Item, Tutorial, ItemClassi
 from worlds.AutoWorld import World, WebWorld
 from .Items import base_id, item_table, group_table, BRCType
 from .Locations import location_table, event_table
-from .Regions import region_names, region_exits, BRCStage
+from .Regions import region_exits
 from .Rules import rules
 from .Options import BombRushCyberfunkOptions, StartStyle
 
@@ -152,10 +152,6 @@ class BombRushCyberfunkWorld(World):
         self.multiworld.itempool += pool
 
 
-    def get_stage(self, stage: BRCStage, player: int) -> Region:
-        return self.multiworld.get_region(region_names[stage], player)
-
-
     def create_regions(self):
         multiworld = self.multiworld
         player = self.player
@@ -163,23 +159,22 @@ class BombRushCyberfunkWorld(World):
         menu = Region("Menu", player, multiworld)
         multiworld.regions.append(menu)
 
-        for _, n in region_names.items():
+        for n in region_exits:
             multiworld.regions += [Region(n, player, multiworld)]
 
         menu.add_exits({"Hideout": "New Game"})
 
-        for r, e in region_exits.items():
-            exits = {region_names[ex] for ex in region_exits[r]}
-            self.get_stage(r, player).add_exits(exits)
+        for n in region_exits:
+            self.get_region(n).add_exits(region_exits[n])
 
         for index, loc in enumerate(location_table):
             if self.options.skip_polo_photos and "Polo" in loc["name"]:
                 continue
-            stage: Region = self.get_stage(loc["stage"], player)
+            stage: Region = self.get_region(loc["stage"])
             stage.add_locations({loc["name"]: base_id + index})
 
         for e in event_table:
-            stage: Region = self.get_stage(e["stage"], player)
+            stage: Region = self.get_region(e["stage"])
             event = BombRushCyberfunkLocation(player, e["name"], None, stage)
             event.show_in_spoiler = False
             event.place_locked_item(self.create_event(e["item"]))
