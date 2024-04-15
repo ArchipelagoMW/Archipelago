@@ -1,13 +1,14 @@
 import io
 import os
 import pkgutil
+import struct
 import typing
 import bsdiff4
 
 from . import Enemies
 from BaseClasses import Item, Location
 from settings import get_settings
-from worlds.Files import APDeltaPatch
+from worlds.Files import APDeltaPatch, APProcedurePatch, APTokenMixin, APTokenTypes
 from .Items import item_table
 from .Locations import shop, badge, pants
 
@@ -61,325 +62,391 @@ def get_base_rom_as_bytes() -> bytes:
     return base_rom_bytes
 
 
-class MLSSDeltaPatch(APDeltaPatch):
+class MLSSProcedurePatch(APProcedurePatch, APTokenMixin):
     game = "Mario & Luigi Superstar Saga"
     hash = "4b1a5897d89d9e74ec7f630eefdfd435"
     patch_file_ending = ".apmlss"
     result_file_ending = ".gba"
 
+    procedure = [
+        ("apply_bsdiff4", ["basepatch.bsdiff"]),
+        ("apply_tokens", ["token_data.bin"])
+    ]
+
     @classmethod
     def get_source_data(cls) -> bytes:
         return get_base_rom_as_bytes()
 
+def write_tokens(world: "MLSSWorld", patch: MLSSProcedurePatch) -> None:
+    # Bake player name into ROM
+    patch.write_token(
+        APTokenTypes.WRITE,
+        0xDF0000,
+        struct.pack("s", world.multiworld.player_name[world.player].encode("UTF-8"))
+    )
 
-class Rom:
-    hash = "4b1a5897d89d9e74ec7f630eefdfd435"
+    # Bake seed name into ROM
+    patch.write_token(
+        APTokenTypes.WRITE,
+        0xDF00A0,
+        struct.pack("s", world.multiworld.seed_name.encode("UTF-8"))
+    )
 
-    def __init__(self, world: "MLSSWorld"):
-        content = get_base_rom_as_bytes()
-        patched = self.apply_delta(content)
-        self.random = world.multiworld.per_slot_randoms[world.player]
-        self.stream = io.BytesIO(patched)
-        self.world = world
-        self.player = world.player
+    # Intro Skip
+    patch.write_token(
+        APTokenTypes.WRITE,
+        0x244D08,
+        struct.pack("s", bytes([0x88, 0x0, 0x19, 0x91, 0x1, 0x20, 0x58, 0x1, 0xF, 0xA0, 0x3, 0x15, 0x27, 0x8]))
+    )
 
-    def swap_colors(self, color, bro):
-        temp = pkgutil.get_data(__name__, "colors/" + color + ".txt")
-        temp_io = io.BytesIO(temp)
-        color_arr = []
+    # Patch S.S Chuckola Loading Zones
+    patch.write_token(
+        APTokenTypes.WRITE,
+        0x25FD4E,
+        struct.pack("s", bytes([0x48, 0x30, 0x80, 0x60, 0x50, 0x2, 0xF]))
+    )
 
-        for lines in temp_io.readlines():
+    patch.write_token(
+        APTokenTypes.WRITE,
+        0x25FD83,
+        struct.pack("s", bytes([0x48, 0x30, 0x80, 0x60, 0xC0, 0x2, 0xF]))
+    )
 
-            arr = lines.decode('utf-8').strip().split(',')
-            if color != "Chaos" and color != "TrueChaos":
-                color_arr.append(Color(int(arr[0], 16), int(arr[1], 16), int(arr[2], 16), int(arr[3], 16)))
-            else:
-                color_arr.append(
-                    Color(int(arr[0], 16), self.random.randint(0, 255), self.random.randint(0, 127), int(arr[1], 16)))
+    patch.write_token(
+        APTokenTypes.WRITE,
+        0x25FDB8,
+        struct.pack("s", bytes([0x48, 0x30, 0x05, 0x80, 0xE4, 0x0, 0xF]))
+    )
 
-        colors_ = [c for c in color_arr if c.bro == bro]
+    patch.write_token(
+        APTokenTypes.WRITE,
+        0x25FDED,
+        struct.pack("s", bytes([0x48, 0x30, 0x06, 0x80, 0xE4, 0x0, 0xF]))
+    )
 
-        for c in colors_:
-            self.stream.seek(c.location, io.SEEK_SET)
-            self.stream.write(bytes([c.byte1, c.byte2]))
+    patch.write_token(
+        APTokenTypes.WRITE,
+        0x25FE22,
+        struct.pack("s", bytes([0x48, 0x30, 0x07, 0x80, 0xE4, 0x0, 0xF]))
+    )
 
-    def swap_pants(self, color, bro):
-        mario_color = self.world.options.mario_color
-        luigi_color = self.world.options.luigi_color
-        if bro == 0 and (colors[mario_color] == "TrueChaos" or colors[mario_color] == "Silhouette"):
-            return
-        if bro == 1 and (colors[luigi_color] == "TrueChaos" or colors[luigi_color] == "Silhouette"):
-            return
-        if color == "Vanilla":
-            return
-        temp = pkgutil.get_data(__name__, "colors/pants/" + color + ".txt")
-        temp_io = io.BytesIO(temp)
-        color_arr = []
+    patch.write_token(
+        APTokenTypes.WRITE,
+        0x25FE57,
+        struct.pack("s", bytes([0x48, 0x30, 0x08, 0x80, 0xE4, 0x0, 0xF]))
+    )
 
-        for lines in temp_io.readlines():
-            arr = lines.decode('utf-8').strip().split(',')
-            if color != "Chaos" and color != "TrueChaos":
-                color_arr.append(Color(int(arr[0], 16), int(arr[1], 16), int(arr[2], 16), int(arr[3], 16)))
-            else:
-                color_arr.append(
-                    Color(int(arr[0], 16), self.random.randint(0, 255), self.random.randint(0, 127), int(arr[1], 16)))
+    if world.options.extra_pipes:
+        patch.write_token(
+            APTokenTypes.WRITE,
+            0xD00001,
+            struct.pack("B", 1)
+        )
 
-        colors_ = [c for c in color_arr if c.bro == bro]
+    if world.options.castle_skip:
+        patch.write_token(
+            APTokenTypes.WRITE,
+            0x3AEAB0,
+            struct.pack("s", bytes([0xC1, 0x67, 0x0, 0x6, 0x1C, 0x08, 0x3]))
+        )
+        patch.write_token(
+            APTokenTypes.WRITE,
+            0x3AEC18,
+            struct.pack("s", bytes([0x89, 0x65, 0x0, 0xE, 0xA, 0x08, 0x1]))
+        )
 
-        for c in colors_:
-            self.stream.seek(c.location, io.SEEK_SET)
-            self.stream.write(bytes([c.byte1, c.byte2]))
+    if world.options.skip_minecart:
+        patch.write_token(
+            APTokenTypes.WRITE,
+            0x3AC728,
+            struct.pack("s", bytes([0x89, 0x13, 0x0, 0x10, 0xF, 0x08, 0x1]))
+        )
+        patch.write_token(
+            APTokenTypes.WRITE,
+            0x3AC56C,
+            struct.pack("s", bytes([0x49, 0x16, 0x0, 0x8, 0x8, 0x08, 0x1]))
+        )
 
-    def item_inject(self, location: int, item_type: int, item: Item):
-        if item.player == self.player:
-            code = item_table[item.name].itemID
-        else:
-            code = 0x3F
-        if item_type == 0:
-            self.stream.seek(location, 0)
-            self.stream.write(bytes([code]))
-            self.stream.seek(location - 6, 0)
-            b = self.stream.read(1)
-            if b[0] == 0x10 and self.world.options.hidden_visible:
-                self.stream.seek(location - 6, 0)
-                self.stream.write(bytes([0x0]))
-            if b[0] == 0x0 and self.world.options.blocks_invisible:
-                self.stream.seek(location - 6, 0)
-                self.stream.write(bytes([0x10]))
-        elif item_type == 1:
-            if code == 0x1D or code == 0x1E:
-                code += 0xE
-            if 0x20 <= code <= 0x26:
-                code -= 0x4
-            insert = int(code)
-            insert2 = insert % 0x10
-            insert2 *= 0x10
-            insert //= 0x10
-            insert += 0x20
-            self.stream.seek(location, 0)
-            self.stream.write(bytes([insert, insert2]))
-        elif item_type == 2:
-            if code == 0x1D or code == 0x1E:
-                code += 0xE
-            if 0x20 <= code <= 0x26:
-                code -= 0x4
-            self.stream.seek(location, 0)
-            self.stream.write(bytes([code]))
-        elif item_type == 3:
-            if code == 0x1D or code == 0x1E:
-                code += 0xE
-            if code < 0x1D:
-                code -= 0xA
-            if 0x20 <= code <= 0x26:
-                code -= 0xE
-            self.stream.seek(location, 0)
-            self.stream.write(bytes([code]))
-        else:
-            self.stream.seek(location, 0)
-            self.stream.write(bytes([0x18]))
+    if world.options.scale_stats:
+        patch.write_token(
+            APTokenTypes.WRITE,
+            0x1E9418,
+            struct.pack("B", 1)
+        )
 
-    def patch_options(self):
-        name = self.world.multiworld.player_name[self.player].encode("UTF-8")
-        self.stream.seek(0xDF0000, 0)
-        self.stream.write(name)
-        self.stream.seek(0xDF00A0, 0)
-        self.stream.write(self.world.multiworld.seed_name.encode("UTF-8"))
+    if world.options.scale_pow:
+        patch.write_token(
+            APTokenTypes.WRITE,
+            0x1E9419,
+            struct.pack("B", 1)
+        )
 
-        # Enable Skip Intro in ROM
-        self.stream.seek(0x244D08, 0)
-        self.stream.write(bytes([0x88, 0x0, 0x19, 0x91, 0x1, 0x20, 0x58, 0x1, 0xF, 0xA0, 0x3, 0x15, 0x27, 0x8]))
+    if world.options.tattle_hp:
+        patch.write_token(
+            APTokenTypes.WRITE,
+            0xD00000,
+            struct.pack("B", 1)
+        )
 
-        if self.world.options.extra_pipes:
-            # Spawn in extra pipes in ROM
-            self.stream.seek(0xD00001, 0)
-            self.stream.write(bytes([0x1]))
+    if world.options.randomize_sounds:
+        self.randomize_sounds()
 
-        if self.world.options.castle_skip:
-            # Enable Bowser's castle skip in ROM
-            self.stream.seek(0x3AEAB0, 0)
-            self.stream.write(bytes([0xC1, 0x67, 0x0, 0x6, 0x1C, 0x08, 0x3]))
-            self.stream.seek(0x3AEC18, 0)
-            self.stream.write(bytes([0x89, 0x65, 0x0, 0xE, 0xA, 0x08, 0x1]))
+    if world.options.music_options == 1:
+        self.randomize_music()
 
-        if self.world.options.skip_minecart:
-            # Enable minecart skip in ROM
-            self.stream.seek(0x3AC728, 0)
-            self.stream.write(bytes([0x89, 0x13, 0x0, 0x10, 0xF, 0x08, 0x1]))
-            self.stream.seek(0x3AC56C, 0)
-            self.stream.write(bytes([0x49, 0x16, 0x0, 0x8, 0x8, 0x08, 0x1]))
+    if world.options.music_options == 2:
+        patch.write_token(
+            APTokenTypes.WRITE,
+            0x19B118,
+            struct.pack("s", bytes([0x0, 0x25]))
+        )
 
-        if self.world.options.randomize_sounds:
-            self.randomize_sounds()
-
-        if self.world.options.music_options == 1:
-            self.randomize_music()
-
-        if self.world.options.music_options == 2:
-            self.disable_music()
-
-        if self.world.options.randomize_backgrounds:
-            self.randomize_backgrounds()
-
-        if self.world.options.randomize_enemies != 0 or self.world.options.randomize_bosses != 0:
-            self.enemy_randomize()
-
-        if self.world.options.scale_stats:
-            self.stream.seek(0x1E9418, 0)
-            self.stream.write(bytes([0x1]))
-
-        if self.world.options.scale_pow:
-            self.stream.seek(0x1E9419, 0)
-            self.stream.write(bytes([0x1]))
-
-        if self.world.options.tattle_hp:
-            self.stream.seek(0xD00000, 0)
-            self.stream.write(bytes([0x1]))
-
-        self.stream.seek(0x25FD4E, 0)
-        self.stream.write(bytes([0x48, 0x30, 0x80, 0x60, 0x50, 0x2, 0xF]))
-        self.stream.seek(0x25FD83, 0)
-        self.stream.write(bytes([0x48, 0x30, 0x80, 0x60, 0xC0, 0x2, 0xF]))
-        self.stream.seek(0x25FDB8, 0)
-        self.stream.write(bytes([0x48, 0x30, 0x05, 0x80, 0xE4, 0x0, 0xF]))
-        self.stream.seek(0x25FDED, 0)
-        self.stream.write(bytes([0x48, 0x30, 0x06, 0x80, 0xE4, 0x0, 0xF]))
-        self.stream.seek(0x25FE22, 0)
-        self.stream.write(bytes([0x48, 0x30, 0x07, 0x80, 0xE4, 0x0, 0xF]))
-        self.stream.seek(0x25FE57, 0)
-        self.stream.write(bytes([0x48, 0x30, 0x08, 0x80, 0xE4, 0x0, 0xF]))
-
-        self.swap_colors(colors[self.world.options.mario_color], 0)
-        self.swap_colors(colors[self.world.options.luigi_color], 1)
-        self.swap_pants(cpants[self.world.options.mario_pants], 0)
-        self.swap_pants(cpants[self.world.options.luigi_pants], 1)
-
-    def enemy_randomize(self):
-        enemies = [pos for pos in Enemies.enemies if pos not in Enemies.bowsers] if self.world.options.castle_skip else Enemies.enemies
-        bosses = [pos for pos in Enemies.bosses if pos not in Enemies.bowsers] if self.world.options.castle_skip else Enemies.bosses
-
-        if self.world.options.randomize_bosses == 1 or (self.world.options.randomize_bosses == 2 and self.world.options.randomize_enemies == 0):
-            raw = []
-            for pos in bosses:
-                self.stream.seek(pos + 1)
-                raw += [self.stream.read(0x1F)]
-            self.random.shuffle(raw)
-            for pos in bosses:
-                self.stream.seek(pos + 1)
-                self.stream.write(raw.pop())
-
-        if self.world.options.randomize_enemies == 1:
-            raw = []
-            for pos in enemies:
-                self.stream.seek(pos + 1)
-                raw += [self.stream.read(0x1F)]
-            if self.world.options.randomize_bosses == 2:
-                for pos in bosses:
-                    self.stream.seek(pos + 1)
-                    raw += [self.stream.read(0x1F)]
-            self.random.shuffle(raw)
-            for pos in enemies:
-                self.stream.seek(pos + 1)
-                self.stream.write(raw.pop())
-            if self.world.options.randomize_bosses == 2:
-                for pos in bosses:
-                    self.stream.seek(pos + 1)
-                    self.stream.write(raw.pop())
-            return
-
-        enemies_raw = []
-        groups = []
-
-        if self.world.options.randomize_enemies == 0:
-            return
-
-        if self.world.options.randomize_bosses == 2:
-            for pos in bosses:
-                self.stream.seek(pos + 1)
-                groups += [self.stream.read(0x1F)]
-
-        for pos in enemies:
-            self.stream.seek(pos + 8)
-            for _ in range(6):
-                enemy = int.from_bytes(self.stream.read(1))
-                if enemy > 0:
-                    self.stream.seek(1, 1)
-                    flag = int.from_bytes(self.stream.read(1))
-                    if flag == 0x7:
-                        break
-                    if flag in [0x0, 0x2, 0x4]:
-                        if enemy not in Enemies.pestnut and enemy not in Enemies.flying:
-                            print(f"adding: 0x{format(enemy, 'x')}")
-                            enemies_raw += [enemy]
-                    self.stream.seek(1, 1)
-                else:
-                    self.stream.seek(3, 1)
-
-        self.random.shuffle(enemies_raw)
-        chomp = False
-        for pos in enemies:
-            self.stream.seek(pos + 8)
-
-            for _ in range(6):
-                enemy = int.from_bytes(self.stream.read(1))
-                if enemy > 0 and enemy not in Enemies.flying and enemy not in Enemies.pestnut:
-                    if enemy == 0x52:
-                        chomp = True
-                    self.stream.seek(1, 1)
-                    flag = int.from_bytes(self.stream.read(1))
-                    if flag not in [0x0, 0x2, 0x4]:
-                        self.stream.seek(1, 1)
-                        continue
-                    self.stream.seek(-3, 1)
-                    self.stream.write(bytes([enemies_raw.pop()]))
-                    self.stream.seek(1, 1)
-                    self.stream.write(bytes([0x4]))
-                    self.stream.seek(1, 1)
-                else:
-                    self.stream.seek(3, 1)
-
-            self.stream.seek(pos + 1)
-            raw = self.stream.read(0x1F)
-            if chomp:
-                raw = raw[0:3] + bytes([0x67, 0xAB, 0x28, 0x08]) + raw[7:]
-            else:
-                raw = raw[0:3] + bytes([0xEE, 0x2C, 0x28, 0x08]) + raw[7:]
-            groups += [raw]
-
-        self.random.shuffle(groups)
-        arr = enemies
-        if self.world.options.randomize_bosses == 2:
-            arr += bosses
-
-        for pos in arr:
-            self.stream.seek(pos + 1)
-            self.stream.write(groups.pop())
-
-
-
-    def randomize_backgrounds(self):
+    if world.options.randomize_backgrounds:
         all_enemies = Enemies.enemies + Enemies.bosses
         for address in all_enemies:
-            self.stream.seek(address + 3, io.SEEK_SET)
-            self.stream.write(bytes([self.random.randint(0x0, 0x26)]))
+            patch.write_token(
+                APTokenTypes.WRITE,
+                address + 3,
+                struct.pack("B", world.multiworld.per_slot_randoms[world.player].randint(0x0, 0x26))
+            )
 
-    def randomize_sounds(self):
-        temp = pkgutil.get_data(__name__, "data/sounds.txt")
-        temp_io = io.BytesIO(temp)
-        fresh_pointers = []
+    if world.options.randomize_enemies != 0 or world.options.randomize_bosses != 0:
+        self.enemy_randomize()
 
-        for line in temp_io.readlines():
-            fresh_pointers += [int(line.decode('utf-8').strip(), 16)]
-        pointers = list(fresh_pointers)
+    swap_colors(world, patch, colors[world.options.mario_color], 0)
+    swap_colors(world, patch, colors[world.options.luigi_color], 1)
+    swap_pants(world, patch, colors[world.options.mario_pants], 0)
+    swap_pants(world, patch, colors[world.options.luigi_pants], 1)
 
-        self.world.random.shuffle(pointers)
-        self.stream.seek(0x21cc44, 0)
-        for i in range(354):
-            current_position = self.stream.tell()
-            value = int.from_bytes(self.stream.read(3), 'little')
-            if value in fresh_pointers:
-                self.stream.seek(current_position)
-                self.stream.write(pointers.pop().to_bytes(3, 'little'))
-            self.stream.seek(1, 1)
+def swap_colors(world: "MLSSWorld", patch: MLSSProcedurePatch, color: str, bro: int):
+    temp = pkgutil.get_data(__name__, "colors/" + color + ".txt")
+    temp_io = io.BytesIO(temp)
+    color_arr = []
+    random = world.multiworld.per_slot_randoms[world.player]
+
+    for lines in temp_io.readlines():
+        arr = lines.decode('utf-8').strip().split(',')
+        if color != "Chaos" and color != "TrueChaos":
+            color_arr.append(Color(int(arr[0], 16), int(arr[1], 16), int(arr[2], 16), int(arr[3], 16)))
+        else:
+            color_arr.append(
+                Color(int(arr[0], 16), random.randint(0, 255), random.randint(0, 127), int(arr[1], 16)))
+
+    colors_ = [c for c in color_arr if c.bro == bro]
+
+    for c in colors_:
+        patch.write_token(
+            APTokenTypes.WRITE,
+            c.location,
+            struct.pack("s", bytes([c.byte1, c.byte2]))
+        )
+
+def swap_pants(world: "MLSSWorld", patch: MLSSProcedurePatch, color: str, bro: int):
+    mario_color = world.options.mario_color
+    luigi_color = world.options.luigi_color
+    random = world.multiworld.per_slot_randoms[world.player]
+    if bro == 0 and (colors[mario_color] == "TrueChaos" or colors[mario_color] == "Silhouette"):
+        return
+    if bro == 1 and (colors[luigi_color] == "TrueChaos" or colors[luigi_color] == "Silhouette"):
+        return
+    if color == "Vanilla":
+        return
+    temp = pkgutil.get_data(__name__, "colors/pants/" + color + ".txt")
+    temp_io = io.BytesIO(temp)
+    color_arr = []
+
+    for lines in temp_io.readlines():
+        arr = lines.decode('utf-8').strip().split(',')
+        if color != "Chaos" and color != "TrueChaos":
+            color_arr.append(Color(int(arr[0], 16), int(arr[1], 16), int(arr[2], 16), int(arr[3], 16)))
+        else:
+            color_arr.append(
+                Color(int(arr[0], 16), random.randint(0, 255), random.randint(0, 127), int(arr[1], 16)))
+
+    colors_ = [c for c in color_arr if c.bro == bro]
+
+    for c in colors_:
+        patch.write_token(
+            APTokenTypes.WRITE,
+            c.location,
+            struct.pack("s", bytes([c.byte1, c.byte2]))
+        )
+
+def item_inject(self, location: int, item_type: int, item: Item):
+    if item.player == self.player:
+        code = item_table[item.name].itemID
+    else:
+        code = 0x3F
+    if item_type == 0:
+        self.stream.seek(location, 0)
+        self.stream.write(bytes([code]))
+        self.stream.seek(location - 6, 0)
+        b = self.stream.read(1)
+        if b[0] == 0x10 and self.world.options.hidden_visible:
+            self.stream.seek(location - 6, 0)
+            self.stream.write(bytes([0x0]))
+        if b[0] == 0x0 and self.world.options.blocks_invisible:
+            self.stream.seek(location - 6, 0)
+            self.stream.write(bytes([0x10]))
+    elif item_type == 1:
+        if code == 0x1D or code == 0x1E:
+            code += 0xE
+        if 0x20 <= code <= 0x26:
+            code -= 0x4
+        insert = int(code)
+        insert2 = insert % 0x10
+        insert2 *= 0x10
+        insert //= 0x10
+        insert += 0x20
+        self.stream.seek(location, 0)
+        self.stream.write(bytes([insert, insert2]))
+    elif item_type == 2:
+        if code == 0x1D or code == 0x1E:
+            code += 0xE
+        if 0x20 <= code <= 0x26:
+            code -= 0x4
+        self.stream.seek(location, 0)
+        self.stream.write(bytes([code]))
+    elif item_type == 3:
+        if code == 0x1D or code == 0x1E:
+            code += 0xE
+        if code < 0x1D:
+            code -= 0xA
+        if 0x20 <= code <= 0x26:
+            code -= 0xE
+        self.stream.seek(location, 0)
+        self.stream.write(bytes([code]))
+    else:
+        self.stream.seek(location, 0)
+        self.stream.write(bytes([0x18]))
+
+def enemy_randomize(world: "MLSSWorld", patch: MLSSProcedurePatch):
+    enemies = [pos for pos in Enemies.enemies if pos not in Enemies.bowsers] if self.world.options.castle_skip else Enemies.enemies
+    bosses = [pos for pos in Enemies.bosses if pos not in Enemies.bowsers] if self.world.options.castle_skip else Enemies.bosses
+
+    if self.world.options.randomize_bosses == 1 or (self.world.options.randomize_bosses == 2 and self.world.options.randomize_enemies == 0):
+        raw = []
+        for pos in bosses:
+            self.stream.seek(pos + 1)
+            raw += [self.stream.read(0x1F)]
+        self.random.shuffle(raw)
+        for pos in bosses:
+            self.stream.seek(pos + 1)
+            self.stream.write(raw.pop())
+
+    if self.world.options.randomize_enemies == 1:
+        raw = []
+        for pos in enemies:
+            self.stream.seek(pos + 1)
+            raw += [self.stream.read(0x1F)]
+        if self.world.options.randomize_bosses == 2:
+            for pos in bosses:
+                self.stream.seek(pos + 1)
+                raw += [self.stream.read(0x1F)]
+        self.random.shuffle(raw)
+        for pos in enemies:
+            self.stream.seek(pos + 1)
+            self.stream.write(raw.pop())
+        if self.world.options.randomize_bosses == 2:
+            for pos in bosses:
+                self.stream.seek(pos + 1)
+                self.stream.write(raw.pop())
+        return
+
+    enemies_raw = []
+    groups = []
+
+    if self.world.options.randomize_enemies == 0:
+        return
+
+    if self.world.options.randomize_bosses == 2:
+        for pos in bosses:
+            self.stream.seek(pos + 1)
+            groups += [self.stream.read(0x1F)]
+
+    for pos in enemies:
+        self.stream.seek(pos + 8)
+        for _ in range(6):
+            enemy = int.from_bytes(self.stream.read(1))
+            if enemy > 0:
+                self.stream.seek(1, 1)
+                flag = int.from_bytes(self.stream.read(1))
+                if flag == 0x7:
+                    break
+                if flag in [0x0, 0x2, 0x4]:
+                    if enemy not in Enemies.pestnut and enemy not in Enemies.flying:
+                        print(f"adding: 0x{format(enemy, 'x')}")
+                        enemies_raw += [enemy]
+                self.stream.seek(1, 1)
+            else:
+                self.stream.seek(3, 1)
+
+    self.random.shuffle(enemies_raw)
+    chomp = False
+    for pos in enemies:
+        self.stream.seek(pos + 8)
+
+        for _ in range(6):
+            enemy = int.from_bytes(self.stream.read(1))
+            if enemy > 0 and enemy not in Enemies.flying and enemy not in Enemies.pestnut:
+                if enemy == 0x52:
+                    chomp = True
+                self.stream.seek(1, 1)
+                flag = int.from_bytes(self.stream.read(1))
+                if flag not in [0x0, 0x2, 0x4]:
+                    self.stream.seek(1, 1)
+                    continue
+                self.stream.seek(-3, 1)
+                self.stream.write(bytes([enemies_raw.pop()]))
+                self.stream.seek(1, 1)
+                self.stream.write(bytes([0x4]))
+                self.stream.seek(1, 1)
+            else:
+                self.stream.seek(3, 1)
+
+        self.stream.seek(pos + 1)
+        raw = self.stream.read(0x1F)
+        if chomp:
+            raw = raw[0:3] + bytes([0x67, 0xAB, 0x28, 0x08]) + raw[7:]
+        else:
+            raw = raw[0:3] + bytes([0xEE, 0x2C, 0x28, 0x08]) + raw[7:]
+        groups += [raw]
+
+    self.random.shuffle(groups)
+    arr = enemies
+    if self.world.options.randomize_bosses == 2:
+        arr += bosses
+
+    for pos in arr:
+        self.stream.seek(pos + 1)
+        self.stream.write(groups.pop())
+
+
+
+def randomize_backgrounds(self):
+    all_enemies = Enemies.enemies + Enemies.bosses
+    for address in all_enemies:
+        self.stream.seek(address + 3, io.SEEK_SET)
+        self.stream.write(bytes([self.random.randint(0x0, 0x26)]))
+
+def randomize_sounds(self):
+    temp = pkgutil.get_data(__name__, "data/sounds.txt")
+    temp_io = io.BytesIO(temp)
+    fresh_pointers = []
+
+    for line in temp_io.readlines():
+        fresh_pointers += [int(line.decode('utf-8').strip(), 16)]
+    pointers = list(fresh_pointers)
+
+    self.world.random.shuffle(pointers)
+    self.stream.seek(0x21cc44, 0)
+    for i in range(354):
+        current_position = self.stream.tell()
+        value = int.from_bytes(self.stream.read(3), 'little')
+        if value in fresh_pointers:
+            self.stream.seek(current_position)
+            self.stream.write(pointers.pop().to_bytes(3, 'little'))
+        self.stream.seek(1, 1)
 
 
     def disable_music(self):
