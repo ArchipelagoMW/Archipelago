@@ -101,12 +101,28 @@ class MM2EnergyLinkType(IntEnum):
     OneUP = 12
 
 
-HP_EXCHANGE_RATE = 250000000
-WEAPON_EXCHANGE_RATE = 125000000
-ONEUP_EXCHANGE_RATE = 25000000000
+request_to_name: Dict[str, str] = {
+    "HP": "health",
+    "AF": "Atomic Fire energy",
+    "AS": "Air Shooter energy",
+    "LS": "Leaf Shield energy",
+    "BL": "Bubble Lead energy",
+    "QB": "Quick Boomerang energy",
+    "TS": "Time Stopper energy",
+    "MB": "Metal Blade energy",
+    "CB": "Crash Bomber energy",
+    "I1": "Item 1 energy",
+    "I2": "Item 2 energy",
+    "I3": "Item 3 energy",
+    "1U": "lives"
+}
+
+HP_EXCHANGE_RATE = 500000000
+WEAPON_EXCHANGE_RATE = 250000000
+ONEUP_EXCHANGE_RATE = 3000000000
 
 
-def cmd_pool(self: "BizHawkClientCommandProcessor"):
+def cmd_pool(self: "BizHawkClientCommandProcessor") -> None:
     """Check the current pool of EnergyLink, and requestable refills from it."""
     if self.ctx.game != "Mega Man 2":
         logger.warning("This command can only be used when playing Mega Man 2.")
@@ -118,12 +134,12 @@ def cmd_pool(self: "BizHawkClientCommandProcessor"):
     health_points = energylink // HP_EXCHANGE_RATE
     weapon_points = energylink // WEAPON_EXCHANGE_RATE
     lives = energylink // ONEUP_EXCHANGE_RATE
-    logger.info(f"Healing available:{health_points}\n"
-                f"Weapon refill available:{weapon_points}\n"
-                f"Lives available:{lives}")
+    logger.info(f"Healing available: {health_points}\n"
+                f"Weapon refill available: {weapon_points}\n"
+                f"Lives available: {lives}")
 
 
-def cmd_request(self: "BizHawkClientCommandProcessor", amount: str, target: str):
+def cmd_request(self: "BizHawkClientCommandProcessor", amount: str, target: str) -> None:
     from worlds._bizhawk.context import BizHawkClientContext
     """Request a refill from EnergyLink."""
     if self.ctx.game != "Mega Man 2":
@@ -154,10 +170,11 @@ def cmd_request(self: "BizHawkClientCommandProcessor", amount: str, target: str)
     assert isinstance(ctx, BizHawkClientContext)
     client = ctx.client_handler
     assert isinstance(client, MegaMan2Client)
-    client.refill_queue.append((valid_targets[target], int(amount)))
+    client.refill_queue.append((valid_targets[target.upper()], int(amount)))
+    logger.info(f"Restoring {amount} {request_to_name[target.upper()]}.")
 
 
-def cmd_autoheal(self):
+def cmd_autoheal(self) -> None:
     """Enable auto heal from EnergyLink."""
     if self.ctx.game != "Mega Man 2":
         logger.warning("This command can only be used when playing Mega Man 2.")
@@ -370,7 +387,7 @@ class MegaMan2Client(BizHawkClient):
                 # if we managed to pickup something else, we should just fall through
                 value = 0
                 exchange_rate = 0
-            contribution = (0.75 * value) * exchange_rate
+            contribution = (value * exchange_rate) >> 2
             if contribution:
                 await ctx.send_msgs([{
                  "cmd": "Set", "key": f"EnergyLink{ctx.team}", "slot": ctx.slot, "operations":
@@ -410,7 +427,7 @@ class MegaMan2Client(BizHawkClient):
                 else:
                     pool = ctx.stored_data.get(f"EnergyLink{ctx.team}", 0)
                     if health_diff * HP_EXCHANGE_RATE > pool:
-                        health_diff = pool // HP_EXCHANGE_RATE
+                        health_diff = int(pool // HP_EXCHANGE_RATE)
                     await ctx.send_msgs([{
                         "cmd": "Set", "key": f"EnergyLink{ctx.team}", "slot": ctx.slot, "operations":
                         [{"operation": "add", "value": -health_diff * HP_EXCHANGE_RATE},
@@ -436,15 +453,15 @@ class MegaMan2Client(BizHawkClient):
                     "cmd": "Set", "key": f"EnergyLink{ctx.team}", "slot": ctx.slot, "operations":
                         [{"operation": "add", "value": -request},
                          {"operation": "max", "value": 0}]}])
-            if refill_type == MM2EnergyLinkType.Life:
-                refill_ptr = MM2_HEALTH
-            elif refill_type == MM2EnergyLinkType.OneUP:
-                refill_ptr = MM2_LIVES
-            else:
-                refill_ptr = MM2_WEAPON_ENERGY - 1 + refill_type
-            current_value = (await read(ctx.bizhawk_ctx, [(refill_ptr, 1, "RAM")]))[0][0]
-            new_value = min(0x1C if refill_type != MM2EnergyLinkType.OneUP else 99, current_value + refill_amount)
-            writes.append((refill_ptr, new_value.to_bytes(1, "little"), "RAM"))
+                if refill_type == MM2EnergyLinkType.Life:
+                    refill_ptr = MM2_HEALTH
+                elif refill_type == MM2EnergyLinkType.OneUP:
+                    refill_ptr = MM2_LIVES
+                else:
+                    refill_ptr = MM2_WEAPON_ENERGY - 1 + refill_type
+                current_value = (await read(ctx.bizhawk_ctx, [(refill_ptr, 1, "RAM")]))[0][0]
+                new_value = min(0x1C if refill_type != MM2EnergyLinkType.OneUP else 99, current_value + refill_amount)
+                writes.append((refill_ptr, new_value.to_bytes(1, "little"), "RAM"))
 
         if len(self.item_queue):
             item = self.item_queue.pop(0)
