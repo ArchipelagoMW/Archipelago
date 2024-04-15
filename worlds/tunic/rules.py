@@ -268,9 +268,9 @@ def set_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> 
     set_rule(multiworld.get_location("Ruined Atoll - [West] Near Kevin Block", player),
              lambda state: state.has(laurels, player))
     set_rule(multiworld.get_location("Ruined Atoll - [East] Locked Room Lower Chest", player),
-             lambda state: state.has_any({laurels, key}, player))
+             lambda state: state.has(laurels, player) or state.has(key, player, 2))
     set_rule(multiworld.get_location("Ruined Atoll - [East] Locked Room Upper Chest", player),
-             lambda state: state.has_any({laurels, key}, player))
+             lambda state: state.has(laurels, player) or state.has(key, player, 2))
     set_rule(multiworld.get_location("Librarian - Hexagon Green", player),
              lambda state: has_sword(state, player) or options.logic_rules)
 
