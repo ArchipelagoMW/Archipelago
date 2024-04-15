@@ -109,7 +109,7 @@ def roll_options(options: Dict[str, Union[dict, str]],
                                                                               plando_options=plando_options)
             except Exception as e:
                 if e.__cause__:
-                    results[filename] = f"Failed to generate options in {filename}: {e}, {e.__cause__:}"
+                    results[filename] = f"Failed to generate options in {filename}: {e} - {e.__cause__}"
                 else:
                     results[filename] = f"Failed to generate options in {filename}: {e}"
             else:
