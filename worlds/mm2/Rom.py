@@ -196,7 +196,7 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
 
     if world.options.consumables != world.options.consumables.option_all:
         value_a = 0x7C
-        value_b = 0x7C
+        value_b = 0x76
         if world.options.consumables == world.options.consumables.option_1up_etank:
             value_b = 0x7A
         else:
