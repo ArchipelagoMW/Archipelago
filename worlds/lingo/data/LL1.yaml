@@ -4159,6 +4159,10 @@
             panel: FIVE (1)
           - room: Directional Gallery
             panel: FIVE (2)
+      First Six:
+        event: True
+        panels:
+          - SIX
       Sevens:
         id:
           - Count Up Room Area Doors/Door_seven_hider
@@ -4453,7 +4457,7 @@
         tag: midorange
         required_door:
           room: Number Hunt
-          door: Sixes
+          door: First Six
       PARANOID:
         id: Backside Room/Panel_paranoid_paranoid
         tag: midwhite
@@ -4461,7 +4465,7 @@
         exclude_reduce: True
         required_door:
           room: Number Hunt
-          door: Sixes
+          door: First Six
       YELLOW:
         id: Color Arrow Room/Panel_yellow_afar
         tag: midwhite
@@ -4535,7 +4539,7 @@
         move: True
         required_door:
           room: Number Hunt
-          door: Sixes
+          door: First Six
       - id: boxes_painting
         orientation: south
       - id: cherry_painting
