@@ -22,7 +22,9 @@ from . import MM2TestBase
 
 class StrictWeaknessTests(MM2TestBase):
     options = {
-        "strict_weakness": True
+        "strict_weakness": True,
+        "yoku_jumps": True,
+        "enable_lasers": True
     }
 
     def test_that_every_boss_has_a_weakness(self) -> None:
@@ -36,7 +38,9 @@ class StrictWeaknessTests(MM2TestBase):
 class RandomStrictWeaknessTests(MM2TestBase):
     options = {
         "strict_weakness": True,
-        "random_weakness": True
+        "random_weakness": True,
+        "yoku_jumps": True,
+        "enable_lasers": True
     }
 
     def test_that_every_boss_has_a_weakness(self) -> None:
