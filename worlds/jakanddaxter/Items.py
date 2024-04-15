@@ -14,7 +14,7 @@ generic_item_table = {
 # Items Only Found Once
 special_item_table = {
     2213: "Fisherman's Boat",
-    2214: "Sculptor's Muse",
+    # 2214: "Sculptor's Muse", # Unused?
     2215: "Flut Flut",
     2216: "Blue Eco Switch",
     2217: "Gladiator's Pontoons",

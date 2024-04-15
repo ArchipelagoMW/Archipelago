@@ -3,7 +3,7 @@ from enum import Enum
 from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Options import JakAndDaxterOptions
 from .Locations import JakAndDaxterLocation, location_table
-from .locs import CellLocations
+from .locs import CellLocations, SpecialLocations
 
 class JakAndDaxterLevel(int, Enum):
     GEYSER_ROCK = 0
@@ -76,13 +76,19 @@ def create_regions(multiworld: MultiWorld, options: JakAndDaxterOptions, player:
     create_locations(regionSV, CellLocations.locSV_cellTable)
 
     regionFJ = create_region(player, multiworld, level_table[JakAndDaxterLevel.FORBIDDEN_JUNGLE])
-    create_locations(regionFJ, {k: CellLocations.locFJ_cellTable[k] for k in {10, 11, 12, 14, 15, 16, 17}})
+    create_locations(regionFJ, {
+        **{k: CellLocations.locFJ_cellTable[k] for k in {10, 11, 12, 14, 15, 16, 17}},
+        **{k: SpecialLocations.loc_specialTable[k] for k in {2213, 2216}}
+        })
 
     subRegionFJPR = create_subregion(regionFJ, subLevel_table[JakAndDaxterSubLevel.FORBIDDEN_JUNGLE_PLANT_ROOM])
     create_locations(subRegionFJPR, {k: CellLocations.locFJ_cellTable[k] for k in {13}})
 
     regionSB = create_region(player, multiworld, level_table[JakAndDaxterLevel.SENTINEL_BEACH])
-    create_locations(regionSB, {k: CellLocations.locSB_cellTable[k] for k in {18, 19, 20, 21, 23, 24, 25}})
+    create_locations(regionSB, {
+        **{k: CellLocations.locSB_cellTable[k] for k in {18, 19, 20, 21, 23, 24, 25}},
+        **{k: SpecialLocations.loc_specialTable[k] for k in {2215}}
+        })
 
     subRegionSBCT = create_subregion(regionSB, subLevel_table[JakAndDaxterSubLevel.SENTINEL_BEACH_CANNON_TOWER])
     create_locations(subRegionSBCT, {k: CellLocations.locSB_cellTable[k] for k in {22}})
@@ -94,7 +100,10 @@ def create_regions(multiworld: MultiWorld, options: JakAndDaxterOptions, player:
     create_locations(regionFC, CellLocations.locFC_cellTable)
 
     regionRV = create_region(player, multiworld, level_table[JakAndDaxterLevel.ROCK_VILLAGE])
-    create_locations(regionRV, CellLocations.locRV_cellTable)
+    create_locations(regionRV, {
+        **CellLocations.locRV_cellTable,
+        **{k: SpecialLocations.loc_specialTable[k] for k in {2217}}
+        })
 
     regionPB = create_region(player, multiworld, level_table[JakAndDaxterLevel.PRECURSOR_BASIN])
     create_locations(regionPB, CellLocations.locPB_cellTable)
@@ -121,10 +130,16 @@ def create_regions(multiworld: MultiWorld, options: JakAndDaxterOptions, player:
     create_locations(regionSC, CellLocations.locSC_cellTable)
 
     regionSM = create_region(player, multiworld, level_table[JakAndDaxterLevel.SNOWY_MOUNTAIN])
-    create_locations(regionSM, {k: CellLocations.locSM_cellTable[k] for k in {86, 87, 88, 89, 92}})
+    create_locations(regionSM, {
+        **{k: CellLocations.locSM_cellTable[k] for k in {86, 87, 88, 89, 92}},
+        **{k: SpecialLocations.loc_specialTable[k] for k in {2218}}
+        })
 
     subRegionSMFF = create_subregion(regionSM, subLevel_table[JakAndDaxterSubLevel.SNOWY_MOUNTAIN_FLUT_FLUT])
-    create_locations(subRegionSMFF, {k: CellLocations.locSM_cellTable[k] for k in {90}})
+    create_locations(subRegionSMFF, {
+        **{k: CellLocations.locSM_cellTable[k] for k in {90}},
+        **{k: SpecialLocations.loc_specialTable[k] for k in {2219}}
+        })
 
     subRegionSMLF = create_subregion(regionSM, subLevel_table[JakAndDaxterSubLevel.SNOWY_MOUNTAIN_LURKER_FORT])
     create_locations(subRegionSMLF, {k: CellLocations.locSM_cellTable[k] for k in {91, 93}})
@@ -147,16 +162,8 @@ def create_region(player: int, multiworld: MultiWorld, name: str) -> JakAndDaxte
 def create_subregion(parent: Region, name: str) -> JakAndDaxterRegion:
     region = JakAndDaxterRegion(name, parent.player, parent.multiworld)
 
-    connection = Entrance(parent.player, name, parent)
-    connection.connect(region)
-    parent.entrances.append(connection)
-
-    # connection = Entrance(parent.player, parent.name + " " + subLevel_table[JakAndDaxterSubLevel.MAIN_AREA], parent)
-    # connection.connect(parent)
-    # region.entrances.append(connection)
-
     parent.multiworld.regions.append(region)
     return region
 
 def create_locations(region: Region, locs: typing.Dict[int, str]):
-    region.locations += [JakAndDaxterLocation(region.player, loc, location_table[loc], region) for loc in locs]
+    region.locations += [JakAndDaxterLocation(region.player, location_table[loc], loc, region) for loc in locs]
