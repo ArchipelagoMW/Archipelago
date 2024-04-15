@@ -249,6 +249,11 @@ def set_rules(world: "MLSSWorld", excluded):
              lambda state: StateLogic.brooch(state, world.player) and StateLogic.canDig(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.ChateauRedGoblet, world.player),
              lambda state: StateLogic.brooch(state, world.player) and StateLogic.canMini(state, world.player))
+
+    add_rule(world.multiworld.get_location(LocationName.GwarharLagoonSpangle, world.player),
+             lambda state: StateLogic.ultra(state, world.player))
+    add_rule(world.multiworld.get_location(LocationName.GwarharLagoonSpangleRoomBlock, world.player),
+             lambda state: StateLogic.ultra(state, world.player))
     if world.options.difficult_logic:
         add_rule(world.multiworld.get_location("Birdo", world.player),
                  lambda state: StateLogic.postJokes(state, world.player))

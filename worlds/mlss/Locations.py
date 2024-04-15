@@ -566,16 +566,16 @@ airport: typing.List[LocationData] = [
     LocationData("Airport Leftside Digspot 3", 0x39e306, 0),
     LocationData("Airport Leftside Digspot 4", 0x39e30e, 0),
     LocationData("Airport Leftside Digspot 5", 0x39e316, 0),
-    LocationData("Airport Middle Digspot 1", 0x39e323, 0),
-    LocationData("Airport Middle Digspot 2", 0x39e32b, 0),
-    LocationData("Airport Middle Digspot 3", 0x39e333, 0),
-    LocationData("Airport Middle Digspot 4", 0x39e33b, 0),
-    LocationData("Airport Middle Digspot 5", 0x39e343, 0),
-    LocationData("Airport Right Digspot 1", 0x39e350, 0),
-    LocationData("Airport Right Digspot 2", 0x39e358, 0),
-    LocationData("Airport Right Digspot 3", 0x39e360, 0),
-    LocationData("Airport Right Digspot 4", 0x39e368, 0),
-    LocationData("Airport Right Digspot 5", 0x39e370, 0)
+    LocationData("Airport Center Digspot 1", 0x39e323, 0),
+    LocationData("Airport Center Digspot 2", 0x39e32b, 0),
+    LocationData("Airport Center Digspot 3", 0x39e333, 0),
+    LocationData("Airport Center Digspot 4", 0x39e33b, 0),
+    LocationData("Airport Center Digspot 5", 0x39e343, 0),
+    LocationData("Airport Rightside Digspot 1", 0x39e350, 0),
+    LocationData("Airport Rightside Digspot 2", 0x39e358, 0),
+    LocationData("Airport Rightside Digspot 3", 0x39e360, 0),
+    LocationData("Airport Rightside Digspot 4", 0x39e368, 0),
+    LocationData("Airport Rightside Digspot 5", 0x39e370, 0)
 ]
 
 gwarharEntrance: typing.List[LocationData] = [
@@ -772,18 +772,6 @@ oasis: typing.List[LocationData] = [
     LocationData("Oho Ocean Spike Room Digspot 2", 0x39e092, 0),
     LocationData("Oho Oasis Firebrand", 0x1e9408, 2),
     LocationData("Oho Oasis Thunderhand", 0x1e9409, 2)
-]
-
-event: typing.List[LocationData] = [
-    LocationData("Dragohoho", 0xDA0000, 0),
-    LocationData("Queen Bean", 0xDA0001, 0),
-    LocationData("Chuckolator", 0xDA0002, 0),
-    LocationData("Oasis", 0xDA0003, 0),
-    LocationData("Mom Piranha", 0xDA0004, 0),
-    LocationData("Fungitown", 0xDA0005, 0),
-    LocationData("Beanstar", 0xDA0006, 2),
-    LocationData("Jojora", 0xDA0007, 2),
-    LocationData("Birdo", 0xDA0008, 2)
 ]
 
 nonBlock: list[(int, int, int)] = [

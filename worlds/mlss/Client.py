@@ -107,7 +107,7 @@ class MLSSClient(BizHawkClient):
             is_buy = (read_state[4][0] != 0)
             shop_address = (struct.unpack('<I', read_state[5])[0]) & 0xFFFFFF
             logo = bytes([byte for byte in read_state[6] if byte < 0x70]).decode("UTF-8")
-            received_index = (read_state[7][0] << 8) + read_state[7][1]
+            received_index = int.from_bytes(read_state[7], 'little')
             cackletta = (read_state[8][0] & 0x40)
             shopping = (read_state[9][0] & 0xF)
 
@@ -130,7 +130,7 @@ class MLSSClient(BizHawkClient):
                     locs_to_send.add(location)
 
             # Loop for recieving items. Item is written as an ID into 0x3057.
-            # ASM read the ID in a loop and give the player the item before resetting the RAM address to 0x0.
+            # ASM reads the ID in a loop and give the player the item before resetting the RAM address to 0x0.
             # If RAM address isn't 0x0 yet break out and try again later to give the rest of the items
             for i in range(len(ctx.items_received) - received_index):
                 item_data = items_by_id[ctx.items_received[received_index + i].item]
@@ -138,7 +138,7 @@ class MLSSClient(BizHawkClient):
                 if b is None:
                     break
                 await bizhawk.write(ctx.bizhawk_ctx, [(0x3057, [id_to_RAM(item_data.itemID)], "EWRAM"), (0x4808, [(received_index + i + 1) // 0x100, (received_index + i + 1) % 0x100], "EWRAM")])
-                await asyncio.sleep(.05)
+                await asyncio.sleep(.1)
 
             # Early return and location send if you are currently in a shop,
             # since other flags aren't going to change
@@ -164,6 +164,15 @@ class MLSSClient(BizHawkClient):
                 if backup_logo != "MLSSAP":
                     return
                 if flag_byte & mask != 0:
+                    if location >= 0xDA0000:
+                        await ctx.send_msgs([{
+                            "cmd": "Set",
+                            "key": f"mlss_flag{location - 0xD9FFFF}_{ctx.team}_{ctx.slot}",
+                            "default": 0,
+                            "want_reply": False,
+                            "operations": [{"operation": "replace", "value": 1}]
+                        }])
+                        continue
                     if location in roomException:
                         if current_room not in roomException[location]:
                             exception = True

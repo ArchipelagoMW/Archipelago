@@ -257,7 +257,7 @@ class Rom:
         enemies = [pos for pos in Enemies.enemies if pos not in Enemies.bowsers] if self.world.options.castle_skip else Enemies.enemies
         bosses = [pos for pos in Enemies.bosses if pos not in Enemies.bowsers] if self.world.options.castle_skip else Enemies.bosses
 
-        if self.world.options.randomize_bosses == 1:
+        if self.world.options.randomize_bosses == 1 or (self.world.options.randomize_bosses == 2 and self.world.options.randomize_enemies == 0):
             raw = []
             for pos in bosses:
                 self.stream.seek(pos + 1)
@@ -288,6 +288,9 @@ class Rom:
 
         enemies_raw = []
         groups = []
+
+        if self.world.options.randomize_enemies == 0:
+            return
 
         if self.world.options.randomize_bosses == 2:
             for pos in bosses:
@@ -343,9 +346,9 @@ class Rom:
             groups += [raw]
 
         self.random.shuffle(groups)
-        arr = Enemies.enemies
+        arr = enemies
         if self.world.options.randomize_bosses == 2:
-            arr += Enemies.bosses
+            arr += bosses
 
         for pos in arr:
             self.stream.seek(pos + 1)

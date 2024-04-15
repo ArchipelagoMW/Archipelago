@@ -4,7 +4,7 @@ from BaseClasses import Region, Entrance
 from .Locations import MLSSLocation, mainArea, chucklehuck, castleTown, startingFlag, chuckolatorFlag, piranhaFlag, \
     kidnappedFlag, beanstarFlag, birdoFlag, surfable, hooniversity, gwarharEntrance, gwarharMain, \
     fungitown, fungitownBeanstar, fungitownBirdo, teeheeValley, winkle, sewers, airport, \
-    bowsers, bowsersMini, jokesEntrance, jokesMain, theater, booStatue, oasis, postJokes, baseUltraRocks, event, coins
+    bowsers, bowsersMini, jokesEntrance, jokesMain, theater, booStatue, oasis, postJokes, baseUltraRocks, coins
 from . import StateLogic
 
 if typing.TYPE_CHECKING:
@@ -41,7 +41,6 @@ def create_regions(world: "MLSSWorld", excluded: typing.List[str]):
     create_region(world, "FungitownBirdo", fungitownBirdo, excluded)
     create_region(world, "BooStatue", booStatue, excluded)
     create_region(world, "Oasis", oasis, excluded)
-    create_region(world, "Event", event, excluded)
     create_region(world, "BaseUltraRocks", baseUltraRocks, excluded)
 
     if world.options.coins:
@@ -70,7 +69,7 @@ def connect_regions(world: "MLSSWorld"):
     connect(world, names, "TeeheeValley", "Fungitown", lambda state: StateLogic.thunder(state, world.player) and StateLogic.castleTown(state, world.player) and StateLogic.rose(state, world.player))
     connect(world, names, "Fungitown", "FungitownBeanstar", lambda state: StateLogic.pieces(state, world.player) or state.can_reach("FungitownBirdo", "Region", world.player))
     connect(world, names, "Main Area", "Shop Starting Flag", lambda state: StateLogic.brooch(state, world.player) or StateLogic.rose(state, world.player))
-    connect(world, names, "Shop Starting Flag", "Shop Chuckolator Flag", lambda state: (StateLogic.brooch(state, world.player) and StateLogic.fruits(state, world.player)) or state.can_reach("Shop Piranha Flag", "Region", world.player))
+    connect(world, names, "Shop Starting Flag", "Shop Chuckolator Flag", lambda state: (StateLogic.brooch(state, world.player) and StateLogic.fruits(state, world.player) and (StateLogic.thunder(state, world.player) or StateLogic.fire(state, world.player) or StateLogic.hammers(state, world.player))) or state.can_reach("Shop Piranha Flag", "Region", world.player))
     connect(world, names, "Shop Starting Flag", "Shop Piranha Flag", lambda state: StateLogic.thunder(state, world.player) or state.can_reach("Shop Peach Kidnapped Flag", "Region", world.player))
     connect(world, names, "Shop Starting Flag", "Shop Peach Kidnapped Flag", lambda state: StateLogic.fungitown(state, world.player) or state.can_reach("Shop Beanstar Complete Flag", "Region", world.player))
     connect(world, names, "Shop Starting Flag", "Shop Beanstar Complete Flag", lambda state: (StateLogic.castleTown(state, world.player) and StateLogic.pieces(state, world.player) and StateLogic.rose(state, world.player)) or state.can_reach("Shop Birdo Flag", "Region", world.player))

@@ -160,7 +160,7 @@ class RandomizeBosses(Choice):
     Boss Normal: Bosses can be swapped with normal enemy encounters.
     """
     display_name = "Randomize Bosses"
-    option_none = 0
+    option_disabled = 0
     option_bossonly = 1
     option_bossnormal = 2
     default = 0
