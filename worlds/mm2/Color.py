@@ -81,7 +81,7 @@ MM2_COLORS: Dict[str, Tuple[int, int]] = {
 MM2_KNOWN_COLORS: Dict[str, Tuple[int, int]] = {
     **MM2_COLORS,
     # Street Fighter, technically
-    "Hadouken": (0x30, 0x1D),
+    "Hadouken": (0x3C, 0x11),
     "Shoryuken": (0x38, 0x16),
     # X Series
     "Z-Saber": (0x20, 0x16),
