@@ -10,7 +10,7 @@ class StardewValleyOption(Protocol):
 
 
 class Goal(Choice):
-    """Goal for this playthrough?
+    """Goal for this playthrough
     Community Center: Complete the Community Center
     Grandpa's Evaluation: 4 lit candles in Grandpa's evaluation
     Bottom of the Mines: Reach level 120 in the mines
@@ -154,7 +154,7 @@ class EntranceRandomization(Choice):
     Disabled: No entrance randomization is done
     Pelican Town: Only doors in the main town area are randomized with each other
     Non Progression: Only entrances that are always available are randomized with each other
-    Buildings: All Entrances that Allow you to enter a building are randomized with each other
+    Buildings: All entrances that allow you to enter a building are randomized with each other
     Chaos: Same as "Buildings", but the entrances get reshuffled every single day!
     """
     # Everything: All buildings and areas are randomized with each other
