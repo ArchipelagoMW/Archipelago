@@ -81,15 +81,18 @@ class Consumables(Choice):
     display_name = "Consumables"
     option_none = 0
     option_1up_etank = 1
-    option_all = 2
+    option_weapon_health = 2
+    option_all = 3
     default = 1
-    alias_true = 2
+    alias_true = 3
     alias_false = 0
 
     @classmethod
     def get_option_name(cls, value: int) -> str:
         if value == 1:
             return "1-Ups/E-Tanks"
+        elif value == 2:
+            return "Weapon/Health Energy"
         return super().get_option_name(value)
 
 

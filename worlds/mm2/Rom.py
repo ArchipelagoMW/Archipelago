@@ -195,11 +195,14 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
         patch.write_byte(quickswap_ptr + 1, 0x01)
 
     if world.options.consumables != world.options.consumables.option_all:
-        if world.options.consumables == world.options.consumables.option_none:
-            value = 0x7C
+        value_a = 0x7C
+        value_b = 0x7C
+        if world.options.consumables == world.options.consumables.option_1up_etank:
+            value_b = 0x7A
         else:
-            value = 0x7A
-        patch.write_byte(consumables_ptr + 1, value)
+            value_a = 0x7A
+        patch.write_byte(consumables_ptr - 3, value_a)
+        patch.write_byte(consumables_ptr + 1, value_b)
 
     patch.write_byte(wily_5_ptr + 1, world.options.wily_5_requirement.value)
 
