@@ -125,7 +125,7 @@ class PaletteShuffle(TextChoice):
 
 class StrictWeaknesses(Toggle):
     """Only your starting Robot Master will take damage from the Mega Buster, the rest must be defeated with weapons.
-    Weapons that only do 1 damage to bosses no longer deal damage (aside from Alien)."""
+    Weapons that only do 1-3 damage to bosses no longer deal damage (aside from Alien)."""
     display_name = "Strict Weaknesses"
 
 
