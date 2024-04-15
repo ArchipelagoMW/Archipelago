@@ -10,3 +10,8 @@ class EnableScoutFlies(Toggle):
 # class EnablePrecursorOrbs(Toggle):
 #     """Enable to include each Precursor Orb as a check. Adds 2000 checks to the pool."""
 #     display_name = "Enable Precursor Orbs"
+
+@dataclass
+class JakAndDaxterOptions(PerGameCommonOptions):
+    enable_scout_flies: EnableScoutFlies
+    # enable_precursor_orbs: EnablePrecursorOrbs

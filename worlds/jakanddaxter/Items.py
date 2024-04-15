@@ -6,19 +6,20 @@ class JakAndDaxterItem(Item):
 
 # Items Found Multiple Times
 generic_item_table = {
-    "Power Cell": 1000,
-    "Scout Fly": 2000,
-    "Precursor Orb": 3000
+    0: "Power Cell",
+    101: "Scout Fly",
+    213: "Precursor Orb"
 }
 
 # Items Only Found Once
 special_item_table = {
-    "Fisherman's Boat": 0,
-    "Sculptor's Muse": 1,
-    "Flut Flut": 2,
-    "Blue Eco Switch": 3,
-    "Gladiator's Pontoons": 4,
-    "Yellow Eco Switch": 5
+    2213: "Fisherman's Boat",
+    2214: "Sculptor's Muse",
+    2215: "Flut Flut",
+    2216: "Blue Eco Switch",
+    2217: "Gladiator's Pontoons",
+    2218: "Yellow Eco Switch",
+    2219: "Lurker Fort Gate"
 }
 
 # All Items

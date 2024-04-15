@@ -1,3 +1,5 @@
+# Scout Flies start at ID 101 and end at ID 212.
+
 # Geyser Rock
 locGR_scoutTable = {
 }
