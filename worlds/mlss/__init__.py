@@ -2,7 +2,7 @@ import typing
 import settings
 from BaseClasses import Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
-from .Locations import all_locations, location_table, bowsers, bowsersMini, event, hidden, coins
+from .Locations import all_locations, location_table, bowsers, bowsersMini, hidden, coins
 from .Options import MLSSOptions
 from .Items import MLSSItem, itemList, item_frequencies, item_table
 from .Names.LocationName import LocationName
@@ -132,7 +132,7 @@ class MLSSWorld(World):
                     freq = 1
                 filler_items += [item.itemName for _ in range(freq)]
 
-        remaining = len(all_locations) - len(required_items) - len(event) - 5
+        remaining = len(all_locations) - len(required_items) - 5
         if self.options.castle_skip:
             remaining -= (len(bowsers) + len(bowsersMini) - (5 if self.options.chuckle_beans == 0 else 0))
         if self.options.skip_minecart and self.options.chuckle_beans == 2:
@@ -173,8 +173,6 @@ class MLSSWorld(World):
             if not self.options.coins and "Coin" in location_name:
                 continue
             location = self.multiworld.get_location(location_name, self.player)
-            if location in self.multiworld.get_region("Event", self.player).locations:
-                continue
             item = location.item
             address = [address for address in all_locations if address.name == location.name]
             rom.item_inject(location.address, address[0].itemType, item)

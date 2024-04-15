@@ -1110,6 +1110,6 @@ all_locations: typing.List[LocationData] = mainArea + booStatue + chucklehuck + 
                                            chuckolatorFlag + piranhaFlag + kidnappedFlag + beanstarFlag + birdoFlag + \
                                            winkle + sewers + hooniversity + surfable + airport + gwarharEntrance + \
                                            teeheeValley + fungitown + fungitownBeanstar + fungitownBirdo + bowsers + \
-                                           jokesEntrance + jokesMain + postJokes + theater + oasis + gwarharMain + bowsersMini + baseUltraRocks + event + coins
+                                           jokesEntrance + jokesMain + postJokes + theater + oasis + gwarharMain + bowsersMini + baseUltraRocks + coins
 
 location_table: typing.Dict[str, int] = {locData.name: locData.id for locData in all_locations}

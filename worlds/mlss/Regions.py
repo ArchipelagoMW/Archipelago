@@ -55,7 +55,6 @@ def connect_regions(world: "MLSSWorld"):
     names: typing.Dict[str, int] = {}
 
     connect(world, names, "Menu", "Main Area")
-    connect(world, names, "Main Area", "Event")
     if world.options.coins:
         connect(world, names, "Main Area", "Coins")
     connect(world, names, "Main Area", "BaseUltraRocks", lambda state: StateLogic.ultra(state, world.player))
