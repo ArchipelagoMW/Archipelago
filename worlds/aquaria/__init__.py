@@ -7,7 +7,7 @@ Description: Main module for Aquaria game multiworld randomizer
 from typing import List, Dict, ClassVar, Any
 from ..AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, MultiWorld, ItemClassification, LocationProgressType
-from .Items import item_table, AquariaItem, ItemType
+from .Items import item_table, AquariaItem, ItemType, ItemGroup
 from .Locations import location_table
 from .Options import AquariaOptions
 from .Regions import AquariaRegions
@@ -138,8 +138,14 @@ class AquariaWorld(World):
             self.multiworld.get_location(location_name, self.player).place_locked_item(item)
 
     def get_filler_item_name(self):
-        filler_item_name = "Sea loaf"  # or write something if there's other filler items that could be genned
+        """Getting a random ingredient item as filler"""
+        ingredients = []
+        for name, data in item_table.items():
+            if data[3] == ItemGroup.INGREDIENT:
+                ingredients.append(name)
+        filler_item_name = self.random.choice(ingredients)
         return filler_item_name
+
     def create_items(self) -> None:
         """Create every item in the world"""
         precollected = [item.name for item in self.multiworld.precollected_items[self.player]]
