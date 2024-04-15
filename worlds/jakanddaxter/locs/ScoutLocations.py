@@ -2,57 +2,57 @@
 
 # Geyser Rock
 locGR_scoutTable = {
-    101: "GR: Scout Fly 1",
-    102: "GR: Scout Fly 2",
-    103: "GR: Scout Fly 3",
-    104: "GR: Scout Fly 4",
-    105: "GR: Scout Fly 5",
-    106: "GR: Scout Fly 6",
-    107: "GR: Scout Fly 7"
+    101: "GR: Scout Fly On Ground, Front",
+    102: "GR: Scout Fly On Ground, Back",
+    103: "GR: Scout Fly On Left Ledge",
+    104: "GR: Scout Fly On Right Ledge",
+    105: "GR: Scout Fly On Middle Ledge, Left",
+    106: "GR: Scout Fly On Middle Ledge, Right",
+    107: "GR: Scout Fly On Top Ledge"
 }
 
 # Sandover Village
 locSV_scoutTable = {
-    108: "SV: Scout Fly 1",
-    109: "SV: Scout Fly 2",
-    110: "SV: Scout Fly 3",
-    111: "SV: Scout Fly 4",
-    112: "SV: Scout Fly 5",
-    113: "SV: Scout Fly 6",
-    114: "SV: Scout Fly 7"
+    108: "SV: Scout Fly In Fisherman's House",
+    109: "SV: Scout Fly In Mayor's House",
+    110: "SV: Scout Fly Under Bridge",
+    111: "SV: Scout Fly Behind Sculptor's House",
+    112: "SV: Scout Fly Overlooking Farmer's House",
+    113: "SV: Scout Fly Near Oracle",
+    114: "SV: Scout Fly In Farmer's House"
 }
 
 # Forbidden Jungle
 locFJ_scoutTable = {
-    115: "FJ: Scout Fly 1",
-    116: "FJ: Scout Fly 2",
-    117: "FJ: Scout Fly 3",
-    118: "FJ: Scout Fly 4",
-    119: "FJ: Scout Fly 5",
-    120: "FJ: Scout Fly 6",
-    121: "FJ: Scout Fly 7"
+    115: "FJ: Scout Fly At End Of Path",
+    116: "FJ: Scout Fly On Spiral Of Stumps",
+    117: "FJ: Scout Fly Under Bridge",
+    118: "FJ: Scout Fly At End Of River",
+    119: "FJ: Scout Fly Behind Lurker Machine",
+    120: "FJ: Scout Fly Around Temple Spire",
+    121: "FJ: Scout Fly On Top Of Temple"
 }
 
 # Sentinel Beach
 locSB_scoutTable = {
-    122: "SB: Scout Fly 1",
-    123: "SB: Scout Fly 2",
-    124: "SB: Scout Fly 3",
-    125: "SB: Scout Fly 4",
-    126: "SB: Scout Fly 5",
-    127: "SB: Scout Fly 6",
-    128: "SB: Scout Fly 7"
+    122: "SB: Scout Fly At Entrance",
+    123: "SB: Scout Fly Overlooking Locked Boxes",
+    124: "SB: Scout Fly On Path To Flut Flut",
+    125: "SB: Scout Fly Under Wood Pillars",
+    126: "SB: Scout Fly Overlooking Blue Eco Vents",
+    127: "SB: Scout Fly Overlooking Green Eco Vents",
+    128: "SB: Scout Fly On Sentinel"
 }
 
 # Misty Island
 locMI_scoutTable = {
-    129: "MI: Scout Fly 1",
-    130: "MI: Scout Fly 2",
-    131: "MI: Scout Fly 3",
-    132: "MI: Scout Fly 4",
-    133: "MI: Scout Fly 5",
-    134: "MI: Scout Fly 6",
-    135: "MI: Scout Fly 7"
+    129: "MI: Scout Fly Overlooking Entrance",
+    130: "MI: Scout Fly On Ledge Path, First",
+    131: "MI: Scout Fly On Ledge Path, Second",
+    132: "MI: Scout Fly Overlooking Shipyard",
+    133: "MI: Scout Fly On Ship",
+    134: "MI: Scout Fly On Barrel Ramps",
+    135: "MI: Scout Fly On Zoomer Ramps"
 }
 
 # Fire Canyon
@@ -68,46 +68,46 @@ locFC_scoutTable = {
 
 # Rock Village
 locRV_scoutTable = {
-    143: "RV: Scout Fly 1",
-    144: "RV: Scout Fly 2",
-    145: "RV: Scout Fly 3",
-    146: "RV: Scout Fly 4",
-    147: "RV: Scout Fly 5",
-    148: "RV: Scout Fly 6",
-    149: "RV: Scout Fly 7"
+    143: "RV: Scout Fly Behind Sage's Hut",
+    144: "RV: Scout Fly On Path To Village",
+    145: "RV: Scout Fly Behind Geologist",
+    146: "RV: Scout Fly Behind Fiery Boulder",
+    147: "RV: Scout Fly On Dock",
+    148: "RV: Scout Fly At Pontoon Bridge",
+    149: "RV: Scout Fly At Boggy Swamp Entrance"
 }
 
 # Precursor Basin
 locPB_scoutTable = {
-    150: "PB: Scout Fly 1",
-    151: "PB: Scout Fly 2",
-    152: "PB: Scout Fly 3",
-    153: "PB: Scout Fly 4",
-    154: "PB: Scout Fly 5",
-    155: "PB: Scout Fly 6",
-    156: "PB: Scout Fly 7"
+    150: "PB: Scout Fly Overlooking Entrance",
+    151: "PB: Scout Fly Near Mole Hole",
+    152: "PB: Scout Fly At Purple Ring Start",
+    153: "PB: Scout Fly Overlooking Dark Eco Plant",
+    154: "PB: Scout Fly At Green Ring Start",
+    155: "PB: Scout Fly Before Big Jump",
+    156: "PB: Scout Fly Near Dark Eco Plant"
 }
 
 # Lost Precursor City
 locLPC_scoutTable = {
-    157: "LPC: Scout Fly 1",
-    158: "LPC: Scout Fly 2",
-    159: "LPC: Scout Fly 3",
-    160: "LPC: Scout Fly 4",
-    161: "LPC: Scout Fly 5",
-    162: "LPC: Scout Fly 6",
-    163: "LPC: Scout Fly 7"
+    157: "LPC: Scout Fly First Room",
+    158: "LPC: Scout Fly Before Second Room",
+    159: "LPC: Scout Fly Second Room, Near Orb Vent",
+    160: "LPC: Scout Fly Second Room, On Path To Cell",
+    161: "LPC: Scout Fly Second Room, Green Switch",
+    162: "LPC: Scout Fly Second Room, Blue Switch",
+    163: "LPC: Scout Fly Across Steam Vents"
 }
 
 # Boggy Swamp
 locBS_scoutTable = {
-    164: "BS: Scout Fly 1",
-    165: "BS: Scout Fly 2",
-    166: "BS: Scout Fly 3",
-    167: "BS: Scout Fly 4",
-    168: "BS: Scout Fly 5",
-    169: "BS: Scout Fly 6",
-    170: "BS: Scout Fly 7"
+    164: "BS: Scout Fly Near Entrance",
+    165: "BS: Scout Fly Over First Jump Pad",
+    166: "BS: Scout Fly Over Second Jump Pad",
+    167: "BS: Scout Fly Across Black Swamp",
+    168: "BS: Scout Fly Overlooking Flut Flut",
+    169: "BS: Scout Fly On Flut Flut Platforms",
+    170: "BS: Scout Fly In Field Of Boxes"
 }
 
 # Mountain Pass
@@ -123,35 +123,35 @@ locMP_scoutTable = {
 
 # Volcanic Crater
 locVC_scoutTable = {
-    178: "VC: Scout Fly 1",
-    179: "VC: Scout Fly 2",
-    180: "VC: Scout Fly 3",
-    181: "VC: Scout Fly 4",
-    182: "VC: Scout Fly 5",
-    183: "VC: Scout Fly 6",
-    184: "VC: Scout Fly 7"
+    178: "VC: Scout Fly In Miner's Cave",
+    179: "VC: Scout Fly Near Oracle",
+    180: "VC: Scout Fly Overlooking Minecarts",
+    181: "VC: Scout Fly On First Minecart Path",
+    182: "VC: Scout Fly At Minecart Junction",
+    183: "VC: Scout Fly At Spider Cave Entrance",
+    184: "VC: Scout Fly Under Mountain Pass Exit"
 }
 
 # Spider Cave
 locSC_scoutTable = {
-    185: "SC: Scout Fly 1",
-    186: "SC: Scout Fly 2",
-    187: "SC: Scout Fly 3",
-    188: "SC: Scout Fly 4",
-    189: "SC: Scout Fly 5",
-    190: "SC: Scout Fly 6",
-    191: "SC: Scout Fly 7"
+    185: "SC: Scout Fly Across Dark Eco Pool",
+    186: "SC: Scout Fly At Dark Area Entrance",
+    187: "SC: Scout Fly First Room, Overlooking Entrance",
+    188: "SC: Scout Fly First Room, Near Dark Crystal",
+    189: "SC: Scout Fly First Room, Near Dark Eco Pool",
+    190: "SC: Scout Fly Robot Room, First Level",
+    191: "SC: Scout Fly Robot Room, Second Level",
 }
 
 # Snowy Mountain
 locSM_scoutTable = {
-    192: "SM: Scout Fly 1",
-    193: "SM: Scout Fly 2",
-    194: "SM: Scout Fly 3",
-    195: "SM: Scout Fly 4",
-    196: "SM: Scout Fly 5",
-    197: "SM: Scout Fly 6",
-    198: "SM: Scout Fly 7"
+    192: "SM: Scout Fly Near Entrance",
+    193: "SM: Scout Fly Near Frozen Box",
+    194: "SM: Scout Fly Near Yellow Eco Switch",
+    195: "SM: Scout Fly On Cliff near Flut Flut",
+    196: "SM: Scout Fly Under Bridge To Fort",
+    197: "SM: Scout Fly On Top Of Fort Tower",
+    198: "SM: Scout Fly On Top Of Fort"
 }
 
 # Lava Tube
@@ -167,11 +167,11 @@ locLT_scoutTable = {
 
 # Gol and Maias Citadel
 locGMC_scoutTable = {
-    206: "GMC: Scout Fly 1",
-    207: "GMC: Scout Fly 2",
-    208: "GMC: Scout Fly 3",
-    209: "GMC: Scout Fly 4",
-    210: "GMC: Scout Fly 5",
-    211: "GMC: Scout Fly 6",
-    212: "GMC: Scout Fly 7"
+    206: "GMC: Scout Fly At Entrance",
+    207: "GMC: Scout Fly At Jump Room Entrance",
+    208: "GMC: Scout Fly On Ledge Across Rotators",
+    209: "GMC: Scout Fly At Tile Color Puzzle",
+    210: "GMC: Scout Fly At Blast Furnace",
+    211: "GMC: Scout Fly At Path To Robot",
+    212: "GMC: Scout Fly On Top Of Rotating Tower"
 }
