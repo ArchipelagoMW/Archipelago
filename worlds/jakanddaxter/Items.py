@@ -1,8 +1,10 @@
 import typing
 from BaseClasses import Item
 
+
 class JakAndDaxterItem(Item):
     game: str = "Jak and Daxter: The Precursor Legacy"
+
 
 # Items Found Multiple Times
 generic_item_table = {

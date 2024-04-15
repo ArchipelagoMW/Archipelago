@@ -1,9 +1,11 @@
 import typing
 from BaseClasses import Location
-from .locs import CellLocations, SpecialLocations
+from .locs import CellLocations, SpecialLocations, ScoutLocations
+
 
 class JakAndDaxterLocation(Location):
     game: str = "Jak and Daxter: The Precursor Legacy"
+
 
 # All Locations
 location_table = {
@@ -23,5 +25,21 @@ location_table = {
     **CellLocations.locSM_cellTable,
     **CellLocations.locLT_cellTable,
     **CellLocations.locGMC_cellTable,
-    **SpecialLocations.loc_specialTable
+    **SpecialLocations.loc_specialTable,
+    **ScoutLocations.locGR_scoutTable,
+    **ScoutLocations.locSV_scoutTable,
+    **ScoutLocations.locFJ_scoutTable,
+    **ScoutLocations.locSB_scoutTable,
+    **ScoutLocations.locMI_scoutTable,
+    **ScoutLocations.locFC_scoutTable,
+    **ScoutLocations.locRV_scoutTable,
+    **ScoutLocations.locPB_scoutTable,
+    **ScoutLocations.locLPC_scoutTable,
+    **ScoutLocations.locBS_scoutTable,
+    **ScoutLocations.locMP_scoutTable,
+    **ScoutLocations.locVC_scoutTable,
+    **ScoutLocations.locSC_scoutTable,
+    **ScoutLocations.locSM_scoutTable,
+    **ScoutLocations.locLT_scoutTable,
+    **ScoutLocations.locGMC_scoutTable
 }
