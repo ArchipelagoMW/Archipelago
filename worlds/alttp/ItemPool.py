@@ -253,10 +253,8 @@ def generate_itempool(world):
         region.locations.append(loc)
 
         multiworld.push_item(loc, item_factory('Triforce', world), False)
-        loc.event = True
         loc.locked = True
 
-    multiworld.get_location('Ganon', player).event = True
     multiworld.get_location('Ganon', player).locked = True
     event_pairs = [
         ('Agahnim 1', 'Beat Agahnim 1'),
@@ -273,7 +271,7 @@ def generate_itempool(world):
         location = multiworld.get_location(location_name, player)
         event = item_factory(event_name, world)
         multiworld.push_item(location, event, False)
-        location.event = location.locked = True
+        location.locked = True
 
 
     # set up item pool

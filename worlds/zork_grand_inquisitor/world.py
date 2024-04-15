@@ -109,9 +109,7 @@ class ZorkGrandInquisitorWorld(World):
                     region_mapping[data.region],
                 )
 
-                location.event = isinstance(location_enum_item, ZorkGrandInquisitorEvents)
-
-                if location.event:
+                if isinstance(location_enum_item, ZorkGrandInquisitorEvents):
                     location.place_locked_item(
                         ZorkGrandInquisitorItem(
                             data.event_item_name,
