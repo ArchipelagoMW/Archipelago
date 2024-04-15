@@ -152,6 +152,9 @@ class CVCotMPatchExtensions(APPatchExtension):
         rom_data.write_bytes(0x6B1F8, [0x00, 0x48, 0x87, 0x46, 0x20, 0xFF, 0x7F, 0x08])
         rom_data.write_bytes(0x7FFF20, patches.remote_textbox_shower)
 
+        # Change the pointer to the DSS tutorial text to instead point to our AP messaging text location.
+        rom_data.write_bytes(0x6710BC, [0x00, 0xFC, 0x7F, 0x08])
+
         return rom_data.get_bytes()
 
     @staticmethod
