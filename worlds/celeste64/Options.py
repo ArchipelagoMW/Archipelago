@@ -14,8 +14,8 @@ class TotalStrawberries(Range):
     """How many Strawberries exist"""
     display_name = "Total Strawberries"
     range_start = 0
-    range_end = 20
-    default = 15
+    range_end = 46
+    default = 20
 
 class StrawberriesRequiredPercentage(Range):
     """Percentage of existing Strawberries you must receive to finish"""
