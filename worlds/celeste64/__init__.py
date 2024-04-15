@@ -3,7 +3,8 @@ from typing import List
 from BaseClasses import ItemClassification, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .Items import Celeste64Item, unlockable_item_data_table, item_data_table, item_table
-from .Locations import Celeste64Location, location_data_table, location_table
+from .Locations import Celeste64Location, strawberry_location_data_table, friend_location_data_table,\
+                                          sign_location_data_table, car_location_data_table, location_table
 from .Names import ItemName
 from .Options import Celeste64Options
 
@@ -57,6 +58,15 @@ class Celeste64World(World):
 
         location_count: int = 30
 
+        if self.options.friendsanity:
+            location_count += 9
+
+        if self.options.signsanity:
+            location_count += 5
+
+        if self.options.carsanity:
+            location_count += 2
+
         item_pool += [self.create_item(name) for name in unlockable_item_data_table.keys()]
 
         real_total_strawberries: int = min(self.options.total_strawberries.value, location_count - len(item_pool))
@@ -81,9 +91,28 @@ class Celeste64World(World):
         for region_name, region_data in region_data_table.items():
             region = self.multiworld.get_region(region_name, self.player)
             region.add_locations({
-                location_name: location_data.address for location_name, location_data in location_data_table.items()
+                location_name: location_data.address for location_name, location_data in strawberry_location_data_table.items()
                 if location_data.region == region_name
             }, Celeste64Location)
+
+            if self.options.friendsanity:
+                region.add_locations({
+                    location_name: location_data.address for location_name, location_data in friend_location_data_table.items()
+                    if location_data.region == region_name
+                }, Celeste64Location)
+
+            if self.options.signsanity:
+                region.add_locations({
+                    location_name: location_data.address for location_name, location_data in sign_location_data_table.items()
+                    if location_data.region == region_name
+                }, Celeste64Location)
+
+            if self.options.carsanity:
+                region.add_locations({
+                    location_name: location_data.address for location_name, location_data in car_location_data_table.items()
+                    if location_data.region == region_name
+                }, Celeste64Location)
+
             region.add_exits(region_data_table[region_name].connecting_regions)
 
 
@@ -101,6 +130,9 @@ class Celeste64World(World):
             "death_link": self.options.death_link.value,
             "death_link_amnesty": self.options.death_link_amnesty.value,
             "strawberries_required": self.strawberries_required,
+            "friendsanity": self.options.friendsanity.value,
+            "signsanity": self.options.signsanity.value,
+            "carsanity": self.options.carsanity.value,
             "badeline_chaser_source": self.options.badeline_chaser_source.value,
             "badeline_chaser_frequency": self.options.badeline_chaser_frequency.value,
             "badeline_chaser_speed": self.options.badeline_chaser_speed.value,

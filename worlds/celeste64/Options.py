@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, Range, DeathLink, PerGameCommonOptions
+from Options import Choice, Range, Toggle, DeathLink, PerGameCommonOptions
 
 
 class DeathLinkAmnesty(Range):
@@ -23,6 +23,20 @@ class StrawberriesRequiredPercentage(Range):
     range_start = 0
     range_end = 100
     default = 80
+
+
+class Friendsanity(Toggle):
+    """Whether chatting with your friends grants location checks"""
+    display_name = "Friendsanity"
+
+class Signsanity(Toggle):
+    """Whether reading signs grants location checks"""
+    display_name = "Signsanity"
+
+class Carsanity(Toggle):
+    """Whether riding on cars grants location checks"""
+    display_name = "Carsanity"
+
 
 class BadelineChaserSource(Choice):
     """
@@ -60,6 +74,10 @@ class Celeste64Options(PerGameCommonOptions):
 
     total_strawberries: TotalStrawberries
     strawberries_required_percentage: StrawberriesRequiredPercentage
+
+    friendsanity: Friendsanity
+    signsanity: Signsanity
+    carsanity: Carsanity
 
     badeline_chaser_source: BadelineChaserSource
     badeline_chaser_frequency: BadelineChaserFrequency
