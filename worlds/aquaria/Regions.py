@@ -988,7 +988,7 @@ class AquariaRegions:
         """
         Modify rules for location that need soup
         """
-        add_rule(self.world.get_location("Urchin costume in the Turtle cave", self.player),
+        add_rule(self.world.get_location("Turtle cave, Urchin costume", self.player),
                  lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
         add_rule(self.world.get_location("Sun Worm path, first cliff bulb", self.player),
                  lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
@@ -1029,9 +1029,9 @@ class AquariaRegions:
                                          self.player), lambda state: _has_bind_song(state, self.player))
 
     def __adjusting_light_in_dark_place_rules(self) -> None:
-        add_rule(self.world.get_location("Black pearl in the Kelp forest top right area", self.player),
+        add_rule(self.world.get_location("Kelp forest top right area, Black pearl", self.player),
                  lambda state: _has_light(state, self.player))
-        add_rule(self.world.get_location("Odd Container in the Kelp forest bottom right area", self.player),
+        add_rule(self.world.get_location("Kelp forest bottom right area, Odd Container", self.player),
                  lambda state: _has_light(state, self.player))
         add_rule(self.world.get_entrance("Transturtle Veil top left to Transturtle Abyss right", self.player),
                  lambda state: _has_light(state, self.player))
@@ -1059,23 +1059,23 @@ class AquariaRegions:
                  lambda state: _has_light(state, self.player))
 
     def __adjusting_manual_rules(self) -> None:
-        add_rule(self.world.get_location("Mithalan Dress in the Mithalas cathedral", self.player),
+        add_rule(self.world.get_location("Mithalas cathedral, Mithalan Dress", self.player),
                  lambda state: _has_beast_form(state, self.player))
         add_rule(self.world.get_location("Open water bottom left area, bulb inside the downest fish pass", self.player),
                  lambda state: _has_fish_form(state, self.player))
-        add_rule(self.world.get_location("Walker baby in the Kelp forest bottom left area", self.player),
+        add_rule(self.world.get_location("Kelp forest bottom left area, Walker baby", self.player),
                  lambda state: _has_spirit_form(state, self.player))
         add_rule(self.world.get_location("The veil top left area, bulb hidden behind the blocking rock", self.player),
                  lambda state: _has_bind_song(state, self.player))
-        add_rule(self.world.get_location("Turtle Egg in the Turtle cave", self.player),
+        add_rule(self.world.get_location("Turtle cave, Turtle Egg", self.player),
                  lambda state: _has_bind_song(state, self.player))
         add_rule(self.world.get_location("Abyss left area, bulb in the bottom fish pass", self.player),
                  lambda state: _has_fish_form(state, self.player))
-        add_rule(self.world.get_location("Anemone seed in the Song cave", self.player),
+        add_rule(self.world.get_location("Song cave, Anemone seed", self.player),
                  lambda state: _has_nature_form(state, self.player))
         add_rule(self.world.get_location("Verse egg in the Song cave", self.player),
                  lambda state: _has_bind_song(state, self.player))
-        add_rule(self.world.get_location("Big Seed in the Verse cave right area", self.player),
+        add_rule(self.world.get_location("Verse cave right area, Big Seed", self.player),
                  lambda state: _has_bind_song(state, self.player))
         add_rule(self.world.get_location("Arnassi ruins, Song plant spore on the top of the ruins", self.player),
                  lambda state: _has_beast_form(state, self.player))

@@ -171,7 +171,7 @@ class AquariaWorld(World):
 
 
     def __excluded_hard_or_hidden_location(self) -> None:
-        self.multiworld.get_location("Fallen god tooth in the Energy temple", self.player).progress_type = (
+        self.multiworld.get_location("Energy temple boss area, Fallen god tooth", self.player).progress_type = (
             LocationProgressType.EXCLUDED)
         self.multiworld.get_location("Cathedral boss area, beating Mithalan God", self.player).progress_type = (
             LocationProgressType.EXCLUDED)
@@ -181,21 +181,19 @@ class AquariaWorld(World):
             LocationProgressType.EXCLUDED)
         self.multiworld.get_location("Sunken city, bulb on the top of the boss area (boiler room)",
                                      self.player).progress_type = LocationProgressType.EXCLUDED
-        self.multiworld.get_location("Nautilus Egg in Home water", self.player).progress_type = (
+        self.multiworld.get_location("Home water, Nautilus Egg", self.player).progress_type = (
             LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Blaster egg in the Energy temple", self.player).progress_type = (
+        self.multiworld.get_location("Energy temple blaster room, Blaster egg", self.player).progress_type = (
             LocationProgressType.EXCLUDED)
         self.multiworld.get_location("Mithalas castle, beating the priests", self.player).progress_type = (
             LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Piranha Egg in the Mermog cave", self.player).progress_type = (
+        self.multiworld.get_location("Mermog cave, Piranha Egg", self.player).progress_type = (
             LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Dumbo Egg in the Octocave", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Verse egg in the Bubble cave", self.player).progress_type = (
+        self.multiworld.get_location("Octopus cave, Dumbo Egg", self.player).progress_type = (
             LocationProgressType.EXCLUDED)
         self.multiworld.get_location("King Jellyfish cave, bulb in the right path from King Jelly",
                                      self.player).progress_type = LocationProgressType.EXCLUDED
-        self.multiworld.get_location("Jellyfish Costume in the King Jellyfish cave",
+        self.multiworld.get_location("King Jellyfish cave, Jellyfish Costume",
                                      self.player).progress_type = LocationProgressType.EXCLUDED
         self.multiworld.get_location("Final boss area, bulb in the boss second form room",
                                      self.player).progress_type = LocationProgressType.EXCLUDED
@@ -211,16 +209,16 @@ class AquariaWorld(World):
         self.multiworld.get_location("Bubble cave, bulb in the right cave wall (behind the ice cristal)",
                                      self.player).progress_type = (
             LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Verse egg in the Bubble cave", self.player).progress_type = (
+        self.multiworld.get_location("Bubble cave, Verse egg", self.player).progress_type = (
             LocationProgressType.EXCLUDED)
         self.multiworld.get_location("Kelp Forest bottom left area, bulb close to the spirit cristals",
                                      self.player).progress_type = (
             LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Walker baby in the Kelp forest bottom left area",
+        self.multiworld.get_location("Kelp forest bottom left area, Walker baby",
                                      self.player).progress_type = LocationProgressType.EXCLUDED
-        self.multiworld.get_location("Sun key in the Sun temple", self.player).progress_type = (
+        self.multiworld.get_location("Sun temple, Sun key", self.player).progress_type = (
             LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Mutant Costume in the body bottom area", self.player).progress_type = (
+        self.multiworld.get_location("The body bottom area, Mutant Costume", self.player).progress_type = (
             LocationProgressType.EXCLUDED)
         self.multiworld.get_location("Sun temple, bulb in the hidden room of the right part",
                                      self.player).progress_type = LocationProgressType.EXCLUDED

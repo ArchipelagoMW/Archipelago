@@ -31,7 +31,7 @@ class AquariaLocations:
     locations_verse_cave_r = {
         "Verse cave, bulb in the skeleton room": 698107,
         "Verse cave, bulb in the path left of the skeleton room": 698108,
-        "Big Seed in the Verse cave right area": 698175,
+        "Verse cave right area, Big Seed": 698175,
     }
 
     locations_verse_cave_l = {
@@ -53,7 +53,7 @@ class AquariaLocations:
     }
 
     locations_home_water_nautilus = {
-        "Nautilus Egg in Home water": 698194,
+        "Home water, Nautilus Egg": 698194,
     }
 
     locations_home_water_transturtle = {
@@ -66,15 +66,15 @@ class AquariaLocations:
     }
 
     locations_song_cave = {
-        "Erulian spirit in the Song cave": 698206,
+        "Song cave, Erulian spirit": 698206,
         "Song cave, bulb in the top left part": 698071,
         "Song cave, bulb in the big anemone room": 698072,
         "Song cave, bulb in the path to the singing statues": 698073,
         "Song cave, bulb under the rock in the path to the singing statues": 698074,
         "Song cave, bulb under the rock close to the song door": 698075,
         "Verse egg in the Song cave": 698160,
-        "Jelly beacon in the Song cave": 698178,
-        "Anemone seed in the Song cave": 698162,
+        "Song cave, Jelly beacon": 698178,
+        "Song cave, Anemone seed": 698162,
     }
 
     locations_energy_temple_1 = {
@@ -83,7 +83,7 @@ class AquariaLocations:
     }
 
     locations_energy_temple_idol = {
-        "Energy Idol in the Energy temple first area": 698170,
+        "Energy temple first area, Energy Idol": 698170,
     }
 
     locations_energy_temple_2 = {
@@ -91,7 +91,7 @@ class AquariaLocations:
     }
 
     locations_energy_temple_altar = {
-        "Krotite armor in the Energy temple": 698163,
+        "Energy temple bottom entrance, Krotite armor": 698163,
     }
 
     locations_energy_temple_3 = {
@@ -99,11 +99,11 @@ class AquariaLocations:
     }
 
     locations_energy_temple_boss = {
-        "Fallen god tooth in the Energy temple": 698169,
+        "Energy temple boss area, Fallen god tooth": 698169,
     }
 
     locations_energy_temple_blaster_room = {
-        "Blaster egg in the Energy temple": 698195,
+        "Energy temple blaster room, Blaster egg": 698195,
     }
 
     locations_openwater_tl = {
@@ -138,7 +138,7 @@ class AquariaLocations:
     }
 
     locations_skeleton_path_sc = {
-        "King skull in the Open water skeleton path": 698177,
+        "Open water skeleton path, King skull": 698177,
     }
 
     locations_arnassi = {
@@ -146,16 +146,16 @@ class AquariaLocations:
         "Arnassi Ruins, bulb in the left part": 698015,
         "Arnassi Ruins, bulb in the center part": 698016,
         "Arnassi ruins, Song plant spore on the top of the ruins": 698179,
-        "Arnassi Armor in Arnassi ruins": 698191,
+        "Arnassi ruins, Arnassi Armor": 698191,
     }
 
     locations_arnassi_path = {
-        "Arnassi statue in Arnassi Ruins": 698164,
+        "Arnassi Ruins, Arnassi statue": 698164,
         "Arnassi Ruins, Transturtle": 698217,
     }
 
     locations_arnassi_crab_boss = {
-        "Crab armor in Arnassi ruins": 698187,
+        "Arnassi ruins, Crab armor": 698187,
     }
 
     locations_simon = {
@@ -184,18 +184,18 @@ class AquariaLocations:
         "Mithalas city, first bulb at the end of the top path": 698032,
         "Mithalas city, second bulb at the end of the top path": 698040,
         "Mithalas city, bulb in the top path": 698036,
-        "Mithalas pot in Mithalas city": 698174,
+        "Mithalas city, Mithalas pot": 698174,
         "Mithalas city, urn in the cathedral flower tube entrance": 698128,
     }
 
     locations_mithalas_city_fishpass = {
-        "Doll in Mithalas city": 698173,
+        "Mithalas city, Doll": 698173,
         "Mithalas city, urn inside a home fish pass": 698129,
     }
 
     locations_cathedral_l = {
         "Mithalas city castle, bulb in the flesh hole": 698042,
-        "Blue banner in the Mithalas city castle": 698165,
+        "Mithalas city castle, Blue banner": 698165,
         "Mithalas city castle, urn in the bedroom": 698130,
         "Mithalas city castle, first urn of the single lamp path": 698131,
         "Mithalas city castle, second urn of the single lamp path": 698132,
@@ -209,7 +209,7 @@ class AquariaLocations:
     }
 
     locations_cathedral_l_sc = {
-        "Trident head in the Mithalas city castle": 698183,
+        "Mithalas city castle, Trident head": 698183,
     }
 
     locations_cathedral_r = {
@@ -220,18 +220,18 @@ class AquariaLocations:
         "Mithalas cathedral, first urn in the bottom right path": 698140,
         "Mithalas cathedral, second urn in the bottom right path": 698141,
         "Mithalas cathedral, urn behind the flesh vein": 698142,
-        "Mithalas cathedral, urn in the top left eyes boss room": 698143,    # Before: Mithalas cathedral, urn in the top right path
+        "Mithalas cathedral, urn in the top left eyes boss room": 698143,
         "Mithalas cathedral, first urn in the path behind the flesh vein": 698144,
         "Mithalas cathedral, second urn in the path behind the flesh vein": 698145,
         "Mithalas cathedral, third urn in the path behind the flesh vein": 698146,
         "Mithalas cathedral, one of the urns in the top right room": 698147,
-        "Mithalan Dress in the Mithalas cathedral": 698189,
+        "Mithalas cathedral, Mithalan Dress": 698189,
         "Mithalas cathedral right area, urn bellow the left entrance": 698198,
     }
 
     locations_cathedral_underground = {
         "Cathedral underground, bulb in the center part": 698113,
-        "Cathedral underground,first bulb in the top left part": 698114,
+        "Cathedral underground, first bulb in the top left part": 698114,
         "Cathedral underground, second bulb in the top left part": 698115,
         "Cathedral underground, third bulb in the top left part": 698116,
         "Cathedral underground, bulb close to the save cristal": 698117,
@@ -246,12 +246,12 @@ class AquariaLocations:
         "Kelp Forest top left area, bulb in the bottom left clearing": 698044,
         "Kelp Forest top left area, bulb in the path down from the top left clearing": 698045,
         "Kelp Forest top left area, bulb in the top left clearing": 698046,
-        "Jelly Egg in the Kelp Forest top left": 698185,
+        "Kelp Forest top left, Jelly Egg": 698185,
     }
 
     locations_forest_tl_fp = {
-        "Kelp Forest top left area, bulb up to the Verse egg": 698047,
-        "Verse egg in the Kelp forest top left area": 698158,
+        "Kelp Forest top left area, bulb close to the Verse egg": 698047,
+        "Kelp forest top left area, Verse egg": 698158,
     }
 
     locations_forest_tr = {
@@ -260,7 +260,7 @@ class AquariaLocations:
         "Kelp Forest top right area, bulb in the left path's big room": 698051,
         "Kelp Forest top right area, bulb in the left path's small room": 698052,
         "Kelp Forest top right area, bulb at the top of the center clearing": 698053,
-        "Black pearl in the Kelp forest top right area": 698167,
+        "Kelp forest top right area, Black pearl": 698167,
     }
 
     locations_forest_tr_fp = {
@@ -269,12 +269,12 @@ class AquariaLocations:
 
     locations_forest_bl = {
         "Kelp Forest bottom left area, bulb close to the spirit cristals": 698054,
-        "Walker baby in the Kelp forest bottom left area": 698186,
+        "Kelp forest bottom left area, Walker baby": 698186,
         "Kelp Forest bottom left area, Transturtle": 698212,
     }
 
     locations_forest_br = {
-        "Odd Container in the Kelp forest bottom right area": 698168,
+        "Kelp forest bottom right area, Odd Container": 698168,
     }
 
     locations_forest_boss = {
@@ -286,7 +286,7 @@ class AquariaLocations:
     }
 
     locations_forest_fish_cave = {
-        "Fish cave puzzle": 698207,
+        "Kelp Forest bottom left area, Fish cave puzzle": 698207,
     }
 
     locations_forest_sprite_cave = {
@@ -295,7 +295,7 @@ class AquariaLocations:
 
     locations_forest_sprite_cave_tube = {
         "Kelp Forest sprite cave, bulb in the second room": 698057,
-        "Seed bag in the Kelp Forest Sprite Cave": 698176,
+        "Kelp Forest Sprite Cave, Seed bag": 698176,
     }
 
     locations_mermog_cave = {
@@ -303,11 +303,11 @@ class AquariaLocations:
     }
 
     locations_mermog_boss = {
-        "Piranha Egg in the Mermog cave": 698197,
+        "Mermog cave, Piranha Egg": 698197,
     }
 
     locations_veil_tl = {
-        "In the Li cave": 698199,
+        "The veil top left area, In the Li cave": 698199,
         "The veil top left area, bulb under the rock in the top right path": 698078,
         "The veil top left area, bulb hidden behind the blocking rock": 698076,
         "The veil top left area, Transturtle": 698209,
@@ -318,12 +318,12 @@ class AquariaLocations:
     }
 
     locations_turtle_cave = {
-        "Turtle Egg in the Turtle cave": 698184,
+        "Turtle cave, Turtle Egg": 698184,
     }
 
     locations_turtle_cave_bubble = {
         "Turtle cave, bulb in bubble cliff": 698000,
-        "Urchin costume in the Turtle cave": 698193,
+        "Turtle cave, Urchin costume": 698193,
     }
 
     locations_veil_tr_r = {
@@ -345,15 +345,15 @@ class AquariaLocations:
     }
 
     locations_veil_bl_fp = {
-        "Verse egg in the veil bottom area": 698157,
+        "The veil bottom areaVerse egg": 698157,
     }
 
     locations_veil_br = {
-        "Stone Head in the veil bottom area": 698181,
+        "The veil bottom area, Stone Head": 698181,
     }
 
     locations_octo_cave_t = {
-        "Dumbo Egg in the Octocave": 698196,
+        "Octopus cave, Dumbo Egg": 698196,
     }
 
     locations_octo_cave_b = {
@@ -363,21 +363,21 @@ class AquariaLocations:
     locations_bubble_cave = {
         "Bubble cave, bulb in the left cave wall": 698089,
         "Bubble cave, bulb in the right cave wall (behind the ice cristal)": 698090,
-        "Verse egg in the Bubble cave": 698161,
+        "Bubble cave, Verse egg": 698161,
     }
 
     locations_sun_temple_l = {
         "Sun temple, bulb in the top left part": 698094,
         "Sun temple, bulb in the top right part": 698095,
         "Sun temple, bulb at the top of the high dark room": 698096,
-        "Golden Gear in the Sun temple": 698171,
+        "Sun temple, Golden Gear": 698171,
     }
 
     locations_sun_temple_r = {
         "Sun temple, first bulb of the temple": 698091,
         "Sun temple, bulb on the left part": 698092,
         "Sun temple, bulb in the hidden room of the right part": 698093,
-        "Sun key in the Sun temple": 698182,
+        "Sun temple, Sun key": 698182,
     }
 
     locations_sun_temple_boss_path = {
@@ -394,8 +394,8 @@ class AquariaLocations:
     locations_abyss_l = {
         "Abyss left area, bulb in hidden path room": 698024,
         "Abyss left area, bulb in the right part": 698025,
-        "Glowing seed in the Abyss left area": 698166,
-        "Glowing Plant in the Abyss left area": 698172,
+        "Abyss left area, Glowing seed": 698166,
+        "Abyss left area, Glowing Plant": 698172,
         "Abyss left area, bulb in the bottom fish pass": 698026,
     }
 
@@ -417,11 +417,11 @@ class AquariaLocations:
 
     locations_king_jellyfish_cave = {
         "King Jellyfish cave, bulb in the right path from King Jelly": 698088,
-        "Jellyfish Costume in the King Jellyfish cave": 698188,
+        "King Jellyfish cave, Jellyfish Costume": 698188,
     }
 
     locations_whale = {
-        "Verse egg in the whale": 698159,
+        "The whale, Verse egg": 698159,
     }
 
     locations_sunken_city_r = {
@@ -436,7 +436,7 @@ class AquariaLocations:
     }
 
     locations_sunken_city_l_bedroom = {
-        "Girl Costume in the Sunken city left area": 698192,
+        "Sunken city left area, Girl Costume": 698192,
     }
 
     locations_sunken_city_boss = {
@@ -468,7 +468,7 @@ class AquariaLocations:
     locations_body_b = {
         "The body bottom area, bulb in the Jelly Zap room": 698101,
         "The body bottom area, bulb in the nautilus room": 698102,
-        "Mutant Costume in the body bottom area": 698190,
+        "The body bottom area, Mutant Costume": 698190,
     }
 
     locations_final_boss_tube = {

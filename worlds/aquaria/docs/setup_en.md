@@ -11,11 +11,11 @@
 ### Windows
 
 First, you should copy the original Aquaria folder game. The randomizer will possibly modify the game so that
-the original game will stop working. Copying the folder will guarantee that the original game keep on working.
-Also, in Windows, the save files are store in the Aquaria folder. So copying the Aquaria folder for every Multiworld
-game you play will make sure that every game have their own save game.
+the original game will stop working. Copying the folder will guarantee that the original game keeps on working.
+Also, in Windows, the save files are stored in the Aquaria folder. So copying the Aquaria folder for every Multiworld
+game you play will make sure that every game has their own save game.
 
-Unzip the Aquaria randomizer release and copy every unzipped files in the Aquaria game folder. The unzipped files
+Unzip the Aquaria randomizer release and copy all unzipped files in the Aquaria game folder. The unzipped files
 are those:
 - aquaria_randomizer.exe
 - OpenAL32.dll
@@ -23,8 +23,9 @@ are those:
 - SDL2.dll
 - usersettings.xml
 - wrap_oal.dll
+- cacert.pem
 
-If there is conflict between file in the original game folder and the unzipped files, you should override
+If there is a conflict between file in the original game folder and the unzipped files, you should override
 the original files with the one of the unzipped randomizer.
 
 Finally, to launch the randomizer, you must use the command line interface (you can open the command line interface
@@ -35,7 +36,7 @@ randomizer:
 aquaria_randomizer.exe --name YourName --server theServer:thePort
 ```
 
-or, if the room hava a password:
+or, if the room has a password:
 
 ```bash
 aquaria_randomizer.exe  --name YourName --server theServer:thePort --password thePassword
@@ -43,7 +44,7 @@ aquaria_randomizer.exe  --name YourName --server theServer:thePort --password th
 
 ### Linux Preparations using the AppImage
 
-If you use the AppImage, juste copy it in the Aquaria game folder. You then have to make it executable. You
+If you use the AppImage, just copy it in the Aquaria game folder. You then have to make it executable. You
 can do that from command line by using 
 
 ```bash
@@ -58,7 +59,7 @@ To launch the randomizer, just launch in command line:
 ./Aquaria_Randomizer-*.AppImage --name YourName --server theServer:thePort
 ```
 
-or, if the room hava a password:
+or, if the room has a password:
 
 ```bash
 ./Aquaria_Randomizer-*.AppImage --name YourName --server theServer:thePort --password thePassword
@@ -67,15 +68,16 @@ or, if the room hava a password:
 ### Linux Preparations using the tar file
 
 First, you should copy the original Aquaria folder game. The randomizer will possibly modify the game so that
-the original game will stop working. Copying the folder will guarantee that the original game keep on working.
+the original game will stop working. Copying the folder will guarantee that the original game keeps on working.
 
-Untar the Aquaria randomizer release and copy every extracted files in the Aquaria game folder. The extracted
+Untar the Aquaria randomizer release and copy all extracted files in the Aquaria game folder. The extracted
 files are those:
 - aquaria_randomizer
 - override (directory)
 - usersettings.xml
+- cacert.pem
 
-If there is conflict between file in the original game folder and the extracted files, you should override
+If there is a conflict between file in the original game folder and the extracted files, you should override
 the original files with the one of the extracted randomizer files.
 
 Then, you should use your system package manager to install liblua5, libogg, libvorbis, libopenal and libsdl2.
@@ -95,14 +97,14 @@ To launch the randomizer, just launch in command line:
 ./aquaria_randomizer --name YourName --server theServer:thePort
 ```
 
-or, if the room hava a password:
+or, if the room has a password:
 
 ```bash
 ./aquaria_randomizer --name YourName --server theServer:thePort --password thePassword
 ```
 
-Note: If you have a permission denied error when using the command line, you can used this command line to be
-sure that your executable have the executable permission:
+Note: If you have a permission denied error when using the command line, you can use this command line to be
+sure that your executable has executable permission:
 
 ```bash
 chmod +x aquaria_randomizer
