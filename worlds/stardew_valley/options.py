@@ -457,7 +457,7 @@ class Cooksanity(Choice):
 
 
 class Chefsanity(NamedRange):
-    """Locations for leaning cooking recipes?
+    """Locations for learning cooking recipes?
     Vanilla: All cooking recipes are learned normally
     Queen of Sauce: Every Queen of sauce episode is a check, all queen of sauce recipes are items
     Purchases: Every purchasable recipe is a check
