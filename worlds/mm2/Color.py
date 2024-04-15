@@ -82,6 +82,24 @@ MM2_KNOWN_COLORS: Dict[str, Tuple[int, int]] = {
     **MM2_COLORS,
     # X Series
     "Z-Saber": (0x20, 0x16),
+    # X1
+    "Homing Torpedo": (0x3D, 0x37),
+    "Chameleon Sting": (0x3B, 0x1A),
+    "Rolling Shield": (0x3A, 0x25),
+    "Fire Wave": (0x37, 0x26),
+    "Storm Tornado": (0x34, 0x14),
+    "Electric Spark": (0x3D, 0x28),
+    "Boomerang Cutter": (0x3B, 0x2D),
+    "Shotgun Ice": (0x28, 0x2C),
+    # X2
+    "Crystal Hunter": (0x33, 0x21),
+    "Bubble Splash": (0x35, 0x28),
+    "Spin Wheel": (0x34, 0x1B),
+    "Silk Shot": (0x3B, 0x27),
+    "Sonic Slicer": (0x27, 0x01),
+    "Strike Chain": (0x30, 0x23),
+    "Magnet Mine": (0x28, 0x2D),
+    "Speed Burner": (0x31, 0x16),
     # X3
     "Acid Burst": (0x28, 0x2A),
     "Tornado Fang": (0x28, 0x2C),
