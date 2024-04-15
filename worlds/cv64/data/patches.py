@@ -197,12 +197,15 @@ deathlink_nitro_edition = [
     0xA168FFFD,  # SB    T0, 0xFFFD (T3)
 ]
 
-nitro_fall_killer = [
-    # Custom code to force the instant fall death if at a high enough falling speed after getting killed by the Nitro
-    # explosion, since the game doesn't run the checks for the fall death after getting hit by said explosion and could
-    # result in a softlock when getting blown into an abyss.
+launch_fall_killer = [
+    # Custom code to force the instant fall death if at a high enough falling speed after getting killed by something
+    # that launches you (whether it be the Nitro explosion or a Big Toss hit). The game doesn't normally run the check
+    # that would trigger the fall death after you get killed by some other means, which could result in a softlock
+    # when a killing blow launches you into an abyss.
     0x3C0C8035,  # LUI   T4, 0x8035
     0x918807E2,  # LBU   T0, 0x07E2 (T4)
+    0x24090008,  # ADDIU T1, R0, 0x0008
+    0x11090002,  # BEQ   T0, T1, [forward 0x02]
     0x2409000C,  # ADDIU T1, R0, 0x000C
     0x15090006,  # BNE   T0, T1, [forward 0x06]
     0x3C098035,  # LUI   T1, 0x8035

@@ -23,7 +23,6 @@ if TYPE_CHECKING:
     from . import CV64World
 
 CV64US10HASH = "1cc5cf3b4d29d8c3ade957648b529dc1"
-ROM_PLAYER_LIMIT = 65535
 
 warp_map_offsets = [0xADF67, 0xADF77, 0xADF87, 0xADF97, 0xADFA7, 0xADFBB, 0xADFCB, 0xADFDF]
 
@@ -396,8 +395,8 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
     # DeathLink counter decrementer code
     rom.write_int32(0x1C340, 0x080FF8F0)  # J 0x803FE3C0
     rom.write_int32s(0xBFE3C0, patches.deathlink_counter_decrementer)
-    rom.write_int32(0x25B6C, 0x0080FF052)  # J 0x803FC148
-    rom.write_int32s(0xBFC148, patches.nitro_fall_killer)
+    rom.write_int32(0x25B6C, 0x080FFA5E)  # J 0x803FE978
+    rom.write_int32s(0xBFE978, patches.launch_fall_killer)
 
     # Death flag un-setter on "Beginning of stage" state overwrite code
     rom.write_int32(0x1C2B0, 0x080FF047)  # J 0x803FC11C
