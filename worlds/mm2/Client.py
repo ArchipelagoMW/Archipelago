@@ -214,10 +214,19 @@ class MegaMan2Client(BizHawkClient):
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from worlds._bizhawk import RequestFailedError, read
+        from . import MM2World
 
         try:
-            game_name = ((await read(ctx.bizhawk_ctx, [(0x3FFB0, 21, "PRG ROM")]))[0])
-            if game_name[:3] != b"MM2":
+            game_name, version = (await read(ctx.bizhawk_ctx, [(0x3FFB0, 21, "PRG ROM"),
+                                                               (0x3FFC8, 3, "PRG ROM")]))
+            if game_name[:3] != b"MM2" or version != bytes(MM2World.world_version):
+                if game_name[:3] == b"MM2":
+                    # I think this is an easier check than the other?
+                    older_version = "0.2.1" if version == b"\xFF\xFF\xFF" else f"{version[0]}.{version[1]}.{version[2]}"
+                    logger.warning(f"This Mega Man 2 patch was generated for an different version of the apworld. "
+                                   f"Please use that version to connect instead.\n"
+                                   f"Patch version: ({older_version})\n"
+                                   f"Client version: ({'.'.join([str(i) for i in MM2World.world_version])})")
                 if "pool" in ctx.command_processor.commands:
                     ctx.command_processor.commands.pop("pool")
                 if "request" in ctx.command_processor.commands:
@@ -287,25 +296,25 @@ class MegaMan2Client(BizHawkClient):
         # get our relevant bytes
         robot_masters_unlocked, robot_masters_defeated, items_acquired, \
             weapons_unlocked, items_unlocked, items_received, \
-            completed_stages, consumable_checks,\
-            e_tanks, lives, weapon_energy, health, difficulty, death_link_status,\
+            completed_stages, consumable_checks, \
+            e_tanks, lives, weapon_energy, health, difficulty, death_link_status, \
             energy_link_packet = await read(ctx.bizhawk_ctx, [
-                (MM2_ROBOT_MASTERS_UNLOCKED, 1, "RAM"),
-                (MM2_ROBOT_MASTERS_DEFEATED, 1, "RAM"),
-                (MM2_ITEMS_ACQUIRED, 1, "RAM"),
-                (MM2_WEAPONS_UNLOCKED, 1, "RAM"),
-                (MM2_ITEMS_UNLOCKED, 1, "RAM"),
-                (MM2_RECEIVED_ITEMS, 1, "RAM"),
-                (MM2_COMPLETED_STAGES, 0xE, "RAM"),
-                (MM2_CONSUMABLES, 52, "RAM"),
-                (MM2_E_TANKS, 1, "RAM"),
-                (MM2_LIVES, 1, "RAM"),
-                (MM2_WEAPON_ENERGY, 11, "RAM"),
-                (MM2_HEALTH, 1, "RAM"),
-                (MM2_DIFFICULTY, 1, "RAM"),
-                (MM2_DEATHLINK, 1, "RAM"),
-                (MM2_ENERGYLINK, 1, "RAM")
-            ])
+            (MM2_ROBOT_MASTERS_UNLOCKED, 1, "RAM"),
+            (MM2_ROBOT_MASTERS_DEFEATED, 1, "RAM"),
+            (MM2_ITEMS_ACQUIRED, 1, "RAM"),
+            (MM2_WEAPONS_UNLOCKED, 1, "RAM"),
+            (MM2_ITEMS_UNLOCKED, 1, "RAM"),
+            (MM2_RECEIVED_ITEMS, 1, "RAM"),
+            (MM2_COMPLETED_STAGES, 0xE, "RAM"),
+            (MM2_CONSUMABLES, 52, "RAM"),
+            (MM2_E_TANKS, 1, "RAM"),
+            (MM2_LIVES, 1, "RAM"),
+            (MM2_WEAPON_ENERGY, 11, "RAM"),
+            (MM2_HEALTH, 1, "RAM"),
+            (MM2_DIFFICULTY, 1, "RAM"),
+            (MM2_DEATHLINK, 1, "RAM"),
+            (MM2_ENERGYLINK, 1, "RAM")
+        ])
 
         if difficulty[0] not in (0, 1):
             return  # Game is not initialized
@@ -390,9 +399,9 @@ class MegaMan2Client(BizHawkClient):
             contribution = (value * exchange_rate) >> 2
             if contribution:
                 await ctx.send_msgs([{
-                 "cmd": "Set", "key": f"EnergyLink{ctx.team}", "slot": ctx.slot, "operations":
-                 [{"operation": "add", "value": contribution},
-                  {"operation": "max", "value": 0}]}])
+                    "cmd": "Set", "key": f"EnergyLink{ctx.team}", "slot": ctx.slot, "operations":
+                        [{"operation": "add", "value": contribution},
+                         {"operation": "max", "value": 0}]}])
             writes.append((MM2_ENERGYLINK, 0x00.to_bytes(1, "little"), "RAM"))
 
         if self.weapon_energy:
@@ -430,8 +439,8 @@ class MegaMan2Client(BizHawkClient):
                         health_diff = int(pool // HP_EXCHANGE_RATE)
                     await ctx.send_msgs([{
                         "cmd": "Set", "key": f"EnergyLink{ctx.team}", "slot": ctx.slot, "operations":
-                        [{"operation": "add", "value": -health_diff * HP_EXCHANGE_RATE},
-                         {"operation": "max", "value": 0}]}])
+                            [{"operation": "add", "value": -health_diff * HP_EXCHANGE_RATE},
+                             {"operation": "max", "value": 0}]}])
                 current_health += health_diff
                 writes.append((MM2_HEALTH, current_health.to_bytes(1, 'little'), "RAM"))
 

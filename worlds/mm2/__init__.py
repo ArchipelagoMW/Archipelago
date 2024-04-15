@@ -87,6 +87,7 @@ class MM2World(World):
     item_name_groups = item_names
     web = MM2WebWorld()
     rom_name: bytearray
+    world_version: Tuple[int, int, int] = (0, 2, 2)
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name = bytearray()

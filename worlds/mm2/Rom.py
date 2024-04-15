@@ -242,6 +242,8 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
     deathlink_byte = world.options.death_link.value | (world.options.energy_link.value << 1)
     patch.write_byte(0x3FFD5, deathlink_byte)
 
+    patch.write_bytes(0x3FFD8, world.world_version)
+
     version_map = {
         "0": 0x90,
         "1": 0x91,
