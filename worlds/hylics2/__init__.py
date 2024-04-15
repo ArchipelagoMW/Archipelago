@@ -80,17 +80,17 @@ class Hylics2World(World):
                     pool.append(self.create_item(item["name"]))
 
         # add party members if option is enabled
-        if self.multiworld.party_shuffle[self.player]:
+        if self.options.party_shuffle:
             for item in Items.party_item_table.values():
                 pool.append(self.create_item(item["name"]))
 
         # handle gesture shuffle
-        if not self.multiworld.gesture_shuffle[self.player]: # add gestures to pool like normal
+        if not self.options.gesture_shuffle: # add gestures to pool like normal
             for item in Items.gesture_item_table.values():
                 pool.append(self.create_item(item["name"]))
 
         # add '10 Bones' items if medallion shuffle is enabled
-        if self.multiworld.medallion_shuffle[self.player]:
+        if self.options.medallion_shuffle:
             for item in Items.medallion_item_table.values():
                 for _ in range(item["count"]):
                     pool.append(self.create_item(item["name"]))
@@ -122,13 +122,13 @@ class Hylics2World(World):
             self.multiworld.get_location("Sage Airship: TV", self.player)\
                 .place_locked_item(self.create_item("BOMBO - GENESIS"))
 
-        elif self.multiworld.gesture_shuffle[self.player] == 1: # TVs only
+        elif self.options.gesture_shuffle == 1: # TVs only
             gestures = [gesture["name"] for gesture in Items.gesture_item_table.values()]
             tvs = [tv["name"] for tv in Locations.tv_location_table.values()]
 
             # if Extra Items in Logic is enabled place CHARGE UP first and make sure it doesn't get
             # placed at Sage Airship: TV or Foglast: TV
-            if self.multiworld.extra_items_in_logic[self.player]:
+            if self.options.extra_items_in_logic:
                 tv = self.random.choice(tvs)
                 while tv == "Sage Airship: TV" or tv == "Foglast: TV":
                     tv = self.random.choice(tvs)
