@@ -7,7 +7,8 @@ from worlds.AutoWorld import World, WebWorld
 from .Names import dr_wily
 from .Items import (item_table, item_names, MM2Item, filler_item_weights, robot_master_weapon_table,
                     stage_access_table, item_item_table, lookup_item_to_id)
-from .Locations import MM2Location, mm2_regions, MM2Region, energy_pickups, etank_1ups, lookup_location_to_id
+from .Locations import (MM2Location, mm2_regions, MM2Region, energy_pickups, etank_1ups, lookup_location_to_id,
+                        location_groups)
 from .Rom import patch_rom, MM2ProcedurePatch, MM2LCHASH, PROTEUSHASH, MM2VCHASH, MM2NESHASH
 from .Options import MM2Options
 from .Client import MegaMan2Client
@@ -85,6 +86,7 @@ class MM2World(World):
     item_name_to_id = lookup_item_to_id
     location_name_to_id = lookup_location_to_id
     item_name_groups = item_names
+    location_name_groups = location_groups
     web = MM2WebWorld()
     rom_name: bytearray
     world_version: Tuple[int, int, int] = (0, 2, 2)
