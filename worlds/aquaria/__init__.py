@@ -253,12 +253,12 @@ class AquariaWorld(World):
                 simple_ingredients_substitution.pop(-1)
                 simple_ingredients_substitution.pop(-1)
                 simple_ingredients_substitution.pop(-1)
-            self.multiworld.random.shuffle(simple_ingredients_substitution)
+            self.random.shuffle(simple_ingredients_substitution)
             if self.options.ingredient_randomizer.value == 1:
                 simple_ingredients_substitution.extend([24, 25, 26])
         dishes_substitution = [i for i in range(27, 76)]
         if self.options.dish_randomizer:
-            self.multiworld.random.shuffle(dishes_substitution)
+            self.random.shuffle(dishes_substitution)
         self.ingredients_substitution.clear()
         self.ingredients_substitution.extend(simple_ingredients_substitution)
         self.ingredients_substitution.extend(dishes_substitution)
