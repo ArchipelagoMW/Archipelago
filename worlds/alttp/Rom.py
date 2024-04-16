@@ -2543,7 +2543,7 @@ def write_strings(rom, world, player):
         if at not in tt:
             raise Exception(f"No text target \"{at}\" found.")
         else:
-            tt[at] = text
+            tt[at] = "\n".join(text)
 
     rom.write_bytes(0xE0000, tt.getBytes())
 

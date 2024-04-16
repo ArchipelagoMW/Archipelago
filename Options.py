@@ -930,7 +930,7 @@ class ItemSet(OptionSet):
 
 class PlandoText(typing.NamedTuple):
     at: str
-    text: str
+    text: typing.List[str]
     percentage: int = 100
 
 
@@ -965,9 +965,12 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
                     if random.random() < float(text.get("percentage", 100)/100):
                         at = text.get("at", None)
                         if at is not None:
+                            given_text = text.get("text", [])
+                            if isinstance(given_text, str):
+                                given_text = [given_text]
                             texts.append(PlandoText(
                                 at,
-                                text.get("text", ""),
+                                given_text,
                                 text.get("percentage", 100)
                             ))
                 elif isinstance(text, PlandoText):
@@ -982,7 +985,7 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
 
     @classmethod
     def get_option_name(cls, value: typing.List[PlandoText]) -> str:
-        return str({text.at: text.text for text in value})
+        return str({text.at: " ".join(text.text) for text in value})
 
     def __iter__(self) -> typing.Iterator[PlandoText]:
         yield from self.value
