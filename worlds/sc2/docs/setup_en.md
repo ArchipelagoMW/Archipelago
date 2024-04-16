@@ -1,4 +1,4 @@
-# StarCraft 2 Wings of Liberty Randomizer Setup Guide
+# StarCraft 2 Randomizer Setup Guide
 
 This guide contains instructions on how to install and troubleshoot the StarCraft 2 Archipelago client, as well as where
 to obtain a config file for StarCraft 2.
