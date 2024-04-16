@@ -17,6 +17,8 @@ self.multiworld.local_early_items[self.player][early_item_name] = 1
 ### I have multiple settings that change the item/location pool counts and need to balance them out
 
 Create extra filler based on the difference between your unfilled locations and your itempool by comparing [get_unfilled_locations](/BaseClasses.py) to your list of items to submit
+
+Note: to use self.create_filler(), self.get_filler_item_name() should be defined to only return valid filler item names
 ```
 total_locations = len(self.multiworld.get_unfilled_locations(self.player))
 item_pool = self.create_non_filler_items()
