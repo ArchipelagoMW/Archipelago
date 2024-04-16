@@ -2,8 +2,6 @@ import os
 import pkgutil
 from typing import ClassVar, Dict, Any
 
-import bsdiff4
-import math
 import settings
 
 import Utils

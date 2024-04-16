@@ -2,14 +2,13 @@ import hashlib
 import math
 import os
 import struct
-from typing import List, Tuple
 
 import Utils
-from worlds.Files import APDeltaPatch, APProcedurePatch, APTokenTypes, APTokenMixin
+from worlds.Files import APProcedurePatch, APTokenTypes, APTokenMixin
 from settings import get_settings
 from .Items import item_to_index
 from .RomValues import structure_deck_selection, banlist_ids, function_addresses
-from ..pokemon_emerald.util import encode_string
+from ..AutoWorld import World
 
 MD5Europe = '020411d3b08f5639eb8cb878283f84bf'
 MD5America = 'b8a7c976b28172995fe9e465d654297a'
@@ -31,7 +30,7 @@ class YGO06ProcedurePatch(APProcedurePatch, APTokenMixin):
         return get_base_rom_bytes()
 
 
-def write_tokens(world: "Yugioh06World", patch: YGO06ProcedurePatch):
+def write_tokens(world: World, patch: YGO06ProcedurePatch):
     structure_deck = structure_deck_selection.get(world.options.structure_deck.value)
     # set structure deck
     patch.write_token(
