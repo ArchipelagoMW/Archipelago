@@ -230,6 +230,10 @@ class TestSpotsGlitchless(BombRushCyberfunkTestBase):
 
 
 class TestSpotsGlitched(BombRushCyberfunkTestBase):
+    options = {
+        "logic": "glitched"
+    }
+
     @property
     def run_default_tests(self) -> bool:
         return False
