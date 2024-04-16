@@ -110,6 +110,7 @@ class AquariaWorld(World):
         """
         self.regions.add_regions_to_world()
         self.regions.connect_regions()
+        self.regions.add_event_locations()
 
     def create_item(self, name: str) -> AquariaItem:
         """
@@ -233,20 +234,13 @@ class AquariaWorld(World):
         """
         Launched when the Multiworld generator is ready to generate rules
         """
-        self.regions.add_event_locations()
+
         self.regions.adjusting_rules(self.options)
         if self.options.exclude_hard_or_hidden_locations:
             self.__excluded_hard_or_hidden_location()
 
         self.multiworld.completion_condition[self.player] = lambda \
             state: state.has("Victory", self.player)
-
-        # for debugging purposes, you may want to visualize the layout of your world.
-        # Uncomment the following code to write a PlantUML diagram to the file
-        # "aquaria_world.puml" that can help you see whether your regions and locations
-        # are connected and placed as desired
-        # from Utils import visualize_regions
-        # visualize_regions(self.multiworld.get_region("Menu", self.player), "aquaria_world.puml")
 
     def generate_basic(self) -> None:
         """

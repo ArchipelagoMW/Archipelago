@@ -476,7 +476,8 @@ class AquariaRegions:
                                lambda state: _has_bind_song(state, self.player))
         self.__connect_regions("Home Water", "Energy temple_altar",
                                self.home_water, self.energy_temple_altar,
-                               lambda state: _has_energy_form(state, self.player))
+                               lambda state: _has_energy_form(state, self.player) and
+                                             _has_bind_song(state, self.player))
         self.__connect_regions("Energy temple first area", "Energy temple second area",
                                self.energy_temple_1, self.energy_temple_2,
                                lambda state: _has_energy_form(state, self.player))
