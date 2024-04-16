@@ -67,7 +67,9 @@ class Celeste64World(World):
         if self.options.carsanity:
             location_count += 2
 
-        item_pool += [self.create_item(name) for name in unlockable_item_data_table.keys()]
+        item_pool += [self.create_item(name)
+                      for name in unlockable_item_data_table.keys()
+                      if name not in self.options.start_inventory]
 
         real_total_strawberries: int = min(self.options.total_strawberries.value, location_count - len(item_pool))
         self.strawberries_required = int(real_total_strawberries * (self.options.strawberries_required_percentage / 100))
