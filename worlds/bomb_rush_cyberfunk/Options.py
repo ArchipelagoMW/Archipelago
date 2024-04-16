@@ -73,7 +73,7 @@ class TotalRep(Range):
     
 
 class EndingREP(Toggle):
-    """Changes the final boss to require 1000 REP to start."""
+    """Changes the final boss to require 1000 REP instead of 960 REP to start."""
     display_name = "Extra REP Required"
 
 

@@ -298,9 +298,15 @@ def pyramid_island_challenge3(state: CollectionState, player: int) -> bool:
 
 def pyramid_island_all_challenges(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched:
-        return graffitiM(state, player, limit, 114)
+        return (
+            graffitiM(state, player, limit, 114)
+            and rep(state, player, 660)
+        )
     else:
-        return graffitiM(state, player, limit, 88)
+        return (
+            graffitiM(state, player, limit, 88)
+            and rep(state, player, 660)
+        )
 
 
 def pyramid_island_upper_half(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
@@ -415,115 +421,36 @@ def mataan_faux(state: CollectionState, player: int, limit: bool, glitched: bool
     )
 
 
-def spots_s(state: CollectionState, player: int, limit: bool, glitched: bool, access_cache: Dict[str, bool]) -> int:
-    total: int = 0
+def spots_s_glitchless(state: CollectionState, player: int, limit: bool, access_cache: Dict[str, bool]) -> int:
+    total: int = 10
+    conditions: Dict[str, int] = {
+        "versum_hill_entrance": 1,
+        "versum_hill_ch1_roadblock": 11,
+        "chapter2": 12,
+        "versum_hill_oldhead": 1,
+        "brink_terminal_entrance": 9,
+        "brink_terminal_plaza": 3,
+        "brink_terminal_tower": 0,
+        "chapter3": 6,
+        "brink_terminal_oldhead_dock": 1,
+        "millennium_mall_entrance": 3,
+        "millennium_mall_switch": 4,
+        "millennium_mall_theater": 3,
+        "chapter4": 2,
+        "pyramid_island_gate": 5,
+        "pyramid_island_upper_half": 8,
+        "pyramid_island_oldhead": 2,
+        "mataan_smoke_wall": 3,
+        "mataan_deep_city": 5,
+        "mataan_oldhead": 3,
+        "mataan_deepest": 2
+    }
 
-    if glitched:
-        total += 75
-
-        if access_cache["brink_terminal_entrance"]:
-            total += 13
-
-        if access_cache["chapter3"]:
-            total += 6
-
-    else:
-        # chapter 1
-        # hideout
-        total += 10
-
-        # versum hill area 1
-        if access_cache["versum_hill_entrance"]:
-            total += 1
-
-            # versum hill area 2
-            if access_cache["versum_hill_ch1_roadblock"]:
-                total += 11
-
-                # versum hill OldHeadArea
-                if access_cache["versum_hill_oldhead"]:
-                    total += 1
-
-                # versum hill area 4
-                if access_cache["versum_hill_basketball_court"]:
-
-                    # chapter 2
-                    # millennium square + mataan
-                    if access_cache["chapter2"]:
-                        # 7 in square, 5 in mataan
-                        total += 12
-                        
-                        # brink terminal area 1
-                        if access_cache["brink_terminal_entrance"]:
-                            total += 9
-
-                            # brink terminal dock OldHeadArea
-                            if access_cache["brink_terminal_oldhead_dock"]:
-                                total += 1
-
-                            # brink terminal tower area
-                            if access_cache["brink_terminal_plaza"]:
-                                total += 3
-
-                                # brink terminal inside tower
-                                if access_cache["brink_terminal_tower"]:
-
-                                    # chapter 3
-                                    # millennium square 2
-                                    if access_cache["chapter3"]:
-                                        total += 6
-
-                                        # millennium mall area 1
-                                        if access_cache["millennium_mall_entrance"]:
-                                            total += 3
-
-                                            # millennium mall area 2
-                                            if access_cache["millennium_mall_switch"]:
-                                                total += 4
-
-                                                # millennium mall area 3
-                                                if access_cache["millennium_mall_theater"]:
-                                                    total += 3
-
-                                                    # chapter 4
-                                                    # pyramid island area 1
-                                                    if access_cache["chapter4"]:
-                                                        # 2 in pyramid
-                                                        total += 2
-
-                                                        # pyramid island area 2
-                                                        if access_cache["pyramid_island_gate"]:
-                                                            total += 5
-
-                                                            # pyramid island OldHeadArea
-                                                            if access_cache["pyramid_island_oldhead"]:
-                                                                total += 2
-
-                                                            # pyramid island area 3
-                                                            if access_cache["pyramid_island_upper_half"]:
-                                                                total += 8
-
-                                                                # pyramid island area 4
-                                                                if access_cache["pyramid_island_crew_battle"]:
-
-                                                                    # chapter 5
-                                                                    # pyramid island 2
-                                                                    if access_cache["chapter5"]:
-
-                                                                        # mataan area 2
-                                                                        if access_cache["mataan_smoke_wall"]:
-                                                                            total += 3
-
-                                                                            # mataan area 3
-                                                                            if access_cache["mataan_deep_city"]:
-                                                                                total += 5
-
-                                                                                # mataan OldHeadArea
-                                                                                if access_cache["mataan_oldhead"]:
-                                                                                    total += 3
-
-                                                                                    if access_cache["mataan_deepest"]:
-                                                                                        total += 2
+    for access_name, graffiti_count in conditions.items():
+        if access_cache[access_name]:
+            total += graffiti_count
+        else:
+            break
 
     if limit:
         sprayable: int = 5 + (state.count_group("characters", player) * 5)
@@ -533,133 +460,65 @@ def spots_s(state: CollectionState, player: int, limit: bool, glitched: bool, ac
             return sprayable
     else:
         return total
+    
 
+def spots_s_glitched(state: CollectionState, player: int, limit: bool, access_cache: Dict[str, bool]) -> int:
+    total: int = 75
+    conditions: Dict[str, int] = {
+        "brink_terminal_entrance": 13,
+        "chapter3": 6
+    }
 
-def spots_m(state: CollectionState, player: int, limit: bool, glitched: bool, access_cache: Dict[str, bool]) -> int:
-    total: int = 0
+    for access_name, graffiti_count in conditions.items():
+        if access_cache[access_name]:
+            total += graffiti_count
+        else:
+            break
 
-    if glitched:
-        total += 99
-
-        if access_cache["brink_terminal_entrance"]:
-            total += 21
-
-        if access_cache["chapter3"]:
-            total += 3
-        
+    if limit:
+        sprayable: int = 5 + (state.count_group("characters", player) * 5)
+        if total <= sprayable:
+            return total
+        else:
+            return sprayable
     else:
-        # chapter 1
-        # hideout
-        total += 4
+        return total
+    
 
-        # versum hill area 1
-        if access_cache["versum_hill_entrance"]:
-            total += 3
+def spots_m_glitchless(state: CollectionState, player: int, limit: bool, access_cache: Dict[str, bool]) -> int:
+    total: int = 4
+    conditions: Dict[str, int] = {
+        "versum_hill_entrance": 3,
+        "versum_hill_ch1_roadblock": 13,
+        "versum_hill_all_challenges": 3,
+        "chapter2": 16,
+        "versum_hill_oldhead": 4,
+        "brink_terminal_entrance": 13,
+        "brink_terminal_plaza": 4,
+        "brink_terminal_tower": 0,
+        "chapter3": 3,
+        "brink_terminal_oldhead_dock": 4,
+        "millennium_mall_entrance": 5,
+        "millennium_mall_big": 6,
+        "millennium_mall_theater": 4,
+        "chapter4": 2,
+        "millennium_mall_oldhead_ceiling": 1,
+        "pyramid_island_gate": 3,
+        "pyramid_island_upper_half": 8,
+        "chapter5": 2,
+        "pyramid_island_oldhead": 5,
+        "mataan_deep_city": 7,
+        "skateboard": 1,
+        "mataan_oldhead": 1,
+        "mataan_smoke_wall2": 1,
+        "mataan_deepest": 10
+    }
 
-            # versum hill area 2
-            if access_cache["versum_hill_ch1_roadblock"]:
-                total += 13
-
-                # versum hill OldHeadArea
-                if access_cache["versum_hill_oldhead"]:
-                    total += 4
-
-                # versum hill area 3
-                if access_cache["versum_hill_all_challenges"]:
-                    total += 3
-
-                # versum hill area 4
-                if access_cache["versum_hill_basketball_court"]:
-
-                    # chapter 2
-                    # millennium square + mataan
-                    if access_cache["chapter2"]:
-                        # 12 in square, 4 in mataan
-                        total += 16
-                        
-                        # brink terminal area 1
-                        if access_cache["brink_terminal_entrance"]:
-                            total += 13
-
-                            # brink terminal dock OldHeadArea
-                            if access_cache["brink_terminal_oldhead_dock"]:
-                                total += 4
-
-                            # brink terminal tower area
-                            if access_cache["brink_terminal_plaza"]:
-                                total += 4
-
-                                # brink terminal inside tower
-                                if access_cache["brink_terminal_tower"]:
-
-                                    # chapter 3
-                                    # millennium square 2
-                                    if access_cache["chapter3"]:
-                                        total += 3
-
-                                        # millennium mall area 1
-                                        if access_cache["millennium_mall_entrance"]:
-                                            total += 5
-
-                                            # millennium mall OldHeadArea
-                                            if access_cache["millennium_mall_oldhead_ceiling"]:
-                                                total += 1
-
-                                            # millennium mall area 2
-                                            if access_cache["millennium_mall_big"]:
-                                                total += 6
-
-                                                # millennium mall area 3
-                                                if access_cache["millennium_mall_theater"]:
-                                                    total += 4
-
-                                                    # chapter 4
-                                                    # pyramid island area 1
-                                                    if access_cache["chapter4"]:
-                                                        # 2 in pyramid
-                                                        total += 2
-
-                                                        # pyramid island area 2
-                                                        if access_cache["pyramid_island_gate"]:
-                                                            total += 3
-
-                                                            # pyramid island OldHeadArea
-                                                            if access_cache["pyramid_island_oldhead"]:
-                                                                total += 5
-
-                                                            # pyramid island area 3
-                                                            if access_cache["pyramid_island_upper_half"]:
-                                                                total += 8
-
-                                                                # pyramid island area 4
-                                                                if access_cache["pyramid_island_crew_battle"]:
-
-                                                                    # chapter 5
-                                                                    # pyramid island 2
-                                                                    if access_cache["chapter5"]:
-                                                                        total += 2
-
-                                                                        # mataan area 2
-                                                                        if access_cache["mataan_smoke_wall"]:
-
-                                                                            # mataan area 3
-                                                                            if access_cache["mataan_deep_city"]:
-                                                                                total += 7
-
-                                                                                # center island
-                                                                                if access_cache["skateboard"]:
-                                                                                    total += 1
-
-                                                                                # mataan OldHeadArea
-                                                                                if access_cache["mataan_oldhead"]:
-                                                                                    total += 1
-
-                                                                                    # mataan area 4
-                                                                                    if access_cache["mataan_smoke_wall2"]:
-                                                                                        total += 1
-
-                                                                                        if access_cache["mataan_deepest"]:
-                                                                                            total += 10
+    for access_name, graffiti_count in conditions.items():
+        if access_cache[access_name]:
+            total += graffiti_count
+        elif access_name != "skateboard":
+            break
 
     if limit:
         sprayable: int = state.count_group("graffitim", player) * 7
@@ -674,145 +533,69 @@ def spots_m(state: CollectionState, player: int, limit: bool, glitched: bool, ac
             return 0
         
 
-def spots_l(state: CollectionState, player: int, limit: bool, glitched: bool, access_cache: Dict[str, bool]) -> int:
-    total: int = 0
+def spots_m_glitched(state: CollectionState, player: int, limit: bool, access_cache: Dict[str, bool]) -> int:
+    total: int = 99
+    conditions: Dict[str, int] = {
+        "brink_terminal_entrance": 21,
+        "chapter3": 3
+    }
 
-    if glitched:
-        total += 90
+    for access_name, graffiti_count in conditions.items():
+        if access_cache[access_name]:
+            total += graffiti_count
+        else:
+            break
 
-        if access_cache["brink_terminal_entrance"]:
-            total += 18
-
-        if access_cache["chapter3"]:
-            total += 4
-
-        if access_cache["chapter4"]:
-            total += 1
-
+    if limit:
+        sprayable: int = state.count_group("graffitim", player) * 7
+        if total <= sprayable:
+            return total
+        else:
+            return sprayable
     else:
-        # chapter 1
-        # hideout
-        total += 7
+        if state.has_group("graffitim", player):
+            return total
+        else:
+            return 0
+        
 
-        if access_cache["inline_skates"]:
-            total += 1
+def spots_l_glitchless(state: CollectionState, player: int, limit: bool, access_cache: Dict[str, bool]) -> int:
+    total: int = 7
+    conditions: Dict[str, int] = {
+        "inline_skates": 1,
+        "versum_hill_entrance": 2,
+        "versum_hill_ch1_roadblock": 13,
+        "versum_hill_all_challenges": 1,
+        "chapter2": 14,
+        "versum_hill_oldhead": 2,
+        "brink_terminal_entrance": 10,
+        "brink_terminal_plaza": 2,
+        "brink_terminal_oldhead_underground": 1,
+        "brink_terminal_tower": 1,
+        "chapter3": 4,
+        "brink_terminal_oldhead_dock": 4,
+        "millennium_mall_entrance": 3,
+        "millennium_mall_big": 8,
+        "millennium_mall_theater": 4,
+        "chapter4": 5,
+        "millennium_mall_oldhead_ceiling": 3,
+        "pyramid_island_gate": 4,
+        "pyramid_island_upper_half": 5,
+        "pyramid_island_crew_battle": 1,
+        "chapter5": 1,
+        "pyramid_island_oldhead": 2,
+        "mataan_smoke_wall": 1,
+        "mataan_deep_city": 2,
+        "skateboard": 1,
+        "mataan_oldhead": 2,
+        "mataan_deepest": 7
+    }
 
-        # versum hill area 1
-        if access_cache["versum_hill_entrance"]:
-            total += 2
-
-            # versum hill area 2
-            if access_cache["versum_hill_ch1_roadblock"]:
-                total += 13
-
-                # versum hill OldHeadArea
-                if access_cache["versum_hill_oldhead"]:
-                    total += 2
-
-                # versum hill area 3
-                if access_cache["versum_hill_all_challenges"]:
-                    total += 1
-
-                # versum hill area 4
-                if access_cache["versum_hill_basketball_court"]:
-
-                    # chapter 2
-                    # millennium square + mataan
-                    if access_cache["chapter2"]:
-                        # 7 in square, 7 in mataan
-                        total += 14
-                        
-                        # brink terminal area 1
-                        if access_cache["brink_terminal_entrance"]:
-                            total += 10
-
-                            # brink terminal underground OldHeadArea
-                            if access_cache["brink_terminal_oldhead_underground"]:
-                                total += 1
-
-                            # brink terminal dock OldHeadArea
-                            if access_cache["brink_terminal_oldhead_dock"]:
-                                total += 4
-
-                            # brink terminal tower area
-                            if access_cache["brink_terminal_plaza"]:
-                                total += 2
-
-                                # brink terminal inside tower
-                                if access_cache["brink_terminal_tower"]:
-                                    total += 1
-
-                                    # chapter 3
-                                    # millennium square 2
-                                    if access_cache["chapter3"]:
-                                        total += 4
-
-                                        # millennium mall area 1
-                                        if access_cache["millennium_mall_entrance"]:
-                                            total += 3
-                                            
-                                            # millennium mall OldHeadArea
-                                            if access_cache["millennium_mall_oldhead_ceiling"]:
-                                                total += 3
-
-                                            # millennium mall area 2
-                                            if access_cache["millennium_mall_big"]:
-                                                total += 8
-
-                                                # millennium mall area 3
-                                                if access_cache["millennium_mall_theater"]:
-                                                    total += 4
-
-                                                    # chapter 4
-                                                    # pyramid island area 1
-                                                    if access_cache["chapter4"]:
-                                                        # 1 in square, 4 in pyramid
-                                                        total += 5
-
-                                                        # pyramid island area 2
-                                                        if access_cache["pyramid_island_gate"]:
-                                                            total += 4
-
-                                                            # pyramid island OldHeadArea
-                                                            if access_cache["pyramid_island_oldhead"]:
-                                                                total += 2
-
-                                                            # pyramid island area 3
-                                                            if access_cache["pyramid_island_upper_half"]:
-                                                                total += 5
-
-                                                                # pyramid island area 4
-                                                                if access_cache["pyramid_island_crew_battle"]:
-                                                                    total += 1
-
-                                                                    # chapter 5
-                                                                    # pyramid island 2
-                                                                    if access_cache["chapter5"]:
-                                                                        total += 1
-
-                                                                        # mataan area 2
-                                                                        if access_cache["mataan_smoke_wall"]:
-                                                                            total += 1
-
-                                                                            # mataan area 3
-                                                                            if access_cache["mataan_deep_city"]:
-                                                                                total += 2
-
-                                                                                # center island
-                                                                                if access_cache["skateboard"]:
-                                                                                    total += 1
-
-                                                                                # mataan OldHeadArea
-                                                                                if access_cache["mataan_oldhead"]:
-                                                                                    total += 2
-
-                                                                                    # mataan area 4
-                                                                                    if access_cache["mataan_smoke_wall2"]:
-                                                                                        total += 2
-
-                                                                                        # mataan area 4 part 2 + area 5
-                                                                                        if access_cache["mataan_deepest"]:
-                                                                                            total += 7
+    for access_name, graffiti_count in conditions.items():
+        if access_cache[access_name]:
+            total += graffiti_count
+        elif not (access_name == "inline_skates" or access_name == "skateboard"):
+            break
 
     if limit:
         sprayable: int = state.count_group("graffitil", player) * 6
@@ -827,122 +610,90 @@ def spots_l(state: CollectionState, player: int, limit: bool, glitched: bool, ac
             return 0
         
 
-def spots_xl(state: CollectionState, player: int, limit: bool, glitched: bool, access_cache: Dict[str, bool]) -> int:
-    total: int = 0
+def spots_l_glitched(state: CollectionState, player: int, limit: bool, access_cache: Dict[str, bool]) -> int:
+    total: int = 90
+    conditions: Dict[str, int] = {
+        "brink_terminal_entrance": 18,
+        "chapter3": 4,
+        "chapter4": 1
+    }
 
-    if glitched:
-        total += 50
+    for access_name, graffiti_count in conditions.items():
+        if access_cache[access_name]:
+            total += graffiti_count
+        else:
+            break
 
-        if access_cache["brink_terminal_entrance"]:
-            total += 7
-
-            if access_cache["chapter4"]:
-                total += 1
-
-        if access_cache["chapter3"]:
-            total += 3
-
+    if limit:
+        sprayable: int = state.count_group("graffitil", player) * 6
+        if total <= sprayable:
+            return total
+        else:
+            return sprayable
     else:
-        # chapter 1
-        # hideout
-        total += 3
+        if state.has_group("graffitil", player):
+            return total
+        else:
+            return 0
+        
 
-        # versum hill area 1
-        if access_cache["versum_hill_entrance"]:
+def spots_xl_glitchless(state: CollectionState, player: int, limit: bool, access_cache: Dict[str, bool]) -> int:
+    total: int = 3
+    conditions: Dict[str, int] = {
+        "versum_hill_ch1_roadblock": 6,
+        "versum_hill_basketball_court": 1,
+        "chapter2": 9,
+        "brink_terminal_entrance": 3,
+        "brink_terminal_plaza": 1,
+        "brink_terminal_oldhead_underground": 1,
+        "brink_terminal_tower": 1,
+        "chapter3": 3,
+        "brink_terminal_oldhead_dock": 2,
+        "millennium_mall_entrance": 2,
+        "millennium_mall_big": 5,
+        "millennium_mall_theater": 5,
+        "chapter4": 3,
+        "millennium_mall_oldhead_ceiling": 1,
+        "pyramid_island_upper_half": 5,
+        "pyramid_island_oldhead": 3,
+        "mataan_smoke_wall": 2,
+        "mataan_deep_city": 2,
+        "mataan_oldhead": 2,
+        "mataan_deepest": 2
+    }
 
-            # versum hill area 2
-            if access_cache["versum_hill_ch1_roadblock"]:
-                total += 6
+    for access_name, graffiti_count in conditions.items():
+        if access_cache[access_name]:
+            total += graffiti_count
+        else:
+            break
 
-                # versum hill area 4
-                if access_cache["versum_hill_basketball_court"]:
-                    total += 1
+    if limit:
+        sprayable: int = state.count_group("graffitixl", player) * 4
+        if total <= sprayable:
+            return total
+        else:
+            return sprayable
+    else:
+        if state.has_group("graffitixl", player):
+            return total
+        else:
+            return 0
+        
 
-                    # chapter 2
-                    # millennium square + mataan
-                    if access_cache["chapter2"]:
-                        # 4 in square, 5 in mataan
-                        total += 9
-                        
-                        # brink terminal area 1
-                        if access_cache["brink_terminal_entrance"]:
-                            total += 3
+def spots_xl_glitched(state: CollectionState, player: int, limit: bool, access_cache: Dict[str, bool]) -> int:
+    total: int = 51
+    conditions: Dict[str, int] = {
+        "brink_terminal_entrance": 7,
+        "chapter3": 3,
+        "chapter4": 1
+    }
 
-                            # brink terminal underground OldHeadArea
-                            if access_cache["brink_terminal_oldhead_underground"]:
-                                total += 1
-
-                            # brink terminal dock OldHeadArea
-                            if access_cache["brink_terminal_oldhead_dock"]:
-                                total += 2
-
-                            # brink terminal tower area
-                            if access_cache["brink_terminal_plaza"]:
-                                total += 1
-
-                                # brink terminal inside tower
-                                if access_cache["brink_terminal_tower"]:
-                                    total += 1
-
-                                    # chapter 3
-                                    # millennium square 2
-                                    if access_cache["chapter3"]:
-                                        total += 3
-
-                                        # millennium mall area 1
-                                        if access_cache["millennium_mall_entrance"]:
-                                            total += 2
-
-                                            # millennium mall OldHeadArea
-                                            if access_cache["millennium_mall_oldhead_ceiling"]:
-                                                total += 1
-
-                                            # millennium mall area 2
-                                            if access_cache["millennium_mall_big"]:
-                                                total += 5
-
-                                                # millennium mall area 3
-                                                if access_cache["millennium_mall_theater"]:
-                                                    total += 5
-
-                                                    # chapter 4
-                                                    # pyramid island area 1
-                                                    if access_cache["chapter4"]:
-                                                        # 1 in terminal, 2 in pyramid
-                                                        total += 3
-
-                                                        # pyramid island area 2
-                                                        if access_cache["pyramid_island_gate"]:
-
-                                                            # pyramid island OldHeadArea
-                                                            if access_cache["pyramid_island_oldhead"]:
-                                                                total += 3
-
-                                                            # pyramid island area 3
-                                                            if access_cache["pyramid_island_upper_half"]:
-                                                                total += 5
-
-                                                                # pyramid island area 4
-                                                                if access_cache["pyramid_island_crew_battle"]:
-
-                                                                    # chapter 5
-                                                                    # pyramid island 2
-                                                                    if access_cache["chapter5"]:
-
-                                                                        # mataan area 2
-                                                                        if access_cache["mataan_smoke_wall"]:
-                                                                            total += 2
-
-                                                                            # mataan area 3
-                                                                            if access_cache["mataan_deep_city"]:
-                                                                                total += 2
-
-                                                                                # mataan OldHeadArea
-                                                                                if access_cache["mataan_oldhead"]:
-                                                                                    total += 2
-
-                                                                                    if access_cache["mataan_deepest"]:
-                                                                                        total += 2
+    for access_name, graffiti_count in conditions.items():
+        if access_cache[access_name]:
+            total += graffiti_count
+        else:
+            break
 
     if limit:
         sprayable: int = state.count_group("graffitixl", player) * 4
@@ -957,7 +708,7 @@ def spots_xl(state: CollectionState, player: int, limit: bool, glitched: bool, a
             return 0
 
 
-def graffiti_spots(state: CollectionState, player: int, movestyle: int, limit: int, glitched: bool, spots: int) -> bool:
+def build_access_cache(state: CollectionState, player: int, movestyle: int, limit: bool, glitched: bool) -> Dict[str, bool]:
     funcs: Dict[str, tuple] = {
         "versum_hill_entrance": (state, player),
         "versum_hill_ch1_roadblock": (state, player, limit),
@@ -1005,10 +756,24 @@ def graffiti_spots(state: CollectionState, player: int, movestyle: int, limit: i
         if not access and not "oldhead" in fname:
             stop = True
 
-    total: int = spots_s(state, player, limit, glitched, access_cache) \
-        + spots_m(state, player, limit, glitched, access_cache) \
-        + spots_l(state, player, limit, glitched, access_cache) \
-        + spots_xl(state, player, limit, glitched, access_cache)
+    return access_cache
+
+
+def graffiti_spots(state: CollectionState, player: int, movestyle: int, limit: bool, glitched: bool, spots: int) -> bool:
+    access_cache = build_access_cache(state, player, movestyle, limit, glitched)
+
+    total: int = 0
+
+    if glitched:
+        total = spots_s_glitched(state, player, limit, access_cache) \
+        + spots_m_glitched(state, player, limit, access_cache) \
+        + spots_l_glitched(state, player, limit, access_cache) \
+        + spots_xl_glitched(state, player, limit, access_cache)
+    else:
+        total = spots_s_glitchless(state, player, limit, access_cache) \
+        + spots_m_glitchless(state, player, limit, access_cache) \
+        + spots_l_glitchless(state, player, limit, access_cache) \
+        + spots_xl_glitchless(state, player, limit, access_cache)
 
     return total >= spots
 
@@ -1018,7 +783,7 @@ def rep(state: CollectionState, player: int, required: int) -> bool:
 
 
 def rules(brcworld):
-    world = brcworld.multiworld
+    multiworld = brcworld.multiworld
     player = brcworld.player
 
     movestyle = brcworld.options.starting_movestyle
@@ -1028,396 +793,235 @@ def rules(brcworld):
     photos = not brcworld.options.skip_polo_photos
 
     # entrances
-    for e in world.get_region(Stages.BT1, player).entrances:
+    for e in multiworld.get_region(Stages.BT1, player).entrances:
         set_rule(e, lambda state: brink_terminal_entrance(state, player))
 
     if not glitched:
         # versum hill
-        for e in world.get_region(Stages.VH1, player).entrances:
+        for e in multiworld.get_region(Stages.VH1, player).entrances:
             set_rule(e, lambda state: versum_hill_entrance(state, player))
-        for e in world.get_region(Stages.VH2, player).entrances:
+        for e in multiworld.get_region(Stages.VH2, player).entrances:
             set_rule(e, lambda state: versum_hill_ch1_roadblock(state, player, limit))
-        for e in world.get_region(Stages.VHO, player).entrances:
+        for e in multiworld.get_region(Stages.VHO, player).entrances:
             set_rule(e, lambda state: versum_hill_oldhead(state, player))
-        for e in world.get_region(Stages.VH3, player).entrances:
+        for e in multiworld.get_region(Stages.VH3, player).entrances:
             set_rule(e, lambda state: versum_hill_all_challenges(state, player))
-        for e in world.get_region(Stages.VH4, player).entrances:
+        for e in multiworld.get_region(Stages.VH4, player).entrances:
             set_rule(e, lambda state: versum_hill_basketball_court(state, player))
 
         # millennium square
-        for e in world.get_region(Stages.MS, player).entrances:
+        for e in multiworld.get_region(Stages.MS, player).entrances:
             set_rule(e, lambda state: millennium_square_entrance(state, player))
 
         # brink terminal
-        for e in world.get_region(Stages.BTO1, player).entrances:
+        for e in multiworld.get_region(Stages.BTO1, player).entrances:
             set_rule(e, lambda state: brink_terminal_oldhead_underground(state, player))
-        for e in world.get_region(Stages.BTO2, player).entrances:
+        for e in multiworld.get_region(Stages.BTO2, player).entrances:
             set_rule(e, lambda state: brink_terminal_oldhead_dock(state, player))
-        for e in world.get_region(Stages.BT2, player).entrances:
+        for e in multiworld.get_region(Stages.BT2, player).entrances:
             set_rule(e, lambda state: brink_terminal_plaza(state, player))
-        for e in world.get_region(Stages.BT3, player).entrances:
+        for e in multiworld.get_region(Stages.BT3, player).entrances:
             set_rule(e, lambda state: brink_terminal_tower(state, player))
 
         # millennium mall
-        for e in world.get_region(Stages.MM1, player).entrances:
+        for e in multiworld.get_region(Stages.MM1, player).entrances:
             set_rule(e, lambda state: millennium_mall_entrance(state, player))
-        for e in world.get_region(Stages.MMO1, player).entrances:
+        for e in multiworld.get_region(Stages.MMO1, player).entrances:
             set_rule(e, lambda state: millennium_mall_oldhead_ceiling(state, player, limit))
-        for e in world.get_region(Stages.MM2, player).entrances:
+        for e in multiworld.get_region(Stages.MM2, player).entrances:
             set_rule(e, lambda state: millennium_mall_big(state, player, limit, glitched))
-        for e in world.get_region(Stages.MMO2, player).entrances:
+        for e in multiworld.get_region(Stages.MMO2, player).entrances:
             set_rule(e, lambda state: millennium_mall_oldhead_race(state, player))
-        for e in world.get_region(Stages.MM3, player).entrances:
+        for e in multiworld.get_region(Stages.MM3, player).entrances:
             set_rule(e, lambda state: millennium_mall_theater(state, player, limit))
 
         # pyramid island
-        for e in world.get_region(Stages.PI1, player).entrances:
+        for e in multiworld.get_region(Stages.PI1, player).entrances:
             set_rule(e, lambda state: pyramid_island_entrance(state, player))
-        for e in world.get_region(Stages.PI2, player).entrances:
+        for e in multiworld.get_region(Stages.PI2, player).entrances:
             set_rule(e, lambda state: pyramid_island_gate(state, player))
-        for e in world.get_region(Stages.PIO, player).entrances:
+        for e in multiworld.get_region(Stages.PIO, player).entrances:
             set_rule(e, lambda state: pyramid_island_oldhead(state, player))
-        for e in world.get_region(Stages.PI3, player).entrances:
-            set_rule(e, lambda state: pyramid_island_all_challenges(state, player, limit, glitched))
-        for e in world.get_region(Stages.PI4, player).entrances:
+        for e in multiworld.get_region(Stages.PI3, player).entrances:
+            set_rule(e, lambda state: pyramid_island_upper_half(state, player, limit, glitched))
+        for e in multiworld.get_region(Stages.PI4, player).entrances:
             set_rule(e, lambda state: pyramid_island_top(state, player))
 
         # mataan
-        for e in world.get_region(Stages.MA1, player).entrances:
+        for e in multiworld.get_region(Stages.MA1, player).entrances:
             set_rule(e, lambda state: mataan_entrance(state, player))
-        for e in world.get_region(Stages.MA2, player).entrances:
+        for e in multiworld.get_region(Stages.MA2, player).entrances:
             set_rule(e, lambda state: mataan_smoke_wall(state, player))
-        for e in world.get_region(Stages.MA3, player).entrances:
+        for e in multiworld.get_region(Stages.MA3, player).entrances:
             set_rule(e, lambda state: mataan_deep_city(state, player, limit, glitched))
-        for e in world.get_region(Stages.MAO, player).entrances:
+        for e in multiworld.get_region(Stages.MAO, player).entrances:
             set_rule(e, lambda state: mataan_oldhead(state, player))
-        for e in world.get_region(Stages.MA4, player).entrances:
+        for e in multiworld.get_region(Stages.MA4, player).entrances:
             set_rule(e, lambda state: mataan_smoke_wall2(state, player, limit, glitched))
-        for e in world.get_region(Stages.MA5, player).entrances:
+        for e in multiworld.get_region(Stages.MA5, player).entrances:
             set_rule(e, lambda state: mataan_deepest(state, player, limit, glitched))
 
-    """
-    for e in world.get_region("Versum Hill", player).entrances:
-        set_rule(e, lambda state: versum_hill_entrance(state, player, glitched))
-    for e in world.get_region("Millennium Square", player).entrances:
-        set_rule(e, lambda state: millennium_square_entrance(state, player, glitched))
-    for e in world.get_region("Brink Terminal", player).entrances:
-        set_rule(e, lambda state: brink_terminal_entrance(state, player))
-    for e in world.get_region("Millennium Mall", player).entrances:
-        set_rule(e, lambda state: millennium_mall_entrance(state, player, glitched))
-    for e in world.get_region("Pyramid Island", player).entrances:
-        set_rule(e, lambda state: pyramid_island_entrance(state, player, glitched))
-    for e in world.get_region("Mataan", player).entrances:
-        set_rule(e, lambda state: mataan_entrance(state, player, glitched))
-    """
 
     # locations
     # hideout
-    set_rule(world.get_location("Hideout: BMX garage skateboard", player),
+    set_rule(multiworld.get_location("Hideout: BMX garage skateboard", player),
         lambda state: bmx(state, player, movestyle))
-    set_rule(world.get_location("Hideout: Unlock phone app", player),
+    set_rule(multiworld.get_location("Hideout: Unlock phone app", player),
         lambda state: current_chapter(state, player, 2))
-    set_rule(world.get_location("Hideout: Vinyl joins the crew", player),
+    set_rule(multiworld.get_location("Hideout: Vinyl joins the crew", player),
         lambda state: current_chapter(state, player, 4))
-    set_rule(world.get_location("Hideout: Solace joins the crew", player),
+    set_rule(multiworld.get_location("Hideout: Solace joins the crew", player),
         lambda state: current_chapter(state, player, 5))
     
     # versum hill
-    set_rule(world.get_location("Versum Hill: Wallrunning challenge reward", player),
+    set_rule(multiworld.get_location("Versum Hill: Wallrunning challenge reward", player),
         lambda state: versum_hill_challenge1(state, player))
-    set_rule(world.get_location("Versum Hill: Manual challenge reward", player),
+    set_rule(multiworld.get_location("Versum Hill: Manual challenge reward", player),
         lambda state: versum_hill_challenge2(state, player))
-    set_rule(world.get_location("Versum Hill: Corner challenge reward", player),
+    set_rule(multiworld.get_location("Versum Hill: Corner challenge reward", player),
         lambda state: versum_hill_challenge3(state, player))
-    set_rule(world.get_location("Versum Hill: BMX gate outfit", player),
+    set_rule(multiworld.get_location("Versum Hill: BMX gate outfit", player),
         lambda state: bmx(state, player, movestyle))
-    set_rule(world.get_location("Versum Hill: Glass floor skates", player),
+    set_rule(multiworld.get_location("Versum Hill: Glass floor skates", player),
         lambda state: inline_skates(state, player, movestyle))
-    set_rule(world.get_location("Versum Hill: Basketball court shortcut CD", player),
+    set_rule(multiworld.get_location("Versum Hill: Basketball court shortcut CD", player),
         lambda state: current_chapter(state, player, 2))
-    set_rule(world.get_location("Versum Hill: Rave joins the crew", player),
+    set_rule(multiworld.get_location("Versum Hill: Rave joins the crew", player),
         lambda state: versum_hill_rave(state, player, limit, glitched))
-    set_rule(world.get_location("Versum Hill: Frank joins the crew", player),
+    set_rule(multiworld.get_location("Versum Hill: Frank joins the crew", player),
         lambda state: current_chapter(state, player, 2))
-    set_rule(world.get_location("Versum Hill: Rietveld joins the crew", player),
+    set_rule(multiworld.get_location("Versum Hill: Rietveld joins the crew", player),
         lambda state: current_chapter(state, player, 2))
     if photos:
-        set_rule(world.get_location("Versum Hill: Big Polo", player),
+        set_rule(multiworld.get_location("Versum Hill: Big Polo", player),
             lambda state: camera(state, player))
-        set_rule(world.get_location("Versum Hill: Trash Polo", player),
+        set_rule(multiworld.get_location("Versum Hill: Trash Polo", player),
             lambda state: camera(state, player))
-        set_rule(world.get_location("Versum Hill: Fruit stand Polo", player),
+        set_rule(multiworld.get_location("Versum Hill: Fruit stand Polo", player),
             lambda state: camera(state, player))
     
     # millennium square
     if photos:
-        set_rule(world.get_location("Millennium Square: Half pipe Polo", player),
+        set_rule(multiworld.get_location("Millennium Square: Half pipe Polo", player),
             lambda state: camera(state, player))
     
     # brink terminal
-    set_rule(world.get_location("Brink Terminal: Upside grind challenge reward", player),
+    set_rule(multiworld.get_location("Brink Terminal: Upside grind challenge reward", player),
         lambda state: brink_terminal_challenge1(state, player))
-    set_rule(world.get_location("Brink Terminal: Manual challenge reward", player),
+    set_rule(multiworld.get_location("Brink Terminal: Manual challenge reward", player),
         lambda state: brink_terminal_challenge2(state, player))
-    set_rule(world.get_location("Brink Terminal: Score challenge reward", player),
+    set_rule(multiworld.get_location("Brink Terminal: Score challenge reward", player),
         lambda state: brink_terminal_challenge3(state, player))
-    set_rule(world.get_location("Brink Terminal: BMX gate graffiti", player),
+    set_rule(multiworld.get_location("Brink Terminal: BMX gate graffiti", player),
         lambda state: bmx(state, player, movestyle))
-    set_rule(world.get_location("Brink Terminal: Mesh's skateboard", player),
+    set_rule(multiworld.get_location("Brink Terminal: Mesh's skateboard", player),
         lambda state: brink_terminal_mesh(state, player, limit, glitched))
-    set_rule(world.get_location("Brink Terminal: Rooftop glass CD", player),
+    set_rule(multiworld.get_location("Brink Terminal: Rooftop glass CD", player),
         lambda state: inline_skates(state, player, movestyle))
-    set_rule(world.get_location("Brink Terminal: Mesh joins the crew", player),
+    set_rule(multiworld.get_location("Brink Terminal: Mesh joins the crew", player),
         lambda state: brink_terminal_mesh(state, player, limit, glitched))
-    set_rule(world.get_location("Brink Terminal: Eclipse joins the crew", player),
+    set_rule(multiworld.get_location("Brink Terminal: Eclipse joins the crew", player),
         lambda state: current_chapter(state, player, 3))
     if photos:
-        set_rule(world.get_location("Brink Terminal: Behind glass Polo", player),
+        set_rule(multiworld.get_location("Brink Terminal: Behind glass Polo", player),
             lambda state: camera(state, player))
     
     # millennium mall
-    set_rule(world.get_location("Millennium Mall: Glass cylinder CD", player),
+    set_rule(multiworld.get_location("Millennium Mall: Glass cylinder CD", player),
         lambda state: inline_skates(state, player, movestyle))
-    set_rule(world.get_location("Millennium Mall: Trick challenge reward", player),
+    set_rule(multiworld.get_location("Millennium Mall: Trick challenge reward", player),
         lambda state: millennium_mall_challenge1(state, player))
-    set_rule(world.get_location("Millennium Mall: Slide challenge reward", player),
+    set_rule(multiworld.get_location("Millennium Mall: Slide challenge reward", player),
         lambda state: millennium_mall_challenge2(state, player))
-    set_rule(world.get_location("Millennium Mall: Fish challenge reward", player),
+    set_rule(multiworld.get_location("Millennium Mall: Fish challenge reward", player),
         lambda state: millennium_mall_challenge3(state, player))
-    set_rule(world.get_location("Millennium Mall: Score challenge reward", player),
+    set_rule(multiworld.get_location("Millennium Mall: Score challenge reward", player),
         lambda state: millennium_mall_challenge4(state, player))
-    set_rule(world.get_location("Millennium Mall: Atrium BMX gate BMX", player),
+    set_rule(multiworld.get_location("Millennium Mall: Atrium BMX gate BMX", player),
         lambda state: bmx(state, player, movestyle))
-    set_rule(world.get_location("Millennium Mall: Shine joins the crew", player),
+    set_rule(multiworld.get_location("Millennium Mall: Shine joins the crew", player),
         lambda state: current_chapter(state, player, 4))
-    set_rule(world.get_location("Millennium Mall: DOT.EXE joins the crew", player),
+    set_rule(multiworld.get_location("Millennium Mall: DOT.EXE joins the crew", player),
         lambda state: current_chapter(state, player, 4))
     
     # pyramid island
-    set_rule(world.get_location("Pyramid Island: BMX gate BMX", player),
+    set_rule(multiworld.get_location("Pyramid Island: BMX gate BMX", player),
         lambda state: bmx(state, player, movestyle))
-    set_rule(world.get_location("Pyramid Island: Score challenge reward", player),
+    set_rule(multiworld.get_location("Pyramid Island: Score challenge reward", player),
         lambda state: pyramid_island_challenge1(state, player))
-    set_rule(world.get_location("Pyramid Island: Score challenge 2 reward", player),
+    set_rule(multiworld.get_location("Pyramid Island: Score challenge 2 reward", player),
         lambda state: pyramid_island_challenge2(state, player))
-    set_rule(world.get_location("Pyramid Island: Quarter pipe challenge reward", player),
+    set_rule(multiworld.get_location("Pyramid Island: Quarter pipe challenge reward", player),
         lambda state: pyramid_island_challenge3(state, player))
-    set_rule(world.get_location("Pyramid Island: Shortcut glass CD", player),
+    set_rule(multiworld.get_location("Pyramid Island: Shortcut glass CD", player),
         lambda state: inline_skates(state, player, movestyle))
-    set_rule(world.get_location("Pyramid Island: Maze outfit", player),
+    set_rule(multiworld.get_location("Pyramid Island: Maze outfit", player),
         lambda state: skateboard(state, player, movestyle))
     if not glitched:
-        add_rule(world.get_location("Pyramid Island: Rise joins the crew", player),
+        add_rule(multiworld.get_location("Pyramid Island: Rise joins the crew", player),
             lambda state: camera(state, player))
-    set_rule(world.get_location("Pyramid Island: Devil Theory joins the crew", player),
+    set_rule(multiworld.get_location("Pyramid Island: Devil Theory joins the crew", player),
         lambda state: current_chapter(state, player, 5))
     if photos:
-        set_rule(world.get_location("Pyramid Island: Polo pile 1", player),
+        set_rule(multiworld.get_location("Pyramid Island: Polo pile 1", player),
             lambda state: camera(state, player))
-        set_rule(world.get_location("Pyramid Island: Polo pile 2", player),
+        set_rule(multiworld.get_location("Pyramid Island: Polo pile 2", player),
             lambda state: camera(state, player))
-        set_rule(world.get_location("Pyramid Island: Polo pile 3", player),
+        set_rule(multiworld.get_location("Pyramid Island: Polo pile 3", player),
             lambda state: camera(state, player))
-        set_rule(world.get_location("Pyramid Island: Polo pile 4", player),
+        set_rule(multiworld.get_location("Pyramid Island: Polo pile 4", player),
             lambda state: camera(state, player))
-        set_rule(world.get_location("Pyramid Island: Maze glass Polo", player),
+        set_rule(multiworld.get_location("Pyramid Island: Maze glass Polo", player),
             lambda state: camera(state, player))
-        set_rule(world.get_location("Pyramid Island: Maze classroom Polo", player),
+        set_rule(multiworld.get_location("Pyramid Island: Maze classroom Polo", player),
             lambda state: camera(state, player))
-        set_rule(world.get_location("Pyramid Island: Maze vent Polo", player),
+        set_rule(multiworld.get_location("Pyramid Island: Maze vent Polo", player),
             lambda state: camera(state, player))
-        set_rule(world.get_location("Pyramid Island: Big maze Polo", player),
+        set_rule(multiworld.get_location("Pyramid Island: Big maze Polo", player),
             lambda state: camera(state, player))
-        set_rule(world.get_location("Pyramid Island: Maze desk Polo", player),
+        set_rule(multiworld.get_location("Pyramid Island: Maze desk Polo", player),
             lambda state: camera(state, player))
-        set_rule(world.get_location("Pyramid Island: Maze forklift Polo", player),
+        set_rule(multiworld.get_location("Pyramid Island: Maze forklift Polo", player),
             lambda state: camera(state, player))
 
     # mataan
-    set_rule(world.get_location("Mataan: Race challenge reward", player),
+    set_rule(multiworld.get_location("Mataan: Race challenge reward", player),
         lambda state: mataan_challenge1(state, player, limit, glitched))
-    set_rule(world.get_location("Mataan: Wallrunning challenge reward", player),
+    set_rule(multiworld.get_location("Mataan: Wallrunning challenge reward", player),
         lambda state: mataan_challenge2(state, player, limit, glitched))
-    set_rule(world.get_location("Mataan: Score challenge reward", player),
+    set_rule(multiworld.get_location("Mataan: Score challenge reward", player),
         lambda state: mataan_challenge3(state, player))
     if photos:
-        set_rule(world.get_location("Mataan: Trash Polo", player),
+        set_rule(multiworld.get_location("Mataan: Trash Polo", player),
             lambda state: camera(state, player))
-        set_rule(world.get_location("Mataan: Shopping Polo", player),
+        set_rule(multiworld.get_location("Mataan: Shopping Polo", player),
             lambda state: camera(state, player))
 
     # events
-    set_rule(world.get_location("Versum Hill: Complete Chapter 1", player),
+    set_rule(multiworld.get_location("Versum Hill: Complete Chapter 1", player),
         lambda state: versum_hill_crew_battle(state, player, limit, glitched))
-    set_rule(world.get_location("Brink Terminal: Complete Chapter 2", player),
+    set_rule(multiworld.get_location("Brink Terminal: Complete Chapter 2", player),
         lambda state: brink_terminal_crew_battle(state, player, limit, glitched))
-    set_rule(world.get_location("Millennium Mall: Complete Chapter 3", player),
+    set_rule(multiworld.get_location("Millennium Mall: Complete Chapter 3", player),
         lambda state: millennium_mall_crew_battle(state, player, limit, glitched))
-    set_rule(world.get_location("Pyramid Island: Complete Chapter 4", player),
+    set_rule(multiworld.get_location("Pyramid Island: Complete Chapter 4", player),
         lambda state: pyramid_island_crew_battle(state, player, limit, glitched))
-    set_rule(world.get_location("Defeat Faux", player),
+    set_rule(multiworld.get_location("Defeat Faux", player),
         lambda state: mataan_faux(state, player, limit, glitched))
     
     if extra:
-        add_rule(world.get_location("Defeat Faux", player),
+        add_rule(multiworld.get_location("Defeat Faux", player),
             lambda state: rep(state, player, 1000))
 
+    
     # graffiti spots
-    set_rule(world.get_location("Tagged 5 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 5))
-    set_rule(world.get_location("Tagged 10 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 10))
-    set_rule(world.get_location("Tagged 15 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 15))
-    set_rule(world.get_location("Tagged 20 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 20))
-    set_rule(world.get_location("Tagged 25 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 25))
-    set_rule(world.get_location("Tagged 30 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 30))
-    set_rule(world.get_location("Tagged 35 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 35))
-    set_rule(world.get_location("Tagged 40 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 40))
-    set_rule(world.get_location("Tagged 45 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 45))
-    set_rule(world.get_location("Tagged 50 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 50))
-    set_rule(world.get_location("Tagged 55 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 55))
-    set_rule(world.get_location("Tagged 60 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 60))
-    set_rule(world.get_location("Tagged 65 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 65))
-    set_rule(world.get_location("Tagged 70 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 70))
-    set_rule(world.get_location("Tagged 75 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 75))
-    set_rule(world.get_location("Tagged 80 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 80))
-    set_rule(world.get_location("Tagged 85 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 85))
-    set_rule(world.get_location("Tagged 90 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 90))
-    set_rule(world.get_location("Tagged 95 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 95))
-    set_rule(world.get_location("Tagged 100 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 100))
-    set_rule(world.get_location("Tagged 105 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 105))
-    set_rule(world.get_location("Tagged 110 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 110))
-    set_rule(world.get_location("Tagged 115 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 115))
-    set_rule(world.get_location("Tagged 120 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 120))
-    set_rule(world.get_location("Tagged 125 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 125))
-    set_rule(world.get_location("Tagged 130 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 130))
-    set_rule(world.get_location("Tagged 135 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 135))
-    set_rule(world.get_location("Tagged 140 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 140))
-    set_rule(world.get_location("Tagged 145 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 145))
-    set_rule(world.get_location("Tagged 150 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 150))
-    set_rule(world.get_location("Tagged 155 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 155))
-    set_rule(world.get_location("Tagged 160 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 160))
-    set_rule(world.get_location("Tagged 165 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 165))
-    set_rule(world.get_location("Tagged 170 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 170))
-    set_rule(world.get_location("Tagged 175 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 175))
-    set_rule(world.get_location("Tagged 180 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 180))
-    set_rule(world.get_location("Tagged 185 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 185))
-    set_rule(world.get_location("Tagged 190 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 190))
-    set_rule(world.get_location("Tagged 195 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 195))
-    set_rule(world.get_location("Tagged 200 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 200))
-    set_rule(world.get_location("Tagged 205 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 205))
-    set_rule(world.get_location("Tagged 210 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 210))
-    set_rule(world.get_location("Tagged 215 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 215))
-    set_rule(world.get_location("Tagged 220 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 220))
-    set_rule(world.get_location("Tagged 225 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 225))
-    set_rule(world.get_location("Tagged 230 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 230))
-    set_rule(world.get_location("Tagged 235 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 235))
-    set_rule(world.get_location("Tagged 240 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 240))
-    set_rule(world.get_location("Tagged 245 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 245))
-    set_rule(world.get_location("Tagged 250 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 250))
-    set_rule(world.get_location("Tagged 255 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 255))
-    set_rule(world.get_location("Tagged 260 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 260))
-    set_rule(world.get_location("Tagged 265 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 265))
-    set_rule(world.get_location("Tagged 270 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 270))
-    set_rule(world.get_location("Tagged 275 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 275))
-    set_rule(world.get_location("Tagged 280 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 280))
-    set_rule(world.get_location("Tagged 285 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 285))
-    set_rule(world.get_location("Tagged 290 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 290))
-    set_rule(world.get_location("Tagged 295 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 295))
-    set_rule(world.get_location("Tagged 300 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 300))
-    set_rule(world.get_location("Tagged 305 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 305))
-    set_rule(world.get_location("Tagged 310 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 310))
-    set_rule(world.get_location("Tagged 315 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 315))
-    set_rule(world.get_location("Tagged 320 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 320))
-    set_rule(world.get_location("Tagged 325 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 325))
-    set_rule(world.get_location("Tagged 330 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 300))
-    set_rule(world.get_location("Tagged 335 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 335))
-    set_rule(world.get_location("Tagged 340 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 340))
-    set_rule(world.get_location("Tagged 345 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 345))
-    set_rule(world.get_location("Tagged 350 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 350))
-    set_rule(world.get_location("Tagged 355 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 355))
-    set_rule(world.get_location("Tagged 360 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 360))
-    set_rule(world.get_location("Tagged 365 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 365))
-    set_rule(world.get_location("Tagged 370 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 370))
-    set_rule(world.get_location("Tagged 375 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 375))
-    set_rule(world.get_location("Tagged 380 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 380))
-    set_rule(world.get_location("Tagged 385 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 385))
-    set_rule(world.get_location("Tagged 389 Graffiti Spots", player),
+    spots: int = 0
+    while spots < 385:
+        spots += 5
+        set_rule(multiworld.get_location(f"Tagged {spots} Graffiti Spots", player),
+            lambda state: graffiti_spots(state, player, movestyle, limit, glitched, spots))
+
+    set_rule(multiworld.get_location("Tagged 389 Graffiti Spots", player),
         lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 389))
     
     
