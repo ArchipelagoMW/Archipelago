@@ -4,7 +4,7 @@ import settings
 import base64
 import logging
 
-from BaseClasses import Item, Region, MultiWorld, Tutorial, ItemClassification
+from BaseClasses import Item, Region, Tutorial, ItemClassification
 from .items import CV64Item, filler_item_names, get_item_info, get_item_names_to_ids, get_item_counts
 from .locations import CV64Location, get_location_info, verify_locations, get_location_names_to_ids, base_id
 from .entrances import verify_entrances, get_warp_entrances
@@ -18,7 +18,7 @@ from ..AutoWorld import WebWorld, World
 from .aesthetics import randomize_lighting, shuffle_sub_weapons, rom_empty_breakables_flags, rom_sub_weapon_flags, \
     randomize_music, get_start_inventory_data, get_location_data, randomize_shop_prices, get_loading_zone_bytes, \
     get_countdown_numbers
-from .rom import RomData, write_patch, get_base_rom_path, CV64ProcedurePatch
+from .rom import RomData, write_patch, get_base_rom_path, CV64ProcedurePatch, CV64_US_10_HASH
 from .client import Castlevania64Client
 
 
@@ -27,7 +27,7 @@ class CV64Settings(settings.Group):
         """File name of the CV64 US 1.0 rom"""
         copy_to = "Castlevania (USA).z64"
         description = "CV64 (US 1.0) ROM File"
-        md5s = [CV64ProcedurePatch.hash]
+        md5s = [CV64_US_10_HASH]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
 
@@ -85,12 +85,6 @@ class CV64World(World):
     auth: bytearray
 
     web = CV64Web()
-
-    @classmethod
-    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
-        rom_file = get_base_rom_path()
-        if not os.path.exists(rom_file):
-            raise FileNotFoundError(rom_file)
 
     def generate_early(self) -> None:
         # Generate the player's unique authentication

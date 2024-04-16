@@ -22,7 +22,7 @@ from settings import get_settings
 if TYPE_CHECKING:
     from . import CV64World
 
-CV64US10HASH = "1cc5cf3b4d29d8c3ade957648b529dc1"
+CV64_US_10_HASH = "1cc5cf3b4d29d8c3ade957648b529dc1"
 
 warp_map_offsets = [0xADF67, 0xADF77, 0xADF87, 0xADF97, 0xADFA7, 0xADFBB, 0xADFCB, 0xADFDF]
 
@@ -866,7 +866,7 @@ class CV64PatchExtensions(APPatchExtension):
 
 
 class CV64ProcedurePatch(APProcedurePatch, APTokenMixin):
-    hash = [CV64US10HASH]
+    hash = [CV64_US_10_HASH]
     patch_file_ending: str = ".apcv64"
     result_file_ending: str = ".z64"
 
@@ -907,15 +907,15 @@ def write_patch(world: "CV64World", patch: CV64ProcedurePatch, offset_data: Dict
                               warp_map_offsets[i] + 4, get_stage_info(active_warp_list[i], "mid spawn id"))
 
     # Change the Stage Select menu's text to reflect its new purpose.
-    patch.write_token(APTokenTypes.WRITE,
-                      0xEFAD0, bytes(cv64_string_to_bytearray(f"Where to...?\t{active_warp_list[0]}\t"
-                                                              f"`{str(s1s_per_warp).zfill(2)} {active_warp_list[1]}\t"
-                                                              f"`{str(s1s_per_warp * 2).zfill(2)} {active_warp_list[2]}\t"
-                                                              f"`{str(s1s_per_warp * 3).zfill(2)} {active_warp_list[3]}\t"
-                                                              f"`{str(s1s_per_warp * 4).zfill(2)} {active_warp_list[4]}\t"
-                                                              f"`{str(s1s_per_warp * 5).zfill(2)} {active_warp_list[5]}\t"
-                                                              f"`{str(s1s_per_warp * 6).zfill(2)} {active_warp_list[6]}\t"
-                                                              f"`{str(s1s_per_warp * 7).zfill(2)} {active_warp_list[7]}")))
+    patch.write_token(APTokenTypes.WRITE, 0xEFAD0, bytes(
+        cv64_string_to_bytearray(f"Where to...?\t{active_warp_list[0]}\t"
+                                 f"`{str(s1s_per_warp).zfill(2)} {active_warp_list[1]}\t"
+                                 f"`{str(s1s_per_warp * 2).zfill(2)} {active_warp_list[2]}\t"
+                                 f"`{str(s1s_per_warp * 3).zfill(2)} {active_warp_list[3]}\t"
+                                 f"`{str(s1s_per_warp * 4).zfill(2)} {active_warp_list[4]}\t"
+                                 f"`{str(s1s_per_warp * 5).zfill(2)} {active_warp_list[5]}\t"
+                                 f"`{str(s1s_per_warp * 6).zfill(2)} {active_warp_list[6]}\t"
+                                 f"`{str(s1s_per_warp * 7).zfill(2)} {active_warp_list[7]}")))
 
     # Write the new File Select stage numbers.
     for stage in world.active_stage_exits:
@@ -952,7 +952,7 @@ def write_patch(world: "CV64World", patch: CV64ProcedurePatch, offset_data: Dict
         wrapped_name, num_lines = cv64_text_wrap(item_name + "\nfor " +
                                                  world.multiworld.get_player_name(loc.item.player), 96)
         patch.write_token(APTokenTypes.WRITE, inject_address, bytes(get_item_text_color(loc) +
-                          cv64_string_to_bytearray(wrapped_name)))
+                                                                    cv64_string_to_bytearray(wrapped_name)))
         patch.write_token(APTokenTypes.WRITE, inject_address + 255, bytes([num_lines]))
 
     # Write the secondary name the client will use to distinguish a vanilla ROM from an AP one.
@@ -1011,7 +1011,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
-        if CV64US10HASH != basemd5.hexdigest():
+        if CV64_US_10_HASH != basemd5.hexdigest():
             raise Exception("Supplied Base Rom does not match known MD5 for Castlevania 64 US 1.0."
                             "Get the correct game and version, then dump it.")
         setattr(get_base_rom_bytes, "base_rom_bytes", base_rom_bytes)
