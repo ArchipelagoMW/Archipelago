@@ -13,7 +13,7 @@ from .locations import (locations, location_name_to_id, level_name_to_id, level_
                         auto_scroll_max)
 from .items import items
 from .sprites import level_sprites
-from .sprite_randomizer import randomize_sprites
+from .sprite_randomizer import randomize_enemies, randomize_platforms
 from .logic import has_pipe_up, has_pipe_down, has_pipe_left, has_pipe_right, has_level_progression, is_auto_scroll
 from . import logic
 
@@ -95,7 +95,8 @@ class MarioLand2World(World):
 
     def generate_early(self):
         self.sprite_data = deepcopy(level_sprites)
-        randomize_sprites(self.sprite_data, self.random)
+        randomize_enemies(self.sprite_data, self.random)
+        randomize_platforms(self.sprite_data, self.random)
         self.sprite_data["Mario's Castle"][35]["sprite"] = "Midway Bell"
 
         if self.options.auto_scroll_chances == -1:
@@ -425,16 +426,17 @@ class MarioLand2World(World):
         else:
             self.multiworld.push_precollected(self.create_item("Pipe Traversal"))
 
-        if self.options.auto_scroll_mode == "global_trap_item":
-            item_counts["Auto Scroll"] = 1
-        elif self.options.auto_scroll_mode == "global_cancel_item":
-            item_counts["Cancel Auto Scroll"] = 1
-        else:
-            for level, i in enumerate(self.auto_scroll_levels):
-                if i == 3:
-                    item_counts[f"Auto Scroll - {level_id_to_name[level]}"] = 1
-                elif i == 2:
-                    item_counts[f"Cancel Auto Scroll - {level_id_to_name[level]}"] = 1
+        if any(self.auto_scroll_levels):
+            if self.options.auto_scroll_mode == "global_trap_item":
+                item_counts["Auto Scroll"] = 1
+            elif self.options.auto_scroll_mode == "global_cancel_item":
+                item_counts["Cancel Auto Scroll"] = 1
+            else:
+                for level, i in enumerate(self.auto_scroll_levels):
+                    if i == 3:
+                        item_counts[f"Auto Scroll - {level_id_to_name[level]}"] = 1
+                    elif i == 2:
+                        item_counts[f"Cancel Auto Scroll - {level_id_to_name[level]}"] = 1
 
         for item in self.multiworld.precollected_items[self.player]:
             if item.name in item_counts and item_counts[item.name] > 0:

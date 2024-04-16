@@ -1,6 +1,6 @@
 
 
-def randomize_sprites(sprite_data, random):
+def randomize_enemies(sprite_data, random):
     for level, level_sprite_data in sprite_data.items():
         shuffle = ()
         if level in ("Mushroom Zone", "Macro Zone 4"):
@@ -99,3 +99,20 @@ def randomize_sprites(sprite_data, random):
                 print(f"Level: {level} - {old_sprite} changed to {sprite['sprite']}")
             elif level == "Mario's Castle" and sprite["sprite"] == "Karamenbo" and not random.randint(0, 9):
                 sprite["y"] += 1
+
+
+def randomize_platforms(sprite_data, random):
+    shuffle = ("Moving Platform (Small, Vertical)", "Moving Platform (Large, Vertical)",
+               "Moving Platform (Small, Horizontal)", "Moving Platform (Large, Horizontal)",
+               "Moving Platform (Large, Diagonal)", "Falling Platform")
+    for sprite in sprite_data["Tree Zone 3"]:
+        if sprite["sprite"] in shuffle:
+            sprite["sprite"] = random.choice(shuffle)
+    shuffle = ("Cloud Platform (Horizontal)", "Owl Platform (Horizontal)/Cheep Cheep (Horizontal)")
+    for sprite in sprite_data["Tree Zone 5"]:
+        if sprite["sprite"] in shuffle:
+            sprite["sprite"] = random.choice(shuffle)
+    shuffle = ("Falling Bone Platform", "Rising Bone Platform", "Skull Platform")
+    for sprite in sprite_data["Mario's Castle"]:
+        if sprite["sprite"] in shuffle:
+            sprite["sprite"] = random.choice(shuffle)

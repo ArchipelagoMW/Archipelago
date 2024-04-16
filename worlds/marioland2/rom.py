@@ -40,7 +40,7 @@ def randomize_sprite(data, random, arr, i):
 
 from .locations import level_id_to_name
 from .sprites import sprite_id_to_name
-def randomize_enemies(data, random):
+def z(data, random):
     i = 0xe077
     level = 0
     d = {}
