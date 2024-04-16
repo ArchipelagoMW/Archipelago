@@ -21,11 +21,11 @@ from BaseClasses import seeddigits, get_seed, PlandoOptions
 from Main import main as ERmain
 from settings import get_settings
 from Utils import parse_yamls, version_tuple, __version__, tuplize_version
-from worlds.alttp import Options as LttPOptions
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from worlds.alttp.Text import TextTable
 from worlds.AutoWorld import AutoWorldRegister
 from worlds.generic import PlandoConnection
+from worlds import failed_world_loads
 
 
 def mystery_argparse():
@@ -34,8 +34,8 @@ def mystery_argparse():
 
     parser = argparse.ArgumentParser(description="CMD Generation Interface, defaults come from host.yaml.")
     parser.add_argument('--weights_file_path', default=defaults.weights_file_path,
-                        help='Path to the weights file to use for rolling game settings, urls are also valid')
-    parser.add_argument('--samesettings', help='Rolls settings per weights file rather than per player',
+                        help='Path to the weights file to use for rolling game options, urls are also valid')
+    parser.add_argument('--sameoptions', help='Rolls options per weights file rather than per player',
                         action='store_true')
     parser.add_argument('--player_files_path', default=defaults.player_files_path,
                         help="Input directory for player files.")
@@ -103,8 +103,8 @@ def main(args=None, callback=ERmain):
             del(meta_weights["meta_description"])
         except Exception as e:
             raise ValueError("No meta description found for meta.yaml. Unable to verify.") from e
-        if args.samesettings:
-            raise Exception("Cannot mix --samesettings with --meta")
+        if args.sameoptions:
+            raise Exception("Cannot mix --sameoptions with --meta")
     else:
         meta_weights = None
     player_id = 1
@@ -156,7 +156,7 @@ def main(args=None, callback=ERmain):
     erargs.skip_output = args.skip_output
 
     settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
-        {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.samesettings else None)
+        {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.sameoptions else None)
          for fname, yamls in weights_cache.items()}
 
     if meta_weights:
@@ -302,31 +302,12 @@ def handle_name(name: str, player: int, name_counter: Counter):
                                                                  NUMBER=(number if number > 1 else ''),
                                                                  player=player,
                                                                  PLAYER=(player if player > 1 else '')))
-    new_name = new_name.strip()[:16]
+    # Run .strip twice for edge case where after the initial .slice new_name has a leading whitespace.
+    # Could cause issues for some clients that cannot handle the additional whitespace.
+    new_name = new_name.strip()[:16].strip()
     if new_name == "Archipelago":
         raise Exception(f"You cannot name yourself \"{new_name}\"")
     return new_name
-
-
-def prefer_int(input_data: str) -> Union[str, int]:
-    try:
-        return int(input_data)
-    except:
-        return input_data
-
-
-goals = {
-    'ganon': 'ganon',
-    'crystals': 'crystals',
-    'bosses': 'bosses',
-    'pedestal': 'pedestal',
-    'ganon_pedestal': 'ganonpedestal',
-    'triforce_hunt': 'triforcehunt',
-    'local_triforce_hunt': 'localtriforcehunt',
-    'ganon_triforce_hunt': 'ganontriforcehunt',
-    'local_ganon_triforce_hunt': 'localganontriforcehunt',
-    'ice_rod_hunt': 'icerodhunt',
-}
 
 
 def roll_percentage(percentage: Union[int, float]) -> bool:
@@ -335,13 +316,29 @@ def roll_percentage(percentage: Union[int, float]) -> bool:
     return random.random() < (float(percentage) / 100)
 
 
-def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> dict:
+def update_weights(weights: dict, new_weights: dict, update_type: str, name: str) -> dict:
     logging.debug(f'Applying {new_weights}')
-    new_options = set(new_weights) - set(weights)
-    weights.update(new_weights)
+    cleaned_weights = {}
+    for option in new_weights:
+        option_name = option.lstrip("+")
+        if option.startswith("+") and option_name in weights:
+            cleaned_value = weights[option_name]
+            new_value = new_weights[option]
+            if isinstance(new_value, (set, dict)):
+                cleaned_value.update(new_value)
+            elif isinstance(new_value, list):
+                cleaned_value.extend(new_value)
+            else:
+                raise Exception(f"Cannot apply merge to non-dict, set, or list type {option_name},"
+                                f" received {type(new_value).__name__}.")
+            cleaned_weights[option_name] = cleaned_value
+        else:
+            cleaned_weights[option_name] = new_weights[option]
+    new_options = set(cleaned_weights) - set(weights)
+    weights.update(cleaned_weights)
     if new_options:
         for new_option in new_options:
-            logging.warning(f'{type} Suboption "{new_option}" of "{name}" did not '
+            logging.warning(f'{update_type} Suboption "{new_option}" of "{name}" did not '
                             f'overwrite a root option. '
                             f'This is probably in error.')
     return weights
@@ -357,15 +354,6 @@ def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
             if options[option_key].supports_weighting:
                 return get_choice(option_key, category_dict)
             return category_dict[option_key]
-    if game == "A Link to the Past":  # TODO wow i hate this
-        if option_key in {"glitches_required", "dark_room_logic", "entrance_shuffle", "goals", "triforce_pieces_mode",
-                          "triforce_pieces_percentage", "triforce_pieces_available", "triforce_pieces_extra",
-                          "triforce_pieces_required", "shop_shuffle", "mode", "item_pool", "item_functionality",
-                          "boss_shuffle", "enemy_damage", "enemy_health", "timer", "countdown_start_time",
-                          "red_clock_time", "blue_clock_time", "green_clock_time", "dungeon_counters", "shuffle_prizes",
-                          "misery_mire_medallion", "turtle_rock_medallion", "sprite_pool", "sprite",
-                          "random_sprite_on_event"}:
-            return get_choice(option_key, category_dict)
     raise Exception(f"Error generating meta option {option_key} for {game}.")
 
 
@@ -463,7 +451,11 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
 
     ret.game = get_choice("game", weights)
     if ret.game not in AutoWorldRegister.world_types:
-        picks = Utils.get_fuzzy_results(ret.game, AutoWorldRegister.world_types, limit=1)[0]
+        picks = Utils.get_fuzzy_results(ret.game, list(AutoWorldRegister.world_types) + failed_world_loads, limit=1)[0]
+        if picks[0] in failed_world_loads:
+            raise Exception(f"No functional world found to handle game {ret.game}. "
+                            f"Did you mean '{picks[0]}' ({picks[1]}% sure)? "
+                            f"If so, it appears the world failed to initialize correctly.")
         raise Exception(f"No world found to handle game {ret.game}. Did you mean '{picks[0]}' ({picks[1]}% sure)? "
                         f"Check your spelling or installation of that world.")
 
@@ -472,6 +464,10 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
 
     world_type = AutoWorldRegister.world_types[ret.game]
     game_weights = weights[ret.game]
+
+    if any(weight.startswith("+") for weight in game_weights) or \
+       any(weight.startswith("+") for weight in weights):
+        raise Exception(f"Merge tag cannot be used outside of trigger contexts.")
 
     if "triggers" in game_weights:
         weights = roll_triggers(weights, game_weights["triggers"])
@@ -485,120 +481,23 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         handle_option(ret, game_weights, option_key, option, plando_options)
     if PlandoOptions.items in plando_options:
         ret.plando_items = game_weights.get("plando_items", [])
-    if ret.game == "Minecraft" or ret.game == "Ocarina of Time":
-        # bad hardcoded behavior to make this work for now
-        ret.plando_connections = []
-        if PlandoOptions.connections in plando_options:
-            options = game_weights.get("plando_connections", [])
-            for placement in options:
-                if roll_percentage(get_choice("percentage", placement, 100)):
-                    ret.plando_connections.append(PlandoConnection(
-                        get_choice("entrance", placement),
-                        get_choice("exit", placement),
-                        get_choice("direction", placement)
-                    ))
-    elif ret.game == "A Link to the Past":
+    if ret.game == "A Link to the Past":
         roll_alttp_settings(ret, game_weights, plando_options)
+    if PlandoOptions.connections in plando_options:
+        ret.plando_connections = []
+        options = game_weights.get("plando_connections", [])
+        for placement in options:
+            if roll_percentage(get_choice("percentage", placement, 100)):
+                ret.plando_connections.append(PlandoConnection(
+                    get_choice("entrance", placement),
+                    get_choice("exit", placement),
+                    get_choice("direction", placement, "both")
+                ))
 
     return ret
 
 
 def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
-    if "dungeon_items" in weights and get_choice_legacy('dungeon_items', weights, "none") != "none":
-        raise Exception(f"dungeon_items key in A Link to the Past was removed, but is present in these weights as {get_choice_legacy('dungeon_items', weights, False)}.")
-    glitches_required = get_choice_legacy('glitches_required', weights)
-    if glitches_required not in [None, 'none', 'no_logic', 'overworld_glitches', 'hybrid_major_glitches', 'minor_glitches']:
-        logging.warning("Only NMG, OWG, HMG and No Logic supported")
-        glitches_required = 'none'
-    ret.logic = {None: 'noglitches', 'none': 'noglitches', 'no_logic': 'nologic', 'overworld_glitches': 'owglitches',
-                 'minor_glitches': 'minorglitches', 'hybrid_major_glitches': 'hybridglitches'}[
-        glitches_required]
-
-    ret.dark_room_logic = get_choice_legacy("dark_room_logic", weights, "lamp")
-    if not ret.dark_room_logic:  # None/False
-        ret.dark_room_logic = "none"
-    if ret.dark_room_logic == "sconces":
-        ret.dark_room_logic = "torches"
-    if ret.dark_room_logic not in {"lamp", "torches", "none"}:
-        raise ValueError(f"Unknown Dark Room Logic: \"{ret.dark_room_logic}\"")
-
-    entrance_shuffle = get_choice_legacy('entrance_shuffle', weights, 'vanilla')
-    if entrance_shuffle.startswith('none-'):
-        ret.shuffle = 'vanilla'
-    else:
-        ret.shuffle = entrance_shuffle if entrance_shuffle != 'none' else 'vanilla'
-
-    goal = get_choice_legacy('goals', weights, 'ganon')
-
-    ret.goal = goals[goal]
-
-
-    extra_pieces = get_choice_legacy('triforce_pieces_mode', weights, 'available')
-
-    ret.triforce_pieces_required = LttPOptions.TriforcePieces.from_any(get_choice_legacy('triforce_pieces_required', weights, 20))
-
-    # sum a percentage to required
-    if extra_pieces == 'percentage':
-        percentage = max(100, float(get_choice_legacy('triforce_pieces_percentage', weights, 150))) / 100
-        ret.triforce_pieces_available = int(round(ret.triforce_pieces_required * percentage, 0))
-    # vanilla mode (specify how many pieces are)
-    elif extra_pieces == 'available':
-        ret.triforce_pieces_available = LttPOptions.TriforcePieces.from_any(
-            get_choice_legacy('triforce_pieces_available', weights, 30))
-    # required pieces + fixed extra
-    elif extra_pieces == 'extra':
-        extra_pieces = max(0, int(get_choice_legacy('triforce_pieces_extra', weights, 10)))
-        ret.triforce_pieces_available = ret.triforce_pieces_required + extra_pieces
-
-    # change minimum to required pieces to avoid problems
-    ret.triforce_pieces_available = min(max(ret.triforce_pieces_required, int(ret.triforce_pieces_available)), 90)
-
-    ret.shop_shuffle = get_choice_legacy('shop_shuffle', weights, '')
-    if not ret.shop_shuffle:
-        ret.shop_shuffle = ''
-
-    ret.mode = get_choice_legacy("mode", weights)
-
-    ret.difficulty = get_choice_legacy('item_pool', weights)
-
-    ret.item_functionality = get_choice_legacy('item_functionality', weights)
-
-
-    ret.enemy_damage = {None: 'default',
-                        'default': 'default',
-                        'shuffled': 'shuffled',
-                        'random': 'chaos', # to be removed
-                        'chaos': 'chaos',
-                        }[get_choice_legacy('enemy_damage', weights)]
-
-    ret.enemy_health = get_choice_legacy('enemy_health', weights)
-
-    ret.timer = {'none': False,
-                 None: False,
-                 False: False,
-                 'timed': 'timed',
-                 'timed_ohko': 'timed-ohko',
-                 'ohko': 'ohko',
-                 'timed_countdown': 'timed-countdown',
-                 'display': 'display'}[get_choice_legacy('timer', weights, False)]
-
-    ret.countdown_start_time = int(get_choice_legacy('countdown_start_time', weights, 10))
-    ret.red_clock_time = int(get_choice_legacy('red_clock_time', weights, -2))
-    ret.blue_clock_time = int(get_choice_legacy('blue_clock_time', weights, 2))
-    ret.green_clock_time = int(get_choice_legacy('green_clock_time', weights, 4))
-
-    ret.dungeon_counters = get_choice_legacy('dungeon_counters', weights, 'default')
-
-    ret.shuffle_prizes = get_choice_legacy('shuffle_prizes', weights, "g")
-
-    ret.required_medallions = [get_choice_legacy("misery_mire_medallion", weights, "random"),
-                               get_choice_legacy("turtle_rock_medallion", weights, "random")]
-
-    for index, medallion in enumerate(ret.required_medallions):
-        ret.required_medallions[index] = {"ether": "Ether", "quake": "Quake", "bombos": "Bombos", "random": "random"} \
-            .get(medallion.lower(), None)
-        if not ret.required_medallions[index]:
-            raise Exception(f"unknown Medallion {medallion} for {'misery mire' if index == 0 else 'turtle rock'}")
 
     ret.plando_texts = {}
     if PlandoOptions.texts in plando_options:
@@ -611,17 +510,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
                 if at not in tt:
                     raise Exception(f"No text target \"{at}\" found.")
                 ret.plando_texts[at] = str(get_choice_legacy("text", placement))
-
-    ret.plando_connections = []
-    if PlandoOptions.connections in plando_options:
-        options = weights.get("plando_connections", [])
-        for placement in options:
-            if roll_percentage(get_choice_legacy("percentage", placement, 100)):
-                ret.plando_connections.append(PlandoConnection(
-                    get_choice_legacy("entrance", placement),
-                    get_choice_legacy("exit", placement),
-                    get_choice_legacy("direction", placement, "both")
-                ))
 
     ret.sprite_pool = weights.get('sprite_pool', [])
     ret.sprite = get_choice_legacy('sprite', weights, "Link")

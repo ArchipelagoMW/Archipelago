@@ -413,26 +413,31 @@ def set_rules(hylics2world):
             lambda state: (
                 enter_foglast(state, player)
                 and bridge_key(state, player)
+                and air_dash(state, player)
             ))
         add_rule(world.get_location("New Muldul: Vault Rear Right Medallion", player),
             lambda state: (
                 enter_foglast(state, player)
                 and bridge_key(state, player)
+                and air_dash(state, player)
             ))
         add_rule(world.get_location("New Muldul: Vault Center Medallion", player),
             lambda state: (
                 enter_foglast(state, player)
                 and bridge_key(state, player)
+                and air_dash(state, player)
             ))
         add_rule(world.get_location("New Muldul: Vault Front Left Medallion", player),
             lambda state: (
                 enter_foglast(state, player)
                 and bridge_key(state, player)
+                and air_dash(state, player)
             ))
         add_rule(world.get_location("New Muldul: Vault Front Right Medallion", player),
             lambda state: (
                 enter_foglast(state, player)
                 and bridge_key(state, player)
+                and air_dash(state, player)
             ))
         add_rule(world.get_location("Viewax's Edifice: Fort Wall Medallion", player),
             lambda state: paddle(state, player))

@@ -2,7 +2,7 @@
 
 ## Required Software
 
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Make sure to check the box for `Zillion Client - Zillion Patch Setup`
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).
 
 - RetroArch 1.10.3 or newer from: [RetroArch Website](https://retroarch.com?page=platforms).
 
@@ -30,9 +30,10 @@ Put your Zillion ROM file in the Archipelago directory in your home directory.
 
 ### Windows Setup
 
-1. During the installation of Archipelago, install the Zillion Client. If you did not do this,
-   or you are on an older version, you may run the installer again to install the Zillion Client.
-2. During setup, you will be asked to locate your base ROM file. This is the Zillion ROM file mentioned above in Required Software.
+1. Download and install [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). **The installer 
+   file is located in the assets section at the bottom of the version information.**
+2. The first time you do local generation or patch your game, you will be asked to locate your base ROM file.
+   This is the Zillion ROM file mentioned above in Required Software. This only needs to be done once.
 
 ---
 # Play
@@ -46,7 +47,7 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a config file?
 
-The [player settings page](/games/Zillion/player-settings) on the website allows you to configure your personal settings and export a config file from
+The [player options page](/games/Zillion/player-options) on the website allows you to configure your personal options and export a config file from
 them.
 
 ### Verifying your config file
@@ -55,7 +56,7 @@ If you would like to validate your config file to make sure it works, you may do
 
 ## Generating a Single-Player Game
 
-1. Navigate to the [player settings page](/games/Zillion/player-settings), configure your options, and click the "Generate Game" button.
+1. Navigate to the [player options page](/games/Zillion/player-options), configure your options, and click the "Generate Game" button.
 2. A "Seed Info" page will appear.
 3. Click the "Create New Room" link.
 4. A server page will appear. Download your patch file from this page.
