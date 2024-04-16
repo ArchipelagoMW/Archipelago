@@ -4,9 +4,17 @@ on:
   pull_request:
     paths:
       - "**.py"
+      - ".github/type_check.sh"
+      - ".github/pyright-config.json"
+      - ".github/workflows/strict-type-check.yml"
+      - "**.pyi"
   push:
     paths:
       - "**.py"
+      - ".github/type_check.sh"
+      - ".github/pyright-config.json"
+      - ".github/workflows/strict-type-check.yml"
+      - "**.pyi"
 
 jobs:
   pyright:
