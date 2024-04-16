@@ -1,3 +1,11 @@
+# 2.0.1
+
+### Fixes
+
+- Changed "Ho-oh" to "Ho-Oh" in options
+- Temporary fix to alleviate problems with sometimes not receiving certain items just after connecting if `remote_items`
+is `true`.
+
 # 2.0.0
 
 ### Features
