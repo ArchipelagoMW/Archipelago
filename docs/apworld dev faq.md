@@ -22,7 +22,7 @@ total_locations = len(self.multiworld.get_unfilled_locations(self.player))
 item_pool = self.create_non_filler_items()
 
 while len(item_pool) < total_locations:
-    item_pool.append(self.create_item(self.get_filler_item_name()))
+    item_pool.append(self.create_filler())
 
 self.multiworld.itempool += item_pool
 ```
