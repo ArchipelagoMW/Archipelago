@@ -1,10 +1,9 @@
-import typing
 from dataclasses import dataclass
-from Options import DefaultOnToggle, Range, Toggle, DeathLink, Choice, PerGameCommonOptions, OptionSet
+from Options import Toggle, PerGameCommonOptions
 
 
 class EnableScoutFlies(Toggle):
-    """Enable to include each Scout Fly as a check. Adds 213 checks to the pool."""
+    """Enable to include each Scout Fly as a check. Adds 112 checks to the pool."""
     display_name = "Enable Scout Flies"
 
 

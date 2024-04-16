@@ -1,7 +1,8 @@
 from BaseClasses import Item, ItemClassification
 from .Locations import JakAndDaxterLocation, location_table
 from .Options import JakAndDaxterOptions
-from .Regions import JakAndDaxterLevel, JakAndDaxterSubLevel, JakAndDaxterRegion, level_table, subLevel_table, create_regions
+from .Regions import JakAndDaxterLevel, JakAndDaxterSubLevel, JakAndDaxterRegion, level_table, subLevel_table, \
+    create_regions
 from .Rules import set_rules
 from .Items import JakAndDaxterItem, item_table, generic_item_table, special_item_table
 from .GameID import game_id

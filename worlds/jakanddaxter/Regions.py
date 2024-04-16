@@ -72,7 +72,7 @@ class JakAndDaxterRegion(Region):
 
 
 def create_regions(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int):
-    region_menu = create_region(player, multiworld, "Menu")
+    create_region(player, multiworld, "Menu")
 
     region_gr = create_region(player, multiworld, level_table[JakAndDaxterLevel.GEYSER_ROCK])
     create_locations(region_gr, {
@@ -201,7 +201,8 @@ def create_regions(multiworld: MultiWorld, options: JakAndDaxterOptions, player:
         **{k: ScoutLocations.locGMC_scoutTable[k] for k in {206, 207, 208, 209, 210, 211}}
     })
 
-    sub_region_gmcrt = create_subregion(region_gmc, subLevel_table[JakAndDaxterSubLevel.GOL_AND_MAIAS_CITADEL_ROTATING_TOWER])
+    sub_region_gmcrt = create_subregion(region_gmc,
+                                        subLevel_table[JakAndDaxterSubLevel.GOL_AND_MAIAS_CITADEL_ROTATING_TOWER])
     create_locations(sub_region_gmcrt, {
         **{k: CellLocations.locGMC_cellTable[k] for k in {99, 100}},
         **{k: ScoutLocations.locGMC_scoutTable[k] for k in {212}}

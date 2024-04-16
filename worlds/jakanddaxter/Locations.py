@@ -1,4 +1,3 @@
-import typing
 from BaseClasses import Location
 from .locs import CellLocations, SpecialLocations, ScoutLocations
 

@@ -1,7 +1,6 @@
-import typing
 from BaseClasses import MultiWorld
 from .Options import JakAndDaxterOptions
-from .Regions import JakAndDaxterLevel, JakAndDaxterSubLevel, JakAndDaxterRegion, level_table, subLevel_table
+from .Regions import JakAndDaxterLevel, JakAndDaxterSubLevel, level_table, subLevel_table
 from .Items import item_table
 
 
@@ -109,17 +108,21 @@ def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int)
     connect_subregions(multiworld, player,
                        JakAndDaxterLevel.GOL_AND_MAIAS_CITADEL,
                        JakAndDaxterSubLevel.GOL_AND_MAIAS_CITADEL_ROTATING_TOWER,
-                       # lambda state: state.has(item_table[96], player) and state.has(item_table[97], player) and state.has(item_table[98], player))
+                       # lambda state: state.has(item_table[96], player)
+                       # and state.has(item_table[97], player)
+                       # and state.has(item_table[98], player))
                        lambda state: state.has(item_table[0], player, 75))
 
 
-def connect_regions(multiworld: MultiWorld, player: int, source: JakAndDaxterLevel, target: JakAndDaxterLevel, rule=None):
+def connect_regions(multiworld: MultiWorld, player: int, source: JakAndDaxterLevel, target: JakAndDaxterLevel,
+                    rule=None):
     source_region = multiworld.get_region(level_table[source], player)
     target_region = multiworld.get_region(level_table[target], player)
     source_region.connect(target_region, rule=rule)
 
 
-def connect_subregions(multiworld: MultiWorld, player: int, source: JakAndDaxterLevel, target: JakAndDaxterSubLevel, rule=None):
+def connect_subregions(multiworld: MultiWorld, player: int, source: JakAndDaxterLevel, target: JakAndDaxterSubLevel,
+                       rule=None):
     source_region = multiworld.get_region(level_table[source], player)
     target_region = multiworld.get_region(subLevel_table[target], player)
     source_region.connect(target_region, rule=rule)
