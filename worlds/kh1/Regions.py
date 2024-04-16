@@ -359,7 +359,9 @@ def create_regions(multiworld: MultiWorld, player: int, options):
    #regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 10")
     if options.super_bosses or options.goal.current_key == "super_boss_hunt":
         regions["Agrabah"].locations.append("Agrabah Defeat Kurt Zisa Ansem's Report 11")
+    if options.super_bosses or options.goal.current_key == "super_boss_hunt" or options.goal.current_key == "sephiroth":
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Sephiroth Ansem's Report 12")
+    if options.super_bosses or options.goal.current_key == "super_boss_hunt" or options.goal.current_key == "unknown":
         regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown Ansem's Report 13")
    
     for i in range(options.level_checks):
@@ -411,8 +413,9 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 90 Puppies")
     regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 99 Puppies Reward 1")
     regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 99 Puppies Reward 2")
-    if options.super_bosses or options.goal.current_key == "super_boss_hunt":
+    if options.super_bosses or options.goal.current_key == "super_boss_hunt" or options.goal.current_key == "sephiroth":
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Sephiroth One-Winged Angel Event")
+    if options.super_bosses or options.goal.current_key == "super_boss_hunt":
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Ice Titan Diamond Dust Event")
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Gates Purple Jar After Defeating Hades")
     regions["Halloween Town"].locations.append("Halloween Town Guillotine Square Ring Jack's Doorbell 3 Times")
@@ -467,6 +470,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Coliseum Gates Green Trinity")
     if options.super_bosses or options.goal.current_key == "super_boss_hunt":
         regions["Agrabah"].locations.append("Agrabah Defeat Kurt Zisa Zantetsuken Event")
+    if options.super_bosses or options.goal.current_key == "super_boss_hunt" or options.goal.current_key == "unknown":
         regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown EXP Necklace Event")
     
     regions["Traverse Town"].locations.append("Traverse Town Synth Log")
@@ -477,7 +481,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Traverse Town"].locations.append("Traverse Town Synth Mushroom")
 
     
-    if options.goal.current_key == "final_ansem" or options.require_final_ansem:
+    if options.goal.current_key == "final_ansem" or options.require_final_ansem or options.goal.current_key == "super_boss_hunt":
         regions["End of the World"].locations.append("Final Ansem")
 
     # Set up the regions correctly.
