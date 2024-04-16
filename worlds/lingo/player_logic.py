@@ -511,10 +511,13 @@ class LingoPlayerLogic:
                     continue
 
                 # We won't coalesce any panels that have requirements beyond colors. To simplify things for now, we will
-                # only coalesce single-color panels. Chains/stacks/combo puzzles will be separate.
+                # only coalesce single-color panels. Chains/stacks/combo puzzles will be separate. Panel door locked
+                # puzzles will be separate if panels mode is on.
                 if len(panel_data.required_panels) > 0 or len(panel_data.required_doors) > 0\
                         or len(panel_data.required_rooms) > 0\
-                        or (world.options.shuffle_colors and len(panel_data.colors) > 1):
+                        or (world.options.shuffle_colors and len(panel_data.colors) > 1)\
+                        or (world.options.shuffle_doors == ShuffleDoors.option_panels
+                            and panel_data.panel_door is not None):
                     self.counting_panel_reqs.setdefault(room_name, []).append(
                         (self.calculate_panel_requirements(room_name, panel_name, world), 1))
                 else:

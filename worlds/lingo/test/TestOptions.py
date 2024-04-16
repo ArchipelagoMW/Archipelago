@@ -29,3 +29,14 @@ class TestAllPanelHunt(LingoTestBase):
         "level_2_requirement": "800",
         "early_color_hallways": "true"
     }
+
+
+class TestAllPanelHuntPanelsMode(LingoTestBase):
+    options = {
+        "shuffle_doors": "panels",
+        "progressive_orange_tower": "true",
+        "shuffle_colors": "true",
+        "victory_condition": "level_2",
+        "level_2_requirement": "800",
+        "early_color_hallways": "true"
+    }
