@@ -9,9 +9,9 @@ As we are using Bizhawk, this guide is only applicable to Windows and Linux syst
 - Bizhawk: [Bizhawk Releases from TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
   - Version 2.9.1 is recommended.
   - Detailed installation instructions for Bizhawk can be found at the above link.
-  - Windows users must run the prereq installer first, which can also be found at the above link.
+  - Windows users must run the prerequisite installer first, which can also be found at the above link.
 - The built-in Bizhawk client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
-- A US Mario & Luigi: Superstar Saga ROM
+- A US copy Mario & Luigi: Superstar Saga
 
 ## Optional Software
 
