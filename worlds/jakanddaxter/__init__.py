@@ -10,6 +10,8 @@ from ..AutoWorld import World
 
 class JakAndDaxterWorld(World):
     game: str = "Jak and Daxter: The Precursor Legacy"
+    data_version = 1
+    required_client_version = (0, 4, 5)
 
     # Stored as {ID: Name} pairs, these must now be swapped to {Name: ID} pairs.
     item_name_to_id = {item_table[k]: game_id + k for k in item_table}
