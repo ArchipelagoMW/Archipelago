@@ -2,7 +2,7 @@ from typing import List
 
 from BaseClasses import ItemClassification, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from .Items import Celeste64Item, unlockable_item_data_table, item_data_table, item_table
+from .Items import Celeste64Item, unlockable_item_data_table, move_item_data_table, item_data_table, item_table
 from .Locations import Celeste64Location, strawberry_location_data_table, friend_location_data_table,\
                                           sign_location_data_table, car_location_data_table, location_table
 from .Names import ItemName
@@ -71,6 +71,11 @@ class Celeste64World(World):
                       for name in unlockable_item_data_table.keys()
                       if name not in self.options.start_inventory]
 
+        if self.options.move_shuffle:
+            item_pool += [self.create_item(name)
+                          for name in move_item_data_table.keys()
+                          if name not in self.options.start_inventory]
+
         real_total_strawberries: int = min(self.options.total_strawberries.value, location_count - len(item_pool))
         self.strawberries_required = int(real_total_strawberries * (self.options.strawberries_required_percentage / 100))
 
@@ -132,6 +137,7 @@ class Celeste64World(World):
             "death_link": self.options.death_link.value,
             "death_link_amnesty": self.options.death_link_amnesty.value,
             "strawberries_required": self.strawberries_required,
+            "move_shuffle": self.options.move_shuffle.value,
             "friendsanity": self.options.friendsanity.value,
             "signsanity": self.options.signsanity.value,
             "carsanity": self.options.carsanity.value,

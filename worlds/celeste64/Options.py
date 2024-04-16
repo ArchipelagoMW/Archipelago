@@ -25,6 +25,25 @@ class StrawberriesRequiredPercentage(Range):
     default = 80
 
 
+class LogicDifficulty(Toggle):
+    """Whether chatting with your friends grants location checks"""
+    display_name = "Logic Difficulty"
+    option_standard = 0
+    option_hard = 1
+    default = 0
+
+class MoveShuffle(Toggle):
+    """
+    Whether the following base movement abilities are shuffled into the item pool:
+    - Ground Dash
+    - Air Dash
+    - Skid Jump
+    - Climb
+    WARNING: Combining Move Shuffle and Hard Logic Difficulty can require very difficult tricks
+    """
+    display_name = "Move Shuffle"
+
+
 class Friendsanity(Toggle):
     """Whether chatting with your friends grants location checks"""
     display_name = "Friendsanity"
@@ -53,6 +72,7 @@ class BadelineChaserFrequency(Range):
     """
     How many of the `Badeline Chaser Source` actions must occur to make each Badeline Chaser start spawning
     NOTE: Choosing `0` disables Badeline Chasers entirely
+    WARNING: Turning on Badeling Chasers alongside Move Shuffle could result in extremely difficult situations
     """
     display_name = "Badeline Chaser Frequency"
     range_start = 0
@@ -74,6 +94,9 @@ class Celeste64Options(PerGameCommonOptions):
 
     total_strawberries: TotalStrawberries
     strawberries_required_percentage: StrawberriesRequiredPercentage
+
+    logic_difficulty: LogicDifficulty
+    move_shuffle: MoveShuffle
 
     friendsanity: Friendsanity
     signsanity: Signsanity
