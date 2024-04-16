@@ -611,7 +611,7 @@ def spots_l_glitchless(state: CollectionState, player: int, limit: bool, access_
         
 
 def spots_l_glitched(state: CollectionState, player: int, limit: bool, access_cache: Dict[str, bool]) -> int:
-    total: int = 90
+    total: int = 88
     conditions: Dict[str, int] = {
         "brink_terminal_entrance": 18,
         "chapter3": 4,

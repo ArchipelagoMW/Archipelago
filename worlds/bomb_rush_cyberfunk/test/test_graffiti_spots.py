@@ -250,7 +250,7 @@ class TestSpotsGlitched(BombRushCyberfunkTestBase):
 
         self.assertEqual(75, spots_s_glitched(self.multiworld.state, player, False, access_cache))
         self.assertEqual(99, spots_m_glitched(self.multiworld.state, player, False, access_cache))
-        self.assertEqual(90, spots_l_glitched(self.multiworld.state, player, False, access_cache))
+        self.assertEqual(88, spots_l_glitched(self.multiworld.state, player, False, access_cache))
         self.assertEqual(51, spots_xl_glitched(self.multiworld.state, player, False, access_cache))
 
 
@@ -262,7 +262,7 @@ class TestSpotsGlitched(BombRushCyberfunkTestBase):
         # brink terminal
         self.assertEqual(88, spots_s_glitched(self.multiworld.state, player, False, access_cache))
         self.assertEqual(120, spots_m_glitched(self.multiworld.state, player, False, access_cache))
-        self.assertEqual(108, spots_l_glitched(self.multiworld.state, player, False, access_cache))
+        self.assertEqual(106, spots_l_glitched(self.multiworld.state, player, False, access_cache))
         self.assertEqual(58, spots_xl_glitched(self.multiworld.state, player, False, access_cache))
 
 
@@ -272,7 +272,7 @@ class TestSpotsGlitched(BombRushCyberfunkTestBase):
         # chapter 3
         self.assertEqual(94, spots_s_glitched(self.multiworld.state, player, False, access_cache))
         self.assertEqual(123, spots_m_glitched(self.multiworld.state, player, False, access_cache))
-        self.assertEqual(112, spots_l_glitched(self.multiworld.state, player, False, access_cache))
+        self.assertEqual(110, spots_l_glitched(self.multiworld.state, player, False, access_cache))
         self.assertEqual(61, spots_xl_glitched(self.multiworld.state, player, False, access_cache))
 
 
@@ -280,5 +280,5 @@ class TestSpotsGlitched(BombRushCyberfunkTestBase):
         access_cache = build_access_cache(self.multiworld.state, player, 2, False, True)
 
         # chapter 4
-        self.assertEqual(113, spots_l_glitched(self.multiworld.state, player, False, access_cache))
+        self.assertEqual(111, spots_l_glitched(self.multiworld.state, player, False, access_cache))
         self.assertEqual(62, spots_xl_glitched(self.multiworld.state, player, False, access_cache))
