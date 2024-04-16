@@ -159,7 +159,6 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
             multiworld.push_item(spot_to_fill, item_to_place, False)
             spot_to_fill.locked = lock
             placements.append(spot_to_fill)
-            spot_to_fill.event = item_to_place.advancement
             placed += 1
             if not placed % 1000:
                 _log_fill_progress(name, placed, total)
@@ -312,7 +311,6 @@ def accessibility_corrections(multiworld: MultiWorld, state: CollectionState, lo
             pool.append(location.item)
             state.remove(location.item)
             location.item = None
-            location.event = False
             if location in state.events:
                 state.events.remove(location)
             locations.append(location)
@@ -662,7 +660,7 @@ def balance_multiworld_progression(multiworld: MultiWorld) -> None:
                     while True:
                         # Check locations in the current sphere and gather progression items to swap earlier
                         for location in balancing_sphere:
-                            if location.event:
+                            if location.advancement:
                                 balancing_state.collect(location.item, True, location)
                                 player = location.item.player
                                 # only replace items that end up in another player's world
@@ -719,7 +717,7 @@ def balance_multiworld_progression(multiworld: MultiWorld) -> None:
 
                     # sort then shuffle to maintain deterministic behaviour,
                     # while allowing use of set for better algorithm growth behaviour elsewhere
-                    replacement_locations = sorted(l for l in checked_locations if not l.event and not l.locked)
+                    replacement_locations = sorted(l for l in checked_locations if not l.advancement and not l.locked)
                     multiworld.random.shuffle(replacement_locations)
                     items_to_replace.sort()
                     multiworld.random.shuffle(items_to_replace)
@@ -750,7 +748,7 @@ def balance_multiworld_progression(multiworld: MultiWorld) -> None:
                             sphere_locations.add(location)
 
             for location in sphere_locations:
-                if location.event:
+                if location.advancement:
                     state.collect(location.item, True, location)
             checked_locations |= sphere_locations
 
@@ -771,7 +769,6 @@ def swap_location_item(location_1: Location, location_2: Location, check_locked:
     location_2.item, location_1.item = location_1.item, location_2.item
     location_1.item.location = location_1
     location_2.item.location = location_2
-    location_1.event, location_2.event = location_2.event, location_1.event
 
 
 def distribute_planned(multiworld: MultiWorld) -> None:

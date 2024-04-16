@@ -38,7 +38,7 @@ class NoitaWorld(World):
 
     web = NoitaWeb()
 
-    def generate_early(self):
+    def generate_early(self) -> None:
         if not self.multiworld.get_player_name(self.player).isascii():
             raise Exception("Noita yaml's slot name has invalid character(s).")
     
