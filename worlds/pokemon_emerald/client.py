@@ -98,7 +98,7 @@ LEGENDARY_NAMES = {
     "Registeel": "REGISTEEL",
     "Mew": "MEW",
     "Deoxys": "DEOXYS",
-    "Ho-oh": "HO_OH",
+    "Ho-Oh": "HO_OH",
     "Lugia": "LUGIA",
 }
 

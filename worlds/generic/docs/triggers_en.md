@@ -6,7 +6,7 @@ about 5 minutes to read.
 
 ## What are triggers?
 
-Triggers allow you to customize your game settings by allowing you to define one or many options which only occur under
+Triggers allow you to customize your game options by allowing you to define one or many options which only occur under
 specific conditions. These are essentially "if, then" statements for options in your game. A good example of what you
 can do with triggers is the [custom mercenary mode YAML
 ](https://github.com/alwaysintreble/Archipelago-yaml-dump/blob/main/Snippets/Mercenary%20Mode%20Snippet.yaml) that was
