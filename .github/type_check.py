@@ -9,7 +9,7 @@ print(" ".join(command))
 
 try:
     result = subprocess.run(
-        ("pyright", "-p", str(config)),
+        command,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE
     )
