@@ -4,14 +4,12 @@ on:
   pull_request:
     paths:
       - "**.py"
-      - ".github/type_check.sh"
       - ".github/pyright-config.json"
       - ".github/workflows/strict-type-check.yml"
       - "**.pyi"
   push:
     paths:
       - "**.py"
-      - ".github/type_check.sh"
       - ".github/pyright-config.json"
       - ".github/workflows/strict-type-check.yml"
       - "**.pyi"
@@ -32,4 +30,4 @@ jobs:
           python ModuleUpdate.py --append "WebHostLib/requirements.txt" --force --yes
 
       - name: "pyright: strict check on specific files"
-        run: .github/type_check.sh
+        run: python .github/type_check.py

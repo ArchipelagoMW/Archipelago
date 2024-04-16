@@ -1,5 +1,6 @@
 {
   "include": [
+    "type_check.py",
     "../worlds/AutoSNIClient.py",
     "../Patch.py"
   ],
@@ -16,7 +17,7 @@
   "reportMissingTypeStubs": true,
 
   "pythonVersion": "3.8",
-  "pythonPlatform": "Linux",
+  "pythonPlatform": "Windows",
 
   "executionEnvironments": [
     {
