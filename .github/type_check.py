@@ -4,7 +4,7 @@ import sys
 
 config = Path(__file__).parent / "pyright-config.json"
 
-command: int = ("pyright", "-p", str(config))
+command = ("pyright", "-p", str(config))
 print(" ".join(command))
 
 try:
