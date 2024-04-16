@@ -133,7 +133,6 @@ class MLSSClient(BizHawkClient):
             # ASM reads the ID in a loop and give the player the item before resetting the RAM address to 0x0.
             # If RAM address isn't 0x0 yet break out and try again later to give the rest of the items
             for i in range(len(ctx.items_received) - received_index):
-                logger.info(f"Receiving items: {len(ctx.items_received) - received_index}")
                 item_data = items_by_id[ctx.items_received[received_index + i].item]
                 b = await bizhawk.guarded_read(ctx.bizhawk_ctx, [(0x3057, 1, "EWRAM")], [(0x3057, [0x0], "EWRAM")])
                 if b is None:
@@ -144,7 +143,6 @@ class MLSSClient(BizHawkClient):
             # Early return and location send if you are currently in a shop,
             # since other flags aren't going to change
             if shopping & 0x3 == 0x3:
-                logger.info("Shopping")
                 if locs_to_send != self.local_checked_locations:
                     self.local_checked_locations = locs_to_send
 
