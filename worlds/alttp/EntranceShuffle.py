@@ -3,6 +3,8 @@ from collections import defaultdict
 
 from .OverworldGlitchRules import overworld_glitch_connections
 from .UnderworldGlitchRules import underworld_glitch_connections
+from .Regions import mark_light_world_regions
+from .InvertedRegions import mark_dark_world_regions
 
 
 def link_entrances(world, player):
@@ -1827,6 +1829,10 @@ def plando_connect(world, player: int):
                 func(world, connection.entrance, connection.exit, player)
             except Exception as e:
                 raise Exception(f"Could not connect using {connection}") from e
+        if world.mode[player] != 'inverted':
+            mark_light_world_regions(world, player)
+        else:
+            mark_dark_world_regions(world, player)
 
 
 LW_Dungeon_Entrances = ['Desert Palace Entrance (South)',
@@ -2651,6 +2657,10 @@ mandatory_connections = [('Links House S&Q', 'Links House'),
                          ('Turtle Rock (Dark Room) (North)', 'Turtle Rock (Crystaroller Room)'),
                          ('Turtle Rock (Dark Room) (South)', 'Turtle Rock (Eye Bridge)'),
                          ('Turtle Rock Dark Room (South)', 'Turtle Rock (Dark Room)'),
+                         ('Turtle Rock Second Section Bomb Wall', 'Turtle Rock (Second Section Bomb Wall)'),
+                         ('Turtle Rock Second Section from Bomb Wall', 'Turtle Rock (Second Section)'),
+                         ('Turtle Rock Eye Bridge Bomb Wall', 'Turtle Rock (Eye Bridge Bomb Wall)'),
+                         ('Turtle Rock Eye Bridge from Bomb Wall', 'Turtle Rock (Eye Bridge)'),
                          ('Turtle Rock (Trinexx)', 'Turtle Rock (Trinexx)'),
                          ('Palace of Darkness Bridge Room', 'Palace of Darkness (Center)'),
                          ('Palace of Darkness Bonk Wall', 'Palace of Darkness (Bonk Section)'),
@@ -2809,6 +2819,10 @@ inverted_mandatory_connections = [('Links House S&Q', 'Inverted Links House'),
                                   ('Turtle Rock (Dark Room) (North)', 'Turtle Rock (Crystaroller Room)'),
                                   ('Turtle Rock (Dark Room) (South)', 'Turtle Rock (Eye Bridge)'),
                                   ('Turtle Rock Dark Room (South)', 'Turtle Rock (Dark Room)'),
+                                  ('Turtle Rock Second Section Bomb Wall', 'Turtle Rock (Second Section Bomb Wall)'),
+                                  ('Turtle Rock Second Section from Bomb Wall', 'Turtle Rock (Second Section)'),
+                                  ('Turtle Rock Eye Bridge Bomb Wall', 'Turtle Rock (Eye Bridge Bomb Wall)'),
+                                  ('Turtle Rock Eye Bridge from Bomb Wall', 'Turtle Rock (Eye Bridge)'),
                                   ('Turtle Rock (Trinexx)', 'Turtle Rock (Trinexx)'),
                                   ('Palace of Darkness Bridge Room', 'Palace of Darkness (Center)'),
                                   ('Palace of Darkness Bonk Wall', 'Palace of Darkness (Bonk Section)'),

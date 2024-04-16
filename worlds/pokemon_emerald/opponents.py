@@ -80,7 +80,7 @@ def randomize_opponent_parties(world: "PokemonEmeraldWorld") -> None:
                 per_species_tmhm_moves[new_species.species_id] = sorted({
                     world.modified_tmhm_moves[i]
                     for i, is_compatible in enumerate(int_to_bool_array(new_species.tm_hm_compatibility))
-                    if is_compatible
+                    if is_compatible and world.modified_tmhm_moves[i] not in world.blacklisted_moves
                 })
 
             # TMs and HMs compatible with the species
