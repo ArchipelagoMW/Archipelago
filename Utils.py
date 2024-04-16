@@ -732,7 +732,14 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         root.update()
 
 
-def askyesnocancel(title: str, text: str) -> Optional[bool]:
+def ask_yes_no_cancel(title: str, text: str) -> Optional[bool]:
+    """
+    Wrapper for tkinter.messagebox.askyesnocancel, that creates a popup dialog box with yes, no, and cancel buttons.
+
+    :param title: Title to be displayed at the top of the message box.
+    :param text: Text to be displayed inside the message box.
+    :return: Returns True if yes, False if no, None if cancel.
+    """
     from tkinter import Tk, messagebox
     root = Tk()
     root.withdraw()

@@ -6,7 +6,7 @@ import urllib.request
 from shutil import which
 from typing import Any, Optional
 from zipfile import ZipFile
-from Utils import open_file, askyesnocancel
+from Utils import open_file, ask_yes_no_cancel
 
 import requests
 
@@ -155,14 +155,14 @@ def launch_game(url: Optional[str] = None) -> None:
     except ImportError:
         pass
     if not courier_installed():
-        should_install = askyesnocancel("Install Courier",
+        should_install = ask_yes_no_cancel("Install Courier",
                                         "No Courier installation detected. Would you like to install now?")
         if not should_install:
             return
         logging.info("Installing Courier")
         install_courier()
     if not mod_installed():
-        should_install = askyesnocancel("Install Mod",
+        should_install = ask_yes_no_cancel("Install Mod",
                                         "No randomizer mod detected. Would you like to install now?")
         if not should_install:
             return
@@ -171,14 +171,14 @@ def launch_game(url: Optional[str] = None) -> None:
     else:
         latest = request_data(MOD_URL)["tag_name"]
         if available_mod_update(latest):
-            should_update = askyesnocancel("Update Mod",
+            should_update = ask_yes_no_cancel("Update Mod",
                                            f"New mod version detected. Would you like to update to {latest} now?")
             if should_update:
                 logging.info("Updating mod")
                 install_mod()
             elif should_update is None:
                 return
-    should_launch = askyesnocancel("Launch Game",
+    should_launch = ask_yes_no_cancel("Launch Game",
                                    "Mod installed and up to date. Would you like to launch the game now?")
     if not should_launch:
         return
