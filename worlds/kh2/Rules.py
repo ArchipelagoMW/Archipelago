@@ -216,6 +216,7 @@ class KH2Rules:
         return False
 
 
+
 class KH2WorldRules(KH2Rules):
     def __init__(self, kh2world: KH2World) -> None:
         # These Rules are Always in effect
@@ -306,34 +307,35 @@ class KH2WorldRules(KH2Rules):
 
     def set_kh2_goal(self):
         final_xemnas_location = self.multiworld.get_location(LocationName.FinalXemnasEventLocation, self.player)
-        if self.multiworld.Goal[self.player] == "three_proofs":
+        if self.world.options.Goal == "three_proofs":
             final_xemnas_location.access_rule = lambda state: self.kh2_has_all(three_proofs, state)
-            if self.multiworld.FinalXemnas[self.player]:
+            if self.world.options.FinalXemnas:
                 self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
             else:
                 self.multiworld.completion_condition[self.player] = lambda state: self.kh2_has_all(three_proofs, state)
         # lucky emblem hunt
-        elif self.multiworld.Goal[self.player] == "lucky_emblem_hunt":
-            final_xemnas_location.access_rule = lambda state: state.has(ItemName.LuckyEmblem, self.player, self.multiworld.LuckyEmblemsRequired[self.player].value)
-            if self.multiworld.FinalXemnas[self.player]:
+        elif self.world.options.Goal == "lucky_emblem_hunt":
+            final_xemnas_location.access_rule = lambda state: state.has(ItemName.LuckyEmblem, self.player, self.world.options.LuckyEmblemsRequired.value)
+            if self.world.options.FinalXemnas:
                 self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
             else:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.LuckyEmblem, self.player, self.multiworld.LuckyEmblemsRequired[self.player].value)
+                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.LuckyEmblem, self.player, self.world.options.LuckyEmblemsRequired.value)
         # hitlist if == 2
-        elif self.multiworld.Goal[self.player] == "hitlist":
-            final_xemnas_location.access_rule = lambda state: state.has(ItemName.Bounty, self.player, self.multiworld.BountyRequired[self.player].value)
-            if self.multiworld.FinalXemnas[self.player]:
+        elif self.world.options.Goal == "hitlist":
+            final_xemnas_location.access_rule = lambda state: state.has(ItemName.Bounty, self.player, self.world.options.BountyRequired.value)
+            if self.world.options.FinalXemnas:
                 self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
             else:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty, self.player, self.multiworld.BountyRequired[self.player].value)
+                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty, self.player, self.world.options.BountyRequired.value)
         else:
-            final_xemnas_location.access_rule = lambda state: state.has(ItemName.Bounty, self.player, self.multiworld.BountyRequired[self.player].value) and \
-                                                              state.has(ItemName.LuckyEmblem, self.player, self.multiworld.LuckyEmblemsRequired[self.player].value)
-            if self.multiworld.FinalXemnas[self.player]:
+          
+            final_xemnas_location.access_rule = lambda state: state.has(ItemName.Bounty, self.player, self.world.options.BountyRequired.value) and \
+                                                              state.has(ItemName.LuckyEmblem, self.player, self.world.options.LuckyEmblemsRequired.value)
+            if self.world.options.FinalXemnas:
                 self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
             else:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty, self.player, self.multiworld.BountyRequired[self.player].value) and \
-                                                                                  state.has(ItemName.LuckyEmblem, self.player, self.multiworld.LuckyEmblemsRequired[self.player].value)
+                self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty, self.player, self.world.options.BountyRequired.value) and \
+                                                                                  state.has(ItemName.LuckyEmblem, self.player, self.world.options.LuckyEmblemsRequired.value)
 
 
 class KH2FormRules(KH2Rules):
@@ -528,7 +530,7 @@ class KH2FightRules(KH2Rules):
     # if skip rules are of return false
     def __init__(self, world: KH2World) -> None:
         super().__init__(world)
-        self.fight_logic = self.multiworld.FightLogic[self.player].current_key
+        self.fight_logic = world.options.FightLogic.current_key
 
         self.fight_region_rules = {
             RegionName.ShanYu:            lambda state: self.get_shan_yu_rules(state),
@@ -1260,7 +1262,7 @@ class KH2FightRules(KH2Rules):
 
     def get_cor_skip_first_rules(self, state: CollectionState) -> bool:
         # if option is not allow skips return false else run rules
-        if not self.multiworld.CorSkipToggle[self.player]:
+        if not self.world.options.CorSkipToggle:
             return False
         # easy: aerial dodge 3,master form,fire
         # normal: aerial dodge 2, master form,fire

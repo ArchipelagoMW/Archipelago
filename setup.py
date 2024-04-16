@@ -68,7 +68,6 @@ non_apworlds: set = {
     "Archipelago",
     "ChecksFinder",
     "Clique",
-    "DLCQuest",
     "Final Fantasy",
     "Lufia II Ancient Cave",
     "Meritous",
@@ -80,13 +79,11 @@ non_apworlds: set = {
     "Super Mario 64",
     "VVVVVV",
     "Wargroove",
-    "Zillion",
 }
 
 # LogicMixin is broken before 3.10 import revamp
 if sys.version_info < (3,10):
     non_apworlds.add("Hollow Knight")
-    non_apworlds.add("Starcraft 2 Wings of Liberty")
 
 def download_SNI():
     print("Updating SNI")
@@ -349,6 +346,18 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
             for folder in sdl2.dep_bins + glew.dep_bins:
                 shutil.copytree(folder, self.libfolder, dirs_exist_ok=True)
                 print(f"copying {folder} -> {self.libfolder}")
+            # windows needs Visual Studio C++ Redistributable
+            # Installer works for x64 and arm64
+            print("Downloading VC Redist")
+            import certifi
+            import ssl
+            context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=certifi.where())
+            with urllib.request.urlopen(r"https://aka.ms/vs/17/release/vc_redist.x64.exe",
+                                        context=context) as download:
+                vc_redist = download.read()
+            print(f"Download complete, {len(vc_redist) / 1024 / 1024:.2f} MBytes downloaded.", )
+            with open("VC_redist.x64.exe", "wb") as vc_file:
+                vc_file.write(vc_redist)
 
         for data in self.extra_data:
             self.installfile(Path(data))
@@ -384,8 +393,6 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
                     folders_to_remove.append(file_name)
                 shutil.rmtree(world_directory)
         shutil.copyfile("meta.yaml", self.buildfolder / "Players" / "Templates" / "meta.yaml")
-        # TODO: fix LttP options one day
-        shutil.copyfile("playerSettings.yaml", self.buildfolder / "Players" / "Templates" / "A Link to the Past.yaml")
         try:
             from maseya import z3pr
         except ImportError:

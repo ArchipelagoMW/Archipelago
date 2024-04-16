@@ -183,7 +183,8 @@ def create_regions(self):
     for puzzle_region_name in puzzle_region_list:
         KH2REGIONS[puzzle_region_name] = []
 
-    if multiworld.LevelDepth[player] == "level_50":
+    if self.options.LevelDepth == "level_50":
+
         KH2REGIONS[RegionName.LevelsVS1] = [LocationName.Lvl2, LocationName.Lvl4, LocationName.Lvl7, LocationName.Lvl9,
                                             LocationName.Lvl10]
         KH2REGIONS[RegionName.LevelsVS3] = [LocationName.Lvl12, LocationName.Lvl14, LocationName.Lvl15,
@@ -197,7 +198,7 @@ def create_regions(self):
         KH2REGIONS[RegionName.LevelsVS15] = [LocationName.Lvl50]
 
     # level 99
-    elif multiworld.LevelDepth[player] == "level_99":
+    elif self.options.LevelDepth == "level_99":
         KH2REGIONS[RegionName.LevelsVS1] = [LocationName.Lvl7, LocationName.Lvl9]
         KH2REGIONS[RegionName.LevelsVS3] = [LocationName.Lvl12, LocationName.Lvl15, LocationName.Lvl17,
                                             LocationName.Lvl20]
@@ -213,7 +214,7 @@ def create_regions(self):
         KH2REGIONS[RegionName.LevelsVS26] = [LocationName.Lvl99]
     # level sanity
     # has to be [] instead of {} for in
-    elif multiworld.LevelDepth[player] in ["level_50_sanity", "level_99_sanity"]:
+    elif self.options.LevelDepth in ["level_50_sanity", "level_99_sanity"]:
         KH2REGIONS[RegionName.LevelsVS1] = [LocationName.Lvl2, LocationName.Lvl3, LocationName.Lvl4, LocationName.Lvl5,
                                             LocationName.Lvl6,
                                             LocationName.Lvl7, LocationName.Lvl8, LocationName.Lvl9, LocationName.Lvl10]
@@ -234,7 +235,7 @@ def create_regions(self):
                                              LocationName.Lvl46, LocationName.Lvl47, LocationName.Lvl48,
                                              LocationName.Lvl49, LocationName.Lvl50]
         # level 99 sanity
-        if multiworld.LevelDepth[player] == "level_99_sanity":
+        if self.options.LevelDepth == "level_99_sanity":
             KH2REGIONS[RegionName.LevelsVS15] = [LocationName.Lvl51, LocationName.Lvl52, LocationName.Lvl53,
                                                  LocationName.Lvl54,
                                                  LocationName.Lvl55, LocationName.Lvl56, LocationName.Lvl57,
@@ -260,8 +261,6 @@ def create_regions(self):
                                                  LocationName.Lvl95, LocationName.Lvl96, LocationName.Lvl97,
                                                  LocationName.Lvl98, LocationName.Lvl99]
     KH2REGIONS[RegionName.Summon] = []
-    if multiworld.SummonLevelLocationToggle[player]:
-        KH2REGIONS[RegionName.Summon] = RegionLocations.SummonRegionLocations
 
     if self.options.PuzzlePiecesLocationToggle:
         KH2REGIONS[RegionName.Tt1PuzzlePieces] = RegionLocations.Tt1PuzzlePiecesLocations
@@ -305,6 +304,15 @@ def create_regions(self):
     # for region_name in [Heart_Checks.keys(), Duality_Checks.keys(), Frontier_Checks.keys(), Sunset_Checks.keys(), Daylight_Checks.keys()]:
     #    for location in region_name:
     #        KH2REGIONS[RegionName.PuzzlePieces].append(location)
+
+
+    if self.options.SummonLevelLocationToggle:
+        KH2REGIONS[RegionName.Summon] = [LocationName.Summonlvl2,
+                                         LocationName.Summonlvl3,
+                                         LocationName.Summonlvl4,
+                                         LocationName.Summonlvl5,
+                                         LocationName.Summonlvl6,
+                                         LocationName.Summonlvl7]
 
     multiworld.regions += [create_region(multiworld, player, active_locations, region, locations) for region, locations in
                            KH2REGIONS.items()]

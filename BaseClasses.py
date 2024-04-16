@@ -18,11 +18,14 @@ import NetUtils
 import Options
 import Utils
 
+if typing.TYPE_CHECKING:
+    from worlds import AutoWorld
+
 
 class Group(TypedDict, total=False):
     name: str
     game: str
-    world: auto_world
+    world: "AutoWorld.World"
     players: Set[int]
     item_pool: Set[str]
     replacement_items: Dict[int, Optional[str]]
@@ -55,7 +58,7 @@ class MultiWorld():
     plando_texts: List[Dict[str, str]]
     plando_items: List[List[Dict[str, Any]]]
     plando_connections: List
-    worlds: Dict[int, auto_world]
+    worlds: Dict[int, "AutoWorld.World"]
     groups: Dict[int, Group]
     regions: RegionManager
     itempool: List[Item]
@@ -82,7 +85,7 @@ class MultiWorld():
     game: Dict[int, str]
 
     random: random.Random
-    per_slot_randoms: Dict[int, random.Random]
+    per_slot_randoms: Utils.DeprecateDict[int, random.Random]
     """Deprecated. Please use `self.random` instead."""
 
     class AttributeProxy():
@@ -107,10 +110,14 @@ class MultiWorld():
             return self
 
         def append(self, region: Region):
+            assert region.name not in self.region_cache[region.player], \
+                f"{region.name} already exists in region cache."
             self.region_cache[region.player][region.name] = region
 
         def extend(self, regions: Iterable[Region]):
             for region in regions:
+                assert region.name not in self.region_cache[region.player], \
+                    f"{region.name} already exists in region cache."
                 self.region_cache[region.player][region.name] = region
 
         def add_group(self, new_id: int):
@@ -153,14 +160,6 @@ class MultiWorld():
         self.local_early_items = {player: {} for player in self.player_ids}
         self.indirect_connections = {}
         self.start_inventory_from_pool: Dict[int, Options.StartInventoryPool] = {}
-        self.fix_trock_doors = self.AttributeProxy(
-            lambda player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted')
-        self.fix_skullwoods_exit = self.AttributeProxy(
-            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
-        self.fix_palaceofdarkness_exit = self.AttributeProxy(
-            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
-        self.fix_trock_exit = self.AttributeProxy(
-            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
 
         for player in range(1, players + 1):
             def set_player_attr(attr, val):
@@ -210,7 +209,8 @@ class MultiWorld():
             set_player_attr('game', "A Link to the Past")
             set_player_attr('completion_condition', lambda state: True)
         self.worlds = {}
-        self.per_slot_randoms = {}
+        self.per_slot_randoms = Utils.DeprecateDict("Using per_slot_randoms is now deprecated. Please use the "
+                                                      "world's random object instead (usually self.random)")
         self.plando_options = PlandoOptions.none
 
     def get_all_ids(self) -> Tuple[int, ...]:
@@ -219,6 +219,8 @@ class MultiWorld():
     def add_group(self, name: str, game: str, players: Set[int] = frozenset()) -> Tuple[int, Group]:
         """Create a group with name and return the assigned player ID and group.
         If a group of this name already exists, the set of players is extended instead of creating a new one."""
+        from worlds import AutoWorld
+
         for group_id, group in self.groups.items():
             if group["name"] == name:
                 group["players"] |= players
@@ -242,17 +244,18 @@ class MultiWorld():
         return {group_id for group_id, group in self.groups.items() if player in group["players"]}
 
     def set_seed(self, seed: Optional[int] = None, secure: bool = False, name: Optional[str] = None):
+        assert not self.worlds, "seed needs to be initialized before Worlds"
         self.seed = get_seed(seed)
         if secure:
             self.secure()
         else:
             self.random.seed(self.seed)
         self.seed_name = name if name else str(self.seed)
-        self.per_slot_randoms = {player: random.Random(self.random.getrandbits(64)) for player in
-                                 range(1, self.players + 1)}
 
     def set_options(self, args: Namespace) -> None:
         # TODO - remove this section once all worlds use options dataclasses
+        from worlds import AutoWorld
+
         all_keys: Set[str] = {key for player in self.player_ids for key in
                               AutoWorld.AutoWorldRegister.world_types[self.game[player]].options_dataclass.type_hints}
         for option_key in all_keys:
@@ -264,12 +267,13 @@ class MultiWorld():
         for player in self.player_ids:
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
             self.worlds[player] = world_type(self, player)
-            self.worlds[player].random = self.per_slot_randoms[player]
             options_dataclass: typing.Type[Options.PerGameCommonOptions] = world_type.options_dataclass
             self.worlds[player].options = options_dataclass(**{option_key: getattr(args, option_key)[player]
                                                                for option_key in options_dataclass.type_hints})
 
     def set_item_links(self):
+        from worlds import AutoWorld
+
         item_links = {}
         replacement_prio = [False, True, None]
         for player in self.player_ids:
@@ -433,7 +437,7 @@ class MultiWorld():
         location.item = item
         item.location = location
         if collect:
-            self.state.collect(item, location.event, location)
+            self.state.collect(item, location.advancement, location)
 
         logging.debug('Placed %s at %s', item, location)
 
@@ -572,15 +576,15 @@ class MultiWorld():
 
         def location_condition(location: Location):
             """Determine if this location has to be accessible, location is already filtered by location_relevant"""
-            if location.player in players["minimal"]:
-                return False
-            return True
+            if location.player in players["locations"] or (location.item and location.item.player not in
+                                                           players["minimal"]):
+                return True
+            return False
 
         def location_relevant(location: Location):
             """Determine if this location is relevant to sweep."""
             if location.progress_type != LocationProgressType.EXCLUDED \
-                and (location.player in players["locations"] or location.event
-                     or (location.item and location.item.advancement)):
+               and (location.player in players["locations"] or location.advancement):
                 return True
             return False
 
@@ -703,20 +707,29 @@ class CollectionState():
             assert isinstance(player, int), "can_reach: player is required if spot is str"
             # try to resolve a name
             if resolution_hint == 'Location':
-                spot = self.multiworld.get_location(spot, player)
+                return self.can_reach_location(spot, player)
             elif resolution_hint == 'Entrance':
-                spot = self.multiworld.get_entrance(spot, player)
+                return self.can_reach_entrance(spot, player)
             else:
                 # default to Region
-                spot = self.multiworld.get_region(spot, player)
+                return self.can_reach_region(spot, player)
         return spot.can_reach(self)
+
+    def can_reach_location(self, spot: str, player: int) -> bool:
+        return self.multiworld.get_location(spot, player).can_reach(self)
+
+    def can_reach_entrance(self, spot: str, player: int) -> bool:
+        return self.multiworld.get_entrance(spot, player).can_reach(self)
+
+    def can_reach_region(self, spot: str, player: int) -> bool:
+        return self.multiworld.get_region(spot, player).can_reach(self)
 
     def sweep_for_events(self, key_only: bool = False, locations: Optional[Iterable[Location]] = None) -> None:
         if locations is None:
             locations = self.multiworld.get_filled_locations()
         reachable_events = True
         # since the loop has a good chance to run more than once, only filter the events once
-        locations = {location for location in locations if location.event and location not in self.events and
+        locations = {location for location in locations if location.advancement and location not in self.events and
                      not key_only or getattr(location.item, "locked_dungeon_item", False)}
         while reachable_events:
             reachable_events = {location for location in locations if location.can_reach(self)}
@@ -823,8 +836,8 @@ class Entrance:
         return self.__str__()
 
     def __str__(self):
-        world = self.parent_region.multiworld if self.parent_region else None
-        return world.get_name_string_for_object(self) if world else f'{self.name} (Player {self.player})'
+        multiworld = self.parent_region.multiworld if self.parent_region else None
+        return multiworld.get_name_string_for_object(self) if multiworld else f'{self.name} (Player {self.player})'
 
 
 class Region:
@@ -867,6 +880,8 @@ class Region:
             del(self.region_manager.location_cache[location.player][location.name])
 
         def insert(self, index: int, value: Location) -> None:
+            assert value.name not in self.region_manager.location_cache[value.player], \
+                f"{value.name} already exists in the location cache."
             self._list.insert(index, value)
             self.region_manager.location_cache[value.player][value.name] = value
 
@@ -877,6 +892,8 @@ class Region:
             del(self.region_manager.entrance_cache[entrance.player][entrance.name])
 
         def insert(self, index: int, value: Entrance) -> None:
+            assert value.name not in self.region_manager.entrance_cache[value.player], \
+                f"{value.name} already exists in the entrance cache."
             self._list.insert(index, value)
             self.region_manager.entrance_cache[value.player][value.name] = value
 
@@ -1002,11 +1019,10 @@ class Location:
     name: str
     address: Optional[int]
     parent_region: Optional[Region]
-    event: bool = False
     locked: bool = False
     show_in_spoiler: bool = True
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
-    always_allow = staticmethod(lambda item, state: False)
+    always_allow = staticmethod(lambda state, item: False)
     access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
     item_rule = staticmethod(lambda item: True)
     item: Optional[Item] = None
@@ -1033,21 +1049,29 @@ class Location:
             raise Exception(f"Location {self} already filled.")
         self.item = item
         item.location = self
-        self.event = item.advancement
         self.locked = True
 
     def __repr__(self):
         return self.__str__()
 
     def __str__(self):
-        world = self.parent_region.multiworld if self.parent_region and self.parent_region.multiworld else None
-        return world.get_name_string_for_object(self) if world else f'{self.name} (Player {self.player})'
+        multiworld = self.parent_region.multiworld if self.parent_region and self.parent_region.multiworld else None
+        return multiworld.get_name_string_for_object(self) if multiworld else f'{self.name} (Player {self.player})'
 
     def __hash__(self):
         return hash((self.name, self.player))
 
     def __lt__(self, other: Location):
         return (self.player, self.name) < (other.player, other.name)
+
+    @property
+    def advancement(self) -> bool:
+        return self.item is not None and self.item.advancement
+
+    @property
+    def is_event(self) -> bool:
+        """Returns True if the address of this location is None, denoting it is an Event Location."""
+        return self.address is None
 
     @property
     def native_item(self) -> bool:
@@ -1175,7 +1199,7 @@ class Spoiler:
                 {"player": player, "entrance": entrance, "exit": exit_, "direction": direction}
 
     def create_playthrough(self, create_paths: bool = True) -> None:
-        """Destructive to the world while it is run, damage gets repaired afterwards."""
+        """Destructive to the multiworld while it is run, damage gets repaired afterwards."""
         from itertools import chain
         # get locations containing progress items
         multiworld = self.multiworld
@@ -1262,12 +1286,12 @@ class Spoiler:
             for location in sphere:
                 state.collect(location.item, True, location)
 
-            required_locations -= sphere
-
             collection_spheres.append(sphere)
 
             logging.debug('Calculated final sphere %i, containing %i of %i progress items.', len(collection_spheres),
                           len(sphere), len(required_locations))
+
+            required_locations -= sphere
             if not sphere:
                 raise RuntimeError(f'Not all required items reachable. Unreachable locations: {required_locations}')
 
@@ -1326,10 +1350,15 @@ class Spoiler:
                             get_path(state, multiworld.get_region('Inverted Big Bomb Shop', player))
 
     def to_file(self, filename: str) -> None:
+        from itertools import chain
+        from worlds import AutoWorld
+        from Options import Visibility
+
         def write_option(option_key: str, option_obj: Options.AssembleOptions) -> None:
             res = getattr(self.multiworld.worlds[player].options, option_key)
-            display_name = getattr(option_obj, "display_name", option_key)
-            outfile.write(f"{display_name + ':':33}{res.current_option_name}\n")
+            if res.visibility & Visibility.spoiler:
+                display_name = getattr(option_obj, "display_name", option_key)
+                outfile.write(f"{display_name + ':':33}{res.current_option_name}\n")
 
         with open(filename, 'w', encoding="utf-8-sig") as outfile:
             outfile.write(
@@ -1359,6 +1388,14 @@ class Spoiler:
                                                          entry['exit']) for entry in self.entrances.values()]))
 
             AutoWorld.call_all(self.multiworld, "write_spoiler", outfile)
+
+            precollected_items = [f"{item.name} ({self.multiworld.get_player_name(item.player)})"
+                                  if self.multiworld.players > 1
+                                  else item.name
+                                  for item in chain.from_iterable(self.multiworld.precollected_items.values())]
+            if precollected_items:
+                outfile.write("\n\nStarting Items:\n\n")
+                outfile.write("\n".join([item for item in precollected_items]))
 
             locations = [(str(location), str(location.item) if location.item is not None else "Nothing")
                          for location in self.multiworld.get_locations() if location.show_in_spoiler]
@@ -1449,8 +1486,3 @@ def get_seed(seed: Optional[int] = None) -> int:
         random.seed(None)
         return random.randint(0, pow(10, seeddigits) - 1)
     return seed
-
-
-from worlds import AutoWorld
-
-auto_world = AutoWorld.World
