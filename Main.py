@@ -199,8 +199,12 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             for player, remaining_items in depletion_pool.items():
                 remaining_items = {name: count for name, count in remaining_items.items() if count}
                 if remaining_items:
-                    raise Exception(f"{multiworld.get_player_name(player)}"
+                    logger.warning(f"{multiworld.get_player_name(player)}"
                                     f" is trying to remove items from their pool that don't exist: {remaining_items}")
+                    # find all filler we generated for the current player and remove until it matches 
+                    removables = [item for item in new_items if item.player == player]
+                    for _ in range(len(remaining_items)):
+                        new_items.remove(removables.pop())
         assert len(multiworld.itempool) == len(new_items), "Item Pool amounts should not change."
         multiworld.itempool[:] = new_items
 
