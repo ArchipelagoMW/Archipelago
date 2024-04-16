@@ -148,6 +148,8 @@ class ShuffleLadders(Toggle):
 class TUNICPlandoConnections(PlandoConnections):
     entrances = {portal.name for portal in portal_mapping}
     exits = {portal.name for portal in portal_mapping}
+    entrance.add("Shop Portal")
+    exits.add("Shop Portal")
 
     
 @dataclass
