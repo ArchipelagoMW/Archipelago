@@ -5,12 +5,12 @@ from .Regions import JakAndDaxterLevel, JakAndDaxterSubLevel, JakAndDaxterRegion
     create_regions
 from .Rules import set_rules
 from .Items import JakAndDaxterItem, item_table, generic_item_table, special_item_table
-from .GameID import game_id
+from .GameID import game_id, game_name
 from ..AutoWorld import World
 
 
 class JakAndDaxterWorld(World):
-    game: str = "Jak and Daxter: The Precursor Legacy"
+    game: str = game_name
     data_version = 1
     required_client_version = (0, 4, 5)
 

@@ -18,19 +18,19 @@ def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int)
                     JakAndDaxterLevel.SANDOVER_VILLAGE,
                     JakAndDaxterLevel.FORBIDDEN_JUNGLE)
 
-    connect_subregions(multiworld, player,
-                       JakAndDaxterLevel.FORBIDDEN_JUNGLE,
-                       JakAndDaxterSubLevel.FORBIDDEN_JUNGLE_PLANT_ROOM,
-                       lambda state: state.has(item_table[2216], player))
+    connect_region_to_sub(multiworld, player,
+                          JakAndDaxterLevel.FORBIDDEN_JUNGLE,
+                          JakAndDaxterSubLevel.FORBIDDEN_JUNGLE_PLANT_ROOM,
+                          lambda state: state.has(item_table[2216], player))
 
     connect_regions(multiworld, player,
                     JakAndDaxterLevel.SANDOVER_VILLAGE,
                     JakAndDaxterLevel.SENTINEL_BEACH)
 
-    connect_subregions(multiworld, player,
-                       JakAndDaxterLevel.SENTINEL_BEACH,
-                       JakAndDaxterSubLevel.SENTINEL_BEACH_CANNON_TOWER,
-                       lambda state: state.has(item_table[2216], player))
+    connect_region_to_sub(multiworld, player,
+                          JakAndDaxterLevel.SENTINEL_BEACH,
+                          JakAndDaxterSubLevel.SENTINEL_BEACH_CANNON_TOWER,
+                          lambda state: state.has(item_table[2216], player))
 
     connect_regions(multiworld, player,
                     JakAndDaxterLevel.SANDOVER_VILLAGE,
@@ -59,20 +59,20 @@ def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int)
                     JakAndDaxterLevel.BOGGY_SWAMP,
                     lambda state: state.has(item_table[2217], player))
 
-    connect_subregions(multiworld, player,
-                       JakAndDaxterLevel.BOGGY_SWAMP,
-                       JakAndDaxterSubLevel.BOGGY_SWAMP_FLUT_FLUT,
-                       lambda state: state.has(item_table[2215], player))
+    connect_region_to_sub(multiworld, player,
+                          JakAndDaxterLevel.BOGGY_SWAMP,
+                          JakAndDaxterSubLevel.BOGGY_SWAMP_FLUT_FLUT,
+                          lambda state: state.has(item_table[2215], player))
 
     connect_regions(multiworld, player,
                     JakAndDaxterLevel.ROCK_VILLAGE,
                     JakAndDaxterLevel.MOUNTAIN_PASS,
                     lambda state: state.has(item_table[2217], player) and state.has(item_table[0], player, 45))
 
-    connect_subregions(multiworld, player,
-                       JakAndDaxterLevel.MOUNTAIN_PASS,
-                       JakAndDaxterSubLevel.MOUNTAIN_PASS_SHORTCUT,
-                       lambda state: state.has(item_table[2218], player))
+    connect_region_to_sub(multiworld, player,
+                          JakAndDaxterLevel.MOUNTAIN_PASS,
+                          JakAndDaxterSubLevel.MOUNTAIN_PASS_SHORTCUT,
+                          lambda state: state.has(item_table[2218], player))
 
     connect_regions(multiworld, player,
                     JakAndDaxterLevel.MOUNTAIN_PASS,
@@ -86,15 +86,15 @@ def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int)
                     JakAndDaxterLevel.VOLCANIC_CRATER,
                     JakAndDaxterLevel.SNOWY_MOUNTAIN)
 
-    connect_subregions(multiworld, player,
-                       JakAndDaxterLevel.SNOWY_MOUNTAIN,
-                       JakAndDaxterSubLevel.SNOWY_MOUNTAIN_FLUT_FLUT,
-                       lambda state: state.has(item_table[2215], player))
+    connect_region_to_sub(multiworld, player,
+                          JakAndDaxterLevel.SNOWY_MOUNTAIN,
+                          JakAndDaxterSubLevel.SNOWY_MOUNTAIN_FLUT_FLUT,
+                          lambda state: state.has(item_table[2215], player))
 
-    connect_subregions(multiworld, player,
-                       JakAndDaxterLevel.SNOWY_MOUNTAIN,
-                       JakAndDaxterSubLevel.SNOWY_MOUNTAIN_LURKER_FORT,
-                       lambda state: state.has(item_table[2219], player))
+    connect_region_to_sub(multiworld, player,
+                          JakAndDaxterLevel.SNOWY_MOUNTAIN,
+                          JakAndDaxterSubLevel.SNOWY_MOUNTAIN_LURKER_FORT,
+                          lambda state: state.has(item_table[2219], player))
 
     connect_regions(multiworld, player,
                     JakAndDaxterLevel.VOLCANIC_CRATER,
@@ -105,13 +105,22 @@ def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int)
                     JakAndDaxterLevel.LAVA_TUBE,
                     JakAndDaxterLevel.GOL_AND_MAIAS_CITADEL)
 
+    connect_region_to_sub(multiworld, player,
+                          JakAndDaxterLevel.GOL_AND_MAIAS_CITADEL,
+                          JakAndDaxterSubLevel.GOL_AND_MAIAS_CITADEL_ROTATING_TOWER,
+                          lambda state: state.has(item_table[2220], player)
+                          and state.has(item_table[2221], player)
+                          and state.has(item_table[2222], player))
+
     connect_subregions(multiworld, player,
-                       JakAndDaxterLevel.GOL_AND_MAIAS_CITADEL,
                        JakAndDaxterSubLevel.GOL_AND_MAIAS_CITADEL_ROTATING_TOWER,
-                       # lambda state: state.has(item_table[96], player)
-                       # and state.has(item_table[97], player)
-                       # and state.has(item_table[98], player))
-                       lambda state: state.has(item_table[0], player, 75))
+                       JakAndDaxterSubLevel.GOL_AND_MAIAS_CITADEL_FINAL_BOSS,
+                       lambda state: state.has(item_table[2223], player))
+
+    multiworld.completion_condition[player] = lambda state: state.can_reach(
+        multiworld.get_region(subLevel_table[JakAndDaxterSubLevel.GOL_AND_MAIAS_CITADEL_FINAL_BOSS], player),
+        "Region",
+        player)
 
 
 def connect_regions(multiworld: MultiWorld, player: int, source: JakAndDaxterLevel, target: JakAndDaxterLevel,
@@ -121,8 +130,15 @@ def connect_regions(multiworld: MultiWorld, player: int, source: JakAndDaxterLev
     source_region.connect(target_region, rule=rule)
 
 
-def connect_subregions(multiworld: MultiWorld, player: int, source: JakAndDaxterLevel, target: JakAndDaxterSubLevel,
-                       rule=None):
+def connect_region_to_sub(multiworld: MultiWorld, player: int, source: JakAndDaxterLevel, target: JakAndDaxterSubLevel,
+                          rule=None):
     source_region = multiworld.get_region(level_table[source], player)
+    target_region = multiworld.get_region(subLevel_table[target], player)
+    source_region.connect(target_region, rule=rule)
+
+
+def connect_subregions(multiworld: MultiWorld, player: int, source: JakAndDaxterSubLevel, target: JakAndDaxterSubLevel,
+                       rule=None):
+    source_region = multiworld.get_region(subLevel_table[source], player)
     target_region = multiworld.get_region(subLevel_table[target], player)
     source_region.connect(target_region, rule=rule)

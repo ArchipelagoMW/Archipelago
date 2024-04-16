@@ -1,6 +1,7 @@
 import typing
 from enum import Enum
 from BaseClasses import MultiWorld, Region
+from .GameID import game_id, game_name
 from .Options import JakAndDaxterOptions
 from .Locations import JakAndDaxterLocation, location_table
 from .locs import CellLocations, SpecialLocations, ScoutLocations
@@ -34,6 +35,7 @@ class JakAndDaxterSubLevel(int, Enum):
     SNOWY_MOUNTAIN_FLUT_FLUT = 5
     SNOWY_MOUNTAIN_LURKER_FORT = 6
     GOL_AND_MAIAS_CITADEL_ROTATING_TOWER = 7
+    GOL_AND_MAIAS_CITADEL_FINAL_BOSS = 8
 
 
 level_table: typing.Dict[JakAndDaxterLevel, str] = {
@@ -63,12 +65,13 @@ subLevel_table: typing.Dict[JakAndDaxterSubLevel, str] = {
     JakAndDaxterSubLevel.MOUNTAIN_PASS_SHORTCUT: "Mountain Pass Shortcut",
     JakAndDaxterSubLevel.SNOWY_MOUNTAIN_FLUT_FLUT: "Snowy Mountain Flut Flut",
     JakAndDaxterSubLevel.SNOWY_MOUNTAIN_LURKER_FORT: "Snowy Mountain Lurker Fort",
-    JakAndDaxterSubLevel.GOL_AND_MAIAS_CITADEL_ROTATING_TOWER: "Gol and Maia's Citadel Rotating Tower"
+    JakAndDaxterSubLevel.GOL_AND_MAIAS_CITADEL_ROTATING_TOWER: "Gol and Maia's Citadel Rotating Tower",
+    JakAndDaxterSubLevel.GOL_AND_MAIAS_CITADEL_FINAL_BOSS: "Gol and Maia's Citadel Final Boss"
 }
 
 
 class JakAndDaxterRegion(Region):
-    game: str = "Jak and Daxter: The Precursor Legacy"
+    game: str = game_name
 
 
 def create_regions(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int):
@@ -198,15 +201,19 @@ def create_regions(multiworld: MultiWorld, options: JakAndDaxterOptions, player:
     region_gmc = create_region(player, multiworld, level_table[JakAndDaxterLevel.GOL_AND_MAIAS_CITADEL])
     create_locations(region_gmc, {
         **{k: CellLocations.locGMC_cellTable[k] for k in {96, 97, 98}},
-        **{k: ScoutLocations.locGMC_scoutTable[k] for k in {206, 207, 208, 209, 210, 211}}
+        **{k: ScoutLocations.locGMC_scoutTable[k] for k in {206, 207, 208, 209, 210, 211}},
+        **{k: SpecialLocations.loc_specialTable[k] for k in {2220, 2221, 2222}}
     })
 
     sub_region_gmcrt = create_subregion(region_gmc,
                                         subLevel_table[JakAndDaxterSubLevel.GOL_AND_MAIAS_CITADEL_ROTATING_TOWER])
     create_locations(sub_region_gmcrt, {
         **{k: CellLocations.locGMC_cellTable[k] for k in {99, 100}},
-        **{k: ScoutLocations.locGMC_scoutTable[k] for k in {212}}
+        **{k: ScoutLocations.locGMC_scoutTable[k] for k in {212}},
+        **{k: SpecialLocations.loc_specialTable[k] for k in {2223}}
     })
+
+    create_subregion(sub_region_gmcrt, subLevel_table[JakAndDaxterSubLevel.GOL_AND_MAIAS_CITADEL_FINAL_BOSS])
 
 
 def create_region(player: int, multiworld: MultiWorld, name: str) -> JakAndDaxterRegion:
@@ -223,5 +230,6 @@ def create_subregion(parent: Region, name: str) -> JakAndDaxterRegion:
     return region
 
 
-def create_locations(region: Region, locs: typing.Dict[int, str]):
-    region.locations += [JakAndDaxterLocation(region.player, location_table[loc], loc, region) for loc in locs]
+def create_locations(region: Region, locations: typing.Dict[int, str]):
+    region.locations += [JakAndDaxterLocation(region.player, location_table[loc], game_id + loc, region)
+                         for loc in locations]

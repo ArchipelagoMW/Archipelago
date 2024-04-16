@@ -1,9 +1,10 @@
 from BaseClasses import Location
+from .GameID import game_id, game_name
 from .locs import CellLocations, SpecialLocations, ScoutLocations
 
 
 class JakAndDaxterLocation(Location):
-    game: str = "Jak and Daxter: The Precursor Legacy"
+    game: str = game_name
 
 
 # All Locations

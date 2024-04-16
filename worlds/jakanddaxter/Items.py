@@ -1,8 +1,9 @@
 from BaseClasses import Item
+from .GameID import game_id, game_name
 
 
 class JakAndDaxterItem(Item):
-    game: str = "Jak and Daxter: The Precursor Legacy"
+    game: str = game_name
 
 
 # Items Found Multiple Times
@@ -20,7 +21,11 @@ special_item_table = {
     2216: "Blue Eco Switch",
     2217: "Gladiator's Pontoons",
     2218: "Yellow Eco Switch",
-    2219: "Lurker Fort Gate"
+    2219: "Lurker Fort Gate",
+    2220: "Free The Yellow Sage",
+    2221: "Free The Red Sage",
+    2222: "Free The Blue Sage",
+    2223: "Free The Green Sage"
 }
 
 # All Items
