@@ -9,6 +9,7 @@ from worlds.Files import APDeltaPatch
 from settings import get_settings
 
 from .rom_addresses import rom_addresses
+from .sprites import sprite_name_to_id
 
 # Enemy and Platform randomizer ported directly from SML2R
 # https://github.com/slashinfty/sml2r-node/blob/862128c73d336d6cbfbf6290c09f3eff103688e8/src/index.ts#L284
@@ -37,8 +38,29 @@ def randomize_sprite(data, random, arr, i):
     selected_sprite = sprite_insert(data[i], data[i + 1], random.choice(arr))
     copy_sprite(data, selected_sprite, i)
 
-
+from .locations import level_id_to_name
+from .sprites import sprite_id_to_name
 def randomize_enemies(data, random):
+    i = 0xe077
+    level = 0
+    d = {}
+    d[level_id_to_name[level]] = []
+    while True:
+        if data[i] == 0xFF:
+            level += 1
+            i += 1
+            if level > len(level_id_to_name) - 1:
+                break
+            d[level_id_to_name[level]] = []
+        sprite = data[i:i+3]
+        screen = sprite[0] & 0b00001111
+        x = sprite[1] & 0b00011111
+        y = sprite[2] & 0b00011111
+        sprite_id = sprite_id_to_name[((sprite[0] & 0b11100000) >> 2) | ((sprite[0] & 0b00010000) << 2) | ((sprite[1] & 0b11100000) >> 5)]
+        ezmode = sprite[2] & 0b11100000
+        d[level_id_to_name[level]].append({"screen": screen, "sprite_id": sprite_id, "x": x, "y": y, "misc": ezmode})
+        i += 3
+    breakpoint()
     level_list = [
         {"enemies": [0x01, 0x08, 0x09, 0x3A], "start": 0xE077, "end": 0xE0BC},  # lv00
         {"enemies": [0x01, 0x08, 0x09, 0x3A], "start": 0xE955, "end": 0xE99D},  # lv17
@@ -166,10 +188,32 @@ def generate_output(self, output_directory: str):
 
     random = self.random
 
-    if self.options.randomize_enemies:
-        randomize_enemies(data, random)
-    if self.options.randomize_platforms:
-        randomize_platforms(data, random)
+    # if self.options.randomize_enemies:
+    #     randomize_enemies(data, random)
+    # if self.options.randomize_platforms:
+    #     randomize_platforms(data, random)
+
+    data[0x4F012] = 0x5D # Midway bell Mario's Castle
+
+    if self.options.coinsanity:
+        # Add platform to return to start of Pumpkin Zone Secret Course 1
+        data[0x258B6] = 0x3B
+        data[0x258F8] = 0x7a
+        data[0x2594D] = 0x67
+        data[0x259A8] = 0x68
+        data[0x259A9] = 0x60
+
+    i = 0xe077
+    for level, sprites in self.sprite_data.items():
+        for sprite_data in sprites:
+            sprite_id = sprite_name_to_id[sprite_data["sprite"]]
+            data[i] = ((sprite_id & 0b01000000) >> 2) | ((sprite_id & 0b00111000) << 2) | sprite_data["screen"]
+            data[i + 1] = ((sprite_id & 0b00000111) << 5) | sprite_data["x"]
+            data[i + 2] = sprite_data["misc"] | sprite_data["y"]
+            i += 3
+        data[i] = 255
+        i += 1
+
     if self.options.randomize_music:
         randomize_music(data, random)
 

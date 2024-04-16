@@ -1,7 +1,7 @@
 import base64
-
 import Utils
 import settings
+from copy import deepcopy
 
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Region, Location, Item, ItemClassification, Tutorial
@@ -12,6 +12,8 @@ from .options import SML2Options
 from .locations import (locations, location_name_to_id, level_name_to_id, level_id_to_name, START_IDS, coins_coords,
                         auto_scroll_max)
 from .items import items
+from .sprites import level_sprites
+from .sprite_randomizer import randomize_sprites
 from .logic import has_pipe_up, has_pipe_down, has_pipe_left, has_pipe_right, has_level_progression, is_auto_scroll
 from . import logic
 
@@ -88,9 +90,14 @@ class MarioLand2World(World):
         self.auto_scroll_levels = []
         self.num_coin_locations = []
         self.max_coin_locations = {}
+        self.sprite_data = {}
         self.coin_fragments_required = 0
 
     def generate_early(self):
+        self.sprite_data = deepcopy(level_sprites)
+        randomize_sprites(self.sprite_data, self.random)
+        self.sprite_data["Mario's Castle"][35]["sprite"] = "Midway Bell"
+
         if self.options.auto_scroll_chances == -1:
             self.auto_scroll_levels = [int(i in [19, 25, 30]) for i in range(32)]
         else:
@@ -324,10 +331,6 @@ class MarioLand2World(World):
                     location.access_rule = lambda state, coin_rule=rule, num_coins=coins: \
                         coin_rule(state, self.player, num_coins)
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Wario Defeated", self.player)
-
-        from worlds.generic.Rules import add_item_rule
-        for location in self.multiworld.get_locations(self.player):
-            add_item_rule(location, lambda i, loc=location.name: "Auto Scroll" not in i.name or i.name.split("- ")[1] in loc)
 
     def create_items(self):
         item_counts = {
