@@ -51,6 +51,7 @@ app.config["PONY"] = {
 app.config["MAX_ROLL"] = 20
 app.config["CACHE_TYPE"] = "SimpleCache"
 app.config["HOST_ADDRESS"] = ""
+app.config["ASSET_RIGHTS"] = False
 
 cache = Cache()
 Compress(app)
@@ -82,6 +83,10 @@ def register():
 
     from WebHostLib.customserver import run_server_process
     # to trigger app routing picking up on it
-    from . import tracker, upload, landing, check, generate, downloads, api, stats, misc, robots
+    from . import tracker, upload, landing, check, generate, downloads, api, stats, misc
+
+    # If this host is not official, do not allow search engine crawling
+    if not app.config["ASSET_RIGHTS"]:
+        from . import robots
 
     app.register_blueprint(api.api_endpoints)
