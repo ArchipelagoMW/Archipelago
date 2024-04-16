@@ -132,7 +132,7 @@ class LingoWorld(World):
     def fill_slot_data(self):
         slot_options = [
             "death_link", "victory_condition", "shuffle_colors", "shuffle_doors", "shuffle_paintings", "shuffle_panels",
-            "mastery_achievements", "level_2_requirement", "location_checks", "early_color_hallways"
+            "mastery_achievements", "level_2_requirement", "location_checks", "early_color_hallways", "group_doors"
         ]
 
         slot_data = {
