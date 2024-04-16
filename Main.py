@@ -203,7 +203,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                                     f" is trying to remove items from their pool that don't exist: {remaining_items}")
                     # find all filler we generated for the current player and remove until it matches 
                     removables = [item for item in new_items if item.player == player]
-                    for _ in range(len(remaining_items)):
+                    for _ in range(sum(remaining_items.values())):
                         new_items.remove(removables.pop())
         assert len(multiworld.itempool) == len(new_items), "Item Pool amounts should not change."
         multiworld.itempool[:] = new_items
