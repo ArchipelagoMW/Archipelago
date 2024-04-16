@@ -171,6 +171,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     # Because some worlds don't actually create items during create_items this has to be as late as possible.
     if any(getattr(multiworld.worlds[player].options, "start_inventory_from_pool", None) for player in multiworld.player_ids):
         new_items: List[Item] = []
+        old_items: List[Item] = []
         depletion_pool: Dict[int, Dict[str, int]] = {
             player: getattr(multiworld.worlds[player].options,
                             "start_inventory_from_pool",
@@ -189,10 +190,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 depletion_pool[item.player][item.name] -= 1
                 # quick abort if we have found all items
                 if not target:
-                    new_items.extend(multiworld.itempool[i+1:])
+                    old_items.extend(multiworld.itempool[i+1:])
                     break
             else:
-                new_items.append(item)
+                old_items.append(item)
 
         # leftovers?
         if target:
@@ -205,8 +206,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     removables = [item for item in new_items if item.player == player]
                     for _ in range(sum(remaining_items.values())):
                         new_items.remove(removables.pop())
-        assert len(multiworld.itempool) == len(new_items), "Item Pool amounts should not change."
-        multiworld.itempool[:] = new_items
+        assert len(multiworld.itempool) == len(new_items + old_items), "Item Pool amounts should not change."
+        multiworld.itempool[:] = new_items + old_items
 
     # temporary home for item links, should be moved out of Main
     for group_id, group in multiworld.groups.items():
