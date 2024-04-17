@@ -33,7 +33,7 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions):
       return "Cave" if "caves" in tags else "Ocean" if "ocean" in tags else "Forest"
    
    # Get number of items that need to be placed, plus make space for junk items and traps
-   location_num_left_to_place:int = len([name for name, data in item_data_table.items() if data.code != None and not "filler" in data.tags]) + 20
+   location_num_left_to_place:int = len([name for name, data in item_data_table.items() if data.code != None and not "junk" in data.tags and not "trap" in data.tags]) + 20
 
    # Check if locations are disabled by options
    filtered_location_data_table = {name: data for name, data in location_data_table.items() if not(
