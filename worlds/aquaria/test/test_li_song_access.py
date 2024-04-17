@@ -2,6 +2,9 @@ from worlds.aquaria.test import AquariaTestBase
 
 
 class LiAccessTest(AquariaTestBase):
+    options = {
+        "turtle_randomizer": 1,
+    }
 
     def test_li_song_location(self) -> None:
         """Test locations that require Li"""
@@ -27,6 +30,9 @@ class LiAccessTest(AquariaTestBase):
             "The body bottom area, bulb in the nautilus room",
             "The body bottom area, Mutant Costume",
             "Final boss area, bulb in the boss third form room",
+            "Beating the Golem",
+            "Sunken City cleared",
+            "Objective complete"
         ]
-        items = [["Li and Li song"]]
+        items = [["Li and Li song", "Body tongue cleared"]]
         self.assertAccessDependency(locations, items)
