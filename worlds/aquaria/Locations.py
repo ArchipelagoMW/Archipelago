@@ -345,7 +345,7 @@ class AquariaLocations:
     }
 
     locations_veil_bl_fp = {
-        "The veil bottom areaVerse egg": 698157,
+        "The veil bottom area, Verse egg": 698157,
     }
 
     locations_veil_br = {
@@ -479,7 +479,7 @@ class AquariaLocations:
     }
 
     locations_final_boss = {
-        "Final boss area, bulb in the boss second form room": 698106,
+        "Final boss area, bulb in the boss third form room": 698106,
     }
 
 

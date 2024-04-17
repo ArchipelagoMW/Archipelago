@@ -202,7 +202,7 @@ class AquariaWorld(World):
                                      self.player).progress_type = LocationProgressType.EXCLUDED
         self.multiworld.get_location("King Jellyfish cave, Jellyfish Costume",
                                      self.player).progress_type = LocationProgressType.EXCLUDED
-        self.multiworld.get_location("Final boss area, bulb in the boss second form room",
+        self.multiworld.get_location("Final boss area, bulb in the boss third form room",
                                      self.player).progress_type = LocationProgressType.EXCLUDED
         self.multiworld.get_location("Sun Worm path, first cliff bulb", self.player).progress_type = (
             LocationProgressType.EXCLUDED)
