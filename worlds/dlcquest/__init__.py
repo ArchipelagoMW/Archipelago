@@ -1,6 +1,6 @@
 from typing import Union
 
-from BaseClasses import Tutorial, CollectionState
+from BaseClasses import Tutorial, CollectionState, ItemClassification
 from worlds.AutoWorld import WebWorld, World
 from . import Options
 from .Items import DLCQuestItem, ItemData, create_items, item_table, items_by_group, Group
@@ -61,7 +61,7 @@ class DLCqworld(World):
         self.precollect_coinsanity()
         locations_count = len([location
                                for location in self.multiworld.get_locations(self.player)
-                               if not location.event])
+                               if not location.advancement])
 
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]]
@@ -82,11 +82,13 @@ class DLCqworld(World):
             if self.options.coinsanity == Options.CoinSanity.option_coin and self.options.coinbundlequantity >= 5:
                 self.multiworld.push_precollected(self.create_item("Movement Pack"))
 
-    def create_item(self, item: Union[str, ItemData]) -> DLCQuestItem:
+    def create_item(self, item: Union[str, ItemData], classification: ItemClassification = None) -> DLCQuestItem:
         if isinstance(item, str):
             item = item_table[item]
+        if classification is None:
+            classification = item.classification
 
-        return DLCQuestItem(item.name, item.classification, item.code, self.player)
+        return DLCQuestItem(item.name, classification, item.code, self.player)
 
     def get_filler_item_name(self) -> str:
         trap = self.multiworld.random.choice(items_by_group[Group.Trap])
@@ -94,7 +96,7 @@ class DLCqworld(World):
 
     def fill_slot_data(self):
         options_dict = self.options.as_dict(
-            "death_link", "ending_choice", "campaign", "coinsanity", "item_shuffle"
+            "death_link", "ending_choice", "campaign", "coinsanity", "item_shuffle", "permanent_coins"
         )
         options_dict.update({
             "coinbundlerange": self.options.coinbundlequantity.value,

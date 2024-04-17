@@ -4,7 +4,7 @@ import Utils
 import worlds.Files
 
 LTTPJPN10HASH: str = "03a63945398191337e896e5771f77173"
-RANDOMIZERBASEHASH: str = "35d010bc148e0ea0ee68e81e330223f1"
+RANDOMIZERBASEHASH: str = "8704fb9b9fa4fad52d4d2f9a95fb5360"
 ROM_PLAYER_LIMIT: int = 255
 
 import io
@@ -34,7 +34,7 @@ from .Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmith
     DeathMountain_texts, \
     LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, \
     SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
-from .Items import ItemFactory, item_table, item_name_groups, progression_items
+from .Items import item_table, item_name_groups, progression_items
 from .EntranceShuffle import door_addresses
 from .Options import small_key_shuffle
 
@@ -868,11 +868,11 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
                                 exit.name not in {'Palace of Darkness Exit', 'Tower of Hera Exit', 'Swamp Palace Exit'}):
                         # For exits that connot be reached from another, no need to apply offset fixes.
                         rom.write_int16(0x15DB5 + 2 * offset, link_y)  # same as final else
-                    elif room_id == 0x0059 and world.fix_skullwoods_exit[player]:
+                    elif room_id == 0x0059 and local_world.fix_skullwoods_exit:
                         rom.write_int16(0x15DB5 + 2 * offset, 0x00F8)
-                    elif room_id == 0x004a and world.fix_palaceofdarkness_exit[player]:
+                    elif room_id == 0x004a and local_world.fix_palaceofdarkness_exit:
                         rom.write_int16(0x15DB5 + 2 * offset, 0x0640)
-                    elif room_id == 0x00d6 and world.fix_trock_exit[player]:
+                    elif room_id == 0x00d6 and local_world.fix_trock_exit:
                         rom.write_int16(0x15DB5 + 2 * offset, 0x0134)
                     elif room_id == 0x000c and world.shuffle_ganon:  # fix ganons tower exit point
                         rom.write_int16(0x15DB5 + 2 * offset, 0x00A4)
@@ -996,7 +996,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     rom.write_byte(0x18003A, 0x01 if world.dark_world_light_cone else 0x00)
 
     GREEN_TWENTY_RUPEES = 0x47
-    GREEN_CLOCK = ItemFactory('Green Clock', player).code
+    GREEN_CLOCK = item_table["Green Clock"].item_code
 
     rom.write_byte(0x18004F, 0x01)  # Byrna Invulnerability: on
 
@@ -1674,14 +1674,14 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         rom.write_byte(0x4E3BB, 0xEB)
 
     # fix trock doors for reverse entrances
-    if world.fix_trock_doors[player]:
+    if local_world.fix_trock_doors:
         rom.write_byte(0xFED31, 0x0E)  # preopen bombable exit
         rom.write_byte(0xFEE41, 0x0E)  # preopen bombable exit
         # included unconditionally in base2current
         # rom.write_byte(0xFE465, 0x1E)  # remove small key door on backside of big key door
     else:
-        rom.write_byte(0xFED31, 0x2A)  # preopen bombable exit
-        rom.write_byte(0xFEE41, 0x2A)  # preopen bombable exit
+        rom.write_byte(0xFED31, 0x2A)  # bombable exit
+        rom.write_byte(0xFEE41, 0x2A)  # bombable exit
 
     if world.tile_shuffle[player]:
         tile_set = TileSet.get_random_tile_set(world.per_slot_randoms[player])
@@ -1777,13 +1777,13 @@ def write_custom_shops(rom, world, player):
             if item['player'] and world.game[item['player']] != "A Link to the Past":  # item not native to ALTTP
                 item_code = get_nonnative_item_sprite(world.worlds[item['player']].item_name_to_id[item['item']])
             else:
-                item_code = ItemFactory(item['item'], player).code
+                item_code = item_table[item["item"]].item_code
                 if item['item'] == 'Single Arrow' and item['player'] == 0 and world.retro_bow[player]:
                     rom.write_byte(0x186500 + shop.sram_offset + slot, arrow_mask)
 
             item_data = [shop_id, item_code] + price_data + \
-                        [item['max'], ItemFactory(item['replacement'], player).code if item['replacement'] else 0xFF] + \
-                        replacement_price_data + [0 if item['player'] == player else min(ROM_PLAYER_LIMIT, item['player'])]
+                        [item["max"], item_table[item["replacement"]].item_code if item["replacement"] else 0xFF] + \
+                        replacement_price_data + [0 if item["player"] == player else min(ROM_PLAYER_LIMIT, item["player"])]
             items_data.extend(item_data)
 
     rom.write_bytes(0x184800, shop_data)
@@ -2397,6 +2397,9 @@ def write_strings(rom, world, player):
             if hint_count:
                 locations = world.find_items_in_locations(items_to_hint, player, True)
                 local_random.shuffle(locations)
+                # make locked locations less likely to appear as hint,
+                # chances are the lock means the player already knows.
+                locations.sort(key=lambda sorting_location: not sorting_location.locked)
                 for x in range(min(hint_count, len(locations))):
                     this_location = locations.pop()
                     this_hint = this_location.item.hint_text + ' can be found ' + hint_text(this_location) + '.'
