@@ -408,7 +408,7 @@ def write_tokens(world: "MLSSWorld", patch: MLSSProcedurePatch) -> None:
             patch.write_token(
                 APTokenTypes.WRITE,
                 address + 3,
-                world.multiworld.per_slot_randoms[world.player].randint(0x0, 0x26)
+                bytes([world.multiworld.per_slot_randoms[world.player].randint(0x0, 0x26)])
             )
 
     for location_name in location_table.keys():
