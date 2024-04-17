@@ -552,7 +552,7 @@ item_descriptions = {
     ItemNames.SWARM_HOST_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(ItemNames.SWARM_HOST),
     ItemNames.ULTRALISK_ANABOLIC_SYNTHESIS: "Ultralisks gain increased movement speed.",
     ItemNames.ULTRALISK_CHITINOUS_PLATING: "Ultralisks gain +2 armor.",
-    ItemNames.ULTRALISK_ORGANIC_CARAPACE: "Ultralisks gain +100 armor.",
+    ItemNames.ULTRALISK_ORGANIC_CARAPACE: "Ultralisks gain +100 life.",
     ItemNames.ULTRALISK_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(ItemNames.ULTRALISK),
     ItemNames.DEVOURER_CORROSIVE_SPRAY: "Devourer attacks will now deal area damage.",
     ItemNames.DEVOURER_GAPING_MAW: "Devourer's attack speed increased by 25%.",
