@@ -31,7 +31,14 @@ def _has_li(state, player: int) -> bool:
 
 def _has_damaging_item(state, player: int) -> bool:
     """`player` in `state` has the shield song item"""
-    return state.has_group("Damage", player)
+    return (state.has("Energy form", player) or
+            state.has("Nature form", player) or
+            state.has("Beast form", player) or
+            state.has("Li and Li song", player) or
+            state.has("Baby nautilus", player) or
+            state.has("Baby piranha", player) or
+            state.has("Baby blaster", player)
+            )
 
 
 def _has_shield_song(state, player: int) -> bool:
@@ -66,7 +73,7 @@ def _has_sun_form(state, player: int) -> bool:
 
 def _has_light(state, player: int) -> bool:
     """`player` in `state` has the light item"""
-    return state.has_group("Light", player)
+    return state.has("Baby dumbo", player)# or _has_sun_form(state, player)
 
 
 def _has_dual_form(state, player: int) -> bool:
@@ -392,7 +399,7 @@ class AquariaRegions:
         """
         self.abyss_l = self.__add_region("Abyss left area",
                                          AquariaLocations.locations_abyss_l)
-        self.abyss_lb = self.__add_region("Abyss left bottom area", None)
+        self.abyss_lb = self.__add_region("Abyss left bottom area", AquariaLocations.locations_abyss_lb)
         self.abyss_r = self.__add_region("Abyss right area", AquariaLocations.locations_abyss_r)
         self.ice_cave = self.__add_region("Ice cave", AquariaLocations.locations_ice_cave)
         self.bubble_cave = self.__add_region("Bubble cave", AquariaLocations.locations_bubble_cave)
@@ -741,8 +748,7 @@ class AquariaRegions:
                                self.abyss_lb, self.body_c,
                                lambda state: _has_tongue_cleared(state, self.player))
         self.__connect_one_way_regions("Body center area", "Abyss left bottom area",
-                               self.body_c, self.abyss_lb,
-                               lambda state: _has_tongue_cleared(state, self.player))
+                               self.body_c, self.abyss_lb)
         self.__connect_regions("Abyss left area", "King jellyfish cave",
                                self.abyss_l, self.king_jellyfish_cave,
                                lambda state: _has_energy_form(state, self.player) and
@@ -763,7 +769,7 @@ class AquariaRegions:
                                self.abyss_r, self.ice_cave,
                                lambda state: _has_spirit_form(state, self.player))
         self.__connect_regions("Abyss right area", "Bubble cave",
-                               self.abyss_r, self.bubble_cave,
+                               self.ice_cave, self.bubble_cave,
                                lambda state: _has_beast_form(state, self.player))
 
     def __connect_sunken_city_regions(self) -> None:

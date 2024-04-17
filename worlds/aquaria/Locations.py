@@ -396,6 +396,9 @@ class AquariaLocations:
         "Abyss left area, bulb in the right part": 698025,
         "Abyss left area, Glowing seed": 698166,
         "Abyss left area, Glowing Plant": 698172,
+    }
+
+    locations_abyss_lb = {
         "Abyss left area, bulb in the bottom fish pass": 698026,
     }
 
@@ -500,6 +503,7 @@ location_table = {
     **AquariaLocations.locations_verse_cave_r,
     **AquariaLocations.locations_verse_cave_l,
     **AquariaLocations.locations_abyss_l,
+    **AquariaLocations.locations_abyss_lb,
     **AquariaLocations.locations_abyss_r,
     **AquariaLocations.locations_energy_temple_1,
     **AquariaLocations.locations_energy_temple_2,

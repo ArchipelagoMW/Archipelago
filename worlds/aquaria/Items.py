@@ -56,7 +56,7 @@ item_table = {
     "Black pearl": (698004, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_blackpearl
     "Baby blaster": (698005, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_blaster
     "Crab armor": (698006, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_crab_costume
-    "Baby dumbo": (698007, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_dumbo
+    "Baby dumbo": (698007, 1, ItemType.PROGRESSION, ItemGroup.UTILITY),  # collectible_dumbo
     "Tooth": (698008, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_energy_boss
     "Energy statue": (698009, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_energy_statue
     "Krotite armor": (698010, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_energy_temple
