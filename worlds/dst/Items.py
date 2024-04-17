@@ -16,14 +16,18 @@ def generate_item_map() -> Dict[str, DSTItemData]:
 	for v in DSTAP_ITEMS:
 		code:int = v[0] + ITEM_ID_OFFSET
 		name:str = v[1]
-		classification:IC = IC.filler
-		tags: set[str] = set()
-		type:str = v[3]
-		if   type == "progression": classification = IC.progression
-		elif type == "useful": classification = IC.useful
-		elif type == "trap": classification = IC.trap; tags.update(["filler", "trap", "regulartrap"])
-		elif type == "seasontrap": classification = IC.trap; tags.update(["filler", "trap", "seasontrap"])
-		elif type == "junk": tags.add("filler")
+		tags: set[str] = set(v[3])
+		classification:IC = (
+			IC.progression if "progression" in tags else
+			IC.useful if "useful" in tags else
+			IC.trap if "trap" in tags else
+			IC.filler
+		)
+		# if   type == "progression": classification = IC.progression
+		# elif type == "useful": classification = IC.useful
+		# elif type == "trap": classification = IC.trap; tags.update(["filler", "trap", "regulartrap"])
+		# elif type == "seasontrap": classification = IC.trap; tags.update(["filler", "trap", "seasontrap"])
+		# elif type == "junk": tags.add("filler")
 
 		ret.setdefault(name, DSTItemData(code, classification, tags))
 	return ret

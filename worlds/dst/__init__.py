@@ -61,10 +61,10 @@ class DSTWorld(World):
 
         for name, item in item_data_table.items():
             if item.code:
-                if "filler" in item.tags:
-                    (self.trap_pool if "regulartrap" in item.tags else
-                     self.seasontrap_pool if "seasontrap" in item.tags else
-                     self.filler_pool).append(name)
+                if "junk" in item.tags:
+                    self.filler_pool.append(name)
+                elif "trap" in item.tags:
+                    (self.seasontrap_pool if "seasontrap" in item.tags else self.trap_pool).append(name)
                 else:
                     item_pool.append(self.create_item(name))
         
