@@ -77,6 +77,10 @@ class DarkSouls3World(World):
     holds the old locations so we can ensure they don't get necessary items.
     """
 
+    local_itempool: Optional[List[DarkSouls3Item]]
+    """The pool of all items within this particular world. This is a subset of
+    `self.multiworld.itempool`."""
+
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
@@ -302,7 +306,7 @@ class DarkSouls3World(World):
         item_set: Set[str] = set()
 
         # Gather all default items on randomized locations
-        itempool: List[DarkSouls3Item] = []
+        self.local_itempool = []
         num_required_extra_items = 0
         for location in self.multiworld.get_unfilled_locations(self.player):
             if not self._is_location_available(location.name):
@@ -312,7 +316,7 @@ class DarkSouls3World(World):
             if item.skip:
                 num_required_extra_items += 1
             elif not item.unique:
-                itempool.append(self.create_item(location.data.default_item_name))
+                self.local_itempool.append(self.create_item(location.data.default_item_name))
             else:
                 # For unique items, make sure there aren't duplicates in the item set even if there
                 # are multiple in-game locations that provide them.
@@ -320,17 +324,17 @@ class DarkSouls3World(World):
                     num_required_extra_items += 1
                 else:
                     item_set.add(location.data.default_item_name)
-                    itempool.append(self.create_item(location.data.default_item_name))
+                    self.local_itempool.append(self.create_item(location.data.default_item_name))
 
         injectables = self._create_injectable_items(num_required_extra_items)
         num_required_extra_items -= len(injectables)
-        itempool.extend(injectables)
+        self.local_itempool.extend(injectables)
 
         # Extra filler items for locations containing skip items
-        itempool.extend(self.create_filler() for _ in range(num_required_extra_items))
+        self.local_itempool.extend(self.create_filler() for _ in range(num_required_extra_items))
 
         # Add items to itempool
-        self.multiworld.itempool += itempool
+        self.multiworld.itempool += self.local_itempool
 
         self._fill_local_items()
 
@@ -474,13 +478,7 @@ class DarkSouls3World(World):
 
         If the item could not be placed, it will be added to starting inventory.
         """
-        item = next(
-            (
-                item for item in self.multiworld.itempool
-                if item.player == self.player and item.name == name
-            ),
-            None
-        )
+        item = next((item for item in self.local_itempool if item.name == name), None)
         if not item: return
 
         candidate_locations = [
@@ -498,6 +496,7 @@ class DarkSouls3World(World):
         ]
 
         self.multiworld.itempool.remove(item)
+        self.local_itempool.remove(item)
 
         if not candidate_locations:
             warning(f"Couldn't place \"{name}\" in a valid location for {self.multiworld.get_player_name(self.player)}. Adding it to starting inventory instead.")
@@ -529,10 +528,7 @@ class DarkSouls3World(World):
 
 
     def set_rules(self) -> None:
-        randomized_items = {
-            item.name for item in self.multiworld.itempool
-            if item.player == self.player
-        }
+        randomized_items = {item.name for item in self.local_itempool}
 
         self._add_shop_rules()
         self._add_npc_rules()
