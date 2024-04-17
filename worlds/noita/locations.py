@@ -192,6 +192,8 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
     },
     "Deep Underground": {
         "Limatoukka": LocationData(110647, LocationFlag.main_world, "boss"),
+    },
+    "West Meat Realm": {
         "Kolmisilmän sydän": LocationData(110671, LocationFlag.main_world, "boss"),
     },
     "The Laboratory": {
