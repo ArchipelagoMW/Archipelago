@@ -100,6 +100,7 @@ class MultiWorld():
     class Observer(threading.Thread):
         current_function: str
         entered: float
+        shutdown: bool = False
 
         def __init__(self):
             self.current_function = ""
@@ -119,8 +120,8 @@ class MultiWorld():
             self.current_function = ""
 
         def run(self):
-            while 1:
-                time.sleep(60)
+            while not self.shutdown:
+                time.sleep(1)
                 if self.current_function:
                     now = time.perf_counter()
                     if now - self.entered > 60:
@@ -247,6 +248,11 @@ class MultiWorld():
         self.per_slot_randoms = Utils.DeprecateDict("Using per_slot_randoms is now deprecated. Please use the "
                                                       "world's random object instead (usually self.random)")
         self.plando_options = PlandoOptions.none
+
+    def __del__(self):
+        observer = getattr(self, "observer", None)
+        if observer:
+            observer.shutdown = True
 
     def get_all_ids(self) -> Tuple[int, ...]:
         return self.player_ids + tuple(self.groups)
