@@ -113,7 +113,7 @@ noita_connections: Dict[str, List[str]] = {
 
     ###
     "Laboratory Holy Mountain": ["The Laboratory"],
-    "The Laboratory": ["The Work", "Friend Cave", "The Work (Hell)", "Lake"],
+    "The Laboratory": ["The Work", "Friend Cave", "The Work (Hell)", "Lake", "The Sky"],
     ###
 }
 
