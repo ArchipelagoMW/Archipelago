@@ -129,6 +129,9 @@ class MultiWorld():
                                      f"running since {time.perf_counter()-self.entered:.0f} seconds ago.")
                         self.current_function = ""
 
+    observer = Observer()
+    observer.start()
+
     class RegionManager:
         region_cache: Dict[int, Dict[str, Region]]
         entrance_cache: Dict[int, Dict[str, Entrance]]
@@ -194,8 +197,6 @@ class MultiWorld():
         self.local_early_items = {player: {} for player in self.player_ids}
         self.indirect_connections = {}
         self.start_inventory_from_pool: Dict[int, Options.StartInventoryPool] = {}
-        self.observer = self.Observer()
-        self.observer.start()
 
         for player in range(1, players + 1):
             def set_player_attr(attr, val):
@@ -248,11 +249,6 @@ class MultiWorld():
         self.per_slot_randoms = Utils.DeprecateDict("Using per_slot_randoms is now deprecated. Please use the "
                                                       "world's random object instead (usually self.random)")
         self.plando_options = PlandoOptions.none
-
-    def __del__(self):
-        observer = getattr(self, "observer", None)
-        if observer:
-            observer.shutdown = True
 
     def get_all_ids(self) -> Tuple[int, ...]:
         return self.player_ids + tuple(self.groups)
