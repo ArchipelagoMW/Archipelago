@@ -20,7 +20,7 @@ weapon_damage: Dict[int, List[int]] = {
     5: [2, 2, 0, 2, 0, 0, 4, 1, 1, 7, 2, 0, 1, -1],  # Quick Boomerang
     6: [-1, 0, 2, 2, 4, 3, 0, 0, 1, 0, 1, 0x14, 1, -1],  # Crash Bomber
     7: [1, 0, 2, 4, 0, 4, 0xE, 0, 0, 7, 0, 0, 1, -1],  # Metal Blade
-    8: [0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0], # Time Stopper
+    8: [0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # Time Stopper
 }
 
 weapons_to_name: Dict[int, str] = {
@@ -86,7 +86,14 @@ def set_rules(world: "MM2World") -> None:
         slot_data = getattr(world.multiworld, "re_gen_passthrough")["Mega Man 2"]
         world.weapon_damage = slot_data["weapon_damage"]
     else:
-        if world.options.random_weakness:
+        if world.options.random_weakness == world.options.random_weakness.option_shuffled:
+            weapon_tables = [table for weapon, table in weapon_damage.items() if weapon not in (0, 8)]
+            world.random.shuffle(weapon_tables)
+            for i in range(1, 8):
+                world.weapon_damage[i] = weapon_tables.pop()
+            world.weapon_damage[8] = [0 for _ in range(14)]
+            world.weapon_damage[8][world.random.choice(range(8))] = 2
+        elif world.options.random_weakness == world.options.random_weakness.option_randomized:
             world.weapon_damage = {i: [] for i in range(9)}
             for boss in range(13):
                 for weapon in world.weapon_damage:

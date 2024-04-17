@@ -69,7 +69,7 @@ class StrictWeaknessTests(MM2TestBase):
 class RandomStrictWeaknessTests(MM2TestBase):
     options = {
         "strict_weakness": True,
-        "random_weakness": True,
+        "random_weakness": "randomized",
         "yoku_jumps": True,
         "enable_lasers": True
     }

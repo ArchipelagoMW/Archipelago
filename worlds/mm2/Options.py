@@ -40,6 +40,7 @@ class EnergyLink(Toggle):
     be requested from the EnergyLink pool.
     Some of the energy sent to the pool will be lost on transfer.
     """
+    display_name = "EnergyLink"
 
 
 class StartingRobotMaster(Choice):
@@ -129,9 +130,18 @@ class StrictWeaknesses(Toggle):
     display_name = "Strict Weaknesses"
 
 
-class RandomWeaknesses(Toggle):
-    """Randomize boss weaknesses."""
+class RandomWeaknesses(Choice):
+    """None: Bosses will have their regular weaknesses.
+    Shuffled: Weapon damage will be shuffled amongst the weapons, so Metal Blade may do Bubble Lead damage.
+    Time Stopper will deplete half of a random Robot Master's HP.
+    Randomized: Weapon damage will be fully randomized.
+    """
     display_name = "Random Weaknesses"
+    option_none = 0
+    option_shuffled = 1
+    option_randomized = 2
+    alias_false = 0
+    alias_true = 2
 
 
 class Wily5Requirement(Range):
