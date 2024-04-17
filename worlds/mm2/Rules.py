@@ -1,3 +1,4 @@
+from math import ceil
 from typing import TYPE_CHECKING, Dict, List
 from . import Names
 from .Locations import heat_man_locations, air_man_locations, wood_man_locations, bubble_man_locations, \
@@ -54,6 +55,18 @@ robot_masters: Dict[int, str] = {
     5: "Flash Man Defeated",
     6: "Metal Man Defeated",
     7: "Crash Man Defeated"
+}
+
+weapon_costs = {
+    0: 0,
+    1: 10,
+    2: 2,
+    3: 3,
+    4: 0.5,
+    5: 0.125,
+    6: 4,
+    7: 0.25,
+    8: 7,
 }
 
 
@@ -133,6 +146,42 @@ def set_rules(world: "MM2World") -> None:
                 world.weapon_damage[weakness][bosses[p_boss]] = minimum_weakness_requirement[weakness]
             world.weapon_damage[weapons_to_id[p_weapon]][bosses[p_boss]] \
                 = world.options.plando_weakness[p_boss][p_weapon]
+
+    # weakness validation, it is better to confirm a completable seed than respect plando
+    boss_health = {boss: 0x1C for boss in [*list(range(8)), 12]}
+
+    weapon_energy = {key: float(0x1C * 2) if key == 12 else float(0x1C) for key in weapon_costs}
+    for boss in [*list(range(8)), 12]:
+        boss_damage = {weapon: world.weapon_damage[weapon][boss] for weapon in world.weapon_damage}
+        weapon_weight = {weapon: damage / weapon_energy[weapon] for weapon, damage in boss_damage.items()
+                         if weapon_energy[weapon] if weapon != 0}
+        while boss_health[boss] > 0:
+            if boss_damage[0]:
+                boss_health[boss] = 0  # if we can buster, we should buster
+                continue
+            highest, wp = max(zip(weapon_weight.values(), weapon_weight.keys()))
+            uses = weapon_energy[wp] // weapon_costs[wp]
+            if int(uses * boss_damage[wp]) > boss_health[boss]:
+                used = ceil(boss_health[boss] / boss_damage[wp])
+                weapon_energy[wp] -= weapon_costs[wp] * used
+                boss_health[boss] = 0
+            elif highest <= 0:
+                # we are out of weapons that can actually damage the boss
+                # so find the weapon that has the most uses, and apply that as an additional weakness
+                # it should be impossible to be out of energy, simply because even if every boss took 1 from
+                # Quick Boomerang and no other, it would only be 28 off from defeating all 9, which Metal Blade should
+                # be able to cover
+                wp, max_uses = max((weapon, weapon_energy[weapon] // weapon_costs[weapon]) for weapon in weapon_weight)
+                world.weapon_damage[wp][boss] = minimum_weakness_requirement[wp]
+                used = ceil(boss_health[boss] / minimum_weakness_requirement[wp])
+                weapon_energy[wp] -= weapon_costs[wp] * used
+                boss_health[boss] -= int(used * minimum_weakness_requirement[wp])
+                weapon_weight.pop(wp)
+            else:
+                # drain the weapon and continue
+                boss_health[boss] -= int(uses * boss_damage[wp])
+                weapon_energy[wp] -= weapon_costs[wp] * uses
+                weapon_weight.pop(wp)
 
     time_stopper_logical = False
 
