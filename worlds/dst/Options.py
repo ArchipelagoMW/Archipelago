@@ -47,6 +47,7 @@ class RequiredBosses(OptionSet):
         "Bee Queen",
         "Klaus",
         "Toadstool",
+        "Malbatross",
         "Crab King",
         "Frostjaw",
         "Eye Of Terror",
@@ -87,23 +88,24 @@ class CookingLocations(Choice):
     Find items when cooking different foods in the crock pot?
 
     None: No items from cooking. (This will remove a lot of locations and potentially leave unplaced items!)
-    Regular: There are locations for cooking in the crock pot, excluding Warly's exclusives.
-    Include Warly Exclusives: All crock pot recipes are locations. Logic will expect you to have the ability to use the Portable Crock Pot.
+    Regular: Get items for cooking in the crock pot, excluding Warly's exclusives.
+    Include Warly Exclusives: All crock pot recipes are item locations. Logic will expect you to have the ability to use the Portable Crock Pot.
+    Veggie Only: All recipes except meat and Warly exclusives.
+    Meat Only: All recipes except veggie and Warly exclusives.
     """
     display_name = "Cooking Locations"
     default = 1
     option_none = 0
     option_regular = 1
     option_warly_enabled = 2
+    option_veggie_only = 3
+    option_meat_only = 4
 
-class FarmingLocations(Choice):
+class FarmingLocations(Toggle):
     """
     Find items when you harvest giant crops?
     """
     display_name = "Farming Locations"
-    default = 0
-    option_none = 0
-    option_enabled = 1
 
 class SeasonalLocations(Toggle):
     """

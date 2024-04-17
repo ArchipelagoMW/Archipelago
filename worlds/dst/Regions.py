@@ -12,10 +12,10 @@ class DSTRegionData(NamedTuple):
 
 def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions):
    REGION_DATA_TABLE: Dict[str, DSTRegionData] = {
-      "Menu":     DSTRegionData(["Forest"]),
-      "Forest":   DSTRegionData(["Cave", "Ocean"]),
-      "Cave":     DSTRegionData([]),
-      "Ocean":    DSTRegionData([]),
+      "Menu":     DSTRegionData(["Forest"], []),
+      "Forest":   DSTRegionData(["Cave", "Ocean"], []),
+      "Cave":     DSTRegionData([], []),
+      "Ocean":    DSTRegionData([], []),
    }
 
    def create_event_item(name: str) -> None:
@@ -35,10 +35,21 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions):
    # Get number of items that need to be placed, plus make space for junk items and traps
    location_num_left_to_place:int = len([name for name, data in item_data_table.items() if data.code != None and not "filler" in data.tags]) + 20
 
+   # Check if locations are disabled by options
+   filtered_location_data_table = {name: data for name, data in location_data_table.items() if not(
+      "deprecated" in data.tags # Don't add deprecated locations
+      or (not options.creature_locations.value and "creature" in data.tags)
+      or (not options.farming_locations.value and "farming" in data.tags)
+      or (options.cooking_locations.current_key == "none" and "cooking" in data.tags)
+      or (options.cooking_locations.current_key != "warly_enabled" and "warly" in data.tags)
+      or (options.cooking_locations.current_key == "veggie_only" and "meat" in data.tags)
+      or (options.cooking_locations.current_key == "meat_only" and "veggie" in data.tags)
+   )}
    # Place normal locations in regions
-   for name, data in location_data_table.items():
-      # Don't add events, science, magic, or seafaring. We'll do that somewhere else
-      if ("event" in data.tags or "research" in data.tags
+   for name, data in filtered_location_data_table.items():
+
+      # Don't add science, magic, or seafaring. We'll do that somewhere else
+      if ("research" in data.tags
          # Require other research locations
          and not  ("ancient" in data.tags 
                   or "celestial" in data.tags
@@ -46,23 +57,16 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions):
          ):
          continue
 
-      # Check if locations are disabled by options
-      if ( (not options.creature_locations.value and "creature" in data.tags)
-         or (not options.farming_locations.value and "farming" in data.tags)
-         or (options.cooking_locations.current_key == "none" and "cooking" in data.tags)
-         or (options.cooking_locations.current_key != "warly_enabled" and "warly" in data.tags)
-         ):
-         continue
       REGION_DATA_TABLE[get_region_name_from_tags(data.tags)].locations.append(name)
       location_num_left_to_place -= 1
 
    # Categories
    RESEARCH_GROUPS = {
-      "science_1_locations" : [name for name, data in location_data_table.items() if "science" in data.tags and "tier_1" in data.tags],
-      "science_2_locations" : [name for name, data in location_data_table.items() if "science" in data.tags and "tier_2" in data.tags],
-      "magic_1_locations" : [name for name, data in location_data_table.items() if "magic" in data.tags and "tier_1" in data.tags],
-      "magic_2_locations" : [name for name, data in location_data_table.items() if "magic" in data.tags and "tier_2" in data.tags],
-      "seafaring_locations" : [name for name, data in location_data_table.items() if "seafaring" in data.tags],
+      "science_1_locations" : [name for name, data in filtered_location_data_table.items() if "science" in data.tags and "tier_1" in data.tags],
+      "science_2_locations" : [name for name, data in filtered_location_data_table.items() if "science" in data.tags and "tier_2" in data.tags],
+      "magic_1_locations" : [name for name, data in filtered_location_data_table.items() if "magic" in data.tags and "tier_1" in data.tags],
+      "magic_2_locations" : [name for name, data in filtered_location_data_table.items() if "magic" in data.tags and "tier_2" in data.tags],
+      "seafaring_locations" : [name for name, data in filtered_location_data_table.items() if "seafaring" in data.tags],
    }
    
    for _, group in RESEARCH_GROUPS.items():
