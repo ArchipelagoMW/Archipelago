@@ -57,4 +57,4 @@ if __name__ == "__main__":
     # mypy is first because of its --install-types feature
     mypy_ret = mypy()
     pyright_ret = pyright()
-    exit(mypy_ret and pyright_ret)
+    exit(mypy_ret or pyright_ret)
