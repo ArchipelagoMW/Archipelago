@@ -71,9 +71,9 @@ class TestBase(unittest.TestCase):
         """
         Tests item link creation by creating a multiworld of 2 worlds for every game and linking their items together.
         """
-        def setup_link_multiworld(world_type: Type[World], link_replace: bool) -> None:
+        def setup_link_multiworld(world: Type[World], link_replace: bool) -> None:
             multiworld = MultiWorld(2)
-            multiworld.game = {1: world_type.game, 2: world_type.game}
+            multiworld.game = {1: world.game, 2: world.game}
             multiworld.player_name = {1: "Linker 1", 2: "Linker 2"}
             multiworld.set_seed()
             item_link_group = [{
@@ -83,7 +83,7 @@ class TestBase(unittest.TestCase):
                 "replacement_item": None,
             }]
             args = Namespace()
-            for name, option in world_type.options_dataclass.type_hints.items():
+            for name, option in world.options_dataclass.type_hints.items():
                 setattr(args, name, {1: option.from_any(option.default), 2: option.from_any(option.default)})
             setattr(args, "item_links",
                     {1: ItemLinks.from_any(item_link_group), 2: ItemLinks.from_any(item_link_group)})

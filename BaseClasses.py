@@ -334,6 +334,7 @@ class MultiWorld():
             group["link_replacement"] = replacement_prio[item_link["link_replacement"]]
 
     def link_items(self) -> None:
+        from worlds import AutoWorld
         for group_id, group in self.groups.items():
             def find_common_pool(players: Set[int], shared_pool: Set[str]) -> Tuple[
                 Optional[Dict[int, Dict[str, int]]], Optional[Dict[str, int]]
