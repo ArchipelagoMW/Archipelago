@@ -42,7 +42,7 @@ In total, this requires:
 
 Locations in which items can be found:
 - All Item Blocks and Coin Blocks
-- All Chuckle Bean digspots
+- All Chuckle Bean Digspots
 - All Shop items
 - All Pants and Badge shop items
 - All Espresso brews and rewards
@@ -58,7 +58,7 @@ Items that can be shuffled:
 
 ## What does another world's item look like in Mario & Luigi: Superstar Saga?
 
-Items will show up as a Golden Mushroom from boxes and digspots and "AP Item" in all textboxes.
+Items will show up as a Golden Mushroom from boxes and Digspots and "AP Item" in all textboxes.
 Items in a shop from another player's world will display the player name and item name in addition to being displayed as an AP Item.
 
 ## When the player receives an item, what happens?
