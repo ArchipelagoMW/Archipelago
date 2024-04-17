@@ -357,7 +357,7 @@ class MegaMan2Client(BizHawkClient):
             elif item.item & 0x30 == 0:
                 # Robot Master Stage Access
                 # print(robot_masters_unlocked[0])
-                new_stages = robot_masters_unlocked[0] ^ (1 << ((item.item & 0xF) - 1))
+                new_stages = robot_masters_unlocked[0] & ~(1 << ((item.item & 0xF) - 1))
                 # print(new_stages)
                 writes.append((MM2_ROBOT_MASTERS_UNLOCKED, new_stages.to_bytes(1, 'little'), "RAM"))
                 writes.extend(get_sfx_writes(0x3a))
