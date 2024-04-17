@@ -121,7 +121,11 @@ class AutoLogicRegister(type):
 def _timed_call(method: Callable[..., Any], *args: Any,
                 multiworld: Optional["MultiWorld"] = None, player: Optional[int] = None) -> Any:
     start = time.perf_counter()
-    ret = method(*args)
+    if multiworld:
+        with multiworld.observer(method, start):
+            ret = method(*args)
+    else:
+        ret = method(*args)
     taken = time.perf_counter() - start
     if taken > 1.0:
         if player and multiworld:
@@ -169,7 +173,7 @@ def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
     for world_type in sorted(world_types, key=lambda world: world.__name__):
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
         if stage_callable:
-            _timed_call(stage_callable, multiworld, *args)
+            _timed_call(stage_callable, multiworld, *args, multiworld=multiworld)
 
 
 class WebWorld:
