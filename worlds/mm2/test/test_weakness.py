@@ -5,7 +5,7 @@ from ..Options import bosses
 
 
 # Need to figure out how this test should work
-def test_wily_5(base: MM2TestBase):
+def validate_wily_5(base: MM2TestBase):
     world = base.multiworld.worlds[base.player]
     weapon_damage = world.weapon_damage
     boss_health = {boss: 0x1C for boss in [*list(range(8)), 12]}
@@ -63,7 +63,7 @@ class StrictWeaknessTests(MM2TestBase):
                 self.fail(f"Boss {boss} generated without weakness! Seed: {self.multiworld.seed}")
 
     def test_wily_5(self):
-        test_wily_5(self)
+        validate_wily_5(self)
 
 
 class RandomStrictWeaknessTests(MM2TestBase):
@@ -82,4 +82,4 @@ class RandomStrictWeaknessTests(MM2TestBase):
                 self.fail(f"Boss {boss} generated without weakness! Seed: {self.multiworld.seed}")
 
     def test_wily_5(self):
-        test_wily_5(self)
+        validate_wily_5(self)
