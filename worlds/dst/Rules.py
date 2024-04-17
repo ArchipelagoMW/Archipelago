@@ -297,7 +297,7 @@ def storm_protection (state: CollectionState, player: int) -> bool:
     return state.has_all(["Fashion Goggles", "Desert Goggles"], player) or (state.has("Astroggles", player) and basic_farming(state, player))
 
 def moonstorm_exploration (state: CollectionState, player: int) -> bool:
-    return state.has_all(["Celestial Sanctum Icon", "Celestial Sanctum Ward", "Inactive Celestial Tribute", "Pinchin' Winch"], player) and lunar_island(state, player) and storm_protection(state, player) and advanced_exploration(state, player) and electric_insulation(state, player)
+    return state.has("Mysterious Energy", player) and storm_protection(state, player) and advanced_exploration(state, player) and electric_insulation(state, player)
                         
 def celestial_champion (state: CollectionState, player: int) -> bool:
     return moonstorm_exploration(state, player) and state.has_all(["Incomplete Experiment", "Celestial Orb"], player) and ranged_combat(state, player)
@@ -371,6 +371,7 @@ def get_rules_lookup(player: int):
             "Moon Stone Event": lambda state: moonstone_event(state, player),
             "Find Celestial Sanctum Icon": lambda state: state.has("Astral Detector", player) and heavy_lifting(state, player),
             "Find Celestial Sanctum Ward": lambda state: state.has("Astral Detector", player) and heavy_lifting(state, player),
+            "Unite Celestial Altars": lambda state: state.has_all(["Celestial Sanctum Icon", "Celestial Sanctum Ward", "Inactive Celestial Tribute", "Pinchin' Winch"], player) and lunar_island(state, player),
             "Will Get Accursed Trinket": lambda state: advanced_boating(state, player),
             "Kill Prime Mate": lambda state: basic_combat(state, player) and moon_quay_exploration(state, player),
             "Defeat Crab King with Pearl's Pearl": lambda state: advanced_boating(state, player) and state.count("Crabby Hermit Friendship", player) >= 10 and (weather_pain(state, player) or cannon(state, player)),
@@ -530,6 +531,11 @@ def get_rules_lookup(player: int):
             "Lure Plant": lambda state: reached_spring(state, player),
             "Glommer": lambda state: has_survived_num_days(11, state, player),
             "Dust Moth": lambda state: archive_exploration(state, player),
+            "No-Eyed Deer": lambda state: is_winter(state, player),     
+            "Moonblind Crow": lambda state: moonstorm_exploration(state, player) and basic_combat(state, player),   
+            "Misshapen Bird": lambda state: moonstorm_exploration(state, player) and basic_combat(state, player),   
+            "Moonrock Pengull": lambda state: lunar_island(state, player) and is_winter(state, player) and basic_combat(state, player), 
+            "Horror Hound": lambda state: moonstorm_exploration(state, player) and basic_combat(state, player),     
             
             # Cook foods
             "Butter Muffin": lambda state: pre_basic_cooking(state, player),

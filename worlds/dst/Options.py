@@ -61,10 +61,10 @@ class RequiredBosses(OptionSet):
     
 class CreatureLocations(DefaultOnToggle):
     """
-    Are non-boss creatures item locations? 
+    Are non-boss creatures item locations, by killing or non-violent interactions? 
     (Disabling will remove a lot of locations and potentially leave unplaced items!)
     """
-    display_name = "Creature Kill Locations"
+    display_name = "Creature Locations"
 
     
 class BossLocations(Choice):

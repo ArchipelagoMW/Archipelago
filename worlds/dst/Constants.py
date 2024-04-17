@@ -18,6 +18,7 @@ DSTAP_EVENTS = {
 	"Kill Prime Mate":								"Pirate Map",
 	"Find Celestial Sanctum Icon":					"Celestial Sanctum Icon",
 	"Find Celestial Sanctum Ward":					"Celestial Sanctum Ward",
+	"Unite Celestial Altars":						"Mysterious Energy",
 	"Defeat Crab King with Pearl's Pearl":			"Inactive Celestial Tribute",
 	"Defeat Ancient Guardian":						"Ancient Key",
 	"Defeat Shadow Pieces":							"Shadow Atrium",
@@ -535,6 +536,11 @@ DSTAP_LOCATIONS = [
     [373,   "Lure Plant",               "lureplant",            [ "creature" ] ],
     [374,   "Glommer",                  "glommer",              [ "creature" ] ],
     [375,   "Dust Moth",                "dustmoth",             [ "creature", "caves" ] ],
+    [376,   "No-Eyed Deer",             "deer",                 [ "creature" ] ],
+    [377,   "Moonblind Crow",           "bird_mutant",          [ "creature", "ocean", "advanced" ] ],
+    [378,   "Misshapen Bird",           "bird_mutant_spitter",  [ "creature", "ocean", "advanced" ] ],
+    [379,   "Moonrock Pengull",         "mutated_penguin",      [ "creature", "ocean", "seasonal", "advanced" ] ],
+    [380,   "Horror Hound",             "mutatedhound",         [ "creature", "ocean", "advanced" ] ],
 
     # Farming (451-500)
     [451,   "Grow Giant Asparagus",         "asparagus_oversized",      [ "farming" ] ],
