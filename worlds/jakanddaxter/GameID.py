@@ -9,5 +9,5 @@ game_name = "Jak and Daxter: The Precursor Legacy"
 # ID numbers shared across items. See respective
 # Locations files for explanations.
 cell_offset = 0
-fly_offset = 1048576  # 2^20
+fly_offset = 128  # 2^7
 orb_offset = 2097152  # 2^21

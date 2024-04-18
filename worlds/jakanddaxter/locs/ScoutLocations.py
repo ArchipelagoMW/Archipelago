@@ -10,8 +10,8 @@
 
 # Because flies are indexed from 0, each 0th fly's full ID == the power cell's ID.
 # So we need to offset all of their ID's in order for Archipelago to separate them
-# from their power cells. We use 1,048,576 (2^20) for this purpose, because scout flies
-# don't use more than 19 bits to describe themselves.
+# from their power cells. We use 128 (2^7) for this purpose, because scout flies
+# never use the 8th lowest bit to describe themselves.
 
 # TODO - The ID's you see below correspond directly to that fly's 32-bit ID in the game.
 

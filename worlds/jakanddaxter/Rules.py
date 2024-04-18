@@ -12,10 +12,13 @@ def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int)
     gr_cells = {game_id + cell_offset + k for k in locGR_cellTable}
     fj_temple_top = game_id + cell_offset + 4
     fj_blue_switch = game_id + cell_offset + 2
+    fj_plant_boss = game_id + cell_offset + 6
     fj_fisherman = game_id + cell_offset + 5
-    pb_purple_rings = game_id + cell_offset + 58
     sb_flut_flut = game_id + cell_offset + 17
     fc_end = game_id + cell_offset + 69
+    pb_purple_rings = game_id + cell_offset + 58
+    lpc_sunken = game_id + cell_offset + 47
+    lpc_helix = game_id + cell_offset + 50
     mp_klaww = game_id + cell_offset + 86
     mp_end = game_id + cell_offset + 87
     sm_yellow_switch = game_id + cell_offset + 60
@@ -47,6 +50,11 @@ def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int)
                        JakAndDaxterSubLevel.FORBIDDEN_JUNGLE_SWITCH_ROOM,
                        JakAndDaxterSubLevel.FORBIDDEN_JUNGLE_PLANT_ROOM,
                        lambda state: state.has(item_table[fj_blue_switch], player))
+
+    connect_sub_to_region(multiworld, player,
+                          JakAndDaxterSubLevel.FORBIDDEN_JUNGLE_PLANT_ROOM,
+                          JakAndDaxterLevel.FORBIDDEN_JUNGLE,
+                          lambda state: state.has(item_table[fj_plant_boss], player))
 
     connect_regions(multiworld, player,
                     JakAndDaxterLevel.SANDOVER_VILLAGE,
@@ -85,6 +93,24 @@ def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int)
                     JakAndDaxterLevel.ROCK_VILLAGE,
                     JakAndDaxterLevel.LOST_PRECURSOR_CITY)
 
+    connect_region_to_sub(multiworld, player,
+                          JakAndDaxterLevel.LOST_PRECURSOR_CITY,
+                          JakAndDaxterSubLevel.LOST_PRECURSOR_CITY_SUNKEN_ROOM)
+
+    connect_subregions(multiworld, player,
+                       JakAndDaxterSubLevel.LOST_PRECURSOR_CITY_SUNKEN_ROOM,
+                       JakAndDaxterSubLevel.LOST_PRECURSOR_CITY_HELIX_ROOM)
+
+    connect_sub_to_region(multiworld, player,
+                          JakAndDaxterSubLevel.LOST_PRECURSOR_CITY_HELIX_ROOM,
+                          JakAndDaxterLevel.LOST_PRECURSOR_CITY,
+                          lambda state: state.has(item_table[lpc_helix], player))
+
+    connect_sub_to_region(multiworld, player,
+                          JakAndDaxterSubLevel.LOST_PRECURSOR_CITY_SUNKEN_ROOM,
+                          JakAndDaxterLevel.ROCK_VILLAGE,
+                          lambda state: state.has(item_table[lpc_sunken], player))
+
     connect_regions(multiworld, player,
                     JakAndDaxterLevel.ROCK_VILLAGE,
                     JakAndDaxterLevel.BOGGY_SWAMP)
@@ -109,10 +135,10 @@ def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int)
                        JakAndDaxterSubLevel.MOUNTAIN_PASS_SHORTCUT,
                        lambda state: state.has(item_table[sm_yellow_switch], player))
 
-    connect_regions(multiworld, player,
-                    JakAndDaxterLevel.MOUNTAIN_PASS,
-                    JakAndDaxterLevel.VOLCANIC_CRATER,
-                    lambda state: state.has(item_table[mp_end], player))
+    connect_sub_to_region(multiworld, player,
+                          JakAndDaxterSubLevel.MOUNTAIN_PASS_RACE,
+                          JakAndDaxterLevel.VOLCANIC_CRATER,
+                          lambda state: state.has(item_table[mp_end], player))
 
     connect_regions(multiworld, player,
                     JakAndDaxterLevel.VOLCANIC_CRATER,
@@ -182,6 +208,13 @@ def connect_region_to_sub(multiworld: MultiWorld, player: int, source: JakAndDax
                           rule=None):
     source_region = multiworld.get_region(level_table[source], player)
     target_region = multiworld.get_region(subLevel_table[target], player)
+    source_region.connect(target_region, rule=rule)
+
+
+def connect_sub_to_region(multiworld: MultiWorld, player: int, source: JakAndDaxterSubLevel, target: JakAndDaxterLevel,
+                          rule=None):
+    source_region = multiworld.get_region(subLevel_table[source], player)
+    target_region = multiworld.get_region(level_table[target], player)
     source_region.connect(target_region, rule=rule)
 
 

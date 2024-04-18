@@ -32,6 +32,8 @@ class JakAndDaxterSubLevel(int, Enum):
     FORBIDDEN_JUNGLE_PLANT_ROOM = auto()
     SENTINEL_BEACH_CANNON_TOWER = auto()
     PRECURSOR_BASIN_BLUE_RINGS = auto()
+    LOST_PRECURSOR_CITY_SUNKEN_ROOM = auto()
+    LOST_PRECURSOR_CITY_HELIX_ROOM = auto()
     BOGGY_SWAMP_FLUT_FLUT = auto()
     MOUNTAIN_PASS_RACE = auto()
     MOUNTAIN_PASS_SHORTCUT = auto()
@@ -67,6 +69,8 @@ subLevel_table: typing.Dict[JakAndDaxterSubLevel, str] = {
     JakAndDaxterSubLevel.FORBIDDEN_JUNGLE_PLANT_ROOM: "Forbidden Jungle Plant Room",
     JakAndDaxterSubLevel.SENTINEL_BEACH_CANNON_TOWER: "Sentinel Beach Cannon Tower",
     JakAndDaxterSubLevel.PRECURSOR_BASIN_BLUE_RINGS: "Precursor Basin Blue Rings",
+    JakAndDaxterSubLevel.LOST_PRECURSOR_CITY_SUNKEN_ROOM: "Lost Precursor City Sunken Room",
+    JakAndDaxterSubLevel.LOST_PRECURSOR_CITY_HELIX_ROOM: "Lost Precursor City Helix Room",
     JakAndDaxterSubLevel.BOGGY_SWAMP_FLUT_FLUT: "Boggy Swamp Flut Flut",
     JakAndDaxterSubLevel.MOUNTAIN_PASS_RACE: "Mountain Pass Race",
     JakAndDaxterSubLevel.MOUNTAIN_PASS_SHORTCUT: "Mountain Pass Shortcut",
@@ -133,8 +137,17 @@ def create_regions(multiworld: MultiWorld, options: JakAndDaxterOptions, player:
     create_cell_locations(sub_region_pbbr, {k: CellLocations.locPB_cellTable[k] for k in {59}})
 
     region_lpc = create_region(player, multiworld, level_table[JakAndDaxterLevel.LOST_PRECURSOR_CITY])
-    create_cell_locations(region_lpc, CellLocations.locLPC_cellTable)
-    create_fly_locations(region_lpc, ScoutLocations.locLPC_scoutTable)
+    create_cell_locations(region_lpc, {k: CellLocations.locLPC_cellTable[k] for k in {45, 48, 44, 51}})
+    create_fly_locations(region_lpc, {k: ScoutLocations.locLPC_scoutTable[k] for k in {157, 158, 159, 160, 161, 162}})
+
+    sub_region_lpcsr = create_subregion(region_lpc, subLevel_table[JakAndDaxterSubLevel
+                                        .LOST_PRECURSOR_CITY_SUNKEN_ROOM])
+    create_cell_locations(sub_region_lpcsr, {k: CellLocations.locLPC_cellTable[k] for k in {47, 49}})
+    create_fly_locations(region_lpc, {k: ScoutLocations.locLPC_scoutTable[k] for k in {163}})
+
+    sub_region_lpchr = create_subregion(region_lpc, subLevel_table[JakAndDaxterSubLevel
+                                        .LOST_PRECURSOR_CITY_HELIX_ROOM])
+    create_cell_locations(sub_region_lpchr, {k: CellLocations.locLPC_cellTable[k] for k in {46, 50}})
 
     region_bs = create_region(player, multiworld, level_table[JakAndDaxterLevel.BOGGY_SWAMP])
     create_cell_locations(region_bs, {k: CellLocations.locBS_cellTable[k] for k in {36, 38, 39, 40, 41, 42}})
