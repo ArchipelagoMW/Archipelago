@@ -143,6 +143,9 @@ class MLSSPatchExtension(APPatchExtension):
     @staticmethod
     def enemy_randomize(caller: APProcedurePatch, rom: bytes):
         options = json.loads(caller.get_file("options.json").decode("UTF-8"))
+        if options["randomize_bosses"] == 0 and options["randomize_enemies"] == 0:
+            return rom
+
         enemies = [pos for pos in Enemies.enemies if
                    pos not in Enemies.bowsers] if options["castle_skip"] else Enemies.enemies
         bosses = [pos for pos in Enemies.bosses if
@@ -150,7 +153,7 @@ class MLSSPatchExtension(APPatchExtension):
         stream = io.BytesIO(rom)
         random.seed(options["seed"] + options["player"])
 
-        if options["randomize_bosses"] == 1 or (options["randomize_bosses"] == 2 and options["randomize_enemies"] == 0):
+        if (options["randomize_bosses"] == 1 or (options["randomize_bosses"] == 2) and options["randomize_enemies"] == 0):
             raw = []
             for pos in bosses:
                 stream.seek(pos + 1)
@@ -201,7 +204,6 @@ class MLSSPatchExtension(APPatchExtension):
                         break
                     if flag in [0x0, 0x2, 0x4]:
                         if enemy not in Enemies.pestnut and enemy not in Enemies.flying:
-                            print(f"adding: 0x{format(enemy, 'x')}")
                             enemies_raw += [enemy]
                     stream.seek(1, 1)
                 else:
