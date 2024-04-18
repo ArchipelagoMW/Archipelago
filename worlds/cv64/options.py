@@ -74,7 +74,8 @@ class HardItemPool(Toggle):
 
 
 class Special1sPerWarp(Range):
-    """Sets how many Special1 jewels are needed per warp menu option unlock."""
+    """Sets how many Special1 jewels are needed per warp menu option unlock.
+    This will decrease until the number x 7 is less than or equal to the Total Specail1s if it isn't already."""
     range_start = 1
     range_end = 10
     default = 1
@@ -82,8 +83,7 @@ class Special1sPerWarp(Range):
 
 
 class TotalSpecial1s(Range):
-    """Sets how many Speical1 jewels are in the pool in total.
-    If this is set to be less than Special1s Per Warp x 7, it will decrease by 1 until it isn't."""
+    """Sets how many Speical1 jewels are in the pool in total."""
     range_start = 7
     range_end = 70
     default = 7
