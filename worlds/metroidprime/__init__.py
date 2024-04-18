@@ -104,7 +104,7 @@ class MetroidPrimeWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
 
         slot_data: Dict[str, Any] = {
-            "goal": self.options.start_inventory_from_pool.value,
+            "goal": self.options.goal.value,
             "spring_ball": self.options.spring_ball.value,
             "death_link": self.options.death_link.value,
             "required_artifacts": self.options.required_artifacts.value,
