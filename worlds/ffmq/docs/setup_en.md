@@ -12,7 +12,7 @@
     - An SD2SNES, FXPak Pro ([FXPak Pro Store Page](https://krikzz.com/store/home/54-fxpak-pro.html)), or other
       compatible hardware
 
-- Your legally obtained Final Fantasy Mystic Quest 1.1 ROM file, probably named `Final Fantasy - Mystic Quest (U) (V1.1).sfc`
+- Your legally obtained Final Fantasy Mystic Quest NA 1.0 or 1.1 ROM file, probably named `Final Fantasy - Mystic Quest (U) (V1.0).sfc` or `Final Fantasy - Mystic Quest (U) (V1.1).sfc`
 The Archipelago community cannot supply you with this.
 
 ## Installation Procedures
@@ -54,7 +54,7 @@ validator page: [YAML Validation page](/mysterycheck)
 2. You will be presented with a "Seed Info" page.
 3. Click the "Create New Room" link.
 4. You will be presented with a server page, from which you can download your `.apmq` patch file.
-5. Go to the [FFMQR website](https://ffmqrando.net/Archipelago) and select your Final Fantasy Mystic Quest 1.1 ROM
+5. Go to the [FFMQR website](https://ffmqrando.net/Archipelago) and select your Final Fantasy Mystic Quest ROM
 and the .apmq file you received, choose optional preferences, and click `Generate` to get your patched ROM.
 7. Since this is a single-player game, you will no longer need the client, so feel free to close it.
 
@@ -66,7 +66,7 @@ When you join a multiworld game, you will be asked to provide your config file t
 the host will provide you with either a link to download your patch file, or with a zip file containing
 everyone's patch files. Your patch file should have a `.apmq` extension.
 
-Go to the [FFMQR website](https://ffmqrando.net/Archipelago) and select your Final Fantasy Mystic Quest 1.1 ROM
+Go to the [FFMQR website](https://ffmqrando.net/Archipelago) and select your Final Fantasy Mystic Quest ROM
 and the .apmq file you received, choose optional preferences, and click `Generate` to get your patched ROM.
 
 Manually launch the SNI Client, and run the patched ROM in your chosen software or hardware.
