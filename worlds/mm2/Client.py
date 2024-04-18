@@ -20,6 +20,7 @@ MM2_ITEMS_ACQUIRED = 0x8C
 MM2_RECEIVED_ITEMS = 0x8E
 MM2_DEATHLINK = 0x8F
 MM2_ENERGYLINK = 0x90
+MM2_RBM_STROBE = 0x91
 MM2_WEAPONS_UNLOCKED = 0x9A
 MM2_ITEMS_UNLOCKED = 0x9B
 MM2_WEAPON_ENERGY = 0x9C
@@ -356,11 +357,10 @@ class MegaMan2Client(BizHawkClient):
                 writes.extend(get_sfx_writes(0x21))
             elif item.item & 0x30 == 0:
                 # Robot Master Stage Access
-                # print(robot_masters_unlocked[0])
                 new_stages = robot_masters_unlocked[0] & ~(1 << ((item.item & 0xF) - 1))
-                # print(new_stages)
                 writes.append((MM2_ROBOT_MASTERS_UNLOCKED, new_stages.to_bytes(1, 'little'), "RAM"))
                 writes.extend(get_sfx_writes(0x3a))
+                writes.append((MM2_RBM_STROBE, b"\x01", "RAM"))
             elif item.item & 0x20 == 0:
                 # Items
                 new_items = items_unlocked[0] | (1 << ((item.item & 0xF) - 1))

@@ -10,6 +10,7 @@ norom
 !last_wily = $8D
 !deathlink = $8F
 !energylink_packet = $90
+!rbm_strobe
 !received_weapons = $9A
 !received_items = $9B
 !current_weapon = $A9
@@ -23,6 +24,8 @@ norom
 
 !PpuControl_2000 = $2000
 !PpuMask_2001 = $2001
+!PpuAddr_2006 = $2006
+!PpuData_2007 = $2007
 
 !LOAD_BANK = $C000
 
@@ -635,6 +638,99 @@ Quickswap:
     TAY
     .Return:
     RTS
+
+RefreshRBMTiles:
+    ; primarily just a copy of the startup RBM setup, we just do it again
+    ; can't jump to it as it leads into the main loop
+    LDA !rbm_strobe
+    BNE .Update
+    JMP .NoUpdate
+    .Update:
+    LDA #$00
+    STA !rbm_strobe
+    LDA #$10
+    STA $F7
+    STA !PpuControl_2000
+    LDA #$06
+    STA $F8
+    STA !PpuMask_2001
+    JSR $847E
+    JSR $843C
+    LDX #$00
+    LDA $8A
+    STA $01
+    .TileLoop:
+    STX $00
+    LSR $01
+    BCC .SkipTile
+    LDA $8531,X
+    STA $09
+    LDA $8539,X
+    STA $08
+    LDX #$04
+    LDA #$00
+    .ClearBody:
+    LDA $09
+    STA !PpuAddr_2006
+    LDA $08
+    STA !PpuAddr_2006
+    LDY #$04
+    LDA #$00
+    .ClearLine:
+    STA !PpuData_2007
+    DEY
+    BNE .ClearLine
+    CLC
+    LDA $08
+    ADC #$20
+    STA $08
+    DEX
+    BNE .ClearBody
+    .SkipTile:
+    LDX $00
+    INX
+    CPX #$08
+    BNE .TileLoop
+    LDX #$1F
+    JSR $829E
+    JSR $8473
+    LDX #$00
+    LDA $8A
+    STA $02
+    LDY #$00
+    .SpriteLoop:
+    STX $01
+    LSR $02
+    BCS .SkipRBM
+    LDA $8605,X
+    STA $00
+    LDA $85FD,X
+    TAX
+    .WriteSprite:
+    LDA $8541,X
+    STA $0200,Y
+    INY
+    INX
+    DEC $00
+    BNE .WriteSprite
+    .SkipRBM:
+    LDX $01
+    INX
+    CPX #$08
+    BNE .SpriteLoop
+    JSR $A51D
+    LDA #$0C
+    JSR $C051
+    LDA #$00
+    STA $2A
+    STA $FD
+    JSR $C0AB
+    .NoUpdate:
+    LDA $1C
+    AND #$08
+    RTS
+
+
 
 assert realbase() <= $03F650 ; This is the start of our text data, and we absolutely cannot go past this point (text takes too much room).
 

@@ -160,8 +160,8 @@ def set_rules(world: "MM2World") -> None:
     weapon_energy = {key: float(0x1C * 2) if key == 12 else float(0x1C) for key in weapon_costs}
     for boss in [*list(range(8)), 12]:
         boss_damage = {weapon: world.weapon_damage[weapon][boss] for weapon in world.weapon_damage}
-        weapon_weight = {weapon: damage / weapon_energy[weapon] for weapon, damage in boss_damage.items()
-                         if weapon_energy[weapon] if weapon != 0}
+        weapon_weight = {weapon: (weapon_energy[weapon] / damage) if damage else 0 for weapon, damage in
+                         boss_damage.items() if weapon_energy[weapon]}
         while boss_health[boss] > 0:
             if boss_damage[0]:
                 boss_health[boss] = 0  # if we can buster, we should buster
