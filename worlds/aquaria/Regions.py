@@ -23,6 +23,10 @@ def _has_tongue_cleared(state, player: int) -> bool:
     """`player` in `state` has the Body tongue cleared item"""
     return state.has("Body tongue cleared", player)
 
+def _has_sun_crystal(state, player: int) -> bool:
+    """`player` in `state` has the Sun crystal item"""
+    return state.has("Has sun crystal", player)
+
 
 def _has_li(state, player: int) -> bool:
     """`player` in `state` has Li in it's team"""
@@ -713,7 +717,7 @@ class AquariaRegions:
         self.__connect_regions("Sun temple right area", "Sun temple left area",
                                self.sun_temple_r, self.sun_temple_l,
                                lambda state: _has_bind_song(state, self.player))
-        self.__connect_regions("Sun temple left area", "Veil left of top sun temple",
+        self.__connect_regions("Sun temple left area", "Veil left of sun temple",
                                self.sun_temple_l, self.veil_tr_l)
         self.__connect_regions("Sun temple left area", "Sun temple before boss area",
                                self.sun_temple_l, self.sun_temple_boss_path)
@@ -969,6 +973,9 @@ class AquariaRegions:
         self.__add_event_location(self.sunken_city_boss,
                                   "Sunken City cleared",
                                   "Body tongue cleared")
+        self.__add_event_location(self.sun_temple_r,
+                                  "Sun Crystal",
+                                  "Has sun crystal")
         self.__add_event_location(self.final_boss_end, "Objective complete",
                                   "Victory")
 
@@ -1091,6 +1098,14 @@ class AquariaRegions:
                  lambda state: _has_light(state, self.player))
         add_rule(self.world.get_entrance("Open water bottom left area to Abyss left area", self.player),
                  lambda state: _has_light(state, self.player))
+        add_rule(self.world.get_entrance("Sun temple left area to Sun temple right area", self.player),
+                 lambda state: _has_light(state, self.player) or _has_sun_crystal(state, self.player))
+        add_rule(self.world.get_entrance("Sun temple right area to Sun temple left area", self.player),
+                 lambda state: _has_light(state, self.player) or _has_sun_crystal(state, self.player))
+        add_rule(self.world.get_entrance("Veil left of sun temple to Sun temple left area", self.player),
+                 lambda state: _has_light(state, self.player) or _has_sun_crystal(state, self.player))
+
+
 
     def __adjusting_manual_rules(self) -> None:
         add_rule(self.world.get_location("Mithalas cathedral, Mithalan Dress", self.player),

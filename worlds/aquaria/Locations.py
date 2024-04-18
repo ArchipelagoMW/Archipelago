@@ -360,12 +360,6 @@ class AquariaLocations:
         "Octopus cave, bulb in the path below the octopus cave path": 698122,
     }
 
-    locations_bubble_cave = {
-        "Bubble cave, bulb in the left cave wall": 698089,
-        "Bubble cave, bulb in the right cave wall (behind the ice cristal)": 698090,
-        "Bubble cave, Verse egg": 698161,
-    }
-
     locations_sun_temple_l = {
         "Sun temple, bulb in the top left part": 698094,
         "Sun temple, bulb in the top right part": 698095,
@@ -416,6 +410,12 @@ class AquariaLocations:
         "Ice cave, Second bulbs in the top exit room": 698085,
         "Ice cave, third bulbs in the top exit room": 698086,
         "Ice cave, bulb in the left room": 698087,
+    }
+
+    locations_bubble_cave = {
+        "Bubble cave, bulb in the left cave wall": 698089,
+        "Bubble cave, bulb in the right cave wall (behind the ice cristal)": 698090,
+        "Bubble cave, Verse egg": 698161,
     }
 
     locations_king_jellyfish_cave = {
