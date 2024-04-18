@@ -109,7 +109,7 @@ noita_connections: Dict[str, List[str]] = {
     "Temple of the Art Holy Mountain": ["Temple of the Art"],
     "Temple of the Art": ["Laboratory Holy Mountain", "The Tower", "Wizards' Den"],
     "Wizards' Den": ["Powerplant"],
-    "Powerplant": ["Deep Underground"],
+    "Powerplant": ["Meat Realm"],
 
     ###
     "Laboratory Holy Mountain": ["The Laboratory"],
