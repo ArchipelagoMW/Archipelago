@@ -26,7 +26,7 @@ class LocationFlag(IntEnum):
 # Mapping of items in each region.
 # Only the first Hidden Chest and Pedestal are mapped here, the others are created in Regions.
 # ltype key: "chest" = Hidden Chests, "pedestal" = Pedestals, "boss" = Boss, "orb" = Orb.
-# 110000-110649
+# 110000-110671
 location_region_mapping: Dict[str, Dict[str, LocationData]] = {
     "Coal Pits Holy Mountain": {
         "Coal Pits Holy Mountain Shop Item 1":   LocationData(110000),
@@ -90,6 +90,9 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Secret Shop Item 3": LocationData(110044),
         "Secret Shop Item 4": LocationData(110045),
     },
+    "The Sky": {
+        "Kivi": LocationData(110670, LocationFlag.main_world, "boss"),
+    },
     "Floating Island": {
         "Floating Island Orb": LocationData(110658, LocationFlag.main_path, "orb"),
     },
@@ -104,6 +107,7 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
     },
     "Lake": {
         "Syväolento": LocationData(110651, LocationFlag.main_world, "boss"),
+        "Tapion vasalli": LocationData(110669, LocationFlag.main_world, "boss"),
     },
     "Frozen Vault": {
         "Frozen Vault Orb":      LocationData(110660, LocationFlag.main_world, "orb"),
@@ -188,6 +192,9 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
     },
     "Deep Underground": {
         "Limatoukka": LocationData(110647, LocationFlag.main_world, "boss"),
+    },
+    "West Meat Realm": {
+        "Kolmisilmän sydän": LocationData(110671, LocationFlag.main_world, "boss"),
     },
     "The Laboratory": {
         "Kolmisilmä": LocationData(110646, LocationFlag.main_path, "boss"),
