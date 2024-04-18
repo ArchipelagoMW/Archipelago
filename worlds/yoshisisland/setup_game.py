@@ -274,7 +274,7 @@ def setup_gamevars(world: "YoshisIslandWorld") -> None:
         norm_start_lv.extend([0x24, 0x3C])
         hard_start_lv.extend([0x1D, 0x3C])
 
-    if world.options.level_shuffle != LevelShuffle.option_bosses_guranteed:
+    if world.options.level_shuffle != LevelShuffle.option_bosses_guaranteed:
         hard_start_lv.extend([0x07, 0x1B, 0x1F, 0x2B, 0x33, 0x37])
         if not world.options.shuffle_midrings:
             easy_start_lv.extend([0x1B])
@@ -286,7 +286,7 @@ def setup_gamevars(world: "YoshisIslandWorld") -> None:
     if world.options.level_shuffle:
         world.global_level_list.remove(starting_level)
         world.random.shuffle(world.global_level_list)
-        if world.options.level_shuffle == LevelShuffle.option_bosses_guranteed:
+        if world.options.level_shuffle == LevelShuffle.option_bosses_guaranteed:
             for i in range(11):
                 world.global_level_list = [item for item in world.global_level_list
                                            if item not in boss_lv]
