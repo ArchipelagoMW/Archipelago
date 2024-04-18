@@ -1,5 +1,6 @@
 # Look at `Rules.dsv` first to get an idea for how this works
 
+import logging
 from typing import Union, Tuple, List, Dict, Set
 from worlds.AutoWorld import WebWorld, World
 from BaseClasses import Region, ItemClassification, Tutorial, CollectionState
@@ -26,7 +27,7 @@ from .Checks import (
     armor_minions,
     accessory_minions,
 )
-from .Options import options
+from .Options import options, Goal
 
 
 class TerrariaWeb(WebWorld):
@@ -71,11 +72,20 @@ class TerrariaWorld(World):
     goal_locations: Set[str]
 
     def generate_early(self) -> None:
-        goal, goal_locations = goals[self.multiworld.goal[self.player].value]
+        self.options.goal
+        goal_id = self.multiworld.goal[self.player].value
+        goal, goal_locations = goals[goal_id]
         ter_goals = {}
         goal_items = set()
         for location in goal_locations:
-            item = rules[rule_indices[location]].flags.get("Item") or f"Post-{location}"
+            flags = rules[rule_indices[location]].flags
+            if not self.multiworld.calamity[self.player].value and "Calamity" in flags:
+                logging.warning(
+                    f"Terraria goal `{Goal.name_lookup[goal_id]}`, which requires Calamity, was selected with Calamity disabled; enabling Calamity"
+                )
+                self.multiworld.calamity[self.player].value = True
+
+            item = flags.get("Item") or f"Post-{location}"
             ter_goals[item] = location
             goal_items.add(item)
 
@@ -85,6 +95,8 @@ class TerrariaWorld(World):
         achievements = self.multiworld.achievements[self.player].value
         location_count = 0
         locations = []
+        item_count = 0
+        items = []
         for rule in rules[:goal]:
             if (
                 (not self.getfixedboi and "Getfixedboi" in rule.flags)
@@ -113,13 +125,6 @@ class TerrariaWorld(World):
                 # Event
                 locations.append(rule.name)
 
-        item_count = 0
-        items = []
-        for rule in rules[:goal]:
-            if (not self.calamity and "Calamity" in rule.flags) or (
-                rule.name == "Zenith" and self.multiworld.goal[self.player].value != 11
-            ):
-                continue
             if "Item" in rule.flags:
                 # Item
                 item_count += 1
@@ -245,7 +250,7 @@ class TerrariaWorld(World):
                 return not condition.sign
             elif condition.condition == "calamity":
                 return condition.sign == self.calamity
-            elif condition == "grindy":
+            elif condition.condition == "grindy":
                 return condition.sign == (
                     self.multiworld.achievements[self.player].value >= 2
                 )
