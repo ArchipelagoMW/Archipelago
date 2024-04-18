@@ -25,7 +25,7 @@ class LocationFlag(IntEnum):
 
 # Mapping of items in each region.
 # Only the first Hidden Chest and Pedestal are mapped here, the others are created in Regions.
-# ltype key: "chest" = Hidden Chests, "pedestal" = Pedestals, "boss" = Boss, "orb" = Orb.
+# ltype key: "Chest" = Hidden Chests, "Pedestal" = Pedestals, "Boss" = Boss, "Orb" = Orb.
 # 110000-110671
 location_region_mapping: Dict[str, Dict[str, LocationData]] = {
     "Coal Pits Holy Mountain": {
