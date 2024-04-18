@@ -165,11 +165,9 @@ def create_regions(world: MultiWorld, options: SM64Options, player: int):
 
     regDDD = create_region("Dire, Dire Docks", player, world)
     create_locs(regDDD, "DDD: Board Bowser's Sub", "DDD: Chests in the Current", "DDD: Through the Jet Stream",
-                        "DDD: The Manta Ray's Reward", "DDD: Collect the Caps...")
-    ddd_moving_poles = create_subregion(regDDD, "DDD: Moving Poles", "DDD: Pole-Jumping for Red Coins")
-    regDDD.subregions = [ddd_moving_poles]
+                        "DDD: The Manta Ray's Reward", "DDD: Collect the Caps...", "DDD: Pole-Jumping for Red Coins")
     if options.enable_coin_stars:
-        create_locs(ddd_moving_poles, "DDD: 100 Coins")
+        create_locs(regDDD, "DDD: 100 Coins")
 
     regCotMC = create_region("Cavern of the Metal Cap", player, world)
     create_default_locs(regCotMC, locCotMC_table)
@@ -222,9 +220,9 @@ def create_regions(world: MultiWorld, options: SM64Options, player: int):
 
     regTTC = create_region("Tick Tock Clock", player, world)
     create_locs(regTTC, "TTC: Stop Time for Red Coins")
-    ttc_lower = create_subregion(regTTC, "TTC: Lower", "TTC: Roll into the Cage", "TTC: Get a Hand", "TTC: 1Up Block Midway Up")
+    ttc_lower = create_subregion(regTTC, "TTC: Lower", "TTC: Roll into the Cage", "TTC: Get a Hand")
     ttc_upper = create_subregion(ttc_lower, "TTC: Upper", "TTC: Timed Jumps on Moving Bars", "TTC: The Pit and the Pendulums")
-    ttc_top = create_subregion(ttc_upper, "TTC: Top", "TTC: Stomp on the Thwomp", "TTC: 1Up Block at the Top")
+    ttc_top = create_subregion(ttc_upper, "TTC: Top", "TTC: 1Up Block Midway Up", "TTC: Stomp on the Thwomp", "TTC: 1Up Block at the Top")
     regTTC.subregions = [ttc_lower, ttc_upper, ttc_top]
     if options.enable_coin_stars:
         create_locs(ttc_top, "TTC: 100 Coins")

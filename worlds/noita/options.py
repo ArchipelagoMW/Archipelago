@@ -6,7 +6,7 @@ class PathOption(Choice):
     """Choose where you would like Hidden Chest and Pedestal checks to be placed.
     Main Path includes the main 7 biomes you typically go through to get to the final boss.
     Side Path includes the Lukki Lair and Fungal Caverns. 9 biomes total.
-    Main World includes the full world (excluding parallel worlds). 14 biomes total.
+    Main World includes the full world (excluding parallel worlds). 15 biomes total.
     Note: The Collapsed Mines have been combined into the Mines as the biome is tiny."""
     display_name = "Path Option"
     option_main_path = 1
