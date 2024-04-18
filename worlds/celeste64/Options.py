@@ -25,7 +25,7 @@ class StrawberriesRequiredPercentage(Range):
     default = 80
 
 
-class LogicDifficulty(Toggle):
+class LogicDifficulty(Choice):
     """Whether chatting with your friends grants location checks"""
     display_name = "Logic Difficulty"
     option_standard = 0

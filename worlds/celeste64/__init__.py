@@ -1,11 +1,12 @@
+from copy import deepcopy
 from typing import List
 
-from BaseClasses import ItemClassification, Region, Tutorial
+from BaseClasses import ItemClassification, Location, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .Items import Celeste64Item, unlockable_item_data_table, move_item_data_table, item_data_table, item_table
 from .Locations import Celeste64Location, strawberry_location_data_table, friend_location_data_table,\
                                           sign_location_data_table, car_location_data_table, location_table
-from .Names import ItemName
+from .Names import ItemName, LocationName
 from .Options import Celeste64Options
 
 
@@ -72,8 +73,23 @@ class Celeste64World(World):
                       if name not in self.options.start_inventory]
 
         if self.options.move_shuffle:
+            move_items_for_itempool: List[str] = deepcopy(list(move_item_data_table.keys()))
+
+            if self.options.logic_difficulty == "standard":
+                # If the start_inventory already includes a move, don't worry about giving it one
+                if not [move for move in move_items_for_itempool if move in self.options.start_inventory]:
+                    chosen_start_move = self.random.choice(move_items_for_itempool)
+                    move_items_for_itempool.remove(chosen_start_move)
+
+                    if self.options.carsanity:
+                        intro_car_loc: Location = self.multiworld.get_location(LocationName.car_1, self.player)
+                        intro_car_loc.place_locked_item(self.create_item(chosen_start_move))
+                        location_count -= 1
+                    else:
+                        self.multiworld.push_precollected(self.create_item(chosen_start_move))
+
             item_pool += [self.create_item(name)
-                          for name in move_item_data_table.keys()
+                          for name in move_items_for_itempool
                           if name not in self.options.start_inventory]
 
         real_total_strawberries: int = min(self.options.total_strawberries.value, location_count - len(item_pool))
