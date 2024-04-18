@@ -3,7 +3,7 @@ from BaseClasses import MultiWorld, Region, Entrance, ItemClassification
 from .Locations import location_data_table, DSTLocation
 from .Items import DSTItem, item_data_table
 from .Options import DSTOptions
-from .Constants import DSTAP_EVENTS
+from .Constants import DSTAP_EVENTS, BOSS_COMPLETION_GOALS
 import random
 
 class DSTRegionData(NamedTuple):
@@ -116,13 +116,16 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions):
    for loc_name, item_name in DSTAP_EVENTS.items(): create_event(loc_name, item_name)
 
    # Decide win conditions
-   victory_targets:set = set()
-   if options.goal.current_key == "survival": 
-      victory_targets.add("Survival Goal")
-   elif options.goal.current_key == "bosses_any" or options.goal.current_key == "bosses_all": 
-      victory_targets = options.required_bosses.value 
+   victory_events:set = set()
+   if options.goal.current_key == "survival":
+      victory_events.add("Victory")
+      create_event("Survival Goal", "Victory")
+   elif options.goal.current_key == "bosses_any" or options.goal.current_key == "bosses_all":
+      victory_events.update([BOSS_COMPLETION_GOALS[bossname] for bossname in options.required_bosses.value])
 
-   # Make win events
-   for name in victory_targets: create_event(name, "Victory")
-   multiworld.completion_condition[player] = lambda state: state.count("Victory", player) >= (len(victory_targets) if options.goal.current_key == "bosses_all" else 1)
+   # Set the win conditions
+   if options.goal.current_key == "bosses_any":
+      multiworld.completion_condition[player] = lambda state: state.has_any(victory_events, player)
+   else:
+      multiworld.completion_condition[player] = lambda state: state.has_all(victory_events, player)
    

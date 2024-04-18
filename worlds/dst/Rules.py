@@ -820,11 +820,14 @@ def set_rules(dst_world: World) -> None:
     rules_lookup = get_rules_lookup(player)
     existing_locations = [item.name for item in multiworld.get_locations(player)]
     excluded = set()
-    
-    PROGRESSION_REQUIRED_BOSSES:set = set(multiworld.required_bosses[player].value)
-    if "Ancient Fuelweaver" in PROGRESSION_REQUIRED_BOSSES: PROGRESSION_REQUIRED_BOSSES.add("Ancient Guardian")
-    if "Celestial Champion" in PROGRESSION_REQUIRED_BOSSES: PROGRESSION_REQUIRED_BOSSES.add("Crab King")
-    if "Scrappy Werepig" in PROGRESSION_REQUIRED_BOSSES: PROGRESSION_REQUIRED_BOSSES.add("Nightmare Werepig")
+    PROGRESSION_REQUIRED_BOSSES:set = set()
+
+    if multiworld.goal[player].current_key != "survival":
+        excluded.update(multiworld.required_bosses[player].value) # Prevent goal bosses from having progression items
+        PROGRESSION_REQUIRED_BOSSES.update(multiworld.required_bosses[player].value) 
+        if "Ancient Fuelweaver" in PROGRESSION_REQUIRED_BOSSES: PROGRESSION_REQUIRED_BOSSES.add("Ancient Guardian")
+        if "Celestial Champion" in PROGRESSION_REQUIRED_BOSSES: PROGRESSION_REQUIRED_BOSSES.add("Crab King")
+        if "Scrappy Werepig" in PROGRESSION_REQUIRED_BOSSES: PROGRESSION_REQUIRED_BOSSES.add("Nightmare Werepig")
         
     PRIORITY_TAGS = {
         "Ancient Fuelweaver": "priority_fuelweaver_boss",
