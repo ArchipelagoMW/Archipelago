@@ -10,7 +10,7 @@ norom
 !last_wily = $8D
 !deathlink = $8F
 !energylink_packet = $90
-!rbm_strobe
+!rbm_strobe = $91
 !received_weapons = $9A
 !received_items = $9B
 !current_weapon = $A9
@@ -67,6 +67,11 @@ LoadWily:
 CheckAccessCodes:
     LDA !received_stages
 
+%org($8312, $0D)
+HookStageSelect:
+    JSR RefreshRBMTiles
+    NOP
+
 %org($A315, $0D)
 RemoveWeaponClear:
     NOP
@@ -84,10 +89,12 @@ RemoveWeaponClear:
 
 ;Remove password text
 %org($AF3A, $0D)
+StartHeight:
     db $AC ; set Start to center
 
 %org($AF49, $0D)
-    db $40, $40, $40, $40, $40, $40, $40, $40,
+PasswordText:
+    db $40, $40, $40, $40, $40, $40, $40, $40
 
 %org($BB74, $0D)
 GetEquippedStage:
