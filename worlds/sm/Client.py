@@ -139,7 +139,7 @@ class SMSNIClient(SNIClient):
         if item_out_ptr < len(ctx.items_received):
             item = ctx.items_received[item_out_ptr]
             item_id = item.item - items_start_id
-            if bool(ctx.items_handling & 0b010):
+            if bool(ctx.items_handling & 0b010) or item.location < 0: # item.location < 0 for !getitem to work
                 location_id = (item.location - locations_start_id) if (item.location >= 0 and item.player == ctx.slot) else 0xFF
             else:
                 location_id = 0x00 #backward compat
