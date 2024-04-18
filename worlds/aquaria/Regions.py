@@ -73,7 +73,7 @@ def _has_sun_form(state, player: int) -> bool:
 
 def _has_light(state, player: int) -> bool:
     """`player` in `state` has the light item"""
-    return state.has("Baby dumbo", player)# or _has_sun_form(state, player)
+    return state.has("Baby dumbo", player) or _has_sun_form(state, player)
 
 
 def _has_dual_form(state, player: int) -> bool:
@@ -291,7 +291,6 @@ class AquariaRegions:
         self.skeleton_path_sc = self.__add_region("Open water skeleton path spirit cristal",
                                                   AquariaLocations.locations_skeleton_path_sc)
         self.arnassi = self.__add_region("Arnassi Ruins", AquariaLocations.locations_arnassi)
-        self.simon = self.__add_region("Arnassi Ruins, Simon's room", AquariaLocations.locations_simon)
         self.arnassi_path = self.__add_region("Arnassi Ruins, back entrance path",
                                               AquariaLocations.locations_arnassi_path)
         self.arnassi_crab_boss = self.__add_region("Arnassi Ruins, Crabbius Maximus lair",
@@ -350,6 +349,7 @@ class AquariaRegions:
                                              AquariaLocations.locations_mermog_boss)
         self.forest_fish_cave = self.__add_region("Kelp forest fish cave",
                                                   AquariaLocations.locations_forest_fish_cave)
+        self.simon = self.__add_region("Kelp forest, Simon's room", AquariaLocations.locations_simon)
 
     def __create_veil(self) -> None:
         """
@@ -572,8 +572,6 @@ class AquariaRegions:
                                                      _has_energy_form(state, self.player))
         self.__connect_one_way_regions("Arnassi crab boss area", "Arnassi path",
                                        self.arnassi_crab_boss, self.arnassi_path)
-        self.__connect_regions("Arnassi path", "simon", self.arnassi_path, self.simon,
-                               lambda state: _has_fish_form(state, self.player))
 
     def __connect_mithalas_regions(self) -> None:
         """
@@ -824,6 +822,12 @@ class AquariaRegions:
             else:
                 self.__connect_one_way_regions(item_source, item_target, region_source, region_target, rule)
 
+    def __connect_arnassi_path_transturtle(self, item_source: str, item_target: str, region_source: Region,
+                                           region_target: Region) -> None:
+        """Connect the Arnassi ruins transturtle to another one"""
+        self.__connect_one_way_regions(item_source, item_target, region_source, region_target,
+                                       lambda state: state.has(item_target, self.player) and
+                                                     _has_fish_form(state, self.player))
 
     def _connect_transturtle_to_other(self, item: str, region: Region) -> None:
         """Connect a single transturtle to all others"""
@@ -838,6 +842,19 @@ class AquariaRegions:
         self.__connect_transturtle(item, "Transturtle Arnassi ruins", region, self.arnassi_path,
                                        lambda state: state.has("Transturtle Arnassi ruins", self.player) and
                                                      _has_fish_form(state, self.player))
+
+    def _connect_arnassi_path_transturtle_to_other(self, item: str, region: Region) -> None:
+        """Connect the Arnassi ruins transturtle to all others"""
+        self.__connect_arnassi_path_transturtle(item, "Transturtle Veil top left", region, self.veil_tl)
+        self.__connect_arnassi_path_transturtle(item, "Transturtle Veil top right", region, self.veil_tr_l)
+        self.__connect_arnassi_path_transturtle(item, "Transturtle Open Water top right", region,
+                                                self.openwater_tr_turtle)
+        self.__connect_arnassi_path_transturtle(item, "Transturtle Forest bottom left", region, self.forest_bl)
+        self.__connect_arnassi_path_transturtle(item, "Transturtle Home water", region, self.home_water_transturtle)
+        self.__connect_arnassi_path_transturtle(item, "Transturtle Abyss right", region, self.abyss_r)
+        self.__connect_arnassi_path_transturtle(item, "Transturtle Final Boss", region, self.final_boss_tube)
+        self.__connect_arnassi_path_transturtle(item, "Transturtle Simon says", region, self.simon)
+
     def __connect_transturtles(self) -> None:
         """Connect every transturtle with others"""
         self._connect_transturtle_to_other("Transturtle Veil top left", self.veil_tl)
@@ -848,8 +865,7 @@ class AquariaRegions:
         self._connect_transturtle_to_other("Transturtle Abyss right", self.abyss_r)
         self._connect_transturtle_to_other("Transturtle Final Boss", self.final_boss_tube)
         self._connect_transturtle_to_other("Transturtle Simon says", self.simon)
-        self._connect_transturtle_to_other("Transturtle Arnassi ruins", self.arnassi_path)
-
+        self._connect_arnassi_path_transturtle_to_other("Transturtle Arnassi ruins", self.arnassi_path)
 
     def connect_regions(self) -> None:
         """

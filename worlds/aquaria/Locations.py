@@ -159,7 +159,7 @@ class AquariaLocations:
     }
 
     locations_simon = {
-        "Arnassi ruins, beating Simon says": 698156,
+        "Kelp forest, beating Simon says": 698156,
         "Simon says area, Transturtle": 698216,
     }
 

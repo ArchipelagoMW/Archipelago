@@ -181,7 +181,7 @@ item_table = {
     "Transturtle Home water": (698129, 1, ItemType.NORMAL, ItemGroup.TURTLE),  # transport_mainarea
     "Transturtle Abyss right": (698130, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_abyss03
     "Transturtle Final Boss": (698131, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_finalboss
-    "Transturtle Simon says": (698132, 1, ItemType.NORMAL, ItemGroup.TURTLE),  # transport_forest05
+    "Transturtle Simon says": (698132, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_forest05
     "Transturtle Arnassi ruins": (698133, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_seahorse
 }
 
