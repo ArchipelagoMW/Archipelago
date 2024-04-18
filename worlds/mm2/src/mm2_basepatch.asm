@@ -71,6 +71,21 @@ RemoveWeaponClear:
     NOP
     NOP
 
+;Adjust Password select flasher
+%org($A32A, $0D)
+    LDX #$68
+
+;Block password input
+%org($A346, $0D)
+    EOR #$00
+
+;Remove password text
+%org($AF3A, $0D)
+    db $AC ; set Start to center
+
+%org($AF49, $0D)
+    db $40, $40, $40, $40, $40, $40, $40, $40,
+
 %org($BB74, $0D)
 GetEquippedStage:
     JSR StageGetEquipped
