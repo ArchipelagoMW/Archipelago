@@ -1345,6 +1345,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     "Sorry, !remaining requires you to have beaten the game on this server")
                 return False
 
+    @mark_raw
     def _cmd_missing(self, filter_text="") -> bool:
         """List all missing location checks from the server's perspective.
         Can be given text, which will be used as filter."""
@@ -1354,7 +1355,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if locations:
             names = [self.ctx.location_names[location] for location in locations]
             if filter_text:
-                names = [name for name in names if filter_text in name]
+                location_groups = self.ctx.location_name_groups[self.ctx.games[self.client.slot]]
+                if filter_text in location_groups:  # location group name
+                    names = [name for name in names if name in location_groups[filter_text]]
+                else:
+                    names = [name for name in names if filter_text in name]
             texts = [f'Missing: {name}' for name in names]
             if filter_text:
                 texts.append(f"Found {len(locations)} missing location checks, displaying {len(names)} of them.")
@@ -1365,6 +1370,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
             self.output("No missing location checks found.")
         return True
 
+    @mark_raw
     def _cmd_checked(self, filter_text="") -> bool:
         """List all done location checks from the server's perspective.
         Can be given text, which will be used as filter."""
@@ -1374,7 +1380,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if locations:
             names = [self.ctx.location_names[location] for location in locations]
             if filter_text:
-                names = [name for name in names if filter_text in name]
+                location_groups = self.ctx.location_name_groups[self.ctx.games[self.client.slot]]
+                if filter_text in location_groups:  # location group name
+                    names = [name for name in names if name in location_groups[filter_text]]
+                else:
+                    names = [name for name in names if filter_text in name]
             texts = [f'Checked: {name}' for name in names]
             if filter_text:
                 texts.append(f"Found {len(locations)} done location checks, displaying {len(names)} of them.")
@@ -1837,6 +1847,11 @@ def update_client_status(ctx: Context, client: Client, new_status: ClientStatus)
     if current != ClientStatus.CLIENT_GOAL:  # can't undo goal completion
         if new_status == ClientStatus.CLIENT_GOAL:
             ctx.on_goal_achieved(client)
+            # if player has yet to ever connect to the server, they will not be in client_game_state
+            if all(player in ctx.client_game_state and ctx.client_game_state[player] == ClientStatus.CLIENT_GOAL
+                   for player in ctx.player_names
+                   if player[0] == client.team and player[1] != client.slot):
+                ctx.broadcast_text_all(f"Team #{client.team + 1} has completed all of their games! Congratulations!")
 
         ctx.client_game_state[client.team, client.slot] = new_status
         ctx.on_client_status_change(client.team, client.slot)
@@ -2090,8 +2105,8 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
             if full_name.isnumeric():
                 location, usable, response = int(full_name), True, None
-            elif self.ctx.location_names_for_game(game) is not None:
-                location, usable, response = get_intended_text(full_name, self.ctx.location_names_for_game(game))
+            elif game in self.ctx.all_location_and_group_names:
+                location, usable, response = get_intended_text(full_name, self.ctx.all_location_and_group_names[game])
             else:
                 self.output("Can't look up location for unknown game. Hint for ID instead.")
                 return False
@@ -2099,6 +2114,11 @@ class ServerCommandProcessor(CommonCommandProcessor):
             if usable:
                 if isinstance(location, int):
                     hints = collect_hint_location_id(self.ctx, team, slot, location)
+                elif game in self.ctx.location_name_groups and location in self.ctx.location_name_groups[game]:
+                    hints = []
+                    for loc_name_from_group in self.ctx.location_name_groups[game][location]:
+                        if loc_name_from_group in self.ctx.location_names_for_game(game):
+                            hints.extend(collect_hint_location_name(self.ctx, team, slot, loc_name_from_group))
                 else:
                     hints = collect_hint_location_name(self.ctx, team, slot, location)
                 if hints:

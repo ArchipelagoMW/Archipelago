@@ -66,7 +66,19 @@ class MuseDashCollections:
         "Error SFX Trap": STARTING_CODE + 9,
     }
 
-    item_names_to_id: ChainMap = ChainMap({}, sfx_trap_items, vfx_trap_items)
+    filler_items: Dict[str, int] = {
+        "Great To Perfect (10 Pack)": STARTING_CODE + 30,
+        "Miss To Great (5 Pack)": STARTING_CODE + 31,
+        "Extra Life": STARTING_CODE + 32,
+    }
+
+    filler_item_weights: Dict[str, int] = {
+        "Great To Perfect (10 Pack)": 10,
+        "Miss To Great (5 Pack)": 3,
+        "Extra Life": 1,
+    }
+
+    item_names_to_id: ChainMap = ChainMap({}, filler_items, sfx_trap_items, vfx_trap_items)
     location_names_to_id: ChainMap = ChainMap(song_locations, album_locations)
 
     def __init__(self) -> None:
