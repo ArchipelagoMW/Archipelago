@@ -441,7 +441,7 @@ def get_price(multiworld, item, player: int, price_type=None):
             if multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal:
                 if item and item["item"] == "Small Key (Universal)":
                     price_types = [ShopPriceType.Rupees, ShopPriceType.Magic]  # no logical requirements for repeatable keys
-                else:
+                elif not multiworld.master_keys[player]:
                     price_types.append(ShopPriceType.Keys)
             if multiworld.retro_bow[player]:
                 if item and item["item"] == "Single Arrow":
