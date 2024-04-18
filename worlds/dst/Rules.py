@@ -50,17 +50,17 @@ def is_autumn (state: CollectionState, player: int) -> bool:
 def mining (state: CollectionState, player: int) -> bool: 
     # TODO: Add logic
     return True
-    # return state.has_any(["Pickaxe", "Opulent Pickaxe", "Woodie"], player)
+    # return state.has_any(["Pickaxe", "Opulent Pickaxe", "Woodie"], player) or expert_player_bias(state, player)
  
 def chopping (state: CollectionState, player: int) -> bool: 
     # TODO: Add logic
     return True
-    # return state.has_any(["Axe", "Luxury Axe", "Woodie"], player)
+    # return state.has_any(["Axe", "Luxury Axe", "Woodie"], player) or expert_player_bias(state, player)
  
 def hammering (state: CollectionState, player: int) -> bool: 
     # TODO: Add logic
     return True
-    # return state.has_any(["Hammer", "Woodie"], player)
+    # return state.has_any(["Hammer", "Woodie"], player) or expert_player_bias(state, player)
  
 def trapping (state: CollectionState, player: int) -> bool: 
     # TODO: Add logic
@@ -70,7 +70,7 @@ def trapping (state: CollectionState, player: int) -> bool:
 def firestarting (state: CollectionState, player: int) -> bool: 
     # TODO: Add logic
     return True
-    # return state.has("Torch", player) or (state.has("Campfire", player) and chopping(state, player)) or fire_staff(state, player) or is_summer(state, player)
+    # return state.has("Torch", player) or (state.has("Campfire", player) and chopping(state, player)) or fire_staff(state, player) or is_summer(state, player) or (can_get_feathers(state, player) and state.has("Fire Dart", player)))
 
 def hostile_flare (state: CollectionState, player: int) -> bool: 
     # TODO: Add logic
@@ -78,7 +78,7 @@ def hostile_flare (state: CollectionState, player: int) -> bool:
     # return state.has_all(["Flare", "Hostile Flare"], player) and mining(state, player) and firestarting(state, player)
 
 def butter_luck (state: CollectionState, player: int) -> bool: 
-    return has_survived_num_days(40, state, player)
+    return has_survived_num_days(40, state, player) or expert_player_bias(state, player)
 
 def bug_catching (state: CollectionState, player: int) -> bool:
     return state.has_all(["Bug Net", "Rope"], player)
@@ -87,14 +87,13 @@ def digging (state: CollectionState, player: int) -> bool:
     return state.has_any(["Shovel", "Regal Shovel"], player)
 
 def basic_combat (state: CollectionState, player: int) -> bool:
-    if advanced_player_bias(state, player):
-        return state.has("Rope", player)
-    return state.has_all(["Rope", "Spear"], player) and state.has_any(["Log Suit", "Football Helmet"], player)
+    return expert_player_bias(state, player) or (state.has_all(["Rope", "Spear"], player) and state.has_any(["Log Suit", "Football Helmet"], player))
 
 def backpack (state: CollectionState, player: int) -> bool:
     return state.has("Backpack", player) or (state.has_all(["Piggyback", "Rope"], player) and basic_combat(state, player))
 
 def basic_exploration (state: CollectionState, player: int) -> bool:
+    if expert_player_bias(state, player): return True
     return backpack(state, player) and digging(state, player) and bug_catching(state, player) and chopping(state, player) and mining(state, player)
 
 def basic_cooking (state: CollectionState, player: int) -> bool:
@@ -119,7 +118,7 @@ def swamp_exploration (state: CollectionState, player: int) -> bool:
     return advanced_player_bias(state, player) or (basic_exploration(state, player) and (basic_combat(state, player) or healing(state, player)))
 
 def base_making (state: CollectionState, player: int) -> bool:
-    return state.has_all(["Boards", "Cut Stone", "Electrical Doodad", "Rope", "Chest"], player) and chopping(state, player) and mining(state, player)
+    return state.has_all(["Boards", "Cut Stone", "Electrical Doodad", "Rope"], player) and chopping(state, player) and mining(state, player) and (state.has_all(["Chest", "Ice Box"], player) or expert_player_bias(state, player))
 
 def basic_farming (state: CollectionState, player: int) -> bool:
     return state.has_any(["Garden Hoe", "Splendid Garden Hoe"], player) and state.has("Garden Digamajig", player) and base_making(state, player)
@@ -136,8 +135,11 @@ def winter_survival (state: CollectionState, player: int) -> bool:
 def electric_insulation (state: CollectionState, player: int) -> bool:
     return state.has_any(["Rain Coat", "Rain Hat"], player) or state.has_all(["Eyebrella", "Defeat Deerclops"], player)
 
+def lightning_rod (state: CollectionState, player: int) -> bool:
+    return state.has_all(["Lightning Rod", "Cut Stone"], player) or state.has_all(["Lightning Conductor", "Mast Kit", "Rope", "Boards"], player)
+
 def spring_survival (state: CollectionState, player: int) -> bool:
-    return (electric_insulation(state, player) or state.has("Umbrella", player) or advanced_player_bias(state, player)) and state.has_all(["Lightning Rod", "Cut Stone"], player)
+    return ((electric_insulation(state, player) or state.has("Umbrella", player)) and lightning_rod(state, player)) or advanced_player_bias(state, player)
 
 def has_cooling_source (state: CollectionState, player: int) -> bool:
     return (state.has_all(["Thermal Stone", "Ice Box", "Cut Stone"], player) 
@@ -170,8 +172,13 @@ def bundling (state: CollectionState, player: int) -> bool:
 def resurrecting (state: CollectionState, player: int) -> bool:
     return (state.has("Life Giving Amulet", player) and red_gems(state, player)) or state.has_all(["Meat Effigy", "Boards"], player)
 
+def speed_boost (state: CollectionState, player: int) -> bool:
+    if expert_player_bias(state, player) and ruins_exploration(state, player): return True
+    return state.has_all(["Walking Cane", "Reach Winter"], player)
+
 def epic_combat (state: CollectionState, player: int) -> bool:
-    return advanced_boss_combat(state, player) and state.has_all(["Pan Flute","Walking Cane","Reach Winter"], player) and bundling(state, player) and ((character_switching(state, player) and resurrecting(state, player)) or expert_player_bias(state, player))
+    if expert_player_bias(state, player): return advanced_boss_combat(state, player)
+    return advanced_boss_combat(state, player) and state.has("Pan Flute", player) and speed_boost(state, player) and bundling(state, player) and character_switching(state, player) and resurrecting(state, player)
 
 def bird_caging (state: CollectionState, player: int) -> bool:
     return state.has_all(["Bird Trap", "Birdcage", "Papyrus"], player)
@@ -180,7 +187,7 @@ def honey_farming (state: CollectionState, player: int) -> bool:
     return state.has_all(["Bee Box", "Boards", "Bug Net", "Rope"], player) or advanced_player_bias(state, player)
     
 def leafy_meat (state: CollectionState, player: int) -> bool:
-    return reached_spring(state, player) or lunar_island(state, player)
+    return reached_spring(state, player) or lunar_island(state, player) or (advanced_player_bias(state, player) and cave_exploration(state, player))
 
 def farmplant_cooking (state: CollectionState, player: int) -> bool:
     return basic_cooking(state, player) and basic_farming(state, player)
@@ -193,16 +200,22 @@ def sweet_cooking (state: CollectionState, player: int) -> bool:
 
 def advanced_cooking (state: CollectionState, player: int) -> bool:
     return basic_cooking(state, player) and basic_farming(state, player) and bird_caging(state, player) and honey_farming(state, player)
-                        
+
 def advanced_exploration (state: CollectionState, player: int) -> bool:
-    return (basic_exploration(state, player) and state.has_all(["Walking Cane", "Reach Winter"], player)) or expert_player_bias(state, player)
+    if expert_player_bias(state, player): return True
+    return basic_exploration(state, player) and speed_boost(state, player)
 
 def advanced_farming (state: CollectionState, player: int) -> bool:
-    return basic_farming(state, player) and state.has("Empty Watering Can", player)
+    return basic_farming(state, player) and digging(state, player) and (state.has("Empty Watering Can", player) or expert_player_bias(state, player))
 
 def light_source (state: CollectionState, player: int) -> bool:
-    return ((state.has_all(["Lantern", "Rope"], player) or state.has_all(["Miner Hat", "Rope", "Bug Net"], player) or ((state.has_any(["Moggles", "Morning Star"], player) and base_making(state, player))) and advanced_player_bias(state, player)) or expert_player_bias(state, player))
-
+    if expert_player_bias(state, player): return firestarting(state, player)
+    return (
+        state.has_all(["Lantern", "Rope"], player) 
+        or state.has_all(["Miner Hat", "Rope", "Bug Net"], player) 
+        or ( state.has_any(["Moggles", "Morning Star"], player) and base_making(state, player) and advanced_player_bias(state, player) )
+    )
+    
 def cave_exploration (state: CollectionState, player: int) -> bool:
     return basic_exploration(state, player) and ((light_source(state, player) and base_making(state, player)) or expert_player_bias(state, player))
 
@@ -222,7 +235,7 @@ def canary (state: CollectionState, player: int) -> bool:
     return state.has_all(["Friendly Scarecrow", "Boards"], player) and basic_farming(state, player)
 
 def can_get_feathers (state: CollectionState, player: int) -> bool:
-    return state.has_all(["Boomerang", "Boards"], player) or state.has("Bird Trap", player) or ice_staff(state, player)
+    return state.has_all(["Boomerang", "Boards"], player) or state.has("Bird Trap", player) or ice_staff(state, player) or expert_player_bias(state, player)
 
 def cannon (state: CollectionState, player: int) -> bool: 
     return state.has_all(["Queen of Moon Quay", "Cannon Kit", "Cannonball", "Gunpowder", "Cut Stone", "Rope"], player) and firestarting(state, player) and mining(state, player) and chopping(state, player) and bird_caging(state, player)
@@ -231,6 +244,7 @@ def ranged_combat (state: CollectionState, player: int) -> bool:
     return can_get_feathers(state, player) and (state.has_all(["Reach Winter", "Blow Dart"], player) or (canary(state, player) and bird_caging(state, player) and state.has("Electric Dart", player)))
 
 def ranged_aggression (state: CollectionState, player: int) -> bool:
+    if expert_player_bias(state, player): return True
     return state.has_all(["Boomerang", "Boards"], player) or (state.has("Bird Trap", player) and state.has_any(["Fire Dart", "Sleep Dart"], player)) or ranged_combat(state, player) or ice_staff(state, player) or fire_staff(state, player) or cannon(state, player)
 
 def dairy (state: CollectionState, player: int) -> bool: 
@@ -261,7 +275,7 @@ def basic_boating (state: CollectionState, player: int) -> bool:
     return basic_exploration(state, player) and state.has_all(["Boat Kit", "Boards"], player)
 
 def advanced_boating (state: CollectionState, player: int) -> bool:
-    return basic_boating(state, player) and light_source(state, player) and base_making(state, player) and state.has_all(["Anchor Kit", "Steering Wheel Kit", "Mast Kit"], player)
+    return basic_boating(state, player) and light_source(state, player) and base_making(state, player) and (state.has_all(["Anchor Kit", "Steering Wheel Kit", "Mast Kit"], player) or expert_player_bias(state, player))
 
 def freshwater_fishing (state: CollectionState, player: int) -> bool:
     return state.has("Freshwater Fishing Rod", player)
@@ -285,10 +299,10 @@ def hermit_island (state: CollectionState, player: int) -> bool:
     return ((basic_boating(state, player) and advanced_player_bias(state, player)) or advanced_boating(state, player)) and basic_cooking(state, player) and base_making(state, player)
                         
 def hermit_sea_quests (state: CollectionState, player: int) -> bool:
-    return (advanced_player_bias(state, player) or advanced_boating(state, player)) and sea_fishing(state, player) and state.has("Pinchin' Winch", player)
+    return (advanced_player_bias(state, player) or advanced_boating(state, player)) and sea_fishing(state, player)
                         
 def moonstone_event (state: CollectionState, player: int) -> bool:
-    return (ruins_exploration(state, player) or expert_player_bias(state, player)) and (wall_building(state, player) or advanced_player_bias(state, player)) and has_survived_num_days(11, state, player)
+    return ruins_exploration(state, player) and (wall_building(state, player) or expert_player_bias(state, player)) and has_survived_num_days(11, state, player)
 
 def archive_exploration (state: CollectionState, player: int) -> bool:
     return state.has_any(["Mooncaller Staff", "Iridescent Gem"], player) and (healing(state, player) or advanced_player_bias(state, player))
@@ -297,22 +311,26 @@ def storm_protection (state: CollectionState, player: int) -> bool:
     return state.has_all(["Fashion Goggles", "Desert Goggles"], player) or (state.has("Astroggles", player) and basic_farming(state, player))
 
 def moonstorm_exploration (state: CollectionState, player: int) -> bool:
-    return state.has("Mysterious Energy", player) and storm_protection(state, player) and advanced_exploration(state, player) and electric_insulation(state, player)
+    return state.has("Mysterious Energy", player) and storm_protection(state, player) and electric_insulation(state, player)
                         
 def celestial_champion (state: CollectionState, player: int) -> bool:
-    return moonstorm_exploration(state, player) and state.has_all(["Incomplete Experiment", "Celestial Orb"], player) and ranged_combat(state, player)
+    return moonstorm_exploration(state, player) and state.has_all(["Incomplete Experiment", "Celestial Orb"], player) and epic_combat(state, player) and (ranged_combat(state, player) or expert_player_bias(state, player))
 
 def shadow_pieces (state: CollectionState, player: int) -> bool:
-    return advanced_boss_combat(state, player) and heavy_lifting(state, player) and base_making(state, player) and state.has("Potter's Wheel", player)
+    return advanced_boss_combat(state, player) and heavy_lifting(state, player) and base_making(state, player) and state.has("Potter's Wheel", player) and (state.has("Defeat Celestial Champion", player) or not state.has("Mysterious Energy", player))
 
 def ancient_fuelweaver (state: CollectionState, player: int) -> bool:
-    return dark_magic(state, player) and state.has_all(["Shadow Atrium", "Ancient Key"], player) and (state.has("Nightmare Amulet", player) and (weather_pain(state, player) or state.has("Wendy", player)) or expert_player_bias(state, player))
+    if not state.has_all(["Shadow Atrium", "Ancient Key"], player): return False
+    if expert_player_bias(state, player): return advanced_combat(state, player)
+    return dark_magic(state, player) and state.has("Nightmare Amulet", player) and (weather_pain(state, player) or state.has("Wendy", player))
 
 def moon_quay_exploration (state: CollectionState, player: int) -> bool:
+    if expert_player_bias(state, player): return basic_boating(state, player)
     return cannon(state, player) and ruins_exploration(state, player) # Cannon already requires Queen of Moon Quay
 
 def wall_building (state: CollectionState, player: int) -> bool:
-    return base_making(state, player) and (state.has_all(["Stone Wall", "Potter's Wheel"], player)) or (ruins_exploration(state, player) and expert_player_bias(state, player))
+    if ruins_exploration(state, player) and expert_player_bias(state, player): return True
+    return base_making(state, player) and (state.has_all(["Stone Wall", "Potter's Wheel"], player))
 
 def science_machine (state: CollectionState, player: int) -> bool:
     return state.has("Science Machine", player)
@@ -374,7 +392,7 @@ def get_rules_lookup(player: int):
             "Unite Celestial Altars": lambda state: state.has_all(["Celestial Sanctum Icon", "Celestial Sanctum Ward", "Inactive Celestial Tribute", "Pinchin' Winch"], player) and lunar_island(state, player),
             "Will Get Accursed Trinket": lambda state: advanced_boating(state, player),
             "Kill Prime Mate": lambda state: basic_combat(state, player) and moon_quay_exploration(state, player),
-            "Defeat Crab King with Pearl's Pearl": lambda state: advanced_boating(state, player) and state.count("Crabby Hermit Friendship", player) >= 10 and (weather_pain(state, player) or cannon(state, player)),
+            "Defeat Crab King with Pearl's Pearl": lambda state: advanced_boating(state, player) and state.count("Crabby Hermit Friendship", player) >= 10 and (weather_pain(state, player) or cannon(state, player) or expert_player_bias(state, player)),
             "Defeat Ancient Guardian": lambda state: ruins_exploration(state, player) and advanced_boss_combat(state, player),
             "Defeat Shadow Pieces": lambda state: shadow_pieces(state, player),
             "Defeat Deerclops": lambda state: basic_combat(state, player) and is_winter(state, player),
@@ -394,16 +412,16 @@ def get_rules_lookup(player: int):
             "Defeat Spazmatism": lambda state: epic_combat(state, player),
             "Defeat Nightmare Werepig": lambda state: ruins_exploration(state, player) and epic_combat(state, player) and state.has_all(["Opulent Pickaxe", "Luxury Axe"], player),
             "Defeat Scrappy Werepig": lambda state: state.has("Defeat Nightmare Werepig", player),
-            "Defeat Frostjaw": lambda state: advanced_boating(state, player) and advanced_boss_combat(state, player) and advanced_exploration(state, player) and state.has("Sea Fishing Rod", player),
+            "Defeat Frostjaw": lambda state: advanced_boating(state, player) and advanced_boss_combat(state, player) and speed_boost(state, player) and state.has("Sea Fishing Rod", player),
 
             # Pearl Questline
             "Hermit Home Upgrade (1)": lambda state: hermit_island(state, player), # Cookie cutters, boards, fireflies
             "Hermit Home Upgrade (2)": lambda state: hermit_island(state, player), # Marble, cut stone, light bulb
             "Hermit Home Upgrade (3)": lambda state: hermit_island(state, player), # Moonrock, rope, carpet
             "Hermit Island Drying Racks": lambda state: hermit_island(state, player),
-            "Hermit Island Plant 10 Flowers": lambda state: hermit_island(state, player),
-            "Hermit Island Plant 8 Berry Bushes": lambda state: hermit_island(state, player),
-            "Hermit Island Clear Underwater Salvageables": lambda state: hermit_sea_quests(state, player),
+            "Hermit Island Plant 10 Flowers": lambda state: hermit_island(state, player) and bug_catching(state, player),
+            "Hermit Island Plant 8 Berry Bushes": lambda state: hermit_island(state, player) and digging(state, player),
+            "Hermit Island Clear Underwater Salvageables": lambda state: hermit_sea_quests(state, player) and state.has("Pinchin' Winch", player),
             "Hermit Island Kill Lureplant": lambda state: hermit_island(state, player) and reached_spring(state, player),
             "Hermit Island Build Wooden Chair": lambda state: hermit_island(state, player) and state.has("Sawhorse", player),
             "Give Crabby Hermit Umbrella": lambda state: hermit_island(state, player) and is_spring(state, player),
@@ -424,7 +442,7 @@ def get_rules_lookup(player: int):
             "Pig King": lambda state: has_survived_num_days(4, state, player),      
             "Chester": lambda state: has_survived_num_days(8, state, player),       
             "Hutch": lambda state: cave_exploration(state, player),         
-            "Stagehand": lambda state: basic_exploration(state, player),     
+            "Stagehand": lambda state: basic_exploration(state, player) and hammering(state, player),     
             "Pirate Stash": lambda state: state.has("Pirate Map", player) and digging(state, player),  
 
             # Bosses
@@ -480,7 +498,7 @@ def get_rules_lookup(player: int):
             "Clockwork Knight": lambda state: advanced_combat(state, player),
             "Koalefant": lambda state: basic_combat(state, player) and ranged_aggression(state, player),
             "Krampus": lambda state: basic_combat(state, player) and can_get_feathers(state, player) and has_survived_num_days(11, state, player),
-            "Treeguard": lambda state: basic_combat(state, player) and has_survived_num_days(10, state, player),
+            "Treeguard": lambda state: basic_combat(state, player) and has_survived_num_days(10, state, player) and chopping(state, player),
             "Crustashine": lambda state: moon_quay_exploration(state, player) and ranged_aggression(state, player),
             "Bulbous Lightbug": lambda state: cave_exploration(state, player),
             "Volt Goat": lambda state: basic_combat(state, player) and ranged_aggression(state, player) and desert_exploration(state, player),
@@ -527,7 +545,7 @@ def get_rules_lookup(player: int):
             "Varglet": lambda state: basic_combat(state, player) and advanced_exploration(state, player) and reached_spring(state, player),
             "Depths Worm": lambda state: ruins_exploration(state, player),
             "Ancient Sentrypede": lambda state: archive_exploration(state, player) and advanced_combat(state, player),
-            "Skittersquid": lambda state: basic_combat(state, player) and advanced_exploration(state, player) and advanced_boating(state, player),
+            "Skittersquid": lambda state: basic_combat(state, player) and advanced_boating(state, player),
             "Lure Plant": lambda state: reached_spring(state, player),
             "Glommer": lambda state: has_survived_num_days(11, state, player),
             "Dust Moth": lambda state: archive_exploration(state, player),
@@ -642,10 +660,10 @@ def get_rules_lookup(player: int):
             "Science (Slurtle Slime)": lambda state: cave_exploration(state, player),		
             "Science (Gears)": lambda state: ruins_exploration(state, player),					
             "Science (Scrap)": lambda state: basic_exploration(state, player),					
-            "Science (Azure Feather)": lambda state: expert_player_bias(state, player) or (reached_winter(state, player) and (can_get_feathers(state, player) or advanced_player_bias(state, player))),	
-            "Science (Crimson Feather)": lambda state: expert_player_bias(state, player) or can_get_feathers(state, player) or advanced_player_bias(state, player),	
-            "Science (Jet Feather)": lambda state: advanced_player_bias(state, player) or can_get_feathers(state, player),	
-            "Science (Saffron Feather)": lambda state: expert_player_bias(state, player) or (state.has_all(["Friendly Scarecrow", "Boards"], player) and basic_farming(state, player) and can_get_feathers(state, player)),	
+            "Science (Azure Feather)": lambda state: reached_winter(state, player) and can_get_feathers(state, player),	
+            "Science (Crimson Feather)": lambda state: can_get_feathers(state, player),	
+            "Science (Jet Feather)": lambda state: can_get_feathers(state, player),	
+            "Science (Saffron Feather)": lambda state: canary(state, player) and can_get_feathers(state, player),	
             "Science (Kelp Fronds)": lambda state: basic_boating(state, player),		
             "Science (Steel Wool)": lambda state: advanced_combat(state, player) and advanced_exploration(state, player) and reached_autumn(state, player),			
             "Science (Electrical Doodad)": lambda state: state.has_all(["Electrical Doodad", "Cut Stone"], player) and mining(state, player),
@@ -705,7 +723,7 @@ def get_rules_lookup(player: int):
             "Magic (Green Spore)": lambda state: is_spring(state, player) and cave_exploration(state, player) and bug_catching(state, player),				
             "Magic (Broken Shell)": lambda state: cave_exploration(state, player),				
             "Magic (Leafy Meat)": lambda state: leafy_meat(state, player),				
-            "Magic (Canary (Volatile))": lambda state: cave_exploration(state, player) and advanced_cooking(state, player),		
+            "Magic (Canary (Volatile))": lambda state: canary(state, player) and cave_exploration(state, player) and bird_caging(state, player),		
             "Magic (Life Giving Amulet)": lambda state: state.has("Life Giving Amulet", player) and red_gems(state, player),			
             "Magic (Nightmare Fuel)": lambda state: basic_combat(state, player),			
             "Magic (Cut Reeds)": lambda state: True,					
@@ -750,7 +768,7 @@ def get_rules_lookup(player: int):
             "Magic (Crow)": lambda state: state.has("Bird Trap", player),						
             "Magic (Redbird)": lambda state: state.has("Bird Trap", player),					
             "Magic (Snowbird)": lambda state: state.has("Bird Trap", player) and is_winter(state, player),					
-            "Magic (Canary)": lambda state: state.has_all(["Friendly Scarecrow", "Boards", "Bird Trap"], player),								
+            "Magic (Canary)": lambda state: state.has("Bird Trap", player) and canary(state, player),								
             "Magic (Puffin)": lambda state: state.has("Bird Trap", player) and basic_boating(state, player),											
             "Think Tank (Freshwater Fish)": lambda state: freshwater_fishing(state, player),
             "Think Tank (Live Eel)": lambda state: cave_exploration(state, player) and freshwater_fishing(state, player),
@@ -857,11 +875,11 @@ def set_rules(dst_world: World) -> None:
                 multiworld.priority_locations[player].value.add(location_name)
             # Exclude from having progression items if it meets the conditions
             if not required and ("excluded" in location_data.tags 
-             or (not multiworld.seasonal_locations[player].value and "seasonal" in location_data.tags)
-         or (multiworld.boss_locations[player].current_key == "none" and "boss" in location_data.tags)
-         or (multiworld.boss_locations[player].current_key == "easy" and "raidboss" in location_data.tags)
-         or (multiworld.skill_level[player].current_key == "easy" and "advanced" in location_data.tags)
-         or (multiworld.skill_level[player].current_key != "expert" and "expert" in location_data.tags)
+            or (not multiworld.seasonal_locations[player].value and "seasonal" in location_data.tags)
+            or (multiworld.boss_locations[player].current_key == "none" and "boss" in location_data.tags)
+            or (multiworld.boss_locations[player].current_key == "easy" and "raidboss" in location_data.tags)
+            or (multiworld.skill_level[player].current_key == "easy" and "advanced" in location_data.tags)
+            or (multiworld.skill_level[player].current_key != "expert" and "expert" in location_data.tags)
             ):
                 excluded.add(location_name)
 

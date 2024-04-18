@@ -120,9 +120,9 @@ class PlayerSkillLevel(Choice):
     """
     What skill level should be considered for randomizer logic?
 
-    Easy: You're still learning to not starve.
-    Advanced: You're good at not dying most of the time.
-    Expert: You're too good at this game.
+    Easy: Ensure items that would be helpful for progression are accessible
+    Advanced: Expects you to know the game well and to survive seasons under-equipped
+    Expert: Expects you to survive in riskier conditions, such as entering the ruins without light, etc
     """
     display_name = "Player Skill Level"
     default = 0

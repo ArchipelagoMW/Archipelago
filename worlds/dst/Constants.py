@@ -268,7 +268,7 @@ DSTAP_ITEMS = [
     [202, "Winged Sail Kit",             "mast_malbatross_item",                  [ "useful" ] ],
     [203, "Tin Fishin' Bin",             "fish_box",                              [ "progression" ] ],
     [204, "Deck Illuminator",            "mastupgrade_lamp_item",                 [ "filler" ] ],
-    [205, "Lightning Conductor",         "mastupgrade_lightningrod_item",         [ "filler" ] ],
+    [205, "Lightning Conductor",         "mastupgrade_lightningrod_item",         [ "progression" ] ],
     [206, "Fire Pump",                   "waterpump",                             [ "filler" ] ],
     [207, "Rudder Kit",                  "boat_rotator_kit",                      [ "useful" ] ],
     [208, "Shell Bumper Kit",            "boat_bumper_shell_kit",                 [ "useful" ] ],
