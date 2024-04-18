@@ -594,5 +594,6 @@ def get_children(chosen_item: str) -> list[str]:
 
 def chessmen_count(items: list[CMItem], pocket_limit: int) -> int:
     return len([item for item in items if item.name in item_name_groups["Chessmen"]]) + \
+        0 if pocket_limit <= 0 else \
         math.ceil(len([item for item in items if item.name == "Progressive Pocket"]) / pocket_limit)
 
