@@ -3,17 +3,33 @@
 {% block head %}
     {% include "header/oceanHeader.html" %}
     <title>Downloads</title>
+    <!-- html style because a full css file for this much change seems overkill -->
+    <style>
+        .downloads-wrapper {
+            text-align: center
+        }
+
+        .downloads {
+            display: inline-block;
+            text-align: left
+        }
+
+        > li:first-child {
+            margin-bottom: 24px
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
-    <div id="downloads-wrapper" style="text-align: center">
-        <h1>Latest Release: {{ version }}</h1>
-        <ul style="display: inline-block; text-align: left">
-            <li><a href="https://github.com/ArchipelagoMW/Archipelago/releases/tag/{{ version }}">Github</a></li>
-            <li><a href="{{ url_for("api.get_download", build="windows") }}">Windows Setup</a></li>
-            <li><a href="{{ url_for("api.get_download", build="windows7") }}">Windows 7 Setup</a></li>
-            <li><a href="{{ url_for("api.get_download", build="app") }}">Linux AppImage</a></li>
-            <li><a href="{{ url_for("api.get_download", build="tar") }}">Linux Tarball</a></li>
+    <div class="downloads-wrapper">
+        <h2>Download Archipelago {{ version }}</h2>
+        <br/>
+        <ul class="downloads">
+            <li><a href="https://github.com/ArchipelagoMW/Archipelago/releases/tag/{{ version }}">Patch Notes</a></li>
+            <li><a href="{{ url_for("api.get_download", build="windows") }}">Download for Windows 10+</a></li>
+            <li><a href="{{ url_for("api.get_download", build="windows7") }}">Download for Windows 7</a></li>
+            <li><a href="{{ url_for("api.get_download", build="appimage") }}">Download for Linux (AppImage)</a></li>
+            <li><a href="{{ url_for("api.get_download", build="tar") }}">Download for Linux (.tar.gz)</a></li>
         </ul>
     </div>
     {% include "islandFooter.html" %}

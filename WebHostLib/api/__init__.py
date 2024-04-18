@@ -76,8 +76,8 @@ def get_latest_release() -> None:
     data = response.json()
     for asset in data["assets"]:
         filename = asset["name"]
-        if "App" in filename:
-            name = "app"
+        if "AppImage" in filename:
+            name = "appimage"
         elif "tar" in filename:
             name = "tar"
         elif "Win7" in filename:
