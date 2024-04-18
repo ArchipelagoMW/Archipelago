@@ -554,19 +554,20 @@ def link_entrances(world, player):
 
     # check for swamp palace fix
     if world.get_entrance('Dam', player).connected_region.name != 'Dam' or world.get_entrance('Swamp Palace', player).connected_region.name != 'Swamp Palace (Entrance)':
-        world.swamp_patch_required[player] = True
+        world.worlds[player].swamp_patch_required = True
 
     # check for potion shop location
     if world.get_entrance('Potion Shop', player).connected_region.name != 'Potion Shop':
-        world.powder_patch_required[player] = True
+        world.worlds[player].powder_patch_required = True
 
     # check for ganon location
     if world.get_entrance('Pyramid Hole', player).connected_region.name != 'Pyramid':
-        world.ganon_at_pyramid[player] = False
+        world.worlds[player].ganon_at_pyramid = False
 
     # check for Ganon's Tower location
     if world.get_entrance('Ganons Tower', player).connected_region.name != 'Ganons Tower (Entrance)':
-        world.ganonstower_vanilla[player] = False
+        world.worlds[player].ganonstower_vanilla = False
+
 
 def link_inverted_entrances(world, player):
     # Link's house shuffled freely, Houlihan set in mandatory_connections 
@@ -1261,19 +1262,19 @@ def link_inverted_entrances(world, player):
 
     # patch swamp drain
     if world.get_entrance('Dam', player).connected_region.name != 'Dam' or world.get_entrance('Swamp Palace', player).connected_region.name != 'Swamp Palace (Entrance)':
-        world.swamp_patch_required[player] = True
+        world.worlds[player].swamp_patch_required = True
 
     # check for potion shop location
     if world.get_entrance('Potion Shop', player).connected_region.name != 'Potion Shop':
-        world.powder_patch_required[player] = True
+        world.worlds[player].powder_patch_required = True
 
     # check for ganon location
     if world.get_entrance('Inverted Pyramid Hole', player).connected_region.name != 'Pyramid':
-        world.ganon_at_pyramid[player] = False
+        world.worlds[player].ganon_at_pyramid = False
    
     # check for Ganon's Tower location
     if world.get_entrance('Inverted Ganons Tower', player).connected_region.name != 'Ganons Tower (Entrance)':
-        world.ganonstower_vanilla[player] = False
+        world.worlds[player].ganonstower_vanilla = False
 
 
 def connect_simple(world, exitname, regionname, player):
