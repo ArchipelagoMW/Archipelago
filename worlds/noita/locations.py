@@ -91,7 +91,7 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Secret Shop Item 4": LocationData(110045),
     },
     "The Sky": {
-        "Kivi": LocationData(110670, LocationFlag.main_world, "boss"),
+        "Kivi": LocationData(110670, LocationFlag.main_world, "Boss"),
     },
     "Floating Island": {
         "Floating Island Orb": LocationData(110658, LocationFlag.main_path, "Orb"),
@@ -194,7 +194,7 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Limatoukka": LocationData(110647, LocationFlag.main_world, "Boss"),
     },
     "West Meat Realm": {
-        "Kolmisilmän sydän": LocationData(110671, LocationFlag.main_world, "boss"),
+        "Kolmisilmän sydän": LocationData(110671, LocationFlag.main_world, "Boss"),
     },
     "The Laboratory": {
         "Kolmisilmä": LocationData(110646, LocationFlag.main_path, "Boss"),
