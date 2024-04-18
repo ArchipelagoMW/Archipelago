@@ -38,7 +38,7 @@ def fake_pearl_state(state, player):
 # Sets the rules on where we can actually go using this clip.
 # Behavior differs based on what type of ER shuffle we're playing. 
 def dungeon_reentry_rules(world, player, clip: Entrance, dungeon_region: str, dungeon_exit: str): 
-    fix_dungeon_exits = world.fix_palaceofdarkness_exit[player]
+    fix_dungeon_exits = world.worlds[player].fix_palaceofdarkness_exit
     fix_fake_worlds = world.worlds[player].fix_fake_world
 
     dungeon_entrance = [r for r in world.get_region(dungeon_region, player).entrances if r.name != clip.name][0]
