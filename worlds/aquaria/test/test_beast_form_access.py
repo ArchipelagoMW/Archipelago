@@ -1,7 +1,14 @@
+"""
+Author: Louis M
+Date: Thu, 18 Apr 2024 18:45:56 +0000
+Description: Unit test used to test accessibility of locations with and without the beast form
+"""
+
 from worlds.aquaria.test import AquariaTestBase
 
 
 class BeastFormAccessTest(AquariaTestBase):
+    """Unit test used to test accessibility of locations with and without the beast form"""
 
     def test_beast_form_location(self) -> None:
         """Test locations that require beast form"""

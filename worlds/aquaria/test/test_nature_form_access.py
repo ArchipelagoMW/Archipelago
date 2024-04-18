@@ -1,7 +1,14 @@
+"""
+Author: Louis M
+Date: Thu, 18 Apr 2024 18:45:56 +0000
+Description: Unit test used to test accessibility of locations with and without the nature form
+"""
+
 from worlds.aquaria.test import AquariaTestBase
 
 
 class NatureFormAccessTest(AquariaTestBase):
+    """Unit test used to test accessibility of locations with and without the nature form"""
     options = {
         "turtle_randomizer": 1,
     }

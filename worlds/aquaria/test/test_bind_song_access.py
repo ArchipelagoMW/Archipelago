@@ -1,7 +1,15 @@
+"""
+Author: Louis M
+Date: Thu, 18 Apr 2024 18:45:56 +0000
+Description: Unit test used to test accessibility of locations with and without the bind song (without the location
+             under rock needing bind song option)
+"""
+
 from worlds.aquaria.test import AquariaTestBase, after_home_water_locations
 
 
 class BindSongAccessTest(AquariaTestBase):
+    """Unit test used to test accessibility of locations with and without the bind song"""
     options = {
         "bind_song_needed_to_get_under_rock_bulb": False,
     }

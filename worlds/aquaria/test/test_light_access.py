@@ -1,7 +1,14 @@
+"""
+Author: Louis M
+Date: Thu, 18 Apr 2024 18:45:56 +0000
+Description: Unit test used to test accessibility of locations with and without a light (Dumbo pet or sun form)
+"""
+
 from worlds.aquaria.test import AquariaTestBase
 
 
 class LightAccessTest(AquariaTestBase):
+    """Unit test used to test accessibility of locations with and without light"""
     options = {
         "turtle_randomizer": 1,
         "light_needed_to_get_to_dark_places": True,

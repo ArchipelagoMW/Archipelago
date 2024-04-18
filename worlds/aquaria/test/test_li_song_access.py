@@ -1,7 +1,14 @@
+"""
+Author: Louis M
+Date: Thu, 18 Apr 2024 18:45:56 +0000
+Description: Unit test used to test accessibility of locations with and without Li
+"""
+
 from worlds.aquaria.test import AquariaTestBase
 
 
 class LiAccessTest(AquariaTestBase):
+    """Unit test used to test accessibility of locations with and without Li"""
     options = {
         "turtle_randomizer": 1,
     }

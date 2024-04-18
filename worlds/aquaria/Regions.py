@@ -5,7 +5,7 @@ Description: Used to manage Regions in the Aquaria game multiworld randomizer
 """
 
 from typing import Dict, Optional
-from BaseClasses import MultiWorld, Region, Entrance, ItemClassification
+from BaseClasses import MultiWorld, Region, Entrance, ItemClassification, LocationProgressType
 from .Items import AquariaItem
 from .Locations import AquariaLocations, AquariaLocation
 from .Options import AquariaOptions
@@ -1139,7 +1139,67 @@ class AquariaRegions:
         add_rule(self.world.get_location("Abyss right area, bulb behind the rock in the whale room", self.player),
                  lambda state: _has_spirit_form(state, self.player) and
                                _has_sun_form(state, self.player))
+        add_rule(self.world.get_location("Arnassi ruins, Arnassi Armor", self.player),
+                 lambda state: _has_fish_form(state, self.player) and
+                               _has_spirit_form(state, self.player))
 
+
+
+
+    def __excluded_hard_or_hidden_location(self) -> None:
+        self.world.get_location("Energy temple boss area, Fallen god tooth", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.world.get_location("Cathedral boss area, beating Mithalan God", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.world.get_location("Kelp forest boss area, beating Drunian God", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.world.get_location("Sun temple boss area, beating Sun God", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.world.get_location("Sunken city, bulb on the top of the boss area (boiler room)",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.world.get_location("Home water, Nautilus Egg", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.world.get_location("Energy temple blaster room, Blaster egg", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.world.get_location("Mithalas castle, beating the priests", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.world.get_location("Mermog cave, Piranha Egg", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.world.get_location("Octopus cave, Dumbo Egg", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.world.get_location("King Jellyfish cave, bulb in the right path from King Jelly",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.world.get_location("King Jellyfish cave, Jellyfish Costume",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.world.get_location("Final boss area, bulb in the boss third form room",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.world.get_location("Sun Worm path, first cliff bulb", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.world.get_location("Sun Worm path, second cliff bulb", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.world.get_location("The veil top right area, bulb in the top of the water fall",
+                                     self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.world.get_location("Bubble cave, bulb in the left cave wall", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.world.get_location("Bubble cave, bulb in the right cave wall (behind the ice cristal)",
+                                     self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.world.get_location("Bubble cave, Verse egg", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.world.get_location("Kelp Forest bottom left area, bulb close to the spirit cristals",
+                                     self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.world.get_location("Kelp forest bottom left area, Walker baby",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.world.get_location("Sun temple, Sun key", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.world.get_location("The body bottom area, Mutant Costume", self.player).progress_type = (
+            LocationProgressType.EXCLUDED)
+        self.world.get_location("Sun temple, bulb in the hidden room of the right part",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.world.get_location("Arnassi ruins, Arnassi Armor",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
 
     def adjusting_rules(self, options: AquariaOptions) -> None:
         """
@@ -1166,6 +1226,8 @@ class AquariaRegions:
         if options.early_energy_form:
             add_rule(self.world.get_entrance("Home Water to Home water transturtle room", self.player),
                      lambda state: _has_energy_form(state, self.player))
+        if options.exclude_hard_or_hidden_locations:
+            self.__excluded_hard_or_hidden_location()
 
     def __add_home_water_regions_to_world(self) -> None:
         """

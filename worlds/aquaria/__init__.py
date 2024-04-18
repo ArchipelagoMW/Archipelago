@@ -176,69 +176,12 @@ class AquariaWorld(World):
                         item = self.create_item(name)
                         self.multiworld.itempool.append(item)
 
-
-    def __excluded_hard_or_hidden_location(self) -> None:
-        self.multiworld.get_location("Energy temple boss area, Fallen god tooth", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Cathedral boss area, beating Mithalan God", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Kelp forest boss area, beating Drunian God", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Sun temple boss area, beating Sun God", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Sunken city, bulb on the top of the boss area (boiler room)",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
-        self.multiworld.get_location("Home water, Nautilus Egg", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Energy temple blaster room, Blaster egg", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Mithalas castle, beating the priests", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Mermog cave, Piranha Egg", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Octopus cave, Dumbo Egg", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("King Jellyfish cave, bulb in the right path from King Jelly",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
-        self.multiworld.get_location("King Jellyfish cave, Jellyfish Costume",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
-        self.multiworld.get_location("Final boss area, bulb in the boss third form room",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
-        self.multiworld.get_location("Sun Worm path, first cliff bulb", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Sun Worm path, second cliff bulb", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("The veil top right area, bulb in the top of the water fall",
-                                     self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Bubble cave, bulb in the left cave wall", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Bubble cave, bulb in the right cave wall (behind the ice cristal)",
-                                     self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Bubble cave, Verse egg", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Kelp Forest bottom left area, bulb close to the spirit cristals",
-                                     self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Kelp forest bottom left area, Walker baby",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
-        self.multiworld.get_location("Sun temple, Sun key", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("The body bottom area, Mutant Costume", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.multiworld.get_location("Sun temple, bulb in the hidden room of the right part",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
-
     def set_rules(self) -> None:
         """
         Launched when the Multiworld generator is ready to generate rules
         """
 
         self.regions.adjusting_rules(self.options)
-        if self.options.exclude_hard_or_hidden_locations:
-            self.__excluded_hard_or_hidden_location()
-
         self.multiworld.completion_condition[self.player] = lambda \
             state: state.has("Victory", self.player)
 

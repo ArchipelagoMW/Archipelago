@@ -1,7 +1,14 @@
+"""
+Author: Louis M
+Date: Thu, 18 Apr 2024 18:45:56 +0000
+Description: Unit test used to test accessibility of locations with and without the fish form
+"""
+
 from worlds.aquaria.test import AquariaTestBase
 
 
 class FishFormAccessTest(AquariaTestBase):
+    """Unit test used to test accessibility of locations with and without the fish form"""
     options = {
         "turtle_randomizer": 1,
     }
@@ -24,6 +31,7 @@ class FishFormAccessTest(AquariaTestBase):
             "Octopus cave, bulb in the path below the octopus cave path",
             "Beating Octopus Prime",
             "Abyss left area, bulb in the bottom fish pass",
+            "Arnassi ruins, Arnassi Armor"
         ]
         items = [["Fish form"]]
         self.assertAccessDependency(locations, items)
