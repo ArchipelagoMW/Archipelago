@@ -122,8 +122,6 @@ def set_rules(world: "MLSSWorld", excluded):
              lambda state: StateLogic.canMini(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.BeanbeanOutskirtsNESoloMarioMole2, world.player),
              lambda state: StateLogic.canMini(state, world.player))
-    add_rule(world.multiworld.get_location(LocationName.HoohooVillageMoleBehindTurtle, world.player),
-             lambda state: StateLogic.thunder(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.BeanbeanOutskirtsSuperHammerUpgrade, world.player),
              lambda state: StateLogic.thunder(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.BeanbeanOutskirtsUltraHammerUpgrade, world.player),
