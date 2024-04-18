@@ -178,7 +178,8 @@ def set_rules(world: "MM2World") -> None:
                 # it should be impossible to be out of energy, simply because even if every boss took 1 from
                 # Quick Boomerang and no other, it would only be 28 off from defeating all 9, which Metal Blade should
                 # be able to cover
-                wp, max_uses = max((weapon, weapon_energy[weapon] // weapon_costs[weapon]) for weapon in weapon_weight)
+                wp, max_uses = max((weapon, weapon_energy[weapon] // weapon_costs[weapon]) for weapon in weapon_weight
+                                   if weapon != 0)
                 world.weapon_damage[wp][boss] = minimum_weakness_requirement[wp]
                 used = ceil(boss_health[boss] / minimum_weakness_requirement[wp])
                 weapon_energy[wp] -= weapon_costs[wp] * used
