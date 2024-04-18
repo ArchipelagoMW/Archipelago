@@ -7,6 +7,7 @@ from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, 
     LocationProgressType
 
 from worlds.AutoWorld import WebWorld, World
+
 from .Rom import MMBN3DeltaPatch, LocalRom, get_base_rom_path
 from .Items import MMBN3Item, ItemData, item_table, all_items, item_frequencies, items_by_id, ItemType
 from .Locations import Location, MMBN3Location, all_locations, location_table, location_data_table, \
@@ -51,7 +52,8 @@ class MMBN3World(World):
     threat the Internet has ever faced!
     """
     game = "MegaMan Battle Network 3"
-    option_definitions = MMBN3Options
+    options_dataclass = MMBN3Options
+    options: MMBN3Options
     settings: typing.ClassVar[MMBN3Settings]
     topology_present = False
 
@@ -71,10 +73,10 @@ class MMBN3World(World):
         Already has access to player options and RNG.
         """
         self.item_frequencies = item_frequencies.copy()
-        if self.multiworld.extra_ranks[self.player] > 0:
-            self.item_frequencies[ItemName.Progressive_Undernet_Rank] = 8 + self.multiworld.extra_ranks[self.player]
+        if self.options.extra_ranks > 0:
+            self.item_frequencies[ItemName.Progressive_Undernet_Rank] = 8 + self.options.extra_ranks
 
-        if not self.multiworld.include_jobs[self.player]:
+        if not self.options.include_jobs:
             self.excluded_locations = always_excluded_locations + [job.name for job in jobs]
         else:
             self.excluded_locations = always_excluded_locations
@@ -160,7 +162,7 @@ class MMBN3World(World):
 
         remaining = len(all_locations) - len(required_items)
         for i in range(remaining):
-            filler_item_name = self.multiworld.random.choice(filler_items)
+            filler_item_name = self.random.choice(filler_items)
             item = self.create_item(filler_item_name)
             self.multiworld.itempool.append(item)
             filler_items.remove(filler_item_name)
@@ -411,10 +413,10 @@ class MMBN3World(World):
                         long_item_text = ""
 
                         # No item hinting
-                        if self.multiworld.trade_quest_hinting[self.player] == 0:
+                        if self.options.trade_quest_hinting == 0:
                             item_name_text = "Check"
                         # Partial item hinting
-                        elif self.multiworld.trade_quest_hinting[self.player] == 1:
+                        elif self.options.trade_quest_hinting == 1:
                             if item.progression == ItemClassification.progression \
                                     or item.progression == ItemClassification.progression_skip_balancing:
                                 item_name_text = "Progress"
@@ -466,7 +468,7 @@ class MMBN3World(World):
         return MMBN3Item(event, ItemClassification.progression, None, self.player)
 
     def fill_slot_data(self):
-        return {name: getattr(self.multiworld, name)[self.player].value for name in self.option_definitions}
+        return self.options.as_dict("extra_ranks", "include_jobs", "trade_quest_hinting")
 
 
     def explore_score(self, state):
