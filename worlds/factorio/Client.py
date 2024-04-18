@@ -267,7 +267,7 @@ async def game_watcher(ctx: FactorioContext):
                                         [{"operation": "add", "value": -ctx.energy_link_increment * in_world_bridges},
                                          {"operation": "max", "value": 0}],
                                     "last_deplete": ctx.last_deplete,
-                                    "slot": ctx.slot
+                                    "slot": ctx.slot,
                                 }]))
                             # Above Capacity - (len(Bridges) * ENERGY_INCREMENT)
                             elif in_world_energy > (in_world_bridges * ctx.energy_link_increment * 5) - \
