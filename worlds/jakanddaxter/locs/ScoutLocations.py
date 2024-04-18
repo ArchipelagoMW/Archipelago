@@ -1,4 +1,19 @@
-# Scout Flies start at ID 101 and end at ID 212.
+# Scout Flies are given ID's between 0 and 393311 by the game, explanation below.
+
+# Each fly is given a unique 32-bit number broken into two 16-bit numbers.
+# The lower 16 bits are the game-task ID of the power cell the fly corresponds to.
+# The higher 16 bits are the index of the fly itself, from 000 (0) to 110 (6).
+
+# Ex: The final scout fly on Geyser Rock
+# 0000000000000110 0000000001011111
+# (   Index: 6   ) (   Cell: 95   )
+
+# Because flies are indexed from 0, each 0th fly's full ID == the power cell's ID.
+# So we need to offset all of their ID's in order for Archipelago to separate them
+# from their power cells. We use 1,048,576 (2^20) for this purpose, because scout flies
+# don't use more than 19 bits to describe themselves.
+
+# TODO - The ID's you see below correspond directly to that fly's 32-bit ID in the game.
 
 # Geyser Rock
 locGR_scoutTable = {

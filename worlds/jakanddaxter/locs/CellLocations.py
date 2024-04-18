@@ -1,128 +1,135 @@
-# Power Cells start at ID 0 and end at ID 100.
+# Power Cells are given ID's between 0 and 116 by the game.
+
+# The game tracks all game-tasks as integers.
+# 101 of these ID's correspond directly to power cells, but they are not
+# necessarily ordered, nor are they the first 101 in the task list.
+# The remaining ones are cutscenes and other events.
+
+# The ID's you see below correspond directly to that cell's game-task ID.
 
 # Geyser Rock
 locGR_cellTable = {
-    0: "GR: Find The Cell On The Path",
-    1: "GR: Open The Precursor Door",
-    2: "GR: Climb Up The Cliff",
-    3: "GR: Free 7 Scout Flies"
+    92: "GR: Find The Cell On The Path",
+    93: "GR: Open The Precursor Door",
+    94: "GR: Climb Up The Cliff",
+    95: "GR: Free 7 Scout Flies"
 }
 
 # Sandover Village
 locSV_cellTable = {
-    4: "SV: Bring 90 Orbs To The Mayor",
-    5: "SV: Bring 90 Orbs to Your Uncle",
-    6: "SV: Herd The Yakows Into The Pen",
-    7: "SV: Bring 120 Orbs To The Oracle (1)",
-    8: "SV: Bring 120 Orbs To The Oracle (2)",
-    9: "SV: Free 7 Scout Flies"
+    11: "SV: Bring 90 Orbs To The Mayor",
+    12: "SV: Bring 90 Orbs to Your Uncle",
+    10: "SV: Herd The Yakows Into The Pen",
+    13: "SV: Bring 120 Orbs To The Oracle (1)",
+    14: "SV: Bring 120 Orbs To The Oracle (2)",
+    75: "SV: Free 7 Scout Flies"
 }
 
 # Forbidden Jungle
 locFJ_cellTable = {
-    10: "FJ: Connect The Eco Beams",
-    11: "FJ: Get To The Top Of The Temple",
-    12: "FJ: Find The Blue Vent Switch",
-    13: "FJ: Defeat The Dark Eco Plant",
-    14: "FJ: Catch 200 Pounds Of Fish",
-    15: "FJ: Follow The Canyon To The Sea",
-    16: "FJ: Open The Locked Temple Door",
-    17: "FJ: Free 7 Scout Flies"
+    3: "FJ: Connect The Eco Beams",
+    4: "FJ: Get To The Top Of The Temple",
+    2: "FJ: Find The Blue Vent Switch",
+    6: "FJ: Defeat The Dark Eco Plant",
+    5: "FJ: Catch 200 Pounds Of Fish",
+    8: "FJ: Follow The Canyon To The Sea",
+    9: "FJ: Open The Locked Temple Door",
+    7: "FJ: Free 7 Scout Flies"
 }
 
 # Sentinel Beach
 locSB_cellTable = {
-    18: "SB: Unblock The Eco Harvesters",
-    19: "SB: Push The Flut Flut Egg Off The Cliff",
-    20: "SB: Get The Power Cell From The Pelican",
-    21: "SB: Chase The Seagulls",
-    22: "SB: Launch Up To The Cannon Tower",
-    23: "SB: Explore The Beach",
-    24: "SB: Climb The Sentinel",
-    25: "SB: Free 7 Scout Flies"
+    15: "SB: Unblock The Eco Harvesters",
+    17: "SB: Push The Flut Flut Egg Off The Cliff",
+    16: "SB: Get The Power Cell From The Pelican",
+    18: "SB: Chase The Seagulls",
+    19: "SB: Launch Up To The Cannon Tower",
+    21: "SB: Explore The Beach",
+    22: "SB: Climb The Sentinel",
+    20: "SB: Free 7 Scout Flies"
 }
 
 # Misty Island
 locMI_cellTable = {
-    26: "MI: Catch The Sculptor's Muse",
-    27: "MI: Climb The Lurker Ship",
-    28: "MI: Stop The Cannon",
-    29: "MI: Return To The Dark Eco Pool",
-    30: "MI: Destroy the Balloon Lurkers",
-    31: "MI: Use Zoomer To Reach Power Cell",
-    32: "MI: Use Blue Eco To Reach Power Cell",
-    33: "MI: Free 7 Scout Flies"
+    23: "MI: Catch The Sculptor's Muse",
+    24: "MI: Climb The Lurker Ship",
+    26: "MI: Stop The Cannon",
+    25: "MI: Return To The Dark Eco Pool",
+    27: "MI: Destroy the Balloon Lurkers",
+    29: "MI: Use Zoomer To Reach Power Cell",
+    30: "MI: Use Blue Eco To Reach Power Cell",
+    28: "MI: Free 7 Scout Flies"
 }
 
 # Fire Canyon
 locFC_cellTable = {
-    34: "FC: Reach The End Of Fire Canyon",
-    35: "FC: Free 7 Scout Flies"
+    69: "FC: Reach The End Of Fire Canyon",
+    68: "FC: Free 7 Scout Flies"
 }
 
 # Rock Village
 locRV_cellTable = {
-    36: "RV: Bring 90 Orbs To The Gambler",
-    37: "RV: Bring 90 Orbs To The Geologist",
-    38: "RV: Bring 90 Orbs To The Warrior",
-    39: "RV: Bring 120 Orbs To The Oracle (1)",
-    40: "RV: Bring 120 Orbs To The Oracle (2)",
-    41: "RV: Free 7 Scout Flies"
+    31: "RV: Bring 90 Orbs To The Gambler",
+    32: "RV: Bring 90 Orbs To The Geologist",
+    33: "RV: Bring 90 Orbs To The Warrior",
+    34: "RV: Bring 120 Orbs To The Oracle (1)",
+    35: "RV: Bring 120 Orbs To The Oracle (2)",
+    76: "RV: Free 7 Scout Flies"
 }
 
 # Precursor Basin
 locPB_cellTable = {
-    42: "PB: Herd The Moles Into Their Hole",
-    43: "PB: Catch The Flying Lurkers",
-    44: "PB: Beat Record Time On The Gorge",
-    45: "PB: Get The Power Cell Over The Lake",
-    46: "PB: Cure Dark Eco Infected Plants",
-    47: "PB: Navigate The Purple Precursor Rings",
-    48: "PB: Navigate The Blue Precursor Rings",
-    49: "PB: Free 7 Scout Flies"
+    54: "PB: Herd The Moles Into Their Hole",
+    53: "PB: Catch The Flying Lurkers",
+    52: "PB: Beat Record Time On The Gorge",
+    56: "PB: Get The Power Cell Over The Lake",
+    55: "PB: Cure Dark Eco Infected Plants",
+    58: "PB: Navigate The Purple Precursor Rings",
+    59: "PB: Navigate The Blue Precursor Rings",
+    57: "PB: Free 7 Scout Flies"
 }
 
 # Lost Precursor City
 locLPC_cellTable = {
-    50: "LPC: Raise The Chamber",
-    51: "LPC: Follow The Colored Pipes",
-    52: "LPC: Reach The Bottom Of The City",
-    53: "LPC: Quickly Cross The Dangerous Pool",
-    54: "LPC: Match The Platform Colors",
-    55: "LPC: Climb The Slide Tube",
-    56: "LPC: Reach The Center Of The Complex",
-    57: "LPC: Free 7 Scout Flies"
+    47: "LPC: Raise The Chamber",
+    45: "LPC: Follow The Colored Pipes",
+    46: "LPC: Reach The Bottom Of The City",
+    48: "LPC: Quickly Cross The Dangerous Pool",
+    44: "LPC: Match The Platform Colors",
+    50: "LPC: Climb The Slide Tube",
+    51: "LPC: Reach The Center Of The Complex",
+    49: "LPC: Free 7 Scout Flies"
 }
 
 # Boggy Swamp
 locBS_cellTable = {
-    58: "BS: Ride The Flut Flut",
-    59: "BS: Protect Farthy's Snacks",
-    60: "BS: Defeat The Lurker Ambush",
-    61: "BS: Break The Tethers To The Zeppelin (1)",
-    62: "BS: Break The Tethers To The Zeppelin (2)",
-    63: "BS: Break The Tethers To The Zeppelin (3)",
-    64: "BS: Break The Tethers To The Zeppelin (4)",
-    65: "BS: Free 7 Scout Flies"
+    37: "BS: Ride The Flut Flut",
+    36: "BS: Protect Farthy's Snacks",
+    38: "BS: Defeat The Lurker Ambush",
+    39: "BS: Break The Tethers To The Zeppelin (1)",
+    40: "BS: Break The Tethers To The Zeppelin (2)",
+    41: "BS: Break The Tethers To The Zeppelin (3)",
+    42: "BS: Break The Tethers To The Zeppelin (4)",
+    43: "BS: Free 7 Scout Flies"
 }
 
 # Mountain Pass
 locMP_cellTable = {
-    66: "MP: Defeat Klaww",
-    67: "MP: Reach The End Of The Mountain Pass",
-    68: "MP: Find The Hidden Power Cell",
-    69: "MP: Free 7 Scout Flies"
+    86: "MP: Defeat Klaww",
+    87: "MP: Reach The End Of The Mountain Pass",
+    110: "MP: Find The Hidden Power Cell",
+    88: "MP: Free 7 Scout Flies"
 }
 
 # Volcanic Crater
 locVC_cellTable = {
-    70: "VC: Bring 90 Orbs To The Miners (1)",
-    71: "VC: Bring 90 Orbs To The Miners (2)",
-    72: "VC: Bring 90 Orbs To The Miners (3)",
-    73: "VC: Bring 90 Orbs To The Miners (4)",
-    74: "VC: Bring 120 Orbs To The Oracle (1)",
-    75: "VC: Bring 120 Orbs To The Oracle (2)",
-    76: "VC: Find The Hidden Power Cell",
+    96: "VC: Bring 90 Orbs To The Miners (1)",
+    97: "VC: Bring 90 Orbs To The Miners (2)",
+    98: "VC: Bring 90 Orbs To The Miners (3)",
+    99: "VC: Bring 90 Orbs To The Miners (4)",
+    100: "VC: Bring 120 Orbs To The Oracle (1)",
+    101: "VC: Bring 120 Orbs To The Oracle (2)",
+    74: "VC: Find The Hidden Power Cell",
     77: "VC: Free 7 Scout Flies"
 }
 
@@ -140,27 +147,27 @@ locSC_cellTable = {
 
 # Snowy Mountain
 locSM_cellTable = {
-    86: "SM: Find The Yellow Vent Switch",
-    87: "SM: Stop The 3 Lurker Glacier Troops",
-    88: "SM: Deactivate The Precursor Blockers",
-    89: "SM: Open The Frozen Crate",
-    90: "SM: Open The Lurker Fort Gate",
-    91: "SM: Get Through The Lurker Fort",
-    92: "SM: Survive The Lurker Infested Cave",
-    93: "SM: Free 7 Scout Flies"
+    60: "SM: Find The Yellow Vent Switch",
+    61: "SM: Stop The 3 Lurker Glacier Troops",
+    66: "SM: Deactivate The Precursor Blockers",
+    67: "SM: Open The Frozen Crate",
+    63: "SM: Open The Lurker Fort Gate",
+    62: "SM: Get Through The Lurker Fort",
+    64: "SM: Survive The Lurker Infested Cave",
+    65: "SM: Free 7 Scout Flies"
 }
 
 # Lava Tube
 locLT_cellTable = {
-    94: "LT: Cross The Lava Tube",
-    95: "LT: Free 7 Scout Flies"
+    89: "LT: Cross The Lava Tube",
+    90: "LT: Free 7 Scout Flies"
 }
 
 # Gol and Maias Citadel
 locGMC_cellTable = {
-    96: "GMC: Free The Blue Sage",
-    97: "GMC: Free The Red Sage",
-    98: "GMC: Free The Yellow Sage",
-    99: "GMC: Free The Green Sage",
-    100: "GMC: Free 7 Scout Flies"
+    71: "GMC: Free The Blue Sage",
+    72: "GMC: Free The Red Sage",
+    73: "GMC: Free The Yellow Sage",
+    70: "GMC: Free The Green Sage",
+    91: "GMC: Free 7 Scout Flies"
 }

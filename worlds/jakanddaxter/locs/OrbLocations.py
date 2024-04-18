@@ -1,4 +1,7 @@
-# Precursor Orbs start at ID 213 and end at ID 2212.
+# Precursor Orbs start at ??? and end at ???
+
+# Given that Scout Flies are being offset by 2^20 to avoid collisions with power cells,
+# I'm tentatively setting the Orb offset to 2^21, or 2,097,152.
 
 # Geyser Rock
 locGR_orbTable = {
