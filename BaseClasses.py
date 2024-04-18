@@ -124,9 +124,10 @@ class MultiWorld():
                 time.sleep(1)
                 if self.current_function:
                     now = time.perf_counter()
-                    if now - self.entered > 60:
+                    elapsed = now - self.entered
+                    if elapsed > 60:
                         logging.info(f"Generation stalling in {self.current_function}, "
-                                     f"running since {time.perf_counter()-self.entered:.0f} seconds ago.")
+                                     f"running since {elapsed:.0f} seconds ago.")
                         self.current_function = ""
 
     observer = Observer()
