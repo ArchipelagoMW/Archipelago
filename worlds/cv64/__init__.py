@@ -270,7 +270,7 @@ class CV64World(World):
         offset_data.update(get_start_inventory_data(self.player, self.options,
                                                     self.multiworld.precollected_items[self.player]))
 
-        patch = CV64ProcedurePatch()
+        patch = CV64ProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
         write_patch(self, patch, offset_data, shop_name_list, shop_desc_list, shop_colors_list, active_locations)
 
         rom_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}"
