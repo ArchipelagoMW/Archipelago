@@ -2134,31 +2134,34 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.output(response)
             return False
 
-    def _cmd_option(self, option_name: str, option: str):
-        """Set options for the server."""
-
-        attrtype = self.ctx.simple_options.get(option_name, None)
-        if attrtype:
-            if attrtype == bool:
-                def attrtype(input_text: str):
-                    return input_text.lower() not in {"off", "0", "false", "none", "null", "no"}
-            elif attrtype == str and option_name.endswith("password"):
-                def attrtype(input_text: str):
-                    if input_text.lower() in {"null", "none", '""', "''"}:
-                        return None
-                    return input_text
-            setattr(self.ctx, option_name, attrtype(option))
-            self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
-            if option_name in {"release_mode", "remaining_mode", "collect_mode"}:
-                self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
-            elif option_name in {"hint_cost", "location_check_points"}:
-                self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
-            return True
-        else:
-            known = (f"{option}:{otype}" for option, otype in self.ctx.simple_options.items())
-            self.output(f"Unrecognized Option {option_name}, known: "
-                        f"{', '.join(known)}")
+    def _cmd_option(self, option_name: str, option_value: str):
+        """Set an option for the server."""
+        value_type = self.ctx.simple_options.get(option_name, None)
+        if not value_type:
+            known_options = (f"{option}: {option_type}" for option, option_type in self.ctx.simple_options.items())
+            self.output(f"Unrecognized option '{option_name}', known: {', '.join(known_options)}")
             return False
+
+        if value_type == bool:
+            def value_type(input_text: str):
+                return input_text.lower() not in {"off", "0", "false", "none", "null", "no"}
+        elif value_type == str and option_name.endswith("password"):
+            def value_type(input_text: str):
+                return None if input_text.lower() in {"null", "none", '""', "''"} else input_text
+        elif value_type == str and option_name.endswith("mode"):
+            valid_values = {"goal", "enabled", "disabled"}
+            valid_values.update(("auto", "auto_enabled") if option_name != "remaining_mode" else [])
+            if option_value.lower() not in valid_values:
+                self.output(f"Unrecognized {option_name} value '{option_value}', known: {', '.join(valid_values)}")
+                return False
+
+        setattr(self.ctx, option_name, value_type(option_value))
+        self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
+        if option_name in {"release_mode", "remaining_mode", "collect_mode"}:
+            self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
+        elif option_name in {"hint_cost", "location_check_points"}:
+            self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
+        return True
 
 
 async def console(ctx: Context):
