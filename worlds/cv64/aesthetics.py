@@ -14,111 +14,111 @@ if TYPE_CHECKING:
     from . import CV64World
 
 rom_sub_weapon_offsets = {
-    0x10C6EB: (0x10, rname.forest_of_silence),  # Forest
-    0x10C6F3: (0x0F, rname.forest_of_silence),
-    0x10C6FB: (0x0E, rname.forest_of_silence),
-    0x10C703: (0x0D, rname.forest_of_silence),
+    0x10C6EB: (b"\x10", rname.forest_of_silence),  # Forest
+    0x10C6F3: (b"\x0F", rname.forest_of_silence),
+    0x10C6FB: (b"\x0E", rname.forest_of_silence),
+    0x10C703: (b"\x0D", rname.forest_of_silence),
 
-    0x10C81F: (0x0F, rname.castle_wall),  # Castle Wall
-    0x10C827: (0x10, rname.castle_wall),
-    0x10C82F: (0x0E, rname.castle_wall),
-    0x7F9A0F: (0x0D, rname.castle_wall),
+    0x10C81F: (b"\x0F", rname.castle_wall),  # Castle Wall
+    0x10C827: (b"\x10", rname.castle_wall),
+    0x10C82F: (b"\x0E", rname.castle_wall),
+    0x7F9A0F: (b"\x0D", rname.castle_wall),
 
-    0x83A5D9: (0x0E, rname.villa),  # Villa
-    0x83A5E5: (0x0D, rname.villa),
-    0x83A5F1: (0x0F, rname.villa),
-    0xBFC903: (0x10, rname.villa),
-    0x10C987: (0x10, rname.villa),
-    0x10C98F: (0x0D, rname.villa),
-    0x10C997: (0x0F, rname.villa),
-    0x10CF73: (0x10, rname.villa),
+    0x83A5D9: (b"\x0E", rname.villa),  # Villa
+    0x83A5E5: (b"\x0D", rname.villa),
+    0x83A5F1: (b"\x0F", rname.villa),
+    0xBFC903: (b"\x10", rname.villa),
+    0x10C987: (b"\x10", rname.villa),
+    0x10C98F: (b"\x0D", rname.villa),
+    0x10C997: (b"\x0F", rname.villa),
+    0x10CF73: (b"\x10", rname.villa),
 
-    0x10CA57: (0x0D, rname.tunnel),  # Tunnel
-    0x10CA5F: (0x0E, rname.tunnel),
-    0x10CA67: (0x10, rname.tunnel),
-    0x10CA6F: (0x0D, rname.tunnel),
-    0x10CA77: (0x0F, rname.tunnel),
-    0x10CA7F: (0x0E, rname.tunnel),
+    0x10CA57: (b"\x0D", rname.tunnel),  # Tunnel
+    0x10CA5F: (b"\x0E", rname.tunnel),
+    0x10CA67: (b"\x10", rname.tunnel),
+    0x10CA6F: (b"\x0D", rname.tunnel),
+    0x10CA77: (b"\x0F", rname.tunnel),
+    0x10CA7F: (b"\x0E", rname.tunnel),
 
-    0x10CBC7: (0x0E, rname.castle_center),  # Castle Center
-    0x10CC0F: (0x0D, rname.castle_center),
-    0x10CC5B: (0x0F, rname.castle_center),
+    0x10CBC7: (b"\x0E", rname.castle_center),  # Castle Center
+    0x10CC0F: (b"\x0D", rname.castle_center),
+    0x10CC5B: (b"\x0F", rname.castle_center),
 
-    0x10CD3F: (0x0E, rname.tower_of_execution),  # Character towers
-    0x10CD65: (0x0D, rname.tower_of_execution),
-    0x10CE2B: (0x0E, rname.tower_of_science),
-    0x10CE83: (0x10, rname.duel_tower),
+    0x10CD3F: (b"\x0E", rname.tower_of_execution),  # Character towers
+    0x10CD65: (b"\x0D", rname.tower_of_execution),
+    0x10CE2B: (b"\x0E", rname.tower_of_science),
+    0x10CE83: (b"\x10", rname.duel_tower),
 
-    0x10CF8B: (0x0F, rname.room_of_clocks),  # Room of Clocks
-    0x10CF93: (0x0D, rname.room_of_clocks),
+    0x10CF8B: (b"\x0F", rname.room_of_clocks),  # Room of Clocks
+    0x10CF93: (b"\x0D", rname.room_of_clocks),
 
-    0x99BC5A: (0x0D, rname.clock_tower),  # Clock Tower
-    0x10CECB: (0x10, rname.clock_tower),
-    0x10CED3: (0x0F, rname.clock_tower),
-    0x10CEDB: (0x0E, rname.clock_tower),
-    0x10CEE3: (0x0D, rname.clock_tower),
+    0x99BC5A: (b"\x0D", rname.clock_tower),  # Clock Tower
+    0x10CECB: (b"\x10", rname.clock_tower),
+    0x10CED3: (b"\x0F", rname.clock_tower),
+    0x10CEDB: (b"\x0E", rname.clock_tower),
+    0x10CEE3: (b"\x0D", rname.clock_tower),
 }
 
 rom_sub_weapon_flags = {
-    0x10C6EC: 0x0200FF04,  # Forest of Silence
-    0x10C6FC: 0x0400FF04,
-    0x10C6F4: 0x0800FF04,
-    0x10C704: 0x4000FF04,
+    0x10C6EC: b"\x02\x00\xFF\x04",  # Forest of Silence
+    0x10C6FC: b"\x04\x00\xFF\x04",
+    0x10C6F4: b"\x08\x00\xFF\x04",
+    0x10C704: b"\x40\x00\xFF\x04",
 
-    0x10C831: 0x08,  # Castle Wall
-    0x10C829: 0x10,
-    0x10C821: 0x20,
-    0xBFCA97: 0x04,
+    0x10C831: b"\x08",  # Castle Wall
+    0x10C829: b"\x10",
+    0x10C821: b"\x20",
+    0xBFCA97: b"\x04",
 
     # Villa
-    0xBFC926: 0xFF04,
-    0xBFC93A: 0x80,
-    0xBFC93F: 0x01,
-    0xBFC943: 0x40,
-    0xBFC947: 0x80,
-    0x10C989: 0x10,
-    0x10C991: 0x20,
-    0x10C999: 0x40,
-    0x10CF77: 0x80,
+    0xBFC926: b"\xFF\x04",
+    0xBFC93A: b"\x80",
+    0xBFC93F: b"\x01",
+    0xBFC943: b"\x40",
+    0xBFC947: b"\x80",
+    0x10C989: b"\x10",
+    0x10C991: b"\x20",
+    0x10C999: b"\x40",
+    0x10CF77: b"\x80",
 
-    0x10CA58: 0x4000FF0E,  # Tunnel
-    0x10CA6B: 0x80,
-    0x10CA60: 0x1000FF05,
-    0x10CA70: 0x2000FF05,
-    0x10CA78: 0x4000FF05,
-    0x10CA80: 0x8000FF05,
+    0x10CA58: b"\x40\x00\xFF\x0E",  # Tunnel
+    0x10CA6B: b"\x80",
+    0x10CA60: b"\x10\x00\xFF\x05",
+    0x10CA70: b"\x20\x00\xFF\x05",
+    0x10CA78: b"\x40\x00\xFF\x05",
+    0x10CA80: b"\x80\x00\xFF\x05",
 
-    0x10CBCA: 0x02,  # Castle Center
-    0x10CC10: 0x80,
-    0x10CC5C: 0x40,
+    0x10CBCA: b"\x02",  # Castle Center
+    0x10CC10: b"\x80",
+    0x10CC5C: b"\x40",
 
-    0x10CE86: 0x01,  # Duel Tower
-    0x10CD43: 0x02,  # Tower of Execution
-    0x10CE2E: 0x20,  # Tower of Science
+    0x10CE86: b"\x01",  # Duel Tower
+    0x10CD43: b"\x02",  # Tower of Execution
+    0x10CE2E: b"\x20",  # Tower of Science
 
-    0x10CF8E: 0x04,  # Room of Clocks
-    0x10CF96: 0x08,
+    0x10CF8E: b"\x04",  # Room of Clocks
+    0x10CF96: b"\x08",
 
-    0x10CECE: 0x08,  # Clock Tower
-    0x10CED6: 0x10,
-    0x10CEE6: 0x20,
-    0x10CEDE: 0x80,
+    0x10CECE: b"\x08",  # Clock Tower
+    0x10CED6: b"\x10",
+    0x10CEE6: b"\x20",
+    0x10CEDE: b"\x80",
 }
 
 rom_empty_breakables_flags = {
-    0x10C74D: 0x40FF05,  # Forest of Silence
-    0x10C765: 0x20FF0E,
-    0x10C774: 0x0800FF0E,
-    0x10C755: 0x80FF05,
-    0x10C784: 0x0100FF0E,
-    0x10C73C: 0x0200FF0E,
+    0x10C74D: b"\x40\xFF\x05",  # Forest of Silence
+    0x10C765: b"\x20\xFF\x0E",
+    0x10C774: b"\x08\x00\xFF\x0E",
+    0x10C755: b"\x80\xFF\x05",
+    0x10C784: b"\x01\x00\xFF\x0E",
+    0x10C73C: b"\x02\x00\xFF\x0E",
 
-    0x10C8D0: 0x0400FF0E,  # Villa foyer
+    0x10C8D0: b"\x04\x00\xFF\x0E",  # Villa foyer
 
-    0x10CF9F: 0x08,  # Room of Clocks flags
-    0x10CFA7: 0x01,
-    0xBFCB6F: 0x04,  # Room of Clocks candle property IDs
-    0xBFCB73: 0x05,
+    0x10CF9F: b"\x08",  # Room of Clocks flags
+    0x10CFA7: b"\x01",
+    0xBFCB6F: b"\x04",  # Room of Clocks candle property IDs
+    0xBFCB73: b"\x05",
 }
 
 rom_axe_cross_lower_values = {
@@ -269,19 +269,18 @@ renon_item_dialogue = {
 }
 
 
-def randomize_lighting(world: "CV64World") -> Dict[int, int]:
+def randomize_lighting(world: "CV64World") -> Dict[int, bytes]:
     """Generates randomized data for the map lighting table."""
     randomized_lighting = {}
     for entry in range(67):
         for sub_entry in range(19):
             if sub_entry not in [3, 7, 11, 15] and entry != 4:
                 # The fourth entry in the lighting table affects the lighting on some item pickups; skip it
-                randomized_lighting[0x1091A0 + (entry * 28) + sub_entry] = \
-                    world.random.randint(0, 255)
+                randomized_lighting[0x1091A0 + (entry * 28) + sub_entry] = bytes([world.random.randint(0, 255)])
     return randomized_lighting
 
 
-def shuffle_sub_weapons(world: "CV64World") -> Dict[int, int]:
+def shuffle_sub_weapons(world: "CV64World") -> Dict[int, bytes]:
     """Shuffles the sub-weapons amongst themselves."""
     sub_weapon_dict = {offset: rom_sub_weapon_offsets[offset][0] for offset in rom_sub_weapon_offsets if
                        rom_sub_weapon_offsets[offset][1] in world.active_stage_exits}
@@ -295,7 +294,7 @@ def shuffle_sub_weapons(world: "CV64World") -> Dict[int, int]:
     return dict(zip(sub_weapon_dict, sub_bytes))
 
 
-def randomize_music(world: "CV64World") -> Dict[int, int]:
+def randomize_music(world: "CV64World") -> Dict[int, bytes]:
     """Generates randomized or disabled data for all the music in the game."""
     music_array = bytearray(0x7A)
     for number in music_sfx_ids:
@@ -340,15 +339,10 @@ def randomize_music(world: "CV64World") -> Dict[int, int]:
                 music_array[i] = fade_in_songs[i]
     del (music_array[0x00: 0x10])
 
-    # Convert the music array into a data dict
-    music_offsets = {}
-    for i in range(len(music_array)):
-        music_offsets[0xBFCD30 + i] = music_array[i]
-
-    return music_offsets
+    return {0xBFCD30: bytes(music_array)}
 
 
-def randomize_shop_prices(world: "CV64World") -> Dict[int, int]:
+def randomize_shop_prices(world: "CV64World") -> Dict[int, bytes]:
     """Randomize the shop prices based on the minimum and maximum values chosen.
     The minimum price will adjust if it's higher than the max."""
     min_price = world.options.minimum_gold_price.value
@@ -363,21 +357,15 @@ def randomize_shop_prices(world: "CV64World") -> Dict[int, int]:
 
     shop_price_list = [world.random.randint(min_price * 100, max_price * 100) for _ in range(7)]
 
-    # Convert the price list into a data dict. Which offset it starts from depends on how many bytes it takes up.
+    # Convert the price list into a data dict.
     price_dict = {}
     for i in range(len(shop_price_list)):
-        if shop_price_list[i] <= 0xFF:
-            price_dict[0x103D6E + (i*12)] = 0
-            price_dict[0x103D6F + (i*12)] = shop_price_list[i]
-        elif shop_price_list[i] <= 0xFFFF:
-            price_dict[0x103D6E + (i*12)] = shop_price_list[i]
-        else:
-            price_dict[0x103D6D + (i*12)] = shop_price_list[i]
+        price_dict[0x103D6C + (i * 12)] = int.to_bytes(shop_price_list[i], 4, "big")
 
     return price_dict
 
 
-def get_countdown_numbers(options: CV64Options, active_locations: Iterable[Location]) -> Dict[int, int]:
+def get_countdown_numbers(options: CV64Options, active_locations: Iterable[Location]) -> Dict[int, bytes]:
     """Figures out which Countdown numbers to increase for each Location after verifying the Item on the Location should
     increase a number.
 
@@ -400,16 +388,11 @@ def get_countdown_numbers(options: CV64Options, active_locations: Iterable[Locat
             if countdown_number is not None:
                 countdown_list[countdown_number] += 1
 
-    # Convert the Countdown list into a data dict
-    countdown_dict = {}
-    for i in range(len(countdown_list)):
-        countdown_dict[0xBFD818 + i] = countdown_list[i]
-
-    return countdown_dict
+    return {0xBFD818: bytes(countdown_list)}
 
 
 def get_location_data(world: "CV64World", active_locations: Iterable[Location]) \
-        -> Tuple[Dict[int, int], List[str], List[bytearray], List[List[Union[int, str, None]]]]:
+        -> Tuple[Dict[int, bytes], List[str], List[bytearray], List[List[Union[int, str, None]]]]:
     """Gets ALL the item data to go into the ROM. Item data consists of two bytes: the first dictates the appearance of
     the item, the second determines what the item actually is when picked up. All items from other worlds will be AP
     items that do nothing when picked up other than set their flag, and their appearance will depend on whether it's
@@ -449,12 +432,11 @@ def get_location_data(world: "CV64World", active_locations: Iterable[Location]) 
 
         # Figure out the item ID bytes to put in each Location here. Write the item itself if either it's the player's
         # very own, or it belongs to an Item Link that the player is a part of.
-        if loc.item.player == world.player or (loc.item.player in world.multiworld.groups and
-                                               world.player in world.multiworld.groups[loc.item.player]['players']):
+        if loc.item.player == world.player:
             if loc_type not in ["npc", "shop"] and get_item_info(loc.item.name, "pickup actor id") is not None:
                 location_bytes[get_location_info(loc.name, "offset")] = get_item_info(loc.item.name, "pickup actor id")
             else:
-                location_bytes[get_location_info(loc.name, "offset")] = get_item_info(loc.item.name, "code")
+                location_bytes[get_location_info(loc.name, "offset")] = get_item_info(loc.item.name, "code") & 0xFF
         else:
             # Make the item the unused Wooden Stake - our multiworld item.
             location_bytes[get_location_info(loc.name, "offset")] = 0x11
@@ -534,11 +516,12 @@ def get_location_data(world: "CV64World", active_locations: Iterable[Location]) 
 
         shop_colors_list.append(get_item_text_color(loc))
 
-    return location_bytes, shop_name_list, shop_colors_list, shop_desc_list
+    return {offset: int.to_bytes(byte, 1, "big") for offset, byte in location_bytes.items()}, shop_name_list,\
+        shop_colors_list, shop_desc_list
 
 
 def get_loading_zone_bytes(options: CV64Options, starting_stage: str,
-                           active_stage_exits: Dict[str, Dict[str, Union[str, int, None]]]) -> Dict[int, int]:
+                           active_stage_exits: Dict[str, Dict[str, Union[str, int, None]]]) -> Dict[int, bytes]:
     """Figure out all the bytes for loading zones and map transitions based on which stages are where in the exit data.
     The same data was used earlier in figuring out the logic. Map transitions consist of two major components: which map
     to send the player to, and which spot within the map to spawn the player at."""
@@ -551,8 +534,8 @@ def get_loading_zone_bytes(options: CV64Options, starting_stage: str,
         # Start loading zones
         # If the start zone is the start of the line, have it simply refresh the map.
         if active_stage_exits[stage]["prev"] == "Menu":
-            loading_zone_bytes[get_stage_info(stage, "startzone map offset")] = 0xFF
-            loading_zone_bytes[get_stage_info(stage, "startzone spawn offset")] = 0x00
+            loading_zone_bytes[get_stage_info(stage, "startzone map offset")] = b"\xFF"
+            loading_zone_bytes[get_stage_info(stage, "startzone spawn offset")] = b"\x00"
         elif active_stage_exits[stage]["prev"]:
             loading_zone_bytes[get_stage_info(stage, "startzone map offset")] = \
                 get_stage_info(active_stage_exits[stage]["prev"], "end map id")
@@ -563,7 +546,7 @@ def get_loading_zone_bytes(options: CV64Options, starting_stage: str,
             if active_stage_exits[stage]["prev"] == rname.castle_center:
                 if options.character_stages == CharacterStages.option_carrie_only or \
                         active_stage_exits[rname.castle_center]["alt"] == stage:
-                    loading_zone_bytes[get_stage_info(stage, "startzone spawn offset")] += 1
+                    loading_zone_bytes[get_stage_info(stage, "startzone spawn offset")] = b"\x03"
 
         # End loading zones
         if active_stage_exits[stage]["next"]:
@@ -582,16 +565,16 @@ def get_loading_zone_bytes(options: CV64Options, starting_stage: str,
     return loading_zone_bytes
 
 
-def get_start_inventory_data(player: int, options: CV64Options, precollected_items: List[Item]) -> Dict[int, int]:
+def get_start_inventory_data(player: int, options: CV64Options, precollected_items: List[Item]) -> Dict[int, bytes]:
     """Calculate and return the starting inventory values. Not every Item goes into the menu inventory, so everything
     has to be handled appropriately."""
-    start_inventory_data = {0xBFD867: 0,  # Jewels
-                            0xBFD87B: 0,  # PowerUps
-                            0xBFD883: 0,  # Sub-weapon
-                            0xBFD88B: 0}  # Ice Traps
+    start_inventory_data = {}
 
     inventory_items_array = [0 for _ in range(35)]
     total_money = 0
+    total_jewels = 0
+    total_powerups = 0
+    total_ice_traps = 0
 
     items_max = 10
 
@@ -615,42 +598,46 @@ def get_start_inventory_data(player: int, options: CV64Options, precollected_ite
                     inventory_items_array[inventory_offset] = 2
         # Starting sub-weapon
         elif sub_equip_id is not None:
-            start_inventory_data[0xBFD883] = sub_equip_id
+            start_inventory_data[0xBFD883] = bytes(sub_equip_id)
         # Starting PowerUps
         elif item.name == iname.powerup:
-            start_inventory_data[0xBFD87B] += 1
-            if start_inventory_data[0xBFD87B] > 2:
-                start_inventory_data[0xBFD87B] = 2
+            total_powerups += 1
+            # Can't have more than 2 PowerUps.
+            if total_powerups > 2:
+                total_powerups = 2
         # Starting Gold
         elif "GOLD" in item.name:
             total_money += int(item.name[0:4])
+            # Money cannot be higher than 99999.
             if total_money > 99999:
                 total_money = 99999
         # Starting Jewels
         elif "jewel" in item.name:
             if "L" in item.name:
-                start_inventory_data[0xBFD867] += 10
+                total_jewels += 10
             else:
-                start_inventory_data[0xBFD867] += 5
-            if start_inventory_data[0xBFD867] > 99:
-                start_inventory_data[0xBFD867] = 99
+                total_jewels += 5
+            # Jewels cannot be higher than 99.
+            if total_jewels > 99:
+                total_jewels = 99
         # Starting Ice Traps
         else:
-            start_inventory_data[0xBFD88B] += 1
-            if start_inventory_data[0xBFD88B] > 0xFF:
-                start_inventory_data[0xBFD88B] = 0xFF
+            total_ice_traps += 1
+            # Ice Traps cannot be higher than 255.
+            if total_ice_traps > 0xFF:
+                total_ice_traps = 0xFF
+
+    # Convert the jewels into data.
+    start_inventory_data[0xBFD867] = bytes([total_jewels])
+
+    # Convert the Ice Traps into data.
+    start_inventory_data[0xBFD88B] = bytes([total_ice_traps])
 
     # Convert the inventory items into data.
-    for i in range(len(inventory_items_array)):
-        start_inventory_data[0xBFE518 + i] = inventory_items_array[i]
+    start_inventory_data[0xBFE518] = bytes(inventory_items_array)
 
-    # Convert the starting money into data. Which offset it starts from depends on how many bytes it takes up.
-    if total_money <= 0xFF:
-        start_inventory_data[0xBFE517] = total_money
-    elif total_money <= 0xFFFF:
-        start_inventory_data[0xBFE516] = total_money
-    else:
-        start_inventory_data[0xBFE515] = total_money
+    # Convert the starting money into data.
+    start_inventory_data[0xBFE514] = int.to_bytes(total_money, 4, "big")
 
     return start_inventory_data
 
