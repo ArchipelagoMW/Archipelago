@@ -18,7 +18,7 @@ class TestPilgrimageWithRoofAndPaintings(LingoTestBase):
     options = {
         "enable_pilgrimage": "true",
         "shuffle_colors": "false",
-        "shuffle_doors": "complex",
+        "shuffle_doors": "doors",
         "pilgrimage_allows_roof_access": "true",
         "pilgrimage_allows_paintings": "true",
         "early_color_hallways": "false"
@@ -40,7 +40,7 @@ class TestPilgrimageNoRoofYesPaintings(LingoTestBase):
     options = {
         "enable_pilgrimage": "true",
         "shuffle_colors": "false",
-        "shuffle_doors": "complex",
+        "shuffle_doors": "doors",
         "pilgrimage_allows_roof_access": "false",
         "pilgrimage_allows_paintings": "true",
         "early_color_hallways": "false"
@@ -64,7 +64,7 @@ class TestPilgrimageNoRoofNoPaintings(LingoTestBase):
     options = {
         "enable_pilgrimage": "true",
         "shuffle_colors": "false",
-        "shuffle_doors": "complex",
+        "shuffle_doors": "doors",
         "pilgrimage_allows_roof_access": "false",
         "pilgrimage_allows_paintings": "false",
         "early_color_hallways": "false"
@@ -92,7 +92,7 @@ class TestPilgrimageYesRoofNoPaintings(LingoTestBase):
     options = {
         "enable_pilgrimage": "true",
         "shuffle_colors": "false",
-        "shuffle_doors": "complex",
+        "shuffle_doors": "doors",
         "pilgrimage_allows_roof_access": "true",
         "pilgrimage_allows_paintings": "false",
         "early_color_hallways": "false"
