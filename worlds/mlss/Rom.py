@@ -78,7 +78,7 @@ class MLSSPatchExtension(APPatchExtension):
             if stream.tell() == 0x21CBD8:
                 stream.seek(4, 1)
                 continue
-            if stream.tell() == 0x21CC3C:
+            if stream.tell() >= 0x21CC3C:
                 break
             temp = stream.read(4)
             songs.append(temp)
@@ -153,7 +153,7 @@ class MLSSPatchExtension(APPatchExtension):
         stream = io.BytesIO(rom)
         random.seed(options["seed"] + options["player"])
 
-        if (options["randomize_bosses"] == 1 or (options["randomize_bosses"] == 2) and options["randomize_enemies"] == 0):
+        if options["randomize_bosses"] == 1 or (options["randomize_bosses"] == 2) and options["randomize_enemies"] == 0:
             raw = []
             for pos in bosses:
                 stream.seek(pos + 1)
