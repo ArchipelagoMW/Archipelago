@@ -1,3 +1,10 @@
+# 2.0.1
+
+### Fixes
+
+- Changed "Ho-oh" to "Ho-Oh" in options
+- Temporarily disable a possible location for Marine Cave to spawn, as its causes an overflow
+
 # 2.0.0
 
 ### Features
