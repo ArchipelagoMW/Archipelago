@@ -14,10 +14,20 @@ class MetroidPrimeCommandProcessor(ClientCommandProcessor):
     def __init__(self, ctx: CommonContext):
         super().__init__(ctx)
 
+    def _cmd_deathlink(self):
+        """Toggle deathlink from client. Overrides default setting."""
+        if isinstance(self.ctx, MetroidPrimeContext):
+            new_value = True
+            if (self.tags["DeathLink"]):
+                new_value = False
+            Utils.async_start(self.ctx.update_death_link(
+                new_value), name="Update Deathlink")
+
 
 class MetroidPrimeContext(CommonContext):
     current_level_id = 0
     previous_level_id = 0
+    is_pending_death_link_reset = False
     command_processor = MetroidPrimeCommandProcessor
     game_interface: MetroidPrimeInterface
     game = "Metroid Prime"
@@ -30,13 +40,19 @@ class MetroidPrimeContext(CommonContext):
 
     def on_deathlink(self, data: Utils.Dict[str, Utils.Any]) -> None:
         super().on_deathlink(data)
-        logger.debug("Death link not implemented")
+        self.game_interface.set_alive(False)
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super(MetroidPrimeContext, self).server_auth(password_requested)
         await self.get_username()
         await self.send_connect()
+
+    def on_package(self, cmd: str, args: dict):
+        if cmd == "Connected":
+            if "death_link" in args["slot_data"]:
+                Utils.async_start(self.update_death_link(
+                    bool(args["slot_data"]["death_link"])))
 
 
 async def dolphin_sync_task(ctx: MetroidPrimeContext):
@@ -158,6 +174,15 @@ async def handle_check_goal_complete(ctx: MetroidPrimeContext):
         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
 
 
+async def handle_check_deathlink(ctx: MetroidPrimeContext):
+    health = ctx.game_interface.get_current_health()
+    if health <= 0 and ctx.is_pending_death_link_reset == False:
+        await ctx.send_death(ctx.player_names[ctx.slot] + " ran out of energy.")
+        ctx.is_pending_death_link_reset
+    elif health > 0 and ctx.is_pending_death_link_reset == True:
+        ctx.is_pending_death_link_reset = False
+
+
 async def _handle_game_ready(ctx: MetroidPrimeContext):
     if ctx.server:
         if not ctx.slot:
@@ -169,7 +194,7 @@ async def _handle_game_ready(ctx: MetroidPrimeContext):
         await handle_check_goal_complete(ctx)
 
         if "DeathLink" in ctx.tags:
-            logger.debug("DeathLink not implemented")
+            await handle_check_deathlink(ctx)
         await asyncio.sleep(0.5)
     else:
         logger.info("Waiting for player to connect to server")

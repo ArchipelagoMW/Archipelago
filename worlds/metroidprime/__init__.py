@@ -1,3 +1,4 @@
+from typing import Any, Dict, List
 from BaseClasses import Item, Tutorial, ItemClassification
 from .Items import MetroidPrimeItem, suit_upgrade_table, artifact_table, item_table, custom_suit_upgrade_table
 from .PrimeOptions import MetroidPrimeOptions
@@ -66,22 +67,26 @@ class MetroidPrimeWorld(World):
                 continue
             elif i == "Missile Expansion":
                 for j in range(0, 8):
-                    self.multiworld.itempool += [self.create_item('Missile Expansion', True)]
+                    self.multiworld.itempool += [
+                        self.create_item('Missile Expansion', True)]
                 items_added += 8
             elif i == "Spring Ball":
                 continue
             elif i == "Energy Tank":
                 for j in range(0, 8):
-                    self.multiworld.itempool += [self.create_item("Energy Tank", True)]
+                    self.multiworld.itempool += [
+                        self.create_item("Energy Tank", True)]
                 for j in range(0, 6):
-                    self.multiworld.itempool += [self.create_item("Energy Tank")]
+                    self.multiworld.itempool += [
+                        self.create_item("Energy Tank")]
                 items_added += 14
                 continue
             elif i == "Ice Trap":
                 continue
             elif i == "Power Bomb Expansion":
                 for j in range(0, 4):
-                    self.multiworld.itempool += [self.create_item("Power Bomb Expansion")]
+                    self.multiworld.itempool += [
+                        self.create_item("Power Bomb Expansion")]
                 items_added += 4
             else:
                 self.multiworld.itempool += [self.create_item(i)]
@@ -95,3 +100,15 @@ class MetroidPrimeWorld(World):
         set_rules(self.multiworld, self.player, every_location)
         self.multiworld.completion_condition[self.player] = lambda state: (
             state.can_reach("Mission Complete", "Region", self.player))
+
+    def fill_slot_data(self) -> Dict[str, Any]:
+
+        slot_data: Dict[str, Any] = {
+            "spring_ball": self.options.spring_ball.value,
+            "death_link": self.options.death_link.value,
+            "required_artifacts": self.options.required_artifacts.value,
+            "exclude_items": self.options.exclude_items.value,
+            "final_bosses": self.options.final_bosses.value,
+        }
+
+        return slot_data

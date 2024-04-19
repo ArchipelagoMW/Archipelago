@@ -1,5 +1,5 @@
 
-from Options import Toggle, Range, ItemDict, StartInventoryPool, Choice, PerGameCommonOptions
+from Options import DeathLink, Toggle, Range, ItemDict, StartInventoryPool, Choice, PerGameCommonOptions
 from dataclasses import dataclass
 
 
@@ -42,4 +42,5 @@ class MetroidPrimeOptions(PerGameCommonOptions):
     required_artifacts: RequiredArtifacts
     exclude_items: ExcludeItems
     final_bosses: FinalBosses
+    death_link: DeathLink
 
