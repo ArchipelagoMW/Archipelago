@@ -1,6 +1,6 @@
 import os
 import pkgutil
-from typing import ClassVar, Dict, Any
+from typing import ClassVar, Dict, Any, Optional
 
 import settings
 
@@ -91,7 +91,7 @@ class Yugioh06World(World):
         "Campaign Boss Beaten": ["Tier 1 Beaten", "Tier 2 Beaten", "Tier 3 Beaten", "Tier 4 Beaten", "Tier 5 Beaten"]
     }
 
-    def __init__(self, world: MultiWorld, player: int):
+    def __init__(self, world: MultiWorld,  player: Optional[int] = None):
         super().__init__(world, player)
         self.removed_challenges = None
         self.starting_booster = None
@@ -403,7 +403,7 @@ class Yugioh06World(World):
         self.rom_name = self.romName
         self.playerName = bytearray(self.multiworld.player_name[self.player], 'utf8')[:0x20]
         self.playerName.extend([0] * (0x20 - len(self.playerName)))
-        patch = YGO06ProcedurePatch()
+        patch = YGO06ProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
         patch.write_file("base_patch.bsdiff4", pkgutil.get_data(__name__, "patch.bsdiff4"))
         if self.is_draft_mode:
             patch.procedure.insert(1, ("apply_bsdiff4", ["draft_patch.bsdiff4"]))
