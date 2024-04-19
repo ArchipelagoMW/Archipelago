@@ -1512,8 +1512,6 @@ panel_doors:
     BLACK: 444604
     CLOSE: 444605
     RIGHT: 444606
-    CASTLE: 444607
-    Lookout: 444609
   Dread Hallway:
     DREAD: 444610
   Hedge Maze:
@@ -1589,6 +1587,8 @@ panel_doors:
     TRUSTED: 444658
   Outside The Wondrous:
     SHRINK: 444659
+  Hallway Room (1):
+    CASTLE: 444607
   Hallway Room (2):
     COUNTERCLOCKWISE: 444660
   Hallway Room (3):
@@ -1604,9 +1604,7 @@ panel_doors:
   Outside The Scientific:
     OPEN: 444666
   Compass Room:
-    Lookout: 444668
-  Hallway Room (1):
-    CASTLE: 444669
+    Lookout: 444609
 panel_groups:
   Tenacious Entrance Panels: 444585
   Symmetry Room Panels: 444600
