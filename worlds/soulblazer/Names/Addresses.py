@@ -119,7 +119,9 @@ CHEST_ADDRESSES = [
     [0xAC8E],
 ]
 
-# The bitflags for Chests in ram are in a different order than the chests in ROM.
+# The bitflags for Chests in ram are in a different order than the chests in ROM. The 8th bit is used by the game
+# for... something but is not actually part of the address, so any index >= 0x80 needs to have the high bit cleared
+# to be a valid index into memory.
 CHEST_FLAG_INDEXES = [
     0x00,
     0x05,
@@ -166,19 +168,19 @@ CHEST_FLAG_INDEXES = [
     0x41,
     0x3F,
     0x2B,
-    0xAC,
-    0xAD,
-    0xAE,
-    0xAF,
-    0xB0,
+    0x2C, # 0xAC & 0x7F,
+    0x2D, # 0xAD & 0x7F,
+    0x2E, # 0xAE & 0x7F,
+    0x2F, # 0xAF & 0x7F,
+    0x30, # 0xB0 & 0x7F,
     0x31,
     0x40,
-    0xB2,
-    0xB3,
-    0xC3,
-    0xB4,
-    0xBD,
-    0xBE,
+    0x32, # 0xB2 & 0x7F,
+    0x33, # 0xB3 & 0x7F,
+    0x33, # 0xC3 & 0x7F,
+    0x34, # 0xB4 & 0x7F,
+    0x3D, # 0xBD & 0x7F,
+    0x3E, # 0xBE & 0x7F,
     0x35,
     0x36,
     0x37,
@@ -190,35 +192,33 @@ CHEST_FLAG_INDEXES = [
 ]
 
 
-
 # WRAM Addresses
 
 
-EVENT_FLAGS = 0x001A5E + WRAM_START #Used to check for deathtoll defeat.
+EVENT_FLAGS = 0x001A5E + WRAM_START  # Used to check for deathtoll defeat.
 EVENT_FLAGS_WIN = EVENT_FLAGS + 0x1F
 EVENT_FLAGS_WIN_BIT = 0x02
-CHEST_OPENED_TABLE = 0x001A7E  + WRAM_START
-NPC_RELEASE_TABLE = 0x001ADE  + WRAM_START
-NPC_REWARD_TABLE = 0x001B13  + WRAM_START
+CHEST_OPENED_TABLE = 0x001A7E + WRAM_START
+NPC_RELEASE_TABLE = 0x001ADE + WRAM_START
+NPC_REWARD_TABLE = 0x001B13 + WRAM_START
 NPC_REWARD_TABLE_SIZE = 0x08
-PLAYER_NAME = 0x001B92  + WRAM_START
+PLAYER_NAME = 0x001B92 + WRAM_START
 PLAYER_NAME_SIZE = 0x09
-PLAYER_CURRENT_HEALTH = 0x001B88  + WRAM_START #TODO: use this for deathlink
-CURRENT_MAP_NUMBER = 0x001C6A  + WRAM_START
-RX_STATUS = 0x001DA0  + WRAM_START
+PLAYER_CURRENT_HEALTH = 0x001B88 + WRAM_START  # TODO: use this for deathlink
+CURRENT_MAP_NUMBER = 0x001C6A + WRAM_START
+RX_STATUS = 0x001DA0 + WRAM_START
 RX_INCREMENT = RX_STATUS + 1
 RX_ID = RX_INCREMENT + 1
 RX_UNUSED = RX_ID + 1
 RX_OPERAND = RX_UNUSED + 1
 RX_SENDER = RX_OPERAND + 2
 RX_SENDER_SIZE = 17
-TX_STATUS = 0x001DC0  + WRAM_START
+TX_STATUS = 0x001DC0 + WRAM_START
 TX_ITEM_NAME = TX_STATUS + 1
 TX_NAME_SIZE = 23
 TX_ADDRESSEE = TX_ITEM_NAME + TX_NAME_SIZE
 TX_ADDRESSEE_SIZE = 19
 
-LAIR_SPAWN_TABLE = 0x010203  + WRAM_START
+LAIR_SPAWN_TABLE = 0x010203 + WRAM_START
 LAIR_SPAWN_TABLE_SIZE = 0x200
-RECEIVE_COUNT = 0x001AD3  + WRAM_START
-
+RECEIVE_COUNT = 0x001AD3 + WRAM_START

@@ -116,6 +116,7 @@ location_dependencies: Dict[str, List[str]] = {
     NPCRewardName.SHIELD_BRACELET_MOLE: [NPCName.MOLE, NPCName.MOLE_SHIELD_BRACELET, ItemName.MOLESRIBBON],
     NPCRewardName.PSYCHO_SWORD_SQUIRREL: [NPCName.SQUIRREL_PSYCHO_SWORD, ItemName.DELICIOUSSEEDS],
     NPCRewardName.EMBLEM_C_SQUIRREL: [NPCName.SQUIRREL_EMBLEM_C, NPCName.SQUIRREL_PSYCHO_SWORD],
+    NPCRewardName.GREENWOODS_GUARDIAN: [NPCName.GREENWOODS_GUARDIAN],
     ChestName.GREENWOOD_ICE_ARMOR: [NPCName.MOLE, NPCName.SQUIRREL_ICE_ARMOR, ItemName.DREAMROD],
     ChestName.GREENWOOD_TUNNELS: [NPCName.MONMO, NPCName.MOLE3],
     # Act 3 - St Elles
@@ -124,11 +125,11 @@ location_dependencies: Dict[str, List[str]] = {
     NPCRewardName.REDHOT_STICK_MERMAID: [NPCName.MERMAID_RED_HOT_STICK],
     NPCRewardName.LUE: [NPCName.LUE, NPCName.DOLPHIN_SAVES_LUE, NPCName.MERMAID_PEARL],
     # Logical mermaids tears. TODO: move to separate list for optional logic toggle
+    NPCRewardName.MERMAID_QUEEN: [NPCName.MERMAID_QUEEN],
     LairName.MERMAID_PEARL: [ItemName.MERMAIDSTEARS],
     LairName.MERMAID_STATUE_BLESTER: [ItemName.MERMAIDSTEARS],
     ChestName.DUREAN_CRITICAL_SWORD: [ItemName.MERMAIDSTEARS],
     # Act 4 - Mountain of Souls
-    NPCRewardName.EMBLEM_E_SNAIL: [NPCName.SNAIL_EMBLEM_E],
     NPCRewardName.MOUNTAIN_KING: [
         NPCName.DANCING_GRANDMA,
         NPCName.DANCING_GRANDMA2,
