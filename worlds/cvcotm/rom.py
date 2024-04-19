@@ -12,6 +12,7 @@ import pkgutil
 
 from .data import patches
 from .locations import get_location_info, get_all_location_names
+from .text import cvcotm_string_to_bytearray, cvcotm_text_wrap
 from settings import get_settings
 
 if TYPE_CHECKING:
@@ -153,7 +154,23 @@ class CVCotMPatchExtensions(APPatchExtension):
         rom_data.write_bytes(0x7FFF20, patches.remote_textbox_shower)
 
         # Change the pointer to the DSS tutorial text to instead point to our AP messaging text location.
-        rom_data.write_bytes(0x6710BC, [0x00, 0xFC, 0x7F, 0x08])
+        rom_data.write_bytes(0x6710BC, [0x00, 0xEB, 0x7C, 0x08])
+
+        # Write all the data for the missing ASCII text characters.
+        for offset, data in patches.missing_char_data.items():
+            rom_data.write_bytes(offset, data)
+
+        # Change all the menu item name strings that use the overwritten character IDs to use a different, equivalent
+        # space character ID.
+        rom_data.write_bytes(0x391A1B, [0xAD, 0xAD, 0xAD, 0xAD, 0xAD, 0xAD])
+        rom_data.write_bytes(0x391CB6, [0xAD, 0xAD, 0xAD])
+        rom_data.write_bytes(0x391CC1, [0xAD, 0xAD, 0xAD])
+        rom_data.write_bytes(0x391CCB, [0xAD, 0xAD, 0xAD, 0xAD])
+        rom_data.write_bytes(0x391CD5, [0xAD, 0xAD, 0xAD, 0xAD, 0xAD])
+        rom_data.write_byte(0x391CE1, 0xAD)
+
+        test_text = cvcotm_text_wrap("Howdy 「@everyone」!\nHow do you do?\nNice\n「weather」\ntoday!\nPretty\ngr8\nm8\nI\nr8\n8/8\nHave a free trial of the critically acclamied MMORPG 「Final Fantasy XIV」, including the entirety of 「A Realm Reborn」 and the award-winning 「Heavansward」 and 「Stormblood」 expansions up to 「level 70」 with 「no restrictions on playtime」! REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE「EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE」EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE「EEEEEEE」EEEEE「EEEEEEEEEEEEEEEEEEEE」EEEEEEE「EEEEEE」EEEEEEEEEEEEEE!!!「!!!」!!!!「1」◊", 21, 3)
+        rom_data.write_bytes(0x7CEB00, cvcotm_string_to_bytearray(test_text, "big top", 3, 1))
 
         return rom_data.get_bytes()
 

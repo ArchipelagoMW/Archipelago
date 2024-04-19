@@ -41,6 +41,8 @@ class CVCotMRules:
             "Kick": lambda state: state.has(iname.kick_boots, self.player) or state.has(iname.roc_wing, self.player),
             "Kick AND Freeze": lambda state: (state.has(iname.kick_boots, self.player) and self.has_ice_or_stone(
                 state)) or state.has(iname.roc_wing, self.player),
+            "Push AND Roc": lambda state: state.has(iname.heavy_ring, self.player) and state.has(iname.roc_wing,
+                                                                                                 self.player),
             "Freeze": lambda state: self.has_ice_or_stone(state) or state.has(iname.roc_wing, self.player),
             "Cleansing": self.can_touch_water,
             "Iron Maiden": self.broke_iron_maidens,
