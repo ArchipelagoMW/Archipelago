@@ -17,46 +17,46 @@
 
 # Geyser Rock
 locGR_scoutTable = {
-    101: "GR: Scout Fly On Ground, Front",
-    102: "GR: Scout Fly On Ground, Back",
-    103: "GR: Scout Fly On Left Ledge",
-    104: "GR: Scout Fly On Right Ledge",
-    105: "GR: Scout Fly On Middle Ledge, Left",
-    106: "GR: Scout Fly On Middle Ledge, Right",
-    107: "GR: Scout Fly On Top Ledge"
+    95: "GR: Scout Fly On Ground, Front",
+    327775: "GR: Scout Fly On Ground, Back",
+    393311: "GR: Scout Fly On Left Ledge",
+    65631: "GR: Scout Fly On Right Ledge",
+    262239: "GR: Scout Fly On Middle Ledge, Left",
+    131167: "GR: Scout Fly On Middle Ledge, Right",
+    196703: "GR: Scout Fly On Top Ledge"
 }
 
 # Sandover Village
 locSV_scoutTable = {
-    108: "SV: Scout Fly In Fisherman's House",
-    109: "SV: Scout Fly In Mayor's House",
-    110: "SV: Scout Fly Under Bridge",
-    111: "SV: Scout Fly Behind Sculptor's House",
-    112: "SV: Scout Fly Overlooking Farmer's House",
-    113: "SV: Scout Fly Near Oracle",
-    114: "SV: Scout Fly In Farmer's House"
+    262219: "SV: Scout Fly In Fisherman's House",
+    327755: "SV: Scout Fly In Mayor's House",
+    131147: "SV: Scout Fly Under Bridge",
+    65611: "SV: Scout Fly Behind Sculptor's House",
+    75: "SV: Scout Fly Overlooking Farmer's House",
+    393291: "SV: Scout Fly Near Oracle",
+    196683: "SV: Scout Fly In Farmer's House"
 }
 
 # Forbidden Jungle
 locFJ_scoutTable = {
-    115: "FJ: Scout Fly At End Of Path",
-    116: "FJ: Scout Fly On Spiral Of Stumps",
-    117: "FJ: Scout Fly Under Bridge",
-    118: "FJ: Scout Fly At End Of River",
-    119: "FJ: Scout Fly Behind Lurker Machine",
-    120: "FJ: Scout Fly Around Temple Spire",
-    121: "FJ: Scout Fly On Top Of Temple"
+    393223: "FJ: Scout Fly At End Of Path",
+    262151: "FJ: Scout Fly On Spiral Of Stumps",
+    7: "FJ: Scout Fly Near Dark Eco Boxes",
+    196615: "FJ: Scout Fly At End Of River",
+    131079: "FJ: Scout Fly Behind Lurker Machine",
+    327687: "FJ: Scout Fly Around Temple Spire",
+    65543: "FJ: Scout Fly On Top Of Temple"
 }
 
 # Sentinel Beach
 locSB_scoutTable = {
-    122: "SB: Scout Fly At Entrance",
-    123: "SB: Scout Fly Overlooking Locked Boxes",
-    124: "SB: Scout Fly On Path To Flut Flut",
-    125: "SB: Scout Fly Under Wood Pillars",
-    126: "SB: Scout Fly Overlooking Blue Eco Vents",
-    127: "SB: Scout Fly Overlooking Green Eco Vents",
-    128: "SB: Scout Fly On Sentinel"
+    327700: "SB: Scout Fly At Entrance",
+    20: "SB: Scout Fly Overlooking Locked Boxes",
+    65556: "SB: Scout Fly On Path To Flut Flut",
+    262164: "SB: Scout Fly Under Wood Pillars",
+    196628: "SB: Scout Fly Overlooking Blue Eco Vent",
+    131092: "SB: Scout Fly Overlooking Green Eco Vents",
+    393236: "SB: Scout Fly On Sentinel"
 }
 
 # Misty Island
