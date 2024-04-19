@@ -132,7 +132,9 @@ class LingoWorld(World):
     def fill_slot_data(self):
         slot_options = [
             "death_link", "victory_condition", "shuffle_colors", "shuffle_doors", "shuffle_paintings", "shuffle_panels",
-            "mastery_achievements", "level_2_requirement", "location_checks", "early_color_hallways", "group_doors"
+            "enable_pilgrimage", "sunwarp_access", "mastery_achievements", "level_2_requirement", "location_checks",
+            "early_color_hallways", "pilgrimage_allows_roof_access", "pilgrimage_allows_paintings", "shuffle_sunwarps",
+            "group_doors"
         ]
 
         slot_data = {
@@ -142,6 +144,9 @@ class LingoWorld(World):
 
         if self.options.shuffle_paintings:
             slot_data["painting_entrance_to_exit"] = self.player_logic.painting_mapping
+
+        if self.options.shuffle_sunwarps:
+            slot_data["sunwarp_permutation"] = self.player_logic.sunwarp_mapping
 
         return slot_data
 
