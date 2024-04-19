@@ -147,7 +147,6 @@ def main(args=None, callback=ERmain):
     erargs = parse_arguments(['--multi', str(args.multi)])
     erargs.seed = seed
     erargs.plando_options = args.plando
-    erargs.glitch_triforce = options.generator.glitch_triforce_room
     erargs.spoiler = args.spoiler
     erargs.race = args.race
     erargs.outputname = seed_name
