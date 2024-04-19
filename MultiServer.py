@@ -656,7 +656,8 @@ class Context:
         else:
             return self.player_names[team, slot]
 
-    def notify_hints(self, team: int, hints: typing.List[NetUtils.Hint], only_new: bool = False):
+    def notify_hints(self, team: int, hints: typing.List[NetUtils.Hint], only_new: bool = False,
+                     recipients: typing.Sequence[int] = None):
         """Send and remember hints."""
         if only_new:
             hints = [hint for hint in hints if hint not in self.hints[team, hint.finding_player]]
@@ -685,12 +686,13 @@ class Context:
         for slot in new_hint_events:
             self.on_new_hint(team, slot)
         for slot, hint_data in concerns.items():
-            clients = self.clients[team].get(slot)
-            if not clients:
-                continue
-            client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
-            for client in clients:
-                async_start(self.send_msgs(client, client_hints))
+            if recipients is None or slot in recipients:
+                clients = self.clients[team].get(slot)
+                if not clients:
+                    continue
+                client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
+                for client in clients:
+                    async_start(self.send_msgs(client, client_hints))
 
     # "events"
 
@@ -705,14 +707,17 @@ class Context:
         self.save()  # save goal completion flag
 
     def on_new_hint(self, team: int, slot: int):
-        key: str = f"_read_hints_{team}_{slot}"
-        targets: typing.Set[Client] = set(self.stored_data_notification_clients[key])
-        if targets:
-            self.broadcast(targets, [{"cmd": "SetReply", "key": key, "value": self.hints[team, slot]}])
+        self.on_changed_hints(team, slot)
         self.broadcast(self.clients[team][slot], [{
             "cmd": "RoomUpdate",
             "hint_points": get_slot_points(self, team, slot)
         }])
+
+    def on_changed_hints(self, team: int, slot: int):
+        key: str = f"_read_hints_{team}_{slot}"
+        targets: typing.Set[Client] = set(self.stored_data_notification_clients[key])
+        if targets:
+            self.broadcast(targets, [{"cmd": "SetReply", "key": key, "value": self.hints[team, slot]}])
 
     def on_client_status_change(self, team: int, slot: int):
         key: str = f"_read_client_status_{team}_{slot}"
@@ -973,7 +978,10 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
             "hint_points": get_slot_points(ctx, team, slot),
             "checked_locations": new_locations,  # send back new checks only
         }])
-
+        old_hints = ctx.hints[team, slot].copy()
+        ctx.recheck_hints(team, slot)
+        if old_hints != ctx.hints[team, slot]:
+            ctx.on_changed_hints(team, slot)
         ctx.save()
 
 
@@ -1050,17 +1058,19 @@ def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bo
         if picks[0][1] == 100:
             return picks[0][0], True, "Perfect Match"
         elif picks[0][1] < 75:
-            return picks[0][0], False, f"Didn't find something that closely matches, " \
-                                       f"did you mean {picks[0][0]}? ({picks[0][1]}% sure)"
+            return picks[0][0], False, f"Didn't find something that closely matches '{input_text}', " \
+                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
         elif dif > 5:
             return picks[0][0], True, "Close Match"
         else:
-            return picks[0][0], False, f"Too many close matches, did you mean {picks[0][0]}? ({picks[0][1]}% sure)"
+            return picks[0][0], False, f"Too many close matches for '{input_text}', " \
+                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
     else:
         if picks[0][1] > 90:
             return picks[0][0], True, "Only Option Match"
         else:
-            return picks[0][0], False, f"Did you mean {picks[0][0]}? ({picks[0][1]}% sure)"
+            return picks[0][0], False, f"Didn't find something that closely matches '{input_text}', " \
+                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
 
 
 class CommandMeta(type):
@@ -1429,9 +1439,13 @@ class ClientMessageProcessor(CommonCommandProcessor):
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
                      self.ctx.hints[self.client.team, self.client.slot]}
             self.ctx.hints[self.client.team, self.client.slot] = hints
-            self.ctx.notify_hints(self.client.team, list(hints))
+            self.ctx.notify_hints(self.client.team, list(hints), recipients=(self.client.slot,))
             self.output(f"A hint costs {self.ctx.get_hint_cost(self.client.slot)} points. "
                         f"You have {points_available} points.")
+            if hints and Utils.version_tuple < (0, 5, 0):
+                self.output("It was recently changed, so that the above hints are only shown to you. "
+                            "If you meant to alert another player of an above hint, "
+                            "please let them know of the content or to run !hint themselves.")
             return True
 
         elif input_text.isnumeric():
@@ -1958,7 +1972,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     @mark_raw
     def _cmd_forbid_release(self, player_name: str) -> bool:
-        """"Disallow the specified player from using the !release command."""
+        """Disallow the specified player from using the !release command."""
         player = self.resolve_player(player_name)
         if player:
             team, slot, name = player

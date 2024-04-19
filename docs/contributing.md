@@ -17,7 +17,17 @@ It is recommended that automated github actions are turned on in your fork to ha
 You can turn them on here:  
 ![Github actions example](./img/github-actions-example.png)
 
-Other than these requests, we tend to judge code on a case by case basis. 
+* **When reviewing PRs, please leave a message about what was done.**
+We don't have full test coverage, so manual testing can help.
+For code changes that could affect multiple worlds or that could have changes in unexpected code paths, manual testing
+or checking if all code paths are covered by automated tests is desired. The original author may not have been able
+to test all possibly affected worlds, or didn't know it would affect another world. In such cases, it is helpful to
+state which games or settings were rolled, if any.
+Please also tell us if you looked at code, just did functional testing, did both, or did neither.
+If testing the PR depends on other PRs, please state what you merged into what for testing.
+We cannot determine what "LGTM" means without additional context, so that should not be the norm.
+
+Other than these requests, we tend to judge code on a case-by-case basis. 
 
 For contribution to the website, please refer to the [WebHost README](/WebHostLib/README.md).
 

@@ -7,7 +7,7 @@ from .Options import MaxSciencePack
 def make_pools() -> Dict[str, List[str]]:
     pools: Dict[str, List[str]] = {}
     for i, pack in enumerate(MaxSciencePack.get_ordered_science_packs(), start=1):
-        max_needed: int = 1999
+        max_needed: int = 999
         prefix: str = f"AP-{i}-"
         pools[pack] = [prefix + str(x).upper().zfill(3) for x in range(1, max_needed + 1)]
     return pools
