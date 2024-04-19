@@ -683,7 +683,6 @@ campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] =
         SC2Mission.THE_ESSENCE_OF_ETERNITY: "The Essence of Eternity: Victory",
     },
     SC2Campaign.NCO: {
-        SC2Mission.END_GAME: "End Game: Victory",
         SC2Mission.FLASHPOINT: "Flashpoint: Victory",
         SC2Mission.DARK_SKIES: "Dark Skies: Victory",
         SC2Mission.NIGHT_TERRORS: "Night Terrors: Victory",
