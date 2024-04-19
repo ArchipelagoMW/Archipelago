@@ -1,6 +1,6 @@
 import os
 import pkgutil
-from typing import ClassVar, Dict, Any, Optional
+from typing import ClassVar, Dict, Any
 
 import settings
 
@@ -91,7 +91,7 @@ class Yugioh06World(World):
         "Campaign Boss Beaten": ["Tier 1 Beaten", "Tier 2 Beaten", "Tier 3 Beaten", "Tier 4 Beaten", "Tier 5 Beaten"]
     }
 
-    def __init__(self, world: MultiWorld,  player: Optional[int] = None):
+    def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
         self.removed_challenges = None
         self.starting_booster = None
