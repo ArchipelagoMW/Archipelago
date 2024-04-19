@@ -168,9 +168,9 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     connected_regions.update(add_dependent_regions(start_region, logic_rules))
 
     if world.options.entrance_rando.value in EntranceRando.options:
-        plando_connections = world.seed_groups[world.options.entrance_rando.value]["plando"]
-    else:
         plando_connections = world.multiworld.plando_connections[world.player]
+    else:
+        plando_connections = world.seed_groups[world.options.entrance_rando.value]["plando"]
 
     # universal tracker support stuff, don't need to care about region dependency
     if hasattr(world.multiworld, "re_gen_passthrough"):
