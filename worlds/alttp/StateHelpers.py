@@ -106,6 +106,12 @@ def can_bomb_or_bonk(state: CollectionState, player: int) -> bool:
     return state.has("Pegasus Boots", player) or can_use_bombs(state, player)
 
 
+def can_activate_crystal_switch(state: CollectionState, player: int) -> bool:
+    return (has_melee_weapon(state, player) or can_use_bombs(state, player) or can_shoot_arrows(state, player)
+            or state.has_any(["Hookshot", "Cane of Somaria", "Cane of Byrna", "Fire Rod", "Ice Rod", "Blue Boomerang",
+                              "Red Boomerang"], player))
+
+
 def can_kill_most_things(state: CollectionState, player: int, enemies: int = 5) -> bool:
     if state.multiworld.enemy_shuffle[player]:
         # I don't fully understand Enemizer's logic for placing enemies in spots where they need to be killable, if any.
@@ -172,6 +178,7 @@ def can_melt_things(state: CollectionState, player: int) -> bool:
 
 def has_misery_mire_medallion(state: CollectionState, player: int) -> bool:
     return state.has(state.multiworld.worlds[player].required_medallions[0], player)
+
 
 def has_turtle_rock_medallion(state: CollectionState, player: int) -> bool:
     return state.has(state.multiworld.worlds[player].required_medallions[1], player)
