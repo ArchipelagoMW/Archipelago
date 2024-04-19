@@ -686,7 +686,7 @@ def get_pool_core(world, player: int):
         else:  # available
             triforce_pieces = world.triforce_pieces_available[player].value
 
-        triforce_pieces = min(90, max(triforce_pieces, world.triforce_pieces_required[player].value))
+        triforce_pieces = int(min(90, max(triforce_pieces, world.triforce_pieces_required[player].value)))
 
         pieces_in_core = min(extraitems, triforce_pieces)
         additional_pieces_to_place = triforce_pieces - pieces_in_core
