@@ -2,7 +2,7 @@ import typing
 
 from BaseClasses import MultiWorld
 from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, StartInventoryPool, PlandoBosses,\
-    FreeText
+    FreeText, Removed
 
 
 class GlitchesRequired(Choice):
@@ -156,7 +156,7 @@ class OpenPyramid(Choice):
             return world.goal[player].current_key in {'crystals', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'ganon_pedestal'}
         elif self.value == self.option_auto:
             return world.goal[player].current_key in {'crystals', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'ganon_pedestal'} \
-            and (world.entrance_shuffle[player] in {'vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed'} or not
+            and (world.entrance_shuffle[player].current_key in {'vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed'} or not
                  world.shuffle_ganon)
         elif self.value == self.option_open:
             return True
@@ -716,9 +716,8 @@ class BeemizerTrapChance(BeemizerRange):
     display_name = "Beemizer Trap Chance"
 
 
-class AllowCollect(Toggle):
-    """Allows for !collect / co-op to auto-open chests containing items for other players.
-    Off by default, because it currently crashes on real hardware."""
+class AllowCollect(DefaultOnToggle):
+    """Allows for !collect / co-op to auto-open chests containing items for other players."""
     display_name = "Allow Collection of checks for other players"
 
 
@@ -796,4 +795,9 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "music": Music,
     "reduceflashing": ReduceFlashing,
     "triforcehud": TriforceHud,
+
+    # removed:
+    "goals": Removed,
+    "smallkey_shuffle": Removed,
+    "bigkey_shuffle": Removed,
 }

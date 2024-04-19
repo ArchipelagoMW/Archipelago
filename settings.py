@@ -1,6 +1,6 @@
 """
 Application settings / host.yaml interface using type hints.
-This is different from player settings.
+This is different from player options.
 """
 
 import os.path
@@ -200,7 +200,7 @@ class Group:
     def _dump_value(cls, value: Any, f: TextIO, indent: str) -> None:
         """Write a single yaml line to f"""
         from Utils import dump, Dumper as BaseDumper
-        yaml_line: str = dump(value, Dumper=cast(BaseDumper, cls._dumper))
+        yaml_line: str = dump(value, Dumper=cast(BaseDumper, cls._dumper), width=2**31-1)
         assert yaml_line.count("\n") == 1, f"Unexpected input for yaml dumper: {value}"
         f.write(f"{indent}{yaml_line}")
 

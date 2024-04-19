@@ -207,10 +207,10 @@ class CrestShuffle(Toggle):
 
 
 class MapShuffleSeed(FreeText):
-    """If this is a number, it will be used as a set seed number for Map, Crest, and Battlefield Reward shuffles.
+    """If this is a number, it will be used as a set seed number for Map, Crest, Battlefield Reward, and Companion shuffles.
     If this is "random" the seed will be chosen randomly. If it is any other text, it will be used as a seed group name.
     All players using the same seed group name will get the same shuffle results, as long as their Map Shuffle,
-    Crest Shuffle, and Shuffle Battlefield Rewards settings are the same."""
+    Crest Shuffle, Shuffle Battlefield Rewards, Companion Shuffle, and Kaeli's Mom settings are the same."""
     display_name = "Map Shuffle Seed"
     default = "random"
 
