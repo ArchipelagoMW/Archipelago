@@ -231,7 +231,7 @@ class MM2World(World):
 
     def generate_output(self, output_directory: str) -> None:
         try:
-            patch = MM2ProcedurePatch()
+            patch = MM2ProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
             patch_rom(self, patch)
 
             self.rom_name = patch.name
