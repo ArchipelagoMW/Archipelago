@@ -87,7 +87,8 @@ KEY_LOCATION_FLAGS = [
 ]
 KEY_LOCATION_FLAG_MAP = {data.locations[location_name].flag: location_name for location_name in KEY_LOCATION_FLAGS}
 
-LEGENDARY_NAMES = {
+# .lower() keys for backward compatibility between 0.4.5 and 0.4.6
+LEGENDARY_NAMES = {k.lower(): v for k, v in {
     "Groudon": "GROUDON",
     "Kyogre": "KYOGRE",
     "Rayquaza": "RAYQUAZA",
@@ -98,9 +99,9 @@ LEGENDARY_NAMES = {
     "Registeel": "REGISTEEL",
     "Mew": "MEW",
     "Deoxys": "DEOXYS",
-    "Ho-oh": "HO_OH",
+    "Ho-Oh": "HO_OH",
     "Lugia": "LUGIA",
-}
+}.items()}
 
 DEFEATED_LEGENDARY_FLAG_MAP = {data.constants[f"FLAG_DEFEATED_{name}"]: name for name in LEGENDARY_NAMES.values()}
 CAUGHT_LEGENDARY_FLAG_MAP = {data.constants[f"FLAG_CAUGHT_{name}"]: name for name in LEGENDARY_NAMES.values()}
@@ -311,7 +312,7 @@ class PokemonEmeraldClient(BizHawkClient):
 
                 num_caught = 0
                 for legendary, is_caught in caught_legendaries.items():
-                    if is_caught and legendary in [LEGENDARY_NAMES[name] for name in ctx.slot_data["allowed_legendary_hunt_encounters"]]:
+                    if is_caught and legendary in [LEGENDARY_NAMES[name.lower()] for name in ctx.slot_data["allowed_legendary_hunt_encounters"]]:
                         num_caught += 1
 
                 if num_caught >= ctx.slot_data["legendary_hunt_count"]:

@@ -10,10 +10,6 @@ class AdvData(typing.NamedTuple):
 class ChecksFinderAdvancement(Location):
     game: str = "ChecksFinder"
 
-    def __init__(self, player: int, name: str, address: typing.Optional[int], parent):
-        super().__init__(player, name, address, parent)
-        self.event = not address
-
 
 advancement_table = {
     "Tile 1": AdvData(81000, 'Board'),
