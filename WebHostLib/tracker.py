@@ -422,11 +422,11 @@ from worlds import network_data_package
 
 if "Factorio" in network_data_package["games"]:
     def render_Factorio_multiworld_tracker(tracker_data: TrackerData, enabled_trackers: List[str]):
-        inventories: Dict[TeamPlayer, Dict[int, int]] = {
-            (team, player): {
+        inventories: Dict[TeamPlayer, collections.Counter[str]] = {
+            (team, player): collections.Counter({
                 tracker_data.item_id_to_name["Factorio"][item_id]: count
                 for item_id, count in tracker_data.get_player_inventory_counts(team, player).items()
-            } for team, players in tracker_data.get_all_slots().items() for player in players
+            }) for team, players in tracker_data.get_all_slots().items() for player in players
             if tracker_data.get_player_game(team, player) == "Factorio"
         }
 
