@@ -20,5 +20,5 @@ def robots():
     if not app.config["ASSET_RIGHTS"]:
         return app.send_static_file('robots.txt')
 
-    # Send 404 if this is the
+    # Send 404 if the host has affirmed this to be the official WebHost
     abort(404)
