@@ -154,10 +154,7 @@ class WitnessPlayerItems:
         """
         output: Set[str] = set()
         if self._world.options.shuffle_symbols:
-            if self._world.options.shuffle_doors:
-                output = {"Dots", "Black/White Squares", "Symmetry"}
-            else:
-                output = {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"}
+            output = {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"}
 
             if self._world.options.shuffle_discarded_panels:
                 if self._world.options.puzzle_randomization == "sigma_expert":
