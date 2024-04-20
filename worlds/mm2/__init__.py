@@ -4,7 +4,8 @@ from typing import Dict, Any, TYPE_CHECKING, Optional, Sequence, Tuple, ClassVar
 
 from BaseClasses import Tutorial, ItemClassification, MultiWorld, Item, Location
 from worlds.AutoWorld import World, WebWorld
-from .Names import dr_wily
+from .Names import (dr_wily, heat_man_stage, air_man_stage, wood_man_stage, bubble_man_stage, quick_man_stage,
+                    flash_man_stage, metal_man_stage, crash_man_stage)
 from .Items import (item_table, item_names, MM2Item, filler_item_weights, robot_master_weapon_table,
                     stage_access_table, item_item_table, lookup_item_to_id)
 from .Locations import (MM2Location, mm2_regions, MM2Region, energy_pickups, etank_1ups, lookup_location_to_id,
@@ -196,14 +197,14 @@ class MM2World(World):
         if self.multiworld.players > 1:
             return  # Don't need to change anything on a multi gen, fill should be able to solve it with a 4 sphere 1
         rbm_to_item = {
-            0: Names.heat_man_stage,
-            1: Names.air_man_stage,
-            2: Names.wood_man_stage,
-            3: Names.bubble_man_stage,
-            4: Names.quick_man_stage,
-            5: Names.flash_man_stage,
-            6: Names.metal_man_stage,
-            7: Names.crash_man_stage
+            0: heat_man_stage,
+            1: air_man_stage,
+            2: wood_man_stage,
+            3: bubble_man_stage,
+            4: quick_man_stage,
+            5: flash_man_stage,
+            6: metal_man_stage,
+            7: crash_man_stage
         }
         affected_rbm = [2, 3]  # Wood and Bubble will always have this happen
         possible_rbm = [1, 5]  # Air and Flash are always valid targets, due to Item 2/3 receive

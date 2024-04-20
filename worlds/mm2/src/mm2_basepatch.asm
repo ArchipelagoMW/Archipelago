@@ -96,10 +96,50 @@ StartHeight:
 PasswordText:
     db $40, $40, $40, $40, $40, $40, $40, $40
 
+%org($AF6C, $0D)
+ContinueHeight:
+    db $AB ;  split height between 2 remaining options
+
+%org($AF77, $0D)
+StageSelectHeight:
+    db $EB ; split between 2 remaining options
+
+%org($AF88, $0D)
+GameOverPasswordText:
+    db $40, $40, $40, $40, $40, $40, $40, $40
+
+%org($AFA5, $0D)
+GetEquippedPasswordText:
+    db $40, $40, $40, $40, $40, $40, $40, $40
+
+%org($AFAE, $0D)
+GetEquippedStageSelect:
+    db $26, $EA
+
+%org($B195, $0D)
+GameOverPasswordUp:
+    LDA #$01 ; originally 02, removing last option
+
+%org($B19F, $0D)
+GameOverPassword:
+    CMP #$02 ; originally 03, remove the last option
+
+%org($B1ED, $0D)
+FixupGameOverArrows:
+    db $68, $78
+
 %org($BB74, $0D)
 GetEquippedStage:
     JSR StageGetEquipped
     NOP #13
+
+%org($BBD9, $0D)
+GetEquippedDefault:
+    LDA #$01
+
+%org($BC01, $0D)
+GetEquippedPasswordRemove:
+    ORA #$01 ; originally EOR #$01, we always want 1 here
 
 %org($BCF1, $0D)
 GetEquippedItem:
@@ -114,6 +154,10 @@ GetEquippedItem:
 WilyProgress:
     JSR StoreWilyProgress
     NOP
+
+%org($BF6F, $0D)
+GetEquippedStageSelectHeight:
+    db $B8
 
 %org($805B, $0E)
 InitalizeStartingRBM:
