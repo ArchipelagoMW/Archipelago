@@ -1,78 +1,46 @@
 from BaseClasses import Location
-from .GameID import game_id, game_name, cell_offset, fly_offset
-from .locs import CellLocations, ScoutLocations
+from .GameID import jak1_name
+from .locs import CellLocations as Cells, ScoutLocations as Scouts
 
 
 class JakAndDaxterLocation(Location):
-    game: str = game_name
+    game: str = jak1_name
 
 
 # All Locations
 # Because all items in Jak And Daxter are unique and do not regenerate, we can use this same table as our item table.
-# Each Item ID == its corresponding Location ID.  And then we only have to do this ugly math once.
+# Each Item ID == its corresponding Location ID. While we're here, do all the ID conversions needed.
 location_table = {
-    **{game_id + cell_offset + k: CellLocations.locGR_cellTable[k]
-       for k in CellLocations.locGR_cellTable},
-    **{game_id + cell_offset + k: CellLocations.locSV_cellTable[k]
-       for k in CellLocations.locSV_cellTable},
-    **{game_id + cell_offset + k: CellLocations.locFJ_cellTable[k]
-       for k in CellLocations.locFJ_cellTable},
-    **{game_id + cell_offset + k: CellLocations.locSB_cellTable[k]
-       for k in CellLocations.locSB_cellTable},
-    **{game_id + cell_offset + k: CellLocations.locMI_cellTable[k]
-       for k in CellLocations.locMI_cellTable},
-    **{game_id + cell_offset + k: CellLocations.locFC_cellTable[k]
-       for k in CellLocations.locFC_cellTable},
-    **{game_id + cell_offset + k: CellLocations.locRV_cellTable[k]
-       for k in CellLocations.locRV_cellTable},
-    **{game_id + cell_offset + k: CellLocations.locPB_cellTable[k]
-       for k in CellLocations.locPB_cellTable},
-    **{game_id + cell_offset + k: CellLocations.locLPC_cellTable[k]
-       for k in CellLocations.locLPC_cellTable},
-    **{game_id + cell_offset + k: CellLocations.locBS_cellTable[k]
-       for k in CellLocations.locBS_cellTable},
-    **{game_id + cell_offset + k: CellLocations.locMP_cellTable[k]
-       for k in CellLocations.locMP_cellTable},
-    **{game_id + cell_offset + k: CellLocations.locVC_cellTable[k]
-       for k in CellLocations.locVC_cellTable},
-    **{game_id + cell_offset + k: CellLocations.locSC_cellTable[k]
-       for k in CellLocations.locSC_cellTable},
-    **{game_id + cell_offset + k: CellLocations.locSM_cellTable[k]
-       for k in CellLocations.locSM_cellTable},
-    **{game_id + cell_offset + k: CellLocations.locLT_cellTable[k]
-       for k in CellLocations.locLT_cellTable},
-    **{game_id + cell_offset + k: CellLocations.locGMC_cellTable[k]
-       for k in CellLocations.locGMC_cellTable},
-    **{game_id + fly_offset + k: ScoutLocations.locGR_scoutTable[k]
-       for k in ScoutLocations.locGR_scoutTable},
-    **{game_id + fly_offset + k: ScoutLocations.locSV_scoutTable[k]
-       for k in ScoutLocations.locSV_scoutTable},
-    **{game_id + fly_offset + k: ScoutLocations.locFJ_scoutTable[k]
-       for k in ScoutLocations.locFJ_scoutTable},
-    **{game_id + fly_offset + k: ScoutLocations.locSB_scoutTable[k]
-       for k in ScoutLocations.locSB_scoutTable},
-    **{game_id + fly_offset + k: ScoutLocations.locMI_scoutTable[k]
-       for k in ScoutLocations.locMI_scoutTable},
-    **{game_id + fly_offset + k: ScoutLocations.locFC_scoutTable[k]
-       for k in ScoutLocations.locFC_scoutTable},
-    **{game_id + fly_offset + k: ScoutLocations.locRV_scoutTable[k]
-       for k in ScoutLocations.locRV_scoutTable},
-    **{game_id + fly_offset + k: ScoutLocations.locPB_scoutTable[k]
-       for k in ScoutLocations.locPB_scoutTable},
-    **{game_id + fly_offset + k: ScoutLocations.locLPC_scoutTable[k]
-       for k in ScoutLocations.locLPC_scoutTable},
-    **{game_id + fly_offset + k: ScoutLocations.locBS_scoutTable[k]
-       for k in ScoutLocations.locBS_scoutTable},
-    **{game_id + fly_offset + k: ScoutLocations.locMP_scoutTable[k]
-       for k in ScoutLocations.locMP_scoutTable},
-    **{game_id + fly_offset + k: ScoutLocations.locVC_scoutTable[k]
-       for k in ScoutLocations.locVC_scoutTable},
-    **{game_id + fly_offset + k: ScoutLocations.locSC_scoutTable[k]
-       for k in ScoutLocations.locSC_scoutTable},
-    **{game_id + fly_offset + k: ScoutLocations.locSM_scoutTable[k]
-       for k in ScoutLocations.locSM_scoutTable},
-    **{game_id + fly_offset + k: ScoutLocations.locLT_scoutTable[k]
-       for k in ScoutLocations.locLT_scoutTable},
-    **{game_id + fly_offset + k: ScoutLocations.locGMC_scoutTable[k]
-       for k in ScoutLocations.locGMC_scoutTable}
+    **{Cells.to_ap_id(k): Cells.locGR_cellTable[k] for k in Cells.locGR_cellTable},
+    **{Cells.to_ap_id(k): Cells.locSV_cellTable[k] for k in Cells.locSV_cellTable},
+    **{Cells.to_ap_id(k): Cells.locFJ_cellTable[k] for k in Cells.locFJ_cellTable},
+    **{Cells.to_ap_id(k): Cells.locSB_cellTable[k] for k in Cells.locSB_cellTable},
+    **{Cells.to_ap_id(k): Cells.locMI_cellTable[k] for k in Cells.locMI_cellTable},
+    **{Cells.to_ap_id(k): Cells.locFC_cellTable[k] for k in Cells.locFC_cellTable},
+    **{Cells.to_ap_id(k): Cells.locRV_cellTable[k] for k in Cells.locRV_cellTable},
+    **{Cells.to_ap_id(k): Cells.locPB_cellTable[k] for k in Cells.locPB_cellTable},
+    **{Cells.to_ap_id(k): Cells.locLPC_cellTable[k] for k in Cells.locLPC_cellTable},
+    **{Cells.to_ap_id(k): Cells.locBS_cellTable[k] for k in Cells.locBS_cellTable},
+    **{Cells.to_ap_id(k): Cells.locMP_cellTable[k] for k in Cells.locMP_cellTable},
+    **{Cells.to_ap_id(k): Cells.locVC_cellTable[k] for k in Cells.locVC_cellTable},
+    **{Cells.to_ap_id(k): Cells.locSC_cellTable[k] for k in Cells.locSC_cellTable},
+    **{Cells.to_ap_id(k): Cells.locSM_cellTable[k] for k in Cells.locSM_cellTable},
+    **{Cells.to_ap_id(k): Cells.locLT_cellTable[k] for k in Cells.locLT_cellTable},
+    **{Cells.to_ap_id(k): Cells.locGMC_cellTable[k] for k in Cells.locGMC_cellTable},
+    **{Scouts.to_ap_id(k): Scouts.locGR_scoutTable[k] for k in Scouts.locGR_scoutTable},
+    **{Scouts.to_ap_id(k): Scouts.locSV_scoutTable[k] for k in Scouts.locSV_scoutTable},
+    **{Scouts.to_ap_id(k): Scouts.locFJ_scoutTable[k] for k in Scouts.locFJ_scoutTable},
+    **{Scouts.to_ap_id(k): Scouts.locSB_scoutTable[k] for k in Scouts.locSB_scoutTable},
+    **{Scouts.to_ap_id(k): Scouts.locMI_scoutTable[k] for k in Scouts.locMI_scoutTable},
+    **{Scouts.to_ap_id(k): Scouts.locFC_scoutTable[k] for k in Scouts.locFC_scoutTable},
+    **{Scouts.to_ap_id(k): Scouts.locRV_scoutTable[k] for k in Scouts.locRV_scoutTable},
+    **{Scouts.to_ap_id(k): Scouts.locPB_scoutTable[k] for k in Scouts.locPB_scoutTable},
+    **{Scouts.to_ap_id(k): Scouts.locLPC_scoutTable[k] for k in Scouts.locLPC_scoutTable},
+    **{Scouts.to_ap_id(k): Scouts.locBS_scoutTable[k] for k in Scouts.locBS_scoutTable},
+    **{Scouts.to_ap_id(k): Scouts.locMP_scoutTable[k] for k in Scouts.locMP_scoutTable},
+    **{Scouts.to_ap_id(k): Scouts.locVC_scoutTable[k] for k in Scouts.locVC_scoutTable},
+    **{Scouts.to_ap_id(k): Scouts.locSC_scoutTable[k] for k in Scouts.locSC_scoutTable},
+    **{Scouts.to_ap_id(k): Scouts.locSM_scoutTable[k] for k in Scouts.locSM_scoutTable},
+    **{Scouts.to_ap_id(k): Scouts.locLT_scoutTable[k] for k in Scouts.locLT_scoutTable},
+    **{Scouts.to_ap_id(k): Scouts.locGMC_scoutTable[k] for k in Scouts.locGMC_scoutTable}
 }

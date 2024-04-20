@@ -1,6 +1,8 @@
+from ..GameID import jak1_id
+
 # Scout Flies are given ID's between 0 and 393311 by the game, explanation below.
 
-# Each fly is given a unique 32-bit number broken into two 16-bit numbers.
+# Each fly (or "buzzer") is given a unique 32-bit number broken into two 16-bit numbers.
 # The lower 16 bits are the game-task ID of the power cell the fly corresponds to.
 # The higher 16 bits are the index of the fly itself, from 000 (0) to 110 (6).
 
@@ -10,10 +12,32 @@
 
 # Because flies are indexed from 0, each 0th fly's full ID == the power cell's ID.
 # So we need to offset all of their ID's in order for Archipelago to separate them
-# from their power cells. We use 128 (2^7) for this purpose, because scout flies
-# never use the 8th lowest bit to describe themselves.
+# from their power cells. We can use 1024 (2^10) for this purpose, because scout flies
+# only ever need 10 bits to identify themselves (3 for the index, 7 for the cell ID).
+fly_offset = 1024
 
-# TODO - The ID's you see below correspond directly to that fly's 32-bit ID in the game.
+
+# These helper functions do all the math required to get information about each
+# scout fly and translate its ID between AP and OpenGOAL.
+def to_ap_id(game_id: int) -> int:
+    cell_id = get_cell_id(game_id)                         # This is AP/OpenGOAL agnostic, works on either ID.
+    buzzer_index = (game_id - cell_id) >> 9                # Subtract the cell ID, bit shift the index down 9 places.
+    return jak1_id + fly_offset + buzzer_index + cell_id   # Add the offsets, the bit-shifted index, and the cell ID.
+
+
+def to_game_id(ap_id: int) -> int:
+    cell_id = get_cell_id(ap_id)                           # This is AP/OpenGOAL agnostic, works on either ID.
+    buzzer_index = ap_id - jak1_id - fly_offset - cell_id  # Reverse process, subtract the offsets and the cell ID.
+    return (buzzer_index << 9) + cell_id                   # Bit shift the index up 9 places, re-add the cell ID.
+
+
+def get_cell_id(buzzer_id: int) -> int:
+    return buzzer_id & 0b1111111                           # Get the power cell ID from the lowest 7 bits.
+
+
+# The ID's you see below correspond directly to that fly's 32-bit ID in the game.
+# I used the decompiled entity JSON's and Jak's X/Y coordinates in Debug Mode
+# to determine which box ID is which location.
 
 # Geyser Rock
 locGR_scoutTable = {
@@ -61,46 +85,46 @@ locSB_scoutTable = {
 
 # Misty Island
 locMI_scoutTable = {
-    129: "MI: Scout Fly Overlooking Entrance",
-    130: "MI: Scout Fly On Ledge Path, First",
-    131: "MI: Scout Fly On Ledge Path, Second",
-    132: "MI: Scout Fly Overlooking Shipyard",
-    133: "MI: Scout Fly On Ship",
-    134: "MI: Scout Fly On Barrel Ramps",
-    135: "MI: Scout Fly On Zoomer Ramps"
+    327708: "MI: Scout Fly Overlooking Entrance",
+    65564: "MI: Scout Fly On Ledge Near Arena Entrance",
+    262172: "MI: Scout Fly Near Arena Door",
+    28: "MI: Scout Fly On Ledge Near Arena Exit",
+    131100: "MI: Scout Fly On Ship",
+    196636: "MI: Scout Fly On Barrel Ramps",
+    393244: "MI: Scout Fly On Zoomer Ramps"
 }
 
 # Fire Canyon
 locFC_scoutTable = {
-    136: "FC: Scout Fly 1",
-    137: "FC: Scout Fly 2",
-    138: "FC: Scout Fly 3",
-    139: "FC: Scout Fly 4",
-    140: "FC: Scout Fly 5",
-    141: "FC: Scout Fly 6",
-    142: "FC: Scout Fly 7"
+    393284: "FC: Scout Fly 1",
+    68: "FC: Scout Fly 2",
+    65604: "FC: Scout Fly 3",
+    196676: "FC: Scout Fly 4",
+    131140: "FC: Scout Fly 5",
+    262212: "FC: Scout Fly 6",
+    327748: "FC: Scout Fly 7"
 }
 
 # Rock Village
 locRV_scoutTable = {
-    143: "RV: Scout Fly Behind Sage's Hut",
-    144: "RV: Scout Fly On Path To Village",
-    145: "RV: Scout Fly Behind Geologist",
-    146: "RV: Scout Fly Behind Fiery Boulder",
-    147: "RV: Scout Fly On Dock",
-    148: "RV: Scout Fly At Pontoon Bridge",
-    149: "RV: Scout Fly At Boggy Swamp Entrance"
+    76: "RV: Scout Fly Behind Sage's Hut",
+    131148: "RV: Scout Fly Near Waterfall",
+    196684: "RV: Scout Fly Behind Geologist",
+    262220: "RV: Scout Fly Behind Fiery Boulder",
+    65612: "RV: Scout Fly On Dock",
+    327756: "RV: Scout Fly At Pontoon Bridge",
+    393292: "RV: Scout Fly At Boggy Swamp Entrance"
 }
 
 # Precursor Basin
 locPB_scoutTable = {
-    150: "PB: Scout Fly Overlooking Entrance",
-    151: "PB: Scout Fly Near Mole Hole",
-    152: "PB: Scout Fly At Purple Ring Start",
-    153: "PB: Scout Fly Overlooking Dark Eco Plant",
-    154: "PB: Scout Fly At Green Ring Start",
-    155: "PB: Scout Fly Before Big Jump",
-    156: "PB: Scout Fly Near Dark Eco Plant"
+    196665: "PB: Scout Fly Overlooking Entrance",
+    393273: "PB: Scout Fly Near Mole Hole",
+    131129: "PB: Scout Fly At Purple Ring Start",
+    65593: "PB: Scout Fly Near Dark Eco Plant, Above",
+    57: "PB: Scout Fly At Blue Ring Start",
+    262201: "PB: Scout Fly Before Big Jump",
+    327737: "PB: Scout Fly Near Dark Eco Plant, Below"
 }
 
 # Lost Precursor City

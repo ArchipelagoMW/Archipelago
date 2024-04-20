@@ -1,13 +1,13 @@
 import typing
 from enum import Enum, auto
 from BaseClasses import MultiWorld, Region
-from .GameID import game_id, game_name, cell_offset, fly_offset
+from .GameID import jak1_name
 from .Options import JakAndDaxterOptions
 from .Locations import JakAndDaxterLocation, location_table
-from .locs import CellLocations, ScoutLocations
+from .locs import CellLocations as Cells, ScoutLocations as Scouts
 
 
-class JakAndDaxterLevel(int, Enum):
+class Jak1Level(int, Enum):
     GEYSER_ROCK = auto()
     SANDOVER_VILLAGE = auto()
     FORBIDDEN_JUNGLE = auto()
@@ -26,7 +26,7 @@ class JakAndDaxterLevel(int, Enum):
     GOL_AND_MAIAS_CITADEL = auto()
 
 
-class JakAndDaxterSubLevel(int, Enum):
+class Jak1SubLevel(int, Enum):
     MAIN_AREA = auto()
     FORBIDDEN_JUNGLE_SWITCH_ROOM = auto()
     FORBIDDEN_JUNGLE_PLANT_ROOM = auto()
@@ -44,165 +44,161 @@ class JakAndDaxterSubLevel(int, Enum):
     GOL_AND_MAIAS_CITADEL_FINAL_BOSS = auto()
 
 
-level_table: typing.Dict[JakAndDaxterLevel, str] = {
-    JakAndDaxterLevel.GEYSER_ROCK: "Geyser Rock",
-    JakAndDaxterLevel.SANDOVER_VILLAGE: "Sandover Village",
-    JakAndDaxterLevel.FORBIDDEN_JUNGLE: "Forbidden Jungle",
-    JakAndDaxterLevel.SENTINEL_BEACH: "Sentinel Beach",
-    JakAndDaxterLevel.MISTY_ISLAND: "Misty Island",
-    JakAndDaxterLevel.FIRE_CANYON: "Fire Canyon",
-    JakAndDaxterLevel.ROCK_VILLAGE: "Rock Village",
-    JakAndDaxterLevel.PRECURSOR_BASIN: "Precursor Basin",
-    JakAndDaxterLevel.LOST_PRECURSOR_CITY: "Lost Precursor City",
-    JakAndDaxterLevel.BOGGY_SWAMP: "Boggy Swamp",
-    JakAndDaxterLevel.MOUNTAIN_PASS: "Mountain Pass",
-    JakAndDaxterLevel.VOLCANIC_CRATER: "Volcanic Crater",
-    JakAndDaxterLevel.SPIDER_CAVE: "Spider Cave",
-    JakAndDaxterLevel.SNOWY_MOUNTAIN: "Snowy Mountain",
-    JakAndDaxterLevel.LAVA_TUBE: "Lava Tube",
-    JakAndDaxterLevel.GOL_AND_MAIAS_CITADEL: "Gol and Maia's Citadel"
+level_table: typing.Dict[Jak1Level, str] = {
+    Jak1Level.GEYSER_ROCK: "Geyser Rock",
+    Jak1Level.SANDOVER_VILLAGE: "Sandover Village",
+    Jak1Level.FORBIDDEN_JUNGLE: "Forbidden Jungle",
+    Jak1Level.SENTINEL_BEACH: "Sentinel Beach",
+    Jak1Level.MISTY_ISLAND: "Misty Island",
+    Jak1Level.FIRE_CANYON: "Fire Canyon",
+    Jak1Level.ROCK_VILLAGE: "Rock Village",
+    Jak1Level.PRECURSOR_BASIN: "Precursor Basin",
+    Jak1Level.LOST_PRECURSOR_CITY: "Lost Precursor City",
+    Jak1Level.BOGGY_SWAMP: "Boggy Swamp",
+    Jak1Level.MOUNTAIN_PASS: "Mountain Pass",
+    Jak1Level.VOLCANIC_CRATER: "Volcanic Crater",
+    Jak1Level.SPIDER_CAVE: "Spider Cave",
+    Jak1Level.SNOWY_MOUNTAIN: "Snowy Mountain",
+    Jak1Level.LAVA_TUBE: "Lava Tube",
+    Jak1Level.GOL_AND_MAIAS_CITADEL: "Gol and Maia's Citadel"
 }
 
-subLevel_table: typing.Dict[JakAndDaxterSubLevel, str] = {
-    JakAndDaxterSubLevel.MAIN_AREA: "Main Area",
-    JakAndDaxterSubLevel.FORBIDDEN_JUNGLE_SWITCH_ROOM: "Forbidden Jungle Switch Room",
-    JakAndDaxterSubLevel.FORBIDDEN_JUNGLE_PLANT_ROOM: "Forbidden Jungle Plant Room",
-    JakAndDaxterSubLevel.SENTINEL_BEACH_CANNON_TOWER: "Sentinel Beach Cannon Tower",
-    JakAndDaxterSubLevel.PRECURSOR_BASIN_BLUE_RINGS: "Precursor Basin Blue Rings",
-    JakAndDaxterSubLevel.LOST_PRECURSOR_CITY_SUNKEN_ROOM: "Lost Precursor City Sunken Room",
-    JakAndDaxterSubLevel.LOST_PRECURSOR_CITY_HELIX_ROOM: "Lost Precursor City Helix Room",
-    JakAndDaxterSubLevel.BOGGY_SWAMP_FLUT_FLUT: "Boggy Swamp Flut Flut",
-    JakAndDaxterSubLevel.MOUNTAIN_PASS_RACE: "Mountain Pass Race",
-    JakAndDaxterSubLevel.MOUNTAIN_PASS_SHORTCUT: "Mountain Pass Shortcut",
-    JakAndDaxterSubLevel.SNOWY_MOUNTAIN_FLUT_FLUT: "Snowy Mountain Flut Flut",
-    JakAndDaxterSubLevel.SNOWY_MOUNTAIN_LURKER_FORT: "Snowy Mountain Lurker Fort",
-    JakAndDaxterSubLevel.SNOWY_MOUNTAIN_FROZEN_BOX: "Snowy Mountain Frozen Box",
-    JakAndDaxterSubLevel.GOL_AND_MAIAS_CITADEL_ROTATING_TOWER: "Gol and Maia's Citadel Rotating Tower",
-    JakAndDaxterSubLevel.GOL_AND_MAIAS_CITADEL_FINAL_BOSS: "Gol and Maia's Citadel Final Boss"
+subLevel_table: typing.Dict[Jak1SubLevel, str] = {
+    Jak1SubLevel.MAIN_AREA: "Main Area",
+    Jak1SubLevel.FORBIDDEN_JUNGLE_SWITCH_ROOM: "Forbidden Jungle Switch Room",
+    Jak1SubLevel.FORBIDDEN_JUNGLE_PLANT_ROOM: "Forbidden Jungle Plant Room",
+    Jak1SubLevel.SENTINEL_BEACH_CANNON_TOWER: "Sentinel Beach Cannon Tower",
+    Jak1SubLevel.PRECURSOR_BASIN_BLUE_RINGS: "Precursor Basin Blue Rings",
+    Jak1SubLevel.LOST_PRECURSOR_CITY_SUNKEN_ROOM: "Lost Precursor City Sunken Room",
+    Jak1SubLevel.LOST_PRECURSOR_CITY_HELIX_ROOM: "Lost Precursor City Helix Room",
+    Jak1SubLevel.BOGGY_SWAMP_FLUT_FLUT: "Boggy Swamp Flut Flut",
+    Jak1SubLevel.MOUNTAIN_PASS_RACE: "Mountain Pass Race",
+    Jak1SubLevel.MOUNTAIN_PASS_SHORTCUT: "Mountain Pass Shortcut",
+    Jak1SubLevel.SNOWY_MOUNTAIN_FLUT_FLUT: "Snowy Mountain Flut Flut",
+    Jak1SubLevel.SNOWY_MOUNTAIN_LURKER_FORT: "Snowy Mountain Lurker Fort",
+    Jak1SubLevel.SNOWY_MOUNTAIN_FROZEN_BOX: "Snowy Mountain Frozen Box",
+    Jak1SubLevel.GOL_AND_MAIAS_CITADEL_ROTATING_TOWER: "Gol and Maia's Citadel Rotating Tower",
+    Jak1SubLevel.GOL_AND_MAIAS_CITADEL_FINAL_BOSS: "Gol and Maia's Citadel Final Boss"
 }
 
 
 class JakAndDaxterRegion(Region):
-    game: str = game_name
+    game: str = jak1_name
 
 
-# Use the original ID's for each item to tell the Region which Locations are available in it.
-# You do NOT need to add the item offsets, that will be handled by create_*_locations.
+# Use the original game ID's for each item to tell the Region which Locations are available in it.
+# You do NOT need to add the item offsets or game ID, that will be handled by create_*_locations.
 def create_regions(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int):
     create_region(player, multiworld, "Menu")
 
-    region_gr = create_region(player, multiworld, level_table[JakAndDaxterLevel.GEYSER_ROCK])
-    create_cell_locations(region_gr, CellLocations.locGR_cellTable)
-    create_fly_locations(region_gr, ScoutLocations.locGR_scoutTable)
+    region_gr = create_region(player, multiworld, level_table[Jak1Level.GEYSER_ROCK])
+    create_cell_locations(region_gr, Cells.locGR_cellTable)
+    create_fly_locations(region_gr, Scouts.locGR_scoutTable)
 
-    region_sv = create_region(player, multiworld, level_table[JakAndDaxterLevel.SANDOVER_VILLAGE])
-    create_cell_locations(region_sv, CellLocations.locSV_cellTable)
-    create_fly_locations(region_sv, ScoutLocations.locSV_scoutTable)
+    region_sv = create_region(player, multiworld, level_table[Jak1Level.SANDOVER_VILLAGE])
+    create_cell_locations(region_sv, Cells.locSV_cellTable)
+    create_fly_locations(region_sv, Scouts.locSV_scoutTable)
 
-    region_fj = create_region(player, multiworld, level_table[JakAndDaxterLevel.FORBIDDEN_JUNGLE])
-    create_cell_locations(region_fj, {k: CellLocations.locFJ_cellTable[k] for k in {3, 4, 5, 8, 9, 7}})
-    create_fly_locations(region_fj, ScoutLocations.locFJ_scoutTable)
+    region_fj = create_region(player, multiworld, level_table[Jak1Level.FORBIDDEN_JUNGLE])
+    create_cell_locations(region_fj, {k: Cells.locFJ_cellTable[k] for k in {3, 4, 5, 8, 9, 7}})
+    create_fly_locations(region_fj, Scouts.locFJ_scoutTable)
 
-    sub_region_fjsr = create_subregion(region_fj, subLevel_table[JakAndDaxterSubLevel.FORBIDDEN_JUNGLE_SWITCH_ROOM])
-    create_cell_locations(sub_region_fjsr, {k: CellLocations.locFJ_cellTable[k] for k in {2}})
+    sub_region_fjsr = create_subregion(region_fj, subLevel_table[Jak1SubLevel.FORBIDDEN_JUNGLE_SWITCH_ROOM])
+    create_cell_locations(sub_region_fjsr, {k: Cells.locFJ_cellTable[k] for k in {2}})
 
-    sub_region_fjpr = create_subregion(sub_region_fjsr, subLevel_table[JakAndDaxterSubLevel
-                                       .FORBIDDEN_JUNGLE_PLANT_ROOM])
-    create_cell_locations(sub_region_fjpr, {k: CellLocations.locFJ_cellTable[k] for k in {6}})
+    sub_region_fjpr = create_subregion(sub_region_fjsr, subLevel_table[Jak1SubLevel.FORBIDDEN_JUNGLE_PLANT_ROOM])
+    create_cell_locations(sub_region_fjpr, {k: Cells.locFJ_cellTable[k] for k in {6}})
 
-    region_sb = create_region(player, multiworld, level_table[JakAndDaxterLevel.SENTINEL_BEACH])
-    create_cell_locations(region_sb, {k: CellLocations.locSB_cellTable[k] for k in {15, 17, 16, 18, 21, 22, 20}})
-    create_fly_locations(region_sb, ScoutLocations.locSB_scoutTable)
+    region_sb = create_region(player, multiworld, level_table[Jak1Level.SENTINEL_BEACH])
+    create_cell_locations(region_sb, {k: Cells.locSB_cellTable[k] for k in {15, 17, 16, 18, 21, 22, 20}})
+    create_fly_locations(region_sb, Scouts.locSB_scoutTable)
 
-    sub_region_sbct = create_subregion(region_sb, subLevel_table[JakAndDaxterSubLevel.SENTINEL_BEACH_CANNON_TOWER])
-    create_cell_locations(sub_region_sbct, {k: CellLocations.locSB_cellTable[k] for k in {19}})
+    sub_region_sbct = create_subregion(region_sb, subLevel_table[Jak1SubLevel.SENTINEL_BEACH_CANNON_TOWER])
+    create_cell_locations(sub_region_sbct, {k: Cells.locSB_cellTable[k] for k in {19}})
 
-    region_mi = create_region(player, multiworld, level_table[JakAndDaxterLevel.MISTY_ISLAND])
-    create_cell_locations(region_mi, CellLocations.locMI_cellTable)
-    create_fly_locations(region_mi, ScoutLocations.locMI_scoutTable)
+    region_mi = create_region(player, multiworld, level_table[Jak1Level.MISTY_ISLAND])
+    create_cell_locations(region_mi, Cells.locMI_cellTable)
+    create_fly_locations(region_mi, Scouts.locMI_scoutTable)
 
-    region_fc = create_region(player, multiworld, level_table[JakAndDaxterLevel.FIRE_CANYON])
-    create_cell_locations(region_fc, CellLocations.locFC_cellTable)
-    create_fly_locations(region_fc, ScoutLocations.locFC_scoutTable)
+    region_fc = create_region(player, multiworld, level_table[Jak1Level.FIRE_CANYON])
+    create_cell_locations(region_fc, Cells.locFC_cellTable)
+    create_fly_locations(region_fc, Scouts.locFC_scoutTable)
 
-    region_rv = create_region(player, multiworld, level_table[JakAndDaxterLevel.ROCK_VILLAGE])
-    create_cell_locations(region_rv, CellLocations.locRV_cellTable)
-    create_fly_locations(region_rv, ScoutLocations.locRV_scoutTable)
+    region_rv = create_region(player, multiworld, level_table[Jak1Level.ROCK_VILLAGE])
+    create_cell_locations(region_rv, Cells.locRV_cellTable)
+    create_fly_locations(region_rv, Scouts.locRV_scoutTable)
 
-    region_pb = create_region(player, multiworld, level_table[JakAndDaxterLevel.PRECURSOR_BASIN])
-    create_cell_locations(region_pb, {k: CellLocations.locPB_cellTable[k] for k in {54, 53, 52, 56, 55, 58, 57}})
-    create_fly_locations(region_pb, ScoutLocations.locPB_scoutTable)
+    region_pb = create_region(player, multiworld, level_table[Jak1Level.PRECURSOR_BASIN])
+    create_cell_locations(region_pb, {k: Cells.locPB_cellTable[k] for k in {54, 53, 52, 56, 55, 58, 57}})
+    create_fly_locations(region_pb, Scouts.locPB_scoutTable)
 
-    sub_region_pbbr = create_subregion(region_pb, subLevel_table[JakAndDaxterSubLevel.PRECURSOR_BASIN_BLUE_RINGS])
-    create_cell_locations(sub_region_pbbr, {k: CellLocations.locPB_cellTable[k] for k in {59}})
+    sub_region_pbbr = create_subregion(region_pb, subLevel_table[Jak1SubLevel.PRECURSOR_BASIN_BLUE_RINGS])
+    create_cell_locations(sub_region_pbbr, {k: Cells.locPB_cellTable[k] for k in {59}})
 
-    region_lpc = create_region(player, multiworld, level_table[JakAndDaxterLevel.LOST_PRECURSOR_CITY])
-    create_cell_locations(region_lpc, {k: CellLocations.locLPC_cellTable[k] for k in {45, 48, 44, 51}})
-    create_fly_locations(region_lpc, {k: ScoutLocations.locLPC_scoutTable[k] for k in {157, 158, 159, 160, 161, 162}})
+    region_lpc = create_region(player, multiworld, level_table[Jak1Level.LOST_PRECURSOR_CITY])
+    create_cell_locations(region_lpc, {k: Cells.locLPC_cellTable[k] for k in {45, 48, 44, 51}})
+    create_fly_locations(region_lpc, {k: Scouts.locLPC_scoutTable[k] for k in {157, 158, 159, 160, 161, 162}})
 
-    sub_region_lpcsr = create_subregion(region_lpc, subLevel_table[JakAndDaxterSubLevel
-                                        .LOST_PRECURSOR_CITY_SUNKEN_ROOM])
-    create_cell_locations(sub_region_lpcsr, {k: CellLocations.locLPC_cellTable[k] for k in {47, 49}})
-    create_fly_locations(region_lpc, {k: ScoutLocations.locLPC_scoutTable[k] for k in {163}})
+    sub_region_lpcsr = create_subregion(region_lpc, subLevel_table[Jak1SubLevel.LOST_PRECURSOR_CITY_SUNKEN_ROOM])
+    create_cell_locations(sub_region_lpcsr, {k: Cells.locLPC_cellTable[k] for k in {47, 49}})
+    create_fly_locations(region_lpc, {k: Scouts.locLPC_scoutTable[k] for k in {163}})
 
-    sub_region_lpchr = create_subregion(region_lpc, subLevel_table[JakAndDaxterSubLevel
-                                        .LOST_PRECURSOR_CITY_HELIX_ROOM])
-    create_cell_locations(sub_region_lpchr, {k: CellLocations.locLPC_cellTable[k] for k in {46, 50}})
+    sub_region_lpchr = create_subregion(region_lpc, subLevel_table[Jak1SubLevel.LOST_PRECURSOR_CITY_HELIX_ROOM])
+    create_cell_locations(sub_region_lpchr, {k: Cells.locLPC_cellTable[k] for k in {46, 50}})
 
-    region_bs = create_region(player, multiworld, level_table[JakAndDaxterLevel.BOGGY_SWAMP])
-    create_cell_locations(region_bs, {k: CellLocations.locBS_cellTable[k] for k in {36, 38, 39, 40, 41, 42}})
-    create_fly_locations(region_bs, {k: ScoutLocations.locBS_scoutTable[k] for k in {164, 165, 166, 167, 170}})
+    region_bs = create_region(player, multiworld, level_table[Jak1Level.BOGGY_SWAMP])
+    create_cell_locations(region_bs, {k: Cells.locBS_cellTable[k] for k in {36, 38, 39, 40, 41, 42}})
+    create_fly_locations(region_bs, {k: Scouts.locBS_scoutTable[k] for k in {164, 165, 166, 167, 170}})
 
-    sub_region_bsff = create_subregion(region_bs, subLevel_table[JakAndDaxterSubLevel.BOGGY_SWAMP_FLUT_FLUT])
-    create_cell_locations(sub_region_bsff, {k: CellLocations.locBS_cellTable[k] for k in {43, 37}})
-    create_fly_locations(sub_region_bsff, {k: ScoutLocations.locBS_scoutTable[k] for k in {168, 169}})
+    sub_region_bsff = create_subregion(region_bs, subLevel_table[Jak1SubLevel.BOGGY_SWAMP_FLUT_FLUT])
+    create_cell_locations(sub_region_bsff, {k: Cells.locBS_cellTable[k] for k in {43, 37}})
+    create_fly_locations(sub_region_bsff, {k: Scouts.locBS_scoutTable[k] for k in {168, 169}})
 
-    region_mp = create_region(player, multiworld, level_table[JakAndDaxterLevel.MOUNTAIN_PASS])
-    create_cell_locations(region_mp, {k: CellLocations.locMP_cellTable[k] for k in {86}})
+    region_mp = create_region(player, multiworld, level_table[Jak1Level.MOUNTAIN_PASS])
+    create_cell_locations(region_mp, {k: Cells.locMP_cellTable[k] for k in {86}})
 
-    sub_region_mpr = create_subregion(region_mp, subLevel_table[JakAndDaxterSubLevel.MOUNTAIN_PASS_RACE])
-    create_cell_locations(sub_region_mpr, {k: CellLocations.locMP_cellTable[k] for k in {87, 88}})
-    create_fly_locations(sub_region_mpr, ScoutLocations.locMP_scoutTable)
+    sub_region_mpr = create_subregion(region_mp, subLevel_table[Jak1SubLevel.MOUNTAIN_PASS_RACE])
+    create_cell_locations(sub_region_mpr, {k: Cells.locMP_cellTable[k] for k in {87, 88}})
+    create_fly_locations(sub_region_mpr, Scouts.locMP_scoutTable)
 
-    sub_region_mps = create_subregion(sub_region_mpr, subLevel_table[JakAndDaxterSubLevel.MOUNTAIN_PASS_SHORTCUT])
-    create_cell_locations(sub_region_mps, {k: CellLocations.locMP_cellTable[k] for k in {110}})
+    sub_region_mps = create_subregion(sub_region_mpr, subLevel_table[Jak1SubLevel.MOUNTAIN_PASS_SHORTCUT])
+    create_cell_locations(sub_region_mps, {k: Cells.locMP_cellTable[k] for k in {110}})
 
-    region_vc = create_region(player, multiworld, level_table[JakAndDaxterLevel.VOLCANIC_CRATER])
-    create_cell_locations(region_vc, CellLocations.locVC_cellTable)
-    create_fly_locations(region_vc, ScoutLocations.locVC_scoutTable)
+    region_vc = create_region(player, multiworld, level_table[Jak1Level.VOLCANIC_CRATER])
+    create_cell_locations(region_vc, Cells.locVC_cellTable)
+    create_fly_locations(region_vc, Scouts.locVC_scoutTable)
 
-    region_sc = create_region(player, multiworld, level_table[JakAndDaxterLevel.SPIDER_CAVE])
-    create_cell_locations(region_sc, CellLocations.locSC_cellTable)
-    create_fly_locations(region_sc, ScoutLocations.locSC_scoutTable)
+    region_sc = create_region(player, multiworld, level_table[Jak1Level.SPIDER_CAVE])
+    create_cell_locations(region_sc, Cells.locSC_cellTable)
+    create_fly_locations(region_sc, Scouts.locSC_scoutTable)
 
-    region_sm = create_region(player, multiworld, level_table[JakAndDaxterLevel.SNOWY_MOUNTAIN])
-    create_cell_locations(region_sm, {k: CellLocations.locSM_cellTable[k] for k in {60, 61, 66, 64}})
-    create_fly_locations(region_sm, {k: ScoutLocations.locSM_scoutTable[k] for k in {192, 193, 194, 195, 196}})
+    region_sm = create_region(player, multiworld, level_table[Jak1Level.SNOWY_MOUNTAIN])
+    create_cell_locations(region_sm, {k: Cells.locSM_cellTable[k] for k in {60, 61, 66, 64}})
+    create_fly_locations(region_sm, {k: Scouts.locSM_scoutTable[k] for k in {192, 193, 194, 195, 196}})
 
-    sub_region_smfb = create_subregion(region_sm, subLevel_table[JakAndDaxterSubLevel.SNOWY_MOUNTAIN_FROZEN_BOX])
-    create_cell_locations(sub_region_smfb, {k: CellLocations.locSM_cellTable[k] for k in {67}})
+    sub_region_smfb = create_subregion(region_sm, subLevel_table[Jak1SubLevel.SNOWY_MOUNTAIN_FROZEN_BOX])
+    create_cell_locations(sub_region_smfb, {k: Cells.locSM_cellTable[k] for k in {67}})
 
-    sub_region_smff = create_subregion(region_sm, subLevel_table[JakAndDaxterSubLevel.SNOWY_MOUNTAIN_FLUT_FLUT])
-    create_cell_locations(sub_region_smff, {k: CellLocations.locSM_cellTable[k] for k in {63}})
+    sub_region_smff = create_subregion(region_sm, subLevel_table[Jak1SubLevel.SNOWY_MOUNTAIN_FLUT_FLUT])
+    create_cell_locations(sub_region_smff, {k: Cells.locSM_cellTable[k] for k in {63}})
 
-    sub_region_smlf = create_subregion(region_sm, subLevel_table[JakAndDaxterSubLevel.SNOWY_MOUNTAIN_LURKER_FORT])
-    create_cell_locations(sub_region_smlf, {k: CellLocations.locSM_cellTable[k] for k in {62, 65}})
-    create_fly_locations(sub_region_smlf, {k: ScoutLocations.locSM_scoutTable[k] for k in {197, 198}})
+    sub_region_smlf = create_subregion(region_sm, subLevel_table[Jak1SubLevel.SNOWY_MOUNTAIN_LURKER_FORT])
+    create_cell_locations(sub_region_smlf, {k: Cells.locSM_cellTable[k] for k in {62, 65}})
+    create_fly_locations(sub_region_smlf, {k: Scouts.locSM_scoutTable[k] for k in {197, 198}})
 
-    region_lt = create_region(player, multiworld, level_table[JakAndDaxterLevel.LAVA_TUBE])
-    create_cell_locations(region_lt, CellLocations.locLT_cellTable)
-    create_fly_locations(region_lt, ScoutLocations.locLT_scoutTable)
+    region_lt = create_region(player, multiworld, level_table[Jak1Level.LAVA_TUBE])
+    create_cell_locations(region_lt, Cells.locLT_cellTable)
+    create_fly_locations(region_lt, Scouts.locLT_scoutTable)
 
-    region_gmc = create_region(player, multiworld, level_table[JakAndDaxterLevel.GOL_AND_MAIAS_CITADEL])
-    create_cell_locations(region_gmc, {k: CellLocations.locGMC_cellTable[k] for k in {71, 72, 73}})
-    create_fly_locations(region_gmc, {k: ScoutLocations.locGMC_scoutTable[k] for k in {206, 207, 208, 209, 210, 211}})
+    region_gmc = create_region(player, multiworld, level_table[Jak1Level.GOL_AND_MAIAS_CITADEL])
+    create_cell_locations(region_gmc, {k: Cells.locGMC_cellTable[k] for k in {71, 72, 73}})
+    create_fly_locations(region_gmc, {k: Scouts.locGMC_scoutTable[k] for k in {206, 207, 208, 209, 210, 211}})
 
-    sub_region_gmcrt = create_subregion(region_gmc, subLevel_table[JakAndDaxterSubLevel
-                                        .GOL_AND_MAIAS_CITADEL_ROTATING_TOWER])
-    create_cell_locations(sub_region_gmcrt, {k: CellLocations.locGMC_cellTable[k] for k in {70, 91}})
-    create_fly_locations(sub_region_gmcrt, {k: ScoutLocations.locGMC_scoutTable[k] for k in {212}})
+    sub_region_gmcrt = create_subregion(region_gmc, subLevel_table[Jak1SubLevel.GOL_AND_MAIAS_CITADEL_ROTATING_TOWER])
+    create_cell_locations(sub_region_gmcrt, {k: Cells.locGMC_cellTable[k] for k in {70, 91}})
+    create_fly_locations(sub_region_gmcrt, {k: Scouts.locGMC_scoutTable[k] for k in {212}})
 
-    create_subregion(sub_region_gmcrt, subLevel_table[JakAndDaxterSubLevel.GOL_AND_MAIAS_CITADEL_FINAL_BOSS])
+    create_subregion(sub_region_gmcrt, subLevel_table[Jak1SubLevel.GOL_AND_MAIAS_CITADEL_FINAL_BOSS])
 
 
 def create_region(player: int, multiworld: MultiWorld, name: str) -> JakAndDaxterRegion:
@@ -219,13 +215,13 @@ def create_subregion(parent: Region, name: str) -> JakAndDaxterRegion:
 
 def create_cell_locations(region: Region, locations: typing.Dict[int, str]):
     region.locations += [JakAndDaxterLocation(region.player,
-                                              location_table[game_id + cell_offset + loc],
-                                              game_id + cell_offset + loc,
+                                              location_table[Cells.to_ap_id(loc)],
+                                              Cells.to_ap_id(loc),
                                               region) for loc in locations]
 
 
 def create_fly_locations(region: Region, locations: typing.Dict[int, str]):
     region.locations += [JakAndDaxterLocation(region.player,
-                                              location_table[game_id + fly_offset + loc],
-                                              game_id + fly_offset + loc,
+                                              location_table[Scouts.to_ap_id(loc)],
+                                              Scouts.to_ap_id(loc),
                                               region) for loc in locations]

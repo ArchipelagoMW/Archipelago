@@ -1,7 +1,38 @@
-# Precursor Orbs start at ??? and end at ???
+from ..GameID import jak1_id
 
-# Given that Scout Flies are being offset by 2^20 to avoid collisions with power cells,
-# I'm tentatively setting the Orb offset to 2^21, or 2,097,152.
+# Precursor Orbs are not necessarily given ID's by the game.
+
+# Of the 2000 orbs (or "money") you can pick up, only 1233 are standalone ones you find in the overworld.
+# We can identify them by Actor ID's, which run from 549 to 24433. Other actors reside in this range,
+# so like Power Cells these are not ordered, nor contiguous, nor exclusively orbs.
+
+# In fact, other ID's in this range belong to actors that spawn orbs when they are activated or when they die,
+# like steel crates, orb caches, Spider Cave gnawers, or jumping on the Plant Boss's head.
+
+# These orbs that spawn from parent actors DON'T have an Actor ID themselves - the parent object keeps
+# track of how many of its orbs have been picked up. If you pick up only some of its orbs, it
+# will respawn when you leave the area, and only drop the remaining number of orbs when activated/killed.
+# Once all the orbs are picked up, the actor will permanently "retire" and never spawn again.
+# The maximum number of orbs that any actor can spawn is 30 (the orb caches in citadel). Covering
+# these ID-less orbs may need to be a future enhancement. TODO ^^
+
+# Standalone orbs need 15 bits to identify themselves by Actor ID,
+# so we can use 2^15 to offset them from scout flies, just like we offset
+# scout flies from power cells by 2^10.
+orb_offset = 32768
+
+
+# These helper functions do all the math required to get information about each
+# precursor orb and translate its ID between AP and OpenGOAL.
+def to_ap_id(game_id: int) -> int:
+    return jak1_id + orb_offset + game_id   # Add the offsets and the orb Actor ID.
+
+
+def to_game_id(ap_id: int) -> int:
+    return ap_id - jak1_id - orb_offset  # Reverse process, subtract the offsets.
+
+
+# The ID's you see below correspond directly to that orb's Actor ID in the game.
 
 # Geyser Rock
 locGR_orbTable = {

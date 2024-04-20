@@ -1,16 +1,16 @@
 from BaseClasses import Item, ItemClassification
-from .Locations import JakAndDaxterLocation, location_table as item_table
+from .GameID import jak1_id, jak1_name
 from .Options import JakAndDaxterOptions
-from .Regions import JakAndDaxterLevel, JakAndDaxterSubLevel, JakAndDaxterRegion, level_table, subLevel_table, \
-    create_regions
-from .Rules import set_rules
 from .Items import JakAndDaxterItem
-from .GameID import game_id, game_name, cell_offset, fly_offset, orb_offset
+from .Locations import JakAndDaxterLocation, location_table as item_table
+from .locs import CellLocations as Cells, ScoutLocations as Scouts, OrbLocations as Orbs
+from .Regions import create_regions
+from .Rules import set_rules
 from ..AutoWorld import World
 
 
 class JakAndDaxterWorld(World):
-    game: str = game_name
+    game: str = jak1_name
     data_version = 1
     required_client_version = (0, 4, 5)
 
@@ -18,13 +18,14 @@ class JakAndDaxterWorld(World):
     options: JakAndDaxterOptions
 
     # Stored as {ID: Name} pairs, these must now be swapped to {Name: ID} pairs.
+    # Remember, the game ID and various offsets for each item type have already been calculated.
     item_name_to_id = {item_table[k]: k for k in item_table}
     location_name_to_id = {item_table[k]: k for k in item_table}
     item_name_groups = {
-        "Power Cell": {item_table[k]: k
-                       for k in item_table if k in range(game_id + cell_offset, game_id + fly_offset)},
-        "Scout Fly": {item_table[k]: k
-                      for k in item_table if k in range(game_id + fly_offset, game_id + orb_offset)},
+        "Power Cell": {item_table[k]: k for k in item_table
+                       if k in range(jak1_id, jak1_id + Scouts.fly_offset)},
+        "Scout Fly": {item_table[k]: k for k in item_table
+                      if k in range(jak1_id + Scouts.fly_offset, jak1_id + Orbs.orb_offset)},
         "Precursor Orb": {}  # TODO
     }
 
@@ -39,13 +40,13 @@ class JakAndDaxterWorld(World):
 
     def create_item(self, name: str) -> Item:
         item_id = self.item_name_to_id[name]
-        if item_id in range(game_id + cell_offset, game_id + fly_offset):
+        if item_id in range(jak1_id, jak1_id + Scouts.fly_offset):
             # Power Cell
             classification = ItemClassification.progression_skip_balancing
-        elif item_id in range(game_id + fly_offset, game_id + orb_offset):
+        elif item_id in range(jak1_id + Scouts.fly_offset, jak1_id + Orbs.orb_offset):
             # Scout Fly
             classification = ItemClassification.progression_skip_balancing
-        elif item_id > game_id + orb_offset:
+        elif item_id > jak1_id + Orbs.orb_offset:
             # Precursor Orb
             classification = ItemClassification.filler  # TODO
         else:

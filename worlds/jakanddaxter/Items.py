@@ -1,7 +1,7 @@
 from BaseClasses import Item
-from .GameID import game_name
+from .GameID import jak1_name
 
 
 class JakAndDaxterItem(Item):
-    game: str = game_name
+    game: str = jak1_name
 

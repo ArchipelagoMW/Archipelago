@@ -1,9 +1,22 @@
+from ..GameID import jak1_id
+
 # Power Cells are given ID's between 0 and 116 by the game.
 
 # The game tracks all game-tasks as integers.
 # 101 of these ID's correspond directly to power cells, but they are not
 # necessarily ordered, nor are they the first 101 in the task list.
 # The remaining ones are cutscenes and other events.
+
+
+# These helper functions do all the math required to get information about each
+# power cell and translate its ID between AP and OpenGOAL.
+def to_ap_id(game_id: int) -> int:
+    return jak1_id + game_id
+
+
+def to_game_id(ap_id: int) -> int:
+    return ap_id - jak1_id
+
 
 # The ID's you see below correspond directly to that cell's game-task ID.
 
