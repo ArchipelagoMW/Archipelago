@@ -103,6 +103,9 @@ def set_rules(world: "MM2World") -> None:
                     # failsafe, there should be at least one defined non-Buster weakness
                     weapon = world.random.randint(1, 7)
                     world.weapon_damage[weapon][boss] = world.random.randint(4, 14)  # Force weakness
+            # special case, if boobeam trap has a weakness to Crash, it needs to be max damage
+            if world.weapon_damage[6][11] > 4:
+                world.weapon_damage[6][11] = 14
             # handle the alien
             boss = 13
             for weapon in world.weapon_damage:
