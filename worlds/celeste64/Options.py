@@ -72,12 +72,12 @@ class BadelineChaserFrequency(Range):
     """
     How many of the `Badeline Chaser Source` actions must occur to make each Badeline Chaser start spawning
     NOTE: Choosing `0` disables Badeline Chasers entirely
-    WARNING: Turning on Badeling Chasers alongside Move Shuffle could result in extremely difficult situations
+    WARNING: Turning on Badeline Chasers alongside Move Shuffle could result in extremely difficult situations
     """
     display_name = "Badeline Chaser Frequency"
     range_start = 0
     range_end = 10
-    default = 5
+    default = 0
 
 class BadelineChaserSpeed(Range):
     """How many seconds behind you each Badeline Chaser will be"""
