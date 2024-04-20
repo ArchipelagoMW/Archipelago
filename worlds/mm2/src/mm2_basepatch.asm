@@ -45,6 +45,13 @@ incbin "mm2font.dat"
 %org($A900, $09)
 incbin "mm2titlefont.dat"
 
+%org($8015, $0D)
+ClearRefreshHook:
+    ; if we're already doing a fresh load of the stage select
+    ; we don't need to immediately refresh it
+    JSR ClearRefresh
+    NOP
+
 %org($802B, $0D)
 PatchFaceTiles:
     LDA !received_stages
@@ -781,7 +788,12 @@ RefreshRBMTiles:
     AND #$08
     RTS
 
-
+ClearRefresh:
+    LDA #$00
+    STA !rbm_strobe
+    LDA #$10
+    STA $F7
+    RTS
 
 assert realbase() <= $03F650 ; This is the start of our text data, and we absolutely cannot go past this point (text takes too much room).
 
