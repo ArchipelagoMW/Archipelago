@@ -1,8 +1,8 @@
 import hashlib
 import logging
-from typing import Dict, Any, TYPE_CHECKING, Optional, Sequence, Tuple, ClassVar
+from typing import Dict, Any, TYPE_CHECKING, Optional, Sequence, Tuple, ClassVar, List
 
-from BaseClasses import Tutorial, ItemClassification, MultiWorld, Item
+from BaseClasses import Tutorial, ItemClassification, MultiWorld, Item, Location
 from worlds.AutoWorld import World, WebWorld
 from .Names import dr_wily
 from .Items import (item_table, item_names, MM2Item, filler_item_weights, robot_master_weapon_table,
@@ -185,6 +185,49 @@ class MM2World(World):
         goal_location = self.multiworld.get_location(dr_wily, self.player)
         goal_location.place_locked_item(MM2Item("Victory", ItemClassification.progression, None, self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+
+    def fill_hook(self,
+                  progitempool: List["Item"],
+                  usefulitempool: List["Item"],
+                  filleritempool: List["Item"],
+                  fill_locations: List["Location"]) -> None:
+        # on a solo gen, fill can try to force Wily into sphere 2, but for most generations this is impossible
+        # since MM2 can have a 2 item sphere 1, and 3 items are required for Wily
+        if self.multiworld.players > 1:
+            return  # Don't need to change anything on a multi gen, fill should be able to solve it with a 4 sphere 1
+        rbm_to_item = {
+            0: Names.heat_man_stage,
+            1: Names.air_man_stage,
+            2: Names.wood_man_stage,
+            3: Names.bubble_man_stage,
+            4: Names.quick_man_stage,
+            5: Names.flash_man_stage,
+            6: Names.metal_man_stage,
+            7: Names.crash_man_stage
+        }
+        affected_rbm = [2, 3]  # Wood and Bubble will always have this happen
+        possible_rbm = [1, 5]  # Air and Flash are always valid targets, due to Item 2/3 receive
+        if self.options.consumables:
+            possible_rbm.append(6)  # Metal has 3 consumables
+            possible_rbm.append(7)  # Crash has 3 consumables
+            if self.options.enable_lasers:
+                possible_rbm.append(4)  # Quick has a lot of consumables, but needs logical time stopper if not enabled
+        else:
+            affected_rbm.extend([6, 7])  # only two checks on non consumables
+        if self.options.yoku_jumps:
+            possible_rbm.append(0)  # Heat has 3 locations always, but might need 2 items logically
+        if self.options.starting_robot_master.value in affected_rbm:
+            rbm_names = list(map(lambda s: rbm_to_item[s], possible_rbm))
+            valid_second = [item for item in progitempool
+                            if item.name in rbm_names
+                            and item.player == self.player]
+            placed_item = self.random.choice(valid_second)
+            rbm_defeated = f"{self.options.starting_robot_master.get_option_name(self.options.starting_robot_master.value)} - Defeated"
+            rbm_location = self.get_location(rbm_defeated)
+            rbm_location.place_locked_item(placed_item)
+            progitempool.remove(placed_item)
+            fill_locations.remove(rbm_location)
+            self.multiworld.itempool.remove(placed_item)
 
     def generate_output(self, output_directory: str) -> None:
         try:

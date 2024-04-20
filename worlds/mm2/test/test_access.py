@@ -10,9 +10,6 @@ class TestAccess(MM2TestBase):
         "consumables": "all"
     }
 
-    def world_setup(self, seed = None) -> None:
-        super().world_setup(65511054861603304893)
-
     def test_time_stopper(self):
         """Optional based on Enable Lasers setting, confirm these are the locations affected"""
         locations = [*quick_man_locations, *energy_pickups["Quick Man Stage"], *etank_1ups["Quick Man Stage"]]
