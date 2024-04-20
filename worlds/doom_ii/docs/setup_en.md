@@ -13,7 +13,7 @@
 1. Download [APDOOM.zip](https://github.com/Daivuk/apdoom/releases) and extract it.
 2. Copy DOOM2.WAD from your steam install into the extracted folder.
    You can find the folder in steam by finding the game in your library,
-   right clicking it and choosing *Manage→Browse Local Files*.
+   right clicking it and choosing *Manage→Browse Local Files*. The WAD file is in the `/base/` folder.
 
 ## Joining a MultiWorld Game
 
