@@ -520,6 +520,10 @@ if "A Link to the Past" in network_data_package["games"]:
         else:
             inventory["Bombs"] = 1
 
+        # Triforce item if we meet goal.
+        if tracker_data.get_room_client_statuses()[team, player] == ClientStatus.CLIENT_GOAL:
+            inventory["Triforce"] = 1
+
     def render_ALinkToThePast_multiworld_tracker(tracker_data: TrackerData, enabled_trackers: List[str]):
         inventories: Dict[Tuple[int, int], collections.Counter[str]] = {
             (team, player): collections.Counter({
