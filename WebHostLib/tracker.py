@@ -762,16 +762,16 @@ if "A Link to the Past" in network_data_package["games"]:
                 0x00ea9a, 0x18002a, 0x180015, 0x0339cf, 0x033e7d, 0x180000, 0x180001, 0x180003, 0x180004, 0x180005,
                 0x00eb42, 0x00eb45, 0x00eb48, 0x00eb4b, 0x180010, 0x00eb4e, 0x00eb3f, 0x180012, 0x180014, 0x180144,
                 0x180142, 0x180143, 0x0289b0, 0x0f69fa, 0x180002, 0x00eb2a, 0x00eb2d, 0x00eb30, 0x00eb33, 0x00eb36,
-                0x00eb39, 0x00eb3c, 0x00e9bf, 0x180016, 0x180140, 0x180141, 0x00e9c5, 0x400018, 0x400019, 0x40001a,
-                0x400015, 0x400016, 0x400017, 0x400012, 0x400013, 0x400014, 0x40001b, 0x40001c, 0x40001d, 0x400022,
-                0x400023, 0x400024, 0x400025, 0x400021, 0x40001e, 0x40001f,
+                0x00eb39, 0x00eb3c, 0x00e9bf, 0x180016, 0x180017, 0x180140, 0x180141, 0x00e9c5, 0x400018, 0x400019,
+                0x40001a, 0x400015, 0x400016, 0x400017, 0x400012, 0x400013, 0x400014, 0x40001b, 0x40001c, 0x40001d,
+                0x400022, 0x400023, 0x400024, 0x400025, 0x400021, 0x40001e, 0x40001f,
             },
             "Dark World": {
-                0x180147, 0x0ee185, 0x0330c7, 0x180148, 0x180017, 0x00eb1e, 0x00eb21, 0x00eb24, 0x00eb27, 0x180011,
-                0x180006, 0x00e980, 0x00e983, 0x00e9ec, 0x00e9ef, 0x00eda8, 0x180146, 0x00ea73, 0x00ea76, 0x00ea7c,
-                0x00ea7f, 0x00ea8b, 0x00eb51, 0x00eb54, 0x00eb5a, 0x00eb57, 0x400000, 0x400001, 0x400002, 0x400006,
-                0x400007, 0x400008, 0x400009, 0x40000a, 0x40000b, 0x40000f, 0x400010, 0x400011, 0x400003, 0x400004,
-                0x400005, 0x40000c, 0x40000d, 0x40000e,
+                0x180147, 0x0ee185, 0x0330c7, 0x180148, 0x00eb1e, 0x00eb21, 0x00eb24, 0x00eb27, 0x180011, 0x180006,
+                0x00e980, 0x00e983, 0x00e9ec, 0x00e9ef, 0x00eda8, 0x180146, 0x00ea73, 0x00ea76, 0x00ea7c, 0x00ea7f,
+                0x00ea8b, 0x00eb51, 0x00eb54, 0x00eb5a, 0x00eb57, 0x400000, 0x400001, 0x400002, 0x400006, 0x400007,
+                0x400008, 0x400009, 0x40000a, 0x40000b, 0x40000f, 0x400010, 0x400011, 0x400003, 0x400004, 0x400005,
+                0x40000c, 0x40000d, 0x40000e,
             },
             "Hyrule Castle": {
                 0x00e974, 0x00eb0c, 0x00eb09, 0x00e96e, 0x00eb5d, 0x00eb60, 0x00eb63, 0x00ea79, 0x140037, 0x140034,
@@ -824,57 +824,40 @@ if "A Link to the Past" in network_data_package["games"]:
         }
 
         regions = {
-            "Light World": [],
-            "Dark World": [],
-            "Hyrule Castle": [],
-            "Agahnims Tower": [],
-            "Eastern Palace": [],
-            "Desert Palace": [],
-            "Tower of Hera": [],
-            "Palace of Darkness": [],
-            "Skull Woods": [],
-            "Thieves' Town": [],
-            "Swamp Palace": [],
-            "Ice Palace": [],
-            "Misery Mire": [],
-            "Turtle Rock": [],
-            "Ganons Tower": [],
-            "Unknown": [],
+            "Light World":        {"checked": 0, "locations": []},
+            "Dark World":         {"checked": 0, "locations": []},
+            "Hyrule Castle":      {"checked": 0, "locations": []},
+            "Agahnims Tower":     {"checked": 0, "locations": []},
+            "Eastern Palace":     {"checked": 0, "locations": []},
+            "Desert Palace":      {"checked": 0, "locations": []},
+            "Tower of Hera":      {"checked": 0, "locations": []},
+            "Palace of Darkness": {"checked": 0, "locations": []},
+            "Skull Woods":        {"checked": 0, "locations": []},
+            "Thieves' Town":      {"checked": 0, "locations": []},
+            "Swamp Palace":       {"checked": 0, "locations": []},
+            "Ice Palace":         {"checked": 0, "locations": []},
+            "Misery Mire":        {"checked": 0, "locations": []},
+            "Turtle Rock":        {"checked": 0, "locations": []},
+            "Ganons Tower":       {"checked": 0, "locations": []},
+            "Unknown":            {"checked": 0, "locations": []},
         }
-        completed_locations = {
-            "Light World": 0,
-            "Dark World": 0,
-            "Hyrule Castle": 0,
-            "Agahnims Tower": 0,
-            "Eastern Palace": 0,
-            "Desert Palace": 0,
-            "Tower of Hera": 0,
-            "Palace of Darkness": 0,
-            "Skull Woods": 0,
-            "Thieves' Town": 0,
-            "Swamp Palace": 0,
-            "Ice Palace": 0,
-            "Misery Mire": 0,
-            "Turtle Rock": 0,
-            "Ganons Tower": 0,
-            "Unknown": 0,
-        }
+
         for location in tracker_data.get_player_locations(team, player):
             location_name = tracker_data.location_id_to_name["A Link to the Past"][location]
             location_checked = location in tracker_data.get_player_checked_locations(team, player)
             for region, region_locations in known_regions.items():
                 if location in region_locations:
-                    regions[region].append((location_name, location_checked))
-                    completed_locations[region] += 1 if location_checked else 0
+                    regions[region]["locations"].append((location_name, location_checked))
+                    regions[region]["checked"] += 1 if location_checked else 0
                     break
             else:
-                # New or missed location in the tables above. Add it to an unknown region just so it's not forgotten.
-                regions["Unknown"].append((location_name, location_checked))
-                completed_locations["Unknown"] += 1 if location_checked else 0
+                # New or missed location in the tables above. Add it to an "unknown region", so it's not forgotten.
+                regions["Unknown"]["locations"].append((location_name, location_checked))
+                regions["Unknown"]["checked"] += 1 if location_checked else 0
 
         # Sort locations in regions by name
         for region in regions:
-            regions[region].sort()
+            regions[region]["locations"].sort()
 
         return render_template(
             template_name_or_list="tracker__ALinkToThePast.html",
@@ -884,7 +867,6 @@ if "A Link to the Past" in network_data_package["games"]:
             inventory=inventory,
             player_name=tracker_data.get_player_name(team, player),
             regions=regions,
-            completed_locations=completed_locations,
         )
 
     _multiworld_trackers["A Link to the Past"] = render_ALinkToThePast_multiworld_tracker

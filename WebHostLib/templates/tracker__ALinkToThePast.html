@@ -146,40 +146,40 @@
                 <div><img src="{{ icons['Big Key'] }}" alt="BK" title="Big Keys"></div>
             </div>
 
-            {% for region, locations in regions.items() %}
-                {% if locations | length > 0 %}
-                <details class="region-details">
-                    <summary>
-                        {% if region in dungeon_keys %}
-                        <div class="region">
-                            <span>{{ region }}</span>
-                            <span>{{ completed_locations[region] }} / {{ locations | length }}</span>
-                            <span>{{ inventory[dungeon_keys[region][0]] }}</span>
-                            <span>
-                                {% if region == "Agahnims Tower" %}
-                                    &mdash;
-                                {% elif inventory[dungeon_keys[region][1]] %}
-                                    ✔
-                                {% endif %}
-                            </span>
-                        </div>
-                        {% else %}
-                        <div class="region">
-                            <span>{{ region }}</span>
-                            <span>{{ completed_locations[region] }} / {{ locations | length }}</span>
-                            <span>&mdash;</span>
-                            <span>&mdash;</span>
-                        </div>
-                        {% endif %}
-                    </summary>
+            {% for region_name, region_data in regions.items() %}
+                {% if region_data["locations"] | length > 0 %}
+                    <details class="region-details">
+                        <summary>
+                            {% if region_name in dungeon_keys %}
+                                <div class="region">
+                                    <span>{{ region_name }}</span>
+                                    <span>{{ region_data["checked"] }} / {{ region_data["locations"] | length }}</span>
+                                    <span>{{ inventory[dungeon_keys[region_name][0]] }}</span>
+                                    <span>
+                                        {% if region_name == "Agahnims Tower" %}
+                                            &mdash;
+                                        {% elif inventory[dungeon_keys[region_name][1]] %}
+                                            ✔
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            {% else %}
+                                <div class="region">
+                                    <span>{{ region_name }}</span>
+                                    <span>{{ region_data["checked"] }} / {{ region_data["locations"] | length }}</span>
+                                    <span>&mdash;</span>
+                                    <span>&mdash;</span>
+                                </div>
+                            {% endif %}
+                        </summary>
 
-                    <div class="location-rows">
-                        {% for location, checked in locations %}
-                        <div>{{ location }}</div>
-                        <div>{% if checked %}✔{% endif %}</div>
-                        {% endfor %}
-                    </div>
-                </details>
+                        <div class="location-rows">
+                            {% for location, checked in region_data["locations"] %}
+                                <div>{{ location }}</div>
+                                <div>{% if checked %}✔{% endif %}</div>
+                            {% endfor %}
+                        </div>
+                    </details>
                 {% endif %}
             {% endfor %}
         </div>
