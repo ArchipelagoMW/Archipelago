@@ -431,8 +431,8 @@ def write_tokens(world: "MLSSWorld", patch: MLSSProcedurePatch) -> None:
 
     swap_colors(world, patch, colors[world.options.mario_color], 0)
     swap_colors(world, patch, colors[world.options.luigi_color], 1)
-    swap_pants(world, patch, colors[world.options.mario_pants], 0)
-    swap_pants(world, patch, colors[world.options.luigi_pants], 1)
+    swap_pants(world, patch, cpants[world.options.mario_pants], 0)
+    swap_pants(world, patch, cpants[world.options.luigi_pants], 1)
 
     patch.write_file("token_data.bin", patch.get_token_binary())
 
@@ -468,7 +468,7 @@ def swap_pants(world: "MLSSWorld", patch: MLSSProcedurePatch, color: str, bro: i
         return
     if bro == 1 and (colors[luigi_color] == "TrueChaos" or colors[luigi_color] == "Silhouette"):
         return
-    if color == "Vanilla" or color == "Silhouette":
+    if color == "Vanilla":
         return
     temp = pkgutil.get_data(__name__, "colors/pants/" + color + ".txt")
     temp_io = io.BytesIO(temp)
@@ -476,7 +476,7 @@ def swap_pants(world: "MLSSWorld", patch: MLSSProcedurePatch, color: str, bro: i
 
     for lines in temp_io.readlines():
         arr = lines.decode('utf-8').strip().split(',')
-        if color != "Chaos" and color != "TrueChaos":
+        if color != "Chaos":
             color_arr.append(Color(int(arr[0], 16), int(arr[1], 16), int(arr[2], 16), int(arr[3], 16)))
         else:
             color_arr.append(
