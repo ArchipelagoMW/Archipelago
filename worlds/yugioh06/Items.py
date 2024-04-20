@@ -1,4 +1,6 @@
-item_to_index = {
+from typing import Dict, List
+
+item_to_index: Dict[str, int] = {
     "LEGEND OF B.E.W.D.": 1,
     "METAL RAIDERS": 2,
     "PHARAOH'S SERVANT": 3,
@@ -173,24 +175,24 @@ item_to_index = {
     "Remote": 255
 }
 
-tier_1_opponents = (
+tier_1_opponents: List[str] = [
     "Campaign Tier 1 Column 1",
     "Campaign Tier 1 Column 2",
     "Campaign Tier 1 Column 3",
     "Campaign Tier 1 Column 4",
     "Campaign Tier 1 Column 5"
-)
+]
 
-Banlist_Items = {
-    0: "No Banlist",
-    1: "Banlist September 2003",
-    2: "Banlist March 2004",
-    3: "Banlist September 2004",
-    4: "Banlist March 2005",
-    5: "Banlist September 2005"
-}
+Banlist_Items: List[str] = [
+    "No Banlist",
+    "Banlist September 2003",
+    "Banlist March 2004",
+    "Banlist September 2004",
+    "Banlist March 2005",
+    "Banlist September 2005"
+]
 
-core_booster = (
+core_booster: List[str] = [
     "LEGEND OF B.E.W.D.",
     "METAL RAIDERS",
     "PHARAOH'S SERVANT",
@@ -209,9 +211,9 @@ core_booster = (
     "CYBERNETIC REVOLUTION",
     "ELEMENTAL ENERGY",
     "SHADOW OF INFINITY",
-)
+]
 
-draft_boosters = (
+draft_boosters: List[str] = [
     "METAL RAIDERS",
     "PHARAOH'S SERVANT",
     "PHARAONIC GUARDIAN",
@@ -223,14 +225,14 @@ draft_boosters = (
     "RISE OF DESTINY",
     "ELEMENTAL ENERGY",
     "SHADOW OF INFINITY",
-)
+]
 
-draft_opponents = (
+draft_opponents: List[str] = [
     "Campaign Tier 1 Column 1",
     "Campaign Tier 1 Column 5"
-)
+]
 
-booster_packs = (
+booster_packs: List[str] = [
     "LEGEND OF B.E.W.D.",
     "METAL RAIDERS",
     "PHARAOH'S SERVANT",
@@ -276,10 +278,10 @@ booster_packs = (
     "Direct Damage Collection",
     "Direct Attack Collection",
     "Monster Destroy Collection"
-)
+]
 
-challenges = {
-"LD01 All except Level 4 forbidden Unlock",
+challenges: List[str] = [
+    "LD01 All except Level 4 forbidden Unlock",
     "LD02 Medium/high Level forbidden Unlock",
     "LD03 ATK 1500 or more forbidden Unlock",
     "LD04 Flip Effects forbidden Unlock",
@@ -370,9 +372,9 @@ challenges = {
     "TD48 Destroy Monsters with Effects Unlock",
     "TD49 Plunder Unlock",
     "TD50 Dark Scorpion Combination Unlock",
-}
+]
 
-excluded_items = {
+excluded_items: List[str] = [
     "All Normal Monsters",
     "All Effect Monsters",
     "All Fusion Monsters",
@@ -381,11 +383,11 @@ excluded_items = {
     "All at Random",
     "5000DP",
     "Remote"
-}
+]
 
-useful = {
+useful: List[str] = [
     "Banlist March 2004",
     "Banlist September 2004",
     "Banlist March 2005",
     "Banlist September 2005",
-}
+]

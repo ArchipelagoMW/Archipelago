@@ -13,7 +13,7 @@ class OpponentData(NamedTuple):
     column: int
     card_id: int = 0
     deck_name_id: int = 0
-    deck_file: str = ''
+    deck_file: str = ""
     difficulty: int = 1
     additional_info: List[str] = []
 

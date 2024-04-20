@@ -1,4 +1,6 @@
-booster_contents = {
+from typing import Dict
+
+booster_contents: Dict[str, set[str]] = {
     "LEGEND OF B.E.W.D.": {
         "Exodia",
         "Dark Magician",
@@ -918,6 +920,6 @@ def get_booster_locations(booster: str) -> dict[str, str]:
     location = {}
     i = 1
     for content in booster_contents.get(booster):
-        location[booster + " " +str(i)] = content
+        location[booster + " " + str(i)] = content
         i = i + 1
     return location

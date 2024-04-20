@@ -106,7 +106,7 @@ class Yugioh06World(World):
         start_inventory = self.options.start_inventory.value.copy()
         item_pool = []
         items = item_to_index.copy()
-        starting_list = Banlist_Items.get(self.options.banlist.value)
+        starting_list = Banlist_Items[self.options.banlist.value]
         if not self.options.add_empty_banList.value and starting_list != "No Banlist":
             items.pop("No Banlist")
         for rc in self.removed_challenges:
@@ -351,7 +351,7 @@ class Yugioh06World(World):
             self.starting_booster = self.random.choice(boosters)
         self.multiworld.push_precollected(self.create_item(self.starting_booster))
         banlist = self.options.banlist.value
-        self.multiworld.push_precollected(self.create_item(Banlist_Items.get(banlist)))
+        self.multiworld.push_precollected(self.create_item(Banlist_Items[banlist]))
 
         if not self.removed_challenges:
             challenge = list((Limited_Duels | Theme_Duels).keys())
@@ -369,7 +369,8 @@ class Yugioh06World(World):
             normal = [e for e in challenge if e not in excluded and e not in prio]
             total = list(excluded) + normal + list(prio)
             self.removed_challenges = total[:noc]
-            self.campaign_opponents = get_opponents(self.multiworld, self.player,
+
+        self.campaign_opponents = get_opponents(self.multiworld, self.player,
                                                 self.options.campaign_opponents_shuffle.value)
 
     def fill_slot_data(self) -> Dict[str, Any]:
