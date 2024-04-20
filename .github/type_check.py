@@ -7,8 +7,8 @@ source_dir = Path(__file__).parent
 config = source_dir / "pyright-config.json"
 
 
-def pyright() -> int:
-    """ returns process return code """
+def run_pyright() -> int:
+    """ returns process exit code """
     command = ("pyright", "-p", str(config))
     print(" ".join(command))
 
@@ -20,8 +20,8 @@ def pyright() -> int:
     return pyright_result.returncode
 
 
-def mypy() -> int:
-    """ returns process return code """
+def run_mypy() -> int:
+    """ returns process exit code """
     with open(config) as config_file:
         config_data: Union[Dict[str, Any], Any] = json.load(config_file)
 
@@ -55,6 +55,6 @@ def mypy() -> int:
 
 if __name__ == "__main__":
     # mypy is first because of its --install-types feature
-    mypy_ret = mypy()
-    pyright_ret = pyright()
+    mypy_ret = run_mypy()
+    pyright_ret = run_pyright()
     exit(mypy_ret or pyright_ret)
