@@ -581,16 +581,6 @@ if "A Link to the Past" in network_data_package["games"]:
             inventories=inventories,
             regions=regions,
             known_regions=known_regions,
-            # tracking_names=tracking_names,
-            # tracking_ids=tracking_ids,
-            # multi_items=multi_items,
-            # checks_done=checks_done,
-            # ordered_areas=ordered_areas,
-            # checks_in_area=player_checks_in_area,
-            # key_locations=group_key_locations,
-            # big_key_locations=group_big_key_locations,
-            # small_key_ids=small_key_ids,
-            # big_key_ids=big_key_ids,
         )
 
     def render_ALinkToThePast_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
