@@ -74,22 +74,20 @@ class MLSSPatchExtension(APPatchExtension):
 
         songs = []
         stream.seek(0x21CB74)
-        while True:
+        for _ in range(50):
             if stream.tell() == 0x21CBD8:
                 stream.seek(4, 1)
                 continue
-            if stream.tell() >= 0x21CC3C:
-                break
             temp = stream.read(4)
             songs.append(temp)
 
         random.shuffle(songs)
         stream.seek(0x21CB74)
-        for i in range(len(songs) - 1, -1, -1):
+        for _ in range(50):
             if stream.tell() == 0x21CBD8:
                 stream.seek(4, 1)
                 continue
-            stream.write(songs[i])
+            stream.write(songs.pop())
 
         return stream.getvalue()
 
@@ -180,13 +178,13 @@ class MLSSPatchExtension(APPatchExtension):
                 for pos in bosses:
                     stream.seek(pos + 1)
                     stream.write(raw.pop())
-            return
+            return stream.getvalue()
 
         enemies_raw = []
         groups = []
 
         if options["randomize_enemies"] == 0:
-            return
+            return stream.getvalue()
 
         if options["randomize_bosses"] == 2:
             for pos in bosses:
