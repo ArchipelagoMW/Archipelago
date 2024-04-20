@@ -695,196 +695,169 @@ if "A Link to the Past" in network_data_package["games"]:
         )
 
     def render_ALinkToThePast_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
-        # Helper objects.
-        alttp_id_lookup = tracker_data.item_name_to_id["A Link to the Past"]
+        inventory = collections.Counter({
+            tracker_data.item_id_to_name["A Link to the Past"][code]: count
+            for code, count in tracker_data.get_player_inventory_counts(team, player).items()
+        })
 
-        links = {
-            "Bow":                   "Progressive Bow",
-            "Silver Arrows":         "Progressive Bow",
-            "Silver Bow":            "Progressive Bow",
-            "Progressive Bow (Alt)": "Progressive Bow",
-            "Bottle (Red Potion)":   "Bottle",
-            "Bottle (Green Potion)": "Bottle",
-            "Bottle (Blue Potion)":  "Bottle",
-            "Bottle (Fairy)":        "Bottle",
-            "Bottle (Bee)":          "Bottle",
-            "Bottle (Good Bee)":     "Bottle",
-            "Fighter Sword":         "Progressive Sword",
-            "Master Sword":          "Progressive Sword",
-            "Tempered Sword":        "Progressive Sword",
-            "Golden Sword":          "Progressive Sword",
-            "Power Glove":           "Progressive Glove",
-            "Titans Mitts":          "Progressive Glove",
+        # Mapping from non-progressive item to progressive name and max level.
+        non_progressive_items = {
+            "Fighter Sword":  ("Progressive Sword",  1),
+            "Master Sword":   ("Progressive Sword",  2),
+            "Tempered Sword": ("Progressive Sword",  3),
+            "Golden Sword":   ("Progressive Sword",  4),
+            "Power Glove":    ("Progressive Glove",  1),
+            "Titans Mitts":   ("Progressive Glove",  2),
+            "Bow":            ("Progressive Bow",    1),
+            "Silver Bow":     ("Progressive Bow",    2),
+            "Blue Mail":      ("Progressive Mail",   1),
+            "Red Mail":       ("Progressive Mail",   2),
+            "Blue Shield":    ("Progressive Shield", 1),
+            "Red Shield":     ("Progressive Shield", 2),
+            "Mirror Shield":  ("Progressive Shield", 3),
         }
-        links = {alttp_id_lookup[key]: alttp_id_lookup[value] for key, value in links.items()}
-        levels = {
-            "Fighter Sword":   1,
-            "Master Sword":    2,
-            "Tempered Sword":  3,
-            "Golden Sword":    4,
-            "Power Glove":     1,
-            "Titans Mitts":    2,
-            "Bow":             1,
-            "Silver Bow":      2,
-            "Triforce Piece": 90,
+
+        progressive_item_max = {
+            "Progressive Sword":  4,
+            "Progressive Glove":  2,
+            "Progressive Bow":    2,
+            "Progressive Mail":   2,
+            "Progressive Shield": 3,
         }
-        tracking_names = [
-            "Progressive Sword", "Progressive Bow", "Book of Mudora", "Hammer", "Hookshot", "Magic Mirror", "Flute",
-            "Pegasus Boots", "Progressive Glove", "Flippers", "Moon Pearl", "Blue Boomerang", "Red Boomerang",
-            "Bug Catching Net", "Cape", "Shovel", "Lamp", "Mushroom", "Magic Powder", "Cane of Somaria",
-            "Cane of Byrna", "Fire Rod", "Ice Rod", "Bombos", "Ether", "Quake", "Bottle", "Triforce Piece", "Triforce",
+
+        bottle_items = [
+            "Bottle",
+            "Bottle (Bee)",
+            "Bottle (Blue Potion)",
+            "Bottle (Fairy)",
+            "Bottle (Good Bee)",
+            "Bottle (Green Potion)",
+            "Bottle (Red Potion)",
         ]
-        default_locations = {
+
+        # Translate non-progression items to progression items for tracker simplicity.
+        for item, (prog_item, level) in non_progressive_items.items():
+            if item in inventory:
+                inventory[prog_item] = min(max(inventory[prog_item], level), progressive_item_max[prog_item])
+
+        for bottle in bottle_items:
+            inventory["Bottles"] = min(inventory["Bottles"] + inventory[bottle], 4)
+
+        if "Progressive Bow (Alt)" in inventory:
+            inventory["Progressive Bow"] += inventory["Progressive Bow (Alt)"]
+            inventory["Progressive Bow"] = min(inventory["Progressive Bow"], progressive_item_max["Progressive Bow"])
+
+        # Highlight 'bombs' if we received any bomb upgrades in bombless start.
+        # In race mode, we'll just assume bombless start for simplicity.
+        if tracker_data.get_slot_data(team, player).get("bombless_start", True):
+            inventory["Bombs"] = sum(count for item, count in inventory.items() if item.startswith("Bomb Upgrade"))
+        else:
+            inventory["Bombs"] = 1
+
+        known_regions = {
             "Light World": {
-                1572864, 1572865, 60034, 1572867, 1572868, 60037, 1572869, 1572866, 60040, 59788, 60046, 60175,
-                1572880, 60049, 60178, 1572883, 60052, 60181, 1572885, 60055, 60184, 191256, 60058, 60187, 1572884,
-                1572886, 1572887, 1572906, 60202, 60205, 59824, 166320, 1010170, 60208, 60211, 60214, 60217, 59836,
-                60220, 60223, 59839, 1573184, 60226, 975299, 1573188, 1573189, 188229, 60229, 60232, 1573193,
-                1573194, 60235, 1573187, 59845, 59854, 211407, 60238, 59857, 1573185, 1573186, 1572882, 212328,
-                59881, 59761, 59890, 59770, 193020, 212605
+                0x180013, 0x02eb18, 0x18014a, 0x180145, 0x033d68, 0x00eb0f, 0x00eb12, 0x00eb15, 0x00eb18, 0x00eb1b,
+                0x02df45, 0x00e971, 0x0ee1c3, 0x180149, 0x00e9b0, 0x00e9d1, 0x00e97a, 0x00e98c, 0x00e9bc, 0x00e9ce,
+                0x00e9e9, 0x00e9f2, 0x00ea82, 0x00ea85, 0x00ea88, 0x02f1fc, 0x00ea8e, 0x00ea91, 0x00ea94, 0x00ea97,
+                0x00ea9a, 0x18002a, 0x180015, 0x0339cf, 0x033e7d, 0x180000, 0x180001, 0x180003, 0x180004, 0x180005,
+                0x00eb42, 0x00eb45, 0x00eb48, 0x00eb4b, 0x180010, 0x00eb4e, 0x00eb3f, 0x180012, 0x180014, 0x180144,
+                0x180142, 0x180143, 0x0289b0, 0x0f69fa, 0x180002, 0x00eb2a, 0x00eb2d, 0x00eb30, 0x00eb33, 0x00eb36,
+                0x00eb39, 0x00eb3c, 0x00e9bf, 0x180016, 0x180017, 0x180140, 0x180141, 0x00e9c5, 0x400018, 0x400019,
+                0x40001a, 0x400015, 0x400016, 0x400017, 0x400012, 0x400013, 0x400014, 0x40001b, 0x40001c, 0x40001d,
+                0x400022, 0x400023, 0x400024, 0x400025, 0x400021, 0x40001e, 0x40001f,
             },
             "Dark World": {
-                59776, 59779, 975237, 1572870, 60043, 1572881, 60190, 60193, 60196, 60199, 60840, 1573190, 209095,
-                1573192, 1573191, 60241, 60244, 60247, 60250, 59884, 59887, 60019, 60022, 60028, 60031
+                0x180147, 0x0ee185, 0x0330c7, 0x180148, 0x00eb1e, 0x00eb21, 0x00eb24, 0x00eb27, 0x180011, 0x180006,
+                0x00e980, 0x00e983, 0x00e9ec, 0x00e9ef, 0x00eda8, 0x180146, 0x00ea73, 0x00ea76, 0x00ea7c, 0x00ea7f,
+                0x00ea8b, 0x00eb51, 0x00eb54, 0x00eb5a, 0x00eb57, 0x400000, 0x400001, 0x400002, 0x400006, 0x400007,
+                0x400008, 0x400009, 0x40000a, 0x40000b, 0x40000f, 0x400010, 0x400011, 0x400003, 0x400004, 0x400005,
+                0x40000c, 0x40000d, 0x40000e,
             },
-            "Desert Palace": {1573216, 59842, 59851, 59791, 1573201, 59830},
-            "Eastern Palace": {1573200, 59827, 59893, 59767, 59833, 59773},
-            "Hyrule Castle": {60256, 60259, 60169, 60172, 59758, 59764, 60025, 60253},
-            "Agahnims Tower": {60082, 60085},
-            "Tower of Hera": {1573218, 59878, 59821, 1573202, 59896, 59899},
-            "Swamp Palace": {60064, 60067, 60070, 59782, 59785, 60073, 60076, 60079, 1573204, 60061},
-            "Thieves Town": {59905, 59908, 59911, 59914, 59917, 59920, 59923, 1573206},
-            "Skull Woods": {59809, 59902, 59848, 59794, 1573205, 59800, 59803, 59806},
-            "Ice Palace": {59872, 59875, 59812, 59818, 59860, 59797, 1573207, 59869},
-            "Misery Mire": {60001, 60004, 60007, 60010, 60013, 1573208, 59866, 59998},
-            "Turtle Rock": {59938, 59941, 59944, 1573209, 59947, 59950, 59953, 59956, 59926, 59929, 59932, 59935},
+            "Hyrule Castle": {
+                0x00e974, 0x00eb0c, 0x00eb09, 0x00e96e, 0x00eb5d, 0x00eb60, 0x00eb63, 0x00ea79, 0x140037, 0x140034,
+                0x14000d, 0x14003d,
+            },
+            "Agahnims Tower": {
+                0x00eab5, 0x00eab2, 0x140061, 0x140052,
+            },
+            "Eastern Palace": {
+                0x00e977, 0x00e97d, 0x00e9b3, 0x00e9b9, 0x00e9f5, 0x180150, 0x14005b, 0x140049,
+            },
+            "Desert Palace": {
+                0x00e98f, 0x180160, 0x00e9b6, 0x00e9cb, 0x00e9c2, 0x180151, 0x140031, 0x14002b, 0x140028,
+            },
+            "Tower of Hera": {
+                0x180162, 0x00e9ad, 0x00e9e6, 0x00e9fb, 0x00e9f8, 0x180152
+            },
             "Palace of Darkness": {
-                59968, 59971, 59974, 59977, 59980, 59983, 59986, 1573203, 59989, 59959, 59992, 59962, 59995,
-                59965
+                0x00ea5b, 0x00ea3d, 0x00ea49, 0x00ea37, 0x00ea3a, 0x00ea52, 0x00ea43, 0x00ea4c, 0x00ea4f, 0x00ea55,
+                0x00ea58, 0x00ea40, 0x00ea46, 0x180153,
+            },
+            "Swamp Palace": {
+                0x00ea9d, 0x00e986, 0x00e989, 0x00eaa0, 0x00eaa6, 0x00eaa3, 0x00eaa9, 0x00eaac, 0x00eaaf, 0x180154,
+                0x140019, 0x140016, 0x140013, 0x140010, 0x14000a,
+            },
+            "Thieves' Town": {
+                0x00ea04, 0x00ea01, 0x00ea07, 0x00ea0a, 0x00ea0d, 0x00ea10, 0x00ea13, 0x180156, 0x14005e, 0x14004f,
+            },
+            "Skull Woods": {
+                0x00e992, 0x00e99b, 0x00e998, 0x00e9a1, 0x00e9c8, 0x00e99e, 0x00e9fe, 0x180155, 0x14002e, 0x14001c,
+            },
+            "Ice Palace": {
+                0x00e9d4, 0x00e995, 0x00e9aa, 0x00e9e3, 0x00e9e0, 0x00e9a4, 0x00e9dd, 0x180157, 0x140004, 0x140022,
+                0x140025, 0x140046,
+            },
+            "Misery Mire": {
+                0x00ea67, 0x00ea6a, 0x00ea5e, 0x00ea61, 0x00e9da, 0x00ea64, 0x00ea6d, 0x180158, 0x140055, 0x14004c,
+                0x140064,
+            },
+            "Turtle Rock": {
+                0x00ea22, 0x00ea1c, 0x00ea1f, 0x00ea16, 0x00ea25, 0x00ea19, 0x00ea34, 0x00ea31, 0x00ea2e, 0x00ea2b,
+                0x00ea28, 0x180159, 0x140058, 0x140007,
             },
             "Ganons Tower": {
-                60160, 60163, 60166, 60088, 60091, 60094, 60097, 60100, 60103, 60106, 60109, 60112, 60115, 60118,
-                60121, 60124, 60127, 1573217, 60130, 60133, 60136, 60139, 60142, 60145, 60148, 60151, 60157
+                0x180161, 0x00ead9, 0x00eadc, 0x00eae2, 0x00eae5, 0x00eae8, 0x00eaeb, 0x00eaee, 0x00eab8, 0x00eabb,
+                0x00eabe, 0x00eac1, 0x00ead3, 0x00ead0, 0x00eac4, 0x00eac7, 0x00eaca, 0x00eacd, 0x00eadf, 0x00eadf,
+                0x00ead6, 0x00eaf4, 0x00eaf7, 0x00eaf1, 0x00eafd, 0x00eb00, 0x00eb03, 0x00eb06, 0x140040, 0x140043,
+                0x14003a, 0x14001f,
             },
-            "Total": set()
         }
-        key_only_locations = {
-            "Light World": set(),
-            "Dark World": set(),
-            "Desert Palace": {0x140031, 0x14002b, 0x140061, 0x140028},
-            "Eastern Palace": {0x14005b, 0x140049},
-            "Hyrule Castle": {0x140037, 0x140034, 0x14000d, 0x14003d},
-            "Agahnims Tower": {0x140061, 0x140052},
-            "Tower of Hera": set(),
-            "Swamp Palace": {0x140019, 0x140016, 0x140013, 0x140010, 0x14000a},
-            "Thieves Town": {0x14005e, 0x14004f},
-            "Skull Woods": {0x14002e, 0x14001c},
-            "Ice Palace": {0x140004, 0x140022, 0x140025, 0x140046},
-            "Misery Mire": {0x140055, 0x14004c, 0x140064},
-            "Turtle Rock": {0x140058, 0x140007},
-            "Palace of Darkness": set(),
-            "Ganons Tower": {0x140040, 0x140043, 0x14003a, 0x14001f},
-            "Total": set()
+
+        regions = {
+            "Light World":        {"checked": 0, "locations": []},
+            "Dark World":         {"checked": 0, "locations": []},
+            "Hyrule Castle":      {"checked": 0, "locations": []},
+            "Agahnims Tower":     {"checked": 0, "locations": []},
+            "Eastern Palace":     {"checked": 0, "locations": []},
+            "Desert Palace":      {"checked": 0, "locations": []},
+            "Tower of Hera":      {"checked": 0, "locations": []},
+            "Palace of Darkness": {"checked": 0, "locations": []},
+            "Skull Woods":        {"checked": 0, "locations": []},
+            "Thieves' Town":      {"checked": 0, "locations": []},
+            "Swamp Palace":       {"checked": 0, "locations": []},
+            "Ice Palace":         {"checked": 0, "locations": []},
+            "Misery Mire":        {"checked": 0, "locations": []},
+            "Turtle Rock":        {"checked": 0, "locations": []},
+            "Ganons Tower":       {"checked": 0, "locations": []},
+            "Unknown":            {"checked": 0, "locations": []},
         }
-        location_to_area = {}
-        for area, locations in default_locations.items():
-            for checked_location in locations:
-                location_to_area[checked_location] = area
-        for area, locations in key_only_locations.items():
-            for checked_location in locations:
-                location_to_area[checked_location] = area
 
-        checks_in_area = {area: len(checks) for area, checks in default_locations.items()}
-        checks_in_area["Total"] = 216
-        ordered_areas = (
-            "Light World", "Dark World", "Hyrule Castle", "Agahnims Tower", "Eastern Palace", "Desert Palace",
-            "Tower of Hera", "Palace of Darkness", "Swamp Palace", "Skull Woods", "Thieves Town", "Ice Palace",
-            "Misery Mire", "Turtle Rock", "Ganons Tower", "Total"
-        )
-
-        tracking_ids = []
-        for item in tracking_names:
-            tracking_ids.append(alttp_id_lookup[item])
-
-        # Can't wait to get this into the apworld. Oof.
-        from worlds.alttp import Items
-
-        small_key_ids = {}
-        big_key_ids = {}
-        ids_small_key = {}
-        ids_big_key = {}
-        for item_name, data in Items.item_table.items():
-            if "Key" in item_name:
-                area = item_name.split("(")[1][:-1]
-                if "Small" in item_name:
-                    small_key_ids[area] = data[2]
-                    ids_small_key[data[2]] = area
-                else:
-                    big_key_ids[area] = data[2]
-                    ids_big_key[data[2]] = area
-
-        inventory = collections.Counter()
-        checks_done = {loc_name: 0 for loc_name in default_locations}
-        player_big_key_locations = set()
-        player_small_key_locations = set()
-
-        player_locations = tracker_data.get_player_locations(team, player)
-        for checked_location in tracker_data.get_player_checked_locations(team, player):
-            if checked_location in player_locations:
-                area_name = location_to_area.get(checked_location, None)
-                if area_name:
-                    checks_done[area_name] += 1
-
-                checks_done["Total"] += 1
-
-        for received_item in tracker_data.get_player_received_items(team, player):
-            target_item = links.get(received_item.item, received_item.item)
-            if received_item.item in levels:  # non-progressive
-                inventory[target_item] = max(inventory[target_item], levels[received_item.item])
+        for location in tracker_data.get_player_locations(team, player):
+            location_name = tracker_data.location_id_to_name["A Link to the Past"][location]
+            location_checked = location in tracker_data.get_player_checked_locations(team, player)
+            for region, region_locations in known_regions.items():
+                if location in region_locations:
+                    regions[region]["locations"].append((location_name, location_checked))
+                    regions[region]["checked"] += 1 if location_checked else 0
+                    break
             else:
-                inventory[target_item] += 1
+                # New or missed location in the tables above. Add it to an "unknown region", so it's not forgotten.
+                regions["Unknown"]["locations"].append((location_name, location_checked))
+                regions["Unknown"]["checked"] += 1 if location_checked else 0
 
-        for location, (item_id, _, _) in player_locations.items():
-            if item_id in ids_big_key:
-                player_big_key_locations.add(ids_big_key[item_id])
-            elif item_id in ids_small_key:
-                player_small_key_locations.add(ids_small_key[item_id])
-
-        # Note the presence of the triforce item
-        if tracker_data.get_player_client_status(team, player) == ClientStatus.CLIENT_GOAL:
-            inventory[106] = 1  # Triforce
-
-        # Progressive items need special handling for icons and class
-        progressive_items = {
-            "Progressive Sword":  94,
-            "Progressive Glove":  97,
-            "Progressive Bow":    100,
-            "Progressive Mail":   96,
-            "Progressive Shield": 95,
-        }
-        progressive_names = {
-            "Progressive Sword":  [None, "Fighter Sword", "Master Sword", "Tempered Sword", "Golden Sword"],
-            "Progressive Glove":  [None, "Power Glove", "Titan Mitts"],
-            "Progressive Bow":    [None, "Bow", "Silver Bow"],
-            "Progressive Mail":   ["Green Mail", "Blue Mail", "Red Mail"],
-            "Progressive Shield": [None, "Blue Shield", "Red Shield", "Mirror Shield"]
-        }
-
-        # Determine which icon to use
-        display_data = {}
-        for item_name, item_id in progressive_items.items():
-            level = min(inventory[item_id], len(progressive_names[item_name]) - 1)
-            display_name = progressive_names[item_name][level]
-            acquired = True
-            if not display_name:
-                acquired = False
-                display_name = progressive_names[item_name][level + 1]
-            base_name = item_name.split(maxsplit=1)[1].lower()
-            display_data[base_name + "_acquired"] = acquired
-            display_data[base_name + "_icon"] = display_name
-
-        # The single player tracker doesn't care about overworld, underworld, and total checks. Maybe it should?
-        sp_areas = ordered_areas[2:15]
+        # Sort locations in regions by name
+        for region in regions:
+            regions[region]["locations"].sort()
 
         return render_template(
             template_name_or_list="tracker__ALinkToThePast.html",
@@ -893,15 +866,7 @@ if "A Link to the Past" in network_data_package["games"]:
             player=player,
             inventory=inventory,
             player_name=tracker_data.get_player_name(team, player),
-            checks_done=checks_done,
-            checks_in_area=checks_in_area,
-            acquired_items={tracker_data.item_id_to_name["A Link to the Past"][id] for id in inventory},
-            sp_areas=sp_areas,
-            small_key_ids=small_key_ids,
-            key_locations=player_small_key_locations,
-            big_key_ids=big_key_ids,
-            big_key_locations=player_big_key_locations,
-            **display_data,
+            regions=regions,
         )
 
     _multiworld_trackers["A Link to the Past"] = render_ALinkToThePast_multiworld_tracker

@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap');
+
+.tracker-container {
+    width: 440px;
+    box-sizing: border-box;
+    font-family: "Lexend Deca", Arial, Helvetica, sans-serif;
+    border: 2px solid black;
+    border-radius: 4px;
+    resize: both;
+
+    background-color: #42b149;
+    color: white;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+/** Inventory Grid ****************************************************************************************************/
+.inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    padding: 1rem;
+    gap: 1rem;
+}
+
+.inventory-grid .item {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    height: 48px;
+}
+
+.inventory-grid .dual-item {
+    display: flex;
+    justify-content: center;
+}
+
+.inventory-grid .missing {
+    /* Missing items will be in full grayscale to signify "uncollected". */
+    filter: grayscale(100%) contrast(75%) brightness(75%);
+}
+
+.inventory-grid .item img,
+.inventory-grid .dual-item img {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-size: 0.8rem;
+    text-shadow: 0 1px 2px black;
+    font-weight: bold;
+    image-rendering: crisp-edges;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.inventory-grid .dual-item img {
+    height: 48px;
+    margin: 0 -4px;
+}
+
+.inventory-grid .dual-item img:first-child {
+    align-self: flex-end;
+}
+
+.inventory-grid .item .quantity {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    text-align: right;
+    font-weight: 600;
+    font-size: 1.75rem;
+    line-height: 1.75rem;
+    text-shadow:
+        -1px -1px 0 #000,
+         1px -1px 0 #000,
+        -1px 1px 0 #000,
+         1px 1px 0 #000;
+    user-select: none;
+}
+
+/** Regions List ******************************************************************************************************/
+.regions-list {
+    padding: 1rem;
+}
+
+.regions-list summary {
+    list-style: none;
+    display: flex;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.regions-list summary::before {
+    content: "⯈";
+    width: 1em;
+    flex-shrink: 0;
+}
+
+.regions-list details {
+    font-weight: 300;
+}
+
+.regions-list details[open] > summary::before {
+    content: "⯆";
+}
+
+.regions-list .region {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 20fr 8fr 2fr 2fr;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+    font-weight: 300;
+    box-sizing: border-box;
+}
+
+.regions-list .region :first-child {
+    text-align: left;
+    font-weight: 500;
+}
+
+.regions-list .region.region-header {
+    margin-left: 24px;
+    width: calc(100% - 24px);
+    padding: 2px;
+}
+
+.regions-list .location-rows {
+    border-top: 1px solid white;
+    display: grid;
+    grid-template-columns: auto 32px;
+    font-weight: 300;
+    padding: 2px 8px;
+    margin-top: 4px;
+    font-size: 0.8rem;
+}
+
+.regions-list .location-rows :nth-child(even) {
+    text-align: right;
+}
