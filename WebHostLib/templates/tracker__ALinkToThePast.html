@@ -68,9 +68,9 @@
     "Desert Palace": ("Small Key (Desert Palace)", "Big Key (Desert Palace)"),
     "Tower of Hera": ("Small Key (Tower of Hera)", "Big Key (Tower of Hera)"),
     "Palace of Darkness": ("Small Key (Palace of Darkness)", "Big Key (Palace of Darkness)"),
-    "Thieves' Town": ("Small Key (Thieves Town)", "Big Key (Thieves Town)"),
-    "Skull Woods": ("Small Key (Skull Woods)", "Big Key (Skull Woods)"),
     "Swamp Palace": ("Small Key (Swamp Palace)", "Big Key (Swamp Palace)"),
+    "Thieves Town": ("Small Key (Thieves Town)", "Big Key (Thieves Town)"),
+    "Skull Woods": ("Small Key (Skull Woods)", "Big Key (Skull Woods)"),
     "Ice Palace": ("Small Key (Ice Palace)", "Big Key (Ice Palace)"),
     "Misery Mire": ("Small Key (Misery Mire)", "Big Key (Misery Mire)"),
     "Turtle Rock": ("Small Key (Turtle Rock)", "Big Key (Turtle Rock)"),
@@ -146,7 +146,8 @@
                 <div><img src="{{ icons['Big Key'] }}" alt="BK" title="Big Keys"></div>
             </div>
 
-            {% for region_name, region_data in regions.items() %}
+            {% for region_name in known_regions %}
+                {% set region_data = regions[region_name] %}
                 {% if region_data["locations"] | length > 0 %}
                     <details class="region-details">
                         <summary>
