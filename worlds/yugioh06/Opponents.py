@@ -141,7 +141,7 @@ challenge_opponents = [
 ]
 
 
-def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int], randomize: bool = False) -> Tuple[OpponentData, ...]:
+def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int], randomize: bool = False) -> List[OpponentData]:
     opponents_table: List[OpponentData] = [
         # Tier 1
         OpponentData(0, "Kuriboh", [], 1, 1, 4064, 8000, "deck/LV1_kuriboh.ydc\x00\x00"),
@@ -184,7 +184,7 @@ def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int], rando
     ]
     world = multiworld.worlds[player]
     if not randomize:
-        return tuple(opponents_table)
+        return opponents_table
     opponents = opponents_table + challenge_opponents
     start = world.random.choice([o for o in opponents if o.tier == 1 and len(o.additional_info) == 0])
     opponents.remove(start)
@@ -209,7 +209,7 @@ def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int], rando
             column = 1
             tier += 1
 
-    return tuple(recreation)
+    return recreation
 
 
 def get_opponent_locations(opponent: OpponentData) -> dict[str, str]:
@@ -221,5 +221,8 @@ def get_opponent_locations(opponent: OpponentData) -> dict[str, str]:
     for info in opponent.campaignInfo:
         location[opponent.name + "-> " + info] = info
     return location
+
+
+
 
 

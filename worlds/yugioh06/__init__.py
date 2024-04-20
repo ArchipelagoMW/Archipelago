@@ -295,6 +295,37 @@ class Yugioh06World(World):
             self.multiworld.regions.append(region)
 
     def generate_early(self):
+        # Universal tracker stuff, shouldn't do anything in standard gen
+        if hasattr(self.multiworld, "re_gen_passthrough"):
+            if "Yu-Gi-Oh! 2006" in self.multiworld.re_gen_passthrough:
+                # bypassing random yaml settings
+                slot_data = self.multiworld.re_gen_passthrough["Yu-Gi-Oh! 2006"]
+                self.options.structure_deck.value = slot_data["structure_deck"]
+                self.options.banlist.value = slot_data["banlist"]
+                self.options.final_campaign_boss_unlock_condition.value = slot_data[
+                    "final_campaign_boss_unlock_condition"]
+                self.options.fourth_tier_5_campaign_boss_unlock_condition.value = \
+                    slot_data["fourth_tier_5_campaign_boss_unlock_condition"]
+                self.options.third_tier_5_campaign_boss_unlock_condition.value = \
+                    slot_data["third_tier_5_campaign_boss_unlock_condition"]
+                self.options.final_campaign_boss_challenges.value = \
+                    slot_data["final_campaign_boss_challenges"]
+                self.options.fourth_tier_5_campaign_boss_challenges.value = \
+                    slot_data["fourth_tier_5_campaign_boss_challenges"]
+                self.options.third_tier_5_campaign_boss_challenges.value = \
+                    slot_data["third_tier_5_campaign_boss_challenges"]
+                self.options.final_campaign_boss_campaign_opponents.value = \
+                    slot_data["final_campaign_boss_campaign_opponents"]
+                self.options.fourth_tier_5_campaign_boss_campaign_opponents.value = \
+                    slot_data["fourth_tier_5_campaign_boss_campaign_opponents"]
+                self.options.third_tier_5_campaign_boss_campaign_opponents.value = \
+                    slot_data["third_tier_5_campaign_boss_campaign_opponents"]
+                self.options.number_of_challenges.value = \
+                    slot_data["number_of_challenges"]
+                self.removed_challenges = slot_data["removed challenges"]
+                self.starting_booster = slot_data["starting_booster"]
+                self.starting_opponent = slot_data["starting_opponent"]
+
         if self.options.structure_deck.current_key == "none":
             self.is_draft_mode = True
             boosters = draft_boosters
@@ -321,23 +352,24 @@ class Yugioh06World(World):
         self.multiworld.push_precollected(self.create_item(self.starting_booster))
         banlist = self.options.banlist.value
         self.multiworld.push_precollected(self.create_item(Banlist_Items.get(banlist)))
-        challenge = list((Limited_Duels | Theme_Duels).keys())
-        noc = len(challenge) - max(self.options.third_tier_5_campaign_boss_challenges.value
+
+        if not self.removed_challenges:
+            challenge = list((Limited_Duels | Theme_Duels).keys())
+            noc = len(challenge) - max(self.options.third_tier_5_campaign_boss_challenges.value
                                    if self.options.third_tier_5_campaign_boss_unlock_condition == "challenges" else 0,
                                    self.options.fourth_tier_5_campaign_boss_challenges.value
                                    if self.options.fourth_tier_5_campaign_boss_unlock_condition == "challenges" else 0,
                                    self.options.final_campaign_boss_challenges.value
                                    if self.options.final_campaign_boss_unlock_condition == "challenges" else 0,
-                                   self.options.number_of_challenges.value,
-                                   91 if hasattr(self.multiworld, "generation_is_fake") else 0)
+                                   self.options.number_of_challenges.value)
 
-        self.random.shuffle(challenge)
-        excluded = self.options.exclude_locations.value.intersection(challenge)
-        prio = self.options.priority_locations.value.intersection(challenge)
-        normal = [e for e in challenge if e not in excluded and e not in prio]
-        total = list(excluded) + normal + list(prio)
-        self.removed_challenges = total[:noc]
-        self.campaign_opponents = get_opponents(self.multiworld, self.player,
+            self.random.shuffle(challenge)
+            excluded = self.options.exclude_locations.value.intersection(challenge)
+            prio = self.options.priority_locations.value.intersection(challenge)
+            normal = [e for e in challenge if e not in excluded and e not in prio]
+            total = list(excluded) + normal + list(prio)
+            self.removed_challenges = total[:noc]
+            self.campaign_opponents = get_opponents(self.multiworld, self.player,
                                                 self.options.campaign_opponents_shuffle.value)
 
     def fill_slot_data(self) -> Dict[str, Any]:
@@ -361,35 +393,11 @@ class Yugioh06World(World):
         slot_data["starting_opponent"] = self.starting_opponent
         return slot_data
 
-    def interpret_slot_data(self, slot_data: Dict[str, Any]) -> None:
-        # bypassing random yaml settings
-        self.options.structure_deck.value = slot_data["structure_deck"]
-        self.options.banlist.value = slot_data["banlist"]
-        self.options.final_campaign_boss_unlock_condition.value = slot_data["final_campaign_boss_unlock_condition"]
-        self.options.fourth_tier_5_campaign_boss_unlock_condition.value = \
-            slot_data["fourth_tier_5_campaign_boss_unlock_condition"]
-        self.options.third_tier_5_campaign_boss_unlock_condition.value = \
-            slot_data["third_tier_5_campaign_boss_unlock_condition"]
-        self.options.final_campaign_boss_challenges.value = \
-            slot_data["final_campaign_boss_challenges"]
-        self.options.fourth_tier_5_campaign_boss_challenges.value = \
-            slot_data["fourth_tier_5_campaign_boss_challenges"]
-        self.options.third_tier_5_campaign_boss_challenges.value = \
-            slot_data["third_tier_5_campaign_boss_challenges"]
-        self.options.final_campaign_boss_campaign_opponents.value = \
-            slot_data["final_campaign_boss_campaign_opponents"]
-        self.options.fourth_tier_5_campaign_boss_campaign_opponents.value = \
-            slot_data["fourth_tier_5_campaign_boss_campaign_opponents"]
-        self.options.third_tier_5_campaign_boss_campaign_opponents.value = \
-            slot_data["third_tier_5_campaign_boss_campaign_opponents"]
-        self.options.number_of_challenges.value = \
-            slot_data["number_of_challenges"]
-        self.removed_challenges = slot_data["removed challenges"]
-        self.starting_booster = slot_data["starting_booster"]
-        self.starting_opponent = slot_data["starting_opponent"]
-        all_state = self.multiworld.get_all_state(False)
-
-        return all_state
+    # for the universal tracker, doesn't get called in standard gen
+    @staticmethod
+    def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
+        # returning slot_data so it regens, giving it back in multiworld.re_gen_passthrough
+        return slot_data
 
     def generate_output(self, output_directory: str):
         #patched_rom = self.apply_randomizer()
