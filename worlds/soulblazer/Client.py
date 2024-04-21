@@ -15,7 +15,7 @@ from .Locations import (
     lair_table,
 )
 from .Items import SoulBlazerItemData, all_items_table
-from .Util import encode_string, is_bit_set
+from .Util import encode_string, is_bit_set, Rectangle
 from NetUtils import ClientStatus, color, NetworkItem
 from worlds.AutoSNIClient import SNIClient
 from Utils import async_start
@@ -41,7 +41,7 @@ class SoulBlazerSNIClient(SNIClient):
     item_data_for_code = {data.code: data for data in all_items_table.values()}
 
     async def was_obtained_locally(self, ctx, item: NetworkItem) -> bool:
-        """Returns True if the item was a local item that has already been obtained."""
+        """True if the item was a local item that has already been obtained."""
 
         from SNIClient import snes_read
 
@@ -64,6 +64,26 @@ class SoulBlazerSNIClient(SNIClient):
         if location_data.type == LocationType.LAIR:
             lair_byte = await snes_read(ctx, Addresses.LAIR_SPAWN_TABLE + location_data.id, 1)
             return lair_byte[0] & 0x80
+
+    async def is_in_excluded_zone(self, ctx: "SNIContext") -> bool:
+        """True if player is in a location that should not allow items to be received."""
+
+        from SNIClient import snes_read
+
+        location_data_start = Addresses.MAP_NUMBER
+        location_data_end = Addresses.POSITION_INT_Y
+        # We need to know which map the player is on, and what their X/Y coords are.
+        location_data = await snes_read(ctx, location_data_start, location_data_end - location_data_start + 1)
+
+        if location_data is None:
+            return True
+
+        map_number = location_data[Addresses.MAP_NUMBER - location_data_start]
+        map_sub_number = location_data[Addresses.MAP_SUB_NUMBER - location_data_start]
+        x = location_data[Addresses.POSITION_INT_X - location_data_start]
+        y = location_data[Addresses.POSITION_INT_Y - location_data_start]
+
+        return any(rect.contains(x, y) for rect in excluded_from_receiving.get((map_number, map_sub_number), []))
 
     async def deathlink_kill_player(self, ctx):
         pass
@@ -253,12 +273,15 @@ class SoulBlazerSNIClient(SNIClient):
 
                 if await self.was_obtained_locally(ctx, item):
                     # Item was already obtained locally, but receive count was not incremented.
-                    #snes_logger.info(
+                    # snes_logger.info(
                     #    f"Item was obtained locally. Incrementing receive count from {recv_index} to {recv_index+1}"
-                    #)
+                    # )
                     recv_index += 1
                     snes_buffered_write(ctx, Addresses.RECEIVE_COUNT, recv_index.to_bytes(2, "little"))
                     await snes_flush_writes(ctx)
+                    return
+
+                if await self.is_in_excluded_zone(ctx):
                     return
 
                 # TODO: Should we also mark the location as checked if it was in our world and we were getting it again from the server?
@@ -281,3 +304,19 @@ class SoulBlazerSNIClient(SNIClient):
 
                 if item.player == ctx.slot:
                     ctx.locations_checked.add(item.location)
+
+
+excluded_from_receiving = {
+    # Lost side marsh rafts
+    # If this goes well we could do this for other tricky locations too like the dolphin ride.
+    # Or if we can find a cleaner way that doesnt involve defining all these excluded regions then we dont have to do this.
+    # TODO: Give Map/Submap combinations names.
+    (0x05, 0x01): [
+        Rectangle(0x0F, 0x11, 0x01, 0x09),
+        Rectangle(0x05, 0x0E, 0x07, 0x01),
+        Rectangle(0x09, 0x17, 0x0F, 0x01),
+        Rectangle(0x1C, 0x0A, 0x01, 0x09),
+        Rectangle(0x05, 0x06, 0x13, 0x01),
+        # We could also do the island, but the crystal is there to let you go home.
+    ]
+}
