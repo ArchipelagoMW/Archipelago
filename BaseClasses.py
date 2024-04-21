@@ -767,12 +767,28 @@ class CollectionState():
             if found >= count:
                 return True
         return False
+    
+    def has_group_exclusive(self, item_name_group: str, player: int, count: int = 1) -> bool:
+        found: int = 0
+        player_prog_items = self.prog_items[player]
+        for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
+            found += player_prog_items[item_name] > 0
+            if found >= count:
+                return True
+        return False
 
     def count_group(self, item_name_group: str, player: int) -> int:
         found: int = 0
         player_prog_items = self.prog_items[player]
         for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
             found += player_prog_items[item_name]
+        return found
+    
+    def count_group_exclusive(self, item_name_group: str, player: int) -> int:
+        found: int = 0
+        player_prog_items = self.prog_items[player]
+        for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
+            found += player_prog_items[item_name] > 0
         return found
 
     # Item related
