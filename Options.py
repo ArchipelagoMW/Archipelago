@@ -1099,10 +1099,10 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
                 if random.random() < float(percentage / 100):
                     entrance = connection.get("entrance", None)
                     if is_iterable_except_str(entrance):
-                        entrance = random.choice(entrance)
+                        entrance = random.choice(sorted(entrance))
                     exit = connection.get("exit", None)
                     if is_iterable_except_str(exit):
-                        exit = random.choice(exit)
+                        exit = random.choice(sorted(exit))
                     direction = connection.get("direction", "both")
 
                     if not entrance or not exit:
