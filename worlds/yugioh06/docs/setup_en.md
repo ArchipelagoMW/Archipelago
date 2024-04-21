@@ -69,4 +69,4 @@ Navigate to your Archipelago install folder and open `data/lua/connector_bizhawk
 To connect the client to the multiserver simply put `<address>:<port>` on the textfield on top and press enter (if the
 server uses password, type in the bottom textfield `/connect <address>:<port> [password]`)
 
-Don't forget to start manipulating RNG early by shouting during generation:
+Don't forget to start manipulating RNG early by shouting "Heart of the Cards!" during generation.
