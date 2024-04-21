@@ -1,11 +1,10 @@
-from typing import Dict, NamedTuple, Set, Optional, List
+from typing import Dict, NamedTuple, Set, Optional
 
 
 class TunicLocationData(NamedTuple):
     region: str
     er_region: str  # entrance rando region
     location_group: Optional[str] = None
-    location_groups: Optional[List[str]] = None
 
 
 location_base_id = 509342400
@@ -326,10 +325,6 @@ location_name_to_id: Dict[str, int] = {name: location_base_id + index for index,
 location_name_groups: Dict[str, Set[str]] = {}
 for loc_name, loc_data in location_table.items():
     loc_group_name = loc_name.split(" - ", 1)[0]
-    if loc_group_name not in location_name_groups.keys():
-        location_name_groups[loc_group_name] = set()
-    location_name_groups[loc_group_name].add(loc_name)
+    location_name_groups.setdefault(loc_group_name, set()).add(loc_name)
     if loc_data.location_group:
-        if loc_data.location_group not in location_name_groups.keys():
-            location_name_groups[loc_data.location_group] = set()
-        location_name_groups[loc_data.location_group].add(loc_name)
+        location_name_groups.setdefault(loc_data.location_group, set()).add(loc_name)
