@@ -156,11 +156,13 @@ class WitnessPlayerItems:
         if self._world.options.shuffle_symbols:
             output = {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"}
 
-            if self._world.options.shuffle_discarded_panels:
-                if self._world.options.puzzle_randomization == "sigma_expert":
-                    output.add("Arrows")
-                else:
-                    output.add("Triangles")
+            discards_on = self._world.options.shuffle_discarded_panels
+            expert_or_variety = self._world.options.puzzle_randomization in {"sigma_expert", "variety"}
+
+            if discards_on or expert_or_variety:
+                output.add("Triangles")
+            if discards_on and expert_or_variety:
+                output.add("Arrows")
 
             # Replace progressive items with their parents.
             output = {static_witness_logic.get_parent_progressive_item(item) for item in output}

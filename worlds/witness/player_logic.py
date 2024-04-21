@@ -651,6 +651,8 @@ class WitnessPlayerLogic:
             self.REFERENCE_LOGIC = static_witness_logic.sigma_normal
         elif self.DIFFICULTY == "sigma_expert":
             self.REFERENCE_LOGIC = static_witness_logic.sigma_expert
+        elif self.DIFFICULTY == "variety":
+            self.REFERENCE_LOGIC = static_witness_logic.variety
         elif self.DIFFICULTY == "none":
             self.REFERENCE_LOGIC = static_witness_logic.vanilla
 

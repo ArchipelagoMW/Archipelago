@@ -182,6 +182,7 @@ class PuzzleRandomization(Choice):
     option_sigma_normal = 0
     option_sigma_expert = 1
     option_none = 2
+    option_variety = 3
 
 
 class MountainLasers(Range):

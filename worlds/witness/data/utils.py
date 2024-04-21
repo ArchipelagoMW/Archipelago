@@ -225,6 +225,10 @@ def get_sigma_expert_logic() -> List[str]:
     return get_adjustment_file("WitnessLogicExpert.txt")
 
 
+def get_variety_logic() -> List[str]:
+    return get_adjustment_file("WitnessLogicVariety.txt")
+
+
 def get_vanilla_logic() -> List[str]:
     return get_adjustment_file("WitnessLogicVanilla.txt")
 
