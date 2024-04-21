@@ -909,7 +909,6 @@ def _init() -> None:
 
         if pre_evolution is not None:
             evo_data = next(evo for evo in data.species[pre_evolution].evolutions if evo.species_id == species.species_id)
-            print(species.label, evo_data.method)
             if evo_data.method == EvolutionMethodEnum.ITEM:
                 default_item = evo_data.param
             else:
