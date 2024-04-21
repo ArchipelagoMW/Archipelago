@@ -31,7 +31,8 @@ website: [SublimeText Website](https://www.sublimetext.com)
 
 This program out of the box supports the correct formatting for the YAML file, so you will be able to use the tab key
 and get proper highlighting for any potential errors made while editing the file. If using any other text editor you
-should ensure your indentation is done correctly with two spaces.
+should ensure your indentation is done correctly with two spaces. After editing your YAML file, you can validate it at
+the website's [validation page](/check).
 
 A typical YAML file will look like:
 
@@ -281,7 +282,8 @@ reasonable, but submitting a ChecksFinder alongside another game OR submitting m
 OK)
 
 To configure your file to generate multiple worlds, use 3 dashes `---` on an empty line to separate the ending of one
-world and the beginning of another world.
+world and the beginning of another world. You can also combine multiple files by uploading them to the
+[validation page](/check).
 
 ### Example
 
