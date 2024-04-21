@@ -80,7 +80,8 @@ class SMZ3World(World):
     locationNamesGT: Set[str] = {loc.Name for loc in GanonsTower(None, None).Locations}
 
     # first added for 0.2.6
-    required_client_version = (0, 2, 6)
+    # optimized message queues for 0.4.4
+    required_client_version = (0, 4, 4)
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
@@ -526,7 +527,6 @@ class SMZ3World(World):
                 if (loc.item.player == self.player and loc.always_allow(state, loc.item)):
                     loc.item.classification = ItemClassification.filler
                     loc.item.item.Progression = False
-                    loc.item.location.event = False
                     self.unreachable.append(loc)
 
     def get_filler_item_name(self) -> str:
@@ -572,7 +572,6 @@ class SMZ3World(World):
                         break
                 assert itemFromPool is not None, "Can't find anymore item(s) to pre fill GT"
                 self.multiworld.push_item(loc, itemFromPool, False)
-                loc.event = False
         toRemove.sort(reverse = True)
         for i in toRemove: 
             self.multiworld.itempool.pop(i)
