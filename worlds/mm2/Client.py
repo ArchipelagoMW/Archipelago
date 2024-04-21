@@ -1,4 +1,3 @@
-import asyncio
 import logging
 import time
 from enum import IntEnum
@@ -16,7 +15,7 @@ logger = logging.getLogger("Client")
 MM2_ROBOT_MASTERS_UNLOCKED = 0x8A
 MM2_ROBOT_MASTERS_DEFEATED = 0x8B
 MM2_ITEMS_ACQUIRED = 0x8C
-# MM2_LAST_WILY = 0x8D
+MM2_LAST_WILY = 0x8D
 MM2_RECEIVED_ITEMS = 0x8E
 MM2_DEATHLINK = 0x8F
 MM2_ENERGYLINK = 0x90
@@ -212,6 +211,7 @@ class MegaMan2Client(BizHawkClient):
     health_energy: int = 0
     auto_heal: bool = False
     refill_queue: List[Tuple[MM2EnergyLinkType, int]] = []
+    last_wily: Optional[int] = None  # default to wily 1
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from worlds._bizhawk import RequestFailedError, read
@@ -270,6 +270,9 @@ class MegaMan2Client(BizHawkClient):
                 assert ctx.slot is not None
                 if "DeathLink" in args["tags"] and args["data"]["source"] != ctx.slot_info[ctx.slot].name:
                     self.on_deathlink(ctx)
+        elif cmd == "Retrieved":
+            if f"MM2_LAST_WILY_{ctx.team}_{ctx.slot}" in args["keys"]:
+                self.last_wily = args["keys"][f"MM2_LAST_WILY_{ctx.team}_{ctx.slot}"]
         elif cmd == "Connected":
             if self.energy_link:
                 ctx.set_notify(f"EnergyLink{ctx.team}")
@@ -299,22 +302,23 @@ class MegaMan2Client(BizHawkClient):
             weapons_unlocked, items_unlocked, items_received, \
             completed_stages, consumable_checks, \
             e_tanks, lives, weapon_energy, health, difficulty, death_link_status, \
-            energy_link_packet = await read(ctx.bizhawk_ctx, [
-            (MM2_ROBOT_MASTERS_UNLOCKED, 1, "RAM"),
-            (MM2_ROBOT_MASTERS_DEFEATED, 1, "RAM"),
-            (MM2_ITEMS_ACQUIRED, 1, "RAM"),
-            (MM2_WEAPONS_UNLOCKED, 1, "RAM"),
-            (MM2_ITEMS_UNLOCKED, 1, "RAM"),
-            (MM2_RECEIVED_ITEMS, 1, "RAM"),
-            (MM2_COMPLETED_STAGES, 0xE, "RAM"),
-            (MM2_CONSUMABLES, 52, "RAM"),
-            (MM2_E_TANKS, 1, "RAM"),
-            (MM2_LIVES, 1, "RAM"),
-            (MM2_WEAPON_ENERGY, 11, "RAM"),
-            (MM2_HEALTH, 1, "RAM"),
-            (MM2_DIFFICULTY, 1, "RAM"),
-            (MM2_DEATHLINK, 1, "RAM"),
-            (MM2_ENERGYLINK, 1, "RAM")
+            energy_link_packet, last_wily = await read(ctx.bizhawk_ctx, [
+                (MM2_ROBOT_MASTERS_UNLOCKED, 1, "RAM"),
+                (MM2_ROBOT_MASTERS_DEFEATED, 1, "RAM"),
+                (MM2_ITEMS_ACQUIRED, 1, "RAM"),
+                (MM2_WEAPONS_UNLOCKED, 1, "RAM"),
+                (MM2_ITEMS_UNLOCKED, 1, "RAM"),
+                (MM2_RECEIVED_ITEMS, 1, "RAM"),
+                (MM2_COMPLETED_STAGES, 0xE, "RAM"),
+                (MM2_CONSUMABLES, 52, "RAM"),
+                (MM2_E_TANKS, 1, "RAM"),
+                (MM2_LIVES, 1, "RAM"),
+                (MM2_WEAPON_ENERGY, 11, "RAM"),
+                (MM2_HEALTH, 1, "RAM"),
+                (MM2_DIFFICULTY, 1, "RAM"),
+                (MM2_DEATHLINK, 1, "RAM"),
+                (MM2_ENERGYLINK, 1, "RAM"),
+                (MM2_LAST_WILY, 1, "RAM"),
         ])
 
         if difficulty[0] not in (0, 1):
@@ -340,6 +344,22 @@ class MegaMan2Client(BizHawkClient):
                 await self.send_deathlink(ctx)
             elif health[0] != 0x00 and not death_link_status[0]:
                 self.sending_death_link = False
+
+        if self.last_wily != last_wily[0]:
+            if self.last_wily is None:
+                # revalidate last wily from data storage
+                await ctx.send_msgs([{"cmd": "Set", "key": f"MM2_LAST_WILY_{ctx.team}_{ctx.slot}", "operations": [
+                    {"operation": "default", "value": 8}
+                ]}])
+                await ctx.send_msgs([{"cmd": "Get", "keys": [f"MM2_LAST_WILY_{ctx.team}_{ctx.slot}"]}])
+            elif last_wily[0] == 0:
+                writes.append((MM2_LAST_WILY, self.last_wily.to_bytes(1, "little"), "RAM"))
+            else:
+                # correct our setting
+                self.last_wily = last_wily[0]
+                await ctx.send_msgs([{"cmd": "Set", "key": f"MM2_LAST_WILY_{ctx.team}_{ctx.slot}", "operations": [
+                    {"operation": "replace", "value": self.last_wily}
+                ]}])
 
         # handle receiving items
         recv_amount = items_received[0]
