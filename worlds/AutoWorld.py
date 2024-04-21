@@ -7,8 +7,8 @@ import random
 import sys
 import time
 from dataclasses import make_dataclass
-from typing import Any, Callable, ClassVar, Dict, FrozenSet, List, Mapping, Optional, Set, TextIO, Tuple, \
-                   TYPE_CHECKING, Type, Union
+from typing import (Any, Callable, ClassVar, Dict, FrozenSet, List, Mapping, Optional, Set, TextIO, Tuple,
+                   TYPE_CHECKING, Type, Union)
 
 from Options import PerGameCommonOptions
 from BaseClasses import CollectionState
