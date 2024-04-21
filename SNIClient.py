@@ -85,6 +85,7 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
         """Close connection to a currently connected snes"""
         self.ctx.snes_reconnect_address = None
         self.ctx.cancel_snes_autoreconnect()
+        self.ctx.snes_state = SNESState.SNES_DISCONNECTED
         if self.ctx.snes_socket and not self.ctx.snes_socket.closed:
             async_start(self.ctx.snes_socket.close())
             return True
