@@ -222,7 +222,14 @@ class ZillionEarlyScope(Toggle):
 
 
 class ZillionSkill(Range):
-    """ the difficulty level of the game """
+    """
+    the difficulty level of the game
+
+    higher skill:
+    - can require more precise platforming movement
+    - lowers your defense
+    - gives you less time to escape at the end
+    """
     range_start = 0
     range_end = 5
     default = 2
