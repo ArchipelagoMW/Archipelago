@@ -51,6 +51,7 @@ TRACKER_EVENT_FLAGS = [
     "FLAG_OMIT_DIVE_FROM_STEVEN_LETTER",                # Steven gives Dive HM (clears seafloor cavern grunt)
     "FLAG_IS_CHAMPION",
     "FLAG_PURCHASED_HARBOR_MAIL",
+    "FLAG_REGI_DOORS_OPENED",
 ]
 EVENT_FLAG_MAP = {data.constants[flag_name]: flag_name for flag_name in TRACKER_EVENT_FLAGS}
 
