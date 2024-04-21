@@ -120,7 +120,7 @@ request_to_name: Dict[str, str] = {
 
 HP_EXCHANGE_RATE = 500000000
 WEAPON_EXCHANGE_RATE = 250000000
-ONEUP_EXCHANGE_RATE = 3000000000
+ONEUP_EXCHANGE_RATE = 14000000000
 
 
 def cmd_pool(self: "BizHawkClientCommandProcessor") -> None:
@@ -396,12 +396,13 @@ class MegaMan2Client(BizHawkClient):
                 # if we managed to pickup something else, we should just fall through
                 value = 0
                 exchange_rate = 0
-            contribution = (value * exchange_rate) >> 2
+            contribution = (value * exchange_rate) >> 1
             if contribution:
                 await ctx.send_msgs([{
                     "cmd": "Set", "key": f"EnergyLink{ctx.team}", "slot": ctx.slot, "operations":
                         [{"operation": "add", "value": contribution},
                          {"operation": "max", "value": 0}]}])
+            logger.info(f"Deposited {contribution / HP_EXCHANGE_RATE} health into the pool.")
             writes.append((MM2_ENERGYLINK, 0x00.to_bytes(1, "little"), "RAM"))
 
         if self.weapon_energy:
