@@ -32,7 +32,7 @@ being to find the required amount of them and then Share Your Wisdom.
 Every item has a chance to appear in another player's world.
 
 ## How many checks are in TUNIC?
-There are 302 checks located across the world in TUNIC. The Fairy Seeking Spell can help you locate them.
+There are 302 checks located across the world of TUNIC. The Fairy Seeking Spell can help you locate them.
 
 ## What do items from other worlds look like in TUNIC?
 Items belonging to other TUNIC players will either appear as that item directly (if in a freestanding location) or in a
