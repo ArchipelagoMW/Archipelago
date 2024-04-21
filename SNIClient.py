@@ -234,6 +234,8 @@ class SNIContext(CommonContext):
 
     def on_package(self, cmd: str, args: typing.Dict[str, typing.Any]) -> None:
         if cmd in {"Connected", "RoomUpdate"}:
+            if self.want_slot_data and cmd == "Connected":
+                self.slot_data = args.get("slot_data", None)
             if "checked_locations" in args and args["checked_locations"]:
                 new_locations = set(args["checked_locations"])
                 self.checked_locations |= new_locations
