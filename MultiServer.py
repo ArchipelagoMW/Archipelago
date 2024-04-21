@@ -1905,7 +1905,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_alias(self, player_name_then_alias_name):
         """Set a player's alias, by listing their base name and then their intended alias."""
-        player_name, alias_name = player_name_then_alias_name.split(" ", 1)
+        player_name, _, alias_name = player_name_then_alias_name.partition(" ")
         player_name, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
             for (team, slot), name in self.ctx.player_names.items():
