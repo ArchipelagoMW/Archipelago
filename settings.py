@@ -671,7 +671,6 @@ class GeneratorOptions(Group):
     weights_file_path: WeightsFilePath = WeightsFilePath("weights.yaml")
     meta_file_path: MetaFilePath = MetaFilePath("meta.yaml")
     spoiler: Spoiler = Spoiler(3)
-    glitch_triforce_room: GlitchTriforceRoom = GlitchTriforceRoom(1)  # why is this here?
     race: Race = Race(0)
     plando_options: PlandoOptions = PlandoOptions("bosses, connections, texts")
 
