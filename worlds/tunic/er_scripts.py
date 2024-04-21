@@ -22,13 +22,13 @@ class TunicERLocation(Location):
 def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
     regions: Dict[str, Region] = {}
     if world.options.entrance_rando:
-        portal_pairs: Dict[Portal, Portal] = pair_portals(world)
+        portal_pairs = pair_portals(world)
 
         # output the entrances to the spoiler log here for convenience
         for portal1, portal2 in portal_pairs.items():
             world.multiworld.spoiler.set_entrance(portal1.name, portal2.name, "both", world.player)
     else:
-        portal_pairs: Dict[Portal, Portal] = vanilla_portals()
+        portal_pairs = vanilla_portals()
 
     for region_name, region_data in tunic_er_regions.items():
         regions[region_name] = Region(region_name, world.player, world.multiworld)
