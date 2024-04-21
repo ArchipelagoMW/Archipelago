@@ -319,7 +319,7 @@ class MegaMan2Client(BizHawkClient):
                 (MM2_DEATHLINK, 1, "RAM"),
                 (MM2_ENERGYLINK, 1, "RAM"),
                 (MM2_LAST_WILY, 1, "RAM"),
-        ])
+            ])
 
         if difficulty[0] not in (0, 1):
             return  # Game is not initialized
