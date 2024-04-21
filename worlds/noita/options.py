@@ -6,7 +6,7 @@ class PathOption(Choice):
     """Choose where you would like Hidden Chest and Pedestal checks to be placed.
     Main Path includes the main 7 biomes you typically go through to get to the final boss.
     Side Path includes the Lukki Lair and Fungal Caverns. 9 biomes total.
-    Main World includes the full world (excluding parallel worlds). 14 biomes total.
+    Main World includes the full world (excluding parallel worlds). 15 biomes total.
     Note: The Collapsed Mines have been combined into the Mines as the biome is tiny."""
     display_name = "Path Option"
     option_main_path = 1
@@ -53,7 +53,7 @@ class BossesAsChecks(Choice):
     """Makes bosses count as location checks. The boss only needs to die, you do not need the kill credit.
     The Main Path option includes Gate Guardian, Suomuhauki, and Kolmisilmä.
     The Side Path option includes the Main Path bosses, Sauvojen Tuntija, and Ylialkemisti.
-    The All Bosses option includes all 12 bosses."""
+    The All Bosses option includes all 15 bosses."""
     display_name = "Bosses as Location Checks"
     option_no_bosses = 0
     option_main_path = 1
