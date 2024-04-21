@@ -2163,6 +2163,18 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
         return True
 
+    def _cmd_datastore(self):
+        """Debug Tool: list writable datastorage keys and approximate the size of their values with pickle."""
+        total: int = 0
+        texts = []
+        for key, value in self.ctx.stored_data.items():
+            size = len(pickle.dumps(value))
+            total += size
+            texts.append(f"Key: {key} | Size: {size}B")
+        texts.insert(0, f"Found {len(self.ctx.stored_data)} keys, "
+                        f"approximately totaling {Utils.format_SI_prefix(total, power=1024)}B")
+        self.output("\n".join(texts))
+
 
 async def console(ctx: Context):
     import sys
