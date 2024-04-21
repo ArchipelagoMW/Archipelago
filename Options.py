@@ -384,7 +384,8 @@ class Toggle(NumericOption):
     default = 0
 
     def __init__(self, value: int):
-        assert value == 0 or value == 1, "value of Toggle can only be 0 or 1"
+        # if user puts in an invalid value, make it valid
+        value = int(bool(value))
         self.value = value
 
     @classmethod
