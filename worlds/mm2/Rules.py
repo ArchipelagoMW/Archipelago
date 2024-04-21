@@ -188,7 +188,8 @@ def set_rules(world: "MM2World") -> None:
                 wp, max_uses = max((weapon, weapon_energy[weapon] // weapon_costs[weapon]) for weapon in weapon_weight
                                    if weapon != 0)
                 world.weapon_damage[wp][boss] = minimum_weakness_requirement[wp]
-                used = ceil(boss_health[boss] / minimum_weakness_requirement[wp])
+                used = min(weapon_energy[wp] // weapon_costs[wp],
+                           ceil(boss_health[boss] / minimum_weakness_requirement[wp]))
                 weapon_energy[wp] -= weapon_costs[wp] * used
                 boss_health[boss] -= int(used * minimum_weakness_requirement[wp])
                 weapon_weight.pop(wp)
