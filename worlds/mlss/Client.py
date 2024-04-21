@@ -1,3 +1,4 @@
+import typing
 from typing import TYPE_CHECKING, Optional, Set
 import struct
 
@@ -23,9 +24,9 @@ class MLSSClient(BizHawkClient):
     goal_flag: int
     rom_slot_name: Optional[str]
     eCount: int
-    eUsed: [int]
+    eUsed: []
     player_name: Optional[str]
-    checked_flags: dict[int, list] = {}
+    checked_flags: typing.Dict[int, list] = {}
 
     def __init__(self) -> None:
         super().__init__()
