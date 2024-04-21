@@ -1124,6 +1124,7 @@ class ItemLinks(OptionList):
                 raise Exception(f"item_link {link['name']} has {intersection} "
                                 f"items in both its local_items and non_local_items pool.")
             link.setdefault("link_replacement", None)
+            link["item_pool"] = list(pool)
 
 
 class Removed(FreeText):
