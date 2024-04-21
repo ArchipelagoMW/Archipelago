@@ -2,9 +2,28 @@ from . import BlasphemousTestBase
 from ..Locations import location_names
 
 
-class BackgroundZonesTest(BlasphemousTestBase):
+class BotSSGauntletTest(BlasphemousTestBase):
+    options = {
+        "starting_location": "albero",
+        "wall_climb_shuffle": True,
+        "dash_shuffle": True
+    }
+
+    @property
+    def run_default_tests(self) -> bool:
+        return False
+    
     def test_botss_gauntlet(self) -> None:
-        self.assertAccessDependency([location_names["CO25"]], [["Dash Ability", "Wall Climb Ability"]])
+        self.assertAccessDependency([location_names["CO25"]], [["Dash Ability", "Wall Climb Ability"]], True)
+
+
+class BackgroundZonesTest(BlasphemousTestBase):
+    @property
+    def run_default_tests(self) -> bool:
+        return False
+
+    def test_dc_shroud(self) -> None:
+        self.assertAccessDependency([location_names["RB03"]], [["Shroud of Dreamt Sins"]], True)
 
     def test_wothp_bronze_cells(self) -> None:
         bronze_locations = [

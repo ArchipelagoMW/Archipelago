@@ -367,20 +367,19 @@ class BlasRules:
     # Health boosts
     def flasks(self, state: CollectionState) -> int:
         doors = {
-            "D01Z05S05[SW]", #"D01Z05S18[E]",
-            "D02Z02S04[W]", #"D02Z02S09[E]",
-            "D03Z02S08[W]", #"D03Z02S14[E]",
-            "D03Z03S04[SW]", #"D03Z03S03[SE]",
-            "D04Z02S13[W]", #"D04Z02S13[W]",
-            "D05Z01S08[NW]", #"D05Z01S12[E]",
-            "D20Z01S07[NE]" #"D20Z01S08[W]"
+            "D01Z05S05[SW]",
+            "D02Z02S04[W]",
+            "D03Z02S08[W]",
+            "D03Z03S04[SW]",
+            "D04Z02S13[W]",
+            "D05Z01S08[NW]",
+            "D20Z01S07[NE]"
         }
 
         return state.count("Empty Bile Vessel", self.player) if sum(state.can_reach_region(door, self.player) for door in doors) >= 1 else 0
     
     def quicksilver(self, state: CollectionState) -> int:
         return state.count("Quicksilver", self.player) if state.can_reach_region("D01Z05S01[W]", self.player) else 0
-        #return state.count("Quicksilver", self.player) if state.can_reach_region("D01Z05S27[E]", self.player) else 0
     
     # Puzzles
     def red_wax(self, state: CollectionState) -> int:
@@ -520,7 +519,6 @@ class BlasRules:
     
     def knots(self, state: CollectionState) -> int:
         return state.count("Knot of Rosary Rope", self.player) if state.can_reach_region("D17Z01S07[NW]", self.player) else 0
-        #return state.count("Knot of Rosary Rope", self.player) if state.can_reach_region("D17Z01S09[E]", self.player) else 0
     
     # Cleofas quest
     def marks_of_refuge(self, state: CollectionState) -> int:
@@ -642,30 +640,18 @@ class BlasRules:
             state.can_reach_region("D20Z01S04[E]", self.player)
             or state.can_reach_region("D01Z05S23[W]", self.player)
         )
-        #return (
-        #    state.can_reach_region("D01Z05S24[W]", self.player)
-        #    or state.can_reach_region("D01Z05S24[E]", self.player)
-        #)
     
     def opened_dc_gate_e(self, state: CollectionState) -> bool:
         return (
             state.can_reach_region("D01Z05S10[SE]", self.player)
             or state.can_reach_region("D01Z04S09[W]", self.player)
         )
-        #return (
-        #    state.can_reach_region("D01Z05S12[W]", self.player)
-        #    or state.can_reach_region("D01Z05S12[E]", self.player)
-        #)
     
     def opened_dc_ladder(self, state: CollectionState) -> bool:
         return (
             state.can_reach_region("D01Z05S25[NE]", self.player)
             or state.can_reach_region("D01Z05S02[S]", self.player)
         )
-        #return (
-        #    state.can_reach_region("D01Z05S20[W]", self.player)
-        #    or state.can_reach_region("D01Z05S20[N]", self.player)
-        #)
     
     def opened_wotw_cave(self, state: CollectionState) -> bool:
         return (
@@ -673,11 +659,6 @@ class BlasRules:
             or self.wall_climb(state) and state.can_reach_region("D02Z01S08[E]", self.player)
             or state.can_reach_region("D02Z01S02[]", self.player)
         )
-        #return (
-        #    state.can_reach_region("D02Z01S06[E]", self.player)
-        #    or self.wall_climb(state) and state.can_reach_region("D02Z01S06[W]", self.player)
-        #    or state.can_reach_region("D02Z01S06[Cherubs]", self.player)
-        #)
     
     def rode_gotp_elevator(self, state: CollectionState) -> bool:
         return (
@@ -687,13 +668,6 @@ class BlasRules:
             or state.can_reach_region("D02Z02S12[W]", self.player)
             or state.can_reach_region("D02Z02S08[W]", self.player)
         )
-        #return (
-        #    state.can_reach_region("D02Z02S11[NW]", self.player)
-        #    or state.can_reach_region("D02Z02S11[NE]", self.player)
-        #    or state.can_reach_region("D02Z02S11[W]", self.player)
-        #    or state.can_reach_region("D02Z02S11[E]", self.player)
-        #    or state.can_reach_region("D02Z02S11[SE]", self.player)
-        #)
     
     def opened_convent_ladder(self, state: CollectionState) -> bool:
         return (
@@ -703,13 +677,6 @@ class BlasRules:
             or state.can_reach_region("D02Z03S10[W]", self.player)
             or state.can_reach_region("D02Z03S22[W]", self.player)
         )
-        #return (
-        #    state.can_reach_region("D02Z03S11[S]", self.player)
-        #    or state.can_reach_region("D02Z03S11[W]", self.player)
-        #    or state.can_reach_region("D02Z03S11[NW]", self.player)
-        #    or state.can_reach_region("D02Z03S11[E]", self.player)
-        #    or state.can_reach_region("D02Z03S11[NE]", self.player)
-        #)
     
     def broke_jondo_bell_w(self, state: CollectionState) -> bool:
         return (
@@ -718,12 +685,6 @@ class BlasRules:
             or state.can_reach_region("D03Z02S10[S]", self.player)
             or state.can_reach_region("D03Z02S10[-Cherubs]", self.player)
         )
-        #return (
-        #    state.can_reach_region("D03Z02S09[S]", self.player)
-        #    or state.can_reach_region("D03Z02S09[W]", self.player) and self.dash(state)
-        #    or state.can_reach_region("D03Z02S09[N]", self.player)
-        #    or state.can_reach_region("D03Z02S09[Cherubs]", self.player)
-        #)
     
     def broke_jondo_bell_e(self, state: CollectionState) -> bool:
         return (
@@ -734,14 +695,6 @@ class BlasRules:
                 or self.can_enemy_bounce(state) and self.can_cross_gap_3(state)
             )
         )
-        #return (
-        #    state.can_reach_region("D03Z02S05[S]", self.player)
-        #    or state.can_reach_region("D03Z02S05[E]", self.player)
-        #    or state.can_reach_region("D03Z02S05[W]", self.player) and (
-        #        self.can_cross_gap_5(state)
-        #        or self.can_enemy_bounce(state) and self.can_cross_gap_3(state)
-        #    )
-        #)
 
     def opened_mom_ladder(self, state: CollectionState) -> bool:
         return (
@@ -750,22 +703,12 @@ class BlasRules:
             or state.can_reach_region("D06Z01S23[S]", self.player)
             or state.can_reach_region("D04Z02S04[N]", self.player)
         )
-        #return (
-        #    state.can_reach_region("D04Z02S06[NW]", self.player)
-        #    or state.can_reach_region("D04Z02S06[NE]", self.player)
-        #    or state.can_reach_region("D04Z02S06[N]", self.player)
-        #    or state.can_reach_region("D04Z02S06[S]", self.player)
-        #)
     
     def opened_tsc_gate(self, state: CollectionState) -> bool:
         return (
             state.can_reach_region("D05Z02S06[SE]", self.player)
             or state.can_reach_region("D05Z01S21[-Cherubs]", self.player)
         )
-        #return (
-        #    state.can_reach_region("D05Z02S11[W]", self.player)
-        #    or state.can_reach_region("D05Z02S11[Cherubs]", self.player)
-        #)
     
     def opened_ar_ladder(self, state: CollectionState) -> bool:
         return (
@@ -774,22 +717,12 @@ class BlasRules:
             or state.can_reach_region("D04Z02S06[N]", self.player)
             or state.can_reach_region("D06Z01S01[-Cherubs]", self.player)
         )
-        #return (
-        #    state.can_reach_region("D06Z01S23[Sword]", self.player)
-        #    or state.can_reach_region("D06Z01S23[E]", self.player)
-        #    or state.can_reach_region("D06Z01S23[S]", self.player)
-        #    or state.can_reach_region("D06Z01S23[Cherubs]", self.player)
-        #)
     
     def broke_bottc_statue(self, state: CollectionState) -> bool:
         return (
             state.can_reach_region("D08Z03S03[W]", self.player)
             or state.can_reach_region("D08Z02S03[W]", self.player)
         )
-        #return (
-        #    state.can_reach_region("D08Z01S02[NE]", self.player)
-        #    or state.can_reach_region("D08Z01S02[SE]", self.player)
-        #)
     
     def opened_wothp_gate(self, state: CollectionState) -> bool:
         return (
@@ -797,21 +730,12 @@ class BlasRules:
             or state.can_reach_region("D09Z01S03[W]", self.player)
             or state.can_reach_region("D09Z01S08[W]", self.player)
         )
-        #return (
-        #    state.can_reach_region("D09Z01S05[W]", self.player)
-        #    or state.can_reach_region("D09Z01S05[SE]", self.player)
-        #    or state.can_reach_region("D09Z01S05[NE]", self.player)
-        #)
     
     def opened_botss_ladder(self, state: CollectionState) -> bool:
         return (
             state.can_reach_region("D17Z01S05[S]", self.player)
             or state.can_reach_region("D17BZ02S01[FrontR]", self.player)
         )
-        #return (
-        #    state.can_reach_region("D17Z01S04[N]", self.player)
-        #    or state.can_reach_region("D17Z01S04[FrontR]", self.player)
-        #)
     
     # Special skips
     def upwarp_skips_allowed(self, state: CollectionState) -> bool:
@@ -835,30 +759,18 @@ class BlasRules:
             state.can_reach_region("D17Z01S05[E]", self.player)
             or state.can_reach_region("D17Z01S03[W]", self.player)
         )
-        #return self.has_boss_strength(state, "warden") and (
-        #    state.can_reach_region("D17Z01S11[W]", self.player)
-        #    or state.can_reach_region("D17Z01S11[E]", self.player)
-        #)
 
     def can_beat_mercy_boss(self, state: CollectionState) -> bool:
         return self.has_boss_strength(state, "ten-piedad") and (
             state.can_reach_region("D01Z04S19[E]", self.player)
             or state.can_reach_region("D01Z04S12[W]", self.player)
         )
-        #return self.has_boss_strength(state, "ten-piedad") and (
-        #    state.can_reach_region("D01Z04S18[W]", self.player)
-        #    or state.can_reach_region("D01Z04S18[E]", self.player)
-        #)
     
     def can_beat_convent_boss(self, state: CollectionState) -> bool:
         return self.has_boss_strength(state, "charred-visage") and (
             state.can_reach_region("D02Z03S09[E]", self.player)
             or state.can_reach_region("D02Z03S21[W]", self.player)
         )
-        #return self.has_boss_strength(state, "charred-visage") and (
-        #    state.can_reach_region("D02Z03S20[W]", self.player)
-        #    or state.can_reach_region("D02Z03S20[E]", self.player)
-        #)
     
     def can_beat_grievance_boss(self, state: CollectionState) -> bool:
         return self.has_boss_strength(state, "tres-angustias") and (
@@ -868,71 +780,42 @@ class BlasRules:
             state.can_reach_region("D03Z03S11[E]", self.player)
             or state.can_reach_region("D03Z03S16[W]", self.player)
         )
-        #return self.has_boss_strength(state, "tres-angustias") and (
-        #    self.wall_climb(state)
-        #    or self.double_jump(state)
-        #) and (
-        #    state.can_reach_region("D03Z03S15[W]", self.player)
-        #    or state.can_reach_region("D03Z03S15[E]", self.player)
-        #)
     
     def can_beat_bridge_boss(self, state: CollectionState) -> bool:
         return self.has_boss_strength(state, "esdras") and (
             state.can_reach_region("D01Z03S06[E]", self.player)
             or state.can_reach_region("D08Z02S01[W]", self.player)
         )
-        #return self.has_boss_strength(state, "esdras") and (
-        #    state.can_reach_region("D08Z01S01[W]", self.player)
-        #    or state.can_reach_region("D08Z01S01[E]", self.player)
-        #)
     
     def can_beat_mothers_boss(self, state: CollectionState) -> bool:
         return self.has_boss_strength(state, "melquiades") and (
             state.can_reach_region("D04Z02S15[E]", self.player)
             or state.can_reach_region("D04Z02S21[W]", self.player)
         )
-        #return self.has_boss_strength(state, "melquiades") and (
-        #    state.can_reach_region("D04Z02S22[W]", self.player)
-        #    or state.can_reach_region("D04Z02S22[E]", self.player)
-        #)
     
     def can_beat_canvases_boss(self, state: CollectionState) -> bool:
         return self.has_boss_strength(state, "exposito") and (
             state.can_reach_region("D05Z02S06[NE]", self.player)
             or state.can_reach_region("D05Z01S21[SW]", self.player)
         )
-        #return self.has_boss_strength(state, "exposito") and (
-        #    state.can_reach_region("D05Z02S14[W]", self.player)
-        #    or state.can_reach_region("D05Z02S14[E]", self.player)
-        #)
     
     def can_beat_prison_boss(self, state: CollectionState) -> bool:
         return self.has_boss_strength(state, "quirce") and (
             state.can_reach_region("D09Z01S05[SE]", self.player)
             or state.can_reach_region("D09Z01S08[S]", self.player)
         )
-        #return self.has_boss_strength(state, "quirce") and (
-        #    state.can_reach_region("D09Z01S03[W]", self.player)
-        #    or state.can_reach_region("D09Z01S03[N]", self.player)
-        #)
     
     def can_beat_rooftops_boss(self, state: CollectionState) -> bool:
         return self.has_boss_strength(state, "crisanta") and (
             state.can_reach_region("D06Z01S19[E]", self.player)
             or state.can_reach_region("D07Z01S01[W]", self.player)
         )
-        #return self.has_boss_strength(state, "crisanta") and (
-        #    state.can_reach_region("D06Z01S25[W]", self.player)
-        #    or state.can_reach_region("D06Z01S25[E]", self.player)
-        #)
     
     def can_beat_ossuary_boss(self, state: CollectionState) -> bool:
         return self.has_boss_strength(state, "isidora") and state.can_reach_region("D01BZ06S01[E]", self.player)
-        #return self.has_boss_strength(state, "isidora") and state.can_reach_region("D01BZ08S01[W]", self.player)
     
     def can_beat_mourning_boss(self, state: CollectionState) -> bool:
         return self.has_boss_strength(state, "sierpes") and state.can_reach_region("D20Z02S07[W]", self.player)
-        #return self.has_boss_strength(state, "sierpes") and state.can_reach_region("D20Z02S08[E]", self.player)
     
     def can_beat_graveyard_boss(self, state: CollectionState) -> bool:
         return (
@@ -942,13 +825,6 @@ class BlasRules:
             and state.can_reach_region("D02Z03S18[NW]", self.player)
             and state.can_reach_region("D02Z02S03[NE]", self.player)
         )
-        #return (
-        #    self.has_boss_strength(state, "amanecida")
-        #    and self.wall_climb(state)
-        #    and state.can_reach_region("D01BZ07S01[Santos]", self.player)
-        #    and state.can_reach_region("D02Z03S23[E]", self.player)
-        #    and state.can_reach_region("D02Z02S14[W]", self.player)
-        #)
     
     def can_beat_jondo_boss(self, state: CollectionState) -> bool:
         return (
@@ -963,18 +839,6 @@ class BlasRules:
                 or state.can_reach_region("D03Z02S10[N]", self.player)
             )
         )
-        #return (
-        #    self.has_boss_strength(state, "amanecida")
-        #    and state.can_reach_region("D01BZ07S01[Santos]", self.player)
-        #    and (
-        #        state.can_reach_region("D20Z01S05[W]", self.player)
-        #        or state.can_reach_region("D20Z01S05[E]", self.player)
-        #    )
-        #    and (
-        #        state.can_reach_region("D03Z01S03[W]", self.player)
-        #        or state.can_reach_region("D03Z01S03[SW]", self.player)
-        #    )
-        #)
     
     def can_beat_patio_boss(self, state: CollectionState) -> bool:
         return (
@@ -987,16 +851,6 @@ class BlasRules:
                 or state.can_reach_region("D06Z01S18[-Cherubs]", self.player)
             )
         )
-        #return (
-        #    self.has_boss_strength(state, "amanecida")
-        #    and state.can_reach_region("D01BZ07S01[Santos]", self.player)
-        #    and state.can_reach_region("D06Z01S18[E]", self.player)
-        #    and (
-        #        state.can_reach_region("D04Z01S04[W]", self.player)
-        #        or state.can_reach_region("D04Z01S04[E]", self.player)
-        #        or state.can_reach_region("D04Z01S04[Cherubs]", self.player)
-        #    )
-        #)
     
     def can_beat_wall_boss(self, state: CollectionState) -> bool:
         return (
@@ -1008,15 +862,6 @@ class BlasRules:
                 or state.can_reach_region("D06Z01S13[W]", self.player)
             )
         )
-        #return (
-        #    self.has_boss_strength(state, "amanecida")
-        #    and state.can_reach_region("D01BZ07S01[Santos]", self.player)
-        #    and state.can_reach_region("D09BZ01S01[Cell24]", self.player)
-        #    and (
-        #        state.can_reach_region("D09Z01S01[W]", self.player)
-        #        or state.can_reach_region("D09Z01S01[E]", self.player)
-        #    )
-        #)
     
     def can_beat_hall_boss(self, state: CollectionState) -> bool:
         return (
@@ -1026,13 +871,6 @@ class BlasRules:
                 or state.can_reach_region("D08Z03S02[NW]", self.player)
             )
         )
-        #return (
-        #    self.has_boss_strength(state, "laudes")
-        #    and (
-        #        state.can_reach_region("D08Z03S03[W]", self.player)
-        #        or state.can_reach_region("D08Z03S03[E]", self.player)
-        #    )
-        #)
     
     def can_beat_perpetua(self, state: CollectionState) -> bool:
         return self.has_boss_strength(state, "perpetua")
@@ -1066,26 +904,26 @@ class BlasRules:
 
     def guilt_rooms(self, state: CollectionState) -> int:
         doors = [
-            "D01Z04S01[NE]", #"D01Z04S17[W]",
-            "D02Z02S11[W]", #"D02Z02S06[E]",
-            "D03Z03S02[NE]", #"D03Z03S14[W]",
-            "D04Z02S02[SE]", #"D04Z02S17[W]",
-            "D05Z01S05[NE]", #"D05Z01S17[W]",
-            "D09Z01S05[W]", #"D09Z01S13[E]",
-            "D17Z01S04[W]", #"D17Z01S12[E]"
+            "D01Z04S01[NE]",
+            "D02Z02S11[W]",
+            "D03Z03S02[NE]",
+            "D04Z02S02[SE]",
+            "D05Z01S05[NE]",
+            "D09Z01S05[W]",
+            "D17Z01S04[W]",
         ]
 
         return sum(state.can_reach_region(door, self.player) for door in doors)
     
     def sword_rooms(self, state: CollectionState) -> int:
         doors = [
-            ["D01Z02S07[E]", "D01Z02S02[SW]"], #["D01Z02S06[W]", "D01Z02S06[E]"],
-            ["D20Z01S04[E]", "D01Z05S23[W]"], #["D01Z05S24[W]", "D01Z05S24[E]"],
-            ["D02Z03S02[NE]"], #["D02Z03S13[W]"],
-            ["D04Z02S21[NE]"], #["D04Z02S12[W]"],
-            ["D05Z01S21[NW]"], #["D05Z01S13[E]"],
-            ["D06Z01S15[NE]"], #["D06Z01S11[W]"],
-            ["D17Z01S07[SW]"] #["D17Z01S08[E]"]
+            ["D01Z02S07[E]", "D01Z02S02[SW]"],
+            ["D20Z01S04[E]", "D01Z05S23[W]"],
+            ["D02Z03S02[NE]"],
+            ["D04Z02S21[NE]"],
+            ["D05Z01S21[NW]"],
+            ["D06Z01S15[NE]"],
+            ["D17Z01S07[SW]"]
         ]
 
         total: int = 0
@@ -1099,15 +937,10 @@ class BlasRules:
 
     def redento_rooms(self, state: CollectionState) -> int:
         if state.can_reach_region("D03Z01S04[E]", self.player) or state.can_reach_region("D03Z02S10[N]", self.player):
-        #if state.can_reach_region("D03Z01S03[W]", self.player) or state.can_reach_region("D03Z01S03[SW]", self.player):
             if state.can_reach_region("D17Z01S05[S]", self.player) or state.can_reach_region("D17BZ02S01[FrontR]", self.player):
-            #if state.can_reach_region("D17Z01S04[N]", self.player) or state.can_reach_region("D17Z01S04[FrontR]", self.player):
                 if state.can_reach_region("D01Z03S04[E]", self.player) or state.can_reach_region("D08Z01S01[W]", self.player):
-                #if state.can_reach_region("D01Z03S06[W]", self.player) or state.can_reach_region("D01Z03S06[E]", self.player):
                     if state.can_reach_region("D04Z01S03[E]", self.player) or state.can_reach_region("D04Z02S01[W]", self.player) or state.can_reach_region("D06Z01S18[-Cherubs]", self.player):
-                    #if state.can_reach_region("D04Z01S04[W]", self.player) or state.can_reach_region("D04Z01S04[E]", self.player) or state.can_reach_region("D04Z01S04[Cherubs]", self.player):
                         if self.knots(state) >= 1 and self.limestones(state) >= 3 and (state.can_reach_region("D04Z02S08[E]", self.player) or state.can_reach_region("D04BZ02S01[Redento]", self.player)):
-                        #if self.knots(state) >= 1 and self.limestones(state) >= 3 and (state.can_reach_region("D04Z02S20[W]", self.player) or state.can_reach_region("D04Z02S20[Redento]", self.player)):
                             return 5
                         return 4
                     return 3
@@ -1117,11 +950,11 @@ class BlasRules:
     
     def miriam_rooms(self, state: CollectionState) -> int:
         doors = [
-            "D02Z03S07[NWW]", #"D02Z03S24[E]",
-            "D03Z03S07[NW]", #"D03Z03S19[E]",
-            "D04Z04S01[E]", #"D04Z04S02[W]",
-            "D05Z01S06[W]", #"D05Z01S24[E]",
-            "D06Z01S17[E]" #"D06Z01S26[W]"
+            "D02Z03S07[NWW]",
+            "D03Z03S07[NW]",
+            "D04Z04S01[E]",
+            "D05Z01S06[W]",
+            "D06Z01S17[E]"
         ]
 
         return sum(state.can_reach_region(door, self.player) for door in doors)
@@ -1142,11 +975,8 @@ class BlasRules:
     def chalice_rooms(self, state: CollectionState) -> int:
         doors = [
             ["D03Z01S02[E]", "D01Z05S02[W]", "D20Z01S03[N]"],
-            #["D03Z01S01[W]", "D03Z01S01[NE]", "D03Z01S01[S]"],
             ["D05Z01S11[SE]", "D05Z02S02[NW]"],
-            #["D05Z02S01[W]", "D05Z02S01[E]"],
             ["D09Z01S09[E]", "D09Z01S10[W]", "D09Z01S08[SE]", "D09Z01S02[SW]"]
-            #["D09Z01S07[SW]", "D09Z01S07[SE]", "D09Z01S07[W]", "D09Z01S07[E]"]
         ]
 
         total: int = 0

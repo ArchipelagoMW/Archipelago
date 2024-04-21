@@ -231,7 +231,7 @@ class BlasphemousWorld(World):
             self.place_items_from_dict(skill_dict)
 
         if self.options.thorn_shuffle == 1:
-            world.local_items[player].value.add("Thorn Upgrade")
+            self.options.local_items.value.add("Thorn Upgrade")
         
 
     def place_items_from_set(self, location_set: Set[str], name: str):
@@ -262,7 +262,6 @@ class BlasphemousWorld(World):
             region = multiworld.get_region(r["name"], player)
 
             for e in r["exits"]:
-                #region.add_exits({e["target"]})
                 region.add_exits({e["target"]}, {e["target"]: blas_logic.load_rule(e)})
 
             for l in r["locations"]:

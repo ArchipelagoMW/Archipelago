@@ -976,6 +976,18 @@ regions = [
                 "logic": []
             },
             {
+                "target": "D01Z05S02[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D01Z05S03[NW]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D01Z05S02[S]",
                 "logic": [
                     {
@@ -1067,6 +1079,18 @@ regions = [
             {
                 "target": "D01Z03S01[E]",
                 "logic": []
+            },
+            {
+                "target": "D01Z03S01[SE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D01Z03S02[SW]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
@@ -1084,6 +1108,18 @@ regions = [
             {
                 "target": "D01Z03S01[E]",
                 "logic": []
+            },
+            {
+                "target": "D01Z03S01[SE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D01Z03S02[SW]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
@@ -1095,16 +1131,24 @@ regions = [
         "name": "D01Z03S02[SW]",
         "exits": [
             {
-                "target": "D01Z03S01[SE]",
-                "logic": []
-            },
-            {
                 "target": "D01Z03S01[W]",
                 "logic": []
             },
             {
                 "target": "D01Z03S01[E]",
                 "logic": []
+            },
+            {
+                "target": "D01Z03S01[SE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D01Z03S02[SW]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [
@@ -1180,6 +1224,18 @@ regions = [
             {
                 "target": "D01Z03S02[E]",
                 "logic": []
+            },
+            {
+                "target": "D01Z03S02[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D01Z05S05[N]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [
@@ -1231,10 +1287,6 @@ regions = [
         "exits": [
             {
                 "target": "D01Z03S02",
-                "logic": []
-            },
-            {
-                "target": "D01Z03S02[S]",
                 "logic": []
             }
         ],
@@ -3048,7 +3100,15 @@ regions = [
         "exits": [
             {
                 "target": "D01Z04S13[SE]",
-                "logic": []
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "HardLogic"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
                 "target": "CO21",
@@ -3657,6 +3717,18 @@ regions = [
                 "logic": []
             },
             {
+                "target": "D01Z05S02[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D01Z05S03[NW]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D01Z05S02[S]",
                 "logic": [
                     {
@@ -3667,28 +3739,11 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
-            },
-            {
-                "target": "D01Z05S03[W]",
-                "logic": []
-            },
-            {
-                "target": "D01Z05S03[E]",
-                "logic": []
-            },
-            {
-                "target": "D01Z05S04[E]",
-                "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D01Z05S03[NW]",
-            "D01Z05S02[E]",
-            "D01Z05S13[N]",
-            "D01Z05S03[S]",
-            "D01Z05S04[W]",
-            "D01Z05S03[NE]"
+            "D01Z05S03[NW]"
         ]
     },
     {
@@ -3701,6 +3756,18 @@ regions = [
             {
                 "target": "D01Z05S02[W]",
                 "logic": []
+            },
+            {
+                "target": "D01Z05S02[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D01Z05S03[NW]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
                 "target": "D01Z05S02[S]",
@@ -3732,6 +3799,18 @@ regions = [
                 "logic": []
             },
             {
+                "target": "D01Z05S02[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D01Z05S03[NW]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D01Z05S02[S]",
                 "logic": [
                     {
@@ -3759,6 +3838,18 @@ regions = [
             {
                 "target": "D03Z01S01[NE]",
                 "logic": []
+            },
+            {
+                "target": "D03Z01S01[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D20Z01S03[N]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
                 "target": "D03Z01S01[-Cherubs]",
@@ -3810,16 +3901,76 @@ regions = [
             {
                 "target": "D03Z01S01",
                 "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D20Z01S03[N]"
+        ]
+    },
+    {
+        "name": "D01Z05S02[E]",
+        "exits": [
+            {
+                "target": "D01Z05S03[NW]",
+                "logic": []
             },
             {
-                "target": "D20Z01S03[W]",
+                "target": "D01Z05S03[W]",
+                "logic": []
+            },
+            {
+                "target": "D01Z05S03[E]",
+                "logic": []
+            },
+            {
+                "target": "D01Z05S04[W]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D20Z01S03[N]",
-            "D03Z01S01[S]"
+            "D01Z05S02[E]"
+        ]
+    },
+    {
+        "name": "D01Z05S04[W]",
+        "exits": [
+            {
+                "target": "D01Z05S03[NW]",
+                "logic": []
+            },
+            {
+                "target": "D01Z05S03[W]",
+                "logic": []
+            },
+            {
+                "target": "D01Z05S03[E]",
+                "logic": []
+            },
+            {
+                "target": "D01Z05S04[E]",
+                "logic": []
+            },
+            {
+                "target": "D01Z05S13[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D01Z05S14[W]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D01Z05S04[W]",
+            "D01Z05S03[NE]",
+            "D01Z05S13[N]",
+            "D01Z05S03[S]"
         ]
     },
     {
@@ -3835,6 +3986,10 @@ regions = [
             },
             {
                 "target": "D01Z05S03[E]",
+                "logic": []
+            },
+            {
+                "target": "D01Z05S04[W]",
                 "logic": []
             }
         ],
@@ -3856,6 +4011,10 @@ regions = [
             },
             {
                 "target": "D01Z05S03[E]",
+                "logic": []
+            },
+            {
+                "target": "D01Z05S04[W]",
                 "logic": []
             }
         ],
@@ -3911,11 +4070,11 @@ regions = [
         "name": "D01Z05S05[NW]",
         "exits": [
             {
-                "target": "D01Z05S04[E]",
+                "target": "D01Z05S04[W]",
                 "logic": []
             },
             {
-                "target": "D01Z05S03[NW]",
+                "target": "D01Z05S04[E]",
                 "logic": []
             }
         ],
@@ -3981,10 +4140,6 @@ regions = [
         "name": "D01Z05S14[W]",
         "exits": [
             {
-                "target": "D01Z05S13[E]",
-                "logic": []
-            },
-            {
                 "target": "RESCUED_CHERUB_12",
                 "logic": [
                     {
@@ -3998,7 +4153,7 @@ regions = [
                 ]
             },
             {
-                "target": "D01Z05S03[NW]",
+                "target": "D01Z05S04[W]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -4011,6 +4166,18 @@ regions = [
                         "item_requirements": [
                             "canSurvivePoison3",
                             "canWaterJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D01Z05S13[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D01Z05S14[W]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -4051,65 +4218,27 @@ regions = [
                 "logic": []
             },
             {
+                "target": "D01Z05S13[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D01Z05S14[W]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D01Z05S21[W]",
+                "logic": []
+            },
+            {
                 "target": "D01Z05S21[Reward]",
                 "logic": [
                     {
                         "item_requirements": [
                             "shroud"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "canCrossGap3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RESCUED_CHERUB_22",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "pillar"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "linen"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -4155,102 +4284,6 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
-            },
-            {
-                "target": "D01Z05S25[NE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S25[SE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "CO44",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D20Z01S09[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "NormalLogic",
-                            "linen",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "NormalLogic",
-                            "linen",
-                            "canAirStall",
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D20Z01S10[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "NormalLogic",
-                            "linen",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "NormalLogic",
-                            "linen",
-                            "canAirStall",
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z03S17[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
@@ -4259,8 +4292,6 @@ regions = [
             "D01Z05S13[SW]",
             "D01Z05S21[E]",
             "D01Z05S16[SW]",
-            "D01Z05S25[E]",
-            "D01Z05S21[W]",
             "D01Z05S17[W]",
             "D01Z05S16[SE]"
         ]
@@ -4484,8 +4515,41 @@ regions = [
         ]
     },
     {
+        "name": "D01Z05S25[E]",
+        "exits": [
+            {
+                "target": "D01Z05S21[W]",
+                "logic": []
+            },
+            {
+                "target": "D01Z05S21[Reward]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "shroud"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D01Z05S16[N]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D01Z05S25[E]"
+        ]
+    },
+    {
         "name": "D01BZ05S01[Reward]",
         "exits": [
+            {
+                "target": "D01Z05S21[W]",
+                "logic": []
+            },
             {
                 "target": "D01Z05S21[Reward]",
                 "logic": [
@@ -4638,6 +4702,21 @@ regions = [
                 ]
             },
             {
+                "target": "D01Z05S25[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "HardLogic",
+                            "tirana",
+                            "obscureSkipsAllowed",
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D20Z01S09[E]",
                 "logic": [
                     {
@@ -4686,8 +4765,216 @@ regions = [
                 ]
             },
             {
-                "target": "D01Z05S16[N]",
+                "target": "D03Z03S17[E]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D01Z05S20[W]"
+        ]
+    },
+    {
+        "name": "D01Z05S21[W]",
+        "exits": [
+            {
+                "target": "D01Z05S25[W]",
                 "logic": [
+                    {
+                        "item_requirements": [
+                            "canWalkOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "canCrossGap3"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "linen",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D01Z05S25[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "HardLogic"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_22",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "pillar"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D01Z05S25[NE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D01Z05S25[SE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO44",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D20Z01S09[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canAirStall",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D20Z01S10[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "NormalLogic",
+                            "linen",
+                            "canAirStall",
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z03S17[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D01Z05S21[W]"
+        ]
+    },
+    {
+        "name": "D01Z05S23[E]",
+        "exits": [
+            {
+                "target": "D01Z05S25[W]",
+                "logic": []
+            },
+            {
+                "target": "D01Z05S25[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "HardLogic",
+                            "tirana",
+                            "obscureSkipsAllowed",
+                            "canWalkOnRoot"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "HardLogic",
+                            "tirana",
+                            "obscureSkipsAllowed",
+                            "canCrossGap3"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
                     {
                         "item_requirements": [
                             "HardLogic",
@@ -4699,23 +4986,6 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
-            },
-            {
-                "target": "D03Z03S17[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D01Z05S20[W]"
-        ]
-    },
-    {
-        "name": "D01Z05S23[E]",
-        "exits": [
-            {
-                "target": "D01Z05S25[W]",
-                "logic": []
             },
             {
                 "target": "RESCUED_CHERUB_22",
@@ -4738,41 +5008,6 @@ regions = [
                     },
                     {
                         "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S16[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "HardLogic",
-                            "tirana",
-                            "obscureSkipsAllowed",
-                            "canWalkOnRoot"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "HardLogic",
-                            "tirana",
-                            "obscureSkipsAllowed",
-                            "canCrossGap3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "HardLogic",
-                            "tirana",
-                            "obscureSkipsAllowed",
                             "linen"
                         ],
                         "location_requirements": [],
@@ -4970,6 +5205,21 @@ regions = [
                 ]
             },
             {
+                "target": "D01Z05S25[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "HardLogic",
+                            "tirana",
+                            "obscureSkipsAllowed",
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D20Z01S09[E]",
                 "logic": [
                     {
@@ -5011,21 +5261,6 @@ regions = [
                             "linen",
                             "canAirStall",
                             "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S16[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "HardLogic",
-                            "tirana",
-                            "obscureSkipsAllowed",
-                            "linen"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -5130,6 +5365,21 @@ regions = [
                 ]
             },
             {
+                "target": "D01Z05S25[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "HardLogic",
+                            "tirana",
+                            "obscureSkipsAllowed",
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D20Z01S09[E]",
                 "logic": [
                     {
@@ -5171,21 +5421,6 @@ regions = [
                             "linen",
                             "canAirStall",
                             "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S16[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "HardLogic",
-                            "tirana",
-                            "obscureSkipsAllowed",
-                            "linen"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -5282,6 +5517,21 @@ regions = [
                 ]
             },
             {
+                "target": "D01Z05S25[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "HardLogic",
+                            "tirana",
+                            "obscureSkipsAllowed",
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D01Z05S25[SE]",
                 "logic": [
                     {
@@ -5310,21 +5560,6 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S16[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "HardLogic",
-                            "tirana",
-                            "obscureSkipsAllowed",
                             "linen"
                         ],
                         "location_requirements": [],
@@ -5454,6 +5689,21 @@ regions = [
                 ]
             },
             {
+                "target": "D01Z05S25[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "HardLogic",
+                            "tirana",
+                            "obscureSkipsAllowed",
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D01Z05S25[SE]",
                 "logic": [
                     {
@@ -5482,21 +5732,6 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D01Z05S16[N]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "HardLogic",
-                            "tirana",
-                            "obscureSkipsAllowed",
                             "linen"
                         ],
                         "location_requirements": [],
@@ -5799,7 +6034,7 @@ regions = [
                 ]
             },
             {
-                "target": "D20Z02S11",
+                "target": "D20Z01S13[E]",
                 "logic": []
             },
             {
@@ -5809,20 +6044,6 @@ regions = [
             {
                 "target": "D20Z01S14[E]",
                 "logic": []
-            },
-            {
-                "target": "D20Z02S10[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "HardLogic",
-                            "mourningSkipAllowed",
-                            "canCrossGap5"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
@@ -5833,8 +6054,6 @@ regions = [
             "D20Z01S11[NW]",
             "D20Z01S13[W]",
             "D20Z01S11[NE]",
-            "D20Z02S11[NW]",
-            "D20Z01S13[E]",
             "D20Z02S12[W]",
             "D20Z01S11[SE]",
             "D20Z01S14[S]",
@@ -7572,6 +7791,26 @@ regions = [
                 ]
             },
             {
+                "target": "D02Z02S04[NE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canEnemyUpslash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D02Z02S04[-CherubsL]",
                 "logic": [
                     {
@@ -7738,19 +7977,11 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z02S05[W]",
+                "target": "D02Z02S04[E]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyUpslash"
+                            "D02Z02S05[SW]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -7758,7 +7989,7 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z02S05[SW]",
+                "target": "D02Z02S05[SE]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -7875,6 +8106,27 @@ regions = [
         "name": "D02Z02S05[SW]",
         "exits": [
             {
+                "target": "D02Z02S04[NE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "CO01",
                 "logic": [
                     {
@@ -7966,29 +8218,11 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z02S05[W]",
+                "target": "D02Z02S04[E]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "dash",
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "EnemySkipsAndDoubleJump",
-                            "doubleJump",
-                            "canEnemyBounce"
+                            "D02Z02S05[SW]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -8010,22 +8244,45 @@ regions = [
             },
             {
                 "target": "D02Z02S03[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S09[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [
+            "RB32"
+        ],
+        "transitions": [
+            "D02Z02S05[SW]"
+        ]
+    },
+    {
+        "name": "D02Z02S05[W]",
+        "exits": [
+            {
+                "target": "D02Z02S04[NE]",
                 "logic": []
             },
             {
-                "target": "D02Z02S05[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[-CherubsL]",
+                "target": "D02Z02S04[-CherubsL]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -8037,7 +8294,122 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z02S05[-CherubsR]",
+                "target": "CO01",
+                "logic": []
+            },
+            {
+                "target": "RESCUED_CHERUB_25",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "blood",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canEnemyBounce"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "lorquiana"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "cante"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "verdiales"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "aubade"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "cantina"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "pillar"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S04[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D02Z02S05[SW]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S03[SW]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S09[E]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D02Z02S05[W]"
+        ]
+    },
+    {
+        "name": "D02Z02S09[E]",
+        "exits": [
+            {
+                "target": "D02Z02S04[NE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S04[-CherubsL]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -8049,8 +8421,15 @@ regions = [
                 ]
             },
             {
-                "target": "RB15",
+                "target": "CO01",
                 "logic": [
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
                     {
                         "item_requirements": [
                             "wallClimb"
@@ -8060,12 +8439,105 @@ regions = [
                     }
                 ]
             },
+            {
+                "target": "RESCUED_CHERUB_25",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "blood",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canEnemyBounce"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "lorquiana"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "cante"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "verdiales"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "aubade"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "cantina"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "pillar"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S04[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D02Z02S05[SW]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S03[SW]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D02Z02S09[E]",
+            "D02Z02S04[W]"
+        ]
+    },
+    {
+        "name": "D02Z02S05[SE]",
+        "exits": [
             {
                 "target": "QI46",
                 "logic": []
             },
             {
                 "target": "CO29",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S03[SW]",
                 "logic": []
             },
             {
@@ -8159,129 +8631,22 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z02S09[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S07[E]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [
-            "RB32"
-        ],
-        "transitions": [
-            "D02Z02S05[SW]",
-            "D02Z02S04[E]",
-            "D02Z02S05[SE]",
-            "D02Z02S03[NW]"
-        ]
-    },
-    {
-        "name": "D02Z02S05[W]",
-        "exits": [
-            {
-                "target": "D02Z02S04[-CherubsL]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "CO01",
+                "target": "D02Z02S05[SW]",
                 "logic": []
             },
             {
-                "target": "RESCUED_CHERUB_25",
+                "target": "D02Z02S05[W]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "blood",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
+                            "EnemySkipsAndDoubleJump",
                             "doubleJump",
                             "canEnemyBounce"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "lorquiana"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "cante"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "verdiales"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "aubade"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "cantina"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "pillar"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
                     }
                 ]
-            },
-            {
-                "target": "D02Z02S03[SW]",
-                "logic": []
-            },
-            {
-                "target": "D02Z02S05[SW]",
-                "logic": []
             },
             {
                 "target": "D02Z02S05[E]",
@@ -8332,10 +8697,6 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z02S09[E]",
-                "logic": []
-            },
-            {
                 "target": "D02Z02S07[E]",
                 "logic": [
                     {
@@ -8350,135 +8711,8 @@ regions = [
         ],
         "locations": [],
         "transitions": [
-            "D02Z02S05[W]",
-            "D02Z02S04[NE]"
-        ]
-    },
-    {
-        "name": "D02Z02S09[E]",
-        "exits": [
-            {
-                "target": "D02Z02S04[-CherubsL]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "CO01",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RESCUED_CHERUB_25",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyBounce"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "lorquiana"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "cante"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "verdiales"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "aubade"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "cantina"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "pillar"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S05[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D02Z02S03[SW]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D02Z02S09[E]",
-            "D02Z02S04[W]"
+            "D02Z02S05[SE]",
+            "D02Z02S03[NW]"
         ]
     },
     {
@@ -8533,7 +8767,7 @@ regions = [
                 ]
             },
             {
-                "target": "D02Z02S05[SW]",
+                "target": "D02Z02S05[SE]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -8562,6 +8796,186 @@ regions = [
         "locations": [],
         "transitions": [
             "D02Z02S14[W]"
+        ]
+    },
+    {
+        "name": "D02Z02S04[E]",
+        "exits": [
+            {
+                "target": "D02Z02S05[SW]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S05[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "EnemySkipsAndDoubleJump",
+                            "doubleJump",
+                            "canEnemyBounce"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S05[SE]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S05[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S05[-CherubsL]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S05[-CherubsR]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB15",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S07[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D02Z02S04[E]"
+        ]
+    },
+    {
+        "name": "D02Z02S04[NE]",
+        "exits": [
+            {
+                "target": "D02Z02S05[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "EnemySkipsAndDoubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S05[SW]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S05[SE]",
+                "logic": []
+            },
+            {
+                "target": "D02Z02S05[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S05[-CherubsL]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S05[-CherubsR]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB15",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D02Z02S07[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D02Z02S04[NE]"
         ]
     },
     {
@@ -8594,6 +9008,10 @@ regions = [
                 ]
             },
             {
+                "target": "D02Z02S05[SE]",
+                "logic": []
+            },
+            {
                 "target": "D02Z02S05[-CherubsL]",
                 "logic": [
                     {
@@ -8620,6 +9038,18 @@ regions = [
             {
                 "target": "D02Z03S08[SW]",
                 "logic": []
+            },
+            {
+                "target": "D02Z03S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D02Z03S07[E]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
                 "target": "D02Z02S11",
@@ -8699,6 +9129,10 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D02Z02S05[SE]",
+                "logic": []
             },
             {
                 "target": "D02Z02S05[-CherubsL]",
@@ -9068,12 +9502,20 @@ regions = [
         "name": "D02Z03S07[E]",
         "exits": [
             {
-                "target": "D02Z03S08[W]",
+                "target": "D02Z03S08[SW]",
                 "logic": []
             },
             {
-                "target": "D02Z03S08[SW]",
-                "logic": []
+                "target": "D02Z03S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D02Z03S07[E]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
                 "target": "D02Z02S07[E]",
@@ -9091,6 +9533,18 @@ regions = [
             {
                 "target": "D02Z03S08[SW]",
                 "logic": []
+            },
+            {
+                "target": "D02Z03S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D02Z03S07[E]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
                 "target": "D02Z02S07[E]",
@@ -10178,6 +10632,23 @@ regions = [
         ]
     },
     {
+        "name": "D03Z01S01[S]",
+        "exits": [
+            {
+                "target": "D20Z01S03[W]",
+                "logic": []
+            },
+            {
+                "target": "D20Z01S03[N]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D03Z01S01[S]"
+        ]
+    },
+    {
         "name": "D20Z01S02[E]",
         "exits": [
             {
@@ -11009,7 +11480,33 @@ regions = [
                 ]
             },
             {
-                "target": "D03Z02S06[W]",
+                "target": "D03Z02S03[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "brokeJondoBellW",
+                            "brokeJondoBellE"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z02S03[SE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "brokeJondoBellW",
+                            "brokeJondoBellE"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z03S01[NL]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -11482,7 +11979,33 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D03Z02S06[W]",
+                "target": "D03Z02S03[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "brokeJondoBellW",
+                            "brokeJondoBellE"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z02S03[SE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "brokeJondoBellW",
+                            "brokeJondoBellE"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z03S01[NL]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -11545,29 +12068,42 @@ regions = [
         "name": "D03Z02S06[W]",
         "exits": [
             {
-                "target": "D03Z02S06",
+                "target": "D03Z02S03[SW]",
                 "logic": []
             },
             {
-                "target": "D03Z02S07",
+                "target": "D03Z02S03[SE]",
                 "logic": []
             },
             {
-                "target": "D03Z03S12[W]",
+                "target": "D03Z03S01[NL]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D03Z02S06[W]",
-            "D03Z02S03[SE]",
-            "D03Z02S07[E]",
-            "D03Z02S03[SW]",
-            "D03Z03S01[NL]",
-            "D03Z02S03[SSL]",
-            "D03Z02S03[SSC]",
-            "D03Z02S03[SSR]",
-            "D03Z03S01[NR]"
+            "D03Z02S06[W]"
+        ]
+    },
+    {
+        "name": "D03Z02S07[E]",
+        "exits": [
+            {
+                "target": "D03Z02S03[SW]",
+                "logic": []
+            },
+            {
+                "target": "D03Z02S03[SE]",
+                "logic": []
+            },
+            {
+                "target": "D03Z03S01[NL]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D03Z02S07[E]"
         ]
     },
     {
@@ -11590,7 +12126,35 @@ regions = [
                 ]
             },
             {
-                "target": "D03Z02S06[W]",
+                "target": "D03Z02S03[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "brokeJondoBellW",
+                            "brokeJondoBellE",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z02S03[SE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "brokeJondoBellW",
+                            "brokeJondoBellE",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z03S01[NL]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -11610,11 +12174,48 @@ regions = [
         ]
     },
     {
+        "name": "D03Z03S01[NL]",
+        "exits": [
+            {
+                "target": "D03Z02S03[SW]",
+                "logic": []
+            },
+            {
+                "target": "D03Z02S03[SE]",
+                "logic": []
+            },
+            {
+                "target": "D03Z03S12[W]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D03Z03S01[NL]",
+            "D03Z02S03[SSL]",
+            "D03Z02S03[SSC]",
+            "D03Z02S03[SSR]",
+            "D03Z03S01[NR]"
+        ]
+    },
+    {
         "name": "D03Z02S07",
         "exits": [
             {
                 "target": "D03Z02S07[W]",
                 "logic": []
+            },
+            {
+                "target": "D03Z02S07[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D03Z02S03[SW]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
                 "target": "D03Z02S07[N]",
@@ -11637,6 +12238,19 @@ regions = [
         "locations": [],
         "transitions": [
             "D03Z02S03[W]"
+        ]
+    },
+    {
+        "name": "D03Z02S03[SW]",
+        "exits": [
+            {
+                "target": "D03Z02S07",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D03Z02S03[SW]"
         ]
     },
     {
@@ -11837,6 +12451,18 @@ regions = [
         "name": "D03Z02S06",
         "exits": [
             {
+                "target": "D03Z02S06[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D03Z02S03[SE]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D03Z02S06[N]",
                 "logic": []
             }
@@ -11845,6 +12471,19 @@ regions = [
             "QI19"
         ],
         "transitions": []
+    },
+    {
+        "name": "D03Z02S03[SE]",
+        "exits": [
+            {
+                "target": "D03Z02S06",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D03Z02S03[SE]"
+        ]
     },
     {
         "name": "D03Z02S04[S]",
@@ -11863,7 +12502,7 @@ regions = [
         "name": "D03Z03S12[W]",
         "exits": [
             {
-                "target": "D03Z02S06[W]",
+                "target": "D03Z03S01[NL]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -12328,6 +12967,18 @@ regions = [
             {
                 "target": "D03Z03S04[NW]",
                 "logic": []
+            },
+            {
+                "target": "D03Z03S03[SE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D03Z03S04[SW]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
@@ -12371,6 +13022,18 @@ regions = [
                 "logic": []
             },
             {
+                "target": "D03Z03S03[SE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D03Z03S04[SW]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D03Z03S04[SE]",
                 "logic": [
                     {
@@ -12405,81 +13068,11 @@ regions = [
         "name": "D03Z03S04[SW]",
         "exits": [
             {
-                "target": "D03Z03S04[NW]",
+                "target": "D03Z03S03[SE]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z03S05[NW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump",
-                            "canEnemyBounce"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z03S05[SW]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "wallClimb"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "doubleJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z03S04[SE]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "blood"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D03Z03S04[-Cherubs]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "linen"
+                            "D03Z03S04[SW]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -12489,8 +13082,7 @@ regions = [
         ],
         "locations": [],
         "transitions": [
-            "D03Z03S04[SW]",
-            "D03Z03S03[SE]"
+            "D03Z03S04[SW]"
         ]
     },
     {
@@ -12555,6 +13147,101 @@ regions = [
         "locations": [],
         "transitions": [
             "D03Z03S03[W]"
+        ]
+    },
+    {
+        "name": "D03Z03S03[SE]",
+        "exits": [
+            {
+                "target": "D03Z03S04[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z03S04[SW]",
+                "logic": []
+            },
+            {
+                "target": "D03Z03S05[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump",
+                            "canEnemyBounce"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z03S05[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "doubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z03S04[SE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "blood"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D03Z03S04[-Cherubs]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D03Z03S03[SE]"
         ]
     },
     {
@@ -13858,6 +14545,18 @@ regions = [
             {
                 "target": "D04Z01S03[E]",
                 "logic": []
+            },
+            {
+                "target": "D04Z01S03[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D05Z01S20[N]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [
@@ -13899,48 +14598,11 @@ regions = [
             {
                 "target": "D04Z01S03",
                 "logic": []
-            },
-            {
-                "target": "D05Z01S07[E]",
-                "logic": []
-            },
-            {
-                "target": "D05Z01S08[NE]",
-                "logic": []
-            },
-            {
-                "target": "D05Z01S06[W]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canSurvivePoison3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB31",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "canSurvivePoison3"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
             }
         ],
         "locations": [],
         "transitions": [
-            "D05Z01S20[N]",
-            "D04Z01S03[S]",
-            "D05Z01S06[E]",
-            "D05Z01S20[W]",
-            "D05Z01S07[NW]",
-            "D05Z01S20[E]"
+            "D05Z01S20[N]"
         ]
     },
     {
@@ -13998,6 +14660,71 @@ regions = [
         "locations": [],
         "transitions": [
             "D06Z01S18[-Cherubs]"
+        ]
+    },
+    {
+        "name": "D04Z01S03[S]",
+        "exits": [
+            {
+                "target": "D05Z01S20[N]",
+                "logic": []
+            },
+            {
+                "target": "D05Z01S06[E]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D04Z01S03[S]"
+        ]
+    },
+    {
+        "name": "D05Z01S06[E]",
+        "exits": [
+            {
+                "target": "D05Z01S20[N]",
+                "logic": []
+            },
+            {
+                "target": "D05Z01S07[E]",
+                "logic": []
+            },
+            {
+                "target": "D05Z01S08[NE]",
+                "logic": []
+            },
+            {
+                "target": "D05Z01S06[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canSurvivePoison3"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB31",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "canSurvivePoison3"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D05Z01S06[E]",
+            "D05Z01S20[W]",
+            "D05Z01S07[NW]",
+            "D05Z01S20[E]"
         ]
     },
     {
@@ -14249,11 +14976,12 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D04Z01S06[Cherubs]",
+                "target": "D04Z01S06[E]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "linen"
+                            "DoubleJump",
+                            "doubleJump"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -14261,12 +14989,11 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S09[SW]",
+                "target": "D04Z01S06[Cherubs]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "DoubleJump",
-                            "doubleJump"
+                            "linen"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -14300,16 +15027,29 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D09Z01S09[Cell20]",
+                "target": "D04Z01S06[E]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "silverKey"
+                            "DoubleJump"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     }
                 ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09Z01S09[SW]"
+        ]
+    },
+    {
+        "name": "D04Z01S06[E]",
+        "exits": [
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": []
             },
             {
                 "target": "D09Z01S09[Cell21]",
@@ -14324,11 +15064,671 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S08[Cell15]",
+                "target": "D09Z01S07[SW]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S09[NW]",
                 "logic": [
                     {
                         "item_requirements": [
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
                             "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S09[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell7]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S08[Cell7]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell17]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S08[Cell7]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S08[Cell16]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S08[Cell18]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell16]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S08[Cell16]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S08[Cell18]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell18]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S08[Cell16]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI72",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S04[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell10]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell11]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO27",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell13]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S10[Cell10]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S10[Cell10]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S10[Cell11]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S10[Cell11]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell22]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell5]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell1]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell1]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell6]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell6]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell22]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell22]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI69",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D04Z01S06[E]"
+        ]
+    },
+    {
+        "name": "D09Z01S07[SW]",
+        "exits": [
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S09[Cell21]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -14353,18 +15753,6 @@ regions = [
                     {
                         "item_requirements": [
                             "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S10[Cell12]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "bronzeKey"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -14400,11 +15788,32 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D09BZ01S01[Cell3]",
-                "logic": []
+                "target": "D09Z01S09[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
-                "target": "D09Z01S09[NW]",
+                "target": "D09Z01S09[Cell24]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -14473,28 +15882,10 @@ regions = [
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09BZ01S01[Cell24]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "NormalLogicAndDoubleJump",
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
                     },
                     {
                         "item_requirements": [
-                            "NormalLogicAndDoubleJump",
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
+                            "silverKey"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -14504,12 +15895,191 @@ regions = [
             {
                 "target": "D09Z01S02[N]",
                 "logic": []
+            },
+            {
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell13]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell17]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell7]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI72",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S04[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell5]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell22]",
+                "logic": []
+            },
+            {
+                "target": "RB11",
+                "logic": []
+            },
+            {
+                "target": "QI69",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
         "transitions": [
-            "D09Z01S09[SW]",
-            "D04Z01S06[E]",
             "D09Z01S07[SW]",
             "D09Z01S09[E]",
             "D09Z01S02[SW]",
@@ -14517,9 +16087,7 @@ regions = [
             "D09Z01S08[SE]",
             "D09Z01S07[W]",
             "D09Z01S10[W]",
-            "D09Z01S07[SE]",
-            "D09Z01S02[Cell2]",
-            "D09BZ01S01[Cell2]"
+            "D09Z01S07[SE]"
         ]
     },
     {
@@ -14530,23 +16098,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "RB16",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09BZ01S01[Cell19]",
-                "logic": []
-            },
-            {
-                "target": "D09BZ01S01[Cell24]",
+                "target": "D09Z01S09[Cell24]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -14565,7 +16117,7 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S09[SW]",
+                "target": "RB16",
                 "logic": [
                     {
                         "item_requirements": [
@@ -14577,11 +16129,14 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S09[Cell20]",
+                "target": "D09BZ01S01[Cell19]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S09[SW]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "silverKey",
                             "dash"
                         ],
                         "location_requirements": [],
@@ -14596,6 +16151,607 @@ regions = [
                         "item_requirements": [
                             "goldKey",
                             "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S07[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S09[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell7]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell7]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell17]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell7]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell16]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell18]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell16]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell16]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell18]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell18]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell16]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI72",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S04[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell10]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell11]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO27",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell13]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell10]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell10]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell11]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell11]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell22]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell5]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI69",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -14616,23 +16772,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "RB16",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09BZ01S01[Cell20]",
-                "logic": []
-            },
-            {
-                "target": "D09BZ01S01[Cell24]",
+                "target": "D09Z01S09[Cell24]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -14651,7 +16791,7 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S09[SW]",
+                "target": "RB16",
                 "logic": [
                     {
                         "item_requirements": [
@@ -14663,12 +16803,159 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S09[Cell20]",
+                "target": "D09Z01S09[SW]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S09[Cell21]",
                 "logic": [
                     {
                         "item_requirements": [
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S07[SW]",
+                "logic": []
+            },
+            {
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell7]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell17]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell16]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell18]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
                             "silverKey",
-                            "dash"
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey",
+                            "openedWotHPGate"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -14676,37 +16963,19 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S09[Cell21]",
+                "target": "D09Z01S08[S]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "goldKey",
-                            "dash"
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09BZ01S01[Cell19]",
-            "D09Z01S09[Cell19]"
-        ]
-    },
-    {
-        "name": "D09BZ01S01[Cell20]",
-        "exits": [
-            {
-                "target": "D09Z01S09[SW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[Cell20]",
-                "logic": [
+                    },
                     {
                         "item_requirements": [
+                            "D09Z01S08[Cell18]",
                             "silverKey"
                         ],
                         "location_requirements": [],
@@ -14715,11 +16984,12 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S09[Cell21]",
+                "target": "QI72",
                 "logic": [
                     {
                         "item_requirements": [
-                            "goldKey"
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -14727,121 +16997,31 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S09[NW]",
+                "target": "D09Z01S04[S]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "NormalLogicAndDoubleJump",
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell10]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     },
                     {
                         "item_requirements": [
-                            "NormalLogicAndDoubleJump",
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB16",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09BZ01S01[Cell19]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "NormalLogicAndDoubleJump",
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "NormalLogicAndDoubleJump",
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09BZ01S01[Cell24]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "NormalLogicAndDoubleJump",
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    },
-                    {
-                        "item_requirements": [
-                            "NormalLogicAndDoubleJump",
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09BZ01S01[Cell20]"
-        ]
-    },
-    {
-        "name": "D09BZ01S01[Cell21]",
-        "exits": [
-            {
-                "target": "D09Z01S09[SW]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[Cell20]",
-                "logic": [
-                    {
-                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
                             "silverKey"
                         ],
                         "location_requirements": [],
@@ -14850,59 +17030,265 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S09[Cell21]",
+                "target": "D09Z01S10[Cell11]",
                 "logic": [
                     {
                         "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO27",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell13]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell22]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell5]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
                             "goldKey"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S09[NW]",
-                "logic": [
+                    },
                     {
                         "item_requirements": [
-                            "NormalLogicAndDoubleJump",
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
+                            "D09Z01S02[Cell1]",
+                            "D09BZ01S01[Cell5]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     },
                     {
                         "item_requirements": [
-                            "NormalLogicAndDoubleJump",
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB16",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
+                            "D09Z01S02[Cell6]",
+                            "goldKey"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     },
                     {
                         "item_requirements": [
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
+                            "D09Z01S02[Cell6]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "D09BZ01S01[Cell5]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -14910,49 +17296,28 @@ regions = [
                 ]
             },
             {
-                "target": "D09BZ01S01[Cell19]",
+                "target": "QI69",
                 "logic": [
                     {
                         "item_requirements": [
-                            "NormalLogicAndDoubleJump",
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     },
                     {
                         "item_requirements": [
-                            "NormalLogicAndDoubleJump",
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09BZ01S01[Cell24]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "NormalLogicAndDoubleJump",
-                            "dash",
-                            "doubleJump",
-                            "canAirStall"
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     },
                     {
                         "item_requirements": [
-                            "NormalLogicAndDoubleJump",
-                            "dash",
-                            "doubleJump",
-                            "canDawnJump"
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -14961,9 +17326,7 @@ regions = [
             }
         ],
         "locations": [],
-        "transitions": [
-            "D09BZ01S01[Cell21]"
-        ]
+        "transitions": []
     },
     {
         "name": "D09BZ01S01[Cell24]",
@@ -14995,6 +17358,10 @@ regions = [
                 ]
             },
             {
+                "target": "D09Z01S09[Cell24]",
+                "logic": []
+            },
+            {
                 "target": "RB16",
                 "logic": []
             },
@@ -15037,19 +17404,6 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S09[Cell20]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "silverKey",
-                            "dash"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
                 "target": "D09Z01S09[Cell21]",
                 "logic": [
                     {
@@ -15061,13 +17415,597 @@ regions = [
                         "state_modifiers": []
                     }
                 ]
+            },
+            {
+                "target": "D09Z01S07[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell7]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell7]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell17]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell7]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell16]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell18]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell16]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell16]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell18]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell18]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell16]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI72",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S04[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell10]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell11]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO27",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell13]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell10]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell10]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell11]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell11]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell22]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell5]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI69",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
-        "transitions": [
-            "D09BZ01S01[Cell24]",
-            "D09Z01S09[Cell24]"
-        ]
+        "transitions": []
     },
     {
         "name": "D04Z02S02",
@@ -15086,7 +18024,6 @@ regions = [
                     {
                         "item_requirements": [
                             "HardLogicAndDoubleJump",
-                            "EnemySkips",
                             "doubleJump",
                             "upwarpSkipsAllowed"
                         ],
@@ -15096,7 +18033,6 @@ regions = [
                     {
                         "item_requirements": [
                             "HardLogicAndDoubleJump",
-                            "EnemySkips",
                             "doubleJump",
                             "canEnemyUpslash"
                         ],
@@ -15106,6 +18042,33 @@ regions = [
                     {
                         "item_requirements": [
                             "HardLogicAndDoubleJump",
+                            "canEnemyUpslash",
+                            "upwarpSkipsAllowed",
+                            "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "EnemySkips",
+                            "doubleJump",
+                            "upwarpSkipsAllowed"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "EnemySkips",
+                            "doubleJump",
+                            "canEnemyUpslash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
                             "EnemySkips",
                             "canEnemyUpslash",
                             "upwarpSkipsAllowed",
@@ -15163,7 +18126,22 @@ regions = [
             },
             {
                 "target": "D04Z02S02[NE]",
-                "logic": []
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "HardLogicAndDoubleJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "EnemySkips"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
                 "target": "D06Z01S02[S]",
@@ -15201,6 +18179,14 @@ regions = [
                     {
                         "item_requirements": [
                             "HardLogicAndDoubleJump",
+                            "canEnemyUpslash",
+                            "upwarpSkipsAllowed"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
                             "EnemySkips",
                             "canEnemyUpslash",
                             "upwarpSkipsAllowed"
@@ -15216,6 +18202,18 @@ regions = [
                     {
                         "item_requirements": [
                             "linen"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S08[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D06Z01S13[S]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -15383,6 +18381,18 @@ regions = [
             {
                 "target": "D04Z02S05[E]",
                 "logic": []
+            },
+            {
+                "target": "D05Z01S02[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D05Z01S15[E]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
                 "target": "D05Z01S03[W]",
@@ -16782,15 +19792,23 @@ regions = [
         "name": "D05Z01S15[E]",
         "exits": [
             {
-                "target": "D05Z01S02[W]",
-                "logic": []
-            },
-            {
                 "target": "RB18",
                 "logic": [
                     {
                         "item_requirements": [
                             "redWax1"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D05Z01S02[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D05Z01S15[E]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -17090,7 +20108,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D05Z01S20[N]",
+                "target": "D05Z01S06[E]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -17143,7 +20161,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D05Z01S20[N]",
+                "target": "D05Z01S06[E]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -17209,7 +20227,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D05Z01S20[N]",
+                "target": "D05Z01S06[E]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -17489,7 +20507,15 @@ regions = [
             },
             {
                 "target": "D05Z01S11[SW]",
-                "logic": []
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "HardLogic"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
@@ -18361,6 +21387,18 @@ regions = [
                 "logic": []
             },
             {
+                "target": "D06Z01S08[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D06Z01S13[S]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D06Z01S02[S]",
                 "logic": []
             },
@@ -18542,7 +21580,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D06Z01S02[S]",
+                "target": "D06Z01S13[S]",
                 "logic": []
             }
         ],
@@ -18555,9 +21593,7 @@ regions = [
             "D06Z01S12[E]",
             "D06Z01S07[W]",
             "D06Z01S13[E]",
-            "D06Z01S12[W]",
-            "D06Z01S13[S]",
-            "D06Z01S08[N]"
+            "D06Z01S12[W]"
         ]
     },
     {
@@ -18739,6 +21775,10 @@ regions = [
         "name": "D06Z01S04[NE]",
         "exits": [
             {
+                "target": "D06Z01S06[EE]",
+                "logic": []
+            },
+            {
                 "target": "D06Z01S04[NW]",
                 "logic": [
                     {
@@ -18854,14 +21894,27 @@ regions = [
                 ]
             }
         ],
-        "locations": [
-            "CO40"
-        ],
+        "locations": [],
         "transitions": [
             "D06Z01S04[NE]",
-            "D06Z01S06[W]",
-            "D06Z01S15[SW]",
-            "D06Z01S06[EE]"
+            "D06Z01S06[W]"
+        ]
+    },
+    {
+        "name": "D06Z01S15[SW]",
+        "exits": [
+            {
+                "target": "D06Z01S06[EE]",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S04[NE]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D06Z01S15[SW]"
         ]
     },
     {
@@ -19866,6 +22919,35 @@ regions = [
         ]
     },
     {
+        "name": "D06Z01S13[S]",
+        "exits": [
+            {
+                "target": "D06Z01S01[SW]",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S08[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D06Z01S13[S]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S02[S]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D06Z01S13[S]"
+        ]
+    },
+    {
         "name": "D06Z01S09[E]",
         "exits": [
             {
@@ -20274,6 +23356,29 @@ regions = [
         ]
     },
     {
+        "name": "D06Z01S06[EE]",
+        "exits": [
+            {
+                "target": "D06Z01S15[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D06Z01S06[EE]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [
+            "CO40"
+        ],
+        "transitions": [
+            "D06Z01S06[EE]"
+        ]
+    },
+    {
         "name": "D06Z01S11[W]",
         "exits": [
             {
@@ -20294,6 +23399,18 @@ regions = [
                         "item_requirements": [
                             "D06Z01S06[EE]",
                             "wallClimb"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D06Z01S15[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D06Z01S06[EE]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -20332,6 +23449,18 @@ regions = [
             {
                 "target": "D06Z01S21",
                 "logic": []
+            },
+            {
+                "target": "D06Z01S15[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D06Z01S06[EE]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
@@ -20341,10 +23470,35 @@ regions = [
         ]
     },
     {
+        "name": "D06Z01S08[N]",
+        "exits": [
+            {
+                "target": "D06Z01S13[W]",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S13[S]",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S01[W]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D06Z01S08[N]"
+        ]
+    },
+    {
         "name": "D09Z01S01[E]",
         "exits": [
             {
                 "target": "D06Z01S13[W]",
+                "logic": []
+            },
+            {
+                "target": "D06Z01S13[S]",
                 "logic": []
             },
             {
@@ -20586,7 +23740,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D07Z01S02[E]",
+                "target": "D07Z01S03[W]",
                 "logic": []
             }
         ],
@@ -20601,38 +23755,11 @@ regions = [
             {
                 "target": "D07Z01S02[W]",
                 "logic": []
-            },
-            {
-                "target": "D07Z01S02[E]",
-                "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D07Z01S03[W]"
-        ]
-    },
-    {
-        "name": "D07Z01S03",
-        "exits": [
-            {
-                "target": "D07Z01S03[W]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": []
-    },
-    {
-        "name": "D07Z01S02[E]",
-        "exits": [
-            {
-                "target": "D07Z01S03",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
+            "D07Z01S03[W]",
             "D07Z01S02[E]"
         ]
     },
@@ -20640,7 +23767,7 @@ regions = [
         "name": "D08Z03S03",
         "exits": [
             {
-                "target": "D08Z01S02[NE]",
+                "target": "D08Z03S03[W]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -20677,14 +23804,13 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D08Z01S02",
+                "target": "D08Z03S03[W]",
                 "logic": []
             }
         ],
         "locations": [],
         "transitions": [
-            "D08Z01S02[NE]",
-            "D08Z03S03[W]"
+            "D08Z01S02[NE]"
         ]
     },
     {
@@ -20767,6 +23893,18 @@ regions = [
         "name": "D08Z01S02",
         "exits": [
             {
+                "target": "D08Z01S02[NE]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D08Z03S03[W]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D08Z01S02[SE]",
                 "logic": []
             },
@@ -20799,6 +23937,19 @@ regions = [
         "locations": [],
         "transitions": [
             "D08Z02S03[W]"
+        ]
+    },
+    {
+        "name": "D08Z03S03[W]",
+        "exits": [
+            {
+                "target": "D08Z01S02",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D08Z03S03[W]"
         ]
     },
     {
@@ -20881,6 +24032,18 @@ regions = [
         "name": "D09Z01S01[W]",
         "exits": [
             {
+                "target": "D09Z01S11[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S04[E]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D09Z01S11[E]",
                 "logic": []
             },
@@ -20897,6 +24060,18 @@ regions = [
     {
         "name": "D09Z01S02[N]",
         "exits": [
+            {
+                "target": "D09Z01S11[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S04[E]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
             {
                 "target": "D09Z01S11[E]",
                 "logic": []
@@ -20926,95 +24101,15 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S02[Cell4]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S02[Cell3]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S02[Cell23]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
+                "target": "D09Z01S02[Cell22]",
+                "logic": []
             },
             {
                 "target": "RB11",
                 "logic": []
             },
             {
-                "target": "D09BZ01S01[Cell23]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "QI69",
-                "logic": []
-            }
-        ],
-        "locations": [
-            "CO10",
-            "QI51"
-        ],
-        "transitions": [
-            "D09Z01S02[N]",
-            "D09Z01S11[S]",
-            "D09Z01S02[NW]",
-            "D09Z01S07[NE]",
-            "D09Z01S02[Cell22]",
-            "D09BZ01S01[Cell22]",
-            "D09Z01S02[Cell5]",
-            "D09BZ01S01[Cell4]",
-            "D09BZ01S01[Cell5]"
-        ]
-    },
-    {
-        "name": "D09Z01S04[E]",
-        "exits": [
-            {
-                "target": "D09Z01S11[E]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S02[N]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S04[W]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S08[Cell7]",
+                "target": "D09BZ01S01[Cell5]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -21022,86 +24117,170 @@ regions = [
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
                     }
                 ]
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S04[E]",
-            "D09Z01S11[W]",
-            "D09Z01S04[S]",
-            "D09Z01S07[N]",
-            "D09Z01S08[NE]",
-            "D09Z01S07[NW]"
-        ]
-    },
-    {
-        "name": "D09Z01S02[Cell1]",
-        "exits": [
+            },
             {
-                "target": "D09BZ01S01[Cell1]",
-                "logic": []
-            }
-        ],
-        "locations": [
-            "RESCUED_CHERUB_03"
-        ],
-        "transitions": [
-            "D09Z01S02[Cell1]"
-        ]
-    },
-    {
-        "name": "D09Z01S02[Cell6]",
-        "exits": [
-            {
-                "target": "D09BZ01S01[Cell6]",
-                "logic": []
-            }
-        ],
-        "locations": [
-            "CO24"
-        ],
-        "transitions": [
-            "D09Z01S02[Cell6]"
-        ]
-    },
-    {
-        "name": "D09Z01S02[Cell4]",
-        "exits": [
-            {
-                "target": "D09Z01S02[N]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S02[Cell4]"
-        ]
-    },
-    {
-        "name": "D09Z01S02[Cell3]",
-        "exits": [
-            {
-                "target": "D09BZ01S01[Cell3]",
-                "logic": []
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S09[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S09[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
                 "target": "D09Z01S09[SW]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S02[Cell3]"
-        ]
-    },
-    {
-        "name": "D09Z01S02[Cell23]",
-        "exits": [
-            {
-                "target": "D09BZ01S01[Cell23]",
                 "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell21]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S07[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
                     {
                         "item_requirements": [
                             "bronzeKey"
@@ -21112,32 +24291,76 @@ regions = [
                 ]
             },
             {
-                "target": "QI69",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S02[Cell23]"
-        ]
-    },
-    {
-        "name": "D09Z01S08[Cell14]",
-        "exits": [
-            {
-                "target": "D09BZ01S01[Cell15]",
-                "logic": []
-            },
-            {
-                "target": "RESCUED_CHERUB_34",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S08[W]",
+                "target": "D09Z01S09[NW]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "openedWotHPGate"
+                            "goldKey",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21145,92 +24368,263 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S08[S]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S08[Cell14]",
-            "D09BZ01S01[Cell14]"
-        ]
-    },
-    {
-        "name": "D09Z01S08[Cell15]",
-        "exits": [
-            {
-                "target": "D09BZ01S01[Cell15]",
-                "logic": []
-            },
-            {
-                "target": "RESCUED_CHERUB_34",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S08[Cell14]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S08[Cell15]"
-        ]
-    },
-    {
-        "name": "D09Z01S08[Cell7]",
-        "exits": [
-            {
-                "target": "D09BZ01S01[Cell7]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S08[Cell7]"
-        ]
-    },
-    {
-        "name": "D09Z01S08[Cell16]",
-        "exits": [
-            {
-                "target": "D09BZ01S01[Cell16]",
-                "logic": []
-            }
-        ],
-        "locations": [
-            "CO26"
-        ],
-        "transitions": [
-            "D09Z01S08[Cell16]"
-        ]
-    },
-    {
-        "name": "D09Z01S08[Cell18]",
-        "exits": [
-            {
-                "target": "D09BZ01S01[Cell18]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S08[Cell17]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S08[Cell18]"
-        ]
-    },
-    {
-        "name": "D09Z01S08[Cell17]",
-        "exits": [
-            {
-                "target": "D09Z01S08[Cell15]",
+                "target": "D09Z01S09[Cell24]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "silverKey",
-                            "dash"
+                            "goldKey",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S09[Cell21]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S09[Cell21]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI69",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21243,7 +24637,93 @@ regions = [
                     {
                         "item_requirements": [
                             "goldKey",
-                            "dash"
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell17]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S08[Cell7]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S08[Cell16]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S08[Cell18]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell7]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell16]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell18]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S08[Cell7]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S08[Cell16]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S08[Cell18]",
+                            "D09BZ01S01[Cell17]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21256,7 +24736,15 @@ regions = [
                     {
                         "item_requirements": [
                             "goldKey",
-                            "dash"
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S08[Cell18]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21268,8 +24756,612 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
+                            "goldKey",
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S08[Cell16]",
                             "silverKey",
-                            "dash"
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S08[Cell18]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell16]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell18]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S08[Cell16]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S08[Cell18]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI72",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S04[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell10]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell11]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO27",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell13]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S10[Cell10]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "goldKey",
+                            "D09Z01S10[Cell11]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S10[Cell10]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S10[Cell11]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09Z01S02[N]",
+            "D09Z01S11[S]",
+            "D09Z01S02[NW]",
+            "D09Z01S07[NE]"
+        ]
+    },
+    {
+        "name": "D09Z01S04[E]",
+        "exits": [
+            {
+                "target": "D09Z01S11[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S04[E]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S11[E]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S02[N]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09Z01S04[E]"
+        ]
+    },
+    {
+        "name": "D09Z01S04[S]",
+        "exits": [
+            {
+                "target": "D09Z01S04[W]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S04[E]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S08[Cell7]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell17]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell24]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21281,7 +25373,8 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
-                            "dash"
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21289,11 +25382,689 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S04[E]",
+                "target": "D09Z01S09[Cell21]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "dash"
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S07[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell16]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell16]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell18]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell18]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell16]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell18]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI72",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell10]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell11]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO27",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell13]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell10]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell10]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell11]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell11]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell1]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell6]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell22]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell22]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell5]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell1]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell1]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell6]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell6]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell22]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell22]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI69",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21303,104 +26074,6878 @@ regions = [
         ],
         "locations": [],
         "transitions": [
-            "D09Z01S08[Cell17]",
-            "D09BZ01S01[Cell17]"
+            "D09Z01S04[S]",
+            "D09Z01S07[N]",
+            "D09Z01S08[NE]",
+            "D09Z01S07[NW]"
         ]
     },
     {
-        "name": "D09Z01S09[Cell20]",
+        "name": "D09Z01S02[Cell1]",
         "exits": [
             {
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell21]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S07[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
                 "target": "D09BZ01S01[Cell19]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell7]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell17]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell16]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell18]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI72",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S04[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell10]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell11]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO27",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell13]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell22]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell5]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI69",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [
+            "RESCUED_CHERUB_03"
+        ],
+        "transitions": []
+    },
+    {
+        "name": "D09Z01S02[Cell6]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell21]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S07[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell7]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell17]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell16]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell18]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI72",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S04[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell10]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell11]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO27",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell13]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell22]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell5]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI69",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [
+            "CO24"
+        ],
+        "transitions": []
+    },
+    {
+        "name": "D09Z01S02[Cell22]",
+        "exits": [
+            {
+                "target": "QI69",
                 "logic": []
             },
             {
-                "target": "D09BZ01S01[Cell20]",
-                "logic": []
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell21]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S07[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell7]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell17]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell16]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell18]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI72",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S04[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell10]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell11]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO27",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell13]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell5]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "bronzeKey",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [
+            "CO10"
+        ],
+        "transitions": []
+    },
+    {
+        "name": "D09Z01S08[Cell7]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell21]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S07[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell17]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell16]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell18]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI72",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S04[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell10]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell11]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO27",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell13]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell22]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell5]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI69",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
-        "transitions": [
-            "D09Z01S09[Cell20]"
-        ]
+        "transitions": []
+    },
+    {
+        "name": "D09Z01S08[Cell16]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell21]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S07[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell7]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell17]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell18]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI72",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S04[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell10]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell11]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO27",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell13]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell22]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell5]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI69",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [
+            "CO26"
+        ],
+        "transitions": []
+    },
+    {
+        "name": "D09Z01S08[Cell18]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell17]",
+                "logic": []
+            },
+            {
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell21]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S07[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell7]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell16]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI72",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S04[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell10]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell11]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO27",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell13]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell22]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell5]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI69",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": []
+    },
+    {
+        "name": "D09Z01S09[Cell24]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell21]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S07[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell7]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell17]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell16]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell18]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI72",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S04[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell10]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell11]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO27",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell13]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell22]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell5]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI69",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": []
     },
     {
         "name": "D09Z01S09[Cell21]",
         "exits": [
             {
-                "target": "D09BZ01S01[Cell21]",
-                "logic": []
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S07[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell7]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell17]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell16]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell18]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI72",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S04[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell10]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell11]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO27",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell13]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell22]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell5]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI69",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [
             "CO02"
         ],
-        "transitions": [
-            "D09Z01S09[Cell21]"
-        ]
-    },
-    {
-        "name": "D09Z01S10[Cell13]",
-        "exits": [
-            {
-                "target": "D09BZ01S01[Cell12]",
-                "logic": []
-            }
-        ],
-        "locations": [
-            "QI70"
-        ],
-        "transitions": [
-            "D09Z01S10[Cell13]",
-            "D09BZ01S01[Cell13]"
-        ]
-    },
-    {
-        "name": "D09Z01S10[Cell12]",
-        "exits": [
-            {
-                "target": "D09BZ01S01[Cell12]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S10[Cell13]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09Z01S10[Cell12]"
-        ]
+        "transitions": []
     },
     {
         "name": "D09Z01S10[Cell10]",
         "exits": [
             {
-                "target": "D09BZ01S01[Cell10]",
-                "logic": []
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell21]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S07[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell7]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell17]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell16]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell18]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI72",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S04[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell11]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO27",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell13]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell22]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell5]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI69",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [
             "CO37"
         ],
-        "transitions": [
-            "D09Z01S10[Cell10]"
-        ]
+        "transitions": []
     },
     {
         "name": "D09Z01S10[Cell11]",
         "exits": [
             {
-                "target": "D09BZ01S01[Cell11]",
-                "logic": []
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell21]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S07[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell7]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell17]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell16]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell18]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI72",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S04[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell10]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO27",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell13]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell22]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell5]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI69",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [
             "RESCUED_CHERUB_04"
         ],
-        "transitions": [
-            "D09Z01S10[Cell11]"
-        ]
+        "transitions": []
     },
     {
         "name": "D09Z01S03[W]",
@@ -21528,15 +33073,547 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D09Z01S08[Cell14]",
-                "logic": []
-            },
-            {
                 "target": "QI72",
                 "logic": [
                     {
                         "item_requirements": [
                             "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
+                "logic": []
+            },
+            {
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell21]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S07[SW]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S09[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell17]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell7]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell16]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell18]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S04[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell10]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell11]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO27",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell13]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell10]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S10[Cell11]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell22]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell5]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI69",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21550,39 +33627,24 @@ regions = [
         ]
     },
     {
-        "name": "D09BZ01S01[Cell7]",
+        "name": "D09BZ01S01[Cell17]",
         "exits": [
             {
                 "target": "D09Z01S08[Cell7]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "goldKey"
+                            "goldKey",
+                            "dash"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S04[E]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09BZ01S01[Cell7]"
-        ]
-    },
-    {
-        "name": "D09BZ01S01[Cell15]",
-        "exits": [
-            {
-                "target": "D09Z01S08[Cell15]",
-                "logic": [
+                    },
                     {
                         "item_requirements": [
-                            "silverKey"
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell7]",
+                            "goldKey"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21594,6 +33656,25 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
+                            "goldKey",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell16]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell18]",
                             "goldKey"
                         ],
                         "location_requirements": [],
@@ -21606,7 +33687,158 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
+                            "silverKey",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell16]",
                             "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S07[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S09[Cell24]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21615,23 +33847,20 @@ regions = [
             },
             {
                 "target": "D09Z01S09[SW]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09BZ01S01[Cell15]"
-        ]
-    },
-    {
-        "name": "D09BZ01S01[Cell16]",
-        "exits": [
-            {
-                "target": "D09Z01S08[Cell15]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "silverKey"
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S09[Cell21]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21639,10 +33868,22 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S08[Cell16]",
+                "target": "D09Z01S09[Cell21]",
                 "logic": [
                     {
                         "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S09[Cell21]",
                             "goldKey"
                         ],
                         "location_requirements": [],
@@ -21651,59 +33892,265 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S08[Cell18]",
+                "target": "D09Z01S09[NW]",
                 "logic": [
                     {
                         "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S09[Cell21]",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S09[Cell21]",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S09[Cell21]",
                             "silverKey"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
                     }
                 ]
             },
             {
-                "target": "D09Z01S09[SW]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09BZ01S01[Cell16]"
-        ]
-    },
-    {
-        "name": "D09BZ01S01[Cell18]",
-        "exits": [
-            {
-                "target": "D09Z01S08[Cell15]",
+                "target": "D09Z01S08[W]",
                 "logic": [
                     {
                         "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell16]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell18]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell16]",
                             "silverKey"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S08[Cell16]",
-                "logic": [
+                    },
                     {
                         "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S08[Cell18]",
-                "logic": [
-                    {
-                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell18]",
                             "silverKey"
                         ],
                         "location_requirements": [],
@@ -21716,6 +34163,18 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S08[Cell18]",
                             "openedWotHPGate"
                         ],
                         "location_requirements": [],
@@ -21724,14 +34183,700 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S09[SW]",
-                "logic": []
+                "target": "D09Z01S04[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "dash"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell10]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S10[Cell11]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell11]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "CO27",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell13]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell10]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell10]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell10]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell10]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell11]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S10[Cell11]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell11]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S10[Cell11]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell1]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell6]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell22]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell22]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell5]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell1]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell1]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell6]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell6]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell22]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell22]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI69",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell17]",
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "silverKey",
+                            "dash",
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
-        "transitions": [
-            "D09BZ01S01[Cell18]"
-        ]
+        "transitions": []
     },
     {
         "name": "D09Z01S06[E]",
@@ -21743,6 +34888,10 @@ regions = [
             {
                 "target": "D09Z01S04[E]",
                 "logic": []
+            },
+            {
+                "target": "D09Z01S04[S]",
+                "logic": []
             }
         ],
         "locations": [],
@@ -21751,14 +34900,388 @@ regions = [
         ]
     },
     {
-        "name": "D09BZ01S01[Cell10]",
+        "name": "D09Z01S11[W]",
         "exits": [
             {
-                "target": "D09Z01S10[Cell12]",
+                "target": "D09Z01S04[W]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S04[E]",
+                "logic": []
+            },
+            {
+                "target": "D09Z01S04[S]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D09Z01S11[W]"
+        ]
+    },
+    {
+        "name": "D09BZ01S01[Cell13]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell24]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "bronzeKey"
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S09[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell21]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S09[Cell21]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S07[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S09[Cell21]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell7]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S08[Cell7]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell17]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S08[Cell7]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S08[Cell16]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S08[Cell18]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell16]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S08[Cell16]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S08[Cell18]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell18]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S08[Cell16]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S08[Cell18]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI72",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S04[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S08[Cell7]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21770,6 +35293,7 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
+                            "D09BZ01S01[Cell13]",
                             "silverKey"
                         ],
                         "location_requirements": [],
@@ -21782,6 +35306,7 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
+                            "D09BZ01S01[Cell13]",
                             "silverKey"
                         ],
                         "location_requirements": [],
@@ -21791,27 +35316,667 @@ regions = [
             },
             {
                 "target": "CO27",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[SW]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09BZ01S01[Cell10]"
-        ]
-    },
-    {
-        "name": "D09BZ01S01[Cell11]",
-        "exits": [
-            {
-                "target": "D09Z01S10[Cell12]",
                 "logic": [
                     {
                         "item_requirements": [
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[N]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell1]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell1]",
                             "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell6]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell1]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell6]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell22]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S02[Cell22]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB11",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell1]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell6]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell22]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell5]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell1]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell1]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell6]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell6]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell22]",
+                            "goldKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell22]",
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI69",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell1]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell6]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell13]",
+                            "D09Z01S02[Cell22]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [
+            "QI70"
+        ],
+        "transitions": []
+    },
+    {
+        "name": "D09BZ01S01[Cell5]",
+        "exits": [
+            {
+                "target": "D09BZ01S01[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell24]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell21]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "goldKey",
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S07[SW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S10[Cell11]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S09[Cell24]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RB16",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell19]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canAirStall"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]",
+                            "NormalLogicAndDoubleJump",
+                            "dash",
+                            "doubleJump",
+                            "canDawnJump"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S09[Cell21]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell7]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "goldKey",
+                            "D09Z01S08[Cell7]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09BZ01S01[Cell17]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell7]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell16]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell18]",
+                            "D09BZ01S01[Cell17]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell16]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "goldKey",
+                            "D09Z01S08[Cell16]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "goldKey",
+                            "D09Z01S08[Cell18]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[Cell18]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "RESCUED_CHERUB_34",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[W]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell16]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell18]",
+                            "silverKey",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S08[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell16]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell18]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI72",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell18]",
+                            "openedWotHPGate"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D09Z01S04[S]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S08[Cell7]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21823,6 +35988,17 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S10[Cell11]",
                             "silverKey"
                         ],
                         "location_requirements": [],
@@ -21835,6 +36011,17 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S10[Cell10]",
+                            "silverKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S10[Cell11]",
                             "silverKey"
                         ],
                         "location_requirements": [],
@@ -21844,27 +36031,19 @@ regions = [
             },
             {
                 "target": "CO27",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[SW]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09BZ01S01[Cell11]"
-        ]
-    },
-    {
-        "name": "D09BZ01S01[Cell12]",
-        "exits": [
-            {
-                "target": "D09Z01S10[Cell12]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "bronzeKey"
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S10[Cell11]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21872,55 +36051,64 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S10[Cell10]",
+                "target": "D09BZ01S01[Cell13]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "silverKey"
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S10[Cell10]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "D09Z01S10[Cell11]",
+                            "D09BZ01S01[Cell13]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "bronzeKey",
+                            "D09Z01S10[Cell10]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    },
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "bronzeKey",
+                            "D09Z01S10[Cell11]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
                     }
                 ]
             },
-            {
-                "target": "D09Z01S10[Cell11]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "CO27",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S09[SW]",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09BZ01S01[Cell12]"
-        ]
-    },
-    {
-        "name": "D09BZ01S01[Cell1]",
-        "exits": [
             {
                 "target": "D09Z01S02[N]",
-                "logic": []
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
                 "target": "D09Z01S02[Cell1]",
                 "logic": [
                     {
                         "item_requirements": [
+                            "D09BZ01S01[Cell5]",
                             "bronzeKey"
                         ],
                         "location_requirements": [],
@@ -21933,6 +36121,7 @@ regions = [
                 "logic": [
                     {
                         "item_requirements": [
+                            "D09BZ01S01[Cell5]",
                             "silverKey"
                         ],
                         "location_requirements": [],
@@ -21941,35 +36130,11 @@ regions = [
                 ]
             },
             {
-                "target": "D09Z01S02[Cell4]",
+                "target": "D09Z01S02[Cell22]",
                 "logic": [
                     {
                         "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S02[Cell3]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S02[Cell23]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "bronzeKey"
+                            "D09BZ01S01[Cell5]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -21978,244 +36143,34 @@ regions = [
             },
             {
                 "target": "RB11",
-                "logic": []
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "QI69",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D09BZ01S01[Cell5]",
+                            "bronzeKey"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
-        "locations": [],
-        "transitions": [
-            "D09BZ01S01[Cell1]"
-        ]
-    },
-    {
-        "name": "D09BZ01S01[Cell3]",
-        "exits": [
-            {
-                "target": "D09Z01S02[N]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S02[Cell1]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S02[Cell6]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S02[Cell4]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S02[Cell3]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S02[Cell23]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB11",
-                "logic": []
-            }
+        "locations": [
+            "QI51"
         ],
-        "locations": [],
-        "transitions": [
-            "D09BZ01S01[Cell3]"
-        ]
-    },
-    {
-        "name": "D09BZ01S01[Cell6]",
-        "exits": [
-            {
-                "target": "D09Z01S02[N]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S02[Cell1]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S02[Cell6]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S02[Cell4]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S02[Cell3]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S02[Cell23]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB11",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09BZ01S01[Cell6]"
-        ]
-    },
-    {
-        "name": "D09BZ01S01[Cell23]",
-        "exits": [
-            {
-                "target": "D09Z01S02[N]",
-                "logic": []
-            },
-            {
-                "target": "D09Z01S02[Cell1]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S02[Cell6]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "silverKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S02[Cell4]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "goldKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S02[Cell3]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "D09Z01S02[Cell23]",
-                "logic": [
-                    {
-                        "item_requirements": [
-                            "bronzeKey"
-                        ],
-                        "location_requirements": [],
-                        "state_modifiers": []
-                    }
-                ]
-            },
-            {
-                "target": "RB11",
-                "logic": []
-            }
-        ],
-        "locations": [],
-        "transitions": [
-            "D09BZ01S01[Cell23]"
-        ]
+        "transitions": []
     },
     {
         "name": "D09Z01S12",
@@ -22642,7 +36597,15 @@ regions = [
         "exits": [
             {
                 "target": "D17BZ02S01[FrontL]",
-                "logic": []
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D17Z01S04[FrontL]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             },
             {
                 "target": "CO25",
@@ -22718,6 +36681,18 @@ regions = [
                         "item_requirements": [
                             "blueWax1",
                             "D05Z02S12[W]"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D17BZ02S01[FrontL]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "D17Z01S04[FrontL]"
                         ],
                         "location_requirements": [],
                         "state_modifiers": []
@@ -23025,6 +37000,23 @@ regions = [
         ]
     },
     {
+        "name": "D20Z02S11[NW]",
+        "exits": [
+            {
+                "target": "D20Z01S13[E]",
+                "logic": []
+            },
+            {
+                "target": "D20Z01S11[W]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D20Z02S11[NW]"
+        ]
+    },
+    {
         "name": "D20Z02S11[SW]",
         "exits": [
             {
@@ -23049,7 +37041,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D20Z01S11[W]",
+                "target": "D20Z02S11[NW]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -23073,7 +37065,7 @@ regions = [
                 ]
             },
             {
-                "target": "D20Z02S10[W]",
+                "target": "D20Z02S11[E]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -23103,6 +37095,45 @@ regions = [
         "transitions": []
     },
     {
+        "name": "D20Z01S13[E]",
+        "exits": [
+            {
+                "target": "D20Z02S11",
+                "logic": []
+            },
+            {
+                "target": "D20Z02S11[NW]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "HardLogic"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            },
+            {
+                "target": "D20Z02S11[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "HardLogic",
+                            "mourningSkipAllowed",
+                            "canCrossGap5"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D20Z01S13[E]"
+        ]
+    },
+    {
         "name": "D20Z02S10[W]",
         "exits": [
             {
@@ -23110,7 +37141,7 @@ regions = [
                 "logic": []
             },
             {
-                "target": "D20Z01S11[W]",
+                "target": "D20Z02S11[NW]",
                 "logic": [
                     {
                         "item_requirements": [
@@ -23123,14 +37154,21 @@ regions = [
                 ]
             },
             {
-                "target": "D20Z02S10[E]",
-                "logic": []
+                "target": "D20Z02S11[E]",
+                "logic": [
+                    {
+                        "item_requirements": [
+                            "HardLogic"
+                        ],
+                        "location_requirements": [],
+                        "state_modifiers": []
+                    }
+                ]
             }
         ],
         "locations": [],
         "transitions": [
-            "D20Z02S10[W]",
-            "D20Z02S11[E]"
+            "D20Z02S10[W]"
         ]
     },
     {
@@ -23467,6 +37505,23 @@ regions = [
         "locations": [],
         "transitions": [
             "D20Z02S09[W]"
+        ]
+    },
+    {
+        "name": "D20Z02S11[E]",
+        "exits": [
+            {
+                "target": "D20Z02S10[W]",
+                "logic": []
+            },
+            {
+                "target": "D20Z02S10[E]",
+                "logic": []
+            }
+        ],
+        "locations": [],
+        "transitions": [
+            "D20Z02S11[E]"
         ]
     },
     {
@@ -27009,7 +41064,47 @@ transitions = [
     },
     {
         "name": "D01Z04S13[SE]",
-        "logic": []
+        "logic": [
+            {
+                "item_requirements": [
+                    "D01Z04S16[W]"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "canDiveLaser",
+                    "canAirStall"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "canDiveLaser",
+                    "wheel"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "canDiveLaser",
+                    "doubleJump"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "canDiveLaser",
+                    "canEnemyBounce"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            }
+        ]
     },
     {
         "name": "D01Z04S14[E]",
@@ -27313,7 +41408,44 @@ transitions = [
     },
     {
         "name": "D01Z05S25[E]",
-        "logic": []
+        "logic": [
+            {
+                "item_requirements": [
+                    "D01Z05S21[W]"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "tirana",
+                    "obscureSkipsAllowed",
+                    "linen"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "tirana",
+                    "obscureSkipsAllowed",
+                    "D01Z05S23[E]",
+                    "canWalkOnRoot"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "tirana",
+                    "obscureSkipsAllowed",
+                    "D01Z05S23[E]",
+                    "canCrossGap3"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            }
+        ]
     },
     {
         "name": "D01Z05S25[SW]",
@@ -27509,7 +41641,23 @@ transitions = [
     },
     {
         "name": "D02Z02S05[W]",
-        "logic": []
+        "logic": [
+            {
+                "item_requirements": [
+                    "D02Z02S04[NE]"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "doubleJump",
+                    "canEnemyBounce"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            }
+        ]
     },
     {
         "name": "D02Z02S05[SE]",
@@ -28329,7 +42477,22 @@ transitions = [
     },
     {
         "name": "D04Z01S06[E]",
-        "logic": []
+        "logic": [
+            {
+                "item_requirements": [
+                    "D09Z01S09[SW]"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "doubleJump"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            }
+        ]
     },
     {
         "name": "D04Z01S06[Cherubs]",
@@ -28361,7 +42524,49 @@ transitions = [
     },
     {
         "name": "D04Z02S02[NE]",
-        "logic": []
+        "logic": [
+            {
+                "item_requirements": [
+                    "D04Z02S15[W]"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "doubleJump",
+                    "upwarpSkipsAllowed"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "doubleJump",
+                    "canEnemyUpslash"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "canEnemyUpslash",
+                    "upwarpSkipsAllowed",
+                    "wallClimb"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "canEnemyUpslash",
+                    "upwarpSkipsAllowed",
+                    "D06Z01S02[S]"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            }
+        ]
     },
     {
         "name": "D04Z02S02[N]",
@@ -28733,7 +42938,23 @@ transitions = [
     },
     {
         "name": "D05Z01S11[SW]",
-        "logic": []
+        "logic": [
+            {
+                "item_requirements": [
+                    "D05Z01S19[E]"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "tirana",
+                    "obscureSkipsAllowed"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            }
+        ]
     },
     {
         "name": "D05Z01S11[NW]",
@@ -29404,38 +43625,6 @@ transitions = [
         "logic": []
     },
     {
-        "name": "D09Z01S02[Cell1]",
-        "logic": []
-    },
-    {
-        "name": "D09Z01S02[Cell6]",
-        "logic": []
-    },
-    {
-        "name": "D09Z01S02[Cell5]",
-        "logic": []
-    },
-    {
-        "name": "D09Z01S02[Cell4]",
-        "logic": []
-    },
-    {
-        "name": "D09Z01S02[Cell2]",
-        "logic": []
-    },
-    {
-        "name": "D09Z01S02[Cell3]",
-        "logic": []
-    },
-    {
-        "name": "D09Z01S02[Cell22]",
-        "logic": []
-    },
-    {
-        "name": "D09Z01S02[Cell23]",
-        "logic": []
-    },
-    {
         "name": "D09Z01S03[W]",
         "logic": []
     },
@@ -29516,30 +43705,6 @@ transitions = [
         "logic": []
     },
     {
-        "name": "D09Z01S08[Cell14]",
-        "logic": []
-    },
-    {
-        "name": "D09Z01S08[Cell15]",
-        "logic": []
-    },
-    {
-        "name": "D09Z01S08[Cell7]",
-        "logic": []
-    },
-    {
-        "name": "D09Z01S08[Cell16]",
-        "logic": []
-    },
-    {
-        "name": "D09Z01S08[Cell18]",
-        "logic": []
-    },
-    {
-        "name": "D09Z01S08[Cell17]",
-        "logic": []
-    },
-    {
         "name": "D09Z01S09[SW]",
         "logic": []
     },
@@ -29552,39 +43717,7 @@ transitions = [
         "logic": []
     },
     {
-        "name": "D09Z01S09[Cell24]",
-        "logic": []
-    },
-    {
-        "name": "D09Z01S09[Cell19]",
-        "logic": []
-    },
-    {
-        "name": "D09Z01S09[Cell20]",
-        "logic": []
-    },
-    {
-        "name": "D09Z01S09[Cell21]",
-        "logic": []
-    },
-    {
         "name": "D09Z01S10[W]",
-        "logic": []
-    },
-    {
-        "name": "D09Z01S10[Cell13]",
-        "logic": []
-    },
-    {
-        "name": "D09Z01S10[Cell12]",
-        "logic": []
-    },
-    {
-        "name": "D09Z01S10[Cell10]",
-        "logic": []
-    },
-    {
-        "name": "D09Z01S10[Cell11]",
         "logic": []
     },
     {
@@ -29605,94 +43738,6 @@ transitions = [
     },
     {
         "name": "D09Z01S13[E]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell1]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell2]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell3]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell4]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell5]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell6]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell7]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell10]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell11]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell12]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell13]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell14]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell15]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell16]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell17]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell18]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell19]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell20]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell21]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell22]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell23]",
-        "logic": []
-    },
-    {
-        "name": "D09BZ01S01[Cell24]",
         "logic": []
     },
     {
@@ -30073,11 +44118,78 @@ transitions = [
     },
     {
         "name": "D20Z02S11[NW]",
-        "logic": []
+        "logic": [
+            {
+                "item_requirements": [
+                    "D20Z01S13[E]"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "mourningSkipAllowed",
+                    "D20Z02S10[W]"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "mourningSkipAllowed",
+                    "doubleJump"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "mourningSkipAllowed",
+                    "tirana",
+                    "obscureSkipsAllowed"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            }
+        ]
     },
     {
         "name": "D20Z02S11[E]",
-        "logic": []
+        "logic": [
+            {
+                "item_requirements": [
+                    "D20Z02S10[W]"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "mourningSkipAllowed",
+                    "D20Z01S13[E]",
+                    "canCrossGap5"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "mourningSkipAllowed",
+                    "doubleJump"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            },
+            {
+                "item_requirements": [
+                    "mourningSkipAllowed",
+                    "tirana",
+                    "obscureSkipsAllowed"
+                ],
+                "location_requirements": [],
+                "state_modifiers": []
+            }
+        ]
     },
     {
         "name": "D20Z02S12[W]",
