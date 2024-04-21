@@ -158,9 +158,9 @@ def set_rules(world: "MM2World") -> None:
                 = world.options.plando_weakness[p_boss][p_weapon]
 
     # weakness validation, it is better to confirm a completable seed than respect plando
-    boss_health = {boss: 0x1C for boss in [*list(range(8)), 12]}
+    boss_health = {boss: 0x1C if boss != 12 else 0x1C * 2 for boss in [*list(range(8)), 12]}
 
-    weapon_energy = {key: float(0x1C * 2) if key == 12 else float(0x1C) for key in weapon_costs}
+    weapon_energy = {key: float(0x1C) for key in weapon_costs}
     weapon_boss = {boss: {weapon: world.weapon_damage[weapon][boss] for weapon in world.weapon_damage}
                    for boss in [*list(range(8)), 12]}
     flexibility = [(sum(1 if weapon_boss[boss][weapon] > 0 else 0 for weapon in range(9)) *
