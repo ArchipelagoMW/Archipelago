@@ -82,7 +82,7 @@ def place_event_items(world: "TunicWorld", regions: Dict[str, Region]) -> None:
             if world.options.hexagon_quest:
                 continue
             location.place_locked_item(
-                TunicERItem(event_name, ItemClassification.progression, None, world.player))
+                TunicERItem("Unseal the Heir", ItemClassification.progression, None, world.player))
         if event_name.endswith("Bell"):
             location.place_locked_item(
                 TunicERItem("Ring " + event_name, ItemClassification.progression, None, world.player))
