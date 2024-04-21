@@ -769,6 +769,9 @@ class CollectionState():
         return False
     
     def has_group_exclusive(self, item_name_group: str, player: int, count: int = 1) -> bool:
+        """Returns True if the number of items from the item group in state are greater than or equal to the count.
+        Ignores duplicates of the same item.
+        """
         found: int = 0
         player_prog_items = self.prog_items[player]
         for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
@@ -785,6 +788,7 @@ class CollectionState():
         return found
     
     def count_group_exclusive(self, item_name_group: str, player: int) -> int:
+        """Returns the number of items from the item group in state. Ignores duplicates of the same item."""
         found: int = 0
         player_prog_items = self.prog_items[player]
         for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
