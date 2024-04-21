@@ -1,6 +1,5 @@
 import logging
-from datetime import date
-from typing import Any, ClassVar, Dict, List, Optional, TextIO
+from typing import Any, ClassVar, Dict, List, Optional, Set, TextIO
 
 from BaseClasses import CollectionState, Entrance, Item, ItemClassification, MultiWorld, Tutorial
 from Options import Accessibility
@@ -154,13 +153,12 @@ class MessengerWorld(World):
         # TODO add a check for transition shuffle when that gets added back in
         if not self.options.shuffle_portals and "Searing Crags Portal" not in self.starting_portals:
             self.starting_portals.append("Searing Crags Portal")
-            if len(self.starting_portals) > 4:
-                portals_to_strip = [portal for portal in ["Riviere Turquoise Portal", "Sunken Shrine Portal"]
-                                    if portal in self.starting_portals]
-                self.starting_portals.remove(self.random.choice(portals_to_strip))
+            portals_to_strip = [portal for portal in ["Riviere Turquoise Portal", "Sunken Shrine Portal"]
+                                if portal in self.starting_portals]
+            self.starting_portals.remove(self.random.choice(portals_to_strip))
 
         self.filler = FILLER.copy()
-        if (not hasattr(self.options, "traps") and date.today() < date(2024, 4, 2)) or self.options.traps:
+        if self.options.traps:
             self.filler.update(TRAPS)
 
         self.plando_portals = []
@@ -349,6 +347,17 @@ class MessengerWorld(World):
             return ItemClassification.trap
 
         return ItemClassification.filler
+
+    @classmethod
+    def create_group(cls, multiworld: "MultiWorld", new_player_id: int, players: Set[int]) -> World:
+        group = super().create_group(multiworld, new_player_id, players)
+        assert isinstance(group, MessengerWorld)
+        
+        group.filler = FILLER.copy()
+        group.options.traps.value = all(multiworld.worlds[player].options.traps for player in players)
+        if group.options.traps:
+            group.filler.update(TRAPS)
+        return group
 
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         change = super().collect(state, item)

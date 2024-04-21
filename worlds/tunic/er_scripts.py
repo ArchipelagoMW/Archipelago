@@ -69,7 +69,8 @@ tunic_events: Dict[str, str] = {
     "Quarry Fuse": "Quarry",
     "Ziggurat Fuse": "Rooted Ziggurat Lower Back",
     "West Garden Fuse": "West Garden",
-    "Library Fuse": "Library Lab"
+    "Library Fuse": "Library Lab",
+    "Place Questagons": "Sealed Temple",
 }
 
 
@@ -77,7 +78,12 @@ def place_event_items(world: "TunicWorld", regions: Dict[str, Region]) -> None:
     for event_name, region_name in tunic_events.items():
         region = regions[region_name]
         location = TunicERLocation(world.player, event_name, None, region)
-        if event_name.endswith("Bell"):
+        if event_name == "Place Questagons":
+            if world.options.hexagon_quest:
+                continue
+            location.place_locked_item(
+                TunicERItem("Unseal the Heir", ItemClassification.progression, None, world.player))
+        elif event_name.endswith("Bell"):
             location.place_locked_item(
                 TunicERItem("Ring " + event_name, ItemClassification.progression, None, world.player))
         else:
