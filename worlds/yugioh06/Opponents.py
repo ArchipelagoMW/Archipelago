@@ -213,8 +213,7 @@ def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int], rando
 
 
 def get_opponent_locations(opponent: OpponentData) -> dict[str, str]:
-    location = {}
-    location[opponent.name + " Beaten"] = "Tier " + str(opponent.tier) + " Beaten"
+    location = {opponent.name + " Beaten": "Tier " + str(opponent.tier) + " Beaten"}
     if opponent.tier > 4 and opponent.column != 5:
         name = "Campaign Tier 5: Column " + str(opponent.column) + " Win"
         location[name] = special[name]

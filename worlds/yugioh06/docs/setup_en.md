@@ -70,9 +70,3 @@ To connect the client to the multiserver simply put `<address>:<port>` on the te
 server uses password, type in the bottom textfield `/connect <address>:<port> [password]`)
 
 Don't forget to start manipulating RNG early by shouting during generation:
-
-```
-JACK IN!
-[Your name]!   
-EXECUTE!
-```
