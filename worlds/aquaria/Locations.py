@@ -72,7 +72,7 @@ class AquariaLocations:
         "Song cave, bulb in the path to the singing statues": 698073,
         "Song cave, bulb under the rock in the path to the singing statues": 698074,
         "Song cave, bulb under the rock close to the song door": 698075,
-        "Verse egg in the Song cave": 698160,
+        "Song cave, Verse egg": 698160,
         "Song cave, Jelly beacon": 698178,
         "Song cave, Anemone seed": 698162,
     }

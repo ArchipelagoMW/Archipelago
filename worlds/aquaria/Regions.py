@@ -1122,7 +1122,7 @@ class AquariaRegions:
                  lambda state: _has_fish_form(state, self.player))
         add_rule(self.world.get_location("Song cave, Anemone seed", self.player),
                  lambda state: _has_nature_form(state, self.player))
-        add_rule(self.world.get_location("Verse egg in the Song cave", self.player),
+        add_rule(self.world.get_location("Song cave, Verse egg", self.player),
                  lambda state: _has_bind_song(state, self.player))
         add_rule(self.world.get_location("Verse cave right area, Big Seed", self.player),
                  lambda state: _has_bind_song(state, self.player))

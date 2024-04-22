@@ -27,7 +27,7 @@ class BindSongOptionAccessTest(AquariaTestBase):
             "Home water, bulb in the path bellow Nautilus Prime",
             "Home water, bulb in the bottom left room",
             "Home water, Nautilus Egg",
-            "Verse egg in the Song cave",
+            "Song cave, Verse egg",
             "Energy temple first area, beating the energy statue",
             "Energy temple first area, bulb in the bottom room blocked by a rock",
             "Energy temple first area, Energy Idol",
