@@ -21,7 +21,7 @@ clear it.
 
 ## Optional Software
 
-- [Pokémon Emerald AP Tracker](https://github.com/seto10987/Archipelago-Emerald-AP-Tracker/releases), for use with
+- [Pokémon Emerald AP Tracker](https://github.com/seto10987/Archipelago-Emerald-AP-Tracker/releases/latest), for use with
 [PopTracker](https://github.com/black-sliver/PopTracker/releases)
 
 ## Generating and Patching a Game
