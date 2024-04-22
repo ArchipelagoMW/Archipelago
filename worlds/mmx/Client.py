@@ -18,7 +18,6 @@ MMX_GAME_STATE          = WRAM_START + 0x000D1
 MMX_MENU_STATE          = WRAM_START + 0x000D2
 MMX_GAMEPLAY_STATE      = WRAM_START + 0x000D3
 MMX_LEVEL_INDEX         = WRAM_START + 0x01F7A
-MMX_VICTORY             = WRAM_START + 0x01F7F
 
 MMX_WEAPON_ARRAY        = WRAM_START + 0x01F88
 MMX_SUB_TANK_ARRAY      = WRAM_START + 0x01F83
@@ -435,7 +434,6 @@ class MMXSNIClient(SNIClient):
         defeated_bosses = list(defeated_bosses_data)
         cleared_levels_data = await snes_read(ctx, MMX_COMPLETED_LEVELS, 0x20)
         cleared_levels = list(cleared_levels_data)
-        victory_ram = await snes_read(ctx, MMX_VICTORY, 0x1)
         collected_heart_tanks_data = await snes_read(ctx, MMX_COLLECTED_HEART_TANKS, 0x01)
         collected_upgrades_data = await snes_read(ctx, MMX_COLLECTED_UPGRADES, 0x01)
         collected_hadouken_data = await snes_read(ctx, MMX_COLLECTED_HADOUKEN, 0x01)
@@ -477,10 +475,6 @@ class MMXSNIClient(SNIClient):
                 elif internal_id == 0x005:
                     # Hadouken
                     if collected_hadouken_data[0] != 0x00:
-                        new_checks.append(loc_id)
-                elif internal_id == 0x006:
-                    # Victory
-                    if menu_state[0] == 0x02 and gameplay_state[0] == 0x16 and victory_ram[0] == 0x01:
                         new_checks.append(loc_id)
                 elif internal_id == 0x007:
                     # Intro

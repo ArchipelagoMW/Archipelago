@@ -71,5 +71,5 @@ location_id_to_level_id = {
     LocationName.sigma_fortress_3_d_rex:            [0x0B, 0x000, 0x1E],
 
     LocationName.sigma_fortress_4_velguarder:       [0x0C, 0x000, 0x13],
-    LocationName.sigma_fortress_4_sigma:            [0x0C, 0x006, 0x14],
+    LocationName.sigma_fortress_4_sigma:            [0x0C, 0x000, 0x1F],
 }
