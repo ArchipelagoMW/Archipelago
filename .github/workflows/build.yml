@@ -8,11 +8,13 @@ on:
       - '.github/workflows/build.yml'
       - 'setup.py'
       - 'requirements.txt'
+      - '*.iss'
   pull_request:
     paths:
       - '.github/workflows/build.yml'
       - 'setup.py'
       - 'requirements.txt'
+      - '*.iss'
   workflow_dispatch:
 
 env:
@@ -25,9 +27,9 @@ jobs:
   build-win-py38: # RCs will still be built and signed by hand
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.8'
       - name: Download run-time dependencies
@@ -46,25 +48,42 @@ jobs:
           cd build
           Rename-Item "exe.$NAME" Archipelago
           7z a -mx=9 -mhe=on -ms "../dist/$ZIP_NAME" Archipelago
+          Rename-Item Archipelago "exe.$NAME"  # inno_setup.iss expects the original name
       - name: Store 7z
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.ZIP_NAME }}
           path: dist/${{ env.ZIP_NAME }}
+          retention-days: 7  # keep for 7 days, should be enough
+      - name: Build Setup
+        run: |
+          & "${env:ProgramFiles(x86)}\Inno Setup 6\iscc.exe" inno_setup.iss /DNO_SIGNTOOL
+          if ( $? -eq $false ) {
+            Write-Error "Building setup failed!"
+            exit 1
+          }
+          $contents = Get-ChildItem -Path setups/*.exe -Force -Recurse
+          $SETUP_NAME=$contents[0].Name
+          echo "SETUP_NAME=$SETUP_NAME" >> $Env:GITHUB_ENV
+      - name: Store Setup
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.SETUP_NAME }}
+          path: setups/${{ env.SETUP_NAME }}
           retention-days: 7  # keep for 7 days, should be enough
 
   build-ubuntu2004:
     runs-on: ubuntu-20.04
     steps:
       # - copy code below to release.yml -
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install base dependencies
         run: |
           sudo apt update
           sudo apt -y install build-essential p7zip xz-utils wget libglib2.0-0
           sudo apt -y install python3-gi libgirepository1.0-dev  # should pull dependencies for gi installation below
       - name: Get a recent python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       - name: Install build-time dependencies
@@ -100,13 +119,13 @@ jobs:
           source venv/bin/activate
           python setup.py build_exe --yes
       - name: Store AppImage
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APPIMAGE_NAME }}
           path: dist/${{ env.APPIMAGE_NAME }}
           retention-days: 7
       - name: Store .tar.gz
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.TAR_NAME }}
           path: dist/${{ env.TAR_NAME }}

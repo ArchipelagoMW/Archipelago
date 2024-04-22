@@ -12,7 +12,7 @@ permettant de lire des informations de la partie et écrire des commandes pour i
 
 ## Procédures d'installation
 
-<span style="color:tomato">
+<span style="color:#ff7800">
 **Il y a des risques de bannissement permanent des serveurs FromSoftware si ce mod est utilisé en ligne.**
 </span>  
 Ce client a été testé sur la version Steam officielle du jeu (v1.15/1.35), peu importe les DLCs actuellement installés.
@@ -29,5 +29,5 @@ placez-le à la racine du jeu (ex: "SteamLibrary\steamapps\common\DARK SOULS III
 
 ## Où trouver le fichier de configuration ?
 
-La [Page de configuration](/games/Dark%20Souls%20III/player-settings) sur le site vous permez de configurer vos 
+La [Page de configuration](/games/Dark%20Souls%20III/player-options) sur le site vous permez de configurer vos
 paramètres et de les exporter sous la forme d'un fichier.
