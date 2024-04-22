@@ -376,14 +376,14 @@ def write_tokens(world: "MLSSWorld", patch: MLSSProcedurePatch) -> None:
     if world.options.scale_stats:
         patch.write_token(
             APTokenTypes.WRITE,
-            0x1E9418,
+            0xD00002,
             bytes([0x1])
         )
 
-    if world.options.scale_pow:
+    if world.options.xp_multiplier:
         patch.write_token(
             APTokenTypes.WRITE,
-            0x1E9419,
+            0xD00003,
             bytes([0x1])
         )
 

@@ -452,14 +452,14 @@ piranhaFlag: typing.List[LocationData] = [
 ]
 
 kidnappedFlag: typing.List[LocationData] = [
-    LocationData("Badge Shop Peach Kidnapped Flag 1", 0x3c0640, 2),
-    LocationData("Badge Shop Peach Kidnapped Flag 2", 0x3c0642, 2),
-    LocationData("Badge Shop Peach Kidnapped Flag 3", 0x3c0644, 2),
-    LocationData("Pants Shop Peach Kidnapped Flag 1", 0x3c0646, 2),
-    LocationData("Pants Shop Peach Kidnapped Flag 2", 0x3c0648, 2),
-    LocationData("Pants Shop Peach Kidnapped Flag 3", 0x3c064a, 2),
-    LocationData("Shop Peach Kidnapped Flag 1", 0x3c0606, 3),
-    LocationData("Shop Peach Kidnapped Flag 2", 0x3c0608, 3)
+    LocationData("Badge Shop Enter Fungitown Flag 1", 0x3c0640, 2),
+    LocationData("Badge Shop Enter Fungitown Flag 2", 0x3c0642, 2),
+    LocationData("Badge Shop Enter Fungitown Flag 3", 0x3c0644, 2),
+    LocationData("Pants Shop Enter Fungitown Flag 1", 0x3c0646, 2),
+    LocationData("Pants Shop Enter Fungitown Flag 2", 0x3c0648, 2),
+    LocationData("Pants Shop Enter Fungitown Flag 3", 0x3c064a, 2),
+    LocationData("Shop Enter Fungitown Flag 1", 0x3c0606, 3),
+    LocationData("Shop Enter Fungitown Flag 2", 0x3c0608, 3)
 ]
 
 beanstarFlag: typing.List[LocationData] = [
@@ -846,14 +846,13 @@ nonBlock = [
     (0x4345, 0x4, 0x1e9409),  # Thunder Hand
     (0x42FF, 0x80, 0x251071),  # Beanstone Reward
     (0x42F9, 0x2, 0xDA0000),  # Dragohoho
-    (0x4300, 0x40, 0xDA0001),  # Queen Bean
-    (0x433D, 0x1, 0xDA0002),  # Chuckolator
-    (0x43FC, 0x80, 0xDA0003),  # Popple 2
-    (0x433D, 0x2, 0xDA0004),  # Mom Piranha
-    (0x4342, 0x10, 0xDA0005),  # Fungitowm
-    (0x433D, 0x8, 0xDA0006),  # Beanstar
-    (0x430F, 0x40, 0xDA0007),  # Jojora
-    (0x433D, 0x10, 0xDA0008)  # Birdo
+    (0x433D, 0x1, 0xDA0001),  # Chuckolator
+    (0x43FC, 0x80, 0xDA0002),  # Popple 2
+    (0x433D, 0x2, 0xDA0003),  # Mom Piranha
+    (0x4342, 0x10, 0xDA0004),  # Fungitowm
+    (0x433D, 0x8, 0xDA0005),  # Beanstar
+    (0x430F, 0x40, 0xDA0006),  # Jojora
+    (0x433D, 0x10, 0xDA0007)  # Birdo
 ]
 
 roomException = {

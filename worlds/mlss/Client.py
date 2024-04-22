@@ -171,7 +171,7 @@ class MLSSClient(BizHawkClient):
                             "key": f"mlss_flag{location - 0xD9FFFF}_{ctx.team}_{ctx.slot}",
                             "default": 0,
                             "want_reply": False,
-                            "operations": [{"operation": "replace", "value": 1}]
+                            "operations": [{"operation": "or", "value": 1 << (location - 0xDA0000)}]
                         }])
                         continue
                     if location in roomException:

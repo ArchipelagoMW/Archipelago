@@ -1,4 +1,4 @@
-from Options import Choice, Toggle, StartInventoryPool, PerGameCommonOptions
+from Options import Choice, Toggle, StartInventoryPool, PerGameCommonOptions, Range
 from dataclasses import dataclass
 
 
@@ -168,16 +168,21 @@ class RandomizeBosses(Choice):
 
 class ScaleStats(Toggle):
     """
-    This scales enemy HP and XP according to the area of the game you are in.
+    This scales enemy HP, POW, DEF, and XP to vanilla values.
+    This setting is intended for use with the Enemy Randomizer and is Recommended to turn on.
+    If you are not using the Enemy Randomizer the effects will be minimal.
     """
     display_name = "Scale Enemy Stats"
 
+class XPMultiplier(Range):
+    """
+    This will multiply any XP you receive in battle by the chosen multiplier.
 
-class ScalePow(Toggle):
     """
-    This scales enemy POW according to the area of the game you are in.
-    """
-    display_name = "Scale Enemy POW"
+    display_name = "XP Multiplier"
+    range_start = 1
+    range_end = 4
+    default = 1
 
 
 class TattleHp(Toggle):
@@ -260,7 +265,7 @@ class MLSSOptions(PerGameCommonOptions):
     randomize_bosses: RandomizeBosses
     randomize_backgrounds: RandomizeBackgrounds
     scale_stats: ScaleStats
-    scale_pow: ScalePow
+    xp_multiplier: XPMultiplier
     tattle_hp: TattleHp
     mario_color: MarioColor
     luigi_color: LuigiColor
