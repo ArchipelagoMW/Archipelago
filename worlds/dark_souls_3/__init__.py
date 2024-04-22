@@ -6,10 +6,9 @@ from logging import warning
 from typing import Callable, Dict, Set, List, Optional, TextIO, Union
 
 from BaseClasses import CollectionState, MultiWorld, Region, Item, Location, LocationProgressType, Entrance, Tutorial, ItemClassification
-from Options import Toggle
 
 from worlds.AutoWorld import World, WebWorld
-from worlds.generic.Rules import CollectionRule, ItemRule, set_rule, add_rule, add_item_rule
+from worlds.generic.Rules import CollectionRule, ItemRule, add_rule, add_item_rule
 
 from .Bosses import DS3BossInfo, all_bosses, default_yhorm_location
 from .Items import DarkSouls3Item, DS3ItemCategory, DS3ItemData, Infusion, UsefulIf, filler_item_names, item_descriptions, item_dictionary, item_name_groups
@@ -44,11 +43,11 @@ class DarkSouls3Web(WebWorld):
 class DarkSouls3World(World):
     """
     Dark souls III is an Action role-playing game and is part of the Souls series developed by FromSoftware.
-    Played in a third-person perspective, players have access to various weapons, armour, magic, and consumables that
+    Played from a third-person perspective, players have access to various weapons, armour, magic, and consumables that
     they can use to fight their enemies.
     """
 
-    game: str = "Dark Souls III"
+    game = "Dark Souls III"
     options: DarkSouls3Options
     options_dataclass = DarkSouls3Options
     web = DarkSouls3Web()
@@ -166,8 +165,7 @@ class DarkSouls3World(World):
 
     def create_regions(self):
         # Create Vanilla Regions
-        regions: Dict[str, Region] = {}
-        regions["Menu"] = self.create_region("Menu", {})
+        regions: Dict[str, Region] = {"Menu": self.create_region("Menu", {})}
         regions.update({region_name: self.create_region(region_name, location_tables[region_name]) for region_name in [
             "Cemetery of Ash",
             "Firelink Shrine",
@@ -344,7 +342,7 @@ class DarkSouls3World(World):
 
         If there isn't enough room to inject all the necessary progression items
         that are in missable locations by default, this adds them to the
-        player's starting inventoy.
+        player's starting inventory.
         """
 
         all_injectable_items = [
@@ -415,10 +413,10 @@ class DarkSouls3World(World):
             and not data.name == "Pyromancy Flame"
         ):
             # if the user made an error and set a min higher than the max we default to the max
-            max_5 = self.options.max_levels_in_5
-            min_5 = min(self.options.min_levels_in_5, max_5)
-            max_10 = self.options.max_levels_in_10
-            min_10 = min(self.options.min_levels_in_10, max_10)
+            max_5 = self.options.max_levels_in_5.value
+            min_5 = min(self.options.min_levels_in_5.value, max_5)
+            max_10 = self.options.max_levels_in_10.value
+            min_10 = min(self.options.min_levels_in_10.value, max_10)
             weapon_level_percentage = self.options.randomize_weapon_level_percentage
 
             if self.random.randint(0, 99) < weapon_level_percentage:
@@ -712,7 +710,7 @@ class DarkSouls3World(World):
         ], "Chameleon")
 
         # Forbid shops from carrying items with multiple counts (the offline randomizer has its own
-        # logic for choosing how many shop items to sell), and from carring soul items.
+        # logic for choosing how many shop items to sell), and from carrying soul items.
         for location in location_dictionary.values():
             if location.shop:
                 self._add_item_rule(
@@ -1187,13 +1185,13 @@ class DarkSouls3World(World):
         for (soul, soul_name, items) in transpositions:
             self._add_location_rule([
                 f"FS: {item} - Ludleth for {soul_name}" for item in items
-            ], lambda state, soul=soul: (
-                state.has(soul, self.player) and state.has("Transposing Kiln", self.player)
+            ], lambda state, s=soul: (
+                state.has(s, self.player) and state.has("Transposing Kiln", self.player)
             ))
 
 
     def _add_crow_rules(self) -> None:
-        """Adds rules for for items obtainable by trading items to the crow on Firelink roof."""
+        """Adds rules for items obtainable by trading items to the crow on Firelink roof."""
 
         crow = {
             "Loretta's Bone": "Ring of Sacrifice",
@@ -1376,8 +1374,6 @@ class DarkSouls3World(World):
         region order, and then the best items in a sphere go into the multiworld.
         """
 
-        state: CollectionState = CollectionState(self.multiworld)
-        unchecked_locations = set(self.multiworld.get_locations())
         locations_by_sphere = list(self.multiworld.get_spheres())
 
         # All items in the base game in approximately the order they appear
@@ -1447,7 +1443,7 @@ class DarkSouls3World(World):
                 ]
 
                 # Check the game, not the player, because we know how to sort within regions for DS3
-                offworld = self._shuffle(loc for loc in locations if loc.game != "Dark Souls III")
+                offworld = self._shuffle([loc for loc in locations if loc.game != "Dark Souls III"])
                 onworld = sorted((loc for loc in locations if loc.game == "Dark Souls III"),
                                  key=lambda loc: loc.data.region_value)
 
@@ -1527,7 +1523,7 @@ class DarkSouls3World(World):
 
         # A map from Archipelago's location IDs to the keys the offline
         # randomizer uses to identify locations.
-        location_ids_to_keys: Dict[str, str] = {}
+        location_ids_to_keys: Dict[int, str] = {}
         for location in self.multiworld.get_filled_locations(self.player):
             # Skip events and only look at this world's locations
             if (location.address is not None and location.item.code is not None

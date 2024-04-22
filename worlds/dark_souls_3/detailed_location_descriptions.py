@@ -47,7 +47,6 @@ if __name__ == '__main__':
         location: len(descriptions) for (location, descriptions) in descriptions_by_location.items()
     }
 
-
     location_names_to_descriptions = {}
     for location in location_dictionary.values():
         if location.ap_code is None: continue
@@ -57,7 +56,7 @@ if __name__ == '__main__':
 
         match = location_re.match(location.name)
         if not match:
-            raise Exception(f'Location name "{location.name}" doesn\'t match expected format.')
+            raise Exception(f"Location name \"{location.name}\" doesn't match expected format.")
 
         item_candidates = descriptions_by_item[match[2]]
         if len(item_candidates) == 1:

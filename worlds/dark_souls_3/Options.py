@@ -299,8 +299,8 @@ class MaxLevelsIn10WeaponPoolOption(Range):
 
 
 class EarlySmallLothricBanner(Choice):
-    """This option makes it so the user can choose to force the Small Lothric Banner into an early sphere in their world or
-    into an early sphere across all worlds."""
+    """This option makes it so the user can choose to force the Small Lothric Banner into an early sphere in their world
+     or into an early sphere across all worlds."""
     display_name = "Early Small Lothric Banner"
     option_off = 0
     option_early_global = 1
@@ -363,8 +363,8 @@ class RandomEnemyPresetOption(Option[typing.Dict[str, typing.Any]], VerifyKeys):
     default = {}
 
     valid_keys = ["Description", "RecommendFullRandomization", "RecommendNoEnemyProgression",
-                 "OopsAll", "Boss", "Miniboss", "Basic", "BuffBasicEnemiesAsBosses",
-                 "DontRandomize", "RemoveSource", "Enemies"]
+                  "OopsAll", "Boss", "Miniboss", "Basic", "BuffBasicEnemiesAsBosses",
+                  "DontRandomize", "RemoveSource", "Enemies"]
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
         self.value = deepcopy(value)
@@ -374,7 +374,7 @@ class RandomEnemyPresetOption(Option[typing.Dict[str, typing.Any]], VerifyKeys):
 
     @classmethod
     def from_any(cls, data: typing.Dict[str, typing.Any]) -> "RandomEnemyPresetOption":
-        if type(data) == dict:
+        if isinstance(data, dict):
             cls.verify_keys(data)
             return cls(data)
         else:
@@ -386,7 +386,7 @@ class RandomizeMimicsWithEnemiesOption(Toggle):
 
     If this is enabled, Mimics will be replaced by normal enemies who drop the Mimic rewards on
     death, and Mimics will be placed randomly in place of normal enemies. It's recommended to
-    enable Impatient Mimcs as well if you enable this.
+    enable Impatient Mimics as well if you enable this.
 
     This is ignored unless enemies are randomized.
     """

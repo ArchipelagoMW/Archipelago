@@ -20,8 +20,8 @@
   * [GA: Grand Archives](#grand-archives)
   * [UG: Untended Graves](#untended-graves)
   * [AP: Archdragon Peak](#archdragon-peak)
-  * [PW1: Painted World of Ariandel (Before Contraption)](#painted-world-of-ariandel-%28before-contraption%29)
-  * [PW2: Painted World of Ariandel (After Contraption)](#painted-world-of-ariandel-%28after-contraption%29)
+  * [PW1: Painted World of Ariandel (Before Contraption)](#painted-world-of-ariandel-before-contraption)
+  * [PW2: Painted World of Ariandel (After Contraption)](#painted-world-of-ariandel-after-contraption)
   * [DH: Dreg Heap](#dreg-heap)
   * [RC: Ringed City](#ringed-city)
 * [Detailed Location Descriptions](#detailed-location-descriptions)
@@ -114,8 +114,8 @@ short.
 * **GA:** [Grand Archives](#grand-archives)
 * **UG:** [Untended Graves](#untended-graves)
 * **AP:** [Archdragon Peak](#archdragon-peak)
-* **PW1:** [Painted World of Ariandel (Before Contraption)](#painted-world-of-ariandel-%28before-contraption%29)
-* **PW2:** [Painted World of Ariandel (After Contraption)](#painted-world-of-ariandel-%28after-contraption%29)
+* **PW1:** [Painted World of Ariandel (Before Contraption)](#painted-world-of-ariandel-before-contraption)
+* **PW2:** [Painted World of Ariandel (After Contraption)](#painted-world-of-ariandel-after-contraption)
 * **DH:** [Dreg Heap](#dreg-heap)
 * **RC:** [Ringed City](#ringed-city)
 
@@ -385,7 +385,7 @@ enter the dungeon from the bonfire on the near left.)
 * **B3:** The lowest floor, with Karla's cell, a lift back to B2, and the exit
   onwards to the Profaned Capital.
   
-  * "Near" is the side with Karla's cell and the the path from the pit.
+  * "Near" is the side with Karla's cell and the path from the pit.
   * "Far" is the opposite side with the mimic.
 
 * **B3 lift:** The elevator from B3 (near where you can use Path of the Dragon
@@ -670,7 +670,7 @@ the painter, including the basement beneath the chapel.
 * **Castle:** The building with The Dreg Heap bonfire, up to the large fall into
   the library.
 
-* **Library:** The building with the stained glass window that you fall into
+* **Library:** The building with the stained-glass window that you fall into
   from the castle.
 
 * **Church:** The building below and to the right of the library, which the
@@ -731,7 +731,7 @@ of Halflight, Gael, and Midir, respectively.
   * "Monument": The area around the purging monument, which can only be accessed
     by solving the "Show Your Humanity" puzzle.
 
-* **Swamp:** The wet area past the city streets. "Left and "right" are relative
+* **Swamp:** The wet area past the city streets. "Left" and "right" are relative
   to heading out from the Ringed City Streets bonfire, and "near" and "far" are
   relative to that bonfire as well.
 
@@ -751,7 +751,7 @@ of Halflight, Gael, and Midir, respectively.
 
 ## Detailed Location Descriptions
 
-These location decsriptions were originally written by [Matt Gruen] for [the
+These location descriptions were originally written by [Matt Gruen] for [the
 offline _Dark Souls III_ randomizer].
 
 [Matt Gruen]: https://thefifthmatt.com/
@@ -922,7 +922,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>CD: Armor of Thorns - Rosaria&#x27;s Bed Chamber after killing Kirk</td><td>Found in Rosaria&#x27;s Bed Chamber after killing Longfinger Kirk</td></tr>
 <tr><td>CD: Astora Greatsword - graveyard, left of entrance</td><td>Down one of the side paths to the left in the Reanimated Corpse area</td></tr>
 <tr><td>CD: Barbed Straight Sword - Kirk drop</td><td>Dropped by Longfinger Kirk when he invades in the cathedral central room</td></tr>
-<tr><td>CD: Black Eye Orb - Rosaria from Leonhard&#x27;s quest</td><td>On Rosaria&#x27;s corpse after joining Rosaria&#x27;s Fingers, exhausing Leonhard&#x27;s dialogue there and reaching the Profaned Capital bonfire.</td></tr>
+<tr><td>CD: Black Eye Orb - Rosaria from Leonhard&#x27;s quest</td><td>On Rosaria&#x27;s corpse after joining Rosaria&#x27;s Fingers, exhausting Leonhard&#x27;s dialogue there and reaching the Profaned Capital bonfire.</td></tr>
 <tr><td>CD: Blessed Gem - upper roofs, rafters</td><td>In the rafters leading to Rosaria, guarded by a Cathedral Knight to the right</td></tr>
 <tr><td>CD: Crest Shield - path, drop down by Cathedral of the Deep bonfire</td><td>On a grave near the Cathedral of the Deep bonfire, accessed by dropping down to the right</td></tr>
 <tr><td>CD: Curse Ward Greatshield - by ladder from white tree to moat</td><td>Taking a right after the Infested Corpse graveyard, before the shortcut ladder down to the Ravenous Crystal Lizard area</td></tr>
@@ -1063,7 +1063,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>DH: Loincloth - swamp, left edge</td><td>In the leftmost edge of the poison swamp after dropping down, guarded by 6 Poisonhorn bugs.</td></tr>
 <tr><td>DH: Lothric War Banner - parapets, end of hall</td><td>After crossing the spire bridge that crashes into the building with the Lothric Knights, past Lapp&#x27;s initial location, dropping down behind the murkman and dropping down again, at the end of the hallway to the right.</td></tr>
 <tr><td>DH: Murky Hand Scythe - library, behind bookshelves</td><td>After the first long drop into the building which looks like Grand Archives, to the left up the bookshelf stairs and behind the bookshelves</td></tr>
-<tr><td>DH: Murky Longstaff - pantry, last room</td><td>After exiting the building with the Lothric Knights where the front crumbles, in the third furthest room in the building to the right.</td></tr>
+<tr><td>DH: Murky Longstaff - pantry, last room</td><td>After exiting the building with the Lothric Knights where the front crumbles, in the third-furthest room in the building to the right.</td></tr>
 <tr><td>DH: Prism Stone - swamp upper, tunnel start</td><td>Near the start of the tunnel with Desert Pyromancer Zoey.</td></tr>
 <tr><td>DH: Projected Heal - parapets balcony</td><td>After crossing the spire bridge that crashes into the building with the Lothric Knights, past Lapp&#x27;s initial location, dropping down behind the murkman, against a wall in the area with the Lothric War Banner Knight and many murkmen.</td></tr>
 <tr><td>DH: Purple Moss Clump - swamp shack</td><td>In the ruined shack with Poisonhorn bugs straight ahead of the dropdown into the poison swamp area.</td></tr>
@@ -1145,18 +1145,18 @@ offline _Dark Souls III_ randomizer].
 <tr><td>FK: Ragged Mask - Farron Keep bonfire, around left corner</td><td>Along the inner wall of the keep, making an immediate left from Farron Keep bonfire, guarded by slugs</td></tr>
 <tr><td>FK: Repair Powder - outside hidden cave</td><td>Along the keep wall in the basilisk area, outside of the cave with the Elizabeth corpse and Golden Scroll</td></tr>
 <tr><td>FK: Rotten Pine Resin - left island, behind fire</td><td>In the area behind the ritual fire which is straight ahead of the Farron Keep bonfire</td></tr>
-<tr><td>FK: Rotten Pine Resin - outside pavilion by left island</td><td>From the Farron Keep bonfire straight ahead to the pavillion guarded by the Darkwraith, just to the left of the ritual fire stairs</td></tr>
+<tr><td>FK: Rotten Pine Resin - outside pavilion by left island</td><td>From the Farron Keep bonfire straight ahead to the pavilion guarded by the Darkwraith, just to the left of the ritual fire stairs</td></tr>
 <tr><td>FK: Rusted Gold Coin - right island, behind wall</td><td>Hidden behind the right wall of the ritual fire with stairs guarded by Elder Ghrus/basilisks</td></tr>
-<tr><td>FK: Sage&#x27;s Coal - pavilion by left island</td><td>In the pavillion guarded by a Darkwraith, straight ahead from the Farron Keep bonfire to the left of the ritual fire stairs</td></tr>
+<tr><td>FK: Sage&#x27;s Coal - pavilion by left island</td><td>In the pavilion guarded by a Darkwraith, straight ahead from the Farron Keep bonfire to the left of the ritual fire stairs</td></tr>
 <tr><td>FK: Sage&#x27;s Scroll - near wall by keep ruins bonfire island</td><td>Along the keep inner wall, heading left from the stone doors past the crab area, surrounded by many Ghru enemies</td></tr>
 <tr><td>FK: Shriving Stone - perimeter, just past stone doors</td><td>Past the stone doors, on the path leading up to Abyss Watchers by the Corvians</td></tr>
 <tr><td>FK: Soul of a Nameless Soldier - by white tree</td><td>Near the swamp birch tree patrolled by the greater crab, where the Giant shoots arrows</td></tr>
 <tr><td>FK: Soul of a Stray Demon - upper keep, miniboss drop</td><td>Dropped by Stray Demon on the bridge above Farron Keep</td></tr>
 <tr><td>FK: Soul of the Blood of the Wolf</td><td>Dropped by Abyss Watchers</td></tr>
-<tr><td>FK: Stone Parma - near wall by left island</td><td>Along the inner wall of the keep, making an left from Farron Keep bonfire but before the area with the Darkwraith, guarded by a slug</td></tr>
+<tr><td>FK: Stone Parma - near wall by left island</td><td>Along the inner wall of the keep, making a left from Farron Keep bonfire but before the area with the Darkwraith, guarded by a slug</td></tr>
 <tr><td>FK: Sunlight Talisman - estus soup island, by ladder to keep proper</td><td>By the pot of estus soup to the left of the stairs leading up to Old Wolf of Farron</td></tr>
 <tr><td>FK: Titanite Scale - perimeter, miniboss drop</td><td>Dropped by Ravenous Crystal Lizard near the shortcut from Farron Keep back to Road of Sacrifices</td></tr>
-<tr><td>FK: Titanite Shard - Farron Keep bonfire, left after exit</td><td>Along the inner wall of the keep, making an left from Farron Keep bonfire, by the second group of four slugs</td></tr>
+<tr><td>FK: Titanite Shard - Farron Keep bonfire, left after exit</td><td>Along the inner wall of the keep, making a left from Farron Keep bonfire, by the second group of four slugs</td></tr>
 <tr><td>FK: Titanite Shard - between left island and keep ruins</td><td>In the swamp area with the Ghru Leaper between the Keep Ruins ritual fire and ritual fire straight ahead of Farron Keep bonfire, opposite from the keep wall</td></tr>
 <tr><td>FK: Titanite Shard - by keep ruins ritual island stairs</td><td>By the stairs leading up to the Keep Ruins ritual fire from the middle of the swamp</td></tr>
 <tr><td>FK: Titanite Shard - by ladder to keep proper</td><td>In the swamp area close to the foot of the ladder leading to Old Wolf of Farron bonfire</td></tr>
@@ -1165,7 +1165,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>FK: Titanite Shard - swamp by right island</td><td>Behind a tree patrolled by an Elder Ghru close to the ritual fire stairs</td></tr>
 <tr><td>FK: Twinkling Dragon Head Stone - Hawkwood drop</td><td>Dropped by Hawkwood after killing him in the Abyss Watchers arena, after running up to the altar in Archdragon Peak. Twinkling Dragon Torso Stone needs to be acquired first.</td></tr>
 <tr><td>FK: Twinkling Titanite - keep proper, lizard</td><td>Dropped by the Crystal Lizard on the balcony behind the Old Wolf of Farron bonfire</td></tr>
-<tr><td>FK: Undead Bone Shard - pavilion by keep ruins bonfire island</td><td>In a standalone pavillion down the ramp from Keep Ruins bonfire and to the right</td></tr>
+<tr><td>FK: Undead Bone Shard - pavilion by keep ruins bonfire island</td><td>In a standalone pavilion down the ramp from Keep Ruins bonfire and to the right</td></tr>
 <tr><td>FK: Watchdogs of Farron - Old Wolf</td><td>Given by Old Wolf of Farron.</td></tr>
 <tr><td>FK: Wolf Ring+1 - keep ruins bonfire island, outside building</td><td>To the right of the building with the Keep Ruins bonfire, when approached from the ritual fire</td></tr>
 <tr><td>FK: Wolf&#x27;s Blood Swordgrass - by ladder to keep proper</td><td>To the left of the ladder leading up to the Old Wolf of Farron bonfire</td></tr>
@@ -1246,7 +1246,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>FS: Ember - Greirat</td><td>Sold by Greirat after recruiting him, or in his ashes</td></tr>
 <tr><td>FS: Ember - Greirat from US</td><td>Sold by Greirat after pillaging Undead Settlement</td></tr>
 <tr><td>FS: Ember - Mortician&#x27;s Ashes</td><td>Sold by Handmaid after giving Mortician&#x27;s Ashes</td></tr>
-<tr><td>FS: Ember - above shrine entrance</td><td>Above the Firelink Shrine entrance, up stairs/slope from either left or right of the entrance</td></tr>
+<tr><td>FS: Ember - above shrine entrance</td><td>Above the Firelink Shrine entrance, up the stairs/slope from either left or right of the entrance</td></tr>
 <tr><td>FS: Ember - path right of Firelink entrance</td><td>On a cliffside to the right of the main path leading up to Firelink Shrine, guarded by a dog</td></tr>
 <tr><td>FS: Ember - shop</td><td>Sold by Handmaid</td></tr>
 <tr><td>FS: Ember - shop for Greirat&#x27;s Ashes</td><td>Sold by Handmaid after Greirat pillages Lothric Castle and handing in ashes</td></tr>
@@ -1313,7 +1313,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>FS: Hollowslayer Greatsword - Ludleth for Greatwood</td><td>Boss weapon for Curse-Rotted Greatwood</td></tr>
 <tr><td>FS: Homeward - Irina</td><td>Sold by Irina after recruiting her, or in her ashes</td></tr>
 <tr><td>FS: Homeward Bone - cliff edge after boss</td><td>Along the cliff edge straight ahead of the Iudex Gundyr fight</td></tr>
-<tr><td>FS: Homeward Bone - path above shrine entrace</td><td>To the right of the Firelink Shrine entrance, up a slope and before the ledge on top of a coffin</td></tr>
+<tr><td>FS: Homeward Bone - path above shrine entrance</td><td>To the right of the Firelink Shrine entrance, up a slope and before the ledge on top of a coffin</td></tr>
 <tr><td>FS: Homing Crystal Soulmass - Orbeck for Crystal Scroll</td><td>Sold by Orbeck after giving him the Crystal Scroll</td></tr>
 <tr><td>FS: Homing Soulmass - Orbeck for Logan&#x27;s Scroll</td><td>Sold by Orbeck after giving him Logan&#x27;s Scroll</td></tr>
 <tr><td>FS: Karla&#x27;s Coat - Prisoner Chief&#x27;s Ashes</td><td>Sold by Handmaid after giving Prisoner Chief&#x27;s Ashes</td></tr>
@@ -1388,7 +1388,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>FS: Seething Chaos - Ludleth for Demon Prince</td><td>Boss weapon for Demon Prince</td></tr>
 <tr><td>FS: Silvercat Ring - Sirris for killing Creighton</td><td>Given by Sirris talking to her in Firelink Shrine after invading and vanquishing Creighton.</td></tr>
 <tr><td>FS: Skull Ring - kill Ludleth</td><td>Dropped by Ludleth upon death, including after placing all cinders. Note that if killed before giving Transposing Kiln, transposition is not possible.</td></tr>
-<tr><td>FS: Slumbering Dragoncrest Ring - Orbeck for buying four specific spells</td><td>Given by Orbeck after purchasing the shop items corresponding to Aural Decoy, Farron Flashsword, Spook (starting items), and Pestlient Mist (after giving one scroll).</td></tr>
+<tr><td>FS: Slumbering Dragoncrest Ring - Orbeck for buying four specific spells</td><td>Given by Orbeck after purchasing the shop items corresponding to Aural Decoy, Farron Flashsword, Spook (starting items), and Pestilent Mist (after giving one scroll).</td></tr>
 <tr><td>FS: Smough&#x27;s Armor - shop after killing AL boss</td><td>Sold by Handmaid after defeating Alrich, Devourer of Gods</td></tr>
 <tr><td>FS: Smough&#x27;s Gauntlets - shop after killing AL boss</td><td>Sold by Handmaid after defeating Alrich, Devourer of Gods</td></tr>
 <tr><td>FS: Smough&#x27;s Helm - shop after killing AL boss</td><td>Sold by Handmaid after defeating Alrich, Devourer of Gods</td></tr>
@@ -1440,7 +1440,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>FS: Yhorm&#x27;s Great Machete - Ludleth for Yhorm</td><td>Boss weapon for Yhorm the Giant</td></tr>
 <tr><td>FS: Yhorm&#x27;s Greatshield - Ludleth for Yhorm</td><td>Boss weapon for Yhorm the Giant</td></tr>
 <tr><td>FS: Young Dragon Ring - Orbeck for one scroll and buying three spells</td><td>Given by Orbeck after purchasing four sorceries from him, and giving him one scroll, as a non-sorcerer.</td></tr>
-<tr><td>FSBT: Armor of the Sun - crow for Siegbräu</td><td>Trade Siegbrau with crow</td></tr>
+<tr><td>FSBT: Armor of the Sun - crow for Siegbräu</td><td>Trade Siegbräu with crow</td></tr>
 <tr><td>FSBT: Blessed Gem - crow for Moaning Shield</td><td>Trade Moaning Shield with crow</td></tr>
 <tr><td>FSBT: Covetous Silver Serpent Ring - illusory wall past rafters</td><td>From the Firelink Shrine roof, past the rafters and an illusory wall</td></tr>
 <tr><td>FSBT: Estus Ring - tower base</td><td>Dropping down from the Bell Tower to where Irina eventually resides</td></tr>
@@ -1520,10 +1520,10 @@ offline _Dark Souls III_ randomizer].
 <tr><td>GA: Titanite Chunk - 2F, by wax pool</td><td>Up the stairs from the Archives second floor on the right side from the entrance, in a corner near the small wax pool</td></tr>
 <tr><td>GA: Titanite Chunk - 2F, right after dark room</td><td>Exiting from the dark room with the Crystal Lizards on the first floor onto the second floor main room, then taking an immediate right</td></tr>
 <tr><td>GA: Titanite Chunk - 5F, far balcony</td><td>On a balcony outside where Lothric Knight stands on the top floor of the Archives, accessing by going right from the final wax pool or by dropping down from the gargoyle area</td></tr>
-<tr><td>GA: Titanite Chunk - rooftopps, balcony</td><td>Going onto the roof and down the first ladder, all the way down the ledge facing the ocean to the right</td></tr>
+<tr><td>GA: Titanite Chunk - rooftops, balcony</td><td>Going onto the roof and down the first ladder, all the way down the ledge facing the ocean to the right</td></tr>
 <tr><td>GA: Titanite Chunk - rooftops lower, ledge by buttress</td><td>Going onto the roof and down the first ladder, dropping down on either side from the ledge facing the ocean, on a roof ledge to the right</td></tr>
 <tr><td>GA: Titanite Chunk - rooftops, just before 5F</td><td>On the Archives roof, after a short dropdown, in the small area where the two Gargoyles attack you</td></tr>
-<tr><td>GA: Titanite Scale - 1F, drop from 2F late onto bookshelves, lizard</td><td>Dropped by a Crystal Lizard on first floor bookshelves. Can be acessed by dropping down to the left at the end of the bridge which is the Crystal Sage&#x27;s final location</td></tr>
+<tr><td>GA: Titanite Scale - 1F, drop from 2F late onto bookshelves, lizard</td><td>Dropped by a Crystal Lizard on first floor bookshelves. Can be accessed by dropping down to the left at the end of the bridge which is the Crystal Sage&#x27;s final location</td></tr>
 <tr><td>GA: Titanite Scale - 1F, up stairs on bookshelf</td><td>On the Archives first floor, up a movable set of stairs near the large wax pool, on top of a bookshelf</td></tr>
 <tr><td>GA: Titanite Scale - 2F, titanite scale atop bookshelf</td><td>On top of a bookshelf on the Archive second floor, accessible by going halfway up the stairs to the third floor and dropping down near a Grand Archives Scholar</td></tr>
 <tr><td>GA: Titanite Scale - 3F, by ladder to 2F late</td><td>Going from the Crystal Sage&#x27;s location on the third floor to its location on the bridge, on the left side of the ladder you descend, behind a table</td></tr>
@@ -1669,7 +1669,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>IBV: Undead Bone Shard - descent, behind gravestone</td><td>In the graveyard down the stairs from the Church of Yorshka, behind the grave with the Corvian</td></tr>
 <tr><td>IBV: Witchtree Branch - by Dorhys</td><td>In the area with Cathedral Evangelist Dorhys, past an illusory railing past the Central Irithyll Fire Witches</td></tr>
 <tr><td>IBV: Wood Grain Ring+2 - ascent, right after great hall</td><td>Leaving the building with the Silver Knight staring at the painting, instead of going left up the stairs, go right</td></tr>
-<tr><td>IBV: Yorshka&#x27;s Spear - descent, dark room rafers chest</td><td>In a chest in the rafters of the dark area with the Irithyllian slaves</td></tr>
+<tr><td>IBV: Yorshka&#x27;s Spear - descent, dark room rafters chest</td><td>In a chest in the rafters of the dark area with the Irithyllian slaves</td></tr>
 <tr><td>ID: Alva Armor - B3 near, by Karla&#x27;s cell, after killing Alva</td><td>In the main Jailer cell block on the floor close to Karla&#x27;s cell, if the invading Alva is killed</td></tr>
 <tr><td>ID: Alva Gauntlets - B3 near, by Karla&#x27;s cell, after killing Alva</td><td>In the main Jailer cell block on the floor close to Karla&#x27;s cell, if the invading Alva is killed</td></tr>
 <tr><td>ID: Alva Helm - B3 near, by Karla&#x27;s cell, after killing Alva</td><td>In the main Jailer cell block on the floor close to Karla&#x27;s cell, if the invading Alva is killed</td></tr>
@@ -1716,7 +1716,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>ID: Rusted Gold Coin - after bonfire, last cell on right</td><td>In the third cell on the right from the Irithyll Dungeon bonfire</td></tr>
 <tr><td>ID: Simple Gem - B2 far, cell by stairs</td><td>In the cell near the bottom corridor opposite to the bonfire in Irithyll Dungeon, adjacent to the room with three Jailers and Cage Spiders</td></tr>
 <tr><td>ID: Soul of a Crestfallen Knight - balcony above pit</td><td>Under whether the Giant Slave is resting his head</td></tr>
-<tr><td>ID: Soul of a Weary Warrior - by drop to pit</td><td>At the end of the room with many peasant hollows after the Estus Shard minic</td></tr>
+<tr><td>ID: Soul of a Weary Warrior - by drop to pit</td><td>At the end of the room with many peasant hollows after the Estus Shard mimic</td></tr>
 <tr><td>ID: Soul of a Weary Warrior - stairs between pit and B3</td><td>Going past the Giant Slave to the sewer with the rats and the basilisks, up the first flight of stairs</td></tr>
 <tr><td>ID: Titanite Chunk - balcony above pit, lizard</td><td>Dropped by the Crystal Lizard where the Giant Slave is resting his head</td></tr>
 <tr><td>ID: Titanite Chunk - pit, miniboss drop</td><td>Drop from the Giant Slave</td></tr>
@@ -2068,7 +2068,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>RS: Great Swamp Ring - miniboss drop, by Farron Keep</td><td>Dropped by Greater Crab in Crucifixion Woods close to the Farron Keep outer wall</td></tr>
 <tr><td>RS: Green Blossom - by deep water</td><td>In the Crucifixion Woods crab area out in the open, close to the edge of the deep water area</td></tr>
 <tr><td>RS: Green Blossom - water beneath stronghold</td><td>In the Crucifixion Woods crab area close to the Crucifixion Woods bonfire, along the left wall of the water area, to the right of the entrance to the building before Crystal Sage</td></tr>
-<tr><td>RS: Heretic&#x27;s Staff - stronghold left room</td><td>In the building before Crystal Sage, entering from near Cruficixion Woods, in a corner under the first stairwell and balcony</td></tr>
+<tr><td>RS: Heretic&#x27;s Staff - stronghold left room</td><td>In the building before Crystal Sage, entering from near Crucifixion Woods, in a corner under the first stairwell and balcony</td></tr>
 <tr><td>RS: Heysel Pick - Heysel drop</td><td>Dropped by Heysel when she invades in Road of Sacrifices</td></tr>
 <tr><td>RS: Homeward Bone - balcony by Farron Keep</td><td>At the far end of the building where you descend into Farron Keep, by the balcony</td></tr>
 <tr><td>RS: Large Soul of an Unknown Traveler - left of stairs to Farron Keep</td><td>In the area before you descend into Farron Keep, before the stairs to the far left</td></tr>
@@ -2088,7 +2088,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>RS: Sorcerer Trousers - water beneath stronghold</td><td>In an alcove under the building before Crystal Sage, guarded by a Lycanthrope, accessible from the swamp or from dropping down</td></tr>
 <tr><td>RS: Soul of a Crystal Sage</td><td>Dropped by Crystal Sage</td></tr>
 <tr><td>RS: Soul of an Unknown Traveler - drop along wall from Halfway Fortress</td><td>From Halfway Fortress, hug the right wall and drop down twice on the way to the crab area</td></tr>
-<tr><td>RS: Soul of an Unknown Traveler - right of door to stronghold left</td><td>Out in the open to the right of the building before Crystal Sage, as entered from Crufixion Woods bonfire</td></tr>
+<tr><td>RS: Soul of an Unknown Traveler - right of door to stronghold left</td><td>Out in the open to the right of the building before Crystal Sage, as entered from Crucifixion Woods bonfire</td></tr>
 <tr><td>RS: Soul of an Unknown Traveler - road, by wagon</td><td>To the right of the overturned wagon descending from the Road of Sacrifices bonfire</td></tr>
 <tr><td>RS: Titanite Shard - road, on bridge after you go under</td><td>Crossing the bridge you go under after the first Road of Sacrifices bonfire, after a sleeping Corvian and another Corvian guarding the pickup</td></tr>
 <tr><td>RS: Titanite Shard - water by Halfway Fortress</td><td>Dropping down into the Crucifixion Woods crab area right after Halfway Fortress, on the left wall heading toward the Black Knight building, guarded by dog</td></tr>
@@ -2100,7 +2100,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>SL: Black Knight Sword - ruins main lower, illusory wall in far hall</td><td>On the far exit of the Demon Ruins main hall, past an illusory wall, guarded by a Black Knight</td></tr>
 <tr><td>SL: Bloodbite Ring+1 - behind ballista</td><td>Behind the ballista, overlooking Smouldering Lake</td></tr>
 <tr><td>SL: Chaos Gem - antechamber, lizard at end of long hall</td><td>Dropped by the Crystal Lizard found from the Antechamber bonfire, toward the Demon Cleric and to the right, then all the way down</td></tr>
-<tr><td>SL: Chaos Gem - lake, far end by mob</td><td>In Smouldering Lake along the wall underneath the balista, all the way to the left past two crabs</td></tr>
+<tr><td>SL: Chaos Gem - lake, far end by mob</td><td>In Smouldering Lake along the wall underneath the ballista, all the way to the left past two crabs</td></tr>
 <tr><td>SL: Dragonrider Bow - by ladder from ruins basement to ballista</td><td>After climbing up the ladder after the Black Knight in Demon Ruins, falling back down to a ledge</td></tr>
 <tr><td>SL: Ember - ruins basement, in lava</td><td>In the lava pit under the Black Knight, by Knight Slayer Tsorig</td></tr>
 <tr><td>SL: Ember - ruins main lower, path to antechamber</td><td>Going down the stairs from the Antechamber bonfire, to the right, at the end of the short hallway to the next right</td></tr>
@@ -2145,17 +2145,17 @@ offline _Dark Souls III_ randomizer].
 <tr><td>UG: Coiled Sword Fragment - shrine, dead bonfire</td><td>In the dead Firelink Shrine bonfire</td></tr>
 <tr><td>UG: Ember - shop</td><td>Sold by Untended Graves Handmaid</td></tr>
 <tr><td>UG: Eyes of a Fire Keeper - shrine, Irina&#x27;s room</td><td>Behind an illusory wall, in the same location Irina sits in Firelink Shrine</td></tr>
-<tr><td>UG: Hidden Blessing - cemetery, behind coffin</td><td>Behind the coffin that had a Titanite Shard in Cemetary of Ash</td></tr>
+<tr><td>UG: Hidden Blessing - cemetery, behind coffin</td><td>Behind the coffin that had a Titanite Shard in Cemetery of Ash</td></tr>
 <tr><td>UG: Hornet Ring - environs, right of main path after killing FK boss</td><td>On a cliffside to the right of the main path leading up to dark Firelink Shrine, after Abyss Watchers is defeated.</td></tr>
 <tr><td>UG: Life Ring+3 - shrine, behind big throne</td><td>Behind Prince Lothric&#x27;s throne</td></tr>
 <tr><td>UG: Priestess Ring - shop</td><td>Sold or dropped by Untended Graves Handmaid. Killing her is not recommended</td></tr>
 <tr><td>UG: Ring of Steel Protection+1 - environs, behind bell tower</td><td>Behind Bell Tower to the right</td></tr>
 <tr><td>UG: Shriving Stone - swamp, by bonfire</td><td>At the very start of the area</td></tr>
 <tr><td>UG: Soul of Champion Gundyr</td><td>Dropped by Champion Gundyr</td></tr>
-<tr><td>UG: Soul of a Crestfallen Knight - environs, above shrine entrance</td><td>Above the Firelink Shrine entrance, up stairs/slope from either left or right of the entrance</td></tr>
-<tr><td>UG: Soul of a Crestfallen Knight - swamp, center</td><td>Close to where Ashen Estus Flask was in Cemetary of Ash</td></tr>
-<tr><td>UG: Titanite Chunk - swamp, left path by fountain</td><td>In a path to the left of where Ashen Estus Flask was in Cemetary of Ash</td></tr>
-<tr><td>UG: Titanite Chunk - swamp, right path by fountain</td><td>In a path to the right of where Ashen Estus Flask was in Cemetary of Ash</td></tr>
+<tr><td>UG: Soul of a Crestfallen Knight - environs, above shrine entrance</td><td>Above the Firelink Shrine entrance, up the stairs/slope from either left or right of the entrance</td></tr>
+<tr><td>UG: Soul of a Crestfallen Knight - swamp, center</td><td>Close to where Ashen Estus Flask was in Cemetery of Ash</td></tr>
+<tr><td>UG: Titanite Chunk - swamp, left path by fountain</td><td>In a path to the left of where Ashen Estus Flask was in Cemetery of Ash</td></tr>
+<tr><td>UG: Titanite Chunk - swamp, right path by fountain</td><td>In a path to the right of where Ashen Estus Flask was in Cemetery of Ash</td></tr>
 <tr><td>UG: Wolf Knight Armor - shop after killing FK boss</td><td>Sold by Untended Graves Handmaid after defeating Abyss Watchers</td></tr>
 <tr><td>UG: Wolf Knight Gauntlets - shop after killing FK boss</td><td>Sold by Untended Graves Handmaid after defeating Abyss Watchers</td></tr>
 <tr><td>UG: Wolf Knight Helm - shop after killing FK boss</td><td>Sold by Untended Graves Handmaid after defeating Abyss Watchers</td></tr>
@@ -2200,7 +2200,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>US: Hawk Ring - Giant Archer</td><td>Dropped by Giant, either by killing him or collecting all of the birch tree items locations in the base game.</td></tr>
 <tr><td>US: Heavy Gem - Hawkwood</td><td>Given or dropped by Hawkwood after defeating Curse-Rotted Greatwood or Crystal Sage</td></tr>
 <tr><td>US: Heavy Gem - chasm, lizard</td><td>Drop by Crystal Lizard in ravine accessible by Grave Key or dropping down near Eygon.</td></tr>
-<tr><td>US: Homeward Bone - foot, drop overloop</td><td>Under Foot of the High Wall bonfire, around where Yoel can be first met</td></tr>
+<tr><td>US: Homeward Bone - foot, drop overlook</td><td>Under Foot of the High Wall bonfire, around where Yoel can be first met</td></tr>
 <tr><td>US: Homeward Bone - stable roof</td><td>In the thrall area across the bridge from the first Undead Settlement building, on a roof overlooking the ravine bridge.</td></tr>
 <tr><td>US: Homeward Bone - tower village, jump from roof</td><td>At the end of the loop from the Siegward Demon fight, after dropping down from the roof onto the tower with Chloranthy Ring, to the right of the tower entrance</td></tr>
 <tr><td>US: Homeward Bone - tower village, right at start</td><td>Under Foot of the High Wall bonfire, around where Yoel can be first met</td></tr>
@@ -2230,7 +2230,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>US: Pale Tongue - tower village, hanging corpse</td><td>Hanging corpse in the Fire Demon fight area, can be knocked down by rolling into it</td></tr>
 <tr><td>US: Partizan - hanging corpse above Cliff Underside</td><td>On a hanging corpse on the path from Cliff Underside to Cornyx&#x27;s cage. Must be shot down with an arrow or projective.</td></tr>
 <tr><td>US: Plank Shield - outside stable, by NPC</td><td>In the thrall area across the bridge from the first Undead Settlement building, on a cliff edge overlooking the ravine bridge.</td></tr>
-<tr><td>US: Poisonbite Ring+1 - graveyard by white tree, near well</td><td>Behind the well in the back of area where the Giant shoots arrows, nearby where the flamerge-wielding thrall drops down.</td></tr>
+<tr><td>US: Poisonbite Ring+1 - graveyard by white tree, near well</td><td>Behind the well in the back of area where the Giant shoots arrows, nearby where the flamberge-wielding thrall drops down.</td></tr>
 <tr><td>US: Pyromancy Flame - Cornyx</td><td>Given by Cornyx in Firelink Shrine or dropped.</td></tr>
 <tr><td>US: Red Bug Pellet - tower village building, basement</td><td>On the floor of the building after the Fire Demon encounter</td></tr>
 <tr><td>US: Red Hilted Halberd - chasm crypt</td><td>In the skeleton area accessible from Grave Key or dropping down from near Eygon</td></tr>

@@ -5,6 +5,7 @@
 from dataclasses import dataclass, field
 from typing import Optional, Set
 
+
 @dataclass
 class DS3BossInfo:
     """The set of locations a given boss location blocks access to."""
@@ -25,17 +26,19 @@ class DS3BossInfo:
     aren't randomized.
     """
 
-    locations: Optional[str] = field(default_factory=set)
+    locations: Optional[Set[str]] = field(default_factory=set)
     """Additional individual locations that can't be accessed until the boss is dead."""
 
 
 # Note: the offline randomizer splits up some bosses into separate fights for separate phases, each
 # of which can be individually replaced by Yhorm.
 all_bosses = [
-    DS3BossInfo("Iudex Gundyr", 4000800, before_storm_ruler = True,
-        locations = {"CA: Coiled Sword - boss drop"}),
-    DS3BossInfo("Vordt of the Boreal Valley", 3000800, before_storm_ruler = True,
-        locations = {"HWL: Soul of Boreal Valley Vordt"}),
+    DS3BossInfo("Iudex Gundyr", 4000800, before_storm_ruler = True, locations = {
+        "CA: Coiled Sword - boss drop"
+    }),
+    DS3BossInfo("Vordt of the Boreal Valley", 3000800, before_storm_ruler = True, locations = {
+        "HWL: Soul of Boreal Valley Vordt"
+    }),
     DS3BossInfo("Curse-rotted Greatwood", 3100800, locations = {
         "US: Soul of the Rotted Greatwood",
         "US: Transposing Kiln - boss drop",

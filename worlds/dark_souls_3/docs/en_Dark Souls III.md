@@ -28,7 +28,7 @@ need to configure and export a config file.
 4. By setting the "Randomize Weapon Level" or "Randomize Infusion" options, you
    can randomize whether the weapons you find will be upgraded or infused.
 
-There are also other settings that can make playing the game more convenient or
+There are also options that can make playing the game more convenient or
 bring a new experience, like removing equip loads or auto-equipping weapons as
 you pick them up. Check out [the options page][options] for more!
 
@@ -68,7 +68,7 @@ groups] you want to omit. For example, this is the default setting but without
 
 [location groups]: /tutorial/Dark%20Souls%20III/locations/en#location-groups
 
-```json
+```yaml
 Dark Souls III:
   exclude_locations:
   - Small Crystal Lizards
@@ -80,7 +80,7 @@ Dark Souls III:
 This allows _all_ non-missable locations to have progression items, if you're in
 for the long haul:
 
-```json
+```yaml
 Dark Souls III:
   exclude_locations: []
 ```
@@ -93,7 +93,7 @@ still be included in the randomization pool, but none of them will be mandatory.
 For example, the following configuration just requires you to play the game
 through Irithyll of the Boreal Valley:
 
-```json
+```yaml
 Dark Souls III:
   # Enable the DLC so it's included in the randomization pool
   enable_dlc: true

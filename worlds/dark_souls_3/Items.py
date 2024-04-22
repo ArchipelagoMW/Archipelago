@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import dataclasses
 from enum import IntEnum
 import types
@@ -92,7 +92,7 @@ class UsefulIf(IntEnum):
 
 
 @dataclass
-class DS3ItemData():
+class DS3ItemData:
     __item_id: ClassVar[int] = 100000
     """The next item ID to use when creating item data."""
 
@@ -130,7 +130,7 @@ class DS3ItemData():
     difference.
     """
 
-    souls: Set[int] = None
+    souls: int = None
     """If this is a consumable item that gives souls, the number of souls it gives."""
 
     useful_if: UsefulIf = UsefulIf.DEFAULT
@@ -453,7 +453,7 @@ _vanilla_items = flatten([
     DS3ItemData("Storyteller's Staff",                 0x00C76EB0, DS3ItemCategory.WEAPON_UPGRADE_10),
     DS3ItemData("Mendicant's Staff",                   0x00C795C0, DS3ItemCategory.WEAPON_UPGRADE_10,
                 classification = ItemClassification.progression, # Crow trade
-                inject = True), # This is just a random drop normally but we need it in-logic
+                inject = True), # This is just a random drop normally, but we need it in-logic
     DS3ItemData("Man-grub's Staff",                    0x00C7E3E0, DS3ItemCategory.WEAPON_UPGRADE_5,
                 inject = True), # Covenant reward
     DS3ItemData("Archdeacon's Great Staff",            0x00C80AF0, DS3ItemCategory.WEAPON_UPGRADE_5,
@@ -509,7 +509,7 @@ _vanilla_items = flatten([
     DS3ItemData("Round Shield",                        0x0131A230, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Large Leather Shield",                0x0131C940, DS3ItemCategory.SHIELD_INFUSIBLE,
                 classification = ItemClassification.progression, # Crow trade
-                inject = True), # This is a shop/infinite drop item but we need it in logic
+                inject = True), # This is a shop/infinite drop item, but we need it in logic
     DS3ItemData("Hawkwood's Shield",                   0x01323E70, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Iron Round Shield",                   0x01326580, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Wooden Shield",                       0x0132DAB0, DS3ItemCategory.SHIELD_INFUSIBLE),
@@ -1293,7 +1293,7 @@ _vanilla_items = flatten([
                 classification = ItemClassification.progression),
 
     # Fake item for controlling access to Archdragon Peak. The real drop isn't actually an item as
-    # such so we have to inject this because there's no slot for it to come from.
+    # such, so we have to inject this because there's no slot for it to come from.
     DS3ItemData("Path of the Dragon",                  0x40002346, DS3ItemCategory.UNIQUE,
                 inject = True, classification = ItemClassification.progression),
 
