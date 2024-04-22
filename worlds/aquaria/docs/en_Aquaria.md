@@ -1,9 +1,9 @@
 # Aquaria
 
-## Where is the settings page?
+## Where is the options page?
 
-The player settings page for this game contains all the options you need to configure and export a config file. Player
-settings page link: [Aquaria Player Settings Page](../player-settings).
+The player options page for this game contains all the options you need to configure and export a config file. Player
+options page link: [Aquaria Player Options Page](../player-options).
 
 ## What does randomization do to this game?
 The locations in the randomizer are:

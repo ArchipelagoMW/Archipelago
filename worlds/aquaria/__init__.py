@@ -97,10 +97,10 @@ class AquariaWorld(World):
 
     exclude: List[str]
 
-    def __init__(self, world: MultiWorld, player: int):
+    def __init__(self, multiworld: MultiWorld, player: int):
         """Initialisation of the Aquaria World"""
-        super(AquariaWorld, self).__init__(world, player)
-        self.regions = AquariaRegions(world, player)
+        super(AquariaWorld, self).__init__(multiworld, player)
+        self.regions = AquariaRegions(multiworld, player)
         self.ingredients_substitution = []
         self.exclude = []
 
@@ -207,16 +207,10 @@ class AquariaWorld(World):
         self.ingredients_substitution.extend(dishes_substitution)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        aquarian_translation = False
-        if self.options.aquarian_translation:
-            aquarian_translation = True
-        skip_first_vision = False
-        if self.options.skip_first_vision:
-            skip_first_vision = True
         return {"ingredientReplacement": self.ingredients_substitution,
-                "aquarianTranslate": aquarian_translation,
+                "aquarianTranslate": bool(self.options.aquarian_translation.value),
                 "secret_needed": self.options.objective.value > 0,
                 "minibosses_to_kill": self.options.mini_bosses_to_beat.value,
                 "bigbosses_to_kill": self.options.big_bosses_to_beat.value,
-                "skip_first_vision": skip_first_vision,
+                "skip_first_vision": bool(self.options.skip_first_vision.value),
                 }

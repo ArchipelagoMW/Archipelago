@@ -97,30 +97,19 @@ def _has_spirit_form(state, player: int) -> bool:
 
 def _has_big_bosses(state, player: int) -> bool:
     """`player` in `state` has beated every big bosses"""
-    return (state.has("Fallen God beated", player) and
-            state.has("Mithalan God beated", player) and
-            state.has("Drunian God beated", player) and
-            state.has("Sun God beated", player) and
-            state.has("The Golem beated", player)
-            )
+    return state.has_all("Fallen God beated", "Mithalan God beated", "Drunian God beated",
+                         "Sun God beated", "The Golem beated", player)
 
 
 def _has_mini_bosses(state, player: int) -> bool:
     """`player` in `state` has beated every big bosses"""
-    return (state.has("Nautilus Prime beated", player) and
-            state.has("Blaster Peg Prime beated", player) and
-            state.has("Mergog beated", player) and
-            state.has("Mithalan priests beated", player) and
-            state.has("Octopus Prime beated", player) and
-            state.has("Crabbius Maximus beated", player) and
-            state.has("Mantis Shrimp Prime beated", player) and
-            state.has("King Jellyfish God Prime beated", player)
-            )
+    return state.has_all("Nautilus Prime beated", "Blaster Peg Prime beated", "Mergog beated",
+                         "Mithalan priests beated", "Octopus Prime beated", "Crabbius Maximus beated",
+                         "Mantis Shrimp Prime beated", "King Jellyfish God Prime beated", player)
+
 
 def _has_secrets(state, player: int) -> bool:
-    return (state.has("First secret obtained",player) and
-            state.has("Second secret obtained",player) and
-            state.has("Third secret obtained",player))
+    return state.has_all("First secret obtained", "Second secret obtained", "Third secret obtained",player)
 
 
 class AquariaRegions:
@@ -217,7 +206,7 @@ class AquariaRegions:
     Every Region of the game
     """
 
-    world: MultiWorld
+    multiworld: MultiWorld
     """
     The Current Multiworld game.
     """
@@ -233,7 +222,7 @@ class AquariaRegions:
         Create a new Region, add it to the `world` regions and return it.
         Be aware that this function have a side effect on ``world`.`regions`
         """
-        region: Region = Region(hint, self.player, self.world, hint)
+        region: Region = Region(hint, self.player, self.multiworld, hint)
         if locations is not None:
             region.add_locations(locations, AquariaLocation)
         return region
@@ -981,165 +970,165 @@ class AquariaRegions:
 
     def __adjusting_urns_rules(self) -> None:
         """Since Urns need to be broken, add a damaging item to rules"""
-        add_rule(self.world.get_location("Open water top right area, first urn in the Mithalas exit", self.player),
+        add_rule(self.multiworld.get_location("Open water top right area, first urn in the Mithalas exit", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.world.get_location("Open water top right area, second urn in the Mithalas exit", self.player),
+        add_rule(self.multiworld.get_location("Open water top right area, second urn in the Mithalas exit", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.world.get_location("Open water top right area, third urn in the Mithalas exit", self.player),
+        add_rule(self.multiworld.get_location("Open water top right area, third urn in the Mithalas exit", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.world.get_location("Mithalas city, first urn in one of the homes", self.player),
+        add_rule(self.multiworld.get_location("Mithalas city, first urn in one of the homes", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.world.get_location("Mithalas city, second urn in one of the homes", self.player),
+        add_rule(self.multiworld.get_location("Mithalas city, second urn in one of the homes", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.world.get_location("Mithalas city, first urn in the city reserve", self.player),
+        add_rule(self.multiworld.get_location("Mithalas city, first urn in the city reserve", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.world.get_location("Mithalas city, second urn in the city reserve", self.player),
+        add_rule(self.multiworld.get_location("Mithalas city, second urn in the city reserve", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.world.get_location("Mithalas city, third urn in the city reserve", self.player),
+        add_rule(self.multiworld.get_location("Mithalas city, third urn in the city reserve", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.world.get_location("Mithalas city, urn in the cathedral flower tube entrance", self.player),
+        add_rule(self.multiworld.get_location("Mithalas city, urn in the cathedral flower tube entrance", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.world.get_location("Mithalas city castle, urn in the bedroom", self.player),
+        add_rule(self.multiworld.get_location("Mithalas city castle, urn in the bedroom", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.world.get_location("Mithalas city castle, first urn of the single lamp path", self.player),
+        add_rule(self.multiworld.get_location("Mithalas city castle, first urn of the single lamp path", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.world.get_location("Mithalas city castle, second urn of the single lamp path", self.player),
+        add_rule(self.multiworld.get_location("Mithalas city castle, second urn of the single lamp path", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.world.get_location("Mithalas city castle, urn in the bottom room", self.player),
+        add_rule(self.multiworld.get_location("Mithalas city castle, urn in the bottom room", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.world.get_location("Mithalas city castle, first urn on the entrance path", self.player),
+        add_rule(self.multiworld.get_location("Mithalas city castle, first urn on the entrance path", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.world.get_location("Mithalas city castle, second urn on the entrance path", self.player),
+        add_rule(self.multiworld.get_location("Mithalas city castle, second urn on the entrance path", self.player),
                  lambda state: _has_damaging_item(state, self.player))
 
     def __adjusting_crates_rules(self) -> None:
         """Since Crate need to be broken, add a damaging item to rules"""
-        add_rule(self.world.get_location("Sunken city right area, crate close to the save cristal", self.player),
+        add_rule(self.multiworld.get_location("Sunken city right area, crate close to the save cristal", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.world.get_location("Sunken city right area, crate in the left bottom room", self.player),
+        add_rule(self.multiworld.get_location("Sunken city right area, crate in the left bottom room", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.world.get_location("Sunken city left area, crate in the little pipe room", self.player),
+        add_rule(self.multiworld.get_location("Sunken city left area, crate in the little pipe room", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.world.get_location("Sunken city left area, crate close to the save cristal", self.player),
+        add_rule(self.multiworld.get_location("Sunken city left area, crate close to the save cristal", self.player),
                  lambda state: _has_damaging_item(state, self.player))
-        add_rule(self.world.get_location("Sunken city left area, crate before the bedroom", self.player),
+        add_rule(self.multiworld.get_location("Sunken city left area, crate before the bedroom", self.player),
                  lambda state: _has_damaging_item(state, self.player))
 
     def __adjusting_soup_rules(self) -> None:
         """
         Modify rules for location that need soup
         """
-        add_rule(self.world.get_location("Turtle cave, Urchin costume", self.player),
+        add_rule(self.multiworld.get_location("Turtle cave, Urchin costume", self.player),
                  lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
-        add_rule(self.world.get_location("Sun Worm path, first cliff bulb", self.player),
+        add_rule(self.multiworld.get_location("Sun Worm path, first cliff bulb", self.player),
                  lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
-        add_rule(self.world.get_location("Sun Worm path, second cliff bulb", self.player),
+        add_rule(self.multiworld.get_location("Sun Worm path, second cliff bulb", self.player),
                  lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
-        add_rule(self.world.get_location("The veil top right area, bulb in the top of the water fall", self.player),
+        add_rule(self.multiworld.get_location("The veil top right area, bulb in the top of the water fall", self.player),
                  lambda state: _has_hot_soup(state, self.player) and _has_beast_form(state, self.player))
 
     def __adjusting_under_rock_location(self) -> None:
         """
         Modify rules implying bind song needed for bulb under rocks
         """
-        add_rule(self.world.get_location("Home water, bulb under the rock in the left path from the verse cave",
+        add_rule(self.multiworld.get_location("Home water, bulb under the rock in the left path from the verse cave",
                                          self.player), lambda state: _has_bind_song(state, self.player))
-        add_rule(self.world.get_location("Verse cave left area, bulb under the rock at the end of the path",
+        add_rule(self.multiworld.get_location("Verse cave left area, bulb under the rock at the end of the path",
                                          self.player), lambda state: _has_bind_song(state, self.player))
-        add_rule(self.world.get_location("Naija's home, bulb under the rock at the right of the main path",
+        add_rule(self.multiworld.get_location("Naija's home, bulb under the rock at the right of the main path",
                                          self.player), lambda state: _has_bind_song(state, self.player))
-        add_rule(self.world.get_location("Song cave, bulb under the rock in the path to the singing statues",
+        add_rule(self.multiworld.get_location("Song cave, bulb under the rock in the path to the singing statues",
                                          self.player), lambda state: _has_bind_song(state, self.player))
-        add_rule(self.world.get_location("Song cave, bulb under the rock close to the song door",
+        add_rule(self.multiworld.get_location("Song cave, bulb under the rock close to the song door",
                                          self.player), lambda state: _has_bind_song(state, self.player))
-        add_rule(self.world.get_location("Energy temple second area, bulb under the rock",
+        add_rule(self.multiworld.get_location("Energy temple second area, bulb under the rock",
                                          self.player), lambda state: _has_bind_song(state, self.player))
-        add_rule(self.world.get_location("Open water top left area, bulb under the rock in the right path",
+        add_rule(self.multiworld.get_location("Open water top left area, bulb under the rock in the right path",
                                          self.player), lambda state: _has_bind_song(state, self.player))
-        add_rule(self.world.get_location("Open water top left area, bulb under the rock in the left path",
+        add_rule(self.multiworld.get_location("Open water top left area, bulb under the rock in the left path",
                                          self.player), lambda state: _has_bind_song(state, self.player))
-        add_rule(self.world.get_location("Kelp Forest top right area, bulb under the rock in the right path",
+        add_rule(self.multiworld.get_location("Kelp Forest top right area, bulb under the rock in the right path",
                                          self.player), lambda state: _has_bind_song(state, self.player))
-        add_rule(self.world.get_location("The veil top left area, bulb under the rock in the top right path",
+        add_rule(self.multiworld.get_location("The veil top left area, bulb under the rock in the top right path",
                                          self.player), lambda state: _has_bind_song(state, self.player))
-        add_rule(self.world.get_location("Abyss right area, bulb behind the rock in the whale room",
+        add_rule(self.multiworld.get_location("Abyss right area, bulb behind the rock in the whale room",
                                          self.player), lambda state: _has_bind_song(state, self.player))
-        add_rule(self.world.get_location("Abyss right area, bulb in the middle path",
+        add_rule(self.multiworld.get_location("Abyss right area, bulb in the middle path",
                                          self.player), lambda state: _has_bind_song(state, self.player))
-        add_rule(self.world.get_location("The veil top left area, bulb under the rock in the top right path",
+        add_rule(self.multiworld.get_location("The veil top left area, bulb under the rock in the top right path",
                                          self.player), lambda state: _has_bind_song(state, self.player))
 
     def __adjusting_light_in_dark_place_rules(self) -> None:
-        add_rule(self.world.get_location("Kelp forest top right area, Black pearl", self.player),
+        add_rule(self.multiworld.get_location("Kelp forest top right area, Black pearl", self.player),
                  lambda state: _has_light(state, self.player))
-        add_rule(self.world.get_location("Kelp forest bottom right area, Odd Container", self.player),
+        add_rule(self.multiworld.get_location("Kelp forest bottom right area, Odd Container", self.player),
                  lambda state: _has_light(state, self.player))
-        add_rule(self.world.get_entrance("Transturtle Veil top left to Transturtle Abyss right", self.player),
+        add_rule(self.multiworld.get_entrance("Transturtle Veil top left to Transturtle Abyss right", self.player),
                  lambda state: _has_light(state, self.player))
-        add_rule(self.world.get_entrance("Transturtle Open Water top right to Transturtle Abyss right", self.player),
+        add_rule(self.multiworld.get_entrance("Transturtle Open Water top right to Transturtle Abyss right", self.player),
                  lambda state: _has_light(state, self.player))
-        add_rule(self.world.get_entrance("Transturtle Veil top right to Transturtle Abyss right", self.player),
+        add_rule(self.multiworld.get_entrance("Transturtle Veil top right to Transturtle Abyss right", self.player),
                  lambda state: _has_light(state, self.player))
-        add_rule(self.world.get_entrance("Transturtle Forest bottom left to Transturtle Abyss right", self.player),
+        add_rule(self.multiworld.get_entrance("Transturtle Forest bottom left to Transturtle Abyss right", self.player),
                  lambda state: _has_light(state, self.player))
-        add_rule(self.world.get_entrance("Transturtle Home water to Transturtle Abyss right", self.player),
+        add_rule(self.multiworld.get_entrance("Transturtle Home water to Transturtle Abyss right", self.player),
                  lambda state: _has_light(state, self.player))
-        add_rule(self.world.get_entrance("Transturtle Final Boss to Transturtle Abyss right", self.player),
+        add_rule(self.multiworld.get_entrance("Transturtle Final Boss to Transturtle Abyss right", self.player),
                  lambda state: _has_light(state, self.player))
-        add_rule(self.world.get_entrance("Transturtle Simon says to Transturtle Abyss right", self.player),
+        add_rule(self.multiworld.get_entrance("Transturtle Simon says to Transturtle Abyss right", self.player),
                  lambda state: _has_light(state, self.player))
-        add_rule(self.world.get_entrance("Transturtle Arnassi ruins to Transturtle Abyss right", self.player),
+        add_rule(self.multiworld.get_entrance("Transturtle Arnassi ruins to Transturtle Abyss right", self.player),
                  lambda state: _has_light(state, self.player))
-        add_rule(self.world.get_entrance("Body center area to Abyss left bottom area", self.player),
+        add_rule(self.multiworld.get_entrance("Body center area to Abyss left bottom area", self.player),
                  lambda state: _has_light(state, self.player))
-        add_rule(self.world.get_entrance("Veil left of sun temple to Octo cave top path", self.player),
+        add_rule(self.multiworld.get_entrance("Veil left of sun temple to Octo cave top path", self.player),
                  lambda state: _has_light(state, self.player))
-        add_rule(self.world.get_entrance("Open water bottom right area to Abyss right area", self.player),
+        add_rule(self.multiworld.get_entrance("Open water bottom right area to Abyss right area", self.player),
                  lambda state: _has_light(state, self.player))
-        add_rule(self.world.get_entrance("Open water bottom left area to Abyss left area", self.player),
+        add_rule(self.multiworld.get_entrance("Open water bottom left area to Abyss left area", self.player),
                  lambda state: _has_light(state, self.player))
-        add_rule(self.world.get_entrance("Sun temple left area to Sun temple right area", self.player),
+        add_rule(self.multiworld.get_entrance("Sun temple left area to Sun temple right area", self.player),
                  lambda state: _has_light(state, self.player) or _has_sun_crystal(state, self.player))
-        add_rule(self.world.get_entrance("Sun temple right area to Sun temple left area", self.player),
+        add_rule(self.multiworld.get_entrance("Sun temple right area to Sun temple left area", self.player),
                  lambda state: _has_light(state, self.player) or _has_sun_crystal(state, self.player))
-        add_rule(self.world.get_entrance("Veil left of sun temple to Sun temple left area", self.player),
+        add_rule(self.multiworld.get_entrance("Veil left of sun temple to Sun temple left area", self.player),
                  lambda state: _has_light(state, self.player) or _has_sun_crystal(state, self.player))
 
 
 
     def __adjusting_manual_rules(self) -> None:
-        add_rule(self.world.get_location("Mithalas cathedral, Mithalan Dress", self.player),
+        add_rule(self.multiworld.get_location("Mithalas cathedral, Mithalan Dress", self.player),
                  lambda state: _has_beast_form(state, self.player))
-        add_rule(self.world.get_location("Open water bottom left area, bulb inside the downest fish pass", self.player),
+        add_rule(self.multiworld.get_location("Open water bottom left area, bulb inside the downest fish pass", self.player),
                  lambda state: _has_fish_form(state, self.player))
-        add_rule(self.world.get_location("Kelp forest bottom left area, Walker baby", self.player),
+        add_rule(self.multiworld.get_location("Kelp forest bottom left area, Walker baby", self.player),
                  lambda state: _has_spirit_form(state, self.player))
-        add_rule(self.world.get_location("The veil top left area, bulb hidden behind the blocking rock", self.player),
+        add_rule(self.multiworld.get_location("The veil top left area, bulb hidden behind the blocking rock", self.player),
                  lambda state: _has_bind_song(state, self.player))
-        add_rule(self.world.get_location("Turtle cave, Turtle Egg", self.player),
+        add_rule(self.multiworld.get_location("Turtle cave, Turtle Egg", self.player),
                  lambda state: _has_bind_song(state, self.player))
-        add_rule(self.world.get_location("Abyss left area, bulb in the bottom fish pass", self.player),
+        add_rule(self.multiworld.get_location("Abyss left area, bulb in the bottom fish pass", self.player),
                  lambda state: _has_fish_form(state, self.player))
-        add_rule(self.world.get_location("Song cave, Anemone seed", self.player),
+        add_rule(self.multiworld.get_location("Song cave, Anemone seed", self.player),
                  lambda state: _has_nature_form(state, self.player))
-        add_rule(self.world.get_location("Song cave, Verse egg", self.player),
+        add_rule(self.multiworld.get_location("Song cave, Verse egg", self.player),
                  lambda state: _has_bind_song(state, self.player))
-        add_rule(self.world.get_location("Verse cave right area, Big Seed", self.player),
+        add_rule(self.multiworld.get_location("Verse cave right area, Big Seed", self.player),
                  lambda state: _has_bind_song(state, self.player))
-        add_rule(self.world.get_location("Arnassi ruins, Song plant spore on the top of the ruins", self.player),
+        add_rule(self.multiworld.get_location("Arnassi ruins, Song plant spore on the top of the ruins", self.player),
                  lambda state: _has_beast_form(state, self.player))
-        add_rule(self.world.get_location("Energy temple first area, bulb in the bottom room blocked by a rock",
+        add_rule(self.multiworld.get_location("Energy temple first area, bulb in the bottom room blocked by a rock",
                                          self.player), lambda state: _has_energy_form(state, self.player))
-        add_rule(self.world.get_location("Home water, bulb in the bottom left room", self.player),
+        add_rule(self.multiworld.get_location("Home water, bulb in the bottom left room", self.player),
                  lambda state: _has_bind_song(state, self.player))
-        add_rule(self.world.get_location("Home water, bulb in the path bellow Nautilus Prime", self.player),
+        add_rule(self.multiworld.get_location("Home water, bulb in the path bellow Nautilus Prime", self.player),
                  lambda state: _has_bind_song(state, self.player))
-        add_rule(self.world.get_location("Naija's home, bulb after the energy door", self.player),
+        add_rule(self.multiworld.get_location("Naija's home, bulb after the energy door", self.player),
                  lambda state: _has_energy_form(state, self.player))
-        add_rule(self.world.get_location("Abyss right area, bulb behind the rock in the whale room", self.player),
+        add_rule(self.multiworld.get_location("Abyss right area, bulb behind the rock in the whale room", self.player),
                  lambda state: _has_spirit_form(state, self.player) and
                                _has_sun_form(state, self.player))
-        add_rule(self.world.get_location("Arnassi ruins, Arnassi Armor", self.player),
+        add_rule(self.multiworld.get_location("Arnassi ruins, Arnassi Armor", self.player),
                  lambda state: _has_fish_form(state, self.player) and
                                _has_spirit_form(state, self.player))
 
@@ -1147,58 +1136,55 @@ class AquariaRegions:
 
 
     def __excluded_hard_or_hidden_location(self) -> None:
-        self.world.get_location("Energy temple boss area, Fallen god tooth", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.world.get_location("Cathedral boss area, beating Mithalan God", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.world.get_location("Kelp forest boss area, beating Drunian God", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.world.get_location("Sun temple boss area, beating Sun God", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.world.get_location("Sunken city, bulb on the top of the boss area (boiler room)",
+        self.multiworld.get_location("Energy temple boss area, Fallen god tooth",
                                      self.player).progress_type = LocationProgressType.EXCLUDED
-        self.world.get_location("Home water, Nautilus Egg", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.world.get_location("Energy temple blaster room, Blaster egg", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.world.get_location("Mithalas castle, beating the priests", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.world.get_location("Mermog cave, Piranha Egg", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.world.get_location("Octopus cave, Dumbo Egg", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.world.get_location("King Jellyfish cave, bulb in the right path from King Jelly",
+        self.multiworld.get_location("Cathedral boss area, beating Mithalan God",
                                      self.player).progress_type = LocationProgressType.EXCLUDED
-        self.world.get_location("King Jellyfish cave, Jellyfish Costume",
+        self.multiworld.get_location("Kelp forest boss area, beating Drunian God",
                                      self.player).progress_type = LocationProgressType.EXCLUDED
-        self.world.get_location("Final boss area, bulb in the boss third form room",
+        self.multiworld.get_location("Sun temple boss area, beating Sun God",
                                      self.player).progress_type = LocationProgressType.EXCLUDED
-        self.world.get_location("Sun Worm path, first cliff bulb", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.world.get_location("Sun Worm path, second cliff bulb", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.world.get_location("The veil top right area, bulb in the top of the water fall",
-                                     self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.world.get_location("Bubble cave, bulb in the left cave wall", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.world.get_location("Bubble cave, bulb in the right cave wall (behind the ice cristal)",
-                                     self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.world.get_location("Bubble cave, Verse egg", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.world.get_location("Kelp Forest bottom left area, bulb close to the spirit cristals",
-                                     self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.world.get_location("Kelp forest bottom left area, Walker baby",
+        self.multiworld.get_location("Sunken city, bulb on the top of the boss area (boiler room)",
                                      self.player).progress_type = LocationProgressType.EXCLUDED
-        self.world.get_location("Sun temple, Sun key", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.world.get_location("The body bottom area, Mutant Costume", self.player).progress_type = (
-            LocationProgressType.EXCLUDED)
-        self.world.get_location("Sun temple, bulb in the hidden room of the right part",
+        self.multiworld.get_location("Home water, Nautilus Egg",
                                      self.player).progress_type = LocationProgressType.EXCLUDED
-        self.world.get_location("Arnassi ruins, Arnassi Armor",
+        self.multiworld.get_location("Energy temple blaster room, Blaster egg",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.multiworld.get_location("Mithalas castle, beating the priests",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.multiworld.get_location("Mermog cave, Piranha Egg",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.multiworld.get_location("Octopus cave, Dumbo Egg",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.multiworld.get_location("King Jellyfish cave, bulb in the right path from King Jelly",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.multiworld.get_location("King Jellyfish cave, Jellyfish Costume",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.multiworld.get_location("Final boss area, bulb in the boss third form room",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.multiworld.get_location("Sun Worm path, first cliff bulb",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.multiworld.get_location("Sun Worm path, second cliff bulb",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.multiworld.get_location("The veil top right area, bulb in the top of the water fall",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.multiworld.get_location("Bubble cave, bulb in the left cave wall",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.multiworld.get_location("Bubble cave, bulb in the right cave wall (behind the ice cristal)",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.multiworld.get_location("Bubble cave, Verse egg",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.multiworld.get_location("Kelp Forest bottom left area, bulb close to the spirit cristals",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.multiworld.get_location("Kelp forest bottom left area, Walker baby",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.multiworld.get_location("Sun temple, Sun key",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.multiworld.get_location("The body bottom area, Mutant Costume",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.multiworld.get_location("Sun temple, bulb in the hidden room of the right part",
+                                     self.player).progress_type = LocationProgressType.EXCLUDED
+        self.multiworld.get_location("Arnassi ruins, Arnassi Armor",
                                      self.player).progress_type = LocationProgressType.EXCLUDED
 
     def adjusting_rules(self, options: AquariaOptions) -> None:
@@ -1215,16 +1201,16 @@ class AquariaRegions:
             self.__adjusting_under_rock_location()
 
         if options.mini_bosses_to_beat.value > 0:
-            add_rule(self.world.get_entrance("Before Final boss to Final boss", self.player),
+            add_rule(self.multiworld.get_entrance("Before Final boss to Final boss", self.player),
                      lambda state: _has_mini_bosses(state, self.player))
         if options.big_bosses_to_beat.value > 0:
-            add_rule(self.world.get_entrance("Before Final boss to Final boss", self.player),
+            add_rule(self.multiworld.get_entrance("Before Final boss to Final boss", self.player),
                      lambda state: _has_big_bosses(state, self.player))
         if options.objective.value == 1:
-            add_rule(self.world.get_entrance("Before Final boss to Final boss", self.player),
+            add_rule(self.multiworld.get_entrance("Before Final boss to Final boss", self.player),
                      lambda state: _has_secrets(state, self.player))
         if options.early_energy_form:
-            add_rule(self.world.get_entrance("Home Water to Home water transturtle room", self.player),
+            add_rule(self.multiworld.get_entrance("Home Water to Home water transturtle room", self.player),
                      lambda state: _has_energy_form(state, self.player))
         if options.exclude_hard_or_hidden_locations:
             self.__excluded_hard_or_hidden_location()
@@ -1233,119 +1219,119 @@ class AquariaRegions:
         """
         Add every region around home water to the `world`
         """
-        self.world.regions.append(self.menu)
-        self.world.regions.append(self.verse_cave_r)
-        self.world.regions.append(self.verse_cave_l)
-        self.world.regions.append(self.home_water)
-        self.world.regions.append(self.home_water_nautilus)
-        self.world.regions.append(self.naija_home)
-        self.world.regions.append(self.song_cave)
-        self.world.regions.append(self.energy_temple_1)
-        self.world.regions.append(self.energy_temple_2)
-        self.world.regions.append(self.energy_temple_3)
-        self.world.regions.append(self.energy_temple_boss)
-        self.world.regions.append(self.energy_temple_blaster_room)
-        self.world.regions.append(self.energy_temple_altar)
+        self.multiworld.regions.append(self.menu)
+        self.multiworld.regions.append(self.verse_cave_r)
+        self.multiworld.regions.append(self.verse_cave_l)
+        self.multiworld.regions.append(self.home_water)
+        self.multiworld.regions.append(self.home_water_nautilus)
+        self.multiworld.regions.append(self.naija_home)
+        self.multiworld.regions.append(self.song_cave)
+        self.multiworld.regions.append(self.energy_temple_1)
+        self.multiworld.regions.append(self.energy_temple_2)
+        self.multiworld.regions.append(self.energy_temple_3)
+        self.multiworld.regions.append(self.energy_temple_boss)
+        self.multiworld.regions.append(self.energy_temple_blaster_room)
+        self.multiworld.regions.append(self.energy_temple_altar)
 
     def __add_open_water_regions_to_world(self) -> None:
         """
         Add every region around open water to the `world`
         """
-        self.world.regions.append(self.openwater_tl)
-        self.world.regions.append(self.openwater_tr)
-        self.world.regions.append(self.openwater_tr_turtle)
-        self.world.regions.append(self.openwater_bl)
-        self.world.regions.append(self.openwater_br)
-        self.world.regions.append(self.skeleton_path)
-        self.world.regions.append(self.skeleton_path_sc)
-        self.world.regions.append(self.arnassi)
-        self.world.regions.append(self.arnassi_path)
-        self.world.regions.append(self.arnassi_crab_boss)
-        self.world.regions.append(self.simon)
+        self.multiworld.regions.append(self.openwater_tl)
+        self.multiworld.regions.append(self.openwater_tr)
+        self.multiworld.regions.append(self.openwater_tr_turtle)
+        self.multiworld.regions.append(self.openwater_bl)
+        self.multiworld.regions.append(self.openwater_br)
+        self.multiworld.regions.append(self.skeleton_path)
+        self.multiworld.regions.append(self.skeleton_path_sc)
+        self.multiworld.regions.append(self.arnassi)
+        self.multiworld.regions.append(self.arnassi_path)
+        self.multiworld.regions.append(self.arnassi_crab_boss)
+        self.multiworld.regions.append(self.simon)
 
     def __add_mithalas_regions_to_world(self) -> None:
         """
         Add every region around Mithalas to the `world`
         """
-        self.world.regions.append(self.mithalas_city)
-        self.world.regions.append(self.mithalas_city_top_path)
-        self.world.regions.append(self.mithalas_city_fishpass)
-        self.world.regions.append(self.cathedral_l)
-        self.world.regions.append(self.cathedral_l_tube)
-        self.world.regions.append(self.cathedral_l_sc)
-        self.world.regions.append(self.cathedral_r)
-        self.world.regions.append(self.cathedral_underground)
-        self.world.regions.append(self.cathedral_boss_l)
-        self.world.regions.append(self.cathedral_boss_r)
+        self.multiworld.regions.append(self.mithalas_city)
+        self.multiworld.regions.append(self.mithalas_city_top_path)
+        self.multiworld.regions.append(self.mithalas_city_fishpass)
+        self.multiworld.regions.append(self.cathedral_l)
+        self.multiworld.regions.append(self.cathedral_l_tube)
+        self.multiworld.regions.append(self.cathedral_l_sc)
+        self.multiworld.regions.append(self.cathedral_r)
+        self.multiworld.regions.append(self.cathedral_underground)
+        self.multiworld.regions.append(self.cathedral_boss_l)
+        self.multiworld.regions.append(self.cathedral_boss_r)
 
     def __add_forest_regions_to_world(self) -> None:
         """
         Add every region around the kelp forest to the `world`
         """
-        self.world.regions.append(self.forest_tl)
-        self.world.regions.append(self.forest_tl_fp)
-        self.world.regions.append(self.forest_tr)
-        self.world.regions.append(self.forest_tr_fp)
-        self.world.regions.append(self.forest_bl)
-        self.world.regions.append(self.forest_br)
-        self.world.regions.append(self.forest_boss)
-        self.world.regions.append(self.forest_boss_entrance)
-        self.world.regions.append(self.forest_sprite_cave)
-        self.world.regions.append(self.forest_sprite_cave_tube)
-        self.world.regions.append(self.mermog_cave)
-        self.world.regions.append(self.mermog_boss)
-        self.world.regions.append(self.forest_fish_cave)
+        self.multiworld.regions.append(self.forest_tl)
+        self.multiworld.regions.append(self.forest_tl_fp)
+        self.multiworld.regions.append(self.forest_tr)
+        self.multiworld.regions.append(self.forest_tr_fp)
+        self.multiworld.regions.append(self.forest_bl)
+        self.multiworld.regions.append(self.forest_br)
+        self.multiworld.regions.append(self.forest_boss)
+        self.multiworld.regions.append(self.forest_boss_entrance)
+        self.multiworld.regions.append(self.forest_sprite_cave)
+        self.multiworld.regions.append(self.forest_sprite_cave_tube)
+        self.multiworld.regions.append(self.mermog_cave)
+        self.multiworld.regions.append(self.mermog_boss)
+        self.multiworld.regions.append(self.forest_fish_cave)
 
     def __add_veil_regions_to_world(self) -> None:
         """
         Add every region around the Veil to the `world`
         """
-        self.world.regions.append(self.veil_tl)
-        self.world.regions.append(self.veil_tl_fp)
-        self.world.regions.append(self.veil_tr_l)
-        self.world.regions.append(self.veil_tr_r)
-        self.world.regions.append(self.veil_bl)
-        self.world.regions.append(self.veil_b_sc)
-        self.world.regions.append(self.veil_bl_fp)
-        self.world.regions.append(self.veil_br)
-        self.world.regions.append(self.octo_cave_t)
-        self.world.regions.append(self.octo_cave_b)
-        self.world.regions.append(self.turtle_cave)
-        self.world.regions.append(self.turtle_cave_bubble)
-        self.world.regions.append(self.sun_temple_l)
-        self.world.regions.append(self.sun_temple_r)
-        self.world.regions.append(self.sun_temple_boss_path)
-        self.world.regions.append(self.sun_temple_boss)
+        self.multiworld.regions.append(self.veil_tl)
+        self.multiworld.regions.append(self.veil_tl_fp)
+        self.multiworld.regions.append(self.veil_tr_l)
+        self.multiworld.regions.append(self.veil_tr_r)
+        self.multiworld.regions.append(self.veil_bl)
+        self.multiworld.regions.append(self.veil_b_sc)
+        self.multiworld.regions.append(self.veil_bl_fp)
+        self.multiworld.regions.append(self.veil_br)
+        self.multiworld.regions.append(self.octo_cave_t)
+        self.multiworld.regions.append(self.octo_cave_b)
+        self.multiworld.regions.append(self.turtle_cave)
+        self.multiworld.regions.append(self.turtle_cave_bubble)
+        self.multiworld.regions.append(self.sun_temple_l)
+        self.multiworld.regions.append(self.sun_temple_r)
+        self.multiworld.regions.append(self.sun_temple_boss_path)
+        self.multiworld.regions.append(self.sun_temple_boss)
 
     def __add_abyss_regions_to_world(self) -> None:
         """
         Add every region around the Abyss to the `world`
         """
-        self.world.regions.append(self.abyss_l)
-        self.world.regions.append(self.abyss_lb)
-        self.world.regions.append(self.abyss_r)
-        self.world.regions.append(self.ice_cave)
-        self.world.regions.append(self.bubble_cave)
-        self.world.regions.append(self.king_jellyfish_cave)
-        self.world.regions.append(self.whale)
-        self.world.regions.append(self.sunken_city_l)
-        self.world.regions.append(self.sunken_city_r)
-        self.world.regions.append(self.sunken_city_boss)
-        self.world.regions.append(self.sunken_city_l_bedroom)
+        self.multiworld.regions.append(self.abyss_l)
+        self.multiworld.regions.append(self.abyss_lb)
+        self.multiworld.regions.append(self.abyss_r)
+        self.multiworld.regions.append(self.ice_cave)
+        self.multiworld.regions.append(self.bubble_cave)
+        self.multiworld.regions.append(self.king_jellyfish_cave)
+        self.multiworld.regions.append(self.whale)
+        self.multiworld.regions.append(self.sunken_city_l)
+        self.multiworld.regions.append(self.sunken_city_r)
+        self.multiworld.regions.append(self.sunken_city_boss)
+        self.multiworld.regions.append(self.sunken_city_l_bedroom)
 
     def __add_body_regions_to_world(self) -> None:
         """
         Add every region around the Body to the `world`
         """
-        self.world.regions.append(self.body_c)
-        self.world.regions.append(self.body_l)
-        self.world.regions.append(self.body_rt)
-        self.world.regions.append(self.body_rb)
-        self.world.regions.append(self.body_b)
-        self.world.regions.append(self.final_boss_loby)
-        self.world.regions.append(self.final_boss_tube)
-        self.world.regions.append(self.final_boss)
-        self.world.regions.append(self.final_boss_end)
+        self.multiworld.regions.append(self.body_c)
+        self.multiworld.regions.append(self.body_l)
+        self.multiworld.regions.append(self.body_rt)
+        self.multiworld.regions.append(self.body_rb)
+        self.multiworld.regions.append(self.body_b)
+        self.multiworld.regions.append(self.final_boss_loby)
+        self.multiworld.regions.append(self.final_boss_tube)
+        self.multiworld.regions.append(self.final_boss)
+        self.multiworld.regions.append(self.final_boss_end)
 
     def add_regions_to_world(self) -> None:
         """
@@ -1359,11 +1345,11 @@ class AquariaRegions:
         self.__add_abyss_regions_to_world()
         self.__add_body_regions_to_world()
 
-    def __init__(self, world: MultiWorld, player: int):
+    def __init__(self, multiworld: MultiWorld, player: int):
         """
         Initialisation of the regions
         """
-        self.world = world
+        self.multiworld = multiworld
         self.player = player
         self.__create_home_water_area()
         self.__create_energy_temple()

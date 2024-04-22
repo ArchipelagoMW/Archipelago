@@ -1,9 +1,9 @@
 # Aquaria
 
-## Où se trouve la page des paramètres ?
+## Où se trouve la page des options ?
 
-La [page des paramètres du joueur pour ce jeu](../player-settings) contiens tous
-les paramètres dont vous avez besoin pour configurer et exporter le fichier.
+La [page des options du joueur pour ce jeu](../player-options) contiens tous
+les options dont vous avez besoin pour configurer et exporter le fichier.
 
 ## Quel est l'effet de la randomisation sur ce jeu ?
 
@@ -45,7 +45,7 @@ Il y a également l'option pour mélanger les ingrédients obtenus en éliminant
 donnent un repas dont la recette n'a pas préalablement été apprise vont donner les ingrédients de cette
 recette.
 
-## Quel est le but de DLC Quest ?
+## Quel est le but de Aquaria ?
 
 Dans Aquaria, le but est de battre le monstre final (le créateur). Il est également possible d'ajouter
 des buts comme obtenir les trois souvenirs secrets, ou devoir battre une quantité de boss ou de mini-boss.
