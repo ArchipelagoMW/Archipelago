@@ -21,7 +21,7 @@ limpiarlas, selecciona el atajo y presiona la tecla Esc.
 
 ## Software Opcional
 
-- [Pokémon Emerald AP Tracker](https://github.com/AliceMousie/emerald-ap-tracker/releases/latest), para usar con
+- [Pokémon Emerald AP Tracker](https://github.com/seto10987/Archipelago-Emerald-AP-Tracker/releases/latest), para usar con
 [PopTracker](https://github.com/black-sliver/PopTracker/releases)
 
 ## Generando y Parcheando el Juego
