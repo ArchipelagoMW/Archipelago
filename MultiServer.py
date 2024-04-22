@@ -1905,7 +1905,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_alias(self, player_name_then_alias_name):
         """Set a player's alias, by listing their base name and then their intended alias."""
-        player_name, alias_name = player_name_then_alias_name.split(" ", 1)
+        player_name, _, alias_name = player_name_then_alias_name.partition(" ")
         player_name, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
             for (team, slot), name in self.ctx.player_names.items():
@@ -2134,31 +2134,46 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.output(response)
             return False
 
-    def _cmd_option(self, option_name: str, option: str):
-        """Set options for the server."""
-
-        attrtype = self.ctx.simple_options.get(option_name, None)
-        if attrtype:
-            if attrtype == bool:
-                def attrtype(input_text: str):
-                    return input_text.lower() not in {"off", "0", "false", "none", "null", "no"}
-            elif attrtype == str and option_name.endswith("password"):
-                def attrtype(input_text: str):
-                    if input_text.lower() in {"null", "none", '""', "''"}:
-                        return None
-                    return input_text
-            setattr(self.ctx, option_name, attrtype(option))
-            self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
-            if option_name in {"release_mode", "remaining_mode", "collect_mode"}:
-                self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
-            elif option_name in {"hint_cost", "location_check_points"}:
-                self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
-            return True
-        else:
-            known = (f"{option}:{otype}" for option, otype in self.ctx.simple_options.items())
-            self.output(f"Unrecognized Option {option_name}, known: "
-                        f"{', '.join(known)}")
+    def _cmd_option(self, option_name: str, option_value: str):
+        """Set an option for the server."""
+        value_type = self.ctx.simple_options.get(option_name, None)
+        if not value_type:
+            known_options = (f"{option}: {option_type}" for option, option_type in self.ctx.simple_options.items())
+            self.output(f"Unrecognized option '{option_name}', known: {', '.join(known_options)}")
             return False
+
+        if value_type == bool:
+            def value_type(input_text: str):
+                return input_text.lower() not in {"off", "0", "false", "none", "null", "no"}
+        elif value_type == str and option_name.endswith("password"):
+            def value_type(input_text: str):
+                return None if input_text.lower() in {"null", "none", '""', "''"} else input_text
+        elif value_type == str and option_name.endswith("mode"):
+            valid_values = {"goal", "enabled", "disabled"}
+            valid_values.update(("auto", "auto_enabled") if option_name != "remaining_mode" else [])
+            if option_value.lower() not in valid_values:
+                self.output(f"Unrecognized {option_name} value '{option_value}', known: {', '.join(valid_values)}")
+                return False
+
+        setattr(self.ctx, option_name, value_type(option_value))
+        self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
+        if option_name in {"release_mode", "remaining_mode", "collect_mode"}:
+            self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
+        elif option_name in {"hint_cost", "location_check_points"}:
+            self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
+        return True
+
+    def _cmd_datastore(self):
+        """Debug Tool: list writable datastorage keys and approximate the size of their values with pickle."""
+        total: int = 0
+        texts = []
+        for key, value in self.ctx.stored_data.items():
+            size = len(pickle.dumps(value))
+            total += size
+            texts.append(f"Key: {key} | Size: {size}B")
+        texts.insert(0, f"Found {len(self.ctx.stored_data)} keys, "
+                        f"approximately totaling {Utils.format_SI_prefix(total, power=1024)}B")
+        self.output("\n".join(texts))
 
 
 async def console(ctx: Context):
