@@ -20,6 +20,16 @@ def launch_client():
 components.append(Component("Don't Starve Together Client", "DontStarveTogetherClient", func=launch_client, 
                             component_type=Type.CLIENT))
 
+class DSTWeb(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Tutorial",
+        "A guide to setting up the Archipelago Don't Starve Together game on your computer.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Dragon Wolf Leo"]
+    )]
+
 class DSTWorld(World):
     """
     Don't Starve Together is a game where you are thrown into a strange and unexplored world full of odd creatures, 
@@ -34,7 +44,7 @@ class DSTWorld(World):
     options_dataclass = DSTOptions  # assign the options dataclass to the world
     options: DSTOptions  # typing for option results
     topology_present = False
-    # web = DSTWeb()
+    web = DSTWeb()
 
     item_name_groups = {"all": set(item_data_table.keys())}
 
