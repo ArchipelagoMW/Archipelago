@@ -1,4 +1,4 @@
-# Kingdom Hearts RECOM Randomizer Setup Guide
+# Kingdom Hearts Randomizer Setup Guide
 
 ##Setting up the required mods
 1. Install OpenKH and the LUA Backend.
@@ -13,21 +13,21 @@
     
     When prompted, install Panacea, then click "Next"
     
-    When prompted, check ReCoM plus any other AP game you play (KH2) and click "Install and configure LUA backend", then click "Next".
+    When prompted, check KH1 plus any other AP game you play and click "Install and configure LUA backend", then click "Next".
     
     Ensure that "Launch via Epic Games" is checked and click "Next"
     
-    Extract game data for ReCoM and any other AP game you play (KH2), then click "Next".
+    Extracting game data for KH1 is not required, you may skip it in the next step.
     
     Click "Finish"
     
 2. Open "OpenKh.Tools.ModsManager.exe"
 
-3. Click the drop down menu at the top-right and choose "Re:Chain of Memories"
+3. Click the drop down menu at the top-right and choose "Kingdom Hearts 1"
 
 4. Click `Mods>Install a New Mod`
 
-5. In "Add a new mod from GitHub" paste `gaithern/KH-RECOM-AP-LUA`
+5. In "Add a new mod from GitHub" paste `gaithern/KH-1FM-AP-LUA`
 
 6. Click Install
 
@@ -44,8 +44,10 @@ an experience customized for their taste, and different players in the same mult
 
 ### Where do I get a YAML file?
 
-you can customize your settings by visiting the [Kingdom Hearts RE Chain of Memories Settings Page](/games/Kingdom%20Hearts%20RE%20Chain%20of%20Memories/player-settings).
+you can customize your settings by visiting the [Kingdom Hearts Settings Page](/games/Kingdom%20Hearts/player-settings).
 
 ## Connect to the MultiServer
 
-On the title screen, open your KHRECOM Client and connect to your MultiServer.
+For first-time players, it is recommended to open your KH1 Client first before opening the game.
+
+On the title screen, open your KH1 Client and connect to your MultiServer.

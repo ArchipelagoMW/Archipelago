@@ -5,7 +5,11 @@ from Options import NamedRange, Choice, Range, Option, Toggle, DeathLink, Defaul
 class StrengthIncrease(Range):
     """
     Number of Strength Increases to Add to the Level Up Rewards
+    
+    The randomizer will add all stat up defined here into a pool and choose up to 100 to add to the multiworld.
+    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) at chosen at random.
     """
+    display_name = "STR Increases"
     range_start = 0
     range_end = 100
     default = 24
@@ -13,7 +17,11 @@ class StrengthIncrease(Range):
 class DefenseIncrease(Range):
     """
     Number of Defense Increases to Add to the Level Up Rewards
+    
+    The randomizer will add all stat up defined here into a pool and choose up to 100 to add to the multiworld.
+    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) at chosen at random.
     """
+    display_name = "DEF Increases"
     range_start = 0
     range_end = 100
     default = 24
@@ -21,7 +29,11 @@ class DefenseIncrease(Range):
 class HPIncrease(Range):
     """
     Number of HP Increases to Add to the Level Up Rewards
+    
+    The randomizer will add all stat up defined here into a pool and choose up to 100 to add to the multiworld.
+    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) at chosen at random.
     """
+    display_name = "HP Increases"
     range_start = 0
     range_end = 100
     default = 23
@@ -29,7 +41,11 @@ class HPIncrease(Range):
 class APIncrease(Range):
     """
     Number of AP Increases to Add to the Level Up Rewards
+    
+    The randomizer will add all stat up defined here into a pool and choose up to 100 to add to the multiworld.
+    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) at chosen at random.
     """
+    display_name = "AP Increases"
     range_start = 0
     range_end = 100
     default = 18
@@ -37,7 +53,11 @@ class APIncrease(Range):
 class MPIncrease(Range):
     """
     Number of MP Increases to Add to the Level Up Rewards
+    
+    The randomizer will add all stat up defined here into a pool and choose up to 100 to add to the multiworld.
+    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) at chosen at random.
     """
+    display_name = "MP Increases"
     range_start = 0
     range_end = 20
     default = 7
@@ -45,7 +65,11 @@ class MPIncrease(Range):
 class AccessorySlotIncrease(Range):
     """
     Number of Accessory Slot Increases to Add to the Level Up Rewards
+    
+    The randomizer will add all stat up defined here into a pool and choose up to 100 to add to the multiworld.
+    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) at chosen at random.
     """
+    display_name = "Accessory Slot Increases"
     range_start = 0
     range_end = 6
     default = 1
@@ -53,7 +77,11 @@ class AccessorySlotIncrease(Range):
 class ItemSlotIncrease(Range):
     """
     Number of Item Slot Increases to Add to the Level Up Rewards
+    
+    The randomizer will add all stat up defined here into a pool and choose up to 100 to add to the multiworld.
+    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) at chosen at random.
     """
+    display_name = "Item Slot Increases"
     range_start = 0
     range_end = 5
     default = 3
