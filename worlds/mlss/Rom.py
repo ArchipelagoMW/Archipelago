@@ -94,17 +94,17 @@ class MLSSPatchExtension(APPatchExtension):
     @staticmethod
     def hidden_visible(caller: APProcedurePatch, rom: bytes):
         options = json.loads(caller.get_file("options.json").decode("UTF-8"))
-        if options["hidden_visible"] == 0 and options["blocks_invisible"] == 0:
+        if options["block_visibility"] == 0:
             return rom
         stream = io.BytesIO(rom)
 
         for location in all_locations:
             stream.seek(location.id - 6)
             b = stream.read(1)
-            if b[0] == 0x10 and options["hidden_visible"]:
+            if b[0] == 0x10 and options["block_visibility"] == 1:
                 stream.seek(location.id - 6)
                 stream.write(bytes([0x0]))
-            if b[0] == 0x0 and options["blocks_invisible"]:
+            if b[0] == 0x0 and options["block_visibility"] == 2:
                 stream.seek(location.id - 6)
                 stream.write(bytes([0x10]))
 
@@ -278,8 +278,7 @@ def write_tokens(world: "MLSSWorld", patch: MLSSProcedurePatch) -> None:
         "castle_skip": world.options.castle_skip.value,
         "randomize_sounds": world.options.randomize_sounds.value,
         "music_options": world.options.music_options.value,
-        "hidden_visible": world.options.hidden_visible.value,
-        "blocks_invisible": world.options.blocks_invisible.value,
+        "block_visibility": world.options.block_visibility.value,
         "seed": world.multiworld.seed,
         "player": world.player
     }

@@ -194,18 +194,15 @@ class RandomizeBackgrounds(Toggle):
     display_name = "Randomize Battle Backgrounds"
 
 
-class HiddenVisible(Toggle):
+class HiddenVisible(Choice):
     """
     This makes any hidden blocks in the game into regular item blocks.
     """
-    display_name = "Hidden Blocks Visible"
-
-
-class BlocksInvisible(Toggle):
-    """
-    Turns any item blocks in the game into hidden blocks.
-    """
-    display_name = "Item Blocks Invisible"
+    display_name = "Item Block Visibility"
+    option_disabled = 0
+    option_hidden_visible = 1
+    option_blocks_invisible = 2
+    default = 0
 
 
 class Coins(Toggle):
@@ -255,8 +252,7 @@ class MLSSOptions(PerGameCommonOptions):
     skip_minecart: SkipMinecart
     disable_surf: DisableSurf
     harhalls_pants: HarhallsPants
-    hidden_visible: HiddenVisible
-    blocks_invisible: BlocksInvisible
+    block_visibility: HiddenVisible
     chuckle_beans: ChuckleBeans
     music_options: MusicOptions
     randomize_sounds: RandomSounds
