@@ -619,6 +619,8 @@ def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: ty
 
 def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typing.Sequence[str]]], suggest: str = "") \
         -> typing.Optional[str]:
+    logging.info(f"Opening file input dialog for {title}.")
+
     def run(*args: str):
         return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
 
