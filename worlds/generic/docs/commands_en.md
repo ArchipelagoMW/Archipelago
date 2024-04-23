@@ -95,7 +95,9 @@ The following commands are available in the clients that use the CommonClient, f
 - `/received` Displays all the items you have received from all players, including yourself.
 - `/missing` Displays all the locations along with their current status (checked/missing).
 - `/items` Lists all the item names for the current game.
+- `/item_groups` Lists all the item group names for the current game.
 - `/locations` Lists all the location names for the current game.
+- `/location_groups` Lists all the location group names for the current game.
 - `/ready` Sends ready status to the server.
 - Typing anything that doesn't start with `/` will broadcast a message to all players.
 

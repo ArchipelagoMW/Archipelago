@@ -72,7 +72,7 @@ def create_all_regions_and_connections(world: "NoitaWorld") -> None:
 # - Snow Chasm is disconnected from the Snowy Wasteland
 # - Pyramid is connected to the Hiisi Base instead of the Desert due to similar difficulty
 # - Frozen Vault is connected to the Vault instead of the Snowy Wasteland due to similar difficulty
-# - Lake is connected to The Laboratory, since the boss is hard without specific set-ups (which means late game)
+# - Lake is connected to The Laboratory, since the bosses are hard without specific set-ups (which means late game)
 # - Snowy Depths connects to Lava Lake orb since you need digging for it, so fairly early is acceptable
 # - Ancient Laboratory is connected to the Coal Pits, so that Ylialkemisti isn't sphere 1
 noita_connections: Dict[str, List[str]] = {
@@ -99,7 +99,7 @@ noita_connections: Dict[str, List[str]] = {
 
     ###
     "Underground Jungle Holy Mountain": ["Underground Jungle"],
-    "Underground Jungle": ["Dragoncave", "Overgrown Cavern", "Vault Holy Mountain", "Lukki Lair", "Snow Chasm"],
+    "Underground Jungle": ["Dragoncave", "Overgrown Cavern", "Vault Holy Mountain", "Lukki Lair", "Snow Chasm", "West Meat Realm"],
 
     ###
     "Vault Holy Mountain": ["The Vault"],
@@ -109,11 +109,11 @@ noita_connections: Dict[str, List[str]] = {
     "Temple of the Art Holy Mountain": ["Temple of the Art"],
     "Temple of the Art": ["Laboratory Holy Mountain", "The Tower", "Wizards' Den"],
     "Wizards' Den": ["Powerplant"],
-    "Powerplant": ["Deep Underground"],
+    "Powerplant": ["Meat Realm"],
 
     ###
     "Laboratory Holy Mountain": ["The Laboratory"],
-    "The Laboratory": ["The Work", "Friend Cave", "The Work (Hell)", "Lake"],
+    "The Laboratory": ["The Work", "Friend Cave", "The Work (Hell)", "Lake", "The Sky"],
     ###
 }
 
