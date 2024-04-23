@@ -15,9 +15,9 @@ Krujo and the team from the KH1 Critical Mix Riku mod for their work on the `Sho
 
 JaredWeakStrike for helping clean up my mess of code.
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains most of the options you need to 
+The [player options page for this game](../player-options) contains most of the options you need to 
 configure and export a config file.
 
 ## What does randomization do to this game?
