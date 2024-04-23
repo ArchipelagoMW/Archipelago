@@ -77,10 +77,10 @@ class KH1World(World):
 
         # Fill remaining pool with items from other pool
         while len(level_up_item_pool) < 100 and len(possible_level_up_item_pool) > 0:
-            level_up_item_pool.append(possible_level_up_item_pool.pop(random.randrange(len(possible_level_up_item_pool))))
+            level_up_item_pool.append(possible_level_up_item_pool.pop(self.random.randrange(len(possible_level_up_item_pool))))
 
         level_up_locations = list(get_locations_by_category("Levels").keys())
-        random.shuffle(level_up_item_pool)
+        self.random.shuffle(level_up_item_pool)
         i = self.options.force_stats_on_levels - 1
         while len(level_up_item_pool) > 0 and i < self.options.level_checks:
             self.multiworld.get_location(level_up_locations[i], self.player).place_locked_item(self.create_item(level_up_item_pool.pop()))
