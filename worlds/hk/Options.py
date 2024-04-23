@@ -405,6 +405,7 @@ class Goal(Choice):
     option_radiance = 3
     option_godhome = 4
     option_godhome_flower = 5
+    option_grub_hunt = 6
     default = 0
 
 

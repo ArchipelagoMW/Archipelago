@@ -155,6 +155,7 @@ class HKWorld(World):
     ranges: typing.Dict[str, typing.Tuple[int, int]]
     charm_costs: typing.List[int]
     cached_filler_items = {}
+    grub_count: int
 
     def __init__(self, multiworld, player):
         super(HKWorld, self).__init__(multiworld, player)
@@ -164,6 +165,7 @@ class HKWorld(World):
         self.ranges = {}
         self.created_shop_items = 0
         self.vanilla_shop_costs = deepcopy(vanilla_shop_costs)
+        self.grub_count = 0
 
     def generate_early(self):
         options = self.options
@@ -441,11 +443,31 @@ class HKWorld(World):
             multiworld.completion_condition[player] = lambda state: state.count("Defeated_Pantheon_5", player)
         elif goal == Goal.option_godhome_flower:
             multiworld.completion_condition[player] = lambda state: state.count("Godhome_Flower_Quest", player)
+        elif goal == Goal.option_grub_hunt:
+            pass  # will set in pre_fill()
         else:
             # Any goal
             multiworld.completion_condition[player] = lambda state: _hk_can_beat_thk(state, player) or _hk_can_beat_radiance(state, player)
 
         set_rules(self)
+
+    def pre_fill(self):
+        if self.options.Goal == "grub_hunt":
+            from collections import Counter
+            relevant_groups = self.multiworld.get_player_groups(self.player)
+            grub_player_count = Counter()
+
+            for grub in [item for item in self.multiworld.get_items() if item.name == "Grub"]:
+                if grub.player in relevant_groups or grub.player == self.player:
+                    grub_player_count += Counter({grub.player: 1})
+                    if grub.location and grub.location.player in relevant_groups:
+                        # not counting our grubs stuck in item links because we also will count the group's copy
+                        pass
+                    else:
+                        self.grub_count += 1
+
+            self.multiworld.completion_condition[self.player] = lambda state, g=grub_player_count: \
+                all([state.has("Grub", player, count) for player, count in g.items()])
 
     def fill_slot_data(self):
         slot_data = {}
@@ -483,6 +505,8 @@ class HKWorld(World):
         slot_data["location_costs"] = location_costs
 
         slot_data["notch_costs"] = self.charm_costs
+
+        slot_data["grub_count"] = self.grub_count
 
         return slot_data
 
@@ -556,7 +580,7 @@ class HKWorld(World):
                 if state.prog_items[item.player][effect_name] == effect_value:
                     del state.prog_items[item.player][effect_name]
                 else:
-                    state.prog_items[item.player][effect_name] -= effect_value
+                state.prog_items[item.player][effect_name] -= effect_value
 
         return change
 
