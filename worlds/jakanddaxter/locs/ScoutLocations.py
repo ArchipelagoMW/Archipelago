@@ -175,44 +175,44 @@ locVC_scoutTable = {
 
 # Spider Cave
 locSC_scoutTable = {
-    185: "SC: Scout Fly Across Dark Eco Pool",
-    186: "SC: Scout Fly At Dark Area Entrance",
-    187: "SC: Scout Fly First Room, Overlooking Entrance",
-    188: "SC: Scout Fly First Room, Near Dark Crystal",
-    189: "SC: Scout Fly First Room, Near Dark Eco Pool",
-    190: "SC: Scout Fly Robot Room, First Level",
-    191: "SC: Scout Fly Robot Room, Second Level",
+    327765: "SC: Scout Fly Near Dark Dave Entrance",
+    262229: "SC: Scout Fly In Dark Cave",
+    393301: "SC: Scout Fly Main Cave, Overlooking Entrance",
+    196693: "SC: Scout Fly Main Cave, Near Dark Crystal",
+    131157: "SC: Scout Fly Main Cave, Near Robot Cave Entrance",
+    85: "SC: Scout Fly Robot Cave, At Bottom Level",
+    65621: "SC: Scout Fly Robot Cave, At Top Level",
 }
 
 # Snowy Mountain
 locSM_scoutTable = {
-    192: "SM: Scout Fly Near Entrance",
-    193: "SM: Scout Fly Near Frozen Box",
-    194: "SM: Scout Fly Near Yellow Eco Switch",
-    195: "SM: Scout Fly On Cliff near Flut Flut",
-    196: "SM: Scout Fly Under Bridge To Fort",
-    197: "SM: Scout Fly On Top Of Fort Tower",
-    198: "SM: Scout Fly On Top Of Fort"
+    65: "SM: Scout Fly Near Entrance",
+    327745: "SM: Scout Fly Near Frozen Box",
+    65601: "SM: Scout Fly Near Yellow Eco Switch",
+    131137: "SM: Scout Fly On Cliff near Flut Flut",
+    393281: "SM: Scout Fly Under Bridge To Fort",
+    196673: "SM: Scout Fly On Top Of Fort Tower",
+    262209: "SM: Scout Fly On Top Of Fort"
 }
 
 # Lava Tube
 locLT_scoutTable = {
-    199: "LT: Scout Fly 1",
-    200: "LT: Scout Fly 2",
-    201: "LT: Scout Fly 3",
-    202: "LT: Scout Fly 4",
-    203: "LT: Scout Fly 5",
-    204: "LT: Scout Fly 6",
-    205: "LT: Scout Fly 7"
+    90: "LT: Scout Fly 1",
+    65626: "LT: Scout Fly 2",
+    327770: "LT: Scout Fly 3",
+    262234: "LT: Scout Fly 4",
+    131162: "LT: Scout Fly 5",
+    196698: "LT: Scout Fly 6",
+    393306: "LT: Scout Fly 7"
 }
 
 # Gol and Maias Citadel
 locGMC_scoutTable = {
-    206: "GMC: Scout Fly At Entrance",
-    207: "GMC: Scout Fly At Jump Room Entrance",
-    208: "GMC: Scout Fly On Ledge Across Rotators",
-    209: "GMC: Scout Fly At Tile Color Puzzle",
-    210: "GMC: Scout Fly At Blast Furnace",
-    211: "GMC: Scout Fly At Path To Robot",
-    212: "GMC: Scout Fly On Top Of Rotating Tower"
+    91: "GMC: Scout Fly At Entrance",
+    65627: "GMC: Scout Fly Main Room, Left of Robot",
+    196699: "GMC: Scout Fly Main Room, Right of Robot",
+    262235: "GMC: Scout Fly Before Jumping Lurkers",
+    393307: "GMC: Scout Fly At Blast Furnace",
+    131163: "GMC: Scout Fly At Launch Pad Room",
+    327771: "GMC: Scout Fly Top Of Rotating Tower"
 }

@@ -137,22 +137,23 @@ def create_regions(multiworld: MultiWorld, options: JakAndDaxterOptions, player:
 
     region_lpc = create_region(player, multiworld, level_table[Jak1Level.LOST_PRECURSOR_CITY])
     create_cell_locations(region_lpc, {k: Cells.locLPC_cellTable[k] for k in {45, 48, 44, 51}})
-    create_fly_locations(region_lpc, {k: Scouts.locLPC_scoutTable[k] for k in {157, 158, 159, 160, 161, 162}})
+    create_fly_locations(region_lpc, {k: Scouts.locLPC_scoutTable[k]
+                                      for k in {262193, 131121, 393265, 196657, 49, 65585}})
 
     sub_region_lpcsr = create_subregion(region_lpc, subLevel_table[Jak1SubLevel.LOST_PRECURSOR_CITY_SUNKEN_ROOM])
     create_cell_locations(sub_region_lpcsr, {k: Cells.locLPC_cellTable[k] for k in {47, 49}})
-    create_fly_locations(region_lpc, {k: Scouts.locLPC_scoutTable[k] for k in {163}})
+    create_fly_locations(region_lpc, {k: Scouts.locLPC_scoutTable[k] for k in {327729}})
 
     sub_region_lpchr = create_subregion(region_lpc, subLevel_table[Jak1SubLevel.LOST_PRECURSOR_CITY_HELIX_ROOM])
     create_cell_locations(sub_region_lpchr, {k: Cells.locLPC_cellTable[k] for k in {46, 50}})
 
     region_bs = create_region(player, multiworld, level_table[Jak1Level.BOGGY_SWAMP])
     create_cell_locations(region_bs, {k: Cells.locBS_cellTable[k] for k in {36, 38, 39, 40, 41, 42}})
-    create_fly_locations(region_bs, {k: Scouts.locBS_scoutTable[k] for k in {164, 165, 166, 167, 170}})
+    create_fly_locations(region_bs, {k: Scouts.locBS_scoutTable[k] for k in {43, 393259, 65579, 262187, 196651}})
 
     sub_region_bsff = create_subregion(region_bs, subLevel_table[Jak1SubLevel.BOGGY_SWAMP_FLUT_FLUT])
     create_cell_locations(sub_region_bsff, {k: Cells.locBS_cellTable[k] for k in {43, 37}})
-    create_fly_locations(sub_region_bsff, {k: Scouts.locBS_scoutTable[k] for k in {168, 169}})
+    create_fly_locations(sub_region_bsff, {k: Scouts.locBS_scoutTable[k] for k in {327723, 131115}})
 
     region_mp = create_region(player, multiworld, level_table[Jak1Level.MOUNTAIN_PASS])
     create_cell_locations(region_mp, {k: Cells.locMP_cellTable[k] for k in {86}})
@@ -174,7 +175,7 @@ def create_regions(multiworld: MultiWorld, options: JakAndDaxterOptions, player:
 
     region_sm = create_region(player, multiworld, level_table[Jak1Level.SNOWY_MOUNTAIN])
     create_cell_locations(region_sm, {k: Cells.locSM_cellTable[k] for k in {60, 61, 66, 64}})
-    create_fly_locations(region_sm, {k: Scouts.locSM_scoutTable[k] for k in {192, 193, 194, 195, 196}})
+    create_fly_locations(region_sm, {k: Scouts.locSM_scoutTable[k] for k in {65, 327745, 65601, 131137, 393281}})
 
     sub_region_smfb = create_subregion(region_sm, subLevel_table[Jak1SubLevel.SNOWY_MOUNTAIN_FROZEN_BOX])
     create_cell_locations(sub_region_smfb, {k: Cells.locSM_cellTable[k] for k in {67}})
@@ -184,7 +185,7 @@ def create_regions(multiworld: MultiWorld, options: JakAndDaxterOptions, player:
 
     sub_region_smlf = create_subregion(region_sm, subLevel_table[Jak1SubLevel.SNOWY_MOUNTAIN_LURKER_FORT])
     create_cell_locations(sub_region_smlf, {k: Cells.locSM_cellTable[k] for k in {62, 65}})
-    create_fly_locations(sub_region_smlf, {k: Scouts.locSM_scoutTable[k] for k in {197, 198}})
+    create_fly_locations(sub_region_smlf, {k: Scouts.locSM_scoutTable[k] for k in {196673, 262209}})
 
     region_lt = create_region(player, multiworld, level_table[Jak1Level.LAVA_TUBE])
     create_cell_locations(region_lt, Cells.locLT_cellTable)
@@ -192,11 +193,12 @@ def create_regions(multiworld: MultiWorld, options: JakAndDaxterOptions, player:
 
     region_gmc = create_region(player, multiworld, level_table[Jak1Level.GOL_AND_MAIAS_CITADEL])
     create_cell_locations(region_gmc, {k: Cells.locGMC_cellTable[k] for k in {71, 72, 73}})
-    create_fly_locations(region_gmc, {k: Scouts.locGMC_scoutTable[k] for k in {206, 207, 208, 209, 210, 211}})
+    create_fly_locations(region_gmc, {k: Scouts.locGMC_scoutTable[k]
+                                      for k in {91, 65627, 196699, 262235, 393307, 131163}})
 
     sub_region_gmcrt = create_subregion(region_gmc, subLevel_table[Jak1SubLevel.GOL_AND_MAIAS_CITADEL_ROTATING_TOWER])
     create_cell_locations(sub_region_gmcrt, {k: Cells.locGMC_cellTable[k] for k in {70, 91}})
-    create_fly_locations(sub_region_gmcrt, {k: Scouts.locGMC_scoutTable[k] for k in {212}})
+    create_fly_locations(sub_region_gmcrt, {k: Scouts.locGMC_scoutTable[k] for k in {327771}})
 
     create_subregion(sub_region_gmcrt, subLevel_table[Jak1SubLevel.GOL_AND_MAIAS_CITADEL_FINAL_BOSS])
 
