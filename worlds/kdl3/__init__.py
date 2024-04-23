@@ -202,25 +202,15 @@ class KDL3World(World):
                 animal_pool.append("Coo Spawn")
             else:
                 animal_pool.append("Kine Spawn")
-            if not self.options.open_world or self.options.ow_boss_requirement.value == 6:
-                # Need to guarantee Kine before Ripple Field 5
-                ripple_field_5 = self.get_region("Ripple Field 5 - 4")
-                # this is primarily for typing, but if this ever hits it's fine to crash
-                assert isinstance(ripple_field_5, KDL3Room)
-                valid_rooms = [room for room in self.rooms if (room.level < ripple_field_5.level)
-                               or (room.level == ripple_field_5.stage and room.stage < ripple_field_5.stage)]
-                animal_spawns = [location for room in valid_rooms for location in room.locations
-                                 if "Animal" in location.name]
-                spawn = self.random.choice(animal_spawns)
-                animal_pool.remove("Kine Spawn")  # should always have at least one in the pool
-                spawn.place_locked_item(self.create_item("Kine Spawn"))
+            # Weird fill hack, this forces ChuChu to be the last animal friend placed
+            # If Kine is ever the last animal friend placed, he will cause fill errors on closed world
+            animal_pool.sort()
             locations = [self.multiworld.get_location(spawn, self.player) for spawn in spawns]
             items: List[Item] = [self.create_item(animal) for animal in animal_pool]
             allstate = CollectionState(self.multiworld)
             for item in [*copy_ability_table, *animal_friend_table, *["Heart Star" for _ in range(50)]]:
                 self.collect(allstate, self.create_item(item))
             self.random.shuffle(locations)
-            self.random.shuffle(items)
             fill_restrictive(self.multiworld, allstate, locations, items, True, True)
         else:
             animal_friends = animal_friend_spawns.copy()
