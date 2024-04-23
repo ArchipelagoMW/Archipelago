@@ -5,7 +5,7 @@ Description: Manage options in the Aquaria game multiworld randomizer
 """
 
 from dataclasses import dataclass
-from Options import Toggle, Choice, DeathLink, PerGameCommonOptions, DefaultOnToggle, StartInventoryPool
+from Options import Toggle, Choice, Range, DeathLink, PerGameCommonOptions, DefaultOnToggle, StartInventoryPool
 
 
 class IngredientRandomizer(Choice):
@@ -47,22 +47,18 @@ class AquarianTranslation(Toggle):
     display_name = "Translate Aquarian"
 
 
-class BigBossesToBeat(Choice):
+class BigBossesToBeat(Range):
     """
     A number of big bosses to beat before having access to the creator (the final boss). The big bosses are
     "Fallen God", "Mithalan God", "Drunian God", "Sun God" and "The Golem".
     """
     display_name = "Big bosses to beat"
-    option_none = 0
-    option_1 = 1
-    option_2 = 2
-    option_3 = 3
-    option_4 = 4
-    option_5 = 5
+    range_start = 0
+    range_end = 5
     default = 0
 
 
-class MiniBossesToBeat(Choice):
+class MiniBossesToBeat(Range):
     """
     A number of Minibosses to beat before having access to the creator (the final boss). Mini bosses are
     "Nautilus Prime", "Blaster Peg Prime", "Mergog", "Mithalan priests", "Octopus Prime", "Crabbius Maximus",
@@ -70,15 +66,8 @@ class MiniBossesToBeat(Choice):
     mini bosses.
     """
     display_name = "Mini bosses to beat"
-    option_none = 0
-    option_1 = 1
-    option_2 = 2
-    option_3 = 3
-    option_4 = 4
-    option_5 = 5
-    option_6 = 6
-    option_7 = 7
-    option_8 = 8
+    range_start = 0
+    range_end = 8
     default = 0
 
 
