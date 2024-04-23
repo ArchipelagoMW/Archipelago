@@ -506,7 +506,7 @@ class HKWorld(World):
 
         slot_data["notch_costs"] = self.charm_costs
 
-        slot_data["grub_count"] = self.grub_count
+        slot_data["GrubCount"] = self.grub_count
 
         return slot_data
 
