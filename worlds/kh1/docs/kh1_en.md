@@ -44,7 +44,7 @@ an experience customized for their taste, and different players in the same mult
 
 ### Where do I get a YAML file?
 
-you can customize your settings by visiting the [Kingdom Hearts Settings Page](/games/Kingdom%20Hearts/player-settings).
+you can customize your settings by visiting the [Kingdom Hearts Options Page](/games/Kingdom%20Hearts/player-options).
 
 ## Connect to the MultiServer
 
