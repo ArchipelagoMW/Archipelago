@@ -384,7 +384,7 @@ def write_tokens(world: "MLSSWorld", patch: MLSSProcedurePatch) -> None:
         patch.write_token(
             APTokenTypes.WRITE,
             0xD00003,
-            bytes([0x1])
+            bytes([world.options.xp_multiplier.value])
         )
 
     if world.options.tattle_hp:
