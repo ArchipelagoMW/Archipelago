@@ -180,7 +180,7 @@ class XPMultiplier(Range):
 
     """
     display_name = "XP Multiplier"
-    range_start = 1
+    range_start = 0
     range_end = 4
     default = 1
 
