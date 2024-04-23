@@ -168,7 +168,7 @@ class RequiredReports(Range):
     """
     Determines the number of Ansem's Reports needed to open End of the World
     """
-    diplay_name = "Reports to Open End of the World"
+    display_name = "Reports to Open End of the World"
     default = 4
     range_start = 1
     range_end = 13
@@ -177,7 +177,7 @@ class ReportsInPool(Range):
     """
     Determines the number of Ansem's Reports in the item pool.
     """
-    diplay_name = "Reports in Pool"
+    display_name = "Reports in Pool"
     default = 4
     range_start = 1
     range_end = 13
