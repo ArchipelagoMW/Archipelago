@@ -6,7 +6,7 @@ about 5 minutes to read.
 
 ## What are triggers?
 
-Triggers allow you to customize your game settings by allowing you to define one or many options which only occur under
+Triggers allow you to customize your game options by allowing you to define one or many options which only occur under
 specific conditions. These are essentially "if, then" statements for options in your game. A good example of what you
 can do with triggers is the [custom mercenary mode YAML
 ](https://github.com/alwaysintreble/Archipelago-yaml-dump/blob/main/Snippets/Mercenary%20Mode%20Snippet.yaml) that was
@@ -122,3 +122,30 @@ In this example (thanks to @Black-Sliver), if the `pupdunk` option is rolled, th
 again using the new options `normal`, `pupdunk_hard`, and `pupdunk_mystery`, and the exp modifier will be rerolled using
 new weights for 150 and 200. This allows for two more triggers that will only be used for the new `pupdunk_hard`
 and `pupdunk_mystery` options so that they will only be triggered on "pupdunk AND hard/mystery".
+
+Options that define a list, set, or dict can additionally have the character `+` added to the start of their name, which applies the contents of
+the activated trigger to the already present equivalents in the game options.
+
+For example:
+```yaml
+Super Metroid:
+  start_location: 
+    landing_site: 50
+    aqueduct: 50
+  start_hints:
+    - Morph Ball
+triggers:
+  - option_category: Super Metroid
+    option_name: start_location
+    option_result: aqueduct
+    options:
+      Super Metroid:
+        +start_hints:
+          - Gravity Suit
+```
+
+In this example, if the `start_location` option rolls `landing_site`, only a starting hint for Morph Ball will be created.
+If `aqueduct` is rolled, a starting hint for Gravity Suit will also be created alongside the hint for Morph Ball.
+
+Note that for lists, items can only be added, not removed or replaced. For dicts, defining a value for a present key will 
+replace that value within the dict.
