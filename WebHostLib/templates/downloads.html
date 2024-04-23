@@ -1,7 +1,7 @@
 {% extends "faq.html" %}
 
 {% block head %}
-    {% include "header/oceanHeader.html" %}
+    {% include "header/oceanIslandHeader.html" %}
     <title>Downloads</title>
     <!-- html style because a full css file for this much change seems overkill -->
     <style>
@@ -22,7 +22,7 @@
 
 {% block body %}
     <div class="downloads-wrapper">
-        <h2>Download Archipelago {{ version }}</h2>
+        <h1>Download Archipelago {{ version }}</h1>
         <br/>
         <ul class="downloads">
             <li><a href="https://github.com/ArchipelagoMW/Archipelago/releases/tag/{{ version }}">Patch Notes</a></li>
