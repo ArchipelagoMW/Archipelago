@@ -46,7 +46,7 @@ guide : [Guide de configuration de base de Multiworld](/tutorial/Archipelago/set
 
 ### Où puis-je obtenir un fichier de configuration (.yaml) ?
 
-La page Paramètres du lecteur sur le site Web vous permet de configurer vos paramètres personnels et d'exporter un fichier de configuration depuis eux. Page des paramètres du joueur : [Page des paramètres du joueur d'Ocarina of Time](/games/Ocarina%20of%20Time/player-settings)
+La page Paramètres du lecteur sur le site Web vous permet de configurer vos paramètres personnels et d'exporter un fichier de configuration depuis eux. Page des paramètres du joueur : [Page des paramètres du joueur d'Ocarina of Time](/games/Ocarina%20of%20Time/player-options)
 
 ### Vérification de votre fichier de configuration
 

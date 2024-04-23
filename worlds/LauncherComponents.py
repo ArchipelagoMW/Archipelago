@@ -64,7 +64,7 @@ class SuffixIdentifier:
     def __init__(self, *args: str):
         self.suffixes = args
 
-    def __call__(self, path: str):
+    def __call__(self, path: str) -> bool:
         if isinstance(path, str):
             for suffix in self.suffixes:
                 if path.endswith(suffix):
