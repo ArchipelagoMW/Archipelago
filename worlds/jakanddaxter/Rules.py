@@ -1,8 +1,20 @@
-from BaseClasses import MultiWorld
+from BaseClasses import MultiWorld, CollectionState
 from .Options import JakAndDaxterOptions
 from .Regions import Jak1Level, Jak1SubLevel, level_table, subLevel_table
 from .Locations import location_table as item_table
 from .locs import CellLocations as Cells, ScoutLocations as Scouts
+
+
+# Helper function for a handful of special cases
+# where we need "at least any N" number of a specific set of cells.
+def has_count_of(cell_list: set, required_count: int, player: int, state: CollectionState) -> bool:
+    c: int = 0
+    for k in cell_list:
+        if state.has(item_table[k], player):
+            c += 1
+            if c >= required_count:
+                return True
+    return False
 
 
 def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int):
@@ -21,6 +33,7 @@ def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int)
     lpc_helix = Cells.to_ap_id(50)
     mp_klaww = Cells.to_ap_id(86)
     mp_end = Cells.to_ap_id(87)
+    pre_sm_cells = {Cells.to_ap_id(k) for k in {**Cells.locVC_cellTable, **Cells.locSC_cellTable}}
     sm_yellow_switch = Cells.to_ap_id(60)
     sm_fort_gate = Cells.to_ap_id(63)
     lt_end = Cells.to_ap_id(89)
@@ -35,7 +48,7 @@ def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int)
     connect_regions(multiworld, player,
                     Jak1Level.GEYSER_ROCK,
                     Jak1Level.SANDOVER_VILLAGE,
-                    lambda state: state.has_all({item_table[k] for k in gr_cells}, player))
+                    lambda state: has_count_of(gr_cells, 4, player, state))
 
     connect_regions(multiworld, player,
                     Jak1Level.SANDOVER_VILLAGE,
@@ -146,7 +159,8 @@ def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int)
 
     connect_regions(multiworld, player,
                     Jak1Level.VOLCANIC_CRATER,
-                    Jak1Level.SNOWY_MOUNTAIN)
+                    Jak1Level.SNOWY_MOUNTAIN,
+                    lambda state: has_count_of(pre_sm_cells, 2, player, state))
 
     connect_region_to_sub(multiworld, player,
                           Jak1Level.SNOWY_MOUNTAIN,

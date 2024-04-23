@@ -1,4 +1,4 @@
-# All Jak And Daxter IDs must be offset by this number.
+# All Jak And Daxter Archipelago IDs must be offset by this number.
 jak1_id = 741000000
 
 # The name of the game.

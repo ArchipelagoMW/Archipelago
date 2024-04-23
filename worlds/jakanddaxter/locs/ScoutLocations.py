@@ -20,12 +20,14 @@ fly_offset = 1024
 # These helper functions do all the math required to get information about each
 # scout fly and translate its ID between AP and OpenGOAL.
 def to_ap_id(game_id: int) -> int:
+    assert game_id < jak1_id, f"Attempted to convert {game_id} to an AP ID, but it already is one."
     cell_id = get_cell_id(game_id)                         # This is AP/OpenGOAL agnostic, works on either ID.
     buzzer_index = (game_id - cell_id) >> 9                # Subtract the cell ID, bit shift the index down 9 places.
     return jak1_id + fly_offset + buzzer_index + cell_id   # Add the offsets, the bit-shifted index, and the cell ID.
 
 
 def to_game_id(ap_id: int) -> int:
+    assert ap_id >= jak1_id, f"Attempted to convert {ap_id} to a Jak 1 ID, but it already is one."
     cell_id = get_cell_id(ap_id)                           # This is AP/OpenGOAL agnostic, works on either ID.
     buzzer_index = ap_id - jak1_id - fly_offset - cell_id  # Reverse process, subtract the offsets and the cell ID.
     return (buzzer_index << 9) + cell_id                   # Bit shift the index up 9 places, re-add the cell ID.
@@ -129,46 +131,46 @@ locPB_scoutTable = {
 
 # Lost Precursor City
 locLPC_scoutTable = {
-    157: "LPC: Scout Fly First Room",
-    158: "LPC: Scout Fly Before Second Room",
-    159: "LPC: Scout Fly Second Room, Near Orb Vent",
-    160: "LPC: Scout Fly Second Room, On Path To Cell",
-    161: "LPC: Scout Fly Second Room, Green Switch",
-    162: "LPC: Scout Fly Second Room, Blue Switch",
-    163: "LPC: Scout Fly Across Steam Vents"
+    262193: "LPC: Scout Fly First Room",
+    131121: "LPC: Scout Fly Before Second Room",
+    393265: "LPC: Scout Fly Second Room, Near Orb Vent",
+    196657: "LPC: Scout Fly Second Room, On Path To Cell",
+    49: "LPC: Scout Fly Second Room, Green Pipe",  # Sunken Pipe Game, special cases. See `got-buzzer?`
+    65585: "LPC: Scout Fly Second Room, Blue Pipe",  # Sunken Pipe Game, special cases. See `got-buzzer?`
+    327729: "LPC: Scout Fly Across Steam Vents"
 }
 
 # Boggy Swamp
 locBS_scoutTable = {
-    164: "BS: Scout Fly Near Entrance",
-    165: "BS: Scout Fly Over First Jump Pad",
-    166: "BS: Scout Fly Over Second Jump Pad",
-    167: "BS: Scout Fly Across Black Swamp",
-    168: "BS: Scout Fly Overlooking Flut Flut",
-    169: "BS: Scout Fly On Flut Flut Platforms",
-    170: "BS: Scout Fly In Field Of Boxes"
+    43: "BS: Scout Fly Near Entrance",
+    393259: "BS: Scout Fly Over First Jump Pad",
+    65579: "BS: Scout Fly Over Second Jump Pad",
+    262187: "BS: Scout Fly Across Black Swamp",
+    327723: "BS: Scout Fly Overlooking Flut Flut",
+    131115: "BS: Scout Fly On Flut Flut Platforms",
+    196651: "BS: Scout Fly In Field Of Boxes"
 }
 
 # Mountain Pass
 locMP_scoutTable = {
-    171: "MP: Scout Fly 1",
-    172: "MP: Scout Fly 2",
-    173: "MP: Scout Fly 3",
-    174: "MP: Scout Fly 4",
-    175: "MP: Scout Fly 5",
-    176: "MP: Scout Fly 6",
-    177: "MP: Scout Fly 7"
+    88: "MP: Scout Fly 1",
+    65624: "MP: Scout Fly 2",
+    131160: "MP: Scout Fly 3",
+    196696: "MP: Scout Fly 4",
+    262232: "MP: Scout Fly 5",
+    327768: "MP: Scout Fly 6",
+    393304: "MP: Scout Fly 7"
 }
 
 # Volcanic Crater
 locVC_scoutTable = {
-    178: "VC: Scout Fly In Miner's Cave",
-    179: "VC: Scout Fly Near Oracle",
-    180: "VC: Scout Fly Overlooking Minecarts",
-    181: "VC: Scout Fly On First Minecart Path",
-    182: "VC: Scout Fly At Minecart Junction",
-    183: "VC: Scout Fly At Spider Cave Entrance",
-    184: "VC: Scout Fly Under Mountain Pass Exit"
+    262221: "VC: Scout Fly In Miner's Cave",
+    393293: "VC: Scout Fly Near Oracle",
+    196685: "VC: Scout Fly On Stone Platforms",
+    131149: "VC: Scout Fly Near Lava Tube",
+    77: "VC: Scout Fly At Minecart Junction",
+    65613: "VC: Scout Fly Near Spider Cave",
+    327757: "VC: Scout Fly Near Mountain Pass"
 }
 
 # Spider Cave
