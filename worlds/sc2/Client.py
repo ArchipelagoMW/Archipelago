@@ -49,7 +49,7 @@ from worlds._sc2common.bot.player import Bot
 from worlds.sc2.Items import lookup_id_to_name, get_full_item_list, ItemData, type_flaggroups, upgrade_numbers, upgrade_numbers_all
 from worlds.sc2.Locations import SC2WOL_LOC_ID_OFFSET, LocationType, SC2HOTS_LOC_ID_OFFSET
 from worlds.sc2.MissionTables import lookup_id_to_mission, SC2Campaign, lookup_name_to_mission, \
-    lookup_id_to_campaign, MissionConnection, SC2Mission, campaign_mission_table, SC2Race, get_no_build_missions
+    lookup_id_to_campaign, MissionConnection, SC2Mission, campaign_mission_table, SC2Race
 from worlds.sc2.Regions import MissionInfo
 
 import colorama

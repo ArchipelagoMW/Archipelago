@@ -1,7 +1,10 @@
 from dataclasses import dataclass, fields, Field
-from typing import FrozenSet, Union, Set
+from typing import *
 
-from Options import Choice, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range, PerGameCommonOptions
+from Options import (Choice, Toggle, DefaultOnToggle, ItemDict, OptionSet, Range, OptionDict,
+    PerGameCommonOptions, Option, VerifyKeys)
+from Utils import get_fuzzy_results
+from BaseClasses import PlandoOptions
 from .MissionTables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_no_build_missions, \
     campaign_mission_table
 from worlds.AutoWorld import World
@@ -380,7 +383,6 @@ class KerriganPresence(Choice):
     display_name = "Kerrigan Presence"
     option_vanilla = 0
     option_not_present = 1
-    option_not_present_and_no_passives = 2
 
 
 class KerriganLevelsPerMissionCompleted(Range):
@@ -621,12 +623,70 @@ class TakeOverAIAllies(Toggle):
     display_name = "Take Over AI Allies"
 
 
-class LockedItems(ItemSet):
+class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
+    """A branch of ItemDict that supports item counts of 0"""
+    default: Dict[str, int] = {}
+    supports_weighting = False
+    verify_item_name = True
+    # convert_name_groups = True
+    display_name = 'Unnamed dictionary'
+    minimum_value: int = 0
+
+    def __init__(self, value: Dict[str, int]):
+        self.value = {key: val for key, val in value.items()}
+
+    @classmethod
+    def from_any(cls, data: Union[List[str], Dict[str, int]]) -> 'Sc2ItemDict':
+        if isinstance(data, list):
+            # This is a little default that gets us backwards compatibility with lists.
+            # It doesn't play nice with trigger merging dicts and lists together, though, so best not to advertise it overmuch.
+            data = {item: 0 for item in data}
+        if isinstance(data, dict):
+            cls.verify_keys(data)
+            for key, value in data.items():
+                if not isinstance(value, int):
+                    raise ValueError(f"Invalid type in '{cls.display_name}': element '{key}' maps to '{value}', expected an integer")
+                if value < cls.minimum_value:
+                    raise ValueError(f"Invalid value for '{cls.display_name}': element '{key}' maps to {value}, which is less than the minimum ({cls.minimum_value})")
+            return cls(data)
+        else:
+            raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
+    
+    def verify(self, world: Type[World], player_name: str, plando_options: PlandoOptions) -> None:
+        """Overridden version of function from Options.VerifyKeys for a better error message"""
+        if self.convert_name_groups:
+            new_value: dict[str, int] = {}
+            for group_name in self.value:
+                item_names = world.item_name_groups.get(group_name, {group_name})
+                for item_name in item_names:
+                    new_value[item_name] = new_value.get(item_name, 0) + self.value[group_name]
+            self.value = new_value
+        for item_name in self.value:
+            if item_name not in world.item_names:
+                picks = get_fuzzy_results(item_name, world.item_names, limit=1)
+                raise Exception(f"Item {item_name} from option {self} "
+                                f"is not a valid item name from {world.game}. "
+                                f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
+
+    def get_option_name(self, value):
+        return ", ".join(f"{key}: {v}" for key, v in value.items())
+
+    def __getitem__(self, item: str) -> int:
+        return self.value.__getitem__(item)
+    
+    def __iter__(self) -> Iterator[str]:
+        return self.value.__iter__()
+
+    def __len__(self) -> int:
+        return self.value.__len__()
+
+
+class LockedItems(Sc2ItemDict):
     """Guarantees that these items will be unlockable"""
     display_name = "Locked Items"
 
 
-class ExcludedItems(ItemSet):
+class ExcludedItems(Sc2ItemDict):
     """Guarantees that these items will not be unlockable"""
     display_name = "Excluded Items"
 

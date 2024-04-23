@@ -405,20 +405,20 @@ def create_structured_regions(
 
             removals = len(mission_order[campaign]) - campaign_mission_pool_size
 
-            for mission in mission_order[campaign]:
+            for fill_mission in mission_order[campaign]:
                 # Removing extra missions if mission pool is too small
-                if 0 < mission.removal_priority <= removals:
+                if 0 < fill_mission.removal_priority <= removals:
                     mission_slots.append(SC2MissionSlot(campaign, None))
-                elif mission.type == MissionPools.FINAL:
+                elif fill_mission.type == MissionPools.FINAL:
                     if campaign == final_mission.campaign:
                         # Campaign is elected to be goal
                         mission_slots.append(SC2MissionSlot(campaign, final_mission))
                     else:
                         # Not the goal, find the most difficult mission in the pool and set the difficulty
-                        campaign_difficulty = max(mission.pool for mission in campaign_mission_pool)
+                        campaign_difficulty = max(fill_mission.pool for fill_mission in campaign_mission_pool)
                         mission_slots.append(SC2MissionSlot(campaign, campaign_difficulty))
                 else:
-                    mission_slots.append(SC2MissionSlot(campaign, mission.type))
+                    mission_slots.append(SC2MissionSlot(campaign, fill_mission.type))
     else:
         order = mission_order[SC2Campaign.GLOBAL]
         # Determining if missions must be removed
@@ -426,14 +426,14 @@ def create_structured_regions(
         removals = len(order) - mission_pool_size
 
         # Initial fill out of mission list and marking All-In mission
-        for mission in order:
+        for fill_mission in order:
             # Removing extra missions if mission pool is too small
-            if 0 < mission.removal_priority <= removals:
+            if 0 < fill_mission.removal_priority <= removals:
                 mission_slots.append(SC2MissionSlot(SC2Campaign.GLOBAL, None))
-            elif mission.type == MissionPools.FINAL:
+            elif fill_mission.type == MissionPools.FINAL:
                 mission_slots.append(SC2MissionSlot(SC2Campaign.GLOBAL, final_mission))
             else:
-                mission_slots.append(SC2MissionSlot(SC2Campaign.GLOBAL, mission.type))
+                mission_slots.append(SC2MissionSlot(SC2Campaign.GLOBAL, fill_mission.type))
 
     no_build_slots = []
     easy_slots = []

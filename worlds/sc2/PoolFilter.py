@@ -2,9 +2,10 @@ from typing import Callable, Dict, List, Set, Union, Tuple, Optional
 from BaseClasses import  Item, Location
 from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items, progressive_if_nco, \
     progressive_if_ext, spear_of_adun_calldowns, spear_of_adun_castable_passives, nova_equipment
-from .MissionTables import mission_orders, MissionInfo, MissionPools, \
-    get_campaign_goal_priority, campaign_final_mission_locations, campaign_alt_final_mission_locations, \
-    SC2Campaign, SC2Race, SC2CampaignGoalPriority, SC2Mission
+from .MissionTables import (mission_orders, MissionInfo, MissionPools, MissionFlag,
+    get_campaign_goal_priority, campaign_final_mission_locations, campaign_alt_final_mission_locations,
+    SC2Campaign, SC2Race, SC2CampaignGoalPriority, SC2Mission,
+)
 from .Options import get_option_value, MissionOrder, \
     get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech, \
     TakeOverAIAllies, SpearOfAdunPresence, SpearOfAdunAutonomouslyCastAbilityPresence, campaign_depending_orders, \
@@ -597,8 +598,6 @@ class ValidInventory:
                     self.locked_items.append(item)
                 else:
                     self.item_pool.append(item)
-            elif item_info.type == "Goal":
-                self.locked_items.append(item)
             else:
                 self.item_pool.append(item)
         self.item_children: Dict[Item, List[Item]] = dict()
@@ -654,7 +653,7 @@ def get_used_races(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]],
 
 def is_nova_equipment_used(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]]) -> bool:
     missions = missions_in_mission_table(mission_req_table)
-    return any([mission.campaign == SC2Campaign.NCO for mission in missions])
+    return any([MissionFlag.Nova in mission.flags for mission in missions])
 
 
 def missions_in_mission_table(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]]) -> Set[SC2Mission]:

@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import List, Tuple, Optional, Callable, NamedTuple, Set, Any
+from typing import List, Tuple, Optional, Callable, NamedTuple, Set, Any, TYPE_CHECKING
 from BaseClasses import MultiWorld
 from . import ItemNames
 from .Options import get_option_value, kerrigan_unit_available, RequiredTactics, GrantStoryTech, LocationInclusion, \
@@ -8,6 +8,9 @@ from .Rules import SC2Logic
 
 from BaseClasses import Location
 from worlds.AutoWorld import World
+
+if TYPE_CHECKING:
+    from BaseClasses import CollectionState
 
 SC2WOL_LOC_ID_OFFSET = 1000
 SC2HOTS_LOC_ID_OFFSET = 20000000  # Avoid clashes with The Legend of Zelda
@@ -32,10 +35,10 @@ class LocationData(NamedTuple):
     name: str
     code: Optional[int]
     type: LocationType
-    rule: Optional[Callable[[Any], bool]] = Location.access_rule
+    rule: Optional[Callable[['CollectionState'], bool]] = Location.access_rule
 
 
-def get_location_types(world: World, inclusion_type: LocationInclusion) -> Set[LocationType]:
+def get_location_types(world: World, inclusion_type: int) -> Set[LocationType]:
     """
 
     :param multiworld:
