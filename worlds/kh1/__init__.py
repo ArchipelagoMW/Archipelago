@@ -98,7 +98,7 @@ class KH1World(World):
         if self.options.puppies == "individual":
            non_filler_item_categories.append("Puppies IND")
         if self.options.atlantica:
-            non_filler_item_categories.append("Atlantica")
+            non_filler_item_categories.append("AL")
         if self.options.hundred_acre_wood:
             non_filler_item_categories.append("HAW")
         for name, data in item_table.items():
