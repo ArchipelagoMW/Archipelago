@@ -48,7 +48,6 @@ class EarlyLegs(Toggle):
 class PickupSanity(Toggle):
     """
     Whether collecting freestanding 1ups, HP and Weapon Energy capsules will grant a check.
-    DOES NOT WORK YET. DO NOT ENABLE.
     """
     display_name = "Pickupsanity"
 

@@ -54,6 +54,8 @@ class MMXWorld(World):
     
     options_dataclass = MMXOptions
     options: MMXOptions
+    
+    required_client_version = (0, 4, 6)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = all_locations
@@ -74,7 +76,7 @@ class MMXWorld(World):
         
         total_required_locations = 47
         if self.options.pickupsanity:
-            total_required_locations += 22
+            total_required_locations += 25
 
         # Add levels into the pool
         start_inventory = self.multiworld.start_inventory[self.player].value.copy()
@@ -203,7 +205,7 @@ class MMXWorld(World):
 
     def generate_output(self, output_directory: str):
         try:
-            patch = MMXProcedurePatch()
+            patch = MMXProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
             patch.write_file("mmx_basepatch.bsdiff4", pkgutil.get_data(__name__, "data/mmx_basepatch.bsdiff4"))
             patch_rom(self, patch)
 

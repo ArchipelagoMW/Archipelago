@@ -270,10 +270,12 @@ class MMXSNIClient(SNIClient):
         can_move = await snes_read(ctx, MMX_CAN_MOVE, 0x7)
         pause_state = await snes_read(ctx, MMX_PAUSE_STATE, 0x1)
         if menu_state[0] != 0x04 or \
-            gameplay_state[0] != 0x04 or \
-            pause_state[0] != 0x00 or \
-            can_move != b'\x00\x00\x00\x00\x00\x00\x00' or \
-            receiving_item[0] != 0x00:
+           gameplay_state[0] != 0x04 or \
+           pause_state[0] != 0x00 or \
+           can_move != b'\x00\x00\x00\x00\x00\x00\x00' or \
+           receiving_item[0] != 0x00:
+            backup_item = self.item_queue.pop(0)
+            self.item_queue.append(backup_item)
             return
         
         if next_item[0] in PICKUP_ITEMS:
@@ -450,8 +452,6 @@ class MMXSNIClient(SNIClient):
                 if internal_id == 0x000:
                     # Boss clear
                     if defeated_bosses_data[data_bit] != 0:
-                        snes_logger.info(f"loc_name: {loc_name} ({defeated_bosses_data[data_bit]}) [{data}]")
-                        snes_logger.info(f"{defeated_bosses}")
                         new_checks.append(loc_id)
                 elif internal_id == 0x001:
                     # Maverick Medal
@@ -480,12 +480,11 @@ class MMXSNIClient(SNIClient):
                     # Intro
                     if game_state[0] == 0x02 and menu_state[0] == 0x00 and gameplay_state[0] == 0x01:
                         new_checks.append(loc_id)
-                elif internal_id >= 0x100:
+                elif internal_id == 0x020:
                     # Pickups
                     if not pickupsanity_enabled or pickupsanity_enabled[0] == 0:
                         continue
-                    pickup_id = internal_id & 0x1F
-                    if collected_pickups_data[pickup_id] != 0:
+                    if collected_pickups_data[data_bit] != 0:
                         new_checks.append(loc_id)
  
         verify_game_state = await snes_read(ctx, MMX_GAMEPLAY_STATE, 1)
@@ -620,8 +619,7 @@ class MMXSNIClient(SNIClient):
                     new_hadouken = True
                 elif internal_id >= 0x100:
                     # Pickups
-                    pickup_id = internal_id & 0x3F
-                    collected_pickups[pickup_id] = 0xFF
+                    collected_pickups[data_bit] = 0x01
                     new_pickup = True
 
             if new_cleared_level:

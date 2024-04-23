@@ -105,6 +105,10 @@ def set_rules(world: MMXWorld):
     set_rule(multiworld.get_location(LocationName.storm_eagle_helmet, player),
              lambda state: state.has(ItemName.legs, player))
 
+    # Handle pickupsanity
+    if world.options.pickupsanity.value:
+        add_pickupsanity_logic(world)
+
     # Handle bosses weakness
     if world.options.logic_boss_weakness.value:
         add_boss_weakness_logic(world)
@@ -112,6 +116,47 @@ def set_rules(world: MMXWorld):
     # Handle charged shotgun ice logic
     if world.options.logic_charged_shotgun_ice.value:
         add_charged_shotgun_ice_logic(world)
+
+
+def add_pickupsanity_logic(world):
+    player = world.player
+    multiworld = world.multiworld
+
+    set_rule(multiworld.get_location(LocationName.chill_penguin_hp_1, player),
+             lambda state: state.has(ItemName.fire_wave, player))
+    
+    set_rule(multiworld.get_location(LocationName.armored_armadillo_hp_1, player),
+             lambda state: state.has(ItemName.helmet, player))
+    set_rule(multiworld.get_location(LocationName.armored_armadillo_hp_2, player),
+             lambda state: state.has(ItemName.helmet, player))
+
+    set_rule(multiworld.get_location(LocationName.sigma_fortress_3_hp_1, player),
+             lambda state: (
+                 state.has(ItemName.legs, player) and
+                 state.has(ItemName.boomerang_cutter, player)
+             ))
+    set_rule(multiworld.get_location(LocationName.sigma_fortress_3_hp_2, player),
+             lambda state: state.has(ItemName.boomerang_cutter, player))
+    set_rule(multiworld.get_location(LocationName.sigma_fortress_3_energy_1, player),
+             lambda state: state.has(ItemName.boomerang_cutter, player))
+    set_rule(multiworld.get_location(LocationName.sigma_fortress_3_hp_4, player),
+             lambda state: (
+                 state.has(ItemName.arms, player) and
+                 state.has(ItemName.chameleon_sting, player)
+             ))
+    set_rule(multiworld.get_location(LocationName.sigma_fortress_3_energy_3, player),
+             lambda state: (
+                 state.has(ItemName.arms, player) and
+                 state.has(ItemName.chameleon_sting, player)
+             ))
+    set_rule(multiworld.get_location(LocationName.sigma_fortress_3_1up, player),
+             lambda state: (
+                 state.has(ItemName.arms, player) and
+                 (
+                    state.has(ItemName.chameleon_sting, player) or
+                    state.has(ItemName.shotgun_ice, player)
+                 )
+             ))
 
 
 def add_boss_weakness_logic(world):

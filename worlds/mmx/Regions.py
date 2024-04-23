@@ -265,7 +265,48 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_4_sigma, LocationName.sigma_fortress_4_sigma)
 
     if world.options.pickupsanity:
-        return
+        add_location_to_region(multiworld, player, active_locations, RegionName.intro, LocationName.intro_hp_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.intro, LocationName.intro_hp_2)
+
+        # Armored Armadillo
+        add_location_to_region(multiworld, player, active_locations, RegionName.armored_armadillo_excavator_1, LocationName.armored_armadillo_hp_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.armored_armadillo_excavator_1, LocationName.armored_armadillo_hp_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.armored_armadillo_ride_3, LocationName.armored_armadillo_hp_3)
+
+        # Chill Penguin
+        add_location_to_region(multiworld, player, active_locations, RegionName.chill_penguin_ride, LocationName.chill_penguin_hp_1)
+
+        # Launch Octopus
+        add_location_to_region(multiworld, player, active_locations, RegionName.launch_octopus_sea, LocationName.launch_octopus_hp_1)
+
+        # Sting Chameleon
+        add_location_to_region(multiworld, player, active_locations, RegionName.sting_chameleon_hill, LocationName.sting_chameleon_1up)
+        add_location_to_region(multiworld, player, active_locations, RegionName.sting_chameleon_swamp, LocationName.sting_chameleon_hp_1)
+
+        # Storm Eagle
+        add_location_to_region(multiworld, player, active_locations, RegionName.storm_eagle_airport, LocationName.storm_eagle_hp_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.storm_eagle_airport, LocationName.storm_eagle_hp_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.storm_eagle_airport, LocationName.storm_eagle_hp_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.storm_eagle_airport, LocationName.storm_eagle_1up_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.storm_eagle_metal, LocationName.storm_eagle_1up_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.storm_eagle_metal, LocationName.storm_eagle_1up_2)
+        #add_location_to_region(multiworld, player, active_locations, RegionName.storm_eagle_aircraft, LocationName.storm_eagle_hp_4)
+        #add_location_to_region(multiworld, player, active_locations, RegionName.storm_eagle_aircraft, LocationName.storm_eagle_energy_1)
+
+        # Flame Mammoth
+        add_location_to_region(multiworld, player, active_locations, RegionName.flame_mammoth_conveyors_1, LocationName.flame_mammoth_hp_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.flame_mammoth_lava_river_1, LocationName.flame_mammoth_hp_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.flame_mammoth_lava_river_1, LocationName.flame_mammoth_1up)
+
+        # Sigma's Fortress 3
+        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_rematch_2, LocationName.sigma_fortress_3_hp_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_rematch_3, LocationName.sigma_fortress_3_hp_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_rematch_3, LocationName.sigma_fortress_3_energy_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_rematch_4, LocationName.sigma_fortress_3_hp_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_rematch_4, LocationName.sigma_fortress_3_energy_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_rematch_5, LocationName.sigma_fortress_3_hp_4)
+        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_rematch_5, LocationName.sigma_fortress_3_energy_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_rematch_5, LocationName.sigma_fortress_3_1up)
 
 def connect_regions(world: World):
     connect(world, "Menu", RegionName.intro)
