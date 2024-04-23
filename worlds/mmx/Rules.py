@@ -33,15 +33,15 @@ def set_rules(world: MMXWorld):
 
     if fortress_open == "multiworld":
         add_rule(entrance, lambda state: state.has(ItemName.stage_sigma_fortress, player))
-    elif fortress_open == "medals":
+    if fortress_open in ("medals", "all") and world.options.sigma_medal_count.value > 0:
         add_rule(entrance, lambda state: state.has(ItemName.maverick_medal, player, world.options.sigma_medal_count.value))
-    elif fortress_open == "weapons":
+    if fortress_open in ("weapons", "all") and world.options.sigma_weapon_count.value > 0:
         add_rule(entrance, lambda state: state.has_group("Weapons", player, world.options.sigma_weapon_count.value))
-    elif fortress_open == "armor_upgrades":
+    if fortress_open in ("armor_upgrades", "all") and world.options.sigma_upgrade_count.value > 0:
         add_rule(entrance, lambda state: state.has_group("Armor Upgrades", player, world.options.sigma_upgrade_count.value))
-    elif fortress_open == "heart_tanks":
+    if fortress_open in ("heart_tanks", "all") and world.options.sigma_heart_tank_count.value > 0:
         add_rule(entrance, lambda state: state.has(ItemName.heart_tank, player, world.options.sigma_heart_tank_count.value))
-    elif fortress_open == "sub_tanks":
+    if fortress_open in ("sub_tanks", "all") and world.options.sigma_sub_tank_count.value > 0:
         add_rule(entrance, lambda state: state.has(ItemName.sub_tank, player, world.options.sigma_sub_tank_count.value))
 
     if world.options.logic_leg_sigma.value:

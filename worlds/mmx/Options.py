@@ -60,16 +60,19 @@ class SigmaOpen(Choice):
       armor_upgrades: Access will be granted after collecting a certain amount of armor upgrades.
       heart_tanks: Access will be granted after collecting a certain amount of Heart Tanks.
       sub_tanks: Access will be granted after collecting a certain amount of Sub Tanks.
-    Do not enable weapons, armor_upgrades, heart_tanks, sub_tanks on solo seeds without pickupsanity
-    or sessions with very few items. There's a big chance it'll cause an error.
+      all: Access will be granted after collecting a certain amount of Medals, Weapons, Armor Upgrades
+           Heart Tanks and Sub Tanks.
+    Do not enable all on solo seeds without pickupsanity or sessions with very few items.
+    There's a big chance it'll cause an error.
     """
     display_name = "Sigma Fortress Rules"
     option_multiworld = 0
     option_medals = 1
     option_weapons = 2
-    option_armor_upgrades = 3
-    option_heart_tanks = 4
-    option_sub_tanks = 5
+    option_armor_upgrades = 4
+    option_heart_tanks = 8
+    option_sub_tanks = 16
+    option_all = 31
     default = 1
 
 class SigmaMedalCount(Range):
@@ -77,7 +80,7 @@ class SigmaMedalCount(Range):
     How many Maverick Medals are required to access Sigma's Fortress.
     """
     display_name = "Sigma Medal Count"
-    range_start = 1
+    range_start = 0
     range_end = 8
     default = 8
 
@@ -86,7 +89,7 @@ class SigmaWeaponCount(Range):
     How many weapons are required to access Sigma's Fortress.
     """
     display_name = "Sigma Weapon Count"
-    range_start = 1
+    range_start = 0
     range_end = 8
     default = 8
 
@@ -95,8 +98,8 @@ class SigmaArmorUpgradeCount(Range):
     How many armor upgrades are required to access Sigma's Fortress.
     """
     display_name = "Sigma Armor Upgrade Count"
-    range_start = 1
-    range_end = 5
+    range_start = 0
+    range_end = 4
     default = 3
 
 class SigmaHeartTankCount(Range):
@@ -104,7 +107,7 @@ class SigmaHeartTankCount(Range):
     How many Heart Tanks are required to access Sigma's Fortress.
     """
     display_name = "Sigma Heart Tank Count"
-    range_start = 1
+    range_start = 0
     range_end = 8
     default = 8
 
@@ -113,7 +116,7 @@ class SigmaSubTankCount(Range):
     How many Sub Tanks are required to access Sigma's Fortress.
     """
     display_name = "Sigma Sub Tank Count"
-    range_start = 1
+    range_start = 0
     range_end = 4
     default = 4
 

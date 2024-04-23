@@ -105,17 +105,38 @@ class MMXWorld(World):
             itempool += [self.create_item(ItemName.stage_sigma_fortress)]
 
         # Add weapons into the pool
-        itempool += [self.create_item(ItemName.shotgun_ice)]
-        itempool += [self.create_item(ItemName.electric_spark)]
-        itempool += [self.create_item(ItemName.rolling_shield)]
-        itempool += [self.create_item(ItemName.homing_torpedo)]
-        itempool += [self.create_item(ItemName.boomerang_cutter)]
+        if self.options.sigma_open == "weapons" or (self.options.sigma_open == "all" and self.options.sigma_weapon_count.value > 0):
+            itempool += [self.create_item(ItemName.electric_spark)]
+            itempool += [self.create_item(ItemName.homing_torpedo)]
+            itempool += [self.create_item(ItemName.storm_tornado)]
+            itempool += [self.create_item(ItemName.shotgun_ice)]
+            itempool += [self.create_item(ItemName.rolling_shield)]
+        else:
+            if self.options.logic_boss_weakness.value:
+                itempool += [self.create_item(ItemName.electric_spark)]
+                itempool += [self.create_item(ItemName.homing_torpedo)]
+                itempool += [self.create_item(ItemName.storm_tornado)]
+            else:
+                itempool += [self.create_item(ItemName.electric_spark, ItemClassification.useful)]
+                itempool += [self.create_item(ItemName.homing_torpedo, ItemClassification.useful)]
+                itempool += [self.create_item(ItemName.storm_tornado, ItemClassification.useful)]
+
+            if self.options.logic_boss_weakness.value or self.options.logic_charged_shotgun_ice.value:
+                itempool += [self.create_item(ItemName.shotgun_ice)]
+            else:
+                itempool += [self.create_item(ItemName.shotgun_ice, ItemClassification.useful)]
+
+            if self.options.logic_boss_weakness.value or self.options.pickupsanity.value: 
+                itempool += [self.create_item(ItemName.rolling_shield)]
+            else: 
+                itempool += [self.create_item(ItemName.rolling_shield, ItemClassification.useful)]
+
         itempool += [self.create_item(ItemName.chameleon_sting)]
-        itempool += [self.create_item(ItemName.storm_tornado)]
         itempool += [self.create_item(ItemName.fire_wave)]
+        itempool += [self.create_item(ItemName.boomerang_cutter)]
 
         # Add upgrades into the pool
-        if self.options.sigma_open.value == 3:
+        if self.options.sigma_open == "armor_upgrades" or (self.options.sigma_open == "all" and self.options.sigma_upgrade_count.value > 0):
             itempool += [self.create_item(ItemName.body)]
         else:
             itempool += [self.create_item(ItemName.body, ItemClassification.useful)]
@@ -123,13 +144,22 @@ class MMXWorld(World):
         itempool += [self.create_item(ItemName.helmet)]
         itempool += [self.create_item(ItemName.legs)]
 
-        if self.options.sigma_open.value == 4:
-            itempool += [self.create_item(ItemName.heart_tank) for _ in range(8)]
+        # Add heart tanks into the pool
+        if self.options.sigma_open == "heart_tanks" or (self.options.sigma_open == "all" and self.options.sigma_heart_tank_count.value > 0):
+            i = self.options.sigma_heart_tank_count.value
+            itempool += [self.create_item(ItemName.heart_tank) for _ in range(i)]
+            if i != 8:
+                i = 8 - i
+                itempool += [self.create_item(ItemName.heart_tank, ItemClassification.useful) for _ in range(4 - i)]
         else:
             itempool += [self.create_item(ItemName.heart_tank, ItemClassification.useful) for _ in range(8)]
 
-        if self.options.sigma_open.value == 5:
-            itempool += [self.create_item(ItemName.sub_tank) for _ in range(4)]
+        # Add sub tanks into the pool
+        if self.options.sigma_open == "sub_tanks" or (self.options.sigma_open == "all" and self.options.sigma_sub_tank_count.value > 0):
+            i = self.options.sigma_sub_tank_count.value
+            itempool += [self.create_item(ItemName.sub_tank) for _ in range(i)]
+            if i != 4:
+                itempool += [self.create_item(ItemName.sub_tank, ItemClassification.useful) for _ in range(4 - i)]
         else:
             itempool += [self.create_item(ItemName.sub_tank, ItemClassification.useful) for _ in range(4)]
 
