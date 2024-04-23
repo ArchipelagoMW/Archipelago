@@ -23,6 +23,7 @@ def _has_tongue_cleared(state, player: int) -> bool:
     """`player` in `state` has the Body tongue cleared item"""
     return state.has("Body tongue cleared", player)
 
+
 def _has_sun_crystal(state, player: int) -> bool:
     """`player` in `state` has the Sun crystal item"""
     return state.has("Has sun crystal", player)
@@ -97,19 +98,19 @@ def _has_spirit_form(state, player: int) -> bool:
 
 def _has_big_bosses(state, player: int) -> bool:
     """`player` in `state` has beated every big bosses"""
-    return state.has_all("Fallen God beated", "Mithalan God beated", "Drunian God beated",
-                         "Sun God beated", "The Golem beated", player)
+    return state.has_all({"Fallen God beated", "Mithalan God beated", "Drunian God beated",
+                         "Sun God beated", "The Golem beated"}, player)
 
 
 def _has_mini_bosses(state, player: int) -> bool:
     """`player` in `state` has beated every big bosses"""
-    return state.has_all("Nautilus Prime beated", "Blaster Peg Prime beated", "Mergog beated",
+    return state.has_all({"Nautilus Prime beated", "Blaster Peg Prime beated", "Mergog beated",
                          "Mithalan priests beated", "Octopus Prime beated", "Crabbius Maximus beated",
-                         "Mantis Shrimp Prime beated", "King Jellyfish God Prime beated", player)
+                         "Mantis Shrimp Prime beated", "King Jellyfish God Prime beated"}, player)
 
 
 def _has_secrets(state, player: int) -> bool:
-    return state.has_all("First secret obtained", "Second secret obtained", "Third secret obtained",player)
+    return state.has_all({"First secret obtained", "Second secret obtained", "Third secret obtained"},player)
 
 
 class AquariaRegions:
