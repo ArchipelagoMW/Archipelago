@@ -9,12 +9,16 @@ class TestTowerOfHera(TestDungeon):
             ["Tower of Hera - Basement Chest", False, []],
             ["Tower of Hera - Basement Chest", False, [], ['Small Key (Tower of Hera)']],
             ["Tower of Hera - Basement Chest", False, [], ['Lamp', 'Fire Rod']],
-            ["Tower of Hera - Basement Chest", True, ['Small Key (Tower of Hera)', 'Lamp']],
+            ["Tower of Hera - Basement Chest", True, ['Small Key (Tower of Hera)', 'Lamp', 'Bomb Upgrade (50)']],
             ["Tower of Hera - Basement Chest", True, ['Small Key (Tower of Hera)', 'Fire Rod']],
 
-            ["Tower of Hera - Basement Cage", True, []],
+            ["Tower of Hera - Basement Cage", False, []],
+            ["Tower of Hera - Basement Cage", True, ['Bomb Upgrade (50)']],
+            ["Tower of Hera - Basement Cage", True, ['Progressive Sword']],
 
-            ["Tower of Hera - Entryway Chest", True, []],
+            ["Tower of Hera - Entryway Chest", False, []],
+            ["Tower of Hera - Entryway Chest", True, ['Bomb Upgrade (50)']],
+            ["Tower of Hera - Entryway Chest", True, ['Progressive Sword']],
 
             ["Tower of Hera - South of Big Chest", False, []],
             ["Tower of Hera - South of Big Chest", False, [], ['Big Key (Tower of Hera)']],

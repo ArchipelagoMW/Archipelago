@@ -145,7 +145,7 @@ TX:
     BEQ +
     JSR ReportLocationCheck
     SEP #$20
-    JML $8EC331             ; skip item get process
+    JML $8EC2DC             ; skip item get process; consider chest emptied
 +:  BIT.w #$4200            ; test for blue chest flag
     BEQ +
     LDA $F02048             ; load total blue chests checked
@@ -155,7 +155,7 @@ TX:
     INC                     ; increment check counter
     STA $F02040             ; store check counter
     SEP #$20
-    JML $8EC331             ; skip item get process
+    JML $8EC2DC             ; skip item get process; consider chest emptied
 +:  SEP #$20
     JML $8EC1EF             ; continue item get process
 
@@ -952,7 +952,7 @@ Shop:
     STZ $05A9
     PHB
     PHP
-    JML $80A33A             ; open shop menu
+    JML $80A33A             ; open shop menu (eventually causes return by reaching existing PLP : PLB : RTL at $809DB0)
 +:  RTL
 
 ; shop item select
