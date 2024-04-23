@@ -1,5 +1,5 @@
 from copy import deepcopy
-from . import poke_data
+from . import poke_data, logic
 from .rom_addresses import rom_addresses
 
 
@@ -134,7 +134,6 @@ def process_pokemon_data(self):
     local_poke_data = deepcopy(poke_data.pokemon_data)
     learnsets = deepcopy(poke_data.learnsets)
     tms_hms = self.local_tms + poke_data.hm_moves
-
 
     compat_hms = set()
 
@@ -323,19 +322,20 @@ def process_pokemon_data(self):
                 mon_data["tms"][int(flag / 8)] &= ~(1 << (flag % 8))
 
     hm_verify = ["Surf", "Strength"]
-    if self.multiworld.accessibility[self.player] == "locations" or ((not
+    if self.multiworld.accessibility[self.player] != "minimal" or ((not
             self.multiworld.badgesanity[self.player]) and max(self.multiworld.elite_four_badges_condition[self.player],
             self.multiworld.route_22_gate_condition[self.player], self.multiworld.victory_road_condition[self.player])
             > 7) or (self.multiworld.door_shuffle[self.player] not in ("off", "simple")):
         hm_verify += ["Cut"]
-    if self.multiworld.accessibility[self.player] == "locations" or (not
+    if self.multiworld.accessibility[self.player] != "minimal" or (not
             self.multiworld.dark_rock_tunnel_logic[self.player]) and ((self.multiworld.trainersanity[self.player] or
                                                                        self.multiworld.extra_key_items[self.player])
                                                                       or self.multiworld.door_shuffle[self.player]):
         hm_verify += ["Flash"]
-    # Fly does not need to be verified. Full/Insanity door shuffle connects reachable regions to unreachable regions,
-    # so if Fly is available and can be learned, the towns you can fly to would be reachable, but if no Pokémon can
-    # learn it this simply would not occur
+    # Fly does not need to be verified. Full/Insanity/Decoupled door shuffle connects reachable regions to unreachable
+    # regions, so if Fly is available and can be learned, the towns you can fly to would be considered reachable for
+    # door shuffle purposes, but if no Pokémon can learn it, that connection would just be out of logic and it would
+    # ensure connections to those towns.
 
     for hm_move in hm_verify:
         if hm_move not in compat_hms:
@@ -346,3 +346,90 @@ def process_pokemon_data(self):
 
     self.local_poke_data = local_poke_data
     self.learnsets = learnsets
+
+
+def verify_hm_moves(multiworld, world, player):
+    def intervene(move, test_state):
+        move_bit = pow(2, poke_data.hm_moves.index(move) + 2)
+        viable_mons = [mon for mon in world.local_poke_data if world.local_poke_data[mon]["tms"][6] & move_bit]
+        if multiworld.randomize_wild_pokemon[player] and viable_mons:
+            accessible_slots = [loc for loc in multiworld.get_reachable_locations(test_state, player) if
+                                loc.type == "Wild Encounter"]
+
+            def number_of_zones(mon):
+                zones = set()
+                for loc in [slot for slot in accessible_slots if slot.item.name == mon]:
+                    zones.add(loc.name.split(" - ")[0])
+                return len(zones)
+
+            placed_mons = [slot.item.name for slot in accessible_slots]
+
+            if multiworld.area_1_to_1_mapping[player]:
+                placed_mons.sort(key=lambda i: number_of_zones(i))
+            else:
+                # this sort method doesn't work if you reference the same list being sorted in the lambda
+                placed_mons_copy = placed_mons.copy()
+                placed_mons.sort(key=lambda i: placed_mons_copy.count(i))
+
+            placed_mon = placed_mons.pop()
+            replace_mon = multiworld.random.choice(viable_mons)
+            replace_slot = multiworld.random.choice([slot for slot in accessible_slots if slot.item.name
+                                                          == placed_mon])
+            if multiworld.area_1_to_1_mapping[player]:
+                zone = " - ".join(replace_slot.name.split(" - ")[:-1])
+                replace_slots = [slot for slot in accessible_slots if slot.name.startswith(zone) and slot.item.name
+                                 == placed_mon]
+                for replace_slot in replace_slots:
+                    replace_slot.item = world.create_item(replace_mon)
+            else:
+                replace_slot.item = world.create_item(replace_mon)
+        else:
+            tms_hms = world.local_tms + poke_data.hm_moves
+            flag = tms_hms.index(move)
+            mon_list = [mon for mon in poke_data.pokemon_data.keys() if test_state.has(mon, player)]
+            multiworld.random.shuffle(mon_list)
+            mon_list.sort(key=lambda mon: world.local_move_data[move]["type"] not in
+                          [world.local_poke_data[mon]["type1"], world.local_poke_data[mon]["type2"]])
+            for mon in mon_list:
+                if test_state.has(mon, player):
+                    world.local_poke_data[mon]["tms"][int(flag / 8)] |= 1 << (flag % 8)
+                    break
+
+    last_intervene = None
+    while True:
+        intervene_move = None
+        test_state = multiworld.get_all_state(False)
+        if not logic.can_learn_hm(test_state, "Surf", player):
+            intervene_move = "Surf"
+        elif not logic.can_learn_hm(test_state, "Strength", player):
+            intervene_move = "Strength"
+        # cut may not be needed if accessibility is minimal, unless you need all 8 badges and badgesanity is off,
+        # as you will require cut to access celadon gyn
+        elif ((not logic.can_learn_hm(test_state, "Cut", player)) and
+                (multiworld.accessibility[player] != "minimal" or ((not
+                multiworld.badgesanity[player]) and max(
+                multiworld.elite_four_badges_condition[player],
+                multiworld.route_22_gate_condition[player],
+                multiworld.victory_road_condition[player])
+                > 7) or (multiworld.door_shuffle[player] not in ("off", "simple")))):
+            intervene_move = "Cut"
+        elif ((not logic.can_learn_hm(test_state, "Flash", player))
+               and multiworld.dark_rock_tunnel_logic[player]
+               and (multiworld.accessibility[player] != "minimal"
+                    or multiworld.door_shuffle[player])):
+            intervene_move = "Flash"
+        # If no Pokémon can learn Fly, then during door shuffle it would simply not treat the free fly maps
+        # as reachable, and if on no door shuffle or simple, fly is simply never necessary.
+        # We only intervene if a Pokémon is able to learn fly but none are reachable, as that would have been
+        # considered in door shuffle.
+        elif ((not logic.can_learn_hm(test_state, "Fly", player))
+                and multiworld.door_shuffle[player] not in
+                ("off", "simple") and [world.fly_map, world.town_map_fly_map] != ["Pallet Town", "Pallet Town"]):
+            intervene_move = "Fly"
+        if intervene_move:
+            if intervene_move == last_intervene:
+                raise Exception(f"Caught in infinite loop attempting to ensure {intervene_move} is available to player {player}")
+            intervene(intervene_move, test_state)
+            last_intervene = intervene_move
+        else:
+            break

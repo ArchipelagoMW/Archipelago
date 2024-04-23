@@ -2,8 +2,9 @@
 from typing import List, Tuple
 from uuid import UUID
 
-from flask import Blueprint, abort
+from flask import Blueprint, abort, url_for
 
+import worlds.Files
 from .. import cache
 from ..models import Room, Seed
 
@@ -22,12 +23,30 @@ def room_info(room: UUID):
     if room is None:
         return abort(404)
     from base64 import urlsafe_b64encode
+    
+    def supports_apdeltapatch(game: str):
+        return game in worlds.Files.AutoPatchRegister.patch_types
+    downloads = []
+    for slot in sorted(room.seed.slots):
+        if slot.data and not supports_apdeltapatch(slot.game):
+            slot_download = {
+                "slot": slot.player_id,
+                "download": url_for("download_slot_file", room_id=room.id, player_id=slot.player_id)
+            }
+            downloads.append(slot_download)
+        elif slot.data:
+            slot_download = {
+                "slot": slot.player_id,
+                "download": url_for("download_patch", patch_id=slot.id, room_id=room.id)
+            }
+            downloads.append(slot_download)
     return {
-        "tracker": urlsafe_b64encode(room.tracker.bytes).rstrip(b'=').decode('ascii'),
+        "tracker": urlsafe_b64encode(room.tracker.bytes).rstrip(b"=").decode("ascii"),
         "players": get_players(room.seed),
         "last_port": room.last_port,
         "last_activity": room.last_activity,
         "timeout": room.timeout,
+        "downloads": downloads,
     }
 
 
