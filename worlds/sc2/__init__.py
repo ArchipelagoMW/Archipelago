@@ -323,12 +323,12 @@ def flag_start_inventory(world: SC2World, item_list: List[FilterItem]) -> None:
             starter_unit = StarterUnit.option_any_starter_unit
 
     if starter_unit != StarterUnit.option_off:
-        resolve_start_unit(world, item_list, starter_unit)
+        flag_start_unit(world, item_list, starter_unit)
     
-    resolve_start_abilities(world, item_list)
+    flag_start_abilities(world, item_list)
 
 
-def resolve_start_unit(world: SC2World, item_list: List[FilterItem], starter_unit: int) -> None:
+def flag_start_unit(world: SC2World, item_list: List[FilterItem], starter_unit: int) -> None:
     first_mission = get_first_mission(world.mission_req_table)
     first_race = first_mission.race
 
@@ -413,7 +413,7 @@ def resolve_start_unit(world: SC2World, item_list: List[FilterItem], starter_uni
                 logger.warning(f"Tried and failed to add {ItemNames.LIBERATOR_RAID_ARTILLERY} to the start inventory because it was excluded or plando'd")
 
 
-def resolve_start_abilities(world: SC2World, item_list: List[FilterItem]) -> None:
+def flag_start_abilities(world: SC2World, item_list: List[FilterItem]) -> None:
     starter_abilities = world.options.start_primary_abilities
     if not starter_abilities:
         return
