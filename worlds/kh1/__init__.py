@@ -175,7 +175,7 @@ class KH1World(World):
         fillers.update(get_items_by_category("Camping", disclude))
         fillers.update(get_items_by_category("Stat Ups", disclude))
         weights = [data.weight for data in fillers.values()]
-        return self.multiworld.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
+        return self.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
 
     def fill_slot_data(self) -> dict:
         if self.options.goal.current_key == "super_boss_hunt":
