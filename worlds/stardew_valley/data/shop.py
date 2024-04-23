@@ -14,3 +14,4 @@ class ShopSource(ItemSource):
 
     def __post_init__(self):
         assert self.money_price or self.items_price, "At least money price or items price need to be defined."
+        assert self.items_price is None or type(self.items_price) != str, "Items price should be a tuple."
