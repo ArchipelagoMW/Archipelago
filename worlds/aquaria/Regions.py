@@ -36,14 +36,8 @@ def _has_li(state, player: int) -> bool:
 
 def _has_damaging_item(state, player: int) -> bool:
     """`player` in `state` has the shield song item"""
-    return (state.has("Energy form", player) or
-            state.has("Nature form", player) or
-            state.has("Beast form", player) or
-            state.has("Li and Li song", player) or
-            state.has("Baby nautilus", player) or
-            state.has("Baby piranha", player) or
-            state.has("Baby blaster", player)
-            )
+    return state.has_any({"Energy form",  "Nature form", "Beast form", "Li and Li song", "Baby nautilus",
+                         "Baby piranha", "Baby blaster"}, player)
 
 
 def _has_shield_song(state, player: int) -> bool:
