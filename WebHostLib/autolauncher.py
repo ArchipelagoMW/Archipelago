@@ -73,7 +73,18 @@ def autohost(config: dict):
                     # Command gets deleted by ponyorm Cascade Delete, as Room is Required
                 if rooms or seeds or slots:
                     logging.info(f"{rooms} Rooms, {seeds} Seeds and {slots} Slots have been deleted.")
+                if config["CHECK_DATA_PACKAGE_CHECKSUM_ON_STARTUP"]:
+                    logging.info("Checking for Data Package Checksum integrity")
+                    from worlds.AutoWorld import data_package_checksum
+                    with db_session:
+                        for data_package in GameDataPackage.select():
+                            data = restricted_loads(data_package.data)
+                            del data["checksum"]
+                            if data_package.checksum != data_package_checksum(data):
+                                logging.warning(f"Deleting mismatching checksum datapackage {data_package.checksum}.")
+                                data_package.delete()
                 run_guardian()
+                logging.info("Starting Autohost.")
                 while 1:
                     time.sleep(0.1)
                     with db_session:
@@ -202,6 +213,6 @@ def run_guardian():
             guardian = threading.Thread(name="Guardian", target=guard)
 
 
-from .models import Room, Generation, STATE_QUEUED, STATE_STARTED, STATE_ERROR, db, Seed, Slot
+from .models import Room, Generation, STATE_QUEUED, STATE_STARTED, STATE_ERROR, db, Seed, Slot, GameDataPackage
 from .customserver import run_server_process, get_static_server_data
 from .generate import gen_game

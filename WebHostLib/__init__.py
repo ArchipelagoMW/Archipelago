@@ -38,6 +38,7 @@ app.config["JOB_THRESHOLD"] = 1
 # after what time in seconds should generation be aborted, freeing the queue slot. Can be set to None to disable.
 app.config["JOB_TIME"] = 600
 app.config['SESSION_PERMANENT'] = True
+app.config["CHECK_DATA_PACKAGE_CHECKSUM_ON_STARTUP"] = False
 
 # waitress uses one thread for I/O, these are for processing of views that then get sent
 # archipelago.gg uses gunicorn + nginx; ignoring this option
