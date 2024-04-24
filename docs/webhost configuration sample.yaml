@@ -48,6 +48,10 @@
 # TODO
 #JSON_AS_ASCII: false
 
+# Performs a check on the database during startup for any data packages with mismatched checksums and clears
+# them from the database automatically.
+#CHECK_DATA_PACKAGE_CHECKSUM_ON_STARTUP: false
+
 # Host Address.  This is the address encoded into the patch that will be used for client auto-connect.
 #HOST_ADDRESS: archipelago.gg
 
