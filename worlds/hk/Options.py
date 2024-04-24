@@ -409,6 +409,16 @@ class Goal(Choice):
     default = 0
 
 
+class GrubHuntGoal(NamedRange):
+    """The amount of grubs required to finish Grub Hunt.
+    On 'All' any grubs from item links replacements etc. will be counted"""
+    display_name = "Grub Hunt Goal"
+    range_start = 1
+    range_end = 46
+    special_range_names = {"all": 0}
+    default = 46
+
+
 class WhitePalace(Choice):
     """
     Whether or not to include White Palace or not.  Note: Even if excluded, the King Fragment check may still be
@@ -523,7 +533,7 @@ hollow_knight_options: typing.Dict[str, type(Option)] = {
     **{
         option.__name__: option
         for option in (
-            StartLocation, Goal, WhitePalace, ExtraPlatforms, AddUnshuffledLocations, StartingGeo,
+            StartLocation, Goal, GrubHuntGoal, WhitePalace, ExtraPlatforms, AddUnshuffledLocations, StartingGeo,
             DeathLink, DeathLinkShade, DeathLinkBreaksFragileCharms,
             MinimumGeoPrice, MaximumGeoPrice,
             MinimumGrubPrice, MaximumGrubPrice,

@@ -444,7 +444,11 @@ class HKWorld(World):
         elif goal == Goal.option_godhome_flower:
             multiworld.completion_condition[player] = lambda state: state.count("Godhome_Flower_Quest", player)
         elif goal == Goal.option_grub_hunt:
-            pass  # will set in pre_fill()
+            if self.options.GrubHuntGoal == "all":
+                pass  # will set in pre_fill()
+            else:
+                self.grub_count = self.options.GrubHuntGoal.value
+                world.completion_condition[player] = lambda state: state.has("Grub", player, self.grub_count)
         else:
             # Any goal
             multiworld.completion_condition[player] = lambda state: _hk_can_beat_thk(state, player) or _hk_can_beat_radiance(state, player)
@@ -452,7 +456,7 @@ class HKWorld(World):
         set_rules(self)
 
     def pre_fill(self):
-        if self.options.Goal == "grub_hunt":
+        if self.options.Goal == "grub_hunt" and self.grub_count == 0:
             from collections import Counter
             relevant_groups = self.multiworld.get_player_groups(self.player)
             grub_player_count = Counter()
