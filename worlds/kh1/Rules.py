@@ -71,7 +71,7 @@ def has_all_magic_lvx(state: CollectionState, player: int, level) -> bool:
         and state.count("Progressive Stop", player) >= level
 
 def has_offensive_magic(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Fire", player) or state.has("Progressive Blizzard", player) or state.has("Progressive Thunder", player) or state.has("Progressive Gravity", player) or state.has("Progressive Stop", player)
+    return state.has_any({"Progressive Fire", "Progressive Blizzard", "Progressive Thunder", "Progressive Gravity", "Progressive Stop"}, player)
 
 def has_reports(state: CollectionState, player: int, required_reports: int) -> bool:
     reports_acquired = 0
