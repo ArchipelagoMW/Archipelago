@@ -175,7 +175,7 @@ class KH1Context(CommonContext):
                         + str(locationID))
                         f.close()
 
-    def on_deathlink(self, data: typing.Dict[str, typing.Any]):
+    def on_deathlink(self, data: dict[str, object]):
         self.last_death_link = max(data["time"], self.last_death_link)
         text = data.get("cause", "")
         if text:
