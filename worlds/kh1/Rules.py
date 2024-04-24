@@ -59,8 +59,7 @@ def has_torn_pages(state: CollectionState, player: int, pages_required: int) -> 
     return pages_available >= pages_required
 
 def has_all_arts(state: CollectionState, player: int) -> bool:
-    return state.has("Fire Arts", player) and state.has("Blizzard Arts", player) and state.has("Thunder Arts", player) \
-         and state.has("Cure Arts", player) and state.has("Gravity Arts", player) and state.has("Stop Arts", player) and state.has("Aero Arts", player)
+    return state.has_all({"Fire Arts", "Blizzard Arts", "Thunder Arts", "Cure Arts", "Gravity Arts", "Stop Arts", "Aero Arts"}, player)
 
 def has_all_summons(state: CollectionState, player: int) -> bool:
     return state.has("Simba", player) and state.has("Bambi", player) and state.has("Genie", player) \
