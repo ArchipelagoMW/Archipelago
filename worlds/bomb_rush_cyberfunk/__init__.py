@@ -12,7 +12,7 @@ class BombRushCyberfunkWeb(WebWorld):
     theme = "ocean"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guite to setting up Bomb Rush Cyberfunk randomizer and connecting to an Archipelago Multiworld",
+        "A guide to setting up Bomb Rush Cyberfunk randomizer and connecting to an Archipelago Multiworld",
         "English",
         "setup_en.md",
         "setup/en",
