@@ -76,7 +76,7 @@ class MMXWorld(World):
         
         total_required_locations = 47
         if self.options.pickupsanity:
-            total_required_locations += 25
+            total_required_locations += 26
 
         # Add levels into the pool
         start_inventory = self.multiworld.start_inventory[self.player].value.copy()
@@ -91,15 +91,18 @@ class MMXWorld(World):
             ItemName.stage_storm_eagle,
         ]
         stage_selected = self.random.randint(0, 7)
-        for i in range(len(stage_list)):
-            if i == stage_selected:
-                if stage_list[i] in self.options.start_inventory_from_pool:
+        if any(stage in self.options.start_inventory_from_pool for stage in stage_list) or \
+           any(stage in start_inventory for stage in stage_list):
+            total_required_locations += 1
+            for i in range(len(stage_list)):
+                if stage_list[i] not in start_inventory:
                     itempool += [self.create_item(stage_list[i])]
-                    total_required_locations += 1
-                elif stage_list[i] not in start_inventory:
+        else:
+            for i in range(len(stage_list)):
+                if i == stage_selected:
                     self.multiworld.get_location(LocationName.intro_completed, self.player).place_locked_item(self.create_item(stage_list[i]))
-            else:
-                itempool += [self.create_item(stage_list[i])]
+                else:
+                    itempool += [self.create_item(stage_list[i])]
 
         if self.options.sigma_open == "multiworld":
             itempool += [self.create_item(ItemName.stage_sigma_fortress)]
