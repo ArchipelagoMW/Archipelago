@@ -57,6 +57,7 @@ location_id_to_level_id = {
     LocationName.storm_eagle_sub_tank:              [0x05, 0x004, 0x10],
     LocationName.storm_eagle_heart_tank:            [0x05, 0x002, 0x04],
     LocationName.storm_eagle_helmet:                [0x05, 0x003, 0x01],
+    LocationName.storm_eagle_1up_3:                 [0x05, 0x020, 0x1B],
     LocationName.storm_eagle_1up_1:                 [0x05, 0x020, 0x0E],
     LocationName.storm_eagle_1up_2:                 [0x05, 0x020, 0x0F],
     LocationName.storm_eagle_hp_1:                  [0x05, 0x020, 0x0B],

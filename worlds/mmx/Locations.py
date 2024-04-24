@@ -81,6 +81,7 @@ pickup_sanity = {
     LocationName.sting_chameleon_hp_1:      STARTING_ID + 0x0057,
     LocationName.storm_eagle_1up_1:         STARTING_ID + 0x0058,
     LocationName.storm_eagle_1up_2:         STARTING_ID + 0x0059,
+    LocationName.storm_eagle_1up_3:         STARTING_ID + 0x006B,
     LocationName.storm_eagle_hp_1:          STARTING_ID + 0x005A,
     LocationName.storm_eagle_hp_2:          STARTING_ID + 0x005B,
     LocationName.storm_eagle_hp_3:          STARTING_ID + 0x005C,

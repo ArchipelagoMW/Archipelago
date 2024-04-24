@@ -287,7 +287,7 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         add_location_to_region(multiworld, player, active_locations, RegionName.storm_eagle_airport, LocationName.storm_eagle_hp_1)
         add_location_to_region(multiworld, player, active_locations, RegionName.storm_eagle_airport, LocationName.storm_eagle_hp_2)
         add_location_to_region(multiworld, player, active_locations, RegionName.storm_eagle_airport, LocationName.storm_eagle_hp_3)
-        add_location_to_region(multiworld, player, active_locations, RegionName.storm_eagle_airport, LocationName.storm_eagle_1up_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.storm_eagle_airport, LocationName.storm_eagle_1up_3)
         add_location_to_region(multiworld, player, active_locations, RegionName.storm_eagle_metal, LocationName.storm_eagle_1up_1)
         add_location_to_region(multiworld, player, active_locations, RegionName.storm_eagle_metal, LocationName.storm_eagle_1up_2)
         #add_location_to_region(multiworld, player, active_locations, RegionName.storm_eagle_aircraft, LocationName.storm_eagle_hp_4)
