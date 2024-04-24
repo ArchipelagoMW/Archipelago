@@ -741,7 +741,7 @@ class MineralsPerItem(Range):
     """
     display_name = "Minerals Per Item"
     range_start = 0
-    range_end = 500
+    range_end = 200
     default = 25
 
 
@@ -751,7 +751,7 @@ class VespenePerItem(Range):
     """
     display_name = "Vespene Per Item"
     range_start = 0
-    range_end = 500
+    range_end = 200
     default = 25
 
 
@@ -761,8 +761,8 @@ class StartingSupplyPerItem(Range):
     """
     display_name = "Starting Supply Per Item"
     range_start = 0
-    range_end = 200
-    default = 5
+    range_end = 8
+    default = 2
 
 
 @dataclass
