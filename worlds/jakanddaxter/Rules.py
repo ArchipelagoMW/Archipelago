@@ -37,9 +37,7 @@ def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int)
     sm_yellow_switch = Cells.to_ap_id(60)
     sm_fort_gate = Cells.to_ap_id(63)
     lt_end = Cells.to_ap_id(89)
-    gmc_blue_sage = Cells.to_ap_id(71)
-    gmc_red_sage = Cells.to_ap_id(72)
-    gmc_yellow_sage = Cells.to_ap_id(73)
+    gmc_rby_sages = {Cells.to_ap_id(k) for k in {71, 72, 73}}
     gmc_green_sage = Cells.to_ap_id(70)
 
     # Start connecting regions and set their access rules.
@@ -190,9 +188,7 @@ def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int)
     connect_region_to_sub(multiworld, player,
                           Jak1Level.GOL_AND_MAIAS_CITADEL,
                           Jak1SubLevel.GOL_AND_MAIAS_CITADEL_ROTATING_TOWER,
-                          lambda state: state.has(item_table[gmc_blue_sage], player)
-                          and state.has(item_table[gmc_red_sage], player)
-                          and state.has(item_table[gmc_yellow_sage], player))
+                          lambda state: has_count_of(gmc_rby_sages, 3, player, state))
 
     connect_subregions(multiworld, player,
                        Jak1SubLevel.GOL_AND_MAIAS_CITADEL_ROTATING_TOWER,
