@@ -6,7 +6,7 @@ Description: Main module for Aquaria game multiworld randomizer
 
 from typing import List, Dict, ClassVar, Any
 from ..AutoWorld import World, WebWorld
-from BaseClasses import Tutorial, MultiWorld, ItemClassification, LocationProgressType
+from BaseClasses import Tutorial, MultiWorld, ItemClassification
 from .Items import item_table, AquariaItem, ItemType, ItemGroup
 from .Locations import location_table
 from .Options import AquariaOptions
