@@ -45,9 +45,6 @@
 # TODO
 #CACHE_TYPE: "simple"
 
-# TODO
-#JSON_AS_ASCII: false
-
 # Host Address.  This is the address encoded into the patch that will be used for client auto-connect.
 #HOST_ADDRESS: archipelago.gg
 
