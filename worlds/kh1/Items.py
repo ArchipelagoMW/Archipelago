@@ -26,7 +26,7 @@ def get_items_by_category(category: str, disclude: list) -> Dict[str, KH1ItemDat
 
 
 item_table: Dict[str, KH1ItemData] = {
-    "Victory":                           KH1ItemData("Victory",          code = 264_0000, classification = ItemClassification.progression,  max_quantity = 1, weight = 10),
+    "Victory":                           KH1ItemData("VIC",              code = 264_0000, classification = ItemClassification.progression,  max_quantity = 1, weight = 10),
     "Potion":                            KH1ItemData("Item",             code = 264_1001, classification = ItemClassification.filler,                         weight = 10),
     "Hi-Potion":                         KH1ItemData("Item",             code = 264_1002, classification = ItemClassification.filler,                         weight = 10),
     "Ether":                             KH1ItemData("Item",             code = 264_1003, classification = ItemClassification.filler,                         weight = 10),
@@ -478,7 +478,7 @@ item_table: Dict[str, KH1ItemData] = {
     "Encounter Plus":                    KH1ItemData("Abilities",        code = 264_3061, classification = ItemClassification.useful,      max_quantity = 1,  weight = 10),
     "Leaf Bracer":                       KH1ItemData("Abilities",        code = 264_3062, classification = ItemClassification.useful,      max_quantity = 1,  weight = 10),
    #"Evolution":                         KH1ItemData("Abilities",        code = 264_3063, classification = ItemClassification.useful,      max_quantity = 1,  weight = 10),
-    "EXP Zero":                          KH1ItemData("EXP Zero",         code = 264_3064, classification = ItemClassification.useful,      max_quantity = 1,  weight = 10),
+    "EXP Zero":                          KH1ItemData("XPZ",              code = 264_3064, classification = ItemClassification.useful,      max_quantity = 1,  weight = 10),
     "Combo Master":                      KH1ItemData("Abilities",        code = 264_3065, classification = ItemClassification.useful,      max_quantity = 1,  weight = 10),
     "Max HP Increase":                   KH1ItemData("Level Up",         code = 264_4001, classification = ItemClassification.useful,      max_quantity = 15, weight = 10),
     "Max MP Increase":                   KH1ItemData("Level Up",         code = 264_4002, classification = ItemClassification.useful,      max_quantity = 15, weight = 10),
