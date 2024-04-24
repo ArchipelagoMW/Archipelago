@@ -96,7 +96,7 @@ class KH1World(World):
         if self.options.puppies == "triplets":
             non_filler_item_categories.append("Puppies TRP")
         if self.options.puppies == "individual":
-           non_filler_item_categories.append("Puppies IND")
+            non_filler_item_categories.append("Puppies IND")
         if self.options.atlantica:
             non_filler_item_categories.append("AL")
         if self.options.hundred_acre_wood:
