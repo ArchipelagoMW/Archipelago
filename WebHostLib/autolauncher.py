@@ -79,6 +79,10 @@ def autohost(config: dict):
                     with db_session:
                         for data_package in GameDataPackage.select():
                             data = restricted_loads(data_package.data)
+                            if data["checksum"] != data_package.checksum:
+                                logging.warning(f"Deleting mismatching checksum datapackage {data_package.checksum}.")
+                                data_package.delete()
+                                continue
                             del data["checksum"]
                             if data_package.checksum != data_package_checksum(data):
                                 logging.warning(f"Deleting mismatching checksum datapackage {data_package.checksum}.")
