@@ -102,6 +102,8 @@ location_dependencies: Dict[str, List[str]] = {
     NPCRewardName.TILE_IN_CHILDS_SECRET_CAVE: [NPCName.BOY_CAVE, ItemName.APASS],
     NPCRewardName.RECOVERY_SWORD_CRYSTAL: [NPCName.IVY_RECOVERY_SWORD, NPCName.BOY_CAVE, ItemName.APASS],
     NPCRewardName.VILLAGE_CHIEF: [NPCName.VILLAGE_CHIEF, NPCName.OLD_WOMAN],
+    LairName.OLD_MAN: [NPCName.LISA, ItemName.DREAMROD],
+    ChestName.UNDERGROUND_CASTLE_LEOS_BRUSH: [NPCName.LISA, ItemName.DREAMROD],
     # Act 2 - Greenwood
     NPCRewardName.REDHOT_MIRROR_BIRD: [NPCName.BIRD_RED_HOT_MIRROR],
     NPCRewardName.MAGIC_BELL_CRYSTAL: [*emblems_table.keys(), NPCName.DEER_MAGIC_BELL, NPCName.CROCODILE3],

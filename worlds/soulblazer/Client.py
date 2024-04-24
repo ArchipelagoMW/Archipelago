@@ -250,6 +250,7 @@ class SoulBlazerSNIClient(SNIClient):
                 item_name = encode_string(ctx.item_names[send.item.item], Addresses.TX_NAME_SIZE)
                 snes_buffered_write(ctx, Addresses.TX_ADDRESSEE, player_name)
                 snes_buffered_write(ctx, Addresses.TX_ITEM_NAME, item_name)
+                await snes_flush_writes(ctx)
                 # Write to Status last to ensure all the data is placed before signaling ready.
                 snes_buffered_write(ctx, Addresses.TX_STATUS, bytes([0x02]))
                 await snes_flush_writes(ctx)
@@ -260,50 +261,57 @@ class SoulBlazerSNIClient(SNIClient):
             async_start(ctx.send_msgs([{"cmd": "Get", "locations": [f"_read_slot_data_{ctx.slot}"]}]))
             return
 
-        # TODO: also prevent receiving NPC unlocks when in a boss room to prevent the boss from regenerating to full health. Can happen either in the ROM or client, whichever is easiest to implement.
+        # Only ever prepare to send things when the game is ready to receive first since otherwise the index might be out of sync.
+        rx_status = await snes_read(ctx, Addresses.RX_STATUS, 1)
+        if rx_status is None or rx_status[0] != 0x01:
+            return
+
+        # Game is ready to receive and receive index is in a stable state.
         recv_bytes = await snes_read(ctx, Addresses.RECEIVE_COUNT, 2)
         if recv_bytes is None:
             return
 
         recv_index = int.from_bytes(recv_bytes, "little")
+        # Check if there are items that the Client knows about that the game does not have yet.
         if recv_index < len(ctx.items_received):
             item = ctx.items_received[recv_index]
-            rx_status = await snes_read(ctx, Addresses.RX_STATUS, 1)
-            if rx_status is not None and rx_status[0] == 0x01:
 
-                if await self.was_obtained_locally(ctx, item):
-                    # Item was already obtained locally, but receive count was not incremented.
-                    # snes_logger.info(
-                    #    f"Item was obtained locally. Incrementing receive count from {recv_index} to {recv_index+1}"
-                    # )
-                    recv_index += 1
-                    snes_buffered_write(ctx, Addresses.RECEIVE_COUNT, recv_index.to_bytes(2, "little"))
-                    await snes_flush_writes(ctx)
-                    return
-
-                if await self.is_in_excluded_zone(ctx):
-                    return
-
-                # TODO: Should we also mark the location as checked if it was in our world and we were getting it again from the server?
-                # This would remove the need to recheck things in case of resetting without saving, but you would lose out on lair monster exp.
-                player_name = encode_string(ctx.player_names[item.player], Addresses.RX_SENDER_SIZE)
-                item_data = self.item_data_for_code[item.item]
-                operand = item_data.operand_for_id
-                if item_data.id == ItemID.GEMS:
-                    operand = ctx.gem_data.get(f"{item.item}:{item.location}:{item.player}", operand)
-                if item_data.id == ItemID.EXP:
-                    operand = ctx.exp_data.get(f"{item.item}:{item.location}:{item.player}", operand)
-
-                snes_buffered_write(ctx, Addresses.RX_INCREMENT, bytes([0x01]))
-                snes_buffered_write(ctx, Addresses.RX_ID, item_data.id.to_bytes(1, "little"))
-                snes_buffered_write(ctx, Addresses.RX_OPERAND, operand.to_bytes(2, "little"))
-                snes_buffered_write(ctx, Addresses.RX_SENDER, player_name)
-                # Write to Status last to ensure all the data is placed before signaling ready.
-                snes_buffered_write(ctx, Addresses.RX_STATUS, bytes([0x02]))
+            if await self.was_obtained_locally(ctx, item):
+                # Item was already obtained locally, but receive count was not incremented.
+                # snes_logger.info(
+                #    f"Item was obtained locally. Incrementing receive count from {recv_index} to {recv_index+1}"
+                # )
+                recv_index += 1
+                snes_buffered_write(ctx, Addresses.RECEIVE_COUNT, recv_index.to_bytes(2, "little"))
                 await snes_flush_writes(ctx)
+                return
 
-                if item.player == ctx.slot:
-                    ctx.locations_checked.add(item.location)
+            if await self.is_in_excluded_zone(ctx):
+                return
+
+            # TODO: also prevent receiving NPC unlocks when in a boss room to prevent the boss from regenerating to full health. Can happen either in the ROM or client, whichever is easiest to implement.
+
+            # TODO: Should we also mark the location as checked in game if it was in our world and we were getting it again from the server?
+            # This would remove the need to recheck things in case of resetting without saving, but you would lose out on lair monster exp.
+            player_name = encode_string(ctx.player_names[item.player], Addresses.RX_SENDER_SIZE)
+            item_data = self.item_data_for_code[item.item]
+            operand = item_data.operand_for_id
+            if item_data.id == ItemID.GEMS:
+                operand = ctx.gem_data.get(f"{item.item}:{item.location}:{item.player}", operand)
+            if item_data.id == ItemID.EXP:
+                operand = ctx.exp_data.get(f"{item.item}:{item.location}:{item.player}", operand)
+
+            snes_buffered_write(ctx, Addresses.RX_INCREMENT, bytes([0x01]))
+            snes_buffered_write(ctx, Addresses.RX_ID, item_data.id.to_bytes(1, "little"))
+            snes_buffered_write(ctx, Addresses.RX_OPERAND, operand.to_bytes(2, "little"))
+            snes_buffered_write(ctx, Addresses.RX_SENDER, player_name)
+            await snes_flush_writes(ctx)
+            # Write to Status last to ensure all the data is placed before signaling ready.
+            snes_buffered_write(ctx, Addresses.RX_STATUS, bytes([0x02]))
+            await snes_flush_writes(ctx)
+
+            if item.player == ctx.slot:
+                ctx.locations_checked.add(item.location)
 
 
 excluded_from_receiving = {
