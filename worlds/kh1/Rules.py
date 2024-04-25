@@ -37,13 +37,16 @@ def has_postcards(state: CollectionState, player: int, postcards_required: int) 
     return postcards_available >= postcards_required
 
 def has_puppies(state: CollectionState, player: int, puppies_required: int) -> bool:
+    puppies_available = 0
+    for i in range(1,100):
+        if state.has("Puppy " + str(i).rjust(2,"0"), player):
+            puppies_available = puppies_available + 1
+    for i in range(1,34):
+        if state.has("Puppies " + str(3*(i-1)+1).rjust(2, "0") + "-" + str(3*(i-1)+3).rjust(2, "0"), player):
+            puppies_available = puppies_available + 3
     if state.has("All Puppies", player):
-        return True
-    if state.has_group("Puppies TRP", player, -(puppies_required//-3)):
-        return True
-    if state.has_group("Puppies IND", player, puppies_required):
-        return True
-    return False
+        puppies_available = puppies_available + 99
+    return puppies_available >= puppies_required
 
 def has_torn_pages(state: CollectionState, player: int, pages_required: int) -> bool:
     pages_available = 0

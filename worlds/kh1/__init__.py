@@ -90,24 +90,27 @@ class KH1World(World):
             total_locations = total_locations - 5
         elif self.options.goal.current_key != "final_ansem" and self.options.require_final_ansem:
             total_locations = total_locations - 1
-        non_filler_item_categories = ["Key", "Magic", "Worlds", "Trinities", "Cups", "Summons", "Abilities", "Shared Abilities", "Keyblades", "Accessory", "Weapons"]
-        if self.options.puppies == "full":
-            non_filler_item_categories.append("Puppies ALL")
-        if self.options.puppies == "triplets":
-            non_filler_item_categories.append("Puppies TRP")
-        if self.options.puppies == "individual":
-            non_filler_item_categories.append("Puppies IND")
-        if self.options.atlantica:
-            non_filler_item_categories.append("AL")
+        non_filler_item_categories = ["Key", "Magic", "Worlds", "Trinities", "Cups", "Summons", "Abilities", "Shared Abilities", "Keyblades", "Accessory", "Weapons", "Puppies"]
         if self.options.hundred_acre_wood:
-            non_filler_item_categories.append("HAW")
+            non_filler_item_categories.append("Torn Pages")
         for name, data in item_table.items():
             quantity = data.max_quantity
 
             # Ignore filler, it will be added in a later stage.
             if data.category not in non_filler_item_categories:
                 continue
-            item_pool += [self.create_item(name) for _ in range(0, quantity)]
+            if data.category == "Puppies":
+                if self.options.puppies == "triplets" and "-" in name:
+                    item_pool += [self.create_item(name) for _ in range(0, quantity)]
+                if self.options.puppies == "individual" and "Puppy" in name:
+                    item_pool += [self.create_item(name) for _ in range(0, quantity)]
+                if self.options.puppies == "full" and name == "All Puppies":
+                    item_pool += [self.create_item(name) for _ in range(0, quantity)]
+            elif name == "Atlantica" or name == "Mermaid Kick":
+                if self.options.atlantica:
+                    item_pool += [self.create_item(name) for _ in range(0, quantity)]
+            else:
+                item_pool += [self.create_item(name) for _ in range(0, quantity)]
         
         reports_in_pool = max(int(self.options.required_reports), int(self.options.reports_in_pool))
         if self.options.goal.current_key == "super_boss_hunt":
