@@ -1,5 +1,4 @@
-from BaseClasses import CollectionState, MultiWorld, LocationProgressType
-from .Locations import get_locations_by_category
+from BaseClasses import CollectionState, MultiWorld
 
 
 def has_x_worlds(state: CollectionState, player: int, num_of_worlds) -> bool:
