@@ -27,6 +27,7 @@ if TYPE_CHECKING:
 
 snes_logger = logging.getLogger("SNES")
 
+STATUS_DELAY_FRAMES = 0x03
 
 class ItemSend(NamedTuple):
     receiving: int
@@ -244,7 +245,7 @@ class SoulBlazerSNIClient(SNIClient):
 
         if bool(ctx.item_send_queue):
             tx_status = await snes_read(ctx, Addresses.TX_STATUS, 1)
-            if tx_status is not None and tx_status[0] == 0x01:
+            if tx_status is not None and tx_status[0] == STATUS_DELAY_FRAMES:
                 send = ctx.item_send_queue.pop(0)
                 player_name = encode_string(ctx.player_names[send.receiving], Addresses.TX_ADDRESSEE_SIZE)
                 item_name = encode_string(ctx.item_names[send.item.item], Addresses.TX_NAME_SIZE)
@@ -252,7 +253,7 @@ class SoulBlazerSNIClient(SNIClient):
                 snes_buffered_write(ctx, Addresses.TX_ITEM_NAME, item_name)
                 await snes_flush_writes(ctx)
                 # Write to Status last to ensure all the data is placed before signaling ready.
-                snes_buffered_write(ctx, Addresses.TX_STATUS, bytes([0x02]))
+                snes_buffered_write(ctx, Addresses.TX_STATUS, bytes([STATUS_DELAY_FRAMES + 1]))
                 await snes_flush_writes(ctx)
 
         # Receive items if possible
@@ -263,7 +264,7 @@ class SoulBlazerSNIClient(SNIClient):
 
         # Only ever prepare to send things when the game is ready to receive first since otherwise the index might be out of sync.
         rx_status = await snes_read(ctx, Addresses.RX_STATUS, 1)
-        if rx_status is None or rx_status[0] != 0x01:
+        if rx_status is None or rx_status[0] != STATUS_DELAY_FRAMES:
             return
 
         # Game is ready to receive and receive index is in a stable state.
@@ -307,7 +308,7 @@ class SoulBlazerSNIClient(SNIClient):
             snes_buffered_write(ctx, Addresses.RX_SENDER, player_name)
             await snes_flush_writes(ctx)
             # Write to Status last to ensure all the data is placed before signaling ready.
-            snes_buffered_write(ctx, Addresses.RX_STATUS, bytes([0x02]))
+            snes_buffered_write(ctx, Addresses.RX_STATUS, bytes([STATUS_DELAY_FRAMES + 1]))
             await snes_flush_writes(ctx)
 
             if item.player == ctx.slot:
