@@ -972,7 +972,7 @@ class Region:
     def add_event(self, location_name: str, item_name: Optional[str] = None,
                   rule: Optional[Callable[[CollectionState], bool]] = None) -> Item:
         """
-        Adds an event location/item pair to a region.
+        Adds an event location/item pair to the region.
 
         :param location_name: Name for the event location.
         :param item_name: Name for the event item. If not provided, defaults to location_name.
