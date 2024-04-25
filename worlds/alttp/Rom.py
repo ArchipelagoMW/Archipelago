@@ -1859,7 +1859,7 @@ def apply_oof_sfx(rom, oof: str):
     rom.write_bytes(0x12803A, oof_bytes)
     rom.write_bytes(0x12803A + len(oof_bytes), [0xEB, 0xEB])
 
-	#Enemizer patch: prevent Enemizer from overwriting $3188 in SPC memory with an unused sound effect ("WHAT")
+    # Enemizer patch: prevent Enemizer from overwriting $3188 in SPC memory with an unused sound effect ("WHAT")
     rom.write_bytes(0x13000D, [0x00, 0x00, 0x00, 0x08])
 
 
@@ -3021,7 +3021,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options = Utils.get_options()
+    options = Utils.get_settings()
     if not file_name:
         file_name = options["lttp_options"]["rom_file"]
     if not os.path.exists(file_name):
