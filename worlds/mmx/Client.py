@@ -74,6 +74,7 @@ BOSS_MEDAL = [0xFF, 0xFF, 0x02, 0xFF, 0x0C, 0x0A, 0x00, 0xFF,
 
 class MMXSNIClient(SNIClient):
     game = "Mega Man X"
+    patch_suffix = ".apmmx"
 
     def __init__(self):
         super().__init__()
