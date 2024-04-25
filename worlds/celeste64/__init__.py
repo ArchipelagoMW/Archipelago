@@ -43,7 +43,7 @@ class Celeste64World(World):
 
     def create_item(self, name: str) -> Celeste64Item:
         # Only make required amount of strawberries be Progression
-        if getattr(self, "options", None) and name == ItemName.strawberry:
+        if getattr(self, "strawberries_required", None) and name == ItemName.strawberry:
             classification: ItemClassification = ItemClassification.filler
             self.prog_strawberries = getattr(self, "prog_strawberries", 0)
             if self.prog_strawberries < self.strawberries_required:
