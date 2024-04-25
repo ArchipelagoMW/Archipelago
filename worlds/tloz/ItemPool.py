@@ -87,14 +87,13 @@ def get_pool_core(world):
     minor_items = dict(minor_dungeon_items)
 
     # Guaranteed Shop Items
-    guaranteed_shop_items = ["Small Key", "Bomb", "Water of Life (Red)", "Arrow"]
-#    print("DEBUG: list is ", guaranteed_shop_items, "and len is ", len(guaranteed_shop_items))
-    if (world.options.ArrowLocation == ArrowLocation.option_anywhere) and ("Arrow" in guaranteed_shop_items):
-        guaranteed_shop_items.remove("Arrow")
-#    print("DEBUG: new list is ", guaranteed_shop_items, "and len is ", len(guaranteed_shop_items))
-    reserved_store_slots = random.sample(shop_locations[0:9], len(guaranteed_shop_items))
-#    print("DEBUG: Slots reserved: ", len(reserved_store_slots))
-    for location, item in zip(reserved_store_slots, guaranteed_shop_items):
+    arrow = "Arrow"
+    copy_shop_items = guaranteed_shop_items.copy()
+    if (world.options.ArrowLocation == ArrowLocation.option_anywhere) and (arrow in copy_shop_items):
+        copy_shop_items.remove(arrow)
+        pool.append(arrow)
+    reserved_store_slots = random.sample(shop_locations[0:9], len(copy_shop_items))
+    for location, item in zip(reserved_store_slots, copy_shop_items):
         placed_items[location] = item
 
     # Starting Weapon
