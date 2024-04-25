@@ -73,11 +73,7 @@ def has_offensive_magic(state: CollectionState, player: int) -> bool:
     return state.has_any({"Progressive Fire", "Progressive Blizzard", "Progressive Thunder", "Progressive Gravity", "Progressive Stop"}, player)
 
 def has_reports(state: CollectionState, player: int, required_reports: int) -> bool:
-    reports_acquired = 0
-    for x in range(13):
-        if has_item(state, player, "Ansem's Report " + str(x+1)):
-            reports_acquired = reports_acquired + 1
-    return reports_acquired >= required_reports
+    return state.has_group("Unlock", player, required_reports)
 
 def set_rules(multiworld: MultiWorld, player: int, options, required_reports):
     #Location rules.
