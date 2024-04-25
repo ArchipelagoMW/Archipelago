@@ -24,6 +24,7 @@ from ..strings.quality_names import ForageQuality
 from ..strings.region_names import Region
 from ..strings.skill_names import Skill, all_mod_skills
 from ..strings.tool_names import ToolMaterial, Tool
+from ..strings.wallet_item_names import Wallet
 
 fishing_regions = (Region.beach, Region.town, Region.forest, Region.mountain, Region.island_south, Region.island_west)
 vanilla_skill_items = ("Farming Level", "Mining Level", "Foraging Level", "Fishing Level", "Combat Level")
@@ -114,6 +115,11 @@ CombatLogicMixin, CropLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
             return And(*[self.logic.received(skill, 10) for skill in skills_items])
 
         return self.has_total_level(50)
+
+    def can_enter_mastery_cave(self) -> StardewRule:
+        if self.options.skill_progression == options.SkillProgression.option_progressive_with_masteries:
+            return self.logic.received(Wallet.mastery_of_the_five_ways)
+        return self.has_all_skills_maxed()
 
     @cached_property
     def can_get_farming_xp(self) -> StardewRule:

@@ -239,7 +239,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_entrance_rule(multiworld, player, Entrance.farmhouse_cooking, logic.cooking.can_cook_in_kitchen)
     set_entrance_rule(multiworld, player, Entrance.shipping, logic.shipping.can_use_shipping_bin)
     set_entrance_rule(multiworld, player, Entrance.watch_queen_of_sauce, logic.action.can_watch(Channel.queen_of_sauce))
-    set_entrance_rule(multiworld, player, Entrance.forest_to_mastery_cave, logic.skill.has_all_skills_maxed())
+    set_entrance_rule(multiworld, player, Entrance.forest_to_mastery_cave, logic.skill.can_enter_mastery_cave())
 
 
 def set_dangerous_mine_rules(logic, multiworld, player, world_options: StardewValleyOptions):
