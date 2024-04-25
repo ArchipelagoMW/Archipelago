@@ -26,7 +26,7 @@ class StrawberriesRequiredPercentage(Range):
 
 
 class LogicDifficulty(Choice):
-    """Whether chatting with your friends grants location checks"""
+    """Whether the logic expects you to play the intended way, or to be able to use advanced tricks and skips"""
     display_name = "Logic Difficulty"
     option_standard = 0
     option_hard = 1
