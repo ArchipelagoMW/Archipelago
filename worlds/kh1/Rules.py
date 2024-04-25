@@ -19,10 +19,10 @@ def can_glide(state: CollectionState, player: int) -> bool:
 def has_emblems(state: CollectionState, player: int) -> bool:
     return state.has("Theon Vol. 6", player) and state.has("Red Trinity", player) and state.has("Progressive Fire", player) and (state.has("Progressive Thunder", player) or state.has("High Jump", player) or can_glide(state, player)) and state.has("Hollow Bastion", player)
 
-def has_item(state: CollectionState, player: int, item) -> bool:
+def has_item(state: CollectionState, player: int, item: str) -> bool:
     return state.has(item, player)
 
-def has_at_least(state: CollectionState, player: int, item, x) -> bool:
+def has_at_least(state: CollectionState, player: int, item: str, x: int) -> bool:
     return state.count(item, player) >= x
 
 def has_postcards(state: CollectionState, player: int, postcards_required: int) -> bool:
