@@ -977,6 +977,7 @@ class Region:
         :param location_name: Name for the event location.
         :param item_name: Name for the event item. If not provided, defaults to location_name.
         :param rule: Callable to determine access for this event location within its region.
+        :return: The created Event Item
         """
         if item_name is None:
             item_name = location_name
