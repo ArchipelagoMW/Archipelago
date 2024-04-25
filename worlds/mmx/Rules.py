@@ -6,6 +6,7 @@ from .Names import LocationName, ItemName, RegionName, EventName
 def set_rules(world: MMXWorld):
     player = world.player
     multiworld = world.multiworld
+    jammed_buster = world.options.jammed_buster.value
 
     multiworld.completion_condition[player] = lambda state: state.has(ItemName.victory, player)
 
@@ -57,7 +58,7 @@ def set_rules(world: MMXWorld):
     
     # Sigma rules
     add_rule(multiworld.get_location(LocationName.sigma_fortress_4_sigma, player),
-             lambda state: state.has(ItemName.arms, player))
+             lambda state: state.has(ItemName.arms, player, jammed_buster + 1))
 
     # Chill Penguin collectibles
     set_rule(multiworld.get_location(LocationName.chill_penguin_heart_tank, player),
@@ -74,7 +75,7 @@ def set_rules(world: MMXWorld):
                  state.has(EventName.chill_penguin_clear, player) or
                  (
                     state.has(ItemName.chameleon_sting, player) and
-                    state.has(ItemName.arms, player) 
+                    state.has(ItemName.arms, player, jammed_buster + 1) 
                  )
              ))
     set_rule(multiworld.get_location(LocationName.flame_mammoth_sub_tank, player),
@@ -121,6 +122,7 @@ def set_rules(world: MMXWorld):
 def add_pickupsanity_logic(world):
     player = world.player
     multiworld = world.multiworld
+    jammed_buster = world.options.jammed_buster.value
 
     set_rule(multiworld.get_location(LocationName.chill_penguin_hp_1, player),
              lambda state: state.has(ItemName.fire_wave, player))
@@ -141,17 +143,17 @@ def add_pickupsanity_logic(world):
              lambda state: state.has(ItemName.boomerang_cutter, player))
     set_rule(multiworld.get_location(LocationName.sigma_fortress_3_hp_4, player),
              lambda state: (
-                 state.has(ItemName.arms, player) and
+                 state.has(ItemName.arms, player, jammed_buster + 1) and
                  state.has(ItemName.chameleon_sting, player)
              ))
     set_rule(multiworld.get_location(LocationName.sigma_fortress_3_energy_3, player),
              lambda state: (
-                 state.has(ItemName.arms, player) and
+                 state.has(ItemName.arms, player, jammed_buster + 1) and
                  state.has(ItemName.chameleon_sting, player)
              ))
     set_rule(multiworld.get_location(LocationName.sigma_fortress_3_1up, player),
              lambda state: (
-                 state.has(ItemName.arms, player) and
+                 state.has(ItemName.arms, player, jammed_buster + 1) and
                  (
                     state.has(ItemName.chameleon_sting, player) or
                     state.has(ItemName.shotgun_ice, player)
@@ -238,11 +240,12 @@ def add_boss_weakness_logic(world):
 def add_charged_shotgun_ice_logic(world):
     player = world.player
     multiworld = world.multiworld
+    jammed_buster = world.options.jammed_buster.value
 
     # Flame Mammoth collectibles
     add_rule(multiworld.get_location(LocationName.flame_mammoth_sub_tank, player),
              lambda state: (
-                state.has(ItemName.arms, player) and
+                state.has(ItemName.arms, player, jammed_buster + 1) and
                 state.has(ItemName.boomerang_cutter, player) and
                 state.has(ItemName.shotgun_ice, player) 
              ))
@@ -250,11 +253,11 @@ def add_charged_shotgun_ice_logic(world):
     add_rule(multiworld.get_location(LocationName.boomer_kuwanger_heart_tank, player),
              lambda state: (
                 state.has(ItemName.shotgun_ice, player) and
-                state.has(ItemName.arms, player) 
+                state.has(ItemName.arms, player, jammed_buster + 1) 
              ))
     # Sting Chameleon collectibles
     add_rule(multiworld.get_location(LocationName.sting_chameleon_body, player),
              lambda state: (
                 state.has(ItemName.shotgun_ice, player) and
-                state.has(ItemName.arms, player) 
+                state.has(ItemName.arms, player, jammed_buster + 1) 
              ))

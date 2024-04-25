@@ -132,15 +132,11 @@ def patch_rom(world: World, patch: MMXProcedurePatch):
     patch.write_byte(0x17FFE5, world.options.sigma_sub_tank_count.value)
     patch.write_byte(0x17FFE6, world.options.starting_life_count.value)
     patch.write_byte(0x17FFE7, world.options.pickupsanity.value)
-    patch.write_byte(0x17FFEB, world.options.logic_boss_weakness.value)
-    #patch.write_byte(0x17FFEA, world.options.logic_hadouken.value)
-    
-    # EnergyLink
     patch.write_byte(0x17FFE8, world.options.energy_link.value)
-
-    # DeathLink
     patch.write_byte(0x17FFE9, world.options.death_link.value)
-    
+    patch.write_byte(0x17FFEA, world.options.jammed_buster.value)
+    patch.write_byte(0x17FFEB, world.options.logic_boss_weakness.value)
+
     patch.write_file("token_patch.bin", patch.get_token_binary())
 
     

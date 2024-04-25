@@ -21,6 +21,13 @@ class StartingLifeCount(Range):
     range_end = 9
     default = 2
 
+class JammedBuster(Toggle):
+    """
+    Jams X's buster making it only able to shoot lemons.
+    Note: This adds another Arms Upgrade into the item pool.
+    """
+    display_name = "Jammed Buster"
+
 class LogicBossWeakness(DefaultOnToggle):
     """
     Every main boss will logically expect you to have its weakness.
@@ -127,6 +134,7 @@ class MMXOptions(PerGameCommonOptions):
     death_link: DeathLink
     energy_link: EnergyLink
     starting_life_count: StartingLifeCount
+    jammed_buster: JammedBuster
     pickupsanity: PickupSanity
     logic_boss_weakness: LogicBossWeakness
     logic_leg_sigma: LogicLegSigma

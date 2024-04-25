@@ -19,14 +19,15 @@ MMX_MENU_STATE          = WRAM_START + 0x000D2
 MMX_GAMEPLAY_STATE      = WRAM_START + 0x000D3
 MMX_LEVEL_INDEX         = WRAM_START + 0x01F7A
 
-MMX_WEAPON_ARRAY        = WRAM_START + 0x01F88
-MMX_SUB_TANK_ARRAY      = WRAM_START + 0x01F83
-MMX_UPGRADES            = WRAM_START + 0x01F99
-MMX_HEART_TANKS         = WRAM_START + 0x01F9C
-MMX_HADOUKEN            = WRAM_START + 0x01F7E
-MMX_LIFE_COUNT          = WRAM_START + 0x01F80
-MMX_MAX_HP              = WRAM_START + 0x01F9A
-MMX_CURRENT_HP          = WRAM_START + 0x00BCF
+MMX_WEAPON_ARRAY            = WRAM_START + 0x01F88
+MMX_SUB_TANK_ARRAY          = WRAM_START + 0x01F83
+MMX_UPGRADES                = WRAM_START + 0x01F99
+MMX_HEART_TANKS             = WRAM_START + 0x01F9C
+MMX_HADOUKEN                = WRAM_START + 0x01F7E
+MMX_LIFE_COUNT              = WRAM_START + 0x01F80
+MMX_MAX_HP                  = WRAM_START + 0x01F9A
+MMX_CURRENT_HP              = WRAM_START + 0x00BCF
+MMX_UNLOCKED_CHARGED_SHOT   = WRAM_START + 0x1EE16
 
 MMX_SFX_FLAG            = WRAM_START + 0x1EE03
 MMX_SFX_NUMBER          = WRAM_START + 0x1EE04
@@ -56,6 +57,7 @@ MMX_CAN_MOVE           = WRAM_START + 0x01F13
 MMX_PICKUPSANITY_ACTIVE    = ROM_START + 0x17FFE7
 MMX_ENERGY_LINK_ENABLED    = ROM_START + 0x17FFE8
 MMX_DEATH_LINK_ACTIVE      = ROM_START + 0x17FFE9
+MMX_JAMMED_BUSTER_ACTIVE   = ROM_START + 0x17FFEA
 
 HP_EXCHANGE_RATE = 500000000
 
@@ -354,16 +356,22 @@ class MMXSNIClient(SNIClient):
                 # Armor
                 upgrades = upgrades[0]
                 upgrades |= bit
-                snes_buffered_write(ctx, MMX_UPGRADES, bytearray([upgrades]))
                 if bit == 0x01:
                     snes_buffered_write(ctx, WRAM_START + 0x0BBE, bytearray([0x18]))
+                    snes_buffered_write(ctx, MMX_UPGRADES, bytearray([upgrades]))
                 elif bit == 0x02:
-                    value = await snes_read(ctx, WRAM_START + 0x0C38, 0x1)
-                    snes_buffered_write(ctx, WRAM_START + 0x0C38, bytearray([value[0] + 1]))
-                    snes_buffered_write(ctx, WRAM_START + 0x0C42, bytearray([0x00]))
-                    snes_buffered_write(ctx, WRAM_START + 0x0C43, bytearray([0x00]))
-                    snes_buffered_write(ctx, WRAM_START + 0x0C39, bytearray([0x00]))
-                    snes_buffered_write(ctx, WRAM_START + 0x0C48, bytearray([0x5D]))
+                    jam_check = await snes_read(ctx, MMX_JAMMED_BUSTER_ACTIVE, 0x1)
+                    charge_shot_unlocked = await snes_read(ctx, MMX_UNLOCKED_CHARGED_SHOT, 0x1)
+                    if jam_check[0] == 1 and charge_shot_unlocked[0] == 0:
+                        snes_buffered_write(ctx, MMX_UNLOCKED_CHARGED_SHOT, bytearray([0x01]))
+                    else:
+                        value = await snes_read(ctx, WRAM_START + 0x0C38, 0x1)
+                        snes_buffered_write(ctx, WRAM_START + 0x0C38, bytearray([value[0] + 1]))
+                        snes_buffered_write(ctx, WRAM_START + 0x0C42, bytearray([0x00]))
+                        snes_buffered_write(ctx, WRAM_START + 0x0C43, bytearray([0x00]))
+                        snes_buffered_write(ctx, WRAM_START + 0x0C39, bytearray([0x00]))
+                        snes_buffered_write(ctx, WRAM_START + 0x0C48, bytearray([0x5D]))
+                        snes_buffered_write(ctx, MMX_UPGRADES, bytearray([upgrades]))
                 elif bit == 0x04:
                     value = await snes_read(ctx, WRAM_START + 0x0C58, 0x1)
                     snes_buffered_write(ctx, WRAM_START + 0x0C58, bytearray([value[0] + 1]))
@@ -371,6 +379,7 @@ class MMXSNIClient(SNIClient):
                     snes_buffered_write(ctx, WRAM_START + 0x0C63, bytearray([0x01]))
                     snes_buffered_write(ctx, WRAM_START + 0x0C59, bytearray([0x00]))
                     snes_buffered_write(ctx, WRAM_START + 0x0C68, bytearray([0x5D]))
+                    snes_buffered_write(ctx, MMX_UPGRADES, bytearray([upgrades]))
                 elif bit == 0x08:
                     value = await snes_read(ctx, WRAM_START + 0x0C78, 0x1)
                     snes_buffered_write(ctx, WRAM_START + 0x0C78, bytearray([value[0] + 1]))
@@ -378,6 +387,7 @@ class MMXSNIClient(SNIClient):
                     snes_buffered_write(ctx, WRAM_START + 0x0C83, bytearray([0x02]))
                     snes_buffered_write(ctx, WRAM_START + 0x0C79, bytearray([0x00]))
                     snes_buffered_write(ctx, WRAM_START + 0x0C88, bytearray([0x5D]))
+                    snes_buffered_write(ctx, MMX_UPGRADES, bytearray([upgrades]))
                 snes_buffered_write(ctx, MMX_SFX_FLAG, bytearray([0x01]))
                 snes_buffered_write(ctx, MMX_SFX_NUMBER, bytearray([0x2B]))
             self.item_queue.pop(0)

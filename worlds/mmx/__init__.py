@@ -144,6 +144,8 @@ class MMXWorld(World):
         else:
             itempool += [self.create_item(ItemName.body, ItemClassification.useful)]
         itempool += [self.create_item(ItemName.arms)]
+        if self.options.jammed_buster.value:
+            itempool += [self.create_item(ItemName.arms)]
         itempool += [self.create_item(ItemName.helmet)]
         itempool += [self.create_item(ItemName.legs)]
 
