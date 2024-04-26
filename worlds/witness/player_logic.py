@@ -560,6 +560,10 @@ class WitnessPlayerLogic:
             # First, entities in unreachable regions are obviously themselves unreachable.
             for region in new_unreachable_regions:
                 for entity in static_witness_logic.ALL_REGIONS_BY_NAME[region]["physical_entities"]:
+                    # Never disable a laser.
+                    if static_witness_logic.ENTITIES_BY_NAME[entity]["entityType"] == "Laser":
+                        continue
+
                     if self.solvability_guaranteed(entity) and not entity == self.VICTORY_LOCATION:
                         newly_discovered_disabled_entities.add(entity)
                         dirty = True
