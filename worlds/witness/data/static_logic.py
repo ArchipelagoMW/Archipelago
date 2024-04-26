@@ -151,8 +151,10 @@ class StaticWitnessLogicObj:
             current_region["panels"].append(entity_hex)
 
     def reverse_connections(self):
+        # Iterate all connections
         for region_name, connections in list(self.CONNECTIONS_WITH_DUPLICATES.items()):
             for target, requirement_set in connections.items():
+                # Reverse this connection with all its possibilities, except the ones marked as "OneWay".
                 for requirement in requirement_set:
                     remaining_options = set()
                     for option in requirement:
