@@ -118,6 +118,7 @@ class TestModEntranceRando(SVTestCase):
             sv_options = complete_options_with_default({
                 options.EntranceRandomization.internal_name: option,
                 options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
+                SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
                 options.Mods.internal_name: all_mods
             })
             seed = get_seed()
