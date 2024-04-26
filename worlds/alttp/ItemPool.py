@@ -590,7 +590,7 @@ def get_pool_core(world, player: int):
     placed_items = {}
     precollected_items = []
     clock_mode: str = ""
-    treasure_hunt_count: int = 1
+    treasure_hunt_count: int = 0
 
     diff = difficulties[difficulty]
     pool.extend(diff.alwaysitems)
@@ -749,7 +749,7 @@ def make_custom_item_pool(world, player):
     placed_items = {}
     precollected_items = []
     clock_mode: str = ""
-    treasure_hunt_count: int = 1
+    treasure_hunt_count: int = 0
 
     def place_item(loc, item):
         assert loc not in placed_items, "cannot place item twice"
