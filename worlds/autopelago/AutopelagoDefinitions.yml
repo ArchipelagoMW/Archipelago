@@ -390,7 +390,7 @@ regions:
       name: 'Moon, The'
       unrandomized_item: pack_rat
       requires:
-        - item: blackbird
+        item: blackbird
       exits:
         - Victory
 
@@ -399,7 +399,7 @@ regions:
       unrandomized_item: blackbird
       reward_is_fixed: yes
       requires:
-        - item: mongoose_in_a_combat_spacecraft
+        item: mongoose_in_a_combat_spacecraft
       exits:
         - moon_comma_the
 
@@ -407,7 +407,7 @@ regions:
       name: 'Asteroid with Pants'
       unrandomized_item: pack_rat
       requires:
-        - any:
+        any:
           - item: asteroid_belt
           - item: moon_shaped_like_a_butt
       exits: []
@@ -416,7 +416,7 @@ regions:
       name: 'Minotaur Labyrinth'
       unrandomized_item: pack_rat
       requires:
-        - any:
+        any:
           - item: red_matador_cape
           - item: lab_rat
       exits:
@@ -427,7 +427,7 @@ regions:
       name: 'Space Opera'
       unrandomized_item: pack_rat
       requires:
-        - rat_count: 10
+        rat_count: 10
       exits:
         - after_space_opera
 
@@ -435,7 +435,7 @@ regions:
       name: 'Seal of Fortune'
       unrandomized_item: pack_rat
       requires:
-        - any:
+        any:
           - item: constellation_prize
           - item: free_vowel
       exits:
@@ -446,21 +446,21 @@ regions:
       name: 'Alien Vending Machine'
       unrandomized_item: pack_rat
       requires:
-        - item: foreign_coin
+        item: foreign_coin
       exits: []
 
     frozen_assets:
       name: 'Frozen Assets'
       unrandomized_item: pack_rat
       requires:
-        - item: playing_with_fire_for_dummies
+        item: playing_with_fire_for_dummies
       exits: []
 
     homeless_mummy:
       name: 'Homeless Mummy'
       unrandomized_item: pack_rat
       requires:
-        - any:
+        any:
           - item: ziggu_rat
           - item: pharaoh_not_anti_mummy_spray
       exits:
@@ -472,7 +472,7 @@ regions:
       name: 'Stalled Rocket! (Get Out and Push)'
       unrandomized_item: pack_rat
       requires:
-        - rat_count: 10
+        rat_count: 10
       exits:
         - after_stalled_rocket_get_out_and_push
 
@@ -480,7 +480,7 @@ regions:
       name: 'Robo-Clop: The Robot War Horse'
       unrandomized_item: pack_rat
       requires:
-        - item: quantum_sugar_cube
+        item: quantum_sugar_cube
       exits:
         - before_stalled_rocket_get_out_and_push
         - before_homeless_mummy
@@ -489,7 +489,7 @@ regions:
       name: 'Makeshift Rocket Ship'
       unrandomized_item: pack_rat
       requires:
-        - any_two:
+        any_two:
             - item: turbo_encabulator
             - item: ratstronaut
             - item: energy_drink_that_is_pure_rocket_fuel
@@ -501,7 +501,7 @@ regions:
       name: 'Secret Cache'
       unrandomized_item: pack_rat
       requires:
-        - any:
+        any:
           - item: virtual_key
           - item: map_of_the_entire_internet
       exits:
@@ -511,7 +511,7 @@ regions:
       name: 'Rat Rap Battle'
       unrandomized_item: pack_rat
       requires:
-        - any:
+        any:
           - item: fifty_cents
           - item: notorious_r_a_t
       exits:
@@ -521,7 +521,7 @@ regions:
       name: 'Stack of Crates'
       unrandomized_item: pack_rat
       requires:
-        - any:
+        any:
           - item: gym_rat
           - item: forklift_certification
       exits:
@@ -531,7 +531,7 @@ regions:
       name: 'Binary Tree'
       unrandomized_item: pack_rat
       requires:
-        - item: childs_first_hand_axe
+        item: childs_first_hand_axe
       exits:
         - before_rat_rap_battle
 
@@ -539,21 +539,21 @@ regions:
       name: 'Room Full of Typewriters'
       unrandomized_item: pack_rat
       requires:
-        - rat_count: 10
+        rat_count: 10
       exits: []
 
     trapeze:
       name: 'Trapeze'
       unrandomized_item: pack_rat
       requires:
-        - item: acro_rat
+        item: acro_rat
       exits: []
 
     computer_ram:
       name: 'Computer Ram'
       unrandomized_item: pack_rat
       requires:
-        - item: artificial_grass
+        item: artificial_grass
       exits:
         - before_stack_of_crates
 
@@ -561,7 +561,7 @@ regions:
       name: 'Copyright Mouse'
       unrandomized_item: pack_rat
       requires:
-        - any:
+        any:
           - item: fake_mouse_ears
           - item: legally_binding_contract
       exits:
@@ -572,7 +572,7 @@ regions:
       name: 'Blue-Colored Screen Interface'
       unrandomized_item: pack_rat
       requires:
-        - any:
+        any:
           - item: lost_ctrl_key
           - item: hammer_of_problem_solving
       exits:
@@ -583,7 +583,7 @@ regions:
       name: 'Broken-Down Bus'
       unrandomized_item: pack_rat
       requires:
-        - rat_count: 1
+        rat_count: 1
       exits:
         - before_copyright_mouse
 
@@ -591,7 +591,7 @@ regions:
       name: 'Overweight Boulder'
       unrandomized_item: pack_rat
       requires:
-        - rat_count: 1
+        rat_count: 1
       exits:
         - before_blue_colored_screen_interface
 
@@ -599,7 +599,7 @@ regions:
       name: 'Kart Races'
       unrandomized_item: pack_rat
       requires:
-        - any:
+        any:
           - item: blue_turtle_shell
           - item: banana_peel
       exits:
@@ -609,7 +609,7 @@ regions:
       name: 'Daring Adventurer'
       unrandomized_item: pack_rat
       requires:
-        - any:
+        any:
           - item: masterful_longsword
           - item: macguffin
       exits:
@@ -619,7 +619,7 @@ regions:
       name: 'Computer Interface'
       unrandomized_item: pack_rat
       requires:
-        - item: computer_rat
+        item: computer_rat
       exits:
         - before_daring_adventurer
         - before_kart_races
@@ -628,7 +628,7 @@ regions:
       name: 'Captured Goldfish'
       unrandomized_item: pack_rat
       requires:
-        - item: giant_novelty_scissors
+        item: giant_novelty_scissors
       ability_check_dc: 20
       exits:
         - before_computer_interface
@@ -637,7 +637,7 @@ regions:
       name: 'Bowling Ball Door'
       unrandomized_item: rat_pack
       requires:
-        - rat_count: 20
+        rat_count: 20
       ability_check_dc: 17
       exits:
         - before_captured_goldfish
@@ -646,7 +646,7 @@ regions:
       name: 'Restaurant'
       unrandomized_item: macguffin
       requires:
-        - item: chef_rat
+        item: chef_rat
       ability_check_dc: 14
       exits:
         - after_restaurant
@@ -655,7 +655,7 @@ regions:
       name: 'Pirate Bake Sale'
       unrandomized_item: chef_rat
       requires:
-        - item: pie_rat
+        item: pie_rat
       ability_check_dc: 14
       exits:
         - after_pirate_bake_sale
@@ -664,7 +664,7 @@ regions:
       name: 'Angry Turtles'
       unrandomized_item: acro_rat
       requires:
-        - any:
+        any:
           - item: pizza_rat
           - item: ninja_rat
       ability_check_dc: 12
@@ -675,7 +675,7 @@ regions:
       name: 'Prawn Stars'
       unrandomized_item: ziggu_rat
       requires:
-        - any:
+        any:
           - item: premium_can_of_prawn_food
           - item: priceless_antique
       ability_check_dc: 12
@@ -687,7 +687,7 @@ regions:
       flavor_text: 'There''s no rule that says you can''t...'
       unrandomized_item: gym_rat
       requires:
-        - rat_count: 5
+        rat_count: 5
       ability_check_dc: 12
       exits:
         - before_prawn_stars

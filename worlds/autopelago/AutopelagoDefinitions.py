@@ -82,7 +82,7 @@ class AutopelagoLandmarkRegionDefinition(TypedDict):
     name: str
     unrandomized_item: str
     reward_is_fixed: Optional[bool]
-    requires: list[AutopelagoGameRequirement]
+    requires: AutopelagoGameRequirement
     exits: list[str]
 
 
@@ -123,11 +123,11 @@ class AutopelagoRegionDefinition:
     locations: list[str]
     requires: AutopelagoAllRequirement
 
-    def __init__(self, key: str, exits: list[str], locations: list[str], requires: list[AutopelagoGameRequirement]):
+    def __init__(self, key: str, exits: list[str], locations: list[str], requires: AutopelagoGameRequirement):
         self.key = key
         self.exits = exits
         self.locations = locations
-        self.requires = {'all': requires}
+        self.requires = requires
 
 
 with open(PurePath(__file__).with_name('AutopelagoDefinitions.yml'), 'r') as f:
@@ -215,7 +215,7 @@ _append_nonprogression('filler')
 _append_nonprogression('uncategorized')
 
 autopelago_regions: dict[str, AutopelagoRegionDefinition] = {
-    'Victory': AutopelagoRegionDefinition('Victory', [], ['Victory'], [])}
+    'Victory': AutopelagoRegionDefinition('Victory', [], ['Victory'], { 'all': [] })}
 location_name_to_unrandomized_progression_item_name: dict[str, str] = {}
 location_name_to_unrandomized_nonprogression_item: dict[str, Literal['useful_nonprogression', 'filler']] = {}
 location_name_to_requirement: dict[str, AutopelagoGameRequirement] = {}
@@ -227,7 +227,7 @@ for k, r in _defs['regions']['landmarks'].items():
     _name = r['name']
     location_name_to_id[_name] = next(_location_id_gen)
     location_name_to_unrandomized_progression_item_name[_name] = item_key_to_name[r['unrandomized_item']]
-    location_name_to_requirement[_name] = {'all': r['requires']}
+    location_name_to_requirement[_name] = r['requires']
     autopelago_regions[k] = AutopelagoRegionDefinition(k, r['exits'], [_name], r['requires'])
     if 'reward_is_fixed' in r and r['reward_is_fixed']:
         location_names_with_fixed_rewards.add(_name)
@@ -260,7 +260,7 @@ for rk, r in _defs['regions']['fillers'].items():
         location_name_to_unrandomized_nonprogression_item[_name] = 'filler'
         _locations.append(_name)
         _cur += 1
-    autopelago_regions[rk] = AutopelagoRegionDefinition(rk, r['exits'], _locations, [])
+    autopelago_regions[rk] = AutopelagoRegionDefinition(rk, r['exits'], _locations, { 'all': [] })
 
 
 def _get_required_rat_count(req: AutopelagoGameRequirement):
