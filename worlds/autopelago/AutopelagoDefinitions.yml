@@ -3,19 +3,46 @@
 
 items:
   blackbird: 'Lockheed SR-71 Blackbird'
-  masterful_longsword: 'Masterful Longsword'
-
-  # if you want to add something extra onto an item, you have to do it like:
-  a_cookie:
-    name: 'A Cookie'
-    flavor_text: 'We all know what happens when you give a MOUSE a cookie...'
-
-  bribe: 'Bribe'
+  mongoose_in_a_combat_spacecraft: 'Mongoose in a Combat Spacecraft'
+  quantum_sugar_cube: 'Quantum Sugar Cube'
+  playing_with_fire_for_dummies: 'Playing with Fire For Dummies'
+  moon_shaped_like_a_butt: 'Moon Shaped Like a Butt'
+  asteroid_belt: 'Asteroid Belt'
+  free_vowel:
+    name: 'Free Vowel'
+    flavor_text: 'A $250 value!'
+  constellation_prize: 'Constellation Prize'
+  foreign_coin:
+    name: 'Foreign Coin'
+    auras_granted: [lucky]
   red_matador_cape: 'Red Matador''s Cape'
-  premium_can_of_prawn_food: 'Premium Can of Prawn Food'
+  pharaoh_not_anti_mummy_spray: 'Pharaoh-Not® Anti-Mummy Spray'
+  pile_of_scrap_metal_in_the_shape_of_a_rocket_ship: 'Pile of Scrap Metal in the Shape of a Rocket Ship'
+  energy_drink_that_is_pure_rocket_fuel: 'Energy Drink that is Pure Rocket Fuel'
+  turbo_encabulator: 'Turbo Encabulator'
 
-  normal_rat:
-    name: 'Normal Rat'
+  map_of_the_entire_internet: 'Map of the Entire Internet'
+  virtual_key: 'Virtual Key'
+  banana_peel: 'Banana Peel'
+  blue_turtle_shell: 'Blue Turtle Shell'
+  forklift_certification: 'Forklift Certification'
+  notorious_r_a_t: 'Notorious R.A.T.'
+  fifty_cents: 'Fifty Cents'
+  childs_first_hand_axe: 'Child''s First Hand Axe'
+  hammer_of_problem_solving: 'Hammer of Problem-Solving'
+  lost_ctrl_key: 'Lost CTRL Key'
+  artificial_grass: 'Artificial Grass'
+  macguffin: 'MacGuffin'
+  masterful_longsword: 'Masterful Longsword'
+  legally_binding_contract: 'Legally Binding Contract'
+  fake_mouse_ears: 'Fake Mouse Ears'
+
+  giant_novelty_scissors: 'Giant Novelty Scissors'
+  premium_can_of_prawn_food: 'Premium Can of Prawn Food'
+  priceless_antique: 'Priceless Antique'
+
+  pack_rat:
+    name: 'Pack Rat'
     rat_count: 1
 
   rat_pack:
@@ -26,7 +53,6 @@ items:
   # 'rats' section will automatically give them a rat_count of 1. you COULD set
   # rat_count to something else to override that if you wanted
   rats:
-    pack_rat: 'Pack Rat'
     pizza_rat: 'Pizza Rat'
     chef_rat: 'Chef Rat'
     ninja_rat: 'Ninja Rat'
@@ -36,14 +62,8 @@ items:
     ziggu_rat: 'Ziggu Rat'
     acro_rat: 'Acro Rat'
     lab_rat: 'Lab Rat'
+    ratstronaut: 'Ratstronaut'
 
-    soc_rat_es:
-      name: 'Soc-Rat-es'
-      flavor_text: 'I am not an Athenian or a Greek, but a rat.'
-
-  # TODO: for now, I'm just listing non-'key' items by category the same as how
-  # they are in the file that I'm replacing with this, but we really ought to
-  # have a way to specify the auras that they grant in this file...
   useful_nonprogression:
     - ['Refreshing Glass of Lemonade', [well_fed]]
     - ['Bag of Powdered Sugar', [well_fed, energized, energized, energized]]
@@ -213,7 +233,6 @@ items:
     - ['Damp Pineapple', [well_fed]]
     - ['Right Sock', []]
     - ['Microplastic Pile', [upset_tummy]]
-    - ['Foreign Coin', [lucky]]
     - ['USB Containing Government Secrets', [smart]]
     - ['Monkey''s Paw', [lucky, conspiratorial, startled]]
     - ['Smelly Vintage T-Shirt', [stylish]]
@@ -330,6 +349,12 @@ items:
     - ['CD containing ''Sounds of the Sewer''', []]
     - ['Squeaky Vent Flap', [startled]]
     - ['Rule stating that Rats Cannot Play Basketball', []]
+
+    - ['Bribe', []]
+    - name: 'A Cookie'
+      auras_granted: []
+      flavor_text: 'We all know what happens when you give a MOUSE a cookie...'
+
     - game_specific:
         'Pokemon Red and Blue':
           - ['Oak''s Other Parcel', []]
@@ -361,48 +386,288 @@ items:
 # game "feel" more "difficult" as the "player" enters the later stages.
 regions:
   landmarks:
+    moon_comma_the:
+      name: 'Moon, The'
+      unrandomized_item: blackbird
+      requires:
+        - item: blackbird
+      exits:
+        - Victory
+
+    snakes_on_a_planet:
+      name: 'Snakes on a Planet'
+      unrandomized_item: pack_rat
+      reward_is_fixed: yes
+      requires:
+        - item: mongoose_in_a_combat_spacecraft
+      exits:
+        - moon_comma_the
+
+    asteroid_with_pants:
+      name: 'Asteroid with Pants'
+      unrandomized_item: pack_rat
+      requires:
+        - any:
+            - item: asteroid_belt
+            - item: moon_shaped_like_a_butt
+      exits: []
+
+    minotaur_labyrinth:
+      name: 'Minotaur Labyrinth'
+      unrandomized_item: pack_rat
+      requires:
+        - any:
+            - item: red_matador_cape
+            - item: lab_rat
+      exits:
+        - before_asteroid_with_pants
+        - after_minotaur_labyrinth
+
+    space_opera:
+      name: 'Space Opera'
+      unrandomized_item: pack_rat
+      requires:
+        - rat_count: 10
+      exits:
+        - after_space_opera
+
+    seal_of_fortune:
+      name: 'Seal of Fortune'
+      unrandomized_item: pack_rat
+      requires:
+        - any:
+            - item: constellation_prize
+            - item: free_vowel
+      exits:
+        - before_minotaur_labyrinth
+        - before_space_opera
+
+    alien_vending_machine:
+      name: 'Alien Vending Machine'
+      unrandomized_item: pack_rat
+      requires:
+        - item: foreign_coin
+      exits: []
+
+    frozen_assets:
+      name: 'Frozen Assets'
+      unrandomized_item: pack_rat
+      requires:
+        - item: playing_with_fire_for_dummies
+      exits: []
+
+    homeless_mummy:
+      name: 'Homeless Mummy'
+      unrandomized_item: pack_rat
+      requires:
+        - any:
+            - item: ziggu_rat
+            - item: pharaoh_not_anti_mummy_spray
+      exits:
+        - before_frozen_assets
+        - before_alien_vending_machine
+        - after_homeless_mummy
+
+    stalled_rocket_get_out_and_push:
+      name: 'Stalled Rocket! (Get Out and Push)'
+      unrandomized_item: pack_rat
+      requires:
+        - rat_count: 10
+      exits:
+        - after_stalled_rocket_get_out_and_push
+
+    roboclop_the_robot_war_horse:
+      name: 'Robo-Clop: The Robot War Horse'
+      unrandomized_item: pack_rat
+      requires:
+        - item: quantum_sugar_cube
+      exits:
+        - before_stalled_rocket_get_out_and_push
+        - before_homeless_mummy
+
+    makeshift_rocket_ship:
+      name: 'Makeshift Rocket Ship'
+      unrandomized_item: pack_rat
+      requires:
+        - any_two:
+            - item: turbo_encabulator
+            - item: ratstronaut
+            - item: energy_drink_that_is_pure_rocket_fuel
+            - item: pile_of_scrap_metal_in_the_shape_of_a_rocket_ship
+      exits:
+        - before_roboclop_the_robot_war_horse
+
+    secret_cache:
+      name: 'Secret Cache'
+      unrandomized_item: pack_rat
+      requires:
+        - any:
+            - item: virtual_key
+            - item: map_of_the_entire_internet
+      exits:
+        - before_makeshift_rocket_ship
+
+    rat_rap_battle:
+      name: 'Rat Rap Battle'
+      unrandomized_item: pack_rat
+      requires:
+        - any:
+            - item: fifty_cents
+            - item: notorious_r_a_t
+      exits:
+        - after_rat_rap_battle
+
+    stack_of_crates:
+      name: 'Stack of Crates'
+      unrandomized_item: pack_rat
+      requires:
+        - any:
+            - item: gym_rat
+            - item: forklift_certification
+      exits:
+        - after_stack_of_crates
+
+    binary_tree:
+      name: 'Binary Tree'
+      unrandomized_item: pack_rat
+      requires:
+        - item: childs_first_hand_axe
+      exits:
+        - before_rat_rap_battle
+
+    room_full_of_typewriters:
+      name: 'Room Full of Typewriters'
+      unrandomized_item: pack_rat
+      requires:
+        - rat_count: 10
+      exits: []
+
+    trapeze:
+      name: 'Trapeze'
+      unrandomized_item: pack_rat
+      requires:
+        - item: acro_rat
+      exits: []
+
+    computer_ram:
+      name: 'Computer Ram'
+      unrandomized_item: pack_rat
+      requires:
+        - item: artificial_grass
+      exits:
+        - before_stack_of_crates
+
+    copyright_mouse:
+      name: 'Copyright Mouse'
+      unrandomized_item: pack_rat
+      requires:
+        - any:
+            - item: fake_mouse_ears
+            - item: legally_binding_contract
+      exits:
+        - before_room_full_of_typewriters
+        - before_binary_tree
+
+    blue_colored_screen_interface:
+      name: 'Blue-Colored Screen Interface'
+      unrandomized_item: pack_rat
+      requires:
+        - any:
+            - item: lost_ctrl_key
+            - item: hammer_of_problem_solving
+      exits:
+        - before_computer_ram
+        - before_trapeze
+
+    broken_down_bus:
+      name: 'Broken-Down Bus'
+      unrandomized_item: pack_rat
+      requires:
+        - rat_count: 1
+      exits:
+        - before_copyright_mouse
+
+    overweight_boulder:
+      name: 'Overweight Boulder'
+      unrandomized_item: pack_rat
+      requires:
+        - rat_count: 1
+      exits:
+        - before_blue_colored_screen_interface
+
+    kart_races:
+      name: 'Kart Races'
+      unrandomized_item: pack_rat
+      requires:
+        - any:
+            - item: blue_turtle_shell
+            - item: banana_peel
+      exits:
+        - before_broken_down_bus
+
+    daring_adventurer:
+      name: 'Daring Adventurer'
+      unrandomized_item: pack_rat
+      requires:
+        - any:
+            - item: masterful_longsword
+            - item: macguffin
+      exits:
+        - before_overweight_boulder
+
+    computer_interface:
+      name: 'Computer Interface'
+      unrandomized_item: pack_rat
+      requires:
+        - item: computer_rat
+      exits:
+        - before_daring_adventurer
+        - before_kart_races
+
     captured_goldfish:
       name: 'Captured Goldfish'
       unrandomized_item: blackbird
       requires:
-        - item: masterful_longsword
-        - ability_check_with_dc: 20
+        - item: giant_novelty_scissors
+      ability_check_dc: 20
       exits:
-        - Victory
+        - before_computer_interface
 
     bowling_ball_door:
       name: 'Bowling Ball Door'
       unrandomized_item: rat_pack
       requires:
         - rat_count: 20
-        - ability_check_with_dc: 17
+      ability_check_dc: 17
       exits:
         - before_captured_goldfish
 
     restaurant:
       name: 'Restaurant'
-      unrandomized_item: chef_rat
+      unrandomized_item: macguffin
       requires:
-        - item: a_cookie
-        - ability_check_with_dc: 14
+        - item: chef_rat
+      ability_check_dc: 14
       exits:
         - after_restaurant
 
     pirate_bake_sale:
       name: 'Pirate Bake Sale'
-      unrandomized_item: pie_rat
+      unrandomized_item: chef_rat
       requires:
-        - item: bribe
-        - ability_check_with_dc: 14
+        - item: pie_rat
+      ability_check_dc: 14
       exits:
         - after_pirate_bake_sale
 
-    minotaur:
-      name: 'Minotaur'
+    angry_turtles:
+      name: 'Angry Turtles'
       unrandomized_item: acro_rat
       requires:
-        - item: red_matador_cape
-        - ability_check_with_dc: 12
+        - any:
+            - item: pizza_rat
+            - item: ninja_rat
+      ability_check_dc: 12
       exits:
         - before_restaurant
 
@@ -410,33 +675,332 @@ regions:
       name: 'Prawn Stars'
       unrandomized_item: ziggu_rat
       requires:
-        - item: premium_can_of_prawn_food
-        - ability_check_with_dc: 12
+        - any:
+            - item: premium_can_of_prawn_food
+            - item: priceless_antique
+      ability_check_dc: 12
       exits:
         - before_pirate_bake_sale
 
     basketball:
       name: 'Basketball'
+      flavor_text: 'There''s no rule that says you can''t...'
       unrandomized_item: gym_rat
       requires:
         - rat_count: 5
-        - ability_check_with_dc: 12
+      ability_check_dc: 12
       exits:
-        - before_minotaur
         - before_prawn_stars
+        - before_angry_turtles
 
   fillers:
+    after_minotaur_labyrinth:
+      name_template: 'After Minotaur Labyrinth #{n}'
+      unrandomized_items:
+        key:
+          - item: pack_rat
+            count: 10
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - snakes_on_a_planet
+
+    after_space_opera:
+      name_template: 'After Space Opera #{n}'
+      unrandomized_items:
+        key:
+          - mongoose_in_a_combat_spacecraft
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - snakes_on_a_planet
+
+    before_asteroid_with_pants:
+      name_template: 'Before Asteroid with Pants #{n}'
+      unrandomized_items:
+        key:
+          - asteroid_belt
+          - moon_shaped_like_a_butt
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - asteroid_with_pants
+
+    before_space_opera:
+      name_template: 'Before Space Opera #{n}'
+      unrandomized_items:
+        key:
+          - item: pack_rat
+            count: 5
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - space_opera
+
+    before_minotaur_labyrinth:
+      name_template: 'Before Minotaur Labyrinth #{n}'
+      unrandomized_items:
+        key:
+          - red_matador_cape
+          - lab_rat
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - minotaur_labyrinth
+
+    before_alien_vending_machine:
+      name_template: 'Before Alien Vending Machine #{n}'
+      unrandomized_items:
+        key:
+          - foreign_coin
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - alien_vending_machine
+
+    before_frozen_assets:
+      name_template: 'Before Frozen Assets #{n}'
+      unrandomized_items:
+        key:
+          - playing_with_fire_for_dummies
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - frozen_assets
+
+    after_homeless_mummy:
+      name_template: 'After Homeless Mummy #{n}'
+      unrandomized_items:
+        key:
+          - free_vowel
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - seal_of_fortune
+
+    after_stalled_rocket_get_out_and_push:
+      name_template: 'After Stalled Rocket! (Get Out and Push) #{n}'
+      unrandomized_items:
+        key:
+          - constellation_prize
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - seal_of_fortune
+
+    before_homeless_mummy:
+      name_template: 'Before Homeless Mummy #{n}'
+      unrandomized_items:
+        key:
+          - ziggu_rat
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - homeless_mummy
+
+    before_stalled_rocket_get_out_and_push:
+      name_template: 'Before Stalled Rocket! (Get Out and Push) #{n}'
+      unrandomized_items:
+        key:
+          - item: pack_rat
+            count: 5
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - stalled_rocket_get_out_and_push
+
+    before_roboclop_the_robot_war_horse:
+      name_template: 'Before Robo-Clop: The Robot War Horse #{n}'
+      unrandomized_items:
+        key:
+          - quantum_sugar_cube
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - roboclop_the_robot_war_horse
+
+    before_makeshift_rocket_ship:
+      name_template: 'Before Makeshift Rocket Ship #{n}'
+      unrandomized_items:
+        key:
+          - turbo_encabulator
+          - ratstronaut
+          - energy_drink_that_is_pure_rocket_fuel
+          - pile_of_scrap_metal_in_the_shape_of_a_rocket_ship
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - makeshift_rocket_ship
+
+    after_rat_rap_battle:
+      name_template: 'After Rat Rap Battle #{n}'
+      unrandomized_items:
+        key:
+          - virtual_key
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - secret_cache
+
+    after_stack_of_crates:
+      name_template: 'After Stack of Crates #{n}'
+      unrandomized_items:
+        key:
+          - map_of_the_entire_internet
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - secret_cache
+
+    before_rat_rap_battle:
+      name_template: 'Before Rat Rap Battle #{n}'
+      unrandomized_items:
+        key:
+          - fifty_cents
+          - notorious_r_a_t
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - rat_rap_battle
+
+    before_stack_of_crates:
+      name_template: 'Before Stack of Crates #{n}'
+      unrandomized_items:
+        key:
+          - gym_rat
+          - forklift_certification
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - stack_of_crates
+
+    before_binary_tree:
+      name_template: 'Before Binary Tree #{n}'
+      unrandomized_items:
+        key:
+          - childs_first_hand_axe
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - binary_tree
+
+    before_room_full_of_typewriters:
+      name_template: 'Before Room Full of Typewriters #{n}'
+      unrandomized_items:
+        key:
+          - item: pack_rat
+            count: 5
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - room_full_of_typewriters
+
+    before_trapeze:
+      name_template: 'Before Trapeze #{n}'
+      unrandomized_items:
+        key:
+          - acro_rat
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - trapeze
+
+    before_computer_ram:
+      name_template: 'Before Computer Ram #{n}'
+      unrandomized_items:
+        key:
+          - artificial_grass
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - computer_ram
+
+    before_copyright_mouse:
+      name_template: 'Before Copyright Mouse #{n}'
+      unrandomized_items:
+        key:
+          - fake_mouse_ears
+          - legally_binding_contract
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - copyright_mouse
+
+    before_blue_colored_screen_interface:
+      name_template: 'Before Blue-Colored Screen Interface #{n}'
+      unrandomized_items:
+        key:
+          - lost_ctrl_key
+          - hammer_of_problem_solving
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - blue_colored_screen_interface
+
+    before_broken_down_bus:
+      name_template: 'Before Broken Down Bus #{n}'
+      unrandomized_items:
+        key:
+          - item: pack_rat
+            count: 5
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - broken_down_bus
+
+    before_overweight_boulder:
+      name_template: 'Before Overweight Boulder #{n}'
+      unrandomized_items:
+        key:
+          - item: pack_rat
+            count: 5
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - overweight_boulder
+
+    before_kart_races:
+      name_template: 'Before Kart Races #{n}'
+      unrandomized_items:
+        key:
+          - blue_turtle_shell
+          - banana_peel
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - kart_races
+
+    before_daring_adventurer:
+      name_template: 'Before Daring Adventurer #{n}'
+      unrandomized_items:
+        key:
+          - masterful_longsword
+          - macguffin
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - daring_adventurer
+
+    before_computer_interface:
+      name_template: 'Before Computer Interface #{n}'
+      unrandomized_items:
+        key:
+          - computer_rat
+        filler: 1
+      ability_check_dc: 1
+      exits:
+        - computer_interface
+
     before_captured_goldfish:
       name_template: 'Before Goldfish #{n}'
       unrandomized_items:
         key:
-          - masterful_longsword
-          - item: normal_rat
+          - giant_novelty_scissors
+          - item: pack_rat
             count: 10
         useful_nonprogression: 3
         filler: 6
-      each_requires:
-        - ability_check_with_dc: 18
+      ability_check_dc: 18
       exits:
         - captured_goldfish
 
@@ -444,12 +1008,11 @@ regions:
       name_template: 'After Restaurant #{n}'
       unrandomized_items:
         key:
-          - item: normal_rat
+          - item: pack_rat
             count: 2
         useful_nonprogression: 3
         filler: 5
-      each_requires:
-        - ability_check_with_dc: 16
+      ability_check_dc: 16
       exits:
         - bowling_ball_door
 
@@ -457,12 +1020,11 @@ regions:
       name_template: 'After Pirate Bake Sale #{n}'
       unrandomized_items:
         key:
-          - item: normal_rat
+          - item: pack_rat
             count: 2
         useful_nonprogression: 3
         filler: 5
-      each_requires:
-        - ability_check_with_dc: 16
+      ability_check_dc: 16
       exits:
         - bowling_ball_door
 
@@ -470,12 +1032,11 @@ regions:
       name_template: 'Before Restaurant #{n}'
       unrandomized_items:
         key:
-          - a_cookie
-          - normal_rat
+          - chef_rat
+          - pack_rat
         useful_nonprogression: 3
         filler: 5
-      each_requires:
-        - ability_check_with_dc: 14
+      ability_check_dc: 14
       exits:
         - restaurant
 
@@ -483,40 +1044,37 @@ regions:
       name_template: 'Before Pirate Bake Sale #{n}'
       unrandomized_items:
         key:
-          - bribe
-          - normal_rat
+          - pie_rat
+          - pack_rat
         useful_nonprogression: 3
         filler: 5
-      each_requires:
-        - ability_check_with_dc: 14
+      ability_check_dc: 14
       exits:
         - pirate_bake_sale
 
-    before_minotaur:
-      name_template: 'Before Minotaur #{n}'
+    before_angry_turtles:
+      name_template: 'Before Angry Turtles #{n}'
       unrandomized_items:
         key:
-          - red_matador_cape
-          - item: normal_rat
-            count: 2
+          - pizza_rat
+          - ninja_rat
+          - pack_rat
         useful_nonprogression: 3
         filler: 4
-      each_requires:
-        - ability_check_with_dc: 12
+      ability_check_dc: 12
       exits:
-        - minotaur
+        - angry_turtles
 
     before_prawn_stars:
       name_template: 'Before Prawn Stars #{n}'
       unrandomized_items:
         key:
           - premium_can_of_prawn_food
-          - item: normal_rat
-            count: 2
+          - priceless_antique
+          - pack_rat
         useful_nonprogression: 3
         filler: 4
-      each_requires:
-        - ability_check_with_dc: 12
+      ability_check_dc: 12
       exits:
         - prawn_stars
 
@@ -524,11 +1082,10 @@ regions:
       name_template: 'Before Basketball #{n}'
       unrandomized_items:
         key:
-          - item: normal_rat
+          - item: pack_rat
             count: 5
         useful_nonprogression: 8
         filler: 27
-      each_requires:
-        - ability_check_with_dc: 10
+      ability_check_dc: 10
       exits:
         - basketball
