@@ -9,15 +9,16 @@ class ModificationFlag(IntFlag):
     NOT_MODIFIED = 0
     MODIFIED = 1
 
+
 class RandomizationFlag(IntFlag):
-    NOT_RANDOMIZED = 0b0
-    PELICAN_TOWN = 0b11111
-    NON_PROGRESSION = 0b11110
-    BUILDINGS = 0b11100
-    EVERYTHING = 0b11000
-    CHAOS = 0b10000
-    GINGER_ISLAND = 0b0100000
-    LEAD_TO_OPEN_AREA = 0b1000000
+    NOT_RANDOMIZED =    0b0
+    PELICAN_TOWN =      0b00011111
+    NON_PROGRESSION =   0b00011110
+    BUILDINGS =         0b00011100
+    EVERYTHING =        0b00011000
+    GINGER_ISLAND =     0b00100000
+    LEAD_TO_OPEN_AREA = 0b01000000
+    MASTERIES =         0b10000000
 
 
 @dataclass(frozen=True)

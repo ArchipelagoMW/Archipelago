@@ -2,7 +2,7 @@ from random import Random
 from typing import Iterable, Dict, Protocol, List, Tuple, Set
 
 from BaseClasses import Region, Entrance
-from .options import EntranceRandomization, ExcludeGingerIsland, Museumsanity, StardewValleyOptions
+from .options import EntranceRandomization, ExcludeGingerIsland, Museumsanity, StardewValleyOptions, SkillProgression
 from .strings.entrance_names import Entrance
 from .strings.region_names import Region
 from .region_classes import RegionData, ConnectionData, RandomizationFlag, ModificationFlag
@@ -282,7 +282,7 @@ vanilla_connections = [
     ConnectionData(Entrance.forest_to_leah_cottage, Region.leah_house,
                    flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
     ConnectionData(Entrance.enter_secret_woods, Region.secret_woods),
-    ConnectionData(Entrance.forest_to_sewer, Region.sewer, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(Entrance.forest_to_sewer, Region.sewer, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.MASTERIES),
     ConnectionData(Entrance.forest_to_mastery_cave, Region.mastery_cave, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(Entrance.buy_from_traveling_merchant, Region.traveling_cart),
     ConnectionData(Entrance.buy_from_traveling_merchant_sunday, Region.traveling_cart_sunday),
@@ -609,6 +609,9 @@ def remove_excluded_entrances(connections_to_randomize: List[ConnectionData], wo
     exclude_island = world_options.exclude_ginger_island == ExcludeGingerIsland.option_true
     if exclude_island:
         connections_to_randomize = [connection for connection in connections_to_randomize if RandomizationFlag.GINGER_ISLAND not in connection.flag]
+    exclude_masteries = world_options.skill_progression != SkillProgression.option_progressive_with_masteries
+    if exclude_masteries:
+        connections_to_randomize = [connection for connection in connections_to_randomize if RandomizationFlag.MASTERIES not in connection.flag]
 
     return connections_to_randomize
 
