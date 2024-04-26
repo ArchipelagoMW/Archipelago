@@ -34,6 +34,13 @@ class StartingLifeCount(Range):
     range_end = 9
     default = 2
 
+class JammedBuster(Toggle):
+    """
+    Jams X's buster making it only able to shoot lemons.
+    Note: This adds another Arms Upgrade into the item pool.
+    """
+    display_name = "Jammed Buster"
+
 class DisableChargeFreeze(DefaultOnToggle):
     """
     Allows X and Zero to move while shooting a level 3 charged shot.
@@ -77,7 +84,7 @@ class Lab2Boss(Choice):
     Which boss will appear in the second Dr Doppler's Lab stage.
     Note: Also affects the stage variation.
     """
-    display_name = "Dr. Doppler Lab 2 Boss"
+    display_name = "Doppler Lab 2 Boss"
     option_volt_kurageil = 0
     option_vile = 1
     default = 0
@@ -86,7 +93,7 @@ class Lab3BossRematchCount(Range):
     """
     How many boss rematches are needed in the third Dr. Doppler's Lab stage.
     """
-    display_name = "Dr. Doppler Lab 3 Rematch count"
+    display_name = "Doppler Lab 3 Rematch count"
     range_start = 0
     range_end = 8
     default = 8
@@ -100,14 +107,17 @@ class DopplerOpen(Choice):
       armor_upgrades: Access will be granted after collecting a certain amount of armor upgrades.
       heart_tanks: Access will be granted after collecting a certain amount of Heart Tanks.
       sub_tanks: Access will be granted after collecting a certain amount of Sub Tanks.
+      all: Access will be granted after collecting a certain amount of Medals, Weapons, Armor Upgrades
+           Heart Tanks and Sub Tanks.
     """
     display_name = "Doppler Lab rules"
     option_multiworld = 0
     option_medals = 1
     option_weapons = 2
-    option_armor_upgrades = 3
-    option_heart_tanks = 4
-    option_sub_tanks = 5
+    option_armor_upgrades = 4
+    option_heart_tanks = 8
+    option_sub_tanks = 16
+    option_all = 31
     default = 1
 
 class DopplerMedalCount(Range):
@@ -115,7 +125,7 @@ class DopplerMedalCount(Range):
     How many Maverick Medals are required to access Dr. Doppler's Lab.
     """
     display_name = "Doppler Medal Count"
-    range_start = 1
+    range_start = 0
     range_end = 8
     default = 8
 
@@ -124,7 +134,7 @@ class DopplerWeaponCount(Range):
     How many weapons are required to access Dr. Doppler's Lab.
     """
     display_name = "Doppler Weapon Count"
-    range_start = 1
+    range_start = 0
     range_end = 8
     default = 8
 
@@ -133,7 +143,7 @@ class DopplerArmorUpgradeCount(Range):
     How many armor upgrades are required to access Dr. Doppler's Lab.
     """
     display_name = "Doppler Armor Upgrade Count"
-    range_start = 1
+    range_start = 0
     range_end = 8
     default = 5
 
@@ -142,7 +152,7 @@ class DopplerHeartTankCount(Range):
     How many Heart Tanks are required to access Dr. Doppler's Lab.
     """
     display_name = "Doppler Heart Tank Count"
-    range_start = 1
+    range_start = 0
     range_end = 8
     default = 8
 
@@ -151,7 +161,7 @@ class DopplerSubTankCount(Range):
     How many Sub Tanks are required to access Dr. Doppler's Lab.
     """
     display_name = "Doppler Sub Tank Count"
-    range_start = 1
+    range_start = 0
     range_end = 4
     default = 4
 
@@ -164,14 +174,17 @@ class VileOpen(Choice):
       armor_upgrades: Access will be granted after collecting a certain amount of armor upgrades.
       heart_tanks: Access will be granted after collecting a certain amount of Heart Tanks.
       sub_tanks: Access will be granted after collecting a certain amount of Sub Tanks.
+      all: Access will be granted after collecting a certain amount of Medals, Weapons, Armor Upgrades
+           Heart Tanks and Sub Tanks.
     """
     display_name = "Vile Stage rules"
     option_multiworld = 0
     option_medals = 1
     option_weapons = 2
-    option_armor_upgrades = 3
-    option_heart_tanks = 4
-    option_sub_tanks = 5
+    option_armor_upgrades = 4
+    option_heart_tanks = 8
+    option_sub_tanks = 16
+    option_all = 31
     default = 1
 
 class VileMedalCount(Range):
@@ -243,8 +256,9 @@ class MMX3Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     death_link: DeathLink
     energy_link: EnergyLink
-    disable_charge_freeze: DisableChargeFreeze
     starting_life_count: StartingLifeCount
+    jammed_buster: JammedBuster
+    disable_charge_freeze: DisableChargeFreeze
     pickupsanity: PickupSanity
     logic_boss_weakness: LogicBossWeakness
     logic_vile_required: LogicRequireVileDefeatForDoppler

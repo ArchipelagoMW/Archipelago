@@ -153,7 +153,8 @@ stage_clears = {
     LocationName.crush_crawfish_clear:      starting_id + 0x0084,
     LocationName.neon_tiger_clear:          starting_id + 0x0085,
     LocationName.gravity_beetle_clear:      starting_id + 0x0086,
-    LocationName.blast_hornet_clear:        starting_id + 0x0087
+    LocationName.blast_hornet_clear:        starting_id + 0x0087,
+    LocationName.intro_stage_clear:         starting_id + 0x0088,
 }
 
 all_locations = {
@@ -169,6 +170,16 @@ all_locations = {
 location_table = {}
 
 location_groups = {
+    "Mavericks": {
+            LocationName.blizzard_buffalo_boss,
+            LocationName.toxic_seahorse_boss,
+            LocationName.tunnel_rhino_boss,
+            LocationName.volt_catfish_boss,
+            LocationName.crush_crawfish_boss,
+            LocationName.neon_tiger_boss,
+            LocationName.gravity_beetle_boss,
+            LocationName.blast_hornet_boss,
+        },
     "Bosses": {
             LocationName.intro_stage_boss,
             LocationName.intro_stage_mini_boss,
@@ -192,8 +203,8 @@ location_groups = {
             LocationName.bit_defeat,
             LocationName.byte_defeat,
         },
-    "Heart Tanks": {location for location in all_locations.keys() if "Heart Tank" in location},
-    "Sub Tanks": {location for location in all_locations.keys() if "Sub Tank" in location},
+    "Heart Tanks": {location for location in all_locations.keys() if "- Heart Tank" in location},
+    "Sub Tanks": {location for location in all_locations.keys() if "- Sub Tank" in location},
     "Upgrade Capsules": {location for location in all_locations.keys() if "Capsule" in location},
     "Ride Armors": {location for location in all_locations.keys() if "Ride Armor" in location},
     "Intro Stage": {location for location in all_locations.keys() if "Hunter Base Stage - " in location},

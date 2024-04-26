@@ -7,6 +7,7 @@ location_id_to_level_id = {
     LocationName.intro_stage_mini_boss:         [0x00, 0x201, 0x00],
     LocationName.intro_stage_hp_1:              [0x00, 0x100, 0x00],
     LocationName.intro_stage_hp_2:              [0x00, 0x101, 0x00],
+    LocationName.intro_stage_clear:             [0x01, 0x312, 0x1E],
 
     LocationName.blast_hornet_clear:            [0x01, 0x300, 0x02],
     LocationName.blast_hornet_boss:             [0x01, 0x202, 0x00],

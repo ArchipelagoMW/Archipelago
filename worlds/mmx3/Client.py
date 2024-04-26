@@ -34,11 +34,12 @@ MMX3_GOING_THROUGH_GATE = WRAM_START + 0x01F25
 MMX3_HYPER_CANNON       = WRAM_START + 0x01FCC
 MMX3_VICTORY            = WRAM_START + 0x0F46B
 
-MMX3_ENABLE_HEART_TANK  = WRAM_START + 0x0F4E0
-MMX3_ENABLE_HP_REFILL   = WRAM_START + 0x0F4E4
-MMX3_HP_REFILL_AMOUNT   = WRAM_START + 0x0F4E5
-MMX3_ENABLE_GIVE_1UP    = WRAM_START + 0x0F4E7
-MMX3_RECEIVING_ITEM     = WRAM_START + 0x0F4FF
+MMX3_ENABLE_HEART_TANK      = WRAM_START + 0x0F4E0
+MMX3_ENABLE_HP_REFILL       = WRAM_START + 0x0F4E4
+MMX3_HP_REFILL_AMOUNT       = WRAM_START + 0x0F4E5
+MMX3_ENABLE_GIVE_1UP        = WRAM_START + 0x0F4E7
+MMX3_RECEIVING_ITEM         = WRAM_START + 0x0F4FF
+MMX3_UNLOCKED_CHARGED_SHOT  = WRAM_START + 0x0F46C
 
 MMX3_SFX_FLAG   = WRAM_START + 0x0F469
 MMX3_SFX_NUMBER = WRAM_START + 0x0F46A
@@ -63,6 +64,7 @@ MMX3_PICKUPSANITY_ACTIVE    = ROM_START + 0x17FFE7
 MMX3_REQUIRED_REMATCHES     = ROM_START + 0x17FFF3
 MMX3_ENERGY_LINK_ENABLED    = ROM_START + 0x17FFF7
 MMX3_DEATH_LINK_ACTIVE      = ROM_START + 0x17FFF8
+MMX3_JAMMED_BUSTER_ACTIVE   = ROM_START + 0x17FFF9
 
 HP_EXCHANGE_RATE = 500000000
 
@@ -81,6 +83,7 @@ BOSS_MEDAL = [0xFF, 0xFF, 0x02, 0xFF, 0x0C, 0x0A, 0x00, 0xFF,
 
 class MMX3SNIClient(SNIClient):
     game = "Mega Man X3"
+    patch_suffix = ".apmmx3"
 
     def __init__(self):
         super().__init__()
@@ -293,7 +296,6 @@ class MMX3SNIClient(SNIClient):
         can_move = await snes_read(ctx, MMX3_CAN_MOVE, 0x1)
         going_through_gate = await snes_read(ctx, MMX3_GOING_THROUGH_GATE, 0x4)
         pause_state = await snes_read(ctx, MMX3_PAUSE_STATE, 0x1)
-        #logger.info(f"{menu_state[0] != 0x04}, {gameplay_state[0] != 0x04}, {can_move[0] != 0x00}, {pause_state[0] != 0x00}, {receiving_item[0] != 0x00}")
         if menu_state[0] != 0x04 or \
             gameplay_state[0] != 0x04 or \
             can_move[0] != 0x00 or \
@@ -305,6 +307,8 @@ class MMX3SNIClient(SNIClient):
                 going_through_gate[2] != 0x00 and \
                 going_through_gate[3] != 0x00 \
             ):
+            backup_item = self.item_queue.pop(0)
+            self.item_queue.append(backup_item)
             return
         
         # Handle items that Zero can also get
@@ -315,7 +319,6 @@ class MMX3SNIClient(SNIClient):
                 current_hp = await snes_read(ctx, MMX3_CURRENT_HP, 0x1)
                 max_hp = await snes_read(ctx, MMX3_MAX_HP, 0x1)
 
-                #logging.info(f"DEBUG HP REFILL: {current_hp[0]}, {max_hp[0]}, {current_hp[0] < max_hp[0]}, {next_item}, {self.item_queue}")
                 if current_hp[0] < max_hp[0]:
                     snes_buffered_write(ctx, MMX3_ENABLE_HP_REFILL, bytearray([0x02]))
                     if next_item[0] == "small hp refill":
@@ -331,7 +334,6 @@ class MMX3SNIClient(SNIClient):
 
             elif next_item[0] == "1up":
                 life_count = await snes_read(ctx, MMX3_LIFE_COUNT, 0x1)
-                #logging.info(f"DEBUG 1UP: {life_count[0]}, {life_count[0] < 9}, {next_item}, {self.item_queue}")
                 if life_count[0] < 9:
                     snes_buffered_write(ctx, MMX3_ENABLE_GIVE_1UP, bytearray([0x01]))
                     snes_buffered_write(ctx, MMX3_RECEIVING_ITEM, bytearray([0x01]))
@@ -361,7 +363,6 @@ class MMX3SNIClient(SNIClient):
                 snes_buffered_write(ctx, MMX3_HEART_TANKS, bytearray([heart_tanks]))
                 snes_buffered_write(ctx, MMX3_ENABLE_HEART_TANK, bytearray([0x02]))
                 snes_buffered_write(ctx, MMX3_RECEIVING_ITEM, bytearray([0x01]))
-                #logging.info(f"DEBUG HEART TANK: {heart_tanks}, {heart_tank_count}, {heart_tank_count < 8}, {next_item}, {self.item_queue}")
             self.item_queue.pop(0)
 
         elif next_item[0] == "sub tank":
@@ -379,7 +380,6 @@ class MMX3SNIClient(SNIClient):
                 snes_buffered_write(ctx, MMX3_SUB_TANK_ARRAY, bytearray(sub_tanks))
                 snes_buffered_write(ctx, MMX3_SFX_FLAG, bytearray([0x01]))
                 snes_buffered_write(ctx, MMX3_SFX_NUMBER, bytearray([0x17]))
-                #snes_buffered_write(ctx, MMX3_RECEIVING_ITEM, bytearray([0x01]))
             self.item_queue.pop(0)
         
         elif next_item[0] == "upgrade":
@@ -394,23 +394,30 @@ class MMX3SNIClient(SNIClient):
                 # Armor
                 upgrades = upgrades[0]
                 upgrades |= bit
-                snes_buffered_write(ctx, MMX3_UPGRADES, bytearray([upgrades]))
                 if bit == 0x01:
                     snes_buffered_write(ctx, WRAM_START + 0x09EE, bytearray([0x18]))
+                    snes_buffered_write(ctx, MMX3_UPGRADES, bytearray([upgrades]))
                 elif bit == 0x02:
-                    value = await snes_read(ctx, WRAM_START + 0x0B28, 0x1)
-                    snes_buffered_write(ctx, WRAM_START + 0x0AE8, bytearray([value[0] + 1]))
-                    snes_buffered_write(ctx, WRAM_START + 0x0AF2, bytearray([0x00]))
-                    snes_buffered_write(ctx, WRAM_START + 0x0AF3, bytearray([0x00]))
-                    snes_buffered_write(ctx, WRAM_START + 0x0AE9, bytearray([0x00]))
-                    snes_buffered_write(ctx, WRAM_START + 0x0AF8, bytearray([0x5D]))
+                    jam_check = await snes_read(ctx, MMX3_JAMMED_BUSTER_ACTIVE, 0x1)
+                    charge_shot_unlocked = await snes_read(ctx, MMX3_UNLOCKED_CHARGED_SHOT, 0x1)
+                    if jam_check[0] == 1 and charge_shot_unlocked[0] == 0:
+                        snes_buffered_write(ctx, MMX3_UNLOCKED_CHARGED_SHOT, bytearray([0x01]))
+                    else:
+                        value = await snes_read(ctx, WRAM_START + 0x0AE8, 0x1)
+                        snes_buffered_write(ctx, WRAM_START + 0x0AE8, bytearray([value[0] + 1]))
+                        snes_buffered_write(ctx, WRAM_START + 0x0AF2, bytearray([0x00]))
+                        snes_buffered_write(ctx, WRAM_START + 0x0AF3, bytearray([0x00]))
+                        snes_buffered_write(ctx, WRAM_START + 0x0AE9, bytearray([0x00]))
+                        snes_buffered_write(ctx, WRAM_START + 0x0AF8, bytearray([0x5D]))
+                        snes_buffered_write(ctx, MMX3_UPGRADES, bytearray([upgrades]))
                 elif bit == 0x04:
-                    value = await snes_read(ctx, WRAM_START + 0x0B28, 0x1)
+                    value = await snes_read(ctx, WRAM_START + 0x0B08, 0x1)
                     snes_buffered_write(ctx, WRAM_START + 0x0B08, bytearray([value[0] + 1]))
                     snes_buffered_write(ctx, WRAM_START + 0x0B12, bytearray([0x00]))
                     snes_buffered_write(ctx, WRAM_START + 0x0B13, bytearray([0x01]))
                     snes_buffered_write(ctx, WRAM_START + 0x0B09, bytearray([0x00]))
                     snes_buffered_write(ctx, WRAM_START + 0x0B18, bytearray([0x5D]))
+                    snes_buffered_write(ctx, MMX3_UPGRADES, bytearray([upgrades]))
                 elif bit == 0x08:
                     value = await snes_read(ctx, WRAM_START + 0x0B28, 0x1)
                     snes_buffered_write(ctx, WRAM_START + 0x0B28, bytearray([value[0] + 1]))
@@ -418,9 +425,9 @@ class MMX3SNIClient(SNIClient):
                     snes_buffered_write(ctx, WRAM_START + 0x0B33, bytearray([0x02]))
                     snes_buffered_write(ctx, WRAM_START + 0x0B29, bytearray([0x00]))
                     snes_buffered_write(ctx, WRAM_START + 0x0B38, bytearray([0x5D]))
+                    snes_buffered_write(ctx, MMX3_UPGRADES, bytearray([upgrades]))
                 snes_buffered_write(ctx, MMX3_SFX_FLAG, bytearray([0x01]))
                 snes_buffered_write(ctx, MMX3_SFX_NUMBER, bytearray([0x1B]))
-                #snes_buffered_write(ctx, MMX3_RECEIVING_ITEM, bytearray([0x01]))
             else:
                 # Chip
                 bit = bit << 4
@@ -432,7 +439,6 @@ class MMX3SNIClient(SNIClient):
                 snes_buffered_write(ctx, MMX3_RIDE_CHIPS, bytearray([chips]))
                 snes_buffered_write(ctx, MMX3_SFX_FLAG, bytearray([0x01]))
                 snes_buffered_write(ctx, MMX3_SFX_NUMBER, bytearray([0x1B]))
-                #snes_buffered_write(ctx, MMX3_RECEIVING_ITEM, bytearray([0x01]))
             self.item_queue.pop(0)
 
         elif next_item[0] == "ride":
@@ -444,7 +450,6 @@ class MMX3SNIClient(SNIClient):
             if check == 0:
                 ride |= bit
                 snes_buffered_write(ctx, MMX3_RIDE_CHIPS, bytearray([ride]))
-                #snes_buffered_write(ctx, MMX3_RECEIVING_ITEM, bytearray([0x01]))
                 snes_buffered_write(ctx, MMX3_SFX_FLAG, bytearray([0x01]))
                 snes_buffered_write(ctx, MMX3_SFX_NUMBER, bytearray([0x32]))
             self.item_queue.pop(0)

@@ -6,6 +6,7 @@ from .Names import LocationName, ItemName, RegionName, EventName
 def set_rules(world: MMX3World):
     player = world.player
     multiworld = world.multiworld
+    jammed_buster = world.options.jammed_buster.value
 
     multiworld.completion_condition[player] = lambda state: state.has(ItemName.victory, player)
 
@@ -32,16 +33,16 @@ def set_rules(world: MMX3World):
     entrance = multiworld.get_entrance(f"{RegionName.intro_stage} -> {RegionName.dr_doppler_lab}", player)
 
     if doppler_open == "multiworld":
-        add_rule(entrance, lambda state: state.has(ItemName.stage_doppler_lab, player))
-    elif doppler_open == "medals":
+        set_rule(entrance, lambda state: state.has(ItemName.stage_doppler_lab, player))
+    if doppler_open in ("medals", "all") and world.options.doppler_medal_count.value > 0:
         add_rule(entrance, lambda state: state.has(ItemName.maverick_medal, player, world.options.doppler_medal_count.value))
-    elif doppler_open == "weapons":
+    if doppler_open in ("weapons", "all") and world.options.doppler_weapon_count.value > 0:
         add_rule(entrance, lambda state: state.has_group("Weapons", player, world.options.doppler_weapon_count.value))
-    elif doppler_open == "armor_upgrades":
+    if doppler_open in ("armor_upgrades", "all") and world.options.doppler_upgrade_count.value > 0:
         add_rule(entrance, lambda state: state.has_group("Armor Upgrades", player, world.options.doppler_upgrade_count.value))
-    elif doppler_open == "heart_tanks":
+    if doppler_open in ("heart_tanks", "all") and world.options.doppler_heart_tank_count.value > 0:
         add_rule(entrance, lambda state: state.has(ItemName.heart_tank, player, world.options.doppler_heart_tank_count.value))
-    elif doppler_open == "sub_tanks":
+    if doppler_open in ("sub_tanks", "all") and world.options.doppler_sub_tank_count.value > 0:
         add_rule(entrance, lambda state: state.has(ItemName.sub_tank, player, world.options.doppler_sub_tank_count.value))
 
     if world.options.logic_vile_required.value:
@@ -58,7 +59,7 @@ def set_rules(world: MMX3World):
     # Set Boss rematch rules
     set_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_3_rematches} -> {RegionName.dr_doppler_lab_3_boss}", player),
              lambda state: state.has(EventName.boss_rematch_clear, player, world.options.doppler_lab_3_boss_rematch_count.value))
-
+    
     # Vile entrance rules
     vile_open = world.options.vile_open
     entrance_blizzard = multiworld.get_entrance(f"{RegionName.blizzard_buffalo_start} -> {RegionName.vile}", player)
@@ -68,26 +69,26 @@ def set_rules(world: MMX3World):
         set_rule(entrance_blizzard, lambda state: state.has(ItemName.stage_vile, player))
         set_rule(entrance_volt, lambda state: state.has(ItemName.stage_vile, player))
         set_rule(entrance_crush, lambda state: state.has(ItemName.stage_vile, player))
-    elif vile_open == "medals":
-        set_rule(entrance_blizzard, lambda state: state.has(ItemName.maverick_medal, player, world.options.vile_medal_count.value))
-        set_rule(entrance_volt, lambda state: state.has(ItemName.maverick_medal, player, world.options.vile_medal_count.value))
-        set_rule(entrance_crush, lambda state: state.has(ItemName.maverick_medal, player, world.options.vile_medal_count.value))
-    elif vile_open == "weapons":
-        set_rule(entrance_blizzard, lambda state: state.has_group("Weapons", player, world.options.vile_weapon_count.value))
-        set_rule(entrance_volt, lambda state: state.has_group("Weapons", player, world.options.vile_weapon_count.value))
-        set_rule(entrance_crush, lambda state: state.has_group("Weapons", player, world.options.vile_weapon_count.value))
-    elif vile_open == "armor_upgrades":
-        set_rule(entrance_blizzard, lambda state: state.has_group("Armor Upgrades", player, world.options.vile_upgrade_count.value))
-        set_rule(entrance_volt, lambda state: state.has_group("Armor Upgrades", player, world.options.vile_upgrade_count.value))
-        set_rule(entrance_crush, lambda state: state.has_group("Armor Upgrades", player, world.options.vile_upgrade_count.value))
-    elif vile_open == "heart_tanks":
-        set_rule(entrance_blizzard, lambda state: state.has(ItemName.heart_tank, player, world.options.vile_heart_tank_count.value))
-        set_rule(entrance_volt, lambda state: state.has(ItemName.heart_tank, player, world.options.vile_heart_tank_count.value))
-        set_rule(entrance_crush, lambda state: state.has(ItemName.heart_tank, player, world.options.vile_heart_tank_count.value))
-    elif vile_open == "sub_tanks":
-        set_rule(entrance_blizzard, lambda state: state.has(ItemName.sub_tank, player, world.options.vile_sub_tank_count.value))
-        set_rule(entrance_volt, lambda state: state.has(ItemName.sub_tank, player, world.options.vile_sub_tank_count.value))
-        set_rule(entrance_crush, lambda state: state.has(ItemName.sub_tank, player, world.options.vile_sub_tank_count.value))
+    if vile_open in ("medals", "all") and world.options.vile_medal_count.value > 0:
+        add_rule(entrance_blizzard, lambda state: state.has(ItemName.maverick_medal, player, world.options.vile_medal_count.value))
+        add_rule(entrance_volt, lambda state: state.has(ItemName.maverick_medal, player, world.options.vile_medal_count.value))
+        add_rule(entrance_crush, lambda state: state.has(ItemName.maverick_medal, player, world.options.vile_medal_count.value))
+    if vile_open in ("weapons", "all") and world.options.vile_weapon_count.value > 0:
+        add_rule(entrance_blizzard, lambda state: state.has_group("Weapons", player, world.options.vile_weapon_count.value))
+        add_rule(entrance_volt, lambda state: state.has_group("Weapons", player, world.options.vile_weapon_count.value))
+        add_rule(entrance_crush, lambda state: state.has_group("Weapons", player, world.options.vile_weapon_count.value))
+    if vile_open in ("armor_upgrades", "all") and world.options.vile_upgrade_count.value > 0:
+        add_rule(entrance_blizzard, lambda state: state.has_group("Armor Upgrades", player, world.options.vile_upgrade_count.value))
+        add_rule(entrance_volt, lambda state: state.has_group("Armor Upgrades", player, world.options.vile_upgrade_count.value))
+        add_rule(entrance_crush, lambda state: state.has_group("Armor Upgrades", player, world.options.vile_upgrade_count.value))
+    if vile_open in ("heart_tanks", "all") and world.options.vile_heart_tank_count.value > 0:
+        add_rule(entrance_blizzard, lambda state: state.has(ItemName.heart_tank, player, world.options.vile_heart_tank_count.value))
+        add_rule(entrance_volt, lambda state: state.has(ItemName.heart_tank, player, world.options.vile_heart_tank_count.value))
+        add_rule(entrance_crush, lambda state: state.has(ItemName.heart_tank, player, world.options.vile_heart_tank_count.value))
+    if vile_open in ("sub_tanks", "all") and world.options.vile_sub_tank_count.value > 0:
+        add_rule(entrance_blizzard, lambda state: state.has(ItemName.sub_tank, player, world.options.vile_sub_tank_count.value))
+        add_rule(entrance_volt, lambda state: state.has(ItemName.sub_tank, player, world.options.vile_sub_tank_count.value))
+        add_rule(entrance_crush, lambda state: state.has(ItemName.sub_tank, player, world.options.vile_sub_tank_count.value))
 
     # Bit & Byte arena entrance rules
     set_rule(multiworld.get_entrance(f"{RegionName.blast_hornet_bit_byte} -> {RegionName.bit_byte}", player), 
@@ -137,7 +138,7 @@ def set_rules(world: MMX3World):
                     state.has(ItemName.ride_frog, player) or 
                     (   
                         state.has(ItemName.frost_shield, player) and
-                        state.has(ItemName.third_armor_arms, player, 1)
+                        state.has(ItemName.third_armor_arms, player, jammed_buster + 1)
                     )
                 )
              ))
@@ -147,19 +148,19 @@ def set_rules(world: MMX3World):
                 state.has(ItemName.ride_frog, player) or 
                 (   
                     state.has(ItemName.frost_shield, player) and
-                    state.has(ItemName.third_armor_arms, player, 1)
+                    state.has(ItemName.third_armor_arms, player, jammed_buster + 1)
                 )
              ))
     
     # Set Tunnel Rhino collectible rules
     set_rule(multiworld.get_location(LocationName.tunnel_rhino_heart_tank, player),
              lambda state: (
-                state.has(ItemName.third_armor_arms, player, 1) and
+                state.has(ItemName.third_armor_arms, player, jammed_buster + 1) and
                 state.has(ItemName.triad_thunder, player)
              ))
     set_rule(multiworld.get_location(LocationName.tunnel_rhino_helmet, player),
              lambda state: (
-                state.has(ItemName.third_armor_arms, player, 1) and
+                state.has(ItemName.third_armor_arms, player, jammed_buster + 1) and
                 state.has(ItemName.triad_thunder, player)
              ))
     
@@ -168,7 +169,7 @@ def set_rules(world: MMX3World):
              lambda state: state.has_group("Ride Armors", player, 1))
     set_rule(multiworld.get_location(LocationName.volt_catfish_body, player),
              lambda state: (
-                state.has(ItemName.third_armor_arms, player, 1) and
+                state.has(ItemName.third_armor_arms, player, jammed_buster + 1) and
                 state.has(ItemName.gravity_well, player)
              ))
     
@@ -179,7 +180,7 @@ def set_rules(world: MMX3World):
              lambda state: state.has_group("Ride Armors", player, 1))
     set_rule(multiworld.get_location(LocationName.crush_crawfish_hawk_ride, player),
              lambda state: (
-                state.has(ItemName.third_armor_arms, player, 1) and
+                state.has(ItemName.third_armor_arms, player, jammed_buster + 1) and
                 state.has(ItemName.triad_thunder, player)
              ))
     
@@ -231,51 +232,51 @@ def add_boss_weakness_logic(world):
     multiworld = world.multiworld
 
     # Set Blizzard Buffalo rules
-    set_rule(multiworld.get_location(LocationName.blizzard_buffalo_boss, player),
+    set_rule(multiworld.get_entrance(f"{RegionName.blizzard_buffalo_after_bit_byte} -> {RegionName.blizzard_buffalo_boss}", player),
              lambda state: state.has(ItemName.parasitic_bomb, player))
-    set_rule(multiworld.get_location(LocationName.blizzard_buffalo_clear, player),
+    set_rule(multiworld.get_entrance(f"{RegionName.blizzard_buffalo_after_bit_byte} -> {RegionName.blizzard_buffalo_boss}", player),
              lambda state: state.has(ItemName.parasitic_bomb, player))
 
     # Set Toxic Seahorse rules
-    set_rule(multiworld.get_location(LocationName.toxic_seahorse_boss, player),
+    set_rule(multiworld.get_entrance(f"{RegionName.toxic_seahorse_dam} -> {RegionName.toxic_seahorse_boss}", player),
              lambda state: state.has(ItemName.frost_shield, player))
-    set_rule(multiworld.get_location(LocationName.toxic_seahorse_clear, player),
+    set_rule(multiworld.get_entrance(f"{RegionName.toxic_seahorse_dam} -> {RegionName.toxic_seahorse_boss}", player),
              lambda state: state.has(ItemName.frost_shield, player))
     
     # Set Tunnel Rhino rules
-    set_rule(multiworld.get_location(LocationName.tunnel_rhino_boss, player),
+    set_rule(multiworld.get_entrance(f"{RegionName.tunnel_rhino_climbing} -> {RegionName.tunnel_rhino_boss}", player),
              lambda state: state.has(ItemName.acid_burst, player))
-    set_rule(multiworld.get_location(LocationName.tunnel_rhino_clear, player),
+    set_rule(multiworld.get_entrance(f"{RegionName.tunnel_rhino_climbing} -> {RegionName.tunnel_rhino_boss}", player),
              lambda state: state.has(ItemName.acid_burst, player))
     
     # Set Volt Catfish rules
-    set_rule(multiworld.get_location(LocationName.volt_catfish_boss, player),
+    set_rule(multiworld.get_entrance(f"{RegionName.volt_catfish_inside} -> {RegionName.volt_catfish_boss}", player),
              lambda state: state.has(ItemName.tornado_fang, player))
-    set_rule(multiworld.get_location(LocationName.volt_catfish_clear, player),
+    set_rule(multiworld.get_entrance(f"{RegionName.volt_catfish_inside} -> {RegionName.volt_catfish_boss}", player),
              lambda state: state.has(ItemName.tornado_fang, player))
     
     # Set Crush Crawfish rules
-    set_rule(multiworld.get_location(LocationName.crush_crawfish_boss, player),
+    set_rule(multiworld.get_entrance(f"{RegionName.crush_crawfish_inside} -> {RegionName.crush_crawfish_boss}", player),
              lambda state: state.has(ItemName.triad_thunder, player))
-    set_rule(multiworld.get_location(LocationName.crush_crawfish_clear, player),
+    set_rule(multiworld.get_entrance(f"{RegionName.crush_crawfish_inside} -> {RegionName.crush_crawfish_boss}", player),
              lambda state: state.has(ItemName.triad_thunder, player))
     
     # Set Neon Tiger rules
-    set_rule(multiworld.get_location(LocationName.neon_tiger_boss, player),
+    set_rule(multiworld.get_entrance(f"{RegionName.neon_tiger_hill} -> {RegionName.neon_tiger_boss}", player),
              lambda state: state.has(ItemName.spinning_blade, player))
-    set_rule(multiworld.get_location(LocationName.neon_tiger_clear, player),
+    set_rule(multiworld.get_entrance(f"{RegionName.neon_tiger_hill} -> {RegionName.neon_tiger_boss}", player),
              lambda state: state.has(ItemName.spinning_blade, player))
     
     # Set Gravity Beetle rules
-    set_rule(multiworld.get_location(LocationName.gravity_beetle_boss, player),
+    set_rule(multiworld.get_entrance(f"{RegionName.gravity_beetle_inside} -> {RegionName.gravity_beetle_boss}", player),
              lambda state: state.has(ItemName.ray_splasher, player))
-    set_rule(multiworld.get_location(LocationName.gravity_beetle_clear, player),
+    set_rule(multiworld.get_entrance(f"{RegionName.gravity_beetle_inside} -> {RegionName.gravity_beetle_boss}", player),
              lambda state: state.has(ItemName.ray_splasher, player))
     
     # Set Blast Hornet rules
-    set_rule(multiworld.get_location(LocationName.blast_hornet_boss, player), 
+    set_rule(multiworld.get_entrance(f"{RegionName.blast_hornet_bit_byte} -> {RegionName.blast_hornet_boss}", player),
              lambda state: state.has(ItemName.gravity_well, player))
-    set_rule(multiworld.get_location(LocationName.blast_hornet_clear, player), 
+    set_rule(multiworld.get_entrance(f"{RegionName.blast_hornet_bit_byte} -> {RegionName.blast_hornet_boss}", player),
              lambda state: state.has(ItemName.gravity_well, player)) 
     
     # Set maverick rematch rules
@@ -328,7 +329,7 @@ def add_boss_weakness_logic(world):
              ))
 
     # Set Vile rules
-    add_rule(multiworld.get_location(LocationName.vile_stage_boss, player), 
+    add_rule(multiworld.get_entrance(f"{RegionName.vile_before} -> {RegionName.vile_boss}", player),
              lambda state: (
                 state.has(ItemName.spinning_blade, player) or
                 state.has(ItemName.ray_splasher, player)

@@ -55,6 +55,8 @@ class MMX3World(World):
     options_dataclass = MMX3Options
     options: MMX3Options
 
+    required_client_version = (0, 4, 6)
+
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = all_locations
     item_name_groups = item_groups
@@ -79,14 +81,32 @@ class MMX3World(World):
             total_required_locations += 58
         
         # Setup item pool
-        itempool += [self.create_item(ItemName.stage_toxic_seahorse)]
-        itempool += [self.create_item(ItemName.stage_volt_catfish)]
-        itempool += [self.create_item(ItemName.stage_tunnel_rhino)]
-        itempool += [self.create_item(ItemName.stage_blizzard_buffalo)]
-        itempool += [self.create_item(ItemName.stage_crush_crawfish)]
-        itempool += [self.create_item(ItemName.stage_neon_tiger)]
-        itempool += [self.create_item(ItemName.stage_blast_hornet)]
-        itempool += [self.create_item(ItemName.stage_gravity_beetle)]
+
+        # Add levels into the pool
+        start_inventory = self.multiworld.start_inventory[self.player].value.copy()
+        stage_list = [
+            ItemName.stage_toxic_seahorse,
+            ItemName.stage_volt_catfish,
+            ItemName.stage_tunnel_rhino,
+            ItemName.stage_blizzard_buffalo,
+            ItemName.stage_crush_crawfish,
+            ItemName.stage_neon_tiger,
+            ItemName.stage_blast_hornet,
+            ItemName.stage_gravity_beetle,
+        ]
+        stage_selected = self.random.randint(0, 7)
+        if any(stage in self.options.start_inventory_from_pool for stage in stage_list) or \
+           any(stage in start_inventory for stage in stage_list):
+            total_required_locations += 1
+            for i in range(len(stage_list)):
+                if stage_list[i] not in start_inventory:
+                    itempool += [self.create_item(stage_list[i])]
+        else:
+            for i in range(len(stage_list)):
+                if i == stage_selected:
+                    self.multiworld.get_location(LocationName.intro_stage_clear, self.player).place_locked_item(self.create_item(stage_list[i]))
+                else:
+                    itempool += [self.create_item(stage_list[i])]
 
         if self.options.doppler_open == "multiworld":
             itempool += [self.create_item(ItemName.stage_doppler_lab)]
@@ -112,23 +132,46 @@ class MMX3World(World):
         else:
             itempool += [self.create_item(ItemName.z_saber)]
 
-        if self.options.doppler_open.value == 3 or self.options.vile_open.value == 3:
+        if self.options.doppler_open in ("armor_upgrades", "all") or self.options.vile_open in ("armor_upgrades", "all"):
             itempool += [self.create_item(ItemName.third_armor_helmet) for _ in range(2)]
             itempool += [self.create_item(ItemName.third_armor_body) for _ in range(2)]
-            itempool += [self.create_item(ItemName.third_armor_arms) for _ in range(2)]
+            itempool += [self.create_item(ItemName.third_armor_arms) for _ in range(2 + self.options.jammed_buster.value)]
         else:
             itempool += [self.create_item(ItemName.third_armor_helmet, ItemClassification.useful) for _ in range(2)]
             itempool += [self.create_item(ItemName.third_armor_body, ItemClassification.useful) for _ in range(2)]
             itempool += [self.create_item(ItemName.third_armor_arms, ItemClassification.useful)]
-            itempool += [self.create_item(ItemName.third_armor_arms)]
+            itempool += [self.create_item(ItemName.third_armor_arms) for _ in range(1 + self.options.jammed_buster.value)]
         itempool += [self.create_item(ItemName.third_armor_legs) for _ in range(2)]
 
-        if self.options.doppler_open.value == 4 or self.options.vile_open.value == 4:
-            itempool += [self.create_item(ItemName.heart_tank) for _ in range(8)]
+        # Add heart tanks into the pool
+        doppler_logic = self.options.doppler_open in ("heart_tanks", "all") and self.options.doppler_heart_tank_count.value > 0
+        highest_count = self.options.doppler_heart_tank_count.value if doppler_logic else 0
+        vile_logic = self.options.vile_open in ("heart_tanks", "all") and self.options.vile_heart_tank_count.value > 0
+        if vile_logic:
+            if self.options.vile_heart_tank_count.value > highest_count:
+                highest_count = self.options.vile_heart_tank_count.value
+        if highest_count > 0:
+            i = highest_count
+            itempool += [self.create_item(ItemName.heart_tank) for _ in range(i)]
+            if i != 8:
+                i = 8 - i
+                itempool += [self.create_item(ItemName.heart_tank, ItemClassification.useful) for _ in range(8 - i)]
         else:
             itempool += [self.create_item(ItemName.heart_tank, ItemClassification.useful) for _ in range(8)]
-        if self.options.doppler_open.value == 5 or self.options.vile_open.value == 5:
-            itempool += [self.create_item(ItemName.sub_tank) for _ in range(4)]
+
+        # Add heart tanks into the pool
+        doppler_logic = self.options.doppler_open in ("sub_tanks", "all") and self.options.doppler_sub_tank_count.value > 0
+        highest_count = self.options.doppler_sub_tank_count.value if doppler_logic else 0
+        vile_logic = self.options.vile_open in ("sub_tanks", "all") and self.options.vile_sub_tank_count.value > 0
+        if vile_logic:
+            if self.options.vile_sub_tank_count.value > highest_count:
+                highest_count = self.options.vile_sub_tank_count.value
+        if highest_count > 0:
+            i = highest_count
+            itempool += [self.create_item(ItemName.sub_tank) for _ in range(i)]
+            if i != 4:
+                i = 4 - i
+                itempool += [self.create_item(ItemName.sub_tank, ItemClassification.useful) for _ in range(4 - i)]
         else:
             itempool += [self.create_item(ItemName.sub_tank, ItemClassification.useful) for _ in range(4)]
 
@@ -204,7 +247,7 @@ class MMX3World(World):
 
     def generate_output(self, output_directory: str):
         try:
-            patch = MMX3ProcedurePatch()
+            patch = MMX3ProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
             patch.write_file("mmx3_basepatch.bsdiff4", pkgutil.get_data(__name__, "data/mmx3_basepatch.bsdiff4"))
             patch_rom(self, patch)
 

@@ -151,6 +151,7 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     # Hunter Base
     add_location_to_region(multiworld, player, active_locations, RegionName.intro_stage, LocationName.intro_stage_boss)
     add_location_to_region(multiworld, player, active_locations, RegionName.intro_stage, LocationName.intro_stage_mini_boss)
+    add_location_to_region(multiworld, player, active_locations, RegionName.intro_stage, LocationName.intro_stage_clear)
 
     # Blizzard Buffalo
     add_location_to_region(multiworld, player, active_locations, RegionName.blizzard_buffalo_start, LocationName.blizzard_buffalo_heart_tank)

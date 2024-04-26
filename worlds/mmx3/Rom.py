@@ -169,6 +169,8 @@ def patch_rom(world: World, patch: MMX3ProcedurePatch):
     # DeathLink
     patch.write_byte(0x17FFF8, world.options.death_link.value)
     
+    patch.write_byte(0x17FFF9, world.options.jammed_buster.value)
+
     # Setup starting life count
     patch.write_byte(0x0019B1, world.options.starting_life_count.value)
     patch.write_byte(0x0072C3, world.options.starting_life_count.value)
