@@ -433,7 +433,7 @@ def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
     if multiworld.key_drop_shuffle[player]:
         key_drop_enemies = {
             0x4DA20, 0x4DA5C, 0x4DB7F, 0x4DD73, 0x4DDC3, 0x4DE07, 0x4E201,
-            0x4E20A, 0x4E326, 0x4E4F7, 0x4E686, 0x4E70C, 0x4E7C8, 0x4E7FA
+            0x4E20A, 0x4E326, 0x4E4F7, 0x4E687, 0x4E70C, 0x4E7C8, 0x4E7FA
         }
         for enemy in key_drop_enemies:
             if rom.read_byte(enemy) == 0x12:
