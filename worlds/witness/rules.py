@@ -173,7 +173,7 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
         return False
 
     # We can get to Hedge 3 from Hedge 2. If we can get from Keep to Hedge 2, we're good.
-    # This covers both Hedge 1 Exit and Hedge 2 Shortcut, because Hedge 1 is just part of the Keep player_regionsn.
+    # This covers both Hedge 1 Exit and Hedge 2 Shortcut, because Hedge 1 is just part of the Keep region.
 
     hedge_2_from_keep = any(
         e.can_reach(state) for e in player_regions.two_way_entrance_register["Keep 2nd Maze", "Keep"]
@@ -223,8 +223,8 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
 def _has_item(item: str, world: "WitnessWorld", player: int,
               player_logic: WitnessPlayerLogic, player_locations: WitnessPlayerLocations) -> CollectionRule:
     if item in player_logic.REFERENCE_LOGIC.ALL_REGIONS_BY_NAME:
-        player_regionsn = world.get_region(item)
-        return player_regionsn.can_reach
+        region = world.get_region(item)
+        return region.can_reach
     if item == "7 Lasers":
         laser_req = world.options.mountain_lasers.value
         return _has_lasers(laser_req, world, False)
