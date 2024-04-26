@@ -7,6 +7,7 @@ from ... import items, Group, ItemClassification
 from ... import options
 from ...items import items_by_group
 from ...mods.mod_data import all_mods
+from ...options import SkillProgression
 from ...regions import RandomizationFlag, randomize_connections, create_final_connections_and_regions
 
 
