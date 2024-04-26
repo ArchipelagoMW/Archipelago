@@ -73,7 +73,7 @@ class WitnessPlayerLogic:
         for subset in these_items:
             self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(subset)
 
-        these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex]["panels"]
+        these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex]["entities"]
 
         if entity_hex in self.DOOR_ITEMS_BY_ID:
             door_items = frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[entity_hex]})
@@ -207,7 +207,7 @@ class WitnessPlayerLogic:
             line_split = line.split(" - ")
 
             requirement = {
-                "panels": utils.parse_lambda(line_split[1]),
+                "entities": utils.parse_lambda(line_split[1]),
             }
 
             if len(line_split) > 2:
@@ -559,7 +559,7 @@ class WitnessPlayerLogic:
 
             # First, entities in unreachable regions are obviously themselves unreachable.
             for region in new_unreachable_regions:
-                for entity in static_witness_logic.ALL_REGIONS_BY_NAME[region]["panels"]:
+                for entity in static_witness_logic.ALL_REGIONS_BY_NAME[region]["physical_entities"]:
                     if self.solvability_guaranteed(entity) and not entity == self.VICTORY_LOCATION:
                         newly_discovered_disabled_entities.add(entity)
                         dirty = True

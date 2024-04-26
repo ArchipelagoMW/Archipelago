@@ -83,13 +83,15 @@ class StaticWitnessLogicObj:
                 self.ENTITIES_BY_NAME[self.ENTITIES_BY_HEX[entity_hex]["checkName"]] = self.ENTITIES_BY_HEX[entity_hex]
 
                 self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex] = {
-                    "panels": parse_lambda(required_panel_lambda)
+                    "entities": parse_lambda(required_panel_lambda)
                 }
 
                 # Lasers and Doors exist in a region, but don't have a regional *requirement*
                 # If a laser is activated, you don't need to physically walk up to it for it to count
                 # As such, logically, they behave more as if they were part of the "Entry" region
-                self.ALL_REGIONS_BY_NAME["Entry"]["panels"].append(entity_hex)
+                self.ALL_REGIONS_BY_NAME["Entry"]["entities"].append(entity_hex)
+                # However, it will also be important to keep track of their physical location for postgame purposes.
+                current_region["physical_entities"].append(entity_hex)
                 continue
 
             required_item_lambda = line_split.pop(0)
@@ -120,7 +122,7 @@ class StaticWitnessLogicObj:
             required_items = frozenset(required_items)
 
             requirement = {
-                "panels": required_panels,
+                "entities": required_panels,
                 "items": required_items
             }
 
@@ -148,7 +150,8 @@ class StaticWitnessLogicObj:
             self.ENTITIES_BY_NAME[self.ENTITIES_BY_HEX[entity_hex]["checkName"]] = self.ENTITIES_BY_HEX[entity_hex]
             self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex] = requirement
 
-            current_region["panels"].append(entity_hex)
+            current_region["entities"].append(entity_hex)
+            current_region["physical_entities"].append(entity_hex)
 
     def reverse_connections(self):
         # Iterate all connections

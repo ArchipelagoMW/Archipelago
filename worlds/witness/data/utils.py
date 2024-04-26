@@ -76,7 +76,8 @@ def define_new_region(region_string: str) -> Tuple[Dict[str, Any], Set[Tuple[str
     region_obj = {
         "name": region_name,
         "shortName": region_name_simple,
-        "panels": list()
+        "entities": list(),
+        "physical_entities": list(),
     }
     return region_obj, options
 

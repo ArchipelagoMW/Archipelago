@@ -99,12 +99,12 @@ class WitnessPlayerRegions:
 
         for region_name, region in regions_to_create.items():
             locations_for_this_region = [
-                self.reference_logic.ENTITIES_BY_HEX[panel]["checkName"] for panel in region["panels"]
+                self.reference_logic.ENTITIES_BY_HEX[panel]["checkName"] for panel in region["entities"]
                 if self.reference_logic.ENTITIES_BY_HEX[panel]["checkName"]
                 in self.player_locations.CHECK_LOCATION_TABLE
             ]
             locations_for_this_region += [
-                static_witness_locations.get_event_name(panel) for panel in region["panels"]
+                static_witness_locations.get_event_name(panel) for panel in region["entities"]
                 if static_witness_locations.get_event_name(panel) in self.player_locations.EVENT_LOCATION_TABLE
             ]
 
