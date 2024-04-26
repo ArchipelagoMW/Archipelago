@@ -1,6 +1,7 @@
 import os
 import pkgutil
 import pickle
+import sys
 from io import BytesIO
 from typing import Dict, List, Set
 
@@ -77,6 +78,10 @@ def get_progressive_item_id(name: str):
 
 def load_static_data_from_file():
     global PAINTING_ENTRANCES, PAINTING_EXITS
+
+    # This seems to be needed for frozen 3.8.
+    from . import datatypes
+    sys.modules['worlds.lingo.datatypes'] = datatypes
 
     class RenameUnpickler(pickle.Unpickler):
         def find_class(self, module, name):
