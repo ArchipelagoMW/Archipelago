@@ -77,7 +77,7 @@ def winkle(state, player):
 
 
 def beanFruit(state, player):
-    return state.has("Beanfruit 1", player) and state.has("Beanfruit 2", player) and state.has("Beanfruit 3", player) and state.has("Beanfruit 4", player) and state.has("Beanfruit 5", player) and state.has("Beanfruit 6", player) and state.has("Beanfruit 7", player)
+    return state.has("Bean Fruit 1", player) and state.has("Bean Fruit 2", player) and state.has("Bean Fruit 3", player) and state.has("Bean Fruit 4", player) and state.has("Bean Fruit 5", player) and state.has("Bean Fruit 6", player) and state.has("Bean Fruit 7", player)
 
 
 def surfable(state, player):
