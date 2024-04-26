@@ -6,7 +6,8 @@ from .assertion import WorldAssertMixin
 from .long.option_names import all_option_choices
 from .. import items_by_group, Group, StardewValleyWorld
 from ..locations import locations_by_tag, LocationTags, location_table
-from ..options import ExcludeGingerIsland, ToolProgression, Goal, SeasonRandomization, TrapItems, SpecialOrderLocations, ArcadeMachineLocations
+from ..options import ExcludeGingerIsland, ToolProgression, Goal, SeasonRandomization, TrapItems, SpecialOrderLocations, ArcadeMachineLocations, \
+    SkillProgression
 from ..strings.goal_names import Goal as GoalName
 from ..strings.season_names import Season
 from ..strings.special_order_names import SpecialOrder
@@ -87,13 +88,32 @@ class TestToolProgression(SVTestCase):
         for tool in TOOLS:
             self.assertNotIn(tool, items)
 
-    def test_given_progressive_when_generate_then_progressive_tool_of_each_is_in_pool_four_times(self):
-        world_options = {ToolProgression.internal_name: ToolProgression.option_progressive}
+    def test_given_progressive_when_generate_then_each_tool_is_in_pool_4_times(self):
+        world_options = {ToolProgression.internal_name: ToolProgression.option_progressive,
+                         SkillProgression.internal_name: SkillProgression.option_progressive}
         multi_world = setup_solo_multiworld(world_options)
 
         items = [item.name for item in multi_world.get_items()]
         for tool in TOOLS:
-            self.assertEqual(items.count("Progressive " + tool), 4)
+            count = items.count("Progressive " + tool)
+            self.assertEqual(count, 4, f"Progressive {tool} was there {count} times")
+        scythe_count = items.count("Progressive Scythe")
+        self.assertEqual(scythe_count, 1, f"Progressive Scythe was there {scythe_count} times")
+        self.assertEqual(items.count("Golden Scythe"), 0, f"Golden Scythe is deprecated")
+
+    def test_given_progressive_with_masteries_when_generate_then_fishing_rod_is_in_the_pool_5_times(self):
+        world_options = {ToolProgression.internal_name: ToolProgression.option_progressive,
+                         SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries}
+        multi_world = setup_solo_multiworld(world_options)
+
+        items = [item.name for item in multi_world.get_items()]
+        for tool in TOOLS:
+            count = items.count("Progressive " + tool)
+            expected_count = 5 if tool == "Fishing Rod" else 4
+            self.assertEqual(count, expected_count, f"Progressive {tool} was there {count} times")
+        scythe_count = items.count("Progressive Scythe")
+        self.assertEqual(scythe_count, 2, f"Progressive Scythe was there {scythe_count} times")
+        self.assertEqual(items.count("Golden Scythe"), 0, f"Golden Scythe is deprecated")
 
     def test_given_progressive_when_generate_then_tool_upgrades_are_locations(self):
         world_options = {ToolProgression.internal_name: ToolProgression.option_progressive}

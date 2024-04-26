@@ -80,10 +80,11 @@ CombatLogicMixin, CropLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
         if level <= 0:
             return True_()
 
-        if self.options.skill_progression == options.SkillProgression.option_progressive:
-            return self.logic.received(f"{skill} Level", level)
+        if self.options.skill_progression == options.SkillProgression.option_vanilla:
+            return self.logic.skill.can_earn_level(skill, level)
 
-        return self.logic.skill.can_earn_level(skill, level)
+        return self.logic.received(f"{skill} Level", level)
+
 
     @cache_self1
     def has_farming_level(self, level: int) -> StardewRule:
