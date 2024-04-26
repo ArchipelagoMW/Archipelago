@@ -166,15 +166,6 @@ class OOTWorld(World):
             "Sell Big Poe", "Bottle with Red Potion", "Bottle with Green Potion",
             "Bottle with Blue Potion", "Bottle with Fairy", "Bottle with Fish",
             "Bottle with Blue Fire", "Bottle with Bugs", "Bottle with Poe"},
-        "keys": {"Small Key (Bottom of the Well)", "Small Key (Fire Temple)", "Small Key (Forest Temple)",
-                 "Small Key (Ganons Castle)", "Small Key (Gerudo Training Ground)", "Small Key (Shadow Temple)",
-                 "Small Key (Spirit Temple)", "Small Key (Thieves Hideout)", "Small Key (Water Temple)",
-                 "Small Key Ring (Bottom of the Well)", "Small Key Ring (Fire Temple)",
-                 "Small Key Ring (Forest Temple)", "Small Key Ring (Ganons Castle)",
-                 "Small Key Ring (Gerudo Training Ground)", "Small Key Ring (Shadow Temple)",
-                 "Small Key Ring (Spirit Temple)", "Small Key Ring (Thieves Hideout)", "Small Key Ring (Water Temple)",
-                 "Boss Key (Fire Temple)", "Boss Key (Forest Temple)", "Boss Key (Ganons Castle)",
-                 "Boss Key (Shadow Temple)", "Boss Key (Spirit Temple)", "Boss Key (Water Temple)"},
 
         # hint groups
         "Bottles": {"Bottle", "Bottle with Milk", "Rutos Letter",
@@ -184,6 +175,15 @@ class OOTWorld(World):
         "Adult Trade Item": {"Pocket Egg", "Pocket Cucco", "Cojiro", "Odd Mushroom",
             "Odd Potion", "Poachers Saw", "Broken Sword", "Prescription",
             "Eyeball Frog", "Eyedrops", "Claim Check"},
+        "Keys": {"Small Key (Bottom of the Well)", "Small Key (Fire Temple)", "Small Key (Forest Temple)",
+                 "Small Key (Ganons Castle)", "Small Key (Gerudo Training Ground)", "Small Key (Shadow Temple)",
+                 "Small Key (Spirit Temple)", "Small Key (Thieves Hideout)", "Small Key (Water Temple)",
+                 "Small Key Ring (Bottom of the Well)", "Small Key Ring (Fire Temple)",
+                 "Small Key Ring (Forest Temple)", "Small Key Ring (Ganons Castle)",
+                 "Small Key Ring (Gerudo Training Ground)", "Small Key Ring (Shadow Temple)",
+                 "Small Key Ring (Spirit Temple)", "Small Key Ring (Thieves Hideout)", "Small Key Ring (Water Temple)",
+                 "Boss Key (Fire Temple)", "Boss Key (Forest Temple)", "Boss Key (Ganons Castle)",
+                 "Boss Key (Shadow Temple)", "Boss Key (Spirit Temple)", "Boss Key (Water Temple)"},
     }
 
     location_name_groups = build_location_name_groups()
