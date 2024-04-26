@@ -32,7 +32,7 @@ class LocationTags(enum.Enum):
     BULLETIN_BOARD_BUNDLE = enum.auto()
     VAULT_BUNDLE = enum.auto()
     COMMUNITY_CENTER_ROOM = enum.auto()
-    RACCOON_BUNDLE = enum.auto()
+    RACCOON_BUNDLES = enum.auto()
     BACKPACK = enum.auto()
     TOOL_UPGRADE = enum.auto()
     HOE_UPGRADE = enum.auto()
