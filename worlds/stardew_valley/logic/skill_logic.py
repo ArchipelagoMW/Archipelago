@@ -108,13 +108,13 @@ CombatLogicMixin, CropLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
         return self.logic.time.has_lived_months(months_with_4_skills) | rule_with_fishing
 
     def has_all_skills_maxed(self, included_modded_skills: bool = True) -> StardewRule:
-        if self.options.skill_progression == options.SkillProgression.option_progressive:
-            skills_items = vanilla_skill_items
-            if included_modded_skills:
-                skills_items += get_mod_skill_levels(self.options.mods)
-            return And(*[self.logic.received(skill, 10) for skill in skills_items])
+        if self.options.skill_progression != options.SkillProgression.option_progressive:
+            return self.has_total_level(50)
+        skills_items = vanilla_skill_items
+        if included_modded_skills:
+            skills_items += get_mod_skill_levels(self.options.mods)
+        return And(*[self.logic.received(skill, 10) for skill in skills_items])
 
-        return self.has_total_level(50)
 
     def can_enter_mastery_cave(self) -> StardewRule:
         if self.options.skill_progression == options.SkillProgression.option_progressive_with_masteries:
