@@ -561,7 +561,7 @@ class WitnessPlayerLogic:
             for region in new_unreachable_regions:
                 for entity in static_witness_logic.ALL_REGIONS_BY_NAME[region]["physical_entities"]:
                     # Never disable a laser.
-                    if static_witness_logic.ENTITIES_BY_NAME[entity]["entityType"] == "Laser":
+                    if static_witness_logic.ENTITIES_BY_HEX[entity]["entityType"] == "Laser":
                         continue
 
                     if self.solvability_guaranteed(entity) and not entity == self.VICTORY_LOCATION:
