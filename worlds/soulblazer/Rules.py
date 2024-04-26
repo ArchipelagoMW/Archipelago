@@ -141,8 +141,9 @@ location_dependencies: Dict[str, List[str]] = {
     ],
     NPCRewardName.MUSHROOM_SHOES_BOY: [NPCName.BOY_MUSHROOM_SHOES],
     NPCRewardName.EMBLEM_E_SNAIL: [NPCName.SNAIL_EMBLEM_E],
-    # Also includes path from lune to sleeping mushroom
+    # Also includes path from lune to sleeping mushroom for the two locations locked behind mushroom's dream.
     NPCRewardName.EMBLEM_F_TILE: [NPCName.MUSHROOM_EMBLEM_F, NPCName.GRANDPA5, NPCName.MUSHROOM2, ItemName.DREAMROD],
+    LairName.SNAIL_EMBLEM_E: [NPCName.MUSHROOM_EMBLEM_F, NPCName.GRANDPA5, NPCName.MUSHROOM2, ItemName.DREAMROD],
     # Act 5 - Leo's Lab
     NPCRewardName.EMBLEM_G_UNDER_CHEST_OF_DRAWERS: [
         NPCName.CHEST_OF_DRAWERS_MYSTIC_ARMOR,
