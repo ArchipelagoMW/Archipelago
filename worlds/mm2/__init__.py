@@ -45,6 +45,11 @@ class MM2Settings(settings.Group):
             """Try to open and validate file against hashes"""
             with open(path, "rb", buffering=0) as f:
                 try:
+                    f.seek(0)
+                    if f.read(4) == b"NES\x1A":
+                        f.seek(16)
+                    else:
+                        f.seek(0)
                     cls._validate_stream_hashes(f)
                     base_rom_bytes = f.read()
                     basemd5 = hashlib.md5()
