@@ -2,4 +2,4 @@
 jak1_id = 741000000
 
 # The name of the game.
-jak1_name = "Jak and Daxter: The Precursor Legacy"
+jak1_name = "Jak and Daxter The Precursor Legacy"

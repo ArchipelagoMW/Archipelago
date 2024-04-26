@@ -24,7 +24,7 @@ class JakAndDaxterWebWorld(WebWorld):
 
 class JakAndDaxterWorld(World):
     # ID, name, version
-    game: str = jak1_name
+    game = jak1_name
     data_version = 1
     required_client_version = (0, 4, 5)
 
