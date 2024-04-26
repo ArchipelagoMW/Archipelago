@@ -2107,7 +2107,7 @@ id,region,name,tags,mod_name
 3545,Farm,Craft Statue Of The Dwarf King,"CRAFTSANITY,REQUIRES_MASTERIES",
 3546,Farm,Craft Statue Of Blessings,"CRAFTSANITY,REQUIRES_MASTERIES",
 3547,Farm,Craft Anvil,"CRAFTSANITY,REQUIRES_MASTERIES",
-3548,Farm,Craft Mini-Forge,"CRAFTSANITY,REQUIRES_MASTERIES",
+3548,Farm,Craft Mini-Forge,"CRAFTSANITY,GINGER_ISLAND,REQUIRES_MASTERIES",
 3551,Pierre's General Store,Grass Starter Recipe,CRAFTSANITY,
 3552,Carpenter Shop,Wood Floor Recipe,CRAFTSANITY,
 3553,Carpenter Shop,Rustic Plank Floor Recipe,CRAFTSANITY,

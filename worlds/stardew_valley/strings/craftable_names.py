@@ -99,6 +99,7 @@ class Consumable:
     fireworks_purple = "Fireworks (Purple)"
     fireworks_green = "Fireworks (Green)"
     far_away_stone = "Far Away Stone"
+    golden_animal_cracker = "Golden Animal Cracker"
     butterfly_powder = "Butterfly Powder"
 
 
