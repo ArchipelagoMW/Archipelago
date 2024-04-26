@@ -54,7 +54,7 @@ id,name,classification,groups,mod_name
 68,Progressive Watering Can,progression,PROGRESSIVE_TOOLS,
 69,Progressive Trash Can,progression,PROGRESSIVE_TOOLS,
 70,Progressive Fishing Rod,progression,PROGRESSIVE_TOOLS,
-71,Golden Scythe,useful,,
+71,Golden Scythe,useful,DEPRECATED,
 72,Progressive Mine Elevator,progression,,
 73,Farming Level,progression,SKILL_LEVEL_UP,
 74,Fishing Level,progression,SKILL_LEVEL_UP,
@@ -456,7 +456,8 @@ id,name,classification,groups,mod_name
 489,Big Stone Chest Recipe,progression,CRAFTSANITY,
 490,Text Sign Recipe,progression,CRAFTSANITY,
 491,Blue Grass Starter Recipe,progression,"QI_CRAFTING_RECIPE,GINGER_ISLAND",
-492,Mastery Of The Five Ways,progression,SKILL_MASTERY
+492,Mastery Of The Five Ways,progression,SKILL_MASTERY,
+493,Progressive Scythe,useful,,
 4001,Burnt Trap,trap,TRAP,
 4002,Darkness Trap,trap,TRAP,
 4003,Frozen Trap,trap,TRAP,

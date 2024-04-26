@@ -324,7 +324,10 @@ def create_tools(item_factory: StardewItemFactory, options: StardewValleyOptions
                 items.append(item_factory(item_data, ItemClassification.useful))
             else:
                 items.extend([item_factory(item) for item in [item_data] * 4])
-    items.append(item_factory("Golden Scythe"))
+        if options.skill_progression == SkillProgression.option_progressive_with_masteries:
+            items.append(item_factory("Progressive Scythe"))
+            items.append(item_factory("Progressive Fishing Rod"))
+    items.append(item_factory("Progressive Scythe"))
 
 
 def create_skills(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
