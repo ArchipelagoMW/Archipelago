@@ -111,11 +111,15 @@ class AutopelagoWorld(World):
         return item
 
     def create_items(self):
-        new_items = [self.create_item(item) for item in location_name_to_unrandomized_progression_item_name.values()]
+        new_items = [self.create_item(item)
+                     for location, item in location_name_to_unrandomized_progression_item_name.items()
+                     if location not in location_names_with_fixed_rewards]
 
         # skip balancing for the pack_rat items that take us beyond the minimum limit
-        rat_items = sorted((item for item in new_items if item.name in item_name_to_rat_count), key=lambda item: (
-        item_name_to_rat_count[item.name], 0 if item.name == item_key_to_name['pack_rat'] else 1))
+        rat_items = sorted(
+            (item for item in new_items if item.name in item_name_to_rat_count),
+            key=lambda item: (item_name_to_rat_count[item.name], 0 if item.name == item_key_to_name['pack_rat'] else 1)
+        )
         for i in range(total_available_rat_count - max_required_rat_count):
             assert rat_items[i].name == item_key_to_name[
                 'pack_rat'], 'Expected there to be enough pack_rat fillers for this calculation.'
@@ -162,6 +166,10 @@ class AutopelagoWorld(World):
             for next_exit in r.autopelago_definition.exits:
                 rule = (lambda req_: lambda state: _is_satisfied(self.player, req_, state))(req)
                 r.connect(new_regions[next_exit], rule=None if _is_trivial(req) else rule)
+            for loc in r.locations:
+                if loc.name in location_names_with_fixed_rewards:
+                    item_name = location_name_to_unrandomized_progression_item_name[loc.name]
+                    loc.place_locked_item(self.create_item(item_name))
 
         self.multiworld.get_location('Victory', self.player).place_locked_item(
             self.create_item('Victory', ItemClassification.progression))

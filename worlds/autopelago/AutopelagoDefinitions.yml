@@ -388,7 +388,7 @@ regions:
   landmarks:
     moon_comma_the:
       name: 'Moon, The'
-      unrandomized_item: blackbird
+      unrandomized_item: pack_rat
       requires:
         - item: blackbird
       exits:
@@ -396,7 +396,7 @@ regions:
 
     snakes_on_a_planet:
       name: 'Snakes on a Planet'
-      unrandomized_item: pack_rat
+      unrandomized_item: blackbird
       reward_is_fixed: yes
       requires:
         - item: mongoose_in_a_combat_spacecraft
@@ -408,8 +408,8 @@ regions:
       unrandomized_item: pack_rat
       requires:
         - any:
-            - item: asteroid_belt
-            - item: moon_shaped_like_a_butt
+          - item: asteroid_belt
+          - item: moon_shaped_like_a_butt
       exits: []
 
     minotaur_labyrinth:
@@ -417,8 +417,8 @@ regions:
       unrandomized_item: pack_rat
       requires:
         - any:
-            - item: red_matador_cape
-            - item: lab_rat
+          - item: red_matador_cape
+          - item: lab_rat
       exits:
         - before_asteroid_with_pants
         - after_minotaur_labyrinth
@@ -436,8 +436,8 @@ regions:
       unrandomized_item: pack_rat
       requires:
         - any:
-            - item: constellation_prize
-            - item: free_vowel
+          - item: constellation_prize
+          - item: free_vowel
       exits:
         - before_minotaur_labyrinth
         - before_space_opera
@@ -461,8 +461,8 @@ regions:
       unrandomized_item: pack_rat
       requires:
         - any:
-            - item: ziggu_rat
-            - item: pharaoh_not_anti_mummy_spray
+          - item: ziggu_rat
+          - item: pharaoh_not_anti_mummy_spray
       exits:
         - before_frozen_assets
         - before_alien_vending_machine
@@ -502,8 +502,8 @@ regions:
       unrandomized_item: pack_rat
       requires:
         - any:
-            - item: virtual_key
-            - item: map_of_the_entire_internet
+          - item: virtual_key
+          - item: map_of_the_entire_internet
       exits:
         - before_makeshift_rocket_ship
 
@@ -512,8 +512,8 @@ regions:
       unrandomized_item: pack_rat
       requires:
         - any:
-            - item: fifty_cents
-            - item: notorious_r_a_t
+          - item: fifty_cents
+          - item: notorious_r_a_t
       exits:
         - after_rat_rap_battle
 
@@ -522,8 +522,8 @@ regions:
       unrandomized_item: pack_rat
       requires:
         - any:
-            - item: gym_rat
-            - item: forklift_certification
+          - item: gym_rat
+          - item: forklift_certification
       exits:
         - after_stack_of_crates
 
@@ -562,8 +562,8 @@ regions:
       unrandomized_item: pack_rat
       requires:
         - any:
-            - item: fake_mouse_ears
-            - item: legally_binding_contract
+          - item: fake_mouse_ears
+          - item: legally_binding_contract
       exits:
         - before_room_full_of_typewriters
         - before_binary_tree
@@ -573,8 +573,8 @@ regions:
       unrandomized_item: pack_rat
       requires:
         - any:
-            - item: lost_ctrl_key
-            - item: hammer_of_problem_solving
+          - item: lost_ctrl_key
+          - item: hammer_of_problem_solving
       exits:
         - before_computer_ram
         - before_trapeze
@@ -600,8 +600,8 @@ regions:
       unrandomized_item: pack_rat
       requires:
         - any:
-            - item: blue_turtle_shell
-            - item: banana_peel
+          - item: blue_turtle_shell
+          - item: banana_peel
       exits:
         - before_broken_down_bus
 
@@ -610,8 +610,8 @@ regions:
       unrandomized_item: pack_rat
       requires:
         - any:
-            - item: masterful_longsword
-            - item: macguffin
+          - item: masterful_longsword
+          - item: macguffin
       exits:
         - before_overweight_boulder
 
@@ -626,7 +626,7 @@ regions:
 
     captured_goldfish:
       name: 'Captured Goldfish'
-      unrandomized_item: blackbird
+      unrandomized_item: pack_rat
       requires:
         - item: giant_novelty_scissors
       ability_check_dc: 20
@@ -665,8 +665,8 @@ regions:
       unrandomized_item: acro_rat
       requires:
         - any:
-            - item: pizza_rat
-            - item: ninja_rat
+          - item: pizza_rat
+          - item: ninja_rat
       ability_check_dc: 12
       exits:
         - before_restaurant
@@ -676,8 +676,8 @@ regions:
       unrandomized_item: ziggu_rat
       requires:
         - any:
-            - item: premium_can_of_prawn_food
-            - item: priceless_antique
+          - item: premium_can_of_prawn_food
+          - item: priceless_antique
       ability_check_dc: 12
       exits:
         - before_pirate_bake_sale

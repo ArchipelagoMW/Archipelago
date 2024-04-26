@@ -81,6 +81,7 @@ class AutopelagoRatCountRequirement(TypedDict):
 class AutopelagoLandmarkRegionDefinition(TypedDict):
     name: str
     unrandomized_item: str
+    reward_is_fixed: Optional[bool]
     requires: list[AutopelagoGameRequirement]
     exits: list[str]
 
@@ -219,6 +220,7 @@ location_name_to_unrandomized_progression_item_name: dict[str, str] = {}
 location_name_to_unrandomized_nonprogression_item: dict[str, Literal['useful_nonprogression', 'filler']] = {}
 location_name_to_requirement: dict[str, AutopelagoGameRequirement] = {}
 location_name_to_id: dict[str, int] = {}
+location_names_with_fixed_rewards: set[str] = set()
 _location_id_gen = _gen_ids()
 
 for k, r in _defs['regions']['landmarks'].items():
@@ -227,6 +229,8 @@ for k, r in _defs['regions']['landmarks'].items():
     location_name_to_unrandomized_progression_item_name[_name] = item_key_to_name[r['unrandomized_item']]
     location_name_to_requirement[_name] = {'all': r['requires']}
     autopelago_regions[k] = AutopelagoRegionDefinition(k, r['exits'], [_name], r['requires'])
+    if 'reward_is_fixed' in r and r['reward_is_fixed']:
+        location_names_with_fixed_rewards.add(_name)
 for rk, r in _defs['regions']['fillers'].items():
     _locations: list[str] = []
     _cur = 1
