@@ -7,7 +7,7 @@ from worlds.AutoWorld import WebWorld, World
 
 from .client import WL4Client
 from .items import WL4Item, ap_id_from_wl4_data, filter_item_names, filter_items, item_table
-from .locations import location_name_to_id
+from .locations import location_name_to_id, location_table
 from .options import Goal, GoldenJewels, PoolJewels, WL4Options
 from .regions import connect_regions, create_regions
 from .rom import LocalRom, WL4DeltaPatch, get_base_rom_path, patch_rom
@@ -213,8 +213,7 @@ class WL4World(World):
             lambda state: state.has('Escape the Pyramid', self.player))
 
     def setup_locations(self):
-        checks = filter(lambda p: self.options.difficulty in p[1].difficulties,
-                                  locations.location_table.items())
+        checks = filter(lambda p: self.options.difficulty in p[1].difficulties, location_table.items())
         if (self.options.goal not in (Goal.option_golden_treasure_hunt, Goal.option_golden_diva_treasure_hunt)):
             checks = filter(lambda p: p[1].source != LocationType.CHEST, checks)
         checks = {name for name, _ in checks}
