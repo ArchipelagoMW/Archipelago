@@ -172,7 +172,7 @@ class CVCotMWorld(World):
         if self.options.countdown:
             offset_data.update(get_countdown_flags(self, active_locations))
 
-        patch = CVCotMProcedurePatch()
+        patch = CVCotMProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
         patch_rom(self, patch, offset_data)
 
         rom_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}"

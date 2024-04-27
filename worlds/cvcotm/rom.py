@@ -169,8 +169,29 @@ class CVCotMPatchExtensions(APPatchExtension):
         rom_data.write_bytes(0x391CD5, [0xAD, 0xAD, 0xAD, 0xAD, 0xAD])
         rom_data.write_byte(0x391CE1, 0xAD)
 
-        test_text = cvcotm_text_wrap("Howdy 「@everyone」!\nHow do you do?\nNice\n「weather」\ntoday!\nPretty\ngr8\nm8\nI\nr8\n8/8\nHave a free trial of the critically acclamied MMORPG 「Final Fantasy XIV」, including the entirety of 「A Realm Reborn」 and the award-winning 「Heavansward」 and 「Stormblood」 expansions up to 「level 70」 with 「no restrictions on playtime」! REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE「EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE」EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE「EEEEEEE」EEEEE「EEEEEEEEEEEEEEEEEEEE」EEEEEEE「EEEEEE」EEEEEEEEEEEEEE!!!「!!!」!!!!「1」◊", 21, 3)
-        rom_data.write_bytes(0x7CEB00, cvcotm_string_to_bytearray(test_text, "big top", 3, 1))
+        # Put the unused bottom-of-screen textbox in the middle of the screen instead.
+        # Its background's new y position will be 0x28 instead of 0x50.
+        rom_data.write_byte(0xBEDEA, 0x28)
+        # Change all the hardcoded checks for the 0x50 position to instead check for 0x28.
+        rom_data.write_byte(0xBF398, 0x28)
+        rom_data.write_byte(0xBF41C, 0x28)
+        rom_data.write_byte(0xBF4CC, 0x28)
+        # Change all the hardcoded checks for greater than 0x48 to instead check for 0x28 specifically.
+        rom_data.write_byte(0xBF4A4, 0x28)
+        rom_data.write_byte(0xBF4A7, 0xD0)
+        rom_data.write_byte(0xBF37E, 0x28)
+        rom_data.write_byte(0xBF381, 0xD0)
+        rom_data.write_byte(0xBF40A, 0x28)
+        rom_data.write_byte(0xBF40D, 0xD0)
+        # Change the y position of the contents within the textbox from 0xA0 to 0xB4.
+        # KCEK didn't program hardcoded checks for these, thankfully!
+        rom_data.write_byte(0xBF3BC, 0xB4)
+
+        # Nuke the DSS tutorial
+        rom_data.write_byte(0x5EB55, 0xE0)
+
+        test_text = "「LEBRON JAMES」 REPORTEDLY LOST TO THE 「DEVIL」 IN THE 「BATTLE ARENA」◊"
+        rom_data.write_bytes(0x7CEB00, cvcotm_string_to_bytearray(test_text, "big bottom", 3))
 
         return rom_data.get_bytes()
 

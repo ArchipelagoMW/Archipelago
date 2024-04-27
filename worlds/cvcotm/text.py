@@ -42,13 +42,31 @@ def cvcotm_string_to_bytearray(cvcotm_text: str, textbox_type: Literal["big top"
         main_control_start_param = 0x80
         main_control_end_param = 0xC0
 
+    # Figure out the number of lines and line length limit.
+    if textbox_type == "little middle":
+        total_lines = 1
+        len_limit = 29
+    elif textbox_type != "little middle" and portrait != 0xFF:
+        total_lines = 3
+        len_limit = 21
+    else:
+        total_lines = 4
+        len_limit = 23
+
+    # Wrap or truncate the text.
+    refined_text = cvcotm_text_wrap(cvcotm_text, len_limit, total_lines)
+    if refined_text == cvcotm_text:
+        print("Same!")
+    else:
+        print("Not same...")
+
     text_bytes.extend([0x1D, main_control_start_param + (speed & 0xF)])  # Speed should be a value between 0 and 15.
 
     # Add the portrait (if we are adding one)
     if portrait != 0xFF and textbox_type != "little middle":
         text_bytes.extend([0x1E, portrait & 0xFF])
 
-    for i, char in enumerate(cvcotm_text):
+    for i, char in enumerate(refined_text):
         if char in cvcotm_char_dict:
             text_bytes.extend([cvcotm_char_dict[char]])
             # If we're pressing A to advance, add the text clear and reset alignment characters.
@@ -96,39 +114,59 @@ def cvcotm_text_wrap(cvcotm_text: str, textbox_len_limit: int, total_lines: int 
         else:
             word_divider = ""
 
+        new_word = ""
+
         for char_index, char in enumerate(word):
             # Check if the current character contributes to the line length.
             if char not in weightless_chars:
                 line_len += 1
                 word_len += 1
 
-            # If the word itself is long enough to exceed the line length, or we hit a manually-placed newline within
-            # the current "word", wrap without moving the entire word.
-            if word_len > textbox_len_limit or char == "\n":
+            # If we're looking at a manually-placed newline, add +1 to the lines counter and reset the length counters.
+            if char == "\n":
                 word_len = 0
                 line_len = 0
                 num_lines += 1
-                # If there's no manually-placed newline, meaning we are auto-wrapping, insert the newline character in
-                # this spot.
-                if char != "\n":
-                    word = word[0:char_index] + "\n" + word[char_index:]
-                # If we are over the line limit, change the newline to the A advance characters.
+                # If this puts us over the line limit, insert the A advance prompt character.
                 if num_lines > total_lines:
                     num_lines = 1
-                    word = word[0:char_index] + "▶" + word[char_index + 1:]
+                    new_word += "▶"
+
+            # If we're looking at a manually-placed A advance prompt, reset the lines and length counters.
+            if char in ["▶", "◊"]:
+                word_len = 0
+                line_len = 0
+                num_lines = 1
+
+            # If the word alone is long enough to exceed the line length, wrap without moving the entire word.
+            if word_len > textbox_len_limit:
+                word_len = 1
+                line_len = 1
+                num_lines += 1
+                word_splitter = "\n"
+
+                # If this puts us over the line limit, replace the newline with the A advance prompt character.
+                if num_lines > total_lines:
+                    num_lines = 1
+                    word_splitter = "▶"
+
+                new_word += word_splitter
 
             # If the total length of the current line exceeds the line length, wrap the current word to the next line.
-            # Note that this check shouldn't ever return True if the above check returns True on the same iteration.
             if line_len > textbox_len_limit:
                 word_divider = "\n"
                 line_len = word_len
                 num_lines += 1
                 # If we're over the allowed number of lines to be displayed in the textbox, insert the A advance
-                # characters.
+                # character instead.
                 if num_lines > total_lines:
                     num_lines = 1
                     word_divider = "▶"
 
-        new_text += word_divider + word
+            # Add the character to the new word if the character is not a newline immediately following up an A advance.
+            if char != "\n" or new_word[len(new_word)-1] not in ["▶", "◊"]:
+                new_word += char
+
+        new_text += word_divider + new_word
 
     return new_text
