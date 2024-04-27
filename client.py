@@ -287,7 +287,7 @@ class WL4Client(BizHawkClient):
 
         # Parse item status bits
         for passage in range(6):
-            for level in range(4):
+            for level in range(5):
                 status_bits = item_status[passage * 6 + level] >> 8
                 for location in get_level_locations(passage, level):
                     bit = location_table[location].flag()
@@ -295,7 +295,6 @@ class WL4Client(BizHawkClient):
                     if status_bits & bit and location_id in client_ctx.server_locations:
                         locations.append(location_id)
 
-            for level in range(5):
                 keyzer_bit = item_status[passage * 6 + level] & (1 << 5)
                 level_name = LEVEL_CLEAR_FLAGS[passage * 5 + level]
                 if level_name:
