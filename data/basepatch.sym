@@ -2,6 +2,8 @@
 03000002 passageid
 03000003 inpassagelevelid
 03000008 minigamecoinnum
+03000010 ucworldnumbak
+03000013 ucsaveflg
 03000024 currentroomid
 03000044 ucflashloop
 03000047 uctimeup
@@ -21,6 +23,14 @@
 03000C0A has4thgempiece
 03000C0B hascd
 03000C0C haskeyzer
+03000C2C hastreasure5
+03000C2D hastreasure6
+03000C2E hastreasure7
+03000C2F hastreasure8
+03000C30 hastreasure9
+03000C31 hastreasure10
+03000C32 hastreasure11
+03000C33 hastreasure12
 03000C34 uctakaracount
 03000C3A globalgamemode
 03000C3C sgameseq
@@ -87,5 +97,5 @@
 0878FE47 sendmultiworlditemsimmediately
 0878FE48 goaltype
 0878FE49 goldentreasuresneeded
-087934E4 multiworldstringdump
+08793660 multiworldstringdump
 

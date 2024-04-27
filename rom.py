@@ -248,6 +248,26 @@ def write_multiworld_table(rom: LocalRom,
             entry_address += 8
 
 
+def set_goal(rom: LocalRom, goal: Goal):
+    if goal == Goal.option_golden_treasure_hunt:
+        # SelectBossDoorInit01() - Check for golden passage instead of boss defeated
+        rom.write_halfword(0x80863C2, 0x46C0)  # nop
+        rom.write_halfword(0x80863C4, 0x4660)  # mov r0, r12
+        rom.write_halfword(0x80863C6, 0x7800)  # ldrb r0, [r0]  ; Passage ID
+        rom.write_halfword(0x80863C8, 0x2805)  # cmp r0, #5  ; Golden Passage
+        rom.write_halfword(0x80863CA, 0xD10D)  # bne 0x80863E8
+
+        rom.write_halfword(0x808640A, 0x1C03)  # mov r3, r0
+        rom.write_halfword(0x808640C, 0x0688)  # lsl r0, r1, #26
+        rom.write_halfword(0x808640E, 0x2B05)  # cmp r3, #5
+        rom.write_halfword(0x8086410, 0xD101)  # beq 0x8086416
+
+    if goal == Goal.option_golden_diva_treasure_hunt:
+        # SelectBossDoorInit01() - Always allow into boss room
+        rom.write_halfword(0x80863CA, 0xE00D)  # b 0x80863E8
+        rom.write_halfword(0x808640C, 0x2300)  # mov r3, #0
+
+
 def set_difficulty_level(rom: LocalRom, difficulty: Difficulty):
     # SramtoWork_Load()
     hardcode_difficulty = 0x2000 | difficulty.value  # mov r0, #difficulty
@@ -386,19 +406,7 @@ def patch_rom(rom: LocalRom, world: WL4World):
     # Set deathlink
     rom.write_byte(get_symbol('DeathLinkFlag'), world.options.death_link.value)
 
-    if (world.options.goal == Goal.option_golden_treasure_hunt):
-        # SelectBossDoorInit01() - Check for golden passage instead of boss defeated
-        rom.write_halfword(0x80863C2, 0x46C0)  # nop
-        rom.write_halfword(0x80863C4, 0x4660)  # mov r0, r12
-        rom.write_halfword(0x80863C6, 0x7800)  # ldrb r0, [r0]  ; Passage ID
-        rom.write_halfword(0x80863C8, 0x2805)  # cmp r0, #5  ; Golden Passage
-        rom.write_halfword(0x80863CA, 0xD10D)  # bne 0x80863E8
-
-        rom.write_halfword(0x808640A, 0x1C03)  # mov r3, r0
-        rom.write_halfword(0x808640C, 0x0688)  # lsl r0, r1, #26
-        rom.write_halfword(0x808640E, 0x2B05)  # cmp r3, #5
-        rom.write_halfword(0x8086410, 0xD101)  # beq 0x8086416
-
+    set_goal(rom, world.options.goal)
     set_difficulty_level(rom, world.options.difficulty)
 
     # TODO: Maybe make it stay open so it looks cleaner

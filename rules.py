@@ -8,6 +8,7 @@ from Options import Option
 
 from . import items, locations, options
 from .types import ItemType, Passage
+from .options import Goal
 
 if TYPE_CHECKING:
     from . import WL4World
@@ -217,7 +218,7 @@ location_rules: Mapping[str, Requirement] = {
     'Catbat - 0:15':        has('Ground Pound') & (has('Enemy Jump') | logic(advanced) & not_difficulty(s_hard)),
     'Catbat - 0:35':        has('Ground Pound') & (has('Enemy Jump') | logic(advanced) & not_difficulty(s_hard)),
     'Catbat - 0:55':        has('Ground Pound') & (has('Enemy Jump') | logic(advanced) & not_difficulty(s_hard)),
-    'Golden Diva':          has('Heavy Grab'),
+    'Golden Diva':          has('Heavy Grab') & (option('goal', Goal.option_golden_diva) | has_treasures()),
 
     'Sound Room - Emergency Exit': has_treasures(),
 

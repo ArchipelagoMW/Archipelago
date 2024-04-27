@@ -7,10 +7,12 @@ class Goal(Choice):
     '''
     Golden Diva: Defeat the four main passage bosses, reach the depths of the pyramid, and defeat the Golden Diva
     Golden Treasure Hunt: Find the golden treasures scattered in the world, and escape through the Sound Room
+    Golden Diva Treasure Hunt: Find the golden treasures, and then defeat the Golden Diva
     '''
     display_name = 'Goal'
     option_golden_diva = 0
     option_golden_treasure_hunt = 1
+    option_golden_diva_treasure_hunt = 2
     default = option_golden_diva
 
 
