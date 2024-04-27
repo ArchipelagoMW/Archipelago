@@ -15,7 +15,7 @@ def set_rules(world: Celeste64World):
     world.multiworld.completion_condition[world.player] = lambda state: goal_rule(state, world)
 
 
-goal_standard_logic: List[List[str]] = [[ItemName.feather, ItemName.traffic_block, ItemName.breakables,ItemName.double_dash_refill]]
+goal_standard_logic: List[List[str]] = [[ItemName.feather, ItemName.traffic_block, ItemName.breakables, ItemName.double_dash_refill]]
 goal_hard_logic: List[List[str]] = [[]]
 goal_standard_moves_logic: List[List[str]] = [[ItemName.double_dash_refill, ItemName.feather, ItemName.traffic_block, ItemName.breakables, ItemName.air_dash, ItemName.climb]]
 goal_hard_moves_logic: List[List[str]] = [[ItemName.double_dash_refill, ItemName.feather, ItemName.traffic_block, ItemName.breakables, ItemName.air_dash, ItemName.climb],

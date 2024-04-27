@@ -4,21 +4,27 @@ from Options import Choice, Range, Toggle, DeathLink, PerGameCommonOptions
 
 
 class DeathLinkAmnesty(Range):
-    """How many deaths it takes to send a DeathLink"""
+    """
+    How many deaths it takes to send a DeathLink
+    """
     display_name = "Death Link Amnesty"
     range_start = 1
     range_end = 30
     default = 10
 
 class TotalStrawberries(Range):
-    """How many Strawberries exist"""
+    """
+    How many Strawberries exist
+    """
     display_name = "Total Strawberries"
     range_start = 0
     range_end = 46
     default = 20
 
 class StrawberriesRequiredPercentage(Range):
-    """Percentage of existing Strawberries you must receive to finish"""
+    """
+    Percentage of existing Strawberries you must receive to finish
+    """
     display_name = "Strawberries Required Percentage"
     range_start = 0
     range_end = 100
@@ -26,7 +32,9 @@ class StrawberriesRequiredPercentage(Range):
 
 
 class LogicDifficulty(Choice):
-    """Whether the logic expects you to play the intended way, or to be able to use advanced tricks and skips"""
+    """
+    Whether the logic expects you to play the intended way, or to be able to use advanced tricks and skips
+    """
     display_name = "Logic Difficulty"
     option_standard = 0
     option_hard = 1
@@ -39,29 +47,36 @@ class MoveShuffle(Toggle):
     - Air Dash
     - Skid Jump
     - Climb
+    NOTE: Having Move Shuffle and Standard Logic Difficulty will guarantee that one of the four Move items will be immediately accessible
     WARNING: Combining Move Shuffle and Hard Logic Difficulty can require very difficult tricks
     """
     display_name = "Move Shuffle"
 
 
 class Friendsanity(Toggle):
-    """Whether chatting with your friends grants location checks"""
+    """
+    Whether chatting with your friends grants location checks
+    """
     display_name = "Friendsanity"
 
 class Signsanity(Toggle):
-    """Whether reading signs grants location checks"""
+    """
+    Whether reading signs grants location checks
+    """
     display_name = "Signsanity"
 
 class Carsanity(Toggle):
-    """Whether riding on cars grants location checks"""
+    """
+    Whether riding on cars grants location checks
+    """
     display_name = "Carsanity"
 
 
 class BadelineChaserSource(Choice):
     """
     What type of action causes more Badeline Chasers to start spawning
-    Locations: The amount of locations you've checked contributes to Badeline Chasers
-    Strawberries: The amount of Strawberry items you've received contibutes to Badeline Chasers
+    Locations: The number of locations you've checked contributes to Badeline Chasers
+    Strawberries: The number of Strawberry items you've received contributes to Badeline Chasers
     """
     display_name = "Badeline Chaser Source"
     option_locations = 0
@@ -80,7 +95,9 @@ class BadelineChaserFrequency(Range):
     default = 0
 
 class BadelineChaserSpeed(Range):
-    """How many seconds behind you each Badeline Chaser will be"""
+    """
+    How many seconds behind you each Badeline Chaser will be
+    """
     display_name = "Badeline Chaser Speed"
     range_start = 2
     range_end = 10
