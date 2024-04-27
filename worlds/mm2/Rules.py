@@ -5,7 +5,7 @@ from .Locations import heat_man_locations, air_man_locations, wood_man_locations
     quick_man_locations, flash_man_locations, metal_man_locations, crash_man_locations, wily_1_locations, \
     wily_2_locations, wily_3_locations, wily_4_locations, wily_5_locations, wily_6_locations
 from .Options import bosses, weapons_to_id
-from worlds.generic.Rules import add_rule
+from worlds.generic.Rules import add_rule, forbid_items
 
 if TYPE_CHECKING:
     from . import MM2World

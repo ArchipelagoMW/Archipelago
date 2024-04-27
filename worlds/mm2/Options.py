@@ -124,10 +124,17 @@ class PaletteShuffle(TextChoice):
     option_singularity = 3
 
 
+class EnemyWeaknesses(Toggle):
+    """
+    Randomizes the damage dealt to enemies by weapons. Friender will always take damage from the buster.
+    """
+    display_name = "Random Enemy Weaknesses"
+
+
 class StrictWeaknesses(Toggle):
     """Only your starting Robot Master will take damage from the Mega Buster, the rest must be defeated with weapons.
     Weapons that only do 1-3 damage to bosses no longer deal damage (aside from Alien)."""
-    display_name = "Strict Weaknesses"
+    display_name = "Strict Boss Weaknesses"
 
 
 class RandomWeaknesses(Choice):
@@ -136,7 +143,7 @@ class RandomWeaknesses(Choice):
     Time Stopper will deplete half of a random Robot Master's HP.
     Randomized: Weapon damage will be fully randomized.
     """
-    display_name = "Random Weaknesses"
+    display_name = "Random Boss Weaknesses"
     option_none = 0
     option_shuffled = 1
     option_randomized = 2
@@ -188,6 +195,7 @@ class MM2Options(PerGameCommonOptions):
     consumables: Consumables
     yoku_jumps: YokuJumps
     enable_lasers: EnableLasers
+    enemy_weakness: EnemyWeaknesses
     strict_weakness: StrictWeaknesses
     random_weakness: RandomWeaknesses
     wily_5_requirement: Wily5Requirement

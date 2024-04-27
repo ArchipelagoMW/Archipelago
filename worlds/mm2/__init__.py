@@ -234,6 +234,24 @@ class MM2World(World):
             progitempool.remove(placed_item)
             fill_locations.remove(rbm_location)
             self.multiworld.itempool.remove(placed_item)
+            target_rbm = (placed_item.code & 0xF) - 1
+            if self.options.strict_weakness or (self.options.random_weakness
+                                                and not (self.weapon_damage[0][target_rbm] > 0)):
+                # we need to find a weakness for this boss
+                weaknesses = [weapon for weapon in range(1, 9)
+                              if self.weapon_damage[weapon][target_rbm] >= minimum_weakness_requirement[weapon]]
+                weapons = list(map(lambda s: weapons_to_name[s], weaknesses))
+                valid_weapons = [item for item in progitempool
+                                 if item.name in weapons
+                                 and item.player == self.player]
+                placed_weapon = self.random.choice(valid_weapons)
+                weapon_name = next(name for name, idx in lookup_location_to_id.items()
+                                   if idx == 0x880101 + self.options.starting_robot_master.value)
+                weapon_location = self.get_location(weapon_name)
+                weapon_location.place_locked_item(placed_weapon)
+                progitempool.remove(placed_weapon)
+                fill_locations.remove(weapon_location)
+                self.multiworld.itempool.remove(placed_weapon)
 
     def generate_output(self, output_directory: str) -> None:
         try:

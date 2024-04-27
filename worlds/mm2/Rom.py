@@ -19,15 +19,53 @@ PROTEUSHASH = "9ff045a3ca30018b6e874c749abb3ec4"
 MM2NESHASH = "0527a0ee512f69e08b8db6dc97964632"
 MM2VCHASH = "0c78dfe8e90fb8f3eed022ff01126ad3"
 
-picopico_weakness_ptrs: Dict[int, int] = {
-    0: 0x3EA12,
-    1: 0x3EA8E,
-    2: 0x3EB06,
-    3: 0x3EB7E,
-    4: 0x3EBF6,
-    5: 0x3EC6E,
-    6: 0x3ECE6,
-    7: 0x3ED5E,
+enemy_weakness_ptrs: Dict[int, int] = {
+    0: 0x3E9A8,
+    1: 0x3EA24,
+    2: 0x3EA9C,
+    3: 0x3EB14,
+    4: 0x3EB8C,
+    5: 0x3EC04,
+    6: 0x3EC7C,
+    7: 0x3ECF4,
+}
+
+enemy_addresses: Dict[str, int] = {
+    "Shrink": 0x00,
+    "Anko": 0x01,
+    "M-445": 0x04,
+    "Claw": 0x08,
+    "Tanishi": 0x0A,
+    "Kerog": 0x0C,
+    "Petit Kerog": 0x0D,
+    "Batton": 0x16,
+    "Robitto": 0x17,
+    "Friender": 0x1C,
+    "Monking": 0x1D,
+    "Kukku": 0x1F,
+    "Telly": 0x22,
+    "Changkey Maker": 0x23,
+    "Changkey": 0x24,
+    "Pierrobot": 0x29,
+    "Fly Boy": 0x2C,
+    # "Crash Wall": 0x2D
+    # "Friender Wall": 0x2E
+    "Blocky": 0x31,
+    "Neo Metall": 0x34,
+    "Matasaburo": 0x36,
+    "Pipi": 0x38,
+    "Copipi": 0x3A,  # could be wrong, test
+    "Kaminari Goro": 0x3E,
+    "Springer": 0x46,
+    "Mole": 0x48,  # 49 is mole variation?
+    "Shotman (Left)": 0x4B,
+    "Shotman (Right)": 0x4C,
+    "Sniper Armor": 0x4E,
+    "Sniper Joe": 0x4F,
+    "Scworm": 0x50,
+    "Picopico-kun": 0x6A,
+    "Boobeam Trap": 0x6D,
+    "Big Fish": 0x71
 }
 
 # addresses printed when assembling basepatch
@@ -138,6 +176,8 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
 
     write_palette_shuffle(world, patch)
 
+    enemy_weaknesses: Dict[str, Dict[int, int]] = {}
+
     if world.options.strict_weakness or world.options.random_weakness or world.options.plando_weakness:
         # we need to write boss weaknesses
         output = bytearray()
@@ -181,15 +221,23 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
             patch.write_byte(0x2DA2E, weak1)
             patch.write_byte(0x2DA32, weak2)
             patch.write_byte(0x2DA3A, weak3)
-        for weapon in picopico_weakness_ptrs:
-            p_damage = world.weapon_damage[weapon][9]
-            if p_damage < 0:
-                p_damage = 256 + p_damage
-            patch.write_byte(picopico_weakness_ptrs[weapon], p_damage)
-            b_damage = world.weapon_damage[weapon][11]
-            if b_damage < 0:
-                b_damage = 256 + b_damage
-            patch.write_byte(picopico_weakness_ptrs[weapon] + 3, b_damage)
+        enemy_weaknesses["Picopico-kun"] = {weapon: world.weapon_damage[weapon][9] for weapon in range(8)}
+        enemy_weaknesses["Boobeam Trap"] = {weapon: world.weapon_damage[weapon][11] for weapon in range(8)}
+
+    if world.options.enemy_weakness:
+        for enemy in enemy_addresses:
+            if enemy in ("Picopico-kun", "Boobeam Trap"):
+                continue
+            enemy_weaknesses[enemy] = {weapon: world.random.randint(-4, 4) for weapon in enemy_weakness_ptrs}
+            if enemy == "Friender":
+                # Friender has to be killed, need buster damage to not break logic
+                enemy_weaknesses[enemy][0] = max(enemy_weaknesses[enemy][0], 1)
+
+    for enemy, damage in enemy_weaknesses.items():
+        for weapon in enemy_weakness_ptrs:
+            if damage[weapon] < 0:
+                damage[weapon] = 256 + damage[weapon]
+            patch.write_byte(enemy_weakness_ptrs[weapon] + enemy_addresses[enemy], damage[weapon])
 
     if world.options.quickswap:
         patch.write_byte(quickswap_ptr + 1, 0x01)

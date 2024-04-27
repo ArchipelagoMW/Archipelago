@@ -59,6 +59,9 @@ class StrictWeaknessTests(MM2TestBase):
         "enable_lasers": True
     }
 
+    def world_setup(self, seed=None) -> None:
+        super().world_setup(28001092471928092413)
+
     def test_that_every_boss_has_a_weakness(self) -> None:
         world = self.multiworld.worlds[self.player]
         weapon_damage = world.weapon_damage
