@@ -570,7 +570,7 @@ class WitnessPlayerLogic:
 
             # Secondly, any entities that depend on disabled entities are unreachable as well.
             for entity, req in self.REQUIREMENTS_BY_HEX.items():
-                if not req and not self.is_disabled(entity) and not entity == self.VICTORY_LOCATION:
+                if not req and not self.is_disabled(entity) and entity != self.VICTORY_LOCATION:
                     newly_discovered_disabled_entities.add(entity)
                     dirty = True
 
