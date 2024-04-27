@@ -47,8 +47,8 @@ from worlds._sc2common.bot.data import Race
 from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
 from worlds.sc2.Items import (
-    lookup_id_to_name, get_full_item_list, ItemData, type_flaggroups, upgrade_numbers, upgrade_numbers_all,
-    race_to_item_type, upgrade_item_types,
+    lookup_id_to_name, get_full_item_list, ItemData, upgrade_numbers, upgrade_numbers_all,
+    race_to_item_type, upgrade_item_types, ZergItemType,
 )
 from worlds.sc2.Locations import SC2WOL_LOC_ID_OFFSET, LocationType, SC2HOTS_LOC_ID_OFFSET
 from worlds.sc2.MissionTables import lookup_id_to_mission, SC2Campaign, lookup_name_to_mission, \
@@ -900,7 +900,7 @@ def calc_difficulty(difficulty: int):
 
 
 def get_kerrigan_level(ctx: SC2Context, items: typing.Dict[SC2Race, typing.List[int]], missions_beaten: int) -> int:
-    item_value = items[SC2Race.ZERG][type_flaggroups[SC2Race.ZERG]["Level"]]
+    item_value = items[SC2Race.ZERG][ZergItemType.Level.flag_word]
     mission_value = missions_beaten * ctx.kerrigan_levels_per_mission_completed
     if ctx.kerrigan_levels_per_mission_completed_cap != -1:
         mission_value = min(mission_value, ctx.kerrigan_levels_per_mission_completed_cap)
