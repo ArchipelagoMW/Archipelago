@@ -276,18 +276,18 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
 
     for item in item_list:
         # Filter Nova equipment if you never get Nova
-        if not nova_missions and item.data.type == Items.ItemType.Nova_Gear:
+        if not nova_missions and item.data.type == Items.TerranItemType.Nova_Gear:
             item.flags |= ItemFilterFlags.Excluded
         
         # Todo(mm): How should no-build only / grant_story_tech affect excluding Kerrigan items?
         # Exclude Primal form based on Kerrigan presence or primal form option
-        if (item.data.type == Items.ItemType.Primal_Form
+        if (item.data.type == Items.ZergItemType.Primal_Form
             and ((not kerrigan_is_present) or world.options.kerrigan_primal_status != KerriganPrimalStatus.option_item)
         ):
             item.flags |= ItemFilterFlags.Excluded
         
         # Remove Kerrigan abilities if there's no kerrigan
-        if (item.data.type == Items.ItemType.Ability and not kerrigan_is_present):
+        if (item.data.type == Items.ZergItemType.Ability and not kerrigan_is_present):
             item.flags |= ItemFilterFlags.Excluded
         
         # Remove Spear of Adun if it's off
@@ -450,7 +450,7 @@ def flag_unused_upgrade_types(world: SC2World, item_list: List[FilterItem]) -> N
     include_upgrades = world.options.generic_upgrade_missions == 0
     upgrade_items = world.options.generic_upgrade_items
     for item in item_list:
-        if item.data.type == Items.ItemType.Upgrade:
+        if item.data.type in Items.upgrade_item_types:
             if not include_upgrades or (item.name not in upgrade_included_names[upgrade_items]):
                 item.flags |= ItemFilterFlags.Excluded
 

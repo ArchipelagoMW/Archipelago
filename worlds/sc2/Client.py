@@ -31,7 +31,7 @@ from worlds.sc2.Options import (
     LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations,
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
-    SpearOfAdunAutonomouslyCastPresentInNoBuild, MineralsPerItem, VespenePerItem, StartingSupplyPerItem,
+    SpearOfAdunAutonomouslyCastPresentInNoBuild,
 )
 
 
@@ -46,7 +46,10 @@ from worlds._sc2common import bot
 from worlds._sc2common.bot.data import Race
 from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
-from worlds.sc2.Items import lookup_id_to_name, get_full_item_list, ItemData, type_flaggroups, upgrade_numbers, upgrade_numbers_all
+from worlds.sc2.Items import (
+    lookup_id_to_name, get_full_item_list, ItemData, type_flaggroups, upgrade_numbers, upgrade_numbers_all,
+    race_to_item_type, upgrade_item_types,
+)
 from worlds.sc2.Locations import SC2WOL_LOC_ID_OFFSET, LocationType, SC2HOTS_LOC_ID_OFFSET
 from worlds.sc2.MissionTables import lookup_id_to_mission, SC2Campaign, lookup_name_to_mission, \
     lookup_id_to_campaign, MissionConnection, SC2Mission, campaign_mission_table, SC2Race
@@ -801,7 +804,10 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
             items.extend(compat_item_to_network_items(compat_item))
 
     network_item: NetworkItem
-    accumulators: typing.Dict[SC2Race, typing.List[int]] = {race: [0 for _ in type_flaggroups[race]] for race in SC2Race}
+    accumulators: typing.Dict[SC2Race, typing.List[int]] = {
+        race: [0 for _ in item_type_enum_class]
+        for race, item_type_enum_class in race_to_item_type.items()
+    }
 
     # Protoss Shield grouped item specific logic
     shields_from_ground_upgrade: int = 0
@@ -814,14 +820,14 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
 
         # exists exactly once
         if item_data.quantity == 1:
-            accumulators[item_data.race][type_flaggroups[item_data.race][item_data.type]] |= 1 << item_data.number
+            accumulators[item_data.race][item_data.type.flag_word] |= 1 << item_data.number
 
         # exists multiple times
-        elif item_data.type in ["Upgrade", "Progressive Upgrade","Progressive Upgrade 2"]:
-            flaggroup = type_flaggroups[item_data.race][item_data.type]
+        elif item_data.quantity > 1:
+            flaggroup = item_data.type.flag_word
 
             # Generic upgrades apply only to Weapon / Armor upgrades
-            if item_data.type != "Upgrade" or ctx.generic_upgrade_items == 0:
+            if item_data.type not in upgrade_item_types or ctx.generic_upgrade_items == 0:
                 accumulators[item_data.race][flaggroup] += 1 << item_data.number
             else:
                 if name == ItemNames.PROGRESSIVE_PROTOSS_GROUND_UPGRADE:
@@ -840,28 +846,28 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
         # sum
         else:
             if name == ItemNames.STARTING_MINERALS:
-                accumulators[item_data.race][type_flaggroups[item_data.race][item_data.type]] += ctx.minerals_per_item
+                accumulators[item_data.race][item_data.type.flag_word] += ctx.minerals_per_item
             elif name == ItemNames.STARTING_VESPENE:
-                accumulators[item_data.race][type_flaggroups[item_data.race][item_data.type]] += ctx.vespene_per_item
+                accumulators[item_data.race][item_data.type.flag_word] += ctx.vespene_per_item
             elif name == ItemNames.STARTING_SUPPLY:
-                accumulators[item_data.race][type_flaggroups[item_data.race][item_data.type]] += ctx.starting_supply_per_item
+                accumulators[item_data.race][item_data.type.flag_word] += ctx.starting_supply_per_item
             else:
-                accumulators[item_data.race][type_flaggroups[item_data.race][item_data.type]] += item_data.number
+                accumulators[item_data.race][item_data.type.flag_word] += item_data.number
 
     # Fix Shields from generic upgrades by unit class (Maximum of ground/air upgrades)
     if shields_from_ground_upgrade > 0 or shields_from_air_upgrade > 0:
         shield_upgrade_level = max(shields_from_ground_upgrade, shields_from_air_upgrade)
         shield_upgrade_item = item_list[ItemNames.PROGRESSIVE_PROTOSS_SHIELDS]
         for _ in range(0, shield_upgrade_level):
-            accumulators[shield_upgrade_item.race][type_flaggroups[shield_upgrade_item.race][shield_upgrade_item.type]] += 1 << shield_upgrade_item.number
+            accumulators[shield_upgrade_item.race][item_data.type.flag_word] += 1 << shield_upgrade_item.number
 
     # Upgrades from completed missions
     if ctx.generic_upgrade_missions > 0:
         total_missions = sum(len(ctx.mission_req_table[campaign]) for campaign in ctx.mission_req_table)
         for race in SC2Race:
-            if "Upgrade" not in type_flaggroups[race]:
+            if race == SC2Race.ANY:
                 continue
-            upgrade_flaggroup = type_flaggroups[race]["Upgrade"]
+            upgrade_flaggroup = race_to_item_type[race]["Upgrade"].flag_word
             num_missions = ctx.generic_upgrade_missions * total_missions
             amounts = [
                 num_missions // 100,

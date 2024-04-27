@@ -47,15 +47,8 @@ del _shortened_names
 
 # All items get sorted into their data type
 for item, data in Items.get_full_item_list().items():
-    # Items get assigned to their flaggroup's type
-    item_name_groups.setdefault(data.type, []).append(item)
-    # Numbered flaggroups get sorted into an unnumbered group
-    # Currently supports numbers of one or two digits
-    if data.type[-2:].strip().isnumeric:
-        type_group = data.type[:-2].strip()
-        item_name_groups.setdefault(type_group, []).append(item)
-        # Flaggroups with numbers are unlisted
-        unlisted_item_name_groups.add(data.type)
+    # Items get assigned to their flaggroup's display type
+    item_name_groups.setdefault(data.type.display_name, []).append(item)
     # Items with a bracket get a short-hand name group for ease of use in YAMLs
     if '(' in item:
         short_name = item[:item.find(' (')]

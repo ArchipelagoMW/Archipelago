@@ -1,15 +1,18 @@
 from typing import Callable, Dict, List, Set, Union, Tuple, Optional
 from BaseClasses import  Item, Location
-from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items, progressive_if_nco, \
-    progressive_if_ext, spear_of_adun_calldowns, spear_of_adun_castable_passives, nova_equipment
+from .Items import (get_full_item_list, spider_mine_sources, second_pass_placeable_items, progressive_if_nco,
+    progressive_if_ext, spear_of_adun_calldowns, spear_of_adun_castable_passives, nova_equipment,
+    upgrade_item_types,
+)
 from .MissionTables import (mission_orders, MissionInfo, MissionPools, MissionFlag,
     get_campaign_goal_priority, campaign_final_mission_locations, campaign_alt_final_mission_locations,
     SC2Campaign, SC2Race, SC2CampaignGoalPriority, SC2Mission,
 )
-from .Options import get_option_value, MissionOrder, \
-    get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech, \
-    TakeOverAIAllies, SpearOfAdunPresence, SpearOfAdunAutonomouslyCastAbilityPresence, campaign_depending_orders, \
-    ShuffleCampaigns, get_excluded_missions, ShuffleNoBuild, ExtraLocations, GrantStoryLevels
+from .Options import (get_option_value, MissionOrder,
+    get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech,
+    TakeOverAIAllies, SpearOfAdunPresence, SpearOfAdunAutonomouslyCastAbilityPresence, campaign_depending_orders,
+    ShuffleCampaigns, get_excluded_missions, ShuffleNoBuild, ExtraLocations, GrantStoryLevels,
+)
 from . import ItemNames
 from worlds.AutoWorld import World
 
@@ -37,7 +40,6 @@ def filter_missions(world: World) -> Dict[MissionPools, List[SC2Mission]]:
     """
     Returns a semi-randomly pruned tuple of no-build, easy, medium, and hard mission sets
     """
-    world: World = world
     mission_order_type = get_option_value(world, "mission_order")
     shuffle_no_build = get_option_value(world, "shuffle_no_build")
     enabled_campaigns = get_enabled_campaigns(world)
@@ -76,7 +78,6 @@ def filter_missions(world: World) -> Dict[MissionPools, List[SC2Mission]]:
         goal_priorities = {campaign: get_campaign_goal_priority(campaign, excluded_missions) for campaign in enabled_campaigns}
         goal_level = max(goal_priorities.values())
         candidate_campaigns: List[SC2Campaign] = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
-    candidate_campaigns.sort(key=lambda it: it.id)
         candidate_campaigns.sort(key=lambda it: it.id)
 
         goal_campaign = world.random.choice(candidate_campaigns)
@@ -589,7 +590,7 @@ class ValidInventory:
             if item.name in nova_equipment and not nova_equipment_used:
                 # Drop Nova equipment if there's no NCO mission generated
                 continue
-            if item_info.type == "Upgrade":
+            if item_info.type in upgrade_item_types:
                 # Locking upgrades based on mission duration
                 if item.name not in item_quantities:
                     item_quantities[item.name] = 0
