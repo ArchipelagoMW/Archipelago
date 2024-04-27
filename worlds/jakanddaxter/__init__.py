@@ -7,6 +7,7 @@ from .locs import CellLocations as Cells, ScoutLocations as Scouts, OrbLocations
 from .Regions import create_regions
 from .Rules import set_rules
 from ..AutoWorld import World, WebWorld
+from ..LauncherComponents import components, Component, launch_subprocess, Type
 
 
 class JakAndDaxterWebWorld(WebWorld):
@@ -44,8 +45,8 @@ class JakAndDaxterWorld(World):
         "Power Cell": {item_table[k]: k for k in item_table
                        if k in range(jak1_id, jak1_id + Scouts.fly_offset)},
         "Scout Fly": {item_table[k]: k for k in item_table
-                      if k in range(jak1_id + Scouts.fly_offset, jak1_id + Orbs.orb_offset)},
-        "Precursor Orb": {}  # TODO
+                      if k in range(jak1_id + Scouts.fly_offset, jak1_id + Orbs.orb_offset)}
+        # "Precursor Orb": {}  # TODO
     }
 
     def create_regions(self):
@@ -73,3 +74,14 @@ class JakAndDaxterWorld(World):
 
         item = JakAndDaxterItem(name, classification, item_id, self.player)
         return item
+
+
+def launch_client():
+    from .Client import launch
+    launch_subprocess(launch, name="JakAndDaxterClient")
+
+
+components.append(Component("Jak and Daxter Client",
+                            "JakAndDaxterClient",
+                            func=launch_client,
+                            component_type=Type.CLIENT))

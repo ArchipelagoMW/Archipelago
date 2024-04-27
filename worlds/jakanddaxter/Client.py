@@ -1,15 +1,32 @@
-import time
-import struct
 import typing
 import asyncio
-from socket import socket, AF_INET, SOCK_STREAM
-
 import colorama
 
 import Utils
-from GameID import jak1_name
-from .locs import CellLocations as Cells, ScoutLocations as Flies
 from CommonClient import ClientCommandProcessor, CommonContext, logger, server_loop, gui_enabled
+
+from .GameID import jak1_name
+from .client.ReplClient import JakAndDaxterReplClient
+from .client.MemoryReader import JakAndDaxterMemoryReader
+
+import ModuleUpdate
+ModuleUpdate.update()
+
+
+all_tasks = set()
+
+
+def create_task_log_exception(awaitable: typing.Awaitable) -> asyncio.Task:
+    async def _log_exception(a):
+        try:
+            return await a
+        except Exception as e:
+            logger.exception(e)
+        finally:
+            all_tasks.remove(task)
+    task = asyncio.create_task(_log_exception(awaitable))
+    all_tasks.add(task)
+    return task
 
 
 class JakAndDaxterClientCommandProcessor(ClientCommandProcessor):
@@ -23,111 +40,28 @@ class JakAndDaxterClientCommandProcessor(ClientCommandProcessor):
     #  All 3 need to be done, and in this order, for this to work.
 
 
-class JakAndDaxterReplClient:
-    ip: str
-    port: int
-    socket: socket
-    connected: bool = False
-    listening: bool = False
-    compiled: bool = False
-
-    def __init__(self, ip: str = "127.0.0.1", port: int = 8181):
-        self.ip = ip
-        self.port = port
-        self.connected = self.g_connect()
-        if self.connected:
-            self.listening = self.g_listen()
-        if self.connected and self.listening:
-            self.compiled = self.g_compile()
-
-    # This helper function formats and sends `form` as a command to the REPL.
-    # ALL commands to the REPL should be sent using this function.
-    def send_form(self, form: str) -> None:
-        header = struct.pack("<II", len(form), 10)
-        self.socket.sendall(header + form.encode())
-        logger.info("Sent Form: " + form)
-
-    def g_connect(self) -> bool:
-        if not self.ip or not self.port:
-            return False
-
-        self.socket = socket(AF_INET, SOCK_STREAM)
-        self.socket.connect((self.ip, self.port))
-        time.sleep(1)
-        print(self.socket.recv(1024).decode())
-        return True
-
-    def g_listen(self) -> bool:
-        self.send_form("(lt)")
-        return True
-
-    def g_compile(self) -> bool:
-        # Show this visual cue when compilation is started.
-        # It's the version number of the OpenGOAL Compiler.
-        self.send_form("(set! *debug-segment* #t)")
-
-        # Play this audio cue when compilation is started.
-        # It's the sound you hear when you press START + CIRCLE to open the Options menu.
-        self.send_form("(dotimes (i 1) "
-                       "(sound-play-by-name "
-                       "(static-sound-name \"start-options\") "
-                       "(new-sound-id) 1024 0 0 (sound-group sfx) #t))")
-
-        # Start compilation. This is blocking, so nothing will happen until the REPL is done.
-        self.send_form("(mi)")
-
-        # Play this audio cue when compilation is complete.
-        # It's the sound you hear when you press START + START to close the Options menu.
-        self.send_form("(dotimes (i 1) "
-                       "(sound-play-by-name "
-                       "(static-sound-name \"menu close\") "
-                       "(new-sound-id) 1024 0 0 (sound-group sfx) #t))")
-
-        # Disable cheat-mode and debug (close the visual cue).
-        self.send_form("(set! *cheat-mode* #f)")
-        self.send_form("(set! *debug-segment* #f)")
-        return True
-
-    def g_verify(self) -> bool:
-        self.send_form("(dotimes (i 1) "
-                       "(sound-play-by-name "
-                       "(static-sound-name \"menu close\") "
-                       "(new-sound-id) 1024 0 0 (sound-group sfx) #t))")
-        return True
-
-    # TODO - In ArchipelaGOAL, override the 'get-pickup event so that it doesn't give you the item,
-    #  it just plays the victory animation. Then define a new event type like 'get-archipelago
-    #  to actually give ourselves the item. See game-info.gc and target-handler.gc.
-
-    def give_power_cell(self, ap_id: int) -> None:
-        cell_id = Cells.to_game_id(ap_id)
-        self.send_form("(send-event "
-                       "*target* \'get-archipelago "
-                       "(pickup-type fuel-cell) "
-                       "(the float " + str(cell_id) + "))")
-
-    def give_scout_fly(self, ap_id: int) -> None:
-        fly_id = Flies.to_game_id(ap_id)
-        self.send_form("(send-event "
-                       "*target* \'get-archipelago "
-                       "(pickup-type buzzer) "
-                       "(the float " + str(fly_id) + "))")
-
-
 class JakAndDaxterContext(CommonContext):
     tags = {"AP"}
     game = jak1_name
     items_handling = 0b111  # Full item handling
     command_processor = JakAndDaxterClientCommandProcessor
+
+    # We'll need two agents working in tandem to handle two-way communication with the game.
+    # The REPL Client will handle the server->game direction by issuing commands directly to the running game.
+    # But the REPL cannot send information back to us, it only ingests information we send it.
+    # Luckily OpenGOAL sets up memory addresses to write to, that AutoSplit can read from, for speedrunning.
+    # We'll piggyback off this system with a Memory Reader, and that will handle the game->server direction.
     repl: JakAndDaxterReplClient
+    memr: JakAndDaxterMemoryReader
+
+    # And two associated tasks, so we have handles on them.
+    repl_task: asyncio.Task
+    memr_task: asyncio.Task
 
     def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str]) -> None:
         self.repl = JakAndDaxterReplClient()
+        self.memr = JakAndDaxterMemoryReader()
         super().__init__(server_address, password)
-
-    def on_package(self, cmd: str, args: dict):
-        if cmd == "":
-            pass
 
     def run_gui(self):
         from kvui import GameManager
@@ -141,28 +75,47 @@ class JakAndDaxterContext(CommonContext):
         self.ui = JakAndDaxterManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
+    def on_package(self, cmd: str, args: dict):
+        if cmd == "ReceivedItems":
+            for index, item in enumerate(args["items"], start=args["index"]):
+                self.repl.item_inbox[index] = item
 
-def run_game():
-    pass
+    async def ap_inform_location_checks(self, location_ids: typing.List[int]):
+        message = [{"cmd": "LocationChecks", "locations": location_ids}]
+        await self.send_msgs(message)
+
+    def on_locations(self, location_ids: typing.List[int]):
+        create_task_log_exception(self.ap_inform_location_checks(location_ids))
+
+    async def run_repl_loop(self):
+        await self.repl.main_tick()
+        await asyncio.sleep(0.1)
+
+    async def run_memr_loop(self):
+        await self.memr.main_tick(self.on_locations)
+        await asyncio.sleep(0.1)
 
 
 async def main():
     Utils.init_logging("JakAndDaxterClient", exception_logger="Client")
 
     ctx = JakAndDaxterContext(None, None)
+
+    await ctx.repl.init()
+
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
+    ctx.repl_task = create_task_log_exception(ctx.run_repl_loop())
+    ctx.memr_task = create_task_log_exception(ctx.run_memr_loop())
 
     if gui_enabled:
         ctx.run_gui()
     ctx.run_cli()
 
-    run_game()
-
     await ctx.exit_event.wait()
     await ctx.shutdown()
 
 
-if __name__ == "__main__":
+def launch():
     colorama.init()
     asyncio.run(main())
     colorama.deinit()
