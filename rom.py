@@ -185,6 +185,12 @@ def give_item(rom: LocalRom, item: WL4Item):
         flag = 1 << ability
         address = get_symbol('StartingInventoryWarioAbilities')
         abilities = rom.read_byte(address)
+        if ability in (1, 3) and abilities & flag:
+            if ability == 1:
+                ability = 6
+            else:
+                ability = 7
+            flag = 1 << ability
         abilities |= flag
         rom.write_byte(address, abilities)
     elif item.type == ItemType.ITEM:
