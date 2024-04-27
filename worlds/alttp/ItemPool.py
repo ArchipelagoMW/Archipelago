@@ -682,7 +682,7 @@ def get_pool_core(world, player: int):
             triforce_pieces = world.triforce_pieces_available[player].value + world.triforce_pieces_extra[player].value
         elif world.triforce_pieces_mode[player].value == TriforcePiecesMode.option_percentage:
             percentage = float(world.triforce_pieces_percentage[player].value) / 100
-            triforce_pieces = round(world.triforce_pieces_required[player].value * percentage, 0)
+            triforce_pieces = int(round(world.triforce_pieces_required[player].value * percentage, 0))
         else:  # available
             triforce_pieces = world.triforce_pieces_available[player].value
 

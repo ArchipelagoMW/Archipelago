@@ -10,23 +10,23 @@ class StardewValleyOption(Protocol):
 
 
 class Goal(Choice):
-    """What's your goal with this play-through?
+    """Goal for this playthrough
     Community Center: Complete the Community Center
-    Grandpa's Evaluation: Succeed Grandpa's evaluation with 4 lit candles
-    Bottom of the Mines: Reach level 120 in the mineshaft
-    Cryptic Note: Complete the quest "Cryptic Note" where Mr Qi asks you to reach floor 100 in the Skull Cavern
-    Master Angler: Catch every fish. Adapts to chosen Fishsanity option
-    Complete Collection: Complete the museum by donating every possible item. Pairs well with Museumsanity
-    Full House: Get married and have two children. Pairs well with Friendsanity
-    Greatest Walnut Hunter: Find all 130 Golden Walnuts
-    Protector of the Valley: Complete all the monster slayer goals. Adapts to Monstersanity
-    Full Shipment: Ship every item in the collection tab. Adapts to Shipsanity
+    Grandpa's Evaluation: 4 lit candles in Grandpa's evaluation
+    Bottom of the Mines: Reach level 120 in the mines
+    Cryptic Note: Complete the quest "Cryptic Note" (Skull Cavern Floor 100)
+    Master Angler: Catch every fish. Adapts to Fishsanity
+    Complete Collection: Complete the museum collection
+    Full House: Get married and have 2 children
+    Greatest Walnut Hunter: Find 130 Golden Walnuts
+    Protector of the Valley: Complete the monster slayer goals. Adapts to Monstersanity
+    Full Shipment: Ship every item. Adapts to Shipsanity
     Gourmet Chef: Cook every recipe. Adapts to Cooksanity
-    Craft Master: Craft every item.
+    Craft Master: Craft every item
     Legend: Earn 10 000 000g
     Mystery of the Stardrops: Find every stardrop
     Allsanity: Complete every check in your slot
-    Perfection: Attain Perfection, based on the vanilla definition
+    Perfection: Attain Perfection
     """
     internal_name = "goal"
     display_name = "Goal"
@@ -154,7 +154,7 @@ class EntranceRandomization(Choice):
     Disabled: No entrance randomization is done
     Pelican Town: Only doors in the main town area are randomized with each other
     Non Progression: Only entrances that are always available are randomized with each other
-    Buildings: All Entrances that Allow you to enter a building are randomized with each other
+    Buildings: All entrances that allow you to enter a building are randomized with each other
     Chaos: Same as "Buildings", but the entrances get reshuffled every single day!
     """
     # Everything: All buildings and areas are randomized with each other
@@ -457,7 +457,7 @@ class Cooksanity(Choice):
 
 
 class Chefsanity(NamedRange):
-    """Locations for leaning cooking recipes?
+    """Locations for learning cooking recipes?
     Vanilla: All cooking recipes are learned normally
     Queen of Sauce: Every Queen of sauce episode is a check, all queen of sauce recipes are items
     Purchases: Every purchasable recipe is a check

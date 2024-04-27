@@ -1616,7 +1616,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     rom.write_byte(0xEFD95, digging_game_rng)
     rom.write_byte(0x1800A3, 0x01)  # enable correct world setting behaviour after agahnim kills
     rom.write_byte(0x1800A4, 0x01 if world.glitches_required[player] != 'no_logic' else 0x00)  # enable POD EG fix
-    rom.write_byte(0x186383, 0x01 if world.glitch_triforce or world.glitches_required[
+    rom.write_byte(0x186383, 0x01 if world.glitches_required[
         player] == 'no_logic' else 0x00)  # disable glitching to Triforce from Ganons Room
     rom.write_byte(0x180042, 0x01 if world.save_and_quit_from_boss else 0x00)  # Allow Save and Quit after boss kill
 
@@ -1859,7 +1859,7 @@ def apply_oof_sfx(rom, oof: str):
     rom.write_bytes(0x12803A, oof_bytes)
     rom.write_bytes(0x12803A + len(oof_bytes), [0xEB, 0xEB])
 
-	#Enemizer patch: prevent Enemizer from overwriting $3188 in SPC memory with an unused sound effect ("WHAT")
+    # Enemizer patch: prevent Enemizer from overwriting $3188 in SPC memory with an unused sound effect ("WHAT")
     rom.write_bytes(0x13000D, [0x00, 0x00, 0x00, 0x08])
 
 
@@ -3021,7 +3021,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options = Utils.get_options()
+    options = Utils.get_settings()
     if not file_name:
         file_name = options["lttp_options"]["rom_file"]
     if not os.path.exists(file_name):

@@ -199,6 +199,13 @@ class PokemonEmeraldClient(BizHawkClient):
                 "items_handling": ctx.items_handling
             }]))
 
+            # Need to make sure items handling updates and we get the correct list of received items
+            # before continuing. Otherwise we might give some duplicate items and skip others.
+            # Should patch remote_items option value into the ROM in the future to guarantee we get the
+            # right item list before entering this part of the code
+            await asyncio.sleep(0.75)
+            return
+
         try:
             guards: Dict[str, Tuple[int, bytes, str]] = {}
 
