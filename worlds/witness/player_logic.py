@@ -22,13 +22,32 @@ from logging import warning
 from typing import TYPE_CHECKING, Dict, FrozenSet, List, Set, Tuple, cast
 
 from .data import static_logic as static_witness_logic
-from .data import utils
 from .data.item_definition_classes import DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
 from .data.utils import (
+    define_new_region,
     dnf_and,
+    dnf_remove_redundancies,
+    get_boat,
     get_caves_except_path_to_challenge_exclusion_list,
+    get_complex_additional_panels,
+    get_complex_door_panels,
+    get_complex_doors,
+    get_disable_unrandomized_list,
     get_discard_exclusion_list,
     get_early_caves_list,
+    get_early_caves_start_list,
+    get_elevators_come_to_you,
+    get_ep_all_individual,
+    get_ep_easy,
+    get_ep_no_eclipse,
+    get_ep_obelisks,
+    get_laser_shuffle,
+    get_obelisk_keys,
+    get_simple_additional_panels,
+    get_simple_doors,
+    get_simple_panels,
+    get_symbol_shuffle_list,
+    get_vault_exclusion_list,
     parse_lambda,
 )
 
@@ -139,13 +158,13 @@ class WitnessPlayerLogic:
                                 for possibility in new_items
                             )
 
-                dependent_items_for_option = utils.dnf_and([dependent_items_for_option, new_items])
+                dependent_items_for_option = dnf_and([dependent_items_for_option, new_items])
 
             for items_option in these_items:
                 for dependent_item in dependent_items_for_option:
                     all_options.add(items_option.union(dependent_item))
 
-        return utils.dnf_remove_redundancies(frozenset(all_options))
+        return dnf_remove_redundancies(frozenset(all_options))
 
     def make_single_adjustment(self, adj_type: str, line: str) -> None:
         from .data import static_items as static_witness_items
@@ -207,11 +226,11 @@ class WitnessPlayerLogic:
             line_split = line.split(" - ")
 
             requirement = {
-                "entities": utils.parse_lambda(line_split[1]),
+                "entities": parse_lambda(line_split[1]),
             }
 
             if len(line_split) > 2:
-                required_items = utils.parse_lambda(line_split[2])
+                required_items = parse_lambda(line_split[2])
                 items_actually_in_the_game = [
                     item_name for item_name, item_definition in static_witness_logic.ALL_ITEMS.items()
                     if item_definition.category is ItemCategory.SYMBOL
@@ -242,7 +261,7 @@ class WitnessPlayerLogic:
             return
 
         if adj_type == "Region Changes":
-            new_region_and_options = utils.define_new_region(line + ":")
+            new_region_and_options = define_new_region(line + ":")
 
             self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[new_region_and_options[0]["name"]] = new_region_and_options[1]
 
@@ -375,7 +394,7 @@ class WitnessPlayerLogic:
                 adjustment_linesets_in_order.append(["Disabled Locations:", "0x17FA2"])
 
         if not world.options.shuffle_vault_boxes:
-            adjustment_linesets_in_order.append(utils.get_vault_exclusion_list())
+            adjustment_linesets_in_order.append(get_vault_exclusion_list())
             if not victory == "challenge":
                 adjustment_linesets_in_order.append(["Disabled Locations:", "0x0A332"])
 
@@ -400,54 +419,54 @@ class WitnessPlayerLogic:
             ])
 
         if world.options.disable_non_randomized_puzzles:
-            adjustment_linesets_in_order.append(utils.get_disable_unrandomized_list())
+            adjustment_linesets_in_order.append(get_disable_unrandomized_list())
 
         if world.options.shuffle_symbols:
-            adjustment_linesets_in_order.append(utils.get_symbol_shuffle_list())
+            adjustment_linesets_in_order.append(get_symbol_shuffle_list())
 
         if world.options.EP_difficulty == "normal":
-            adjustment_linesets_in_order.append(utils.get_ep_easy())
+            adjustment_linesets_in_order.append(get_ep_easy())
         elif world.options.EP_difficulty == "tedious":
-            adjustment_linesets_in_order.append(utils.get_ep_no_eclipse())
+            adjustment_linesets_in_order.append(get_ep_no_eclipse())
 
         if world.options.door_groupings == "regional":
             if world.options.shuffle_doors == "panels":
-                adjustment_linesets_in_order.append(utils.get_simple_panels())
+                adjustment_linesets_in_order.append(get_simple_panels())
             elif world.options.shuffle_doors == "doors":
-                adjustment_linesets_in_order.append(utils.get_simple_doors())
+                adjustment_linesets_in_order.append(get_simple_doors())
             elif world.options.shuffle_doors == "mixed":
-                adjustment_linesets_in_order.append(utils.get_simple_doors())
-                adjustment_linesets_in_order.append(utils.get_simple_additional_panels())
+                adjustment_linesets_in_order.append(get_simple_doors())
+                adjustment_linesets_in_order.append(get_simple_additional_panels())
         else:
             if world.options.shuffle_doors == "panels":
-                adjustment_linesets_in_order.append(utils.get_complex_door_panels())
-                adjustment_linesets_in_order.append(utils.get_complex_additional_panels())
+                adjustment_linesets_in_order.append(get_complex_door_panels())
+                adjustment_linesets_in_order.append(get_complex_additional_panels())
             elif world.options.shuffle_doors == "doors":
-                adjustment_linesets_in_order.append(utils.get_complex_doors())
+                adjustment_linesets_in_order.append(get_complex_doors())
             elif world.options.shuffle_doors == "mixed":
-                adjustment_linesets_in_order.append(utils.get_complex_doors())
-                adjustment_linesets_in_order.append(utils.get_complex_additional_panels())
+                adjustment_linesets_in_order.append(get_complex_doors())
+                adjustment_linesets_in_order.append(get_complex_additional_panels())
 
         if world.options.shuffle_boat:
-            adjustment_linesets_in_order.append(utils.get_boat())
+            adjustment_linesets_in_order.append(get_boat())
 
         if world.options.early_caves == "starting_inventory":
-            adjustment_linesets_in_order.append(utils.get_early_caves_start_list())
+            adjustment_linesets_in_order.append(get_early_caves_start_list())
 
         if world.options.early_caves == "add_to_pool" and not remote_doors:
             adjustment_linesets_in_order.append(get_early_caves_list())
 
         if world.options.elevators_come_to_you:
-            adjustment_linesets_in_order.append(utils.get_elevators_come_to_you())
+            adjustment_linesets_in_order.append(get_elevators_come_to_you())
 
         for item in self.YAML_ADDED_ITEMS:
             adjustment_linesets_in_order.append(["Items:", item])
 
         if lasers:
-            adjustment_linesets_in_order.append(utils.get_laser_shuffle())
+            adjustment_linesets_in_order.append(get_laser_shuffle())
 
         if world.options.shuffle_EPs and world.options.obelisk_keys:
-            adjustment_linesets_in_order.append(utils.get_obelisk_keys())
+            adjustment_linesets_in_order.append(get_obelisk_keys())
 
         if world.options.shuffle_EPs == "obelisk_sides":
             ep_gen = ((ep_hex, ep_obj) for (ep_hex, ep_obj) in self.REFERENCE_LOGIC.ENTITIES_BY_HEX.items()
@@ -459,10 +478,10 @@ class WitnessPlayerLogic:
                 ep_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[ep_hex]["checkName"]
                 self.ALWAYS_EVENT_NAMES_BY_HEX[ep_hex] = f"{obelisk_name} - {ep_name}"
         else:
-            adjustment_linesets_in_order.append(["Disabled Locations:"] + utils.get_ep_obelisks()[1:])
+            adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_obelisks()[1:])
 
         if not world.options.shuffle_EPs:
-            adjustment_linesets_in_order.append(["Disabled Locations:"] + utils.get_ep_all_individual()[1:])
+            adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_all_individual()[1:])
 
         for yaml_disabled_location in self.YAML_DISABLED_LOCATIONS:
             if yaml_disabled_location not in self.REFERENCE_LOGIC.ENTITIES_BY_NAME:
