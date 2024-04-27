@@ -311,8 +311,11 @@ def shuffle_music(rom: LocalRom, music_shuffle: MusicShuffle):
     # Only change the header pointers; leave the music player numbers alone
     music_info_table = [rom.read_word(music_table_address + 8 * i) for i in range(819)]
 
-    shuffled_music = list(music_pool)
-    random.shuffle(shuffled_music)
+    if music_shuffle == MusicShuffle.option_disabled:
+        shuffled_music = [0] * len(music_pool)
+    else:
+        shuffled_music = list(music_pool)
+        random.shuffle(shuffled_music)
     for vanilla, shuffled in zip(music_pool, shuffled_music):
         rom.write_word(music_table_address + 8 * vanilla, music_info_table[shuffled])
 
