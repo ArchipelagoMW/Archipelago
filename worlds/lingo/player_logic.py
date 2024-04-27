@@ -190,12 +190,6 @@ class LingoPlayerLogic:
                             self.real_items.append(door_data.item_name)
 
         self.real_items += door_groups
-        
-        # Create color items, if needed.
-        if color_shuffle:
-            self.real_items += [name for name, item in ALL_ITEM_TABLE.items() if item.type == ItemType.COLOR]
-
-        self.real_items += door_groups
 
         # Create panel items, where needed.
         if world.options.shuffle_doors == ShuffleDoors.option_panels:
