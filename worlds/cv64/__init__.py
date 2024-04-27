@@ -14,7 +14,7 @@ from .stages import get_locations_from_stage, get_normal_stage_exits, vanilla_st
 from .regions import get_region_info
 from .rules import CV64Rules
 from .data import iname, rname, ename
-from ..AutoWorld import WebWorld, World
+from worlds.AutoWorld import WebWorld, World
 from .aesthetics import randomize_lighting, shuffle_sub_weapons, rom_empty_breakables_flags, rom_sub_weapon_flags, \
     randomize_music, get_start_inventory_data, get_location_data, randomize_shop_prices, get_loading_zone_bytes, \
     get_countdown_numbers
