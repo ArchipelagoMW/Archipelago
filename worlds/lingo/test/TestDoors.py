@@ -94,8 +94,7 @@ class TestSimpleDoors(LingoTestBase):
 
 class TestPanels(LingoTestBase):
     options = {
-        "shuffle_doors": "panels",
-        "shuffle_colors": "false",
+        "shuffle_doors": "panels"
     }
 
     def test_requirement(self):
