@@ -49,7 +49,7 @@ class WitnessPlayerLogic:
         Panels outside of the same region will still be checked manually.
         """
 
-        if entity_hex in self.COMPLETELY_DISABLED_ENTITIES or entity_hex in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES:
+        if self.is_disabled(entity_hex):
             return frozenset()
 
         if entity_hex == self.VICTORY_LOCATION and not allow_victory:
@@ -564,13 +564,13 @@ class WitnessPlayerLogic:
                     if static_witness_logic.ENTITIES_BY_HEX[entity]["entityType"] == "Laser":
                         continue
 
-                    if self.solvability_guaranteed(entity) and not entity == self.VICTORY_LOCATION:
+                    if entity != self.VICTORY_LOCATION:
                         newly_discovered_disabled_entities.add(entity)
                         dirty = True
 
             # Secondly, any entities that depend on disabled entities are unreachable as well.
             for entity, req in self.REQUIREMENTS_BY_HEX.items():
-                if not req and self.solvability_guaranteed(entity) and not entity == self.VICTORY_LOCATION:
+                if not req and not self.is_disabled(entity) and not entity == self.VICTORY_LOCATION:
                     newly_discovered_disabled_entities.add(entity)
                     dirty = True
 
@@ -667,6 +667,12 @@ class WitnessPlayerLogic:
         return not (
             entity_hex in self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY
             or entity_hex in self.COMPLETELY_DISABLED_ENTITIES
+            or entity_hex in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES
+        )
+
+    def is_disabled(self, entity_hex: str) -> bool:
+        return (
+            entity_hex in self.COMPLETELY_DISABLED_ENTITIES
             or entity_hex in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES
         )
 
