@@ -564,13 +564,12 @@ class WitnessPlayerLogic:
                     if entity == self.VICTORY_LOCATION:
                         continue
 
-                    # Never disable a laser.
+                    # Never disable a laser (They should still function even if you can't walk up to them).
                     if static_witness_logic.ENTITIES_BY_HEX[entity]["entityType"] == "Laser":
                         continue
 
-                    if entity != self.VICTORY_LOCATION:
-                        newly_discovered_disabled_entities.add(entity)
-                        dirty = True
+                    newly_discovered_disabled_entities.add(entity)
+                    dirty = True
 
             # Secondly, any entities that depend on disabled entities are unreachable as well.
             for entity, req in self.REQUIREMENTS_BY_HEX.items():
@@ -580,9 +579,12 @@ class WitnessPlayerLogic:
                     if entity == self.VICTORY_LOCATION:
                         continue
 
-                    # Never disable a laser.
+                    # If we are disabling a laser, something has gone wrong.
                     if static_witness_logic.ENTITIES_BY_HEX[entity]["entityType"] == "Laser":
-                        continue
+                        laser_name = static_witness_logic.ENTITIES_BY_HEX[entity]["checkName"]
+                        player_name = world.multiworld.get_player_name(world.player)
+                        raise RuntimeError(f"Somehow, {laser_name} was disabled for player {player_name}."
+                                           f" This is not allowed to happen, please report to Violet.")
 
                     newly_discovered_disabled_entities.add(entity)
                     dirty = True
