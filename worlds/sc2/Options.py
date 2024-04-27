@@ -761,7 +761,7 @@ class StartingSupplyPerItem(Range):
     """
     display_name = "Starting Supply Per Item"
     range_start = 0
-    range_end = 8
+    range_end = 16
     default = 2
 
 
