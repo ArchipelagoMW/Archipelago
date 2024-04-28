@@ -23,7 +23,7 @@ from MultiServer import CommandProcessor
 from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
                       RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes)
 from Utils import Version, stream_input, async_start
-from worlds import network_data_package, AutoWorldRegister
+from worlds import AutoWorldRegister, load_worlds
 import os
 import ssl
 
@@ -271,7 +271,6 @@ class CommonContext:
 
         self.jsontotextparser = JSONtoTextParser(self)
         self.rawjsontotextparser = RawJSONtoTextParser(self)
-        self.update_data_package(network_data_package)
 
         # execution
         self.keep_alive_task = asyncio.create_task(keep_alive(self), name="Bouncy")
@@ -458,6 +457,8 @@ class CommonContext:
         Download, assimilate and cache missing data from the server."""
         # by documentation any game can use Archipelago locations/items -> always relevant
         relevant_games.add("Archipelago")
+        network_data_package = load_worlds(sorted(relevant_games))
+        self.update_data_package(network_data_package)
 
         needed_updates: typing.Set[str] = set()
         for game in relevant_games:
