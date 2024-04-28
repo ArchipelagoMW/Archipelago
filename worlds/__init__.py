@@ -152,9 +152,7 @@ def load_all_worlds() -> DataPackage:
         json_name = [name for name in world.__module__.split(".") if "world" not in name][0]
         if world.zip_path:
             json_name += ".apworld"
-        world_json = {"game": world.game, "path": world.__file__}
-        if getattr(world, "settings", None):
-            world_json.update({"settings": str(world.settings_key)})
+        world_json = {"game": world.game, "path": world.__file__, "settings": str(world.settings_key) if hasattr(world, "settings") else None}
         json_data[json_name] = world_json
 
     with open(cache_path("worlds.json"), "wb") as f:
