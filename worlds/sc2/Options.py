@@ -7,9 +7,9 @@ from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
 from .MissionTables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_no_build_missions, \
     campaign_mission_table
-from worlds.AutoWorld import World
 
 if TYPE_CHECKING:
+    from worlds.AutoWorld import World
     from . import SC2World
 
 
@@ -628,7 +628,7 @@ class TakeOverAIAllies(Toggle):
 
 class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
     """A branch of ItemDict that supports item counts of 0"""
-    default: Dict[str, int] = {}
+    default = {}
     supports_weighting = False
     verify_item_name = True
     # convert_name_groups = True
@@ -655,7 +655,7 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
         else:
             raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
     
-    def verify(self, world: Type['SC2World'], player_name: str, plando_options: PlandoOptions) -> None:
+    def verify(self, world: Type['World'], player_name: str, plando_options: PlandoOptions) -> None:
         """Overridden version of function from Options.VerifyKeys for a better error message"""
         new_value: dict[str, int] = {}
         for group_name in self.value:
@@ -665,7 +665,7 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
         self.value = new_value
         for item_name in self.value:
             if item_name not in world.item_names:
-                picks = get_fuzzy_results(item_name, world.item_names, limit=1)
+                picks = get_fuzzy_results(item_name, list(world.item_names), limit=1)
                 raise Exception(f"Item {item_name} from option {self} "
                                 f"is not a valid item name from {world.game}. "
                                 f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
@@ -889,7 +889,7 @@ class Starcraft2Options(PerGameCommonOptions):
     starting_supply_per_item: StartingSupplyPerItem
 
 
-def get_option_value(world: World, name: str) -> Union[int,  FrozenSet]:
+def get_option_value(world: 'SC2World', name: str) -> Union[int,  FrozenSet]:
     if world is None:
         field: Field = [class_field for class_field in fields(Starcraft2Options) if class_field.name == name][0]
         return field.type.default
@@ -899,7 +899,7 @@ def get_option_value(world: World, name: str) -> Union[int,  FrozenSet]:
     return player_option.value
 
 
-def get_enabled_campaigns(world: World) -> Set[SC2Campaign]:
+def get_enabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
     enabled_campaigns = set()
     if get_option_value(world, "enable_wol_missions"):
         enabled_campaigns.add(SC2Campaign.WOL)
@@ -918,7 +918,7 @@ def get_enabled_campaigns(world: World) -> Set[SC2Campaign]:
     return enabled_campaigns
 
 
-def get_disabled_campaigns(world: World) -> Set[SC2Campaign]:
+def get_disabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
     all_campaigns = set(SC2Campaign)
     enabled_campaigns = get_enabled_campaigns(world)
     disabled_campaigns = all_campaigns.difference(enabled_campaigns)
@@ -926,23 +926,23 @@ def get_disabled_campaigns(world: World) -> Set[SC2Campaign]:
     return disabled_campaigns
 
 
-def get_excluded_missions(world: World) -> Set[SC2Mission]:
-    mission_order_type = get_option_value(world, "mission_order")
-    excluded_mission_names = get_option_value(world, "excluded_missions")
-    shuffle_no_build = get_option_value(world, "shuffle_no_build")
+def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
+    mission_order_type = world.options.mission_order.value
+    excluded_mission_names = world.options.excluded_missions.value
+    shuffle_no_build = world.options.shuffle_no_build
     disabled_campaigns = get_disabled_campaigns(world)
 
     excluded_missions: Set[SC2Mission] = set([lookup_name_to_mission[name] for name in excluded_mission_names])
 
     # Excluding Very Hard missions depending on options
-    if (get_option_value(world, "exclude_very_hard_missions") == ExcludeVeryHardMissions.option_true
+    if (world.options.exclude_very_hard_missions == ExcludeVeryHardMissions.option_true
         ) or (
-            get_option_value(world, "exclude_very_hard_missions") == ExcludeVeryHardMissions.option_default
+            world.options.exclude_very_hard_missions == ExcludeVeryHardMissions.option_default
             and (
                     mission_order_type not in [MissionOrder.option_vanilla_shuffled, MissionOrder.option_grid]
                     or (
                             mission_order_type == MissionOrder.option_grid
-                            and get_option_value(world, "maximum_campaign_size") < 20
+                            and world.options.maximum_campaign_size < 20
                     )
             )
     ):

@@ -362,6 +362,7 @@ def create_grid_regions(
     final_mission_id = final_mission.id
     # Changing the completion condition for alternate final missions into an event
     final_location = get_goal_location(final_mission)
+    assert final_location, f"Unable to find a goal location for mission {final_mission}"
     setup_final_location(final_location, location_cache)
 
     return {SC2Campaign.GLOBAL: mission_req_table}, final_mission_id, final_location
@@ -597,6 +598,7 @@ def create_structured_regions(
     final_mission_id = final_mission.id
     # Changing the completion condition for alternate final missions into an event
     final_location = get_goal_location(final_mission)
+    assert final_location, f"Unable to find a goal location for mission {final_mission}"
     setup_final_location(final_location, location_cache)
 
     return mission_req_table, final_mission_id, final_location

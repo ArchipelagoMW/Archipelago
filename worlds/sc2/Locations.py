@@ -1,6 +1,5 @@
 from enum import IntEnum
 from typing import List, Tuple, Optional, Callable, NamedTuple, Set, Any, TYPE_CHECKING
-from BaseClasses import MultiWorld
 from . import ItemNames
 from .Options import get_option_value, kerrigan_unit_available, RequiredTactics, GrantStoryTech, LocationInclusion, \
     EnableHotsMissions
@@ -11,6 +10,7 @@ from worlds.AutoWorld import World
 
 if TYPE_CHECKING:
     from BaseClasses import CollectionState
+    from . import SC2World
 
 SC2WOL_LOC_ID_OFFSET = 1000
 SC2HOTS_LOC_ID_OFFSET = 20000000  # Avoid clashes with The Legend of Zelda
@@ -33,9 +33,9 @@ class LocationType(IntEnum):
 class LocationData(NamedTuple):
     region: str
     name: str
-    code: Optional[int]
+    code: int
     type: LocationType
-    rule: Optional[Callable[['CollectionState'], bool]] = Location.access_rule
+    rule: Callable[['CollectionState'], bool] = Location.access_rule
 
 
 def get_location_types(world: World, inclusion_type: int) -> Set[LocationType]:
@@ -78,7 +78,7 @@ def get_plando_locations(world: World) -> List[str]:
     return plando_locations
 
 
-def get_locations(world: Optional[World]) -> Tuple[LocationData, ...]:
+def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
     # Note: rules which are ended with or True are rules identified as needed later when restricted units is an option
     logic_level = get_option_value(world, 'required_tactics')
     adv_tactics = logic_level != RequiredTactics.option_standard

@@ -35,7 +35,7 @@ class Sc2SetupTestBase(unittest.TestCase):
                 1: new_option
             })
         self.multiworld.set_options(args)
-        self.world: SC2World = self.multiworld.worlds[self.player]
+        self.world: SC2World = cast(SC2World, self.multiworld.worlds[self.player])
         for step in gen_steps:
             call_all(self.multiworld, step)
 
