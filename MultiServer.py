@@ -249,7 +249,8 @@ class Context:
     # Data package retrieval
     def _load_game_data(self):
         import worlds
-        self.gamespackage = worlds.load_worlds(list(self.gamespackage.keys()))["games"]
+        worlds_to_load = sorted({"Archipelago", *self.gamespackage.keys()})
+        self.gamespackage = worlds.load_worlds(worlds_to_load)["games"]
 
         self.item_name_groups = {world_name: world.item_name_groups for world_name, world in
                                  worlds.AutoWorldRegister.world_types.items()}
@@ -260,7 +261,7 @@ class Context:
 
     def _init_game_data(self):
         # WebHostContext
-        if self is Context:
+        if type(self) is Context:
             self._load_game_data()
         for game_name, game_package in self.gamespackage.items():
             if "checksum" in game_package:
