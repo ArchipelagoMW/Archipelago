@@ -96,11 +96,12 @@ class TestItemFiltering(Sc2SetupTestBase):
         }
         self.generate_world(options)
         self.assertTrue(self.multiworld.itempool)
-        item_data_entries = [Items.item_table[item.name] for item in self.multiworld.itempool]
-        for item_data in item_data_entries:
+        items = [(item.name, Items.item_table[item.name]) for item in self.multiworld.itempool]
+        for item_name, item_data in items:
             self.assertNotIn(item_data.type, Items.ProtossItemType)
             self.assertNotIn(item_data.type, Items.ZergItemType)
             self.assertNotEqual(item_data.type, Items.TerranItemType.Nova_Gear)
+            self.assertNotEqual(item_name, ItemNames.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE)
 
     def test_excluding_all_terran_missions_excludes_all_terran_items(self) -> None:
         options = {

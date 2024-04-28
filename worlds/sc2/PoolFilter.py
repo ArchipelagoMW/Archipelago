@@ -539,7 +539,7 @@ class ValidInventory:
 
     def __init__(self, world: 'SC2World',
                  item_pool: List[Item], existing_items: List[Item], locked_items: List[Item],
-                 used_races: Set[SC2Race], nova_equipment_used: bool):
+                 used_races: Set[SC2Race]):
         self.multiworld = world.multiworld
         self.player = world.player
         self.world: 'SC2World' = world
@@ -567,9 +567,6 @@ class ValidInventory:
                     self.item_pool.append(item)
                 # Drop any item belonging to a race not used in the campaign
                 continue
-            if item.name in nova_equipment and not nova_equipment_used:
-                # Drop Nova equipment if there's no NCO mission generated
-                continue
             if item_info.type in upgrade_item_types:
                 # Locking upgrades based on mission duration
                 if item.name not in item_quantities:
@@ -596,9 +593,8 @@ def filter_items(world: 'SC2World', mission_req_table: Dict[SC2Campaign, Dict[st
     open_locations = [location for location in location_cache if location.item is None]
     inventory_size = len(open_locations)
     used_races = get_used_races(mission_req_table, world)
-    nova_equipment_used = is_nova_equipment_used(mission_req_table)
     mission_requirements = [(location.name, location.access_rule) for location in location_cache]
-    valid_inventory = ValidInventory(world, item_pool, existing_items, locked_items, used_races, nova_equipment_used)
+    valid_inventory = ValidInventory(world, item_pool, existing_items, locked_items, used_races)
 
     valid_items = valid_inventory.generate_reduced_inventory(inventory_size, mission_requirements)
     return valid_items
@@ -633,10 +629,6 @@ def get_used_races(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]],
         races.add(SC2Race.TERRAN)
 
     return races
-
-def is_nova_equipment_used(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]]) -> bool:
-    missions = missions_in_mission_table(mission_req_table)
-    return any([MissionFlag.Nova in mission.flags for mission in missions])
 
 
 def missions_in_mission_table(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]]) -> Set[SC2Mission]:
