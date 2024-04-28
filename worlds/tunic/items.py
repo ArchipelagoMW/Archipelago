@@ -236,6 +236,7 @@ extra_groups: Dict[str, Set[str]] = {
     "Questagons": {"Red Questagon", "Green Questagon", "Blue Questagon", "Gold Questagon"},
     "Ladder to Atoll": {"Ladder to Ruined Atoll"},  # fuzzy matching made it hint Ladders in Well, now it won't
     "Ladders to Bell": {"Ladders to West Bell"},
+    "Ladders to Well": {"Ladders in Well"},  # fuzzy matching decided ladders in well was ladders to west bell
 }
 
 item_name_groups.update(extra_groups)
