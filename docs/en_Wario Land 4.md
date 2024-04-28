@@ -31,7 +31,7 @@ In Golden Treasure Hunt, find a certain number of golden treasures and escape th
 the emergency exit in the Sound Room.
 
 In Golden Diva Treasure Hunt, find the treasures scattered in the multiworld and then defeat the
-Golden Diva.
+Golden Diva. Don't take too long, or else it won't count!
 
 ## Which items can be in another player's world?
 
