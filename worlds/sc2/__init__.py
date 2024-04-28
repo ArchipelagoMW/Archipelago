@@ -324,7 +324,7 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
 
     for item in item_list:
         # Filter Nova equipment if you never get Nova
-        if not nova_missions and (item.data.type == Items.TerranItemType.Nova_Gear or item.name == ItemNames.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE):
+        if not nova_missions and (item.name in ItemGroups.nova_equipment):
             item.flags |= ItemFilterFlags.Excluded
         
         # Todo(mm): How should no-build only / grant_story_tech affect excluding Kerrigan items?
