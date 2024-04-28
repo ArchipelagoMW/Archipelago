@@ -105,8 +105,12 @@ class AutopelagoWorld(World):
 
     def create_item(self, name: str, classification: ItemClassification | None = None):
         item_id = item_name_to_id[name] if name in item_name_to_id else None
-        classification = classification if classification is not None else item_name_to_defined_classification[name]
-        assert classification is not None, 'Classification should either be defined, calculated during generate_early, or hardcoded.'
+        if classification is None:
+            classification = item_name_to_defined_classification[name]
+            if classification is None:
+                # not observed during a real generation, but it's technically a part of the contract. once we fully
+                # stabilize, *ALL* items will be in item_name_to_defined_classification, so this can go away.
+                classification = ItemClassification.filler
         item = AutopelagoItem(name, classification, item_id, self.player)
         return item
 
