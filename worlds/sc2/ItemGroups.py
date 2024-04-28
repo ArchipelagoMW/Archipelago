@@ -83,7 +83,7 @@ class ItemGroupNames:
     AIUR = "Aiur"
     NERAZIM = "Nerazim"
     TAL_DARIM = "Tal'Darim"
-    PURIFIER = "PURIFIER"
+    PURIFIER = "Purifier"
 
 
 # Terran
