@@ -25,6 +25,7 @@ class ItemTypeEnum(enum.Enum):
 
 class TerranItemType(ItemTypeEnum):
     Armory_1 = "Armory", 0
+    """General Terran unit upgrades"""
     Armory_2 = "Armory", 1
     Armory_3 = "Armory", 2
     Armory_4 = "Armory", 3
@@ -42,6 +43,7 @@ class TerranItemType(ItemTypeEnum):
 
 class ZergItemType(ItemTypeEnum):
     Ability = "Ability", 0
+    """Kerrigan abilities"""
     Mutation_1 = "Mutation", 1
     Strain = "Strain", 2
     Morph = "Morph", 3
@@ -49,8 +51,10 @@ class ZergItemType(ItemTypeEnum):
     Mercenary = "Mercenary", 5
     Unit = "Unit", 6
     Level = "Level", 7
+    """Kerrigan level packs"""
     Primal_Form = "Primal Form", 8
     Evolution_Pit = "Evolution Pit", 9
+    """Zerg global economy upgrades, like automated extractors"""
     Mutation_2 = "Mutation", 10
     Mutation_3 = "Mutation", 11
 
@@ -63,9 +67,13 @@ class ProtossItemType(ItemTypeEnum):
     Progressive = "Progressive Upgrade", 4
     Spear_Of_Adun = "Spear of Adun", 5
     Solarite_Core = "Solarite Core", 6
+    """Protoss global effects, such as reconstruction beam or automated assimilators"""
     Forge_1 = "Forge 1", 7
+    """General Protoss unit upgrades"""
     Forge_2 = "Forge 2", 8
+    """General Protoss unit upgrades"""
     Forge_3 = "Forge 3", 9
+    """General Protoss unit upgrades"""
     
 
 class FactionlessItemType(ItemTypeEnum):

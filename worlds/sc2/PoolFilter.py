@@ -1,4 +1,4 @@
-from typing import Callable, Dict, List, Set, Union, Tuple, Optional
+from typing import Callable, Dict, List, Set, Union, Tuple, Optional, TYPE_CHECKING
 from BaseClasses import  Item, Location
 from .Items import (get_full_item_list, spider_mine_sources, second_pass_placeable_items, progressive_if_nco,
     progressive_if_ext, spear_of_adun_calldowns, spear_of_adun_castable_passives, nova_equipment,
@@ -13,29 +13,20 @@ from .Options import (get_option_value, MissionOrder,
     TakeOverAIAllies, SpearOfAdunPresence, SpearOfAdunAutonomouslyCastAbilityPresence, campaign_depending_orders,
     ShuffleCampaigns, get_excluded_missions, ShuffleNoBuild, ExtraLocations, GrantStoryLevels,
 )
-from . import ItemNames
-from worlds.AutoWorld import World
+from . import ItemNames, ItemGroups
+
+if TYPE_CHECKING:
+    from . import SC2World
+
 
 # Items with associated upgrades
 UPGRADABLE_ITEMS = {item.parent_item for item in get_full_item_list().values() if item.parent_item}
-
-BARRACKS_UNITS = {
-    ItemNames.MARINE, ItemNames.MEDIC, ItemNames.FIREBAT, ItemNames.MARAUDER,
-    ItemNames.REAPER, ItemNames.GHOST, ItemNames.SPECTRE, ItemNames.HERC,
-}
-FACTORY_UNITS = {
-    ItemNames.HELLION, ItemNames.VULTURE, ItemNames.GOLIATH, ItemNames.DIAMONDBACK,
-    ItemNames.SIEGE_TANK, ItemNames.THOR, ItemNames.PREDATOR, ItemNames.WIDOW_MINE,
-    ItemNames.CYCLONE, ItemNames.WARHOUND,
-}
-STARPORT_UNITS = {
-    ItemNames.MEDIVAC, ItemNames.WRAITH, ItemNames.VIKING, ItemNames.BANSHEE,
-    ItemNames.BATTLECRUISER, ItemNames.HERCULES, ItemNames.SCIENCE_VESSEL, ItemNames.RAVEN,
-    ItemNames.LIBERATOR, ItemNames.VALKYRIE,
-}
+BARRACKS_UNITS = set(ItemGroups.barracks_units)
+FACTORY_UNITS = set(ItemGroups.factory_units)
+STARPORT_UNITS = set(ItemGroups.starport_units)
 
 
-def filter_missions(world: World) -> Dict[MissionPools, List[SC2Mission]]:
+def filter_missions(world: 'SC2World') -> Dict[MissionPools, List[SC2Mission]]:
 
     """
     Returns a semi-randomly pruned tuple of no-build, easy, medium, and hard mission sets
@@ -212,7 +203,7 @@ def get_item_upgrades(inventory: List[Item], parent_item: Union[Item, str]) -> L
     ]
 
 
-def get_item_quantity(item: Item, world: World):
+def get_item_quantity(item: Item, world: 'SC2World'):
     if (not get_option_value(world, "nco_items")) \
             and SC2Campaign.NCO in get_disabled_campaigns(world) \
             and item.name in progressive_if_nco:
@@ -225,17 +216,6 @@ def get_item_quantity(item: Item, world: World):
 
 def copy_item(item: Item):
     return Item(item.name, item.classification, item.code, item.player)
-
-
-def num_missions(world: World) -> int:
-    mission_order_type = get_option_value(world, "mission_order")
-    if mission_order_type != MissionOrder.option_grid:
-        mission_order = mission_orders[mission_order_type]()
-        misssions = [mission for campaign in mission_order for mission in mission_order[campaign]]
-        return len(misssions) - 1  # Menu
-    else:
-        mission_pools = filter_missions(world)
-        return sum(len(pool) for _, pool in mission_pools.items())
 
 
 class ValidInventory:
@@ -557,12 +537,12 @@ class ValidInventory:
 
         return inventory
 
-    def __init__(self, world: World ,
+    def __init__(self, world: 'SC2World',
                  item_pool: List[Item], existing_items: List[Item], locked_items: List[Item],
                  used_races: Set[SC2Race], nova_equipment_used: bool):
         self.multiworld = world.multiworld
         self.player = world.player
-        self.world: World = world
+        self.world: 'SC2World' = world
         self.logical_inventory = list()
         self.locked_items = locked_items[:]
         self.existing_items = existing_items
@@ -572,7 +552,7 @@ class ValidInventory:
         self.item_pool = []
         item_quantities: dict[str, int] = dict()
         # Inventory restrictiveness based on number of missions with checks
-        mission_count = num_missions(world)
+        mission_count = mission_count = sum(len(campaign) for campaign in world.mission_req_table.values())
         self.min_units_per_structure = int(mission_count / 7)
         min_upgrades = 1 if mission_count < 10 else 2
         for item in item_pool:
@@ -607,7 +587,7 @@ class ValidInventory:
                 self.item_children[item] = get_item_upgrades(self.item_pool, item)
 
 
-def filter_items(world: World, mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]], location_cache: List[Location],
+def filter_items(world: 'SC2World', mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]], location_cache: List[Location],
                  item_pool: List[Item], existing_items: List[Item], locked_items: List[Item]) -> List[Item]:
     """
     Returns a semi-randomly pruned set of items based on number of available locations.
@@ -624,12 +604,14 @@ def filter_items(world: World, mission_req_table: Dict[SC2Campaign, Dict[str, Mi
     return valid_items
 
 
-def get_used_races(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]], world: World) -> Set[SC2Race]:
+def get_used_races(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]], world: 'SC2World') -> Set[SC2Race]:
     grant_story_tech = get_option_value(world, "grant_story_tech")
     take_over_ai_allies = get_option_value(world, "take_over_ai_allies")
-    kerrigan_presence = get_option_value(world, "kerrigan_presence") in kerrigan_unit_available \
-        and SC2Campaign.HOTS in get_enabled_campaigns(world)
     missions = missions_in_mission_table(mission_req_table)
+    kerrigan_presence = (
+        world.options.kerrigan_presence in kerrigan_unit_available
+        and any([MissionFlag.Kerrigan in mission.flags for mission in missions])
+    )
 
     # By missions
     races = set([mission.race for mission in missions])

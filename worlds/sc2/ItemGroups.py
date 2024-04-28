@@ -70,23 +70,48 @@ for item, data in Items.get_full_item_list().items():
 
 
 # Hand-made groups
-item_name_groups["Aiur"] = [
+class ItemGroupNames:
+    BARRACKS_UNITS = "Barracks Units"
+    FACTORY_UNITS = "Factory Units"
+    STARPORT_UNITS = "Starport Units"
+
+    AIUR = "Aiur"
+    NERAZIM = "Nerazim"
+    TAL_DARIM = "Tal'Darim"
+    PURIFIER = "PURIFIER"
+
+
+item_name_groups[ItemGroupNames.BARRACKS_UNITS] = barracks_units = [
+    ItemNames.MARINE, ItemNames.MEDIC, ItemNames.FIREBAT, ItemNames.MARAUDER,
+    ItemNames.REAPER, ItemNames.GHOST, ItemNames.SPECTRE, ItemNames.HERC,
+]
+item_name_groups[ItemGroupNames.FACTORY_UNITS] = factory_units = [
+    ItemNames.HELLION, ItemNames.VULTURE, ItemNames.GOLIATH, ItemNames.DIAMONDBACK,
+    ItemNames.SIEGE_TANK, ItemNames.THOR, ItemNames.PREDATOR, ItemNames.WIDOW_MINE,
+    ItemNames.CYCLONE, ItemNames.WARHOUND,
+]
+item_name_groups[ItemGroupNames.STARPORT_UNITS] = starport_units = [
+    ItemNames.MEDIVAC, ItemNames.WRAITH, ItemNames.VIKING, ItemNames.BANSHEE,
+    ItemNames.BATTLECRUISER, ItemNames.HERCULES, ItemNames.SCIENCE_VESSEL, ItemNames.RAVEN,
+    ItemNames.LIBERATOR, ItemNames.VALKYRIE,
+]
+item_name_groups[ItemGroupNames.AIUR] = [
     ItemNames.ZEALOT, ItemNames.DRAGOON, ItemNames.SENTRY, ItemNames.AVENGER, ItemNames.HIGH_TEMPLAR,
     ItemNames.IMMORTAL, ItemNames.REAVER,
     ItemNames.PHOENIX, ItemNames.SCOUT, ItemNames.ARBITER, ItemNames.CARRIER,
 ]
-item_name_groups["Nerazim"] = [
+item_name_groups[ItemGroupNames.NERAZIM] = [
     ItemNames.CENTURION, ItemNames.STALKER, ItemNames.DARK_TEMPLAR, ItemNames.SIGNIFIER, ItemNames.DARK_ARCHON,
     ItemNames.ANNIHILATOR,
     ItemNames.CORSAIR, ItemNames.ORACLE, ItemNames.VOID_RAY,
 ]
-item_name_groups["Tal'Darim"] = [
+item_name_groups[ItemGroupNames.TAL_DARIM] = [
     ItemNames.SUPPLICANT, ItemNames.SLAYER, ItemNames.HAVOC, ItemNames.BLOOD_HUNTER, ItemNames.ASCENDANT,
     ItemNames.VANGUARD, ItemNames.WRATHWALKER,
     ItemNames.DESTROYER, ItemNames.MOTHERSHIP,
     ItemNames.WARP_PRISM_PHASE_BLASTER,
 ]
-item_name_groups["Purifier"] = [
+item_name_groups[ItemGroupNames.PURIFIER] = [
     ItemNames.SENTINEL, ItemNames.ADEPT, ItemNames.INSTIGATOR, ItemNames.ENERGIZER,
     ItemNames.COLOSSUS, ItemNames.DISRUPTOR,
     ItemNames.MIRAGE, ItemNames.TEMPEST,

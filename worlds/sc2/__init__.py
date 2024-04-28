@@ -36,6 +36,8 @@ class ItemFilterFlags(enum.IntFlag):
     Removed = enum.auto()
     Plando = enum.auto()
     Excluded = enum.auto()
+    AllowedOrphan = enum.auto()
+    """Used to flag items that shouldn't be filtered out with their parents"""
 
     Unremovable = Locked|StartInventory|Plando
 
@@ -109,10 +111,12 @@ class SC2World(World):
         setup_events(self.player, self.locked_locations, self.location_cache)
 
         item_list: List[FilterItem] = create_and_flag_explicit_item_locks_and_excludes(self)
+        flag_faction_unit_excludes_based_on_mission_excludes(self, item_list)
         flag_mission_based_item_excludes(self, item_list)
+        flag_allowed_orphan_items(self, item_list)
         flag_start_inventory(self, item_list)
         flag_unused_upgrade_types(self, item_list)
-        flag_excluded_item_sets(self, item_list)
+        flag_user_excluded_item_sets(self, item_list)
         flag_and_add_resource_locations(self, item_list)
         pool: List[Item] = prune_item_pool(self, item_list)
         pad_item_pool_with_filler(self, len(self.location_cache) - len(self.locked_locations) - len(pool), pool)
@@ -225,13 +229,57 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
     return result
 
 
+def flag_faction_unit_excludes_based_on_mission_excludes(world: SC2World, item_list: List[FilterItem]) -> None:
+    """
+    Excludes units based on whether a mission they can be built exists in the mission table
+    """
+    missions = get_all_missions(world.mission_req_table)
+    build_missions = [mission for mission in missions if MissionFlag.NoBuild not in mission.flags]
+    if world.options.take_over_ai_allies:
+        terran_build_missions = [mission for mission in build_missions if MissionFlag.Terran|MissionFlag.AiZergAlly & mission.flags]
+        zerg_build_missions = [mission for mission in build_missions if MissionFlag.Zerg|MissionFlag.AiTerranAlly & mission.flags]
+        protoss_build_missions = [mission for mission in build_missions if MissionFlag.Protoss|MissionFlag.AiProtossAlly & mission.flags]
+    else:
+        terran_build_missions = [mission for mission in build_missions if MissionFlag.Terran & mission.flags]
+        zerg_build_missions = [mission for mission in build_missions if MissionFlag.Zerg & mission.flags]
+        protoss_build_missions = [mission for mission in build_missions if MissionFlag.Protoss & mission.flags]
+    for item in item_list:
+        if (not terran_build_missions
+            and item.data.type in (Items.TerranItemType.Unit, Items.TerranItemType.Building, Items.TerranItemType.Mercenary)
+        ):
+            item.flags |= ItemFilterFlags.Excluded
+        if (not zerg_build_missions
+            and item.data.type in (Items.ZergItemType.Unit, Items.ZergItemType.Mercenary, Items.ZergItemType.Evolution_Pit)
+        ):
+            if (SC2Mission.ENEMY_WITHIN not in missions
+                or item.name not in (ItemNames.ZERGLING, ItemNames.ROACH, ItemNames.HYDRALISK, ItemNames.INFESTOR)
+            ):
+                item.flags |= ItemFilterFlags.Excluded
+        if (not protoss_build_missions
+            and item.data.type in (
+                Items.ProtossItemType.Unit,
+                Items.ProtossItemType.Unit_2,
+                Items.ProtossItemType.Building,
+            )
+        ):
+            # Note(mm): This doesn't exclude things like automated assimilators or warp gate improvements
+            # because that item type is mixed in with e.g. Reconstruction Beam and Overwatch
+            if (SC2Mission.TEMPLAR_S_RETURN not in missions
+                or item.name not in (
+                    ItemNames.IMMORTAL, ItemNames.ANNIHILATOR,
+                    ItemNames.COLOSSUS, ItemNames.VANGUARD, ItemNames.REAVER, ItemNames.DARK_TEMPLAR,
+                    ItemNames.SENTRY, ItemNames.HIGH_TEMPLAR,
+                )
+            ):
+                item.flags |= ItemFilterFlags.Excluded
+    
+
+
 def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem]) -> None:
     """
-    Excludes items based on mission / campaign presence. e.g. Nova Gear is excluded if there are no Nova missions.
+    Excludes items based on mission / campaign presence: Nova Gear, Kerrigan abilities, SOA
     """
-    missions: List[SC2Mission] = []
-    for campaign in world.mission_req_table.values():
-        missions.extend(mission_info.mission for _, mission_info in campaign.items())
+    missions = get_all_missions(world.mission_req_table)
 
     kerrigan_missions = len([mission for mission in missions if MissionFlag.Kerrigan in mission.flags]) > 0
     nova_missions = [mission for mission in missions if MissionFlag.Nova in mission.flags]
@@ -304,6 +352,28 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
         ):
             item.flags |= ItemFilterFlags.Excluded
     return
+
+
+def flag_allowed_orphan_items(world: SC2World, item_list: List[FilterItem]) -> None:
+    """Adds the `Allowed_Orphan` flag to items that shouldn't be filtered with their parents, like combat shield"""
+    missions = get_all_missions(world.mission_req_table)
+    terran_missions = any(MissionFlag.Terran in  mission.flags for mission in missions)
+    zerg_missions = any(MissionFlag.Terran in  mission.flags for mission in missions)
+    protoss_missions = any(MissionFlag.Terran in  mission.flags for mission in missions)
+    for item in item_list:
+        if item.name in (
+            ItemNames.MARINE_COMBAT_SHIELD, ItemNames.MARINE_PROGRESSIVE_STIMPACK, ItemNames.MARINE_MAGRAIL_MUNITIONS,
+            ItemNames.MEDIC_STABILIZER_MEDPACKS, ItemNames.MEDIC_NANO_PROJECTOR,
+        ) and terran_missions:
+            item.flags |= ItemFilterFlags.AllowedOrphan
+        if item.name in (
+            ItemNames.ZERGLING_ADRENAL_OVERLOAD, ItemNames.ZERGLING_METABOLIC_BOOST,
+        ) and zerg_missions:
+            item.flags |= ItemFilterFlags.AllowedOrphan
+        if item.name in (
+            ItemNames.STALKER_INSTIGATOR_SLAYER_DISINTEGRATING_PARTICLES, ItemNames.STALKER_INSTIGATOR_SLAYER_PARTICLE_REFLECTION,
+        ) and protoss_missions:
+            item.flags |= ItemFilterFlags.AllowedOrphan
 
 
 def flag_start_inventory(world: SC2World, item_list: List[FilterItem]) -> None:
@@ -455,7 +525,7 @@ def flag_unused_upgrade_types(world: SC2World, item_list: List[FilterItem]) -> N
                 item.flags |= ItemFilterFlags.Excluded
 
 
-def flag_excluded_item_sets(world: SC2World, item_list: List[FilterItem]) -> None:
+def flag_user_excluded_item_sets(world: SC2World, item_list: List[FilterItem]) -> None:
     """Excludes items based on item set options (`nco_items`, `bw_items`, `ext_items`)"""
     # Note(mm): These options should just be removed in favour of better item sets and a single "vanilla only" switch
     item_sets = {'wol', 'hots', 'lotv'}
@@ -519,7 +589,9 @@ def prune_item_pool(world: SC2World, item_list: List[FilterItem]) -> List[Item]:
     last_num_items = -1
     while num_items != last_num_items:
         # Remove orphan items until there are no more being removed
-        item_list = [item for item in item_list if ItemFilterFlags.Unremovable & item.flags or item_list_contains_parent(item.data, item_list)]
+        item_list = [item for item in item_list
+            if (ItemFilterFlags.Unremovable|ItemFilterFlags.AllowedOrphan) & item.flags
+            or item_list_contains_parent(item.data, item_list)]
         last_num_items = num_items
         num_items = len(item_list)
 
@@ -561,6 +633,13 @@ def get_first_mission(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo
     lowest_id = min([campaign.id for campaign in campaigns])
     first_campaign = [campaign for campaign in campaigns if campaign.id == lowest_id][0]
     return list(mission_req_table[first_campaign].values())[0].mission
+
+
+def get_all_missions(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]]) -> List[SC2Mission]:
+    missions: List[SC2Mission] = []
+    for campaign in mission_req_table.values():
+        missions.extend(mission_info.mission for _, mission_info in campaign.items())
+    return missions
 
 
 def create_item_with_correct_settings(player: int, name: str) -> Item:

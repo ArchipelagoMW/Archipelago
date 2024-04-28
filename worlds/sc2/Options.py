@@ -9,6 +9,9 @@ from .MissionTables import SC2Campaign, SC2Mission, lookup_name_to_mission, Miss
     campaign_mission_table
 from worlds.AutoWorld import World
 
+if TYPE_CHECKING:
+    from . import SC2World
+
 
 class GameDifficulty(Choice):
     """
@@ -652,15 +655,14 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
         else:
             raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
     
-    def verify(self, world: Type[World], player_name: str, plando_options: PlandoOptions) -> None:
+    def verify(self, world: Type['SC2World'], player_name: str, plando_options: PlandoOptions) -> None:
         """Overridden version of function from Options.VerifyKeys for a better error message"""
-        if self.convert_name_groups:
-            new_value: dict[str, int] = {}
-            for group_name in self.value:
-                item_names = world.item_name_groups.get(group_name, {group_name})
-                for item_name in item_names:
-                    new_value[item_name] = new_value.get(item_name, 0) + self.value[group_name]
-            self.value = new_value
+        new_value: dict[str, int] = {}
+        for group_name in self.value:
+            item_names = world.item_name_groups.get(group_name, {group_name})
+            for item_name in item_names:
+                new_value[item_name] = new_value.get(item_name, 0) + self.value[group_name]
+        self.value = new_value
         for item_name in self.value:
             if item_name not in world.item_names:
                 picks = get_fuzzy_results(item_name, world.item_names, limit=1)
