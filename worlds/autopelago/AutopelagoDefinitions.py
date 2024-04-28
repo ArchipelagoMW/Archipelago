@@ -215,7 +215,7 @@ _append_nonprogression('filler')
 _append_nonprogression('uncategorized')
 
 autopelago_regions: dict[str, AutopelagoRegionDefinition] = {
-    'Victory': AutopelagoRegionDefinition('Victory', [], ['Victory'], { 'all': [] })}
+    'Victory': AutopelagoRegionDefinition('Victory', [], ['Victory'], {'all': []})}
 location_name_to_unrandomized_progression_item_name: dict[str, str] = {}
 location_name_to_unrandomized_nonprogression_item: dict[str, Literal['useful_nonprogression', 'filler']] = {}
 location_name_to_requirement: dict[str, AutopelagoGameRequirement] = {}
@@ -260,7 +260,7 @@ for rk, r in _defs['regions']['fillers'].items():
         location_name_to_unrandomized_nonprogression_item[_name] = 'filler'
         _locations.append(_name)
         _cur += 1
-    autopelago_regions[rk] = AutopelagoRegionDefinition(rk, r['exits'], _locations, { 'all': [] })
+    autopelago_regions[rk] = AutopelagoRegionDefinition(rk, r['exits'], _locations, {'all': []})
 
 
 def _get_required_rat_count(req: AutopelagoGameRequirement):
