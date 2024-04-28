@@ -246,12 +246,10 @@ class Context:
         self.all_location_and_group_names = {}
         self.non_hintable_names = collections.defaultdict(frozenset)
 
-        self._load_game_data()
-
     # Data package retrieval
     def _load_game_data(self):
         import worlds
-        self.gamespackage = worlds.network_data_package["games"]
+        self.gamespackage = worlds.load_worlds(list(self.gamespackage.keys()))["games"]
 
         self.item_name_groups = {world_name: world.item_name_groups for world_name, world in
                                  worlds.AutoWorldRegister.world_types.items()}
@@ -261,6 +259,7 @@ class Context:
             self.non_hintable_names[world_name] = world.hint_blacklist
 
     def _init_game_data(self):
+        self._load_game_data()
         for game_name, game_package in self.gamespackage.items():
             if "checksum" in game_package:
                 self.checksums[game_name] = game_package["checksum"]
