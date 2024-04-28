@@ -125,9 +125,15 @@ def get_world_paths_from_name(name: str) -> Tuple[str, str]:
         raise ModuleNotFoundError(f"No game found for {name}")
 
 
-def get_worlds_info() -> Tuple[Dict[str, Dict[str, str]], bool]:
+class WorldJson(TypedDict):
+    game: str
+    path: str
+    settings: Union[str, None]
+
+
+def get_worlds_info() -> Tuple[Dict[str, WorldJson], bool]:
     should_update = False
-    world_data = {}
+    world_data: Dict[str, WorldJson] = {}
     try:
         cached_time = os.path.getmtime(cached_worlds_path)
         world_data = orjson.loads(pkgutil.get_data(__name__, cached_worlds_path))
@@ -144,7 +150,7 @@ def get_worlds_info() -> Tuple[Dict[str, Dict[str, str]], bool]:
 def load_all_worlds() -> DataPackage:
     # import all submodules to trigger AutoWorldRegister
     games: Dict[str, GamesPackage] = {}
-    json_data: Dict[str, Dict[str, str]] = {}
+    json_data: Dict[str, WorldJson] = {}
     for world_source in world_sources:
         world_source.load()
 
@@ -156,8 +162,8 @@ def load_all_worlds() -> DataPackage:
         json_name = [name for name in world.__module__.split(".") if "world" not in name][0]
         if world.zip_path:
             json_name += ".apworld"
-        world_json = {"game": world.game, "path": world.__file__,
-                      "settings": str(world.settings_key) if hasattr(world, "settings") else None}
+        world_json: WorldJson = {"game": world.game, "path": world.__file__,
+                                 "settings": str(world.settings_key) if hasattr(world, "settings") else None}
         json_data[json_name] = world_json
 
     if "runner" not in cached_worlds_path:
