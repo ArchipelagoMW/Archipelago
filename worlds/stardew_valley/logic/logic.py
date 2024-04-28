@@ -270,7 +270,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Ingredient.qi_seasoning: self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 10),
             Ingredient.rice: self.money.can_spend_at(Region.pierre_store, 200) | (self.building.has_building(Building.mill) & self.has(Vegetable.unmilled_rice)),
             Ingredient.sugar: self.money.can_spend_at(Region.pierre_store, 100) | (self.building.has_building(Building.mill) & self.has(Vegetable.beet)),
-            Ingredient.vinegar: self.money.can_spend_at(Region.pierre_store, 200) | (self.artisan.can_keg(Ingredient.rice)),
+            Ingredient.vinegar: self.money.can_spend_at(Region.pierre_store, 200) | self.artisan.can_keg(Ingredient.rice),
             Ingredient.wheat_flour: self.money.can_spend_at(Region.pierre_store, 100) | (self.building.has_building(Building.mill) & self.has(Vegetable.wheat)),
             Loot.bat_wing: self.mine.can_mine_in_the_mines_floor_41_80() | self.mine.can_mine_in_the_skull_cavern(),
             Loot.bug_meat: self.mine.can_mine_in_the_mines_floor_1_40(),
