@@ -2,8 +2,8 @@ from copy import deepcopy
 from typing import List, TYPE_CHECKING
 
 from BaseClasses import CollectionState, PlandoOptions
+from worlds.generic import PlandoConnection
 from .options import ShufflePortals
-from ..generic import PlandoConnection
 
 if TYPE_CHECKING:
     from . import MessengerWorld
