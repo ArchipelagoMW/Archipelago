@@ -644,7 +644,7 @@ regions:
 
     restaurant:
       name: 'Restaurant'
-      unrandomized_item: macguffin
+      unrandomized_item: pack_rat
       requires:
         item: chef_rat
       ability_check_dc: 14
@@ -662,7 +662,7 @@ regions:
 
     angry_turtles:
       name: 'Angry Turtles'
-      unrandomized_item: acro_rat
+      unrandomized_item: pack_rat
       requires:
         any:
           - item: pizza_rat
@@ -673,7 +673,7 @@ regions:
 
     prawn_stars:
       name: 'Prawn Stars'
-      unrandomized_item: ziggu_rat
+      unrandomized_item: pack_rat
       requires:
         any:
           - item: premium_can_of_prawn_food
@@ -792,6 +792,7 @@ regions:
       name_template: 'Before Homeless Mummy #{n}'
       unrandomized_items:
         key:
+          - pharaoh_not_anti_mummy_spray
           - ziggu_rat
         filler: 1
       ability_check_dc: 1
@@ -867,7 +868,6 @@ regions:
       name_template: 'Before Stack of Crates #{n}'
       unrandomized_items:
         key:
-          - gym_rat
           - forklift_certification
         filler: 1
       ability_check_dc: 1
@@ -1032,10 +1032,9 @@ regions:
       name_template: 'Before Restaurant #{n}'
       unrandomized_items:
         key:
-          - chef_rat
           - pack_rat
         useful_nonprogression: 3
-        filler: 5
+        filler: 6
       ability_check_dc: 14
       exits:
         - restaurant
