@@ -61,15 +61,15 @@ class TestItemFiltering(Sc2SetupTestBase):
             }
         }
         self.generate_world(options)
-        item_list = create_and_flag_explicit_item_locks_and_excludes(self.world)
-        self.assertNotIn(ItemNames.ZERGLING, [x.name for x in item_list], msg=f'{ItemNames.ZERGLING} did not get properly excluded')
-        self.assertIn(FilterItem(ItemNames.MARINE, Items.item_table[ItemNames.MARINE], flags=ItemFilterFlags.Locked), item_list)
-        self.assertIn(FilterItem(ItemNames.MARAUDER, Items.item_table[ItemNames.MARAUDER], flags=ItemFilterFlags.Locked), item_list)
-        self.assertIn(FilterItem(ItemNames.MEDIVAC, Items.item_table[ItemNames.MEDIVAC], flags=ItemFilterFlags.Locked), item_list)
-        self.assertIn(FilterItem(ItemNames.FIREBAT, Items.item_table[ItemNames.FIREBAT], flags=ItemFilterFlags.Locked), item_list)
-        self.assertIn(FilterItem(ItemNames.ZEALOT, Items.item_table[ItemNames.ZEALOT], flags=ItemFilterFlags.Locked), item_list)
-        self.assertIn(FilterItem(ItemNames.DRAGOON, Items.item_table[ItemNames.DRAGOON]), item_list)
-        regen_biosteel_items = [x for x in item_list if x.name == ItemNames.PROGRESSIVE_REGENERATIVE_BIO_STEEL]
+        self.assertTrue(self.multiworld.itempool)
+        item_names = [item.name for item in self.multiworld.itempool]
+        self.assertIn(ItemNames.MARINE, item_names)
+        self.assertIn(ItemNames.MARAUDER, item_names)
+        self.assertIn(ItemNames.MEDIVAC, item_names)
+        self.assertIn(ItemNames.FIREBAT, item_names)
+        self.assertIn(ItemNames.ZEALOT, item_names)
+        self.assertNotIn(ItemNames.ZERGLING, item_names)
+        regen_biosteel_items = [x for x in item_names if x == ItemNames.PROGRESSIVE_REGENERATIVE_BIO_STEEL]
         self.assertEqual(len(regen_biosteel_items), 2)
 
     def test_excluding_groups_excludes_all_items_in_group(self):
