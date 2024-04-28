@@ -6,7 +6,7 @@ import sys
 import time
 import warnings
 import zipimport
-from typing import Dict, Iterable, List, Optional, Tuple, TypedDict, Union
+from typing import Dict, Iterable, List, Optional, Tuple, TypedDict
 
 import orjson
 
@@ -117,12 +117,12 @@ def scan_worlds() -> List[WorldSource]:
     return sources
 
 
-def get_world_by_name(name: str) -> str:
-    for world in world_data:
-        if world["game"] == name:
-            return world
+def get_world_paths_from_name(name: str) -> Tuple[str, str]:
+    for source, data in world_data.items():
+        if data["game"] == name:
+            return source, data["path"]
     else:
-        raise ModuleNotFoundError(f"No game found that matches {name}")
+        raise ModuleNotFoundError(f"No game found for {name}")
 
 
 def get_worlds_info() -> Tuple[Dict[str, Dict[str, str]], bool]:
@@ -166,17 +166,19 @@ def load_all_worlds() -> DataPackage:
     return DataPackage(games=games)
 
 
-def load_worlds(games: Union[Iterable[str], str]) -> DataPackage:
-    if isinstance(games, str):
-        games = [games]
+def load_worlds(games: Iterable[str]) -> DataPackage:
+    to_load: List[Tuple[str, str]] = [get_world_paths_from_name(game) for game in games]
 
-    to_load: List[str] = []
-    for source, data in world_data.items():
-        if data["game"] in games:
-            to_load.append(source)
-
-    for world_source in [source for source in world_sources if source.path in to_load]:
-        world_source.load()
+    for source in world_sources:
+        lookup_index = 0 if source.relative else 1
+        for paths in to_load:
+            if source.path == paths[lookup_index]:
+                remove_index = to_load.index(paths)
+                break
+        else:
+            continue
+        source.load()
+        to_load.pop(remove_index)
 
     package: Dict[str, GamesPackage] = {}
     for world_name, world in AutoWorldRegister.world_types.items():
