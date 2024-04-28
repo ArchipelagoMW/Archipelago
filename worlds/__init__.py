@@ -110,6 +110,7 @@ def scan_worlds() -> List[WorldSource]:
                     sources.append(WorldSource(file_name, relative=relative))
                 elif entry.is_file() and entry.name.endswith(".apworld"):
                     sources.append(WorldSource(file_name, is_zip=True, relative=relative))
+    sources.sort()
     return sources
 
 
@@ -126,41 +127,47 @@ def get_worlds_info() -> Tuple[Dict[str, Dict[str, str]], bool]:
     world_data = {}
     try:
         worlds_path = cache_path("worlds.json")
+        cached_time = os.path.getmtime(worlds_path)
         world_data = orjson.loads(pkgutil.get_data(__name__, worlds_path))
         for world in world_sources:
-            if os.path.getmtime(world.resolved_path) > os.path.getmtime(worlds_path):
+            if os.path.getmtime(world.resolved_path) > cached_time:
                 should_update = True
                 break
-    except orjson.JSONDecodeError:
+    except (FileNotFoundError, orjson.JSONDecodeError):
         should_update = True
 
     return world_data, should_update
 
 
-def load_all_worlds() -> Tuple[DataPackage, Dict[str, Dict[str, str]]]:
+def load_all_worlds() -> DataPackage:
     # import all submodules to trigger AutoWorldRegister
     from .AutoWorld import AutoWorldRegister
-    world_sources.sort()
-
-    for world_source in world_sources:
-        world_source.load()
 
     games: Dict[str, GamesPackage] = {}
     json_data: Dict[str, Dict[str, str]] = {}
+    for world_source in world_sources:
+        world_source.load()
+
     for world_name, world in AutoWorldRegister.world_types.items():
         games[world_name] = world.get_data_package_data()
-        json_data[world.__module__] = {"game": world.game}
+        json_name = [name for name in world.__module__.split(".") if "world" not in name][0]
+        if world.zip_path:
+            json_name += ".apworld"
+        world_json = {"game": world.game, "path": world.__file__}
         if getattr(world, "settings", None):
-            json_data[world.__module__].update({"settings": str(world.settings_key)})
+            world_json.update({"settings": str(world.settings_key)})
+        json_data[json_name] = world_json
 
-    return DataPackage(games=games), json_data
+    with open(cache_path("worlds.json"), "wb") as f:
+        f.write(orjson.dumps(json_data))
+    return DataPackage(games=games)
 
 
 def load_worlds(games: Union[Iterable[str], str]) -> DataPackage:
+    from .AutoWorld import AutoWorldRegister
     if isinstance(games, str):
         games = [games]
 
-    from .AutoWorld import AutoWorldRegister
     to_load: List[str] = []
     for source, data in world_data.items():
         if data["game"] in games:
@@ -176,14 +183,8 @@ def load_worlds(games: Union[Iterable[str], str]) -> DataPackage:
     return DataPackage(games=package)
 
 
-# if typing.TYPE_CHECKING:
-# network_data_package = load_all_worlds()
-
-
 world_sources = scan_worlds()
 world_data, needs_update = get_worlds_info()
 # TODO change to check if we need to update once everything expects lazy loading
-# network_data_package, world_data = load_all_worlds()
-network_data_package = load_worlds("The Messenger")
-with open(cache_path("worlds.json"), "wb") as f:
-    f.write(orjson.dumps(world_data))
+# if needs_update:
+network_data_package = load_all_worlds()
