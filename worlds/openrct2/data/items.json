@@ -91,6 +91,7 @@
         "Single Rail Roller Coaster",
         "Alpine Roller Coaster",
         "Classic Wooden Roller Coaster",
+        "Classic Stand-up Roller Coaster",
         "scenery",
         "Rainstorm",
         "Thunderstorm",
@@ -222,6 +223,7 @@
         "Single Rail Roller Coaster",
         "Alpine Roller Coaster",
         "Classic Wooden Roller Coaster",
+        "Classic Stand-up Roller Coaster",
         "Miniature Railway",
         "Monorail",
         "Chairlift",
@@ -307,7 +309,8 @@
         "Hybrid Coaster",
         "Single Rail Roller Coaster",
         "Alpine Roller Coaster",
-        "Classic Wooden Roller Coaster"
+        "Classic Wooden Roller Coaster",
+        "Classic Stand-up Roller Coaster"
     ],
     "transport_rides": [
         "Miniature Railway",
@@ -450,6 +453,7 @@
         "Single Rail Roller Coaster",
         "Alpine Roller Coaster",
         "Classic Wooden Roller Coaster",
+        "Classic Stand-up Roller Coaster",
         "Miniature Railway",
         "Monorail",
         "Chairlift",
