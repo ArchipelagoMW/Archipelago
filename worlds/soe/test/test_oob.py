@@ -6,7 +6,7 @@ class OoBTest(SoETestBase):
     """Tests that 'on' doesn't put out-of-bounds in logic. This is also the test base for OoB in logic."""
     options: typing.Dict[str, typing.Any] = {"out_of_bounds": "on"}
 
-    def testOoBAccess(self):
+    def test_oob_access(self) -> None:
         in_logic = self.options["out_of_bounds"] == "logic"
 
         # some locations that just need a weapon + OoB
@@ -37,7 +37,7 @@ class OoBTest(SoETestBase):
         self.collect_by_name("Diamond Eye")
         self.assertLocationReachability(reachable=de_reachable, unreachable=de_unreachable, satisfied=in_logic)
 
-    def testOoBGoal(self):
+    def test_oob_goal(self) -> None:
         # still need Energy Core with OoB if sequence breaks are not in logic
         for item in ["Gladiator Sword", "Diamond Eye", "Wheel", "Gauge"]:
             self.collect_by_name(item)

@@ -45,7 +45,15 @@ def create():
         }
 
         game_options = {}
+        visible: typing.Set[str] = set()
+        visible_weighted: typing.Set[str] = set()
+
         for option_name, option in all_options.items():
+            if option.visibility & Options.Visibility.simple_ui:
+                visible.add(option_name)
+            if option.visibility & Options.Visibility.complex_ui:
+                visible_weighted.add(option_name)
+
             if option_name in handled_in_js:
                 pass
 
@@ -81,8 +89,8 @@ def create():
                     "max": option.range_end,
                 }
 
-                if issubclass(option, Options.SpecialRange):
-                    game_options[option_name]["type"] = 'special_range'
+                if issubclass(option, Options.NamedRange):
+                    game_options[option_name]["type"] = 'named_range'
                     game_options[option_name]["value_names"] = {}
                     for key, val in option.special_range_names.items():
                         game_options[option_name]["value_names"][key] = val
@@ -116,8 +124,6 @@ def create():
             else:
                 logging.debug(f"{option} not exported to Web Options.")
 
-        player_options["gameOptions"] = game_options
-
         player_options["presetOptions"] = {}
         for preset_name, preset in world.web.options_presets.items():
             player_options["presetOptions"][preset_name] = {}
@@ -133,7 +139,7 @@ def create():
                     continue
 
                 option = world.options_dataclass.type_hints[option_name].from_any(option_value)
-                if isinstance(option, Options.SpecialRange) and isinstance(option_value, str):
+                if isinstance(option, Options.NamedRange) and isinstance(option_value, str):
                     assert option_value in option.special_range_names, \
                         f"Invalid preset value '{option_value}' for '{option_name}' in '{preset_name}'. " \
                         f"Expected {option.special_range_names.keys()} or {option.range_start}-{option.range_end}."
@@ -156,12 +162,23 @@ def create():
 
         os.makedirs(os.path.join(target_folder, 'player-options'), exist_ok=True)
 
+        filtered_player_options = player_options
+        filtered_player_options["gameOptions"] = {
+            option_name: option_data for option_name, option_data in game_options.items()
+            if option_name in visible
+        }
+
         with open(os.path.join(target_folder, 'player-options', game_name + ".json"), "w") as f:
-            json.dump(player_options, f, indent=2, separators=(',', ': '))
+            json.dump(filtered_player_options, f, indent=2, separators=(',', ': '))
+
+        filtered_player_options["gameOptions"] = {
+            option_name: option_data for option_name, option_data in game_options.items()
+            if option_name in visible_weighted
+        }
 
         if not world.hidden and world.web.options_page is True:
             # Add the random option to Choice, TextChoice, and Toggle options
-            for option in game_options.values():
+            for option in filtered_player_options["gameOptions"].values():
                 if option["type"] == "select":
                     option["options"].append({"name": "Random", "value": "random"})
 
@@ -170,7 +187,7 @@ def create():
 
             weighted_options["baseOptions"]["game"][game_name] = 0
             weighted_options["games"][game_name] = {
-                "gameSettings": game_options,
+                "gameSettings": filtered_player_options["gameOptions"],
                 "gameItems": tuple(world.item_names),
                 "gameItemGroups": [
                     group for group in world.item_name_groups.keys() if group != "Everything"

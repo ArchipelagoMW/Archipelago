@@ -195,10 +195,10 @@ def set_icon(window):
     window.tk.call('wm', 'iconphoto', window._w, logo)
 
 def adjust(args):
-    # Create a fake world and OOTWorld to use as a base
-    world = MultiWorld(1)
-    world.per_slot_randoms = {1: random}
-    ootworld = OOTWorld(world, 1)
+    # Create a fake multiworld and OOTWorld to use as a base
+    multiworld = MultiWorld(1)
+    multiworld.per_slot_randoms = {1: random}
+    ootworld = OOTWorld(multiworld, 1)
     # Set options in the fake OOTWorld
     for name, option in chain(cosmetic_options.items(), sfx_options.items()):
         result = getattr(args, name, None)

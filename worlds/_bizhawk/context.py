@@ -7,7 +7,6 @@ checking or launching the client, otherwise it will probably cause circular impo
 import asyncio
 import enum
 import subprocess
-import traceback
 from typing import Any, Dict, Optional
 
 from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, server_loop, logger, gui_enabled
@@ -130,7 +129,18 @@ async def _game_watcher(ctx: BizHawkClientContext):
                     logger.info("Waiting to connect to BizHawk...")
                     showed_connecting_message = True
 
-                if not await connect(ctx.bizhawk_ctx):
+                # Since a call to `connect` can take a while to return, this will cancel connecting
+                # if the user has decided to close the client.
+                connect_task = asyncio.create_task(connect(ctx.bizhawk_ctx), name="BizHawkConnect")
+                exit_task = asyncio.create_task(ctx.exit_event.wait(), name="ExitWait")
+                await asyncio.wait([connect_task, exit_task], return_when=asyncio.FIRST_COMPLETED)
+
+                if exit_task.done():
+                    connect_task.cancel()
+                    return
+
+                if not connect_task.result():
+                    # Failed to connect
                     continue
 
                 showed_no_handler_message = False
@@ -197,24 +207,38 @@ async def _run_game(rom: str):
 
     if auto_start is True:
         emuhawk_path = Utils.get_settings().bizhawkclient_options.emuhawk_path
-        subprocess.Popen([emuhawk_path, "--lua=data/lua/connector_bizhawk_generic.lua", os.path.realpath(rom)],
-                         cwd=Utils.local_path("."),
-                         stdin=subprocess.DEVNULL,
-                         stdout=subprocess.DEVNULL,
-                         stderr=subprocess.DEVNULL)
+        subprocess.Popen(
+            [
+                emuhawk_path,
+                f"--lua={Utils.local_path('data', 'lua', 'connector_bizhawk_generic.lua')}",
+                os.path.realpath(rom),
+            ],
+            cwd=Utils.local_path("."),
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
     elif isinstance(auto_start, str):
         import shlex
 
-        subprocess.Popen([*shlex.split(auto_start), os.path.realpath(rom)],
-                         cwd=Utils.local_path("."),
-                         stdin=subprocess.DEVNULL,
-                         stdout=subprocess.DEVNULL,
-                         stderr=subprocess.DEVNULL)
+        subprocess.Popen(
+            [
+                *shlex.split(auto_start),
+                os.path.realpath(rom)
+            ],
+            cwd=Utils.local_path("."),
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
 
 
 async def _patch_and_run_game(patch_file: str):
-    metadata, output_file = Patch.create_rom_file(patch_file)
-    Utils.async_start(_run_game(output_file))
+    try:
+        metadata, output_file = Patch.create_rom_file(patch_file)
+        Utils.async_start(_run_game(output_file))
+    except Exception as exc:
+        logger.exception(exc)
 
 
 def launch() -> None:
@@ -238,7 +262,7 @@ def launch() -> None:
         try:
             await watcher_task
         except Exception as e:
-            logger.error("".join(traceback.format_exception(e)))
+            logger.exception(e)
 
         await ctx.exit_event.wait()
         await ctx.shutdown()

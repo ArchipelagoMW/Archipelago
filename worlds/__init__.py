@@ -2,45 +2,52 @@ import importlib
 import os
 import pkgutil
 import sys
-import typing
 import warnings
 import zipimport
 import orjson
+import time
+import dataclasses
+from typing import Dict, List, Iterable, Tuple, TypedDict, Optional, Union
 
-from Utils import user_path, local_path, cache_path
+from Utils import cache_path, local_path, user_path
 
 local_folder = os.path.dirname(__file__)
 user_folder = user_path("worlds") if user_path() != local_path() else None
 
-__all__ = (
+__all__ = {
     "network_data_package",
     "AutoWorldRegister",
     "world_sources",
     "local_folder",
     "user_folder",
-)
+    "GamesPackage",
+    "DataPackage",
+    "failed_world_loads",
+}
 
 
-class GamesData(typing.TypedDict):
-    item_name_groups: typing.Dict[str, typing.List[str]]
-    item_name_to_id: typing.Dict[str, int]
-    location_name_groups: typing.Dict[str, typing.List[str]]
-    location_name_to_id: typing.Dict[str, int]
-    version: int
+failed_world_loads: List[str] = []
 
 
-class GamesPackage(GamesData, total=False):
+class GamesPackage(TypedDict, total=False):
+    item_name_groups: Dict[str, List[str]]
+    item_name_to_id: Dict[str, int]
+    location_name_groups: Dict[str, List[str]]
+    location_name_to_id: Dict[str, int]
     checksum: str
+    version: int  # TODO: Remove support after per game data packages API change.
 
 
-class DataPackage(typing.TypedDict):
-    games: typing.Dict[str, GamesPackage]
+class DataPackage(TypedDict):
+    games: Dict[str, GamesPackage]
 
 
-class WorldSource(typing.NamedTuple):
+@dataclasses.dataclass(order=True)
+class WorldSource:
     path: str  # typically relative path from this module
     is_zip: bool = False
     relative: bool = True  # relative to regular world import folder
+    time_taken: Optional[float] = None
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.path}, is_zip={self.is_zip}, relative={self.relative})"
@@ -53,6 +60,7 @@ class WorldSource(typing.NamedTuple):
 
     def load(self) -> bool:
         try:
+            start = time.perf_counter()
             if self.is_zip:
                 importer = zipimport.zipimporter(self.resolved_path)
                 if hasattr(importer, "find_spec"):  # new in Python 3.10
@@ -72,6 +80,7 @@ class WorldSource(typing.NamedTuple):
                         importer.exec_module(mod)
             else:
                 importlib.import_module(f".{self.path}", "worlds")
+            self.time_taken = time.perf_counter()-start
             return True
 
         except Exception:
@@ -84,12 +93,13 @@ class WorldSource(typing.NamedTuple):
             file_like.seek(0)
             import logging
             logging.exception(file_like.read())
+            failed_world_loads.append(os.path.basename(self.path).rsplit(".", 1)[0])
             return False
 
 
-def scan_worlds() -> typing.List[WorldSource]:
+def scan_worlds() -> List[WorldSource]:
     # find potential world containers, currently folders and zip-importable .apworld's
-    sources: typing.List[WorldSource] = []
+    sources: List[WorldSource] = []
     for folder in (folder for folder in (user_folder, local_folder) if folder):
         relative = folder == local_folder
         for entry in os.scandir(folder):
@@ -111,7 +121,7 @@ def get_world_by_name(name: str) -> str:
         raise ModuleNotFoundError(f"No game found that matches {name}")
 
 
-def get_worlds_info() -> typing.Tuple[typing.Dict[str, typing.Dict[str, str]], bool]:
+def get_worlds_info() -> Tuple[Dict[str, Dict[str, str]], bool]:
     should_update = False
     world_data = {}
     try:
@@ -127,7 +137,7 @@ def get_worlds_info() -> typing.Tuple[typing.Dict[str, typing.Dict[str, str]], b
     return world_data, should_update
 
 
-def load_all_worlds() -> typing.Tuple[DataPackage, typing.Dict[str, typing.Dict[str, str]]]:
+def load_all_worlds() -> Tuple[DataPackage, Dict[str, Dict[str, str]]]:
     # import all submodules to trigger AutoWorldRegister
     from .AutoWorld import AutoWorldRegister
     world_sources.sort()
@@ -135,8 +145,8 @@ def load_all_worlds() -> typing.Tuple[DataPackage, typing.Dict[str, typing.Dict[
     for world_source in world_sources:
         world_source.load()
 
-    games: typing.Dict[str, GamesPackage] = {}
-    json_data: typing.Dict[str, typing.Dict[str, str]] = {}
+    games: Dict[str, GamesPackage] = {}
+    json_data: Dict[str, Dict[str, str]] = {}
     for world_name, world in AutoWorldRegister.world_types.items():
         games[world_name] = world.get_data_package_data()
         json_data[world.__module__] = {"game": world.game}
@@ -146,12 +156,12 @@ def load_all_worlds() -> typing.Tuple[DataPackage, typing.Dict[str, typing.Dict[
     return DataPackage(games=games), json_data
 
 
-def load_worlds(games: typing.Union[typing.Iterable[str], str]) -> DataPackage:
+def load_worlds(games: Union[Iterable[str], str]) -> DataPackage:
     if isinstance(games, str):
         games = [games]
 
     from .AutoWorld import AutoWorldRegister
-    to_load: typing.List[str] = []
+    to_load: List[str] = []
     for source, data in world_data.items():
         if data["game"] in games:
             to_load.append(source)
@@ -159,7 +169,7 @@ def load_worlds(games: typing.Union[typing.Iterable[str], str]) -> DataPackage:
     for world_source in [source for source in world_sources if source.path in to_load]:
         world_source.load()
 
-    package: typing.Dict[str, GamesPackage] = {}
+    package: Dict[str, GamesPackage] = {}
     for world_name, world in AutoWorldRegister.world_types.items():
         package[world_name] = world.get_data_package_data()
     

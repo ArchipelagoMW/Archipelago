@@ -619,7 +619,7 @@ class SA2BWorld(World):
         for name in name_list_base:
             for char_idx in range(7):
                 if char_idx < len(name):
-                    name_list_s.append(chao_name_conversion[name[char_idx]])
+                    name_list_s.append(chao_name_conversion.get(name[char_idx], 0x5F))
                 else:
                     name_list_s.append(0x00)
 
