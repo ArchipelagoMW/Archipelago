@@ -80,6 +80,9 @@ class ItemGroupNames:
     STARPORT_UNITS = "Starport Units"
     NOVA_EQUIPMENT = "Nova Equipment"
 
+    GATEWAY_UNITS = "Gateway Units"
+    ROBO_UNITS = "Robo Units"
+    STARGATE_UNITS = "Stargate Units"
     AIUR = "Aiur"
     NERAZIM = "Nerazim"
     TAL_DARIM = "Tal'Darim"
@@ -120,6 +123,27 @@ item_name_groups[ItemGroupNames.NOVA_EQUIPMENT] = nova_equipment = [
 ]
 
 # Protoss
+item_name_groups[ItemGroupNames.GATEWAY_UNITS] = [
+    ItemNames.ZEALOT, ItemNames.CENTURION, ItemNames.SENTINEL, ItemNames.SUPPLICANT,
+    ItemNames.STALKER, ItemNames.INSTIGATOR, ItemNames.SLAYER,
+    ItemNames.SENTRY, ItemNames.HAVOC, ItemNames.ENERGIZER,
+    ItemNames.DRAGOON, ItemNames.ADEPT, ItemNames.DARK_ARCHON,
+    ItemNames.HIGH_TEMPLAR, ItemNames.SIGNIFIER, ItemNames.ASCENDANT,
+    ItemNames.DARK_TEMPLAR, ItemNames.AVENGER, ItemNames.BLOOD_HUNTER,
+]
+item_name_groups[ItemGroupNames.ROBO_UNITS] = [
+    ItemNames.WARP_PRISM, ItemNames.OBSERVER,
+    ItemNames.IMMORTAL, ItemNames.ANNIHILATOR, ItemNames.VANGUARD,
+    ItemNames.COLOSSUS, ItemNames.WRATHWALKER,
+    ItemNames.REAVER, ItemNames.DISRUPTOR,
+]
+item_name_groups[ItemGroupNames.STARGATE_UNITS] = [
+    ItemNames.PHOENIX, ItemNames.MIRAGE, ItemNames.CORSAIR,
+    ItemNames.VOID_RAY, ItemNames.DESTROYER,
+    ItemNames.SCOUT, ItemNames.TEMPEST,
+    ItemNames.CARRIER, ItemNames.MOTHERSHIP,
+    ItemNames.ARBITER, ItemNames.ORACLE,
+]
 item_name_groups[ItemGroupNames.AIUR] = [
     ItemNames.ZEALOT, ItemNames.DRAGOON, ItemNames.SENTRY, ItemNames.AVENGER, ItemNames.HIGH_TEMPLAR,
     ItemNames.IMMORTAL, ItemNames.REAVER,
