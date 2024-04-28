@@ -8,12 +8,30 @@ class Goal(Choice):
     Golden Diva: Defeat the four main passage bosses, reach the depths of the pyramid, and defeat the Golden Diva
     Golden Treasure Hunt: Find the golden treasures scattered in the world, and escape through the Sound Room
     Golden Diva Treasure Hunt: Find the golden treasures, and then defeat the Golden Diva
+    Local Golden Treasure Hunt: Find the treasures scattered in the pyramid and esape through the Sound Room
+    Local Golden Diva Treasure Hunt: Find the golden treasures in the pyramid and defeat the Golden Diva
     '''
     display_name = 'Goal'
     option_golden_diva = 0
     option_golden_treasure_hunt = 1
     option_golden_diva_treasure_hunt = 2
+    option_local_golden_treasure_hunt = 3
+    option_local_golden_diva_treasure_hunt = 4
+    alias_divahunt = option_golden_diva_treasure_hunt
+    alias_local_divahunt = option_local_golden_diva_treasure_hunt
     default = option_golden_diva
+
+    def needs_diva(self):
+        return self == Goal.option_golden_diva or self.is_diva_hunt()
+
+    def needs_treasure_hunt(self):
+        return self.is_treasure_hunt() or self.is_diva_hunt()
+
+    def is_treasure_hunt(self):
+        return self in (Goal.option_golden_treasure_hunt, Goal.option_local_golden_treasure_hunt)
+
+    def is_diva_hunt(self):
+        return self in (Goal.option_golden_diva_treasure_hunt, Goal.option_local_golden_diva_treasure_hunt)
 
 
 class GoldenTreasureCount(Range):

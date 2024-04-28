@@ -82,6 +82,8 @@ class WL4World(World):
     web = WL4Web()
 
     def generate_early(self):
+        if self.options.goal in (Goal.option_local_golden_treasure_hunt, Goal.option_local_golden_diva_treasure_hunt):
+            self.options.local_items.value.update(self.item_name_groups['Golden Treasure'])
         if self.options.required_jewels > self.options.pool_jewels:
             self.options.pool_jewels = PoolJewels(self.options.required_jewels)
         if self.options.required_jewels >= 1 and self.options.golden_jewels == 0:
@@ -99,12 +101,10 @@ class WL4World(World):
             location.place_locked_item(self.create_item(f'{passage} Passage Clear'))
             location.show_in_spoiler = False
 
-        if self.options.goal == Goal.option_golden_diva:
+        if self.options.goal.needs_diva():
             goal = 'Golden Diva'
-        if self.options.goal == Goal.option_golden_treasure_hunt:
+        if self.options.goal.is_treasure_hunt():
             goal = 'Sound Room - Emergency Exit'
-        if self.options.goal == Goal.option_golden_diva_treasure_hunt:
-            goal = 'Golden Diva'
 
         goal = self.multiworld.get_location(goal, self.player)
         goal.place_locked_item(self.create_item('Escape the Pyramid'))
@@ -112,7 +112,7 @@ class WL4World(World):
 
     def create_items(self):
         difficulty = self.options.difficulty
-        treasure_hunt = self.options.goal in (Goal.option_golden_treasure_hunt, Goal.option_golden_diva_treasure_hunt)
+        treasure_hunt = self.options.goal.needs_treasure_hunt()
 
         gem_pieces = 18 * 4
         cds = 16
@@ -130,7 +130,7 @@ class WL4World(World):
                 copies = min(pool_jewels, 1)
             elif item.passage() == Passage.GOLDEN:
                 copies = self.options.golden_jewels.value
-                if self.options.goal == Goal.option_golden_treasure_hunt:
+                if self.options.goal.is_treasure_hunt():
                     force_non_progression = True
             else:
                 copies = pool_jewels
@@ -214,12 +214,12 @@ class WL4World(World):
 
     def setup_locations(self):
         checks = filter(lambda p: self.options.difficulty in p[1].difficulties, location_table.items())
-        if (self.options.goal not in (Goal.option_golden_treasure_hunt, Goal.option_golden_diva_treasure_hunt)):
+        if not self.options.goal.needs_treasure_hunt():
             checks = filter(lambda p: p[1].source != LocationType.CHEST, checks)
         checks = {name for name, _ in checks}
 
-        if (self.options.goal not in (Goal.option_golden_diva, Goal.option_golden_diva_treasure_hunt)):
-            checks.remove('Golden Diva')
-        if (self.options.goal != Goal.option_golden_treasure_hunt):
+        if self.options.goal.needs_diva():
             checks.remove('Sound Room - Emergency Exit')
+        else:
+            checks.remove('Golden Diva')
         return checks

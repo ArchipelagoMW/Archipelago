@@ -248,7 +248,16 @@ def write_multiworld_table(rom: LocalRom,
             entry_address += 8
 
 
-def set_goal(rom: LocalRom, goal: Goal):
+def set_goal(rom: LocalRom, _goal: Goal):
+    if _goal == Goal.option_local_golden_treasure_hunt:
+        goal = Goal.option_golden_treasure_hunt
+    elif _goal == Goal.option_local_golden_diva_treasure_hunt:
+        goal = Goal.option_golden_diva_treasure_hunt
+    else:
+        goal = _goal.value
+
+    rom.write_byte(get_symbol('GoalType'), goal)
+
     if goal == Goal.option_golden_treasure_hunt:
         # SelectBossDoorInit01() - Check for golden passage instead of boss defeated
         rom.write_halfword(0x80863C2, 0x46C0)  # nop
@@ -400,13 +409,11 @@ def patch_rom(rom: LocalRom, world: WL4World):
     rom.write_word(get_symbol('PlayerID'), world.player)
     rom.write_bytes(get_symbol('SeedName'), seed_name)
 
-    rom.write_byte(get_symbol('GoalType'), world.options.goal.value)
-    rom.write_byte(get_symbol('GoldenTreasuresNeeded'), world.options.golden_treasure_count.value)
-
     # Set deathlink
     rom.write_byte(get_symbol('DeathLinkFlag'), world.options.death_link.value)
 
     set_goal(rom, world.options.goal)
+    rom.write_byte(get_symbol('GoldenTreasuresNeeded'), world.options.golden_treasure_count.value)
     set_difficulty_level(rom, world.options.difficulty)
 
     # TODO: Maybe make it stay open so it looks cleaner
