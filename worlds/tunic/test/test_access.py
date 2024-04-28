@@ -54,8 +54,7 @@ class TestNormalGoal(TunicTestBase):
     # test that you need the three colored hexes to reach the Heir in standard
     def test_normal_goal(self) -> None:
         location = ["The Heir"]
-        items = [["Red Questagon", "Blue Questagon", "Green Questagon", "Hero Relic - ATT", "Hero Relic - DEF",
-                  "Hero Relic - HP", "Hero Relic - MP", "Hero Relic - POTION", "Hero Relic - SP"]]
+        items = [["Red Questagon", "Blue Questagon", "Green Questagon"]]
         self.assertAccessDependency(location, items)
 
 
