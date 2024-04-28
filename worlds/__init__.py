@@ -10,6 +10,7 @@ import dataclasses
 from typing import Dict, List, Iterable, Tuple, TypedDict, Optional, Union
 
 from Utils import cache_path, local_path, user_path
+from .AutoWorld import AutoWorldRegister
 
 local_folder = os.path.dirname(__file__)
 user_folder = user_path("worlds") if user_path() != local_path() else None
@@ -141,8 +142,6 @@ def get_worlds_info() -> Tuple[Dict[str, Dict[str, str]], bool]:
 
 def load_all_worlds() -> DataPackage:
     # import all submodules to trigger AutoWorldRegister
-    from .AutoWorld import AutoWorldRegister
-
     games: Dict[str, GamesPackage] = {}
     json_data: Dict[str, Dict[str, str]] = {}
     for world_source in world_sources:
@@ -164,7 +163,6 @@ def load_all_worlds() -> DataPackage:
 
 
 def load_worlds(games: Union[Iterable[str], str]) -> DataPackage:
-    from .AutoWorld import AutoWorldRegister
     if isinstance(games, str):
         games = [games]
 
