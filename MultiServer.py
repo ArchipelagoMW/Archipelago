@@ -259,7 +259,9 @@ class Context:
             self.non_hintable_names[world_name] = world.hint_blacklist
 
     def _init_game_data(self):
-        self._load_game_data()
+        # WebHostContext
+        if self is Context:
+            self._load_game_data()
         for game_name, game_package in self.gamespackage.items():
             if "checksum" in game_package:
                 self.checksums[game_name] = game_package["checksum"]

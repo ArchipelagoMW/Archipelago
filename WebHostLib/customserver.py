@@ -64,6 +64,7 @@ class WebHostContext(Context):
         # without needing to import worlds system, which takes quite a bit of memory
         self.static_server_data = static_server_data
         super(WebHostContext, self).__init__("", 0, "", "", 1, 40, True, "enabled", "enabled", "enabled", 0, 2)
+        self._load_game_data()
         del self.static_server_data
         self.main_loop = asyncio.get_running_loop()
         self.video = {}
