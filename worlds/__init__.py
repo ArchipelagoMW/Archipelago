@@ -6,7 +6,7 @@ import sys
 import time
 import warnings
 import zipimport
-from typing import Dict, Iterable, List, Optional, Tuple, TypedDict
+from typing import Dict, Iterable, List, Optional, Tuple, TypedDict, Union
 
 import orjson
 
@@ -166,7 +166,9 @@ def load_all_worlds() -> DataPackage:
     return DataPackage(games=games)
 
 
-def load_worlds(games: Iterable[str]) -> DataPackage:
+def load_worlds(games: Union[Iterable[str], str]) -> DataPackage:
+    if isinstance(games, str):
+        games = (games,)
     to_load: List[Tuple[str, str]] = [get_world_paths_from_name(game) for game in games]
 
     for source in world_sources:
