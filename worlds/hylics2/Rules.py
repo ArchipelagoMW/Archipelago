@@ -129,6 +129,12 @@ def set_rules(hylics2world):
     world = hylics2world.multiworld
     player = hylics2world.player
 
+    extra = hylics2world.options.extra_items_in_logic
+    party = hylics2world.options.party_shuffle
+    medallion = hylics2world.options.medallion_shuffle
+    random_start = hylics2world.options.random_start
+    start_location = hylics2world.start_location
+
     # Afterlife
     add_rule(world.get_location("Afterlife: TV", player),
         lambda state: cave_key(state, player))
@@ -346,7 +352,7 @@ def set_rules(hylics2world):
         lambda state: upper_chamber_key(state, player))
 
     # extra rules if Extra Items in Logic is enabled
-    if world.extra_items_in_logic[player]:
+    if extra:
         for i in world.get_region("Foglast", player).entrances:
             add_rule(i, lambda state: charge_up(state, player))
         for i in world.get_region("Sage Airship", player).entrances:
@@ -368,7 +374,7 @@ def set_rules(hylics2world):
             ))
 
     # extra rules if Shuffle Party Members is enabled
-    if world.party_shuffle[player]:
+    if party:
         for i in world.get_region("Arcade Island", player).entrances:
             add_rule(i, lambda state: party_3(state, player))
         for i in world.get_region("Foglast", player).entrances:
@@ -406,33 +412,38 @@ def set_rules(hylics2world):
             lambda state: party_3(state, player))
 
     # extra rules if Shuffle Red Medallions is enabled
-    if world.medallion_shuffle[player]:
+    if medallion:
         add_rule(world.get_location("New Muldul: Upper House Medallion", player),
             lambda state: upper_house_key(state, player))
         add_rule(world.get_location("New Muldul: Vault Rear Left Medallion", player),
             lambda state: (
                 enter_foglast(state, player)
                 and bridge_key(state, player)
+                and air_dash(state, player)
             ))
         add_rule(world.get_location("New Muldul: Vault Rear Right Medallion", player),
             lambda state: (
                 enter_foglast(state, player)
                 and bridge_key(state, player)
+                and air_dash(state, player)
             ))
         add_rule(world.get_location("New Muldul: Vault Center Medallion", player),
             lambda state: (
                 enter_foglast(state, player)
                 and bridge_key(state, player)
+                and air_dash(state, player)
             ))
         add_rule(world.get_location("New Muldul: Vault Front Left Medallion", player),
             lambda state: (
                 enter_foglast(state, player)
                 and bridge_key(state, player)
+                and air_dash(state, player)
             ))
         add_rule(world.get_location("New Muldul: Vault Front Right Medallion", player),
             lambda state: (
                 enter_foglast(state, player)
                 and bridge_key(state, player)
+                and air_dash(state, player)
             ))
         add_rule(world.get_location("Viewax's Edifice: Fort Wall Medallion", player),
             lambda state: paddle(state, player))
@@ -456,7 +467,7 @@ def set_rules(hylics2world):
             lambda state: upper_chamber_key(state, player))
 
     # extra rules if Shuffle Red Medallions and Party Shuffle are enabled
-    if world.party_shuffle[player] and world.medallion_shuffle[player]:
+    if party and medallion:
         add_rule(world.get_location("New Muldul: Vault Rear Left Medallion", player),
             lambda state: party_3(state, player))
         add_rule(world.get_location("New Muldul: Vault Rear Right Medallion", player),
@@ -488,8 +499,7 @@ def set_rules(hylics2world):
         add_rule(i, lambda state: enter_hylemxylem(state, player))
 
     # random start logic (default)
-    if ((not world.random_start[player]) or \
-        (world.random_start[player] and hylics2world.start_location == "Waynehouse")):
+    if not random_start or random_start and start_location == "Waynehouse":
         # entrances
         for i in world.get_region("Viewax", player).entrances:
             add_rule(i, lambda state: (
@@ -504,7 +514,7 @@ def set_rules(hylics2world):
             add_rule(i, lambda state: airship(state, player))
 
     # random start logic (Viewax's Edifice)
-    elif (world.random_start[player] and hylics2world.start_location == "Viewax's Edifice"):
+    elif random_start and start_location == "Viewax's Edifice":
         for i in world.get_region("Waynehouse", player).entrances:
             add_rule(i, lambda state: (
                 air_dash(state, player)
@@ -535,7 +545,7 @@ def set_rules(hylics2world):
             add_rule(i, lambda state: airship(state, player))
 
     # random start logic (TV Island)
-    elif (world.random_start[player] and hylics2world.start_location == "TV Island"):
+    elif random_start and start_location == "TV Island":
         for i in world.get_region("Waynehouse", player).entrances:
             add_rule(i, lambda state: airship(state, player))
         for i in world.get_region("New Muldul", player).entrances:
@@ -554,7 +564,7 @@ def set_rules(hylics2world):
             add_rule(i, lambda state: airship(state, player))
 
     # random start logic (Shield Facility)
-    elif (world.random_start[player] and hylics2world.start_location == "Shield Facility"):
+    elif random_start and start_location == "Shield Facility":
         for i in world.get_region("Waynehouse", player).entrances:
             add_rule(i, lambda state: airship(state, player))
         for i in world.get_region("New Muldul", player).entrances:

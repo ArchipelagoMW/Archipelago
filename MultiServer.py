@@ -586,7 +586,7 @@ class Context:
             self.location_check_points = savedata["game_options"]["location_check_points"]
             self.server_password = savedata["game_options"]["server_password"]
             self.password = savedata["game_options"]["password"]
-            self.release_mode = savedata["game_options"].get("release_mode", savedata["game_options"].get("forfeit_mode", "goal"))
+            self.release_mode = savedata["game_options"]["release_mode"]
             self.remaining_mode = savedata["game_options"]["remaining_mode"]
             self.collect_mode = savedata["game_options"]["collect_mode"]
             self.item_cheat = savedata["game_options"]["item_cheat"]
@@ -631,8 +631,6 @@ class Context:
 
     def _set_options(self, server_options: dict):
         for key, value in server_options.items():
-            if key == "forfeit_mode":
-                key = "release_mode"
             data_type = self.simple_options.get(key, None)
             if data_type is not None:
                 if value not in {False, True, None}:  # some can be boolean OR text, such as password
@@ -656,7 +654,8 @@ class Context:
         else:
             return self.player_names[team, slot]
 
-    def notify_hints(self, team: int, hints: typing.List[NetUtils.Hint], only_new: bool = False):
+    def notify_hints(self, team: int, hints: typing.List[NetUtils.Hint], only_new: bool = False,
+                     recipients: typing.Sequence[int] = None):
         """Send and remember hints."""
         if only_new:
             hints = [hint for hint in hints if hint not in self.hints[team, hint.finding_player]]
@@ -685,12 +684,13 @@ class Context:
         for slot in new_hint_events:
             self.on_new_hint(team, slot)
         for slot, hint_data in concerns.items():
-            clients = self.clients[team].get(slot)
-            if not clients:
-                continue
-            client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
-            for client in clients:
-                async_start(self.send_msgs(client, client_hints))
+            if recipients is None or slot in recipients:
+                clients = self.clients[team].get(slot)
+                if not clients:
+                    continue
+                client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
+                for client in clients:
+                    async_start(self.send_msgs(client, client_hints))
 
     # "events"
 
@@ -705,14 +705,17 @@ class Context:
         self.save()  # save goal completion flag
 
     def on_new_hint(self, team: int, slot: int):
-        key: str = f"_read_hints_{team}_{slot}"
-        targets: typing.Set[Client] = set(self.stored_data_notification_clients[key])
-        if targets:
-            self.broadcast(targets, [{"cmd": "SetReply", "key": key, "value": self.hints[team, slot]}])
+        self.on_changed_hints(team, slot)
         self.broadcast(self.clients[team][slot], [{
             "cmd": "RoomUpdate",
             "hint_points": get_slot_points(self, team, slot)
         }])
+
+    def on_changed_hints(self, team: int, slot: int):
+        key: str = f"_read_hints_{team}_{slot}"
+        targets: typing.Set[Client] = set(self.stored_data_notification_clients[key])
+        if targets:
+            self.broadcast(targets, [{"cmd": "SetReply", "key": key, "value": self.hints[team, slot]}])
 
     def on_client_status_change(self, team: int, slot: int):
         key: str = f"_read_client_status_{team}_{slot}"
@@ -973,7 +976,10 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
             "hint_points": get_slot_points(ctx, team, slot),
             "checked_locations": new_locations,  # send back new checks only
         }])
-
+        old_hints = ctx.hints[team, slot].copy()
+        ctx.recheck_hints(team, slot)
+        if old_hints != ctx.hints[team, slot]:
+            ctx.on_changed_hints(team, slot)
         ctx.save()
 
 
@@ -1050,17 +1056,19 @@ def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bo
         if picks[0][1] == 100:
             return picks[0][0], True, "Perfect Match"
         elif picks[0][1] < 75:
-            return picks[0][0], False, f"Didn't find something that closely matches, " \
-                                       f"did you mean {picks[0][0]}? ({picks[0][1]}% sure)"
+            return picks[0][0], False, f"Didn't find something that closely matches '{input_text}', " \
+                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
         elif dif > 5:
             return picks[0][0], True, "Close Match"
         else:
-            return picks[0][0], False, f"Too many close matches, did you mean {picks[0][0]}? ({picks[0][1]}% sure)"
+            return picks[0][0], False, f"Too many close matches for '{input_text}', " \
+                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
     else:
         if picks[0][1] > 90:
             return picks[0][0], True, "Only Option Match"
         else:
-            return picks[0][0], False, f"Did you mean {picks[0][0]}? ({picks[0][1]}% sure)"
+            return picks[0][0], False, f"Didn't find something that closely matches '{input_text}', " \
+                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
 
 
 class CommandMeta(type):
@@ -1337,6 +1345,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     "Sorry, !remaining requires you to have beaten the game on this server")
                 return False
 
+    @mark_raw
     def _cmd_missing(self, filter_text="") -> bool:
         """List all missing location checks from the server's perspective.
         Can be given text, which will be used as filter."""
@@ -1346,7 +1355,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if locations:
             names = [self.ctx.location_names[location] for location in locations]
             if filter_text:
-                names = [name for name in names if filter_text in name]
+                location_groups = self.ctx.location_name_groups[self.ctx.games[self.client.slot]]
+                if filter_text in location_groups:  # location group name
+                    names = [name for name in names if name in location_groups[filter_text]]
+                else:
+                    names = [name for name in names if filter_text in name]
             texts = [f'Missing: {name}' for name in names]
             if filter_text:
                 texts.append(f"Found {len(locations)} missing location checks, displaying {len(names)} of them.")
@@ -1357,6 +1370,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
             self.output("No missing location checks found.")
         return True
 
+    @mark_raw
     def _cmd_checked(self, filter_text="") -> bool:
         """List all done location checks from the server's perspective.
         Can be given text, which will be used as filter."""
@@ -1366,7 +1380,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if locations:
             names = [self.ctx.location_names[location] for location in locations]
             if filter_text:
-                names = [name for name in names if filter_text in name]
+                location_groups = self.ctx.location_name_groups[self.ctx.games[self.client.slot]]
+                if filter_text in location_groups:  # location group name
+                    names = [name for name in names if name in location_groups[filter_text]]
+                else:
+                    names = [name for name in names if filter_text in name]
             texts = [f'Checked: {name}' for name in names]
             if filter_text:
                 texts.append(f"Found {len(locations)} done location checks, displaying {len(names)} of them.")
@@ -1429,9 +1447,13 @@ class ClientMessageProcessor(CommonCommandProcessor):
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
                      self.ctx.hints[self.client.team, self.client.slot]}
             self.ctx.hints[self.client.team, self.client.slot] = hints
-            self.ctx.notify_hints(self.client.team, list(hints))
+            self.ctx.notify_hints(self.client.team, list(hints), recipients=(self.client.slot,))
             self.output(f"A hint costs {self.ctx.get_hint_cost(self.client.slot)} points. "
                         f"You have {points_available} points.")
+            if hints and Utils.version_tuple < (0, 5, 0):
+                self.output("It was recently changed, so that the above hints are only shown to you. "
+                            "If you meant to alert another player of an above hint, "
+                            "please let them know of the content or to run !hint themselves.")
             return True
 
         elif input_text.isnumeric():
@@ -1825,6 +1847,11 @@ def update_client_status(ctx: Context, client: Client, new_status: ClientStatus)
     if current != ClientStatus.CLIENT_GOAL:  # can't undo goal completion
         if new_status == ClientStatus.CLIENT_GOAL:
             ctx.on_goal_achieved(client)
+            # if player has yet to ever connect to the server, they will not be in client_game_state
+            if all(player in ctx.client_game_state and ctx.client_game_state[player] == ClientStatus.CLIENT_GOAL
+                   for player in ctx.player_names
+                   if player[0] == client.team and player[1] != client.slot):
+                ctx.broadcast_text_all(f"Team #{client.team + 1} has completed all of their games! Congratulations!")
 
         ctx.client_game_state[client.team, client.slot] = new_status
         ctx.on_client_status_change(client.team, client.slot)
@@ -1878,7 +1905,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_alias(self, player_name_then_alias_name):
         """Set a player's alias, by listing their base name and then their intended alias."""
-        player_name, alias_name = player_name_then_alias_name.split(" ", 1)
+        player_name, _, alias_name = player_name_then_alias_name.partition(" ")
         player_name, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
             for (team, slot), name in self.ctx.player_names.items():
@@ -1958,7 +1985,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     @mark_raw
     def _cmd_forbid_release(self, player_name: str) -> bool:
-        """"Disallow the specified player from using the !release command."""
+        """Disallow the specified player from using the !release command."""
         player = self.resolve_player(player_name)
         if player:
             team, slot, name = player
@@ -2078,8 +2105,8 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
             if full_name.isnumeric():
                 location, usable, response = int(full_name), True, None
-            elif self.ctx.location_names_for_game(game) is not None:
-                location, usable, response = get_intended_text(full_name, self.ctx.location_names_for_game(game))
+            elif game in self.ctx.all_location_and_group_names:
+                location, usable, response = get_intended_text(full_name, self.ctx.all_location_and_group_names[game])
             else:
                 self.output("Can't look up location for unknown game. Hint for ID instead.")
                 return False
@@ -2087,6 +2114,11 @@ class ServerCommandProcessor(CommonCommandProcessor):
             if usable:
                 if isinstance(location, int):
                     hints = collect_hint_location_id(self.ctx, team, slot, location)
+                elif game in self.ctx.location_name_groups and location in self.ctx.location_name_groups[game]:
+                    hints = []
+                    for loc_name_from_group in self.ctx.location_name_groups[game][location]:
+                        if loc_name_from_group in self.ctx.location_names_for_game(game):
+                            hints.extend(collect_hint_location_name(self.ctx, team, slot, loc_name_from_group))
                 else:
                     hints = collect_hint_location_name(self.ctx, team, slot, location)
                 if hints:
@@ -2102,31 +2134,46 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.output(response)
             return False
 
-    def _cmd_option(self, option_name: str, option: str):
-        """Set options for the server."""
-
-        attrtype = self.ctx.simple_options.get(option_name, None)
-        if attrtype:
-            if attrtype == bool:
-                def attrtype(input_text: str):
-                    return input_text.lower() not in {"off", "0", "false", "none", "null", "no"}
-            elif attrtype == str and option_name.endswith("password"):
-                def attrtype(input_text: str):
-                    if input_text.lower() in {"null", "none", '""', "''"}:
-                        return None
-                    return input_text
-            setattr(self.ctx, option_name, attrtype(option))
-            self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
-            if option_name in {"release_mode", "remaining_mode", "collect_mode"}:
-                self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
-            elif option_name in {"hint_cost", "location_check_points"}:
-                self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
-            return True
-        else:
-            known = (f"{option}:{otype}" for option, otype in self.ctx.simple_options.items())
-            self.output(f"Unrecognized Option {option_name}, known: "
-                        f"{', '.join(known)}")
+    def _cmd_option(self, option_name: str, option_value: str):
+        """Set an option for the server."""
+        value_type = self.ctx.simple_options.get(option_name, None)
+        if not value_type:
+            known_options = (f"{option}: {option_type}" for option, option_type in self.ctx.simple_options.items())
+            self.output(f"Unrecognized option '{option_name}', known: {', '.join(known_options)}")
             return False
+
+        if value_type == bool:
+            def value_type(input_text: str):
+                return input_text.lower() not in {"off", "0", "false", "none", "null", "no"}
+        elif value_type == str and option_name.endswith("password"):
+            def value_type(input_text: str):
+                return None if input_text.lower() in {"null", "none", '""', "''"} else input_text
+        elif value_type == str and option_name.endswith("mode"):
+            valid_values = {"goal", "enabled", "disabled"}
+            valid_values.update(("auto", "auto_enabled") if option_name != "remaining_mode" else [])
+            if option_value.lower() not in valid_values:
+                self.output(f"Unrecognized {option_name} value '{option_value}', known: {', '.join(valid_values)}")
+                return False
+
+        setattr(self.ctx, option_name, value_type(option_value))
+        self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
+        if option_name in {"release_mode", "remaining_mode", "collect_mode"}:
+            self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
+        elif option_name in {"hint_cost", "location_check_points"}:
+            self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
+        return True
+
+    def _cmd_datastore(self):
+        """Debug Tool: list writable datastorage keys and approximate the size of their values with pickle."""
+        total: int = 0
+        texts = []
+        for key, value in self.ctx.stored_data.items():
+            size = len(pickle.dumps(value))
+            total += size
+            texts.append(f"Key: {key} | Size: {size}B")
+        texts.insert(0, f"Found {len(self.ctx.stored_data)} keys, "
+                        f"approximately totaling {Utils.format_SI_prefix(total, power=1024)}B")
+        self.output("\n".join(texts))
 
 
 async def console(ctx: Context):
@@ -2210,25 +2257,24 @@ def parse_args() -> argparse.Namespace:
 
 async def auto_shutdown(ctx, to_cancel=None):
     await asyncio.sleep(ctx.auto_shutdown)
+
+    def inactivity_shutdown():
+        ctx.server.ws_server.close()
+        ctx.exit_event.set()
+        if to_cancel:
+            for task in to_cancel:
+                task.cancel()
+        logging.info("Shutting down due to inactivity.")
+
     while not ctx.exit_event.is_set():
         if not ctx.client_activity_timers.values():
-            ctx.server.ws_server.close()
-            ctx.exit_event.set()
-            if to_cancel:
-                for task in to_cancel:
-                    task.cancel()
-            logging.info("Shutting down due to inactivity.")
+            inactivity_shutdown()
         else:
             newest_activity = max(ctx.client_activity_timers.values())
             delta = datetime.datetime.now(datetime.timezone.utc) - newest_activity
             seconds = ctx.auto_shutdown - delta.total_seconds()
             if seconds < 0:
-                ctx.server.ws_server.close()
-                ctx.exit_event.set()
-                if to_cancel:
-                    for task in to_cancel:
-                        task.cancel()
-                logging.info("Shutting down due to inactivity.")
+                inactivity_shutdown()
             else:
                 await asyncio.sleep(seconds)
 
