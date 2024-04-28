@@ -79,29 +79,33 @@ class ItemGroupNames:
     FACTORY_UNITS = "Factory Units"
     STARPORT_UNITS = "Starport Units"
     NOVA_EQUIPMENT = "Nova Equipment"
+    TERRAN_BUILDINGS = "Terran Buildings"
+    TERRAN_MERCENARIES = "Terran Mercenaries"
 
     GATEWAY_UNITS = "Gateway Units"
     ROBO_UNITS = "Robo Units"
     STARGATE_UNITS = "Stargate Units"
+    PROTOSS_BUILDINGS = "Protoss Buildings"
     AIUR = "Aiur"
     NERAZIM = "Nerazim"
     TAL_DARIM = "Tal'Darim"
     PURIFIER = "Purifier"
 
 
-# Terran
-item_name_groups[ItemGroupNames.TERRAN_UNITS] = [
+item_name_groups[ItemGroupNames.TERRAN_UNITS] = terran_units = [
     item_name for item_name, item_data in Items.item_table.items()
     if item_data.type in (Items.TerranItemType.Unit, Items.TerranItemType.Mercenary, Items.TerranItemType.Building)
 ]
-item_name_groups[ItemGroupNames.ZERG_UNITS] = [
+item_name_groups[ItemGroupNames.ZERG_UNITS] = zerg_units = [
     item_name for item_name, item_data in Items.item_table.items()
     if item_data.type in (Items.ZergItemType.Unit, Items.ZergItemType.Mercenary, Items.ZergItemType.Morph)
 ]
-item_name_groups[ItemGroupNames.PROTOSS_UNITS] = [
+item_name_groups[ItemGroupNames.PROTOSS_UNITS] = protoss_units = [
     item_name for item_name, item_data in Items.item_table.items()
     if item_data.type in (Items.ProtossItemType.Unit, Items.ProtossItemType.Unit_2, Items.ProtossItemType.Building)
 ]
+
+# Terran
 item_name_groups[ItemGroupNames.BARRACKS_UNITS] = barracks_units = [
     ItemNames.MARINE, ItemNames.MEDIC, ItemNames.FIREBAT, ItemNames.MARAUDER,
     ItemNames.REAPER, ItemNames.GHOST, ItemNames.SPECTRE, ItemNames.HERC,
@@ -116,6 +120,14 @@ item_name_groups[ItemGroupNames.STARPORT_UNITS] = starport_units = [
     ItemNames.BATTLECRUISER, ItemNames.HERCULES, ItemNames.SCIENCE_VESSEL, ItemNames.RAVEN,
     ItemNames.LIBERATOR, ItemNames.VALKYRIE,
 ]
+item_name_groups[ItemGroupNames.TERRAN_BUILDINGS] = terran_buildings = [
+    item_name for item_name, item_data in Items.item_table.items()
+    if item_data.type == Items.TerranItemType.Building
+]
+item_name_groups[ItemGroupNames.TERRAN_MERCENARIES] = terran_mercenaries = [
+    item_name for item_name, item_data in Items.item_table.items()
+    if item_data.type == Items.TerranItemType.Mercenary
+]
 item_name_groups[ItemGroupNames.NOVA_EQUIPMENT] = nova_equipment = [
     *[item_name for item_name, item_data in Items.item_table.items()
         if item_data.type == Items.TerranItemType.Nova_Gear],
@@ -123,7 +135,7 @@ item_name_groups[ItemGroupNames.NOVA_EQUIPMENT] = nova_equipment = [
 ]
 
 # Protoss
-item_name_groups[ItemGroupNames.GATEWAY_UNITS] = [
+item_name_groups[ItemGroupNames.GATEWAY_UNITS] = gateway_units = [
     ItemNames.ZEALOT, ItemNames.CENTURION, ItemNames.SENTINEL, ItemNames.SUPPLICANT,
     ItemNames.STALKER, ItemNames.INSTIGATOR, ItemNames.SLAYER,
     ItemNames.SENTRY, ItemNames.HAVOC, ItemNames.ENERGIZER,
@@ -131,18 +143,22 @@ item_name_groups[ItemGroupNames.GATEWAY_UNITS] = [
     ItemNames.HIGH_TEMPLAR, ItemNames.SIGNIFIER, ItemNames.ASCENDANT,
     ItemNames.DARK_TEMPLAR, ItemNames.AVENGER, ItemNames.BLOOD_HUNTER,
 ]
-item_name_groups[ItemGroupNames.ROBO_UNITS] = [
+item_name_groups[ItemGroupNames.ROBO_UNITS] = robo_units = [
     ItemNames.WARP_PRISM, ItemNames.OBSERVER,
     ItemNames.IMMORTAL, ItemNames.ANNIHILATOR, ItemNames.VANGUARD,
     ItemNames.COLOSSUS, ItemNames.WRATHWALKER,
     ItemNames.REAVER, ItemNames.DISRUPTOR,
 ]
-item_name_groups[ItemGroupNames.STARGATE_UNITS] = [
+item_name_groups[ItemGroupNames.STARGATE_UNITS] = stargate_units = [
     ItemNames.PHOENIX, ItemNames.MIRAGE, ItemNames.CORSAIR,
     ItemNames.VOID_RAY, ItemNames.DESTROYER,
     ItemNames.SCOUT, ItemNames.TEMPEST,
     ItemNames.CARRIER, ItemNames.MOTHERSHIP,
     ItemNames.ARBITER, ItemNames.ORACLE,
+]
+item_name_groups[ItemGroupNames.PROTOSS_BUILDINGS] = protoss_buildings = [
+    item_name for item_name, item_data in Items.item_table.items()
+    if item_data.type == Items.ProtossItemType.Building
 ]
 item_name_groups[ItemGroupNames.AIUR] = [
     ItemNames.ZEALOT, ItemNames.DRAGOON, ItemNames.SENTRY, ItemNames.AVENGER, ItemNames.HIGH_TEMPLAR,
@@ -165,3 +181,7 @@ item_name_groups[ItemGroupNames.PURIFIER] = [
     ItemNames.COLOSSUS, ItemNames.DISRUPTOR,
     ItemNames.MIRAGE, ItemNames.TEMPEST,
 ]
+
+# Sanity checks
+assert len(terran_units) == len(barracks_units) + len(factory_units) + len(starport_units) + len(terran_buildings) + len(terran_mercenaries)
+assert len(protoss_units) == len(gateway_units) + len(robo_units) + len(stargate_units) + len(protoss_buildings)
