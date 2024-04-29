@@ -67,7 +67,7 @@ class DataStorage:
         return key
 
     def set(self, set_cmd: Dict[str, object]) -> Dict[str, object]:
-        key = self.get_key(set_cmd)
+        key = self.validate_and_get_key(set_cmd)
         value = self.stored_data.get(key, set_cmd.get("default", 0))
         on_error = set_cmd.get("on_error", "raise")
 
