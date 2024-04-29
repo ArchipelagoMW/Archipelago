@@ -106,17 +106,17 @@ class AutopelagoWorld(World):
     def create_item(self, name: str, classification: ItemClassification | None = None):
         item_id = item_name_to_id[name] if name in item_name_to_id else None
         if classification is None:
-            classification = item_name_to_defined_classification[name]
+            classification = item_name_to_classification[name]
             if classification is None:
                 # not observed during a real generation, but it's technically a part of the contract. once we fully
-                # stabilize, *ALL* items will be in item_name_to_defined_classification, so this can go away.
+                # stabilize, *ALL* items will be in item_name_to_classification, so this can go away.
                 classification = ItemClassification.filler
         item = AutopelagoItem(name, classification, item_id, self.player)
         return item
 
     def create_items(self):
         new_items = [self.create_item(item)
-                     for location, item in location_name_to_unrandomized_progression_item_name.items()
+                     for location, item in location_name_to_progression_item_name.items()
                      if location not in location_names_with_fixed_rewards]
 
         # skip balancing for the pack_rat items that take us beyond the minimum limit
@@ -149,7 +149,7 @@ class AutopelagoWorld(World):
                                                                                 generic_nonprogression_item_table}
         next_filler_becomes_trap = False
         nonprog_type: Literal['useful_nonprogression', 'filler', 'trap', 'uncategorized']
-        for nonprog_type in location_name_to_unrandomized_nonprogression_item.values():
+        for nonprog_type in location_name_to_nonprogression_item.values():
             if nonprog_type == 'filler':
                 if next_filler_becomes_trap:
                     nonprog_type = 'trap'
@@ -172,11 +172,9 @@ class AutopelagoWorld(World):
                 r.connect(new_regions[next_exit], rule=None if _is_trivial(req) else rule)
             for loc in r.locations:
                 if loc.name in location_names_with_fixed_rewards:
-                    item_name = location_name_to_unrandomized_progression_item_name[loc.name]
+                    item_name = location_name_to_progression_item_name[loc.name]
                     loc.place_locked_item(self.create_item(item_name))
 
-        self.multiworld.get_location('Victory', self.player).place_locked_item(
-            self.create_item('Victory', ItemClassification.progression))
         self.multiworld.completion_condition[self.player] = lambda state: state.has('Victory', self.player)
 
     def get_filler_item_name(self):
