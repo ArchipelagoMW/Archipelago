@@ -225,7 +225,7 @@ class MLSSPatchExtension(APPatchExtension):
                     stream.seek(-3, 1)
                     stream.write(bytes([enemies_raw.pop()]))
                     stream.seek(1, 1)
-                    stream.write(bytes([0x4]))
+                    stream.write(bytes([0x6]))
                     stream.seek(1, 1)
                 else:
                     stream.seek(3, 1)
