@@ -816,7 +816,7 @@ regions:
       unrandomized_items:
         key:
           - quantum_sugar_cube
-        filler: 5
+        filler: 17
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -830,7 +830,7 @@ regions:
           - ratstronaut
           - energy_drink_that_is_pure_rocket_fuel
           - pile_of_scrap_metal_in_the_shape_of_a_rocket_ship
-        filler: 28
+        filler: 16
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
