@@ -23,7 +23,7 @@ class TestDataStorage(unittest.TestCase):
             "operations": [{"operation": "add", "value": 12}] 
         }
 
-        with self.assertRaisesRegex(InvalidArgumentsException, "`Key` is not provided"):
+        with self.assertRaisesRegex(InvalidArgumentsException, "`Key` is not a string"):
             self.storage.set(set_cmd)
 
     def test_raises_on_key_invalid_type(self):
@@ -56,7 +56,7 @@ class TestDataStorage(unittest.TestCase):
             "key": "OperationsMissing"
         }
 
-        with self.assertRaisesRegex(InvalidArgumentsException, "`operations` are not provided"):
+        with self.assertRaisesRegex(InvalidArgumentsException, "`operations` is not a list"):
             self.storage.set(set_cmd)
 
     def test_raises_on_operations_invalid_type(self):
@@ -95,7 +95,7 @@ class TestDataStorage(unittest.TestCase):
 
         self.assert_result(result, "AddWithDefault", 41, 35)
 
-    # Default is currently weird in two ways:
+    # The `default` operation is currently weird in two ways:
     # * The operation requires a "value" but its contents is ignored
     # * The original_value is also updated to the value
     def test_default_operation(self):

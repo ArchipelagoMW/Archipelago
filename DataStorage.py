@@ -55,23 +55,23 @@ class DataStorage:
         self.stored_data = stored_data
 
     @staticmethod
-    def validate_set_cmd(set_cmd: Dict[str, object]) -> bool:
-        if "key" not in set_cmd:
-            raise InvalidArgumentsException("`Key` is not provided")
-        if type(set_cmd["key"]) != str:
+    def get_key(set_cmd: Dict[str, object]) -> str:
+        try:
+            key = set_cmd["key"]
+            if key.startswith("_read_"):
+                raise InvalidArgumentsException(f"cannot apply `Set` operation to the read only key `{key}`")
+        except (KeyError, AttributeError):
             raise InvalidArgumentsException("`Key` is not a string")
-        if set_cmd["key"].startswith("_read_"):
-            raise InvalidArgumentsException(f"cannot apply `Set` operation to the read only key `{set_cmd['key']}`")
-        if "operations" not in set_cmd:
-            raise InvalidArgumentsException("`operations` are not provided")
+        return key
+
+    def set(self, set_cmd: Dict[str, object]) -> Dict[str, object]:
+        key = self.get_key(set_cmd)
+
         if not isinstance(set_cmd["operations"], List):
             raise InvalidArgumentsException("`operations` is not a list")
 
-    def set(self, set_cmd: Dict[str, object]) -> Dict[str, object]:
-        self.validate_set_cmd(set_cmd)
-
-        value = self.stored_data.get(set_cmd["key"], set_cmd.get("default", 0))
-        on_error =  set_cmd.get("on_error", "raise")
+        value = self.stored_data.get(key, set_cmd.get("default", 0))
+        on_error = set_cmd.get("on_error", "raise")
 
         set_cmd.update({
             "cmd": "SetReply",
@@ -96,6 +96,6 @@ class DataStorage:
             else:
                 raise
 
-        self.stored_data[set_cmd["key"]] = set_cmd["value"] = value
+        self.stored_data[key] = set_cmd["value"] = value
 
         return set_cmd
