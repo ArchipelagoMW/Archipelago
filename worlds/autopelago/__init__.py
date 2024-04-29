@@ -168,6 +168,8 @@ class AutopelagoWorld(World):
             self.multiworld.regions.append(r)
             req = r.autopelago_definition.requires
             for next_exit in r.autopelago_definition.exits:
+                if next_exit == 'moon_comma_the':
+                    continue
                 rule = (lambda req_: lambda state: _is_satisfied(self.player, req_, state))(req)
                 r.connect(new_regions[next_exit], rule=None if _is_trivial(req) else rule)
             for loc in r.locations:
@@ -175,7 +177,8 @@ class AutopelagoWorld(World):
                     item_name = location_name_to_progression_item_name[loc.name]
                     loc.place_locked_item(self.create_item(item_name))
 
-        self.multiworld.completion_condition[self.player] = lambda state: state.has('Victory', self.player)
+        self.multiworld.completion_condition[self.player] =\
+            lambda state: state.has('Lockheed SR-71 Blackbird', self.player)
 
     def get_filler_item_name(self):
         return "Monkey's Paw"

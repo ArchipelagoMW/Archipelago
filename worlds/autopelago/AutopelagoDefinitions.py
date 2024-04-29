@@ -145,10 +145,10 @@ item_name_to_id: dict[str, int] = {}
 generic_nonprogression_item_table: dict[AutopelagoNonProgressionItemType, list[str]] = {'useful_nonprogression': [],
                                                                                         'trap': [], 'filler': [],
                                                                                         'uncategorized': []}
-item_name_to_classification: dict[str, Optional[ItemClassification]] = {'Victory': ItemClassification.progression}
+item_name_to_classification: dict[str, Optional[ItemClassification]] = {}
 item_name_to_rat_count: dict[str, int] = {}
 game_specific_nonprogression_items: dict[str, dict[AutopelagoNonProgressionItemType, list[str]]] = {}
-item_key_to_name: dict[str, str] = {'Victory': 'Victory'}
+item_key_to_name: dict[str, str] = {}
 _item_id_gen = _gen_ids()
 
 for k, v in ((k, v) for k, v in _defs['items'].items() if
@@ -223,6 +223,9 @@ location_names_with_fixed_rewards: set[str] = set()
 _location_id_gen = _gen_ids()
 
 for k, r in _defs['regions']['landmarks'].items():
+    if k == 'moon_comma_the':
+        # "Moon, The" is only a "region" on the client.
+        continue
     _name = r['name']
     location_name_to_id[_name] = next(_location_id_gen)
     location_name_to_progression_item_name[_name] = item_key_to_name[r['unrandomized_item']]
