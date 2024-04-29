@@ -49,8 +49,15 @@ def connect_entrance(regions: Dict[str, Region], source_region: Region, target_r
     if door is not None:
         effective_room = target_region.name if door.room is None else door.room
         if door.door not in world.player_logic.item_by_door.get(effective_room, {}):
-            for region in world.player_logic.calculate_door_requirements(effective_room, door.door, world).rooms:
+            access_reqs = world.player_logic.calculate_door_requirements(effective_room, door.door, world)
+            for region in access_reqs.rooms:
                 world.multiworld.register_indirect_condition(regions[region], connection)
+
+            # This pretty much only applies to Orange Tower Sixth Floor -> Orange Tower Basement.
+            if access_reqs.the_master:
+                for mastery_req in world.player_logic.mastery_reqs:
+                    for region in mastery_req.rooms:
+                        world.multiworld.register_indirect_condition(regions[region], connection)
     
     if not pilgrimage and world.options.enable_pilgrimage and is_acceptable_pilgrimage_entrance(entrance_type, world)\
             and source_region.name != "Menu":
