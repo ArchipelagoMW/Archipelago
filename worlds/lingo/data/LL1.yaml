@@ -343,7 +343,13 @@
     panels:
       Achievement:
         id: Countdown Panels/Panel_seeker_seeker
-        required_room: Hidden Room
+        # The Seeker uniquely has the property that 1) it can be entered (through the Pilgrim Room) without opening the
+        # front door in panels mode door shuffle, and 2) the front door panel is part of the CDP. This necessitates this
+        # required_panel clause, because the entrance panel needs to be solvable for the achievement even if an
+        # alternate entrance to the room is used.
+        required_panel:
+          room: Hidden Room
+          panel: OPEN
         tag: forbid
         check: True
         achievement: The Seeker
