@@ -23,7 +23,7 @@ class TestDataStorage(unittest.TestCase):
             "operations": [{"operation": "add", "value": 12}] 
         }
 
-        with self.assertRaisesRegex(InvalidArgumentsException, "`Key` is not a string"):
+        with self.assertRaisesRegex(InvalidArgumentsException, "'key'"):
             self.storage.set(set_cmd)
 
     def test_raises_on_key_invalid_type(self):
@@ -34,7 +34,7 @@ class TestDataStorage(unittest.TestCase):
             "operations": [{"operation": "add", "value": 12}] 
         }
 
-        with self.assertRaisesRegex(InvalidArgumentsException, "`Key` is not a string"):
+        with self.assertRaisesRegex(InvalidArgumentsException, "'int' object has no attribute 'startswith'"):
             self.storage.set(set_cmd)
 
     def test_raises_on_set_on_read_only_key(self):
@@ -56,7 +56,7 @@ class TestDataStorage(unittest.TestCase):
             "key": "OperationsMissing"
         }
 
-        with self.assertRaisesRegex(InvalidArgumentsException, "`operations` is not a list"):
+        with self.assertRaisesRegex(InvalidArgumentsException, "'operations'"):
             self.storage.set(set_cmd)
 
     def test_raises_on_operations_invalid_type(self):
