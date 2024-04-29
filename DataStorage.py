@@ -55,21 +55,19 @@ class DataStorage:
         self.stored_data = stored_data
 
     @staticmethod
-    def get_key(set_cmd: Dict[str, object]) -> str:
+    def validate_and_get_key(set_cmd: Dict[str, object]) -> str:
         try:
             key = set_cmd["key"]
             if key.startswith("_read_"):
                 raise InvalidArgumentsException(f"cannot apply `Set` operation to the read only key `{key}`")
-        except (KeyError, AttributeError):
-            raise InvalidArgumentsException("`Key` is not a string")
+            if not isinstance(set_cmd["operations"], List):
+                raise InvalidArgumentsException("`operations` is not a list")
+        except (KeyError, AttributeError) as e:
+            raise InvalidArgumentsException(str(e))
         return key
 
     def set(self, set_cmd: Dict[str, object]) -> Dict[str, object]:
         key = self.get_key(set_cmd)
-
-        if not isinstance(set_cmd["operations"], List):
-            raise InvalidArgumentsException("`operations` is not a list")
-
         value = self.stored_data.get(key, set_cmd.get("default", 0))
         on_error = set_cmd.get("on_error", "raise")
 
