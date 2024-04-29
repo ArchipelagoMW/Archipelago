@@ -5,7 +5,7 @@ Description: Used to manage Regions in the Aquaria game multiworld randomizer
 """
 
 from typing import Dict, Optional
-from BaseClasses import MultiWorld, Region, Entrance, ItemClassification, LocationProgressType
+from BaseClasses import MultiWorld, Region, Entrance, ItemClassification, LocationProgressType, CollectionState
 from .Items import AquariaItem
 from .Locations import AquariaLocations, AquariaLocation
 from .Options import AquariaOptions
@@ -14,96 +14,96 @@ from worlds.generic.Rules import add_rule, set_rule
 
 # Every condition to connect regions
 
-def _has_hot_soup(state, player: int) -> bool:
+def _has_hot_soup(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the hotsoup item"""
     return state.has("Hot soup", player)
 
 
-def _has_tongue_cleared(state, player: int) -> bool:
+def _has_tongue_cleared(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the Body tongue cleared item"""
     return state.has("Body tongue cleared", player)
 
 
-def _has_sun_crystal(state, player: int) -> bool:
+def _has_sun_crystal(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the Sun crystal item"""
     return state.has("Has sun crystal", player)
 
 
-def _has_li(state, player: int) -> bool:
+def _has_li(state:CollectionState, player: int) -> bool:
     """`player` in `state` has Li in it's team"""
     return state.has("Li and Li song", player)
 
 
-def _has_damaging_item(state, player: int) -> bool:
+def _has_damaging_item(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the shield song item"""
     return state.has_any({"Energy form",  "Nature form", "Beast form", "Li and Li song", "Baby nautilus",
                          "Baby piranha", "Baby blaster"}, player)
 
 
-def _has_shield_song(state, player: int) -> bool:
+def _has_shield_song(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the shield song item"""
     return state.has("Shield song", player)
 
 
-def _has_bind_song(state, player: int) -> bool:
+def _has_bind_song(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the bind song item"""
     return state.has("Bind song", player)
 
 
-def _has_energy_form(state, player: int) -> bool:
+def _has_energy_form(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the energy form item"""
     return state.has("Energy form", player)
 
 
-def _has_beast_form(state, player: int) -> bool:
+def _has_beast_form(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the beast form item"""
     return state.has("Beast form", player)
 
 
-def _has_nature_form(state, player: int) -> bool:
+def _has_nature_form(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the nature form item"""
     return state.has("Nature form", player)
 
 
-def _has_sun_form(state, player: int) -> bool:
+def _has_sun_form(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the sun form item"""
     return state.has("Sun form", player)
 
 
-def _has_light(state, player: int) -> bool:
+def _has_light(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the light item"""
     return state.has("Baby dumbo", player) or _has_sun_form(state, player)
 
 
-def _has_dual_form(state, player: int) -> bool:
+def _has_dual_form(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the dual form item"""
     return _has_li(state, player) and state.has("Dual form", player)
 
 
-def _has_fish_form(state, player: int) -> bool:
+def _has_fish_form(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the fish form item"""
     return state.has("Fish form", player)
 
 
-def _has_spirit_form(state, player: int) -> bool:
+def _has_spirit_form(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the spirit form item"""
     return state.has("Spirit form", player)
 
 
-def _has_big_bosses(state, player: int) -> bool:
+def _has_big_bosses(state:CollectionState, player: int) -> bool:
     """`player` in `state` has beated every big bosses"""
     return state.has_all({"Fallen God beated", "Mithalan God beated", "Drunian God beated",
                          "Sun God beated", "The Golem beated"}, player)
 
 
-def _has_mini_bosses(state, player: int) -> bool:
+def _has_mini_bosses(state:CollectionState, player: int) -> bool:
     """`player` in `state` has beated every big bosses"""
     return state.has_all({"Nautilus Prime beated", "Blaster Peg Prime beated", "Mergog beated",
                          "Mithalan priests beated", "Octopus Prime beated", "Crabbius Maximus beated",
                          "Mantis Shrimp Prime beated", "King Jellyfish God Prime beated"}, player)
 
 
-def _has_secrets(state, player: int) -> bool:
+def _has_secrets(state:CollectionState, player: int) -> bool:
     return state.has_all({"First secret obtained", "Second secret obtained", "Third secret obtained"},player)
 
 
@@ -788,7 +788,7 @@ class AquariaRegions:
         self.__connect_regions("Body bottom area", "Final boss area",
                                self.body_b, self.final_boss_loby,
                                lambda state: _has_dual_form(state, self.player))
-        self.__connect_regions("Before Final boss area", "Final boss tube",
+        self.__connect_regions("Before Final boss", "Final boss tube",
                                self.final_boss_loby, self.final_boss_tube,
                                lambda state: _has_nature_form(state, self.player))
         self.__connect_one_way_regions("Before Final boss", "Final boss",

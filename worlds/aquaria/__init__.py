@@ -66,7 +66,7 @@ class AquariaWorld(World):
     "The web page generation informations"
 
     item_name_to_id: ClassVar[Dict[str, int]] =\
-        {name: data[0] for name, data in item_table.items()}
+        {name: data.id for name, data in item_table.items()}
     "The name and associated ID of each item of the world"
 
     item_name_groups = {
@@ -120,11 +120,11 @@ class AquariaWorld(World):
         try:
             data = item_table[name]
             classification: ItemClassification = ItemClassification.useful
-            if data[2] == ItemType.JUNK:
+            if data.type == ItemType.JUNK:
                 classification = ItemClassification.filler
-            elif data[2] == ItemType.PROGRESSION:
+            elif data.type == ItemType.PROGRESSION:
                 classification = ItemClassification.progression
-            result = AquariaItem(name, classification, data[0], self.player)
+            result = AquariaItem(name, classification, data.id, self.player)
         except BaseException:
             raise Exception('The item ' + name + ' is not valid.')
 
@@ -135,14 +135,14 @@ class AquariaWorld(World):
         if item_name not in precollected:
             self.exclude.append(item_name)
             data = item_table[item_name]
-            item = AquariaItem(item_name, ItemClassification.useful, data[0], self.player)
+            item = AquariaItem(item_name, ItemClassification.useful, data.id, self.player)
             self.multiworld.get_location(location_name, self.player).place_locked_item(item)
 
     def get_filler_item_name(self):
         """Getting a random ingredient item as filler"""
         ingredients = []
         for name, data in item_table.items():
-            if data[3] == ItemGroup.INGREDIENT:
+            if data.group == ItemGroup.INGREDIENT:
                 ingredients.append(name)
         filler_item_name = self.random.choice(ingredients)
         return filler_item_name
@@ -172,7 +172,7 @@ class AquariaWorld(World):
                 self.multiworld.itempool.append(self.create_item(self.get_filler_item_name()))
             else:
                 if name not in self.exclude:
-                    for i in range(data[1]):
+                    for i in range(data.count):
                         item = self.create_item(name)
                         self.multiworld.itempool.append(item)
 

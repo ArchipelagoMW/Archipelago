@@ -9,7 +9,6 @@ from test.bases import WorldTestBase
 
 # Every location accessible after the home water.
 after_home_water_locations = [
-
     "Sun Crystal",
     "Home water, Transturtle",
     "Open water top left area, bulb under the rock in the right path",
