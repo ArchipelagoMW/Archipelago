@@ -32,12 +32,12 @@ enemy_weakness_ptrs: Dict[int, int] = {
 
 enemy_addresses: Dict[str, int] = {
     "Shrink": 0x00,
-    "Anko": 0x01,
     "M-445": 0x04,
     "Claw": 0x08,
     "Tanishi": 0x0A,
     "Kerog": 0x0C,
     "Petit Kerog": 0x0D,
+    "Anko": 0x0F,
     "Batton": 0x16,
     "Robitto": 0x17,
     "Friender": 0x1C,
@@ -54,15 +54,19 @@ enemy_addresses: Dict[str, int] = {
     "Neo Metall": 0x34,
     "Matasaburo": 0x36,
     "Pipi": 0x38,
-    "Copipi": 0x3A,  # could be wrong, test
+    "Pipi Egg": 0x3A,
+    "Copipi": 0x3C,
     "Kaminari Goro": 0x3E,
+    "Petit Goblin": 0x45,
     "Springer": 0x46,
-    "Mole": 0x48,  # 49 is mole variation?
+    "Mole (Up)": 0x48,
+    "Mole (Down)": 0x49,
     "Shotman (Left)": 0x4B,
     "Shotman (Right)": 0x4C,
     "Sniper Armor": 0x4E,
     "Sniper Joe": 0x4F,
     "Scworm": 0x50,
+    "Scworm Worm": 0x51,
     "Picopico-kun": 0x6A,
     "Boobeam Trap": 0x6D,
     "Big Fish": 0x71
