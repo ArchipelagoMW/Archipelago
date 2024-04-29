@@ -90,23 +90,6 @@ class DarkSouls3World(World):
         self.all_excluded_locations = set()
 
     def generate_early(self):
-        if not self.options.enable_weapon_locations:
-            self._exclude_location_group("Weapons")
-        if not self.options.enable_shield_locations:
-            self._exclude_location_group("Shields")
-        if not self.options.enable_armor_locations:
-            self._exclude_location_group("Armor")
-        if not self.options.enable_ring_locations:
-            self._exclude_location_group("Rings")
-        if not self.options.enable_spell_locations:
-            self._exclude_location_group("Spells")
-        if not self.options.enable_key_locations:
-            self._exclude_location_group("Progression")
-        if not self.options.enable_misc_locations:
-            self._exclude_location_group("Unique")
-        if not self.options.enable_health_upgrade_locations:
-            self._exclude_location_group("Healing")
-
         self.all_excluded_locations.update(self.options.exclude_locations.value)
 
         # Randomize Yhorm manually so that we know where to place the Storm Ruler.
