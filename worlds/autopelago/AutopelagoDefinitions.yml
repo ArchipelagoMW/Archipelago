@@ -1006,7 +1006,7 @@ regions:
       unrandomized_items:
         key:
           - giant_novelty_scissors
-        useful_nonprogression: 1
+        useful_nonprogression: 2
         filler: 5
       ability_check_dc: 18
       exits:
@@ -1015,8 +1015,8 @@ regions:
     after_restaurant:
       name_template: 'After Restaurant #{n}'
       unrandomized_items:
-        useful_nonprogression: 1
-        filler: 5
+        useful_nonprogression: 3
+        filler: 8
       ability_check_dc: 16
       exits:
         - bowling_ball_door
@@ -1024,8 +1024,8 @@ regions:
     after_pirate_bake_sale:
       name_template: 'After Pirate Bake Sale #{n}'
       unrandomized_items:
-        useful_nonprogression: 1
-        filler: 5
+        useful_nonprogression: 3
+        filler: 8
       ability_check_dc: 16
       exits:
         - bowling_ball_door
@@ -1083,8 +1083,8 @@ regions:
         key:
           - item: pack_rat
             count: 5
-        useful_nonprogression: 13
-        filler: 11
+        useful_nonprogression: 8
+        filler: 5
       ability_check_dc: 10
       exits:
         - basketball
