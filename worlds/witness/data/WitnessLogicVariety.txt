@@ -11,7 +11,7 @@ Tutorial First Hallway (Tutorial First Hallway) - Entry - True - Tutorial First 
 Tutorial First Hallway Room (Tutorial First Hallway) - Tutorial - 0x00182:
 158001 - 0x00182 (Bend) - True - True
 
-Tutorial (Tutorial) - Outside Tutorial - 0x03629:
+Tutorial (Tutorial) - Outside Tutorial - True:
 158002 - 0x00293 (Front Center) - True - Dots
 158003 - 0x00295 (Center Left) - 0x00293 - Black/White Squares & Colored Squares
 158004 - 0x002C2 (Front Left) - 0x00295 - Stars
