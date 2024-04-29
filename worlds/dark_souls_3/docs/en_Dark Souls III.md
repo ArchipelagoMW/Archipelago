@@ -181,8 +181,6 @@ The following options have been removed:
   items in randomized categories, there's not a meaningful distinction between
   "shuffle" and "various" mode.
 
-In addition, the following options have changed:
-
 * `enable_*_locations` options have all been removed. Instead, you can now add
   [location group names] to the `exclude_locations` option to prevent them from
   containing important items.
@@ -193,6 +191,8 @@ In addition, the following options have changed:
   Miscellaneous groups are in `exclude_locations`. Once you've chosen your
   excluded locations, you can set `excluded_locations: unrandomized` to preserve
   the default vanilla item placements for all excluded locations.
+
+In addition, the following options have changed:
 
 * The location names used in options like `exclude_locations` have changed. See
   the [location guide] for a full description.
