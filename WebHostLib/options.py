@@ -1,5 +1,6 @@
 import json
 import logging
+import numbers
 import os
 import typing
 
@@ -9,6 +10,15 @@ from worlds.AutoWorld import AutoWorldRegister
 
 handled_in_js = {"start_inventory", "local_items", "non_local_items", "start_hints", "start_location_hints",
                  "exclude_locations", "priority_locations"}
+
+
+def _is_json_safe(value: typing.Any) -> bool:
+    """Returns whether the value can be serialized to JSON."""
+    try:
+        json.dumps(value)
+        return True
+    except TypeError:
+        return False
 
 
 def create():
@@ -113,12 +123,14 @@ def create():
 
             elif issubclass(option, Options.VerifyKeys) and not issubclass(option, Options.OptionDict):
                 if option.valid_keys:
+                    default = option.default if hasattr(option, "default") else []
+                    if not _is_json_safe(default): default = list(default)
                     game_options[option_name] = {
                         "type": "custom-list",
                         "displayName": option.display_name if hasattr(option, "display_name") else option_name,
                         "description": get_html_doc(option),
                         "options": list(option.valid_keys),
-                        "defaultValue": list(option.default) if hasattr(option, "default") else []
+                        "defaultValue": default
                     }
 
             else:
