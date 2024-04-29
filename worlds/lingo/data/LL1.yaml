@@ -1968,9 +1968,12 @@
         check: True
         tag: forbid
         required_room:
-          - Elements Area
-          - Courtyard
           - Eight Room
+        required_panel:
+          - room: Courtyard
+            panel: I
+          - room: Elements Area
+            panel: A
         achievement: The Incomparable
       A (One):
         id: Strand Room/Panel_blank_a
