@@ -12,6 +12,7 @@ from worlds._bizhawk.client import BizHawkClient
 
 from .data import encode_str, get_symbol
 from .locations import get_level_locations, location_name_to_id, location_table
+from .options import Goal
 from .types import Passage
 
 if TYPE_CHECKING:
@@ -150,6 +151,8 @@ class WL4Client(BizHawkClient):
 
     death_link: DeathLinkCtx
 
+    dc_pending: bool
+
     def __init__(self) -> None:
         super().__init__()
         self.local_checked_locations = []
@@ -163,16 +166,26 @@ class WL4Client(BizHawkClient):
         bizhawk_ctx = client_ctx.bizhawk_ctx
         try:
             read_result = iter(await bizhawk.read(bizhawk_ctx, [
-                read(0x080000A0, 10),
-                read(get_symbol('PlayerName'), 64)
+                read(0x080000A0, 12),
+                read(get_symbol('PlayerName'), 64),
+                read(get_symbol('SeedName'), 64),
             ]))
         except RequestFailedError:
             return False  # Should verify on the next pass
 
         game_name = next(read_result).decode('ascii')
-        slot_name_bytes = bytes(filter(None, next(read_result)))
+        slot_name_bytes = next(read_result).rstrip(b'\0')
+        seed_name_bytes = next(read_result).rstrip(b'\0')
 
-        if game_name not in ('WARIOLANDE', 'WARIOLAND\0'):
+        if not game_name.startswith('WARIOLAND'):
+            return False
+        if game_name in ('WARIOLANDE\0\0', 'WARIOLAND\0\0\0'):
+            logger.info('You appear to be running an unpatched version of Wario Land 4. You need '
+                        'to generate a patch file and use it to create a patched ROM.')
+            return False
+        if game_name not in ('WARIOLANDAPE', 'WARIOLANDAPJ'):
+            logger.info('The patch file used to create this ROM is not compatible with this client. '
+                        'Double check your client version against the version being used by the generator.')
             return False
 
         # Check if we can read the slot name. Doing this here instead of set_auth as a protection against
@@ -180,15 +193,22 @@ class WL4Client(BizHawkClient):
         try:
             self.rom_slot_name = slot_name_bytes.decode('utf-8')
         except UnicodeDecodeError:
-            logger.info("Could not read slot name from ROM. Are you sure this ROM matches this client version?")
+            logger.info('Could not read slot name from ROM. Are you sure this ROM matches this client version?')
             return False
 
         client_ctx.game = self.game
         client_ctx.items_handling = 0b001
         client_ctx.want_slot_data = True
+        try:
+            client_ctx.seed_name = seed_name_bytes.decode('utf-8')
+        except UnicodeDecodeError:
+            logger.info('Could not determine seed name from ROM. Are you sure this ROM matches this client version?')
+            return False
 
         client_ctx.command_processor.commands["deathlink"] = cmd_deathlink
         self.death_link = DeathLinkCtx()
+
+        self.dc_pending = False
 
         return True
 
@@ -196,6 +216,10 @@ class WL4Client(BizHawkClient):
         client_ctx.auth = self.rom_slot_name
 
     async def game_watcher(self, client_ctx: BizHawkClientContext) -> None:
+        if self.dc_pending:
+            await client_ctx.disconnect()
+            return
+
         get_int = functools.partial(int.from_bytes, byteorder='little')
         bizhawk_ctx = client_ctx.bizhawk_ctx
 
@@ -210,6 +234,16 @@ class WL4Client(BizHawkClient):
         death_link_address = get_symbol('DeathLinkEnabled')
         wario_health_address = get_symbol('WarioHeart')
         timer_status_address = get_symbol('ucTimeUp')
+        multiworld_send_address = get_symbol('SendMultiworldItemsImmediately')
+        passage_address = get_symbol('PassageID')
+        level_address = get_symbol('InPassageLevelID')
+        gem_1_address = get_symbol('Has1stGemPiece')
+        gem_2_address = get_symbol('Has2ndGemPiece')
+        gem_3_address = get_symbol('Has3rdGemPiece')
+        gem_4_address = get_symbol('Has4thGemPiece')
+        cd_address = get_symbol('HasCD')
+        fhi_1_address = get_symbol('HasFullHealthItem')
+        fhi_2_address = get_symbol('HasFullHealthItem2')
 
         try:
             read_result = iter(await bizhawk.read(bizhawk_ctx, [
@@ -222,6 +256,16 @@ class WL4Client(BizHawkClient):
                 read8(death_link_address),
                 read8(wario_health_address),
                 read8(timer_status_address),
+                read8(multiworld_send_address),
+                read8(passage_address),
+                read8(level_address),
+                read8(gem_1_address),
+                read8(gem_2_address),
+                read8(gem_3_address),
+                read8(gem_4_address),
+                read8(cd_address),
+                read8(fhi_1_address),
+                read8(fhi_2_address),
             ]))
         except RequestFailedError:
             return
@@ -235,14 +279,24 @@ class WL4Client(BizHawkClient):
         death_link_flag = next_int(read_result)
         wario_health = next_int(read_result)
         timer_status = next_int(read_result)
+        send_level_locations = next_int(read_result)
+        passage_id = next_int(read_result)
+        in_passage_level_id = next_int(read_result)
+        level_items = list(next_int(read_result) for _ in range(7))
+        level_items.insert(5, 0)
 
         # Ensure safe state
         gameplay_state = (game_mode, game_state)
-        safe_states = [
+        write_safe_states = [
             (1, 2),  # Passage select
             (2, 2),  # Playing level
         ]
-        if gameplay_state not in safe_states:
+        read_safe_states = [
+            *write_safe_states,
+            *((0, seq) for seq in range(0x1A, 0x20)),  # End of game cutscene
+        ]
+
+        if gameplay_state not in read_safe_states:
             return
 
         # Turn on death link if it is on, and if the client hasn't overriden it
@@ -258,15 +312,21 @@ class WL4Client(BizHawkClient):
 
         # Parse item status bits
         for passage in range(6):
-            for level in range(4):
+            for level in range(5):
                 status_bits = item_status[passage * 6 + level] >> 8
+                if (send_level_locations
+                    and in_passage_level_id < 4
+                    and (passage, level) == (passage_id, in_passage_level_id)
+                ):
+                    for i, status in enumerate(level_items):
+                        if status:
+                            status_bits |= (1 << i)
                 for location in get_level_locations(passage, level):
                     bit = location_table[location].flag()
                     location_id = location_name_to_id[location]
                     if status_bits & bit and location_id in client_ctx.server_locations:
                         locations.append(location_id)
 
-            for level in range(5):
                 keyzer_bit = item_status[passage * 6 + level] & (1 << 5)
                 level_name = LEVEL_CLEAR_FLAGS[passage * 5 + level]
                 if level_name:
@@ -318,6 +378,9 @@ class WL4Client(BizHawkClient):
             else:
                 self.death_link.sent_this_death = False
 
+        if gameplay_state not in write_safe_states:
+            return
+
         write_list = []
         guard_list = [
             # Ensure game state hasn't changed
@@ -359,3 +422,7 @@ class WL4Client(BizHawkClient):
             tags = args.get('tags', [])
             if 'DeathLink' in tags and args['data']['source'] != ctx.auth:
                 self.death_link.pending = True
+        if cmd == 'RoomInfo':
+            if ctx.seed_name and ctx.seed_name != args["seed_name"]:
+                # CommonClient's on_package displays an error to the user in this case, but connection is not cancelled.
+                self.dc_pending = True

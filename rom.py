@@ -14,7 +14,7 @@ from worlds.Files import APDeltaPatch
 from .data import ap_id_offset, data_path, Domain, encode_str, get_symbol
 from .items import WL4Item, filter_items
 from .types import ItemType, Passage
-from .options import Difficulty, MusicShuffle, OpenDoors, WarioVoiceShuffle
+from .options import Difficulty, Goal, MusicShuffle, OpenDoors, WarioVoiceShuffle
 
 if TYPE_CHECKING:
     from . import WL4World
@@ -185,6 +185,12 @@ def give_item(rom: LocalRom, item: WL4Item):
         flag = 1 << ability
         address = get_symbol('StartingInventoryWarioAbilities')
         abilities = rom.read_byte(address)
+        if ability in (1, 3) and abilities & flag:
+            if ability == 1:
+                ability = 6
+            else:
+                ability = 7
+            flag = 1 << ability
         abilities |= flag
         rom.write_byte(address, abilities)
     elif item.type == ItemType.ITEM:
@@ -193,6 +199,13 @@ def give_item(rom: LocalRom, item: WL4Item):
         count = rom.read_byte(address)
         count += 1
         rom.write_byte(address, count)
+    elif item.type == ItemType.TREASURE:
+        treasure_type = item.code - (ap_id_offset + 0x70)
+        address = level_to_start_inventory_address(treasure_type / 3 + 1, 4)
+        flag = 1 << (treasure_type % 3)
+        status = rom.read_byte(address)
+        status |= flag
+        rom.write_byte(address, status)
 
 
 def level_to_start_inventory_address(passage: Passage, level: int):
@@ -235,21 +248,47 @@ def write_multiworld_table(rom: LocalRom,
             entry_address += 8
 
 
+def set_goal(rom: LocalRom, _goal: Goal):
+    if _goal == Goal.option_local_golden_treasure_hunt:
+        goal = Goal.option_golden_treasure_hunt
+    elif _goal == Goal.option_local_golden_diva_treasure_hunt:
+        goal = Goal.option_golden_diva_treasure_hunt
+    else:
+        goal = _goal.value
+
+    rom.write_byte(get_symbol('GoalType'), goal)
+
+    if goal == Goal.option_golden_treasure_hunt:
+        # SelectBossDoorInit01() - Check for golden passage instead of boss defeated
+        rom.write_halfword(0x80863C2, 0x46C0)  # nop
+        rom.write_halfword(0x80863C4, 0x4660)  # mov r0, r12
+        rom.write_halfword(0x80863C6, 0x7800)  # ldrb r0, [r0]  ; Passage ID
+        rom.write_halfword(0x80863C8, 0x2805)  # cmp r0, #5  ; Golden Passage
+        rom.write_halfword(0x80863CA, 0xD10D)  # bne 0x80863E8
+
+        rom.write_halfword(0x808640A, 0x1C03)  # mov r3, r0
+        rom.write_halfword(0x808640C, 0x0688)  # lsl r0, r1, #26
+        rom.write_halfword(0x808640E, 0x2B05)  # cmp r3, #5
+        rom.write_halfword(0x8086410, 0xD101)  # beq 0x8086416
+
+    if goal == Goal.option_golden_diva_treasure_hunt:
+        # SelectBossDoorInit01() - Always allow into boss room
+        rom.write_halfword(0x80863CA, 0xE00D)  # b 0x80863E8
+        rom.write_halfword(0x808640C, 0x2300)  # mov r3, #0
+
+
 def set_difficulty_level(rom: LocalRom, difficulty: Difficulty):
-    mov_r0 = 0x2000 | difficulty.value     # mov r0, #difficulty
-    cmp_r0 = 0x2800 | difficulty.value     # cmp r0, #difficulty
-
     # SramtoWork_Load()
-    rom.write_halfword(0x8091558, mov_r0)  # Force difficulty (anti-cheese)
+    hardcode_difficulty = 0x2000 | difficulty.value  # mov r0, #difficulty
+    rom.write_halfword(0x8091558, hardcode_difficulty)
+    rom.write_halfword(0x8091590, hardcode_difficulty)
 
-    # ReadySub_Level()
-    rom.write_halfword(0x8091F8E, 0x2001)  # movs r0, r1  ; Allow selecting S-Hard
-    rom.write_halfword(0x8091FCC, 0x46C0)  # nop  ; Force cursor to difficulty
-    rom.write_halfword(0x8091FD2, 0xE007)  # b 0x8091FE4
-    rom.write_halfword(0x8091FE4, cmp_r0)
-
-    # ReadyObj_Win1Set()
-    rom.write_halfword(0x8092268, 0x2001)  # movs r0, #1  ; Display S-Hard
+    # Difficulty graphics tiles
+    for i in range(3):
+        english_addr = 0x8742992 + 2 * i
+        japanese_addr = 0x8742992 + 2 * (3 + i)
+        rom.write_halfword(english_addr, 0x2C0 + 5 * difficulty.value)
+        rom.write_halfword(japanese_addr, 0x2CF + 5 * difficulty.value)
 
 
 # https://github.com/wario-land/Toge-Docs/blob/master/Steaks/music_and_sound_effects.md#sfx-indices
@@ -307,8 +346,11 @@ def shuffle_music(rom: LocalRom, music_shuffle: MusicShuffle):
     # Only change the header pointers; leave the music player numbers alone
     music_info_table = [rom.read_word(music_table_address + 8 * i) for i in range(819)]
 
-    shuffled_music = list(music_pool)
-    random.shuffle(shuffled_music)
+    if music_shuffle == MusicShuffle.option_disabled:
+        shuffled_music = [0] * len(music_pool)
+    else:
+        shuffled_music = list(music_pool)
+        random.shuffle(shuffled_music)
     for vanilla, shuffled in zip(music_pool, shuffled_music):
         rom.write_word(music_table_address + 8 * vanilla, music_info_table[shuffled])
 
@@ -352,14 +394,26 @@ def shuffle_wario_voice_sets(rom: LocalRom, shuffle: WarioVoiceShuffle):
 def patch_rom(rom: LocalRom, world: WL4World):
     fill_items(rom, world)
 
+    # Change game name
+    game_name = rom.read_bytes(0x080000A0, 12).decode('ascii')
+    if game_name == 'WARIOLANDE\0\0':
+        game_name = 'WARIOLANDAPE'
+    elif game_name == 'WARIOLAND\0\0\0':
+        game_name = 'WARIOLANDAPJ'
+    rom.write_bytes(0x080000A0, game_name.encode('ascii'))
+
     # Write player name and number
     player_name = world.multiworld.player_name[world.player].encode('utf-8')
+    seed_name = world.multiworld.seed_name.encode('utf-8')[:64]
     rom.write_bytes(get_symbol('PlayerName'), player_name)
-    rom.write_byte(get_symbol('PlayerID'), world.player)
+    rom.write_word(get_symbol('PlayerID'), world.player)
+    rom.write_bytes(get_symbol('SeedName'), seed_name)
 
     # Set deathlink
     rom.write_byte(get_symbol('DeathLinkFlag'), world.options.death_link.value)
 
+    set_goal(rom, world.options.goal)
+    rom.write_byte(get_symbol('GoldenTreasuresNeeded'), world.options.golden_treasure_count.value)
     set_difficulty_level(rom, world.options.difficulty)
 
     # TODO: Maybe make it stay open so it looks cleaner
@@ -378,7 +432,7 @@ def patch_rom(rom: LocalRom, world: WL4World):
 
     # Multiworld send
     rom.write_byte(get_symbol('SendMultiworldItemsImmediately'),
-                   world.options.send_multiworld_items.value)
+                   world.options.send_locations_to_server.value)
 
     shuffle_music(rom, world.options.music_shuffle)
     shuffle_wario_voice_sets(rom, world.options.wario_voice_shuffle)

@@ -3,6 +3,47 @@ from dataclasses import dataclass
 from Options import Choice, PerGameCommonOptions, Toggle, DeathLink, Range
 
 
+class Goal(Choice):
+    '''
+    Golden Diva: Defeat the four main passage bosses, reach the depths of the pyramid, and defeat the Golden Diva
+    Golden Treasure Hunt: Find the golden treasures scattered in the world, and escape through the Sound Room
+    Golden Diva Treasure Hunt: Find the golden treasures, and then defeat the Golden Diva
+    Local Golden Treasure Hunt: Find the treasures scattered in the pyramid and esape through the Sound Room
+    Local Golden Diva Treasure Hunt: Find the golden treasures in the pyramid and defeat the Golden Diva
+    '''
+    display_name = 'Goal'
+    option_golden_diva = 0
+    option_golden_treasure_hunt = 1
+    option_golden_diva_treasure_hunt = 2
+    option_local_golden_treasure_hunt = 3
+    option_local_golden_diva_treasure_hunt = 4
+    alias_divahunt = option_golden_diva_treasure_hunt
+    alias_local_divahunt = option_local_golden_diva_treasure_hunt
+    default = option_golden_diva
+
+    def needs_diva(self):
+        return self == Goal.option_golden_diva or self.is_diva_hunt()
+
+    def needs_treasure_hunt(self):
+        return self.is_treasure_hunt() or self.is_diva_hunt()
+
+    def is_treasure_hunt(self):
+        return self in (Goal.option_golden_treasure_hunt, Goal.option_local_golden_treasure_hunt)
+
+    def is_diva_hunt(self):
+        return self in (Goal.option_golden_diva_treasure_hunt, Goal.option_local_golden_diva_treasure_hunt)
+
+
+class GoldenTreasureCount(Range):
+    '''
+    Number of treasures required to win in Golden Treasure Hunt.
+    '''
+    display_name = 'Golden Treasure Count'
+    range_start = 1
+    range_end = 12
+    default = 6  # Minimum for a good ending
+
+
 class Difficulty(Choice):
     '''
     The game's difficulty level.
@@ -94,15 +135,15 @@ class SmashThroughHardBlocks(Toggle):
 
 class MultiworldSend(Choice):
     '''
-    When to send items items to other worlds.
-    On escape: Like your own items, only count other players' items when the level is complete.
-    Immediately: Send other players' items as soon as you take them from the box.
-    Regardless of this setting, sending items from a level you can't clear is not in logic.
+    When to tell the server you've found items.
+    Immediately: Count your locations as you take them from the box.
+    On escape: Only count your locations after the game saves.
+    Regardless of this setting, sending other players items from a level you can't clear is not in logic.
     '''
-    display_name = "Send Other Players' Items"
-    option_on_escape = 0
-    option_immediately = 1
-    default = option_on_escape
+    display_name = "Send Locations to Server"
+    option_immediately = 0
+    option_on_escape = 1
+    default = option_immediately
 
 
 class MusicShuffle(Choice):
@@ -112,12 +153,14 @@ class MusicShuffle(Choice):
     Levels only: Only shuffle music between the main levels
     Levels and extras: Shuffle any music that plays in levels, including the 'Hurry up!' and boss themes
     Full: Shuffle all music
+    Disabled: Disable all music
     '''
     display_name = 'Music Shuffle'
     option_none = 0
     option_levels_only = 1
     option_levels_and_extras = 2
     option_full = 3
+    option_disabled = 4
     default = 0
 
 
@@ -130,6 +173,8 @@ class WarioVoiceShuffle(Toggle):
 
 @dataclass
 class WL4Options(PerGameCommonOptions):
+    goal: Goal
+    golden_treasure_count: GoldenTreasureCount
     difficulty: Difficulty
     logic: Logic
     pool_jewels: PoolJewels
@@ -138,7 +183,7 @@ class WL4Options(PerGameCommonOptions):
     open_doors: OpenDoors
     portal: Portal
     smash_through_hard_blocks: SmashThroughHardBlocks
-    send_multiworld_items: MultiworldSend
+    send_locations_to_server: MultiworldSend
     death_link: DeathLink
     music_shuffle: MusicShuffle
     wario_voice_shuffle: WarioVoiceShuffle

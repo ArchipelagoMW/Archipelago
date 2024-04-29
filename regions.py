@@ -8,7 +8,7 @@ from BaseClasses import Region, Entrance
 from . import rules
 from .locations import WL4Location, get_level_location_data
 from .types import AccessRule, Passage
-from .options import OpenDoors
+from .options import Goal, OpenDoors
 
 if TYPE_CHECKING:
     from . import WL4World
@@ -53,7 +53,8 @@ def create_main_regions(world: WL4World, location_table: Set[str]):
         return basic_region(f'{passage.short_name()} Minigame Shop')
 
     def boss_region(passage: Passage, boss_name: str):
-        return basic_region(f'{passage.long_name()} Boss', [boss_name])
+        return basic_region(f'{passage.long_name()} Boss',
+                            [boss_name, *(f'{boss_name} - 0:{time}' for time in ('15', '35', '55'))])
 
     menu_region = basic_region('Menu')
 
@@ -67,6 +68,8 @@ def create_main_regions(world: WL4World, location_table: Set[str]):
     catbat = boss_region(Passage.SAPPHIRE, 'Catbat')
     golden_diva = boss_region(Passage.GOLDEN, 'Golden Diva')
 
+    sound_room = basic_region('Sound Room', ['Sound Room - Emergency Exit'])
+
     world.multiworld.regions += [
         menu_region,
         *passage_regions,
@@ -77,6 +80,7 @@ def create_main_regions(world: WL4World, location_table: Set[str]):
         aerodent,
         catbat,
         golden_diva,
+        sound_room,
     ]
 
 
@@ -280,9 +284,12 @@ def connect_regions(world: WL4World):
             lambda state: state.has_all({'Emerald Passage Clear', 'Ruby Passage Clear',
                                      'Topaz Passage Clear', 'Sapphire Passage Clear'}, world.player))
     connect('Golden Pyramid', 'Golden Passage (entrance)')
-    connect_level_exit('Golden Passage', 'Golden Minigame Shop')
-    connect('Golden Minigame Shop', 'Golden Pyramid Boss',
-            rules.make_boss_access_rule(world, Passage.GOLDEN, required_jewels_entry))
+    if world.options.goal != Goal.option_golden_treasure_hunt:
+        connect_level_exit('Golden Passage', 'Golden Minigame Shop')
+        connect('Golden Minigame Shop', 'Golden Pyramid Boss',
+                rules.make_boss_access_rule(world, Passage.GOLDEN, required_jewels_entry))
+
+    connect('Menu', 'Sound Room')
 
 
 def create_region(world: WL4World, location_table: Set[str], name: str,

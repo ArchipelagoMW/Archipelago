@@ -8,6 +8,7 @@ from Options import Option
 
 from . import items, locations, options
 from .types import ItemType, Passage
+from .options import Goal
 
 if TYPE_CHECKING:
     from . import WL4World
@@ -55,12 +56,20 @@ def has_all(items: Sequence[str]) -> Requirement:
 def has_any(items: Sequence[str]) -> Requirement:
     return Requirement(lambda w, s: any(has(item).inner(w, s) for item in items))
 
+def has_treasures() -> Requirement:
+    return Requirement(lambda w, s: sum(has(item).inner(w, s)
+                                        for item in items.filter_item_names(type=ItemType.TREASURE))
+                                    >= w.options.golden_treasure_count)
+
 
 def option(option_name: str, choice: Option):
     return Requirement(lambda w, _: getattr(w.options, option_name) == choice)
 
 def difficulty(difficulty: options.Difficulty):
     return option('difficulty', difficulty)
+
+def not_difficulty(_difficulty: options.Difficulty):
+    return Requirement(lambda w, s: not difficulty(_difficulty).inner(w, s))
 
 def logic(logic: options.Logic):
     return option('logic', logic)
@@ -193,11 +202,25 @@ region_rules: Mapping[str, Requirement] = {
 
 
 location_rules: Mapping[str, Requirement] = {
-    'Cractus':       has('Ground Pound'),
-    'Cuckoo Condor': has('Grab'),
-    'Aerodent':      has('Grab'),
-    'Catbat':        has('Ground Pound') & (has('Enemy Jump') | logic(advanced)),
-    'Golden Diva':   has('Grab'),
+    'Cractus':              has('Ground Pound'),
+    'Cractus - 0:15':       has('Ground Pound') & (not_difficulty(s_hard) | has('Enemy Jump') | logic('advanced')),
+    'Cractus - 0:35':       has('Ground Pound') & (not_difficulty(s_hard) | has('Enemy Jump') | logic('advanced')),
+    'Cractus - 0:55':       has('Ground Pound') & (not_difficulty(s_hard) | has('Enemy Jump') | logic('advanced')),
+    'Cuckoo Condor':        has('Grab'),
+    'Cuckoo Condor - 0:15': has('Grab'),
+    'Cuckoo Condor - 0:35': has('Grab'),
+    'Cuckoo Condor - 0:55': has('Grab'),
+    'Aerodent':             has('Grab'),
+    'Aerodent - 0:15':      has('Grab'),
+    'Aerodent - 0:35':      has('Grab'),
+    'Aerodent - 0:55':      has('Grab'),
+    'Catbat':               has('Ground Pound') & (has('Enemy Jump') | logic(advanced)),
+    'Catbat - 0:15':        has('Ground Pound') & (has('Enemy Jump') | logic(advanced) & not_difficulty(s_hard)),
+    'Catbat - 0:35':        has('Ground Pound') & (has('Enemy Jump') | logic(advanced) & not_difficulty(s_hard)),
+    'Catbat - 0:55':        has('Ground Pound') & (has('Enemy Jump') | logic(advanced) & not_difficulty(s_hard)),
+    'Golden Diva':          has('Heavy Grab') & (option('goal', Goal.option_golden_diva) | has_treasures()),
+
+    'Sound Room - Emergency Exit': has_treasures(),
 
     'Wildflower Fields - 8-Shaped Cave Box':
             has('Super Ground Pound') & ((difficulty(hard) & has('Grab')) | (difficulty(s_hard) & has('Heavy Grab'))),
@@ -208,12 +231,10 @@ location_rules: Mapping[str, Requirement] = {
     # HACK: It should be in the depths on S-Hard, but I don't have handling for
     # this box's region varying with difficulty
     'Mystic Lake - Full Health Item Box':
-            ((difficulty(normal) | difficulty(hard)) & has('Grab')) |
+            (not_difficulty(s_hard) & has('Grab')) |
             (difficulty(s_hard) & has_all(['Swim', 'Head Smash', 'Dash Attack'])),
-    'Monsoon Jungle - Fat Plummet Box':
-            difficulty(normal) | (difficulty(hard) | difficulty(s_hard)) & has('Ground Pound'),
-    'Monsoon Jungle - Buried Cave Box':
-            difficulty(normal) | (difficulty(hard) | difficulty(s_hard)) & has('Grab'),
+    'Monsoon Jungle - Fat Plummet Box':               difficulty(normal) | has('Ground Pound'),
+    'Monsoon Jungle - Buried Cave Box':               difficulty(normal) | has('Grab'),
     'Monsoon Jungle - Puffy Hallway Box':             has('Dash Attack'),
     'Monsoon Jungle - Full Health Item Box':          has('Swim'),
     'Monsoon Jungle - CD Box':                        has('Ground Pound'),
@@ -231,21 +252,17 @@ location_rules: Mapping[str, Requirement] = {
     'The Big Board - Full Health Item Box':           has_all(['Grab', 'Enemy Jump']),
     'Doodle Woods - Blue Circle Box':                 has('Enemy Jump'),
     'Doodle Woods - Pink Circle Box':                 has('Ground Pound'),
-    'Doodle Woods - Gray Square Box':
-            has('Ground Pound') | logic(advanced) & has('Grab'),
+    'Doodle Woods - Gray Square Box':                 has('Ground Pound') | logic(advanced) & has('Grab'),
     'Doodle Woods - CD Box':
-            difficulty(normal) & (has('Ground Pound') | logic(advanced) & has('Grab')) |
-            difficulty(hard) | difficulty(s_hard),
+            (has('Ground Pound') | logic(advanced) & has('Grab')) | not_difficulty(normal),
     'Domino Row - Swimming Detour Box':               has('Head Smash'),
     'Domino Row - Swimming Room Escape Box':          has('Ground Pound'),
     'Domino Row - Keyzer Room Box':                   has('Ground Pound'),
 
     'Crescent Moon Village - Agile Bat Hidden Box':   has_all(['Ground Pound', 'Grab']),
     'Crescent Moon Village - Sewer Box':              has('Swim'),
-    'Arabian Night - Onomi Box':
-            difficulty(normal) | (difficulty(hard) | difficulty(s_hard)) & has_any(['Ground Pound', 'Head Smash']),
-    'Arabian Night - Sewer Box':
-            difficulty(normal) | ((difficulty(hard) | difficulty(s_hard)) & has('Super Ground Pound')),
+    'Arabian Night - Onomi Box':                      difficulty(normal) | has_any(['Ground Pound', 'Head Smash']),
+    'Arabian Night - Sewer Box':                      difficulty(normal) | has('Super Ground Pound'),
     'Arabian Night - Flying Carpet Dash Attack Box':  has('Dash Attack'),
     'Arabian Night - Kool-Aid Box':                   has('Dash Attack'),
 
