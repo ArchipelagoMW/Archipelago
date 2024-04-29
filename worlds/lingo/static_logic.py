@@ -1,7 +1,6 @@
 import os
 import pkgutil
 import pickle
-import sys
 from io import BytesIO
 from typing import Dict, List, Set
 
@@ -79,17 +78,16 @@ def get_progressive_item_id(name: str):
 def load_static_data_from_file():
     global PAINTING_ENTRANCES, PAINTING_EXITS
 
-    # This seems to be needed for frozen 3.8.
     from . import datatypes
-    sys.modules['worlds.lingo.datatypes'] = datatypes
+    from Utils import safe_builtins
 
     class RenameUnpickler(pickle.Unpickler):
         def find_class(self, module, name):
-            renamed_module = module
-            if module == "datatypes":
-                renamed_module = "worlds.lingo.datatypes"
-
-            return super(RenameUnpickler, self).find_class(renamed_module, name)
+            if module in ("worlds.lingo.datatypes", "datatypes"):
+                return getattr(datatypes, name)
+            elif module == "builtins" and name in safe_builtins:
+                return getattr(safe_builtins, name)
+            raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")
 
     file = pkgutil.get_data(__name__, os.path.join("data", "generated.dat"))
     pickdata = RenameUnpickler(BytesIO(file)).load()
