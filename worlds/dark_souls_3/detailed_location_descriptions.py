@@ -1,7 +1,7 @@
 # python -m worlds.dark_souls_3.detailed_location_descriptions \
 #     worlds/dark_souls_3/detailed_location_descriptions.py
 #
-# This script downloads the offline randomizer's descriptions for each location and adds them to
+# This script downloads the static randomizer's descriptions for each location and adds them to
 # the location documentation.
 
 from collections import defaultdict
@@ -21,10 +21,10 @@ if __name__ == '__main__':
     url = 'https://raw.githubusercontent.com/nex3/SoulsRandomizers/archipelago-server/dist/Base/annotations.txt'
     response = requests.get(url)
     if response.status_code != 200:
-        raise Exception(f"Got {response.status_code} when downloading offline randomizer locations")
+        raise Exception(f"Got {response.status_code} when downloading static randomizer locations")
     annotations = yaml.load(response.text, Loader=yaml.Loader)
 
-    offline_to_archi_regions = {
+    static_to_archi_regions = {
         area['Name']: area['Archipelago']
         for area in annotations['Areas']
     }
@@ -38,7 +38,7 @@ if __name__ == '__main__':
     descriptions_by_item = defaultdict(list)
 
     for slot in annotations['Slots']:
-        region = offline_to_archi_regions[slot['Area']]
+        region = static_to_archi_regions[slot['Area']]
         for item in slot['DebugText']:
             name = item.split(" - ")[0]
             descriptions_by_location[(region, name)].append(slot['Text'])
@@ -50,8 +50,8 @@ if __name__ == '__main__':
     location_names_to_descriptions = {}
     for location in location_dictionary.values():
         if location.ap_code is None: continue
-        if location.offline:
-            location_names_to_descriptions[location.name] = descriptions_by_key[location.offline]
+        if location.static:
+            location_names_to_descriptions[location.name] = descriptions_by_key[location.static]
             continue
 
         match = location_re.match(location.name)
@@ -65,12 +65,12 @@ if __name__ == '__main__':
 
         key = (match[1], match[2])
         if key not in descriptions_by_location:
-            raise Exception(f'No offline randomizer location found matching "{match[1]}: {match[2]}".')
+            raise Exception(f'No static randomizer location found matching "{match[1]}: {match[2]}".')
 
         candidates = descriptions_by_location[key]
         if len(candidates) == 0:
             raise Exception(
-                f'There are only {counts_by_location[key]} locations in the offline randomizer ' +
+                f'There are only {counts_by_location[key]} locations in the static randomizer ' +
                 f'matching "{match[1]}: {match[2]}", but there are more in Archipelago.'
             )
 

@@ -624,7 +624,7 @@ class DarkSouls3World(World):
         )
         self._add_entrance_rule("Karla's Shop", "Jailer's Key Ring")
 
-        # The offline randomizer edits events to guarantee that Greirat won't go to Lothric until
+        # The static randomizer edits events to guarantee that Greirat won't go to Lothric until
         # Grand Archives is available, so his shop will always be available one way or another.
         self._add_entrance_rule("Greirat's Shop", "Cell Key")
 
@@ -692,7 +692,7 @@ class DarkSouls3World(World):
             "RC: Lapp's Leggings - Lapp",
         ], "Chameleon")
 
-        # Forbid shops from carrying items with multiple counts (the offline randomizer has its own
+        # Forbid shops from carrying items with multiple counts (the static randomizer has its own
         # logic for choosing how many shop items to sell), and from carrying soul items.
         for location in location_dictionary.values():
             if location.shop:
@@ -1178,11 +1178,11 @@ class DarkSouls3World(World):
 
         crow = {
             "Loretta's Bone": "Ring of Sacrifice",
-            # "Avelyn": "Titanite Scale", # Missing from offline randomizer
+            # "Avelyn": "Titanite Scale", # Missing from static randomizer
             "Coiled Sword Fragment": "Titanite Slab",
             "Seed of a Giant Tree": "Iron Leggings",
             "Siegbräu": "Armor of the Sun",
-            # Offline randomizer can't randomize Hodrick's drop yet
+            # Static randomizer can't randomize Hodrick's drop yet
             # "Vertebra Shackle": "Lucatiel's Mask",
             "Xanthous Crown": "Lightning Gem",
             "Mendicant's Staff": "Sunlight Shield",
@@ -1504,14 +1504,14 @@ class DarkSouls3World(World):
             if item.data.ds3_code: ap_ids_to_ds3_ids[str(item.code)] = item.data.ds3_code
             if item.data.count != 1: item_counts[str(item.code)] = item.data.count
 
-        # A map from Archipelago's location IDs to the keys the offline
-        # randomizer uses to identify locations.
+        # A map from Archipelago's location IDs to the keys the static randomizer uses to identify
+        # locations.
         location_ids_to_keys: Dict[int, str] = {}
         for location in self.multiworld.get_filled_locations(self.player):
             # Skip events and only look at this world's locations
             if (location.address is not None and location.item.code is not None
-                    and location.data.offline):
-                location_ids_to_keys[location.address] = location.data.offline
+                    and location.data.static):
+                location_ids_to_keys[location.address] = location.data.static
 
         slot_data = {
             "options": {
@@ -1538,7 +1538,7 @@ class DarkSouls3World(World):
             },
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server
-            # Reserializing here is silly, but it's easier for the offline randomizer.
+            # Reserializing here is silly, but it's easier for the static randomizer.
             "random_enemy_preset": json.dumps(self.options.random_enemy_preset.value),
             "yhorm": (
                 f"{self.yhorm_location.name} {self.yhorm_location.id}"

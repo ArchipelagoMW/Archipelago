@@ -244,9 +244,9 @@ class RandomizeEnemiesOption(DefaultOnToggle):
 
 
 class RandomEnemyPresetOption(Option[typing.Dict[str, typing.Any]], VerifyKeys):
-    """The YAML preset for the offline enemy randomizer.
+    """The YAML preset for the static enemy randomizer.
     
-    See the offline randomizer documentation in randomizer\\presets\\README.txt for details.
+    See the static randomizer documentation in randomizer\\presets\\README.txt for details.
     """
     display_name = "Random Enemy Preset"
     supports_weighting = False

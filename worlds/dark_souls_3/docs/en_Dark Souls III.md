@@ -1,5 +1,10 @@
 # Dark Souls III
 
+Game Page | [Items] | [Locations]
+
+[Items]: /tutorial/Dark%20Souls%20III/items/en
+[Locations]: /tutorial/Dark%20Souls%20III/locations/en
+
 ## What do I need to do to randomize DS3?
 
 See full instructions on [the setup page].
@@ -100,6 +105,7 @@ Dark Souls III:
 
   exclude_locations:
     # Exclude late-game and DLC regions
+    - Anor Londo
     - Lothric Castle
     - Consumed King's Garden
     - Untended Graves
@@ -132,26 +138,21 @@ Check out the [item guide], which explains the named groups available for items.
 
 [item guide]: /tutorial/Dark%20Souls%20III/items/en
 
-## What's the difference from 2.x.x?
+## What's new from 2.x.x?
 
-Version 3.0.0 and forward of the Dark Souls III Archipelago client has a number
-of substantial differences with the older 2.x.x versions. Improvements include:
+Version 3.0.0 of the Dark Souls III Archipelago client has a number of
+substantial differences with the older 2.x.x versions. Improvements include:
 
-* Support for randomizing all item locations, not just unique items, without
-  needing progressive pickup lists.
+* Support for randomizing all item locations, not just unique items.
 
 * Support for randomizing items in shops, starting loadouts, Path of the Dragon,
   and more.
 
 * Built-in integration with the enemy randomizer, including consistent seeding
-  for races and configuration via the web interface and the standard Archipelago
-  YAML file.
+  for races.
 
-* Support for the latest patch for Dark Souls III, 1.15.2. Note that older
-  patches are currently *not* supported, although if [ModEngine2] ever adds
-  support they should work fine.
-
-  [ModEngine2]: https://github.com/soulsmods/ModEngine2
+* Support for the latest patch for Dark Souls III, 1.15.2. Older patches are
+  *not* supported.
 
 * Optional smooth distribution for upgrade items, upgraded weapons, and soul
   items so you're more likely to see weaker items earlier and more powerful
@@ -162,11 +163,10 @@ of substantial differences with the older 2.x.x versions. Improvements include:
 
 * Other players' item names are visible in DS3.
 
-* If you pick up items while offline, they'll still send once you reconnect.
+* If you pick up items while static, they'll still send once you reconnect.
  
-However, not all YAML fields from 2.x.x are supported as-is in 3.0.0, and some
-new fields are available. Consider [generating a new YAML configuration] for use
-with 3.x.x.
+However, 2.x.x YAMLs are not compatible with 3.0.0. You'll need to [generate a
+new YAML configuration] for use with 3.x.x.
 
 [generating a new YAML configuration]: /games/Dark%20Souls%20III/player-options
 
@@ -183,9 +183,9 @@ The following options have been removed:
 
 In addition, the following options have changed:
 
-* `enable_*_locations` options have all been deprecated. Instead, you can now
-  add [location group names] to the `exclude_locations` option to prevent them
-  from containing important items.
+* `enable_*_locations` options have all been removed. Instead, you can now add
+  [location group names] to the `exclude_locations` option to prevent them from
+  containing important items.
 
   [location group names]: /tutorial/Dark%20Souls%20III/locations/en#location-groups
 

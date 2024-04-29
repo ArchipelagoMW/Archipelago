@@ -1,5 +1,10 @@
 # Dark Souls III Items
 
+[Game Page] | Items | [Locations]
+
+[Game Page]: /games/Dark%20Souls%20III/info/en
+[Locations]: /tutorial/Dark%20Souls%20III/locations/en
+
 ## Item Groups
 
 The Dark Souls III randomizer supports a number of item group names, which can

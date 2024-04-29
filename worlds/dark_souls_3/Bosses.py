@@ -1,4 +1,4 @@
-# In almost all cases, we leave boss and enemy randomization up to the offline randomizer. But for
+# In almost all cases, we leave boss and enemy randomization up to the static randomizer. But for
 # Yhorm specifically we need to know where he ends up in order to ensure that the Storm Ruler is
 # available before his fight.
 
@@ -30,7 +30,7 @@ class DS3BossInfo:
     """Additional individual locations that can't be accessed until the boss is dead."""
 
 
-# Note: the offline randomizer splits up some bosses into separate fights for separate phases, each
+# Note: the static randomizer splits up some bosses into separate fights for separate phases, each
 # of which can be individually replaced by Yhorm.
 all_bosses = [
     DS3BossInfo("Iudex Gundyr", 4000800, before_storm_ruler = True, locations = {
