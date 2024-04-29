@@ -1,3 +1,4 @@
+import logging
 import typing
 import asyncio
 import colorama
@@ -38,6 +39,26 @@ class JakAndDaxterClientCommandProcessor(ClientCommandProcessor):
     #  2. Listen (have the REPL compiler connect and listen on the game's REPL server's socket).
     #  3. Compile (have the REPL compiler compile the game into object code it can run).
     #  All 3 need to be done, and in this order, for this to work.
+    def _cmd_repl(self, *arguments: str):
+        """Sends a command to the OpenGOAL REPL. Arguments:
+        - connect <ip> <port> : connect a new client to the REPL.
+        - listen : listen to the game's internal socket.
+        - compile : compile the game into executable object code.
+        - verify : verify successful compilation."""
+        if arguments:
+            if arguments[0] == "connect":
+                if arguments[1] and arguments[2]:
+                    self.ctx.repl.ip = str(arguments[1])
+                    self.ctx.repl.port = int(arguments[2])
+                    self.ctx.repl.connect()
+                else:
+                    logging.error("You must provide the ip address and port (default 127.0.0.1 port 8181).")
+            if arguments[0] == "listen":
+                self.ctx.repl.listen()
+            if arguments[0] == "compile":
+                self.ctx.repl.compile()
+            if arguments[0] == "verify":
+                self.ctx.repl.verify()
 
 
 class JakAndDaxterContext(CommonContext):
