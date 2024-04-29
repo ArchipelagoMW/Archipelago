@@ -1172,6 +1172,14 @@
         panels:
           - NEAR
           - FAR
+    progression:
+      Progressive Symmetry Room:
+        panel_doors:
+          - NEAR FAR
+          - room: Warts Straw Area
+            panel_door: WARTS STRAW
+          - room: Leaf Feel Area
+            panel_door: LEAF FEEL
   Warts Straw Area:
     entrances:
       Near Far Area:
@@ -4933,6 +4941,9 @@
         panel_group: Backside Entrance Panels
         panels:
           - FARTHER
+      MIDDLE:
+        panels:
+          - MIDDLE
   The Bearer (East):
     entrances:
       Cross Tower (East): True
@@ -7825,6 +7836,17 @@
           - Tower Room Area Doors/Door_panel_basement
           - Tower Room Area Doors/Door_panel_basement2
         panels:
+          - BASE
+    panel_doors:
+      STAIRS:
+        panel_group: Room Room Panels
+        panels:
+          - STAIRS
+      Colors:
+        panel_group: Room Room Panels
+        panels:
+          - BROOMED
+          - LAYS
           - BASE
   Cellar:
     entrances:

@@ -287,6 +287,10 @@ config.each do |room_name, room|
     unless bad_subdirectives.empty? then
       puts "#{room_name} - #{panel_door_name} :::: Panel door has the following invalid subdirectives: #{bad_subdirectives.join(", ")}"
     end
+
+    unless ids.include?("panel_doors") and ids["panel_doors"].include?(room_name) and ids["panel_doors"][room_name].include?(panel_door_name)
+      puts "#{room_name} - #{panel_door_name} :::: Panel door is missing an item ID"
+    end
   end
 
   (room["paintings"] || []).each do |painting|

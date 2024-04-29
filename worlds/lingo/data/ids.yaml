@@ -1478,6 +1478,7 @@ progression:
   Progressive Colorful: 444580
   Progressive Pilgrimage: 444583
   Progressive Number Hunt: 444652
+  Progressive Symmetry Room: 444673
 panel_doors:
   Starting Room:
     HIDDEN: 444589
@@ -1585,6 +1586,7 @@ panel_doors:
     GREEN: 444660
   The Bearer:
     FARTHER: 444661
+    MIDDLE: 444674
   Knight Night (Final):
     TRUSTED: 444662
   Outside The Wondrous:
@@ -1605,6 +1607,9 @@ panel_doors:
     KITTEN CAT: 444671
   Outside The Scientific:
     OPEN: 444672
+  Room Room:
+    STAIRS: 444675
+    Colors: 444677
 panel_groups:
   Tenacious Entrance Panels: 444593
   Symmetry Room Panels: 444606
@@ -1612,3 +1617,4 @@ panel_groups:
   Colorful Panels: 444627
   Color Hunt Panels: 444655
   Hallway Room Panels: 444665
+  Room Room Panels: 444676
