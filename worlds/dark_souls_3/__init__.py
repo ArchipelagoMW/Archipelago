@@ -472,7 +472,9 @@ class DarkSouls3World(World):
                 and not location.conditional
                 and (not additional_condition or additional_condition(location))
             )
-            if not location.item and location.progress_type != LocationProgressType.EXCLUDED
+            # We can't use location.progress_type here because it's not set
+            # until after `set_rules()` runs.
+            if not location.item and location.name not in self.all_excluded_locations
             and location.item_rule(item)
         ]
 
