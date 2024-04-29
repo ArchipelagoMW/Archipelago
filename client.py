@@ -234,6 +234,16 @@ class WL4Client(BizHawkClient):
         death_link_address = get_symbol('DeathLinkEnabled')
         wario_health_address = get_symbol('WarioHeart')
         timer_status_address = get_symbol('ucTimeUp')
+        multiworld_send_address = get_symbol('SendMultiworldItemsImmediately')
+        passage_address = get_symbol('PassageID')
+        level_address = get_symbol('InPassageLevelID')
+        gem_1_address = get_symbol('Has1stGemPiece')
+        gem_2_address = get_symbol('Has2ndGemPiece')
+        gem_3_address = get_symbol('Has3rdGemPiece')
+        gem_4_address = get_symbol('Has4thGemPiece')
+        cd_address = get_symbol('HasCD')
+        fhi_1_address = get_symbol('HasFullHealthItem')
+        fhi_2_address = get_symbol('HasFullHealthItem2')
 
         try:
             read_result = iter(await bizhawk.read(bizhawk_ctx, [
@@ -246,6 +256,16 @@ class WL4Client(BizHawkClient):
                 read8(death_link_address),
                 read8(wario_health_address),
                 read8(timer_status_address),
+                read8(multiworld_send_address),
+                read8(passage_address),
+                read8(level_address),
+                read8(gem_1_address),
+                read8(gem_2_address),
+                read8(gem_3_address),
+                read8(gem_4_address),
+                read8(cd_address),
+                read8(fhi_1_address),
+                read8(fhi_2_address),
             ]))
         except RequestFailedError:
             return
@@ -259,6 +279,11 @@ class WL4Client(BizHawkClient):
         death_link_flag = next_int(read_result)
         wario_health = next_int(read_result)
         timer_status = next_int(read_result)
+        send_level_locations = next_int(read_result)
+        passage_id = next_int(read_result)
+        in_passage_level_id = next_int(read_result)
+        level_items = list(next_int(read_result) for _ in range(7))
+        level_items.insert(5, 0)
 
         # Ensure safe state
         gameplay_state = (game_mode, game_state)
@@ -289,6 +314,13 @@ class WL4Client(BizHawkClient):
         for passage in range(6):
             for level in range(5):
                 status_bits = item_status[passage * 6 + level] >> 8
+                if (send_level_locations
+                    and in_passage_level_id < 4
+                    and (passage, level) == (passage_id, in_passage_level_id)
+                ):
+                    for i, status in enumerate(level_items):
+                        if status:
+                            status_bits |= (1 << i)
                 for location in get_level_locations(passage, level):
                     bit = location_table[location].flag()
                     location_id = location_name_to_id[location]

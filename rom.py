@@ -432,7 +432,7 @@ def patch_rom(rom: LocalRom, world: WL4World):
 
     # Multiworld send
     rom.write_byte(get_symbol('SendMultiworldItemsImmediately'),
-                   world.options.send_multiworld_items.value)
+                   world.options.send_locations_to_server.value)
 
     shuffle_music(rom, world.options.music_shuffle)
     shuffle_wario_voice_sets(rom, world.options.wario_voice_shuffle)
