@@ -42,12 +42,6 @@ def lingo_can_use_level_2_location(state: CollectionState, world: "LingoWorld"):
                 counted_panels += panel_count
         if counted_panels >= world.options.level_2_requirement.value - 1:
             return True
-    # THE MASTER has to be handled separately, because it has special access rules.
-    if state.can_reach("Orange Tower Seventh Floor", "Region", world.player)\
-            and lingo_can_use_mastery_location(state, world):
-        counted_panels += 1
-    if counted_panels >= world.options.level_2_requirement.value - 1:
-        return True
     return False
 
 
@@ -69,6 +63,9 @@ def _lingo_can_satisfy_requirements(state: CollectionState, access: AccessRequir
         return False
 
     if not all(state.has(item, world.player, index) for item, index in access.progression.items()):
+        return False
+
+    if access.the_master and not lingo_can_use_mastery_location(state, world):
         return False
 
     return True
