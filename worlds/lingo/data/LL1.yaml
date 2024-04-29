@@ -961,6 +961,14 @@
         direction: exit
         entrance_indicator_pos: [ -17, 2.5, -41.01 ]
         orientation: north
+    progression:
+      Progressive Suits Area:
+        panel_doors:
+          - WORDS SWORD
+          - room: Lost Area
+            panel_door: LOST
+          - room: Amen Name Area
+            panel_door: AMEN NAME
   Lost Area:
     entrances:
       Outside The Agreeable:
@@ -988,7 +996,6 @@
           - LOST (2)
     panel_doors:
       LOST:
-        item_name: Crossroads - LOST (Panels)
         panels:
           - LOST (1)
           - LOST (2)
