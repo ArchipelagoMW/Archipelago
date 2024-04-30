@@ -3,7 +3,7 @@ import logging
 import sys
 import typing
 import re
-from typing import *
+from typing import List, Tuple, Optional
 
 if sys.platform == "win32":
     import ctypes
