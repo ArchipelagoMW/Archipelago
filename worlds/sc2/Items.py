@@ -92,17 +92,6 @@ race_to_item_type: Dict[SC2Race, Type[ItemTypeEnum]] = {
 }
 
 
-class ItemOrigin(enum.IntFlag):
-    WoL = enum.auto()
-    HotS = enum.auto()
-    LotV = enum.auto()
-    NCO = enum.auto()
-    Melee = enum.auto()
-    Coop = enum.auto()
-    BW = enum.auto()
-    AP = enum.auto()
-
-
 class ItemData(typing.NamedTuple):
     code: int
     type: ItemType
