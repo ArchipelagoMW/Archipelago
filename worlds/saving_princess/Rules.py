@@ -15,11 +15,7 @@ def set_rules(world: "SavingPrincessWorld"):
         # portia can hover if she has a weapon other than the powered blaster and 4 reload speed upgrades
         return (
                 state.has(ITEM_RELOAD_SPEED, world.player, 4)
-                and (
-                        state.has(ITEM_WEAPON_FIRE, world.player)
-                        or state.has(ITEM_WEAPON_ICE, world.player)
-                        or state.has(ITEM_WEAPON_VOLT, world.player)
-                )
+                and state.has_any({ITEM_WEAPON_FIRE, ITEM_WEAPON_ICE, ITEM_WEAPON_VOLT}, world.player)
         )
 
     # guarantees that the player will have some upgrades before having to face the area bosses, except for cave
@@ -38,11 +34,7 @@ def set_rules(world: "SavingPrincessWorld"):
                 and state.has(ITEM_RELOAD_SPEED, world.player, 4)
                 and state.has(ITEM_WEAPON_CHARGE, world.player)
                 # at least one special weapon, other than powered blaster
-                and (
-                        state.has(ITEM_WEAPON_FIRE, world.player)
-                        or state.has(ITEM_WEAPON_ICE, world.player)
-                        or state.has(ITEM_WEAPON_VOLT, world.player)
-                )
+                and state.has_any({ITEM_WEAPON_FIRE, ITEM_WEAPON_ICE, ITEM_WEAPON_VOLT}, world.player)
         )
 
     def is_gate_unlocked(state: CollectionState) -> bool:
@@ -50,11 +42,10 @@ def set_rules(world: "SavingPrincessWorld"):
         if world.is_pool_expanded:
             # in expanded, the final area requires all the boss keys
             return (
-                    state.has(EP_ITEM_GUARD_GONE, world.player)
-                    and state.has(EP_ITEM_CLIFF_GONE, world.player)
-                    and state.has(EP_ITEM_ACE_GONE, world.player)
-                    and state.has(EP_ITEM_SNAKE_GONE, world.player)
-                    and super_nice_check(state)
+                    state.has_all(
+                        {EP_ITEM_GUARD_GONE, EP_ITEM_CLIFF_GONE, EP_ITEM_ACE_GONE, EP_ITEM_SNAKE_GONE},
+                        world.player
+                    ) and super_nice_check(state)
             )
         else:
             # in base pool, just the powered blaster is enough to guarantee access to the final area
