@@ -67,18 +67,16 @@ class OSRSWorld(World):
         self.resource_rows_by_name = {rec_row.name: rec_row for rec_row in self.resource_rows}
         self.item_rows_by_name = {it_row.name: it_row for it_row in self.item_rows}
 
-        rnd = self.multiworld.per_slot_randoms[self.player]
+        rnd = self.random
         starting_area = self.options.starting_area
         self.allow_brutal_grinds = self.options.brutal_grinds
 
         if starting_area.value == StartingArea.option_any_bank:
-            random_bank = rnd.randint(0, len(starting_area_dict) - 1)
-            self.starting_area_item = starting_area_dict[random_bank]
+            self.starting_area_item = rnd.choice(starting_area_dict)
         elif starting_area.value < StartingArea.option_chunksanity:
             self.starting_area_item = starting_area_dict[starting_area.value]
         else:
-            chunksanity_random = rnd.randint(0, len(chunksanity_starting_chunks) - 1)
-            self.starting_area_item = chunksanity_starting_chunks[chunksanity_random]
+            self.starting_area_item = rnd.choice(chunksanity_starting_chunks)
 
         # Set Starting Chunk
         self.multiworld.push_precollected(self.create_item(self.starting_area_item))
