@@ -11,6 +11,15 @@ Weapons received from Robot Masters, access to each individual stage, and Items 
 into the multiworld. Access to the Wily Stages is locked behind receiving Item 1, 2, and 3. The game is complete upon 
 viewing the ending sequence after defeating the Alien.
 
+## What Mega Man 2 items can appear in other players' worlds?
+- Robot Master weapons
+- Robot Master Access Codes (stage access)
+- Items 1/2/3
+- 1-Ups
+- E-Tanks
+- Health Energy (L)
+- Weapon Energy (L)
+
 ## What is considered a location check in Mega Man 2?
 - The defeat of a Robot Master or Wily Boss
 - Receiving a weapon or item from Dr. Light
@@ -31,6 +40,45 @@ Energy from the EnergyLink storage can be converted into health, weapon energy, 
 You can find out how much of each type you can pull using `/pool` in the client. Additionally, you can have it 
 automatically pull from the EnergyLink storage to keep Mega Man healed using the `/autoheal` command in the client. 
 Finally, you can use the `/request` command to request a certain type of energy from the storage.
+
+## Plando Palettes
+The palette shuffle option supports specifying a specific palette for a given weapon/Robot Master. The format for doing 
+so is `Character-Color1|Color2;Option`. Character is the individual that this should apply to, and can only be one of 
+the following:
+- Mega Buster
+- Atomic Fire
+- Air Shooter
+- Leaf Shield
+- Bubble Lead
+- Quick Boomerang
+- Time Stopper
+- Metal Blade
+- Crash Bomber
+- Item 1
+- Item 2
+- Item 3
+- Heat Man
+- Air Man
+- Wood Man
+- Bubble Man
+- Quick Man
+- Flash Man
+- Metal Man
+- Crash Man
+
+Colors attempt to map a list of HTML-defined colors to what the NES can render. A full list of applicable colors can be
+found [here](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/mm2/Color.py#L11). Alternatively, colors can 
+be supplied directly using `$xx` format. A full list of NES colors can be found [here](https://www.nesdev.org/wiki/PPU_palettes#2C02).
+
+You can also pass only one color (such as `Mega Buster-Red`) and it will interpret a second color based off of the color
+given. Additionally, passing only colors (such as `Red|Blue`) and not any specific boss/weapon will apply that color to 
+all weapons/bosses that did not have a prior color specified.
+
+The option is the method to be used to set the palettes of the remaining bosses/weapons, and will not overwrite any 
+plando placements.
+
+## Plando Weaknesses
+
 
 ## Unique Local Commands
 - `/pool` Only present with EnergyLink, prints the max amount of each type of request that could be fulfilled.
