@@ -11,54 +11,63 @@ class OpenRCT2Item(Item):
 
 
 
-def set_openRCT2_items(scenario, rules, monopoly_mode, include_gamespeed_items, furry_convention_traps, spam_traps, bathroom_traps, skips, filler, atm, first_aid):
+# def set_openRCT2_items(scenario, rules, monopoly_mode, include_gamespeed_items, furry_convention_traps, spam_traps, bathroom_traps, skips, filler, atm, first_aid):
+def set_openRCT2_items(world):
     # print("\nThis is the selected scenario:")
     # print(scenario)
     # print("And these items will be randomized:")
     # print(Scenario_Items[scenario])
-    openRCT2_items = copy.deepcopy(Scenario_Items[scenario])
-    
-    if atm:
+    openRCT2_items = copy.deepcopy(Scenario_Items[world.options.scenario.value])
+    rules = [world.options.difficult_guest_generation.value,
+                 world.options.difficult_park_rating.value,
+                 world.options.forbid_high_construction.value,
+                 world.options.forbid_landscape_changes.value,
+                 world.options.forbid_marketing_campaigns.value,
+                 world.options.forbid_tree_removal.value]
+
+    if world.options.include_atm:
         if "Cash Machine" not in openRCT2_items:
             openRCT2_items.append("Cash Machine")
 
-    if first_aid:
+    if world.options.include_first_aid:
         if "First Aid" not in openRCT2_items:
             openRCT2_items.append("First Aid")
 
-    if monopoly_mode:
+    if world.options.monopoly_mode.value:
         count = 0
         while count < 20:
             openRCT2_items.append("Land Discount")
             openRCT2_items.append("Construction Rights Discount")
             count += 1
             
-    if include_gamespeed_items:
+    if world.options.include_gamespeed_items.value:
         count = 0
         while count < 4:
             openRCT2_items.append("Progressive Speed")
             count += 1
 
     count = 0
-    while count < furry_convention_traps:
+    while count < world.options.furry_convention_traps.value:
         openRCT2_items.append("Furry Convention Trap")
         count += 1
     count = 0
-    while count < spam_traps:
+    while count < world.options.spam_traps.value:
         openRCT2_items.append("Spam Trap")
         count +=1
     count = 0
-    while count < bathroom_traps:
+    while count < world.options.bathroom_traps.value:
         openRCT2_items.append("Bathroom Trap")
         count +=1
     count = 0
-    while count < skips:
+    while count < world.options.skips.value:
         openRCT2_items.append("Skip")
         count +=1
 
     for number, rule in enumerate(item_info["park_rules"]):#Check every rule type
         if rules[number] == 1:#If it's enabled and can be disabled
             openRCT2_items.append(rule)#Add an item to disable
+
+    filler = world.options.filler.value
 
     filler_count = len(openRCT2_items) * (filler * .01) - 1
     count = 0
@@ -91,4 +100,4 @@ def set_openRCT2_items(scenario, rules, monopoly_mode, include_gamespeed_items, 
     # print("\n\n")
     # print(item_frequency)
 
-    return[item_table,item_frequency]
+    return item_table, item_frequency

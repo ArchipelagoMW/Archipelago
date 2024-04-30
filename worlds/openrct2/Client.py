@@ -96,8 +96,7 @@ class OpenRCT2Socket:
                 newgame.setblocking(0)
                 try:
                     while self.package_queue:
-                        self._send(self.package_queue[0])
-                        self.package_queue.pop(0)
+                        self._send(self.package_queue.pop(0))
                         await asyncio.sleep(0.1)
                 except Exception as e:
                     print("Error in connect game: " + e)
@@ -198,7 +197,7 @@ class OpenRCT2Socket:
 
 
 class OpenRCT2Context(CommonContext):
-    tags = {"AP", "DeathLink"}
+    tags = {"DeathLink"}
     game = "OpenRCT2"
     items_handling = 0b111  # receive all items for /received
     want_slot_data = True 

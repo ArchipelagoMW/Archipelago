@@ -31,16 +31,14 @@ class OpenRCT2WebWorld(WebWorld):
 
 
 def get_previous_region_from_OpenRCT2_location(location_number: int):
-    if location_number == 0:
-        return "OpenRCT2_Level_0"
-    elif location_number == 1 or location_number == 2:
+    if location_number == 0 or location_number == 1 or location_number == 2:
         return "OpenRCT2_Level_0"
     elif location_number == 3 or location_number == 4 or location_number == 5 or location_number == 6:
         return "OpenRCT2_Level_1"
     else:
         divider = location_number - 6
         region = math.ceil(divider / 8) + 1
-        return "OpenRCT2_Level_" + str(region)
+        return f"OpenRCT2_Level_{region}"
 
 
 class OpenRCT2World(World):
@@ -54,7 +52,7 @@ class OpenRCT2World(World):
 
     options_dataclass = openRCT2Options
     options: openRCT2Options
-    topology_present = True  # show path to required location checks in spoiler
+    topology_present = False  # show path to required location checks in spoiler
     item_name_to_id = {name: id for id, name in enumerate(item_info["all_items"], base_id)}
     location_name_to_id = {name: id for id, name in enumerate(location_info["all_locations"], base_id)}
     item_name_groups = {
@@ -120,26 +118,8 @@ class OpenRCT2World(World):
             scenario = Scenario[new_scenario].value  # Reassign the scenario option to the randomly selected choice
             self.options.scenario.value = scenario
 
-        monopoly_mode = self.options.monopoly_mode.value
-        include_gamespeed_items = self.options.include_gamespeed_items.value
-        furry_convention_traps = self.options.furry_convention_traps.value
-        spam_traps = self.options.spam_traps.value
-        bathroom_traps = self.options.bathroom_traps.value
-        skips = self.options.skips.value
-        filler = self.options.filler.value
-        atm = self.options.include_atm
-        first_aid = self.options.include_first_aid
-        rules = [self.options.difficult_guest_generation.value,
-                 self.options.difficult_park_rating.value,
-                 self.options.forbid_high_construction.value,
-                 self.options.forbid_landscape_changes.value,
-                 self.options.forbid_marketing_campaigns.value,
-                 self.options.forbid_tree_removal.value]
-        items = set_openRCT2_items(scenario, rules, monopoly_mode, include_gamespeed_items, furry_convention_traps,
-                                   spam_traps, bathroom_traps, skips, filler, atm, first_aid)
+        self.item_table, self.item_frequency = set_openRCT2_items(self)
 
-        self.item_table = items[0]
-        self.item_frequency = items[1]
         # print("Here's the generated item table and frequency table... again")
         # print(self.item_table)
         # print("\n\n")
@@ -177,7 +157,7 @@ class OpenRCT2World(World):
             locations = []
             while location < ending_location + 1:
                 locations.append(OpenRCT2Location(self.player, "OpenRCT2_" + str(location),
-                                                  self.location_name_to_id["OpenRCT2_" + str(location)], chosen_region))
+                                                  self.location_name_to_id[f"OpenRCT2_{location}"], chosen_region))
                 location += 1
             return locations
 
