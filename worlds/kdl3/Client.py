@@ -170,7 +170,7 @@ class KDL3SNIClient(SNIClient):
                 self.item_queue.append(item)  # no more slots, get it next go around
 
     async def pop_gift(self, ctx):
-        if ctx.stored_data[self.giftbox_key]:
+        if self.giftbox_key in ctx.stored_data and ctx.stored_data[self.giftbox_key]:
             from SNIClient import snes_read, snes_buffered_write
             key, gift = ctx.stored_data[self.giftbox_key].popitem()
             await pop_object(ctx, self.giftbox_key, key)
