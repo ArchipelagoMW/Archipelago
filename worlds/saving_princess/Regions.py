@@ -76,18 +76,18 @@ def set_region_locations(region: Region, location_names: List[str], is_pool_expa
     ]
 
 
-def create_regions(world: MultiWorld, player: int, is_pool_expanded: bool):
-        region = Region(region_name, player, world)
-        world.regions.append(region)
-    connect_regions(world, player)
+def create_regions(multiworld: MultiWorld, player: int, is_pool_expanded: bool):
     for region_name, location_names in region_dict.items():
+        region = Region(region_name, player, multiworld)
         set_region_locations(region, location_names, is_pool_expanded)
+        multiworld.regions.append(region)
+    connect_regions(multiworld, player)
 
 
-def connect_regions(world: MultiWorld, player: int):
+def connect_regions(multiworld: MultiWorld, player: int):
     # and add a connection from the menu to the hub region
-    menu = world.get_region(REGION_MENU, player)
-    hub = world.get_region(REGION_HUB, player)
+    menu = multiworld.get_region(REGION_MENU, player)
+    hub = multiworld.get_region(REGION_HUB, player)
     connection = Entrance(player, f"{REGION_HUB} entrance", menu)
     menu.exits.append(connection)
     connection.connect(hub)
@@ -96,10 +96,10 @@ def connect_regions(world: MultiWorld, player: int):
     for region_name in [REGION_CAVE, REGION_VOLCANIC, REGION_ARCTIC, REGION_SWAMP, REGION_ELECTRICAL]:
         connection = Entrance(player, f"{region_name} entrance", hub)
         hub.exits.append(connection)
-        connection.connect(world.get_region(region_name, player))
+        connection.connect(multiworld.get_region(region_name, player))
 
     # and finally, the connection between the final region and its powered version
-    electrical = world.get_region(REGION_ELECTRICAL, player)
+    electrical = multiworld.get_region(REGION_ELECTRICAL, player)
     connection = Entrance(player, f"{REGION_ELECTRICAL_POWERED} entrance", electrical)
     electrical.exits.append(connection)
-    connection.connect(world.get_region(REGION_ELECTRICAL_POWERED, player))
+    connection.connect(multiworld.get_region(REGION_ELECTRICAL_POWERED, player))
