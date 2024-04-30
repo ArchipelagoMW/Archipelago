@@ -208,4 +208,49 @@ class TestItemFiltering(Sc2SetupTestBase):
             self.assertNotEqual(item_data.type, Items.ProtossItemType.Unit_2, f"Item '{item_name}' included when all protoss build missions are excluded")
             self.assertNotEqual(item_data.type, Items.ProtossItemType.Building, f"Item '{item_name}' included when all protoss build missions are excluded")
 
+    def test_vanilla_items_only_excludes_terran_progressives(self) -> None:
+        options = {
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'mission_order': Options.MissionOrder.option_grid,
+            'maximum_campaign_size': Options.MaximumCampaignSize.range_end,
+            'accessibility': 'locations',
+            'vanilla_items_only': True,
+        }
+        self.generate_world(options)
+        items = [(item.name, Items.item_table[item.name]) for item in self.multiworld.itempool]
+        self.assertTrue(items)
+        occurrences: Dict[str, int] = {}
+        for item_name, _ in items:
+            if item_name in ItemGroups.terran_progressive_items:
+                if item_name in ItemGroups.nova_equipment:
+                    # The option imposes no contraint on Nova equipment
+                    continue
+                occurrences.setdefault(item_name, 0)
+                occurrences[item_name] += 1
+                self.assertLessEqual(occurrences[item_name], 1, f"'{item_name}' unexpectedly appeared multiple times in the pool")
+
+    def test_nco_and_2_wol_missions_only_can_generate_with_vanilla_items_only(self) -> None:
+        options = {
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'excluded_missions': [
+                mission.mission_name for mission in MissionTables.SC2Mission
+                if mission.campaign == MissionTables.SC2Campaign.WOL
+                    and mission.mission_name not in (MissionTables.SC2Mission.LIBERATION_DAY.mission_name, MissionTables.SC2Mission.THE_OUTLAWS.mission_name)
+            ],
+            'mission_order': Options.MissionOrder.option_grid,
+            'maximum_campaign_size': Options.MaximumCampaignSize.range_end,
+            'accessibility': 'locations',
+            'vanilla_items_only': True,
+        }
+        self.generate_world(options)
+        items = [(item.name, Items.item_table[item.name]) for item in self.multiworld.itempool]
+        self.assertTrue(items)
 

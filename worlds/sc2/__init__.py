@@ -528,11 +528,11 @@ def flag_user_excluded_item_sets(world: SC2World, item_list: List[FilterItem]) -
     vanilla_nonprogressive_count = {
         item_name: 0 for item_name in ItemGroups.terran_original_progressive_upgrades
     }
-
+    vanilla_items = ItemGroups.vanilla_items + ItemGroups.nova_equipment
     for item in item_list:
         if ItemFilterFlags.Excluded in item.flags:
             continue
-        if item.name not in ItemGroups.vanilla_items:
+        if item.name not in vanilla_items:
             item.flags |= ItemFilterFlags.Excluded
         if item.name in ItemGroups.terran_original_progressive_upgrades:
             if vanilla_nonprogressive_count[item.name]:

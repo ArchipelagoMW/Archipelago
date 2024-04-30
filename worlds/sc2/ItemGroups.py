@@ -243,7 +243,7 @@ item_name_groups[ItemGroupNames.TERRAN_ORIGINAL_PROGRESSIVE_UPGRADES] = terran_o
     ItemNames.THOR_PROGRESSIVE_IMMORTALITY_PROTOCOL,
     ItemNames.PROGRESSIVE_REGENERATIVE_BIO_STEEL,
 ]
-item_name_groups[ItemGroupNames.TERRAN_PROGRESSIVE_UPGRADES] = [
+item_name_groups[ItemGroupNames.TERRAN_PROGRESSIVE_UPGRADES] = terran_progressive_items = [
     item_name for item_name, item_data in Items.item_table.items()
     if item_data.type in (Items.TerranItemType.Progressive, Items.TerranItemType.Progressive_2)
 ]
