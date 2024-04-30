@@ -677,6 +677,11 @@ class ExcludedItems(Sc2ItemDict):
     display_name = "Excluded Items"
 
 
+class UnexcludedItems(Sc2ItemDict):
+    """Undoes an item exclusion; useful for whitelisting or fine-tuning a category."""
+    display_name = "Unexcluded Items"
+
+
 class ExcludedMissions(OptionSet):
     """Guarantees that these missions will not appear in the campaign
     Doesn't apply to vanilla mission order.
@@ -859,6 +864,7 @@ class Starcraft2Options(PerGameCommonOptions):
     take_over_ai_allies: TakeOverAIAllies
     locked_items: LockedItems
     excluded_items: ExcludedItems
+    unexcluded_items: UnexcludedItems
     excluded_missions: ExcludedMissions
     exclude_very_hard_missions: ExcludeVeryHardMissions
     vanilla_items_only: VanillaItemsOnly

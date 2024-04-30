@@ -72,6 +72,44 @@ class TestItemFiltering(Sc2SetupTestBase):
         regen_biosteel_items = [x for x in item_names if x == ItemNames.PROGRESSIVE_REGENERATIVE_BIO_STEEL]
         self.assertEqual(len(regen_biosteel_items), 2)
 
+    def test_unexcludes_cancel_out_excludes(self):
+        options = {
+            'grant_story_tech': True,
+            'excluded_items': {
+                ItemGroups.ItemGroupNames.NOVA_EQUIPMENT: 15,
+                ItemNames.MARINE_PROGRESSIVE_STIMPACK: 1,
+                ItemNames.MARAUDER_PROGRESSIVE_STIMPACK: 2,
+                ItemNames.MARINE: 0,
+                ItemNames.MARAUDER: 0,
+                ItemNames.REAPER: 1,
+                ItemNames.DIAMONDBACK: 0,
+                ItemNames.HELLION: 1,
+            },
+            'unexcluded_items': {
+                ItemNames.NOVA_PLASMA_RIFLE: 1,      # Necessary to pass logic
+                ItemNames.NOVA_PULSE_GRENADES: 0,    # Necessary to pass logic
+                ItemNames.NOVA_JUMP_SUIT_MODULE: 0,  # Necessary to pass logic
+                ItemGroups.ItemGroupNames.BARRACKS_UNITS: 0,
+                ItemNames.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE: 1,
+                ItemNames.HELLION: 1,
+                ItemNames.MARINE_PROGRESSIVE_STIMPACK: 1,
+                ItemNames.MARAUDER_PROGRESSIVE_STIMPACK: 0,
+            },
+        }
+        self.generate_world(options)
+        self.assertTrue(self.multiworld.itempool)
+        item_names = [item.name for item in self.multiworld.itempool]
+        self.assertIn(ItemNames.MARINE, item_names)
+        self.assertIn(ItemNames.MARAUDER, item_names)
+        self.assertIn(ItemNames.REAPER, item_names)
+        self.assertEqual(item_names.count(ItemNames.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE), 1, f"Stealth suit occurred the wrong number of times")
+        self.assertIn(ItemNames.HELLION, item_names)
+        self.assertEqual(item_names.count(ItemNames.MARINE_PROGRESSIVE_STIMPACK), 2, "Marine stimpacks weren't unexcluded")
+        self.assertEqual(item_names.count(ItemNames.MARAUDER_PROGRESSIVE_STIMPACK), 2, "Marauder stimpacks weren't unexcluded")
+        self.assertNotIn(ItemNames.DIAMONDBACK, item_names)
+        self.assertNotIn(ItemNames.NOVA_BLAZEFIRE_GUNBLADE, item_names)
+        self.assertNotIn(ItemNames.NOVA_ENERGY_SUIT_MODULE, item_names)
+
     def test_excluding_groups_excludes_all_items_in_group(self):
         options = {
             'excluded_items': [
