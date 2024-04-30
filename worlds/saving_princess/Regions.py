@@ -6,80 +6,59 @@ from . import Locations
 from .Constants import *
 
 
-class RegionData:
-    location_names: List[str]
-
-    def __init__(self, location_names: List[str]):
-        self.location_names = location_names
-
-
-region_dict: Dict[str, RegionData] = {
-    REGION_MENU: RegionData([]),
-    REGION_CAVE: RegionData(
-        [
-            LOCATION_CAVE_AMMO,
-            LOCATION_CAVE_RELOAD,
-            LOCATION_CAVE_HEALTH,
-            LOCATION_CAVE_WEAPON,
-            EP_LOCATION_CAVE_MINIBOSS,
-            EP_LOCATION_CAVE_BOSS,
-        ]
-    ),
-    REGION_VOLCANIC: RegionData(
-        [
-            LOCATION_VOLCANIC_RELOAD,
-            LOCATION_VOLCANIC_HEALTH,
-            LOCATION_VOLCANIC_AMMO,
-            LOCATION_VOLCANIC_WEAPON,
-            EP_LOCATION_VOLCANIC_BOSS,
-        ]
-    ),
-    REGION_ARCTIC: RegionData(
-        [
-            LOCATION_ARCTIC_AMMO,
-            LOCATION_ARCTIC_RELOAD,
-            LOCATION_ARCTIC_HEALTH,
-            LOCATION_ARCTIC_WEAPON,
-            LOCATION_JACKET,
-            EP_LOCATION_ARCTIC_BOSS,
-        ]
-    ),
-    REGION_HUB: RegionData(
-        [
-            LOCATION_HUB_AMMO,
-            LOCATION_HUB_HEALTH,
-            LOCATION_HUB_RELOAD,
-            EP_LOCATION_HUB_CONSOLE,
-            EP_LOCATION_HUB_NINJA_SCARE,
-        ]
-    ),
-    REGION_SWAMP: RegionData(
-        [
-            LOCATION_SWAMP_AMMO,
-            LOCATION_SWAMP_HEALTH,
-            LOCATION_SWAMP_RELOAD,
-            LOCATION_SWAMP_SPECIAL,
-            EP_LOCATION_SWAMP_BOSS,
-        ]
-    ),
-    REGION_ELECTRICAL: RegionData(
-        [
-            EP_LOCATION_ELEVATOR_NINJA_FIGHT,
-            LOCATION_ELECTRICAL_WEAPON,
-            EP_LOCATION_ELECTRICAL_MINIBOSS,
-            EP_LOCATION_ELECTRICAL_EXTRA,
-        ]
-    ),
-    REGION_ELECTRICAL_POWERED: RegionData(
-        [
-            LOCATION_ELECTRICAL_RELOAD,
-            LOCATION_ELECTRICAL_HEALTH,
-            LOCATION_ELECTRICAL_AMMO,
-            EP_LOCATION_ELECTRICAL_BOSS,
-            EP_LOCATION_ELECTRICAL_FINAL_BOSS,
-            EVENT_LOCATION_VICTORY,
-        ]
-    ),
+region_dict: Dict[str, List[str]] = {
+    REGION_MENU: [],
+    REGION_CAVE: [
+        LOCATION_CAVE_AMMO,
+        LOCATION_CAVE_RELOAD,
+        LOCATION_CAVE_HEALTH,
+        LOCATION_CAVE_WEAPON,
+        EP_LOCATION_CAVE_MINIBOSS,
+        EP_LOCATION_CAVE_BOSS,
+    ],
+    REGION_VOLCANIC: [
+        LOCATION_VOLCANIC_RELOAD,
+        LOCATION_VOLCANIC_HEALTH,
+        LOCATION_VOLCANIC_AMMO,
+        LOCATION_VOLCANIC_WEAPON,
+        EP_LOCATION_VOLCANIC_BOSS,
+    ],
+    REGION_ARCTIC: [
+        LOCATION_ARCTIC_AMMO,
+        LOCATION_ARCTIC_RELOAD,
+        LOCATION_ARCTIC_HEALTH,
+        LOCATION_ARCTIC_WEAPON,
+        LOCATION_JACKET,
+        EP_LOCATION_ARCTIC_BOSS,
+    ],
+    REGION_HUB: [
+        LOCATION_HUB_AMMO,
+        LOCATION_HUB_HEALTH,
+        LOCATION_HUB_RELOAD,
+        EP_LOCATION_HUB_CONSOLE,
+        EP_LOCATION_HUB_NINJA_SCARE,
+    ],
+    REGION_SWAMP: [
+        LOCATION_SWAMP_AMMO,
+        LOCATION_SWAMP_HEALTH,
+        LOCATION_SWAMP_RELOAD,
+        LOCATION_SWAMP_SPECIAL,
+        EP_LOCATION_SWAMP_BOSS,
+    ],
+    REGION_ELECTRICAL: [
+        EP_LOCATION_ELEVATOR_NINJA_FIGHT,
+        LOCATION_ELECTRICAL_WEAPON,
+        EP_LOCATION_ELECTRICAL_MINIBOSS,
+        EP_LOCATION_ELECTRICAL_EXTRA,
+    ],
+    REGION_ELECTRICAL_POWERED: [
+        LOCATION_ELECTRICAL_RELOAD,
+        LOCATION_ELECTRICAL_HEALTH,
+        LOCATION_ELECTRICAL_AMMO,
+        EP_LOCATION_ELECTRICAL_BOSS,
+        EP_LOCATION_ELECTRICAL_FINAL_BOSS,
+        EVENT_LOCATION_VICTORY,
+    ],
 }
 
 
@@ -98,11 +77,11 @@ def set_region_locations(region: Region, location_names: List[str], is_pool_expa
 
 
 def create_regions(world: MultiWorld, player: int, is_pool_expanded: bool):
-    for region_name, region_data in region_dict.items():
         region = Region(region_name, player, world)
-        set_region_locations(region, region_data.location_names, is_pool_expanded)
         world.regions.append(region)
     connect_regions(world, player)
+    for region_name, location_names in region_dict.items():
+        set_region_locations(region, location_names, is_pool_expanded)
 
 
 def connect_regions(world: MultiWorld, player: int):
