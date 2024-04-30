@@ -497,7 +497,7 @@ class CommonContext:
     def on_ui_command(self, text: str) -> None:
         """Gets called by kivy when the user executes a command starting with `/` or `!`.
         The command processor is still called; this is just intended for command echoing."""
-        self.ui.print_json([{"text": text, "type": "color", "color": "slateblue"}])
+        self.ui.print_json([{"text": text, "type": "color", "color": "orange"}])
 
     def update_permissions(self, permissions: typing.Dict[str, int]):
         for permission_name, permission_flag in permissions.items():
