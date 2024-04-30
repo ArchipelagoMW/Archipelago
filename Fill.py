@@ -12,7 +12,11 @@ from worlds.generic.Rules import add_item_rule
 
 
 class FillError(RuntimeError):
-    pass
+    def __init__(self, *args, **kwargs) -> None:
+        if kwargs["multiworld"]:
+            placements = f"\nAll Placements:\n{[(loc, loc.item) for loc in kwargs['multiworld'].get_filled_locations()]}"
+            args = (*args, placements)
+        super().__init__(*args)
 
 
 def _log_fill_progress(name: str, placed: int, total_items: int) -> None:
@@ -206,7 +210,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                             f"Unfilled locations:\n"
                             f"{', '.join(str(location) for location in locations)}\n"
                             f"Already placed {len(placements)}:\n"
-                            f"{', '.join(str(place) for place in placements)}")
+                            f"{', '.join(str(place) for place in placements)}", multiworld=multiworld)
 
     item_pool.extend(unplaced_items)
 
@@ -467,7 +471,8 @@ def distribute_items_restrictive(multiworld: MultiWorld) -> None:
         if progitempool:
             raise FillError(
                 f"Not enough locations for progression items. "
-                f"There are {len(progitempool)} more progression items than there are available locations."
+                f"There are {len(progitempool)} more progression items than there are available locations.",
+                multiworld=multiworld,
             )
         accessibility_corrections(multiworld, multiworld.state, defaultlocations)
 
@@ -482,7 +487,8 @@ def distribute_items_restrictive(multiworld: MultiWorld) -> None:
     if excludedlocations:
         raise FillError(
             f"Not enough filler items for excluded locations. "
-            f"There are {len(excludedlocations)} more excluded locations than filler or trap items."
+            f"There are {len(excludedlocations)} more excluded locations than filler or trap items.",
+            multiworld=multiworld,
         )
 
     restitempool = filleritempool + usefulitempool
@@ -547,7 +553,7 @@ def flood_items(multiworld: MultiWorld) -> None:
             if candidate_item_to_place is not None:
                 item_to_place = candidate_item_to_place
             else:
-                raise FillError('No more progress items left to place.')
+                raise FillError('No more progress items left to place.', multiworld=multiworld)
 
         # find item to replace with progress item
         location_list = multiworld.get_reachable_locations()
