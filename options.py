@@ -141,8 +141,8 @@ class MultiworldSend(Choice):
     Regardless of this setting, sending other players items from a level you can't clear is not in logic.
     '''
     display_name = "Send Locations to Server"
-    option_immediately = 0
-    option_on_escape = 1
+    option_on_escape = 0
+    option_immediately = 1
     default = option_immediately
 
 
