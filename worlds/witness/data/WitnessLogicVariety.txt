@@ -1012,13 +1012,13 @@ Mountain Floor 1 Bridge (Mountain Floor 1) - Mountain Floor 1 At Door - TrueOneW
 158411 - 0x09E72 (Right Row 3) - 0x09E71 - Black/White Squares & Shapers & Stars & Stars + Same Colored Symbol
 158412 - 0x09E69 (Right Row 4) - 0x09E72 - Black/White Squares & Eraser & Stars & Stars + Same Colored Symbol
 158413 - 0x09E7B (Right Row 5) - 0x09E69 - Dots & Full Dots & Triangles
-158414 - 0x09E73 (Left Row 1) - True - Arrows & Dots ?
-158415 - 0x09E75 (Left Row 2) - 0x09E73 - Arrows & Black/White Squares ?
-158416 - 0x09E78 (Left Row 3) - 0x09E75 - Arrows & Stars ?
-158417 - 0x09E79 (Left Row 4) - 0x09E78 - Arrows & Shapers & Rotated Shapers ?
-158418 - 0x09E6C (Left Row 5) - 0x09E79 - Arrows & Black/White Squares & Stars & Stars + Same Colored Symbol ?
-158419 - 0x09E6F (Left Row 6) - 0x09E6C - Arrows & Dots & Full Dots ?
-158420 - 0x09E6B (Left Row 7) - 0x09E6F - Arrows & Dots & Full Dots ?
+158414 - 0x09E73 (Left Row 1) - True - Arrows & Dots
+158415 - 0x09E75 (Left Row 2) - 0x09E73 - Arrows & Black/White Squares
+158416 - 0x09E78 (Left Row 3) - 0x09E75 - Arrows & Stars
+158417 - 0x09E79 (Left Row 4) - 0x09E78 - Arrows & Shapers & Rotated Shapers
+158418 - 0x09E6C (Left Row 5) - 0x09E79 - Arrows & Black/White Squares & Stars & Stars + Same Colored Symbol
+158419 - 0x09E6F (Left Row 6) - 0x09E6C - Arrows & Dots & Full Dots
+158420 - 0x09E6B (Left Row 7) - 0x09E6F - Arrows & Dots & Full Dots
 158421 - 0x33AF5 (Back Row 1) - True - Symmetry & Triangles
 158422 - 0x33AF7 (Back Row 2) - 0x33AF5 - Triangles
 158423 - 0x09F6E (Back Row 3) - 0x33AF7 - Symmetry & Triangles
