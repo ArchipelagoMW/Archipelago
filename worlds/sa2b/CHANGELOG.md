@@ -1,6 +1,18 @@
 # Sonic Adventure 2 Battle - Changelog
 
 
+## v2.4 - WIP
+
+### Features:
+
+### Quality of Life:
+
+### Bug Fixes:
+- Chaos Emeralds should no longer disproportionately end up in Cannon's Core or the final Level Gate
+- Fix Chao World Entrance Shuffle causing inaccessible Neutral Garden
+- Fix pressing the 'B' button to take you to the proper location in Chao World Entrance Shuffle
+
+
 ## v2.3 - The Chao Update
 
 ### Features:
