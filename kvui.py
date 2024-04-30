@@ -3,7 +3,6 @@ import logging
 import sys
 import typing
 import re
-from typing import List, Tuple, Optional
 
 if sys.platform == "win32":
     import ctypes
@@ -390,15 +389,24 @@ class CommandPromptTextInput(TextInput):
 
     def __init__(self, *args, **kwargs) -> None:
         self._command_history_index = -1
-        self._command_history: List[str] = []
+        self._command_history: typing.List[str] = []
         return super().__init__(*args, **kwargs)
     
     def update_history(self, new_entry: str) -> None:
         self._command_history_index = -1
         if is_command_input(new_entry):
-            self._command_history = [new_entry, *self._command_history[:CommandPromptTextInput.MAXIMUM_HISTORY_MESSAGES-1]]
+            self._command_history = [
+                new_entry,
+                *self._command_history[:CommandPromptTextInput.MAXIMUM_HISTORY_MESSAGES-1]
+            ]
 
-    def keyboard_on_key_down(self, window, keycode: Tuple[int, str], text: Optional[str], modifiers: List[str]) -> bool:
+    def keyboard_on_key_down(
+        self,
+        window,
+        keycode: typing.Tuple[int, str],
+        text: typing.Optional[str],
+        modifiers: typing.List[str]
+    ) -> bool:
         """
         :param window: The kivy window object
         :param keycode: A tuple of (keycode, keyname). Keynames are always lowercase
