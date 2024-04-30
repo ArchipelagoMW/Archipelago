@@ -28,8 +28,14 @@
 # Bumper Stickers
 /worlds/bumpstik/ @FelicitusNeko
 
+# Castlevania 64
+/worlds/cv64/ @LiquidCat64
+
+# Celeste 64
+/worlds/celeste64/ @PoryGone
+
 # ChecksFinder
-/worlds/checksfinder/ @jonloveslegos
+/worlds/checksfinder/ @SunCatMC
 
 # Clique
 /worlds/clique/ @ThePhar
@@ -46,11 +52,20 @@
 # DOOM 1993
 /worlds/doom_1993/ @Daivuk
 
+# DOOM II
+/worlds/doom_ii/ @Daivuk
+
 # Factorio
 /worlds/factorio/ @Berserker66
 
 # Final Fantasy
 /worlds/ff1/ @jtoyoda
+
+# Final Fantasy Mystic Quest
+/worlds/ffmq/ @Alchav @wildham0
+
+# Heretic
+/worlds/heretic/ @Daivuk
 
 # Hollow Knight
 /worlds/hk/ @BadMagic100 @ThePhar
@@ -58,8 +73,17 @@
 # Hylics 2
 /worlds/hylics2/ @TRPG0
 
+# Kirby's Dream Land 3
+/worlds/kdl3/ @Silvris
+
 # Kingdom Hearts 2
 /worlds/kh2/ @JaredWeakStrike
+
+# Landstalker: The Treasures of King Nole
+/worlds/landstalker/ @Dinopony
+
+# Lingo
+/worlds/lingo/ @hatkirby
 
 # Links Awakening DX
 /worlds/ladx/ @zig-for
@@ -92,6 +116,9 @@
 # Overcooked! 2
 /worlds/overcooked2/ @toasterparty
 
+# Pokemon Emerald
+/worlds/pokemon_emerald/ @Zunawe
+
 # Pokemon Red and Blue
 /worlds/pokemon_rb/ @Alchav
 
@@ -104,11 +131,17 @@
 # Risk of Rain 2
 /worlds/ror2/ @kindasneaki
 
+# Shivers
+/worlds/shivers/ @GodlFire
+
+# A Short Hike
+/worlds/shorthike/ @chandler05
+
 # Sonic Adventure 2 Battle
 /worlds/sa2b/ @PoryGone @RaspberrySpace
 
-# Starcraft 2 Wings of Liberty
-/worlds/sc2wol/ @Ziktofel
+# Starcraft 2
+/worlds/sc2/ @Ziktofel
 
 # Super Metroid
 /worlds/sm/ @lordlou
@@ -143,6 +176,9 @@
 # The Legend of Zelda (1)
 /worlds/tloz/ @Rosalie-A @t3hf1gm3nt
 
+# TUNIC
+/worlds/tunic/ @silent-destroyer @ScipioWright
+
 # Undertale
 /worlds/undertale/ @jonloveslegos
 
@@ -155,8 +191,14 @@
 # The Witness
 /worlds/witness/ @NewSoupVi @blastron
 
+# Yoshi's Island
+/worlds/yoshisisland/ @PinkSwitch
+
 # Zillion
 /worlds/zillion/ @beauxq
+
+# Zork Grand Inquisitor
+/worlds/zork_grand_inquisitor/ @nbrochu
 
 ##################################
 ## Disabled Unmaintained Worlds ##

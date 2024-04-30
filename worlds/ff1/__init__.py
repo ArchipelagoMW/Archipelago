@@ -14,7 +14,7 @@ class FF1Settings(settings.Group):
 
 
 class FF1Web(WebWorld):
-    settings_page = "https://finalfantasyrandomizer.com/"
+    options_page = "https://finalfantasyrandomizer.com/"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide to playing Final Fantasy multiworld. This guide only covers playing multiworld.",
@@ -74,6 +74,7 @@ class FF1World(World):
         items = get_options(self.multiworld, 'items', self.player)
         goal_rule = generate_rule([[name for name in items.keys() if name in FF1_PROGRESSION_LIST and name != "Shard"]],
                                   self.player)
+        terminated_event.access_rule = goal_rule
         if "Shard" in items.keys():
             def goal_rule_and_shards(state):
                 return goal_rule(state) and state.has("Shard", self.player, 32)

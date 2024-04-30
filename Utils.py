@@ -5,6 +5,7 @@ import json
 import typing
 import builtins
 import os
+import itertools
 import subprocess
 import sys
 import pickle
@@ -18,14 +19,13 @@ import warnings
 from argparse import Namespace
 from settings import Settings, get_settings
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
-from yaml import load, load_all, dump, SafeLoader
+from typing_extensions import TypeGuard
+from yaml import load, load_all, dump
 
 try:
-    from yaml import CLoader as UnsafeLoader
-    from yaml import CDumper as Dumper
+    from yaml import CLoader as UnsafeLoader, CSafeLoader as SafeLoader, CDumper as Dumper
 except ImportError:
-    from yaml import Loader as UnsafeLoader
-    from yaml import Dumper
+    from yaml import Loader as UnsafeLoader, SafeLoader, Dumper
 
 if typing.TYPE_CHECKING:
     import tkinter
@@ -46,7 +46,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.4.3"
+__version__ = "0.4.6"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -73,6 +73,8 @@ def snes_to_pc(value: int) -> int:
 
 
 RetType = typing.TypeVar("RetType")
+S = typing.TypeVar("S")
+T = typing.TypeVar("T")
 
 
 def cache_argsless(function: typing.Callable[[], RetType]) -> typing.Callable[[], RetType]:
@@ -88,6 +90,31 @@ def cache_argsless(function: typing.Callable[[], RetType]) -> typing.Callable[[]
         return typing.cast(RetType, result)
 
     return _wrap
+
+
+def cache_self1(function: typing.Callable[[S, T], RetType]) -> typing.Callable[[S, T], RetType]:
+    """Specialized cache for self + 1 arg. Does not keep global ref to self and skips building a dict key tuple."""
+
+    assert function.__code__.co_argcount == 2, "Can only cache 2 argument functions with this cache."
+
+    cache_name = f"__cache_{function.__name__}__"
+
+    @functools.wraps(function)
+    def wrap(self: S, arg: T) -> RetType:
+        cache: Optional[Dict[T, RetType]] = typing.cast(Optional[Dict[T, RetType]],
+                                                        getattr(self, cache_name, None))
+        if cache is None:
+            res = function(self, arg)
+            setattr(self, cache_name, {arg: res})
+            return res
+        try:
+            return cache[arg]
+        except KeyError:
+            res = function(self, arg)
+            cache[arg] = res
+            return res
+
+    return wrap
 
 
 def is_frozen() -> bool:
@@ -146,12 +173,16 @@ def user_path(*path: str) -> str:
         if user_path.cached_path != local_path():
             import filecmp
             if not os.path.exists(user_path("manifest.json")) or \
+                    not os.path.exists(local_path("manifest.json")) or \
                     not filecmp.cmp(local_path("manifest.json"), user_path("manifest.json"), shallow=True):
                 import shutil
-                for dn in ("Players", "data/sprites"):
+                for dn in ("Players", "data/sprites", "data/lua"):
                     shutil.copytree(local_path(dn), user_path(dn), dirs_exist_ok=True)
-                for fn in ("manifest.json",):
-                    shutil.copy2(local_path(fn), user_path(fn))
+                if not os.path.exists(local_path("manifest.json")):
+                    warnings.warn(f"Upgrading {user_path()} from something that is not a proper install")
+                else:
+                    shutil.copy2(local_path("manifest.json"), user_path("manifest.json"))
+            os.makedirs(user_path("worlds"), exist_ok=True)
 
     return os.path.join(user_path.cached_path, *path)
 
@@ -170,7 +201,7 @@ def cache_path(*path: str) -> str:
 def output_path(*path: str) -> str:
     if hasattr(output_path, 'cached_path'):
         return os.path.join(output_path.cached_path, *path)
-    output_path.cached_path = user_path(get_options()["general_options"]["output_path"])
+    output_path.cached_path = user_path(get_settings()["general_options"]["output_path"])
     path = os.path.join(output_path.cached_path, *path)
     os.makedirs(os.path.dirname(path), exist_ok=True)
     return path
@@ -194,6 +225,9 @@ class UniqueKeyLoader(SafeLoader):
             if key in mapping:
                 logging.error(f"YAML duplicates sanity check failed{key_node.start_mark}")
                 raise KeyError(f"Duplicate key {key} found in YAML. Already found keys: {mapping}.")
+            if (str(key).startswith("+") and (str(key)[1:] in mapping)) or (f"+{key}" in mapping):
+                logging.error(f"YAML merge duplicates sanity check failed{key_node.start_mark}")
+                raise KeyError(f"Equivalent key {key} found in YAML. Already found keys: {mapping}.")
             mapping.add(key)
         return super().construct_mapping(node, deep)
 
@@ -257,15 +291,13 @@ def get_public_ipv6() -> str:
     return ip
 
 
-OptionsType = Settings  # TODO: remove ~2 versions after 0.4.1
+OptionsType = Settings  # TODO: remove when removing get_options
 
 
-@cache_argsless
-def get_default_options() -> Settings:  # TODO: remove ~2 versions after 0.4.1
-    return Settings(None)
-
-
-get_options = get_settings  # TODO: add a warning ~2 versions after 0.4.1 and remove once all games are ported
+def get_options() -> Settings:
+    # TODO: switch to Utils.deprecate after 0.4.4
+    warnings.warn("Utils.get_options() is deprecated. Use the settings API instead.", DeprecationWarning)
+    return get_settings()
 
 
 def persistent_store(category: str, key: typing.Any, value: typing.Any):
@@ -587,6 +619,8 @@ def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: ty
 
 def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typing.Sequence[str]]], suggest: str = "") \
         -> typing.Optional[str]:
+    logging.info(f"Opening file input dialog for {title}.")
+
     def run(*args: str):
         return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
 
@@ -684,7 +718,7 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         import ctypes
         style = 0x10 if error else 0x0
         return ctypes.windll.user32.MessageBoxW(0, text, title, style)
-    
+
     # fall back to tk
     try:
         import tkinter
@@ -748,6 +782,25 @@ def deprecate(message: str):
         raise Exception(message)
     import warnings
     warnings.warn(message)
+
+
+class DeprecateDict(dict):
+    log_message: str
+    should_error: bool
+
+    def __init__(self, message, error: bool = False) -> None:
+        self.log_message = message
+        self.should_error = error
+        super().__init__()
+
+    def __getitem__(self, item: Any) -> Any:
+        if self.should_error:
+            deprecate(self.log_message)
+        elif __debug__:
+            import warnings
+            warnings.warn(self.log_message)
+        return super().__getitem__(item)
+
 
 def _extend_freeze_support() -> None:
     """Extend multiprocessing.freeze_support() to also work on Non-Windows for spawn."""
@@ -822,8 +875,8 @@ def visualize_regions(root_region: Region, file_name: str, *,
 
     Example usage in Main code:
     from Utils import visualize_regions
-    for player in world.player_ids:
-        visualize_regions(world.get_region("Menu", player), f"{world.get_out_file_name_base(player)}.puml")
+    for player in multiworld.player_ids:
+        visualize_regions(multiworld.get_region("Menu", player), f"{multiworld.get_out_file_name_base(player)}.puml")
     """
     assert root_region.multiworld, "The multiworld attribute of root_region has to be filled"
     from BaseClasses import Entrance, Item, Location, LocationProgressType, MultiWorld, Region
@@ -905,3 +958,24 @@ def visualize_regions(root_region: Region, file_name: str, *,
 
     with open(file_name, "wt", encoding="utf-8") as f:
         f.write("\n".join(uml))
+
+
+class RepeatableChain:
+    def __init__(self, iterable: typing.Iterable):
+        self.iterable = iterable
+
+    def __iter__(self):
+        return itertools.chain.from_iterable(self.iterable)
+
+    def __bool__(self):
+        return any(sub_iterable for sub_iterable in self.iterable)
+
+    def __len__(self):
+        return sum(len(iterable) for iterable in self.iterable)
+
+
+def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]]:
+    """ `str` is `Iterable`, but that's not what we want """
+    if isinstance(obj, str):
+        return False
+    return isinstance(obj, typing.Iterable)

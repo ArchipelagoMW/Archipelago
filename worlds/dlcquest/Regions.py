@@ -23,7 +23,10 @@ def add_coin(region: Region, coin: int, player: int, suffix: str):
     location_coin = f"{region.name}{suffix}"
     location = DLCQuestLocation(player, location_coin, None, region)
     region.locations.append(location)
-    location.place_locked_item(create_event(player, number_coin))
+    event = create_event(player, number_coin)
+    event.coins = coin
+    event.coin_suffix = suffix
+    location.place_locked_item(event)
 
 
 def create_regions(multiworld: MultiWorld, player: int, world_options: Options.DLCQuestOptions):
@@ -179,9 +182,22 @@ def create_coinsanity_locations_lfod(has_coinsanity: bool, coin_bundle_size: int
 def create_coinsanity_locations(has_coinsanity: bool, coin_bundle_size: int, player: int, region: Region, last_coin_number: int, campaign_prefix: str):
     if not has_coinsanity:
         return
+    if coin_bundle_size == -1:
+        create_coinsanity_piece_locations(player, region, last_coin_number, campaign_prefix)
+        return
+
 
     coin_bundle_needed = math.ceil(last_coin_number / coin_bundle_size)
     for i in range(1, coin_bundle_needed + 1):
         number_coins = min(last_coin_number, coin_bundle_size * i)
         item_coin = f"{campaign_prefix}: {number_coins} Coin"
         region.locations += [DLCQuestLocation(player, item_coin, location_table[item_coin], region)]
+
+
+def create_coinsanity_piece_locations(player: int, region: Region, total_coin: int, campaign_prefix:str):
+
+    pieces_needed = total_coin * 10
+    for i in range(1, pieces_needed + 1):
+        number_piece = i
+        item_piece = f"{campaign_prefix}: {number_piece} Coin Piece"
+        region.locations += [DLCQuestLocation(player, item_piece, location_table[item_piece], region)]
