@@ -251,6 +251,10 @@ class TestItemFiltering(Sc2SetupTestBase):
             'vanilla_items_only': True,
         }
         self.generate_world(options)
-        items = [(item.name, Items.item_table[item.name]) for item in self.multiworld.itempool]
-        self.assertTrue(items)
+        item_names = [item.name for item in self.multiworld.itempool]
+        self.assertTrue(item_names)
+        self.assertNotIn(ItemNames.LIBERATOR, item_names)
+        self.assertNotIn(ItemNames.MARAUDER_PROGRESSIVE_STIMPACK, item_names)
+        self.assertNotIn(ItemNames.HELLION_HELLBAT_ASPECT, item_names)
+        self.assertNotIn(ItemNames.BATTLECRUISER_CLOAK, item_names)
 
