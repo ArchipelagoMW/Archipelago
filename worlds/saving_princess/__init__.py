@@ -54,7 +54,7 @@ class SavingPrincessWorld(World):
     def generate_early(self) -> None:
         self.is_pool_expanded = self.options.expanded_pool > 0
         if self.options.music_shuffle:
-            self.multiworld.random.shuffle(self.music_table)
+            self.random.shuffle(self.music_table)
             # find zzz and purple and swap them back to their original positions
             for song_id in [9, 13]:
                 song_index = self.music_table.index(song_id)
@@ -100,10 +100,10 @@ class SavingPrincessWorld(World):
     def get_filler_item_name(self) -> str:
         filler_list = list(Items.item_dict_filler.keys())
         # check if this is going to be a trap
-        if self.multiworld.random.randint(0, 99) < self.options.trap_chance:
+        if self.random.randint(0, 99) < self.options.trap_chance:
             filler_list = list(Items.item_dict_traps.keys())
         # and return one of the names at random
-        return self.multiworld.random.choice(filler_list)
+        return self.random.choice(filler_list)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
