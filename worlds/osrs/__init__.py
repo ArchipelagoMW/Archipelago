@@ -1,4 +1,4 @@
-from BaseClasses import Item, Tutorial, ItemClassification, Region, Entrance, CollectionState, MultiWorld
+from BaseClasses import Item, Tutorial, ItemClassification, Region, MultiWorld
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_rule
 from .Items import OSRSItem, starting_area_dict, chunksanity_starting_chunks, QP_Items
@@ -6,7 +6,11 @@ from .Locations import OSRSLocation
 
 from .Options import OSRSOptions, StartingArea
 from .Names import LocationNames, ItemNames, RegionNames
-from .LogicCSVParser import load_location_csv, load_region_csv, load_resource_csv, load_item_csv
+
+from .LogicCSV.items_generated import item_rows
+from .LogicCSV.locations_generated import location_rows
+from .LogicCSV.regions_generated import region_rows
+from .LogicCSV.resources_generated import resource_rows
 
 
 class OSRSWeb(WebWorld):
@@ -32,14 +36,8 @@ class OSRSWorld(World):
     base_id = 0x070000
     data_version = 0
 
-    location_rows = load_location_csv()
-    region_rows = load_region_csv()
-    resource_rows = load_resource_csv()
-    item_rows = load_item_csv()
-
-    # Don't worry, the load_X_csv functions are cached. It just gets the list it generated the first time
-    item_name_to_id = {load_item_csv()[i].name: 0x070000 + i for i in range(len(load_item_csv()))}
-    location_name_to_id = {load_location_csv()[i].name: 0x070000 + i for i in range(len(load_location_csv()))}
+    item_name_to_id = {item_rows[i].name: 0x070000 + i for i in range(len(item_rows))}
+    location_name_to_id = {location_rows[i].name: 0x070000 + i for i in range(len(location_rows))}
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
@@ -58,7 +56,7 @@ class OSRSWorld(World):
         self.locations_by_category = {}
 
     def generate_early(self) -> None:
-        self.location_categories = {location_row.category for location_row in load_location_csv()}
+        self.location_categories = {location_row.category for location_row in location_rows}
         self.locations_by_category = {category:
                                           [location_row for location_row in self.location_rows if
                                            location_row.category == category]
