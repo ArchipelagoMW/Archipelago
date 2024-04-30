@@ -1,5 +1,4 @@
 from typing import *
-from pydoc import describe
 
 from BaseClasses import Item, ItemClassification, MultiWorld
 import typing
@@ -9,6 +8,9 @@ from .Options import get_option_value, RequiredTactics
 from .MissionTables import SC2Mission, SC2Race, SC2Campaign, campaign_mission_table
 from . import ItemNames
 from worlds.AutoWorld import World
+
+if TYPE_CHECKING:
+    from . import SC2World
 
 
 class ItemTypeEnum(enum.Enum):
@@ -1669,7 +1671,7 @@ not_balanced_starting_units = {
 }
 
 
-def get_basic_units(world: World, race: SC2Race) -> typing.Set[str]:
+def get_basic_units(world: 'SC2World', race: SC2Race) -> typing.Set[str]:
     logic_level = get_option_value(world, 'required_tactics')
     if logic_level == RequiredTactics.option_no_logic:
         return no_logic_starting_units[race]

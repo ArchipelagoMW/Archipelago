@@ -1,4 +1,4 @@
-from typing import List, Dict, Tuple, Optional, Callable, NamedTuple, Union
+from typing import List, Dict, Tuple, Optional, Callable, NamedTuple, Union, TYPE_CHECKING
 import math
 
 from BaseClasses import MultiWorld, Region, Entrance, Location, CollectionState
@@ -11,13 +11,17 @@ from .PoolFilter import filter_missions
 from worlds.AutoWorld import World
 
 
+if TYPE_CHECKING:
+    from . import SC2World
+
+
 class SC2MissionSlot(NamedTuple):
     campaign: SC2Campaign
     slot: Union[MissionPools, SC2Mission, None]
 
 
 def create_regions(
-    world: World, locations: Tuple[LocationData, ...], location_cache: List[Location]
+    world: 'SC2World', locations: Tuple[LocationData, ...], location_cache: List[Location]
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
     """
     Creates region connections by calling the multiworld's `connect()` methods
@@ -36,7 +40,7 @@ def create_regions(
         return create_structured_regions(world, locations, location_cache, mission_order_type)
 
 def create_vanilla_regions(
-    world: World,
+    world: 'SC2World',
     locations: Tuple[LocationData, ...],
     location_cache: List[Location],
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
@@ -268,7 +272,7 @@ def create_vanilla_regions(
 
 
 def create_grid_regions(
-    world: World,
+    world: 'SC2World',
     locations: Tuple[LocationData, ...],
     location_cache: List[Location],
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
@@ -377,7 +381,7 @@ def make_grid_connect_rule(
 
 
 def create_structured_regions(
-    world: World,
+    world: 'SC2World',
     locations: Tuple[LocationData, ...],
     location_cache: List[Location],
     mission_order_type: int,
@@ -622,7 +626,7 @@ def create_location(player: int, location_data: LocationData, region: Region,
     return location
 
 
-def create_region(world: World, locations_per_region: Dict[str, List[LocationData]],
+def create_region(world: 'SC2World', locations_per_region: Dict[str, List[LocationData]],
                   location_cache: List[Location], name: str) -> Region:
     region = Region(name, world.player, world.multiworld)
 
@@ -634,7 +638,7 @@ def create_region(world: World, locations_per_region: Dict[str, List[LocationDat
     return region
 
 
-def connect(world: World, used_names: Dict[str, int], source: str, target: str,
+def connect(world: 'SC2World', used_names: Dict[str, int], source: str, target: str,
             rule: Optional[Callable] = None):
     source_region = world.get_region(source)
     target_region = world.get_region(target)
