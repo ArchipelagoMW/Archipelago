@@ -110,6 +110,31 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertNotIn(ItemNames.NOVA_BLAZEFIRE_GUNBLADE, item_names)
         self.assertNotIn(ItemNames.NOVA_ENERGY_SUIT_MODULE, item_names)
 
+    def test_usecase_terran_with_nco_units_only(self):
+        options = {
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'excluded_items': {
+                ItemGroups.ItemGroupNames.TERRAN_UNITS: 0,
+            },
+            'unexcluded_items': {
+                ItemGroups.ItemGroupNames.NCO_UNITS: 0,
+            },
+        }
+        self.generate_world(options)
+        self.assertTrue(self.multiworld.itempool)
+        item_names = [item.name for item in self.multiworld.itempool]
+        self.assertIn(ItemNames.MARINE, item_names)
+        self.assertIn(ItemNames.RAVEN, item_names)
+        self.assertIn(ItemNames.LIBERATOR, item_names)
+        self.assertIn(ItemNames.BATTLECRUISER, item_names)
+        self.assertNotIn(ItemNames.DIAMONDBACK, item_names)
+        self.assertNotIn(ItemNames.DIAMONDBACK_BURST_CAPACITORS, item_names)
+        self.assertNotIn(ItemNames.VIKING, item_names)
+
     def test_excluding_groups_excludes_all_items_in_group(self):
         options = {
             'excluded_items': [
