@@ -45,7 +45,7 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a YAML file?
 
-You can customize your settings by visiting the [Saving Princess Player Settings Page](/games/Saving Princess/player-settings)
+You can customize your options by visiting the [Saving Princess Player Options Page](/games/Saving Princess/player-options)
 
 ### Verifying your YAML file
 
