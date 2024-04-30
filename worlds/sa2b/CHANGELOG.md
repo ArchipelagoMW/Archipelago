@@ -8,9 +8,12 @@
 ### Quality of Life:
 
 ### Bug Fixes:
+- Added missing `Dry Lagoon - 12 Animals` location
 - Chaos Emeralds should no longer disproportionately end up in Cannon's Core or the final Level Gate
 - Fix Chao World Entrance Shuffle causing inaccessible Neutral Garden
 - Fix pressing the 'B' button to take you to the proper location in Chao World Entrance Shuffle
+- Prevent Chao Karate progress icon overflow
+- Prevent changing Chao Timescale while paused
 
 
 ## v2.3 - The Chao Update
