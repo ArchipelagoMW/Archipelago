@@ -3,6 +3,8 @@ from typing import List, TYPE_CHECKING
 
 from BaseClasses import CollectionState, PlandoOptions
 from Options import PlandoConnection
+from .options import ShufflePortals
+
 
 if TYPE_CHECKING:
     from . import MessengerWorld

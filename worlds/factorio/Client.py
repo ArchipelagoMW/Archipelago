@@ -521,7 +521,7 @@ rcon_port = args.rcon_port
 rcon_password = args.rcon_password if args.rcon_password else ''.join(
     random.choice(string.ascii_letters) for x in range(32))
 factorio_server_logger = logging.getLogger("FactorioServer")
-options = Utils.get_options()
+options = Utils.get_settings()
 executable = options["factorio_options"]["executable"]
 server_settings = args.server_settings if args.server_settings \
     else options["factorio_options"].get("server_settings", None)
