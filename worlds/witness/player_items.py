@@ -157,12 +157,21 @@ class WitnessPlayerItems:
             output = {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"}
 
             discards_on = self._world.options.shuffle_discarded_panels
-            expert_or_variety = self._world.options.puzzle_randomization in {"sigma_expert", "variety"}
-
-            if discards_on or expert_or_variety:
+            difficulty = self._world.options.puzzle_randomization
+            
+            if difficulty == "sigma_expert" or difficulty == "variety":
+                # In Variety and Expert, Triangles are featured more prominently on all puzzles.
                 output.add("Triangles")
-            if discards_on and expert_or_variety:
-                output.add("Arrows")
+
+                # In Expert, Discards feature Arrows.
+                # In Variety, they feature Arrows + Triangles. Triangles are already taken care of.
+                if discards_on:
+                    output.add("Arrows")
+
+            else:
+                # In Normal and Vanilla Puzzles, Triangles are very useful for Discards, but nothing else.
+                if discards_on:
+                    output.add("Triangles")
 
             # Replace progressive items with their parents.
             output = {static_witness_logic.get_parent_progressive_item(item) for item in output}
