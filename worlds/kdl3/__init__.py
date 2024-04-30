@@ -203,9 +203,13 @@ class KDL3World(World):
                 animal_pool.append("Coo Spawn")
             else:
                 animal_pool.append("Kine Spawn")
+            # Weird fill hack, this forces ChuChu to be the last animal friend placed
+            # If Kine is ever the last animal friend placed, he will cause fill errors on closed world
+            animal_pool.sort()
             locations = [self.multiworld.get_location(spawn, self.player) for spawn in spawns]
             items = [self.create_item(animal) for animal in animal_pool]
             allstate = self.multiworld.get_all_state(False)
+            self.random.shuffle(locations)
             fill_restrictive(self.multiworld, allstate, locations, items, True, True)
         else:
             animal_friends = animal_friend_spawns.copy()

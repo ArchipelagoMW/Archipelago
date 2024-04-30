@@ -8,6 +8,7 @@ from ..options import ToolProgression, BuildingProgression, ExcludeGingerIsland,
     FriendsanityHeartSize, BundleRandomization, SkillProgression
 from ..strings.entrance_names import Entrance
 from ..strings.region_names import Region
+from ..strings.tool_names import Tool, ToolMaterial
 
 
 class TestProgressiveToolsLogic(SVTestBase):
@@ -556,8 +557,8 @@ class TestDonationLogicRandomized(SVTestBase):
         railroad_item = "Railroad Boulder Removed"
         swap_museum_and_bathhouse(self.multiworld, self.player)
         collect_all_except(self.multiworld, railroad_item)
-        donation_locations = [location for location in self.multiworld.get_locations() if
-                              not location.event and LocationTags.MUSEUM_DONATIONS in location_table[location.name].tags]
+        donation_locations = [location for location in self.get_real_locations() if
+                              LocationTags.MUSEUM_DONATIONS in location_table[location.name].tags]
 
         for donation in donation_locations:
             self.assertFalse(self.world.logic.region.can_reach_location(donation.name)(self.multiworld.state))
@@ -594,6 +595,54 @@ def swap_museum_and_bathhouse(multiworld, player):
     bathhouse_entrance = multiworld.get_entrance(Entrance.enter_bathhouse_entrance, player)
     museum_entrance.connect(bathhouse_region)
     bathhouse_entrance.connect(museum_region)
+
+
+class TestToolVanillaRequiresBlacksmith(SVTestBase):
+    options = {
+        options.EntranceRandomization: options.EntranceRandomization.option_buildings,
+        options.ToolProgression: options.ToolProgression.option_vanilla,
+    }
+    seed = 4111845104987680262
+
+    # Seed is hardcoded to make sure the ER is a valid roll that actually lock the blacksmith behind the Railroad Boulder Removed.
+
+    def test_cannot_get_any_tool_without_blacksmith_access(self):
+        railroad_item = "Railroad Boulder Removed"
+        place_region_at_entrance(self.multiworld, self.player, Region.blacksmith, Entrance.enter_bathhouse_entrance)
+        collect_all_except(self.multiworld, railroad_item)
+
+        for tool in [Tool.pickaxe, Tool.axe, Tool.hoe, Tool.trash_can, Tool.watering_can]:
+            for material in [ToolMaterial.copper, ToolMaterial.iron, ToolMaterial.gold, ToolMaterial.iridium]:
+                self.assert_rule_false(self.world.logic.tool.has_tool(tool, material), self.multiworld.state)
+
+        self.multiworld.state.collect(self.world.create_item(railroad_item), event=False)
+
+        for tool in [Tool.pickaxe, Tool.axe, Tool.hoe, Tool.trash_can, Tool.watering_can]:
+            for material in [ToolMaterial.copper, ToolMaterial.iron, ToolMaterial.gold, ToolMaterial.iridium]:
+                self.assert_rule_true(self.world.logic.tool.has_tool(tool, material), self.multiworld.state)
+
+    def test_cannot_get_fishing_rod_without_willy_access(self):
+        railroad_item = "Railroad Boulder Removed"
+        place_region_at_entrance(self.multiworld, self.player, Region.fish_shop, Entrance.enter_bathhouse_entrance)
+        collect_all_except(self.multiworld, railroad_item)
+
+        for fishing_rod_level in [3, 4]:
+            self.assert_rule_false(self.world.logic.tool.has_fishing_rod(fishing_rod_level), self.multiworld.state)
+
+        self.multiworld.state.collect(self.world.create_item(railroad_item), event=False)
+
+        for fishing_rod_level in [3, 4]:
+            self.assert_rule_true(self.world.logic.tool.has_fishing_rod(fishing_rod_level), self.multiworld.state)
+
+
+def place_region_at_entrance(multiworld, player, region, entrance):
+    region_to_place = multiworld.get_region(region, player)
+    entrance_to_place_region = multiworld.get_entrance(entrance, player)
+
+    entrance_to_switch = region_to_place.entrances[0]
+    region_to_switch = entrance_to_place_region.connected_region
+    entrance_to_switch.connect(region_to_switch)
+    entrance_to_place_region.connect(region_to_place)
 
 
 def collect_all_except(multiworld, item_to_not_collect: str):
@@ -664,10 +713,9 @@ class TestShipsanityNone(SVTestBase):
     }
 
     def test_no_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event:
-                self.assertFalse("Shipsanity" in location.name)
-                self.assertNotIn(LocationTags.SHIPSANITY, location_table[location.name].tags)
+        for location in self.get_real_locations():
+            self.assertFalse("Shipsanity" in location.name)
+            self.assertNotIn(LocationTags.SHIPSANITY, location_table[location.name].tags)
 
 
 class TestShipsanityCrops(SVTestBase):
@@ -676,8 +724,8 @@ class TestShipsanityCrops(SVTestBase):
     }
 
     def test_only_crop_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+        for location in self.get_real_locations():
+            if LocationTags.SHIPSANITY in location_table[location.name].tags:
                 self.assertIn(LocationTags.SHIPSANITY_CROP, location_table[location.name].tags)
 
 
@@ -687,8 +735,8 @@ class TestShipsanityFish(SVTestBase):
     }
 
     def test_only_fish_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+        for location in self.get_real_locations():
+            if LocationTags.SHIPSANITY in location_table[location.name].tags:
                 self.assertIn(LocationTags.SHIPSANITY_FISH, location_table[location.name].tags)
 
 
@@ -698,8 +746,8 @@ class TestShipsanityFullShipment(SVTestBase):
     }
 
     def test_only_full_shipment_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+        for location in self.get_real_locations():
+            if LocationTags.SHIPSANITY in location_table[location.name].tags:
                 self.assertIn(LocationTags.SHIPSANITY_FULL_SHIPMENT, location_table[location.name].tags)
                 self.assertNotIn(LocationTags.SHIPSANITY_FISH, location_table[location.name].tags)
 
@@ -710,8 +758,8 @@ class TestShipsanityFullShipmentWithFish(SVTestBase):
     }
 
     def test_only_full_shipment_and_fish_shipsanity_locations(self):
-        for location in self.multiworld.get_locations(self.player):
-            if not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags:
+        for location in self.get_real_locations():
+            if LocationTags.SHIPSANITY in location_table[location.name].tags:
                 self.assertTrue(LocationTags.SHIPSANITY_FULL_SHIPMENT in location_table[location.name].tags or
                                 LocationTags.SHIPSANITY_FISH in location_table[location.name].tags)
 
@@ -725,8 +773,8 @@ class TestShipsanityEverything(SVTestBase):
     def test_all_shipsanity_locations_require_shipping_bin(self):
         bin_name = "Shipping Bin"
         collect_all_except(self.multiworld, bin_name)
-        shipsanity_locations = [location for location in self.multiworld.get_locations() if
-                                not location.event and LocationTags.SHIPSANITY in location_table[location.name].tags]
+        shipsanity_locations = [location for location in self.get_real_locations() if
+                                LocationTags.SHIPSANITY in location_table[location.name].tags]
         bin_item = self.world.create_item(bin_name)
         for location in shipsanity_locations:
             with self.subTest(location.name):

@@ -101,20 +101,20 @@ class TestDeathMountain(TestInvertedOWG):
             ["Hookshot Cave - Bottom Right", False, []],
             ["Hookshot Cave - Bottom Right", False, [], ['Hookshot', 'Pegasus Boots']],
             ["Hookshot Cave - Bottom Right", False, [], ['Progressive Glove', 'Pegasus Boots', 'Magic Mirror']],
-            ["Hookshot Cave - Bottom Right", True, ['Pegasus Boots']],
+            ["Hookshot Cave - Bottom Right", True, ['Pegasus Boots', 'Bomb Upgrade (50)']],
 
             ["Hookshot Cave - Bottom Left", False, []],
             ["Hookshot Cave - Bottom Left", False, [], ['Hookshot']],
             ["Hookshot Cave - Bottom Left", False, [], ['Progressive Glove', 'Pegasus Boots', 'Magic Mirror']],
-            ["Hookshot Cave - Bottom Left", True, ['Pegasus Boots', 'Hookshot']],
+            ["Hookshot Cave - Bottom Left", True, ['Pegasus Boots', 'Hookshot', 'Bomb Upgrade (50)']],
 
             ["Hookshot Cave - Top Left", False, []],
             ["Hookshot Cave - Top Left", False, [], ['Hookshot']],
             ["Hookshot Cave - Top Left", False, [], ['Progressive Glove', 'Pegasus Boots', 'Magic Mirror']],
-            ["Hookshot Cave - Top Left", True, ['Pegasus Boots', 'Hookshot']],
+            ["Hookshot Cave - Top Left", True, ['Pegasus Boots', 'Hookshot', 'Bomb Upgrade (50)']],
 
             ["Hookshot Cave - Top Right", False, []],
             ["Hookshot Cave - Top Right", False, [], ['Hookshot']],
             ["Hookshot Cave - Top Right", False, [], ['Progressive Glove', 'Pegasus Boots', 'Magic Mirror']],
-            ["Hookshot Cave - Top Right", True, ['Pegasus Boots', 'Hookshot']],
+            ["Hookshot Cave - Top Right", True, ['Pegasus Boots', 'Hookshot', 'Bomb Upgrade (50)']],
         ])

@@ -238,7 +238,7 @@ def generate_itempool(world):
         raise NotImplementedError(f"Timer {multiworld.timer[player]} for player {player}")
 
     if multiworld.timer[player] in ['ohko', 'timed_ohko']:
-        multiworld.can_take_damage[player] = False
+        world.can_take_damage = False
     if multiworld.goal[player] in ['pedestal', 'triforce_hunt', 'local_triforce_hunt']:
         multiworld.push_item(multiworld.get_location('Ganon', player), item_factory('Nothing', world), False)
     else:
@@ -253,10 +253,8 @@ def generate_itempool(world):
         region.locations.append(loc)
 
         multiworld.push_item(loc, item_factory('Triforce', world), False)
-        loc.event = True
         loc.locked = True
 
-    multiworld.get_location('Ganon', player).event = True
     multiworld.get_location('Ganon', player).locked = True
     event_pairs = [
         ('Agahnim 1', 'Beat Agahnim 1'),
@@ -273,18 +271,19 @@ def generate_itempool(world):
         location = multiworld.get_location(location_name, player)
         event = item_factory(event_name, world)
         multiworld.push_item(location, event, False)
-        location.event = location.locked = True
+        location.locked = True
 
 
     # set up item pool
     additional_triforce_pieces = 0
+    treasure_hunt_total = 0
     if multiworld.custom:
-        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count,
-         treasure_hunt_icon) = make_custom_item_pool(multiworld, player)
+        pool, placed_items, precollected_items, clock_mode, treasure_hunt_required = (
+            make_custom_item_pool(multiworld, player))
         multiworld.rupoor_cost = min(multiworld.customitemarray[67], 9999)
     else:
-        pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, \
-        treasure_hunt_icon, additional_triforce_pieces = get_pool_core(multiworld, player)
+        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_required, treasure_hunt_total,
+         additional_triforce_pieces) = get_pool_core(multiworld, player)
 
     for item in precollected_items:
         multiworld.push_precollected(item_factory(item, world))
@@ -319,11 +318,11 @@ def generate_itempool(world):
                                             'Bomb Upgrade (50)', 'Cane of Somaria', 'Cane of Byrna'] and multiworld.enemy_health[player] not in ['default', 'easy']):
             if multiworld.bombless_start[player] and "Bomb Upgrade" not in placed_items["Link's Uncle"]:
                 if 'Bow' in placed_items["Link's Uncle"]:
-                    multiworld.escape_assist[player].append('arrows')
+                    multiworld.worlds[player].escape_assist.append('arrows')
                 elif 'Cane' in placed_items["Link's Uncle"]:
-                    multiworld.escape_assist[player].append('magic')
+                    multiworld.worlds[player].escape_assist.append('magic')
             else:
-                multiworld.escape_assist[player].append('bombs')
+                multiworld.worlds[player].escape_assist.append('bombs')
 
     for (location, item) in placed_items.items():
         multiworld.get_location(location, player).place_locked_item(item_factory(item, world))
@@ -336,13 +335,11 @@ def generate_itempool(world):
                 item.code = 0x65  # Progressive Bow (Alt)
                 break
 
-    if clock_mode is not None:
-        multiworld.clock_mode[player] = clock_mode
+    if clock_mode:
+        world.clock_mode = clock_mode
 
-    if treasure_hunt_count is not None:
-        multiworld.treasure_hunt_count[player] = treasure_hunt_count % 999
-    if treasure_hunt_icon is not None:
-        multiworld.treasure_hunt_icon[player] = treasure_hunt_icon
+    multiworld.worlds[player].treasure_hunt_required = treasure_hunt_required % 999
+    multiworld.worlds[player].treasure_hunt_total = treasure_hunt_total
 
     dungeon_items = [item for item in get_dungeon_item_pool_player(world)
                      if item.name not in multiworld.worlds[player].dungeon_local_item_names]
@@ -371,7 +368,7 @@ def generate_itempool(world):
         elif "Small" in key_data[3] and multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal:
             # key drop shuffle and universal keys are on. Add universal keys in place of key drop keys.
             multiworld.itempool.append(item_factory(GetBeemizerItem(multiworld, player, 'Small Key (Universal)'), world))
-    dungeon_item_replacements = sum(difficulties[multiworld.difficulty[player]].extras, []) * 2
+    dungeon_item_replacements = sum(difficulties[world.options.item_pool.current_key].extras, []) * 2
     multiworld.random.shuffle(dungeon_item_replacements)
 
     for x in range(len(dungeon_items)-1, -1, -1):
@@ -466,8 +463,6 @@ def generate_itempool(world):
             while len(items) > pool_count:
                 items_were_cut = False
                 for reduce_item in items_reduction_table:
-                    if len(items) <= pool_count:
-                        break
                     if len(reduce_item) == 2:
                         items_were_cut = items_were_cut or cut_item(items, *reduce_item)
                     elif len(reduce_item) == 4:
@@ -479,7 +474,10 @@ def generate_itempool(world):
                             items.remove(bottle)
                             removed_filler.append(bottle)
                             items_were_cut = True
-                assert items_were_cut, f"Failed to limit item pool size for player {player}"
+                    if items_were_cut:
+                        break
+                else:
+                    raise Exception(f"Failed to limit item pool size for player {player}")
     if len(items) < pool_count:
         items += removed_filler[len(items) - pool_count:]
 
@@ -500,15 +498,15 @@ def generate_itempool(world):
             for i in range(4):
                 next(adv_heart_pieces).classification = ItemClassification.progression
 
-    multiworld.required_medallions[player] = (multiworld.misery_mire_medallion[player].current_key.title(),
-                                              multiworld.turtle_rock_medallion[player].current_key.title())
+    world.required_medallions = (multiworld.misery_mire_medallion[player].current_key.title(),
+                                 multiworld.turtle_rock_medallion[player].current_key.title())
 
     place_bosses(world)
 
     multiworld.itempool += items
 
     if multiworld.retro_caves[player]:
-        set_up_take_anys(multiworld, player)  # depends on world.itempool to be set
+        set_up_take_anys(multiworld, world, player)  # depends on world.itempool to be set
 
 
 take_any_locations = {
@@ -528,30 +526,30 @@ take_any_locations_inverted.sort()
 take_any_locations.sort()
 
 
-def set_up_take_anys(world, player):
+def set_up_take_anys(multiworld, world, player):
     # these are references, do not modify these lists in-place
-    if world.mode[player] == 'inverted':
+    if multiworld.mode[player] == 'inverted':
         take_any_locs = take_any_locations_inverted
     else:
         take_any_locs = take_any_locations
 
-    regions = world.random.sample(take_any_locs, 5)
+    regions = multiworld.random.sample(take_any_locs, 5)
 
-    old_man_take_any = LTTPRegion("Old Man Sword Cave", LTTPRegionType.Cave, 'the sword cave', player, world)
-    world.regions.append(old_man_take_any)
+    old_man_take_any = LTTPRegion("Old Man Sword Cave", LTTPRegionType.Cave, 'the sword cave', player, multiworld)
+    multiworld.regions.append(old_man_take_any)
 
     reg = regions.pop()
-    entrance = world.get_region(reg, player).entrances[0]
-    connect_entrance(world, entrance.name, old_man_take_any.name, player)
+    entrance = multiworld.get_region(reg, player).entrances[0]
+    connect_entrance(multiworld, entrance.name, old_man_take_any.name, player)
     entrance.target = 0x58
     old_man_take_any.shop = TakeAny(old_man_take_any, 0x0112, 0xE2, True, True, total_shop_slots)
-    world.shops.append(old_man_take_any.shop)
+    multiworld.shops.append(old_man_take_any.shop)
 
-    swords = [item for item in world.itempool if item.player == player and item.type == 'Sword']
+    swords = [item for item in multiworld.itempool if item.player == player and item.type == 'Sword']
     if swords:
-        sword = world.random.choice(swords)
-        world.itempool.remove(sword)
-        world.itempool.append(item_factory('Rupees (20)', world))
+        sword = multiworld.random.choice(swords)
+        multiworld.itempool.remove(sword)
+        multiworld.itempool.append(item_factory('Rupees (20)', world))
         old_man_take_any.shop.add_inventory(0, sword.name, 0, 0)
         loc_name = "Old Man Sword Cave"
         location = ALttPLocation(player, loc_name, shop_table_by_location[loc_name], parent=old_man_take_any)
@@ -562,16 +560,16 @@ def set_up_take_anys(world, player):
         old_man_take_any.shop.add_inventory(0, 'Rupees (300)', 0, 0)
 
     for num in range(4):
-        take_any = LTTPRegion("Take-Any #{}".format(num+1), LTTPRegionType.Cave, 'a cave of choice', player, world)
-        world.regions.append(take_any)
+        take_any = LTTPRegion("Take-Any #{}".format(num+1), LTTPRegionType.Cave, 'a cave of choice', player, multiworld)
+        multiworld.regions.append(take_any)
 
-        target, room_id = world.random.choice([(0x58, 0x0112), (0x60, 0x010F), (0x46, 0x011F)])
+        target, room_id = multiworld.random.choice([(0x58, 0x0112), (0x60, 0x010F), (0x46, 0x011F)])
         reg = regions.pop()
-        entrance = world.get_region(reg, player).entrances[0]
-        connect_entrance(world, entrance.name, take_any.name, player)
+        entrance = multiworld.get_region(reg, player).entrances[0]
+        connect_entrance(multiworld, entrance.name, take_any.name, player)
         entrance.target = target
         take_any.shop = TakeAny(take_any, room_id, 0xE3, True, True, total_shop_slots + num + 1)
-        world.shops.append(take_any.shop)
+        multiworld.shops.append(take_any.shop)
         take_any.shop.add_inventory(0, 'Blue Potion', 0, 0)
         take_any.shop.add_inventory(1, 'Boss Heart Container', 0, 0)
         location = ALttPLocation(player, take_any.name, shop_table_by_location[take_any.name], parent=take_any)
@@ -593,9 +591,9 @@ def get_pool_core(world, player: int):
     pool = []
     placed_items = {}
     precollected_items = []
-    clock_mode = None
-    treasure_hunt_count = None
-    treasure_hunt_icon = None
+    clock_mode: str = ""
+    treasure_hunt_required: int = 0
+    treasure_hunt_total: int = 0
 
     diff = difficulties[difficulty]
     pool.extend(diff.alwaysitems)
@@ -684,21 +682,21 @@ def get_pool_core(world, player: int):
     if 'triforce_hunt' in goal:
 
         if world.triforce_pieces_mode[player].value == TriforcePiecesMode.option_extra:
-            triforce_pieces = world.triforce_pieces_available[player].value + world.triforce_pieces_extra[player].value
+            treasure_hunt_total = (world.triforce_pieces_available[player].value
+                                   + world.triforce_pieces_extra[player].value)
         elif world.triforce_pieces_mode[player].value == TriforcePiecesMode.option_percentage:
-            percentage = float(max(100, world.triforce_pieces_percentage[player].value)) / 100
-            triforce_pieces = int(round(world.triforce_pieces_required[player].value * percentage, 0))
+            percentage = float(world.triforce_pieces_percentage[player].value) / 100
+            treasure_hunt_total = int(round(world.triforce_pieces_required[player].value * percentage, 0))
         else:  # available
-            triforce_pieces = world.triforce_pieces_available[player].value
+            treasure_hunt_total = world.triforce_pieces_available[player].value
 
-        triforce_pieces = max(triforce_pieces, world.triforce_pieces_required[player].value)
+        triforce_pieces = min(90, max(treasure_hunt_total, world.triforce_pieces_required[player].value))
 
         pieces_in_core = min(extraitems, triforce_pieces)
         additional_pieces_to_place = triforce_pieces - pieces_in_core
         pool.extend(["Triforce Piece"] * pieces_in_core)
         extraitems -= pieces_in_core
-        treasure_hunt_count = world.triforce_pieces_required[player].value
-        treasure_hunt_icon = 'Triforce Piece'
+        treasure_hunt_required = world.triforce_pieces_required[player].value
 
     for extra in diff.extras:
         if extraitems >= len(extra):
@@ -739,7 +737,7 @@ def get_pool_core(world, player: int):
                 place_item(key_location, "Small Key (Universal)")
                 pool = pool[:-3]
 
-    return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon,
+    return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_required, treasure_hunt_total,
             additional_pieces_to_place)
 
 
@@ -754,9 +752,9 @@ def make_custom_item_pool(world, player):
     pool = []
     placed_items = {}
     precollected_items = []
-    clock_mode = None
-    treasure_hunt_count = None
-    treasure_hunt_icon = None
+    clock_mode: str = ""
+    treasure_hunt_required: int = 0
+    treasure_hunt_total: int = 0
 
     def place_item(loc, item):
         assert loc not in placed_items, "cannot place item twice"
@@ -851,8 +849,7 @@ def make_custom_item_pool(world, player):
     if "triforce" in world.goal[player]:
         pool.extend(["Triforce Piece"] * world.triforce_pieces_available[player])
         itemtotal += world.triforce_pieces_available[player]
-        treasure_hunt_count = world.triforce_pieces_required[player]
-        treasure_hunt_icon = 'Triforce Piece'
+        treasure_hunt_required = world.triforce_pieces_required[player]
 
     if timer in ['display', 'timed', 'timed_countdown']:
         clock_mode = 'countdown' if timer == 'timed_countdown' else 'stopwatch'
@@ -897,4 +894,4 @@ def make_custom_item_pool(world, player):
         pool.extend(['Nothing'] * (total_items_to_place - itemtotal))
         logging.warning(f"Pool was filled up with {total_items_to_place - itemtotal} Nothing's for player {player}")
 
-    return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon)
+    return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_required)
