@@ -67,7 +67,6 @@ ITEM_GROUPS = {
     "HM06": {"HM06 Rock Smash"},
     "HM07": {"HM07 Waterfall"},
     "HM08": {"HM08 Dive"},
-    },
     "TMs": { #This will probly not do anything if the TM is obtained from a npc like in the location group "Gym TMs" ?
         "TM01",
         "TM02",
