@@ -615,6 +615,8 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, pla
                  lambda state: state.has(ItemName.knuckles_hammer_gloves, player))
         add_rule(multiworld.get_location(LocationName.crazy_gadget_hidden_1, player),
                  lambda state: state.has(ItemName.sonic_light_shoes, player))
+        add_rule(multiworld.get_location(LocationName.lost_colony_hidden_1, player),
+                 lambda state: state.has(ItemName.eggman_jet_engine, player))
         add_rule(multiworld.get_location(LocationName.white_jungle_hidden_3, player),
                  lambda state: state.has(ItemName.shadow_air_shoes, player))
         add_rule(multiworld.get_location(LocationName.cannon_core_hidden_1, player),

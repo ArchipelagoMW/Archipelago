@@ -14,6 +14,8 @@
 - Fix pressing the 'B' button to take you to the proper location in Chao World Entrance Shuffle
 - Prevent Chao Karate progress icon overflow
 - Prevent changing Chao Timescale while paused
+- Logic Fixes:
+	- `Lost Colony - Hidden 1` (Standard Logic) now requires `Eggman - Jet Engine`
 
 
 ## v2.3 - The Chao Update
