@@ -1,8 +1,10 @@
+import typing
+
 from BaseClasses import Item, Tutorial, ItemClassification, Region, MultiWorld
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_rule
-from .Items import OSRSItem, starting_area_dict, chunksanity_starting_chunks, QP_Items
-from .Locations import OSRSLocation
+from .Items import OSRSItem, starting_area_dict, chunksanity_starting_chunks, QP_Items, ItemRow
+from .Locations import OSRSLocation, LocationRow
 
 from .Options import OSRSOptions, StartingArea
 from .Names import LocationNames, ItemNames, RegionNames
@@ -11,6 +13,7 @@ from .LogicCSV.items_generated import item_rows
 from .LogicCSV.locations_generated import location_rows
 from .LogicCSV.regions_generated import region_rows
 from .LogicCSV.resources_generated import resource_rows
+from .Regions import RegionRow, ResourceRow
 
 
 class OSRSWeb(WebWorld):
@@ -39,6 +42,18 @@ class OSRSWorld(World):
     item_name_to_id = {item_rows[i].name: 0x070000 + i for i in range(len(item_rows))}
     location_name_to_id = {location_rows[i].name: 0x070000 + i for i in range(len(location_rows))}
 
+    region_name_to_data: typing.Dict[str, Region]
+    location_name_to_data: typing.Dict[str, OSRSLocation]
+
+    location_rows_by_name: typing.Dict[str, LocationRow]
+    region_rows_by_name: typing.Dict[str, RegionRow]
+    resource_rows_by_name: typing.Dict[str, ResourceRow]
+    item_rows_by_name: typing.Dict[str, ItemRow]
+
+    starting_area_item: str
+
+    locations_by_category: typing.Dict[str, LocationRow]
+
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
         self.region_name_to_data = {}
@@ -50,17 +65,15 @@ class OSRSWorld(World):
         self.item_rows_by_name = {}
 
         self.starting_area_item = ""
-        self.allow_brutal_grinds = False
 
-        self.location_categories = {}
         self.locations_by_category = {}
 
     def generate_early(self) -> None:
-        self.location_categories = {location_row.category for location_row in location_rows}
+        location_categories = [location_row.category for location_row in location_rows]
         self.locations_by_category = {category:
                                           [location_row for location_row in self.location_rows if
                                            location_row.category == category]
-                                      for category in self.location_categories}
+                                      for category in location_categories}
 
         self.location_rows_by_name = {loc_row.name: loc_row for loc_row in self.location_rows}
         self.region_rows_by_name = {reg_row.name: reg_row for reg_row in self.region_rows}
@@ -69,7 +82,6 @@ class OSRSWorld(World):
 
         rnd = self.random
         starting_area = self.options.starting_area
-        self.allow_brutal_grinds = self.options.brutal_grinds
 
         if starting_area.value == StartingArea.option_any_bank:
             self.starting_area_item = rnd.choice(starting_area_dict)
@@ -106,25 +118,28 @@ class OSRSWorld(World):
         # Create entrances between regions
         for region_row in self.region_rows:
             region = self.region_name_to_data[region_row.name]
+
             for outbound_region_name in region_row.connections:
                 entrance = region.create_exit(f"{region_row.name}->{outbound_region_name.replace('*', '')}")
-                if "*" not in outbound_region_name:
-                    item_name = self.region_rows_by_name[outbound_region_name].itemReq
-                    if "*" not in item_name:
-                        entrance.access_rule = lambda state, item_name=item_name: state.has(item_name, self.player)
-                    else:
-                        self.generate_special_rules_for(entrance, region_row, outbound_region_name)
-                else:
-                    self.generate_special_rules_for(entrance, region_row, outbound_region_name)
                 entrance.connect(self.region_name_to_data[outbound_region_name.replace('*', '')])
+
+                item_name = self.region_rows_by_name[outbound_region_name].itemReq
+                if "*" not in outbound_region_name and "*" not in item_name:
+                    entrance.access_rule = lambda state, item_name=item_name: state.has(item_name, self.player)
+                    continue
+
+                self.generate_special_rules_for(entrance, region_row, outbound_region_name)
+
             for resource_region in region_row.resources:
-                if resource_region != "":
-                    entrance = region.create_exit(f"{region_row.name}->{resource_region.replace('*', '')}")
-                    if "*" not in resource_region:
-                        entrance.connect(self.region_name_to_data[resource_region])
-                    else:
-                        self.generate_special_rules_for(entrance, region_row, resource_region)
-                        entrance.connect(self.region_name_to_data[resource_region.replace('*', '')])
+                if not resource_region:
+                    continue
+
+                entrance = region.create_exit(f"{region_row.name}->{resource_region.replace('*', '')}")
+                if "*" not in resource_region:
+                    entrance.connect(self.region_name_to_data[resource_region])
+                else:
+                    self.generate_special_rules_for(entrance, region_row, resource_region)
+                    entrance.connect(self.region_name_to_data[resource_region.replace('*', '')])
 
         self.roll_locations()
 
@@ -155,7 +170,6 @@ class OSRSWorld(World):
             entrance.access_rule = lambda state: state.has(ItemNames.QP_Dorics_Quest, self.player)
             return
 
-        print(f"Special rules required to access region {outbound_region_name} from {region_row.name}")
 
     def roll_locations(self):
         locations_required = 0
@@ -166,8 +180,7 @@ class OSRSWorld(World):
         locations_added = 1 # At this point we've already added the starting area, so we start at 1 instead of 0
 
         # Quests are always added
-        for i in range(len(self.location_rows)):
-            location_row = self.location_rows[i]
+        for i, location_row in enumerate(self.location_rows):
             if location_row.category in ["Quest", "Points", "Goal"]:
                 self.create_and_add_location(i)
                 if location_row.category == "Quest":
@@ -326,12 +339,12 @@ class OSRSWorld(World):
         ]
 
         while locations_added < locations_required or (generation_is_fake and len(all_tasks)>0):
-            taskChosen = False
+            task_chosen = False
             if all_tasks:
                 chosen_task = rnd.choices(all_tasks, all_weights)[0]
                 if len(chosen_task) > 0:
                     task = chosen_task.pop()
-                    taskChosen = True
+                    task_chosen = True
                 if len(chosen_task) == 0:
                     index = all_tasks.index(chosen_task)
                     del all_tasks[index]
@@ -341,7 +354,7 @@ class OSRSWorld(World):
                 assert len(general_tasks) > 0, "There are not enough avaialbe tasks to vfill the remaining pool for OSRS"
                 task = general_tasks.pop()
                 pass
-            if taskChosen:
+            if task_chosen:
                 self.add_location(task)
                 locations_added += 1
 
@@ -361,10 +374,10 @@ class OSRSWorld(World):
         # print(f"Adding task {location_row.name}")
 
         # Create Location
-        id = self.base_id + row_index
+        location_id = self.base_id + row_index
         if location_row.category == "Points" or location_row.category == "Goal":
-            id = None
-        location = OSRSLocation(self.player, location_row.name, id)
+            location_id = None
+        location = OSRSLocation(self.player, location_row.name, location_id)
         self.location_name_to_data[location_row.name] = location
 
         # Add the location to its first region, or if it doesn't belong to one, to Menu
@@ -534,7 +547,7 @@ class OSRSWorld(World):
     def can_reach_skill(self, state, skill, level):
         if skill == "Fishing":
             can_train = state.can_reach(RegionNames.Shrimp, None, self.player)
-            if not self.allow_brutal_grinds:
+            if not self.options.brutal_grinds:
                 fishing_shop = state.can_reach(RegionNames.Port_Sarim, None, self.player)
                 if level >= 5:
                     can_train = can_train and fishing_shop
@@ -544,14 +557,14 @@ class OSRSWorld(World):
         if skill == "Mining":
             can_train = state.can_reach(RegionNames.Bronze_Ores, None, self.player) or state.can_reach(
                 RegionNames.Clay_Rock, None, self.player)
-            if not self.allow_brutal_grinds:
+            if not self.options.brutal_grinds:
                 # Iron is the best way to train all the way to 99, so having access to iron is all you need
                 if level >= 15:
                     can_train = can_train and state.can_reach(RegionNames.Iron_Rock, None, self.player)
             return can_train
         if skill == "Woodcutting":
             # Trees are literally everywhere and you start with an axe
-            if self.allow_brutal_grinds:
+            if self.options.brutal_grinds:
                 return True
             else:
                 can_train = True
@@ -563,7 +576,7 @@ class OSRSWorld(World):
         if skill == "Smithing":
             can_train = state.can_reach(RegionNames.Bronze_Ores, None, self.player) and state.can_reach(
                 RegionNames.Furnace, None, self.player)
-            if not self.allow_brutal_grinds:
+            if not self.options.brutal_grinds:
                 if level < 15:
                     # The special bronze-only anvil in Lumbridge makes this a bit more tricky
                     can_train = can_train and state.can_reach(RegionNames.Anvil, None,
@@ -588,7 +601,7 @@ class OSRSWorld(World):
 
             mould_access = state.can_reach(RegionNames.Al_Kharid, None, self.player) or state.can_reach(
                 RegionNames.Rimmington, None, self.player)
-            if self.allow_brutal_grinds:
+            if self.options.brutal_grinds:
                 # Only force killing barbarians for moulds in brutal grinds
                 mould_access = mould_access or state.can_reach(RegionNames.Barbarian_Village, None, self.player)
             can_silver = state.can_reach(RegionNames.Silver_Rock, None, self.player) and state.can_reach(
@@ -597,7 +610,7 @@ class OSRSWorld(World):
                        state.can_reach(RegionNames.Furnace, None, self.player) and mould_access
 
             can_train = can_spin or can_pot or can_tan
-            if not self.allow_brutal_grinds:
+            if not self.options.brutal_grinds:
                 if level > 5:
                     can_tran = can_pot or can_tan or can_gold
                 if level > 16:
@@ -610,7 +623,7 @@ class OSRSWorld(World):
             can_train = state.can_reach(RegionNames.Milk, None, self.player) or \
                         state.can_reach(RegionNames.Egg, None, self.player) or state.can_reach(
                 RegionNames.Shrimp, None, self.player) or can_bread
-            if not self.allow_brutal_grinds:
+            if not self.options.brutal_grinds:
                 if level > 15:
                     can_train = can_train and state.can_reach(RegionNames.Fly_Fish, None,
                                                               self.player) and self.can_reach_skill(state,
