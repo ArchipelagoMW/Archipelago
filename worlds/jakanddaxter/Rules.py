@@ -1,5 +1,5 @@
 from BaseClasses import MultiWorld, CollectionState
-from .Options import JakAndDaxterOptions
+from .JakAndDaxterOptions import JakAndDaxterOptions
 from .Regions import Jak1Level, Jak1SubLevel, level_table, subLevel_table
 from .Locations import location_table as item_table
 from .locs import CellLocations as Cells, ScoutLocations as Scouts

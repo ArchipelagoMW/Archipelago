@@ -6,9 +6,9 @@ import colorama
 import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, logger, server_loop, gui_enabled
 
-from .GameID import jak1_name
-from .client.ReplClient import JakAndDaxterReplClient
-from .client.MemoryReader import JakAndDaxterMemoryReader
+from worlds.jakanddaxter.GameID import jak1_name
+from worlds.jakanddaxter.client.ReplClient import JakAndDaxterReplClient
+from worlds.jakanddaxter.client.MemoryReader import JakAndDaxterMemoryReader
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -96,9 +96,16 @@ class JakAndDaxterContext(CommonContext):
         self.ui = JakAndDaxterManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
+    async def server_auth(self, password_requested: bool = False):
+        if password_requested and not self.password:
+            await super(JakAndDaxterContext, self).server_auth(password_requested)
+        await self.get_username()
+        await self.send_connect()
+
     def on_package(self, cmd: str, args: dict):
         if cmd == "ReceivedItems":
             for index, item in enumerate(args["items"], start=args["index"]):
+                logger.info(args)
                 self.repl.item_inbox[index] = item
 
     async def ap_inform_location_checks(self, location_ids: typing.List[int]):
@@ -109,12 +116,14 @@ class JakAndDaxterContext(CommonContext):
         create_task_log_exception(self.ap_inform_location_checks(location_ids))
 
     async def run_repl_loop(self):
-        await self.repl.main_tick()
-        await asyncio.sleep(0.1)
+        while True:
+            await self.repl.main_tick()
+            await asyncio.sleep(0.1)
 
     async def run_memr_loop(self):
-        await self.memr.main_tick(self.on_locations)
-        await asyncio.sleep(0.1)
+        while True:
+            await self.memr.main_tick(self.on_locations)
+            await asyncio.sleep(0.1)
 
 
 async def main():

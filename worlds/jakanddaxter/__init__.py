@@ -1,6 +1,6 @@
 from BaseClasses import Item, ItemClassification, Tutorial
 from .GameID import jak1_id, jak1_name
-from .Options import JakAndDaxterOptions
+from .JakAndDaxterOptions import JakAndDaxterOptions
 from .Items import JakAndDaxterItem
 from .Locations import JakAndDaxterLocation, location_table as item_table
 from .locs import CellLocations as Cells, ScoutLocations as Scouts, OrbLocations as Orbs

@@ -54,7 +54,8 @@ class JakAndDaxterReplClient:
             time.sleep(1)
             logger.info(self.socket.recv(1024).decode())
             return True
-        except ConnectionRefusedError:
+        except ConnectionRefusedError as e:
+            logger.error(e.strerror)
             return False
 
     def listen(self) -> bool:
@@ -96,7 +97,7 @@ class JakAndDaxterReplClient:
         return True
 
     def receive_item(self):
-        ap_id = self.item_inbox[self.inbox_index]["item"]
+        ap_id = getattr(self.item_inbox[self.inbox_index], "item")
 
         # Determine the type of item to receive.
         if ap_id in range(jak1_id, jak1_id + Flies.fly_offset):

@@ -2,7 +2,7 @@ import typing
 from enum import Enum, auto
 from BaseClasses import MultiWorld, Region
 from .GameID import jak1_name
-from .Options import JakAndDaxterOptions
+from .JakAndDaxterOptions import JakAndDaxterOptions
 from .Locations import JakAndDaxterLocation, location_table
 from .locs import CellLocations as Cells, ScoutLocations as Scouts
 

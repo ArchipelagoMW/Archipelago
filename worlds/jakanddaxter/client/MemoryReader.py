@@ -1,8 +1,9 @@
 import typing
-import subprocess
 import pymem
 from pymem import pattern
 from pymem.exception import ProcessNotFound
+
+from CommonClient import logger
 from worlds.jakanddaxter.locs import CellLocations as Cells, ScoutLocations as Flies
 
 # Some helpful constants.
@@ -18,7 +19,7 @@ class JakAndDaxterMemoryReader:
     connected: bool = False
     marked: bool = False
 
-    process = None
+    process: pymem.process = None
     marker_address = None
     goal_address = None
 
@@ -33,17 +34,20 @@ class JakAndDaxterMemoryReader:
 
     async def main_tick(self, location_callback: typing.Callable):
         self.read_memory()
+        location_callback(self.location_outbox)
 
-        # Checked Locations in game. Handle 1 location per tick.
+        # Checked Locations in game. Handle the entire outbox every tick until we're up to speed.
         if len(self.location_outbox) > self.outbox_index:
-            await location_callback(self.location_outbox[self.outbox_index])
+            location_callback(self.location_outbox)
             self.outbox_index += 1
 
     def connect(self) -> bool:
         try:
             self.process = pymem.Pymem("gk.exe")  # The GOAL Kernel
+            logger.info("Found the gk process: " + str(self.process.process_id))
             return True
         except ProcessNotFound:
+            logger.error("Could not find the gk process.")
             return False
 
     def find_marker(self) -> bool:
@@ -59,19 +63,40 @@ class JakAndDaxterMemoryReader:
             self.goal_address = int.from_bytes(self.process.read_bytes(goal_pointer, 8),
                                                byteorder="little",
                                                signed=False)
+            logger.info("Found the archipelago memory address: " + str(self.goal_address))
             return True
+        logger.error("Could not find the archipelago memory address.")
         return False
 
     def read_memory(self) -> typing.List[int]:
-        next_cell_index = int.from_bytes(self.process.read_bytes(self.goal_address, 8))
-        next_buzzer_index = int.from_bytes(self.process.read_bytes(self.goal_address + next_buzzer_index_offset, 8))
-        next_cell = int.from_bytes(self.process.read_bytes(self.goal_address + cells_offset + (next_cell_index * 4), 4))
-        next_buzzer = int.from_bytes(self.process.read_bytes(self.goal_address + cells_offset + (next_buzzer_index * 4), 4))
+        next_cell_index = int.from_bytes(
+            self.process.read_bytes(self.goal_address, 8),
+            byteorder="little",
+            signed=False)
+        next_buzzer_index = int.from_bytes(
+            self.process.read_bytes(self.goal_address + next_buzzer_index_offset, 8),
+            byteorder="little",
+            signed=False)
 
-        if next_cell not in self.location_outbox:
-            self.location_outbox.append(Cells.to_ap_id(next_cell))
-        if next_buzzer not in self.location_outbox:
-            self.location_outbox.append(Flies.to_ap_id(next_buzzer))
+        for k in range(0, next_cell_index):
+            next_cell = int.from_bytes(
+                self.process.read_bytes(self.goal_address + cells_offset + (k * 4), 4),
+                byteorder="little",
+                signed=False)
+            cell_ap_id = Cells.to_ap_id(next_cell)
+            if cell_ap_id not in self.location_outbox:
+                self.location_outbox.append(cell_ap_id)
+                logger.info("Checked power cell: " + str(next_cell))
+
+        for k in range(0, next_buzzer_index):
+            next_buzzer = int.from_bytes(
+                self.process.read_bytes(self.goal_address + buzzers_offset + (k * 4), 4),
+                byteorder="little",
+                signed=False)
+            buzzer_ap_id = Flies.to_ap_id(next_buzzer)
+            if buzzer_ap_id not in self.location_outbox:
+                self.location_outbox.append(buzzer_ap_id)
+                logger.info("Checked scout fly: " + str(next_buzzer))
 
         return self.location_outbox
 
