@@ -1019,7 +1019,7 @@ def rules(brcworld):
     while spots < 385:
         spots += 5
         set_rule(multiworld.get_location(f"Tagged {spots} Graffiti Spots", player),
-            lambda state: graffiti_spots(state, player, movestyle, limit, glitched, spots))
+            lambda state, spots=spots: graffiti_spots(state, player, movestyle, limit, glitched, spots))
 
     set_rule(multiworld.get_location("Tagged 389 Graffiti Spots", player),
         lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 389))
