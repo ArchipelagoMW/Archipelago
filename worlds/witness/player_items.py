@@ -158,13 +158,13 @@ class WitnessPlayerItems:
 
             discards_on = self._world.options.shuffle_discarded_panels
             difficulty = self._world.options.puzzle_randomization
-            
+
             if difficulty == "sigma_expert" or difficulty == "variety":
                 # In Variety and Expert, Triangles are featured more prominently on all puzzles.
                 output.add("Triangles")
 
                 # In Expert, Discards feature Arrows.
-                # In Variety, they feature Arrows + Triangles. Triangles are already taken care of.
+                # In Variety, they feature Arrows + Triangles. (Triangles are already taken care of)
                 if discards_on:
                     output.add("Arrows")
 
