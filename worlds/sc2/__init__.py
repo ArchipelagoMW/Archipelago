@@ -9,8 +9,8 @@ from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
 from . import ItemNames
 from .Items import (StarcraftItem, filler_items, get_full_item_list,
-    get_basic_units, ItemData, upgrade_included_names, progressive_if_nco, kerrigan_actives, kerrigan_passives,
-    progressive_if_ext, not_balanced_starting_units, 
+    get_basic_units, ItemData, upgrade_included_names, kerrigan_actives, kerrigan_passives,
+    not_balanced_starting_units,
 )
 from . import Items
 from .ItemGroups import item_name_groups
@@ -521,36 +521,23 @@ def flag_unused_upgrade_types(world: SC2World, item_list: List[FilterItem]) -> N
 
 
 def flag_user_excluded_item_sets(world: SC2World, item_list: List[FilterItem]) -> None:
-    """Excludes items based on item set options (`nco_items`, `bw_items`, `ext_items`)"""
-    # Note(mm): These options should just be removed in favour of better item sets and a single "vanilla only" switch
-    item_sets = {'wol', 'hots', 'lotv'}
-    if get_option_value(world, 'nco_items') or SC2Campaign.NCO in get_enabled_campaigns(world):
-        item_sets.add('nco')
-    if get_option_value(world, 'bw_items'):
-        item_sets.add('bw')
-    if get_option_value(world, 'ext_items'):
-        item_sets.add('ext')
+    """Excludes items based on item set options (`only_vanilla_items`)"""
+    if not world.options.vanilla_items_only.value:
+        return
 
-    def allowed_quantity(name: str, data: ItemData) -> int:
-        if not data.origin.intersection(item_sets):
-            return 0
-        elif name in progressive_if_nco and 'nco' not in item_sets:
-            return 1
-        elif name in progressive_if_ext and 'ext' not in item_sets:
-            return 1
-        else:
-            return data.quantity
+    vanilla_nonprogressive_count = {
+        item_name: 0 for item_name in ItemGroups.terran_original_progressive_upgrades
+    }
 
-    amounts: Dict[str, int] = {}
     for item in item_list:
         if ItemFilterFlags.Excluded in item.flags:
             continue
-        max_quantity = allowed_quantity(item.name, item.data)
-        amount_in_pool = amounts.get(item.name, 0)
-        if max_quantity > amount_in_pool:
-            amounts[item.name] = amount_in_pool + 1
-        else:
+        if item.name not in ItemGroups.vanilla_items:
             item.flags |= ItemFilterFlags.Excluded
+        if item.name in ItemGroups.terran_original_progressive_upgrades:
+            if vanilla_nonprogressive_count[item.name]:
+                item.flags |= ItemFilterFlags.Excluded
+            vanilla_nonprogressive_count[item.name] += 1
 
 
 def flag_and_add_resource_locations(world: SC2World, item_list: List[FilterItem]) -> None:

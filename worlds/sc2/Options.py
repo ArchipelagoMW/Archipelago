@@ -303,26 +303,10 @@ class GenericUpgradeItems(Choice):
     option_bundle_all = 3
 
 
-class NovaCovertOpsItems(Toggle):
-    """
-    If turned on, the equipment upgrades from Nova Covert Ops may be present in the world.
-
-    If Nova Covert Ops campaign is enabled, this option is locked to be turned on.
-    """
-    display_name = "Nova Covert Ops Items"
-    default = Toggle.option_true
-
-
-class BroodWarItems(Toggle):
-    """If turned on, returning items from StarCraft: Brood War may appear in the world."""
-    display_name = "Brood War Items"
-    default = Toggle.option_true
-
-
-class ExtendedItems(Toggle):
-    """If turned on, original items that did not appear in Campaign mode may appear in the world."""
-    display_name = "Extended Items"
-    default = Toggle.option_true
+class VanillaItemsOnly(Toggle):
+    """If turned on, the item pool is limited only to items that appear in the main 3 vanilla campaigns.
+    locked_items may override these exclusions."""
+    display_name = "Vanilla Items Only"
 
 
 # Current maximum number of upgrades for a unit
@@ -877,9 +861,7 @@ class Starcraft2Options(PerGameCommonOptions):
     excluded_items: ExcludedItems
     excluded_missions: ExcludedMissions
     exclude_very_hard_missions: ExcludeVeryHardMissions
-    nco_items: NovaCovertOpsItems
-    bw_items: BroodWarItems
-    ext_items: ExtendedItems
+    vanilla_items_only: VanillaItemsOnly
     vanilla_locations: VanillaLocations
     extra_locations: ExtraLocations
     challenge_locations: ChallengeLocations

@@ -1,7 +1,7 @@
 from typing import Callable, Dict, List, Set, Union, Tuple, Optional, TYPE_CHECKING
 from BaseClasses import  Item, Location
-from .Items import (get_full_item_list, spider_mine_sources, second_pass_placeable_items, progressive_if_nco,
-    progressive_if_ext, spear_of_adun_calldowns, spear_of_adun_castable_passives, nova_equipment,
+from .Items import (get_full_item_list, spider_mine_sources, second_pass_placeable_items,
+    spear_of_adun_calldowns, spear_of_adun_castable_passives,
     upgrade_item_types,
 )
 from .MissionTables import (mission_orders, MissionInfo, MissionPools, MissionFlag,
@@ -203,17 +203,6 @@ def get_item_upgrades(inventory: List[Item], parent_item: Union[Item, str]) -> L
     ]
 
 
-def get_item_quantity(item: Item, world: 'SC2World'):
-    if (not get_option_value(world, "nco_items")) \
-            and SC2Campaign.NCO in get_disabled_campaigns(world) \
-            and item.name in progressive_if_nco:
-        return 1
-    if (not get_option_value(world, "ext_items")) \
-            and item.name in progressive_if_ext:
-        return 1
-    return get_full_item_list()[item.name].quantity
-
-
 def copy_item(item: Item):
     return Item(item.name, item.classification, item.code, item.player)
 
@@ -265,8 +254,7 @@ class ValidInventory:
                 if not all(requirement(self) for (_, requirement) in mission_requirements):
                     # If item cannot be removed, lock or revert
                     self.logical_inventory.append(item.name)
-                    for _ in range(get_item_quantity(item, self.world)):
-                        locked_items.append(copy_item(item))
+                    locked_items.append(item)
                     return False
             return True
 

@@ -78,34 +78,60 @@ class ItemGroupNames:
     BARRACKS_UNITS = "Barracks Units"
     FACTORY_UNITS = "Factory Units"
     STARPORT_UNITS = "Starport Units"
+    WOL_UNITS = "WoL Units"
+    WOL_MERCS = "WoL Mercenaries"
+    WOL_BUILDINGS = "WoL Buildings"
+    WOL_UPGRADES = "WoL Upgrades"
+    WOL_ITEMS = "WoL Items"
+    """All items from vanilla WoL. Note some items are progressive where level 2 is not vanilla."""
+    NCO_UNITS = "NCO Units"
     NOVA_EQUIPMENT = "Nova Equipment"
     TERRAN_BUILDINGS = "Terran Buildings"
     TERRAN_MERCENARIES = "Terran Mercenaries"
+    TERRAN_STIMPACKS = "Terran Stimpacks"
+    TERRAN_PROGRESSIVE_UPGRADES = "Terran Progressive Upgrades"
+    TERRAN_ORIGINAL_PROGRESSIVE_UPGRADES = "Terran Original Progressive Upgrades"
+    """Progressive items where level 1 appeared in WoL"""
+
+    HOTS_UNITS = "HotS Units"
+    HOTS_STRAINS = "HotS Strains"
+    """Vanilla HotS strains (the upgrades you play a mini-mission for)"""
+    HOTS_MUTATIONS = "HotS Mutations"
+    """Vanilla HotS Mutations (basic toggleable unit upgrades)"""
+    HOTS_GLOBAL_UPGRADES = "HotS Global Upgrades"
+    HOTS_MORPHS = "HotS Morphs"
+    KERRIGAN_ABILITIES = "Kerrigan Abilities"
+    KERRIGAN_PASSIVES = "Kerrigan Passives"
+    HOTS_ITEMS = "HotS Items"
+    """All items from vanilla HotS"""
+    ZERG_MORPHS = "Zerg Morphs"
+    ZERG_MERCS = "Zerg Mercenaries"
+    ZERG_BUILDINGS = "Zerg Buildings"
 
     GATEWAY_UNITS = "Gateway Units"
     ROBO_UNITS = "Robo Units"
     STARGATE_UNITS = "Stargate Units"
+    PROPHECY_UNITS = "Prophecy Units"
+    PROPHECY_BUILDINGS = "Prophecy Buildings"
+    LOTV_UNITS = "LotV Units"
+    LOTV_ITEMS = "LotV Items"
+    LOTV_GLOBAL_UPGRADES = "LotV Global Upgrades"
+    SOA_ITEMS = "SOA"
+    PROTOSS_GLOBAL_UPGRADES = "Protoss Global Upgrades"
     PROTOSS_BUILDINGS = "Protoss Buildings"
-    AIUR = "Aiur"
-    NERAZIM = "Nerazim"
-    TAL_DARIM = "Tal'Darim"
-    PURIFIER = "Purifier"
+    AIUR_UNITS = "Aiur"
+    NERAZIM_UNITS = "Nerazim"
+    TAL_DARIM_UNITS = "Tal'Darim"
+    PURIFIER_UNITS = "Purifier"
 
+    VANILLA_ITEMS = "Vanilla Items"
 
-item_name_groups[ItemGroupNames.TERRAN_UNITS] = terran_units = [
-    item_name for item_name, item_data in Items.item_table.items()
-    if item_data.type in (Items.TerranItemType.Unit, Items.TerranItemType.Mercenary, Items.TerranItemType.Building)
-]
-item_name_groups[ItemGroupNames.ZERG_UNITS] = zerg_units = [
-    item_name for item_name, item_data in Items.item_table.items()
-    if item_data.type in (Items.ZergItemType.Unit, Items.ZergItemType.Mercenary, Items.ZergItemType.Morph)
-]
-item_name_groups[ItemGroupNames.PROTOSS_UNITS] = protoss_units = [
-    item_name for item_name, item_data in Items.item_table.items()
-    if item_data.type in (Items.ProtossItemType.Unit, Items.ProtossItemType.Unit_2, Items.ProtossItemType.Building)
-]
 
 # Terran
+item_name_groups[ItemGroupNames.TERRAN_UNITS] = terran_units = [
+    item_name for item_name, item_data in Items.item_table.items()
+    if item_data.type in (Items.TerranItemType.Unit, Items.TerranItemType.Mercenary)
+]
 item_name_groups[ItemGroupNames.BARRACKS_UNITS] = barracks_units = [
     ItemNames.MARINE, ItemNames.MEDIC, ItemNames.FIREBAT, ItemNames.MARAUDER,
     ItemNames.REAPER, ItemNames.GHOST, ItemNames.SPECTRE, ItemNames.HERC,
@@ -128,13 +154,200 @@ item_name_groups[ItemGroupNames.TERRAN_MERCENARIES] = terran_mercenaries = [
     item_name for item_name, item_data in Items.item_table.items()
     if item_data.type == Items.TerranItemType.Mercenary
 ]
+item_name_groups[ItemGroupNames.NCO_UNITS] = nco_units = [
+    ItemNames.MARINE, ItemNames.MARAUDER, ItemNames.REAPER,
+    ItemNames.HELLION, ItemNames.GOLIATH, ItemNames.SIEGE_TANK,
+    ItemNames.RAVEN, ItemNames.LIBERATOR, ItemNames.BANSHEE, ItemNames.BATTLECRUISER,
+]
 item_name_groups[ItemGroupNames.NOVA_EQUIPMENT] = nova_equipment = [
     *[item_name for item_name, item_data in Items.item_table.items()
         if item_data.type == Items.TerranItemType.Nova_Gear],
     ItemNames.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE,
 ]
+item_name_groups[ItemGroupNames.WOL_UNITS] = wol_units = [
+    ItemNames.MARINE, ItemNames.MEDIC, ItemNames.FIREBAT, ItemNames.MARAUDER, ItemNames.REAPER,
+    ItemNames.HELLION, ItemNames.VULTURE, ItemNames.GOLIATH,  ItemNames.DIAMONDBACK, ItemNames.SIEGE_TANK,
+    ItemNames.MEDIVAC, ItemNames.WRAITH, ItemNames.VIKING, ItemNames.BANSHEE, ItemNames.BATTLECRUISER,
+    ItemNames.GHOST, ItemNames.SPECTRE, ItemNames.THOR,
+    ItemNames.PREDATOR, ItemNames.HERCULES,
+    ItemNames.SCIENCE_VESSEL, ItemNames.RAVEN,
+]
+item_name_groups[ItemGroupNames.WOL_MERCS] = wol_mercs = [
+    ItemNames.WAR_PIGS, ItemNames.DEVIL_DOGS, ItemNames.HAMMER_SECURITIES,
+    ItemNames.SPARTAN_COMPANY, ItemNames.SIEGE_BREAKERS,
+    ItemNames.HELS_ANGELS, ItemNames.DUSK_WINGS, ItemNames.JACKSONS_REVENGE,
+]
+item_name_groups[ItemGroupNames.WOL_BUILDINGS] = wol_buildings = [
+    ItemNames.BUNKER, ItemNames.SENSOR_TOWER, ItemNames.PROGRESSIVE_ORBITAL_COMMAND,
+    ItemNames.PERDITION_TURRET, ItemNames.PLANETARY_FORTRESS,
+    ItemNames.HIVE_MIND_EMULATOR, ItemNames.PSI_DISRUPTER,
+]
+
+# Terran Upgrades
+item_name_groups[ItemGroupNames.WOL_UPGRADES] = wol_upgrades = [
+    # Armory Base
+    ItemNames.BUNKER_PROJECTILE_ACCELERATOR, ItemNames.BUNKER_NEOSTEEL_BUNKER,
+    ItemNames.MISSILE_TURRET_TITANIUM_HOUSING, ItemNames.MISSILE_TURRET_HELLSTORM_BATTERIES,
+    ItemNames.SCV_ADVANCED_CONSTRUCTION, ItemNames.SCV_DUAL_FUSION_WELDERS,
+    ItemNames.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM, ItemNames.PROGRESSIVE_ORBITAL_COMMAND,
+    # Armory Infantry
+    ItemNames.MARINE_PROGRESSIVE_STIMPACK, ItemNames.MARINE_COMBAT_SHIELD,
+    ItemNames.MEDIC_ADVANCED_MEDIC_FACILITIES, ItemNames.MEDIC_STABILIZER_MEDPACKS,
+    ItemNames.FIREBAT_INCINERATOR_GAUNTLETS, ItemNames.FIREBAT_JUGGERNAUT_PLATING,
+    ItemNames.MARAUDER_CONCUSSIVE_SHELLS, ItemNames.MARAUDER_KINETIC_FOAM,
+    ItemNames.REAPER_U238_ROUNDS, ItemNames.REAPER_G4_CLUSTERBOMB,
+    # Armory Vehicles
+    ItemNames.HELLION_TWIN_LINKED_FLAMETHROWER, ItemNames.HELLION_THERMITE_FILAMENTS,
+    ItemNames.SPIDER_MINE_CERBERUS_MINE, ItemNames.VULTURE_PROGRESSIVE_REPLENISHABLE_MAGAZINE,
+    ItemNames.GOLIATH_MULTI_LOCK_WEAPONS_SYSTEM, ItemNames.GOLIATH_ARES_CLASS_TARGETING_SYSTEM,
+    ItemNames.DIAMONDBACK_PROGRESSIVE_TRI_LITHIUM_POWER_CELL, ItemNames.DIAMONDBACK_SHAPED_HULL,
+    ItemNames.SIEGE_TANK_MAELSTROM_ROUNDS, ItemNames.SIEGE_TANK_SHAPED_BLAST,
+    # Armory Starships
+    ItemNames.MEDIVAC_RAPID_DEPLOYMENT_TUBE, ItemNames.MEDIVAC_ADVANCED_HEALING_AI,
+    ItemNames.WRAITH_PROGRESSIVE_TOMAHAWK_POWER_CELLS, ItemNames.WRAITH_DISPLACEMENT_FIELD,
+    ItemNames.VIKING_RIPWAVE_MISSILES, ItemNames.VIKING_PHOBOS_CLASS_WEAPONS_SYSTEM,
+    ItemNames.BANSHEE_PROGRESSIVE_CROSS_SPECTRUM_DAMPENERS, ItemNames.BANSHEE_SHOCKWAVE_MISSILE_BATTERY,
+    ItemNames.BATTLECRUISER_PROGRESSIVE_MISSILE_PODS, ItemNames.BATTLECRUISER_PROGRESSIVE_DEFENSIVE_MATRIX,
+    # Armory Dominion
+    ItemNames.GHOST_OCULAR_IMPLANTS, ItemNames.GHOST_CRIUS_SUIT,
+    ItemNames.SPECTRE_PSIONIC_LASH, ItemNames.SPECTRE_NYX_CLASS_CLOAKING_MODULE,
+    ItemNames.THOR_330MM_BARRAGE_CANNON, ItemNames.THOR_PROGRESSIVE_IMMORTALITY_PROTOCOL,
+    # Lab Zerg
+    ItemNames.BUNKER_FORTIFIED_BUNKER, ItemNames.BUNKER_SHRIKE_TURRET,
+    ItemNames.PROGRESSIVE_REGENERATIVE_BIO_STEEL, ItemNames.CELLULAR_REACTOR,
+    # Other 3 levels are units/buildings (Perdition, PF, Hercules, Predator, HME, Psi Disrupter)
+    # Lab Protoss
+    ItemNames.VANADIUM_PLATING, ItemNames.ULTRA_CAPACITORS,
+    ItemNames.AUTOMATED_REFINERY, ItemNames.MICRO_FILTERING,
+    ItemNames.ORBITAL_DEPOTS, ItemNames.COMMAND_CENTER_REACTOR,
+    ItemNames.ORBITAL_STRIKE, ItemNames.TECH_REACTOR,
+    # Other level is units (Raven, Science Vessel)
+]
+item_name_groups[ItemGroupNames.TERRAN_STIMPACKS] = terran_stimpacks = [
+    ItemNames.MARINE_PROGRESSIVE_STIMPACK,
+    ItemNames.MARAUDER_PROGRESSIVE_STIMPACK,
+    ItemNames.REAPER_PROGRESSIVE_STIMPACK,
+    ItemNames.FIREBAT_PROGRESSIVE_STIMPACK,
+    ItemNames.HELLION_PROGRESSIVE_STIMPACK,
+]
+item_name_groups[ItemGroupNames.TERRAN_ORIGINAL_PROGRESSIVE_UPGRADES] = terran_original_progressive_upgrades = [
+    ItemNames.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM,
+    ItemNames.PROGRESSIVE_ORBITAL_COMMAND,
+    ItemNames.MARINE_PROGRESSIVE_STIMPACK,
+    ItemNames.VULTURE_PROGRESSIVE_REPLENISHABLE_MAGAZINE,
+    ItemNames.DIAMONDBACK_PROGRESSIVE_TRI_LITHIUM_POWER_CELL,
+    ItemNames.WRAITH_PROGRESSIVE_TOMAHAWK_POWER_CELLS,
+    ItemNames.BANSHEE_PROGRESSIVE_CROSS_SPECTRUM_DAMPENERS,
+    ItemNames.BATTLECRUISER_PROGRESSIVE_MISSILE_PODS,
+    ItemNames.BATTLECRUISER_PROGRESSIVE_DEFENSIVE_MATRIX,
+    ItemNames.THOR_PROGRESSIVE_IMMORTALITY_PROTOCOL,
+    ItemNames.PROGRESSIVE_REGENERATIVE_BIO_STEEL,
+]
+item_name_groups[ItemGroupNames.TERRAN_PROGRESSIVE_UPGRADES] = [
+    item_name for item_name, item_data in Items.item_table.items()
+    if item_data.type in (Items.TerranItemType.Progressive, Items.TerranItemType.Progressive_2)
+]
+item_name_groups[ItemGroupNames.WOL_ITEMS] = vanilla_wol_items = (
+    wol_units
+    + wol_buildings
+    + wol_mercs
+    + wol_upgrades
+)
+
+# Zerg
+item_name_groups[ItemGroupNames.ZERG_BUILDINGS] = zerg_buildings = [ItemNames.SPINE_CRAWLER, ItemNames.SPORE_CRAWLER]
+item_name_groups[ItemGroupNames.ZERG_UNITS] = zerg_units = [
+    item_name for item_name, item_data in Items.item_table.items()
+    if item_data.type in (Items.ZergItemType.Unit, Items.ZergItemType.Mercenary, Items.ZergItemType.Morph)
+        and item_name not in zerg_buildings
+]
+item_name_groups[ItemGroupNames.HOTS_UNITS] = hots_units = [
+    ItemNames.ZERGLING, ItemNames.SWARM_QUEEN, ItemNames.ROACH, ItemNames.HYDRALISK,
+    ItemNames.ABERRATION, ItemNames.SWARM_HOST, ItemNames.MUTALISK,
+    ItemNames.INFESTOR, ItemNames.ULTRALISK,
+    ItemNames.ZERGLING_BANELING_ASPECT,
+    ItemNames.HYDRALISK_LURKER_ASPECT,
+    ItemNames.HYDRALISK_IMPALER_ASPECT,
+    ItemNames.MUTALISK_CORRUPTOR_VIPER_ASPECT,
+    ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT,
+]
+item_name_groups[ItemGroupNames.HOTS_MORPHS] = hots_morphs = [
+    ItemNames.ZERGLING_BANELING_ASPECT,
+    ItemNames.HYDRALISK_IMPALER_ASPECT,
+    ItemNames.HYDRALISK_LURKER_ASPECT,
+    ItemNames.MUTALISK_CORRUPTOR_VIPER_ASPECT,
+    ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT,
+]
+item_name_groups[ItemGroupNames.ZERG_MORPHS] = zerg_morphs = [
+    item_name for item_name, item_data in Items.item_table.items() if item_data.type == Items.ZergItemType.Morph
+]
+item_name_groups[ItemGroupNames.ZERG_MERCS] = zerg_mercs = [
+    item_name for item_name, item_data in Items.item_table.items() if item_data.type == Items.ZergItemType.Mercenary
+]
+item_name_groups[ItemGroupNames.KERRIGAN_ABILITIES] = kerrigan_abilities = [
+    item_name for item_name, item_data in Items.item_table.items() if item_data.type == Items.ZergItemType.Ability
+]
+item_name_groups[ItemGroupNames.KERRIGAN_PASSIVES] = kerrigan_passives = [
+    ItemNames.KERRIGAN_HEROIC_FORTITUDE, ItemNames.KERRIGAN_CHAIN_REACTION,
+    ItemNames.KERRIGAN_INFEST_BROODLINGS, ItemNames.KERRIGAN_FURY, ItemNames.KERRIGAN_ABILITY_EFFICIENCY,
+]
+
+# Zerg Upgrades
+item_name_groups[ItemGroupNames.HOTS_STRAINS] = hots_strains = [
+    item_name for item_name, item_data in Items.item_table.items() if item_data.type == Items.ZergItemType.Strain
+]
+item_name_groups[ItemGroupNames.HOTS_MUTATIONS] = hots_mutations = [
+    ItemNames.ZERGLING_HARDENED_CARAPACE, ItemNames.ZERGLING_ADRENAL_OVERLOAD, ItemNames.ZERGLING_METABOLIC_BOOST,
+    ItemNames.BANELING_CORROSIVE_ACID, ItemNames.BANELING_RUPTURE, ItemNames.BANELING_REGENERATIVE_ACID,
+    ItemNames.ROACH_HYDRIODIC_BILE, ItemNames.ROACH_ADAPTIVE_PLATING, ItemNames.ROACH_TUNNELING_CLAWS,
+    ItemNames.HYDRALISK_FRENZY, ItemNames.HYDRALISK_ANCILLARY_CARAPACE, ItemNames.HYDRALISK_GROOVED_SPINES,
+    ItemNames.SWARM_HOST_BURROW, ItemNames.SWARM_HOST_RAPID_INCUBATION, ItemNames.SWARM_HOST_PRESSURIZED_GLANDS,
+    ItemNames.MUTALISK_VICIOUS_GLAIVE, ItemNames.MUTALISK_RAPID_REGENERATION, ItemNames.MUTALISK_SUNDERING_GLAIVE,
+    ItemNames.ULTRALISK_BURROW_CHARGE, ItemNames.ULTRALISK_TISSUE_ASSIMILATION, ItemNames.ULTRALISK_MONARCH_BLADES,
+]
+item_name_groups[ItemGroupNames.HOTS_GLOBAL_UPGRADES] = hots_global_upgrades = [
+    ItemNames.KERRIGAN_ZERGLING_RECONSTITUTION,
+    ItemNames.KERRIGAN_IMPROVED_OVERLORDS,
+    ItemNames.KERRIGAN_AUTOMATED_EXTRACTORS,
+    ItemNames.KERRIGAN_TWIN_DRONES,
+    ItemNames.KERRIGAN_MALIGNANT_CREEP,
+    ItemNames.KERRIGAN_VESPENE_EFFICIENCY,
+]
+item_name_groups[ItemGroupNames.HOTS_ITEMS] = vanilla_hots_items = (
+    hots_units
+    + zerg_buildings
+    + kerrigan_abilities
+    + hots_mutations
+    + hots_strains
+    + hots_global_upgrades
+)
+
 
 # Protoss
+item_name_groups[ItemGroupNames.PROTOSS_UNITS] = protoss_units = [
+    item_name for item_name, item_data in Items.item_table.items()
+    if item_data.type in (Items.ProtossItemType.Unit, Items.ProtossItemType.Unit_2)
+]
+item_name_groups[ItemGroupNames.LOTV_UNITS] = lotv_units = [
+    ItemNames.ZEALOT, ItemNames.CENTURION, ItemNames.SENTINEL,
+    ItemNames.STALKER, ItemNames.DRAGOON, ItemNames.ADEPT,
+    ItemNames.SENTRY, ItemNames.HAVOC, ItemNames.ENERGIZER,
+    ItemNames.HIGH_TEMPLAR, ItemNames.DARK_ARCHON, ItemNames.ASCENDANT,
+    ItemNames.DARK_TEMPLAR, ItemNames.AVENGER, ItemNames.BLOOD_HUNTER,
+    ItemNames.IMMORTAL, ItemNames.ANNIHILATOR, ItemNames.VANGUARD,
+    ItemNames.COLOSSUS, ItemNames.WRATHWALKER, ItemNames.REAVER,
+    ItemNames.PHOENIX, ItemNames.MIRAGE, ItemNames.CORSAIR,
+    ItemNames.VOID_RAY, ItemNames.DESTROYER, ItemNames.ARBITER,
+    ItemNames.CARRIER, ItemNames.TEMPEST, ItemNames.MOTHERSHIP,
+]
+item_name_groups[ItemGroupNames.PROPHECY_UNITS] = prophecy_units = [
+    ItemNames.ZEALOT, ItemNames.STALKER, ItemNames.HIGH_TEMPLAR, ItemNames.DARK_TEMPLAR,
+    ItemNames.OBSERVER, ItemNames.IMMORTAL, ItemNames.COLOSSUS,
+    ItemNames.PHOENIX, ItemNames.VOID_RAY, ItemNames.CARRIER,
+]
+item_name_groups[ItemGroupNames.PROPHECY_BUILDINGS] = prophecy_buildings = [
+    ItemNames.PHOTON_CANNON,
+]
 item_name_groups[ItemGroupNames.GATEWAY_UNITS] = gateway_units = [
     ItemNames.ZEALOT, ItemNames.CENTURION, ItemNames.SENTINEL, ItemNames.SUPPLICANT,
     ItemNames.STALKER, ItemNames.INSTIGATOR, ItemNames.SLAYER,
@@ -160,28 +373,69 @@ item_name_groups[ItemGroupNames.PROTOSS_BUILDINGS] = protoss_buildings = [
     item_name for item_name, item_data in Items.item_table.items()
     if item_data.type == Items.ProtossItemType.Building
 ]
-item_name_groups[ItemGroupNames.AIUR] = [
+item_name_groups[ItemGroupNames.AIUR_UNITS] = [
     ItemNames.ZEALOT, ItemNames.DRAGOON, ItemNames.SENTRY, ItemNames.AVENGER, ItemNames.HIGH_TEMPLAR,
     ItemNames.IMMORTAL, ItemNames.REAVER,
     ItemNames.PHOENIX, ItemNames.SCOUT, ItemNames.ARBITER, ItemNames.CARRIER,
 ]
-item_name_groups[ItemGroupNames.NERAZIM] = [
+item_name_groups[ItemGroupNames.NERAZIM_UNITS] = [
     ItemNames.CENTURION, ItemNames.STALKER, ItemNames.DARK_TEMPLAR, ItemNames.SIGNIFIER, ItemNames.DARK_ARCHON,
     ItemNames.ANNIHILATOR,
     ItemNames.CORSAIR, ItemNames.ORACLE, ItemNames.VOID_RAY,
 ]
-item_name_groups[ItemGroupNames.TAL_DARIM] = [
+item_name_groups[ItemGroupNames.TAL_DARIM_UNITS] = [
     ItemNames.SUPPLICANT, ItemNames.SLAYER, ItemNames.HAVOC, ItemNames.BLOOD_HUNTER, ItemNames.ASCENDANT,
     ItemNames.VANGUARD, ItemNames.WRATHWALKER,
     ItemNames.DESTROYER, ItemNames.MOTHERSHIP,
-    ItemNames.WARP_PRISM_PHASE_BLASTER,
 ]
-item_name_groups[ItemGroupNames.PURIFIER] = [
+item_name_groups[ItemGroupNames.PURIFIER_UNITS] = [
     ItemNames.SENTINEL, ItemNames.ADEPT, ItemNames.INSTIGATOR, ItemNames.ENERGIZER,
     ItemNames.COLOSSUS, ItemNames.DISRUPTOR,
     ItemNames.MIRAGE, ItemNames.TEMPEST,
 ]
+item_name_groups[ItemGroupNames.SOA_ITEMS] = soa_items = [
+    *[item_name for item_name, item_data in Items.item_table.items() if item_data.type == Items.ProtossItemType.Spear_Of_Adun],
+    ItemNames.SOA_PROGRESSIVE_PROXY_PYLON,
+]
+lotv_soa_items = [item_name for item_name in soa_items if item_name != ItemNames.SOA_PYLON_OVERCHARGE]
+item_name_groups[ItemGroupNames.PROTOSS_GLOBAL_UPGRADES] = [
+    item_name for item_name, item_data in Items.item_table.items() if item_data.type == Items.ProtossItemType.Solarite_Core
+]
+item_name_groups[ItemGroupNames.LOTV_GLOBAL_UPGRADES] = lotv_global_upgrades = [
+    ItemNames.NEXUS_OVERCHARGE,
+    ItemNames.ORBITAL_ASSIMILATORS,
+    ItemNames.WARP_HARMONIZATION,
+    ItemNames.MATRIX_OVERLOAD,
+    ItemNames.GUARDIAN_SHELL,
+    ItemNames.RECONSTRUCTION_BEAM,
+]
+item_name_groups[ItemGroupNames.LOTV_ITEMS] = vanilla_lotv_items = (
+    lotv_units
+    + protoss_buildings
+    + lotv_soa_items
+    + lotv_global_upgrades
+)
+
+item_name_groups[ItemGroupNames.VANILLA_ITEMS] = vanilla_items = (
+    vanilla_wol_items + vanilla_hots_items + vanilla_lotv_items
+)
+
 
 # Sanity checks
-assert len(terran_units) == len(barracks_units) + len(factory_units) + len(starport_units) + len(terran_buildings) + len(terran_mercenaries)
-assert len(protoss_units) == len(gateway_units) + len(robo_units) + len(stargate_units) + len(protoss_buildings)
+def _sanity_check() -> None:
+    all_progressive_upgrades = [
+        item_name for item_name, item_data in Items.item_table.items()
+        if item_data.type.display_name == Items.TerranItemType.Progressive.display_name
+    ]
+    assert len(terran_units) == len(barracks_units) + len(factory_units) + len(starport_units) + len(terran_mercenaries)
+    assert len(protoss_units) == len(gateway_units) + len(robo_units) + len(stargate_units)
+    for item_name in terran_original_progressive_upgrades:
+        assert item_name in all_progressive_upgrades
+        assert item_name in wol_upgrades
+    for item_name in terran_stimpacks:
+        assert "Stimpack" in item_name
+    for var_name, display_name in ItemGroupNames.__dict__.items():
+        if var_name.startswith("_"):
+            continue
+        assert display_name in item_name_groups
+_sanity_check()
