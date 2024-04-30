@@ -1100,6 +1100,16 @@ LOCATION_GROUPS = {
         "Space Center - Team Magma Grunt 6",
         "Space Center - Team Magma Grunt 7",
     },
+    "Jagged Pass": {
+        "Jagged Pass - Camper Ethan",
+        "Jagged Pass - Hidden Item in Corner",
+        "Jagged Pass - Hidden Item in Grass",
+        "Jagged Pass - Hiker Eric",
+        "Jagged Pass - Item Below Hideout",
+        "Jagged Pass - Picnicker Autumn",
+        "Jagged Pass - Picnicker Diana",
+        "Jagged Pass - Triathlete Julio",
+    },
     "Mt Chimney": {
         "Mt Chimney - Beauty Melissa",
         "Mt Chimney - Beauty Sheila",
