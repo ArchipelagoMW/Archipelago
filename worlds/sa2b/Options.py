@@ -1,6 +1,6 @@
-import typing
+from dataclasses import dataclass
 
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList
+from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList, PerGameCommonOptions
 
 
 class Goal(Choice):
@@ -833,103 +833,103 @@ class LogicDifficulty(Choice):
     default = 0
 
 
-sa2b_options: typing.Dict[str, type(Option)] = {
-    "goal": Goal,
+@dataclass
+class SA2BOptions(PerGameCommonOptions):
+    goal: Goal
 
-    "mission_shuffle": MissionShuffle,
-    "boss_rush_shuffle": BossRushShuffle,
+    mission_shuffle: MissionShuffle
+    boss_rush_shuffle: BossRushShuffle
 
-    "keysanity": Keysanity,
-    "whistlesanity": Whistlesanity,
-    "beetlesanity": Beetlesanity,
-    "omosanity": Omosanity,
-    "animalsanity": Animalsanity,
-    "itemboxsanity": ItemBoxsanity,
-    "kart_race_checks": KartRaceChecks,
+    keysanity: Keysanity
+    whistlesanity: Whistlesanity
+    beetlesanity: Beetlesanity
+    omosanity: Omosanity
+    animalsanity: Animalsanity
+    itemboxsanity: ItemBoxsanity
+    kart_race_checks: KartRaceChecks
 
-    "logic_difficulty": LogicDifficulty,
-    "required_rank": RequiredRank,
-    "required_cannons_core_missions": RequiredCannonsCoreMissions,
+    logic_difficulty: LogicDifficulty
+    required_rank: RequiredRank
+    required_cannons_core_missions: RequiredCannonsCoreMissions
 
-    "emblem_percentage_for_cannons_core": EmblemPercentageForCannonsCore,
-    "number_of_level_gates": NumberOfLevelGates,
-    "level_gate_distribution": LevelGateDistribution,
-    "level_gate_costs": LevelGateCosts,
-    "max_emblem_cap": MaximumEmblemCap,
+    emblem_percentage_for_cannons_core: EmblemPercentageForCannonsCore
+    number_of_level_gates: NumberOfLevelGates
+    level_gate_distribution: LevelGateDistribution
+    level_gate_costs: LevelGateCosts
+    max_emblem_cap: MaximumEmblemCap
 
-    "chao_race_difficulty": ChaoRaceDifficulty,
-    "chao_karate_difficulty": ChaoKarateDifficulty,
-    "chao_stadium_checks": ChaoStadiumChecks,
-    "chao_stats": ChaoStats,
-    "chao_stats_frequency": ChaoStatsFrequency,
-    "chao_stats_stamina": ChaoStatsStamina,
-    "chao_stats_hidden": ChaoStatsHidden,
-    "chao_animal_parts": ChaoAnimalParts,
-    "chao_kindergarten": ChaoKindergarten,
-    "black_market_slots": BlackMarketSlots,
-    "black_market_unlock_costs": BlackMarketUnlockCosts,
-    "black_market_price_multiplier": BlackMarketPriceMultiplier,
-    "shuffle_starting_chao_eggs": ShuffleStartingChaoEggs,
-    "chao_entrance_randomization": ChaoEntranceRandomization,
+    chao_race_difficulty: ChaoRaceDifficulty
+    chao_karate_difficulty: ChaoKarateDifficulty
+    chao_stadium_checks: ChaoStadiumChecks
+    chao_stats: ChaoStats
+    chao_stats_frequency: ChaoStatsFrequency
+    chao_stats_stamina: ChaoStatsStamina
+    chao_stats_hidden: ChaoStatsHidden
+    chao_animal_parts: ChaoAnimalParts
+    chao_kindergarten: ChaoKindergarten
+    black_market_slots: BlackMarketSlots
+    black_market_unlock_costs: BlackMarketUnlockCosts
+    black_market_price_multiplier: BlackMarketPriceMultiplier
+    shuffle_starting_chao_eggs: ShuffleStartingChaoEggs
+    chao_entrance_randomization: ChaoEntranceRandomization
 
-    "junk_fill_percentage": JunkFillPercentage,
-    "trap_fill_percentage": TrapFillPercentage,
-    "omochao_trap_weight": OmochaoTrapWeight,
-    "timestop_trap_weight": TimestopTrapWeight,
-    "confusion_trap_weight": ConfusionTrapWeight,
-    "tiny_trap_weight": TinyTrapWeight,
-    "gravity_trap_weight": GravityTrapWeight,
-    "exposition_trap_weight": ExpositionTrapWeight,
-    #"darkness_trap_weight": DarknessTrapWeight,
-    "ice_trap_weight": IceTrapWeight,
-    "slow_trap_weight": SlowTrapWeight,
-    "cutscene_trap_weight": CutsceneTrapWeight,
-    "reverse_trap_weight": ReverseTrapWeight,
-    "literature_trap_weight": LiteratureTrapWeight,
-    "pong_trap_weight": PongTrapWeight,
-    "platformer_trap_weight": PlatformerTrapWeight,
-    "fishing_trap_weight": FishingTrapWeight,
-    "trivia_trap_weight": TriviaTrapWeight,
-    "pokemon_trivia_trap_weight": PokemonTriviaTrapWeight,
-    "pokemon_count_trap_weight": PokemonCountTrapWeight,
-    "minigame_trap_difficulty": MinigameTrapDifficulty,
+    junk_fill_percentage: JunkFillPercentage
+    trap_fill_percentage: TrapFillPercentage
+    omochao_trap_weight: OmochaoTrapWeight
+    timestop_trap_weight: TimestopTrapWeight
+    confusion_trap_weight: ConfusionTrapWeight
+    tiny_trap_weight: TinyTrapWeight
+    gravity_trap_weight: GravityTrapWeight
+    exposition_trap_weight: ExpositionTrapWeight
+    #darkness_trap_weight: DarknessTrapWeight
+    ice_trap_weight: IceTrapWeight
+    slow_trap_weight: SlowTrapWeight
+    cutscene_trap_weight: CutsceneTrapWeight
+    reverse_trap_weight: ReverseTrapWeight
+    literature_trap_weight: LiteratureTrapWeight
+    pong_trap_weight: PongTrapWeight
+    platformer_trap_weight: PlatformerTrapWeight
+    fishing_trap_weight: FishingTrapWeight
+    trivia_trap_weight: TriviaTrapWeight
+    pokemon_trivia_trap_weight: PokemonTriviaTrapWeight
+    pokemon_count_trap_weight: PokemonCountTrapWeight
+    minigame_trap_difficulty: MinigameTrapDifficulty
 
-    "sadx_music": SADXMusic,
-    "music_shuffle": MusicShuffle,
-    "voice_shuffle": VoiceShuffle,
-    "narrator": Narrator,
-    "ring_loss": RingLoss,
+    sadx_music: SADXMusic
+    music_shuffle: MusicShuffle
+    voice_shuffle: VoiceShuffle
+    narrator: Narrator
+    ring_loss: RingLoss
 
-    "speed_mission_count": SpeedMissionCount,
-    "speed_mission_2": SpeedMission2,
-    "speed_mission_3": SpeedMission3,
-    "speed_mission_4": SpeedMission4,
-    "speed_mission_5": SpeedMission5,
+    speed_mission_count: SpeedMissionCount
+    speed_mission_2: SpeedMission2
+    speed_mission_3: SpeedMission3
+    speed_mission_4: SpeedMission4
+    speed_mission_5: SpeedMission5
 
-    "mech_mission_count": MechMissionCount,
-    "mech_mission_2": MechMission2,
-    "mech_mission_3": MechMission3,
-    "mech_mission_4": MechMission4,
-    "mech_mission_5": MechMission5,
+    mech_mission_count: MechMissionCount
+    mech_mission_2: MechMission2
+    mech_mission_3: MechMission3
+    mech_mission_4: MechMission4
+    mech_mission_5: MechMission5
 
-    "hunt_mission_count": HuntMissionCount,
-    "hunt_mission_2": HuntMission2,
-    "hunt_mission_3": HuntMission3,
-    "hunt_mission_4": HuntMission4,
-    "hunt_mission_5": HuntMission5,
+    hunt_mission_count: HuntMissionCount
+    hunt_mission_2: HuntMission2
+    hunt_mission_3: HuntMission3
+    hunt_mission_4: HuntMission4
+    hunt_mission_5: HuntMission5
 
-    "kart_mission_count": KartMissionCount,
-    "kart_mission_2": KartMission2,
-    "kart_mission_3": KartMission3,
-    "kart_mission_4": KartMission4,
-    "kart_mission_5": KartMission5,
+    kart_mission_count: KartMissionCount
+    kart_mission_2: KartMission2
+    kart_mission_3: KartMission3
+    kart_mission_4: KartMission4
+    kart_mission_5: KartMission5
 
-    "cannons_core_mission_count": CannonsCoreMissionCount,
-    "cannons_core_mission_2": CannonsCoreMission2,
-    "cannons_core_mission_3": CannonsCoreMission3,
-    "cannons_core_mission_4": CannonsCoreMission4,
-    "cannons_core_mission_5": CannonsCoreMission5,
+    cannons_core_mission_count: CannonsCoreMissionCount
+    cannons_core_mission_2: CannonsCoreMission2
+    cannons_core_mission_3: CannonsCoreMission3
+    cannons_core_mission_4: CannonsCoreMission4
+    cannons_core_mission_5: CannonsCoreMission5
 
-    "ring_link": RingLink,
-    "death_link": DeathLink,
-}
+    ring_link: RingLink
+    death_link: DeathLink

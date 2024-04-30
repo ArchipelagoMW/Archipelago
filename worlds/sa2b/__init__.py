@@ -6,7 +6,7 @@ from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from .Items import SA2BItem, ItemData, item_table, upgrades_table, emeralds_table, junk_table, trap_table, item_groups, \
                    eggs_table, fruits_table, seeds_table, hats_table, animals_table, chaos_drives_table
 from .Locations import SA2BLocation, all_locations, setup_locations, chao_animal_event_location_table, black_market_location_table
-from .Options import sa2b_options
+from .Options import SA2BOptions
 from .Regions import create_regions, shuffleable_regions, connect_regions, LevelGate, gate_0_whitelist_regions, \
     gate_0_blacklist_regions
 from .Rules import set_rules
@@ -54,7 +54,8 @@ class SA2BWorld(World):
     Sonic Adventure 2 Battle is an action platforming game. Play as Sonic, Tails, Knuckles, Shadow, Rouge, and Eggman across 31 stages and prevent the destruction of the earth.
     """
     game: str = "Sonic Adventure 2 Battle"
-    option_definitions = sa2b_options
+    options_dataclass = SA2BOptions
+    options: SA2BOptions
     topology_present = False
 
     item_name_groups = item_groups

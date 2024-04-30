@@ -7,6 +7,8 @@
 
 ### Quality of Life:
 
+- Moved SA2B to the new Options system
+
 ### Bug Fixes:
 - Added missing `Dry Lagoon - 12 Animals` location
 - Chaos Emeralds should no longer disproportionately end up in Cannon's Core or the final Level Gate
