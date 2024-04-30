@@ -13,7 +13,7 @@ from .Items import (StarcraftItem, filler_items, get_full_item_list,
     not_balanced_starting_units,
 )
 from . import Items
-from .ItemGroups import item_name_groups
+from . import ItemGroups
 from .Locations import get_locations, get_location_types, get_plando_locations
 from .Regions import create_regions
 from .Options import (get_option_value, LocationInclusion, KerriganLevelItemDistribution,
@@ -77,7 +77,7 @@ class SC2World(World):
     options_dataclass = Starcraft2Options
     options: Starcraft2Options
 
-    item_name_groups = item_name_groups
+    item_name_groups = ItemGroups.item_name_groups
     locked_locations: List[str]
     """Locations locked to contain specific items, such as victory events or forced resources"""
     location_cache: List[Location]
@@ -638,11 +638,13 @@ def create_item_with_correct_settings(player: int, name: str) -> Item:
     return item
 
 
-def fill_pool_with_kerrigan_levels(world: World, item_pool: List[Item]):
-    total_levels = get_option_value(world, "kerrigan_level_item_sum")
-    if get_option_value(world, "kerrigan_presence") not in kerrigan_unit_available \
-            or total_levels == 0 \
-            or SC2Campaign.HOTS not in get_enabled_campaigns(world):
+def fill_pool_with_kerrigan_levels(world: SC2World, item_pool: List[Item]):
+    total_levels = world.options.kerrigan_level_item_sum.value
+    missions = get_all_missions(world.mission_req_table)
+    if (world.options.kerrigan_presence.value not in kerrigan_unit_available
+        or total_levels == 0
+        or not [mission for mission in missions if MissionFlag.Kerrigan in mission.flags]
+    ):
         return
     
     def add_kerrigan_level_items(level_amount: int, item_amount: int):
@@ -653,7 +655,7 @@ def fill_pool_with_kerrigan_levels(world: World, item_pool: List[Item]):
             item_pool.append(create_item_with_correct_settings(world.player, name))
 
     sizes = [70, 35, 14, 10, 7, 5, 2, 1]
-    option = get_option_value(world, "kerrigan_level_item_distribution")
+    option = world.options.kerrigan_level_item_distribution.value
 
     assert isinstance(option, int)
     assert isinstance(total_levels, int)
