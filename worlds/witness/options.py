@@ -177,6 +177,10 @@ class VictoryCondition(Choice):
 class PuzzleRandomization(Choice):
     """
     Puzzles in this randomizer are randomly generated. This option changes the difficulty/types of puzzles.
+    "Sigma Normal" randomizes puzzles close to their original mechanics and difficulty.
+    "Sigma Expert" is an entirely new experience with extremely difficult random puzzles. Do not underestimate this mode, it is brutal.
+    "None" means that the puzzles are unchanged from the original game.
+    "Variety" focuses on unique symbol combinations not featured in the original game. It is harder than Sigma Normal, but easier than Sigma Expert.
     """
     display_name = "Puzzle Randomization"
     option_sigma_normal = 0
