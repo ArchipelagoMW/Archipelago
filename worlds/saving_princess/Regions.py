@@ -1,0 +1,126 @@
+from typing import List, Dict
+
+from BaseClasses import MultiWorld, Region, Entrance
+
+from . import Locations
+from .Constants import *
+
+
+class RegionData:
+    location_names: List[str]
+
+    def __init__(self, location_names: List[str]):
+        self.location_names = location_names
+
+
+region_dict: Dict[str, RegionData] = {
+    REGION_MENU: RegionData([]),
+    REGION_CAVE: RegionData(
+        [
+            LOCATION_CAVE_AMMO,
+            LOCATION_CAVE_RELOAD,
+            LOCATION_CAVE_HEALTH,
+            LOCATION_CAVE_WEAPON,
+            EP_LOCATION_CAVE_MINIBOSS,
+            EP_LOCATION_CAVE_BOSS,
+        ]
+    ),
+    REGION_VOLCANIC: RegionData(
+        [
+            LOCATION_VOLCANIC_RELOAD,
+            LOCATION_VOLCANIC_HEALTH,
+            LOCATION_VOLCANIC_AMMO,
+            LOCATION_VOLCANIC_WEAPON,
+            EP_LOCATION_VOLCANIC_BOSS,
+        ]
+    ),
+    REGION_ARCTIC: RegionData(
+        [
+            LOCATION_ARCTIC_AMMO,
+            LOCATION_ARCTIC_RELOAD,
+            LOCATION_ARCTIC_HEALTH,
+            LOCATION_ARCTIC_WEAPON,
+            LOCATION_JACKET,
+            EP_LOCATION_ARCTIC_BOSS,
+        ]
+    ),
+    REGION_HUB: RegionData(
+        [
+            LOCATION_HUB_AMMO,
+            LOCATION_HUB_HEALTH,
+            LOCATION_HUB_RELOAD,
+            EP_LOCATION_HUB_CONSOLE,
+            EP_LOCATION_HUB_NINJA_SCARE,
+        ]
+    ),
+    REGION_SWAMP: RegionData(
+        [
+            LOCATION_SWAMP_AMMO,
+            LOCATION_SWAMP_HEALTH,
+            LOCATION_SWAMP_RELOAD,
+            LOCATION_SWAMP_SPECIAL,
+            EP_LOCATION_SWAMP_BOSS,
+        ]
+    ),
+    REGION_ELECTRICAL: RegionData(
+        [
+            EP_LOCATION_ELEVATOR_NINJA_FIGHT,
+            LOCATION_ELECTRICAL_WEAPON,
+            EP_LOCATION_ELECTRICAL_MINIBOSS,
+            EP_LOCATION_ELECTRICAL_EXTRA,
+        ]
+    ),
+    REGION_ELECTRICAL_POWERED: RegionData(
+        [
+            LOCATION_ELECTRICAL_RELOAD,
+            LOCATION_ELECTRICAL_HEALTH,
+            LOCATION_ELECTRICAL_AMMO,
+            EP_LOCATION_ELECTRICAL_BOSS,
+            EP_LOCATION_ELECTRICAL_FINAL_BOSS,
+            EVENT_LOCATION_VICTORY,
+        ]
+    ),
+}
+
+
+def set_region_locations(region: Region, location_names: List[str], is_pool_expanded: bool):
+    location_pool = {**Locations.location_dict_base, **Locations.location_dict_event}
+    if is_pool_expanded:
+        location_pool = {**Locations.location_dict_expanded, **Locations.location_dict_event}
+    region.locations = [
+        Locations.SavingPrincessLocation(
+            region.player,
+            name,
+            Locations.location_dict[name].code,
+            region
+        ) for name in location_names if name in location_pool.keys()
+    ]
+
+
+def create_regions(world: MultiWorld, player: int, is_pool_expanded: bool):
+    for region_name, region_data in region_dict.items():
+        region = Region(region_name, player, world)
+        set_region_locations(region, region_data.location_names, is_pool_expanded)
+        world.regions.append(region)
+    connect_regions(world, player)
+
+
+def connect_regions(world: MultiWorld, player: int):
+    # and add a connection from the menu to the hub region
+    menu = world.get_region(REGION_MENU, player)
+    hub = world.get_region(REGION_HUB, player)
+    connection = Entrance(player, f"{REGION_HUB} entrance", menu)
+    menu.exits.append(connection)
+    connection.connect(hub)
+
+    # now add an entrance from every other region to hub
+    for region_name in [REGION_CAVE, REGION_VOLCANIC, REGION_ARCTIC, REGION_SWAMP, REGION_ELECTRICAL]:
+        connection = Entrance(player, f"{region_name} entrance", hub)
+        hub.exits.append(connection)
+        connection.connect(world.get_region(region_name, player))
+
+    # and finally, the connection between the final region and its powered version
+    electrical = world.get_region(REGION_ELECTRICAL, player)
+    connection = Entrance(player, f"{REGION_ELECTRICAL_POWERED} entrance", electrical)
+    electrical.exits.append(connection)
+    connection.connect(world.get_region(REGION_ELECTRICAL_POWERED, player))
