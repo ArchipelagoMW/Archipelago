@@ -497,7 +497,8 @@ class SNESRomPath(UserFilePath):
 
 
 class NESRomPath(UserFilePath):
-    # Special UserFilePath that ignores a non-optional variable header when validating
+    """Special UserFilePath that ignores a non-optional variable header when validating. Using this will require
+    validating that the rom has a header when loading the rom, and adding one should it be missing."""
 
     @classmethod
     def validate(cls, path: str) -> None:
