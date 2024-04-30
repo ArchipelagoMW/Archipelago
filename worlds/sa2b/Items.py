@@ -2,7 +2,6 @@ import typing
 
 from BaseClasses import Item, ItemClassification
 from .Names import ItemName
-from worlds.alttp import ALTTPWorld
 
 
 class ItemData(typing.NamedTuple):
@@ -271,5 +270,9 @@ item_groups: typing.Dict[str, str] = {
     "Traps":          list(trap_table.keys()),
 }
 
-ALTTPWorld.pedestal_credit_texts[item_table[ItemName.sonic_light_shoes].code] = "and the Soap Shoes"
-ALTTPWorld.pedestal_credit_texts[item_table[ItemName.shadow_air_shoes].code] = "and the Soap Shoes"
+try:
+    from worlds.alttp import ALTTPWorld
+    ALTTPWorld.pedestal_credit_texts[item_table[ItemName.sonic_light_shoes].code] = "and the Soap Shoes"
+    ALTTPWorld.pedestal_credit_texts[item_table[ItemName.shadow_air_shoes].code] = "and the Soap Shoes"
+except ModuleNotFoundError:
+    pass

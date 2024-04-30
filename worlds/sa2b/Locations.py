@@ -2308,10 +2308,6 @@ def setup_locations(world: World, player: int, mission_map: typing.Dict[int, int
             location_table.update({**lifebox_location_table})
             location_table.update({**itembox_location_table})
 
-        print(len(lifebox_location_table))
-        print(len(itembox_location_table))
-
-
         if world.options.kart_race_checks == 2:
             location_table.update({**kart_race_beginner_location_table})
             location_table.update({**kart_race_standard_location_table})
