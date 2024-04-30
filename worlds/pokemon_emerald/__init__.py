@@ -14,11 +14,11 @@ import settings
 from worlds.AutoWorld import WebWorld, World
 
 from .client import PokemonEmeraldClient  # Unused, but required to register with BizHawkClient
-from .data import LEGENDARY_POKEMON, MapData, SpeciesData, TrainerData, data as emerald_data
+from .data import LEGENDARY_POKEMON, MapData, SpeciesData, TrainerData, LocationCategory, data as emerald_data
 from .items import (ITEM_GROUPS, PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification,
                     offset_item_value)
 from .locations import (LOCATION_GROUPS, PokemonEmeraldLocation, create_location_label_to_id_map,
-                        create_locations_with_tags, set_free_fly, set_legendary_cave_entrances)
+                        create_locations_by_category, set_free_fly, set_legendary_cave_entrances)
 from .opponents import randomize_opponent_parties
 from .options import (Goal, DarkCavesRequireFlash, HmRequirements, ItemPoolType, PokemonEmeraldOptions,
                       RandomizeWildPokemon, RandomizeBadges, RandomizeHms, NormanRequirement)
@@ -231,24 +231,32 @@ class PokemonEmeraldWorld(World):
 
     def create_regions(self) -> None:
         from .regions import create_regions
-        regions = create_regions(self)
+        all_regions = create_regions(self)
 
-        tags = {"Badge", "HM", "KeyItem", "Rod", "Bike", "EventTicket"}  # Tags with progression items always included
+        # Categories with progression items always included
+        categories = {
+            LocationCategory.BADGE,
+            LocationCategory.HM,
+            LocationCategory.KEY,
+            LocationCategory.ROD,
+            LocationCategory.BIKE,
+            LocationCategory.TICKET
+        }
         if self.options.overworld_items:
-            tags.add("OverworldItem")
+            categories.add(LocationCategory.OVERWORLD_ITEM)
         if self.options.hidden_items:
-            tags.add("HiddenItem")
+            categories.add(LocationCategory.HIDDEN_ITEM)
         if self.options.npc_gifts:
-            tags.add("NpcGift")
+            categories.add(LocationCategory.GIFT)
         if self.options.berry_trees:
-            tags.add("BerryTree")
+            categories.add(LocationCategory.BERRY_TREE)
         if self.options.dexsanity:
-            tags.add("Pokedex")
+            categories.add(LocationCategory.POKEDEX)
         if self.options.trainersanity:
-            tags.add("Trainer")
-        create_locations_with_tags(self, regions, tags)
+            categories.add(LocationCategory.TRAINER)
+        create_locations_by_category(self, all_regions, categories)
 
-        self.multiworld.regions.extend(regions.values())
+        self.multiworld.regions.extend(all_regions.values())
 
         # Exclude locations which are always locked behind the player's goal
         def exclude_locations(location_names: List[str]):
@@ -319,21 +327,21 @@ class PokemonEmeraldWorld(World):
         # Filter progression items which shouldn't be shuffled into the itempool.
         # Their locations will still exist, but event items will be placed and
         # locked at their vanilla locations instead.
-        filter_tags = set()
+        filter_categories = set()
 
         if not self.options.key_items:
-            filter_tags.add("KeyItem")
+            filter_categories.add(LocationCategory.KEY)
         if not self.options.rods:
-            filter_tags.add("Rod")
+            filter_categories.add(LocationCategory.ROD)
         if not self.options.bikes:
-            filter_tags.add("Bike")
+            filter_categories.add(LocationCategory.BIKE)
         if not self.options.event_tickets:
-            filter_tags.add("EventTicket")
+            filter_categories.add(LocationCategory.TICKET)
 
         if self.options.badges in {RandomizeBadges.option_vanilla, RandomizeBadges.option_shuffle}:
-            filter_tags.add("Badge")
+            filter_categories.add(LocationCategory.BADGE)
         if self.options.hms in {RandomizeHms.option_vanilla, RandomizeHms.option_shuffle}:
-            filter_tags.add("HM")
+            filter_categories.add(LocationCategory.HM)
 
         # If Badges and HMs are set to the `shuffle` option, don't add them to
         # the normal item pool, but do create their items and save them and
@@ -341,17 +349,17 @@ class PokemonEmeraldWorld(World):
         if self.options.badges == RandomizeBadges.option_shuffle:
             self.badge_shuffle_info = [
                 (location, self.create_item_by_code(location.default_item_code))
-                for location in [l for l in item_locations if "Badge" in l.tags]
+                for location in [l for l in item_locations if emerald_data.locations[l.key].category == LocationCategory.BADGE]
             ]
         if self.options.hms == RandomizeHms.option_shuffle:
             self.hm_shuffle_info = [
                 (location, self.create_item_by_code(location.default_item_code))
-                for location in [l for l in item_locations if "HM" in l.tags]
+                for location in [l for l in item_locations if emerald_data.locations[l.key].category == LocationCategory.HM]
             ]
 
         # Filter down locations to actual items that will be filled and create
         # the itempool.
-        item_locations = [location for location in item_locations if len(filter_tags & location.tags) == 0]
+        item_locations = [location for location in item_locations if emerald_data.locations[location.key].category not in filter_categories]
         default_itempool = [self.create_item_by_code(location.default_item_code) for location in item_locations]
 
         # Take the itempool as-is
@@ -430,25 +438,26 @@ class PokemonEmeraldWorld(World):
 
         # Key items which are considered in access rules but not randomized are converted to events and placed
         # in their vanilla locations so that the player can have them in their inventory for logic.
-        def convert_unrandomized_items_to_events(tag: str) -> None:
+        def convert_unrandomized_items_to_events(category: LocationCategory) -> None:
             for location in self.multiworld.get_locations(self.player):
-                if location.tags is not None and tag in location.tags:
+                assert isinstance(location, PokemonEmeraldLocation)
+                if location.key is not None and emerald_data.locations[location.key].category == category:
                     location.place_locked_item(self.create_event(self.item_id_to_name[location.default_item_code]))
                     location.progress_type = LocationProgressType.DEFAULT
                     location.address = None
 
         if self.options.badges == RandomizeBadges.option_vanilla:
-            convert_unrandomized_items_to_events("Badge")
+            convert_unrandomized_items_to_events(LocationCategory.BADGE)
         if self.options.hms == RandomizeHms.option_vanilla:
-            convert_unrandomized_items_to_events("HM")
+            convert_unrandomized_items_to_events(LocationCategory.HM)
         if not self.options.rods:
-            convert_unrandomized_items_to_events("Rod")
+            convert_unrandomized_items_to_events(LocationCategory.ROD)
         if not self.options.bikes:
-            convert_unrandomized_items_to_events("Bike")
+            convert_unrandomized_items_to_events(LocationCategory.BIKE)
         if not self.options.event_tickets:
-            convert_unrandomized_items_to_events("EventTicket")
+            convert_unrandomized_items_to_events(LocationCategory.TICKET)
         if not self.options.key_items:
-            convert_unrandomized_items_to_events("KeyItem")
+            convert_unrandomized_items_to_events(LocationCategory.KEY)
 
     def pre_fill(self) -> None:
         # Badges and HMs that are set to shuffle need to be placed at
