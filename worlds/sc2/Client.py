@@ -215,15 +215,21 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         # Groups must be matched case-sensitively, so we properly capitalize the search term
         # eg. "Spear of Adun" over "Spear Of Adun" or "spear of adun"
         # This fails a lot of item name matches, but those should be found by partial name match
-        formatted_filter_search = " ".join([(part.lower() if len(part) <= 3 else part.lower().capitalize()) for part in filter_search.split()])
+        group_filter = ''
+        for group_name in item_name_groups:
+            if group_name in unlisted_item_name_groups:
+                continue
+            if filter_search.casefold() == group_name.casefold():
+                group_filter = group_name
+                break
 
         def item_matches_filter(item_name: str) -> bool:
             # The filter can be an exact group name or a partial item name
             # Partial item name can be matched case-insensitively
-            if filter_search.lower() in item_name.lower():
+            if filter_search.casefold() in item_name.casefold():
                 return True
             # The search term should already be formatted as a group name
-            if formatted_filter_search in item_name_groups and item_name in item_name_groups[formatted_filter_search]:
+            if group_filter and item_name in item_name_groups[group_filter]:
                 return True
             return False
 
