@@ -30,7 +30,7 @@ def can_shoot_arrows(state: CollectionState, player: int) -> bool:
 
 
 def has_triforce_pieces(state: CollectionState, player: int) -> bool:
-    count = state.multiworld.worlds[player].treasure_hunt_count
+    count = state.multiworld.worlds[player].treasure_hunt_required
     return state.count('Triforce Piece', player) + state.count('Power Star', player) >= count
 
 
