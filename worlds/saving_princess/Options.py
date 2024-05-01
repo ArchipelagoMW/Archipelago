@@ -106,14 +106,17 @@ class MusicShuffle(Toggle):
 
 @dataclass
 class SavingPrincessOptions(PerGameCommonOptions):
-    death_link: DeathLink
+    # generation options
     start_inventory_from_pool: StartInventoryPool
     expanded_pool: ExpandedPool
+    trap_chance: TrapChance
+    # gameplay options
+    death_link: DeathLink
     instant_saving: InstantSaving
     sprint_availability: SprintAvailability
     cliff_weapon_upgrade: CliffWeaponUpgrade
     ace_weapon_upgrade: AceWeaponUpgrade
-    shake_intensity: ScreenShakeIntensity
     iframes_duration: IFramesDuration
-    trap_chance: TrapChance
+    # aesthetic options
+    shake_intensity: ScreenShakeIntensity
     music_shuffle: MusicShuffle
