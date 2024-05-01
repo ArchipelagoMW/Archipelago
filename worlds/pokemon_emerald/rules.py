@@ -464,7 +464,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
 
     # Slateport City
     set_rule(
-        get_entrance("REGION_SLATEPORT_CITY/MAIN -> REGION_ROUTE134/WEST"),
+        get_entrance("REGION_SLATEPORT_CITY/MAIN -> REGION_SLATEPORT_CITY/WATER"),
         hm_rules["HM03 Surf"]
     )
     set_rule(
