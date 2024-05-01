@@ -249,7 +249,7 @@ def __getattr__(name):
         return get_sigma_normal()
     elif name == "sigma_expert":
         return get_sigma_expert()
-    elif name == "variety":
+    elif name == "umbra_variety":
         return get_variety()
     raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
 

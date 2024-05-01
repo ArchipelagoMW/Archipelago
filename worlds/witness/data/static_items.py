@@ -19,14 +19,14 @@ MODE_SPECIFIC_GOOD_ITEMS: Dict[str, Set[str]] = {
     "none": set(),
     "sigma_normal": set(),
     "sigma_expert": {"Triangles"},
-    "variety": {"Triangles"}
+    "umbra_variety": {"Triangles"}
 }
 
 MODE_SPECIFIC_GOOD_DISCARD_ITEMS: Dict[str, Set[str]] = {
     "none": {"Triangles"},
     "sigma_normal": {"Triangles"},
     "sigma_expert": {"Arrows"},
-    "variety": set()  # Variety Discards use both Arrows and Triangles, so neither of them are that useful alone
+    "umbra_variety": set()  # Variety Discards use both Arrows and Triangles, so neither of them are that useful alone
 }
 
 
