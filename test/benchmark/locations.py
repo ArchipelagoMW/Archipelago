@@ -7,6 +7,7 @@ def run_locations_benchmark():
     import sys
 
     from time_it import TimeIt
+    from typing import Counter
 
     from Utils import init_logging
     from BaseClasses import MultiWorld, CollectionState, Location
@@ -23,7 +24,7 @@ def run_locations_benchmark():
 
         if sys.version_info >= (3, 9):
             @staticmethod
-            def format_times_from_counter(counter: collections.Counter[str], top: int = 5) -> str:
+            def format_times_from_counter(counter: Counter[str], top: int = 5) -> str:
                 return "\n".join(f"  {time:.4f} in {name}" for name, time in counter.most_common(top))
         else:
             @staticmethod
@@ -42,7 +43,7 @@ def run_locations_benchmark():
 
         def main(self):
             for game in sorted(AutoWorld.AutoWorldRegister.world_types):
-                summary_data: typing.Dict[str, collections.Counter[str]] = {
+                summary_data: typing.Dict[str, Counter[str]] = {
                     "empty_state": collections.Counter(),
                     "all_state": collections.Counter(),
                 }

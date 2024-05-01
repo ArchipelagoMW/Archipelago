@@ -422,7 +422,7 @@ from worlds import network_data_package
 
 if "Factorio" in network_data_package["games"]:
     def render_Factorio_multiworld_tracker(tracker_data: TrackerData, enabled_trackers: List[str]):
-        inventories: Dict[TeamPlayer, collections.Counter[str]] = {
+        inventories: Dict[TeamPlayer, Counter[str]] = {
             (team, player): collections.Counter({
                 tracker_data.item_id_to_name["Factorio"][item_id]: count
                 for item_id, count in tracker_data.get_player_inventory_counts(team, player).items()
