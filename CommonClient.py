@@ -1,16 +1,15 @@
 from __future__ import annotations
 
-import asyncio
 import copy
-import functools
 import logging
-import sys
-import time
+import asyncio
 import urllib.parse
-from typing import Any, Dict, List, Optional, Set, TYPE_CHECKING, Type, Union
+import sys
+import typing
+import time
+import functools
 
 import ModuleUpdate
-
 ModuleUpdate.update()
 
 import websockets
@@ -24,11 +23,11 @@ from MultiServer import CommandProcessor
 from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
                       RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes)
 from Utils import Version, stream_input, async_start
-from worlds import DataPackage, GamePackage, network_data_package, AutoWorldRegister
+from worlds import network_data_package, AutoWorldRegister
 import os
 import ssl
 
-if TYPE_CHECKING:
+if typing.TYPE_CHECKING:
     import kvui
 
 logger = logging.getLogger("Client")
@@ -169,72 +168,70 @@ class ClientCommandProcessor(CommandProcessor):
 
 class CommonContext:
     # Should be adjusted as needed in subclasses
-    tags: Set[str] = {"AP"}
-    game: Optional[str] = None
-    items_handling: Optional[int] = None
+    tags: typing.Set[str] = {"AP"}
+    game: typing.Optional[str] = None
+    items_handling: typing.Optional[int] = None
     want_slot_data: bool = True  # should slot_data be retrieved via Connect
 
     # data package
     # Contents in flux until connection to server is made, to download correct data for this multiworld.
-    item_names: Dict[str, Dict[int, str]] = {}
-    """Dictionary of games to item id/name lookup dictionary for each game."""
-    location_names: Dict[str, Dict[int, str]] = {}
-    """Dictionary of games to location id/name lookup dictionary for each game."""
+    item_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')
+    location_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')
 
     # defaults
     starting_reconnect_delay: int = 5
     current_reconnect_delay: int = starting_reconnect_delay
-    command_processor: Type[CommandProcessor] = ClientCommandProcessor
+    command_processor: typing.Type[CommandProcessor] = ClientCommandProcessor
     ui = None
-    ui_task: Optional["asyncio.Task[None]"] = None
-    input_task: Optional["asyncio.Task[None]"] = None
-    keep_alive_task: Optional["asyncio.Task[None]"] = None
-    server_task: Optional["asyncio.Task[None]"] = None
-    autoreconnect_task: Optional["asyncio.Task[None]"] = None
+    ui_task: typing.Optional["asyncio.Task[None]"] = None
+    input_task: typing.Optional["asyncio.Task[None]"] = None
+    keep_alive_task: typing.Optional["asyncio.Task[None]"] = None
+    server_task: typing.Optional["asyncio.Task[None]"] = None
+    autoreconnect_task: typing.Optional["asyncio.Task[None]"] = None
     disconnected_intentionally: bool = False
-    server: Optional[Endpoint] = None
+    server: typing.Optional[Endpoint] = None
     server_version: Version = Version(0, 0, 0)
     generator_version: Version = Version(0, 0, 0)
-    current_energy_link_value: Optional[int] = None  # to display in UI, gets set by server
+    current_energy_link_value: typing.Optional[int] = None  # to display in UI, gets set by server
     max_size: int = 16*1024*1024  # 16 MB of max incoming packet size
 
     last_death_link: float = time.time()  # last send/received death link on AP layer
 
     # remaining type info
-    slot_info: Dict[int, NetworkSlot]
-    server_address: Optional[str]
-    password: Optional[str]
-    hint_cost: Optional[int]
-    hint_points: Optional[int]
-    player_names: Dict[int, str]
+    slot_info: typing.Dict[int, NetworkSlot]
+    server_address: typing.Optional[str]
+    password: typing.Optional[str]
+    hint_cost: typing.Optional[int]
+    hint_points: typing.Optional[int]
+    player_names: typing.Dict[int, str]
 
     finished_game: bool
     ready: bool
     team: typing.Optional[int]
     slot: typing.Optional[int]
-    auth: Optional[str]
-    seed_name: Optional[str]
+    auth: typing.Optional[str]
+    seed_name: typing.Optional[str]
 
     # locations
-    locations_checked: Set[int]  # local state
-    locations_scouted: Set[int]
-    items_received: List[NetworkItem]
-    missing_locations: Set[int]  # server state
-    checked_locations: Set[int]  # server state
-    server_locations: Set[int]  # all locations the server knows of, missing_location | checked_locations
-    locations_info: Dict[int, NetworkItem]
+    locations_checked: typing.Set[int]  # local state
+    locations_scouted: typing.Set[int]
+    items_received: typing.List[NetworkItem]
+    missing_locations: typing.Set[int]  # server state
+    checked_locations: typing.Set[int]  # server state
+    server_locations: typing.Set[int]  # all locations the server knows of, missing_location | checked_locations
+    locations_info: typing.Dict[int, NetworkItem]
 
     # data storage
-    stored_data: Dict[str, Any]
-    stored_data_notification_keys: Set[str]
+    stored_data: typing.Dict[str, typing.Any]
+    stored_data_notification_keys: typing.Set[str]
 
     # internals
     # current message box through kvui
-    _messagebox: Optional["kvui.MessageBox"] = None
+    _messagebox: typing.Optional["kvui.MessageBox"] = None
     # message box reporting a loss of connection
-    _messagebox_connection_loss: Optional["kvui.MessageBox"] = None
+    _messagebox_connection_loss: typing.Optional["kvui.MessageBox"] = None
 
-    def __init__(self, server_address: Optional[str], password: Optional[str]) -> None:
+    def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str]) -> None:
         # server state
         self.server_address = server_address
         self.username = None
@@ -292,7 +289,7 @@ class CommonContext:
         return RawJSONtoTextParser(self)
 
     @property
-    def total_locations(self) -> Optional[int]:
+    def total_locations(self) -> typing.Optional[int]:
         """Will return None until connected."""
         if self.checked_locations or self.missing_locations:
             return len(self.checked_locations | self.missing_locations)
@@ -329,13 +326,13 @@ class CommonContext:
         if self.server_task is not None:
             await self.server_task
 
-    async def send_msgs(self, msgs: List[Any]) -> None:
+    async def send_msgs(self, msgs: typing.List[typing.Any]) -> None:
         """ `msgs` JSON serializable """
         if not self.server or not self.server.socket.open or self.server.socket.closed:
             return
         await self.server.socket.send(encode(msgs))
 
-    def consume_players_package(self, package: List[tuple]):
+    def consume_players_package(self, package: typing.List[tuple]):
         self.player_names = {slot: name for team, slot, name, orig_name in package if self.team == team}
         self.player_names[0] = "Archipelago"
 
@@ -358,7 +355,7 @@ class CommonContext:
                 logger.info('Enter slot name:')
                 self.auth = await self.console_input()
 
-    async def send_connect(self, **kwargs: Any) -> None:
+    async def send_connect(self, **kwargs: typing.Any) -> None:
         """ send `Connect` packet to log in to server """
         payload = {
             'cmd': 'Connect',
@@ -376,7 +373,7 @@ class CommonContext:
         self.input_requests += 1
         return await self.input_queue.get()
 
-    async def connect(self, address: Optional[str] = None) -> None:
+    async def connect(self, address: typing.Optional[str] = None) -> None:
         """ disconnect any previous connection, and open new connection to the server """
         await self.disconnect()
         self.server_task = asyncio.create_task(server_loop(self, address), name="server loop")
@@ -423,12 +420,12 @@ class CommonContext:
         """For custom package handling in subclasses."""
         pass
 
-    def on_user_say(self, text: str) -> Optional[str]:
+    def on_user_say(self, text: str) -> typing.Optional[str]:
         """Gets called before sending a Say to the server from the user.
         Returned text is sent, or sending is aborted if None is returned."""
         return text
 
-    def update_permissions(self, permissions: Dict[str, int]):
+    def update_permissions(self, permissions: typing.Dict[str, int]):
         for permission_name, permission_flag in permissions.items():
             try:
                 flag = Permission(permission_flag)
@@ -456,48 +453,54 @@ class CommonContext:
             self.input_task.cancel()
 
     # DataPackage
-    async def prepare_data_package(self, relevant_games: Set[str], remote_data_package_checksums: Dict[str, str]):
-        """
-        Validate that all data is present for the current multiworld.
-        Download, assimilate and cache missing data from the server.
-        """
-
-        # Per documentation, any game can use the "Archipelago" world locations/items, so it's always relevant.
+    async def prepare_data_package(self, relevant_games: typing.Set[str],
+                                   remote_date_package_versions: typing.Dict[str, int],
+                                   remote_data_package_checksums: typing.Dict[str, str]):
+        """Validate that all data is present for the current multiworld.
+        Download, assimilate and cache missing data from the server."""
+        # by documentation any game can use Archipelago locations/items -> always relevant
         relevant_games.add("Archipelago")
 
-        needed_updates: Set[str] = set()
+        needed_updates: typing.Set[str] = set()
         for game in relevant_games:
-            if game not in remote_data_package_checksums:
+            if game not in remote_date_package_versions and game not in remote_data_package_checksums:
                 continue
 
-            remote_checksum: Optional[str] = remote_data_package_checksums.get(game)
-            local_checksum: Optional[str] = network_data_package["games"].get(game, {}).get("checksum")
+            remote_version: int = remote_date_package_versions.get(game, 0)
+            remote_checksum: typing.Optional[str] = remote_data_package_checksums.get(game)
 
-            # No action is required if our local version is the same.
-            if not remote_checksum or remote_checksum != local_checksum:
+            if remote_version == 0 and not remote_checksum:  # custom data package and no checksum for this game
+                needed_updates.add(game)
+                continue
+
+            local_version: int = network_data_package["games"].get(game, {}).get("version", 0)
+            local_checksum: typing.Optional[str] = network_data_package["games"].get(game, {}).get("checksum")
+            # no action required if local version is new enough
+            if (not remote_checksum and (remote_version > local_version or remote_version == 0)) \
+                    or remote_checksum != local_checksum:
                 cached_game = Utils.load_data_package_for_checksum(game, remote_checksum)
-                cache_checksum: Optional[str] = cached_game.get("checksum")
-
-                # Download the remote version, if our cache doesn't contain the same data package.
-                if not remote_checksum or remote_checksum != cache_checksum:
+                cache_version: int = cached_game.get("version", 0)
+                cache_checksum: typing.Optional[str] = cached_game.get("checksum")
+                # download remote version if cache is not new enough
+                if (not remote_checksum and (remote_version > cache_version or remote_version == 0)) \
+                        or remote_checksum != cache_checksum:
                     needed_updates.add(game)
                 else:
-                    self.update_game_package(game, cached_game)
-
+                    self.update_game(cached_game)
         if needed_updates:
             await self.send_msgs([{"cmd": "GetDataPackage", "games": [game_name]} for game_name in needed_updates])
 
-    def update_game_package(self, game: str, game_package: GamePackage):
-        self.item_names[game] = {name: id for name, id in game_package["item_name_to_id"].items()}
-        self.location_names[game] = {name: id for name, id in game_package["location_name_to_id"].items()}
+    def update_game(self, game_package: dict):
+        for item_name, item_id in game_package["item_name_to_id"].items():
+            self.item_names[item_id] = item_name
+        for location_name, location_id in game_package["location_name_to_id"].items():
+            self.location_names[location_id] = location_name
 
-    def update_data_package(self, data_package: DataPackage):
-        for game, game_package in data_package["games"].items():
-            self.item_names.setdefault(game, {})
-            self.location_names.setdefault(game, {})
-            self.update_game_package(game, game_package)
+    def update_data_package(self, data_package: dict):
+        for game, game_data in data_package["games"].items():
+            self.update_game(game_data)
 
-    def consume_network_data_package(self, data_package: DataPackage):
+    def consume_network_data_package(self, data_package: dict):
         self.update_data_package(data_package)
         current_cache = Utils.persistent_load().get("datapackage", {}).get("games", {})
         current_cache.update(data_package["games"])
@@ -523,7 +526,7 @@ class CommonContext:
 
     # DeathLink hooks
 
-    def on_deathlink(self, data: Dict[str, Any]) -> None:
+    def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
         """Gets dispatched when a new DeathLink is triggered by another linked player."""
         self.last_death_link = max(data["time"], self.last_death_link)
         text = data.get("cause", "")
@@ -554,7 +557,7 @@ class CommonContext:
         if old_tags != self.tags and self.server and not self.server.socket.closed:
             await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
 
-    def gui_error(self, title: str, text: Union[Exception, str]) -> Optional["kvui.MessageBox"]:
+    def gui_error(self, title: str, text: typing.Union[Exception, str]) -> typing.Optional["kvui.MessageBox"]:
         """Displays an error messagebox"""
         if not self.ui:
             return None
@@ -617,7 +620,7 @@ async def keep_alive(ctx: CommonContext, seconds_between_checks=100):
                 seconds_elapsed = 0
 
 
-async def server_loop(ctx: CommonContext, address: Optional[str] = None) -> None:
+async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) -> None:
     if ctx.server and ctx.server.socket:
         logger.error('Already connected')
         return
@@ -903,7 +906,7 @@ async def console_loop(ctx: CommonContext):
             logger.exception(e)
 
 
-def get_base_parser(description: Optional[str] = None):
+def get_base_parser(description: typing.Optional[str] = None):
     import argparse
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
