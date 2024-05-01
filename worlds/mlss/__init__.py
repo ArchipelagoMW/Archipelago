@@ -154,8 +154,12 @@ class MLSSWorld(World):
 
     def set_rules(self) -> None:
         set_rules(self, self.disabled_locations)
-        self.multiworld.completion_condition[self.player] = \
-            lambda state: state.can_reach("PostJokes", "Region", self.player)
+        if self.options.castle_skip:
+            self.multiworld.completion_condition[self.player] = \
+                lambda state: state.can_reach("PostJokes", "Region", self.player)
+        else:
+            self.multiworld.completion_condition[self.player] = \
+                lambda state: state.can_reach("Bowser's Castle Mini", "Region", self.player)
 
     def create_item(self, name: str) -> MLSSItem:
         item = item_table[name]

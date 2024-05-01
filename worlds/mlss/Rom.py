@@ -4,7 +4,7 @@ import pkgutil
 import random
 import typing
 
-from . import Enemies
+from . import Data
 from BaseClasses import Item, Location
 from settings import get_settings
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
@@ -117,14 +117,8 @@ class MLSSPatchExtension(APPatchExtension):
             return rom
         stream = io.BytesIO(rom)
         random.seed(options["seed"] + options["player"])
-
-        temp = pkgutil.get_data(__name__, "data/sounds.txt")
-        temp_io = io.BytesIO(temp)
-        fresh_pointers = []
-
-        for line in temp_io.readlines():
-            fresh_pointers += [int(line.decode('utf-8').strip(), 16)]
-        pointers = list(fresh_pointers)
+        fresh_pointers = Data.sounds
+        pointers = Data.sounds
 
         random.shuffle(pointers)
         stream.seek(0x21cc44, 0)
@@ -144,10 +138,10 @@ class MLSSPatchExtension(APPatchExtension):
         if options["randomize_bosses"] == 0 and options["randomize_enemies"] == 0:
             return rom
 
-        enemies = [pos for pos in Enemies.enemies if
-                   pos not in Enemies.bowsers] if options["castle_skip"] else Enemies.enemies
-        bosses = [pos for pos in Enemies.bosses if
-                  pos not in Enemies.bowsers] if options["castle_skip"] else Enemies.bosses
+        enemies = [pos for pos in Data.enemies if
+                   pos not in Data.bowsers] if options["castle_skip"] else Data.enemies
+        bosses = [pos for pos in Data.bosses if
+                  pos not in Data.bowsers] if options["castle_skip"] else Data.bosses
         stream = io.BytesIO(rom)
         random.seed(options["seed"] + options["player"])
 
@@ -201,7 +195,7 @@ class MLSSPatchExtension(APPatchExtension):
                     if flag == 0x7:
                         break
                     if flag in [0x0, 0x2, 0x4]:
-                        if enemy not in Enemies.pestnut and enemy not in Enemies.flying:
+                        if enemy not in Data.pestnut and enemy not in Data.flying:
                             enemies_raw += [enemy]
                     stream.seek(1, 1)
                 else:
@@ -214,7 +208,7 @@ class MLSSPatchExtension(APPatchExtension):
 
             for _ in range(6):
                 enemy = int.from_bytes(stream.read(1))
-                if enemy > 0 and enemy not in Enemies.flying and enemy not in Enemies.pestnut:
+                if enemy > 0 and enemy not in Data.flying and enemy not in Data.pestnut:
                     if enemy == 0x52:
                         chomp = True
                     stream.seek(1, 1)
@@ -409,7 +403,7 @@ def write_tokens(world: "MLSSWorld", patch: MLSSProcedurePatch) -> None:
         )
 
     if world.options.randomize_backgrounds:
-        all_enemies = Enemies.enemies + Enemies.bosses
+        all_enemies = Data.enemies + Data.bosses
         for address in all_enemies:
             patch.write_token(
                 APTokenTypes.WRITE,
