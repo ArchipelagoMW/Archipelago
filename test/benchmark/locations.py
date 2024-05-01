@@ -28,7 +28,7 @@ def run_locations_benchmark():
                 return "\n".join(f"  {time:.4f} in {name}" for name, time in counter.most_common(top))
         else:
             @staticmethod
-            def format_times_from_counter(counter: collections.Counter, top: int = 5) -> str:
+            def format_times_from_counter(counter: Counter, top: int = 5) -> str:
                 return "\n".join(f"  {time:.4f} in {name}" for name, time in counter.most_common(top))
 
         def location_test(self, test_location: Location, state: CollectionState, state_name: str) -> float:
