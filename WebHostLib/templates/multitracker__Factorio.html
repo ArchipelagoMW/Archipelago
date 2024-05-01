@@ -19,7 +19,7 @@
 {#- macro that creates a table header with display name and image -#}
 {%- macro make_header(name, img_src) %}
 <th class="center-column">
-    <img src="{{ img_src }}" alt="{{ name }}" title="{{ name }}" />
+    <img class="icon-sprite" src="{{ img_src }}" alt="{{ name }}" title="{{ name }}" />
 </th>
 {% endmacro -%}
 {#- call the macro to build the table header -#}

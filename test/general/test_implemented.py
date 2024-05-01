@@ -40,8 +40,8 @@ class TestImplemented(unittest.TestCase):
             # has an await for generate_output which isn't being called
             if game_name in {"Ocarina of Time", "Zillion"}:
                 continue
-            with self.subTest(game_name):
-                multiworld = setup_solo_multiworld(world_type)
+            multiworld = setup_solo_multiworld(world_type)
+            with self.subTest(game=game_name, seed=multiworld.seed):
                 distribute_items_restrictive(multiworld)
                 call_all(multiworld, "post_fill")
                 for key, data in multiworld.worlds[1].fill_slot_data().items():

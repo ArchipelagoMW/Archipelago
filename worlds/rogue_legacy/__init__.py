@@ -5,6 +5,7 @@ from worlds.AutoWorld import WebWorld, World
 from .Items import RLItem, RLItemData, event_item_table, get_items_by_category, item_table
 from .Locations import RLLocation, location_table
 from .Options import rl_options
+from .Presets import rl_options_presets
 from .Regions import create_regions
 from .Rules import set_rules
 
@@ -22,6 +23,7 @@ class RLWeb(WebWorld):
     )]
     bug_report_page = "https://github.com/ThePhar/RogueLegacyRandomizer/issues/new?assignees=&labels=bug&template=" \
                       "report-an-issue---.md&title=%5BIssue%5D"
+    options_presets = rl_options_presets
 
 
 class RLWorld(World):

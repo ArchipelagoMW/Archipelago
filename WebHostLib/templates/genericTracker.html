@@ -11,26 +11,28 @@
     {% include "header/dirtHeader.html" %}
 
     <div id="tracker-navigation">
-        <a
-            class="tracker-navigation-button"
-            href="{{ url_for("get_multiworld_tracker", tracker=room.tracker) }}"
-        >
-             🡸 Return to Multiworld Tracker
-        </a>
-        {% if game_specific_tracker %}
-        <a
-            class="tracker-navigation-button"
-            href="{{ url_for("get_player_tracker", tracker=room.tracker, tracked_team=team, tracked_player=player) }}"
-        >
-            Game-Specific Tracker
-        </a>
-        {% endif %}
+        <div class="tracker-navigation-bar">
+            <a
+                class="tracker-navigation-button"
+                href="{{ url_for("get_multiworld_tracker", tracker=room.tracker) }}"
+            >
+                 🡸 Return to Multiworld Tracker
+            </a>
+            {% if game_specific_tracker %}
+            <a
+                class="tracker-navigation-button"
+                href="{{ url_for("get_player_tracker", tracker=room.tracker, tracked_team=team, tracked_player=player) }}"
+            >
+                Game-Specific Tracker
+            </a>
+            {% endif %}
+        </div>
     </div>
 
     <div id="tracker-wrapper" data-tracker="{{ room.tracker | suuid }}/{{ team }}/{{ player }}" data-second="{{ saving_second }}">
         <div id="tracker-header-bar">
             <input placeholder="Search" id="search" />
-            <span class="info">This tracker will automatically update itself periodically.</span>
+            <div class="info">This tracker will automatically update itself periodically.</div>
         </div>
         <div id="tables-container">
             <div class="table-wrapper">

@@ -1,8 +1,8 @@
 # Undertale
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What is considered a location check in Undertale?
@@ -56,8 +56,8 @@ If you press `W` while in the save menu, you will teleport back to the flower ro
 The following commands are only available when using the UndertaleClient to play with Archipelago.
 
 - `/resync` Manually trigger a resync.
-- `/patch` Patch the game.
-- `/savepath` Redirect to proper save data folder. (Use before connecting!)
+- `/savepath` Redirect to proper save data folder. This is necessary for Linux users to use before connecting.
 - `/auto_patch` Patch the game automatically.
-- `/online` Makes you no longer able to see other Undertale players.
+- `/patch` Patch the game. Only use this command if `/auto_patch` fails.
+- `/online` Toggles seeing other Undertale players.
 - `/deathlink` Toggles deathlink

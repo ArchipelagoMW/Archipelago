@@ -13,15 +13,29 @@
     <div id="tracker-wrapper" data-tracker="{{ room.tracker | suuid }}">
         <div id="tracker-header-bar">
             <input placeholder="Search" id="search" />
-            <span {% if not videos %}hidden{% endif %} id="multi-stream-link">
-                <a target="_blank" href="https://multistream.me/
-                    {%- for platform, link in videos.values() | unique(False, 1) -%}
-                        {%- if platform == "Twitch" -%}t{%- else -%}yt{%- endif -%}:{{- link -}}/
-                    {%- endfor -%}">
-                    Multistream
+
+            <div
+                id="multi-stream-link"
+                class="tracker-navigation-bar"
+                {% if not videos %}style="display: none"{% endif %}
+            >
+
+                <a
+                    class="tracker-navigation-button"
+                    href="https://multistream.me/
+                        {%- for platform, link in videos.values() | unique(False, 1) -%}
+                            {%- if platform == "Twitch" -%}t{%- else -%}yt{%- endif -%}:{{- link -}}/
+                        {%- endfor -%}"
+                    target="_blank"
+                >
+                    ► Multistream
                 </a>
-            </span>
-            <span class="info">Clicking on a slot&apos;s number will bring up the slot-specific tracker. This tracker will automatically update itself periodically.</span>
+            </div>
+
+            <div class="info">
+                Clicking on a slot&apos;s number will bring up the slot-specific tracker.
+                This tracker will automatically update itself periodically.
+            </div>
         </div>
 
         <div id="tables-container">

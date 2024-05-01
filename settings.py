@@ -1,6 +1,6 @@
 """
 Application settings / host.yaml interface using type hints.
-This is different from player settings.
+This is different from player options.
 """
 
 import os.path
@@ -200,7 +200,7 @@ class Group:
     def _dump_value(cls, value: Any, f: TextIO, indent: str) -> None:
         """Write a single yaml line to f"""
         from Utils import dump, Dumper as BaseDumper
-        yaml_line: str = dump(value, Dumper=cast(BaseDumper, cls._dumper))
+        yaml_line: str = dump(value, Dumper=cast(BaseDumper, cls._dumper), width=2**31-1)
         assert yaml_line.count("\n") == 1, f"Unexpected input for yaml dumper: {value}"
         f.write(f"{indent}{yaml_line}")
 
@@ -597,8 +597,8 @@ class ServerOptions(Group):
     disable_item_cheat: Union[DisableItemCheat, bool] = False
     location_check_points: LocationCheckPoints = LocationCheckPoints(1)
     hint_cost: HintCost = HintCost(10)
-    release_mode: ReleaseMode = ReleaseMode("goal")
-    collect_mode: CollectMode = CollectMode("goal")
+    release_mode: ReleaseMode = ReleaseMode("auto")
+    collect_mode: CollectMode = CollectMode("auto")
     remaining_mode: RemainingMode = RemainingMode("goal")
     auto_shutdown: AutoShutdown = AutoShutdown(0)
     compatibility: Compatibility = Compatibility(2)
@@ -671,9 +671,8 @@ class GeneratorOptions(Group):
     weights_file_path: WeightsFilePath = WeightsFilePath("weights.yaml")
     meta_file_path: MetaFilePath = MetaFilePath("meta.yaml")
     spoiler: Spoiler = Spoiler(3)
-    glitch_triforce_room: GlitchTriforceRoom = GlitchTriforceRoom(1)  # why is this here?
     race: Race = Race(0)
-    plando_options: PlandoOptions = PlandoOptions("bosses")
+    plando_options: PlandoOptions = PlandoOptions("bosses, connections, texts")
 
 
 class SNIOptions(Group):

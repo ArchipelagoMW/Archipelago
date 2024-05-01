@@ -28,10 +28,24 @@
             <a href="/static/generated/configs/{{ game }}.yaml">template file for this game</a>.
         </p>
 
-        <p><label for="player-name">Please enter your player name. This will appear in-game as you send and receive
-            items if you are playing in a MultiWorld.</label><br />
-            <input id="player-name" placeholder="Player Name" data-key="name" maxlength="16" />
-        </p>
+        <div id="meta-options">
+            <div>
+                <label for="player-name">
+                    Player Name: <span class="interactive" data-tooltip="This is the name you use to connect with your game. This is also known as your 'slot name'.">(?)</span>
+                </label>
+                <input id="player-name" placeholder="Player" data-key="name" maxlength="16" />
+            </div>
+            <div>
+                <label for="game-options-preset">
+                    Options Preset: <span class="interactive" data-tooltip="Select from a list of developer-curated presets (if any) or reset all options to their defaults.">(?)</span>
+                </label>
+                <select id="game-options-preset">
+                    <option value="__default">Defaults</option>
+                    <option value="__custom" hidden>Custom</option>
+                </select>
+            </div>
+
+        </div>
 
         <h2>Game Options</h2>
         <div id="game-options">
