@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Set
 
 from BaseClasses import ItemClassification
 
@@ -13,6 +13,19 @@ ITEM_GROUPS: Dict[str, List[str]] = {}
 # item list during get_progression_items.
 _special_usefuls: List[str] = ["Puzzle Skip"]
 
+USEFUL_ITEMS_PER_MODE: Dict[str, Set[str]] = {
+    "none": {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"},
+    "sigma_normal": {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"},
+    "sigma_expert": {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars", "Triangles"},
+    "variety": {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars", "Triangles"}
+}
+
+USEFUL_DISCARD_ITEMS_PER_MODE: Dict[str, Set[str]] = {
+    "none": {"Triangles"},
+    "sigma_normal": {"Triangles"},
+    "sigma_expert": {"Arrows"},
+    "variety": set()  # Variety Discards use both Arrows and Triangles, so neither of them are that useful alone
+}
 
 def populate_items() -> None:
     for item_name, definition in static_witness_logic.ALL_ITEMS.items():
