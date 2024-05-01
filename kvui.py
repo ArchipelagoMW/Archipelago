@@ -388,9 +388,9 @@ class CommandPromptTextInput(TextInput):
     MAXIMUM_HISTORY_MESSAGES = 50
 
     def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
         self._command_history_index = -1
         self._command_history: typing.List[str] = []
-        return super().__init__(*args, **kwargs)
     
     def update_history(self, new_entry: str) -> None:
         self._command_history_index = -1
