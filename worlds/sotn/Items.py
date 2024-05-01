@@ -21,6 +21,8 @@ class IType(Enum):
     USABLE = 11
     RELIC = 12
     EVENT = 13
+    BOOST = 14
+    TRAP = 15
 
 
 def is_relic(item):
@@ -52,6 +54,8 @@ class ItemData:
             return self.index - base_item_id - 300
         if self.type == IType.POWERUP or self.type == IType.GOLD:
             return self.index - base_item_id - 400
+        if self.type == IType.TRAP or self.type == IType.BOOST:
+            return 4
         return self.index - base_item_id + tile_id_offset
 
     def get_item_type(self):
@@ -374,9 +378,41 @@ relic_table = {
 }
 
 event_table = {
-    "Victory": ItemData(350, IType.EVENT, 0x0, ItemClassification.progression),
-    "Boss token": ItemData(351, IType.EVENT, 0x0, ItemClassification.progression),
-    "Exploration token": ItemData(352, IType.EVENT, 0x0, ItemClassification.progression)
+    "Victory": ItemData(400, IType.EVENT, 0x0, ItemClassification.progression),
+    "Boss token": ItemData(401, IType.EVENT, 0x0, ItemClassification.progression),
+    "Exploration token": ItemData(402, IType.EVENT, 0x0, ItemClassification.progression)
+}
+
+boost_table = {
+    "Experience boost 1k": ItemData(330, IType.BOOST, 0x097bec, ItemClassification.useful),
+    "Experience boost 5k": ItemData(331, IType.BOOST, 0x097bec, ItemClassification.useful),
+    "Experience boost 10k": ItemData(332, IType.BOOST, 0x097bec, ItemClassification.useful),
+    "Max hp boost 10": ItemData(333, IType.BOOST, 0x097ba4, ItemClassification.useful),
+    "Max hp boost 50": ItemData(334, IType.BOOST, 0x097ba4, ItemClassification.useful),
+    "Max heart boost 10": ItemData(335, IType.BOOST, 0x097bac, ItemClassification.useful),
+    "Max heart boost 50": ItemData(336, IType.BOOST, 0x097bac, ItemClassification.useful),
+    "Max mp boost 10": ItemData(337, IType.BOOST, 0x097bb4, ItemClassification.useful),
+    "Max mp boost 50": ItemData(338, IType.BOOST, 0x097bb4, ItemClassification.useful),
+    "Hp restore": ItemData(339, IType.BOOST, 0x97ba0, ItemClassification.useful),
+    "Heart restore": ItemData(340, IType.BOOST, 0x097ba8, ItemClassification.useful),
+    "Mp restore": ItemData(341, IType.BOOST, 0x097bb0, ItemClassification.useful),
+}
+
+trap_table = {
+    "Half max hp": ItemData(350, IType.TRAP, 0x097ba4, ItemClassification.trap),
+    "80% max hp": ItemData(351, IType.TRAP, 0x097ba4, ItemClassification.trap),
+    "Half max heart": ItemData(352, IType.TRAP, 0x97bac, ItemClassification.trap),
+    "80% max heart": ItemData(353, IType.TRAP, 0x97bac, ItemClassification.trap),
+    "Half max mp": ItemData(354, IType.TRAP, 0x097bb4, ItemClassification.trap),
+    "80% max mp": ItemData(355, IType.TRAP, 0x097bb4, ItemClassification.trap),
+    "10 hp subtract": ItemData(356, IType.TRAP, 0x097ba0, ItemClassification.trap),
+    "50 hp subtract": ItemData(357, IType.TRAP, 0x097ba0, ItemClassification.trap),
+    "10 heart subtract": ItemData(358, IType.TRAP, 0x097ba8, ItemClassification.trap),
+    "50 heart subtract": ItemData(359, IType.TRAP, 0x097ba8, ItemClassification.trap),
+    "Fall damage 5": ItemData(366, IType.TRAP, 0x0, ItemClassification.trap),
+    "Fall damage 10": ItemData(367, IType.TRAP, 0x0, ItemClassification.trap),
+    "Ice floor 5": ItemData(368, IType.TRAP, 0x0, ItemClassification.trap),
+    "Ice floor 10": ItemData(369, IType.TRAP, 0x0, ItemClassification.trap),
 }
 
 item_table = {
@@ -388,6 +424,8 @@ item_table = {
     **vessel_table,
     **relic_table,
     **event_table,
+    **boost_table,
+    **trap_table,
 }
 
 
@@ -403,50 +441,4 @@ def get_item_data_shop(item_id: int) -> Tuple:
         data: ItemData = v
         if data.index == item_id + base_item_id:
             return k, data
-
-
-vanilla_list = ["Monster vial 3", "Monster vial 3", "Monster vial 3", "Monster vial 3", "Shield rod", "Leather shield",
-                "Knight shield", "Herald shield", "Goddess shield", "Shaman shield", "Alucard shield", "Sword of dawn",
-                "Basilard", "Combat knife", "Nunchaku", "Karma coin", "Karma coin", "Karma coin", "Karma coin",
-                "Karma coin", "Karma coin", "Magic missile", "Magic missile", "Magic missile", "Magic missile",
-                "Magic missile", "Takemitsu", "Shotel", "Peanuts", "Peanuts", "Peanuts", "Peanuts", "Toadstool",
-                "Toadstool", "Toadstool", "Shiitake", "Shiitake", "Shiitake", "Shiitake", "Shiitake", "Shiitake",
-                "Shiitake", "Shiitake", "Shiitake", "Shiitake", "Shiitake", "Shiitake", "Frankfurter", "Frankfurter",
-                "Cheese", "Grape juice", "Barley tea", "Green tea", "Green tea", "Pork bun", "Red bean bun",
-                "Dim sum set", "Pot roast", "Pot roast", "Pot roast", "Pot roast", "Pot roast", "Pot roast",
-                "Pot roast", "Pot roast", "Sirloin", "Turkey", "Turkey", "Turkey", "Turkey", "Meal ticket",
-                "Meal ticket", "Meal ticket", "Meal ticket", "Meal ticket", "Meal ticket", "Meal ticket", "Meal ticket",
-                "Meal ticket", "Meal ticket", "Neutron bomb", "Neutron bomb", "Power of sire", "Power of sire",
-                "Power of sire", "Pentagram", "Pentagram", "Bat pentagram", "Shuriken", "Shuriken", "Shuriken",
-                "Shuriken", "Shuriken", "Cross shuriken", "Cross shuriken", "Buffalo star", "Buffalo star", "TNT",
-                "TNT", "TNT", "TNT", "Bwaka knife", "Bwaka knife", "Bwaka knife", "Boomerang", "Boomerang", "Javelin",
-                "Tyrfing", "Knuckle duster", "Gladius", "Scimitar", "Cutlass", "Falchion", "Broadsword", "Bekatowa",
-                "Estoc", "Bastard sword", "Jewel knuckles", "Claymore", "Talwar", "Katana", "Sword of hador", "Luminus",
-                "Gram", "Jewel sword", "Mormegil", "Icebrand", "Holy sword", "Dark blade", "Alucard sword", "Badelaire",
-                "Morningstar", "Holy rod", "Star flail", "Moon rod", "Fire boomerang", "Fire boomerang", "Iron ball",
-                "Iron ball", "Iron ball", "Osafune katana", "Heart refresh", "Heart refresh", "Heart refresh",
-                "Antivenom", "Antivenom", "Antivenom", "Antivenom", "Life apple", "Life apple", "Life apple",
-                "Life apple", "Life apple", "Hammer", "Hammer", "Hammer", "Hammer", "Str. potion", "Str. potion",
-                "Str. potion", "Luck potion", "Luck potion", "Luck potion", "Smart potion", "Smart potion",
-                "Attack potion", "Attack potion", "Shield potion", "Shield potion", "Shield potion",
-                "Shield potion", "Resist fire", "Resist fire", "Resist fire", "Resist fire", "Resist fire",
-                "Resist thunder", "Resist thunder", "Resist thunder", "Resist thunder", "Resist ice", "Resist ice",
-                "Resist ice", "Resist stone", "Resist stone", "Resist stone", "Resist holy", "Resist holy",
-                "Resist dark", "Resist dark", "Resist dark", "Potion", "Potion", "Potion", "Potion", "Potion", "Potion",
-                "Potion", "High potion", "High potion", "High potion", "High potion", "High potion", "Elixir", "Elixir",
-                "Elixir", "Manna prism", "Manna prism", "Manna prism", "Manna prism", "Manna prism", "Library card",
-                "Library card", "Library card", "Library card", "Library card", "Library card", "Library card",
-                "Alucart shield", "Alucart sword", "Hide cuirass", "Bronze cuirass", "Silver plate", "Gold plate",
-                "Platinum mail", "Fire mail", "Lightning mail", "Ice mail", "Mirror cuirass",
-                "Alucard mail", "Healing mail", "Holy mail", "Walk armor", "Fury plate", "Dracula tunic",
-                "Axe Lord armor", "Sunglasses", "Ballroom mask", "Bandanna", "Goggles", "Steel helm",
-                "Stone mask", "Ruby circlet", "Topaz circlet", "Beryl circlet", "Cat-eye circl.", "Dragon helm",
-                "Cloth cape", "Crystal cloak", "Royal cloak", "Blood cloak", "Twilight cloak",
-                "Moonstone", "Sunstone", "Bloodstone", "Staurolite", "Zircon", "Zircon", "Zircon", "Zircon", "Zircon",
-                "Zircon", "Zircon", "Zircon", "Zircon", "Aquamarine", "Aquamarine", "Aquamarine", "Turquoise",
-                "Turquoise", "Turquoise", "Onyx", "Onyx", "Onyx", "Garnet", "Garnet", "Garnet", "Garnet", "Garnet",
-                "Opal", "Opal", "Opal", "Opal", "Diamond", "Diamond", "Diamond", "Diamond", "Ring of ares",
-                "Ring of arcana", "Mystic pendant", "Necklace of j", "Ankh of life", "Talisman",
-                "Secret boots", "Alucart mail"
-               ]
 
