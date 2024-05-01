@@ -56,8 +56,6 @@ class WL4World(World):
     settings: ClassVar[WL4Settings]
     topology_present = False
 
-    data_version = 1
-
     item_name_to_id = {item_name: ap_id_from_wl4_data(data) for item_name, data in item_table.items()
                        if data[1] is not None}
     location_name_to_id = location_name_to_id
