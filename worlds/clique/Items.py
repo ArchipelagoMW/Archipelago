@@ -15,16 +15,16 @@ class CliqueItemData(NamedTuple):
 
 item_data_table: Dict[str, CliqueItemData] = {
     "Feeling of Satisfaction": CliqueItemData(
-        code=0x1A,  # Purposely changed to test #1933; Overlaps with "Magic Mirror" in ALTTP.
+        code=69696969,
         type=ItemClassification.progression,
     ),
     "Button Activation": CliqueItemData(
-        code=0x14,  # Purposely changed to test #1933; Overlaps with "Flute" in ALTTP.
+        code=69696968,
         type=ItemClassification.progression,
         can_create=lambda multiworld, player: bool(getattr(multiworld, "hard_mode")[player]),
     ),
     "A Cool Filler Item (No Satisfaction Guaranteed)": CliqueItemData(
-        code=0x4B,  # Purposely changed to test #1933; Overlaps with "Pegasus Boots" in ALTTP.
+        code=69696967,
         can_create=lambda multiworld, player: False  # Only created from `get_filler_item_name`.
     ),
     "The Urge to Push": CliqueItemData(

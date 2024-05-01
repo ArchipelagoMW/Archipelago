@@ -1,6 +1,5 @@
 from typing import NamedTuple, Union
 import logging
-from typing import NamedTuple, Union
 
 from BaseClasses import Item, ItemClassification, Tutorial
 from NetUtils import SlotType

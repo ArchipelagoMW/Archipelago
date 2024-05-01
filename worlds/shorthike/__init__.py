@@ -28,7 +28,6 @@ class ShortHikeWorld(World):
 
     game = "A Short Hike"
     web = ShortHikeWeb()
-    data_version = 2
 
     item_name_to_id = {item["name"]: item["id"] for item in item_table}
     location_name_to_id = {loc["name"]: loc["id"] for loc in location_table}

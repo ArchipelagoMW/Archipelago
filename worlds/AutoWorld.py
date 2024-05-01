@@ -11,13 +11,13 @@ from dataclasses import make_dataclass
 from typing import (Any, Callable, ClassVar, Dict, FrozenSet, List, Mapping,
                     Optional, Set, TextIO, Tuple, TYPE_CHECKING, Type, Union)
 
-from BaseClasses import CollectionState
 from Options import PerGameCommonOptions
+from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
     import random
     from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance
-    from . import GamePackage
+    from . import GamesPackage
     from settings import Group
 
 perf_logger = logging.getLogger("performance")
@@ -493,14 +493,14 @@ class World(metaclass=AutoWorldRegister):
         return self.multiworld.get_region(region_name, self.player)
 
     @classmethod
-    def get_data_package_data(cls) -> GamePackage:
+    def get_data_package_data(cls) -> GamesPackage:
         sorted_item_name_groups = {
             name: sorted(cls.item_name_groups[name]) for name in sorted(cls.item_name_groups)
         }
         sorted_location_name_groups = {
             name: sorted(cls.location_name_groups[name]) for name in sorted(cls.location_name_groups)
         }
-        res: GamePackage = {
+        res: GamesPackage = {
             # sorted alphabetically
             "item_name_groups": sorted_item_name_groups,
             "item_name_to_id": cls.item_name_to_id,
@@ -517,7 +517,7 @@ class LogicMixin(metaclass=AutoLogicRegister):
     pass
 
 
-def data_package_checksum(data: "GamePackage") -> str:
+def data_package_checksum(data: "GamesPackage") -> str:
     """Calculates the data package checksum for a game from a dict"""
     assert "checksum" not in data, "Checksum already in data"
     assert sorted(data) == list(data), "Data not ordered"

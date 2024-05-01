@@ -42,6 +42,7 @@ class KH2World(World):
     """
     game = "Kingdom Hearts 2"
     web = KingdomHearts2Web()
+
     required_client_version = (0, 4, 4)
     options_dataclass = KingdomHearts2Options
     options: KingdomHearts2Options
@@ -49,6 +50,7 @@ class KH2World(World):
                        for item_id, item in enumerate(item_dictionary_table.keys(), 0x130000)}
     location_name_to_id = {item: location
                            for location, item in enumerate(all_locations.keys(), 0x130000)}
+
     item_name_groups = item_groups
     location_name_groups = location_groups
 

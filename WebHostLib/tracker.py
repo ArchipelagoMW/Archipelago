@@ -303,19 +303,6 @@ def get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, ge
     cache.set(key, tracker_page, timeout)
     return tracker_page
 
-        small_key_ids = {}
-        big_key_ids = {}
-        ids_small_key = {}
-        ids_big_key = {}
-        for item_name, data in Items.item_table.items():
-            if "Key" in item_name:
-                area = item_name.split("(")[1][:-1]
-                if "Small" in item_name:
-                    small_key_ids[area] = data[2]
-                    ids_small_key[data[2]] = area
-                else:
-                    big_key_ids[area] = data[2]
-                    ids_big_key[data[2]] = area
 
 @app.route("/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>")
 def get_generic_game_tracker(tracker: UUID, tracked_team: int, tracked_player: int) -> str:
@@ -1307,35 +1294,37 @@ if "Starcraft 2" in network_data_package["games"]:
         SC2HOTS_ITEM_ID_OFFSET = SC2WOL_ITEM_ID_OFFSET + 1000
         SC2LOTV_ITEM_ID_OFFSET = SC2HOTS_ITEM_ID_OFFSET + 1000
 
-    slot_data = tracker_data.get_slot_data(team, player)
+        slot_data = tracker_data.get_slot_data(team, player)
         minerals_per_item = slot_data.get("minerals_per_item", 15)
         vespene_per_item = slot_data.get("vespene_per_item", 15)
         starting_supply_per_item = slot_data.get("starting_supply_per_item", 2)
 
         github_icon_base_url = "https://matthewmarinets.github.io/ap_sc2_icons/icons/"
-        organics_icon_base_url = "https://0rganics.org/archipelago/sc2wol/"    icons = {
+        organics_icon_base_url = "https://0rganics.org/archipelago/sc2wol/"
+
+        icons = {
             "Starting Minerals":                           "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/icons/icon-mineral-protoss.png",
             "Starting Vespene":                            "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/icons/icon-gas-terran.png",
             "Starting Supply":                             github_icon_base_url + "blizzard/icon-supply-terran_nobg.png",
 
-            "TerranInfantry Weapons Level 1":                    "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryweaponslevel1.png",
-            "TerranInfantry Weapons Level 2":                    "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryweaponslevel2.png",
-            "TerranInfantry Weapons Level 3":                    "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryweaponslevel3.png",
-            "TerranInfantry Armor Level 1":                      "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryarmorlevel1.png",
-            "TerranInfantry Armor Level 2":                      "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryarmorlevel2.png",
-            "TerranInfantry Armor Level 3":                      "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryarmorlevel3.png",
-            "TerranVehicle Weapons Level 1":                     "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleweaponslevel1.png",
-            "TerranVehicle Weapons Level 2":                     "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleweaponslevel2.png",
-            "TerranVehicle Weapons Level 3":                     "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleweaponslevel3.png",
-            "TerranVehicle Armor Level 1":                       "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleplatinglevel1.png",
-            "TerranVehicle Armor Level 2":                       "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleplatinglevel2.png",
-            "TerranVehicle Armor Level 3":                       "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleplatinglevel3.png",
-            "TerranShip Weapons Level 1":                        "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipweaponslevel1.png",
-            "TerranShip Weapons Level 2":                        "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipweaponslevel2.png",
-            "TerranShip Weapons Level 3":                        "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipweaponslevel3.png",
-            "TerranShip Armor Level 1":                          "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipplatinglevel1.png",
-            "TerranShip Armor Level 2":                          "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipplatinglevel2.png",
-            "TerranShip Armor Level 3":                          "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipplatinglevel3.png",
+            "Terran Infantry Weapons Level 1":             "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryweaponslevel1.png",
+            "Terran Infantry Weapons Level 2":             "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryweaponslevel2.png",
+            "Terran Infantry Weapons Level 3":             "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryweaponslevel3.png",
+            "Terran Infantry Armor Level 1":               "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryarmorlevel1.png",
+            "Terran Infantry Armor Level 2":               "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryarmorlevel2.png",
+            "Terran Infantry Armor Level 3":               "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryarmorlevel3.png",
+            "Terran Vehicle Weapons Level 1":              "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleweaponslevel1.png",
+            "Terran Vehicle Weapons Level 2":              "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleweaponslevel2.png",
+            "Terran Vehicle Weapons Level 3":              "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleweaponslevel3.png",
+            "Terran Vehicle Armor Level 1":                "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleplatinglevel1.png",
+            "Terran Vehicle Armor Level 2":                "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleplatinglevel2.png",
+            "Terran Vehicle Armor Level 3":                "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleplatinglevel3.png",
+            "Terran Ship Weapons Level 1":                 "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipweaponslevel1.png",
+            "Terran Ship Weapons Level 2":                 "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipweaponslevel2.png",
+            "Terran Ship Weapons Level 3":                 "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipweaponslevel3.png",
+            "Terran Ship Armor Level 1":                   "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipplatinglevel1.png",
+            "Terran Ship Armor Level 2":                   "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipplatinglevel2.png",
+            "Terran Ship Armor Level 3":                   "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipplatinglevel3.png",
 
             "Bunker":                                      "https://static.wikia.nocookie.net/starcraft/images/c/c5/Bunker_SC2_Icon1.jpg",
             "Missile Turret":                              "https://static.wikia.nocookie.net/starcraft/images/5/5f/MissileTurret_SC2_Icon1.jpg",
@@ -1350,7 +1339,8 @@ if "Starcraft 2" in network_data_package["games"]:
             "Hostile Environment Adaptation (SCV)":        github_icon_base_url + "blizzard/btn-upgrade-swann-hellarmor.png",
             "Fire-Suppression System Level 1":             organics_icon_base_url + "Fire-SuppressionSystem.png",
             "Fire-Suppression System Level 2":             github_icon_base_url + "blizzard/btn-upgrade-swann-firesuppressionsystem.png",
-            "Orbital Command ":                             organics_icon_base_url + "OrbitalCommandCampaign.png",
+
+            "Orbital Command":                             organics_icon_base_url + "OrbitalCommandCampaign.png",
             "Planetary Command Module":                    github_icon_base_url + "original/btn-orbital-fortress.png",
             "Lift Off (Planetary Fortress)":               github_icon_base_url + "blizzard/btn-ability-terran-liftoff.png",
             "Armament Stabilizers (Planetary Fortress)":   github_icon_base_url + "blizzard/btn-ability-mengsk-siegetank-flyingtankarmament.png",
@@ -1360,7 +1350,8 @@ if "Starcraft 2" in network_data_package["games"]:
             "Medic":                                       github_icon_base_url + "blizzard/btn-unit-terran-medic.png",
             "Firebat":                                     github_icon_base_url + "blizzard/btn-unit-terran-firebat.png",
             "Marauder":                                    "https://static.wikia.nocookie.net/starcraft/images/b/ba/Marauder_SC2_Icon1.jpg",
-            "Reaper":                                      "https://static.wikia.nocookie.net/starcraft/images/7/7d/Reaper_SC2_Icon1.jpg","Ghost":                                       "https://static.wikia.nocookie.net/starcraft/images/6/6e/Ghost_SC2_Icon1.jpg",
+            "Reaper":                                      "https://static.wikia.nocookie.net/starcraft/images/7/7d/Reaper_SC2_Icon1.jpg",
+            "Ghost":                                       "https://static.wikia.nocookie.net/starcraft/images/6/6e/Ghost_SC2_Icon1.jpg",
             "Spectre":                                     github_icon_base_url + "original/btn-unit-terran-spectre.png",
             "HERC":                                        github_icon_base_url + "blizzard/btn-unit-terran-herc.png",
 
@@ -1376,14 +1367,14 @@ if "Starcraft 2" in network_data_package["games"]:
             "Optical Flare (Medic)":                       github_icon_base_url + "blizzard/btn-upgrade-protoss-fenix-dragoonsolariteflare.png",
             "Resource Efficiency (Medic)":                 github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
             "Adaptive Medpacks (Medic)":                   github_icon_base_url + "blizzard/btn-ability-terran-heal-color.png",
-            "Nano Projector (Medic)":                 github_icon_base_url + "blizzard/talent-raynor-level03-firebatmedicrange.png",
+            "Nano Projector (Medic)":                      github_icon_base_url + "blizzard/talent-raynor-level03-firebatmedicrange.png",
             "Incinerator Gauntlets (Firebat)":             github_icon_base_url + "blizzard/btn-upgrade-raynor-incineratorgauntlets.png",
             "Juggernaut Plating (Firebat)":                github_icon_base_url + "blizzard/btn-upgrade-raynor-juggernautplating.png",
             "Stimpack (Firebat)":                          github_icon_base_url + "blizzard/btn-ability-terran-stimpack-color.png",
             "Super Stimpack (Firebat)":                    github_icon_base_url + "blizzard/btn-upgrade-terran-superstimppack.png",
             "Resource Efficiency (Firebat)":               github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
             "Infernal Pre-Igniter (Firebat)":              github_icon_base_url + "blizzard/btn-upgrade-terran-infernalpreigniter.png",
-            "Kinetic Foam (Firebat)":               organics_icon_base_url + "KineticFoam.png",
+            "Kinetic Foam (Firebat)":                      organics_icon_base_url + "KineticFoam.png",
             "Nano Projectors (Firebat)":                   github_icon_base_url + "blizzard/talent-raynor-level03-firebatmedicrange.png",
             "Concussive Shells (Marauder)":                github_icon_base_url + "blizzard/btn-ability-terran-punishergrenade-color.png",
             "Kinetic Foam (Marauder)":                     organics_icon_base_url + "KineticFoam.png",
@@ -1420,7 +1411,7 @@ if "Starcraft 2" in network_data_package["games"]:
             "Goliath":                                     github_icon_base_url + "blizzard/btn-unit-terran-goliath.png",
             "Diamondback":                                 github_icon_base_url + "blizzard/btn-unit-terran-cobra.png",
             "Siege Tank":                                  "https://static.wikia.nocookie.net/starcraft/images/5/57/SiegeTank_SC2_Icon1.jpg",
-            "Thor":                                  "https://static.wikia.nocookie.net/starcraft/images/e/ef/Thor_SC2_Icon1.jpg",
+            "Thor":                                        "https://static.wikia.nocookie.net/starcraft/images/e/ef/Thor_SC2_Icon1.jpg",
             "Predator":                                    github_icon_base_url + "original/btn-unit-terran-predator.png",
             "Widow Mine":                                  github_icon_base_url + "blizzard/btn-unit-terran-widowmine.png",
             "Cyclone":                                     github_icon_base_url + "blizzard/btn-unit-terran-cyclone.png",
@@ -1497,10 +1488,9 @@ if "Starcraft 2" in network_data_package["games"]:
             "Viking":                                      "https://static.wikia.nocookie.net/starcraft/images/2/2a/Viking_SC2_Icon1.jpg",
             "Banshee":                                     "https://static.wikia.nocookie.net/starcraft/images/3/32/Banshee_SC2_Icon1.jpg",
             "Battlecruiser":                               "https://static.wikia.nocookie.net/starcraft/images/f/f5/Battlecruiser_SC2_Icon1.jpg",
-
             "Raven":                                       "https://static.wikia.nocookie.net/starcraft/images/1/19/SC2_Lab_Raven_Icon.png",
-            "Science Vessel":                                     "https://static.wikia.nocookie.net/starcraft/images/c/c3/SC2_Lab_SciVes_Icon.png",
-            "Hercules":                                        "https://static.wikia.nocookie.net/starcraft/images/4/40/SC2_Lab_Hercules_Icon.png",
+            "Science Vessel":                              "https://static.wikia.nocookie.net/starcraft/images/c/c3/SC2_Lab_SciVes_Icon.png",
+            "Hercules":                                    "https://static.wikia.nocookie.net/starcraft/images/4/40/SC2_Lab_Hercules_Icon.png",
             "Liberator":                                   github_icon_base_url + "blizzard/btn-unit-terran-liberator.png",
             "Valkyrie":                                    github_icon_base_url + "original/btn-unit-terran-valkyrie@scbw.png",
 
@@ -1568,7 +1558,7 @@ if "Starcraft 2" in network_data_package["games"]:
             "Resource Efficiency (Liberator)":             github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
             "Enhanced Cluster Launchers (Valkyrie)":       github_icon_base_url + "blizzard/btn-ability-stetmann-corruptormissilebarrage.png",
             "Shaped Hull (Valkyrie)":                      organics_icon_base_url + "ShapedHull.png",
-            "Flechette Missiles (Valkyrie)":                     github_icon_base_url + "blizzard/btn-ability-hornerhan-viking-missileupgrade.png",
+            "Flechette Missiles (Valkyrie)":               github_icon_base_url + "blizzard/btn-ability-hornerhan-viking-missileupgrade.png",
             "Afterburners (Valkyrie)":                     github_icon_base_url + "blizzard/btn-upgrade-terran-medivacemergencythrusters.png",
             "Launching Vector Compensator (Valkyrie)":     github_icon_base_url + "blizzard/btn-ability-terran-emergencythrusters.png",
             "Resource Efficiency (Valkyrie)":              github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
@@ -1578,9 +1568,10 @@ if "Starcraft 2" in network_data_package["games"]:
             "Hammer Securities":                           "https://static.wikia.nocookie.net/starcraft/images/3/3b/HammerSecurity_SC2_Icon1.jpg",
             "Spartan Company":                             "https://static.wikia.nocookie.net/starcraft/images/b/be/SpartanCompany_SC2_Icon1.jpg",
             "Siege Breakers":                              "https://static.wikia.nocookie.net/starcraft/images/3/31/SiegeBreakers_SC2_Icon1.jpg",
-            "Hel's Angels":                                 "https://static.wikia.nocookie.net/starcraft/images/6/63/HelsAngels_SC2_Icon1.jpg",
+            "Hel's Angels":                                "https://static.wikia.nocookie.net/starcraft/images/6/63/HelsAngels_SC2_Icon1.jpg",
             "Dusk Wings":                                  "https://static.wikia.nocookie.net/starcraft/images/5/52/DuskWings_SC2_Icon1.jpg",
-            "Jackson's Revenge":                           "https://static.wikia.nocookie.net/starcraft/images/9/95/JacksonsRevenge_SC2_Icon1.jpg","Skibi's Angels":                              github_icon_base_url + "blizzard/btn-unit-terran-medicelite.png",
+            "Jackson's Revenge":                           "https://static.wikia.nocookie.net/starcraft/images/9/95/JacksonsRevenge_SC2_Icon1.jpg",
+            "Skibi's Angels":                              github_icon_base_url + "blizzard/btn-unit-terran-medicelite.png",
             "Death Heads":                                 github_icon_base_url + "blizzard/btn-unit-terran-deathhead.png",
             "Winged Nightmares":                           github_icon_base_url + "blizzard/btn-unit-collection-wraith-junker.png",
             "Midnight Riders":                             github_icon_base_url + "blizzard/btn-unit-terran-liberatorblackops.png",
@@ -1836,7 +1827,8 @@ if "Starcraft 2" in network_data_package["games"]:
             "Slayer":                                      github_icon_base_url + "blizzard/btn-unit-protoss-alarak-taldarim-stalker.png",
             "Dragoon":                                     github_icon_base_url + "blizzard/btn-unit-protoss-dragoon-void.png",
             "Adept":                                       github_icon_base_url + "blizzard/btn-unit-protoss-adept-purifier.png",
-            "High Templar":                                "https://static.wikia.nocookie.net/starcraft/images/a/a0/Icon_Protoss_High_Templar.jpg","Signifier":                                   github_icon_base_url + "original/btn-unit-protoss-hightemplar-nerazim.png",
+            "High Templar":                                "https://static.wikia.nocookie.net/starcraft/images/a/a0/Icon_Protoss_High_Templar.jpg",
+            "Signifier":                                   github_icon_base_url + "original/btn-unit-protoss-hightemplar-nerazim.png",
             "Ascendant":                                   github_icon_base_url + "blizzard/btn-unit-protoss-hightemplar-taldarim.png",
             "Dark Archon":                                 github_icon_base_url + "blizzard/talent-vorazun-level05-unlockdarkarchon.png",
             "Dark Templar":                                "https://static.wikia.nocookie.net/starcraft/images/9/90/Icon_Protoss_Dark_Templar.jpg",
@@ -1882,7 +1874,8 @@ if "Starcraft 2" in network_data_package["games"]:
             "Resource Efficiency (Dark Templar/Avenger/Blood Hunter)": github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
 
             "Warp Prism":                                  github_icon_base_url + "blizzard/btn-unit-protoss-warpprism.png",
-            "Immortal":                                    "https://static.wikia.nocookie.net/starcraft/images/c/c1/Icon_Protoss_Immortal.jpg","Annihilator":                                 github_icon_base_url + "blizzard/btn-unit-protoss-immortal-nerazim.png",
+            "Immortal":                                    "https://static.wikia.nocookie.net/starcraft/images/c/c1/Icon_Protoss_Immortal.jpg",
+            "Annihilator":                                 github_icon_base_url + "blizzard/btn-unit-protoss-immortal-nerazim.png",
             "Vanguard":                                    github_icon_base_url + "blizzard/btn-unit-protoss-immortal-taldarim.png",
             "Colossus":                                    github_icon_base_url + "blizzard/btn-unit-protoss-colossus-purifier.png",
             "Wrathwalker":                                 github_icon_base_url + "blizzard/btn-unit-protoss-colossus-taldarim.png",
@@ -1906,11 +1899,14 @@ if "Starcraft 2" in network_data_package["games"]:
             "Solarite Payload (Reaver)":                   github_icon_base_url + "blizzard/btn-upgrade-artanis-scarabsplashradius.png",
             "Reaver Capacity (Reaver)":                    github_icon_base_url + "original/btn-upgrade-protoss-increasedscarabcapacity@scbw.png",
             "Resource Efficiency (Reaver)":                github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-            "Phoenix":                                     "https://static.wikia.nocookie.net/starcraft/images/b/b1/Icon_Protoss_Phoenix.jpg","Mirage":                                      github_icon_base_url + "blizzard/btn-unit-protoss-phoenix-purifier.png",
+
+            "Phoenix":                                     "https://static.wikia.nocookie.net/starcraft/images/b/b1/Icon_Protoss_Phoenix.jpg",
+            "Mirage":                                      github_icon_base_url + "blizzard/btn-unit-protoss-phoenix-purifier.png",
             "Corsair":                                     github_icon_base_url + "blizzard/btn-unit-protoss-corsair.png",
             "Destroyer":                                   github_icon_base_url + "blizzard/btn-unit-protoss-voidray-taldarim.png",
             "Void Ray":                                    github_icon_base_url + "blizzard/btn-unit-protoss-voidray-nerazim.png",
-            "Carrier":                                     "https://static.wikia.nocookie.net/starcraft/images/2/2c/Icon_Protoss_Carrier.jpg","Scout":                                       github_icon_base_url + "original/btn-unit-protoss-scout.png",
+            "Carrier":                                     "https://static.wikia.nocookie.net/starcraft/images/2/2c/Icon_Protoss_Carrier.jpg",
+            "Scout":                                       github_icon_base_url + "original/btn-unit-protoss-scout.png",
             "Tempest":                                     github_icon_base_url + "blizzard/btn-unit-protoss-tempest-purifier.png",
             "Mothership":                                  github_icon_base_url + "blizzard/btn-unit-protoss-mothership-taldarim.png",
             "Arbiter":                                     github_icon_base_url + "blizzard/btn-unit-protoss-arbiter.png",
@@ -1993,7 +1989,7 @@ if "Starcraft 2" in network_data_package["games"]:
             "Gates of Hell":           range(SC2WOL_LOC_ID_OFFSET + 2600, SC2WOL_LOC_ID_OFFSET + 2700),
             "Belly of the Beast":      range(SC2WOL_LOC_ID_OFFSET + 2700, SC2WOL_LOC_ID_OFFSET + 2800),
             "Shatter the Sky":         range(SC2WOL_LOC_ID_OFFSET + 2800, SC2WOL_LOC_ID_OFFSET + 2900),
-        "All-In":                  range(SC2WOL_LOC_ID_OFFSET + 2900, SC2WOL_LOC_ID_OFFSET + 3000),
+            "All-In":                  range(SC2WOL_LOC_ID_OFFSET + 2900, SC2WOL_LOC_ID_OFFSET + 3000),
 
             "Lab Rat":                 range(SC2HOTS_LOC_ID_OFFSET + 100, SC2HOTS_LOC_ID_OFFSET + 200),
             "Back in the Saddle":      range(SC2HOTS_LOC_ID_OFFSET + 200, SC2HOTS_LOC_ID_OFFSET + 300),
@@ -2146,30 +2142,30 @@ if "Starcraft 2" in network_data_package["games"]:
 
         # Determine display for progressive items
         progressive_items = {
-            "Progressive TerranInfantry Weapon":                    100 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive TerranInfantry Armor":                     102 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive TerranVehicle Weapon":                     103 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive TerranVehicle Armor":                      104 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive TerranShip Weapon":                        105 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive TerranShip Armor":                         106 + SC2WOL_ITEM_ID_OFFSET,
+            "Progressive Terran Infantry Weapon":                   100 + SC2WOL_ITEM_ID_OFFSET,
+            "Progressive Terran Infantry Armor":                    102 + SC2WOL_ITEM_ID_OFFSET,
+            "Progressive Terran Vehicle Weapon":                    103 + SC2WOL_ITEM_ID_OFFSET,
+            "Progressive Terran Vehicle Armor":                     104 + SC2WOL_ITEM_ID_OFFSET,
+            "Progressive Terran Ship Weapon":                       105 + SC2WOL_ITEM_ID_OFFSET,
+            "Progressive Terran Ship Armor":                        106 + SC2WOL_ITEM_ID_OFFSET,
             "Progressive Fire-Suppression System":                  206 + SC2WOL_ITEM_ID_OFFSET,
             "Progressive Orbital Command":                          207 + SC2WOL_ITEM_ID_OFFSET,
-            "ProgressiveStimpack (Marine)":                  208 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Stimpack (Firebat)":                 226 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Stimpack (Marauder)":                228 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Stimpack (Reaper)":                  250 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Stimpack (Hellion)":                 259 + SC2WOL_ITEM_ID_OFFSET,
+            "Progressive Stimpack (Marine)":                        208 + SC2WOL_ITEM_ID_OFFSET,
+            "Progressive Stimpack (Firebat)":                       226 + SC2WOL_ITEM_ID_OFFSET,
+            "Progressive Stimpack (Marauder)":                      228 + SC2WOL_ITEM_ID_OFFSET,
+            "Progressive Stimpack (Reaper)":                        250 + SC2WOL_ITEM_ID_OFFSET,
+            "Progressive Stimpack (Hellion)":                       259 + SC2WOL_ITEM_ID_OFFSET,
             "Progressive Replenishable Magazine (Vulture)":         303 + SC2WOL_ITEM_ID_OFFSET,
             "Progressive Tri-Lithium Power Cell (Diamondback)":     306 + SC2WOL_ITEM_ID_OFFSET,
             "Progressive Tomahawk Power Cells (Wraith)":            312 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Cross-Spectrum Dampeners (Banshee)": 316 + SC2WOL_ITEM_ID_OFFSET,
+            "Progressive Cross-Spectrum Dampeners (Banshee)":       316 + SC2WOL_ITEM_ID_OFFSET,
             "Progressive Missile Pods (Battlecruiser)":             318 + SC2WOL_ITEM_ID_OFFSET,
             "Progressive Defensive Matrix (Battlecruiser)":         319 + SC2WOL_ITEM_ID_OFFSET,
             "Progressive Immortality Protocol (Thor)":              325 + SC2WOL_ITEM_ID_OFFSET,
             "Progressive High Impact Payload (Thor)":               361 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Augmented Thrusters (Planetary Fortress)": 388 +SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Regenerative Bio-Steel":             617 + SC2WOL_ITEM_ID_OFFSET,
-        "Progressive Stealth Suit Module (Nova Suit Module)":   904 + SC2WOL_ITEM_ID_OFFSET,
+            "Progressive Augmented Thrusters (Planetary Fortress)": 388 + SC2WOL_ITEM_ID_OFFSET,
+            "Progressive Regenerative Bio-Steel":                   617 + SC2WOL_ITEM_ID_OFFSET,
+            "Progressive Stealth Suit Module (Nova Suit Module)":   904 + SC2WOL_ITEM_ID_OFFSET,
             "Progressive Zerg Melee Attack":                        100 + SC2HOTS_ITEM_ID_OFFSET,
             "Progressive Zerg Missile Attack":                      101 + SC2HOTS_ITEM_ID_OFFSET,
             "Progressive Zerg Ground Carapace":                     102 + SC2HOTS_ITEM_ID_OFFSET,
@@ -2184,45 +2180,45 @@ if "Starcraft 2" in network_data_package["games"]:
         }
         # Format: L0, L1, L2, L3
         progressive_names = {
-            "Progressive TerranInfantry Weapon":                    ["Terran Infantry Weapons Level 1",
-                                                                 "TerranInfantry Weapons Level 1",
-                                                               "Terran Infantry Weapons Level 2",
-                                                                 "TerranInfantry Weapons Level 3"],
-            "Progressive TerranInfantry Armor":                     ["Terran Infantry Armor Level 1",
-                                                                 "TerranInfantry Armor Level 1",
-                                                               "Terran Infantry Armor Level 2",
-                                                                 "TerranInfantry Armor Level 3"],
-            "Progressive TerranVehicle Weapon":                     ["Terran Vehicle Weapons Level 1",
-                                                                 "TerranVehicle Weapons Level 1",
-                                                               "Terran Vehicle Weapons Level 2",
-                                                                 "TerranVehicle Weapons Level 3"],
-            "Progressive TerranVehicle Armor":                      ["Terran Vehicle Armor Level 1",
-                                                                 "TerranVehicle Armor Level 1",
-                                                               "Terran Vehicle Armor Level 2",
-                                                                 "TerranVehicle Armor Level 3"],
-            "Progressive TerranShip Weapon":                        ["Terran Ship Weapons Level 1",
-                                                                 "TerranShip Weapons Level 1",
-                                                               "Terran Ship Weapons Level 2",
-                                                                 "TerranShip Weapons Level 3"],
-            "Progressive TerranShip Armor":                         ["Terran Ship Armor Level 1",
-                                                                 "TerranShip Armor Level 1",
-                                                               "Terran Ship Armor Level 2",
-                                                                 "TerranShip Armor Level 3"],
+            "Progressive Terran Infantry Weapon":               ["Terran Infantry Weapons Level 1",
+                                                                 "Terran Infantry Weapons Level 1",
+                                                                 "Terran Infantry Weapons Level 2",
+                                                                 "Terran Infantry Weapons Level 3"],
+            "Progressive Terran Infantry Armor":                ["Terran Infantry Armor Level 1",
+                                                                 "Terran Infantry Armor Level 1",
+                                                                 "Terran Infantry Armor Level 2",
+                                                                 "Terran Infantry Armor Level 3"],
+            "Progressive Terran Vehicle Weapon":                ["Terran Vehicle Weapons Level 1",
+                                                                 "Terran Vehicle Weapons Level 1",
+                                                                 "Terran Vehicle Weapons Level 2",
+                                                                 "Terran Vehicle Weapons Level 3"],
+            "Progressive Terran Vehicle Armor":                 ["Terran Vehicle Armor Level 1",
+                                                                 "Terran Vehicle Armor Level 1",
+                                                                 "Terran Vehicle Armor Level 2",
+                                                                 "Terran Vehicle Armor Level 3"],
+            "Progressive Terran Ship Weapon":                   ["Terran Ship Weapons Level 1",
+                                                                 "Terran Ship Weapons Level 1",
+                                                                 "Terran Ship Weapons Level 2",
+                                                                 "Terran Ship Weapons Level 3"],
+            "Progressive Terran Ship Armor":                    ["Terran Ship Armor Level 1",
+                                                                 "Terran Ship Armor Level 1",
+                                                                 "Terran Ship Armor Level 2",
+                                                                 "Terran Ship Armor Level 3"],
             "Progressive Fire-Suppression System":              ["Fire-Suppression System Level 1",
                                                                  "Fire-Suppression System Level 1",
                                                                  "Fire-Suppression System Level 2"],
             "Progressive Orbital Command":                      ["Orbital Command", "Orbital Command",
                                                                  "Planetary Command Module"],
-            "ProgressiveStimpack (Marine)":                  ["Stimpack (Marine)", "Stimpack (Marine)",
-                                                               "Super Stimpack (Marine)"],
-            "Progressive Stimpack (Firebat)":                 ["Stimpack (Firebat)", "Stimpack (Firebat)",
-                                                               "Super Stimpack (Firebat)"],
-            "Progressive Stimpack (Marauder)":                ["Stimpack (Marauder)", "Stimpack (Marauder)",
-                                                               "Super Stimpack (Marauder)"],
-            "Progressive Stimpack (Reaper)":                  ["Stimpack (Reaper)", "Stimpack (Reaper)",
-                                                               "Super Stimpack (Reaper)"],
-            "Progressive Stimpack (Hellion)":                 ["Stimpack (Hellion)", "Stimpack (Hellion)",
-                                                               "Super Stimpack (Hellion)"],
+            "Progressive Stimpack (Marine)":                    ["Stimpack (Marine)", "Stimpack (Marine)",
+                                                                 "Super Stimpack (Marine)"],
+            "Progressive Stimpack (Firebat)":                   ["Stimpack (Firebat)", "Stimpack (Firebat)",
+                                                                 "Super Stimpack (Firebat)"],
+            "Progressive Stimpack (Marauder)":                  ["Stimpack (Marauder)", "Stimpack (Marauder)",
+                                                                 "Super Stimpack (Marauder)"],
+            "Progressive Stimpack (Reaper)":                    ["Stimpack (Reaper)", "Stimpack (Reaper)",
+                                                                 "Super Stimpack (Reaper)"],
+            "Progressive Stimpack (Hellion)":                   ["Stimpack (Hellion)", "Stimpack (Hellion)",
+                                                                 "Super Stimpack (Hellion)"],
             "Progressive Replenishable Magazine (Vulture)":     ["Replenishable Magazine (Vulture)",
                                                                  "Replenishable Magazine (Vulture)",
                                                                  "Replenishable Magazine (Free) (Vulture)"],
@@ -2232,9 +2228,9 @@ if "Starcraft 2" in network_data_package["games"]:
             "Progressive Tomahawk Power Cells (Wraith)":        ["Tomahawk Power Cells (Wraith)",
                                                                  "Tomahawk Power Cells (Wraith)",
                                                                  "Unregistered Cloaking Module (Wraith)"],
-            "Progressive Cross-Spectrum Dampeners (Banshee)": ["Cross-Spectrum Dampeners (Banshee)",
-                                                               "Cross-Spectrum Dampeners (Banshee)",
-                                                               "Advanced Cross-Spectrum Dampeners (Banshee)"],
+            "Progressive Cross-Spectrum Dampeners (Banshee)":   ["Cross-Spectrum Dampeners (Banshee)",
+                                                                 "Cross-Spectrum Dampeners (Banshee)",
+                                                                 "Advanced Cross-Spectrum Dampeners (Banshee)"],
             "Progressive Missile Pods (Battlecruiser)":         ["Missile Pods (Battlecruiser) Level 1",
                                                                  "Missile Pods (Battlecruiser) Level 1",
                                                                  "Missile Pods (Battlecruiser) Level 2"],
@@ -2249,9 +2245,9 @@ if "Starcraft 2" in network_data_package["games"]:
             "Progressive Augmented Thrusters (Planetary Fortress)": ["Lift Off (Planetary Fortress)",
                                                                      "Lift Off (Planetary Fortress)",
                                                                      "Armament Stabilizers (Planetary Fortress)"],
-            "ProgressiveRegenerative Bio-Steel":             ["Regenerative Bio-Steel Level 1",
-                                                               "Regenerative Bio-Steel Level 1",
-                                                              "Regenerative Bio-Steel Level 2",
+            "Progressive Regenerative Bio-Steel":               ["Regenerative Bio-Steel Level 1",
+                                                                 "Regenerative Bio-Steel Level 1",
+                                                                 "Regenerative Bio-Steel Level 2",
                                                                  "Regenerative Bio-Steel Level 3"],
             "Progressive Stealth Suit Module (Nova Suit Module)": ["Stealth Suit Module (Nova Suit Module)",
                                                                    "Cloak (Nova Suit Module)",
@@ -2275,7 +2271,7 @@ if "Starcraft 2" in network_data_package["games"]:
             "Progressive Zerg Flyer Carapace":                  ["Zerg Flyer Carapace Level 1",
                                                                  "Zerg Flyer Carapace Level 1",
                                                                  "Zerg Flyer Carapace Level 2",
-        "Zerg Flyer Carapace Level 3"],
+                                                                 "Zerg Flyer Carapace Level 3"],
             "Progressive Protoss Ground Weapon":                ["Protoss Ground Weapon Level 1",
                                                                  "Protoss Ground Weapon Level 1",
                                                                  "Protoss Ground Weapon Level 2",
@@ -2296,7 +2292,8 @@ if "Starcraft 2" in network_data_package["games"]:
                                                                  "Protoss Air Armor Level 3"],
             "Progressive Proxy Pylon (Spear of Adun Calldown)": ["Proxy Pylon (Spear of Adun Calldown)",
                                                                  "Proxy Pylon (Spear of Adun Calldown)",
-                                                                 "Warp In Reinforcements (Spear of Adun Calldown)"]}
+                                                                 "Warp In Reinforcements (Spear of Adun Calldown)"]
+        }
         for item_name, item_id in progressive_items.items():
             level = min(inventory[item_id], len(progressive_names[item_name]) - 1)
             display_name = progressive_names[item_name][level]
@@ -2306,25 +2303,26 @@ if "Starcraft 2" in network_data_package["games"]:
                          .replace("(", "")
                          .replace(")", ""))
             display_data[base_name + "_level"] = level
-            display_data[base_name + "_url"] = icons[display_name]if display_name in icons else "FIXME"
+            display_data[base_name + "_url"] = icons[display_name] if display_name in icons else "FIXME"
             display_data[base_name + "_name"] = display_name
 
         # Multi-items
         multi_items = {
             "Additional Starting Minerals": 800 + SC2WOL_ITEM_ID_OFFSET,
             "Additional Starting Vespene":  801 + SC2WOL_ITEM_ID_OFFSET,
-            "Additional Starting Supply":    802 + SC2WOL_ITEM_ID_OFFSET
+            "Additional Starting Supply":   802 + SC2WOL_ITEM_ID_OFFSET
         }
         for item_name, item_id in multi_items.items():
             base_name = item_name.split()[-1].lower()
             count = inventory[item_id]
             if base_name == "supply":
                 count = count * starting_supply_per_item
-                elif base_name == "minerals":
+            elif base_name == "minerals":
                 count = count * minerals_per_item
             elif base_name == "vespene":
                 count = count * vespene_per_item
-                display_data[base_name + "_count"] = count# Kerrigan level
+            display_data[base_name + "_count"] = count
+        # Kerrigan level
         level_items = {
             "1 Kerrigan Level":     509 + SC2HOTS_ITEM_ID_OFFSET,
             "2 Kerrigan Levels":    508 + SC2HOTS_ITEM_ID_OFFSET,
