@@ -27,6 +27,7 @@ USEFUL_DISCARD_ITEMS_PER_MODE: Dict[str, Set[str]] = {
     "variety": set()  # Variety Discards use both Arrows and Triangles, so neither of them are that useful alone
 }
 
+
 def populate_items() -> None:
     for item_name, definition in static_witness_logic.ALL_ITEMS.items():
         ap_item_code = definition.local_code + ID_START
