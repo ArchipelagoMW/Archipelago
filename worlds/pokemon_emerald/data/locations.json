@@ -1,7 +1,7 @@
 {
   "BADGE_1": {
     "label": "Rustboro Gym - Stone Badge",
-    "tags": [""],
+    "tags": [],
     "category": "BADGE"
   },
   "BADGE_2": {
@@ -1683,12 +1683,12 @@
   },
   "NPC_GIFT_RECEIVED_TM_WATER_PULSE": {
     "label": "Sootopolis Gym - TM03 from Juan",
-    "tags": [],
+    "tags": ["Gym TMs"],
     "category": "GIFT"
   },
   "NPC_GIFT_RECEIVED_TM_CALM_MIND": {
     "label": "Mossdeep Gym - TM04 from Tate and Liza",
-    "tags": [],
+    "tags": ["Gym TMs"],
     "category": "GIFT"
   },
   "NPC_GIFT_RECEIVED_TM_ROAR": {
@@ -1698,7 +1698,7 @@
   },
   "NPC_GIFT_RECEIVED_TM_BULK_UP": {
     "label": "Dewford Gym - TM08 from Brawly",
-    "tags": [],
+    "tags": ["Gym TMs"],
     "category": "GIFT"
   },
   "NPC_GIFT_RECEIVED_TM_BULLET_SEED": {
@@ -1743,7 +1743,7 @@
   },
   "NPC_GIFT_RECEIVED_TM_SHOCK_WAVE": {
     "label": "Mauville Gym - TM34 from Wattson",
-    "tags": [],
+    "tags": ["Gym TMs"],
     "category": "GIFT"
   },
   "NPC_GIFT_RECEIVED_TM_SLUDGE_BOMB": {
@@ -1753,12 +1753,12 @@
   },
   "NPC_GIFT_RECEIVED_TM_ROCK_TOMB": {
     "label": "Rustboro Gym - TM39 from Roxanne",
-    "tags": [],
+    "tags": ["Gym TMs"],
     "category": "GIFT"
   },
   "NPC_GIFT_RECEIVED_TM_AERIAL_ACE": {
     "label": "Fortree Gym - TM40 from Winona",
-    "tags": [],
+    "tags": ["Gym TMs"],
     "category": "GIFT"
   },
   "NPC_GIFT_RECEIVED_TM_TORMENT": {
@@ -1768,7 +1768,7 @@
   },
   "NPC_GIFT_RECEIVED_TM_FACADE": {
     "label": "Petalburg Gym - TM42 from Norman",
-    "tags": [],
+    "tags": ["Gym TMs"],
     "category": "GIFT"
   },
   "NPC_GIFT_RECEIVED_TM_REST": {
@@ -1798,7 +1798,7 @@
   },
   "NPC_GIFT_RECEIVED_TM_OVERHEAT": {
     "label": "Lavaridge Gym - TM50 from Flannery",
-    "tags": [],
+    "tags": ["Gym TMs"],
     "category": "GIFT"
   },
   "NPC_GIFT_RECEIVED_WHITE_HERB": {

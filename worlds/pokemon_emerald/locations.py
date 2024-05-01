@@ -12,41 +12,6 @@ if TYPE_CHECKING:
     from . import PokemonEmeraldWorld
 
 
-_LOCATION_CATEGORY_TO_GROUP_NAME = {
-    LocationCategory.BADGE: "Badges",
-    LocationCategory.HM: "HMs",
-    LocationCategory.KEY: "Key Items",
-    LocationCategory.ROD: "Fishing Rods",
-    LocationCategory.BIKE: "Bikes",
-    LocationCategory.TICKET: "Tickets",
-    LocationCategory.OVERWORLD_ITEM: "Overworld Items",
-    LocationCategory.HIDDEN_ITEM: "Hidden Items",
-    LocationCategory.GIFT: "NPC Gifts",
-    LocationCategory.BERRY_TREE: "Berry Trees",
-    LocationCategory.TRAINER: "Trainers",
-    LocationCategory.POKEDEX: "Pokedex",
-}
-
-LOCATION_GROUPS: Dict[str, Set[str]] = {group_name: set() for group_name in _LOCATION_CATEGORY_TO_GROUP_NAME.values()}
-for location in data.locations.values():
-    LOCATION_GROUPS[_LOCATION_CATEGORY_TO_GROUP_NAME[location.category]].add(location.label)
-
-    for tag in location.tags:
-        if tag not in LOCATION_GROUPS:
-            LOCATION_GROUPS[tag] = set()
-        LOCATION_GROUPS[tag].add(location.label)
-
-LOCATION_GROUPS["Gym TMs"] = {
-    "Rustboro Gym - TM39 from Roxanne",
-    "Dewford Gym - TM08 from Brawly",
-    "Mauville Gym - TM34 from Wattson",
-    "Lavaridge Gym - TM50 from Flannery",
-    "Petalburg Gym - TM42 from Norman",
-    "Fortree Gym - TM40 from Winona",
-    "Mossdeep Gym - TM04 from Tate and Liza",
-    "Sootopolis Gym - TM03 from Juan",
-}
-
 VISITED_EVENT_NAME_TO_ID = {
     "EVENT_VISITED_LITTLEROOT_TOWN": 0,
     "EVENT_VISITED_OLDALE_TOWN": 1,

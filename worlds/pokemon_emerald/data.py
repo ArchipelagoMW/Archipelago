@@ -1481,3 +1481,59 @@ UNEVOLVED_POKEMON = frozenset({
 """Species IDs of pokemon which have further evolution stages in the vanilla game"""
 
 NATIONAL_ID_TO_SPECIES_ID = {species.national_dex_number: i for i, species in data.species.items()}
+
+# Item Groups
+ITEM_GROUPS: Dict[str, Set[str]] = {}
+
+for item in data.items.values():
+    for tag in item.tags:
+        if tag not in ITEM_GROUPS:
+            ITEM_GROUPS[tag] = set()
+        ITEM_GROUPS[tag].add(item.label)
+
+# Location Groups
+_LOCATION_GROUP_MAPS = {
+    "Route 101": {"MAP_ROUTE101"},
+    "Route 102": {"MAP_ROUTE102"},
+    "Petalburg City": {
+        "MAP_PETALBURG_CITY",
+        "MAP_PETALBURG_CITY_HOUSE1",
+        "MAP_PETALBURG_CITY_HOUSE2",
+        "MAP_PETALBURG_CITY_WALLYS_HOUSE",
+        "MAP_PETALBURG_CITY_GYM",
+        "MAP_PETALBURG_CITY_POKEMON_CENTER_1F",
+        "MAP_PETALBURG_CITY_MART",
+    },
+}
+
+_LOCATION_CATEGORY_TO_GROUP_NAME = {
+    LocationCategory.BADGE: "Badges",
+    LocationCategory.HM: "HMs",
+    LocationCategory.KEY: "Key Items",
+    LocationCategory.ROD: "Fishing Rods",
+    LocationCategory.BIKE: "Bikes",
+    LocationCategory.TICKET: "Tickets",
+    LocationCategory.OVERWORLD_ITEM: "Overworld Items",
+    LocationCategory.HIDDEN_ITEM: "Hidden Items",
+    LocationCategory.GIFT: "NPC Gifts",
+    LocationCategory.BERRY_TREE: "Berry Trees",
+    LocationCategory.TRAINER: "Trainers",
+    LocationCategory.POKEDEX: "Pokedex",
+}
+
+LOCATION_GROUPS: Dict[str, Set[str]] = {group_name: set() for group_name in _LOCATION_CATEGORY_TO_GROUP_NAME.values()}
+for location in data.locations.values():
+    LOCATION_GROUPS[_LOCATION_CATEGORY_TO_GROUP_NAME[location.category]].add(location.label)
+
+    for tag in location.tags:
+        if tag not in LOCATION_GROUPS:
+            LOCATION_GROUPS[tag] = set()
+        LOCATION_GROUPS[tag].add(location.label)
+
+    map_name = data.regions[location.parent_region].parent_map.name
+    for group, maps in _LOCATION_GROUP_MAPS.items():
+        if map_name in maps:
+            if group not in LOCATION_GROUPS:
+                LOCATION_GROUPS[group] = set()
+            LOCATION_GROUPS[group].add(location.label)
+            break

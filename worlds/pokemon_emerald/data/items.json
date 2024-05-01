@@ -52,49 +52,49 @@
   "ITEM_HM_CUT": {
     "label": "HM01 Cut",
     "classification": "PROGRESSION",
-    "tags": ["HM", "Unique"],
+    "tags": ["HM", "HM01", "Unique"],
     "modern_id": 420
   },
   "ITEM_HM_FLY": {
     "label": "HM02 Fly",
     "classification": "PROGRESSION",
-    "tags": ["HM", "Unique"],
+    "tags": ["HM", "HM02", "Unique"],
     "modern_id": 421
   },
   "ITEM_HM_SURF": {
     "label": "HM03 Surf",
     "classification": "PROGRESSION",
-    "tags": ["HM", "Unique"],
+    "tags": ["HM", "HM03", "Unique"],
     "modern_id": 422
   },
   "ITEM_HM_STRENGTH": {
     "label": "HM04 Strength",
     "classification": "PROGRESSION",
-    "tags": ["HM", "Unique"],
+    "tags": ["HM", "HM04", "Unique"],
     "modern_id": 423
   },
   "ITEM_HM_FLASH": {
     "label": "HM05 Flash",
     "classification": "PROGRESSION",
-    "tags": ["HM", "Unique"],
+    "tags": ["HM", "HM05", "Unique"],
     "modern_id": 424
   },
   "ITEM_HM_ROCK_SMASH": {
     "label": "HM06 Rock Smash",
     "classification": "PROGRESSION",
-    "tags": ["HM", "Unique"],
+    "tags": ["HM", "HM06", "Unique"],
     "modern_id": 425
   },
   "ITEM_HM_WATERFALL": {
     "label": "HM07 Waterfall",
     "classification": "PROGRESSION",
-    "tags": ["HM", "Unique"],
+    "tags": ["HM", "HM07", "Unique"],
     "modern_id": 737
   },
   "ITEM_HM_DIVE": {
     "label": "HM08 Dive",
     "classification": "PROGRESSION",
-    "tags": ["HM", "Unique"],
+    "tags": ["HM", "HM08", "Unique"],
     "modern_id": null
   },
 
