@@ -5,13 +5,15 @@ from .Locations import are_locations, cat_locations, chi_locations, dai_location
                         top_locations, SotnLocation, rare_locations, rcat_locations, rcen_locations, rchi_locations, \
                         rdai_locations, rlib_locations, rno0_locations, rno1_locations, rno2_locations, \
                         rno3_locations, rno4_locations, rnz0_locations, rnz1_locations, rtop_locations, \
-                        exp_locations_item, exp_locations_token
+                        exp_locations_item, exp_locations_token, enemy_locations, drop_locations
 
 
 def create_regions(multiworld: MultiWorld, player: int) -> None:
     open_no4 = multiworld.opened_no4[player]
     open_are = multiworld.opened_are[player]
     open_no2 = multiworld.opened_no2[player]
+    esanity = multiworld.enemysanity[player]
+    dsanity = multiworld.dropsanity[player]
 
     menu = Region("Menu", player, multiworld)
     multiworld.regions.append(menu)
@@ -102,6 +104,17 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
     rtop = Region("Reverse Catle Keep", player, multiworld)
     for k, v in rtop_locations.items():
         rtop.locations.append(SotnLocation(player, k, v.location_id, rtop))
+
+    if esanity:
+        for k, v in enemy_locations.items():
+            region_name = v.zone
+            region = Region(region_name, player, multiworld)
+            region.locations.append(SotnLocation(player, k, v.location_id, region))
+    if dsanity:
+        for k, v in drop_locations.items():
+            region_name = v.zone
+            region = Region(region_name, player, multiworld)
+            region.locations.append(SotnLocation(player, k, v.location_id, region))
 
     multiworld.regions.append(are)
     multiworld.regions.append(cat)
@@ -214,14 +227,12 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
     # Underground Caverns
     no4.connect(no0, "NO4->NO0", lambda state: state.has("Jewel of open", player))
     if not open_no4:
-        no4.connect(no3, "NO4->NO3", lambda state: (state.has("Jewel of open", player)))
+        no4.connect(no3, "NO4->NO3", lambda state: state.has("Jewel of open", player))
         no4.connect(chi, "NO4->CHI", lambda state: state.has("Leap stone", player) or
                     state.has("Soul of bat", player) or (state.has("Form of mist", player) and
                                                          state.has("Power of mist", player)) or
-                    (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                             state.has("Soul of wolf", player) or
-                     state.has("Form of mist", player))) or (state.has("Soul of wolf", player) and
-                                                             state.has("Power of wolf", player)))
+                    (state.has("Gravity boots", player) and state.has("Leap stone", player)) or
+                    (state.has("Soul of wolf", player) and state.has("Power of wolf", player)))
     else:
         no4.connect(no3)
         no4.connect(chi, "NO4->CHI", lambda state: state.has("Soul of bat", player) or
