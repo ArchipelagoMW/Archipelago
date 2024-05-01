@@ -171,6 +171,12 @@ def set_rules(world: MultiWorld, player: int) -> None:
     location = world.get_location("CHI - Ring of ares", player)
     set_rule(location, lambda state: state.has("Demon card", player))
 
+    location = world.get_location("Enemysanity: 95 - Venus weed", player)
+    set_rule(location, lambda state: state.has("Demon card", player))
+
+    location = world.get_location("Dropsanity: 95 - Venus weed", player)
+    set_rule(location, lambda state: state.has("Demon card", player))
+
     # DAI - Royal Chapel Worst case scenario only Jewel, maybe didn't have Jewel if he came from NZ1
     location = world.get_location("DAI - Silver ring", player)
     set_rule(location, lambda state: state.has("Form of mist", player) and state.has("Jewel of open", player) and
@@ -218,6 +224,18 @@ def set_rules(world: MultiWorld, player: int) -> None:
     set_rule(location, lambda state: sotn_has_any(state, player))
 
     location = world.get_location("LIB - Lesser Demon kill", player)
+    set_rule(location, lambda state: sotn_has_any(state, player))
+
+    location = world.get_location("Enemysanity: 65 - Flea armor", player)
+    set_rule(location, lambda state: sotn_has_any(state, player))
+
+    location = world.get_location("Enemysanity: 80 - Lesser demon", player)
+    set_rule(location, lambda state: sotn_has_any(state, player))
+
+    location = world.get_location("Dropsanity: 54 - Corpseweed", player)
+    set_rule(location, lambda state: sotn_has_any(state, player))
+
+    location = world.get_location("Dropsanity: 65 - Flea armor", player)
     set_rule(location, lambda state: sotn_has_any(state, player))
 
     # If the player got here with only leap stone, leap jump on flea man
@@ -321,6 +339,27 @@ def set_rules(world: MultiWorld, player: int) -> None:
 
         location = world.get_location("NO2 - Heart Vessel", player)
         set_rule(location, lambda state: sotn_has_flying(state, player))
+
+    location = world.get_location("Enemysanity: 57 - Spectral sword", player)
+    set_rule(location, lambda state: sotn_has_any(state, player))
+
+    location = world.get_location("Enemysanity: 83 - Blade", player)
+    set_rule(location, lambda state: sotn_has_any(state, player))
+
+    location = world.get_location("Enemysanity: 85 - Hammer", player)
+    set_rule(location, lambda state: sotn_has_any(state, player))
+
+    location = world.get_location("Enemysanity: 92 - Olrox", player)
+    set_rule(location, lambda state: sotn_has_flying(state, player))
+
+    location = world.get_location("Dropsanity: 57 - Spectral sword", player)
+    set_rule(location, lambda state: sotn_has_any(state, player))
+
+    location = world.get_location("Dropsanity: 83 - Blade", player)
+    set_rule(location, lambda state: sotn_has_any(state, player))
+
+    location = world.get_location("Dropsanity: 85 - Hammer", player)
+    set_rule(location, lambda state: sotn_has_any(state, player))
 
     # NO3 - Castle Entrance
     location = world.get_location("NO3 - Life Vessel (Above entry)", player)
@@ -458,7 +497,47 @@ def set_rules(world: MultiWorld, player: int) -> None:
         location = world.get_location("NO4 - Elixir(Holy)", player)
         set_rule(location, lambda state: state.has("Merman statue", player) and (state.has("Jewel of open", player) or
                                                                          sotn_has_flying(state, player)))
+
+        location = world.get_location("Enemysanity: 37 - Scylla wyrm", player)
+        set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
+
+        location = world.get_location("Enemysanity: 44 - Toad", player)
+        set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
+
+        location = world.get_location("Enemysanity: 48 - Frog", player)
+        set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
+
+        location = world.get_location("Enemysanity: 59 - Scylla", player)
+        set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
+
+        location = world.get_location("Enemysanity: 93 - Succubus", player)
+        set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
+
+        location = world.get_location("Enemysanity: 79 - Fishhead", player)
+        set_rule(location, lambda state: state.has("Holy symbol", player) and
+                                         (state.has("Jewel of open", player) or sotn_has_flying(state, player)))
+
+        location = world.get_location("Enemysanity: 91 - Killer fish", player)
+        set_rule(location, lambda state: state.has("Holy symbol", player) and
+                                         (state.has("Jewel of open", player) or sotn_has_flying(state, player)))
+
+        location = world.get_location("Dropsanity: 44 - Toad", player)
+        set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
+
+        location = world.get_location("Dropsanity: 48 - Frog", player)
+        set_rule(location, lambda state: state.has("Jewel of open", player) or sotn_has_flying(state, player))
+
+        location = world.get_location("Dropsanity: 79 - Fishhead", player)
+        set_rule(location, lambda state: state.has("Holy symbol", player) and
+                                         (state.has("Jewel of open", player) or sotn_has_flying(state, player)))
+
+        location = world.get_location("Dropsanity: 91 - Killer fish", player)
+        set_rule(location, lambda state: state.has("Holy symbol", player) and
+                                         (state.has("Jewel of open", player) or sotn_has_flying(state, player)))
     else:
+        # NO3 - Life Vessel (UC exit) is the same need as NO4
+        location = world.get_location("NO3 - Life Vessel (UC exit)", player)
+        set_rule(location, lambda state: state.has("Jewel of open", player))
         # NO4 - Underground Caverns need only Jewel
         location = world.get_location("NO4 - Zircon", player)
         set_rule(location, lambda state: sotn_has_any(state, player))
@@ -512,6 +591,48 @@ def set_rules(world: MultiWorld, player: int) -> None:
 
         location = world.get_location("NO4 - Nunchaku", player)
         set_rule(location, lambda state: state.has("Holy symbol", player))
+
+        location = world.get_location("Enemysanity: 37 - Scylla wyrm", player)
+        set_rule(location, lambda state: state.has("Jewel of open", player))
+
+        location = world.get_location("Enemysanity: 44 - Toad", player)
+        set_rule(location, lambda state: state.has("Jewel of open", player))
+
+        location = world.get_location("Enemysanity: 48 - Frog", player)
+        set_rule(location, lambda state: state.has("Jewel of open", player))
+
+        location = world.get_location("Enemysanity: 49 - Frozen shade", player)
+        set_rule(location, lambda state: state.has("Jewel of open", player))
+
+        location = world.get_location("Enemysanity: 59 - Scylla", player)
+        set_rule(location, lambda state: state.has("Jewel of open", player))
+
+        location = world.get_location("Enemysanity: 93 - Succubus", player)
+        set_rule(location, lambda state: state.has("Jewel of open", player) and sotn_has_flying(state, player))
+
+        location = world.get_location("Enemysanity: 79 - Fishhead", player)
+        set_rule(location, lambda state: state.has("Holy symbol", player) and state.has("Jewel of open", player))
+
+        location = world.get_location("Enemysanity: 91 - Killer fish", player)
+        set_rule(location, lambda state: state.has("Holy symbol", player) and state.has("Jewel of open", player))
+
+        """location = world.get_location("Enemysanity: 37 - Scylla wyrm", player)
+        set_rule(location, lambda state: state.has("Jewel of open", player))"""
+
+        location = world.get_location("Dropsanity: 44 - Toad", player)
+        set_rule(location, lambda state: state.has("Jewel of open", player))
+
+        location = world.get_location("Dropsanity: 48 - Frog", player)
+        set_rule(location, lambda state: state.has("Jewel of open", player))
+
+        location = world.get_location("Dropsanity: 49 - Frozen shade", player)
+        set_rule(location, lambda state: state.has("Jewel of open", player))
+
+        location = world.get_location("Dropsanity: 79 - Fishhead", player)
+        set_rule(location, lambda state: state.has("Holy symbol", player) and state.has("Jewel of open", player))
+
+        location = world.get_location("Dropsanity: 91 - Killer fish", player)
+        set_rule(location, lambda state: state.has("Holy symbol", player) and state.has("Jewel of open", player))
 
     # NZ1 - Clock tower
     location = world.get_location("NZ1 - Bekatowa", player)
