@@ -154,12 +154,11 @@ class WitnessPlayerItems:
         output: Set[str] = set()
         if self._world.options.shuffle_symbols:
             discards_on = self._world.options.shuffle_discarded_panels
-            difficulty = self._world.options.puzzle_randomization.current_key
+            mode = self._world.options.puzzle_randomization.current_key
 
-            output = static_witness_items.ALWAYS_GOOD_SYMBOL_ITEMS.copy()
-            output |= static_witness_items.MODE_SPECIFIC_GOOD_ITEMS[difficulty]
+            output = static_witness_items.ALWAYS_GOOD_SYMBOL_ITEMS | static_witness_items.MODE_SPECIFIC_GOOD_ITEMS[mode]
             if discards_on:
-                output |= static_witness_items.MODE_SPECIFIC_GOOD_DISCARD_ITEMS[difficulty]
+                output |= static_witness_items.MODE_SPECIFIC_GOOD_DISCARD_ITEMS[mode]
 
         # Remove items that are mentioned in any plando options. (Hopefully, in the future, plando will get resolved
         #   before create_items so that we'll be able to check placed items instead of just removing all items mentioned
