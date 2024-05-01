@@ -198,6 +198,7 @@ class WL4World(World):
     def fill_slot_data(self) -> Mapping[str, Any]:
         return self.options.as_dict(
             'goal',
+            'golden_treasure_count',
             'difficulty',
             'logic',
             'required_jewels',
