@@ -164,7 +164,6 @@ class WitnessPlayerItems:
                 output.add("Triangles")
 
                 # In Expert, Discards feature Arrows.
-                # In Variety, they feature Arrows + Triangles. (Triangles are already taken care of)
                 if discards_on:
                     output.add("Arrows")
 
