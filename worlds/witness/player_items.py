@@ -159,7 +159,7 @@ class WitnessPlayerItems:
             output = static_witness_items.ALWAYS_GOOD_SYMBOL_ITEMS
             output |= static_witness_items.MODE_SPECIFIC_GOOD_ITEMS[difficulty]
             if discards_on:
-                output |= static_witness_items.MODE_SPECIFIC_GOOD_DISCARD_ITEMS[difficulty].copy()
+                output |= static_witness_items.MODE_SPECIFIC_GOOD_DISCARD_ITEMS[difficulty]
 
         # Remove items that are mentioned in any plando options. (Hopefully, in the future, plando will get resolved
         #   before create_items so that we'll be able to check placed items instead of just removing all items mentioned
