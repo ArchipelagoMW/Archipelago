@@ -7,7 +7,8 @@ from worlds.LauncherComponents import Component, components, SuffixIdentifier, l
 from Options import AssembleOptions
 
 
-from .Items import item_table, relic_table, SotnItem, ItemData, base_item_id, event_table, IType, vanilla_list
+from .Items import (item_table, relic_table, SotnItem, ItemData, base_item_id, event_table, IType, boost_table,
+                    trap_table)
 from .Locations import location_table, SotnLocation, exp_locations_token
 from .Regions import create_regions
 from .Rules import set_rules
@@ -95,6 +96,12 @@ class SotnWorld(World):
         # W:13% S:2% H:4% A:6% C:2% T:14% U:59%
         exp = self.options.exp_need
         extra = self.options.extra_pool
+        esanity = self.options.enemysanity
+        dsanity = self.options.dropsanity
+        boosts = self.options.boostqty
+        traps = self.options.trapqty
+        boosts_weight = self.options.boostweight
+        traps_weight = self.options.trapweight
         added_items = 0
         itempool: typing.List[SotnItem] = []
         remove_offset = 0
@@ -193,7 +200,6 @@ class SotnWorld(World):
             try:
                 if added_items <= 50:
                     itempool += [self.create_item(i)]
-                    print(f"Adding {i} to the pool")
                     added_items += 1
                     self.added_pool.append(f"{i}")
             except KeyError:
@@ -209,11 +215,17 @@ class SotnWorld(World):
             added_items += 1
         self.added_pool.append(f"({exploration_junk} exploration junks)")
 
-        difficult = self.multiworld.difficult[self.player]
+        difficult = self.options.difficult
+
         # Last generate 446 locations
         # Remove Victory,40 tokens
         # Relic list = 28 Vanilla list = 295
         total_location = 405
+        # Extra locations Enemy 140 / Drops 109
+        if esanity:
+            total_location += 140
+        if dsanity:
+            total_location += 109
 
         # Add progression items
         itempool += [self.create_item("Spike breaker")]
@@ -229,7 +241,6 @@ class SotnWorld(World):
                        ]
         self.added_pool.append("Relics:(")
         if difficult == 0:
-            print("Easy difficult")
             itempool += [self.create_item("Life Vessel") for _ in range(40)]
             itempool += [self.create_item("Heart Vessel") for _ in range(40)]
             added_items += 80
@@ -244,7 +255,6 @@ class SotnWorld(World):
             self.multiworld.early_items[self.player]["Gravity boots"] = 1
 
         if difficult == 1:
-            print("Normal difficult")
             itempool += [self.create_item("Life Vessel") for _ in range(32)]
             itempool += [self.create_item("Heart Vessel") for _ in range(33)]
             added_items += 65
@@ -256,7 +266,6 @@ class SotnWorld(World):
                 self.added_pool.append(r)
 
         if difficult == 2:
-            print("Hard difficult")
             itempool += [self.create_item("Life Vessel") for _ in range(17)]
             itempool += [self.create_item("Heart Vessel") for _ in range(17)]
             added_items += 34
@@ -268,16 +277,59 @@ class SotnWorld(World):
                 self.added_pool.append(r)
 
         if difficult == 3:
-            print("Insane difficult")
             remove_offset = 200
             for r in prog_relics:
                 itempool += [self.create_item(r)]
                 added_items += 1
                 self.added_pool.append(r)
         self.added_pool.append(")")
-        remaining = total_location - added_items - remove_offset
 
-        print(f"{remaining}/{total_location}/{added_items}/{difficult}")
+        if boosts > 50:
+            boosts = 50
+        if traps > 50:
+            traps = 50
+
+        boosts_weight_list = []
+        boosts_list = boosts_weight.current_key.split(';')
+        for i, b in enumerate(boosts_list):
+            if i < 12:
+                if b == "*":
+                    boosts_weight_list.append(self.random.randint(0, 10))
+                else:
+                    boosts_weight_list.append(int(b))
+
+        while len(boosts_weight_list) < 12:
+            boosts_weight_list.append(0)
+
+        boost_list = [name for name in boost_table.keys()]
+        random_boosts = self.random.choices(boost_list, weights=boosts_weight_list, k=boosts)
+        for b in random_boosts:
+            if added_items == total_location:
+                break
+            itempool += [self.create_item(b)]
+            added_items += 1
+
+        traps_weight_list = []
+        traps_list = traps_weight.current_key.split(';')
+        for i, t in enumerate(traps_list):
+            if i < 14:
+                if t == "*":
+                    traps_weight_list.append(self.random.randint(0, 10))
+                else:
+                    traps_weight_list.append(int(t))
+
+        while len(traps_weight_list) < 14:
+            traps_weight_list.append(0)
+
+        trap_list = [name for name in trap_table.keys()]
+        random_traps = self.random.choices(trap_list, weights=traps_weight_list, k=traps)
+        for t in random_traps:
+            if added_items == total_location:
+                break
+            itempool += [self.create_item(t)]
+            added_items += 1
+
+        remaining = total_location - added_items - remove_offset
 
         weapon_num = int(remaining * 0.1254)
         shield_num = int(remaining * 0.0237)
@@ -288,11 +340,9 @@ class SotnWorld(World):
         salable_num = int(remaining * 0.1084)
         usab_num = int(remaining * 0.5966)
 
-        print(f"{weapon_num}/{shield_num}/{helmet_num}/{armor_num}/{cloak_num}/{acce_num}/{salable_num}/{usab_num}")
-
         self.added_pool.append(f"{weapon_num + 1} Weapons:(")
         for _ in range(weapon_num + 1):
-            if weapon_list:
+            if weapon_list and remaining > 0:
                 item = self.random.choice(weapon_list)
                 itempool += [self.create_item(item)]
                 self.added_pool.append(item)
@@ -301,7 +351,7 @@ class SotnWorld(World):
         self.added_pool.append(")")
         self.added_pool.append(f"{shield_num + 1} Shields:(")
         for _ in range(shield_num + 1):
-            if shield_list:
+            if shield_list and remaining > 0:
                 item = self.random.choice(shield_list)
                 itempool += [self.create_item(item)]
                 self.added_pool.append(item)
@@ -310,7 +360,7 @@ class SotnWorld(World):
         self.added_pool.append(")")
         self.added_pool.append(f"{helmet_num + 1} Helmets:(")
         for _ in range(helmet_num + 1):
-            if helmet_list:
+            if helmet_list and remaining > 0:
                 item = self.random.choice(helmet_list)
                 itempool += [self.create_item(item)]
                 self.added_pool.append(item)
@@ -319,7 +369,7 @@ class SotnWorld(World):
         self.added_pool.append(")")
         self.added_pool.append(f"{armor_num + 1} Armor:(")
         for _ in range(armor_num + 1):
-            if armor_list:
+            if armor_list and remaining > 0:
                 item = self.random.choice(armor_list)
                 itempool += [self.create_item(item)]
                 self.added_pool.append(item)
@@ -328,7 +378,7 @@ class SotnWorld(World):
         self.added_pool.append(")")
         self.added_pool.append(f"{cloak_num + 1} Cloak:(")
         for _ in range(cloak_num + 1):
-            if cloak_list:
+            if cloak_list and remaining > 0:
                 item = self.random.choice(cloak_list)
                 itempool += [self.create_item(item)]
                 self.added_pool.append(item)
@@ -337,7 +387,7 @@ class SotnWorld(World):
         self.added_pool.append(")")
         self.added_pool.append(f"{acce_num + 1} Accessory:(")
         for _ in range(acce_num + 1):
-            if accessory_list:
+            if accessory_list and remaining > 0:
                 item = self.random.choice(accessory_list)
                 itempool += [self.create_item(item)]
                 self.added_pool.append(item)
@@ -346,7 +396,7 @@ class SotnWorld(World):
         self.added_pool.append(")")
         self.added_pool.append(f"{salable_num + 1} Salable:(")
         for _ in range(salable_num + 1):
-            if salable_list:
+            if salable_list and remaining > 0:
                 item = self.random.choice(salable_list)
                 itempool += [self.create_item(item)]
                 self.added_pool.append(item)
@@ -354,7 +404,7 @@ class SotnWorld(World):
         self.added_pool.append(")")
         self.added_pool.append(f"{usab_num + 1} Usable:(")
         for _ in range(usab_num + 1):
-            if usable_list and added_items < total_location:
+            if usable_list and remaining > 0:
                 item = self.random.choice(usable_list)
                 itempool += [self.create_item(item)]
                 self.added_pool.append(item)
