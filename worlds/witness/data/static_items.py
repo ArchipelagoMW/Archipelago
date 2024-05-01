@@ -16,8 +16,8 @@ _special_usefuls: List[str] = ["Puzzle Skip"]
 ALWAYS_GOOD_SYMBOL_ITEMS : Set[str] = {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"}
 
 MODE_SPECIFIC_GOOD_ITEMS: Dict[str, Set[str]] = {
-    "none": {},
-    "sigma_normal": {},
+    "none": set(),
+    "sigma_normal": set(),
     "sigma_expert": {"Triangles"},
     "variety": {"Triangles"}
 }
