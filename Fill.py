@@ -495,10 +495,9 @@ def distribute_items_restrictive(multiworld: MultiWorld) -> None:
     if unplaced or unfilled:
         logging.warning(
             f"Unplaced items({len(unplaced)}): {unplaced} - Unfilled Locations({len(unfilled)}): {unfilled}")
-        items_counter = Counter(location.item.player for location in multiworld.get_locations() if location.item)
+        items_counter = Counter(location.item.player for location in multiworld.get_filled_locations())
         locations_counter = Counter(location.player for location in multiworld.get_locations())
         items_counter.update(item.player for item in unplaced)
-        locations_counter.update(location.player for location in unfilled)
         print_data = {"items": items_counter, "locations": locations_counter}
         logging.info(f"Per-Player counts: {print_data})")
 

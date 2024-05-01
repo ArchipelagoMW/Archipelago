@@ -1,7 +1,7 @@
 import datetime
 import collections
 from dataclasses import dataclass
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple, NamedTuple
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple, NamedTuple, Counter
 from uuid import UUID
 
 from flask import render_template
@@ -422,11 +422,11 @@ from worlds import network_data_package
 
 if "Factorio" in network_data_package["games"]:
     def render_Factorio_multiworld_tracker(tracker_data: TrackerData, enabled_trackers: List[str]):
-        inventories: Dict[TeamPlayer, Dict[int, int]] = {
-            (team, player): {
+        inventories: Dict[TeamPlayer, collections.Counter[str]] = {
+            (team, player): collections.Counter({
                 tracker_data.item_id_to_name["Factorio"][item_id]: count
                 for item_id, count in tracker_data.get_player_inventory_counts(team, player).items()
-            } for team, players in tracker_data.get_all_slots().items() for player in players
+            }) for team, players in tracker_data.get_all_slots().items() for player in players
             if tracker_data.get_player_game(team, player) == "Factorio"
         }
 
@@ -501,7 +501,7 @@ if "A Link to the Past" in network_data_package["games"]:
         total: int
         checked: int
 
-    def prepare_inventories(team: int, player: int, inventory: collections.Counter[str], tracker_data: TrackerData):
+    def prepare_inventories(team: int, player: int, inventory: Counter[str], tracker_data: TrackerData):
         for item, (prog_item, level) in non_progressive_items.items():
             if item in inventory:
                 inventory[prog_item] = min(max(inventory[prog_item], level), progressive_item_max[prog_item])
@@ -525,7 +525,7 @@ if "A Link to the Past" in network_data_package["games"]:
             inventory["Triforce"] = 1
 
     def render_ALinkToThePast_multiworld_tracker(tracker_data: TrackerData, enabled_trackers: List[str]):
-        inventories: Dict[Tuple[int, int], collections.Counter[str]] = {
+        inventories: Dict[Tuple[int, int], Counter[str]] = {
             (team, player): collections.Counter({
                 tracker_data.item_id_to_name["A Link to the Past"][code]: count
                 for code, count in tracker_data.get_player_inventory_counts(team, player).items()

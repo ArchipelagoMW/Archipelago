@@ -1905,7 +1905,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_alias(self, player_name_then_alias_name):
         """Set a player's alias, by listing their base name and then their intended alias."""
-        player_name, alias_name = player_name_then_alias_name.split(" ", 1)
+        player_name, _, alias_name = player_name_then_alias_name.partition(" ")
         player_name, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
             for (team, slot), name in self.ctx.player_names.items():
@@ -2163,6 +2163,18 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
         return True
 
+    def _cmd_datastore(self):
+        """Debug Tool: list writable datastorage keys and approximate the size of their values with pickle."""
+        total: int = 0
+        texts = []
+        for key, value in self.ctx.stored_data.items():
+            size = len(pickle.dumps(value))
+            total += size
+            texts.append(f"Key: {key} | Size: {size}B")
+        texts.insert(0, f"Found {len(self.ctx.stored_data)} keys, "
+                        f"approximately totaling {Utils.format_SI_prefix(total, power=1024)}B")
+        self.output("\n".join(texts))
+
 
 async def console(ctx: Context):
     import sys
@@ -2186,7 +2198,7 @@ async def console(ctx: Context):
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    defaults = Utils.get_options()["server_options"].as_dict()
+    defaults = Utils.get_settings()["server_options"].as_dict()
     parser.add_argument('multidata', nargs="?", default=defaults["multidata"])
     parser.add_argument('--host', default=defaults["host"])
     parser.add_argument('--port', default=defaults["port"], type=int)
