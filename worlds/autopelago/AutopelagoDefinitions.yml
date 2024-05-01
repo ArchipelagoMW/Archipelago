@@ -697,7 +697,7 @@ regions:
     after_minotaur_labyrinth:
       name_template: 'After Minotaur Labyrinth #{n}'
       unrandomized_items:
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -708,7 +708,7 @@ regions:
       unrandomized_items:
         key:
           - mongoose_in_a_combat_spacecraft
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -720,7 +720,7 @@ regions:
         key:
           - asteroid_belt
           - moon_shaped_like_a_butt
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -729,7 +729,7 @@ regions:
     before_space_opera:
       name_template: 'Before Space Opera #{n}'
       unrandomized_items:
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -741,7 +741,7 @@ regions:
         key:
           - red_matador_cape
           - lab_rat
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -752,7 +752,7 @@ regions:
       unrandomized_items:
         key:
           - foreign_coin
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -763,7 +763,7 @@ regions:
       unrandomized_items:
         key:
           - playing_with_fire_for_dummies
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -774,7 +774,7 @@ regions:
       unrandomized_items:
         key:
           - free_vowel
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -785,7 +785,7 @@ regions:
       unrandomized_items:
         key:
           - constellation_prize
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -797,7 +797,7 @@ regions:
         key:
           - pharaoh_not_anti_mummy_spray
           - ziggu_rat
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -806,7 +806,7 @@ regions:
     before_stalled_rocket_get_out_and_push:
       name_template: 'Before Stalled Rocket! (Get Out and Push) #{n}'
       unrandomized_items:
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -842,7 +842,7 @@ regions:
       unrandomized_items:
         key:
           - virtual_key
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -853,7 +853,7 @@ regions:
       unrandomized_items:
         key:
           - map_of_the_entire_internet
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -865,7 +865,7 @@ regions:
         key:
           - fifty_cents
           - notorious_r_a_t
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -877,7 +877,7 @@ regions:
         key:
           - gym_rat
           - forklift_certification
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -888,7 +888,7 @@ regions:
       unrandomized_items:
         key:
           - childs_first_hand_axe
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -897,7 +897,7 @@ regions:
     before_room_full_of_typewriters:
       name_template: 'Before Room Full of Typewriters #{n}'
       unrandomized_items:
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -908,7 +908,7 @@ regions:
       unrandomized_items:
         key:
           - acro_rat
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -919,7 +919,7 @@ regions:
       unrandomized_items:
         key:
           - artificial_grass
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -931,7 +931,7 @@ regions:
         key:
           - fake_mouse_ears
           - legally_binding_contract
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -943,7 +943,7 @@ regions:
         key:
           - lost_ctrl_key
           - hammer_of_problem_solving
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -952,7 +952,7 @@ regions:
     before_broken_down_bus:
       name_template: 'Before Broken Down Bus #{n}'
       unrandomized_items:
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -961,7 +961,7 @@ regions:
     before_overweight_boulder:
       name_template: 'Before Overweight Boulder #{n}'
       unrandomized_items:
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -973,7 +973,7 @@ regions:
         key:
           - blue_turtle_shell
           - banana_peel
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -985,7 +985,7 @@ regions:
         key:
           - masterful_longsword
           - macguffin
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -996,7 +996,7 @@ regions:
       unrandomized_items:
         key:
           - computer_rat
-        filler: 5
+        filler: 3
         useful_nonprogression: 1
       ability_check_dc: 1
       exits:
@@ -1008,7 +1008,7 @@ regions:
         key:
           - giant_novelty_scissors
         useful_nonprogression: 2
-        filler: 5
+        filler: 3
       ability_check_dc: 18
       exits:
         - captured_goldfish
@@ -1037,7 +1037,7 @@ regions:
         key:
           - chef_rat
         useful_nonprogression: 1
-        filler: 5
+        filler: 3
       ability_check_dc: 14
       exits:
         - restaurant
@@ -1049,7 +1049,7 @@ regions:
           - pie_rat
           - pack_rat
         useful_nonprogression: 1
-        filler: 5
+        filler: 3
       ability_check_dc: 14
       exits:
         - pirate_bake_sale
@@ -1061,7 +1061,7 @@ regions:
           - pizza_rat
           - ninja_rat
         useful_nonprogression: 1
-        filler: 5
+        filler: 3
       ability_check_dc: 12
       exits:
         - angry_turtles
@@ -1073,7 +1073,7 @@ regions:
           - premium_can_of_prawn_food
           - priceless_antique
         useful_nonprogression: 1
-        filler: 5
+        filler: 3
       ability_check_dc: 12
       exits:
         - prawn_stars
@@ -1085,7 +1085,7 @@ regions:
           - item: pack_rat
             count: 5
         useful_nonprogression: 8
-        filler: 5
+        filler: 3
       ability_check_dc: 10
       exits:
         - basketball
