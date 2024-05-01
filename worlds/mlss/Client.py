@@ -1,5 +1,4 @@
-import typing
-from typing import TYPE_CHECKING, Optional, Set
+from typing import TYPE_CHECKING, Optional, Set, List, Dict
 import struct
 
 from NetUtils import ClientStatus
@@ -24,9 +23,9 @@ class MLSSClient(BizHawkClient):
     goal_flag: int
     rom_slot_name: Optional[str]
     eCount: int
-    eUsed: []
+    eUsed: List[int]
     player_name: Optional[str]
-    checked_flags: typing.Dict[int, list] = {}
+    checked_flags: Dict[int, list] = {}
 
     def __init__(self) -> None:
         super().__init__()
@@ -98,9 +97,11 @@ class MLSSClient(BizHawkClient):
                 self.seed_verify = True
 
             read_state = await bizhawk.read(ctx.bizhawk_ctx, [(0x4564, 59, "EWRAM"),
-                                                              (0x2330, 2, "IWRAM"), (0x3FE0, 1, "IWRAM"), (0x304A, 1, "EWRAM"),
-                                                              (0x304B, 1, "EWRAM"), (0x304C, 4, "EWRAM"), (0x3060, 6, "EWRAM"),
-                                                              (0x4808, 2, "EWRAM"), (0x4407, 1, "EWRAM"), (0x2339, 1, "IWRAM")])
+                                                              (0x2330, 2, "IWRAM"), (0x3FE0, 1, "IWRAM"),
+                                                              (0x304A, 1, "EWRAM"), (0x304B, 1, "EWRAM"),
+                                                              (0x304C, 4, "EWRAM"), (0x3060, 6, "EWRAM"),
+                                                              (0x4808, 2, "EWRAM"), (0x4407, 1, "EWRAM"),
+                                                              (0x2339, 1, "IWRAM")])
             flags = read_state[0]
             current_room = int.from_bytes(read_state[1], 'little')
             shop_init = read_state[2][0]

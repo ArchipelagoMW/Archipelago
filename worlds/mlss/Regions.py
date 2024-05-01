@@ -20,7 +20,7 @@ def create_regions(world: "MLSSWorld", excluded: typing.List[str]):
     create_region(world, "Beanbean Castle Town", castleTown, excluded)
     create_region(world, "Shop Starting Flag", startingFlag, excluded)
     create_region(world, "Shop Chuckolator Flag", chuckolatorFlag, excluded)
-    create_region(world, "Shop Piranha Flag", piranhaFlag, excluded)
+    create_region(world, "Shop Mom Piranha Flag", piranhaFlag, excluded)
     create_region(world, "Shop Enter Fungitown Flag", kidnappedFlag, excluded)
     create_region(world, "Shop Beanstar Complete Flag", beanstarFlag, excluded)
     create_region(world, "Shop Birdo Flag", birdoFlag, excluded)
@@ -37,8 +37,8 @@ def create_regions(world: "MLSSWorld", excluded: typing.List[str]):
     create_region(world, "PostJokes", postJokes, excluded)
     create_region(world, "Theater", theater, excluded)
     create_region(world, "Fungitown", fungitown, excluded)
-    create_region(world, "FungitownBeanstar", fungitownBeanstar, excluded)
-    create_region(world, "FungitownBirdo", fungitownBirdo, excluded)
+    create_region(world, "Fungitown Shop Beanstar Complete Flag", fungitownBeanstar, excluded)
+    create_region(world, "Fungitown Shop Birdo Flag", fungitownBirdo, excluded)
     create_region(world, "BooStatue", booStatue, excluded)
     create_region(world, "Oasis", oasis, excluded)
     create_region(world, "BaseUltraRocks", baseUltraRocks, excluded)
@@ -57,44 +57,49 @@ def connect_regions(world: "MLSSWorld"):
     connect(world, names, "Menu", "Main Area")
     if world.options.coins:
         connect(world, names, "Main Area", "Coins")
-    connect(world, names, "Main Area", "BaseUltraRocks", lambda state: StateLogic.ultra(state, world.player))
-    connect(world, names, "Main Area", "Chucklehuck Woods", lambda state: StateLogic.brooch(state, world.player))
-    connect(world, names, "Main Area", "BooStatue", lambda state: StateLogic.canCrash(state, world.player))
-    connect(world, names, "Main Area", "Hooniversity", lambda state: StateLogic.canDig(state, world.player) and StateLogic.canMini(state, world.player))
+    connect(world, names, "Main Area", "BaseUltraRocks", StateLogic.ultra(world.player))
+    connect(world, names, "Main Area", "Chucklehuck Woods", StateLogic.brooch(world.player))
+    connect(world, names, "Main Area", "BooStatue", StateLogic.canCrash(world.player))
+    connect(world, names, "Main Area", "Hooniversity", StateLogic.canDig(world.player) and StateLogic.canMini(world.player))
     connect(world, names, "Hooniversity", "Oasis")
-    connect(world, names, "Main Area", "TeeheeValley", lambda state: StateLogic.super(state, world.player) or StateLogic.canDash(state, world.player))
-    connect(world, names, "TeeheeValley", "GwarharEntrance", lambda state: StateLogic.membership(state, world.player) and StateLogic.fire(state, world.player))
-    connect(world, names, "TeeheeValley", "Oasis", lambda state: StateLogic.membership(state, world.player) and StateLogic.fire(state, world.player))
-    connect(world, names, "TeeheeValley", "Fungitown", lambda state: StateLogic.thunder(state, world.player) and StateLogic.castleTown(state, world.player) and StateLogic.rose(state, world.player))
-    connect(world, names, "Fungitown", "FungitownBeanstar", lambda state: StateLogic.pieces(state, world.player) or state.can_reach("FungitownBirdo", "Region", world.player))
-    connect(world, names, "Main Area", "Shop Starting Flag", lambda state: StateLogic.brooch(state, world.player) or StateLogic.rose(state, world.player))
-    connect(world, names, "Shop Starting Flag", "Shop Chuckolator Flag", lambda state: (StateLogic.brooch(state, world.player) and StateLogic.fruits(state, world.player) and (StateLogic.thunder(state, world.player) or StateLogic.fire(state, world.player) or StateLogic.hammers(state, world.player))) or state.can_reach("Shop Piranha Flag", "Region", world.player))
-    connect(world, names, "Shop Starting Flag", "Shop Piranha Flag", lambda state: StateLogic.thunder(state, world.player) or state.can_reach("Shop Enter Fungitown Flag", "Region", world.player))
-    connect(world, names, "Shop Starting Flag", "Shop Enter Fungitown Flag", lambda state: StateLogic.fungitown(state, world.player) or state.can_reach("Shop Beanstar Complete Flag", "Region", world.player))
-    connect(world, names, "Shop Starting Flag", "Shop Beanstar Complete Flag", lambda state: (StateLogic.castleTown(state, world.player) and StateLogic.pieces(state, world.player) and StateLogic.rose(state, world.player)) or state.can_reach("Shop Birdo Flag", "Region", world.player))
-    connect(world, names, "Main Area", "Sewers", lambda state: StateLogic.rose(state, world.player))
-    connect(world, names, "Main Area", "Airport", lambda state: StateLogic.thunder(state, world.player))
-    connect(world, names, "Main Area", "Theater", lambda state: StateLogic.canDash(state, world.player))
-    connect(world, names, "Main Area", "Surfable", lambda state: StateLogic.surfable(state, world.player))
+    connect(world, names, "Main Area", "TeeheeValley", StateLogic.super(world.player) or StateLogic.canDash(world.player))
+    connect(world, names, "TeeheeValley", "GwarharEntrance", StateLogic.membership(world.player) and StateLogic.fire(world.player))
+    connect(world, names, "TeeheeValley", "Oasis", StateLogic.membership(world.player) and StateLogic.fire(world.player))
+    connect(world, names, "TeeheeValley", "Fungitown", StateLogic.thunder(world.player) and StateLogic.castleTown(world.player) and StateLogic.rose(world.player))
+    connection = connect(world, names, "Fungitown", "Fungitown Shop Beanstar Complete Flag", StateLogic.pieces(world.player) or StateLogic.fungitown_birdo_shop(world.player), True)
+    world.multiworld.register_indirect_condition(world.get_region("Fungitown Shop Birdo Flag"), connection)
+    connect(world, names, "Main Area", "Shop Starting Flag", StateLogic.brooch(world.player) or StateLogic.rose(world.player))
+    connection = connect(world, names, "Shop Starting Flag", "Shop Chuckolator Flag", (StateLogic.brooch(world.player) and StateLogic.fruits(world.player) and (StateLogic.thunder(world.player) or StateLogic.fire(world.player) or StateLogic.hammers(world.player))) or StateLogic.piranha_shop(world.player), True)
+    world.multiworld.register_indirect_condition(world.get_region("Shop Mom Piranha Flag"), connection)
+    connection = connect(world, names, "Shop Starting Flag", "Shop Mom Piranha Flag", StateLogic.thunder(world.player) or StateLogic.fungitown_shop(world.player), True)
+    world.multiworld.register_indirect_condition(world.get_region("Shop Enter Fungitown Flag"), connection)
+    connect(world, names, "Shop Starting Flag", "Shop Enter Fungitown Flag", StateLogic.fungitown(world.player) or StateLogic.star_shop(world.player), True)
+    world.multiworld.register_indirect_condition(world.get_region("Shop Beanstar Complete Flag"), connection)
+    connect(world, names, "Shop Starting Flag", "Shop Beanstar Complete Flag", (StateLogic.castleTown(world.player) and StateLogic.pieces(world.player) and StateLogic.rose(world.player)) or StateLogic.birdo_shop(world.player), True)
+    world.multiworld.register_indirect_condition(world.get_region("Shop Birdo Flag"), connection)
+    connect(world, names, "Main Area", "Sewers", StateLogic.rose(world.player))
+    connect(world, names, "Main Area", "Airport", StateLogic.thunder(world.player))
+    connect(world, names, "Main Area", "Theater", StateLogic.canDash(world.player))
+    connect(world, names, "Main Area", "Surfable", StateLogic.surfable(world.player))
     connect(world, names, "Surfable", "GwarharEntrance")
     connect(world, names, "Surfable", "Oasis")
-    connect(world, names, "Surfable", "JokesEntrance", lambda state: StateLogic.fire(state, world.player))
-    connect(world, names, "JokesMain", "PostJokes", lambda state: StateLogic.postJokes(state, world.player))
+    connect(world, names, "Surfable", "JokesEntrance", StateLogic.fire(world.player))
+    connect(world, names, "JokesMain", "PostJokes", StateLogic.postJokes(world.player))
     if not world.options.castle_skip:
         connect(world, names, "PostJokes", "Bowser's Castle")
-        connect(world, names, "Bowser's Castle", "Bowser's Castle Mini", lambda state: StateLogic.canMini(state, world.player) and StateLogic.thunder(state, world.player))
-    connect(world, names, "Chucklehuck Woods", "Winkle", lambda state: StateLogic.canDash(state, world.player))
-    connect(world, names, "Chucklehuck Woods", "Beanbean Castle Town", lambda state: StateLogic.fruits(state, world.player) and (StateLogic.hammers(state, world.player) or StateLogic.fire(state, world.player) or StateLogic.thunder(state, world.player)))
+        connect(world, names, "Bowser's Castle", "Bowser's Castle Mini", StateLogic.canMini(world.player) and StateLogic.thunder(world.player))
+    connect(world, names, "Chucklehuck Woods", "Winkle", StateLogic.canDash(world.player))
+    connect(world, names, "Chucklehuck Woods", "Beanbean Castle Town", StateLogic.fruits(world.player) and (StateLogic.hammers(world.player) or StateLogic.fire(world.player) or StateLogic.thunder(world.player)))
     if world.options.difficult_logic:
-        connect(world, names, "GwarharEntrance", "GwarharMain", lambda state: StateLogic.canDash(state, world.player))
-        connect(world, names, "JokesEntrance", "JokesMain", lambda state: StateLogic.canDig(state, world.player))
-        connect(world, names, "Shop Starting Flag", "Shop Birdo Flag", lambda state: StateLogic.postJokes(state, world.player))
-        connect(world, names, "Fungitown", "FungitownBirdo", lambda state: StateLogic.postJokes(state, world.player))
+        connect(world, names, "GwarharEntrance", "GwarharMain", StateLogic.canDash(world.player))
+        connect(world, names, "JokesEntrance", "JokesMain", StateLogic.canDig(world.player))
+        connect(world, names, "Shop Starting Flag", "Shop Birdo Flag", StateLogic.postJokes(world.player))
+        connect(world, names, "Fungitown", "Fungitown Shop Birdo Flag", StateLogic.postJokes(world.player))
     else:
-        connect(world, names, "GwarharEntrance", "GwarharMain", lambda state: StateLogic.canDash(state, world.player) and StateLogic.canCrash(state, world.player))
-        connect(world, names, "JokesEntrance", "JokesMain", lambda state: StateLogic.canCrash(state, world.player) and StateLogic.canDig(state, world.player))
-        connect(world, names, "Shop Starting Flag", "Shop Birdo Flag", lambda state: StateLogic.canCrash(state, world.player) and StateLogic.postJokes(state, world.player))
-        connect(world, names, "Fungitown", "FungitownBirdo", lambda state: StateLogic.canCrash(state, world.player) and StateLogic.postJokes(state, world.player))
+        connect(world, names, "GwarharEntrance", "GwarharMain", StateLogic.canDash(world.player) and StateLogic.canCrash(world.player))
+        connect(world, names, "JokesEntrance", "JokesMain", StateLogic.canCrash(world.player) and StateLogic.canDig(world.player))
+        connect(world, names, "Shop Starting Flag", "Shop Birdo Flag", StateLogic.canCrash(world.player) and StateLogic.postJokes(world.player))
+        connect(world, names, "Fungitown", "Fungitown Shop Birdo Flag", StateLogic.canCrash(world.player) and StateLogic.postJokes(world.player))
 
 
 def create_region(world: "MLSSWorld", name, locations, excluded):
@@ -108,7 +113,7 @@ def create_region(world: "MLSSWorld", name, locations, excluded):
 
 
 def connect(world: "MLSSWorld", used_names: typing.Dict[str, int], source: str, target: str,
-            rule: typing.Optional[typing.Callable] = None):
+            rule: typing.Optional[typing.Callable] = None, reach: typing.Optional[bool] = False) -> Entrance | None:
     source_region = world.multiworld.get_region(source, world.player)
     target_region = world.multiworld.get_region(target, world.player)
 
@@ -126,3 +131,7 @@ def connect(world: "MLSSWorld", used_names: typing.Dict[str, int], source: str, 
 
     source_region.exits.append(connection)
     connection.connect(target_region)
+    if reach:
+        return connection
+    else:
+        return None

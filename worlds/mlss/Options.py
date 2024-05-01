@@ -48,7 +48,7 @@ class MusicOptions(Choice):
 
 class RandomSounds(Toggle):
     """
-    Randomizes every sound in the game, minus a few sounds that can softlock the game* (UNSTABLE OPTION)
+    Randomizes every sound in the game, minus a select few that can softlock the game
     """
     display_name = "Randomize Sounds"
 
