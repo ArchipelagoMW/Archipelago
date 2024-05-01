@@ -79,7 +79,6 @@ class SOTNDeltaPatch(APDeltaPatch):
 
     def patch(self, target: str):
         """Base + Delta -> Patched"""
-        print("Patching")
         patch_path = target[:-4] + ".apsotn"
 
         with open(patch_path, "rb") as infile:
@@ -107,6 +106,9 @@ class SOTNDeltaPatch(APDeltaPatch):
 
         patched_rom[0x000affd0:0x000b9ea5] = patched_slice[0:0x9ed5]
         patched_rom[0x04389c6c:0x06a868a4] = patched_slice[0x9ed5:]
+
+        # Duplicate Sanity options
+        patched_rom[0xf50c6] = patched_rom[0x0438d85e]
 
         with open(target[:-4] + ".bin", "wb") as stream:
             stream.write(patched_rom)
@@ -226,11 +228,17 @@ def patch_rom(world: World, output_directory: str) -> None:
     no2 = world.options.opened_no2
     songs = world.options.rng_songs
     shop = world.options.rng_shop
+    shop_prog = world.options.noprog_shop
+    shop_lib = world.options.lib_shop
     prices = world.options.rng_prices
     bosses = world.options.bosses_need
     exp = world.options.exp_need
     candles = world.options.rng_candles
+    candles_prog = world.options.noprog_candles
     drops = world.options.rng_drops
+    drops_prog = world.options.noprog_drops
+    esanity = world.options.enemysanity
+    dsanity = world.options.dropsanity
     if bosses > 20:
         bosses = 20
     if exp > 20:
@@ -242,14 +250,15 @@ def patch_rom(world: World, output_directory: str) -> None:
 
     for loc in world.multiworld.get_locations(world.player):
         if loc.item and loc.item.player == world.player:
-            if loc.item.name == "Victory" or loc.item.name == "Boss token":
+            if (loc.item.name == "Victory" or loc.item.name == "Boss token" or "Enemysanity" in loc.name or
+                    "Dropsanity" in loc.name):
                 continue
             item_data = item_table[loc.item.name]
             loc_data = location_table[loc.name]
             if loc_data.rom_address:
                 for address in loc_data.rom_address:
                     if loc_data.no_offset:
-                        if item_data.type == IType.RELIC:
+                        if item_data.type in [IType.RELIC, IType.TRAP, IType.BOOST]:
                             write_short(patched_rom, address, 0x0000)
                         else:
                             write_short(patched_rom, address, item_data.get_item_id_no_offset())
@@ -366,13 +375,23 @@ def patch_rom(world: World, output_directory: str) -> None:
         randomize_music(patched_rom)
 
     if shop:
-        randomize_shop(patched_rom)
+        randomize_shop(patched_rom, shop_prog, shop_lib)
 
     if prices != 0 and prices <= 3:
         randomize_prices(patched_rom, prices)
 
-    randomize_candles(patched_rom, candles)
-    randomize_drops(patched_rom, drops)
+    randomize_candles(patched_rom, candles, candles_prog)
+    randomize_drops(patched_rom, drops, drops_prog)
+
+    sanity = 0
+
+    if esanity:
+        sanity |= (1 << 0)
+    if dsanity:
+        sanity |= (1 << 1)
+
+    # 0xf50c6
+    write_char(patched_rom, 0x0438d85e, sanity)
 
     music_slice = original_rom[0x000affd0:0x000b9ea5]
     music_patched = patched_rom[0x000affd0:0x000b9ea5]
@@ -479,9 +498,17 @@ def randomize_music(buffer):
         music.pop(rng_song)
 
 
-def randomize_shop(buffer):
-    for key, value in shop_stock.items():
-        rng_item = random.choice([i for i in range(1, 259) if i not in [169, 195, 217, 226]])
+def randomize_shop(buffer, prog, lib):
+    forbid_items = [169, 195, 217, 226]
+
+    if prog:
+        forbid_items = [169, 183, 195, 203, 217, 226, 241, 242]
+
+    for i, (key, value) in enumerate(shop_stock.items()):
+        if lib and i == 0:
+            rng_item = 166
+        else:
+            rng_item = random.choice([i for i in range(1, 259) if i not in forbid_items])
         item_name: str
         item_data: ItemData
         item_name, item_data = get_item_data_shop(rng_item)
@@ -517,9 +544,14 @@ def randomize_prices(buffer, prices):
         write_word(buffer, value + 4, rng_price)
 
 
-def randomize_candles(buffer, rng_choice=0):
+def randomize_candles(buffer, rng_choice=0, prog=False):
     if rng_choice == 0:
         return
+
+    forbid_items = [169, 195, 217, 226]
+
+    if prog:
+        forbid_items = [169, 183, 195, 203, 217, 226, 241, 242]
 
     rng_item = 0
     rng_type = 0
@@ -533,9 +565,10 @@ def randomize_candles(buffer, rng_choice=0):
                 rng_item = random.choice([2, 3, 4, 5, 6, 7, 9, 10])
             elif (candle.name in
                   ["Dagger", "Axe", "Cross", "Holy water", "Stopwatch", "Bible", "Rebound Stone", "Vibhuti", "Agunea"]):
+                print("DEBUG: NOT Need it anymore")
                 rng_item = random.choice([14, 15, 16, 17, 18, 19, 20, 21, 22])
             elif candle.name == "Uncurse":
-                rng_item = random.choice([i for i in range(1, 259) if i not in [169, 195, 217, 226]])
+                rng_item = random.choice([i for i in range(1, 259) if i not in forbid_items])
                 rng_type = 1
             else:
                 print(f"DEBUG: ERROR {candle.name}")
@@ -546,7 +579,7 @@ def randomize_candles(buffer, rng_choice=0):
             if rng_type == 0:
                 rng_item = random.choice([i for i in range(0, 24) if i not in [8, 11, 13]])
             else:
-                rng_item = random.choice([i for i in range(1, 259) if i not in [169, 195, 217, 226]])
+                rng_item = random.choice([i for i in range(1, 259) if i not in forbid_items])
 
         item_id = (candle.offset << 8) | rng_item
         if candle.offset & rng_item >= tile_id_offset:
@@ -555,35 +588,50 @@ def randomize_candles(buffer, rng_choice=0):
             if rng_type == 1:
                 item_id += tile_id_offset
 
+        for a in candle.addresses:
+            write_short(buffer, a, item_id)
 
-def randomize_drops(buffer, rng_choice=0):
+
+def randomize_drops(buffer, rng_choice=0, prog=False):
     if rng_choice == 0:
         return
+
+    forbid_items = [169, 195, 217, 226]
+
+    if prog:
+        forbid_items = [169, 183, 195, 203, 217, 226, 241, 242]
 
     rng_item = 0
     rng_type = 0
 
     for enemy in Enemies:
         if rng_choice == 1:
+            for a in enemy.addresses:
                 if enemy.name in ["Heart", "Big heart"]:
                     rng_item = random.choice([0, 1])
                 elif enemy.name in ["$1", "$25", "$50", "$100", "$250", "$400", "$1000", "$2000"]:
                     rng_item = random.choice([2, 3, 4, 5, 6, 7, 9, 10])
                 elif enemy.name in ["Dagger", "Axe", "Cross", "Holy water", "Stopwatch", "Bible", "Rebound Stone",
                                     "Vibhuti", "Agunea"]:
+                    print("DEBUG: NOT Need it anymore")
                     rng_item = random.choice([14, 15, 16, 17, 18, 19, 20, 21, 22])
                 elif enemy.name in hand_type_table:
                     rng_item = random.randrange(1, 169)
+                    rng_type = 1
                 elif enemy.name in chest_type_table:
-                    chest_table = [x for x in range(170, 195)]
+                    chest_table = [x for x in range(170, 195) if x not in forbid_items]
                     chest_table.append(258)
                     rng_item = random.choice(chest_table)
+                    rng_type = 1
                 elif enemy.name in helmet_type_table:
-                    rng_item = random.randrange(196, 217)
+                    rng_item = random.choice([i for i in range(196, 217) if i not in forbid_items])
+                    rng_type = 1
                 elif enemy.name in cloak_type_table:
-                    rng_item = random.randrange(218, 226)
+                    rng_item = random.choice([i for i in range(218, 226) if i not in forbid_items])
+                    rng_type = 1
                 elif enemy.name in acc_type_table:
-                    rng_item = random.randrange(227, 258)
+                    rng_item = random.choice([i for i in range(227, 258) if i not in forbid_items])
+                    rng_type = 1
                 else:
                     print(f"DEBUG: ERROR {enemy.name}")
 
@@ -601,9 +649,9 @@ def randomize_drops(buffer, rng_choice=0):
                 rng_type = random.randrange(0, 2)
 
                 if rng_type == 0:
-                    rng_item = random.choice([i for i in range(0, 24) if i not in [8, 11, 13]])
+                    rng_item = random.choice([i for i in range(2, 12) if i not in [8]])
                 else:
-                    rng_item = random.choice([i for i in range(1, 259) if i not in [169, 195, 217, 226]])
+                    rng_item = random.choice([i for i in range(1, 259) if i not in forbid_items])
 
                 item_id = rng_item
                 if rng_item >= tile_id_offset:
