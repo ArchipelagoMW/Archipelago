@@ -58,6 +58,20 @@ class RngShop(Toggle):
     display_name = "Randomize shop items"
 
 
+class NoProgShop(Toggle):
+    """
+        Shop items can't be progression items
+    """
+    display_name = "Forbid progression items on shop"
+
+
+class LibCardShop(Toggle):
+    """
+        Shop items will have a library card in stock
+    """
+    display_name = "Library card will be available on librarian"
+
+
 class RngPrices(Choice):
     """
     Randomize shop prices
@@ -89,6 +103,13 @@ class RngCandles(Choice):
     default = 0
 
 
+class NoProgCandle(Toggle):
+    """
+        Candle drop can't be progression items
+    """
+    display_name = "Forbid progression items on candles"
+
+
 class RngDrops(Choice):
     """
     Randomize enemies drops
@@ -98,6 +119,55 @@ class RngDrops(Choice):
     option_on = 1
     option_crazy = 2
     default = 0
+
+
+class NoProgDrop(Toggle):
+    """
+        Enemy drop can't be progression items
+    """
+    display_name = "Forbid progression items on enemies"
+
+
+class Enemysanity(Toggle):
+    """
+        Enemies become a location check
+    """
+    display_name = "Enemies become a location check"
+
+
+class Dropsanity(Toggle):
+    """
+        Enemies second item drop become a location check
+    """
+    display_name = "Enemies drops are locations checks"
+
+
+class Boostqty(Range):
+    """Boosts quantity in the pool."""
+    display_name = "Boost quantity"
+    range_start = 0
+    range_end = 50
+    default = 0
+
+
+class BoostWeight(FreeText):
+    """Weights for randomize boosts"""
+    display_name = "Boosts weights"
+    default = "10;6;1;6;1;6;1;6;1;7;7;7"
+
+
+class Trapqty(Range):
+    """Traps quantity in the pool."""
+    display_name = "Trap quantity"
+    range_start = 0
+    range_end = 50
+    default = 0
+
+
+class TrapWeight(FreeText):
+    """Weights for randomize traps"""
+    display_name = "Traps weights"
+    default = "1;2;1;2;1;2;7;3;7;3;6;2;6;2"
 
 
 class ExtraPool(FreeText):
@@ -114,10 +184,20 @@ sotn_option_definitions: Dict[str, type(Option)] = {
     "bosses_need": BossesNeed,
     "rng_songs": RngSongs,
     "rng_shop": RngShop,
+    "noprog_shop": NoProgShop,
+    "lib_shop": LibCardShop,
     "rng_prices": RngPrices,
     "exp_need": ExpNeed,
     "rng_candles": RngCandles,
+    "noprog_candles": NoProgCandle,
     "rng_drops": RngDrops,
+    "noprog_drops": NoProgDrop,
+    "enemysanity": Enemysanity,
+    "dropsanity": Dropsanity,
+    "boostqty": Boostqty,
+    "boostweight": BoostWeight,
+    "trapqty": Trapqty,
+    "trapweight": TrapWeight,
     "extra_pool": ExtraPool
 }
 
