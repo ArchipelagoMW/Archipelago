@@ -154,7 +154,7 @@ class WitnessPlayerItems:
         output: Set[str] = set()
         if self._world.options.shuffle_symbols:
             discards_on = self._world.options.shuffle_discarded_panels
-            difficulty = str(self._world.options.puzzle_randomization)
+            difficulty = self._world.options.puzzle_randomization.current_key
 
             output = static_witness_items.USEFUL_ITEMS_PER_MODE[difficulty].copy()
             if discards_on:
