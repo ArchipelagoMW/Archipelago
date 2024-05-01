@@ -1,7 +1,7 @@
 """
 Classes and functions related to AP locations for Pokemon Emerald
 """
-from typing import TYPE_CHECKING, Dict, Optional, FrozenSet, Set
+from typing import TYPE_CHECKING, Dict, Optional, Set
 
 from BaseClasses import Location, Region
 
@@ -12,51 +12,40 @@ if TYPE_CHECKING:
     from . import PokemonEmeraldWorld
 
 
-LOCATION_GROUPS = {
-    "Badges": {
-        "Rustboro Gym - Stone Badge",
-        "Dewford Gym - Knuckle Badge",
-        "Mauville Gym - Dynamo Badge",
-        "Lavaridge Gym - Heat Badge",
-        "Petalburg Gym - Balance Badge",
-        "Fortree Gym - Feather Badge",
-        "Mossdeep Gym - Mind Badge",
-        "Sootopolis Gym - Rain Badge",
-    },
-    "Gym TMs": {
-        "Rustboro Gym - TM39 from Roxanne",
-        "Dewford Gym - TM08 from Brawly",
-        "Mauville Gym - TM34 from Wattson",
-        "Lavaridge Gym - TM50 from Flannery",
-        "Petalburg Gym - TM42 from Norman",
-        "Fortree Gym - TM40 from Winona",
-        "Mossdeep Gym - TM04 from Tate and Liza",
-        "Sootopolis Gym - TM03 from Juan",
-    },
-    "Trick House": {
-        "Trick House Puzzle 1 - Item",
-        "Trick House Puzzle 2 - Item 1",
-        "Trick House Puzzle 2 - Item 2",
-        "Trick House Puzzle 3 - Item 1",
-        "Trick House Puzzle 3 - Item 2",
-        "Trick House Puzzle 4 - Item",
-        "Trick House Puzzle 6 - Item",
-        "Trick House Puzzle 7 - Item",
-        "Trick House Puzzle 8 - Item",
-        "Trick House Puzzle 1 - Reward",
-        "Trick House Puzzle 2 - Reward",
-        "Trick House Puzzle 3 - Reward",
-        "Trick House Puzzle 4 - Reward",
-        "Trick House Puzzle 5 - Reward",
-        "Trick House Puzzle 6 - Reward",
-        "Trick House Puzzle 7 - Reward",
-    }
+_LOCATION_CATEGORY_TO_GROUP_NAME = {
+    LocationCategory.BADGE: "Badges",
+    LocationCategory.HM: "HMs",
+    LocationCategory.KEY: "Key Items",
+    LocationCategory.ROD: "Fishing Rods",
+    LocationCategory.BIKE: "Bikes",
+    LocationCategory.TICKET: "Tickets",
+    LocationCategory.OVERWORLD_ITEM: "Overworld Items",
+    LocationCategory.HIDDEN_ITEM: "Hidden Items",
+    LocationCategory.GIFT: "NPC Gifts",
+    LocationCategory.BERRY_TREE: "Berry Trees",
+    LocationCategory.TRAINER: "Trainers",
+    LocationCategory.POKEDEX: "Pokedex",
 }
 
+LOCATION_GROUPS: Dict[str, Set[str]] = {group_name: set() for group_name in _LOCATION_CATEGORY_TO_GROUP_NAME.values()}
+for location in data.locations.values():
+    LOCATION_GROUPS[_LOCATION_CATEGORY_TO_GROUP_NAME[location.category]].add(location.label)
 
+    for tag in location.tags:
+        if tag not in LOCATION_GROUPS:
+            LOCATION_GROUPS[tag] = set()
+        LOCATION_GROUPS[tag].add(location.label)
 
-# {location.label for location in data.locations.values() if "HiddenItem" in location.tags}
-
+LOCATION_GROUPS["Gym TMs"] = {
+    "Rustboro Gym - TM39 from Roxanne",
+    "Dewford Gym - TM08 from Brawly",
+    "Mauville Gym - TM34 from Wattson",
+    "Lavaridge Gym - TM50 from Flannery",
+    "Petalburg Gym - TM42 from Norman",
+    "Fortree Gym - TM40 from Winona",
+    "Mossdeep Gym - TM04 from Tate and Liza",
+    "Sootopolis Gym - TM03 from Juan",
+}
 
 VISITED_EVENT_NAME_TO_ID = {
     "EVENT_VISITED_LITTLEROOT_TOWN": 0,

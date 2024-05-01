@@ -368,7 +368,8 @@ class PokemonEmeraldWorld(World):
 
         # Recreate the itempool from random items
         elif self.options.item_pool_type in (ItemPoolType.option_diverse, ItemPoolType.option_diverse_balanced):
-            item_categories = ["Ball", "Heal", "Candy", "Vitamin", "EvoStone", "Money", "TM", "Held", "Misc", "Berry"]
+            item_categories = ["Ball", "Healing", "Rare Candy", "Vitamin", "Evolution Stone",
+                               "Money", "TM", "Held", "Misc", "Berry"]
 
             # Count occurrences of types of vanilla items in pool
             item_category_counter = Counter()
