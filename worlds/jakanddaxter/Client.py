@@ -36,7 +36,7 @@ class JakAndDaxterClientCommandProcessor(ClientCommandProcessor):
     # TODO - Clean up commands related to the REPL, make them more user friendly.
     #  The REPL has a specific order of operations it needs to do in order to process our input:
     #  1. Connect (we need to open a socket connection on ip/port to the REPL).
-    #  2. Listen (have the REPL compiler connect and listen on the game's REPL server's socket).
+    #  2. Listen (have the REPL compiler connect and listen on the game's internal socket).
     #  3. Compile (have the REPL compiler compile the game into object code it can run).
     #  All 3 need to be done, and in this order, for this to work.
     def _cmd_repl(self, *arguments: str):
