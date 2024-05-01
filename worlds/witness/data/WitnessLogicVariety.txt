@@ -958,7 +958,7 @@ Treehouse Laser Room Front Platform (Treehouse) - Treehouse Laser Room - 0x0C323
 Door - 0x0C323 (Laser House Entry) - 0x17DA2 & 0x2700B & 0x17DDB | 0x17CBC
 
 Treehouse Laser Room Back Platform (Treehouse):
-158611 - 0x17FA0 (Laser Discard) - True - Arrows
+158611 - 0x17FA0 (Laser Discard) - True - Arrows & Triangles
 
 Treehouse Burned House (Treehouse):
 159202 - 0x00769 (Burned House Beach EP) - True - True
@@ -981,7 +981,7 @@ Mountainside Obelisk (Mountainside) - Entry - True:
 
 Mountainside (Mountainside) - Main Island - True - Mountaintop - True - Mountainside Vault - 0x00085:
 159550 - 0x28B91 (Thundercloud EP) - 0x09F98 & 0x012FB - True
-158612 - 0x17C42 (Discard) - True - Arrows
+158612 - 0x17C42 (Discard) - True - Arrows & Triangles
 158665 - 0x002A6 (Vault Panel) - True - Symmetry & Colored Dots & Triangles
 Door - 0x00085 (Vault Door) - 0x002A6
 159301 - 0x335AE (Cloud Cycle EP) - True - True
