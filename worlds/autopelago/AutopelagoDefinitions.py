@@ -18,7 +18,7 @@ AutopelagoItemDefinition = str | list[str, list[str]] | AutopelagoItemDefinition
 AutopelagoItemDefinitionsSimple = dict[str, AutopelagoItemDefinition]
 AutopelagoGameSpecificItemGroup = dict[Literal['game_specific'], dict[str, list[AutopelagoItemDefinition]]]
 AutopelagoNonProgressionGroupItems = list[AutopelagoItemDefinition | AutopelagoGameSpecificItemGroup]
-AutopelagoNonProgressionItemType = Literal['useful_nonprogression', 'trap', 'filler', 'uncategorized']
+AutopelagoNonProgressionItemType = Literal['useful_nonprogression', 'trap', 'filler']
 
 
 def _name_of(item: AutopelagoItemDefinition):
@@ -49,7 +49,6 @@ class AutopelagoItemDefinitions(TypedDict):
     useful_nonprogression: AutopelagoNonProgressionGroupItems
     trap: AutopelagoNonProgressionGroupItems
     filler: AutopelagoNonProgressionGroupItems
-    uncategorized: AutopelagoNonProgressionGroupItems
     # any_other_str_key_not_listed: AutopelagoItemDefinition
 
 
@@ -143,8 +142,7 @@ def _gen_ids():
 
 item_name_to_id: dict[str, int] = {}
 generic_nonprogression_item_table: dict[AutopelagoNonProgressionItemType, list[str]] = {'useful_nonprogression': [],
-                                                                                        'trap': [], 'filler': [],
-                                                                                        'uncategorized': []}
+                                                                                        'trap': [], 'filler': []}
 item_name_to_classification: dict[str, Optional[ItemClassification]] = {}
 item_name_to_rat_count: dict[str, int] = {}
 game_specific_nonprogression_items: dict[str, dict[AutopelagoNonProgressionItemType, list[str]]] = {}
@@ -152,7 +150,7 @@ item_key_to_name: dict[str, str] = {}
 _item_id_gen = _gen_ids()
 
 for k, v in ((k, v) for k, v in _defs['items'].items() if
-             k not in {'rats', 'useful_nonprogression', 'trap', 'filler', 'uncategorized'}):
+             k not in {'rats', 'useful_nonprogression', 'trap', 'filler'}):
     _name = _name_of(v)
     item_name_to_id[_name] = next(_item_id_gen)
     item_name_to_classification[_name] = ItemClassification.progression
@@ -212,7 +210,6 @@ def _append_nonprogression(k: AutopelagoNonProgressionItemType):
 _append_nonprogression('useful_nonprogression')
 _append_nonprogression('trap')
 _append_nonprogression('filler')
-_append_nonprogression('uncategorized')
 
 autopelago_regions: dict[str, AutopelagoRegionDefinition] = {}
 location_name_to_progression_item_name: dict[str, str] = {}

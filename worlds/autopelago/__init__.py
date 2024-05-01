@@ -148,7 +148,7 @@ class AutopelagoWorld(World):
         category_to_next_offset: dict[AutopelagoNonProgressionItemType, int] = {category: 0 for category in
                                                                                 generic_nonprogression_item_table}
         next_filler_becomes_trap = False
-        nonprog_type: Literal['useful_nonprogression', 'filler', 'trap', 'uncategorized']
+        nonprog_type: Literal['useful_nonprogression', 'filler', 'trap']
         for nonprog_type in location_name_to_nonprogression_item.values():
             if nonprog_type == 'filler':
                 if next_filler_becomes_trap:
@@ -156,8 +156,6 @@ class AutopelagoWorld(World):
                 next_filler_becomes_trap = not next_filler_becomes_trap
 
             classification = autopelago_item_classification_of(nonprog_type)
-            if category_to_next_offset[nonprog_type] >= len(nonprogression_item_table[nonprog_type]):
-                nonprog_type = 'uncategorized'
             next_item = nonprogression_item_table[nonprog_type][category_to_next_offset[nonprog_type]]
             self.multiworld.itempool.append(self.create_item(next_item, classification))
             category_to_next_offset[nonprog_type] += 1
