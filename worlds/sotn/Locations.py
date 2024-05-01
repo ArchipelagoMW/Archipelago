@@ -223,6 +223,7 @@ lib_locations = {
                                 False,True, 0x002600b0, 13, [0x47a3922]),
 }
 
+# IMPORTANT: Writing on item index 12 make Karasuman door not interactable, trying Fire of Bat on index 2
 nz1_locations = {
     "NZ1 - Magic missile": LocationData("Clock Tower", 0, [0x5573834]),
     "NZ1 - Pentagram": LocationData("Clock Tower", 1, [0x5573836]),
@@ -241,7 +242,7 @@ nz1_locations = {
     "NZ1 - TNT": LocationData("Clock Tower", 3153, [0x55737a8], True),
     "NZ1 - Karasuman kill": LocationData("Clock Tower", 3154),
     "Fire of Bat": LocationData("Clock Tower", 3155, [0x5575356+8, 0x5575e92+8], False,
-                                True, 0x002300b0, 12, [0x557384c])
+                                True, 0x002300b0, 2, [0x5573838])
 }
 
 top_locations = {
@@ -695,6 +696,407 @@ exp_locations_token = {
     "Exploration 200": LocationData("Castle Entrance", 30, []),
 }
 
+are_enemies = {
+    "Enemysanity: 25 - Blade soldier": LocationData("Colosseum", 125),
+    "Enemysanity: 67 - Paranthropus": LocationData("Colosseum", 167),
+    "Enemysanity: 69 - Blade master": LocationData("Colosseum", 169),
+    "Enemysanity: 71 - Grave keeper": LocationData("Colosseum", 171),
+    "Enemysanity: 74 - Minotaurus": LocationData("Colosseum", 174),
+    "Enemysanity: 75 - Werewolf": LocationData("Colosseum", 175),
+    "Enemysanity: 77 - Valhalla knight": LocationData("Colosseum", 177),
+}
+
+are_drops = {
+    "Dropsanity: 25 - Blade soldier": LocationData("Colosseum", 325),
+    "Dropsanity: 67 - Paranthropus": LocationData("Colosseum", 367),
+    "Dropsanity: 69 - Blade master": LocationData("Colosseum", 369),
+    "Dropsanity: 71 - Grave keeper": LocationData("Colosseum", 371),
+    "Dropsanity: 77 - Valhalla knight": LocationData("Colosseum", 377),
+}
+
+cat_enemies = {
+    "Enemysanity: 68 - Slime": LocationData("Catacombs", 168),
+    "Enemysanity: 70 - Wereskeleton": LocationData("Catacombs", 170),
+    "Enemysanity: 72 - Gremlin": LocationData("Catacombs", 172),
+    "Enemysanity: 76 - Bone ark": LocationData("Catacombs", 176),
+    "Enemysanity: 81 - Lossoth": LocationData("Catacombs", 181),
+    "Enemysanity: 86 - Discus lord": LocationData("Catacombs", 186),
+    "Enemysanity: 88 - Large slime": LocationData("Catacombs", 188),
+    "Enemysanity: 89 - Hellfire beast": LocationData("Catacombs", 189),
+    "Enemysanity: 98 - Legion": LocationData("Catacombs", 198),
+}
+
+cat_drops = {
+    "Dropsanity: 70 - Wereskeleton": LocationData("Catacombs", 370),
+    "Dropsanity: 72 - Gremlin": LocationData("Catacombs", 372),
+    "Dropsanity: 76 - Bone ark": LocationData("Catacombs", 376),
+    "Dropsanity: 81 - Lossoth": LocationData("Catacombs", 381),
+    "Dropsanity: 86 - Discus lord": LocationData("Catacombs", 386),
+    "Dropsanity: 89 - Hellfire beast": LocationData("Catacombs", 389),
+}
+
+chi_enemies = {
+    "Enemysanity: 82 - Salem witch": LocationData("Abandoned Mine", 182),
+    "Enemysanity: 90 - Cerberos": LocationData("Abandoned Mine", 190),
+    "Enemysanity: 95 - Venus weed": LocationData("Abandoned Mine", 195),
+}
+
+chi_drops = {
+    "Dropsanity: 82 - Salem witch": LocationData("Abandoned Mine", 382),
+    "Dropsanity: 95 - Venus weed": LocationData("Abandoned Mine", 395),
+}
+
+# Mudman only appears on Lesser Demon fight keep it out
+lib_enemies = {
+    "Enemysanity: 17 - Thornweed": LocationData("Long Library", 117),
+    "Enemysanity: 40 - Spellbook": LocationData("Long Library", 140),
+    "Enemysanity: 42 - Ectoplasm": LocationData("Long Library", 142),
+    "Enemysanity: 47 - Dhuron": LocationData("Long Library", 147),
+    "Enemysanity: 50 - Magic tome": LocationData("Long Library", 150),
+    "Enemysanity: 54 - Corpseweed": LocationData("Long Library", 154),
+    "Enemysanity: 65 - Flea armor": LocationData("Long Library", 165),
+    "Enemysanity: 80 - Lesser demon": LocationData("Long Library", 180),
+}
+
+lib_drops = {
+    "Dropsanity: 17 - Thornweed": LocationData("Long Library", 317),
+    "Dropsanity: 40 - Spellbook": LocationData("Long Library", 340),
+    "Dropsanity: 42 - Ectoplasm": LocationData("Long Library", 342),
+    "Dropsanity: 47 - Dhuron": LocationData("Long Library", 347),
+    "Dropsanity: 50 - Magic tome": LocationData("Long Library", 350),
+    "Dropsanity: 54 - Corpseweed": LocationData("Long Library", 354),
+    "Dropsanity: 65 - Flea armor": LocationData("Long Library", 365),
+}
+
+dai_enemies = {
+    "Enemysanity: 33 - Bone Pillar": LocationData("Royal Chapel", 133),
+    "Enemysanity: 41 - Winged guard": LocationData("Royal Chapel", 141),
+    "Enemysanity: 46 - Corner guard": LocationData("Royal Chapel", 146),
+    "Enemysanity: 52 - Black crow": LocationData("Royal Chapel", 152),
+    "Enemysanity: 53 - Blue raven": LocationData("Royal Chapel", 153),
+    "Enemysanity: 58 - Bone halberd": LocationData("Royal Chapel", 158),
+    "Enemysanity: 60 - Hunting girl": LocationData("Royal Chapel", 160),
+    "Enemysanity: 63 - Spectral sword(swords)": LocationData("Royal Chapel", 163),
+    "Enemysanity: 66 - Hippogryph": LocationData("Royal Chapel", 166),
+}
+
+dai_drops = {
+    "Dropsanity: 33 - Bone Pillar": LocationData("Royal Chapel", 333),
+    "Dropsanity: 41 - Winged guard": LocationData("Royal Chapel", 341),
+    "Dropsanity: 46 - Corner guard": LocationData("Royal Chapel", 346),
+    "Dropsanity: 52 - Black crow": LocationData("Royal Chapel", 352),
+    "Dropsanity: 53 - Blue raven": LocationData("Royal Chapel", 353),
+    "Dropsanity: 58 - Bone halberd": LocationData("Royal Chapel", 358),
+    "Dropsanity: 60 - Hunting girl": LocationData("Royal Chapel", 360),
+    "Dropsanity: 63 - Spectral sword(swords)": LocationData("Royal Chapel", 363),
+}
+
+no0_enemies = {
+    "Enemysanity: 14 - Slinger": LocationData("Marble Gallery", 114),
+    "Enemysanity: 15 - Ouija table": LocationData("Marble Gallery", 115),
+    "Enemysanity: 16 - Skelerang": LocationData("Marble Gallery", 116),
+    "Enemysanity: 19 - Ghost": LocationData("Marble Gallery", 119),
+    "Enemysanity: 20 - Marionette": LocationData("Marble Gallery", 120),
+    "Enemysanity: 22 - Diplocephalus": LocationData("Marble Gallery", 122),
+    "Enemysanity: 23 - Flea man": LocationData("Marble Gallery", 123),
+    "Enemysanity: 28 - Plate lord": LocationData("Marble Gallery", 128),
+    "Enemysanity: 29 - Stone rose": LocationData("Marble Gallery", 129),
+    "Enemysanity: 31 - Ctulhu": LocationData("Marble Gallery", 131),
+}
+
+no0_drops = {
+    "Dropsanity: 14 - Slinger": LocationData("Marble Gallery", 314),
+    "Dropsanity: 15 - Ouija table": LocationData("Marble Gallery", 315),
+    "Dropsanity: 16 - Skelerang": LocationData("Marble Gallery", 316),
+    "Dropsanity: 19 - Ghost": LocationData("Marble Gallery", 319),
+    "Dropsanity: 20 - Marionette": LocationData("Marble Gallery", 320),
+    "Dropsanity: 22 - Diplocephalus": LocationData("Marble Gallery", 322),
+    "Dropsanity: 23 - Flea man": LocationData("Marble Gallery", 323),
+    "Dropsanity: 28 - Plate lord": LocationData("Marble Gallery", 328),
+    "Dropsanity: 29 - Stone rose": LocationData("Marble Gallery", 329),
+    "Dropsanity: 31 - Ctulhu": LocationData("Marble Gallery", 331),
+}
+
+no1_enemies = {
+    "Enemysanity: 24 - Medusa head": LocationData("Outer Wall", 124),
+    "Enemysanity: 26 - Bone musket": LocationData("Outer Wall", 126),
+    "Enemysanity: 27 - Medusa head(yellow)": LocationData("Outer Wall", 127),
+    "Enemysanity: 30 - Axe knight(armored)": LocationData("Outer Wall", 130),
+    "Enemysanity: 32 - Bone archer": LocationData("Outer Wall", 132),
+    "Enemysanity: 34 - Doppleganger10": LocationData("Outer Wall", 134),
+    "Enemysanity: 38 - Skeleton ape": LocationData("Outer Wall", 138),
+    "Enemysanity: 39 - Spear guard": LocationData("Outer Wall", 139),
+    "Enemysanity: 43 - Sword lord": LocationData("Outer Wall", 143),
+    "Enemysanity: 45 - Armor lord": LocationData("Outer Wall", 145),
+}
+
+no1_drops = {
+    "Dropsanity: 24 - Medusa head": LocationData("Outer Wall", 324),
+    "Dropsanity: 26 - Bone musket": LocationData("Outer Wall", 326),
+    "Dropsanity: 27 - Medusa head(yellow)": LocationData("Outer Wall", 327),
+    "Dropsanity: 30 - Axe knight(armored)": LocationData("Outer Wall", 330),
+    "Dropsanity: 32 - Bone archer": LocationData("Outer Wall", 332),
+    "Dropsanity: 34 - Doppleganger10": LocationData("Outer Wall", 334),
+    "Dropsanity: 38 - Skeleton ape": LocationData("Outer Wall", 338),
+    "Dropsanity: 39 - Spear guard": LocationData("Outer Wall", 339),
+    "Dropsanity: 43 - Sword lord": LocationData("Outer Wall", 343),
+    "Dropsanity: 45 - Armor lord": LocationData("Outer Wall", 345),
+}
+
+no2_enemies = {
+    "Enemysanity: 57 - Spectral sword": LocationData("Olrox's Quarters", 157),
+    "Enemysanity: 83 - Blade": LocationData("Olrox's Quarters", 183),
+    "Enemysanity: 85 - Hammer": LocationData("Olrox's Quarters", 185),
+    "Enemysanity: 92 - Olrox": LocationData("Olrox's Quarters", 192),
+}
+
+no2_drops = {
+    "Dropsanity: 57 - Spectral sword": LocationData("Olrox's Quarters", 357),
+    "Dropsanity: 83 - Blade": LocationData("Olrox's Quarters", 383),
+    "Dropsanity: 85 - Hammer": LocationData("Olrox's Quarters", 385),
+}
+
+no3_enemies = {
+    "Enemysanity: 3 - Bat": LocationData("Castle Entrance", 103),
+    "Enemysanity: 5 - Zombie": LocationData("Castle Entrance", 105),
+    "Enemysanity: 6 - Merman": LocationData("Castle Entrance", 106),
+    "Enemysanity: 8 - Warg": LocationData("Castle Entrance", 108),
+    "Enemysanity: 10 - Merman(red)": LocationData("Castle Entrance", 110),
+    "Enemysanity: 35 - Owl": LocationData("Castle Entrance", 135),
+    "Enemysanity: 62 - Owl knight": LocationData("Castle Entrance", 162),
+    "Enemysanity: 84 - Gurkha": LocationData("Castle Entrance", 184),
+}
+
+no3_drops = {
+    "Dropsanity: 3 - Bat": LocationData("Castle Entrance", 303),
+    "Dropsanity: 5 - Zombie": LocationData("Castle Entrance", 305),
+    "Dropsanity: 6 - Merman": LocationData("Castle Entrance", 306),
+    "Dropsanity: 10 - Merman(red)": LocationData("Castle Entrance", 310),
+    "Dropsanity: 62 - Owl knight": LocationData("Castle Entrance", 362),
+    "Dropsanity: 84 - Gurkha": LocationData("Castle Entrance", 384),
+}
+
+no4_enemies = {
+    "Enemysanity: 37 - Scylla wyrm": LocationData("Underground Caverns", 137),
+    "Enemysanity: 44 - Toad": LocationData("Underground Caverns", 144),
+    "Enemysanity: 48 - Frog": LocationData("Underground Caverns", 148),
+    "Enemysanity: 49 - Frozen shade": LocationData("Underground Caverns", 149),
+    "Enemysanity: 59 - Scylla": LocationData("Underground Caverns", 159),
+    "Enemysanity: 79 - Fishhead": LocationData("Underground Caverns", 179),
+    "Enemysanity: 91 - Killer fish": LocationData("Underground Caverns", 191),
+    "Enemysanity: 93 - Succubus": LocationData("Underground Caverns", 193),
+}
+
+no4_drops = {
+    "Dropsanity: 44 - Toad": LocationData("Underground Caverns", 344),
+    "Dropsanity: 48 - Frog": LocationData("Underground Caverns", 348),
+    "Dropsanity: 49 - Frozen shade": LocationData("Underground Caverns", 349),
+    "Dropsanity: 79 - Fishhead": LocationData("Underground Caverns", 379),
+    "Dropsanity: 91 - Killer fish": LocationData("Underground Caverns", 391),
+}
+
+nz0_enemies = {
+    "Enemysanity: 2 - Blood skeleton": LocationData("Alchemy Laboratory", 102),
+    "Enemysanity: 7 - Skeleton": LocationData("Alchemy Laboratory", 107),
+    "Enemysanity: 9 - Bone scimitar": LocationData("Alchemy Laboratory", 109),
+    "Enemysanity: 11 - Spittle bone": LocationData("Alchemy Laboratory", 111),
+    "Enemysanity: 12 - Axe knight": LocationData("Alchemy Laboratory", 112),
+    "Enemysanity: 13 - Bloody zombie": LocationData("Alchemy Laboratory", 113),
+    "Enemysanity: 18 - Gaibon": LocationData("Alchemy Laboratory", 118),
+    "Enemysanity: 21 - Slogra": LocationData("Alchemy Laboratory", 121),
+}
+
+nz0_drops = {
+    "Dropsanity: 7 - Skeleton": LocationData("Alchemy Laboratory", 307),
+    "Dropsanity: 9 - Bone scimitar": LocationData("Alchemy Laboratory", 309),
+    "Dropsanity: 12 - Axe knight": LocationData("Alchemy Laboratory", 312),
+    "Dropsanity: 13 - Bloody zombie": LocationData("Alchemy Laboratory", 313),
+}
+
+nz1_enemies = {
+    "Enemysanity: 36 - Phantom skull": LocationData("Clock Tower", 136),
+    "Enemysanity: 51 - Skull lord": LocationData("Clock Tower", 151),
+    "Enemysanity: 55 - Flail guard": LocationData("Clock Tower", 155),
+    "Enemysanity: 64 - Vandal sword": LocationData("Clock Tower", 164),
+    "Enemysanity: 73 - Harpy": LocationData("Clock Tower", 173),
+    "Enemysanity: 78 - Cloaked knight": LocationData("Clock Tower", 178),
+    "Enemysanity: 87 - Karasuman": LocationData("Clock Tower", 187),
+}
+
+nz1_drops = {
+    "Dropsanity: 36 - Phantom skull": LocationData("Clock Tower", 336),
+    "Dropsanity: 51 - Skull lord": LocationData("Clock Tower", 351),
+    "Dropsanity: 55 - Flail guard": LocationData("Clock Tower", 355),
+    "Dropsanity: 64 - Vandal sword": LocationData("Clock Tower", 364),
+    "Dropsanity: 73 - Harpy": LocationData("Clock Tower", 373),
+    "Dropsanity: 78 - Cloaked knight": LocationData("Clock Tower", 378),
+}
+
+top_enemies = {
+    "Enemysanity: 56 - Flea rider": LocationData("Castle Keep", 156),
+    # "Enemysanity: 140 - Richter belmont": LocationData("Castle Keep", 240),
+}
+
+top_drops = {
+    "Dropsanity: 56 - Flea rider": LocationData("Castle Keep", 356),
+}
+
+rare_enemies = {
+    "Enemysanity: 108 - Werewolf(reverse)": LocationData("Reverse Colosseum", 208),
+    "Enemysanity: 112 - Minotaur": LocationData("Reverse Colosseum", 212),
+    "Enemysanity: 115 - White dragon": LocationData("Reverse Colosseum", 215),
+    "Enemysanity: 132 - Fake grant": LocationData("Reverse Colosseum", 232),
+    "Enemysanity: 133 - Fake trevor": LocationData("Reverse Colosseum", 233),
+    "Enemysanity: 135 - Fake sipha": LocationData("Reverse Colosseum", 235),
+    "Enemysanity: 137 - Azaghal": LocationData("Reverse Colosseum", 237),
+}
+
+rare_drops = {
+    "Dropsanity: 108 - Werewolf(reverse)": LocationData("Reverse Colosseum", 408),
+    "Dropsanity: 112 - Minotaur": LocationData("Reverse Colosseum", 412),
+    "Dropsanity: 137 - Azaghal": LocationData("Reverse Colosseum", 437),
+}
+
+rcat_enemies = {
+    "Enemysanity: 138 - Frozen half": LocationData("Floating Catacombs", 238),
+    "Enemysanity: 139 - Salome": LocationData("Floating Catacombs", 239),
+    "Enemysanity: 142 - Galamoth": LocationData("Floating Catacombs", 242),
+}
+
+rcat_drops = {
+    "Dropsanity: 138 - Frozen half": LocationData("Floating Catacombs", 438),
+    "Dropsanity: 139 - Salome": LocationData("Floating Catacombs", 439),
+}
+
+rchi_enemies = {
+    "Enemysanity: 144 - Death": LocationData("Floating Catacombs", 244),
+}
+
+rdai_enemies = {
+    "Enemysanity: 101 - Ballon pod": LocationData("Anti-Chapel", 201),
+    "Enemysanity: 107 - Archer": LocationData("Anti-Chapel", 207),
+    "Enemysanity: 109 - Black panther": LocationData("Anti-Chapel", 209),
+    "Enemysanity: 118 - Sniper of goth": LocationData("Anti-Chapel", 218),
+    "Enemysanity: 119 - Spectral sword(shields)": LocationData("Anti-Chapel", 219),
+    "Enemysanity: 130 - Medusa": LocationData("Anti-Chapel", 230),
+    "Enemysanity: 134 - Imp": LocationData("Anti-Chapel", 234),
+}
+
+rdai_drops = {
+    "Dropsanity: 107 - Archer": LocationData("Anti-Chapel", 407),
+    "Dropsanity: 109 - Black panther": LocationData("Anti-Chapel", 409),
+    "Dropsanity: 118 - Sniper of goth": LocationData("Anti-Chapel", 418),
+    "Dropsanity: 119 - Spectral sword(shields)": LocationData("Anti-Chapel", 419),
+    "Dropsanity: 134 - Imp": LocationData("Anti-Chapel", 434),
+}
+
+rlib_enemies = {
+    "Enemysanity: 96 - Lion": LocationData("Forbidden Library", 196),
+    "Enemysanity: 97 - Scarecrow": LocationData("Forbidden Library", 197),
+    "Enemysanity: 99 - Schmoo": LocationData("Forbidden Library", 199),
+    "Enemysanity: 100 - Tin man": LocationData("Forbidden Library", 200),
+}
+
+rlib_drops = {
+    "Dropsanity: 96 - Lion": LocationData("Forbidden Library", 396),
+    "Dropsanity: 97 - Scarecrow": LocationData("Forbidden Library", 397),
+    "Dropsanity: 99 - Schmoo": LocationData("Forbidden Library", 399),
+    "Dropsanity: 100 - Tin man": LocationData("Forbidden Library", 400),
+}
+
+rno0_enemies = {
+    "Enemysanity: 4 - Stone skill": LocationData("Black Marble Gallery", 104),
+    "Enemysanity: 106 - Jack O'bones": LocationData("Black Marble Gallery", 206),
+    "Enemysanity: 113 - Nova skeleton": LocationData("Black Marble Gallery", 213),
+    "Enemysanity: 125 - Gorgon": LocationData("Black Marble Gallery", 225),
+    "Enemysanity: 143 - Guardian": LocationData("Black Marble Gallery", 243),
+}
+
+rno0_drops = {
+    "Dropsanity: 106 - Jack O'bones": LocationData("Black Marble Gallery", 406),
+    "Dropsanity: 113 - Nova skeleton": LocationData("Black Marble Gallery", 413),
+    "Dropsanity: 125 - Gorgon": LocationData("Black Marble Gallery", 425),
+    "Dropsanity: 143 - Guardian": LocationData("Black Marble Gallery", 443),
+}
+
+rno1_enemies = {
+    "Enemysanity: 131 - The creature": LocationData("Reverse Outer Wall", 231),
+}
+
+rno2_enemies = {
+    "Enemysanity: 104 - Flying zombie": LocationData("Death Wing's Lair", 204),
+    "Enemysanity: 120 - Ghost dancer": LocationData("Death Wing's Lair", 220),
+    "Enemysanity: 126 - Malachi": LocationData("Death Wing's Lair", 226),
+    "Enemysanity: 127 - Akmodan II": LocationData("Death Wing's Lair", 227),
+}
+
+rno2_drops = {
+    "Dropsanity: 104 - Flying zombie": LocationData("Death Wing's Lair", 404),
+    "Dropsanity: 120 - Ghost dancer": LocationData("Death Wing's Lair", 420),
+    "Dropsanity: 126 - Malachi": LocationData("Death Wing's Lair", 426),
+    "Dropsanity: 87 - Karasuman": LocationData("Death Wing's Lair", 387),
+}
+
+rno3_enemies = {
+    "Enemysanity: 111 - Dragon rider": LocationData("Reverse Entrance", 211),
+    "Enemysanity: 114 - Orobourous": LocationData("Reverse Entrance", 214),
+    "Enemysanity: 116 - Fire warg": LocationData("Reverse Entrance", 216),
+    "Enemysanity: 141 - Dodo bird": LocationData("Reverse Entrance", 241),
+}
+
+rno3_drops = {
+    "Dropsanity: 114 - Orobourous": LocationData("Reverse Entrance", 414),
+    "Dropsanity: 116 - Fire warg": LocationData("Reverse Entrance", 416),
+    "Dropsanity: 121 - Warg rider": LocationData("Reverse Entrance", 421),
+    "Dropsanity: 141 - Dodo bird": LocationData("Reverse Entrance", 441),
+}
+
+rno4_enemies = {
+    "Enemysanity: 117 - Rock knight": LocationData("Reverse Caverns", 217),
+    "Enemysanity: 122 - Cave troll": LocationData("Reverse Caverns", 222),
+    "Enemysanity: 123 - Dark octopus": LocationData("Reverse Caverns", 223),
+    "Enemysanity: 128 - Blue venus weed": LocationData("Reverse Caverns", 228),
+    "Enemysanity: 129 - Doppleganger40": LocationData("Reverse Caverns", 229),
+}
+
+rno4_drops = {
+    "Dropsanity: 117 - Rock knight": LocationData("Reverse Caverns", 417),
+    "Dropsanity: 122 - Cave troll": LocationData("Reverse Caverns", 422),
+    "Dropsanity: 123 - Dark octopus": LocationData("Reverse Caverns", 423),
+    "Dropsanity: 128 - Blue venus weed": LocationData("Reverse Caverns", 428),
+}
+
+rnz0_enemies = {
+    "Enemysanity: 105 - Bitterfly": LocationData("Necromancy Laboratory", 205),
+    "Enemysanity: 124 - Fire demon": LocationData("Necromancy Laboratory", 224),
+    "Enemysanity: 136 - Beezelbub": LocationData("Necromancy Laboratory", 236),
+}
+
+rnz0_drops = {
+    "Dropsanity: 105 - Bitterfly": LocationData("Necromancy Laboratory", 405),
+    "Dropsanity: 124 - Fire demon": LocationData("Necromancy Laboratory", 424),
+}
+
+rnz1_enemies = {
+    "Enemysanity: 103 - Bomb knight": LocationData("Reverse Clock Tower", 203),
+    "Enemysanity: 110 - Darkwing bat": LocationData("Reverse Clock Tower", 210),
+}
+
+rnz1_drops = {
+    "Dropsanity: 103 - Bomb knight": LocationData("Reverse Clock Tower", 403),
+    "Dropsanity: 80 - Lesser demon": LocationData("Necromancy Laboratory", 380),
+}
+
+rtop_enemies = {
+    "Enemysanity: 94 - Tombstone": LocationData("Reverse Castle Keep", 194),
+    "Enemysanity: 102 - Yorick": LocationData("Reverse Castle Keep", 202),
+}
+
+rtop_drops = {
+    "Dropsanity: 94 - Tombstone": LocationData("Reverse Castle Keep", 394),
+    "Dropsanity: 102 - Yorick": LocationData("Reverse Castle Keep", 402),
+}
+
 normal_locations = {
     **are_locations,
     **cat_locations,
@@ -728,11 +1130,69 @@ reverse_locations = {
     **rtop_locations
 }
 
+enemy_locations = {
+    **are_enemies,
+    **cat_enemies,
+    **chi_enemies,
+    **lib_enemies,
+    **dai_enemies,
+    **no0_enemies,
+    **no1_enemies,
+    **no2_enemies,
+    **no3_enemies,
+    **no4_enemies,
+    **nz0_enemies,
+    **nz1_enemies,
+    **top_enemies,
+    **rare_enemies,
+    **rcat_enemies,
+    **rchi_enemies,
+    **rdai_enemies,
+    **rlib_enemies,
+    **rno0_enemies,
+    **rno1_enemies,
+    **rno2_enemies,
+    **rno3_enemies,
+    **rno4_enemies,
+    **rnz0_enemies,
+    **rnz1_enemies,
+    **rtop_enemies
+}
+
+drop_locations = {
+    **are_drops,
+    **cat_drops,
+    **chi_drops,
+    **lib_drops,
+    **dai_drops,
+    **no0_drops,
+    **no1_drops,
+    **no2_drops,
+    **no3_drops,
+    **no4_drops,
+    **nz0_drops,
+    **nz1_drops,
+    **top_drops,
+    **rare_drops,
+    **rcat_drops,
+    **rdai_drops,
+    **rlib_drops,
+    **rno0_drops,
+    **rno2_drops,
+    **rno3_drops,
+    **rno4_drops,
+    **rnz0_drops,
+    **rnz1_drops,
+    **rtop_drops
+}
+
 location_table = {
     **normal_locations,
     **reverse_locations,
     **exp_locations_item,
-    **exp_locations_token
+    **exp_locations_token,
+    **enemy_locations,
+    **drop_locations
 }
 
 
