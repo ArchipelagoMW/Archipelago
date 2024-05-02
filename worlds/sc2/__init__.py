@@ -408,16 +408,11 @@ def flag_allowed_orphan_items(world: SC2World, item_list: List[FilterItem]) -> N
     """Adds the `Allowed_Orphan` flag to items that shouldn't be filtered with their parents, like combat shield"""
     missions = get_all_missions(world.mission_req_table)
     terran_nobuild_missions = any((MissionFlag.Terran|MissionFlag.NoBuild) in  mission.flags for mission in missions)
-    evil_awoken_enabled = SC2Mission.EVIL_AWOKEN in missions
     for item in item_list:
         if item.name in (
             ItemNames.MARINE_COMBAT_SHIELD, ItemNames.MARINE_PROGRESSIVE_STIMPACK, ItemNames.MARINE_MAGRAIL_MUNITIONS,
             ItemNames.MEDIC_STABILIZER_MEDPACKS, ItemNames.MEDIC_NANO_PROJECTOR,
         ) and terran_nobuild_missions:
-            item.flags |= ItemFilterFlags.AllowedOrphan
-        if item.name in (
-            ItemNames.STALKER_INSTIGATOR_SLAYER_DISINTEGRATING_PARTICLES, ItemNames.STALKER_INSTIGATOR_SLAYER_PARTICLE_REFLECTION,
-        ) and evil_awoken_enabled:
             item.flags |= ItemFilterFlags.AllowedOrphan
 
 

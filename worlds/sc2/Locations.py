@@ -83,11 +83,9 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
     # Note: rules which are ended with or True are rules identified as needed later when restricted units is an option
     if world is None:
         logic_level = int(RequiredTactics.default)
-        vanilla_items_only = not not VanillaItemsOnly.default
         kerriganless = False
     else:
         logic_level = world.options.required_tactics.value
-        vanilla_items_only = not not world.options.vanilla_items_only.value
         kerriganless = (
             world.options.kerrigan_presence.value != KerriganPresence.option_vanilla
             or not world.options.enable_hots_missions.value
@@ -1098,8 +1096,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                      lambda state: logic.protoss_common_unit(state) \
                                    and logic.protoss_anti_armor_anti_air(state) \
                                    and logic.protoss_can_attack_behind_chasm(state)),
-        LocationData("Evil Awoken", "Evil Awoken: Victory", SC2LOTV_LOC_ID_OFFSET + 300, LocationType.VICTORY,
-                     lambda state: adv_tactics or vanilla_items_only or logic.protoss_stalker_upgrade(state)),
+        LocationData("Evil Awoken", "Evil Awoken: Victory", SC2LOTV_LOC_ID_OFFSET + 300, LocationType.VICTORY),
         LocationData("Evil Awoken", "Evil Awoken: Temple Investigated", SC2LOTV_LOC_ID_OFFSET + 301, LocationType.EXTRA),
         LocationData("Evil Awoken", "Evil Awoken: Void Catalyst", SC2LOTV_LOC_ID_OFFSET + 302, LocationType.EXTRA),
         LocationData("Evil Awoken", "Evil Awoken: First Particle Cannon", SC2LOTV_LOC_ID_OFFSET + 303, LocationType.VANILLA),
