@@ -185,6 +185,23 @@ class TestItemFiltering(Sc2SetupTestBase):
         for mission in missions:
             self.assertEqual(MissionTables.SC2Campaign.NCO, mission.campaign)
 
+    def test_starter_unit_populates_start_inventory(self):
+        options = {
+            'enable_wol_missions': True,
+            'enable_nco_missions': False,
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'shuffle_no_build': Options.ShuffleNoBuild.option_false,
+            'mission_order': Options.MissionOrder.option_grid,
+            'starter_unit': Options.StarterUnit.option_any_starter_unit,
+        }
+        self.generate_world(options)
+        self.assertTrue(self.multiworld.itempool)
+        self.assertTrue(self.multiworld.precollected_items[self.player])
+
     def test_excluding_all_terran_missions_excludes_all_terran_items(self) -> None:
         options = {
             'mission_order': Options.MissionOrder.option_grid,

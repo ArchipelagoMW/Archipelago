@@ -121,6 +121,8 @@ class SC2World(World):
         pool: List[Item] = prune_item_pool(self, item_list)
         pad_item_pool_with_filler(self, len(self.location_cache) - len(self.locked_locations) - len(pool), pool)
 
+        push_precollected_items_to_multiworld(self, item_list)
+
         self.multiworld.itempool += pool
 
     def set_rules(self):
@@ -193,6 +195,7 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
     result: List[FilterItem] = []
     for item_name, item_data in Items.item_table.items():
         if not item_data.quantity:
+            result.append(FilterItem(item_name, item_data, 0, ItemFilterFlags.StartInventory))
             continue
         max_count = item_data.quantity
         excluded_count = excluded_items.get(item_name)
@@ -670,3 +673,17 @@ def fill_pool_with_kerrigan_levels(world: SC2World, item_pool: List[Item]):
         else:
             round_func = ceil
         add_kerrigan_level_items(size, round_func(float(total_levels) / size))
+
+def push_precollected_items_to_multiworld(world: SC2World, item_list: List[FilterItem]) -> None:
+    # world.multiworld.push_precollected() has side-effects, so we can't just clear
+    # world.multiworld.precollected_items[world.player]
+    precollected_amounts: Dict[str, int] = {}
+    for ap_item in world.multiworld.precollected_items[world.player]:
+        precollected_amounts[ap_item.name] = precollected_amounts.get(ap_item.name, 0) + 1
+    for item in item_list:
+        if ItemFilterFlags.StartInventory not in item.flags:
+            continue
+        if precollected_amounts.get(item.name, 0) <= 0:
+            world.multiworld.push_precollected(create_item_with_correct_settings(world.player, item.name))
+        else:
+            precollected_amounts[item.name] -= 1
