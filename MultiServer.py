@@ -688,7 +688,7 @@ class Context:
                 clients = self.clients[team].get(slot)
                 if not clients:
                     continue
-                client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
+                client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player != slot)]
                 for client in clients:
                     async_start(self.send_msgs(client, client_hints))
 
@@ -1508,14 +1508,13 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if hints:
             new_hints = set(hints) - self.ctx.hints[self.client.team, self.client.slot]
             old_hints = set(hints) - new_hints
-            if old_hints:
+            if old_hints and not new_hints:
                 self.ctx.notify_hints(self.client.team, list(old_hints))
-                if not new_hints:
-                    self.output("Hint was previously used, no points deducted.")
+                self.output("Hint was previously used, no points deducted.")
             if new_hints:
                 found_hints = [hint for hint in new_hints if hint.found]
                 not_found_hints = [hint for hint in new_hints if not hint.found]
-
+                old_hints = [hint for hint in old_hints]
                 if not not_found_hints:  # everything's been found, no need to pay
                     can_pay = 1000
                 elif cost:
@@ -1527,7 +1526,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 # By popular vote, make hints prefer non-local placements
                 not_found_hints.sort(key=lambda hint: int(hint.receiving_player != hint.finding_player))
 
-                hints = found_hints
+                hints = found_hints + old_hints
                 while can_pay > 0:
                     if not not_found_hints:
                         break
@@ -1537,6 +1536,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     self.ctx.hints_used[self.client.team, self.client.slot] += 1
                     points_available = get_client_points(self.ctx, self.client)
 
+                self.ctx.notify_hints(self.client.team, hints)
                 if not_found_hints:
                     if hints and cost and int((points_available // cost) == 0):
                         self.output(
@@ -1550,7 +1550,6 @@ class ClientMessageProcessor(CommonCommandProcessor):
                         self.output(f"You can't afford the hint. "
                                     f"You have {points_available} points and need at least "
                                     f"{self.ctx.get_hint_cost(self.client.slot)}.")
-                self.ctx.notify_hints(self.client.team, hints)
                 self.ctx.save()
                 return True
 
