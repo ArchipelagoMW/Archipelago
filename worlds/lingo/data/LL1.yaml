@@ -2052,6 +2052,7 @@
         door: Rhyme Room Entrance
       Art Gallery:
         warp: True
+      Roof: True # by parkouring through the Bearer shortcut
     panels:
       RED:
         id: Color Arrow Room/Panel_red_afar
@@ -4098,6 +4099,7 @@
       Number Hunt:
         room: Number Hunt
         door: Door to Directional Gallery
+      Roof: True # through ceiling of sunwarp
     panels:
       PEPPER:
         id: Backside Room/Panel_pepper_salt
@@ -7272,6 +7274,7 @@
       MASTERY:
         id: Master Room/Panel_mastery_mastery
         tag: midwhite
+        hunt: True
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
