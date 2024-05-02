@@ -1,13 +1,10 @@
 # Pokémon Emerald Installations Guide
 
-## Programvara
+## Programvara som behövs
 
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
-     - Om du är osäker på hur eller var du laddar ner, när du är på github scrolla ner och tryck på "Assets" 
-
-- [BizHawk](https://tasvideos.org/BizHawk/ReleaseHistory) 2.7 eller senare
-
 - Ett Engelsk Pokémon Emerald ROM, Archipelago kan inte hjälpa dig med detta
+- [BizHawk](https://tasvideos.org/BizHawk/ReleaseHistory) 2.7 eller senare
 
 ### konfigurera BizHawk
 
@@ -22,11 +19,16 @@ När du har installerat Bizhawk, öppna `EmuHawk.exe` och ändra följande inst�
 - Överväg också att rensa keybind inställningar I `Config > Hotkeys…` som du inte tänkt använda, du kan trycka på en keybind
 och använda ESC för att ta bort.
 
+## Extra programvara
+
+- [Pokémon Emerald AP Tracker](https://github.com/seto10987/Archipelago-Emerald-AP-Tracker/releases/latest), används tillsamans med
+[PopTracker](https://github.com/black-sliver/PopTracker/releases)
+
 ## Generera och patcha ett spel
 
-1. Skapa din (YAML) konfigurations fil, du kan enkelt skapa en via att använda
+1. Skapa din konfigurations fil (YAML). Du kan göra en via att använda
 [Pokémon Emerald options page](../../../games/Pokemon%20Emerald/player-options).
-2. Följ de allmänna Archipelago instruktionerna [generating a game](../../Archipelago/setup/en#generating-a-game).
+2. Följ de allmänna Archipelago instruktionerna för hur man genererar ett spel [generating a game](../../Archipelago/setup/en#generating-a-game).
 Detta kommer Generera en fil för dig. Din patch fil kommer ha `.apemerald` some sitt filnamnstillägg
 3. Öppna `ArchipelagoLauncher.exe`
 4. Välj "Open Patch" på vänster sidan, och välj sedan din patch fil
@@ -35,13 +37,13 @@ Detta kommer Generera en fil för dig. Din patch fil kommer ha `.apemerald` some
 7. Första gången du öppnar en patch med BizHawk klienten, kommer du också behöva bekräfta var `EmuHawk.exe` 
 filen är installerad i din BizHawk map
 
-Om du bara tänkt spela själv och du inte bryr dig om något extra som till exempel spårare för föremål eller att ha tips för var grejer kan vara, 
-så behöver du inte göra något mer än det här. stäng klienten, och starta ditt patchade ROM med Bizhawk eller valfri emulator.
+Om du bara tänkt spela ett seed gjort för enspelarläge och du inte bryr dig om automatisk spårning eller tips, 
+så behöver du inte göra något mer än det här. stäng klienten, och starta ditt patchade ROM med valfri emulator.
 Vill du dock använda multvärlds funktionen eller andra Archipelago funktioner, så behöver du fortsätta med några steg till för BizHawk
 
 ## Anslut till en server
 
-Som standard, om du öppnar du en patchad fil så görs steg 1-5 automatisk åt dig. Men det kan fortfarande va bra att veta hur allt funkar om
+Som standard, När du öppnar du en patchad fil så görs steg 1-5 automatisk åt dig. Men det kan fortfarande va bra att veta hur allt funkar om
 du till exempel behöver stänga och starta om något medans du spelar.
 
 1. Pokemon Emerald använder Archipelago's BizHawk Klient. Om klienten fortfarande inte startat efter att du patchat ditt spel,
@@ -50,24 +52,21 @@ så kan du bara öppna den igen från launchern.
 3. I EmuHawk, gå till `Tools > Lua Console`. Det är viktigt att du inte stänger denna Lua konsolen medans du spelar, dock är det ok att minimera för att dölja den
 4. I Lua konsolen, Tryck på `Script > Open Script…`.
 5. Leta reda på din Archipelago map och i den öppna `data/lua/connector_bizhawk_generic.lua`.
-6. Bizhawk emulatorn och Archipelago klienten kommer så småningom koppla ihop med varanda. I klienten kommer du sedan kunna see om allt är
+6. Emulatorn och klienten kommer så småningom koppla ihop med varanda. I klienten kommer du sedan kunna see om allt är
 kopplat och att Pokemon Emerald startat ordentligt.
-7. För att ansluta klienten till en server, skriv in din lobby/ip adress och port i text fältet tex,`archipelago.gg:38281`
+7. För att ansluta klienten till en server, skriv in din lobby adress och port i text fältet tex,`archipelago.gg:38281`
  längst upp i din klient och tryck sen på "connect"
  
- Du borde nu kunna ta emot och skicka föremål. Du behöver göra dom hör stegen varje gång du vill ansluta. det är helt okej
- att göra grejer i spelet medans du är offline; allt kommer synkronisera sig när du ansluter till servern igen
+Du borde nu kunna ta emot och skicka föremål. Du behöver göra dom hör stegen varje gång du vill ansluta.
+du kan göra saker offline utan att behöva oroa dig; allt kommer synkronisera sig när du ansluter till servern igen
 
-## Extra Programvara 
+## Automatisk Spårning 
 
-- Ett program för att lätt kunna spåra var föremål i spelet är plaserade, och vilka som är åtkomliga med det du nuvarande har
+Pokémon Emerald har en fullt fungerande spårare med stöd för auto spårning
 
-1. Ladda ner [PopTracker](https://github.com/black-sliver/PopTracker/releases), och
-[Pokémon Emerald AP Tracker](https://github.com/seto10987/Archipelago-Emerald-AP-Tracker/releases/latest)
-2. Om du är osäker på hur eller vad du ska ladda ner för poptracker, när du är på github tryck på "Assets" för att öppna en lista med olika operativsystems val
-utav poptracker, du vill förmodligen ha win64zip(för windows)
-3. Öppna Zip filen och Plasera PopTracker på valfri plats eller i din Archipelago map
-4. Öppna den andra Zip filen och placera "Emerald AP Tracker" mappen i poptrackers map `poptracker\packs`
-5. Öppna PopTracker, och välj Pokemon Emerald
-6. För att automatisk spåra, tryck på "AP" symbolen längst upp
-7. Skriv in Archipelago serverns uppgifter (Samma som du använda för att koppla Klienten), spelar namn, och lösenord om det används.
+1. Laddaner [Pokémon Emerald AP Tracker](https://github.com/seto10987/Archipelago-Emerald-AP-Tracker/releases/latest) och
+[PopTracker](https://github.com/black-sliver/PopTracker/releases).
+2. Plasera tracker pack filen i packs/ där du har PopTracker installerat.
+3. Öppna PopTracker, och välj Pokemon Emerald.
+4. För att automatisk spåra, tryck på "AP" symbolen längst upp
+5. Skriv in Archipelago serverns uppgifter (Samma som du använda för att koppla Klienten), plats namn, och lösenord.
