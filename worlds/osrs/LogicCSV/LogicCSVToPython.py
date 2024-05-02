@@ -32,7 +32,7 @@ if __name__ == "__main__":
                 for row in locations_reader:
                     row_line = "LocationRow("
                     row_line += str_format(row[0])
-                    row_line += str_format(row[1])
+                    row_line += str_format(row[1].lower())
 
                     region_strings = row[2].split(", ") if len(row[2]) > 0 else []
                     row_line += f"{str_list_to_py(region_strings)}, "
