@@ -106,7 +106,7 @@ class MLSSWorld(World):
         required_items = []
         precollected = [item for item in itemList if item in self.multiworld.precollected_items]
         for item in itemList:
-            if item.progression != ItemClassification.filler and item.progression != ItemClassification.skip_balancing:
+            if item.classification != ItemClassification.filler and item.classification != ItemClassification.skip_balancing:
                 freq = item_frequencies.get(item.itemName, 1)
                 if item in precollected:
                     freq = max(freq - precollected.count(item), 0)
@@ -120,7 +120,7 @@ class MLSSWorld(World):
         # Then, create our list of filler items
         filler_items = []
         for item in itemList:
-            if item.progression != ItemClassification.filler:
+            if item.classification != ItemClassification.filler:
                 continue
             if item.itemName == "5 Coins" and not self.options.coins:
                 continue
@@ -167,10 +167,10 @@ class MLSSWorld(World):
 
     def create_item(self, name: str) -> MLSSItem:
         item = item_table[name]
-        return MLSSItem(item.itemName, item.progression, item.code, self.player)
+        return MLSSItem(item.itemName, item.classification, item.code, self.player)
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(list(filter(lambda item: item.progression == ItemClassification.filler, itemList)))
+        return self.random.choice(list(filter(lambda item: item.classification == ItemClassification.filler, itemList)))
 
     def generate_output(self, output_directory: str) -> None:
         patch = MLSSProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])

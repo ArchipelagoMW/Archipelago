@@ -6,7 +6,7 @@ from BaseClasses import Item, ItemClassification
 class ItemData(typing.NamedTuple):
     code: int
     itemName: str
-    progression: ItemClassification
+    classification: ItemClassification
     itemID: int
 
 

@@ -5,7 +5,7 @@ from dataclasses import dataclass
 class BowsersCastleSkip(Toggle):
     """
     Skip straight from the entrance hall to bowletta in Bowser's Castle.
-    All Bowser's Castle items will be removed from the location pool.
+    All Bowser's Castle locations will be removed from the location pool.
     """
 
     display_name = "Bowser's Castle Skip"
@@ -22,7 +22,7 @@ class ExtraPipes(Toggle):
 class SkipMinecart(Toggle):
     """
     Skip the minecart minigame that leads you through Hoohoo Mountain Base.
-    This will remove the 1 item in the minecart cave from the location pool.
+    This will remove the 1 location in the minecart cave from the location pool.
     """
 
     display_name = "Skip Minecart Minigame"
@@ -30,7 +30,7 @@ class SkipMinecart(Toggle):
 
 class DisableSurf(Toggle):
     """
-    Remove the surf minigame item from the location pool.
+    Remove the surf minigame location from the location pool.
     """
 
     display_name = "Disable Surf Minigame"
@@ -53,7 +53,7 @@ class MusicOptions(Choice):
 
 class RandomSounds(Toggle):
     """
-    Randomizes every sound in the game, minus a select few that can softlock the game
+    Randomizes every sound in the game, minus a select few that can softlock the game.
     """
 
     display_name = "Randomize Sounds"
@@ -77,7 +77,7 @@ class MarioColor(Choice):
     option_white = 9
     option_silhouette = 10
     option_chaos = 11
-    option_truechaos = 12
+    option_true_chaos = 12
     default = 0
 
 
@@ -99,7 +99,7 @@ class LuigiColor(Choice):
     option_white = 9
     option_silhouette = 10
     option_chaos = 11
-    option_truechaos = 12
+    option_true_chaos = 12
     default = 1
 
 
@@ -148,11 +148,11 @@ class LuigiPants(Choice):
 class RandomizeEnemies(Choice):
     """
     Randomize all normal enemy encounters in the game.
-    If Bowser's castle skip is enabled then enemies from Bowser's Castle will not be included.
-    disabled: Enemies will not be randomized
-    vanilla_groups: Vanilla enemy groups will be shuffled with each other. Custom enemy groups will not be made.
-    custom_groups: Custom enemy groups will be made and shuffled. Some enemy groups will only be semi-random.
-    (Groups including flying enemies or pestnuts)
+    If Bowser's castle skip is enabled, then enemies from Bowser's Castle will not be included.
+    Disabled: Enemies will not be randomized.
+    Vanilla Groups: Vanilla enemy groups will be shuffled with each other. Custom enemy groups will not be made.
+    Custom Groups: Custom enemy groups will be made and shuffled. Some enemy groups will only be semi-random,
+    including groups with flying enemies or pestnuts in them.
     """
 
     display_name = "Randomize Enemies"
@@ -166,15 +166,15 @@ class RandomizeBosses(Choice):
     """
     Randomize all boss encounters in the game.
     If Bowser's castle skip is enabled then bosses from Bowser's Castle will not be included.
-    Some bosses are not randomized due to flags, and story (Such as the final boss)
+    Some bosses are not randomized due to flags, and story (such as the final boss).
     Boss Only: Bosses will only be swapped with another boss.
     Boss Normal: Bosses can be swapped with normal enemy encounters.
     """
 
     display_name = "Randomize Bosses"
     option_disabled = 0
-    option_bossonly = 1
-    option_bossnormal = 2
+    option_boss_only = 1
+    option_boss_normal = 2
     default = 0
 
 
@@ -191,7 +191,6 @@ class ScaleStats(Toggle):
 class XPMultiplier(Range):
     """
     This will multiply any XP you receive in battle by the chosen multiplier.
-
     """
 
     display_name = "XP Multiplier"
@@ -202,7 +201,7 @@ class XPMultiplier(Range):
 
 class TattleHp(Toggle):
     """
-    This will display the enemies current and max health while in battle.
+    This will display the enemies' current and max health while in battle.
     """
 
     display_name = "Tattle HP"
@@ -210,7 +209,7 @@ class TattleHp(Toggle):
 
 class RandomizeBackgrounds(Toggle):
     """
-    This randomizes the background image in battles
+    This randomizes the background image in battles.
     """
 
     display_name = "Randomize Battle Backgrounds"
@@ -218,7 +217,10 @@ class RandomizeBackgrounds(Toggle):
 
 class HiddenVisible(Choice):
     """
-    This makes any hidden blocks in the game into regular item blocks.
+    This makes any hidden blocks in the game into regular item blocks and vice versa.
+    Disabled: Hidden blocks will remain invisible.
+    Hidden Visible: Hidden blocks will turn visible to the player.
+    Blocks Invisible: All item blocks will turn invisible. Hidden blocks will also remain invisible.
     """
 
     display_name = "Item Block Visibility"
@@ -247,19 +249,21 @@ class HarhallsPants(Toggle):
 class DifficultLogic(Toggle):
     """
     This adjusts the logic to be more difficult in a few areas,
-    allowing for the logic to account for players getting to certain area's in unintended ways.
+    allowing for the logic to account for players getting to certain areas in unintended ways.
     Enable at your own risk, this is not an option made for beginners.
     """
 
-    display_name = "Difficult Logic Toggle"
+    display_name = "Difficult Logic"
 
 
 class ChuckleBeans(Choice):
     """
     Choose how you want chuckle bean digspots to be randomized.
-    none: No chuckle bean digspots will be added into the item pool.
-    only_visible: Only chuckle bean digspots clearly marked with an X will be added into the item pool.
-    all: All chuckle bean digspots will be added into the item pool.
+    An amount of chuckle beans will be removed from the item pool,
+    equal to the amount of locations removed by the setting that you choose.
+    None: No chuckle bean digspots will be added into the location pool.
+    Only Visible: Only chuckle bean digspots clearly marked with an X will be added into the location pool.
+    All: All chuckle bean digspots will be added into the location pool.
     """
 
     display_name = "Chuckle Beans"
