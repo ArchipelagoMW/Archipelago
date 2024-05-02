@@ -145,7 +145,7 @@ class WitnessPlayerRegions:
         elif difficulty == "sigma_expert":
             self.reference_logic = static_witness_logic.sigma_expert
         elif difficulty == "umbra_variety":
-            self.reference_logic = static_witness_logic.variety
+            self.reference_logic = static_witness_logic.umbra_variety
         elif difficulty == "none":
             self.reference_logic = static_witness_logic.vanilla
 

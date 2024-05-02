@@ -652,7 +652,7 @@ class WitnessPlayerLogic:
         elif self.DIFFICULTY == "sigma_expert":
             self.REFERENCE_LOGIC = static_witness_logic.sigma_expert
         elif self.DIFFICULTY == "umbra_variety":
-            self.REFERENCE_LOGIC = static_witness_logic.variety
+            self.REFERENCE_LOGIC = static_witness_logic.umbra_variety
         elif self.DIFFICULTY == "none":
             self.REFERENCE_LOGIC = static_witness_logic.vanilla
 
