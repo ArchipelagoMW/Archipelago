@@ -63,18 +63,18 @@ class ZergItemType(ItemTypeEnum):
 
 class ProtossItemType(ItemTypeEnum):
     Unit = "Unit", 0
-    Unit_2 = "Unit 2", 1
+    Unit_2 = "Unit", 1
     Upgrade = "Upgrade", 2
     Building = "Building", 3
     Progressive = "Progressive Upgrade", 4
     Spear_Of_Adun = "Spear of Adun", 5
     Solarite_Core = "Solarite Core", 6
     """Protoss global effects, such as reconstruction beam or automated assimilators"""
-    Forge_1 = "Forge 1", 7
+    Forge_1 = "Forge", 7
     """General Protoss unit upgrades"""
-    Forge_2 = "Forge 2", 8
+    Forge_2 = "Forge", 8
     """General Protoss unit upgrades"""
-    Forge_3 = "Forge 3", 9
+    Forge_3 = "Forge", 9
     """General Protoss unit upgrades"""
     
 

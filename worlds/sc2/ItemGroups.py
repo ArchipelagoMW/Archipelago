@@ -28,7 +28,13 @@ item_name_groups["WoL Missions"] = ["Beat " + mission.mission_name for mission i
 
 # These item name groups should not show up in documentation
 unlisted_item_name_groups = {
-    "Missions", "WoL Missions"
+    "Missions", "WoL Missions",
+    Items.TerranItemType.Progressive.display_name,
+    Items.TerranItemType.Nova_Gear.display_name,
+    Items.TerranItemType.Mercenary.display_name,
+    Items.ZergItemType.Ability.display_name,
+    Items.ZergItemType.Morph.display_name,
+    Items.ZergItemType.Strain.display_name,
 }
 
 # Some item names only differ in bracketed parts
