@@ -140,7 +140,7 @@ class TunicWorld(World):
         if self.options.shuffle_ladders:
             ladder_count = 0
             for item_name, item_data in item_table.items():
-                if item_data.item_group == "ladders":
+                if item_data.item_group == "Ladders":
                     items_to_create[item_name] = 1
                     ladder_count += 1
             remove_filler(ladder_count)
@@ -259,7 +259,7 @@ class TunicWorld(World):
                         name, connection = connection
                         # for LS entrances, we just want to give the portal name
                         if "(LS)" in name:
-                            name, _ = name.split(" (LS) ")
+                            name = name.split(" (LS) ", 1)[0]
                         # was getting some cases like Library Grave -> Library Grave -> other place
                         if name in portal_names and name != previous_name:
                             previous_name = name
