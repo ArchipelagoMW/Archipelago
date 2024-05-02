@@ -419,6 +419,6 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.generate_world(options)
         item_names = [item.name for item in self.multiworld.itempool]
         self.assertTrue(item_names)
-        self.assertIn(ItemNames.SOA_SOLAR_LANCE, item_names)
-        self.assertIn(ItemNames.SOA_SOLAR_BOMBARDMENT, item_names)
+        soa_items_in_pool = [item_name for item_name in item_names if Items.item_table[item_name].type == Items.ProtossItemType.Spear_Of_Adun]
+        self.assertGreater(len(soa_items_in_pool), 5)
 
