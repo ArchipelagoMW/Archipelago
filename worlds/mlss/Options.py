@@ -7,6 +7,7 @@ class BowsersCastleSkip(Toggle):
     Skip straight from the entrance hall to bowletta in Bowser's Castle.
     All Bowser's Castle items will be removed from the location pool.
     """
+
     display_name = "Bowser's Castle Skip"
 
 
@@ -14,6 +15,7 @@ class ExtraPipes(Toggle):
     """
     Gives the player access to pipes 1, 3, 4, and 6 from the start.
     """
+
     display_name = "Start With Extra Pipes"
 
 
@@ -22,6 +24,7 @@ class SkipMinecart(Toggle):
     Skip the minecart minigame that leads you through Hoohoo Mountain Base.
     This will remove the 1 item in the minecart cave from the location pool.
     """
+
     display_name = "Skip Minecart Minigame"
 
 
@@ -29,6 +32,7 @@ class DisableSurf(Toggle):
     """
     Remove the surf minigame item from the location pool.
     """
+
     display_name = "Disable Surf Minigame"
 
 
@@ -39,6 +43,7 @@ class MusicOptions(Choice):
     randomize: Music will be randomized.
     disable: All music will be disabled. No music will play throughout the entire game.
     """
+
     display_name = "Music Options"
     option_default = 0
     option_randomize = 1
@@ -50,6 +55,7 @@ class RandomSounds(Toggle):
     """
     Randomizes every sound in the game, minus a select few that can softlock the game
     """
+
     display_name = "Randomize Sounds"
 
 
@@ -57,6 +63,7 @@ class MarioColor(Choice):
     """
     This changes the color of Mario's hat, as well as some key colors that are red including UI etc.
     """
+
     display_name = "Mario's Color"
     option_red = 0
     option_green = 1
@@ -78,6 +85,7 @@ class LuigiColor(Choice):
     """
     This changes the color of Luigi's hat, as well as some key colors that are green including UI etc.
     """
+
     display_name = "Luigi's Color"
     option_red = 0
     option_green = 1
@@ -99,6 +107,7 @@ class MarioPants(Choice):
     """
     This changes the color of Mario's trousers.
     """
+
     display_name = "Mario's Pants Color"
     option_vanilla = 0
     option_red = 1
@@ -119,6 +128,7 @@ class LuigiPants(Choice):
     """
     This changes the color of Luigi's trousers.
     """
+
     display_name = "Luigi's Pants Color"
     option_vanilla = 0
     option_red = 1
@@ -144,6 +154,7 @@ class RandomizeEnemies(Choice):
     custom_groups: Custom enemy groups will be made and shuffled. Some enemy groups will only be semi-random.
     (Groups including flying enemies or pestnuts)
     """
+
     display_name = "Randomize Enemies"
     option_disabled = 0
     option_vanilla_groups = 1
@@ -159,6 +170,7 @@ class RandomizeBosses(Choice):
     Boss Only: Bosses will only be swapped with another boss.
     Boss Normal: Bosses can be swapped with normal enemy encounters.
     """
+
     display_name = "Randomize Bosses"
     option_disabled = 0
     option_bossonly = 1
@@ -172,13 +184,16 @@ class ScaleStats(Toggle):
     This setting is intended for use with the Enemy Randomizer and is Recommended to turn on.
     If you are not using the Enemy Randomizer the effects will be minimal.
     """
+
     display_name = "Scale Enemy Stats"
+
 
 class XPMultiplier(Range):
     """
     This will multiply any XP you receive in battle by the chosen multiplier.
 
     """
+
     display_name = "XP Multiplier"
     range_start = 0
     range_end = 4
@@ -189,6 +204,7 @@ class TattleHp(Toggle):
     """
     This will display the enemies current and max health while in battle.
     """
+
     display_name = "Tattle HP"
 
 
@@ -196,6 +212,7 @@ class RandomizeBackgrounds(Toggle):
     """
     This randomizes the background image in battles
     """
+
     display_name = "Randomize Battle Backgrounds"
 
 
@@ -203,6 +220,7 @@ class HiddenVisible(Choice):
     """
     This makes any hidden blocks in the game into regular item blocks.
     """
+
     display_name = "Item Block Visibility"
     option_disabled = 0
     option_hidden_visible = 1
@@ -214,6 +232,7 @@ class Coins(Toggle):
     """
     Add all coin blocks in the game to the location pool.
     """
+
     display_name = "Coin Blocks"
 
 
@@ -221,6 +240,7 @@ class HarhallsPants(Toggle):
     """
     This will remove the Harhall's Pants check from the pool.
     """
+
     display_name = "Remove Harhall's Pants"
 
 
@@ -230,6 +250,7 @@ class DifficultLogic(Toggle):
     allowing for the logic to account for players getting to certain area's in unintended ways.
     Enable at your own risk, this is not an option made for beginners.
     """
+
     display_name = "Difficult Logic Toggle"
 
 
@@ -240,6 +261,7 @@ class ChuckleBeans(Choice):
     only_visible: Only chuckle bean digspots clearly marked with an X will be added into the item pool.
     all: All chuckle bean digspots will be added into the item pool.
     """
+
     display_name = "Chuckle Beans"
     option_none = 0
     option_only_visible = 1

@@ -16,16 +16,16 @@ from .Rules import set_rules
 
 
 class MLSSWebWorld(WebWorld):
-    theme = 'partyTime'
+    theme = "partyTime"
     bug_report_page = "https://github.com/jamesbrq/ArchipelagoMLSS/issues"
     tutorials = [
         Tutorial(
-            tutorial_name='Setup Guide',
-            description='A guide to setting up Mario & Luigi: Superstar Saga for Archipelago.',
-            language='English',
-            file_name='setup_en.md',
-            link='setup/en',
-            authors=['jamesbrq']
+            tutorial_name="Setup Guide",
+            description="A guide to setting up Mario & Luigi: Superstar Saga for Archipelago.",
+            language="English",
+            file_name="setup_en.md",
+            link="setup/en",
+            authors=["jamesbrq"],
         )
     ]
 
@@ -33,6 +33,7 @@ class MLSSWebWorld(WebWorld):
 class MLSSSettings(settings.Group):
     class RomFile(settings.UserFilePath):
         """File name of the MLSS US rom"""
+
         copy_to = "Mario & Luigi - Superstar Saga (U).gba"
         description = "MLSS ROM File"
         md5s = ["4b1a5897d89d9e74ec7f630eefdfd435"]
@@ -46,6 +47,7 @@ class MLSSWorld(World):
     Adventure with Mario and Luigi together in the Beanbean Kingdom
     to stop the evil cackletta and retrieve the Beanstar.
     """
+
     game = "Mario & Luigi Superstar Saga"
     web = MLSSWebWorld()
     options_dataclass = MLSSOptions
@@ -96,7 +98,7 @@ class MLSSWorld(World):
             "HarhallsPants": self.options.harhalls_pants.value,
             "ChuckleBeans": self.options.chuckle_beans.value,
             "DifficultLogic": self.options.difficult_logic.value,
-            "Coins": self.options.coins.value
+            "Coins": self.options.coins.value,
         }
 
     def create_items(self) -> None:
@@ -134,7 +136,7 @@ class MLSSWorld(World):
         # And finally take as many fillers as we need to have the same amount of items and locations.
         remaining = len(all_locations) - len(required_items) - 5
         if self.options.castle_skip:
-            remaining -= (len(bowsers) + len(bowsersMini) - (5 if self.options.chuckle_beans == 0 else 0))
+            remaining -= len(bowsers) + len(bowsersMini) - (5 if self.options.chuckle_beans == 0 else 0)
         if self.options.skip_minecart and self.options.chuckle_beans == 2:
             remaining -= 1
         if self.options.disable_surf:
@@ -155,11 +157,13 @@ class MLSSWorld(World):
     def set_rules(self) -> None:
         set_rules(self, self.disabled_locations)
         if self.options.castle_skip:
-            self.multiworld.completion_condition[self.player] = \
-                lambda state: state.can_reach("PostJokes", "Region", self.player)
+            self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(
+                "PostJokes", "Region", self.player
+            )
         else:
-            self.multiworld.completion_condition[self.player] = \
-                lambda state: state.can_reach("Bowser's Castle Mini", "Region", self.player)
+            self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(
+                "Bowser's Castle Mini", "Region", self.player
+            )
 
     def create_item(self, name: str) -> MLSSItem:
         item = item_table[name]
@@ -172,6 +176,7 @@ class MLSSWorld(World):
         patch = MLSSProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
         patch.write_file("base_patch.bsdiff4", pkgutil.get_data(__name__, "data/basepatch.bsdiff"))
         write_tokens(self, patch)
-        rom_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}"
-                                                  f"{patch.patch_file_ending}")
+        rom_path = os.path.join(
+            output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}" f"{patch.patch_file_ending}"
+        )
         patch.write(rom_path)

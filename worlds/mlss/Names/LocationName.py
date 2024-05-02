@@ -1,4 +1,4 @@
-class LocationName():
+class LocationName:
     StardustFields1Block1 = "Stardust Fields Room 1 Block 1"
     StardustFields1Block2 = "Stardust Fields Room 1 Block 2"
     StardustFields2Block = "Stardust Fields Room 2 Block"
@@ -359,8 +359,12 @@ class LocationName():
     BeanbeanOutskirtsSouthOfHooniversityGuardsDigspot2 = "Beanbean Outskirts South of Hooniversity Guards Digspot 2"
     BeanbeanOutskirtsSouthOfHooniversityGuardsDigspot3 = "Beanbean Outskirts South of Hooniversity Guards Digspot 3"
     OutsideWoohooHooniversityBlock = "Outside Woohoo Hooniversity Block"
-    BeanbeanOutskirtsEntranceToHoohooMountainBaseDigspot1 = "Beanbean Outskirts Entrance to Hoohoo Mountain Base Digspot 1"
-    BeanbeanOutskirtsEntranceToHoohooMountainBaseDigspot2 = "Beanbean Outskirts Entrance to Hoohoo Mountain Base Digspot 2"
+    BeanbeanOutskirtsEntranceToHoohooMountainBaseDigspot1 = (
+        "Beanbean Outskirts Entrance to Hoohoo Mountain Base Digspot 1"
+    )
+    BeanbeanOutskirtsEntranceToHoohooMountainBaseDigspot2 = (
+        "Beanbean Outskirts Entrance to Hoohoo Mountain Base Digspot 2"
+    )
     WoohooHooniversitySoloMarioBarrelAreaBlock1 = "Woohoo Hooniversity Solo Mario Barrel Area Block 1"
     WoohooHooniversitySoloMarioBarrelAreaBlock2 = "Woohoo Hooniversity Solo Mario Barrel Area Block 2"
     WoohooHooniversitySoloMarioBarrelAreaBlock3 = "Woohoo Hooniversity Solo Mario Barrel Area Block 3"

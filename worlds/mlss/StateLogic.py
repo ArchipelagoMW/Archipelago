@@ -27,30 +27,32 @@ def ultra(state, player):
 
 
 def fruits(state, player):
-    return (state.has("Red Chuckola Fruit", player)
-                          and state.has("Purple Chuckola Fruit", player)
-                          and state.has("White Chuckola Fruit", player))
+    return (
+        state.has("Red Chuckola Fruit", player)
+        and state.has("Purple Chuckola Fruit", player)
+        and state.has("White Chuckola Fruit", player)
+    )
 
 
 def pieces(state, player):
     return (
-                         state.has("Beanstar Piece 1", player)
-                         and state.has("Beanstar Piece 2", player)
-                         and state.has("Beanstar Piece 3", player)
-                         and state.has("Beanstar Piece 4", player)
-                        )
+        state.has("Beanstar Piece 1", player)
+        and state.has("Beanstar Piece 2", player)
+        and state.has("Beanstar Piece 3", player)
+        and state.has("Beanstar Piece 4", player)
+    )
 
 
 def neon(state, player):
     return (
-                          state.has("Blue Neon Egg", player)
-                          and state.has("Red Neon Egg", player)
-                          and state.has("Green Neon Egg", player)
-                          and state.has("Yellow Neon Egg", player)
-                          and state.has("Purple Neon Egg", player)
-                          and state.has("Orange Neon Egg", player)
-                          and state.has("Azure Neon Egg", player)
-                          )
+        state.has("Blue Neon Egg", player)
+        and state.has("Red Neon Egg", player)
+        and state.has("Green Neon Egg", player)
+        and state.has("Yellow Neon Egg", player)
+        and state.has("Purple Neon Egg", player)
+        and state.has("Orange Neon Egg", player)
+        and state.has("Azure Neon Egg", player)
+    )
 
 
 def spangle(state, player):
@@ -87,35 +89,33 @@ def winkle(state, player):
 
 def beanFruit(state, player):
     return (
-                          state.has("Bean Fruit 1", player)
-                          and state.has("Bean Fruit 2", player)
-                          and state.has("Bean Fruit 3", player)
-                          and state.has("Bean Fruit 4", player)
-                          and state.has("Bean Fruit 5", player)
-                          and state.has("Bean Fruit 6", player)
-                          and state.has("Bean Fruit 7", player)
-                          )
+        state.has("Bean Fruit 1", player)
+        and state.has("Bean Fruit 2", player)
+        and state.has("Bean Fruit 3", player)
+        and state.has("Bean Fruit 4", player)
+        and state.has("Bean Fruit 5", player)
+        and state.has("Bean Fruit 6", player)
+        and state.has("Bean Fruit 7", player)
+    )
 
 
 def surfable(state, player):
-    return (
-                        ultra(state, player)
-                        and ((canDig(state, player) and canMini(state, player))
-                        or (membership(state, player) and fire(state, player)))
-                        )
+    return ultra(state, player) and (
+        (canDig(state, player) and canMini(state, player)) or (membership(state, player) and fire(state, player))
+    )
 
 
 def postJokes(state, player):
     return (
-                          surfable(state, player)
-                          and canDig(state, player)
-                          and dressBeanstar(state, player)
-                          and pieces(state, player)
-                          and fruits(state, player)
-                          and brooch(state, player)
-                          and rose(state, player)
-                          and canDash(state, player)
-                          )
+        surfable(state, player)
+        and canDig(state, player)
+        and dressBeanstar(state, player)
+        and pieces(state, player)
+        and fruits(state, player)
+        and brooch(state, player)
+        and rose(state, player)
+        and canDash(state, player)
+    )
 
 
 def teehee(state, player):
@@ -127,19 +127,29 @@ def castleTown(state, player):
 
 
 def fungitown(state, player):
-    return castleTown(state, player) and thunder(state, player) and rose(state, player) and (super(state, player) or canDash(state, player))
+    return (
+        castleTown(state, player)
+        and thunder(state, player)
+        and rose(state, player)
+        and (super(state, player) or canDash(state, player))
+    )
+
 
 def piranha_shop(state, player):
     return state.can_reach("Shop Mom Piranha Flag", "Region", player)
 
+
 def fungitown_shop(state, player):
     return state.can_reach("Shop Enter Fungitown Flag", "Region", player)
+
 
 def star_shop(state, player):
     return state.can_reach("Shop Beanstar Complete Flag", "Region", player)
 
+
 def birdo_shop(state, player):
     return state.can_reach("Shop Birdo Flag", "Region", player)
+
 
 def fungitown_birdo_shop(state, player):
     return state.can_reach("Fungitown Shop Birdo Flag", "Region", player)
