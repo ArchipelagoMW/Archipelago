@@ -4,47 +4,32 @@
 
 The [player options page for this game](../player-options) contains all the options you need to configure and export a config file.
 
-## What does randomization do to this game?
+## What changes have been made?
 
-The contents of all chests are shuffled into the pool.
-These chests become locations where items from this or the other games in the MultiWorld can be found.
-
-Because of this, the player may end up fighting a boss or getting through an area with a different set of upgrades available to them compared to a vanilla playthrough.
-
-In Expanded Pool, the way to open the final area of the game changes, going from having to defeat bosses to having to locate some items, which can also alter the order the game is tackled in.
-
-Finally, there are also new items to work as filler and traps, ranging from a full health and ammo restore to spawning a Ninja on top of you.
-
-## Are there any other changes made?
-
-The game has had several changes made to add new features, fix original issues and prevent new ones. 
-
-The most important changes to know are the following:
+The game has had several changes made to add new features and prevent issues. The most important changes are the following:
 - There is an in-game connection settings menu, autotracker and client console.
 - New save files are created and used automatically for each seed and slot played.
 - The game window can now be dragged and a new integer scaling option has been added.
 
-## What is the goal of Saving Princess when randomized?
-
-You must defeat the final boss and escape the space station in time after securing your mission objective.
-
-In short, the goal is unchanged.
-
 ## What items and locations get shuffled?
 
-The chests and special weapons in the game and their contents are the locations and items that get shuffled.
+The chest contents and special weapons are the items and locations that get shuffled.
 
-By default, bosses are also made into locations, meaning that defeating a boss will count as a check.
-The door to the final area will open once the player has received the 4 Keys which will be shuffled, instead of when the main area bosses are defeated.
+Additionally, there are new items to work as filler and traps, ranging from a full health and ammo restore to spawning a Ninja on top of you.
+
+The Expanded Pool option, which is enabled by default, adds a few more items and locations:
+- Completing the intro sequence, powering the generator with the Volt Laser and defeating each boss become locations.
+- 4 Keys will be shuffled, which serve to open the door to the final area in place of defeating the main area bosses.
+- A System Power item will be shuffled, which restores power to the final area instead of this happening when the generator is powered.
 
 ## What does another world's item look like in Saving Princess?
 
-Some locations, such as boss kills, have no visual representation, but those that do will have either a vanilla sprite corresponding to the item or, if it's an item from a different game, the Archipelago icon.
+Some locations, such as boss kills, have no visual representation, but those that do will have the Archipelago icon.
 
-Once the item is picked up a textbox will, without halting gameplay, inform you of the item that was found as well as the player that will be receiving it.
+Once the item is picked up a textbox will inform you of the item that was found as well as the player that will be receiving it.
 
-These textboxes will have colored backgrounds and comments about the item category, as well.
-For example, Progression items will have a purple background and say "Looks plenty important!".
+These textboxes will have colored backgrounds and comments about the item category.
+For example, progression items will have a purple background and say "Looks plenty important!".
 
 ## When the player receives an item, what happens?
 
