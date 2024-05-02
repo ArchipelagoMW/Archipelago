@@ -468,88 +468,88 @@ def set_rules(world: "MLSSWorld", excluded):
             lambda state: StateLogic.canCrash(state, world.player) or StateLogic.super(state, world.player),
         )
         add_rule(
-            world.multiworld.get_location("Hoohoo Mountain Base Boo Statue Cave Coin Block 2", world.player),
+            world.multiworld.get_location(LocationName.HoohooMountainBaseBooStatueCaveCoinBlock2, world.player),
             lambda state: StateLogic.canCrash(state, world.player) or StateLogic.super(state, world.player),
         )
         add_rule(
-            world.multiworld.get_location("Hoohoo Mountain Base Boo Statue Cave Coin Block 3", world.player),
+            world.multiworld.get_location(LocationName.HoohooMountainBaseBooStatueCaveCoinBlock3, world.player),
             lambda state: StateLogic.canCrash(state, world.player) or StateLogic.super(state, world.player),
         )
         add_rule(
-            world.multiworld.get_location("Beanbean Outskirts NW Coin Block", world.player),
+            world.multiworld.get_location(LocationName.BeanbeanOutskirtsNWCoinBlock, world.player),
             lambda state: StateLogic.super(state, world.player),
         )
         add_rule(
-            world.multiworld.get_location("Beanbean Outskirts S Room 1 Coin Block", world.player),
+            world.multiworld.get_location(LocationName.BeanbeanOutskirtsSRoom1CoinBlock, world.player),
             lambda state: StateLogic.ultra(state, world.player) and StateLogic.thunder(state, world.player),
         )
         add_rule(
-            world.multiworld.get_location("Beanbean Outskirts S Room 2 Coin Block", world.player),
+            world.multiworld.get_location(LocationName.BeanbeanOutskirtsSRoom2CoinBlock, world.player),
             lambda state: StateLogic.canCrash(state, world.player),
         )
         add_rule(
-            world.multiworld.get_location("Chateau Popple Room Coin Block 1", world.player),
+            world.multiworld.get_location(LocationName.ChateauPoppleRoomCoinBlock1, world.player),
             lambda state: StateLogic.brooch(state, world.player),
         )
         add_rule(
-            world.multiworld.get_location("Chateau Popple Room Coin Block 2", world.player),
+            world.multiworld.get_location(LocationName.ChateauPoppleRoomCoinBlock2, world.player),
             lambda state: StateLogic.brooch(state, world.player),
         )
         add_rule(
-            world.multiworld.get_location("Chucklehuck Woods Cave Room 1 Coin Block", world.player),
+            world.multiworld.get_location(LocationName.ChucklehuckWoodsCaveRoom1CoinBlock, world.player),
             lambda state: StateLogic.brooch(state, world.player),
         )
         add_rule(
-            world.multiworld.get_location("Chucklehuck Woods Cave Room 2 Coin Block", world.player),
+            world.multiworld.get_location(LocationName.ChucklehuckWoodsCaveRoom2CoinBlock, world.player),
             lambda state: StateLogic.brooch(state, world.player),
         )
         add_rule(
-            world.multiworld.get_location("Chucklehuck Woods Cave Room 3 Coin Block", world.player),
+            world.multiworld.get_location(LocationName.ChucklehuckWoodsCaveRoom3CoinBlock, world.player),
             lambda state: StateLogic.brooch(state, world.player),
         )
         add_rule(
-            world.multiworld.get_location("Chucklehuck Woods Pipe 5 Room Coin Block", world.player),
+            world.multiworld.get_location(LocationName.ChucklehuckWoodsPipe5RoomCoinBlock, world.player),
             lambda state: StateLogic.brooch(state, world.player) and StateLogic.hammers(state, world.player),
         )
         add_rule(
-            world.multiworld.get_location("Chucklehuck Woods Room 7 Coin Block", world.player),
+            world.multiworld.get_location(LocationName.ChucklehuckWoodsRoom7CoinBlock, world.player),
             lambda state: StateLogic.brooch(state, world.player) and StateLogic.hammers(state, world.player),
         )
         add_rule(
-            world.multiworld.get_location("Chucklehuck Woods After Chuckleroot Coin Block", world.player),
+            world.multiworld.get_location(LocationName.ChucklehuckWoodsAfterChucklerootCoinBlock, world.player),
             lambda state: StateLogic.brooch(state, world.player) and StateLogic.fruits(state, world.player),
         )
         add_rule(
-            world.multiworld.get_location("Chucklehuck Woods Koopa Room Coin Block", world.player),
+            world.multiworld.get_location(LocationName.ChucklehuckWoodsKoopaRoomCoinBlock, world.player),
             lambda state: StateLogic.brooch(state, world.player),
         )
         add_rule(
-            world.multiworld.get_location("Chucklehuck Woods Winkle Area Cave Coin Block", world.player),
+            world.multiworld.get_location(LocationName.ChucklehuckWoodsWinkleAreaCaveCoinBlock, world.player),
             lambda state: StateLogic.brooch(state, world.player) and StateLogic.canDash(state, world.player),
         )
         add_rule(
-            world.multiworld.get_location("Sewers Prison Room Coin Block", world.player),
+            world.multiworld.get_location(LocationName.SewersPrisonRoomCoinBlock, world.player),
             lambda state: StateLogic.rose(state, world.player),
         )
         add_rule(
-            world.multiworld.get_location("Teehee Valley Past Ultra Hammer Rocks Coin Block", world.player),
+            world.multiworld.get_location(LocationName.TeeheeValleyPastUltraHammerRocksCoinBlock, world.player),
             lambda state: StateLogic.ultra(state, world.player),
         )
         add_rule(
-            world.multiworld.get_location("S.S. Chuckola Storage Room Coin Block 1", world.player),
+            world.multiworld.get_location(LocationName.SSChuckolaStorageRoomCoinBlock1, world.player),
             lambda state: StateLogic.super(state, world.player) or StateLogic.canDash(state, world.player),
         )
         add_rule(
-            world.multiworld.get_location("Gwarhar Lagoon First Underwater Area Room 2 Coin Block", world.player),
+            world.multiworld.get_location(LocationName.SSChuckolaStorageRoomCoinBlock2, world.player),
+            lambda state: StateLogic.super(state, world.player) or StateLogic.canDash(state, world.player),
+        )
+        add_rule(
+            world.multiworld.get_location(LocationName.GwarharLagoonFirstUnderwaterAreaRoom2CoinBlock, world.player),
             lambda state: StateLogic.canDash(state, world.player)
             and (StateLogic.membership(state, world.player) or StateLogic.surfable(state, world.player)),
         )
         add_rule(
-            world.multiworld.get_location("S.S. Chuckola Storage Room Coin Block 2", world.player),
-            lambda state: StateLogic.super(state, world.player) or StateLogic.canDash(state, world.player),
-        )
-        add_rule(
-            world.multiworld.get_location("Joke's End Second Floor West Room Coin Block", world.player),
+            world.multiworld.get_location(LocationName.JokesEndSecondFloorWestRoomCoinBlock, world.player),
             lambda state: StateLogic.ultra(state, world.player)
             and StateLogic.fire(state, world.player)
             and (
@@ -558,7 +558,7 @@ def set_rules(world: "MLSSWorld", excluded):
             ),
         )
         add_rule(
-            world.multiworld.get_location("Joke's End North of Bridge Room Coin Block", world.player),
+            world.multiworld.get_location(LocationName.JokesEndNorthofBridgeRoomCoinBlock, world.player),
             lambda state: StateLogic.ultra(state, world.player)
             and StateLogic.fire(state, world.player)
             and StateLogic.canDig(state, world.player)
@@ -566,6 +566,6 @@ def set_rules(world: "MLSSWorld", excluded):
         )
         if not world.options.difficult_logic:
             add_rule(
-                world.multiworld.get_location("Joke's End North of Bridge Room Coin Block", world.player),
+                world.multiworld.get_location(LocationName.JokesEndNorthofBridgeRoomCoinBlock, world.player),
                 lambda state: StateLogic.canCrash(state, world.player),
             )
