@@ -7,8 +7,7 @@
 
 - [BizHawk](https://tasvideos.org/BizHawk/ReleaseHistory) 2.7 eller senare
 
-- Ett Engelsk Pokémon Emerald ROM, förmodligen med namnet `Pokemon - Emerald Version (USA, Europe).gba`
-     - Archipelago kan inte hjälpa dig med detta
+- Ett Engelsk Pokémon Emerald ROM, Archipelago kan inte hjälpa dig med detta
 
 ### konfigurera BizHawk
 
