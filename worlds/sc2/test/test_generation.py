@@ -402,3 +402,23 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertNotIn(ItemNames.CORRUPTOR, item_names)
         self.assertNotIn(ItemNames.SCOURGE, item_names)
 
+    def test_soa_items_are_included_in_wol_when_presence_set_to_everywhere(self) -> None:
+        options = {
+            'enable_nco_missions': False,
+            'enable_prophecy_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_hots_missions': False,
+            'enable_epilogue_missions': False,
+            'spear_of_adun_presence': Options.SpearOfAdunPresence.option_everywhere,
+            'mission_order': Options.MissionOrder.option_grid,
+            'maximum_campaign_size': Options.MaximumCampaignSize.range_end,
+            'accessibility': 'locations',
+            'excluded_items': {ItemGroups.ItemGroupNames.BARRACKS_UNITS: 0},
+        }
+        self.generate_world(options)
+        item_names = [item.name for item in self.multiworld.itempool]
+        self.assertTrue(item_names)
+        self.assertIn(ItemNames.SOA_SOLAR_LANCE, item_names)
+        self.assertIn(ItemNames.SOA_SOLAR_BOMBARDMENT, item_names)
+

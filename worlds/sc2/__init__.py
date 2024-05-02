@@ -286,7 +286,6 @@ def flag_faction_unit_excludes_based_on_mission_excludes(world: SC2World, item_l
                 item.flags |= ItemFilterFlags.Excluded
     
 
-
 def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem]) -> None:
     """
     Excludes items based on mission / campaign presence: Nova Gear, Kerrigan abilities, SOA
@@ -307,7 +306,7 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
     tvz_build_missions = [mission for mission in missions if tvz_build_mask & mission.flags == tvz_expect_value]
 
     # Check if SOA actives should be present
-    if world.options.spear_of_adun_presence == SpearOfAdunPresence.option_not_present:
+    if world.options.spear_of_adun_presence != SpearOfAdunPresence.option_not_present:
         soa_missions = missions
         if not world.options.spear_of_adun_present_in_no_build:
             soa_missions = [m for m in soa_missions if MissionFlag.NoBuild not in m.flags]
@@ -321,7 +320,7 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
         soa_presence = False
     
     # Check if SOA passives should be present
-    if world.options.spear_of_adun_autonomously_cast_ability_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_not_present:
+    if world.options.spear_of_adun_autonomously_cast_ability_presence != SpearOfAdunAutonomouslyCastAbilityPresence.option_not_present:
         soa_missions = missions
         if not world.options.spear_of_adun_autonomously_cast_present_in_no_build:
             soa_missions = [m for m in soa_missions if MissionFlag.NoBuild not in m.flags]
