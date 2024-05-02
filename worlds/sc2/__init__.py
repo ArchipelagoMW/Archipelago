@@ -476,12 +476,6 @@ def flag_start_unit(world: SC2World, item_list: List[FilterItem], starter_unit: 
             starter_weapon_options = [item for item in possible_starter_items.values() if item.name in possible_starter_weapons]
             starter_weapon = world.random.choice(starter_weapon_options)
             starter_weapon.flags |= ItemFilterFlags.StartInventory
-        mission_count = sum(len(campaign) for campaign in world.mission_req_table.values())
-        if mission_count <= 10 and world.final_mission_id == SC2Mission.END_GAME.id:
-            if ItemNames.LIBERATOR_RAID_ARTILLERY in possible_starter_items:
-                possible_starter_items[ItemNames.LIBERATOR_RAID_ARTILLERY].flags |= ItemFilterFlags.StartInventory
-            else:
-                logger.warning(f"Tried and failed to add {ItemNames.LIBERATOR_RAID_ARTILLERY} to the start inventory because it was excluded or plando'd")
 
 
 def flag_start_abilities(world: SC2World, item_list: List[FilterItem]) -> None:

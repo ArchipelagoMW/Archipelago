@@ -6,7 +6,7 @@ import unittest
 import random
 
 from .. import Options, MissionTables, ItemNames, Items, ItemGroups
-from .. import FilterItem, ItemFilterFlags, create_and_flag_explicit_item_locks_and_excludes, SC2World
+from .. import get_all_missions, SC2World
 
 from BaseClasses import MultiWorld, CollectionState, PlandoOptions
 from argparse import Namespace
@@ -110,31 +110,6 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertNotIn(ItemNames.NOVA_BLAZEFIRE_GUNBLADE, item_names)
         self.assertNotIn(ItemNames.NOVA_ENERGY_SUIT_MODULE, item_names)
 
-    def test_usecase_terran_with_nco_units_only(self):
-        options = {
-            'enable_prophecy_missions': False,
-            'enable_hots_missions': False,
-            'enable_lotv_prologue_missions': False,
-            'enable_lotv_missions': False,
-            'enable_epilogue_missions': False,
-            'excluded_items': {
-                ItemGroups.ItemGroupNames.TERRAN_UNITS: 0,
-            },
-            'unexcluded_items': {
-                ItemGroups.ItemGroupNames.NCO_UNITS: 0,
-            },
-        }
-        self.generate_world(options)
-        self.assertTrue(self.multiworld.itempool)
-        item_names = [item.name for item in self.multiworld.itempool]
-        self.assertIn(ItemNames.MARINE, item_names)
-        self.assertIn(ItemNames.RAVEN, item_names)
-        self.assertIn(ItemNames.LIBERATOR, item_names)
-        self.assertIn(ItemNames.BATTLECRUISER, item_names)
-        self.assertNotIn(ItemNames.DIAMONDBACK, item_names)
-        self.assertNotIn(ItemNames.DIAMONDBACK_BURST_CAPACITORS, item_names)
-        self.assertNotIn(ItemNames.VIKING, item_names)
-
     def test_excluding_groups_excludes_all_items_in_group(self):
         options = {
             'excluded_items': [
@@ -165,6 +140,50 @@ class TestItemFiltering(Sc2SetupTestBase):
             self.assertNotIn(item_data.type, Items.ZergItemType)
             self.assertNotEqual(item_data.type, Items.TerranItemType.Nova_Gear)
             self.assertNotEqual(item_name, ItemNames.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE)
+
+    def test_usecase_terran_with_nco_units_only(self):
+        options = {
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'excluded_items': {
+                ItemGroups.ItemGroupNames.TERRAN_UNITS: 0,
+            },
+            'unexcluded_items': {
+                ItemGroups.ItemGroupNames.NCO_UNITS: 0,
+            },
+        }
+        self.generate_world(options)
+        self.assertTrue(self.multiworld.itempool)
+        item_names = [item.name for item in self.multiworld.itempool]
+        self.assertIn(ItemNames.MARINE, item_names)
+        self.assertIn(ItemNames.RAVEN, item_names)
+        self.assertIn(ItemNames.LIBERATOR, item_names)
+        self.assertIn(ItemNames.BATTLECRUISER, item_names)
+        self.assertNotIn(ItemNames.DIAMONDBACK, item_names)
+        self.assertNotIn(ItemNames.DIAMONDBACK_BURST_CAPACITORS, item_names)
+        self.assertNotIn(ItemNames.VIKING, item_names)
+
+    def test_usecase_nco_with_nobuilds_excluded(self):
+        options = {
+            'enable_wol_missions': False,
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'shuffle_no_build': Options.ShuffleNoBuild.option_false,
+            'mission_order': Options.MissionOrder.option_mini_campaign,
+        }
+        self.generate_world(options)
+        self.assertTrue(self.multiworld.itempool)
+        missions = get_all_missions(self.world.mission_req_table)
+        self.assertNotIn(MissionTables.SC2Mission.THE_ESCAPE, missions)
+        self.assertNotIn(MissionTables.SC2Mission.IN_THE_ENEMY_S_SHADOW, missions)
+        for mission in missions:
+            self.assertEqual(MissionTables.SC2Campaign.NCO, mission.campaign)
 
     def test_excluding_all_terran_missions_excludes_all_terran_items(self) -> None:
         options = {

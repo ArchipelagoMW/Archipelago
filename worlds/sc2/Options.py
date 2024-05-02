@@ -917,7 +917,7 @@ def get_disabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
 def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
     mission_order_type = world.options.mission_order.value
     excluded_mission_names = world.options.excluded_missions.value
-    shuffle_no_build = world.options.shuffle_no_build
+    shuffle_no_build = world.options.shuffle_no_build.value
     disabled_campaigns = get_disabled_campaigns(world)
 
     excluded_missions: Set[SC2Mission] = set([lookup_name_to_mission[name] for name in excluded_mission_names])
