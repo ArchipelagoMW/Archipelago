@@ -136,8 +136,8 @@ class SmashThroughHardBlocks(Toggle):
 class MultiworldSend(Choice):
     '''
     When to tell the server you've found items.
-    Immediately: Count your locations as you take them from the box.
     On escape: Only count your locations after the game saves.
+    Immediately: Count your locations as you take them from the box.
     Regardless of this setting, sending other players items from a level you can't clear is not in logic.
     '''
     display_name = "Send Locations to Server"
