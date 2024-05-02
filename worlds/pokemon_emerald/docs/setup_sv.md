@@ -17,7 +17,7 @@ När du har installerat Bizhawk, öppna `EmuHawk.exe` och ändra följande inst�
  - Öppna en `.gba` fil i EmuHawk och gå till `Config > Controllers…` för att konfigurera dina tangentbords och handkontrolls inputs. 
  om du inte hittar `Controllers…`, I config menyn så starta bara något valfrit `.gba` ROM först.
 - Överväg också att rensa keybind inställningar I `Config > Hotkeys…` som du inte tänkt använda, du kan trycka på en keybind
-och använda ESC för att ta bort.
+och använda ESC för att ta bort den.
 
 ## Extra programvara
 
@@ -49,7 +49,7 @@ du till exempel behöver stänga och starta om något medans du spelar.
 1. Pokemon Emerald använder Archipelago's BizHawk Klient. Om klienten fortfarande inte startat efter att du patchat ditt spel,
 så kan du bara öppna den igen från launchern.
 2. Dubbel kolla att EmuHawk faktiskt startat med den patchade ROM filen.
-3. I EmuHawk, gå till `Tools > Lua Console`. Det är viktigt att du inte stänger denna Lua konsolen medans du spelar, dock är det ok att minimera för att dölja den
+3. I EmuHawk, gå till `Tools > Lua Console`. Denna Lua konsolen får inte stängas medans du spelar.
 4. I Lua konsolen, Tryck på `Script > Open Script…`.
 5. Leta reda på din Archipelago map och i den öppna `data/lua/connector_bizhawk_generic.lua`.
 6. Emulatorn och klienten kommer så småningom koppla ihop med varanda. I klienten kommer du sedan kunna see om allt är
