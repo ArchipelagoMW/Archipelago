@@ -668,17 +668,20 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
 
 
 class LockedItems(Sc2ItemDict):
-    """Guarantees that these items will be unlockable"""
+    """Guarantees that these items will be unlockable, in the amount specified.
+    Specify an amount of 0 to lock all copies of an item."""
     display_name = "Locked Items"
 
 
 class ExcludedItems(Sc2ItemDict):
-    """Guarantees that these items will not be unlockable"""
+    """Guarantees that these items will not be unlockable, in the amount specified.
+    Specify an amount of 0 to exclude all copies of an item."""
     display_name = "Excluded Items"
 
 
 class UnexcludedItems(Sc2ItemDict):
-    """Undoes an item exclusion; useful for whitelisting or fine-tuning a category."""
+    """Undoes an item exclusion; useful for whitelisting or fine-tuning a category.
+    Specify an amount of 0 to unexclude all copies of an item."""
     display_name = "Unexcluded Items"
 
 
