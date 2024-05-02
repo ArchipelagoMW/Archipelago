@@ -64,11 +64,8 @@ For the Entrance Randomizer:
 - The portal in the trophy room of the Old House is active from the start.
 - The elevator in Cathedral is immediately usable without activating the fuse. Activating the fuse does nothing.
 
-## What item groups are there?
-Bombs, consumables (non-bomb ones), weapons, melee weapons (stick and sword), keys, hexagons, offerings, hero relics, cards, golden treasures, money, pages, and abilities (the three ability pages). There are also a few groups being used for singular items: laurels, orb, dagger, magic rod, holy cross, prayer, icebolt, and progressive sword.
-
-## What location groups are there?
-Holy cross (for all holy cross checks), fairies (for the two fairy checks), well (for the coin well checks), shop, bosses (for the bosses with checks associated with them), hero relic (for the 6 hero grave checks), and ladders (for the ladder items when you have shuffle ladders enabled).
+## Does this game have item and location groups?
+Yes! To find what they are, open up the Archipelago Text Client while connected to a TUNIC session and type in `/item_groups` or `/location_groups`.
 
 ## Is Connection Plando supported?
 Yes. The host needs to enable it in their `host.yaml`, and the player's yaml needs to contain a plando_connections block.
