@@ -236,9 +236,12 @@ class LingoPlayerLogic:
         elif location_checks == LocationChecks.option_insanity:
             location_classification = LocationClassification.insanity
 
+        if door_shuffle != ShuffleDoors.option_none and not early_color_hallways:
+            location_classification |= LocationClassification.small_sphere_one
+
         for location_name, location_data in ALL_LOCATION_TABLE.items():
             if location_name != self.victory_condition:
-                if location_classification not in location_data.classification:
+                if not (location_classification & location_data.classification):
                     continue
 
                 self.add_location(location_data.room, location_name, location_data.code, location_data.panels, world)
