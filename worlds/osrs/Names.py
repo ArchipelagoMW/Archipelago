@@ -1,4 +1,7 @@
-class RegionNames:
+from enum import Enum
+
+
+class RegionNames(str, Enum):
     Lumbridge = "Lumbridge"
     Lumbridge_Swamp = "Lumbridge Swamp"
     Lumbridge_Farms_East = "Lumbridge Farms East"
@@ -52,8 +55,10 @@ class RegionNames:
     Lobster = "Lobster Spot"
     Mind_Runes = "Mind Runes"
 
+    __str__ = str.__str__
 
-class ItemNames:
+
+class ItemNames(str, Enum):
     Lumbridge = "Area: Lumbridge"
     Lumbridge_Swamp = "Area: Lumbridge Swamp"
     Lumbridge_Farms = "Area: Lumbridge Farms"
@@ -119,8 +124,10 @@ class ItemNames:
     QP_X_Marks_the_Spot = "1 QP (X Marks The Spot)"
     QP_Below_Ice_Mountain = "1 QP (Below Ice Mountain)"
 
+    __str__ = str.__str__
 
-class LocationNames:
+
+class LocationNames(str, Enum):
     Q_Cooks_Assistant = "Quest: Cook's Assistant"
     Q_Demon_Slayer = "Quest: Demon Slayer"
     Q_Restless_Ghost = "Quest: The Restless Ghost"
@@ -198,3 +205,5 @@ class LocationNames:
     Combat_Level_15 = "Combat Level 15"
     Combat_Level_25 = "Combat Level 25"
     Q_Dragon_Slayer = "Quest: Dragon Slayer"
+
+    __str__ = str.__str__
