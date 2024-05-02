@@ -527,15 +527,13 @@ class ValidInventory:
 
     def __init__(self, world: 'SC2World',
                  item_pool: List[Item], existing_items: List[Item], locked_items: List[Item],
-                 used_races: Set[SC2Race]):
+    ):
         self.multiworld = world.multiworld
         self.player = world.player
         self.world: 'SC2World' = world
         self.logical_inventory = list()
         self.locked_items = locked_items[:]
         self.existing_items = existing_items
-        soa_presence = get_option_value(world, "spear_of_adun_presence")
-        soa_autocast_presence = get_option_value(world, "spear_of_adun_autonomously_cast_ability_presence")
         # Initial filter of item pool
         self.item_pool = []
         item_quantities: dict[str, int] = dict()
@@ -545,16 +543,6 @@ class ValidInventory:
         min_upgrades = 1 if mission_count < 10 else 2
         for item in item_pool:
             item_info = get_full_item_list()[item.name]
-            if item_info.race != SC2Race.ANY and item_info.race not in used_races:
-                if soa_presence == SpearOfAdunPresence.option_everywhere \
-                        and item.name in spear_of_adun_calldowns:
-                    # Add SoA powers regardless of used races as it's present everywhere
-                    self.item_pool.append(item)
-                if soa_autocast_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_everywhere \
-                        and item.name in spear_of_adun_castable_passives:
-                    self.item_pool.append(item)
-                # Drop any item belonging to a race not used in the campaign
-                continue
             if item_info.type in upgrade_item_types:
                 # Locking upgrades based on mission duration
                 if item.name not in item_quantities:
@@ -580,43 +568,11 @@ def filter_items(world: 'SC2World', mission_req_table: Dict[SC2Campaign, Dict[st
     """
     open_locations = [location for location in location_cache if location.item is None]
     inventory_size = len(open_locations)
-    used_races = get_used_races(mission_req_table, world)
     mission_requirements = [(location.name, location.access_rule) for location in location_cache]
-    valid_inventory = ValidInventory(world, item_pool, existing_items, locked_items, used_races)
+    valid_inventory = ValidInventory(world, item_pool, existing_items, locked_items)
 
     valid_items = valid_inventory.generate_reduced_inventory(inventory_size, mission_requirements)
     return valid_items
-
-
-def get_used_races(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]], world: 'SC2World') -> Set[SC2Race]:
-    grant_story_tech = get_option_value(world, "grant_story_tech")
-    take_over_ai_allies = get_option_value(world, "take_over_ai_allies")
-    missions = missions_in_mission_table(mission_req_table)
-    kerrigan_presence = (
-        world.options.kerrigan_presence in kerrigan_unit_available
-        and any([MissionFlag.Kerrigan in mission.flags for mission in missions])
-    )
-
-    # By missions
-    races = set([mission.race for mission in missions])
-
-    # Conditionally logic-less no-builds (They're set to SC2Race.ANY):
-    if grant_story_tech == GrantStoryTech.option_false:
-        if SC2Mission.ENEMY_WITHIN in missions:
-            # Zerg units need to be unlocked
-            races.add(SC2Race.ZERG)
-        if kerrigan_presence \
-                and not missions.isdisjoint({SC2Mission.BACK_IN_THE_SADDLE, SC2Mission.SUPREME, SC2Mission.CONVICTION, SC2Mission.THE_INFINITE_CYCLE}):
-            # You need some Kerrigan abilities (they're granted if Kerriganless or story tech granted)
-            races.add(SC2Race.ZERG)
-
-    # If you take over the AI Ally, you need to have its race stuff
-    if take_over_ai_allies == TakeOverAIAllies.option_true \
-            and not missions.isdisjoint({SC2Mission.THE_RECKONING}):
-        # Jimmy in The Reckoning
-        races.add(SC2Race.TERRAN)
-
-    return races
 
 
 def missions_in_mission_table(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]]) -> Set[SC2Mission]:
