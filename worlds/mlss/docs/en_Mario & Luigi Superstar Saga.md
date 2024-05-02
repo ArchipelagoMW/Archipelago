@@ -63,4 +63,4 @@ Items in a shop from another player's world will display the player name and ite
 
 ## When the player receives an item, what happens?
 
-Items will be placed directly into the players inventory after a few seconds. Sometimes for certain events and cutscenes to be properly triggered right after you recieved an item, you may have to leave and re-enter the room to properly load everything required for the respective event or cutscene.
+Items will be placed directly into the players inventory after a few seconds. Sometimes for certain events and cutscenes to be properly triggered right after you received an item, you may have to leave and re-enter the room to properly load everything required for the respective event or cutscene.
