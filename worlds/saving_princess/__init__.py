@@ -2,7 +2,7 @@ from typing import ClassVar, Dict, Any, Type, List
 
 from BaseClasses import Tutorial, ItemClassification as ItemClass
 from Options import PerGameCommonOptions
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
 
 from . import Options, Items, Locations
 from .Constants import *
