@@ -13,25 +13,15 @@
     cursor: unset;
 }
 
-#games h2{
+#games summary{
     color: #93dcff;
     margin-bottom: 2px;
-}
-
-#games .collapse-toggle{
+    margin-top: 20px;
     cursor: pointer;
 }
 
-#games h2 .collapse-arrow{
-    font-size: 20px;
-    display: inline-block; /* make vertical-align work */
-    padding-bottom: 9px;
-    vertical-align: middle;
-    padding-right: 8px;
-}
-
-#games p.collapsed{
-    display: none;
+#games summary > *{
+    display: inline;
 }
 
 #games a{
