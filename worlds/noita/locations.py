@@ -12,7 +12,7 @@ class NoitaLocation(Location):
 class LocationData(NamedTuple):
     id: int
     flag: int = 0
-    ltype: str = "shop"
+    ltype: str = "Shop"
 
 
 class LocationFlag(IntEnum):
@@ -25,7 +25,7 @@ class LocationFlag(IntEnum):
 
 # Mapping of items in each region.
 # Only the first Hidden Chest and Pedestal are mapped here, the others are created in Regions.
-# ltype key: "chest" = Hidden Chests, "pedestal" = Pedestals, "boss" = Boss, "orb" = Orb.
+# ltype key: "Chest" = Hidden Chests, "Pedestal" = Pedestals, "Boss" = Boss, "Orb" = Orb.
 # 110000-110671
 location_region_mapping: Dict[str, Dict[str, LocationData]] = {
     "Coal Pits Holy Mountain": {
@@ -91,117 +91,118 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Secret Shop Item 4": LocationData(110045),
     },
     "The Sky": {
-        "Kivi": LocationData(110670, LocationFlag.main_world, "boss"),
+        "Kivi": LocationData(110670, LocationFlag.main_world, "Boss"),
     },
     "Floating Island": {
-        "Floating Island Orb": LocationData(110658, LocationFlag.main_path, "orb"),
+        "Floating Island Orb": LocationData(110658, LocationFlag.main_path, "Orb"),
     },
     "Pyramid": {
-        "Kolmisilmän Koipi": LocationData(110649, LocationFlag.main_world, "boss"),
-        "Pyramid Orb":       LocationData(110659, LocationFlag.main_world, "orb"),
-        "Sandcave Orb":      LocationData(110662, LocationFlag.main_world, "orb"),
+        "Kolmisilmän Koipi": LocationData(110649, LocationFlag.main_world, "Boss"),
+        "Pyramid Orb":       LocationData(110659, LocationFlag.main_world, "Orb"),
+        "Sandcave Orb":      LocationData(110662, LocationFlag.main_world, "Orb"),
     },
     "Overgrown Cavern": {
-        "Overgrown Cavern Chest":    LocationData(110526, LocationFlag.main_world, "chest"),
-        "Overgrown Cavern Pedestal": LocationData(110546, LocationFlag.main_world, "pedestal"),
+        "Overgrown Cavern Chest":    LocationData(110526, LocationFlag.main_world, "Chest"),
+        "Overgrown Cavern Pedestal": LocationData(110546, LocationFlag.main_world, "Pedestal"),
     },
     "Lake": {
-        "Syväolento": LocationData(110651, LocationFlag.main_world, "boss"),
-        "Tapion vasalli": LocationData(110669, LocationFlag.main_world, "boss"),
+        "Syväolento": LocationData(110651, LocationFlag.main_world, "Boss"),
+        "Tapion vasalli": LocationData(110669, LocationFlag.main_world, "Boss"),
     },
     "Frozen Vault": {
-        "Frozen Vault Orb":      LocationData(110660, LocationFlag.main_world, "orb"),
-        "Frozen Vault Chest":    LocationData(110566, LocationFlag.main_world, "chest"),
-        "Frozen Vault Pedestal": LocationData(110586, LocationFlag.main_world, "pedestal"),
+        "Frozen Vault Orb":      LocationData(110660, LocationFlag.main_world, "Orb"),
+        "Frozen Vault Chest":    LocationData(110566, LocationFlag.main_world, "Chest"),
+        "Frozen Vault Pedestal": LocationData(110586, LocationFlag.main_world, "Pedestal"),
     },
     "Mines": {
-        "Mines Chest":    LocationData(110046, LocationFlag.main_path, "chest"),
-        "Mines Pedestal": LocationData(110066, LocationFlag.main_path, "pedestal"),
+        "Mines Chest":    LocationData(110046, LocationFlag.main_path, "Chest"),
+        "Mines Pedestal": LocationData(110066, LocationFlag.main_path, "Pedestal"),
     },
     # Collapsed Mines is a very small area, combining it with the Mines. Leaving this here as a reminder
+
     "Ancient Laboratory": {
-        "Ylialkemisti": LocationData(110656, LocationFlag.side_path, "boss"),
+        "Ylialkemisti": LocationData(110656, LocationFlag.side_path, "Boss"),
     },
     "Abyss Orb Room": {
-        "Sauvojen Tuntija": LocationData(110650, LocationFlag.side_path, "boss"),
-        "Abyss Orb":        LocationData(110665, LocationFlag.main_path, "orb"),
+        "Sauvojen Tuntija": LocationData(110650, LocationFlag.side_path, "Boss"),
+        "Abyss Orb":        LocationData(110665, LocationFlag.main_path, "Orb"),
     },
     "Below Lava Lake": {
-        "Lava Lake Orb": LocationData(110661, LocationFlag.side_path, "orb"),
+        "Lava Lake Orb": LocationData(110661, LocationFlag.side_path, "Orb"),
     },
     "Coal Pits": {
-        "Coal Pits Chest":    LocationData(110126, LocationFlag.main_path, "chest"),
-        "Coal Pits Pedestal": LocationData(110146, LocationFlag.main_path, "pedestal"),
+        "Coal Pits Chest":    LocationData(110126, LocationFlag.main_path, "Chest"),
+        "Coal Pits Pedestal": LocationData(110146, LocationFlag.main_path, "Pedestal"),
     },
     "Fungal Caverns": {
-        "Fungal Caverns Chest":    LocationData(110166, LocationFlag.side_path, "chest"),
-        "Fungal Caverns Pedestal": LocationData(110186, LocationFlag.side_path, "pedestal"),
+        "Fungal Caverns Chest":    LocationData(110166, LocationFlag.side_path, "Chest"),
+        "Fungal Caverns Pedestal": LocationData(110186, LocationFlag.side_path, "Pedestal"),
     },
     "Snowy Depths": {
-        "Snowy Depths Chest":    LocationData(110206, LocationFlag.main_path, "chest"),
-        "Snowy Depths Pedestal": LocationData(110226, LocationFlag.main_path, "pedestal"),
+        "Snowy Depths Chest":    LocationData(110206, LocationFlag.main_path, "Chest"),
+        "Snowy Depths Pedestal": LocationData(110226, LocationFlag.main_path, "Pedestal"),
     },
     "Magical Temple": {
-        "Magical Temple Orb":  LocationData(110663, LocationFlag.side_path, "orb"),
+        "Magical Temple Orb":  LocationData(110663, LocationFlag.side_path, "Orb"),
     },
     "Hiisi Base": {
-        "Hiisi Base Chest":    LocationData(110246, LocationFlag.main_path, "chest"),
-        "Hiisi Base Pedestal": LocationData(110266, LocationFlag.main_path, "pedestal"),
+        "Hiisi Base Chest":    LocationData(110246, LocationFlag.main_path, "Chest"),
+        "Hiisi Base Pedestal": LocationData(110266, LocationFlag.main_path, "Pedestal"),
     },
     "Underground Jungle": {
-        "Suomuhauki":                  LocationData(110648, LocationFlag.main_path, "boss"),
-        "Underground Jungle Chest":    LocationData(110286, LocationFlag.main_path, "chest"),
-        "Underground Jungle Pedestal": LocationData(110306, LocationFlag.main_path, "pedestal"),
+        "Suomuhauki":                  LocationData(110648, LocationFlag.main_path, "Boss"),
+        "Underground Jungle Chest":    LocationData(110286, LocationFlag.main_path, "Chest"),
+        "Underground Jungle Pedestal": LocationData(110306, LocationFlag.main_path, "Pedestal"),
     },
     "Lukki Lair": {
-        "Lukki Lair Orb":      LocationData(110664, LocationFlag.side_path, "orb"),
-        "Lukki Lair Chest":    LocationData(110326, LocationFlag.side_path, "chest"),
-        "Lukki Lair Pedestal": LocationData(110346, LocationFlag.side_path, "pedestal"),
+        "Lukki Lair Orb":      LocationData(110664, LocationFlag.side_path, "Orb"),
+        "Lukki Lair Chest":    LocationData(110326, LocationFlag.side_path, "Chest"),
+        "Lukki Lair Pedestal": LocationData(110346, LocationFlag.side_path, "Pedestal"),
     },
     "The Vault": {
-        "The Vault Chest":    LocationData(110366, LocationFlag.main_path, "chest"),
-        "The Vault Pedestal": LocationData(110386, LocationFlag.main_path, "pedestal"),
+        "The Vault Chest":    LocationData(110366, LocationFlag.main_path, "Chest"),
+        "The Vault Pedestal": LocationData(110386, LocationFlag.main_path, "Pedestal"),
     },
     "Temple of the Art": {
-        "Gate Guardian":              LocationData(110652, LocationFlag.main_path, "boss"),
-        "Temple of the Art Chest":    LocationData(110406, LocationFlag.main_path, "chest"),
-        "Temple of the Art Pedestal": LocationData(110426, LocationFlag.main_path, "pedestal"),
+        "Gate Guardian":              LocationData(110652, LocationFlag.main_path, "Boss"),
+        "Temple of the Art Chest":    LocationData(110406, LocationFlag.main_path, "Chest"),
+        "Temple of the Art Pedestal": LocationData(110426, LocationFlag.main_path, "Pedestal"),
     },
     "The Tower": {
-        "The Tower Chest":    LocationData(110606, LocationFlag.main_world, "chest"),
-        "The Tower Pedestal": LocationData(110626, LocationFlag.main_world, "pedestal"),
+        "The Tower Chest":    LocationData(110606, LocationFlag.main_world, "Chest"),
+        "The Tower Pedestal": LocationData(110626, LocationFlag.main_world, "Pedestal"),
     },
     "Wizards' Den": {
-        "Mestarien Mestari":     LocationData(110655, LocationFlag.main_world, "boss"),
-        "Wizards' Den Orb":      LocationData(110668, LocationFlag.main_world, "orb"),
-        "Wizards' Den Chest":    LocationData(110446, LocationFlag.main_world, "chest"),
-        "Wizards' Den Pedestal": LocationData(110466, LocationFlag.main_world, "pedestal"),
+        "Mestarien Mestari":     LocationData(110655, LocationFlag.main_world, "Boss"),
+        "Wizards' Den Orb":      LocationData(110668, LocationFlag.main_world, "Orb"),
+        "Wizards' Den Chest":    LocationData(110446, LocationFlag.main_world, "Chest"),
+        "Wizards' Den Pedestal": LocationData(110466, LocationFlag.main_world, "Pedestal"),
     },
     "Powerplant": {
-        "Kolmisilmän silmä":    LocationData(110657, LocationFlag.main_world, "boss"),
-        "Power Plant Chest":    LocationData(110486, LocationFlag.main_world, "chest"),
-        "Power Plant Pedestal": LocationData(110506, LocationFlag.main_world, "pedestal"),
+        "Kolmisilmän silmä":    LocationData(110657, LocationFlag.main_world, "Boss"),
+        "Power Plant Chest":    LocationData(110486, LocationFlag.main_world, "Chest"),
+        "Power Plant Pedestal": LocationData(110506, LocationFlag.main_world, "Pedestal"),
     },
     "Snow Chasm": {
-        "Unohdettu":      LocationData(110653, LocationFlag.main_world, "boss"),
-        "Snow Chasm Orb": LocationData(110667, LocationFlag.main_world, "orb"),
+        "Unohdettu":      LocationData(110653, LocationFlag.main_world, "Boss"),
+        "Snow Chasm Orb": LocationData(110667, LocationFlag.main_world, "Orb"),
     },
     "Meat Realm": {
-        "Meat Realm Chest": LocationData(110086, LocationFlag.main_world, "chest"),
-        "Meat Realm Pedestal": LocationData(110106, LocationFlag.main_world, "pedestal"),
-        "Limatoukka": LocationData(110647, LocationFlag.main_world, "boss"),
+        "Meat Realm Chest": LocationData(110086, LocationFlag.main_world, "Chest"),
+        "Meat Realm Pedestal": LocationData(110106, LocationFlag.main_world, "Pedestal"),
+        "Limatoukka": LocationData(110647, LocationFlag.main_world, "Boss"),
     },
     "West Meat Realm": {
-        "Kolmisilmän sydän": LocationData(110671, LocationFlag.main_world, "boss"),
+        "Kolmisilmän sydän": LocationData(110671, LocationFlag.main_world, "Boss"),
     },
     "The Laboratory": {
-        "Kolmisilmä": LocationData(110646, LocationFlag.main_path, "boss"),
+        "Kolmisilmä": LocationData(110646, LocationFlag.main_path, "Boss"),
     },
     "Friend Cave": {
-        "Toveri": LocationData(110654, LocationFlag.main_world, "boss"),
+        "Toveri": LocationData(110654, LocationFlag.main_world, "Boss"),
     },
     "The Work (Hell)": {
-        "The Work (Hell) Orb": LocationData(110666, LocationFlag.main_world, "orb"),
+        "The Work (Hell) Orb": LocationData(110666, LocationFlag.main_world, "Orb"),
     },
 }
 
@@ -212,18 +213,20 @@ def make_location_range(location_name: str, base_id: int, amt: int) -> Dict[str,
     return {f"{location_name} {i+1}": base_id + i for i in range(amt)}
 
 
-location_name_groups: Dict[str, Set[str]] = {"shop": set(), "orb": set(), "boss": set(), "chest": set(),
-                                             "pedestal": set()}
+location_name_groups: Dict[str, Set[str]] = {"Shop": set(), "Orb": set(), "Boss": set(), "Chest": set(),
+                                             "Pedestal": set()}
 location_name_to_id: Dict[str, int] = {}
 
 
-for location_group in location_region_mapping.values():
+for region_name, location_group in location_region_mapping.items():
+    location_name_groups[region_name] = set()
     for locname, locinfo in location_group.items():
         # Iterating the hidden chest and pedestal locations here to avoid clutter above
-        amount = 20 if locinfo.ltype in ["chest", "pedestal"] else 1
+        amount = 20 if locinfo.ltype in ["Chest", "Pedestal"] else 1
         entries = make_location_range(locname, locinfo.id, amount)
 
         location_name_to_id.update(entries)
         location_name_groups[locinfo.ltype].update(entries.keys())
+        location_name_groups[region_name].update(entries.keys())
 
 shop_locations = {name for name in location_name_to_id.keys() if "Shop Item" in name}
