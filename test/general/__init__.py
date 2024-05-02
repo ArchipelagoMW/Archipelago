@@ -1,7 +1,7 @@
 from argparse import Namespace
 from typing import List, Optional, Tuple, Type, Union
 
-from BaseClasses import CollectionState, MultiWorld
+from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region
 from worlds.AutoWorld import World, call_all
 
 gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "generate_basic", "pre_fill")
@@ -17,19 +17,21 @@ def setup_solo_multiworld(
     :param steps: The gen steps that should be called on the generated multiworld before returning. Default calls
     steps through pre_fill
     :param seed: The seed to be used when creating this multiworld
+    :return: The generated multiworld
     """
     return setup_multiworld(world_type, steps, seed)
 
 
 def setup_multiworld(worlds: Union[List[Type[World]], Type[World]], steps: Tuple[str, ...] = gen_steps,
-    seed: Optional[int] = None) -> MultiWorld:
+                     seed: Optional[int] = None) -> MultiWorld:
     """
     Creates a multiworld with a player for each provided world type, allowing duplicates, setting default options, and
     calling the provided gen steps.
     
-    :param worlds: type/s of worlds to generate a multiworld for
-    :param steps: gen steps that should be called before returning. Default calls through pre_fill
+    :param worlds: Type/s of worlds to generate a multiworld for
+    :param steps: Gen steps that should be called before returning. Default calls through pre_fill
     :param seed: The seed to be used when creating this multiworld
+    :return: The generated multiworld
     """
     if not isinstance(worlds, list):
         worlds = [worlds]
@@ -49,3 +51,59 @@ def setup_multiworld(worlds: Union[List[Type[World]], Type[World]], steps: Tuple
     for step in steps:
         call_all(multiworld, step)
     return multiworld
+
+
+class TestWorld(World):
+    game = f"Test Game"
+    item_name_to_id = {}
+    location_name_to_id = {}
+    hidden = True
+
+
+def generate_test_multiworld(players: int = 1) -> MultiWorld:
+    """
+    Generates a multiworld using a special Test Case World class, and seed of 0.
+
+    :param players: Number of players to generate the multiworld for
+    :return: The generated test multiworld
+    """
+    multiworld = setup_multiworld([TestWorld] * players, seed=0)
+    multiworld.regions += [Region("Menu", player_id + 1, multiworld) for player_id in range(players)]
+
+    return multiworld
+
+
+def generate_locations(count: int, player_id: int, region: Region, address: Optional[int] = None,
+                       tag: str = "") -> List[Location]:
+    """
+    Generates the specified amount of locations for the player and adds them to the specified region.
+
+    :param count: Number of locations to create
+    :param player_id: ID of the player to create the locations for
+    :param address: Address for the specified locations. They will all share the same address if multiple are created
+    :param region: Parent region to add these locations to
+    :param tag: Tag to add to the name of the generated locations
+    :return: List containing the created locations
+    """
+    prefix = f"player{player_id}{tag}_location"
+
+    locations = [Location(player_id, f"{prefix}{i}", address, region) for i in range(count)]
+    region.locations += locations
+    return locations
+
+
+def generate_items(count: int, player_id: int, advancement: bool = False, code: int = None) -> List[Item]:
+    """
+    Generates the specified amount of items for the target player.
+
+    :param count: The amount of items to create
+    :param player_id: ID of the player to create the items for
+    :param advancement: Whether the created items should be advancement
+    :param code: The code the items should be created with
+    :return: List containing the created items
+    """
+    item_type = "prog" if advancement else ""
+    classification = ItemClassification.progression if advancement else ItemClassification.filler
+
+    items = [Item(f"player{player_id}_{item_type}item{i}", classification, code, player_id) for i in range(count)]
+    return items
