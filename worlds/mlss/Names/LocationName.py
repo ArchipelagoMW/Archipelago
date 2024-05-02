@@ -541,9 +541,9 @@ class LocationName:
     BeanbeanOutskirtsSRoom2CoinBlock = "Beanbean Outskirts S Room 2 Coin Block"
     ChateauPoppleRoomCoinBlock1 = "Chateau Popple Room Coin Block 1"
     ChateauPoppleRoomCoinBlock2 = "Chateau Popple Room Coin Block 2"
-    ChucklehuckWoodsCaveRoom1CoinBlock = "Chuck Woods Cave Room 1 Coin Block"
-    ChucklehuckWoodsCaveRoom2CoinBlock = "Chuck Woods Cave Room 2 Coin Block"
-    ChucklehuckWoodsCaveRoom3CoinBlock = "Chuck Woods Cave Room 3 Coin Block"
+    ChucklehuckWoodsCaveRoom1CoinBlock = "Chucklehuck Woods Cave Room 1 Coin Block"
+    ChucklehuckWoodsCaveRoom2CoinBlock = "Chucklehuck Woods Cave Room 2 Coin Block"
+    ChucklehuckWoodsCaveRoom3CoinBlock = "Chucklehuck Woods Cave Room 3 Coin Block"
     ChucklehuckWoodsPipe5RoomCoinBlock = "Chucklehuck Woods Pipe 5 Room Coin Block"
     ChucklehuckWoodsRoom7CoinBlock = "Chucklehuck Woods Room 7 Coin Block"
     ChucklehuckWoodsAfterChucklerootCoinBlock = "Chucklehuck Woods After Chuckleroot Coin Block"
@@ -556,3 +556,4 @@ class LocationName:
     GwarharLagoonFirstUnderwaterAreaRoom2CoinBlock = "Gwarhar Lagoon First Underwater Area Room 2 Coin Block"
     JokesEndSecondFloorWestRoomCoinBlock = "Joke's End Second Floor West Room Coin Block"
     JokesEndNorthofBridgeRoomCoinBlock = "Joke's End North of Bridge Room Coin Block"
+

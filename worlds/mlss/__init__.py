@@ -57,9 +57,10 @@ class MLSSWorld(World):
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
     required_client_version = (0, 4, 5)
 
-    disabled_locations: List[str] = []
+    disabled_locations: List[str]
 
     def generate_early(self) -> None:
+        self.disabled_locations = []
         if self.options.chuckle_beans == 0:
             self.disabled_locations += [location.name for location in all_locations if "Digspot" in location.name]
         if self.options.castle_skip:
