@@ -278,7 +278,7 @@ class LingoPlayerLogic:
                                 "iterations. This is very unlikely to happen on its own, and probably indicates some "
                                 "kind of logic error.")
 
-        if door_shuffle != ShuffleDoors.option_none and location_classification != LocationClassification.insanity \
+        if door_shuffle != ShuffleDoors.option_none and location_checks != LocationChecks.option_insanity \
                 and not early_color_hallways and world.multiworld.players > 1:
             # Under the combination of door shuffle, normal location checks, and no early color hallways, sphere 1 is
             # only three checks. In a multiplayer situation, this can be frustrating for the player because they are
