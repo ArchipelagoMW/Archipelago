@@ -28,6 +28,7 @@ def set_rules(tloz_world: "TLoZWorld"):
                     or location.name not in dangerous_weapon_locations:
                 add_rule(world.get_location(location.name, player),
                          lambda state: state.has_group("weapons", player))
+            #  This part of the loop sets up an expected amount of defense needed for each dungeon
             if i > 0:  # Don't need an extra heart for Level 1
                 add_rule(world.get_location(location.name, player),
                          lambda state, hearts=i: state.has("Heart Container", player, hearts) or
