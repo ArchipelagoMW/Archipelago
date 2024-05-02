@@ -1,4 +1,4 @@
-from BaseClasses import CollectionState, Location
+from BaseClasses import CollectionState, Location, Entrance
 from worlds.generic.Rules import set_rule
 
 from .Constants import *
@@ -8,8 +8,8 @@ def set_rules(world: "SavingPrincessWorld"):
     def get_location(name: str) -> Location:
         return world.multiworld.get_location(name, world.player)
 
-    def get_region_entrance(name: str) -> Location:
         return world.multiworld.get_entrance(f"{name} entrance", world.player)
+    def get_region_entrance(name: str) -> Entrance:
 
     def can_hover(state: CollectionState) -> bool:
         # portia can hover if she has a weapon other than the powered blaster and 4 reload speed upgrades
