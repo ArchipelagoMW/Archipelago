@@ -29,7 +29,7 @@ colors = [
     Data.truechaosHat
 ]
 
-pants = [
+cpants = [
     Data.vanilla,
     Data.redPants,
     Data.greenPants,
@@ -361,7 +361,7 @@ def swap_colors(world: "MLSSWorld", patch: MLSSProcedurePatch, color: int, bro: 
         chaos = True
     if pants_option and color == 11:
         chaos = True
-    for c in [c for c in (pants[color] if pants_option else colors[color])
+    for c in [c for c in (cpants[color] if pants_option else colors[color])
               if (c[3] == bro if not chaos else c[1] == bro)]:
         if chaos:
             patch.write_token(APTokenTypes.WRITE, c[0],
