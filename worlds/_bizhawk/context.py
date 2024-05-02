@@ -168,6 +168,7 @@ async def _game_watcher(ctx: BizHawkClientContext):
                 ctx.auth = None
                 ctx.username = None
                 ctx.client_handler = None
+                ctx.finished_game = False
                 await ctx.disconnect(False)
             ctx.rom_hash = rom_hash
 
