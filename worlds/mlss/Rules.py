@@ -61,7 +61,7 @@ def set_rules(world: "MLSSWorld", excluded):
             lambda state: StateLogic.canDash(state, world.player),
         )
 
-    if world.options.chuckle_beans == 1 or world.options.chuckle_beans == 2:
+    if world.options.chuckle_beans != 0:
         add_rule(
             world.multiworld.get_location(LocationName.HoohooMountainBaseBoostatueRoomDigspot2, world.player),
             lambda state: StateLogic.canCrash(state, world.player) or StateLogic.super(state, world.player),
