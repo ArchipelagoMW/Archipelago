@@ -37,10 +37,6 @@ The chests and special weapons in the game and their contents are the locations 
 By default, bosses are also made into locations, meaning that defeating a boss will count as a check.
 The door to the final area will open once the player has received the 4 Keys which will be shuffled, instead of when the main area bosses are defeated.
 
-## Which items can be in another player's world?
-
-Any shuffled item can be in other players' worlds.
-
 ## What does another world's item look like in Saving Princess?
 
 Some locations, such as boss kills, have no visual representation, but those that do will have either a vanilla sprite corresponding to the item or, if it's an item from a different game, the Archipelago icon.
