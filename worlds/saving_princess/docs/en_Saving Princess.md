@@ -58,7 +58,7 @@ This textbox shows both which item you got and which player sent it to you.
 If you send an item to yourself, however, the sending player will be omitted.
 If the items are cheated in, no textbox will be displayed.
 
-## Unique local commands
+## Unique Local Commands
 
 The following commands are only available when using the in-game console in Saving Princess:
 - `/help` Returns the help listing.
