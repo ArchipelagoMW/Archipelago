@@ -112,9 +112,8 @@ class SC2World(World):
         setup_events(self.player, self.locked_locations, self.location_cache)
 
         item_list: List[FilterItem] = create_and_flag_explicit_item_locks_and_excludes(self)
-        flag_faction_unit_excludes_based_on_mission_excludes(self, item_list)
+        flag_excludes_by_faction_presence(self, item_list)
         flag_mission_based_item_excludes(self, item_list)
-        flag_faction_excludes_based_on_faction_presence(self, item_list)
         flag_allowed_orphan_items(self, item_list)
         flag_start_inventory(self, item_list)
         flag_unused_upgrade_types(self, item_list)
@@ -240,21 +239,39 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
     return result
 
 
-def flag_faction_unit_excludes_based_on_mission_excludes(world: SC2World, item_list: List[FilterItem]) -> None:
-    """
-    Excludes units based on whether a mission they can be built exists in the mission table
-    """
+def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterItem]) -> None:
+    """Excludes items based on if their faction has a mission present where they can be used"""
     missions = get_all_missions(world.mission_req_table)
-    build_missions = [mission for mission in missions if MissionFlag.NoBuild not in mission.flags]
-    if world.options.take_over_ai_allies:
-        terran_build_missions = [mission for mission in build_missions if MissionFlag.Terran|MissionFlag.AiZergAlly & mission.flags]
-        zerg_build_missions = [mission for mission in build_missions if MissionFlag.Zerg|MissionFlag.AiTerranAlly & mission.flags]
-        protoss_build_missions = [mission for mission in build_missions if MissionFlag.Protoss|MissionFlag.AiProtossAlly & mission.flags]
+    if world.options.take_over_ai_allies.value:
+        terran_missions = [mission for mission in missions if (MissionFlag.Terran|MissionFlag.AiTerranAlly) & mission.flags]
+        zerg_missions = [mission for mission in missions if (MissionFlag.Zerg|MissionFlag.AiZergAlly) & mission.flags]
+        protoss_missions = [mission for mission in missions if (MissionFlag.Protoss|MissionFlag.AiProtossAlly) & mission.flags]
     else:
-        terran_build_missions = [mission for mission in build_missions if MissionFlag.Terran & mission.flags]
-        zerg_build_missions = [mission for mission in build_missions if MissionFlag.Zerg & mission.flags]
-        protoss_build_missions = [mission for mission in build_missions if MissionFlag.Protoss & mission.flags]
+        terran_missions = [mission for mission in missions if MissionFlag.Terran in mission.flags]
+        zerg_missions = [mission for mission in missions if MissionFlag.Zerg in mission.flags]
+        protoss_missions = [mission for mission in missions if MissionFlag.Protoss in mission.flags]
+    terran_build_missions = [mission for mission in terran_missions if MissionFlag.NoBuild not in mission.flags]
+    zerg_build_missions = [mission for mission in zerg_missions if MissionFlag.NoBuild not in mission.flags]
+    protoss_build_missions = [mission for mission in protoss_missions if MissionFlag.NoBuild not in mission.flags]
+    auto_upgrades_in_nobuilds = (
+        world.options.generic_upgrade_research.value
+        in (GenericUpgradeResearch.option_always_auto, GenericUpgradeResearch.option_auto_in_no_build)
+    )
+
     for item in item_list:
+        # Catch-all for all of a faction's items
+        if (not terran_missions and item.data.race == SC2Race.TERRAN):
+            item.flags |= ItemFilterFlags.Excluded
+            continue
+        if (not zerg_missions and item.data.race == SC2Race.ZERG):
+            item.flags |= ItemFilterFlags.Excluded
+            continue
+        if (not protoss_missions and item.data.race == SC2Race.PROTOSS):
+            if item.name not in ItemGroups.soa_items:
+                item.flags |= ItemFilterFlags.Excluded
+            continue
+        
+        # Faction units
         if (not terran_build_missions
             and item.data.type in (Items.TerranItemType.Unit, Items.TerranItemType.Building, Items.TerranItemType.Mercenary)
         ):
@@ -285,37 +302,8 @@ def flag_faction_unit_excludes_based_on_mission_excludes(world: SC2World, item_l
                 )
             ):
                 item.flags |= ItemFilterFlags.Excluded
-    
-
-def flag_faction_excludes_based_on_faction_presence(world: SC2World, item_list: List[FilterItem]) -> None:
-    """
-    Excludes global upgrade / progressive items based on mission presence
-    """
-    missions = get_all_missions(world.mission_req_table)
-    if world.options.take_over_ai_allies.value:
-        terran_missions = [mission for mission in missions if (MissionFlag.Terran|MissionFlag.AiTerranAlly) & mission.flags]
-        zerg_missions = [mission for mission in missions if (MissionFlag.Zerg|MissionFlag.AiZergAlly) & mission.flags]
-        protoss_missions = [mission for mission in missions if (MissionFlag.Protoss|MissionFlag.AiProtossAlly) & mission.flags]
-    else:
-        terran_missions = [mission for mission in missions if MissionFlag.Terran in mission.flags]
-        zerg_missions = [mission for mission in missions if MissionFlag.Zerg in mission.flags]
-        protoss_missions = [mission for mission in missions if MissionFlag.Protoss in mission.flags]
-    terran_build_missions = [mission for mission in terran_missions if MissionFlag.NoBuild not in mission.flags]
-    zerg_build_missions = [mission for mission in zerg_missions if MissionFlag.NoBuild not in mission.flags]
-    protoss_build_missions = [mission for mission in protoss_missions if MissionFlag.NoBuild not in mission.flags]
-    auto_upgrades_in_nobuilds = (
-        world.options.generic_upgrade_research.value
-        in (GenericUpgradeResearch.option_always_auto, GenericUpgradeResearch.option_auto_in_no_build)
-    )
-
-    for item in item_list:
-        if (not terran_missions and item.data.race == SC2Race.TERRAN):
-            item.flags |= ItemFilterFlags.Excluded
-        if (not zerg_missions and item.data.race == SC2Race.ZERG):
-            item.flags |= ItemFilterFlags.Excluded
-        if (not protoss_missions and item.data.race == SC2Race.PROTOSS):
-            if item.name not in ItemGroups.soa_items:
-                item.flags |= ItemFilterFlags.Excluded
+        
+        # Faction +attack/armour upgrades
         if (item.data.type == Items.TerranItemType.Upgrade
             and not terran_build_missions
             and not auto_upgrades_in_nobuilds
