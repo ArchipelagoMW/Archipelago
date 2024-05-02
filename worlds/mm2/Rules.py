@@ -157,6 +157,9 @@ def set_rules(world: "MM2World") -> None:
             world.weapon_damage[weapons_to_id[p_weapon]][bosses[p_boss]] \
                 = world.options.plando_weakness[p_boss][p_weapon]
 
+    if world.weapon_damage[0][world.options.starting_robot_master.value] < 1:
+        world.weapon_damage[0][world.options.starting_robot_master.value] = 1
+
     # weakness validation, it is better to confirm a completable seed than respect plando
     boss_health = {boss: 0x1C if boss != 12 else 0x1C * 2 for boss in [*list(range(8)), 12]}
 
