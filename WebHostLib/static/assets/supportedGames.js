@@ -36,8 +36,9 @@ window.addEventListener('load', () => {
 });
 
 const toggleCollapse = (evt) => {
-  const gameArrow = evt.target.firstElementChild;
-  const gameInfo = evt.target.nextElementSibling;
+  const header = evt.target.closest('.collapse-toggle')
+  const gameArrow = header.firstElementChild;
+  const gameInfo = header.nextElementSibling;
   if (gameInfo.classList.contains('collapsed')) {
     gameArrow.innerText = '▼';
     gameInfo.classList.remove('collapsed');
