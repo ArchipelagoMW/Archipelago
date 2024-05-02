@@ -64,7 +64,7 @@ du kan göra saker offline utan att behöva oroa dig; allt kommer synkronisera s
 
 Pokémon Emerald har en fullt fungerande spårare med stöd för auto spårning
 
-1. Laddaner [Pokémon Emerald AP Tracker](https://github.com/seto10987/Archipelago-Emerald-AP-Tracker/releases/latest) och
+1. Ladda ner [Pokémon Emerald AP Tracker](https://github.com/seto10987/Archipelago-Emerald-AP-Tracker/releases/latest) och
 [PopTracker](https://github.com/black-sliver/PopTracker/releases).
 2. Plasera tracker pack filen i packs/ där du har PopTracker installerat.
 3. Öppna PopTracker, och välj Pokemon Emerald.
