@@ -48,16 +48,15 @@ def set_rules(world: "SavingPrincessWorld"):
                     ) and super_nice_check(state)
             )
         else:
-            # in base pool, just the powered blaster is enough to guarantee access to the final area
-            return super_nice_check(state)
+            # in base pool, check that the main area bosses can be defeated
+            return state.has_all(
+                        {EVENT_ITEM_GUARD_GONE, EVENT_ITEM_CLIFF_GONE, EVENT_ITEM_ACE_GONE, EVENT_ITEM_SNAKE_GONE},
+                        world.player
+                    ) and super_nice_check(state)
 
     def is_power_on(state: CollectionState) -> bool:
-        if world.is_pool_expanded:
-            # in expanded pool, the power item is what determines this
-            return state.has(EP_ITEM_POWER_ON, world.player)
-        else:
-            # in base pool, volt laser plus the gate condition is enough
-            return state.has(ITEM_WEAPON_VOLT, world.player)
+        # in expanded pool, the power item is what determines this, else it happens when the generator is powered
+        return state.has(EP_ITEM_POWER_ON if world.is_pool_expanded else EVENT_ITEM_POWER_ON, world.player)
 
     # set the location rules
     # this is behind the blast door to arctic
@@ -72,18 +71,24 @@ def set_rules(world: "SavingPrincessWorld"):
     if world.is_pool_expanded:
         # does not spawn until the guard has been defeated
         set_rule(get_location(EP_LOCATION_HUB_NINJA_SCARE), lambda state: state.has(EP_ITEM_GUARD_GONE, world.player))
-        # cannot be turned on without the volt laser
-        set_rule(get_location(EP_LOCATION_ELECTRICAL_EXTRA), lambda state: state.has(ITEM_WEAPON_VOLT, world.player))
-
+    # generator cannot be turned on without the volt laser
+    set_rule(
+        get_location(EP_LOCATION_ELECTRICAL_EXTRA if world.is_pool_expanded else EVENT_LOCATION_POWER_ON),
+        lambda state: state.has(ITEM_WEAPON_VOLT, world.player)
+    )
     # the roller is not very intuitive to get past without 4 ammo
     set_rule(get_location(LOCATION_CAVE_WEAPON), lambda state: state.has(ITEM_MAX_AMMO, world.player))
-    if world.is_pool_expanded:
-        set_rule(get_location(EP_LOCATION_CAVE_BOSS), lambda state: state.has(ITEM_MAX_AMMO, world.player))
+    set_rule(
+        get_location(EP_LOCATION_CAVE_BOSS if world.is_pool_expanded else EVENT_LOCATION_GUARD_GONE),
+        lambda state: state.has(ITEM_MAX_AMMO, world.player)
+    )
 
     # guarantee some upgrades to be found before bosses
     boss_locations = [LOCATION_VOLCANIC_WEAPON, LOCATION_ARCTIC_WEAPON, LOCATION_SWAMP_SPECIAL]
     if world.is_pool_expanded:
         boss_locations += [EP_LOCATION_VOLCANIC_BOSS, EP_LOCATION_ARCTIC_BOSS, EP_LOCATION_SWAMP_BOSS]
+    else:
+        boss_locations += [EVENT_LOCATION_CLIFF_GONE, EVENT_LOCATION_ACE_GONE, EVENT_LOCATION_SNAKE_GONE]
     for location_name in boss_locations:
         set_rule(get_location(location_name), lambda state: nice_check(state))
 
@@ -94,6 +99,20 @@ def set_rules(world: "SavingPrincessWorld"):
     # now for the final area regions, which have different rules based on if ep is on
     set_rule(get_region_entrance(REGION_ELECTRICAL), lambda state: is_gate_unlocked(state))
     set_rule(get_region_entrance(REGION_ELECTRICAL_POWERED), lambda state: is_power_on(state))
+
+    # if not expanded pool, place the events for the boss kills and generator
+    if not world.is_pool_expanded:
+        # accessible with no items
+        cave_item = world.create_item(EVENT_ITEM_GUARD_GONE)
+        get_location(EVENT_LOCATION_GUARD_GONE).place_locked_item(cave_item)
+        volcanic_item = world.create_item(EVENT_ITEM_CLIFF_GONE)
+        get_location(EVENT_LOCATION_CLIFF_GONE).place_locked_item(volcanic_item)
+        arctic_item = world.create_item(EVENT_ITEM_ACE_GONE)
+        get_location(EVENT_LOCATION_ACE_GONE).place_locked_item(arctic_item)
+        swamp_item = world.create_item(EVENT_ITEM_SNAKE_GONE)
+        get_location(EVENT_LOCATION_SNAKE_GONE).place_locked_item(swamp_item)
+        power_item = world.create_item(EVENT_ITEM_POWER_ON)
+        get_location(EVENT_LOCATION_POWER_ON).place_locked_item(power_item)
 
     # and, finally, set the victory event
     victory_item = world.create_item(EVENT_ITEM_VICTORY)

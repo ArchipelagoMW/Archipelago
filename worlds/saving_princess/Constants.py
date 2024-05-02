@@ -26,6 +26,11 @@ TRAP_ITEM_ICE: str = "Ice Trap"
 TRAP_ITEM_SHAKES: str = "Shake Trap"
 TRAP_ITEM_NINJA: str = "Ninja Trap"
 
+EVENT_ITEM_GUARD_GONE: str = "Guard neutralized"
+EVENT_ITEM_CLIFF_GONE: str = "Cliff neutralized"
+EVENT_ITEM_ACE_GONE: str = "Ace neutralized"
+EVENT_ITEM_SNAKE_GONE: str = "Snake neutralized"
+EVENT_ITEM_POWER_ON: str = "Power restored"
 EVENT_ITEM_VICTORY: str = "PRINCESS"
 
 # location names, EP stands for Expanded Pool
@@ -67,7 +72,12 @@ EP_LOCATION_ELECTRICAL_MINIBOSS: str = "Electrical: Generator (Boss)"
 EP_LOCATION_ELECTRICAL_BOSS: str = "Electrical: Malakhov (Boss)"
 EP_LOCATION_ELECTRICAL_FINAL_BOSS: str = "Electrical: BRAINOS (Boss)"
 
-EVENT_LOCATION_VICTORY: str = "Mission Objective"
+EVENT_LOCATION_GUARD_GONE: str = "Cave status"
+EVENT_LOCATION_CLIFF_GONE: str = "Volcanic status"
+EVENT_LOCATION_ACE_GONE: str = "Arctic status"
+EVENT_LOCATION_SNAKE_GONE: str = "Swamp status"
+EVENT_LOCATION_POWER_ON: str = "Generator status"
+EVENT_LOCATION_VICTORY: str = "Mission objective"
 
 # region names
 REGION_MENU: str = "Menu"

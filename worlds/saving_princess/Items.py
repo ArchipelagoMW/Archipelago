@@ -82,7 +82,12 @@ item_dict_traps: Dict[str, ItemData] = {
 }
 
 item_dict_events: Dict[str, ItemData] = {
-    EVENT_ITEM_VICTORY: ItemData(ItemClass.progression, None)
+    EVENT_ITEM_GUARD_GONE: ItemData(ItemClass.progression, None),
+    EVENT_ITEM_CLIFF_GONE: ItemData(ItemClass.progression, None),
+    EVENT_ITEM_ACE_GONE: ItemData(ItemClass.progression, None),
+    EVENT_ITEM_SNAKE_GONE: ItemData(ItemClass.progression, None),
+    EVENT_ITEM_POWER_ON: ItemData(ItemClass.progression, None),
+    EVENT_ITEM_VICTORY: ItemData(ItemClass.progression, None),
 }
 
 item_dict: Dict[str, ItemData] = {

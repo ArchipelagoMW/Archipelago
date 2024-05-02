@@ -62,11 +62,21 @@ location_dict_expanded: Dict[str, LocData] = {
     EP_LOCATION_ELECTRICAL_FINAL_BOSS:  LocData(35),
 }
 
-location_dict_event: Dict[str, LocData] = {
+location_dict_event_expanded: Dict[str, LocData] = {
     EVENT_LOCATION_VICTORY: LocData(None),
+}
+
+# most event locations are only relevant without expanded pool
+location_dict_event_base: Dict[str, LocData] = {
+    EVENT_LOCATION_GUARD_GONE:      LocData(None),
+    EVENT_LOCATION_CLIFF_GONE:      LocData(None),
+    EVENT_LOCATION_ACE_GONE:        LocData(None),
+    EVENT_LOCATION_SNAKE_GONE:      LocData(None),
+    EVENT_LOCATION_POWER_ON:        LocData(None),
+    **location_dict_event_expanded,
 }
 
 location_dict: Dict[str, LocData] = {
     **location_dict_expanded,
-    **location_dict_event,
+    **location_dict_event_base,
 }

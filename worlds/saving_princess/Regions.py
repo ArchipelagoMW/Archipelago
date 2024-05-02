@@ -15,6 +15,7 @@ region_dict: Dict[str, List[str]] = {
         LOCATION_CAVE_WEAPON,
         EP_LOCATION_CAVE_MINIBOSS,
         EP_LOCATION_CAVE_BOSS,
+        EVENT_LOCATION_GUARD_GONE,
     ],
     REGION_VOLCANIC: [
         LOCATION_VOLCANIC_RELOAD,
@@ -22,6 +23,7 @@ region_dict: Dict[str, List[str]] = {
         LOCATION_VOLCANIC_AMMO,
         LOCATION_VOLCANIC_WEAPON,
         EP_LOCATION_VOLCANIC_BOSS,
+        EVENT_LOCATION_CLIFF_GONE,
     ],
     REGION_ARCTIC: [
         LOCATION_ARCTIC_AMMO,
@@ -30,6 +32,7 @@ region_dict: Dict[str, List[str]] = {
         LOCATION_ARCTIC_WEAPON,
         LOCATION_JACKET,
         EP_LOCATION_ARCTIC_BOSS,
+        EVENT_LOCATION_ACE_GONE,
     ],
     REGION_HUB: [
         LOCATION_HUB_AMMO,
@@ -44,12 +47,14 @@ region_dict: Dict[str, List[str]] = {
         LOCATION_SWAMP_RELOAD,
         LOCATION_SWAMP_SPECIAL,
         EP_LOCATION_SWAMP_BOSS,
+        EVENT_LOCATION_SNAKE_GONE,
     ],
     REGION_ELECTRICAL: [
         EP_LOCATION_ELEVATOR_NINJA_FIGHT,
         LOCATION_ELECTRICAL_WEAPON,
         EP_LOCATION_ELECTRICAL_MINIBOSS,
         EP_LOCATION_ELECTRICAL_EXTRA,
+        EVENT_LOCATION_POWER_ON,
     ],
     REGION_ELECTRICAL_POWERED: [
         LOCATION_ELECTRICAL_RELOAD,
@@ -63,9 +68,9 @@ region_dict: Dict[str, List[str]] = {
 
 
 def set_region_locations(region: Region, location_names: List[str], is_pool_expanded: bool):
-    location_pool = {**Locations.location_dict_base, **Locations.location_dict_event}
+    location_pool = {**Locations.location_dict_base, **Locations.location_dict_event_base}
     if is_pool_expanded:
-        location_pool = {**Locations.location_dict_expanded, **Locations.location_dict_event}
+        location_pool = {**Locations.location_dict_expanded, **Locations.location_dict_event_expanded}
     region.locations = [
         Locations.SavingPrincessLocation(
             region.player,
