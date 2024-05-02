@@ -1,7 +1,9 @@
 from dataclasses import dataclass
 from typing import Dict
-from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, OptionDict, OptionList, PerGameCommonOptions
+from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, OptionDict, OptionList, Visibility
+from Options import PerGameCommonOptions, DeathLinkMixin
 from schema import Schema, And, Optional, Or
+import logging
 
 
 class StartWithJewelryBox(Toggle):
@@ -400,9 +402,8 @@ class PresentAccessWithWheelAndSpindle(Toggle):
     """When inverted, allows using the refugee camp warp when both the Timespinner Wheel and Spindle is acquired."""
     display_name = "Past Wheel & Spindle Warp"
 
-
 @dataclass
-class TimespinnerOptions(PerGameCommonOptions):
+class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     start_with_jewelry_box: StartWithJewelryBox
     downloadable_items: DownloadableItems
     eye_spy: EyeSpy
@@ -437,4 +438,225 @@ class TimespinnerOptions(PerGameCommonOptions):
     present_access_with_wheel_and_spindle: PresentAccessWithWheelAndSpindle
     trap_chance: TrapChance
     traps: Traps
-    death_link: DeathLink
+
+@dataclass
+class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
+    StartWithJewelryBox: StartWithJewelryBox
+    DownloadableItems: DownloadableItems
+    EyeSpy: EyeSpy
+    StartWithMeyef: StartWithMeyef
+    QuickSeed: QuickSeed
+    SpecificKeycards: SpecificKeycards
+    Inverted: Inverted
+    GyreArchives: GyreArchives
+    Cantoran: Cantoran
+    LoreChecks: LoreChecks
+    BossRando: BossRando
+    DamageRando: DamageRando
+    DamageRandoOverrides: DamageRandoOverrides
+    HpCap: HpCap
+    LevelCap: LevelCap
+    ExtraEarringsXP: ExtraEarringsXP
+    BossHealing: BossHealing
+    ShopFill: ShopFill
+    ShopWarpShards: ShopWarpShards
+    ShopMultiplier: ShopMultiplier
+    LootPool: LootPool
+    DropRateCategory: DropRateCategory
+    FixedDropRate: FixedDropRate
+    LootTierDistro: LootTierDistro
+    ShowBestiary: ShowBestiary
+    ShowDrops: ShowDrops
+    EnterSandman: EnterSandman
+    DadPercent: DadPercent
+    RisingTides: RisingTides
+    RisingTidesOverrides: RisingTidesOverrides
+    UnchainedKeys: UnchainedKeys
+    PresentAccessWithWheelAndSpindle: PresentAccessWithWheelAndSpindle
+    TrapChance: TrapChance
+    Traps: Traps
+    DeathLink: DeathLink
+
+    def __post_init__(self):
+        self.StartWithJewelryBox.visibility = Visibility.none
+        self.DownloadableItems.visibility = Visibility.none
+        self.EyeSpy.visibility = Visibility.none
+        self.StartWithMeyef.visibility = Visibility.none
+        self.QuickSeed.visibility = Visibility.none
+        self.SpecificKeycards.visibility = Visibility.none
+        self.Inverted.visibility = Visibility.none
+        self.GyreArchives.visibility = Visibility.none
+        self.Cantoran.visibility = Visibility.none
+        self.LoreChecks.visibility = Visibility.none
+        self.BossRando.visibility = Visibility.none
+        self.DamageRando.visibility = Visibility.none
+        self.DamageRandoOverrides.visibility = Visibility.none
+        self.HpCap.visibility = Visibility.none
+        self.LevelCap.visibility = Visibility.none
+        self.ExtraEarringsXP.visibility = Visibility.none
+        self.BossHealing.visibility = Visibility.none
+        self.ShopFill.visibility = Visibility.none
+        self.ShopWarpShards.visibility = Visibility.none
+        self.ShopMultiplier.visibility = Visibility.none
+        self.LootPool.visibility = Visibility.none
+        self.DropRateCategory.visibility = Visibility.none
+        self.FixedDropRate.visibility = Visibility.none
+        self.LootTierDistro.visibility = Visibility.none
+        self.ShowBestiary.visibility = Visibility.none
+        self.ShowDrops.visibility = Visibility.none
+        self.EnterSandman.visibility = Visibility.none
+        self.DadPercent.visibility = Visibility.none
+        self.RisingTides.visibility = Visibility.none
+        self.RisingTidesOverrides.visibility = Visibility.none
+        self.UnchainedKeys.visibility = Visibility.none
+        self.PresentAccessWithWheelAndSpindle.visibility = Visibility.none
+        self.TrapChance.visibility = Visibility.none
+        self.Traps.visibility = Visibility.none
+        self.DeathLink.visibility = Visibility.none
+
+    def handle_backward_compatibility(o) -> None:
+        has_replaced_options: bool = False
+
+        if o.StartWithJewelryBox.value != o.StartWithJewelryBox.default and \
+            o.start_with_jewelry_box.value == o.start_with_jewelry_box.default:
+            o.start_with_jewelry_box.value = o.StartWithJewelryBox.value
+            has_replaced_options = True
+        if o.DownloadableItems.value != o.DownloadableItems.default and \
+            o.downloadable_items.value == o.downloadable_items.default:
+            o.downloadable_items.value = o.DownloadableItems.value
+            has_replaced_options = True
+        if o.EyeSpy.value != o.EyeSpy.default and \
+            o.eye_spy.value == o.eye_spy.default:
+            o.eye_spy.value = o.EyeSpy.value
+            has_replaced_options = True
+        if o.StartWithMeyef.value != o.StartWithMeyef.default and \
+            o.start_with_meyef.value == o.start_with_meyef.default:
+            o.start_with_meyef.value = o.StartWithMeyef.value
+            has_replaced_options = True
+        if o.QuickSeed.value != o.QuickSeed.default and \
+            o.quick_seed.value == o.quick_seed.default:
+            o.quick_seed.value = o.QuickSeed.value
+            has_replaced_options = True
+        if o.SpecificKeycards.value != o.SpecificKeycards.default and \
+            o.specific_keycards.value == o.specific_keycards.default:
+            o.specific_keycards.value = o.SpecificKeycards.value
+            has_replaced_options = True
+        if o.Inverted.value != o.Inverted.default and \
+            o.inverted.value == o.inverted.default:
+            o.inverted.value = o.Inverted.value
+            has_replaced_options = True
+        if o.GyreArchives.value != o.GyreArchives.default and \
+            o.gyre_archives.value == o.gyre_archives.default:
+            o.gyre_archives.value = o.GyreArchives.value
+            has_replaced_options = True
+        if o.Cantoran.value != o.Cantoran.default and \
+            o.cantoran.value == o.cantoran.default:
+            o.cantoran.value = o.Cantoran.value
+            has_replaced_options = True
+        if o.LoreChecks.value != o.LoreChecks.default and \
+            o.lore_checks.value == o.lore_checks.default:
+            o.lore_checks.value = o.LoreChecks.value
+            has_replaced_options = True
+        if o.BossRando.value != o.BossRando.default and \
+            o.boss_rando.value == o.boss_rando.default:
+            o.boss_rando.value = o.BossRando.value
+            has_replaced_options = True
+        if o.DamageRando.value != o.DamageRando.default and \
+            o.damage_rando.value == o.damage_rando.default:
+            o.damage_rando.value = o.DamageRando.value
+            has_replaced_options = True
+        if o.DamageRandoOverrides.value != o.DamageRandoOverrides.default and \
+            o.damage_rando_overrides.value == o.damage_rando_overrides.default:
+            o.damage_rando_overrides.value = o.DamageRandoOverrides.value
+            has_replaced_options = True
+        if o.HpCap.value != o.HpCap.default and \
+            o.hp_cap.value == o.hp_cap.default:
+            o.hp_cap.value = o.HpCap.value
+            has_replaced_options = True
+        if o.LevelCap.value != o.LevelCap.default and \
+            o.level_cap.value == o.level_cap.default:
+            o.level_cap.value = o.LevelCap.value
+            has_replaced_options = True
+        if o.ExtraEarringsXP.value != o.ExtraEarringsXP.default and \
+            o.extra_earrings_xp.value == o.extra_earrings_xp.default:
+            o.extra_earrings_xp.value = o.ExtraEarringsXP.value
+            has_replaced_options = True
+        if o.BossHealing.value != o.BossHealing.default and \
+            o.boss_healing.value == o.boss_healing.default:
+            o.boss_healing.value = o.BossHealing.value
+            has_replaced_options = True
+        if o.ShopFill.value != o.ShopFill.default and \
+            o.shop_fill.value == o.shop_fill.default:
+            o.shop_fill.value = o.ShopFill.value
+            has_replaced_options = True
+        if o.ShopWarpShards.value != o.ShopWarpShards.default and \
+            o.shop_warp_shards.value == o.shop_warp_shards.default:
+            o.shop_warp_shards.value = o.ShopWarpShards.value
+            has_replaced_options = True
+        if o.ShopMultiplier.value != o.ShopMultiplier.default and \
+            o.shop_multiplier.value == o.shop_multiplier.default:
+            o.shop_multiplier.value = o.ShopMultiplier.value
+            has_replaced_options = True
+        if o.LootPool.value != o.LootPool.default and \
+            o.loot_pool.value == o.loot_pool.default:
+            o.loot_pool.value = o.LootPool.value
+            has_replaced_options = True
+        if o.DropRateCategory.value != o.DropRateCategory.default and \
+            o.drop_rate_category.value == o.drop_rate_category.default:
+            o.drop_rate_category.value = o.DropRateCategory.value
+            has_replaced_options = True
+        if o.FixedDropRate.value != o.FixedDropRate.default and \
+            o.fixed_drop_rate.value == o.fixed_drop_rate.default:
+            o.fixed_drop_rate.value = o.FixedDropRate.value
+            has_replaced_options = True
+        if o.LootTierDistro.value != o.LootTierDistro.default and \
+            o.loot_tier_distro.value == o.loot_tier_distro.default:
+            o.loot_tier_distro.value = o.LootTierDistro.value
+            has_replaced_options = True
+        if o.ShowBestiary.value != o.ShowBestiary.default and \
+            o.show_bestiary.value == o.show_bestiary.default:
+            o.show_bestiary.value = o.ShowBestiary.value
+            has_replaced_options = True
+        if o.ShowDrops.value != o.ShowDrops.default and \
+            o.show_drops.value == o.show_drops.default:
+            o.show_drops.value = o.ShowDrops.value
+            has_replaced_options = True
+        if o.EnterSandman.value != o.EnterSandman.default and \
+            o.enter_sandman.value == o.enter_sandman.default:
+            o.enter_sandman.value = o.EnterSandman.value
+            has_replaced_options = True
+        if o.DadPercent.value != o.DadPercent.default and \
+            o.dad_percent.value == o.dad_percent.default:
+            o.dad_percent.value = o.DadPercent.value
+            has_replaced_options = True
+        if o.RisingTides.value != o.RisingTides.default and \
+            o.rising_tides.value == o.rising_tides.default:
+            o.rising_tides.value = o.RisingTides.value
+            has_replaced_options = True
+        if o.RisingTidesOverrides.value != o.RisingTidesOverrides.default and \
+            o.rising_tides_overrides.value == o.rising_tides_overrides.default:
+            o.rising_tides_overrides.value = o.RisingTidesOverrides.value
+            has_replaced_options = True
+        if o.UnchainedKeys.value != o.UnchainedKeys.default and \
+            o.unchained_keys.value == o.unchained_keys.default:
+            o.unchained_keys.value = o.UnchainedKeys.value
+            has_replaced_options = True
+        if o.PresentAccessWithWheelAndSpindle.value != o.PresentAccessWithWheelAndSpindle.default and \
+            o.present_access_with_wheel_and_spindle.value == o.present_access_with_wheel_and_spindle.default:
+            o.present_access_with_wheel_and_spindle.value = o.PresentAccessWithWheelAndSpindle.value
+            has_replaced_options = True
+        if o.TrapChance.value != o.TrapChance.default and \
+            o.trap_chance.value == o.trap_chance.default:
+            o.trap_chance.value = o.TrapChance.value
+            has_replaced_options = True
+        if o.Traps.value != o.Traps.default and \
+            o.traps.value == o.traps.default:
+            o.traps.value = o.Traps.value
+            has_replaced_options = True
+        if o.DeathLink.value != o.DeathLink.default and \
+            o.death_link.value == o.death_link.default:
+            o.death_link.value = o.DeathLink.value
+            has_replaced_options = True
+
+        if has_replaced_options:
+            logging.warning("Timespinner options where renamed from PasCalCase to snake_case, plz update your yml")

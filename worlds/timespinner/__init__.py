@@ -3,7 +3,7 @@ from BaseClasses import Item, Tutorial, ItemClassification
 from .Items import get_item_names_per_category
 from .Items import item_table, starter_melee_weapons, starter_spells, filler_items, starter_progression_items
 from .Locations import get_location_datas, EventId
-from .Options import TimespinnerOptions
+from .Options import BackwardsCompatiableTimespinnerOptions
 from .PreCalculatedWeights import PreCalculatedWeights
 from .Regions import create_regions_and_locations
 from worlds.AutoWorld import World, WebWorld
@@ -35,8 +35,8 @@ class TimespinnerWorld(World):
     Timespinner is a beautiful metroidvania inspired by classic 90s action-platformers.
     Travel back in time to change fate itself. Join timekeeper Lunais on her quest for revenge against the empire that killed her family.
     """
-    options_dataclass = TimespinnerOptions
-    options: TimespinnerOptions
+    options_dataclass = BackwardsCompatiableTimespinnerOptions
+    options: BackwardsCompatiableTimespinnerOptions
     game = "Timespinner"
     topology_present = True
     data_version = 12
@@ -59,6 +59,8 @@ class TimespinnerWorld(World):
             self.options.quick_seed.value = self.options.quick_seed.option_true
         if self.options.start_inventory.value.pop('Jewelry Box', 0) > 0:
             self.options.start_with_jewelry_box.value = self.options.start_with_jewelry_box.option_true
+
+        self.options.handle_backward_compatibility()
 
     def create_regions(self) -> None: 
         create_regions_and_locations(self.multiworld, self.player, self.options, self.precalculated_weights)
