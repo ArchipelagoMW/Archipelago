@@ -30,9 +30,9 @@ fichier d'archive devrait contenir les fichiers suivants:
 S'il y a des conflits entre les fichiers de l'archive zip et les fichiers du jeu original, vous devez utiliser
 les fichiers contenus dans l'archive zip.
 
-Finalement, pour lancer le randomiser, vous devez utiliser la ligne de commande (vous pouvez ouvrir une interface de
+Finalement, pour lancer le randomizer, vous devez utiliser la ligne de commande (vous pouvez ouvrir une interface de
 ligne de commande, entrez l'adresse `cmd` dans la barre d'adresse de l'explorateur de fichier de Windows). Voici
-la ligne de commande à utiliser pour lancer le randomiser:
+la ligne de commande à utiliser pour lancer le randomizer:
 
 ```bash
 aquaria_randomizer.exe --name VotreNom --server leServeur:LePort
@@ -67,11 +67,14 @@ Si vous devez entrer un mot de passe:
 ./Aquaria_Randomizer-*.AppImage --name VotreNom --server LeServeur:LePort --password LeMotDePasse
 ```
 
+À noter que vous ne devez pas avoir plusieurs fichiers AppImage différents dans le même répertoire. Si cette situation
+survient, le jeu sera lancé plusieurs fois.
+
 ### Linux avec le fichier tar
 
 En premier lieu, assurez-vous de faire une copie du répertoire du jeu d'origine d'Aquaria. Les fichiers contenus
-dans le randomiser auront comme impact de rendre le jeu d'origine non fonctionnel. Donc, effectuer la copie du jeu
-avant de déposer le randomiser à l'intérieur permet de vous assurer de garder une version du jeu d'origine fonctionnel.
+dans le randomizer auront comme impact de rendre le jeu d'origine non fonctionnel. Donc, effectuer la copie du jeu
+avant de déposer le randomizer à l'intérieur permet de vous assurer de garder une version du jeu d'origine fonctionnel.
 
 Désarchiver le fichier tar et copier tous les fichiers qu'il contient dans le répertoire du jeu d'origine d'Aquaria. Les
 fichiers extraient du fichier tar devraient être les suivants:
@@ -93,7 +96,7 @@ sudo apt install liblua5.1-0-dev libogg-dev libvorbis-dev libopenal-dev libsdl2-
 
 Notez également que s'il y a des fichiers ".so" dans le répertoire d'Aquaria (`libgcc_s.so.1`, `libopenal.so.1`,
 `libSDL-1.2.so.0` and `libstdc++.so.6`), vous devriez les retirer. Il s'agit de vieille version des librairies qui
-ne sont plus fonctionnelles dans les systèmes modernes et qui pourrait empêcher le randomiser de fonctionner.
+ne sont plus fonctionnelles dans les systèmes modernes et qui pourrait empêcher le randomizer de fonctionner.
 
 Pour lancer le randomizer, utiliser la commande suivante:
 

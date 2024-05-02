@@ -65,6 +65,9 @@ or, if the room has a password:
 ./Aquaria_Randomizer-*.AppImage --name YourName --server theServer:thePort --password thePassword
 ```
 
+Note that you should not have multiple Aquaria_Randomizer AppImage file in the same folder. If this situation occurred,
+the preceding commands will launch the game multiple times.
+
 ### Linux when using the tar file
 
 First, you should copy the original Aquaria folder game. The randomizer will possibly modify the game so that

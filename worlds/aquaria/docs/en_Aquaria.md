@@ -1,5 +1,8 @@
 # Aquaria
 
+## Game page in other languages:
+* [Français](/games/Aquaria/info/fr)
+
 ## Where is the options page?
 
 The player options page for this game contains all the options you need to configure and export a config file. Player
