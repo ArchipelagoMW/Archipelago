@@ -71,14 +71,14 @@ class OSRSWorld(World):
     def generate_early(self) -> None:
         location_categories = [location_row.category for location_row in location_rows]
         self.locations_by_category = {category:
-                                          [location_row for location_row in self.location_rows if
+                                          [location_row for location_row in location_rows if
                                            location_row.category == category]
                                       for category in location_categories}
 
-        self.location_rows_by_name = {loc_row.name: loc_row for loc_row in self.location_rows}
-        self.region_rows_by_name = {reg_row.name: reg_row for reg_row in self.region_rows}
-        self.resource_rows_by_name = {rec_row.name: rec_row for rec_row in self.resource_rows}
-        self.item_rows_by_name = {it_row.name: it_row for it_row in self.item_rows}
+        self.location_rows_by_name = {loc_row.name: loc_row for loc_row in location_rows}
+        self.region_rows_by_name = {reg_row.name: reg_row for reg_row in region_rows}
+        self.resource_rows_by_name = {rec_row.name: rec_row for rec_row in resource_rows}
+        self.item_rows_by_name = {it_row.name: it_row for it_row in item_rows}
 
         rnd = self.random
         starting_area = self.options.starting_area
@@ -102,10 +102,10 @@ class OSRSWorld(World):
         # First, create the "Menu" region to start
         menu_region = self.create_region("Menu")
 
-        for region_row in self.region_rows:
+        for region_row in region_rows:
             self.create_region(region_row.name)
 
-        for resource_row in self.resource_rows:
+        for resource_row in resource_rows:
             self.create_region(resource_row.name)
 
         # Removes the word "Area: " from the item name to get the region it applies to.
@@ -116,14 +116,15 @@ class OSRSWorld(World):
         starting_entrance.connect(self.region_name_to_data[starting_area_region])
 
         # Create entrances between regions
-        for region_row in self.region_rows:
+        for region_row in region_rows:
             region = self.region_name_to_data[region_row.name]
 
             for outbound_region_name in region_row.connections:
-                entrance = region.create_exit(f"{region_row.name}->{outbound_region_name.replace('*', '')}")
-                entrance.connect(self.region_name_to_data[outbound_region_name.replace('*', '')])
+                parsed_outbound = outbound_region_name.replace('*', '')
+                entrance = region.create_exit(f"{region_row.name}->{parsed_outbound}")
+                entrance.connect(self.region_name_to_data[parsed_outbound])
 
-                item_name = self.region_rows_by_name[outbound_region_name].itemReq
+                item_name = self.region_rows_by_name[parsed_outbound].itemReq
                 if "*" not in outbound_region_name and "*" not in item_name:
                     entrance.access_rule = lambda state, item_name=item_name: state.has(item_name, self.player)
                     continue
@@ -174,13 +175,13 @@ class OSRSWorld(World):
     def roll_locations(self):
         locations_required = 0
         generation_is_fake = hasattr(self.multiworld, "generation_is_fake") #UT specific override
-        for item_row in self.item_rows:
+        for item_row in item_rows:
             locations_required += item_row.count
 
         locations_added = 1 # At this point we've already added the starting area, so we start at 1 instead of 0
 
         # Quests are always added
-        for i, location_row in enumerate(self.location_rows):
+        for i, location_row in enumerate(location_rows):
             if location_row.category in ["Quest", "Points", "Goal"]:
                 self.create_and_add_location(i)
                 if location_row.category == "Quest":
@@ -359,18 +360,18 @@ class OSRSWorld(World):
                 locations_added += 1
 
     def add_location(self, location):
-        index = [i for i in range(0, len(self.location_rows)) if self.location_rows[i].name == location.name][0]
+        index = [i for i in range(0, len(location_rows)) if location_rows[i].name == location.name][0]
         self.create_and_add_location(index)
 
     def create_items(self) -> None:
-        for item_row in self.item_rows:
+        for item_row in item_rows:
             if item_row.name != self.starting_area_item:
                 for c in range(item_row.count):
                     item = self.create_item(item_row.name)
                     self.multiworld.itempool.append(item)
 
     def create_and_add_location(self, row_index) -> None:
-        location_row = self.location_rows[row_index]
+        location_row = location_rows[row_index]
         # print(f"Adding task {location_row.name}")
 
         # Create Location
@@ -525,8 +526,8 @@ class OSRSWorld(World):
         return region
 
     def create_item(self, item_name: str) -> "Item":
-        item = [item for item in self.item_rows if item.name == item_name][0]
-        index = self.item_rows.index(item)
+        item = [item for item in item_rows if item.name == item_name][0]
+        index = item_rows.index(item)
         return OSRSItem(item.name, item.progression, self.base_id + index, self.player)
 
     def create_event(self, event: str):
