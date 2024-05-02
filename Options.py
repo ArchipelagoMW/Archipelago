@@ -7,17 +7,31 @@ import math
 import numbers
 import random
 import typing
+import enum
 from copy import deepcopy
 from dataclasses import dataclass
 
 from schema import And, Optional, Or, Schema
 
-from Utils import get_fuzzy_results, is_iterable_of_str
+from Utils import get_fuzzy_results, is_iterable_except_str
 
 if typing.TYPE_CHECKING:
     from BaseClasses import PlandoOptions
     from worlds.AutoWorld import World
     import pathlib
+
+
+class OptionError(ValueError):
+    pass
+
+  
+class Visibility(enum.IntFlag):
+    none = 0b0000
+    template = 0b0001
+    simple_ui = 0b0010  # show option in simple menus, such as player-options
+    complex_ui = 0b0100  # show option in complex menus, such as weighted-options
+    spoiler = 0b1000
+    all = 0b1111
 
 
 class AssembleOptions(abc.ABCMeta):
@@ -41,6 +55,11 @@ class AssembleOptions(abc.ABCMeta):
         aliases = {name[6:].lower(): option_id for name, option_id in attrs.items() if
                    name.startswith("alias_")}
 
+        assert (
+            name in {"Option", "VerifyKeys"} or  # base abstract classes don't need default
+            "default" in attrs or
+            any(hasattr(base, "default") for base in bases)
+        ), f"Option class {name} needs default value"
         assert "random" not in aliases, "Choice option 'random' cannot be manually assigned."
 
         # auto-alias Off and On being parsed as True and False
@@ -96,7 +115,8 @@ T = typing.TypeVar('T')
 
 class Option(typing.Generic[T], metaclass=AssembleOptions):
     value: T
-    default = 0
+    default: typing.ClassVar[typing.Any]  # something that __init__ will be able to convert to the correct type
+    visibility = Visibility.all
 
     # convert option_name_long into Name Long as display_name, otherwise name_long is the result.
     # Handled in get_option_name()
@@ -106,8 +126,9 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     supports_weighting = True
 
     # filled by AssembleOptions:
-    name_lookup: typing.Dict[T, str]
-    options: typing.Dict[str, int]
+    name_lookup: typing.ClassVar[typing.Dict[T, str]]  # type: ignore
+    # https://github.com/python/typing/discussions/1460 the reason for this type: ignore
+    options: typing.ClassVar[typing.Dict[str, int]]
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.current_option_name})"
@@ -160,6 +181,8 @@ class FreeText(Option[str]):
     """Text option that allows users to enter strings.
     Needs to be validated by the world or option definition."""
 
+    default = ""
+
     def __init__(self, value: str):
         assert isinstance(value, str), "value of FreeText must be a string"
         self.value = value
@@ -179,6 +202,14 @@ class FreeText(Option[str]):
     @classmethod
     def get_option_name(cls, value: str) -> str:
         return value
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return other.value == self.value
+        elif isinstance(other, str):
+            return other == self.value
+        else:
+            raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
 
 
 class NumericOption(Option[int], numbers.Integral, abc.ABC):
@@ -357,7 +388,8 @@ class Toggle(NumericOption):
     default = 0
 
     def __init__(self, value: int):
-        assert value == 0 or value == 1, "value of Toggle can only be 0 or 1"
+        # if user puts in an invalid value, make it valid
+        value = int(bool(value))
         self.value = value
 
     @classmethod
@@ -803,7 +835,7 @@ class VerifyKeys(metaclass=FreezeValidKeys):
 
 
 class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mapping[str, typing.Any]):
-    default: typing.Dict[str, typing.Any] = {}
+    default = {}
     supports_weighting = False
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
@@ -844,10 +876,10 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
     # If only unique entries are needed and input order of elements does not matter, OptionSet should be used instead.
     # Not a docstring so it doesn't get grabbed by the options system.
 
-    default: typing.Union[typing.List[typing.Any], typing.Tuple[typing.Any, ...]] = ()
+    default = ()
     supports_weighting = False
 
-    def __init__(self, value: typing.Iterable[str]):
+    def __init__(self, value: typing.Iterable[typing.Any]):
         self.value = list(deepcopy(value))
         super(OptionList, self).__init__()
 
@@ -857,7 +889,7 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 
     @classmethod
     def from_any(cls, data: typing.Any):
-        if is_iterable_of_str(data):
+        if is_iterable_except_str(data):
             cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
@@ -870,7 +902,7 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 
 
 class OptionSet(Option[typing.Set[str]], VerifyKeys):
-    default: typing.Union[typing.Set[str], typing.FrozenSet[str]] = frozenset()
+    default = frozenset()
     supports_weighting = False
 
     def __init__(self, value: typing.Iterable[str]):
@@ -883,7 +915,7 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
 
     @classmethod
     def from_any(cls, data: typing.Any):
-        if is_iterable_of_str(data):
+        if is_iterable_except_str(data):
             cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
@@ -1097,6 +1129,18 @@ class ItemLinks(OptionList):
                 raise Exception(f"item_link {link['name']} has {intersection} "
                                 f"items in both its local_items and non_local_items pool.")
             link.setdefault("link_replacement", None)
+            link["item_pool"] = list(pool)
+
+
+class Removed(FreeText):
+    """This Option has been Removed."""
+    default = ""
+    visibility = Visibility.none
+
+    def __init__(self, value: str):
+        if value:
+            raise Exception("Option removed, please update your options file.")
+        super().__init__(value)
 
 
 @dataclass
@@ -1154,7 +1198,10 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
     for game_name, world in AutoWorldRegister.world_types.items():
         if not world.hidden or generate_hidden:
-            all_options: typing.Dict[str, AssembleOptions] = world.options_dataclass.type_hints
+            all_options: typing.Dict[str, AssembleOptions] = {
+                option_name: option for option_name, option in world.options_dataclass.type_hints.items()
+                if option.visibility & Visibility.template
+            }
 
             with open(local_path("data", "options.yaml")) as f:
                 file_data = f.read()

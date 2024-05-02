@@ -11,13 +11,12 @@ class TestVanilla(TestBase, LTTPTestBase):
     def setUp(self):
         self.world_setup()
         self.multiworld.glitches_required[1] = GlitchesRequired.from_any("no_glitches")
-        self.multiworld.difficulty_requirements[1] = difficulties['normal']
+        self.multiworld.worlds[1].difficulty_requirements = difficulties['normal']
         self.multiworld.bombless_start[1].value = True
-        self.multiworld.shuffle_capacity_upgrades[1].value = True
+        self.multiworld.shuffle_capacity_upgrades[1].value = 2
         self.multiworld.worlds[1].er_seed = 0
         self.multiworld.worlds[1].create_regions()
         self.multiworld.worlds[1].create_items()
-        self.multiworld.required_medallions[1] = ['Ether', 'Quake']
         self.multiworld.itempool.extend(get_dungeon_item_pool(self.multiworld))
         self.multiworld.itempool.extend(item_factory(['Green Pendant', 'Red Pendant', 'Blue Pendant', 'Beat Agahnim 1', 'Beat Agahnim 2', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 5', 'Crystal 6', 'Crystal 7'], self.world))
         self.multiworld.get_location('Agahnim 1', 1).item = None

@@ -201,7 +201,12 @@ class DKC3World(World):
             er_hint_data = {}
             for world_index in range(len(world_names)):
                 for level_index in range(5):
-                    level_region = self.multiworld.get_region(self.active_level_list[world_index * 5 + level_index], self.player)
+                    level_id: int = world_index * 5 + level_index
+
+                    if level_id >= len(self.active_level_list):
+                        break
+
+                    level_region = self.multiworld.get_region(self.active_level_list[level_id], self.player)
                     for location in level_region.locations:
                         er_hint_data[location.address] = world_names[world_index]
 
