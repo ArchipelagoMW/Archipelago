@@ -1,6 +1,5 @@
-import typing
-
-from Options import AssembleOptions, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
+from Options import PerGameCommonOptions, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
+from dataclasses import dataclass
 
 
 class Goal(Choice):
@@ -146,22 +145,22 @@ class Episode5(Toggle):
     display_name = "Episode 5"
 
 
-options: typing.Dict[str, AssembleOptions] = {
-    "start_inventory_from_pool": StartInventoryPool,
-    "goal": Goal,
-    "difficulty": Difficulty,
-    "random_monsters": RandomMonsters,
-    "random_pickups": RandomPickups,
-    "random_music": RandomMusic,
-    "allow_death_logic": AllowDeathLogic,
-    "pro": Pro,
-    "check_sanity": CheckSanity,
-    "start_with_map_scrolls": StartWithMapScrolls,
-    "reset_level_on_death": ResetLevelOnDeath,
-    "death_link": DeathLink,
-    "episode1": Episode1,
-    "episode2": Episode2,
-    "episode3": Episode3,
-    "episode4": Episode4,
-    "episode5": Episode5
-}
+@dataclass
+class HereticOptions(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
+    goal: Goal
+    difficulty: Difficulty
+    random_monsters: RandomMonsters
+    random_pickups: RandomPickups
+    random_music: RandomMusic
+    allow_death_logic: AllowDeathLogic
+    pro: Pro
+    check_sanity: CheckSanity
+    start_with_map_scrolls: StartWithMapScrolls
+    reset_level_on_death: ResetLevelOnDeath
+    death_link: DeathLink
+    episode1: Episode1
+    episode2: Episode2
+    episode3: Episode3
+    episode4: Episode4
+    episode5: Episode5

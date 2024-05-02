@@ -29,3 +29,23 @@ class TestAllPanelHunt(LingoTestBase):
         "level_2_requirement": "800",
         "early_color_hallways": "true"
     }
+
+
+class TestShuffleSunwarps(LingoTestBase):
+    options = {
+        "shuffle_doors": "none",
+        "shuffle_colors": "false",
+        "victory_condition": "pilgrimage",
+        "shuffle_sunwarps": "true",
+        "sunwarp_access": "normal"
+    }
+
+
+class TestShuffleSunwarpsAccess(LingoTestBase):
+    options = {
+        "shuffle_doors": "none",
+        "shuffle_colors": "false",
+        "victory_condition": "pilgrimage",
+        "shuffle_sunwarps": "true",
+        "sunwarp_access": "individual"
+    }
