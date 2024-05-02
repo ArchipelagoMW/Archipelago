@@ -18,7 +18,8 @@ from .Locations import get_locations, get_location_types, get_plando_locations
 from .Regions import create_regions
 from .Options import (get_option_value, LocationInclusion, KerriganLevelItemDistribution,
     KerriganPresence, KerriganPrimalStatus, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence,
-    get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence, Starcraft2Options
+    get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence, Starcraft2Options,
+    GrantStoryTech
 )
 from .PoolFilter import filter_items, get_used_races
 from .MissionTables import (
@@ -261,6 +262,7 @@ def flag_faction_unit_excludes_based_on_mission_excludes(world: SC2World, item_l
             and item.data.type in (Items.ZergItemType.Unit, Items.ZergItemType.Mercenary, Items.ZergItemType.Evolution_Pit)
         ):
             if (SC2Mission.ENEMY_WITHIN not in missions
+                or world.options.grant_story_tech.value == GrantStoryTech.option_true
                 or item.name not in (ItemNames.ZERGLING, ItemNames.ROACH, ItemNames.HYDRALISK, ItemNames.INFESTOR)
             ):
                 item.flags |= ItemFilterFlags.Excluded
@@ -274,6 +276,7 @@ def flag_faction_unit_excludes_based_on_mission_excludes(world: SC2World, item_l
             # Note(mm): This doesn't exclude things like automated assimilators or warp gate improvements
             # because that item type is mixed in with e.g. Reconstruction Beam and Overwatch
             if (SC2Mission.TEMPLAR_S_RETURN not in missions
+                or world.options.grant_story_tech.value == GrantStoryTech.option_true
                 or item.name not in (
                     ItemNames.IMMORTAL, ItemNames.ANNIHILATOR,
                     ItemNames.COLOSSUS, ItemNames.VANGUARD, ItemNames.REAVER, ItemNames.DARK_TEMPLAR,
