@@ -381,14 +381,14 @@ class ConnectBarTextInput(TextInput):
 
 
 def is_command_input(string: str) -> bool:
-    return string and string[0] in "/!"
+    return len(string) > 0 and string[0] in "/!"
 
 
 class CommandPromptTextInput(TextInput):
     MAXIMUM_HISTORY_MESSAGES = 50
 
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+    def __init__(self, **kwargs) -> None:
+        super().__init__(**kwargs)
         self._command_history_index = -1
         self._command_history: typing.List[str] = []
     
@@ -469,7 +469,7 @@ class GameManager(App):
         self.commandprocessor = ctx.command_processor(ctx)
         self.icon = r"data/icon.png"
         self.json_to_kivy_parser = KivyJSONtoTextParser(ctx)
-        self.log_panels = {}
+        self.log_panels: typing.Dict[str, Widget] = {}
 
         # keep track of last used command to autofill on click
         self.last_autofillable_command = "hint"
