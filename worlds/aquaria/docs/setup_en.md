@@ -42,7 +42,7 @@ or, if the room has a password:
 aquaria_randomizer.exe  --name YourName --server theServer:thePort --password thePassword
 ```
 
-### Linux Preparations using the AppImage
+### Linux when using the AppImage
 
 If you use the AppImage, just copy it in the Aquaria game folder. You then have to make it executable. You
 can do that from command line by using 
@@ -65,7 +65,7 @@ or, if the room has a password:
 ./Aquaria_Randomizer-*.AppImage --name YourName --server theServer:thePort --password thePassword
 ```
 
-### Linux Preparations using the tar file
+### Linux when using the tar file
 
 First, you should copy the original Aquaria folder game. The randomizer will possibly modify the game so that
 the original game will stop working. Copying the folder will guarantee that the original game keeps on working.

@@ -24,7 +24,7 @@ The locations in the randomizer are:
   * Beating Sun God boss,
   * Breaking Li cage in the body
 
-Note that, unlike the vanilla game, when opening sing bulbs, Mithalas urns and Sunken city crates,
+Note that, unlike the vanilla game, when opening sing bulbs, Mithalas urns and Sunken City crates,
 nothing will come out of them. The moment those bulbs, urns and crates are opened, the location is considered received.
 
 The items in the randomizer are:
@@ -44,7 +44,7 @@ cannot be cooked (and learn) before being obtained as randomized items. Also, en
 that drop dishes that have not been learned before will drop ingredients of this dish instead.
 
 ## What is the goal of the game?
-The goal of the Aquaria game is to beat the final boss. You can also add other goals like getting
+The goal of the Aquaria game is to beat the creator. You can also add other goals like getting
 secret memories, beating a number of mini-bosses and beating a number of bosses.
 
 ## Which items can be in another player's world?
@@ -52,7 +52,7 @@ Any items specified above can be in another player's world.
 
 ## What does another world's item look like in Aquaria?
 No visuals are shown when finding locations other than collectible treasure.
-For those treasures, the visual of the treasure are visually unchanged.
+For those treasures, the visual of the treasure is visually unchanged.
 After collecting a location check, a message will be shown to inform the player
 what has been collected, and who will receive it.
 

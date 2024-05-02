@@ -11,13 +11,13 @@
 ### Windows
 
 En premier lieu, vous devriez effectuer une nouvelle copie du jeu d'Aquaria original à chaque fois que vous effectuez une
-nouvelle partie. La première raison de cette copie est que le randomiser modifie des fichiers qui rendront possiblement
+nouvelle partie. La première raison de cette copie est que le randomizer modifie des fichiers qui rendront possiblement
 le jeu original non fonctionnel. La seconde raison d'effectuer cette copie est que les sauvegardes sont créées
 directement dans le répertoire du jeu. Donc, la copie permet d'éviter de perdre vos sauvegardes du jeu d'origine ou
 encore de charger une sauvegarde d'une ancienne partie de multiworld (ce qui pourrait avoir comme conséquence de briser
 la logique du multiworld).
 
-Désarchiver le randomizer d'aquaria et copier tous les fichiers de l'archive dans le répertoire du jeu d'Aquaria. Le
+Désarchiver le randomizer d'Aquaria et copier tous les fichiers de l'archive dans le répertoire du jeu d'Aquaria. Le
 fichier d'archive devrait contenir les fichiers suivants:
 - aquaria_randomizer.exe
 - OpenAL32.dll
@@ -27,7 +27,7 @@ fichier d'archive devrait contenir les fichiers suivants:
 - wrap_oal.dll
 - cacert.pem
 
-S'il y a des conflits entre des fichiers de l'archive zip et des fichiers du jeu original, vous devez utiliser
+S'il y a des conflits entre les fichiers de l'archive zip et les fichiers du jeu original, vous devez utiliser
 les fichiers contenus dans l'archive zip.
 
 Finalement, pour lancer le randomiser, vous devez utiliser la ligne de commande (vous pouvez ouvrir une interface de
@@ -46,7 +46,7 @@ aquaria_randomizer.exe --name VotreNom --server leServeur:LePort --password leMo
 
 ### Linux avec le fichier AppImage
 
-Si vous utilisez le fichier AppImage, copiez le fichier dans le répertoire du jsu d'Aquaria. Ensuite, assurez-vous de
+Si vous utilisez le fichier AppImage, copiez le fichier dans le répertoire du jeu d'Aquaria. Ensuite, assurez-vous de
 le mettre exécutable. Vous pouvez mettre le fichier exécutable avec la commande suivante:
 
 ```bash
@@ -73,14 +73,14 @@ En premier lieu, assurez-vous de faire une copie du répertoire du jeu d'origine
 dans le randomiser auront comme impact de rendre le jeu d'origine non fonctionnel. Donc, effectuer la copie du jeu
 avant de déposer le randomiser à l'intérieur permet de vous assurer de garder une version du jeu d'origine fonctionnel.
 
-Désarchiver le fichier tar et copier tous les fichiers qu'il contient dans le répertoire du jeu d'origine Aquaria. Les
+Désarchiver le fichier tar et copier tous les fichiers qu'il contient dans le répertoire du jeu d'origine d'Aquaria. Les
 fichiers extraient du fichier tar devraient être les suivants:
 - aquaria_randomizer
 - override (directory)
 - usersettings.xml
 - cacert.pem
 
-S'il y a des conflits entre des fichiers de l'archive tar et des fichiers du jeu original, vous devez utiliser
+S'il y a des conflits entre les fichiers de l'archive tar et les fichiers du jeu original, vous devez utiliser
 les fichiers contenus dans l'archive tar.
 
 Ensuite, vous devez installer manuellement les librairies dont dépend le jeu: liblua5, libogg, libvorbis, libopenal and

@@ -2,7 +2,7 @@
 
 ## Où se trouve la page des options ?
 
-La [page des options du joueur pour ce jeu](../player-options) contiens tous
+La [page des options du joueur pour ce jeu](../player-options) contient tous
 les options dont vous avez besoin pour configurer et exporter le fichier.
 
 ## Quel est l'effet de la randomisation sur ce jeu ?
@@ -38,7 +38,7 @@ Les objets pouvant être obtenus sont:
 - Toutes les musiques (autre que la musique de Li puisque cette dernière est apprise en obtenant Li);
 - Les localisations de transportation.
 
-Il y a également l'option pour mélanger les ingrédients obtenus en éliminant des montres, des poissons ou des plantes. 
+Il y a également l'option pour mélanger les ingrédients obtenus en éliminant des monstres, des poissons ou des plantes. 
 
 *À noter que, contrairement au jeu original, il est impossible de cuisiner une recette qui n'a pas préalablement
 été apprise en obtenant un repas en tant qu'objet. À noter également que les ennemies et plantes qui
