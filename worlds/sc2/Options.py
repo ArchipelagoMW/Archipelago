@@ -642,8 +642,10 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
     def verify(self, world: Type['World'], player_name: str, plando_options: PlandoOptions) -> None:
         """Overridden version of function from Options.VerifyKeys for a better error message"""
         new_value: dict[str, int] = {}
+        case_insensitive_group_mapping = {
+            group_name.casefold(): group_value for group_name, group_value in world.item_name_groups.items()}
         for group_name in self.value:
-            item_names = world.item_name_groups.get(group_name, {group_name})
+            item_names = case_insensitive_group_mapping.get(group_name.casefold(), {group_name})
             for item_name in item_names:
                 new_value[item_name] = new_value.get(item_name, 0) + self.value[group_name]
         self.value = new_value

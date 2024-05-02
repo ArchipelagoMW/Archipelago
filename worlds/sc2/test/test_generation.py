@@ -116,7 +116,7 @@ class TestItemFiltering(Sc2SetupTestBase):
     def test_excluding_groups_excludes_all_items_in_group(self):
         options = {
             'excluded_items': [
-                ItemGroups.ItemGroupNames.BARRACKS_UNITS,
+                ItemGroups.ItemGroupNames.BARRACKS_UNITS.lower(),
             ]
         }
         self.generate_world(options)
