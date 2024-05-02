@@ -65,7 +65,7 @@ def locality_rules(multiworld: MultiWorld):
 
         # create fewer lambda's to save memory and cache misses
         func_cache = {}
-        for location in world.get_locations():
+        for location in multiworld.get_locations():
             if (location.player, location.item_rule) in func_cache:
                 location.item_rule = func_cache[location.player, location.item_rule]
             # empty rule that just returns True, overwrite
