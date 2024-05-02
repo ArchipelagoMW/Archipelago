@@ -422,3 +422,27 @@ class TestItemFiltering(Sc2SetupTestBase):
         soa_items_in_pool = [item_name for item_name in item_names if Items.item_table[item_name].type == Items.ProtossItemType.Spear_Of_Adun]
         self.assertGreater(len(soa_items_in_pool), 5)
 
+    def test_lotv_only_doesnt_include_kerrigan_items_with_grant_story_tech(self) -> None:
+        options = {
+            'enable_wol_missions': False,
+            'enable_nco_missions': False,
+            'enable_prophecy_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': True,
+            'enable_hots_missions': False,
+            'enable_epilogue_missions': False,
+            'mission_order': Options.MissionOrder.option_grid,
+            'maximum_campaign_size': Options.MaximumCampaignSize.range_end,
+            'accessibility': 'locations',
+            'grant_story_tech': Options.GrantStoryTech.option_true,
+        }
+        self.generate_world(options)
+        missions = get_all_missions(self.world.mission_req_table)
+        self.assertIn(MissionTables.SC2Mission.TEMPLE_OF_UNIFICATION, missions)
+        item_names = [item.name for item in self.multiworld.itempool]
+        self.assertTrue(item_names)
+        kerrigan_items_in_pool = set(ItemGroups.kerrigan_abilities).intersection(item_names)
+        self.assertFalse(kerrigan_items_in_pool)
+        kerrigan_passives_in_pool = set(ItemGroups.kerrigan_passives).intersection(item_names)
+        self.assertFalse(kerrigan_passives_in_pool)
+

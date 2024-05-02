@@ -327,10 +327,11 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
     """
     missions = get_all_missions(world.mission_req_table)
 
-    kerrigan_missions = len([mission for mission in missions if MissionFlag.Kerrigan in mission.flags]) > 0
+    kerrigan_missions = [mission for mission in missions if MissionFlag.Kerrigan in mission.flags]
+    kerrigan_build_missions = [mission for mission in kerrigan_missions if MissionFlag.NoBuild not in mission.flags]
     nova_missions = [mission for mission in missions if MissionFlag.Nova in mission.flags]
 
-    kerrigan_is_present = kerrigan_missions and world.options.kerrigan_presence == KerriganPresence.option_vanilla
+    kerrigan_is_present = len(kerrigan_missions) > 0 and world.options.kerrigan_presence == KerriganPresence.option_vanilla
 
     # TvZ build missions -- check flags Terran and VsZerg are true and NoBuild is false
     tvz_build_mask = MissionFlag.Terran|MissionFlag.VsZerg|MissionFlag.NoBuild
@@ -381,8 +382,11 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
             item.flags |= ItemFilterFlags.Excluded
         
         # Remove Kerrigan abilities if there's no kerrigan
-        if (item.data.type == Items.ZergItemType.Ability and not kerrigan_is_present):
-            item.flags |= ItemFilterFlags.Excluded
+        if item.data.type == Items.ZergItemType.Ability:
+            if not kerrigan_is_present:
+                item.flags |= ItemFilterFlags.Excluded
+            elif world.options.grant_story_tech and not kerrigan_build_missions:
+                item.flags |= ItemFilterFlags.Excluded
         
         # Remove Spear of Adun if it's off
         if item.name in Items.spear_of_adun_calldowns and not soa_presence:
@@ -673,9 +677,12 @@ def create_item_with_correct_settings(player: int, name: str) -> Item:
 def fill_pool_with_kerrigan_levels(world: SC2World, item_pool: List[Item]):
     total_levels = world.options.kerrigan_level_item_sum.value
     missions = get_all_missions(world.mission_req_table)
+    kerrigan_missions = [mission for mission in missions if MissionFlag.Kerrigan in mission.flags]
+    kerrigan_build_missions = [mission for mission in missions if MissionFlag.NoBuild not in mission.flags]
     if (world.options.kerrigan_presence.value not in kerrigan_unit_available
         or total_levels == 0
-        or not [mission for mission in missions if MissionFlag.Kerrigan in mission.flags]
+        or not kerrigan_missions
+        or (world.options.grant_story_levels and not kerrigan_build_missions)
     ):
         return
     
