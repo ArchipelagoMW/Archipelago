@@ -202,8 +202,8 @@ class TestItemFiltering(Sc2SetupTestBase):
                 ItemGroups.ItemGroupNames.TERRAN_ITEMS: 0,
             },
             'unexcluded_items': {
-                ItemGroups.ItemGroupNames.NCO_MAX_PROGRESSIVE_UPGRADES: 0,
-                ItemGroups.ItemGroupNames.NCO_MIN_PROGRESSIVE_UPGRADES: 1,
+                ItemGroups.ItemGroupNames.NCO_MAX_PROGRESSIVE_ITEMS: 0,
+                ItemGroups.ItemGroupNames.NCO_MIN_PROGRESSIVE_ITEMS: 1,
             },
         }
         self.generate_world(options)

@@ -91,9 +91,9 @@ class ItemGroupNames:
     NCO_BASELINE_UPGRADES = "NCO Baseline Upgrades"
     NCO_UPGRADES = "NCO Upgrades"
     NOVA_EQUIPMENT = "Nova Equipment"
-    NCO_MAX_PROGRESSIVE_UPGRADES = "NCO +Items"
+    NCO_MAX_PROGRESSIVE_ITEMS = "NCO +Items"
     """NCO item groups that should be set to maximum progressive amounts"""
-    NCO_MIN_PROGRESSIVE_UPGRADES = "NCO -Items"
+    NCO_MIN_PROGRESSIVE_ITEMS = "NCO -Items"
     """NCO item groups that should be set to minimum progressive amounts (1)"""
     TERRAN_BUILDINGS = "Terran Buildings"
     TERRAN_MERCENARIES = "Terran Mercenaries"
@@ -336,8 +336,8 @@ item_name_groups[ItemGroupNames.NCO_UNIT_TECHNOLOGY] = nco_unit_technology = [
     ItemNames.PROGRESSIVE_REGENERATIVE_BIO_STEEL,
 ]
 item_name_groups[ItemGroupNames.NCO_UPGRADES] = nco_upgrades = nco_baseline_upgrades + nco_unit_technology
-item_name_groups[ItemGroupNames.NCO_MAX_PROGRESSIVE_UPGRADES] = nco_unit_technology + nova_equipment + terran_generic_upgrades
-item_name_groups[ItemGroupNames.NCO_MIN_PROGRESSIVE_UPGRADES] = nco_units + nco_baseline_upgrades
+item_name_groups[ItemGroupNames.NCO_MAX_PROGRESSIVE_ITEMS] = nco_unit_technology + nova_equipment + terran_generic_upgrades
+item_name_groups[ItemGroupNames.NCO_MIN_PROGRESSIVE_ITEMS] = nco_units + nco_baseline_upgrades
 item_name_groups[ItemGroupNames.TERRAN_PROGRESSIVE_UPGRADES] = terran_progressive_items = [
     item_name for item_name, item_data in Items.item_table.items()
     if item_data.type in (Items.TerranItemType.Progressive, Items.TerranItemType.Progressive_2)
