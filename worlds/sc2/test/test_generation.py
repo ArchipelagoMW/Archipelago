@@ -36,9 +36,12 @@ class Sc2SetupTestBase(unittest.TestCase):
             })
         self.multiworld.set_options(args)
         self.world: SC2World = cast(SC2World, self.multiworld.worlds[self.player])
-        for step in gen_steps:
-            call_all(self.multiworld, step)
-
+        try:
+            for step in gen_steps:
+                call_all(self.multiworld, step)
+        except Exception as ex:
+            ex.add_note(f"Seed: {self.multiworld.seed}")
+            raise
 
 class TestItemFiltering(Sc2SetupTestBase):
     def test_explicit_locks_excludes_interact_and_set_flags(self):

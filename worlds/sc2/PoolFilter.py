@@ -247,14 +247,18 @@ class ValidInventory:
         minimum_upgrades = get_option_value(self.world, "min_number_of_upgrades")
 
         def attempt_removal(item: Item) -> bool:
-            inventory.remove(item)
+            removed_item = inventory.pop(inventory.index(item))
             # Only run logic checks when removing logic items
             if item.name in self.logical_inventory:
                 self.logical_inventory.remove(item.name)
                 if not all(requirement(self) for (_, requirement) in mission_requirements):
                     # If item cannot be removed, lock or revert
                     self.logical_inventory.append(item.name)
-                    locked_items.append(item)
+                    # Note(mm): Be sure to re-add the _exact_ item we removed.
+                    # Removing from `inventory` searches based on == checks, but AutoWorld.py
+                    # checks using `is` to make sure there are no duplicate item objects in the pool.
+                    # Hence, appending `item` could cause sporadic generation failures.
+                    locked_items.append(removed_item)
                     return False
             return True
 
