@@ -1,4 +1,4 @@
-from typing import ClassVar, Dict, Tuple, TextIO
+from typing import ClassVar, Dict, Tuple, TextIO, Any
 
 import settings, typing
 from worlds.AutoWorld import WebWorld, World
@@ -445,6 +445,9 @@ class SotnWorld(World):
 
     def set_rules(self):
         set_rules(self.multiworld, self.player)
+
+    def fill_slot_data(self) -> Dict[str, Any]:
+        return self.options.as_dict(*self.option_definitions.keys())
 
     def generate_output(self, output_directory: str) -> None:
         patch_rom(self, output_directory)
