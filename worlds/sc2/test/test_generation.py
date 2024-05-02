@@ -321,3 +321,48 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertNotIn(ItemNames.HELLION_HELLBAT_ASPECT, item_names)
         self.assertNotIn(ItemNames.BATTLECRUISER_CLOAK, item_names)
 
+    def test_evil_awoken_with_vanilla_items_only_generates(self) -> None:
+        options = {
+            'enable_wol_missions': False,
+            'enable_nco_missions': False,
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_epilogue_missions': False,
+            'mission_order': Options.MissionOrder.option_grid,
+            'maximum_campaign_size': Options.MaximumCampaignSize.range_end,
+            'accessibility': 'locations',
+            'vanilla_items_only': True,
+        }
+        self.generate_world(options)
+        item_names = [item.name for item in self.multiworld.itempool]
+        self.assertTrue(item_names)
+        self.assertTrue(self.world.get_region(MissionTables.SC2Mission.EVIL_AWOKEN.mission_name))
+
+    def test_enemy_within_and_no_zerg_build_missions_generates(self) -> None:
+        options = {
+            # including WoL to allow for valid goal missions
+            'enable_nco_missions': False,
+            'enable_prophecy_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'excluded_missions': [
+                mission.mission_name for mission in MissionTables.SC2Mission
+                if MissionTables.MissionFlag.Zerg in mission.flags
+                    and MissionTables.MissionFlag.NoBuild not in mission.flags
+            ],
+            'mission_order': Options.MissionOrder.option_grid,
+            'maximum_campaign_size': Options.MaximumCampaignSize.range_end,
+            'accessibility': 'locations',
+            'vanilla_items_only': True,
+        }
+        self.generate_world(options)
+        item_names = [item.name for item in self.multiworld.itempool]
+        self.assertTrue(item_names)
+        self.assertTrue(self.world.get_region(MissionTables.SC2Mission.ENEMY_WITHIN.mission_name))
+        self.assertNotIn(ItemNames.ULTRALISK, item_names)
+        self.assertNotIn(ItemNames.SWARM_QUEEN, item_names)
+        self.assertNotIn(ItemNames.MUTALISK, item_names)
+        self.assertNotIn(ItemNames.CORRUPTOR, item_names)
+        self.assertNotIn(ItemNames.SCOURGE, item_names)
+

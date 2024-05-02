@@ -1,8 +1,9 @@
 from enum import IntEnum
 from typing import List, Tuple, Optional, Callable, NamedTuple, Set, Any, TYPE_CHECKING
 from . import ItemNames
-from .Options import get_option_value, kerrigan_unit_available, RequiredTactics, GrantStoryTech, LocationInclusion, \
-    EnableHotsMissions
+from .Options import (VanillaItemsOnly, get_option_value, RequiredTactics,
+    LocationInclusion, KerriganPresence,
+)
 from .Rules import SC2Logic
 
 from BaseClasses import Location
@@ -38,7 +39,7 @@ class LocationData(NamedTuple):
     rule: Callable[['CollectionState'], bool] = Location.access_rule
 
 
-def get_location_types(world: World, inclusion_type: int) -> Set[LocationType]:
+def get_location_types(world: 'SC2World', inclusion_type: int) -> Set[LocationType]:
     """
 
     :param multiworld:
@@ -80,13 +81,20 @@ def get_plando_locations(world: World) -> List[str]:
 
 def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
     # Note: rules which are ended with or True are rules identified as needed later when restricted units is an option
-    logic_level = get_option_value(world, 'required_tactics')
+    if world is None:
+        logic_level = int(RequiredTactics.default)
+        vanilla_items_only = not not VanillaItemsOnly.default
+        kerriganless = False
+    else:
+        logic_level = world.options.required_tactics.value
+        vanilla_items_only = not not world.options.vanilla_items_only.value
+        kerriganless = (
+            world.options.kerrigan_presence.value != KerriganPresence.option_vanilla
+            or not world.options.enable_hots_missions.value
+        )
     adv_tactics = logic_level != RequiredTactics.option_standard
-    kerriganless = get_option_value(world, 'kerrigan_presence') not in kerrigan_unit_available \
-        or get_option_value(world, "enable_hots_missions") == EnableHotsMissions.option_false
-    story_tech_granted = get_option_value(world, "grant_story_tech") == GrantStoryTech.option_true
     logic = SC2Logic(world)
-    player = None if world is None else world.player
+    player = 1 if world is None else world.player
     location_table: List[LocationData] = [
         # WoL
         LocationData("Liberation Day", "Liberation Day: Victory", SC2WOL_LOC_ID_OFFSET + 100, LocationType.VICTORY),
@@ -460,8 +468,8 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                      lambda state: logic.great_train_robbery_train_stopper(state) and
                                    logic.terran_basic_anti_air(state)),
         LocationData("Cutthroat", "Cutthroat: Victory", SC2WOL_LOC_ID_OFFSET + 1800, LocationType.VICTORY,
-                     lambda state: logic.terran_common_unit(state) and
-                                   (adv_tactics or logic.terran_basic_anti_air)),
+                     lambda state: logic.terran_common_unit(state)
+                                    and (adv_tactics or logic.terran_basic_anti_air(state))),
         LocationData("Cutthroat", "Cutthroat: Mira Han", SC2WOL_LOC_ID_OFFSET + 1801, LocationType.EXTRA,
                      lambda state: logic.terran_common_unit(state)),
         LocationData("Cutthroat", "Cutthroat: North Relic", SC2WOL_LOC_ID_OFFSET + 1802, LocationType.VANILLA,
@@ -1091,7 +1099,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                                    and logic.protoss_anti_armor_anti_air(state) \
                                    and logic.protoss_can_attack_behind_chasm(state)),
         LocationData("Evil Awoken", "Evil Awoken: Victory", SC2LOTV_LOC_ID_OFFSET + 300, LocationType.VICTORY,
-                     lambda state: adv_tactics or logic.protoss_stalker_upgrade(state)),
+                     lambda state: adv_tactics or vanilla_items_only or logic.protoss_stalker_upgrade(state)),
         LocationData("Evil Awoken", "Evil Awoken: Temple Investigated", SC2LOTV_LOC_ID_OFFSET + 301, LocationType.EXTRA),
         LocationData("Evil Awoken", "Evil Awoken: Void Catalyst", SC2LOTV_LOC_ID_OFFSET + 302, LocationType.EXTRA),
         LocationData("Evil Awoken", "Evil Awoken: First Particle Cannon", SC2LOTV_LOC_ID_OFFSET + 303, LocationType.VANILLA),
@@ -1581,7 +1589,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                      lambda state: logic.enemy_shadow_door_controls(state)),
         LocationData("In the Enemy's Shadow", "In the Enemy's Shadow: Facility: Blazefire Gunblade", SC2NCO_LOC_ID_OFFSET + 706, LocationType.VANILLA,
                      lambda state: logic.enemy_shadow_second_stage(state)
-                                   and (story_tech_granted
+                                   and (logic.story_tech_granted
                                         or state.has(ItemNames.NOVA_BLINK, player)
                                         or (adv_tactics and state.has_all({ItemNames.NOVA_DOMINATION, ItemNames.NOVA_HOLO_DECOY, ItemNames.NOVA_JUMP_SUIT_MODULE}, player))
                                         )
@@ -1621,7 +1629,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
     if world is not None:
         excluded_location_types = get_location_types(world, LocationInclusion.option_disabled)
         plando_locations = get_plando_locations(world)
-        exclude_locations = get_option_value(world, "exclude_locations")
+        exclude_locations = world.options.exclude_locations.value
         location_table = [location for location in location_table
                           if (location.type is LocationType.VICTORY or location.name not in exclude_locations)
                           and location.type not in excluded_location_types
