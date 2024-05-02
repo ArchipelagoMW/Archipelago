@@ -1,45 +1,48 @@
 import io
 import json
-import pkgutil
 import random
-import typing
 
 from . import Data
+from typing import TYPE_CHECKING, Optional
 from BaseClasses import Item, Location
 from settings import get_settings
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
 from .Items import item_table
 from .Locations import shop, badge, pants, location_table, hidden, all_locations
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from . import MLSSWorld
 
-
-class Color:
-    def __init__(self, location, byte1, byte2, bro):
-        self.location = location
-        self.byte1 = byte1
-        self.byte2 = byte2
-        self.bro = bro
-
-
 colors = [
-    "Red",
-    "Green",
-    "Blue",
-    "Cyan",
-    "Yellow",
-    "Orange",
-    "Purple",
-    "Pink",
-    "Black",
-    "White",
-    "Silhouette",
-    "Chaos",
-    "TrueChaos",
+    Data.redHat,
+    Data.greenHat,
+    Data.blueHat,
+    Data.azureHat,
+    Data.yellowHat,
+    Data.orangeHat,
+    Data.purpleHat,
+    Data.pinkHat,
+    Data.blackHat,
+    Data.whiteHat,
+    Data.silhouetteHat,
+    Data.chaosHat,
+    Data.truechaosHat
 ]
 
-cpants = ["Vanilla", "Red", "Green", "Blue", "Cyan", "Yellow", "Orange", "Purple", "Pink", "Black", "White", "Chaos"]
+pants = [
+    Data.vanilla,
+    Data.redPants,
+    Data.greenPants,
+    Data.bluePants,
+    Data.azurePants,
+    Data.yellowPants,
+    Data.orangePants,
+    Data.purplePants,
+    Data.pinkPants,
+    Data.blackPants,
+    Data.whitePants,
+    Data.chaosPants
+]
 
 
 def get_base_rom_as_bytes() -> bytes:
@@ -341,58 +344,30 @@ def write_tokens(world: "MLSSWorld", patch: MLSSProcedurePatch) -> None:
         if "Shop" in location_name and "Coffee" not in location_name and item.player != world.player:
             desc_inject(world, patch, location, item)
 
-    swap_colors(world, patch, colors[world.options.mario_color], 0)
-    swap_colors(world, patch, colors[world.options.luigi_color], 1)
-    swap_pants(world, patch, cpants[world.options.mario_pants], 0)
-    swap_pants(world, patch, cpants[world.options.luigi_pants], 1)
+    swap_colors(world, patch, world.options.mario_pants.value, 0, True)
+    swap_colors(world, patch, world.options.luigi_pants.value, 1, True)
+    swap_colors(world, patch, world.options.mario_color.value, 0)
+    swap_colors(world, patch, world.options.luigi_color.value, 1)
 
     patch.write_file("token_data.bin", patch.get_token_binary())
 
 
-def swap_colors(world: "MLSSWorld", patch: MLSSProcedurePatch, color: str, bro: int):
-    temp = pkgutil.get_data(__name__, "colors/" + color + ".txt")
-    temp_io = io.BytesIO(temp)
-    color_arr = []
-    random = world.multiworld.per_slot_randoms[world.player]
-
-    for lines in temp_io.readlines():
-        arr = lines.decode("utf-8").strip().split(",")
-        if color != "Chaos" and color != "TrueChaos":
-            color_arr.append(Color(int(arr[0], 16), int(arr[1], 16), int(arr[2], 16), int(arr[3], 16)))
+def swap_colors(world: "MLSSWorld", patch: MLSSProcedurePatch, color: int, bro: int,
+                pants_option: Optional[bool] = False):
+    if not pants_option and color == bro:
+        return
+    chaos = False
+    if not pants_option and color == 11 or color == 12:
+        chaos = True
+    if pants_option and color == 11:
+        chaos = True
+    for c in [c for c in (pants[color] if pants_option else colors[color])
+              if (c[3] == bro if not chaos else c[1] == bro)]:
+        if chaos:
+            patch.write_token(APTokenTypes.WRITE, c[0],
+                              bytes([world.random.randint(0, 255), world.random.randint(0, 127)]))
         else:
-            color_arr.append(Color(int(arr[0], 16), random.randint(0, 255), random.randint(0, 127), int(arr[1], 16)))
-
-    colors_ = [c for c in color_arr if c.bro == bro]
-
-    for c in colors_:
-        patch.write_token(APTokenTypes.WRITE, c.location, bytes([c.byte1, c.byte2]))
-
-
-def swap_pants(world: "MLSSWorld", patch: MLSSProcedurePatch, color: str, bro: int):
-    mario_color = world.options.mario_color
-    luigi_color = world.options.luigi_color
-    random = world.multiworld.per_slot_randoms[world.player]
-    if bro == 0 and (colors[mario_color] == "TrueChaos" or colors[mario_color] == "Silhouette"):
-        return
-    if bro == 1 and (colors[luigi_color] == "TrueChaos" or colors[luigi_color] == "Silhouette"):
-        return
-    if color == "Vanilla":
-        return
-    temp = pkgutil.get_data(__name__, "colors/pants/" + color + ".txt")
-    temp_io = io.BytesIO(temp)
-    color_arr = []
-
-    for lines in temp_io.readlines():
-        arr = lines.decode("utf-8").strip().split(",")
-        if color != "Chaos":
-            color_arr.append(Color(int(arr[0], 16), int(arr[1], 16), int(arr[2], 16), int(arr[3], 16)))
-        else:
-            color_arr.append(Color(int(arr[0], 16), random.randint(0, 255), random.randint(0, 127), int(arr[1], 16)))
-
-    colors_ = [c for c in color_arr if c.bro == bro]
-
-    for c in colors_:
-        patch.write_token(APTokenTypes.WRITE, c.location, bytes([c.byte1, c.byte2]))
+            patch.write_token(APTokenTypes.WRITE, c[0], bytes([c[1], c[2]]))
 
 
 def item_inject(world: "MLSSWorld", patch: MLSSProcedurePatch, location: int, item_type: int, item: Item):
