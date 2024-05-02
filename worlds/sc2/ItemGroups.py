@@ -1,6 +1,6 @@
 import typing
 from . import Items, ItemNames
-from .MissionTables import campaign_mission_table, SC2Campaign, SC2Mission
+from .MissionTables import campaign_mission_table, SC2Campaign, SC2Mission, SC2Race
 
 """
 Item name groups, given to Archipelago and used in YAMLs and /received filtering.
@@ -71,10 +71,11 @@ for item, data in Items.get_full_item_list().items():
 
 # Hand-made groups
 class ItemGroupNames:
+    TERRAN_ITEMS = "Terran Items"
+    """All Terran items"""
     TERRAN_UNITS = "Terran Units"
-    ZERG_UNITS = "Zerg Units"
-    PROTOSS_UNITS = "Protoss Units"
-
+    TERRAN_GENERIC_UPGRADES = "Terran Generic Upgrades"
+    """+attack/armour upgrades"""
     BARRACKS_UNITS = "Barracks Units"
     FACTORY_UNITS = "Factory Units"
     STARPORT_UNITS = "Starport Units"
@@ -85,7 +86,15 @@ class ItemGroupNames:
     WOL_ITEMS = "WoL Items"
     """All items from vanilla WoL. Note some items are progressive where level 2 is not vanilla."""
     NCO_UNITS = "NCO Units"
+    NCO_BUILDINGS = "NCO Buildings"
+    NCO_UNIT_TECHNOLOGY = "NCO Unit Technology"
+    NCO_BASELINE_UPGRADES = "NCO Baseline Upgrades"
+    NCO_UPGRADES = "NCO Upgrades"
     NOVA_EQUIPMENT = "Nova Equipment"
+    NCO_MAX_PROGRESSIVE_UPGRADES = "NCO +Items"
+    """NCO item groups that should be set to maximum progressive amounts"""
+    NCO_MIN_PROGRESSIVE_UPGRADES = "NCO -Items"
+    """NCO item groups that should be set to minimum progressive amounts (1)"""
     TERRAN_BUILDINGS = "Terran Buildings"
     TERRAN_MERCENARIES = "Terran Mercenaries"
     TERRAN_STIMPACKS = "Terran Stimpacks"
@@ -93,6 +102,10 @@ class ItemGroupNames:
     TERRAN_ORIGINAL_PROGRESSIVE_UPGRADES = "Terran Original Progressive Upgrades"
     """Progressive items where level 1 appeared in WoL"""
 
+    ZERG_ITEMS = "Zerg Items"
+    ZERG_UNITS = "Zerg Units"
+    ZERG_GENERIC_UPGRADES = "Zerg Generic Upgrades"
+    """+attack/armour upgrades"""
     HOTS_UNITS = "HotS Units"
     HOTS_STRAINS = "HotS Strains"
     """Vanilla HotS strains (the upgrades you play a mini-mission for)"""
@@ -108,6 +121,10 @@ class ItemGroupNames:
     ZERG_MERCS = "Zerg Mercenaries"
     ZERG_BUILDINGS = "Zerg Buildings"
 
+    PROTOSS_ITEMS = "Protoss Items"
+    PROTOSS_UNITS = "Protoss Units"
+    PROTOSS_GENERIC_UPGRADES = "Protoss Generic Upgrades"
+    """+attack/armour upgrades"""
     GATEWAY_UNITS = "Gateway Units"
     ROBO_UNITS = "Robo Units"
     STARGATE_UNITS = "Stargate Units"
@@ -128,9 +145,17 @@ class ItemGroupNames:
 
 
 # Terran
+item_name_groups[ItemGroupNames.TERRAN_ITEMS] = terran_items = [
+    item_name for item_name, item_data in Items.item_table.items()
+    if item_data.race == SC2Race.TERRAN
+]
 item_name_groups[ItemGroupNames.TERRAN_UNITS] = terran_units = [
     item_name for item_name, item_data in Items.item_table.items()
     if item_data.type in (Items.TerranItemType.Unit, Items.TerranItemType.Mercenary)
+]
+item_name_groups[ItemGroupNames.TERRAN_GENERIC_UPGRADES] = terran_generic_upgrades = [
+    item_name for item_name, item_data in Items.item_table.items()
+    if item_data.type == Items.TerranItemType.Upgrade
 ]
 item_name_groups[ItemGroupNames.BARRACKS_UNITS] = barracks_units = [
     ItemNames.MARINE, ItemNames.MEDIC, ItemNames.FIREBAT, ItemNames.MARAUDER,
@@ -158,6 +183,10 @@ item_name_groups[ItemGroupNames.NCO_UNITS] = nco_units = [
     ItemNames.MARINE, ItemNames.MARAUDER, ItemNames.REAPER,
     ItemNames.HELLION, ItemNames.GOLIATH, ItemNames.SIEGE_TANK,
     ItemNames.RAVEN, ItemNames.LIBERATOR, ItemNames.BANSHEE, ItemNames.BATTLECRUISER,
+    ItemNames.HERC,  # From that one bonus objective in mission 5
+]
+item_name_groups[ItemGroupNames.NCO_BUILDINGS] = nco_buildings = [
+    ItemNames.BUNKER, ItemNames.MISSILE_TURRET, ItemNames.PLANETARY_FORTRESS,
 ]
 item_name_groups[ItemGroupNames.NOVA_EQUIPMENT] = nova_equipment = [
     *[item_name for item_name, item_data in Items.item_table.items()
@@ -243,6 +272,72 @@ item_name_groups[ItemGroupNames.TERRAN_ORIGINAL_PROGRESSIVE_UPGRADES] = terran_o
     ItemNames.THOR_PROGRESSIVE_IMMORTALITY_PROTOCOL,
     ItemNames.PROGRESSIVE_REGENERATIVE_BIO_STEEL,
 ]
+item_name_groups[ItemGroupNames.NCO_BASELINE_UPGRADES] = nco_baseline_upgrades = [
+    ItemNames.BUNKER_NEOSTEEL_BUNKER,  # Baseline from mission 2
+    ItemNames.BUNKER_FORTIFIED_BUNKER,  # Baseline from mission 2
+    ItemNames.MARINE_COMBAT_SHIELD,   # Baseline from mission 2
+    ItemNames.MARAUDER_KINETIC_FOAM,  # Baseline outside WOL
+    ItemNames.MARAUDER_CONCUSSIVE_SHELLS,  # Baseline from mission 2
+    ItemNames.HELLION_HELLBAT_ASPECT,  # Baseline from mission 3
+    ItemNames.GOLIATH_INTERNAL_TECH_MODULE,  # Baseline from mission 4
+    ItemNames.GOLIATH_SHAPED_HULL,
+    # ItemNames.GOLIATH_RESOURCE_EFFICIENCY,  # Supply savings baseline in NCO, mineral savings is non-NCO
+    ItemNames.SIEGE_TANK_SHAPED_HULL,  # Baseline NCO gives +10; this upgrade gives +25
+    ItemNames.SIEGE_TANK_SHAPED_BLAST,  # Baseline from mission 3
+    ItemNames.LIBERATOR_RAID_ARTILLERY,  # Baseline in mission 5
+    ItemNames.RAVEN_BIO_MECHANICAL_REPAIR_DRONE,  # Baseline in mission 5
+    ItemNames.BATTLECRUISER_TACTICAL_JUMP,
+    ItemNames.BATTLECRUISER_COVERT_OPS_ENGINES,
+    ItemNames.PROGRESSIVE_ORBITAL_COMMAND,  # Can be upgraded from mission 2
+    ItemNames.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM,  # Baseline from mission 2
+    ItemNames.ORBITAL_DEPOTS,  # Baseline from mission 2
+] + nco_buildings
+item_name_groups[ItemGroupNames.NCO_UNIT_TECHNOLOGY] = nco_unit_technology = [
+    ItemNames.MARINE_LASER_TARGETING_SYSTEM,
+    ItemNames.MARINE_PROGRESSIVE_STIMPACK,
+    ItemNames.MARINE_MAGRAIL_MUNITIONS,
+    ItemNames.MARINE_OPTIMIZED_LOGISTICS,
+    ItemNames.MARAUDER_LASER_TARGETING_SYSTEM,
+    ItemNames.MARAUDER_INTERNAL_TECH_MODULE,
+    ItemNames.MARAUDER_PROGRESSIVE_STIMPACK,
+    ItemNames.MARAUDER_MAGRAIL_MUNITIONS,
+    ItemNames.REAPER_SPIDER_MINES,
+    ItemNames.REAPER_LASER_TARGETING_SYSTEM,
+    ItemNames.REAPER_PROGRESSIVE_STIMPACK,
+    ItemNames.REAPER_ADVANCED_CLOAKING_FIELD,
+    # Reaper special ordnance gives anti-building attack, which is baseline in AP
+    ItemNames.HELLION_JUMP_JETS,
+    ItemNames.HELLION_PROGRESSIVE_STIMPACK,
+    ItemNames.HELLION_SMART_SERVOS,
+    ItemNames.HELLION_OPTIMIZED_LOGISTICS,
+    ItemNames.HELLION_THERMITE_FILAMENTS,  # Called Infernal Pre-Igniter in NCO
+    ItemNames.GOLIATH_ARES_CLASS_TARGETING_SYSTEM,  # Called Laser Targeting System in NCO
+    ItemNames.GOLIATH_JUMP_JETS,
+    ItemNames.GOLIATH_OPTIMIZED_LOGISTICS,
+    ItemNames.GOLIATH_MULTI_LOCK_WEAPONS_SYSTEM,
+    ItemNames.SIEGE_TANK_SPIDER_MINES, ItemNames.SIEGE_TANK_JUMP_JETS,
+    ItemNames.SIEGE_TANK_INTERNAL_TECH_MODULE, ItemNames.SIEGE_TANK_SMART_SERVOS,
+    # Tanks can't get Laser targeting system in NCO
+    ItemNames.BANSHEE_INTERNAL_TECH_MODULE,
+    ItemNames.BANSHEE_PROGRESSIVE_CROSS_SPECTRUM_DAMPENERS,
+    ItemNames.BANSHEE_SHOCKWAVE_MISSILE_BATTERY,  # Banshee Special Ordnance
+    # Banshees can't get laser targeting systems in NCO
+    ItemNames.LIBERATOR_CLOAK,
+    ItemNames.LIBERATOR_SMART_SERVOS,
+    ItemNames.LIBERATOR_OPTIMIZED_LOGISTICS,
+    # Liberators can't get laser targeting system in NCO
+    ItemNames.RAVEN_SPIDER_MINES, 
+    ItemNames.RAVEN_INTERNAL_TECH_MODULE, 
+    ItemNames.RAVEN_RAILGUN_TURRET,        # Raven Magrail Munitions
+    ItemNames.RAVEN_HUNTER_SEEKER_WEAPON,  # Raven Special Ordnance
+    ItemNames.BATTLECRUISER_INTERNAL_TECH_MODULE,
+    ItemNames.BATTLECRUISER_CLOAK,
+    ItemNames.BATTLECRUISER_ATX_LASER_BATTERY,  # Battlecruiser Special Ordnance
+    ItemNames.PROGRESSIVE_REGENERATIVE_BIO_STEEL,
+]
+item_name_groups[ItemGroupNames.NCO_UPGRADES] = nco_upgrades = nco_baseline_upgrades + nco_unit_technology
+item_name_groups[ItemGroupNames.NCO_MAX_PROGRESSIVE_UPGRADES] = nco_unit_technology + nova_equipment + terran_generic_upgrades
+item_name_groups[ItemGroupNames.NCO_MIN_PROGRESSIVE_UPGRADES] = nco_units + nco_baseline_upgrades
 item_name_groups[ItemGroupNames.TERRAN_PROGRESSIVE_UPGRADES] = terran_progressive_items = [
     item_name for item_name, item_data in Items.item_table.items()
     if item_data.type in (Items.TerranItemType.Progressive, Items.TerranItemType.Progressive_2)
@@ -252,14 +347,23 @@ item_name_groups[ItemGroupNames.WOL_ITEMS] = vanilla_wol_items = (
     + wol_buildings
     + wol_mercs
     + wol_upgrades
+    + terran_generic_upgrades
 )
 
 # Zerg
+item_name_groups[ItemGroupNames.ZERG_ITEMS] = zerg_items = [
+    item_name for item_name, item_data in Items.item_table.items()
+    if item_data.race == SC2Race.ZERG
+]
 item_name_groups[ItemGroupNames.ZERG_BUILDINGS] = zerg_buildings = [ItemNames.SPINE_CRAWLER, ItemNames.SPORE_CRAWLER]
 item_name_groups[ItemGroupNames.ZERG_UNITS] = zerg_units = [
     item_name for item_name, item_data in Items.item_table.items()
     if item_data.type in (Items.ZergItemType.Unit, Items.ZergItemType.Mercenary, Items.ZergItemType.Morph)
         and item_name not in zerg_buildings
+]
+item_name_groups[ItemGroupNames.ZERG_GENERIC_UPGRADES] = zerg_generic_upgrades = [
+    item_name for item_name, item_data in Items.item_table.items()
+    if item_data.type == Items.ZergItemType.Upgrade
 ]
 item_name_groups[ItemGroupNames.HOTS_UNITS] = hots_units = [
     ItemNames.ZERGLING, ItemNames.SWARM_QUEEN, ItemNames.ROACH, ItemNames.HYDRALISK,
@@ -320,13 +424,22 @@ item_name_groups[ItemGroupNames.HOTS_ITEMS] = vanilla_hots_items = (
     + hots_mutations
     + hots_strains
     + hots_global_upgrades
+    + zerg_generic_upgrades
 )
 
 
 # Protoss
+item_name_groups[ItemGroupNames.PROTOSS_ITEMS] = protoss_items = [
+    item_name for item_name, item_data in Items.item_table.items()
+    if item_data.race == SC2Race.PROTOSS
+]
 item_name_groups[ItemGroupNames.PROTOSS_UNITS] = protoss_units = [
     item_name for item_name, item_data in Items.item_table.items()
     if item_data.type in (Items.ProtossItemType.Unit, Items.ProtossItemType.Unit_2)
+]
+item_name_groups[ItemGroupNames.PROTOSS_GENERIC_UPGRADES] = protoss_generic_upgrades = [
+    item_name for item_name, item_data in Items.item_table.items()
+    if item_data.type == Items.ProtossItemType.Upgrade
 ]
 item_name_groups[ItemGroupNames.LOTV_UNITS] = lotv_units = [
     ItemNames.ZEALOT, ItemNames.CENTURION, ItemNames.SENTINEL,
@@ -414,6 +527,7 @@ item_name_groups[ItemGroupNames.LOTV_ITEMS] = vanilla_lotv_items = (
     + protoss_buildings
     + lotv_soa_items
     + lotv_global_upgrades
+    + protoss_generic_upgrades
 )
 
 item_name_groups[ItemGroupNames.VANILLA_ITEMS] = vanilla_items = (

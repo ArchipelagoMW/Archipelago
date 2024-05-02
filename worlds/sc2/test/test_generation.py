@@ -188,6 +188,45 @@ class TestItemFiltering(Sc2SetupTestBase):
         for mission in missions:
             self.assertEqual(MissionTables.SC2Campaign.NCO, mission.campaign)
 
+    def test_usecase_terran_with_nco_upgrades_units_only(self):
+        options = {
+            'enable_wol_missions': True,
+            'enable_nco_missions': True,
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'mission_order': Options.MissionOrder.option_mini_campaign,
+            'excluded_items': {
+                ItemGroups.ItemGroupNames.TERRAN_ITEMS: 0,
+            },
+            'unexcluded_items': {
+                ItemGroups.ItemGroupNames.NCO_MAX_PROGRESSIVE_UPGRADES: 0,
+                ItemGroups.ItemGroupNames.NCO_MIN_PROGRESSIVE_UPGRADES: 1,
+            },
+        }
+        self.generate_world(options)
+        item_names = [item.name for item in self.multiworld.itempool]
+        self.assertTrue(item_names)
+        missions = get_all_missions(self.world.mission_req_table)
+        for mission in missions:
+            self.assertIn(MissionTables.MissionFlag.Terran, mission.flags)
+        self.assertIn(ItemNames.MARINE, item_names)
+        self.assertIn(ItemNames.MARAUDER, item_names)
+        self.assertIn(ItemNames.BUNKER, item_names)
+        self.assertIn(ItemNames.BANSHEE, item_names)
+        self.assertIn(ItemNames.BATTLECRUISER_ATX_LASER_BATTERY, item_names)
+        self.assertIn(ItemNames.NOVA_C20A_CANISTER_RIFLE, item_names)
+        self.assertGreaterEqual(item_names.count(ItemNames.BANSHEE_PROGRESSIVE_CROSS_SPECTRUM_DAMPENERS), 2)
+        self.assertGreaterEqual(item_names.count(ItemNames.PROGRESSIVE_TERRAN_SHIP_WEAPON), 3)
+        self.assertNotIn(ItemNames.MEDIC, item_names)
+        self.assertNotIn(ItemNames.PSI_DISRUPTER, item_names)
+        self.assertNotIn(ItemNames.BATTLECRUISER_PROGRESSIVE_MISSILE_PODS, item_names)
+        self.assertNotIn(ItemNames.HELLION_INFERNAL_PLATING, item_names)
+        self.assertNotIn(ItemNames.CELLULAR_REACTOR, item_names)
+        self.assertNotIn(ItemNames.TECH_REACTOR, item_names)
+
     def test_starter_unit_populates_start_inventory(self):
         options = {
             'enable_wol_missions': True,
