@@ -22,7 +22,8 @@ class ItemData:
         if code is not None:
             self.code += BASE_ID
 
-        if self.item_class == ItemClass.filler or code is None:
+        # if this is filler, a trap or an event, ignore the count
+        if self.item_class == ItemClass.filler or self.item_class == ItemClass.trap or code is None:
             self.count = 0
             self.count_extra = 0
         else:
@@ -69,19 +70,19 @@ item_dict_expanded: Dict[str, ItemData] = {
 }
 
 item_dict_filler: Dict[str, ItemData] = {
-    FILLER_ITEM_HEAL: ItemData(ItemClass.filler, 14, 0),
-    FILLER_ITEM_QUICK_FIRE: ItemData(ItemClass.filler, 15, 0),
-    FILLER_ITEM_ACTIVE_CAMO: ItemData(ItemClass.filler, 16, 0),
+    FILLER_ITEM_HEAL: ItemData(ItemClass.filler, 14),
+    FILLER_ITEM_QUICK_FIRE: ItemData(ItemClass.filler, 15),
+    FILLER_ITEM_ACTIVE_CAMO: ItemData(ItemClass.filler, 16),
 }
 
 item_dict_traps: Dict[str, ItemData] = {
-    TRAP_ITEM_ICE: ItemData(ItemClass.trap, 17, 0),
-    TRAP_ITEM_SHAKES: ItemData(ItemClass.trap, 18, 0),
-    TRAP_ITEM_NINJA: ItemData(ItemClass.trap, 19, 0),
+    TRAP_ITEM_ICE: ItemData(ItemClass.trap, 17),
+    TRAP_ITEM_SHAKES: ItemData(ItemClass.trap, 18),
+    TRAP_ITEM_NINJA: ItemData(ItemClass.trap, 19),
 }
 
 item_dict_events: Dict[str, ItemData] = {
-    EVENT_ITEM_VICTORY: ItemData(ItemClass.progression, None, 0)
+    EVENT_ITEM_VICTORY: ItemData(ItemClass.progression, None)
 }
 
 item_dict: Dict[str, ItemData] = {
