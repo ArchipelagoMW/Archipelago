@@ -17,7 +17,7 @@ Other Features such as Turbo through textboxes (Hold L/R+A) and Pipe Warping fro
 
 Enemies and Bosses can be randomized, and their stats can be scaled to feel more like the vanilla game's stats.
 
-Other aspects of the game can be randomized as well such as music, sounds, battle backgrounds, Mario and Luigis Colors, and more.
+Other aspects of the game can be randomized as well such as music, sounds, battle backgrounds, Mario and Luigi's Colors, and more.
 
 ## What is the goal of Mario & Luigi: Superstar Saga when randomized?
 
