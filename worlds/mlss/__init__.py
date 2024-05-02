@@ -45,7 +45,7 @@ class MLSSSettings(settings.Group):
 class MLSSWorld(World):
     """
     Adventure with Mario and Luigi together in the Beanbean Kingdom
-    to stop the evil cackletta and retrieve the Beanstar.
+    to stop the evil Cackletta and retrieve the Beanstar.
     """
 
     game = "Mario & Luigi Superstar Saga"

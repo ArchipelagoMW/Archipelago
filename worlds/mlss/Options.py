@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 class BowsersCastleSkip(Toggle):
     """
-    Skip straight from the entrance hall to bowletta in Bowser's Castle.
+    Skip straight from the entrance hall to Bowletta in Bowser's Castle.
     All Bowser's Castle locations will be removed from the location pool.
     """
 

@@ -149,7 +149,7 @@ class MLSSClient(BizHawkClient):
                 if location in ctx.server_locations:
                     locs_to_send.add(location)
 
-            # Loop for recieving items. Item is written as an ID into 0x3057.
+            # Loop for receiving items. Item is written as an ID into 0x3057.
             # ASM reads the ID in a loop and give the player the item before resetting the RAM address to 0x0.
             # If RAM address isn't 0x0 yet break out and try again later to give the rest of the items
             for i in range(len(ctx.items_received) - received_index):

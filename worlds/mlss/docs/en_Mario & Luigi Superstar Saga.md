@@ -17,7 +17,7 @@ Other Features such as Turbo through textboxes (Hold L/R+A) and Pipe Warping fro
 
 Enemies and Bosses can be randomized, and their stats can be scaled to feel more like the vanilla game's stats.
 
-Other aspects of the game can be randomized as well such as music, sounds, battle backgrounds, Mario and Luigis Colors, and more.
+Other aspects of the game can be randomized as well such as music, sounds, battle backgrounds, Mario and Luigi's Colors, and more.
 
 ## What is the goal of Mario & Luigi: Superstar Saga when randomized?
 
@@ -63,4 +63,4 @@ Items in a shop from another player's world will display the player name and ite
 
 ## When the player receives an item, what happens?
 
-Items will be placed directly into the players inventory after a few seconds. Sometimes for certain events and cutscenes to be properly triggered right after you recieved an item, you may have to leave and re-enter the room to properly load everything required for the respective event or cutscene.
+Items will be placed directly into the players inventory after a few seconds. Sometimes for certain events and cutscenes to be properly triggered right after you received an item, you may have to leave and re-enter the room to properly load everything required for the respective event or cutscene.
