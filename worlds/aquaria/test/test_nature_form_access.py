@@ -26,6 +26,8 @@ class NatureFormAccessTest(AquariaTestBase):
             "Kelp Forest Sprite Cave, Seed bag",
             "Beating Mithalan priests",
             "Abyss left area, bulb in the bottom fish pass",
+            "Bubble cave, Verse egg",
+            "Beating Mantis Shrimp Prime",
             "Sunken city right area, crate close to the save cristal",
             "Sunken city right area, crate in the left bottom room",
             "Sunken city left area, crate in the little pipe room",

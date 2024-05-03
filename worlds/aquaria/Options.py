@@ -116,7 +116,7 @@ class UnconfineHomeWater(Choice):
     Open the way out of Home water area so that Naija can go to open water and beyond without the bind song.
     """
     display_name = "Unconfine Home Water Area"
-    option_no = 0
+    option_off = 0
     option_via_energy_door = 1
     option_via_transturtle = 2
     option_via_both = 3

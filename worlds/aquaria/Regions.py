@@ -181,6 +181,7 @@ class AquariaRegions:
     abyss_r: Region
     ice_cave: Region
     bubble_cave: Region
+    bubble_cave_boss: Region
     king_jellyfish_cave: Region
     whale: Region
     first_secret: Region
@@ -391,6 +392,7 @@ class AquariaRegions:
         self.abyss_r = self.__add_region("Abyss right area", AquariaLocations.locations_abyss_r)
         self.ice_cave = self.__add_region("Ice cave", AquariaLocations.locations_ice_cave)
         self.bubble_cave = self.__add_region("Bubble cave", AquariaLocations.locations_bubble_cave)
+        self.bubble_cave_boss = self.__add_region("Bubble cave boss area", AquariaLocations.locations_bubble_cave_boss)
         self.king_jellyfish_cave = self.__add_region("Abyss left area, King jellyfish cave",
                                                      AquariaLocations.locations_king_jellyfish_cave)
         self.whale = self.__add_region("Inside the whale", AquariaLocations.locations_whale)
@@ -754,6 +756,10 @@ class AquariaRegions:
         self.__connect_regions("Abyss right area", "Bubble cave",
                                self.ice_cave, self.bubble_cave,
                                lambda state: _has_beast_form(state, self.player))
+        self.__connect_regions("Bubble cave boss area", "Bubble cave",
+                               self.bubble_cave, self.bubble_cave_boss,
+                               lambda state: _has_nature_form(state, self.player) and _has_bind_song(state, self.player)
+                               )
 
     def __connect_sunken_city_regions(self) -> None:
         """
@@ -923,7 +929,7 @@ class AquariaRegions:
         self.__add_event_location(self.arnassi_crab_boss,
                                   "Beating Crabbius Maximus",
                                   "Crabbius Maximus beated")
-        self.__add_event_location(self.bubble_cave,
+        self.__add_event_location(self.bubble_cave_boss,
                                   "Beating Mantis Shrimp Prime",
                                   "Mantis Shrimp Prime beated")
         self.__add_event_location(self.king_jellyfish_cave,
@@ -1315,6 +1321,7 @@ class AquariaRegions:
         self.multiworld.regions.append(self.abyss_r)
         self.multiworld.regions.append(self.ice_cave)
         self.multiworld.regions.append(self.bubble_cave)
+        self.multiworld.regions.append(self.bubble_cave_boss)
         self.multiworld.regions.append(self.king_jellyfish_cave)
         self.multiworld.regions.append(self.whale)
         self.multiworld.regions.append(self.sunken_city_l)

@@ -415,6 +415,9 @@ class AquariaLocations:
     locations_bubble_cave = {
         "Bubble cave, bulb in the left cave wall": 698089,
         "Bubble cave, bulb in the right cave wall (behind the ice cristal)": 698090,
+    }
+
+    locations_bubble_cave_boss = {
         "Bubble cave, Verse egg": 698161,
     }
 
@@ -556,6 +559,7 @@ location_table = {
     **AquariaLocations.locations_ice_cave,
     **AquariaLocations.locations_king_jellyfish_cave,
     **AquariaLocations.locations_bubble_cave,
+    **AquariaLocations.locations_bubble_cave_boss,
     **AquariaLocations.locations_naija_home,
     **AquariaLocations.locations_mermog_cave,
     **AquariaLocations.locations_mermog_boss,
