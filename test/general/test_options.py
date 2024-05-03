@@ -1,7 +1,7 @@
 import unittest
 
 from BaseClasses import PlandoOptions
-from Options import ItemLinks
+from Options import ItemLinks, Visibility
 from worlds.AutoWorld import AutoWorldRegister
 
 
@@ -11,6 +11,8 @@ class TestOptions(unittest.TestCase):
         for gamename, world_type in AutoWorldRegister.world_types.items():
             if not world_type.hidden:
                 for option_key, option in world_type.options_dataclass.type_hints.items():
+                    if option.visibility in {Visibility.none, Visibility.spoiler}:
+                        continue
                     with self.subTest(game=gamename, option=option_key):
                         self.assertTrue(option.__doc__)
 
