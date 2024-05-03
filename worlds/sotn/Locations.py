@@ -836,7 +836,6 @@ no1_drops = {
     "Dropsanity: 27 - Medusa head(yellow)": LocationData("Outer Wall", 327),
     "Dropsanity: 30 - Axe knight(armored)": LocationData("Outer Wall", 330),
     "Dropsanity: 32 - Bone archer": LocationData("Outer Wall", 332),
-    "Dropsanity: 34 - Doppleganger10": LocationData("Outer Wall", 334),
     "Dropsanity: 38 - Skeleton ape": LocationData("Outer Wall", 338),
     "Dropsanity: 39 - Spear guard": LocationData("Outer Wall", 339),
     "Dropsanity: 43 - Sword lord": LocationData("Outer Wall", 343),
@@ -1184,6 +1183,16 @@ drop_locations = {
     **rnz0_drops,
     **rnz1_drops,
     **rtop_drops
+}
+
+castle_table = {
+    **normal_locations,
+    **reverse_locations,
+}
+
+exploration_table = {
+    **exp_locations_item,
+    **exp_locations_token,
 }
 
 location_table = {
