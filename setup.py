@@ -21,7 +21,7 @@ from pathlib import Path
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 try:
-    requirement = 'cx-Freeze>=6.15.10'
+    requirement = 'cx-Freeze>=7.0.0'
     import pkg_resources
     try:
         pkg_resources.require(requirement)
@@ -68,7 +68,6 @@ non_apworlds: set = {
     "Archipelago",
     "ChecksFinder",
     "Clique",
-    "DLCQuest",
     "Final Fantasy",
     "Lufia II Ancient Cave",
     "Meritous",
@@ -85,7 +84,6 @@ non_apworlds: set = {
 # LogicMixin is broken before 3.10 import revamp
 if sys.version_info < (3,10):
     non_apworlds.add("Hollow Knight")
-    non_apworlds.add("Starcraft 2 Wings of Liberty")
 
 def download_SNI():
     print("Updating SNI")
@@ -230,8 +228,8 @@ class BuildCommand(setuptools.command.build.build):
 
 
 # Override cx_Freeze's build_exe command for pre and post build steps
-class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
-    user_options = cx_Freeze.command.build_exe.BuildEXE.user_options + [
+class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
+    user_options = cx_Freeze.command.build_exe.build_exe.user_options + [
         ('yes', 'y', 'Answer "yes" to all questions.'),
         ('extra-data=', None, 'Additional files to add.'),
     ]
