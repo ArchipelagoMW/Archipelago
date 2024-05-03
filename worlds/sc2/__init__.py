@@ -191,13 +191,12 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
             return max_count
         if count is None:
             return 0
+        if max_count == 0:
+            return count
         return min(count, max_count)
 
     result: List[FilterItem] = []
     for item_name, item_data in Items.item_table.items():
-        if not item_data.quantity:
-            result.append(FilterItem(item_name, item_data, 0, ItemFilterFlags.StartInventory))
-            continue
         max_count = item_data.quantity
         excluded_count = excluded_items.get(item_name)
         unexcluded_count = unexcluded_items.get(item_name)
@@ -214,7 +213,12 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
         excluded_count = max(0, excluded_count - unexcluded_count)
 
         # Priority: start_inventory >> locked_items >> excluded_items >> unspecified
-        if start_count > max_count:
+        if max_count == 0:
+            if excluded_count:
+                logger.warning(f"Item {item_name} was listed as excluded, but as a filler item, it cannot be explicitly excluded.")
+            excluded_count = 0
+            max_count = start_count + locked_count
+        elif start_count > max_count:
             logger.warning(f"Item {item_name} had start amount greater than maximum amount ({start_count} > {max_count}). Capping start amount to max.")
             start_count = max_count
             locked_count = 0

@@ -3,7 +3,7 @@ Unit tests for yaml usecases we want to support
 """
 
 from .test_base import Sc2SetupTestBase
-from .. import ItemGroups, ItemNames, Options, MissionTables, get_all_missions
+from .. import ItemGroups, ItemNames, Items, Options, MissionTables, get_all_missions
 
 
 class TestSupportedUseCases(Sc2SetupTestBase):
@@ -114,3 +114,43 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         self.assertNotIn(ItemNames.MARAUDER_PROGRESSIVE_STIMPACK, item_names)
         self.assertNotIn(ItemNames.HELLION_HELLBAT_ASPECT, item_names)
         self.assertNotIn(ItemNames.BATTLECRUISER_CLOAK, item_names)
+    
+    def test_free_protoss_only_generates(self) -> None:
+        options = {
+            'enable_wol_missions': False,
+            'enable_nco_missions': False,
+            'enable_prophecy_missions': True,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': True,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            # todo(mm): Currently, these settings don't generate on grid because there are not enough EASY missions
+            'mission_order': Options.MissionOrder.option_vanilla_shuffled,
+            'maximum_campaign_size': Options.MaximumCampaignSize.range_end,
+            'accessibility': 'locations',
+        }
+        self.generate_world(options)
+        item_names = [item.name for item in self.multiworld.itempool]
+        self.assertTrue(item_names)
+        missions = get_all_missions(self.world.mission_req_table)
+        self.assertEqual(len(missions), 7, "Wrong number of missions in free protoss seed")
+        for mission in missions:
+            self.assertIn(mission.campaign, (MissionTables.SC2Campaign.PROLOGUE, MissionTables.SC2Campaign.PROPHECY))
+        for item_name in item_names:
+            self.assertIn(Items.item_table[item_name].race, (MissionTables.SC2Race.ANY, MissionTables.SC2Race.PROTOSS))
+
+    def test_resource_filler_items_may_be_put_in_start_inventory(self) -> None:
+        NUM_RESOURCE_ITEMS = 10
+        options = {
+            'start_inventory': {
+                ItemNames.STARTING_MINERALS: NUM_RESOURCE_ITEMS,
+                ItemNames.STARTING_VESPENE: NUM_RESOURCE_ITEMS,
+                ItemNames.STARTING_SUPPLY: NUM_RESOURCE_ITEMS,
+            },
+        }
+        self.generate_world(options)
+        start_item_names = [item.name for item in self.multiworld.precollected_items[self.player]]
+        self.assertEqual(start_item_names.count(ItemNames.STARTING_MINERALS), NUM_RESOURCE_ITEMS, "Wrong number of starting minerals in starting inventory")
+        self.assertEqual(start_item_names.count(ItemNames.STARTING_VESPENE), NUM_RESOURCE_ITEMS, "Wrong number of starting vespene in starting inventory")
+        self.assertEqual(start_item_names.count(ItemNames.STARTING_SUPPLY), NUM_RESOURCE_ITEMS, "Wrong number of starting supply in starting inventory")
+
