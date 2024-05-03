@@ -158,7 +158,8 @@ def set_rules(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int)
     connect_regions(multiworld, player,
                     Jak1Level.VOLCANIC_CRATER,
                     Jak1Level.SNOWY_MOUNTAIN,
-                    lambda state: has_count_of(pre_sm_cells, 2, player, state))
+                    lambda state: has_count_of(pre_sm_cells, 2, player, state)
+                                  or state.count_group("Power Cell", player) >= 71)  # Yeah, this is a weird one.
 
     connect_region_to_sub(multiworld, player,
                           Jak1Level.SNOWY_MOUNTAIN,
