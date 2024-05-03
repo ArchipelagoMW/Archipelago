@@ -202,8 +202,6 @@ def set_rules(world: "MM2World") -> None:
                     weapon_energy[wp] -= weapon_costs[wp] * uses
                     weapon_weight.pop(wp)
 
-    time_stopper_logical = False
-
     for i, boss_locations in zip(range(14), [
         heat_man_locations,
         air_man_locations,
@@ -228,17 +226,6 @@ def set_rules(world: "MM2World") -> None:
                 if world.weapon_damage[weapon][i] < minimum_weakness_requirement[weapon]:
                     continue  # Atomic Fire can only be considered logical for bosses it can kill in 2 hits
                 weapons.append(weapons_to_name[weapon])
-        if i in (*list(range(8)), 12) and Names.time_stopper in weapons:
-            if not time_stopper_logical:
-                # Time Stopper only gets one use, and needs the full bar to kill
-                # So we can only consider it logical for one of the RBMs/Wily Machine
-                time_stopper_logical = True
-            else:
-                weapons.remove(Names.time_stopper)
-                if not weapons:
-                    weakness = world.random.choice([key for key in world.weapon_damage if key != 8])
-                    world.weapon_damage[weakness][i] = minimum_weakness_requirement[weakness]
-                    weapons.append(weapons_to_name[weakness])
         if not weapons:
             raise Exception(f"Attempted to have boss {i} with no weakness! Seed: {world.multiworld.seed}")
         for location in boss_locations:
