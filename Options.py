@@ -1206,7 +1206,8 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
             [ordered_groups.append(group) for group in option_groups.values() if group not in ordered_groups]
             grouped_options = {group: {} for group in ordered_groups}
             for option_name, option in world.options_dataclass.type_hints.items():
-                grouped_options[option_groups.get(option, "Game Options")][option_name] = option
+                if option.visibility >= Visibility.template:
+                    grouped_options[option_groups.get(option, "Game Options")][option_name] = option
 
             with open(local_path("data", "options.yaml")) as f:
                 file_data = f.read()
