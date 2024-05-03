@@ -17,7 +17,7 @@ from Options import ExcludeLocations, ItemLinks, LocalItems, NonLocalItems, PerG
 from BaseClasses import CollectionState, OptionGroup
 
 if TYPE_CHECKING:
-    import random
+    from random import Random
     from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance
     from . import GamesPackage
     from settings import Group
@@ -311,7 +311,7 @@ class World(metaclass=AutoWorldRegister):
     location_names: ClassVar[Set[str]]
     """set of all potential location names"""
 
-    random: random.Random
+    random: Random
     """This world's random object. Should be used for any randomization needed in world for this player slot."""
 
     settings_key: ClassVar[str]
@@ -328,7 +328,7 @@ class World(metaclass=AutoWorldRegister):
         assert multiworld is not None
         self.multiworld = multiworld
         self.player = player
-        self.random = random.Random(multiworld.random.getrandbits(64))
+        self.random = Random(multiworld.random.getrandbits(64))
         multiworld.per_slot_randoms[player] = self.random
 
     def __getattr__(self, item: str) -> Any:
