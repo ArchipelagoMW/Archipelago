@@ -1,6 +1,6 @@
 from BaseClasses import Location, Region
 from typing import Dict, Tuple, Optional
-import Names
+from . import Names
 
 
 class MM2Location(Location):

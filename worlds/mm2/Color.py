@@ -1,5 +1,5 @@
 from typing import Dict, Tuple, List, TYPE_CHECKING, Union
-import Names
+from . import Names
 from zlib import crc32
 import struct
 import logging

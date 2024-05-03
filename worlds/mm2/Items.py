@@ -1,6 +1,6 @@
 from BaseClasses import Item
 from typing import NamedTuple, Dict
-import Names
+from . import Names
 
 
 class ItemData(NamedTuple):
