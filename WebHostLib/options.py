@@ -80,11 +80,6 @@ def send_yaml(player_name: str, formatted_options: dict):
     return response
 
 
-@app.route("/weighted-settings")
-def weighted_settings():
-    return redirect("games", 301)
-
-
 @app.route("/weighted-options")
 def weighted_options_old():
     return redirect("games", 301)
