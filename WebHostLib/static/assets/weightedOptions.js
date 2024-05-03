@@ -66,12 +66,6 @@ window.addEventListener('load', () => {
       const optionName = keys[0] ?? null;
       const subOption = keys[1] ?? null;
 
-      // Option name must be present
-      if (!optionName) {
-        // TODO: Fail gracefully, with a message to the user
-        return console.error(`Invalid option parsed: ${JSON.stringify(keys)}`);
-      }
-
       // Ensure keys exist
       if (!weightedOptions[optionName]) { weightedOptions[optionName] = {}; }
       if (subOption && !weightedOptions[optionName][subOption]) {
@@ -95,7 +89,37 @@ window.addEventListener('load', () => {
     });
   });
 
-  // TODO: Populate all settings from localStorage on page initialisation
+  // Populate all settings from localStorage on page initialisation
+  const previousSettingsJson = localStorage.getItem(`${worldName}-weights`);
+  if (previousSettingsJson) {
+    const previousSettings = JSON.parse(previousSettingsJson);
+    Object.keys(previousSettings).forEach((option) => {
+      if (typeof previousSettings[option] === 'string') {
+        return document.querySelector(`input[name="${option}"]`).value = previousSettings[option];
+      }
+
+      Object.keys(previousSettings[option]).forEach((value) => {
+        const input = document.querySelector(`input[name="${option}||${value}"]`);
+        if (!input?.type) {
+          return console.error(`Unable to populate option with name ${option}||${value}.`);
+        }
+
+        switch (input.type) {
+          case 'checkbox':
+            input.checked = (parseInt(previousSettings[option][value], 10) === 1);
+            break;
+          case 'range':
+            input.value = parseInt(previousSettings[option][value], 10);
+            break;
+          case 'number':
+            input.value = previousSettings[option][value].toString();
+            break;
+          default:
+            console.error(`Found unsupported input type: ${input.type}`);
+        }
+      });
+    });
+  }
 });
 
 const addRangeRow = (optionName) => {
