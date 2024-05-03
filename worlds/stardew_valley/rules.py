@@ -314,15 +314,18 @@ def set_blacksmith_upgrade_rule(logic, multiworld, player, entrance_name: str, i
 
 def set_festival_entrance_rules(logic, multiworld, player):
     set_entrance_rule(multiworld, player, Entrance.attend_egg_festival, logic.season.has(Season.spring))
+    set_entrance_rule(multiworld, player, Entrance.attend_desert_festival, logic.season.has(Season.spring) & logic.received("Bus Repair"))
     set_entrance_rule(multiworld, player, Entrance.attend_flower_dance, logic.season.has(Season.spring))
 
     set_entrance_rule(multiworld, player, Entrance.attend_luau, logic.season.has(Season.summer))
+    set_entrance_rule(multiworld, player, Entrance.attend_trout_derby, logic.season.has(Season.summer))
     set_entrance_rule(multiworld, player, Entrance.attend_moonlight_jellies, logic.season.has(Season.summer))
 
     set_entrance_rule(multiworld, player, Entrance.attend_fair, logic.season.has(Season.fall))
     set_entrance_rule(multiworld, player, Entrance.attend_spirit_eve, logic.season.has(Season.fall))
 
     set_entrance_rule(multiworld, player, Entrance.attend_festival_of_ice, logic.season.has(Season.winter))
+    set_entrance_rule(multiworld, player, Entrance.attend_squidfest, logic.season.has(Season.winter))
     set_entrance_rule(multiworld, player, Entrance.attend_night_market, logic.season.has(Season.winter))
     set_entrance_rule(multiworld, player, Entrance.attend_winter_star, logic.season.has(Season.winter))
 

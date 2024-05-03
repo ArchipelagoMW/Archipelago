@@ -235,6 +235,7 @@ iron_lamp_post = shop_recipe(Lighting.iron_lamp_post, Region.carpenter, 1000, {M
 jack_o_lantern = festival_shop_recipe(Lighting.jack_o_lantern, Region.spirit_eve, 2000, {Vegetable.pumpkin: 1, Lighting.torch: 1})
 
 bone_mill = special_order_recipe(Machine.bone_mill, SpecialOrder.fragments_of_the_past, {Fossil.bone_fragment: 10, Material.clay: 3, Material.stone: 20})
+bait_maker = skill_recipe(Machine.bait_maker, Skill.fishing, 6, {MetalBar.iron: 3, WaterItem.coral: 3, WaterItem.sea_urchin: 1})
 
 charcoal_kiln = skill_recipe(Machine.charcoal_kiln, Skill.foraging, 2, {Material.wood: 20, MetalBar.copper: 2})
 

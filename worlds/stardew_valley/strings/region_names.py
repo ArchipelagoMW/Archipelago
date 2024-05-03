@@ -170,6 +170,7 @@ class Region:
     festival_of_ice = "Festival of Ice"
     night_market = "Night Market"
     winter_star = "Feast of the Winter Star"
+    squidfest = "SquidFest"
     raccoon_daddy = "Raccoon Bundles"
     raccoon_shop = "Raccoon Shop"
     bookseller_1 = "Bookseller Experience Books"

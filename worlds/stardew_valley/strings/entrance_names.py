@@ -208,6 +208,7 @@ class Entrance:
     attend_festival_of_ice = "Attend Festival of Ice"
     attend_night_market = "Attend Night Market"
     attend_winter_star = "Attend Feast of the Winter Star"
+    attend_squidfest = "Attend SquidFest"
     buy_experience_books = "Buy Experience Books from the bookseller"
     buy_year1_books = "Buy Year 1 Books from the Bookseller"
     buy_year3_books = "Buy Year 3 Books from the Bookseller"

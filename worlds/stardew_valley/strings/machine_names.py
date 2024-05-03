@@ -33,4 +33,5 @@ class Machine:
     heavy_furnace = "Heavy Furnace"
     anvil = "Anvil"
     mini_forge = "Mini-Forge"
+    bait_maker = "Bait Maker"
 

@@ -14,6 +14,7 @@ from ..options import ExcludeGingerIsland
 from ..options import SpecialOrderLocations
 from ..stardew_rule import StardewRule, True_, False_
 from ..strings.fish_names import SVEFish
+from ..strings.machine_names import Machine
 from ..strings.quality_names import FishQuality
 from ..strings.region_names import Region
 from ..strings.skill_names import Skill
@@ -106,3 +107,6 @@ class FishingLogic(BaseLogic[Union[HasLogicMixin, FishingLogicMixin, ReceivedLog
         )
 
         return self.logic.and_(*rules)
+
+    def has_specific_bait(self, fish: FishItem) -> StardewRule:
+        return self.can_catch_fish(fish) & self.logic.has(Machine.bait_maker)

@@ -77,8 +77,8 @@ vanilla_regions = [
                 Entrance.town_to_jojamart, Entrance.purchase_movie_ticket, Entrance.buy_experience_books,
                 Entrance.attend_egg_festival, Entrance.attend_fair, Entrance.attend_spirit_eve, Entrance.attend_winter_star]),
     RegionData(Region.beach, [Entrance.beach_to_willy_fish_shop, Entrance.enter_elliott_house, Entrance.enter_tide_pools,
-                              Entrance.fishing,
-                              Entrance.attend_luau, Entrance.attend_moonlight_jellies, Entrance.attend_night_market]),
+                              Entrance.fishing, Entrance.attend_luau, Entrance.attend_moonlight_jellies,
+                              Entrance.attend_night_market, Entrance.attend_squidfest]),
     RegionData(Region.fishing),
     RegionData(Region.railroad, [Entrance.enter_bathhouse_entrance, Entrance.enter_witch_warp_cave]),
     RegionData(Region.ranch),
@@ -244,6 +244,7 @@ vanilla_regions = [
     RegionData(Region.festival_of_ice),
     RegionData(Region.night_market),
     RegionData(Region.winter_star),
+    RegionData(Region.squidfest),
 ]
 
 # Exists and where they lead
@@ -479,6 +480,7 @@ vanilla_connections = [
     ConnectionData(Entrance.attend_festival_of_ice, Region.festival_of_ice),
     ConnectionData(Entrance.attend_night_market, Region.night_market),
     ConnectionData(Entrance.attend_winter_star, Region.winter_star),
+    ConnectionData(Entrance.attend_squidfest, Region.squidfest),
     ConnectionData(Entrance.buy_experience_books, Region.bookseller_1),
     ConnectionData(Entrance.buy_year1_books, Region.bookseller_2),
     ConnectionData(Entrance.buy_year3_books, Region.bookseller_3),
