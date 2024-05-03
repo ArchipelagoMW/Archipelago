@@ -95,8 +95,8 @@ from Options import Toggle
 
 class StartingSword(Toggle):
     """Adds a sword to your starting inventory"""
-    display_name = 'Start With Sword'
-    group_name = 'Inventory Options'
+    display_name = "Start With Sword"
+    group_name = "Inventory Options"
 ```
 
 ### Option Checking
