@@ -256,6 +256,21 @@ class TestItemFiltering(Sc2SetupTestBase):
                 occurrences[item_name] += 1
                 self.assertLessEqual(occurrences[item_name], 1, f"'{item_name}' unexpectedly appeared multiple times in the pool")
 
+    def test_vanilla_items_only_includes_only_nova_equipment_and_vanilla_and_filler_items(self) -> None:
+        options = {
+            'mission_order': Options.MissionOrder.option_grid,
+            'maximum_campaign_size': Options.MaximumCampaignSize.range_end,
+            'accessibility': 'locations',
+            'vanilla_items_only': True,
+        }
+        self.generate_world(options)
+        items = [(item.name, Items.item_table[item.name]) for item in self.multiworld.itempool]
+        self.assertTrue(items)
+        for item_name, item_data in items:
+            if item_data.quantity == 0:
+                continue
+            self.assertIn(item_name, ItemGroups.vanilla_items + ItemGroups.nova_equipment)
+
     def test_evil_awoken_with_vanilla_items_only_generates(self) -> None:
         options = {
             'enable_wol_missions': False,
