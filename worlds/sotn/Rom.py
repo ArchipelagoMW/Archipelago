@@ -3,7 +3,7 @@ import random
 import logging
 from sys import platform
 from worlds.Files import APDeltaPatch
-from Utils import home_path
+from Utils import home_path, open_filename, messagebox
 from settings import get_settings
 from worlds.AutoWorld import World
 from BaseClasses import ItemClassification
@@ -79,78 +79,86 @@ class SOTNDeltaPatch(APDeltaPatch):
 
     def patch(self, target: str):
         """Base + Delta -> Patched"""
-        patch_path = target[:-4] + ".apsotn"
-
-        with open(patch_path, "rb") as infile:
-            print("Opening patch")
-            diff_patch = bytes(infile.read())
-        with open(get_settings().sotn_settings.rom_file, "rb") as infile:
-            print("Opening track 1")
-            original_rom = bytearray(infile.read())
-        with open(get_settings().sotn_settings.audio_file, "rb") as infile:
-            print("Opening track 2")
-            audio_rom = bytearray(infile.read())
-
-        patched_rom = original_rom.copy()
-        music_slice = original_rom[0x000affd0:0x000b9ea5]  # Size 0x9ed5 / 40661
-        original_slice = music_slice + original_rom[0x04389c6c:0x06a868a4]
-
-        patched_slice = bsdiff4.patch(bytes(original_slice), diff_patch)
-
-        # Patch Clock Room cutscene
-        write_char(patched_rom, 0x0aeaa0, 0x00)
-        write_char(patched_rom, 0x119af4, 0x00)
-
-        # patchPowerOfSireFlashing Patches researched by MottZilla.
-        write_word(patched_rom, 0x00136580, 0x03e00008)
-
-        patched_rom[0x000affd0:0x000b9ea5] = patched_slice[0:0x9ed5]
-        patched_rom[0x04389c6c:0x06a868a4] = patched_slice[0x9ed5:]
-
-        # Duplicate Sanity options
-        patched_rom[0xf50c6] = patched_rom[0x0438d85e]
-
-        with open(target[:-4] + ".bin", "wb") as stream:
-            stream.write(patched_rom)
+        file_name = target[:-4]
+        patch_path = file_name + ".apsotn"
 
         audio_name = target[0:target.rfind('/') + 1]
         audio_name += "Castlevania - Symphony of the Night (USA) (Track 2).bin"
 
         if os.path.exists(audio_name):
-            print("Track 2 already exists!")
+            logger.info("Track 2 already exist")
         else:
-            print("Creating audio file!")
+            logger.info("Copying track 2")
+            with open(get_settings().sotn_settings.audio_file, "rb") as infile:
+                audio_rom = bytearray(infile.read())
             with open(audio_name, "wb") as stream:
                 stream.write(audio_rom)
 
-        error_recalc_path = ""
-        if platform == "win32":
-            print("ERROR RECALC started. Please wait")
-            if os.path.exists("error_recalc.exe"):
-                error_recalc_path = "error_recalc.exe"
-            elif os.path.exists(f"{home_path('lib')}\\error_recalc.exe"):
-                error_recalc_path = f"{home_path('lib')}\\error_recalc.exe"
-        elif platform.startswith("linux") or platform.startswith("darwin"):
-            if os.path.exists("error_recalc"):
-                error_recalc_path = "./error_recalc"
-            elif os.path.exists(f"{home_path('lib')}/error_recalc"):
-                error_recalc_path = f"{home_path('lib')}/error_recalc"
-        else:
-            print("ERROR RECALC FAILED!!!")
-            logger.info("ERROR RECALC FAILED!!!")
+        if not (os.path.exists(file_name + ".bin") and os.path.exists(file_name + ".cue")):
+            logger.info("Patched ROM doesn't exist")
 
-        track1_name = target[target.rfind('/') + 1:-4]
-        if error_recalc_path != "":
+            with open(patch_path, "rb") as infile:
+                diff_patch = bytes(infile.read())
+            with open(get_settings().sotn_settings.rom_file, "rb") as infile:
+                original_rom = bytearray(infile.read())
+
+            patched_rom = original_rom.copy()
+            music_slice = original_rom[0x000affd0:0x000b9ea5]  # Size 0x9ed5 / 40661
+            original_slice = music_slice + original_rom[0x04389c6c:0x06a868a4]
+
+            patched_slice = bsdiff4.patch(bytes(original_slice), diff_patch)
+
+            # Patch Clock Room cutscene
+            write_char(patched_rom, 0x0aeaa0, 0x00)
+            write_char(patched_rom, 0x119af4, 0x00)
+
+            # patchPowerOfSireFlashing Patches researched by MottZilla.
+            write_word(patched_rom, 0x00136580, 0x03e00008)
+
+            patched_rom[0x000affd0:0x000b9ea5] = patched_slice[0:0x9ed5]
+            patched_rom[0x04389c6c:0x06a868a4] = patched_slice[0x9ed5:]
+
+            # Duplicate Sanity options
+            patched_rom[0xf50c6] = patched_rom[0x0438d85e]
+
+            with open(target[:-4] + ".bin", "wb") as stream:
+                stream.write(patched_rom)
+
             target_bin = target[:-4] + ".bin"
-            subprocess.call([error_recalc_path, target_bin])
+            track1_name = target[target.rfind('/') + 1:-4]
+
             cue_file = f'FILE "{track1_name}.bin" BINARY\n  TRACK 01 MODE2/2352\n\tINDEX 01 00:00:00\n'
             cue_file += f'FILE "Castlevania - Symphony of the Night (USA) (Track 2).bin" BINARY\n  TRACK 02 AUDIO\n'
             cue_file += f'\tINDEX 00 00:00:00\n\tINDEX 01 00:02:00'
             with open(target[:-4] + ".cue", 'wb') as outfile:
                 outfile.write(bytes(cue_file, 'utf-8'))
+
+            error_recalc_path = ""
+            if platform == "win32":
+                if os.path.exists("error_recalc.exe"):
+                    error_recalc_path = "error_recalc.exe"
+                elif os.path.exists(f"{home_path('lib')}\\error_recalc.exe"):
+                    error_recalc_path = f"{home_path('lib')}\\error_recalc.exe"
+            elif platform.startswith("linux") or platform.startswith("darwin"):
+                if os.path.exists("error_recalc"):
+                    error_recalc_path = "./error_recalc"
+                elif os.path.exists(f"{home_path('lib')}/error_recalc"):
+                    error_recalc_path = f"{home_path('lib')}/error_recalc"
+            else:
+                logger.info("Error_recalc not find on /lib folder !!!")
+
+            if error_recalc_path == "":
+                try:
+                    error_recalc_path = open_filename("Error recalc binary", (("All", "*.*"),))
+                except Exception as e:
+                    messagebox("Error", str(e), error=True)
+
+            if error_recalc_path != "":
+                subprocess.call([error_recalc_path, target_bin])
+            else:
+                messagebox("Error", "Could not find Error_recalc binary", error=True)
         else:
-            print("Couldn't find error_recalc.exe")
-            logger.info("Couldn't find error_recalc.exe")
+            logger.info("Patched ROM already exist")
 
 
 def get_base_rom_bytes() -> bytes:
@@ -557,6 +565,7 @@ def randomize_candles(buffer, rng_choice=0, prog=False):
     rng_type = 0
     for candle in Candles:
         if candle.name == "Stopwatch" and (candle.zone == "NO0" or candle.zone == "RNO0"):
+            print(f"DEBUG: Don't change stopwatch")
             continue
         if rng_choice == 1:
             if candle.name in ["Heart", "Big heart"]:
@@ -565,7 +574,6 @@ def randomize_candles(buffer, rng_choice=0, prog=False):
                 rng_item = random.choice([2, 3, 4, 5, 6, 7, 9, 10])
             elif (candle.name in
                   ["Dagger", "Axe", "Cross", "Holy water", "Stopwatch", "Bible", "Rebound Stone", "Vibhuti", "Agunea"]):
-                print("DEBUG: NOT Need it anymore")
                 rng_item = random.choice([14, 15, 16, 17, 18, 19, 20, 21, 22])
             elif candle.name == "Uncurse":
                 rng_item = random.choice([i for i in range(1, 259) if i not in forbid_items])
@@ -574,6 +582,7 @@ def randomize_candles(buffer, rng_choice=0, prog=False):
                 print(f"DEBUG: ERROR {candle.name}")
                 pass
         if rng_choice == 2:
+            print(f"DEBUG:Crazy candle drop")
             rng_type = random.randrange(0, 2)
 
             if rng_type == 0:
@@ -613,7 +622,7 @@ def randomize_drops(buffer, rng_choice=0, prog=False):
                     rng_item = random.choice([2, 3, 4, 5, 6, 7, 9, 10])
                 elif enemy.name in ["Dagger", "Axe", "Cross", "Holy water", "Stopwatch", "Bible", "Rebound Stone",
                                     "Vibhuti", "Agunea"]:
-                    print("DEBUG: NOT Need it anymore")
+                    print("DEBUG: NOT Need it anymore for enemies")
                     rng_item = random.choice([14, 15, 16, 17, 18, 19, 20, 21, 22])
                 elif enemy.name in hand_type_table:
                     rng_item = random.randrange(1, 169)
