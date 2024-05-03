@@ -86,7 +86,7 @@ def has_final_rest_door(state: CollectionState, player:int, final_rest_door_requ
     if final_rest_door_requirement == "postcards":
         return has_postcards(state, player, 10)
     if final_rest_door_requirement == "superbosses":
-        return state.has_all({"Olympus Coliseum", "Neverland", "Agrabah", "Hollow Bastion", "Green Trinity", "Phil Cup", "Pegasus Cup", "Hercules Cup"}, player) and has_emblems(state, player)
+        return state.has_all({"Olympus Coliseum", "Neverland", "Agrabah", "Hollow Bastion", "Green Trinity", "Phil Cup", "Pegasus Cup", "Hercules Cup"}, player) and has_emblems(state, player) and has_all_magic_lvx(state, player, 2)
 
 def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_reports: int, final_rest_door_required_reports: int, final_rest_door_requirement: str):
     #Location rules.
@@ -255,7 +255,7 @@ def set_rules(multiworld: MultiWorld, player: int, options, eotw_required_report
    #multiworld.get_location("Neverland Galley Chest"                                                       , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Neverland Cabin Chest"                                                        , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
     multiworld.get_location("Neverland Hold Flight 1st Chest "                                             , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
-    multiworld.get_location("Neverland Clock Tower Chest"                                                  , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
+    multiworld.get_location("Neverland Clock Tower Chest"                                                  , player).access_rule = lambda state: has_item(state, player, "Green Trinity") and has_all_magic_lvx(state, player, 2)
     multiworld.get_location("Neverland Hold Flight 2nd Chest"                                              , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
     multiworld.get_location("Neverland Hold Yellow Trinity Green Chest"                                    , player).access_rule = lambda state: has_item(state, player, "Yellow Trinity")
     multiworld.get_location("Neverland Captain's Cabin Chest"                                              , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
