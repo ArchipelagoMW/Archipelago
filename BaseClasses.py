@@ -133,7 +133,6 @@ class MultiWorld():
         self.random = ThreadBarrierProxy(random.Random())
         self.players = players
         self.player_types = {player: NetUtils.SlotType.player for player in self.player_ids}
-        self.glitch_triforce = False
         self.algorithm = 'balanced'
         self.groups = {}
         self.regions = self.RegionManager(players)

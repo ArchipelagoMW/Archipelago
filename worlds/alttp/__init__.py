@@ -261,7 +261,8 @@ class ALTTPWorld(World):
     fix_fake_world: bool = True
 
     clock_mode: str = ""
-    treasure_hunt_count: int = 1
+    treasure_hunt_required: int = 0
+    treasure_hunt_total: int = 0
 
     def __init__(self, *args, **kwargs):
         self.dungeon_local_item_names = set()
@@ -484,8 +485,8 @@ class ALTTPWorld(World):
                     if state.has('Silver Bow', item.player):
                         return
                     elif state.has('Bow', item.player) and (self.difficulty_requirements.progressive_bow_limit >= 2
-                                                            or self.glitches_required == 'no_glitches'
-                                                            or self.swordless):  # modes where silver bow is always required for ganon
+                                                            or self.multiworld.glitches_required[self.player] == 'no_glitches'
+                                                            or self.multiworld.swordless[self.player]):  # modes where silver bow is always required for ganon
                         return 'Silver Bow'
                     elif self.difficulty_requirements.progressive_bow_limit >= 1:
                         return 'Bow'
