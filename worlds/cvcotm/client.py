@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Set
 from .locations import base_id, get_location_names_to_ids
-from .items import get_item_info
+from .text import cvcotm_string_to_bytearray
 
 from NetUtils import ClientStatus
 import worlds._bizhawk as bizhawk
@@ -19,6 +19,7 @@ class CastlevaniaCotMClient(BizHawkClient):
     self_induced_death = False
     received_deathlinks = 0
     local_checked_locations: Set[int]
+    sent_message_queue = []
     killed_drac_2 = False
 
     def __init__(self) -> None:
@@ -73,7 +74,10 @@ class CastlevaniaCotMClient(BizHawkClient):
                                                               (0x25674, 20, "EWRAM"),
                                                               (0x253D0, 2, "EWRAM"),
                                                               (0x2572C, 3, "EWRAM"),
-                                                              (0x2572F, 8, "EWRAM")])
+                                                              (0x2572F, 8, "EWRAM"),
+                                                              (0x25300, 2, "EWRAM"),
+                                                              (0x25308, 2, "EWRAM"),
+                                                              (0x26000, 1, "EWRAM")])
 
             game_state = int.from_bytes(read_state[0], "little")
             flag_bytes = read_state[1]
@@ -81,6 +85,11 @@ class CastlevaniaCotMClient(BizHawkClient):
             max_ups_array = list(read_state[4])
             magic_items_array = list(read_state[5])
             num_received_items = int.from_bytes(bytearray(read_state[3]), "little")
+            queued_textbox = int.from_bytes(bytearray(read_state[6]), "little")
+            delay_timer = int.from_bytes(bytearray(read_state[7]), "little")
+            cutscene = int.from_bytes(bytearray(read_state[8]), "little")
+
+            ok_to_inject = not queued_textbox and not delay_timer and not cutscene
 
             # Make sure we are in the Gameplay or Credits states before detecting sent locations.
             # If we are in any other state, such as the Game Over state, reset the textbox buffers back to 0 so that we
@@ -89,22 +98,60 @@ class CastlevaniaCotMClient(BizHawkClient):
             # If the intro cutscene floor broken flag is not set, then assume we are in the demo; at no point during
             # regular gameplay will this flag not be set.
             if game_state not in [0x6, 0x21] or not flag_bytes[6] & 0x02:
-                await bizhawk.write(ctx.bizhawk_ctx, [(0x25300, [0, 0, 0, 0, 0, 0, 0, 0], "EWRAM")])
+                await bizhawk.write(ctx.bizhawk_ctx, [(0x25300, [0 for _ in range(12)], "EWRAM")])
                 return
 
             # Scout all Locations and capture the ones with local DSS Cards.
             if ctx.locations_info == {}:
-
                 await ctx.send_msgs([{
-                        "cmd": "LocationScouts",
-                        "locations": [code for name, code in get_location_names_to_ids().items()],
-                        "create_as_hint": 0
-                    }])
-            elif self.local_dss == {}:
+                    "cmd": "LocationScouts",
+                    "locations": [code for name, code in get_location_names_to_ids().items()],
+                    "create_as_hint": 0
+                }])
+                # Some later parts of this need the scouted Location info, so return now.
+                return
+
+            # Capture all the Locations with local DSS Cards, so we can trigger the Location check off the Card being
+            # put in the inventory by the game.
+            if self.local_dss == {}:
                 self.local_dss = {loc.item & 0xFF: location_id for location_id, loc in ctx.locations_info.items()
                                   if loc.player == ctx.slot and (loc.item >> 8) & 0xFF == 0xE6}
 
-            if num_received_items < len(ctx.items_received):
+            # If we have a queue of Locations to inject "sent" messages with, do so before giving any subsequent Items.
+            if self.sent_message_queue and ok_to_inject:
+                loc = self.sent_message_queue[0]
+                # Truncate the Item name at 300 characters. ArchipIDLE's FFXIV Item is 214 characters, for comparison.
+                item_name = ctx.item_names[ctx.locations_info[loc].item]
+                if len(item_name) > 300:
+                    item_name = item_name[:300]
+                # Truncate the player name at 50 characters. Player names are normally capped at 16 characters, but
+                # there is no limit on ItemLink group names.
+                player_name = ctx.player_names[ctx.locations_info[loc].player]
+                if len(player_name) > 50:
+                    player_name = player_name[:50]
+
+                sent_text = cvcotm_string_to_bytearray(f"「{item_name}」 sent to 「{player_name}」◊", "big middle", 0)
+
+                # Set the correct sound to play depending on the Item's classification.
+                if ctx.locations_info[loc].flags & 0b011:
+                    mssg_sfx_id = 0x1B4
+                else:
+                    mssg_sfx_id = 0x1B3
+
+                await bizhawk.write(ctx.bizhawk_ctx, [(0x25300, [0x1D, 0x82], "EWRAM"),
+                                                      (0x25306, bytearray(int.to_bytes(
+                                                          mssg_sfx_id, 2, "little")), "EWRAM"),
+                                                      (0x7CEB00, sent_text, "ROM")])
+
+                del(self.sent_message_queue[0])
+
+            # If the game hasn't received all items yet, the received item struct doesn't contain an item, the
+            # current number of received items still matches what we read before, the delay timer is 0, and we are
+            # not in a cutscene, then write the next incoming item into the inventory and, separately, the textbox ID
+            # to trigger the multiworld textbox, sound effect to play when the textbox opens, number to increment
+            # the received items count by, and the text to go into the multiworld textbox. The game will then do the
+            # rest when it's able to.
+            elif num_received_items < len(ctx.items_received) and ok_to_inject:
                 next_item = ctx.items_received[num_received_items]
 
                 # Figure out what inventory array and offset from said array to increment based on what we are
@@ -114,24 +161,35 @@ class CastlevaniaCotMClient(BizHawkClient):
                 if item_type == 0xE600:  # Card
                     inv_offset = 0x25674
                     inv_array = cards_array
+                    mssg_sfx_id = 0x1B4
                 elif item_type == 0xE800:  # Magic Item
                     inv_offset = 0x2572F
                     inv_array = magic_items_array
+                    mssg_sfx_id = 0x1B4
                     if item_index > 5:  # The unused Map's index is skipped over.
                         item_index -= 1
                 else:  # Max Up
                     inv_offset = 0x2572C
+                    mssg_sfx_id = 0x1B3
                     inv_array = max_ups_array
 
+                item_name = ctx.item_names[next_item.item]
+                player_name = ctx.player_names[next_item.player]
+                # Truncate the player name at 50 characters.
+                if len(player_name) > 50:
+                    player_name = player_name[:50]
+
+                received_text = cvcotm_string_to_bytearray(f"「{item_name}」 received from "
+                                                           f"「{player_name}」◊", "big middle", 0)
+
                 await bizhawk.guarded_write(ctx.bizhawk_ctx,
-                                            [(0x25300, bytearray(int.to_bytes(get_item_info(ctx.item_names[
-                                                                                                next_item.item],
-                                                                 "textbox id"), 2, "little")), "EWRAM"),
+                                            [(0x25300, [0x1D, 0x82], "EWRAM"),
                                              (0x25304, [1], "EWRAM"),
-                                             ((inv_offset + item_index), [inv_array[item_index] + 1], "EWRAM")],
-                                            [(0x25300, [0], "EWRAM"),    # Textbox ID buffer
-                                             (0x25304, [0], "EWRAM"),    # Received item index buffer
-                                             (0x253D0, read_state[3], "EWRAM")])  # Received items index
+                                             (0x25306, bytearray(int.to_bytes(mssg_sfx_id, 2, "little")), "EWRAM"),
+                                             (inv_offset + item_index, [inv_array[item_index] + 1], "EWRAM"),
+                                             (0x7CEB00, received_text, "ROM")],
+                                            # Make sure the number of received items is still what we expected it to be.
+                                            [(0x253D0, read_state[3], "EWRAM")]),
 
             locs_to_send = set()
 
@@ -155,11 +213,16 @@ class CastlevaniaCotMClient(BizHawkClient):
                 if byte and byte_index in self.local_dss:
                     locs_to_send.add(self.local_dss[byte_index])
 
-            # Send locations if there are any to send.
+            # Send Locations if there are any to send.
             if locs_to_send != self.local_checked_locations:
                 self.local_checked_locations = locs_to_send
 
                 if locs_to_send is not None:
+                    # Capture all the Locations with non-local Items to send that are in ctx.missing_locations
+                    # (the ones that were definitely never sent before).
+                    self.sent_message_queue += [loc for loc in locs_to_send if loc in ctx.missing_locations and
+                                                ctx.locations_info[loc].player != ctx.slot]
+
                     await ctx.send_msgs([{
                         "cmd": "LocationChecks",
                         "locations": list(locs_to_send)

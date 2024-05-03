@@ -24,7 +24,7 @@ cvcotm_char_dict = {"\n": 0x09, " ": 0x26, "!": 0x4A, '"': 0x78, "#": 0x79, "$":
 weightless_chars = {"\n", "▶", "◊", "\b", "\t", "「", "」"}
 
 
-def cvcotm_string_to_bytearray(cvcotm_text: str, textbox_type: Literal["big top", "big bottom", "little middle"],
+def cvcotm_string_to_bytearray(cvcotm_text: str, textbox_type: Literal["big top", "big middle", "little middle"],
                                speed: int, portrait: int = 0xFF) -> bytearray:
     """Converts a string into a textbox bytearray following CVCotM's string format."""
     text_bytes = bytearray(0)
@@ -55,14 +55,10 @@ def cvcotm_string_to_bytearray(cvcotm_text: str, textbox_type: Literal["big top"
 
     # Wrap or truncate the text.
     refined_text = cvcotm_text_wrap(cvcotm_text, len_limit, total_lines)
-    if refined_text == cvcotm_text:
-        print("Same!")
-    else:
-        print("Not same...")
 
     text_bytes.extend([0x1D, main_control_start_param + (speed & 0xF)])  # Speed should be a value between 0 and 15.
 
-    # Add the portrait (if we are adding one)
+    # Add the portrait (if we are adding one).
     if portrait != 0xFF and textbox_type != "little middle":
         text_bytes.extend([0x1E, portrait & 0xFF])
 
@@ -75,6 +71,7 @@ def cvcotm_string_to_bytearray(cvcotm_text: str, textbox_type: Literal["big top"
         else:
             text_bytes.extend([0x48])
 
+    # Add the characters indicating the end of the whole message.
     text_bytes.extend([0x1D, main_control_end_param, 0x00])
     return text_bytes
 

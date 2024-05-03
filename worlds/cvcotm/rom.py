@@ -150,8 +150,12 @@ class CVCotMPatchExtensions(APPatchExtension):
             rom_data.apply_ips("NoMPDrain.ips")
 
         # Write the textbox messaging system code
-        rom_data.write_bytes(0x6B1F8, [0x00, 0x48, 0x87, 0x46, 0x20, 0xFF, 0x7F, 0x08])
+        rom_data.write_bytes(0x7D60, [0x00, 0x48, 0x87, 0x46, 0x20, 0xFF, 0x7F, 0x08])
         rom_data.write_bytes(0x7FFF20, patches.remote_textbox_shower)
+
+        # Write the code that sets the screen transition delay timer
+        rom_data.write_bytes(0x6CE14, [0x00, 0x4A, 0x97, 0x46, 0xC0, 0xFF, 0x7F, 0x08])
+        rom_data.write_bytes(0x7FFFC0, patches.transition_textbox_delayer)
 
         # Change the pointer to the DSS tutorial text to instead point to our AP messaging text location.
         rom_data.write_bytes(0x6710BC, [0x00, 0xEB, 0x7C, 0x08])
@@ -190,8 +194,11 @@ class CVCotMPatchExtensions(APPatchExtension):
         # Nuke the DSS tutorial
         rom_data.write_byte(0x5EB55, 0xE0)
 
+        # Shorten Hugh's post-battle dialogue to give players more time to pick up his item.
+        rom_data.write_bytes(0x393114, cvcotm_string_to_bytearray("Ok! You win!◊", "big top", 4, 2))
+
         test_text = "「LEBRON JAMES」 REPORTEDLY LOST TO THE 「DEVIL」 IN THE 「BATTLE ARENA」◊"
-        rom_data.write_bytes(0x7CEB00, cvcotm_string_to_bytearray(test_text, "big bottom", 3))
+        rom_data.write_bytes(0x7CEB00, cvcotm_string_to_bytearray(test_text, "big middle", 3))
 
         return rom_data.get_bytes()
 
