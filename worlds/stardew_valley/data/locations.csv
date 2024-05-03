@@ -174,7 +174,7 @@ id,region,name,tags,mod_name
 235,The Mines - Floor 110,Floor 110 Elevator,ELEVATOR,
 236,The Mines - Floor 115,Floor 115 Elevator,ELEVATOR,
 237,The Mines - Floor 120,Floor 120 Elevator,ELEVATOR,
-250,Shipping,Demetrius's Breakthrough,MANDATORY
+250,Shipping,Demetrius's Breakthrough,MANDATORY,
 251,Volcano - Floor 10,Volcano Caldera Treasure,"GINGER_ISLAND,MANDATORY",
 301,Farming,Level 1 Farming,"FARMING_LEVEL,SKILL_LEVEL",
 302,Farming,Level 2 Farming,"FARMING_LEVEL,SKILL_LEVEL",
