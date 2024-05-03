@@ -26,11 +26,11 @@ def _has_tongue_cleared(state:CollectionState, player: int) -> bool:
 
 def _has_sun_crystal(state:CollectionState, player: int) -> bool:
     """`player` in `state` has the Sun crystal item"""
-    return state.has("Has sun crystal", player)
+    return state.has("Has sun crystal", player) and _has_bind_song(state, player)
 
 
 def _has_li(state:CollectionState, player: int) -> bool:
-    """`player` in `state` has Li in it's team"""
+    """`player` in `state` has Li in its team"""
     return state.has("Li and Li song", player)
 
 
@@ -773,7 +773,8 @@ class AquariaRegions:
         self.__connect_regions("Sunken city left area", "Sunken city boss area",
                                self.sunken_city_l, self.sunken_city_boss,
                                lambda state: _has_beast_form(state, self.player) and
-                                             _has_energy_form(state, self.player))
+                                             _has_energy_form(state, self.player) and
+                                             _has_bind_song(state, self.player))
 
     def __connect_body_regions(self) -> None:
         """
