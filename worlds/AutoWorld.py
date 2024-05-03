@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import logging
 import pathlib
+from random import Random
 import re
 import sys
 import time
@@ -17,7 +18,6 @@ from Options import ExcludeLocations, ItemLinks, LocalItems, NonLocalItems, PerG
 from BaseClasses import CollectionState, OptionGroup
 
 if TYPE_CHECKING:
-    from random import Random
     from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance
     from . import GamesPackage
     from settings import Group
