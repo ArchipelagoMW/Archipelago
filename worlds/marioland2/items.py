@@ -68,6 +68,7 @@ items = {
     "Turtle Zone 1 Midway Bell": ItemClassification.filler,
     "Turtle Zone 2 Midway Bell": ItemClassification.progression_skip_balancing,
     "Turtle Zone 3 Midway Bell": ItemClassification.filler,
+    "Mario's Castle Midway Bell": ItemClassification.progression_skip_balancing,
     "1 Coin": ItemClassification.filler,
     **{f"{i} Coins": ItemClassification.filler for i in range(2, 169)}
 }

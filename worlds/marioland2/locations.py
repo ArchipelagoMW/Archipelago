@@ -59,7 +59,8 @@ locations = {
     'Turtle Zone 2 - Midway Bell': {'id': 0x0F, 'ram_index': 22, 'clear_condition': ("Turtle Zone 2 Midway Bell", 1), 'type': 'bell'},
     'Turtle Zone 3 - Boss': {'id': 0x10, 'ram_index': 23, 'clear_condition': ("Turtle Coin", 1), 'type': 'level'},
     'Turtle Zone 3 - Midway Bell': {'id': 0x10, 'ram_index': 23, 'clear_condition': ("Turtle Zone 3 Midway Bell", 1), 'type': 'bell'},
-    'Turtle Zone Secret Course - Normal Exit': {'id': 0x1A, 'ram_index': 37, 'type': 'level'}
+    'Turtle Zone Secret Course - Normal Exit': {'id': 0x1A, 'ram_index': 37, 'type': 'level'},
+    "Mario's Castle - Midway Bell": {'id': 24, 'ram_index': 24, 'clear_condition': ("Mario's Castle Midway Bell", 1), 'type': 'bell'},
 }
 
 

@@ -1,4 +1,5 @@
-
+# Based on SML2R enemy and platform randomizer
+# # https://github.com/slashinfty/sml2r-node/blob/862128c73d336d6cbfbf6290c09f3eff103688e8/src/index.ts#L284
 
 def randomize_enemies(sprite_data, random):
     for level, level_sprite_data in sprite_data.items():
@@ -94,9 +95,7 @@ def randomize_enemies(sprite_data, random):
             if sprite["sprite"] in ("Piranha Plant", "Fire Piranha Plant"):
                 shuffle = ("Piranha Plant", "Fire Piranha Plant")
             if sprite["sprite"] in shuffle:
-                old_sprite = sprite["sprite"]
                 sprite["sprite"] = random.choice(shuffle)
-                print(f"Level: {level} - {old_sprite} changed to {sprite['sprite']}")
             elif level == "Mario's Castle" and sprite["sprite"] == "Karamenbo" and not random.randint(0, 9):
                 sprite["y"] += 1
 

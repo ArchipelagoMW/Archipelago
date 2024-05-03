@@ -48,6 +48,11 @@ class ShuffleMidwayBells(Toggle):
     display_name = "Shuffle Midway Bells"
 
 
+class MariosCastleMidwayBell(Toggle):
+    """Adds a Midway Bell to the final stage, just before the Wario fight."""
+    display_name = "Mario's Castle Midway Bell"
+
+
 class Coinsanity(Toggle):
     """Shuffles the singular coins found freestanding and in question mark blocks into the item pool, and adds location
     checks made by obtaining a sufficient number of coins in particular levels within a single playthrough."""
@@ -148,6 +153,7 @@ class SML2Options(PerGameCommonOptions):
     coinsanity: Coinsanity
     coinsanity_checks: CoinsanityChecks
     shuffle_midway_bells: ShuffleMidwayBells
+    marios_castle_midway_bell: MariosCastleMidwayBell
     shuffle_pipe_traversal: ShufflePipeTraversal
     auto_scroll_mode: AutoScrollMode
     auto_scroll_chances: AutoScrollChances
