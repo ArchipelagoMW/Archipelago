@@ -14,6 +14,11 @@ from .Locations import (ZoneData, LocationData, location_table, get_location_dat
 from .Items import ItemData, IType, base_item_id, item_table, trap_table
 
 
+# TODO:
+#  Sometimes RNO1 vase near Creature is missing. Research
+#  Visual glitches on Richter dialog
+#  Visual glitch on sliding door after defeating Lesser Demon
+
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
 
@@ -1073,8 +1078,8 @@ class SotNClient(BizHawkClient):
                     trap_name = item_id_to_name[cur_trap]
                     logger.info(f"Trap: {trap_name} ended")
                     remaining_traps = ""
-                    if self.last_trap_processed  <= len(self.received_traps):
-                        for i in range(self.last_trap_processed + 1, len(self.received_traps)):
+                    if self.last_trap_processed <= len(self.received_traps):
+                        for i in range(self.last_trap_processed, len(self.received_traps)):
                             remaining_traps += f"{item_id_to_name[self.received_traps[i]]}, "
                     if len(remaining_traps) > 0:
                         logger.info(f"Remaining trap: {remaining_traps[:-2]}")
@@ -1133,7 +1138,7 @@ class SotNClient(BizHawkClient):
                 trap_name = item_id_to_name[cur_trap]
                 logger.info(f"Trap: {trap_name} applied")
                 if "max" in trap_name:
-                    if "half" in trap_name:
+                    if "Half" in trap_name:
                         trap = 0.5
                     if "80%" in trap_name:
                         trap = 0.8
