@@ -7,6 +7,7 @@ from Options import Visibility
 from flask import redirect, render_template, request, Response
 from worlds.AutoWorld import AutoWorldRegister
 from Utils import local_path
+from textwrap import dedent
 from . import app, cache
 
 
@@ -78,6 +79,11 @@ def send_yaml(player_name: str, formatted_options: dict):
     response.headers["Content-Type"] = "text/yaml"
     response.headers["Content-Disposition"] = f"attachment; filename={player_name}.yaml"
     return response
+
+
+@app.template_filter("dedent")
+def filter_dedent(text: str):
+    return dedent(text)
 
 
 @app.route("/weighted-options")

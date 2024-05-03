@@ -250,7 +250,7 @@
 {% macro OptionTitle(option_name, option) %}
     <label for="{{ option_name }}">
         {{ option.display_name|default(option_name) }}:
-        <span class="interactive" data-tooltip="{{ (option.__doc__ | default("Please document me!"))|escape }}">(?)</span>
+        <span class="interactive" data-tooltip="{% filter dedent %}{{(option.__doc__ | default("Please document me!"))|escape }}{% endfilter %}">(?)</span>
     </label>
 {% endmacro %}
 
