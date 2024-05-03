@@ -3,7 +3,6 @@ from typing import List, TYPE_CHECKING
 
 from BaseClasses import CollectionState, PlandoOptions
 from Options import PlandoConnection
-from .options import ShufflePortals
 
 if TYPE_CHECKING:
     from . import MessengerWorld
@@ -207,6 +206,8 @@ REGION_ORDER = [
 
 def shuffle_portals(world: "MessengerWorld") -> None:
     """shuffles the output of the portals from the main hub"""
+    from .options import ShufflePortals
+
     def create_mapping(in_portal: str, warp: str) -> str:
         """assigns the chosen output to the input"""
         parent = out_to_parent[warp]
