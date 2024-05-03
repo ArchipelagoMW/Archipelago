@@ -66,6 +66,7 @@ class LocationTags(enum.Enum):
     FRIENDSANITY = enum.auto()
     FESTIVAL = enum.auto()
     FESTIVAL_HARD = enum.auto()
+    DESERT_FESTIVAL_CHEF = enum.auto()
     SPECIAL_ORDER_BOARD = enum.auto()
     SPECIAL_ORDER_QI = enum.auto()
     REQUIRES_QI_ORDERS = enum.auto()
@@ -251,21 +252,29 @@ def extend_baby_locations(randomized_locations: List[LocationData]):
     randomized_locations.extend(baby_locations)
 
 
-def extend_festival_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
+def extend_festival_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, random: Random):
     if options.festival_locations == FestivalLocations.option_disabled:
         return
 
     festival_locations = locations_by_tag[LocationTags.FESTIVAL]
     randomized_locations.extend(festival_locations)
     extend_hard_festival_locations(randomized_locations, options)
+    extend_desert_festival_chef_locations(randomized_locations, options, random)
 
 
-def extend_hard_festival_locations(randomized_locations, options: StardewValleyOptions):
+def extend_hard_festival_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
     if options.festival_locations != FestivalLocations.option_hard:
         return
 
     hard_festival_locations = locations_by_tag[LocationTags.FESTIVAL_HARD]
     randomized_locations.extend(hard_festival_locations)
+
+
+def extend_desert_festival_chef_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, random: Random):
+    festival_chef_locations = locations_by_tag[LocationTags.DESERT_FESTIVAL_CHEF]
+    number_to_add = 5 if options.festival_locations == FestivalLocations.option_easy else 10
+    locations_to_add = random.sample(festival_chef_locations, number_to_add)
+    randomized_locations.extend(locations_to_add)
 
 
 def extend_special_order_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
@@ -456,7 +465,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_museumsanity_locations(randomized_locations, options, random)
     extend_friendsanity_locations(randomized_locations, content)
 
-    extend_festival_locations(randomized_locations, options)
+    extend_festival_locations(randomized_locations, options, random)
     extend_special_order_locations(randomized_locations, options)
     extend_walnut_purchase_locations(randomized_locations, options)
 
