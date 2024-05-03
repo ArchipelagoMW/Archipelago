@@ -23,7 +23,8 @@ class SkipIntro(DefaultOnToggle):
 
 
 class SkipDreams(Toggle):
-    """Skips the dream sequences at the end of each chapter."""
+    """Skips the dream sequences at the end of each chapter.
+    This can be changed later in the options menu inside the Archipelago phone app."""
     display_name = "Skip Dreams"
 
 
