@@ -466,8 +466,7 @@ class AquariaRegions:
                                self.home_water, self.home_water_nautilus,
                                lambda state: _has_energy_form(state, self.player) and _has_bind_song(state, self.player))
         self.__connect_regions("Home Water", "Home water transturtle room",
-                               self.home_water, self.home_water_transturtle,
-                               lambda state: _has_bind_song(state, self.player))
+                               self.home_water, self.home_water_transturtle)
         self.__connect_regions("Home Water", "Energy temple first area",
                                self.home_water, self.energy_temple_1,
                                lambda state: _has_bind_song(state, self.player))
@@ -507,9 +506,7 @@ class AquariaRegions:
                                              _has_energy_form(state, self.player) and
                                              _has_beast_form(state, self.player))
         self.__connect_regions("Home Water", "Open water top left area",
-                               self.home_water, self.openwater_tl,
-                               lambda state: _has_bind_song(state, self.player) and
-                                             _has_energy_form(state, self.player))
+                               self.home_water, self.openwater_tl)
 
     def __connect_open_water_regions(self) -> None:
         """
@@ -1204,9 +1201,19 @@ class AquariaRegions:
         if options.objective.value == 1:
             add_rule(self.multiworld.get_entrance("Before Final boss to Final boss", self.player),
                      lambda state: _has_secrets(state, self.player))
+        if options.unconfine_home_water.value in [0, 1]:
+            add_rule(self.multiworld.get_entrance("Home Water to Home water transturtle room", self.player),
+                     lambda state: _has_bind_song(state, self.player))
         if options.early_energy_form:
             add_rule(self.multiworld.get_entrance("Home Water to Home water transturtle room", self.player),
                      lambda state: _has_energy_form(state, self.player))
+        if options.unconfine_home_water.value in [0, 2]:
+            add_rule(self.multiworld.get_entrance("Home Water to Open water top left area", self.player),
+                     lambda state: _has_bind_song(state, self.player) and _has_energy_form(state, self.player))
+        if options.early_energy_form:
+            add_rule(self.multiworld.get_entrance("Home Water to Open water top left area", self.player),
+                     lambda state: _has_energy_form(state, self.player))
+
         if options.exclude_hard_or_hidden_locations:
             self.__excluded_hard_or_hidden_location()
 
@@ -1219,6 +1226,7 @@ class AquariaRegions:
         self.multiworld.regions.append(self.verse_cave_l)
         self.multiworld.regions.append(self.home_water)
         self.multiworld.regions.append(self.home_water_nautilus)
+        self.multiworld.regions.append(self.home_water_transturtle)
         self.multiworld.regions.append(self.naija_home)
         self.multiworld.regions.append(self.song_cave)
         self.multiworld.regions.append(self.energy_temple_1)

@@ -111,23 +111,35 @@ class BindSongNeededToGetUnderRockBulb(Toggle):
     display_name = "Bind song needed to get sing bulbs under rocks"
 
 
+class UnconfineHomeWater(Choice):
+    """
+    Open the way out of Home water area so that Naija can go to open water and beyond without the bind song.
+    """
+    display_name = "Unconfine Home Water Area"
+    option_no = 0
+    option_via_energy_door = 1
+    option_via_transturtle = 2
+    option_via_both = 3
+    default = 0
+
 
 @dataclass
 class AquariaOptions(PerGameCommonOptions):
     """
     Every option in the Aquaria randomizer
     """
+    start_inventory_from_pool: StartInventoryPool
+    objective: Objective
+    mini_bosses_to_beat: MiniBossesToBeat
+    big_bosses_to_beat: BigBossesToBeat
+    turtle_randomizer: TurtleRandomizer
+    early_energy_form: EarlyEnergyForm
+    light_needed_to_get_to_dark_places: LightNeededToGetToDarkPlaces
+    bind_song_needed_to_get_under_rock_bulb: BindSongNeededToGetUnderRockBulb
+    unconfine_home_water: UnconfineHomeWater
+    exclude_hard_or_hidden_locations: ExcludeHardOrHiddenLocation
     ingredient_randomizer: IngredientRandomizer
     dish_randomizer: DishRandomizer
     aquarian_translation: AquarianTranslation
-    objective: Objective
-    turtle_randomizer: TurtleRandomizer
-    early_energy_form: EarlyEnergyForm
-    big_bosses_to_beat: BigBossesToBeat
-    mini_bosses_to_beat: MiniBossesToBeat
     skip_first_vision: SkipFirstVision
-    exclude_hard_or_hidden_locations: ExcludeHardOrHiddenLocation
-    light_needed_to_get_to_dark_places: LightNeededToGetToDarkPlaces
-    bind_song_needed_to_get_under_rock_bulb: BindSongNeededToGetUnderRockBulb
-    start_inventory_from_pool: StartInventoryPool
     death_link: DeathLink

@@ -213,4 +213,6 @@ class AquariaWorld(World):
                 "minibosses_to_kill": self.options.mini_bosses_to_beat.value,
                 "bigbosses_to_kill": self.options.big_bosses_to_beat.value,
                 "skip_first_vision": bool(self.options.skip_first_vision.value),
+                "unconfine_home_water_energy_door": self.options.unconfine_home_water.value in [1, 3],
+                "unconfine_home_water_transturtle": self.options.unconfine_home_water.value in [2, 3],
                 }
