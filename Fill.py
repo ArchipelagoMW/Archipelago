@@ -34,8 +34,8 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
     """
     :param multiworld: Multiworld to be filled.
     :param base_state: State assumed before fill.
-    :param locations: Locations to be filled with item_pool
-    :param item_pool: Items to fill into the locations
+    :param locations: Locations to be filled with item_pool, gets mutated by removing locations that get filled.
+    :param item_pool: Items to fill into the locations, gets mutated by removing items that get placed.
     :param single_player_placement: if true, can speed up placement if everything belongs to a single player
     :param lock: locations are set to locked as they are filled
     :param swap: if true, swaps of already place items are done in the event of a dead end
@@ -414,7 +414,8 @@ def distribute_early_items(multiworld: MultiWorld,
     return fill_locations, itempool
 
 
-def distribute_items_restrictive(multiworld: MultiWorld) -> None:
+def distribute_items_restrictive(multiworld: MultiWorld,
+                                 panic_method: typing.Literal["swap", "raise", "start_inventory"] = "swap") -> None:
     fill_locations = sorted(multiworld.get_unfilled_locations())
     multiworld.random.shuffle(fill_locations)
     # get items to distribute
@@ -456,14 +457,36 @@ def distribute_items_restrictive(multiworld: MultiWorld) -> None:
 
     if prioritylocations:
         # "priority fill"
-        fill_restrictive(multiworld, multiworld.state, prioritylocations, progitempool, swap=False, on_place=mark_for_locking,
-                         name="Priority")
+        fill_restrictive(multiworld, multiworld.state, prioritylocations, progitempool, swap=False,
+                         on_place=mark_for_locking, name="Priority")
         accessibility_corrections(multiworld, multiworld.state, prioritylocations, progitempool)
         defaultlocations = prioritylocations + defaultlocations
 
     if progitempool:
         # "advancement/progression fill"
-        fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool, name="Progression")
+        if panic_method == "swap":
+            fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool,
+                             swap=True,
+                             on_place=mark_for_locking, name="Progression")
+        elif panic_method == "raise":
+            fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool,
+                             swap=False,
+                             on_place=mark_for_locking, name="Progression")
+        elif panic_method == "start_inventory":
+            fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool,
+                             swap=False, allow_partial=True,
+                             on_place=mark_for_locking, name="Progression")
+            if progitempool:
+                for item in progitempool:
+                    logging.debug(f"Moved {item} to start_inventory to prevent fill failure.")
+                    multiworld.push_precollected(item)
+                    filleritempool.append(multiworld.worlds[item.player].create_filler())
+                logging.warning(f"{len(progitempool)} items moved to start inventory,"
+                                f" due to failure in Progression fill step.")
+                progitempool[:] = []
+
+        else:
+            raise ValueError(f"Generator Panic Method {panic_method} not recognized.")
         if progitempool:
             raise FillError(
                 f"Not enough locations for progression items. "
