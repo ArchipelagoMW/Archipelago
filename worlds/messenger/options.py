@@ -40,6 +40,8 @@ class PortalPlando(PlandoConnections):
 # for back compatibility. To later be replaced with transition plando
 class HiddenPortalPlando(PortalPlando):
     visibility = Visibility.none
+    entrances = PortalPlando.entrances
+    exits = PortalPlando.exits
 
 
 class Logic(Choice):
