@@ -118,7 +118,7 @@ class MLSSClient(BizHawkClient):
                     (0x4808, 2, "EWRAM"),
                     (0x4407, 1, "EWRAM"),
                     (0x2339, 1, "IWRAM"),
-                ],
+                ]
             )
             flags = read_state[0]
             current_room = int.from_bytes(read_state[1], "little")
