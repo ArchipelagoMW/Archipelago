@@ -247,7 +247,9 @@ def shuffle_portals(world: "MessengerWorld") -> None:
     available_portals = [val for zone in shop_points.values() for val in zone]
     world.random.shuffle(available_portals)
 
-    plando = world.options.plando_connections.value
+    plando = world.options.portal_plando.value
+    if not plando:
+        plando = world.options.plando_connections.value
     if plando and world.multiworld.plando_options & PlandoOptions.connections:
         handle_planned_portals(plando)
 

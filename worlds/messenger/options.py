@@ -4,7 +4,7 @@ from typing import Dict
 from schema import And, Optional, Or, Schema
 
 from Options import Accessibility, Choice, DeathLinkMixin, DefaultOnToggle, OptionDict, PerGameCommonOptions, \
-    PlandoConnections, Range, StartInventoryPool, Toggle
+    PlandoConnections, Range, StartInventoryPool, Toggle, Visibility
 from worlds.messenger.portals import CHECKPOINTS, PORTALS, SHOP_POINTS
 
 
@@ -14,15 +14,19 @@ class MessengerAccessibility(Accessibility):
     __doc__ = Accessibility.__doc__.replace(f"default {Accessibility.default}", f"default {default}")
 
 
-class MessengerPlandoConnections(PlandoConnections):
+class PortalPlando(PlandoConnections):
     """
     Plando connections to be used with portal shuffle. Direction is ignored.
-    List of valid connections can be found here: .
+    List of valid connections can be found here: https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/messenger/portals.py#L12.
     The entering Portal should *not* have "Portal" appended.
     For the exits, those in checkpoints and shops should just be the name of the spot, while portals should have " Portal" at the end.
-    Format is:
+    Example:
     - entrance: Riviere Turquoise
       exit: Wingsuit
+    - entrance: Sunken Shrine
+      exit: Sunny Day
+    - entrance: Searing Crags
+      exit: Glacial Peak Portal
     """
     portals = [f"{portal} Portal" for portal in PORTALS]
     shop_points = [point for points in SHOP_POINTS.values() for point in points]
@@ -31,6 +35,11 @@ class MessengerPlandoConnections(PlandoConnections):
     portal_exits = portals + shop_points + checkpoints
     entrances = portal_entrances
     exits = portal_exits
+
+
+# for back compatibility. To later be replaced with transition plando
+class HiddenPortalPlando(PortalPlando):
+    visibility = Visibility.none
 
 
 class Logic(Choice):
@@ -209,7 +218,6 @@ class PlannedShopPrices(OptionDict):
 @dataclass
 class MessengerOptions(DeathLinkMixin, PerGameCommonOptions):
     accessibility: MessengerAccessibility
-    plando_connections: MessengerPlandoConnections
     start_inventory: StartInventoryPool
     logic_level: Logic
     shuffle_shards: MegaShards
@@ -226,3 +234,5 @@ class MessengerOptions(DeathLinkMixin, PerGameCommonOptions):
     traps: Traps
     shop_price: ShopPrices
     shop_price_plan: PlannedShopPrices
+    portal_plando: PortalPlando
+    plando_connections: HiddenPortalPlando
