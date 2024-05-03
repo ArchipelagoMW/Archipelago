@@ -5,7 +5,6 @@ from BaseClasses import CollectionState, PlandoOptions
 from Options import PlandoConnection
 from .options import ShufflePortals
 
-
 if TYPE_CHECKING:
     from . import MessengerWorld
 
@@ -207,12 +206,9 @@ REGION_ORDER = [
 
 
 def shuffle_portals(world: "MessengerWorld") -> None:
-    from .options import ShufflePortals
-
     """shuffles the output of the portals from the main hub"""
     def create_mapping(in_portal: str, warp: str) -> str:
         """assigns the chosen output to the input"""
-        nonlocal available_portals
         parent = out_to_parent[warp]
         exit_string = f"{parent.strip(' ')} - "
 
@@ -232,8 +228,6 @@ def shuffle_portals(world: "MessengerWorld") -> None:
         return parent
 
     def handle_planned_portals(plando_connections: List[PlandoConnection]) -> None:
-        nonlocal plandoed_portals
-
         """checks the provided plando connections for portals and connects them"""
         for connection in plando_connections:
             if connection.entrance not in PORTALS:
@@ -241,7 +235,6 @@ def shuffle_portals(world: "MessengerWorld") -> None:
             # let it crash here if input is invalid
             create_mapping(connection.entrance, connection.exit)
             world.plando_portals.append(connection.entrance)
-            plandoed_portals.append(connection.entrance)
 
     shuffle_type = world.options.shuffle_portals
     shop_points = deepcopy(SHOP_POINTS)
@@ -254,12 +247,9 @@ def shuffle_portals(world: "MessengerWorld") -> None:
     available_portals = [val for zone in shop_points.values() for val in zone]
     world.random.shuffle(available_portals)
 
-    plando = world.options.plando_connections
-    plandoed_portals = []
+    plando = world.options.plando_connections.value
     if plando and world.multiworld.plando_options & PlandoOptions.connections:
         handle_planned_portals(plando)
-        world.options.plando_connections.value = [connection for connection in plando
-                                                  if connection.entrance not in PORTALS]
 
     for portal in PORTALS:
         if portal in world.plando_portals:
