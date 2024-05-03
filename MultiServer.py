@@ -1529,14 +1529,13 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
         if hints:
             new_hints = set(hints) - self.ctx.hints[self.client.team, self.client.slot]
-            old_hints = set(hints) - new_hints
+            old_hints = list(set(hints) - new_hints)
             if old_hints and not new_hints:
-                self.ctx.notify_hints(self.client.team, list(old_hints))
+                self.ctx.notify_hints(self.client.team, old_hints)
                 self.output("Hint was previously used, no points deducted.")
             if new_hints:
                 found_hints = [hint for hint in new_hints if hint.found]
                 not_found_hints = [hint for hint in new_hints if not hint.found]
-                old_hints = [hint for hint in old_hints]
                 if not not_found_hints:  # everything's been found, no need to pay
                     can_pay = 1000
                 elif cost:
