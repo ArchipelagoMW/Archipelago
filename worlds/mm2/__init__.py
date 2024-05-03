@@ -118,7 +118,7 @@ class MM2World(World):
                 old_stage = self.multiworld.get_region(prev_stage, self.player)
                 old_stage.connect(stage, f"To {region}",
                                   lambda state, items=required_items: state.has_all(items, self.player))
-            stage.add_locations(locations)
+            stage.add_locations(locations, MM2Location)
             for location in stage.get_locations():
                 if location.address is None and location.name is not dr_wily:
                     location.place_locked_item(MM2Item(location.name, ItemClassification.progression,
