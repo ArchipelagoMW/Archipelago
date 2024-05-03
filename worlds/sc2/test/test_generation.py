@@ -2,46 +2,11 @@
 Unit tests for world generation
 """
 from typing import *
-import unittest
-import random
+from .test_base import Sc2SetupTestBase
 
 from .. import Options, MissionTables, ItemNames, Items, ItemGroups
-from .. import get_all_missions, SC2World
+from .. import get_all_missions
 
-from BaseClasses import MultiWorld, CollectionState, PlandoOptions
-from argparse import Namespace
-from worlds import AutoWorld
-from Generate import get_seed_name
-from test.general import gen_steps, call_all
-
-
-class Sc2SetupTestBase(unittest.TestCase):
-    seed: Optional[int] = None
-    game = SC2World.game
-    player = 1
-    def generate_world(self, options: Dict[str, Any]) -> None:
-        self.multiworld = MultiWorld(1)
-        self.multiworld.game[self.player] = self.game
-        self.multiworld.player_name = {self.player: "Tester"}
-        self.multiworld.set_seed(self.seed)
-        self.multiworld.state = CollectionState(self.multiworld)
-        random.seed(self.multiworld.seed)
-        self.multiworld.seed_name = get_seed_name(random)  # only called to get same RNG progression as Generate.py
-        args = Namespace()
-        for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].options_dataclass.type_hints.items():
-            new_option = option.from_any(options.get(name, option.default))
-            new_option.verify(SC2World, "Tester", PlandoOptions.items|PlandoOptions.connections|PlandoOptions.texts|PlandoOptions.bosses)
-            setattr(args, name, {
-                1: new_option
-            })
-        self.multiworld.set_options(args)
-        self.world: SC2World = cast(SC2World, self.multiworld.worlds[self.player])
-        try:
-            for step in gen_steps:
-                call_all(self.multiworld, step)
-        except Exception as ex:
-            ex.add_note(f"Seed: {self.multiworld.seed}")
-            raise
 
 class TestItemFiltering(Sc2SetupTestBase):
     def test_explicit_locks_excludes_interact_and_set_flags(self):
@@ -143,89 +108,6 @@ class TestItemFiltering(Sc2SetupTestBase):
             self.assertNotIn(item_data.type, Items.ZergItemType)
             self.assertNotEqual(item_data.type, Items.TerranItemType.Nova_Gear)
             self.assertNotEqual(item_name, ItemNames.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE)
-
-    def test_usecase_terran_with_nco_units_only(self):
-        options = {
-            'enable_prophecy_missions': False,
-            'enable_hots_missions': False,
-            'enable_lotv_prologue_missions': False,
-            'enable_lotv_missions': False,
-            'enable_epilogue_missions': False,
-            'excluded_items': {
-                ItemGroups.ItemGroupNames.TERRAN_UNITS: 0,
-            },
-            'unexcluded_items': {
-                ItemGroups.ItemGroupNames.NCO_UNITS: 0,
-            },
-        }
-        self.generate_world(options)
-        self.assertTrue(self.multiworld.itempool)
-        item_names = [item.name for item in self.multiworld.itempool]
-        self.assertIn(ItemNames.MARINE, item_names)
-        self.assertIn(ItemNames.RAVEN, item_names)
-        self.assertIn(ItemNames.LIBERATOR, item_names)
-        self.assertIn(ItemNames.BATTLECRUISER, item_names)
-        self.assertNotIn(ItemNames.DIAMONDBACK, item_names)
-        self.assertNotIn(ItemNames.DIAMONDBACK_BURST_CAPACITORS, item_names)
-        self.assertNotIn(ItemNames.VIKING, item_names)
-
-    def test_usecase_nco_with_nobuilds_excluded(self):
-        options = {
-            'enable_wol_missions': False,
-            'enable_prophecy_missions': False,
-            'enable_hots_missions': False,
-            'enable_lotv_prologue_missions': False,
-            'enable_lotv_missions': False,
-            'enable_epilogue_missions': False,
-            'shuffle_no_build': Options.ShuffleNoBuild.option_false,
-            'mission_order': Options.MissionOrder.option_mini_campaign,
-        }
-        self.generate_world(options)
-        self.assertTrue(self.multiworld.itempool)
-        missions = get_all_missions(self.world.mission_req_table)
-        self.assertNotIn(MissionTables.SC2Mission.THE_ESCAPE, missions)
-        self.assertNotIn(MissionTables.SC2Mission.IN_THE_ENEMY_S_SHADOW, missions)
-        for mission in missions:
-            self.assertEqual(MissionTables.SC2Campaign.NCO, mission.campaign)
-
-    def test_usecase_terran_with_nco_upgrades_units_only(self):
-        options = {
-            'enable_wol_missions': True,
-            'enable_nco_missions': True,
-            'enable_prophecy_missions': False,
-            'enable_hots_missions': False,
-            'enable_lotv_prologue_missions': False,
-            'enable_lotv_missions': False,
-            'enable_epilogue_missions': False,
-            'mission_order': Options.MissionOrder.option_mini_campaign,
-            'excluded_items': {
-                ItemGroups.ItemGroupNames.TERRAN_ITEMS: 0,
-            },
-            'unexcluded_items': {
-                ItemGroups.ItemGroupNames.NCO_MAX_PROGRESSIVE_ITEMS: 0,
-                ItemGroups.ItemGroupNames.NCO_MIN_PROGRESSIVE_ITEMS: 1,
-            },
-        }
-        self.generate_world(options)
-        item_names = [item.name for item in self.multiworld.itempool]
-        self.assertTrue(item_names)
-        missions = get_all_missions(self.world.mission_req_table)
-        for mission in missions:
-            self.assertIn(MissionTables.MissionFlag.Terran, mission.flags)
-        self.assertIn(ItemNames.MARINE, item_names)
-        self.assertIn(ItemNames.MARAUDER, item_names)
-        self.assertIn(ItemNames.BUNKER, item_names)
-        self.assertIn(ItemNames.BANSHEE, item_names)
-        self.assertIn(ItemNames.BATTLECRUISER_ATX_LASER_BATTERY, item_names)
-        self.assertIn(ItemNames.NOVA_C20A_CANISTER_RIFLE, item_names)
-        self.assertGreaterEqual(item_names.count(ItemNames.BANSHEE_PROGRESSIVE_CROSS_SPECTRUM_DAMPENERS), 2)
-        self.assertGreaterEqual(item_names.count(ItemNames.PROGRESSIVE_TERRAN_SHIP_WEAPON), 3)
-        self.assertNotIn(ItemNames.MEDIC, item_names)
-        self.assertNotIn(ItemNames.PSI_DISRUPTER, item_names)
-        self.assertNotIn(ItemNames.BATTLECRUISER_PROGRESSIVE_MISSILE_PODS, item_names)
-        self.assertNotIn(ItemNames.HELLION_INFERNAL_PLATING, item_names)
-        self.assertNotIn(ItemNames.CELLULAR_REACTOR, item_names)
-        self.assertNotIn(ItemNames.TECH_REACTOR, item_names)
 
     def test_starter_unit_populates_start_inventory(self):
         options = {
@@ -374,31 +256,6 @@ class TestItemFiltering(Sc2SetupTestBase):
                 occurrences[item_name] += 1
                 self.assertLessEqual(occurrences[item_name], 1, f"'{item_name}' unexpectedly appeared multiple times in the pool")
 
-    def test_nco_and_2_wol_missions_only_can_generate_with_vanilla_items_only(self) -> None:
-        options = {
-            'enable_prophecy_missions': False,
-            'enable_hots_missions': False,
-            'enable_lotv_prologue_missions': False,
-            'enable_lotv_missions': False,
-            'enable_epilogue_missions': False,
-            'excluded_missions': [
-                mission.mission_name for mission in MissionTables.SC2Mission
-                if mission.campaign == MissionTables.SC2Campaign.WOL
-                    and mission.mission_name not in (MissionTables.SC2Mission.LIBERATION_DAY.mission_name, MissionTables.SC2Mission.THE_OUTLAWS.mission_name)
-            ],
-            'mission_order': Options.MissionOrder.option_grid,
-            'maximum_campaign_size': Options.MaximumCampaignSize.range_end,
-            'accessibility': 'locations',
-            'vanilla_items_only': True,
-        }
-        self.generate_world(options)
-        item_names = [item.name for item in self.multiworld.itempool]
-        self.assertTrue(item_names)
-        self.assertNotIn(ItemNames.LIBERATOR, item_names)
-        self.assertNotIn(ItemNames.MARAUDER_PROGRESSIVE_STIMPACK, item_names)
-        self.assertNotIn(ItemNames.HELLION_HELLBAT_ASPECT, item_names)
-        self.assertNotIn(ItemNames.BATTLECRUISER_CLOAK, item_names)
-
     def test_evil_awoken_with_vanilla_items_only_generates(self) -> None:
         options = {
             'enable_wol_missions': False,
@@ -487,4 +344,3 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertFalse(kerrigan_items_in_pool)
         kerrigan_passives_in_pool = set(ItemGroups.kerrigan_passives).intersection(item_names)
         self.assertFalse(kerrigan_passives_in_pool)
-
