@@ -51,7 +51,8 @@ def option_presets(game):
 
     class SetEncoder(json.JSONEncoder):
         def default(self, obj):
-            if isinstance(obj, set):
+            from collections.abc import Set
+            if isinstance(obj, Set):
                 return list(obj)
             return json.JSONEncoder.default(self, obj)
 
