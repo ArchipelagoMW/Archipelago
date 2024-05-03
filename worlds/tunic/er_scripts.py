@@ -139,17 +139,16 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     has_laurels = True
     waterfall_plando = False
 
-    # marking that you don't immediately have laurels
-    if world.options.laurels_location == 3 and not hasattr(world.multiworld, "re_gen_passthrough"):
-        has_laurels = False
-
-
     # if it's not one of the EntranceRando options, it's a custom seed
     if world.options.entrance_rando.value not in EntranceRando.options:
         seed_group = world.seed_groups[world.options.entrance_rando.value]
         logic_rules = seed_group["logic_rules"]
         fixed_shop = seed_group["fixed_shop"]
         laurels_location = "10_fairies" if seed_group["laurels_at_10_fairies"] is True else False
+
+    # marking that you don't immediately have laurels
+    if laurels_location == "10_fairies" and not hasattr(world.multiworld, "re_gen_passthrough"):
+        has_laurels = False
 
     shop_scenes: Set[str] = set()
     shop_count = 6
@@ -169,15 +168,16 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             if tunic_er_regions[portal.region].dead_end == 3:
                 # we treat secret gathering place as a two_plus if laurels is there, so it can be added earlier
                 if portal.region == "Secret Gathering Place":
-                    if world.options.laurels_location == 3:
+                    if laurels_location == "10_fairies":
                         two_plus.append(portal)
                     else:
                         dead_ends.append(portal)
                 if portal.region == "Zig Skip Exit":
-                    if world.options.fixed_shop:
+                    if fixed_shop:
                         two_plus.append(portal)
                     else:
                         dead_ends.append(portal)
+            # this is the difference between this and the below one
             elif tunic_er_regions[portal.region].dead_end == 1:
                 dead_ends.append(portal)
             else:
@@ -186,12 +186,12 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         for portal in portal_map:
             if tunic_er_regions[portal.region].dead_end == 3:
                 if portal.region == "Secret Gathering Place":
-                    if world.options.laurels_location == 3:
+                    if laurels_location == "10_fairies":
                         two_plus.append(portal)
                     else:
                         dead_ends.append(portal)
                 if portal.region == "Zig Skip Exit":
-                    if world.options.fixed_shop:
+                    if fixed_shop:
                         two_plus.append(portal)
                     else:
                         dead_ends.append(portal)
@@ -239,8 +239,8 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         elif region_info.dead_end == 2 and logic_rules:
             non_dead_end_regions.add(region_name)
         elif region_info.dead_end == 3:
-            if (region_name == "Secret Gathering Place" and world.options.laurels_location == 3) \
-                    or (region_name == "Zig Skip Exit" and world.options.fixed_shop):
+            if (region_name == "Secret Gathering Place" and laurels_location == "10_fairies") \
+                    or (region_name == "Zig Skip Exit" and fixed_shop):
                 non_dead_end_regions.add(region_name)
 
     if plando_connections:
@@ -257,8 +257,10 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             for portal in two_plus:
                 if p_entrance == portal.name:
                     portal1 = portal
+                    portal1_dead_end = False
                 if p_exit == portal.name:
                     portal2 = portal
+                    portal2_dead_end = False
 
             # search dead_ends individually since we can't really remove items from two_plus during the loop
             if portal1:
@@ -285,10 +287,6 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             if portal2:
                 two_plus.remove(portal2)
             else:
-                portal1_dead_end = False
-                two_plus.remove(portal1)
-
-            if not portal2:
                 for portal in dead_ends:
                     if p_exit == portal.name:
                         portal2 = portal
@@ -298,6 +296,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                     portal2 = Portal(name="Shop Portal", region="Shop",
                                      destination="Previous Region", tag="_")
                     shop_count -= 1
+                    # need to maintain an even number of portals total
                     if shop_count < 0:
                         shop_count += 2
                     for p in portal_mapping:
@@ -310,9 +309,6 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                         raise Exception(f"Could not find entrance named {p_exit} for "
                                         f"plando connections in {player_name}'s YAML.")
                     dead_ends.remove(portal2)
-            else:
-                portal2_dead_end = False
-                two_plus.remove(portal2)
 
             if not portal1_dead_end and not portal2_dead_end:
                 if portal1.region not in traversal_reqs.keys():
@@ -330,7 +326,26 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                     else:
                         traversal_reqs[portal2.region][portal1.region] = []
 
+            if portal1.region == "Zig Skip Exit" or portal2.region == "Zig Skip Exit":
+                if portal1_dead_end or portal2_dead_end or \
+                        portal1.region == "Secret Gathering Place" or portal2.region == "Secret Gathering Place":
+                    if world.options.entrance_rando.value not in EntranceRando.options:
+                        raise Exception(f"Tunic ER seed group {world.options.entrance_rando.value} paired a dead "
+                                        "end to a dead end in their plando connections.")
+                    else:
+                        raise Exception(f"{player_name} paired a dead end to a dead end in their "
+                                        "plando connections.")
+
             if portal1.region == "Secret Gathering Place" or portal2.region == "Secret Gathering Place":
+                # need to make sure you didn't pair this to a dead end or zig skip
+                if portal1_dead_end or portal2_dead_end or \
+                        portal1.region == "Zig Skip Exit" or portal2.region == "Zig Skip Exit":
+                    if world.options.entrance_rando.value not in EntranceRando.options:
+                        raise Exception(f"Tunic ER seed group {world.options.entrance_rando.value} paired a dead "
+                                        "end to a dead end in their plando connections.")
+                    else:
+                        raise Exception(f"{player_name} paired a dead end to a dead end in their "
+                                        "plando connections.")
                 waterfall_plando = True
             portal_pairs[portal1] = portal2
 
