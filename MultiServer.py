@@ -803,14 +803,25 @@ async def on_client_disconnected(ctx: Context, client: Client):
         await on_client_left(ctx, client)
 
 
+_non_game_messages = {"HintGame": "hinting", "Tracker": "tracking", "TextOnly": "viewing"}
+""" { tag: ui_message } """
+
+
 async def on_client_joined(ctx: Context, client: Client):
     if ctx.client_game_state[client.team, client.slot] == ClientStatus.CLIENT_UNKNOWN:
         update_client_status(ctx, client, ClientStatus.CLIENT_CONNECTED)
     version_str = '.'.join(str(x) for x in client.version)
-    verb = "tracking" if "Tracker" in client.tags else "playing"
+
+    for tag, verb in _non_game_messages.items():
+        if tag in client.tags:
+            final_verb = verb
+            break
+    else:
+        final_verb = "playing"
+
     ctx.broadcast_text_all(
         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) "
-        f"{verb} {ctx.games[client.slot]} has joined. "
+        f"{final_verb} {ctx.games[client.slot]} has joined. "
         f"Client({version_str}), {client.tags}.",
         {"type": "Join", "team": client.team, "slot": client.slot, "tags": client.tags})
     ctx.notify_client(client, "Now that you are connected, "
@@ -825,8 +836,19 @@ async def on_client_left(ctx: Context, client: Client):
     if len(ctx.clients[client.team][client.slot]) < 1:
         update_client_status(ctx, client, ClientStatus.CLIENT_UNKNOWN)
         ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
+
+    version_str = '.'.join(str(x) for x in client.version)
+
+    for tag, verb in _non_game_messages.items():
+        if tag in client.tags:
+            final_verb = f"stopped {verb}"
+            break
+    else:
+        final_verb = "left"
+
     ctx.broadcast_text_all(
-        "%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1),
+        f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has {final_verb} the game. "
+        f"Client({version_str}), {client.tags}.",
         {"type": "Part", "team": client.team, "slot": client.slot})
 
 
@@ -1631,7 +1653,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         else:
             team, slot = ctx.connect_names[args['name']]
             game = ctx.games[slot]
-            ignore_game = ("TextOnly" in args["tags"] or "Tracker" in args["tags"]) and not args.get("game")
+
+            ignore_game = not args.get("game") and any(tag in _non_game_messages for tag in args["tags"])
+
             if not ignore_game and args['game'] != game:
                 errors.add('InvalidGame')
             minver = min_client_version if ignore_game else ctx.minimum_client_versions[slot]
@@ -2198,7 +2222,7 @@ async def console(ctx: Context):
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    defaults = Utils.get_options()["server_options"].as_dict()
+    defaults = Utils.get_settings()["server_options"].as_dict()
     parser.add_argument('multidata', nargs="?", default=defaults["multidata"])
     parser.add_argument('--host', default=defaults["host"])
     parser.add_argument('--port', default=defaults["port"], type=int)
