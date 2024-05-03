@@ -65,7 +65,7 @@ def set_rules(world):
 
     set_tool_rules(logic, multiworld, player, world_options)
     set_skills_rules(logic, multiworld, player, world_options)
-    set_bundle_rules(bundle_rooms, logic, multiworld, player)
+    set_bundle_rules(bundle_rooms, logic, multiworld, player, world_options)
     set_building_rules(logic, multiworld, player, world_options)
     set_cropsanity_rules(logic, multiworld, player, world_content)
     set_story_quests_rules(all_location_names, logic, multiworld, player, world_options)
@@ -131,7 +131,7 @@ def set_building_rules(logic: StardewLogic, multiworld, player, world_options: S
                                  logic.registry.building_rules[building.name.replace(" Blueprint", "")])
 
 
-def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, multiworld, player):
+def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
     for bundle_room in bundle_rooms:
         room_rules = []
         for bundle in bundle_room.bundles:
@@ -140,9 +140,9 @@ def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, multiw
             room_rules.append(bundle_rules)
             if bundle_room.name == CCRoom.raccoon_requests:
                 num = int(bundle.name[-1])
-                bundle_rules = bundle_rules & logic.received(CommunityUpgrade.raccoon, 2)
-                if num > 1:
-                    bundle_rules = bundle_rules & logic.region.can_reach_location(f"Raccoon Request {num-1}")
+                extra_raccoons = 1 if world_options.quest_locations >= 0 else 0
+                extra_raccoons = extra_raccoons + num
+                bundle_rules = logic.received(CommunityUpgrade.raccoon, extra_raccoons) & bundle_rules
             MultiWorldRules.set_rule(location, bundle_rules)
         if bundle_room.name == CCRoom.abandoned_joja_mart or bundle_room.name == CCRoom.raccoon_requests:
             continue
