@@ -42,29 +42,6 @@ html{
                 cursor: pointer;
             }
         }
-
-        .group-toggle{
-            display: none;
-        }
-
-        .arrow{
-            display: inline-block;
-            font-size: 1.5rem;
-        }
-
-        .game-options{
-            display: none;
-        }
-
-        &:has(input[type=checkbox].group-toggle:checked){
-            .game-options{
-                display: flex;
-            }
-
-            .arrow{
-                transform: rotate(90deg);
-            }
-        }
     }
 
     #player-options-button-row{
@@ -72,14 +49,6 @@ html{
         flex-direction: row;
         justify-content: space-between;
         margin-top: 15px;
-    }
-
-    code{
-        background-color: #d9cd8e;
-        border-radius: 4px;
-        padding-left: 0.25rem;
-        padding-right: 0.25rem;
-        color: #000000;
     }
 
     #user-message{

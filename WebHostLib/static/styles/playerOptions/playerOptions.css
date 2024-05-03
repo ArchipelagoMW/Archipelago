@@ -36,34 +36,11 @@ html {
 #player-options .group-container h2 label {
   cursor: pointer;
 }
-#player-options .group-container .group-toggle {
-  display: none;
-}
-#player-options .group-container .arrow {
-  display: inline-block;
-  font-size: 1.5rem;
-}
-#player-options .group-container .game-options {
-  display: none;
-}
-#player-options .group-container:has(input[type=checkbox].group-toggle:checked) .game-options {
-  display: flex;
-}
-#player-options .group-container:has(input[type=checkbox].group-toggle:checked) .arrow {
-  transform: rotate(90deg);
-}
 #player-options #player-options-button-row {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin-top: 15px;
-}
-#player-options code {
-  background-color: #d9cd8e;
-  border-radius: 4px;
-  padding-left: 0.25rem;
-  padding-right: 0.25rem;
-  color: #000000;
 }
 #player-options #user-message {
   display: none;

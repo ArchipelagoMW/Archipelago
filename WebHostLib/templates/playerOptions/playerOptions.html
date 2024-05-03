@@ -2,7 +2,7 @@
 {% import 'playerOptions/macros.html' as inputs %}
 
 {% block head %}
-    <title>{{ game }} Options</title>
+    <title>{{ world_name }} Options</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/playerOptions/playerOptions.css") }}" />
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/md5.min.js") }}"></script>
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/js-yaml.min.js") }}"></script>
@@ -19,11 +19,11 @@
 
 {% block body %}
     {% include 'header/'+theme+'Header.html' %}
-    <div id="player-options" class="markdown" data-game="{{ game }}" data-presets="{{ presets }}">
+    <div id="player-options" class="markdown" data-game="{{ world_name }}" data-presets="{{ presets }}">
         <div id="user-message">{{ message }}</div>
 
         <div id="player-options-header">
-            <h1>{{ game }}</h1>
+            <h1>{{ world_name }}</h1>
             <h1>Player Options</h1>
         </div>
         <p>Choose the options you would like to play with! You may generate a single-player game from this page,
@@ -36,7 +36,7 @@
             A list of all games you have generated can be found on the <a href="/user-content">User Content Page</a>.
             <br />
             You may also download the
-            <a href="/static/generated/configs/{{ game }}.yaml">template file for this game</a>.
+            <a href="/static/generated/configs/{{ world_name }}.yaml">template file for this game</a>.
         </p>
 
         <form id="options-form" method="post" enctype="application/x-www-form-urlencoded" action="generate-yaml">
@@ -63,15 +63,8 @@
 
             <div id="option-groups">
                 {% for group_name, group_options in option_groups.items() %}
-                    <div class="group-container">
-                        <h2>
-                            <label for="{{ group_name }}-toggle">
-                                <span class="arrow">▶</span>
-                                {{ group_name }}
-                            </label>
-                        </h2>
-                        <input type="checkbox" id="{{ group_name }}-toggle" class="group-toggle" checked />
-
+                    <details class="group-container" open>
+                        <summary class="h2">{{ group_name }}</summary>
                         <div class="game-options">
                             <table class="left">
                                 <tbody>
@@ -170,13 +163,13 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
+                    </details>
                 {% endfor %}
             </div>
 
             <div id="player-options-button-row">
+                <input type="submit" name="intent-export" value="Export Options" />
                 <input type="submit" name="intent-generate" value="Generate Single-Player Game">
-                <input type="submit" name="intent-export" value="Export YAML" />
             </div>
         </form>
     </div>

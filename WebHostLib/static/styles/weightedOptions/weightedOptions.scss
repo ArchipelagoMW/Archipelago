@@ -14,6 +14,19 @@ html{
     padding: 1rem;
     color: #eeffeb;
 
+    #weighted-options-header{
+        h1{
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        h1:nth-child(2){
+            font-size: 1.4rem;
+            margin-top: -8px;
+            margin-bottom: 0.5rem;
+        }
+    }
+
     .js-warning-banner{
         width: calc(100% - 1rem);
         padding: 0.5rem;
@@ -22,19 +35,6 @@ html{
         color: #000000;
         margin-bottom: 0.5rem;
         text-align: center;
-    }
-
-    h3{
-        cursor: unset;
-
-        &.option-group-header{
-            margin-top: 0.75rem;
-            font-weight: bold;
-        }
-    }
-
-    #games-wrapper{
-        width: 100%;
     }
 
     .option-wrapper{
@@ -71,12 +71,6 @@ html{
             margin: 0 0 1rem;
             font-style: italic;
         };
-    }
-
-    .jump-link{
-        color: #ffef00;
-        cursor: pointer;
-        text-decoration: underline;
     }
 
     table{
@@ -127,14 +121,6 @@ html{
         margin-top: 15px;
     }
 
-    code{
-        background-color: #d9cd8e;
-        border-radius: 4px;
-        padding-left: 0.25rem;
-        padding-right: 0.25rem;
-        color: #000000;
-    }
-
     #user-message{
         display: none;
         width: calc(100% - 8px);
@@ -153,14 +139,13 @@ html{
     h1{
         font-size: 2.5rem;
         font-weight: normal;
-        border-bottom: 1px solid #ffffff;
         width: 100%;
         margin-bottom: 0.5rem;
         color: #ffffff;
         text-shadow: 1px 1px 4px #000000;
     }
 
-    h2{
+    h2, details summary.h2{
         font-size: 2rem;
         font-weight: normal;
         border-bottom: 1px solid #ffffff;
@@ -175,6 +160,14 @@ html{
         color: #ffffff;
         text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
         text-transform: none;
+        cursor: unset;
+    }
+
+    h3{
+        &.option-group-header{
+            margin-top: 0.75rem;
+            font-weight: bold;
+        }
     }
 
     a{
@@ -193,85 +186,12 @@ html{
         }
     }
 
-    select{
-        border: 1px solid #000000;
-        padding: 3px;
-        border-radius: 3px;
-        min-width: 150px;
-        background-color: #ffffff;
-    }
-
     .invisible{
         display: none;
     }
 
-    .world-container h2, .options-container h3{
-        label{
-            user-select: none;
-            cursor: pointer;
-
-            span.world-collapse-arrow, span.group-collapse-arrow{
-                user-select: none;
-                display: inline-block;
-                font-size: 1.3rem;
-            }
-        }
-    }
-
     .unsupported-option{
         margin-top: 0.5rem;
-    }
-
-    .world-container{
-        .options-container{
-            display: none;
-            flex-direction: column;
-
-            .options-wrapper{
-                margin-left: 0.5rem;
-                display: none;
-                flex-direction: column;
-
-                .custom-value-wrapper{
-                    display: flex;
-                    flex-direction: row;
-                    margin-top: 0.5rem;
-
-                    button{
-                        width: auto;
-                        height: auto;
-                        padding: 0 0.25rem;
-                        margin-left: 0.15rem;
-                        border-radius: 4px;
-                        cursor: default;
-
-                        &:active{
-                            margin-bottom: 1px;
-                        }
-                    }
-                }
-            }
-        }
-
-        &:has(h2.world-name):has(input[type=checkbox].collapse-toggle:checked){
-            .options-container{
-                display: flex;
-
-                &:has(h3.group-name):has(input[type=checkbox].collapse-toggle:checked){
-                    .options-wrapper{
-                        display: flex;
-                    }
-
-                    span.group-collapse-arrow{
-                        transform: rotate(90deg);
-                    }
-                }
-            }
-
-            span.world-collapse-arrow{
-                transform: rotate(90deg);
-            }
-        }
     }
 
     .set-container, .dict-container, .list-container{

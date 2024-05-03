@@ -14,6 +14,15 @@ html {
   padding: 1rem;
   color: #eeffeb;
 }
+#weighted-options #weighted-options-header h1 {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+#weighted-options #weighted-options-header h1:nth-child(2) {
+  font-size: 1.4rem;
+  margin-top: -8px;
+  margin-bottom: 0.5rem;
+}
 #weighted-options .js-warning-banner {
   width: calc(100% - 1rem);
   padding: 0.5rem;
@@ -22,16 +31,6 @@ html {
   color: #000000;
   margin-bottom: 0.5rem;
   text-align: center;
-}
-#weighted-options h3 {
-  cursor: unset;
-}
-#weighted-options h3.option-group-header {
-  margin-top: 0.75rem;
-  font-weight: bold;
-}
-#weighted-options #games-wrapper {
-  width: 100%;
 }
 #weighted-options .option-wrapper {
   width: 100%;
@@ -60,11 +59,6 @@ html {
 #weighted-options p.hint-text {
   margin: 0 0 1rem;
   font-style: italic;
-}
-#weighted-options .jump-link {
-  color: #ffef00;
-  cursor: pointer;
-  text-decoration: underline;
 }
 #weighted-options table {
   width: 100%;
@@ -105,13 +99,6 @@ html {
   justify-content: space-between;
   margin-top: 15px;
 }
-#weighted-options code {
-  background-color: #d9cd8e;
-  border-radius: 4px;
-  padding-left: 0.25rem;
-  padding-right: 0.25rem;
-  color: #000000;
-}
 #weighted-options #user-message {
   display: none;
   width: calc(100% - 8px);
@@ -128,13 +115,12 @@ html {
 #weighted-options h1 {
   font-size: 2.5rem;
   font-weight: normal;
-  border-bottom: 1px solid #ffffff;
   width: 100%;
   margin-bottom: 0.5rem;
   color: #ffffff;
   text-shadow: 1px 1px 4px #000000;
 }
-#weighted-options h2 {
+#weighted-options h2, #weighted-options details summary.h2 {
   font-size: 2rem;
   font-weight: normal;
   border-bottom: 1px solid #ffffff;
@@ -148,6 +134,11 @@ html {
   color: #ffffff;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
   text-transform: none;
+  cursor: unset;
+}
+#weighted-options h3.option-group-header {
+  margin-top: 0.75rem;
+  font-weight: bold;
 }
 #weighted-options a {
   color: #ffef00;
@@ -162,64 +153,11 @@ html {
 #weighted-options input:not([type]):focus {
   border: 1px solid #ffffff;
 }
-#weighted-options select {
-  border: 1px solid #000000;
-  padding: 3px;
-  border-radius: 3px;
-  min-width: 150px;
-  background-color: #ffffff;
-}
 #weighted-options .invisible {
   display: none;
 }
-#weighted-options .world-container h2 label, #weighted-options .options-container h3 label {
-  user-select: none;
-  cursor: pointer;
-}
-#weighted-options .world-container h2 label span.world-collapse-arrow, #weighted-options .world-container h2 label span.group-collapse-arrow, #weighted-options .options-container h3 label span.world-collapse-arrow, #weighted-options .options-container h3 label span.group-collapse-arrow {
-  user-select: none;
-  display: inline-block;
-  font-size: 1.3rem;
-}
 #weighted-options .unsupported-option {
   margin-top: 0.5rem;
-}
-#weighted-options .world-container .options-container {
-  display: none;
-  flex-direction: column;
-}
-#weighted-options .world-container .options-container .options-wrapper {
-  margin-left: 0.5rem;
-  display: none;
-  flex-direction: column;
-}
-#weighted-options .world-container .options-container .options-wrapper .custom-value-wrapper {
-  display: flex;
-  flex-direction: row;
-  margin-top: 0.5rem;
-}
-#weighted-options .world-container .options-container .options-wrapper .custom-value-wrapper button {
-  width: auto;
-  height: auto;
-  padding: 0 0.25rem;
-  margin-left: 0.15rem;
-  border-radius: 4px;
-  cursor: default;
-}
-#weighted-options .world-container .options-container .options-wrapper .custom-value-wrapper button:active {
-  margin-bottom: 1px;
-}
-#weighted-options .world-container:has(h2.world-name):has(input[type=checkbox].collapse-toggle:checked) .options-container {
-  display: flex;
-}
-#weighted-options .world-container:has(h2.world-name):has(input[type=checkbox].collapse-toggle:checked) .options-container:has(h3.group-name):has(input[type=checkbox].collapse-toggle:checked) .options-wrapper {
-  display: flex;
-}
-#weighted-options .world-container:has(h2.world-name):has(input[type=checkbox].collapse-toggle:checked) .options-container:has(h3.group-name):has(input[type=checkbox].collapse-toggle:checked) span.group-collapse-arrow {
-  transform: rotate(90deg);
-}
-#weighted-options .world-container:has(h2.world-name):has(input[type=checkbox].collapse-toggle:checked) span.world-collapse-arrow {
-  transform: rotate(90deg);
 }
 #weighted-options .set-container, #weighted-options .dict-container, #weighted-options .list-container {
   display: flex;
