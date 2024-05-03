@@ -389,7 +389,7 @@ class StardewValleyWorld(World):
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
             "randomized_entrances": self.randomized_entrances,
             "modified_bundles": bundles,
-            "client_version": "5.0.0",
+            "client_version": "6.0.0",
         })
 
         return slot_data
