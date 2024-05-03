@@ -99,26 +99,40 @@ class KH1Context(CommonContext):
                     f.close()
             
             #Handle Slot Data
-            if "EXP Multiplier" in list(args['slot_data'].keys()):
-                xp_mult = args['slot_data']["EXP Multiplier"]
-            else:
-                xp_mult = 1.0
-            with open(os.path.join(self.game_communication_path, "xpmult.cfg"), 'w') as f:
-                f.write(str(xp_mult))
-                f.close()
             
-            if "Required Reports" in list(args['slot_data'].keys()):
-                reports_required = args['slot_data']["Required Reports"]
-            else:
-                reports_required = 4
-            with open(os.path.join(self.game_communication_path, "required_reports.cfg"), 'w') as f:
-                f.write(str(reports_required))
-                f.close()
-            if "Keyblade Stats" in list(args['slot_data'].keys()):
-                keyblade_stats = args['slot_data']["Keyblade Stats"]
-                with open(os.path.join(self.game_communication_path, "keyblade_stats.cfg"), 'w') as f:
-                    f.write(str(keyblade_stats))
+            ####if "EXP Multiplier" in list(args['slot_data'].keys()):
+            ####    xp_mult = args['slot_data']["EXP Multiplier"]
+            ####else:
+            ####    xp_mult = 1.0
+            ####with open(os.path.join(self.game_communication_path, "xpmult.cfg"), 'w') as f:
+            ####    f.write(str(xp_mult))
+            ####    f.close()
+            ####
+            ####if "Required Reports" in list(args['slot_data'].keys()):
+            ####    reports_required = args['slot_data']["Required Reports"]
+            ####else:
+            ####    reports_required = 4
+            ####with open(os.path.join(self.game_communication_path, "required_reports.cfg"), 'w') as f:
+            ####    f.write(str(reports_required))
+            ####    f.close()
+            ####if "Keyblade Stats" in list(args['slot_data'].keys()):
+            ####    keyblade_stats = args['slot_data']["Keyblade Stats"]
+            ####    with open(os.path.join(self.game_communication_path, "keyblade_stats.cfg"), 'w') as f:
+            ####        f.write(str(keyblade_stats))
+            ####        f.close()
+            for key in list(args['slot_data'].keys()):
+                with open(os.path.join(self.game_communication_path, key + ".cfg"), 'w') as f:
+                    f.write(str(args['slot_data'][key]))
                     f.close()
+                    
+            ###Support Legacy Games
+            if "Required Reports" in list(args['slot_data'].keys()) and "required_reports_eotw" not in list(args['slot_data'].keys()):
+                reports_required = args['slot_data']["Required Reports"]
+                with open(os.path.join(self.game_communication_path, "required_reports.cfg"), 'w') as f:
+                    f.write(str(reports_required))
+                    f.close()
+            ###End Support Legacy Games
+            
             #End Handle Slot Data
 
         if cmd in {"ReceivedItems"}:

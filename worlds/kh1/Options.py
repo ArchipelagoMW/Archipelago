@@ -100,22 +100,25 @@ class HundredAcreWood(Toggle):
 
 class SuperBosses(Toggle):
     """
-    Toggle whether to include checks behind Super Bosses.  This is ignored if Super Boss Hunt is your goal.
+    Toggle whether to include checks behind Super Bosses.
     """
     display_name = "Super Bosses"
 
+class Cups(Toggle):
+    """
+    Toggle whether to include checks behind completing Phil, Pegasus, Hercules, or Hades cups.  Please note that the items will still appear in the multiworld, as they are required to challenge Sephiroth.
+    """
+    display_name = "Cups"
+
 class Goal(Choice):
     """
-    Determines the goal of your playthrough.
-    Depending on your setting for Require Final Ansem, this will either yield Victory or required Ansem Reports to enter End of the World.
-    Note: If requiring Final Ansem, with more than 1 Ansem Report in the pool (or more than 5 if you are using the Super Boss Hunt goal), the goal(s) will not be required, but will remain a way to get a report.
+    Determines when victory is achieved in your playthrough.
     
     Sephiroth: Defeat Sephiroth.
     Unknown: Defeat Unknown.
     Postcards: Turn in all 10 postcards in Traverse Town
     Final Ansem: Enter End of the World and defeat Ansem as normal
     Puppies: Rescue and return all 99 puppies in Traverse Town.
-    Super Boss Hunt: Ansem Reports are set to appear as rewards for defeating Phantom, Kurt Zisa, Sephiroth, Ice Titan, and Unknown.  Forces require Final Ansem on.
     """
     display_name = "Goal"
     option_sephiroth = 0
@@ -123,14 +126,28 @@ class Goal(Choice):
     option_postcards = 2
     option_final_ansem = 3
     option_puppies = 4
-    option_super_boss_hunt = 5
     default = 3
 
-class RequireFinalAnsem(Toggle):
+class EndoftheWorldUnlock(Choice):
+    """Determines how End of the World is Unlocked"""
+    display_name = "End of the World Unlock"
+    option_item = 0
+    option_reports = 1
+    default = 1
+
+class FinalRestDoor(Choice):
+    """Determines what conditions need to be met to manifest the door in Final Rest, allowing the player to challenge Ansem
+    
+    Reports: A certain number of Ansem's Reports are required.  That number is defined in another setting.
+    Puppies: Having all 99 puppies is required.
+    Postcards: Turning in all 10 postcards is required.
+    Superbosses: Defeating Sephiroth, Unknown, Kurt Zisa, and Phantom are required.
     """
-    Determines whether the Victory item is behind your goal or if your goal will provide an Ansem's Report to enter End of the World and defeat Ansem.
-    """
-    display_name = "Require Final Ansem"
+    display_name = "Final Rest Door"
+    option_reports = 0
+    option_puppies = 1
+    option_postcards = 2
+    option_superbosses = 3
 
 class Puppies(Choice):
     """
@@ -143,7 +160,7 @@ class Puppies(Choice):
     option_full = 0
     option_triplets = 1
     option_individual = 2
-    default = 0
+    default = 1
 
 class EXPMultiplier(NamedRange):
     """
@@ -152,7 +169,7 @@ class EXPMultiplier(NamedRange):
     display_name = "EXP Multiplier"
     default = 16
     range_start = default / 4
-    range_end = 160
+    range_end = 128
     special_range_names = {
         "0.25x": default / 4,
         "0.5x": default / 2,
@@ -161,14 +178,22 @@ class EXPMultiplier(NamedRange):
         "3x": default * 3,
         "4x": default * 4,
         "8x": default * 8,
-        "10x": default * 10,
     }
 
-class RequiredReports(Range):
+class RequiredReportsEotW(Range):
     """
-    Determines the number of Ansem's Reports needed to open End of the World
+    If End of the World Unlock is set to "Reports", determines the number of Ansem's Reports required to open End of the World.
     """
     display_name = "Reports to Open End of the World"
+    default = 4
+    range_start = 1
+    range_end = 13
+    
+class RequiredReportsDoor(Range):
+    """
+    If Final Rest Door is set to "Reports", determines the number of Ansem's Reports required to manifest the door in Final Rest to challenge Ansem.
+    """
+    display_name = "Reports to Open Final Rest Door"
     default = 4
     range_start = 1
     range_end = 13
@@ -257,12 +282,15 @@ class BadStartingWeapons(Toggle):
 @dataclass
 class KH1Options(PerGameCommonOptions):
     goal: Goal
-    require_final_ansem: RequireFinalAnsem
-    required_reports: RequiredReports
+    end_of_the_world_unlock: EndoftheWorldUnlock
+    final_rest_door: FinalRestDoor
+    required_reports_eotw: RequiredReportsEotW
+    required_reports_door: RequiredReportsDoor
     reports_in_pool: ReportsInPool
     super_bosses: SuperBosses
     atlantica: Atlantica
     hundred_acre_wood: HundredAcreWood
+    cups: Cups
     puppies: Puppies
     exp_multiplier: EXPMultiplier
     randomize_keyblade_stats: RandomizeKeybladeStats

@@ -509,7 +509,7 @@ item_table: Dict[str, KH1ItemData] = {
     "Atlantica":                         KH1ItemData("Worlds",           code = 264_7007, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Neverland":                         KH1ItemData("Worlds",           code = 264_7008, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Hollow Bastion":                    KH1ItemData("Worlds",           code = 264_7009, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
-   #"End of the World":                  KH1ItemData("Worlds",           code = 264_7010, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
+    "End of the World":                  KH1ItemData("Worlds",           code = 264_7010, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Monstro":                           KH1ItemData("Worlds",           code = 264_7011, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Blue Trinity":                      KH1ItemData("Trinities",        code = 264_8001, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Red Trinity":                       KH1ItemData("Trinities",        code = 264_8002, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),

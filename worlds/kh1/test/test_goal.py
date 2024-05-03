@@ -27,8 +27,3 @@ class TestPuppies(KH1TestBase):
     options = {
         "Goal": 4,
     }
-
-class TestSuperBossHunt(KH1TestBase):
-    options = {
-        "Goal": 5,
-    }
