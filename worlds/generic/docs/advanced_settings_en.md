@@ -9,7 +9,6 @@ The options page can be found on the supported games page, just click the "Optio
 game you would like.
 
 * Supported games page: [Archipelago Games List](/games)
-* Weighted settings page: [Archipelago Weighted Settings](/weighted-settings)
 
 Clicking on the "Export Options" button at the bottom-left will provide you with a pre-filled YAML with your options.
 The player options page also has a link to download a full template file for that game which will have every option
