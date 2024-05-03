@@ -236,9 +236,12 @@ class LingoPlayerLogic:
         elif location_checks == LocationChecks.option_insanity:
             location_classification = LocationClassification.insanity
 
+        if door_shuffle != ShuffleDoors.option_none and not early_color_hallways:
+            location_classification |= LocationClassification.small_sphere_one
+
         for location_name, location_data in ALL_LOCATION_TABLE.items():
             if location_name != self.victory_condition:
-                if location_classification not in location_data.classification:
+                if not (location_classification & location_data.classification):
                     continue
 
                 self.add_location(location_data.room, location_name, location_data.code, location_data.panels, world)
@@ -275,7 +278,7 @@ class LingoPlayerLogic:
                                 "iterations. This is very unlikely to happen on its own, and probably indicates some "
                                 "kind of logic error.")
 
-        if door_shuffle != ShuffleDoors.option_none and location_classification != LocationClassification.insanity \
+        if door_shuffle != ShuffleDoors.option_none and location_checks != LocationChecks.option_insanity \
                 and not early_color_hallways and world.multiworld.players > 1:
             # Under the combination of door shuffle, normal location checks, and no early color hallways, sphere 1 is
             # only three checks. In a multiplayer situation, this can be frustrating for the player because they are
