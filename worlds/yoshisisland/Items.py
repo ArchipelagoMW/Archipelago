@@ -75,7 +75,7 @@ item_table: Dict[str, ItemData] = {
     "1-Up": ItemData("Lives", 0x30208C, ItemClassification.filler, 0),
     "2-Up": ItemData("Lives", 0x30208D, ItemClassification.filler, 0),
     "3-Up": ItemData("Lives", 0x30208E, ItemClassification.filler, 0),
-    "10-Up": ItemData("Lives", 0x30208F, ItemClassification.filler, 5),
+    "10-Up": ItemData("Lives", 0x30208F, ItemClassification.useful, 5),
     "Bonus Consumables": ItemData("Events", None, ItemClassification.progression, 0),
     "Bandit Consumables": ItemData("Events", None, ItemClassification.progression, 0),
     "Bandit Watermelons": ItemData("Events", None, ItemClassification.progression, 0),

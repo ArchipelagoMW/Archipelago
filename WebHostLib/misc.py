@@ -70,12 +70,6 @@ def weighted_options():
     )
 
 
-# TODO for back compat. remove around 0.4.5
-@app.route("/games/<string:game>/player-settings")
-def player_settings(game: str):
-    return redirect(url_for("player_options", game=game), 301)
-
-
 # Player options pages
 @app.route("/games/<string:game>/player-options")
 @cache.cached()
