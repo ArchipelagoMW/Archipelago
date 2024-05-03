@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Optional, cast
 
 from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial
 
-from Options import PerGameCommonOptions, Toggle, OptionError
+from Options import OptionError, PerGameCommonOptions, Toggle
 from worlds.AutoWorld import WebWorld, World
 
 from .data import static_items as static_witness_items
