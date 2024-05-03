@@ -1,7 +1,8 @@
 from typing import Dict, List, Any
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.generic.Rules import set_rule
-from . import Exits, Items, Locations, Options, Rules
+from . import Exits, Items, Locations, Rules
+from .Options import Hylics2Options
 from worlds.AutoWorld import WebWorld, World
 
 
@@ -32,7 +33,9 @@ class Hylics2World(World):
 
     item_name_to_id = {data["name"]: item_id for item_id, data in all_items.items()}
     location_name_to_id = {data["name"]: loc_id for loc_id, data in all_locations.items()}
-    option_definitions = Options.hylics2_options
+
+    options_dataclass = Hylics2Options
+    options: Hylics2Options
 
     data_version = 3
 
@@ -55,7 +58,7 @@ class Hylics2World(World):
 
     # set random starting location if option is enabled
     def generate_early(self):
-        if self.multiworld.random_start[self.player]:
+        if self.options.random_start:
             i = self.random.randint(0, 3)
             if i == 0:
                 self.start_location = "Waynehouse"
@@ -77,17 +80,17 @@ class Hylics2World(World):
                     pool.append(self.create_item(item["name"]))
 
         # add party members if option is enabled
-        if self.multiworld.party_shuffle[self.player]:
+        if self.options.party_shuffle:
             for item in Items.party_item_table.values():
                 pool.append(self.create_item(item["name"]))
 
         # handle gesture shuffle
-        if not self.multiworld.gesture_shuffle[self.player]: # add gestures to pool like normal
+        if not self.options.gesture_shuffle: # add gestures to pool like normal
             for item in Items.gesture_item_table.values():
                 pool.append(self.create_item(item["name"]))
 
         # add '10 Bones' items if medallion shuffle is enabled
-        if self.multiworld.medallion_shuffle[self.player]:
+        if self.options.medallion_shuffle:
             for item in Items.medallion_item_table.values():
                 for _ in range(item["count"]):
                     pool.append(self.create_item(item["name"]))
@@ -98,7 +101,7 @@ class Hylics2World(World):
 
     def pre_fill(self):
         # handle gesture shuffle options
-        if self.multiworld.gesture_shuffle[self.player] == 2: # vanilla locations
+        if self.options.gesture_shuffle == 2: # vanilla locations
             gestures = Items.gesture_item_table
             self.multiworld.get_location("Waynehouse: TV", self.player)\
                 .place_locked_item(self.create_item("POROMER BLEB"))
@@ -119,13 +122,13 @@ class Hylics2World(World):
             self.multiworld.get_location("Sage Airship: TV", self.player)\
                 .place_locked_item(self.create_item("BOMBO - GENESIS"))
 
-        elif self.multiworld.gesture_shuffle[self.player] == 1: # TVs only
+        elif self.options.gesture_shuffle == 1: # TVs only
             gestures = [gesture["name"] for gesture in Items.gesture_item_table.values()]
             tvs = [tv["name"] for tv in Locations.tv_location_table.values()]
 
             # if Extra Items in Logic is enabled place CHARGE UP first and make sure it doesn't get
             # placed at Sage Airship: TV or Foglast: TV
-            if self.multiworld.extra_items_in_logic[self.player]:
+            if self.options.extra_items_in_logic:
                 tv = self.random.choice(tvs)
                 while tv == "Sage Airship: TV" or tv == "Foglast: TV":
                     tv = self.random.choice(tvs)
@@ -144,11 +147,11 @@ class Hylics2World(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
-            "party_shuffle": self.multiworld.party_shuffle[self.player].value,
-            "medallion_shuffle": self.multiworld.medallion_shuffle[self.player].value,
-            "random_start" : self.multiworld.random_start[self.player].value,
+            "party_shuffle": self.options.party_shuffle.value,
+            "medallion_shuffle": self.options.medallion_shuffle.value,
+            "random_start" : self.options.random_start.value,
             "start_location" : self.start_location,
-            "death_link": self.multiworld.death_link[self.player].value
+            "death_link": self.options.death_link.value
         }
         return slot_data
 
@@ -186,7 +189,7 @@ class Hylics2World(World):
                         # create entrance and connect it to parent and destination regions
                         ent = Entrance(self.player, f"{reg.name} {k}", reg)
                         reg.exits.append(ent)
-                        if k == "New Game" and self.multiworld.random_start[self.player]:
+                        if k == "New Game" and self.options.random_start:
                             if self.start_location == "Waynehouse":
                                 ent.connect(region_table[2])
                             elif self.start_location == "Viewax's Edifice":
@@ -209,13 +212,13 @@ class Hylics2World(World):
                 .append(Hylics2Location(self.player, data["name"], i, region_table[data["region"]]))
 
         # add party member locations if option is enabled
-        if self.multiworld.party_shuffle[self.player]:
+        if self.options.party_shuffle:
             for i, data in Locations.party_location_table.items():
                 region_table[data["region"]].locations\
                     .append(Hylics2Location(self.player, data["name"], i, region_table[data["region"]]))
 
         # add medallion locations if option is enabled
-        if self.multiworld.medallion_shuffle[self.player]:
+        if self.options.medallion_shuffle:
             for i, data in Locations.medallion_location_table.items():
                 region_table[data["region"]].locations\
                     .append(Hylics2Location(self.player, data["name"], i, region_table[data["region"]]))

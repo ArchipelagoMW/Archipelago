@@ -51,10 +51,6 @@ class ThreadBarrierProxy:
 class MultiWorld():
     debug_types = False
     player_name: Dict[int, str]
-    difficulty_requirements: dict
-    required_medallions: dict
-    dark_room_logic: Dict[int, str]
-    restrict_dungeon_item_on_boss: Dict[int, bool]
     plando_texts: List[Dict[str, str]]
     plando_items: List[List[Dict[str, Any]]]
     plando_connections: List
@@ -137,7 +133,6 @@ class MultiWorld():
         self.random = ThreadBarrierProxy(random.Random())
         self.players = players
         self.player_types = {player: NetUtils.SlotType.player for player in self.player_ids}
-        self.glitch_triforce = False
         self.algorithm = 'balanced'
         self.groups = {}
         self.regions = self.RegionManager(players)
@@ -164,49 +159,10 @@ class MultiWorld():
         for player in range(1, players + 1):
             def set_player_attr(attr, val):
                 self.__dict__.setdefault(attr, {})[player] = val
-
-            set_player_attr('shuffle', "vanilla")
-            set_player_attr('logic', "noglitches")
-            set_player_attr('mode', 'open')
-            set_player_attr('difficulty', 'normal')
-            set_player_attr('item_functionality', 'normal')
-            set_player_attr('timer', False)
-            set_player_attr('goal', 'ganon')
-            set_player_attr('required_medallions', ['Ether', 'Quake'])
-            set_player_attr('swamp_patch_required', False)
-            set_player_attr('powder_patch_required', False)
-            set_player_attr('ganon_at_pyramid', True)
-            set_player_attr('ganonstower_vanilla', True)
-            set_player_attr('can_access_trock_eyebridge', None)
-            set_player_attr('can_access_trock_front', None)
-            set_player_attr('can_access_trock_big_chest', None)
-            set_player_attr('can_access_trock_middle', None)
-            set_player_attr('fix_fake_world', True)
-            set_player_attr('difficulty_requirements', None)
-            set_player_attr('boss_shuffle', 'none')
-            set_player_attr('enemy_health', 'default')
-            set_player_attr('enemy_damage', 'default')
-            set_player_attr('beemizer_total_chance', 0)
-            set_player_attr('beemizer_trap_chance', 0)
-            set_player_attr('escape_assist', [])
-            set_player_attr('treasure_hunt_icon', 'Triforce Piece')
-            set_player_attr('treasure_hunt_count', 0)
-            set_player_attr('clock_mode', False)
-            set_player_attr('countdown_start_time', 10)
-            set_player_attr('red_clock_time', -2)
-            set_player_attr('blue_clock_time', 2)
-            set_player_attr('green_clock_time', 4)
-            set_player_attr('can_take_damage', True)
-            set_player_attr('triforce_pieces_available', 30)
-            set_player_attr('triforce_pieces_required', 20)
-            set_player_attr('shop_shuffle', 'off')
-            set_player_attr('shuffle_prizes', "g")
-            set_player_attr('sprite_pool', [])
-            set_player_attr('dark_room_logic', "lamp")
             set_player_attr('plando_items', [])
             set_player_attr('plando_texts', {})
             set_player_attr('plando_connections', [])
-            set_player_attr('game', "A Link to the Past")
+            set_player_attr('game', "Archipelago")
             set_player_attr('completion_condition', lambda state: True)
         self.worlds = {}
         self.per_slot_randoms = Utils.DeprecateDict("Using per_slot_randoms is now deprecated. Please use the "

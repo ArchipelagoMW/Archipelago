@@ -803,14 +803,25 @@ async def on_client_disconnected(ctx: Context, client: Client):
         await on_client_left(ctx, client)
 
 
+_non_game_messages = {"HintGame": "hinting", "Tracker": "tracking", "TextOnly": "viewing"}
+""" { tag: ui_message } """
+
+
 async def on_client_joined(ctx: Context, client: Client):
     if ctx.client_game_state[client.team, client.slot] == ClientStatus.CLIENT_UNKNOWN:
         update_client_status(ctx, client, ClientStatus.CLIENT_CONNECTED)
     version_str = '.'.join(str(x) for x in client.version)
-    verb = "tracking" if "Tracker" in client.tags else "playing"
+
+    for tag, verb in _non_game_messages.items():
+        if tag in client.tags:
+            final_verb = verb
+            break
+    else:
+        final_verb = "playing"
+
     ctx.broadcast_text_all(
         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) "
-        f"{verb} {ctx.games[client.slot]} has joined. "
+        f"{final_verb} {ctx.games[client.slot]} has joined. "
         f"Client({version_str}), {client.tags}.",
         {"type": "Join", "team": client.team, "slot": client.slot, "tags": client.tags})
     ctx.notify_client(client, "Now that you are connected, "
@@ -825,8 +836,19 @@ async def on_client_left(ctx: Context, client: Client):
     if len(ctx.clients[client.team][client.slot]) < 1:
         update_client_status(ctx, client, ClientStatus.CLIENT_UNKNOWN)
         ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
+
+    version_str = '.'.join(str(x) for x in client.version)
+
+    for tag, verb in _non_game_messages.items():
+        if tag in client.tags:
+            final_verb = f"stopped {verb}"
+            break
+    else:
+        final_verb = "left"
+
     ctx.broadcast_text_all(
-        "%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1),
+        f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has {final_verb} the game. "
+        f"Client({version_str}), {client.tags}.",
         {"type": "Part", "team": client.team, "slot": client.slot})
 
 
@@ -1631,7 +1653,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         else:
             team, slot = ctx.connect_names[args['name']]
             game = ctx.games[slot]
-            ignore_game = ("TextOnly" in args["tags"] or "Tracker" in args["tags"]) and not args.get("game")
+
+            ignore_game = not args.get("game") and any(tag in _non_game_messages for tag in args["tags"])
+
             if not ignore_game and args['game'] != game:
                 errors.add('InvalidGame')
             minver = min_client_version if ignore_game else ctx.minimum_client_versions[slot]
@@ -1905,7 +1929,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
     @mark_raw
     def _cmd_alias(self, player_name_then_alias_name):
         """Set a player's alias, by listing their base name and then their intended alias."""
-        player_name, alias_name = player_name_then_alias_name.split(" ", 1)
+        player_name, _, alias_name = player_name_then_alias_name.partition(" ")
         player_name, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
             for (team, slot), name in self.ctx.player_names.items():
@@ -2134,31 +2158,46 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.output(response)
             return False
 
-    def _cmd_option(self, option_name: str, option: str):
-        """Set options for the server."""
-
-        attrtype = self.ctx.simple_options.get(option_name, None)
-        if attrtype:
-            if attrtype == bool:
-                def attrtype(input_text: str):
-                    return input_text.lower() not in {"off", "0", "false", "none", "null", "no"}
-            elif attrtype == str and option_name.endswith("password"):
-                def attrtype(input_text: str):
-                    if input_text.lower() in {"null", "none", '""', "''"}:
-                        return None
-                    return input_text
-            setattr(self.ctx, option_name, attrtype(option))
-            self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
-            if option_name in {"release_mode", "remaining_mode", "collect_mode"}:
-                self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
-            elif option_name in {"hint_cost", "location_check_points"}:
-                self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
-            return True
-        else:
-            known = (f"{option}:{otype}" for option, otype in self.ctx.simple_options.items())
-            self.output(f"Unrecognized Option {option_name}, known: "
-                        f"{', '.join(known)}")
+    def _cmd_option(self, option_name: str, option_value: str):
+        """Set an option for the server."""
+        value_type = self.ctx.simple_options.get(option_name, None)
+        if not value_type:
+            known_options = (f"{option}: {option_type}" for option, option_type in self.ctx.simple_options.items())
+            self.output(f"Unrecognized option '{option_name}', known: {', '.join(known_options)}")
             return False
+
+        if value_type == bool:
+            def value_type(input_text: str):
+                return input_text.lower() not in {"off", "0", "false", "none", "null", "no"}
+        elif value_type == str and option_name.endswith("password"):
+            def value_type(input_text: str):
+                return None if input_text.lower() in {"null", "none", '""', "''"} else input_text
+        elif value_type == str and option_name.endswith("mode"):
+            valid_values = {"goal", "enabled", "disabled"}
+            valid_values.update(("auto", "auto_enabled") if option_name != "remaining_mode" else [])
+            if option_value.lower() not in valid_values:
+                self.output(f"Unrecognized {option_name} value '{option_value}', known: {', '.join(valid_values)}")
+                return False
+
+        setattr(self.ctx, option_name, value_type(option_value))
+        self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
+        if option_name in {"release_mode", "remaining_mode", "collect_mode"}:
+            self.ctx.broadcast_all([{"cmd": "RoomUpdate", 'permissions': get_permissions(self.ctx)}])
+        elif option_name in {"hint_cost", "location_check_points"}:
+            self.ctx.broadcast_all([{"cmd": "RoomUpdate", option_name: getattr(self.ctx, option_name)}])
+        return True
+
+    def _cmd_datastore(self):
+        """Debug Tool: list writable datastorage keys and approximate the size of their values with pickle."""
+        total: int = 0
+        texts = []
+        for key, value in self.ctx.stored_data.items():
+            size = len(pickle.dumps(value))
+            total += size
+            texts.append(f"Key: {key} | Size: {size}B")
+        texts.insert(0, f"Found {len(self.ctx.stored_data)} keys, "
+                        f"approximately totaling {Utils.format_SI_prefix(total, power=1024)}B")
+        self.output("\n".join(texts))
 
 
 async def console(ctx: Context):
@@ -2183,7 +2222,7 @@ async def console(ctx: Context):
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    defaults = Utils.get_options()["server_options"].as_dict()
+    defaults = Utils.get_settings()["server_options"].as_dict()
     parser.add_argument('multidata', nargs="?", default=defaults["multidata"])
     parser.add_argument('--host', default=defaults["host"])
     parser.add_argument('--port', default=defaults["port"], type=int)

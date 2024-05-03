@@ -21,6 +21,10 @@ if typing.TYPE_CHECKING:
     import pathlib
 
 
+class OptionError(ValueError):
+    pass
+
+  
 class Visibility(enum.IntFlag):
     none = 0b0000
     template = 0b0001
@@ -384,7 +388,8 @@ class Toggle(NumericOption):
     default = 0
 
     def __init__(self, value: int):
-        assert value == 0 or value == 1, "value of Toggle can only be 0 or 1"
+        # if user puts in an invalid value, make it valid
+        value = int(bool(value))
         self.value = value
 
     @classmethod
@@ -1124,6 +1129,7 @@ class ItemLinks(OptionList):
                 raise Exception(f"item_link {link['name']} has {intersection} "
                                 f"items in both its local_items and non_local_items pool.")
             link.setdefault("link_replacement", None)
+            link["item_pool"] = list(pool)
 
 
 class Removed(FreeText):
