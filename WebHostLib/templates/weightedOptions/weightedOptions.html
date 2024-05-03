@@ -31,22 +31,24 @@
             <h1>Weighted Options</h1>
         </div>
 
-        <p>Weighted options allow you to choose how likely a particular option&apos;s value is to be used in game
-            generation. The higher a value is weighted, the more likely the option will be chosen. Think of them like
-            entries in a raffle.</p>
-
-        <p>Choose the options you would like to play with! You may generate a single-player game from
-            this page, or download an options file you can use to participate in a MultiWorld.</p>
-
-        <p>A list of all games you have generated can be found on the <a href="/user-content">User Content</a>
-            page.</p>
-
-        <p><label for="player-name">Please enter your player name. This will appear in-game as you send and receive
-            items if you are playing in a MultiWorld.</label><br />
-            <input id="player-name" placeholder="Player Name" name="name" maxlength="16" />
-        </p>
-
         <form id="weighted-options-form" method="post" enctype="application/x-www-form-urlencoded" action="generate-weighted-yaml">
+
+            <p>Weighted options allow you to choose how likely a particular option&apos;s value is to be used in game
+                generation. The higher a value is weighted, the more likely the option will be chosen. Think of them like
+                entries in a raffle.</p>
+
+            <p>Choose the options you would like to play with! You may generate a single-player game from
+                this page, or download an options file you can use to participate in a MultiWorld.</p>
+
+            <p>A list of all games you have generated can be found on the <a href="/user-content">User Content</a>
+                page.</p>
+
+
+            <p><label for="player-name">Please enter your player name. This will appear in-game as you send and receive
+                items if you are playing in a MultiWorld.</label><br />
+                <input id="player-name" placeholder="Player Name" name="name" maxlength="16" />
+            </p>
+
             <div id="{{ world_name }}-container">
                 {% for group_name, group_options in option_groups.items() %}
                     <details open>
