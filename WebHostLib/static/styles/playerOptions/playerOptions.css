@@ -280,6 +280,7 @@ html {
   min-width: 200px;
   margin-right: 4px;
   cursor: default;
+  word-break: normal;
 }
 #player-options table th, #player-options table td {
   border: none;
