@@ -3,6 +3,7 @@ import yaml
 import requests
 
 import Options
+from Options import Visibility
 from flask import redirect, render_template, request, Response
 from worlds.AutoWorld import AutoWorldRegister
 from Utils import local_path
@@ -22,7 +23,7 @@ def get_world_theme(game_name: str):
     return 'grass'
 
 
-def render_options_page(template: str, world_name: str):
+def render_options_page(template: str, world_name: str, is_complex: bool = False):
     world = AutoWorldRegister.world_types[world_name]
     if world.hidden or world.web.options_page is False:
         return redirect("games")
@@ -33,6 +34,13 @@ def render_options_page(template: str, world_name: str):
     ordered_groups = ["Game Options", *[group.name for group in world.web.option_groups]]
     grouped_options = {group: {} for group in ordered_groups}
     for option_name, option in world.options_dataclass.type_hints.items():
+        # Exclude settings from options pages if their visibility is disabled
+        if not is_complex and option.visibility < Visibility.simple_ui:
+            continue
+
+        if is_complex and option.visibility < Visibility.complex_ui:
+            continue
+
         grouped_options[option_groups.get(option, "Game Options")][option_name] = option
 
     return render_template(
@@ -85,7 +93,7 @@ def weighted_options_old():
 @app.route("/games/<string:game>/weighted-options")
 @cache.cached()
 def weighted_options(game: str):
-    return render_options_page("weightedOptions/weightedOptions.html", game)
+    return render_options_page("weightedOptions/weightedOptions.html", game, is_complex=True)
 
 
 @app.route("/games/<string:game>/generate-weighted-yaml", methods=["POST"])
@@ -140,7 +148,7 @@ def generate_weighted_yaml(game: str):
 @app.route("/games/<string:game>/player-options")
 @cache.cached()
 def player_options(game: str):
-    return render_options_page("playerOptions/playerOptions.html", game)
+    return render_options_page("playerOptions/playerOptions.html", game, is_complex=False)
 
 
 # YAML generator for player-options

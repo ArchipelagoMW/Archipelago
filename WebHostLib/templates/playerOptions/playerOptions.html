@@ -20,6 +20,12 @@
 {% block body %}
     {% include 'header/'+theme+'Header.html' %}
     <div id="player-options" class="markdown" data-game="{{ world_name }}" data-presets="{{ presets }}">
+        <noscript>
+            <div class="js-warning-banner">
+                This page has reduced functionality without JavaScript.
+            </div>
+        </noscript>
+
         <div id="user-message">{{ message }}</div>
 
         <div id="player-options-header">
