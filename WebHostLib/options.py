@@ -75,7 +75,7 @@ def generate_game(player_name: str, formatted_options: dict):
 
 
 def send_yaml(player_name: str, formatted_options: dict):
-    response = Response(yaml.dump(formatted_options))
+    response = Response(yaml.dump(formatted_options, sort_keys=False))
     response.headers["Content-Type"] = "text/yaml"
     response.headers["Content-Disposition"] = f"attachment; filename={player_name}.yaml"
     return response
