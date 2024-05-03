@@ -1,60 +1,50 @@
 from dataclasses import dataclass
+from typing import Type, Any
 from typing import Dict
-from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, OptionDict, OptionList, Visibility
-from Options import PerGameCommonOptions, DeathLinkMixin
+from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, OptionDict, OptionList, Visibility, Option
+from Options import PerGameCommonOptions, DeathLinkMixin, AssembleOptions
 from schema import Schema, And, Optional, Or
 import logging
-
 
 class StartWithJewelryBox(Toggle):
     "Start with Jewelry Box unlocked"
     display_name = "Start with Jewelry Box"
 
-
 class DownloadableItems(DefaultOnToggle):
     "With the tablet you will be able to download items at terminals"
     display_name = "Downloadable items"
-
 
 class EyeSpy(Toggle):
     "Requires Oculus Ring in inventory to be able to break hidden walls."
     display_name = "Eye Spy"
 
-
 class StartWithMeyef(Toggle):
     "Start with Meyef, ideal for when you want to play multiplayer."
     display_name = "Start with Meyef"
-
 
 class QuickSeed(Toggle):
     "Start with Talaria Attachment, Nyoom!"
     display_name = "Quick seed"
 
-
 class SpecificKeycards(Toggle):
     "Keycards can only open corresponding doors"
     display_name = "Specific Keycards"
-
 
 class Inverted(Toggle):
     "Start in the past"
     display_name = "Inverted"
 
-
 class GyreArchives(Toggle):
     "Gyre locations are in logic. New warps are gated by Merchant Crow and Kobo"
     display_name = "Gyre Archives"
-
 
 class Cantoran(Toggle):
     "Cantoran's fight and check are available upon revisiting his room"
     display_name = "Cantoran"
 
-
 class LoreChecks(Toggle):
     "Memories and journal entries contain items."
     display_name = "Lore Checks"
-
 
 class BossRando(Choice):
     "Wheter all boss locations are shuffled, and if their damage/hp should be scaled."
@@ -64,7 +54,6 @@ class BossRando(Choice):
     option_unscaled = 2
     alias_true = 1
 
-
 class EnemyRando(Choice):
     "Wheter enemies will be randomized, and if their damage/hp should be scaled."
     display_name = "Enemy Randomization"
@@ -73,7 +62,6 @@ class EnemyRando(Choice):
     option_unscaled = 2
     option_ryshia = 3
     alias_true = 1
-
 
 class DamageRando(Choice):
     "Randomly nerfs and buffs some orbs and their associated spells as well as some associated rings."
@@ -86,7 +74,6 @@ class DamageRando(Choice):
     option_allbuffs = 5
     option_manual = 6
     alias_true = 2
-
 
 class DamageRandoOverrides(OptionDict):
     """Manual +/-/normal odds for an orb. Put 0 if you don't want a certain nerf or buff to be a possibility. Orbs that
@@ -193,14 +180,12 @@ class DamageRandoOverrides(OptionDict):
         "Radiant": { "MinusOdds": 1, "NormalOdds": 1, "PlusOdds": 1 },
     }
 
-
 class HpCap(Range):
     "Sets the number that Lunais's HP maxes out at."
     display_name = "HP Cap"
     range_start = 1
     range_end = 999
     default = 999
-
 
 class LevelCap(Range):
     """Sets the max level Lunais can achieve."""
@@ -209,19 +194,16 @@ class LevelCap(Range):
     range_end = 99
     default = 99
 
-
 class ExtraEarringsXP(Range):
     """Adds additional XP granted by Galaxy Earrings."""
     display_name = "Extra Earrings XP"
     range_start = 0
     range_end = 24
     default = 0
-    
 
 class BossHealing(DefaultOnToggle):
     "Enables/disables healing after boss fights. NOTE: Currently only applicable when Boss Rando is enabled."
     display_name = "Heal After Bosses"
-
 
 class ShopFill(Choice):
     """Sets the items for sale in Merchant Crow's shops.
@@ -235,11 +217,9 @@ class ShopFill(Choice):
     option_vanilla = 2
     option_empty = 3
 
-
 class ShopWarpShards(DefaultOnToggle):
     "Shops always sell warp shards (when keys possessed), ignoring inventory setting."
     display_name = "Always Sell Warp Shards"
-
 
 class ShopMultiplier(Range):
     "Multiplier for the cost of items in the shop. Set to 0 for free shops."
@@ -247,7 +227,6 @@ class ShopMultiplier(Range):
     range_start = 0
     range_end = 10
     default = 1
-
 
 class LootPool(Choice):
     """Sets the items that drop from enemies (does not apply to boss reward checks)
@@ -258,7 +237,6 @@ class LootPool(Choice):
     option_vanilla = 0
     option_randomized = 1
     option_empty = 2
-
 
 class DropRateCategory(Choice):
     """Sets the drop rate when 'Loot Pool' is set to 'Random'
@@ -273,14 +251,12 @@ class DropRateCategory(Choice):
     option_randomized = 2
     option_fixed = 3
 
-
 class FixedDropRate(Range):
     "Base drop rate percentage when 'Drop Rate Category' is set to 'Fixed'"
     display_name = "Fixed Drop Rate"
     range_start = 0
     range_end = 100
     default = 5
-
 
 class LootTierDistro(Choice):
     """Sets how often items of each rarity tier are placed when 'Loot Pool' is set to 'Random'
@@ -293,31 +269,25 @@ class LootTierDistro(Choice):
     option_full_random = 1
     option_inverted_weight = 2
 
-
 class ShowBestiary(Toggle):
     "All entries in the bestiary are visible, without needing to kill one of a given enemy first"
     display_name = "Show Bestiary Entries"
-
 
 class ShowDrops(Toggle):
     "All item drops in the bestiary are visible, without needing an enemy to drop one of a given item first"
     display_name = "Show Bestiary Item Drops"
 
-
 class EnterSandman(Toggle):
     "The Ancient Pyramid is unlocked by the Twin Pyramid Keys, but the final boss door opens if you have all 5 Timespinner pieces"
     display_name = "Enter Sandman"
-
 
 class DadPercent(Toggle):
     """The win condition is beating the boss of Emperor's Tower"""
     display_name = "Dad Percent"
 
-
 class RisingTides(Toggle):
     """Random areas are flooded or drained, can be further specified with RisingTidesOverrides"""
     display_name = "Rising Tides"
-
 
 def rising_tide_option(location: str, with_save_point_option: bool = False) -> Dict[Optional, Or]:
     if with_save_point_option:
@@ -342,7 +312,6 @@ def rising_tide_option(location: str, with_save_point_option: bool = False) -> D
                 "Dry",
                 "Flooded")
         }
-
 
 class RisingTidesOverrides(OptionDict):
     """Odds for specific areas to be flooded or drained, only has effect when RisingTides is on.
@@ -375,12 +344,10 @@ class RisingTidesOverrides(OptionDict):
         "Lab": { "Dry": 67, "Flooded": 33 },
     }
 
-
 class UnchainedKeys(Toggle):
     """Start with Twin Pyramid Key, which does not give free warp;
     warp items for Past, Present, (and ??? with Enter Sandman) can be found."""
     display_name = "Unchained Keys"
-
 
 class TrapChance(Range):
     """Chance of traps in the item pool.
@@ -390,17 +357,15 @@ class TrapChance(Range):
     range_end = 100
     default = 10
 
-
 class Traps(OptionList):
     """List of traps that may be in the item pool to find"""
     display_name = "Traps Types"
     valid_keys = { "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" }
     default = [ "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" ]
 
-
 class PresentAccessWithWheelAndSpindle(Toggle):
     """When inverted, allows using the refugee camp warp when both the Timespinner Wheel and Spindle is acquired."""
-    display_name = "Past Wheel & Spindle Warp"
+    display_name = "Back to the future"
 
 @dataclass
 class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
@@ -435,84 +400,60 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     rising_tides: RisingTides
     rising_tides_overrides: RisingTidesOverrides
     unchained_keys: UnchainedKeys
-    present_access_with_wheel_and_spindle: PresentAccessWithWheelAndSpindle
+    back_to_the_future: PresentAccessWithWheelAndSpindle
     trap_chance: TrapChance
     traps: Traps
 
+class HiddenDamageRandoOverrides(DamageRandoOverrides): 
+    visibility = Visibility.none
+
+class HiddenRisingTidesOverrides(RisingTidesOverrides):
+    visibility = Visibility.none
+
 @dataclass
 class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
-    StartWithJewelryBox: StartWithJewelryBox
-    DownloadableItems: DownloadableItems
-    EyeSpy: EyeSpy
-    StartWithMeyef: StartWithMeyef
-    QuickSeed: QuickSeed
-    SpecificKeycards: SpecificKeycards
-    Inverted: Inverted
-    GyreArchives: GyreArchives
-    Cantoran: Cantoran
-    LoreChecks: LoreChecks
-    BossRando: BossRando
-    DamageRando: DamageRando
-    DamageRandoOverrides: DamageRandoOverrides
-    HpCap: HpCap
-    LevelCap: LevelCap
-    ExtraEarringsXP: ExtraEarringsXP
-    BossHealing: BossHealing
-    ShopFill: ShopFill
-    ShopWarpShards: ShopWarpShards
-    ShopMultiplier: ShopMultiplier
-    LootPool: LootPool
-    DropRateCategory: DropRateCategory
-    FixedDropRate: FixedDropRate
-    LootTierDistro: LootTierDistro
-    ShowBestiary: ShowBestiary
-    ShowDrops: ShowDrops
-    EnterSandman: EnterSandman
-    DadPercent: DadPercent
-    RisingTides: RisingTides
-    RisingTidesOverrides: RisingTidesOverrides
-    UnchainedKeys: UnchainedKeys
-    PresentAccessWithWheelAndSpindle: PresentAccessWithWheelAndSpindle
-    TrapChance: TrapChance
-    Traps: Traps
-    DeathLink: DeathLink
 
-    def __post_init__(self):
-        self.StartWithJewelryBox.visibility = Visibility.none
-        self.DownloadableItems.visibility = Visibility.none
-        self.EyeSpy.visibility = Visibility.none
-        self.StartWithMeyef.visibility = Visibility.none
-        self.QuickSeed.visibility = Visibility.none
-        self.SpecificKeycards.visibility = Visibility.none
-        self.Inverted.visibility = Visibility.none
-        self.GyreArchives.visibility = Visibility.none
-        self.Cantoran.visibility = Visibility.none
-        self.LoreChecks.visibility = Visibility.none
-        self.BossRando.visibility = Visibility.none
-        self.DamageRando.visibility = Visibility.none
-        self.DamageRandoOverrides.visibility = Visibility.none
-        self.HpCap.visibility = Visibility.none
-        self.LevelCap.visibility = Visibility.none
-        self.ExtraEarringsXP.visibility = Visibility.none
-        self.BossHealing.visibility = Visibility.none
-        self.ShopFill.visibility = Visibility.none
-        self.ShopWarpShards.visibility = Visibility.none
-        self.ShopMultiplier.visibility = Visibility.none
-        self.LootPool.visibility = Visibility.none
-        self.DropRateCategory.visibility = Visibility.none
-        self.FixedDropRate.visibility = Visibility.none
-        self.LootTierDistro.visibility = Visibility.none
-        self.ShowBestiary.visibility = Visibility.none
-        self.ShowDrops.visibility = Visibility.none
-        self.EnterSandman.visibility = Visibility.none
-        self.DadPercent.visibility = Visibility.none
-        self.RisingTides.visibility = Visibility.none
-        self.RisingTidesOverrides.visibility = Visibility.none
-        self.UnchainedKeys.visibility = Visibility.none
-        self.PresentAccessWithWheelAndSpindle.visibility = Visibility.none
-        self.TrapChance.visibility = Visibility.none
-        self.Traps.visibility = Visibility.none
-        self.DeathLink.visibility = Visibility.none
+    @staticmethod
+    def hidden(option: Type[Option[Any]]) -> Type[Option]:
+        new_option = AssembleOptions(f"{option}Hidden", option.__bases__, vars(option).copy())
+        new_option.visibility = Visibility.none
+        return new_option
+
+    StartWithJewelryBox: hidden(StartWithJewelryBox) # type: ignore
+    DownloadableItems: hidden(DownloadableItems) # type: ignore
+    EyeSpy: hidden(EyeSpy) # type: ignore
+    StartWithMeyef: hidden(StartWithMeyef) # type: ignore
+    QuickSeed: hidden(QuickSeed) # type: ignore
+    SpecificKeycards: hidden(SpecificKeycards) # type: ignore
+    Inverted: hidden(Inverted) # type: ignore
+    GyreArchives: hidden(GyreArchives) # type: ignore
+    Cantoran: hidden(Cantoran) # type: ignore
+    LoreChecks: hidden(LoreChecks) # type: ignore
+    BossRando: hidden(BossRando) # type: ignore
+    DamageRando: hidden(DamageRando) # type: ignore
+    DamageRandoOverrides: HiddenDamageRandoOverrides
+    HpCap: hidden(HpCap) # type: ignore
+    LevelCap: hidden(LevelCap) # type: ignore
+    ExtraEarringsXP: hidden(ExtraEarringsXP) # type: ignore
+    BossHealing: hidden(BossHealing) # type: ignore
+    ShopFill: hidden(ShopFill) # type: ignore
+    ShopWarpShards: hidden(ShopWarpShards) # type: ignore
+    ShopMultiplier: hidden(ShopMultiplier) # type: ignore
+    LootPool: hidden(LootPool) # type: ignore
+    DropRateCategory: hidden(DropRateCategory) # type: ignore
+    FixedDropRate: hidden(FixedDropRate) # type: ignore
+    LootTierDistro: hidden(LootTierDistro) # type: ignore
+    ShowBestiary: hidden(ShowBestiary) # type: ignore
+    ShowDrops: hidden(ShowDrops) # type: ignore
+    EnterSandman: hidden(EnterSandman) # type: ignore
+    DadPercent: hidden(DadPercent) # type: ignore
+    RisingTides: hidden(RisingTides) # type: ignore
+    RisingTidesOverrides: HiddenRisingTidesOverrides
+    UnchainedKeys: hidden(UnchainedKeys) # type: ignore
+    PresentAccessWithWheelAndSpindle: hidden(PresentAccessWithWheelAndSpindle) # type: ignore
+    TrapChance: hidden(TrapChance) # type: ignore
+    Traps: hidden(Traps) # type: ignore
+    DeathLink: hidden(DeathLink) # type: ignore
 
     def handle_backward_compatibility(o) -> None:
         has_replaced_options: bool = False
@@ -642,8 +583,8 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
             o.unchained_keys.value = o.UnchainedKeys.value
             has_replaced_options = True
         if o.PresentAccessWithWheelAndSpindle.value != o.PresentAccessWithWheelAndSpindle.default and \
-            o.present_access_with_wheel_and_spindle.value == o.present_access_with_wheel_and_spindle.default:
-            o.present_access_with_wheel_and_spindle.value = o.PresentAccessWithWheelAndSpindle.value
+            o.back_to_the_future.value == o.back_to_the_future.default:
+            o.back_to_the_future.value = o.PresentAccessWithWheelAndSpindle.value
             has_replaced_options = True
         if o.TrapChance.value != o.TrapChance.default and \
             o.trap_chance.value == o.trap_chance.default:

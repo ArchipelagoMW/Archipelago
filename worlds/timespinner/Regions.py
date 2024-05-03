@@ -125,7 +125,7 @@ def create_regions_and_locations(world: MultiWorld, player: int, options: Timesp
     connect(world, player, 'Sealed Caves (Xarion)', 'Skeleton Shaft')
     connect(world, player, 'Sealed Caves (Xarion)', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Refugee Camp', 'Forest')
-    connect(world, player, 'Refugee Camp', 'Library', lambda state: options.inverted and options.present_access_with_wheel_and_spindle and state.has_all({'Timespinner Wheel', 'Timespinner Spindle'}, player))
+    connect(world, player, 'Refugee Camp', 'Library', lambda state: options.inverted and options.back_to_the_future and state.has_all({'Timespinner Wheel', 'Timespinner Spindle'}, player))
     connect(world, player, 'Refugee Camp', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Forest', 'Refugee Camp')
     connect(world, player, 'Forest', 'Left Side forest Caves', lambda state: flooded.flood_lake_serene_bridge or state.has('Talaria Attachment', player) or logic.has_timestop(state))

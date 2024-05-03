@@ -117,7 +117,7 @@ class TimespinnerWorld(World):
             "DadPercent": self.options.dad_percent.value,
             "RisingTides": self.options.rising_tides.value,
             "UnchainedKeys": self.options.unchained_keys.value,
-            "PresentAccessWithWheelAndSpindle": self.options.present_access_with_wheel_and_spindle.value,
+            "PresentAccessWithWheelAndSpindle": self.options.back_to_the_future.value,
             "Traps": self.options.traps.value,
             "DeathLink": self.options.death_link.value,
             "StinkyMaw": True,
