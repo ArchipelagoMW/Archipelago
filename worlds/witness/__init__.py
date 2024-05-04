@@ -81,6 +81,7 @@ class WitnessWorld(World):
             "door_hexes_in_the_pool": self.player_items.get_door_ids_in_pool(),
             "symbols_not_in_the_game": self.player_items.get_symbol_ids_not_in_pool(),
             "disabled_entities": [int(h, 16) for h in self.player_logic.COMPLETELY_DISABLED_ENTITIES],
+            "hunt_entities": [int(h, 16) for h in self.player_logic.HUNT_ENTITIES],
             "log_ids_to_hints": self.log_ids_to_hints,
             "laser_ids_to_hints": self.laser_ids_to_hints,
             "progressive_item_lists": self.player_items.get_progressive_item_ids_in_pool(),
