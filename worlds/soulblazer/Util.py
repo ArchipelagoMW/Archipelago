@@ -1,5 +1,13 @@
+from collections.abc import AsyncIterable
 from dataclasses import dataclass
 from typing import NamedTuple
+
+
+async def async_any(async_iterable: AsyncIterable[object]) -> bool:
+    async for element in async_iterable:
+        if element:
+            return True
+    return False
 
 
 def is_bit_set(data: bytes, index: int, offset: int = 0) -> bool:

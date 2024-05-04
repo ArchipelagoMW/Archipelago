@@ -29,6 +29,7 @@ snes_logger = logging.getLogger("SNES")
 
 STATUS_DELAY_FRAMES = 0x03
 
+
 class ItemSend(NamedTuple):
     receiving: int
     item: NetworkItem
@@ -84,7 +85,30 @@ class SoulBlazerSNIClient(SNIClient):
         x = location_data[Addresses.POSITION_INT_X - location_data_start]
         y = location_data[Addresses.POSITION_INT_Y - location_data_start]
 
-        return any(rect.contains(x, y) for rect in excluded_from_receiving.get((map_number, map_sub_number), []))
+        return any(
+            rect.contains(x, y) for rect in exclusion_zones.get((map_number, map_sub_number), [])
+        ) or await self.is_lair_in_progress(ctx, boss_zones.get((map_number, map_sub_number), None))
+
+    async def is_lair_in_progress(self, ctx: "SNIContext", lair_id: Optional[int], threshold: int = 0) -> bool:
+        """Returns true if the lair is in the progress of being sealed"""
+
+        from SNIClient import snes_read
+
+        if lair_id is None:
+            return False
+
+        if lair_id == 0xFFFF:
+            return True
+
+        lair_state = await snes_read(ctx, Addresses.LAIR_SPAWN_TABLE + lair_id, 1)
+
+        if lair_state is None:
+            return True
+
+        lair_sealed = bool(lair_state[0] & 0x80)
+        threshold_reached = bool(lair_state[0] <= threshold)
+
+        return not (lair_sealed or threshold_reached)
 
     async def deathlink_kill_player(self, ctx):
         pass
@@ -315,7 +339,7 @@ class SoulBlazerSNIClient(SNIClient):
                 ctx.locations_checked.add(item.location)
 
 
-excluded_from_receiving = {
+exclusion_zones = {
     # Lost side marsh rafts
     # If this goes well we could do this for other tricky locations too like the dolphin ride.
     # Or if we can find a cleaner way that doesnt involve defining all these excluded regions then we dont have to do this.
@@ -328,4 +352,23 @@ excluded_from_receiving = {
         Rectangle(0x05, 0x06, 0x13, 0x01),
         # We could also do the island, but the crystal is there to let you go home.
     ]
+}
+
+boss_zones = {
+    # Solidarm
+    (0x03, 0x06): 0x0009,
+    # Elemental Statues
+    (0x05, 0x0A): 0x0050,
+    # Ghost Ship
+    (0x09, 0x01): 0x00B6,
+    # Poseidon
+    (0x0B, 0x07): 0x0103,
+    # Tin Doll
+    (0x0E, 0x04): 0x012F,
+    # Demon Bird
+    (0x13, 0x02): 0x0195,
+    # Deathtoll's Shrine
+    (0x15, 0x01): 0xFFFF,
+    # Final Battle
+    (0x15, 0x02): 0xFFFF,
 }
