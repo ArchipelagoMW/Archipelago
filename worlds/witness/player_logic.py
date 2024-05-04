@@ -17,8 +17,7 @@ When the world has parsed its options, a second function is called to finalize t
 
 import copy
 from collections import defaultdict
-from logging import warning
-from typing import TYPE_CHECKING, Dict, List, Set, Tuple, cast
+from typing import TYPE_CHECKING, Dict, List, Set, cast, Tuple
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
