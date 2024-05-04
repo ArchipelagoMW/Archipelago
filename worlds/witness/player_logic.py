@@ -810,6 +810,13 @@ class WitnessPlayerLogic:
         all_eligible_panels = [
             entity_hex for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items()
             if entity_obj["entityType"] == "Panel" and self.solvability_guaranteed(entity_hex)
+            and not (
+                # Due to an edge case, Discards have to be on in disable_non_randomized even if Discard Shuffle is off.
+                # However, I don't think they should be hunt panels in this case.
+                world.options.disable_non_randomized_puzzles
+                and not world.options.shuffle_discarded_panels
+                and entity_obj["locationType"] == "Discard"
+            )
         ]
 
         total_panels = world.options.panel_hunt_total.value
