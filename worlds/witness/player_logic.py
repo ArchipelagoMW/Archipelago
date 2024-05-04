@@ -794,6 +794,13 @@ class WitnessPlayerLogic:
             # Jungle Popup Wall Panel
         }
 
+        # In panel hunt, all panels are game, so all panels need to be reachable (unless disabled)
+        # TODO: I think there is some weirdness here with Mountain Floor 2 Elevator Discard on disable_non_randomized?
+        if world.options.victory_condition == "panel_hunt":
+            for entity_hex in is_item_required_dict:
+                if static_witness_logic.ENTITIES_BY_HEX[entity_hex]["entityType"] == "panel":
+                    is_item_required_dict[entity_hex] = True
+
         # Now, return the keys of the dict entries where the result is False to get unrequired major items
         self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY |= {
             item_name for item_name, is_required in is_item_required_dict.items() if not is_required
