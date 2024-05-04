@@ -18,7 +18,8 @@ from .StateHelpers import (can_extend_magic, can_kill_most_things,
                            can_shoot_arrows, has_beam_sword, has_crystals,
                            has_fire_source, has_hearts, has_melee_weapon,
                            has_misery_mire_medallion, has_sword, has_turtle_rock_medallion,
-                           has_triforce_pieces, can_use_bombs, can_bomb_or_bonk)
+                           has_triforce_pieces, can_use_bombs, can_bomb_or_bonk,
+                           can_activate_crystal_switch)
 from .UnderworldGlitchRules import underworld_glitches_rules
 
 
@@ -357,8 +358,10 @@ def global_rules(multiworld: MultiWorld, player: int):
     if not (multiworld.small_key_shuffle[player] and multiworld.big_key_shuffle[player]):
         add_rule(multiworld.get_location('Desert Palace - Prize', player), lambda state: state.multiworld.get_region('Desert Palace Main (Outer)', player).can_reach(state))
 
-    set_rule(multiworld.get_entrance('Tower of Hera Small Key Door', player), lambda state: state._lttp_has_key('Small Key (Tower of Hera)', player) or location_item_name(state, 'Tower of Hera - Big Key Chest', player) == ('Small Key (Tower of Hera)', player))
-    set_rule(multiworld.get_entrance('Tower of Hera Big Key Door', player), lambda state: state.has('Big Key (Tower of Hera)', player))
+    set_rule(multiworld.get_location('Tower of Hera - Basement Cage', player), lambda state: can_activate_crystal_switch(state, player))
+    set_rule(multiworld.get_location('Tower of Hera - Map Chest', player), lambda state: can_activate_crystal_switch(state, player))
+    set_rule(multiworld.get_entrance('Tower of Hera Small Key Door', player), lambda state: can_activate_crystal_switch(state, player) and (state._lttp_has_key('Small Key (Tower of Hera)', player) or location_item_name(state, 'Tower of Hera - Big Key Chest', player) == ('Small Key (Tower of Hera)', player)))
+    set_rule(multiworld.get_entrance('Tower of Hera Big Key Door', player), lambda state: can_activate_crystal_switch(state, player) and state.has('Big Key (Tower of Hera)', player))
     if multiworld.enemy_shuffle[player]:
         add_rule(multiworld.get_entrance('Tower of Hera Big Key Door', player), lambda state: can_kill_most_things(state, player, 3))
     else:
@@ -551,8 +554,8 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location('Ganons Tower - Firesnake Room', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or
                                                                                              ((item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(randomizer_room_chests, [player] * len(randomizer_room_chests))) or item_name_in_location_names(state, 'Small Key (Ganons Tower)', player, [('Ganons Tower - Firesnake Room', player)])) and state._lttp_has_key('Small Key (Ganons Tower)', player, 5)))
     for location in randomizer_room_chests:
-        set_rule(multiworld.get_location(location, player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 8) or (
-                    item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(randomizer_room_chests, [player] * len(randomizer_room_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 6)))
+        set_rule(multiworld.get_location(location, player), lambda state: can_use_bombs(state, player) and (state._lttp_has_key('Small Key (Ganons Tower)', player, 8) or (
+                    item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(randomizer_room_chests, [player] * len(randomizer_room_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 6))))
 
     # Once again it is possible to need more than 7 keys...
     set_rule(multiworld.get_entrance('Ganons Tower (Tile Room) Key Door', player), lambda state: state.has('Fire Rod', player) and (state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or (

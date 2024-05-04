@@ -14,7 +14,7 @@ from .stages import get_locations_from_stage, get_normal_stage_exits, vanilla_st
 from .regions import get_region_info
 from .rules import CV64Rules
 from .data import iname, rname, ename
-from ..AutoWorld import WebWorld, World
+from worlds.AutoWorld import WebWorld, World
 from .aesthetics import randomize_lighting, shuffle_sub_weapons, rom_empty_breakables_flags, rom_sub_weapon_flags, \
     randomize_music, get_start_inventory_data, get_location_data, randomize_shop_prices, get_loading_zone_bytes, \
     get_countdown_numbers
@@ -270,7 +270,7 @@ class CV64World(World):
         offset_data.update(get_start_inventory_data(self.player, self.options,
                                                     self.multiworld.precollected_items[self.player]))
 
-        patch = CV64ProcedurePatch()
+        patch = CV64ProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
         write_patch(self, patch, offset_data, shop_name_list, shop_desc_list, shop_colors_list, active_locations)
 
         rom_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}"
