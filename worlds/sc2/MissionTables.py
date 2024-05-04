@@ -399,31 +399,6 @@ def mini_campaign_order() -> Dict[SC2Campaign, List[FillMission]]:
     }
 
 
-def gauntlet_order() -> Dict[SC2Campaign, List[FillMission]]:
-    return {
-        SC2Campaign.GLOBAL: [
-            FillMission(MissionPools.STARTER, [MissionConnection(-1)], "I", completion_critical=True),
-            FillMission(MissionPools.EASY, [MissionConnection(0)], "II", completion_critical=True),
-            FillMission(MissionPools.EASY, [MissionConnection(1)], "III", completion_critical=True),
-            FillMission(MissionPools.MEDIUM, [MissionConnection(2)], "IV", completion_critical=True),
-            FillMission(MissionPools.MEDIUM, [MissionConnection(3)], "V", completion_critical=True),
-            FillMission(MissionPools.HARD, [MissionConnection(4)], "VI", completion_critical=True),
-            FillMission(MissionPools.FINAL, [MissionConnection(5)], "Final", completion_critical=True)
-        ]
-    }
-
-
-def mini_gauntlet_order() -> Dict[SC2Campaign, List[FillMission]]:
-    return {
-        SC2Campaign.GLOBAL: [
-            FillMission(MissionPools.STARTER, [MissionConnection(-1)], "I", completion_critical=True),
-            FillMission(MissionPools.EASY, [MissionConnection(0)], "II", completion_critical=True),
-            FillMission(MissionPools.MEDIUM, [MissionConnection(1)], "III", completion_critical=True),
-            FillMission(MissionPools.FINAL, [MissionConnection(2)], "Final", completion_critical=True)
-        ]
-    }
-
-
 def grid_order() -> Dict[SC2Campaign, List[FillMission]]:
     return {
         SC2Campaign.GLOBAL: [
@@ -497,8 +472,6 @@ mission_orders: List[Callable[[], Dict[SC2Campaign, List[FillMission]]]] = [
     grid_order,
     mini_grid_order,
     blitz_order,
-    gauntlet_order,
-    mini_gauntlet_order,
     tiny_grid_order
 ]
 

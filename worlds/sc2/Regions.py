@@ -4,7 +4,7 @@ import math
 from BaseClasses import MultiWorld, Region, Entrance, Location, CollectionState
 from .Locations import LocationData
 from .Options import get_option_value, MissionOrder, get_enabled_campaigns, campaign_depending_orders, \
-    GridTwoStartPositions
+    GridTwoStartPositions, dynamic_mission_orders
 from .MissionTables import MissionInfo, mission_orders, vanilla_mission_req_table, \
     MissionPools, SC2Campaign, get_goal_location, SC2Mission, MissionConnection, FillMission
 from .PoolFilter import filter_missions
@@ -388,6 +388,15 @@ def make_dynamic_mission_order(
 
     num_missions = min(len(mission_pool), get_option_value(world, "maximum_campaign_size"))
     num_missions = max(2, num_missions)
+    if mission_order_type == MissionOrder.option_golden_path:
+        return make_golden_path(world, num_missions)
+    # Grid handled by dedicated region generator
+    elif mission_order_type == MissionOrder.option_gauntlet:
+        return make_gauntlet(num_missions)
+
+
+
+def make_golden_path(world, num_missions):
     chain_name_options = ['Mar Sara', 'Char', 'Kaldir', 'Zerus', 'Skygeirr Station',
                    'Dominion Space', 'Korhal', 'Aiur', 'Shakuras', 'Ulnar']
     world.random.shuffle(chain_name_options)
@@ -455,6 +464,42 @@ def make_dynamic_mission_order(
     return {SC2Campaign.GLOBAL: campaign.mission_order}
 
 
+def make_gauntlet(num_missions):
+    mission_difficulties = [MissionPools.EASY, MissionPools.MEDIUM, MissionPools.HARD, MissionPools.VERY_HARD]
+    mission_order: list[FillMission] = []
+    row_length = 7
+    rows = math.ceil(num_missions / row_length)
+    if rows == 1:
+        column_names = ["I", "II", "III", "IV", "V", "VI", "VII"][:num_missions - 1]
+        column_names.append("Final")
+    else:
+        column_names = [f'_{col + 1}' for col in range(row_length)]
+    first_mission = FillMission(MissionPools.STARTER, [MissionConnection(-1)], column_names[0],
+                                     completion_critical=True)
+    mission_order.append(first_mission)
+    mission_number = 1
+    space_rows = 0
+    while mission_number < num_missions:
+        if mission_number == num_missions - 1:
+            difficulty = MissionPools.FINAL
+        else:
+            difficulty_progress = math.floor(min(mission_number * 4 / num_missions, mission_number / 3))
+            difficulty = mission_difficulties[min(difficulty_progress, 3)]
+        connection = MissionConnection(mission_number - 1)
+        mission_order.append(FillMission(
+            difficulty,
+            [connection],
+            column_names[mission_number % row_length],
+            completion_critical=True,
+            ui_vertical_padding=space_rows
+        ))
+        if mission_number == row_length - 1:
+            space_rows += 1
+        mission_number += 1
+    return {SC2Campaign.GLOBAL: mission_order}
+
+
+
 def create_structured_regions(
     world: World,
     locations: Tuple[LocationData, ...],
@@ -463,7 +508,7 @@ def create_structured_regions(
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
     locations_per_region = get_locations_per_region(locations)
 
-    if mission_order_type == MissionOrder.option_golden_path:
+    if mission_order_type in dynamic_mission_orders:
         mission_order = make_dynamic_mission_order(world, locations, location_cache, mission_order_type)
     else:
         mission_order = mission_orders[mission_order_type]()
