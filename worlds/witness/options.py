@@ -192,7 +192,7 @@ class PanelHuntRequiredPercentage(Range):
     """
     Determines the percentage of "Panel Hunt" panels that need to be solved to win.
     """
-    display_name = "Percentage of extra panel hunt panels"
+    display_name = "Percentage of required Panel Hunt panels"
     range_start = 20
     range_end = 100
     default = 63
