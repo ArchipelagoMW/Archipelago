@@ -14,8 +14,8 @@ import settings
 from worlds.AutoWorld import WebWorld, World
 
 from .client import PokemonEmeraldClient  # Unused, but required to register with BizHawkClient
-from .data import (LEGENDARY_POKEMON, LOCATION_GROUPS, ITEM_GROUPS, MapData, SpeciesData, TrainerData, LocationCategory,
-                   data as emerald_data)
+from .data import LEGENDARY_POKEMON, MapData, SpeciesData, TrainerData, LocationCategory, data as emerald_data
+from .groups import ITEM_GROUPS, LOCATION_GROUPS
 from .items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification, offset_item_value
 from .locations import (PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_by_category,
                         set_free_fly, set_legendary_cave_entrances)
