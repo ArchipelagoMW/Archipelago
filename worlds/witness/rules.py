@@ -35,66 +35,36 @@ laser_hexes = [
 def _can_do_panel_hunt(world: "WitnessWorld") -> CollectionRule:
     total = world.options.panel_hunt_total.value
     required = round(world.options.panel_hunt_required_percentage / 100 * total)
-
-    requirements = [
-        logical_and_witness_rules([
-            world.player_logic.REQUIREMENTS_BY_HEX[entity_hex],
-            frozenset({frozenset([static_witness_logic.ENTITIES_BY_HEX[entity_hex]["region"]["name"]])})
-        ])
-        for entity_hex in world.player_logic.HUNT_ENTITIES
-    ]
-
-    counter = Counter(requirements).most_common()
-    lambdas_to_count = [(_meets_item_requirements(requirement, world), count) for requirement, count in counter]
-
-    def can_solve_at_least_entities(state: CollectionState) -> bool:
-        solvable_so_far = 0
-        for representative_lambda, count in lambdas_to_count:
-            if representative_lambda(state):
-                solvable_so_far += count
-
-            if solvable_so_far >= required:
-                return True
-
-        return False
-
-    return lambda state: can_solve_at_least_entities(state)
+    player = world.player
+    return lambda state: state.has("+1 Panel Hunt", player, required)
 
 
-def _has_laser(laser_hex: str, world: "WitnessWorld", player: int, redirect_required: bool) -> CollectionRule:
+def _has_laser(laser_hex: str, world: "WitnessWorld", redirect_required: bool) -> CollectionRule:
+    player = world.player
+    laser_name = static_witness_logic.ENTITIES_BY_HEX[laser_hex]["checkName"]
     if laser_hex == "0x012FB" and redirect_required:
-        return lambda state: (
-            _can_solve_panel(laser_hex, world, world.player, world.player_logic, world.player_locations)(state)
-            and state.has("Desert Laser Redirection", player)
-        )
+        return lambda state: state.has_all([f"+1 Laser ({laser_name})", "Desert Laser Redirection"], player)
     else:
-        return _can_solve_panel(laser_hex, world, world.player, world.player_logic, world.player_locations)
+        return lambda state: state.has(f"+1 Laser ({laser_name})", player)
 
 
 def _has_lasers(amount: int, world: "WitnessWorld", redirect_required: bool) -> CollectionRule:
     laser_lambdas = []
 
     for laser_hex in laser_hexes:
-        has_laser_lambda = _has_laser(laser_hex, world, world.player, redirect_required)
+        has_laser_lambda = _has_laser(laser_hex, world, redirect_required)
 
         laser_lambdas.append(has_laser_lambda)
 
     return lambda state: sum(laser_lambda(state) for laser_lambda in laser_lambdas) >= amount
 
 
-def _can_solve_panel(panel: str, world: "WitnessWorld", player: int, player_logic: WitnessPlayerLogic,
-                     player_locations: WitnessPlayerLocations) -> CollectionRule:
+def _can_solve_panel(panel: str, world: "WitnessWorld") -> CollectionRule:
     """
     Determines whether a panel can be solved
     """
 
-    panel_obj = player_logic.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel]
-    entity_name = panel_obj["checkName"]
-
-    if entity_name + " Solved" in player_locations.EVENT_LOCATION_TABLE:
-        return lambda state, item=player_logic.EVENT_ITEM_PAIRS[entity_name + " Solved"][0]: state.has(item, player)
-    else:
-        return make_lambda(panel, world)
+    return make_lambda(panel, world)
 
 
 def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
@@ -274,7 +244,7 @@ def _has_item(item: str, world: "WitnessWorld", player: int,
     elif item == "Theater to Tunnels":
         return lambda state: _can_do_theater_to_tunnels(state, world)
     if item in player_logic.USED_EVENT_NAMES_BY_HEX:
-        return _can_solve_panel(item, world, player, player_logic, player_locations)
+        return _can_solve_panel(item, world)
 
     prog_item = static_witness_logic.get_parent_progressive_item(item)
     return lambda state: state.has(prog_item, player, player_logic.MULTI_AMOUNTS[item])

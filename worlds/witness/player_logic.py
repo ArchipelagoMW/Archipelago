@@ -828,7 +828,6 @@ class WitnessPlayerLogic:
 
         self.HUNT_ENTITIES.update(world.random.sample(all_eligible_panels, total_panels))
 
-
     def make_event_panel_lists(self) -> None:
         """
         Makes event-item pairs for entities with associated events, unless these entities are disabled.
@@ -853,13 +852,13 @@ class WitnessPlayerLogic:
                 if i == 0:
                     self.EVENT_ITEM_PAIRS[entity_name + action] = (event_name, entity_hex)
                 else:
-                    self.EVENT_ITEM_PAIRS[entity_name + action + f"(Effect {i + 1})"] = (event_name, entity_hex)
+                    self.EVENT_ITEM_PAIRS[entity_name + action + f" (Effect {i + 1})"] = (event_name, entity_hex)
 
         # Make Panel Hunt Events
         for entity_hex in self.HUNT_ENTITIES:
             entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity_hex]
             entity_name = entity_obj["checkName"]
-            self.EVENT_ITEM_PAIRS[entity_name + "(Panel Hunt)"] = ("+1 Panel Hunt", entity_hex)
+            self.EVENT_ITEM_PAIRS[entity_name + " (Panel Hunt)"] = ("+1 Panel Hunt", entity_hex)
 
         return
 
@@ -912,7 +911,7 @@ class WitnessPlayerLogic:
         self.HUNT_ENTITIES = set()
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {
-            "0x00509": "+1 Laser (Symmetry Laser)",
+            "0x00509": "+1 Laser (Symmetry Island Laser)",
             "0x012FB": "+1 Laser (Desert Laser)",
             "0x09F98": "Desert Laser Redirection",
             "0x01539": "+1 Laser (Quarry Laser)",
