@@ -82,6 +82,10 @@ def send_yaml(player_name: str, formatted_options: dict):
 
 
 def ap_dedent(text: str) -> str:
+    """
+    handles 2 different styles of multiline doc strings,
+    opening triple-quote either isolated or not isolated
+    """
     text = text.strip("\n")
     if text.startswith("  "):
         return dedent(text)
