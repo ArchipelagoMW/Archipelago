@@ -707,17 +707,18 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         connecting_region=regions["Fortress Exterior from Overworld"])
 
     regions["Beneath the Vault Ladder Exit"].connect(
-        connecting_region=regions["Beneath the Vault Front"],
-        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, player, options))
-    regions["Beneath the Vault Front"].connect(
+        connecting_region=regions["Beneath the Vault Main"],
+        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, player, options)
+        and has_lantern(state, player, options))
+    regions["Beneath the Vault Main"].connect(
         connecting_region=regions["Beneath the Vault Ladder Exit"],
         rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, player, options))
 
-    regions["Beneath the Vault Front"].connect(
+    regions["Beneath the Vault Main"].connect(
         connecting_region=regions["Beneath the Vault Back"],
         rule=lambda state: has_lantern(state, player, options))
     regions["Beneath the Vault Back"].connect(
-        connecting_region=regions["Beneath the Vault Front"])
+        connecting_region=regions["Beneath the Vault Main"])
 
     regions["Fortress East Shortcut Upper"].connect(
         connecting_region=regions["Fortress East Shortcut Lower"])
