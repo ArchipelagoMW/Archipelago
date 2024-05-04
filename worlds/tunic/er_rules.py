@@ -268,7 +268,8 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         connecting_region=regions["Overworld Well Ladder"],
         rule=lambda state: has_ladder("Ladders in Well", state, player, options))
     regions["Overworld Well Ladder"].connect(
-        connecting_region=regions["Overworld"])
+        connecting_region=regions["Overworld"],
+        rule=lambda state: has_ladder("Ladders in Well", state, player, options))
 
     # nmg: can ice grapple through the door
     regions["Overworld"].connect(
