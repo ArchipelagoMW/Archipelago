@@ -512,7 +512,7 @@ class WitnessPlayerLogic:
             if loc_obj["entityType"] == "EP":
                 self.COMPLETELY_DISABLED_ENTITIES.add(loc_obj["entity_hex"])
 
-            elif loc_obj["entityType"] in {"General", "Vault", "Discard"}:
+            elif loc_obj["entityType"] == "Panel":
                 self.EXCLUDED_LOCATIONS.add(loc_obj["entity_hex"])
 
         for adjustment_lineset in adjustment_linesets_in_order:
@@ -806,6 +806,18 @@ class WitnessPlayerLogic:
             item_name for item_name, is_required in is_item_required_dict.items() if not is_required
         }
 
+    def pick_panel_hunt_panels(self, world: "WitnessWorld"):
+        all_eligible_panels = [
+            entity_hex for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items()
+            if entity_obj["entityType"] == "Panel" and self.solvability_guaranteed(entity_hex)
+        ]
+
+        total_panels = world.options.panel_hunt_total.value
+
+        self.HUNT_ENTITIES.update(world.random.sample(all_eligible_panels, total_panels))
+
+        print(self.HUNT_ENTITIES)
+
     def make_event_item_pair(self, entity_hex: str) -> Tuple[str, str]:
         """
         Makes a pair of an event panel and its event item
@@ -883,6 +895,8 @@ class WitnessPlayerLogic:
         self.ADDED_CHECKS = set()
         self.VICTORY_LOCATION = "0x0356B"
 
+        self.HUNT_ENTITIES = set()
+
         self.ALWAYS_EVENT_NAMES_BY_HEX = {
             "0x00509": "+1 Laser (Symmetry Laser)",
             "0x012FB": "+1 Laser (Desert Laser)",
@@ -912,6 +926,9 @@ class WitnessPlayerLogic:
         # After we have adjusted the raw requirements, we perform a dependency reduction for the entity requirements.
         # This will make the access conditions way faster, instead of recursively checking dependent entities each time.
         self.make_dependency_reduced_checklist()
+
+        if world.options.victory_condition == "panel_hunt":
+            self.pick_panel_hunt_panels(world)
 
         # Finalize which items actually exist in the MultiWorld and which get grouped into progressive items.
         self.finalize_items()

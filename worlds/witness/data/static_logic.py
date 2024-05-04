@@ -78,6 +78,7 @@ class StaticWitnessLogicObj:
                     "region": None,
                     "id": None,
                     "entityType": location_id,
+                    "locationType": None,
                     "area": current_area,
                 }
 
@@ -102,19 +103,28 @@ class StaticWitnessLogicObj:
                 "Laser Hedges",
                 "Laser Pressure Plates",
             }
-            is_vault_or_video = "Vault" in entity_name or "Video" in entity_name
+            is_vault_or_video = "Vault" in entity_name
 
             if "Discard" in entity_name:
+                entity_type = "Panel"
                 location_type = "Discard"
-            elif is_vault_or_video or entity_name == "Tutorial Gate Close":
+            elif is_vault_or_video:
+                entity_type = "Panel"
                 location_type = "Vault"
             elif entity_name in laser_names:
-                location_type = "Laser"
+                entity_type = "Laser"
+                location_type = None
             elif "Obelisk Side" in entity_name:
+                entity_type = "Obelisk Side"
                 location_type = "Obelisk Side"
             elif "EP" in entity_name:
+                entity_type = "EP"
                 location_type = "EP"
+            elif entity_hex.startswith("0xFF"):
+                entity_type = "Event"
+                location_type = None
             else:
+                entity_type = "Panel"
                 location_type = "General"
 
             required_items = parse_lambda(required_item_lambda)
@@ -127,7 +137,7 @@ class StaticWitnessLogicObj:
                 "items": required_items
             }
 
-            if location_type == "Obelisk Side":
+            if entity_type == "Obelisk Side":
                 eps = set(next(iter(required_panels)))
                 eps -= {"Theater to Tunnels"}
 
@@ -142,7 +152,8 @@ class StaticWitnessLogicObj:
                 "entity_hex": entity_hex,
                 "region": current_region,
                 "id": int(location_id),
-                "entityType": location_type,
+                "entityType": entity_type,
+                "locationType": location_type,
                 "area": current_area,
             }
 

@@ -50,7 +50,7 @@ class WitnessPlayerLocations:
         self.CHECK_PANELHEX_TO_ID = {
             static_witness_logic.ENTITIES_BY_NAME[ch]["entity_hex"]: static_witness_locations.ALL_LOCATIONS_TO_ID[ch]
             for ch in self.CHECK_LOCATIONS
-            if static_witness_logic.ENTITIES_BY_NAME[ch]["entityType"] in self.PANEL_TYPES_TO_SHUFFLE
+            if static_witness_logic.ENTITIES_BY_NAME[ch]["locationType"] in self.PANEL_TYPES_TO_SHUFFLE
         }
 
         dog_hex = static_witness_logic.ENTITIES_BY_NAME["Town Pet the Dog"]["entity_hex"]
