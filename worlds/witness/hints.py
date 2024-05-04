@@ -604,12 +604,28 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int,
 def make_compact_hint_data(hint: WitnessWordedHint, local_player_number: int) -> CompactItemData:
     location = hint.location
     area_amount = hint.area_amount
+    hunt_panels = hint.area_hunt_panels
 
-    # None if junk hint, address if location hint, area string if area hint
-    arg_1 = location.address if location else (hint.area if hint.area else None)
+    # -1 if junk hint, address if location hint, area string if area hint
+    arg_1: Union[str, int]
+    if location and location.address is not None:
+        arg_1 = location.address
+    elif hint.area is not None:
+        arg_1 = hint.area
+    else:
+        arg_1 = -1
 
-    # self.player if junk hint, player if location hint, progression amount if area hint
-    arg_2 = area_amount if area_amount is not None else (location.player if location else local_player_number)
+    # self.player if junk hint, player if location hint, progression amount & hunt panels if area hint
+    arg_2: int
+    if area_amount is not None:
+        arg_2 = area_amount
+        # Encode amounts together
+        if hunt_panels:
+            arg_2 += 0x100 * hunt_panels
+    elif location is not None:
+        arg_2 = location.player
+    else:
+        arg_2 = local_player_number
 
     return hint.wording, arg_1, arg_2
 
