@@ -1,0 +1,134 @@
+Items:
+Outside Tutorial Outpost Doors
+Glass Factory Doors
+Symmetry Island Doors
+Orchard Gates
+Desert Doors & Elevator
+Quarry Entry Doors
+Quarry Stoneworks Doors
+Quarry Boathouse Doors
+Shadows Laser Room Doors
+Shadows Lower Doors
+Keep Hedge Maze Doors
+Keep Pressure Plates Doors
+Keep Shortcuts
+Monastery Entry Doors
+Monastery Shortcuts
+Town Doors
+Town Tower Doors
+Windmill & Theater Doors
+Jungle Doors
+Bunker Doors
+Swamp Doors
+Swamp Shortcuts
+Swamp Water Pumps
+Treehouse Entry Doors
+Treehouse Upper Doors
+Mountain Floor 1 & 2 Doors
+Mountain Bottom Floor Doors
+Caves Doors
+Caves Shortcuts
+Tunnels Doors
+
+Added Locations:
+Outside Tutorial Outpost Entry Panel
+Outside Tutorial Outpost Exit Panel
+Glass Factory Entry Panel
+Glass Factory Back Wall 5
+Symmetry Island Lower Panel
+Symmetry Island Upper Panel
+Orchard Apple Tree 3
+Orchard Apple Tree 5
+Desert Light Room Entry Panel
+Desert Light Room 3
+Desert Flood Room Entry Panel
+Desert Flood Room 6
+Quarry Entry 1 Panel
+Quarry Entry 2 Panel
+Quarry Stoneworks Entry Right Panel
+Quarry Stoneworks Entry Left Panel
+Quarry Stoneworks Side Exit Panel
+Quarry Stoneworks Roof Exit Panel
+Quarry Stoneworks Stairs Panel
+Quarry Boathouse Second Barrier Panel
+Shadows Door Timer Inside
+Shadows Door Timer Outside
+Shadows Far 8
+Shadows Near 5
+Shadows Intro 3
+Shadows Intro 5
+Keep Hedge Maze 1
+Keep Pressure Plates 1
+Keep Hedge Maze 2
+Keep Hedge Maze 3
+Keep Hedge Maze 4
+Keep Pressure Plates 2
+Keep Pressure Plates 3
+Keep Pressure Plates 4
+Keep Shadows Shortcut Panel
+Keep Tower Shortcut Panel
+Monastery Laser Shortcut Panel
+Monastery Entry Left
+Monastery Entry Right
+Monastery Outside 3
+Town Cargo Box Entry Panel
+Town Wooden Roof Lower Row 5
+Town RGB House Entry Panel
+Town Church Entry Panel
+Town Maze Panel
+Windmill Entry Panel
+Town RGB House Sound Room Right
+Town Red Rooftop 5
+Town Church Lattice
+Town Tall Hexagonal
+Town Wooden Rooftop
+Windmill Theater Entry Panel
+Theater Exit Left Panel
+Theater Exit Right Panel
+Jungle Laser Shortcut Panel
+Jungle Popup Wall Control
+Jungle Monastery Garden Shortcut Panel
+Bunker Entry Panel
+Bunker Tinted Glass Door Panel
+Bunker Glass Room 3
+Bunker UV Room 2
+Swamp Entry Panel
+Swamp Platform Row 4
+Swamp Platform Shortcut Right Panel
+Swamp Blue Underwater 5
+Swamp Between Bridges Near Row 4
+Swamp Cyan Underwater 5
+Swamp Red Underwater 4
+Swamp Beyond Rotating Bridge 4
+Swamp Beyond Rotating Bridge 4
+Swamp Laser Shortcut Right Panel
+Treehouse First Door Panel
+Treehouse Second Door Panel
+Treehouse Third Door Panel
+Treehouse Drawbridge Panel
+Treehouse Left Orange Bridge 15
+Treehouse Right Orange Bridge 12
+Treehouse Laser House Door Timer Outside
+Treehouse Laser House Door Timer Inside
+Mountain Floor 1 Left Row 7
+Mountain Floor 1 Right Row 5
+Mountain Floor 1 Back Row 3
+Mountain Floor 1 Trash Pillar 2
+Mountain Floor 2 Near Row 5
+Mountain Floor 2 Light Bridge Controller Near
+Mountain Floor 2 Light Bridge Controller Far
+Mountain Floor 2 Far Row 6
+Mountain Bottom Floor Giant Puzzle
+Mountain Bottom Floor Pillars Room Entry Left
+Mountain Bottom Floor Pillars Room Entry Right
+Mountain Bottom Floor Discard
+Mountain Bottom Floor Rock Control
+Mountain Bottom Floor Caves Entry Panel
+Caves Lone Pillar
+Caves Mountain Shortcut Panel
+Caves Swamp Shortcut Panel
+Caves Challenge Entry Panel
+Challenge Tunnels Entry Panel
+Tunnels Theater Shortcut Panel
+Tunnels Desert Shortcut Panel
+Tunnels Town Shortcut Panel
