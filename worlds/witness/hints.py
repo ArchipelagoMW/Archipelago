@@ -429,8 +429,6 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, area_items: List[Ite
         else:
             hint_string += f"{hunt_panels} Hunt Panels and "
 
-        print(hint_string)
-
     if not total_progression:
         hint_string += "no progression items."
 
