@@ -471,7 +471,7 @@ class HKWorld(World):
                 all([state.has("Grub", player, count) for player, count in g.items()])
         else:
             self.grub_count = grub_hunt_goal.value
-            world.completion_condition[player] = lambda state: state.has("Grub", player, self.grub_count)
+            self.multiworld.completion_condition[self.player] = lambda state: state.has("Grub", self.player, self.grub_count)
 
     def fill_slot_data(self):
         slot_data = {}
