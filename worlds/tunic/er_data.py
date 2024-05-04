@@ -1282,6 +1282,8 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     "Beneath the Vault Back": {
         "Beneath the Vault Main":
             [],
+        "Beneath the Vault Ladder Exit":
+            [],
     },
     "Fortress East Shortcut Lower": {
         "Fortress East Shortcut Upper":
