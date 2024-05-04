@@ -124,12 +124,13 @@ class PokemonEmeraldWorld(World):
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
-        from .sanity_check import validate_regions
+        from .sanity_check import validate_regions, validate_group_maps
 
         if not os.path.exists(cls.settings.rom_file):
             raise FileNotFoundError(cls.settings.rom_file)
 
         assert validate_regions()
+        assert validate_group_maps()
 
     def get_filler_item_name(self) -> str:
         return "Great Ball"
