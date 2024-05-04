@@ -32,6 +32,7 @@ class WitnessWordedHint:
     location: Optional[Location] = None
     area: Optional[str] = None
     area_amount: Optional[int] = None
+    area_hunt_panels: Optional[int] = None
 
 
 def get_always_hint_items(world: "WitnessWorld") -> List[str]:
@@ -386,22 +387,22 @@ def get_hintable_areas(world: "WitnessWorld") -> Tuple[Dict[str, List[Location]]
     return locations_per_area, items_per_area
 
 
-def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items: List[Item]) -> Tuple[str, int]:
+def word_area_hint(world: "WitnessWorld", hinted_area: str, area_items: List[Item]) -> Tuple[str, int, Optional[int]]:
     """
     Word the hint for an area using natural sounding language.
     This takes into account how much progression there is, how much of it is local/non-local, and whether there are
     any local lasers to be found in this area.
     """
 
-    local_progression = sum(item.player == world.player and item.advancement for item in corresponding_items)
-    non_local_progression = sum(item.player != world.player and item.advancement for item in corresponding_items)
+    local_progression = sum(item.player == world.player and item.advancement for item in area_items)
+    non_local_progression = sum(item.player != world.player and item.advancement for item in area_items)
 
     laser_names = {"Symmetry Laser", "Desert Laser", "Quarry Laser", "Shadows Laser", "Town Laser", "Monastery Laser",
                    "Jungle Laser", "Bunker Laser", "Swamp Laser", "Treehouse Laser", "Keep Laser", }
 
     local_lasers = sum(
         item.player == world.player and item.name in laser_names
-        for item in corresponding_items
+        for item in area_items
     )
 
     total_progression = non_local_progression + local_progression
@@ -410,11 +411,31 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items:
 
     area_progression_word = "Both" if total_progression == 2 else "All"
 
+    hint_string = f"In the {hinted_area} area, you will find "
+
+    hunt_panels = None
+    if world.options.victory_condition == "panel_hunt":
+        hunt_panels = sum(
+            static_witness_logic.ENTITIES_BY_HEX[hunt_entity]["area"]["name"] == hinted_area
+            for hunt_entity in world.player_logic.HUNT_ENTITIES
+        )
+
+        if not hunt_panels:
+            hint_string += "no Hunt Panels and "
+
+        elif hunt_panels == 1:
+            hint_string += "1 Hunt Panel and "
+
+        else:
+            hint_string += f"{hunt_panels} Hunt Panels and "
+
+        print(hint_string)
+
     if not total_progression:
-        hint_string = f"In the {hinted_area} area, you will find no progression items."
+        hint_string += "no progression items."
 
     elif total_progression == 1:
-        hint_string = f"In the {hinted_area} area, you will find 1 progression item."
+        hint_string += "1 progression item."
 
         if player_count > 1:
             if local_lasers:
@@ -429,7 +450,7 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items:
                 hint_string += "\nThis item is a laser."
 
     else:
-        hint_string = f"In the {hinted_area} area, you will find {total_progression} progression items."
+        hint_string += f"{total_progression} progression items."
 
         if local_lasers == total_progression:
             sentence_end = (" for this world." if player_count > 1 else ".")
@@ -466,7 +487,7 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items:
             elif local_lasers:
                 hint_string += f"\n{local_lasers} of them are lasers."
 
-    return hint_string, total_progression
+    return hint_string, total_progression, hunt_panels
 
 
 def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations: Set[Location]
@@ -478,9 +499,9 @@ def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations
     hints = []
 
     for hinted_area in hinted_areas:
-        hint_string, prog_amount = word_area_hint(world, hinted_area, items_per_area[hinted_area])
+        hint_string, prog_amount, hunt_panels = word_area_hint(world, hinted_area, items_per_area[hinted_area])
 
-        hints.append(WitnessWordedHint(hint_string, None, f"hinted_area:{hinted_area}", prog_amount))
+        hints.append(WitnessWordedHint(hint_string, None, f"hinted_area:{hinted_area}", prog_amount, hunt_panels))
 
     if len(hinted_areas) < amount:
         player_name = world.multiworld.get_player_name(world.player)
