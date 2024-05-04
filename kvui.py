@@ -285,12 +285,12 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
                 temp = MarkupLabel(text=self.text).markup
                 text = "".join(part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
                 cmdinput = App.get_running_app().textinput
-                if not cmdinput.text and " did you mean " in text:
-                    for question in ("Didn't find something that closely matches, did you mean ",
-                                     "Too many close matches, did you mean "):
+                if not cmdinput.text and "did you mean " in text:
+                    for question in ("Didn't find something that closely matches",
+                                     "Too many close matches"):
                         if text.startswith(question):
-                            name = Utils.get_text_between(text, question,
-                                                          "? (")
+                            name = Utils.get_text_between(text, "did you mean '",
+                                                          "'? (")
                             cmdinput.text = f"!{App.get_running_app().last_autofillable_command} {name}"
                             break
                 elif not cmdinput.text and text.startswith("Missing: "):
