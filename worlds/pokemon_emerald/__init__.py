@@ -9,7 +9,7 @@ from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar, TextIO, Unio
 
 from BaseClasses import ItemClassification, MultiWorld, Tutorial, LocationProgressType
 from Fill import FillError, fill_restrictive
-from Options import Toggle
+from Options import OptionError, Toggle
 import settings
 from worlds.AutoWorld import WebWorld, World
 
@@ -183,8 +183,8 @@ class PokemonEmeraldWorld(World):
         if self.options.goal == Goal.option_legendary_hunt:
             # Prevent turning off all legendary encounters
             if len(self.options.allowed_legendary_hunt_encounters.value) == 0:
-                raise ValueError(f"Pokemon Emerald: Player {self.player} ({self.multiworld.player_name[self.player]}) "
-                                 "needs to allow at least one legendary encounter when goal is legendary hunt.")
+                raise OptionError(f"Pokemon Emerald: Player {self.player} ({self.multiworld.player_name[self.player]}) "
+                                  "needs to allow at least one legendary encounter when goal is legendary hunt.")
 
             # Prevent setting the number of required legendaries higher than the number of enabled legendaries
             if self.options.legendary_hunt_count.value > len(self.options.allowed_legendary_hunt_encounters.value):
@@ -195,8 +195,8 @@ class PokemonEmeraldWorld(World):
 
         # Require random wild encounters if dexsanity is enabled
         if self.options.dexsanity and self.options.wild_pokemon == RandomizeWildPokemon.option_vanilla:
-            raise ValueError(f"Pokemon Emerald: Player {self.player} ({self.multiworld.player_name[self.player]}) must "
-                             "not leave wild encounters vanilla if enabling dexsanity.")
+            raise OptionError(f"Pokemon Emerald: Player {self.player} ({self.multiworld.player_name[self.player]}) must "
+                              "not leave wild encounters vanilla if enabling dexsanity.")
 
         # If badges or HMs are vanilla, Norman locks you from using Surf,
         # which means you're not guaranteed to be able to reach Fortree Gym,
