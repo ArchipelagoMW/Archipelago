@@ -1512,9 +1512,6 @@ _LOCATION_GROUP_MAPS = {
         "MAP_AQUA_HIDEOUT_1F",
         "MAP_AQUA_HIDEOUT_B1F",
         "MAP_AQUA_HIDEOUT_B2F",
-        "MAP_AQUA_HIDEOUT_UNUSED_RUBY_MAP1",
-        "MAP_AQUA_HIDEOUT_UNUSED_RUBY_MAP2",
-        "MAP_AQUA_HIDEOUT_UNUSED_RUBY_MAP3",
     },
     "Battle Frontier": {
         "MAP_ARTISAN_CAVE_1F",
@@ -1595,10 +1592,6 @@ _LOCATION_GROUP_MAPS = {
         "MAP_CONTEST_HALL_SMART",
         "MAP_CONTEST_HALL_TOUGH",
     },
-    "Desert": {
-        "MAP_DESERT_RUINS",
-        "MAP_DESERT_UNDERPASS",
-    },
     "Dewford Town": {
         "MAP_DEWFORD_TOWN",
         "MAP_DEWFORD_TOWN_GYM",
@@ -1640,6 +1633,7 @@ _LOCATION_GROUP_MAPS = {
     "Faraway Island": {
         "MAP_FARAWAY_ISLAND_ENTRANCE",
         "MAP_FARAWAY_ISLAND_INTERIOR",
+    },
     "Fiery Path": {"MAP_FIERY_PATH"},
     "Fortree City": {
         "MAP_FORTREE_CITY",
@@ -1659,6 +1653,7 @@ _LOCATION_GROUP_MAPS = {
         "MAP_GRANITE_CAVE_B1F",
         "MAP_GRANITE_CAVE_B2F",
         "MAP_GRANITE_CAVE_STEVENS_ROOM",
+    },
     "Jagged Pass": {"MAP_JAGGED_PASS"},
     "Lavaridge Town": {
         "MAP_LAVARIDGE_TOWN",
@@ -1694,7 +1689,6 @@ _LOCATION_GROUP_MAPS = {
         "MAP_LILYCOVE_CITY_POKEMON_CENTER_1F",
         "MAP_LILYCOVE_CITY_POKEMON_CENTER_2F",
         "MAP_LILYCOVE_CITY_POKEMON_TRAINER_FAN_CLUB",
-        "MAP_LILYCOVE_CITY_UNUSED_MART",
     },
     "Littleroot Town": {
         "MAP_INSIDE_OF_TRUCK",
@@ -1829,6 +1823,7 @@ _LOCATION_GROUP_MAPS = {
         "MAP_PETALBURG_CITY_POKEMON_CENTER_1F",
         "MAP_PETALBURG_CITY_POKEMON_CENTER_2F",
         "MAP_PETALBURG_CITY_WALLYS_HOUSE",
+    },
     "Petalburg Woods": {"MAP_PETALBURG_WOODS"},
     "Route 101": {"MAP_ROUTE101"},
     "Route 102": {"MAP_ROUTE102"},
@@ -1837,8 +1832,6 @@ _LOCATION_GROUP_MAPS = {
         "MAP_ROUTE104",
         "MAP_ROUTE104_MR_BRINEYS_HOUSE",
         "MAP_ROUTE104_PRETTY_PETAL_FLOWER_SHOP",
-        "MAP_ROUTE104_PROTOTYPE",
-        "MAP_ROUTE104_PROTOTYPE_PRETTY_PETAL_FLOWER_SHOP",
     },
     "Route 105": {
         "MAP_ISLAND_CAVE",
@@ -1871,6 +1864,7 @@ _LOCATION_GROUP_MAPS = {
         "MAP_ROUTE110_TRICK_HOUSE_PUZZLE8",
     },
     "Route 111": {
+        "MAP_DESERT_RUINS",
         "MAP_ROUTE111",
         "MAP_ROUTE111_OLD_LADYS_REST_STOP",
         "MAP_ROUTE111_WINSTRATE_FAMILYS_HOUSE",
@@ -1884,13 +1878,13 @@ _LOCATION_GROUP_MAPS = {
         "MAP_ROUTE113_GLASS_WORKSHOP",
     },
     "Route 114": {
+        "MAP_DESERT_UNDERPASS",
         "MAP_ROUTE114",
         "MAP_ROUTE114_FOSSIL_MANIACS_HOUSE",
         "MAP_ROUTE114_FOSSIL_MANIACS_TUNNEL",
         "MAP_ROUTE114_LANETTES_HOUSE",
     },
     "Route 115": {"MAP_ROUTE115"},
-    },
     "Route 116": {
         "MAP_ROUTE116",
         "MAP_ROUTE116_TUNNELERS_REST_HOUSE",
@@ -1913,7 +1907,7 @@ _LOCATION_GROUP_MAPS = {
     },
     "Route 121": {
         "MAP_ROUTE121",
-        "MAP_ROUTE121_SAFARI_ZONE_ENTRANCE",
+    },
     "Route 122": {"MAP_ROUTE122"},
     "Route 123": {
         "MAP_ROUTE123",
@@ -1943,6 +1937,7 @@ _LOCATION_GROUP_MAPS = {
     "Route 129": {
         "MAP_ROUTE129",
         "MAP_UNDERWATER_ROUTE129",
+    },
     "Route 130": {"MAP_ROUTE130"},
     "Route 131": {"MAP_ROUTE131"},
     "Route 132": {"MAP_ROUTE132"},
@@ -1973,8 +1968,10 @@ _LOCATION_GROUP_MAPS = {
         "MAP_RUSTBORO_CITY_POKEMON_CENTER_1F",
         "MAP_RUSTBORO_CITY_POKEMON_CENTER_2F",
         "MAP_RUSTBORO_CITY_POKEMON_SCHOOL",
+    },
     "Rusturf Tunnel": {"MAP_RUSTURF_TUNNEL"},
     "Safari Zone": {
+        "MAP_ROUTE121_SAFARI_ZONE_ENTRANCE",
         "MAP_SAFARI_ZONE_NORTH",
         "MAP_SAFARI_ZONE_NORTHEAST",
         "MAP_SAFARI_ZONE_NORTHWEST",
@@ -1995,32 +1992,6 @@ _LOCATION_GROUP_MAPS = {
         "MAP_SEAFLOOR_CAVERN_ROOM8",
         "MAP_SEAFLOOR_CAVERN_ROOM9",
         "MAP_UNDERWATER_SEAFLOOR_CAVERN",
-    },
-    "Secret Base": {
-        "MAP_SECRET_BASE_BLUE_CAVE1", 
-        "MAP_SECRET_BASE_BLUE_CAVE2",
-        "MAP_SECRET_BASE_BLUE_CAVE3",
-        "MAP_SECRET_BASE_BLUE_CAVE4",
-        "MAP_SECRET_BASE_BROWN_CAVE1",
-        "MAP_SECRET_BASE_BROWN_CAVE2",
-        "MAP_SECRET_BASE_BROWN_CAVE3",
-        "MAP_SECRET_BASE_BROWN_CAVE4",
-        "MAP_SECRET_BASE_RED_CAVE1",
-        "MAP_SECRET_BASE_RED_CAVE2",
-        "MAP_SECRET_BASE_RED_CAVE3",
-        "MAP_SECRET_BASE_RED_CAVE4",
-        "MAP_SECRET_BASE_SHRUB1",
-        "MAP_SECRET_BASE_SHRUB2",
-        "MAP_SECRET_BASE_SHRUB3",
-        "MAP_SECRET_BASE_SHRUB4",
-        "MAP_SECRET_BASE_TREE1",
-        "MAP_SECRET_BASE_TREE2",
-        "MAP_SECRET_BASE_TREE3",
-        "MAP_SECRET_BASE_TREE4",
-        "MAP_SECRET_BASE_YELLOW_CAVE1",
-        "MAP_SECRET_BASE_YELLOW_CAVE2",
-        "MAP_SECRET_BASE_YELLOW_CAVE3",
-        "MAP_SECRET_BASE_YELLOW_CAVE4",
     },
     "Shoal Cave": {
         "MAP_SHOAL_CAVE_HIGH_TIDE_ENTRANCE_ROOM",
@@ -2084,7 +2055,7 @@ _LOCATION_GROUP_MAPS = {
         "MAP_SOUTHERN_ISLAND_EXTERIOR",
         "MAP_SOUTHERN_ISLAND_INTERIOR",
     },
-    "SS Tidal": {
+    "S.S. Tidal": {
         "MAP_SS_TIDAL_CORRIDOR",
         "MAP_SS_TIDAL_LOWER_DECK",
         "MAP_SS_TIDAL_ROOMS",
@@ -2093,22 +2064,13 @@ _LOCATION_GROUP_MAPS = {
         "MAP_TERRA_CAVE_END",
         "MAP_TERRA_CAVE_ENTRANCE",
     },
-    "Trainer Hill": { #route 111
-        "MAP_TRAINER_HILL_1F",
+    "Trainer Hill": {
         "MAP_TRAINER_HILL_2F",
         "MAP_TRAINER_HILL_3F",
         "MAP_TRAINER_HILL_4F",
         "MAP_TRAINER_HILL_ELEVATOR",
         "MAP_TRAINER_HILL_ENTRANCE",
         "MAP_TRAINER_HILL_ROOF",
-    },
-    "Unused Contest": {
-        "MAP_UNUSED_CONTEST_HALL1",
-        "MAP_UNUSED_CONTEST_HALL2",
-        "MAP_UNUSED_CONTEST_HALL3",
-        "MAP_UNUSED_CONTEST_HALL4",
-        "MAP_UNUSED_CONTEST_HALL5",
-        "MAP_UNUSED_CONTEST_HALL6",
     },
     "Verdanturf Town": {
         "MAP_VERDANTURF_TOWN",
@@ -2126,13 +2088,6 @@ _LOCATION_GROUP_MAPS = {
         "MAP_VICTORY_ROAD_1F",
         "MAP_VICTORY_ROAD_B1F",
         "MAP_VICTORY_ROAD_B2F",
-    },
-    "Unknown": {
-        "MAP_BATTLE_COLOSSEUM_2P",
-        "MAP_BATTLE_COLOSSEUM_4P",
-        "MAP_RECORD_CORNER",
-        "MAP_TRADE_CENTER",
-        "MAP_UNION_ROOM",
     },
 }
 
@@ -2160,10 +2115,11 @@ for location in data.locations.values():
             LOCATION_GROUPS[tag] = set()
         LOCATION_GROUPS[tag].add(location.label)
 
-    map_name = data.regions[location.parent_region].parent_map.name
-    for group, maps in _LOCATION_GROUP_MAPS.items():
-        if map_name in maps:
-            if group not in LOCATION_GROUPS:
-                LOCATION_GROUPS[group] = set()
-            LOCATION_GROUPS[group].add(location.label)
-            break
+    if location.parent_region != "REGION_POKEDEX":
+        map_name = data.regions[location.parent_region].parent_map.name
+        for group, maps in _LOCATION_GROUP_MAPS.items():
+            if map_name in maps:
+                if group not in LOCATION_GROUPS:
+                    LOCATION_GROUPS[group] = set()
+                LOCATION_GROUPS[group].add(location.label)
+                break
