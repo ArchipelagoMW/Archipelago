@@ -90,6 +90,8 @@ def ap_dedent(text: str) -> str:
     if text.startswith("  "):
         return dedent(text)
     lines = text.split("\n")
+    if len(lines) < 2:
+        return text
     not_first = dedent("\n".join(lines[1:]))
     return f"{lines[0]}\n{not_first}"
 
