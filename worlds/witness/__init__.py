@@ -189,8 +189,9 @@ class WitnessWorld(World):
         ]
         if early_items:
             random_early_item = self.random.choice(early_items)
-            if self.options.puzzle_randomization == "sigma_expert":
+            if self.options.puzzle_randomization == "sigma_expert" or self.options.victory_condition == "panel_hunt":
                 # In Expert, only tag the item as early, rather than forcing it onto the gate.
+                # Same with panel hunt, since the Tutorial Gate Open panel is used for something else
                 self.multiworld.local_early_items[self.player][random_early_item] = 1
             else:
                 # Force the item onto the tutorial gate check and remove it from our random pool.

@@ -135,7 +135,7 @@ class WitnessPlayerLogic:
                 dep_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX.get(option_entity)
 
                 if option_entity in {"7 Lasers", "11 Lasers", "7 Lasers + Redirect", "11 Lasers + Redirect",
-                                     "PP2 Weirdness", "Theater to Tunnels", "Panel Hunt"}:
+                                     "PP2 Weirdness", "Theater to Tunnels", "Entity Hunt"}:
                     new_items = frozenset({frozenset([option_entity])})
                 elif option_entity in self.DISABLE_EVERYTHING_BEHIND:
                     new_items = frozenset()

@@ -2,6 +2,7 @@
 Defines the rules by which locations can be accessed,
 depending on the items received
 """
+from collections import Counter
 from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
@@ -9,7 +10,7 @@ from BaseClasses import CollectionState
 from worlds.generic.Rules import CollectionRule, set_rule
 
 from .data import static_logic as static_witness_logic
-from .data.utils import WitnessRule
+from .data.utils import WitnessRule, logical_and_witness_rules
 from .locations import WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
 
@@ -30,10 +31,34 @@ laser_hexes = [
     "0x17C65",
 ]
 
-def _can_do_panel_hunt(world: "WitnessWorld") -> CollectionRule:
-    # TODO
 
-    return lambda state: True
+def _can_do_panel_hunt(world: "WitnessWorld") -> CollectionRule:
+    total = world.options.panel_hunt_total.value
+    required = round(world.options.panel_hunt_required_percentage / 100 * total)
+
+    requirements = [
+        logical_and_witness_rules([
+            world.player_logic.REQUIREMENTS_BY_HEX[entity_hex],
+            frozenset({frozenset([static_witness_logic.ENTITIES_BY_HEX[entity_hex]["region"]["name"]])})
+        ])
+        for entity_hex in world.player_logic.HUNT_ENTITIES
+    ]
+
+    counter = Counter(requirements).most_common()
+    lambdas_to_count = [(_meets_item_requirements(requirement, world), count) for requirement, count in counter]
+
+    def can_solve_at_least_entities(state: CollectionState) -> bool:
+        solvable_so_far = 0
+        for representative_lambda, count in lambdas_to_count:
+            if representative_lambda(state):
+                solvable_so_far += count
+
+            if solvable_so_far >= required:
+                return True
+
+        return False
+
+    return lambda state: can_solve_at_least_entities(state)
 
 
 def _has_laser(laser_hex: str, world: "WitnessWorld", player: int, redirect_required: bool) -> CollectionRule:
@@ -242,7 +267,7 @@ def _has_item(item: str, world: "WitnessWorld", player: int,
     elif item == "11 Lasers + Redirect":
         laser_req = world.options.challenge_lasers.value
         return _has_lasers(laser_req, world, True)
-    elif item == "Panel Hunt":
+    elif item == "Entity Hunt":
         return _can_do_panel_hunt(world)
     elif item == "PP2 Weirdness":
         return lambda state: _can_do_expert_pp2(state, world)
