@@ -715,10 +715,10 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, player, options))
 
     regions["Beneath the Vault Main"].connect(
-        connecting_region=regions["Beneath the Vault Back"],
-        rule=lambda state: has_lantern(state, player, options))
+        connecting_region=regions["Beneath the Vault Back"])
     regions["Beneath the Vault Back"].connect(
-        connecting_region=regions["Beneath the Vault Main"])
+        connecting_region=regions["Beneath the Vault Main"],
+        rule=lambda state: has_lantern(state, player, options))
 
     regions["Fortress East Shortcut Upper"].connect(
         connecting_region=regions["Fortress East Shortcut Lower"])
@@ -1458,8 +1458,6 @@ def set_er_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) 
     # Beneath the Vault
     set_rule(multiworld.get_location("Beneath the Fortress - Bridge", player),
              lambda state: state.has_group("Melee Weapons", player, 1) or state.has_any({laurels, fire_wand}, player))
-    set_rule(multiworld.get_location("Beneath the Fortress - Obscured Behind Waterfall", player),
-             lambda state: has_lantern(state, player, options))
 
     # Quarry
     set_rule(multiworld.get_location("Quarry - [Central] Above Ladder Dash Chest", player),
