@@ -167,7 +167,7 @@ class WitnessWorld(World):
 
         for event_location in self.player_locations.EVENT_LOCATION_TABLE:
             item_obj = self.create_item(
-                self.player_logic.EVENT_ITEM_PAIRS[event_location]
+                self.player_logic.EVENT_ITEM_PAIRS[event_location][0]
             )
             location_obj = self.get_location(event_location)
             location_obj.place_locked_item(item_obj)

@@ -92,7 +92,7 @@ def _can_solve_panel(panel: str, world: "WitnessWorld", player: int, player_logi
     entity_name = panel_obj["checkName"]
 
     if entity_name + " Solved" in player_locations.EVENT_LOCATION_TABLE:
-        return lambda state: state.has(player_logic.EVENT_ITEM_PAIRS[entity_name + " Solved"], player)
+        return lambda state, item=player_logic.EVENT_ITEM_PAIRS[entity_name + " Solved"][0]: state.has(item, player)
     else:
         return make_lambda(panel, world)
 
@@ -315,7 +315,8 @@ def set_rules(world: "WitnessWorld") -> None:
         real_location = location
 
         if location in world.player_locations.EVENT_LOCATION_TABLE:
-            real_location = location[:-7]
+            entity_hex = world.player_logic.EVENT_ITEM_PAIRS[location][1]
+            real_location = static_witness_logic.ENTITIES_BY_HEX[entity_hex]["checkName"]
 
         associated_entity = world.player_logic.REFERENCE_LOGIC.ENTITIES_BY_NAME[real_location]
         entity_hex = associated_entity["entity_hex"]

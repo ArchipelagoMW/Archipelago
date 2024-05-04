@@ -60,14 +60,9 @@ class WitnessPlayerLocations:
         self.CHECK_PANELHEX_TO_ID = dict(
             sorted(self.CHECK_PANELHEX_TO_ID.items(), key=lambda item: item[1])
         )
-
-        event_locations = {
-            p for p in player_logic.USED_EVENT_NAMES_BY_HEX
-        }
-
         self.EVENT_LOCATION_TABLE = {
-            static_witness_locations.get_event_name(entity_hex): None
-            for entity_hex in event_locations
+            event_location: None
+            for event_location in player_logic.EVENT_ITEM_PAIRS
         }
 
         check_dict = {

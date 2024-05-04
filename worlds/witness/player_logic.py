@@ -152,10 +152,10 @@ class WitnessPlayerLogic:
                     elif option_entity in self.ALWAYS_EVENT_NAMES_BY_HEX:
                         new_items = frozenset({frozenset([option_entity])})
                     elif (entity_hex, option_entity) in self.CONDITIONAL_EVENTS:
-                        new_items = frozenset({frozenset([option_entity])})
-                        self.USED_EVENT_NAMES_BY_HEX[option_entity] = self.CONDITIONAL_EVENTS[
-                            (entity_hex, option_entity)
-                        ]
+                        new_items = frozenset({frozenset([self.CONDITIONAL_EVENTS[(entity_hex, option_entity)]])})
+                        self.USED_EVENT_NAMES_BY_HEX[option_entity].append(
+                            self.CONDITIONAL_EVENTS[(entity_hex, option_entity)]
+                        )
                     else:
                         new_items = theoretical_new_items
                         if dep_obj["region"] and entity_obj["region"] != dep_obj["region"]:
@@ -690,7 +690,7 @@ class WitnessPlayerLogic:
 
         # We also clear any data structures that we might have filled in a previous dependency reduction
         self.REQUIREMENTS_BY_HEX = dict()
-        self.USED_EVENT_NAMES_BY_HEX = dict()
+        self.USED_EVENT_NAMES_BY_HEX = defaultdict(list)
         self.CONNECTIONS_BY_REGION_NAME = dict()
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI = set()
 
@@ -828,18 +828,6 @@ class WitnessPlayerLogic:
 
         self.HUNT_ENTITIES.update(world.random.sample(all_eligible_panels, total_panels))
 
-    def make_event_item_pair(self, entity_hex: str) -> Tuple[str, str]:
-        """
-        Makes a pair of an event panel and its event item
-        """
-        action = " Opened" if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity_hex]["entityType"] == "Door" else " Solved"
-
-        name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity_hex]["checkName"] + action
-        if entity_hex not in self.USED_EVENT_NAMES_BY_HEX:
-            warning(f'Entity "{name}" does not have an associated event name.')
-            self.USED_EVENT_NAMES_BY_HEX[entity_hex] = name + " Event"
-        pair = (name, self.USED_EVENT_NAMES_BY_HEX[entity_hex])
-        return pair
 
     def make_event_panel_lists(self) -> None:
         """
@@ -848,16 +836,32 @@ class WitnessPlayerLogic:
 
         self.ALWAYS_EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION] = "Victory"
 
-        self.USED_EVENT_NAMES_BY_HEX.update(self.ALWAYS_EVENT_NAMES_BY_HEX)
+        for event_hex, event_name in self.ALWAYS_EVENT_NAMES_BY_HEX.items():
+            self.USED_EVENT_NAMES_BY_HEX[event_hex].append(event_name)
 
         self.USED_EVENT_NAMES_BY_HEX = {
-            event_hex: event_name for event_hex, event_name in self.USED_EVENT_NAMES_BY_HEX.items()
+            event_hex: event_list for event_hex, event_list in self.USED_EVENT_NAMES_BY_HEX.items()
             if self.solvability_guaranteed(event_hex)
         }
 
-        for panel in self.USED_EVENT_NAMES_BY_HEX:
-            pair = self.make_event_item_pair(panel)
-            self.EVENT_ITEM_PAIRS[pair[0]] = pair[1]
+        for entity_hex, event_names in self.USED_EVENT_NAMES_BY_HEX.items():
+            entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity_hex]
+            entity_name = entity_obj["checkName"]
+            entity_type = entity_obj["entityType"]
+            action = " Opened" if entity_type == "Door" else " Solved"
+            for i, event_name in enumerate(event_names):
+                if i == 0:
+                    self.EVENT_ITEM_PAIRS[entity_name + action] = (event_name, entity_hex)
+                else:
+                    self.EVENT_ITEM_PAIRS[entity_name + action + f"(Effect {i + 1})"] = (event_name, entity_hex)
+
+        # Make Panel Hunt Events
+        for entity_hex in self.HUNT_ENTITIES:
+            entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity_hex]
+            entity_name = entity_obj["checkName"]
+            self.EVENT_ITEM_PAIRS[entity_name + "(Panel Hunt)"] = ("+1 Panel Hunt", entity_hex)
+
+        return
 
     def __init__(self, world: "WitnessWorld", disabled_locations: Set[str], start_inv: Dict[str, int]) -> None:
         self.YAML_DISABLED_LOCATIONS = disabled_locations
