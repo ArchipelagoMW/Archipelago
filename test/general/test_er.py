@@ -1,12 +1,11 @@
-import itertools
 import unittest
-from typing import Optional, List, Type, Iterable
+from typing import List, Type
 
-from BaseClasses import Region, EntranceType, MultiWorld, Entrance, CollectionState
+from BaseClasses import Region, EntranceType, MultiWorld, Entrance
 from EntranceRando import disconnect_entrance_for_randomization, randomize_entrances, EntranceRandomizationError, \
     ERPlacementState, EntranceLookup
 from Options import Accessibility
-from test.general import generate_multiworld, generate_locations, generate_items
+from test.general import generate_test_multiworld, generate_locations, generate_items
 from worlds.generic.Rules import set_rule
 
 
@@ -62,7 +61,7 @@ def directionally_matched_group_selection(group: str) -> List[str]:
 class TestEntranceLookup(unittest.TestCase):
     def test_shuffled_targets(self):
         """tests that get_targets shuffles targets between groups when requested"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         generate_disconnected_region_grid(multiworld, 5)
 
         lookup = EntranceLookup(multiworld.per_slot_randoms[1])
@@ -81,7 +80,7 @@ class TestEntranceLookup(unittest.TestCase):
 
     def test_ordered_targets(self):
         """tests that get_targets does not shuffle targets between groups when requested"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         generate_disconnected_region_grid(multiworld, 5)
 
         lookup = EntranceLookup(multiworld.per_slot_randoms[1])
@@ -98,7 +97,7 @@ class TestEntranceLookup(unittest.TestCase):
 
 class TestDisconnectForRandomization(unittest.TestCase):
     def test_disconnect_default_2way(self):
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         r1 = Region("r1", 1, multiworld)
         r2 = Region("r2", 1, multiworld)
         e = r1.create_exit("e")
@@ -121,7 +120,7 @@ class TestDisconnectForRandomization(unittest.TestCase):
         self.assertEqual("Group1", r1.entrances[0].er_group)
 
     def test_disconnect_default_1way(self):
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         r1 = Region("r1", 1, multiworld)
         r2 = Region("r2", 1, multiworld)
         e = r1.create_exit("e")
@@ -144,7 +143,7 @@ class TestDisconnectForRandomization(unittest.TestCase):
         self.assertEqual("Group1", r2.entrances[0].er_group)
 
     def test_disconnect_uses_alternate_group(self):
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         r1 = Region("r1", 1, multiworld)
         r2 = Region("r2", 1, multiworld)
         e = r1.create_exit("e")
@@ -170,10 +169,10 @@ class TestDisconnectForRandomization(unittest.TestCase):
 class TestRandomizeEntrances(unittest.TestCase):
     def test_determinism(self):
         """tests that the same output is produced for the same input"""
-        multiworld1 = generate_multiworld()
+        multiworld1 = generate_test_multiworld()
         multiworld1.worlds[1].random = multiworld1.per_slot_randoms[1]
         generate_disconnected_region_grid(multiworld1, 5)
-        multiworld2 = generate_multiworld()
+        multiworld2 = generate_test_multiworld()
         multiworld2.worlds[1].random = multiworld2.per_slot_randoms[1]
         generate_disconnected_region_grid(multiworld2, 5)
 
@@ -187,7 +186,7 @@ class TestRandomizeEntrances(unittest.TestCase):
 
     def test_all_entrances_placed(self):
         """tests that all entrances and exits were placed, all regions are connected, and no dangling edges exist"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
         generate_disconnected_region_grid(multiworld, 5)
 
@@ -204,7 +203,7 @@ class TestRandomizeEntrances(unittest.TestCase):
 
     def test_coupling(self):
         """tests that in coupled mode, all 2 way transitions have an inverse"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
         generate_disconnected_region_grid(multiworld, 5)
         seen_placement_count = 0
@@ -223,7 +222,7 @@ class TestRandomizeEntrances(unittest.TestCase):
 
     def test_uncoupled(self):
         """tests that in uncoupled mode, no transitions have an (intentional) inverse"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
         generate_disconnected_region_grid(multiworld, 5)
         seen_placement_count = 0
@@ -240,7 +239,7 @@ class TestRandomizeEntrances(unittest.TestCase):
 
     def test_oneway_twoway_pairing(self):
         """tests that 1 ways are only paired to 1 ways and 2 ways are only paired to 2 ways"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
         generate_disconnected_region_grid(multiworld, 5)
         region26 = Region("region26", 1, multiworld)
@@ -262,7 +261,7 @@ class TestRandomizeEntrances(unittest.TestCase):
 
     def test_group_constraints_satisfied(self):
         """tests that all grouping constraints are satisfied"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
         generate_disconnected_region_grid(multiworld, 5)
 
@@ -281,7 +280,7 @@ class TestRandomizeEntrances(unittest.TestCase):
 
     def test_minimal_entrance_rando(self):
         """tests that entrance randomization can complete with minimal accessibility and unreachable exits"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
         multiworld.worlds[1].options.accessibility = Accessibility.from_any(Accessibility.option_minimal)
         multiworld.completion_condition[1] = lambda state: state.can_reach("region24", player=1)
@@ -302,7 +301,7 @@ class TestRandomizeEntrances(unittest.TestCase):
 
     def test_fails_when_mismatched_entrance_and_exit_count(self):
         """tests that entrance randomization fast-fails if the input exit and entrance count do not match"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
         generate_disconnected_region_grid(multiworld, 5)
         multiworld.get_region("region1", 1).create_exit("extra")
@@ -312,7 +311,7 @@ class TestRandomizeEntrances(unittest.TestCase):
 
     def test_fails_when_some_unreachable_exit(self):
         """tests that entrance randomization fails if an exit is never reachable (non-minimal accessibility)"""
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
         generate_disconnected_region_grid(multiworld, 5)
         e = multiworld.get_entrance("region1_right", 1)
@@ -331,7 +330,7 @@ class TestRandomizeEntrances(unittest.TestCase):
         class CustomRegion(Region):
             entrance_type = CustomEntrance
 
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
         generate_disconnected_region_grid(multiworld, 5, region_type=CustomRegion)
 
@@ -343,7 +342,7 @@ class TestRandomizeEntrances(unittest.TestCase):
         tests that entrance randomization fails in minimal accessibility if there are not enough locations
         available to place all progression items locally
         """
-        multiworld = generate_multiworld()
+        multiworld = generate_test_multiworld()
         multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
         multiworld.worlds[1].options.accessibility = Accessibility.from_any(Accessibility.option_minimal)
         multiworld.completion_condition[1] = lambda state: state.can_reach("region24", player=1)
