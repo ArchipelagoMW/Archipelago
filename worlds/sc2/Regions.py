@@ -6,7 +6,7 @@ from .Locations import LocationData
 from .Options import get_option_value, MissionOrder, get_enabled_campaigns, campaign_depending_orders, \
     GridTwoStartPositions
 from .MissionTables import MissionInfo, mission_orders, vanilla_mission_req_table, \
-    MissionPools, SC2Campaign, get_goal_location, SC2Mission, MissionConnection
+    MissionPools, SC2Campaign, get_goal_location, SC2Mission, MissionConnection, FillMission
 from .PoolFilter import filter_missions
 from worlds.AutoWorld import World
 
@@ -375,6 +375,86 @@ def make_grid_connect_rule(
     return lambda state: state.has(f"Beat {missions[connected_coords].mission_name}", player)
 
 
+def make_dynamic_mission_order(
+    world: World,
+    locations: Tuple[LocationData, ...],
+    location_cache: List[Location],
+    mission_order_type: int
+) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
+    player = world.player
+    mission_pools = filter_missions(world)
+
+    mission_pool = [mission for mission_pool in mission_pools.values() for mission in mission_pool]
+
+    num_missions = min(len(mission_pool), get_option_value(world, "maximum_campaign_size"))
+    num_missions = max(2, num_missions)
+    chain_name_options = ['Mar Sara', 'Char', 'Kaldir', 'Zerus', 'Skygeirr Station',
+                   'Dominion Space', 'Korhal', 'Aiur', 'Shakuras', 'Ulnar']
+    world.random.shuffle(chain_name_options)
+
+    mission_difficulties = [MissionPools.EASY, MissionPools.MEDIUM, MissionPools.HARD, MissionPools.VERY_HARD]
+    first_chain = chain_name_options.pop()
+    first_mission = FillMission(MissionPools.STARTER, [MissionConnection(-1, SC2Campaign.GLOBAL)], first_chain,
+                                     completion_critical=True)
+
+    class Campaign:
+        def __init__(self, first_mission: FillMission, missions_remaining: int):
+            self.mission_order = [first_mission]
+            self.counter = 0
+            self.last_mission_in_chain = [0]
+            self.chain_names = [first_mission.category]
+            self.missions_remaining = missions_remaining
+            self.padding = 0
+
+        def add_mission(self, chain: int, difficulty: int, required_missions: int = 0):
+            if self.missions_remaining == 0 and difficulty is not MissionPools.FINAL:
+                return
+            self.counter += 1
+            if self.mission_order[self.last_mission_in_chain[chain]].number == required_missions or required_missions <= 1:
+                required_missions = 0
+            mission_connections = [MissionConnection(self.last_mission_in_chain[chain], SC2Campaign.GLOBAL)]
+            padding = 0
+            if self.last_mission_in_chain[chain] == self.last_mission_in_chain[0]:
+                # Adding padding to the start of new chains
+                if chain != 0:
+                    padding = self.padding
+            else:
+                # Requiring main chain progress for optional chains
+                mission_connections.append(MissionConnection(self.last_mission_in_chain[0], SC2Campaign.GLOBAL))
+            self.mission_order.append(FillMission(
+                difficulty,
+                mission_connections,
+                self.chain_names[chain],
+                number=required_missions,
+                completion_critical=chain == 0,
+                ui_vertical_padding=padding
+            ))
+            self.last_mission_in_chain[chain] = self.counter
+            if chain == 0:
+                self.padding += 1
+            self.missions_remaining -= 1
+
+    campaign = Campaign(first_mission, num_missions - 2)
+    current_required_missions = 0
+    main_chain = 0
+    while campaign.missions_remaining > 0:
+        main_chain += 1
+        mission_difficulty = mission_difficulties[min(main_chain // 2, 3)]
+        if main_chain % 2 == 1:  # Adding branches
+            chains_to_make = 0 if len(campaign.chain_names) > 5 else 2 if main_chain == 1 else 1
+            for new_chain in range(chains_to_make):
+                campaign.chain_names.append(chain_name_options.pop())
+                campaign.last_mission_in_chain.append(campaign.last_mission_in_chain[0])
+        # Updating branches
+        for side_chain in range(len(campaign.chain_names) - 1, 0, -1):
+            campaign.add_mission(side_chain, mission_difficulty)
+        # Adding main path mission
+        current_required_missions = (len(campaign.mission_order) * 3) // 4
+        campaign.add_mission(0, mission_difficulty, current_required_missions)
+    campaign.add_mission(0, MissionPools.FINAL, current_required_missions)
+    return {SC2Campaign.GLOBAL: campaign.mission_order}
+
+
 def create_structured_regions(
     world: World,
     locations: Tuple[LocationData, ...],
@@ -383,7 +463,10 @@ def create_structured_regions(
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
     locations_per_region = get_locations_per_region(locations)
 
-    mission_order = mission_orders[mission_order_type]()
+    if mission_order_type == MissionOrder.option_golden_path:
+        mission_order = make_dynamic_mission_order(world, locations, location_cache, mission_order_type)
+    else:
+        mission_order = mission_orders[mission_order_type]()
     enabled_campaigns = get_enabled_campaigns(world)
     shuffle_campaigns = get_option_value(world, "shuffle_campaigns")
 
@@ -592,7 +675,9 @@ def create_structured_regions(
                 mission.slot, connections, mission_order[campaign][i].category,
                 number=mission_order[campaign][i].number,
                 completion_critical=mission_order[campaign][i].completion_critical,
-                or_requirements=mission_order[campaign][i].or_requirements)})
+                or_requirements=mission_order[campaign][i].or_requirements,
+                ui_vertical_padding=mission_order[campaign][i].ui_vertical_padding),
+            })
 
     final_mission_id = final_mission.id
     # Changing the completion condition for alternate final missions into an event

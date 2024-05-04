@@ -8,7 +8,7 @@ from .MissionTables import mission_orders, MissionInfo, MissionPools, \
 from .Options import get_option_value, MissionOrder, \
     get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech, \
     TakeOverAIAllies, SpearOfAdunPresence, SpearOfAdunAutonomouslyCastAbilityPresence, campaign_depending_orders, \
-    ShuffleCampaigns, get_excluded_missions, ShuffleNoBuild, ExtraLocations, GrantStoryLevels
+    ShuffleCampaigns, get_excluded_missions, ShuffleNoBuild, ExtraLocations, GrantStoryLevels, dynamic_mission_orders
 from . import ItemNames
 from worlds.AutoWorld import World
 
@@ -208,7 +208,7 @@ def copy_item(item: Item):
 
 def num_missions(world: World) -> int:
     mission_order_type = get_option_value(world, "mission_order")
-    if mission_order_type != MissionOrder.option_grid:
+    if mission_order_type not in dynamic_mission_orders:
         mission_order = mission_orders[mission_order_type]()
         misssions = [mission for campaign in mission_order for mission in mission_order[campaign]]
         return len(misssions) - 1  # Menu

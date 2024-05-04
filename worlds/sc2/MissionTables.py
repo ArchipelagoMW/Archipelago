@@ -217,7 +217,7 @@ class MissionInfo(NamedTuple):
     number: int = 0  # number of worlds need beaten
     completion_critical: bool = False  # missions needed to beat game
     or_requirements: bool = False  # true if the requirements should be or-ed instead of and-ed
-    ui_vertical_padding: int = 0
+    ui_vertical_padding: int = 0   # How many blank padding tiles go above this mission in the launcher
 
 
 class FillMission(NamedTuple):
@@ -228,7 +228,7 @@ class FillMission(NamedTuple):
     completion_critical: bool = False  # missions needed to beat game
     or_requirements: bool = False  # true if the requirements should be or-ed instead of and-ed
     removal_priority: int = 0  # how many missions missing from the pool required to remove this mission
-
+    ui_vertical_padding: int = 0  # How many blank padding tiles go above this mission in the launcher
 
 
 def vanilla_shuffle_order() -> Dict[SC2Campaign, List[FillMission]]:

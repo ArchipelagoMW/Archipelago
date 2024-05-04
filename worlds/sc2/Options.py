@@ -80,6 +80,7 @@ class MissionOrder(Choice):
     option_mini_gauntlet = 7
     option_tiny_grid = 8
     option_grid = 9
+    option_golden_path = 10
 
 
 class MaximumCampaignSize(Range):
@@ -902,6 +903,10 @@ campaign_depending_orders = [
     MissionOrder.option_vanilla,
     MissionOrder.option_vanilla_shuffled,
     MissionOrder.option_mini_campaign
+]
+
+dynamic_mission_orders = [
+    MissionOrder.option_golden_path
 ]
 
 kerrigan_unit_available = [
