@@ -275,11 +275,11 @@ _LOCATION_GROUP_MAPS = {
         "MAP_MOSSDEEP_CITY_SPACE_CENTER_2F",
         "MAP_MOSSDEEP_CITY_STEVENS_HOUSE",
     },
-    "Mt Chimney": {
+    "Mt. Chimney": {
         "MAP_MT_CHIMNEY",
         "MAP_MT_CHIMNEY_CABLE_CAR_STATION",
     },
-    "Mt Pyre": {
+    "Mt. Pyre": {
         "MAP_MT_PYRE_1F",
         "MAP_MT_PYRE_2F",
         "MAP_MT_PYRE_3F",
@@ -629,13 +629,16 @@ _LOCATION_CATEGORY_TO_GROUP_NAME = {
 
 LOCATION_GROUPS: Dict[str, Set[str]] = {group_name: set() for group_name in _LOCATION_CATEGORY_TO_GROUP_NAME.values()}
 for location in data.locations.values():
+    # Category groups
     LOCATION_GROUPS[_LOCATION_CATEGORY_TO_GROUP_NAME[location.category]].add(location.label)
 
+    # Tag groups
     for tag in location.tags:
         if tag not in LOCATION_GROUPS:
             LOCATION_GROUPS[tag] = set()
         LOCATION_GROUPS[tag].add(location.label)
 
+    # Geographic groups
     if location.parent_region != "REGION_POKEDEX":
         map_name = data.regions[location.parent_region].parent_map.name
         for group, maps in _LOCATION_GROUP_MAPS.items():
@@ -644,3 +647,75 @@ for location in data.locations.values():
                     LOCATION_GROUPS[group] = set()
                 LOCATION_GROUPS[group].add(location.label)
                 break
+
+# Meta-groups
+LOCATION_GROUPS["Cities"] = {
+    *LOCATION_GROUPS.get("Littleroot Town", set()),
+    *LOCATION_GROUPS.get("Oldale Town", set()),
+    *LOCATION_GROUPS.get("Petalburg City", set()),
+    *LOCATION_GROUPS.get("Rustboro City", set()),
+    *LOCATION_GROUPS.get("Dewford Town", set()),
+    *LOCATION_GROUPS.get("Slateport City", set()),
+    *LOCATION_GROUPS.get("Mauville City", set()),
+    *LOCATION_GROUPS.get("Verdanturf Town", set()),
+    *LOCATION_GROUPS.get("Fallarbor Town", set()),
+    *LOCATION_GROUPS.get("Lavaridge Town", set()),
+    *LOCATION_GROUPS.get("Fortree City", set()),
+    *LOCATION_GROUPS.get("Mossdeep City", set()),
+    *LOCATION_GROUPS.get("Sootopolis City", set()),
+    *LOCATION_GROUPS.get("Pacifidlog Town", set()),
+    *LOCATION_GROUPS.get("Ever Grande City", set()),
+}
+
+LOCATION_GROUPS["Dungeons"] = {
+    *LOCATION_GROUPS.get("Petalburg Woods", set()),
+    *LOCATION_GROUPS.get("Rusturf Tunnel", set()),
+    *LOCATION_GROUPS.get("Granite Cave", set()),
+    *LOCATION_GROUPS.get("Fiery Path", set()),
+    *LOCATION_GROUPS.get("Meteor Falls", set()),
+    *LOCATION_GROUPS.get("Jagged Pass", set()),
+    *LOCATION_GROUPS.get("Mt. Chimney", set()),
+    *LOCATION_GROUPS.get("Abandoned Ship", set()),
+    *LOCATION_GROUPS.get("New Mauville", set()),
+    *LOCATION_GROUPS.get("Mt. Pyre", set()),
+    *LOCATION_GROUPS.get("Seafloor Cavern", set()),
+    *LOCATION_GROUPS.get("Sky Pillar", set()),
+    *LOCATION_GROUPS.get("Victory Road", set()),
+}
+
+LOCATION_GROUPS["Routes"] = {
+    *LOCATION_GROUPS.get("Route 101", set()),
+    *LOCATION_GROUPS.get("Route 102", set()),
+    *LOCATION_GROUPS.get("Route 103", set()),
+    *LOCATION_GROUPS.get("Route 104", set()),
+    *LOCATION_GROUPS.get("Route 105", set()),
+    *LOCATION_GROUPS.get("Route 106", set()),
+    *LOCATION_GROUPS.get("Route 107", set()),
+    *LOCATION_GROUPS.get("Route 108", set()),
+    *LOCATION_GROUPS.get("Route 109", set()),
+    *LOCATION_GROUPS.get("Route 110", set()),
+    *LOCATION_GROUPS.get("Route 111", set()),
+    *LOCATION_GROUPS.get("Route 112", set()),
+    *LOCATION_GROUPS.get("Route 113", set()),
+    *LOCATION_GROUPS.get("Route 114", set()),
+    *LOCATION_GROUPS.get("Route 115", set()),
+    *LOCATION_GROUPS.get("Route 116", set()),
+    *LOCATION_GROUPS.get("Route 117", set()),
+    *LOCATION_GROUPS.get("Route 118", set()),
+    *LOCATION_GROUPS.get("Route 119", set()),
+    *LOCATION_GROUPS.get("Route 120", set()),
+    *LOCATION_GROUPS.get("Route 121", set()),
+    *LOCATION_GROUPS.get("Route 122", set()),
+    *LOCATION_GROUPS.get("Route 123", set()),
+    *LOCATION_GROUPS.get("Route 124", set()),
+    *LOCATION_GROUPS.get("Route 125", set()),
+    *LOCATION_GROUPS.get("Route 126", set()),
+    *LOCATION_GROUPS.get("Route 127", set()),
+    *LOCATION_GROUPS.get("Route 128", set()),
+    *LOCATION_GROUPS.get("Route 129", set()),
+    *LOCATION_GROUPS.get("Route 130", set()),
+    *LOCATION_GROUPS.get("Route 131", set()),
+    *LOCATION_GROUPS.get("Route 132", set()),
+    *LOCATION_GROUPS.get("Route 133", set()),
+    *LOCATION_GROUPS.get("Route 134", set()),
+}
