@@ -415,7 +415,7 @@ class GrubHuntGoal(NamedRange):
     display_name = "Grub Hunt Goal"
     range_start = 1
     range_end = 46
-    special_range_names = {"all": 0}
+    special_range_names = {"all": -1}
     default = 46
 
 

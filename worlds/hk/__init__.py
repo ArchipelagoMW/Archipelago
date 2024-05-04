@@ -444,11 +444,7 @@ class HKWorld(World):
         elif goal == Goal.option_godhome_flower:
             multiworld.completion_condition[player] = lambda state: state.count("Godhome_Flower_Quest", player)
         elif goal == Goal.option_grub_hunt:
-            if self.options.GrubHuntGoal == "all":
-                pass  # will set in pre_fill()
-            else:
-                self.grub_count = self.options.GrubHuntGoal.value
-                world.completion_condition[player] = lambda state: state.has("Grub", player, self.grub_count)
+            pass  # will set in pre_fill()
         else:
             # Any goal
             multiworld.completion_condition[player] = lambda state: _hk_can_beat_thk(state, player) or _hk_can_beat_radiance(state, player)
@@ -456,7 +452,8 @@ class HKWorld(World):
         set_rules(self)
 
     def pre_fill(self):
-        if self.options.Goal == "grub_hunt" and self.grub_count == 0:
+        grub_hunt_goal = self.options.GrubHuntGoal
+        if grub_hunt_goal == grub_hunt_goal.special_range_names["all"]:
             from collections import Counter
             relevant_groups = self.multiworld.get_player_groups(self.player)
             grub_player_count = Counter()
@@ -472,6 +469,9 @@ class HKWorld(World):
 
             self.multiworld.completion_condition[self.player] = lambda state, g=grub_player_count: \
                 all([state.has("Grub", player, count) for player, count in g.items()])
+        else:
+            self.grub_count = grub_hunt_goal.value
+            world.completion_condition[player] = lambda state: state.has("Grub", player, self.grub_count)
 
     def fill_slot_data(self):
         slot_data = {}
@@ -510,7 +510,7 @@ class HKWorld(World):
 
         slot_data["notch_costs"] = self.charm_costs
 
-        slot_data["GrubCount"] = self.grub_count
+        slot_data["grub_count"] = self.grub_count
 
         return slot_data
 
