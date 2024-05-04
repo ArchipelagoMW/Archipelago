@@ -86,17 +86,22 @@ class ExampleWorld(World):
 ```
 
 ### Option Groups
-Options may be categorized into groups for display on the WebHost. The name of a group may be defined by adding a
-`group_name` to your option. Option groups are displayed alphabetically on the player-options and weighted-options
-pages. Options without a group name are categorized into a generic "Game Options" group.
+Options may be categorized into groups for display on the WebHost. Option groups are displayed alphabetically on the
+player-options and weighted-options pages. Options without a group name are categorized into a generic "Game Options"
+group.
 
 ```python
-from Options import Toggle
+from worlds.AutoWorld import WebWorld
+from BaseClasses import OptionGroup
 
-class StartingSword(Toggle):
-    """Adds a sword to your starting inventory"""
-    display_name = "Start With Sword"
-    group_name = "Inventory Options"
+class MyWorldWeb(WebWorld):
+    option_groups = [
+        OptionGroup('Color Options', [
+            Options.ColorblindMode,
+            Options.FlashReduction,
+            Options.UIColors,
+        ]),
+    ]
 ```
 
 ### Option Checking
