@@ -81,9 +81,18 @@ def send_yaml(player_name: str, formatted_options: dict):
     return response
 
 
+def ap_dedent(text: str) -> str:
+    text = text.strip("\n")
+    if text.startswith("  "):
+        return dedent(text)
+    lines = text.split("\n")
+    not_first = dedent("\n".join(lines[1:]))
+    return f"{lines[0]}\n{not_first}"
+
+
 @app.template_filter("dedent")
-def filter_dedent(text: str):
-    return dedent(text)
+def filter_dedent(text: str) -> str:
+    return ap_dedent(text)
 
 
 @app.route("/weighted-options")
