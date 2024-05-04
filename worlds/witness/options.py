@@ -182,7 +182,7 @@ class PanelHuntTotal(Range):
     """
     Sets the number of random panels that will get marked as "Panel Hunt" panels in the "Panel Hunt" game mode.
     """
-    display_name = "Number of Panel Hunt Panels"
+    display_name = "Number of Panel Hunt panels"
     range_start = 5
     range_end = 100
     default = 40
