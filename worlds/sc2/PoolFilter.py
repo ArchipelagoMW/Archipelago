@@ -1,4 +1,4 @@
-from typing import Callable, Dict, List, Set, Union, Tuple
+from typing import Callable, Dict, List, Set, Union, Tuple, Optional
 from BaseClasses import  Item, Location
 from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items, progressive_if_nco, \
     progressive_if_ext, spear_of_adun_calldowns, spear_of_adun_castable_passives, nova_equipment
@@ -58,7 +58,8 @@ def filter_missions(world: World) -> Dict[MissionPools, List[SC2Mission]]:
         # Vanilla uses the entire mission pool
         goal_priorities: Dict[SC2Campaign, SC2CampaignGoalPriority] = {campaign: get_campaign_goal_priority(campaign) for campaign in enabled_campaigns}
         goal_level = max(goal_priorities.values())
-        candidate_campaigns = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
+        candidate_campaigns: List[SC2Campaign] = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
+        candidate_campaigns.sort(key=lambda it: it.id)
         goal_campaign = world.random.choice(candidate_campaigns)
         if campaign_final_mission_locations[goal_campaign] is not None:
             mission_pools[MissionPools.FINAL] = [campaign_final_mission_locations[goal_campaign].mission]
@@ -68,20 +69,39 @@ def filter_missions(world: World) -> Dict[MissionPools, List[SC2Mission]]:
         return mission_pools
 
     # Finding the goal map
-    goal_priorities = {campaign: get_campaign_goal_priority(campaign, excluded_missions) for campaign in enabled_campaigns}
-    goal_level = max(goal_priorities.values())
-    candidate_campaigns = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
-    goal_campaign = world.random.choice(candidate_campaigns)
-    primary_goal = campaign_final_mission_locations[goal_campaign]
-    if primary_goal is None or primary_goal.mission in excluded_missions:
-        # No primary goal or its mission is excluded
-        candidate_missions = list(campaign_alt_final_mission_locations[goal_campaign].keys())
-        candidate_missions = [mission for mission in candidate_missions if mission not in excluded_missions]
-        if len(candidate_missions) == 0:
-            raise Exception("There are no valid goal missions. Please exclude fewer missions.")
-        goal_mission = world.random.choice(candidate_missions)
+    goal_mission: Optional[SC2Mission] = None
+    if mission_order_type in campaign_depending_orders:
+        # Prefer long campaigns over shorter ones and harder missions over easier ones
+        goal_priorities = {campaign: get_campaign_goal_priority(campaign, excluded_missions) for campaign in enabled_campaigns}
+        goal_level = max(goal_priorities.values())
+        candidate_campaigns: List[SC2Campaign] = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
+        candidate_campaigns.sort(key=lambda it: it.id)
+
+        goal_campaign = world.random.choice(candidate_campaigns)
+        primary_goal = campaign_final_mission_locations[goal_campaign]
+        if primary_goal is None or primary_goal.mission in excluded_missions:
+            # No primary goal or its mission is excluded
+            candidate_missions = list(campaign_alt_final_mission_locations[goal_campaign].keys())
+            candidate_missions = [mission for mission in candidate_missions if mission not in excluded_missions]
+            if len(candidate_missions) == 0:
+                raise Exception("There are no valid goal missions. Please exclude fewer missions.")
+            goal_mission = world.random.choice(candidate_missions)
+        else:
+            goal_mission = primary_goal.mission
     else:
-        goal_mission = primary_goal.mission
+        # Find one of the missions with the hardest difficulty
+        available_missions: List[SC2Mission] = \
+            [mission for mission in SC2Mission
+             if (mission not in excluded_missions and mission.campaign in enabled_campaigns)]
+        available_missions.sort(key=lambda it: it.id)
+        # Loop over pools, from hardest to easiest
+        for mission_pool in range(MissionPools.VERY_HARD, MissionPools.STARTER - 1, -1):
+            pool_missions: List[SC2Mission] = [mission for mission in available_missions if mission.pool == mission_pool]
+            if pool_missions:
+                goal_mission = world.random.choice(pool_missions)
+                break
+    if goal_mission is None:
+        raise Exception("There are no valid goal missions. Please exclude fewer missions.")
 
     # Excluding missions
     for difficulty, mission_pool in mission_pools.items():
@@ -242,8 +262,8 @@ class ValidInventory:
 
     def generate_reduced_inventory(self, inventory_size: int, mission_requirements: List[Tuple[str, Callable]]) -> List[Item]:
         """Attempts to generate a reduced inventory that can fulfill the mission requirements."""
-        inventory = list(self.item_pool)
-        locked_items = list(self.locked_items)
+        inventory: List[Item] = list(self.item_pool)
+        locked_items: List[Item] = list(self.locked_items)
         item_list = get_full_item_list()
         self.logical_inventory = [
             item.name for item in inventory + locked_items + self.existing_items
@@ -346,7 +366,7 @@ class ValidInventory:
                 removable_generic_items.append(item)
 
         # Main cull process
-        unused_items = [] # Reusable items for the second pass
+        unused_items: List[str] = []  # Reusable items for the second pass
         while len(inventory) + len(locked_items) > inventory_size:
             if len(inventory) == 0:
                 # There are more items than locations and all of them are already locked due to YAML or logic.
@@ -394,18 +414,35 @@ class ValidInventory:
                 if attempt_removal(item):
                     unused_items.append(item.name)
 
+        pool_items: List[str] = [item.name for item in (inventory + locked_items + self.existing_items)]
+        unused_items = [
+            unused_item for unused_item in unused_items
+            if item_list[unused_item].parent_item is None
+               or item_list[unused_item].parent_item in pool_items
+        ]
+
         # Removing extra dependencies
         # WoL
         logical_inventory_set = set(self.logical_inventory)
         if not spider_mine_sources & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Spider Mine)")]
+            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Spider Mine)")]
         if not BARRACKS_UNITS & logical_inventory_set:
-            inventory = [item for item in inventory if
-                         not (item.name.startswith(ItemNames.TERRAN_INFANTRY_UPGRADE_PREFIX) or item.name == ItemNames.ORBITAL_STRIKE)]
+            inventory = [
+                item for item in inventory
+                if not (item.name.startswith(ItemNames.TERRAN_INFANTRY_UPGRADE_PREFIX)
+                        or item.name == ItemNames.ORBITAL_STRIKE)]
+            unused_items = [
+                item_name for item_name in unused_items
+                if not (item_name.startswith(
+                    ItemNames.TERRAN_INFANTRY_UPGRADE_PREFIX)
+                        or item_name == ItemNames.ORBITAL_STRIKE)]
         if not FACTORY_UNITS & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.startswith(ItemNames.TERRAN_VEHICLE_UPGRADE_PREFIX)]
+            unused_items = [item_name for item_name in unused_items if not item_name.startswith(ItemNames.TERRAN_VEHICLE_UPGRADE_PREFIX)]
         if not STARPORT_UNITS & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.startswith(ItemNames.TERRAN_SHIP_UPGRADE_PREFIX)]
+            unused_items = [item_name for item_name in unused_items if not item_name.startswith(ItemNames.TERRAN_SHIP_UPGRADE_PREFIX)]
         # HotS
         # Baneling without sources => remove Baneling and upgrades
         if (ItemNames.ZERGLING_BANELING_ASPECT in self.logical_inventory
@@ -414,6 +451,8 @@ class ValidInventory:
         ):
             inventory = [item for item in inventory if item.name != ItemNames.ZERGLING_BANELING_ASPECT]
             inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.ZERGLING_BANELING_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_name != ItemNames.ZERGLING_BANELING_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != ItemNames.ZERGLING_BANELING_ASPECT]
         # Spawn Banelings without Zergling => remove Baneling unit, keep upgrades except macro ones
         if (ItemNames.ZERGLING_BANELING_ASPECT in self.logical_inventory
             and ItemNames.ZERGLING not in self.logical_inventory
@@ -421,9 +460,12 @@ class ValidInventory:
         ):
             inventory = [item for item in inventory if item.name != ItemNames.ZERGLING_BANELING_ASPECT]
             inventory = [item for item in inventory if item.name != ItemNames.BANELING_RAPID_METAMORPH]
+            unused_items = [item_name for item_name in unused_items if item_name != ItemNames.ZERGLING_BANELING_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_name != ItemNames.BANELING_RAPID_METAMORPH]
         if not {ItemNames.MUTALISK, ItemNames.CORRUPTOR, ItemNames.SCOURGE} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.startswith(ItemNames.ZERG_FLYER_UPGRADE_PREFIX)]
             locked_items = [item for item in locked_items if not item.name.startswith(ItemNames.ZERG_FLYER_UPGRADE_PREFIX)]
+            unused_items = [item_name for item_name in unused_items if not item_name.startswith(ItemNames.ZERG_FLYER_UPGRADE_PREFIX)]
         # T3 items removal rules - remove morph and its upgrades if the basic unit isn't in
         if not {ItemNames.MUTALISK, ItemNames.CORRUPTOR} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Mutalisk/Corruptor)")]
@@ -431,45 +473,69 @@ class ValidInventory:
             inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.MUTALISK_CORRUPTOR_DEVOURER_ASPECT]
             inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT]
             inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.MUTALISK_CORRUPTOR_VIPER_ASPECT]
+            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Mutalisk/Corruptor)")]
+            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != ItemNames.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != ItemNames.MUTALISK_CORRUPTOR_DEVOURER_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != ItemNames.MUTALISK_CORRUPTOR_VIPER_ASPECT]
         if ItemNames.ROACH not in logical_inventory_set:
             inventory = [item for item in inventory if item.name != ItemNames.ROACH_RAVAGER_ASPECT]
             inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.ROACH_RAVAGER_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_name != ItemNames.ROACH_RAVAGER_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != ItemNames.ROACH_RAVAGER_ASPECT]
         if ItemNames.HYDRALISK not in logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Hydralisk)")]
             inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.HYDRALISK_LURKER_ASPECT]
             inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.HYDRALISK_IMPALER_ASPECT]
+            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Hydralisk)")]
+            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != ItemNames.HYDRALISK_LURKER_ASPECT]
+            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != ItemNames.HYDRALISK_IMPALER_ASPECT]
         # LotV
         # Shared unit upgrades between several units
         if not {ItemNames.STALKER, ItemNames.INSTIGATOR, ItemNames.SLAYER} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Stalker/Instigator/Slayer)")]
+            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Stalker/Instigator/Slayer)")]
         if not {ItemNames.PHOENIX, ItemNames.MIRAGE} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Phoenix/Mirage)")]
+            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Phoenix/Mirage)")]
         if not {ItemNames.VOID_RAY, ItemNames.DESTROYER} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Void Ray/Destroyer)")]
+            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Void Ray/Destroyer)")]
         if not {ItemNames.IMMORTAL, ItemNames.ANNIHILATOR} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Immortal/Annihilator)")]
+            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Immortal/Annihilator)")]
         if not {ItemNames.DARK_TEMPLAR, ItemNames.AVENGER, ItemNames.BLOOD_HUNTER} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Dark Templar/Avenger/Blood Hunter)")]
+            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Dark Templar/Avenger/Blood Hunter)")]
         if not {ItemNames.HIGH_TEMPLAR, ItemNames.SIGNIFIER, ItemNames.ASCENDANT, ItemNames.DARK_TEMPLAR} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Archon)")]
+            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Archon)")]
             logical_inventory_set.difference_update([item_name for item_name in logical_inventory_set if item_name.endswith("(Archon)")])
         if not {ItemNames.HIGH_TEMPLAR, ItemNames.SIGNIFIER, ItemNames.ARCHON_HIGH_ARCHON} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(High Templar/Signifier)")]
+            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(High Templar/Signifier)")]
         if ItemNames.SUPPLICANT not in logical_inventory_set:
             inventory = [item for item in inventory if item.name != ItemNames.ASCENDANT_POWER_OVERWHELMING]
+            unused_items = [item_name for item_name in unused_items if item_name != ItemNames.ASCENDANT_POWER_OVERWHELMING]
         if not {ItemNames.DARK_ARCHON, ItemNames.DARK_TEMPLAR_DARK_ARCHON_MELD} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Dark Archon)")]
+            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Dark Archon)")]
         if not {ItemNames.SENTRY, ItemNames.ENERGIZER, ItemNames.HAVOC} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Sentry/Energizer/Havoc)")]
+            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Sentry/Energizer/Havoc)")]
         if not {ItemNames.SENTRY, ItemNames.ENERGIZER, ItemNames.HAVOC, ItemNames.SHIELD_BATTERY} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Sentry/Energizer/Havoc/Shield Battery)")]
+            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Sentry/Energizer/Havoc/Shield Battery)")]
         if not {ItemNames.ZEALOT, ItemNames.CENTURION, ItemNames.SENTINEL} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Zealot/Sentinel/Centurion)")]
+            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Zealot/Sentinel/Centurion)")]
         # Static defense upgrades only if static defense present
         if not {ItemNames.PHOTON_CANNON, ItemNames.KHAYDARIN_MONOLITH, ItemNames.NEXUS_OVERCHARGE, ItemNames.SHIELD_BATTERY} & logical_inventory_set:
             inventory = [item for item in inventory if item.name != ItemNames.ENHANCED_TARGETING]
+            unused_items = [item_name for item_name in unused_items if item_name != ItemNames.ENHANCED_TARGETING]
         if not {ItemNames.PHOTON_CANNON, ItemNames.KHAYDARIN_MONOLITH, ItemNames.NEXUS_OVERCHARGE} & logical_inventory_set:
             inventory = [item for item in inventory if item.name != ItemNames.OPTIMIZED_ORDNANCE]
+            unused_items = [item_name for item_name in unused_items if item_name != ItemNames.OPTIMIZED_ORDNANCE]
 
         # Cull finished, adding locked items back into inventory
         inventory += locked_items
@@ -560,7 +626,7 @@ def filter_items(world: World, mission_req_table: Dict[SC2Campaign, Dict[str, Mi
 def get_used_races(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]], world: World) -> Set[SC2Race]:
     grant_story_tech = get_option_value(world, "grant_story_tech")
     take_over_ai_allies = get_option_value(world, "take_over_ai_allies")
-    kerrigan_presence = get_option_value(world, "kerrigan_presence") \
+    kerrigan_presence = get_option_value(world, "kerrigan_presence") in kerrigan_unit_available \
         and SC2Campaign.HOTS in get_enabled_campaigns(world)
     missions = missions_in_mission_table(mission_req_table)
 
@@ -572,7 +638,7 @@ def get_used_races(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]],
         if SC2Mission.ENEMY_WITHIN in missions:
             # Zerg units need to be unlocked
             races.add(SC2Race.ZERG)
-        if kerrigan_presence in kerrigan_unit_available \
+        if kerrigan_presence \
                 and not missions.isdisjoint({SC2Mission.BACK_IN_THE_SADDLE, SC2Mission.SUPREME, SC2Mission.CONVICTION, SC2Mission.THE_INFINITE_CYCLE}):
             # You need some Kerrigan abilities (they're granted if Kerriganless or story tech granted)
             races.add(SC2Race.ZERG)

@@ -193,6 +193,7 @@ class CommonContext:
     server_version: Version = Version(0, 0, 0)
     generator_version: Version = Version(0, 0, 0)
     current_energy_link_value: typing.Optional[int] = None  # to display in UI, gets set by server
+    max_size: int = 16*1024*1024  # 16 MB of max incoming packet size
 
     last_death_link: float = time.time()  # last send/received death link on AP layer
 
@@ -206,6 +207,8 @@ class CommonContext:
 
     finished_game: bool
     ready: bool
+    team: typing.Optional[int]
+    slot: typing.Optional[int]
     auth: typing.Optional[str]
     seed_name: typing.Optional[str]
 
@@ -651,7 +654,8 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
     try:
         port = server_url.port or 38281  # raises ValueError if invalid
         socket = await websockets.connect(address, port=port, ping_timeout=None, ping_interval=None,
-                                          ssl=get_ssl_context() if address.startswith("wss://") else None)
+                                          ssl=get_ssl_context() if address.startswith("wss://") else None,
+                                          max_size=ctx.max_size)
         if ctx.ui is not None:
             ctx.ui.update_address_bar(server_url.netloc)
         ctx.server = Endpoint(socket)
