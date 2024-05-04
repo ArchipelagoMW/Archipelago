@@ -323,7 +323,7 @@ def location_rule(state: CollectionState, world: Celeste64World, loc: str) -> bo
     return False
 
 def goal_rule(state: CollectionState, world: Celeste64World) -> bool:
-    active_logic_mapping:List[List[str]]
+    active_logic_mapping: List[List[str]]
 
     if not state.has(ItemName.strawberry, world.player, world.strawberries_required):
         return False
