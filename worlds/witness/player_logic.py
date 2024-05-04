@@ -49,6 +49,7 @@ from .data.utils import (
     logical_and_witness_rules,
     logical_or_witness_rules,
     parse_lambda,
+    get_entity_hunt,
 )
 
 if TYPE_CHECKING:
@@ -134,7 +135,7 @@ class WitnessPlayerLogic:
                 dep_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX.get(option_entity)
 
                 if option_entity in {"7 Lasers", "11 Lasers", "7 Lasers + Redirect", "11 Lasers + Redirect",
-                                     "PP2 Weirdness", "Theater to Tunnels"}:
+                                     "PP2 Weirdness", "Theater to Tunnels", "Panel Hunt"}:
                     new_items = frozenset({frozenset([option_entity])})
                 elif option_entity in self.DISABLE_EVERYTHING_BEHIND:
                     new_items = frozenset()
@@ -428,6 +429,8 @@ class WitnessPlayerLogic:
             self.VICTORY_LOCATION = "0x09F7F"
         elif victory == "mountain_box_long":
             self.VICTORY_LOCATION = "0xFFF00"
+        elif victory == "panel_hunt":
+            self.VICTORY_LOCATION = "0x03629"
 
         # Long box can usually only be solved by opening Mountain Entry. However, if it requires 7 lasers or less
         # (challenge_lasers <= 7), you can now solve it without opening Mountain Entry first.
@@ -478,6 +481,9 @@ class WitnessPlayerLogic:
 
         if world.options.elevators_come_to_you:
             adjustment_linesets_in_order.append(get_elevators_come_to_you())
+
+        if world.options.victory_condition == "panel_hunt":
+            adjustment_linesets_in_order.append(get_entity_hunt())
 
         for item in self.YAML_ADDED_ITEMS:
             adjustment_linesets_in_order.append(["Items:", item])
@@ -795,7 +801,6 @@ class WitnessPlayerLogic:
         }
 
         # In panel hunt, all panels are game, so all panels need to be reachable (unless disabled)
-        # TODO: I think there is some weirdness here with Mountain Floor 2 Elevator Discard on disable_non_randomized?
         if world.options.victory_condition == "panel_hunt":
             for entity_hex in is_item_required_dict:
                 if static_witness_logic.ENTITIES_BY_HEX[entity_hex]["entityType"] == "panel":
@@ -822,8 +827,6 @@ class WitnessPlayerLogic:
         total_panels = world.options.panel_hunt_total.value
 
         self.HUNT_ENTITIES.update(world.random.sample(all_eligible_panels, total_panels))
-
-        print(self.HUNT_ENTITIES)
 
     def make_event_item_pair(self, entity_hex: str) -> Tuple[str, str]:
         """

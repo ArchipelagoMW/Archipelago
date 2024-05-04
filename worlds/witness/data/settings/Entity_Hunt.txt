@@ -1,0 +1,5 @@
+Requirement Changes:
+0x03629 - Entity Hunt - True
+
+New Connections:
+Tutorial (Tutorial) - Outside Tutorial - True

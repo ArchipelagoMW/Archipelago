@@ -30,6 +30,11 @@ laser_hexes = [
     "0x17C65",
 ]
 
+def _can_do_panel_hunt(world: "WitnessWorld") -> CollectionRule:
+    # TODO
+
+    return lambda state: True
+
 
 def _has_laser(laser_hex: str, world: "WitnessWorld", player: int, redirect_required: bool) -> CollectionRule:
     if laser_hex == "0x012FB" and redirect_required:
@@ -225,18 +230,20 @@ def _has_item(item: str, world: "WitnessWorld", player: int,
     if item in player_logic.REFERENCE_LOGIC.ALL_REGIONS_BY_NAME:
         region = world.get_region(item)
         return region.can_reach
-    if item == "7 Lasers":
+    elif item == "7 Lasers":
         laser_req = world.options.mountain_lasers.value
         return _has_lasers(laser_req, world, False)
-    if item == "7 Lasers + Redirect":
+    elif item == "7 Lasers + Redirect":
         laser_req = world.options.mountain_lasers.value
         return _has_lasers(laser_req, world, True)
-    if item == "11 Lasers":
+    elif item == "11 Lasers":
         laser_req = world.options.challenge_lasers.value
         return _has_lasers(laser_req, world, False)
-    if item == "11 Lasers + Redirect":
+    elif item == "11 Lasers + Redirect":
         laser_req = world.options.challenge_lasers.value
         return _has_lasers(laser_req, world, True)
+    elif item == "Panel Hunt":
+        return _can_do_panel_hunt(world)
     elif item == "PP2 Weirdness":
         return lambda state: _can_do_expert_pp2(state, world)
     elif item == "Theater to Tunnels":
