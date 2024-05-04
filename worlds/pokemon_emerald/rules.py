@@ -6,7 +6,8 @@ from typing import TYPE_CHECKING, Callable, Dict
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 
-from .data import NATIONAL_ID_TO_SPECIES_ID, NUM_REAL_SPECIES, data
+from .data import LocationCategory, NATIONAL_ID_TO_SPECIES_ID, NUM_REAL_SPECIES, data
+from .locations import PokemonEmeraldLocation
 from .options import DarkCavesRequireFlash, EliteFourRequirement, NormanRequirement, Goal
 
 if TYPE_CHECKING:
@@ -1649,7 +1650,8 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Add Itemfinder requirement to hidden items
     if world.options.require_itemfinder:
         for location in world.multiworld.get_locations(world.player):
-            if location.tags is not None and "HiddenItem" in location.tags:
+            assert isinstance(location, PokemonEmeraldLocation)
+            if location.key is not None and data.locations[location.key].category == LocationCategory.HIDDEN_ITEM:
                 add_rule(
                     location,
                     lambda state: state.has("Itemfinder", world.player)
