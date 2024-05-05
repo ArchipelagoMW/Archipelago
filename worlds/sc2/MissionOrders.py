@@ -320,7 +320,7 @@ def make_blitz(num_missions: int) -> list[FillMission]:
     return {SC2Campaign.GLOBAL: mission_order}
 
 
-def make_diagonal(two_start_positions: bool, num_missions: int):
+def make_hopscotch(two_start_positions: bool, num_missions: int):
     mission_order: List[FillMission] = []
     menu_connection = [MissionConnection(-1)]
     max_width = 7

@@ -64,8 +64,9 @@ class MissionOrder(Choice):
     Mini Campaign (47 total if all campaigns enabled): Shorter version of the campaign with randomized missions and optional branches.
     Blitz:  Missions are divided into sets. Complete one mission from a set to advance to the next set.
     Gauntlet: A linear path of missions to complete the campaign.
-    Grid: A grid that will resize to use all non-excluded missions.  Corners may be omitted to make the grid more square.  Complete the bottom-right mission to win.
-    Golden Path:
+    Grid: Missions are arranged into a grid. Completing a mission unlocks the adjacent missions. Corners may be omitted to make the grid more square. Complete the bottom-right mission to win.
+    Golden Path: A required line of missions with several optional branches, similar to the Wings of Liberty campaign.
+    Hopscotch: Missions alternate between mandatory missions and pairs of optional missions.
     """
     display_name = "Mission Order"
     option_vanilla = 0
@@ -75,7 +76,7 @@ class MissionOrder(Choice):
     option_gauntlet = 6
     option_grid = 9
     option_golden_path = 10
-    option_diagonal = 11
+    option_hopscotch = 11
 
 
 class MaximumCampaignSize(Range):
@@ -91,8 +92,8 @@ class MaximumCampaignSize(Range):
 
 class GridTwoStartPositions(Toggle):
     """
-    If turned on and 'grid' mission order is selected, removes a mission from the starting
-    corner sets the adjacent two missions as the starter missions.
+    If turned on and 'grid' or 'hopscotch' mission orders are selected,
+    removes a mission from the starting corner and sets the adjacent two missions as the starter missions.
     """
     display_name = "Start with two unlocked missions on grid"
     default = Toggle.option_false
@@ -904,7 +905,7 @@ dynamic_mission_orders = [
     MissionOrder.option_grid,
     MissionOrder.option_gauntlet,
     MissionOrder.option_blitz,
-    MissionOrder.option_diagonal
+    MissionOrder.option_hopscotch
 ]
 
 kerrigan_unit_available = [

@@ -7,7 +7,7 @@ from .Options import get_option_value, MissionOrder, get_enabled_campaigns, camp
     GridTwoStartPositions, static_mission_orders, dynamic_mission_orders
 from .MissionTables import MissionInfo, vanilla_mission_req_table, \
     MissionPools, SC2Campaign, get_goal_location, SC2Mission, MissionConnection
-from .MissionOrders import make_gauntlet, make_blitz, make_golden_path, make_diagonal
+from .MissionOrders import make_gauntlet, make_blitz, make_golden_path, make_hopscotch
 from .PoolFilter import filter_missions
 from worlds.AutoWorld import World
 
@@ -394,8 +394,8 @@ def make_dynamic_mission_order(
         return make_gauntlet(num_missions)
     elif mission_order_type == MissionOrder.option_blitz:
         return make_blitz(num_missions)
-    elif mission_order_type == MissionOrder.option_diagonal:
-        return make_diagonal(world.options.grid_two_start_positions, num_missions)
+    elif mission_order_type == MissionOrder.option_hopscotch:
+        return make_hopscotch(world.options.grid_two_start_positions, num_missions)
 
 
 def create_structured_regions(
