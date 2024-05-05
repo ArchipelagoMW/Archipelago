@@ -1,6 +1,14 @@
 GAME_NAME: str = "Saving Princess"
 BASE_ID: int = 0x53565052494E  # SVPRIN
 
+# client installation data
+CLIENT_NAME = f"{GAME_NAME.replace(' ', '')}Client"
+GAME_HASH = "35a111d0149fae1f04b7b3fea42c5319"
+DLL_NAME = "gm-apclientpp.dll"
+DLL_URL = "https://api.github.com/repos/black-sliver/gm-apclientpp/releases"
+PATCH_NAME = "saving_princess_basepatch.bsdiff4"
+PATCH_URL = "https://api.github.com/repos/LeonarthCG/saving-princess-archipelago/releases"
+
 # item names
 ITEM_WEAPON_CHARGE: str = "Powered Blaster"
 ITEM_WEAPON_FIRE: str = "Flamethrower"

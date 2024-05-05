@@ -1,11 +1,42 @@
-from typing import ClassVar, Dict, Any, Type, List
+from typing import ClassVar, Dict, Any, Type, List, Union
 
 from BaseClasses import Tutorial, ItemClassification as ItemClass
 from Options import PerGameCommonOptions
+from settings import Group, FilePath, LocalFolderPath, Bool
 from worlds.AutoWorld import World, WebWorld
-
+from worlds.LauncherComponents import components, Component, launch_subprocess, Type as ComponentType
 from . import Options, Items, Locations
 from .Constants import *
+
+
+def launch_client():
+    from .Client import launch
+    launch_subprocess(launch, name=CLIENT_NAME)
+
+
+components.append(
+    Component(f"{GAME_NAME} Client", CLIENT_NAME, func=launch_client, component_type=ComponentType.CLIENT)
+)
+
+
+class SavingPrincessSettings(Group):
+    class GamePath(FilePath):
+        """Path to the game executable from which files are extracted"""
+        description = "the Saving Princess game executable"
+        is_exe = True
+        md5s = [GAME_HASH]
+
+    class InstallFolder(LocalFolderPath):
+        """Path to the mod installation folder"""
+        description = "the folder to install Saving Princess Archipelago to"
+
+    class LaunchGame(Bool):
+        """Set this to false to never autostart the game"""
+
+
+    exe_path: GamePath = GamePath("Saving Princess.exe")
+    install_folder: InstallFolder = InstallFolder("Saving Princess")
+    launch_game: Union[LaunchGame, bool] = True
 
 
 class SavingPrincessWeb(WebWorld):
@@ -47,6 +78,8 @@ class SavingPrincessWorld(World):
 
     options_dataclass: ClassVar[Type[PerGameCommonOptions]] = Options.SavingPrincessOptions
     options: Options.SavingPrincessOptions
+    settings_key = "saving_princess_settings"
+    settings: ClassVar[SavingPrincessSettings]
 
     is_pool_expanded: bool = False
     music_table: List[int] = [i for i in range(16)]
