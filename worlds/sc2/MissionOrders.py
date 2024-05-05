@@ -287,7 +287,7 @@ def make_blitz(num_missions: int) -> list[FillMission]:
     min_width, max_width = 2, 5
     mission_divisor = 5
     dynamic_width = num_missions / mission_divisor
-    width = max(min(dynamic_width, max_width), min_width)
+    width = math.floor(max(min(dynamic_width, max_width), min_width))
     middle_column = math.floor(width / 2)
     connections = [MissionConnection(-1)]
     mission_number = 0
