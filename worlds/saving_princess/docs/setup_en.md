@@ -36,7 +36,6 @@ Steps:
 3. If you don't have `original_data.win`, copy `data.win` and rename its copy to `original_data.win`
    * By keeping an unmodified copy of `data.win`, you will have an easier time updating in the future
 4. Apply the `saving_princess_basepatch.bsdiff4` patch using your patching software
-   * If this seems intimidating to you, more details about how to proceed can be found in the troubleshooting section
 5. To launch the game, run `Saving Princess v0_8.exe`
 
 ### Manual Linux Installation
