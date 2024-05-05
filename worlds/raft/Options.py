@@ -37,8 +37,7 @@ class IslandFrequencyLocations(Choice):
     Random on Island will randomize each frequency within its vanilla island, but will preserve island order.
     Random Island Order will change the order you visit islands, but will preserve the vanilla location of each frequency unlock.
     Random On Island Random Order will randomize the location containing the frequency on each island and randomize the order.
-    Progressive will randomize the frequencies to anywhere, but will always unlock the frequencies in vanilla order as the
-    frequency items are received.
+    Progressive will randomize the frequencies to anywhere, but will always unlock the frequencies in vanilla order as the frequency items are received.
     Anywhere will randomize the frequencies to anywhere, and frequencies will be received in any order."""
     display_name = "Frequency locations"
     option_vanilla = 0
@@ -60,7 +59,8 @@ class IslandGenerationDistance(Choice):
     default = 8
 
 class ExpensiveResearch(Toggle):
-    """If No is selected, researching items and unlocking items in the Crafting Table works the same as vanilla Raft. If Yes is selected, each unlock in the Crafting Table will require its own set of researched items in order to unlock it."""
+    """If No is selected, researching items and unlocking items in the Crafting Table works the same as vanilla Raft.
+    If Yes is selected, each unlock in the Crafting Table will require its own set of researched items in order to unlock it."""
     display_name = "Expensive research"
 
 class ProgressiveItems(DefaultOnToggle):
