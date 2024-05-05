@@ -75,7 +75,6 @@ def filter_missions(world: World) -> Dict[MissionPools, List[SC2Mission]]:
         goal_priorities = {campaign: get_campaign_goal_priority(campaign, excluded_missions) for campaign in enabled_campaigns}
         goal_level = max(goal_priorities.values())
         candidate_campaigns: List[SC2Campaign] = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
-    candidate_campaigns.sort(key=lambda it: it.id)
         candidate_campaigns.sort(key=lambda it: it.id)
 
         goal_campaign = world.random.choice(candidate_campaigns)
