@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import Dict, List, NamedTuple, Optional, Set, Tuple, TYPE_CHECKING
 
+from Options import OptionError
 from .datatypes import Door, DoorType, RoomAndDoor, RoomAndPanel
 from .items import ALL_ITEM_TABLE, ItemType
 from .locations import ALL_LOCATION_TABLE, LocationClassification
@@ -149,8 +150,8 @@ class LingoPlayerLogic:
         early_color_hallways = world.options.early_color_hallways
 
         if location_checks == LocationChecks.option_reduced and door_shuffle != ShuffleDoors.option_none:
-            raise Exception("You cannot have reduced location checks when door shuffle is on, because there would not "
-                            "be enough locations for all of the door items.")
+            raise OptionError("You cannot have reduced location checks when door shuffle is on, because there would not"
+                              " be enough locations for all of the door items.")
 
         # Create door items, where needed.
         door_groups: Set[str] = set()
@@ -219,7 +220,7 @@ class LingoPlayerLogic:
             self.event_loc_to_item[self.level_2_location] = "Victory"
 
             if world.options.level_2_requirement == 1:
-                raise Exception("The Level 2 requirement must be at least 2 when LEVEL 2 is the victory condition.")
+                raise OptionError("The Level 2 requirement must be at least 2 when LEVEL 2 is the victory condition.")
         elif victory_condition == VictoryCondition.option_pilgrimage:
             self.victory_condition = "Pilgrim Antechamber - PILGRIM"
             self.add_location("Pilgrim Antechamber", "PILGRIM (Solved)", None,
@@ -248,11 +249,11 @@ class LingoPlayerLogic:
                 self.real_locations.append(location_name)
 
         if world.options.enable_pilgrimage and world.options.sunwarp_access == SunwarpAccess.option_disabled:
-            raise Exception("Sunwarps cannot be disabled when pilgrimage is enabled.")
+            raise OptionError("Sunwarps cannot be disabled when pilgrimage is enabled.")
 
         if world.options.shuffle_sunwarps:
             if world.options.sunwarp_access == SunwarpAccess.option_disabled:
-                raise Exception("Sunwarps cannot be shuffled if they are disabled.")
+                raise OptionError("Sunwarps cannot be shuffled if they are disabled.")
 
             self.sunwarp_mapping = list(range(0, 12))
             world.random.shuffle(self.sunwarp_mapping)
