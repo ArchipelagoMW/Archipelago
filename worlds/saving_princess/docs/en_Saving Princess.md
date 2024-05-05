@@ -51,5 +51,5 @@ The following commands are only available when using the in-game console in Savi
 - `/sprint {never|always|jacket}` Sets sprint mode.
 - `/cliff {never|always|vanilla}` Sets Cliff's weapon upgrade condition.
 - `/ace {never|always|vanilla}` Sets Ace's weapon upgrade condition.
-- `/shake n` Sets the shake intensity % multiplier to n, where 0 <= n <= 100.
 - `/iframes n` Sets the iframe duration % multiplier to n, where 0 <= n <= 400.
+- `/shake n` Sets the shake intensity % multiplier to n, where 0 <= n <= 100.
