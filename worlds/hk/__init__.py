@@ -455,7 +455,7 @@ class HKWorld(World):
         grub_hunt_goal = self.options.GrubHuntGoal
         goal = self.options.Goal
         if goal in ["any", "grub_hunt"]:
-            def set_goal(grub_rule: Callable[[CollectionState], bool]):
+            def set_goal(grub_rule: typing.Callable[[CollectionState], bool]):
                 if goal == "grub_hunt":
                     self.multiworld.completion_condition[self.player] = grub_rule
                 else:
