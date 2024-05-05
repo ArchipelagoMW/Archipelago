@@ -21,7 +21,7 @@ När du har installerat BizHawk, öppna `EmuHawk.exe` och ändra följande inst�
 
 ## Extra programvara
 
-- [Pokémon Emerald AP Tracker](https://github.com/seto10987/Archipelago-Emerald-AP-Tracker/releases/latest), används tillsammands med
+- [Pokémon Emerald AP Tracker](https://github.com/seto10987/Archipelago-Emerald-AP-Tracker/releases/latest), används tillsammans med
 [PopTracker](https://github.com/black-sliver/PopTracker/releases)
 
 ## Generera och patcha ett spel
