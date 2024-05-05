@@ -72,6 +72,8 @@ class WitnessWorld(World):
     items_placed_early: List[str]
     own_itempool: List[WitnessItem]
 
+    panel_hunt_required_count: int
+
     def _get_slot_data(self) -> Dict[str, Any]:
         return {
             "seed": self.random.randrange(0, 1000000),
@@ -88,6 +90,7 @@ class WitnessWorld(World):
             "obelisk_side_id_to_EPs": static_witness_logic.OBELISK_SIDE_ID_TO_EP_HEXES,
             "precompleted_puzzles": [int(h, 16) for h in self.player_logic.EXCLUDED_LOCATIONS],
             "entity_to_name": static_witness_logic.ENTITY_ID_TO_NAME,
+            "panel_hunt_required_absolute": self.panel_hunt_required_count
         }
 
     def determine_sufficient_progression(self) -> None:
@@ -149,6 +152,13 @@ class WitnessWorld(World):
 
         if self.options.shuffle_lasers == "local":
             self.options.local_items.value |= self.item_name_groups["Lasers"]
+
+        if self.options.victory_condition == "panel_hunt":
+            total_panels = self.options.panel_hunt_total
+            required_percentage = self.options.panel_hunt_required_percentage
+            self.panel_hunt_required_count = round(required_percentage / 100 * total_panels)
+        else:
+            self.panel_hunt_required_count = 0
 
     def create_regions(self) -> None:
         self.player_regions.create_regions(self, self.player_logic)

@@ -31,8 +31,7 @@ laser_hexes = [
 
 
 def _can_do_panel_hunt(world: "WitnessWorld") -> CollectionRule:
-    total = world.options.panel_hunt_total.value
-    required = round(world.options.panel_hunt_required_percentage / 100 * total)
+    required = world.panel_hunt_required_count
     player = world.player
     return lambda state: state.has("+1 Panel Hunt", player, required)
 
