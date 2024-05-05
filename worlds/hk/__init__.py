@@ -203,7 +203,7 @@ class HKWorld(World):
 
         # check for any goal that godhome events are relevant to
         all_event_names = event_names.copy()
-        if self.options.Goal in [Goal.option_godhome, Goal.option_godhome_flower]:
+        if self.options.Goal in [Goal.option_godhome, Goal.option_godhome_flower, Goal.option_any]:
             from .GodhomeData import godhome_event_names
             all_event_names.update(set(godhome_event_names))
 
@@ -447,7 +447,7 @@ class HKWorld(World):
             pass  # will set in pre_fill()
         else:
             # Any goal
-            multiworld.completion_condition[player] = lambda state: _hk_can_beat_thk(state, player) or _hk_can_beat_radiance(state, player) or state.count("Defeated_Pantheon_5", player) or state.count("Godhome_Flower_Quest", player)
+            multiworld.completion_condition[player] = lambda state: _hk_can_beat_thk(state, player) or _hk_can_beat_radiance(state, player) or state.count("Defeated_Pantheon_5", player)
 
         set_rules(self)
 
