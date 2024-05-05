@@ -8,8 +8,30 @@ from .Names import ItemName, LocationName
 
 
 def set_rules(world: Celeste64World):
+    if world.options.logic_difficulty == "standard":
+        if world.options.move_shuffle:
+            world.active_logic_mapping = location_standard_moves_logic
+        else:
+            world.active_logic_mapping = location_standard_logic
+    else:
+        if world.options.move_shuffle:
+            world.active_logic_mapping = location_hard_moves_logic
+        else:
+            world.active_logic_mapping = location_hard_logic
+
     for location in world.multiworld.get_locations(world.player):
         set_rule(location, lambda state, location=location: location_rule(state, world, location.name))
+
+    if world.options.logic_difficulty == "standard":
+        if world.options.move_shuffle:
+            world.goal_logic_mapping = goal_standard_moves_logic
+        else:
+            world.goal_logic_mapping = goal_standard_logic
+    else:
+        if world.options.move_shuffle:
+            world.goal_logic_mapping = goal_hard_moves_logic
+        else:
+            world.goal_logic_mapping = goal_hard_logic
 
     # Completion condition.
     world.multiworld.completion_condition[world.player] = lambda state: goal_rule(state, world)
@@ -300,46 +322,21 @@ location_hard_moves_logic: Dict[str, List[List[str]]] = {
 
 
 def location_rule(state: CollectionState, world: Celeste64World, loc: str) -> bool:
-    active_logic_mapping: Dict[str, List[List[str]]]
 
-    if world.options.logic_difficulty == "standard":
-        if world.options.move_shuffle:
-            active_logic_mapping = location_standard_moves_logic
-        else:
-            active_logic_mapping = location_standard_logic
-    else:
-        if world.options.move_shuffle:
-            active_logic_mapping = location_hard_moves_logic
-        else:
-            active_logic_mapping = location_hard_logic
-
-    if loc not in active_logic_mapping:
+    if loc not in world.active_logic_mapping:
         return True
 
-    for possible_access in active_logic_mapping[loc]:
+    for possible_access in world.active_logic_mapping[loc]:
         if state.has_all(possible_access, world.player):
             return True
 
     return False
 
 def goal_rule(state: CollectionState, world: Celeste64World) -> bool:
-    active_logic_mapping: List[List[str]]
-
     if not state.has(ItemName.strawberry, world.player, world.strawberries_required):
         return False
 
-    if world.options.logic_difficulty == "standard":
-        if world.options.move_shuffle:
-            active_logic_mapping = goal_standard_moves_logic
-        else:
-            active_logic_mapping = goal_standard_logic
-    else:
-        if world.options.move_shuffle:
-            active_logic_mapping = goal_hard_moves_logic
-        else:
-            active_logic_mapping = goal_hard_logic
-
-    for possible_access in active_logic_mapping:
+    for possible_access in world.goal_logic_mapping:
         if state.has_all(possible_access, world.player):
             return True
 

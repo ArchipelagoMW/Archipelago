@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import List
+from typing import Dict, List
 
 from BaseClasses import ItemClassification, Location, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
@@ -39,6 +39,8 @@ class Celeste64World(World):
 
     # Instance Data
     strawberries_required: int
+    active_logic_mapping: Dict[str, List[List[str]]]
+    goal_logic_mapping: Dict[str, List[List[str]]]
 
 
     def create_item(self, name: str) -> Celeste64Item:
