@@ -447,31 +447,39 @@ class HKWorld(World):
             pass  # will set in pre_fill()
         else:
             # Any goal
-            multiworld.completion_condition[player] = lambda state: _hk_can_beat_thk(state, player) or _hk_can_beat_radiance(state, player)
+            multiworld.completion_condition[player] = lambda state: _hk_can_beat_thk(state, player) or _hk_can_beat_radiance(state, player) or state.count("Defeated_Pantheon_5", player) or state.count("Godhome_Flower_Quest", player)
 
         set_rules(self)
 
     def pre_fill(self):
         grub_hunt_goal = self.options.GrubHuntGoal
-        if grub_hunt_goal == grub_hunt_goal.special_range_names["all"]:
-            from collections import Counter
-            relevant_groups = self.multiworld.get_player_groups(self.player)
-            grub_player_count = Counter()
+        goal = self.options.Goal
+        if goal in ["any", "grub_hunt"]:
+            def set_goal(grub_rule: Callable[[CollectionState], bool]):
+                if goal == "grub_hunt":
+                    self.multiworld.completion_condition[self.player] = grub_rule
+                else:
+                    old_rule = self.multiworld.completion_condition[self.player]
+                    self.multiworld.completion_condition[self.player] = lambda state: old_rule(state) or grub_rule(state)
 
-            for grub in [item for item in self.multiworld.get_items() if item.name == "Grub"]:
-                if grub.player in relevant_groups or grub.player == self.player:
-                    grub_player_count += Counter({grub.player: 1})
-                    if grub.location and grub.location.player in relevant_groups:
-                        # not counting our grubs stuck in item links because we also will count the group's copy
-                        pass
-                    else:
-                        self.grub_count += 1
+            if grub_hunt_goal == grub_hunt_goal.special_range_names["all"]:
+                from collections import Counter
+                relevant_groups = self.multiworld.get_player_groups(self.player)
+                grub_player_count = Counter()
 
-            self.multiworld.completion_condition[self.player] = lambda state, g=grub_player_count: \
-                all([state.has("Grub", player, count) for player, count in g.items()])
-        else:
-            self.grub_count = grub_hunt_goal.value
-            self.multiworld.completion_condition[self.player] = lambda state: state.has("Grub", self.player, self.grub_count)
+                for grub in [item for item in self.multiworld.get_items() if item.name == "Grub"]:
+                    if grub.player in relevant_groups or grub.player == self.player:
+                        grub_player_count += Counter({grub.player: 1})
+                        if grub.location and grub.location.player in relevant_groups:
+                            # not counting our grubs stuck in item links because we also will count the group's copy
+                            pass
+                        else:
+                            self.grub_count += 1
+
+                set_goal(lambda state, g=grub_player_count: all([state.has("Grub", player, count) for player, count in g.items()]))
+            else:
+                self.grub_count = grub_hunt_goal.value
+                set_goal(lambda state: state.has("Grub", self.player, self.grub_count))
 
     def fill_slot_data(self):
         slot_data = {}
