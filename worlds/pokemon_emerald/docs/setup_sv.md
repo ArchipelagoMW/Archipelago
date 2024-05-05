@@ -54,7 +54,7 @@ så kan du bara öppna den igen från launchern.
 5. Leta reda på din Archipelago map och i den öppna `data/lua/connector_bizhawk_generic.lua`.
 6. Emulatorn och klienten kommer så småningom koppla ihop med varanda. I klienten kommer du sedan kunna see om allt är
 kopplat och att Pokemon Emerald startat ordentligt.
-7. För att ansluta klienten till en server, skriv in din lobby adress och port i text fältet tex,`archipelago.gg:38281`
+7. För att ansluta klienten till en server, skriv in din lobby adress och port i text fältet tex, `archipelago.gg:38281`
  längst upp i din klient och tryck sen på "connect"
  
 Du borde nu kunna ta emot och skicka föremål. Du behöver göra dom hör stegen varje gång du vill ansluta.
