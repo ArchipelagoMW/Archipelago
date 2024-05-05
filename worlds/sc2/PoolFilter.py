@@ -215,7 +215,7 @@ def num_missions(world: World) -> int:
         return len(misssions) - 1  # Menu
     else:
         mission_pools = filter_missions(world)
-        return sum(len(pool) for _, pool in mission_pools.items())
+        return min(world.options.maximum_campaign_size, sum(len(pool) for _, pool in mission_pools.items()))
 
 
 class ValidInventory:
