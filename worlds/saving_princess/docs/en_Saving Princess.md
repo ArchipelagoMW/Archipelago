@@ -1,8 +1,9 @@
 # Saving Princess
 
-## Where is the options page?
-
-The [player options page for this game](../player-options) contains all the options you need to configure and export a config file.
+## Quick Links
+- [Setup Guide](/tutorial/Saving%20Princess/setup/en)
+- [Options Page](/games/Saving%20Princess/player-options)
+- [Saving Princess Archipelago GitHub](https://github.com/LeonarthCG/saving-princess-archipelago)
 
 ## What changes have been made?
 

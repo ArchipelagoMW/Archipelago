@@ -1,5 +1,9 @@
 # Saving Princess Setup Guide
 
+## Quick Links
+- [Game Info](/games/Saving%20Princess/info/en)
+- [Options Page](/games/Saving%20Princess/player-options)
+- [Saving Princess Archipelago GitHub](https://github.com/LeonarthCG/saving-princess-archipelago)
 
 ## Installation Procedures
 
