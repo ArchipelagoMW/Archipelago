@@ -10,7 +10,7 @@
 
 När du har installerat Bizhawk, öppna `EmuHawk.exe` och ändra följande inställningar:
 
-- Om du använder Bizhawk 2.7 eller 2.8, gå till `Config > Customize`. sen på "advanced tab" bytt Lua core från
+- Om du använder BizHawk 2.7 eller 2.8, gå till `Config > Customize`. sen på "advanced tab" bytt Lua core från
 `NLua+KopiLua` till `Lua+LuaInterface`, efteråt starta om EmuHawk. (Om du använder BizHawk 2.9, så kan du skippa detta steget.)
 - Gå till `Config > Customize`, Tryck och markera "Run in background" inställningen för att förhindra att bli bortkopplad från klienten
  om du tabbar ur från EmuHawk.
