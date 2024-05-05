@@ -2,13 +2,14 @@ from typing import Callable, Dict, List, Set, Union, Tuple
 from BaseClasses import  Item, Location
 from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items, progressive_if_nco, \
     progressive_if_ext, spear_of_adun_calldowns, spear_of_adun_castable_passives, nova_equipment
-from .MissionTables import mission_orders, MissionInfo, MissionPools, \
+from .MissionTables import MissionInfo, MissionPools, \
     get_campaign_goal_priority, campaign_final_mission_locations, campaign_alt_final_mission_locations, \
     SC2Campaign, SC2Race, SC2CampaignGoalPriority, SC2Mission
 from .Options import get_option_value, MissionOrder, \
     get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech, \
     TakeOverAIAllies, SpearOfAdunPresence, SpearOfAdunAutonomouslyCastAbilityPresence, campaign_depending_orders, \
-    ShuffleCampaigns, get_excluded_missions, ShuffleNoBuild, ExtraLocations, GrantStoryLevels, dynamic_mission_orders
+    ShuffleCampaigns, get_excluded_missions, ShuffleNoBuild, ExtraLocations, GrantStoryLevels, \
+    static_mission_orders, dynamic_mission_orders
 from . import ItemNames
 from worlds.AutoWorld import World
 
@@ -208,8 +209,8 @@ def copy_item(item: Item):
 
 def num_missions(world: World) -> int:
     mission_order_type = get_option_value(world, "mission_order")
-    if mission_order_type not in dynamic_mission_orders:
-        mission_order = mission_orders[mission_order_type]()
+    if mission_order_type in static_mission_orders:
+        mission_order = static_mission_orders[mission_order_type]()
         misssions = [mission for campaign in mission_order for mission in mission_order[campaign]]
         return len(misssions) - 1  # Menu
     else:

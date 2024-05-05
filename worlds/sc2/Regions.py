@@ -4,8 +4,8 @@ import math
 from BaseClasses import MultiWorld, Region, Entrance, Location, CollectionState
 from .Locations import LocationData
 from .Options import get_option_value, MissionOrder, get_enabled_campaigns, campaign_depending_orders, \
-    GridTwoStartPositions, dynamic_mission_orders
-from .MissionTables import MissionInfo, mission_orders, vanilla_mission_req_table, \
+    GridTwoStartPositions, static_mission_orders, dynamic_mission_orders
+from .MissionTables import MissionInfo, vanilla_mission_req_table, \
     MissionPools, SC2Campaign, get_goal_location, SC2Mission, MissionConnection, FillMission
 from .PoolFilter import filter_missions
 from worlds.AutoWorld import World
@@ -26,7 +26,7 @@ def create_regions(
     * int The number of missions in the world
     * str The name of the goal location
     """
-    mission_order_type: int = get_option_value(world, "mission_order")
+    mission_order_type: MissionOrder = get_option_value(world, "mission_order")
 
     if mission_order_type == MissionOrder.option_vanilla:
         return create_vanilla_regions(world, locations, location_cache)
@@ -377,8 +377,6 @@ def make_grid_connect_rule(
 
 def make_dynamic_mission_order(
     world: World,
-    locations: Tuple[LocationData, ...],
-    location_cache: List[Location],
     mission_order_type: int
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
     player = world.player
@@ -542,14 +540,14 @@ def create_structured_regions(
     world: World,
     locations: Tuple[LocationData, ...],
     location_cache: List[Location],
-    mission_order_type: int,
+    mission_order_type: MissionOrder,
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
     locations_per_region = get_locations_per_region(locations)
 
-    if mission_order_type in dynamic_mission_orders:
-        mission_order = make_dynamic_mission_order(world, locations, location_cache, mission_order_type)
+    if mission_order_type in static_mission_orders:
+        mission_order = static_mission_orders[mission_order_type]()
     else:
-        mission_order = mission_orders[mission_order_type]()
+        mission_order = make_dynamic_mission_order(world, mission_order_type)
     enabled_campaigns = get_enabled_campaigns(world)
     shuffle_campaigns = get_option_value(world, "shuffle_campaigns")
 

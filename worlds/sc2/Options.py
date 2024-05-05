@@ -3,7 +3,7 @@ from typing import FrozenSet, Union, Set
 
 from Options import Choice, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range, PerGameCommonOptions
 from .MissionTables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_no_build_missions, \
-    campaign_mission_table
+    campaign_mission_table, vanilla_shuffle_order, mini_campaign_order
 from worlds.AutoWorld import World
 
 
@@ -57,28 +57,21 @@ class AllInMap(Choice):
 
 class MissionOrder(Choice):
     """
-    Determines the order the missions are played in.  The last three mission orders end in a random mission.
+    Determines the order the missions are played in.  The first three mission orders ignore the Maximum Campaign Size option.
     Vanilla (83 total if all campaigns enabled): Keeps the standard mission order and branching from the vanilla Campaigns.
     Vanilla Shuffled (83 total if all campaigns enabled): Keeps same branching paths from the vanilla Campaigns but randomizes the order of missions within.
     Mini Campaign (47 total if all campaigns enabled): Shorter version of the campaign with randomized missions and optional branches.
-    Medium Grid (16):  A 4x4 grid of random missions.  Start at the top-left and forge a path towards bottom-right mission to win.
-    Mini Grid (9):  A 3x3 version of Grid.  Complete the bottom-right mission to win.
-    Blitz (12):  12 random missions that open up very quickly.  Complete the bottom-right mission to win.
-    Gauntlet (7): Linear series of 7 random missions to complete the campaign.
-    Mini Gauntlet (4): Linear series of 4 random missions to complete the campaign.
-    Tiny Grid (4): A 2x2 version of Grid.  Complete the bottom-right mission to win.
-    Grid (variable): A grid that will resize to use all non-excluded missions.  Corners may be omitted to make the grid more square.  Complete the bottom-right mission to win.
+    Blitz:  Missions are divided into sets. Complete one mission from a set to advance to the next set.
+    Gauntlet: A linear path of missions to complete the campaign.
+    Grid: A grid that will resize to use all non-excluded missions.  Corners may be omitted to make the grid more square.  Complete the bottom-right mission to win.
+    Golden Path:
     """
     display_name = "Mission Order"
     option_vanilla = 0
     option_vanilla_shuffled = 1
     option_mini_campaign = 2
-    option_medium_grid = 3
-    option_mini_grid = 4
     option_blitz = 5
     option_gauntlet = 6
-    option_mini_gauntlet = 7
-    option_tiny_grid = 8
     option_grid = 9
     option_golden_path = 10
 
@@ -904,6 +897,12 @@ campaign_depending_orders = [
     MissionOrder.option_vanilla_shuffled,
     MissionOrder.option_mini_campaign
 ]
+
+static_mission_orders = {
+    MissionOrder.option_vanilla: vanilla_shuffle_order,
+    MissionOrder.option_vanilla_shuffled: vanilla_shuffle_order,
+    MissionOrder.option_mini_campaign: mini_campaign_order
+}
 
 dynamic_mission_orders = [
     MissionOrder.option_golden_path,

@@ -399,64 +399,6 @@ def mini_campaign_order() -> Dict[SC2Campaign, List[FillMission]]:
     }
 
 
-def grid_order() -> Dict[SC2Campaign, List[FillMission]]:
-    return {
-        SC2Campaign.GLOBAL: [
-            FillMission(MissionPools.STARTER, [MissionConnection(-1)], "_1"),
-            FillMission(MissionPools.EASY, [MissionConnection(0)], "_1"),
-            FillMission(MissionPools.MEDIUM, [MissionConnection(1), MissionConnection(6), MissionConnection( 3)], "_1", or_requirements=True),
-            FillMission(MissionPools.HARD, [MissionConnection(2), MissionConnection(7)], "_1", or_requirements=True),
-            FillMission(MissionPools.EASY, [MissionConnection(0)], "_2"),
-            FillMission(MissionPools.MEDIUM, [MissionConnection(1), MissionConnection(4)], "_2", or_requirements=True),
-            FillMission(MissionPools.HARD, [MissionConnection(2), MissionConnection(5), MissionConnection(10), MissionConnection(7)], "_2", or_requirements=True),
-            FillMission(MissionPools.HARD, [MissionConnection(3), MissionConnection(6), MissionConnection(11)], "_2", or_requirements=True),
-            FillMission(MissionPools.MEDIUM, [MissionConnection(4), MissionConnection(9), MissionConnection(12)], "_3", or_requirements=True),
-            FillMission(MissionPools.HARD, [MissionConnection(5), MissionConnection(8), MissionConnection(10), MissionConnection(13)], "_3", or_requirements=True),
-            FillMission(MissionPools.HARD, [MissionConnection(6), MissionConnection(9), MissionConnection(11), MissionConnection(14)], "_3", or_requirements=True),
-            FillMission(MissionPools.HARD, [MissionConnection(7), MissionConnection(10)], "_3", or_requirements=True),
-            FillMission(MissionPools.HARD, [MissionConnection(8), MissionConnection(13)], "_4", or_requirements=True),
-            FillMission(MissionPools.HARD, [MissionConnection(9), MissionConnection(12), MissionConnection(14)], "_4", or_requirements=True),
-            FillMission(MissionPools.HARD, [MissionConnection(10), MissionConnection(13)], "_4", or_requirements=True),
-            FillMission(MissionPools.FINAL, [MissionConnection(11), MissionConnection(14)], "_4", or_requirements=True)
-        ]
-    }
-
-def mini_grid_order() -> Dict[SC2Campaign, List[FillMission]]:
-    return {
-        SC2Campaign.GLOBAL: [
-            FillMission(MissionPools.STARTER, [MissionConnection(-1)], "_1"),
-            FillMission(MissionPools.EASY, [MissionConnection(0)], "_1"),
-            FillMission(MissionPools.MEDIUM, [MissionConnection(1), MissionConnection(5)], "_1", or_requirements=True),
-            FillMission(MissionPools.EASY, [MissionConnection(0)], "_2"),
-            FillMission(MissionPools.MEDIUM, [MissionConnection(1), MissionConnection(3)], "_2", or_requirements=True),
-            FillMission(MissionPools.HARD, [MissionConnection(2), MissionConnection(4)], "_2", or_requirements=True),
-            FillMission(MissionPools.MEDIUM, [MissionConnection(3), MissionConnection(7)], "_3", or_requirements=True),
-            FillMission(MissionPools.HARD, [MissionConnection(4), MissionConnection(6)], "_3", or_requirements=True),
-            FillMission(MissionPools.FINAL, [MissionConnection(5), MissionConnection(7)], "_3", or_requirements=True)
-        ]
-    }
-
-def tiny_grid_order() -> Dict[SC2Campaign, List[FillMission]]:
-    return {
-        SC2Campaign.GLOBAL: [
-            FillMission(MissionPools.STARTER, [MissionConnection(-1)], "_1"),
-            FillMission(MissionPools.MEDIUM, [MissionConnection(0)], "_1"),
-            FillMission(MissionPools.EASY, [MissionConnection(0)], "_2"),
-            FillMission(MissionPools.FINAL, [MissionConnection(1), MissionConnection(2)], "_2", or_requirements=True),
-        ]
-    }
-
-
-mission_orders: List[Callable[[], Dict[SC2Campaign, List[FillMission]]]] = [
-    vanilla_shuffle_order,
-    vanilla_shuffle_order,
-    mini_campaign_order,
-    grid_order,
-    mini_grid_order,
-    tiny_grid_order
-]
-
-
 vanilla_mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]] = {
     SC2Campaign.WOL: {
         SC2Mission.LIBERATION_DAY.mission_name: MissionInfo(SC2Mission.LIBERATION_DAY, [], SC2Mission.LIBERATION_DAY.area, completion_critical=True),
