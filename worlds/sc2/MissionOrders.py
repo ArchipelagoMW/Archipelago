@@ -173,12 +173,18 @@ def mini_campaign_order() -> Dict[SC2Campaign, List[FillMission]]:
     }
 
 
+smooth_difficulty = [MissionPools.EASY,
+                     MissionPools.MEDIUM, MissionPools.MEDIUM,
+                     MissionPools.HARD, MissionPools.HARD,
+                     MissionPools.VERY_HARD]
+max_difficulty = len(smooth_difficulty) - 1
+
+
 def make_golden_path(world: World, num_missions: int) -> list[FillMission]:
     chain_name_options = ['Mar Sara', 'Char', 'Kaldir', 'Zerus', 'Skygeirr Station',
                    'Dominion Space', 'Korhal', 'Aiur', 'Shakuras', 'Ulnar']
     world.random.shuffle(chain_name_options)
 
-    mission_difficulties = [MissionPools.EASY, MissionPools.MEDIUM, MissionPools.HARD, MissionPools.VERY_HARD]
     first_chain = chain_name_options.pop()
     first_mission = FillMission(MissionPools.STARTER, [MissionConnection(-1, SC2Campaign.GLOBAL)], first_chain,
                                      completion_critical=True)
@@ -224,8 +230,8 @@ def make_golden_path(world: World, num_missions: int) -> list[FillMission]:
     current_required_missions = 0
     main_chain = 0
     while campaign.missions_remaining > 0:
+        mission_difficulty = smooth_difficulty[min(main_chain, max_difficulty)]
         main_chain += 1
-        mission_difficulty = mission_difficulties[min(main_chain // 2, 3)]
         if main_chain % 2 == 1:  # Adding branches
             chains_to_make = 0 if len(campaign.chain_names) > 5 else 2 if main_chain == 1 else 1
             for new_chain in range(chains_to_make):
@@ -242,10 +248,10 @@ def make_golden_path(world: World, num_missions: int) -> list[FillMission]:
 
 
 def make_gauntlet(num_missions: int) -> list[FillMission]:
-    mission_difficulties = [MissionPools.EASY, MissionPools.MEDIUM, MissionPools.HARD, MissionPools.VERY_HARD]
     mission_order: list[FillMission] = []
     row_length = 7
     rows = math.ceil(num_missions / row_length)
+    difficulty_rate = (max_difficulty + 1) / num_missions if num_missions < 21 else 1/3
     if rows == 1:
         column_names = ["I", "II", "III", "IV", "V", "VI", "VII"][:num_missions - 1]
         column_names.append("Final")
@@ -260,8 +266,8 @@ def make_gauntlet(num_missions: int) -> list[FillMission]:
         if mission_number == num_missions - 1:
             difficulty = MissionPools.FINAL
         else:
-            difficulty_progress = math.floor(min(mission_number * 4 / num_missions, mission_number / 3))
-            difficulty = mission_difficulties[min(difficulty_progress, 3)]
+            difficulty_progress = mission_number * difficulty_rate
+            difficulty = smooth_difficulty[min(math.floor(difficulty_progress), max_difficulty)]
         connection = MissionConnection(mission_number - 1)
         mission_order.append(FillMission(
             difficulty,
@@ -278,7 +284,6 @@ def make_gauntlet(num_missions: int) -> list[FillMission]:
 
 
 def make_blitz(num_missions: int) -> list[FillMission]:
-    mission_difficulties = [MissionPools.EASY, MissionPools.MEDIUM, MissionPools.HARD, MissionPools.VERY_HARD]
     min_width, max_width = 2, 5
     mission_divisor = 5
     dynamic_width = num_missions / mission_divisor
@@ -294,12 +299,13 @@ def make_blitz(num_missions: int) -> list[FillMission]:
         final_mission_number = num_missions - 1
     while mission_number < num_missions:
         column = mission_number % width
+        row = math.floor(mission_number / width)
         if mission_number == middle_column:
             difficulty = MissionPools.STARTER
         elif mission_number == final_mission_number:
             difficulty = MissionPools.FINAL
         else:
-            difficulty = mission_difficulties[math.floor(min(mission_number / width, 3))]
+            difficulty = smooth_difficulty[(min(row, max_difficulty))]
         mission_order.append(FillMission(
             difficulty,
             connections,
@@ -311,4 +317,73 @@ def make_blitz(num_missions: int) -> list[FillMission]:
         if mission_number % width == 0:
             connections = [MissionConnection(mission_number - 1 - i) for i in range(width)]
             connections.reverse()
+    return {SC2Campaign.GLOBAL: mission_order}
+
+
+def make_diagonal(two_start_positions: bool, num_missions: int):
+    mission_order: List[FillMission] = []
+    menu_connection = [MissionConnection(-1)]
+    max_width = 7
+    difficulty_progress = 0
+    difficulty_rate = max(0.5, min(1, 3 * max_difficulty / num_missions))
+    x = 0
+    y = 0
+    difficulty = MissionPools.EASY
+    first_diagonal = True
+    creation_cycle = 0  # Root -> Bottom Branch -> Right Branch
+    # Creating the starter missions
+    if two_start_positions:
+        mission_order += [
+            FillMission(MissionPools.STARTER, menu_connection, '_1', ui_vertical_padding=1),
+            FillMission(MissionPools.EASY, menu_connection, '_2')
+        ]
+        mission_number = 2
+    else:
+        mission_order.append(FillMission(MissionPools.STARTER, menu_connection, '_1', completion_critical=True))
+        creation_cycle = 1
+        mission_number = 1
+    while mission_number < num_missions:
+        if mission_number == num_missions - 1:
+            difficulty = MissionPools.FINAL
+        elif creation_cycle == 0 and difficulty_progress < max_difficulty:
+            difficulty_progress += difficulty_rate
+            difficulty = smooth_difficulty[math.floor(difficulty_progress)]
+        if creation_cycle == 0:
+            # Root
+            if y != -1:
+                x += 1
+            y += 1
+            mission_order.append(FillMission(
+                difficulty,
+                [MissionConnection(mission_number - 1), MissionConnection(mission_number - 2)],
+                f'_{x + 1}',
+                or_requirements=True,
+                completion_critical=True
+            ))
+        elif creation_cycle == 1:
+            # Bottom branch
+            mission_order.append(FillMission(
+                difficulty,
+                [MissionConnection(mission_number - 1)],
+                f'_{x + 1}'
+            ))
+        else:
+            # Right branch
+            column = f'_{x + 2}'
+            if x >= max_width - 1:
+                # Wrapping around
+                x = 0
+                y = -1
+                column = '_1'
+                first_diagonal = False
+            mission_order.append(FillMission(
+                difficulty,
+                [MissionConnection(mission_number - 2)],
+                column,
+                ui_vertical_padding=y if first_diagonal else 1
+            ))
+        mission_number += 1
+        creation_cycle += 1
+        if creation_cycle == 3:
+            creation_cycle = 0
     return {SC2Campaign.GLOBAL: mission_order}

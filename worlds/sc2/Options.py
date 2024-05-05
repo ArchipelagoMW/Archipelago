@@ -75,6 +75,7 @@ class MissionOrder(Choice):
     option_gauntlet = 6
     option_grid = 9
     option_golden_path = 10
+    option_diagonal = 11
 
 
 class MaximumCampaignSize(Range):
@@ -909,7 +910,8 @@ dynamic_mission_orders = [
     MissionOrder.option_golden_path,
     MissionOrder.option_grid,
     MissionOrder.option_gauntlet,
-    MissionOrder.option_blitz
+    MissionOrder.option_blitz,
+    MissionOrder.option_diagonal
 ]
 
 kerrigan_unit_available = [
