@@ -1,3 +1,13 @@
+# 2.1.1
+
+### Features
+
+- You no longer need a copy of Pokemon Emerald to generate a game, patch files generate much faster.
+
+# 2.1.0
+
+_Separately released, branching from 2.0.0. Included procedure patch migration, but none of the 2.0.1 fixes._
+
 # 2.0.1
 
 ### Fixes
