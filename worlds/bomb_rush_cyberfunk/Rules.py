@@ -85,6 +85,19 @@ def versum_hill_crew_battle(state: CollectionState, player: int, limit: bool, gl
         )
     
 
+def versum_hill_rietveld(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
+    if glitched:
+        return (
+            current_chapter(state, player, 2)
+            and graffitiM(state, player, limit, 114)
+        )
+    else:
+        return (
+            current_chapter(state, player, 2)
+            and graffitiM(state, player, limit, 67)
+        )
+    
+
 def versum_hill_rave(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched:
         if current_chapter(state, player, 4):
@@ -891,7 +904,7 @@ def rules(brcworld):
     set_rule(multiworld.get_location("Versum Hill: Frank joins the crew", player),
         lambda state: current_chapter(state, player, 2))
     set_rule(multiworld.get_location("Versum Hill: Rietveld joins the crew", player),
-        lambda state: current_chapter(state, player, 2))
+        lambda state: versum_hill_rietveld(state, player, limit, glitched))
     if photos:
         set_rule(multiworld.get_location("Versum Hill: Big Polo", player),
             lambda state: camera(state, player))
