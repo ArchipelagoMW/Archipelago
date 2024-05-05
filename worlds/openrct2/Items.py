@@ -11,7 +11,6 @@ class OpenRCT2Item(Item):
 
 
 
-# def set_openRCT2_items(scenario, rules, monopoly_mode, include_gamespeed_items, furry_convention_traps, spam_traps, bathroom_traps, skips, filler, atm, first_aid):
 def set_openRCT2_items(world):
     # print("\nThis is the selected scenario:")
     # print(scenario)
@@ -34,34 +33,23 @@ def set_openRCT2_items(world):
             openRCT2_items.append("First Aid")
 
     if world.options.monopoly_mode.value:
-        count = 0
-        while count < 20:
+        for each in range(20):
             openRCT2_items.append("Land Discount")
             openRCT2_items.append("Construction Rights Discount")
-            count += 1
-            
+                      
     if world.options.include_gamespeed_items.value:
-        count = 0
-        while count < 4:
+        for each in range(4):
             openRCT2_items.append("Progressive Speed")
-            count += 1
 
-    count = 0
-    while count < world.options.furry_convention_traps.value:
+    for each in range(world.options.furry_convention_traps.value):
         openRCT2_items.append("Furry Convention Trap")
-        count += 1
-    count = 0
-    while count < world.options.spam_traps.value:
+
+    for each in range(world.options.spam_traps.value):
         openRCT2_items.append("Spam Trap")
-        count +=1
-    count = 0
-    while count < world.options.bathroom_traps.value:
+    for each in range(world.options.bathroom_traps.value):
         openRCT2_items.append("Bathroom Trap")
-        count +=1
-    count = 0
-    while count < world.options.skips.value:
+    for each in range(world.options.skips.value):
         openRCT2_items.append("Skip")
-        count +=1
 
     for number, rule in enumerate(item_info["park_rules"]):#Check every rule type
         if rules[number] == 1:#If it's enabled and can be disabled
