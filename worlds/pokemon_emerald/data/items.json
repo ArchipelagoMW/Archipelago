@@ -736,13 +736,13 @@
   },
   "ITEM_BLACK_FLUTE": {
     "label": "Black Flute",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": ["Misc"],
     "modern_id": 68
   },
   "ITEM_WHITE_FLUTE": {
     "label": "White Flute",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": ["Misc"],
     "modern_id": 69
   },
