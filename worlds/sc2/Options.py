@@ -3,7 +3,8 @@ from typing import FrozenSet, Union, Set
 
 from Options import Choice, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range, PerGameCommonOptions
 from .MissionTables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_no_build_missions, \
-    campaign_mission_table, vanilla_shuffle_order, mini_campaign_order
+    campaign_mission_table
+from .MissionOrders import vanilla_shuffle_order, mini_campaign_order
 from worlds.AutoWorld import World
 
 
