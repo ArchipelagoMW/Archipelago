@@ -10,7 +10,7 @@ from .er_scripts import create_er_regions
 from .er_data import portal_mapping
 from .options import TunicOptions, EntranceRando
 from worlds.AutoWorld import WebWorld, World
-from worlds.generic import PlandoConnection
+from Options import PlandoConnection
 from decimal import Decimal, ROUND_HALF_UP
 
 
