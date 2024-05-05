@@ -1364,8 +1364,8 @@ def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete
                 else:
                     req_success = False
 
-            # Grid-specific logic (to avoid long path checks and infinite recursion)
-            if ctx.mission_order in (MissionOrder.option_grid, MissionOrder.option_mini_grid, MissionOrder.option_medium_grid):
+            # Grid and Blitz-specific logic (to avoid long path checks and infinite recursion) (Includes legacy grids)
+            if ctx.mission_order in (MissionOrder.option_grid, MissionOrder.option_blitz, 3, 4, 8):
                 if req_success:
                     return True
                 else:

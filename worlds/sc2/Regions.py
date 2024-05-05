@@ -393,10 +393,11 @@ def make_dynamic_mission_order(
     # Grid handled by dedicated region generator
     elif mission_order_type == MissionOrder.option_gauntlet:
         return make_gauntlet(num_missions)
+    elif mission_order_type == MissionOrder.option_blitz:
+        return make_blitz(num_missions)
 
 
-
-def make_golden_path(world, num_missions):
+def make_golden_path(world, num_missions) -> list[FillMission]:
     chain_name_options = ['Mar Sara', 'Char', 'Kaldir', 'Zerus', 'Skygeirr Station',
                    'Dominion Space', 'Korhal', 'Aiur', 'Shakuras', 'Ulnar']
     world.random.shuffle(chain_name_options)
@@ -464,7 +465,7 @@ def make_golden_path(world, num_missions):
     return {SC2Campaign.GLOBAL: campaign.mission_order}
 
 
-def make_gauntlet(num_missions):
+def make_gauntlet(num_missions) -> list[FillMission]:
     mission_difficulties = [MissionPools.EASY, MissionPools.MEDIUM, MissionPools.HARD, MissionPools.VERY_HARD]
     mission_order: list[FillMission] = []
     row_length = 7
@@ -475,7 +476,7 @@ def make_gauntlet(num_missions):
     else:
         column_names = [f'_{col + 1}' for col in range(row_length)]
     first_mission = FillMission(MissionPools.STARTER, [MissionConnection(-1)], column_names[0],
-                                     completion_critical=True)
+                                completion_critical=True)
     mission_order.append(first_mission)
     mission_number = 1
     space_rows = 0
@@ -493,11 +494,48 @@ def make_gauntlet(num_missions):
             completion_critical=True,
             ui_vertical_padding=space_rows
         ))
-        if mission_number == row_length - 1:
-            space_rows += 1
         mission_number += 1
+        # Next row
+        if mission_number == row_length:
+            space_rows += 1
     return {SC2Campaign.GLOBAL: mission_order}
 
+
+def make_blitz(num_missions) -> list[FillMission]:
+    mission_difficulties = [MissionPools.EASY, MissionPools.MEDIUM, MissionPools.HARD, MissionPools.VERY_HARD]
+    min_width, max_width = 2, 5
+    mission_divisor = 5
+    dynamic_width = num_missions / mission_divisor
+    width = max(min(dynamic_width, max_width), min_width)
+    middle_column = math.floor(width / 2)
+    connections = [MissionConnection(-1)]
+    mission_number = 0
+    mission_order: List[FillMission] = []
+    if num_missions % width > middle_column:
+        final_row = math.floor(num_missions / width) * width
+        final_mission_number = final_row + middle_column
+    else:
+        final_mission_number = num_missions - 1
+    while mission_number < num_missions:
+        column = mission_number % width
+        if mission_number == middle_column:
+            difficulty = MissionPools.STARTER
+        elif mission_number == final_mission_number:
+            difficulty = MissionPools.FINAL
+        else:
+            difficulty = mission_difficulties[math.floor(min(mission_number / width, 3))]
+        mission_order.append(FillMission(
+            difficulty,
+            connections,
+            f'_{column}',
+            or_requirements=True
+        ))
+        mission_number += 1
+        # Next row, requires previous row
+        if mission_number % width == 0:
+            connections = [MissionConnection(mission_number - 1 - i) for i in range(width)]
+            connections.reverse()
+    return {SC2Campaign.GLOBAL: mission_order}
 
 
 def create_structured_regions(

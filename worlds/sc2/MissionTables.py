@@ -446,24 +446,6 @@ def tiny_grid_order() -> Dict[SC2Campaign, List[FillMission]]:
         ]
     }
 
-def blitz_order() -> Dict[SC2Campaign, List[FillMission]]:
-    return {
-        SC2Campaign.GLOBAL: [
-            FillMission(MissionPools.STARTER, [MissionConnection(-1)], "I"),
-            FillMission(MissionPools.EASY, [MissionConnection(-1)], "I"),
-            FillMission(MissionPools.MEDIUM, [MissionConnection(0), MissionConnection(1)], "II", number=1, or_requirements=True),
-            FillMission(MissionPools.MEDIUM, [MissionConnection(0), MissionConnection(1)], "II", number=1, or_requirements=True),
-            FillMission(MissionPools.MEDIUM, [MissionConnection(0), MissionConnection(1)], "III", number=2, or_requirements=True),
-            FillMission(MissionPools.MEDIUM, [MissionConnection(0), MissionConnection(1)], "III", number=2, or_requirements=True),
-            FillMission(MissionPools.HARD, [MissionConnection(0), MissionConnection(1)], "IV", number=3, or_requirements=True),
-            FillMission(MissionPools.HARD, [MissionConnection(0), MissionConnection(1)], "IV", number=3, or_requirements=True),
-            FillMission(MissionPools.HARD, [MissionConnection(0), MissionConnection(1)], "V", number=4, or_requirements=True),
-            FillMission(MissionPools.HARD, [MissionConnection(0), MissionConnection(1)], "V", number=4, or_requirements=True),
-            FillMission(MissionPools.HARD, [MissionConnection(0), MissionConnection(1)], "Final", number=5, or_requirements=True),
-            FillMission(MissionPools.FINAL, [MissionConnection(0), MissionConnection(1)], "Final", number=5, or_requirements=True)
-        ]
-    }
-
 
 mission_orders: List[Callable[[], Dict[SC2Campaign, List[FillMission]]]] = [
     vanilla_shuffle_order,
@@ -471,7 +453,6 @@ mission_orders: List[Callable[[], Dict[SC2Campaign, List[FillMission]]]] = [
     mini_campaign_order,
     grid_order,
     mini_grid_order,
-    blitz_order,
     tiny_grid_order
 ]
 

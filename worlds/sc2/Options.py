@@ -908,7 +908,8 @@ campaign_depending_orders = [
 dynamic_mission_orders = [
     MissionOrder.option_golden_path,
     MissionOrder.option_grid,
-    MissionOrder.option_gauntlet
+    MissionOrder.option_gauntlet,
+    MissionOrder.option_blitz
 ]
 
 kerrigan_unit_available = [
