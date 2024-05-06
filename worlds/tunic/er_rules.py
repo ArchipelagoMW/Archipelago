@@ -986,7 +986,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         connecting_region=regions["Spirit Arena Victory"],
         rule=lambda state: (state.has(gold_hexagon, player, world.options.hexagon_goal.value) if
                             world.options.hexagon_quest else
-                            state.has_all({red_hexagon, green_hexagon, blue_hexagon}, player)))
+                            state.has_all({red_hexagon, green_hexagon, blue_hexagon, "Unseal the Heir"}, player)))
 
     # connecting the regions portals are in to other portals you can access via ladder storage
     # using has_stick instead of can_ladder_storage since it's already checking the logic rules
@@ -1452,7 +1452,7 @@ def set_er_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) 
 
     # Beneath the Vault
     set_rule(multiworld.get_location("Beneath the Fortress - Bridge", player),
-             lambda state: state.has_group("melee weapons", player, 1) or state.has_any({laurels, fire_wand}, player))
+             lambda state: state.has_group("Melee Weapons", player, 1) or state.has_any({laurels, fire_wand}, player))
     set_rule(multiworld.get_location("Beneath the Fortress - Obscured Behind Waterfall", player),
              lambda state: has_lantern(state, player, options))
 
