@@ -235,7 +235,7 @@ class KeybladeMinMP(Range):
     """
     Determines the minimum MP bonus a keyblade can have
     """
-    display_name = "Keyblade Maximum MP Bonus"
+    display_name = "Keyblade Minimum MP Bonus"
     default = -2
     range_start = -2
     range_end = 5
