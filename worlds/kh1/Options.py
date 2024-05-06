@@ -220,7 +220,7 @@ class KeybladeMinStrength(Range):
     display_name = "Keyblade Minimum STR Bonus"
     default = 3
     range_start = 0
-    range_end = 19
+    range_end = 20
 
 class KeybladeMaxStrength(Range):
     """
@@ -228,7 +228,7 @@ class KeybladeMaxStrength(Range):
     """
     display_name = "Keyblade Maximum STR Bonus"
     default = 14
-    range_start = 2
+    range_start = 0
     range_end = 20
 
 class KeybladeMinMP(Range):
@@ -236,9 +236,9 @@ class KeybladeMinMP(Range):
     Determines the minimum MP bonus a keyblade can have
     """
     display_name = "Keyblade Maximum MP Bonus"
-    default = 0
-    range_start = 0
-    range_end = 4
+    default = -2
+    range_start = -2
+    range_end = 5
 
 class KeybladeMaxMP(Range):
     """
@@ -246,7 +246,7 @@ class KeybladeMaxMP(Range):
     """
     display_name = "Keyblade Maximum MP Bonus"
     default = 3
-    range_start = 1
+    range_start = -2
     range_end = 5
 
 class LevelChecks(Range):
