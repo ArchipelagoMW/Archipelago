@@ -2,7 +2,7 @@ import unittest
 from typing import List, Type
 
 from BaseClasses import Region, EntranceType, MultiWorld, Entrance
-from EntranceRando import disconnect_entrance_for_randomization, randomize_entrances, EntranceRandomizationError, \
+from entrance_rando import disconnect_entrance_for_randomization, randomize_entrances, EntranceRandomizationError, \
     ERPlacementState, EntranceLookup
 from Options import Accessibility
 from test.general import generate_test_multiworld, generate_locations, generate_items
@@ -11,11 +11,11 @@ from worlds.generic.Rules import set_rule
 
 def generate_entrance_pair(region: Region, name_suffix: str, group: str):
     lx = region.create_exit(region.name + name_suffix)
-    lx.er_group = group
-    lx.er_type = EntranceType.TWO_WAY
+    lx.randomization_group = group
+    lx.randomization_type = EntranceType.TWO_WAY
     le = region.create_er_target(region.name + name_suffix)
-    le.er_group = group
-    le.er_type = EntranceType.TWO_WAY
+    le.randomization_group = group
+    le.randomization_type = EntranceType.TWO_WAY
 
 
 def generate_disconnected_region_grid(multiworld: MultiWorld, grid_side_length: int, region_size: int = 0,
@@ -72,7 +72,7 @@ class TestEntranceLookup(unittest.TestCase):
 
         retrieved_targets = lookup.get_targets(["Top", "Bottom"], False, False)
         prev = None
-        group_order = [prev := group.er_group for group in retrieved_targets if prev != group.er_group]
+        group_order = [prev := group.randomization_group for group in retrieved_targets if prev != group.randomization_group]
         # technically possible that group order may not be shuffled, by some small chance, on some seeds. but generally
         # a shuffled list should alternate more frequently which is the desired behavior here
         self.assertGreater(len(group_order), 2)
@@ -91,7 +91,7 @@ class TestEntranceLookup(unittest.TestCase):
 
         retrieved_targets = lookup.get_targets(["Top", "Bottom"], False, True)
         prev = None
-        group_order = [prev := group.er_group for group in retrieved_targets if prev != group.er_group]
+        group_order = [prev := group.randomization_group for group in retrieved_targets if prev != group.randomization_group]
         self.assertEqual(["Top", "Bottom"], group_order)
 
 
@@ -101,8 +101,8 @@ class TestDisconnectForRandomization(unittest.TestCase):
         r1 = Region("r1", 1, multiworld)
         r2 = Region("r2", 1, multiworld)
         e = r1.create_exit("e")
-        e.er_type = EntranceType.TWO_WAY
-        e.er_group = "Group1"
+        e.randomization_type = EntranceType.TWO_WAY
+        e.randomization_group = "Group1"
         e.connect(r2)
 
         disconnect_entrance_for_randomization(e)
@@ -116,16 +116,16 @@ class TestDisconnectForRandomization(unittest.TestCase):
         self.assertEqual(1, len(r1.entrances))
         self.assertIsNone(r1.entrances[0].parent_region)
         self.assertEqual("e", r1.entrances[0].name)
-        self.assertEqual(EntranceType.TWO_WAY, r1.entrances[0].er_type)
-        self.assertEqual("Group1", r1.entrances[0].er_group)
+        self.assertEqual(EntranceType.TWO_WAY, r1.entrances[0].randomization_type)
+        self.assertEqual("Group1", r1.entrances[0].randomization_group)
 
     def test_disconnect_default_1way(self):
         multiworld = generate_test_multiworld()
         r1 = Region("r1", 1, multiworld)
         r2 = Region("r2", 1, multiworld)
         e = r1.create_exit("e")
-        e.er_type = EntranceType.ONE_WAY
-        e.er_group = "Group1"
+        e.randomization_type = EntranceType.ONE_WAY
+        e.randomization_group = "Group1"
         e.connect(r2)
 
         disconnect_entrance_for_randomization(e)
@@ -139,16 +139,16 @@ class TestDisconnectForRandomization(unittest.TestCase):
         self.assertEqual(1, len(r2.entrances))
         self.assertIsNone(r2.entrances[0].parent_region)
         self.assertEqual("r2", r2.entrances[0].name)
-        self.assertEqual(EntranceType.ONE_WAY, r2.entrances[0].er_type)
-        self.assertEqual("Group1", r2.entrances[0].er_group)
+        self.assertEqual(EntranceType.ONE_WAY, r2.entrances[0].randomization_type)
+        self.assertEqual("Group1", r2.entrances[0].randomization_group)
 
     def test_disconnect_uses_alternate_group(self):
         multiworld = generate_test_multiworld()
         r1 = Region("r1", 1, multiworld)
         r2 = Region("r2", 1, multiworld)
         e = r1.create_exit("e")
-        e.er_type = EntranceType.ONE_WAY
-        e.er_group = "Group1"
+        e.randomization_type = EntranceType.ONE_WAY
+        e.randomization_group = "Group1"
         e.connect(r2)
 
         disconnect_entrance_for_randomization(e, "Group2")
@@ -162,8 +162,8 @@ class TestDisconnectForRandomization(unittest.TestCase):
         self.assertEqual(1, len(r2.entrances))
         self.assertIsNone(r2.entrances[0].parent_region)
         self.assertEqual("r2", r2.entrances[0].name)
-        self.assertEqual(EntranceType.ONE_WAY, r2.entrances[0].er_type)
-        self.assertEqual("Group2", r2.entrances[0].er_group)
+        self.assertEqual(EntranceType.ONE_WAY, r2.entrances[0].randomization_type)
+        self.assertEqual("Group2", r2.entrances[0].randomization_group)
 
 
 class TestRandomizeEntrances(unittest.TestCase):
@@ -246,11 +246,11 @@ class TestRandomizeEntrances(unittest.TestCase):
         multiworld.regions.append(region26)
         for index, region in enumerate(["region4", "region20", "region24"]):
             x = multiworld.get_region(region, 1).create_exit(f"{region}_bottom_1way")
-            x.er_type = EntranceType.ONE_WAY
-            x.er_group = "Bottom"
+            x.randomization_type = EntranceType.ONE_WAY
+            x.randomization_group = "Bottom"
             e = region26.create_er_target(f"region26_top_1way{index}")
-            e.er_type = EntranceType.ONE_WAY
-            e.er_group = "Top"
+            e.randomization_type = EntranceType.ONE_WAY
+            e.randomization_group = "Top"
 
         result = randomize_entrances(multiworld.worlds[1], False, directionally_matched_group_selection)
         for exit_name, entrance_name in result.pairings:

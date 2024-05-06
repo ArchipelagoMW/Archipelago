@@ -40,13 +40,13 @@ class EntranceLookup:
             return self.__str__()
 
         def add(self, entrance: Entrance) -> None:
-            self._lookup.setdefault(entrance.er_group, []).append(entrance)
+            self._lookup.setdefault(entrance.randomization_group, []).append(entrance)
 
         def remove(self, entrance: Entrance) -> None:
-            group = self._lookup.get(entrance.er_group, [])
+            group = self._lookup.get(entrance.randomization_group, [])
             group.remove(entrance)
             if not group:
-                del self._lookup[entrance.er_group]
+                del self._lookup[entrance.randomization_group]
 
     dead_ends: GroupLookup
     others: GroupLookup
@@ -175,7 +175,7 @@ class ERPlacementState:
 
         self._connect_one_way(source_exit, target_entrance)
         # if we're doing coupled randomization place the reverse transition as well.
-        if self.coupled and source_exit.er_type == EntranceType.TWO_WAY:
+        if self.coupled and source_exit.randomization_type == EntranceType.TWO_WAY:
             for reverse_entrance in source_region.entrances:
                 if reverse_entrance.name == source_exit.name:
                     if reverse_entrance.parent_region:
@@ -226,15 +226,15 @@ def disconnect_entrance_for_randomization(entrance: Entrance, target_group: Opti
     entrance.connected_region = None
 
     # create the needed ER target
-    if entrance.er_type == EntranceType.TWO_WAY:
+    if entrance.randomization_type == EntranceType.TWO_WAY:
         # for 2-ways, create a target in the parent region with a matching name to support coupling.
         # targets in the child region will be created when the other direction edge is disconnected
         target = parent_region.create_er_target(entrance.name)
     else:
         # for 1-ways, the child region needs a target and coupling/naming is not a concern
         target = child_region.create_er_target(child_region.name)
-    target.er_type = entrance.er_type
-    target.er_group = target_group or entrance.er_group
+    target.randomization_type = entrance.randomization_type
+    target.randomization_group = target_group or entrance.randomization_group
 
 
 def randomize_entrances(
@@ -316,7 +316,7 @@ def randomize_entrances(
         nonlocal perform_validity_check
         placeable_exits = er_state.find_placeable_exits(perform_validity_check)
         for source_exit in placeable_exits:
-            target_groups = get_target_groups(source_exit.er_group)
+            target_groups = get_target_groups(source_exit.randomization_group)
             # anything can connect to the default group - if people don't like it the fix is to
             # assign a non-default group
             if "Default" not in target_groups:

@@ -19,7 +19,7 @@ import Options
 import Utils
 
 if typing.TYPE_CHECKING:
-    from EntranceRando import ERPlacementState
+    from entrance_rando import ERPlacementState
     from worlds import AutoWorld
 
 
@@ -656,6 +656,7 @@ class CollectionState():
         ret.events = copy.copy(self.events)
         ret.path = copy.copy(self.path)
         ret.locations_checked = copy.copy(self.locations_checked)
+        ret.allow_partial_entrances = self.allow_partial_entrances
         for function in self.additional_copy_functions:
             ret = function(self, ret)
         return ret
@@ -776,19 +777,19 @@ class Entrance:
     name: str
     parent_region: Optional[Region]
     connected_region: Optional[Region] = None
-    er_group: str
-    er_type: EntranceType
+    randomization_group: str
+    randomization_type: EntranceType
     # LttP specific, TODO: should make a LttPEntrance
     addresses = None
     target = None
 
     def __init__(self, player: int, name: str = "", parent: Region = None,
-                 er_group: str = "Default", er_type: EntranceType = EntranceType.ONE_WAY):
+                 randomization_group: str = "Default", randomization_type: EntranceType = EntranceType.ONE_WAY):
         self.name = name
         self.parent_region = parent
         self.player = player
-        self.er_group = er_group
-        self.er_type = er_type
+        self.randomization_group = randomization_group
+        self.randomization_type = randomization_type
 
     def can_reach(self, state: CollectionState) -> bool:
         if self.parent_region.can_reach(state) and self.access_rule(state):
@@ -830,7 +831,7 @@ class Entrance:
         """
         # the implementation of coupled causes issues for self-loops since the reverse entrance will be the
         # same as the forward entrance. In uncoupled they are ok.
-        return self.er_type == other.er_type and (not state.coupled or self.name != other.name)
+        return self.randomization_type == other.randomization_type and (not state.coupled or self.name != other.name)
 
     def __repr__(self):
         return self.__str__()
