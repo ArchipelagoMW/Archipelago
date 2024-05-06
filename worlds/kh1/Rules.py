@@ -26,7 +26,7 @@ def has_at_least(state: CollectionState, player: int, item: str, x: int) -> bool
     return state.count(item, player) >= x
 
 def has_postcards(state: CollectionState, player: int, postcards_required: int) -> bool:
-    postcards_available = 3 #You can get three postcards without no items
+    postcards_available = 3 #You can get three postcards without any items
     if has_item(state, player, "Progressive Thunder"):
         postcards_available = postcards_available + 2 #Gizmo Shop Postcards
     if  has_item(state, player, "Green Trinity"):
