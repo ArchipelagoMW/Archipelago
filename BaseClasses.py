@@ -768,6 +768,7 @@ class CollectionState():
         return self.count(item, player)
 
     def has_list(self, items: Iterable[str], player: int, count: int = 1) -> bool:
+        """Returns True if the cumulative count of items from a list present in state exceeds the specified number."""
         found: int = 0
         player_prog_items = self.prog_items[player]
         for item_name in items:
@@ -777,6 +778,7 @@ class CollectionState():
         return False
 
     def count_list(self, items: Iterable[str], player: int) -> int:
+        """Returns the cumulative count of items from a list present in state."""
         return sum(self.prog_items[player][item_name] for item_name in items)
 
     # item name group related
@@ -1255,7 +1257,7 @@ class Spoiler:
         # reducing each range of influence to the bare minimum required inside it
         restore_later = {}
         for num, sphere in reversed(tuple(enumerate(collection_spheres))):
-            to_delete = set()
+            to_delete = set()has_
             for location in sphere:
                 # we remove the item at location and check if game is still beatable
                 logging.debug('Checking if %s (Player %d) is required to beat the game.', location.item.name,
