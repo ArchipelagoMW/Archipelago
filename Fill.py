@@ -220,7 +220,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
 def remaining_fill(multiworld: MultiWorld,
                    locations: typing.List[Location],
                    itempool: typing.List[Item],
-                   name: str = "Remaining") -> None:
+                   name: str = "Remaining", move_unplaceable_to_start_inventory: bool = False) -> None:
     unplaced_items: typing.List[Item] = []
     placements: typing.List[Location] = []
     swapped_items: typing.Counter[typing.Tuple[int, str]] = Counter()
@@ -284,13 +284,21 @@ def remaining_fill(multiworld: MultiWorld,
 
     if unplaced_items and locations:
         # There are leftover unplaceable items and locations that won't accept them
-        raise FillError(f"No more spots to place {len(unplaced_items)} items. Remaining locations are invalid.\n"
-                        f"Unplaced items:\n"
-                        f"{', '.join(str(item) for item in unplaced_items)}\n"
-                        f"Unfilled locations:\n"
-                        f"{', '.join(str(location) for location in locations)}\n"
-                        f"Already placed {len(placements)}:\n"
-                        f"{', '.join(str(place) for place in placements)}")
+        if move_unplaceable_to_start_inventory:
+            last_batch = []
+            for item in unplaced_items:
+                logging.debug(f"Moved {item} to start_inventory to prevent fill failure.")
+                multiworld.push_precollected(item)
+                last_batch.append(multiworld.worlds[item.player].create_filler())
+            remaining_fill(multiworld, locations, unplaced_items, name + " Start Inventory Retry")
+        else:
+            raise FillError(f"No more spots to place {len(unplaced_items)} items. Remaining locations are invalid.\n"
+                            f"Unplaced items:\n"
+                            f"{', '.join(str(item) for item in unplaced_items)}\n"
+                            f"Unfilled locations:\n"
+                            f"{', '.join(str(location) for location in locations)}\n"
+                            f"Already placed {len(placements)}:\n"
+                            f"{', '.join(str(place) for place in placements)}")
 
     itempool.extend(unplaced_items)
 
@@ -508,7 +516,9 @@ def distribute_items_restrictive(multiworld: MultiWorld,
 
     inaccessible_location_rules(multiworld, multiworld.state, defaultlocations)
 
-    remaining_fill(multiworld, excludedlocations, filleritempool, "Remaining Excluded")
+    remaining_fill(multiworld, excludedlocations, filleritempool, "Remaining Excluded",
+                   move_unplaceable_to_start_inventory=panic_method=="start_inventory")
+
     if excludedlocations:
         raise FillError(
             f"Not enough filler items for excluded locations. "
@@ -517,7 +527,8 @@ def distribute_items_restrictive(multiworld: MultiWorld,
 
     restitempool = filleritempool + usefulitempool
 
-    remaining_fill(multiworld, defaultlocations, restitempool)
+    remaining_fill(multiworld, defaultlocations, restitempool,
+                   move_unplaceable_to_start_inventory=panic_method=="start_inventory")
 
     unplaced = restitempool
     unfilled = defaultlocations
