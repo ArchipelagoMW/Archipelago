@@ -1004,7 +1004,7 @@ rlib_drops = {
 }
 
 rno0_enemies = {
-    "Enemysanity: 4 - Stone skill": LocationData("Black Marble Gallery", 104),
+    "Enemysanity: 4 - Stone skull": LocationData("Black Marble Gallery", 104),
     "Enemysanity: 106 - Jack O'bones": LocationData("Black Marble Gallery", 206),
     "Enemysanity: 113 - Nova skeleton": LocationData("Black Marble Gallery", 213),
     "Enemysanity: 125 - Gorgon": LocationData("Black Marble Gallery", 225),
