@@ -11,8 +11,8 @@ from argparse import Namespace
 from collections import Counter, deque
 from collections.abc import Collection, MutableSequence
 from enum import IntEnum, IntFlag
-from typing import Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, Optional, Set, Tuple, TypedDict, Union, \
-    Type, ClassVar
+from typing import Any, Callable, Dict, Iterable, Iterator, List, Mapping, NamedTuple, Optional, Set, Tuple, \
+                   TypedDict, Union, Type, ClassVar
 
 import NetUtils
 import Options
@@ -760,11 +760,11 @@ class CollectionState():
         """Returns True if at least one item name of items is in state at least once."""
         return any(self.prog_items[player][item] for item in items)
 
-    def has_all_counts(self, item_counts: Dict[str, int], player: int) -> bool:
+    def has_all_counts(self, item_counts: Mapping[str, int], player: int) -> bool:
         """Returns True if each item name is in the state at least as many times as specified."""
         return all(self.prog_items[player][item] >= count for item, count in item_counts.items())
 
-    def has_any_count(self, item_counts: Dict[str, int], player: int) -> bool:
+    def has_any_count(self, item_counts: Mapping[str, int], player: int) -> bool:
         """Returns True if at least one item name is in the state at least as many times as specified."""
         return any(self.prog_items[player][item] >= count for item, count in item_counts.items())
 
