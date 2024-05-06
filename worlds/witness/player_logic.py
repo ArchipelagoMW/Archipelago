@@ -537,9 +537,6 @@ class WitnessPlayerLogic:
             if entity_id in self.DOOR_ITEMS_BY_ID:
                 del self.DOOR_ITEMS_BY_ID[entity_id]
 
-        if victory == "panel_hunt":
-            self.COMPLETELY_DISABLED_ENTITIES.discard("0x2FAF6")
-
     def discover_reachable_regions(self):
         """
         Some options disable panels or remove specific items.
