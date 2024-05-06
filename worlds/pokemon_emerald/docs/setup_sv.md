@@ -10,8 +10,8 @@
 
 När du har installerat BizHawk, öppna `EmuHawk.exe` och ändra följande inställningar:
 
-- Om du använder BizHawk 2.7 eller 2.8, gå till `Config > Customize`. sen på "Advanced Tab" bytt Lua core från
-`NLua+KopiLua` till `Lua+LuaInterface`, efteråt starta om EmuHawk. (använder du BizHawk 2.9, kan du skippa detta.)
+- Om du använder BizHawk 2.7 eller 2.8, gå till `Config > Customize`. Sen på "Advanced Tab" bytt Lua core från
+`NLua+KopiLua` till `Lua+LuaInterface`, efteråt starta om EmuHawk. (Använder du BizHawk 2.9, kan du skippa detta.)
 - Gå till `Config > Customize`, Markera "Run in background" inställningen för att förhindra bortkoppling från
 klienten om du tabbar ur från EmuHawk.
 - Öppna en `.gba` fil i EmuHawk och gå till `Config > Controllers…` för att konfigurera dina inputs.
@@ -45,7 +45,7 @@ funktioner, fortsätt nedanför med BizHawk.
 
 ## Anslut till en server
 
-Som standard, Öppnar du en patchad fil så görs steg 1-5 automatisk åt dig. även om det är så, kom ihåg dom om ifall
+Som standard, Öppnar du en patchad fil så görs steg 1-5 automatisk åt dig. Även om det är så, kom ihåg dom om ifall
 du till exempel behöver stänga och starta om något medans du spelar.
 
 1. Pokemon Emerald använder Archipelago's BizHawk Klient. Om klienten inte startat efter att du patchat ditt spel,
