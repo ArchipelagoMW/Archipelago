@@ -4,6 +4,8 @@ import sys
 import typing
 import re
 
+from MultiServer import get_input_text_from_response
+
 if sys.platform == "win32":
     import ctypes
 
@@ -285,16 +287,10 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
                 temp = MarkupLabel(text=self.text).markup
                 text = "".join(part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
                 cmdinput = App.get_running_app().textinput
-                if not cmdinput.text and "did you mean " in text:
-                    for question in ("Didn't find something that closely matches",
-                                     "Too many close matches"):
-                        if text.startswith(question):
-                            name = Utils.get_text_between(text, "did you mean '",
-                                                          "'? (")
-                            cmdinput.text = f"!{App.get_running_app().last_autofillable_command} {name}"
-                            break
-                elif not cmdinput.text and text.startswith("Missing: "):
-                    cmdinput.text = text.replace("Missing: ", "!hint_location ")
+                if not cmdinput.text:
+                    input_text = get_input_text_from_response(text, App.get_running_app().last_autofillable_command)
+                    if input_text is not None:
+                        cmdinput.text = input_text
 
                 Clipboard.copy(text.replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
                 return self.parent.select_with_touch(self.index, touch)

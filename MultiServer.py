@@ -1093,6 +1093,20 @@ def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bo
                                        f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
 
 
+def get_input_text_from_response(text: str, command: str) -> typing.Optional[str]:
+    if "did you mean " in text:
+        for question in ("Didn't find something that closely matches",
+                         "Too many close matches"):
+            if text.startswith(question):
+                name = Utils.get_text_between(text, "did you mean '",
+                                              "'? (")
+                return f"!{command} {name}"
+                break
+    elif text.startswith("Missing: "):
+        return text.replace("Missing: ", "!hint_location ")
+    return None
+
+
 class CommandMeta(type):
     def __new__(cls, name, bases, attrs):
         commands = attrs["commands"] = {}
