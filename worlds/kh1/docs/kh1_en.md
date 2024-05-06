@@ -3,35 +3,35 @@
 ##Setting up the required mods
 1. Install OpenKH and the LUA Backend.
 
-    Download the latest release of OpenKH here: https://github.com/OpenKH/OpenKh/releases/tag/latest
+    Download the latest release of OpenKH [here](https://github.com/OpenKH/OpenKh/releases/tag/latest)
     
     Extract the files to a directory of your choosing.
     
-    Open OpenKh.Tools.ModsManager.exe and run first time set up.
+    Open `OpenKh.Tools.ModsManager.exe` and run first time set up.
     
-    When prompted for game edition, choose PC Release via Epic Games Store and navigate to your KH_1.5_2.5 in the path box and click "Next"
+    When prompted for game edition, choose `PC Release via Epic Games Store` and navigate to your `KH_1.5_2.5` folder in the path box and click `Next`
     
-    When prompted, install Panacea, then click "Next"
+    When prompted, install Panacea, then click `Next`
     
-    When prompted, check KH1 plus any other AP game you play and click "Install and configure LUA backend", then click "Next".
+    When prompted, check KH1 plus any other AP game you play and click `Install and configure LUA backend`, then click `Next`.
     
-    Ensure that "Launch via Epic Games" is checked and click "Next"
+    Ensure that `Launch via Epic Games` is checked and click `Next`
     
     Extracting game data for KH1 is not required, you may skip it in the next step.
     
-    Click "Finish"
+    Click `Finish`
     
-2. Open "OpenKh.Tools.ModsManager.exe"
+2. Open `OpenKh.Tools.ModsManager.exe`
 
-3. Click the drop down menu at the top-right and choose "Kingdom Hearts 1"
+3. Click the drop down menu at the top-right and choose `Kingdom Hearts 1`
 
 4. Click `Mods>Install a New Mod`
 
-5. In "Add a new mod from GitHub" paste `gaithern/KH-1FM-AP-LUA`
+5. In `Add a new mod from GitHub` paste `gaithern/KH-1FM-AP-LUA`
 
-6. Click Install
+6. Click `Install`
 
-7. Navigate to Mod Loader and click "Build Only"
+7. Navigate to Mod Loader and click `Build and Run`
 
 
 ## Configuring your YAML file

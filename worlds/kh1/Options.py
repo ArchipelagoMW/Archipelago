@@ -7,7 +7,7 @@ class StrengthIncrease(Range):
     Number of Strength Increases to Add to the Level Up Rewards
     
     The randomizer will add all stat up defined here into a pool and choose up to 100 to add to the multiworld.
-    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) at chosen at random.
+    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
     """
     display_name = "STR Increases"
     range_start = 0
@@ -19,7 +19,7 @@ class DefenseIncrease(Range):
     Number of Defense Increases to Add to the Level Up Rewards
     
     The randomizer will add all stat up defined here into a pool and choose up to 100 to add to the multiworld.
-    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) at chosen at random.
+    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
     """
     display_name = "DEF Increases"
     range_start = 0
@@ -31,7 +31,7 @@ class HPIncrease(Range):
     Number of HP Increases to Add to the Level Up Rewards
     
     The randomizer will add all stat up defined here into a pool and choose up to 100 to add to the multiworld.
-    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) at chosen at random.
+    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
     """
     display_name = "HP Increases"
     range_start = 0
@@ -43,7 +43,7 @@ class APIncrease(Range):
     Number of AP Increases to Add to the Level Up Rewards
     
     The randomizer will add all stat up defined here into a pool and choose up to 100 to add to the multiworld.
-    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) at chosen at random.
+    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
     """
     display_name = "AP Increases"
     range_start = 0
@@ -55,7 +55,7 @@ class MPIncrease(Range):
     Number of MP Increases to Add to the Level Up Rewards
     
     The randomizer will add all stat up defined here into a pool and choose up to 100 to add to the multiworld.
-    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) at chosen at random.
+    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
     """
     display_name = "MP Increases"
     range_start = 0
@@ -67,7 +67,7 @@ class AccessorySlotIncrease(Range):
     Number of Accessory Slot Increases to Add to the Level Up Rewards
     
     The randomizer will add all stat up defined here into a pool and choose up to 100 to add to the multiworld.
-    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) at chosen at random.
+    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
     """
     display_name = "Accessory Slot Increases"
     range_start = 0
@@ -79,7 +79,7 @@ class ItemSlotIncrease(Range):
     Number of Item Slot Increases to Add to the Level Up Rewards
     
     The randomizer will add all stat up defined here into a pool and choose up to 100 to add to the multiworld.
-    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) at chosen at random.
+    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
     """
     display_name = "Item Slot Increases"
     range_start = 0
@@ -186,7 +186,7 @@ class RequiredReportsEotW(Range):
     """
     display_name = "Reports to Open End of the World"
     default = 4
-    range_start = 1
+    range_start = 0
     range_end = 13
     
 class RequiredReportsDoor(Range):
@@ -195,7 +195,7 @@ class RequiredReportsDoor(Range):
     """
     display_name = "Reports to Open Final Rest Door"
     default = 4
-    range_start = 1
+    range_start = 0
     range_end = 13
 
 class ReportsInPool(Range):
@@ -204,7 +204,7 @@ class ReportsInPool(Range):
     """
     display_name = "Reports in Pool"
     default = 4
-    range_start = 1
+    range_start = 0
     range_end = 13
 
 class RandomizeKeybladeStats(DefaultOnToggle):
@@ -219,7 +219,7 @@ class KeybladeMinStrength(Range):
     """
     display_name = "Keyblade Minimum STR Bonus"
     default = 3
-    range_start = 1
+    range_start = 0
     range_end = 19
 
 class KeybladeMaxStrength(Range):
