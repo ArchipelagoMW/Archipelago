@@ -7813,8 +7813,8 @@
         id: Panel Room/Panel_broomed_bedroom
         colors: yellow
         tag: midyellow
-        required_door:
-          door: Excavation
+        required_panel:
+          panel: WALL (1)
       LAYS:
         id: Panel Room/Panel_lays_maze
         colors: purple
@@ -7840,7 +7840,7 @@
       Excavation:
         event: True
         panels:
-          - WALL (1)
+          - STAIRS
       Cellar Exit:
         id:
           - Tower Room Area Doors/Door_panel_basement
