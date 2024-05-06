@@ -39,6 +39,11 @@ def _can_do_panel_hunt(world: "WitnessWorld") -> CollectionRule:
 def _has_laser(laser_hex: str, world: "WitnessWorld", redirect_required: bool) -> CollectionRule:
     player = world.player
     laser_name = static_witness_logic.ENTITIES_BY_HEX[laser_hex]["checkName"]
+
+    # Workaround for intentional naming inconsistency
+    if laser_name == "Symmetry Island Laser":
+        laser_name = "Symmetry Laser"
+
     if laser_hex == "0x012FB" and redirect_required:
         return lambda state: state.has_all([f"+1 Laser ({laser_name})", "Desert Laser Redirection"], player)
     else:

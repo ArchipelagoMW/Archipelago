@@ -944,7 +944,7 @@ class WitnessPlayerLogic:
         self.HUNT_ENTITIES = set()
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {
-            "0x00509": "+1 Laser (Symmetry Island Laser)",
+            "0x00509": "+1 Laser (Symmetry Laser)",
             "0x012FB": "+1 Laser (Desert Laser)",
             "0x09F98": "Desert Laser Redirection",
             "0x01539": "+1 Laser (Quarry Laser)",
