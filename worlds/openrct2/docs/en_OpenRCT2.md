@@ -2,7 +2,7 @@
 
 ## Quick Links
 - [Setup Guide](../../../../tutorial/OpenRCT2/setup/en)
-- [Settings Page](../../../../games/OpenRCT2/player-settings)
+- [Options Page](../player-options)
 - [OpenRCT2](https://openrct2.io/)
 
 ## How Does Randomizer Work in this game?

@@ -5,10 +5,10 @@ import worlds.LauncherComponents as LauncherComponents
 from BaseClasses import ItemClassification, Region, Item, Location
 from worlds.generic.Rules import add_rule
 
-from .Constants import *
-from .Items import *
-from .Options import *
-from ..AutoWorld import World, WebWorld
+from .Constants import base_id, item_info, location_info, scenario_info
+from .Items import OpenRCT2Item, set_openRCT2_items
+from .Options import openRCT2Options
+from worlds.AutoWorld import World, WebWorld
 class OpenRCT2WebWorld(WebWorld):
     tutorials = []
 
@@ -465,6 +465,8 @@ class OpenRCT2World(World):
                 # print(self.location_prices[index]["RidePrereq"][1])
             else:
                 category = None
+            # If the item has a prereq that's a category instead of a specific ride, convert that to what
+            # the in-game plugin will read
             if category in item_info["ride_types"]:
                 if category == "roller_coasters":
                     self.location_prices[index]["RidePrereq"][1] = "rollercoaster"
@@ -479,21 +481,12 @@ class OpenRCT2World(World):
         # from Utils import visualize_regions
         # visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml")
         # print("Here's the final unlock shop:")
-        return {
-            "difficulty": self.options.difficulty.value,
-            "scenario_length": self.options.scenario_length.value,
-            "scenario": self.options.scenario.value,
-            "death_link": self.options.deathlink.value,
-            "randomization_range": self.options.randomization_range.value,
-            "stat_rerolls": self.options.stat_rerolls.value,
-            "randomize_park_values": self.options.randomize_park_values.value,
-            "ignore_ride_stat_changes": self.options.ignore_ride_stat_changes.value,
-            "visibility": self.options.visibility.value,
-            "rules": self.rules,
-            "preferred_intensity": self.options.preferred_intensity.value,
-            "objectives": objectives,
-            "location_prices": self.location_prices
-        }
+        slot_data = self.options.as_dict("difficulty", "scenario_length", "scenario", "death_link", "randomization_range",
+        "stat_rerolls", "randomize_park_values", "ignore_ride_stat_changes", "visibility", "preferred_intensity")
+        slot_data["objectives"] = objectives
+        slot_data["rules"] = self.rules
+        slot_data["location_prices"] = self.location_prices
+        return slot_data
 
     def create_item(self, item: str) -> OpenRCT2Item:
         classification = ItemClassification.useful

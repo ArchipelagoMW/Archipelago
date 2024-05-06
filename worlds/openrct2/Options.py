@@ -163,7 +163,6 @@ class LocationBalancingMode(IntEnum):
     compromise = 1
     full = 2
 
-
 class DeathLinkMode(IntEnum):
     disabled = 0
     enabled = 1
@@ -239,13 +238,13 @@ class Forbid_Tree_Removal(IntEnum):
 class OpenRCT2OnToggle(DefaultOnToggle):
     @property
     def result(self) -> bool:
-        return bool(self.value)
+        return self.value
 
 
 class OpenRCT2Toggle(Toggle):
     @property
     def result(self) -> bool:
-        return bool(self.value)
+        return self.value
 
 
 class LocationBalancing(Choice):
@@ -771,7 +770,7 @@ class openRCT2Options(PerGameCommonOptions):
     skips: Skips
 
     # deathlink
-    deathlink: DeathLink
+    death_link: DeathLink
 
     # traps
     furry_convention_traps: Furry_Convention_Traps

@@ -3,7 +3,7 @@
 
 ## Quick Links
 - [Main Page](../../../../games/OpenRCT2/info/en)
-- [Settings Page](../../../../games/OpenRCT2/player-settings)
+- [Options Page](../../../../games/OpenRCT2/player-options)
 - [OpenRCT2 Plugins](https://openrct2plugins.org/)
 
 ## Required Software
@@ -29,9 +29,9 @@ Once OpenRCT2 is up and running, you'll need to install the [Roller Coaster Tyco
 
 ## Generate a MultiWorld Game
 
-1. Visit the [Player Settings](../../../../games/OpenRCT2/player-settings) page and configure the game-specific settings to taste.
+1. Visit the [Player Options](../player-options) page and configure the game-specific options to taste.
 
-*By default, these settings will only use levels from Roller Coaster Tycoon 2. If you own Roller Coaster Tycoon 1 or any of the expansion packs for either game, you may select the scenario for use in your game of Archipelago.
+*By default, these options will only use levels from Roller Coaster Tycoon 2. If you own Roller Coaster Tycoon 1 or any of the expansion packs for either game, you may select the scenario for use in your game of Archipelago.
 
 2. Export your yaml file and use it to generate a new randomized game or generate a game on the spot.
 
@@ -41,13 +41,24 @@ Once OpenRCT2 is up and running, you'll need to install the [Roller Coaster Tyco
 
 1. Launch the game
 
-2. Select the scenario you chose in your settings file. If this was randomized or you otherwise don't know what scenario to select, you can either look at the spoiler log or select any scenario. Upon attempting to start, the game will inform you which scenario you should be playing.
+2. Select the scenario you chose in your options file. If this was randomized or you otherwise don't know what scenario to select, you can either look at the spoiler log or select any scenario. Upon attempting to start, the game will inform you which scenario you should be playing.
 
 3. Launch the Archipelago client from the Archipelago program.
 
 4. Click the "Archipelago" button on the menu that pops up in your scenario. Once the client is launched, they should automatically connect and you can connect to the server. Type your server address and port in the "Connect" box at the top of the client, put in the name for your slot, and you'll be able to select the "Start Game!" button. If the randomizer menu doesn't appear at the start of the scenario, select the "RCTRando Options" menu item from the map tab and ensure the "Enable Randomizer" box is checked.
 
 5. Begin your game of Archipelago! All your locations/checks/goals can be found in the "Archipelago Checks!" menu under the map tab.
+
+## Game Commands
+
+Game commands may only be executed from within OpenRCT2, by typing the following from the unlock shop, including the 
+exclamation points: `!!`.
+
+- `!!help` Prints the help menu.
+- `!!toggleDeathLink` Enables/Disables Deathlink in game
+- `!!setMaxSpeed x` Sets the maximum speed the game will allow, from 1 to 5.
+- `!!resendChecks` Resends all the purchased checks, in case the connector is bad at its job.
+- `!!addSkip` Cheats in a skip for the unlock shop. This is on the honor system.
 
 ## Multiplayer
 

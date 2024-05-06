@@ -234,12 +234,12 @@ class OpenRCT2Context(CommonContext):
         self.gamesock.sendobj(args)
         time.sleep(0.00000272727*len(args)) #Future Colby, this probably won't help to extend... but maybe?
 
-    async def disconnect(self, allow_autoreconnect: bool = False):
-        # self.game = ""
-        await super().disconnect(allow_autoreconnect)
+    # async def disconnect(self, allow_autoreconnect: bool = False):
+    #     # self.game = ""
+    #     await super().disconnect(allow_autoreconnect)
     
-    async def shutdown(self):
-        await super().shutdown()
+    # async def shutdown(self):
+    #     await super().shutdown()
 
 
     # DeathLink hooks
@@ -296,28 +296,3 @@ def main():
     asyncio.run(_main())
 
     colorama.deinit()
-
-def run_as_textclient():
-    import colorama
-
-    parser = get_base_parser(description="Client to connect OpenRCT2 to Archipelago")
-    parser.add_argument('--name', default=None, help="Slot Name to connect as.")
-    parser.add_argument("url", nargs="?", help="Archipelago connection url")
-    args = parser.parse_args()
-
-    if args.url:
-        url = urllib.parse.urlparse(args.url)
-        args.connect = url.netloc
-        if url.username:
-            args.name = urllib.parse.unquote(url.username)
-        if url.password:
-            args.password = urllib.parse.unquote(url.password)
-
-    colorama.init()
-
-    asyncio.run(main(args))
-    colorama.deinit()
-
-
-if __name__ == '__main__':
-    run_as_textclient()
