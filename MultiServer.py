@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import collections
 import datetime
 import functools
 import hashlib
 import inspect
 import itertools
 import logging
-import collections
 import operator
 import pickle
 import random
@@ -113,7 +113,6 @@ class Context:
     hints_used: typing.Dict[typing.Tuple[int, int], int]
     groups: typing.Dict[int, typing.Set[int]]
     save_version = 2
-    stored_data: typing.Dict[str, object]
     read_data: typing.Dict[str, object]
     stored_data_notification_clients: typing.Dict[str, typing.Set[Client]]
     data_storage: DataStorage
@@ -185,10 +184,9 @@ class Context:
         self.groups = {}
         self.group_collected: typing.Dict[int, typing.Set[int]] = {}
         self.random = random.Random()
-        self.stored_data = {}
         self.stored_data_notification_clients = collections.defaultdict(weakref.WeakSet)
         self.read_data = {}
-        self.data_storage = DataStorage(self.stored_data)
+        self.data_storage = DataStorage({})
 
         # init empty to satisfy linter, I suppose
         self.gamespackage = {}
@@ -549,8 +547,7 @@ class Context:
             self.group_collected = savedata["group_collected"]
 
         if "stored_data" in savedata:
-            self.stored_data = savedata["stored_data"]
-            self.data_storage = DataStorage(self.stored_data)
+            self.data_storage = DataStorage(savedata["stored_data"])
         # count items and slots from lists for items_handling = remote
         logging.info(
             f'Loaded save file with {sum([len(v) for k, v in self.received_items.items() if k[2]])} received items '
@@ -1762,7 +1759,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             keys = args["keys"]
             args["keys"] = {
                 key: ctx.read_data.get(key[6:], lambda: None)() if key.startswith("_read_") else
-                     ctx.stored_data.get(key, None)
+                     ctx.data_storage.data.get(key, None)
                 for key in keys
             }
             await ctx.send_msgs(client, [args])
@@ -2117,11 +2114,11 @@ class ServerCommandProcessor(CommonCommandProcessor):
         """Debug Tool: list writable datastorage keys and approximate the size of their values with pickle."""
         total: int = 0
         texts = []
-        for key, value in self.ctx.stored_data.items():
+        for key, value in self.ctx.data_storage.data.items():
             size = len(pickle.dumps(value))
             total += size
             texts.append(f"Key: {key} | Size: {size}B")
-        texts.insert(0, f"Found {len(self.ctx.stored_data)} keys, "
+        texts.insert(0, f"Found {len(self.ctx.data_storage.data)} keys, "
                         f"approximately totaling {Utils.format_SI_prefix(total, power=1024)}B")
         self.output("\n".join(texts))
 

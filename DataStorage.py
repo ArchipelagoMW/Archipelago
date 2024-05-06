@@ -49,10 +49,10 @@ class InvalidArgumentsException(Exception):
     pass
 
 class DataStorage:
-    stored_data: Dict[str, object]
+    data: Dict[str, object]
 
-    def __init__(self, stored_data: Dict[str, object]):
-        self.stored_data = stored_data
+    def __init__(self, data: Dict[str, object]):
+        self.data = data
 
     @staticmethod
     def validate_and_get_key(set_cmd: Dict[str, object]) -> str:
@@ -70,7 +70,7 @@ class DataStorage:
 
     def set(self, set_cmd: Dict[str, object]) -> Dict[str, object]:
         key = self.validate_and_get_key(set_cmd)
-        value = self.stored_data.get(key, set_cmd.get("default", 0))
+        value = self.data.get(key, set_cmd.get("default", 0))
         on_error = set_cmd.get("on_error", "raise")
 
         set_cmd.update({
@@ -96,6 +96,6 @@ class DataStorage:
             else:
                 raise
 
-        self.stored_data[key] = set_cmd["value"] = value
+        self.data[key] = set_cmd["value"] = value
 
         return set_cmd
