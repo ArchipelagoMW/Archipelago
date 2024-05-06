@@ -3,7 +3,7 @@
 ##Setting up the required mods
 1. Install OpenKH and the LUA Backend.
 
-    Download the latest release of OpenKH [here](https://github.com/OpenKH/OpenKh/releases/tag/latest)
+    Download the [latest release of OpenKH](https://github.com/OpenKH/OpenKh/releases/tag/latest)
     
     Extract the files to a directory of your choosing.
     
