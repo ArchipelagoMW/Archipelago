@@ -23,8 +23,9 @@ class MLSSClient(BizHawkClient):
     local_checked_locations: Set[int]
     goal_flag: int
     rom_slot_name: Optional[str]
-    eCount: int
     eUsed: List[int]
+    room: int
+    local_events: List[int]
     player_name: Optional[str]
     checked_flags: Dict[int, list] = {}
 
@@ -35,8 +36,9 @@ class MLSSClient(BizHawkClient):
         self.local_found_key_items = {}
         self.rom_slot_name = None
         self.seed_verify = False
-        self.eCount = 0
         self.eUsed = []
+        self.room = 0
+        self.local_events = []
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from CommonClient import logger
@@ -187,7 +189,8 @@ class MLSSClient(BizHawkClient):
                 if backup_logo != "MLSSAP":
                     return
                 if flag_byte & mask != 0:
-                    if location >= 0xDA0000:
+                    if location >= 0xDA0000 and location not in self.local_events:
+                        self.local_events += [location]
                         await ctx.send_msgs(
                             [
                                 {
@@ -247,17 +250,19 @@ class MLSSClient(BizHawkClient):
             if not ctx.finished_game and cackletta != 0 and current_room == 0x1C7:
                 await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
 
-            await ctx.send_msgs(
-                [
-                    {
-                        "cmd": "Set",
-                        "key": f"mlss_room_{ctx.team}_{ctx.slot}",
-                        "default": 0,
-                        "want_reply": False,
-                        "operations": [{"operation": "replace", "value": current_room}],
-                    }
-                ]
-            )
+            if self.room != current_room:
+                self.room = current_room
+                await ctx.send_msgs(
+                    [
+                        {
+                            "cmd": "Set",
+                            "key": f"mlss_room_{ctx.team}_{ctx.slot}",
+                            "default": 0,
+                            "want_reply": False,
+                            "operations": [{"operation": "replace", "value": current_room}],
+                        }
+                    ]
+                )
 
             # Send locations if there are any to send.
             if locs_to_send != self.local_checked_locations:
