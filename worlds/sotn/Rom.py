@@ -582,7 +582,6 @@ def randomize_candles(buffer, rng_choice=0, prog=False):
                 print(f"DEBUG: ERROR {candle.name}")
                 pass
         if rng_choice == 2:
-            print(f"DEBUG:Crazy candle drop")
             rng_type = random.randrange(0, 2)
 
             if rng_type == 0:
