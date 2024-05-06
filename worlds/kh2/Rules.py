@@ -216,7 +216,6 @@ class KH2Rules:
         return False
 
 
-
 class KH2WorldRules(KH2Rules):
     def __init__(self, kh2world: KH2World) -> None:
         # These Rules are Always in effect
@@ -328,7 +327,6 @@ class KH2WorldRules(KH2Rules):
             else:
                 self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty, self.player, self.world.options.BountyRequired.value)
         else:
-          
             final_xemnas_location.access_rule = lambda state: state.has(ItemName.Bounty, self.player, self.world.options.BountyRequired.value) and \
                                                               state.has(ItemName.LuckyEmblem, self.player, self.world.options.LuckyEmblemsRequired.value)
             if self.world.options.FinalXemnas:
@@ -983,7 +981,7 @@ class KH2FightRules(KH2Rules):
     def get_normal_cerberus_rules(self, state: CollectionState) -> bool:
         # normal:defensive option, offensive magic
         # return self.kh2_list_any_sum([defensive_tool, black_magic], state) >= 2
-        return get_easy_cerberus_rules(self, state)
+        return self.kh2_list_any_sum([defensive_tool, black_magic], state) >= 2
 
     def get_hard_cerberus_rules(self, state: CollectionState) -> bool:
         # Hard: defensive option
@@ -991,137 +989,153 @@ class KH2FightRules(KH2Rules):
 
     def get_pain_and_panic_cup_rules(self, state: CollectionState) -> bool:
         # easy:2 party limit,reflect
+        return self.kh2_list_count_sum(party_limit, state) >= 2 and state.has(ItemName.ReflectElement, self.player) and (self.kh2_has_all([ItemName.FuturePeteEvent], state) or state.has(ItemName.HadesCupTrophy, self.player))
+
+    def get_normal_pain_and_panic_cup_rules(self, state: CollectionState) -> bool:
         # normal:1 party limit,reflect
+        return self.kh2_list_count_sum(party_limit, state) >= 1 and state.has(ItemName.ReflectElement, self.player) and (self.kh2_has_all([ItemName.FuturePeteEvent], state) or state.has(ItemName.HadesCupTrophy, self.player))
+
+    def get_hard_pain_and_panic_cup_rules(self, state: CollectionState) -> bool:
         # hard:reflect
-        pain_and_panic_rules = {
-            "easy":   self.kh2_list_count_sum(party_limit, state) >= 2 and state.has(ItemName.ReflectElement, self.player),
-            "normal": self.kh2_list_count_sum(party_limit, state) >= 1 and state.has(ItemName.ReflectElement, self.player),
-            "hard":   state.has(ItemName.ReflectElement, self.player)
-        }
-        return pain_and_panic_rules[self.fight_logic] and (self.kh2_has_all([ItemName.FuturePeteEvent], state) or state.has(ItemName.HadesCupTrophy, self.player))
+        return state.has(ItemName.ReflectElement, self.player) and (self.kh2_has_all([ItemName.FuturePeteEvent], state) or state.has(ItemName.HadesCupTrophy, self.player))
 
     def get_cerberus_cup_rules(self, state: CollectionState) -> bool:
         # easy:3 drive forms,reflect
-        # normal:2 drive forms,reflect
-        # hard:reflect
-        cerberus_cup_rules = {
-            "easy":   self.get_form_level_max(state, 3) and state.has(ItemName.ReflectElement, self.player),
-            "normal": self.get_form_level_max(state, 2) and state.has(ItemName.ReflectElement, self.player),
-            "hard":   state.has(ItemName.ReflectElement, self.player)
-        }
-        return cerberus_cup_rules[self.fight_logic] and (self.kh2_has_all([ItemName.ScarEvent, ItemName.OogieBoogieEvent, ItemName.TwinLordsEvent], state) or state.has(ItemName.HadesCupTrophy, self.player))
+        return self.get_form_level_max(state, 3) and state.has(ItemName.ReflectElement, self.player) and (self.kh2_has_all([ItemName.ScarEvent, ItemName.OogieBoogieEvent, ItemName.TwinLordsEvent], state) or state.has(ItemName.HadesCupTrophy, self.player))
 
-    def get_titan_cup_rules(self, state: CollectionState) -> bool:
+    def get_normal_cerberus_cup_rules(self, state: CollectionState) -> bool:
+        # normal:2 drive forms,reflect
+        return self.get_form_level_max(state, 2) and state.has(ItemName.ReflectElement, self.player) and (self.kh2_has_all([ItemName.ScarEvent, ItemName.OogieBoogieEvent, ItemName.TwinLordsEvent], state) or state.has(ItemName.HadesCupTrophy, self.player))
+
+    def get_hard_cerberus_cup_rules(self, state: CollectionState) -> bool:
+        # hard:reflect
+        return state.has(ItemName.ReflectElement, self.player) and (self.kh2_has_all([ItemName.ScarEvent, ItemName.OogieBoogieEvent, ItemName.TwinLordsEvent], state) or state.has(ItemName.HadesCupTrophy, self.player))
+
+    # easy:3 drive forms,reflect
+    def get_easy_titan_cup_rules(self, state: CollectionState) -> bool:
         # easy:4 summons,reflera
+        return self.kh2_list_count_sum(summons, state) >= 4 and state.has(ItemName.ReflectElement, self.player, 2) and (state.has(ItemName.HadesEvent, self.player) or state.has(ItemName.HadesCupTrophy, self.player))
+
+    def get_normal_titan_cup_rules(self, state: CollectionState) -> bool:
         # normal:4 summons,reflera
+        return self.kh2_list_count_sum(summons, state) >= 3 and state.has(ItemName.ReflectElement, self.player, 2) and (state.has(ItemName.HadesEvent, self.player) or state.has(ItemName.HadesCupTrophy, self.player))
+
+    def get_hard_titan_cup_rules(self, state: CollectionState) -> bool:
         # hard:2 summons,reflera
-        titan_cup_rules = {
-            "easy":   self.kh2_list_count_sum(summons, state) >= 4 and state.has(ItemName.ReflectElement, self.player, 2),
-            "normal": self.kh2_list_count_sum(summons, state) >= 3 and state.has(ItemName.ReflectElement, self.player, 2),
-            "hard":   self.kh2_list_count_sum(summons, state) >= 2 and state.has(ItemName.ReflectElement, self.player, 2),
-        }
-        return titan_cup_rules[self.fight_logic] and (state.has(ItemName.HadesEvent, self.player) or state.has(ItemName.HadesCupTrophy, self.player))
+        return self.kh2_list_count_sum(summons, state) >= 2 and state.has(ItemName.ReflectElement, self.player, 2) and (state.has(ItemName.HadesEvent, self.player) or state.has(ItemName.HadesCupTrophy, self.player))
 
     def get_goddess_of_fate_cup_rules(self, state: CollectionState) -> bool:
         # can beat all the other cups+xemnas 1
-        return self.kh2_has_all([ItemName.OcPainAndPanicCupEvent, ItemName.OcCerberusCupEvent, ItemName.Oc2TitanCupEvent], state)
+        for loc_name in [LocationName.ProtectBeltPainandPanicCup, LocationName.RisingDragonCerberusCup, LocationName.GenjiShieldTitanCup, LocationName.Xemnas1GetBonus]:
+            loc = self.world.get_location(loc_name)
+            if not loc.can_reach(state):
+                return False
+        return True
 
     def get_hades_cup_rules(self, state: CollectionState) -> bool:
         # can beat goddess of fate cup
-        return state.has(ItemName.Oc2GofCupEvent, self.player)
+        return self.world.get_location(LocationName.FatalCrestGoddessofFateCup).can_reach(state)
 
-    def get_olympus_pete_rules(self, state: CollectionState) -> bool:
+    def get_easy_olympus_pete_rules(self, state: CollectionState) -> bool:
         # easy:gap closer,defensive option,drive form
+        return self.kh2_list_any_sum([gap_closer, defensive_tool, form_list], state) >= 3
+
+    def get_normal_olympus_pete_rules(self, state: CollectionState) -> bool:
         # normal:2 of those things
+        return self.kh2_list_any_sum([gap_closer, defensive_tool, form_list], state) >= 2
+
+    def get_hard_olympus_pete_rules(self, state: CollectionState) -> bool:
         # hard:1 of those things
-        olympus_pete_rules = {
-            "easy":   self.kh2_list_any_sum([gap_closer, defensive_tool, form_list], state) >= 3,
-            "normal": self.kh2_list_any_sum([gap_closer, defensive_tool, form_list], state) >= 2,
-            "hard":   self.kh2_list_any_sum([gap_closer, defensive_tool, form_list], state) >= 1,
-        }
-        return olympus_pete_rules[self.fight_logic]
+        return self.kh2_list_any_sum([gap_closer, defensive_tool, form_list], state) >= 1
 
-    def get_hydra_rules(self, state: CollectionState) -> bool:
+    def get_easy_hydra_rules(self, state: CollectionState) -> bool:
         # easy:drive form,defensive option,offensive magic
+        return self.kh2_list_any_sum([black_magic, defensive_tool, form_list], state) >= 3
+
+    def get_normal_hydra_rules(self, state: CollectionState) -> bool:
         # normal 2 of those things
+        return self.kh2_list_any_sum([black_magic, defensive_tool, form_list], state) >= 2
+
+    def get_hard_hydra_rules(self, state: CollectionState) -> bool:
         # hard: one of those things
-        hydra_rules = {
-            "easy":   self.kh2_list_any_sum([black_magic, defensive_tool, form_list], state) >= 3,
-            "normal": self.kh2_list_any_sum([black_magic, defensive_tool, form_list], state) >= 2,
-            "hard":   self.kh2_list_any_sum([black_magic, defensive_tool, form_list], state) >= 1,
-        }
-        return hydra_rules[self.fight_logic]
+        return self.kh2_list_any_sum([black_magic, defensive_tool, form_list], state) >= 1
 
-    def get_hades_rules(self, state: CollectionState) -> bool:
+    def get_easy_hades_rules(self, state: CollectionState) -> bool:
         # easy:drive form,summon,gap closer,defensive option
+        return self.kh2_list_any_sum([gap_closer, summons, defensive_tool, form_list], state) >= 4
+
+    def get_normal_hades_rules(self, state: CollectionState) -> bool:
         # normal:3 of those things
+        return self.kh2_list_any_sum([gap_closer, summons, defensive_tool, form_list], state) >= 3
+
+    def get_hard_hades_rules(self, state: CollectionState) -> bool:
         # hard:2 of those things
-        hades_rules = {
-            "easy":   self.kh2_list_any_sum([gap_closer, summons, defensive_tool, form_list], state) >= 4,
-            "normal": self.kh2_list_any_sum([gap_closer, summons, defensive_tool, form_list], state) >= 3,
-            "hard":   self.kh2_list_any_sum([gap_closer, summons, defensive_tool, form_list], state) >= 2,
-        }
-        return hades_rules[self.fight_logic]
+        return self.kh2_list_any_sum([gap_closer, summons, defensive_tool, form_list], state) >= 2
 
-    def get_data_zexion_rules(self, state: CollectionState) -> bool:
+    def get_easy_data_zexion_rules(self, state: CollectionState) -> bool:
         # easy: final 7,firaga,scom,both donald limits, Reflega ,guard,2 gap closers,quick run level 3
-        # normal:final 7,firaga, donald limit, Reflega ,guard,1 gap closers,quick run level 3
-        # hard:final 5,fira, donald limit, reflect,gap closer,quick run level 2
-        data_zexion_rules = {
-            "easy":   self.kh2_dict_count(easy_data_zexion, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5),
-            "normal": self.kh2_dict_count(normal_data_zexion, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
-            "hard":   self.kh2_dict_count(hard_data_zexion, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
-        }
-        return data_zexion_rules[self.fight_logic]
+        return self.kh2_dict_count(easy_data_zexion, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5)
 
-    def get_thresholder_rules(self, state: CollectionState) -> bool:
+    def get_normal_data_zexion_rules(self, state: CollectionState) -> bool:
+        # normal:final 7,firaga, donald limit, Reflega ,guard,1 gap closers,quick run level 3
+        return self.kh2_dict_count(normal_data_zexion, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
+
+    def get_hard_data_zexion_rules(self, state: CollectionState) -> bool:
+        # hard:final 5,fira, donald limit, reflect,gap closer,quick run level 2
+        return self.kh2_dict_count(hard_data_zexion, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
+
+    def get_easy_thresholder_rules(self, state: CollectionState) -> bool:
         # easy:drive form,black magic,defensive tool
+        return self.kh2_list_any_sum([form_list, black_magic, defensive_tool], state) >= 3
+
+    def get_normal_thresholder_rules(self, state: CollectionState) -> bool:
         # normal:2 of those things
+        return self.kh2_list_any_sum([form_list, black_magic, defensive_tool], state) >= 2
+
+    def get_hard_thresholder_rules(self, state: CollectionState) -> bool:
         # hard:defensive tool or drive form
-        thresholder_rules = {
-            "easy":   self.kh2_list_any_sum([form_list, black_magic, defensive_tool], state) >= 3,
-            "normal": self.kh2_list_any_sum([form_list, black_magic, defensive_tool], state) >= 2,
-            "hard":   self.kh2_list_any_sum([form_list, defensive_tool], state) >= 1,
-        }
-        return thresholder_rules[self.fight_logic]
+        return self.kh2_list_any_sum([form_list, defensive_tool], state) >= 1
 
     @staticmethod
     def get_beast_rules():
         # fight is free
         return True
 
-    def get_dark_thorn_rules(self, state: CollectionState) -> bool:
+    def get_easy_dark_thorn_rules(self, state: CollectionState) -> bool:
         # easy:drive form,defensive tool,gap closer
+        return self.kh2_list_any_sum([form_list, gap_closer, defensive_tool], state) >= 3
+
+    def get_normal_dark_thorn_rules(self, state: CollectionState) -> bool:
         # normal:drive form,defensive tool
+
+        return self.kh2_list_any_sum([form_list, defensive_tool], state) >= 2
+
+    def get_hard_dark_thorn_rules(self, state: CollectionState) -> bool:
         # hard:defensive tool
-        dark_thorn_rules = {
-            "easy":   self.kh2_list_any_sum([form_list, gap_closer, defensive_tool], state) >= 3,
-            "normal": self.kh2_list_any_sum([form_list, defensive_tool], state) >= 2,
-            "hard":   self.kh2_list_any_sum([defensive_tool], state) >= 1,
-        }
-        return dark_thorn_rules[self.fight_logic]
+        return self.kh2_list_any_sum([defensive_tool], state) >= 1
 
-    def get_xaldin_rules(self, state: CollectionState) -> bool:
+    def get_easy_xaldin_rules(self, state: CollectionState) -> bool:
         # easy:guard,2 aerial modifier,valor/master/final
-        # normal:guard,1 aerial modifier
-        # hard:guard
-        xaldin_rules = {
-            "easy":   self.kh2_list_any_sum([[ItemName.Guard], [ItemName.ValorForm, ItemName.MasterForm, ItemName.FinalForm]], state) >= 2 and self.kh2_list_count_sum(aerial_move, state) >= 2,
-            "normal": self.kh2_list_any_sum([aerial_move], state) >= 1 and state.has(ItemName.Guard, self.player),
-            "hard":   state.has(ItemName.Guard, self.player),
-        }
-        return xaldin_rules[self.fight_logic]
+        return self.kh2_list_any_sum([[ItemName.Guard], [ItemName.ValorForm, ItemName.MasterForm, ItemName.FinalForm]], state) >= 2 and self.kh2_list_count_sum(aerial_move, state) >= 2,
 
-    def get_data_xaldin_rules(self, state: CollectionState) -> bool:
+    def get_normal_xaldin_rules(self, state: CollectionState) -> bool:
+        # normal:guard,1 aerial modifier
+        return self.kh2_list_any_sum([aerial_move], state) >= 1 and state.has(ItemName.Guard, self.player)
+
+    def get_hard_xaldin_rules(self, state: CollectionState) -> bool:
+        # hard:guard
+        return state.has(ItemName.Guard, self.player)
+
+    def get_easy_data_xaldin_rules(self, state: CollectionState) -> bool:
         # easy:final 7,firaga,2 air combo plus, finishing plus,guard,reflega,donald limit,high jump aerial dodge glide lvl 3,magnet,aerial dive,aerial spiral,hori slash,berserk charge
+        return self.kh2_dict_count(easy_data_xaldin, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5)
+    def get_normal_data_xaldin_rules(self, state: CollectionState) -> bool:
         # normal:final 7,firaga, finishing plus,guard,reflega,donald limit,high jump aerial dodge glide lvl 3,magnet,aerial dive,aerial spiral,hori slash
+         return self.kh2_dict_count(normal_data_xaldin, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5)
+
+    def get_hard_data_xaldin_rules(self, state: CollectionState) -> bool:
         # hard:final 5, fira, party limit, finishing plus,guard,high jump aerial dodge glide lvl 2,magnet,aerial dive
-        data_xaldin_rules = {
-            "easy":   self.kh2_dict_count(easy_data_xaldin, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5),
-            "normal": self.kh2_dict_count(normal_data_xaldin, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5),
-            "hard":   self.kh2_dict_count(hard_data_xaldin, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 3) and self.kh2_has_any(party_limit, state),
-        }
-        return data_xaldin_rules[self.fight_logic]
+        return self.kh2_dict_count(hard_data_xaldin, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 3) and self.kh2_has_any(party_limit, state)
 
     def get_hostile_program_rules(self, state: CollectionState) -> bool:
         # easy:donald limit,reflect,drive form,summon
