@@ -118,7 +118,7 @@ class SC2World(World):
         slot_data["nova_covert_ops_only"] = (enabled_campaigns == {SC2Campaign.NCO})
         slot_data["mission_req"] = slot_req_table
         slot_data["final_mission"] = self.final_mission_id
-        slot_data["version"] = 3
+        slot_data["version"] = 4
 
         if SC2Campaign.HOTS not in enabled_campaigns:
             slot_data["kerrigan_presence"] = KerriganPresence.option_not_present
