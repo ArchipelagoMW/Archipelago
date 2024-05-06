@@ -2,7 +2,7 @@
 
 ## Required Software
 
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) (optional, but recommended).
 - [SNI](https://github.com/alttpo/sni/releases). This is automatically included with your Archipelago installation above.
 - SNI is not compatible with (Q)Usb2Snes.
 - Hardware or software capable of loading and playing SNES ROM files, including:
@@ -14,6 +14,7 @@
     - An SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), or other compatible hardware. **note:
       modded SNES minis are currently not supported by SNI. Some users have claimed success with QUsb2Snes for this system,
       but it is not supported.**
+- A modern web browser to run the client.
 - Your legally obtained Secret of Evermore US ROM file, probably named `Secret of Evermore (USA).sfc`
 
 ## Create a Config (.yaml) File
@@ -60,12 +61,12 @@ page: [Evermizer apbpatch Page](https://evermizer.com/apbpatch)
 
 ### Connect to SNI
 
-#### With an emulator
-
 Start SNI either from the Archipelago install folder or the stand-alone version. If this is its first time launching,
 you may be prompted to allow it to communicate through the Windows Firewall.
 
-#### snes9x-nwa
+#### With an emulator
+
+##### snes9x-nwa
 
 1. Click on the Network Menu and check **Enable Emu Network Control**
 2. Load your ROM file if it hasn't already been loaded.
