@@ -113,11 +113,12 @@ class MarioLand2World(World):
             if i == 1:
                 if self.options.auto_scroll_mode in ("global_cancel_item", "level_cancel_items"):
                     self.auto_scroll_levels[level] = 2
-                elif self.options.auto_scroll_mode == "level_cancel_or_trap_items":
-                    if ((self.options.accessibility == "locations"
-                         and level_id_to_name[level] in unbeatable_scroll_levels)
-                            or self.random.randint(0, 1)):
-                        self.auto_scroll_levels[level] = 2
+                elif self.options.auto_scroll_mode == "chaos":
+                    self.auto_scroll_levels[level] = self.random.randint(1, 3)
+                    if (self.options.accessibility == "locations"
+                            and level_id_to_name[level] in unbeatable_scroll_levels
+                            and self.auto_scroll_levels[level] != 2):
+                        self.auto_scroll_levels[level] = self.random.choice([1, 3])
                 elif (self.options.accessibility == "locations"
                       and level_id_to_name[level] in unbeatable_scroll_levels):
                     self.auto_scroll_levels[level] = 0
@@ -480,7 +481,7 @@ class MarioLand2World(World):
                     item_counts[double_progression_item + " x2"] = 1
                     continue
                 if self.options.auto_scroll_mode in ("level_trap_items", "level_cancel_items",
-                                                     "level_cancel_or_trap_items"):
+                                                     "chaos"):
                     auto_scroll_item = self.random.choice([item for item in item_counts if "Auto Scroll" in item])
                     level = auto_scroll_item.split("- ")[1]
                     self.auto_scroll_levels[level_name_to_id[level]] = 0
