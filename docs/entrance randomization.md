@@ -59,6 +59,8 @@ graph LR
     CR1 <--> DL1
     DR1 <--> EL1
     CR2 <--> EL2
+    
+    classDef hidden display:none;
 ```
 
 First, the world begins by splitting the `Entrance`s which should be randomized. This is essentially all that has to be
@@ -104,6 +106,8 @@ graph LR
     DR1 <--> T9:::hidden
     T10:::hidden <--> EL1
     T12:::hidden <--> EL2
+    
+    classDef hidden display:none;
 ```
 
 From here, you can call the `randomize_entrances` function and Archipelago takes over. Starting from the Menu region,
@@ -149,6 +153,7 @@ graph LR
     T10:::hidden <--> EL1
     T12:::hidden <--> EL2
     
+    classDef hidden display:none;
     linkStyle 8 stroke:red,stroke-width:5px;
 ```
 
@@ -186,6 +191,8 @@ graph LR
     CR1 <--> EL1
     CR2 <--> AL1
     DR1 <--> AL2
+    
+    classDef hidden display:none;
 ```
 
 ## Using Generic ER
