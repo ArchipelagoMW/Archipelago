@@ -21,7 +21,6 @@ from BaseClasses import seeddigits, get_seed, PlandoOptions
 from Main import main as ERmain
 from settings import get_settings
 from Utils import parse_yamls, version_tuple, __version__, tuplize_version
-from worlds.alttp import Options as LttPOptions
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from worlds.alttp.Text import TextTable
 from worlds.AutoWorld import AutoWorldRegister
@@ -35,8 +34,8 @@ def mystery_argparse():
 
     parser = argparse.ArgumentParser(description="CMD Generation Interface, defaults come from host.yaml.")
     parser.add_argument('--weights_file_path', default=defaults.weights_file_path,
-                        help='Path to the weights file to use for rolling game settings, urls are also valid')
-    parser.add_argument('--samesettings', help='Rolls settings per weights file rather than per player',
+                        help='Path to the weights file to use for rolling game options, urls are also valid')
+    parser.add_argument('--sameoptions', help='Rolls options per weights file rather than per player',
                         action='store_true')
     parser.add_argument('--player_files_path', default=defaults.player_files_path,
                         help="Input directory for player files.")
@@ -104,8 +103,8 @@ def main(args=None, callback=ERmain):
             del(meta_weights["meta_description"])
         except Exception as e:
             raise ValueError("No meta description found for meta.yaml. Unable to verify.") from e
-        if args.samesettings:
-            raise Exception("Cannot mix --samesettings with --meta")
+        if args.sameoptions:
+            raise Exception("Cannot mix --sameoptions with --meta")
     else:
         meta_weights = None
     player_id = 1
@@ -121,7 +120,7 @@ def main(args=None, callback=ERmain):
                 raise ValueError(f"File {fname} is invalid. Please fix your yaml.") from e
 
     # sort dict for consistent results across platforms:
-    weights_cache = {key: value for key, value in sorted(weights_cache.items())}
+    weights_cache = {key: value for key, value in sorted(weights_cache.items(), key=lambda k: k[0].casefold())}
     for filename, yaml_data in weights_cache.items():
         if filename not in {args.meta_file_path, args.weights_file_path}:
             for yaml in yaml_data:
@@ -148,7 +147,6 @@ def main(args=None, callback=ERmain):
     erargs = parse_arguments(['--multi', str(args.multi)])
     erargs.seed = seed
     erargs.plando_options = args.plando
-    erargs.glitch_triforce = options.generator.glitch_triforce_room
     erargs.spoiler = args.spoiler
     erargs.race = args.race
     erargs.outputname = seed_name
@@ -157,7 +155,7 @@ def main(args=None, callback=ERmain):
     erargs.skip_output = args.skip_output
 
     settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
-        {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.samesettings else None)
+        {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.sameoptions else None)
          for fname, yamls in weights_cache.items()}
 
     if meta_weights:
@@ -311,13 +309,6 @@ def handle_name(name: str, player: int, name_counter: Counter):
     return new_name
 
 
-def prefer_int(input_data: str) -> Union[str, int]:
-    try:
-        return int(input_data)
-    except:
-        return input_data
-
-
 def roll_percentage(percentage: Union[int, float]) -> bool:
     """Roll a percentage chance.
     percentage is expected to be in range [0, 100]"""
@@ -362,7 +353,7 @@ def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
             if options[option_key].supports_weighting:
                 return get_choice(option_key, category_dict)
             return category_dict[option_key]
-    raise Exception(f"Error generating meta option {option_key} for {game}.")
+    raise Options.OptionError(f"Error generating meta option {option_key} for {game}.")
 
 
 def roll_linked_options(weights: dict) -> dict:
@@ -418,19 +409,19 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
 
 
 def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, option: type(Options.Option), plando_options: PlandoOptions):
-    if option_key in game_weights:
-        try:
+    try:
+        if option_key in game_weights:
             if not option.supports_weighting:
                 player_option = option.from_any(game_weights[option_key])
             else:
                 player_option = option.from_any(get_choice(option_key, game_weights))
-            setattr(ret, option_key, player_option)
-        except Exception as e:
-            raise Exception(f"Error generating option {option_key} in {ret.game}") from e
         else:
-            player_option.verify(AutoWorldRegister.world_types[ret.game], ret.name, plando_options)
+            player_option = option.from_any(option.default)  # call the from_any here to support default "random"
+        setattr(ret, option_key, player_option)
+    except Exception as e:
+        raise Options.OptionError(f"Error generating option {option_key} in {ret.game}") from e
     else:
-        setattr(ret, option_key, option.from_any(option.default))  # call the from_any here to support default "random"
+        player_option.verify(AutoWorldRegister.world_types[ret.game], ret.name, plando_options)
 
 
 def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.bosses):

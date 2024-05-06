@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Dict, Optional, FrozenSet, Iterable
 
 from BaseClasses import Location, Region
 
-from .data import BASE_OFFSET, POKEDEX_OFFSET, data
+from .data import BASE_OFFSET, NATIONAL_ID_TO_SPECIES_ID, POKEDEX_OFFSET, data
 from .items import offset_item_value
 
 if TYPE_CHECKING:
@@ -130,8 +130,14 @@ def create_locations_with_tags(world: "PokemonEmeraldWorld", regions: Dict[str, 
             location_data = data.locations[location_name]
 
             location_id = offset_flag(location_data.flag)
-            if location_data.flag == 0:
-                location_id += POKEDEX_OFFSET + int(location_name[15:])
+            if location_data.flag == 0:  # Dexsanity location
+                national_dex_id = int(location_name[-3:])  # Location names are formatted POKEDEX_REWARD_###
+
+                # Don't create this pokedex location if player can't find it in the wild
+                if NATIONAL_ID_TO_SPECIES_ID[national_dex_id] in world.blacklisted_wilds:
+                    continue
+
+                location_id += POKEDEX_OFFSET + national_dex_id
 
             location = PokemonEmeraldLocation(
                 world.player,
@@ -212,7 +218,7 @@ def set_legendary_cave_entrances(world: "PokemonEmeraldWorld") -> None:
         "MARINE_CAVE_ROUTE_127_1",
         "MARINE_CAVE_ROUTE_127_2",
         "MARINE_CAVE_ROUTE_129_1",
-        "MARINE_CAVE_ROUTE_129_2",
+        # "MARINE_CAVE_ROUTE_129_2",  # Cave ID too high for internal data type, needs patch update
     ])
 
     marine_cave_location_location = world.multiworld.get_location("MARINE_CAVE_LOCATION", world.player)
