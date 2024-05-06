@@ -3,7 +3,7 @@
 ## Programvara som behövs
 
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
-- Ett Engelsk Pokémon Emerald ROM, Archipelago kan inte hjälpa dig med detta
+- Ett Engelsk Pokémon Emerald ROM, Archipelago kan inte hjälpa dig med detta.
 - [BizHawk](https://tasvideos.org/BizHawk/ReleaseHistory) 2.7 eller senare
 
 ### konfigurera BizHawk
@@ -33,15 +33,15 @@ används tillsammans med
 [Generera ett spel](../../Archipelago/setup/en#generating-a-game).
 Detta kommer Generera en fil för dig. Din patch fil kommer ha `.apemerald` some sitt filnamnstillägg
 3. Öppna `ArchipelagoLauncher.exe`
-4. Välj "Open Patch" på vänster sidan, och välj din patch fil
+4. Välj "Open Patch" på vänster sidan, och välj din patch fil.
 5. Om detta är första gången du patchar, så kommer du behöva välja var ditt vanliga ROM är.
 6. En patchad `.gba` fil kommer skapas på samma plats som patch filen.
 7. Första gången du öppnar en patch med BizHawk klienten, kommer du också behöva bekräfta var `EmuHawk.exe`
-filen är installerad i din BizHawk map
+filen är installerad i din BizHawk map.
 
 Om du bara tänkt spela själv och du inte bryr dig om automatisk spårning eller tips, så kan du stoppa här, stäng
 klienten, och starta ditt patchade ROM med valfri emulator. Dock, för multvärlds funktionen eller andra Archipelago
-funktioner, fortsätt nedanför med BizHawk
+funktioner, fortsätt nedanför med BizHawk.
 
 ## Anslut till en server
 
@@ -56,11 +56,13 @@ så kan du bara öppna den igen från launchern.
 5. Leta reda på din Archipelago map och i den öppna `data/lua/connector_bizhawk_generic.lua`.
 6. Emulatorn och klienten kommer så småningom koppla ihop. I BizHawk klienten kommer du kunna see om allt är
 kopplat och att Pokemon Emerald är igenkänt.
-7. För att ansluta klienten till en server, skriv in din lobby adress och port i text fältet tex, `archipelago.gg:38281`
-längst upp i din klient och tryck sen på "Connect"
+7. För att ansluta klienten till en server, skriv in din lobby adress och port i text fältet tex,
+`archipelago.gg:38281`
+längst upp i din klient och tryck sen på "Connect".
 
 Du borde nu kunna ta emot och skicka föremål. Du behöver göra dom hör stegen varje gång du vill ansluta igen. Det är
-helt okej att göra saker offline utan att behöva oroa sig; allt kommer synkronisera sig när du ansluter till servern igen
+helt okej att göra saker offline utan att behöva oroa sig; allt kommer synkronisera sig när du ansluter till servern
+igen.
 
 ## Automatisk Spårning
 
@@ -71,5 +73,5 @@ och
 [PopTracker](https://github.com/black-sliver/PopTracker/releases).
 2. Placera tracker pack filen i packs/ där du har PopTracker installerat.
 3. Öppna PopTracker, och välj Pokemon Emerald.
-4. För att automatisk spåra, tryck på "AP" symbolen längst upp
+4. För att automatisk spåra, tryck på "AP" symbolen längst upp.
 5. Skriv in Archipelago serverns uppgifter (Samma som du använda för att koppla Klienten), plats namn, och lösenord.
