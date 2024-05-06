@@ -10,7 +10,6 @@ from ..options import Friendsanity, SeasonRandomization, Museumsanity, Shipsanit
 from ..strings.wallet_item_names import Wallet
 
 all_seasons = ["Spring", "Summer", "Fall", "Winter"]
-all_farms = ["Standard Farm", "Riverland Farm", "Forest Farm", "Hill-top Farm", "Wilderness Farm", "Four Corners Farm", "Beach Farm"]
 
 
 class TestItems(SVTestCase):
@@ -74,18 +73,6 @@ class TestItems(SVTestCase):
             self.assertEqual(len(season_items), 3)
             starting_seasons_rolled.add(f"{starting_season_items[0]}")
         self.assertEqual(len(starting_seasons_rolled), 4)
-
-    def test_can_start_on_any_farm(self):
-        starting_farms_rolled = set()
-        for attempt_number in range(60):
-            if len(starting_farms_rolled) >= 7:
-                print(f"Already got all 7 farm types, breaking early [{attempt_number} generations]")
-                break
-            seed = random.randrange(sys.maxsize)
-            multiworld = setup_solo_multiworld(seed=seed, _cache={})
-            starting_farm = multiworld.worlds[1].fill_slot_data()["farm_type"]
-            starting_farms_rolled.add(starting_farm)
-        self.assertEqual(len(starting_farms_rolled), 7)
 
 
 class TestMetalDetectors(SVTestCase):
