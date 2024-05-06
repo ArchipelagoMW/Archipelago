@@ -25,7 +25,7 @@ gui_enabled = not sys.stdout or "--nogui" not in sys.argv
 logger = logging.getLogger("Client")
 
 class OpenRCT2Socket:
-    listener:socket = None
+    listener:socket.socket = None
     gamecons:list[socket.socket] = []
     gameport:int = 38280
 
@@ -34,7 +34,7 @@ class OpenRCT2Socket:
         self.maintask = asyncio.create_task(self.main(), name="GameListen")
         self.connected_to_game = asyncio.Event()
         self.initial_connection = True
-        self.package_queue = []
+        self.outbound_packet_queue = []
 
     
     async def main(self):
@@ -62,7 +62,7 @@ class OpenRCT2Socket:
             await asyncio.sleep(0.01)
 
 
-    def disconnectgame(self, sock:socket):
+    def disconnectgame(self, sock:socket.socket):
         if sock:
             sock.shutdown(socket.SHUT_RDWR)
             sock.close()
@@ -95,8 +95,8 @@ class OpenRCT2Socket:
                 self.connected_to_game.set()
                 newgame.setblocking(0)
                 try:
-                    while self.package_queue:
-                        self._send(self.package_queue.pop(0))
+                    while self.outbound_packet_queue:
+                        self._send(self.outbound_packet_queue.pop(0))
                         await asyncio.sleep(0.1)
                 except Exception as e:
                     print("Error in connect game: " + e)
@@ -114,27 +114,24 @@ class OpenRCT2Socket:
 
     
     def recv(self):
+        packets = []
         # print('Attempting to Receive', self.game, self)
         for sock in select(self.gamecons, [], [])[0]:
             # print(repr(sock))
             try:
-                data = sock.recv(16384)
+                data = sock.recv(1000000)
                 if data:
-                    print('received', len(data), 'bytes from', sock.getpeername(), '->', sock.getsockname(),':\n', data)
-                    # data = json.dumps(data)
-                    packets = []
-                    for packet in data.split(b'\0'):
-                        packet = packet.decode('UTF-8')
-                        if packet:
-                            packets.append(json.loads(packet))
-                    print(packets)
-                    return packets
+                    print('received', len(data), 'bytes:\n', data)
+                    new_packets = self._parseReceivedData(data)
+                    if new_packets:
+                        packets.extend(new_packets)
+                        self.disconnectgame(sock)
             except socket.timeout as e:
                 pass
             except BlockingIOError as e:
                 pass
             except ConnectionAbortedError as e:
-                print('closing', sock.getpeername(), '->', sock.getsockname())
+                print('closing')
                 self.gamecons.remove(sock)
             except Exception as e:
                 print(traceback.format_exc(100))
@@ -142,8 +139,22 @@ class OpenRCT2Socket:
                 #self.disconnectgame(sock)
                 # raise
                 # self.connectgame()
-        return None
+        return packets
 
+    def _parseReceivedData(self, data:bytes):
+        if not data:
+            return []
+        print('received', len(data), 'bytes:\n', data)
+        packets = []
+        for packet in data.split(b'\0'):
+            packet = packet.decode('UTF-8')
+            if packet:
+                try:
+                    packets.append(json.loads(packet))
+                except Exception as e:
+                    print("partial packet received?", e)
+        print(packets)
+        return packets
 
     def _send(self, data):
         # time.sleep(0.3)
@@ -163,9 +174,9 @@ class OpenRCT2Socket:
             print(e)
         finally:
             if data:
-                self.package_queue.append(data)
-                print("Unable to send. Appending package to queue")
-                print(self.package_queue)
+                self.outbound_packet_queue.append(data)
+                print("Unable to send. Appending packet to outbound queue")
+                print(self.outbound_packet_queue)
 
 
     def sendobj(self, obj):
