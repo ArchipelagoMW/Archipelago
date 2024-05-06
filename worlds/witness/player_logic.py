@@ -821,6 +821,7 @@ class WitnessPlayerLogic:
                 and not world.options.shuffle_discarded_panels
                 and entity_obj["locationType"] == "Discard"
             )
+            and entity_hex not in {"0x03629", "0x03505", "0x3352F"}
         ]
 
         total_panels = world.options.panel_hunt_total.value
