@@ -401,8 +401,8 @@ boost_table = {
 trap_table = {
     "Half max hp": ItemData(350, IType.TRAP, 0x097ba4, ItemClassification.trap),
     "80% max hp": ItemData(351, IType.TRAP, 0x097ba4, ItemClassification.trap),
-    "Half max heart": ItemData(352, IType.TRAP, 0x97bac, ItemClassification.trap),
-    "80% max heart": ItemData(353, IType.TRAP, 0x97bac, ItemClassification.trap),
+    "Half max heart": ItemData(352, IType.TRAP, 0x097bac, ItemClassification.trap),
+    "80% max heart": ItemData(353, IType.TRAP, 0x097bac, ItemClassification.trap),
     "Half max mp": ItemData(354, IType.TRAP, 0x097bb4, ItemClassification.trap),
     "80% max mp": ItemData(355, IType.TRAP, 0x097bb4, ItemClassification.trap),
     "10 hp subtract": ItemData(356, IType.TRAP, 0x097ba0, ItemClassification.trap),
