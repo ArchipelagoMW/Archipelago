@@ -1,6 +1,5 @@
 from BaseClasses import Item
 import typing
-import random
 import copy
 from .Constants import *
 from .Options import *
@@ -51,41 +50,38 @@ def set_openRCT2_items(world):
     for each in range(world.options.skips.value):
         openRCT2_items.append("Skip")
 
-    for number, rule in enumerate(item_info["park_rules"]):#Check every rule type
-        if rules[number] == 1:#If it's enabled and can be disabled
-            openRCT2_items.append(rule)#Add an item to disable
+    for number, rule in enumerate(item_info["park_rules"]):  # Check every rule type
+        if rules[number] == 1:  # If it's enabled and can be disabled
+            openRCT2_items.append(rule)  # Add an item to disable
 
     filler = world.options.filler.value
 
     filler_count = len(openRCT2_items) * (filler * .01) - 1
     count = 0
     while count < filler_count:
-        rarity = random.random()
+        rarity = world.random.random()
         if rarity < .6:
-            openRCT2_items.append(random.choice(item_info["filler_common"]))
+            openRCT2_items.append(world.random.choice(item_info["filler_common"]))
         elif rarity < .9:
-            openRCT2_items.append(random.choice(item_info["filler_uncommon"]))
+            openRCT2_items.append(world.random.choice(item_info["filler_uncommon"]))
         else:
-            openRCT2_items.append(random.choice(item_info["filler_rare"]))
+            openRCT2_items.append(world.random.choice(item_info["filler_rare"]))
         count += 1
 
     openRCT2_items.append("Beauty Contest")
     
-    item_table = {name: [base_id + count, True] for count, name in enumerate(openRCT2_items)}
-    item_frequency = {}
-    for ride in openRCT2_items:
-        found = False
-        for item in item_frequency:
-            if ride == item:
-                item_frequency[item] += 1
-                found = True
-                break
-        if not found:
-            item_frequency[ride] = 1
+    # print(openRCT2_items)
 
-    # print("Here's the generated item table and frequency table")
-    # print(item_table)
-    # print("\n\n")
-    # print(item_frequency)
+    # handles the starting ride
+    found_starter = False
+    while not found_starter:
+        candidate_list = [item for item in openRCT2_items if item in item_info["rides"] and item not in item_info["non_starters"]]  
+        candidate = world.random.choice(candidate_list)  
+        starting_ride = candidate
+        openRCT2_items.remove(candidate)
+        found_starter = True
+    
+    # print("Here's the starting ride!")
+    # print(starting_ride)
 
-    return item_table, item_frequency
+    return openRCT2_items, starting_ride

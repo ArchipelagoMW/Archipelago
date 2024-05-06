@@ -2,14 +2,18 @@ import math
 from typing import TextIO
 
 import worlds.LauncherComponents as LauncherComponents
-from BaseClasses import ItemClassification, Region
+from BaseClasses import ItemClassification, Region, Item, Location
 from worlds.generic.Rules import add_rule
 
 from .Constants import *
 from .Items import *
-from .Locations import *
 from .Options import *
 from ..AutoWorld import World, WebWorld
+class OpenRCT2WebWorld(WebWorld):
+    tutorials = []
+
+class OpenRCT2Location(Location):
+    game = "OpenRCT2"
 
 
 def launch_client() -> None:  # Shoutout to Serpent.ai for the launcher code!
@@ -26,12 +30,8 @@ LauncherComponents.components.append(
 )
 
 
-class OpenRCT2WebWorld(WebWorld):
-    tutorials = []
-
-
 def get_previous_region_from_OpenRCT2_location(location_number: int):
-    if location_number == 0 or location_number == 1 or location_number == 2:
+    if location_number <= 2:
         return "OpenRCT2_Level_0"
     elif location_number == 3 or location_number == 4 or location_number == 5 or location_number == 6:
         return "OpenRCT2_Level_1"
@@ -68,7 +68,6 @@ class OpenRCT2World(World):
         super().__init__(multiworld, player)
         self.starting_ride = None
         self.item_table = {}
-        self.item_frequency = {}
         self.location_prices = []  # This list is passed to OpenRCT2 to create the unlock shop
         self.rules = []
         self.unique_rides = []
@@ -118,45 +117,16 @@ class OpenRCT2World(World):
             scenario = Scenario[new_scenario].value  # Reassign the scenario option to the randomly selected choice
             self.options.scenario.value = scenario
 
-        self.item_table, self.item_frequency = set_openRCT2_items(self)
+        self.item_table, self.starting_ride = set_openRCT2_items(self)
 
-        # print("Here's the generated item table and frequency table... again")
-        # print(self.item_table)
-        # print("\n\n")
-        # print(self.item_frequency)
-
-        logic_table = []
-        for item in self.item_table:
-            count = 0
-            while count != self.item_frequency[item]:
-                logic_table.append(item)
-                count += 1
-
-        found_starter = False
-        while not found_starter:
-            candidate = self.random.choice(logic_table)
-            if candidate in item_info["rides"]:
-                if candidate not in item_info["non_starters"]:
-                    self.starting_ride = candidate
-                    self.item_frequency[candidate] -= 1
-                    found_starter = True
-
-        # print("Here's the starting ride!")
-        # print(self.starting_ride)
 
     def create_regions(self) -> None:
-        logic_table = []
-        for item in self.item_table:
-            count = 0
-            while count != self.item_frequency[item]:
-                logic_table.append(item)
-                count += 1
-        logic_length = (len(logic_table))
+        logic_length = (len(self.item_table))
 
         def locations_to_region(location, ending_location, chosen_region):
             locations = []
             while location < ending_location + 1:
-                locations.append(OpenRCT2Location(self.player, "OpenRCT2_" + str(location),
+                locations.append(OpenRCT2Location(self.player, f"OpenRCT2_{location}",
                                                   self.location_name_to_id[f"OpenRCT2_{location}"], chosen_region))
                 location += 1
             return locations
@@ -206,8 +176,8 @@ class OpenRCT2World(World):
         s.connect(self.multiworld.get_region("OpenRCT2_Level_0", self.player))
         count = 0
         while count < current_level:
-            region = self.multiworld.get_region("OpenRCT2_Level_" + str(count), self.player)
-            region.connect(self.multiworld.get_region("OpenRCT2_Level_" + str(count + 1), self.player))
+            region = self.multiworld.get_region(f"OpenRCT2_Level_{count}", self.player)
+            region_entrance = region.connect(self.multiworld.get_region(f"OpenRCT2_Level_{count + 1}", self.player))
             num_rides = 0
             if count == 0:
                 pass
@@ -215,43 +185,35 @@ class OpenRCT2World(World):
                 num_rides = 2
             elif count == 2:  # 7 total items, we want 4 rides and a food stall
                 num_rides = 4
-                add_rule(region.exits[0], lambda state: state.has("Food Stall", self.player))
+                add_rule(region_entrance, lambda state: state.has("Food Stall", self.player))
             elif count == 3:  # 15 total items, we want 10 rides and now a drink stall
                 num_rides = 10
-                add_rule(region.exits[0], lambda state: state.has("Drink Stall", self.player, 1))
+                add_rule(region_entrance, lambda state: state.has("Drink Stall", self.player, 1))
             elif count == 4:  # 23 total items, we want 15 rides and now toilets
                 num_rides = 15
-                add_rule(region.exits[0], lambda state: state.has("Toilets", self.player, 1))
+                add_rule(region_entrance, lambda state: state.has("Toilets", self.player, 1))
             elif count == 5:  # 31 total items, we want 18 rides and some rules if applicable
                 num_rides = 18
                 if self.rules[2] == 1:  # If high construction can be disabled
-                    add_rule(region.exits[0], lambda state: state.has("Allow High Construction", self.player, 1))
+                    add_rule(region_entrance, lambda state: state.has("Allow High Construction", self.player, 1))
                 if self.rules[3] == 1:  # landscape
-                    add_rule(region.exits[0], lambda state: state.has("Allow Landscape Changes", self.player, 1))
+                    add_rule(region_entrance, lambda state: state.has("Allow Landscape Changes", self.player, 1))
                 if self.rules[5] == 1:  # tree removal
-                    add_rule(region.exits[0], lambda state: state.has("Allow Tree Removal", self.player, 1))
-                if "Cash Machine" in logic_table:
-                    add_rule(region.exits[0], lambda state: state.has("Cash Machine", self.player, 1))
-                if "First Aid" in logic_table:
-                    add_rule(region.exits[0], lambda state: state.has("First Aid", self.player, 1))
-            add_rule(region.exits[0], lambda state: state.has_group("rides", self.player, num_rides))
+                    add_rule(region_entrance, lambda state: state.has("Allow Tree Removal", self.player, 1))
+                if "Cash Machine" in self.item_table:
+                    add_rule(region_entrance, lambda state: state.has("Cash Machine", self.player, 1))
+                if "First Aid" in self.item_table:
+                    add_rule(region_entrance, lambda state: state.has("First Aid", self.player, 1))
+            add_rule(region_entrance, lambda state: state.has_group("rides", self.player, num_rides))
             count += 1
         final_region = self.multiworld.get_region("OpenRCT2_Level_" + str(current_level), self.player)
         final_region.connect(victory)
 
     def create_items(self) -> None:
-        # print("The item tabel is this long:")
-        # print(len(self.item_table))
-        # print(self.item_frequency)
         for item in self.item_table:
-            count = 0
-            while count != self.item_frequency[item]:
-                self.multiworld.itempool.append(self.create_item(item))
-                count += 1
+            self.multiworld.itempool.append(self.create_item(item))
 
         # Adds the starting ride to precollected items
-        # self.multiworld.precollected_items[self.player].append(self.create_item(self.starting_ride))
-
         self.multiworld.push_precollected(self.create_item(self.starting_ride))
         # If the user doesn't want to buy speed, give it to em for free
         if not self.options.include_gamespeed_items.value:
@@ -267,15 +229,8 @@ class OpenRCT2World(World):
     def set_rules(self) -> None:
         # print("Here's the precollected Items")
         # print(self.multiworld.precollected_items[self.player])
-        logic_table = []
-        for item in self.item_table:
-            count = 0
-            while count != self.item_frequency[item]:
-                logic_table.append(item)
-                count += 1
-        # print("Here's the logic table:")
-        self.random.shuffle(logic_table)
-        # print(logic_table)
+        self.random.shuffle(self.item_table)
+        # print(self.item_table)
 
         def set_openRCT2_rule(rule_type, selected_item, location_number):
             if rule_type == "ride":
@@ -323,34 +278,32 @@ class OpenRCT2World(World):
                 # print("Added rule: \nHave: " + str(
                 #     category) + "\nLocation: " + get_previous_region_from_OpenRCT2_location(location_number))
 
-        difficulty = self.options.difficulty.value
-        length = self.options.scenario_length.value
         length_modifier = 0
         difficulty_modifier = 0
         base_price = 500
         final_price = 500
 
-        if difficulty == 0:  # very_easy
+        if self.options.difficulty == "very_easy":
             difficulty_modifier = 0
-        if difficulty == 1:  # easy
+        if self.options.difficulty == "easy":
             difficulty_modifier = .3
-        if difficulty == 2:  # medium
+        if self.options.difficulty == "medium":
             difficulty_modifier = .5
-        if difficulty == 3:  # hard
+        if self.options.difficulty == "hard":
             difficulty_modifier = .75
-        if difficulty == 4:  # extreme
+        if self.options.difficulty == "extreme":
             difficulty_modifier = .9
 
-        if length == 0:  # sync short
+        if self.options.scenario_length == "synchronous_short":
             length_modifier = .2
             final_price = 100000
-        if length == 1:  # sync long
+        if self.options.scenario_length == "synchronous_long":
             length_modifier = .4
             final_price = 250000
-        if length == 2:  # lengthy
+        if self.options.scenario_length == "lengthy":
             length_modifier = .6
             final_price = 500000
-        if length == 3:  # marathon
+        if self.options.scenario_length == "marathon": 
             length_modifier = .9
             final_price = 1000000
 
@@ -359,20 +312,20 @@ class OpenRCT2World(World):
         # Once we're finished with the given region, we'll add the queued prereqs to the possibles list
         queued_prereqs = []
         prereq_counter = 0
-        total_price = base_price * len(logic_table)
+        total_price = base_price * len(self.item_table)
         if final_price < total_price:  # If everything being $500 is too expensive,
-            base_price = final_price / len(logic_table)  # Make everything cheaper
+            base_price = final_price / len(self.item_table)  # Make everything cheaper
         # print("This is the base price: " + str(base_price))
-        total_base = base_price * len(logic_table)
+        total_base = base_price * len(self.item_table)
         remaining_amount = final_price - total_base
-        increment = remaining_amount / (len(logic_table) * (len(logic_table) + 1) / 2)
+        increment = remaining_amount / (len(self.item_table) * (len(self.item_table) + 1) / 2)
         # print("This is the increment: " + str(increment))
-        # print("with this many items: " + str(len(logic_table)))
-        for number, item in enumerate(logic_table):
+        # print("with this many items: " + str(len(self.item_table)))
+        for number, item in enumerate(self.item_table):
             unlock = {"LocationID": number, "Price": 0, "Lives": 0, "RidePrereq": []}
 
             # Handles the price of each location
-            if self.random.random() < 0.9 or number == 0:  # 90 percent of locations will have a cash price
+            if number == 0 or self.random.random() < 0.9:  # 90 percent of locations will have a cash price
                 current_price = base_price + increment * number
                 unlock["Price"] = int(current_price)
                 # print(unlock["Price"])
@@ -389,7 +342,7 @@ class OpenRCT2World(World):
             # We'll never have a prereq on the first 31 items or on blood prices
             if number > 31 and unlock["Lives"] == 0:
                 if (self.random.random() < length_modifier) or (
-                        len(logic_table) * .85 < number):  # Determines if we have a prereq
+                        len(self.item_table) * .85 < number):  # Determines if we have a prereq
                     if self.random.random() < difficulty_modifier:  # Determines if the prereq is a specific ride
                         chosen_prereq = self.random.choice(possible_prereqs)
                         set_openRCT2_rule("ride", chosen_prereq, number)
@@ -457,7 +410,7 @@ class OpenRCT2World(World):
 
         # Okay, here's where we're going to take the last eligible rides in the logic table
         # and make them required for completion, if that's required.
-        eligible_rides = [item for index, item in enumerate(logic_table) if
+        eligible_rides = [item for index, item in enumerate(self.item_table) if
                           item in item_info["rides"] and item not in item_info["non_starters"]]
         eligible_rides = list(dict.fromkeys(eligible_rides))
         self.random.shuffle(eligible_rides)
@@ -486,9 +439,6 @@ class OpenRCT2World(World):
         spoiler_handle.write(f'Starting Ride:       {self.starting_ride}\n')
 
     def fill_slot_data(self):
-        # archipelago_objectives = {Guests: [300, false], ParkValue: [0, false], RollerCoasters: [5,2,2,2,0,false],
-        # RideIncome: [0, false], ShopIncome: [8000, false], ParkRating: [700, false], LoanPaidOff: [true, false],
-        # Monopoly: [true, false]};
         guests = self.options.guest_objective.value
         park_value = self.options.park_value_objective.value
         roller_coasters = self.options.roller_coaster_objective.value
