@@ -1261,7 +1261,7 @@ class Spoiler:
         # reducing each range of influence to the bare minimum required inside it
         restore_later = {}
         for num, sphere in reversed(tuple(enumerate(collection_spheres))):
-            to_delete = set()has_
+            to_delete = set()
             for location in sphere:
                 # we remove the item at location and check if game is still beatable
                 logging.debug('Checking if %s (Player %d) is required to beat the game.', location.item.name,
