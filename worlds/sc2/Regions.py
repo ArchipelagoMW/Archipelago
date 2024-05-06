@@ -1,14 +1,13 @@
 from typing import List, Dict, Tuple, Optional, Callable, NamedTuple, Union, TYPE_CHECKING
 import math
 
-from BaseClasses import MultiWorld, Region, Entrance, Location, CollectionState
+from BaseClasses import Region, Entrance, Location, CollectionState
 from .Locations import LocationData
 from .Options import get_option_value, MissionOrder, get_enabled_campaigns, campaign_depending_orders, \
     GridTwoStartPositions
 from .MissionTables import MissionInfo, mission_orders, vanilla_mission_req_table, \
     MissionPools, SC2Campaign, get_goal_location, SC2Mission, MissionConnection
 from .PoolFilter import filter_missions
-from worlds.AutoWorld import World
 
 
 if TYPE_CHECKING:

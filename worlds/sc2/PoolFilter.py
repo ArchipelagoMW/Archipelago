@@ -1,16 +1,15 @@
 from typing import Callable, Dict, List, Set, Union, Tuple, Optional, TYPE_CHECKING
 from BaseClasses import  Item, Location
 from .Items import (get_full_item_list, spider_mine_sources, second_pass_placeable_items,
-    spear_of_adun_calldowns, spear_of_adun_castable_passives,
     upgrade_item_types,
 )
-from .MissionTables import (mission_orders, MissionInfo, MissionPools, MissionFlag,
+from .MissionTables import (MissionInfo, MissionPools,
     get_campaign_goal_priority, campaign_final_mission_locations, campaign_alt_final_mission_locations,
-    SC2Campaign, SC2Race, SC2CampaignGoalPriority, SC2Mission,
+    SC2Campaign, SC2CampaignGoalPriority, SC2Mission,
 )
 from .Options import (get_option_value, MissionOrder,
-    get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech,
-    TakeOverAIAllies, SpearOfAdunPresence, SpearOfAdunAutonomouslyCastAbilityPresence, campaign_depending_orders,
+    get_enabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech,
+    TakeOverAIAllies, campaign_depending_orders,
     ShuffleCampaigns, get_excluded_missions, ShuffleNoBuild, ExtraLocations, GrantStoryLevels,
 )
 from . import ItemNames, ItemGroups
