@@ -207,7 +207,8 @@ class SotNClient(BizHawkClient):
                         self.dracula_loaded = False
                         self.not_patched = True
                         self.trap_active = False
-                        await self.restore_ram(ctx, self.received_traps[self.last_trap_processed])
+                        if len(self.trap_ram_backup) > 0:
+                            await self.restore_ram(ctx, self.received_traps[self.last_trap_processed])
                         # We might have died without a save. Flag to read received from the memory
                         self.update_variables = True
 
