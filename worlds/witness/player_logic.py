@@ -327,6 +327,7 @@ class WitnessPlayerLogic:
         victory = world.options.victory_condition
         mnt_lasers = world.options.mountain_lasers
         chal_lasers = world.options.challenge_lasers
+        panel_hunt_postgame = world.options.panel_hunt_postgame
 
         # Goal is "short box", and long box requires at least as many lasers as short box (as god intended)
         proper_shortbox_goal = victory == "mountain_box_short" and chal_lasers >= mnt_lasers
@@ -343,6 +344,7 @@ class WitnessPlayerLogic:
         # If we have a long box goal, Challenge is behind the amount of lasers required to just win.
         # This is technically slightly incorrect as the Challenge Vault Box could contain a *symbol* that is required
         # to open Mountain Entry (Stars 2). However, since there is a very easy sphere 1 snipe, this is not considered.
+
         if victory == "mountain_box_long":
             postgame_adjustments.append(["Disabled Locations:", "0x0A332 (Challenge Timer Start)"])
 
@@ -384,6 +386,35 @@ class WitnessPlayerLogic:
         # So, we should disable all entities in the Caves and Tunnels *except* for those that are required to enter.
         if not (early_caves or remote_doors) and victory == "challenge":
             postgame_adjustments.append(get_caves_except_path_to_challenge_exclusion_list())
+
+        # ||| Section 3: Forced Postgame |||
+        # The player is given options to force locations to be postgame.
+        # This section handles them. (Right now, this is only panel hunt)
+
+        if victory == "panel_hunt":
+            disable_mountain_lasers = (
+                panel_hunt_postgame == "disable_mountain_lasers_locations"
+                or panel_hunt_postgame == "disable_anything_locked_by_lasers"
+            )
+
+            disable_challenge_lasers = (
+                panel_hunt_postgame == "disable_challenge_lasers_locations"
+                or panel_hunt_postgame == "disable_anything_locked_by_lasers"
+            )
+
+            if disable_mountain_lasers:
+                self.DISABLE_EVERYTHING_BEHIND.add("0x09F7F")
+                self.HUNT_ENTITIES.add("0x09F7F")
+
+                # If mountain lasers are disabled, and challenge lasers > 7, the box will need to be rotated
+                if chal_lasers > 7:
+                    postgame_adjustments.append([
+                        "Requirement Changes:",
+                        "0xFFF00 - 11 Lasers - True",
+                    ])
+            if disable_challenge_lasers:
+                self.DISABLE_EVERYTHING_BEHIND.add("0xFFF00")
+                self.HUNT_ENTITIES.add("0xFFF00")
 
         return postgame_adjustments
 
@@ -597,6 +628,7 @@ class WitnessPlayerLogic:
             # Check if any regions have become unreachable.
             reachable_regions = self.discover_reachable_regions()
             new_unreachable_regions = all_regions - reachable_regions - self.UNREACHABLE_REGIONS
+
             if new_unreachable_regions:
                 self.UNREACHABLE_REGIONS.update(new_unreachable_regions)
 
@@ -822,11 +854,12 @@ class WitnessPlayerLogic:
                 and entity_obj["locationType"] == "Discard"
             )
             and entity_hex not in {"0x03629", "0x03505", "0x3352F"}
+            and entity_hex not in self.HUNT_ENTITIES
         ]
 
         total_panels = world.options.panel_hunt_total.value
 
-        self.HUNT_ENTITIES.update(world.random.sample(all_eligible_panels, total_panels))
+        self.HUNT_ENTITIES.update(world.random.sample(all_eligible_panels, total_panels - len(self.HUNT_ENTITIES)))
 
     def make_event_panel_lists(self) -> None:
         """
@@ -924,11 +957,12 @@ class WitnessPlayerLogic:
             "0x00BF6": "+1 Laser (Swamp Laser)",
             "0x028A4": "+1 Laser (Treehouse Laser)",
             "0x17C34": "Mountain Entry",
-            "0xFFF00": "Bottom Floor Discard Turns On",
         }
 
         self.USED_EVENT_NAMES_BY_HEX = {}
-        self.CONDITIONAL_EVENTS = {}
+        self.CONDITIONAL_EVENTS = {
+            ("0x17FA2", "0xFFF00"): "Bottom Floor Discard Turns On",
+        }
 
         # The basic requirements to solve each entity come from StaticWitnessLogic.
         # However, for any given world, the options (e.g. which item shuffles are enabled) affect the requirements.
