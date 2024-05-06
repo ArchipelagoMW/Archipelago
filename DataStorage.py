@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Any, Dict, List
 import operator
 import copy
 import math
@@ -58,6 +58,8 @@ class DataStorage:
     def validate_and_get_key(set_cmd: Dict[str, object]) -> str:
         try:
             key = set_cmd["key"]
+            if not isinstance(key, str):
+                raise InvalidArgumentsException(f"key has to be a string")
             if key.startswith("_read_"):
                 raise InvalidArgumentsException(f"cannot apply `Set` operation to the read only key `{key}`")
             if not isinstance(set_cmd["operations"], List):
@@ -81,16 +83,16 @@ class DataStorage:
                 try:
                     func = modify_functions[operation["operation"]]
                     value = func(value, operation["value"])
-                except:
+                except Exception:
                     if on_error != "ignore":
                         raise
-        except:
+        except Exception:
             if (on_error == "set_default"):
                 value = set_cmd.get("default", 0)
             elif (on_error == "undo"):
                 value = set_cmd["original_value"]
             elif (on_error == "abort"):
-                pass # dont process further operations
+                pass  # dont process further operations
             else:
                 raise
 
