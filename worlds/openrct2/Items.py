@@ -1,7 +1,7 @@
 from BaseClasses import Item
 import typing
 import copy
-from .Constants import *
+from .Constants import item_info, Scenario_Items
 from .Options import *
 
 
