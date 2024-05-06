@@ -180,7 +180,7 @@ smooth_difficulty = [MissionPools.EASY,
 max_difficulty = len(smooth_difficulty) - 1
 
 
-def make_golden_path(world: World, num_missions: int) -> list[FillMission]:
+def make_golden_path(world: World, num_missions: int) -> List[FillMission]:
     chain_name_options = ['Mar Sara', 'Char', 'Kaldir', 'Zerus', 'Skygeirr Station',
                    'Dominion Space', 'Korhal', 'Aiur', 'Shakuras', 'Ulnar']
     world.random.shuffle(chain_name_options)
@@ -247,8 +247,8 @@ def make_golden_path(world: World, num_missions: int) -> list[FillMission]:
     return {SC2Campaign.GLOBAL: campaign.mission_order}
 
 
-def make_gauntlet(num_missions: int) -> list[FillMission]:
-    mission_order: list[FillMission] = []
+def make_gauntlet(num_missions: int) -> List[FillMission]:
+    mission_order: List[FillMission] = []
     row_length = 7
     rows = math.ceil(num_missions / row_length)
     difficulty_rate = (max_difficulty + 1) / num_missions if num_missions < 21 else 1/3
@@ -283,7 +283,7 @@ def make_gauntlet(num_missions: int) -> list[FillMission]:
     return {SC2Campaign.GLOBAL: mission_order}
 
 
-def make_blitz(num_missions: int) -> list[FillMission]:
+def make_blitz(num_missions: int) -> List[FillMission]:
     min_width, max_width = 2, 5
     mission_divisor = 5
     dynamic_width = num_missions / mission_divisor
