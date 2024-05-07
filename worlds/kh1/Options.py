@@ -279,6 +279,18 @@ class BadStartingWeapons(Toggle):
     """
     display_name = "Bad Starting Weapons"
 
+class DonaldDeathLink(Toggle):
+    """
+    If Donald is KO'ed, so is Sora.  If Death Link is toggled on in your client, this will send a death to everyone.
+    """
+    display_name = "Donald Death Link"
+
+class GoofyDeathLink(Toggle):
+    """
+    If Goofy is KO'ed, so is Sora.  If Death Link is toggled on in your client, this will send a death to everyone.
+    """
+    display_name = "Goofy Death Link"
+
 @dataclass
 class KH1Options(PerGameCommonOptions):
     goal: Goal
@@ -308,4 +320,6 @@ class KH1Options(PerGameCommonOptions):
     mp_increase: MPIncrease
     accessory_slot_increase: AccessorySlotIncrease
     item_slot_increase: ItemSlotIncrease
+    donald_death_link: DonaldDeathLink
+    goofy_death_link: GoofyDeathLink
     

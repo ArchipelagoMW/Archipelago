@@ -189,6 +189,10 @@ class KH1World(World):
                         mp_bonus = int(min_mp_bonus)
                     slot_data["keyblade_stats"] = slot_data["keyblade_stats"] + str(str_bonus) + "," + str(mp_bonus) + ","
             slot_data["keyblade_stats"] = slot_data["keyblade_stats"][:-1]
+        if self.options.donald_death_link:
+            slot_data["donalddl"] = ""
+        if self.options.goofy_death_link:
+            slot_data["goofydl"] = ""
         return slot_data
     
     def create_item(self, name: str) -> KH1Item:
