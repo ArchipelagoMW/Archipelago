@@ -908,6 +908,8 @@ dynamic_mission_orders = [
     MissionOrder.option_hopscotch
 ]
 
+LEGACY_GRID_ORDERS = {3, 4, 8}  # Medium Grid, Mini Grid, and Tiny Grid respectively
+
 kerrigan_unit_available = [
     KerriganPresence.option_vanilla,
 ]
