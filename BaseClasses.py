@@ -622,14 +622,6 @@ class PlayerState:
             locations = self._multiworld.get_filled_locations(self.player)
         self._parent.sweep_for_events(key_only, locations)
 
-    # these signatures need to match the parent so that player state can be used in place for access rule checks
-    def can_reach(
-            self,
-            spot: Union[Location, Entrance, Region, str],
-            resolve_hint: Optional[str] = None,
-            player: Optional[int] = None) -> bool:
-        return self._parent.can_reach(spot, resolve_hint, player)
-
     def has(self, item: str, count: int = 1) -> bool:
         return self.prog_items[item] >= count
 
@@ -664,7 +656,7 @@ class PlayerState:
         if location:
             self.locations_checked.add(location)
         if isinstance(item, Iterable):
-            # not sure what this should return but this at least guarantees they all get called :shrug:
+            # not sure what this should return but this at least guarantees they all get collected :shrug:
             return [self.collect(item_, event) for item_ in item]
         changed = self._multiworld.worlds[item.player].collect(self._parent, item)
         if not changed and event:
@@ -772,10 +764,12 @@ class CollectionState:
         ret = CollectionState(self.multiworld)
         ret.states = {player: state.copy(ret) for player, state in self.states.items()}
         ret.prog_items = ret.states
-        ret.reachable_regions = {player: self.states[player].reachable_regions.copy() for player in
-                                 self.states}
-        ret.blocked_connections = {player: self.states[player].blocked_connections for player in
-                                   self.states}
+        ret.reachable_regions = {
+            player: self.states[player].reachable_regions.copy() for player in self.states
+        }
+        ret.blocked_connections = {
+            player: self.states[player].blocked_connections for player in self.states
+        }
         ret.events = copy.copy(self.events)
         ret.path = copy.copy(self.path)
         ret.locations_checked = copy.copy(self.locations_checked)
