@@ -62,7 +62,7 @@ clam = BundleItem(Fish.clam)
 cockle = BundleItem(Fish.cockle)
 mussel = BundleItem(Fish.mussel)
 oyster = BundleItem(Fish.oyster)
-seaweed = BundleItem(WaterItem.seaweed)
+seaweed = BundleItem(WaterItem.seaweed, can_have_quality=False)
 
 wood = BundleItem(Material.wood, 99)
 stone = BundleItem(Material.stone, 99)
@@ -512,7 +512,7 @@ wild_medicine_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.wild_medici
 quality_foraging_items = sorted({item.as_quality(ForageQuality.gold).as_amount(1)
                                  for item in
                                  [*spring_foraging_items_thematic, *summer_foraging_items_thematic, *fall_foraging_items_thematic,
-                                  *winter_foraging_items_thematic, *beach_foraging_items, *desert_foraging_items, magma_cap]})
+                                  *winter_foraging_items_thematic, *beach_foraging_items, *desert_foraging_items, magma_cap] if item.can_have_quality})
 quality_foraging_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.quality_foraging, quality_foraging_items, 4, 3)
 
 crafts_room_bundles_vanilla = [spring_foraging_bundle_vanilla, summer_foraging_bundle_vanilla, fall_foraging_bundle_vanilla,

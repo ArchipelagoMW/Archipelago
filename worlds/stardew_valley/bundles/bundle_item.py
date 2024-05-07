@@ -57,6 +57,7 @@ class BundleItem:
     quality: str = CropQuality.basic
     source: BundleItemSource = Sources.vanilla
     flavor: str = None
+    can_have_quality: bool = True
 
     @staticmethod
     def money_bundle(amount: int) -> BundleItem:
@@ -71,7 +72,9 @@ class BundleItem:
         return BundleItem(self.item_name, amount, self.quality, self.source, self.flavor)
 
     def as_quality(self, quality: str) -> BundleItem:
-        return BundleItem(self.item_name, self.amount, quality, self.source, self.flavor)
+        if self.can_have_quality:
+            return BundleItem(self.item_name, self.amount, quality, self.source, self.flavor)
+        return BundleItem(self.item_name, self.amount, self.quality, self.source, self.flavor)
 
     def as_quality_crop(self) -> BundleItem:
         amount = 5
