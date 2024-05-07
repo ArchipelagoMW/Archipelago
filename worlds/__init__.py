@@ -136,7 +136,7 @@ def get_worlds_info() -> Tuple[Dict[str, WorldJson], bool]:
     world_data: Dict[str, WorldJson] = {}
     try:
         cached_time = os.path.getmtime(cached_worlds_path)
-        world_data = orjson.loads(pkgutil.get_data(__name__, cached_worlds_path))
+        world_data = orjson.loads(cached_worlds_path)
         for world in world_sources:
             if os.path.getmtime(world.resolved_path) > cached_time:
                 should_update = True
