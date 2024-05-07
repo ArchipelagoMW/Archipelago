@@ -180,7 +180,7 @@ smooth_difficulty = [MissionPools.EASY,
 max_difficulty = len(smooth_difficulty) - 1
 
 
-def make_golden_path(world: World, num_missions: int) -> List[FillMission]:
+def make_golden_path(world: World, num_missions: int) -> Dict[SC2Campaign, List[FillMission]]:
     chain_name_options = ['Mar Sara', 'Char', 'Kaldir', 'Zerus', 'Skygeirr Station',
                    'Dominion Space', 'Korhal', 'Aiur', 'Shakuras', 'Ulnar']
     world.random.shuffle(chain_name_options)
@@ -247,7 +247,7 @@ def make_golden_path(world: World, num_missions: int) -> List[FillMission]:
     return {SC2Campaign.GLOBAL: campaign.mission_order}
 
 
-def make_gauntlet(num_missions: int) -> List[FillMission]:
+def make_gauntlet(num_missions: int) -> Dict[SC2Campaign, List[FillMission]]:
     mission_order: List[FillMission] = []
     row_length = 7
     rows = math.ceil(num_missions / row_length)
@@ -283,7 +283,7 @@ def make_gauntlet(num_missions: int) -> List[FillMission]:
     return {SC2Campaign.GLOBAL: mission_order}
 
 
-def make_blitz(num_missions: int) -> List[FillMission]:
+def make_blitz(num_missions: int) -> Dict[SC2Campaign, List[FillMission]]:
     min_width, max_width = 2, 5
     mission_divisor = 5
     dynamic_width = num_missions / mission_divisor
@@ -320,7 +320,7 @@ def make_blitz(num_missions: int) -> List[FillMission]:
     return {SC2Campaign.GLOBAL: mission_order}
 
 
-def make_hopscotch(two_start_positions: bool, num_missions: int):
+def make_hopscotch(two_start_positions: bool, num_missions: int) -> Dict[SC2Campaign, List[FillMission]]:
     mission_order: List[FillMission] = []
     menu_connection = [MissionConnection(-1)]
     max_width = 7

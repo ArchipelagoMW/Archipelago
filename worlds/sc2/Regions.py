@@ -6,7 +6,7 @@ from .Locations import LocationData
 from .Options import get_option_value, MissionOrder, get_enabled_campaigns, campaign_depending_orders, \
     GridTwoStartPositions, static_mission_orders, dynamic_mission_orders
 from .MissionTables import MissionInfo, vanilla_mission_req_table, \
-    MissionPools, SC2Campaign, get_goal_location, SC2Mission, MissionConnection
+    MissionPools, SC2Campaign, get_goal_location, SC2Mission, MissionConnection, FillMission
 from .MissionOrders import make_gauntlet, make_blitz, make_golden_path, make_hopscotch
 from .PoolFilter import filter_missions
 from worlds.AutoWorld import World
@@ -27,7 +27,7 @@ def create_regions(
     * int The number of missions in the world
     * str The name of the goal location
     """
-    mission_order_type: MissionOrder = get_option_value(world, "mission_order")
+    mission_order_type: MissionOrder = world.options.mission_order
 
     if mission_order_type == MissionOrder.option_vanilla:
         return create_vanilla_regions(world, locations, location_cache)
@@ -379,8 +379,7 @@ def make_grid_connect_rule(
 def make_dynamic_mission_order(
     world: World,
     mission_order_type: int
-) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
-    player = world.player
+) -> Dict[SC2Campaign, List[FillMission]]:
     mission_pools = filter_missions(world)
 
     mission_pool = [mission for mission_pool in mission_pools.values() for mission in mission_pool]
