@@ -286,14 +286,14 @@ def make_gauntlet(num_missions: int) -> Dict[SC2Campaign, List[FillMission]]:
 def make_blitz(num_missions: int) -> Dict[SC2Campaign, List[FillMission]]:
     min_width, max_width = 2, 5
     mission_divisor = 5
-    dynamic_width = num_missions / mission_divisor
-    width = math.floor(max(min(dynamic_width, max_width), min_width))
-    middle_column = math.floor(width / 2)
+    dynamic_width = num_missions // mission_divisor
+    width = max(min(dynamic_width, max_width), min_width)
+    middle_column = width // 2
     connections = [MissionConnection(-1)]
     mission_number = 0
     mission_order: List[FillMission] = []
     if num_missions % width > middle_column:
-        final_row = math.floor(num_missions / width) * width
+        final_row = width * (num_missions // width)
         final_mission_number = final_row + middle_column
     else:
         final_mission_number = num_missions - 1
