@@ -725,6 +725,23 @@ class PlayerState:
     def __delitem__(self, key) -> None:
         del self.prog_items[key]
 
+    def has_all_counts(self, item_counts: Mapping[str, int]) -> bool:
+        return all(self.prog_items[item] >= count for item, count in item_counts.items())
+
+    def has_any_count(self, item_counts: Mapping[str, int]) -> bool:
+        return any(self.prog_items[item] >= count for item, count in item_counts.items())
+
+    def has_from_list(self, items: Iterable[str], count: int) -> bool:
+        found: int = 0
+        for item_name in items:
+            found += self.prog_items[item_name]
+            if found >= count:
+                return True
+        return False
+
+    def count_from_list(self, items: Iterable[str]) -> int:
+        return sum(self.prog_items[item_name] for item_name in items)
+
 
 class CollectionState:
     prog_items: Dict[int, PlayerState]  # to be removed
@@ -862,11 +879,11 @@ class CollectionState:
 
     def has_all_counts(self, item_counts: Mapping[str, int], player: int) -> bool:
         """Returns True if each item name is in the state at least as many times as specified."""
-        return all(self.prog_items[player][item] >= count for item, count in item_counts.items())
+        return self.states[player].has_all_counts(item_counts)
 
     def has_any_count(self, item_counts: Mapping[str, int], player: int) -> bool:
         """Returns True if at least one item name is in the state at least as many times as specified."""
-        return any(self.prog_items[player][item] >= count for item, count in item_counts.items())
+        return self.states[player].has_any_count(item_counts)
 
     def count(self, item: str, player: int) -> int:
         return self.states[player].count(item)
@@ -877,17 +894,11 @@ class CollectionState:
 
     def has_from_list(self, items: Iterable[str], player: int, count: int) -> bool:
         """Returns True if the state contains at least `count` items matching any of the item names from a list."""
-        found: int = 0
-        player_prog_items = self.prog_items[player]
-        for item_name in items:
-            found += player_prog_items[item_name]
-            if found >= count:
-                return True
-        return False
+        return self.states[player].has_from_list(items, count)
 
     def count_from_list(self, items: Iterable[str], player: int) -> int:
         """Returns the cumulative count of items from a list present in state."""
-        return sum(self.prog_items[player][item_name] for item_name in items)
+        return self.states[player].count_from_list(items)
 
     # item name group related
     def has_group(self, item_name_group: str, player: int, count: int = 1) -> bool:
