@@ -167,8 +167,7 @@ class MarioLand2World(World):
             self.multiworld.get_region("Macro Zone 4", self.player))
         self.multiworld.get_region("Macro Zone 4", self.player).connect(
             self.multiworld.get_region("Macro Zone Secret Course", self.player))
-        # castle = Region("Mario's Castle", self.player, self.multiworld)
-        # menu_region.connect(castle)
+
         castle = self.multiworld.get_region("Mario's Castle", self.player)
         wario = MarioLand2Location(self.player, "Mario's Castle - Wario", parent=castle)
         castle.locations.append(wario)

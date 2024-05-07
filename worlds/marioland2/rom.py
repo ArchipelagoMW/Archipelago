@@ -25,21 +25,7 @@ def randomize_music(patch, random):
 
 
 def generate_output(self, output_directory: str):
-    # data = get_base_rom_bytes()
-    # base_patch = pkgutil.get_data(__name__, f'basepatch.bsdiff4')
 
-    # data = bytearray(bsdiff4.patch(data, base_patch))
-
-    # outfilepname = f'_P{self.player}'
-    # outfilepname += f"_{self.multiworld.get_file_safe_player_name(self.player).replace(' ', '_')}" \
-    #     if self.multiworld.player_name[self.player] != 'Player%d' % self.player else ''
-    # rompath = os.path.join(output_directory, f'AP_{self.multiworld.seed_name}{outfilepname}.gb')
-    # with open(rompath, 'wb') as outfile:
-    #     outfile.write(data)
-    # patch = SuperMarioLand2ProcedurePatch(os.path.splitext(rompath)[0]
-    #                                       + SuperMarioLand2ProcedurePatch.patch_file_ending,
-    #                                       player=self.player, player_name=self.multiworld.player_name[self.player],
-    #                                       patched_path=rompath)
     patch = SuperMarioLand2ProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
 
     patch.write_file("basepatch.bsdiff4", pkgutil.get_data(__name__, "basepatch.bsdiff4"))
@@ -77,8 +63,6 @@ def generate_output(self, output_directory: str):
     if self.options.randomize_music:
         randomize_music(patch, random)
 
-    # if self.options.auto_scroll_trap:
-    #     patch.write_bytes(rom_addresses["Auto_Scroll_Disable"]] = 0xAF
     if self.options.shuffle_golden_coins:
         patch.write_bytes(rom_addresses["Coin_Shuffle"], 0x40)
     if self.options.shuffle_midway_bells:
@@ -161,9 +145,3 @@ def get_base_rom_path():
     if not os.path.exists(file_name):
         file_name = Utils.user_path(file_name)
     return file_name
-
-
-# def write_bytes(patch, byte_array, address):
-#     for byte in byte_array:
-#         patch.write_bytes(address] = byte
-#         address += 1
