@@ -18,7 +18,7 @@ class TestProgressiveToolsLogic(SVTestBase):
     }
 
     def test_sturgeon(self):
-        self.multiworld.state.prog_items = {1: Counter()}
+        self.multiworld.state.states[self.player].prog_items = Counter()
 
         sturgeon_rule = self.world.logic.has("Sturgeon")
         self.assert_rule_false(sturgeon_rule, self.multiworld.state)
@@ -54,7 +54,7 @@ class TestProgressiveToolsLogic(SVTestBase):
         self.assert_rule_false(sturgeon_rule, self.multiworld.state)
 
     def test_old_master_cannoli(self):
-        self.multiworld.state.prog_items = {1: Counter()}
+        self.multiworld.state.states[self.player].prog_items = Counter()
 
         self.multiworld.state.collect(self.world.create_item("Progressive Axe"), event=False)
         self.multiworld.state.collect(self.world.create_item("Progressive Axe"), event=False)
