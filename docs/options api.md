@@ -137,7 +137,10 @@ elif self.options.logic == "crazy":
 # check if the current option is in a collection of integers using the class attributes
 if self.options.weapon in {Weapon.option_bow, Weapon.option_sword}:
     do_stuff()
-# if we want to use a collection of strings a set won't work so use a tuple here
+# in order to make a set of strings work, we have to compare against current_key
+elif self.options.weapon.current_key in {"none", "hammer"}:
+    do_something_else()
+# though it's usually better to just use a tuple instead
 elif self.options.weapon in ("none", "hammer"):
     do_something_else()
 ```
