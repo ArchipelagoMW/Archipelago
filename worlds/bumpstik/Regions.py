@@ -23,13 +23,13 @@ def create_regions(world: MultiWorld, player: int):
 
     entrance_map = {
         "Level 1": lambda state:
-        state.has("Booster Bumper", player, 2) and state.has("Treasure Bumper", player, 9),
+        state.has("Booster Bumper", player, 1) and state.has("Treasure Bumper", player, 8),
         "Level 2": lambda state:
-        state.has("Booster Bumper", player, 3) and state.has("Treasure Bumper", player, 17),
+        state.has("Booster Bumper", player, 2) and state.has("Treasure Bumper", player, 16),
         "Level 3": lambda state:
-        state.has("Booster Bumper", player, 4) and state.has("Treasure Bumper", player, 25),
+        state.has("Booster Bumper", player, 3) and state.has("Treasure Bumper", player, 24),
         "Level 4": lambda state:
-        state.has("Booster Bumper", player, 5) and state.has("Treasure Bumper", player, 33)
+        state.has("Booster Bumper", player, 5) and state.has("Treasure Bumper", player, 32)
     }
 
     for x, region_name in enumerate(region_map):

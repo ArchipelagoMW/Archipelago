@@ -1,0 +1,4026 @@
+- name: Overworld
+  id: 0
+  type: "Overworld"
+  game_objects: []
+  links:
+  - target_room: 220 # To Forest Subregion
+    access: []
+- name: Subregion Foresta
+  id: 220
+  type: "Subregion"
+  region: "Foresta"
+  game_objects:
+  - name: "Foresta South Battlefield"
+    object_id: 0x01
+    location: "ForestaSouthBattlefield"
+    location_slot: "ForestaSouthBattlefield"
+    type: "BattlefieldXp"
+    access: []
+  - name: "Foresta West Battlefield"
+    object_id: 0x02
+    location: "ForestaWestBattlefield"
+    location_slot: "ForestaWestBattlefield"
+    type: "BattlefieldItem"
+    access: []
+  - name: "Foresta East Battlefield"
+    object_id: 0x03
+    location: "ForestaEastBattlefield"
+    location_slot: "ForestaEastBattlefield"
+    type: "BattlefieldGp"
+    access: []
+  links:
+  - target_room: 15  # Level Forest
+    location: "LevelForest"
+    location_slot: "LevelForest"
+    entrance: 445
+    teleporter: [0x2E, 8]
+    access: []
+  - target_room: 16  # Foresta
+    location: "Foresta"
+    location_slot: "Foresta"
+    entrance: 446
+    teleporter: [0x02, 1]
+    access: []
+  - target_room: 24  # Sand Temple
+    location: "SandTemple"
+    location_slot: "SandTemple"
+    entrance: 447
+    teleporter: [0x03, 1]
+    access: []
+  - target_room: 25  # Bone Dungeon
+    location: "BoneDungeon"
+    location_slot: "BoneDungeon"
+    entrance: 448
+    teleporter: [0x04, 1]
+    access: []
+  - target_room: 3   # Focus Tower Foresta
+    location: "FocusTowerForesta"
+    location_slot: "FocusTowerForesta"
+    entrance: 449
+    teleporter: [0x05, 1]
+    access: []
+  - target_room: 221
+    access: ["SandCoin"]
+  - target_room: 224
+    access: ["RiverCoin"]
+  - target_room: 226
+    access: ["SunCoin"]
+- name: Subregion Aquaria
+  id: 221
+  type: "Subregion"
+  region: "Aquaria"
+  game_objects:
+  - name: "South of Libra Temple Battlefield"
+    object_id: 0x04
+    location: "AquariaBattlefield01"
+    location_slot: "AquariaBattlefield01"
+    type: "BattlefieldXp"
+    access: []
+  - name: "East of Libra Temple Battlefield"
+    object_id: 0x05
+    location: "AquariaBattlefield02"
+    location_slot: "AquariaBattlefield02"
+    type: "BattlefieldGp"
+    access: []
+  - name: "South of Aquaria Battlefield"
+    object_id: 0x06
+    location: "AquariaBattlefield03"
+    location_slot: "AquariaBattlefield03"
+    type: "BattlefieldItem"
+    access: []
+  - name: "South of Wintry Cave Battlefield"
+    object_id: 0x07
+    location: "WintryBattlefield01"
+    location_slot: "WintryBattlefield01"
+    type: "BattlefieldXp"
+    access: []
+  - name: "West of Wintry Cave Battlefield"
+    object_id: 0x08
+    location: "WintryBattlefield02"
+    location_slot: "WintryBattlefield02"
+    type: "BattlefieldGp"
+    access: []
+  - name: "Ice Pyramid Battlefield"
+    object_id: 0x09
+    location: "PyramidBattlefield01"
+    location_slot: "PyramidBattlefield01"
+    type: "BattlefieldXp"
+    access: []
+  links:
+  - target_room: 10  # Focus Tower Aquaria
+    location: "FocusTowerAquaria"
+    location_slot: "FocusTowerAquaria"
+    entrance: 450
+    teleporter: [0x13, 1]
+    access: []
+  - target_room: 39  # Libra Temple
+    location: "LibraTemple"
+    location_slot: "LibraTemple"
+    entrance: 451
+    teleporter: [0x07, 1]
+    access: []
+  - target_room: 40  # Aquaria
+    location: "Aquaria"
+    location_slot: "Aquaria"
+    entrance: 452
+    teleporter: [0x08, 8]
+    access: []
+  - target_room: 45  # Wintry Cave
+    location: "WintryCave"
+    location_slot: "WintryCave"
+    entrance: 453
+    teleporter: [0x0A, 1]
+    access: []
+  - target_room: 52  # Falls Basin
+    location: "FallsBasin"
+    location_slot: "FallsBasin"
+    entrance: 455
+    teleporter: [0x0C, 1]
+    access: []
+  - target_room: 54  # Ice Pyramid
+    location: "IcePyramid"
+    location_slot: "IcePyramid"
+    entrance: 456
+    teleporter: [0x0D, 1] # Will be switched to a script
+    access: []
+  - target_room: 220
+    access: ["SandCoin"]
+  - target_room: 224
+    access: ["SandCoin", "RiverCoin"]
+  - target_room: 226
+    access: ["SandCoin", "SunCoin"]
+  - target_room: 223
+    access: ["SummerAquaria"]
+- name: Subregion Life Temple
+  id: 222
+  type: "Subregion"
+  region: "LifeTemple"
+  game_objects: []
+  links:
+  - target_room: 51  # Life Temple
+    location: "LifeTemple"
+    location_slot: "LifeTemple"
+    entrance: 454
+    teleporter: [0x0B, 1]
+    access: []
+- name: Subregion Frozen Fields
+  id: 223
+  type: "Subregion"
+  region: "AquariaFrozenField"
+  game_objects:
+  - name: "North of Libra Temple Battlefield"
+    object_id: 0x0A
+    location: "LibraBattlefield01"
+    location_slot: "LibraBattlefield01"
+    type: "BattlefieldItem"
+    access: []
+  - name: "Aquaria Frozen Field Battlefield"
+    object_id: 0x0B
+    location: "LibraBattlefield02"
+    location_slot: "LibraBattlefield02"
+    type: "BattlefieldXp"
+    access: []
+  links:
+  - target_room: 74  # Wintry Temple
+    location: "WintryTemple"
+    location_slot: "WintryTemple"
+    entrance: 458
+    teleporter: [0x10, 1]
+    access: []
+  - target_room: 14  # Focus Tower Frozen Strip
+    location: "FocusTowerFrozen"
+    location_slot: "FocusTowerFrozen"
+    entrance: 459
+    teleporter: [0x11, 1]
+    access: []
+  - target_room: 221
+    access: []
+  - target_room: 225
+    access: ["SummerAquaria", "DualheadHydra"]
+- name: Subregion Fireburg
+  id: 224
+  type: "Subregion"
+  region: "Fireburg"
+  game_objects:
+  - name: "Path to Fireburg Southern Battlefield"
+    object_id: 0x0C
+    location: "FireburgBattlefield01"
+    location_slot: "FireburgBattlefield01"
+    type: "BattlefieldGp"
+    access: []
+  - name: "Path to Fireburg Central Battlefield"
+    object_id: 0x0D
+    location: "FireburgBattlefield02"
+    location_slot: "FireburgBattlefield02"
+    type: "BattlefieldItem"
+    access: []
+  - name: "Path to Fireburg Northern Battlefield"
+    object_id: 0x0E
+    location: "FireburgBattlefield03"
+    location_slot: "FireburgBattlefield03"
+    type: "BattlefieldXp"
+    access: []
+  - name: "Sealed Temple Battlefield"
+    object_id: 0x0F
+    location: "MineBattlefield01"
+    location_slot: "MineBattlefield01"
+    type: "BattlefieldGp"
+    access: []
+  - name: "Mine Battlefield"
+    object_id: 0x10
+    location: "MineBattlefield02"
+    location_slot: "MineBattlefield02"
+    type: "BattlefieldItem"
+    access: []
+  - name: "Boulder Battlefield"
+    object_id: 0x11
+    location: "MineBattlefield03"
+    location_slot: "MineBattlefield03"
+    type: "BattlefieldXp"
+    access: []
+  links:
+  - target_room: 13  # Focus Tower Fireburg
+    location: "FocusTowerFireburg"
+    location_slot: "FocusTowerFireburg"
+    entrance: 460
+    teleporter: [0x12, 1]
+    access: []
+  - target_room: 76  # Fireburg
+    location: "Fireburg"
+    location_slot: "Fireburg"
+    entrance: 461
+    teleporter: [0x14, 1]
+    access: []
+  - target_room: 84  # Mine
+    location: "Mine"
+    location_slot: "Mine"
+    entrance: 462
+    teleporter: [0x15, 1]
+    access: []
+  - target_room: 92  # Sealed Temple
+    location: "SealedTemple"
+    location_slot: "SealedTemple"
+    entrance: 463
+    teleporter: [0x16, 1]
+    access: []
+  - target_room: 93  # Volcano
+    location: "Volcano"
+    location_slot: "Volcano"
+    entrance: 464
+    teleporter: [0x17, 1] # Also this one / 0x0F, 8
+    access: []
+  - target_room: 100 # Lava Dome
+    location: "LavaDome"
+    location_slot: "LavaDome"
+    entrance: 465
+    teleporter: [0x18, 1]
+    access: []
+  - target_room: 220
+    access: ["RiverCoin"]
+  - target_room: 221
+    access: ["SandCoin", "RiverCoin"]
+  - target_room: 226
+    access: ["RiverCoin", "SunCoin"]
+  - target_room: 225
+    access: ["DualheadHydra"]
+- name: Subregion Volcano Battlefield
+  id: 225
+  type: "Subregion"
+  region: "VolcanoBattlefield"
+  game_objects:
+  - name: "Volcano Battlefield"
+    object_id: 0x12
+    location: "VolcanoBattlefield01"
+    location_slot: "VolcanoBattlefield01"
+    type: "BattlefieldXp"
+    access: []
+  links:
+  - target_room: 224
+    access: ["DualheadHydra"]
+  - target_room: 223
+    access: ["SummerAquaria"]
+- name: Subregion Windia
+  id: 226
+  type: "Subregion"
+  region: "Windia"
+  game_objects:
+  - name: "Kaidge Temple Battlefield"
+    object_id: 0x13
+    location: "WindiaBattlefield01"
+    location_slot: "WindiaBattlefield01"
+    type: "BattlefieldXp"
+    access: ["SandCoin", "RiverCoin"]
+  - name: "South of Windia Battlefield"
+    object_id: 0x14
+    location: "WindiaBattlefield02"
+    location_slot: "WindiaBattlefield02"
+    type: "BattlefieldXp"
+    access: ["SandCoin", "RiverCoin"]
+  links:
+  - target_room: 9   # Focus Tower Windia
+    location: "FocusTowerWindia"
+    location_slot: "FocusTowerWindia"
+    entrance: 466
+    teleporter: [0x06, 1]
+    access: []
+  - target_room: 123 # Rope Bridge
+    location: "RopeBridge"
+    location_slot: "RopeBridge"
+    entrance: 467
+    teleporter: [0x19, 1]
+    access: []
+  - target_room: 124 # Alive Forest
+    location: "AliveForest"
+    location_slot: "AliveForest"
+    entrance: 468
+    teleporter: [0x1A, 1]
+    access: []
+  - target_room: 125 # Giant Tree
+    location: "GiantTree"
+    location_slot: "GiantTree"
+    entrance: 469
+    teleporter: [0x1B, 1]
+    access: ["Barred"]
+  - target_room: 152 # Kaidge Temple
+    location: "KaidgeTemple"
+    location_slot: "KaidgeTemple"
+    entrance: 470
+    teleporter: [0x1C, 1]
+    access: []
+  - target_room: 156 # Windia
+    location: "Windia"
+    location_slot: "Windia"
+    entrance: 471
+    teleporter: [0x1D, 1]
+    access: []
+  - target_room: 154 # Windhole Temple
+    location: "WindholeTemple"
+    location_slot: "WindholeTemple"
+    entrance: 472
+    teleporter: [0x1E, 1]
+    access: []
+  - target_room: 155 # Mount Gale
+    location: "MountGale"
+    location_slot: "MountGale"
+    entrance: 473
+    teleporter: [0x1F, 1]
+    access: []
+  - target_room: 166 # Pazuzu Tower
+    location: "PazuzusTower"
+    location_slot: "PazuzusTower"
+    entrance: 474
+    teleporter: [0x20, 1]
+    access: []
+  - target_room: 220
+    access: ["SunCoin"]
+  - target_room: 221
+    access: ["SandCoin", "SunCoin"]
+  - target_room: 224
+    access: ["RiverCoin", "SunCoin"]
+  - target_room: 227
+    access: ["RainbowBridge"]
+- name: Subregion Spencer's Cave
+  id: 227
+  type: "Subregion"
+  region: "SpencerCave"
+  game_objects: []
+  links:
+  - target_room: 73  # Spencer's Place
+    location: "SpencersPlace"
+    location_slot: "SpencersPlace"
+    entrance: 457
+    teleporter: [0x30, 8]
+    access: []
+  - target_room: 226
+    access: ["RainbowBridge"]
+- name: Subregion Ship Dock
+  id: 228
+  type: "Subregion"
+  region: "ShipDock"
+  game_objects: []
+  links:
+  - target_room: 186 # Ship Dock
+    location: "ShipDock"
+    location_slot: "ShipDock"
+    entrance: 475
+    teleporter: [0x3E, 1]
+    access: []
+  - target_room: 229
+    access: ["ShipLiberated", "ShipDockAccess"]
+- name: Subregion Mac's Ship
+  id: 229
+  type: "Subregion"
+  region: "MacShip"
+  game_objects: []
+  links:
+  - target_room: 187 # Mac Ship
+    location: "MacsShip"
+    location_slot: "MacsShip"
+    entrance: 478
+    teleporter: [0x24, 1]
+    access: []
+  - target_room: 228
+    access: ["ShipLiberated", "ShipDockAccess"]
+  - target_room: 231
+    access: ["ShipLoaned", "ShipDockAccess", "ShipSteeringWheel"]
+- name: Subregion Light Temple
+  id: 230
+  type: "Subregion"
+  region: "LightTemple"
+  game_objects: []
+  links:
+  - target_room: 185 # Light Temple
+    location: "LightTemple"
+    location_slot: "LightTemple"
+    entrance: 477
+    teleporter: [0x23, 1]
+    access: []
+- name: Subregion Doom Castle
+  id: 231
+  type: "Subregion"
+  region: "DoomCastle"
+  game_objects: []
+  links:
+  - target_room: 1   # Doom Castle
+    location: "DoomCastle"
+    location_slot: "DoomCastle"
+    entrance: 476
+    teleporter: [0x21, 1]
+    access: []
+  - target_room: 187 # Mac Ship Doom
+    location: "MacsShipDoom"
+    location_slot: "MacsShipDoom"
+    entrance: 479
+    teleporter: [0x24, 1]
+    access: ["Barred"]
+  - target_room: 229
+    access: ["ShipLoaned", "ShipDockAccess", "ShipSteeringWheel"]
+- name: Doom Castle - Sand Floor
+  id: 1
+  game_objects:
+  - name: "Doom Castle B2 - Southeast Chest"
+    object_id: 0x01
+    type: "Chest"
+    access: ["Bomb"]
+  - name: "Doom Castle B2 - Bone Ledge Box"
+    object_id: 0x1E
+    type: "Box"
+    access: []
+  - name: "Doom Castle B2 - Hook Platform Box"
+    object_id: 0x1F
+    type: "Box"
+    access: ["DragonClaw"]
+  links:
+  - target_room: 231
+    entrance: 1
+    teleporter: [1, 6]
+    access: []
+  - target_room: 5
+    entrance: 0
+    teleporter: [0, 0]
+    access: ["DragonClaw", "MegaGrenade"]
+- name: Doom Castle - Aero Room
+  id: 2
+  game_objects:
+  - name: "Doom Castle B2 - Sun Door Chest"
+    object_id: 0x00
+    type: "Chest"
+    access: []
+  links:
+  - target_room: 4
+    entrance: 2
+    teleporter: [1, 0]
+    access: []
+- name: Focus Tower B1 - Main Loop
+  id: 3
+  game_objects: []
+  links:
+  - target_room: 220
+    entrance: 3
+    teleporter: [2, 6]
+    access: []
+  - target_room: 6
+    entrance: 4
+    teleporter: [4, 0]
+    access: []
+- name: Focus Tower B1 - Aero Corridor
+  id: 4
+  game_objects: []
+  links:
+  - target_room: 9
+    entrance: 5
+    teleporter: [5, 0]
+    access: []
+  - target_room: 2
+    entrance: 6
+    teleporter: [8, 0]
+    access: []
+- name: Focus Tower B1 - Inner Loop
+  id: 5
+  game_objects: []
+  links:
+  - target_room: 1
+    entrance: 8
+    teleporter: [7, 0]
+    access: []
+  - target_room: 201
+    entrance: 7
+    teleporter: [6, 0]
+    access: []
+- name: Focus Tower 1F Main Lobby
+  id: 6
+  game_objects:
+  - name: "Focus Tower 1F - Main Lobby Box"
+    object_id: 0x21
+    type: "Box"
+    access: []
+  links:
+  - target_room: 3
+    entrance: 11
+    teleporter: [11, 0]
+    access: []
+  - target_room: 7
+    access: ["SandCoin"]
+  - target_room: 8
+    access: ["RiverCoin"]
+  - target_room: 9
+    access: ["SunCoin"]
+- name: Focus Tower 1F SandCoin Room
+  id: 7
+  game_objects: []
+  links:
+  - target_room: 6
+    access: ["SandCoin"]
+  - target_room: 10
+    entrance: 10
+    teleporter: [10, 0]
+    access: []
+- name: Focus Tower 1F RiverCoin Room
+  id: 8
+  game_objects: []
+  links:
+  - target_room: 6
+    access: ["RiverCoin"]
+  - target_room: 11
+    entrance: 14
+    teleporter: [14, 0]
+    access: []
+- name: Focus Tower 1F SunCoin Room
+  id: 9
+  game_objects: []
+  links:
+  - target_room: 6
+    access: ["SunCoin"]
+  - target_room: 4
+    entrance: 12
+    teleporter: [12, 0]
+    access: []
+  - target_room: 226
+    entrance: 9
+    teleporter: [3, 6]
+    access: []
+- name: Focus Tower 1F SkyCoin Room
+  id: 201
+  game_objects: []
+  links:
+  - target_room: 195
+    entrance: 13
+    teleporter: [13, 0]
+    access: ["SkyCoin", "FlamerusRex", "IceGolem", "DualheadHydra", "Pazuzu"]
+  - target_room: 5
+    entrance: 15
+    teleporter: [15, 0]
+    access: []
+- name: Focus Tower 2F - Sand Coin Passage
+  id: 10
+  game_objects:
+  - name: "Focus Tower 2F - Sand Door Chest"
+    object_id: 0x03
+    type: "Chest"
+    access: []
+  links:
+  - target_room: 221
+    entrance: 16
+    teleporter: [4, 6]
+    access: []
+  - target_room: 7
+    entrance: 17
+    teleporter: [17, 0]
+    access: []
+- name: Focus Tower 2F - River Coin Passage
+  id: 11
+  game_objects: []
+  links:
+  - target_room: 8
+    entrance: 18
+    teleporter: [18, 0]
+    access: []
+  - target_room: 13
+    entrance: 19
+    teleporter: [20, 0]
+    access: []
+- name: Focus Tower 2F - Venus Chest Room
+  id: 12
+  game_objects:
+  - name: "Focus Tower 2F - Back Door Chest"
+    object_id: 0x02
+    type: "Chest"
+    access: []
+  - name: "Focus Tower 2F - Venus Chest"
+    object_id: 9
+    type: "NPC"
+    access: ["Bomb", "VenusKey"]
+  links:
+  - target_room: 14
+    entrance: 20
+    teleporter: [19, 0]
+    access: []
+- name: Focus Tower 3F - Lower Floor
+  id: 13
+  game_objects:
+  - name: "Focus Tower 3F - River Door Box"
+    object_id: 0x22
+    type: "Box"
+    access: []
+  links:
+  - target_room: 224
+    entrance: 22
+    teleporter: [6, 6]
+    access: []
+  - target_room: 11
+    entrance: 23
+    teleporter: [24, 0]
+    access: []
+- name: Focus Tower 3F - Upper Floor
+  id: 14
+  game_objects: []
+  links:
+  - target_room: 223
+    entrance: 24
+    teleporter: [5, 6]
+    access: []
+  - target_room: 12
+    entrance: 25
+    teleporter: [23, 0]
+    access: []
+- name: Level Forest
+  id: 15
+  game_objects:
+  - name: "Level Forest - Northwest Box"
+    object_id: 0x28
+    type: "Box"
+    access: ["Axe"]
+  - name: "Level Forest - Northeast Box"
+    object_id: 0x29
+    type: "Box"
+    access: ["Axe"]
+  - name: "Level Forest - Middle Box"
+    object_id: 0x2A
+    type: "Box"
+    access: []
+  - name: "Level Forest - Southwest Box"
+    object_id: 0x2B
+    type: "Box"
+    access: ["Axe"]
+  - name: "Level Forest - Southeast Box"
+    object_id: 0x2C
+    type: "Box"
+    access: ["Axe"]
+  - name: "Minotaur"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Minotaur"]
+    access: ["Kaeli1"]
+  - name: "Level Forest - Old Man"
+    object_id: 0
+    type: "NPC"
+    access: []
+  - name: "Level Forest - Kaeli"
+    object_id: 1
+    type: "NPC"
+    access: ["Kaeli1", "Minotaur"]
+  links:
+  - target_room: 220
+    entrance: 28
+    teleporter: [25, 0]
+    access: []
+- name: Foresta
+  id: 16
+  game_objects:
+  - name: "Foresta - Outside Box"
+    object_id: 0x2D
+    type: "Box"
+    access: ["Axe"]
+  links:
+  - target_room: 220
+    entrance: 38
+    teleporter: [31, 0]
+    access: []
+  - target_room: 17
+    entrance: 44
+    teleporter: [0, 5]
+    access: []
+  - target_room: 18
+    entrance: 42
+    teleporter: [32, 4]
+    access: []
+  - target_room: 19
+    entrance: 43
+    teleporter: [33, 0]
+    access: []
+  - target_room: 20
+    entrance: 45
+    teleporter: [1, 5]
+    access: []
+- name: Kaeli's House
+  id: 17
+  game_objects:
+  - name: "Foresta - Kaeli's House Box"
+    object_id: 0x2E
+    type: "Box"
+    access: []
+  - name: "Kaeli Companion"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Kaeli1"]
+    access: ["TreeWither"]
+  - name: "Kaeli 2"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Kaeli2"]
+    access: ["Kaeli1", "Minotaur", "Elixir"]
+  links:
+  - target_room: 16
+    entrance: 46
+    teleporter: [86, 3]
+    access: []
+- name: Foresta Houses - Old Man's House Main
+  id: 18
+  game_objects: []
+  links:
+  - target_room: 19
+    access: ["BarrelPushed"]
+  - target_room: 16
+    entrance: 47
+    teleporter: [34, 0]
+    access: []
+- name: Foresta Houses - Old Man's House Back
+  id: 19
+  game_objects:
+  - name: "Foresta - Old Man House Chest"
+    object_id: 0x05
+    type: "Chest"
+    access: []
+  - name: "Old Man Barrel"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["BarrelPushed"]
+    access: []
+  links:
+  - target_room: 18
+    access: ["BarrelPushed"]
+  - target_room: 16
+    entrance: 48
+    teleporter: [35, 0]
+    access: []
+- name: Foresta Houses - Rest House
+  id: 20
+  game_objects:
+  - name: "Foresta - Rest House Box"
+    object_id: 0x2F
+    type: "Box"
+    access: []
+  links:
+  - target_room: 16
+    entrance: 50
+    teleporter: [87, 3]
+    access: []
+- name: Libra Treehouse
+  id: 21
+  game_objects:
+  - name: "Alive Forest - Libra Treehouse Box"
+    object_id: 0x32
+    type: "Box"
+    access: []
+  links:
+  - target_room: 124
+    entrance: 51
+    teleporter: [67, 8]
+    access: ["LibraCrest"]
+- name: Gemini Treehouse
+  id: 22
+  game_objects:
+  - name: "Alive Forest - Gemini Treehouse Box"
+    object_id: 0x33
+    type: "Box"
+    access: []
+  links:
+  - target_room: 124
+    entrance: 52
+    teleporter: [68, 8]
+    access: ["GeminiCrest"]
+- name: Mobius Treehouse
+  id: 23
+  game_objects:
+  - name: "Alive Forest - Mobius Treehouse West Box"
+    object_id: 0x30
+    type: "Box"
+    access: []
+  - name: "Alive Forest - Mobius Treehouse East Box"
+    object_id: 0x31
+    type: "Box"
+    access: []
+  links:
+  - target_room: 124
+    entrance: 53
+    teleporter: [69, 8]
+    access: ["MobiusCrest"]
+- name: Sand Temple
+  id: 24
+  game_objects:
+  - name: "Tristam Companion"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Tristam"]
+    access: []
+  links:
+  - target_room: 220
+    entrance: 54
+    teleporter: [36, 0]
+    access: []
+- name: Bone Dungeon 1F
+  id: 25
+  game_objects:
+  - name: "Bone Dungeon 1F - Entrance Room West Box"
+    object_id: 0x35
+    type: "Box"
+    access: []
+  - name: "Bone Dungeon 1F - Entrance Room Middle Box"
+    object_id: 0x36
+    type: "Box"
+    access: []
+  - name: "Bone Dungeon 1F - Entrance Room East Box"
+    object_id: 0x37
+    type: "Box"
+    access: []
+  links:
+  - target_room: 220
+    entrance: 55
+    teleporter: [37, 0]
+    access: []
+  - target_room: 26
+    entrance: 56
+    teleporter: [2, 2]
+    access: []
+- name: Bone Dungeon B1 - Waterway
+  id: 26
+  game_objects:
+  - name: "Bone Dungeon B1 - Skull Chest"
+    object_id: 0x06
+    type: "Chest"
+    access: ["Bomb"]
+  - name: "Bone Dungeon B1 - Tristam"
+    object_id: 2
+    type: "NPC"
+    access: ["Tristam"]
+  - name: "Tristam Bone Dungeon Item Given"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["TristamBoneItemGiven"]
+    access: ["Tristam"]
+  links:
+  - target_room: 25
+    entrance: 59
+    teleporter: [88, 3]
+    access: []
+  - target_room: 28
+    entrance: 57
+    teleporter: [3, 2]
+    access: ["Bomb"]
+- name: Bone Dungeon B1 - Checker Room
+  id: 28
+  game_objects:
+  - name: "Bone Dungeon B1 - Checker Room Box"
+    object_id: 0x38
+    type: "Box"
+    access: ["Bomb"]
+  links:
+  - target_room: 26
+    entrance: 61
+    teleporter: [89, 3]
+    access: []
+  - target_room: 30
+    entrance: 60
+    teleporter: [4, 2]
+    access: []
+- name: Bone Dungeon B1 - Hidden Room
+  id: 29
+  game_objects:
+  - name: "Bone Dungeon B1 - Ribcage Waterway Box"
+    object_id: 0x39
+    type: "Box"
+    access: []
+  links:
+  - target_room: 31
+    entrance: 62
+    teleporter: [91, 3]
+    access: []
+- name: Bone Dungeon B2 - Exploding Skull Room - First Room
+  id: 30
+  game_objects:
+  - name: "Bone Dungeon B2 - Spines Room Alcove Box"
+    object_id: 0x3B
+    type: "Box"
+    access: []
+  - name: "Long Spine"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["LongSpineBombed"]
+    access: ["Bomb"]
+  links:
+  - target_room: 28
+    entrance: 65
+    teleporter: [90, 3]
+    access: []
+  - target_room: 31
+    access: ["LongSpineBombed"]
+- name: Bone Dungeon B2 - Exploding Skull Room - Second Room
+  id: 31
+  game_objects:
+  - name: "Bone Dungeon B2 - Spines Room Looped Hallway Box"
+    object_id: 0x3A
+    type: "Box"
+    access: []
+  - name: "Short Spine"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["ShortSpineBombed"]
+    access: ["Bomb"]
+  links:
+  - target_room: 29
+    entrance: 63
+    teleporter: [5, 2]
+    access: ["LongSpineBombed"]
+  - target_room: 32
+    access: ["ShortSpineBombed"]
+  - target_room: 30
+    access: ["LongSpineBombed"]
+- name: Bone Dungeon B2 - Exploding Skull Room - Third Room
+  id: 32
+  game_objects: []
+  links:
+  - target_room: 35
+    entrance: 64
+    teleporter: [6, 2]
+    access: []
+  - target_room: 31
+    access: ["ShortSpineBombed"]
+- name: Bone Dungeon B2 - Box Room
+  id: 33
+  game_objects:
+  - name: "Bone Dungeon B2 - Lone Room Box"
+    object_id: 0x3D
+    type: "Box"
+    access: []
+  links:
+  - target_room: 36
+    entrance: 66
+    teleporter: [93, 3]
+    access: []
+- name: Bone Dungeon B2 - Quake Room
+  id: 34
+  game_objects:
+  - name: "Bone Dungeon B2 - Penultimate Room Chest"
+    object_id: 0x07
+    type: "Chest"
+    access: []
+  links:
+  - target_room: 37
+    entrance: 67
+    teleporter: [94, 3]
+    access: []
+- name: Bone Dungeon B2 - Two Skulls Room - First Room
+  id: 35
+  game_objects:
+  - name: "Bone Dungeon B2 - Two Skulls Room Box"
+    object_id: 0x3C
+    type: "Box"
+    access: []
+  - name: "Skull 1"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Skull1Bombed"]
+    access: ["Bomb"]
+  links:
+  - target_room: 32
+    entrance: 71
+    teleporter: [92, 3]
+    access: []
+  - target_room: 36
+    access: ["Skull1Bombed"]
+- name: Bone Dungeon B2 - Two Skulls Room - Second Room
+  id: 36
+  game_objects:
+  - name: "Skull 2"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Skull2Bombed"]
+    access: ["Bomb"]
+  links:
+  - target_room: 33
+    entrance: 68
+    teleporter: [7, 2]
+    access: []
+  - target_room: 37
+    access: ["Skull2Bombed"]
+  - target_room: 35
+    access: ["Skull1Bombed"]
+- name: Bone Dungeon B2 - Two Skulls Room - Third Room
+  id: 37
+  game_objects: []
+  links:
+  - target_room: 34
+    entrance: 69
+    teleporter: [8, 2]
+    access: []
+  - target_room: 38
+    entrance: 70
+    teleporter: [9, 2]
+    access: ["Bomb"]
+  - target_room: 36
+    access: ["Skull2Bombed"]
+- name: Bone Dungeon B2 - Boss Room
+  id: 38
+  game_objects:
+  - name: "Bone Dungeon B2 - North Box"
+    object_id: 0x3E
+    type: "Box"
+    access: []
+  - name: "Bone Dungeon B2 - South Box"
+    object_id: 0x3F
+    type: "Box"
+    access: []
+  - name: "Bone Dungeon B2 - Flamerus Rex Chest"
+    object_id: 0x08
+    type: "Chest"
+    access: []
+  - name: "Bone Dungeon B2 - Tristam's Treasure Chest"
+    object_id: 0x04
+    type: "Chest"
+    access: []
+  - name: "Flamerus Rex"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["FlamerusRex"]
+    access: []
+  links:
+  - target_room: 37
+    entrance: 74
+    teleporter: [95, 3]
+    access: []
+- name: Libra Temple
+  id: 39
+  game_objects:
+  - name: "Libra Temple - Box"
+    object_id: 0x40
+    type: "Box"
+    access: []
+  - name: "Phoebe Companion"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Phoebe1"]
+    access: []
+  links:
+  - target_room: 221
+    entrance: 75
+    teleporter: [13, 6]
+    access: []
+  - target_room: 51
+    entrance: 76
+    teleporter: [59, 8]
+    access: ["LibraCrest"]
+- name: Aquaria
+  id: 40
+  game_objects:
+  - name: "Summer Aquaria"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["SummerAquaria"]
+    access: ["WakeWater"]
+  links:
+  - target_room: 221
+    entrance: 77
+    teleporter: [8, 6]
+    access: []
+  - target_room: 41
+    entrance: 81
+    teleporter: [10, 5]
+    access: []
+  - target_room: 42
+    entrance: 82
+    teleporter: [44, 4]
+    access: []
+  - target_room: 44
+    entrance: 83
+    teleporter: [11, 5]
+    access: []
+  - target_room: 71
+    entrance: 89
+    teleporter: [42, 0]
+    access: ["SummerAquaria"]
+  - target_room: 71
+    entrance: 90
+    teleporter: [43, 0]
+    access: ["SummerAquaria"]
+- name: Phoebe's House
+  id: 41
+  game_objects:
+  - name: "Aquaria - Phoebe's House Chest"
+    object_id: 0x41
+    type: "Box"
+    access: []
+  links:
+  - target_room: 40
+    entrance: 93
+    teleporter: [5, 8]
+    access: []
+- name: Aquaria Vendor House
+  id: 42
+  game_objects:
+  - name: "Aquaria - Vendor"
+    object_id: 4
+    type: "NPC"
+    access: []
+  - name: "Aquaria - Vendor House Box"
+    object_id: 0x42
+    type: "Box"
+    access: []
+  links:
+  - target_room: 40
+    entrance: 94
+    teleporter: [40, 8]
+    access: []
+  - target_room: 43
+    entrance: 95
+    teleporter: [47, 0]
+    access: []
+- name: Aquaria Gemini Room
+  id: 43
+  game_objects: []
+  links:
+  - target_room: 42
+    entrance: 97
+    teleporter: [48, 0]
+    access: []
+  - target_room: 81
+    entrance: 96
+    teleporter: [72, 8]
+    access: ["GeminiCrest"]
+- name: Aquaria INN
+  id: 44
+  game_objects: []
+  links:
+  - target_room: 40
+    entrance: 98
+    teleporter: [75, 8]
+    access: []
+- name: Wintry Cave 1F - East Ledge
+  id: 45
+  game_objects:
+  - name: "Wintry Cave 1F - North Box"
+    object_id: 0x43
+    type: "Box"
+    access: []
+  - name: "Wintry Cave 1F - Entrance Box"
+    object_id: 0x46
+    type: "Box"
+    access: []
+  - name: "Wintry Cave 1F - Slippery Cliff Box"
+    object_id: 0x44
+    type: "Box"
+    access: ["Claw"]
+  - name: "Wintry Cave 1F - Phoebe"
+    object_id: 5
+    type: "NPC"
+    access: ["Phoebe1"]
+  links:
+  - target_room: 221
+    entrance: 99
+    teleporter: [49, 0]
+    access: []
+  - target_room: 49
+    entrance: 100
+    teleporter: [14, 2]
+    access: ["Bomb"]
+  - target_room: 46
+    access: ["Claw"]
+- name: Wintry Cave 1F - Central Space
+  id: 46
+  game_objects:
+  - name: "Wintry Cave 1F - Scenic Overlook Box"
+    object_id: 0x45
+    type: "Box"
+    access: ["Claw"]
+  links:
+  - target_room: 45
+    access: ["Claw"]
+  - target_room: 47
+    access: ["Claw"]
+- name: Wintry Cave 1F - West Ledge
+  id: 47
+  game_objects: []
+  links:
+  - target_room: 48
+    entrance: 101
+    teleporter: [15, 2]
+    access: ["Bomb"]
+  - target_room: 46
+    access: ["Claw"]
+- name: Wintry Cave 2F
+  id: 48
+  game_objects:
+  - name: "Wintry Cave 2F - West Left Box"
+    object_id: 0x47
+    type: "Box"
+    access: []
+  - name: "Wintry Cave 2F - West Right Box"
+    object_id: 0x48
+    type: "Box"
+    access: []
+  - name: "Wintry Cave 2F - East Left Box"
+    object_id: 0x49
+    type: "Box"
+    access: []
+  - name: "Wintry Cave 2F - East Right Box"
+    object_id: 0x4A
+    type: "Box"
+    access: []
+  links:
+  - target_room: 47
+    entrance: 104
+    teleporter: [97, 3]
+    access: []
+  - target_room: 50
+    entrance: 103
+    teleporter: [50, 0]
+    access: []
+- name: Wintry Cave 3F Top
+  id: 49
+  game_objects:
+  - name: "Wintry Cave 3F - West Box"
+    object_id: 0x4B
+    type: "Box"
+    access: []
+  - name: "Wintry Cave 3F - East Box"
+    object_id: 0x4C
+    type: "Box"
+    access: []
+  links:
+  - target_room: 45
+    entrance: 105
+    teleporter: [96, 3]
+    access: []
+- name: Wintry Cave 3F Bottom
+  id: 50
+  game_objects:
+  - name: "Wintry Cave 3F - Squidite Chest"
+    object_id: 0x09
+    type: "Chest"
+    access: ["Phanquid"]
+  - name: "Phanquid"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Phanquid"]
+    access: []
+  - name: "Wintry Cave 3F - Before Boss Box"
+    object_id: 0x4D
+    type: "Box"
+    access: []
+  links:
+  - target_room: 48
+    entrance: 106
+    teleporter: [51, 0]
+    access: []
+- name: Life Temple
+  id: 51
+  game_objects:
+  - name: "Life Temple - Box"
+    object_id: 0x4E
+    type: "Box"
+    access: []
+  - name: "Life Temple - Mysterious Man"
+    object_id: 6
+    type: "NPC"
+    access: []
+  links:
+  - target_room: 222
+    entrance: 107
+    teleporter: [14, 6]
+    access: []
+  - target_room: 39
+    entrance: 108
+    teleporter: [60, 8]
+    access: ["LibraCrest"]
+- name: Fall Basin
+  id: 52
+  game_objects:
+  - name: "Falls Basin - Snow Crab Chest"
+    object_id: 0x0A
+    type: "Chest"
+    access: ["FreezerCrab"]
+  - name: "Freezer Crab"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["FreezerCrab"]
+    access: []
+  - name: "Falls Basin - Box"
+    object_id: 0x4F
+    type: "Box"
+    access: []
+  links:
+  - target_room: 221
+    entrance: 111
+    teleporter: [53, 0]
+    access: []
+- name: Ice Pyramid B1 Taunt Room
+  id: 53
+  game_objects:
+  - name: "Ice Pyramid B1 - Chest"
+    object_id: 0x0B
+    type: "Chest"
+    access: []
+  - name: "Ice Pyramid B1 - West Box"
+    object_id: 0x50
+    type: "Box"
+    access: []
+  - name: "Ice Pyramid B1 - North Box"
+    object_id: 0x51
+    type: "Box"
+    access: []
+  - name: "Ice Pyramid B1 - East Box"
+    object_id: 0x52
+    type: "Box"
+    access: []
+  links:
+  - target_room: 68
+    entrance: 113
+    teleporter: [55, 0]
+    access: []
+- name: Ice Pyramid 1F Maze Lobby
+  id: 54
+  game_objects:
+  - name: "Ice Pyramid 1F Statue"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["IcePyramid1FStatue"]
+    access: ["Sword"]
+  links:
+  - target_room: 221
+    entrance: 114
+    teleporter: [56, 0]
+    access: []
+  - target_room: 55
+    access: ["IcePyramid1FStatue"]
+- name: Ice Pyramid 1F Maze
+  id: 55
+  game_objects:
+  - name: "Ice Pyramid 1F - East Alcove Chest"
+    object_id: 0x0D
+    type: "Chest"
+    access: []
+  - name: "Ice Pyramid 1F - Sandwiched Alcove Box"
+    object_id: 0x53
+    type: "Box"
+    access: []
+  - name: "Ice Pyramid 1F - Southwest Left Box"
+    object_id: 0x54
+    type: "Box"
+    access: []
+  - name: "Ice Pyramid 1F - Southwest Right Box"
+    object_id: 0x55
+    type: "Box"
+    access: []
+  links:
+  - target_room: 56
+    entrance: 116
+    teleporter: [57, 0]
+    access: []
+  - target_room: 57
+    entrance: 117
+    teleporter: [58, 0]
+    access: []
+  - target_room: 58
+    entrance: 118
+    teleporter: [59, 0]
+    access: []
+  - target_room: 59
+    entrance: 119
+    teleporter: [60, 0]
+    access: []
+  - target_room: 60
+    entrance: 120
+    teleporter: [61, 0]
+    access: []
+  - target_room: 54
+    access: ["IcePyramid1FStatue"]
+- name: Ice Pyramid 2F South Tiled Room
+  id: 56
+  game_objects:
+  - name: "Ice Pyramid 2F - South Side Glass Door Box"
+    object_id: 0x57
+    type: "Box"
+    access: ["Sword"]
+  - name: "Ice Pyramid 2F - South Side East Box"
+    object_id: 0x5B
+    type: "Box"
+    access: []
+  links:
+  - target_room: 55
+    entrance: 122
+    teleporter: [62, 0]
+    access: []
+  - target_room: 61
+    entrance: 123
+    teleporter: [67, 0]
+    access: []
+- name: Ice Pyramid 2F West Room
+  id: 57
+  game_objects:
+  - name: "Ice Pyramid 2F - Northwest Room Box"
+    object_id: 0x5A
+    type: "Box"
+    access: []
+  links:
+  - target_room: 55
+    entrance: 124
+    teleporter: [63, 0]
+    access: []
+- name: Ice Pyramid 2F Center Room
+  id: 58
+  game_objects:
+  - name: "Ice Pyramid 2F - Center Room Box"
+    object_id: 0x56
+    type: "Box"
+    access: []
+  links:
+  - target_room: 55
+    entrance: 125
+    teleporter: [64, 0]
+    access: []
+- name: Ice Pyramid 2F Small North Room
+  id: 59
+  game_objects:
+  - name: "Ice Pyramid 2F - North Room Glass Door Box"
+    object_id: 0x58
+    type: "Box"
+    access: ["Sword"]
+  links:
+  - target_room: 55
+    entrance: 126
+    teleporter: [65, 0]
+    access: []
+- name: Ice Pyramid 2F North Corridor
+  id: 60
+  game_objects:
+  - name: "Ice Pyramid 2F - North Corridor Glass Door Box"
+    object_id: 0x59
+    type: "Box"
+    access: ["Sword"]
+  links:
+  - target_room: 55
+    entrance: 127
+    teleporter: [66, 0]
+    access: []
+  - target_room: 62
+    entrance: 128
+    teleporter: [68, 0]
+    access: []
+- name: Ice Pyramid 3F Two Boxes Room
+  id: 61
+  game_objects:
+  - name: "Ice Pyramid 3F - Staircase Dead End Left Box"
+    object_id: 0x5E
+    type: "Box"
+    access: []
+  - name: "Ice Pyramid 3F - Staircase Dead End Right Box"
+    object_id: 0x5F
+    type: "Box"
+    access: []
+  links:
+  - target_room: 56
+    entrance: 129
+    teleporter: [69, 0]
+    access: []
+- name: Ice Pyramid 3F Main Loop
+  id: 62
+  game_objects:
+  - name: "Ice Pyramid 3F - Inner Room North Box"
+    object_id: 0x5C
+    type: "Box"
+    access: []
+  - name: "Ice Pyramid 3F - Inner Room South Box"
+    object_id: 0x5D
+    type: "Box"
+    access: []
+  - name: "Ice Pyramid 3F - East Alcove Box"
+    object_id: 0x60
+    type: "Box"
+    access: []
+  - name: "Ice Pyramid 3F - Leapfrog Box"
+    object_id: 0x61
+    type: "Box"
+    access: []
+  - name: "Ice Pyramid 3F Statue"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["IcePyramid3FStatue"]
+    access: ["Sword"]
+  links:
+  - target_room: 60
+    entrance: 130
+    teleporter: [70, 0]
+    access: []
+  - target_room: 63
+    access: ["IcePyramid3FStatue"]
+- name: Ice Pyramid 3F Blocked Room
+  id: 63
+  game_objects: []
+  links:
+  - target_room: 64
+    entrance: 131
+    teleporter: [71, 0]
+    access: []
+  - target_room: 62
+    access: ["IcePyramid3FStatue"]
+- name: Ice Pyramid 4F Main Loop
+  id: 64
+  game_objects: []
+  links:
+  - target_room: 66
+    entrance: 133
+    teleporter: [73, 0]
+    access: []
+  - target_room: 63
+    entrance: 132
+    teleporter: [72, 0]
+    access: []
+  - target_room: 65
+    access: ["IcePyramid4FStatue"]
+- name: Ice Pyramid 4F Treasure Room
+  id: 65
+  game_objects:
+  - name: "Ice Pyramid 4F - Chest"
+    object_id: 0x0C
+    type: "Chest"
+    access: []
+  - name: "Ice Pyramid 4F - Northwest Box"
+    object_id: 0x62
+    type: "Box"
+    access: []
+  - name: "Ice Pyramid 4F - West Left Box"
+    object_id: 0x63
+    type: "Box"
+    access: []
+  - name: "Ice Pyramid 4F - West Right Box"
+    object_id: 0x64
+    type: "Box"
+    access: []
+  - name: "Ice Pyramid 4F - South Left Box"
+    object_id: 0x65
+    type: "Box"
+    access: []
+  - name: "Ice Pyramid 4F - South Right Box"
+    object_id: 0x66
+    type: "Box"
+    access: []
+  - name: "Ice Pyramid 4F - East Left Box"
+    object_id: 0x67
+    type: "Box"
+    access: []
+  - name: "Ice Pyramid 4F - East Right Box"
+    object_id: 0x68
+    type: "Box"
+    access: []
+  - name: "Ice Pyramid 4F Statue"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["IcePyramid4FStatue"]
+    access: ["Sword"]
+  links:
+  - target_room: 64
+    access: ["IcePyramid4FStatue"]
+- name: Ice Pyramid 5F Leap of Faith Room
+  id: 66
+  game_objects:
+  - name: "Ice Pyramid 5F - Glass Door Left Box"
+    object_id: 0x69
+    type: "Box"
+    access: ["IcePyramid5FStatue"]
+  - name: "Ice Pyramid 5F - West Ledge Box"
+    object_id: 0x6A
+    type: "Box"
+    access: []
+  - name: "Ice Pyramid 5F - South Shelf Box"
+    object_id: 0x6B
+    type: "Box"
+    access: []
+  - name: "Ice Pyramid 5F - South Leapfrog Box"
+    object_id: 0x6C
+    type: "Box"
+    access: []
+  - name: "Ice Pyramid 5F - Glass Door Right Box"
+    object_id: 0x6D
+    type: "Box"
+    access: ["IcePyramid5FStatue"]
+  - name: "Ice Pyramid 5F - North Box"
+    object_id: 0x6E
+    type: "Box"
+    access: []
+  links:
+  - target_room: 64
+    entrance: 134
+    teleporter: [74, 0]
+    access: []
+  - target_room: 65
+    access: []
+  - target_room: 53
+    access: ["Bomb", "Claw", "Sword"]
+- name: Ice Pyramid 5F Stairs to Ice Golem
+  id: 67
+  game_objects:
+  - name: "Ice Pyramid 5F Statue"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["IcePyramid5FStatue"]
+    access: ["Sword"]
+  links:
+  - target_room: 69
+    entrance: 137
+    teleporter: [76, 0]
+    access: []
+  - target_room: 65
+    access: []
+  - target_room: 70
+    entrance: 136
+    teleporter: [75, 0]
+    access: []
+- name: Ice Pyramid Climbing Wall Room Lower Space
+  id: 68
+  game_objects: []
+  links:
+  - target_room: 53
+    entrance: 139
+    teleporter: [78, 0]
+    access: []
+  - target_room: 69
+    access: ["Claw"]
+- name: Ice Pyramid Climbing Wall Room Upper Space
+  id: 69
+  game_objects: []
+  links:
+  - target_room: 67
+    entrance: 140
+    teleporter: [79, 0]
+    access: []
+  - target_room: 68
+    access: ["Claw"]
+- name: Ice Pyramid Ice Golem Room
+  id: 70
+  game_objects:
+  - name: "Ice Pyramid 6F - Ice Golem Chest"
+    object_id: 0x0E
+    type: "Chest"
+    access: ["IceGolem"]
+  - name: "Ice Golem"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["IceGolem"]
+    access: []
+  links:
+  - target_room: 67
+    entrance: 141
+    teleporter: [80, 0]
+    access: []
+  - target_room: 66
+    access: []
+- name: Spencer Waterfall
+  id: 71
+  game_objects: []
+  links:
+  - target_room: 72
+    entrance: 143
+    teleporter: [81, 0]
+    access: []
+  - target_room: 40
+    entrance: 145
+    teleporter: [82, 0]
+    access: []
+  - target_room: 40
+    entrance: 148
+    teleporter: [83, 0]
+    access: []
+- name: Spencer Cave Normal Main
+  id: 72
+  game_objects:
+  - name: "Spencer's Cave - Box"
+    object_id: 0x6F
+    type: "Box"
+    access: ["Claw"]
+  - name: "Spencer's Cave - Spencer"
+    object_id: 8
+    type: "NPC"
+    access: []
+  - name: "Spencer's Cave - Locked Chest"
+    object_id: 13
+    type: "NPC"
+    access: ["VenusKey"]
+  links:
+  - target_room: 71
+    entrance: 150
+    teleporter: [85, 0]
+    access: []
+- name: Spencer Cave Normal South Ledge
+  id: 73
+  game_objects:
+  - name: "Collapse Spencer's Cave"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["ShipLiberated"]
+    access: ["MegaGrenade"]
+  links:
+  - target_room: 227
+    entrance: 151
+    teleporter: [7, 6]
+    access: []
+  - target_room: 203
+    access: ["MegaGrenade"]
+#  - target_room: 72  # access to spencer?
+#    access: ["MegaGrenade"]
+- name: Spencer Cave Caved In Main Loop
+  id: 203
+  game_objects: []
+  links:
+  - target_room: 73
+    access: []
+  - target_room: 207
+    entrance: 156
+    teleporter: [36, 8]
+    access: ["MobiusCrest"]
+  - target_room: 204
+    access: ["Claw"]
+  - target_room: 205
+    access: ["Bomb"]
+- name: Spencer Cave Caved In Waters
+  id: 204
+  game_objects:
+  - name: "Bomb Libra Block"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["SpencerCaveLibraBlockBombed"]
+    access: ["MegaGrenade", "Claw"]
+  links:
+  - target_room: 203
+    access: ["Claw"]
+- name: Spencer Cave Caved In Libra Nook
+  id: 205
+  game_objects: []
+  links:
+  - target_room: 206
+    entrance: 153
+    teleporter: [33, 8]
+    access: ["LibraCrest"]
+- name: Spencer Cave Caved In Libra Corridor
+  id: 206
+  game_objects: []
+  links:
+  - target_room: 205
+    entrance: 154
+    teleporter: [34, 8]
+    access: ["LibraCrest"]
+  - target_room: 207
+    access: ["SpencerCaveLibraBlockBombed"]
+- name: Spencer Cave Caved In Mobius Chest
+  id: 207
+  game_objects:
+  - name: "Spencer's Cave - Mobius Chest"
+    object_id: 0x0F
+    type: "Chest"
+    access: []
+  links:
+  - target_room: 203
+    entrance: 155
+    teleporter: [35, 8]
+    access: ["MobiusCrest"]
+  - target_room: 206
+    access: ["Bomb"]
+- name: Wintry Temple Outer Room
+  id: 74
+  game_objects: []
+  links:
+  - target_room: 223
+    entrance: 157
+    teleporter: [15, 6]
+    access: []
+- name: Wintry Temple Inner Room
+  id: 75
+  game_objects:
+  - name: "Wintry Temple - West Box"
+    object_id: 0x70
+    type: "Box"
+    access: []
+  - name: "Wintry Temple - North Box"
+    object_id: 0x71
+    type: "Box"
+    access: []
+  links:
+  - target_room: 92
+    entrance: 158
+    teleporter: [62, 8]
+    access: ["GeminiCrest"]
+- name: Fireburg Upper Plaza
+  id: 76
+  game_objects: []
+  links:
+  - target_room: 224
+    entrance: 159
+    teleporter: [9, 6]
+    access: []
+  - target_room: 80
+    entrance: 163
+    teleporter: [91, 0]
+    access: []
+  - target_room: 77
+    entrance: 164
+    teleporter: [98, 8] # original value [16, 2]
+    access: []
+  - target_room: 82
+    entrance: 165
+    teleporter: [96, 8] # original value [17, 2]
+    access: []
+  - target_room: 208
+    access: ["Claw"]
+- name: Fireburg Lower Plaza
+  id: 208
+  game_objects:
+  - name: "Fireburg - Hidden Tunnel Box"
+    object_id: 0x74
+    type: "Box"
+    access: []
+  links:
+  - target_room: 76
+    access: ["Claw"]
+  - target_room: 78
+    entrance: 166
+    teleporter: [11, 8]
+    access: ["MultiKey"]
+- name: Reuben's House
+  id: 77
+  game_objects:
+  - name: "Fireburg - Reuben's House Arion"
+    object_id: 14
+    type: "NPC"
+    access: ["ReubenDadSaved"]
+  - name: "Reuben Companion"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Reuben1"]
+    access: []
+  - name: "Fireburg - Reuben's House Box"
+    object_id: 0x75
+    type: "Box"
+    access: []
+  links:
+  - target_room: 76
+    entrance: 167
+    teleporter: [98, 3]
+    access: []
+- name: GrenadeMan's House
+  id: 78
+  game_objects:
+  - name: "Fireburg - Locked House Man"
+    object_id: 12
+    type: "NPC"
+    access: []
+  links:
+  - target_room: 208
+    entrance: 168
+    teleporter: [9, 8]
+    access: ["MultiKey"]
+  - target_room: 79
+    entrance: 169
+    teleporter: [93, 0]
+    access: []
+- name: GrenadeMan's Mobius Room
+  id: 79
+  game_objects: []
+  links:
+  - target_room: 78
+    entrance: 170
+    teleporter: [94, 0]
+    access: []
+  - target_room: 161
+    entrance: 171
+    teleporter: [54, 8]
+    access: ["MobiusCrest"]
+- name: Fireburg Vendor House
+  id: 80
+  game_objects:
+  - name: "Fireburg - Vendor"
+    object_id: 11
+    type: "NPC"
+    access: []
+  links:
+  - target_room: 76
+    entrance: 172
+    teleporter: [95, 0]
+    access: []
+  - target_room: 81
+    entrance: 173
+    teleporter: [96, 0]
+    access: []
+- name: Fireburg Gemini Room
+  id: 81
+  game_objects: []
+  links:
+  - target_room: 80
+    entrance: 174
+    teleporter: [97, 0]
+    access: []
+  - target_room: 43
+    entrance: 175
+    teleporter: [45, 8]
+    access: ["GeminiCrest"]
+- name: Fireburg Hotel Lobby
+  id: 82
+  game_objects:
+  - name: "Fireburg - Tristam"
+    object_id: 10
+    type: "NPC"
+    access: ["Tristam", "TristamBoneItemGiven"]
+  links:
+  - target_room: 76
+    entrance: 177
+    teleporter: [99, 3]
+    access: []
+  - target_room: 83
+    entrance: 176
+    teleporter: [213, 0]
+    access: []
+- name: Fireburg Hotel Beds
+  id: 83
+  game_objects: []
+  links:
+  - target_room: 82
+    entrance: 178
+    teleporter: [214, 0]
+    access: []
+- name: Mine Exterior North West Platforms
+  id: 84
+  game_objects: []
+  links:
+  - target_room: 224
+    entrance: 179
+    teleporter: [98, 0]
+    access: []
+  - target_room: 88
+    entrance: 181
+    teleporter: [20, 2]
+    access: ["Bomb"]
+  - target_room: 85
+    access: ["Claw"]
+  - target_room: 86
+    access: ["Claw"]
+  - target_room: 87
+    access: ["Claw"]
+- name: Mine Exterior Central Ledge
+  id: 85
+  game_objects: []
+  links:
+  - target_room: 90
+    entrance: 183
+    teleporter: [22, 2]
+    access: ["Bomb"]
+  - target_room: 84
+    access: ["Claw"]
+- name: Mine Exterior North Ledge
+  id: 86
+  game_objects: []
+  links:
+  - target_room: 89
+    entrance: 182
+    teleporter: [21, 2]
+    access: ["Bomb"]
+  - target_room: 85
+    access: ["Claw"]
+- name: Mine Exterior South East Platforms
+  id: 87
+  game_objects:
+  - name: "Jinn"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Jinn"]
+    access: []
+  links:
+  - target_room: 91
+    entrance: 180
+    teleporter: [99, 0]
+    access: ["Jinn"]
+  - target_room: 86
+    access: []
+  - target_room: 85
+    access: ["Claw"]
+- name: Mine Parallel Room
+  id: 88
+  game_objects:
+  - name: "Mine - Parallel Room West Box"
+    object_id: 0x77
+    type: "Box"
+    access: ["Claw"]
+  - name: "Mine - Parallel Room East Box"
+    object_id: 0x78
+    type: "Box"
+    access: ["Claw"]
+  links:
+  - target_room: 84
+    entrance: 185
+    teleporter: [100, 3]
+    access: []
+- name: Mine Crescent Room
+  id: 89
+  game_objects:
+  - name: "Mine - Crescent Room Chest"
+    object_id: 0x10
+    type: "Chest"
+    access: []
+  links:
+  - target_room: 86
+    entrance: 186
+    teleporter: [101, 3]
+    access: []
+- name: Mine Climbing Room
+  id: 90
+  game_objects:
+  - name: "Mine - Glitchy Collision Cave Box"
+    object_id: 0x76
+    type: "Box"
+    access: ["Claw"]
+  links:
+  - target_room: 85
+    entrance: 187
+    teleporter: [102, 3]
+    access: []
+- name: Mine Cliff
+  id: 91
+  game_objects:
+  - name: "Mine - Cliff Southwest Box"
+    object_id: 0x79
+    type: "Box"
+    access: []
+  - name: "Mine - Cliff Northwest Box"
+    object_id: 0x7A
+    type: "Box"
+    access: []
+  - name: "Mine - Cliff Northeast Box"
+    object_id: 0x7B
+    type: "Box"
+    access: []
+  - name: "Mine - Cliff Southeast Box"
+    object_id: 0x7C
+    type: "Box"
+    access: []
+  - name: "Mine - Reuben"
+    object_id: 7
+    type: "NPC"
+    access: ["Reuben1"]
+  - name: "Reuben's dad Saved"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["ReubenDadSaved"]
+    access: ["MegaGrenade"]
+  links:
+  - target_room: 87
+    entrance: 188
+    teleporter: [100, 0]
+    access: []
+- name: Sealed Temple
+  id: 92
+  game_objects:
+  - name: "Sealed Temple - West Box"
+    object_id: 0x7D
+    type: "Box"
+    access: []
+  - name: "Sealed Temple - East Box"
+    object_id: 0x7E
+    type: "Box"
+    access: []
+  links:
+  - target_room: 224
+    entrance: 190
+    teleporter: [16, 6]
+    access: []
+  - target_room: 75
+    entrance: 191
+    teleporter: [63, 8]
+    access: ["GeminiCrest"]
+- name: Volcano Base
+  id: 93
+  game_objects:
+  - name: "Volcano - Base Chest"
+    object_id: 0x11
+    type: "Chest"
+    access: []
+  - name: "Volcano - Base West Box"
+    object_id: 0x7F
+    type: "Box"
+    access: []
+  - name: "Volcano - Base East Left Box"
+    object_id: 0x80
+    type: "Box"
+    access: []
+  - name: "Volcano - Base East Right Box"
+    object_id: 0x81
+    type: "Box"
+    access: []
+  links:
+  - target_room: 224
+    entrance: 192
+    teleporter: [103, 0]
+    access: []
+  - target_room: 98
+    entrance: 196
+    teleporter: [31, 8]
+    access: []
+  - target_room: 96
+    entrance: 197
+    teleporter: [30, 8]
+    access: []
+- name: Volcano Top Left
+  id: 94
+  game_objects:
+  - name: "Volcano - Medusa Chest"
+    object_id: 0x12
+    type: "Chest"
+    access: ["Medusa"]
+  - name: "Medusa"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Medusa"]
+    access: []
+  - name: "Volcano - Behind Medusa Box"
+    object_id: 0x82
+    type: "Box"
+    access: []
+  links:
+  - target_room: 209
+    entrance: 199
+    teleporter: [26, 8]
+    access: []
+- name: Volcano Top Right
+  id: 95
+  game_objects:
+  - name: "Volcano - Top of the Volcano Left Box"
+    object_id: 0x83
+    type: "Box"
+    access: []
+  - name: "Volcano - Top of the Volcano Right Box"
+    object_id: 0x84
+    type: "Box"
+    access: []
+  links:
+  - target_room: 99
+    entrance: 200
+    teleporter: [79, 8]
+    access: []
+- name: Volcano Right Path
+  id: 96
+  game_objects:
+  - name: "Volcano - Right Path Box"
+    object_id: 0x87
+    type: "Box"
+    access: []
+  links:
+  - target_room: 93
+    entrance: 201
+    teleporter: [15, 8]
+    access: []
+- name: Volcano Left Path
+  id: 98
+  game_objects:
+  - name: "Volcano - Left Path Box"
+    object_id: 0x86
+    type: "Box"
+    access: []
+  links:
+  - target_room: 93
+    entrance: 204
+    teleporter: [27, 8]
+    access: []
+  - target_room: 99
+    entrance: 202
+    teleporter: [25, 2]
+    access: []
+  - target_room: 209
+    entrance: 203
+    teleporter: [26, 2]
+    access: []
+- name: Volcano Cross Left-Right
+  id: 99
+  game_objects: []
+  links:
+  - target_room: 95
+    entrance: 206
+    teleporter: [29, 8]
+    access: []
+  - target_room: 98
+    entrance: 205
+    teleporter: [103, 3]
+    access: []
+- name: Volcano Cross Right-Left
+  id: 209
+  game_objects:
+  - name: "Volcano - Crossover Section Box"
+    object_id: 0x85
+    type: "Box"
+    access: []
+  links:
+  - target_room: 98
+    entrance: 208
+    teleporter: [104, 3]
+    access: []
+  - target_room: 94
+    entrance: 207
+    teleporter: [28, 8]
+    access: []
+- name: Lava Dome Inner Ring Main Loop
+  id: 100
+  game_objects:
+  - name: "Lava Dome - Exterior Caldera Near Switch Cliff Box"
+    object_id: 0x88
+    type: "Box"
+    access: []
+  - name: "Lava Dome - Exterior South Cliff Box"
+    object_id: 0x89
+    type: "Box"
+    access: []
+  links:
+  - target_room: 224
+    entrance: 209
+    teleporter: [104, 0]
+    access: []
+  - target_room: 113
+    entrance: 211
+    teleporter: [105, 0]
+    access: []
+  - target_room: 114
+    entrance: 212
+    teleporter: [106, 0]
+    access: []
+  - target_room: 116
+    entrance: 213
+    teleporter: [108, 0]
+    access: []
+  - target_room: 118
+    entrance: 214
+    teleporter: [111, 0]
+    access: []
+- name: Lava Dome Inner Ring Center Ledge
+  id: 101
+  game_objects:
+  - name: "Lava Dome - Exterior Center Dropoff Ledge Box"
+    object_id: 0x8A
+    type: "Box"
+    access: []
+  links:
+  - target_room: 115
+    entrance: 215
+    teleporter: [107, 0]
+    access: []
+  - target_room: 100
+    access: ["Claw"]
+- name: Lava Dome Inner Ring Plate Ledge
+  id: 102
+  game_objects:
+  - name: "Lava Dome Plate"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["LavaDomePlate"]
+    access: []
+  links:
+  - target_room: 119
+    entrance: 216
+    teleporter: [109, 0]
+    access: []
+- name: Lava Dome Inner Ring Upper Ledge West
+  id: 103
+  game_objects: []
+  links:
+  - target_room: 111
+    entrance: 219
+    teleporter: [112, 0]
+    access: []
+  - target_room: 108
+    entrance: 220
+    teleporter: [113, 0]
+    access: []
+  - target_room: 104
+    access: ["Claw"]
+  - target_room: 100
+    access: ["Claw"]
+- name: Lava Dome Inner Ring Upper Ledge East
+  id: 104
+  game_objects: []
+  links:
+  - target_room: 110
+    entrance: 218
+    teleporter: [110, 0]
+    access: []
+  - target_room: 103
+    access: ["Claw"]
+- name: Lava Dome Inner Ring Big Door Ledge
+  id: 105
+  game_objects: []
+  links:
+  - target_room: 107
+    entrance: 221
+    teleporter: [114, 0]
+    access: []
+  - target_room: 121
+    entrance: 222
+    teleporter: [29, 2]
+    access: ["LavaDomePlate"]
+- name: Lava Dome Inner Ring Tiny Bottom Ledge
+  id: 106
+  game_objects:
+  - name: "Lava Dome - Exterior Dead End Caldera Box"
+    object_id: 0x8B
+    type: "Box"
+    access: []
+  links:
+  - target_room: 120
+    entrance: 226
+    teleporter: [115, 0]
+    access: []
+- name: Lava Dome Jump Maze II
+  id: 107
+  game_objects:
+  - name: "Lava Dome - Gold Maze Northwest Box"
+    object_id: 0x8C
+    type: "Box"
+    access: []
+  - name: "Lava Dome - Gold Maze Southwest Box"
+    object_id: 0xF6
+    type: "Box"
+    access: []
+  - name: "Lava Dome - Gold Maze Northeast Box"
+    object_id: 0xF7
+    type: "Box"
+    access: []
+  - name: "Lava Dome - Gold Maze North Box"
+    object_id: 0xF8
+    type: "Box"
+    access: []
+  - name: "Lava Dome - Gold Maze Center Box"
+    object_id: 0xF9
+    type: "Box"
+    access: []
+  - name: "Lava Dome - Gold Maze Southeast Box"
+    object_id: 0xFA
+    type: "Box"
+    access: []
+  links:
+  - target_room: 105
+    entrance: 227
+    teleporter: [116, 0]
+    access: []
+  - target_room: 108
+    entrance: 228
+    teleporter: [119, 0]
+    access: []
+  - target_room: 120
+    entrance: 229
+    teleporter: [120, 0]
+    access: []
+- name: Lava Dome Up-Down Corridor
+  id: 108
+  game_objects: []
+  links:
+  - target_room: 107
+    entrance: 231
+    teleporter: [118, 0]
+    access: []
+  - target_room: 103
+    entrance: 230
+    teleporter: [117, 0]
+    access: []
+- name: Lava Dome Jump Maze I
+  id: 109
+  game_objects:
+  - name: "Lava Dome - Bare Maze Leapfrog Alcove North Box"
+    object_id: 0x8D
+    type: "Box"
+    access: []
+  - name: "Lava Dome - Bare Maze Leapfrog Alcove South Box"
+    object_id: 0x8E
+    type: "Box"
+    access: []
+  - name: "Lava Dome - Bare Maze Center Box"
+    object_id: 0x8F
+    type: "Box"
+    access: []
+  - name: "Lava Dome - Bare Maze Southwest Box"
+    object_id: 0x90
+    type: "Box"
+    access: []
+  links:
+  - target_room: 118
+    entrance: 232
+    teleporter: [121, 0]
+    access: []
+  - target_room: 111
+    entrance: 233
+    teleporter: [122, 0]
+    access: []
+- name: Lava Dome Pointless Room
+  id: 110
+  game_objects: []
+  links:
+  - target_room: 104
+    entrance: 234
+    teleporter: [123, 0]
+    access: []
+- name: Lava Dome Lower Moon Helm Room
+  id: 111
+  game_objects:
+  - name: "Lava Dome - U-Bend Room North Box"
+    object_id: 0x92
+    type: "Box"
+    access: []
+  - name: "Lava Dome - U-Bend Room South Box"
+    object_id: 0x93
+    type: "Box"
+    access: []
+  links:
+  - target_room: 103
+    entrance: 235
+    teleporter: [124, 0]
+    access: []
+  - target_room: 109
+    entrance: 236
+    teleporter: [125, 0]
+    access: []
+- name: Lava Dome Moon Helm Room
+  id: 112
+  game_objects:
+  - name: "Lava Dome - Beyond River Room Chest"
+    object_id: 0x13
+    type: "Chest"
+    access: []
+  - name: "Lava Dome - Beyond River Room Box"
+    object_id: 0x91
+    type: "Box"
+    access: []
+  links:
+  - target_room: 117
+    entrance: 237
+    teleporter: [126, 0]
+    access: []
+- name: Lava Dome Three Jumps Room
+  id: 113
+  game_objects:
+  - name: "Lava Dome - Three Jumps Room Box"
+    object_id: 0x96
+    type: "Box"
+    access: []
+  links:
+  - target_room: 100
+    entrance: 238
+    teleporter: [127, 0]
+    access: []
+- name: Lava Dome Life Chest Room Lower Ledge
+  id: 114
+  game_objects:
+  - name: "Lava Dome - Gold Bar Room Boulder Chest"
+    object_id: 0x1C
+    type: "Chest"
+    access: ["MegaGrenade"]
+  links:
+  - target_room: 100
+    entrance: 239
+    teleporter: [128, 0]
+    access: []
+  - target_room: 115
+    access: ["Claw"]
+- name: Lava Dome Life Chest Room Upper Ledge
+  id: 115
+  game_objects:
+  - name: "Lava Dome - Gold Bar Room Leapfrog Alcove Box West"
+    object_id: 0x94
+    type: "Box"
+    access: []
+  - name: "Lava Dome - Gold Bar Room Leapfrog Alcove Box East"
+    object_id: 0x95
+    type: "Box"
+    access: []
+  links:
+  - target_room: 101
+    entrance: 240
+    teleporter: [129, 0]
+    access: []
+  - target_room: 114
+    access: ["Claw"]
+- name: Lava Dome Big Jump Room Main Area
+  id: 116
+  game_objects:
+  - name: "Lava Dome - Lava River Room North Box"
+    object_id: 0x98
+    type: "Box"
+    access: []
+  - name: "Lava Dome - Lava River Room East Box"
+    object_id: 0x99
+    type: "Box"
+    access: []
+  - name: "Lava Dome - Lava River Room South Box"
+    object_id: 0x9A
+    type: "Box"
+    access: []
+  links:
+  - target_room: 100
+    entrance: 241
+    teleporter: [133, 0]
+    access: []
+  - target_room: 119
+    entrance: 243
+    teleporter: [132, 0]
+    access: []
+  - target_room: 117
+    access: ["MegaGrenade"]
+- name: Lava Dome Big Jump Room MegaGrenade Area
+  id: 117
+  game_objects: []
+  links:
+  - target_room: 112
+    entrance: 242
+    teleporter: [131, 0]
+    access: []
+  - target_room: 116
+    access: ["Bomb"]
+- name: Lava Dome Split Corridor
+  id: 118
+  game_objects:
+  - name: "Lava Dome - Split Corridor Box"
+    object_id: 0x97
+    type: "Box"
+    access: []
+  links:
+  - target_room: 109
+    entrance: 244
+    teleporter: [130, 0]
+    access: []
+  - target_room: 100
+    entrance: 245
+    teleporter: [134, 0]
+    access: []
+- name: Lava Dome Plate Corridor
+  id: 119
+  game_objects: []
+  links:
+  - target_room: 102
+    entrance: 246
+    teleporter: [135, 0]
+    access: []
+  - target_room: 116
+    entrance: 247
+    teleporter: [137, 0]
+    access: []
+- name: Lava Dome Four Boxes Stairs
+  id: 120
+  game_objects:
+  - name: "Lava Dome - Caldera Stairway West Left Box"
+    object_id: 0x9B
+    type: "Box"
+    access: []
+  - name: "Lava Dome - Caldera Stairway West Right Box"
+    object_id: 0x9C
+    type: "Box"
+    access: []
+  - name: "Lava Dome - Caldera Stairway East Left Box"
+    object_id: 0x9D
+    type: "Box"
+    access: []
+  - name: "Lava Dome - Caldera Stairway East Right Box"
+    object_id: 0x9E
+    type: "Box"
+    access: []
+  links:
+  - target_room: 107
+    entrance: 248
+    teleporter: [136, 0]
+    access: []
+  - target_room: 106
+    entrance: 249
+    teleporter: [16, 0]
+    access: []
+- name: Lava Dome Hydra Room
+  id: 121
+  game_objects:
+  - name: "Lava Dome - Dualhead Hydra Chest"
+    object_id: 0x14
+    type: "Chest"
+    access: ["DualheadHydra"]
+  - name: "Dualhead Hydra"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["DualheadHydra"]
+    access: []
+  - name: "Lava Dome - Hydra Room Northwest Box"
+    object_id: 0x9F
+    type: "Box"
+    access: []
+  - name: "Lava Dome - Hydra Room Southweast Box"
+    object_id: 0xA0
+    type: "Box"
+    access: []
+  links:
+  - target_room: 105
+    entrance: 250
+    teleporter: [105, 3]
+    access: []
+  - target_room: 122
+    entrance: 251
+    teleporter: [138, 0]
+    access: ["DualheadHydra"]
+- name: Lava Dome Escape Corridor
+  id: 122
+  game_objects: []
+  links:
+  - target_room: 121
+    entrance: 253
+    teleporter: [139, 0]
+    access: []
+- name: Rope Bridge
+  id: 123
+  game_objects:
+  - name: "Rope Bridge - West Box"
+    object_id: 0xA3
+    type: "Box"
+    access: []
+  - name: "Rope Bridge - East Box"
+    object_id: 0xA4
+    type: "Box"
+    access: []
+  links:
+  - target_room: 226
+    entrance: 255
+    teleporter: [140, 0]
+    access: []
+- name: Alive Forest
+  id: 124
+  game_objects:
+  - name: "Alive Forest - Tree Stump Chest"
+    object_id: 0x15
+    type: "Chest"
+    access: ["Axe"]
+  - name: "Alive Forest - Near Entrance Box"
+    object_id: 0xA5
+    type: "Box"
+    access: ["Axe"]
+  - name: "Alive Forest - After Bridge Box"
+    object_id: 0xA6
+    type: "Box"
+    access: ["Axe"]
+  - name: "Alive Forest - Gemini Stump Box"
+    object_id: 0xA7
+    type: "Box"
+    access: ["Axe"]
+  links:
+  - target_room: 226
+    entrance: 272
+    teleporter: [142, 0]
+    access: ["Axe"]
+  - target_room: 21
+    entrance: 275
+    teleporter: [64, 8]
+    access: ["LibraCrest", "Axe"]
+  - target_room: 22
+    entrance: 276
+    teleporter: [65, 8]
+    access: ["GeminiCrest", "Axe"]
+  - target_room: 23
+    entrance: 277
+    teleporter: [66, 8]
+    access: ["MobiusCrest", "Axe"]
+  - target_room: 125
+    entrance: 274
+    teleporter: [143, 0]
+    access: ["Axe"]
+- name: Giant Tree 1F Main Area
+  id: 125
+  game_objects:
+  - name: "Giant Tree 1F - Northwest Box"
+    object_id: 0xA8
+    type: "Box"
+    access: []
+  - name: "Giant Tree 1F - Southwest Box"
+    object_id: 0xA9
+    type: "Box"
+    access: []
+  - name: "Giant Tree 1F - Center Box"
+    object_id: 0xAA
+    type: "Box"
+    access: []
+  - name: "Giant Tree 1F - East Box"
+    object_id: 0xAB
+    type: "Box"
+    access: []
+  links:
+  - target_room: 124
+    entrance: 278
+    teleporter: [56, 1] # [49, 8] script restored if no map shuffling
+    access: []
+  - target_room: 202
+    access: ["DragonClaw"]
+- name: Giant Tree 1F North Island
+  id: 202
+  game_objects: []
+  links:
+  - target_room: 127
+    entrance: 280
+    teleporter: [144, 0]
+    access: []
+  - target_room: 125
+    access: ["DragonClaw"]
+- name: Giant Tree 1F Central Island
+  id: 126
+  game_objects: []
+  links:
+  - target_room: 202
+    access: ["DragonClaw"]
+- name: Giant Tree 2F Main Lobby
+  id: 127
+  game_objects:
+  - name: "Giant Tree 2F - North Box"
+    object_id: 0xAC
+    type: "Box"
+    access: []
+  links:
+  - target_room: 126
+    access: ["DragonClaw"]
+  - target_room: 125
+    entrance: 281
+    teleporter: [145, 0]
+    access: []
+  - target_room: 133
+    entrance: 283
+    teleporter: [149, 0]
+    access: []
+  - target_room: 129
+    access: ["DragonClaw"]
+- name: Giant Tree 2F West Ledge
+  id: 128
+  game_objects:
+  - name: "Giant Tree 2F - Dropdown Ledge Box"
+    object_id: 0xAE
+    type: "Box"
+    access: []
+  links:
+  - target_room: 140
+    entrance: 284
+    teleporter: [147, 0]
+    access: ["Sword"]
+  - target_room: 130
+    access: ["DragonClaw"]
+- name: Giant Tree 2F Lower Area
+  id: 129
+  game_objects:
+  - name: "Giant Tree 2F - South Box"
+    object_id: 0xAD
+    type: "Box"
+    access: []
+  links:
+  - target_room: 130
+    access: ["Claw"]
+  - target_room: 131
+    access: ["Claw"]
+- name: Giant Tree 2F Central Island
+  id: 130
+  game_objects: []
+  links:
+  - target_room: 129
+    access: ["Claw"]
+  - target_room: 135
+    entrance: 282
+    teleporter: [146, 0]
+    access: ["Sword"]
+- name: Giant Tree 2F East Ledge
+  id: 131
+  game_objects: []
+  links:
+  - target_room: 129
+    access: ["Claw"]
+  - target_room: 130
+    access: ["DragonClaw"]
+- name: Giant Tree 2F Meteor Chest Room
+  id: 132
+  game_objects:
+  - name: "Giant Tree 2F - Gidrah Chest"
+    object_id: 0x16
+    type: "Chest"
+    access: []
+  links:
+  - target_room: 133
+    entrance: 285
+    teleporter: [148, 0]
+    access: []
+- name: Giant Tree 2F Mushroom Room
+  id: 133
+  game_objects:
+  - name: "Giant Tree 2F - Mushroom Tunnel West Box"
+    object_id: 0xAF
+    type: "Box"
+    access: ["Axe"]
+  - name: "Giant Tree 2F - Mushroom Tunnel East Box"
+    object_id: 0xB0
+    type: "Box"
+    access: ["Axe"]
+  links:
+  - target_room: 127
+    entrance: 286
+    teleporter: [150, 0]
+    access: ["Axe"]
+  - target_room: 132
+    entrance: 287
+    teleporter: [151, 0]
+    access: ["Axe", "Gidrah"]
+- name: Giant Tree 3F Central Island
+  id: 135
+  game_objects:
+  - name: "Giant Tree 3F - Central Island Box"
+    object_id: 0xB3
+    type: "Box"
+    access: []
+  links:
+  - target_room: 130
+    entrance: 288
+    teleporter: [152, 0]
+    access: []
+  - target_room: 136
+    access: ["Claw"]
+  - target_room: 137
+    access: ["DragonClaw"]
+- name: Giant Tree 3F Central Area
+  id: 136
+  game_objects:
+  - name: "Giant Tree 3F - Center North Box"
+    object_id: 0xB1
+    type: "Box"
+    access: []
+  - name: "Giant Tree 3F - Center West Box"
+    object_id: 0xB2
+    type: "Box"
+    access: []
+  links:
+  - target_room: 135
+    access: ["Claw"]
+  - target_room: 127
+    access: []
+  - target_room: 131
+    access: []
+- name: Giant Tree 3F Lower Ledge
+  id: 137
+  game_objects: []
+  links:
+  - target_room: 135
+    access: ["DragonClaw"]
+  - target_room: 142
+    entrance: 289
+    teleporter: [153, 0]
+    access: ["Sword"]
+- name: Giant Tree 3F West Area
+  id: 138
+  game_objects:
+  - name: "Giant Tree 3F - West Side Box"
+    object_id: 0xB4
+    type: "Box"
+    access: []
+  links:
+  - target_room: 128
+    access: []
+  - target_room: 210
+    entrance: 290
+    teleporter: [154, 0]
+    access: []
+- name: Giant Tree 3F Middle Up Island
+  id: 139
+  game_objects: []
+  links:
+  - target_room: 136
+    access: ["Claw"]
+- name: Giant Tree 3F West Platform
+  id: 140
+  game_objects: []
+  links:
+  - target_room: 139
+    access: ["Claw"]
+  - target_room: 141
+    access: ["Claw"]
+  - target_room: 128
+    entrance: 291
+    teleporter: [155, 0]
+    access: []
+- name: Giant Tree 3F North Ledge
+  id: 141
+  game_objects: []
+  links:
+  - target_room: 143
+    entrance: 292
+    teleporter: [156, 0]
+    access: ["Sword"]
+  - target_room: 139
+    access: ["Claw"]
+  - target_room: 136
+    access: ["Claw"]
+- name: Giant Tree Worm Room Upper Ledge
+  id: 142
+  game_objects:
+  - name: "Giant Tree 3F - Worm Room North Box"
+    object_id: 0xB5
+    type: "Box"
+    access: ["Axe"]
+  - name: "Giant Tree 3F - Worm Room South Box"
+    object_id: 0xB6
+    type: "Box"
+    access: ["Axe"]
+  links:
+  - target_room: 137
+    entrance: 293
+    teleporter: [157, 0]
+    access: ["Axe"]
+  - target_room: 210
+    access: ["Axe", "Claw"]
+- name: Giant Tree Worm Room Lower Ledge
+  id: 210
+  game_objects: []
+  links:
+  - target_room: 138
+    entrance: 294
+    teleporter: [158, 0]
+    access: []
+- name: Giant Tree 4F Lower Floor
+  id: 143
+  game_objects: []
+  links:
+  - target_room: 141
+    entrance: 295
+    teleporter: [159, 0]
+    access: []
+  - target_room: 148
+    entrance: 296
+    teleporter: [160, 0]
+    access: []
+  - target_room: 148
+    entrance: 297
+    teleporter: [161, 0]
+    access: []
+  - target_room: 147
+    entrance: 298
+    teleporter: [162, 0]
+    access: ["Sword"]
+- name: Giant Tree 4F Middle Floor
+  id: 144
+  game_objects:
+  - name: "Giant Tree 4F - Highest Platform North Box"
+    object_id: 0xB7
+    type: "Box"
+    access: []
+  - name: "Giant Tree 4F - Highest Platform South Box"
+    object_id: 0xB8
+    type: "Box"
+    access: []
+  links:
+  - target_room: 149
+    entrance: 299
+    teleporter: [163, 0]
+    access: []
+  - target_room: 145
+    access: ["Claw"]
+  - target_room: 146
+    access: ["DragonClaw"]
+- name: Giant Tree 4F Upper Floor
+  id: 145
+  game_objects: []
+  links:
+  - target_room: 150
+    entrance: 300
+    teleporter: [164, 0]
+    access: ["Sword"]
+  - target_room: 144
+    access: ["Claw"]
+- name: Giant Tree 4F South Ledge
+  id: 146
+  game_objects:
+  - name: "Giant Tree 4F - Hook Ledge Northeast Box"
+    object_id: 0xB9
+    type: "Box"
+    access: []
+  - name: "Giant Tree 4F - Hook Ledge Southwest Box"
+    object_id: 0xBA
+    type: "Box"
+    access: []
+  links:
+  - target_room: 144
+    access: ["DragonClaw"]
+- name: Giant Tree 4F Slime Room East Area
+  id: 147
+  game_objects:
+  - name: "Giant Tree 4F - East Slime Room Box"
+    object_id: 0xBC
+    type: "Box"
+    access: ["Axe"]
+  links:
+  - target_room: 143
+    entrance: 304
+    teleporter: [168, 0]
+    access: []
+- name: Giant Tree 4F Slime Room West Area
+  id: 148
+  game_objects: []
+  links:
+  - target_room: 143
+    entrance: 303
+    teleporter: [167, 0]
+    access: ["Axe"]
+  - target_room: 143
+    entrance: 302
+    teleporter: [166, 0]
+    access: ["Axe"]
+  - target_room: 149
+    access: ["Axe", "Claw"]
+- name: Giant Tree 4F Slime Room Platform
+  id: 149
+  game_objects:
+  - name: "Giant Tree 4F - West Slime Room Box"
+    object_id: 0xBB
+    type: "Box"
+    access: []
+  links:
+  - target_room: 144
+    entrance: 301
+    teleporter: [165, 0]
+    access: []
+  - target_room: 148
+    access: ["Claw"]
+- name: Giant Tree 5F Lower Area
+  id: 150
+  game_objects:
+  - name: "Giant Tree 5F - Northwest Left Box"
+    object_id: 0xBD
+    type: "Box"
+    access: []
+  - name: "Giant Tree 5F - Northwest Right Box"
+    object_id: 0xBE
+    type: "Box"
+    access: []
+  - name: "Giant Tree 5F - South Left Box"
+    object_id: 0xBF
+    type: "Box"
+    access: []
+  - name: "Giant Tree 5F - South Right Box"
+    object_id: 0xC0
+    type: "Box"
+    access: []
+  links:
+  - target_room: 145
+    entrance: 305
+    teleporter: [169, 0]
+    access: []
+  - target_room: 151
+    access: ["Claw"]
+  - target_room: 143
+    access: []
+- name: Giant Tree 5F Gidrah Platform
+  id: 151
+  game_objects:
+  - name: "Gidrah"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Gidrah"]
+    access: []
+  links:
+  - target_room: 150
+    access: ["Claw"]
+- name: Kaidge Temple Lower Ledge
+  id: 152
+  game_objects: []
+  links:
+  - target_room: 226
+    entrance: 307
+    teleporter: [18, 6]
+    access: []
+  - target_room: 153
+    access: ["Claw"]
+- name: Kaidge Temple Upper Ledge
+  id: 153
+  game_objects:
+  - name: "Kaidge Temple - Box"
+    object_id: 0xC1
+    type: "Box"
+    access: []
+  links:
+  - target_room: 185
+    entrance: 308
+    teleporter: [71, 8]
+    access: ["MobiusCrest"]
+  - target_room: 152
+    access: ["Claw"]
+- name: Windhole Temple
+  id: 154
+  game_objects:
+  - name: "Windhole Temple - Box"
+    object_id: 0xC2
+    type: "Box"
+    access: []
+  links:
+  - target_room: 226
+    entrance: 309
+    teleporter: [173, 0]
+    access: []
+- name: Mount Gale
+  id: 155
+  game_objects:
+  - name: "Mount Gale - Dullahan Chest"
+    object_id: 0x17
+    type: "Chest"
+    access: ["DragonClaw", "Dullahan"]
+  - name: "Dullahan"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Dullahan"]
+    access: ["DragonClaw"]
+  - name: "Mount Gale - East Box"
+    object_id: 0xC3
+    type: "Box"
+    access: ["DragonClaw"]
+  - name: "Mount Gale - West Box"
+    object_id: 0xC4
+    type: "Box"
+    access: []
+  links:
+  - target_room: 226
+    entrance: 310
+    teleporter: [174, 0]
+    access: []
+- name: Windia
+  id: 156
+  game_objects: []
+  links:
+  - target_room: 226
+    entrance: 312
+    teleporter: [10, 6]
+    access: []
+  - target_room: 157
+    entrance: 320
+    teleporter: [30, 5]
+    access: []
+  - target_room: 163
+    entrance: 321
+    teleporter: [97, 8]
+    access: []
+  - target_room: 165
+    entrance: 322
+    teleporter: [32, 5]
+    access: []
+  - target_room: 159
+    entrance: 323
+    teleporter: [176, 4]
+    access: []
+  - target_room: 160
+    entrance: 324
+    teleporter: [177, 4]
+    access: []
+- name: Otto's House
+  id: 157
+  game_objects:
+  - name: "Otto"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["RainbowBridge"]
+    access: ["ThunderRock"]
+  links:
+  - target_room: 156
+    entrance: 327
+    teleporter: [106, 3]
+    access: []
+  - target_room: 158
+    entrance: 326
+    teleporter: [33, 2]
+    access: []
+- name: Otto's Attic
+  id: 158
+  game_objects:
+  - name: "Windia - Otto's Attic Box"
+    object_id: 0xC5
+    type: "Box"
+    access: []
+  links:
+  - target_room: 157
+    entrance: 328
+    teleporter: [107, 3]
+    access: []
+- name: Windia Kid House
+  id: 159
+  game_objects: []
+  links:
+  - target_room: 156
+    entrance: 329
+    teleporter: [178, 0]
+    access: []
+  - target_room: 161
+    entrance: 330
+    teleporter: [180, 0]
+    access: []
+- name: Windia Old People House
+  id: 160
+  game_objects: []
+  links:
+  - target_room: 156
+    entrance: 331
+    teleporter: [179, 0]
+    access: []
+  - target_room: 162
+    entrance: 332
+    teleporter: [181, 0]
+    access: []
+- name: Windia Kid House Basement
+  id: 161
+  game_objects: []
+  links:
+  - target_room: 159
+    entrance: 333
+    teleporter: [182, 0]
+    access: []
+  - target_room: 79
+    entrance: 334
+    teleporter: [44, 8]
+    access: ["MobiusCrest"]
+- name: Windia Old People House Basement
+  id: 162
+  game_objects:
+  - name: "Windia - Mobius Basement West Box"
+    object_id: 0xC8
+    type: "Box"
+    access: []
+  - name: "Windia - Mobius Basement East Box"
+    object_id: 0xC9
+    type: "Box"
+    access: []
+  links:
+  - target_room: 160
+    entrance: 335
+    teleporter: [183, 0]
+    access: []
+  - target_room: 186
+    entrance: 336
+    teleporter: [43, 8]
+    access: ["MobiusCrest"]
+- name: Windia Inn Lobby
+  id: 163
+  game_objects: []
+  links:
+  - target_room: 156
+    entrance: 338
+    teleporter: [135, 3]
+    access: []
+  - target_room: 164
+    entrance: 337
+    teleporter: [102, 8]
+    access: []
+- name: Windia Inn Beds
+  id: 164
+  game_objects:
+  - name: "Windia - Inn Bedroom North Box"
+    object_id: 0xC6
+    type: "Box"
+    access: []
+  - name: "Windia - Inn Bedroom South Box"
+    object_id: 0xC7
+    type: "Box"
+    access: []
+  - name: "Windia - Kaeli"
+    object_id: 15
+    type: "NPC"
+    access: ["Kaeli2"]
+  links:
+  - target_room: 163
+    entrance: 339
+    teleporter: [216, 0]
+    access: []
+- name: Windia Vendor House
+  id: 165
+  game_objects:
+  - name: "Windia - Vendor"
+    object_id: 16
+    type: "NPC"
+    access: []
+  links:
+  - target_room: 156
+    entrance: 340
+    teleporter: [108, 3]
+    access: []
+- name: Pazuzu Tower 1F Main Lobby
+  id: 166
+  game_objects:
+  - name: "Pazuzu 1F"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Pazuzu1F"]
+    access: []
+  links:
+  - target_room: 226
+    entrance: 341
+    teleporter: [184, 0]
+    access: []
+  - target_room: 180
+    entrance: 345
+    teleporter: [185, 0]
+    access: []
+- name: Pazuzu Tower 1F Boxes Room
+  id: 167
+  game_objects:
+  - name: "Pazuzu's Tower 1F - Descent Bomb Wall West Box"
+    object_id: 0xCA
+    type: "Box"
+    access: ["Bomb"]
+  - name: "Pazuzu's Tower 1F - Descent Bomb Wall Center Box"
+    object_id: 0xCB
+    type: "Box"
+    access: ["Bomb"]
+  - name: "Pazuzu's Tower 1F - Descent Bomb Wall East Box"
+    object_id: 0xCC
+    type: "Box"
+    access: ["Bomb"]
+  - name: "Pazuzu's Tower 1F - Descent Box"
+    object_id: 0xCD
+    type: "Box"
+    access: []
+  links:
+  - target_room: 169
+    entrance: 349
+    teleporter: [187, 0]
+    access: []
+- name: Pazuzu Tower 1F Southern Platform
+  id: 168
+  game_objects: []
+  links:
+  - target_room: 169
+    entrance: 346
+    teleporter: [186, 0]
+    access: []
+  - target_room: 166
+    access: ["DragonClaw"]
+- name: Pazuzu 2F
+  id: 169
+  game_objects:
+  - name: "Pazuzu's Tower 2F - East Room West Box"
+    object_id: 0xCE
+    type: "Box"
+    access: []
+  - name: "Pazuzu's Tower 2F - East Room East Box"
+    object_id: 0xCF
+    type: "Box"
+    access: []
+  - name: "Pazuzu 2F Lock"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Pazuzu2FLock"]
+    access: ["Axe"]
+  - name: "Pazuzu 2F"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Pazuzu2F"]
+    access: ["Bomb"]
+  links:
+  - target_room: 183
+    entrance: 350
+    teleporter: [188, 0]
+    access: []
+  - target_room: 168
+    entrance: 351
+    teleporter: [189, 0]
+    access: []
+  - target_room: 167
+    entrance: 352
+    teleporter: [190, 0]
+    access: []
+  - target_room: 171
+    entrance: 353
+    teleporter: [191, 0]
+    access: []
+- name: Pazuzu 3F Main Room
+  id: 170
+  game_objects:
+  - name: "Pazuzu's Tower 3F - Guest Room West Box"
+    object_id: 0xD0
+    type: "Box"
+    access: []
+  - name: "Pazuzu's Tower 3F - Guest Room East Box"
+    object_id: 0xD1
+    type: "Box"
+    access: []
+  - name: "Pazuzu 3F"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Pazuzu3F"]
+    access: []
+  links:
+  - target_room: 180
+    entrance: 356
+    teleporter: [192, 0]
+    access: []
+  - target_room: 181
+    entrance: 357
+    teleporter: [193, 0]
+    access: []
+- name: Pazuzu 3F Central Island
+  id: 171
+  game_objects: []
+  links:
+  - target_room: 169
+    entrance: 360
+    teleporter: [194, 0]
+    access: []
+  - target_room: 170
+    access: ["DragonClaw"]
+  - target_room: 172
+    access: ["DragonClaw"]
+- name: Pazuzu 3F Southern Island
+  id: 172
+  game_objects:
+  - name: "Pazuzu's Tower 3F - South Ledge Box"
+    object_id: 0xD2
+    type: "Box"
+    access: []
+  links:
+  - target_room: 173
+    entrance: 361
+    teleporter: [195, 0]
+    access: []
+  - target_room: 171
+    access: ["DragonClaw"]
+- name: Pazuzu 4F
+  id: 173
+  game_objects:
+  - name: "Pazuzu's Tower 4F - Elevator West Box"
+    object_id: 0xD3
+    type: "Box"
+    access: ["Bomb"]
+  - name: "Pazuzu's Tower 4F - Elevator East Box"
+    object_id: 0xD4
+    type: "Box"
+    access: ["Bomb"]
+  - name: "Pazuzu's Tower 4F - East Storage Room Chest"
+    object_id: 0x18
+    type: "Chest"
+    access: []
+  - name: "Pazuzu 4F Lock"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Pazuzu4FLock"]
+    access: ["Axe"]
+  - name: "Pazuzu 4F"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Pazuzu4F"]
+    access: ["Bomb"]
+  links:
+  - target_room: 183
+    entrance: 362
+    teleporter: [196, 0]
+    access: []
+  - target_room: 184
+    entrance: 363
+    teleporter: [197, 0]
+    access: []
+  - target_room: 172
+    entrance: 364
+    teleporter: [198, 0]
+    access: []
+  - target_room: 175
+    entrance: 365
+    teleporter: [199, 0]
+    access: []
+- name: Pazuzu 5F Pazuzu Loop
+  id: 174
+  game_objects:
+  - name: "Pazuzu 5F"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Pazuzu5F"]
+    access: []
+  links:
+  - target_room: 181
+    entrance: 368
+    teleporter: [200, 0]
+    access: []
+  - target_room: 182
+    entrance: 369
+    teleporter: [201, 0]
+    access: []
+- name: Pazuzu 5F Upper Loop
+  id: 175
+  game_objects:
+  - name: "Pazuzu's Tower 5F - North Box"
+    object_id: 0xD5
+    type: "Box"
+    access: []
+  - name: "Pazuzu's Tower 5F - South Box"
+    object_id: 0xD6
+    type: "Box"
+    access: []
+  links:
+  - target_room: 173
+    entrance: 370
+    teleporter: [202, 0]
+    access: []
+  - target_room: 176
+    entrance: 371
+    teleporter: [203, 0]
+    access: []
+- name: Pazuzu 6F
+  id: 176
+  game_objects:
+  - name: "Pazuzu's Tower 6F - Box"
+    object_id: 0xD7
+    type: "Box"
+    access: []
+  - name: "Pazuzu's Tower 6F - Chest"
+    object_id: 0x19
+    type: "Chest"
+    access: []
+  - name: "Pazuzu 6F Lock"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Pazuzu6FLock"]
+    access: ["Bomb", "Axe"]
+  - name: "Pazuzu 6F"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Pazuzu6F"]
+    access: ["Bomb"]
+  links:
+  - target_room: 184
+    entrance: 374
+    teleporter: [204, 0]
+    access: []
+  - target_room: 175
+    entrance: 375
+    teleporter: [205, 0]
+    access: []
+  - target_room: 178
+    entrance: 376
+    teleporter: [206, 0]
+    access: []
+  - target_room: 178
+    entrance: 377
+    teleporter: [207, 0]
+    access: []
+- name: Pazuzu 7F Southwest Area
+  id: 177
+  game_objects: []
+  links:
+  - target_room: 182
+    entrance: 380
+    teleporter: [26, 0]
+    access: []
+  - target_room: 178
+    access: ["DragonClaw"]
+- name: Pazuzu 7F Rest of the Area
+  id: 178
+  game_objects: []
+  links:
+  - target_room: 177
+    access: ["DragonClaw"]
+  - target_room: 176
+    entrance: 381
+    teleporter: [27, 0]
+    access: []
+  - target_room: 176
+    entrance: 382
+    teleporter: [28, 0]
+    access: []
+  - target_room: 179
+    access: ["DragonClaw", "Pazuzu2FLock", "Pazuzu4FLock", "Pazuzu6FLock", "Pazuzu1F", "Pazuzu2F", "Pazuzu3F", "Pazuzu4F", "Pazuzu5F", "Pazuzu6F"]
+- name: Pazuzu 7F Sky Room
+  id: 179
+  game_objects:
+  - name: "Pazuzu's Tower 7F - Pazuzu Chest"
+    object_id: 0x1A
+    type: "Chest"
+    access: []
+  - name: "Pazuzu"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Pazuzu"]
+    access: ["Pazuzu2FLock", "Pazuzu4FLock", "Pazuzu6FLock", "Pazuzu1F", "Pazuzu2F", "Pazuzu3F", "Pazuzu4F", "Pazuzu5F", "Pazuzu6F"]
+  links:
+  - target_room: 178
+    access: ["DragonClaw"]
+- name: Pazuzu 1F to 3F
+  id: 180
+  game_objects: []
+  links:
+  - target_room: 166
+    entrance: 385
+    teleporter: [29, 0]
+    access: []
+  - target_room: 170
+    entrance: 386
+    teleporter: [30, 0]
+    access: []
+- name: Pazuzu 3F to 5F
+  id: 181
+  game_objects: []
+  links:
+  - target_room: 170
+    entrance: 387
+    teleporter: [40, 0]
+    access: []
+  - target_room: 174
+    entrance: 388
+    teleporter: [41, 0]
+    access: []
+- name: Pazuzu 5F to 7F
+  id: 182
+  game_objects: []
+  links:
+  - target_room: 174
+    entrance: 389
+    teleporter: [38, 0]
+    access: []
+  - target_room: 177
+    entrance: 390
+    teleporter: [39, 0]
+    access: []
+- name: Pazuzu 2F to 4F
+  id: 183
+  game_objects: []
+  links:
+  - target_room: 169
+    entrance: 391
+    teleporter: [21, 0]
+    access: []
+  - target_room: 173
+    entrance: 392
+    teleporter: [22, 0]
+    access: []
+- name: Pazuzu 4F to 6F
+  id: 184
+  game_objects: []
+  links:
+  - target_room: 173
+    entrance: 393
+    teleporter: [2, 0]
+    access: []
+  - target_room: 176
+    entrance: 394
+    teleporter: [3, 0]
+    access: []
+- name: Light Temple
+  id: 185
+  game_objects:
+  - name: "Light Temple - Box"
+    object_id: 0xD8
+    type: "Box"
+    access: []
+  links:
+  - target_room: 230
+    entrance: 395
+    teleporter: [19, 6]
+    access: []
+  - target_room: 153
+    entrance: 396
+    teleporter: [70, 8]
+    access: ["MobiusCrest"]
+- name: Ship Dock
+  id: 186
+  game_objects:
+  - name: "Ship Dock Access"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["ShipDockAccess"]
+    access: []
+  links:
+  - target_room: 228
+    entrance: 399
+    teleporter: [17, 6]
+    access: []
+  - target_room: 162
+    entrance: 397
+    teleporter: [61, 8]
+    access: ["MobiusCrest"]
+- name: Mac Ship Deck
+  id: 187
+  game_objects:
+  - name: "Mac Ship Steering Wheel"
+    object_id: 00
+    type: "Trigger"
+    on_trigger: ["ShipSteeringWheel"]
+    access: []
+  - name: "Mac's Ship Deck - North Box"
+    object_id: 0xD9
+    type: "Box"
+    access: []
+  - name: "Mac's Ship Deck - Center Box"
+    object_id: 0xDA
+    type: "Box"
+    access: []
+  - name: "Mac's Ship Deck - South Box"
+    object_id: 0xDB
+    type: "Box"
+    access: []
+  links:
+  - target_room: 229
+    entrance: 400
+    teleporter: [37, 8]
+    access: []
+  - target_room: 188
+    entrance: 401
+    teleporter: [50, 8]
+    access: []
+  - target_room: 188
+    entrance: 402
+    teleporter: [51, 8]
+    access: []
+  - target_room: 188
+    entrance: 403
+    teleporter: [52, 8]
+    access: []
+  - target_room: 189
+    entrance: 404
+    teleporter: [53, 8]
+    access: []
+- name: Mac Ship B1 Outer Ring
+  id: 188
+  game_objects:
+  - name: "Mac's Ship B1 - Northwest Hook Platform Box"
+    object_id: 0xE4
+    type: "Box"
+    access: ["DragonClaw"]
+  - name: "Mac's Ship B1 - Center Hook Platform Box"
+    object_id: 0xE5
+    type: "Box"
+    access: ["DragonClaw"]
+  links:
+  - target_room: 187
+    entrance: 405
+    teleporter: [208, 0]
+    access: []
+  - target_room: 187
+    entrance: 406
+    teleporter: [175, 0]
+    access: []
+  - target_room: 187
+    entrance: 407
+    teleporter: [172, 0]
+    access: []
+  - target_room: 193
+    entrance: 408
+    teleporter: [88, 0]
+    access: []
+  - target_room: 193
+    access: []
+- name: Mac Ship B1 Square Room
+  id: 189
+  game_objects: []
+  links:
+  - target_room: 187
+    entrance: 409
+    teleporter: [141, 0]
+    access: []
+  - target_room: 192
+    entrance: 410
+    teleporter: [87, 0]
+    access: []
+- name: Mac Ship B1 Central Corridor
+  id: 190
+  game_objects:
+  - name: "Mac's Ship B1 - Central Corridor Box"
+    object_id: 0xE6
+    type: "Box"
+    access: []
+  links:
+  - target_room: 192
+    entrance: 413
+    teleporter: [86, 0]
+    access: []
+  - target_room: 191
+    entrance: 412
+    teleporter: [102, 0]
+    access: []
+  - target_room: 193
+    access: []
+- name: Mac Ship B2 South Corridor
+  id: 191
+  game_objects: []
+  links:
+  - target_room: 190
+    entrance: 415
+    teleporter: [55, 8]
+    access: []
+  - target_room: 194
+    entrance: 414
+    teleporter: [57, 1]
+    access: []
+- name: Mac Ship B2 North Corridor
+  id: 192
+  game_objects: []
+  links:
+  - target_room: 190
+    entrance: 416
+    teleporter: [56, 8]
+    access: []
+  - target_room: 189
+    entrance: 417
+    teleporter: [57, 8]
+    access: []
+- name: Mac Ship B2 Outer Ring
+  id: 193
+  game_objects:
+  - name: "Mac's Ship B2 - Barrel Room South Box"
+    object_id: 0xDF
+    type: "Box"
+    access: []
+  - name: "Mac's Ship B2 - Barrel Room North Box"
+    object_id: 0xE0
+    type: "Box"
+    access: []
+  - name: "Mac's Ship B2 - Southwest Room Box"
+    object_id: 0xE1
+    type: "Box"
+    access: []
+  - name: "Mac's Ship B2 - Southeast Room Box"
+    object_id: 0xE2
+    type: "Box"
+    access: []
+  links:
+  - target_room: 188
+    entrance: 418
+    teleporter: [58, 8]
+    access: []
+- name: Mac Ship B1 Mac Room
+  id: 194
+  game_objects:
+  - name: "Mac's Ship B1 - Mac Room Chest"
+    object_id: 0x1B
+    type: "Chest"
+    access: []
+  - name: "Captain Mac"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["ShipLoaned"]
+    access: ["CaptainCap"]
+  links:
+  - target_room: 191
+    entrance: 424
+    teleporter: [101, 0]
+    access: []
+- name: Doom Castle Corridor of Destiny
+  id: 195
+  game_objects: []
+  links:
+  - target_room: 201
+    entrance: 428
+    teleporter: [84, 0]
+    access: []
+  - target_room: 196
+    entrance: 429
+    teleporter: [35, 2]
+    access: []
+  - target_room: 197
+    entrance: 430
+    teleporter: [209, 0]
+    access: ["StoneGolem"]
+  - target_room: 198
+    entrance: 431
+    teleporter: [211, 0]
+    access: ["StoneGolem", "TwinheadWyvern"]
+  - target_room: 199
+    entrance: 432
+    teleporter: [13, 2]
+    access: ["StoneGolem", "TwinheadWyvern", "Zuh"]
+- name: Doom Castle Ice Floor
+  id: 196
+  game_objects:
+  - name: "Doom Castle 4F - Northwest Room Box"
+    object_id: 0xE7
+    type: "Box"
+    access: ["Sword", "DragonClaw"]
+  - name: "Doom Castle 4F - Southwest Room Box"
+    object_id: 0xE8
+    type: "Box"
+    access: ["Sword", "DragonClaw"]
+  - name: "Doom Castle 4F - Northeast Room Box"
+    object_id: 0xE9
+    type: "Box"
+    access: ["Sword"]
+  - name: "Doom Castle 4F - Southeast Room Box"
+    object_id: 0xEA
+    type: "Box"
+    access: ["Sword", "DragonClaw"]
+  - name: "Stone Golem"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["StoneGolem"]
+    access: ["Sword", "DragonClaw"]
+  links:
+  - target_room: 195
+    entrance: 433
+    teleporter: [109, 3]
+    access: []
+- name: Doom Castle Lava Floor
+  id: 197
+  game_objects:
+  - name: "Doom Castle 5F - North Left Box"
+    object_id: 0xEB
+    type: "Box"
+    access: ["DragonClaw"]
+  - name: "Doom Castle 5F - North Right Box"
+    object_id: 0xEC
+    type: "Box"
+    access: ["DragonClaw"]
+  - name: "Doom Castle 5F - South Left Box"
+    object_id: 0xED
+    type: "Box"
+    access: ["DragonClaw"]
+  - name: "Doom Castle 5F - South Right Box"
+    object_id: 0xEE
+    type: "Box"
+    access: ["DragonClaw"]
+  - name: "Twinhead Wyvern"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["TwinheadWyvern"]
+    access: ["DragonClaw"]
+  links:
+  - target_room: 195
+    entrance: 434
+    teleporter: [210, 0]
+    access: []
+- name: Doom Castle Sky Floor
+  id: 198
+  game_objects:
+  - name: "Doom Castle 6F - West Box"
+    object_id: 0xEF
+    type: "Box"
+    access: []
+  - name: "Doom Castle 6F - East Box"
+    object_id: 0xF0
+    type: "Box"
+    access: []
+  - name: "Zuh"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Zuh"]
+    access: ["DragonClaw"]
+  links:
+  - target_room: 195
+    entrance: 435
+    teleporter: [212, 0]
+    access: []
+  - target_room: 197
+    access: []
+- name: Doom Castle Hero Room
+  id: 199
+  game_objects:
+  - name: "Doom Castle Hero Chest 01"
+    object_id: 0xF2
+    type: "Chest"
+    access: []
+  - name: "Doom Castle Hero Chest 02"
+    object_id: 0xF3
+    type: "Chest"
+    access: []
+  - name: "Doom Castle Hero Chest 03"
+    object_id: 0xF4
+    type: "Chest"
+    access: []
+  - name: "Doom Castle Hero Chest 04"
+    object_id: 0xF5
+    type: "Chest"
+    access: []
+  links:
+  - target_room: 200
+    entrance: 436
+    teleporter: [54, 0]
+    access: []
+  - target_room: 195
+    entrance: 441
+    teleporter: [110, 3]
+    access: []
+- name: Doom Castle Dark King Room
+  id: 200
+  game_objects: []
+  links:
+  - target_room: 199
+    entrance: 442
+    teleporter: [52, 0]
+    access: []

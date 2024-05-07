@@ -29,12 +29,12 @@ def data_path(file_name: str):
 
 class UndertaleWeb(WebWorld):
     tutorials = [Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up the Archipelago Undertale software on your computer. This guide covers "
         "single-player, multiworld, and related software.",
         "English",
-        "undertale_en.md",
-        "undertale/en",
+        "setup_en.md",
+        "setup/en",
         ["Mewlif"]
     )]
 
@@ -47,13 +47,12 @@ class UndertaleWorld(World):
     """
     game = "Undertale"
     option_definitions = undertale_options
-    topology_present = True
     web = UndertaleWeb()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
-    data_version = 5
+    data_version = 7
 
     def _get_undertale_data(self):
         return {
@@ -64,6 +63,7 @@ class UndertaleWorld(World):
             "client_version": self.required_client_version,
             "race": self.multiworld.is_race,
             "route": self.multiworld.route_required[self.player].current_key,
+            "starting_area": self.multiworld.starting_area[self.player].current_key,
             "temy_armor_include": bool(self.multiworld.temy_include[self.player].value),
             "only_flakes": bool(self.multiworld.only_flakes[self.player].value),
             "no_equips": bool(self.multiworld.no_equips[self.player].value),
@@ -107,9 +107,6 @@ class UndertaleWorld(World):
             self.multiworld.push_precollected(self.create_item("ITEM"))
         self.multiworld.push_precollected(self.create_item("FIGHT"))
         self.multiworld.push_precollected(self.create_item("ACT"))
-        chosen_key_start = self.multiworld.per_slot_randoms[self.player].choice(["Ruins Key", "Snowdin Key", "Waterfall Key", "Hotland Key"])
-        self.multiworld.push_precollected(self.create_item(chosen_key_start))
-        itempool.remove(chosen_key_start)
         self.multiworld.push_precollected(self.create_item("MERCY"))
         if self.multiworld.route_required[self.player] == "genocide":
             itempool = [item for item in itempool if item != "Popato Chisps" and item != "Stained Apron" and
@@ -157,6 +154,10 @@ class UndertaleWorld(World):
                             if item == "Heart Locket" else item for item in itempool]
         if self.multiworld.only_flakes[self.player]:
             itempool = [item for item in itempool if item not in non_key_items]
+
+        starting_key = self.multiworld.starting_area[self.player].current_key.title() + " Key"
+        itempool.remove(starting_key)
+        self.multiworld.push_precollected(self.create_item(starting_key))
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
         exclusion_pool.update(exclusion_table[self.multiworld.route_required[self.player].current_key])
@@ -192,7 +193,7 @@ class UndertaleWorld(World):
     def create_regions(self):
         def UndertaleRegion(region_name: str, exits=[]):
             ret = Region(region_name, self.player, self.multiworld)
-            ret.locations = [UndertaleAdvancement(self.player, loc_name, loc_data.id, ret)
+            ret.locations += [UndertaleAdvancement(self.player, loc_name, loc_data.id, ret)
                              for loc_name, loc_data in advancement_table.items()
                              if loc_data.region == region_name and
                              (loc_name not in exclusion_table["NoStats"] or

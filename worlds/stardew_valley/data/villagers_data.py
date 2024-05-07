@@ -1,38 +1,65 @@
 from dataclasses import dataclass
-from typing import Set, List, FrozenSet, Tuple
-from .region_data import SVRegion
+from typing import List, Tuple, Optional, Dict, Callable, Set
+
+from ..mods.mod_data import ModNames
+from ..strings.food_names import Beverage
+from ..strings.generic_names import Generic
+from ..strings.region_names import Region, SVERegion, AlectoRegion, BoardingHouseRegion, LaceyRegion
+from ..strings.season_names import Season
+from ..strings.villager_names import NPC, ModNPC
 
 
 @dataclass(frozen=True)
 class Villager:
     name: str
     bachelor: bool
-    locations: Tuple[str]
+    locations: Tuple[str, ...]
     birthday: str
-    gifts: Tuple[str]
+    gifts: Tuple[str, ...]
     available: bool
+    mod_name: str
 
     def __repr__(self):
         return f"{self.name} [Bachelor: {self.bachelor}] [Available from start: {self.available}]" \
                f"(Locations: {self.locations} |" \
                f" Birthday: {self.birthday} |" \
-               f" Gifts: {self.gifts}) "
+               f" Gifts: {self.gifts}) |" \
+               f" Mod: {self.mod_name}"
 
 
-town = (SVRegion.town,)
-beach = (SVRegion.beach,)
-forest = (SVRegion.forest,)
-mountain = (SVRegion.mountain,)
-hospital = (SVRegion.hospital,)
-carpenter = (SVRegion.carpenter,)
-alex_house = (SVRegion.alex_house,)
-elliott_house = (SVRegion.elliott_house,)
-ranch = (SVRegion.ranch,)
-mines = (SVRegion.mines,)
-desert = (SVRegion.desert,)
-oasis = (SVRegion.desert,)
-sewers = (SVRegion.sewers,)
-island = (SVRegion.ginger_island,)
+town = (Region.town,)
+beach = (Region.beach,)
+forest = (Region.forest,)
+mountain = (Region.mountain,)
+hospital = (Region.hospital,)
+carpenter = (Region.carpenter,)
+alex_house = (Region.alex_house,)
+elliott_house = (Region.elliott_house,)
+ranch = (Region.ranch,)
+mines_dwarf_shop = (Region.mines_dwarf_shop,)
+desert = (Region.desert,)
+oasis = (Region.oasis,)
+sewers = (Region.sewer,)
+island = (Region.island_east,)
+secret_woods = (Region.secret_woods,)
+wizard_tower = (Region.wizard_tower,)
+
+# Stardew Valley Expanded Locations
+adventurer = (Region.adventurer_guild,)
+highlands = (SVERegion.highlands_outside,)
+bluemoon = (SVERegion.blue_moon_vineyard,)
+aurora = (SVERegion.aurora_vineyard,)
+museum = (Region.museum,)
+jojamart = (Region.jojamart,)
+railroad = (Region.railroad,)
+junimo = (SVERegion.junimo_woods,)
+
+# Stray Locations
+witch_swamp = (Region.witch_swamp,)
+witch_attic = (AlectoRegion.witch_attic,)
+hat_house = (LaceyRegion.hat_house,)
+the_lost_valley = (BoardingHouseRegion.the_lost_valley,)
+boarding_house = (BoardingHouseRegion.boarding_house_first,)
 
 golden_pumpkin = ("Golden Pumpkin",)
 # magic_rock_candy = ("Magic Rock Candy",)
@@ -176,7 +203,7 @@ mead = ("Mead",)
 pale_ale = ("Pale Ale",)
 parsnip = ("Parsnip",)
 # parsnip_soup = ("Parsnip Soup",)
-pina_colada = ("Piña Colada",)
+pina_colada = (Beverage.pina_colada,)
 pam_loves = beer + cactus_fruit + glazed_yams + mead + pale_ale + parsnip + pina_colada  # | parsnip_soup
 # fried_calamari = ("Fried Calamari",)
 pierre_loves = ()  # fried_calamari
@@ -202,49 +229,268 @@ super_cucumber = ("Super Cucumber",)
 void_essence = ("Void Essence",)
 wizard_loves = purple_mushroom + solar_essence + super_cucumber + void_essence
 
+# Custom NPC Items and Loves
+
+blueberry = ("Blueberry",)
+chanterelle = ("Chanterelle",)
+garlic = ("Garlic",)
+omelet = ("Omelet",)
+wild_plum = ("Wild Plum",)
+rhubarb = ("Rhubarb",)
+fried_mushroom = ("Fried Mushroom",)
+eggplant_parmesan = ("Eggplant Parmesan",)
+maki_roll = ("Maki Roll",)
+red_plate = ("Red Plate",)
+baked_fish = ("Baked Fish",)
+cheese = ("Cheese",)
+eel = ("Eel",)
+flounder = ("Flounder",)
+salmon = ("Salmon",)
+sashimi = ("Sashimi",)
+tuna = ("Tuna",)
+energy_tonic = ("Energy Tonic",)
+kale = ("Kale",)
+muscle_remedy = ("Muscle Remedy",)
+vegetable_medley = ("Vegetable Medley",)
+trilobite = ("Trilobite",)
+golden_mask = ("Golden Mask",)
+rainbow_shell = ("Rainbow Shell",)
+blue_jazz = ("Blue Jazz",)
+honey = ("Honey",)
+apple = ("Apple",)
+dwarf_gadget = ("Dwarf Gadget",)
+dwarvish_helm = ("Dwarvish Helm",)
+fire_quartz = ("Fire Quartz",)
+jasper = ("Jasper",)
+opal = ("Opal",)
+rare_disc = ("Rare Disc",)
+ancient_doll = ("Ancient Doll",)
+elvish_jewelry = ("Elvish Jewelry",)
+dinosaur_egg = ("Dinosaur Egg",)
+strange_doll = ("Strange Doll",)
+joja_cola = ("Joja Cola",)
+hashbrowns = ("Hashbrowns",)
+jelly = ("Jelly",)
+ghost_crystal = ("Ghost Crystal",)
+prehistoric_scapula = ("Prehistoric Scapula",)
+cherry = ("Cherry",)
+golden_relic = ("Golden Relic",)
+
+ayeisha_loves = blackberry_cobbler + blueberry + chanterelle + emerald + omelet + sweet_pea + wild_plum + rhubarb + \
+                fried_mushroom + eggplant_parmesan
+shiko_loves = maki_roll + red_plate + ruby + salad + wine
+wellwick_loves = fairy_rose + solar_essence + void_essence + wine
+mister_ginger_loves = baked_fish + cheese + eel + flounder + goat_cheese + lobster + salmon + sashimi + tuna
+delores_loves = aquamarine + blueberry + energy_tonic + green_tea + kale + muscle_remedy + red_plate + \
+                roots_platter + salad + vegetable_medley
+yoba_loves = golden_mask + rainbow_shell
+eugene_loves = blue_jazz + fairy_rose + green_tea + honey + poppy + poppyseed_muffin + \
+               salad + summer_spangle + sunflower + tulip
+jasper_loves = apple + blueberry + diamond + dwarf_gadget + dwarvish_helm + fire_quartz + jasper + \
+               miners_treat + opal + rare_disc
+juna_loves = ancient_doll + elvish_jewelry + dinosaur_egg + strange_doll + joja_cola + hashbrowns + pancakes + \
+             pink_cake + jelly + ghost_crystal + prehistoric_scapula + cherry
+
+glazed_butterfish = ("Glazed Butterfish",)
+aged_blue_moon_wine = ("Aged Blue Moon Wine",)
+blue_moon_wine = ("Blue Moon Wine",)
+daggerfish = ("Daggerfish",)
+gemfish = ("Gemfish",)
+green_mushroom = ("Green Mushroom",)
+monster_mushroom = ("Monster Mushroom",)
+swirl_stone = ("Swirl Stone",)
+torpedo_trout = ("Torpedo Trout",)
+void_shard = ("Void Shard",)
+ornate_treasure_chest = ("Ornate Treasure Chest",)
+frog_legs = ("Frog Legs",)
+void_delight = ("Void Delight",)
+void_pebble = ("Void Pebble",)
+void_salmon_sushi = ("Void Salmon Sushi",)
+puppyfish = ("Puppyfish",)
+butterfish = ("Butterfish",)
+king_salmon = ("King Salmon",)
+frog = ("Frog",)
+kittyfish = ("Kittyfish",)
+big_bark_burger = ("Big Bark Burger",)
+starfruit = ("Starfruit",)
+bruschetta = ("Brushetta",)
+apricot = ("Apricot",)
+ocean_stone = ("Ocean Stone",)
+fairy_stone = ("Fairy Stone",)
+lunarite = ("Lunarite",)
+bean_hotpot = ("Bean Hotpot",)
+petrified_slime = ("Petrified Slime",)
+ornamental_fan = ("Ornamental Fan",)
+ancient_sword = ("Ancient Sword",)
+star_shards = ("Star Shards",)
+life_elixir = ("Life Elixir",)
+juice = ("Juice",)
+lobster_bisque = ("Lobster Bisque",)
+chowder = ("Chowder",)
+goat_milk = ("Goat Milk",)
+maple_syrup = ("Maple Syrup",)
+cookie = ("Cookie",)
+blueberry_tart = ("Blueberry Tart",)
+
+claire_loves = green_tea + sunflower + energy_tonic + bruschetta + apricot + ocean_stone + glazed_butterfish
+lance_loves = aged_blue_moon_wine + daggerfish + gemfish + golden_pumpkin + \
+              green_mushroom + monster_mushroom + swirl_stone + torpedo_trout + tropical_curry + void_shard + \
+              ornate_treasure_chest
+olivia_loves = wine + chocolate_cake + pink_cake + golden_mask + golden_relic + \
+               blue_moon_wine + aged_blue_moon_wine
+sophia_loves = fairy_rose + fairy_stone + puppyfish
+victor_loves = spaghetti + battery_pack + duck_feather + lunarite + \
+               aged_blue_moon_wine + blue_moon_wine + butterfish
+andy_loves = pearl + beer + mead + pale_ale + farmers_lunch + glazed_butterfish + butterfish + \
+             king_salmon + blackberry_cobbler
+gunther_loves = bean_hotpot + petrified_slime + salmon_dinner + elvish_jewelry + ornamental_fan + \
+                dinosaur_egg + rare_disc + ancient_sword + dwarvish_helm + dwarf_gadget + golden_mask + golden_relic + \
+                star_shards
+marlon_loves = roots_platter + life_elixir + aged_blue_moon_wine + void_delight
+martin_loves = juice + ice_cream + big_bark_burger
+morgan_loves = iridium_bar + void_egg + void_mayonnaise + frog + kittyfish
+morris_loves = lobster_bisque + chowder + truffle_oil + star_shards + aged_blue_moon_wine
+scarlett_loves = goat_cheese + duck_feather + goat_milk + cherry + maple_syrup + honey + \
+                 chocolate_cake + pink_cake + jade + glazed_yams  # actually large milk but meh
+susan_loves = pancakes + chocolate_cake + pink_cake + ice_cream + cookie + pumpkin_pie + rhubarb_pie + \
+              blueberry_tart + blackberry_cobbler + cranberry_candy + red_plate
+
 all_villagers: List[Villager] = []
+villager_modifications_by_mod: Dict[str, Dict[str, Callable[[str, Villager], Villager]]] = {}
 
 
 def villager(name: str, bachelor: bool, locations: Tuple[str, ...], birthday: str, gifts: Tuple[str, ...],
-             available: bool) -> Villager:
-    npc = Villager(name, bachelor, locations, birthday, gifts, available)
+             available: bool, mod_name: Optional[str] = None) -> Villager:
+    npc = Villager(name, bachelor, locations, birthday, gifts, available, mod_name)
     all_villagers.append(npc)
     return npc
 
 
-josh = villager("Alex", True, town + alex_house, "Summer", universal_loves + complete_breakfast + salmon_dinner, True)
-elliott = villager("Elliott", True, town + beach + elliott_house, "Fall", universal_loves + elliott_loves, True)
-harvey = villager("Harvey", True, town + hospital, "Winter", universal_loves + harvey_loves, True)
-sam = villager("Sam", True, town, "Summer", universal_loves + sam_loves, True)
-sebastian = villager("Sebastian", True, carpenter, "Winter", universal_loves + sebastian_loves, True)
-shane = villager("Shane", True, ranch, "Spring", universal_loves + shane_loves, True)
-best_girl = villager("Abigail", True, town, "Fall", universal_loves + abigail_loves, True)
-emily = villager("Emily", True, town, "Spring", universal_loves + emily_loves, True)
-hoe = villager("Haley", True, town, "Spring", universal_loves_no_prismatic_shard + haley_loves, True)
-leah = villager("Leah", True, forest, "Winter", universal_loves + leah_loves, True)
-nerd = villager("Maru", True, carpenter, "Summer", universal_loves + maru_loves, True)
-penny = villager("Penny", True, town, "Fall", universal_loves_no_rabbit_foot + penny_loves, True)
-caroline = villager("Caroline", False, town, "Winter", universal_loves + caroline_loves, True)
-clint = villager("Clint", False, town, "Winter", universal_loves + clint_loves, True)
-demetrius = villager("Demetrius", False, carpenter, "Summer", universal_loves + demetrius_loves, True)
-dwarf = villager("Dwarf", False, mines, "Summer", universal_loves + dwarf_loves, False)
-gilf = villager("Evelyn", False, town, "Winter", universal_loves + evelyn_loves, True)
-boomer = villager("George", False, town, "Fall", universal_loves + george_loves, True)
-gus = villager("Gus", False, town, "Summer", universal_loves + gus_loves, True)
-jas = villager("Jas", False, ranch, "Summer", universal_loves + jas_loves, True)
-jodi = villager("Jodi", False, town, "Fall", universal_loves + jodi_loves, True)
-kent = villager("Kent", False, town, "Spring", universal_loves + kent_loves, False)
-krobus = villager("Krobus", False, sewers, "Winter", universal_loves + krobus_loves, False)
-leo = villager("Leo", False, island, "Summer", universal_loves + leo_loves, False)
-lewis = villager("Lewis", False, town, "Spring", universal_loves + lewis_loves, True)
-linus = villager("Linus", False, mountain, "Winter", universal_loves + linus_loves, True)
-marnie = villager("Marnie", False, ranch, "Fall", universal_loves + marnie_loves, True)
-pam = villager("Pam", False, town, "Spring", universal_loves + pam_loves, True)
-pierre = villager("Pierre", False, town, "Spring", universal_loves + pierre_loves, True)
-milf = villager("Robin", False, carpenter, "Fall", universal_loves + robin_loves, True)
-sandy = villager("Sandy", False, oasis, "Fall", universal_loves + sandy_loves, False)
-vincent = villager("Vincent", False, town, "Spring", universal_loves + vincent_loves, True)
-willy = villager("Willy", False, beach, "Summer", universal_loves + willy_loves, True)
-wizard = villager("Wizard", False, forest, "Winter", universal_loves + wizard_loves, True)
+def adapt_wizard_to_sve(mod_name: str, npc: Villager):
+    if npc.mod_name:
+        mod_name = npc.mod_name
+    # The wizard leaves his tower on sunday, for like 1 hour... Good enough to meet him!
+    return Villager(npc.name, True, npc.locations + forest, npc.birthday, npc.gifts, npc.available, mod_name)
 
-all_villagers_by_name = {item.name: item for item in all_villagers}
+
+def register_villager_modification(mod_name: str, npc: Villager, modification_function):
+    if mod_name not in villager_modifications_by_mod:
+        villager_modifications_by_mod[mod_name] = {}
+    villager_modifications_by_mod[mod_name][npc.name] = modification_function
+
+
+josh = villager(NPC.alex, True, town + alex_house, Season.summer, universal_loves + complete_breakfast + salmon_dinner, True)
+elliott = villager(NPC.elliott, True, town + beach + elliott_house, Season.fall, universal_loves + elliott_loves, True)
+harvey = villager(NPC.harvey, True, town + hospital, Season.winter, universal_loves + harvey_loves, True)
+sam = villager(NPC.sam, True, town, Season.summer, universal_loves + sam_loves, True)
+sebastian = villager(NPC.sebastian, True, carpenter, Season.winter, universal_loves + sebastian_loves, True)
+shane = villager(NPC.shane, True, ranch, Season.spring, universal_loves + shane_loves, True)
+best_girl = villager(NPC.abigail, True, town, Season.fall, universal_loves + abigail_loves, True)
+emily = villager(NPC.emily, True, town, Season.spring, universal_loves + emily_loves, True)
+hoe = villager(NPC.haley, True, town, Season.spring, universal_loves_no_prismatic_shard + haley_loves, True)
+leah = villager(NPC.leah, True, forest, Season.winter, universal_loves + leah_loves, True)
+nerd = villager(NPC.maru, True, carpenter + hospital + town, Season.summer, universal_loves + maru_loves, True)
+penny = villager(NPC.penny, True, town, Season.fall, universal_loves_no_rabbit_foot + penny_loves, True)
+caroline = villager(NPC.caroline, False, town, Season.winter, universal_loves + caroline_loves, True)
+clint = villager(NPC.clint, False, town, Season.winter, universal_loves + clint_loves, True)
+demetrius = villager(NPC.demetrius, False, carpenter, Season.summer, universal_loves + demetrius_loves, True)
+dwarf = villager(NPC.dwarf, False, mines_dwarf_shop, Season.summer, universal_loves + dwarf_loves, False)
+gilf = villager(NPC.evelyn, False, town, Season.winter, universal_loves + evelyn_loves, True)
+boomer = villager(NPC.george, False, town, Season.fall, universal_loves + george_loves, True)
+gus = villager(NPC.gus, False, town, Season.summer, universal_loves + gus_loves, True)
+jas = villager(NPC.jas, False, ranch, Season.summer, universal_loves + jas_loves, True)
+jodi = villager(NPC.jodi, False, town, Season.fall, universal_loves + jodi_loves, True)
+kent = villager(NPC.kent, False, town, Season.spring, universal_loves + kent_loves, False)
+krobus = villager(NPC.krobus, False, sewers, Season.winter, universal_loves + krobus_loves, False)
+leo = villager(NPC.leo, False, island, Season.summer, universal_loves + leo_loves, False)
+lewis = villager(NPC.lewis, False, town, Season.spring, universal_loves + lewis_loves, True)
+linus = villager(NPC.linus, False, mountain, Season.winter, universal_loves + linus_loves, True)
+marnie = villager(NPC.marnie, False, ranch, Season.fall, universal_loves + marnie_loves, True)
+pam = villager(NPC.pam, False, town, Season.spring, universal_loves + pam_loves, True)
+pierre = villager(NPC.pierre, False, town, Season.spring, universal_loves + pierre_loves, True)
+milf = villager(NPC.robin, False, carpenter, Season.fall, universal_loves + robin_loves, True)
+sandy = villager(NPC.sandy, False, oasis, Season.fall, universal_loves + sandy_loves, False)
+vincent = villager(NPC.vincent, False, town, Season.spring, universal_loves + vincent_loves, True)
+willy = villager(NPC.willy, False, beach, Season.summer, universal_loves + willy_loves, True)
+wizard = villager(NPC.wizard, False, wizard_tower, Season.winter, universal_loves + wizard_loves, True)
+
+# Custom NPCs
+alec = villager(ModNPC.alec, True, forest, Season.winter, universal_loves + trilobite, True, ModNames.alec)
+ayeisha = villager(ModNPC.ayeisha, False, town, Season.summer, universal_loves + ayeisha_loves, True, ModNames.ayeisha)
+delores = villager(ModNPC.delores, True, forest, Season.winter, universal_loves + delores_loves, True, ModNames.delores)
+eugene = villager(ModNPC.eugene, True, forest, Season.spring, universal_loves + eugene_loves, True, ModNames.eugene)
+jasper = villager(ModNPC.jasper, True, town, Season.fall, universal_loves + jasper_loves, True, ModNames.jasper)
+juna = villager(ModNPC.juna, False, forest, Season.summer, universal_loves + juna_loves, True, ModNames.juna)
+kitty = villager(ModNPC.mr_ginger, False, forest, Season.summer, universal_loves + mister_ginger_loves, True, ModNames.ginger)
+shiko = villager(ModNPC.shiko, True, town, Season.winter, universal_loves + shiko_loves, True, ModNames.shiko)
+wellwick = villager(ModNPC.wellwick, True, forest, Season.winter, universal_loves + wellwick_loves, True, ModNames.wellwick)
+yoba = villager(ModNPC.yoba, False, secret_woods, Season.spring, universal_loves + yoba_loves, False, ModNames.yoba)
+riley = villager(ModNPC.riley, True, town, Season.spring, universal_loves, True, ModNames.riley)
+zic = villager(ModNPC.goblin, False, witch_swamp, Season.fall, void_mayonnaise, False, ModNames.distant_lands)
+alecto = villager(ModNPC.alecto, False, witch_attic, Generic.any, universal_loves, False, ModNames.alecto)
+lacey = villager(ModNPC.lacey, True, forest, Season.spring, universal_loves, True, ModNames.lacey)
+
+# Boarding House Villagers
+gregory = villager(ModNPC.gregory, True, the_lost_valley, Season.fall, universal_loves, False, ModNames.boarding_house)
+sheila = villager(ModNPC.sheila, True, boarding_house, Season.spring, universal_loves, True, ModNames.boarding_house)
+joel = villager(ModNPC.joel, False, boarding_house, Season.winter, universal_loves, True, ModNames.boarding_house)
+
+# SVE Villagers
+claire = villager(ModNPC.claire, True, town + jojamart, Season.fall, universal_loves + claire_loves, True, ModNames.sve)
+lance = villager(ModNPC.lance, True, adventurer + highlands + island, Season.spring, lance_loves, False, ModNames.sve)
+mommy = villager(ModNPC.olivia, True, town, Season.spring, universal_loves_no_rabbit_foot + olivia_loves, True, ModNames.sve)
+sophia = villager(ModNPC.sophia, True, bluemoon, Season.winter, universal_loves_no_rabbit_foot + sophia_loves, True, ModNames.sve)
+victor = villager(ModNPC.victor, True, town, Season.summer, universal_loves + victor_loves, True, ModNames.sve)
+andy = villager(ModNPC.andy, False, forest, Season.spring, universal_loves + andy_loves, True, ModNames.sve)
+apples = villager(ModNPC.apples, False, aurora + junimo, Generic.any, starfruit, False, ModNames.sve)
+gunther = villager(ModNPC.gunther, False, museum, Season.winter, universal_loves + gunther_loves, True, ModNames.jasper_sve)
+martin = villager(ModNPC.martin, False, town + jojamart, Season.summer, universal_loves + martin_loves, True, ModNames.sve)
+marlon = villager(ModNPC.marlon, False, adventurer, Season.winter, universal_loves + marlon_loves, False, ModNames.jasper_sve)
+morgan = villager(ModNPC.morgan, False, forest, Season.fall, universal_loves_no_rabbit_foot + morgan_loves, False, ModNames.sve)
+scarlett = villager(ModNPC.scarlett, False, bluemoon, Season.summer, universal_loves + scarlett_loves, False, ModNames.sve)
+susan = villager(ModNPC.susan, False, railroad, Season.fall, universal_loves + susan_loves, False, ModNames.sve)
+morris = villager(ModNPC.morris, False, jojamart, Season.spring, universal_loves + morris_loves, True, ModNames.sve)
+
+# Modified villagers; not included in all villagers
+
+register_villager_modification(ModNames.sve, wizard, adapt_wizard_to_sve)
+
+all_villagers_by_name: Dict[str, Villager] = {villager.name: villager for villager in all_villagers}
+all_villagers_by_mod: Dict[str, List[Villager]] = {}
+all_villagers_by_mod_by_name: Dict[str, Dict[str, Villager]] = {}
+
+for npc in all_villagers:
+    mod = npc.mod_name
+    name = npc.name
+    if mod in all_villagers_by_mod:
+        all_villagers_by_mod[mod].append(npc)
+        all_villagers_by_mod_by_name[mod][name] = npc
+    else:
+        all_villagers_by_mod[mod] = [npc]
+        all_villagers_by_mod_by_name[mod] = {}
+        all_villagers_by_mod_by_name[mod][name] = npc
+
+
+def villager_included_for_any_mod(npc: Villager, mods: Set[str]):
+    if not npc.mod_name:
+        return True
+    for mod in npc.mod_name.split(","):
+        if mod in mods:
+            return True
+    return False
+
+
+def get_villagers_for_mods(mods: Set[str]) -> List[Villager]:
+    villagers_for_current_mods = []
+    for npc in all_villagers:
+        if not villager_included_for_any_mod(npc, mods):
+            continue
+        modified_npc = npc
+        for active_mod in mods:
+            if (active_mod not in villager_modifications_by_mod or
+                    npc.name not in villager_modifications_by_mod[active_mod]):
+                continue
+            modification = villager_modifications_by_mod[active_mod][npc.name]
+            modified_npc = modification(active_mod, modified_npc)
+        villagers_for_current_mods.append(modified_npc)
+    return villagers_for_current_mods

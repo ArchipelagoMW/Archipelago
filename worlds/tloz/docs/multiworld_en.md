@@ -4,8 +4,9 @@
 
 - The Zelda1Client
     - Bundled with Archipelago: [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
-- The BizHawk emulator. Versions 2.3.1 and higher are supported. Version 2.7 is recommended
+- The BizHawk emulator. Versions 2.3.1 and higher are supported.
     - [BizHawk at TASVideos](https://tasvideos.org/BizHawk)
+- Your legally acquired US v1.0 PRG0 ROM file, probably named `Legend of Zelda, The (U) (PRG0) [!].nes`
 
 ## Optional Software
 
@@ -23,6 +24,11 @@
         2. Check the box next to **Always use this app to open .nes files**.
         3. Scroll to the bottom of the list and click the grey text **Look for another App on this PC**.
         4. Browse for `EmuHawk.exe` located inside your BizHawk folder (from step 1) and click **Open**.
+3. (EmuHawk version ≤ 2.8) Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua" to
+  "Lua+LuaInterface". Then restart EmuHawk. This is required for the Lua script to function correctly.
+  **NOTE: Even if "Lua+LuaInterface" is already selected, toggle between the two options and reselect it. Fresh installs** 
+  **of newer versions of EmuHawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load** 
+  **"NLua+KopiLua" until this step is done.**
 
 ## Create a Config (.yaml) File
 
@@ -33,18 +39,18 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a config file?
 
-The Player Settings page on the website allows you to configure your personal settings and export a config file from
-them. Player settings page: [The Legend of Zelda Player Settings Page](/games/The%20Legend%20of%20Zelda/player-settings)
+The Player Options page on the website allows you to configure your personal options and export a config file from
+them. Player options page: [The Legend of Zelda Player Sptions Page](/games/The%20Legend%20of%20Zelda/player-options)
 
 ### Verifying your config file
 
 If you would like to validate your config file to make sure it works, you may do so on the YAML Validator page. YAML
-validator page: [YAML Validation page](/mysterycheck)
+validator page: [YAML Validation page](/check)
 
 ## Generating a Single-Player Game
 
-1. Navigate to the Player Settings page, configure your options, and click the "Generate Game" button.
-    - Player Settings page: [The Legend of Zelda Player Settings Page](/games/The%20Legend%20of%20Zelda/player-settings)
+1. Navigate to the Player Options page, configure your options, and click the "Generate Game" button.
+    - Player Options page: [The Legend of Zelda Player Options Page](/games/The%20Legend%20of%20Zelda/player-options)
 2. You will be presented with a "Seed Info" page.
 3. Click the "Create New Room" link.
 4. You will be presented with a server page, from which you can download your patch file.
@@ -78,10 +84,10 @@ Once the Archipelago server has been hosted:
 
 1. Open EmuHawk 2.3.1 or higher and load your ROM OR click your ROM file if it is already associated with the
    extension `*.nes`.
-2. Navigate to where you installed Archipelago, then to `data/lua`, and drag+drop the `connector_ff1.lua` script onto
+2. Navigate to where you installed Archipelago, then to `data/lua`, and drag+drop the `connector_tloz.lua` script onto
    the main EmuHawk window.
     1. You could instead open the Lua Console manually, click `Script` 〉 `Open Script`, and navigate to
-       `connector_ff1.lua` with the file picker.
+       `connector_tloz.lua` with the file picker.
     2. If it gives a `NLua.Exceptions.LuaScriptException: .\socket.lua:13: module 'socket.core' not found:` exception
        close your emulator entirely, restart it and re-run these steps.
     3. If it says `Must use a version of BizHawk 2.3.1 or higher`, double-check your BizHawk version by clicking **

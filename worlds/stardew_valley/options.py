@@ -1,34 +1,32 @@
 from dataclasses import dataclass
-from typing import Dict, Union, Protocol, runtime_checkable, ClassVar
+from typing import Protocol, ClassVar
 
-from Options import Option, Range, DeathLink, SpecialRange, Toggle, Choice
+from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink
+from .mods.mod_data import ModNames
 
 
-@runtime_checkable
-class StardewOption(Protocol):
+class StardewValleyOption(Protocol):
     internal_name: ClassVar[str]
 
 
-@dataclass
-class StardewOptions:
-    options: Dict[str, Union[bool, int]]
-
-    def __getitem__(self, item: Union[str, StardewOption]) -> Union[bool, int]:
-        if isinstance(item, StardewOption):
-            item = item.internal_name
-
-        return self.options.get(item, None)
-
-
 class Goal(Choice):
-    """What's your goal with this play-through?
-    Community Center: The world will be completed once you complete the Community Center.
-    Grandpa's Evaluation: The world will be completed once 4 candles are lit at Grandpa's Shrine.
-    Bottom of the Mines: The world will be completed once you reach level 120 in the mineshaft.
-    Cryptic Note: The world will be completed once you complete the quest "Cryptic Note" where Mr Qi asks you to reach floor 100 in the Skull Cavern.
-    Master Angler: The world will be completed once you have caught every fish in the game. Pairs well with Fishsanity.
-    Complete Collection: The world will be completed once you have completed the museum by donating every possible item. Pairs well with Museumsanity.
-    Full House: The world will be completed once you get married and have two kids. Pairs well with Friendsanity.
+    """Goal for this playthrough
+    Community Center: Complete the Community Center
+    Grandpa's Evaluation: 4 lit candles in Grandpa's evaluation
+    Bottom of the Mines: Reach level 120 in the mines
+    Cryptic Note: Complete the quest "Cryptic Note" (Skull Cavern Floor 100)
+    Master Angler: Catch every fish. Adapts to Fishsanity
+    Complete Collection: Complete the museum collection
+    Full House: Get married and have 2 children
+    Greatest Walnut Hunter: Find 130 Golden Walnuts
+    Protector of the Valley: Complete the monster slayer goals. Adapts to Monstersanity
+    Full Shipment: Ship every item. Adapts to Shipsanity
+    Gourmet Chef: Cook every recipe. Adapts to Cooksanity
+    Craft Master: Craft every item
+    Legend: Earn 10 000 000g
+    Mystery of the Stardrops: Find every stardrop
+    Allsanity: Complete every check in your slot
+    Perfection: Attain Perfection
     """
     internal_name = "goal"
     display_name = "Goal"
@@ -40,6 +38,20 @@ class Goal(Choice):
     option_master_angler = 4
     option_complete_collection = 5
     option_full_house = 6
+    option_greatest_walnut_hunter = 7
+    option_protector_of_the_valley = 8
+    option_full_shipment = 9
+    option_gourmet_chef = 10
+    option_craft_master = 11
+    option_legend = 12
+    option_mystery_of_the_stardrops = 13
+    # option_junimo_kart =
+    # option_prairie_king =
+    # option_fector_challenge =
+    # option_beloved_farmer =
+    # option_master_of_the_five_ways =
+    option_allsanity = 24
+    option_perfection = 25
 
     @classmethod
     def get_option_name(cls, value) -> str:
@@ -49,12 +61,26 @@ class Goal(Choice):
         return super().get_option_name(value)
 
 
-class StartingMoney(SpecialRange):
+class FarmType(Choice):
+    """What farm to play on?"""
+    internal_name = "farm_type"
+    display_name = "Farm Type"
+    default = "random"
+    option_standard = 0
+    option_riverland = 1
+    option_forest = 2
+    option_hill_top = 3
+    option_wilderness = 4
+    option_four_corners = 5
+    option_beach = 6
+
+
+class StartingMoney(NamedRange):
     """Amount of gold when arriving at the farm.
-    Set to -1 or unlimited for infinite money in this playthrough"""
+    Set to -1 or unlimited for infinite money"""
     internal_name = "starting_money"
     display_name = "Starting Gold"
-    range_start = -1
+    range_start = 0
     range_end = 50000
     default = 5000
 
@@ -68,21 +94,22 @@ class StartingMoney(SpecialRange):
     }
 
 
-class ResourcePackMultiplier(SpecialRange):
-    """How many items will be in the resource packs. A lower setting mean fewer resources in each pack.
-    A higher setting means more resources in each pack. Easy (200) doubles the default quantity"""
-    internal_name = "resource_pack_multiplier"
-    default = 100
-    range_start = 0
-    range_end = 200
+class ProfitMargin(NamedRange):
+    """Multiplier over all gold earned in-game by the player."""
+    internal_name = "profit_margin"
+    display_name = "Profit Margin"
+    range_start = 25
+    range_end = 400
     # step = 25
-    display_name = "Resource Pack Multiplier"
+    default = 100
 
     special_range_names = {
-        "resource packs disabled": 0,
-        "half packs": 50,
-        "normal packs": 100,
-        "double packs": 200,
+        "quarter": 25,
+        "half": 50,
+        "normal": 100,
+        "double": 200,
+        "triple": 300,
+        "quadruple": 400,
     }
 
 
@@ -90,37 +117,46 @@ class BundleRandomization(Choice):
     """What items are needed for the community center bundles?
     Vanilla: Standard bundles from the vanilla game
     Thematic: Every bundle will require random items compatible with their original theme
+    Remixed: Picks bundles at random from thematic, vanilla remixed and new custom ones
     Shuffled: Every bundle will require random items and follow no particular structure"""
     internal_name = "bundle_randomization"
     display_name = "Bundle Randomization"
-    default = 1
+    default = 2
     option_vanilla = 0
     option_thematic = 1
-    option_shuffled = 2
+    option_remixed = 2
+    option_shuffled = 3
 
 
 class BundlePrice(Choice):
     """How many items are needed for the community center bundles?
+    Minimum: Every bundle will require only one item
     Very Cheap: Every bundle will require 2 items fewer than usual
     Cheap: Every bundle will require 1 item fewer than usual
     Normal: Every bundle will require the vanilla number of items
-    Expensive: Every bundle will require 1 extra item when applicable"""
+    Expensive: Every bundle will require 1 extra item
+    Very Expensive: Every bundle will require 2 extra items
+    Maximum: Every bundle will require many extra items"""
     internal_name = "bundle_price"
     display_name = "Bundle Price"
-    default = 2
-    option_very_cheap = 0
-    option_cheap = 1
-    option_normal = 2
-    option_expensive = 3
+    default = 0
+    option_minimum = -8
+    option_very_cheap = -2
+    option_cheap = -1
+    option_normal = 0
+    option_expensive = 1
+    option_very_expensive = 2
+    option_maximum = 8
 
 
 class EntranceRandomization(Choice):
     """Should area entrances be randomized?
     Disabled: No entrance randomization is done
-    Pelican Town: Only buildings in the main town area are randomized among each other
-    Non Progression: Only buildings that are always available are randomized with each other
+    Pelican Town: Only doors in the main town area are randomized with each other
+    Non Progression: Only entrances that are always available are randomized with each other
+    Buildings: All entrances that allow you to enter a building are randomized with each other
+    Chaos: Same as "Buildings", but the entrances get reshuffled every single day!
     """
-    # Buildings: All buildings in the world are randomized with each other
     # Everything: All buildings and areas are randomized with each other
     # Chaos, same as everything: but the buildings are shuffled again every in-game day. You can't learn it!
     # Buildings One-way: Entrance pairs are disconnected, they aren't two-way!
@@ -133,21 +169,20 @@ class EntranceRandomization(Choice):
     option_disabled = 0
     option_pelican_town = 1
     option_non_progression = 2
-    # option_buildings = 3
+    option_buildings = 3
     # option_everything = 4
-    # option_chaos = 4
-    # option_buildings_one_way = 5
-    # option_everything_one_way = 6
-    # option_chaos_one_way = 7
+    option_chaos = 5
+    # option_buildings_one_way = 6
+    # option_everything_one_way = 7
+    # option_chaos_one_way = 8
 
 
 class SeasonRandomization(Choice):
     """Should seasons be randomized?
-    All settings allow you to choose which season you want to play next (from those unlocked) at the end of a season.
-    Disabled: You will start in Spring with all seasons unlocked.
-    Randomized: The seasons will be unlocked randomly as Archipelago items.
-    Randomized Not Winter: The seasons are randomized, but you're guaranteed not to start with winter.
-    Progressive: You will start in Spring and unlock the seasons in their original order.
+    Disabled: Start in Spring with all seasons unlocked.
+    Randomized: Start in a random season and the other 3 must be unlocked randomly.
+    Randomized Not Winter: Same as randomized, but the start season is guaranteed not to be winter.
+    Progressive: Start in Spring and unlock the seasons in their original order.
     """
     internal_name = "season_randomization"
     display_name = "Season Randomization"
@@ -158,24 +193,25 @@ class SeasonRandomization(Choice):
     option_progressive = 3
 
 
-class SeedShuffle(Choice):
-    """Should seeds be randomized?
+class Cropsanity(Choice):
+    """Formerly named "Seed Shuffle"
     Pierre now sells a random amount of seasonal seeds and Joja sells them without season requirements, but only in huge packs.
-    Disabled: All the seeds will be unlocked from the start.
-    Shuffled: The seeds will be unlocked as Archipelago items
+    Disabled: All the seeds are unlocked from the start, there are no location checks for growing and harvesting crops
+    Enabled: Seeds are unlocked as archipelago items, for each seed there is a location check for growing and harvesting that crop
     """
-    internal_name = "seed_shuffle"
-    display_name = "Seed Shuffle"
+    internal_name = "cropsanity"
+    display_name = "Cropsanity"
     default = 1
     option_disabled = 0
-    option_shuffled = 1
+    option_enabled = 1
+    alias_shuffled = option_enabled
 
 
 class BackpackProgression(Choice):
-    """How is the backpack progression handled?
-    Vanilla: You can buy them at Pierre's General Store.
+    """Shuffle the backpack?
+    Vanilla: You can buy backpacks at Pierre's General Store.
     Progressive: You will randomly find Progressive Backpack upgrades.
-    Early Progressive: You can expect your first Backpack in sphere 1.
+    Early Progressive: Same as progressive, but one backpack will be placed early in the multiworld.
     """
     internal_name = "backpack_progression"
     display_name = "Backpack Progression"
@@ -186,23 +222,28 @@ class BackpackProgression(Choice):
 
 
 class ToolProgression(Choice):
-    """How is the tool progression handled?
-    Vanilla: Clint will upgrade your tools with ore.
-    Progressive: You will randomly find Progressive Tool upgrades."""
+    """Shuffle the tool upgrades?
+    Vanilla: Clint will upgrade your tools with metal bars.
+    Progressive: You will randomly find Progressive Tool upgrades.
+    Cheap: Tool Upgrades will cost 2/5th as much
+    Very Cheap: Tool Upgrades will cost 1/5th as much"""
     internal_name = "tool_progression"
     display_name = "Tool Progression"
     default = 1
-    option_vanilla = 0
-    option_progressive = 1
+    option_vanilla = 0b000  # 0
+    option_progressive = 0b001  # 1
+    option_vanilla_cheap = 0b010  # 2
+    option_vanilla_very_cheap = 0b100  # 4
+    option_progressive_cheap = 0b011  # 3
+    option_progressive_very_cheap = 0b101  # 5
 
 
-class TheMinesElevatorsProgression(Choice):
-    """How is The Mines' Elevator progression handled?
-    Vanilla: You will unlock a new elevator floor every 5 floor in the mine.
-    Progressive: You will randomly find Progressive Mine Elevator to go deeper. Location are sent for reaching
-        every level multiple of 5.
-    Progressive from previous floor: Locations are sent for taking the ladder or stairs to every 5
-        levels, taking the elevator does not count."""
+class ElevatorProgression(Choice):
+    """Shuffle the elevator?
+    Vanilla: Reaching a mineshaft floor unlocks the elevator for it
+    Progressive: You will randomly find Progressive Mine Elevators to go deeper.
+    Progressive from previous floor: Same as progressive, but you cannot use the elevator to check elevator locations.
+        You must reach elevator floors on your own."""
     internal_name = "elevator_progression"
     display_name = "Elevator Progression"
     default = 2
@@ -212,10 +253,9 @@ class TheMinesElevatorsProgression(Choice):
 
 
 class SkillProgression(Choice):
-    """How is the skill progression handled?
-    Vanilla: You will level up and get the normal reward at each level.
-    Progressive: The xp will be earned internally, locations will be sent when you earn a level. Your real
-        levels will be scattered around the multiworld."""
+    """Shuffle skill levels?
+    Vanilla: Leveling up skills is normal
+    Progressive: Skill levels are unlocked randomly, and earning xp sends checks"""
     internal_name = "skill_progression"
     display_name = "Skill Progression"
     default = 1
@@ -224,26 +264,43 @@ class SkillProgression(Choice):
 
 
 class BuildingProgression(Choice):
-    """How is the building progression handled?
-    Vanilla: You will buy each building normally.
+    """Shuffle Carpenter Buildings?
+    Vanilla: You can buy each building normally.
     Progressive: You will receive the buildings and will be able to build the first one of each type for free,
         once it is received. If you want more of the same building, it will cost the vanilla price.
-    Progressive early shipping bin: You can expect your shipping bin in sphere 1.
+    Cheap: Buildings will cost half as much
+    Very Cheap: Buildings will cost 1/5th as much
     """
     internal_name = "building_progression"
     display_name = "Building Progression"
-    default = 2
-    option_vanilla = 0
-    option_progressive = 1
-    option_progressive_early_shipping_bin = 2
+    default = 3
+    option_vanilla = 0b000  # 0
+    option_vanilla_cheap = 0b010  # 2
+    option_vanilla_very_cheap = 0b100  # 4
+    option_progressive = 0b001  # 1
+    option_progressive_cheap = 0b011  # 3
+    option_progressive_very_cheap = 0b101  # 5
+
+
+class FestivalLocations(Choice):
+    """Shuffle Festival Activities?
+    Disabled: You do not need to attend festivals
+    Easy: Every festival has checks, but they are easy and usually only require attendance
+    Hard: Festivals have more checks, and many require performing well, not just attending
+    """
+    internal_name = "festival_locations"
+    display_name = "Festival Locations"
+    default = 1
+    option_disabled = 0
+    option_easy = 1
+    option_hard = 2
 
 
 class ArcadeMachineLocations(Choice):
-    """How are the Arcade Machines handled?
-    Vanilla: The arcade machines are not included in the Archipelago shuffling.
+    """Shuffle the arcade machines?
+    Disabled: The arcade machines are not included.
     Victories: Each Arcade Machine will contain one check on victory
-    Victories Easy: The arcade machines are both made considerably easier to be more accessible for the average
-        player.
+    Victories Easy: Same as Victories, but both games are made considerably easier.
     Full Shuffling: The arcade machines will contain multiple checks each, and different buffs that make the game
         easier are in the item pool. Junimo Kart has one check at the end of each level.
         Journey of the Prairie King has one check after each boss, plus one check for each vendor equipment.
@@ -257,19 +314,37 @@ class ArcadeMachineLocations(Choice):
     option_full_shuffling = 3
 
 
-class HelpWantedLocations(SpecialRange):
-    """How many "Help Wanted" quests need to be completed as Archipelago Locations
-    Out of every 7 quests, 4 will be item deliveries, and then 1 of each for: Fishing, Gathering and Slaying Monsters.
-    Choosing a multiple of 7 is recommended."""
-    internal_name = "help_wanted_locations"
+class SpecialOrderLocations(Choice):
+    """Shuffle Special Orders?
+    Disabled: The special orders are not included in the Archipelago shuffling.
+    Board Only: The Special Orders on the board in town are location checks
+    Board and Qi: The Special Orders from Mr Qi's walnut room are checks, in addition to the board in town
+    """
+    internal_name = "special_order_locations"
+    display_name = "Special Order Locations"
+    default = 1
+    option_disabled = 0
+    option_board_only = 1
+    option_board_qi = 2
+
+
+class QuestLocations(NamedRange):
+    """Include location checks for quests
+    None: No quests are checks
+    Story: Only story quests are checks
+    Number: Story quests and help wanted quests are checks up to the specified amount. Multiple of 7 recommended
+    Out of every 7 help wanted quests, 4 will be item deliveries, and then 1 of each for: Fishing, Gathering and Slaying Monsters.
+    Extra Help wanted quests might be added if current settings don't have enough locations"""
+    internal_name = "quest_locations"
     default = 7
     range_start = 0
     range_end = 56
     # step = 7
-    display_name = "Number of Help Wanted locations"
+    display_name = "Quest Locations"
 
     special_range_names = {
-        "none": 0,
+        "none": -1,
+        "story": 0,
         "minimum": 7,
         "normal": 14,
         "lots": 28,
@@ -278,12 +353,15 @@ class HelpWantedLocations(SpecialRange):
 
 
 class Fishsanity(Choice):
-    """Locations for catching fish?
+    """Locations for catching a fish the first time?
     None: There are no locations for catching fish
-    Legendaries: Each of the 5 legendary fish are checks
+    Legendaries: Each of the 5 legendary fish are checks, plus the extended family if qi board is turned on
     Special: A curated selection of strong fish are checks
     Randomized: A random selection of fish are checks
     All: Every single fish in the game is a location that contains an item. Pairs well with the Master Angler Goal
+    Exclude Legendaries: Every fish except legendaries
+    Exclude Hard Fish: Every fish under difficulty 80
+    Only Easy Fish: Every fish under difficulty 50
     """
     internal_name = "fishsanity"
     display_name = "Fishsanity"
@@ -294,6 +372,9 @@ class Fishsanity(Choice):
     option_randomized = 3
     alias_random_selection = option_randomized
     option_all = 4
+    option_exclude_legendaries = 5
+    option_exclude_hard_fish = 6
+    option_only_easy_fish = 7
 
 
 class Museumsanity(Choice):
@@ -301,7 +382,7 @@ class Museumsanity(Choice):
     None: There are no locations for donating artifacts and minerals to the museum
     Milestones: The donation milestones from the vanilla game are checks
     Randomized: A random selection of minerals and artifacts are checks
-    All: Every single donation will be a check
+    All: Every single donation is a check
     """
     internal_name = "museumsanity"
     display_name = "Museumsanity"
@@ -312,13 +393,122 @@ class Museumsanity(Choice):
     option_all = 3
 
 
+class Monstersanity(Choice):
+    """Locations for slaying monsters?
+    None: There are no checks for slaying monsters
+    One per category: Every category visible at the adventure guild gives one check
+    One per Monster: Every unique monster gives one check
+    Monster Eradication Goals: The Monster Eradication Goals each contain one check
+    Short Monster Eradication Goals: The Monster Eradication Goals each contain one check, but are reduced by 60%
+    Very Short Monster Eradication Goals: The Monster Eradication Goals each contain one check, but are reduced by 90%
+    Progressive Eradication Goals: The Monster Eradication Goals each contain 5 checks, each 20% of the way
+    Split Eradication Goals: The Monster Eradication Goals are split by monsters, each monster has one check
+    """
+    internal_name = "monstersanity"
+    display_name = "Monstersanity"
+    default = 1
+    option_none = 0
+    option_one_per_category = 1
+    option_one_per_monster = 2
+    option_goals = 3
+    option_short_goals = 4
+    option_very_short_goals = 5
+    option_progressive_goals = 6
+    option_split_goals = 7
+
+
+class Shipsanity(Choice):
+    """Locations for shipping items?
+    None: There are no checks for shipping items
+    Crops: Every crop and forageable being shipped is a check
+    Fish: Every fish being shipped is a check except legendaries
+    Full Shipment: Every item in the Collections page is a check
+    Full Shipment With Fish: Every item in the Collections page and every fish is a check
+    Everything: Every item in the game that can be shipped is a check
+    """
+    internal_name = "shipsanity"
+    display_name = "Shipsanity"
+    default = 0
+    option_none = 0
+    option_crops = 1
+    # option_quality_crops = 2
+    option_fish = 3
+    # option_quality_fish = 4
+    option_full_shipment = 5
+    # option_quality_full_shipment = 6
+    option_full_shipment_with_fish = 7
+    # option_quality_full_shipment_with_fish = 8
+    option_everything = 9
+    # option_quality_everything = 10
+
+
+class Cooksanity(Choice):
+    """Locations for cooking food?
+    None: There are no checks for cooking
+    Queen of Sauce: Every Queen of Sauce Recipe can be cooked for a check
+    All: Every cooking recipe can be cooked for a check
+    """
+    internal_name = "cooksanity"
+    display_name = "Cooksanity"
+    default = 0
+    option_none = 0
+    option_queen_of_sauce = 1
+    option_all = 2
+
+
+class Chefsanity(NamedRange):
+    """Locations for learning cooking recipes?
+    Vanilla: All cooking recipes are learned normally
+    Queen of Sauce: Every Queen of sauce episode is a check, all queen of sauce recipes are items
+    Purchases: Every purchasable recipe is a check
+    Friendship: Recipes obtained from friendship are checks
+    Skills: Recipes obtained from skills are checks
+    All: Learning every cooking recipe is a check
+    """
+    internal_name = "chefsanity"
+    display_name = "Chefsanity"
+    default = 0
+    range_start = 0
+    range_end = 15
+
+    option_none = 0b0000  # 0
+    option_queen_of_sauce = 0b0001  # 1
+    option_purchases = 0b0010  # 2
+    option_qos_and_purchases = 0b0011  # 3
+    option_skills = 0b0100  # 4
+    option_friendship = 0b1000  # 8
+    option_all = 0b1111  # 15
+
+    special_range_names = {
+        "none": 0b0000,  # 0
+        "queen_of_sauce": 0b0001,  # 1
+        "purchases": 0b0010,  # 2
+        "qos_and_purchases": 0b0011,  # 3
+        "skills": 0b0100,  # 4
+        "friendship": 0b1000,  # 8
+        "all": 0b1111,  # 15
+    }
+
+
+class Craftsanity(Choice):
+    """Checks for crafting items?
+    If enabled, all recipes purchased in shops will be checks as well.
+    Recipes obtained from other sources will depend on related archipelago settings
+    """
+    internal_name = "craftsanity"
+    display_name = "Craftsanity"
+    default = 0
+    option_none = 0
+    option_all = 1
+
+
 class Friendsanity(Choice):
-    """Locations for friendships?
-    None: There are no checks for befriending villagers
-    Bachelors: Each heart of a bachelor is a check
-    Starting NPCs: Each heart for npcs that are immediately available is a check
-    All: Every heart with every NPC is a check, including Leo, Kent, Sandy, etc
-    All With Marriage: Marriage candidates must also be dated, married, and befriended up to 14 hearts.
+    """Shuffle Friendships?
+    None: Friendship hearts are earned normally
+    Bachelors: Hearts with bachelors are shuffled
+    Starting NPCs: Hearts for NPCs available immediately are checks
+    All: Hearts for all npcs are checks, including Leo, Kent, Sandy, etc
+    All With Marriage: Hearts for all npcs are checks, including romance hearts up to 14 when applicable
     """
     internal_name = "friendsanity"
     display_name = "Friendsanity"
@@ -331,16 +521,63 @@ class Friendsanity(Choice):
     option_all_with_marriage = 5
 
 
-class NumberOfPlayerBuffs(Range):
-    """Number of buffs to the player of each type that exist as items in the pool.
-    Buffs include movement speed (+25% multiplier, stacks additively)
-    and daily luck bonus (0.025 flat value per buff)"""
-    internal_name = "player_buff_number"
-    display_name = "Number of Player Buffs"
+# Conditional Setting - Friendsanity not None
+class FriendsanityHeartSize(Range):
+    """If using friendsanity, how many hearts are received per heart item, and how many hearts must be earned to send a check
+    A higher value will lead to fewer heart items in the item pool, reducing bloat"""
+    internal_name = "friendsanity_heart_size"
+    display_name = "Friendsanity Heart Size"
+    range_start = 1
+    range_end = 8
+    default = 4
+    # step = 1
+
+
+class NumberOfMovementBuffs(Range):
+    """Number of movement speed buffs to the player that exist as items in the pool.
+    Each movement speed buff is a +25% multiplier that stacks additively"""
+    internal_name = "movement_buff_number"
+    display_name = "Number of Movement Buffs"
     range_start = 0
     range_end = 12
     default = 4
     # step = 1
+
+
+class NumberOfLuckBuffs(Range):
+    """Number of luck buffs to the player that exist as items in the pool.
+    Each luck buff is a bonus to daily luck of 0.025"""
+    internal_name = "luck_buff_number"
+    display_name = "Number of Luck Buffs"
+    range_start = 0
+    range_end = 12
+    default = 4
+    # step = 1
+
+
+class ExcludeGingerIsland(Toggle):
+    """Exclude Ginger Island?
+    This option will forcefully exclude everything related to Ginger Island from the slot.
+    If you pick a goal that requires Ginger Island, you cannot exclude it and it will get included anyway"""
+    internal_name = "exclude_ginger_island"
+    display_name = "Exclude Ginger Island"
+    default = 0
+
+
+class TrapItems(Choice):
+    """When rolling filler items, including resource packs, the game can also roll trap items.
+    Trap items are negative items that cause problems or annoyances for the player
+    This setting is for choosing if traps will be in the item pool, and if so, how punishing they will be.
+    """
+    internal_name = "trap_items"
+    display_name = "Trap Items"
+    default = 2
+    option_no_traps = 0
+    option_easy = 1
+    option_medium = 2
+    option_hard = 3
+    option_hell = 4
+    option_nightmare = 5
 
 
 class MultipleDaySleepEnabled(Toggle):
@@ -350,7 +587,7 @@ class MultipleDaySleepEnabled(Toggle):
     default = 1
 
 
-class MultipleDaySleepCost(SpecialRange):
+class MultipleDaySleepCost(NamedRange):
     """How much gold it will cost to use MultiSleep. You will have to pay that amount for each day skipped."""
     internal_name = "multiple_day_sleep_cost"
     display_name = "Multiple Day Sleep Cost"
@@ -360,19 +597,21 @@ class MultipleDaySleepCost(SpecialRange):
 
     special_range_names = {
         "free": 0,
-        "cheap": 25,
-        "medium": 50,
-        "expensive": 100,
+        "cheap": 10,
+        "medium": 25,
+        "expensive": 50,
+        "very expensive": 100,
     }
 
 
-class ExperienceMultiplier(SpecialRange):
-    """How fast you want to earn skill experience. A lower setting mean less experience.
+class ExperienceMultiplier(NamedRange):
+    """How fast you want to earn skill experience.
+    A lower setting mean less experience.
     A higher setting means more experience."""
     internal_name = "experience_multiplier"
     display_name = "Experience Multiplier"
     range_start = 25
-    range_end = 400
+    range_end = 800
     # step = 25
     default = 200
 
@@ -385,14 +624,14 @@ class ExperienceMultiplier(SpecialRange):
     }
 
 
-class FriendshipMultiplier(SpecialRange):
+class FriendshipMultiplier(NamedRange):
     """How fast you want to earn friendship points with villagers.
     A lower setting mean less friendship per action.
     A higher setting means more friendship per action."""
     internal_name = "friendship_multiplier"
     display_name = "Friendship Multiplier"
     range_start = 25
-    range_end = 400
+    range_end = 800
     # step = 25
     default = 200
 
@@ -432,76 +671,67 @@ class QuickStart(Toggle):
 
 
 class Gifting(Toggle):
-    """Do you want to enable gifting items to and from other Stardew Valley worlds?"""
+    """Do you want to enable gifting items to and from other Archipelago slots?
+    Items can only be sent to games that also support gifting"""
     internal_name = "gifting"
     display_name = "Gifting"
     default = 1
 
 
-class GiftTax(SpecialRange):
-    """Joja Prime will deliver gifts within one business day, for a price!
-    Sending a gift will cost a percentage of the item's monetary value as a tax on the sender"""
-    internal_name = "gift_tax"
-    display_name = "Gift Tax"
-    range_start = 0
-    range_end = 400
-    # step = 20
-    default = 20
-
-    special_range_names = {
-        "no tax": 0,
-        "soft tax": 20,
-        "rough tax": 40,
-        "full tax": 100,
-        "oppressive tax": 200,
-        "nightmare tax": 400,
+class Mods(OptionSet):
+    """List of mods that will be included in the shuffling."""
+    internal_name = "mods"
+    display_name = "Mods"
+    valid_keys = {
+        ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
+        ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
+        ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
+        ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
+        ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
+        ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator, ModNames.sve, ModNames.distant_lands,
+        ModNames.alecto, ModNames.lacey, ModNames.boarding_house
     }
 
 
-stardew_valley_option_classes = [
-    Goal,
-    StartingMoney,
-    ResourcePackMultiplier,
-    BundleRandomization,
-    BundlePrice,
-    EntranceRandomization,
-    SeasonRandomization,
-    SeedShuffle,
-    BackpackProgression,
-    ToolProgression,
-    SkillProgression,
-    BuildingProgression,
-    TheMinesElevatorsProgression,
-    ArcadeMachineLocations,
-    HelpWantedLocations,
-    Fishsanity,
-    Museumsanity,
-    Friendsanity,
-    NumberOfPlayerBuffs,
-    MultipleDaySleepEnabled,
-    MultipleDaySleepCost,
-    ExperienceMultiplier,
-    FriendshipMultiplier,
-    DebrisMultiplier,
-    QuickStart,
-    Gifting,
-    GiftTax,
-]
-stardew_valley_options: Dict[str, type(Option)] = {option.internal_name: option for option in
-                                                   stardew_valley_option_classes}
-default_options = {option.internal_name: option.default for option in stardew_valley_options.values()}
-stardew_valley_options["death_link"] = DeathLink
-
-
-def fetch_options(world, player: int) -> StardewOptions:
-    return StardewOptions({option: get_option_value(world, player, option) for option in stardew_valley_options})
-
-
-def get_option_value(world, player: int, name: str) -> Union[bool, int]:
-    assert name in stardew_valley_options, f"{name} is not a valid option for Stardew Valley."
-
-    value = getattr(world, name)
-
-    if issubclass(stardew_valley_options[name], Toggle):
-        return bool(value[player].value)
-    return value[player].value
+@dataclass
+class StardewValleyOptions(PerGameCommonOptions):
+    goal: Goal
+    farm_type: FarmType
+    starting_money: StartingMoney
+    profit_margin: ProfitMargin
+    bundle_randomization: BundleRandomization
+    bundle_price: BundlePrice
+    entrance_randomization: EntranceRandomization
+    season_randomization: SeasonRandomization
+    cropsanity: Cropsanity
+    backpack_progression: BackpackProgression
+    tool_progression: ToolProgression
+    skill_progression: SkillProgression
+    building_progression: BuildingProgression
+    festival_locations: FestivalLocations
+    elevator_progression: ElevatorProgression
+    arcade_machine_locations: ArcadeMachineLocations
+    special_order_locations: SpecialOrderLocations
+    quest_locations: QuestLocations
+    fishsanity: Fishsanity
+    museumsanity: Museumsanity
+    monstersanity: Monstersanity
+    shipsanity: Shipsanity
+    cooksanity: Cooksanity
+    chefsanity: Chefsanity
+    craftsanity: Craftsanity
+    friendsanity: Friendsanity
+    friendsanity_heart_size: FriendsanityHeartSize
+    movement_buff_number: NumberOfMovementBuffs
+    luck_buff_number: NumberOfLuckBuffs
+    exclude_ginger_island: ExcludeGingerIsland
+    trap_items: TrapItems
+    multiple_day_sleep_enabled: MultipleDaySleepEnabled
+    multiple_day_sleep_cost: MultipleDaySleepCost
+    experience_multiplier: ExperienceMultiplier
+    friendship_multiplier: FriendshipMultiplier
+    debris_multiplier: DebrisMultiplier
+    quick_start: QuickStart
+    gifting: Gifting
+    mods: Mods
+    death_link: DeathLink

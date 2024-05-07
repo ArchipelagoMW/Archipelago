@@ -25,6 +25,8 @@ charDict = {
     "BowneGlobal10": 0x7D, "BowneGlobal11": 0x7E, '\n': 0xE8, 'ω': 0x6C
 }
 
+dictChar = {v: k for k, v in charDict.items()}
+
 undernet_item_indices = [27, 28, 29, 30, 31, 32, 58, 34, 34]
 
 

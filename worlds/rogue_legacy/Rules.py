@@ -7,8 +7,8 @@ def get_upgrade_total(multiworld: MultiWorld, player: int) -> int:
 
 
 def get_upgrade_count(state: CollectionState, player: int) -> int:
-    return state.item_count("Health Up", player) + state.item_count("Mana Up", player) + \
-           state.item_count("Attack Up", player) + state.item_count("Magic Damage Up", player)
+    return state.count("Health Up", player) + state.count("Mana Up", player) + \
+        state.count("Attack Up", player) + state.count("Magic Damage Up", player)
 
 
 def has_vendors(state: CollectionState, player: int) -> bool:

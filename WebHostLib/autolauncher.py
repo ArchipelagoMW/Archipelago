@@ -3,65 +3,16 @@ from __future__ import annotations
 import json
 import logging
 import multiprocessing
-import os
-import sys
 import threading
 import time
 import typing
+from uuid import UUID
 from datetime import timedelta, datetime
 
 from pony.orm import db_session, select, commit
 
 from Utils import restricted_loads
-
-
-class CommonLocker():
-    """Uses a file lock to signal that something is already running"""
-    lock_folder = "file_locks"
-
-    def __init__(self, lockname: str, folder=None):
-        if folder:
-            self.lock_folder = folder
-        os.makedirs(self.lock_folder, exist_ok=True)
-        self.lockname = lockname
-        self.lockfile = os.path.join(self.lock_folder, f"{self.lockname}.lck")
-
-
-class AlreadyRunningException(Exception):
-    pass
-
-
-if sys.platform == 'win32':
-    class Locker(CommonLocker):
-        def __enter__(self):
-            try:
-                if os.path.exists(self.lockfile):
-                    os.unlink(self.lockfile)
-                self.fp = os.open(
-                    self.lockfile, os.O_CREAT | os.O_EXCL | os.O_RDWR)
-            except OSError as e:
-                raise AlreadyRunningException() from e
-
-        def __exit__(self, _type, value, tb):
-            fp = getattr(self, "fp", None)
-            if fp:
-                os.close(self.fp)
-                os.unlink(self.lockfile)
-else:  # unix
-    import fcntl
-
-
-    class Locker(CommonLocker):
-        def __enter__(self):
-            try:
-                self.fp = open(self.lockfile, "wb")
-                fcntl.flock(self.fp.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
-            except OSError as e:
-                raise AlreadyRunningException() from e
-
-        def __exit__(self, _type, value, tb):
-            fcntl.flock(self.fp.fileno(), fcntl.LOCK_UN)
-            self.fp.close()
+from .locker import Locker, AlreadyRunningException
 
 
 def launch_room(room: Room, config: dict):
@@ -112,6 +63,16 @@ def autohost(config: dict):
     def keep_running():
         try:
             with Locker("autohost"):
+                # delete unowned user-content
+                with db_session:
+                    # >>> bool(uuid.UUID(int=0))
+                    # True
+                    rooms = Room.select(lambda room: room.owner == UUID(int=0)).delete(bulk=True)
+                    seeds = Seed.select(lambda seed: seed.owner == UUID(int=0) and not seed.rooms).delete(bulk=True)
+                    slots = Slot.select(lambda slot: not slot.seed).delete(bulk=True)
+                    # Command gets deleted by ponyorm Cascade Delete, as Room is Required
+                if rooms or seeds or slots:
+                    logging.info(f"{rooms} Rooms, {seeds} Seeds and {slots} Slots have been deleted.")
                 run_guardian()
                 while 1:
                     time.sleep(0.1)
@@ -241,6 +202,6 @@ def run_guardian():
             guardian = threading.Thread(name="Guardian", target=guard)
 
 
-from .models import Room, Generation, STATE_QUEUED, STATE_STARTED, STATE_ERROR, db, Seed
+from .models import Room, Generation, STATE_QUEUED, STATE_STARTED, STATE_ERROR, db, Seed, Slot
 from .customserver import run_server_process, get_static_server_data
 from .generate import gen_game

@@ -47,12 +47,12 @@ wählen können!
 
 ### Wo bekomme ich so eine YAML-Datei her?
 
-Die [Player Settings](/games/A Link to the Past/player-settings) Seite auf der Website ermöglicht das einfache Erstellen
+Die [Player Options](/games/A Link to the Past/player-options) Seite auf der Website ermöglicht das einfache Erstellen
 und Herunterladen deiner eigenen `yaml` Datei. Drei verschiedene Voreinstellungen können dort gespeichert werden.
 
 ### Deine YAML-Datei ist gewichtet!
 
-Die **Player Settings** Seite hat eine Menge Optionen, die man per Schieber einstellen kann. Das ermöglicht es,
+Die **Player Options** Seite hat eine Menge Optionen, die man per Schieber einstellen kann. Das ermöglicht es,
 verschiedene Optionen mit unterschiedlichen Wahrscheinlichkeiten in einer Kategorie ausgewürfelt zu werden
 
 Als Beispiel kann man sich die Option "Map Shuffle" als einen Eimer mit Zetteln zur Abstimmung Vorstellen. So kann man
@@ -67,7 +67,7 @@ Wenn du eine Option nicht gewählt haben möchtest, setze ihren Wert einfach auf
 
 ### Überprüfung deiner YAML-Datei
 
-Wenn man sichergehen will, ob die YAML-Datei funktioniert, kann man dies bei der [YAML Validator](/mysterycheck) Seite
+Wenn man sichergehen will, ob die YAML-Datei funktioniert, kann man dies bei der [YAML Validator](/check) Seite
 tun.
 
 ## ein Einzelspielerspiel erstellen

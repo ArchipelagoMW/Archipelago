@@ -1,21 +1,27 @@
 """
 Archipelago init file for The Witness
 """
-import typing
+import dataclasses
+from logging import error, warning
+from typing import Any, Dict, List, Optional, cast
 
-from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial, ItemClassification
-from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
-    get_priority_hint_items, make_hints, generate_joke_hints
-from worlds.AutoWorld import World, WebWorld
+from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial
+
+from Options import PerGameCommonOptions, Toggle
+from worlds.AutoWorld import WebWorld, World
+
+from .data import static_items as static_witness_items
+from .data import static_logic as static_witness_logic
+from .data.item_definition_classes import DoorItemDefinition, ItemData
+from .data.utils import get_audio_logs
+from .hints import CompactItemData, create_all_hints, make_compact_hint_data, make_laser_hints
+from .locations import WitnessPlayerLocations, static_witness_locations
+from .options import TheWitnessOptions
+from .player_items import WitnessItem, WitnessPlayerItems
 from .player_logic import WitnessPlayerLogic
-from .static_logic import StaticWitnessLogic
-from .locations import WitnessPlayerLocations, StaticWitnessLocations
-from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems
+from .presets import witness_option_presets
+from .regions import WitnessPlayerRegions
 from .rules import set_rules
-from .regions import WitnessRegions
-from .Options import is_option_enabled, the_witness_options, get_option_value
-from .utils import best_junk_to_add_based_on_weights, get_audio_logs, make_warning_string
-from logging import warning
 
 
 class WitnessWebWorld(WebWorld):
@@ -29,6 +35,8 @@ class WitnessWebWorld(WebWorld):
         ["NewSoupVi", "Jarno"]
     )]
 
+    options_presets = witness_option_presets
+
 
 class WitnessWorld(World):
     """
@@ -38,285 +46,328 @@ class WitnessWorld(World):
     """
     game = "The Witness"
     topology_present = False
-    data_version = 13
-
-    static_logic = StaticWitnessLogic()
-    static_locat = StaticWitnessLocations()
-    static_items = StaticWitnessItems()
     web = WitnessWebWorld()
-    option_definitions = the_witness_options
+
+    options_dataclass = TheWitnessOptions
+    options: TheWitnessOptions
 
     item_name_to_id = {
-        name: data.code for name, data in static_items.ALL_ITEM_TABLE.items()
+        name: data.ap_code for name, data in static_witness_items.ITEM_DATA.items()
     }
-    location_name_to_id = StaticWitnessLocations.ALL_LOCATIONS_TO_ID
-    item_name_groups = StaticWitnessItems.ITEM_NAME_GROUPS
+    location_name_to_id = static_witness_locations.ALL_LOCATIONS_TO_ID
+    item_name_groups = static_witness_items.ITEM_GROUPS
+    location_name_groups = static_witness_locations.AREA_LOCATION_GROUPS
 
-    required_client_version = (0, 3, 9)
+    required_client_version = (0, 4, 5)
 
-    def _get_slot_data(self):
+    player_logic: WitnessPlayerLogic
+    player_locations: WitnessPlayerLocations
+    player_items: WitnessPlayerItems
+    player_regions: WitnessPlayerRegions
+
+    log_ids_to_hints: Dict[int, CompactItemData]
+    laser_ids_to_hints: Dict[int, CompactItemData]
+
+    items_placed_early: List[str]
+    own_itempool: List[WitnessItem]
+
+    def _get_slot_data(self) -> Dict[str, Any]:
         return {
-            'seed': self.multiworld.per_slot_randoms[self.player].randint(0, 1000000),
-            'victory_location': int(self.player_logic.VICTORY_LOCATION, 16),
-            'panelhex_to_id': self.locat.CHECK_PANELHEX_TO_ID,
-            'item_id_to_door_hexes': self.static_items.ITEM_ID_TO_DOOR_HEX_ALL,
-            'door_hexes_in_the_pool': self.items.DOORS,
-            'symbols_not_in_the_game': self.items.SYMBOLS_NOT_IN_THE_GAME,
-            'disabled_panels': list(self.player_logic.COMPLETELY_DISABLED_CHECKS),
-            'log_ids_to_hints': self.log_ids_to_hints,
-            'progressive_item_lists': self.items.MULTI_LISTS_BY_CODE,
-            'obelisk_side_id_to_EPs': self.static_logic.OBELISK_SIDE_ID_TO_EP_HEXES,
-            'precompleted_puzzles': [int(h, 16) for h in self.player_logic.EXCLUDED_LOCATIONS],
-            'entity_to_name': self.static_logic.ENTITY_ID_TO_NAME,
+            "seed": self.random.randrange(0, 1000000),
+            "victory_location": int(self.player_logic.VICTORY_LOCATION, 16),
+            "panelhex_to_id": self.player_locations.CHECK_PANELHEX_TO_ID,
+            "item_id_to_door_hexes": static_witness_items.get_item_to_door_mappings(),
+            "door_hexes_in_the_pool": self.player_items.get_door_ids_in_pool(),
+            "symbols_not_in_the_game": self.player_items.get_symbol_ids_not_in_pool(),
+            "disabled_entities": [int(h, 16) for h in self.player_logic.COMPLETELY_DISABLED_ENTITIES],
+            "log_ids_to_hints": self.log_ids_to_hints,
+            "laser_ids_to_hints": self.laser_ids_to_hints,
+            "progressive_item_lists": self.player_items.get_progressive_item_ids_in_pool(),
+            "obelisk_side_id_to_EPs": static_witness_logic.OBELISK_SIDE_ID_TO_EP_HEXES,
+            "precompleted_puzzles": [int(h, 16) for h in self.player_logic.EXCLUDED_LOCATIONS],
+            "entity_to_name": static_witness_logic.ENTITY_ID_TO_NAME,
         }
 
-    def generate_early(self):
-        self.items_by_name = dict()
+    def determine_sufficient_progression(self) -> None:
+        """
+        Determine whether there are enough progression items in this world to consider it "interactive".
+        In the case of singleplayer, this just outputs a warning.
+        In the case of multiplayer, the requirements are a bit stricter and an Exception is raised.
+        """
 
-        if not (is_option_enabled(self.multiworld, self.player, "shuffle_symbols")
-                or get_option_value(self.multiworld, self.player, "shuffle_doors")
-                or is_option_enabled(self.multiworld, self.player, "shuffle_lasers")):
-            if self.multiworld.players == 1:
-                warning("This Witness world doesn't have any progression items. Please turn on Symbol Shuffle, Door"
-                        " Shuffle or Laser Shuffle if that doesn't seem right.")
-            else:
-                raise Exception("This Witness world doesn't have any progression items. Please turn on Symbol Shuffle,"
-                                " Door Shuffle or Laser Shuffle.")
+        # A note on Obelisk Keys:
+        # Obelisk Keys are never relevant in singleplayer, because the locations they lock are irrelevant to in-game
+        # progress and irrelevant to all victory conditions. Thus, I consider them "fake progression" for singleplayer.
+        # However, those locations could obviously contain big items needed for other players, so I consider
+        # "Obelisk Keys only" valid for multiworld.
 
-        disabled_locations = self.multiworld.exclude_locations[self.player].value
+        # A note on Laser Shuffle:
+        # In singleplayer, I don't mind "Ice Rod Hunt" type gameplay, so "laser shuffle only" is valid.
+        # However, I do not want to allow "Ice Rod Hunt" style gameplay in multiworld, so "laser shuffle only" is
+        # not considered interactive enough for multiworld.
 
-        self.player_logic = WitnessPlayerLogic(
-            self.multiworld, self.player, disabled_locations, self.multiworld.start_inventory[self.player].value
+        interacts_sufficiently_with_multiworld = (
+            self.options.shuffle_symbols
+            or self.options.shuffle_doors
+            or self.options.obelisk_keys and self.options.shuffle_EPs
         )
 
-        self.locat = WitnessPlayerLocations(self.multiworld, self.player, self.player_logic)
-        self.items = WitnessPlayerItems(self.locat, self.multiworld, self.player, self.player_logic)
-        self.regio = WitnessRegions(self.locat)
+        has_locally_relevant_progression = (
+            self.options.shuffle_symbols
+            or self.options.shuffle_doors
+            or self.options.shuffle_lasers
+            or self.options.shuffle_boat
+            or self.options.early_caves == "add_to_pool" and self.options.victory_condition == "challenge"
+        )
+
+        if not has_locally_relevant_progression and self.multiworld.players == 1:
+            warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any progression"
+                    f" items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle if that doesn't seem right.")
+        elif not interacts_sufficiently_with_multiworld and self.multiworld.players > 1:
+            raise Exception(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have enough"
+                            f" progression items that can be placed in other players' worlds. Please turn on Symbol"
+                            f" Shuffle, Door Shuffle, or Obelisk Keys.")
+
+    def generate_early(self) -> None:
+        disabled_locations = self.options.exclude_locations.value
+
+        self.player_logic = WitnessPlayerLogic(
+            self, disabled_locations, self.options.start_inventory.value
+        )
+
+        self.player_locations: WitnessPlayerLocations = WitnessPlayerLocations(self, self.player_logic)
+        self.player_items: WitnessPlayerItems = WitnessPlayerItems(
+            self, self.player_logic, self.player_locations
+        )
+        self.player_regions: WitnessPlayerRegions = WitnessPlayerRegions(self.player_locations, self)
 
         self.log_ids_to_hints = dict()
-        self.junk_items_created = {key: 0 for key in self.items.JUNK_WEIGHTS.keys()}
 
-    def create_regions(self):
-        self.regio.create_regions(self.multiworld, self.player, self.player_logic)
+        self.determine_sufficient_progression()
 
-    def create_items(self):
-        # Generate item pool
-        pool = []
-        for item in self.items.ITEM_TABLE:
-            for i in range(0, self.items.PROG_ITEM_AMOUNTS[item]):
-                if item in self.items.PROGRESSION_TABLE:
-                    witness_item = self.create_item(item)
-                    pool.append(witness_item)
-                    self.items_by_name[item] = witness_item
+        if self.options.shuffle_lasers == "local":
+            self.options.local_items.value |= self.item_name_groups["Lasers"]
 
-        for precol_item in self.multiworld.precollected_items[self.player]:
-            if precol_item.name in self.items_by_name:  # if item is in the pool, remove 1 instance.
-                item_obj = self.items_by_name[precol_item.name]
+    def create_regions(self) -> None:
+        self.player_regions.create_regions(self, self.player_logic)
 
-                if item_obj in pool:
-                    pool.remove(item_obj)  # remove one instance of this pre-collected item if it exists
+        # Set rules early so extra locations can be created based on the results of exploring collection states
 
-        for item in self.player_logic.STARTING_INVENTORY:
-            self.multiworld.push_precollected(self.items_by_name[item])
-            pool.remove(self.items_by_name[item])
+        set_rules(self)
 
-        for item in self.items.EXTRA_AMOUNTS:
-            for i in range(0, self.items.EXTRA_AMOUNTS[item]):
-                witness_item = self.create_item(item)
-                pool.append(witness_item)
+        # Start creating items
 
-        # Tie Event Items to Event Locations (e.g. Laser Activations)
-        for event_location in self.locat.EVENT_LOCATION_TABLE:
+        self.items_placed_early = []
+        self.own_itempool = []
+
+        # Add event items and tie them to event locations (e.g. laser activations).
+
+        event_locations = []
+
+        for event_location in self.player_locations.EVENT_LOCATION_TABLE:
             item_obj = self.create_item(
                 self.player_logic.EVENT_ITEM_PAIRS[event_location]
             )
-            location_obj = self.multiworld.get_location(event_location, self.player)
+            location_obj = self.get_location(event_location)
             location_obj.place_locked_item(item_obj)
+            self.own_itempool.append(item_obj)
 
-        # Find out how much empty space there is for junk items. -1 for the "Town Pet the Dog" check
-        itempool_difference = len(self.locat.CHECK_LOCATION_TABLE) - len(self.locat.EVENT_LOCATION_TABLE) - 1
-        itempool_difference -= len(pool)
+            event_locations.append(location_obj)
 
-        # Place two locked items: Good symbol on Tutorial Gate Open, and a Puzzle Skip on "Town Pet the Dog"
-        good_items_in_the_game = []
-        plandoed_items = set()
+        # Place other locked items
+        dog_puzzle_skip = self.create_item("Puzzle Skip")
+        self.get_location("Town Pet the Dog").place_locked_item(dog_puzzle_skip)
 
-        for v in self.multiworld.plando_items[self.player]:
-            if v.get("from_pool", True):
-                for item_key in {"item", "items"}:
-                    if item_key in v:
-                        if type(v[item_key]) is str:
-                            plandoed_items.add(v[item_key])
-                        elif type(v[item_key]) is dict:
-                            plandoed_items.update(item for item, weight in v[item_key].items() if weight)
-                        else:
-                            # Other type of iterable
-                            plandoed_items.update(v[item_key])
+        self.own_itempool.append(dog_puzzle_skip)
 
-        for symbol in self.items.GOOD_ITEMS:
-            item = self.items_by_name[symbol]
-            if item in pool and symbol not in plandoed_items:
-                # for now, any item that is mentioned in any plando option, even if it's a list of items, is ineligible.
-                # Hopefully, in the future, plando gets resolved before create_items.
-                # I could also partially resolve lists myself, but this could introduce errors if not done carefully.
-                good_items_in_the_game.append(symbol)
+        self.items_placed_early.append("Puzzle Skip")
 
-        if good_items_in_the_game:
-            random_good_item = self.multiworld.random.choice(good_items_in_the_game)
-
-            item = self.items_by_name[random_good_item]
-
-            if get_option_value(self.multiworld, self.player, "puzzle_randomization") == 1:
-                self.multiworld.local_early_items[self.player][random_good_item] = 1
+        # Pick an early item to place on the tutorial gate.
+        early_items = [
+            item for item in self.player_items.get_early_items() if item in self.player_items.get_mandatory_items()
+        ]
+        if early_items:
+            random_early_item = self.random.choice(early_items)
+            if self.options.puzzle_randomization == "sigma_expert":
+                # In Expert, only tag the item as early, rather than forcing it onto the gate.
+                self.multiworld.local_early_items[self.player][random_early_item] = 1
             else:
-                first_check = self.multiworld.get_location(
-                    "Tutorial Gate Open", self.player
-                )
+                # Force the item onto the tutorial gate check and remove it from our random pool.
+                gate_item = self.create_item(random_early_item)
+                self.get_location("Tutorial Gate Open").place_locked_item(gate_item)
+                self.own_itempool.append(gate_item)
+                self.items_placed_early.append(random_early_item)
 
-                first_check.place_locked_item(item)
-                pool.remove(item)
+        # There are some really restrictive settings in The Witness.
+        # They are rarely played, but when they are, we add some extra sphere 1 locations.
+        # This is done both to prevent generation failures, but also to make the early game less linear.
+        # Only sweeps for events because having this behavior be random based on Tutorial Gate would be strange.
 
-        dog_check = self.multiworld.get_location(
-            "Town Pet the Dog", self.player
-        )
+        state = CollectionState(self.multiworld)
+        state.sweep_for_events(locations=event_locations)
 
-        dog_check.place_locked_item(self.create_item("Puzzle Skip"))
+        num_early_locs = sum(1 for loc in self.multiworld.get_reachable_locations(state, self.player) if loc.address)
 
-        # Fill rest of item pool with junk if there is room
-        if itempool_difference > 0:
-            for i in range(0, itempool_difference):
-                self.multiworld.itempool.append(self.create_item(self.get_filler_item_name()))
+        # Adjust the needed size for sphere 1 based on how restrictive the settings are in terms of items
 
-        # Remove junk, Functioning Brain, useful items (non-door), useful door items in that order until there is room
-        if itempool_difference < 0:
-            junk = [
-                item for item in pool
-                if item.classification in {ItemClassification.filler, ItemClassification.trap}
-                and item.name != "Functioning Brain"
-            ]
+        needed_size = 3
+        needed_size += self.options.puzzle_randomization == "sigma_expert"
+        needed_size += self.options.shuffle_symbols
+        needed_size += self.options.shuffle_doors > 0
 
-            f_brain = [item for item in pool if item.name == "Functioning Brain"]
+        # Then, add checks in order until the required amount of sphere 1 checks is met.
 
-            usefuls = [
-                item for item in pool
-                if item.classification == ItemClassification.useful
-                and item.name not in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT
-            ]
+        extra_checks = [
+            ("Tutorial First Hallway Room", "Tutorial First Hallway Bend"),
+            ("Tutorial First Hallway", "Tutorial First Hallway Straight"),
+            ("Desert Outside", "Desert Surface 1"),
+            ("Desert Outside", "Desert Surface 2"),
+        ]
 
-            removable_doors = [
-                item for item in pool
-                if item.classification == ItemClassification.useful
-                and item.name in StaticWitnessLogic.ALL_DOOR_ITEMS_AS_DICT
-            ]
+        for i in range(num_early_locs, needed_size):
+            if not extra_checks:
+                break
 
-            self.multiworld.per_slot_randoms[self.player].shuffle(junk)
-            self.multiworld.per_slot_randoms[self.player].shuffle(usefuls)
-            self.multiworld.per_slot_randoms[self.player].shuffle(removable_doors)
+            region, loc = extra_checks.pop(0)
+            self.player_locations.add_location_late(loc)
+            self.get_region(region).add_locations({loc: self.location_name_to_id[loc]})
 
-            removed_junk = False
-            removed_usefuls = False
-            removed_doors = False
+            player = self.multiworld.get_player_name(self.player)
 
-            for i in range(itempool_difference, 0):
-                if junk:
-                    pool.remove(junk.pop())
-                    removed_junk = True
-                elif f_brain:
-                    pool.remove(f_brain.pop())
-                elif usefuls:
-                    pool.remove(usefuls.pop())
-                    removed_usefuls = True
-                elif removable_doors:
-                    pool.remove(removable_doors.pop())
-                    removed_doors = True
+            warning(f"""Location "{loc}" had to be added to {player}'s world due to insufficient sphere 1 size.""")
 
-            warn = make_warning_string(
-                removed_junk, removed_usefuls, removed_doors, not junk, not usefuls, not removable_doors
-            )
+    def create_items(self) -> None:
+        # Determine pool size.
+        pool_size = len(self.player_locations.CHECK_LOCATION_TABLE) - len(self.player_locations.EVENT_LOCATION_TABLE)
 
-            if warn:
-                warning(f"This Witness world has too few locations to place all its items."
-                        f" In order to make space, {warn} had to be removed.")
+        # Fill mandatory items and remove precollected and/or starting items from the pool.
+        item_pool = self.player_items.get_mandatory_items()
 
-        # Finally, add the generated pool to the overall itempool
-        self.multiworld.itempool += pool
+        # Remove one copy of each item that was placed early
+        for already_placed in self.items_placed_early:
+            pool_size -= 1
 
-    def set_rules(self):
-        set_rules(self.multiworld, self.player, self.player_logic, self.locat)
+            if already_placed not in item_pool:
+                continue
+
+            if item_pool[already_placed] == 1:
+                item_pool.pop(already_placed)
+            else:
+                item_pool[already_placed] -= 1
+
+        for precollected_item_name in [item.name for item in self.multiworld.precollected_items[self.player]]:
+            if precollected_item_name in item_pool:
+                if item_pool[precollected_item_name] == 1:
+                    item_pool.pop(precollected_item_name)
+                else:
+                    item_pool[precollected_item_name] -= 1
+
+        for inventory_item_name in self.player_logic.STARTING_INVENTORY:
+            if inventory_item_name in item_pool:
+                if item_pool[inventory_item_name] == 1:
+                    item_pool.pop(inventory_item_name)
+                else:
+                    item_pool[inventory_item_name] -= 1
+            self.multiworld.push_precollected(self.create_item(inventory_item_name))
+
+        if len(item_pool) > pool_size:
+            error(f"{self.multiworld.get_player_name(self.player)}'s Witness world has too few locations ({pool_size})"
+                  f" to place its necessary items ({len(item_pool)}).")
+            return
+
+        remaining_item_slots = pool_size - sum(item_pool.values())
+
+        # Add puzzle skips.
+        num_puzzle_skips = self.options.puzzle_skip_amount
+
+        if num_puzzle_skips > remaining_item_slots:
+            warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world has insufficient locations"
+                    f" to place all requested puzzle skips.")
+            num_puzzle_skips = remaining_item_slots
+        item_pool["Puzzle Skip"] = num_puzzle_skips
+        remaining_item_slots -= num_puzzle_skips
+
+        # Add junk items.
+        if remaining_item_slots > 0:
+            item_pool.update(self.player_items.get_filler_items(remaining_item_slots))
+
+        # Generate the actual items.
+        for item_name, quantity in sorted(item_pool.items()):
+            new_items = [self.create_item(item_name) for _ in range(0, quantity)]
+
+            self.own_itempool += new_items
+            self.multiworld.itempool += new_items
+            if self.player_items.item_data[item_name].local_only:
+                self.options.local_items.value.add(item_name)
 
     def fill_slot_data(self) -> dict:
-        hint_amount = get_option_value(self.multiworld, self.player, "hint_amount")
+        self.log_ids_to_hints: Dict[int, CompactItemData] = dict()
+        self.laser_ids_to_hints: Dict[int, CompactItemData] = dict()
 
-        credits_hint = (
-            "This Randomizer is brought to you by",
-            "NewSoupVi, Jarno, blastron,",
-            "jbzdarkid, sigma144, IHNN, oddGarrett.", -1
-        )
+        already_hinted_locations = set()
 
+        # Laser hints
+
+        if self.options.laser_hints:
+            laser_hints = make_laser_hints(self, static_witness_items.ITEM_GROUPS["Lasers"])
+
+            for item_name, hint in laser_hints.items():
+                item_def = cast(DoorItemDefinition, static_witness_logic.ALL_ITEMS[item_name])
+                self.laser_ids_to_hints[int(item_def.panel_id_hexes[0], 16)] = make_compact_hint_data(hint, self.player)
+                already_hinted_locations.add(hint.location)
+
+        # Audio Log Hints
+
+        hint_amount = self.options.hint_amount.value
         audio_logs = get_audio_logs().copy()
 
-        if hint_amount != 0:
-            generated_hints = make_hints(self.multiworld, self.player, hint_amount)
+        if hint_amount:
+            area_hints = round(self.options.area_hint_percentage / 100 * hint_amount)
 
-            self.multiworld.per_slot_randoms[self.player].shuffle(audio_logs)
+            generated_hints = create_all_hints(self, hint_amount, area_hints, already_hinted_locations)
+
+            self.random.shuffle(audio_logs)
 
             duplicates = min(3, len(audio_logs) // hint_amount)
 
-            for _ in range(0, hint_amount):
-                hint = generated_hints.pop(0)
+            for hint in generated_hints:
+                compact_hint_data = make_compact_hint_data(hint, self.player)
 
                 for _ in range(0, duplicates):
                     audio_log = audio_logs.pop()
-                    self.log_ids_to_hints[int(audio_log, 16)] = hint
+                    self.log_ids_to_hints[int(audio_log, 16)] = compact_hint_data
 
-        if audio_logs:
-            audio_log = audio_logs.pop()
-            self.log_ids_to_hints[int(audio_log, 16)] = credits_hint
+        # Client will generate joke hints for these.
+        self.log_ids_to_hints.update({int(audio_log, 16): ("", -1, -1) for audio_log in audio_logs})
 
-        joke_hints = generate_joke_hints(self.multiworld, self.player, len(audio_logs))
-
-        while audio_logs:
-            audio_log = audio_logs.pop()
-            self.log_ids_to_hints[int(audio_log, 16)] = joke_hints.pop()
-
-        # generate hints done
+        # Options for the client & auto-tracker
 
         slot_data = self._get_slot_data()
 
-        for option_name in the_witness_options:
-            slot_data[option_name] = get_option_value(
-                self.multiworld, self.player, option_name
-            )
+        for option_name in (attr.name for attr in dataclasses.fields(TheWitnessOptions)
+                            if attr not in dataclasses.fields(PerGameCommonOptions)):
+            option = getattr(self.options, option_name)
+            slot_data[option_name] = bool(option.value) if isinstance(option, Toggle) else option.value
 
         return slot_data
 
-    def create_item(self, name: str) -> Item:
+    def create_item(self, item_name: str) -> WitnessItem:
+        # If the player's plando options are malformed, the item_name parameter could be a dictionary containing the
+        #   name of the item, rather than the item itself. This is a workaround to prevent a crash.
+        if isinstance(item_name, dict):
+            item_name = next(iter(item_name))
+
         # this conditional is purely for unit tests, which need to be able to create an item before generate_early
-        if hasattr(self, 'items') and name in self.items.ITEM_TABLE:
-            item = self.items.ITEM_TABLE[name]
+        item_data: ItemData
+        if hasattr(self, "player_items") and self.player_items and item_name in self.player_items.item_data:
+            item_data = self.player_items.item_data[item_name]
         else:
-            item = StaticWitnessItems.ALL_ITEM_TABLE[name]
+            item_data = static_witness_items.ITEM_DATA[item_name]
 
-        if item.trap:
-            classification = ItemClassification.trap
-        elif item.progression:
-            classification = ItemClassification.progression
-        elif item.never_exclude:
-            classification = ItemClassification.useful
-        else:
-            classification = ItemClassification.filler
+        return WitnessItem(item_name, item_data.classification, item_data.ap_code, player=self.player)
 
-        new_item = WitnessItem(
-            name, classification, item.code, player=self.player
-        )
-        return new_item
-
-    def get_filler_item_name(self) -> str:  # Used by itemlinks
-        item = best_junk_to_add_based_on_weights(self.items.JUNK_WEIGHTS, self.junk_items_created)
-
-        self.junk_items_created[item] += 1
-
-        return item
+    def get_filler_item_name(self) -> str:
+        return "Speed Boost"
 
 
 class WitnessLocation(Location):
@@ -324,36 +375,36 @@ class WitnessLocation(Location):
     Archipelago Location for The Witness
     """
     game: str = "The Witness"
-    check_hex: int = -1
+    entity_hex: int = -1
 
-    def __init__(self, player: int, name: str, address: typing.Optional[int], parent, ch_hex: int = -1):
+    def __init__(self, player: int, name: str, address: Optional[int], parent, ch_hex: int = -1) -> None:
         super().__init__(player, name, address, parent)
-        self.check_hex = ch_hex
+        self.entity_hex = ch_hex
 
 
-def create_region(world: MultiWorld, player: int, name: str,
-                  locat: WitnessPlayerLocations, region_locations=None, exits=None):
+def create_region(world: WitnessWorld, name: str, player_locations: WitnessPlayerLocations,
+                  region_locations=None, exits=None) -> Region:
     """
     Create an Archipelago Region for The Witness
     """
 
-    ret = Region(name, player, world)
+    ret = Region(name, world.player, world.multiworld)
     if region_locations:
         for location in region_locations:
-            loc_id = locat.CHECK_LOCATION_TABLE[location]
+            loc_id = player_locations.CHECK_LOCATION_TABLE[location]
 
-            check_hex = -1
-            if location in StaticWitnessLogic.CHECKS_BY_NAME:
-                check_hex = int(
-                    StaticWitnessLogic.CHECKS_BY_NAME[location]["checkHex"], 0
+            entity_hex = -1
+            if location in static_witness_logic.ENTITIES_BY_NAME:
+                entity_hex = int(
+                    static_witness_logic.ENTITIES_BY_NAME[location]["entity_hex"], 0
                 )
             location = WitnessLocation(
-                player, location, loc_id, ret, check_hex
+                world.player, location, loc_id, ret, entity_hex
             )
 
             ret.locations.append(location)
     if exits:
         for single_exit in exits:
-            ret.exits.append(Entrance(player, single_exit, ret))
+            ret.exits.append(Entrance(world.player, single_exit, ret))
 
     return ret

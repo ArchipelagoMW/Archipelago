@@ -1,0 +1,13 @@
+Items:
+Arrows
+Progressive Dots
+Sound Dots
+Progressive Symmetry
+Triangles
+Eraser
+Shapers
+Rotated Shapers
+Negative Shapers
+Progressive Stars
+Black/White Squares
+Colored Squares

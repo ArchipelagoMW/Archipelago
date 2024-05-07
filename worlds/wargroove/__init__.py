@@ -64,7 +64,7 @@ class WargrooveWorld(World):
             starting_faction = WargrooveItem(self.multiworld.random.choice(factions) + ' Commanders', self.player)
             self.multiworld.push_precollected(starting_faction)
 
-    def generate_basic(self):
+    def create_items(self):
         # Fill out our pool with our items from the item table
         pool = []
         precollected_item_names = {item.name for item in self.multiworld.precollected_items[self.player]}
@@ -130,12 +130,6 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
 
 class WargrooveLocation(Location):
     game: str = "Wargroove"
-
-    def __init__(self, player: int, name: str, address=None, parent=None):
-        super(WargrooveLocation, self).__init__(player, name, address, parent)
-        if address is None:
-            self.event = True
-            self.locked = True
 
 
 class WargrooveItem(Item):

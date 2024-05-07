@@ -6,7 +6,7 @@ slot name, and a room password if one is required. Then click "Connect".
 If you're playing on "easy mode", just click the button and receive "Satisfaction".
 
 If you're playing on "hard mode", you may need to wait for activation before you can complete your objective. Luckily, 
-Clique runs in all the major browsers that support HTML5, so you can load Clique on your phone and be productive while 
+Clique runs in most major browsers that support HTML5, so you can load Clique on your phone and be productive while 
 you wait!
 
 If you need some ideas for what to do while waiting for button activation, give the following a try:
@@ -19,4 +19,4 @@ If you need some ideas for what to do while waiting for button activation, give 
 - Do your school work.
 
 
-~~If you run into any issues with this game, definitely do not contact Phar#4444 on discord. *wink* *wink*~~
+~~If you run into any issues with this game, definitely do not contact **thephar** on discord. *wink* *wink*~~

@@ -60,7 +60,7 @@ peuvent avoir différentes options.
 
 ### Où est-ce que j'obtiens un fichier YAML ?
 
-La page [Génération de partie](/games/A%20Link%20to%20the%20Past/player-settings) vous permet de configurer vos
+La page [Génération de partie](/games/A%20Link%20to%20the%20Past/player-options) vous permet de configurer vos
 paramètres personnels et de les exporter vers un fichier YAML.
 
 ### Configuration avancée du fichier YAML
@@ -83,11 +83,11 @@ chaque paramètre il faut au moins une option qui soit paramétrée sur un nombr
 ### Vérifier son fichier YAML
 
 Si vous voulez valider votre fichier YAML pour être sûr qu'il fonctionne, vous pouvez le vérifier sur la page du
-[Validateur de YAML](/mysterycheck).
+[Validateur de YAML](/check).
 
 ## Générer une partie pour un joueur
 
-1. Aller sur la page [Génération de partie](/games/A%20Link%20to%20the%20Past/player-settings), configurez vos options,
+1. Aller sur la page [Génération de partie](/games/A%20Link%20to%20the%20Past/player-options), configurez vos options,
    et cliquez sur le bouton "Generate Game".
 2. Il vous sera alors présenté une page d'informations sur la seed, où vous pourrez télécharger votre patch.
 3. Double-cliquez sur le patch et l'émulateur devrait se lancer automatiquement avec la seed. Etant donné que le client

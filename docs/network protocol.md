@@ -27,8 +27,13 @@ There are also a number of community-supported libraries available that implemen
 | Haxe                          | [hxArchipelago](https://lib.haxe.org/p/hxArchipelago)                                              |                                                                                 |
 | Rust                          | [ArchipelagoRS](https://github.com/ryanisaacg/archipelago_rs)                                      |                                                                                 |
 | Lua                           | [lua-apclientpp](https://github.com/black-sliver/lua-apclientpp)                                   |                                                                                 |
+| Game Maker + Studio 1.x       | [gm-apclientpp](https://github.com/black-sliver/gm-apclientpp)                                     | For GM7, GM8 and GMS1.x, maybe older                                            |
+| GameMaker: Studio 2.x+        | [see Discord](https://discord.com/channels/731205301247803413/1166418532519653396)                 |                                                                                 |
 
 ## Synchronizing Items
+After a client connects, it will receive all previously collected items for its associated slot in a [ReceivedItems](#ReceivedItems) packet. This will include items the client may have already processed in a previous play session.  
+To ensure the client is able to reject those items if it needs to, each item in the packet has an associated `index` argument. You will need to find a way to save the "last processed item index" to the player's local savegame, a local file, or something to that effect. Before connecting, you should load that "last processed item index" value and compare against it in your received items handling.
+
 When the client receives a [ReceivedItems](#ReceivedItems) packet, if the `index` argument does not match the next index that the client expects then it is expected that the client will re-sync items with the server. This can be accomplished by sending the server a [Sync](#Sync) packet and then a [LocationChecks](#LocationChecks) packet.
 
 Even if the client detects a desync, it can still accept the items provided in this packet to prevent gameplay interruption.
@@ -325,7 +330,11 @@ Sent to server to inform it of locations that the client has checked. Used to in
 | locations | list\[int\] | The ids of the locations checked by the client. May contain any number of checks, even ones sent before; duplicates do not cause issues with the Archipelago server. |
 
 ### LocationScouts
-Sent to the server to inform it of locations the client has seen, but not checked. Useful in cases in which the item may appear in the game world, such as 'ledge items' in A Link to the Past. The server will always respond with a [LocationInfo](#LocationInfo) packet with the items located in the scouted location.
+Sent to the server to retrieve the items that are on a specified list of locations. The server will respond with a [LocationInfo](#LocationInfo) packet containing the items located in the scouted locations.
+Fully remote clients without a patch file may use this to "place" items onto their in-game locations, most commonly to display their names or item classifications before/upon pickup.
+
+LocationScouts can also be used to inform the server of locations the client has seen, but not checked. This creates a hint as if the player had run `!hint_location` on a location, but without deducting hint points.
+This is useful in cases where an item appears in the game world, such as 'ledge items' in _A Link to the Past_. To do this, set the `create_as_hint` parameter to a non-zero value.
 
 #### Arguments
 | Name | Type | Notes |
@@ -339,7 +348,7 @@ Sent to the server to update on the sender's status. Examples include readiness 
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| status | ClientStatus\[int\] | One of [Client States](#Client-States). Send as int. Follow the link for more information. |
+| status | ClientStatus\[int\] | One of [Client States](#ClientStatus). Send as int. Follow the link for more information. |
 
 ### Say
 Basic chat command which sends text to the server to be distributed to other clients.
@@ -380,11 +389,13 @@ Additional arguments sent in this package will also be added to the [Retrieved](
 
 Some special keys exist with specific return data, all of them have the prefix `_read_`, so `hints_{team}_{slot}` is `_read_hints_{team}_{slot}`.
 
-| Name                          | Type                     | Notes                                             |
-|-------------------------------|--------------------------|---------------------------------------------------|
-| hints_{team}_{slot}           | list\[[Hint](#Hint)\]    | All Hints belonging to the requested Player.      |
-| slot_data_{slot}              | dict\[str, any\]         | slot_data belonging to the requested slot.        |
-| item_name_groups_{game_name}  | dict\[str, list\[str\]\] | item_name_groups belonging to the requested game. |
+| Name                             | Type                          | Notes                                                 |
+|----------------------------------|-------------------------------|-------------------------------------------------------|
+| hints_{team}_{slot}              | list\[[Hint](#Hint)\]         | All Hints belonging to the requested Player.          |
+| slot_data_{slot}                 | dict\[str, any\]              | slot_data belonging to the requested slot.            |
+| item_name_groups_{game_name}     | dict\[str, list\[str\]\]      | item_name_groups belonging to the requested game.     |
+| location_name_groups_{game_name} | dict\[str, list\[str\]\]      | location_name_groups belonging to the requested game. |
+| client_status_{team}_{slot}      | [ClientStatus](#ClientStatus) | The current game status of the requested player.      |
 
 ### Set
 Used to write data to the server's data storage, that data can then be shared across worlds or just saved for later. Values for keys in the data storage can be retrieved with a [Get](#Get) package, or monitored with a [SetNotify](#SetNotify) package.
@@ -415,6 +426,8 @@ The following operations can be applied to a datastorage key
 | mul | Multiplies the current value of the key by `value`. |
 | pow | Multiplies the current value of the key to the power of `value`. |
 | mod | Sets the current value of the key to the remainder after division by `value`. |
+| floor | Floors the current value (`value` is ignored). |
+| ceil | Ceils the current value (`value` is ignored). |
 | max | Sets the current value of the key to `value` if `value` is bigger. |
 | min | Sets the current value of the key to `value` if `value` is lower. |
 | and | Applies a bitwise AND to the current value of the key with `value`. |
@@ -556,7 +569,7 @@ Color options:
 `player` marks owning player id for location/item, 
 `flags` contains the [NetworkItem](#NetworkItem) flags that belong to the item
 
-### Client States
+### ClientStatus
 An enumeration containing the possible client states that may be used to inform
 the server in [StatusUpdate](#StatusUpdate). The MultiServer automatically sets
 the client state to `ClientStatus.CLIENT_CONNECTED` on the first active connection
@@ -671,8 +684,8 @@ Tags are represented as a list of strings, the common Client tags follow:
 ### DeathLink
 A special kind of Bounce packet that can be supported by any AP game. It targets the tag "DeathLink" and carries the following data:
 
-| Name | Type | Notes |
-| ---- | ---- | ---- |
-| time | float | Unix Time Stamp of time of death. |
-| cause | str | Optional. Text to explain the cause of death, ex. "Berserker was run over by a train." |
-| source | str | Name of the player who first died. Can be a slot name, but can also be a name from within a multiplayer game. |
+| Name   | Type  | Notes                                                                                                                                                  |
+|--------|-------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| time   | float | Unix Time Stamp of time of death.                                                                                                                      |
+| cause  | str   | Optional. Text to explain the cause of death. When provided, or checked, this should contain the player name, ex. "Berserker was run over by a train." |
+| source | str   | Name of the player who first died. Can be a slot name, but can also be a name from within a multiplayer game.                                          |

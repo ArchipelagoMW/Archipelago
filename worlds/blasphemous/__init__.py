@@ -52,6 +52,9 @@ class BlasphemousWorld(World):
 
     def set_rules(self):
         rules(self)
+        for door in door_table:
+            add_rule(self.multiworld.get_location(door["Id"], self.player),
+                lambda state: state.can_reach(self.get_connected_door(door["Id"])), self.player)
 
 
     def create_item(self, name: str) -> "BlasphemousItem":
@@ -301,7 +304,6 @@ class BlasphemousWorld(World):
             event = BlasphemousLocation(player, door["Id"], None, region)
             event.show_in_spoiler = False
             event.place_locked_item(self.create_event(door["Id"]))
-            add_rule(event, lambda state: state.can_reach(self.get_connected_door(door["Id"])), player)
             region.locations.append(event)
         
         victory = Location(player, "His Holiness Escribar", None, world.get_region("D07Z01S03", player))

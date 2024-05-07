@@ -107,7 +107,7 @@ location_table_uw = {"Blind's Hideout - Top": (0x11d, 0x10),
                      "Hyrule Castle - Zelda's Chest": (0x80, 0x10),
                      'Hyrule Castle - Big Key Drop': (0x80, 0x400),
                      'Sewers - Dark Cross': (0x32, 0x10),
-                     'Hyrule Castle - Key Rat Key Drop': (0x21, 0x400),
+                     'Sewers - Key Rat Key Drop': (0x21, 0x400),
                      'Sewers - Secret Room - Left': (0x11, 0x10),
                      'Sewers - Secret Room - Middle': (0x11, 0x20),
                      'Sewers - Secret Room - Right': (0x11, 0x40),
@@ -471,6 +471,7 @@ async def track_locations(ctx, roomid, roomdata) -> bool:
 
 class ALTTPSNIClient(SNIClient):
     game = "A Link to the Past"
+    patch_suffix = [".aplttp", ".apz3"]
 
     async def deathlink_kill_player(self, ctx):
         from SNIClient import DeathState, snes_read, snes_buffered_write, snes_flush_writes
@@ -520,7 +521,8 @@ class ALTTPSNIClient(SNIClient):
         gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
         if "DeathLink" in ctx.tags and gamemode and ctx.last_death_link + 1 < time.time():
             currently_dead = gamemode[0] in DEATH_MODES
-            await ctx.handle_deathlink_state(currently_dead)
+            await ctx.handle_deathlink_state(currently_dead,
+                                             ctx.player_names[ctx.slot] + " ran out of hearts." if ctx.slot else "")
 
         gameend = await snes_read(ctx, SAVEDATA_START + 0x443, 1)
         game_timer = await snes_read(ctx, SAVEDATA_START + 0x42E, 4)
@@ -581,31 +583,25 @@ class ALTTPSNIClient(SNIClient):
 def get_alttp_settings(romfile: str):
     import LttPAdjuster
 
-    last_settings = Utils.get_adjuster_settings(GAME_ALTTP)
-    base_settings = LttPAdjuster.get_argparser().parse_known_args(args=[])[0]
-    allow_list = {"music", "menuspeed", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
-                  "uw_palettes", "sprite", "sword_palettes", "shield_palettes", "hud_palettes",
-                  "reduceflashing", "deathlink", "allowcollect", "oof"}
-
-    for option_name in allow_list:
-        # set new defaults since last_settings were created
-        if not hasattr(last_settings, option_name):
-            setattr(last_settings, option_name, getattr(base_settings, option_name))
-
     adjustedromfile = ''
-    if last_settings:
+    if vars(Utils.get_adjuster_settings_no_defaults(GAME_ALTTP)):
+        last_settings = Utils.get_adjuster_settings(GAME_ALTTP)
+
+        allow_list = {"music", "menuspeed", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
+                    "uw_palettes", "sprite", "sword_palettes", "shield_palettes", "hud_palettes",
+                    "reduceflashing", "deathlink", "allowcollect", "oof"}
         choice = 'no'
-        if not hasattr(last_settings, 'auto_apply') or 'ask' in last_settings.auto_apply:
+        if 'ask' in last_settings.auto_apply:
             printed_options = {name: value for name, value in vars(last_settings).items() if name in allow_list}
-            if hasattr(last_settings, "sprite_pool"):
-                sprite_pool = {}
-                for sprite in last_settings.sprite_pool:
-                    if sprite in sprite_pool:
-                        sprite_pool[sprite] += 1
-                    else:
-                        sprite_pool[sprite] = 1
-                    if sprite_pool:
-                        printed_options["sprite_pool"] = sprite_pool
+            
+            sprite_pool = {}
+            for sprite in last_settings.sprite_pool:
+                if sprite in sprite_pool:
+                    sprite_pool[sprite] += 1
+                else:
+                    sprite_pool[sprite] = 1
+                if sprite_pool:
+                    printed_options["sprite_pool"] = sprite_pool
             import pprint
 
             from CommonClient import gui_enabled
@@ -685,17 +681,17 @@ def get_alttp_settings(romfile: str):
             choice = 'yes'
 
         if 'yes' in choice:
+            import LttPAdjuster
             from worlds.alttp.Rom import get_base_rom_path
             last_settings.rom = romfile
             last_settings.baserom = get_base_rom_path()
             last_settings.world = None
 
-            if hasattr(last_settings, "sprite_pool"):
+            if last_settings.sprite_pool:
                 from LttPAdjuster import AdjusterWorld
                 last_settings.world = AdjusterWorld(getattr(last_settings, "sprite_pool"))
 
             adjusted = True
-            import LttPAdjuster
             _, adjustedromfile = LttPAdjuster.adjust(last_settings)
 
             if hasattr(last_settings, "world"):
