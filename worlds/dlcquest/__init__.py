@@ -1,9 +1,9 @@
 from typing import Union
 
-from BaseClasses import Tutorial, CollectionState
+from BaseClasses import Tutorial, CollectionState, ItemClassification
 from worlds.AutoWorld import WebWorld, World
 from . import Options
-from .Items import DLCQuestItem, ItemData, create_items, item_table
+from .Items import DLCQuestItem, ItemData, create_items, item_table, items_by_group, Group
 from .Locations import DLCQuestLocation, location_table
 from .Options import DLCQuestOptions
 from .Regions import create_regions
@@ -13,14 +13,23 @@ client_version = 0
 
 
 class DLCqwebworld(WebWorld):
-    tutorials = [Tutorial(
-        "Multiworld Setup Tutorial",
+    setup_en = Tutorial(
+        "Multiworld Setup Guide",
         "A guide to setting up the Archipelago DLCQuest game on your computer.",
         "English",
         "setup_en.md",
         "setup/en",
         ["axe_y"]
-    )]
+    )
+    setup_fr = Tutorial(
+        "Guide de configuration MultiWorld",
+        "Un guide pour configurer DLCQuest sur votre PC.",
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["Deoxis"]
+    )
+    tutorials = [setup_en, setup_fr]
 
 
 class DLCqworld(World):
@@ -52,7 +61,7 @@ class DLCqworld(World):
         self.precollect_coinsanity()
         locations_count = len([location
                                for location in self.multiworld.get_locations(self.player)
-                               if not location.event])
+                               if not location.advancement])
 
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]]
@@ -60,7 +69,9 @@ class DLCqworld(World):
         created_items = create_items(self, self.options, locations_count + len(items_to_exclude), self.multiworld.random)
 
         self.multiworld.itempool += created_items
-        self.multiworld.early_items[self.player]["Movement Pack"] = 1
+
+        if self.options.campaign == Options.Campaign.option_basic or self.options.campaign == Options.Campaign.option_both:
+            self.multiworld.early_items[self.player]["Movement Pack"] = 1
 
         for item in items_to_exclude:
             if item in self.multiworld.itempool:
@@ -71,15 +82,21 @@ class DLCqworld(World):
             if self.options.coinsanity == Options.CoinSanity.option_coin and self.options.coinbundlequantity >= 5:
                 self.multiworld.push_precollected(self.create_item("Movement Pack"))
 
-    def create_item(self, item: Union[str, ItemData]) -> DLCQuestItem:
+    def create_item(self, item: Union[str, ItemData], classification: ItemClassification = None) -> DLCQuestItem:
         if isinstance(item, str):
             item = item_table[item]
+        if classification is None:
+            classification = item.classification
 
-        return DLCQuestItem(item.name, item.classification, item.code, self.player)
+        return DLCQuestItem(item.name, classification, item.code, self.player)
+
+    def get_filler_item_name(self) -> str:
+        trap = self.multiworld.random.choice(items_by_group[Group.Trap])
+        return trap.name
 
     def fill_slot_data(self):
         options_dict = self.options.as_dict(
-            "death_link", "ending_choice", "campaign", "coinsanity", "item_shuffle"
+            "death_link", "ending_choice", "campaign", "coinsanity", "item_shuffle", "permanent_coins"
         )
         options_dict.update({
             "coinbundlerange": self.options.coinbundlequantity.value,

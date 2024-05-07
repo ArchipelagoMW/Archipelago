@@ -9,10 +9,12 @@ import asyncio
 import base64
 import enum
 import json
+import sys
 import typing
 
 
-BIZHAWK_SOCKET_PORT = 43055
+BIZHAWK_SOCKET_PORT_RANGE_START = 43055
+BIZHAWK_SOCKET_PORT_RANGE_SIZE = 5
 
 
 class ConnectionStatus(enum.IntEnum):
@@ -45,11 +47,13 @@ class BizHawkContext:
     streams: typing.Optional[typing.Tuple[asyncio.StreamReader, asyncio.StreamWriter]]
     connection_status: ConnectionStatus
     _lock: asyncio.Lock
+    _port: typing.Optional[int]
 
     def __init__(self) -> None:
         self.streams = None
         self.connection_status = ConnectionStatus.NOT_CONNECTED
         self._lock = asyncio.Lock()
+        self._port = None
 
     async def _send_message(self, message: str):
         async with self._lock:
@@ -86,15 +90,24 @@ class BizHawkContext:
 
 
 async def connect(ctx: BizHawkContext) -> bool:
-    """Attempts to establish a connection with the connector script. Returns True if successful."""
-    try:
-        ctx.streams = await asyncio.open_connection("localhost", BIZHAWK_SOCKET_PORT)
-        ctx.connection_status = ConnectionStatus.TENTATIVE
-        return True
-    except (TimeoutError, ConnectionRefusedError):
-        ctx.streams = None
-        ctx.connection_status = ConnectionStatus.NOT_CONNECTED
-        return False
+    """Attempts to establish a connection with a connector script. Returns True if successful."""
+    rotation_steps = 0 if ctx._port is None else ctx._port - BIZHAWK_SOCKET_PORT_RANGE_START
+    ports = [*range(BIZHAWK_SOCKET_PORT_RANGE_START, BIZHAWK_SOCKET_PORT_RANGE_START + BIZHAWK_SOCKET_PORT_RANGE_SIZE)]
+    ports = ports[rotation_steps:] + ports[:rotation_steps]
+
+    for port in ports:
+        try:
+            ctx.streams = await asyncio.open_connection("127.0.0.1", port)
+            ctx.connection_status = ConnectionStatus.TENTATIVE
+            ctx._port = port
+            return True
+        except (TimeoutError, ConnectionRefusedError):
+            continue
+    
+    # No ports worked
+    ctx.streams = None
+    ctx.connection_status = ConnectionStatus.NOT_CONNECTED
+    return False
 
 
 def disconnect(ctx: BizHawkContext) -> None:
@@ -113,7 +126,20 @@ async def send_requests(ctx: BizHawkContext, req_list: typing.List[typing.Dict[s
     """Sends a list of requests to the BizHawk connector and returns their responses.
 
     It's likely you want to use the wrapper functions instead of this."""
-    return json.loads(await ctx._send_message(json.dumps(req_list)))
+    responses = json.loads(await ctx._send_message(json.dumps(req_list)))
+    errors: typing.List[ConnectorError] = []
+
+    for response in responses:
+        if response["type"] == "ERROR":
+            errors.append(ConnectorError(response["err"]))
+
+    if errors:
+        if sys.version_info >= (3, 11, 0):
+            raise ExceptionGroup("Connector script returned errors", errors)  # noqa
+        else:
+            raise errors[0]
+
+    return responses
 
 
 async def ping(ctx: BizHawkContext) -> None:
@@ -233,7 +259,7 @@ async def guarded_read(ctx: BizHawkContext, read_list: typing.List[typing.Tuple[
                 return None
         else:
             if item["type"] != "READ_RESPONSE":
-                raise SyncError(f"Expected response of type READ_RESPONSE or GUARD_RESPONSE but got {res['type']}")
+                raise SyncError(f"Expected response of type READ_RESPONSE or GUARD_RESPONSE but got {item['type']}")
 
             ret.append(base64.b64decode(item["value"]))
 
@@ -285,7 +311,7 @@ async def guarded_write(ctx: BizHawkContext, write_list: typing.List[typing.Tupl
                 return False
         else:
             if item["type"] != "WRITE_RESPONSE":
-                raise SyncError(f"Expected response of type WRITE_RESPONSE or GUARD_RESPONSE but got {res['type']}")
+                raise SyncError(f"Expected response of type WRITE_RESPONSE or GUARD_RESPONSE but got {item['type']}")
 
     return True
 

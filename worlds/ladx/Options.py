@@ -43,6 +43,12 @@ class TradeQuest(DefaultOffToggle, LADXROption):
     display_name = "Trade Quest"
     ladxr_name = "tradequest"
 
+class TextShuffle(DefaultOffToggle):
+    """
+    [On] Shuffles all the text in the game
+    [Off] (default) doesn't shuffle them.
+    """
+
 class Rooster(DefaultOnToggle, LADXROption):
     """
     [On] Adds the rooster to the item pool. 
@@ -173,6 +179,22 @@ class ShuffleStoneBeaks(DungeonItemShuffle):
     display_name = "Shuffle Stone Beaks"
     ladxr_item = "STONE_BEAK"
 
+class ShuffleInstruments(DungeonItemShuffle):
+    """
+    Shuffle Instruments
+    [Original Dungeon] The item will be within its original dungeon
+    [Own Dungeons] The item will be within a dungeon in your world
+    [Own World] The item will be somewhere in your world
+    [Any World] The item could be anywhere
+    [Different World] The item will be somewhere in another world
+    [Vanilla] The item will be in its vanilla location in your world
+    """
+    display_name = "Shuffle Instruments"
+    ladxr_item = "INSTRUMENT"
+    default = 100
+    option_vanilla = 100
+    alias_false = 100
+
 class Goal(Choice, LADXROption):
     """
     The Goal of the game
@@ -294,6 +316,21 @@ class Overworld(Choice, LADXROption):
 # [Disable] no music in the whole game""",
 #                 aesthetic=True),
 
+class BootsControls(Choice):
+    """
+    Adds additional button to activate Pegasus Boots (does nothing if you haven't picked up your boots!)
+    [Vanilla] Nothing changes, you have to equip the boots to use them
+    [Bracelet] Holding down the button for the bracelet also activates boots (somewhat like Link to the Past)
+    [Press A] Holding down A activates boots
+    [Press B] Holding down B activates boots
+    """
+    display_name = "Boots Controls"
+    option_vanilla = 0
+    option_bracelet = 1
+    option_press_a = 2
+    option_press_b = 3
+    
+
 class LinkPalette(Choice, LADXROption):
     """
     Sets link's palette
@@ -343,18 +380,19 @@ class GfxMod(FreeText, LADXROption):
     normal = ''
     default = 'Link'
 
+    __spriteDir: str = Utils.local_path(os.path.join('data', 'sprites','ladx'))
     __spriteFiles: typing.DefaultDict[str, typing.List[str]] = defaultdict(list)
-    __spriteDir: str = None
 
     extensions = [".bin", ".bdiff", ".png", ".bmp"]
+
+    for file in os.listdir(__spriteDir):
+        name, extension = os.path.splitext(file)
+        if extension in extensions:
+            __spriteFiles[name].append(file)
+            
     def __init__(self, value: str):
         super().__init__(value)
-        if not GfxMod.__spriteDir:
-            GfxMod.__spriteDir = Utils.local_path(os.path.join('data', 'sprites','ladx'))
-            for file in os.listdir(GfxMod.__spriteDir):
-                name, extension = os.path.splitext(file)
-                if extension in self.extensions:
-                    GfxMod.__spriteFiles[name].append(file)
+
                     
     def verify(self, world, player_name: str, plando_options) -> None:
         if self.value == "Link" or self.value in GfxMod.__spriteFiles:
@@ -391,6 +429,26 @@ class Palette(Choice):
     option_greyscale = 3
     option_pink = 4
     option_inverted = 5
+
+class Music(Choice, LADXROption):
+    """
+    [Vanilla] Regular Music
+    [Shuffled] Shuffled Music
+    [Off] No music
+    """
+    ladxr_name = "music"
+    option_vanilla = 0
+    option_shuffled = 1
+    option_off = 2
+
+    
+    def to_ladxr_option(self, all_options):
+        s = ""
+        if self.value == self.option_shuffled:
+            s = "random"
+        elif self.value == self.option_off:
+            s = "off"
+        return self.ladxr_name, s
 
 class WarpImprovements(DefaultOffToggle):
     """
@@ -431,12 +489,16 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'trendy_game': TrendyGame,
     'gfxmod': GfxMod,
     'palette': Palette,
+    'text_shuffle': TextShuffle,
     'shuffle_nightmare_keys': ShuffleNightmareKeys,
     'shuffle_small_keys': ShuffleSmallKeys,
     'shuffle_maps': ShuffleMaps,
     'shuffle_compasses': ShuffleCompasses,
     'shuffle_stone_beaks': ShuffleStoneBeaks,
+    'music': Music,
+    'shuffle_instruments': ShuffleInstruments,
     'music_change_condition': MusicChangeCondition,
     'nag_messages': NagMessages,
     'ap_title_screen': APTitleScreen,
+    'boots_controls': BootsControls,   
 }
