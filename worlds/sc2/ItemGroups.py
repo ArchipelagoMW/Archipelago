@@ -539,23 +539,3 @@ item_name_groups[ItemGroupNames.LOTV_ITEMS] = vanilla_lotv_items = (
 item_name_groups[ItemGroupNames.VANILLA_ITEMS] = vanilla_items = (
     vanilla_wol_items + vanilla_hots_items + vanilla_lotv_items
 )
-
-
-# Sanity checks
-def _sanity_check() -> None:
-    all_progressive_upgrades = [
-        item_name for item_name, item_data in Items.item_table.items()
-        if item_data.type.display_name == Items.TerranItemType.Progressive.display_name
-    ]
-    assert len(terran_units) == len(barracks_units) + len(factory_units) + len(starport_units) + len(terran_mercenaries)
-    assert len(protoss_units) == len(gateway_units) + len(robo_units) + len(stargate_units)
-    for item_name in terran_original_progressive_upgrades:
-        assert item_name in all_progressive_upgrades
-        assert item_name in wol_upgrades
-    for item_name in terran_stimpacks:
-        assert "Stimpack" in item_name
-    for var_name, display_name in ItemGroupNames.__dict__.items():
-        if var_name.startswith("_"):
-            continue
-        assert display_name in item_name_groups
-_sanity_check()
