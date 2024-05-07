@@ -707,10 +707,12 @@ class CollectionState:
     additional_init_functions: List[Callable[[CollectionState, MultiWorld], None]] = []
     additional_copy_functions: List[Callable[[CollectionState, CollectionState], CollectionState]] = []
 
-    def __init__(self, parent: MultiWorld, player: Optional[int] = None):
+    def __init__(self, parent: MultiWorld, players: Optional[Union[Iterable[int], int]] = None):
         self.multiworld = parent
-        if player:
-            self.states = {player: PlayerState(player, self)}
+        if players:
+            if not isinstance(players, Iterable):
+                players = (players,)
+            self.states = {player: PlayerState(player, self) for player in players}
         else:
             self.states = {player: PlayerState(player, self) for player in parent.get_all_ids()}
         self.prog_items = self.states  # assign as a reference for back compatibility
