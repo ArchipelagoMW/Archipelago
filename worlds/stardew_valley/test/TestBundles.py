@@ -1,8 +1,8 @@
 import unittest
 
-from ..data.bundle_data import all_bundle_items_except_money, quality_crops_items_thematic
+from ..data.bundle_data import all_bundle_items_except_money, quality_crops_items_thematic, quality_foraging_items, quality_fish_items
 from ..strings.crop_names import Fruit
-from ..strings.quality_names import CropQuality
+from ..strings.quality_names import CropQuality, ForageQuality, FishQuality
 
 
 class TestBundles(unittest.TestCase):
@@ -26,4 +26,24 @@ class TestBundles(unittest.TestCase):
         for bundle_item in quality_crops_items_thematic:
             with self.subTest(bundle_item.item_name):
                 self.assertEqual(bundle_item.quality, CropQuality.gold)
+
+    def test_quality_foraging_have_correct_amounts(self):
+        for bundle_item in quality_foraging_items:
+            with self.subTest(bundle_item.item_name):
+                self.assertEqual(bundle_item.amount, 3)
+
+    def test_quality_foraging_have_correct_quality(self):
+        for bundle_item in quality_foraging_items:
+            with self.subTest(bundle_item.item_name):
+                self.assertEqual(bundle_item.quality, ForageQuality.gold)
+
+    def test_quality_fish_have_correct_amounts(self):
+        for bundle_item in quality_fish_items:
+            with self.subTest(bundle_item.item_name):
+                self.assertEqual(bundle_item.amount, 2)
+
+    def test_quality_fish_have_correct_quality(self):
+        for bundle_item in quality_fish_items:
+            with self.subTest(bundle_item.item_name):
+                self.assertEqual(bundle_item.quality, FishQuality.gold)
 

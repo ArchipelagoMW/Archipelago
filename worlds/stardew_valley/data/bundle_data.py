@@ -509,7 +509,7 @@ forest_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.forest, forest_ite
 wild_medicine_items = [item.as_amount(5) for item in [purple_mushroom, fiddlehead_fern, white_algae, hops, blackberry, dandelion]]
 wild_medicine_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.wild_medicine, wild_medicine_items, 4, 3)
 
-quality_foraging_items = sorted({item.as_quality(ForageQuality.gold).as_amount(1)
+quality_foraging_items = sorted({item.as_quality(ForageQuality.gold).as_amount(3)
                                  for item in
                                  [*spring_foraging_items_thematic, *summer_foraging_items_thematic, *fall_foraging_items_thematic,
                                   *winter_foraging_items_thematic, *beach_foraging_items, *desert_foraging_items, magma_cap] if item.can_have_quality})
@@ -657,8 +657,8 @@ winter_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.winter_fish, wi
 rain_fish_items = [red_snapper, shad, catfish, eel, walleye]
 rain_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.rain_fish, rain_fish_items, 3, 3)
 
-quality_fish_items = sorted({item.as_quality(FishQuality.gold) for item in [*river_fish_items_thematic, *lake_fish_items_thematic, *ocean_fish_items_thematic]})
-quality_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.quality_fish, quality_fish_items, 4, 4)
+quality_fish_items = sorted({item.as_quality(FishQuality.gold).as_amount(2) for item in [*river_fish_items_thematic, *lake_fish_items_thematic, *ocean_fish_items_thematic]})
+quality_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.quality_fish, quality_fish_items, 4, 3)
 
 master_fisher_items = [lava_eel, scorpion_carp, octopus, blobfish, lingcod, ice_pip, super_cucumber, stingray, void_salmon, pufferfish]
 master_fisher_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.master_fisher, master_fisher_items, 4, 2)
