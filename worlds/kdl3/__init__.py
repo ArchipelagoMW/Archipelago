@@ -129,6 +129,8 @@ class KDL3World(World):
             # randomize copy abilities
             valid_abilities = list(copy_ability_access_table.keys())
             enemies_to_set = list(self.copy_abilities.keys())
+            unplaced_abilities = set(key for key in copy_ability_access_table.keys()
+                                     if key not in ("No Ability", "Cutter Ability", "Burning Ability"))
             # now for the edge cases
             for abilities, enemies in enemy_restrictive:
                 available_enemies = list()
@@ -143,6 +145,7 @@ class KDL3World(World):
                     chosen_ability = self.random.choice(abilities)
                     self.copy_abilities[chosen_enemy] = chosen_ability
                     enemies_to_set.remove(chosen_enemy)
+                    unplaced_abilities.discard(chosen_ability)
             # two less restrictive ones, we need to ensure Cutter and Burning appear before their required stages
             sand_canyon_5 = self.get_region("Sand Canyon 5 - 9")
             # this is primarily for typing, but if this ever hits it's fine to crash
@@ -160,6 +163,13 @@ class KDL3World(World):
             if burning_enemy:
                 self.copy_abilities[burning_enemy] = "Burning Ability"
                 enemies_to_set.remove(burning_enemy)
+            # ensure we place one of every ability
+            if unplaced_abilities and self.options.accessibility != self.options.accessibility.option_minimal:
+                # failsafe, on non-minimal we need to guarantee every copy ability exists
+                for ability in sorted(unplaced_abilities):
+                    enemy = self.random.choice(enemies_to_set)
+                    self.copy_abilities[enemy] = ability
+                    enemies_to_set.remove(enemy)
             # place remaining
             for enemy in enemies_to_set:
                 self.copy_abilities[enemy] = self.random.choice(valid_abilities)
@@ -193,9 +203,13 @@ class KDL3World(World):
                 animal_pool.append("Coo Spawn")
             else:
                 animal_pool.append("Kine Spawn")
+            # Weird fill hack, this forces ChuChu to be the last animal friend placed
+            # If Kine is ever the last animal friend placed, he will cause fill errors on closed world
+            animal_pool.sort()
             locations = [self.multiworld.get_location(spawn, self.player) for spawn in spawns]
             items = [self.create_item(animal) for animal in animal_pool]
             allstate = self.multiworld.get_all_state(False)
+            self.random.shuffle(locations)
             fill_restrictive(self.multiworld, allstate, locations, items, True, True)
         else:
             animal_friends = animal_friend_spawns.copy()
@@ -283,6 +297,8 @@ class KDL3World(World):
                 self.boss_butch_bosses = [True for _ in range(6)]
             else:
                 self.boss_butch_bosses = [self.random.choice([True, False]) for _ in range(6)]
+        else:
+            self.boss_butch_bosses = [False for _ in range(6)]
 
     def generate_output(self, output_directory: str):
         rom_path = ""

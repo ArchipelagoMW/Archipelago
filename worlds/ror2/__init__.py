@@ -44,8 +44,8 @@ class RiskOfRainWorld(World):
     }
     location_name_to_id = item_pickups
 
-    data_version = 8
-    required_client_version = (0, 4, 4)
+    data_version = 9
+    required_client_version = (0, 4, 5)
     web = RiskOfWeb()
     total_revivals: int
 
@@ -91,6 +91,17 @@ class RiskOfRainWorld(World):
         # only mess with the environments if they are set as items
         if self.options.goal == "explore":
 
+            # check to see if the user doesn't want to use stages, and to figure out what type of stages are being used.
+            if not self.options.require_stages:
+                if not self.options.progressive_stages:
+                    self.multiworld.push_precollected(self.multiworld.create_item("Stage 1", self.player))
+                    self.multiworld.push_precollected(self.multiworld.create_item("Stage 2", self.player))
+                    self.multiworld.push_precollected(self.multiworld.create_item("Stage 3", self.player))
+                    self.multiworld.push_precollected(self.multiworld.create_item("Stage 4", self.player))
+                else:
+                    for _ in range(4):
+                        self.multiworld.push_precollected(self.multiworld.create_item("Progressive Stage", self.player))
+
             # figure out all available ordered stages for each tier
             environment_available_orderedstages_table = environment_vanilla_orderedstages_table
             if self.options.dlc_sotv:
@@ -121,8 +132,12 @@ class RiskOfRainWorld(World):
             total_locations = self.options.total_locations.value
         else:
             # explore mode
-            # Add Stage items for logic gates
-            itempool += ["Stage 1", "Stage 2", "Stage 3", "Stage 4"]
+
+            # Add Stage items to the pool
+            if self.options.require_stages:
+                itempool += ["Stage 1", "Stage 2", "Stage 3", "Stage 4"] if not self.options.progressive_stages else \
+                    ["Progressive Stage"] * 4
+
             total_locations = len(
                 get_locations(
                     chests=self.options.chests_per_stage.value,
@@ -206,8 +221,8 @@ class RiskOfRainWorld(World):
         options_dict = self.options.as_dict("item_pickup_step", "shrine_use_step", "goal", "victory", "total_locations",
                                             "chests_per_stage", "shrines_per_stage", "scavengers_per_stage",
                                             "scanner_per_stage", "altars_per_stage", "total_revivals",
-                                            "start_with_revive", "final_stage_death", "death_link",
-                                            casing="camel")
+                                            "start_with_revive", "final_stage_death", "death_link", "require_stages",
+                                            "progressive_stages", casing="camel")
         return {
             **options_dict,
             "seed": "".join(self.random.choice(string.digits) for _ in range(16)),
