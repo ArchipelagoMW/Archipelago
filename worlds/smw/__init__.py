@@ -89,7 +89,7 @@ class SMWWorld(World):
         return slot_data
 
     def generate_early(self):
-        if self.options.early_climb:
+        if (self.options.early_climb == "auto" and not self.options.level_shuffle) or self.options.early_climb == "on":
             self.multiworld.local_early_items[self.player][ItemName.mario_climb] = 1
 
     def create_regions(self):

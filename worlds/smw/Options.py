@@ -153,14 +153,19 @@ class ExcludeSpecialZone(Toggle):
     display_name = "Exclude Special Zone"
 
 
-class SwapDonutGhostHouseExits(Toggle):
+class SwapDonutGhostHouseExits(Choice):
     """
     If enabled, this option will swap which overworld direction the two exits of the level at the Donut Ghost House
         overworld tile go:
-    False: Normal Exit goes up, Secret Exit goes right.
-    True: Normal Exit goes right, Secret Exit goes up.
+    Off: Normal Exit goes up, Secret Exit goes right.
+    On: Normal Exit goes right, Secret Exit goes up.
+    Auto: On if Level Shuffle is on, and Off if Level Shuffle is on.
     """
     display_name = "Swap Donut GH Exits"
+    option_off = 0
+    option_on = 1
+    option_auto = 2
+    default = 2
 
 
 class DisplayReceivedItemPopups(Choice):
@@ -255,12 +260,17 @@ class Autosave(DefaultOnToggle):
     display_name = "Autosave"
 
 
-class EarlyClimb(Toggle):
+class EarlyClimb(Choice):
     """
     Force Climb to appear early in the seed as a local item.
-    This is particularly useful to prevent BK when Level Shuffle is disabled
+    This is particularly useful to prevent BK when Level Shuffle is disabled.
+    Auto will turn this on if Level Shuffle is off, and off if Level Shuffle is on.
     """
     display_name = "Early Climb"
+    option_off = 0
+    option_on = 1
+    option_auto = 2
+    default = 2
 
 
 class OverworldSpeed(Choice):

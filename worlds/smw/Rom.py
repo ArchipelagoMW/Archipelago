@@ -3137,8 +3137,9 @@ def patch_rom(world: World, rom, player, active_level_dict):
     
     if world.options.sfx_shuffle != "none":
         generate_shuffled_sfx(rom, world)
-    
-    if world.options.swap_donut_gh_exits:
+
+    if (world.options.swap_donut_gh_exits == "auto"
+        and world.options.level_shuffle) or world.options.swap_donut_gh_exits == "on":
         handle_swap_donut_gh_exits(rom)
 
     handle_mario_palette(rom, world)
