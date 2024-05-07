@@ -59,6 +59,10 @@ class TestSurf(PokemonEmeraldTestBase):
         self.assertFalse(self.can_reach_entrance("REGION_ROUTE119/UPPER -> REGION_FORTREE_CITY/MAIN"))
         self.assertFalse(self.can_reach_entrance("MAP_FORTREE_CITY:3/MAP_FORTREE_CITY_MART:0"))
 
+        # Slateport Access
+        self.collect_by_name(["HM06 Rock Smash", "Dynamo Badge", "Mach Bike"])
+        self.assertFalse(self.can_reach_region("MAP_SLATEPORT_CITY_WATER_ENCOUNTERS"))
+
     def test_accessible_with_surf_only(self) -> None:
         self.collect_by_name(["HM03 Surf", "Balance Badge"])
         self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_PETALBURG_CITY_ETHER")))
@@ -70,6 +74,7 @@ class TestSurf(PokemonEmeraldTestBase):
         self.assertTrue(self.can_reach_entrance("REGION_ROUTE119/UPPER -> REGION_FORTREE_CITY/MAIN"))
         self.assertTrue(self.can_reach_entrance("MAP_FORTREE_CITY:3/MAP_FORTREE_CITY_MART:0"))
         self.assertTrue(self.can_reach_location(location_name_to_label("BADGE_4")))
+        self.assertTrue(self.can_reach_region("MAP_SLATEPORT_CITY_WATER_ENCOUNTERS"))
 
 
 class TestFreeFly(PokemonEmeraldTestBase):
