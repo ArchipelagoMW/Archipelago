@@ -783,9 +783,7 @@ class CollectionState():
 
     # item name group related
     def has_group(self, item_name_group: str, player: int, count: int = 1) -> bool:
-        """
-        Returns True if the cumulative count of items from an item group present in state exceeds the specified number.
-        """
+        """Returns True if the state contains at least `count` items present in a specified item group."""
         found: int = 0
         player_prog_items = self.prog_items[player]
         for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
