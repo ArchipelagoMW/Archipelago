@@ -321,8 +321,10 @@ item_name_groups[ItemGroupNames.NCO_UNIT_TECHNOLOGY] = nco_unit_technology = [
     ItemNames.GOLIATH_JUMP_JETS,
     ItemNames.GOLIATH_OPTIMIZED_LOGISTICS,
     ItemNames.GOLIATH_MULTI_LOCK_WEAPONS_SYSTEM,
-    ItemNames.SIEGE_TANK_SPIDER_MINES, ItemNames.SIEGE_TANK_JUMP_JETS,
-    ItemNames.SIEGE_TANK_INTERNAL_TECH_MODULE, ItemNames.SIEGE_TANK_SMART_SERVOS,
+    ItemNames.SIEGE_TANK_SPIDER_MINES,
+    ItemNames.SIEGE_TANK_JUMP_JETS,
+    ItemNames.SIEGE_TANK_INTERNAL_TECH_MODULE,
+    ItemNames.SIEGE_TANK_SMART_SERVOS,
     # Tanks can't get Laser targeting system in NCO
     ItemNames.BANSHEE_INTERNAL_TECH_MODULE,
     ItemNames.BANSHEE_PROGRESSIVE_CROSS_SPECTRUM_DAMPENERS,
@@ -484,8 +486,8 @@ item_name_groups[ItemGroupNames.ROBO_UNITS] = robo_units = [
 item_name_groups[ItemGroupNames.STARGATE_UNITS] = stargate_units = [
     ItemNames.PHOENIX, ItemNames.MIRAGE, ItemNames.CORSAIR,
     ItemNames.VOID_RAY, ItemNames.DESTROYER,
-    ItemNames.SCOUT, ItemNames.TEMPEST,
-    ItemNames.CARRIER, ItemNames.MOTHERSHIP,
+    ItemNames.SCOUT, ItemNames.MOTHERSHIP,
+    ItemNames.CARRIER, ItemNames.TEMPEST,
     ItemNames.ARBITER, ItemNames.ORACLE,
 ]
 item_name_groups[ItemGroupNames.PROTOSS_BUILDINGS] = protoss_buildings = [
