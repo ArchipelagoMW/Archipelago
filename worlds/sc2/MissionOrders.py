@@ -187,21 +187,21 @@ def make_golden_path(world: World, num_missions: int) -> Dict[SC2Campaign, List[
 
     first_chain = chain_name_options.pop()
     first_mission = FillMission(MissionPools.STARTER, [MissionConnection(-1, SC2Campaign.GLOBAL)], first_chain,
-                                     completion_critical=True)
+                                completion_critical=True)
 
     class Campaign:
-        def __init__(self, first_mission: FillMission, missions_remaining: int):
-            self.mission_order = [first_mission]
-            self.counter = 0
+        def __init__(self, root_mission: FillMission, missions_remaining: int):
+            self.mission_order = [root_mission]
+            self.mission_counter = 0
             self.last_mission_in_chain = [0]
-            self.chain_names = [first_mission.category]
+            self.chain_names = [root_mission.category]
             self.missions_remaining = missions_remaining
             self.padding = 0
 
         def add_mission(self, chain: int, difficulty: int, required_missions: int = 0):
             if self.missions_remaining == 0 and difficulty is not MissionPools.FINAL:
                 return
-            self.counter += 1
+            self.mission_counter += 1
             if self.mission_order[self.last_mission_in_chain[chain]].number == required_missions or required_missions <= 1:
                 required_missions = 0
             mission_connections = [MissionConnection(self.last_mission_in_chain[chain], SC2Campaign.GLOBAL)]
@@ -221,19 +221,19 @@ def make_golden_path(world: World, num_missions: int) -> Dict[SC2Campaign, List[
                 completion_critical=chain == 0,
                 ui_vertical_padding=padding
             ))
-            self.last_mission_in_chain[chain] = self.counter
+            self.last_mission_in_chain[chain] = self.mission_counter
             if chain == 0:
                 self.padding += 1
             self.missions_remaining -= 1
 
     campaign = Campaign(first_mission, num_missions - 2)
     current_required_missions = 0
-    main_chain = 0
+    main_chain_length = 0
     while campaign.missions_remaining > 0:
-        mission_difficulty = smooth_difficulty[min(main_chain, max_difficulty)]
-        main_chain += 1
-        if main_chain % 2 == 1:  # Adding branches
-            chains_to_make = 0 if len(campaign.chain_names) > 5 else 2 if main_chain == 1 else 1
+        mission_difficulty = smooth_difficulty[min(main_chain_length, max_difficulty)]
+        main_chain_length += 1
+        if main_chain_length % 2 == 1:  # Adding branches
+            chains_to_make = 0 if len(campaign.chain_names) > 5 else 2 if main_chain_length == 1 else 1
             for new_chain in range(chains_to_make):
                 campaign.chain_names.append(chain_name_options.pop())
                 campaign.last_mission_in_chain.append(campaign.last_mission_in_chain[0])
