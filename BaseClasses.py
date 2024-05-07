@@ -722,8 +722,23 @@ class CollectionState():
         Utils.deprecate("Use count instead.")
         return self.count(item, player)
 
+    def has_from_list(self, items: Iterable[str], player: int, count: int) -> bool:
+        """Returns True if the state contains at least `count` items matching any of the item names from a list."""
+        found: int = 0
+        player_prog_items = self.prog_items[player]
+        for item_name in items:
+            found += player_prog_items[item_name]
+            if found >= count:
+                return True
+        return False
+
+    def count_from_list(self, items: Iterable[str], player: int) -> int:
+        """Returns the cumulative count of items from a list present in state."""
+        return sum(self.prog_items[player][item_name] for item_name in items)
+
     # item name group related
     def has_group(self, item_name_group: str, player: int, count: int = 1) -> bool:
+        """Returns True if the state contains at least `count` items present in a specified item group."""
         found: int = 0
         player_prog_items = self.prog_items[player]
         for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
@@ -733,11 +748,12 @@ class CollectionState():
         return False
 
     def count_group(self, item_name_group: str, player: int) -> int:
-        found: int = 0
+        """Returns the cumulative count of items from an item group present in state."""
         player_prog_items = self.prog_items[player]
-        for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
-            found += player_prog_items[item_name]
-        return found
+        return sum(
+            player_prog_items[item_name]
+            for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]
+        )
 
     # Item related
     def collect(self, item: Item, event: bool = False, location: Optional[Location] = None) -> bool:
