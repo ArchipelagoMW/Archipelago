@@ -110,6 +110,11 @@ local IsItemable = function()
 end
 
 local is_game_complete = function()
+    -- If the Cannary Byte is 0xFF, then the save RAM is untrustworthy
+    if memory.read_u8(canary_byte) == 0xFF then
+        return game_complete
+    end
+
     -- If on the title screen don't read RAM, RAM can't be trusted yet
     if IsOnTitle() then return game_complete end
 
