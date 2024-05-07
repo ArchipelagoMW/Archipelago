@@ -767,7 +767,7 @@ class CollectionState():
         Utils.deprecate("Use count instead.")
         return self.count(item, player)
 
-    def has_list(self, items: Iterable[str], player: int, count: int = 1) -> bool:
+    def has_from_list(self, items: Iterable[str], player: int, count: int = 1) -> bool:
         """Returns True if the cumulative count of items from a list present in state exceeds the specified number."""
         found: int = 0
         player_prog_items = self.prog_items[player]
@@ -777,7 +777,7 @@ class CollectionState():
                 return True
         return False
 
-    def count_list(self, items: Iterable[str], player: int) -> int:
+    def count_from_list(self, items: Iterable[str], player: int) -> int:
         """Returns the cumulative count of items from a list present in state."""
         return sum(self.prog_items[player][item_name] for item_name in items)
 
