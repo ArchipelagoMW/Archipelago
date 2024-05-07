@@ -1129,57 +1129,61 @@ class KH2FightRules(KH2Rules):
     def get_easy_data_xaldin_rules(self, state: CollectionState) -> bool:
         # easy:final 7,firaga,2 air combo plus, finishing plus,guard,reflega,donald limit,high jump aerial dodge glide lvl 3,magnet,aerial dive,aerial spiral,hori slash,berserk charge
         return self.kh2_dict_count(easy_data_xaldin, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5)
+
     def get_normal_data_xaldin_rules(self, state: CollectionState) -> bool:
         # normal:final 7,firaga, finishing plus,guard,reflega,donald limit,high jump aerial dodge glide lvl 3,magnet,aerial dive,aerial spiral,hori slash
-         return self.kh2_dict_count(normal_data_xaldin, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5)
+        return self.kh2_dict_count(normal_data_xaldin, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5)
 
     def get_hard_data_xaldin_rules(self, state: CollectionState) -> bool:
         # hard:final 5, fira, party limit, finishing plus,guard,high jump aerial dodge glide lvl 2,magnet,aerial dive
         return self.kh2_dict_count(hard_data_xaldin, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 3) and self.kh2_has_any(party_limit, state)
 
-    def get_hostile_program_rules(self, state: CollectionState) -> bool:
+    def get_easy_hostile_program_rules(self, state: CollectionState) -> bool:
         # easy:donald limit,reflect,drive form,summon
+
+        return self.kh2_list_any_sum([donald_limit, form_list, summons, {ItemName.ReflectElement}], state) >= 4
+
+    def get_normal_hostile_program_rules(self, state: CollectionState) -> bool:
         # normal:3 of those things
+        return self.kh2_list_any_sum([donald_limit, form_list, summons, {ItemName.ReflectElement}], state) >= 3
+
+    def get_hard_hostile_program_rules(self, state: CollectionState) -> bool:
         # hard: 2 of those things
-        hostile_program_rules = {
-            "easy":   self.kh2_list_any_sum([donald_limit, form_list, summons, {ItemName.ReflectElement}], state) >= 4,
-            "normal": self.kh2_list_any_sum([donald_limit, form_list, summons, {ItemName.ReflectElement}], state) >= 3,
-            "hard":   self.kh2_list_any_sum([donald_limit, form_list, summons, {ItemName.ReflectElement}], state) >= 2,
-        }
-        return hostile_program_rules[self.fight_logic]
+
+        return self.kh2_list_any_sum([donald_limit, form_list, summons, {ItemName.ReflectElement}], state) >= 2
 
     def get_mcp_rules(self, state: CollectionState) -> bool:
-        # easy:donald limit,reflect,drive form,summon
-        # normal:3 of those things
-        # hard: 2 of those things
-        mcp_rules = {
-            "easy":   self.kh2_list_any_sum([donald_limit, form_list, summons, {ItemName.ReflectElement}], state) >= 4,
-            "normal": self.kh2_list_any_sum([donald_limit, form_list, summons, {ItemName.ReflectElement}], state) >= 3,
-            "hard":   self.kh2_list_any_sum([donald_limit, form_list, summons, {ItemName.ReflectElement}], state) >= 2,
-        }
-        return mcp_rules[self.fight_logic]
+        # same fight rules. Change this if boss enemy
+        return self.multiworld.get_location(LocationName.HostileProgramGetBonus).can_reach(state)
 
-    def get_data_larxene_rules(self, state: CollectionState) -> bool:
+    def get_easy_data_larxene_rules(self, state: CollectionState) -> bool:
         # easy: final 7,firaga,scom,both donald limits, Reflega,guard,2 gap closers,2 ground finishers,aerial dodge 3,glide 3
-        # normal:final 7,firaga, donald limit, Reflega ,guard,1 gap closers,1 ground finisher,aerial dodge 3,glide 3
-        # hard:final 5,fira, donald limit, reflect,gap closer,aerial dodge 2,glide 2
-        data_larxene_rules = {
-            "easy":   self.kh2_dict_count(easy_data_larxene, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5),
-            "normal": self.kh2_dict_count(normal_data_larxene, state) and self.kh2_list_any_sum([gap_closer, ground_finisher, donald_limit], state) >= 3 and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5),
-            "hard":   self.kh2_dict_count(hard_data_larxene, state) and self.kh2_list_any_sum([gap_closer, donald_limit], state) >= 2 and self.kh2_has_final_form(state) and self.get_form_level_max(state, 3),
-        }
-        return data_larxene_rules[self.fight_logic]
 
-    def get_prison_keeper_rules(self, state: CollectionState) -> bool:
+        return self.kh2_dict_count(easy_data_larxene, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5),
+
+    def get_normal_data_larxene_rules(self, state: CollectionState) -> bool:
+        # normal:final 7,firaga, donald limit, Reflega ,guard,1 gap closers,1 ground finisher,aerial dodge 3,glide 3
+        return self.kh2_dict_count(easy_data_larxene, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5),
+
+    def get_hard_data_larxene_rules(self, state: CollectionState) -> bool:
+        # hard:final 5,fira, donald limit, reflect,gap closer,aerial dodge 2,glide 2
+
+        return self.kh2_dict_count(hard_data_larxene, state) and self.kh2_list_any_sum([gap_closer, donald_limit], state) >= 2 and self.kh2_has_final_form(state) and self.get_form_level_max(state, 3),
+
+    def get_easy_prison_keeper_rules(self, state: CollectionState) -> bool:
         # easy:defensive tool,drive form, party limit
+
+        return self.kh2_list_any_sum([defensive_tool, form_list, party_limit], state) >= 3
+
+    def get_normal_prison_keeper_rules(self, state: CollectionState) -> bool:
         # normal:two of those things
+
+        return self.kh2_list_any_sum([defensive_tool, form_list, party_limit], state) >= 2
+
+    def get_hard_prison_keeper_rules(self, state: CollectionState) -> bool:
         # hard:one of those things
-        prison_keeper_rules = {
-            "easy":   self.kh2_list_any_sum([defensive_tool, form_list, party_limit], state) >= 3,
-            "normal": self.kh2_list_any_sum([defensive_tool, form_list, party_limit], state) >= 2,
-            "hard":   self.kh2_list_any_sum([defensive_tool, form_list, party_limit], state) >= 1,
-        }
-        return prison_keeper_rules[self.fight_logic]
+
+        return self.kh2_list_any_sum([defensive_tool, form_list, party_limit], state) >= 1
 
     @staticmethod
     def get_oogie_rules():
@@ -1197,40 +1201,72 @@ class KH2FightRules(KH2Rules):
         }
         return experiment_rules[self.fight_logic]
 
-    def get_data_vexen_rules(self, state: CollectionState) -> bool:
+    def get_easy_data_vexen_rules(self, state: CollectionState) -> bool:
         # easy: final 7,firaga,scom,both donald limits, Reflega,guard,2 gap closers,2 ground finishers,aerial dodge 3,glide 3,dodge roll 3,quick run 3
+
+        return self.kh2_dict_count(easy_data_vexen, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5),
+
+    def get_normal_data_vexen_rules(self, state: CollectionState) -> bool:
         # normal:final 7,firaga, donald limit, Reflega,guard,1 gap closers,1 ground finisher,aerial dodge 3,glide 3,dodge roll 3,quick run 3
+
+        return self.kh2_dict_count(normal_data_vexen, state) and self.kh2_list_any_sum([gap_closer, ground_finisher, donald_limit], state) >= 3 and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5),
+
+    def get_hard_data_vexen_rules(self, state: CollectionState) -> bool:
         # hard:final 5,fira, donald limit, reflect,gap closer,aerial dodge 2,glide 2,dodge roll 2,quick run 2
-        data_vexen_rules = {
-            "easy":   self.kh2_dict_count(easy_data_vexen, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5),
-            "normal": self.kh2_dict_count(normal_data_vexen, state) and self.kh2_list_any_sum([gap_closer, ground_finisher, donald_limit], state) >= 3 and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5),
-            "hard":   self.kh2_dict_count(hard_data_vexen, state) and self.kh2_list_any_sum([gap_closer, donald_limit], state) >= 2 and self.kh2_has_final_form(state) and self.get_form_level_max(state, 3),
-        }
-        return data_vexen_rules[self.fight_logic]
 
-    def get_demyx_rules(self, state: CollectionState) -> bool:
+        return self.kh2_dict_count(hard_data_vexen, state) and self.kh2_list_any_sum([gap_closer, donald_limit], state) >= 2 and self.kh2_has_final_form(state) and self.get_form_level_max(state, 3),
+
+    def get_easy_demyx_rules(self, state: CollectionState) -> bool:
         # defensive option,drive form,party limit
+
+        return self.kh2_list_any_sum([defensive_tool, form_list, party_limit], state) >= 3
+
+    def get_normal_demyx_rules(self, state: CollectionState) -> bool:
         # defensive option,drive form
+
+        return self.kh2_list_any_sum([defensive_tool, form_list], state) >= 2
+
+    def get_hard_demyx_rules(self, state: CollectionState) -> bool:
         # defensive option
-        demyx_rules = {
-            "easy":   self.kh2_list_any_sum([defensive_tool, form_list, party_limit], state) >= 3,
-            "normal": self.kh2_list_any_sum([defensive_tool, form_list], state) >= 2,
-            "hard":   self.kh2_list_any_sum([defensive_tool], state) >= 1,
-        }
-        return demyx_rules[self.fight_logic]
 
-    def get_thousand_heartless_rules(self, state: CollectionState) -> bool:
+        return self.kh2_list_any_sum([defensive_tool], state) >= 1
+
+    def get_easy_thousand_heartless_rules(self, state: CollectionState) -> bool:
         # easy:scom,limit form,guard,magnera
-        # normal:limit form, guard
-        # hard:guard
-        thousand_heartless_rules = {
-            "easy":   self.kh2_dict_count(easy_thousand_heartless_rules, state),
-            "normal": self.kh2_dict_count(normal_thousand_heartless_rules, state),
-            "hard":   state.has(ItemName.Guard, self.player),
-        }
-        return thousand_heartless_rules[self.fight_logic]
 
-    def get_data_demyx_rules(self, state: CollectionState) -> bool:
+        return self.kh2_dict_count(easy_thousand_heartless_rules, state)
+    def get_normal_thousand_heartless_rules(self, state: CollectionState) -> bool:
+
+        # normal:limit form, guard
+
+        return self.kh2_dict_count(normal_thousand_heartless_rules, state)
+
+    def get_hard_thousand_heartless_rules(self, state: CollectionState) -> bool:
+
+        # hard:guard
+
+        return state.has(ItemName.Guard, self.player)
+    def get__data_demyx_rules(self, state: CollectionState) -> bool:
+        # easy:wisdom 7,1 form boosts,reflera,firaga,duck flare,guard,scom,finishing plus
+        # normal:remove form boost and scom
+        # hard:wisdom 6,reflect,guard,duck flare,fira,finishing plus
+        data_demyx_rules = {
+            "easy":   self.kh2_dict_count(easy_data_demyx, state) and self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 5),
+            "normal": self.kh2_dict_count(normal_data_demyx, state) and self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 5),
+            "hard":   self.kh2_dict_count(hard_data_demyx, state) and self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 4),
+        }
+        return data_demyx_rules[self.fight_logic]
+    def get__data_demyx_rules(self, state: CollectionState) -> bool:
+        # easy:wisdom 7,1 form boosts,reflera,firaga,duck flare,guard,scom,finishing plus
+        # normal:remove form boost and scom
+        # hard:wisdom 6,reflect,guard,duck flare,fira,finishing plus
+        data_demyx_rules = {
+            "easy":   self.kh2_dict_count(easy_data_demyx, state) and self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 5),
+            "normal": self.kh2_dict_count(normal_data_demyx, state) and self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 5),
+            "hard":   self.kh2_dict_count(hard_data_demyx, state) and self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 4),
+        }
+        return data_demyx_rules[self.fight_logic]
+    def get__data_demyx_rules(self, state: CollectionState) -> bool:
         # easy:wisdom 7,1 form boosts,reflera,firaga,duck flare,guard,scom,finishing plus
         # normal:remove form boost and scom
         # hard:wisdom 6,reflect,guard,duck flare,fira,finishing plus
