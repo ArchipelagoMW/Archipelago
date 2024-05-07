@@ -181,8 +181,8 @@ class OpenRCT2Socket:
 
     def sendobj(self, obj):
         # asyncio.run(self.connectgame())
-        data = json.dumps(obj) + "\0"
-        data = data.encode()
+        data = json.dumps(obj)
+        data = b"\0" + data.encode() + b"\0"
         try:
             self._send(data)
         except Exception as e:
