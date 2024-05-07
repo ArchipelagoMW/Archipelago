@@ -1269,7 +1269,7 @@
   "REGION_SLATEPORT_CITY/MAIN": {
     "parent_map": "MAP_SLATEPORT_CITY",
     "has_grass": false,
-    "has_water": true,
+    "has_water": false,
     "has_fishing": true,
     "locations": [
       "NPC_GIFT_RECEIVED_POWDER_JAR"
@@ -1279,9 +1279,9 @@
       "EVENT_VISITED_SLATEPORT_CITY"
     ],
     "exits": [
+      "REGION_SLATEPORT_CITY/WATER",
       "REGION_ROUTE109/BEACH",
-      "REGION_ROUTE110/SOUTH",
-      "REGION_ROUTE134/WEST"
+      "REGION_ROUTE110/SOUTH"
     ],
     "warps": [
       "MAP_SLATEPORT_CITY:0/MAP_SLATEPORT_CITY_POKEMON_CENTER_1F:0",
@@ -1295,6 +1295,19 @@
       "MAP_SLATEPORT_CITY:9/MAP_SLATEPORT_CITY_HARBOR:2",
       "MAP_SLATEPORT_CITY:10/MAP_SLATEPORT_CITY_HOUSE:0"
     ]
+  },
+  "REGION_SLATEPORT_CITY/WATER": {
+    "parent_map": "MAP_SLATEPORT_CITY",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_SLATEPORT_CITY/MAIN",
+      "REGION_ROUTE134/WEST"
+    ],
+    "warps": []
   },
   "REGION_SLATEPORT_CITY_POKEMON_CENTER_2F/MAIN": {
     "parent_map": "MAP_SLATEPORT_CITY_POKEMON_CENTER_2F",
