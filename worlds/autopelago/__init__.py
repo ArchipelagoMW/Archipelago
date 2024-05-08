@@ -173,6 +173,8 @@ class AutopelagoWorld(World):
             for next_exit in r.autopelago_definition.exits:
                 if next_exit == 'moon_comma_the':
                     continue
+                # TODO: report a bug about state.locations_checked somehow not working... I can't seem to make the rule
+                # make the landmark checks themselves show up in the spoiler.
                 rule = (lambda req_: lambda state: _is_satisfied(self.player, req_, state))(req)
                 r.connect(new_regions[next_exit], rule=None if _is_trivial(req) else rule)
             for loc in r.locations:
