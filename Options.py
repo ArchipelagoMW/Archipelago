@@ -885,7 +885,9 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 
     @classmethod
     def from_text(cls, text: str):
-        return cls([option.strip() for option in text.split(",")])
+        values = [option.strip() for option in text.split(",")]
+        cls.verify_keys(values)
+        return cls(values)
 
     @classmethod
     def from_any(cls, data: typing.Any):
@@ -911,7 +913,9 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
 
     @classmethod
     def from_text(cls, text: str):
-        return cls([option.strip() for option in text.split(",")])
+        values = [option.strip() for option in text.split(",")]
+        cls.verify_keys(values)
+        return cls(values)
 
     @classmethod
     def from_any(cls, data: typing.Any):
