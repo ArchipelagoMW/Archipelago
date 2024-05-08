@@ -731,10 +731,25 @@ class CollectionState():
             if found >= count:
                 return True
         return False
+    
+    def has_from_list_exclusive(self, items: Iterable[str], player: int, count: int) -> bool:
+        """Returns True if the state contains at least `count` items matching any of the item names from a list.
+        Ignores duplicates of the same item."""
+        found: int = 0
+        player_prog_items = self.prog_items[player]
+        for item_name in items:
+            found += player_prog_items[item_name] > 0
+            if found >= count:
+                return True
+        return False
 
     def count_from_list(self, items: Iterable[str], player: int) -> int:
         """Returns the cumulative count of items from a list present in state."""
         return sum(self.prog_items[player][item_name] for item_name in items)
+    
+    def count_from_list_exclusive(self, items: Iterable[str], player: int) -> int:
+        """Returns the cumulative count of items from a list present in state. Ignores duplicates of the same item."""
+        return sum(self.prog_items[player][item_name] > 0 for item_name in items)
 
     # item name group related
     def has_group(self, item_name_group: str, player: int, count: int = 1) -> bool:
@@ -748,7 +763,7 @@ class CollectionState():
         return False
 
     def has_group_exclusive(self, item_name_group: str, player: int, count: int = 1) -> bool:
-        """Returns True if the number of items from the item group in state are greater than or equal to the count.
+        """Returns True if the state contains at least `count` items present in a specified item group.
         Ignores duplicates of the same item.
         """
         found: int = 0
@@ -768,12 +783,13 @@ class CollectionState():
         )
 
     def count_group_exclusive(self, item_name_group: str, player: int) -> int:
-        """Returns the number of items from the item group in state. Ignores duplicates of the same item."""
-        found: int = 0
+        """Returns the cumulative count of items from an item group present in state.
+        Ignores duplicates of the same item."""
         player_prog_items = self.prog_items[player]
-        for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
-            found += player_prog_items[item_name] > 0
-        return found
+        return sum(
+            player_prog_items[item_name] > 0
+            for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]
+        )
 
     # Item related
     def collect(self, item: Item, event: bool = False, location: Optional[Location] = None) -> bool:
