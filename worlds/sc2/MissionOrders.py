@@ -302,7 +302,7 @@ def make_blitz(num_missions: int) -> Dict[SC2Campaign, List[FillMission]]:
         final_mission_number = num_missions - 1
     while mission_number < num_missions:
         column = mission_number % width
-        row = math.floor(mission_number / width)
+        row = mission_number // width
         if mission_number == middle_column:
             difficulty = MissionPools.STARTER
         elif mission_number == final_mission_number:
