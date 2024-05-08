@@ -73,6 +73,7 @@ class FarmType(Choice):
     option_wilderness = 4
     option_four_corners = 5
     option_beach = 6
+    option_meadowlands = 7
 
 
 class StartingMoney(NamedRange):

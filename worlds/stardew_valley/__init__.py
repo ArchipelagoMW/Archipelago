@@ -16,7 +16,7 @@ from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
 from .option_groups import sv_option_groups
 from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, BundlePrice, NumberOfLuckBuffs, NumberOfMovementBuffs, \
-    BackpackProgression, BuildingProgression, ExcludeGingerIsland, TrapItems, EntranceRandomization
+    BackpackProgression, BuildingProgression, ExcludeGingerIsland, TrapItems, EntranceRandomization, FarmType
 from .presets import sv_options_presets
 from .regions import create_regions
 from .rules import set_rules
@@ -134,6 +134,7 @@ class StardewValleyWorld(World):
 
     def create_items(self):
         self.precollect_starting_season()
+        self.precollect_farm_type_items()
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]
                             if not item_table[excluded_items.name].has_any_group(Group.RESOURCE_PACK,
@@ -176,6 +177,11 @@ class StardewValleyWorld(World):
 
         starting_season = self.create_starting_item(self.random.choice(season_pool))
         self.multiworld.push_precollected(starting_season)
+
+    def precollect_farm_type_items(self):
+        if self.options.farm_type == FarmType.option_meadowlands:
+            self.multiworld.push_precollected(self.create_starting_item("Progressive Coop"))
+
 
     def setup_player_events(self):
         self.setup_construction_events()
