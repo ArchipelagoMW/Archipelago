@@ -257,6 +257,9 @@ blacklisted_acts = {
 blacklisted_combos = {
     "The Illness has Spread":           ["Nyakuza Free Roam", "Alpine Free Roam", "Contractual Obligations"],
     "Rush Hour":                        ["Nyakuza Free Roam", "Alpine Free Roam", "Contractual Obligations"],
+
+    # Bon Voyage is here to prevent the cycle: Owl Express -> Bon Voyage -> Deep Sea -> MOTOE -> Owl Express
+    # which would make them all inaccessible since those rifts have no other entrances
     "Time Rift - The Owl Express":      ["Alpine Free Roam", "Nyakuza Free Roam", "Bon Voyage!",
                                          "Contractual Obligations"],
 
@@ -266,7 +269,10 @@ blacklisted_combos = {
     "Time Rift - The Twilight Bell":    ["Nyakuza Free Roam", "Contractual Obligations"],
     "Time Rift - Alpine Skyline":       ["Nyakuza Free Roam", "Contractual Obligations"],
     "Time Rift - Rumbi Factory":        ["Alpine Free Roam", "Contractual Obligations"],
-    "Time Rift - Deep Sea":             ["Alpine Free Roam", "Nyakuza Free Roam", "Contractual Obligations"],
+
+    # See above comment
+    "Time Rift - Deep Sea":             ["Alpine Free Roam", "Nyakuza Free Roam", "Contractual Obligations",
+                                         "Murder on the Owl Express"],
 }
 
 
@@ -425,17 +431,10 @@ def create_regions(world: "HatInTimeWorld"):
 
 
 def create_rift_connections(world: "HatInTimeWorld", region: Region):
-    i = 1
-    for name in rift_access_regions[region.name]:
+    for i, name in enumerate(rift_access_regions[region.name]):
         act_region = world.multiworld.get_region(name, world.player)
-        entrance_name = f"{region.name} Portal - Entrance {i}"
+        entrance_name = f"{region.name} Portal - Entrance {i+1}"
         connect_regions(act_region, region, entrance_name, world.player)
-        i += 1
-
-    # fix for some weird keyerror from tests
-    if region.name == "Time Rift - Rumbi Factory":
-        for entrance in region.entrances:
-            world.multiworld.get_entrance(entrance.name, world.player)
 
 
 def create_tasksanity_locations(world: "HatInTimeWorld"):
@@ -446,260 +445,87 @@ def create_tasksanity_locations(world: "HatInTimeWorld"):
         ship_shape.locations.append(location)
 
 
-def is_valid_plando(world: "HatInTimeWorld", region: str, is_candidate: bool = False) -> bool:
-    # Duplicated keys will throw an exception for us, but we still need to check for duplicated values
-    if is_candidate:
-        found_list: List = []
-        old_region = region
-        for name in world.options.ActPlando.keys():
-            act = world.options.ActPlando.get(name)
-            if act == old_region:
-                region = name
-                found_list.append(name)
-
-        if len(found_list) == 0:
-            return False
-
-        if len(found_list) > 1:
-            raise Exception(f"ActPlando ({world.multiworld.get_player_name(world.player)}) - "
-                  f"Duplicated act plando mapping found for act: \"{old_region}\"")
-    elif region not in world.options.ActPlando.keys():
-        return False
-
-    if region in blacklisted_acts.values() or (region not in act_entrances.keys() and "Time Rift" not in region):
-        return False
-
-    act = world.options.ActPlando.get(region)
-    try:
-        world.multiworld.get_region(region, world.player)
-        world.multiworld.get_region(act, world.player)
-    except KeyError:
-        return False
-
-    if act in blacklisted_acts.values() or (act not in act_entrances.keys() and "Time Rift" not in act):
-        return False
-
-    # Don't allow plando-ing things onto the first act that aren't completable with nothing
-    is_first_act: bool = act_chapters[region] == get_first_chapter_region(world).name \
-        and region in act_entrances.keys() and ("Act 1" in act_entrances[region] or "Free Roam" in act_entrances[region])
-
-    if is_first_act:
-        if act_chapters[act] == "Subcon Forest" and world.options.ShuffleSubconPaintings.value > 0:
-            return False
-
-        if world.options.UmbrellaLogic.value > 0 \
-           and (act == "Heating Up Mafia Town" or act == "Queen Vanessa's Manor"):
-            return False
-
-        if act not in guaranteed_first_acts:
-            return False
-
-    # Don't allow straight up impossible mappings
-    if (region == "Time Rift - Curly Tail Trail"
-       or region == "Time Rift - The Twilight Bell"
-       or region == "The Illness has Spread") \
-       and act == "Alpine Free Roam":
-        return False
-
-    if (region == "Rush Hour" or region == "Time Rift - Rumbi Factory") \
-       and act == "Nyakuza Free Roam":
-        return False
-
-    if region == "Time Rift - The Owl Express" and act == "Murder on the Owl Express":
-        return False
-
-    if region == "Time Rift - Deep Sea" and act == "Bon Voyage!":
-        return False
-
-    return any(a.name == world.options.ActPlando.get(region) for a in world.multiworld.get_regions(world.player))
-
-
 def randomize_act_entrances(world: "HatInTimeWorld"):
     region_list: List[Region] = get_act_regions(world)
     world.random.shuffle(region_list)
+    region_list.sort(key=sort_acts)
+    candidate_list: List[Region] = region_list.copy()
+    rift_dict: Dict[str, Region] = {}
 
-    separate_rifts: bool = bool(world.options.ActRandomizer.value == 1)
-
-    for region in region_list.copy():
-        if (act_chapters[region.name] == "Alpine Skyline" or act_chapters[region.name] == "Nyakuza Metro") \
-           and "Time Rift" not in region.name:
-            region_list.remove(region)
-            region_list.append(region)
-
-    for region in region_list.copy():
-        if region.name in chapter_finales:
-            region_list.remove(region)
-            region_list.append(region)
-
-    for region in region_list.copy():
-        if "Time Rift" in region.name:
-            region_list.remove(region)
-            region_list.append(region)
-
-    for name in world.options.ActPlando.keys():
-        try:
-            world.multiworld.get_region(name, world.player)
-        except KeyError:
-            print(f"[WARNING] ActPlando ({world.multiworld.get_player_name(world.player)}) - "
-                  f"Act \"{name}\" does not exist in the multiworld."
-                  f"Possible reasons are typos, case-sensitivity, or DLC options.")
-
-    for region in region_list.copy():
-        if region.name in world.options.ActPlando.keys():
+    # Check if Plando's are valid, if so, map them
+    if len(world.options.ActPlando) > 0:
+        player_name = world.multiworld.get_player_name(world.player)
+        for (name1, name2) in world.options.ActPlando.items():
+            region: Region
+            act: Region
             try:
-                act = world.multiworld.get_region(world.options.ActPlando.get(region.name), world.player)
+                region = world.multiworld.get_region(name1, world.player)
             except KeyError:
-                print(f"[WARNING] ActPlando ({world.multiworld.get_player_name(world.player)}) - "
-                      f"Act \"{world.options.ActPlando.get(region.name)}\" does not exist in the multiworld."
+                print(f"ActPlando ({player_name}) - "
+                      f"Act \"{name1}\" does not exist in the multiworld. "
+                      f"Possible reasons are typos, case-sensitivity, or DLC options.")
+                continue
+
+            try:
+                act = world.multiworld.get_region(name2, world.player)
+            except KeyError:
+                print(f"ActPlando ({player_name}) - "
+                      f"Act \"{name2}\" does not exist in the multiworld. "
                       f"Possible reasons are typos, case-sensitivity, or DLC options.")
                 continue
 
             if is_valid_plando(world, region.name) and is_valid_plando(world, act.name, True):
                 region_list.remove(region)
-                region_list.append(region)
-                region_list.remove(act)
-                region_list.append(act)
+                candidate_list.remove(act)
+                connect_acts(world, region, act, rift_dict)
             else:
-                print(f"[WARNING] ActPlando "
-                      f"({world.multiworld.get_player_name(world.player)}) - "
-                      f"\"{region.name}: {world.options.ActPlando.get(region.name)}\" "
+                print(f"ActPlando "
+                      f"({player_name}) - "
+                      f"\"{name1}: {name2}\" "
                       f"is an invalid or disallowed act plando combination!")
 
-    # Reverse the list, so we can do what we want to do first
-    region_list.reverse()
-
-    shuffled_list: List[Region] = []
-    mapped_list: List[Region] = []
-    rift_dict: Dict[str, Region] = {}
-    first_chapter: Region = get_first_chapter_region(world)
-    has_guaranteed: bool = False
-
-    i = 0
-    while i < len(region_list):
-        region = region_list[i]
-        i += 1
-
-        # Get the first accessible act, so we can map that to something first
-        if not has_guaranteed:
-            if act_chapters[region.name] != first_chapter.name:
-                continue
-
-            if region.name not in act_entrances.keys() or "Act 1" not in act_entrances[region.name] \
-               and "Free Roam" not in act_entrances[region.name]:
-                continue
-
-            if is_valid_plando(world, region.name):
-                has_guaranteed = True
-
-            i = 0
-
-        # Already mapped to something else
-        if region in mapped_list:
-            continue
-
-        mapped_list.append(region)
-
-        # Look for candidates to map this act to
-        candidate_list: List[Region] = []
-        for candidate in region_list:
-            # We're mapping something to the first act, make sure it is valid
-            if not has_guaranteed:
-                if candidate.name not in guaranteed_first_acts:
-                    continue
-
-                if is_valid_plando(world, candidate.name, True):
-                    continue
-
-                # Not completable without Umbrella
-                if world.options.UmbrellaLogic.value > 0 \
-                   and (candidate.name == "Heating Up Mafia Town" or candidate.name == "Queen Vanessa's Manor"):
-                    continue
-
-                # Subcon sphere 1 is too small without painting unlocks, and no acts are completable either
-                if world.options.ShuffleSubconPaintings.value > 0 \
-                   and "Subcon Forest" in act_entrances[candidate.name]:
-                    continue
-
-                candidate_list.append(candidate)
-                has_guaranteed = True
-                break
-
-            if is_valid_plando(world, region.name):
-                candidate_list.clear()
-                candidate_list.append(
-                   world.multiworld.get_region(world.options.ActPlando.get(region.name), world.player))
-                break
-
-            # Already mapped onto something else
-            if candidate in shuffled_list:
-                continue
-
-            if separate_rifts:
-                # Don't map Time Rifts to normal acts
-                if "Time Rift" in region.name and "Time Rift" not in candidate.name:
-                    continue
-
-                # Don't map normal acts to Time Rifts
-                if "Time Rift" not in region.name and "Time Rift" in candidate.name:
-                    continue
-
-                # Separate purple rifts
-                if region.name in purple_time_rifts and candidate.name not in purple_time_rifts \
-                   or region.name not in purple_time_rifts and candidate.name in purple_time_rifts:
-                    continue
-
-            if region.name in blacklisted_combos.keys() and candidate.name in blacklisted_combos[region.name]:
-                continue
-
-            # Prevent Contractual Obligations from being inaccessible if contracts are not shuffled
-            if world.options.ShuffleActContracts.value == 0:
-                if (region.name == "Your Contract has Expired" or region.name == "The Subcon Well") \
-                   and candidate.name == "Contractual Obligations":
-                    continue
-
-            if world.options.FinaleShuffle.value > 0 and region.name in chapter_finales:
-                if candidate.name not in chapter_finales:
-                    continue
-
-            if region.name in rift_access_regions and candidate.name in rift_access_regions[region.name]:
-                continue
-
-            candidate_list.append(candidate)
+    first_act_mapped: bool = False
+    ignore_certain_rules: bool = False
+    while len(region_list) > 0:
+        region: Region
+        if not first_act_mapped:
+            region = get_first_act(world)
+        else:
+            region = region_list[0]
 
         candidate: Region
-        if len(candidate_list) > 0:
-            candidate = candidate_list[world.random.randint(0, len(candidate_list)-1)]
+        valid_candidates: List[Region] = []
+
+        # Look for candidates to map this act to
+        for c in candidate_list:
+            # Map the first act before anything
+            if not first_act_mapped:
+                if not is_valid_first_act(world, c):
+                    continue
+
+                valid_candidates.append(c)
+                first_act_mapped = True
+                break  # we can stop here, as we only need one
+
+            if is_valid_act_combo(world, region, c, bool(world.options.ActRandomizer.value == 1), ignore_certain_rules):
+                valid_candidates.append(c)
+
+        if len(valid_candidates) > 0:
+            candidate = valid_candidates[world.random.randint(0, len(valid_candidates)-1)]
         else:
-            # plando can still break certain rules, so acts may not always end up shuffled.
-            for c in region_list:
-                if c not in shuffled_list:
-                    candidate = c
-                    break
+            # If we fail here, try again with less shuffle rules. If we still somehow fail, there's an issue for sure
+            if ignore_certain_rules:
+                raise Exception(f"Failed to find act shuffle candidate for {region}"
+                                f"\nRemaining acts to map to: {region_list}"
+                                f"\nRemaining candidates: {candidate_list}")
 
-        # noinspection PyUnboundLocalVariable
-        shuffled_list.append(candidate)
-
-        # Vanilla
-        if candidate.name == region.name:
-            if region.name in rift_access_regions.keys():
-                rift_dict.setdefault(region.name, candidate)
-
-            update_chapter_act_info(world, region, candidate)
+            ignore_certain_rules = True
             continue
 
-        if region.name in rift_access_regions.keys():
-            connect_time_rift(world, region, candidate)
-            rift_dict.setdefault(region.name, candidate)
-        else:
-            if candidate.name in rift_access_regions.keys():
-                for e in candidate.entrances.copy():
-                    e.parent_region.exits.remove(e)
-                    e.connected_region.entrances.remove(e)
-
-            entrance = world.multiworld.get_entrance(act_entrances[region.name], world.player)
-            reconnect_regions(entrance, world.multiworld.get_region(act_chapters[region.name], world.player), candidate)
-
-        update_chapter_act_info(world, region, candidate)
+        ignore_certain_rules = False
+        region_list.remove(region)
+        candidate_list.remove(candidate)
+        connect_acts(world, region, candidate, rift_dict)
 
     for name in blacklisted_acts.values():
         if not is_act_blacklisted(world, name):
@@ -711,6 +537,130 @@ def randomize_act_entrances(world: "HatInTimeWorld"):
     set_rift_rules(world, rift_dict)
 
 
+# Try to do levels that may have specific mapping rules first
+def sort_acts(act: Region) -> int:
+    if "Time Rift" in act.name:
+        return -5
+
+    if act.name in chapter_finales:
+        return -4
+
+    # Free Roam
+    if (act_chapters[act.name] == "Alpine Skyline" or act_chapters[act.name] == "Nyakuza Metro") \
+       and "Time Rift" not in act.name:
+        return -3
+
+    if act.name == "Contractual Obligations":
+        return -2
+
+    world = act.multiworld.worlds[act.player]
+    blacklist = world.options.ActBlacklist
+    if len(blacklist) > 0:
+        for name, act_list in blacklist.items():
+            if act.name == name or act.name in act_list:
+                return -1
+
+    return 0
+
+
+def get_first_act(world: "HatInTimeWorld") -> Region:
+    first_chapter = get_first_chapter_region(world)
+    act: Region
+    for e in first_chapter.exits:
+        if "Act 1" in e.name or "Free Roam" in e.name:
+            act = e.connected_region
+            break
+
+    # noinspection PyUnboundLocalVariable
+    return act
+
+
+def connect_acts(world: "HatInTimeWorld", entrance_act: Region, exit_act: Region, rift_dict: Dict[str, Region]):
+    # Vanilla
+    if exit_act.name == entrance_act.name:
+        if entrance_act.name in rift_access_regions.keys():
+            rift_dict.setdefault(entrance_act.name, exit_act)
+
+        update_chapter_act_info(world, entrance_act, exit_act)
+        return
+
+    if entrance_act.name in rift_access_regions.keys():
+        connect_time_rift(world, entrance_act, exit_act)
+        rift_dict.setdefault(entrance_act.name, exit_act)
+    else:
+        if exit_act.name in rift_access_regions.keys():
+            for e in exit_act.entrances.copy():
+                e.parent_region.exits.remove(e)
+                e.connected_region.entrances.remove(e)
+
+        entrance = world.multiworld.get_entrance(act_entrances[entrance_act.name], world.player)
+        chapter = world.multiworld.get_region(act_chapters[entrance_act.name], world.player)
+        reconnect_regions(entrance, chapter, exit_act)
+
+    update_chapter_act_info(world, entrance_act, exit_act)
+
+
+def is_valid_act_combo(world: "HatInTimeWorld", entrance_act: Region,
+                       exit_act: Region, separate_rifts: bool, ignore_certain_rules=False) -> bool:
+
+    # Ignore certain rules that aren't to prevent impossible combos. This is needed for ActPlando.
+    if not ignore_certain_rules:
+        if separate_rifts and not ignore_certain_rules:
+            # Don't map Time Rifts to normal acts
+            if "Time Rift" in entrance_act.name and "Time Rift" not in exit_act.name:
+                return False
+
+            # Don't map normal acts to Time Rifts
+            if "Time Rift" not in entrance_act.name and "Time Rift" in exit_act.name:
+                return False
+
+            # Separate purple rifts
+            if entrance_act.name in purple_time_rifts and exit_act.name not in purple_time_rifts \
+                    or entrance_act.name not in purple_time_rifts and exit_act.name in purple_time_rifts:
+                return False
+
+        if world.options.FinaleShuffle.value > 0 and entrance_act.name in chapter_finales:
+            if exit_act.name not in chapter_finales:
+                return False
+
+        if entrance_act.name in rift_access_regions and exit_act.name in rift_access_regions[entrance_act.name]:
+            return False
+
+    # Blacklisted?
+    if entrance_act.name in blacklisted_combos.keys() and exit_act.name in blacklisted_combos[entrance_act.name]:
+        return False
+
+    if len(world.options.ActBlacklist) > 0:
+        act_blacklist = world.options.ActBlacklist.get(entrance_act.name)
+        if act_blacklist is not None and exit_act.name in act_blacklist:
+            return False
+
+    # Prevent Contractual Obligations from being inaccessible if contracts are not shuffled
+    if world.options.ShuffleActContracts.value == 0:
+        if (entrance_act.name == "Your Contract has Expired" or entrance_act.name == "The Subcon Well") \
+                and exit_act.name == "Contractual Obligations":
+            return False
+
+    return True
+
+
+def is_valid_first_act(world: "HatInTimeWorld", act: Region) -> bool:
+    if act.name not in guaranteed_first_acts:
+        return False
+
+    # Not completable without Umbrella
+    if world.options.UmbrellaLogic.value > 0 \
+            and (act.name == "Heating Up Mafia Town" or act.name == "Queen Vanessa's Manor"):
+        return False
+
+    # Subcon sphere 1 is too small without painting unlocks, and no acts are completable either
+    if world.options.ShuffleSubconPaintings.value > 0 \
+            and "Subcon Forest" in act_entrances[act.name]:
+        return False
+
+    return True
+
+
 def connect_time_rift(world: "HatInTimeWorld", time_rift: Region, exit_region: Region):
     count: int = len(rift_access_regions[time_rift.name])
     i: int = 1
@@ -720,7 +670,10 @@ def connect_time_rift(world: "HatInTimeWorld", time_rift: Region, exit_region: R
         try:
             entrance = world.multiworld.get_entrance(name, world.player)
         except KeyError:
-            entrance = time_rift.entrances[0]
+            if len(time_rift.entrances) > 0:
+                entrance = time_rift.entrances[i-1]
+            else:
+                entrance = connect_regions(time_rift, exit_region, name, world.player)
 
         # noinspection PyUnboundLocalVariable
         reconnect_regions(entrance, entrance.parent_region, exit_region)
@@ -751,6 +704,62 @@ def is_act_blacklisted(world: "HatInTimeWorld", name: str) -> bool:
         return world.options.ExcludeTour.value > 0
 
     return name in blacklisted_acts.values()
+
+
+def is_valid_plando(world: "HatInTimeWorld", region: str, is_candidate: bool = False) -> bool:
+    # Duplicated keys will throw an exception for us, but we still need to check for duplicated values
+    if is_candidate:
+        found_list: List = []
+        old_region = region
+        for name, act in world.options.ActPlando.items():
+            if act == old_region:
+                region = name
+                found_list.append(name)
+
+        if len(found_list) == 0:
+            return False
+
+        if len(found_list) > 1:
+            raise Exception(f"ActPlando ({world.multiworld.get_player_name(world.player)}) - "
+                  f"Duplicated act plando mapping found for act: \"{old_region}\"")
+    elif region not in world.options.ActPlando.keys():
+        return False
+
+    if region in blacklisted_acts.values() or (region not in act_entrances.keys() and "Time Rift" not in region):
+        return False
+
+    act = world.options.ActPlando.get(region)
+    try:
+        world.multiworld.get_region(region, world.player)
+        world.multiworld.get_region(act, world.player)
+    except KeyError:
+        return False
+
+    if act in blacklisted_acts.values() or (act not in act_entrances.keys() and "Time Rift" not in act):
+        return False
+
+    # Don't allow plando-ing things onto the first act that aren't completable with nothing
+    if act == get_first_act(world).name and not is_valid_first_act(world, act):
+        return False
+
+    # Don't allow straight up impossible mappings
+    if (region == "Time Rift - Curly Tail Trail"
+       or region == "Time Rift - The Twilight Bell"
+       or region == "The Illness has Spread") \
+       and act == "Alpine Free Roam":
+        return False
+
+    if (region == "Rush Hour" or region == "Time Rift - Rumbi Factory") \
+       and act == "Nyakuza Free Roam":
+        return False
+
+    if region == "Time Rift - The Owl Express" and act == "Murder on the Owl Express":
+        return False
+
+    if region == "Time Rift - Deep Sea" and act == "Bon Voyage!":
+        return False
+
+    return any(a.name == world.options.ActPlando.get(region) for a in world.multiworld.get_regions(world.player))
 
 
 def create_region(world: "HatInTimeWorld", name: str) -> Region:

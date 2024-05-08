@@ -499,7 +499,7 @@ def set_hard_rules(world: "HatInTimeWorld"):
 
     # Hard: Goat Refinery from TIHS with nothing
     add_rule(world.multiworld.get_location("Alpine Skyline - Goat Refinery", world.player),
-             lambda state: state.has("TIHS Access", world.player, "or"))
+             lambda state: state.has("TIHS Access", world.player), "or")
 
     if world.is_dlc1():
         # Hard: clear Deep Sea without Dweller Mask

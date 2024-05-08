@@ -95,6 +95,8 @@ class HatInTimeWorld(World):
             if self.options.ActRandomizer.value == 0:
                 if start_chapter == 4:
                     self.multiworld.push_precollected(self.create_item("Hookshot Badge"))
+                    if self.options.UmbrellaLogic.value > 0:
+                        self.multiworld.push_precollected(self.create_item("Umbrella"))
 
                 if start_chapter == 3 and self.options.ShuffleSubconPaintings.value > 0:
                     self.multiworld.push_precollected(self.create_item("Progressive Painting Unlock"))

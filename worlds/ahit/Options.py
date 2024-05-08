@@ -125,10 +125,21 @@ class ActRandomizer(Choice):
 
 
 class ActPlando(OptionDict):
-    """Plando acts onto other acts. For example, \"Train Rush\": \"Alpine Free Roam\""""
+    """Plando acts onto other acts. For example, \"Train Rush\": \"Alpine Free Roam\" will place Alpine Free Roam
+    at Train Rush."""
     display_name = "Act Plando"
     schema = Schema({
         Optional(str): str
+    })
+
+
+class ActBlacklist(OptionDict):
+    """Blacklist acts from being shuffled onto other acts. Multiple can be listed per act.
+    For example, \"Barrel Battle\": [\"The Big Parade\", \"Dead Bird Studio\"]
+    will prevent The Big Parade and Dead Bird Studio from being shuffled onto Barrel Battle."""
+    display_name = "Act Blacklist"
+    schema = Schema({
+        Optional(str): list
     })
 
 
@@ -619,6 +630,7 @@ class AHITOptions(PerGameCommonOptions):
     EndGoal:                  EndGoal
     ActRandomizer:            ActRandomizer
     ActPlando:                ActPlando
+    ActBlacklist:             ActBlacklist
     ShuffleAlpineZiplines:    ShuffleAlpineZiplines
     FinaleShuffle:            FinaleShuffle
     LogicDifficulty:          LogicDifficulty
