@@ -3,7 +3,7 @@ Option definitions for Pokemon Emerald
 """
 from dataclasses import dataclass
 
-from Options import (Choice, DeathLink, DefaultOnToggle, TextChoice, OptionSet, NamedRange, Range, Toggle, FreeText,
+from Options import (Choice, DeathLink, DefaultOnToggle, OptionSet, NamedRange, Range, Toggle, FreeText,
                      PerGameCommonOptions)
 
 from .data import data
@@ -37,7 +37,6 @@ class RandomizeBadges(Choice):
 
 class RandomizeHms(Choice):
     """Adds HMs to the pool.
-
     Vanilla: HMs are at their vanilla locations
     Shuffle: HMs are shuffled among vanilla HM locations
     Completely Random: HMs can be found anywhere"""
@@ -50,7 +49,6 @@ class RandomizeHms(Choice):
 
 class RandomizeKeyItems(DefaultOnToggle):
     """Adds most key items to the pool.
-    
     These are usually required to unlock a location or region (e.g. Devon Scope, Letter, Basement Key)."""
     display_name = "Randomize Key Items"
 
@@ -152,7 +150,6 @@ class EliteFourCount(Range):
 
 class NormanRequirement(Choice):
     """Sets the requirements to challenge the Petalburg Gym.
-
     Badges: Obtain some number of badges
     Gyms: Defeat some number of gym leaders"""
     display_name = "Norman Requirement"
@@ -393,29 +390,34 @@ class MoveBlacklist(OptionSet):
 
 
 class HmCompatibility(NamedRange):
-    """Sets the percent chance that a given HM is compatible with a species."""
+    """Sets the percent chance that a given HM is compatible with a species.
+    Some opponents like gym leaders are allowed to use HMs. This option can affect the moves they use."""
     display_name = "HM Compatibility"
     default = -1
     range_start = 50
     range_end = 100
     special_range_names = {
-        "vanilla": -1
+        "vanilla": -1,
+        "full": 100,
     }
 
 
 class TmTutorCompatibility(NamedRange):
-    """Sets the percent chance that a given TM or move tutor is compatible with a species."""
+    """Sets the percent chance that a given TM or move tutor is compatible with a species.
+    Some opponents like gym leaders are allowed to use TMs. This option can affect the moves they know."""
     display_name = "TM/Tutor Compatibility"
     default = -1
     range_start = 0
     range_end = 100
     special_range_names = {
-        "vanilla": -1
+        "vanilla": -1,
+        "full": 100,
     }
 
 
 class TmTutorMoves(Toggle):
-    """Randomizes the moves taught by TMs and move tutors."""
+    """Randomizes the moves taught by TMs and move tutors.
+    Some opponents like gym leaders are allowed to use TMs. This option can affect the moves they know."""
     display_name = "TM/Tutor Moves"
 
 
@@ -551,7 +553,7 @@ class FreeFlyLocation(Toggle):
     display_name = "Free Fly Location"
 
 
-class HmRequirements(TextChoice):
+class HmRequirements(Choice):
     """Sets the requirements to use HMs outside of battle."""
     display_name = "HM Requirements"
     default = 0
