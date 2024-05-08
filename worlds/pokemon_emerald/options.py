@@ -90,6 +90,8 @@ class RandomizeBerryTrees(Toggle):
 
 class Dexsanity(Toggle):
     """Adding a "caught" pokedex entry gives you an item (catching, evolving, trading, etc.).
+    Only wild encounters are considered logical access to a species.
+    Blacklisting wild encounters removes the dexsanity location.
     Defeating gym leaders provides dex info, allowing you to see where on the map you can catch species you need.
     Each pokedex entry adds a Poke Ball, Great Ball, or Ultra Ball to the pool."""
     display_name = "Dexsanity"
