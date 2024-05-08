@@ -453,14 +453,15 @@ class LingoPlayerLogic:
             panel_object = PANELS_BY_ROOM[room][panel]
 
             if world.options.shuffle_doors == ShuffleDoors.option_panels and panel_object.panel_door is not None:
-                pd_ref = panel_object.panel_door
-                panel_door = PANEL_DOORS_BY_ROOM[pd_ref.room][pd_ref.panel_door]
+                panel_door_room = panel_object.panel_door.room
+                panel_door_name = panel_object.panel_door.panel_door
+                panel_door = PANEL_DOORS_BY_ROOM[panel_door_room][panel_door_name]
 
                 if panel_door.panel_group is not None and world.options.group_doors:
                     access_reqs.items.add(panel_door.panel_group)
-                elif pd_ref.room in PROGRESSIVE_PANELS_BY_ROOM\
-                        and pd_ref.panel_door in PROGRESSIVE_PANELS_BY_ROOM[pd_ref.room]:
-                    progression_obj = PROGRESSIVE_PANELS_BY_ROOM[pd_ref.room][pd_ref.panel_door]
+                elif panel_door_room in PROGRESSIVE_PANELS_BY_ROOM\
+                        and panel_door_name in PROGRESSIVE_PANELS_BY_ROOM[panel_door_room]:
+                    progression_obj = PROGRESSIVE_PANELS_BY_ROOM[panel_door_room][panel_door_name]
                     progression_handling = should_split_progression(progression_obj.item_name, world)
 
                     if progression_handling == ProgressiveItemBehavior.SPLIT:
