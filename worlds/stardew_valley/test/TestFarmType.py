@@ -19,6 +19,7 @@ class TestStartInventoryStandardFarm(WorldAssertMixin, SVTestBase):
 class TestStartInventoryMeadowLands(WorldAssertMixin, SVTestBase):
     options = {
         options.FarmType.internal_name: options.FarmType.option_meadowlands,
+        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
     }
 
     def test_start_inventory_progressive_coops(self):

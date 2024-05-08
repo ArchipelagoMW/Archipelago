@@ -179,9 +179,8 @@ class StardewValleyWorld(World):
         self.multiworld.push_precollected(starting_season)
 
     def precollect_farm_type_items(self):
-        if self.options.farm_type == FarmType.option_meadowlands:
+        if self.options.farm_type == FarmType.option_meadowlands and self.options.building_progression & BuildingProgression.option_progressive:
             self.multiworld.push_precollected(self.create_starting_item("Progressive Coop"))
-
 
     def setup_player_events(self):
         self.setup_construction_events()
