@@ -797,17 +797,17 @@ class VerifyKeys(metaclass=FreezeValidKeys):
     verify_location_name: bool = False
     value: typing.Any
 
-    @classmethod
-    def verify_keys(cls, data: typing.Iterable[str]) -> None:
-        if cls.valid_keys:
-            data = set(data)
-            dataset = set(word.casefold() for word in data) if cls.valid_keys_casefold else set(data)
-            extra = dataset - cls._valid_keys
+    def verify_keys(self) -> None:
+        if self.valid_keys:
+            data = set(self.value)
+            dataset = set(word.casefold() for word in data) if self.valid_keys_casefold else set(data)
+            extra = dataset - self._valid_keys
             if extra:
-                raise Exception(f"Found unexpected key {', '.join(extra)} in {cls}. "
-                                f"Allowed keys: {cls._valid_keys}.")
+                raise Exception(f"Found unexpected key {', '.join(extra)} in {self}. "
+                                f"Allowed keys: {self._valid_keys}.")
 
     def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
+        self.verify_keys()
         if self.convert_name_groups and self.verify_item_name:
             new_value = type(self.value)()  # empty container of whatever value is
             for item_name in self.value:
@@ -844,7 +844,6 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mappin
     @classmethod
     def from_any(cls, data: typing.Dict[str, typing.Any]) -> OptionDict:
         if type(data) == dict:
-            cls.verify_keys(data)
             return cls(data)
         else:
             raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
@@ -890,7 +889,6 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
     @classmethod
     def from_any(cls, data: typing.Any):
         if is_iterable_except_str(data):
-            cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
 
@@ -916,7 +914,6 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
     @classmethod
     def from_any(cls, data: typing.Any):
         if is_iterable_except_str(data):
-            cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
 
