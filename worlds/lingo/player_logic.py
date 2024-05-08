@@ -324,9 +324,10 @@ class LingoPlayerLogic:
             # Starting Room - Exit Door gives access to OPEN and TRACE.
             good_item_options: List[str] = ["Starting Room - Back Right Door", "Second Room - Exit Door"]
 
-            if not color_shuffle and not world.options.enable_pilgrimage:
-                # HOT CRUST and THIS.
-                good_item_options.append("Pilgrim Room - Sun Painting")
+            if not color_shuffle:
+                if not world.options.enable_pilgrimage:
+                    # HOT CRUST and THIS.
+                    good_item_options.append("Pilgrim Room - Sun Painting")
 
                 if world.options.group_doors:
                     # WELCOME BACK, CLOCKWISE, and DRAWL + RUNS.
