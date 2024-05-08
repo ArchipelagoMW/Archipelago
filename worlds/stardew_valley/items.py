@@ -20,6 +20,7 @@ from .strings.ap_names.buff_names import Buff
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade
 from .strings.ap_names.event_names import Event
 from .strings.ap_names.mods.mod_items import SVEQuestItem
+from .strings.currency_names import Currency
 from .strings.wallet_item_names import Wallet
 
 ITEM_CODE_OFFSET = 717000
@@ -238,7 +239,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     items.append(item_factory(CommunityUpgrade.mushroom_boxes))
     items.append(item_factory("Beach Bridge"))
     create_tv_channels(item_factory, options, items)
-    create_special_quest_rewards(item_factory, options, items)
+    create_quest_rewards(item_factory, options, items)
     create_stardrops(item_factory, options, content, items)
     create_museum_items(item_factory, options, items)
     create_arcade_machine_items(item_factory, options, items)
@@ -387,6 +388,11 @@ def create_carpenter_buildings(item_factory: StardewItemFactory, options: Starde
         items.append(item_factory("Tractor Garage"))
 
 
+def create_quest_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+    create_special_quest_rewards(item_factory, options, items)
+    create_help_wanted_quest_rewards(item_factory, options, items)
+
+
 def create_special_quest_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
     if options.quest_locations < 0:
         return
@@ -403,6 +409,16 @@ def create_special_quest_rewards(item_factory: StardewItemFactory, options: Star
     create_special_quest_rewards_sve(item_factory, options, items)
     create_distant_lands_quest_rewards(item_factory, options, items)
     create_boarding_house_quest_rewards(item_factory, options, items)
+
+
+def create_help_wanted_quest_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+    if options.quest_locations <= 0:
+        return
+
+    number_help_wanted = options.quest_locations.value
+    quest_per_prize_ticket = 3
+    number_prize_tickets = number_help_wanted // quest_per_prize_ticket
+    items.extend(item_factory(item) for item in [Currency.prize_ticket] * number_prize_tickets)
 
 
 def create_stardrops(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):
