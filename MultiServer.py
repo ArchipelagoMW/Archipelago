@@ -688,7 +688,7 @@ class Context:
                 clients = self.clients[team].get(slot)
                 if not clients:
                     continue
-                client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
+                client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player != slot)]
                 for client in clients:
                     async_start(self.send_msgs(client, client_hints))
 
@@ -803,14 +803,25 @@ async def on_client_disconnected(ctx: Context, client: Client):
         await on_client_left(ctx, client)
 
 
+_non_game_messages = {"HintGame": "hinting", "Tracker": "tracking", "TextOnly": "viewing"}
+""" { tag: ui_message } """
+
+
 async def on_client_joined(ctx: Context, client: Client):
     if ctx.client_game_state[client.team, client.slot] == ClientStatus.CLIENT_UNKNOWN:
         update_client_status(ctx, client, ClientStatus.CLIENT_CONNECTED)
     version_str = '.'.join(str(x) for x in client.version)
-    verb = "tracking" if "Tracker" in client.tags else "playing"
+
+    for tag, verb in _non_game_messages.items():
+        if tag in client.tags:
+            final_verb = verb
+            break
+    else:
+        final_verb = "playing"
+
     ctx.broadcast_text_all(
         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) "
-        f"{verb} {ctx.games[client.slot]} has joined. "
+        f"{final_verb} {ctx.games[client.slot]} has joined. "
         f"Client({version_str}), {client.tags}.",
         {"type": "Join", "team": client.team, "slot": client.slot, "tags": client.tags})
     ctx.notify_client(client, "Now that you are connected, "
@@ -825,8 +836,19 @@ async def on_client_left(ctx: Context, client: Client):
     if len(ctx.clients[client.team][client.slot]) < 1:
         update_client_status(ctx, client, ClientStatus.CLIENT_UNKNOWN)
         ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
+
+    version_str = '.'.join(str(x) for x in client.version)
+
+    for tag, verb in _non_game_messages.items():
+        if tag in client.tags:
+            final_verb = f"stopped {verb}"
+            break
+    else:
+        final_verb = "left"
+
     ctx.broadcast_text_all(
-        "%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1),
+        f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has {final_verb} the game. "
+        f"Client({version_str}), {client.tags}.",
         {"type": "Part", "team": client.team, "slot": client.slot})
 
 
@@ -1507,15 +1529,13 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
         if hints:
             new_hints = set(hints) - self.ctx.hints[self.client.team, self.client.slot]
-            old_hints = set(hints) - new_hints
-            if old_hints:
-                self.ctx.notify_hints(self.client.team, list(old_hints))
-                if not new_hints:
-                    self.output("Hint was previously used, no points deducted.")
+            old_hints = list(set(hints) - new_hints)
+            if old_hints and not new_hints:
+                self.ctx.notify_hints(self.client.team, old_hints)
+                self.output("Hint was previously used, no points deducted.")
             if new_hints:
                 found_hints = [hint for hint in new_hints if hint.found]
                 not_found_hints = [hint for hint in new_hints if not hint.found]
-
                 if not not_found_hints:  # everything's been found, no need to pay
                     can_pay = 1000
                 elif cost:
@@ -1527,7 +1547,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 # By popular vote, make hints prefer non-local placements
                 not_found_hints.sort(key=lambda hint: int(hint.receiving_player != hint.finding_player))
 
-                hints = found_hints
+                hints = found_hints + old_hints
                 while can_pay > 0:
                     if not not_found_hints:
                         break
@@ -1537,6 +1557,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     self.ctx.hints_used[self.client.team, self.client.slot] += 1
                     points_available = get_client_points(self.ctx, self.client)
 
+                self.ctx.notify_hints(self.client.team, hints)
                 if not_found_hints:
                     if hints and cost and int((points_available // cost) == 0):
                         self.output(
@@ -1550,7 +1571,6 @@ class ClientMessageProcessor(CommonCommandProcessor):
                         self.output(f"You can't afford the hint. "
                                     f"You have {points_available} points and need at least "
                                     f"{self.ctx.get_hint_cost(self.client.slot)}.")
-                self.ctx.notify_hints(self.client.team, hints)
                 self.ctx.save()
                 return True
 
@@ -1631,7 +1651,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         else:
             team, slot = ctx.connect_names[args['name']]
             game = ctx.games[slot]
-            ignore_game = ("TextOnly" in args["tags"] or "Tracker" in args["tags"]) and not args.get("game")
+
+            ignore_game = not args.get("game") and any(tag in _non_game_messages for tag in args["tags"])
+
             if not ignore_game and args['game'] != game:
                 errors.add('InvalidGame')
             minver = min_client_version if ignore_game else ctx.minimum_client_versions[slot]
