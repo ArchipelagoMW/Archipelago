@@ -78,8 +78,8 @@ try the following:
 The most common cause of this is the `steam_appid.txt` file. If you're on Windows 10, file extensions are hidden by 
 default (thanks Microsoft). You likely made the mistake of still naming the file `steam_appid.txt`, which, since file 
 extensions are hidden, would result in the file being named `steam_appid.txt.txt`, which is incorrect. 
-To show file extensions in Windows 10, open any folder, click the View tab at the top, 
-and make sure "File name extensions" is checked, and correct the name of the file. If the name of the file is correct, 
+To show file extensions in Windows 10, open any folder, click the View tab at the top, and check
+"File name extensions". Then you can correct the name of the file. If the name of the file is correct, 
 and you're still running into the issue, re-read the setup guide again in case you missed a step. 
 If you still can't get it to work, ask for help in the Discord thread.
 
