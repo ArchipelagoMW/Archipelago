@@ -9,6 +9,8 @@
 ## Instructions
 
 1. Have Steam running. Open the Steam console with this link: [steam://open/console](steam://open/console)
+This may not work for some browsers. If that's the case, and you're on Windows, open the Run dialog using Win+R,
+paste the link into the box, and hit Enter.
 
 
 2. In the Steam console, enter the following command: 
