@@ -20,24 +20,27 @@ class RegionData:
 def create_regions(world: PokemonCrystalWorld) -> Dict[str, Region]:
     regions: Dict[str, Region] = {}
     connections: List[Tuple[str, str, str]] = []
+    johto_only = world.options.johto_only
 
     for region_name, region_data in data.regions.items():
-        new_region = Region(region_name, world.player, world.multiworld)
+        if region_data.johto or not johto_only:
+            new_region = Region(region_name, world.player, world.multiworld)
 
-        regions[region_name] = new_region
+            regions[region_name] = new_region
 
-        for event_data in region_data.events:
-            event = PokemonCrystalLocation(world.player, event_data.name, new_region)
-            event.show_in_spoiler = False
-            event.place_locked_item(PokemonCrystalItem(
-                event_data.name, ItemClassification.progression, None, world.player))
-            new_region.locations.append(event)
+            for event_data in region_data.events:
+                event = PokemonCrystalLocation(world.player, event_data.name, new_region)
+                event.show_in_spoiler = False
+                event.place_locked_item(PokemonCrystalItem(
+                    event_data.name, ItemClassification.progression, None, world.player))
+                new_region.locations.append(event)
 
-        for region_exit in region_data.exits:
-            connections.append((f"{region_name} -> {region_exit}", region_name, region_exit))
+            for region_exit in region_data.exits:
+                connections.append((f"{region_name} -> {region_exit}", region_name, region_exit))
 
     for name, source, dest in connections:
-        regions[source].connect(regions[dest], name)
+        if (data.regions[source].johto and data.regions[dest].johto) or not johto_only:
+            regions[source].connect(regions[dest], name)
 
     regions["Menu"] = Region("Menu", world.player, world.multiworld)
     regions["Menu"].connect(regions["REGION_PLAYERS_HOUSE_2F"], "Start Game")

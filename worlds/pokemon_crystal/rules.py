@@ -79,6 +79,9 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     def pokegear():
         return world.options.randomize_pokegear
 
+    def johto_only():
+        return world.options.johto_only
+
     def expn(state: CollectionState):
         if pokegear():
             return (state.has("Pokegear", world.player)
@@ -186,8 +189,9 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_location("Goldenrod City - Squirtbottle from Flower Shop"),
              lambda state: state.has("Plain Badge", world.player))
 
-    set_rule(get_entrance("REGION_GOLDENROD_MAGNET_TRAIN_STATION -> REGION_SAFFRON_MAGNET_TRAIN_STATION"),
-             lambda state: state.has("Pass", world.player))
+    if not johto_only():
+        set_rule(get_entrance("REGION_GOLDENROD_MAGNET_TRAIN_STATION -> REGION_SAFFRON_MAGNET_TRAIN_STATION"),
+                 lambda state: state.has("Pass", world.player))
 
     # Underground
 
@@ -239,12 +243,13 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     # Olivine City
     set_rule(get_location("EVENT_JASMINE_RETURNED_TO_GYM"), lambda state: state.has("Secretpotion", world.player))
 
-    set_rule(get_entrance("REGION_OLIVINE_PORT -> REGION_FAST_SHIP_1F"),
-             lambda state: state.has("S.S. Ticket", world.player))
+    if not johto_only():
+        set_rule(get_entrance("REGION_OLIVINE_PORT -> REGION_FAST_SHIP_1F"),
+                 lambda state: state.has("S.S. Ticket", world.player))
 
-    if hidden():
-        set_rule(get_location("Olivine Port - Hidden Item in Southeast Buoy"),
-                 lambda state: state.has("S.S. Ticket", world.player) and can_surf(state))
+        if hidden():
+            set_rule(get_location("Olivine Port - Hidden Item in Southeast Buoy"),
+                     lambda state: state.has("S.S. Ticket", world.player) and can_surf(state))
 
     set_rule(get_entrance("REGION_OLIVINE_CITY -> REGION_OLIVINE_GYM"),
              lambda state: state.has("EVENT_JASMINE_RETURNED_TO_GYM", world.player))
@@ -410,160 +415,162 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     set_rule(get_entrance("REGION_VICTORY_ROAD_GATE -> REGION_ROUTE_26"), has_elite_four_badges)
 
-    set_rule(get_entrance("REGION_ROUTE_28 -> REGION_VICTORY_ROAD_GATE"),
-             lambda state: state.has("EVENT_OPENED_MT_SILVER", world.player))
+    if not johto_only():
+        set_rule(get_entrance("REGION_ROUTE_22 -> REGION_VICTORY_ROAD_GATE"),
+                 lambda state: state.has("EVENT_FOUGHT_SNORLAX", world.player))
 
-    set_rule(get_entrance("REGION_VICTORY_ROAD_GATE -> REGION_ROUTE_28"),
-             lambda state: state.has("EVENT_OPENED_MT_SILVER", world.player))
+        set_rule(get_entrance("REGION_VICTORY_ROAD_GATE -> REGION_ROUTE_22"),
+                 lambda state: state.has("EVENT_FOUGHT_SNORLAX", world.player))
 
-    set_rule(get_entrance("REGION_ROUTE_22 -> REGION_VICTORY_ROAD_GATE"),
-             lambda state: state.has("EVENT_FOUGHT_SNORLAX", world.player))
+        set_rule(get_entrance("REGION_ROUTE_28 -> REGION_VICTORY_ROAD_GATE"),
+                 lambda state: state.has("EVENT_OPENED_MT_SILVER", world.player))
 
-    set_rule(get_entrance("REGION_VICTORY_ROAD_GATE -> REGION_ROUTE_22"),
-             lambda state: state.has("EVENT_FOUGHT_SNORLAX", world.player))
+        set_rule(get_entrance("REGION_VICTORY_ROAD_GATE -> REGION_ROUTE_28"),
+                 lambda state: state.has("EVENT_OPENED_MT_SILVER", world.player))
 
-    # Route 28
-    set_rule(get_location("Route 28 - Steel Wing from Celebrity in House"), can_cut)
-    if hidden():
-        set_rule(get_location("Route 28 - Hidden Item Behind Cut Tree"), can_cut)
+        # Route 28
+        set_rule(get_location("Route 28 - Steel Wing from Celebrity in House"), can_cut)
+        if hidden():
+            set_rule(get_location("Route 28 - Hidden Item Behind Cut Tree"), can_cut)
+            
+        # Silver Cave
+        set_rule(get_entrance("REGION_SILVER_CAVE_OUTSIDE -> REGION_SILVER_CAVE_ROOM_1"), can_flash)
 
-    # Silver Cave
-    set_rule(get_entrance("REGION_SILVER_CAVE_OUTSIDE -> REGION_SILVER_CAVE_ROOM_1"), can_flash)
+        if hidden():
+            set_rule(get_location("Outside Silver Cave - Hidden Item Across Water"), can_surf)
 
-    if hidden():
-        set_rule(get_location("Outside Silver Cave - Hidden Item Across Water"), can_surf)
+        set_rule(get_location("Silver Cave 2F - Item 1"), lambda state: can_surf(state) and can_waterfall(state))
 
-    set_rule(get_location("Silver Cave 2F - Item 1"), lambda state: can_surf(state) and can_waterfall(state))
+        set_rule(get_location("Silver Cave 2F - Item 2"), lambda state: can_surf(state) and can_waterfall(state))
 
-    set_rule(get_location("Silver Cave 2F - Item 2"), lambda state: can_surf(state) and can_waterfall(state))
+        set_rule(get_entrance("REGION_SILVER_CAVE_ROOM_2 -> REGION_SILVER_CAVE_ITEM_ROOMS"),
+                 lambda state: can_surf(state) and can_waterfall(state))
 
-    set_rule(get_entrance("REGION_SILVER_CAVE_ROOM_2 -> REGION_SILVER_CAVE_ITEM_ROOMS"),
-             lambda state: can_surf(state) and can_waterfall(state))
+        # Viridian
+        set_rule(get_location("Viridian City - TM42 from Sleepy Guy"), lambda state: can_surf(state) or can_cut(state))
 
-    # Viridian
-    set_rule(get_location("Viridian City - TM42 from Sleepy Guy"), lambda state: can_surf(state) or can_cut(state))
+        set_rule(get_entrance("REGION_VIRIDIAN_CITY -> REGION_VIRIDIAN_GYM"),
+                 lambda state: state.has("EVENT_VIRIDIAN_GYM_BLUE", world.player))
 
-    set_rule(get_entrance("REGION_VIRIDIAN_CITY -> REGION_VIRIDIAN_GYM"),
-             lambda state: state.has("EVENT_VIRIDIAN_GYM_BLUE", world.player))
+        # Route 2
+        set_rule(get_entrance("REGION_ROUTE_2:WEST -> REGION_ROUTE_2:NORTHEAST"), can_cut)
 
-    # Route 2
-    set_rule(get_entrance("REGION_ROUTE_2:WEST -> REGION_ROUTE_2:NORTHEAST"), can_cut)
+        set_rule(get_entrance("REGION_ROUTE_2:WEST -> REGION_ROUTE_2:SOUTHEAST"), can_cut)
 
-    set_rule(get_entrance("REGION_ROUTE_2:WEST -> REGION_ROUTE_2:SOUTHEAST"), can_cut)
+        set_rule(get_entrance("REGION_ROUTE_2:SOUTHEAST -> REGION_ROUTE_2:WEST"), can_cut)
 
-    set_rule(get_entrance("REGION_ROUTE_2:SOUTHEAST -> REGION_ROUTE_2:WEST"), can_cut)
+        set_rule(get_entrance("REGION_ROUTE_2:SOUTHEAST -> REGION_ROUTE_2:NORTHEAST"), can_cut)
 
-    set_rule(get_entrance("REGION_ROUTE_2:SOUTHEAST -> REGION_ROUTE_2:NORTHEAST"), can_cut)
+        set_rule(get_entrance("REGION_ROUTE_2:NORTHEAST -> REGION_ROUTE_2:SOUTHEAST"), can_cut)
 
-    set_rule(get_entrance("REGION_ROUTE_2:NORTHEAST -> REGION_ROUTE_2:SOUTHEAST"), can_cut)
+        # Cerulean
+        if hidden():
+            set_rule(get_location("Cerulean City - Hidden Item in Water"), can_surf)
 
-    # Cerulean
-    if hidden():
-        set_rule(get_location("Cerulean City - Hidden Item in Water"), can_surf)
+        set_rule(get_entrance("REGION_CERULEAN_CITY -> REGION_ROUTE_9"), can_cut)
 
-    set_rule(get_entrance("REGION_CERULEAN_CITY -> REGION_ROUTE_9"), can_cut)
+        set_rule(get_entrance("REGION_ROUTE_9 -> REGION_CERULEAN_CITY"), can_cut)
 
-    set_rule(get_entrance("REGION_ROUTE_9 -> REGION_CERULEAN_CITY"), can_cut)
+        set_rule(get_entrance("REGION_ROUTE_10_NORTH -> REGION_POWER_PLANT"), can_surf)
 
-    set_rule(get_entrance("REGION_ROUTE_10_NORTH -> REGION_POWER_PLANT"), can_surf)
+        # Route 25
+        set_rule(get_location("Route 25 - Item Behind Cut Tree"), can_cut)
 
-    # Route 25
-    set_rule(get_location("Route 25 - Item Behind Cut Tree"), can_cut)
+        # Power Plant
+        set_rule(get_location("EVENT_RESTORED_POWER_TO_KANTO"), lambda state: state.has("Machine Part", world.player))
 
-    # Power Plant
-    set_rule(get_location("EVENT_RESTORED_POWER_TO_KANTO"), lambda state: state.has("Machine Part", world.player))
+        set_rule(get_location("Power Plant - TM07 from Manager"),
+                 lambda state: state.has("EVENT_RESTORED_POWER_TO_KANTO", world.player))
 
-    set_rule(get_location("Power Plant - TM07 from Manager"),
-             lambda state: state.has("EVENT_RESTORED_POWER_TO_KANTO", world.player))
+        # Rock Tunnel
+        set_rule(get_entrance("REGION_ROUTE_9 -> REGION_ROCK_TUNNEL_1F"), can_flash)
 
-    # Rock Tunnel
-    set_rule(get_entrance("REGION_ROUTE_9 -> REGION_ROCK_TUNNEL_1F"), can_flash)
+        set_rule(get_entrance("REGION_ROUTE_10_SOUTH -> REGION_ROCK_TUNNEL_1F"), can_flash)
 
-    set_rule(get_entrance("REGION_ROUTE_10_SOUTH -> REGION_ROCK_TUNNEL_1F"), can_flash)
+        # Lavendar
 
-    # Lavendar
+        if pokegear():
+            set_rule(get_location("Lavender Radio Tower - EXPN Card"), lambda state: state.has(
+                "EVENT_RESTORED_POWER_TO_KANTO", world.player))
+        else:
+            set_rule(get_location("EVENT_GOT_EXPN_CARD"), lambda state: state.has(
+                "EVENT_RESTORED_POWER_TO_KANTO", world.player))
 
-    if pokegear():
-        set_rule(get_location("Lavender Radio Tower - EXPN Card"), lambda state: state.has(
-            "EVENT_RESTORED_POWER_TO_KANTO", world.player))
-    else:
-        set_rule(get_location("EVENT_GOT_EXPN_CARD"), lambda state: state.has(
-            "EVENT_RESTORED_POWER_TO_KANTO", world.player))
+        # Route 12
 
-    # Route 12
+        set_rule(get_location("Route 12 - Item 1"), can_cut)
 
-    set_rule(get_location("Route 12 - Item 1"), can_cut)
+        set_rule(get_location("Route 12 - Item 2"), lambda state: can_cut(state) and can_surf(state))
 
-    set_rule(get_location("Route 12 - Item 2"), lambda state: can_cut(state) and can_surf(state))
+        if hidden():
+            set_rule(get_location("Route 12 - Hidden Item on Island"), can_surf)
 
-    if hidden():
-        set_rule(get_location("Route 12 - Hidden Item on Island"), can_surf)
+        # Vermilion
+        set_rule(get_entrance("REGION_VERMILION_CITY -> REGION_VERMILION_GYM"),
+                 lambda state: can_cut(state) or can_surf(state))
 
-    # Vermilion
-    set_rule(get_entrance("REGION_VERMILION_CITY -> REGION_VERMILION_GYM"),
-             lambda state: can_cut(state) or can_surf(state))
+        set_rule(get_location("Vermilion City - HP Up from Man by PokeCenter"), has_red_badges)
 
-    set_rule(get_location("Vermilion City - HP Up from Man by PokeCenter"), has_red_badges)
+        set_rule(get_location("Vermilion City - Lost Item from Guy in Fan Club"),
+                 lambda state: state.has("EVENT_RESTORED_POWER_TO_KANTO", world.player) and state.has(
+                     "EVENT_MET_COPYCAT_FOUND_OUT_ABOUT_LOST_ITEM", world.player))
 
-    set_rule(get_location("Vermilion City - Lost Item from Guy in Fan Club"),
-             lambda state: state.has("EVENT_RESTORED_POWER_TO_KANTO", world.player) and state.has(
-                 "EVENT_MET_COPYCAT_FOUND_OUT_ABOUT_LOST_ITEM", world.player))
+        if hidden():
+            set_rule(get_location("Vermilion Port - Hidden Item in Buoy"), can_surf)
 
-    if hidden():
-        set_rule(get_location("Vermilion Port - Hidden Item in Buoy"), can_surf)
+        set_rule(get_location("EVENT_FOUGHT_SNORLAX"), expn)
 
-    set_rule(get_location("EVENT_FOUGHT_SNORLAX"), expn)
+        set_rule(get_entrance("REGION_VERMILION_CITY -> REGION_ROUTE_11"), expn)
 
-    set_rule(get_entrance("REGION_VERMILION_CITY -> REGION_ROUTE_11"), expn)
+        set_rule(get_entrance("REGION_ROUTE_11 -> REGION_VERMILION_CITY"), expn)
 
-    set_rule(get_entrance("REGION_ROUTE_11 -> REGION_VERMILION_CITY"), expn)
+        set_rule(get_entrance("REGION_VERMILION_CITY -> REGION_DIGLETTS_CAVE"), expn)
 
-    set_rule(get_entrance("REGION_VERMILION_CITY -> REGION_DIGLETTS_CAVE"), expn)
+        set_rule(get_entrance("REGION_DIGLETTS_CAVE -> REGION_VERMILION_CITY"), expn)
 
-    set_rule(get_entrance("REGION_DIGLETTS_CAVE -> REGION_VERMILION_CITY"), expn)
+        set_rule(get_entrance("REGION_VERMILION_PORT_PASSAGE -> REGION_VERMILION_PORT"),
+                 lambda state: state.has("S.S. Ticket", world.player))
 
-    set_rule(get_entrance("REGION_VERMILION_PORT_PASSAGE -> REGION_VERMILION_PORT"),
-             lambda state: state.has("S.S. Ticket", world.player))
+        # Saffron
+        set_rule(get_location("Copycat's House - Pass from Copycat"),
+                 lambda state: state.has("Lost Item", world.player))
 
-    # Saffron
-    set_rule(get_location("Copycat's House - Pass from Copycat"), lambda state: state.has("Lost Item", world.player))
+        set_rule(get_entrance("REGION_SAFFRON_MAGNET_TRAIN_STATION -> REGION_GOLDENROD_MAGNET_TRAIN_STATION"),
+                 lambda state: state.has("Pass", world.player))
 
-    set_rule(get_entrance("REGION_SAFFRON_MAGNET_TRAIN_STATION -> REGION_GOLDENROD_MAGNET_TRAIN_STATION"),
-             lambda state: state.has("Pass", world.player))
+        # Underground Path
+        set_rule(get_entrance("REGION_ROUTE_5 -> REGION_ROUTE_5_UNDERGROUND_PATH_ENTRANCE"),
+                 lambda state: state.has("EVENT_RESTORED_POWER_TO_KANTO", world.player))
 
-    # Underground Path
-    set_rule(get_entrance("REGION_ROUTE_5 -> REGION_ROUTE_5_UNDERGROUND_PATH_ENTRANCE"),
-             lambda state: state.has("EVENT_RESTORED_POWER_TO_KANTO", world.player))
+        set_rule(get_entrance("REGION_ROUTE_6 -> REGION_ROUTE_6_UNDERGROUND_PATH_ENTRANCE"),
+                 lambda state: state.has("EVENT_RESTORED_POWER_TO_KANTO", world.player))
 
-    set_rule(get_entrance("REGION_ROUTE_6 -> REGION_ROUTE_6_UNDERGROUND_PATH_ENTRANCE"),
-             lambda state: state.has("EVENT_RESTORED_POWER_TO_KANTO", world.player))
+        # Celadon
 
-    # Celadon
+        set_rule(get_entrance("REGION_CELADON_CITY -> REGION_CELADON_GYM"), can_cut)
 
-    set_rule(get_entrance("REGION_CELADON_CITY -> REGION_CELADON_GYM"), can_cut)
+        # Cycling Road
+        set_rule(get_entrance("REGION_ROUTE_16 -> REGION_ROUTE_17"), lambda state: state.has("Bicycle", world.player))
 
-    # Cycling Road
-    set_rule(get_entrance("REGION_ROUTE_16 -> REGION_ROUTE_17"), lambda state: state.has("Bicycle", world.player))
+        set_rule(get_entrance("REGION_ROUTE_17_ROUTE_18_GATE -> REGION_ROUTE_17"),
+                 lambda state: state.has("Bicycle", world.player))
 
-    set_rule(get_entrance("REGION_ROUTE_17_ROUTE_18_GATE -> REGION_ROUTE_17"),
-             lambda state: state.has("Bicycle", world.player))
+        # Route 15
+        set_rule(get_location("Route 15 - Item"), can_cut)
 
-    # Route 15
-    set_rule(get_location("Route 15 - Item"), can_cut)
+        # Route 20
+        set_rule(get_entrance("REGION_ROUTE_19 -> REGION_ROUTE_20"),
+                 lambda state: state.has("EVENT_CINNABAR_ROCKS_CLEARED", world.player) and can_surf(state))
 
-    # Route 20
-    set_rule(get_entrance("REGION_ROUTE_19 -> REGION_ROUTE_20"),
-             lambda state: state.has("EVENT_CINNABAR_ROCKS_CLEARED", world.player) and can_surf(state))
+        set_rule(get_entrance("REGION_CINNABAR_ISLAND -> REGION_ROUTE_20"), can_surf)
 
-    set_rule(get_entrance("REGION_CINNABAR_ISLAND -> REGION_ROUTE_20"), can_surf)
+        set_rule(get_entrance("REGION_CINNABAR_ISLAND -> REGION_ROUTE_21"), can_surf)
 
-    set_rule(get_entrance("REGION_CINNABAR_ISLAND -> REGION_ROUTE_21"), can_surf)
+        set_rule(get_entrance("REGION_PALLET_TOWN -> REGION_ROUTE_21"), can_surf)
 
-    set_rule(get_entrance("REGION_PALLET_TOWN -> REGION_ROUTE_21"), can_surf)
+        # Pallet
 
-    # Pallet
-
-    set_rule(get_location("EVENT_OPENED_MT_SILVER"), has_red_badges)
+        set_rule(get_location("EVENT_OPENED_MT_SILVER"), has_red_badges)
 
     if world.options.require_itemfinder:
         for location in world.multiworld.get_locations(world.player):

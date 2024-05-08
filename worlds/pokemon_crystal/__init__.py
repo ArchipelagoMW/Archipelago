@@ -1,6 +1,7 @@
 import settings
 from typing import List, Union, ClassVar, Dict, Any, Tuple
 import copy
+import logging
 
 from BaseClasses import Tutorial
 from worlds.AutoWorld import World, WebWorld
@@ -66,6 +67,21 @@ class PokemonCrystalWorld(World):
     generated_pokemon: Dict[str, PokemonData]
     generated_starters: Tuple[List[str], List[str], List[str]]
     generated_trainers: Dict[str, TrainerData]
+
+    def generate_early(self) -> None:
+        if self.options.johto_only:
+            if self.options.goal == 1:
+                self.options.goal = 0
+                logging.warning(
+                    "Pokemon Crystal: Red goal is incompatible with Johto Only."
+                    "Changing goal to Elite Four for player %s.",
+                    self.multiworld.get_player_name(self.player))
+            if self.options.elite_four_badges > 8:
+                self.options.elite_four_badges = 8
+                logging.warning(
+                    "Pokemon Crystal: Elite Four Badges >8 incompatible with Johto Only."
+                    "Changing Elite Four Badges to 8 for player %s.",
+                    self.multiworld.get_player_name(self.player))
 
     def create_regions(self) -> None:
         regions = create_regions(self)

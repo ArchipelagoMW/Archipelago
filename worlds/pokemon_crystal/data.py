@@ -35,6 +35,7 @@ class EventData(NamedTuple):
 
 class RegionData:
     name: str
+    johto: bool
     exits: List[str]
     warps: List[str]
     locations: List[str]
@@ -167,7 +168,8 @@ def _init() -> None:
         # Exits
         for region_exit in region_json["exits"]:
             new_region.exits.append(region_exit)
-
+        print(region_name)
+        new_region.johto = region_json["johto"]
         data.regions[region_name] = new_region
 
     # items

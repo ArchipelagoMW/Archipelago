@@ -11,6 +11,13 @@ class Goal(Choice):
     option_red = 1
 
 
+class JohtoOnly(Toggle):
+    """Excludes all of Kanto, disables early Kanto access
+        Forces Goal to Elite Four and Badges to ≤8"""
+    display_name = "Johto Only"
+    default = 0
+
+
 class EliteFourBadges(Range):
     """Number of badges required to enter Victory Road"""
     display_name = "Elite Four Badges"
@@ -25,6 +32,15 @@ class RedBadges(Range):
     default = 16
     range_start = 1
     range_end = 16
+
+
+# class RandomizeBadges(Choice):
+#     """Shuffles badges into the pool"""
+#     display_name = "Randomize Badges"
+#     default = 2
+#     option_vanilla = 0
+#     option_shuffle = 1
+#     option_completely_random = 2
 
 
 class RandomizeHiddenItems(Toggle):
@@ -160,8 +176,10 @@ class ItemReceiveSound(DefaultOnToggle):
 @dataclass
 class PokemonCrystalOptions(PerGameCommonOptions):
     goal: Goal
+    johto_only: JohtoOnly
     elite_four_badges: EliteFourBadges
     red_badges: RedBadges
+    # randomize_badges: RandomizeBadges
     randomize_hidden_items: RandomizeHiddenItems
     require_itemfinder: RequireItemfinder
     trainersanity: Trainersanity
