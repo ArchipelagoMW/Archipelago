@@ -17,7 +17,7 @@ paste the link into the box, and hit Enter.
 `download_depot 253230 253232 7770543545116491859`. ***Wait for the console to say the download is finished!***
 This can take a while to finish (30+ minutes) depending on your connection speed, so please be patient. Additionally,
 **try to prevent your connection from being interrupted or slowed while Steam is downloading the depot,**
-or else the download may potentially become corrupted (see first FAQ question below).
+or else the download may potentially become corrupted (see first FAQ issue below).
 
 
 3. Once the download finishes, go to `steamapps/content/app_253230` in Steam's program folder.
