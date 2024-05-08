@@ -111,8 +111,10 @@ def set_tool_rules(logic: StardewLogic, multiworld, player, world_options: Stard
     MultiWorldRules.add_rule(multiworld.get_location("Purchase Iridium Rod", player),
                              (logic.skill.has_level(Skill.fishing, 6) & logic.money.can_spend(7500)))
 
+    MultiWorldRules.add_rule(multiworld.get_location("Copper Pan Cutscene", player), logic.received("Glittering Boulder Removed"))
+
     materials = [None, "Copper", "Iron", "Gold", "Iridium"]
-    tool = [Tool.hoe, Tool.pickaxe, Tool.axe, Tool.watering_can, Tool.watering_can, Tool.trash_can]
+    tool = [Tool.hoe, Tool.pickaxe, Tool.axe, Tool.watering_can, Tool.trash_can, Tool.pan]
     for (previous, material), tool in itertools.product(zip(materials[:4], materials[1:]), tool):
         if previous is None:
             continue

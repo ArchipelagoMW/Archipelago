@@ -125,7 +125,7 @@ id,region,name,tags,mod_name
 124,Beach,Bamboo Pole Cutscene,"FISHING_ROD_UPGRADE,TOOL_UPGRADE",
 125,Willy's Fish Shop,Purchase Fiberglass Rod,"FISHING_ROD_UPGRADE,TOOL_UPGRADE",
 126,Willy's Fish Shop,Purchase Iridium Rod,"FISHING_ROD_UPGRADE,TOOL_UPGRADE",
-127,Blacksmith Copper Upgrades,Copper Pan,"TOOL_UPGRADE,PAN_UPGRADE",
+127,Mountain,Copper Pan Cutscene,"TOOL_UPGRADE,PAN_UPGRADE",
 128,Blacksmith Iron Upgrades,Iron Pan Upgrade,"TOOL_UPGRADE,PAN_UPGRADE",
 129,Blacksmith Gold Upgrades,Gold Pan Upgrade,"TOOL_UPGRADE,PAN_UPGRADE",
 130,Blacksmith Iridium Upgrades,Iridium Pan Upgrade,"TOOL_UPGRADE,PAN_UPGRADE",

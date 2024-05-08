@@ -458,7 +458,7 @@ id,name,classification,groups,mod_name
 491,Blue Grass Starter Recipe,progression,"QI_CRAFTING_RECIPE,GINGER_ISLAND",
 492,Mastery Of The Five Ways,progression,SKILL_MASTERY,
 493,Progressive Scythe,useful,,
-494,Progressive Pan,useful,PROGRESSIVE_TOOLS,
+494,Progressive Pan,progression,PROGRESSIVE_TOOLS,
 495,Calico Statue,filler,FESTIVAL,
 496,Mummy Mask,filler,FESTIVAL,
 497,Free Cactus,filler,FESTIVAL,

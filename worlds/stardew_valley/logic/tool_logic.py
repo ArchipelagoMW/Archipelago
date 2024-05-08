@@ -47,6 +47,9 @@ class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixi
         if tool == Tool.fishing_rod:
             return self.logic.tool.has_fishing_rod(tool_materials[material])
 
+        if tool == Tool.pan and material == ToolMaterial.basic:
+            material = ToolMaterial.copper  # The first Pan is the copper one, so the basic one does not exist
+
         if material == ToolMaterial.basic or tool == Tool.scythe:
             return True_()
 
