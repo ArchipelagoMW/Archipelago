@@ -681,19 +681,29 @@ class Gifting(Toggle):
     default = 1
 
 
+# These mods have been disabled because either they are not updated for the current supported version of Stardew Valley,
+# or we didn't find the time to validate that they work or fix compatibility issues if they do.
+# Once a mod is validated to be functional, it can simply be removed from this list
+disabled_mods = {ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
+                 ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
+                 ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
+                 ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
+                 ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
+                 ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator, ModNames.sve, ModNames.distant_lands,
+                 ModNames.alecto, ModNames.lacey, ModNames.boarding_house}
+
+
 class Mods(OptionSet):
     """List of mods that will be included in the shuffling."""
     internal_name = "mods"
     display_name = "Mods"
-    valid_keys = {
-        ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
-        ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
-        ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
-        ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
-        ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
-        ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator, ModNames.sve, ModNames.distant_lands,
-        ModNames.alecto, ModNames.lacey, ModNames.boarding_house
-    }
+    valid_keys = {ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
+                  ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
+                  ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
+                  ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
+                  ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
+                  ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator, ModNames.sve, ModNames.distant_lands,
+                  ModNames.alecto, ModNames.lacey, ModNames.boarding_house}.difference(disabled_mods)
 
 
 @dataclass
