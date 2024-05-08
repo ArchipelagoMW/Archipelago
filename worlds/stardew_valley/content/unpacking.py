@@ -38,6 +38,8 @@ def unpack_content(features: StardewFeatures, packs: Iterable[ContentPack]) -> S
             sorter.done(pack_name)
             packs_to_finalize.append(pack)
 
+    prune_inaccessible_items(content)
+
     for pack in packs_to_finalize:
         pack.finalize_hook(content)
 
@@ -73,7 +75,7 @@ def register_pack(content: StardewContent, pack: ContentPack):
 
 
 def register_sources_and_call_hook(content: StardewContent,
-                                   sources_by_item_name: Mapping[str, Iterable[ItemSource, ...]],
+                                   sources_by_item_name: Mapping[str, Iterable[ItemSource]],
                                    hook: Callable[[StardewContent], None]):
     for item_name, sources in sources_by_item_name.items():
         item = content.game_items.setdefault(item_name, GameItem(item_name))
@@ -85,3 +87,9 @@ def register_sources_and_call_hook(content: StardewContent,
                 requirement_item.add_tags(tags)
 
     hook(content)
+
+
+def prune_inaccessible_items(content: StardewContent):
+    for item in list(content.game_items.values()):
+        if not item.sources:
+            content.game_items.pop(item.name)

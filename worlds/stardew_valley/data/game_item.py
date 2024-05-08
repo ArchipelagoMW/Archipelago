@@ -35,7 +35,13 @@ class ItemSource(ABC):
 @dataclass(**source_dataclass_args)
 class PermanentSource(ItemSource):
     regions: Tuple[str, ...] = ()
-    """No regions means it's available everywhere."""
+    """No region means it's available everywhere."""
+
+
+@dataclass(**source_dataclass_args)
+class CustomSource(ItemSource):
+    """A source just to make sure the item is not pruned, since its rule will be implemented directly in logic."""
+    ...
 
 
 @dataclass(frozen=True)
@@ -50,3 +56,7 @@ class GameItem:
 
     def add_tags(self, tags: Iterable[ItemTag]):
         self.tags.update(tags)
+
+    @property
+    def has_custom_rule(self):
+        return any(isinstance(source, CustomSource) for source in self.sources)

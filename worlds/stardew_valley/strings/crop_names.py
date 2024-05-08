@@ -34,6 +34,7 @@ class Fruit:
     cranberries = fruity("Cranberries")
     hot_pepper = fruity("Hot Pepper")
     powdermelon = fruity("Powdermelon")
+    qi_fruit = fruity("Qi Fruit")
 
 
 class Vegetable:

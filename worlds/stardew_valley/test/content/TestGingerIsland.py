@@ -2,7 +2,11 @@ from . import SVContentPackTestBase
 from .. import SVTestBase
 from ... import options
 from ...content import content_packs
+from ...data.artisan import MachineSource
+from ...strings.artisan_good_names import ArtisanGood
+from ...strings.crop_names import Fruit
 from ...strings.fish_names import Fish
+from ...strings.machine_names import Machine
 from ...strings.villager_names import NPC
 
 
@@ -21,6 +25,16 @@ class TestGingerIsland(SVContentPackTestBase):
 
         # 63 from pelican town + 3 ginger island exclusive
         self.assertEqual(63 + 3, len(self.content.fishes))
+
+    def test_ginger_island_fruits_can_be_made_into_wines(self):
+        self.assertIn(MachineSource(item=Fruit.banana, machine=Machine.keg), self.content.game_items[ArtisanGood.specific_wine(Fruit.banana)].sources)
+        self.assertIn(MachineSource(item=Fruit.banana, machine=Machine.keg), self.content.game_items[ArtisanGood.wine].sources)
+
+        self.assertIn(MachineSource(item=Fruit.mango, machine=Machine.keg), self.content.game_items[ArtisanGood.specific_wine(Fruit.mango)].sources)
+        self.assertIn(MachineSource(item=Fruit.mango, machine=Machine.keg), self.content.game_items[ArtisanGood.wine].sources)
+
+        self.assertIn(MachineSource(item=Fruit.pineapple, machine=Machine.keg), self.content.game_items[ArtisanGood.specific_wine(Fruit.pineapple)].sources)
+        self.assertIn(MachineSource(item=Fruit.pineapple, machine=Machine.keg), self.content.game_items[ArtisanGood.wine].sources)
 
 
 class TestWithoutGingerIslandE2E(SVTestBase):

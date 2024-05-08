@@ -207,7 +207,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             ArtisanGood.stardrop_tea: self.has(WaterChest.golden_fishing_chest),
             ArtisanGood.truffle_oil: self.has(AnimalProduct.truffle) & self.has(Machine.oil_maker),
             ArtisanGood.void_mayonnaise: (self.skill.can_fish(Region.witch_swamp)) | (self.artisan.can_mayonnaise(AnimalProduct.void_egg)),
-            ArtisanGood.wine: self.artisan.has_wine(),
             Beverage.beer: self.artisan.can_keg(Vegetable.wheat) | self.money.can_spend_at(Region.saloon, 400),
             Beverage.coffee: self.artisan.can_keg(Seed.coffee) | self.has(Machine.coffee_maker) | (self.money.can_spend_at(Region.saloon, 300)) | self.has("Hot Java Ring"),
             Beverage.pina_colada: self.money.can_spend_at(Region.island_resort, 600),
@@ -356,7 +355,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         content_rules = {
             item_name: self.source.has_access_to_item(game_item)
             for item_name, game_item in self.content.game_items.items()
-            if game_item.sources
+            if not game_item.has_custom_rule
         }
 
         self.registry.item_rules.update(content_rules)
