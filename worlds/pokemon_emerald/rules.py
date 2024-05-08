@@ -994,6 +994,10 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
             get_entrance("REGION_LILYCOVE_CITY/SEA -> REGION_ROUTE124/MAIN"),
             lambda state: state.has("EVENT_CLEAR_AQUA_HIDEOUT", world.player)
         )
+        set_rule(
+            get_entrance("REGION_ROUTE124/MAIN -> REGION_LILYCOVE_CITY/SEA"),
+            lambda state: state.has("EVENT_CLEAR_AQUA_HIDEOUT", world.player)
+        )
 
     # Magma Hideout
     set_rule(
