@@ -2334,6 +2334,7 @@
         # This is the MASTERY on the other side of THE FEARLESS. It can only be
         # accessed by jumping from the top of the tower.
         id: Master Room/Panel_mastery_mastery8
+        location_name: The Fearless - MASTERY
         tag: midwhite
         hunt: True
         required_door:
