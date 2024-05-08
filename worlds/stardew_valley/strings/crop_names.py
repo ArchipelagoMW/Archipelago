@@ -1,4 +1,3 @@
-all_fruits = []
 all_vegetables = []
 
 
@@ -7,34 +6,29 @@ def veggie(name: str) -> str:
     return name
 
 
-def fruity(name: str) -> str:
-    all_fruits.append(name)
-    return name
-
-
 class Fruit:
-    sweet_gem_berry = fruity("Sweet Gem Berry")
+    sweet_gem_berry = "Sweet Gem Berry"
     any = "Any Fruit"
-    blueberry = fruity("Blueberry")
-    melon = fruity("Melon")
-    apple = fruity("Apple")
-    apricot = fruity("Apricot")
-    cherry = fruity("Cherry")
-    orange = fruity("Orange")
-    peach = fruity("Peach")
-    pomegranate = fruity("Pomegranate")
-    banana = fruity("Banana")
-    mango = fruity("Mango")
-    pineapple = fruity("Pineapple")
-    ancient_fruit = fruity("Ancient Fruit")
-    strawberry = fruity("Strawberry")
-    starfruit = fruity("Starfruit")
-    rhubarb = fruity("Rhubarb")
-    grape = fruity("Grape")
-    cranberries = fruity("Cranberries")
-    hot_pepper = fruity("Hot Pepper")
-    powdermelon = fruity("Powdermelon")
-    qi_fruit = fruity("Qi Fruit")
+    blueberry = "Blueberry"
+    melon = "Melon"
+    apple = "Apple"
+    apricot = "Apricot"
+    cherry = "Cherry"
+    orange = "Orange"
+    peach = "Peach"
+    pomegranate = "Pomegranate"
+    banana = "Banana"
+    mango = "Mango"
+    pineapple = "Pineapple"
+    ancient_fruit = "Ancient Fruit"
+    strawberry = "Strawberry"
+    starfruit = "Starfruit"
+    rhubarb = "Rhubarb"
+    grape = "Grape"
+    cranberries = "Cranberries"
+    hot_pepper = "Hot Pepper"
+    powdermelon = "Powdermelon"
+    qi_fruit = "Qi Fruit"
 
 
 class Vegetable:
@@ -84,4 +78,3 @@ class DistantLandsCrop:
 
 
 all_vegetables = tuple(all_vegetables)
-all_fruits = tuple(all_fruits)

@@ -1,17 +1,18 @@
 from ..bundles.bundle import BundleTemplate, IslandBundleTemplate, DeepBundleTemplate, CurrencyBundleTemplate, MoneyBundleTemplate, FestivalBundleTemplate
 from ..bundles.bundle_item import BundleItem
 from ..bundles.bundle_room import BundleRoomTemplate
+from ..content.vanilla.base import all_fruits, all_vegetables, all_edible_mushrooms
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.bundle_names import CCRoom, BundleName
 from ..strings.craftable_names import Fishing, Craftable, Bomb, Consumable, Lighting
-from ..strings.crop_names import Fruit, Vegetable, all_fruits, all_vegetables
+from ..strings.crop_names import Fruit, Vegetable
 from ..strings.currency_names import Currency
 from ..strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
 from ..strings.fish_names import Fish, WaterItem, Trash
 from ..strings.flower_names import Flower
 from ..strings.food_names import Beverage, Meal
-from ..strings.forageable_names import Forageable, all_edible_mushrooms, Mushroom
+from ..strings.forageable_names import Forageable, Mushroom
 from ..strings.geode_names import Geode
 from ..strings.gift_names import Gift
 from ..strings.ingredient_names import Ingredient
@@ -657,7 +658,10 @@ winter_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.winter_fish, wi
 rain_fish_items = [red_snapper, shad, catfish, eel, walleye]
 rain_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.rain_fish, rain_fish_items, 3, 3)
 
-quality_fish_items = sorted({item.as_quality(FishQuality.gold).as_amount(2) for item in [*river_fish_items_thematic, *lake_fish_items_thematic, *ocean_fish_items_thematic]})
+quality_fish_items = sorted({
+    item.as_quality(FishQuality.gold).as_amount(2)
+    for item in [*river_fish_items_thematic, *lake_fish_items_thematic, *ocean_fish_items_thematic]
+})
 quality_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.quality_fish, quality_fish_items, 4, 3)
 
 master_fisher_items = [lava_eel, scorpion_carp, octopus, blobfish, lingcod, ice_pip, super_cucumber, stingray, void_salmon, pufferfish]

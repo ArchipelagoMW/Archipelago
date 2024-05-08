@@ -12,12 +12,12 @@ from ...strings.machine_names import Machine
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed
 
-all_fruits = [
+all_fruits = (
     Fruit.ancient_fruit, Fruit.apple, Fruit.apricot, Fruit.banana, Forageable.blackberry, Fruit.blueberry, Forageable.cactus_fruit, Fruit.cherry,
     Forageable.coconut, Fruit.cranberries, Forageable.crystal_fruit, Fruit.grape, Fruit.hot_pepper, Fruit.mango, Fruit.melon, Fruit.orange, Fruit.peach,
     Fruit.pineapple, Fruit.pomegranate, Fruit.powdermelon, Fruit.qi_fruit, Fruit.rhubarb, Forageable.salmonberry, Forageable.spice_berry, Fruit.starfruit,
     Fruit.strawberry
-]
+)
 
 
 # This will hold items, skills and stuff that is available everywhere across the game, but not directly needing pelican town (crops, ore, foraging, etc.)
