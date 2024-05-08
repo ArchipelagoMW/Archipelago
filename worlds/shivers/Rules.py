@@ -53,13 +53,13 @@ def metal_capturable(state: CollectionState, player: int) -> bool:
 
 
 def lightning_capturable(state: CollectionState, player: int) -> bool:
-    return (first_nine_ixupi_capturable or state.multiworld.early_lightning[player].value) \
+    return (first_nine_ixupi_capturable or state.multiworld.worlds[player].options.early_lightning.value) \
         and (state.has_all({"Lightning Pot Bottom", "Lightning Pot Top", "Lightning Pot Bottom DUPE", "Lightning Pot Top DUPE"}, player) or \
              state.has_all({"Lightning Pot Complete", "Lightning Pot Complete DUPE"}, player))
 
 
 def beths_body_available(state: CollectionState, player: int) -> bool:
-    return (first_nine_ixupi_capturable(state, player) or state.multiworld.early_beth[player].value) \
+    return (first_nine_ixupi_capturable(state, player) or state.multiworld.worlds[player].options.early_beth.value) \
         and state.can_reach("Generator", "Region", player)
 
 
