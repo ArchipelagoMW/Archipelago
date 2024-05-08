@@ -783,13 +783,13 @@ class SpecialRange(NamedRange):
 
 class FreezeValidKeys(AssembleOptions):
     def __new__(mcs, name, bases, attrs):
-        if "valid_keys" in attrs:
+        if "valid_keys" in attrs and attrs["valid_keys"] is not None:
             attrs["_valid_keys"] = frozenset(attrs["valid_keys"])
         return super(FreezeValidKeys, mcs).__new__(mcs, name, bases, attrs)
 
 
 class VerifyKeys(metaclass=FreezeValidKeys):
-    valid_keys: typing.Iterable = []
+    valid_keys: typing.Iterable = None
     _valid_keys: frozenset  # gets created by AssembleOptions from valid_keys
     valid_keys_casefold: bool = False
     convert_name_groups: bool = False

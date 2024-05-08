@@ -112,7 +112,7 @@ def create():
                 }
 
             elif issubclass(option, Options.VerifyKeys) and not issubclass(option, Options.OptionDict):
-                if option.valid_keys:
+                if option.valid_keys is not None:
                     game_options[option_name] = {
                         "type": "custom-list",
                         "displayName": option.display_name if hasattr(option, "display_name") else option_name,
