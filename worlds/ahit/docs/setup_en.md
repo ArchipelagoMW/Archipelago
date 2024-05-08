@@ -8,7 +8,7 @@
 
 ## Instructions
 
-1. Have Steam running. Open the Steam console with [this link.](steam://open/console)
+1. Have Steam running. Open the Steam console with this link: [steam://open/console](steam://open/console)
 
 
 2. In the Steam console, enter the following command: 
