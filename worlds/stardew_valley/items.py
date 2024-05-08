@@ -258,6 +258,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_shipsanity_items(item_factory, options, items)
     create_goal_items(item_factory, options, items)
     items.append(item_factory("Golden Egg"))
+    items.append(item_factory(CommunityUpgrade.mr_qi_plane_ride))
 
     create_magic_mod_spells(item_factory, options, items)
     create_deepwoods_pendants(item_factory, options, items)
