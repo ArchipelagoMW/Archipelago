@@ -764,11 +764,20 @@ def set_booksanity_rules(all_location_names: Set[str], logic: StardewLogic, mult
         return
 
     read_prefix = "Read "
-    for location in locations.locations_by_tag[LocationTags.BOOKSANITY]:
+    books_to_find_yourself = []
+    books_to_find_yourself.extend(locations.locations_by_tag[LocationTags.BOOKSANITY_POWER])
+    books_to_find_yourself.extend(locations.locations_by_tag[LocationTags.BOOKSANITY_SKILL])
+    for location in books_to_find_yourself:
         if location.name not in all_location_names or not location.name.startswith(read_prefix):
             continue
         book_name = location.name[len(read_prefix):]
         read_rule = logic.has(book_name)
+        MultiWorldRules.set_rule(multiworld.get_location(location.name, player), read_rule)
+    for location in locations.locations_by_tag[LocationTags.BOOKSANITY_LOST]:
+        if location.name not in all_location_names or not location.name.startswith(read_prefix):
+            continue
+        book_name = location.name[len(read_prefix):]
+        read_rule = logic.received(book_name)
         MultiWorldRules.set_rule(multiworld.get_location(location.name, player), read_rule)
 
 

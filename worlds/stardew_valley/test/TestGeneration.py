@@ -7,7 +7,7 @@ from .. import items, location_table, options
 from ..items import Group, item_table
 from ..locations import LocationTags
 from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, ToolProgression, \
-    SkillProgression
+    SkillProgression, Booksanity
 from ..strings.region_names import Region
 
 
@@ -20,6 +20,7 @@ class TestBaseItemGeneration(SVTestBase):
         Shipsanity.internal_name: Shipsanity.option_everything,
         Chefsanity.internal_name: Chefsanity.option_all,
         Craftsanity.internal_name: Craftsanity.option_all,
+        Booksanity.internal_name: Booksanity.option_all,
     }
 
     def test_all_progression_items_are_added_to_the_pool(self):
@@ -71,6 +72,7 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
         Chefsanity.internal_name: Chefsanity.option_all,
         Craftsanity.internal_name: Craftsanity.option_all,
         ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
+        Booksanity.internal_name: Booksanity.option_all,
     }
 
     def test_all_progression_items_except_island_are_added_to_the_pool(self):

@@ -14,7 +14,7 @@ from .data.game_item import ItemTag
 from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
     BuildingProgression, SkillProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
-    Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity
+    Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Booksanity
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.buff_names import Buff
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade
@@ -83,8 +83,8 @@ class Group(enum.Enum):
     CHEFSANITY_FRIENDSHIP = enum.auto()
     CHEFSANITY_SKILL = enum.auto()
     CRAFTSANITY = enum.auto()
-    BOOK = enum.auto()
-    BOOK_EFFECT = enum.auto()
+    BOOK_POWER = enum.auto()
+    LOST_BOOK = enum.auto()
     # Mods
     MAGIC_SPELL = enum.auto()
     MOD_WARP = enum.auto()
@@ -256,6 +256,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_crafting_recipes(item_factory, options, items)
     create_cooking_recipes(item_factory, options, items)
     create_shipsanity_items(item_factory, options, items)
+    create_booksanity_items(item_factory, options, items)
     create_goal_items(item_factory, options, items)
     items.append(item_factory("Golden Egg"))
     items.append(item_factory(CommunityUpgrade.mr_qi_plane_ride))
@@ -631,6 +632,16 @@ def create_shipsanity_items(item_factory: StardewItemFactory, options: StardewVa
         return
 
     items.append(item_factory(Wallet.metal_detector))
+
+
+def create_booksanity_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+    booksanity = options.booksanity
+    if booksanity == Booksanity.option_none:
+        return
+
+    items.extend([item_factory(item) for item in items_by_group[Group.BOOK_POWER]])
+    if booksanity >= Booksanity.option_all:
+        items.extend([item_factory(item) for item in items_by_group[Group.LOST_BOOK]])
 
 
 def create_goal_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
