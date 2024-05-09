@@ -70,12 +70,6 @@ class SpelunkerWorld(World):
         super().__init__(multiworld, player)
         self.locked_locations = []
 
-    @classmethod
-    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
-        rom_file = get_base_rom_path()
-        if not os.path.exists(rom_file):
-            raise FileNotFoundError(rom_file)
-
     def create_item(self, name: str) -> Item:
         data = item_table[name]
         return Item(name, data.classification, data.code, self.player)
