@@ -98,8 +98,8 @@ def set_rules(world: PokemonCrystalWorld) -> None:
             "EVENT_BEAT_ELITE_FOUR", world.player)
 
     # New Bark Town
-    set_rule(get_entrance("REGION_NEW_BARK_TOWN -> REGION_ROUTE_29"),
-             lambda state: state.has("EVENT_GOT_A_POKEMON_FROM_ELM", world.player))
+    # set_rule(get_entrance("REGION_NEW_BARK_TOWN -> REGION_ROUTE_29"),
+    #          lambda state: state.has("EVENT_GOT_A_POKEMON_FROM_ELM", world.player))
 
     set_rule(get_entrance("REGION_NEW_BARK_TOWN -> REGION_ROUTE_27:WEST"), can_surf)
 
@@ -117,8 +117,8 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     # Route 29
     set_rule(get_location("Route 29 - Pink Bow from Tuscany"), lambda state: state.has("Zephyr Badge", world.player))
     # Route 30
-    set_rule(get_entrance("REGION_ROUTE_30 -> REGION_ROUTE_31"),
-             lambda state: state.has("EVENT_GOT_MYSTERY_EGG_FROM_MR_POKEMON", world.player))
+    # set_rule(get_entrance("REGION_ROUTE_30 -> REGION_ROUTE_31"),
+    #          lambda state: state.has("EVENT_GOT_MYSTERY_EGG_FROM_MR_POKEMON", world.player))
 
     set_rule(get_location("Route 30 - Exp Share from Mr Pokemon"), lambda state: state.has("Red Scale", world.player))
 
@@ -432,7 +432,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
         set_rule(get_location("Route 28 - Steel Wing from Celebrity in House"), can_cut)
         if hidden():
             set_rule(get_location("Route 28 - Hidden Item Behind Cut Tree"), can_cut)
-            
+
         # Silver Cave
         set_rule(get_entrance("REGION_SILVER_CAVE_OUTSIDE -> REGION_SILVER_CAVE_ROOM_1"), can_flash)
 
