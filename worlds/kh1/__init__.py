@@ -168,7 +168,8 @@ class KH1World(World):
         slot_data = {"xpmult": int(self.options.exp_multiplier)/16
                     ,"required_reports_eotw": int(required_reports_eotw)
                     ,"required_reports_door": int(required_reports_door)
-                    ,"door": self.options.final_rest_door.current_key}
+                    ,"door": self.options.final_rest_door.current_key
+                    ,"seed": self.multiworld.seed_name}
         if self.options.randomize_keyblade_stats:
             min_str_bonus = min(self.options.keyblade_min_str, self.options.keyblade_max_str)
             max_str_bonus = max(self.options.keyblade_min_str, self.options.keyblade_max_str)
