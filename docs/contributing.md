@@ -46,4 +46,4 @@ If you want to merge a new game into the main Archipelago repo, please make sure
 [world maintainer](/docs/world%20maintainer.md).
 
 For other questions, feel free to explore the [main documentation folder](/docs), and ask us questions in the
-#archipelago-dev channel of the [Discord](https://archipelago.gg/discord).
+#ap-world-dev channel of the [Discord](https://archipelago.gg/discord).

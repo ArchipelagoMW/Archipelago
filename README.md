@@ -82,9 +82,8 @@ The repositories which Archipelago is built upon, inspired by, or otherwise owes
 * [VT Web Randomizer](https://github.com/sporchia/alttp_vt_randomizer)
 * [Dessyreqt's alttprandomizer](https://github.com/Dessyreqt/alttprandomizer)
 * [Zarby89's](https://github.com/Ijwu/Enemizer/commits?author=Zarby89)
-  and [sosuke3's](https://github.com/Ijwu/Enemizer/commits?author=sosuke3) contributions to Enemizer, which make the
-  vast majority of Enemizer
-  contributions.
+  and [sosuke3's](https://github.com/Ijwu/Enemizer/commits?author=sosuke3) contributions to Enemizer, which make up the
+  vast majority of Enemizer contributions.
 
 We recognize that there is a strong community of incredibly smart people that have come before us and helped pave the
 path. Just because one person's name may be in a repository title does not mean that only one person made that project
@@ -102,7 +101,7 @@ _MultiWorld-Utilities_ to better encompass its intended function. As Archipelago
 ## Running Archipelago
 
 For most people, all you need to do is head over to
-the [releases](https://github.com/ArchipelagoMW/Archipelago/releases) page then download and run the appropriate
+the [releases page](https://github.com/ArchipelagoMW/Archipelago/releases), then download and run the appropriate
 installer, or AppImage for Linux-based systems.
 
 If you are a developer or are running on a platform with no compiled releases available, please see our doc on
