@@ -95,20 +95,24 @@ html {
   min-width: 150px;
   background-color: #ffffff;
 }
-#player-options .game-options, #player-options #rom-options {
+#player-options .game-options {
   display: flex;
   flex-direction: row;
+}
+#player-options .game-options .left, #player-options .game-options .right {
+  display: grid;
+  grid-template-columns: 10rem auto;
+  grid-row-gap: 0.5rem;
+  grid-auto-rows: min-content;
+  align-items: start;
+  min-width: 480px;
+  width: 50%;
 }
 #player-options #meta-options {
   display: flex;
   justify-content: space-between;
   gap: 20px;
   padding: 3px;
-}
-#player-options #meta-options label {
-  display: inline-block;
-  min-width: 180px;
-  flex-grow: 1;
 }
 #player-options #meta-options input, #player-options #meta-options select {
   box-sizing: border-box;
@@ -124,64 +128,60 @@ html {
 #player-options .right {
   margin-left: 10px;
 }
-#player-options table {
-  margin-bottom: 30px;
-  width: 100%;
-}
-#player-options table .select-container {
+#player-options .select-container {
   display: flex;
   flex-direction: row;
 }
-#player-options table .select-container select {
+#player-options .select-container select {
   min-width: 200px;
   flex-grow: 1;
 }
-#player-options table .select-container select:disabled {
+#player-options .select-container select:disabled {
   background-color: lightgray;
 }
-#player-options table .range-container {
+#player-options .range-container {
   display: flex;
   flex-direction: row;
 }
-#player-options table .range-container input[type=range] {
+#player-options .range-container input[type=range] {
   flex-grow: 1;
 }
-#player-options table .range-container .range-value {
+#player-options .range-container .range-value {
   min-width: 20px;
   margin-left: 0.25rem;
 }
-#player-options table .named-range-container {
+#player-options .named-range-container {
   display: flex;
   flex-direction: column;
 }
-#player-options table .named-range-container .named-range-wrapper {
+#player-options .named-range-container .named-range-wrapper {
   display: flex;
   flex-direction: row;
   margin-top: 0.25rem;
 }
-#player-options table .named-range-container .named-range-wrapper input[type=range] {
+#player-options .named-range-container .named-range-wrapper input[type=range] {
   flex-grow: 1;
 }
-#player-options table .free-text-container {
+#player-options .free-text-container {
   display: flex;
   flex-direction: column;
 }
-#player-options table .free-text-container input[type=text] {
+#player-options .free-text-container input[type=text] {
   flex-grow: 1;
 }
-#player-options table .text-choice-container {
+#player-options .text-choice-container {
   display: flex;
   flex-direction: column;
 }
-#player-options table .text-choice-container .text-choice-wrapper {
+#player-options .text-choice-container .text-choice-wrapper {
   display: flex;
   flex-direction: row;
   margin-bottom: 0.25rem;
 }
-#player-options table .text-choice-container .text-choice-wrapper select {
+#player-options .text-choice-container .text-choice-wrapper select {
   flex-grow: 1;
 }
-#player-options table .option-container {
+#player-options .option-container {
   display: flex;
   flex-direction: column;
   background-color: rgba(0, 0, 0, 0.25);
@@ -194,14 +194,14 @@ html {
   padding-right: 0.25rem;
   padding-left: 0.25rem;
 }
-#player-options table .option-container .option-divider {
+#player-options .option-container .option-divider {
   width: 100%;
   height: 2px;
   background-color: rgba(20, 20, 20, 0.25);
   margin-top: 0.125rem;
   margin-bottom: 0.125rem;
 }
-#player-options table .option-container .option-entry {
+#player-options .option-container .option-entry {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -209,13 +209,13 @@ html {
   margin-top: 0.125rem;
   user-select: none;
 }
-#player-options table .option-container .option-entry:hover {
+#player-options .option-container .option-entry:hover {
   background-color: rgba(20, 20, 20, 0.25);
 }
-#player-options table .option-container .option-entry input[type=checkbox] {
+#player-options .option-container .option-entry input[type=checkbox] {
   margin-right: 0.25rem;
 }
-#player-options table .option-container .option-entry input[type=number] {
+#player-options .option-container .option-entry input[type=number] {
   max-width: 1.5rem;
   max-height: 1rem;
   margin-left: 0.125rem;
@@ -223,17 +223,17 @@ html {
   /* Hide arrows on input[type=number] fields */
   -moz-appearance: textfield;
 }
-#player-options table .option-container .option-entry input[type=number]::-webkit-outer-spin-button, #player-options table .option-container .option-entry input[type=number]::-webkit-inner-spin-button {
+#player-options .option-container .option-entry input[type=number]::-webkit-outer-spin-button, #player-options .option-container .option-entry input[type=number]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-#player-options table .option-container .option-entry label {
+#player-options .option-container .option-entry label {
   flex-grow: 1;
   margin-right: 0;
   min-width: unset;
   display: unset;
 }
-#player-options table .randomize-button {
+#player-options .randomize-button {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -246,11 +246,11 @@ html {
   background-color: #d3d3d3;
   user-select: none;
 }
-#player-options table .randomize-button:hover {
+#player-options .randomize-button:hover {
   background-color: #c0c0c0;
   cursor: pointer;
 }
-#player-options table .randomize-button label {
+#player-options .randomize-button label {
   line-height: 22px;
   padding-left: 5px;
   padding-right: 2px;
@@ -259,30 +259,29 @@ html {
   height: 100%;
   min-width: unset;
 }
-#player-options table .randomize-button label:hover {
+#player-options .randomize-button label:hover {
   cursor: pointer;
 }
-#player-options table .randomize-button input[type=checkbox] {
+#player-options .randomize-button input[type=checkbox] {
   display: none;
 }
-#player-options table .randomize-button:has(input[type=checkbox]:checked) {
+#player-options .randomize-button:has(input[type=checkbox]:checked) {
   background-color: #ffef00; /* Same as .interactive in globalStyles.css */
 }
-#player-options table .randomize-button:has(input[type=checkbox]:checked):hover {
+#player-options .randomize-button:has(input[type=checkbox]:checked):hover {
   background-color: #eedd27;
 }
-#player-options table .randomize-button[data-tooltip]::after {
+#player-options .randomize-button[data-tooltip]::after {
   left: unset;
   right: 0;
 }
-#player-options table label {
+#player-options label {
   display: block;
-  min-width: 200px;
   margin-right: 4px;
   cursor: default;
-  word-break: normal;
+  word-break: break-word;
 }
-#player-options table th, #player-options table td {
+#player-options th, #player-options td {
   border: none;
   padding: 3px;
   font-size: 17px;
@@ -301,19 +300,6 @@ html {
   #player-options .game-options {
     justify-content: flex-start;
     flex-wrap: wrap;
-  }
-  #player-options .game-options table {
-    margin-bottom: 0;
-  }
-  #player-options .game-options table label {
-    display: block;
-    min-width: 200px;
-  }
-  #player-options .game-options table tr td {
-    width: 50%;
-  }
-  #player-options .left, #player-options .right {
-    margin: 0;
   }
 }
 

@@ -112,9 +112,19 @@ html{
         background-color: #ffffff;
     }
 
-    .game-options, #rom-options{
+    .game-options{
         display: flex;
         flex-direction: row;
+
+        .left, .right{
+            display: grid;
+            grid-template-columns: 10rem auto;
+            grid-row-gap: 0.5rem;
+            grid-auto-rows: min-content;
+            align-items: start;
+            min-width: 480px;
+            width: 50%;
+        }
     }
 
     #meta-options{
@@ -122,12 +132,6 @@ html{
         justify-content: space-between;
         gap: 20px;
         padding: 3px;
-
-        label{
-            display: inline-block;
-            min-width: 180px;
-            flex-grow: 1;
-        }
 
         input, select{
             box-sizing: border-box;
@@ -148,200 +152,194 @@ html{
         margin-left: 10px;
     }
 
-    table{
-        margin-bottom: 30px;
-        width: 100%;
+    .select-container{
+        display: flex;
+        flex-direction: row;
 
-        .select-container{
-            display: flex;
-            flex-direction: row;
+        select{
+            min-width: 200px;
+            flex-grow: 1;
 
-            select{
-                min-width: 200px;
-                flex-grow: 1;
-
-                &:disabled{
-                    background-color: lightgray;
-                }
+            &:disabled{
+                background-color: lightgray;
             }
         }
+    }
 
-        .range-container{
+    .range-container{
+        display: flex;
+        flex-direction: row;
+
+        input[type=range]{
+            flex-grow: 1;
+        }
+
+        .range-value{
+            min-width: 20px;
+            margin-left: 0.25rem;
+        }
+    }
+
+    .named-range-container{
+        display: flex;
+        flex-direction: column;
+
+        .named-range-wrapper{
             display: flex;
             flex-direction: row;
+            margin-top: 0.25rem;
 
             input[type=range]{
                 flex-grow: 1;
             }
-
-            .range-value{
-                min-width: 20px;
-                margin-left: 0.25rem;
-            }
         }
+    }
 
-        .named-range-container{
-            display: flex;
-            flex-direction: column;
+    .free-text-container{
+        display: flex;
+        flex-direction: column;
 
-            .named-range-wrapper{
-                display: flex;
-                flex-direction: row;
-                margin-top: 0.25rem;
-
-                input[type=range]{
-                    flex-grow: 1;
-                }
-            }
+        input[type=text]{
+            flex-grow: 1;
         }
+    }
 
-        .free-text-container{
+    .text-choice-container{
+        display: flex;
+        flex-direction: column;
+
+        .text-choice-wrapper{
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
+            margin-bottom: 0.25rem;
 
-            input[type=text]{
+            select{
                 flex-grow: 1;
             }
         }
+    }
 
-        .text-choice-container{
-            display: flex;
-            flex-direction: column;
+    .option-container{
+        display: flex;
+        flex-direction: column;
+        background-color: rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(20, 20, 20, 0.25);
+        border-radius: 3px;
+        color: #ffffff;
+        max-height: 10rem;
+        min-width: 14.5rem;
+        overflow-y: auto;
+        padding-right: 0.25rem;
+        padding-left: 0.25rem;
 
-            .text-choice-wrapper{
-                display: flex;
-                flex-direction: row;
-                margin-bottom: 0.25rem;
-
-                select{
-                    flex-grow: 1;
-                }
-            }
+        .option-divider{
+            width: 100%;
+            height: 2px;
+            background-color: rgba(20, 20, 20, 0.25);
+            margin-top: 0.125rem;
+            margin-bottom: 0.125rem;
         }
 
-        .option-container{
+        .option-entry{
             display: flex;
-            flex-direction: column;
-            background-color: rgba(0, 0, 0, 0.25);
-            border: 1px solid rgba(20, 20, 20, 0.25);
-            border-radius: 3px;
-            color: #ffffff;
-            max-height: 10rem;
-            min-width: 14.5rem;
-            overflow-y: auto;
-            padding-right: 0.25rem;
-            padding-left: 0.25rem;
-
-            .option-divider{
-                width: 100%;
-                height: 2px;
-                background-color: rgba(20, 20, 20, 0.25);
-                margin-top: 0.125rem;
-                margin-bottom: 0.125rem;
-            }
-
-            .option-entry{
-                display: flex;
-                flex-direction: row;
-                align-items: flex-start;
-                margin-bottom: 0.125rem;
-                margin-top: 0.125rem;
-                user-select: none;
-
-                &:hover{
-                    background-color: rgba(20, 20, 20, 0.25);
-                }
-
-                input[type=checkbox]{
-                    margin-right: 0.25rem;
-                }
-
-                input[type=number]{
-                    max-width: 1.5rem;
-                    max-height: 1rem;
-                    margin-left: 0.125rem;
-                    text-align: center;
-
-                    /* Hide arrows on input[type=number] fields */
-                    -moz-appearance: textfield;
-                    &::-webkit-outer-spin-button, &::-webkit-inner-spin-button{
-                        -webkit-appearance: none;
-                        margin: 0;
-                    }
-                }
-
-                label{
-                    flex-grow: 1;
-                    margin-right: 0;
-                    min-width: unset;
-                    display: unset;
-                }
-            }
-        }
-
-        .randomize-button{
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            height: 22px;
-            max-width: 30px;
-            margin: 0 0 0 0.25rem;
-            font-size: 14px;
-            border: 1px solid black;
-            border-radius: 3px;
-            background-color: #d3d3d3;
+            flex-direction: row;
+            align-items: flex-start;
+            margin-bottom: 0.125rem;
+            margin-top: 0.125rem;
             user-select: none;
 
             &:hover{
-                background-color: #c0c0c0;
-                cursor: pointer;
-            }
-
-            label{
-                line-height: 22px;
-                padding-left: 5px;
-                padding-right: 2px;
-                margin-right: 4px;
-                width: 100%;
-                height: 100%;
-                min-width: unset;
-                &:hover{
-                    cursor: pointer;
-                }
+                background-color: rgba(20, 20, 20, 0.25);
             }
 
             input[type=checkbox]{
-                display: none;
+                margin-right: 0.25rem;
             }
 
-            &:has(input[type=checkbox]:checked){
-                background-color: #ffef00; /* Same as .interactive in globalStyles.css */
+            input[type=number]{
+                max-width: 1.5rem;
+                max-height: 1rem;
+                margin-left: 0.125rem;
+                text-align: center;
 
-                &:hover{
-                    background-color: #eedd27;
+                /* Hide arrows on input[type=number] fields */
+                -moz-appearance: textfield;
+                &::-webkit-outer-spin-button, &::-webkit-inner-spin-button{
+                    -webkit-appearance: none;
+                    margin: 0;
                 }
             }
 
-            &[data-tooltip]::after{
-                left: unset;
-                right: 0;
+            label{
+                flex-grow: 1;
+                margin-right: 0;
+                min-width: unset;
+                display: unset;
             }
+        }
+    }
+
+    .randomize-button{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 22px;
+        max-width: 30px;
+        margin: 0 0 0 0.25rem;
+        font-size: 14px;
+        border: 1px solid black;
+        border-radius: 3px;
+        background-color: #d3d3d3;
+        user-select: none;
+
+        &:hover{
+            background-color: #c0c0c0;
+            cursor: pointer;
         }
 
         label{
-            display: block;
-            min-width: 200px;
+            line-height: 22px;
+            padding-left: 5px;
+            padding-right: 2px;
             margin-right: 4px;
-            cursor: default;
-            word-break: normal;
+            width: 100%;
+            height: 100%;
+            min-width: unset;
+            &:hover{
+                cursor: pointer;
+            }
         }
 
-        th, td{
-            border: none;
-            padding: 3px;
-            font-size: 17px;
-            vertical-align: top;
+        input[type=checkbox]{
+            display: none;
         }
+
+        &:has(input[type=checkbox]:checked){
+            background-color: #ffef00; /* Same as .interactive in globalStyles.css */
+
+            &:hover{
+                background-color: #eedd27;
+            }
+        }
+
+        &[data-tooltip]::after{
+            left: unset;
+            right: 0;
+        }
+    }
+
+    label{
+        display: block;
+        margin-right: 4px;
+        cursor: default;
+        word-break: break-word;
+    }
+
+    th, td{
+        border: none;
+        padding: 3px;
+        font-size: 17px;
+        vertical-align: top;
     }
 }
 
@@ -358,23 +356,6 @@ html{
         .game-options{
             justify-content: flex-start;
             flex-wrap: wrap;
-
-            table{
-                margin-bottom: 0;
-
-                label{
-                    display: block;
-                    min-width: 200px;
-                }
-
-                tr td{
-                    width: 50%;
-                }
-            }
-        }
-
-        .left, .right{
-            margin: 0;
         }
     }
 }
