@@ -35,7 +35,7 @@
 /worlds/celeste64/ @PoryGone
 
 # ChecksFinder
-/worlds/checksfinder/ @jonloveslegos
+/worlds/checksfinder/ @SunCatMC
 
 # Clique
 /worlds/clique/ @ThePhar
@@ -91,6 +91,9 @@
 # Lufia II Ancient Cave
 /worlds/lufia2ac/ @el-u
 /worlds/lufia2ac/docs/ @wordfcuk @el-u
+
+# Mario & Luigi: Superstar Saga
+/worlds/mlss/ @jamesbrq
 
 # Meritous
 /worlds/meritous/ @FelicitusNeko

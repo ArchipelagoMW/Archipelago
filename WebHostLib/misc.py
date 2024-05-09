@@ -49,12 +49,6 @@ def weighted_options():
     return render_template("weighted-options.html")
 
 
-# TODO for back compat. remove around 0.4.5
-@app.route("/games/<string:game>/player-settings")
-def player_settings(game: str):
-    return redirect(url_for("player_options", game=game), 301)
-
-
 # Player options pages
 @app.route("/games/<string:game>/player-options")
 @cache.cached()
@@ -156,6 +150,7 @@ def host_room(room: UUID):
             if cmd:
                 Command(room=room, commandtext=cmd)
                 commit()
+        return redirect(url_for("host_room", room=room.id))
 
     now = datetime.datetime.utcnow()
     # indicate that the page should reload to get the assigned port
