@@ -18,7 +18,7 @@ from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
 from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
-from .options import StardewValleyOptions
+from .options import StardewValleyOptions, Booksanity
 from .options import ToolProgression, BuildingProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, SkillProgression
 from .stardew_rule import And, StardewRule
@@ -82,6 +82,7 @@ def set_rules(world):
     set_cooksanity_rules(all_location_names, logic, multiworld, player, world_options)
     set_chefsanity_rules(all_location_names, logic, multiworld, player, world_options)
     set_craftsanity_rules(all_location_names, logic, multiworld, player, world_options)
+    set_booksanity_rules(all_location_names, logic, multiworld, player, world_options)
     set_isolated_locations_rules(logic, multiworld, player)
     set_traveling_merchant_day_rules(logic, multiworld, player)
     set_arcade_machine_rules(logic, multiworld, player, world_options)
@@ -755,6 +756,20 @@ def set_craftsanity_rules(all_location_names: Set[str], logic: StardewLogic, mul
             recipe = all_crafting_recipes_by_name[recipe_name]
             craft_rule = logic.crafting.can_craft(recipe)
         MultiWorldRules.set_rule(multiworld.get_location(location.name, player), craft_rule)
+
+
+def set_booksanity_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
+    booksanity_option = world_options.booksanity
+    if booksanity_option == Booksanity.option_none:
+        return
+
+    read_prefix = "Read "
+    for location in locations.locations_by_tag[LocationTags.BOOKSANITY]:
+        if location.name not in all_location_names or not location.name.startswith(read_prefix):
+            continue
+        book_name = location.name[len(read_prefix):]
+        read_rule = logic.has(book_name)
+        MultiWorldRules.set_rule(multiworld.get_location(location.name, player), read_rule)
 
 
 def set_traveling_merchant_day_rules(logic: StardewLogic, multiworld: MultiWorld, player: int):
