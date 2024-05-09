@@ -134,6 +134,10 @@ class WebWorldRegister(type):
             if group.name == "Item & Location Options":
                 group.options.extend(item_and_loc_options)
                 item_group_in_list = True
+            else:
+                for option in group.options:
+                    assert option not in item_and_loc_options, \
+                           f"{option} cannot be moved out of the \"Item & Location Options\" Group"
             assert len(group.options) == len(set(group.options)), f"Duplicate options in option group {group.name}"
             for option in group.options:
                 assert option not in seen_options, f"{option} found in two option groups"
