@@ -1881,8 +1881,10 @@ def update_client_status(ctx: Context, client: Client, new_status: ClientStatus)
 
 
 class ServerCommandProcessor(CommonCommandProcessor):
+    player_name_lookup_table: Dict[str, typing.Tuple[int, int, str]] = {}
     def __init__(self, ctx: Context):
         self.ctx = ctx
+        self.player_name_lookup_table = {}
         super(ServerCommandProcessor, self).__init__()
 
     def output(self, text: str):
@@ -1925,48 +1927,40 @@ class ServerCommandProcessor(CommonCommandProcessor):
         return True
 
     @mark_raw
-    def _cmd_alias(self, player_name_then_alias_name):
+    def _cmd_alias(self, player_name_then_alias_name: str) -> bool:
         """Set a player's alias, by listing their base name and then their intended alias."""
         player_name, _, alias_name = player_name_then_alias_name.partition(" ")
-        player_name, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
-        if usable:
-            for (team, slot), name in self.ctx.player_names.items():
-                if name == player_name:
-                    if alias_name:
-                        alias_name = alias_name.strip()[:15]
-                        self.ctx.name_aliases[team, slot] = alias_name
-                        self.output(f"Named {player_name} as {alias_name}")
-                        update_aliases(self.ctx, team)
-                        self.ctx.save()
-                        return True
-                    else:
-                        del (self.ctx.name_aliases[team, slot])
-                        self.output(f"Removed Alias for {player_name}")
-                        update_aliases(self.ctx, team)
-                        self.ctx.save()
-                        return True
+        player = self.resolve_player(player_name)
+        if player:
+            team, slot, seeked_player = player
+            if alias_name:
+                alias_name = alias_name.strip()[:15]
+                self.ctx.name_aliases[team, slot] = alias_name
+                self.output(f"Named {seeked_player} as {alias_name}")
+                update_aliases(self.ctx, team)
+                self.ctx.save()
+                return True
+            else:
+                del (self.ctx.name_aliases[team, slot])
+                self.output(f"Removed Alias for {seeked_player}")
+                update_aliases(self.ctx, team)
+                self.ctx.save()
+                return True
         else:
-            self.output(response)
+            self.output(f"Could not find player {player_name} to alias.")
             return False
 
     def resolve_player(self, input_name: str) -> typing.Optional[typing.Tuple[int, int, str]]:
-        """ returns (team, slot, player name) """
-        # TODO: clean up once we disallow multidata < 0.3.6, which has CI unique names
-        # first match case
-        for (team, slot), name in self.ctx.player_names.items():
-            if name == input_name:
-                return team, slot, name
+        """
+        returns (team: int, slot: int, player name: str)
+        Looks for an exact match as wrong player can be fatal, _ can be used instead of a space.
+        """
+        if not self.player_name_lookup_table:
+            # populate on first use
+            for (team, slot), name in self.ctx.player_names.items():
+                self.player_name_lookup_table[name.lower().replace("_", " ")] = team, slot, name
 
-        # if no case-sensitive match, then match without case only if there's only 1 match
-        input_lower = input_name.lower()
-        match: typing.Optional[typing.Tuple[int, int, str]] = None
-        for (team, slot), name in self.ctx.player_names.items():
-            lowered = name.lower()
-            if lowered == input_lower:
-                if match:
-                    return None  # ambiguous input_name
-                match = (team, slot, name)
-        return match
+        return self.player_name_lookup_table.get(input_name.lower().replace("_", " "), None)
 
     @mark_raw
     def _cmd_collect(self, player_name: str) -> bool:
@@ -1977,7 +1971,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
             collect_player(self.ctx, team, slot)
             return True
 
-        self.output(f"Could not find player {player_name} to collect")
+        self.output(f"Could not find player {player_name} to collect.")
         return False
 
     @mark_raw
@@ -2020,9 +2014,9 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     def _cmd_send_multiple(self, amount: typing.Union[int, str], player_name: str, *item_name: str) -> bool:
         """Sends multiples of an item to the specified player"""
-        seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
-        if usable:
-            team, slot = self.ctx.player_name_lookup[seeked_player]
+        player = self.resolve_player(player_name)
+        if player:
+            team, slot, seeked_player = player
             item_name = " ".join(item_name)
             names = self.ctx.item_names_for_game(self.ctx.games[slot])
             item_name, usable, response = get_intended_text(item_name, names)
@@ -2040,7 +2034,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 self.output(response)
                 return False
         else:
-            self.output(response)
+            self.output(f"Could not find player {player_name})")
             return False
 
     def _cmd_send(self, player_name: str, *item_name: str) -> bool:
@@ -2049,9 +2043,9 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     def _cmd_send_location(self, player_name: str, *location_name: str) -> bool:
         """Send out item from a player's location as though they checked it"""
-        seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
-        if usable:
-            team, slot = self.ctx.player_name_lookup[seeked_player]
+        player = self.resolve_player(player_name)
+        if player:
+            team, slot, seeked_player = player
             game = self.ctx.games[slot]
             full_name = " ".join(location_name)
 
@@ -2075,14 +2069,14 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 return False
 
         else:
-            self.output(response)
+            self.output(f"Could not find player {player_name})")
             return False
 
     def _cmd_hint(self, player_name: str, *item_name: str) -> bool:
         """Send out a hint for a player's item to their team"""
-        seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
-        if usable:
-            team, slot = self.ctx.player_name_lookup[seeked_player]
+        player = self.resolve_player(player_name)
+        if player:
+            team, slot, seeked_player = player
             game = self.ctx.games[slot]
             full_name = " ".join(item_name)
 
@@ -2114,14 +2108,14 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 return False
 
         else:
-            self.output(response)
+            self.output(f"Could not find player {player_name})")
             return False
 
     def _cmd_hint_location(self, player_name: str, *location_name: str) -> bool:
         """Send out a hint for a player's location to their team"""
-        seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
-        if usable:
-            team, slot = self.ctx.player_name_lookup[seeked_player]
+        player = self.resolve_player(player_name)
+        if player:
+            team, slot, seeked_player = player
             game = self.ctx.games[slot]
             full_name = " ".join(location_name)
 
@@ -2153,7 +2147,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 return False
 
         else:
-            self.output(response)
+            self.output(f"Could not find player {player_name})")
             return False
 
     def _cmd_option(self, option_name: str, option_value: str):
