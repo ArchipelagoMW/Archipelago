@@ -545,7 +545,7 @@ class Booksanity(Choice):
     """
     internal_name = "booksanity"
     display_name = "Booksanity"
-    default = 0
+    default = 2
     option_none = 0
     option_power = 1
     option_power_skill = 2

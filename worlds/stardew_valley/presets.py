@@ -5,7 +5,7 @@ from .options import Goal, StartingMoney, ProfitMargin, BundleRandomization, Bun
     BackpackProgression, ToolProgression, ElevatorProgression, SkillProgression, BuildingProgression, FestivalLocations, ArcadeMachineLocations, \
     SpecialOrderLocations, QuestLocations, Fishsanity, Museumsanity, Friendsanity, FriendsanityHeartSize, NumberOfMovementBuffs, NumberOfLuckBuffs, \
     ExcludeGingerIsland, TrapItems, MultipleDaySleepEnabled, MultipleDaySleepCost, ExperienceMultiplier, FriendshipMultiplier, DebrisMultiplier, QuickStart, \
-    Gifting, FarmType, Monstersanity, Shipsanity, Cooksanity, Chefsanity, Craftsanity
+    Gifting, FarmType, Monstersanity, Shipsanity, Cooksanity, Chefsanity, Craftsanity, Booksanity
 
 all_random_settings = {
     "progression_balancing":                "random",
@@ -37,6 +37,7 @@ all_random_settings = {
     Craftsanity.internal_name:              "random",
     Friendsanity.internal_name:             "random",
     FriendsanityHeartSize.internal_name:    "random",
+    Booksanity.internal_name:               "random",
     NumberOfMovementBuffs.internal_name:    "random",
     NumberOfLuckBuffs.internal_name:        "random",
     ExcludeGingerIsland.internal_name:      "random",
@@ -81,6 +82,7 @@ easy_settings = {
     Craftsanity.internal_name:              Craftsanity.option_none,
     Friendsanity.internal_name:             Friendsanity.option_none,
     FriendsanityHeartSize.internal_name:    4,
+    Booksanity.internal_name:               Booksanity.option_none,
     NumberOfMovementBuffs.internal_name:    8,
     NumberOfLuckBuffs.internal_name:        8,
     ExcludeGingerIsland.internal_name:      ExcludeGingerIsland.option_true,
@@ -125,6 +127,7 @@ medium_settings = {
     Craftsanity.internal_name:              Craftsanity.option_none,
     Friendsanity.internal_name:             Friendsanity.option_starting_npcs,
     FriendsanityHeartSize.internal_name:    4,
+    Booksanity.internal_name:               Booksanity.option_power_skill,
     NumberOfMovementBuffs.internal_name:    6,
     NumberOfLuckBuffs.internal_name:        6,
     ExcludeGingerIsland.internal_name:      ExcludeGingerIsland.option_true,
@@ -169,6 +172,7 @@ hard_settings = {
     Craftsanity.internal_name:              Craftsanity.option_none,
     Friendsanity.internal_name:             Friendsanity.option_all,
     FriendsanityHeartSize.internal_name:    4,
+    Booksanity.internal_name:               Booksanity.option_all,
     NumberOfMovementBuffs.internal_name:    4,
     NumberOfLuckBuffs.internal_name:        4,
     ExcludeGingerIsland.internal_name:      ExcludeGingerIsland.option_false,
@@ -213,6 +217,7 @@ nightmare_settings = {
     Craftsanity.internal_name:              Craftsanity.option_none,
     Friendsanity.internal_name:             Friendsanity.option_all_with_marriage,
     FriendsanityHeartSize.internal_name:    4,
+    Booksanity.internal_name:               Booksanity.option_all,
     NumberOfMovementBuffs.internal_name:    2,
     NumberOfLuckBuffs.internal_name:        2,
     ExcludeGingerIsland.internal_name:      ExcludeGingerIsland.option_false,
@@ -257,6 +262,7 @@ short_settings = {
     Craftsanity.internal_name:              Craftsanity.option_none,
     Friendsanity.internal_name:             Friendsanity.option_none,
     FriendsanityHeartSize.internal_name:    4,
+    Booksanity.internal_name:               Booksanity.option_none,
     NumberOfMovementBuffs.internal_name:    10,
     NumberOfLuckBuffs.internal_name:        10,
     ExcludeGingerIsland.internal_name:      ExcludeGingerIsland.option_true,
@@ -301,6 +307,7 @@ minsanity_settings = {
     Craftsanity.internal_name:              Craftsanity.option_none,
     Friendsanity.internal_name:             Friendsanity.option_none,
     FriendsanityHeartSize.internal_name:    FriendsanityHeartSize.default,
+    Booksanity.internal_name:               Booksanity.option_none,
     NumberOfMovementBuffs.internal_name:    NumberOfMovementBuffs.default,
     NumberOfLuckBuffs.internal_name:        NumberOfLuckBuffs.default,
     ExcludeGingerIsland.internal_name:      ExcludeGingerIsland.option_true,
@@ -345,6 +352,7 @@ allsanity_settings = {
     Craftsanity.internal_name:              Craftsanity.option_all,
     Friendsanity.internal_name:             Friendsanity.option_all,
     FriendsanityHeartSize.internal_name:    1,
+    Booksanity.internal_name:               Booksanity.option_all,
     NumberOfMovementBuffs.internal_name:    12,
     NumberOfLuckBuffs.internal_name:        12,
     ExcludeGingerIsland.internal_name:      ExcludeGingerIsland.option_false,

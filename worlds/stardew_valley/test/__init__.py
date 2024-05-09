@@ -26,7 +26,8 @@ def disable_5_x_x_options():
         options.Shipsanity.internal_name: options.Shipsanity.option_none,
         options.Cooksanity.internal_name: options.Cooksanity.option_none,
         options.Chefsanity.internal_name: options.Chefsanity.option_none,
-        options.Craftsanity.internal_name: options.Craftsanity.option_none
+        options.Craftsanity.internal_name: options.Craftsanity.option_none,
+        options.Booksanity.internal_name: options.Booksanity.option_none,
     }
 
 
@@ -71,6 +72,7 @@ def get_minsanity_options():
         options.Craftsanity.internal_name: options.Craftsanity.option_none,
         options.Friendsanity.internal_name: options.Friendsanity.option_none,
         options.FriendsanityHeartSize.internal_name: 8,
+        options.Booksanity.internal_name: options.Booksanity.option_none,
         options.NumberOfMovementBuffs.internal_name: 0,
         options.NumberOfLuckBuffs.internal_name: 0,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
@@ -105,6 +107,7 @@ def minimal_locations_maximal_items():
         options.Craftsanity.internal_name: options.Craftsanity.option_none,
         options.Friendsanity.internal_name: options.Friendsanity.option_none,
         options.FriendsanityHeartSize.internal_name: 8,
+        options.Booksanity.internal_name: options.Booksanity.option_none,
         options.NumberOfMovementBuffs.internal_name: 12,
         options.NumberOfLuckBuffs.internal_name: 12,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
@@ -147,6 +150,7 @@ def allsanity_4_x_x_options_without_mods():
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
         options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
         options.FriendsanityHeartSize.internal_name: 1,
+        options.Booksanity.internal_name: options.Booksanity.option_all,
         options.NumberOfMovementBuffs.internal_name: 12,
         options.NumberOfLuckBuffs.internal_name: 12,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
@@ -182,6 +186,7 @@ def allsanity_options_without_mods():
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
         options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
         options.FriendsanityHeartSize.internal_name: 1,
+        options.Booksanity.internal_name: options.Booksanity.option_all,
         options.NumberOfMovementBuffs.internal_name: 12,
         options.NumberOfLuckBuffs.internal_name: 12,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,

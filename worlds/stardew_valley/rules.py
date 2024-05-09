@@ -777,7 +777,7 @@ def set_booksanity_rules(all_location_names: Set[str], logic: StardewLogic, mult
         if location.name not in all_location_names or not location.name.startswith(read_prefix):
             continue
         book_name = location.name[len(read_prefix):]
-        read_rule = logic.received(book_name)
+        read_rule = logic.received(f"Lost Book: {book_name}")
         MultiWorldRules.set_rule(multiworld.get_location(location.name, player), read_rule)
 
 
