@@ -6,6 +6,7 @@ from worlds.generic.Rules import exclusion_rules, set_rule, add_rule
 from worlds.AutoWorld import World
 
 from .Locations import location_data_table
+from .Options import DSTOptions
 
 def advanced_player_bias (state: CollectionState, player: int) -> bool: 
    return state.multiworld.skill_level[player].current_key != "easy"
@@ -238,7 +239,7 @@ def can_get_feathers (state: CollectionState, player: int) -> bool:
     return state.has_all(["Boomerang", "Boards"], player) or state.has("Bird Trap", player) or ice_staff(state, player) or expert_player_bias(state, player)
 
 def cannon (state: CollectionState, player: int) -> bool: 
-    return state.has_all(["Queen of Moon Quay", "Cannon Kit", "Cannonball", "Gunpowder", "Cut Stone", "Rope"], player) and firestarting(state, player) and mining(state, player) and chopping(state, player) and bird_caging(state, player)
+    return state.has_all(["Queen of Moon Quay", "Cannon Kit", "Gunpowder", "Cut Stone", "Rope"], player) and firestarting(state, player) and mining(state, player) and chopping(state, player) and bird_caging(state, player)
 
 def ranged_combat (state: CollectionState, player: int) -> bool:
     return can_get_feathers(state, player) and (state.has_all(["Reach Winter", "Blow Dart"], player) or (canary(state, player) and bird_caging(state, player) and state.has("Electric Dart", player)))
@@ -386,7 +387,7 @@ def get_rules_lookup(player: int):
             "Build Shadow Manipulator": lambda state: ruins_exploration(state, player) and state.has("Prestihatitor",player),
             "Build Think Tank": lambda state: state.has_all(["Boards", "Science Machine"], player),	
             "Find Celestial Orb": lambda state: has_survived_num_days(5, state, player) and mining(state, player),
-            "Moon Stone Event": lambda state: moonstone_event(state, player),
+            "Moon Stone Event Reward": lambda state: moonstone_event(state, player),
             "Find Celestial Sanctum Icon": lambda state: state.has("Astral Detector", player) and heavy_lifting(state, player),
             "Find Celestial Sanctum Ward": lambda state: state.has("Astral Detector", player) and heavy_lifting(state, player),
             "Unite Celestial Altars": lambda state: state.has_all(["Celestial Sanctum Icon", "Celestial Sanctum Ward", "Inactive Celestial Tribute", "Pinchin' Winch"], player) and lunar_island(state, player),
@@ -417,7 +418,7 @@ def get_rules_lookup(player: int):
             # Pearl Questline
             "Hermit Home Upgrade (1)": lambda state: hermit_island(state, player), # Cookie cutters, boards, fireflies
             "Hermit Home Upgrade (2)": lambda state: hermit_island(state, player), # Marble, cut stone, light bulb
-            "Hermit Home Upgrade (3)": lambda state: hermit_island(state, player), # Moonrock, rope, carpet
+            "Hermit Home Upgrade (3)": lambda state: hermit_island(state, player) and state.has("Floorings", player), # Moonrock, rope, carpet
             "Hermit Island Drying Racks": lambda state: hermit_island(state, player),
             "Hermit Island Plant 10 Flowers": lambda state: hermit_island(state, player) and bug_catching(state, player),
             "Hermit Island Plant 8 Berry Bushes": lambda state: hermit_island(state, player) and digging(state, player),
@@ -444,6 +445,9 @@ def get_rules_lookup(player: int):
             "Hutch": lambda state: cave_exploration(state, player),         
             "Stagehand": lambda state: basic_exploration(state, player) and hammering(state, player),     
             "Pirate Stash": lambda state: state.has("Pirate Map", player) and digging(state, player),  
+            "Moon Stone Event": lambda state: state.has("Mooncaller Staff", player),
+            "Oasis": lambda state: is_summer(state, player) and freshwater_fishing(state, player),
+            "Poison Birchnut Tree": lambda state: reached_autumn(state, player) and chopping(state, player),
 
             # Bosses
             "Deerclops": lambda state: state.has("Defeat Deerclops", player),
@@ -550,10 +554,13 @@ def get_rules_lookup(player: int):
             "Glommer": lambda state: has_survived_num_days(11, state, player),
             "Dust Moth": lambda state: archive_exploration(state, player),
             "No-Eyed Deer": lambda state: is_winter(state, player),     
-            "Moonblind Crow": lambda state: moonstorm_exploration(state, player) and basic_combat(state, player),   
-            "Misshapen Bird": lambda state: moonstorm_exploration(state, player) and basic_combat(state, player),   
+            "Moonblind Crow": lambda state: moonstorm_exploration(state, player) and basic_combat(state, player),
+            "Misshapen Bird": lambda state: moonstorm_exploration(state, player) and basic_combat(state, player),
             "Moonrock Pengull": lambda state: lunar_island(state, player) and is_winter(state, player) and basic_combat(state, player), 
-            "Horror Hound": lambda state: moonstorm_exploration(state, player) and basic_combat(state, player),     
+            "Horror Hound": lambda state: moonstorm_exploration(state, player) and basic_combat(state, player),
+            "Resting Horror": lambda state: ruins_exploration(state, player),
+            "Birchnutter": lambda state: reached_autumn(state, player) and chopping(state, player),
+            "Mandrake": lambda state: has_survived_num_days(3, state, player),
             
             # Cook foods
             "Butter Muffin": lambda state: pre_basic_cooking(state, player),
@@ -817,14 +824,15 @@ def get_rules_lookup(player: int):
 def set_rules(dst_world: World) -> None:
     multiworld = dst_world.multiworld
     player = dst_world.player
+    options:DSTOptions = dst_world.options
     rules_lookup = get_rules_lookup(player)
     existing_locations = [item.name for item in multiworld.get_locations(player)]
     excluded = set()
     PROGRESSION_REQUIRED_BOSSES:set = set()
 
-    if multiworld.goal[player].current_key != "survival":
-        excluded.update(multiworld.required_bosses[player].value) # Prevent goal bosses from having progression items
-        PROGRESSION_REQUIRED_BOSSES.update(multiworld.required_bosses[player].value) 
+    if options.goal.current_key != "survival":
+        excluded.update(options.required_bosses.value) # Prevent goal bosses from having progression items
+        PROGRESSION_REQUIRED_BOSSES.update(options.required_bosses.value) 
         if "Ancient Fuelweaver" in PROGRESSION_REQUIRED_BOSSES: PROGRESSION_REQUIRED_BOSSES.add("Ancient Guardian")
         if "Celestial Champion" in PROGRESSION_REQUIRED_BOSSES: PROGRESSION_REQUIRED_BOSSES.add("Crab King")
         if "Scrappy Werepig" in PROGRESSION_REQUIRED_BOSSES: PROGRESSION_REQUIRED_BOSSES.add("Nightmare Werepig")
@@ -836,6 +844,7 @@ def set_rules(dst_world: World) -> None:
         "Crab King": "priority_crabking_boss",
         "Nightmare Werepig": "priority_ruins_boss",
         "Scrappy Werepig": "priority_scrappywerepig_boss",
+        "Antlion": "priority_antlion_boss",
     }
 
     # Set location rules
@@ -872,17 +881,17 @@ def set_rules(dst_world: World) -> None:
             if required: 
                 multiworld.priority_locations[player].value.add(location_name)
             elif ("priority" in location_data.tags
-            or (multiworld.boss_locations[player].current_key == "prioritized" and "boss" in location_data.tags and not "excluded" in location_data.tags)
+            or (options.boss_locations.current_key == "prioritized" and "boss" in location_data.tags and not "excluded" in location_data.tags)
             ):
                 # Prioritize generic priority tag
                 multiworld.priority_locations[player].value.add(location_name)
             # Exclude from having progression items if it meets the conditions
             if not required and ("excluded" in location_data.tags 
-            or (not multiworld.seasonal_locations[player].value and "seasonal" in location_data.tags)
-            or (multiworld.boss_locations[player].current_key == "none" and "boss" in location_data.tags)
-            or (multiworld.boss_locations[player].current_key == "easy" and "raidboss" in location_data.tags)
-            or (multiworld.skill_level[player].current_key == "easy" and "advanced" in location_data.tags)
-            or (multiworld.skill_level[player].current_key != "expert" and "expert" in location_data.tags)
+            or (not options.seasonal_locations.value and "seasonal" in location_data.tags)
+            or (options.boss_locations.current_key == "none" and "boss" in location_data.tags)
+            or (options.boss_locations.current_key == "easy" and "raidboss" in location_data.tags)
+            or (options.skill_level.current_key == "easy" and "advanced" in location_data.tags)
+            or (options.skill_level.current_key != "expert" and "expert" in location_data.tags)
             ):
                 excluded.add(location_name)
 

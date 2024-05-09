@@ -2,6 +2,7 @@ from typing import Dict, List, NamedTuple
 from BaseClasses import MultiWorld, Region, Entrance, ItemClassification
 from .Locations import location_data_table, DSTLocation
 from .Items import DSTItem, item_data_table
+from .ItemPool import DSTItemPool
 from .Options import DSTOptions
 from .Constants import DSTAP_EVENTS, BOSS_COMPLETION_GOALS
 import random
@@ -10,7 +11,7 @@ class DSTRegionData(NamedTuple):
    connecting_regions: List[str] = []
    locations: List[str] = []
 
-def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions):
+def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, itempool:DSTItemPool):
    REGION_DATA_TABLE: Dict[str, DSTRegionData] = {
       "Menu":     DSTRegionData(["Forest"], []),
       "Forest":   DSTRegionData(["Cave", "Ocean"], []),
@@ -33,7 +34,7 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions):
       return "Cave" if "caves" in tags else "Ocean" if "ocean" in tags else "Forest"
    
    # Get number of items that need to be placed, plus make space for junk items and traps
-   location_num_left_to_place:int = len([name for name, data in item_data_table.items() if data.code != None and not "junk" in data.tags and not "trap" in data.tags]) + 20
+   location_num_left_to_place:int = len(itempool.nonfiller_items) + 20
 
    # Check if locations are disabled by options
    filtered_location_data_table = {name: data for name, data in location_data_table.items() if not(

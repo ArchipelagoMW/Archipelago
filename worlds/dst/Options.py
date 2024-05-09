@@ -34,6 +34,29 @@ class DaysToSurvive(NamedRange):
 class RequiredBosses(OptionSet):
     """
     Which boss(es) are required to be defeated to beat the game?
+    
+    Valid Bosses:
+        "Deerclops"
+        "Moose/Goose"
+        "Bearger"
+        "Ancient Guardian"
+        "Antlion"
+        "Dragonfly"
+        "Bee Queen"
+        "Klaus"
+        "Toadstool"
+        "Malbatross"
+        "Crab King"
+        "Frostjaw"
+        "Eye Of Terror"
+        "Retinazor"
+        "Spazmatism"
+        "Nightmare Werepig"
+        "Scrappy Werepig"
+        "Ancient Fuelweaver"
+        "Celestial Champion"
+
+    Example: ['Deerclops', 'Moose/Goose', 'Bearger']
     """
     display_name = "Boss Defeat Requirement"
     default = {"Ancient Guardian"}
@@ -115,6 +138,26 @@ class SeasonalLocations(Toggle):
     True: Season-specific locations may have useful items.
     """
     display_name = "Seasonal Locations"
+  
+class ShuffleStartingRecipes(Toggle):
+    """
+    Turn your basic starting recipes into Archipelago items?
+    (Work in progress! Logic is not completed for this option. Use at your own risk!)
+    """
+    display_name = "Shuffle Starting Recipes"
+
+class ShuffleNoUnlockRecipes(Toggle):
+    """
+    Turn crafting recipes in the Ancient Pseudoscience Station and Celestial Altars into Archipelago items?
+    (Work in progress! Logic is not completed for this option. Use at your own risk!)
+    """
+    display_name = "Shuffle Ancient and Celestial Recipes"
+
+# class CraftWithLockedItems(DefaultOnToggle):
+#     """
+#     Should you be able to craft if any of the ingredients are one of your missing items?
+#     """
+#     display_name = "Craft With Locked Items"
 
 class PlayerSkillLevel(Choice):
     """
@@ -129,6 +172,7 @@ class PlayerSkillLevel(Choice):
     option_easy = 0
     option_advanced = 1
     option_expert = 2
+
 
 class TrapItems(Choice):
     """
@@ -152,7 +196,6 @@ class SeasonTrapItems(Choice):
     option_medium = 2
     option_high = 3
 
-    
 @dataclass
 class DSTOptions(PerGameCommonOptions):
     goal: Goal
@@ -163,6 +206,9 @@ class DSTOptions(PerGameCommonOptions):
     cooking_locations: CookingLocations
     farming_locations: FarmingLocations
     seasonal_locations: SeasonalLocations
+    shuffle_starting_recipes: ShuffleStartingRecipes
+    shuffle_no_unlock_recipes: ShuffleNoUnlockRecipes
+    # craft_with_locked_items: CraftWithLockedItems
     skill_level: PlayerSkillLevel
     trap_items: TrapItems
     season_trap_items: SeasonTrapItems
