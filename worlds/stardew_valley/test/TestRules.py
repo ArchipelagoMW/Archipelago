@@ -5,7 +5,7 @@ from .. import options, HasProgressionPercent
 from ..data.craftable_data import all_crafting_recipes_by_name
 from ..locations import locations_by_tag, LocationTags, location_table
 from ..options import ToolProgression, BuildingProgression, ExcludeGingerIsland, Chefsanity, Craftsanity, Shipsanity, SeasonRandomization, Friendsanity, \
-    FriendsanityHeartSize, BundleRandomization, SkillProgression, Museumsanity
+    FriendsanityHeartSize, BundleRandomization, SkillProgression, Museumsanity, FarmType
 from ..strings.entrance_names import Entrance
 from ..strings.region_names import Region
 from ..strings.tool_names import Tool, ToolMaterial
@@ -119,7 +119,8 @@ class TestBundlesLogic(SVTestBase):
 
 class TestBuildingLogic(SVTestBase):
     options = {
-        BuildingProgression.internal_name: BuildingProgression.option_progressive
+        FarmType.internal_name: FarmType.option_standard,
+        BuildingProgression.internal_name: BuildingProgression.option_progressive,
     }
 
     def test_coop_blueprint(self):
