@@ -11,7 +11,7 @@ from .data.game_item import ItemTag
 from .data.museum_data import all_museum_items
 from .mods.mod_data import ModNames
 from .options import ExcludeGingerIsland, ArcadeMachineLocations, SpecialOrderLocations, Museumsanity, FestivalLocations, \
-    SkillProgression, BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression
+    SkillProgression, BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression, Booksanity
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
 from .strings.goal_names import Goal
 from .strings.quest_names import ModQuest
@@ -92,6 +92,9 @@ class LocationTags(enum.Enum):
     CHEFSANITY_SKILL = enum.auto()
     CHEFSANITY_STARTER = enum.auto()
     CRAFTSANITY = enum.auto()
+    BOOKSANITY_POWER = enum.auto()
+    BOOKSANITY_SKILL = enum.auto()
+    BOOKSANITY_LOST = enum.auto()
     # Mods
     # Skill Mods
     LUCK_LEVEL = enum.auto()
@@ -421,8 +424,23 @@ def extend_craftsanity_locations(randomized_locations: List[LocationData], optio
         return
 
     craftsanity_locations = [craft for craft in locations_by_tag[LocationTags.CRAFTSANITY]]
-    filtered_chefsanity_locations = filter_disabled_locations(options, craftsanity_locations)
-    randomized_locations.extend(filtered_chefsanity_locations)
+    filtered_craftsanity_locations = filter_disabled_locations(options, craftsanity_locations)
+    randomized_locations.extend(filtered_craftsanity_locations)
+
+
+def extend_book_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
+    if options.booksanity == Booksanity.option_none:
+        return
+
+    book_locations = []
+    if options.booksanity >= Booksanity.option_power:
+        book_locations.extend(locations_by_tag[LocationTags.BOOKSANITY_POWER])
+    if options.booksanity >= Booksanity.option_power_skill:
+        book_locations.extend(locations_by_tag[LocationTags.BOOKSANITY_SKILL])
+    if options.booksanity >= Booksanity.option_all:
+        book_locations.extend(locations_by_tag[LocationTags.BOOKSANITY_LOST])
+    filtered_booksanity_locations = filter_disabled_locations(options, book_locations)
+    randomized_locations.extend(filtered_booksanity_locations)
 
 
 def create_locations(location_collector: StardewLocationCollector,
@@ -475,6 +493,9 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_chefsanity_locations(randomized_locations, options)
     extend_craftsanity_locations(randomized_locations, options)
     extend_quests_locations(randomized_locations, options)
+    extend_book_locations(randomized_locations, options)
+
+    # Mods
     extend_situational_quest_locations(randomized_locations, options)
 
     for location_data in randomized_locations:

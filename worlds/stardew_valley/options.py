@@ -536,6 +536,22 @@ class FriendsanityHeartSize(Range):
     # step = 1
 
 
+class Booksanity(Choice):
+    """Shuffle Books?
+    None: All books behave like vanilla
+    Power: Power books are turned into checks
+    Power and Skill: Power and skill books are turned into checks.
+    All: Lost books are also included in the shuffling
+    """
+    internal_name = "booksanity"
+    display_name = "Booksanity"
+    default = 0
+    option_none = 0
+    option_power = 1
+    option_power_skill = 2
+    option_all = 3
+
+
 class NumberOfMovementBuffs(Range):
     """Number of movement speed buffs to the player that exist as items in the pool.
     Each movement speed buff is a +25% multiplier that stacks additively"""
@@ -733,6 +749,7 @@ class StardewValleyOptions(PerGameCommonOptions):
     craftsanity: Craftsanity
     friendsanity: Friendsanity
     friendsanity_heart_size: FriendsanityHeartSize
+    booksanity: Booksanity
     exclude_ginger_island: ExcludeGingerIsland
     quick_start: QuickStart
     starting_money: StartingMoney
