@@ -1,45 +1,41 @@
 import urllib.parse
-import threading
 import logging
 import asyncio
-import random
 import json
 import time
-import copy
-from NetUtils import RawJSONtoTextParser, ClientStatus, JSONtoTextParser
-from CommonClient import CommonContext, get_base_parser, logger
+import socket
+import random
+from NetUtils import ClientStatus
+from CommonClient import CommonContext, get_base_parser
 from Utils import async_start
-from .DSTWebServer import startWebServer, receivequeue, getvariables, setvariables
+ITEM_ID_OFFSET:int = 264000
+LOCATION_RESEARCH_RANGE = {"start": 264501, "end": 264900}
+CLIENT_VERSION = "1.1"
+
+class DSTTimeoutError(Exception):
+    pass
 
 class DSTContext(CommonContext):
     game = "Don't Starve Together"
     items_handling = 0b111
     want_slot_data = True
-
-    interfacelog = None
+    logger = logging.getLogger("DSTInterface")
     slotdata = dict()
-    defeated_bosses = set()
-    defeated_bosses_dirty = False
-    required_bosses = set()
-    # victories_needed:int = 1
-    # days_survived:int = 0
-    SlotDataDirty = False
-    QueueDSTState = False
-    waitforconnect = False
-    ConnectDataDirty = True
-
-
-    
+    resync_items = False
+    lockable_items = set()
+    dst_handler = None
+    connected_to_ap = False
+    _eventqueue:list[dict] = []
 
     def __init__(self, server_address, password):
-        self.json_text_parser = RawJSONtoTextParser(self)
-
+        self.dst_handler = DSTHandler(self)
         super().__init__(server_address, password)
 
-    def on_deathlink(self, data: dict):
-        sendqueue = getvariables().get('sendqueue')
-        sendqueue.append(json.dumps({'datatype': "Death", 'msg': dict.get(data, 'cause')}))
-        setvariables({"sendqueue": sendqueue})
+    def on_deathlink(self, data:dict):
+        self.dst_handler.enqueue({
+            "datatype": "Death",
+            "msg": data.get("cause")
+        })
 
     def run_gui(self):
         from kvui import GameManager
@@ -47,292 +43,400 @@ class DSTContext(CommonContext):
         class DSTManager(GameManager):
             logging_pairs = [
                 ("Client", "Archipelago"),
-                # ("DSTServer", "DST Server Log"),
-                ("DSTInterface", "DST Interface"),
+                ("DSTInterface", "Don't Starve Together"),
             ]
             base_title = "Archipelago Don't Starve Together Client"
 
         self.ui = DSTManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+        async_start(self.handle_eventqueue())
+
+    async def server_auth(self, password_requested: bool = False):
+        if password_requested and not self.password:
+            await super(DSTContext, self).server_auth(password_requested)
+        await self.get_username()
+        await self.send_connect()
+
+    def on_dst_connect_to_ap(self):
+        "When the client connects to both DST and AP"
+        self.dst_handler.enqueue({
+            "datatype": "State",
+            "connected": True,
+            "clientversion": CLIENT_VERSION,
+            "seed_name": self.seed_name,
+            "slot": self.slot,
+            "slot_name": self.player_names[self.slot],
+            "goal": self.slotdata.get("goal"),
+            "days_to_survive": self.slotdata.get("days_to_survive"),
+            "required_bosses": self.slotdata.get("required_bosses"), # Legacy
+            "goal_locations": self.slotdata.get("goal_locations"),
+            "craft_with_locked_items": self.slotdata.get("craft_with_locked_items"),
+            "finished_game": self.finished_game,
+        })
+        
+        self.dst_handler.enqueue({
+            "datatype": "Locations",
+            "resync": True,
+            "missing_locations": list(self.missing_locations),
+            "checked_locations": list(self.checked_locations),
+        })
+
+        self.resync_items = True # Expecting ReceivedItems package, either following Connect or Sync package
+        # Send locked items
+        lockable_items = self.slotdata.get("locked_items_local_id")
+        if lockable_items:
+            self.dst_handler.enqueue({
+                "datatype": "Items",
+                "locked_items_local_id": lockable_items,
+            })
+            print(f"DST: Locking {len(lockable_items)} items!")
+
+        # Scout research locations
+        async_start(self.send_msgs([{
+            "cmd": "LocationScouts",
+            "locations": set([id for id in self.missing_locations if (id >= LOCATION_RESEARCH_RANGE["start"] and id <= LOCATION_RESEARCH_RANGE["end"])]),
+        }]))
+
+    def send_hints_to_dst(self):
+        for hint in self.stored_data.get(f"_read_hints_{self.team}_{self.slot}", []):
+            if hint["found"]: 
+                continue
+            self.dst_handler.enqueue({
+                "datatype": "HintInfo",
+                "item": hint["item"],
+                "locationname": self.location_names[hint["location"]],
+                "findingname": self.player_names[hint["finding_player"]],
+            }, False)
+
+    def on_dst_handler_connected(self):
+        "When the handler connects to DST but is not necessarily connected to AP"
+        if self.connected_to_ap:
+            print("Connected to DST!")
+            self.on_dst_connect_to_ap()
+            self.send_hints_to_dst()
+            async_start(self.send_msgs([{"cmd": "Sync"}]))
+        else:
+            self.logger.info("Waiting to connect to Archipelago.")
 
     def on_package(self, cmd: str, args: dict):
-        print("on_package", cmd)
-        if cmd == "RoomInfo":
-            self.seed_name = args.get('seed_name')
+        # print("on_package", cmd)
+        try:
+            if cmd == "RoomInfo":
+                self.seed_name = args.get("seed_name")
 
-        elif cmd == "Connected":
-            self.slotdata = args.get('slot_data')
-            self.SlotDataDirty = True
-            self.ConnectDataDirty = True
-            setvariables({'connected': True})
-            sendqueue = getvariables().get('sendqueue')
-            sendqueue.append(json.dumps({
-                "datatype": "State",
-                "connected": True,
-                "readyfortraps": True, 
-                "seed_name": self.seed_name,
-                "slot": self.slot,
-                "slot_name": self.player_names[self.slot],
-                "goal": self.slotdata.get("goal"),
-                "days_to_survive": self.slotdata.get("days_to_survive"),
-                "required_bosses": list(self.slotdata.get("required_bosses")),
-                "finished_game": self.finished_game,
-            }))
-            sendqueue.append(json.dumps({
-                "datatype": "Items", 
-                "items": [netitem.item for netitem in self.items_received],
-                "resync": True,
-            }))
-            sendqueue.append(json.dumps({
-                "datatype": "Locations", 
-                "missing_locations": list(self.missing_locations),
-            }))
-            self.QueueDSTState = True
-            # setvariables({"sendqueue": sendqueue})
+            elif cmd == "Connected":
+                self.connected_to_ap = True
+                self.slotdata = args.get('slot_data')
+                if self.dst_handler.connected:
+                    print("Connected to AP!")
+                    self.on_dst_connect_to_ap()
+                else:
+                    async def dst_connect_hint():
+                        await asyncio.sleep(1.0)
+                        self.logger.info("Waiting for Don't Starve Together server.")
+                    async_start(dst_connect_hint())
 
-            # Scout missing locations
-            async_start(self.send_msgs([{"cmd": "LocationScouts", "locations": self.missing_locations}]))
+            elif cmd == "ReceivedItems":
+                items = [netitem.item for netitem in args["items"]]
+                self.dst_handler.enqueue({
+                    "datatype": "Items",
+                    "items": items,
+                    "resync": True if self.resync_items else None,
+                })
+                self.resync_items = False
 
-        elif cmd == "ReceivedItems":
-            sendqueue = getvariables().get('sendqueue')
-            items = [netitem.item for netitem in args['items']]
-            sendqueue.append(json.dumps({"datatype": "Items", "items": items}))
-            # setvariables({"sendqueue": sendqueue})
-        
-        elif cmd == "RoomUpdate":
-            if args.get("checked_locations"):
-                sendqueue = getvariables().get('sendqueue')
-                locations = [id for id in args.get("checked_locations")]
-                sendqueue.append(json.dumps({"datatype": "Locations", "checked_locations": locations}))
-                # setvariables({"sendqueue": sendqueue})
+            elif cmd == "RoomUpdate":
+                if args.get("checked_locations"):
+                    locations = [id for id in args.get("checked_locations")]
+                    self.dst_handler.enqueue({"datatype": "Locations", "checked_locations": locations})
 
-        elif cmd == "ConnectionRefused": #Does not seem to get triggered when connection is refused
-            setvariables({'authname': "Nil", 'authip': "Nil"})
-            self.waitforconnect = False
-            # self.AbortDSTConnect = True
-            sendqueue = getvariables().get('sendqueue')
-            sendqueue.append(json.dumps({"datatype": "State", "connected": False}))
+            elif cmd == "PrintJSON":
+                if (args.get("slot") != self.slot) or args.get("type") == "Goal":
+                    text = self.rawjsontotextparser(args["data"])
+                    self.dst_handler.enqueue({"datatype": "Chat", "msg": text})
 
-        elif cmd == "PrintJSON":
-            if (args.get('slot') != self.slot) or args.get('type') == "Goal":
-                sendqueue = getvariables().get('sendqueue')
-                text = self.json_text_parser(copy.deepcopy(args["data"]))
-                sendqueue.append(json.dumps({"datatype": "Chat", "msg": text}))
-                # setvariables({"sendqueue": sendqueue})
+            elif cmd == "LocationInfo":
+                locs = args.get("locations")
+                for loc in locs:
+                    self.dst_handler.enqueue({
+                        "datatype": "LocationInfo",
+                        "location_info": {
+                            "location": loc.location,
+                            "item": loc.item,
+                            "player": loc.player,
+                            "itemname": self.item_names[loc.item],
+                            "playername": self.player_names[loc.player],
+                            "flags": loc.flags,
+                        },
+                    }, False)
 
-        # elif cmd == "Retrieved":
-        #     keys = args.get('keys')
-        #     scouted = keys.get(self.username + "_locations_scouted")
-        #     defeated_bosses = keys.get(self.username + "_defeated_bosses")
-        #     print(scouted)
-        #     if scouted is not None:
-        #         self.locations_scouted = set(scouted)
-        #     if defeated_bosses is not None:
-        #         self.defeated_bosses = set(defeated_bosses)
-        #     print(self.locations_scouted)
-        
-        elif cmd == "LocationInfo":
-            locs = args.get('locations')
-            # relevant_names = {
-            #     "item": {},
-            #     "player": {},
-            # }
-            sendqueue = getvariables().get('sendqueue')
-            for loc in locs:
-                sendqueue.append(json.dumps({
-                    "datatype": "LocationInfo", 
-                    "location_info": {
-                        "location": loc.location,
-                        "item": loc.item,
-                        "player": loc.player,
-                        "itemname": self.item_names[loc.item],
-                        "playername": self.player_names[loc.player],
-                        "flags": loc.flags,
-                    }, 
-                }))
-            # setvariables({"sendqueue": sendqueue})
+            elif cmd == "Retrieved":
+                print("Got retrieved")
+                # Send hints to DST
+                if f"_read_hints_{self.team}_{self.slot}" in args.get("keys"):
+                    self.send_hints_to_dst()
+                    
+            elif cmd == "SetReply":
+                print("Got setreply")
+                # Send hints to DST
+                if f"_read_hints_{self.team}_{self.slot}" == args.get("key"):
+                    self.send_hints_to_dst()
 
-        elif cmd == "InvalidPacket":
-            print(args)
-            
+            elif cmd == "InvalidPacket":
+                print(args)
+
+        except Exception as e:
+            self.logger.error(f"DST on_package error: {e}")
+
         return super().on_package(cmd, args)
-    
-    def handle_connection_loss(self, msg: str) -> None:
-        super().handle_connection_loss(msg)
-        self.waitforconnect = False
-        setvariables({'authname': "Nil", 'authip': "Nil", 'connected': False})
 
-    # async def connect(self, address: str | None = None) -> None:
-
-    #     return await super().connect(address)
-
-    async def disconnect(self, allow_autoreconnect: bool = False): # Seems to do nothing
-        print("testdisconnect")
-        allow_autoreconnect = False
-        self.defeated_bosses = set()
-        # if allow_autoreconnect == False:
-        #     self.username = None
-        #     setvariables({'authname': "Nil", 'authip': "Nil"})
-        #     self.QueueDeathLink = None
-        #     self.QueueDSTState = False
-        #     self.waitforconnect = False
-        #     self.scouted_dirty = True
+    async def disconnect(self, allow_autoreconnect: bool = False):
+        self.connected_to_ap = False
         await super().disconnect(allow_autoreconnect)
-    
 
-async def trytoconnect(ctx:DSTContext, name: str, ip: str, password: str):
-    if name == "Nil":
-        name = None
-    if ip == "Nil":
-        ip = None
-    if password == "Nil":
-        password = None
-    
-    if name is not None and ip is not None:
-        ctx.username = None
-        ctx.auth = name
-        ctx.server_address = ip
-        ctx.password = password
-
-        ctx.waitforconnect = True
-        await ctx.connect()
-        # while not ctx.disconnected_intentionally or not ctx.exit_event.is_set() or not ctx.AbortDSTConnect == True:
-            
-        # ctx.AbortDSTConnect = False
-
-async def onwaitforconnect(ctx:DSTContext):
-    print("onwaitforconnect", ctx.username)
-    if not ctx.username:
-        await ctx.send_connect()
-    else:
-        setvariables({'authname': "Nil", 'authip': "Nil", 'connected': True})
-        ctx.waitforconnect = False
-
-
-async def timeoutdisconnect(ctx:DSTContext):
-    await ctx.disconnect()
-
-async def manageevent(ctx:DSTContext, event):
-    # interfacelog.info("Got event from DST:")
-    eventtype = dict.get(event, "datatype")
-    if eventtype == "Chat" or eventtype == "Join" or eventtype == "Leave":
-        await ctx.send_msgs([{"cmd": "Say", "text": dict.get(event, "msg")}])
-    elif eventtype == "Death":
-        if "DeathLink" in ctx.tags:
-            await ctx.send_death(dict.get(event, "msg"))
-            ctx.interfacelog.info("...And so does everyone else.")
+    async def queue_event(self, data):
+        if self.connected_to_ap:
+            # Since we're connected, manage event immediately
+            await self.manage_event(data)
         else:
-            ctx.interfacelog.info("Death Link is disabled. Everyone is safe... except you.")
-    elif eventtype == "Item":
-        loc_id:int = dict.get(event, "source")
-        print("  Item:", loc_id)
-        ctx.locations_checked.add(loc_id)
-        loc_name = ctx.location_names.get(loc_id)
-        if loc_name and loc_name in ctx.required_bosses:
-            # Boss kill
-            ctx.defeated_bosses.add(loc_name)
-            ctx.defeated_bosses_dirty = True
-        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": ctx.locations_checked}])
-    elif eventtype == "Hint": #I think this should be deterministic enough for races, does not account for manual hints
-        if ctx.missing_locations.__len__() != 0:
-            # print(ctx.locations_scouted)
-            valid = ctx.missing_locations.difference(ctx.locations_scouted)
-            hints = list()
-            for _ in range(3):
-                hint = valid.pop()
-                ctx.locations_scouted.add(hint)
-                hints.append(hint)
-            await ctx.send_msgs([{"cmd": "Set",
-                                "key": ctx.username + "_locations_scouted",
-                                #   "default":  ctx.locations_scouted,
-                                "operations": [{"operation": "replace", "value": ctx.locations_scouted}]}])
-            await ctx.send_msgs([{"cmd": "LocationScouts", "locations": hints, "create_as_hint": 2}])
-    # elif eventtype == "DaysSurvived":
-    #     ctx.interfacelog.info("Lived for days:")
-    #     ctx.interfacelog.info(ctx.days_survived)
-    #     ctx.days_survived = dict.get(event, "num")
-    #     ctx.defeated_bosses_dirty = True
-    elif eventtype == "Victory":
-        await onwincondition(ctx)
-        
-async def onwincondition(ctx):
-    await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+            # Queue for when we connect to AP again
+            self._eventqueue.append(data)
+
+    async def handle_eventqueue(self):
+        while True:
+            try:
+                while self.connected_to_ap and len(self._eventqueue):
+                    # print(f"Managed queued event {self._eventqueue[0]}")
+                    await self.manage_event(self._eventqueue.pop(0))
+            except Exception as e:
+                self.logger.error(f"DST event queue error: {e}")
+            await asyncio.sleep(3.0)
+
+    async def manage_event(self, event:dict):
+        eventtype = event.get("datatype")
+        try:
+            # print(f"Got event from DST: {eventtype}" )
+            if eventtype == "Chat" or eventtype == "Join" or eventtype == "Leave":
+                await self.send_msgs([{"cmd": "Say", "text": event.get("msg")}])
+
+            elif eventtype == "Death":
+                if "DeathLink" in self.tags:
+                    await self.send_death(event.get("msg"))
+                    self.logger.info("...And so does everyone else.")
+                else:
+                    print("Death Link is disabled. Everyone is safe... except you.")
+
+            elif eventtype == "Item":
+                loc_id = event.get("source")
+                if loc_id != None:
+                    print("  Item:", loc_id)
+                    self.locations_checked.add(loc_id)
+                locs = event.get("sources")
+                if locs != None:
+                    self.locations_checked.update(locs)
+                await self.send_msgs([{"cmd": "LocationChecks", "locations": self.locations_checked}])
+
+            elif eventtype == "Hint": #I think this should be deterministic enough for races, does not account for manual hints
+                if len(self.missing_locations):
+                    valid = list(self.missing_locations.difference(self.locations_scouted))
+                    if len(valid):
+                        hint = random.choice(valid)
+                        self.locations_scouted.add(hint)
+                        await self.send_msgs([{"cmd": "Set",
+                                            "key": self.username + "_locations_scouted",
+                                            "operations": [{"operation": "replace", "value": self.locations_scouted}]}])
+                        await self.send_msgs([{"cmd": "LocationScouts", "locations": [hint], "create_as_hint": 2}])
+
+            elif eventtype == "Victory":
+                await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+
+            elif eventtype == "Connect": # Connection from within DST
+
+                name = event.get("name") or None
+                ip = event.get("ip") or None
+                password = event.get("password") or None
+
+                if self.connected_to_ap and name and name != self.username:
+                    print("Disconnecting current user")
+                    await self.disconnect()
+
+                if not self.server or not self.server.socket:
+                    # Not connect to AP server at all
+                    print("Not connected to AP server. Connecting.")
+                    self.username = name
+                    self.server_address = ip if ip else self.server_address
+                    self.password = password
+                    await self.connect()
+
+                elif not self.connected_to_ap:
+                    # Connected to AP server but not logged in
+                    if name:
+                        self.username = name
+                    self.auth = self.username
+                    self.password = password
+                    if self.auth:
+                        print(f"Not logged in. Logging in as {self.auth}.")
+                        self.send_connect()
+
+                else:
+                    self.logger.info("Already connected.")
+
+            elif eventtype == "Disconnect":
+                print("Disconnecting")
+                await self.disconnect(False)
+
+        except Exception as e:
+            self.logger.error(f"Manage event error ({eventtype}): {e}")
+
+def parse_request(req_bytes:bytes):
+    "Parses HTTP request from DST"
+    lines = req_bytes.decode("utf-8").splitlines()
+    req_info = lines.pop(0)
+    assert req_info.startswith("POST")
+    headers = {}
+    assert len(lines)
+    while len(lines):
+        line = lines.pop(0)
+        if not line:
+            break
+        entry = line.split(" ", 1)
+        headers[entry[0]] = entry[1]
+    assert len(lines)
+    datastr = "\r\n".join(lines)
+    if datastr.endswith("EOF"):
+        datastr = datastr[:-3]
+    return json.loads(datastr)
 
 
-async def interface(ctx:DSTContext):
-    ctx.interfacelog = logging.getLogger("DSTInterface")
-    # serverinterface = startWebServer()
-    Thread = threading.Thread(None, startWebServer, "WebServer") #Add way to restart thread during loop if it shuts down
-    Thread.start()
+def send_response(conn:socket.socket, content:dict = {}, status=100):
+    "Sends a response to the connection "
+    header  = f"HTTP/1.1 {status}\r\n".encode()
+    header += b"Content-type: application/json\r\n"
+    header += b"\r\n"
 
+    body = json.dumps(content).encode()
     try:
-        while not ctx.exit_event.is_set():
-            vars = getvariables()
-            authname = vars.get('authname')
-            authip = vars.get('authip')
-            authpassword = vars.get('password')
-            authdirty = vars.get('authdirty')
-
-            setvariables({'frozencheck': time.time()})
-
-            #At a moments notice the loop should be able to stop and abort the Thread
-
-            # print(ctx.username)
-            if not ctx.exit_event.is_set() and not Thread.is_alive():
-                Thread = threading.Thread(None, startWebServer, "WebServer")
-                Thread.start()
-                setvariables({'frozencheck': time.time()})
-
-            elif not ctx.exit_event.is_set() and authdirty:
-                print("trytoconnect", authname, authip, authpassword, authdirty)
-                await trytoconnect(ctx, authname, authip, authpassword)
-                setvariables({'authdirty': False})
-                
-            elif not ctx.exit_event.is_set() and not ctx.username: # If not Connected
-                if ctx.waitforconnect:
-                    await onwaitforconnect(ctx)
-
-            elif not ctx.exit_event.is_set() and (time.time() - vars.get('lastping') > 10): # If Connected, but has not
-                await timeoutdisconnect(ctx)                                           #had a ping from DST for a while
-
-            elif not ctx.exit_event.is_set() and ctx.SlotDataDirty == True: # If Connected and waiting to change DL
-                print(ctx.slotdata)
-                print(ctx.slotdata.get('death_link'))
-                await ctx.update_death_link(ctx.slotdata.get('death_link'))
-                ctx.SlotDataDirty = False
-
-            elif not ctx.exit_event.is_set() and ctx.ConnectDataDirty == True:
-                await ctx.send_msgs([{"cmd": "Get", "keys": [ctx.username + "_locations_scouted"]}])
-                await ctx.send_msgs([{"cmd": "Get", "keys": [ctx.username + "_defeated_bosses"]}])
-                ctx.ConnectDataDirty = False
-
-            elif not ctx.exit_event.is_set() and receivequeue.__len__() > 0: # If Connected and has a event to process
-                event = receivequeue.pop(0)
-                await manageevent(ctx, event)
-                
-            if not ctx.exit_event.is_set():
-                await asyncio.sleep(0.2)
-
-        ctx.interfacelog.info("Stopping server...")
-        setvariables({'serverstopsignal': True})
-        Thread.join()
-        ctx.interfacelog.info("Server stopped successfully")
-
+        conn.send(header + body)
     except Exception as e:
-        ctx.interfacelog.exception(e)
-        ctx.interfacelog.info("Stopping server...")
-        setvariables({'serverstopsignal': True})
-        Thread.join()
-        ctx.interfacelog.info("Server stopped successfully")
+        print(f"Could not send content: {content}")
+
+class DSTHandler():
+    logger = logging.getLogger("DSTInterface")
+    ctx = None
+    lastping = time.time()
+    _sendqueue:list[str] = []
+    _sendqueue_lowpriority:list[str] = []
+
+    def __init__(self, ctx:DSTContext):
+        self.ctx = ctx
+        self._connected = False
+
+    @property
+    def connected(self):
+        return self._connected
+
+    @connected.setter
+    def connected(self, value:bool):
+        if self._connected != value:
+            self._connected = value
+            if not value:
+                self._sendqueue.clear()
+                self._sendqueue_lowpriority.clear()
+
+    def enqueue(self, data, priority = True):
+        if self.connected:
+            (self._sendqueue if priority else self._sendqueue_lowpriority).append(data)
+
+    async def handle_dst_data(self, conn, data):
+        try:
+            datatype:str = data.get("datatype")
+            if datatype == "Ping":
+                if len(self._sendqueue):
+                    send_response(conn, self._sendqueue.pop(0), 100)
+                elif len(self._sendqueue_lowpriority):
+                    send_response(conn, self._sendqueue_lowpriority.pop(0), 100)
+                else:
+                    # No data to send. Delay next ping
+                    await asyncio.sleep(1.0)
+
+            elif datatype in {"Chat", "Join", "Leave", "Death", "Connect", "Disconnect"}:
+                 # Instant event
+                await self.ctx.manage_event(data)
+
+            elif datatype in {"Item", "Hint", "Victory"}:
+                # Queued event
+                await self.ctx.queue_event(data)
+
+            else:
+                if datatype: self.logger.error(f"Error! Recieved invalid datatype: {datatype}")
+                await asyncio.sleep(1.0)
+                send_response(conn, {"datatype": "Error"}, 400)
+                return
+
+            # Tell DST if we're connected to AP
+            send_response(conn, {"datatype": "State", "connected": self.ctx.connected_to_ap}, 100)
+
+        except AssertionError as e:
+            print(f"Invalid request! {e}")
+            send_response(conn, {"datatype": "Error"}, 400)
+            await asyncio.sleep(1.0)
+
+    def on_sock_accept(self, conn, address):
+        if not self.connected:
+            self.connected = True
+            self.logger.info(f"Connected to Don't Starve Together server on: {address[0]}")
+            self.ctx.on_dst_handler_connected()
+
+    async def handle_dst_request(self, sock:socket.socket):
+        loop = asyncio.get_event_loop()
+        while True:
+            conn = None
+            try:
+                conn, address = await asyncio.wait_for(loop.sock_accept(sock), timeout=(10 if self.connected else None))
+                request = await loop.sock_recv(conn, 4096)
+                self.on_sock_accept(conn, address)
+                if not request: break
+                self.lastping = time.time()
+                await self.handle_dst_data(conn, parse_request(request))
+            except asyncio.TimeoutError:
+                raise
+            except Exception as e:
+                self.logger.error(f"DST request error: {e}")
+                send_response(conn, {"datatype": "Error"}, 500)
+                await asyncio.sleep(5.0)
+            finally:
+                if conn: conn.close()
+
+    async def run_handler(self):
+        while True:
+            sock = socket.socket()
+            sock.bind(("", 8000))
+            sock.listen(2)
+            sock.setblocking(False)
+            try:
+                while True:
+                    await self.handle_dst_request(sock)
+                    if not self.connected: break
+            except asyncio.TimeoutError:
+                self.logger.info("Disconnected from Don't Starve Together (timed out).")
+            except Exception as e:
+                self.logger.error(f"DST handler error: {e}")
+            finally:
+                sock.close()
+                self.connected = False
+            print("Restarting connection loop in 5 seconds.")
+            await asyncio.sleep(5.0)
+            self.logger.info("Waiting for Don't Starve Together server.")
 
 async def main(args):
     ctx = DSTContext(args.connect, args.password)
     ctx.auth = args.name
     ctx.run_gui()
 
-    dstinterface = asyncio.create_task(interface(ctx), name="DSTInterface")
-    
+    dst_handler_task = asyncio.create_task(ctx.dst_handler.run_handler(), name="DST Handler")
+
     await ctx.exit_event.wait()
+    dst_handler_task.cancel()
     await ctx.shutdown()
 
 
@@ -340,7 +444,7 @@ def launch():
     import colorama
 
     parser = get_base_parser(description="DST Archipelago Client for interfacing with Don't Starve Together.")
-    parser.add_argument('--name', default=None, help="Slot Name to connect as.")
+    parser.add_argument("--name", default=None, help="Slot Name to connect as.")
     parser.add_argument("url", nargs="?", help="Archipelago connection url")
     args = parser.parse_args()
 
