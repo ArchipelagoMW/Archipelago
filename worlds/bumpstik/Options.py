@@ -70,6 +70,7 @@ class KillerTrapWeight(Range):
     range_end = 100
     default = 0
 
+
 @dataclass
 class BumpstikOptions(PerGameCommonOptions):
     task_advances: TaskAdvances
