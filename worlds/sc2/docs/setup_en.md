@@ -29,8 +29,6 @@ There are three basic ways to get a yaml:
 
 Remember the name you enter in the options page or in the yaml file, you'll need it to connect later!
 
-Note that the basic Player Options page doesn't allow you to change all advanced options, such as excluding particular units or upgrades. Go through the [Weighted Options](https://archipelago.gg/weighted-options) page for that.
-
 Check out [Creating a YAML](https://archipelago.gg/tutorial/Archipelago/setup/en#creating-a-yaml) for more game-agnostic information.
 
 ### Common yaml questions

@@ -3,7 +3,7 @@ This guide covers more the more advanced options available in YAML files. This g
 to edit their YAML file manually. This guide should take about 10 minutes to read.
 
 If you would like to generate a basic, fully playable YAML without editing a file, then visit the options page for the
-game you intend to play. The weighted settings page can also handle most of the advanced settings discussed here.
+game you intend to play.
 
 The options page can be found on the supported games page, just click the "Options Page" link under the name of the
 game you would like.
