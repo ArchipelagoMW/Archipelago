@@ -112,7 +112,7 @@ def set_rules(world: "SpelunkerWorld") -> None:
     hidden_rules(world)
     
 
-def hidden_rules(world: "YoshisIslandWorld") -> None:
+def hidden_rules(world: "SpelunkerWorld") -> None:
     player = world.player
     if not world.options.hidden_items:
         return

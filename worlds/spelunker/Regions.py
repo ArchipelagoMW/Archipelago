@@ -2,7 +2,7 @@ from typing import List, Dict, TYPE_CHECKING
 from BaseClasses import Region, Location
 from .Locations import LocationData
 if TYPE_CHECKING:
-    from . import YoshisIslandWorld
+    from . import SpelunkerWorld
 
 
 class SpelunkerLocation(Location):
