@@ -49,7 +49,8 @@ class DSTItemPool:
     def create_items(self, world: World) -> None:
         item_pool: List[DSTItem] = []
 
-        for name, item in item_data_table.items():
+        for name in self.nonfiller_items:
+            item = item_data_table[name]
             if item.code and not "deprecated" in item.tags:
                 if "junk" in item.tags:
                     self.filler_items.add(name)
