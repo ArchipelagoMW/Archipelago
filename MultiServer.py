@@ -1881,7 +1881,8 @@ def update_client_status(ctx: Context, client: Client, new_status: ClientStatus)
 
 
 class ServerCommandProcessor(CommonCommandProcessor):
-    player_name_lookup_table: Dict[str, typing.Tuple[int, int, str]] = {}
+    player_name_lookup_table: typing.Dict[str, typing.Tuple[int, int, str]] = {}
+
     def __init__(self, ctx: Context):
         self.ctx = ctx
         self.player_name_lookup_table = {}
