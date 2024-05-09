@@ -236,7 +236,7 @@
         <td>{{ OptionTitle(option_name, option) }}</td>
         <td>
             <div class="option-container">
-                {% for key in option.valid_keys %}
+                {% for key in option.valid_keys|sort %}
                     <div class="option-entry">
                         <input type="checkbox" id="{{ option_name }}-{{ key }}" name="{{ option_name }}" value="{{ key }}" {{ "checked" if key in option.default }} />
                         <label for="{{ option_name }}-{{ key }}">{{ key }}</label>
