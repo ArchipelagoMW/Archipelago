@@ -5,28 +5,6 @@ from struct import pack
 from .Rom import location_table, hidden_table
 from typing import TYPE_CHECKING, Dict, Set
 
-# TODO:  Remove this when Archipelago 0.4.4 gets released
-import sys
-
-if "worlds._bizhawk" not in sys.modules:
-    import importlib
-    import os
-    import zipimport
-
-    bh_apworld_path = os.path.join(
-        os.path.dirname(sys.modules["worlds"].__file__), "_bizhawk.apworld"
-    )
-    if os.path.isfile(bh_apworld_path):
-        importer = zipimport.zipimporter(bh_apworld_path)
-        spec = importer.find_spec(os.path.basename(bh_apworld_path).rsplit(".", 1)[0])
-        mod = importlib.util.module_from_spec(spec)
-        mod.__package__ = f"worlds.{mod.__package__}"
-        mod.__name__ = f"worlds.{mod.__name__}"
-        sys.modules[mod.__name__] = mod
-        importer.exec_module(mod)
-    elif not os.path.isdir(os.path.splitext(bh_apworld_path)[0]):
-        raise AssertionError("Could not import worlds._bizhawk")
-
 from NetUtils import ClientStatus
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
@@ -34,19 +12,7 @@ import time
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
-else:
-    BizHawkClientContext = object
-
-# Add .apwl suffix to bizhawk client
-from worlds.LauncherComponents import SuffixIdentifier, components
-
-for component in components:
-    if component.script_name == "BizHawkClient":
-        component.file_identifier = SuffixIdentifier(
-            *(*component.file_identifier.suffixes, ".apsplunker")
-        )
-        break
-
+    
 EXPECTED_ROM_NAME = "SPELUNKERAP"
 
 
@@ -60,7 +26,7 @@ class SpelunkerClient(BizHawkClient):
     def __init__(self) -> None:
         super().__init__()
 
-    async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
+    async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
         from CommonClient import logger
 
         try:
@@ -89,7 +55,7 @@ class SpelunkerClient(BizHawkClient):
             await ctx.update_death_link(bool(death_link[0]))
         return True
 
-    async def set_auth(self, ctx: BizHawkClientContext) -> None:
+    async def set_auth(self, ctx: "BizHawkClientContext") -> None:
         from CommonClient import logger
 
         slot_name_length = await bizhawk.read(ctx.bizhawk_ctx, [(0x7040, 1, "PRG ROM")])
@@ -108,7 +74,7 @@ class SpelunkerClient(BizHawkClient):
         if "DeathLink" in args["tags"] and args["data"]["source"] != ctx.slot_info[ctx.slot].name:
             self.received_deathlinks += 1
 
-    async def game_watcher(self, ctx: BizHawkClientContext) -> None:
+    async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         from CommonClient import logger
 
         if ctx.server_version.build > 0:
@@ -187,7 +153,7 @@ class SpelunkerClient(BizHawkClient):
         for new_check_id in new_checks:
             ctx.locations_checked.add(new_check_id)
             location = ctx.location_names[new_check_id]
-            await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
+            await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [new_check_id]}])
 
         if recv_count < len(ctx.items_received):
             item = ctx.items_received[recv_count]
