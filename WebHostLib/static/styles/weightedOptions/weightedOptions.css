@@ -171,6 +171,7 @@ html {
   overflow-y: auto;
   padding-right: 0.25rem;
   padding-left: 0.25rem;
+  margin-top: 0.5rem;
 }
 #weighted-options .set-container .divider, #weighted-options .dict-container .divider, #weighted-options .list-container .divider {
   width: 100%;
