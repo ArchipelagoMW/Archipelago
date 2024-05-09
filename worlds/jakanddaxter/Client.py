@@ -33,7 +33,6 @@ def create_task_log_exception(awaitable: typing.Awaitable) -> asyncio.Task:
 class JakAndDaxterClientCommandProcessor(ClientCommandProcessor):
     ctx: "JakAndDaxterContext"
 
-    # TODO - Clean up commands related to the REPL, make them more user friendly.
     #  The REPL has a specific order of operations it needs to do in order to process our input:
     #  1. Connect (we need to open a socket connection on ip/port to the REPL).
     #  2. Listen (have the REPL compiler connect and listen on the game's internal socket).
@@ -41,24 +40,24 @@ class JakAndDaxterClientCommandProcessor(ClientCommandProcessor):
     #  All 3 need to be done, and in this order, for this to work.
     def _cmd_repl(self, *arguments: str):
         """Sends a command to the OpenGOAL REPL. Arguments:
-        - connect <ip> <port> : connect a new client to the REPL.
-        - listen : listen to the game's internal socket.
-        - compile : compile the game into executable object code.
-        - verify : verify successful compilation."""
+        - connect : connect the client to the REPL (goalc).
+        - status : check internal status of the REPL."""
         if arguments:
             if arguments[0] == "connect":
-                if arguments[1] and arguments[2]:
-                    self.ctx.repl.ip = str(arguments[1])
-                    self.ctx.repl.port = int(arguments[2])
-                    self.ctx.repl.connect()
-                else:
-                    logging.error("You must provide the ip address and port (default 127.0.0.1 port 8181).")
-            if arguments[0] == "listen":
-                self.ctx.repl.listen()
-            if arguments[0] == "compile":
-                self.ctx.repl.compile()
-            if arguments[0] == "verify":
-                self.ctx.repl.verify()
+                logger.info("This may take a bit... Wait for the success audio cue before continuing!")
+                self.ctx.repl.user_connect = True  # Will attempt to reconnect on next tick.
+            if arguments[0] == "status":
+                self.ctx.repl.print_status()
+
+    def _cmd_memr(self, *arguments: str):
+        """Sends a command to the Memory Reader. Arguments:
+        - connect : connect the memory reader to the game process (gk).
+        - status : check the internal status of the Memory Reader."""
+        if arguments:
+            if arguments[0] == "connect":
+                self.ctx.memr.connect()
+            if arguments[0] == "status":
+                self.ctx.memr.print_status()
 
 
 class JakAndDaxterContext(CommonContext):
@@ -130,8 +129,6 @@ async def main():
     Utils.init_logging("JakAndDaxterClient", exception_logger="Client")
 
     ctx = JakAndDaxterContext(None, None)
-
-    await ctx.repl.init()
 
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
     ctx.repl_task = create_task_log_exception(ctx.run_repl_loop())
