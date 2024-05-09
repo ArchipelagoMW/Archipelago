@@ -1,9 +1,9 @@
 import logging
 import asyncio
 import types
-from typing import Dict, List, Optional, NamedTuple, TYPE_CHECKING
+from typing import Dict, List, Optional, NamedTuple, TYPE_CHECKING, Set
 
-from .Names import Addresses, ItemID
+from .Names import Addresses, ItemID, MapID
 from .Names.ArchipelagoID import BASE_ID, LAIR_ID_OFFSET, NPC_REWARD_OFFSET
 from .Locations import (
     SoulBlazerLocationData,
@@ -16,6 +16,8 @@ from .Locations import (
 )
 from .Items import SoulBlazerItemData, all_items_table
 from .Util import encode_string, is_bit_set, Rectangle
+from .Lair import LairData, unpack_lair_data
+from .Entity import EntityData, unpack_entity_data
 from NetUtils import ClientStatus, color, NetworkItem
 from worlds.AutoSNIClient import SNIClient
 from Utils import async_start
@@ -35,12 +37,30 @@ class ItemSend(NamedTuple):
     item: NetworkItem
 
 
+class LocationData(NamedTuple):
+    map_number: int
+    map_sub_number: int
+    x: int
+    y: int
+
+    @property
+    def map_id(self) -> int:
+        return MapID.map_id_for_number[(self.map_number, self.map_sub_number)]
+
+
 class SoulBlazerSNIClient(SNIClient):
     game = "Soul Blazer"
     patch_suffix = ".apsb"
 
     location_data_for_address = {data.address: data for data in all_locations_table.values()}
     item_data_for_code = {data.code: data for data in all_items_table.values()}
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.lair_data: List[LairData] = []
+        self.entity_list: List[EntityData] = []
+        self.lairs_for_map: Dict[int, Set[int]] = {}
+        self.lairs_rom_name: bytes = bytes(0)
 
     async def was_obtained_locally(self, ctx, item: NetworkItem) -> bool:
         """True if the item was a local item that has already been obtained."""
@@ -67,48 +87,38 @@ class SoulBlazerSNIClient(SNIClient):
             lair_byte = await snes_read(ctx, Addresses.LAIR_SPAWN_TABLE + location_data.id, 1)
             return lair_byte[0] & 0x80
 
-    async def is_in_excluded_zone(self, ctx: "SNIContext") -> bool:
+    def is_in_excluded_zone(self, location: LocationData, lair_state_table: bytes) -> bool:
         """True if player is in a location that should not allow items to be received."""
 
-        from SNIClient import snes_read
+        return any(rect.contains(location.x, location.y) for rect in exclusion_zones.get(location.map_id, [])) or any(
+            self.is_lair_in_progress(lair_id, lair_state_table) for lair_id in self.lairs_for_map[location.map_id]
+        )
 
-        location_data_start = Addresses.MAP_NUMBER
-        location_data_end = Addresses.POSITION_INT_Y
-        # We need to know which map the player is on, and what their X/Y coords are.
-        location_data = await snes_read(ctx, location_data_start, location_data_end - location_data_start + 1)
+    def is_lair_in_progress(self, lair_id: int, lair_state_table: bytes) -> bool:
+        """Returns true if a lair is in the progress of being sealed"""
 
-        if location_data is None:
-            return True
+        lair_state = lair_state_table[lair_id]
 
-        map_number = location_data[Addresses.MAP_NUMBER - location_data_start]
-        map_sub_number = location_data[Addresses.MAP_SUB_NUMBER - location_data_start]
-        x = location_data[Addresses.POSITION_INT_X - location_data_start]
-        y = location_data[Addresses.POSITION_INT_Y - location_data_start]
-
-        return any(
-            rect.contains(x, y) for rect in exclusion_zones.get((map_number, map_sub_number), [])
-        ) or await self.is_lair_in_progress(ctx, boss_zones.get((map_number, map_sub_number), None))
-
-    async def is_lair_in_progress(self, ctx: "SNIContext", lair_id: Optional[int], threshold: int = 0) -> bool:
-        """Returns true if the lair is in the progress of being sealed"""
-
-        from SNIClient import snes_read
-
-        if lair_id is None:
+        # First check if lair sealed or cleared.
+        if bool(lair_state & 0x80) or lair_state & 0x3F == 0:
             return False
 
-        if lair_id == 0xFFFF:
+        # Boss Lairs are always in progress while the lair is active.
+        if lair_id in boss_lair_ids:
             return True
 
-        lair_state = await snes_read(ctx, Addresses.LAIR_SPAWN_TABLE + lair_id, 1)
+        max_enemies = lair_state & 0x3F
 
-        if lair_state is None:
-            return True
+        lair_entity = next(
+            (x for x in self.entity_list if x.parent_entity == 0 and x.lair_assotiated_with == lair_id), None
+        )
 
-        lair_sealed = bool(lair_state[0] & 0x80)
-        threshold_reached = bool(lair_state[0] <= threshold)
+        # I dont think should be able to happen.
+        if lair_entity is None:
+            return False
 
-        return not (lair_sealed or threshold_reached)
+        # Regular lairs are in progress if at least one enemy in the lair has been killed.
+        return lair_entity.loop_counter < max_enemies
 
     async def deathlink_kill_player(self, ctx):
         pass
@@ -116,8 +126,6 @@ class SoulBlazerSNIClient(SNIClient):
 
     async def validate_rom(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read, SNIContext
-
-        # from .Context import SoulBlazerContext
 
         rom_name = await snes_read(ctx, Addresses.SNES_ROMNAME_START, Addresses.ROMNAME_SIZE)
         if rom_name is None or rom_name == bytes([0] * Addresses.ROMNAME_SIZE) or rom_name[:3] != b"SB_":
@@ -129,13 +137,8 @@ class SoulBlazerSNIClient(SNIClient):
         ctx.rom = rom_name
 
         ctx.want_slot_data = True
-        ## This feels hacky, but I cant figure out any other way to get the context to expose slot data.
-        # if ctx.__class__ != SoulBlazerContext:
-        #    ctx.__class__ = SoulBlazerContext
-        #    ctx.gem_data = {}
-        #    ctx.exp_data = {}
-        #    ctx.item_send_queue = []
 
+        # This is pretty hacky, but I cant figure out a way to get this data otherwise.
         def new_on_package(self: SNIContext, cmd: str, args: dict):
             """Custom package handling for Soul Blazer."""
             # Run the original on_package
@@ -145,12 +148,12 @@ class SoulBlazerSNIClient(SNIClient):
                 slot_data = args.get("slot_data", None)
                 if slot_data:
                     self.gem_data = slot_data.get("gem_data", {})
-                    self.exp_data = slot_data.get("item_data", {})
+                    self.exp_data = slot_data.get("exp_data", {})
             elif cmd == "Retrieved":
                 slot_data = args["keys"].get(f"_read_slot_data_{self.slot}", None)
                 if slot_data:
                     self.gem_data = slot_data.get("gem_data", {})
-                    self.exp_data = slot_data.get("item_data", {})
+                    self.exp_data = slot_data.get("exp_data", {})
             elif cmd == "PrintJSON":
                 # We want ItemSends from us to another player so we can print them in game
                 if (
@@ -165,14 +168,12 @@ class SoulBlazerSNIClient(SNIClient):
         # Replace the on_package function on our context's instance only.
         ctx.on_package = types.MethodType(new_on_package, ctx)
 
-        # self.slot_data_key = f'_read_slot_data_{ctx.slot}'
-        # ctx.set_notify(self.slot_data_key)
-
         # death_link = await snes_read(ctx, DEATH_LINK_ACTIVE_ADDR, 1)
         ## TODO: Handle Deathlink
         # if death_link:
         #    ctx.allow_collect = bool(death_link[0] & 0b100)
         #    await ctx.update_death_link(bool(death_link[0] & 0b1))
+
         return True
 
     async def game_watcher(self, ctx: "SNIContext"):
@@ -190,6 +191,18 @@ class SoulBlazerSNIClient(SNIClient):
             # not successfully connected to a multiworld server, cannot process the game sending items
             return
 
+        # Only read lair data once per rom.
+        if self.lairs_rom_name != rom:
+            lair_bytes = await snes_read(ctx, Addresses.LAIR_DATA, Addresses.LAIR_DATA_SIZE * Addresses.LAIRS_COUNT)
+            if lair_bytes is None:
+                return False
+            self.lair_data = unpack_lair_data(lair_bytes)
+            self.lairs_for_map = {
+                map: {id for id, lair in enumerate(self.lair_data) if lair.lair_map == map}
+                for map in MapID.map_number_for_id.keys()
+            }
+            self.lairs_rom_name = rom
+
         save_file_name = await snes_read(ctx, Addresses.PLAYER_NAME, Addresses.PLAYER_NAME_SIZE)
         if save_file_name is None or save_file_name[0] == 0x00 or save_file_name[-1] != 0x00:
             # We haven't loaded a save file
@@ -201,8 +214,31 @@ class SoulBlazerSNIClient(SNIClient):
         ram_misc = await snes_read(ctx, ram_misc_start, ram_misc_end - ram_misc_start + 1)
         ram_lair_spawn = await snes_read(ctx, Addresses.LAIR_SPAWN_TABLE, Addresses.LAIR_SPAWN_TABLE_SIZE)
 
-        if ram_misc is None or ram_lair_spawn is None:
+        location_data_start = Addresses.MAP_NUMBER
+        location_data_end = Addresses.POSITION_INT_Y
+        # We need to know which map the player is on, and what their X/Y coords are.
+        location_data = await snes_read(ctx, location_data_start, location_data_end - location_data_start + 1)
+
+        # 4k bytes. Hopefully not too much to read.
+        entity_bytes = await snes_read(ctx, Addresses.ENTITIES_TABLE, Addresses.ENTITY_SIZE * Addresses.ENTITY_COUNT)
+
+        if (
+            ram_misc is None
+            or ram_lair_spawn is None
+            or ram_lair_spawn is None
+            or location_data is None
+            or entity_bytes is None
+        ):
             return
+
+        self.entity_list = unpack_entity_data(entity_bytes)
+
+        player_location = LocationData(
+            location_data[Addresses.MAP_NUMBER - location_data_start],
+            location_data[Addresses.MAP_SUB_NUMBER - location_data_start],
+            location_data[Addresses.POSITION_INT_X - location_data_start],
+            location_data[Addresses.POSITION_INT_Y - location_data_start],
+        )
 
         # Any new checks?
 
@@ -298,7 +334,7 @@ class SoulBlazerSNIClient(SNIClient):
 
         recv_index = int.from_bytes(recv_bytes, "little")
         # Check if there are items that the Client knows about that the game does not have yet.
-        if recv_index < len(ctx.items_received):
+        if recv_index < len(ctx.items_received) and not self.is_in_excluded_zone(player_location, ram_lair_spawn):
             item = ctx.items_received[recv_index]
 
             if await self.was_obtained_locally(ctx, item):
@@ -310,11 +346,6 @@ class SoulBlazerSNIClient(SNIClient):
                 snes_buffered_write(ctx, Addresses.RECEIVE_COUNT, recv_index.to_bytes(2, "little"))
                 await snes_flush_writes(ctx)
                 return
-
-            if await self.is_in_excluded_zone(ctx):
-                return
-
-            # TODO: also prevent receiving NPC unlocks when in a boss room to prevent the boss from regenerating to full health. Can happen either in the ROM or client, whichever is easiest to implement.
 
             # TODO: Should we also mark the location as checked in game if it was in our world and we were getting it again from the server?
             # This would remove the need to recheck things in case of resetting without saving, but you would lose out on lair monster exp.
@@ -343,32 +374,23 @@ exclusion_zones = {
     # Lost side marsh rafts
     # If this goes well we could do this for other tricky locations too like the dolphin ride.
     # Or if we can find a cleaner way that doesnt involve defining all these excluded regions then we dont have to do this.
-    # TODO: Give Map/Submap combinations names.
-    (0x05, 0x01): [
+    # TODO: Give names to MapIDs somewhere.
+    # TODO: Rafts no longer required I think since the game no longer processes things while directional movement is disabled.
+    # TODO: Might still want to exclude the Lost side marsh island so you dont have to take the gem fairy back to town.
+    # TODO: Exclude the ice patches if you dont have the mushroom shoes equipped?
+    0x19: [
         Rectangle(0x0F, 0x11, 0x01, 0x09),
         Rectangle(0x05, 0x0E, 0x07, 0x01),
         Rectangle(0x09, 0x17, 0x0F, 0x01),
         Rectangle(0x1C, 0x0A, 0x01, 0x09),
         Rectangle(0x05, 0x06, 0x13, 0x01),
         # We could also do the island, but the crystal is there to let you go home.
-    ]
+    ],
+    # Boss arena of Deathtoll's Shrine.
+    0x7C: [Rectangle(0x00, 0x00, 0x0F, 0x0F)],
+    # Final Battle, the entire possible area.
+    0x7C: [Rectangle(0x00, 0x00, 0xFF, 0xFF)],
 }
 
-boss_zones = {
-    # Solidarm
-    (0x03, 0x06): 0x0009,
-    # Elemental Statues
-    (0x05, 0x0A): 0x0050,
-    # Ghost Ship
-    (0x09, 0x01): 0x00B6,
-    # Poseidon
-    (0x0B, 0x07): 0x0103,
-    # Tin Doll
-    (0x0E, 0x04): 0x012F,
-    # Demon Bird
-    (0x13, 0x02): 0x0195,
-    # Deathtoll's Shrine
-    (0x15, 0x01): 0xFFFF,
-    # Final Battle
-    (0x15, 0x02): 0xFFFF,
-}
+boss_lair_maps = {0x0C, 0x22, 0x32, 0x44, 0x59, 0x72}
+boss_lair_ids = {0x0009, 0x0050, 0x00B6, 0x0103, 0x012F, 0x0195}

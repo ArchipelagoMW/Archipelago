@@ -128,7 +128,7 @@ location_dependencies: Dict[str, List[str]] = {
     NPCRewardName.LUE: [NPCName.LUE, NPCName.DOLPHIN_SAVES_LUE, NPCName.MERMAID_PEARL],
     # Logical mermaids tears. TODO: move to separate list for optional logic toggle
     NPCRewardName.MERMAID_QUEEN: [NPCName.MERMAID_QUEEN],
-    LairName.MERMAID_PEARL: [ItemName.MERMAIDSTEARS],
+    LairName.MERMAID3: [ItemName.MERMAIDSTEARS],
     LairName.MERMAID_STATUE_BLESTER: [ItemName.MERMAIDSTEARS],
     ChestName.DUREAN_CRITICAL_SWORD: [ItemName.MERMAIDSTEARS],
     # Act 4 - Mountain of Souls
