@@ -180,6 +180,13 @@ class CVCotMWorld(World):
 
         patch.write(rom_path)
 
+    def fill_slot_data(self) -> dict:
+        return {"death_link": self.options.death_link.value,
+                "break_iron_maidens": self.options.break_iron_maidens.value,
+                "ignore_cleansing": self.options.ignore_cleansing.value,
+                "required_last_keys": self.required_last_keys,
+                "completion_goal": self.options.completion_goal.value}
+
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_item_names)
 

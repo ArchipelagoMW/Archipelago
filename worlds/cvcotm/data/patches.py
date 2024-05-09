@@ -101,6 +101,28 @@ transition_textbox_delayer = [
     0x1C, 0xCE, 0x06, 0x08,
 ]
 
+map_sfx_preventer = [
+    # Prevents the Magic Item pickup sound from playing if the Magic Item being picked up is the Map specifically.
+    # In these cases, the appropriate sound is played by the written remote textbox instead.
+    0x70, 0x68,  # ldr  r0, [r6, #4]
+    0xC0, 0x88,  # ldrh r0, [r0, #6]
+    0x05, 0x21,  # mov  r1, #5
+    0x88, 0x42,  # cmp  r0, r1
+    0x06, 0xD0,  # beq  0x87FFE68
+    0xDA, 0x20,  # movs r0, #0xDA
+    0x40, 0x00,  # lsls r0, r0, #1
+    0x03, 0x4A,  # ldr  r2, =0x8005E80
+    0x7B, 0x46,  # mov  r3, r15
+    0x05, 0x33,  # adds r3, #5
+    0x9E, 0x46,  # mov  r14, r3
+    0x97, 0x46,  # mov  r15, r2
+    0x01, 0x48,  # ldr  r0, =0x8095BEC
+    0x87, 0x46,  # mov  r15, r0
+    # LDR number pool
+    0x80, 0x5E, 0x00, 0x08,
+    0xEC, 0x5B, 0x09, 0x08,
+]
+
 missing_char_data = {
     # The data for all missing ASCII characters from the game's dialogue textbox font.
 

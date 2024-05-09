@@ -105,6 +105,28 @@ class EarlyDouble(DefaultOnToggle):
     display_name = "Early Double"
 
 
+class DeathLink(Choice):
+    """When you die, everyone dies. Of course the reverse is true too.
+    Will be ignored in the Battle Arena unless On Including Arena is chosen."""
+    display_name = "DeathLink"
+    option_off = 0
+    alias_no = 0
+    alias_true = 1
+    alias_yes = 1
+    option_on = 1
+    option_on_including_arena = 2
+    default = 0
+
+
+class CompletionGoal(Choice):
+    """The goal for game completion. Whether it be defeating Dracula, winning in the Battle Arena, or both."""
+    display_name = "Completion Goal"
+    option_dracula = 0
+    option_battle_arena = 1
+    option_battle_arena_and_dracula = 2
+    default = 0
+
+
 @dataclass
 class CVCotMOptions(PerGameCommonOptions):
     ignore_cleansing: IgnoreCleansing
@@ -125,3 +147,5 @@ class CVCotMOptions(PerGameCommonOptions):
     require_all_bosses: RequireAllBosses
     early_double: EarlyDouble
     start_inventory_from_pool: StartInventoryPool
+    death_link: DeathLink
+    completion_goal: CompletionGoal

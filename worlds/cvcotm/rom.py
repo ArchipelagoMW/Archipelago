@@ -149,13 +149,17 @@ class CVCotMPatchExtensions(APPatchExtension):
         if options["disable_battle_arena_mp_drain"]:
             rom_data.apply_ips("NoMPDrain.ips")
 
-        # Write the textbox messaging system code
+        # Write the textbox messaging system code.
         rom_data.write_bytes(0x7D60, [0x00, 0x48, 0x87, 0x46, 0x20, 0xFF, 0x7F, 0x08])
         rom_data.write_bytes(0x7FFF20, patches.remote_textbox_shower)
 
-        # Write the code that sets the screen transition delay timer
+        # Write the code that sets the screen transition delay timer.
         rom_data.write_bytes(0x6CE14, [0x00, 0x4A, 0x97, 0x46, 0xC0, 0xFF, 0x7F, 0x08])
         rom_data.write_bytes(0x7FFFC0, patches.transition_textbox_delayer)
+
+        # Write the code that prevents the Map from playing its normal pickup sound.
+        rom_data.write_bytes(0x95BE4, [0x00, 0x4A, 0x97, 0x46, 0x50, 0xFE, 0x7F, 0x08])
+        rom_data.write_bytes(0x7FFE50, patches.map_sfx_preventer)
 
         # Change the pointer to the DSS tutorial text to instead point to our AP messaging text location.
         rom_data.write_bytes(0x6710BC, [0x00, 0xEB, 0x7C, 0x08])
@@ -191,8 +195,16 @@ class CVCotMPatchExtensions(APPatchExtension):
         # KCEK didn't program hardcoded checks for these, thankfully!
         rom_data.write_byte(0xBF3BC, 0xB4)
 
-        # Nuke the DSS tutorial
-        rom_data.write_byte(0x5EB55, 0xE0)
+        # Nuke all the item tutorials
+        rom_data.write_byte(0x5EB55, 0xE0)  # DSS
+        rom_data.write_byte(0x393B8C, 0x00)  # Dash Boots
+        rom_data.write_byte(0x393BDD, 0x00)  # Double
+        rom_data.write_byte(0x393C33, 0x00)  # Tackle
+        rom_data.write_byte(0x393CC2, 0x00)  # Kick Boots
+        rom_data.write_byte(0x393D41, 0x00)  # Heavy Ring
+        rom_data.write_byte(0x393D86, 0x00)  # Cleansing
+        rom_data.write_byte(0x393DF5, 0x00)  # Roc Wing
+        rom_data.write_byte(0x393E65, 0x00)  # Last Key
 
         # Shorten Hugh's post-battle dialogue to give players more time to pick up his item.
         rom_data.write_bytes(0x393114, cvcotm_string_to_bytearray("Ok! You win!◊", "big top", 4, 2))
@@ -241,8 +253,8 @@ class CVCotMProcedurePatch(APProcedurePatch, APTokenMixin):
     game = "Castlevania - Circle of the Moon"
 
     procedure = [
-        ("apply_tokens", ["token_data.bin"]),
         ("apply_ips_patches", ["options.json"]),
+        ("apply_tokens", ["token_data.bin"]),
         ("fix_item_graphics", [])
     ]
 
@@ -258,7 +270,7 @@ def patch_rom(world: "CVCotMWorld", patch: CVCotMProcedurePatch, offset_data: Di
         patch.write_token(APTokenTypes.WRITE, offset, data)
 
     # Write the secondary name the client will use to distinguish a vanilla ROM from an AP one.
-    patch.write_token(APTokenTypes.WRITE, 0x7FFF00, "ARCHIPELAG01".encode("utf-8"))
+    patch.write_token(APTokenTypes.WRITE, 0x7FFF00, "ARCHIPELAG02".encode("utf-8"))
     # Write the slot authentication
     patch.write_token(APTokenTypes.WRITE, 0x7FFF10, bytes(world.auth))
 

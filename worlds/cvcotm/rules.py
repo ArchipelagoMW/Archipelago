@@ -5,6 +5,7 @@ from worlds.generic.Rules import CollectionRule
 from .regions import get_entrance_info
 from .locations import get_location_info
 from .data import iname
+from .options import CompletionGoal
 
 if TYPE_CHECKING:
     from . import CVCotMWorld
@@ -17,6 +18,7 @@ class CVCotMRules:
     required_last_keys: int
     break_iron_maidens: int
     ignore_cleansing: int
+    completion_goal: int
 
     def __init__(self, world: "CVCotMWorld") -> None:
         self.player = world.player
@@ -24,6 +26,7 @@ class CVCotMRules:
         self.required_last_keys = world.required_last_keys
         self.break_iron_maidens = world.options.break_iron_maidens.value
         self.ignore_cleansing = world.options.ignore_cleansing.value
+        self.completion_goal = world.options.completion_goal.value
 
         self.rules = {
             "Roc": lambda state: state.has(iname.roc_wing, self.player),
@@ -86,4 +89,11 @@ class CVCotMRules:
                 if loc_rule is not None:
                     loc.access_rule = self.rules[loc_rule]
 
-        multiworld.completion_condition[self.player] = lambda state: state.has(iname.victory, self.player)
+        # Set the World's completion condition depending on what its Completion Goal option is.
+        if self.completion_goal == CompletionGoal.option_dracula:
+            multiworld.completion_condition[self.player] = lambda state: state.has(iname.dracula, self.player)
+        elif self.completion_goal == CompletionGoal.option_battle_arena:
+            multiworld.completion_condition[self.player] = lambda state: state.has(iname.shinning_armor, self.player)
+        else:
+            multiworld.completion_condition[self.player] = \
+                lambda state: state.has_all({iname.dracula, iname.shinning_armor}, self.player)

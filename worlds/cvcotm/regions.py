@@ -98,11 +98,14 @@ region_info = {
                                    lname.ct16,
                                    lname.ct18,
                                    lname.ct_switch,
-                                   lname.ct22,
-                                   lname.ct26,
-                                   lname.ct26b],
+                                   lname.ct22],
                      "entrances": ["Into the Corridor Pit",
-                                   "Dip Into Waterway End"]},
+                                   "Dip Into Waterway End",
+                                   "Arena Passage"]},
+
+    "Battle Arena": {"locations": [lname.ct26,
+                                   lname.ct26b,
+                                   lname.ba24]},
 
     "Underground Gallery Upper": {"locations": [lname.ug0,
                                                 lname.ug1,
@@ -166,7 +169,7 @@ region_info = {
                                         lname.ot20]},
 
     "Ceremonial Room": {"locations": [lname.cr1,
-                                      lname.victory]},
+                                      lname.dracula]},
 }
 
 # # #    KEY    # # #
@@ -187,6 +190,7 @@ entrance_info = {
     "Ceremonial Door": {"destination": "Ceremonial Room", "rule": "Last Keys"},
     "Machine Bottom to Top": {"destination": "Machine Tower Top"},
     "Corridor to Gallery": {"destination": "Underground Gallery Upper", "rule": "Iron Maiden"},
+    "Arena Passage": {"destination": "Battle Arena", "rule": "Push AND Roc"},
     "Into the Corridor Pit": {"destination": "Eternal Corridor Pit"},
     "Dip Into Waterway End": {"destination": "Underground Waterway End", "rule": "Roc"},
     "Gallery to Corridor": {"destination": "Eternal Corridor Pit"},

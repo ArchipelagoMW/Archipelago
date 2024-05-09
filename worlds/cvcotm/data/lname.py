@@ -122,6 +122,6 @@ ot13  = "Observation Tower: Catoblepeas hallway"
 ot16  = "Observation Tower: Near warp room fake wall"
 ot20  = "Observation Tower: Behind Hugh"
 cr1   = "Ceremonial Room: Fake floor"
-ba24  = "Battle Arena: End reward"
+ba24  = "Battle Arena"
 
-victory = "Dracula"
+dracula = "Dracula"

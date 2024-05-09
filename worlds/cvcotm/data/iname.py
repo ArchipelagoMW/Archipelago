@@ -32,4 +32,6 @@ uranus =      "Uranus Card"
 pluto =       "Pluto Card"
 
 ironmaidens = "Iron maidens broken"
-victory =     "The Count Downed"
+dracula =     "The Count Downed"
+
+shinning_armor = "Where's My Super Suit?"

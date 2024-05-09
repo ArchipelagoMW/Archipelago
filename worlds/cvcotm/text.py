@@ -25,7 +25,7 @@ weightless_chars = {"\n", "▶", "◊", "\b", "\t", "「", "」"}
 
 
 def cvcotm_string_to_bytearray(cvcotm_text: str, textbox_type: Literal["big top", "big middle", "little middle"],
-                               speed: int, portrait: int = 0xFF) -> bytearray:
+                               speed: int, portrait: int = 0xFF, wrap: bool = True) -> bytearray:
     """Converts a string into a textbox bytearray following CVCotM's string format."""
     text_bytes = bytearray(0)
     if portrait == 0xFF and textbox_type != "little middle":
@@ -53,8 +53,11 @@ def cvcotm_string_to_bytearray(cvcotm_text: str, textbox_type: Literal["big top"
         total_lines = 4
         len_limit = 23
 
-    # Wrap or truncate the text.
-    refined_text = cvcotm_text_wrap(cvcotm_text, len_limit, total_lines)
+    # Wrap the text if we are opting to do so.
+    if wrap:
+        refined_text = cvcotm_text_wrap(cvcotm_text, len_limit, total_lines)
+    else:
+        refined_text = cvcotm_text
 
     text_bytes.extend([0x1D, main_control_start_param + (speed & 0xF)])  # Speed should be a value between 0 and 15.
 
@@ -66,7 +69,7 @@ def cvcotm_string_to_bytearray(cvcotm_text: str, textbox_type: Literal["big top"
         if char in cvcotm_char_dict:
             text_bytes.extend([cvcotm_char_dict[char]])
             # If we're pressing A to advance, add the text clear and reset alignment characters.
-            if char == "▶":
+            if char in ["▶", "◊"]:
                 text_bytes.extend([0x01, 0x0A])
         else:
             text_bytes.extend([0x48])

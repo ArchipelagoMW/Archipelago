@@ -1,6 +1,6 @@
 from BaseClasses import Location
 from .data import lname, iname
-from .options import CVCotMOptions
+from .options import CVCotMOptions, CompletionGoal
 
 from typing import Dict, Union, List, Tuple, Optional, Set
 
@@ -105,8 +105,8 @@ location_info = {
     lname.ct18:  {"code": 0x74, "offset": 0xD47C8, "room gfx": 0xD8BE6, "countdown": 7},
     lname.ct_switch: {"event": iname.ironmaidens},
     lname.ct22:  {"code": 0x71, "offset": 0xD3CF4, "room gfx": 0xD89B6, "countdown": 7, "type": "max up boss"},
-    lname.ct26:  {"code": 0x9C, "offset": 0xD6ACC, "room gfx": 0xD941A, "countdown": 11, "rule": "Push AND Roc"},
-    lname.ct26b: {"code": 0x9B, "offset": 0xD6AC0, "room gfx": 0xD941A, "countdown": 11, "rule": "Push AND Roc"},
+    lname.ct26:  {"code": 0x9C, "offset": 0xD6ACC, "room gfx": 0xD941A, "countdown": 11},
+    lname.ct26b: {"code": 0x9B, "offset": 0xD6AC0, "room gfx": 0xD941A, "countdown": 11},
     # Underground Gallery
     lname.ug0:   {"code": 0x82, "offset": 0xD5944, "room gfx": 0xD9046, "countdown": 9},
     lname.ug1:   {"code": 0x83, "offset": 0xD5890, "room gfx": 0xD902A, "countdown": 9, "rule": "Push"},
@@ -161,9 +161,9 @@ location_info = {
     lname.ot20:  {"code": 0xB0, "offset": 0xD6E20, "room gfx": 0xD94A6, "countdown": 12, "type": "boss"},
     # Ceremonial Room
     lname.cr1:   {"code": 0xA7, "offset": 0xD7690, "room gfx": 0xD972A, "countdown": 13, "rule": "Kick"},
-    lname.victory: {"event": iname.victory, "rule": "Roc"}
+    lname.dracula: {"event": iname.dracula, "rule": "Roc"},
     # Battle Arena
-    # lname.ba24:  {"code": 0xB2, "offset": 0xD7D20, "room gfx": 0xD99E6, "countdown": 15},
+    lname.ba24:  {"event": iname.shinning_armor},
  }
 
 
@@ -207,6 +207,14 @@ def get_named_locations_data(locations: List[str], options: CVCotMOptions) -> \
     for loc in locations:
         # If Break Iron Maidens is on, don't place the Broke Iron Maidens Location.
         if loc == lname.ct_switch and options.break_iron_maidens:
+            continue
+
+        # Don't place the Dracula Location if our Completion Goal is the Battle Arena only.
+        if loc == lname.dracula and options.completion_goal == CompletionGoal.option_battle_arena:
+            continue
+
+        # Don't place the Battle Arena Location if our Completion Goal is Dracula only.
+        if loc == lname.ba24 and options.completion_goal == CompletionGoal.option_dracula:
             continue
 
         loc_code = get_location_info(loc, "code")
