@@ -49,7 +49,7 @@ class MeritousWorld(World):
     # NOTE: Remember to change this before this game goes live
     required_client_version = (0, 2, 4)
 
-    options = MeritousOptions
+    options: MeritousOptions
     options_dataclass = MeritousOptions
 
     def __init__(self, multiworld: MultiWorld, player: int):
