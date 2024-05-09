@@ -59,7 +59,7 @@ location_table = {
     0x69697F: 0x36,
     0x696980: 0x32,
     0x696981: 0x26,
-    0x696981: 0x27,
+    0x696982: 0x27,
 
     0x696983: 0x35,
     0x696984: 0x41,
@@ -182,7 +182,7 @@ location_table = {
     0x6969F0: 0xF0,
     0x6969F1: 0xEE,
     0x6969F2: 0xED,
-    0x6969F2: 0xEA,
+    0x6969F3: 0xEA,
     0x6969F4: 0xF7,
     0x6969F5: 0xF6,
     0x6969F6: 0xF9,
@@ -294,7 +294,7 @@ def patch_rom(world, rom, player: int, multiworld):
             else:
                 rom.write_bytes(local_locations[location.name], bytearray([0x02]))
 
-    rom.write_bytes(0x7060, bytearray([world.options.cave_difficulty.value + 1]))
+    rom.write_bytes(0x7060, bytearray([world.options.cave_color.value + 1]))
     rom.write_bytes(0x7061, bytearray([world.options.hidden_items.value]))
     rom.write_bytes(0x7062, bytearray([world.options.death_link.value]))
 

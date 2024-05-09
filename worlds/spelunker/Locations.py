@@ -206,7 +206,7 @@ def get_locations(world: Optional["SpelunkerWorld"]) -> List[LocationData]:
             LocationData("Area 3", "B16F - Blue Door Hidden Item", 0x696A01),
             LocationData("Area 3", "B20F - Water Spout Upper Ledge Hidden Item", 0x696A02),
             LocationData("Area 4", "B23F - Pyramid Hidden Item", 0x696A03),
-            LocationData("Area 4", "B24F - Pit Trap Hidden Item", 0x696A04),
+            LocationData("Area 4", "B24F - Pit Trap Hidden Item", 0x696A04)
         ]
 
     return location_table

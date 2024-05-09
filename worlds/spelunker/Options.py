@@ -3,12 +3,12 @@ from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, PerGameCo
 
 
 class HiddenLocs(Toggle):
-    """Places items on the secret invisible items. Does not count for Keys on cave difficulty 4."""
+    """Places items on the secret invisible item locations."""
     display_name = "Hidden Item Checks"
 
 class CaveLevel(Choice):
-    """This will determine the difficulty level of the cave you venture through."""
-    display_name = "Cave Difficulty"
+    """This will determine the color palette of the cave you venture though."""
+    display_name = "Cave Palette"
     option_cave_1 = 0
     option_cave_2 = 1
     option_cave_3 = 2
@@ -18,5 +18,5 @@ class CaveLevel(Choice):
 @dataclass
 class SpelunkerOptions(PerGameCommonOptions):
     hidden_items: HiddenLocs
-    cave_difficulty: CaveLevel
+    cave_color: CaveLevel
     death_link: DeathLink

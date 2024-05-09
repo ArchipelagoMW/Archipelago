@@ -81,7 +81,7 @@ local_locations = {
     "B14F - Boulder Item": 0x3255,
     "B14F - Far Ledge": 0x327D,
 
-    "B15F - Left Wall": 0x32A5,
+    "B15F - Left Wall": 0x32C5,
     "B15F - Past Boulder": 0x32D5,
     "B15F - Upper Ledge": 0x3285,
     "B15F - Three in a Row 1": 0x328D,

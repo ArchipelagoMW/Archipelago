@@ -137,7 +137,8 @@ class SpelunkerClient(BizHawkClient):
                                                             (0x7051, 1, "PRG ROM"),
                                                             (0x022C, 1, "RAM"),
                                                             (0x022D, 1, "RAM"),
-                                                            (0x0783, 1, "RAM")])
+                                                            (0x0783, 1, "RAM"),
+                                                            (0x0781, 1, "RAM")])
 
         demo_mode = int.from_bytes(read_state[0], "little")
         loc_array = bytearray(read_state[1])
@@ -146,6 +147,7 @@ class SpelunkerClient(BizHawkClient):
         is_dead = int.from_bytes(read_state[4], "little")
         is_paused = int.from_bytes(read_state[5], "little")
         goal_trigger = int.from_bytes(read_state[6], "little")
+        recv_count = int.from_bytes(read_state[7], "big")
 
         if hidden_checks == 0x01:
             self.location_map.update(hidden_table)
@@ -178,25 +180,23 @@ class SpelunkerClient(BizHawkClient):
                     new_checks.append(loc_id)
 
             if loc_id in ctx.checked_locations:
-                await bizhawk.write(ctx.bizhawk_ctx, [(0x0500 + loc_pointer, bytes([0x00]), "RAM")])
-                
+                loc_array[loc_pointer] = 0 
 
+        await bizhawk.write(ctx.bizhawk_ctx, [(0x0500, loc_array, "RAM")])
+                
         for new_check_id in new_checks:
             ctx.locations_checked.add(new_check_id)
             location = ctx.location_names[new_check_id]
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
 
-        recv_count = await bizhawk.read(ctx.bizhawk_ctx, [(0x0781, 1, "RAM")])
-        recv_index = recv_count[0]
-        recv_index = int.from_bytes(recv_index, byteorder='big')
-        if recv_index < len(ctx.items_received):
-            item = ctx.items_received[recv_index]
-            recv_index += 1
+        if recv_count < len(ctx.items_received):
+            item = ctx.items_received[recv_count]
+            recv_count += 1
 
             if item.item in item_ids:
                 ram_item = item_ids[item.item]
                 await bizhawk.write(ctx.bizhawk_ctx, [(0x780, bytes([ram_item]), "RAM")])
-                await bizhawk.write(ctx.bizhawk_ctx, [(0x781, bytes([recv_index]), "RAM")])
+                await bizhawk.write(ctx.bizhawk_ctx, [(0x781, bytes([recv_count]), "RAM")])
 
         if not ctx.finished_game and goal_trigger == 0x01:
             await ctx.send_msgs([{
