@@ -43,7 +43,7 @@ class BumpStikWorld(World):
 
     required_client_version = (0, 3, 8)
 
-    options_dataclass = bumpstikOptions
+    options_dataclass = BumpstikOptions
 
     def __init__(self, world: MultiWorld, player: int):
         super(BumpStikWorld, self).__init__(world, player)
