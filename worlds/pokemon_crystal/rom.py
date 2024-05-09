@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 import os
 import pkgutil
 import bsdiff4
+import copy
 
 from worlds.Files import APDeltaPatch
 from settings import get_settings
@@ -163,6 +164,15 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
                         pokemon_data.append(move_id)
             write_bytes(patched_rom, pokemon_data, address)
             address += len(pokemon)
+
+    # if world.options.randomize_trainer_parties:
+    #     new_coords = copy.deepcopy(data.f_t)
+    #     random.shuffle(new_coords)
+    #     address = data.rom_addresses["AP_Misc_FuchsiaTrainers"] + 1
+    #     for c in new_coords:
+    #         write_coords = [c[1] + 4, c[0] + 4]
+    #         write_bytes(patched_rom, write_coords, address)
+    #         address += 13
 
     if world.options.blind_trainers:
         address = data.rom_addresses["AP_Setting_Blind_Trainers"]

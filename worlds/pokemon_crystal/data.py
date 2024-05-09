@@ -95,6 +95,7 @@ class PokemonCrystalData:
     pokemon: Dict[str, PokemonData]
     moves: Dict[str, MoveData]
     fish: Dict[str, FishData]
+    f_t: List[List[int]]
 
     def __init__(self) -> None:
         self.rom_addresses = {}
@@ -132,6 +133,7 @@ def _init() -> None:
     move_data = data_json["moves"]
     trainer_data = data_json["trainers"]
     wildfish_data = data_json["wilds"]["fish"]
+    f_data = data_json["misc"]["fuchsia"]
 
     claimed_locations: Set[str] = set()
     claimed_warps: Set[str] = set()
@@ -168,7 +170,6 @@ def _init() -> None:
         # Exits
         for region_exit in region_json["exits"]:
             new_region.exits.append(region_exit)
-        print(region_name)
         new_region.johto = region_json["johto"]
         data.regions[region_name] = new_region
 
@@ -245,6 +246,8 @@ def _init() -> None:
             fish_data["Good"],
             fish_data["Super"]
         )
+
+    data.f_t = f_data
 
 
 _init()
