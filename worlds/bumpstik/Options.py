@@ -71,7 +71,7 @@ class KillerTrapWeight(Range):
     default = 0
 
 @dataclass
-class bumpstikOptions(PerGameCommonOptions):
+class BumpstikOptions(PerGameCommonOptions):
     task_advances: TaskAdvances
     turners: Turners
     paint_cans: PaintCans
