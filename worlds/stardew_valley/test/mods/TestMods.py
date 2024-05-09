@@ -58,6 +58,7 @@ class TestBaseItemGeneration(SVTestBase):
         options.Shipsanity.internal_name: options.Shipsanity.option_everything,
         options.Chefsanity.internal_name: options.Chefsanity.option_all,
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
+        options.Booksanity.internal_name: options.Booksanity.option_all,
         options.Mods.internal_name: all_mods
     }
 
@@ -86,6 +87,7 @@ class TestNoGingerIslandModItemGeneration(SVTestBase):
         options.Shipsanity.internal_name: options.Shipsanity.option_everything,
         options.Chefsanity.internal_name: options.Chefsanity.option_all,
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
+        options.Booksanity.internal_name: options.Booksanity.option_all,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
         options.Mods.internal_name: all_mods
     }

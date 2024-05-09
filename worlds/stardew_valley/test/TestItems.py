@@ -49,7 +49,7 @@ class TestItems(SVTestCase):
     def test_correct_number_of_stardrops(self):
         allsanity_options = allsanity_options_without_mods()
         multiworld = setup_solo_multiworld(allsanity_options)
-        stardrop_items = [item for item in multiworld.get_items() if "Stardrop" in item.name]
+        stardrop_items = [item for item in multiworld.get_items() if item.name == "Stardrop"]
         self.assertEqual(len(stardrop_items), 7)
 
     def test_no_duplicate_rings(self):
