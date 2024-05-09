@@ -60,7 +60,7 @@ class SpelunkerClient(BizHawkClient):
     def __init__(self) -> None:
         super().__init__()
 
-    async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
+    async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from CommonClient import logger
 
         try:
