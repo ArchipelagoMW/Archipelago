@@ -1,7 +1,8 @@
 # support for AP world
 import pathlib
+import pkgutil
 import sys
-import zipfile
+
 import io
 
 isAPWorld = ".apworld" in sys.modules[__name__].__file__
@@ -11,7 +12,7 @@ def getZipFile():
     filename = sys.modules[__name__].__file__
     apworldExt = ".apworld"
     zipPath = pathlib.Path(filename[:filename.index(apworldExt) + len(apworldExt)])
-    return (zipfile.ZipFile(zipPath), zipPath.stem)
+    return pkgutil.get_data(__name__, zipPath)
 
 
 def openFile(resource: str, mode: str = "r", encoding: None = None):
