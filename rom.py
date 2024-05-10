@@ -391,16 +391,27 @@ def shuffle_wario_voice_sets(rom: LocalRom, shuffle: WarioVoiceShuffle):
         rom.write_word(voice_set_length_address + 4 * i, length)
 
 
-def patch_rom(rom: LocalRom, world: WL4World):
-    fill_items(rom, world)
-
+def update_header(rom: LocalRom):
     # Change game name
-    game_name = rom.read_bytes(0x080000A0, 12).decode('ascii')
+    game_name = rom.read_bytes(0x80000A0, 12).decode('ascii')
     if game_name == 'WARIOLANDE\0\0':
         game_name = 'WARIOLANDAPE'
     elif game_name == 'WARIOLAND\0\0\0':
         game_name = 'WARIOLANDAPJ'
-    rom.write_bytes(0x080000A0, game_name.encode('ascii'))
+    rom.write_bytes(0x80000A0, game_name.encode('ascii'))
+
+    # Recalculate checksum
+    checksum = 0
+    for i in range(0x0A0, 0x0BD):
+        checksum -= rom.read_byte(i, Domain.ROM)
+    checksum -= 0x19
+    rom.write_byte(0x80000BD, checksum & 0xFF)
+
+
+def patch_rom(rom: LocalRom, world: WL4World):
+    update_header(rom)
+
+    fill_items(rom, world)
 
     # Write player name and number
     player_name = world.multiworld.player_name[world.player].encode('utf-8')
