@@ -109,13 +109,8 @@ def set_rules(world: "SpelunkerWorld") -> None:
 
     set_rule(world.multiworld.get_location("Golden Pyramid", player), lambda state: state.has("Red Key", player, 5) and state.has("Dynamite", player, 6) and state.has("Blue Key", player, 6))
 
-    hidden_rules(world)
+    if world.options.hidden_items:
+        set_rule(world.multiworld.get_location("B1F - Side Shaft Hidden Item", player), lambda state: state.has("Dynamite", player, 1))
+        set_rule(world.multiworld.get_location("B8F - Boulder Pit Hidden Item", player), lambda state: state.has("Dynamite", player, 2))
+        set_rule(world.multiworld.get_location("B16F - Blue Door Hidden Item", player), lambda state: state.has("Blue Key", player, 4))
     
-
-def hidden_rules(world: "SpelunkerWorld") -> None:
-    player = world.player
-    if not world.options.hidden_items:
-        return
-    set_rule(world.multiworld.get_location("B1F - Side Shaft Hidden Item", player), lambda state: state.has("Dynamite", player, 1))
-    set_rule(world.multiworld.get_location("B8F - Boulder Pit Hidden Item", player), lambda state: state.has("Dynamite", player, 2))
-    set_rule(world.multiworld.get_location("B16F - Blue Door Hidden Item", player), lambda state: state.has("Blue Key", player, 4))

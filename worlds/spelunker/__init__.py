@@ -95,10 +95,6 @@ class SpelunkerWorld(World):
     def create_item_with_correct_settings(self, name: str) -> Item:
         data = item_table[name]
         item = Item(name, data.classification, data.code, self.player)
-
-        if not item.advancement:
-            return item
-
         return item
 
     def generate_filler(self, pool: List[Item]) -> None:

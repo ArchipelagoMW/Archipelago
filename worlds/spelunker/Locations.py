@@ -14,7 +14,7 @@ class LocationData(NamedTuple):
     rule: CollectionRule = lambda state: True
 
 
-def get_locations(world: Optional["SpelunkerWorld"]) -> List[LocationData]:
+def get_locations(world: ["SpelunkerWorld"]) -> List[LocationData]:
 
     location_table: List[LocationData] = [
         LocationData("Area 1", "1F - First Item", 0x696969),

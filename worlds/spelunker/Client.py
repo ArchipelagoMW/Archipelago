@@ -12,7 +12,7 @@ import time
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
-    
+
 EXPECTED_ROM_NAME = "SPELUNKERAP"
 
 
@@ -26,7 +26,7 @@ class SpelunkerClient(BizHawkClient):
     def __init__(self) -> None:
         super().__init__()
 
-    async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
+    async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from CommonClient import logger
 
         try:

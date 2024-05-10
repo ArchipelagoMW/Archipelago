@@ -14,7 +14,7 @@ The goal is to reach the bottom of the cave and discover the Pyramid of Gold.
 
 ## What items and locations get shuffled?
 
-Locations consist of any collectable items aside from Energy refills. Optionally, the player may also randomize the hidden items.
+The shuffled items and locations are the game's collectible items aside from Energy refills. Optionally, the player may also randomize the hidden items.
 
 ## Which items can be in another player's world?
 

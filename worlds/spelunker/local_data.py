@@ -1,4 +1,6 @@
-local_locations = {
+from typing import Dict, List
+
+local_locations: Dict[str, int] = {
     "1F - First Item": 0x2EAD,
     "1F - Pit Item": 0x2EB5,
     "1F - Right Item 1": 0x2E95,
