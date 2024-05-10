@@ -13,17 +13,6 @@ from worlds.AutoWorld import World
 
 class SC2Logic:
 
-    def lock_any_item(self, state: CollectionState, items: Set[str]) -> bool:
-        """
-        Guarantees that at least one of these items will remain in the world. Doesn't affect placement.
-        Needed for cases when the dynamic pool filtering could remove all the item prerequisites
-        :param state:
-        :param items:
-        :return:
-        """
-        return self.is_item_placement(state) \
-            or state.has_any(items, self.player)
-
     def is_item_placement(self, state):
         """
         Tells if it's item placement or item pool filter
@@ -607,12 +596,10 @@ class SC2Logic:
 
     def protoss_stalker_upgrade(self, state: CollectionState) -> bool:
         return (
-                state.has_any(
-                    {
-                        ItemNames.STALKER_INSTIGATOR_SLAYER_DISINTEGRATING_PARTICLES,
-                        ItemNames.STALKER_INSTIGATOR_SLAYER_PARTICLE_REFLECTION
-                    }, self.player)
-                and self.lock_any_item(state, {ItemNames.STALKER, ItemNames.INSTIGATOR, ItemNames.SLAYER})
+            state.has_any({
+                ItemNames.STALKER_INSTIGATOR_SLAYER_DISINTEGRATING_PARTICLES,
+                ItemNames.STALKER_INSTIGATOR_SLAYER_PARTICLE_REFLECTION
+            }, self.player)
         )
 
     def steps_of_the_rite_requirement(self, state: CollectionState) -> bool:

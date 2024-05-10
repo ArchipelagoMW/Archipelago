@@ -1,42 +1,35 @@
-from typing import Callable, Dict, List, Set, Union, Tuple, Optional
+from typing import Callable, Dict, List, Set, Union, Tuple, Optional, TYPE_CHECKING
 from BaseClasses import  Item, Location
-from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items, progressive_if_nco, \
-    progressive_if_ext, spear_of_adun_calldowns, spear_of_adun_castable_passives, nova_equipment
-from .MissionTables import mission_orders, MissionInfo, MissionPools, \
-    get_campaign_goal_priority, campaign_final_mission_locations, campaign_alt_final_mission_locations, \
-    SC2Campaign, SC2Race, SC2CampaignGoalPriority, SC2Mission
-from .Options import get_option_value, MissionOrder, \
-    get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech, \
-    TakeOverAIAllies, SpearOfAdunPresence, SpearOfAdunAutonomouslyCastAbilityPresence, campaign_depending_orders, \
-    ShuffleCampaigns, get_excluded_missions, ShuffleNoBuild, ExtraLocations, GrantStoryLevels
-from . import ItemNames
-from worlds.AutoWorld import World
+from .Items import (get_full_item_list, spider_mine_sources, second_pass_placeable_items,
+    upgrade_item_types,
+)
+from .MissionTables import (MissionInfo, MissionPools,
+    get_campaign_goal_priority, campaign_final_mission_locations, campaign_alt_final_mission_locations,
+    SC2Campaign, SC2CampaignGoalPriority, SC2Mission,
+)
+from .Options import (get_option_value, MissionOrder,
+    get_enabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech,
+    TakeOverAIAllies, campaign_depending_orders,
+    ShuffleCampaigns, get_excluded_missions, ShuffleNoBuild, ExtraLocations, GrantStoryLevels,
+)
+from . import ItemNames, ItemGroups
+
+if TYPE_CHECKING:
+    from . import SC2World
+
 
 # Items with associated upgrades
 UPGRADABLE_ITEMS = {item.parent_item for item in get_full_item_list().values() if item.parent_item}
-
-BARRACKS_UNITS = {
-    ItemNames.MARINE, ItemNames.MEDIC, ItemNames.FIREBAT, ItemNames.MARAUDER,
-    ItemNames.REAPER, ItemNames.GHOST, ItemNames.SPECTRE, ItemNames.HERC,
-}
-FACTORY_UNITS = {
-    ItemNames.HELLION, ItemNames.VULTURE, ItemNames.GOLIATH, ItemNames.DIAMONDBACK,
-    ItemNames.SIEGE_TANK, ItemNames.THOR, ItemNames.PREDATOR, ItemNames.WIDOW_MINE,
-    ItemNames.CYCLONE, ItemNames.WARHOUND,
-}
-STARPORT_UNITS = {
-    ItemNames.MEDIVAC, ItemNames.WRAITH, ItemNames.VIKING, ItemNames.BANSHEE,
-    ItemNames.BATTLECRUISER, ItemNames.HERCULES, ItemNames.SCIENCE_VESSEL, ItemNames.RAVEN,
-    ItemNames.LIBERATOR, ItemNames.VALKYRIE,
-}
+BARRACKS_UNITS = set(ItemGroups.barracks_units)
+FACTORY_UNITS = set(ItemGroups.factory_units)
+STARPORT_UNITS = set(ItemGroups.starport_units)
 
 
-def filter_missions(world: World) -> Dict[MissionPools, List[SC2Mission]]:
+def filter_missions(world: 'SC2World') -> Dict[MissionPools, List[SC2Mission]]:
 
     """
     Returns a semi-randomly pruned tuple of no-build, easy, medium, and hard mission sets
     """
-    world: World = world
     mission_order_type = get_option_value(world, "mission_order")
     shuffle_no_build = get_option_value(world, "shuffle_no_build")
     enabled_campaigns = get_enabled_campaigns(world)
@@ -75,7 +68,6 @@ def filter_missions(world: World) -> Dict[MissionPools, List[SC2Mission]]:
         goal_priorities = {campaign: get_campaign_goal_priority(campaign, excluded_missions) for campaign in enabled_campaigns}
         goal_level = max(goal_priorities.values())
         candidate_campaigns: List[SC2Campaign] = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
-    candidate_campaigns.sort(key=lambda it: it.id)
         candidate_campaigns.sort(key=lambda it: it.id)
 
         goal_campaign = world.random.choice(candidate_campaigns)
@@ -210,30 +202,8 @@ def get_item_upgrades(inventory: List[Item], parent_item: Union[Item, str]) -> L
     ]
 
 
-def get_item_quantity(item: Item, world: World):
-    if (not get_option_value(world, "nco_items")) \
-            and SC2Campaign.NCO in get_disabled_campaigns(world) \
-            and item.name in progressive_if_nco:
-        return 1
-    if (not get_option_value(world, "ext_items")) \
-            and item.name in progressive_if_ext:
-        return 1
-    return get_full_item_list()[item.name].quantity
-
-
 def copy_item(item: Item):
     return Item(item.name, item.classification, item.code, item.player)
-
-
-def num_missions(world: World) -> int:
-    mission_order_type = get_option_value(world, "mission_order")
-    if mission_order_type != MissionOrder.option_grid:
-        mission_order = mission_orders[mission_order_type]()
-        misssions = [mission for campaign in mission_order for mission in mission_order[campaign]]
-        return len(misssions) - 1  # Menu
-    else:
-        mission_pools = filter_missions(world)
-        return sum(len(pool) for _, pool in mission_pools.items())
 
 
 class ValidInventory:
@@ -276,15 +246,18 @@ class ValidInventory:
         minimum_upgrades = get_option_value(self.world, "min_number_of_upgrades")
 
         def attempt_removal(item: Item) -> bool:
-            inventory.remove(item)
+            removed_item = inventory.pop(inventory.index(item))
             # Only run logic checks when removing logic items
             if item.name in self.logical_inventory:
                 self.logical_inventory.remove(item.name)
                 if not all(requirement(self) for (_, requirement) in mission_requirements):
                     # If item cannot be removed, lock or revert
                     self.logical_inventory.append(item.name)
-                    for _ in range(get_item_quantity(item, self.world)):
-                        locked_items.append(copy_item(item))
+                    # Note(mm): Be sure to re-add the _exact_ item we removed.
+                    # Removing from `inventory` searches based on == checks, but AutoWorld.py
+                    # checks using `is` to make sure there are no duplicate item objects in the pool.
+                    # Hence, appending `item` could cause sporadic generation failures.
+                    locked_items.append(removed_item)
                     return False
             return True
 
@@ -555,40 +528,25 @@ class ValidInventory:
 
         return inventory
 
-    def __init__(self, world: World ,
+    def __init__(self, world: 'SC2World',
                  item_pool: List[Item], existing_items: List[Item], locked_items: List[Item],
-                 used_races: Set[SC2Race], nova_equipment_used: bool):
+    ):
         self.multiworld = world.multiworld
         self.player = world.player
-        self.world: World = world
+        self.world: 'SC2World' = world
         self.logical_inventory = list()
         self.locked_items = locked_items[:]
         self.existing_items = existing_items
-        soa_presence = get_option_value(world, "spear_of_adun_presence")
-        soa_autocast_presence = get_option_value(world, "spear_of_adun_autonomously_cast_ability_presence")
         # Initial filter of item pool
         self.item_pool = []
         item_quantities: dict[str, int] = dict()
         # Inventory restrictiveness based on number of missions with checks
-        mission_count = num_missions(world)
+        mission_count = sum(len(campaign) for campaign in world.mission_req_table.values())
         self.min_units_per_structure = int(mission_count / 7)
         min_upgrades = 1 if mission_count < 10 else 2
         for item in item_pool:
             item_info = get_full_item_list()[item.name]
-            if item_info.race != SC2Race.ANY and item_info.race not in used_races:
-                if soa_presence == SpearOfAdunPresence.option_everywhere \
-                        and item.name in spear_of_adun_calldowns:
-                    # Add SoA powers regardless of used races as it's present everywhere
-                    self.item_pool.append(item)
-                if soa_autocast_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_everywhere \
-                        and item.name in spear_of_adun_castable_passives:
-                    self.item_pool.append(item)
-                # Drop any item belonging to a race not used in the campaign
-                continue
-            if item.name in nova_equipment and not nova_equipment_used:
-                # Drop Nova equipment if there's no NCO mission generated
-                continue
-            if item_info.type == "Upgrade":
+            if item_info.type in upgrade_item_types:
                 # Locking upgrades based on mission duration
                 if item.name not in item_quantities:
                     item_quantities[item.name] = 0
@@ -597,8 +555,6 @@ class ValidInventory:
                     self.locked_items.append(item)
                 else:
                     self.item_pool.append(item)
-            elif item_info.type == "Goal":
-                self.locked_items.append(item)
             else:
                 self.item_pool.append(item)
         self.item_children: Dict[Item, List[Item]] = dict()
@@ -607,7 +563,7 @@ class ValidInventory:
                 self.item_children[item] = get_item_upgrades(self.item_pool, item)
 
 
-def filter_items(world: World, mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]], location_cache: List[Location],
+def filter_items(world: 'SC2World', mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]], location_cache: List[Location],
                  item_pool: List[Item], existing_items: List[Item], locked_items: List[Item]) -> List[Item]:
     """
     Returns a semi-randomly pruned set of items based on number of available locations.
@@ -615,46 +571,11 @@ def filter_items(world: World, mission_req_table: Dict[SC2Campaign, Dict[str, Mi
     """
     open_locations = [location for location in location_cache if location.item is None]
     inventory_size = len(open_locations)
-    used_races = get_used_races(mission_req_table, world)
-    nova_equipment_used = is_nova_equipment_used(mission_req_table)
     mission_requirements = [(location.name, location.access_rule) for location in location_cache]
-    valid_inventory = ValidInventory(world, item_pool, existing_items, locked_items, used_races, nova_equipment_used)
+    valid_inventory = ValidInventory(world, item_pool, existing_items, locked_items)
 
     valid_items = valid_inventory.generate_reduced_inventory(inventory_size, mission_requirements)
     return valid_items
-
-
-def get_used_races(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]], world: World) -> Set[SC2Race]:
-    grant_story_tech = get_option_value(world, "grant_story_tech")
-    take_over_ai_allies = get_option_value(world, "take_over_ai_allies")
-    kerrigan_presence = get_option_value(world, "kerrigan_presence") in kerrigan_unit_available \
-        and SC2Campaign.HOTS in get_enabled_campaigns(world)
-    missions = missions_in_mission_table(mission_req_table)
-
-    # By missions
-    races = set([mission.race for mission in missions])
-
-    # Conditionally logic-less no-builds (They're set to SC2Race.ANY):
-    if grant_story_tech == GrantStoryTech.option_false:
-        if SC2Mission.ENEMY_WITHIN in missions:
-            # Zerg units need to be unlocked
-            races.add(SC2Race.ZERG)
-        if kerrigan_presence \
-                and not missions.isdisjoint({SC2Mission.BACK_IN_THE_SADDLE, SC2Mission.SUPREME, SC2Mission.CONVICTION, SC2Mission.THE_INFINITE_CYCLE}):
-            # You need some Kerrigan abilities (they're granted if Kerriganless or story tech granted)
-            races.add(SC2Race.ZERG)
-
-    # If you take over the AI Ally, you need to have its race stuff
-    if take_over_ai_allies == TakeOverAIAllies.option_true \
-            and not missions.isdisjoint({SC2Mission.THE_RECKONING}):
-        # Jimmy in The Reckoning
-        races.add(SC2Race.TERRAN)
-
-    return races
-
-def is_nova_equipment_used(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]]) -> bool:
-    missions = missions_in_mission_table(mission_req_table)
-    return any([mission.campaign == SC2Campaign.NCO for mission in missions])
 
 
 def missions_in_mission_table(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]]) -> Set[SC2Mission]:
