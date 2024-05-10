@@ -13,7 +13,7 @@ from .Items import item_to_index, tier_1_opponents, booster_packs, excluded_item
     challenges, useful, draft_boosters, draft_opponents
 from .Locations import Bonuses, Limited_Duels, Theme_Duels, Campaign_Opponents, Required_Cards, \
     get_beat_challenge_events, special, collection_events
-from .Opponents import get_opponents, get_opponent_locations, challenge_opponents
+from .Opponents import get_opponents, get_opponent_locations, challenge_opponents, get_opponent_condition
 from .Options import Yugioh06Options
 from .Rom import YGO06ProcedurePatch, get_base_rom_path, MD5Europe, MD5America, write_tokens
 from .Rules import set_rules
@@ -204,21 +204,20 @@ class Yugioh06World(World):
             create_region(self, 'Structure Deck', get_deck_content_locations(structure_deck))
         ]
 
-        self.multiworld.get_entrance('to Campaign', self.player) \
+        self.get_entrance('to Campaign') \
             .connect(self.multiworld.get_region('Campaign', self.player))
-        self.multiworld.get_entrance('to Challenges', self.player) \
+        self.get_entrance('to Challenges') \
             .connect(self.multiworld.get_region('Challenges', self.player))
-        self.multiworld.get_entrance('to Card Shop', self.player) \
+        self.get_entrance('to Card Shop') \
             .connect(self.multiworld.get_region('Card Shop', self.player))
-        self.multiworld.get_entrance('to Deck Edit', self.player) \
+        self.get_entrance('to Deck Edit') \
             .connect(self.multiworld.get_region('Structure Deck', self.player))
 
         campaign = self.multiworld.get_region('Campaign', self.player)
         # Campaign Opponents
         for opponent in self.campaign_opponents:
             unlock_item = "Campaign Tier " + str(opponent.tier) + " Column " + str(opponent.column)
-            region = create_region(self,
-                                   opponent.name, get_opponent_locations(opponent))
+            region = create_region(self, opponent.name, get_opponent_locations(opponent))
             entrance = Entrance(self.player, unlock_item, campaign)
             if opponent.tier == 5 and opponent.column > 2:
                 unlock_amount = 0
@@ -250,22 +249,12 @@ class Yugioh06World(World):
                         unlock_item = "Campaign Boss Beaten"
                         unlock_amount = self.options.final_campaign_boss_campaign_opponents.value
                         is_challenge = False
-                if is_challenge:
-                    entrance.access_rule = \
-                        (lambda opp, item, amount: lambda state: state.has(item, self.player, amount) and
-                                                                 yugioh06_difficulty(state, self.player, opp.difficulty)
-                                                                 and state.has_all(opp.additional_info, self.player))\
-                                                                (opponent, unlock_item, unlock_amount)
-
-                else:
-                    entrance.access_rule = \
-                        (lambda opp, item, amount: lambda state: state.has_group(item, self.player, amount) and
-                                                                 yugioh06_difficulty(state, self.player, opp.difficulty)
-                                                                 and state.has_all(opp.additional_info, self.player))\
-                                                                 (opponent, unlock_item, unlock_amount)
+                entrance.access_rule = get_opponent_condition(opponent, unlock_item, unlock_amount, self.player,
+                                                              is_challenge)
             else:
-                entrance.access_rule = (lambda unlock, opp: lambda state:
-                state.has(unlock, self.player) and yugioh06_difficulty(state, self.player, opp.difficulty))(unlock_item, opponent)
+                entrance.access_rule = (lambda state, unlock=unlock_item, opp=opponent:
+                                        state.has(unlock, self.player) and yugioh06_difficulty(state, self.player,
+                                                                                               opp.difficulty))
             campaign.exits.append(entrance)
             entrance.connect(region)
             self.multiworld.regions.append(region)
@@ -276,7 +265,7 @@ class Yugioh06World(World):
             region = create_region(self,
                                    booster, get_booster_locations(booster))
             entrance = Entrance(self.player, booster, card_shop)
-            entrance.access_rule = (lambda unlock: lambda state: state.has(unlock, self.player))(booster)
+            entrance.access_rule = (lambda state, unlock=booster: state.has(unlock, self.player))
             card_shop.exits.append(entrance)
             entrance.connect(region)
             self.multiworld.regions.append(region)
@@ -289,7 +278,7 @@ class Yugioh06World(World):
             region = create_region(self,
                                    challenge, {challenge: lid, challenge + " Complete": None})
             entrance = Entrance(self.player, challenge, challenge_region)
-            entrance.access_rule = (lambda unlock: lambda state: state.has(unlock + " Unlock", self.player))(challenge)
+            entrance.access_rule = (lambda state, unlock=challenge: state.has(unlock + " Unlock", self.player))
             challenge_region.exits.append(entrance)
             entrance.connect(region)
             self.multiworld.regions.append(region)
