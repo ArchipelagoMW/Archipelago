@@ -1,16 +1,27 @@
-from typing import Set
+from typing import List
+from BaseClasses import CollectionState
 
-from worlds.AutoWorld import LogicMixin
+core_booster: List[str] = [
+    "LEGEND OF B.E.W.D.",
+    "METAL RAIDERS",
+    "PHARAOH'S SERVANT",
+    "PHARAONIC GUARDIAN",
+    "SPELL RULER",
+    "LABYRINTH OF NIGHTMARE",
+    "LEGACY OF DARKNESS",
+    "MAGICIAN'S FORCE",
+    "DARK CRISIS",
+    "INVASION OF CHAOS",
+    "ANCIENT SANCTUARY",
+    "SOUL OF THE DUELIST",
+    "RISE OF DESTINY",
+    "FLAMING ETERNITY",
+    "THE LOST MILLENIUM",
+    "CYBERNETIC REVOLUTION",
+    "ELEMENTAL ENERGY",
+    "SHADOW OF INFINITY",
+]
 
 
-class YuGiOh06Logic(LogicMixin):
-    def yugioh06_difficulty(self, player, amount: int):
-        return self.has_group("Core Booster", player, amount)
-
-    def yugioh06_has_individual(self, items: list[str], player: int):
-        amount = 0
-        for item in items:
-            if self.has(item, player):
-                amount += 1
-        return amount
-
+def yugioh06_difficulty(state: CollectionState, player: int, amount: int):
+    return state.count_from_list(core_booster, player) >= amount

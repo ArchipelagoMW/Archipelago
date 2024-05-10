@@ -6,9 +6,10 @@ import settings
 
 import Utils
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
+from .logic import yugioh06_difficulty, core_booster
 from .utils import openFile
 from ..AutoWorld import World, WebWorld
-from .Items import item_to_index, tier_1_opponents, booster_packs, excluded_items, Banlist_Items, core_booster, \
+from .Items import item_to_index, tier_1_opponents, booster_packs, excluded_items, Banlist_Items, \
     challenges, useful, draft_boosters, draft_opponents
 from .Locations import Bonuses, Limited_Duels, Theme_Duels, Campaign_Opponents, Required_Cards, \
     get_beat_challenge_events, special, collection_events
@@ -16,7 +17,6 @@ from .Opponents import get_opponents, get_opponent_locations, challenge_opponent
 from .Options import Yugioh06Options
 from .Rom import YGO06ProcedurePatch, get_base_rom_path, MD5Europe, MD5America, write_tokens
 from .Rules import set_rules
-from .logic import YuGiOh06Logic
 from .BoosterPacks import booster_contents, get_booster_locations
 from .StructureDeck import get_deck_content_locations
 from .RomValues import structure_deck_selection, banlist_ids, function_addresses
@@ -253,19 +253,19 @@ class Yugioh06World(World):
                 if is_challenge:
                     entrance.access_rule = \
                         (lambda opp, item, amount: lambda state: state.has(item, self.player, amount) and
-                                                                 state.yugioh06_difficulty(self.player, opp.difficulty)
+                                                                 yugioh06_difficulty(state, self.player, opp.difficulty)
                                                                  and state.has_all(opp.additional_info, self.player))\
                                                                 (opponent, unlock_item, unlock_amount)
 
                 else:
                     entrance.access_rule = \
                         (lambda opp, item, amount: lambda state: state.has_group(item, self.player, amount) and
-                                                                 state.yugioh06_difficulty(self.player, opp.difficulty)
+                                                                 yugioh06_difficulty(state, self.player, opp.difficulty)
                                                                  and state.has_all(opp.additional_info, self.player))\
                                                                  (opponent, unlock_item, unlock_amount)
             else:
                 entrance.access_rule = (lambda unlock, opp: lambda state:
-                state.has(unlock, self.player) and state.yugioh06_difficulty(self.player, opp.difficulty))(unlock_item, opponent)
+                state.has(unlock, self.player) and yugioh06_difficulty(state, self.player, opp.difficulty))(unlock_item, opponent)
             campaign.exits.append(entrance)
             entrance.connect(region)
             self.multiworld.regions.append(region)
