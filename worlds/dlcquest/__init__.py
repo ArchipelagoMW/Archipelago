@@ -1,25 +1,35 @@
-from typing import Dict, Any, Iterable, Optional, Union
-from BaseClasses import Tutorial
-from worlds.AutoWorld import World, WebWorld
-from .Items import DLCQuestItem, item_table, ItemData, create_items
-from .Locations import location_table, DLCQuestLocation
-from .Options import DLCQuest_options, DLCQuestOptions, fetch_options
-from .Rules import set_rules
-from .Regions import create_regions
+from typing import Union
+
+from BaseClasses import Tutorial, CollectionState, ItemClassification
+from worlds.AutoWorld import WebWorld, World
 from . import Options
+from .Items import DLCQuestItem, ItemData, create_items, item_table, items_by_group, Group
+from .Locations import DLCQuestLocation, location_table
+from .Options import DLCQuestOptions
+from .Regions import create_regions
+from .Rules import set_rules
 
 client_version = 0
 
 
 class DLCqwebworld(WebWorld):
-    tutorials = [Tutorial(
-        "Multiworld Setup Tutorial",
+    setup_en = Tutorial(
+        "Multiworld Setup Guide",
         "A guide to setting up the Archipelago DLCQuest game on your computer.",
         "English",
         "setup_en.md",
         "setup/en",
         ["axe_y"]
-    )]
+    )
+    setup_fr = Tutorial(
+        "Guide de configuration MultiWorld",
+        "Un guide pour configurer DLCQuest sur votre PC.",
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["Deoxis"]
+    )
+    tutorials = [setup_en, setup_fr]
 
 
 class DLCqworld(World):
@@ -35,10 +45,8 @@ class DLCqworld(World):
 
     data_version = 1
 
-    option_definitions = DLCQuest_options
-
-    def generate_early(self):
-        self.options = fetch_options(self.multiworld, self.player)
+    options_dataclass = DLCQuestOptions
+    options: DLCQuestOptions
 
     def create_regions(self):
         create_regions(self.multiworld, self.player, self.options)
@@ -53,7 +61,7 @@ class DLCqworld(World):
         self.precollect_coinsanity()
         locations_count = len([location
                                for location in self.multiworld.get_locations(self.player)
-                               if not location.event])
+                               if not location.advancement])
 
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]]
@@ -61,31 +69,53 @@ class DLCqworld(World):
         created_items = create_items(self, self.options, locations_count + len(items_to_exclude), self.multiworld.random)
 
         self.multiworld.itempool += created_items
-        self.multiworld.early_items[self.player]["Movement Pack"] = 1
+
+        if self.options.campaign == Options.Campaign.option_basic or self.options.campaign == Options.Campaign.option_both:
+            self.multiworld.early_items[self.player]["Movement Pack"] = 1
 
         for item in items_to_exclude:
             if item in self.multiworld.itempool:
                 self.multiworld.itempool.remove(item)
 
     def precollect_coinsanity(self):
-        if self.options[Options.Campaign] == Options.Campaign.option_basic:
-            if self.options[Options.CoinSanity] == Options.CoinSanity.option_coin and self.options[Options.CoinSanityRange] >= 5:
+        if self.options.campaign == Options.Campaign.option_basic:
+            if self.options.coinsanity == Options.CoinSanity.option_coin and self.options.coinbundlequantity >= 5:
                 self.multiworld.push_precollected(self.create_item("Movement Pack"))
 
-
-    def create_item(self, item: Union[str, ItemData]) -> DLCQuestItem:
+    def create_item(self, item: Union[str, ItemData], classification: ItemClassification = None) -> DLCQuestItem:
         if isinstance(item, str):
             item = item_table[item]
+        if classification is None:
+            classification = item.classification
 
-        return DLCQuestItem(item.name, item.classification, item.code, self.player)
+        return DLCQuestItem(item.name, classification, item.code, self.player)
+
+    def get_filler_item_name(self) -> str:
+        trap = self.multiworld.random.choice(items_by_group[Group.Trap])
+        return trap.name
 
     def fill_slot_data(self):
-        return {
-            "death_link": self.multiworld.death_link[self.player].value,
-            "ending_choice": self.multiworld.ending_choice[self.player].value,
-            "campaign": self.multiworld.campaign[self.player].value,
-            "coinsanity": self.multiworld.coinsanity[self.player].value,
-            "coinbundlerange": self.multiworld.coinbundlequantity[self.player].value,
-            "item_shuffle": self.multiworld.item_shuffle[self.player].value,
-            "seed": self.multiworld.per_slot_randoms[self.player].randrange(99999999)
-        }
+        options_dict = self.options.as_dict(
+            "death_link", "ending_choice", "campaign", "coinsanity", "item_shuffle", "permanent_coins"
+        )
+        options_dict.update({
+            "coinbundlerange": self.options.coinbundlequantity.value,
+            "seed": self.random.randrange(99999999)
+        })
+        return options_dict
+
+    def collect(self, state: CollectionState, item: DLCQuestItem) -> bool:
+        change = super().collect(state, item)
+        if change:
+            suffix = item.coin_suffix
+            if suffix:
+                state.prog_items[self.player][suffix] += item.coins
+        return change
+
+    def remove(self, state: CollectionState, item: DLCQuestItem) -> bool:
+        change = super().remove(state, item)
+        if change:
+            suffix = item.coin_suffix
+            if suffix:
+                state.prog_items[self.player][suffix] -= item.coins
+        return change

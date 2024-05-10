@@ -1,8 +1,8 @@
 # Lufia II - Rise of the Sinistrals (Ancient Cave)
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What does randomization do to this game?
@@ -49,11 +49,13 @@ Your Party Leader will hold up the item they received when not in a fight or in 
 - Customize the multiworld item pool. (By default, your pool is filled with random blue chest items, but you can place
   any cave item you want instead)
 - Customize start inventory, i.e., begin every run with certain items or spells of your choice
-- Adjust how much EXP is gained from enemies
+- Adjust how much EXP and gold is gained from enemies
 - Randomize enemy movement patterns, enemy sprites, and which enemy types can appear at which floor numbers
+- Option to make shops appear in the cave so that you have a way to spend your hard-earned gold
 - Option to shuffle your party members and/or capsule monsters into the multiworld, meaning that someone will have to
-  find them in order to unlock them for you to use. While cave diving, you can add newly unlocked members to your party
-  by using the character items from your inventory
+  find them in order to unlock them for you to use. While cave diving, you can add or remove unlocked party members by
+  using the character items from your inventory. There's also an option to allow inactive characters to gain some EXP,
+  so that new party members added during a run don't have to start off at a low level
 
 ###### Quality of life:
 
@@ -75,7 +77,7 @@ Your Party Leader will hold up the item they received when not in a fight or in 
 
 ###### Bug fixes:
 
-- Vanilla game bugs that could result in softlocks or save file corruption have been fixed
+- Vanilla game bugs that could result in anomalous floors, softlocks, or save file corruption have been fixed
 - (optional) Bugfix for the algorithm that determines the item pool for red chest gear. Enabling this allows the cave to
   generate shields, headgear, rings, and jewels in red chests even after floor B9
 - (optional) Bugfix for the outlandish cravings of capsule monsters in the US version. Enabling this makes feeding work

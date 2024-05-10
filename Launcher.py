@@ -50,17 +50,22 @@ def open_host_yaml():
 def open_patch():
     suffixes = []
     for c in components:
-        if isfile(get_exe(c)[-1]):
-            suffixes += c.file_identifier.suffixes if c.type == Type.CLIENT and \
-                                                      isinstance(c.file_identifier, SuffixIdentifier) else []
+        if c.type == Type.CLIENT and \
+                isinstance(c.file_identifier, SuffixIdentifier) and \
+                (c.script_name is None or isfile(get_exe(c)[-1])):
+            suffixes += c.file_identifier.suffixes
     try:
-        filename = open_filename('Select patch', (('Patches', suffixes),))
+        filename = open_filename("Select patch", (("Patches", suffixes),))
     except Exception as e:
-        messagebox('Error', str(e), error=True)
+        messagebox("Error", str(e), error=True)
     else:
         file, component = identify(filename)
         if file and component:
-            launch([*get_exe(component), file], component.cli)
+            exe = get_exe(component)
+            if exe is None or not isfile(exe[-1]):
+                exe = get_exe("Launcher")
+
+            launch([*exe, file], component.cli)
 
 
 def generate_yamls():
@@ -95,9 +100,9 @@ components.extend([
     # Functions
     Component("Open host.yaml", func=open_host_yaml),
     Component("Open Patch", func=open_patch),
-    Component("Generate Template Settings", func=generate_yamls),
+    Component("Generate Template Options", func=generate_yamls),
     Component("Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/8Z65BR2")),
-    Component("18+ Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4")),
+    Component("Unrated/18+ Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4")),
     Component("Browse Files", func=browse_files),
 ])
 
@@ -107,7 +112,7 @@ def identify(path: Union[None, str]):
         return None, None
     for component in components:
         if component.handles_file(path):
-            return path,  component
+            return path, component
         elif path == component.display_name or path == component.script_name:
             return None, component
     return None, None
@@ -117,25 +122,25 @@ def get_exe(component: Union[str, Component]) -> Optional[Sequence[str]]:
     if isinstance(component, str):
         name = component
         component = None
-        if name.startswith('Archipelago'):
+        if name.startswith("Archipelago"):
             name = name[11:]
-        if name.endswith('.exe'):
+        if name.endswith(".exe"):
             name = name[:-4]
-        if name.endswith('.py'):
+        if name.endswith(".py"):
             name = name[:-3]
         if not name:
             return None
         for c in components:
-            if c.script_name == name or c.frozen_name == f'Archipelago{name}':
+            if c.script_name == name or c.frozen_name == f"Archipelago{name}":
                 component = c
                 break
         if not component:
             return None
     if is_frozen():
-        suffix = '.exe' if is_windows else ''
-        return [local_path(f'{component.frozen_name}{suffix}')]
+        suffix = ".exe" if is_windows else ""
+        return [local_path(f"{component.frozen_name}{suffix}")] if component.frozen_name else None
     else:
-        return [sys.executable, local_path(f'{component.script_name}.py')]
+        return [sys.executable, local_path(f"{component.script_name}.py")] if component.script_name else None
 
 
 def launch(exe, in_terminal=False):
@@ -156,7 +161,7 @@ def launch(exe, in_terminal=False):
 
 
 def run_gui():
-    from kvui import App, ContainerLayout, GridLayout, Button, Label
+    from kvui import App, ContainerLayout, GridLayout, Button, Label, ScrollBox, Widget
     from kivy.uix.image import AsyncImage
     from kivy.uix.relativelayout import RelativeLayout
 
@@ -180,11 +185,16 @@ def run_gui():
             self.container = ContainerLayout()
             self.grid = GridLayout(cols=2)
             self.container.add_widget(self.grid)
-            self.grid.add_widget(Label(text="General"))
-            self.grid.add_widget(Label(text="Clients"))
-            button_layout = self.grid  # make buttons fill the window
+            self.grid.add_widget(Label(text="General", size_hint_y=None, height=40))
+            self.grid.add_widget(Label(text="Clients", size_hint_y=None, height=40))
+            tool_layout = ScrollBox()
+            tool_layout.layout.orientation = "vertical"
+            self.grid.add_widget(tool_layout)
+            client_layout = ScrollBox()
+            client_layout.layout.orientation = "vertical"
+            self.grid.add_widget(client_layout)
 
-            def build_button(component: Component):
+            def build_button(component: Component) -> Widget:
                 """
                 Builds a button widget for a given component.
 
@@ -195,31 +205,26 @@ def run_gui():
                     None. The button is added to the parent grid layout.
 
                 """
-                button = Button(text=component.display_name)
+                button = Button(text=component.display_name, size_hint_y=None, height=40)
                 button.component = component
                 button.bind(on_release=self.component_action)
                 if component.icon != "icon":
                     image = AsyncImage(source=icon_paths[component.icon],
                                        size=(38, 38), size_hint=(None, 1), pos=(5, 0))
-                    box_layout = RelativeLayout()
+                    box_layout = RelativeLayout(size_hint_y=None, height=40)
                     box_layout.add_widget(button)
                     box_layout.add_widget(image)
-                    button_layout.add_widget(box_layout)
-                else:
-                    button_layout.add_widget(button)
+                    return box_layout
+                return button
 
             for (tool, client) in itertools.zip_longest(itertools.chain(
                     self._tools.items(), self._miscs.items(), self._adjusters.items()), self._clients.items()):
                 # column 1
                 if tool:
-                    build_button(tool[1])
-                else:
-                    button_layout.add_widget(Label())
+                    tool_layout.layout.add_widget(build_button(tool[1]))
                 # column 2
                 if client:
-                    build_button(client[1])
-                else:
-                    button_layout.add_widget(Label())
+                    client_layout.layout.add_widget(build_button(client[1]))
 
             return self.container
 

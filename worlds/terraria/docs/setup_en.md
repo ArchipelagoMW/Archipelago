@@ -31,6 +31,8 @@ highly recommended to use utility mods and features to speed up gameplay, such a
     - (Can be used to break progression)
 - Reduced Grinding
 - Upgraded Research
+    - (WARNING: Do not use without Journey mode)
+    - (NOTE: If items you pick up aren't showing up in your inventory, check your research menu. This mod automatically researches certain items.)
 
 ## Configuring your YAML File
 
@@ -41,7 +43,7 @@ files are, and how they are used.
 
 ### Where do I get a YAML?
 
-You can use the [game settings page for Terraria](/games/Terraria/player-settings) here
+You can use the [game options page for Terraria](/games/Terraria/player-options) here
 on the Archipelago website to generate a YAML using a graphical interface.
 
 ## Joining an Archipelago Game in Terraria

@@ -1,0 +1,6 @@
+Disabled Locations:
+0x17FA2 (Mountain Bottom Floor Discard)
+0x17F33 (Rock Open Door)
+0x00FF8 (Caves Entry Panel)
+0x334E1 (Rock Control)
+0x2D77D (Caves Entry Door)

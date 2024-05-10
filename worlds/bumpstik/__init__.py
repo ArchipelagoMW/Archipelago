@@ -14,7 +14,7 @@ from worlds.generic.Rules import forbid_item
 
 class BumpStikWeb(WebWorld):
     tutorials = [Tutorial(
-        "Bumper Stickers Setup Tutorial",
+        "Bumper Stickers Setup Guide",
         "A guide to setting up the Archipelago Bumper Stickers software on your computer.",
         "English",
         "setup_en.md",
@@ -108,7 +108,7 @@ class BumpStikWorld(World):
                 item_pool += self._create_item_in_quantities(
                     name, frequencies[i])
 
-        item_delta = len(location_table) - len(item_pool) - 1
+        item_delta = len(location_table) - len(item_pool)
         if item_delta > 0:
             item_pool += self._create_item_in_quantities(
                 "Score Bonus", item_delta)
@@ -116,13 +116,16 @@ class BumpStikWorld(World):
         self.multiworld.itempool += item_pool
 
     def set_rules(self):
-        forbid_item(self.multiworld.get_location("Bonus Booster 5", self.player),
-                    "Booster Bumper", self.player)
-
-    def generate_basic(self):
-        self.multiworld.get_location("Level 5 - Cleared all Hazards", self.player).place_locked_item(
-            self.create_item(self.get_filler_item_name()))
-
+        for treasure_count in range(1, 33):
+            self.multiworld.get_location(f"Treasure Bumper {treasure_count}", self.player).access_rule = \
+                lambda state, treasure_held = treasure_count: state.has("Treasure Bumper", self.player, treasure_held)
+        for booster_count in range(1, 6):
+            self.multiworld.get_location(f"Bonus Booster {booster_count}", self.player).access_rule = \
+                lambda state, booster_held = booster_count: state.has("Booster Bumper", self.player, booster_held)
+        self.multiworld.get_location("Level 5 - Cleared all Hazards", self.player).access_rule = \
+            lambda state: state.has("Hazard Bumper", self.player, 25)
+            
         self.multiworld.completion_condition[self.player] = \
             lambda state: state.has("Booster Bumper", self.player, 5) and \
             state.has("Treasure Bumper", self.player, 32)
+

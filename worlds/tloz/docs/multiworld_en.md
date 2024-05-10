@@ -6,6 +6,7 @@
     - Bundled with Archipelago: [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
 - The BizHawk emulator. Versions 2.3.1 and higher are supported.
     - [BizHawk at TASVideos](https://tasvideos.org/BizHawk)
+- Your legally acquired US v1.0 PRG0 ROM file, probably named `Legend of Zelda, The (U) (PRG0) [!].nes`
 
 ## Optional Software
 
@@ -38,18 +39,18 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a config file?
 
-The Player Settings page on the website allows you to configure your personal settings and export a config file from
-them. Player settings page: [The Legend of Zelda Player Settings Page](/games/The%20Legend%20of%20Zelda/player-settings)
+The Player Options page on the website allows you to configure your personal options and export a config file from
+them. Player options page: [The Legend of Zelda Player Sptions Page](/games/The%20Legend%20of%20Zelda/player-options)
 
 ### Verifying your config file
 
 If you would like to validate your config file to make sure it works, you may do so on the YAML Validator page. YAML
-validator page: [YAML Validation page](/mysterycheck)
+validator page: [YAML Validation page](/check)
 
 ## Generating a Single-Player Game
 
-1. Navigate to the Player Settings page, configure your options, and click the "Generate Game" button.
-    - Player Settings page: [The Legend of Zelda Player Settings Page](/games/The%20Legend%20of%20Zelda/player-settings)
+1. Navigate to the Player Options page, configure your options, and click the "Generate Game" button.
+    - Player Options page: [The Legend of Zelda Player Options Page](/games/The%20Legend%20of%20Zelda/player-options)
 2. You will be presented with a "Seed Info" page.
 3. Click the "Create New Room" link.
 4. You will be presented with a server page, from which you can download your patch file.
