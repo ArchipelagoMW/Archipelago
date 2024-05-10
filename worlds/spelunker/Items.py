@@ -1,4 +1,4 @@
-from typing import Dict, Set, Tuple, NamedTuple, Optional
+from typing import Dict, Set, List, NamedTuple, Optional
 from BaseClasses import ItemClassification
 
 class ItemData(NamedTuple):
@@ -25,19 +25,18 @@ item_table: Dict[str, ItemData] = {
     "Golden Pyramid": ItemData("Events", None, ItemClassification.progression, 0)
 }
 
-filler_items: Tuple[str, ...] = (
+filler_items: List[str] = [
     "Money Bag",
     "Coin",
     "Diamond",
     "Miracle"
-)
-
-useful_items: Tuple[str, ...] = (
+]
+useful_items: List[str] = [
     "1-Up",
     "Multiplier",
     "Potion",
     "Invincibility"
-)
+]
 
 def get_item_names_per_category() -> Dict[str, Set[str]]:
     categories: Dict[str, Set[str]] = {}
