@@ -88,14 +88,14 @@ class SkipFirstVision(Toggle):
     """
     display_name = "Skip first Naija's vision"
 
-class ExcludeHardOrHiddenLocation(Toggle):
+class NoProgressionHardOrHiddenLocation(Toggle):
     """
     Make sure that there is no progression items at hard to get or hard to find locations.
-    Locations that will be excluded are very High location (that need beast form, soup and skill to get), every
+    Those locations that will be very High location (that need beast form, soup and skill to get), every
     location in the bubble cave, locations that need you to cross a false wall without any indication, Arnassi
     race, bosses and mini-bosses. Usefull for those that want a casual run.
     """
-    display_name = "Exclude hard or hidden locations"
+    display_name = "No progression in hard or hidden locations"
 
 class LightNeededToGetToDarkPlaces(DefaultOnToggle):
     """
@@ -137,7 +137,7 @@ class AquariaOptions(PerGameCommonOptions):
     light_needed_to_get_to_dark_places: LightNeededToGetToDarkPlaces
     bind_song_needed_to_get_under_rock_bulb: BindSongNeededToGetUnderRockBulb
     unconfine_home_water: UnconfineHomeWater
-    exclude_hard_or_hidden_locations: ExcludeHardOrHiddenLocation
+    no_progression_hard_or_hidden_locations: NoProgressionHardOrHiddenLocation
     ingredient_randomizer: IngredientRandomizer
     dish_randomizer: DishRandomizer
     aquarian_translation: AquarianTranslation

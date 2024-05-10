@@ -1134,57 +1134,82 @@ class AquariaRegions:
 
 
 
-    def __excluded_hard_or_hidden_location(self) -> None:
+    def __no_progression_hard_or_hidden_location(self) -> None:
         self.multiworld.get_location("Energy temple boss area, Fallen god tooth",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Cathedral boss area, beating Mithalan God",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Kelp forest boss area, beating Drunian God",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Sun temple boss area, beating Sun God",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Sunken city, bulb on the top of the boss area (boiler room)",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Home water, Nautilus Egg",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Energy temple blaster room, Blaster egg",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Mithalas castle, beating the priests",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Mermog cave, Piranha Egg",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Octopus cave, Dumbo Egg",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("King Jellyfish cave, bulb in the right path from King Jelly",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("King Jellyfish cave, Jellyfish Costume",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Final boss area, bulb in the boss third form room",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Sun Worm path, first cliff bulb",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Sun Worm path, second cliff bulb",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("The veil top right area, bulb in the top of the water fall",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Bubble cave, bulb in the left cave wall",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Bubble cave, bulb in the right cave wall (behind the ice cristal)",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Bubble cave, Verse egg",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Kelp Forest bottom left area, bulb close to the spirit cristals",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Kelp forest bottom left area, Walker baby",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Sun temple, Sun key",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("The body bottom area, Mutant Costume",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Sun temple, bulb in the hidden room of the right part",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Arnassi ruins, Arnassi Armor",
-                                     self.player).progress_type = LocationProgressType.EXCLUDED
+                                     self.player).item_rule =\
+            lambda item: item.classification != ItemClassification.progression
 
     def adjusting_rules(self, options: AquariaOptions) -> None:
         """
@@ -1211,18 +1236,18 @@ class AquariaRegions:
         if options.unconfine_home_water.value in [0, 1]:
             add_rule(self.multiworld.get_entrance("Home Water to Home water transturtle room", self.player),
                      lambda state: _has_bind_song(state, self.player))
-        if options.early_energy_form:
-            add_rule(self.multiworld.get_entrance("Home Water to Home water transturtle room", self.player),
-                     lambda state: _has_energy_form(state, self.player))
         if options.unconfine_home_water.value in [0, 2]:
             add_rule(self.multiworld.get_entrance("Home Water to Open water top left area", self.player),
                      lambda state: _has_bind_song(state, self.player) and _has_energy_form(state, self.player))
         if options.early_energy_form:
+            add_rule(self.multiworld.get_entrance("Home Water to Home water transturtle room", self.player),
+                     lambda state: _has_energy_form(state, self.player))
+        if options.early_energy_form:
             add_rule(self.multiworld.get_entrance("Home Water to Open water top left area", self.player),
                      lambda state: _has_energy_form(state, self.player))
 
-        if options.exclude_hard_or_hidden_locations:
-            self.__excluded_hard_or_hidden_location()
+        if options.no_progression_hard_or_hidden_locations:
+            self.__no_progression_hard_or_hidden_location()
 
     def __add_home_water_regions_to_world(self) -> None:
         """
