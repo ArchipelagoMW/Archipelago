@@ -100,7 +100,18 @@ class Yugioh06World(World):
         self.is_draft_mode = False
 
     def create_item(self, name: str) -> Item:
-        return Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
+        classification: ItemClassification = ItemClassification.progression
+        if name == "5000DP":
+            classification = ItemClassification.filler
+        if name in useful:
+            classification = ItemClassification.useful
+        return Item(name, classification, self.item_name_to_id[name], self.player)
+
+    def create_filler(self) -> Item:
+        return self.create_item("5000DP")
+
+    def get_filler_item_name(self) -> str:
+        return "5000DP"
 
     def create_items(self):
         start_inventory = self.options.start_inventory.value.copy()
@@ -117,26 +128,19 @@ class Yugioh06World(World):
         for name in items:
             if name in excluded_items or name in start_inventory:
                 continue
-            item = Yugioh2006Item(
-                name,
-                ItemClassification.useful if name in useful else ItemClassification.progression,
-                self.item_name_to_id[name],
-                self.player
-            )
+            item = self.create_item(name)
             item_pool.append(item)
 
-        while len(item_pool) < len([l for l in self.location_name_to_id if l not in self.removed_challenges]):
-            item = Yugioh2006Item(
-                "5000DP",
-                ItemClassification.filler,
-                self.item_name_to_id["5000DP"],
-                self.player
-            )
-            item_pool.append(item)
+        needed_item_pool_size = sum(l not in self.removed_challenges for l in self.location_name_to_id)
+        needed_filler_amount = needed_item_pool_size - len(item_pool)
+        item_pool += [
+            self.create_item("5000DP")
+            for _ in range(needed_filler_amount)
+        ]
 
         self.multiworld.itempool += item_pool
 
-        for challenge in get_beat_challenge_events(self).keys():
+        for challenge in get_beat_challenge_events(self):
             item = Yugioh2006Item(
                 "Challenge Beaten",
                 ItemClassification.progression,
@@ -145,7 +149,6 @@ class Yugioh06World(World):
             )
             location = self.multiworld.get_location(challenge, self.player)
             location.place_locked_item(item)
-            location.event = True
 
         for opponent in self.campaign_opponents:
             for location_name, event in get_opponent_locations(opponent).items():
@@ -158,7 +161,6 @@ class Yugioh06World(World):
                     )
                     location = self.multiworld.get_location(location_name, self.player)
                     location.place_locked_item(item)
-                    location.event = True
 
         for booster in booster_packs:
             for location_name, content in get_booster_locations(booster).items():
@@ -170,7 +172,6 @@ class Yugioh06World(World):
                 )
                 location = self.multiworld.get_location(location_name, self.player)
                 location.place_locked_item(item)
-                location.event = True
 
         structure_deck = self.options.structure_deck.current_key
         for location_name, content in get_deck_content_locations(structure_deck).items():
@@ -182,7 +183,7 @@ class Yugioh06World(World):
             )
             location = self.multiworld.get_location(location_name, self.player)
             location.place_locked_item(item)
-            location.event = True
+
         for event in collection_events:
             item = Yugioh2006Item(
                 event,
@@ -192,7 +193,6 @@ class Yugioh06World(World):
             )
             location = self.multiworld.get_location(event, self.player)
             location.place_locked_item(item)
-            location.event = True
 
     def create_regions(self):
         structure_deck = self.options.structure_deck.current_key

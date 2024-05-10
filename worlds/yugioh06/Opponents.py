@@ -1,4 +1,4 @@
-from typing import NamedTuple, List, Optional, Tuple
+from typing import NamedTuple, List, Optional, Dict, Union
 
 from BaseClasses import MultiWorld
 from worlds.yugioh06 import tier_1_opponents, item_to_index
@@ -212,10 +212,11 @@ def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int], rando
     return recreation
 
 
-def get_opponent_locations(opponent: OpponentData) -> dict[str, str]:
+def get_opponent_locations(opponent: OpponentData) -> Dict[str, Optional[Union[str, int]]]:
     location = {opponent.name + " Beaten": "Tier " + str(opponent.tier) + " Beaten"}
     if opponent.tier > 4 and opponent.column != 5:
         name = "Campaign Tier 5: Column " + str(opponent.column) + " Win"
+        # return a int instead so a item can be placed at this location later
         location[name] = special[name]
     for info in opponent.campaignInfo:
         location[opponent.name + "-> " + info] = info
