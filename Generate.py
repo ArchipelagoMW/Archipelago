@@ -378,7 +378,7 @@ def roll_linked_options(weights: dict) -> dict:
     return weights
 
 
-def roll_triggers(weights: dict, triggers: list) -> dict:
+def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
     weights = copy.deepcopy(weights)  # make sure we don't write back to other weights sets in same_settings
     weights["_Generator_Version"] = Utils.__version__
     for i, option_set in enumerate(triggers):
@@ -401,7 +401,7 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
                     if category_name:
                         currently_targeted_weights = currently_targeted_weights[category_name]
                     update_weights(currently_targeted_weights, category_options, "Triggered", option_set["option_name"])
-
+            valid_keys.add(key)
         except Exception as e:
             raise ValueError(f"Your trigger number {i + 1} is invalid. "
                              f"Please fix your triggers.") from e
@@ -415,6 +415,7 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
                 player_option = option.from_any(game_weights[option_key])
             else:
                 player_option = option.from_any(get_choice(option_key, game_weights))
+            del game_weights[option_key]
         else:
             player_option = option.from_any(option.default)  # call the from_any here to support default "random"
         setattr(ret, option_key, player_option)
@@ -428,8 +429,9 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
 
+    valid_trigger_names = set()
     if "triggers" in weights:
-        weights = roll_triggers(weights, weights["triggers"])
+        weights = roll_triggers(weights, weights["triggers"], valid_trigger_names)
 
     requirements = weights.get("requires", {})
     if requirements:
@@ -469,7 +471,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         raise Exception(f"Merge tag cannot be used outside of trigger contexts.")
 
     if "triggers" in game_weights:
-        weights = roll_triggers(weights, game_weights["triggers"])
+        weights = roll_triggers(weights, game_weights["triggers"], valid_trigger_names)
         game_weights = weights[ret.game]
 
     ret.name = get_choice('name', weights)
@@ -478,6 +480,10 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
 
     for option_key, option in world_type.options_dataclass.type_hints.items():
         handle_option(ret, game_weights, option_key, option, plando_options)
+    for option_key in game_weights:
+        if option_key in {"triggers", *valid_trigger_names}:
+            continue
+        logging.warning(f"{option_key} is not a valid option name for {ret.game} and is not present in triggers.")
     if PlandoOptions.items in plando_options:
         ret.plando_items = game_weights.get("plando_items", [])
     if ret.game == "A Link to the Past":
