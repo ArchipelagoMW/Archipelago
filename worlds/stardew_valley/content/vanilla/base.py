@@ -1,6 +1,6 @@
 from ..game_content import ContentPack, StardewContent
 from ...data.artisan import MachineSource
-from ...data.game_item import ItemTag, CustomSource
+from ...data.game_item import ItemTag, CustomRuleSource, GameItem
 from ...data.harvest import HarvestFruitTreeSource, HarvestCropSource
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.craftable_names import WildSeeds
@@ -34,10 +34,8 @@ non_juiceable_vegetables = (Vegetable.hops, Vegetable.tea_leaves, Vegetable.whea
 class BaseGameContentPack(ContentPack):
 
     def harvest_source_hook(self, content: StardewContent):
-        # TODO should make a fake item sourced on primary coffee bean sources (monsters & travelling merchant) and real coffee bean sourced harvesting so this
-        #  tag is not needed
-        content.tag_item(Seed.coffee, ItemTag.CROPSANITY, ItemTag.CROPSANITY_SEED)
-        content.source_item(Seed.coffee, CustomSource())
+        coffee_starter = content.game_items[Seed.coffee_starter]
+        content.game_items[Seed.coffee_starter] = GameItem(Seed.coffee, sources=coffee_starter.sources, tags=coffee_starter.tags)
 
         content.untag_item(WildSeeds.ancient, ItemTag.CROPSANITY_SEED)
 
@@ -133,11 +131,16 @@ base_game = BaseGameContentPack(
         Fruit.strawberry: (HarvestCropSource(seed=Seed.strawberry, seasons=(Season.spring,)),),
         Fruit.sweet_gem_berry: (HarvestCropSource(seed=Seed.rare_seed, seasons=(Season.fall,)),),
         Fruit.ancient_fruit: (HarvestCropSource(seed=WildSeeds.ancient, seasons=(Season.spring, Season.summer, Season.fall,)),),
+
+        Seed.coffee_starter: (CustomRuleSource(),),  # from monsters and travelling merchant
+        Seed.coffee: (HarvestCropSource(seed=Seed.coffee_starter, seasons=(Season.spring, Season.summer,)),),
+
+        Vegetable.tea_leaves: (CustomRuleSource(),),  # friendship with Caroline
     },
     artisan_good_sources={
         Beverage.beer: (MachineSource(item=Vegetable.wheat, machine=Machine.keg),),
         # Ingredient.vinegar: (MachineSource(item=Ingredient.rice, machine=Machine.keg),),
-        Beverage.coffee: (MachineSource(item=Seed.coffee, machine=Machine.keg),),
+        Beverage.coffee: (MachineSource(item=Seed.coffee, machine=Machine.keg), CustomRuleSource(),),  # Coffee machine
         ArtisanGood.green_tea: (MachineSource(item=Vegetable.tea_leaves, machine=Machine.keg),),
         ArtisanGood.mead: (MachineSource(item=ArtisanGood.honey, machine=Machine.keg),),
         ArtisanGood.pale_ale: (MachineSource(item=Vegetable.hops, machine=Machine.keg),),

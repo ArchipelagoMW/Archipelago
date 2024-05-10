@@ -64,7 +64,7 @@ AbilityLogicMixin, SpecialOrderLogicMixin, MonsterLogicMixin]]):
             SpecialOrder.gus_famous_omelet: self.logic.has(AnimalProduct.any_egg),
             SpecialOrder.crop_order: self.logic.ability.can_farm_perfectly() & self.logic.received(Event.can_ship_items),
             SpecialOrder.community_cleanup: self.logic.skill.can_crab_pot,
-            SpecialOrder.the_strong_stuff: self.logic.artisan.can_keg(Vegetable.potato),
+            SpecialOrder.the_strong_stuff: self.logic.has(ArtisanGood.specific_juice(Vegetable.potato)),
             SpecialOrder.pierres_prime_produce: self.logic.ability.can_farm_perfectly(),
             SpecialOrder.robins_project: self.logic.relationship.can_meet(NPC.robin) & self.logic.ability.can_chop_perfectly() &
                                          self.logic.has(Material.hardwood),

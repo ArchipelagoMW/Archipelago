@@ -9,6 +9,9 @@ class Seed:
     cactus = "Cactus Seeds"
     carrot = "Carrot Seeds"
     cauliflower = "Cauliflower Seeds"
+    coffee_starter = "Coffee Bean (Starter)"
+    """This item does not really exist and should never end up being displayed. 
+    It's there to patch the loop in logic because "Coffee Bean" is both the seed and the crop."""
     coffee = "Coffee Bean"
     corn = "Corn Seeds"
     cranberry = "Cranberry Seeds"

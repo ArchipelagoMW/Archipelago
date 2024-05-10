@@ -6,6 +6,7 @@ from .base_logic import BaseLogic, BaseLogicMixin
 from .received_logic import ReceivedLogicMixin
 from ..stardew_rule import StardewRule, HasProgressionPercent, True_
 
+ONE_YEAR = 4
 MAX_MONTHS = 12
 MONTH_COEFFICIENT = 24 // MAX_MONTHS
 

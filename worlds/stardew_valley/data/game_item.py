@@ -39,7 +39,7 @@ class PermanentSource(ItemSource):
 
 
 @dataclass(**source_dataclass_args)
-class CustomSource(ItemSource):
+class CustomRuleSource(ItemSource):
     """A source just to make sure the item is not pruned, since its rule will be implemented directly in logic."""
     ...
 
@@ -59,4 +59,4 @@ class GameItem:
 
     @property
     def has_custom_rule(self):
-        return any(isinstance(source, CustomSource) for source in self.sources)
+        return any(isinstance(source, CustomRuleSource) for source in self.sources)

@@ -35,7 +35,7 @@ from .shipping_logic import ShippingLogicMixin
 from .skill_logic import SkillLogicMixin
 from .source_logic import SourceLogicMixin
 from .special_order_logic import SpecialOrderLogicMixin
-from .time_logic import TimeLogicMixin
+from .time_logic import TimeLogicMixin, ONE_YEAR
 from .tool_logic import ToolLogicMixin
 from .traveling_merchant_logic import TravelingMerchantLogicMixin
 from .wallet_logic import WalletLogicMixin
@@ -302,11 +302,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Material.sap: self.ability.can_chop_trees(),
             Material.stone: self.tool.has_tool(Tool.pickaxe),
             Material.wood: self.tool.has_tool(Tool.axe),
-            Meal.bread: self.money.can_spend_at(Region.saloon, 120),
             Meal.ice_cream: (self.season.has(Season.summer) & self.money.can_spend_at(Region.town, 250)) | self.money.can_spend_at(Region.oasis, 240),
-            Meal.pizza: self.money.can_spend_at(Region.saloon, 600),
-            Meal.salad: self.money.can_spend_at(Region.saloon, 220),
-            Meal.spaghetti: self.money.can_spend_at(Region.saloon, 240),
             Meal.strange_bun: self.relationship.has_hearts(NPC.shane, 7) & self.has(Ingredient.wheat_flour) & self.has(Fish.periwinkle) & self.has(ArtisanGood.void_mayonnaise),
             MetalBar.copper: self.can_smelt(Ore.copper),
             MetalBar.gold: self.can_smelt(Ore.gold),
@@ -322,7 +318,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             RetainingSoil.basic: self.money.can_spend_at(Region.pierre_store, 100),
             RetainingSoil.quality: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             Sapling.tea: self.relationship.has_hearts(NPC.caroline, 2) & self.has(Material.fiber) & self.has(Material.wood),
-            Seed.coffee: self.traveling_merchant.has_days(3) & self.crop.can_plant_and_grow_item((Season.spring, Season.summer)),
+            Seed.coffee_starter: self.traveling_merchant.has_days(3) & self.monster.can_kill(Monster.dust_sprite, ONE_YEAR),
             SpeedGro.basic: self.money.can_spend_at(Region.pierre_store, 100),
             SpeedGro.deluxe: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             Trash.broken_cd: self.skill.can_crab_pot,
@@ -356,7 +352,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             if not game_item.has_custom_rule
         }
 
-        for item in set(self.content.game_items.keys()).intersection(self.registry.item_rules.keys()):
+        for item in set(content_rules.keys()).intersection(self.registry.item_rules.keys()):
             logger.warning(f"Rule for {item} already exists in the registry, overwriting it.")
 
         self.registry.item_rules.update(content_rules)

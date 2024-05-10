@@ -6,7 +6,7 @@ from ...data.shop import ShopSource
 from ...strings.book_names import Book
 from ...strings.crop_names import Fruit
 from ...strings.fish_names import WaterItem
-from ...strings.food_names import Beverage
+from ...strings.food_names import Beverage, Meal
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.fruit_tree_names import Sapling
 from ...strings.material_names import Material
@@ -188,9 +188,10 @@ pelican_town = ContentPack(
 
         # Saloon
         Beverage.beer: (ShopSource(money_price=400, shop_region=Region.saloon),),
-        # Meal.salad: (ShopSource(money_price=220, shop_region=Region.saloon),),
-        # Meal.bread: (ShopSource(money_price=100, shop_region=Region.saloon),),
-        # Meal.spaghetti: (ShopSource(money_price=240, shop_region=Region.saloon),),
+        Meal.salad: (ShopSource(money_price=220, shop_region=Region.saloon),),
+        Meal.bread: (ShopSource(money_price=100, shop_region=Region.saloon),),
+        Meal.spaghetti: (ShopSource(money_price=240, shop_region=Region.saloon),),
+        Meal.pizza: (ShopSource(money_price=600, shop_region=Region.saloon),),
         Beverage.coffee: (ShopSource(money_price=300, shop_region=Region.saloon),),
 
         # Books
