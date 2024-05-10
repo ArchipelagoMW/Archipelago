@@ -4,6 +4,7 @@ from worlds.AutoWorld import World
 from .Items import itemList
 from .Arrays import level_locations, difficulty_convert
 
+
 def prog_count(state, player):
     count = 0
     for i in range(1, 14):

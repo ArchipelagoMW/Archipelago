@@ -1,6 +1,6 @@
 import typing
 
-from BaseClasses import MultiWorld, Region, Entrance
+from BaseClasses import Region, Entrance
 from worlds.AutoWorld import World
 from .Locations import GLLocation, valleyOfFire, daggerPeak, cliffsOfDesolation, lostCave, volcanicCavern \
     , dragonsLair, castleCourtyard, dungeonOfTorment, towerArmory \
@@ -11,8 +11,11 @@ from .Locations import GLLocation, valleyOfFire, daggerPeak, cliffsOfDesolation,
     , gatesOfTheUnderworld
 from .Rules import prog_count, name_convert
 
+if typing.TYPE_CHECKING:
+    from . import GauntletLegendsWorld
 
-def create_regions(world: "World"):
+
+def create_regions(world: "GauntletLegendsWorld"):
     world.multiworld.regions.append(Region("Menu", world.player, world.multiworld))
 
     create_region(world, "Valley of Fire", valleyOfFire)

@@ -1,4 +1,3 @@
-import binascii
 import traceback
 import zlib
 import io
@@ -7,9 +6,8 @@ import os
 import Utils
 from settings import get_settings
 from worlds.Files import APDeltaPatch
-from .Arrays import level_locations, level_size, level_address, item_dict, level_header, level_obelisk
+from .Arrays import level_locations, level_size, level_address, item_dict, level_header
 from worlds.AutoWorld import World
-from .Locations import obelisks
 from .Rules import name_convert
 
 
