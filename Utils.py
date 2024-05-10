@@ -201,7 +201,7 @@ def cache_path(*path: str) -> str:
 def output_path(*path: str) -> str:
     if hasattr(output_path, 'cached_path'):
         return os.path.join(output_path.cached_path, *path)
-    output_path.cached_path = user_path(get_options()["general_options"]["output_path"])
+    output_path.cached_path = user_path(get_settings()["general_options"]["output_path"])
     path = os.path.join(output_path.cached_path, *path)
     os.makedirs(os.path.dirname(path), exist_ok=True)
     return path
@@ -619,6 +619,8 @@ def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: ty
 
 def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typing.Sequence[str]]], suggest: str = "") \
         -> typing.Optional[str]:
+    logging.info(f"Opening file input dialog for {title}.")
+
     def run(*args: str):
         return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
 
