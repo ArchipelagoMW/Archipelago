@@ -31,6 +31,6 @@ class CaveLevel(Choice):
 class SpelunkerOptions(PerGameCommonOptions):
     hidden_items: HiddenLocs
     cave_color: CaveLevel
-    energy_link: EnergyLink
-    energy_link_percent: EnergyLinkPercent
+    #energy_link: EnergyLink
+    #energy_link_percent: EnergyLinkPercent
     death_link: DeathLink
