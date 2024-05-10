@@ -486,10 +486,8 @@ item_name_groups[ItemGroupNames.ROBO_UNITS] = robo_units = [
 item_name_groups[ItemGroupNames.STARGATE_UNITS] = stargate_units = [
     ItemNames.PHOENIX, ItemNames.MIRAGE, ItemNames.CORSAIR,
     ItemNames.VOID_RAY, ItemNames.DESTROYER,
-    ItemNames.SCOUT,
     ItemNames.CARRIER,
-    ItemNames.TEMPEST,
-    ItemNames.MOTHERSHIP,
+    ItemNames.TEMPEST, ItemNames.SCOUT, ItemNames.MOTHERSHIP,
     ItemNames.ARBITER, ItemNames.ORACLE,
 ]
 item_name_groups[ItemGroupNames.PROTOSS_BUILDINGS] = protoss_buildings = [
