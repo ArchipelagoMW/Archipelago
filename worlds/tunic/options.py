@@ -147,6 +147,7 @@ class ShuffleLadders(Toggle):
 
 @dataclass
 class TunicOptions(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
     sword_progression: SwordProgression
     start_with_sword: StartWithSword
     keys_behind_bosses: KeysBehindBosses
@@ -162,4 +163,3 @@ class TunicOptions(PerGameCommonOptions):
     lanternless: Lanternless
     maskless: Maskless
     laurels_location: LaurelsLocation
-    start_inventory_from_pool: StartInventoryPool
