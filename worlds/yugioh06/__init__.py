@@ -205,15 +205,15 @@ class Yugioh06World(World):
         ]
 
         self.get_entrance('to Campaign') \
-            .connect(self.multiworld.get_region('Campaign', self.player))
+            .connect(self.get_region('Campaign'))
         self.get_entrance('to Challenges') \
-            .connect(self.multiworld.get_region('Challenges', self.player))
+            .connect(self.get_region('Challenges'))
         self.get_entrance('to Card Shop') \
-            .connect(self.multiworld.get_region('Card Shop', self.player))
+            .connect(self.get_region('Card Shop'))
         self.get_entrance('to Deck Edit') \
-            .connect(self.multiworld.get_region('Structure Deck', self.player))
+            .connect(self.get_region('Structure Deck'))
 
-        campaign = self.multiworld.get_region('Campaign', self.player)
+        campaign = self.get_region('Campaign')
         # Campaign Opponents
         for opponent in self.campaign_opponents:
             unlock_item = "Campaign Tier " + str(opponent.tier) + " Column " + str(opponent.column)
@@ -259,7 +259,7 @@ class Yugioh06World(World):
             entrance.connect(region)
             self.multiworld.regions.append(region)
 
-        card_shop = self.multiworld.get_region('Card Shop', self.player)
+        card_shop = self.get_region('Card Shop')
         # Booster Contents
         for booster in booster_packs:
             region = create_region(self,
@@ -270,7 +270,7 @@ class Yugioh06World(World):
             entrance.connect(region)
             self.multiworld.regions.append(region)
 
-        challenge_region = self.multiworld.get_region('Challenges', self.player)
+        challenge_region = self.get_region('Challenges')
         # Challenges
         for challenge, lid in (Limited_Duels | Theme_Duels).items():
             if challenge in self.removed_challenges:
@@ -327,7 +327,7 @@ class Yugioh06World(World):
             opponents = tier_1_opponents
 
         if self.options.structure_deck.current_key == "random_deck":
-            self.options.structure_deck.value = self.random.choice([0, 1, 2, 3, 4, 5])
+            self.options.structure_deck.value = self.random.randint(0, 5)
         for item in self.options.start_inventory:
             if item in opponents:
                 self.starting_opponent = item
@@ -335,10 +335,10 @@ class Yugioh06World(World):
                 self.starting_booster = item
         if not self.starting_opponent:
             self.starting_opponent = self.random.choice(opponents)
-        self.multiworld.push_precollected(self.create_item(self.starting_opponent))
+            self.multiworld.push_precollected(self.create_item(self.starting_opponent))
         if not self.starting_booster:
             self.starting_booster = self.random.choice(boosters)
-        self.multiworld.push_precollected(self.create_item(self.starting_booster))
+            self.multiworld.push_precollected(self.create_item(self.starting_booster))
         banlist = self.options.banlist.value
         self.multiworld.push_precollected(self.create_item(Banlist_Items[banlist]))
 
