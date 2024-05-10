@@ -1,14 +1,17 @@
-from typing import List, Dict, Tuple, Optional, Callable, NamedTuple, Union
+from typing import List, Dict, Tuple, Optional, Callable, NamedTuple, Union, TYPE_CHECKING
 import math
 
-from BaseClasses import MultiWorld, Region, Entrance, Location, CollectionState
+from BaseClasses import Region, Entrance, Location, CollectionState
 from .Locations import LocationData
 from .Options import get_option_value, MissionOrder, get_enabled_campaigns, campaign_depending_orders, \
     GridTwoStartPositions
 from .MissionTables import MissionInfo, mission_orders, vanilla_mission_req_table, \
     MissionPools, SC2Campaign, get_goal_location, SC2Mission, MissionConnection
 from .PoolFilter import filter_missions
-from worlds.AutoWorld import World
+
+
+if TYPE_CHECKING:
+    from . import SC2World
 
 
 class SC2MissionSlot(NamedTuple):
@@ -17,7 +20,7 @@ class SC2MissionSlot(NamedTuple):
 
 
 def create_regions(
-    world: World, locations: Tuple[LocationData, ...], location_cache: List[Location]
+    world: 'SC2World', locations: Tuple[LocationData, ...], location_cache: List[Location]
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
     """
     Creates region connections by calling the multiworld's `connect()` methods
@@ -36,7 +39,7 @@ def create_regions(
         return create_structured_regions(world, locations, location_cache, mission_order_type)
 
 def create_vanilla_regions(
-    world: World,
+    world: 'SC2World',
     locations: Tuple[LocationData, ...],
     location_cache: List[Location],
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
@@ -268,7 +271,7 @@ def create_vanilla_regions(
 
 
 def create_grid_regions(
-    world: World,
+    world: 'SC2World',
     locations: Tuple[LocationData, ...],
     location_cache: List[Location],
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
@@ -362,6 +365,7 @@ def create_grid_regions(
     final_mission_id = final_mission.id
     # Changing the completion condition for alternate final missions into an event
     final_location = get_goal_location(final_mission)
+    assert final_location, f"Unable to find a goal location for mission {final_mission}"
     setup_final_location(final_location, location_cache)
 
     return {SC2Campaign.GLOBAL: mission_req_table}, final_mission_id, final_location
@@ -376,7 +380,7 @@ def make_grid_connect_rule(
 
 
 def create_structured_regions(
-    world: World,
+    world: 'SC2World',
     locations: Tuple[LocationData, ...],
     location_cache: List[Location],
     mission_order_type: int,
@@ -405,20 +409,20 @@ def create_structured_regions(
 
             removals = len(mission_order[campaign]) - campaign_mission_pool_size
 
-            for mission in mission_order[campaign]:
+            for fill_mission in mission_order[campaign]:
                 # Removing extra missions if mission pool is too small
-                if 0 < mission.removal_priority <= removals:
+                if 0 < fill_mission.removal_priority <= removals:
                     mission_slots.append(SC2MissionSlot(campaign, None))
-                elif mission.type == MissionPools.FINAL:
+                elif fill_mission.type == MissionPools.FINAL:
                     if campaign == final_mission.campaign:
                         # Campaign is elected to be goal
                         mission_slots.append(SC2MissionSlot(campaign, final_mission))
                     else:
                         # Not the goal, find the most difficult mission in the pool and set the difficulty
-                        campaign_difficulty = max(mission.pool for mission in campaign_mission_pool)
+                        campaign_difficulty = max(fill_mission.pool for fill_mission in campaign_mission_pool)
                         mission_slots.append(SC2MissionSlot(campaign, campaign_difficulty))
                 else:
-                    mission_slots.append(SC2MissionSlot(campaign, mission.type))
+                    mission_slots.append(SC2MissionSlot(campaign, fill_mission.type))
     else:
         order = mission_order[SC2Campaign.GLOBAL]
         # Determining if missions must be removed
@@ -426,14 +430,14 @@ def create_structured_regions(
         removals = len(order) - mission_pool_size
 
         # Initial fill out of mission list and marking All-In mission
-        for mission in order:
+        for fill_mission in order:
             # Removing extra missions if mission pool is too small
-            if 0 < mission.removal_priority <= removals:
+            if 0 < fill_mission.removal_priority <= removals:
                 mission_slots.append(SC2MissionSlot(SC2Campaign.GLOBAL, None))
-            elif mission.type == MissionPools.FINAL:
+            elif fill_mission.type == MissionPools.FINAL:
                 mission_slots.append(SC2MissionSlot(SC2Campaign.GLOBAL, final_mission))
             else:
-                mission_slots.append(SC2MissionSlot(SC2Campaign.GLOBAL, mission.type))
+                mission_slots.append(SC2MissionSlot(SC2Campaign.GLOBAL, fill_mission.type))
 
     no_build_slots = []
     easy_slots = []
@@ -597,6 +601,7 @@ def create_structured_regions(
     final_mission_id = final_mission.id
     # Changing the completion condition for alternate final missions into an event
     final_location = get_goal_location(final_mission)
+    assert final_location, f"Unable to find a goal location for mission {final_mission}"
     setup_final_location(final_location, location_cache)
 
     return mission_req_table, final_mission_id, final_location
@@ -620,7 +625,7 @@ def create_location(player: int, location_data: LocationData, region: Region,
     return location
 
 
-def create_region(world: World, locations_per_region: Dict[str, List[LocationData]],
+def create_region(world: 'SC2World', locations_per_region: Dict[str, List[LocationData]],
                   location_cache: List[Location], name: str) -> Region:
     region = Region(name, world.player, world.multiworld)
 
@@ -632,7 +637,7 @@ def create_region(world: World, locations_per_region: Dict[str, List[LocationDat
     return region
 
 
-def connect(world: World, used_names: Dict[str, int], source: str, target: str,
+def connect(world: 'SC2World', used_names: Dict[str, int], source: str, target: str,
             rule: Optional[Callable] = None):
     source_region = world.get_region(source)
     target_region = world.get_region(target)

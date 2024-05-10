@@ -118,7 +118,7 @@ class SC2Manager(GameManager):
             if self.ctx.mission_req_table:
                 self.last_checked_locations = self.ctx.checked_locations.copy()
                 self.first_check = False
-                self.first_mission = get_first_mission(self.ctx.mission_req_table)
+                self.first_mission = get_first_mission(self.ctx.mission_req_table).mission_name
 
                 self.mission_id_to_button = {}
 
