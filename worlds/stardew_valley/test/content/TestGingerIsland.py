@@ -4,7 +4,7 @@ from ... import options
 from ...content import content_packs
 from ...data.artisan import MachineSource
 from ...strings.artisan_good_names import ArtisanGood
-from ...strings.crop_names import Fruit
+from ...strings.crop_names import Fruit, Vegetable
 from ...strings.fish_names import Fish
 from ...strings.machine_names import Machine
 from ...strings.villager_names import NPC
@@ -35,6 +35,11 @@ class TestGingerIsland(SVContentPackTestBase):
 
         self.assertIn(MachineSource(item=Fruit.pineapple, machine=Machine.keg), self.content.game_items[ArtisanGood.specific_wine(Fruit.pineapple)].sources)
         self.assertIn(MachineSource(item=Fruit.pineapple, machine=Machine.keg), self.content.game_items[ArtisanGood.wine].sources)
+
+    def test_ginger_island_vegetables_can_be_made_into_wines(self):
+        taro_root_juice_sources = self.content.game_items[ArtisanGood.specific_juice(Vegetable.taro_root)].sources
+        self.assertIn(MachineSource(item=Vegetable.taro_root, machine=Machine.keg), taro_root_juice_sources)
+        self.assertIn(MachineSource(item=Vegetable.taro_root, machine=Machine.keg), self.content.game_items[ArtisanGood.juice].sources)
 
 
 class TestWithoutGingerIslandE2E(SVTestBase):

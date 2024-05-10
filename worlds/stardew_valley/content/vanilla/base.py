@@ -4,8 +4,9 @@ from ...data.game_item import ItemTag, CustomSource
 from ...data.harvest import HarvestFruitTreeSource, HarvestCropSource
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.craftable_names import WildSeeds
-from ...strings.crop_names import Fruit, Vegetable, all_vegetables
+from ...strings.crop_names import Fruit, Vegetable
 from ...strings.flower_names import Flower
+from ...strings.food_names import Beverage
 from ...strings.forageable_names import all_edible_mushrooms, Mushroom, Forageable
 from ...strings.fruit_tree_names import Sapling
 from ...strings.machine_names import Machine
@@ -18,6 +19,15 @@ all_fruits = (
     Fruit.pineapple, Fruit.pomegranate, Fruit.powdermelon, Fruit.qi_fruit, Fruit.rhubarb, Forageable.salmonberry, Forageable.spice_berry, Fruit.starfruit,
     Fruit.strawberry
 )
+
+all_vegetables = (
+    Vegetable.amaranth, Vegetable.artichoke, Vegetable.beet, Vegetable.bok_choy, Vegetable.broccoli, Vegetable.carrot, Vegetable.cauliflower,
+    Vegetable.corn, Vegetable.eggplant, Forageable.fiddlehead_fern, Vegetable.garlic, Vegetable.green_bean, Vegetable.hops, Vegetable.kale,
+    Vegetable.parsnip, Vegetable.potato, Vegetable.pumpkin, Vegetable.radish, Vegetable.red_cabbage, Vegetable.summer_squash, Vegetable.taro_root,
+    Vegetable.tea_leaves, Vegetable.tomato, Vegetable.unmilled_rice, Vegetable.wheat, Vegetable.yam
+)
+
+non_juiceable_vegetables = (Vegetable.hops, Vegetable.tea_leaves, Vegetable.wheat)
 
 
 # This will hold items, skills and stuff that is available everywhere across the game, but not directly needing pelican town (crops, ore, foraging, etc.)
@@ -34,11 +44,7 @@ class BaseGameContentPack(ContentPack):
         for fruit in all_fruits:
             content.tag_item(fruit, ItemTag.FRUIT)
 
-        # TODO add Fiddlehead fern to vegetables
         for vegetable in all_vegetables:
-            if vegetable == Vegetable.taro_root:
-                continue
-
             content.tag_item(vegetable, ItemTag.VEGETABLE)
 
         for edible_mushroom in all_edible_mushrooms:
@@ -61,8 +67,10 @@ class BaseGameContentPack(ContentPack):
             content.source_item(jelly, MachineSource(item=fruit.name, machine=Machine.preserves_jar))
 
         for vegetable in tuple(content.find_tagged_items(ItemTag.VEGETABLE)):
-            juice = ArtisanGood.specific_juice(vegetable.name)
-            content.source_item(juice, MachineSource(item=vegetable.name, machine=Machine.keg))
+            if vegetable.name not in non_juiceable_vegetables:
+                juice = ArtisanGood.specific_juice(vegetable.name)
+                content.source_item(juice, MachineSource(item=vegetable.name, machine=Machine.keg))
+                content.source_item(ArtisanGood.juice, MachineSource(item=vegetable.name, machine=Machine.keg))
 
             pickles = ArtisanGood.specific_pickles(vegetable.name)
             content.source_item(pickles, MachineSource(item=vegetable.name, machine=Machine.preserves_jar))
@@ -125,5 +133,13 @@ base_game = BaseGameContentPack(
         Fruit.strawberry: (HarvestCropSource(seed=Seed.strawberry, seasons=(Season.spring,)),),
         Fruit.sweet_gem_berry: (HarvestCropSource(seed=Seed.rare_seed, seasons=(Season.fall,)),),
         Fruit.ancient_fruit: (HarvestCropSource(seed=WildSeeds.ancient, seasons=(Season.spring, Season.summer, Season.fall,)),),
+    },
+    artisan_good_sources={
+        Beverage.beer: (MachineSource(item=Vegetable.wheat, machine=Machine.keg),),
+        # Ingredient.vinegar: (MachineSource(item=Ingredient.rice, machine=Machine.keg),),
+        Beverage.coffee: (MachineSource(item=Seed.coffee, machine=Machine.keg),),
+        ArtisanGood.green_tea: (MachineSource(item=Vegetable.tea_leaves, machine=Machine.keg),),
+        ArtisanGood.mead: (MachineSource(item=ArtisanGood.honey, machine=Machine.keg),),
+        ArtisanGood.pale_ale: (MachineSource(item=Vegetable.hops, machine=Machine.keg),),
     }
 )

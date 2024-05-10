@@ -85,7 +85,6 @@ CombatLogicMixin, CropLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
 
         return self.logic.received(f"{skill} Level", level)
 
-
     @cache_self1
     def has_farming_level(self, level: int) -> StardewRule:
         return self.logic.skill.has_level(Skill.farming, level)
@@ -115,7 +114,6 @@ CombatLogicMixin, CropLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
         if included_modded_skills:
             skills_items += get_mod_skill_levels(self.options.mods)
         return And(*[self.logic.received(skill, 10) for skill in skills_items])
-
 
     def can_enter_mastery_cave(self) -> StardewRule:
         if self.options.skill_progression == options.SkillProgression.option_progressive_with_masteries:

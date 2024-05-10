@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from typing import Collection
 
 from .ability_logic import AbilityLogicMixin
@@ -81,6 +82,8 @@ from ..strings.skill_names import Skill
 from ..strings.tool_names import Tool, ToolMaterial
 from ..strings.villager_names import NPC
 from ..strings.wallet_item_names import Wallet
+
+logger = logging.getLogger(__name__)
 
 
 class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogicMixin, TravelingMerchantLogicMixin, TimeLogicMixin,
@@ -190,16 +193,12 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             ArtisanGood.dried_mushroom: self.artisan.has_dried_mushrooms(),
             ArtisanGood.duck_mayonnaise: self.artisan.can_mayonnaise(AnimalProduct.duck_egg),
             ArtisanGood.goat_cheese: self.has(AnimalProduct.goat_milk) & self.has(Machine.cheese_press),
-            ArtisanGood.green_tea: self.artisan.can_keg(Vegetable.tea_leaves),
             ArtisanGood.honey: self.money.can_spend_at(Region.oasis, 200) | (self.has(Machine.bee_house) & self.season.has_any_not_winter()),
             ArtisanGood.jelly: self.artisan.has_jelly(),
-            ArtisanGood.juice: self.artisan.has_juice(),
             ArtisanGood.maple_syrup: self.has(Machine.tapper),
             ArtisanGood.mayonnaise: self.artisan.can_mayonnaise(AnimalProduct.chicken_egg),
-            ArtisanGood.mead: self.artisan.can_keg(ArtisanGood.honey),
             ArtisanGood.mystic_syrup: self.has(Machine.tapper) & self.has(TreeSeed.mystic),
             ArtisanGood.oak_resin: self.has(Machine.tapper),
-            ArtisanGood.pale_ale: self.artisan.can_keg(Vegetable.hops),
             ArtisanGood.pickles: self.artisan.has_pickle(),
             ArtisanGood.pine_tar: self.has(Machine.tapper),
             ArtisanGood.raisins: self.artisan.has_raisins(),
@@ -207,7 +206,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             ArtisanGood.stardrop_tea: self.has(WaterChest.golden_fishing_chest),
             ArtisanGood.truffle_oil: self.has(AnimalProduct.truffle) & self.has(Machine.oil_maker),
             ArtisanGood.void_mayonnaise: (self.skill.can_fish(Region.witch_swamp)) | (self.artisan.can_mayonnaise(AnimalProduct.void_egg)),
-            Beverage.beer: self.artisan.can_keg(Vegetable.wheat) | self.money.can_spend_at(Region.saloon, 400),
             Beverage.coffee: self.artisan.can_keg(Seed.coffee) | self.has(Machine.coffee_maker) | (self.money.can_spend_at(Region.saloon, 300)) | self.has("Hot Java Ring"),
             Beverage.pina_colada: self.money.can_spend_at(Region.island_resort, 600),
             Beverage.triple_shot_espresso: self.has("Hot Java Ring"),
@@ -357,6 +355,9 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             for item_name, game_item in self.content.game_items.items()
             if not game_item.has_custom_rule
         }
+
+        for item in set(self.content.game_items.keys()).intersection(self.registry.item_rules.keys()):
+            logger.warning(f"Rule for {item} already exists in the registry, overwriting it.")
 
         self.registry.item_rules.update(content_rules)
         self.registry.item_rules.update(self.registry.fish_rules)

@@ -1,11 +1,3 @@
-all_vegetables = []
-
-
-def veggie(name: str) -> str:
-    all_vegetables.append(name)
-    return name
-
-
 class Fruit:
     sweet_gem_berry = "Sweet Gem Berry"
     any = "Any Fruit"
@@ -33,31 +25,31 @@ class Fruit:
 
 class Vegetable:
     any = "Any Vegetable"
-    parsnip = veggie("Parsnip")
-    garlic = veggie("Garlic")
+    parsnip = "Parsnip"
+    garlic = "Garlic"
     bok_choy = "Bok Choy"
     wheat = "Wheat"
-    potato = veggie("Potato")
-    corn = veggie("Corn")
-    tomato = veggie("Tomato")
-    pumpkin = veggie("Pumpkin")
-    unmilled_rice = veggie("Unmilled Rice")
-    beet = veggie("Beet")
+    potato = "Potato"
+    corn = "Corn"
+    tomato = "Tomato"
+    pumpkin = "Pumpkin"
+    unmilled_rice = "Unmilled Rice"
+    beet = "Beet"
     hops = "Hops"
-    cauliflower = veggie("Cauliflower")
-    amaranth = veggie("Amaranth")
-    kale = veggie("Kale")
-    artichoke = veggie("Artichoke")
+    cauliflower = "Cauliflower"
+    amaranth = "Amaranth"
+    kale = "Kale"
+    artichoke = "Artichoke"
     tea_leaves = "Tea Leaves"
-    eggplant = veggie("Eggplant")
-    green_bean = veggie("Green Bean")
-    red_cabbage = veggie("Red Cabbage")
-    yam = veggie("Yam")
-    radish = veggie("Radish")
-    taro_root = veggie("Taro Root")
-    carrot = veggie("Carrot")
-    summer_squash = veggie("Summer Squash")
-    broccoli = veggie("Broccoli")
+    eggplant = "Eggplant"
+    green_bean = "Green Bean"
+    red_cabbage = "Red Cabbage"
+    yam = "Yam"
+    radish = "Radish"
+    taro_root = "Taro Root"
+    carrot = "Carrot"
+    summer_squash = "Summer Squash"
+    broccoli = "Broccoli"
 
 
 class SVEFruit:
@@ -75,6 +67,3 @@ class SVEVegetable:
 class DistantLandsCrop:
     void_mint = "Void Mint Leaves"
     vile_ancient_fruit = "Vile Ancient Fruit"
-
-
-all_vegetables = tuple(all_vegetables)

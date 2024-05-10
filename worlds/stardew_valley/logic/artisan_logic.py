@@ -55,9 +55,6 @@ class ArtisanLogic(BaseLogic[Union[ArtisanLogicMixin, TimeLogicMixin, HasLogicMi
     def has_raisins(self) -> StardewRule:
         return self.logic.artisan.can_dehydrate(Fruit.grape)
 
-    def has_juice(self) -> StardewRule:
-        return self.logic.artisan.can_keg(Vegetable.any)
-
     def can_produce_from(self, source: MachineSource) -> StardewRule:
         return self.logic.has(source.item) & self.logic.has(source.machine)
 
