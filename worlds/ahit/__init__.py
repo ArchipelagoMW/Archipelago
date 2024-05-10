@@ -1,5 +1,5 @@
 from BaseClasses import Item, ItemClassification, Tutorial, Location, MultiWorld
-from .Items import item_table, create_item, relic_groups, act_contracts, create_itempool
+from .Items import item_table, create_item, relic_groups, act_contracts, create_itempool, get_shop_trap_name
 from .Regions import create_regions, randomize_act_entrances, chapter_act_info, create_events, get_shuffled_region
 from .Locations import location_table, contract_locations, is_location_valid, get_location_names, TASKSANITY_START_ID, \
     get_total_locations
@@ -226,7 +226,13 @@ class HatInTimeWorld(World):
         shop_item_names: Dict[str, str] = {}
         for name in self.shop_locs:
             loc: Location = self.multiworld.get_location(name, self.player)
-            shop_item_names.setdefault(str(loc.address), loc.item.name)
+            item_name: str
+            if loc.item.classification is ItemClassification.trap and loc.item.game == "A Hat in Time":
+                item_name = get_shop_trap_name(self)
+            else:
+                item_name = loc.item.name
+
+            shop_item_names.setdefault(str(loc.address), item_name)
 
         slot_data["ShopItemNames"] = shop_item_names
 

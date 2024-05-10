@@ -175,6 +175,31 @@ def create_junk_items(world: "HatInTimeWorld", count: int) -> List[Item]:
     return junk_pool
 
 
+def get_shop_trap_name(world: "HatInTimeWorld") -> str:
+    rand = world.random.randint(1, 9)
+    name = ""
+    if rand == 1:
+        name = "Time Plece"
+    elif rand == 2:
+        name = "Time Piece (Trust me bro)"
+    elif rand == 3:
+        name = "TimePiece"
+    elif rand == 4:
+        name = "Time Piece?"
+    elif rand == 5:
+        name = "Time Pizza"
+    elif rand == 6:
+        name = "Time piece"
+    elif rand == 7:
+        name = "TIme Piece"
+    elif rand == 8:
+        name = "Time Piece (maybe)"
+    elif rand == 9:
+        name = "Time Piece ;)"
+
+    return name
+
+
 ahit_items = {
     "Yarn": ItemData(2000300001, ItemClassification.progression_skip_balancing),
     "Time Piece": ItemData(2000300002, ItemClassification.progression_skip_balancing),
@@ -185,6 +210,18 @@ ahit_items = {
     "Ice Hat": ItemData(2000300051, ItemClassification.progression),
     "Dweller Mask": ItemData(2000300052, ItemClassification.progression),
     "Time Stop Hat": ItemData(2000300053, ItemClassification.progression),
+
+    # Badges
+    "Projectile Badge": ItemData(2000300024, ItemClassification.useful),
+    "Fast Hatter Badge": ItemData(2000300025, ItemClassification.useful),
+    "Hover Badge": ItemData(2000300026, ItemClassification.useful),
+    "Hookshot Badge": ItemData(2000300027, ItemClassification.progression),
+    "Item Magnet Badge": ItemData(2000300028, ItemClassification.useful),
+    "No Bonk Badge": ItemData(2000300029, ItemClassification.useful),
+    "Compass Badge": ItemData(2000300030, ItemClassification.useful),
+    "Scooter Badge": ItemData(2000300031, ItemClassification.useful),
+    "One-Hit Hero Badge": ItemData(2000300038, ItemClassification.progression, HatDLC.death_wish),
+    "Camera Badge": ItemData(2000300042, ItemClassification.progression, HatDLC.death_wish),
 
     # Relics
     "Relic (Burger Patty)": ItemData(2000300006, ItemClassification.progression),
@@ -199,23 +236,13 @@ ahit_items = {
     "Relic (Red Crayon)": ItemData(2000300015, ItemClassification.progression),
     "Relic (Blue Crayon)": ItemData(2000300016, ItemClassification.progression),
     "Relic (Green Crayon)": ItemData(2000300017, ItemClassification.progression),
-
-    # Badges
-    "Projectile Badge": ItemData(2000300024, ItemClassification.useful),
-    "Fast Hatter Badge": ItemData(2000300025, ItemClassification.useful),
-    "Hover Badge": ItemData(2000300026, ItemClassification.useful),
-    "Hookshot Badge": ItemData(2000300027, ItemClassification.progression),
-    "Item Magnet Badge": ItemData(2000300028, ItemClassification.useful),
-    "No Bonk Badge": ItemData(2000300029, ItemClassification.useful),
-    "Compass Badge": ItemData(2000300030, ItemClassification.useful),
-    "Scooter Badge": ItemData(2000300031, ItemClassification.useful),
-    "One-Hit Hero Badge": ItemData(2000300038, ItemClassification.progression, HatDLC.death_wish),
-    "Camera Badge": ItemData(2000300042, ItemClassification.progression, HatDLC.death_wish),
-
-    # Other
-    "Badge Pin": ItemData(2000300043, ItemClassification.useful),
-    "Umbrella": ItemData(2000300033, ItemClassification.progression),
-    "Progressive Painting Unlock": ItemData(2000300003, ItemClassification.progression),
+    # DLC
+    "Relic (Cake Stand)": ItemData(2000300018, ItemClassification.progression, HatDLC.dlc1),
+    "Relic (Shortcake)": ItemData(2000300019, ItemClassification.progression, HatDLC.dlc1),
+    "Relic (Chocolate Cake Slice)": ItemData(2000300020, ItemClassification.progression, HatDLC.dlc1),
+    "Relic (Chocolate Cake)": ItemData(2000300021, ItemClassification.progression, HatDLC.dlc1),
+    "Relic (Necklace Bust)": ItemData(2000300022, ItemClassification.progression, HatDLC.dlc2),
+    "Relic (Necklace)": ItemData(2000300023, ItemClassification.progression, HatDLC.dlc2),
 
     # Garbage items
     "25 Pons": ItemData(2000300034, ItemClassification.filler),
@@ -229,15 +256,11 @@ ahit_items = {
     "Laser Trap": ItemData(2000300040, ItemClassification.trap),
     "Parade Trap": ItemData(2000300041, ItemClassification.trap),
 
-    # DLC1 items
-    "Relic (Cake Stand)": ItemData(2000300018, ItemClassification.progression, HatDLC.dlc1),
-    "Relic (Shortcake)": ItemData(2000300019, ItemClassification.progression, HatDLC.dlc1),
-    "Relic (Chocolate Cake Slice)": ItemData(2000300020, ItemClassification.progression, HatDLC.dlc1),
-    "Relic (Chocolate Cake)": ItemData(2000300021, ItemClassification.progression, HatDLC.dlc1),
-
-    # DLC2 items
-    "Relic (Necklace Bust)": ItemData(2000300022, ItemClassification.progression, HatDLC.dlc2),
-    "Relic (Necklace)": ItemData(2000300023, ItemClassification.progression, HatDLC.dlc2),
+    # Other
+    "Badge Pin": ItemData(2000300043, ItemClassification.useful),
+    "Umbrella": ItemData(2000300033, ItemClassification.progression),
+    "Progressive Painting Unlock": ItemData(2000300003, ItemClassification.progression),
+    # DLC
     "Metro Ticket - Yellow": ItemData(2000300045, ItemClassification.progression, HatDLC.dlc2),
     "Metro Ticket - Green": ItemData(2000300046, ItemClassification.progression, HatDLC.dlc2),
     "Metro Ticket - Blue": ItemData(2000300047, ItemClassification.progression, HatDLC.dlc2),
