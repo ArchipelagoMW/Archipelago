@@ -118,7 +118,7 @@ class EntranceRando(TextChoice):
 
 
 class FixedShop(Toggle):
-    """Forces the Windmill entrance to lead to a shop, and excludes all other shops from the entrance pool.
+    """Forces the Windmill entrance to lead to a shop, and removes the remaining shops from the pool.
     Adds another entrance in Rooted Ziggurat Lower to keep an even number of entrances.
     Has no effect if Entrance Rando is not enabled."""
     internal_name = "fixed_shop"
