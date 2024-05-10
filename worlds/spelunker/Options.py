@@ -14,18 +14,18 @@ class CaveLevel(Choice):
     option_cave_3 = 2
     option_cave_4 = 3
     default = 0
+#NOT IMPLEMENTED
+#class EnergyLink(Toggle):
+  #  """Enables Energy Link. If enabled, you can hold the Select button to refill your energy from the pool.
+   #    A specified percent of energy received from refills will be put into the pool."""
+    #display_name = "Energy Link"
 
-class EnergyLink(Toggle):
-    """Enables Energy Link. If enabled, you can hold the Select button to refill your energy from the pool.
-       A specified percent of energy received from refills will be put into the pool."""
-    display_name = "Energy Link"
-
-class EnergyLinkPercent(Range):
-    """Specifies how much energy from """
-    display_name = "Energy Link Percent"
-    range_start = 1
-    range_end = 100
-    default = 50
+#class EnergyLinkPercent(Range):
+ #   """Specifies how much energy from """
+  #  display_name = "Energy Link Percent"
+   # range_start = 1
+    #range_end = 100
+    #default = 50
 
 @dataclass
 class SpelunkerOptions(PerGameCommonOptions):
