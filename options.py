@@ -125,12 +125,12 @@ class Portal(Choice):
 
 
 class SmashThroughHardBlocks(Toggle):
-    """
+    '''
     Break hard, teal blocks with the dash attack and super ground pound without stopping,
     as in Pizza Tower and Wario Land: Shake It!
     This option does not affect logic.
-    """
-    display_name = "Smash Hard Blocks Without Stopping"
+    '''
+    display_name = 'Smash Hard Blocks Without Stopping'
 
 
 class MultiworldSend(Choice):
@@ -140,7 +140,7 @@ class MultiworldSend(Choice):
     Immediately: Count your locations as you take them from the box.
     Regardless of this setting, sending other players items from a level you can't clear is not in logic.
     '''
-    display_name = "Send Locations to Server"
+    display_name = 'Send Locations to Server'
     option_on_escape = 0
     option_immediately = 1
     default = option_immediately

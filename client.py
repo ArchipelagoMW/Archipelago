@@ -205,7 +205,7 @@ class WL4Client(BizHawkClient):
             logger.info('Could not determine seed name from ROM. Are you sure this ROM matches this client version?')
             return False
 
-        client_ctx.command_processor.commands["deathlink"] = cmd_deathlink
+        client_ctx.command_processor.commands['deathlink'] = cmd_deathlink
         self.death_link = DeathLinkCtx()
 
         self.dc_pending = False
@@ -358,11 +358,11 @@ class WL4Client(BizHawkClient):
                 if events[flag]:
                     event_bitfield |= 1 << i
             await client_ctx.send_msgs([{
-                "cmd": "Set",
-                "key": f"wl4_events_{client_ctx.team}_{client_ctx.slot}",
-                "default": 0,
-                "want_reply": False,
-                "operations": [{"operation": "or", "value": event_bitfield}]
+                'cmd': 'Set',
+                'key': f'wl4_events_{client_ctx.team}_{client_ctx.slot}',
+                'default': 0,
+                'want_reply': False,
+                'operations': [{'operation': 'or', 'value': event_bitfield}]
             }])
             self.local_set_events = events
 
@@ -373,7 +373,7 @@ class WL4Client(BizHawkClient):
                 self.death_link.pending = False
                 if not self.death_link.sent_this_death:
                     self.death_link.sent_this_death = True
-                    death_text = f'{client_ctx.auth} timed out' if time_up else ""
+                    death_text = f'{client_ctx.auth} timed out' if time_up else ''
                     await client_ctx.send_death(death_text)
             else:
                 self.death_link.sent_this_death = False
@@ -423,6 +423,6 @@ class WL4Client(BizHawkClient):
             if 'DeathLink' in tags and args['data']['source'] != ctx.auth:
                 self.death_link.pending = True
         if cmd == 'RoomInfo':
-            if ctx.seed_name and ctx.seed_name != args["seed_name"]:
+            if ctx.seed_name and ctx.seed_name != args['seed_name']:
                 # CommonClient's on_package displays an error to the user in this case, but connection is not cancelled.
                 self.dc_pending = True

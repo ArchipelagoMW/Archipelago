@@ -42,9 +42,9 @@ class LocalRom():
         self.name = name
         self.hash = hash
 
-        with open(file, "rb") as rom_file:
+        with open(file, 'rb') as rom_file:
             rom_bytes = rom_file.read()
-        patch_bytes = data_path("basepatch.bsdiff")
+        patch_bytes = data_path('basepatch.bsdiff')
         self.buffer = bytearray(bsdiff4.patch(rom_bytes, patch_bytes))
 
     def read_bit(self, address: int, bit_number: int, space: Domain = Domain.SYSTEM_BUS) -> bool:
