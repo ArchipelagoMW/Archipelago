@@ -300,21 +300,21 @@ def get_options() -> Settings:
     return get_settings()
 
 
-def persistent_store(category: str, key: typing.Any, value: typing.Any):
+def persistent_store(category: str, key: str, value: typing.Any):
     path = user_path("_persistent_storage.yaml")
-    storage: dict = persistent_load()
-    category = storage.setdefault(category, {})
-    category[key] = value
+    storage = persistent_load()
+    category_dict = storage.setdefault(category, {})
+    category_dict[key] = value
     with open(path, "wt") as f:
         f.write(dump(storage, Dumper=Dumper))
 
 
-def persistent_load() -> typing.Dict[str, dict]:
-    storage = getattr(persistent_load, "storage", None)
+def persistent_load() -> Dict[str, Dict[str, Any]]:
+    storage: Union[Dict[str, Dict[str, Any]], None] = getattr(persistent_load, "storage", None)
     if storage:
         return storage
     path = user_path("_persistent_storage.yaml")
-    storage: dict = {}
+    storage = {}
     if os.path.exists(path):
         try:
             with open(path, "r") as f:
@@ -323,7 +323,7 @@ def persistent_load() -> typing.Dict[str, dict]:
             logging.debug(f"Could not read store: {e}")
     if storage is None:
         storage = {}
-    persistent_load.storage = storage
+    setattr(persistent_load, "storage", storage)
     return storage
 
 
@@ -365,6 +365,7 @@ def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> N
         except Exception as e:
             logging.debug(f"Could not store data package: {e}")
 
+
 def get_default_adjuster_settings(game_name: str) -> Namespace:
     import LttPAdjuster
     adjuster_settings = Namespace()
@@ -383,7 +384,9 @@ def get_adjuster_settings(game_name: str) -> Namespace:
     default_settings = get_default_adjuster_settings(game_name)
 
     # Fill in any arguments from the argparser that we haven't seen before
-    return Namespace(**vars(adjuster_settings), **{k:v for k,v in vars(default_settings).items() if k not in vars(adjuster_settings)})
+    return Namespace(**vars(adjuster_settings), **{
+        k: v for k, v in vars(default_settings).items() if k not in vars(adjuster_settings)
+    })
 
 
 @cache_argsless
@@ -407,13 +410,13 @@ safe_builtins = frozenset((
 class RestrictedUnpickler(pickle.Unpickler):
     generic_properties_module: Optional[object]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(RestrictedUnpickler, self).__init__(*args, **kwargs)
         self.options_module = importlib.import_module("Options")
         self.net_utils_module = importlib.import_module("NetUtils")
         self.generic_properties_module = None
 
-    def find_class(self, module, name):
+    def find_class(self, module: str, name: str) -> type:
         if module == "builtins" and name in safe_builtins:
             return getattr(builtins, name)
         # used by MultiServer -> savegame/multidata
@@ -437,7 +440,7 @@ class RestrictedUnpickler(pickle.Unpickler):
         raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")
 
 
-def restricted_loads(s):
+def restricted_loads(s: bytes) -> Any:
     """Helper function analogous to pickle.loads()."""
     return RestrictedUnpickler(io.BytesIO(s)).load()
 
@@ -493,7 +496,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
     file_handler.setFormatter(logging.Formatter(log_format))
 
     class Filter(logging.Filter):
-        def __init__(self, filter_name, condition):
+        def __init__(self, filter_name: str, condition: typing.Callable[[logging.LogRecord], bool]) -> None:
             super().__init__(filter_name)
             self.condition = condition
 
@@ -544,7 +547,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
     )
 
 
-def stream_input(stream, queue):
+def stream_input(stream: typing.TextIO, queue: "asyncio.Queue[str]"):
     def queuer():
         while 1:
             try:
@@ -787,7 +790,7 @@ class DeprecateDict(dict):
     log_message: str
     should_error: bool
 
-    def __init__(self, message, error: bool = False) -> None:
+    def __init__(self, message: str, error: bool = False) -> None:
         self.log_message = message
         self.should_error = error
         super().__init__()
