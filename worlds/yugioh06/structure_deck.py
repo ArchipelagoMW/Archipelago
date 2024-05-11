@@ -68,7 +68,7 @@ structure_contents: dict[str, set] = {
         "Skilled Dark Magician",
         "Tsukuyomi",
         "Magical Dimension",
-        "Mage Power" "Spell-Counter Cards",
+        "Mage PowerSpell-Counter Cards",
         "Heavy Storm",
         "Dust Tornado",
         "Mystical Space Typhoon",

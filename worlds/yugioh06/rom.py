@@ -9,8 +9,8 @@ import Utils
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 
 from ..AutoWorld import World
-from .Items import item_to_index
-from .RomValues import banlist_ids, function_addresses, structure_deck_selection
+from .items import item_to_index
+from .rom_values import banlist_ids, function_addresses, structure_deck_selection
 
 MD5Europe = "020411d3b08f5639eb8cb878283f84bf"
 MD5America = "b8a7c976b28172995fe9e465d654297a"

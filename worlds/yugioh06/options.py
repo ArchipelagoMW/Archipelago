@@ -23,12 +23,12 @@ class Banlist(Choice):
 
     display_name = "Banlist"
     option_no_banlist = 0
-    option_September_2003 = 1
-    option_March_2004 = 2
-    option_September_2004 = 3
-    option_March_2005 = 4
-    option_September_2005 = 5
-    default = option_September_2005
+    option_september_2003 = 1
+    option_march_2004 = 2
+    option_september_2004 = 3
+    option_march_2005 = 4
+    option_september_2005 = 5
+    default = option_september_2005
 
 
 class FinalCampaignBossUnlockCondition(Choice):
@@ -190,6 +190,6 @@ class Yugioh06Options(PerGameCommonOptions):
     money_reward_multiplier: MoneyRewardMultiplier
     normalize_boosters_packs: NormalizeBoostersPacks
     booster_pack_prices: BoosterPackPrices
-    add_empty_banList: AddEmptyBanList
+    add_empty_banlist: AddEmptyBanList
     campaign_opponents_shuffle: CampaignOpponentsShuffle
     ocg_arts: OCGArts

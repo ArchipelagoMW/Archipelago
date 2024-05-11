@@ -1,7 +1,7 @@
 from worlds.generic.Rules import add_rule
 
 from . import yugioh06_difficulty
-from .Fusions import count_has_materials
+from .fusions import count_has_materials
 
 
 def set_rules(world):
@@ -762,7 +762,7 @@ def only_dragon(state, player):
                 [
                     "Luster Dragon",
                     "Spear Dragon",
-                    "Cave Dragon" "Armed Dragon LV3",
+                    "Cave DragonArmed Dragon LV3",
                     "Masked Dragon",
                     "Twin-Headed Behemoth",
                     "Element Dragon",

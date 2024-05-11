@@ -8,10 +8,10 @@ from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld
 import Utils
 from worlds.AutoWorld import WebWorld, World
 
-from .BoosterPacks import booster_contents as booster_contents
-from .BoosterPacks import get_booster_locations
-from .Client_bh import YuGiOh2006Client as YuGiOh2006Client
-from .Items import (
+from .boosterpacks import booster_contents as booster_contents
+from .boosterpacks import get_booster_locations
+from .client_bh import YuGiOh2006Client as YuGiOh2006Client
+from .items import (
     Banlist_Items,
     booster_packs,
     draft_boosters,
@@ -21,10 +21,10 @@ from .Items import (
     tier_1_opponents,
     useful,
 )
-from .Items import (
+from .items import (
     challenges as challenges,
 )
-from .Locations import (
+from .locations import (
     Bonuses,
     Campaign_Opponents,
     Limited_Duels,
@@ -35,17 +35,17 @@ from .Locations import (
     special,
 )
 from .logic import core_booster, yugioh06_difficulty
-from .Opponents import OpponentData, get_opponent_condition, get_opponent_locations, get_opponents
-from .Opponents import challenge_opponents as challenge_opponents
-from .Options import Yugioh06Options
-from .Rom import MD5America, MD5Europe, YGO06ProcedurePatch, write_tokens
-from .Rom import get_base_rom_path as get_base_rom_path
-from .RomValues import banlist_ids as banlist_ids
-from .RomValues import function_addresses as function_addresses
-from .RomValues import structure_deck_selection as structure_deck_selection
-from .Rules import set_rules
-from .StructureDeck import get_deck_content_locations
-from .utils import openFile as openFile
+from .opponents import OpponentData, get_opponent_condition, get_opponent_locations, get_opponents
+from .opponents import challenge_opponents as challenge_opponents
+from .options import Yugioh06Options
+from .rom import MD5America, MD5Europe, YGO06ProcedurePatch, write_tokens
+from .rom import get_base_rom_path as get_base_rom_path
+from .rom_values import banlist_ids as banlist_ids
+from .rom_values import function_addresses as function_addresses
+from .rom_values import structure_deck_selection as structure_deck_selection
+from .rules import set_rules
+from .structure_deck import get_deck_content_locations
+from .utils import open_file as open_file
 
 
 class Yugioh06Web(WebWorld):
@@ -338,7 +338,7 @@ class Yugioh06World(World):
         item_pool = []
         items = item_to_index.copy()
         starting_list = Banlist_Items[self.options.banlist.value]
-        if not self.options.add_empty_banList.value and starting_list != "No Banlist":
+        if not self.options.add_empty_banlist.value and starting_list != "No Banlist":
             items.pop("No Banlist")
         for rc in self.removed_challenges:
             items.pop(rc + " Unlock")
@@ -351,7 +351,7 @@ class Yugioh06World(World):
             item = self.create_item(name)
             item_pool.append(item)
 
-        needed_item_pool_size = sum(l not in self.removed_challenges for l in self.location_name_to_id)
+        needed_item_pool_size = sum(loc not in self.removed_challenges for loc in self.location_name_to_id)
         needed_filler_amount = needed_item_pool_size - len(item_pool)
         item_pool += [self.create_item("5000DP") for _ in range(needed_filler_amount)]
 
@@ -390,11 +390,8 @@ class Yugioh06World(World):
         set_rules(self)
 
     def generate_output(self, output_directory: str):
-        # patched_rom = self.apply_randomizer()
-        outfilebase = "AP_" + self.multiworld.seed_name
         outfilepname = f"_P{self.player}"
         outfilepname += f"_{self.multiworld.get_file_safe_player_name(self.player).replace(' ', '_')}"
-        outputFilename = os.path.join(output_directory, f"{outfilebase}{outfilepname}.gba")
         self.rom_name_text = f'YGO06{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0'
         self.romName = bytearray(self.rom_name_text, "utf8")[:0x20]
         self.romName.extend([0] * (0x20 - len(self.romName)))
@@ -420,14 +417,21 @@ class Yugioh06World(World):
             "structure_deck": self.options.structure_deck.value,
             "banlist": self.options.banlist.value,
             "final_campaign_boss_unlock_condition": self.options.final_campaign_boss_unlock_condition.value,
-            "fourth_tier_5_campaign_boss_unlock_condition": self.options.fourth_tier_5_campaign_boss_unlock_condition.value,
-            "third_tier_5_campaign_boss_unlock_condition": self.options.third_tier_5_campaign_boss_unlock_condition.value,
+            "fourth_tier_5_campaign_boss_unlock_condition":
+                self.options.fourth_tier_5_campaign_boss_unlock_condition.value,
+            "third_tier_5_campaign_boss_unlock_condition":
+                self.options.third_tier_5_campaign_boss_unlock_condition.value,
             "final_campaign_boss_challenges": self.options.final_campaign_boss_challenges.value,
-            "fourth_tier_5_campaign_boss_challenges": self.options.fourth_tier_5_campaign_boss_challenges.value,
-            "third_tier_5_campaign_boss_challenges": self.options.third_tier_5_campaign_boss_campaign_opponents.value,
-            "final_campaign_boss_campaign_opponents": self.options.final_campaign_boss_campaign_opponents.value,
-            "fourth_tier_5_campaign_boss_campaign_opponents": self.options.fourth_tier_5_campaign_boss_unlock_condition.value,
-            "third_tier_5_campaign_boss_campaign_opponents": self.options.third_tier_5_campaign_boss_campaign_opponents.value,
+            "fourth_tier_5_campaign_boss_challenges":
+                self.options.fourth_tier_5_campaign_boss_challenges.value,
+            "third_tier_5_campaign_boss_challenges":
+                self.options.third_tier_5_campaign_boss_campaign_opponents.value,
+            "final_campaign_boss_campaign_opponents":
+                self.options.final_campaign_boss_campaign_opponents.value,
+            "fourth_tier_5_campaign_boss_campaign_opponents":
+                self.options.fourth_tier_5_campaign_boss_unlock_condition.value,
+            "third_tier_5_campaign_boss_campaign_opponents":
+                self.options.third_tier_5_campaign_boss_campaign_opponents.value,
             "number_of_challenges": self.options.number_of_challenges.value,
         }
 

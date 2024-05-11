@@ -3,13 +3,13 @@ from typing import Dict, List, NamedTuple, Optional, Union
 from BaseClasses import MultiWorld
 
 from worlds.yugioh06 import item_to_index, tier_1_opponents, yugioh06_difficulty
-from worlds.yugioh06.Locations import special
+from worlds.yugioh06.locations import special
 
 
 class OpponentData(NamedTuple):
     id: int
     name: str
-    campaignInfo: List[str]
+    campaign_info: List[str]
     tier: int
     column: int
     card_id: int = 0
@@ -212,7 +212,7 @@ def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int], rando
     opponents = opponents_table + challenge_opponents
     start = world.random.choice([o for o in opponents if o.tier == 1 and len(o.additional_info) == 0])
     opponents.remove(start)
-    goal = world.random.choice([o for o in opponents if "Goal" in o.campaignInfo])
+    goal = world.random.choice([o for o in opponents if "Goal" in o.campaign_info])
     opponents.remove(goal)
     world.random.shuffle(opponents)
     chosen_ones = opponents[:23]
@@ -226,7 +226,7 @@ def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int], rando
     column = 1
     recreation = []
     for opp in chosen_ones:
-        recreation.append(OpponentData(opp.id, opp.name, opp.campaignInfo, tier, column, opp.card_id,
+        recreation.append(OpponentData(opp.id, opp.name, opp.campaign_info, tier, column, opp.card_id,
                                        opp.deck_name_id, opp.deck_file, opp.difficulty))
         column += 1
         if column > 5:
@@ -242,7 +242,7 @@ def get_opponent_locations(opponent: OpponentData) -> Dict[str, Optional[Union[s
         name = "Campaign Tier 5: Column " + str(opponent.column) + " Win"
         # return a int instead so a item can be placed at this location later
         location[name] = special[name]
-    for info in opponent.campaignInfo:
+    for info in opponent.campaign_info:
         location[opponent.name + "-> " + info] = info
     return location
 
