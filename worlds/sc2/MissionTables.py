@@ -1,4 +1,4 @@
-from typing import NamedTuple, Dict, List, Set, Union, Literal, Iterable, Callable
+from typing import NamedTuple, Dict, List, Set, Union, Literal, Iterable, Callable, Optional
 from enum import IntEnum, Enum, IntFlag, auto
 
 
@@ -397,7 +397,7 @@ class SC2CampaignGoal(NamedTuple):
     location: str
 
 
-campaign_final_mission_locations: Dict[SC2Campaign, SC2CampaignGoal] = {
+campaign_final_mission_locations: Dict[SC2Campaign, Optional[SC2CampaignGoal]] = {
     SC2Campaign.WOL: SC2CampaignGoal(SC2Mission.ALL_IN, "All-In: Victory"),
     SC2Campaign.PROPHECY: SC2CampaignGoal(SC2Mission.IN_UTTER_DARKNESS, "In Utter Darkness: Kills"),
     SC2Campaign.HOTS: None,

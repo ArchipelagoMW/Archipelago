@@ -1,11 +1,18 @@
 from dataclasses import dataclass, fields, Field
-from typing import FrozenSet, Union, Set
+from typing import *
 
-from Options import Choice, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range, PerGameCommonOptions
+from Options import (Choice, Toggle, DefaultOnToggle, ItemDict, OptionSet, Range, OptionDict,
+    PerGameCommonOptions, Option, VerifyKeys)
+from Utils import get_fuzzy_results
+from BaseClasses import PlandoOptions
 from .MissionTables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_no_build_missions, \
     campaign_mission_table
 from .MissionOrders import vanilla_shuffle_order, mini_campaign_order
 from worlds.AutoWorld import World
+
+if TYPE_CHECKING:
+    from worlds.AutoWorld import World
+    from . import SC2World
 
 
 class GameDifficulty(Choice):
@@ -294,26 +301,10 @@ class GenericUpgradeItems(Choice):
     option_bundle_all = 3
 
 
-class NovaCovertOpsItems(Toggle):
-    """
-    If turned on, the equipment upgrades from Nova Covert Ops may be present in the world.
-
-    If Nova Covert Ops campaign is enabled, this option is locked to be turned on.
-    """
-    display_name = "Nova Covert Ops Items"
-    default = Toggle.option_true
-
-
-class BroodWarItems(Toggle):
-    """If turned on, returning items from StarCraft: Brood War may appear in the world."""
-    display_name = "Brood War Items"
-    default = Toggle.option_true
-
-
-class ExtendedItems(Toggle):
-    """If turned on, original items that did not appear in Campaign mode may appear in the world."""
-    display_name = "Extended Items"
-    default = Toggle.option_true
+class VanillaItemsOnly(Toggle):
+    """If turned on, the item pool is limited only to items that appear in the main 3 vanilla campaigns.
+    locked_items may override these exclusions."""
+    display_name = "Vanilla Items Only"
 
 
 # Current maximum number of upgrades for a unit
@@ -377,7 +368,6 @@ class KerriganPresence(Choice):
     display_name = "Kerrigan Presence"
     option_vanilla = 0
     option_not_present = 1
-    option_not_present_and_no_passives = 2
 
 
 class KerriganLevelsPerMissionCompleted(Range):
@@ -618,14 +608,81 @@ class TakeOverAIAllies(Toggle):
     display_name = "Take Over AI Allies"
 
 
-class LockedItems(ItemSet):
-    """Guarantees that these items will be unlockable"""
+class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
+    """A branch of ItemDict that supports item counts of 0"""
+    default = {}
+    supports_weighting = False
+    verify_item_name = True
+    # convert_name_groups = True
+    display_name = 'Unnamed dictionary'
+    minimum_value: int = 0
+
+    def __init__(self, value: Dict[str, int]):
+        self.value = {key: val for key, val in value.items()}
+
+    @classmethod
+    def from_any(cls, data: Union[List[str], Dict[str, int]]) -> 'Sc2ItemDict':
+        if isinstance(data, list):
+            # This is a little default that gets us backwards compatibility with lists.
+            # It doesn't play nice with trigger merging dicts and lists together, though, so best not to advertise it overmuch.
+            data = {item: 0 for item in data}
+        if isinstance(data, dict):
+            cls.verify_keys(data)
+            for key, value in data.items():
+                if not isinstance(value, int):
+                    raise ValueError(f"Invalid type in '{cls.display_name}': element '{key}' maps to '{value}', expected an integer")
+                if value < cls.minimum_value:
+                    raise ValueError(f"Invalid value for '{cls.display_name}': element '{key}' maps to {value}, which is less than the minimum ({cls.minimum_value})")
+            return cls(data)
+        else:
+            raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
+
+    def verify(self, world: Type['World'], player_name: str, plando_options: PlandoOptions) -> None:
+        """Overridden version of function from Options.VerifyKeys for a better error message"""
+        new_value: dict[str, int] = {}
+        case_insensitive_group_mapping = {
+            group_name.casefold(): group_value for group_name, group_value in world.item_name_groups.items()}
+        for group_name in self.value:
+            item_names = case_insensitive_group_mapping.get(group_name.casefold(), {group_name})
+            for item_name in item_names:
+                new_value[item_name] = new_value.get(item_name, 0) + self.value[group_name]
+        self.value = new_value
+        for item_name in self.value:
+            if item_name not in world.item_names:
+                picks = get_fuzzy_results(item_name, list(world.item_names), limit=1)
+                raise Exception(f"Item {item_name} from option {self} "
+                                f"is not a valid item name from {world.game}. "
+                                f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
+
+    def get_option_name(self, value):
+        return ", ".join(f"{key}: {v}" for key, v in value.items())
+
+    def __getitem__(self, item: str) -> int:
+        return self.value.__getitem__(item)
+
+    def __iter__(self) -> Iterator[str]:
+        return self.value.__iter__()
+
+    def __len__(self) -> int:
+        return self.value.__len__()
+
+
+class LockedItems(Sc2ItemDict):
+    """Guarantees that these items will be unlockable, in the amount specified.
+    Specify an amount of 0 to lock all copies of an item."""
     display_name = "Locked Items"
 
 
-class ExcludedItems(ItemSet):
-    """Guarantees that these items will not be unlockable"""
+class ExcludedItems(Sc2ItemDict):
+    """Guarantees that these items will not be unlockable, in the amount specified.
+    Specify an amount of 0 to exclude all copies of an item."""
     display_name = "Excluded Items"
+
+
+class UnexcludedItems(Sc2ItemDict):
+    """Undoes an item exclusion; useful for whitelisting or fine-tuning a category.
+    Specify an amount of 0 to unexclude all copies of an item."""
+    display_name = "Unexcluded Items"
 
 
 class ExcludedMissions(OptionSet):
@@ -810,11 +867,10 @@ class Starcraft2Options(PerGameCommonOptions):
     take_over_ai_allies: TakeOverAIAllies
     locked_items: LockedItems
     excluded_items: ExcludedItems
+    unexcluded_items: UnexcludedItems
     excluded_missions: ExcludedMissions
     exclude_very_hard_missions: ExcludeVeryHardMissions
-    nco_items: NovaCovertOpsItems
-    bw_items: BroodWarItems
-    ext_items: ExtendedItems
+    vanilla_items_only: VanillaItemsOnly
     vanilla_locations: VanillaLocations
     extra_locations: ExtraLocations
     challenge_locations: ChallengeLocations
@@ -824,7 +880,7 @@ class Starcraft2Options(PerGameCommonOptions):
     starting_supply_per_item: StartingSupplyPerItem
 
 
-def get_option_value(world: World, name: str) -> Union[int,  FrozenSet]:
+def get_option_value(world: 'SC2World', name: str) -> Union[int,  FrozenSet]:
     if world is None:
         field: Field = [class_field for class_field in fields(Starcraft2Options) if class_field.name == name][0]
         return field.type.default
@@ -834,7 +890,7 @@ def get_option_value(world: World, name: str) -> Union[int,  FrozenSet]:
     return player_option.value
 
 
-def get_enabled_campaigns(world: World) -> Set[SC2Campaign]:
+def get_enabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
     enabled_campaigns = set()
     if get_option_value(world, "enable_wol_missions"):
         enabled_campaigns.add(SC2Campaign.WOL)
@@ -853,7 +909,7 @@ def get_enabled_campaigns(world: World) -> Set[SC2Campaign]:
     return enabled_campaigns
 
 
-def get_disabled_campaigns(world: World) -> Set[SC2Campaign]:
+def get_disabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
     all_campaigns = set(SC2Campaign)
     enabled_campaigns = get_enabled_campaigns(world)
     disabled_campaigns = all_campaigns.difference(enabled_campaigns)
@@ -861,10 +917,10 @@ def get_disabled_campaigns(world: World) -> Set[SC2Campaign]:
     return disabled_campaigns
 
 
-def get_excluded_missions(world: World) -> Set[SC2Mission]:
-    mission_order_type = get_option_value(world, "mission_order")
-    excluded_mission_names = get_option_value(world, "excluded_missions")
-    shuffle_no_build = get_option_value(world, "shuffle_no_build")
+def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
+    mission_order_type = world.options.mission_order.value
+    excluded_mission_names = world.options.excluded_missions.value
+    shuffle_no_build = world.options.shuffle_no_build.value
     disabled_campaigns = get_disabled_campaigns(world)
 
     excluded_missions: Set[SC2Mission] = set([lookup_name_to_mission[name] for name in excluded_mission_names])
