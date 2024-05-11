@@ -179,7 +179,7 @@ Required_Cards = {
     "Obtain Raviel, Lord of Phantasms": 166,
     "Obtain Uria, Lord of Searing Flames": 167,
     "Obtain Gate Guardian and its pieces": 168,
-    "Obtain Dark Scorpion Combination and its required cards": 169
+    "Obtain Dark Scorpion Combination and its required cards": 169,
 }
 
 collection_events = {
@@ -198,7 +198,7 @@ collection_events = {
     "Can Stall with Monsters": None,
     "Can Stall with ST": None,
     "Can Last Turn Win": None,
-    "Has Back-row removal": None
+    "Has Back-row removal": None,
 }
 
 

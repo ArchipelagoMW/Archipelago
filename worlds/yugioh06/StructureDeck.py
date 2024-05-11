@@ -24,7 +24,7 @@ structure_contents: dict[str, set] = {
         "Reload",
         "Heavy Storm",
         "Dust Tornado",
-        "Mystical Space Typhoon"
+        "Mystical Space Typhoon",
     },
     "blazing_destruction": {
         "Inferno",
@@ -36,7 +36,7 @@ structure_contents: dict[str, set] = {
         "Level Limit - Area B",
         "Heavy Storm",
         "Dust Tornado",
-        "Mystical Space Typhoon"
+        "Mystical Space Typhoon",
     },
     "fury_from_the_deep": {
         "Mother Grizzly",
@@ -46,7 +46,7 @@ structure_contents: dict[str, set] = {
         "Mobius the Frost Monarch",
         "Heavy Storm",
         "Dust Tornado",
-        "Mystical Space Typhoon"
+        "Mystical Space Typhoon",
     },
     "warriors_triumph": {
         "Gearfried the Iron Knight",
@@ -58,7 +58,7 @@ structure_contents: dict[str, set] = {
         "Reload",
         "Heavy Storm",
         "Dust Tornado",
-        "Mystical Space Typhoon"
+        "Mystical Space Typhoon",
     },
     "spellcasters_judgement": {
         "Dark Magician",
@@ -68,18 +68,14 @@ structure_contents: dict[str, set] = {
         "Skilled Dark Magician",
         "Tsukuyomi",
         "Magical Dimension",
-        "Mage Power"
-        "Spell-Counter Cards",
+        "Mage Power" "Spell-Counter Cards",
         "Heavy Storm",
         "Dust Tornado",
-        "Mystical Space Typhoon"
+        "Mystical Space Typhoon",
     },
-    "none": {}
+    "none": {},
 }
 
 
 def get_deck_content_locations(deck: str) -> dict[str, str]:
-    return {
-        f"{deck} {i}": content
-        for i, content in enumerate(structure_contents[deck])
-    }
+    return {f"{deck} {i}": content for i, content in enumerate(structure_contents[deck])}

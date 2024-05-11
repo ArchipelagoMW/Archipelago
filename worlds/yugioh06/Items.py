@@ -172,7 +172,7 @@ item_to_index: Dict[str, int] = {
     "Banlist March 2005": 171,
     "Banlist September 2005": 172,
     "5000DP": 254,
-    "Remote": 255
+    "Remote": 255,
 }
 
 tier_1_opponents: List[str] = [
@@ -180,7 +180,7 @@ tier_1_opponents: List[str] = [
     "Campaign Tier 1 Column 2",
     "Campaign Tier 1 Column 3",
     "Campaign Tier 1 Column 4",
-    "Campaign Tier 1 Column 5"
+    "Campaign Tier 1 Column 5",
 ]
 
 Banlist_Items: List[str] = [
@@ -189,7 +189,7 @@ Banlist_Items: List[str] = [
     "Banlist March 2004",
     "Banlist September 2004",
     "Banlist March 2005",
-    "Banlist September 2005"
+    "Banlist September 2005",
 ]
 
 draft_boosters: List[str] = [
@@ -206,10 +206,7 @@ draft_boosters: List[str] = [
     "SHADOW OF INFINITY",
 ]
 
-draft_opponents: List[str] = [
-    "Campaign Tier 1 Column 1",
-    "Campaign Tier 1 Column 5"
-]
+draft_opponents: List[str] = ["Campaign Tier 1 Column 1", "Campaign Tier 1 Column 5"]
 
 booster_packs: List[str] = [
     "LEGEND OF B.E.W.D.",
@@ -256,7 +253,7 @@ booster_packs: List[str] = [
     "Quick/Counter Collection",
     "Direct Damage Collection",
     "Direct Attack Collection",
-    "Monster Destroy Collection"
+    "Monster Destroy Collection",
 ]
 
 challenges: List[str] = [
@@ -361,7 +358,7 @@ excluded_items: List[str] = [
     "All Spells",
     "All at Random",
     "5000DP",
-    "Remote"
+    "Remote",
 ]
 
 useful: List[str] = [

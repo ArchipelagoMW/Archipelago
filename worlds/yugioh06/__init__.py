@@ -57,7 +57,7 @@ class Yugioh06Web(WebWorld):
         "English",
         "docs/setup_en.md",
         "setup/en",
-        ["Rensen"]
+        ["Rensen"],
     )
     tutorials = [setup]
 
@@ -65,6 +65,7 @@ class Yugioh06Web(WebWorld):
 class Yugioh2006Setting(settings.Group):
     class Yugioh2006RomFile(settings.UserFilePath):
         """File name of your Yu-Gi-Oh 2006 ROM"""
+
         description = "Yu-Gi-Oh 2006 ROM File"
         copy_to = "YuGiOh06.gba"
         md5s = [MD5Europe, MD5America]
@@ -77,6 +78,7 @@ class Yugioh06World(World):
     Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006 is the definitive Yu-Gi-Oh
     simulator on the GBA. Featuring over 2000 cards and over 90 Challenges.
     """
+
     game = "Yu-Gi-Oh! 2006"
     web = Yugioh06Web()
     options: Yugioh06Options
@@ -110,7 +112,7 @@ class Yugioh06World(World):
 
     item_name_groups = {
         "Core Booster": core_booster,
-        "Campaign Boss Beaten": ["Tier 1 Beaten", "Tier 2 Beaten", "Tier 3 Beaten", "Tier 4 Beaten", "Tier 5 Beaten"]
+        "Campaign Boss Beaten": ["Tier 1 Beaten", "Tier 2 Beaten", "Tier 3 Beaten", "Tier 4 Beaten", "Tier 5 Beaten"],
     }
 
     removed_challenges: List[str]
@@ -134,25 +136,31 @@ class Yugioh06World(World):
                 self.options.structure_deck.value = slot_data["structure_deck"]
                 self.options.banlist.value = slot_data["banlist"]
                 self.options.final_campaign_boss_unlock_condition.value = slot_data[
-                    "final_campaign_boss_unlock_condition"]
-                self.options.fourth_tier_5_campaign_boss_unlock_condition.value = \
-                    slot_data["fourth_tier_5_campaign_boss_unlock_condition"]
-                self.options.third_tier_5_campaign_boss_unlock_condition.value = \
-                    slot_data["third_tier_5_campaign_boss_unlock_condition"]
-                self.options.final_campaign_boss_challenges.value = \
-                    slot_data["final_campaign_boss_challenges"]
-                self.options.fourth_tier_5_campaign_boss_challenges.value = \
-                    slot_data["fourth_tier_5_campaign_boss_challenges"]
-                self.options.third_tier_5_campaign_boss_challenges.value = \
-                    slot_data["third_tier_5_campaign_boss_challenges"]
-                self.options.final_campaign_boss_campaign_opponents.value = \
-                    slot_data["final_campaign_boss_campaign_opponents"]
-                self.options.fourth_tier_5_campaign_boss_campaign_opponents.value = \
-                    slot_data["fourth_tier_5_campaign_boss_campaign_opponents"]
-                self.options.third_tier_5_campaign_boss_campaign_opponents.value = \
-                    slot_data["third_tier_5_campaign_boss_campaign_opponents"]
-                self.options.number_of_challenges.value = \
-                    slot_data["number_of_challenges"]
+                    "final_campaign_boss_unlock_condition"
+                ]
+                self.options.fourth_tier_5_campaign_boss_unlock_condition.value = slot_data[
+                    "fourth_tier_5_campaign_boss_unlock_condition"
+                ]
+                self.options.third_tier_5_campaign_boss_unlock_condition.value = slot_data[
+                    "third_tier_5_campaign_boss_unlock_condition"
+                ]
+                self.options.final_campaign_boss_challenges.value = slot_data["final_campaign_boss_challenges"]
+                self.options.fourth_tier_5_campaign_boss_challenges.value = slot_data[
+                    "fourth_tier_5_campaign_boss_challenges"
+                ]
+                self.options.third_tier_5_campaign_boss_challenges.value = slot_data[
+                    "third_tier_5_campaign_boss_challenges"
+                ]
+                self.options.final_campaign_boss_campaign_opponents.value = slot_data[
+                    "final_campaign_boss_campaign_opponents"
+                ]
+                self.options.fourth_tier_5_campaign_boss_campaign_opponents.value = slot_data[
+                    "fourth_tier_5_campaign_boss_campaign_opponents"
+                ]
+                self.options.third_tier_5_campaign_boss_campaign_opponents.value = slot_data[
+                    "third_tier_5_campaign_boss_campaign_opponents"
+                ]
+                self.options.number_of_challenges.value = slot_data["number_of_challenges"]
                 self.removed_challenges = slot_data["removed challenges"]
                 self.starting_booster = slot_data["starting_booster"]
                 self.starting_opponent = slot_data["starting_opponent"]
@@ -187,13 +195,18 @@ class Yugioh06World(World):
 
         if not self.removed_challenges:
             challenge = list((Limited_Duels | Theme_Duels).keys())
-            noc = len(challenge) - max(self.options.third_tier_5_campaign_boss_challenges.value
-                                   if self.options.third_tier_5_campaign_boss_unlock_condition == "challenges" else 0,
-                                   self.options.fourth_tier_5_campaign_boss_challenges.value
-                                   if self.options.fourth_tier_5_campaign_boss_unlock_condition == "challenges" else 0,
-                                   self.options.final_campaign_boss_challenges.value
-                                   if self.options.final_campaign_boss_unlock_condition == "challenges" else 0,
-                                   self.options.number_of_challenges.value)
+            noc = len(challenge) - max(
+                self.options.third_tier_5_campaign_boss_challenges.value
+                if self.options.third_tier_5_campaign_boss_unlock_condition == "challenges"
+                else 0,
+                self.options.fourth_tier_5_campaign_boss_challenges.value
+                if self.options.fourth_tier_5_campaign_boss_unlock_condition == "challenges"
+                else 0,
+                self.options.final_campaign_boss_challenges.value
+                if self.options.final_campaign_boss_unlock_condition == "challenges"
+                else 0,
+                self.options.number_of_challenges.value,
+            )
 
             self.random.shuffle(challenge)
             excluded = self.options.exclude_locations.value.intersection(challenge)
@@ -202,8 +215,9 @@ class Yugioh06World(World):
             total = list(excluded) + normal + list(prio)
             self.removed_challenges = total[:noc]
 
-        self.campaign_opponents = get_opponents(self.multiworld, self.player,
-                                                self.options.campaign_opponents_shuffle.value)
+        self.campaign_opponents = get_opponents(
+            self.multiworld, self.player, self.options.campaign_opponents_shuffle.value
+        )
 
     def create_region(self, name: str, locations=None, exits=None):
         region = Region(name, self.player, self.multiworld)
@@ -228,17 +242,13 @@ class Yugioh06World(World):
             self.create_region("Campaign", Bonuses | Campaign_Opponents),
             self.create_region("Challenges"),
             self.create_region("Card Shop", Required_Cards | collection_events),
-            self.create_region("Structure Deck", get_deck_content_locations(structure_deck))
+            self.create_region("Structure Deck", get_deck_content_locations(structure_deck)),
         ]
 
-        self.get_entrance("to Campaign") \
-            .connect(self.get_region("Campaign"))
-        self.get_entrance("to Challenges") \
-            .connect(self.get_region("Challenges"))
-        self.get_entrance("to Card Shop") \
-            .connect(self.get_region("Card Shop"))
-        self.get_entrance("to Deck Edit") \
-            .connect(self.get_region("Structure Deck"))
+        self.get_entrance("to Campaign").connect(self.get_region("Campaign"))
+        self.get_entrance("to Challenges").connect(self.get_region("Challenges"))
+        self.get_entrance("to Card Shop").connect(self.get_region("Card Shop"))
+        self.get_entrance("to Deck Edit").connect(self.get_region("Structure Deck"))
 
         campaign = self.get_region("Campaign")
         # Campaign Opponents
@@ -276,12 +286,13 @@ class Yugioh06World(World):
                         unlock_item = "Campaign Boss Beaten"
                         unlock_amount = self.options.final_campaign_boss_campaign_opponents.value
                         is_challenge = False
-                entrance.access_rule = get_opponent_condition(opponent, unlock_item, unlock_amount, self.player,
-                                                              is_challenge)
+                entrance.access_rule = get_opponent_condition(
+                    opponent, unlock_item, unlock_amount, self.player, is_challenge
+                )
             else:
-                entrance.access_rule = (lambda state, unlock=unlock_item, opp=opponent:
-                                        state.has(unlock, self.player) and yugioh06_difficulty(state, self.player,
-                                                                                               opp.difficulty))
+                entrance.access_rule = lambda state, unlock=unlock_item, opp=opponent: state.has(
+                    unlock, self.player
+                ) and yugioh06_difficulty(state, self.player, opp.difficulty)
             campaign.exits.append(entrance)
             entrance.connect(region)
             self.multiworld.regions.append(region)
@@ -291,7 +302,7 @@ class Yugioh06World(World):
         for booster in booster_packs:
             region = self.create_region(booster, get_booster_locations(booster))
             entrance = Entrance(self.player, booster, card_shop)
-            entrance.access_rule = (lambda state, unlock=booster: state.has(unlock, self.player))
+            entrance.access_rule = lambda state, unlock=booster: state.has(unlock, self.player)
             card_shop.exits.append(entrance)
             entrance.connect(region)
             self.multiworld.regions.append(region)
@@ -303,7 +314,7 @@ class Yugioh06World(World):
                 continue
             region = self.create_region(challenge, {challenge: lid, challenge + " Complete": None})
             entrance = Entrance(self.player, challenge, challenge_region)
-            entrance.access_rule = (lambda state, unlock=challenge: state.has(unlock + " Unlock", self.player))
+            entrance.access_rule = lambda state, unlock=challenge: state.has(unlock + " Unlock", self.player)
             challenge_region.exits.append(entrance)
             entrance.connect(region)
             self.multiworld.regions.append(region)
@@ -342,64 +353,36 @@ class Yugioh06World(World):
 
         needed_item_pool_size = sum(l not in self.removed_challenges for l in self.location_name_to_id)
         needed_filler_amount = needed_item_pool_size - len(item_pool)
-        item_pool += [
-            self.create_item("5000DP")
-            for _ in range(needed_filler_amount)
-        ]
+        item_pool += [self.create_item("5000DP") for _ in range(needed_filler_amount)]
 
         self.multiworld.itempool += item_pool
 
         for challenge in get_beat_challenge_events(self):
-            item = Yugioh2006Item(
-                "Challenge Beaten",
-                ItemClassification.progression,
-                None,
-                self.player
-            )
+            item = Yugioh2006Item("Challenge Beaten", ItemClassification.progression, None, self.player)
             location = self.multiworld.get_location(challenge, self.player)
             location.place_locked_item(item)
 
         for opponent in self.campaign_opponents:
             for location_name, event in get_opponent_locations(opponent).items():
                 if event is not None and not isinstance(event, int):
-                    item = Yugioh2006Item(
-                        event,
-                        ItemClassification.progression,
-                        None,
-                        self.player
-                    )
+                    item = Yugioh2006Item(event, ItemClassification.progression, None, self.player)
                     location = self.multiworld.get_location(location_name, self.player)
                     location.place_locked_item(item)
 
         for booster in booster_packs:
             for location_name, content in get_booster_locations(booster).items():
-                item = Yugioh2006Item(
-                    content,
-                    ItemClassification.progression,
-                    None,
-                    self.player
-                )
+                item = Yugioh2006Item(content, ItemClassification.progression, None, self.player)
                 location = self.multiworld.get_location(location_name, self.player)
                 location.place_locked_item(item)
 
         structure_deck = self.options.structure_deck.current_key
         for location_name, content in get_deck_content_locations(structure_deck).items():
-            item = Yugioh2006Item(
-                content,
-                ItemClassification.progression,
-                None,
-                self.player
-            )
+            item = Yugioh2006Item(content, ItemClassification.progression, None, self.player)
             location = self.multiworld.get_location(location_name, self.player)
             location.place_locked_item(item)
 
         for event in collection_events:
-            item = Yugioh2006Item(
-                event,
-                ItemClassification.progression,
-                None,
-                self.player
-            )
+            item = Yugioh2006Item(event, ItemClassification.progression, None, self.player)
             location = self.multiworld.get_location(event, self.player)
             location.place_locked_item(item)
 

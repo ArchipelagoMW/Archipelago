@@ -12,7 +12,7 @@ structure_deck_selection = {
     # SPELLCASTER'S JUDGEMENT
     5: 0x15,
     # Draft Mode
-    6: 0x1
+    6: 0x1,
 }
 
 banlist_ids = {
@@ -27,12 +27,12 @@ banlist_ids = {
     # March 2005
     4: 0x8,
     # September 2005
-    5: 0x9
+    5: 0x9,
 }
 
 function_addresses = {
     # Count Campaign Opponents
-    0: 0xf0c8,
+    0: 0xF0C8,
     # Count Challenges
-    1: 0xef3a
+    1: 0xEF3A,
 }

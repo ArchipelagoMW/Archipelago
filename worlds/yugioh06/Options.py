@@ -5,6 +5,7 @@ from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle
 
 class StructureDeck(Choice):
     """Which Structure Deck you start with"""
+
     display_name = "Structure Deck"
     option_dragons_roar = 0
     option_zombie_madness = 1
@@ -19,6 +20,7 @@ class StructureDeck(Choice):
 
 class Banlist(Choice):
     """Which Banlist you start with"""
+
     display_name = "Banlist"
     option_no_banlist = 0
     option_September_2003 = 1
@@ -31,6 +33,7 @@ class Banlist(Choice):
 
 class FinalCampaignBossUnlockCondition(Choice):
     """How to unlock the final campaign boss and goal for the world"""
+
     display_name = "Final Campaign Boss unlock Condition"
     option_campaign_opponents = 0
     option_challenges = 1
@@ -38,6 +41,7 @@ class FinalCampaignBossUnlockCondition(Choice):
 
 class FourthTier5UnlockCondition(Choice):
     """How to unlock the fourth campaign boss"""
+
     display_name = "Fourth Tier 5 Campaign Boss unlock Condition"
     option_campaign_opponents = 0
     option_challenges = 1
@@ -45,6 +49,7 @@ class FourthTier5UnlockCondition(Choice):
 
 class ThirdTier5UnlockCondition(Choice):
     """How to unlock the third campaign boss"""
+
     display_name = "Third Tier 5 Campaign Boss unlock Condition"
     option_campaign_opponents = 0
     option_challenges = 1
@@ -52,6 +57,7 @@ class ThirdTier5UnlockCondition(Choice):
 
 class FinalCampaignBossChallenges(Range):
     """Number of Limited/Theme Duels completed for the Final Campaign Boss to appear"""
+
     display_name = "Final Campaign Boss challenges unlock amount"
     range_start = 0
     range_end = 91
@@ -60,6 +66,7 @@ class FinalCampaignBossChallenges(Range):
 
 class FourthTier5CampaignBossChallenges(Range):
     """Number of Limited/Theme Duels completed for the Fourth Level 5 Campaign Opponent to appear"""
+
     display_name = "Fourth Tier 5 Campaign Boss unlock amount"
     range_start = 0
     range_end = 91
@@ -68,6 +75,7 @@ class FourthTier5CampaignBossChallenges(Range):
 
 class ThirdTier5CampaignBossChallenges(Range):
     """Number of Limited/Theme Duels completed for the Third Level 5 Campaign Opponent to appear"""
+
     display_name = "Third Tier 5 Campaign Boss unlock amount"
     range_start = 0
     range_end = 91
@@ -76,6 +84,7 @@ class ThirdTier5CampaignBossChallenges(Range):
 
 class FinalCampaignBossCampaignOpponents(Range):
     """Number of Campaign Opponents Duels defeated for the Final Campaign Boss to appear"""
+
     display_name = "Final Campaign Boss campaign opponent unlock amount"
     range_start = 0
     range_end = 24
@@ -84,6 +93,7 @@ class FinalCampaignBossCampaignOpponents(Range):
 
 class FourthTier5CampaignBossCampaignOpponents(Range):
     """Number of Campaign Opponents Duels defeated for the Fourth Level 5 Campaign Opponent to appear"""
+
     display_name = "Fourth Tier 5 Campaign Boss campaign opponent unlock amount"
     range_start = 0
     range_end = 23
@@ -92,6 +102,7 @@ class FourthTier5CampaignBossCampaignOpponents(Range):
 
 class ThirdTier5CampaignBossCampaignOpponents(Range):
     """Number of Campaign Opponents Duels defeated for the Third Level 5 Campaign Opponent to appear"""
+
     display_name = "Third Tier 5 Campaign Boss campaign opponent unlock amount"
     range_start = 0
     range_end = 22
@@ -100,6 +111,7 @@ class ThirdTier5CampaignBossCampaignOpponents(Range):
 
 class NumberOfChallenges(Range):
     """Number of random Limited/Theme Duels that are included. The rest will be inaccessible."""
+
     display_name = "Number of Challenges"
     range_start = 0
     range_end = 91
@@ -108,6 +120,7 @@ class NumberOfChallenges(Range):
 
 class StartingMoney(Range):
     """The amount of money you start with"""
+
     display_name = "Starting Money"
     range_start = 0
     range_end = 100000
@@ -116,6 +129,7 @@ class StartingMoney(Range):
 
 class MoneyRewardMultiplier(Range):
     """By which amount the campaign reward money is multiplied"""
+
     display_name = "Money Reward Multiplier"
     range_start = 1
     range_end = 255
@@ -124,6 +138,7 @@ class MoneyRewardMultiplier(Range):
 
 class NormalizeBoostersPacks(DefaultOnToggle):
     """If enabled every booster pack costs the same otherwise vanilla cost is used"""
+
     display_name = "Normalize Booster Packs"
 
 
@@ -132,6 +147,7 @@ class BoosterPackPrices(Range):
     Only Works if normalize booster packs is enabled.
     Sets the amount that what every booster pack costs.
     """
+
     display_name = "Booster Pack Prices"
     range_start = 1
     range_end = 3000
@@ -140,16 +156,19 @@ class BoosterPackPrices(Range):
 
 class AddEmptyBanList(Toggle):
     """Adds a Ban List where everything is at 3 to the item pool"""
+
     display_name = "Add Empty Ban List"
 
 
 class CampaignOpponentsShuffle(Toggle):
     """Replaces the campaign with random opponents from the entire game"""
+
     display_name = "Campaign Opponents Shuffle"
 
 
 class OCGArts(Toggle):
     """Always use the OCG artworks for cards"""
+
     display_name = "OCG Arts"
 
 

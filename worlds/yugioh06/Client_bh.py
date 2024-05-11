@@ -56,12 +56,16 @@ class YuGiOh2006Client(BizHawkClient):
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         try:
-            read_state = await bizhawk.read(ctx.bizhawk_ctx,
-                                            [(0x0, 8, "EWRAM"),
-                                             (0x52e8, 32, "EWRAM"),
-                                             (0x5308, 32, "EWRAM"),
-                                             (0x5325, 1, "EWRAM"),
-                                             (0x6c38, 4, "EWRAM")])
+            read_state = await bizhawk.read(
+                ctx.bizhawk_ctx,
+                [
+                    (0x0, 8, "EWRAM"),
+                    (0x52E8, 32, "EWRAM"),
+                    (0x5308, 32, "EWRAM"),
+                    (0x5325, 1, "EWRAM"),
+                    (0x6C38, 4, "EWRAM"),
+                ],
+            )
             game_state = read_state[0].decode("utf-8")
             locations = read_state[1]
             items = read_state[2]
@@ -72,21 +76,27 @@ class YuGiOh2006Client(BizHawkClient):
             if game_state != "YWCT2006":
                 return
             local_items = bytearray(items)
-            await bizhawk.guarded_write(ctx.bizhawk_ctx,
-                                        [(0x5308, parse_items(bytearray(items), ctx.items_received), "EWRAM")],
-                                        [(0x5308, local_items, "EWRAM")])
+            await bizhawk.guarded_write(
+                ctx.bizhawk_ctx,
+                [(0x5308, parse_items(bytearray(items), ctx.items_received), "EWRAM")],
+                [(0x5308, local_items, "EWRAM")],
+            )
             money_received = 0
             for item in ctx.items_received:
                 if item.item == item_to_index["5000DP"] + 5730000:
                     money_received += 1
             if money_received > amount_items:
-                await bizhawk.guarded_write(ctx.bizhawk_ctx,
-                                            [(0x6c38,
-                                              (money + (money_received - amount_items) * 5000).to_bytes(4, "little"),
-                                              "EWRAM"),
-                                             (0x5325, money_received.to_bytes(2, "little"), "EWRAM")],
-                                            [(0x6c38, money.to_bytes(4, "little"), "EWRAM"),
-                                             (0x5325, amount_items.to_bytes(2, "little"), "EWRAM")])
+                await bizhawk.guarded_write(
+                    ctx.bizhawk_ctx,
+                    [
+                        (0x6C38, (money + (money_received - amount_items) * 5000).to_bytes(4, "little"), "EWRAM"),
+                        (0x5325, money_received.to_bytes(2, "little"), "EWRAM"),
+                    ],
+                    [
+                        (0x6C38, money.to_bytes(4, "little"), "EWRAM"),
+                        (0x5325, amount_items.to_bytes(2, "little"), "EWRAM"),
+                    ],
+                )
 
             locs_to_send = set()
 
@@ -106,17 +116,11 @@ class YuGiOh2006Client(BizHawkClient):
                 self.local_checked_locations = locs_to_send
 
                 if locs_to_send is not None:
-                    await ctx.send_msgs([{
-                        "cmd": "LocationChecks",
-                        "locations": list(locs_to_send)
-                    }])
+                    await ctx.send_msgs([{"cmd": "LocationChecks", "locations": list(locs_to_send)}])
 
             # Send game clear if we're in either any ending cutscene or the credits state.
             if not ctx.finished_game and locations[18] & (1 << 5) != 0:
-                await ctx.send_msgs([{
-                    "cmd": "StatusUpdate",
-                    "status": ClientStatus.CLIENT_GOAL
-                }])
+                await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
 
         except bizhawk.RequestFailedError:
             # Exit handler and return to main loop to reconnect.
