@@ -111,11 +111,6 @@ class DarkSouls3World(World):
             self.yhorm_location = default_yhorm_location
 
 
-    def _exclude_location_group(self, name: str):
-        """Adds all the locations in the given location group to the set of excluded locations."""
-        self.options.exclude_locations.value.update(location_name_groups[name])
-
-
     def _allow_boss_for_yhorm(self, boss: DS3BossInfo) -> bool:
         """Returns whether boss is a valid location for Yhorm in this seed."""
 
