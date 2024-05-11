@@ -8,13 +8,10 @@ from typing import List
 from BaseClasses import get_seed
 from Fill import distribute_items_restrictive, balance_multiworld_progression
 from worlds import AutoWorld
-from .. import SVTestCase, minimal_locations_maximal_items, setup_multiworld, default_4_x_x_options, \
-    allsanity_4_x_x_options_without_mods, default_options, allsanity_options_without_mods, allsanity_options_with_mods
+from .. import SVTestCase, minimal_locations_maximal_items, setup_multiworld, default_5_x_x, allsanity_no_mods_5_x_x, allsanity_mods_5_x_x
 
-assert default_4_x_x_options
-assert allsanity_4_x_x_options_without_mods
-assert default_options
-assert allsanity_options_without_mods
+assert default_5_x_x
+assert allsanity_no_mods_5_x_x
 
 default_number_generations = 25
 acceptable_deviation = 4
@@ -138,7 +135,7 @@ def size_name(number_players):
 
 class TestDefaultOptions(SVPerformanceTestCase):
     acceptable_time_per_player = 2
-    options = default_options()
+    options = default_5_x_x()
     results = []
 
     def test_solo(self):
@@ -191,7 +188,7 @@ class TestMinLocationMaxItems(SVPerformanceTestCase):
 
 class TestAllsanityWithoutMods(SVPerformanceTestCase):
     acceptable_time_per_player = 10
-    options = allsanity_options_without_mods()
+    options = allsanity_no_mods_5_x_x()
     results = []
 
     def test_solo(self):
@@ -219,7 +216,7 @@ class TestAllsanityWithoutMods(SVPerformanceTestCase):
 
 class TestAllsanityWithMods(SVPerformanceTestCase):
     acceptable_time_per_player = 25
-    options = allsanity_options_with_mods()
+    options = allsanity_mods_5_x_x()
     results = []
 
     def test_solo(self):
