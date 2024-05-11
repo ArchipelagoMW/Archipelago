@@ -207,17 +207,6 @@ def copy_item(item: Item):
     return Item(item.name, item.classification, item.code, item.player)
 
 
-def num_missions(world: 'SC2World') -> int:
-    mission_order_type = get_option_value(world, "mission_order")
-    if mission_order_type in static_mission_orders:
-        mission_order = static_mission_orders[mission_order_type]()
-        misssions = [mission for campaign in mission_order for mission in mission_order[campaign]]
-        return len(misssions) - 1  # Menu
-    else:
-        mission_pools = filter_missions(world)
-        return min(world.options.maximum_campaign_size, sum(len(pool) for _, pool in mission_pools.items()))
-
-
 class ValidInventory:
 
     def has(self, item: str, player: int):
