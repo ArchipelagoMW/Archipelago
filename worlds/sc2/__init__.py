@@ -450,8 +450,7 @@ def flag_start_unit(world: SC2World, item_list: List[FilterItem], starter_unit: 
         # If the first mission is a logic-less no-build
         missions = get_all_missions(world.mission_req_table)
         build_missions = [mission for mission in missions if MissionFlag.NoBuild not in mission.flags]
-        races = set(mission.race for mission in build_missions)
-        races.remove(SC2Race.ANY)
+        races = {mission.race for mission in build_missions if mission.race != SC2Race.ANY}
         if races:
             first_race = world.random.choice(list(races))
 
