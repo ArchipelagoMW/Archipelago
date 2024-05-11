@@ -181,10 +181,10 @@ max_difficulty = len(smooth_difficulty) - 1
 
 
 def make_golden_path(world: World, num_missions: int) -> Dict[SC2Campaign, List[FillMission]]:
-    chain_name_options = ['Mar Sara', 'Agria', 'Redstone', 'Meinhoff', 'Tarsonis', 'Char',
+    chain_name_options = ['Mar Sara', 'Agria', 'Redstone', 'Meinhoff', 'Haven', 'Tarsonis', 'Valhalla', 'Char',
                           'Umoja', 'Kaldir', 'Zerus', 'Skygeirr Station', 'Dominion Space', 'Korhal',
                           'Aiur', 'Glacius', 'Shakuras', 'Ulnar', 'Slayn',
-                          'Antiga', 'Braxis', 'Moria', 'Tyrador', 'Xil', 'Zhakul',
+                          'Antiga', 'Braxis', 'Chau Sara', 'Moria', 'Tyrador', 'Xil', 'Zhakul',
                           'Azeroth', 'Crouton', 'Draenor', 'Sanctuary']
     world.random.shuffle(chain_name_options)
 
