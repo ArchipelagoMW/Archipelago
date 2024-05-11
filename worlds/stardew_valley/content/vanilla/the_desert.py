@@ -32,9 +32,9 @@ the_desert = ContentPack(
     },
     shop_sources={
         Seed.cactus: (ShopSource(money_price=150, shop_region=Region.oasis),),
-        Seed.rhubarb: (ShopSource(money_price=100, shop_region=Region.oasis),),
-        Seed.starfruit: (ShopSource(money_price=400, shop_region=Region.oasis),),
-        Seed.beet: (ShopSource(money_price=20, shop_region=Region.oasis),),
+        Seed.rhubarb: (ShopSource(money_price=100, shop_region=Region.oasis, seasons=(Season.spring,)),),
+        Seed.starfruit: (ShopSource(money_price=400, shop_region=Region.oasis, seasons=(Season.summer,)),),
+        Seed.beet: (ShopSource(money_price=20, shop_region=Region.oasis, seasons=(Season.fall,)),),
     },
     fishes=(
         fish_data.sandfish,
