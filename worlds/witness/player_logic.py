@@ -843,6 +843,12 @@ class WitnessPlayerLogic:
         }
 
     def pick_panel_hunt_panels(self, world: "WitnessWorld"):
+        disallowed_entities_for_panel_hunt = {
+            "0x03629",  # Tutorial Gate Open, which is the panel that is locked by panel hunt
+            "0x03505",  # Tutorial Gate Close (same thing)
+            "0x3352F",  # Gate EP (same thing)
+        }
+
         all_eligible_panels = [
             entity_hex for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items()
             if entity_obj["entityType"] == "Panel" and self.solvability_guaranteed(entity_hex)
@@ -853,7 +859,7 @@ class WitnessPlayerLogic:
                 and not world.options.shuffle_discarded_panels
                 and entity_obj["locationType"] == "Discard"
             )
-            and entity_hex not in {"0x03629", "0x03505", "0x3352F"}
+            and entity_hex not in disallowed_entities_for_panel_hunt
             and entity_hex not in self.HUNT_ENTITIES
         ]
 
