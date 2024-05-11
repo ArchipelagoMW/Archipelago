@@ -823,9 +823,6 @@ class Entrance:
         only allows connection between entrances of the same type (one ways only go to one ways,
         two ways always go to two ways) and prevents connecting an exit to itself in coupled mode.
 
-        Generally it is a good idea use call super().can_connect_to as one condition in any custom
-        implementations unless you specifically want to avoid the above behaviors.
-
         :param other: The proposed Entrance to connect to
         :param state: The current (partial) state of the ongoing entrance randomization
         """

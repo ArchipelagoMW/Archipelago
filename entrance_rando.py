@@ -206,13 +206,7 @@ class ERPlacementState:
 def disconnect_entrance_for_randomization(entrance: Entrance, target_group: Optional[str] = None) -> None:
     """
     Given an entrance in a "vanilla" region graph, splits that entrance to prepare it for randomization
-    in randomize_entrances. Specifically that means the entrance will be disconnected from its
-    connected region and a corresponding ER target will be created in a way that can respect coupled randomization
-    requirements for 2 way transitions (assuming that this is called on both sides of the vanilla 2 way).
-    
-    Preconditions:
-    1. The entrance has both a parent and child region (ie, it is fully connected)
-    2. The entrance has already been labeled with the appropriate entrance type
+    in randomize_entrances. This should be done after setting the type and group of the entrance.
 
     :param entrance: The entrance which will be disconnected in preparation for randomization.
     :param target_group: The group to assign to the created ER target. If not specified, the group from
@@ -247,51 +241,9 @@ def randomize_entrances(
     """
     Randomizes Entrances for a single world in the multiworld.
 
-    Depending on how your world is configured, this may be called as early as create_regions or
-    need to be called as late as pre_fill. In general, earlier is better; the best time to
-    randomize entrances is as soon as the preconditions are fulfilled.
-
-    Preconditions:
-    1. All of your Regions and all of their exits have been created.
-    2. Placeholder entrances have been created as the targets of randomization
-       (each exit will be randomly paired to an entrance). There are 2 primary ways to do this:
-       * Pre-place your unrandomized region graph, then use disconnect_entrances_for_randomization
-         to prepare them, or
-       * Manually prepare your entrances for randomization. Exits to be randomized should be created
-         and left without a connected region. There should be an equal number of matching dummy
-         entrances of each entrance type in the region graph which do not have a parent; these can
-         easily be created with region.create_er_target(). If you plan to use coupled randomization, the names
-         of these placeholder entrances matter and should exactly match the name of the corresponding exit in
-         that region. For example, given regions R1 and R2 connected R1 --[E1]-> R2 and R2 --[E2]-> R1 when
-         unrandomized, then the expected inputs to coupled ER would be the following (the names of the ER targets
-         for one-way transitions do not matter):
-            * R1 --[E1]-> None
-            * None --[E1]-> R1
-            * R2 --[E2]-> None
-            * None --[E2]-> R2
-    3. All entrances and exits have been correctly labeled as 1 way or 2 way.
-    4. Your Menu region is connected to your starting region.
-    5. All the region connections you don't want to randomize are connected; usually this
-       is connecting regions within a "scene" but may also include plando'd transitions.
-    6. Access rules are set on all relevant region exits.
-       * Access rules are used to conservatively prevent cases where, given a switch in region R_s
-         and the gate that it opens being the exit E_g to region R_g, the only way to access R_s
-         is through a connection R_g --(E_g)-> R_s, thus making R_s inaccessible. If you encode
-         this kind of cross-region dependency through events or indirect connections, those must
-         be placed/registered before calling this function if you want them to be respected.
-       * If you set access rules that contain items other than events, those items must be added to
-         the multiworld item pool before randomizing entrances.
-       * Any plando (item or entrance) you want to accommodate in logic should be completed for logic to
-         work correctly. Notably, if you want to logically accommodate items placed in plando, you will
-         have to do ER in pre_fill.
-
-    Post-conditions:
-    1. All randomizable Entrances will be connected
-    2. All placeholder entrances to regions will have been removed.
-
     :param world: Your World instance
     :param coupled: Whether connected entrances should be coupled to go in both directions
-    :param get_target_groups: Method to call that returns the groups that a specific group type is allowed to connect to
+    :param get_target_groups: Function to call that returns the groups that a specific group type is allowed to connect to
     :param preserve_group_order: Whether the order of groupings should be preserved for the returned target_groups
     :param on_connect: A callback function which allows specifying side effects after a placement is completed
                        successfully and the underlying collection state has been updated.

@@ -7,7 +7,7 @@ as "ER."
 This doc assumes familiarity with Archipelago's graph logic model. If you don't have a solid understanding of how
 regions work, you should start there.
 
-## Entrance Randomization Concepts
+## Entrance randomization concepts
 
 ### Terminology
 
@@ -21,7 +21,7 @@ Some important terminology to understand when reading this doc and working with 
   `Entrance` class will always be referenced in a code block with an uppercase E.
 * Dead end - a region which can never give access to additional randomized transitions
 
-### Basic Randomization Strategy
+### Basic randomization strategy
 
 The Generic ER algorithm works by using the logic structures you are already familiar with. To give a basic example,
 let's assume a toy world is defined with the vanilla region graph modeled below. In this diagram, the smaller boxes
@@ -195,12 +195,182 @@ graph LR
     classDef hidden display:none;
 ```
 
-## Using Generic ER
+## Usage
 
-### Defining Entrances to be Randomized
+### Defining entrances to be randomized
 
-### Entrance Groups
+The first step to using generic ER is defining entrances to be randomized. In order to do this, you will need to
+leave partially disconnected exits without a `target_region` and partially disconnected entrances without a
+`parent_region`. You can do this either by hand using `region.create_exit` and `region.create_er_target`, or you can
+create your vanilla region graph and then use `disconnect_entrance_for_randomization` to split the desired edges.
+If you're not sure which to use, prefer the latter approach as it will automatically satisfy the requirements for 
+coupled randomization (discussed in more depth later).
 
-### Imposing Custom Constraints on Randomization
+> [!TIP]
+> It's recommended to give your `Entrance`s non-default names when creating them. The default naming scheme is 
+> `f"{parent_region} -> {target_region}"` which is generally not helpful in an entrance rando context - after all,
+> the target region will not be the same as vanilla and regions are often not user-facing anyway. Instead consider names
+> that describe the location of the exit, such as "Starting Room Right Door."
 
-## Implementation Details
+When creating your `Entrance`s you should also set the randomization type and group. One-way `Entrance`s represent
+transitions which are impossible to traverse in reverse. All other transitions are two-ways. To ensure that all
+transitions can be accessed in the game, one-ways are only randomized with other one-ways and two-ways are only
+randomized with other two-ways. You can set whether an `Entrance` is one-way or two-way using the `randomization_type`
+attribute.
+
+`Entrace`s can also set the `randomization_group` attribute to allow for grouping during randomization. This can be
+any arbitrary string you define and may be based on player options. Some possible use cases for grouping include:
+* Directional matching - only match leftward-facing transitions to rightward-facing ones
+* Terrain matching - only match water transitions to water transitions and land transitions to land transitions
+* Dungeon shuffle - only shuffle entrances within a dungeon/area with each other
+* Combinations of the above
+
+By default, all `Entrance`s are placed in the `"Default"` group.
+
+### Calling generic ER
+
+Once you have defined all your entrances and exits and connected the Menu region to your region graph, you can call 
+`randomize_entrances` to perform randomization.
+
+#### Coupled and uncoupled modes
+
+In coupled randomization, an entrance placed from A to B guarantees that the reverse placement B to A also exists
+(assuming that A and B are both two-way doors). Uncoupled randomization does not make this guarantee.
+
+When using coupled mode, there are some requirements for how placeholder ER targets for two-ways are named. 
+`disconnect_entrance_for_randomization` will handle this for you. However, if you opt to create your ER targets and
+exits by hand, you will need to ensure that ER targets into a region are named the same as the exit they correspond to.
+This allows the randomizer to find and connect the reverse pairing after the first pairing is completed. See the diagram
+below for an example of incorrect and correct naming.
+
+Incorrect target naming:
+
+```mermaid
+%%{init: {"graph": {"defaultRenderer": "elk"}} }%%
+graph LR
+    subgraph a [" "]
+        direction TB
+        target1
+        target2
+    end
+    subgraph b [" "]
+        direction TB
+        Region
+    end
+    Region["Room1"] -->|Room1 Right Door| target1:::hidden
+    Region --- target2:::hidden -->|Room2 Left Door| Region
+
+    linkStyle 1 stroke:none;
+    classDef hidden display:none;
+    style a display:none;
+    style b display:none;
+```
+
+Correct target naming:
+
+```mermaid
+%%{init: {"graph": {"defaultRenderer": "elk"}} }%%
+graph LR
+    subgraph a [" "]
+        direction TB
+        target1
+        target2
+    end
+    subgraph b [" "]
+        direction TB
+        Region
+    end
+    Region["Room1"] -->|Room1 Right Door| target1:::hidden
+    Region --- target2:::hidden -->|Room1 Right Door| Region
+
+    linkStyle 1 stroke:none;
+    classDef hidden display:none;
+    style a display:none;
+    style b display:none;
+```
+
+#### Implementing grouping
+
+When you created your entrances, you defined the group each entrance belongs to. Now you will have to define how groups
+should connect with each other. This is done with the `get_target_groups` and `preserve_group_order` parameters. Some
+recipes for `get_target_groups` are presented here.
+
+Directional matching:
+```python
+def match_direction(group: str) -> List[str]:
+    if group == "Left":
+        # with preserve_group_order = False, pair a left transition to either a right transition or door randomly
+        # with preserve_group_order = True, pair a left transition to a right transition, or else a door if no
+        #   viable right transitions remain
+        return ["Right", "Door"]
+    # ...
+```
+
+Terrain matching or dungeon shuffle:
+```python
+def randomize_within_same_group(group: str) -> List[str]:
+    return [group]
+```
+
+Directional + area shuffle:
+```python
+def get_target_groups(group: str) -> List[str]:
+    # example group: "Left-City"
+    # example result: ["Right-City", "Door-City"]
+    direction, area = group.split("-")
+    return [f"{pair_direction}-{area}" for pair_direction in match_direction(direction)]
+```
+
+#### When to call `randomize_entrances`
+
+The short answer is that you will almost always want to do ER in `pre_fill`. For more information why, continue reading.
+
+ER begins by collecting the entire item pool and then uses your access rules to try and prevent some kinds of failures. 
+Consider a case where an `Entrance`'s access rule requires another region. In logic, these would usually be represented 
+with events or indirect connections, which are not part of the item pool. Logic is used to prevent an arrangement where
+that region is locked behind that entrance, thus making the seed impossible. In theory, if none of these appear in your
+logic, you could do ER as early as `create_regions`, immediately after the regions are available.
+
+However, plando is also a consideration. Since item plando happens before `pre_fill` and modifies the item pool,
+doing ER in `pre_fill` is the only way to account for placements made by item plando, otherwise you risk impossible
+seeds or generation failures. Obviously, you may also want to perform ER after entrance plando as well.
+
+#### Informing your client about randomized entrances
+
+`randomize_entrances` returns the completed `ERPlacementState`. The `pairings` attribute contains a list of the
+created placements by name which can be used to populate slot data.
+
+### Imposing custom constraints on randomization
+
+Generic ER is, as the name implies, generic! That means that your world may have some use case which is not covered by
+the ER implementation. To solve this, you can create a custom `Entrance` class which provides custom implementations
+for `is_valid_source_transition` and `can_connect_to`. These allow arbitrary constraints to be implemented on
+randomization, for instance helping to prevent restrictive sphere 1s or ensuring a maximum distance from a "hub" region.
+
+> [!IMPORTANT]
+> When implementing these functions, make sure to use `super().is_valid_source_transition` and `super().can_connect_to`
+> as part of your implementation. Otherwise ER may behave unexpectedly.
+
+## Implementation details
+
+This section is a medium-level explainer of the implementation of ER for those who don't want to decipher the code.
+
+ER uses a forward fill approach to create the region layout. First, ER collects `all_state` and performs a region sweep
+from Menu, similar to fill. ER then proceeds in stages to complete the randomization:
+1. Attempt to connect all non-dead-end regions, prioritizing access to unseen regions so there will always be new exits
+   to pair off.
+2. Attempt to connect all dead-end regions, so that all regions will be placed
+3. Attempt to connect any dangling edges with each other, so that all entrances will be paired
+4. Do one final pass over the dead ends in case the earlier stages gated logical access to them.
+
+The process for each connection will do the following:
+1. Select a randomizable exit of a reachable region which is a valid source transition.
+2. Get its group and call `get_target_groups` to determine which groups are valid targets.
+3. Look up ER targets from those groups and find one which is valid according to `can_connect_to`
+4. Connect the source exit to the target's target_region and delete the target.
+5. If it's coupled mode, find the reverse exit and target by name and connect them as well.
+6. Sweep to update reachable regions.
+7. Call the `on_connect` callback.
+
+This process repeats until the stage is complete, no valid source transition is found, or no valid target transition is
+found for any source transition. Unlike fill, there is no attempt made to save a failed randomization.
