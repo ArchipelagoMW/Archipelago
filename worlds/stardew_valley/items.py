@@ -640,7 +640,7 @@ def create_booksanity_items(item_factory: StardewItemFactory, options: StardewVa
 
     items.extend([item_factory(item) for item in items_by_group[Group.BOOK_POWER]])
     if booksanity >= Booksanity.option_all:
-        items.extend([item_factory(item) for item in ["Progressive Lost Book"] * 21])
+        items.extend([item_factory(item) for item in ["Progressive Lost Book"] * 20])
 
 
 def create_goal_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):

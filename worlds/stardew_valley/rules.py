@@ -776,9 +776,9 @@ def set_booksanity_rules(all_location_names: Set[str], logic: StardewLogic, mult
     lost_books_in_order = sorted(locations.locations_by_tag[LocationTags.BOOKSANITY_LOST], key=lambda x: x.code_without_offset)
     for i in range(len(lost_books_in_order)):
         location = lost_books_in_order[i]
-        if location.name not in all_location_names or not location.name.startswith(read_prefix):
+        if i <= 0 or location.name not in all_location_names or not location.name.startswith(read_prefix):
             continue
-        read_rule = logic.received(f"Progressive Lost Book", i+1)
+        read_rule = logic.received(f"Progressive Lost Book", i)
         MultiWorldRules.set_rule(multiworld.get_location(location.name, player), read_rule)
 
 
