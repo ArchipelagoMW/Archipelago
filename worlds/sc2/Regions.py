@@ -381,7 +381,7 @@ def make_grid_connect_rule(
 
 
 def make_dynamic_mission_order(
-    world: World,
+    world: 'SC2World',
     mission_order_type: int
 ) -> Dict[SC2Campaign, List[FillMission]]:
     mission_pools = filter_missions(world)
