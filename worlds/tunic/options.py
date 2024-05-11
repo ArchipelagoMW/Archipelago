@@ -4,6 +4,7 @@ from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range,
                      PerGameCommonOptions)
 from .er_data import portal_mapping
 
+
 class SwordProgression(DefaultOnToggle):
     """Adds four sword upgrades to the item pool that will progressively grant stronger melee weapons, including two new swords with increased range and attack power."""
     internal_name = "sword_progression"
@@ -138,7 +139,6 @@ class LaurelsLocation(Choice):
     default = 0
 
 
-
 class ShuffleLadders(Toggle):
     """Turns several ladders in the game into items that must be found before they can be climbed on.
     Adds more layers of progression to the game by blocking access to many areas early on.
@@ -153,7 +153,9 @@ class TUNICPlandoConnections(PlandoConnections):
     entrances.add("Shop Portal")
     exits.add("Shop Portal")
 
-    
+    duplicate_exits = True
+
+
 @dataclass
 class TunicOptions(PerGameCommonOptions):
     sword_progression: SwordProgression

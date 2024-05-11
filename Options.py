@@ -1049,6 +1049,9 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
     entrances: typing.ClassVar[typing.AbstractSet[str]]
     exits: typing.ClassVar[typing.AbstractSet[str]]
 
+    duplicate_exits: bool = False
+    """Whether or not exits should be allowed to be duplicate."""
+
     def __init__(self, value: typing.Iterable[PlandoConnection]):
         self.value = list(deepcopy(value))
         super(PlandoConnections, self).__init__()
@@ -1081,7 +1084,7 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
                 raise ValueError(f"Unknown direction: {direction}")
             if entrance in used_entrances:
                 raise ValueError(f"Duplicate Entrance {entrance} not allowed.")
-            if exit in used_exits:
+            if not cls.duplicate_exits and exit in used_exits:
                 raise ValueError(f"Duplicate Exit {exit} not allowed.")
             used_entrances.append(entrance)
             used_exits.append(exit)
