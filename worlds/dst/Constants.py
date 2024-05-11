@@ -90,14 +90,13 @@ BOSS_COMPLETION_GOALS = {
 }
 
 # About "deprecated" items and locations:
-# Commented items have *never* been enabled. Once enabled, nothing gets re-commented to not break existing games.
 # If an item is no longer to be included in generation it gets marked as "deprecated".
 # Items marked as "deprecated" directly below "bundle" are likely moved into that bundle, and are no longer placed individually
 
 DSTAP_ITEMS = [
     # Crafting Recipes (1-400)
     [1,   "Tackle Receptacle",           "tacklestation",                         [ "useful" ] ],
-    # [2,   "Cartographer's Desk",         "cartographydesk",                       [ "useful" ] ],
+    # [2,   "UNUSED",                      "",                                      [ "filler" ] ],
     [3,   "Potter's Wheel",              "sculptingtable",                        [ "progression" ] ],
     [4,   "Terra Firma Tamper",          "turfcraftingstation",                   [ "useful" ] ],
     [5,   "Sawhorse",                    "carpentry_station",                     [ "progression" ] ],
@@ -158,7 +157,7 @@ DSTAP_ITEMS = [
     [60,  "Thick Fur (Recipe)",          "bearger_fur",                           [ "filler" ] ],
     [61,  "Feathery Canvas",             "malbatross_feathered_weave",            [ "useful" ] ],
     [62,  "Collected Dust",              "refined_dust",                          [ "progression" ] ],
-    # [63,  "Cookbook",                    "cookbook",                              [ "filler" ] ],
+    [63,  "Gramophone",                  "phonograph",                            [ "filler", "bundle" ] ],
     [64,  "Crock Pot",                   "cookpot",                               [ "progression" ] ],
     [65,  "Drying Rack",                 "meatrack",                              [ "progression" ] ],
     [66,  "Spear",                       "spear",                                 [ "progression" ] ],
@@ -285,14 +284,14 @@ DSTAP_ITEMS = [
     [187, "War Saddle",                  "saddle_war",                            [ "useful" ] ],
     [188, "Glossamer Saddle",            "saddle_race",                           [ "useful" ] ],
     [189, "Brush",                       "brush",                                 [ "filler" ] ],
-    # [190, "Wardrobe",                    "wardrobe",                              [ "filler" ] ],
-    # [191, "Beefalo Grooming Station",    "beefalo_groomer",                       [ "filler" ] ],
-    # [192, "Fish Scale-O-Matic",          "trophyscale_fish",                      [ "filler" ] ],
-    # [193, "Produce Scale",               "trophyscale_oversizedveggies",          [ "filler" ] ],
-    # [194, "Potted Fern",                 "pottedfern",                            [ "filler" ] ],
-    # [195, "Potted Succulent",            "succulent_potted",                      [ "filler" ] ],
-    # [196, "Gramophone",                  "phonograph",                            [ "filler" ] ],
-    # [197, "Record",                      "record",                                [ "filler" ] ],
+    [190, "Scrap Wall",                  "wall_scrap_item",                       [ "progression" ] ],
+    # [191, "UNUSED",                      "",                                      [ "filler" ] ],
+    # [192, "UNUSED",                      "",                                      [ "filler" ] ],
+    # [193, "UNUSED",                      "",                                      [ "filler" ] ],
+    # [194, "UNUSED",                      "",                                      [ "filler" ] ],
+    # [195, "UNUSED",                      "",                                      [ "filler" ] ],
+    # [196, "UNUSED",                      "",                                      [ "filler" ] ],
+    # [197, "UNUSED",                      "",                                      [ "filler" ] ],
     [198, "Boat Kit",                    "boat_item",                             [ "progression" ] ],
     [199, "Anchor Kit",                  "anchor_item",                           [ "progression" ] ],
     [200, "Steering Wheel Kit",          "steeringwheel_item",                    [ "progression" ] ],
@@ -310,6 +309,16 @@ DSTAP_ITEMS = [
     [212, "Slimy Salve",                 "healingsalve_acid",                     [ "useful" ] ],
     [213, "Floorings",                   "floorings",                             [ "progression", "bundle" ] ],
     [214, "Replica Relics",              "replicarelics",                         [ "filler", "bundle" ] ],
+    
+    # Not shuffled
+    # [000, "Cartographer's Desk",         "cartographydesk",                       [ "useful" ] ],
+    # [000, "Cookbook",                    "cookbook",                              [ "filler" ] ],
+    # [000, "Wardrobe",                    "wardrobe",                              [ "filler" ] ],
+    # [000, "Beefalo Grooming Station",    "beefalo_groomer",                       [ "filler" ] ],
+    # [000, "Fish Scale-O-Matic",          "trophyscale_fish",                      [ "filler" ] ],
+    # [000, "Produce Scale",               "trophyscale_oversizedveggies",          [ "filler" ] ],
+    # [000, "Potted Fern",                 "pottedfern",                            [ "filler" ] ],
+    # [000, "Potted Succulent",            "succulent_potted",                      [ "filler" ] ],
 
     # No-Unlock Recipes (401-450)
     [401, "Moon Rock Idol",              "moonrockidol",                              [ "nounlock", "progression" ],  [ "MAGIC" ] ],
@@ -365,12 +374,12 @@ DSTAP_ITEMS = [
     [503, "Scales",                      "dragon_scales",                         [ "physical", "filler" ] ],
     [504, "Shroom Skin",                 "shroom_skin",                           [ "physical", "filler" ] ],
     [505, "Bee Queen Crown",             "hivehat",                               [ "physical", "filler" ] ],
-    [506, "Malbatross Feather",          "malbatross_feather",                    [ "physical", "filler" ], 6],
+    [506, "Malbatross Feather",          "malbatross_feather",                    [ "physical", "filler" ], 12],
     [507, "Down Feather",                "goose_feather",                         [ "physical", "filler" ], 5],
     [508, "Eye Mask",                    "eyemaskhat",                            [ "physical", "filler" ] ],
     [509, "Shield of Terror",            "shieldofterror",                        [ "physical", "filler" ] ],
-    [510, "Iridescent Gem",              "opalpreciousgem",                       [ "physical", "filler" ] ],
-    [511, "Krampus Sack",                "krampus_sack",                          [ "physical", "filler" ] ],
+    [510, "Iridescent Gem",              "opalpreciousgem",                       [ "physical", "useful" ] ],
+    [511, "Krampus Sack",                "krampus_sack",                          [ "physical", "useful" ] ],
 
     # Junk (601 - 650)
     [601, "20 Health",                   "",                                      [ "junk", "filler" ] ],
@@ -391,10 +400,19 @@ DSTAP_ITEMS = [
     [658, "Winter Trap",                 "",                                      [ "trap", "seasontrap" ] ],
     [659, "Spring Trap",                 "",                                      [ "trap", "seasontrap" ] ],
     [660, "Summer Trap",                 "",                                      [ "trap", "seasontrap" ] ],
+
+    # Other (701 - )
+    [701, "Autumn Season Change",        "dstap_seasonchange_autumn",             [ "seasonhelper", "useful" ] ],
+    [702, "Winter Season Change",        "dstap_seasonchange_winter",             [ "seasonhelper", "useful" ] ],
+    [703, "Spring Season Change",        "dstap_seasonchange_spring",             [ "seasonhelper", "useful" ] ],
+    [704, "Summer Season Change",        "dstap_seasonchange_summer",             [ "seasonhelper", "useful" ] ],
+    [705, "Full Moon Cycle Change",      "dstap_mooncyclechange_full",            [ "seasonhelper", "useful" ] ],
+    [706, "New Moon Cycle Change",       "dstap_mooncyclechange_new",             [ "seasonhelper", "useful" ] ],
+    [707, "Extra Damage Against Bosses", "extrabossdamage",                       [ "abstract", "useful", "progressive" ] ],
 ]
 
 DSTAP_LOCATIONS = [
-    # Tasks (1-100)
+    # Misc (1-100)
     [1,     "Distilled Knowledge (Yellow)",     "",                     [ "task", "caves", "seasonal" ] ],
     [2,     "Distilled Knowledge (Blue)",       "",                     [ "task", "caves", "seasonal", "priority_celestial_boss" ] ],
     [3,     "Distilled Knowledge (Red)",        "",                     [ "task", "caves", "seasonal" ] ],
@@ -407,7 +425,7 @@ DSTAP_LOCATIONS = [
     [10,    "Pirate Stash",                     "",                     [ "task", "ocean" ] ],
     [11,    "Moon Stone Event",                 "opalstaff",            [ "item", "caves", "seasonal", "priority_celestial_boss" ] ],
     [12,    "Oasis",                            "wetpouch",             [ "item", "seasonal", "priority_antlion_boss" ] ],
-    [13,    "Poison Birchnut Tree",             "",                     [ "task", "seasonal" ] ],
+    [13,    "Poison Birchnut Tree",             "",                     [ "task", "creature", "seasonal" ] ],
 
     # Normal dishes (101-200)
     [101,   "Butter Muffin",            "butterflymuffin",          [ "cooking", "veggie" ] ],
@@ -480,6 +498,7 @@ DSTAP_LOCATIONS = [
     [168,   "Milkmade Hat",             "batnosehat",               [ "cooking", "goodies", "caves" ] ],
     [169,   "Amberosia",                "dustmeringue",             [ "cooking", "other", "ocean" ] ],
     [170,   "Stuffed Night Cap",        "shroombait",               [ "cooking", "meat", "caves" ] ],
+
     # Warly-exclusive dishes (201-250)
     [201,   "Grim Galette",             "nightmarepie",             [ "cooking", "warly" ] ],
     [202,   "Volt Goat Chaud-Froid",    "voltgoatjelly",            [ "cooking", "warly" ] ],
@@ -743,26 +762,26 @@ DSTAP_LOCATIONS = [
     [658,   "Magic (Puffin)",                   "puffin",                   [ "research", "magic", "tier_1" ] ],
 
     # Seafaring (701-750)
-    [701,   "Think Tank (Freshwater Fish)",     "pondfish",                 [ "research", "seafaring", "fishing" ] ],
-    [702,   "Think Tank (Live Eel)",            "pondeel",                  [ "research", "seafaring", "fishing" ] ],
-    [703,   "Think Tank (Runty Guppy)",         "oceanfish_small_1_inv",    [ "research", "seafaring", "fishing" ] ],
-    [704,   "Think Tank (Needlenosed Squirt)",  "oceanfish_small_2_inv",    [ "research", "seafaring", "fishing" ] ],
-    [705,   "Think Tank (Bitty Baitfish)",      "oceanfish_small_3_inv",    [ "research", "seafaring", "fishing" ] ],
-    [706,   "Think Tank (Smolt Fry)",           "oceanfish_small_4_inv",    [ "research", "seafaring", "fishing" ] ],
-    [707,   "Think Tank (Popperfish)",          "oceanfish_small_5_inv",    [ "research", "seafaring", "fishing" ] ],
-    [708,   "Think Tank (Fallounder)",          "oceanfish_small_6_inv",    [ "research", "seafaring", "fishing", "ocean", "seasonal" ] ],
-    [709,   "Think Tank (Bloomfin Tuna)",       "oceanfish_small_7_inv",    [ "research", "seafaring", "fishing", "seasonal" ] ],
-    [710,   "Think Tank (Scorching Sunfish)",   "oceanfish_small_8_inv",    [ "research", "seafaring", "fishing", "ocean", "seasonal" ] ],
-    [711,   "Think Tank (Spittlefish)",         "oceanfish_small_9_inv",    [ "research", "seafaring", "fishing", "ocean" ] ],
-    [712,   "Think Tank (Mudfish)",             "oceanfish_medium_1_inv",   [ "research", "seafaring", "fishing" ] ],
-    [713,   "Think Tank (Deep Bass)",           "oceanfish_medium_2_inv",   [ "research", "seafaring", "fishing", "ocean" ] ],
-    [714,   "Think Tank (Dandy Lionfish)",      "oceanfish_medium_3_inv",   [ "research", "seafaring", "fishing", "ocean" ] ],
-    [715,   "Think Tank (Black Catfish)",       "oceanfish_medium_4_inv",   [ "research", "seafaring", "fishing", "ocean" ] ],
-    [716,   "Think Tank (Corn Cod)",            "oceanfish_medium_5_inv",   [ "research", "seafaring", "fishing", "ocean" ] ],
-    [717,   "Think Tank (Ice Bream)",           "oceanfish_medium_8_inv",   [ "research", "seafaring", "fishing", "seasonal" ] ],
-    [718,   "Think Tank (Sweetish Fish)",       "oceanfish_medium_9_inv",   [ "research", "seafaring", "fishing" ] ],
-    [719,   "Think Tank (Wobster)",             "wobster_sheller_land",     [ "research", "seafaring", "fishing" ] ],
-    [720,   "Think Tank (Lunar Wobster)",       "wobster_moonglass_land",   [ "research", "seafaring", "fishing", "ocean" ] ],
+    [701,   "Think Tank (Freshwater Fish)",     "pondfish",                 [ "research", "seafaring" ] ],
+    [702,   "Think Tank (Live Eel)",            "pondeel",                  [ "research", "seafaring" ] ],
+    [703,   "Think Tank (Runty Guppy)",         "oceanfish_small_1_inv",    [ "research", "seafaring" ] ],
+    [704,   "Think Tank (Needlenosed Squirt)",  "oceanfish_small_2_inv",    [ "research", "seafaring" ] ],
+    [705,   "Think Tank (Bitty Baitfish)",      "oceanfish_small_3_inv",    [ "research", "seafaring" ] ],
+    [706,   "Think Tank (Smolt Fry)",           "oceanfish_small_4_inv",    [ "research", "seafaring" ] ],
+    [707,   "Think Tank (Popperfish)",          "oceanfish_small_5_inv",    [ "research", "seafaring" ] ],
+    [708,   "Think Tank (Fallounder)",          "oceanfish_small_6_inv",    [ "research", "seafaring", "ocean", "seasonal" ] ],
+    [709,   "Think Tank (Bloomfin Tuna)",       "oceanfish_small_7_inv",    [ "research", "seafaring", "seasonal" ] ],
+    [710,   "Think Tank (Scorching Sunfish)",   "oceanfish_small_8_inv",    [ "research", "seafaring", "ocean", "seasonal" ] ],
+    [711,   "Think Tank (Spittlefish)",         "oceanfish_small_9_inv",    [ "research", "seafaring", "ocean" ] ],
+    [712,   "Think Tank (Mudfish)",             "oceanfish_medium_1_inv",   [ "research", "seafaring" ] ],
+    [713,   "Think Tank (Deep Bass)",           "oceanfish_medium_2_inv",   [ "research", "seafaring", "ocean" ] ],
+    [714,   "Think Tank (Dandy Lionfish)",      "oceanfish_medium_3_inv",   [ "research", "seafaring", "ocean" ] ],
+    [715,   "Think Tank (Black Catfish)",       "oceanfish_medium_4_inv",   [ "research", "seafaring", "ocean" ] ],
+    [716,   "Think Tank (Corn Cod)",            "oceanfish_medium_5_inv",   [ "research", "seafaring", "ocean" ] ],
+    [717,   "Think Tank (Ice Bream)",           "oceanfish_medium_8_inv",   [ "research", "seafaring", "seasonal" ] ],
+    [718,   "Think Tank (Sweetish Fish)",       "oceanfish_medium_9_inv",   [ "research", "seafaring" ] ],
+    [719,   "Think Tank (Wobster)",             "wobster_sheller_land",     [ "research", "seafaring" ] ],
+    [720,   "Think Tank (Lunar Wobster)",       "wobster_moonglass_land",   [ "research", "seafaring", "ocean" ] ],
 
     # Ancient (751-800)
     [751,   "Pseudoscience (Purple Gem)",       "purplegem",                [ "research", "ancient", "tier_1", "caves" ] ],

@@ -138,6 +138,23 @@ class SeasonalLocations(Toggle):
     True: Season-specific locations may have useful items.
     """
     display_name = "Seasonal Locations"
+    
+class SeasonChangeHelperItems(Toggle):
+    """
+    Include a way to change seasons and moon phases to help with location checks?
+    These will be added as Archipelago items, and cost sanity and purple gems to use.
+    """
+    display_name = "Season Change Helper Items"
+
+class ExtraDamageAgainstBosses(Range):
+    """
+    This adds "Extra Damage Against Bosses" buffs as Archipelago items.
+    Each stack of this buff gives the player a permanent +10% damage against easier bosses and +25% damage against tougher ones.
+    """
+    display_name = "Extra Damage Against Bosses"
+    range_start = 0
+    range_end = 10
+    default = 0
   
 class ShuffleStartingRecipes(Toggle):
     """
@@ -206,6 +223,8 @@ class DSTOptions(PerGameCommonOptions):
     cooking_locations: CookingLocations
     farming_locations: FarmingLocations
     seasonal_locations: SeasonalLocations
+    season_change_helper_items: SeasonChangeHelperItems
+    extra_damage_against_bosses: ExtraDamageAgainstBosses
     shuffle_starting_recipes: ShuffleStartingRecipes
     shuffle_no_unlock_recipes: ShuffleNoUnlockRecipes
     # craft_with_locked_items: CraftWithLockedItems

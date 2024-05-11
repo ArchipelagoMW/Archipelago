@@ -19,6 +19,7 @@ def generate_item_map() -> Dict[str, DSTItemData]:
 		tags: set[str] = set(v[3])
 		classification:IC = (
 			IC.progression if "progression" in tags else
+			IC.progression_skip_balancing if "progression_skip_balancing" in tags else
 			IC.useful if "useful" in tags else
 			IC.trap if "trap" in tags else
 			IC.filler
