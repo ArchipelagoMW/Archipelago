@@ -79,10 +79,8 @@ structure_contents: dict[str, set] = {
 
 
 def get_deck_content_locations(deck: str) -> dict[str, str]:
-    location = {}
-    i = 1
-    for content in structure_contents.get(deck):
-        location[deck + " " + str(i)] = content
-        i += 1
-    return location
+    return {
+        f"{deck} {i}": content
+        for i, content in enumerate(structure_contents[deck])
+    }
 

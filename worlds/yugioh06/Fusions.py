@@ -9,24 +9,36 @@ class FusionData(NamedTuple):
 
 
 fusions = {
-    "Elemental Hero Flame Wingman": FusionData("Elemental Hero Flame Wingman",
-               ["Elemental Hero Avian", "Elemental Hero Burstinatrix"],
-               True, ["Miracle Fusion"]),
-    "Elemental Hero Madballman": FusionData("Elemental Hero Madballman",
-               ["Elemental Hero Bubbleman", "Elemental Hero Clayman"],
-               True, ["Miracle Fusion"]),
-    "Elemental Hero Rampart Blaster": FusionData("Elemental Hero Rampart Blaster",
-               ["Elemental Hero Burstinatrix", "Elemental Hero Clayman"],
-               True, ["Miracle Fusion"]),
-    "Elemental Hero Shining Flare Wingman": FusionData("Elemental Hero Shining Flare Wingman",
-               ["Elemental Hero Flame Wingman", "Elemental Hero Sparkman"],
-               True, ["Miracle Fusion"]),
-    "Elemental Hero Steam Healer": FusionData("Elemental Hero Steam Healer",
-               ["Elemental Hero Burstinatrix", "Elemental Hero Bubbleman"],
-               True, ["Miracle Fusion"]),
-    "Elemental Hero Wildedge": FusionData("Elemental Hero Wildedge",
-               ["Elemental Hero Wildheart", "Elemental Hero Bladedge"],
-               True, ["Miracle Fusion"])
+    "Elemental Hero Flame Wingman": FusionData(
+        "Elemental Hero Flame Wingman",
+        ["Elemental Hero Avian", "Elemental Hero Burstinatrix"],
+        True,
+        ["Miracle Fusion"]),
+    "Elemental Hero Madballman": FusionData(
+        "Elemental Hero Madballman",
+        ["Elemental Hero Bubbleman", "Elemental Hero Clayman"],
+        True,
+        ["Miracle Fusion"]),
+    "Elemental Hero Rampart Blaster": FusionData(
+        "Elemental Hero Rampart Blaster",
+        ["Elemental Hero Burstinatrix", "Elemental Hero Clayman"],
+        True,
+        ["Miracle Fusion"]),
+    "Elemental Hero Shining Flare Wingman": FusionData(
+        "Elemental Hero Shining Flare Wingman",
+        ["Elemental Hero Flame Wingman", "Elemental Hero Sparkman"],
+        True,
+        ["Miracle Fusion"]),
+    "Elemental Hero Steam Healer": FusionData(
+        "Elemental Hero Steam Healer",
+        ["Elemental Hero Burstinatrix", "Elemental Hero Bubbleman"],
+        True,
+        ["Miracle Fusion"]),
+    "Elemental Hero Wildedge": FusionData(
+        "Elemental Hero Wildedge",
+        ["Elemental Hero Wildheart", "Elemental Hero Bladedge"],
+        True,
+        ["Miracle Fusion"])
 }
 
 fusion_subs = ["The Dark - Hex-Sealed Fusion",
@@ -58,9 +70,3 @@ def count_has_materials(state, monsters, player):
     for monster in monsters:
         amount += has_all_materials(state, monster, player)
     return amount
-
-
-
-
-
-

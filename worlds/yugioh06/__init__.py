@@ -1,6 +1,6 @@
 import os
 import pkgutil
-from typing import ClassVar, Dict, Any
+from typing import ClassVar, Dict, Any, List
 
 import settings
 
@@ -8,12 +8,12 @@ import Utils
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
 from .logic import yugioh06_difficulty, core_booster
 from .utils import openFile
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
 from .Items import item_to_index, tier_1_opponents, booster_packs, excluded_items, Banlist_Items, \
     challenges, useful, draft_boosters, draft_opponents
 from .Locations import Bonuses, Limited_Duels, Theme_Duels, Campaign_Opponents, Required_Cards, \
     get_beat_challenge_events, special, collection_events
-from .Opponents import get_opponents, get_opponent_locations, challenge_opponents, get_opponent_condition
+from .Opponents import get_opponents, get_opponent_locations, challenge_opponents, get_opponent_condition, OpponentData
 from .Options import Yugioh06Options
 from .Rom import YGO06ProcedurePatch, get_base_rom_path, MD5Europe, MD5America, write_tokens
 from .Rules import set_rules
@@ -53,7 +53,6 @@ class Yugioh06World(World):
     simulator on the GBA. Featuring over 2000 cards and over 90 Challenges.
     """
     game = "Yu-Gi-Oh! 2006"
-    data_version = 1
     web = Yugioh06Web()
     options: Yugioh06Options
     options_dataclass = Yugioh06Options
@@ -84,20 +83,22 @@ class Yugioh06World(World):
     for k, v in Required_Cards.items():
         location_name_to_id[k] = v + start_id
 
-    set_rules = set_rules
-
     item_name_groups = {
         "Core Booster": core_booster,
         "Campaign Boss Beaten": ["Tier 1 Beaten", "Tier 2 Beaten", "Tier 3 Beaten", "Tier 4 Beaten", "Tier 5 Beaten"]
     }
 
+    removed_challenges: List[str]
+    starting_booster: str
+    starting_opponent: str
+    campaign_opponents: List[OpponentData]
+    is_draft_mode: bool
+
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
-        self.removed_challenges = None
-        self.starting_booster = None
-        self.starting_opponent = None
-        self.campaign_opponents = None
-        self.is_draft_mode = False
+
+    def set_rules(self):
+        set_rules(self)
 
     def create_item(self, name: str) -> Item:
         classification: ItemClassification = ItemClassification.progression
@@ -284,6 +285,9 @@ class Yugioh06World(World):
             self.multiworld.regions.append(region)
 
     def generate_early(self):
+        self.starting_opponent = ""
+        self.starting_booster = ""
+        self.removed_challenges = []
         # Universal tracker stuff, shouldn't do anything in standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "Yu-Gi-Oh! 2006" in self.multiworld.re_gen_passthrough:
@@ -323,6 +327,7 @@ class Yugioh06World(World):
             else:
                 opponents = draft_opponents
         else:
+            self.is_draft_mode = False
             boosters = booster_packs
             opponents = tier_1_opponents
 
@@ -425,8 +430,6 @@ def create_region(self, name: str, locations=None, exits=None):
             else:
                 lid = None
             location = Yugioh2006Location(self.player, location_name, lid, region)
-            if lid is None:
-                location.event = True
             region.locations.append(location)
 
     if exits:
@@ -436,7 +439,7 @@ def create_region(self, name: str, locations=None, exits=None):
 
 
 class Yugioh2006Item(Item):
-    game = "Yu-Gi-Oh! 2006"
+    game: str = "Yu-Gi-Oh! 2006"
 
 
 class Yugioh2006Location(Location):
