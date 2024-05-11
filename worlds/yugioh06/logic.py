@@ -1,4 +1,5 @@
 from typing import List
+
 from BaseClasses import CollectionState
 
 core_booster: List[str] = [

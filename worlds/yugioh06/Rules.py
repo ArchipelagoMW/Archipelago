@@ -1,4 +1,5 @@
 from worlds.generic.Rules import add_rule
+
 from . import yugioh06_difficulty
 from .Fusions import count_has_materials
 
@@ -52,10 +53,10 @@ def set_rules(world):
         "Skull Servant Finish Bonus": lambda state: state.has("Skull Servant", player) and
                                                     yugioh06_difficulty(state, player, 3),
         "Konami Bonus": lambda state: state.has_all(["Messenger of Peace", "Castle of Dark Illusions", "Mystik Wok"],
-                                                    player) or state.has_all(["Mystik Wok", "Barox", "Cyber-Stein",
+                                                    player) or (state.has_all(["Mystik Wok", "Barox", "Cyber-Stein",
                                                                               "Poison of the Old Man"],
-                                                                             player) and yugioh06_difficulty(state, 
-            player, 8),
+                                                                             player) and yugioh06_difficulty(state,
+            player, 8)),
         "Max Damage Bonus": lambda state: state.has_any(["Wave-Motion Cannon", "Megamorph", "United We Stand",
                                                          "Mage Power"], player),
         "Fusion Summon Bonus": lambda state: state.has_any(["Polymerization", "Fusion Gate", "Power Bond"], player),
@@ -68,8 +69,8 @@ def set_rules(world):
                                                 and yugioh06_difficulty(state, player, 4),
         "Effect Damage Only Bonus": lambda state: state.has_all(["Solar Flare Dragon", "UFO Turtle"], player)
                                                   or state.has("Wave-Motion Cannon", player)
-                                                  or state.can_reach("Final Countdown Finish Bonus", 'Location', player)
-                                                  or state.can_reach("Destiny Board Finish Bonus", 'Location', player)
+                                                  or state.can_reach("Final Countdown Finish Bonus", "Location", player)
+                                                  or state.can_reach("Destiny Board Finish Bonus", "Location", player)
                                                   or state.has("Can Exodia Win", player)
                                                   or state.has("Can Last Turn Win", player),
         "No More Cards Bonus": lambda state: state.has_any(["Cyber Jar", "Morphing Jar",
@@ -145,12 +146,12 @@ def set_rules(world):
         "Can Exodia Win":
             lambda state: state.has_all(["Exodia", "Heart of the Underdog"], player),
         "Can Last Turn Win":
-            lambda state: state.has_all(["Last Turn", "Wall of Revealing Light"], player) and \
+            lambda state: state.has_all(["Last Turn", "Wall of Revealing Light"], player) and
                           (state.has_any(["Jowgen the Spiritualist", "Jowls of Dark Demise", "Non Aggression Area"],
                                          player)
                            or state.has_all(["Cyber-Stein", "The Last Warrior from Another Planet"], player)),
         "Can Yata Lock":
-            lambda state: state.has_all(["Yata-Garasu", "Chaos Emperor Dragon - Envoy of the End", "Sangan"], player) \
+            lambda state: state.has_all(["Yata-Garasu", "Chaos Emperor Dragon - Envoy of the End", "Sangan"], player)
                           and state.has_any(["No Banlist", "Banlist September 2003"], player),
         "Can Stall with Monsters":
             lambda state: state.count_from_list_exclusive(
@@ -722,19 +723,19 @@ def only_spellcaster(state, player):
 
 
 def equip_unions(state, player):
-    return (state.has("Burning Beast", player) and state.has("Freezing Beast", player) and
-            state.has("Metallizing Parasite - Lunatite", player) and state.has("Mother Grizzly", player) or
-            state.has("Dark Blade", player) and state.has("Pitch-Dark Dragon", player) and
+    return ((state.has("Burning Beast", player) and state.has("Freezing Beast", player) and
+            state.has("Metallizing Parasite - Lunatite", player) and state.has("Mother Grizzly", player)) or
+            (state.has("Dark Blade", player) and state.has("Pitch-Dark Dragon", player) and
             state.has("Giant Orc", player) and state.has("Second Goblin", player) and
-            state.has("Mystic Tomato", player) or
-            state.has("Decayed Commander", player) and state.has("Zombie Tiger", player) and
+            state.has("Mystic Tomato", player)) or
+            (state.has("Decayed Commander", player) and state.has("Zombie Tiger", player) and
             state.has("Vampire Orchis", player) and state.has("Des Dendle", player) and
-            state.has("Giant Rat", player) or
-            state.has("Indomitable Fighter Lei Lei", player) and state.has("Protective Soul Ailin", player) and
+            state.has("Giant Rat", player)) or
+            (state.has("Indomitable Fighter Lei Lei", player) and state.has("Protective Soul Ailin", player) and
             state.has("V-Tiger Jet", player) and state.has("W-Wing Catapult", player) and
-            state.has("Shining Angel", player) or
-            state.has("X-Head Cannon", player) and state.has("Y-Dragon Head", player) and
-            state.has("Z-Metal Tank", player) and state.has("Shining Angel", player)) and \
+            state.has("Shining Angel", player)) or
+            (state.has("X-Head Cannon", player) and state.has("Y-Dragon Head", player) and
+            state.has("Z-Metal Tank", player) and state.has("Shining Angel", player))) and \
            state.count_from_list_exclusive(["Frontline Base", "Formation Union", "Roll Out!"], player) > 0
 
 

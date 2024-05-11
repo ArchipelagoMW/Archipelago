@@ -201,12 +201,13 @@ collection_events = {
     "Has Back-row removal": None
 }
 
+
 def get_beat_challenge_events(self):
     beat_events = {}
     for limited in Limited_Duels.keys():
         if limited not in self.removed_challenges:
-            beat_events[limited + ' Complete'] = None
+            beat_events[limited + " Complete"] = None
     for theme in Theme_Duels.keys():
         if theme not in self.removed_challenges:
-            beat_events[theme + ' Complete'] = None
+            beat_events[theme + " Complete"] = None
     return beat_events

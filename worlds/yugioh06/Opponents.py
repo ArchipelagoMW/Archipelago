@@ -1,7 +1,8 @@
-from typing import NamedTuple, List, Optional, Dict, Union
+from typing import Dict, List, NamedTuple, Optional, Union
 
 from BaseClasses import MultiWorld
-from worlds.yugioh06 import tier_1_opponents, item_to_index, yugioh06_difficulty
+
+from worlds.yugioh06 import item_to_index, tier_1_opponents, yugioh06_difficulty
 from worlds.yugioh06.Locations import special
 
 
@@ -249,8 +250,8 @@ def get_opponent_locations(opponent: OpponentData) -> Dict[str, Optional[Union[s
 def get_opponent_condition(opponent: OpponentData, unlock_item: str, unlock_amount: int, player: int,
                            is_challenge: bool):
     return lambda state: (
-            (is_challenge and state.has(unlock_item, player, unlock_amount)
-             or not is_challenge and state.has_group(unlock_item, player, unlock_amount))
+            ((is_challenge and state.has(unlock_item, player, unlock_amount))
+             or (not is_challenge and state.has_group(unlock_item, player, unlock_amount)))
             and yugioh06_difficulty(state, player, opponent.difficulty)
             and state.has_all(opponent.additional_info, player)
     )

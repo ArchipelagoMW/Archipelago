@@ -1,7 +1,6 @@
-import typing
 from dataclasses import dataclass
 
-from Options import Option, Choice, Range, Toggle, PerGameCommonOptions, DefaultOnToggle
+from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle
 
 
 class StructureDeck(Choice):
@@ -152,6 +151,7 @@ class CampaignOpponentsShuffle(Toggle):
 class OCGArts(Toggle):
     """Always use the OCG artworks for cards"""
     display_name = "OCG Arts"
+
 
 @dataclass
 class Yugioh06Options(PerGameCommonOptions):

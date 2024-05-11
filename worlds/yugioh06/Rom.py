@@ -3,15 +3,17 @@ import math
 import os
 import struct
 
-import Utils
-from worlds.Files import APProcedurePatch, APTokenTypes, APTokenMixin
 from settings import get_settings
-from .Items import item_to_index
-from .RomValues import structure_deck_selection, banlist_ids, function_addresses
-from ..AutoWorld import World
 
-MD5Europe = '020411d3b08f5639eb8cb878283f84bf'
-MD5America = 'b8a7c976b28172995fe9e465d654297a'
+import Utils
+from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
+
+from ..AutoWorld import World
+from .Items import item_to_index
+from .RomValues import banlist_ids, function_addresses, structure_deck_selection
+
+MD5Europe = "020411d3b08f5639eb8cb878283f84bf"
+MD5America = "b8a7c976b28172995fe9e465d654297a"
 
 
 class YGO06ProcedurePatch(APProcedurePatch, APTokenMixin):
@@ -138,7 +140,7 @@ def write_tokens(world: World, patch: YGO06ProcedurePatch):
     )
     # normalize booster packs if option is set
     if world.options.normalize_boosters_packs.value:
-        booster_pack_price = world.options.booster_pack_prices.value.to_bytes(2, 'little')
+        booster_pack_price = world.options.booster_pack_prices.value.to_bytes(2, "little")
         for booster in range(51):
             space = booster * 16
             patch.write_token(
@@ -176,7 +178,7 @@ def write_tokens(world: World, patch: YGO06ProcedurePatch):
                 0x1e58d10 + space,
                 struct.pack("<H", opp.deck_name_id)
             )
-            for j, b in enumerate(opp.deck_file.encode('ascii')):
+            for j, b in enumerate(opp.deck_file.encode("ascii")):
                 patch.write_token(
                     APTokenTypes.WRITE,
                     0x1e58d12 + space + j,
@@ -210,9 +212,9 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
         basemd5.update(base_rom_bytes)
         md5hash = basemd5.hexdigest()
         if MD5Europe != md5hash and MD5America != md5hash:
-            raise Exception('Supplied Base Rom does not match known MD5 for'
-                            'Yu-Gi-Oh! World Championship 2006 America or Europe '
-                            'Get the correct game and version, then dump it')
+            raise Exception("Supplied Base Rom does not match known MD5 for"
+                            "Yu-Gi-Oh! World Championship 2006 America or Europe "
+                            "Get the correct game and version, then dump it")
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes
 

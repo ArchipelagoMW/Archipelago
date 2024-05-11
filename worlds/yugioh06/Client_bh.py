@@ -1,12 +1,11 @@
-import logging
 import math
-import sys
-from typing import TYPE_CHECKING, Optional, Dict, Set, List
+from typing import TYPE_CHECKING, List, Optional, Set
 
-from worlds.yugioh06 import item_to_index
 from NetUtils import ClientStatus, NetworkItem
+
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
+from worlds.yugioh06 import item_to_index
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext

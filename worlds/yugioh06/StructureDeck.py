@@ -83,4 +83,3 @@ def get_deck_content_locations(deck: str) -> dict[str, str]:
         f"{deck} {i}": content
         for i, content in enumerate(structure_contents[deck])
     }
-

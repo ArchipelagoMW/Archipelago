@@ -16,23 +16,23 @@ structure_deck_selection = {
 }
 
 banlist_ids = {
-    #NoList
+    # NoList
     0: 0x0,
-    #September 2003
+    # September 2003
     1: 0x5,
-    #March 2004
+    # March 2004
     2: 0x6,
-    #September 2004
+    # September 2004
     3: 0x7,
-    #March 2005
+    # March 2005
     4: 0x8,
-    #September 2005
+    # September 2005
     5: 0x9
 }
 
 function_addresses = {
-    #Count Campaign Opponents
+    # Count Campaign Opponents
     0: 0xf0c8,
-    #Count Challenges
+    # Count Challenges
     1: 0xef3a
 }

@@ -1,9 +1,8 @@
 # support for AP world
+import io
 import pathlib
 import pkgutil
 import sys
-
-import io
 
 isAPWorld = ".apworld" in sys.modules[__name__].__file__
 
@@ -20,8 +19,8 @@ def openFile(resource: str, mode: str = "r", encoding: None = None):
         (zipFile, stem) = getZipFile()
         with zipFile as zf:
             zipFilePath = resource[resource.index(stem + "/"):]
-            if mode == 'rb':
-                return zf.open(zipFilePath, 'r')
+            if mode == "rb":
+                return zf.open(zipFilePath, "r")
             else:
                 return io.TextIOWrapper(zf.open(zipFilePath, mode), encoding)
     else:

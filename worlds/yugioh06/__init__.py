@@ -1,26 +1,51 @@
 import os
 import pkgutil
-from typing import ClassVar, Dict, Any, List
+from typing import Any, ClassVar, Dict, List
 
 import settings
+from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
 
 import Utils
-from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
-from .logic import yugioh06_difficulty, core_booster
-from .utils import openFile
-from worlds.AutoWorld import World, WebWorld
-from .Items import item_to_index, tier_1_opponents, booster_packs, excluded_items, Banlist_Items, \
-    challenges, useful, draft_boosters, draft_opponents
-from .Locations import Bonuses, Limited_Duels, Theme_Duels, Campaign_Opponents, Required_Cards, \
-    get_beat_challenge_events, special, collection_events
-from .Opponents import get_opponents, get_opponent_locations, challenge_opponents, get_opponent_condition, OpponentData
+from worlds.AutoWorld import WebWorld, World
+
+from .BoosterPacks import booster_contents as booster_contents
+from .BoosterPacks import get_booster_locations
+from .Client_bh import YuGiOh2006Client as YuGiOh2006Client
+from .Items import (
+    Banlist_Items,
+    booster_packs,
+    draft_boosters,
+    draft_opponents,
+    excluded_items,
+    item_to_index,
+    tier_1_opponents,
+    useful,
+)
+from .Items import (
+    challenges as challenges,
+)
+from .Locations import (
+    Bonuses,
+    Campaign_Opponents,
+    Limited_Duels,
+    Required_Cards,
+    Theme_Duels,
+    collection_events,
+    get_beat_challenge_events,
+    special,
+)
+from .logic import core_booster, yugioh06_difficulty
+from .Opponents import OpponentData, get_opponent_condition, get_opponent_locations, get_opponents
+from .Opponents import challenge_opponents as challenge_opponents
 from .Options import Yugioh06Options
-from .Rom import YGO06ProcedurePatch, get_base_rom_path, MD5Europe, MD5America, write_tokens
+from .Rom import MD5America, MD5Europe, YGO06ProcedurePatch, write_tokens
+from .Rom import get_base_rom_path as get_base_rom_path
+from .RomValues import banlist_ids as banlist_ids
+from .RomValues import function_addresses as function_addresses
+from .RomValues import structure_deck_selection as structure_deck_selection
 from .Rules import set_rules
-from .BoosterPacks import booster_contents, get_booster_locations
 from .StructureDeck import get_deck_content_locations
-from .RomValues import structure_deck_selection, banlist_ids, function_addresses
-from .Client_bh import YuGiOh2006Client
+from .utils import openFile as openFile
 
 
 class Yugioh06Web(WebWorld):
@@ -382,16 +407,16 @@ class Yugioh06World(World):
         set_rules(self)
 
     def generate_output(self, output_directory: str):
-        #patched_rom = self.apply_randomizer()
-        outfilebase = 'AP_' + self.multiworld.seed_name
-        outfilepname = f'_P{self.player}'
+        # patched_rom = self.apply_randomizer()
+        outfilebase = "AP_" + self.multiworld.seed_name
+        outfilepname = f"_P{self.player}"
         outfilepname += f"_{self.multiworld.get_file_safe_player_name(self.player).replace(' ', '_')}"
-        outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.gba')
+        outputFilename = os.path.join(output_directory, f"{outfilebase}{outfilepname}.gba")
         self.rom_name_text = f'YGO06{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0'
-        self.romName = bytearray(self.rom_name_text, 'utf8')[:0x20]
+        self.romName = bytearray(self.rom_name_text, "utf8")[:0x20]
         self.romName.extend([0] * (0x20 - len(self.romName)))
         self.rom_name = self.romName
-        self.playerName = bytearray(self.multiworld.player_name[self.player], 'utf8')[:0x20]
+        self.playerName = bytearray(self.multiworld.player_name[self.player], "utf8")[:0x20]
         self.playerName.extend([0] * (0x20 - len(self.playerName)))
         patch = YGO06ProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
         patch.write_file("base_patch.bsdiff4", pkgutil.get_data(__name__, "patch.bsdiff4"))
