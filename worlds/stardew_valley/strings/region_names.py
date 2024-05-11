@@ -29,7 +29,6 @@ class Region:
     oasis = "Oasis"
     casino = "Casino"
     mines = "The Mines"
-    mines_dwarf_shop = "Mines Dwarf Shop"
     skull_cavern_entrance = "Skull Cavern Entrance"
     skull_cavern = "Skull Cavern"
     sewer = "Sewer"
@@ -75,14 +74,6 @@ class Region:
     elliott_house = "Elliott's House"
     ranch = "Marnie's Ranch"
     mastery_cave = "Mastery Cave"
-    traveling_cart = "Traveling Cart"
-    traveling_cart_sunday = "Traveling Cart Sunday"
-    traveling_cart_monday = "Traveling Cart Monday"
-    traveling_cart_tuesday = "Traveling Cart Tuesday"
-    traveling_cart_wednesday = "Traveling Cart Wednesday"
-    traveling_cart_thursday = "Traveling Cart Thursday"
-    traveling_cart_friday = "Traveling Cart Friday"
-    traveling_cart_saturday = "Traveling Cart Saturday"
     farm_cave = "Farmcave"
     greenhouse = "Greenhouse"
     leah_house = "Leah's Cottage"
@@ -150,6 +141,20 @@ class Region:
     dangerous_mines_20 = "Dangerous Mines - Floor 20"
     dangerous_mines_60 = "Dangerous Mines - Floor 60"
     dangerous_mines_100 = "Dangerous Mines - Floor 100"
+
+
+class LogicRegion:
+    mines_dwarf_shop = "Mines Dwarf Shop"
+
+    traveling_cart = "Traveling Cart"
+    traveling_cart_sunday = "Traveling Cart Sunday"
+    traveling_cart_monday = "Traveling Cart Monday"
+    traveling_cart_tuesday = "Traveling Cart Tuesday"
+    traveling_cart_wednesday = "Traveling Cart Wednesday"
+    traveling_cart_thursday = "Traveling Cart Thursday"
+    traveling_cart_friday = "Traveling Cart Friday"
+    traveling_cart_saturday = "Traveling Cart Saturday"
+
     kitchen = "Kitchen"
     shipping = "Shipping"
     queen_of_sauce = "The Queen of Sauce"

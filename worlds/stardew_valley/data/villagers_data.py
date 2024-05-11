@@ -4,7 +4,7 @@ from typing import Tuple, Optional
 from ..mods.mod_data import ModNames
 from ..strings.food_names import Beverage
 from ..strings.generic_names import Generic
-from ..strings.region_names import Region, SVERegion, AlectoRegion, BoardingHouseRegion, LaceyRegion
+from ..strings.region_names import Region, SVERegion, AlectoRegion, BoardingHouseRegion, LaceyRegion, LogicRegion
 from ..strings.season_names import Season
 from ..strings.villager_names import NPC, ModNPC
 
@@ -36,7 +36,7 @@ carpenter = (Region.carpenter,)
 alex_house = (Region.alex_house,)
 elliott_house = (Region.elliott_house,)
 ranch = (Region.ranch,)
-mines_dwarf_shop = (Region.mines_dwarf_shop,)
+mines_dwarf_shop = (LogicRegion.mines_dwarf_shop,)
 desert = (Region.desert,)
 oasis = (Region.oasis,)
 sewers = (Region.sewer,)

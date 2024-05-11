@@ -24,7 +24,7 @@ from .stardew_rule import True_, StardewRule, HasProgressionPercent
 from .strings.ap_names.event_names import Event
 from .strings.entrance_names import Entrance as EntranceName
 from .strings.goal_names import Goal as GoalName
-from .strings.region_names import Region as RegionName
+from .strings.region_names import Region as RegionName, LogicRegion
 
 client_version = 0
 
@@ -196,7 +196,7 @@ class StardewValleyWorld(World):
         self.create_event_location(start_dark_talisman_quest, self.logic.wallet.has_rusty_key(), Event.start_dark_talisman_quest)
 
     def setup_action_events(self):
-        can_ship_event = LocationData(None, RegionName.shipping, Event.can_ship_items)
+        can_ship_event = LocationData(None, LogicRegion.shipping, Event.can_ship_items)
         self.create_event_location(can_ship_event, True_(), Event.can_ship_items)
         can_shop_pierre_event = LocationData(None, RegionName.pierre_store, Event.can_shop_at_pierre)
         self.create_event_location(can_shop_pierre_event, True_(), Event.can_shop_at_pierre)

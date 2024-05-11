@@ -15,7 +15,7 @@ from .options import ExcludeGingerIsland, ArcadeMachineLocations, SpecialOrderLo
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
 from .strings.goal_names import Goal
 from .strings.quest_names import ModQuest
-from .strings.region_names import Region
+from .strings.region_names import Region, LogicRegion
 from .strings.villager_names import NPC
 
 LOCATION_CODE_OFFSET = 717000
@@ -152,10 +152,10 @@ events_locations = [
     LocationData(None, Region.farm_house, Goal.full_house),
     LocationData(None, Region.island_west, Goal.greatest_walnut_hunter),
     LocationData(None, Region.adventurer_guild, Goal.protector_of_the_valley),
-    LocationData(None, Region.shipping, Goal.full_shipment),
-    LocationData(None, Region.kitchen, Goal.gourmet_chef),
+    LocationData(None, LogicRegion.shipping, Goal.full_shipment),
+    LocationData(None, LogicRegion.kitchen, Goal.gourmet_chef),
     LocationData(None, Region.farm, Goal.craft_master),
-    LocationData(None, Region.shipping, Goal.legend),
+    LocationData(None, LogicRegion.shipping, Goal.legend),
     LocationData(None, Region.farm, Goal.mystery_of_the_stardrops),
     LocationData(None, Region.farm, Goal.allsanity),
     LocationData(None, Region.qi_walnut_room, Goal.perfection),

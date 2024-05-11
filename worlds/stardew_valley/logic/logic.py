@@ -75,7 +75,7 @@ from ..strings.material_names import Material
 from ..strings.metal_names import Ore, MetalBar, Mineral, Fossil, Artifact
 from ..strings.monster_drop_names import Loot
 from ..strings.monster_names import Monster
-from ..strings.region_names import Region
+from ..strings.region_names import Region, LogicRegion
 from ..strings.season_names import Season
 from ..strings.seed_names import Seed, TreeSeed
 from ..strings.skill_names import Skill
@@ -217,8 +217,8 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Consumable.golden_animal_cracker: self.skill.has_mastery(Skill.farming),
             Consumable.mystery_box: self.received(CommunityUpgrade.mr_qi_plane_ride),
             Consumable.gold_mystery_box: self.received(CommunityUpgrade.mr_qi_plane_ride) & self.skill.has_mastery(Skill.foraging),
-            Currency.calico_egg: self.region.can_reach(Region.desert_festival),
-            Currency.golden_tag: self.region.can_reach(Region.trout_derby),
+            Currency.calico_egg: self.region.can_reach(LogicRegion.desert_festival),
+            Currency.golden_tag: self.region.can_reach(LogicRegion.trout_derby),
             Currency.prize_ticket: self.time.has_lived_months(2),  # Time to do a few help wanted quests
             Decoration.rotten_plant: self.has(Lighting.jack_o_lantern) & self.season.has(Season.winter),
             Fertilizer.basic: self.money.can_spend_at(Region.pierre_store, 100),

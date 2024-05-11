@@ -1,8 +1,8 @@
 from typing import Dict, List, Optional
 
-from ..mods.mod_data import ModNames
 from .recipe_source import RecipeSource, StarterSource, QueenOfSauceSource, ShopSource, SkillSource, FriendshipSource, ShopTradeSource, CutsceneSource, \
     ArchipelagoSource, LogicSource, SpecialOrderSource, FestivalShopSource, QuestSource, MasterySource
+from ..mods.mod_data import ModNames
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.craftable_names import Bomb, Fence, Sprinkler, WildSeeds, Floor, Fishing, Ring, Consumable, Edible, Lighting, Storage, Furniture, Sign, \
     Craftable, \
@@ -20,7 +20,7 @@ from ..strings.material_names import Material
 from ..strings.metal_names import Ore, MetalBar, Fossil, Artifact, Mineral, ModFossil
 from ..strings.monster_drop_names import Loot
 from ..strings.quest_names import Quest
-from ..strings.region_names import Region, SVERegion
+from ..strings.region_names import Region, SVERegion, LogicRegion
 from ..strings.seed_names import Seed, TreeSeed
 from ..strings.skill_names import Skill, ModSkill
 from ..strings.special_order_names import SpecialOrder
@@ -139,10 +139,12 @@ cask = cellar_recipe(Machine.cask, {Material.wood: 40, Material.hardwood: 1})
 cheese_press = skill_recipe(Machine.cheese_press, Skill.farming, 6, {Material.wood: 45, Material.stone: 45, Material.hardwood: 10, MetalBar.copper: 1})
 keg = skill_recipe(Machine.keg, Skill.farming, 8, {Material.wood: 30, MetalBar.copper: 1, MetalBar.iron: 1, ArtisanGood.oak_resin: 1})
 loom = skill_recipe(Machine.loom, Skill.farming, 7, {Material.wood: 60, Material.fiber: 30, ArtisanGood.pine_tar: 1})
-mayonnaise_machine = skill_recipe(Machine.mayonnaise_machine, Skill.farming, 2, {Material.wood: 15, Material.stone: 15, Mineral.earth_crystal: 10, MetalBar.copper: 1})
+mayonnaise_machine = skill_recipe(Machine.mayonnaise_machine, Skill.farming, 2,
+                                  {Material.wood: 15, Material.stone: 15, Mineral.earth_crystal: 10, MetalBar.copper: 1})
 oil_maker = skill_recipe(Machine.oil_maker, Skill.farming, 8, {Loot.slime: 50, Material.hardwood: 20, MetalBar.gold: 1})
 preserves_jar = skill_recipe(Machine.preserves_jar, Skill.farming, 4, {Material.wood: 50, Material.stone: 40, Material.coal: 8})
-fish_smoker = shop_recipe(Machine.fish_smoker, Region.fish_shop, 10000, {Material.hardwood: 10, WaterItem.sea_jelly: 1, WaterItem.river_jelly: 1, WaterItem.cave_jelly: 1})
+fish_smoker = shop_recipe(Machine.fish_smoker, Region.fish_shop, 10000,
+                          {Material.hardwood: 10, WaterItem.sea_jelly: 1, WaterItem.river_jelly: 1, WaterItem.cave_jelly: 1})
 dehydrator = shop_recipe(Machine.dehydrator, Region.pierre_store, 10000, {Material.wood: 30, Material.clay: 2, Mineral.fire_quartz: 1})
 
 basic_fertilizer = skill_recipe(Fertilizer.basic, Skill.farming, 1, {Material.sap: 2})
@@ -155,13 +157,16 @@ deluxe_speed_gro = skill_recipe(SpeedGro.deluxe, Skill.farming, 8, {ArtisanGood.
 hyper_speed_gro = ap_recipe(SpeedGro.hyper, {Ore.radioactive: 1, Fossil.bone_fragment: 3, Loot.solar_essence: 1})
 basic_retaining_soil = skill_recipe(RetainingSoil.basic, Skill.farming, 4, {Material.stone: 2})
 quality_retaining_soil = skill_recipe(RetainingSoil.quality, Skill.farming, 7, {Material.stone: 3, Material.clay: 1})
-deluxe_retaining_soil = shop_trade_recipe(RetainingSoil.deluxe, Region.island_trader, Currency.cinder_shard, 50, {Material.stone: 5, Material.fiber: 3, Material.clay: 1})
+deluxe_retaining_soil = shop_trade_recipe(RetainingSoil.deluxe, Region.island_trader, Currency.cinder_shard, 50,
+                                          {Material.stone: 5, Material.fiber: 3, Material.clay: 1})
 tree_fertilizer = skill_recipe(Fertilizer.tree, Skill.foraging, 7, {Material.fiber: 5, Material.stone: 5})
 
-spring_seeds = skill_recipe(WildSeeds.spring, Skill.foraging, 1, {Forageable.wild_horseradish: 1, Forageable.daffodil: 1, Forageable.leek: 1, Forageable.dandelion: 1})
+spring_seeds = skill_recipe(WildSeeds.spring, Skill.foraging, 1,
+                            {Forageable.wild_horseradish: 1, Forageable.daffodil: 1, Forageable.leek: 1, Forageable.dandelion: 1})
 summer_seeds = skill_recipe(WildSeeds.summer, Skill.foraging, 4, {Forageable.spice_berry: 1, Fruit.grape: 1, Forageable.sweet_pea: 1})
 fall_seeds = skill_recipe(WildSeeds.fall, Skill.foraging, 6, {Mushroom.common: 1, Forageable.wild_plum: 1, Forageable.hazelnut: 1, Forageable.blackberry: 1})
-winter_seeds = skill_recipe(WildSeeds.winter, Skill.foraging, 7, {Forageable.winter_root: 1, Forageable.crystal_fruit: 1, Forageable.snow_yam: 1, Forageable.crocus: 1})
+winter_seeds = skill_recipe(WildSeeds.winter, Skill.foraging, 7,
+                            {Forageable.winter_root: 1, Forageable.crystal_fruit: 1, Forageable.snow_yam: 1, Forageable.crocus: 1})
 ancient_seeds = ap_recipe(WildSeeds.ancient, {Artifact.ancient_seed: 1})
 grass_starter = shop_recipe(WildSeeds.grass_starter, Region.pierre_store, 1000, {Material.fiber: 10})
 blue_grass_starter = ap_recipe(WildSeeds.blue_grass_starter, {Material.fiber: 25, Material.moss: 10, ArtisanGood.mystic_syrup: 1})
@@ -172,7 +177,7 @@ fiber_seeds = special_order_recipe(WildSeeds.fiber, SpecialOrder.community_clean
 wood_floor = shop_recipe(Floor.wood, Region.carpenter, 100, {Material.wood: 1})
 rustic_floor = shop_recipe(Floor.rustic, Region.carpenter, 200, {Material.wood: 1})
 straw_floor = shop_recipe(Floor.straw, Region.carpenter, 200, {Material.wood: 1, Material.fiber: 1})
-weathered_floor = shop_recipe(Floor.weathered, Region.mines_dwarf_shop, 500, {Material.wood: 1})
+weathered_floor = shop_recipe(Floor.weathered, LogicRegion.mines_dwarf_shop, 500, {Material.wood: 1})
 crystal_floor = shop_recipe(Floor.crystal, Region.sewer, 500, {MetalBar.quartz: 1})
 stone_floor = shop_recipe(Floor.stone, Region.carpenter, 100, {Material.stone: 1})
 stone_walkway_floor = shop_recipe(Floor.stone_walkway, Region.carpenter, 200, {Material.stone: 1})
@@ -204,7 +209,7 @@ ring_of_yoba = skill_recipe(Ring.ring_of_yoba, Skill.combat, 7, {MetalBar.gold: 
 thorns_ring = skill_recipe(Ring.thorns_ring, Skill.combat, 7, {Fossil.bone_fragment: 50, Material.stone: 50, MetalBar.gold: 1})
 glowstone_ring = skill_recipe(Ring.glowstone_ring, Skill.mining, 4, {Loot.solar_essence: 5, MetalBar.iron: 5})
 iridium_band = skill_recipe(Ring.iridium_band, Skill.combat, 9, {MetalBar.iridium: 5, Loot.solar_essence: 50, Loot.void_essence: 50})
-wedding_ring = shop_recipe(Ring.wedding_ring, Region.traveling_cart, 500, {MetalBar.iridium: 5, Mineral.prismatic_shard: 1})
+wedding_ring = shop_recipe(Ring.wedding_ring, LogicRegion.traveling_cart, 500, {MetalBar.iridium: 5, Mineral.prismatic_shard: 1})
 
 field_snack = skill_recipe(Edible.field_snack, Skill.foraging, 1, {TreeSeed.acorn: 1, TreeSeed.maple: 1, TreeSeed.pine: 1})
 bug_steak = skill_recipe(Edible.bug_steak, Skill.combat, 1, {Loot.bug_meat: 10})
@@ -216,8 +221,10 @@ fairy_dust = quest_recipe(Consumable.fairy_dust, Quest.the_pirates_wife, {Minera
 warp_totem_beach = skill_recipe(Consumable.warp_totem_beach, Skill.foraging, 6, {Material.hardwood: 1, WaterItem.coral: 2, Material.fiber: 10})
 warp_totem_mountains = skill_recipe(Consumable.warp_totem_mountains, Skill.foraging, 7, {Material.hardwood: 1, MetalBar.iron: 1, Material.stone: 25})
 warp_totem_farm = skill_recipe(Consumable.warp_totem_farm, Skill.foraging, 8, {Material.hardwood: 1, ArtisanGood.honey: 1, Material.fiber: 20})
-warp_totem_desert = shop_trade_recipe(Consumable.warp_totem_desert, Region.desert, MetalBar.iridium, 10, {Material.hardwood: 2, Forageable.coconut: 1, Ore.iridium: 4})
-warp_totem_island = shop_recipe(Consumable.warp_totem_island, Region.volcano_dwarf_shop, 10000, {Material.hardwood: 5, Forageable.dragon_tooth: 1, Forageable.ginger: 1})
+warp_totem_desert = shop_trade_recipe(Consumable.warp_totem_desert, Region.desert, MetalBar.iridium, 10,
+                                      {Material.hardwood: 2, Forageable.coconut: 1, Ore.iridium: 4})
+warp_totem_island = shop_recipe(Consumable.warp_totem_island, Region.volcano_dwarf_shop, 10000,
+                                {Material.hardwood: 5, Forageable.dragon_tooth: 1, Forageable.ginger: 1})
 rain_totem = skill_recipe(Consumable.rain_totem, Skill.foraging, 9, {Material.hardwood: 1, ArtisanGood.truffle_oil: 1, ArtisanGood.pine_tar: 5})
 
 torch = starter_recipe(Lighting.torch, {Material.wood: 1, Material.sap: 2})
@@ -232,7 +239,7 @@ skull_brazier = shop_recipe(Lighting.skull_brazier, Region.carpenter, 3000, {Fos
 marble_brazier = shop_recipe(Lighting.marble_brazier, Region.carpenter, 5000, {Mineral.marble: 1, Mineral.aquamarine: 1, Material.stone: 100})
 wood_lamp_post = shop_recipe(Lighting.wood_lamp_post, Region.carpenter, 500, {Material.wood: 50, ArtisanGood.battery_pack: 1})
 iron_lamp_post = shop_recipe(Lighting.iron_lamp_post, Region.carpenter, 1000, {MetalBar.iron: 1, ArtisanGood.battery_pack: 1})
-jack_o_lantern = festival_shop_recipe(Lighting.jack_o_lantern, Region.spirit_eve, 2000, {Vegetable.pumpkin: 1, Lighting.torch: 1})
+jack_o_lantern = festival_shop_recipe(Lighting.jack_o_lantern, LogicRegion.spirit_eve, 2000, {Vegetable.pumpkin: 1, Lighting.torch: 1})
 
 bone_mill = special_order_recipe(Machine.bone_mill, SpecialOrder.fragments_of_the_past, {Fossil.bone_fragment: 10, Material.clay: 3, Material.stone: 20})
 bait_maker = skill_recipe(Machine.bait_maker, Skill.fishing, 6, {MetalBar.iron: 3, WaterItem.coral: 3, WaterItem.sea_urchin: 1})
@@ -257,7 +264,8 @@ tapper = skill_recipe(Machine.tapper, Skill.foraging, 4, {Material.wood: 40, Met
 worm_bin = skill_recipe(Machine.worm_bin, Skill.fishing, 4, {Material.hardwood: 25, MetalBar.gold: 1, MetalBar.iron: 1, Material.fiber: 50})
 deluxe_worm_bin = skill_recipe(Machine.deluxe_worm_bin, Skill.fishing, 8, {Machine.worm_bin: 1, Material.moss: 30})
 
-tub_o_flowers = festival_shop_recipe(Furniture.tub_o_flowers, Region.flower_dance, 2000, {Material.wood: 15, Seed.tulip: 1, Seed.jazz: 1, Seed.poppy: 1, Seed.spangle: 1})
+tub_o_flowers = festival_shop_recipe(Furniture.tub_o_flowers, LogicRegion.flower_dance, 2000,
+                                     {Material.wood: 15, Seed.tulip: 1, Seed.jazz: 1, Seed.poppy: 1, Seed.spangle: 1})
 wicked_statue = shop_recipe(Furniture.wicked_statue, Region.sewer, 1000, {Material.stone: 25, Material.coal: 5})
 flute_block = cutscene_recipe(Furniture.flute_block, Region.carpenter, NPC.robin, 6, {Material.wood: 10, Ore.copper: 2, Material.fiber: 20})
 drum_block = cutscene_recipe(Furniture.drum_block, Region.carpenter, NPC.robin, 6, {Material.stone: 10, Ore.copper: 2, Material.fiber: 20})
@@ -265,7 +273,7 @@ drum_block = cutscene_recipe(Furniture.drum_block, Region.carpenter, NPC.robin, 
 chest = starter_recipe(Storage.chest, {Material.wood: 50})
 stone_chest = special_order_recipe(Storage.stone_chest, SpecialOrder.robins_resource_rush, {Material.stone: 50})
 big_chest = shop_recipe(Storage.big_chest, Region.carpenter, 5000, {Material.wood: 120, MetalBar.copper: 2})
-big_stone_chest = shop_recipe(Storage.big_stone_chest, Region.mines_dwarf_shop, 5000, {Material.stone: 250})
+big_stone_chest = shop_recipe(Storage.big_stone_chest, LogicRegion.mines_dwarf_shop, 5000, {Material.stone: 250})
 
 wood_sign = starter_recipe(Sign.wood, {Material.wood: 25})
 stone_sign = starter_recipe(Sign.stone, {Material.stone: 25})
@@ -281,7 +289,8 @@ transmute_fe = skill_recipe(Craftable.transmute_fe, Skill.mining, 4, {MetalBar.c
 transmute_au = skill_recipe(Craftable.transmute_au, Skill.mining, 7, {MetalBar.iron: 2})
 mini_jukebox = cutscene_recipe(Craftable.mini_jukebox, Region.saloon, NPC.gus, 5, {MetalBar.iron: 2, ArtisanGood.battery_pack: 1})
 mini_obelisk = special_order_recipe(Craftable.mini_obelisk, SpecialOrder.a_curious_substance, {Material.hardwood: 30, Loot.solar_essence: 20, MetalBar.gold: 3})
-farm_computer = special_order_recipe(Craftable.farm_computer, SpecialOrder.aquatic_overpopulation, {Artifact.dwarf_gadget: 1, ArtisanGood.battery_pack: 1, MetalBar.quartz: 10})
+farm_computer = special_order_recipe(Craftable.farm_computer, SpecialOrder.aquatic_overpopulation,
+                                     {Artifact.dwarf_gadget: 1, ArtisanGood.battery_pack: 1, MetalBar.quartz: 10})
 hopper = ap_recipe(Craftable.hopper, {Material.hardwood: 10, MetalBar.iridium: 1, MetalBar.radioactive: 1})
 
 cookout_kit = skill_recipe(Craftable.cookout_kit, Skill.foraging, 3, {Material.wood: 15, Material.fiber: 10, Material.coal: 3})
@@ -297,11 +306,13 @@ anvil = mastery_recipe(Machine.anvil, Skill.combat, {MetalBar.iron: 50})
 mini_forge = mastery_recipe(Machine.mini_forge, Skill.combat, {Forageable.dragon_tooth: 5, MetalBar.iron: 10, MetalBar.gold: 10, MetalBar.iridium: 5})
 
 travel_charm = shop_recipe(ModCraftable.travel_core, Region.adventurer_guild, 250, {Loot.solar_essence: 1, Loot.void_essence: 1}, ModNames.magic)
-preservation_chamber = skill_recipe(ModMachine.preservation_chamber, ModSkill.archaeology, 2, {MetalBar.copper: 1, Material.wood: 15, ArtisanGood.oak_resin: 30},
+preservation_chamber = skill_recipe(ModMachine.preservation_chamber, ModSkill.archaeology, 2,
+                                    {MetalBar.copper: 1, Material.wood: 15, ArtisanGood.oak_resin: 30},
                                     ModNames.archaeology)
 preservation_chamber_h = skill_recipe(ModMachine.hardwood_preservation_chamber, ModSkill.archaeology, 7, {MetalBar.copper: 1, Material.hardwood: 15,
                                                                                                           ArtisanGood.oak_resin: 30}, ModNames.archaeology)
-grinder = skill_recipe(ModMachine.grinder, ModSkill.archaeology, 8, {Artifact.rusty_cog: 10, MetalBar.iron: 5, ArtisanGood.battery_pack: 1}, ModNames.archaeology)
+grinder = skill_recipe(ModMachine.grinder, ModSkill.archaeology, 8, {Artifact.rusty_cog: 10, MetalBar.iron: 5, ArtisanGood.battery_pack: 1},
+                       ModNames.archaeology)
 ancient_battery = skill_recipe(ModMachine.ancient_battery, ModSkill.archaeology, 6, {Material.stone: 40, MetalBar.copper: 10, MetalBar.iron: 5},
                                ModNames.archaeology)
 glass_bazier = skill_recipe(ModCraftable.glass_bazier, ModSkill.archaeology, 1, {Artifact.glass_shards: 10}, ModNames.archaeology)
@@ -320,27 +331,29 @@ hero_elixir = shop_recipe(ModEdible.hero_elixir, SVERegion.isaac_shop, 65000, {S
 armor_elixir = shop_recipe(ModEdible.armor_elixir, SVERegion.alesia_shop, 50000, {Loot.solar_essence: 30, SVEForage.void_soul: 5, Ingredient.vinegar: 5,
                                                                                   Fossil.bone_fragment: 5}, ModNames.sve)
 ginger_tincture = friendship_recipe(ModConsumable.ginger_tincture, ModNPC.goblin, 4, {DistantLandsForageable.brown_amanita: 1, Forageable.ginger: 5,
-                                                                                      Material.cinder_shard: 1, DistantLandsForageable.swamp_herb: 1}, ModNames.distant_lands)
+                                                                                      Material.cinder_shard: 1, DistantLandsForageable.swamp_herb: 1},
+                                    ModNames.distant_lands)
 
-neanderthal_skeleton = shop_recipe(ModCraftable.neanderthal_skeleton, Region.mines_dwarf_shop, 5000,
-                                   {ModFossil.neanderthal_skull: 1, ModFossil.neanderthal_ribs: 1, ModFossil.neanderthal_pelvis: 1, ModFossil.neanderthal_limb_bones: 1,
-                                                                                                      MetalBar.iron: 5, Material.hardwood: 10}, ModNames.boarding_house)
-pterodactyl_skeleton_l = shop_recipe(ModCraftable.pterodactyl_skeleton_l, Region.mines_dwarf_shop, 5000,
+neanderthal_skeleton = shop_recipe(ModCraftable.neanderthal_skeleton, LogicRegion.mines_dwarf_shop, 5000,
+                                   {ModFossil.neanderthal_skull: 1, ModFossil.neanderthal_ribs: 1, ModFossil.neanderthal_pelvis: 1,
+                                    ModFossil.neanderthal_limb_bones: 1,
+                                    MetalBar.iron: 5, Material.hardwood: 10}, ModNames.boarding_house)
+pterodactyl_skeleton_l = shop_recipe(ModCraftable.pterodactyl_skeleton_l, LogicRegion.mines_dwarf_shop, 5000,
                                      {ModFossil.pterodactyl_phalange: 1, ModFossil.pterodactyl_skull: 1, ModFossil.pterodactyl_l_wing_bone: 1,
                                       MetalBar.iron: 10, Material.hardwood: 15}, ModNames.boarding_house)
-pterodactyl_skeleton_m = shop_recipe(ModCraftable.pterodactyl_skeleton_m, Region.mines_dwarf_shop, 5000,
+pterodactyl_skeleton_m = shop_recipe(ModCraftable.pterodactyl_skeleton_m, LogicRegion.mines_dwarf_shop, 5000,
                                      {ModFossil.pterodactyl_phalange: 1, ModFossil.pterodactyl_vertebra: 1, ModFossil.pterodactyl_ribs: 1,
                                       MetalBar.iron: 10, Material.hardwood: 15}, ModNames.boarding_house)
-pterodactyl_skeleton_r = shop_recipe(ModCraftable.pterodactyl_skeleton_r, Region.mines_dwarf_shop, 5000,
+pterodactyl_skeleton_r = shop_recipe(ModCraftable.pterodactyl_skeleton_r, LogicRegion.mines_dwarf_shop, 5000,
                                      {ModFossil.pterodactyl_phalange: 1, ModFossil.pterodactyl_claw: 1, ModFossil.pterodactyl_r_wing_bone: 1,
                                       MetalBar.iron: 10, Material.hardwood: 15}, ModNames.boarding_house)
-trex_skeleton_l = shop_recipe(ModCraftable.trex_skeleton_l, Region.mines_dwarf_shop, 5000,
+trex_skeleton_l = shop_recipe(ModCraftable.trex_skeleton_l, LogicRegion.mines_dwarf_shop, 5000,
                               {ModFossil.dinosaur_vertebra: 1, ModFossil.dinosaur_tooth: 1, ModFossil.dinosaur_skull: 1,
                                MetalBar.iron: 10, Material.hardwood: 15}, ModNames.boarding_house)
-trex_skeleton_m = shop_recipe(ModCraftable.trex_skeleton_m, Region.mines_dwarf_shop, 5000,
+trex_skeleton_m = shop_recipe(ModCraftable.trex_skeleton_m, LogicRegion.mines_dwarf_shop, 5000,
                               {ModFossil.dinosaur_vertebra: 1, ModFossil.dinosaur_ribs: 1, ModFossil.dinosaur_claw: 1,
                                MetalBar.iron: 10, Material.hardwood: 15}, ModNames.boarding_house)
-trex_skeleton_r = shop_recipe(ModCraftable.trex_skeleton_r, Region.mines_dwarf_shop, 5000,
+trex_skeleton_r = shop_recipe(ModCraftable.trex_skeleton_r, LogicRegion.mines_dwarf_shop, 5000,
                               {ModFossil.dinosaur_vertebra: 1, ModFossil.dinosaur_femur: 1, ModFossil.dinosaur_pelvis: 1,
                                MetalBar.iron: 10, Material.hardwood: 15}, ModNames.boarding_house)
 

@@ -13,7 +13,7 @@ from ..options import SpecialOrderLocations
 from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_, true_
 from ..strings.ap_names.event_names import Event
 from ..strings.currency_names import Currency
-from ..strings.region_names import Region
+from ..strings.region_names import Region, LogicRegion
 
 qi_gem_rewards = ("100 Qi Gems", "50 Qi Gems", "40 Qi Gems", "35 Qi Gems", "25 Qi Gems",
                   "20 Qi Gems", "15 Qi Gems", "10 Qi Gems")
@@ -34,7 +34,7 @@ SeasonLogicMixin]]):
             return True_()
 
         pierre_rule = self.logic.region.can_reach_all((Region.pierre_store, Region.forest))
-        willy_rule = self.logic.region.can_reach_all((Region.fish_shop, Region.fishing))
+        willy_rule = self.logic.region.can_reach_all((Region.fish_shop, LogicRegion.fishing))
         clint_rule = self.logic.region.can_reach_all((Region.blacksmith, Region.mines_floor_5))
         robin_rule = self.logic.region.can_reach_all((Region.carpenter, Region.secret_woods))
         shipping_rule = self.logic.received(Event.can_ship_items)
@@ -83,7 +83,7 @@ SeasonLogicMixin]]):
         if currency == Currency.money:
             return self.can_spend(amount)
         if currency == Currency.star_token:
-            return self.logic.region.can_reach(Region.fair)
+            return self.logic.region.can_reach(LogicRegion.fair)
         if currency == Currency.qi_coin:
             return self.logic.region.can_reach(Region.casino) & self.logic.buff.has_max_luck()
         if currency == Currency.qi_gem:

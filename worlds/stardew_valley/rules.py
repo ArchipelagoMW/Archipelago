@@ -35,7 +35,7 @@ from .strings.calendar_names import Weekday
 from .strings.craftable_names import Bomb
 from .strings.crop_names import Fruit
 from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entrance, move_to_woods_depth, DeepWoodsEntrance, AlecEntrance, \
-    SVEEntrance, LaceyEntrance, BoardingHouseEntrance
+    SVEEntrance, LaceyEntrance, BoardingHouseEntrance, LogicEntrance
 from .strings.material_names import Material
 from .strings.metal_names import MetalBar
 from .strings.performance_names import Performance
@@ -223,9 +223,10 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_entrance_rule(multiworld, player, Entrance.purchase_movie_ticket, movie_theater_rule)
     set_entrance_rule(multiworld, player, Entrance.take_bus_to_desert, logic.received("Bus Repair"))
     set_entrance_rule(multiworld, player, Entrance.enter_skull_cavern, logic.received(Wallet.skull_key))
-    set_entrance_rule(multiworld, player, Entrance.talk_to_mines_dwarf, logic.wallet.can_speak_dwarf() & logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
-    set_entrance_rule(multiworld, player, Entrance.buy_from_traveling_merchant, logic.traveling_merchant.has_days())
-    set_entrance_rule(multiworld, player, Entrance.buy_from_raccoon, logic.quest.has_raccoon_shop())
+    set_entrance_rule(multiworld, player, LogicEntrance.talk_to_mines_dwarf,
+                      logic.wallet.can_speak_dwarf() & logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
+    set_entrance_rule(multiworld, player, LogicEntrance.buy_from_traveling_merchant, logic.traveling_merchant.has_days())
+    set_entrance_rule(multiworld, player, LogicEntrance.buy_from_raccoon, logic.quest.has_raccoon_shop())
 
     set_farm_buildings_entrance_rules(logic, multiworld, player)
 
@@ -238,10 +239,10 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
 
     set_bedroom_entrance_rules(logic, multiworld, player, world_options)
     set_festival_entrance_rules(logic, multiworld, player)
-    set_island_entrance_rule(multiworld, player, Entrance.island_cooking, logic.cooking.can_cook_in_kitchen, world_options)
-    set_entrance_rule(multiworld, player, Entrance.farmhouse_cooking, logic.cooking.can_cook_in_kitchen)
-    set_entrance_rule(multiworld, player, Entrance.shipping, logic.shipping.can_use_shipping_bin)
-    set_entrance_rule(multiworld, player, Entrance.watch_queen_of_sauce, logic.action.can_watch(Channel.queen_of_sauce))
+    set_island_entrance_rule(multiworld, player, LogicEntrance.island_cooking, logic.cooking.can_cook_in_kitchen, world_options)
+    set_entrance_rule(multiworld, player, LogicEntrance.farmhouse_cooking, logic.cooking.can_cook_in_kitchen)
+    set_entrance_rule(multiworld, player, LogicEntrance.shipping, logic.shipping.can_use_shipping_bin)
+    set_entrance_rule(multiworld, player, LogicEntrance.watch_queen_of_sauce, logic.action.can_watch(Channel.queen_of_sauce))
     set_entrance_rule(multiworld, player, Entrance.forest_to_mastery_cave, logic.skill.can_enter_mastery_cave())
 
 
@@ -298,15 +299,15 @@ def set_skull_cavern_floor_entrance_rules(logic, multiworld, player):
 
 
 def set_blacksmith_entrance_rules(logic, multiworld, player):
-    set_blacksmith_upgrade_rule(logic, multiworld, player, Entrance.blacksmith_copper, MetalBar.copper, ToolMaterial.copper)
-    set_blacksmith_upgrade_rule(logic, multiworld, player, Entrance.blacksmith_iron, MetalBar.iron, ToolMaterial.iron)
-    set_blacksmith_upgrade_rule(logic, multiworld, player, Entrance.blacksmith_gold, MetalBar.gold, ToolMaterial.gold)
-    set_blacksmith_upgrade_rule(logic, multiworld, player, Entrance.blacksmith_iridium, MetalBar.iridium, ToolMaterial.iridium)
+    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_copper, MetalBar.copper, ToolMaterial.copper)
+    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_iron, MetalBar.iron, ToolMaterial.iron)
+    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_gold, MetalBar.gold, ToolMaterial.gold)
+    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_iridium, MetalBar.iridium, ToolMaterial.iridium)
 
 
 def set_skill_entrance_rules(logic, multiworld, player):
-    set_entrance_rule(multiworld, player, Entrance.farming, logic.skill.can_get_farming_xp)
-    set_entrance_rule(multiworld, player, Entrance.fishing, logic.skill.can_get_fishing_xp)
+    set_entrance_rule(multiworld, player, LogicEntrance.farming, logic.skill.can_get_farming_xp)
+    set_entrance_rule(multiworld, player, LogicEntrance.fishing, logic.skill.can_get_fishing_xp)
 
 
 def set_blacksmith_upgrade_rule(logic, multiworld, player, entrance_name: str, item_name: str, tool_material: str):
@@ -316,23 +317,23 @@ def set_blacksmith_upgrade_rule(logic, multiworld, player, entrance_name: str, i
 
 
 def set_festival_entrance_rules(logic, multiworld, player):
-    set_entrance_rule(multiworld, player, Entrance.attend_egg_festival, logic.season.has(Season.spring))
-    set_entrance_rule(multiworld, player, Entrance.attend_desert_festival, logic.season.has(Season.spring) & logic.received("Bus Repair"))
-    set_entrance_rule(multiworld, player, Entrance.attend_flower_dance, logic.season.has(Season.spring))
+    set_entrance_rule(multiworld, player, LogicEntrance.attend_egg_festival, logic.season.has(Season.spring))
+    set_entrance_rule(multiworld, player, LogicEntrance.attend_desert_festival, logic.season.has(Season.spring) & logic.received("Bus Repair"))
+    set_entrance_rule(multiworld, player, LogicEntrance.attend_flower_dance, logic.season.has(Season.spring))
 
-    set_entrance_rule(multiworld, player, Entrance.attend_luau, logic.season.has(Season.summer))
-    set_entrance_rule(multiworld, player, Entrance.attend_trout_derby, logic.season.has(Season.summer))
-    set_entrance_rule(multiworld, player, Entrance.attend_moonlight_jellies, logic.season.has(Season.summer))
+    set_entrance_rule(multiworld, player, LogicEntrance.attend_luau, logic.season.has(Season.summer))
+    set_entrance_rule(multiworld, player, LogicEntrance.attend_trout_derby, logic.season.has(Season.summer))
+    set_entrance_rule(multiworld, player, LogicEntrance.attend_moonlight_jellies, logic.season.has(Season.summer))
 
-    set_entrance_rule(multiworld, player, Entrance.attend_fair, logic.season.has(Season.fall))
-    set_entrance_rule(multiworld, player, Entrance.attend_spirit_eve, logic.season.has(Season.fall))
+    set_entrance_rule(multiworld, player, LogicEntrance.attend_fair, logic.season.has(Season.fall))
+    set_entrance_rule(multiworld, player, LogicEntrance.attend_spirit_eve, logic.season.has(Season.fall))
 
-    set_entrance_rule(multiworld, player, Entrance.attend_festival_of_ice, logic.season.has(Season.winter))
-    set_entrance_rule(multiworld, player, Entrance.attend_squidfest, logic.season.has(Season.winter))
-    set_entrance_rule(multiworld, player, Entrance.attend_night_market, logic.season.has(Season.winter))
-    set_entrance_rule(multiworld, player, Entrance.attend_winter_star, logic.season.has(Season.winter))
+    set_entrance_rule(multiworld, player, LogicEntrance.attend_festival_of_ice, logic.season.has(Season.winter))
+    set_entrance_rule(multiworld, player, LogicEntrance.attend_squidfest, logic.season.has(Season.winter))
+    set_entrance_rule(multiworld, player, LogicEntrance.attend_night_market, logic.season.has(Season.winter))
+    set_entrance_rule(multiworld, player, LogicEntrance.attend_winter_star, logic.season.has(Season.winter))
 
-    set_entrance_rule(multiworld, player, Entrance.attend_desert_festival, logic.season.has(Season.spring))
+    set_entrance_rule(multiworld, player, LogicEntrance.attend_desert_festival, logic.season.has(Season.spring))
 
 
 def set_ginger_island_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):

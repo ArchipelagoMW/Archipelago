@@ -43,16 +43,6 @@ class Entrance:
     forest_to_leah_cottage = "Forest to Leah's Cottage"
     forest_to_sewer = "Forest to Sewer"
     forest_to_mastery_cave = "Forest to Mastery Cave"
-    buy_from_traveling_merchant = "Buy from Traveling Merchant"
-    buy_from_traveling_merchant_sunday = "Buy from Traveling Merchant Sunday"
-    buy_from_traveling_merchant_monday = "Buy from Traveling Merchant Monday"
-    buy_from_traveling_merchant_tuesday = "Buy from Traveling Merchant Tuesday"
-    buy_from_traveling_merchant_wednesday = "Buy from Traveling Merchant Wednesday"
-    buy_from_traveling_merchant_thursday = "Buy from Traveling Merchant Thursday"
-    buy_from_traveling_merchant_friday = "Buy from Traveling Merchant Friday"
-    buy_from_traveling_merchant_saturday = "Buy from Traveling Merchant Saturday"
-    complete_raccoon_requests = "Complete Raccoon Requests"
-    buy_from_raccoon = "Buy From Raccoon"
     mountain_to_railroad = "Mountain to Railroad"
     mountain_to_tent = "Mountain to Tent"
     mountain_to_carpenter_shop = "Mountain to Carpenter Shop"
@@ -124,7 +114,6 @@ class Entrance:
     mine_to_skull_cavern_floor_175 = dig_to_skull_floor(175)
     mine_to_skull_cavern_floor_200 = dig_to_skull_floor(200)
     enter_dangerous_skull_cavern = "Enter the Dangerous Skull Cavern"
-    talk_to_mines_dwarf = "Talk to Mines Dwarf"
     dig_to_mines_floor_5 = dig_to_mines_floor(5)
     dig_to_mines_floor_10 = dig_to_mines_floor(10)
     dig_to_mines_floor_15 = dig_to_mines_floor(15)
@@ -187,6 +176,19 @@ class Entrance:
     parrot_express_jungle_to_docks = "Parrot Express Jungle to Docks"
     parrot_express_dig_site_to_docks = "Parrot Express Dig Site to Docks"
     parrot_express_volcano_to_docks = "Parrot Express Volcano to Docks"
+
+
+class LogicEntrance:
+    talk_to_mines_dwarf = "Talk to Mines Dwarf"
+
+    buy_from_traveling_merchant = "Buy from Traveling Merchant"
+    buy_from_traveling_merchant_sunday = "Buy from Traveling Merchant Sunday"
+    buy_from_traveling_merchant_monday = "Buy from Traveling Merchant Monday"
+    buy_from_traveling_merchant_tuesday = "Buy from Traveling Merchant Tuesday"
+    buy_from_traveling_merchant_wednesday = "Buy from Traveling Merchant Wednesday"
+    buy_from_traveling_merchant_thursday = "Buy from Traveling Merchant Thursday"
+    buy_from_traveling_merchant_friday = "Buy from Traveling Merchant Friday"
+    buy_from_traveling_merchant_saturday = "Buy from Traveling Merchant Saturday"
     farmhouse_cooking = "Farmhouse Cooking"
     island_cooking = "Island Cooking"
     shipping = "Use Shipping Bin"
@@ -212,6 +214,8 @@ class Entrance:
     buy_experience_books = "Buy Experience Books from the bookseller"
     buy_year1_books = "Buy Year 1 Books from the Bookseller"
     buy_year3_books = "Buy Year 3 Books from the Bookseller"
+    complete_raccoon_requests = "Complete Raccoon Requests"
+    buy_from_raccoon = "Buy From Raccoon"
 
 
 # Skull Cavern Elevator
@@ -366,4 +370,3 @@ class BoardingHouseEntrance:
     lost_valley_ruins_to_lost_valley_house_1 = "Lost Valley Ruins to Lost Valley Ruins - First House"
     lost_valley_ruins_to_lost_valley_house_2 = "Lost Valley Ruins to Lost Valley Ruins - Second House"
     boarding_house_plateau_to_buffalo_ranch = "Boarding House Outside to Buffalo's Ranch"
-
