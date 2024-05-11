@@ -870,9 +870,11 @@ def get_excluded_missions(world: World) -> Set[SC2Mission]:
     excluded_missions: Set[SC2Mission] = set([lookup_name_to_mission[name] for name in excluded_mission_names])
 
     # Excluding Very Hard missions depending on options
-    if (world.options.exclude_very_hard_missions == ExcludeVeryHardMissions.option_true) or (
-            world.options.exclude_very_hard_missions == ExcludeVeryHardMissions.option_default
-            and mission_order_type in dynamic_mission_orders and world.options.maximum_campaign_size < 20
+    if world.options.exclude_very_hard_missions == ExcludeVeryHardMissions.option_true or (
+        world.options.exclude_very_hard_missions == ExcludeVeryHardMissions.option_default and (
+            mission_order_type in dynamic_mission_orders and world.options.maximum_campaign_size < 20 or
+            mission_order_type == MissionOrder.option_mini_campaign
+        )
     ):
         excluded_missions = excluded_missions.union(
             [mission for mission in SC2Mission if
