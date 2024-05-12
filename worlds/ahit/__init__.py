@@ -229,6 +229,7 @@ class HatInTimeWorld(World):
         shop_item_names: Dict[str, str] = {}
         for name in self.shop_locs:
             loc: Location = self.multiworld.get_location(name, self.player)
+            assert loc.item
             item_name: str
             if loc.item.classification is ItemClassification.trap and loc.item.game == "A Hat in Time":
                 item_name = get_shop_trap_name(self)
