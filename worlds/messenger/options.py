@@ -203,6 +203,7 @@ class MessengerOptions(DeathLinkMixin, PerGameCommonOptions):
     notes_needed: NotesNeeded
     total_seals: AmountSeals
     percent_seals_required: RequiredSeals
+    traps: Traps
     shop_price: ShopPrices
     shop_price_plan: PlannedShopPrices
 

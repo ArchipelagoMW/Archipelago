@@ -30,7 +30,7 @@ def can_shoot_arrows(state: CollectionState, player: int) -> bool:
 
 
 def has_triforce_pieces(state: CollectionState, player: int) -> bool:
-    count = state.multiworld.treasure_hunt_count[player]
+    count = state.multiworld.worlds[player].treasure_hunt_required
     return state.count('Triforce Piece', player) + state.count('Power Star', player) >= count
 
 
@@ -48,8 +48,8 @@ def can_lift_heavy_rocks(state: CollectionState, player: int) -> bool:
 
 
 def bottle_count(state: CollectionState, player: int) -> int:
-    return min(state.multiworld.difficulty_requirements[player].progressive_bottle_limit,
-                state.count_group("Bottles", player))
+    return min(state.multiworld.worlds[player].difficulty_requirements.progressive_bottle_limit,
+               state.count_group("Bottles", player))
 
 
 def has_hearts(state: CollectionState, player: int, count: int) -> int:
@@ -59,7 +59,7 @@ def has_hearts(state: CollectionState, player: int, count: int) -> int:
 
 def heart_count(state: CollectionState, player: int) -> int:
     # Warning: This only considers items that are marked as advancement items
-    diff = state.multiworld.difficulty_requirements[player]
+    diff = state.multiworld.worlds[player].difficulty_requirements
     return min(state.count('Boss Heart Container', player), diff.boss_heart_container_limit) \
             + state.count('Sanctuary Heart Container', player) \
         + min(state.count('Piece of Heart', player), diff.heart_piece_limit) // 4 \
@@ -104,6 +104,12 @@ def can_use_bombs(state: CollectionState, player: int, quantity: int = 1) -> boo
 
 def can_bomb_or_bonk(state: CollectionState, player: int) -> bool:
     return state.has("Pegasus Boots", player) or can_use_bombs(state, player)
+
+
+def can_activate_crystal_switch(state: CollectionState, player: int) -> bool:
+    return (has_melee_weapon(state, player) or can_use_bombs(state, player) or can_shoot_arrows(state, player)
+            or state.has_any(["Hookshot", "Cane of Somaria", "Cane of Byrna", "Fire Rod", "Ice Rod", "Blue Boomerang",
+                              "Red Boomerang"], player))
 
 
 def can_kill_most_things(state: CollectionState, player: int, enemies: int = 5) -> bool:
@@ -171,10 +177,11 @@ def can_melt_things(state: CollectionState, player: int) -> bool:
 
 
 def has_misery_mire_medallion(state: CollectionState, player: int) -> bool:
-    return state.has(state.multiworld.required_medallions[player][0], player)
+    return state.has(state.multiworld.worlds[player].required_medallions[0], player)
+
 
 def has_turtle_rock_medallion(state: CollectionState, player: int) -> bool:
-    return state.has(state.multiworld.required_medallions[player][1], player)
+    return state.has(state.multiworld.worlds[player].required_medallions[1], player)
 
 
 def can_boots_clip_lw(state: CollectionState, player: int) -> bool:
