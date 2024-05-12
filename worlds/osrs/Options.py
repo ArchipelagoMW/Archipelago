@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from Options import Choice, Toggle, Range, PerGameCommonOptions
 
-MAX_COMBAT_TASKS = 20
+MAX_COMBAT_TASKS = 16
 MAX_PRAYER_TASKS = 3
 MAX_MAGIC_TASKS = 4
 MAX_RUNECRAFT_TASKS = 3
@@ -14,7 +14,7 @@ MAX_COOKING_TASKS = 5
 MAX_FIREMAKING_TASKS = 2
 MAX_WOODCUTTING_TASKS = 3
 
-NON_QUEST_LOCATION_COUNT = 30
+NON_QUEST_LOCATION_COUNT = 22
 
 
 class StartingArea(Choice):

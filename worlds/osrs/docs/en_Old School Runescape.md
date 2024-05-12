@@ -1,5 +1,9 @@
 # Old School Runescape
 
+## What is the Goal of this Randomizer?
+The goal is to complete the quest "Dragon Slayer I" with limited access to gear and map chunks while following normal
+Ironman/Group Ironman restrictions on a fresh free-to-play account.
+
 ## Where is the options page?
 
 The [player options page for this game](../player-options) contains all the options you need to configure and export a
