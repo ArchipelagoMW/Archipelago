@@ -134,6 +134,7 @@ class Hylics2World(World):
         slot_data: Dict[str, Any] = {
             "party_shuffle": self.options.party_shuffle.value,
             "medallion_shuffle": self.options.medallion_shuffle.value,
+            "random_start": int(self.options.start_location != "waynehouse"),
             "start_location" : self.options.start_location.current_option_name,
             "death_link": self.options.death_link.value
         }
