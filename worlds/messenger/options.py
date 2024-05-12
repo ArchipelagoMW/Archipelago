@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from datetime import date
 from typing import Dict
 
 from schema import And, Optional, Or, Schema
@@ -205,7 +204,3 @@ class MessengerOptions(DeathLinkMixin, PerGameCommonOptions):
     percent_seals_required: RequiredSeals
     traps: Traps
     shop_price: ShopPrices
-    shop_price_plan: PlannedShopPrices
-
-    if date.today() > date(2024, 4, 1):
-        traps: Traps
