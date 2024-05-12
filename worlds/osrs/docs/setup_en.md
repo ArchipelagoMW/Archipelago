@@ -17,7 +17,7 @@ an experience customized for their taste, and different players in the same mult
 ### Where do I get a YAML file?
 
 You can customize your settings by visiting the 
-[Old School Runescape Player Settings Page](/games/Old%20School%20Runescape/player-settings)
+[Old School Runescape Player Options Page](/games/Old%20School%20Runescape/player-options)
 
 ## Joining a MultiWorld Game
 
@@ -32,6 +32,11 @@ disabled.
 ### Create a new OSRS Account
 The OSRS Randomizer assumes you are playing on a newly created f2p Ironman account. As such, you will need to [create a
 new Runescape account](https://secure.runescape.com/m=account-creation/create_account?theme=oldschool). 
+
+If you already have a [Jagex Account](https://www.jagex.com/en-GB/accounts) you can add up to 20 characters on
+one account through the Jagex Launcher. Note that there is currently no way to _remove_ characters
+from a Jagex Account, and as such you might want to create a separate account to hold your Archipelago
+characters if you intend to use your main Jagex account for more characters in the future.
 
 **Protip**: In order to avoid having to remember random email addresses for many accounts, take advantage of an email
 alias, a feature supported by most email providers. Any text after a `+` in your email address will redirect to your
