@@ -21,11 +21,9 @@ vanilla_regions = [
                [Entrance.farmhouse_to_farm, Entrance.downstairs_to_cellar, LogicEntrance.farmhouse_cooking, LogicEntrance.watch_queen_of_sauce]),
     RegionData(Region.cellar),
     RegionData(Region.farm,
-               [Entrance.farm_to_backwoods, Entrance.farm_to_bus_stop, Entrance.farm_to_forest,
-                Entrance.farm_to_farmcave, Entrance.enter_greenhouse,
-                Entrance.enter_coop, Entrance.enter_barn,
-                Entrance.enter_shed, Entrance.enter_slime_hutch,
-                LogicEntrance.farming, LogicEntrance.shipping]),
+               [Entrance.farm_to_backwoods, Entrance.farm_to_bus_stop, Entrance.farm_to_forest, Entrance.farm_to_farmcave, Entrance.enter_greenhouse,
+                Entrance.enter_coop, Entrance.enter_barn, Entrance.enter_shed, Entrance.enter_slime_hutch, LogicEntrance.grow_spring_crops,
+                LogicEntrance.grow_summer_crops, LogicEntrance.grow_fall_crops, LogicEntrance.shipping]),
     RegionData(Region.backwoods, [Entrance.backwoods_to_mountain]),
     RegionData(Region.bus_stop,
                [Entrance.bus_stop_to_town, Entrance.take_bus_to_desert, Entrance.bus_stop_to_tunnel_entrance]),
@@ -35,13 +33,15 @@ vanilla_regions = [
                 LogicEntrance.complete_raccoon_requests, LogicEntrance.attend_flower_dance, LogicEntrance.attend_trout_derby,
                 LogicEntrance.attend_festival_of_ice]),
     RegionData(Region.farm_cave),
-    RegionData(Region.greenhouse),
+    RegionData(Region.greenhouse,
+               [LogicEntrance.grow_spring_crops_in_greenhouse, LogicEntrance.grow_summer_crops_in_greenhouse, LogicEntrance.grow_fall_crops_in_greenhouse,
+                LogicEntrance.grow_indoor_crops_in_greenhouse]),
     RegionData(Region.mountain,
                [Entrance.mountain_to_railroad, Entrance.mountain_to_tent, Entrance.mountain_to_carpenter_shop,
                 Entrance.mountain_to_the_mines, Entrance.enter_quarry, Entrance.mountain_to_adventurer_guild,
                 Entrance.mountain_to_town, Entrance.mountain_to_maru_room,
                 Entrance.mountain_to_leo_treehouse]),
-    RegionData(Region.leo_treehouse),
+    RegionData(Region.leo_treehouse, is_ginger_island=True),
     RegionData(Region.maru_room),
     RegionData(Region.tunnel_entrance, [Entrance.tunnel_entrance_to_bus_tunnel]),
     RegionData(Region.bus_tunnel),
@@ -60,8 +60,7 @@ vanilla_regions = [
     RegionData(Region.mastery_cave),
     RegionData(Region.sewer, [Entrance.enter_mutant_bug_lair]),
     RegionData(Region.mutant_bug_lair),
-    RegionData(Region.wizard_tower, [Entrance.enter_wizard_basement,
-                                     Entrance.use_desert_obelisk, Entrance.use_island_obelisk]),
+    RegionData(Region.wizard_tower, [Entrance.enter_wizard_basement, Entrance.use_desert_obelisk, Entrance.use_island_obelisk]),
     RegionData(Region.wizard_basement),
     RegionData(Region.tent),
     RegionData(Region.carpenter, [Entrance.enter_sebastian_room]),
@@ -100,7 +99,7 @@ vanilla_regions = [
     RegionData(Region.movie_ticket_stand),
     RegionData(Region.movie_theater),
     RegionData(Region.fish_shop, [Entrance.fish_shop_to_boat_tunnel]),
-    RegionData(Region.boat_tunnel, [Entrance.boat_to_ginger_island]),
+    RegionData(Region.boat_tunnel, [Entrance.boat_to_ginger_island], is_ginger_island=True),
     RegionData(Region.elliott_house),
     RegionData(Region.tide_pools),
     RegionData(Region.bathhouse_entrance, [Entrance.enter_locker_room]),
@@ -126,46 +125,45 @@ vanilla_regions = [
     RegionData(Region.skull_cavern_150, [Entrance.mine_to_skull_cavern_floor_175]),
     RegionData(Region.skull_cavern_175, [Entrance.mine_to_skull_cavern_floor_200]),
     RegionData(Region.skull_cavern_200, [Entrance.enter_dangerous_skull_cavern]),
-    RegionData(Region.dangerous_skull_cavern),
-    RegionData(Region.island_south, [Entrance.island_south_to_west, Entrance.island_south_to_north,
-                                     Entrance.island_south_to_east, Entrance.island_south_to_southeast,
-                                     Entrance.use_island_resort,
-                                     Entrance.parrot_express_docks_to_volcano,
-                                     Entrance.parrot_express_docks_to_dig_site,
-                                     Entrance.parrot_express_docks_to_jungle]),
-    RegionData(Region.island_resort),
+    RegionData(Region.dangerous_skull_cavern, is_ginger_island=True),
+    RegionData(Region.island_south,
+               [Entrance.island_south_to_west, Entrance.island_south_to_north, Entrance.island_south_to_east, Entrance.island_south_to_southeast,
+                Entrance.use_island_resort, Entrance.parrot_express_docks_to_volcano, Entrance.parrot_express_docks_to_dig_site,
+                Entrance.parrot_express_docks_to_jungle],
+               is_ginger_island=True),
+    RegionData(Region.island_resort, is_ginger_island=True),
     RegionData(Region.island_west,
-               [Entrance.island_west_to_islandfarmhouse, Entrance.island_west_to_gourmand_cave,
-                Entrance.island_west_to_crystals_cave, Entrance.island_west_to_shipwreck,
-                Entrance.island_west_to_qi_walnut_room, Entrance.use_farm_obelisk,
-                Entrance.parrot_express_jungle_to_docks, Entrance.parrot_express_jungle_to_dig_site,
-                Entrance.parrot_express_jungle_to_volcano]),
-    RegionData(Region.island_east, [Entrance.island_east_to_leo_hut, Entrance.island_east_to_island_shrine]),
-    RegionData(Region.island_shrine),
-    RegionData(Region.island_south_east, [Entrance.island_southeast_to_pirate_cove]),
-    RegionData(Region.island_north, [Entrance.talk_to_island_trader, Entrance.island_north_to_field_office,
-                                     Entrance.island_north_to_dig_site, Entrance.island_north_to_volcano,
-                                     Entrance.parrot_express_volcano_to_dig_site,
-                                     Entrance.parrot_express_volcano_to_jungle,
-                                     Entrance.parrot_express_volcano_to_docks]),
-    RegionData(Region.volcano, [Entrance.climb_to_volcano_5, Entrance.volcano_to_secret_beach]),
-    RegionData(Region.volcano_secret_beach),
-    RegionData(Region.volcano_floor_5, [Entrance.talk_to_volcano_dwarf, Entrance.climb_to_volcano_10]),
-    RegionData(Region.volcano_dwarf_shop),
-    RegionData(Region.volcano_floor_10),
-    RegionData(Region.island_trader),
-    RegionData(Region.island_farmhouse, [LogicEntrance.island_cooking]),
-    RegionData(Region.gourmand_frog_cave),
-    RegionData(Region.colored_crystals_cave),
-    RegionData(Region.shipwreck),
-    RegionData(Region.qi_walnut_room),
-    RegionData(Region.leo_hut),
-    RegionData(Region.pirate_cove),
-    RegionData(Region.field_office),
+               [Entrance.island_west_to_islandfarmhouse, Entrance.island_west_to_gourmand_cave, Entrance.island_west_to_crystals_cave,
+                Entrance.island_west_to_shipwreck, Entrance.island_west_to_qi_walnut_room, Entrance.use_farm_obelisk, Entrance.parrot_express_jungle_to_docks,
+                Entrance.parrot_express_jungle_to_dig_site, Entrance.parrot_express_jungle_to_volcano, LogicEntrance.grow_spring_crops_on_island,
+                LogicEntrance.grow_summer_crops_on_island, LogicEntrance.grow_fall_crops_on_island, LogicEntrance.grow_indoor_crops_on_island],
+               is_ginger_island=True),
+    RegionData(Region.island_east, [Entrance.island_east_to_leo_hut, Entrance.island_east_to_island_shrine], is_ginger_island=True),
+    RegionData(Region.island_shrine, is_ginger_island=True),
+    RegionData(Region.island_south_east, [Entrance.island_southeast_to_pirate_cove], is_ginger_island=True),
+    RegionData(Region.island_north,
+               [Entrance.talk_to_island_trader, Entrance.island_north_to_field_office, Entrance.island_north_to_dig_site, Entrance.island_north_to_volcano,
+                Entrance.parrot_express_volcano_to_dig_site, Entrance.parrot_express_volcano_to_jungle, Entrance.parrot_express_volcano_to_docks],
+               is_ginger_island=True),
+    RegionData(Region.volcano, [Entrance.climb_to_volcano_5, Entrance.volcano_to_secret_beach], is_ginger_island=True),
+    RegionData(Region.volcano_secret_beach, is_ginger_island=True),
+    RegionData(Region.volcano_floor_5, [Entrance.talk_to_volcano_dwarf, Entrance.climb_to_volcano_10], is_ginger_island=True),
+    RegionData(Region.volcano_dwarf_shop, is_ginger_island=True),
+    RegionData(Region.volcano_floor_10, is_ginger_island=True),
+    RegionData(Region.island_trader, is_ginger_island=True),
+    RegionData(Region.island_farmhouse, [LogicEntrance.island_cooking], is_ginger_island=True),
+    RegionData(Region.gourmand_frog_cave, is_ginger_island=True),
+    RegionData(Region.colored_crystals_cave, is_ginger_island=True),
+    RegionData(Region.shipwreck, is_ginger_island=True),
+    RegionData(Region.qi_walnut_room, is_ginger_island=True),
+    RegionData(Region.leo_hut, is_ginger_island=True),
+    RegionData(Region.pirate_cove, is_ginger_island=True),
+    RegionData(Region.field_office, is_ginger_island=True),
     RegionData(Region.dig_site,
                [Entrance.dig_site_to_professor_snail_cave, Entrance.parrot_express_dig_site_to_volcano,
-                Entrance.parrot_express_dig_site_to_docks, Entrance.parrot_express_dig_site_to_jungle]),
-    RegionData(Region.professor_snail_cave),
+                Entrance.parrot_express_dig_site_to_docks, Entrance.parrot_express_dig_site_to_jungle],
+               is_ginger_island=True),
+    RegionData(Region.professor_snail_cave, is_ginger_island=True),
     RegionData(Region.coop),
     RegionData(Region.barn),
     RegionData(Region.shed),
@@ -197,9 +195,9 @@ vanilla_regions = [
     RegionData(Region.mines_floor_110, [Entrance.dig_to_mines_floor_115]),
     RegionData(Region.mines_floor_115, [Entrance.dig_to_mines_floor_120]),
     RegionData(Region.mines_floor_120, [Entrance.dig_to_dangerous_mines_20, Entrance.dig_to_dangerous_mines_60, Entrance.dig_to_dangerous_mines_100]),
-    RegionData(Region.dangerous_mines_20),
-    RegionData(Region.dangerous_mines_60),
-    RegionData(Region.dangerous_mines_100),
+    RegionData(Region.dangerous_mines_20, is_ginger_island=True),
+    RegionData(Region.dangerous_mines_60, is_ginger_island=True),
+    RegionData(Region.dangerous_mines_100, is_ginger_island=True),
 
     RegionData(LogicRegion.mines_dwarf_shop),
     RegionData(LogicRegion.blacksmith_copper, [LogicEntrance.blacksmith_iron]),
@@ -209,7 +207,13 @@ vanilla_regions = [
     RegionData(LogicRegion.kitchen),
     RegionData(LogicRegion.queen_of_sauce),
     RegionData(LogicRegion.fishing),
-    RegionData(LogicRegion.farming),
+
+    RegionData(LogicRegion.spring_farming),
+    RegionData(LogicRegion.summer_farming, [LogicEntrance.grow_summer_fall_crops_in_summer]),
+    RegionData(LogicRegion.fall_farming, [LogicEntrance.grow_summer_fall_crops_in_fall]),
+    RegionData(LogicRegion.summer_or_fall_farming),
+    RegionData(LogicRegion.indoor_farming),
+
     RegionData(LogicRegion.shipping),
     RegionData(LogicRegion.traveling_cart, [LogicEntrance.buy_from_traveling_merchant_sunday,
                                             LogicEntrance.buy_from_traveling_merchant_monday,
@@ -461,7 +465,21 @@ vanilla_connections = [
     ConnectionData(LogicEntrance.buy_from_raccoon, LogicRegion.raccoon_shop),
     ConnectionData(LogicEntrance.farmhouse_cooking, LogicRegion.kitchen),
     ConnectionData(LogicEntrance.watch_queen_of_sauce, LogicRegion.queen_of_sauce),
-    ConnectionData(LogicEntrance.farming, LogicRegion.farming),
+
+    ConnectionData(LogicEntrance.grow_spring_crops, LogicRegion.spring_farming),
+    ConnectionData(LogicEntrance.grow_summer_crops, LogicRegion.summer_farming),
+    ConnectionData(LogicEntrance.grow_fall_crops, LogicRegion.fall_farming),
+    ConnectionData(LogicEntrance.grow_spring_crops_in_greenhouse, LogicRegion.spring_farming),
+    ConnectionData(LogicEntrance.grow_summer_crops_in_greenhouse, LogicRegion.summer_farming),
+    ConnectionData(LogicEntrance.grow_fall_crops_in_greenhouse, LogicRegion.fall_farming),
+    ConnectionData(LogicEntrance.grow_indoor_crops_in_greenhouse, LogicRegion.indoor_farming),
+    ConnectionData(LogicEntrance.grow_spring_crops_on_island, LogicRegion.spring_farming, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(LogicEntrance.grow_summer_crops_on_island, LogicRegion.summer_farming, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(LogicEntrance.grow_fall_crops_on_island, LogicRegion.fall_farming, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(LogicEntrance.grow_indoor_crops_on_island, LogicRegion.indoor_farming, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(LogicEntrance.grow_summer_fall_crops_in_summer, LogicRegion.summer_or_fall_farming),
+    ConnectionData(LogicEntrance.grow_summer_fall_crops_in_fall, LogicRegion.summer_or_fall_farming),
+
     ConnectionData(LogicEntrance.shipping, LogicRegion.shipping),
     ConnectionData(LogicEntrance.blacksmith_copper, LogicRegion.blacksmith_copper),
     ConnectionData(LogicEntrance.blacksmith_iron, LogicRegion.blacksmith_iron),
@@ -520,12 +538,22 @@ def create_final_connections_and_regions(world_options) -> Tuple[Dict[str, Conne
 def remove_ginger_island_regions_and_connections(regions_by_name: Dict[str, RegionData], connections: Dict[str, ConnectionData], include_island: bool):
     if include_island:
         return connections, regions_by_name
-    for connection_name in list(connections):
+
+    removed_connections = set()
+
+    for connection_name in tuple(connections):
         connection = connections[connection_name]
         if connection.flag & RandomizationFlag.GINGER_ISLAND:
-            regions_by_name.pop(connection.destination, None)
             connections.pop(connection_name)
-            regions_by_name = {name: regions_by_name[name].get_without_exit(connection_name) for name in regions_by_name}
+            removed_connections.add(connection_name)
+
+    for region_name in tuple(regions_by_name):
+        region = regions_by_name[region_name]
+        if region.is_ginger_island:
+            regions_by_name.pop(region_name)
+        else:
+            regions_by_name[region_name] = region.get_without_exits(removed_connections)
+
     return connections, regions_by_name
 
 
@@ -552,12 +580,16 @@ def modify_vanilla_regions(existing_region: RegionData, modified_region: RegionD
     return updated_region
 
 
-def create_regions(region_factory: RegionFactory, random: Random, world_options: StardewValleyOptions) -> Tuple[
-    Dict[str, Region], Dict[str, Entrance], Dict[str, str]]:
+def create_regions(region_factory: RegionFactory, random: Random, world_options: StardewValleyOptions) \
+        -> Tuple[Dict[str, Region], Dict[str, Entrance], Dict[str, str]]:
     entrances_data, regions_data = create_final_connections_and_regions(world_options)
     regions_by_name: Dict[str: Region] = {region_name: region_factory(region_name, regions_data[region_name].exits) for region_name in regions_data}
-    entrances_by_name: Dict[str: Entrance] = {entrance.name: entrance for region in regions_by_name.values() for entrance in region.exits
-                                              if entrance.name in entrances_data}
+    entrances_by_name: Dict[str: Entrance] = {
+        entrance.name: entrance
+        for region in regions_by_name.values()
+        for entrance in region.exits
+        if entrance.name in entrances_data
+    }
 
     connections, randomized_data = randomize_connections(random, world_options, regions_data, entrances_data)
 

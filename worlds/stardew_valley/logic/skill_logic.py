@@ -4,7 +4,6 @@ from typing import Union, Tuple
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
 from .combat_logic import CombatLogicMixin
-from .crop_logic import CropLogicMixin
 from .harvesting_logic import HarvestingLogicMixin
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
@@ -37,7 +36,7 @@ class SkillLogicMixin(BaseLogicMixin):
 
 
 class SkillLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, TimeLogicMixin, ToolLogicMixin, SkillLogicMixin,
-CombatLogicMixin, CropLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
+CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
     # Should be cached
     def can_earn_level(self, skill: str, level: int) -> StardewRule:
         if level <= 0:

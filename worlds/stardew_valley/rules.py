@@ -21,7 +21,7 @@ from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, Booksanity
 from .options import ToolProgression, BuildingProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, SkillProgression
-from .stardew_rule import And, StardewRule
+from .stardew_rule import And, StardewRule, true_
 from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .stardew_rule.rule_explain import explain
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade
@@ -208,7 +208,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_mines_floor_entrance_rules(logic, multiworld, player)
     set_skull_cavern_floor_entrance_rules(logic, multiworld, player)
     set_blacksmith_entrance_rules(logic, multiworld, player)
-    set_skill_entrance_rules(logic, multiworld, player)
+    set_skill_entrance_rules(logic, multiworld, player, world_options)
     set_traveling_merchant_day_rules(logic, multiworld, player)
     set_dangerous_mine_rules(logic, multiworld, player, world_options)
 
@@ -305,8 +305,21 @@ def set_blacksmith_entrance_rules(logic, multiworld, player):
     set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_iridium, MetalBar.iridium, ToolMaterial.iridium)
 
 
-def set_skill_entrance_rules(logic, multiworld, player):
-    set_entrance_rule(multiworld, player, LogicEntrance.farming, logic.skill.can_get_farming_xp)
+def set_skill_entrance_rules(logic, multiworld, player, world_options: StardewValleyOptions):
+    set_entrance_rule(multiworld, player, LogicEntrance.grow_spring_crops, logic.farming.has_farming_tools & logic.season.has_spring)
+    set_entrance_rule(multiworld, player, LogicEntrance.grow_summer_crops, logic.farming.has_farming_tools & logic.season.has_summer)
+    set_entrance_rule(multiworld, player, LogicEntrance.grow_fall_crops, logic.farming.has_farming_tools & logic.season.has_fall)
+    set_entrance_rule(multiworld, player, LogicEntrance.grow_spring_crops_in_greenhouse, logic.farming.has_farming_tools)
+    set_entrance_rule(multiworld, player, LogicEntrance.grow_summer_crops_in_greenhouse, logic.farming.has_farming_tools)
+    set_entrance_rule(multiworld, player, LogicEntrance.grow_fall_crops_in_greenhouse, logic.farming.has_farming_tools)
+    set_entrance_rule(multiworld, player, LogicEntrance.grow_indoor_crops_in_greenhouse, logic.farming.has_farming_tools)
+    set_island_entrance_rule(multiworld, player, LogicEntrance.grow_spring_crops_on_island, logic.farming.has_farming_tools, world_options)
+    set_island_entrance_rule(multiworld, player, LogicEntrance.grow_summer_crops_on_island, logic.farming.has_farming_tools, world_options)
+    set_island_entrance_rule(multiworld, player, LogicEntrance.grow_fall_crops_on_island, logic.farming.has_farming_tools, world_options)
+    set_island_entrance_rule(multiworld, player, LogicEntrance.grow_indoor_crops_on_island, logic.farming.has_farming_tools, world_options)
+    set_entrance_rule(multiworld, player, LogicEntrance.grow_summer_fall_crops_in_summer, true_)
+    set_entrance_rule(multiworld, player, LogicEntrance.grow_summer_fall_crops_in_fall, true_)
+
     set_entrance_rule(multiworld, player, LogicEntrance.fishing, logic.skill.can_get_fishing_xp)
 
 

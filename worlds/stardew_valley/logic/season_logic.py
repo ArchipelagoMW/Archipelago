@@ -1,3 +1,4 @@
+from functools import cached_property
 from typing import Iterable, Union
 
 from Utils import cache_self1
@@ -18,6 +19,22 @@ class SeasonLogicMixin(BaseLogicMixin):
 
 
 class SeasonLogic(BaseLogic[Union[HasLogicMixin, SeasonLogicMixin, TimeLogicMixin, ReceivedLogicMixin]]):
+
+    @cached_property
+    def has_spring(self) -> StardewRule:
+        return self.logic.season.has(Season.spring)
+
+    @cached_property
+    def has_summer(self) -> StardewRule:
+        return self.logic.season.has(Season.summer)
+
+    @cached_property
+    def has_fall(self) -> StardewRule:
+        return self.logic.season.has(Season.fall)
+
+    @cached_property
+    def has_winter(self) -> StardewRule:
+        return self.logic.season.has(Season.winter)
 
     @cache_self1
     def has(self, season: str) -> StardewRule:

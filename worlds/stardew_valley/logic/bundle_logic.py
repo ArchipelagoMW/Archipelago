@@ -2,10 +2,10 @@ from functools import cached_property
 from typing import Union, List
 
 from .base_logic import BaseLogicMixin, BaseLogic
-from .farming_logic import FarmingLogicMixin
 from .fishing_logic import FishingLogicMixin
 from .has_logic import HasLogicMixin
 from .money_logic import MoneyLogicMixin
+from .quality_logic import QualityLogicMixin
 from .quest_logic import QuestLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
@@ -26,8 +26,8 @@ class BundleLogicMixin(BaseLogicMixin):
         self.bundle = BundleLogic(*args, **kwargs)
 
 
-class BundleLogic(BaseLogic[Union[ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, MoneyLogicMixin, FarmingLogicMixin, FishingLogicMixin, SkillLogicMixin,
-                                  QuestLogicMixin]]):
+class BundleLogic(BaseLogic[Union[ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, MoneyLogicMixin, QualityLogicMixin, FishingLogicMixin, SkillLogicMixin,
+QuestLogicMixin]]):
     # Should be cached
     def can_complete_bundle(self, bundle: Bundle) -> StardewRule:
         item_rules = []
@@ -50,7 +50,7 @@ class BundleLogic(BaseLogic[Union[ReceivedLogicMixin, HasLogicMixin, RegionLogic
         artisan_quality = ArtisanQuality.get_highest(qualities)
         quality_rules = []
         if crop_quality != CropQuality.basic:
-            quality_rules.append(self.logic.farming.can_grow_crop_quality(crop_quality))
+            quality_rules.append(self.logic.quality.can_grow_crop_quality(crop_quality))
         if fish_quality != FishQuality.basic:
             quality_rules.append(self.logic.fishing.can_catch_quality_fish(fish_quality))
         if forage_quality != ForageQuality.basic:

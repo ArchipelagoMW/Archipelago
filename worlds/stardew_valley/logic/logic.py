@@ -15,7 +15,6 @@ from .bundle_logic import BundleLogicMixin
 from .combat_logic import CombatLogicMixin
 from .cooking_logic import CookingLogicMixin
 from .crafting_logic import CraftingLogicMixin
-from .crop_logic import CropLogicMixin
 from .farming_logic import FarmingLogicMixin
 from .fishing_logic import FishingLogicMixin
 from .gift_logic import GiftLogicMixin
@@ -26,6 +25,7 @@ from .money_logic import MoneyLogicMixin
 from .monster_logic import MonsterLogicMixin
 from .museum_logic import MuseumLogicMixin
 from .pet_logic import PetLogicMixin
+from .quality_logic import QualityLogicMixin
 from .quest_logic import QuestLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
@@ -89,7 +89,7 @@ logger = logging.getLogger(__name__)
 class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogicMixin, TravelingMerchantLogicMixin, TimeLogicMixin,
                    SeasonLogicMixin, MoneyLogicMixin, ActionLogicMixin, ArcadeLogicMixin, ArtisanLogicMixin, GiftLogicMixin,
                    BuildingLogicMixin, ShippingLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, WalletLogicMixin, AnimalLogicMixin,
-                   CombatLogicMixin, MagicLogicMixin, MonsterLogicMixin, ToolLogicMixin, PetLogicMixin, CropLogicMixin,
+                   CombatLogicMixin, MagicLogicMixin, MonsterLogicMixin, ToolLogicMixin, PetLogicMixin, QualityLogicMixin,
                    SkillLogicMixin, FarmingLogicMixin, BundleLogicMixin, FishingLogicMixin, MineLogicMixin, CookingLogicMixin, AbilityLogicMixin,
                    SpecialOrderLogicMixin, QuestLogicMixin, CraftingLogicMixin, ModLogicMixin, HarvestingLogicMixin, SourceLogicMixin):
     player: int

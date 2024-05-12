@@ -6,7 +6,6 @@ from ...logic.action_logic import ActionLogicMixin
 from ...logic.artisan_logic import ArtisanLogicMixin
 from ...logic.base_logic import BaseLogicMixin, BaseLogic
 from ...logic.crafting_logic import CraftingLogicMixin
-from ...logic.crop_logic import CropLogicMixin
 from ...logic.has_logic import HasLogicMixin
 from ...logic.received_logic import ReceivedLogicMixin
 from ...logic.region_logic import RegionLogicMixin
@@ -34,7 +33,7 @@ class ModSpecialOrderLogicMixin(BaseLogicMixin):
         self.special_order = ModSpecialOrderLogic(*args, **kwargs)
 
 
-class ModSpecialOrderLogic(BaseLogic[Union[ActionLogicMixin, ArtisanLogicMixin, CraftingLogicMixin, CropLogicMixin, HasLogicMixin, RegionLogicMixin,
+class ModSpecialOrderLogic(BaseLogic[Union[ActionLogicMixin, ArtisanLogicMixin, CraftingLogicMixin, HasLogicMixin, RegionLogicMixin,
 ReceivedLogicMixin, RelationshipLogicMixin, SeasonLogicMixin, WalletLogicMixin]]):
     def get_modded_special_orders_rules(self):
         special_orders = {}

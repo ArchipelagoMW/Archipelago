@@ -162,7 +162,13 @@ class LogicRegion:
     blacksmith_iron = "Blacksmith Iron Upgrades"
     blacksmith_gold = "Blacksmith Gold Upgrades"
     blacksmith_iridium = "Blacksmith Iridium Upgrades"
-    farming = "Farming"
+
+    spring_farming = "Spring Farming"
+    summer_farming = "Summer Farming"
+    fall_farming = "Fall Farming"
+    indoor_farming = "Indoor Farming"
+    summer_or_fall_farming = "Summer or Fall Farming"
+
     fishing = "Fishing"
     egg_festival = "Egg Festival"
     desert_festival = "Desert Festival"
