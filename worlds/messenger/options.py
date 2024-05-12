@@ -204,3 +204,4 @@ class MessengerOptions(DeathLinkMixin, PerGameCommonOptions):
     percent_seals_required: RequiredSeals
     traps: Traps
     shop_price: ShopPrices
+    shop_price_plan: PlannedShopPrices
