@@ -194,16 +194,11 @@ def create_dw_regions(world: "HatInTimeWorld"):
             dw_shuffle.append("Seal the Deal")
 
         world.dw_shuffle = dw_shuffle
-        prev_dw: Region
+        prev_dw = dw_map
         for i in range(len(dw_shuffle)):
             name = dw_shuffle[i]
             dw = create_region(world, name)
-
-            if i == 0:
-                connect_regions(dw_map, dw, f"-> {name}", world.player)
-            else:
-                # noinspection PyUnboundLocalVariable
-                connect_regions(prev_dw, dw, f"{prev_dw.name} -> {name}", world.player)
+            connect_regions(prev_dw, dw, f"{prev_dw.name} -> {name}", world.player)
 
             loc_id = death_wishes[name]
             main_objective = HatInTimeLocation(world.player, f"{name} - Main Objective", loc_id, dw)
@@ -252,7 +247,6 @@ def create_dw_regions(world: "HatInTimeWorld"):
             bonus_stamps.show_in_spoiler = False
             dw.locations.append(main_stamp)
             dw.locations.append(bonus_stamps)
-
             main_stamp.place_locked_item(HatInTimeItem(f"1 Stamp - {key}",
                                                        ItemClassification.progression, None, world.player))
             bonus_stamps.place_locked_item(HatInTimeItem(f"2 Stamps - {key}",

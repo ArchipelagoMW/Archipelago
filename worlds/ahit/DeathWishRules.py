@@ -196,12 +196,9 @@ def set_dw_rules(world: "HatInTimeWorld"):
                     add_rule(bonus_stamps, loc.access_rule)
 
     if world.options.DWShuffle.value > 0:
-        for i in range(len(world.dw_shuffle)):
-            if i == 0:
-                continue
-
-            name = world.dw_shuffle[i]
-            prev_dw = world.multiworld.get_region(world.dw_shuffle[i-1], world.player)
+        for i in range(len(world.dw_shuffle)-1):
+            name = world.dw_shuffle[i+1]
+            prev_dw = world.multiworld.get_region(world.dw_shuffle[i], world.player)
             entrance = world.multiworld.get_entrance(f"{prev_dw.name} -> {name}", world.player)
             add_rule(entrance, lambda state, n=prev_dw.name: state.has(f"1 Stamp - {n}", world.player))
     else:
@@ -326,7 +323,7 @@ def set_candle_dw_rules(name: str, world: "HatInTimeWorld"):
     elif name == "Camera Tourist":
         add_rule(main_objective, lambda state: get_reachable_enemy_count(state, world) >= 8)
         add_rule(full_clear, lambda state: can_reach_all_bosses(state, world)
-                 and state.has("Triple Enemy Picture", world.player))
+                 and state.has("Triple Enemy Photo", world.player))
 
     elif "Snatcher Coins" in name:
         coins: List[str] = []
@@ -418,8 +415,8 @@ def create_enemy_events(world: "HatInTimeWorld"):
             continue
 
         region = world.multiworld.get_region(name, world.player)
-        event = HatInTimeLocation(world.player, f"Triple Enemy Picture - {name}", None, region)
-        event.place_locked_item(HatInTimeItem("Triple Enemy Picture", ItemClassification.progression, None, world.player))
+        event = HatInTimeLocation(world.player, f"Triple Enemy Photo - {name}", None, region)
+        event.place_locked_item(HatInTimeItem("Triple Enemy Photo", ItemClassification.progression, None, world.player))
         region.locations.append(event)
         event.show_in_spoiler = False
         if name == "The Mustache Gauntlet":
@@ -528,7 +525,7 @@ hit_list = {
     "Mustache Girl":    ["The Finale", "Boss Rush", "No More Bad Guys"],
 }
 
-# Camera Tourist has a bonus that requires getting three different types of enemies in one picture.
+# Camera Tourist has a bonus that requires getting three different types of enemies in one photo.
 triple_enemy_locations = [
     "She Came from Outer Space",
     "She Speedran from Outer Space",

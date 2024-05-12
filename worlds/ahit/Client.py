@@ -17,9 +17,6 @@ class AHITJSONToTextParser(JSONtoTextParser):
 
 
 class AHITCommandProcessor(ClientCommandProcessor):
-    def __init__(self, ctx: CommonContext):
-        super().__init__(ctx)
-
     def _cmd_ahit(self):
         """Check AHIT Connection State"""
         if isinstance(self.ctx, AHITContext):

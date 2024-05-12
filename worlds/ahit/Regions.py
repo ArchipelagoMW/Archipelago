@@ -316,10 +316,10 @@ def create_regions(world: "HatInTimeWorld"):
 
     # Items near the Dead Bird Studio elevator can be reached from the basement act, and beyond in Expert
     ev_area = create_region_and_connect(w, "Dead Bird Studio - Elevator Area", "DBS -> Elevator Area", dbs)
-    post_ev_area = create_region_and_connect(w, "Dead Bird Studio - Post Elevator Area", "DBS -> Post Elevator Area", dbs)
+    post_ev = create_region_and_connect(w, "Dead Bird Studio - Post Elevator Area", "DBS -> Post Elevator Area", dbs)
     connect_regions(basement, ev_area, "DBS Basement -> Elevator Area", p)
     if world.options.LogicDifficulty.value >= int(Difficulty.EXPERT):
-        connect_regions(basement, post_ev_area, "DBS Basement -> Post Elevator Area", p)
+        connect_regions(basement, post_ev, "DBS Basement -> Post Elevator Area", p)
 
     # ------------------------------------------- SUBCON FOREST --------------------------------------- #
     subcon_forest = create_region_and_connect(w, "Subcon Forest", "Telescope -> Subcon Forest", spaceship)
