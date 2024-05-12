@@ -103,8 +103,8 @@ def get_relic_count(state: CollectionState, world: "HatInTimeWorld", relic: str)
     return state.count_group(relic, world.player)
 
 
-# Only use for rifts
-def can_clear_act(state: CollectionState, world: "HatInTimeWorld", act_entrance: str) -> bool:
+# This is used to determine if the player can clear an act that's required to unlock a Time Rift
+def can_clear_required_act(state: CollectionState, world: "HatInTimeWorld", act_entrance: str) -> bool:
     entrance: Entrance = world.multiworld.get_entrance(act_entrance, world.player)
     if not state.can_reach(entrance.connected_region, "Region", world.player):
         return False
@@ -799,12 +799,12 @@ def set_rift_rules(world: "HatInTimeWorld", regions: Dict[str, Region]):
                  and state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.ALPINE]))
 
     for entrance in regions["Time Rift - Sewers"].entrances:
-        add_rule(entrance, lambda state: can_clear_act(state, world, "Mafia Town - Act 4"))
+        add_rule(entrance, lambda state: can_clear_required_act(state, world, "Mafia Town - Act 4"))
         reg_act_connection(world, world.multiworld.get_entrance("Mafia Town - Act 4",
                                                                 world.player).connected_region, entrance)
 
     for entrance in regions["Time Rift - Bazaar"].entrances:
-        add_rule(entrance, lambda state: can_clear_act(state, world, "Mafia Town - Act 6"))
+        add_rule(entrance, lambda state: can_clear_required_act(state, world, "Mafia Town - Act 6"))
         reg_act_connection(world, world.multiworld.get_entrance("Mafia Town - Act 6",
                                                                 world.player).connected_region, entrance)
 
@@ -812,16 +812,16 @@ def set_rift_rules(world: "HatInTimeWorld", regions: Dict[str, Region]):
         add_rule(entrance, lambda state: has_relic_combo(state, world, "Burger"))
 
     for entrance in regions["Time Rift - The Owl Express"].entrances:
-        add_rule(entrance, lambda state: can_clear_act(state, world, "Battle of the Birds - Act 2"))
-        add_rule(entrance, lambda state: can_clear_act(state, world, "Battle of the Birds - Act 3"))
+        add_rule(entrance, lambda state: can_clear_required_act(state, world, "Battle of the Birds - Act 2"))
+        add_rule(entrance, lambda state: can_clear_required_act(state, world, "Battle of the Birds - Act 3"))
         reg_act_connection(world, world.multiworld.get_entrance("Battle of the Birds - Act 2",
                                                                 world.player).connected_region, entrance)
         reg_act_connection(world, world.multiworld.get_entrance("Battle of the Birds - Act 3",
                                                                 world.player).connected_region, entrance)
 
     for entrance in regions["Time Rift - The Moon"].entrances:
-        add_rule(entrance, lambda state: can_clear_act(state, world, "Battle of the Birds - Act 4"))
-        add_rule(entrance, lambda state: can_clear_act(state, world, "Battle of the Birds - Act 5"))
+        add_rule(entrance, lambda state: can_clear_required_act(state, world, "Battle of the Birds - Act 4"))
+        add_rule(entrance, lambda state: can_clear_required_act(state, world, "Battle of the Birds - Act 5"))
         reg_act_connection(world, world.multiworld.get_entrance("Battle of the Birds - Act 4",
                                                                 world.player).connected_region, entrance)
         reg_act_connection(world, world.multiworld.get_entrance("Battle of the Birds - Act 5",
@@ -831,14 +831,14 @@ def set_rift_rules(world: "HatInTimeWorld", regions: Dict[str, Region]):
         add_rule(entrance, lambda state: has_relic_combo(state, world, "Train"))
 
     for entrance in regions["Time Rift - Pipe"].entrances:
-        add_rule(entrance, lambda state: can_clear_act(state, world, "Subcon Forest - Act 2"))
+        add_rule(entrance, lambda state: can_clear_required_act(state, world, "Subcon Forest - Act 2"))
         reg_act_connection(world, world.multiworld.get_entrance("Subcon Forest - Act 2",
                                                                 world.player).connected_region, entrance)
         if painting_logic(world):
             add_rule(entrance, lambda state: has_paintings(state, world, 2))
 
     for entrance in regions["Time Rift - Village"].entrances:
-        add_rule(entrance, lambda state: can_clear_act(state, world, "Subcon Forest - Act 4"))
+        add_rule(entrance, lambda state: can_clear_required_act(state, world, "Subcon Forest - Act 4"))
         reg_act_connection(world, world.multiworld.get_entrance("Subcon Forest - Act 4",
                                                                 world.player).connected_region, entrance)
 
@@ -861,7 +861,7 @@ def set_rift_rules(world: "HatInTimeWorld", regions: Dict[str, Region]):
 
     if world.is_dlc1() > 0:
         for entrance in regions["Time Rift - Balcony"].entrances:
-            add_rule(entrance, lambda state: can_clear_act(state, world, "The Arctic Cruise - Finale"))
+            add_rule(entrance, lambda state: can_clear_required_act(state, world, "The Arctic Cruise - Finale"))
 
         for entrance in regions["Time Rift - Deep Sea"].entrances:
             add_rule(entrance, lambda state: has_relic_combo(state, world, "Cake"))
@@ -884,25 +884,25 @@ def set_default_rift_rules(world: "HatInTimeWorld"):
                  and state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.ALPINE]))
 
     for entrance in world.multiworld.get_region("Time Rift - Sewers", world.player).entrances:
-        add_rule(entrance, lambda state: can_clear_act(state, world, "Mafia Town - Act 4"))
+        add_rule(entrance, lambda state: can_clear_required_act(state, world, "Mafia Town - Act 4"))
         reg_act_connection(world, "Down with the Mafia!", entrance.name)
 
     for entrance in world.multiworld.get_region("Time Rift - Bazaar", world.player).entrances:
-        add_rule(entrance, lambda state: can_clear_act(state, world, "Mafia Town - Act 6"))
+        add_rule(entrance, lambda state: can_clear_required_act(state, world, "Mafia Town - Act 6"))
         reg_act_connection(world, "Heating Up Mafia Town", entrance.name)
 
     for entrance in world.multiworld.get_region("Time Rift - Mafia of Cooks", world.player).entrances:
         add_rule(entrance, lambda state: has_relic_combo(state, world, "Burger"))
 
     for entrance in world.multiworld.get_region("Time Rift - The Owl Express", world.player).entrances:
-        add_rule(entrance, lambda state: can_clear_act(state, world, "Battle of the Birds - Act 2"))
-        add_rule(entrance, lambda state: can_clear_act(state, world, "Battle of the Birds - Act 3"))
+        add_rule(entrance, lambda state: can_clear_required_act(state, world, "Battle of the Birds - Act 2"))
+        add_rule(entrance, lambda state: can_clear_required_act(state, world, "Battle of the Birds - Act 3"))
         reg_act_connection(world, "Murder on the Owl Express", entrance.name)
         reg_act_connection(world, "Picture Perfect", entrance.name)
 
     for entrance in world.multiworld.get_region("Time Rift - The Moon", world.player).entrances:
-        add_rule(entrance, lambda state: can_clear_act(state, world, "Battle of the Birds - Act 4"))
-        add_rule(entrance, lambda state: can_clear_act(state, world, "Battle of the Birds - Act 5"))
+        add_rule(entrance, lambda state: can_clear_required_act(state, world, "Battle of the Birds - Act 4"))
+        add_rule(entrance, lambda state: can_clear_required_act(state, world, "Battle of the Birds - Act 5"))
         reg_act_connection(world, "Train Rush", entrance.name)
         reg_act_connection(world, "The Big Parade", entrance.name)
 
@@ -910,13 +910,13 @@ def set_default_rift_rules(world: "HatInTimeWorld"):
         add_rule(entrance, lambda state: has_relic_combo(state, world, "Train"))
 
     for entrance in world.multiworld.get_region("Time Rift - Pipe", world.player).entrances:
-        add_rule(entrance, lambda state: can_clear_act(state, world, "Subcon Forest - Act 2"))
+        add_rule(entrance, lambda state: can_clear_required_act(state, world, "Subcon Forest - Act 2"))
         reg_act_connection(world, "The Subcon Well", entrance.name)
         if painting_logic(world):
             add_rule(entrance, lambda state: has_paintings(state, world, 2))
 
     for entrance in world.multiworld.get_region("Time Rift - Village", world.player).entrances:
-        add_rule(entrance, lambda state: can_clear_act(state, world, "Subcon Forest - Act 4"))
+        add_rule(entrance, lambda state: can_clear_required_act(state, world, "Subcon Forest - Act 4"))
         reg_act_connection(world, "Queen Vanessa's Manor", entrance.name)
         if painting_logic(world):
             add_rule(entrance, lambda state: has_paintings(state, world, 2))
@@ -937,7 +937,7 @@ def set_default_rift_rules(world: "HatInTimeWorld"):
 
     if world.is_dlc1():
         for entrance in world.multiworld.get_region("Time Rift - Balcony", world.player).entrances:
-            add_rule(entrance, lambda state: can_clear_act(state, world, "The Arctic Cruise - Finale"))
+            add_rule(entrance, lambda state: can_clear_required_act(state, world, "The Arctic Cruise - Finale"))
 
         for entrance in world.multiworld.get_region("Time Rift - Deep Sea", world.player).entrances:
             add_rule(entrance, lambda state: has_relic_combo(state, world, "Cake"))

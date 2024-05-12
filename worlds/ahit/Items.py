@@ -94,7 +94,7 @@ def calculate_yarn_costs(world: "HatInTimeWorld"):
 
     max_cost = 0
     for i in range(5):
-        cost: int = world.random.randint(min(min_yarn_cost, max_yarn_cost), max(max_yarn_cost, min_yarn_cost))
+        cost: int = world.random.randint(min_yarn_cost, max_yarn_cost)
         world.hat_yarn_costs[HatType(i)] = cost
         max_cost += cost
 
