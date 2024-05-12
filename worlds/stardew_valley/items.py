@@ -145,6 +145,10 @@ events = [
     ItemData(None, Event.start_dark_talisman_quest, ItemClassification.progression),
     ItemData(None, Event.can_ship_items, ItemClassification.progression),
     ItemData(None, Event.can_shop_at_pierre, ItemClassification.progression),
+
+    ItemData(None, Event.spring_farming, ItemClassification.progression),
+    ItemData(None, Event.summer_farming, ItemClassification.progression),
+    ItemData(None, Event.fall_farming, ItemClassification.progression),
 ]
 
 all_items: List[ItemData] = load_item_csv() + events

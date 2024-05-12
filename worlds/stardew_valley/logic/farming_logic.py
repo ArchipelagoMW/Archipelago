@@ -4,22 +4,22 @@ from typing import Union, Tuple
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
 from .has_logic import HasLogicMixin
+from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .season_logic import SeasonLogicMixin
 from .tool_logic import ToolLogicMixin
 from .. import options
-from ..stardew_rule import StardewRule, True_, False_
+from ..stardew_rule import StardewRule, True_, false_
+from ..strings.ap_names.event_names import Event
 from ..strings.fertilizer_names import Fertilizer
-from ..strings.region_names import Region, LogicRegion
+from ..strings.region_names import Region
 from ..strings.season_names import Season
 from ..strings.tool_names import Tool
 
-farming_logic_region_by_season = {
-    (Season.spring,): LogicRegion.spring_farming,
-    (Season.summer,): LogicRegion.summer_farming,
-    (Season.fall,): LogicRegion.fall_farming,
-    (): LogicRegion.indoor_farming,
-    (Season.spring, Season.summer): LogicRegion.summer_or_fall_farming,
+farming_event_by_season = {
+    Season.spring: Event.spring_farming,
+    Season.summer: Event.summer_farming,
+    Season.fall: Event.fall_farming,
 }
 
 
@@ -29,7 +29,7 @@ class FarmingLogicMixin(BaseLogicMixin):
         self.farming = FarmingLogic(*args, **kwargs)
 
 
-class FarmingLogic(BaseLogic[Union[HasLogicMixin, RegionLogicMixin, SeasonLogicMixin, ToolLogicMixin, FarmingLogicMixin]]):
+class FarmingLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, ToolLogicMixin, FarmingLogicMixin]]):
 
     @cached_property
     def has_farming_tools(self) -> StardewRule:
@@ -47,20 +47,15 @@ class FarmingLogic(BaseLogic[Union[HasLogicMixin, RegionLogicMixin, SeasonLogicM
 
     @cache_self1
     def can_plant_and_grow_item(self, seasons: Union[str, Tuple[str]]) -> StardewRule:
+        if seasons == ():  # indoor farming
+            return (self.logic.region.can_reach(Region.greenhouse) | self.logic.farming.has_island_farm()) & self.logic.farming.has_farming_tools
+
         if isinstance(seasons, str):
             seasons = (seasons,)
 
-        region = farming_logic_region_by_season.get(seasons, LogicRegion.indoor_farming)
-        if region is not None:
-            return self.logic.region.can_reach(region)
-
-        greenhouse_rule = self.logic.region.can_reach(Region.greenhouse)
-        island_farm_rule = self.logic.farming.has_island_farm()
-        farm_with_right_season_rule = self.logic.season.has_any(seasons) & self.logic.region.can_reach(Region.farm)
-
-        return greenhouse_rule | island_farm_rule | farm_with_right_season_rule
+        return self.logic.or_(*(self.logic.received(farming_event_by_season[season]) for season in seasons))
 
     def has_island_farm(self) -> StardewRule:
         if self.options.exclude_ginger_island == options.ExcludeGingerIsland.option_false:
             return self.logic.region.can_reach(Region.island_west)
-        return False_()
+        return false_

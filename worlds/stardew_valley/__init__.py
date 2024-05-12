@@ -20,7 +20,7 @@ from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRand
 from .presets import sv_options_presets
 from .regions import create_regions
 from .rules import set_rules
-from .stardew_rule import True_, StardewRule, HasProgressionPercent
+from .stardew_rule import True_, StardewRule, HasProgressionPercent, true_
 from .strings.ap_names.event_names import Event
 from .strings.entrance_names import Entrance as EntranceName
 from .strings.goal_names import Goal as GoalName
@@ -197,9 +197,16 @@ class StardewValleyWorld(World):
 
     def setup_action_events(self):
         can_ship_event = LocationData(None, LogicRegion.shipping, Event.can_ship_items)
-        self.create_event_location(can_ship_event, True_(), Event.can_ship_items)
+        self.create_event_location(can_ship_event, true_, Event.can_ship_items)
         can_shop_pierre_event = LocationData(None, RegionName.pierre_store, Event.can_shop_at_pierre)
-        self.create_event_location(can_shop_pierre_event, True_(), Event.can_shop_at_pierre)
+        self.create_event_location(can_shop_pierre_event, true_, Event.can_shop_at_pierre)
+
+        spring_farming = LocationData(None, LogicRegion.spring_farming, Event.spring_farming)
+        self.create_event_location(spring_farming, true_, Event.spring_farming)
+        summer_farming = LocationData(None, LogicRegion.summer_farming, Event.summer_farming)
+        self.create_event_location(summer_farming, true_, Event.summer_farming)
+        fall_farming = LocationData(None, LogicRegion.fall_farming, Event.fall_farming)
+        self.create_event_location(fall_farming, true_, Event.fall_farming)
 
     def setup_victory(self):
         if self.options.goal == Goal.option_community_center:

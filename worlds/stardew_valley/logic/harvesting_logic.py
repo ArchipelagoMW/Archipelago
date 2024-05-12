@@ -43,6 +43,7 @@ FarmingLogicMixin, TimeLogicMixin]]):
 
     @cache_self1
     def can_harvest_tree_from(self, source: HarvestFruitTreeSource) -> StardewRule:
+        # FIXME tool not required for this
         region_to_grow_rule = self.logic.farming.can_plant_and_grow_item(source.seasons)
         sapling_rule = self.logic.has(source.sapling)
         # Because it takes 1 month to grow the sapling

@@ -4,3 +4,7 @@ class Event:
     start_dark_talisman_quest = "Start Dark Talisman Quest"
     can_ship_items = "Can Ship Items"
     can_shop_at_pierre = "Can Shop At Pierre's"
+
+    spring_farming = "Spring Farming"
+    summer_farming = "Summer Farming"
+    fall_farming = "Fall Farming"
