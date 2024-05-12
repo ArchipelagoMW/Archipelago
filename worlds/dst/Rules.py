@@ -2,11 +2,12 @@ import typing
 from collections.abc import Callable
 
 from BaseClasses import CollectionState
-from worlds.generic.Rules import exclusion_rules, set_rule, add_rule
+from worlds.generic.Rules import exclusion_rules, set_rule, add_rule, forbid_item
 from worlds.AutoWorld import World
 
 from .Locations import location_data_table
 from .Options import DSTOptions
+from .Items import item_data_table
 
 def advanced_player_bias (state: CollectionState, player: int) -> bool: 
    return state.multiworld.skill_level[player].current_key != "easy"
@@ -448,6 +449,8 @@ def get_rules_lookup(player: int):
             "Moon Stone Event": lambda state: state.has("Mooncaller Staff", player),
             "Oasis": lambda state: is_summer(state, player) and freshwater_fishing(state, player),
             "Poison Birchnut Tree": lambda state: reached_autumn(state, player) and chopping(state, player),
+            "W.O.B.O.T.": lambda state: state.has("Defeat Scrappy Werepig", player) or state.has_all(["Auto-Mat-O-Chanic", "Cut Stone", "Electrical Doodad"], player),
+            "Friendly Fruit Fly": lambda state: state.has("Defeat Lord of the Fruit Flies", player),
 
             # Bosses
             "Deerclops": lambda state: state.has("Defeat Deerclops", player),
@@ -561,6 +564,7 @@ def get_rules_lookup(player: int):
             "Resting Horror": lambda state: ruins_exploration(state, player),
             "Birchnutter": lambda state: reached_autumn(state, player) and chopping(state, player),
             "Mandrake": lambda state: has_survived_num_days(3, state, player),
+            "Fruit Fly": lambda state: basic_farming(state, player) and reached_spring(state, player),
             
             # Cook foods
             "Butter Muffin": lambda state: pre_basic_cooking(state, player),
@@ -826,7 +830,8 @@ def set_rules(dst_world: World) -> None:
     player = dst_world.player
     options:DSTOptions = dst_world.options
     rules_lookup = get_rules_lookup(player)
-    existing_locations = [item.name for item in multiworld.get_locations(player)]
+    EXISTING_LOCATIONS = [item.name for item in multiworld.get_locations(player)]
+    SEASON_HELPER_ITEMS = [name for name, data in item_data_table.items() if "seasonhelper" in data.tags]
     excluded = set()
     PROGRESSION_REQUIRED_BOSSES:set = set()
 
@@ -849,7 +854,7 @@ def set_rules(dst_world: World) -> None:
 
     # Set location rules
     for location_name, rule in rules_lookup["locations"].items():
-        if location_name in existing_locations:
+        if location_name in EXISTING_LOCATIONS:
             location = multiworld.get_location(location_name, player)
             required = False
 
@@ -894,6 +899,11 @@ def set_rules(dst_world: World) -> None:
             or (options.skill_level.current_key != "expert" and "expert" in location_data.tags)
             ):
                 excluded.add(location_name)
+
+            # Forbid season helpers in seasonal locations
+            if "seasonal" in location_data.tags:
+                for item_name in SEASON_HELPER_ITEMS:
+                    forbid_item(location, item_name, player)
 
     exclusion_rules(multiworld, player, excluded)
     

@@ -285,10 +285,10 @@ DSTAP_ITEMS = [
     [187, "War Saddle",                  "saddle_war",                            [ "useful" ] ],
     [188, "Glossamer Saddle",            "saddle_race",                           [ "useful" ] ],
     [189, "Brush",                       "brush",                                 [ "filler" ] ],
-    [190, "Scrap Wall",                  "wall_scrap_item",                       [ "progression" ] ],
-    # [191, "UNUSED",                      "",                                      [ "filler" ] ],
-    # [192, "UNUSED",                      "",                                      [ "filler" ] ],
-    # [193, "UNUSED",                      "",                                      [ "filler" ] ],
+    [190, "Scrap Wall",                  "wall_scrap_item",                       [ "filler" ] ],
+    [191, "Auto-Mat-O-Chanic",           "wagpunkbits_kit",                       [ "progression" ] ],
+    [192, "Dreadstone Armor",            "armordreadstone",                       [ "useful" ] ],
+    [193, "Dreadstone Helm",             "dreadstonehat",                         [ "useful" ] ],
     # [194, "UNUSED",                      "",                                      [ "filler" ] ],
     # [195, "UNUSED",                      "",                                      [ "filler" ] ],
     # [196, "UNUSED",                      "",                                      [ "filler" ] ],
@@ -407,8 +407,8 @@ DSTAP_ITEMS = [
     [702, "Winter Season Change",        "dstap_seasonchange_winter",             [ "seasonhelper", "useful" ] ],
     [703, "Spring Season Change",        "dstap_seasonchange_spring",             [ "seasonhelper", "useful" ] ],
     [704, "Summer Season Change",        "dstap_seasonchange_summer",             [ "seasonhelper", "useful" ] ],
-    [705, "Full Moon Cycle Change",      "dstap_mooncyclechange_full",            [ "seasonhelper", "useful" ] ],
-    [706, "New Moon Cycle Change",       "dstap_mooncyclechange_new",             [ "seasonhelper", "useful" ] ],
+    [705, "Full Moon Phase Change",      "dstap_moonphasechange_full",            [ "seasonhelper", "useful" ] ],
+    [706, "New Moon Phase Change",       "dstap_moonphasechange_new",             [ "seasonhelper", "useful" ] ],
     [707, "Extra Damage Against Bosses", "extrabossdamage",                       [ "abstract", "useful", "progressive" ] ],
 ]
 
@@ -427,6 +427,8 @@ DSTAP_LOCATIONS = [
     [11,    "Moon Stone Event",                 "opalstaff",            [ "item", "caves", "seasonal", "priority_celestial_boss" ] ],
     [12,    "Oasis",                            "wetpouch",             [ "item", "seasonal", "priority_antlion_boss" ] ],
     [13,    "Poison Birchnut Tree",             "",                     [ "task", "creature", "seasonal" ] ],
+    [14,    "W.O.B.O.T.",                       "",                     [ "task" ] ],
+    [15,    "Friendly Fruit Fly",               "fruitflyfruit",        [ "item" ] ],
 
     # Normal dishes (101-200)
     [101,   "Butter Muffin",            "butterflymuffin",          [ "cooking", "veggie" ] ],
@@ -625,6 +627,7 @@ DSTAP_LOCATIONS = [
     [381,   "Resting Horror",           "ruins_shadeling",      [ "creature", "caves" ] ],
     [382,   "Birchnutter",              "birchnutdrake",        [ "creature", "seasonal" ] ],
     [383,   "Mandrake",                 "mandrake",             [ "creature" ] ],
+    [384,   "Fruit Fly",                "fruitfly",             [ "creature" ] ],
 
     # Farming (451-500)
     [451,   "Grow Giant Asparagus",         "asparagus_oversized",      [ "farming" ] ],
