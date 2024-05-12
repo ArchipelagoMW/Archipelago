@@ -36,15 +36,16 @@ At this time, the only supported method of setup is through Manual Compilation. 
 
 - Open 3 Powershell windows. If you have VSCode, you can run 3 terminals to consolidate this process.
     - In the first window, navigate to the Archipelago folder using `cd` and run `python ./Launcher.py`.
-    - In the second window, navigate to the ArchipelaGOAL folder and run `task extract`. This will prompt you to tell the mod where to find your ISO file to dump its cotnents. When that is done, run `task repl`.
+    - In the second window, navigate to the ArchipelaGOAL folder and run `task extract`. This will prompt you to tell the mod where to find your ISO file to dump its contents. When that is done, run `task repl`.
     - In the third window, navigate to the ArchipelaGOAL folder and run `task boot-game`. At this point, Jak should be standing outside Samos's hut.
+    - You can now close all these windows
 - In the Launcher, click Generate to create a new random seed. Save the resulting zip file.
 - In the Launcher, click Host to host the Archipelago server. It will prompt you for the location of that zip file.
-- Once the server is running, in the Launcher, find the Jak and Daxter Client and click it. You should see the `task repl` window begin to compile the game. 
-- When it completes, you should hear the menu closing sound effect, and the Client window should appear.
+- Once the server is running, in the Launcher, find the Jak and Daxter Client and click it. You should see the command window begin to compile the game. 
+- When it completes, you should hear the menu closing sound effect, and you should see the text client indicate that the two agents are ready to communicate with the game.
 - Connect the client to the Archipelago server and enter your slot name. Once this is done, the game should be ready to play. Talk to Samos to trigger the cutscene where he sends you to Geyser Rock, and off you go!
 
-Once you complete the setup steps, you need to repeat most of them in order to launch a new game. You can skip a few steps:
+Once you complete the setup steps, you should only need to run the Launcher again to generate a game, host a server, or run the client and connect to a server.
 - You never need to download the zip copies of the projects again (unless there are updates).
 - You never need to dump your ISO again.
 - You never need to extract the ISO assets again.
@@ -63,17 +64,16 @@ Offline play is untested at this time.
 
 ### Runtime Failures
 
-- If the client window appears but no sound plays, you will need to enter the repl commands into the client to connect it to the game. These are, in order:
-    - `/repl connect 127.0.0.1 8181`
-    - `/repl listen`
-    - `/repl compile`
-- Once these are done, you can enter `/repl verify` and you should hear the menu sound again.
+- If the client window appears but no sound plays, you will need to enter the following commands into the client to connect it to the game.
+    - `/repl connect`
+    - `/memr connect`
+- Once these are done, you can enter `/repl status` and `/memr status` to check that everything is connected and ready.
 
 ## Gameplay Troubleshooting
 
 ### Known Issues
 
-- Needing to open so many windows to play the game is a massive pain, and I hope to streamline this process in the future.
+- I've streamlined the process of connecting the client's agents to the game, but they are temperamental and I am bad at asynchronous programming.
 - The game needs to run in debug mode in order to allow the repl to connect to it. At some point I want to make sure it can run in retail mode, or at least hide the debug text on screen and play the game's introductory cutscenes properly.
 - The client is currently not very robust and doesn't handle failures gracefully. This may result in items not being delivered to the game, or location checks not being delivered to the server.
 - The game relates tasks and power cells closely but separately. Some issues may result from having to tell the game to check for the power cells you own, rather than the tasks you completed.

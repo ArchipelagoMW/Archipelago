@@ -1,4 +1,6 @@
 import logging
+import os
+import subprocess
 import typing
 import asyncio
 import colorama
@@ -33,11 +35,10 @@ def create_task_log_exception(awaitable: typing.Awaitable) -> asyncio.Task:
 class JakAndDaxterClientCommandProcessor(ClientCommandProcessor):
     ctx: "JakAndDaxterContext"
 
-    #  The REPL has a specific order of operations it needs to do in order to process our input:
-    #  1. Connect (we need to open a socket connection on ip/port to the REPL).
-    #  2. Listen (have the REPL compiler connect and listen on the game's internal socket).
-    #  3. Compile (have the REPL compiler compile the game into object code it can run).
-    #  All 3 need to be done, and in this order, for this to work.
+    # The command processor is not async and cannot use async tasks, so long-running operations
+    # like the /repl connect command (which takes 10-15 seconds to compile the game) have to be requested
+    # with user-initiated flags. The text client will hang while the operation runs, but at least we can
+    # inform the user to wait. The flags are checked by the agents every main_tick.
     def _cmd_repl(self, *arguments: str):
         """Sends a command to the OpenGOAL REPL. Arguments:
         - connect : connect the client to the REPL (goalc).
@@ -45,7 +46,7 @@ class JakAndDaxterClientCommandProcessor(ClientCommandProcessor):
         if arguments:
             if arguments[0] == "connect":
                 logger.info("This may take a bit... Wait for the success audio cue before continuing!")
-                self.ctx.repl.user_connect = True  # Will attempt to reconnect on next tick.
+                self.ctx.repl.initiated_connect = True
             if arguments[0] == "status":
                 self.ctx.repl.print_status()
 
@@ -55,7 +56,7 @@ class JakAndDaxterClientCommandProcessor(ClientCommandProcessor):
         - status : check the internal status of the Memory Reader."""
         if arguments:
             if arguments[0] == "connect":
-                self.ctx.memr.connect()
+                self.ctx.memr.initiated_connect = True
             if arguments[0] == "status":
                 self.ctx.memr.print_status()
 
@@ -125,6 +126,55 @@ class JakAndDaxterContext(CommonContext):
             await asyncio.sleep(0.1)
 
 
+async def run_game(ctx: JakAndDaxterContext):
+    exec_directory = ""
+    try:
+        exec_directory = Utils.get_settings()["jakanddaxter_options"]["exec_directory"]
+        files_in_path = os.listdir(exec_directory)
+        if ".git" in files_in_path:
+            # Indicates the user is running from source, append expected subdirectory appropriately.
+            exec_directory = os.path.join(exec_directory, "out", "build", "Release", "bin")
+        else:
+            # Indicates the user is running from the official launcher, a mod launcher, or otherwise.
+            # We'll need to handle version numbers in the path somehow...
+            exec_directory = os.path.join(exec_directory, "versions", "official")
+            latest_version = list(reversed(os.listdir(exec_directory)))[0]
+            exec_directory = os.path.join(exec_directory, str(latest_version))
+    except FileNotFoundError:
+        logger.error(f"Unable to locate directory {exec_directory}, "
+                     f"unable to locate game executable.")
+        return
+    except KeyError as e:
+        logger.error(f"Hosts.yaml does not contain {e.args[0]}, "
+                     f"unable to locate game executable.")
+        return
+
+    gk = os.path.join(exec_directory, "gk.exe")
+    goalc = os.path.join(exec_directory, "goalc.exe")
+
+    # Don't mind all the arguments, they are exactly what you get when you run "task boot-game" or "task repl".
+    await asyncio.create_subprocess_exec(
+        gk,
+        "-v", "--game jak1", "--", "-boot", "-fakeiso", "-debug",
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stdin=subprocess.DEVNULL)
+
+    # You MUST launch goalc as a console application, so powershell/cmd/bash/etc is the program
+    # and goalc is just an argument. It HAS to be this way.
+    #  TODO - Support other OS's.
+    await asyncio.create_subprocess_exec(
+        "powershell.exe",
+        goalc, "--user-auto", "--game jak1")
+
+    # Auto connect the repl and memr agents. Sleep 5 because goalc takes just a little bit of time to load,
+    # and it's not something we can await.
+    logger.info("This may take a bit... Wait for the success audio cue before continuing!")
+    await asyncio.sleep(5)
+    ctx.repl.initiated_connect = True
+    ctx.memr.initiated_connect = True
+
+
 async def main():
     Utils.init_logging("JakAndDaxterClient", exception_logger="Client")
 
@@ -138,6 +188,8 @@ async def main():
         ctx.run_gui()
     ctx.run_cli()
 
+    # Find and run the game (gk) and compiler/repl (goalc).
+    await run_game(ctx)
     await ctx.exit_event.wait()
     await ctx.shutdown()
 

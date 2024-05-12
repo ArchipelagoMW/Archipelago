@@ -15,7 +15,7 @@ class JakAndDaxterReplClient:
     port: int
     sock: socket
     connected: bool = False
-    user_connect: bool = False  # Signals when user tells us to try reconnecting.
+    initiated_connect: bool = False  # Signals when user tells us to try reconnecting.
 
     # The REPL client needs the REPL/compiler process running, but that process
     # also needs the game running. Therefore, the REPL client needs both running.
@@ -31,9 +31,9 @@ class JakAndDaxterReplClient:
         self.connect()
 
     async def main_tick(self):
-        if self.user_connect:
+        if self.initiated_connect:
             await self.connect()
-            self.user_connect = False
+            self.initiated_connect = False
 
         if self.connected:
             try:

@@ -11,13 +11,20 @@ next_cell_index_offset = 0    # Each of these is an uint64, so 8 bytes.
 next_buzzer_index_offset = 8  # Each of these is an uint64, so 8 bytes.
 cells_offset = 16
 buzzers_offset = 420          # cells_offset + (sizeof uint32 * 101 cells) = 16 + (4 * 101)
-end_marker_offset = 868       # buzzers_offset + (sizeof uint32 * 112 flies) = 420 + (4 * 112)
+
+
+# buzzers_offset
+# + (sizeof uint32 * 112 flies)  <-- The buzzers themselves.
+# + (sizeof uint8 * 116 tasks)   <-- A "cells-received" array for the game to handle new ownership logic.
+# = 420 + (4 * 112) + (1 * 116)
+end_marker_offset = 984
 
 
 class JakAndDaxterMemoryReader:
     marker: typing.ByteString
     goal_address = None
     connected: bool = False
+    initiated_connect: bool = False
 
     # The memory reader just needs the game running.
     gk_process: pymem.process = None
@@ -30,6 +37,10 @@ class JakAndDaxterMemoryReader:
         self.connect()
 
     async def main_tick(self, location_callback: typing.Callable):
+        if self.initiated_connect:
+            await self.connect()
+            self.initiated_connect = False
+
         if self.connected:
             try:
                 self.gk_process.read_bool(self.gk_process.base_address)  # Ping to see if it's alive.
@@ -48,7 +59,7 @@ class JakAndDaxterMemoryReader:
             location_callback(self.location_outbox)
             self.outbox_index += 1
 
-    def connect(self):
+    async def connect(self):
         try:
             self.gk_process = pymem.Pymem("gk.exe")  # The GOAL Kernel
             logger.info("Found the gk process: " + str(self.gk_process.process_id))

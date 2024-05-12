@@ -24,6 +24,15 @@ class JakAndDaxterWebWorld(WebWorld):
 
 
 class JakAndDaxterWorld(World):
+    """
+    Jak and Daxter: The Precursor Legacy is a 2001 action platformer developed by Naughty Dog
+    for the PlayStation 2. The game follows the eponymous protagonists, a young boy named Jak
+    and his friend Daxter, who has been transformed into an "ottsel." With the help of Samos
+    the Sage of Green Eco and his daughter Keira, the pair travel north in search of a cure for Daxter,
+    discovering artifacts created by an ancient race known as the Precursors along the way. When the
+    rogue sages Gol and Maia Acheron plan to flood the world with Dark Eco, they must stop their evil plan
+    and save the world.
+    """
     # ID, name, version
     game = jak1_name
     data_version = 1
