@@ -10,8 +10,7 @@ if TYPE_CHECKING:
 
 def create_itempool(world: "HatInTimeWorld") -> List[Item]:
     itempool: List[Item] = []
-    if not world.is_dw_only() and world.options.HatItems.value == 0:
-        calculate_yarn_costs(world)
+    if world.has_yarn():
         yarn_pool: List[Item] = create_multiple_items(world, "Yarn",
                                                       world.options.YarnAvailable.value,
                                                       ItemClassification.progression_skip_balancing)
@@ -90,13 +89,12 @@ def create_itempool(world: "HatInTimeWorld") -> List[Item]:
 
 
 def calculate_yarn_costs(world: "HatInTimeWorld"):
-    mw = world.multiworld
     min_yarn_cost = int(min(world.options.YarnCostMin.value, world.options.YarnCostMax.value))
     max_yarn_cost = int(max(world.options.YarnCostMin.value, world.options.YarnCostMax.value))
 
     max_cost = 0
     for i in range(5):
-        cost: int = mw.random.randint(min(min_yarn_cost, max_yarn_cost), max(max_yarn_cost, min_yarn_cost))
+        cost: int = world.random.randint(min(min_yarn_cost, max_yarn_cost), max(max_yarn_cost, min_yarn_cost))
         world.hat_yarn_costs[HatType(i)] = cost
         max_cost += cost
 

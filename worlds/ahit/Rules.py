@@ -452,6 +452,11 @@ def set_moderate_rules(world: "HatInTimeWorld"):
         # No Dweller, Hookshot, or Time Stop for these
         set_rule(world.multiworld.get_location("Pink Paw Station - Cat Vacuum", world.player), lambda state: True)
         set_rule(world.multiworld.get_location("Pink Paw Station - Behind Fan", world.player), lambda state: True)
+        set_rule(world.multiworld.get_location("Pink Paw Station - Pink Ticket Booth", world.player), lambda state: True)
+        set_rule(world.multiworld.get_location("Act Completion (Pink Paw Station)", world.player), lambda state: True)
+        for key in shop_locations.keys():
+            if "Pink Paw Station Thug" in key and is_location_valid(world, key):
+                set_rule(world.multiworld.get_location(key, world.player), lambda state: True)
 
         # Moderate: clear Rush Hour without Hookshot
         set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player),

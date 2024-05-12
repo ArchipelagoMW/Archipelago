@@ -1,5 +1,6 @@
 from BaseClasses import Item, ItemClassification, Tutorial, Location, MultiWorld
-from .Items import item_table, create_item, relic_groups, act_contracts, create_itempool, get_shop_trap_name
+from .Items import item_table, create_item, relic_groups, act_contracts, create_itempool, get_shop_trap_name, \
+    calculate_yarn_costs
 from .Regions import create_regions, randomize_act_entrances, chapter_act_info, create_events, get_shuffled_region
 from .Locations import location_table, contract_locations, is_location_valid, get_location_names, TASKSANITY_START_ID, \
     get_total_locations
@@ -124,11 +125,14 @@ class HatInTimeWorld(World):
                 self.multiworld.get_location(name, self.player).place_locked_item(create_item(self, name))
 
     def create_items(self):
-        if self.options.HatItems.value == 0 and self.options.RandomizeHatOrder.value > 0:
-            self.random.shuffle(self.hat_craft_order)
-            if self.options.RandomizeHatOrder.value == 2:
-                self.hat_craft_order.remove(HatType.TIME_STOP)
-                self.hat_craft_order.append(HatType.TIME_STOP)
+        if self.has_yarn():
+            calculate_yarn_costs(self)
+
+            if self.options.RandomizeHatOrder.value > 0:
+                self.random.shuffle(self.hat_craft_order)
+                if self.options.RandomizeHatOrder.value == 2:
+                    self.hat_craft_order.remove(HatType.TIME_STOP)
+                    self.hat_craft_order.append(HatType.TIME_STOP)
 
         self.multiworld.itempool += create_itempool(self)
 
@@ -180,7 +184,7 @@ class HatInTimeWorld(World):
                            "SeedName": self.multiworld.seed_name,
                            "TotalLocations": get_total_locations(self)}
 
-        if self.options.HatItems.value == 0:
+        if self.has_yarn():
             slot_data.setdefault("SprintYarnCost", self.hat_yarn_costs[HatType.SPRINT])
             slot_data.setdefault("BrewingYarnCost", self.hat_yarn_costs[HatType.BREWING])
             slot_data.setdefault("IceYarnCost", self.hat_yarn_costs[HatType.ICE])
@@ -286,6 +290,9 @@ class HatInTimeWorld(World):
 
         for hat in self.hat_craft_order:
             spoiler_handle.write("Hat Cost: %s: %i\n" % (hat, self.hat_yarn_costs[hat]))
+
+    def has_yarn(self) -> bool:
+        return not self.is_dw_only() and self.options.HatItems.value == 0
 
     def is_dlc1(self) -> bool:
         return self.options.EnableDLC1.value > 0

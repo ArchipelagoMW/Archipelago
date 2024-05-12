@@ -306,7 +306,7 @@ class FinalChapterMaxCost(Range):
 
 
 class MaxExtraTimePieces(Range):
-    """Maximum amount of extra Time Pieces from the DLCs.
+    """Maximum number of extra Time Pieces from the DLCs.
     Arctic Cruise will add up to 6. Nyakuza Metro will add up to 10. The absolute maximum is 56."""
     display_name = "Max Extra Time Pieces"
     range_start = 0
@@ -339,8 +339,8 @@ class YarnAvailable(Range):
 
 
 class MinExtraYarn(Range):
-    """The minimum amount of extra yarn in the item pool.
-    There must be at least this much more yarn over the total amount of yarn needed to craft all hats.
+    """The minimum number of extra yarn in the item pool.
+    There must be at least this much more yarn over the total number of yarn needed to craft all hats.
     For example, if this option's value is 10, and the total yarn needed to craft all hats is 40,
     there must be at least 50 yarn in the pool."""
     display_name = "Max Extra Yarn"
@@ -355,7 +355,7 @@ class HatItems(Toggle):
 
 
 class MinPonCost(Range):
-    """The minimum amount of Pons that any shop item can cost."""
+    """The minimum number of Pons that any shop item can cost."""
     display_name = "Minimum Shop Pon Cost"
     range_start = 10
     range_end = 800
@@ -363,7 +363,7 @@ class MinPonCost(Range):
 
 
 class MaxPonCost(Range):
-    """The maximum amount of Pons that any shop item can cost."""
+    """The maximum number of Pons that any shop item can cost."""
     display_name = "Maximum Shop Pon Cost"
     range_start = 10
     range_end = 800
@@ -371,7 +371,7 @@ class MaxPonCost(Range):
 
 
 class BadgeSellerMinItems(Range):
-    """The smallest amount of items that the Badge Seller can have for sale."""
+    """The smallest number of items that the Badge Seller can have for sale."""
     display_name = "Badge Seller Minimum Items"
     range_start = 0
     range_end = 10
@@ -379,7 +379,7 @@ class BadgeSellerMinItems(Range):
 
 
 class BadgeSellerMaxItems(Range):
-    """The largest amount of items that the Badge Seller can have for sale."""
+    """The largest number of items that the Badge Seller can have for sale."""
     display_name = "Badge Seller Maximum Items"
     range_start = 0
     range_end = 10
@@ -421,7 +421,7 @@ class ExcludeTour(Toggle):
 
 
 class ShipShapeCustomTaskGoal(Range):
-    """Change the amount of tasks required to complete Ship Shape. This will not affect Cruisin' for a Bruisin'."""
+    """Change the number of tasks required to complete Ship Shape. This will not affect Cruisin' for a Bruisin'."""
     display_name = "Ship Shape Custom Task Goal"
     range_start = 1
     range_end = 30
@@ -451,7 +451,7 @@ class MetroMaxPonCost(Range):
 
 
 class NyakuzaThugMinShopItems(Range):
-    """The smallest amount of items that the thugs in Nyakuza Metro can have for sale."""
+    """The smallest number of items that the thugs in Nyakuza Metro can have for sale."""
     display_name = "Nyakuza Thug Minimum Shop Items"
     range_start = 0
     range_end = 5
@@ -459,7 +459,7 @@ class NyakuzaThugMinShopItems(Range):
 
 
 class NyakuzaThugMaxShopItems(Range):
-    """The largest amount of items that the thugs in Nyakuza Metro can have for sale."""
+    """The largest number of items that the thugs in Nyakuza Metro can have for sale."""
     display_name = "Nyakuza Thug Maximum Shop Items"
     range_start = 0
     range_end = 5
