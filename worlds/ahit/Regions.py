@@ -446,7 +446,7 @@ def create_tasksanity_locations(world: "HatInTimeWorld"):
 
 
 def randomize_act_entrances(world: "HatInTimeWorld"):
-    region_list: List[Region] = get_act_regions(world)
+    region_list: List[Region] = get_shuffleable_act_regions(world)
     world.random.shuffle(region_list)
     region_list.sort(key=sort_acts)
     candidate_list: List[Region] = region_list.copy()
@@ -676,7 +676,7 @@ def connect_time_rift(world: "HatInTimeWorld", time_rift: Region, exit_region: R
         i += 1
 
 
-def get_act_regions(world: "HatInTimeWorld") -> List[Region]:
+def get_shuffleable_act_regions(world: "HatInTimeWorld") -> List[Region]:
     act_list: List[Region] = []
     for region in world.multiworld.get_regions(world.player):
         if region.name in chapter_act_info.keys():
