@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions, Choice
+from Options import Choice, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions
 
 class PartyShuffle(Toggle):
     """Shuffles party members into the pool.
