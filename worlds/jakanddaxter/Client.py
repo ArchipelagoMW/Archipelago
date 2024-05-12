@@ -129,7 +129,7 @@ class JakAndDaxterContext(CommonContext):
 async def run_game(ctx: JakAndDaxterContext):
     exec_directory = ""
     try:
-        exec_directory = Utils.get_settings()["jakanddaxter_options"]["exec_directory"]
+        exec_directory = Utils.get_settings()["jakanddaxter_options"]["root_directory"]
         files_in_path = os.listdir(exec_directory)
         if ".git" in files_in_path:
             # Indicates the user is running from source, append expected subdirectory appropriately.

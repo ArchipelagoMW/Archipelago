@@ -1,3 +1,6 @@
+import typing
+import settings
+
 from BaseClasses import Item, ItemClassification, Tutorial
 from .GameID import jak1_id, jak1_name
 from .JakAndDaxterOptions import JakAndDaxterOptions
@@ -8,6 +11,14 @@ from .Regions import create_regions
 from .Rules import set_rules
 from ..AutoWorld import World, WebWorld
 from ..LauncherComponents import components, Component, launch_subprocess, Type
+
+
+class JakAndDaxterSettings(settings.Group):
+    class RootDirectory(settings.UserFolderPath):
+        """Path to folder containing the ArchipelaGOAL mod."""
+        description = "ArchipelaGOAL Root Directory"
+
+    root_directory:  RootDirectory = RootDirectory("D:/Files/Repositories/ArchipelaGOAL")
 
 
 class JakAndDaxterWebWorld(WebWorld):
@@ -27,7 +38,7 @@ class JakAndDaxterWorld(World):
     """
     Jak and Daxter: The Precursor Legacy is a 2001 action platformer developed by Naughty Dog
     for the PlayStation 2. The game follows the eponymous protagonists, a young boy named Jak
-    and his friend Daxter, who has been transformed into an "ottsel." With the help of Samos
+    and his friend Daxter, who has been transformed into an ottsel. With the help of Samos
     the Sage of Green Eco and his daughter Keira, the pair travel north in search of a cure for Daxter,
     discovering artifacts created by an ancient race known as the Precursors along the way. When the
     rogue sages Gol and Maia Acheron plan to flood the world with Dark Eco, they must stop their evil plan
@@ -39,6 +50,7 @@ class JakAndDaxterWorld(World):
     required_client_version = (0, 4, 5)
 
     # Options
+    settings: typing.ClassVar[JakAndDaxterSettings]
     options_dataclass = JakAndDaxterOptions
     options: JakAndDaxterOptions
 
