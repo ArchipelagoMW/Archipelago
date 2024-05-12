@@ -2,6 +2,7 @@ from BaseClasses import Item, ItemClassification
 from .Types import HatDLC, HatType, hat_type_to_item, Difficulty, ItemData, HatInTimeItem
 from .Locations import get_total_locations
 from .Rules import get_difficulty
+from .Options import get_total_time_pieces
 from typing import Optional, List, Dict, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -65,17 +66,7 @@ def create_itempool(world: "HatInTimeWorld") -> List[Item]:
             continue
 
         if name == "Time Piece":
-            tp_count = 40
-            max_extra = 0
-            if world.is_dlc1():
-                max_extra += 6
-
-            if world.is_dlc2():
-                max_extra += 10
-
-            tp_count += min(max_extra, world.options.MaxExtraTimePieces.value)
-            tp_list: List[Item] = create_multiple_items(world, name, tp_count, item_type)
-
+            tp_list: List[Item] = create_multiple_items(world, name, get_total_time_pieces(world), item_type)
             for i in range(int(len(tp_list) * (0.01 * world.options.TimePieceBalancePercent.value))):
                 tp_list[i].classification = ItemClassification.progression
 
