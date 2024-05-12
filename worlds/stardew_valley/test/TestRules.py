@@ -1,7 +1,7 @@
 from collections import Counter
 
 from . import SVTestBase
-from .. import options, HasProgressionPercent
+from .. import options, HasProgressionPercent, Event
 from ..data.craftable_data import all_crafting_recipes_by_name
 from ..locations import locations_by_tag, LocationTags, location_table
 from ..options import ToolProgression, BuildingProgression, ExcludeGingerIsland, Chefsanity, Craftsanity, Shipsanity, SeasonRandomization, Friendsanity, \
@@ -77,10 +77,12 @@ class TestProgressiveToolsLogic(SVTestBase):
         self.assert_rule_true(rule, self.multiworld.state)
 
         self.remove(fall)
+        self.remove(self.world.create_item(Event.fall_farming))
         self.assert_rule_false(rule, self.multiworld.state)
         self.remove(tuesday)
 
         green_house = self.world.create_item("Greenhouse")
+        self.collect(self.world.create_item(Event.fall_farming))
         self.multiworld.state.collect(green_house, event=False)
         self.assert_rule_false(rule, self.multiworld.state)
 
@@ -89,6 +91,7 @@ class TestProgressiveToolsLogic(SVTestBase):
         self.assertTrue(self.multiworld.get_location("Old Master Cannoli", 1).access_rule(self.multiworld.state))
 
         self.remove(green_house)
+        self.remove(self.world.create_item(Event.fall_farming))
         self.assert_rule_false(rule, self.multiworld.state)
         self.remove(friday)
 
