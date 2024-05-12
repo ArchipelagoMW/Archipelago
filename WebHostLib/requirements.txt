@@ -1,5 +1,6 @@
 flask>=3.0.0
-pony>=0.7.17
+pony>=0.7.17; python_version < '3.12'
+pony @ git+https://github.com/black-sliver/pony@5a37f6d59b6433d17d6d56b54f3726190e98c98f#0.7.17; python_version >= '3.12'
 waitress>=2.1.2
 Flask-Caching>=2.1.0
 Flask-Compress>=1.14
