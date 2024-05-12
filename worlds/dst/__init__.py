@@ -3,7 +3,7 @@ import random
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 from .Options import DSTOptions, Goal
-from . import Regions, Rules, ItemPool
+from . import Regions, Rules, ItemPool, Constants
 from .Locations import location_name_to_id, location_data_table
 from .Items import item_data_table, item_name_to_id, DSTItem
 
@@ -76,6 +76,7 @@ class DSTWorld(World):
 
     def fill_slot_data(self):
         slot_data = {
+            "generator_version": Constants.VERSION,
             "death_link": bool(self.options.death_link.value),
             "goal": self.options.goal.current_key,
             # "craft_with_locked_items": self.options.craft_with_locked_items.value,

@@ -10,7 +10,7 @@ from CommonClient import CommonContext, get_base_parser
 from Utils import async_start
 ITEM_ID_OFFSET:int = 264000
 LOCATION_RESEARCH_RANGE = {"start": 264501, "end": 264900}
-CLIENT_VERSION = "1.1"
+CLIENT_VERSION = "1.1.1"
 
 class DSTTimeoutError(Exception):
     pass
@@ -63,6 +63,7 @@ class DSTContext(CommonContext):
             "datatype": "State",
             "connected": True,
             "clientversion": CLIENT_VERSION,
+            "generatorversion": self.slotdata.get("generator_version"),
             "seed_name": self.seed_name,
             "slot": self.slot,
             "slot_name": self.player_names[self.slot],
@@ -70,7 +71,7 @@ class DSTContext(CommonContext):
             "days_to_survive": self.slotdata.get("days_to_survive"),
             "required_bosses": self.slotdata.get("required_bosses"), # Legacy
             "goal_locations": self.slotdata.get("goal_locations"),
-            "craft_with_locked_items": self.slotdata.get("craft_with_locked_items"),
+            "craft_with_locked_items": self.slotdata.get("craft_with_locked_items", True),
             "finished_game": self.finished_game,
         })
         
