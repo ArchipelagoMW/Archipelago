@@ -4,16 +4,18 @@ import io
 import os
 
 import Utils
+from BaseClasses import ItemClassification
 from settings import get_settings
 from worlds.Files import APDeltaPatch
 from .Arrays import level_locations, level_size, level_address, item_dict, level_header
 from worlds.AutoWorld import World
+from .Items import items_by_id, ItemData
 from .Rules import name_convert
 
 
 def get_base_rom_as_bytes() -> bytes:
     try:
-        with open(get_settings().gauntlet_legends_options.rom_file, "rb") as infile:
+        with open(get_settings().gl_options.rom_file, "rb") as infile:
             base_rom_bytes = bytes(infile.read())
     except Exception as e:
         traceback.print_exc()
@@ -93,10 +95,8 @@ def zenc(data):
 class Rom:
     def __init__(self, world: "World"):
         try:
-            with open(get_settings().gauntlet_legends_options.rom_file, 'rb') as file:
-                content = file.read()
             self.random = world.multiworld.per_slot_randoms[world.player]
-            self.stream = io.BytesIO(content)
+            self.stream = io.BytesIO(get_base_rom_as_bytes())
             self.world = world
             self.player = world.player
         except Exception as e:
@@ -118,6 +118,10 @@ class Rom:
             self.stream.seek(level_address[i], 0)
             data = self.get_level_data(level_size[i])
             print("Data Acquired")
+            try:
+                self.print_data(i, level, data)
+            except Exception as e:
+                print(e)
             for j, location in enumerate(level):
                 location = self.world.multiworld.get_location(name_convert(location), self.player)
                 print(location.item.name)
@@ -127,16 +131,22 @@ class Rom:
                         print(len(data.objects))
                         index = [index for index in range(len(data.objects)) if data.objects[index][8] == 0x26][0]
                         data.items += [
-                            bytearray(data.objects[index][0:6]) + bytes(item_dict[location.item.code]) + bytes(
+                            bytearray(data.objects[index][0:6]) + bytes(item_dict.get(location.item.code, [0x27, 0x4])) + bytes(
                                 [0x0, 0x0, 0x0, 0x0])]
                         del data.objects[index]
                         data.item += 1
                     except Exception as e:
+                        print(location.item.code)
                         print(traceback.print_exc())
                     continue
                 if location.item.player is not self.player:
-                    data.items[j - data.obelisk][6] = 0x27
-                    data.items[j - data.obelisk][7] = 0x4
+                    if "Chest" in location.name:
+                        print(j - len(data.items))
+                        data.chests[j - len(data.items)][12] = 0x27
+                        data.chests[j - len(data.items)][13] = 0x4
+                    else:
+                        data.items[j - data.obelisk][6] = 0x27
+                        data.items[j - data.obelisk][7] = 0x4
                 else:
                     if "Obelisk" in location.item.name:
                         data.objects += [bytearray(data.items[j - data.obelisk][0:6]) +
@@ -146,8 +156,13 @@ class Rom:
                         del data.items[j - data.obelisk]
                         data.obelisk += 1
                     else:
-                        data.items[j - data.obelisk][6] = item_dict[location.item.code][0]
-                        data.items[j - data.obelisk][7] = item_dict[location.item.code][1]
+                        if "Chest" in location.name:
+                            print(j - len(data.items))
+                            data.chests[j - len(data.items)][12] = item_dict[location.item.code][0]
+                            data.chests[j - len(data.items)][13] = item_dict[location.item.code][1]
+                        else:
+                            data.items[j - data.obelisk][6] = item_dict[location.item.code][0]
+                            data.items[j - data.obelisk][7] = item_dict[location.item.code][1]
             self.stream.seek(level_address[i], 0)
             print("Reformatting")
             compressed = zenc(self.level_data_reformat(data))
@@ -199,7 +214,18 @@ class Rom:
             data.chests += [bytearray(data.stream.read(16))]
         print("Chests Done")
         data.end = data.stream.read()
+        print("Read End")
         return data
+
+    def print_data(self, i: int, level, data: LevelData) -> None:
+        name = level[0].name.find('-')
+        name = level[0].name[:name - 1]
+        try:
+            with open(f"C:\\Users\\james\\gl_docs\\{i}_names.txt", "w") as file:
+                    for _i, chests in enumerate(data.chests):
+                        file.write(f"LocationData(\"{name} Chest - {items_by_id.get(next((key for key, value in item_dict.items() if value == [chests[12], chests[13]]), -1), ItemData(0, 'Unknown', ItemClassification.filler)).itemName}\", 8887{i if i > 10 else 30 + i}{_i}, {chests[11]}),\n")
+        except Exception as e:
+            print(traceback.print_exception(e))
 
     def level_data_reformat(self, data: LevelData) -> bytes:
         stream = io.BytesIO()

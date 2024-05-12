@@ -67,14 +67,6 @@ def create_regions(world: "GauntletLegendsWorld"):
     create_region(world, "Gates of the Underworld", gatesOfTheUnderworld)
 
 
-def runestoneCount(state, player):
-    count = 0
-    for i in range(1, 14):
-        if state.has(f"Runestone {i}", player):
-            count += 1
-    return count
-
-
 def connect_regions(world: "World"):
     names: typing.Dict[str, int] = {}
 
@@ -108,7 +100,7 @@ def connect_regions(world: "World"):
             and state.has("Runestone 7", world.player) and state.has("Runestone 8", world.player)
             and state.has("Runestone 9", world.player) and state.has("Runestone 10", world.player)
             and state.has("Runestone 11", world.player) and state.has("Runestone 12", world.player)
-            and state.has("Runestone 13", world.player) and prog_count(state, world.player) >= 20)
+            and state.has("Runestone 13", world.player) and prog_count(state, world.player) >= 24)
 
 
 def create_region(world: "World", name, locations):

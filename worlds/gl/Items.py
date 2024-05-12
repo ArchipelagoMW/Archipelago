@@ -79,7 +79,7 @@ itemList: typing.List[ItemData] = [
 ]
 
 item_frequencies: typing.Dict[str, int] = {
-    "Key": 280,
+    "Key": 2280,
     "Lightning Potion": 15,
     "Light Potion": 10,
     "Acid Potion": 10,

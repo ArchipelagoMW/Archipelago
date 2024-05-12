@@ -40,7 +40,7 @@ def name_convert(location: LocationData) -> str:
 
 
 def set_rules(world: "World", excluded):
-    for location in [location for location in all_locations if "Obelisk" in location.name or location in dragonsLair or location in chimerasKeep or location in gatesOfTheUnderworld]:
+    for location in [location for location in all_locations if "Obelisk" in location.name or "Chest" in location.name or location in dragonsLair or location in chimerasKeep or location in gatesOfTheUnderworld]:
         for item in [item for item in itemList if "Obelisk" in item.itemName]:
             forbid_item(world.multiworld.get_location(name_convert(location), world.player), item.itemName, world.player)
 
