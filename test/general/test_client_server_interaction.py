@@ -1,6 +1,6 @@
 import unittest
 
-from MultiServer import get_intended_text, get_input_text_from_response
+from util.server_communication import get_intended_text, get_input_text_from_response
 
 
 class TestClient(unittest.TestCase):

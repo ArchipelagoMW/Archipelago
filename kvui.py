@@ -4,7 +4,7 @@ import sys
 import typing
 import re
 
-from MultiServer import get_input_text_from_response
+from util.server_communication import get_input_text_from_response
 
 if sys.platform == "win32":
     import ctypes
