@@ -54,6 +54,8 @@
   #                   this door will open the doors listed here.
   # - painting_id:    An internal ID of a painting that should be moved upon
   #                   receiving this door.
+  # - warp_id:        An internal ID or IDs of warps that should be disabled
+  #                   until receiving this door.
   # - panels:         These are the panels that canonically open this door. If
   #                   there is only one panel for the door, then that panel is a
   #                   check. If there is more than one panel, then that entire
@@ -73,10 +75,6 @@
   #                   will be covered by a single item.
   # - include_reduce: Door checks are assumed to be EXCLUDED when reduce checks
   #                   is on. This option includes the check anyway.
-  # - junk_item:      If on, the item for this door will be considered a junk
-  #                   item instead of a progression item. Only use this for
-  #                   doors that could never gate progression regardless of
-  #                   options and state.
   # - event:          Denotes that the door is event only. This is similar to
   #                   setting both skip_location and skip_item.
   #
@@ -106,9 +104,42 @@
   #                   Use "req_blocked_when_no_doors" instead if it would be
   #                   fine in door shuffle mode.
   # - move:           Denotes that the painting is able to move.
+  #
+  # sunwarps is an array of sunwarps in the room. This is used for sunwarp
+  # shuffling.
+  # - dots:                   The number of dots on this sunwarp.
+  # - direction:              "enter" or "exit"
+  # - entrance_indicator_pos: Coordinates for where the entrance indicator
+  #                           should be placed if this becomes an entrance.
+  # - orientation:            One of north/south/east/west.
   Starting Room:
     entrances:
-      Menu: True
+      Menu:
+        warp: True
+      Outside The Wise:
+        painting: True
+      Rhyme Room (Circle):
+        painting: True
+      Rhyme Room (Target):
+        painting: True
+      Wondrous Lobby:
+        painting: True
+      Orange Tower Third Floor:
+        painting: True
+      Color Hunt:
+        painting: True
+      Owl Hallway:
+        painting: True
+      The Wondrous:
+        room: The Wondrous
+        door: Exit
+        painting: True
+      Orange Tower Sixth Floor:
+        painting: True
+      Orange Tower Basement:
+        painting: True
+      The Colorful:
+        painting: True
     panels:
       HI:
         id: Entry Room/Panel_hi_hi
@@ -416,7 +447,7 @@
       The Traveled:
         door: Traveled Entrance
       Roof: True # through the sunwarp
-      Outside The Undeterred: # (NOTE: used in hardcoded pilgrimage)
+      Outside The Undeterred:
         room: Outside The Undeterred
         door: Green Painting
         painting: True
@@ -500,6 +531,11 @@
     paintings:
       - id: maze_painting
         orientation: west
+    sunwarps:
+      - dots: 1
+        direction: enter
+        entrance_indicator_pos: [18, 2.5, -17.01]
+        orientation: north
   Dead End Area:
     entrances:
       Hidden Room:
@@ -526,12 +562,52 @@
     paintings:
       - id: smile_painting_6
         orientation: north
-  Pilgrim Antechamber:
-    # Let's not shuffle the paintings yet.
+  Sunwarps:
+    # This is a special, meta-ish room.
     entrances:
-      # The pilgrimage is hardcoded in rules.py
-      Starting Room:
-        door: Sun Painting
+      Menu: True
+    doors:
+      1 Sunwarp:
+        warp_id: Teleporter Warps/Sunwarp_enter_1
+        door_group: Sunwarps
+        skip_location: True
+        item_name: "1 Sunwarp"
+      2 Sunwarp:
+        warp_id: Teleporter Warps/Sunwarp_enter_2
+        door_group: Sunwarps
+        skip_location: True
+        item_name: 2 Sunwarp
+      3 Sunwarp:
+        warp_id: Teleporter Warps/Sunwarp_enter_3
+        door_group: Sunwarps
+        skip_location: True
+        item_name: "3 Sunwarp"
+      4 Sunwarp:
+        warp_id: Teleporter Warps/Sunwarp_enter_4
+        door_group: Sunwarps
+        skip_location: True
+        item_name: 4 Sunwarp
+      5 Sunwarp:
+        warp_id: Teleporter Warps/Sunwarp_enter_5
+        door_group: Sunwarps
+        skip_location: True
+        item_name: "5 Sunwarp"
+      6 Sunwarp:
+        warp_id: Teleporter Warps/Sunwarp_enter_6
+        door_group: Sunwarps
+        skip_location: True
+        item_name: "6 Sunwarp"
+    progression:
+      Progressive Pilgrimage:
+        - 1 Sunwarp
+        - 2 Sunwarp
+        - 3 Sunwarp
+        - 4 Sunwarp
+        - 5 Sunwarp
+        - 6 Sunwarp
+  Pilgrim Antechamber:
+    # The entrances to this room are special. When pilgrimage is enabled, we use a special access rule to determine
+    # whether a pilgrimage can succeed. When pilgrimage is disabled, the sun painting will be added to the pool.
     panels:
       HOT CRUST:
         id: Lingo Room/Panel_shortcut
@@ -541,6 +617,7 @@
         id: Lingo Room/Panel_pilgrim
         colors: blue
         tag: midblue
+        check: True
       MASTERY:
         id: Master Room/Panel_mastery_mastery14
         tag: midwhite
@@ -636,11 +713,19 @@
           - THIS
   Crossroads:
     entrances:
-      Hub Room: True # The sunwarp means that we never need the ORDER door
-      Color Hallways: True
+      Hub Room:
+        - room: Sunwarps
+          door: 1 Sunwarp
+          sunwarp: True
+        - room: Hub Room
+          door: Crossroads Entrance
+      Color Hallways:
+        warp: True
       The Tenacious:
         door: Tenacious Entrance
-      Orange Tower Fourth Floor: True # through IRK HORN
+      Orange Tower Fourth Floor:
+        - warp: True # through IRK HORN
+        - door: Tower Entrance
       Amen Name Area:
         room: Lost Area
         door: Exit
@@ -760,7 +845,6 @@
           - SWORD
       Eye Wall:
         id: Shuffle Room Area Doors/Door_behind
-        junk_item: True
         door_group: Crossroads Doors
         panels:
           - BEND HI
@@ -795,6 +879,11 @@
           door: Eye Wall
       - id: smile_painting_4
         orientation: south
+    sunwarps:
+      - dots: 1
+        direction: exit
+        entrance_indicator_pos: [ -17, 2.5, -41.01 ]
+        orientation: north
   Lost Area:
     entrances:
       Outside The Agreeable:
@@ -1036,11 +1125,12 @@
           - LEAF
           - FEEL
   Outside The Agreeable:
-    # Let's ignore the blue warp thing for now because the lookout is a dead
-    # end. Later on it could be filler checks.
     entrances:
-      # We don't have to list Lost Area because of Crossroads.
-      Crossroads: True
+      Crossroads:
+        warp: True
+      Lost Area:
+        room: Lost Area
+        door: Exit
       The Tenacious:
         door: Tenacious Entrance
       The Agreeable:
@@ -1053,12 +1143,11 @@
       Starting Room:
         door: Painting Shortcut
         painting: True
-      Hallway Room (2): True
-      Hallway Room (3): True
-      Hallway Room (4): True
+      Hallway Room (1):
+        warp: True
       Hedge Maze: True # through the door to the sectioned-off part of the hedge maze
-      Cellar:
-        door: Lookout Entrance
+      Compass Room:
+        warp: True
     panels:
       MASSACRED:
         id: Palindrome Room/Panel_massacred_sacred
@@ -1104,11 +1193,6 @@
         required_door:
           room: Outside The Undeterred
           door: Fives
-      OUT:
-        id: Hallway Room/Panel_out_out
-        check: True
-        exclude_reduce: True
-        tag: midwhite
       HIDE:
         id: Maze Room/Panel_hide_seek_4
         colors: black
@@ -1117,52 +1201,6 @@
         id: Maze Room/Panel_daze_maze
         colors: purple
         tag: midpurp
-      WALL:
-        id: Hallway Room/Panel_castle_1
-        colors: blue
-        tag: quad bot blue
-        link: qbb CASTLE
-      KEEP:
-        id: Hallway Room/Panel_castle_2
-        colors: blue
-        tag: quad bot blue
-        link: qbb CASTLE
-      BAILEY:
-        id: Hallway Room/Panel_castle_3
-        colors: blue
-        tag: quad bot blue
-        link: qbb CASTLE
-      TOWER:
-        id: Hallway Room/Panel_castle_4
-        colors: blue
-        tag: quad bot blue
-        link: qbb CASTLE
-      NORTH:
-        id: Cross Room/Panel_north_missing
-        colors: green
-        tag: forbid
-        required_panel:
-          - room: Outside The Bold
-            panel: SOUND
-          - room: Outside The Bold
-            panel: YEAST
-          - room: Outside The Bold
-            panel: WET
-      DIAMONDS:
-        id: Cross Room/Panel_diamonds_missing
-        colors: green
-        tag: forbid
-        required_room: Suits Area
-      FIRE:
-        id: Cross Room/Panel_fire_missing
-        colors: green
-        tag: forbid
-        required_room: Elements Area
-      WINTER:
-        id: Cross Room/Panel_winter_missing
-        colors: green
-        tag: forbid
-        required_room: Orange Tower Fifth Floor
     doors:
       Tenacious Entrance:
         id: Palindrome Room Area Doors/Door_massacred_sacred
@@ -1194,15 +1232,49 @@
         panels:
           - room: Color Hunt
             panel: PURPLE
-      Hallway Door:
-        id: Red Blue Purple Room Area Doors/Door_room_2
-        door_group: Hallway Room Doors
-        location_name: Hallway Room - First Room
-        panels:
-          - WALL
-          - KEEP
-          - BAILEY
-          - TOWER
+    paintings:
+      - id: eyes_yellow_painting
+        orientation: east
+    sunwarps:
+      - dots: 6
+        direction: enter
+        entrance_indicator_pos: [ 3, 2.5, -55.01 ]
+        orientation: north
+  Compass Room:
+    entrances:
+      Outside The Agreeable:
+        warp: True
+      Cellar:
+        door: Lookout Entrance
+        warp: True
+    panels:
+      NORTH:
+        id: Cross Room/Panel_north_missing
+        colors: green
+        tag: forbid
+        required_panel:
+          - room: Outside The Bold
+            panel: SOUND
+          - room: Outside The Bold
+            panel: YEAST
+          - room: Outside The Bold
+            panel: WET
+      DIAMONDS:
+        id: Cross Room/Panel_diamonds_missing
+        colors: green
+        tag: forbid
+        required_room: Suits Area
+      FIRE:
+        id: Cross Room/Panel_fire_missing
+        colors: green
+        tag: forbid
+        required_room: Elements Area
+      WINTER:
+        id: Cross Room/Panel_winter_missing
+        colors: green
+        tag: forbid
+        required_room: Orange Tower Fifth Floor
+    doors:
       Lookout Entrance:
         id: Cross Room Doors/Door_missing
         location_name: Outside The Agreeable - Lookout Panels
@@ -1212,21 +1284,8 @@
           - DIAMONDS
           - FIRE
     paintings:
-      - id: panda_painting
-        orientation: south
-      - id: eyes_yellow_painting
-        orientation: east
       - id: pencil_painting7
         orientation: north
-    progression:
-      Progressive Hallway Room:
-        - Hallway Door
-        - room: Hallway Room (2)
-          door: Exit
-        - room: Hallway Room (3)
-          door: Exit
-        - room: Hallway Room (4)
-          door: Exit
   Dread Hallway:
     entrances:
       Outside The Agreeable:
@@ -1321,7 +1380,8 @@
       Hub Room:
         room: Hub Room
         door: Shortcut to Hedge Maze
-      Color Hallways: True
+      Color Hallways:
+        warp: True
       The Agreeable:
         room: The Agreeable
         door: Shortcut to Hedge Maze
@@ -1465,7 +1525,8 @@
         orientation: north
   The Fearless (First Floor):
     entrances:
-      The Perceptive: True
+      The Perceptive:
+        warp: True
     panels:
       SPAN:
         id: Naps Room/Panel_naps_span
@@ -1508,6 +1569,7 @@
       The Fearless (First Floor):
         room: The Fearless (First Floor)
         door: Second Floor
+        warp: True
     panels:
       NONE:
         id: Naps Room/Panel_one_many
@@ -1557,6 +1619,7 @@
       The Fearless (First Floor):
         room: The Fearless (Second Floor)
         door: Third Floor
+        warp: True
     panels:
       Achievement:
         id: Countdown Panels/Panel_fearless_fearless
@@ -1585,7 +1648,8 @@
       Hedge Maze:
         room: Hedge Maze
         door: Observant Entrance
-      The Incomparable: True
+      The Incomparable:
+        warp: True
     panels:
       Achievement:
         id: Countdown Panels/Panel_observant_observant
@@ -1709,7 +1773,8 @@
           - SIX
   The Incomparable:
     entrances:
-      The Observant: True # Assuming that access to The Observant includes access to the right entrance
+      The Observant:
+        warp: True
       Eight Room: True
       Eight Alcove:
         door: Eight Door
@@ -1911,9 +1976,11 @@
       Outside The Wanderer:
         room: Outside The Wanderer
         door: Tower Entrance
+        warp: True
       Orange Tower Second Floor:
         room: Orange Tower
         door: Second Floor
+        warp: True
       Directional Gallery:
         door: Salt Pepper Door
       Roof: True # through the sunwarp
@@ -1944,15 +2011,23 @@
           - SALT
           - room: Directional Gallery
             panel: PEPPER
+    sunwarps:
+      - dots: 4
+        direction: enter
+        entrance_indicator_pos: [ -32, 2.5, -14.99 ]
+        orientation: south
   Orange Tower Second Floor:
     entrances:
       Orange Tower First Floor:
         room: Orange Tower
         door: Second Floor
+        warp: True
       Orange Tower Third Floor:
         room: Orange Tower
         door: Third Floor
-      Outside The Undeterred: True
+        warp: True
+      Outside The Undeterred:
+        warp: True
   Orange Tower Third Floor:
     entrances:
       Knight Night Exit:
@@ -1961,16 +2036,22 @@
       Orange Tower Second Floor:
         room: Orange Tower
         door: Third Floor
+        warp: True
       Orange Tower Fourth Floor:
         room: Orange Tower
         door: Fourth Floor
-      Hot Crusts Area: True # sunwarp
-      Bearer Side Area: # This is complicated because of The Bearer's topology
+        warp: True
+      Hot Crusts Area:
+        room: Sunwarps
+        door: 2 Sunwarp
+        sunwarp: True
+      Bearer Side Area:
         room: Bearer Side Area
         door: Shortcut to Tower
       Rhyme Room (Smiley):
         door: Rhyme Room Entrance
-      Art Gallery: True # mark this as a warp in the sunwarps branch
+      Art Gallery:
+        warp: True
     panels:
       RED:
         id: Color Arrow Room/Panel_red_afar
@@ -2019,14 +2100,25 @@
         orientation: east
       - id: flower_painting_5
         orientation: south
+    sunwarps:
+      - dots: 2
+        direction: exit
+        entrance_indicator_pos: [ 24.01, 2.5, 38 ]
+        orientation: west
+      - dots: 3
+        direction: enter
+        entrance_indicator_pos: [ 28.01, 2.5, 29 ]
+        orientation: west
   Orange Tower Fourth Floor:
     entrances:
       Orange Tower Third Floor:
         room: Orange Tower
         door: Fourth Floor
+        warp: True
       Orange Tower Fifth Floor:
         room: Orange Tower
         door: Fifth Floor
+        warp: True
       Hot Crusts Area:
         door: Hot Crusts Door
       Crossroads:
@@ -2034,7 +2126,10 @@
           door: Tower Entrance
         - room: Crossroads
           door: Tower Back Entrance
-      Courtyard: True
+      Courtyard:
+        - warp: True
+        - room: Crossroads
+          door: Tower Entrance
       Roof: True # through the sunwarp
     panels:
       RUNT (1):
@@ -2067,6 +2162,11 @@
         id: Shuffle Room Area Doors/Door_hotcrust_shortcuts
         panels:
           - HOT CRUSTS
+    sunwarps:
+      - dots: 5
+        direction: enter
+        entrance_indicator_pos: [ -20, 3, -64.01 ]
+        orientation: north
   Hot Crusts Area:
     entrances:
       Orange Tower Fourth Floor:
@@ -2084,28 +2184,31 @@
     paintings:
       - id: smile_painting_8
         orientation: north
+    sunwarps:
+      - dots: 2
+        direction: enter
+        entrance_indicator_pos: [ -26, 3.5, -80.01 ]
+        orientation: north
   Orange Tower Fifth Floor:
     entrances:
       Orange Tower Fourth Floor:
         room: Orange Tower
         door: Fifth Floor
+        warp: True
       Orange Tower Sixth Floor:
         room: Orange Tower
         door: Sixth Floor
+        warp: True
       Cellar:
         room: Room Room
         door: Cellar Exit
+        warp: True
       Welcome Back Area:
         door: Welcome Back
-      Art Gallery:
-        room: Art Gallery
-        door: Exit
-      The Bearer:
-        room: Art Gallery
-        door: Exit
       Outside The Initiated:
         room: Art Gallery
         door: Exit
+        warp: True
     panels:
       SIZE (Small):
         id: Entry Room/Panel_size_small
@@ -2185,6 +2288,7 @@
       Orange Tower Fifth Floor:
         room: Orange Tower
         door: Sixth Floor
+        warp: True
       The Scientific:
         painting: True
     paintings:
@@ -2213,6 +2317,7 @@
       Orange Tower Sixth Floor:
         room: Orange Tower
         door: Seventh Floor
+        warp: True
     panels:
       THE END:
         id: EndPanel/Panel_end_end
@@ -2389,7 +2494,10 @@
   Courtyard:
     entrances:
       Roof: True
-      Orange Tower Fourth Floor: True
+      Orange Tower Fourth Floor:
+        - warp: True
+        - room: Crossroads
+          door: Tower Entrance
       Arrow Garden:
         painting: True
       Starting Room:
@@ -2757,15 +2865,24 @@
     entrances:
       Starting Room:
         door: Shortcut to Starting Room
-      Hub Room: True
-      Outside The Wondrous: True
-      Outside The Undeterred: True
-      Outside The Agreeable: True
-      Outside The Wanderer: True
-      The Observant: True
-      Art Gallery: True
-      The Scientific: True
-      Cellar: True
+      Hub Room:
+        warp: True
+      Outside The Wondrous:
+        warp: True
+      Outside The Undeterred:
+        warp: True
+      Outside The Agreeable:
+        warp: True
+      Outside The Wanderer:
+        warp: True
+      The Observant:
+        warp: True
+      Art Gallery:
+        warp: True
+      The Scientific:
+        warp: True
+      Cellar:
+        warp: True
       Orange Tower Fifth Floor:
         room: Orange Tower Fifth Floor
         door: Welcome Back
@@ -2833,8 +2950,19 @@
       Knight Night Exit:
         room: Knight Night (Final)
         door: Exit
-      Orange Tower Third Floor: True # sunwarp
+      Orange Tower Third Floor:
+        room: Sunwarps
+        door: 3 Sunwarp
+        sunwarp: True
       Orange Tower Fifth Floor:
+        room: Art Gallery
+        door: Exit
+        warp: True
+      Art Gallery:
+        room: Art Gallery
+        door: Exit
+        warp: True
+      The Bearer:
         room: Art Gallery
         door: Exit
       Eight Alcove:
@@ -3007,6 +3135,11 @@
         orientation: east
       - id: smile_painting_1
         orientation: north
+    sunwarps:
+      - dots: 3
+        direction: exit
+        entrance_indicator_pos: [ 89.99, 2.5, 1 ]
+        orientation: east
   The Initiated:
     entrances:
       Outside The Initiated:
@@ -3130,6 +3263,7 @@
         door: Traveled Entrance
       Color Hallways:
         door: Color Hallways Entrance
+        warp: True
     panels:
       Achievement:
         id: Countdown Panels/Panel_traveled_traveled
@@ -3220,22 +3354,32 @@
       The Traveled:
         room: The Traveled
         door: Color Hallways Entrance
-      Outside The Bold: True
-      Outside The Undeterred: True
-      Crossroads: True
-      Hedge Maze: True
-      The Optimistic: True # backside
-      Directional Gallery: True # backside
-      Yellow Backside Area: True
+      Outside The Bold:
+        warp: True
+      Outside The Undeterred:
+        warp: True
+      Crossroads:
+        warp: True
+      Hedge Maze:
+        warp: True
+      The Optimistic:
+        warp: True # backside
+      Directional Gallery:
+        warp: True # backside
+      Yellow Backside Area:
+        warp: True
       The Bearer:
         room: The Bearer
         door: Backside Door
+        warp: True
       The Observant:
         room: The Observant
         door: Backside Door
+        warp: True
   Outside The Bold:
     entrances:
-      Color Hallways: True
+      Color Hallways:
+        warp: True
       Color Hunt:
         room: Color Hunt
         door: Shortcut to The Steady
@@ -3253,7 +3397,7 @@
         door: Painting Shortcut
         painting: True
       Room Room: True # trapdoor
-      Outside The Agreeable:
+      Compass Room:
         painting: True
     panels:
       UNOPEN:
@@ -3455,13 +3599,22 @@
         tag: botred
   Outside The Undeterred:
     entrances:
-      Color Hallways: True
-      Orange Tower First Floor: True # sunwarp
-      Orange Tower Second Floor: True
-      The Artistic (Smiley): True
-      The Artistic (Panda): True
-      The Artistic (Apple): True
-      The Artistic (Lattice): True
+      Color Hallways:
+        warp: True
+      Orange Tower First Floor:
+        room: Sunwarps
+        door: 4 Sunwarp
+        sunwarp: True
+      Orange Tower Second Floor:
+        warp: True
+      The Artistic (Smiley):
+        warp: True
+      The Artistic (Panda):
+        warp: True
+      The Artistic (Apple):
+        warp: True
+      The Artistic (Lattice):
+        warp: True
       Yellow Backside Area:
         painting: True
       Number Hunt:
@@ -3650,6 +3803,11 @@
         required_door:
           door: Green Painting
       - id: blueman_painting_2
+        orientation: east
+    sunwarps:
+      - dots: 4
+        direction: exit
+        entrance_indicator_pos: [ -89.01, 2.5, 4 ]
         orientation: east
   The Undeterred:
     entrances:
@@ -3928,7 +4086,10 @@
           door: Eights
   Directional Gallery:
     entrances:
-      Outside The Agreeable: True # sunwarp
+      Outside The Agreeable:
+        room: Sunwarps
+        door: 6 Sunwarp
+        sunwarp: True
       Orange Tower First Floor:
         room: Orange Tower First Floor
         door: Salt Pepper Door
@@ -4096,11 +4257,19 @@
         orientation: south
       - id: cherry_painting
         orientation: east
+    sunwarps:
+      - dots: 6
+        direction: exit
+        entrance_indicator_pos: [ -39, 2.5, -7.01 ]
+        orientation: north
   Color Hunt:
     entrances:
       Outside The Bold:
         door: Shortcut to The Steady
-      Orange Tower Fourth Floor: True # sunwarp
+      Orange Tower Fourth Floor:
+        room: Sunwarps
+        door: 5 Sunwarp
+        sunwarp: True
       Roof: True # through ceiling of sunwarp
       Champion's Rest:
         room: Outside The Initiated
@@ -4159,6 +4328,11 @@
         required_door:
           room: Outside The Initiated
           door: Entrance
+    sunwarps:
+      - dots: 5
+        direction: exit
+        entrance_indicator_pos: [ 54, 2.5, 69.99 ]
+        orientation: north
   Champion's Rest:
     entrances:
       Color Hunt:
@@ -4192,7 +4366,7 @@
     entrances:
       Outside The Bold:
         door: Entrance
-      Orange Tower Fifth Floor:
+      Outside The Initiated:
         room: Art Gallery
         door: Exit
       The Bearer (East): True
@@ -4640,7 +4814,8 @@
         tag: midyellow
   The Steady (Lime):
     entrances:
-      The Steady (Sunflower): True
+      The Steady (Sunflower):
+        warp: True
       The Steady (Emerald):
         room: The Steady
         door: Reveal
@@ -4662,7 +4837,8 @@
         orientation: south
   The Steady (Lemon):
     entrances:
-      The Steady (Emerald): True
+      The Steady (Emerald):
+        warp: True
       The Steady (Orange):
         room: The Steady
         door: Reveal
@@ -5019,8 +5195,10 @@
       Knight Night (Outer Ring):
         room: Knight Night (Outer Ring)
         door: Fore Door
+        warp: True
       Knight Night (Right Lower Segment):
         door: Segment Door
+        warp: True
     panels:
       RUST (1):
         id: Appendix Room/Panel_rust_trust
@@ -5049,9 +5227,11 @@
       Knight Night (Right Upper Segment):
         room: Knight Night (Right Upper Segment)
         door: Segment Door
+        warp: True
       Knight Night (Outer Ring):
         room: Knight Night (Outer Ring)
         door: New Door
+        warp: True
     panels:
       ADJUST:
         id: Appendix Room/Panel_adjust_readjusted
@@ -5097,9 +5277,11 @@
       Knight Night (Outer Ring):
         room: Knight Night (Outer Ring)
         door: To End
+        warp: True
       Knight Night (Right Upper Segment):
         room: Knight Night (Outer Ring)
         door: To End
+        warp: True
     panels:
       TRUSTED:
         id: Appendix Room/Panel_trusted_readjusted
@@ -5295,7 +5477,7 @@
     entrances:
       Orange Tower Sixth Floor:
         painting: True
-      Outside The Agreeable:
+      Hallway Room (1):
         painting: True
       The Artistic (Smiley):
         room: The Artistic (Smiley)
@@ -5746,7 +5928,8 @@
         painting: True
       Wondrous Lobby:
         door: Exit
-      Directional Gallery: True
+      Directional Gallery:
+        warp: True
     panels:
       NEAR:
         id: Shuffle Room/Panel_near_near
@@ -5781,7 +5964,8 @@
         tag: midwhite
   Wondrous Lobby:
     entrances:
-      Directional Gallery: True
+      Directional Gallery:
+        warp: True
       The Eyes They See:
         room: The Eyes They See
         door: Exit
@@ -5790,10 +5974,12 @@
         orientation: east
   Outside The Wondrous:
     entrances:
-      Wondrous Lobby: True
+      Wondrous Lobby:
+        warp: True
       The Wondrous (Doorknob):
         door: Wondrous Entrance
-      The Wondrous (Window): True
+      The Wondrous (Window):
+        warp: True
     panels:
       SHRINK:
         id: Wonderland Room/Panel_shrink_shrink
@@ -5815,7 +6001,9 @@
         painting: True
       The Wondrous (Chandelier):
         painting: True
-      The Wondrous (Table): True # There is a way that doesn't use the painting
+      The Wondrous (Table):
+        - painting: True
+        - warp: True
     doors:
       Painting Shortcut:
         painting_id:
@@ -5901,7 +6089,8 @@
         required: True
   The Wondrous:
     entrances:
-      The Wondrous (Table): True
+      The Wondrous (Table):
+        warp: True
       Arrow Garden:
         door: Exit
     panels:
@@ -5967,11 +6156,70 @@
     paintings:
       - id: flower_painting_6
         orientation: south
-  Hallway Room (2):
+  Hallway Room (1):
     entrances:
       Outside The Agreeable:
-        room: Outside The Agreeable
-        door: Hallway Door
+        warp: True
+      Hallway Room (2):
+        warp: True
+      Hallway Room (3):
+        warp: True
+      Hallway Room (4):
+        warp: True
+    panels:
+      OUT:
+        id: Hallway Room/Panel_out_out
+        check: True
+        exclude_reduce: True
+        tag: midwhite
+      WALL:
+        id: Hallway Room/Panel_castle_1
+        colors: blue
+        tag: quad bot blue
+        link: qbb CASTLE
+      KEEP:
+        id: Hallway Room/Panel_castle_2
+        colors: blue
+        tag: quad bot blue
+        link: qbb CASTLE
+      BAILEY:
+        id: Hallway Room/Panel_castle_3
+        colors: blue
+        tag: quad bot blue
+        link: qbb CASTLE
+      TOWER:
+        id: Hallway Room/Panel_castle_4
+        colors: blue
+        tag: quad bot blue
+        link: qbb CASTLE
+    doors:
+      Exit:
+        id: Red Blue Purple Room Area Doors/Door_room_2
+        door_group: Hallway Room Doors
+        location_name: Hallway Room - First Room
+        panels:
+          - WALL
+          - KEEP
+          - BAILEY
+          - TOWER
+    paintings:
+      - id: panda_painting
+        orientation: south
+    progression:
+      Progressive Hallway Room:
+        - Exit
+        - room: Hallway Room (2)
+          door: Exit
+        - room: Hallway Room (3)
+          door: Exit
+        - room: Hallway Room (4)
+          door: Exit
+  Hallway Room (2):
+    entrances:
+      Hallway Room (1):
+        room: Hallway Room (1)
+        door: Exit
+        warp: True
       Elements Area: True
     panels:
       WISE:
@@ -6009,6 +6257,7 @@
       Hallway Room (2):
         room: Hallway Room (2)
         door: Exit
+        warp: True
       # No entrance from Elements Area. The winding hallway does not connect.
     panels:
       TRANCE:
@@ -6046,6 +6295,7 @@
       Hallway Room (3):
         room: Hallway Room (3)
         door: Exit
+        warp: True
       Elements Area: True
     panels:
       WHEEL:
@@ -6068,6 +6318,7 @@
       Hallway Room (4):
         room: Hallway Room (4)
         door: Exit
+        # If this door is open, then a non-warp entrance from the first hallway room is available
       The Artistic (Smiley):
         room: Hallway Room (4)
         door: Exit
@@ -6112,6 +6363,7 @@
     entrances:
       Orange Tower First Floor:
         door: Tower Entrance
+        warp: True
       Rhyme Room (Cross):
         room: Rhyme Room (Cross)
         door: Exit
@@ -6139,6 +6391,7 @@
       Outside The Wanderer:
         room: Outside The Wanderer
         door: Wanderer Entrance
+        warp: True
     panels:
       Achievement:
         id: Countdown Panels/Panel_1234567890_wanderlust
@@ -6180,12 +6433,17 @@
         tag: midorange
   Art Gallery:
     entrances:
-      Orange Tower Third Floor: True
-      Art Gallery (Second Floor): True
-      Art Gallery (Third Floor): True
-      Art Gallery (Fourth Floor): True
-      Orange Tower Fifth Floor:
+      Orange Tower Third Floor:
+        warp: True
+      Art Gallery (Second Floor):
+        warp: True
+      Art Gallery (Third Floor):
+        warp: True
+      Art Gallery (Fourth Floor):
+        warp: True
+      Outside The Initiated:
         door: Exit
+        warp: True
     panels:
       EIGHT:
         id: Backside Room/Panel_eight_eight_6
@@ -6766,6 +7024,7 @@
       Rhyme Room (Smiley): # one-way
         room: Rhyme Room (Smiley)
         door: Door to Target
+        warp: True
       Rhyme Room (Looped Square):
         room: Rhyme Room (Looped Square)
         door: Door to Target
@@ -6829,7 +7088,8 @@
     # For pretty much the same reason, I don't want to shuffle the paintings in
     # here.
     entrances:
-      Orange Tower Fourth Floor: True
+      Orange Tower Fourth Floor:
+        warp: True
     panels:
       DOOR (1):
         id: Panel Room/Panel_room_door_1
@@ -7037,9 +7297,11 @@
       Orange Tower Fifth Floor:
         room: Room Room
         door: Cellar Exit
-      Outside The Agreeable:
-        room: Outside The Agreeable
+        warp: True
+      Compass Room:
+        room: Compass Room
         door: Lookout Entrance
+        warp: True
   Outside The Wise:
     entrances:
       Orange Tower Sixth Floor:
@@ -7077,6 +7339,7 @@
       Outside The Wise:
         room: Outside The Wise
         door: Wise Entrance
+        warp: True # The Wise is so full of warps
     panels:
       Achievement:
         id: Countdown Panels/Panel_intelligent_wise
