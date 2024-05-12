@@ -1,9 +1,9 @@
-from worlds.stardew_valley.data.artisan import MachineSource
-from worlds.stardew_valley.mods.mod_data import ModNames
-from worlds.stardew_valley.strings.artisan_good_names import ArtisanGood
-from worlds.stardew_valley.strings.crop_names import Fruit
-from worlds.stardew_valley.strings.machine_names import Machine
-from worlds.stardew_valley.test.content import SVContentPackTestBase
+from ....data.artisan import MachineSource
+from ....mods.mod_data import ModNames
+from ....strings.artisan_good_names import ArtisanGood
+from ....strings.crop_names import Fruit
+from ....strings.machine_names import Machine
+from ....test.content import SVContentPackTestBase
 
 
 class TestArtisanEquipment(SVContentPackTestBase):

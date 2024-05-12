@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from worlds.stardew_valley.data.game_item import source_dataclass_args, ItemSource
+from .game_item import source_dataclass_args, ItemSource
 
 
 @dataclass(**source_dataclass_args)
