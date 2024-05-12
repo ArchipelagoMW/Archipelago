@@ -1,6 +1,8 @@
+import pkgutil
+
+assert pkgutil
+
 import importlib
-import os
-import pathlib
 
 from . import mods
 from .mod_registry import by_mod
@@ -21,12 +23,11 @@ assert the_farm
 assert the_mines
 
 # Dynamically register everything currently in the mods folder. This would ideally be done through a metaclass, but I have not looked into that yet.
-mod_folder = pathlib.Path(next(iter(mods.__path__)))
-module_files = [f for f in os.listdir(mod_folder) if f.endswith('.py')]
+mod_modules = pkgutil.iter_modules(mods.__path__)
 
 loaded_modules = {}
-for file_name in module_files:
-    module_name = file_name[:-3]
+for mod_module in mod_modules:
+    module_name = mod_module.name
     module = importlib.import_module("." + module_name, mods.__name__)
     loaded_modules[module_name] = module
 
