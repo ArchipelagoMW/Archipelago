@@ -151,8 +151,7 @@ def create_dw_regions(world: "HatInTimeWorld"):
         for name in annoying_dws:
             world.excluded_dws.append(name)
 
-    if world.options.DWEnableBonus.value == 0 \
-       or world.options.DWAutoCompleteBonuses.value > 0:
+    if world.options.DWEnableBonus.value == 0 or world.options.DWAutoCompleteBonuses.value > 0:
         for name in death_wishes:
             world.excluded_bonuses.append(name)
     elif world.options.DWExcludeAnnoyingBonuses.value > 0:
@@ -161,9 +160,8 @@ def create_dw_regions(world: "HatInTimeWorld"):
 
     if world.options.DWExcludeCandles.value > 0:
         for name in dw_candles:
-            if name in world.excluded_dws:
-                continue
-            world.excluded_dws.append(name)
+            if name not in world.excluded_dws:
+                world.excluded_dws.append(name)
 
     spaceship = world.multiworld.get_region("Spaceship", world.player)
     dw_map: Region = create_region(world, "Death Wish Map")
@@ -171,8 +169,10 @@ def create_dw_regions(world: "HatInTimeWorld"):
     add_rule(entrance, lambda state: state.has("Time Piece", world.player, world.options.DWTimePieceRequirement.value))
 
     if world.options.DWShuffle.value > 0:
+        # Connect Death Wishes randomly to one another in a linear sequence
         dw_list: List[str] = []
         for name in death_wishes.keys():
+            # Don't shuffle excluded or invalid Death Wishes
             if not world.is_dlc2() and name == "Snatcher Coins in Nyakuza Metro" or world.is_dw_excluded(name):
                 continue
 
@@ -180,7 +180,6 @@ def create_dw_regions(world: "HatInTimeWorld"):
 
         world.random.shuffle(dw_list)
         count = world.random.randint(world.options.DWShuffleCountMin.value, world.options.DWShuffleCountMax.value)
-
         dw_shuffle: List[str] = []
         total = min(len(dw_list), count)
         for i in range(total):
@@ -199,64 +198,46 @@ def create_dw_regions(world: "HatInTimeWorld"):
             name = dw_shuffle[i]
             dw = create_region(world, name)
             connect_regions(prev_dw, dw, f"{prev_dw.name} -> {name}", world.player)
-
-            loc_id = death_wishes[name]
-            main_objective = HatInTimeLocation(world.player, f"{name} - Main Objective", loc_id, dw)
-            full_clear = HatInTimeLocation(world.player, f"{name} - All Clear", loc_id + 1, dw)
-            main_stamp = HatInTimeLocation(world.player, f"Main Stamp - {name}", None, dw)
-            bonus_stamps = HatInTimeLocation(world.player, f"Bonus Stamps - {name}", None, dw)
-            main_stamp.show_in_spoiler = False
-            bonus_stamps.show_in_spoiler = False
-            dw.locations.append(main_stamp)
-            dw.locations.append(bonus_stamps)
-
-            main_stamp.place_locked_item(HatInTimeItem(f"1 Stamp - {name}",
-                                                       ItemClassification.progression, None, world.player))
-            bonus_stamps.place_locked_item(HatInTimeItem(f"2 Stamps - {name}",
-                                                         ItemClassification.progression, None, world.player))
-
-            if name in world.excluded_dws:
-                main_objective.progress_type = LocationProgressType.EXCLUDED
-                full_clear.progress_type = LocationProgressType.EXCLUDED
-            elif world.is_bonus_excluded(name):
-                full_clear.progress_type = LocationProgressType.EXCLUDED
-
-            dw.locations.append(main_objective)
-            dw.locations.append(full_clear)
+            create_dw_locations(world, dw)
             prev_dw = dw
     else:
-        for key, loc_id in death_wishes.items():
+        # DWShuffle is disabled, use vanilla connections
+        for key in death_wishes.keys():
             if key == "Snatcher Coins in Nyakuza Metro" and not world.is_dlc2():
                 world.excluded_dws.append(key)
                 continue
 
             dw = create_region(world, key)
-
             if key == "Beat the Heat":
-                connect_regions(dw_map, dw, "-> Beat the Heat", world.player)
+                connect_regions(dw_map, dw, f"{dw_map.name} -> Beat the Heat", world.player)
             elif key in dw_prereqs.keys():
                 for name in dw_prereqs[key]:
                     parent = world.multiworld.get_region(name, world.player)
                     connect_regions(parent, dw, f"{parent.name} -> {key}", world.player)
 
-            main_objective = HatInTimeLocation(world.player, f"{key} - Main Objective", loc_id, dw)
-            full_clear = HatInTimeLocation(world.player, f"{key} - All Clear", loc_id+1, dw)
-            main_stamp = HatInTimeLocation(world.player, f"Main Stamp - {key}", None, dw)
-            bonus_stamps = HatInTimeLocation(world.player, f"Bonus Stamps - {key}", None, dw)
-            main_stamp.show_in_spoiler = False
-            bonus_stamps.show_in_spoiler = False
-            dw.locations.append(main_stamp)
-            dw.locations.append(bonus_stamps)
-            main_stamp.place_locked_item(HatInTimeItem(f"1 Stamp - {key}",
-                                                       ItemClassification.progression, None, world.player))
-            bonus_stamps.place_locked_item(HatInTimeItem(f"2 Stamps - {key}",
-                                                         ItemClassification.progression, None, world.player))
+            create_dw_locations(world, dw)
 
-            if key in world.excluded_dws:
-                main_objective.progress_type = LocationProgressType.EXCLUDED
-                full_clear.progress_type = LocationProgressType.EXCLUDED
-            elif world.is_bonus_excluded(key):
-                full_clear.progress_type = LocationProgressType.EXCLUDED
 
-            dw.locations.append(main_objective)
-            dw.locations.append(full_clear)
+def create_dw_locations(world: "HatInTimeWorld", dw: Region):
+    loc_id = death_wishes[dw.name]
+    main_objective = HatInTimeLocation(world.player, f"{dw.name} - Main Objective", loc_id, dw)
+    full_clear = HatInTimeLocation(world.player, f"{dw.name} - All Clear", loc_id + 1, dw)
+    main_stamp = HatInTimeLocation(world.player, f"Main Stamp - {dw.name}", None, dw)
+    bonus_stamps = HatInTimeLocation(world.player, f"Bonus Stamps - {dw.name}", None, dw)
+    main_stamp.show_in_spoiler = False
+    bonus_stamps.show_in_spoiler = False
+    dw.locations.append(main_stamp)
+    dw.locations.append(bonus_stamps)
+    main_stamp.place_locked_item(HatInTimeItem(f"1 Stamp - {dw.name}",
+                                               ItemClassification.progression, None, world.player))
+    bonus_stamps.place_locked_item(HatInTimeItem(f"2 Stamps - {dw.name}",
+                                                 ItemClassification.progression, None, world.player))
+
+    if dw.name in world.excluded_dws:
+        main_objective.progress_type = LocationProgressType.EXCLUDED
+        full_clear.progress_type = LocationProgressType.EXCLUDED
+    elif world.is_bonus_excluded(dw.name):
+        full_clear.progress_type = LocationProgressType.EXCLUDED
+
+    dw.locations.append(main_objective)
+    dw.locations.append(full_clear)

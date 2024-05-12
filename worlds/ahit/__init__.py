@@ -115,8 +115,7 @@ class HatInTimeWorld(World):
 
         create_events(self)
         if self.is_dw():
-            if "Snatcher's Hit List" not in self.excluded_dws \
-               or "Camera Tourist" not in self.excluded_dws:
+            if "Snatcher's Hit List" not in self.excluded_dws or "Camera Tourist" not in self.excluded_dws:
                 create_enemy_events(self)
 
         # place vanilla contract locations if contract shuffle is off
