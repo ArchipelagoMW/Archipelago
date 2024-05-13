@@ -99,7 +99,7 @@ class OpenRCT2Socket:
                         self._send(self.outbound_packet_queue.pop(0))
                         await asyncio.sleep(0.1)
                 except Exception as e:
-                    print("Error in connect game: " + e)
+                    print("Error in connect game: ", e)
         except socket.timeout as e:
             #print('error connecting to game', e)
             pass
@@ -162,7 +162,6 @@ class OpenRCT2Socket:
             if data:
                 print("DATA")
                 sock = self.gamecons[-1]
-                print(sock)
                 if sock:
                     print("SOCK")
                     sock.sendall(data)
@@ -186,7 +185,7 @@ class OpenRCT2Socket:
         try:
             self._send(data)
         except Exception as e:
-            print('error sending to game', e)
+            print('error sending to game:', e)
             #self.disconnectgame(self.gamecons[-1])
             # self.connectgame()
             # asyncio.get_event_loop().run_until_complete(connectgame())
@@ -243,7 +242,6 @@ class OpenRCT2Context(CommonContext):
                     args['data'][index]['text'] = match.group(1) 
         print(args)
         self.gamesock.sendobj(args)
-        time.sleep(0.00000272727*len(args)) #Future Colby, this probably won't help to extend... but maybe?
 
     # async def disconnect(self, allow_autoreconnect: bool = False):
     #     # self.game = ""
