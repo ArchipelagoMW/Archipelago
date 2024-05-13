@@ -1003,7 +1003,7 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
 
 
 class ConnectionsMeta(AssembleOptions):
-    def __new__(mcs, name, bases, attrs):
+    def __new__(mcs, name: str, bases: tuple[type, ...], attrs: dict[str, typing.Any]):
         if name != "PlandoConnections":
             assert "entrances" in attrs, f"Please define valid entrances for {name}"
             attrs["entrances"] = frozenset((connection.lower() for connection in attrs["entrances"]))
