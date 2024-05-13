@@ -202,9 +202,14 @@ def set_rules(world: "HatInTimeWorld"):
         last_cost = cost
 
     if final_chapter is not None:
-        world.chapter_timepiece_costs[final_chapter] = world.random.randint(
-                                                            world.options.FinalChapterMinCost.value,
-                                                            world.options.FinalChapterMaxCost.value)
+        final_chapter_cost: int
+        if world.options.FinalChapterMinCost.value == world.options.FinalChapterMaxCost.value:
+            final_chapter_cost = world.options.FinalChapterMaxCost.value
+        else:
+            final_chapter_cost = world.random.randint(world.options.FinalChapterMinCost.value,
+                                                      world.options.FinalChapterMaxCost.value)
+
+        world.chapter_timepiece_costs[final_chapter] = final_chapter_cost
 
     add_rule(world.multiworld.get_entrance("Telescope -> Mafia Town", world.player),
              lambda state: state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.MAFIA]))

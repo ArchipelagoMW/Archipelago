@@ -9,45 +9,25 @@ if TYPE_CHECKING:
     
 
 def adjust_options(world: "HatInTimeWorld"):
-    world.options.HighestChapterCost.value = max(
-        world.options.HighestChapterCost.value,
-        world.options.LowestChapterCost.value)
+    if world.options.HighestChapterCost < world.options.LowestChapterCost:
+        world.options.HighestChapterCost.value, world.options.LowestChapterCost.value = \
+         world.options.LowestChapterCost.value, world.options.HighestChapterCost.value
 
-    world.options.LowestChapterCost.value = min(
-        world.options.LowestChapterCost.value,
-        world.options.HighestChapterCost.value)
+    if world.options.FinalChapterMaxCost < world.options.FinalChapterMinCost:
+        world.options.FinalChapterMaxCost.value, world.options.FinalChapterMinCost.value = \
+         world.options.FinalChapterMinCost.value, world.options.FinalChapterMaxCost.value
 
-    world.options.FinalChapterMinCost.value = min(
-        world.options.FinalChapterMinCost.value,
-        world.options.FinalChapterMaxCost.value)
+    if world.options.BadgeSellerMaxItems < world.options.BadgeSellerMinItems:
+        world.options.BadgeSellerMaxItems.value, world.options.BadgeSellerMinItems.value = \
+         world.options.BadgeSellerMinItems.value, world.options.BadgeSellerMaxItems.value
 
-    world.options.FinalChapterMaxCost.value = max(
-        world.options.FinalChapterMaxCost.value,
-        world.options.FinalChapterMinCost.value)
+    if world.options.NyakuzaThugMaxShopItems < world.options.NyakuzaThugMinShopItems:
+        world.options.NyakuzaThugMaxShopItems.value, world.options.NyakuzaThugMinShopItems.value = \
+         world.options.NyakuzaThugMinShopItems.value, world.options.NyakuzaThugMaxShopItems.value
 
-    world.options.BadgeSellerMinItems.value = min(
-        world.options.BadgeSellerMinItems.value,
-        world.options.BadgeSellerMaxItems.value)
-
-    world.options.BadgeSellerMaxItems.value = max(
-        world.options.BadgeSellerMinItems.value,
-        world.options.BadgeSellerMaxItems.value)
-
-    world.options.NyakuzaThugMinShopItems.value = min(
-        world.options.NyakuzaThugMinShopItems.value,
-        world.options.NyakuzaThugMaxShopItems.value)
-
-    world.options.NyakuzaThugMaxShopItems.value = max(
-        world.options.NyakuzaThugMinShopItems.value,
-        world.options.NyakuzaThugMaxShopItems.value)
-
-    world.options.DWShuffleCountMin.value = min(
-        world.options.DWShuffleCountMin.value,
-        world.options.DWShuffleCountMax.value)
-
-    world.options.DWShuffleCountMax.value = max(
-        world.options.DWShuffleCountMin.value,
-        world.options.DWShuffleCountMax.value)
+    if world.options.DWShuffleCountMax < world.options.DWShuffleCountMin:
+        world.options.DWShuffleCountMax.value, world.options.DWShuffleCountMin.value = \
+         world.options.DWShuffleCountMin.value, world.options.DWShuffleCountMax.value
 
     total_tps: int = get_total_time_pieces(world)
     if world.options.HighestChapterCost.value > total_tps-5:
@@ -60,7 +40,7 @@ def adjust_options(world: "HatInTimeWorld"):
         world.options.FinalChapterMaxCost.value = min(50, total_tps)
 
     if world.options.FinalChapterMinCost.value > total_tps:
-        world.options.FinalChapterMinCost.value = min(50, total_tps-5)
+        world.options.FinalChapterMinCost.value = min(50, total_tps)
 
     # Don't allow Rush Hour goal if DLC2 content is disabled
     if world.options.EndGoal.value == 2 and world.options.EnableDLC2.value == 0:
