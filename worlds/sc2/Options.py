@@ -7,6 +7,7 @@ from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
 from .MissionTables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_no_build_missions, \
     campaign_mission_table
+from .MissionOrders import vanilla_shuffle_order, mini_campaign_order
 
 if TYPE_CHECKING:
     from worlds.AutoWorld import World
@@ -63,29 +64,25 @@ class AllInMap(Choice):
 
 class MissionOrder(Choice):
     """
-    Determines the order the missions are played in.  The last three mission orders end in a random mission.
+    Determines the order the missions are played in.  The first three mission orders ignore the Maximum Campaign Size option.
     Vanilla (83 total if all campaigns enabled): Keeps the standard mission order and branching from the vanilla Campaigns.
     Vanilla Shuffled (83 total if all campaigns enabled): Keeps same branching paths from the vanilla Campaigns but randomizes the order of missions within.
     Mini Campaign (47 total if all campaigns enabled): Shorter version of the campaign with randomized missions and optional branches.
-    Medium Grid (16):  A 4x4 grid of random missions.  Start at the top-left and forge a path towards bottom-right mission to win.
-    Mini Grid (9):  A 3x3 version of Grid.  Complete the bottom-right mission to win.
-    Blitz (12):  12 random missions that open up very quickly.  Complete the bottom-right mission to win.
-    Gauntlet (7): Linear series of 7 random missions to complete the campaign.
-    Mini Gauntlet (4): Linear series of 4 random missions to complete the campaign.
-    Tiny Grid (4): A 2x2 version of Grid.  Complete the bottom-right mission to win.
-    Grid (variable): A grid that will resize to use all non-excluded missions.  Corners may be omitted to make the grid more square.  Complete the bottom-right mission to win.
+    Blitz:  Missions are divided into sets. Complete one mission from a set to advance to the next set.
+    Gauntlet: A linear path of missions to complete the campaign.
+    Grid: Missions are arranged into a grid. Completing a mission unlocks the adjacent missions. Corners may be omitted to make the grid more square. Complete the bottom-right mission to win.
+    Golden Path: A required line of missions with several optional branches, similar to the Wings of Liberty campaign.
+    Hopscotch: Missions alternate between mandatory missions and pairs of optional missions.
     """
     display_name = "Mission Order"
     option_vanilla = 0
     option_vanilla_shuffled = 1
     option_mini_campaign = 2
-    option_medium_grid = 3
-    option_mini_grid = 4
     option_blitz = 5
     option_gauntlet = 6
-    option_mini_gauntlet = 7
-    option_tiny_grid = 8
     option_grid = 9
+    option_golden_path = 10
+    option_hopscotch = 11
 
 
 class MaximumCampaignSize(Range):
@@ -101,8 +98,8 @@ class MaximumCampaignSize(Range):
 
 class GridTwoStartPositions(Toggle):
     """
-    If turned on and 'grid' mission order is selected, removes a mission from the starting
-    corner sets the adjacent two missions as the starter missions.
+    If turned on and 'grid' or 'hopscotch' mission orders are selected,
+    removes a mission from the starting corner and sets the adjacent two missions as the starter missions.
     """
     display_name = "Start with two unlocked missions on grid"
     default = Toggle.option_false
@@ -645,7 +642,7 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
             return cls(data)
         else:
             raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
-    
+
     def verify(self, world: Type['World'], player_name: str, plando_options: PlandoOptions) -> None:
         """Overridden version of function from Options.VerifyKeys for a better error message"""
         new_value: dict[str, int] = {}
@@ -668,7 +665,7 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
 
     def __getitem__(self, item: str) -> int:
         return self.value.__getitem__(item)
-    
+
     def __iter__(self) -> Iterator[str]:
         return self.value.__iter__()
 
@@ -936,16 +933,11 @@ def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
     excluded_missions: Set[SC2Mission] = set([lookup_name_to_mission[name] for name in excluded_mission_names])
 
     # Excluding Very Hard missions depending on options
-    if (world.options.exclude_very_hard_missions == ExcludeVeryHardMissions.option_true
-        ) or (
-            world.options.exclude_very_hard_missions == ExcludeVeryHardMissions.option_default
-            and (
-                    mission_order_type not in [MissionOrder.option_vanilla_shuffled, MissionOrder.option_grid]
-                    or (
-                            mission_order_type == MissionOrder.option_grid
-                            and world.options.maximum_campaign_size < 20
-                    )
-            )
+    if world.options.exclude_very_hard_missions == ExcludeVeryHardMissions.option_true or (
+        world.options.exclude_very_hard_missions == ExcludeVeryHardMissions.option_default and (
+            mission_order_type in dynamic_mission_orders and world.options.maximum_campaign_size < 20 or
+            mission_order_type == MissionOrder.option_mini_campaign
+        )
     ):
         excluded_missions = excluded_missions.union(
             [mission for mission in SC2Mission if
@@ -966,6 +958,22 @@ campaign_depending_orders = [
     MissionOrder.option_vanilla_shuffled,
     MissionOrder.option_mini_campaign
 ]
+
+static_mission_orders = {
+    MissionOrder.option_vanilla: vanilla_shuffle_order,
+    MissionOrder.option_vanilla_shuffled: vanilla_shuffle_order,
+    MissionOrder.option_mini_campaign: mini_campaign_order
+}
+
+dynamic_mission_orders = [
+    MissionOrder.option_golden_path,
+    MissionOrder.option_grid,
+    MissionOrder.option_gauntlet,
+    MissionOrder.option_blitz,
+    MissionOrder.option_hopscotch
+]
+
+LEGACY_GRID_ORDERS = {3, 4, 8}  # Medium Grid, Mini Grid, and Tiny Grid respectively
 
 kerrigan_unit_available = [
     KerriganPresence.option_vanilla,

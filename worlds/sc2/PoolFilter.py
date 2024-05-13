@@ -10,7 +10,8 @@ from .MissionTables import (MissionInfo, MissionPools,
 from .Options import (get_option_value, MissionOrder,
     get_enabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech,
     TakeOverAIAllies, campaign_depending_orders,
-    ShuffleCampaigns, get_excluded_missions, ShuffleNoBuild, ExtraLocations, GrantStoryLevels, EnableMorphling
+    ShuffleCampaigns, get_excluded_missions, ShuffleNoBuild, ExtraLocations, GrantStoryLevels, EnableMorphling,
+    static_mission_orders, dynamic_mission_orders
 )
 from . import ItemNames, ItemGroups
 

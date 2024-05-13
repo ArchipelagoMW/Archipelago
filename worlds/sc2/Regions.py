@@ -4,9 +4,10 @@ import math
 from BaseClasses import Region, Entrance, Location, CollectionState
 from .Locations import LocationData
 from .Options import get_option_value, MissionOrder, get_enabled_campaigns, campaign_depending_orders, \
-    GridTwoStartPositions
-from .MissionTables import MissionInfo, mission_orders, vanilla_mission_req_table, \
-    MissionPools, SC2Campaign, get_goal_location, SC2Mission, MissionConnection
+    GridTwoStartPositions, static_mission_orders, dynamic_mission_orders
+from .MissionTables import MissionInfo, vanilla_mission_req_table, \
+    MissionPools, SC2Campaign, get_goal_location, SC2Mission, MissionConnection, FillMission
+from .MissionOrders import make_gauntlet, make_blitz, make_golden_path, make_hopscotch
 from .PoolFilter import filter_missions
 
 
@@ -29,7 +30,7 @@ def create_regions(
     * int The number of missions in the world
     * str The name of the goal location
     """
-    mission_order_type: int = get_option_value(world, "mission_order")
+    mission_order_type: MissionOrder = world.options.mission_order
 
     if mission_order_type == MissionOrder.option_vanilla:
         return create_vanilla_regions(world, locations, location_cache)
@@ -379,15 +380,39 @@ def make_grid_connect_rule(
     return lambda state: state.has(f"Beat {missions[connected_coords].mission_name}", player)
 
 
+def make_dynamic_mission_order(
+    world: 'SC2World',
+    mission_order_type: int
+) -> Dict[SC2Campaign, List[FillMission]]:
+    mission_pools = filter_missions(world)
+
+    mission_pool = [mission for mission_pool in mission_pools.values() for mission in mission_pool]
+
+    num_missions = min(len(mission_pool), get_option_value(world, "maximum_campaign_size"))
+    num_missions = max(2, num_missions)
+    if mission_order_type == MissionOrder.option_golden_path:
+        return make_golden_path(world, num_missions)
+    # Grid handled by dedicated region generator
+    elif mission_order_type == MissionOrder.option_gauntlet:
+        return make_gauntlet(num_missions)
+    elif mission_order_type == MissionOrder.option_blitz:
+        return make_blitz(num_missions)
+    elif mission_order_type == MissionOrder.option_hopscotch:
+        return make_hopscotch(world.options.grid_two_start_positions, num_missions)
+
+
 def create_structured_regions(
     world: 'SC2World',
     locations: Tuple[LocationData, ...],
     location_cache: List[Location],
-    mission_order_type: int,
+    mission_order_type: MissionOrder,
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
     locations_per_region = get_locations_per_region(locations)
 
-    mission_order = mission_orders[mission_order_type]()
+    if mission_order_type in static_mission_orders:
+        mission_order = static_mission_orders[mission_order_type]()
+    else:
+        mission_order = make_dynamic_mission_order(world, mission_order_type)
     enabled_campaigns = get_enabled_campaigns(world)
     shuffle_campaigns = get_option_value(world, "shuffle_campaigns")
 
@@ -596,7 +621,9 @@ def create_structured_regions(
                 mission.slot, connections, mission_order[campaign][i].category,
                 number=mission_order[campaign][i].number,
                 completion_critical=mission_order[campaign][i].completion_critical,
-                or_requirements=mission_order[campaign][i].or_requirements)})
+                or_requirements=mission_order[campaign][i].or_requirements,
+                ui_vertical_padding=mission_order[campaign][i].ui_vertical_padding),
+            })
 
     final_mission_id = final_mission.id
     # Changing the completion condition for alternate final missions into an event
