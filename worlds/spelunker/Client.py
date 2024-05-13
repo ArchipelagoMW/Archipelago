@@ -51,7 +51,7 @@ class SpelunkerClient(BizHawkClient):
         ctx.items_handling = 0b111
 
         death_link = await bizhawk.read(ctx.bizhawk_ctx, [(0x7052, 1, "PRG ROM")])
-        if death_link:
+        if death_link == 0x01:
             await ctx.update_death_link(bool(death_link[0]))
         return True
 
