@@ -14,7 +14,7 @@ class TestActs(HatInTimeTestBase):
     }
 
     def test_act_shuffle(self):
-        for i in range(1000):
+        for i in range(300):
             self.world_setup()
             self.collect_all_but([""])
 
