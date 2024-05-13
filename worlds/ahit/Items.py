@@ -3,7 +3,7 @@ from .Types import HatDLC, HatType, hat_type_to_item, Difficulty, ItemData, HatI
 from .Locations import get_total_locations
 from .Rules import get_difficulty
 from .Options import get_total_time_pieces
-from typing import Optional, List, Dict, TYPE_CHECKING
+from typing import List, Dict, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from . import HatInTimeWorld
@@ -120,7 +120,7 @@ def create_item(world: "HatInTimeWorld", name: str) -> Item:
 
 
 def create_multiple_items(world: "HatInTimeWorld", name: str, count: int = 1,
-                          item_type: Optional[ItemClassification] = ItemClassification.progression) -> List[Item]:
+                          item_type: ItemClassification = ItemClassification.progression) -> List[Item]:
 
     data = item_table[name]
     itemlist: List[Item] = []
@@ -156,11 +156,11 @@ def create_junk_items(world: "HatInTimeWorld", count: int) -> List[Item]:
 
     for i in range(count):
         if trap_chance > 0 and world.random.randint(1, 100) <= trap_chance:
-            junk_pool += [world.create_item(
-                world.random.choices(list(trap_list.keys()), weights=list(trap_list.values()), k=1)[0])]
+            junk_pool.append(world.create_item(
+                world.random.choices(list(trap_list.keys()), weights=list(trap_list.values()), k=1)[0]))
         else:
-            junk_pool += [world.create_item(
-                world.random.choices(list(junk_list.keys()), weights=list(junk_list.values()), k=1)[0])]
+            junk_pool.append(world.create_item(
+                world.random.choices(list(junk_list.keys()), weights=list(junk_list.values()), k=1)[0]))
 
     return junk_pool
 
