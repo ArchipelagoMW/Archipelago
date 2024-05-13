@@ -3,7 +3,7 @@ from typing import Set
 from BaseClasses import  CollectionState
 from .Options import get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap, \
     GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, SpearOfAdunAutonomouslyCastAbilityPresence, \
-    get_enabled_campaigns, MissionOrder
+    get_enabled_campaigns, MissionOrder, EnableMorphling
 from .Items import get_basic_units, defense_ratings, zerg_defense_ratings, kerrigan_actives, air_defense_ratings, \
     kerrigan_levels, get_full_item_list
 from .MissionTables import SC2Race, SC2Campaign
@@ -930,7 +930,7 @@ class SC2Logic:
         self.kerrigan_levels_per_mission_completed = get_option_value(world, "kerrigan_levels_per_mission_completed")
         self.kerrigan_levels_per_mission_completed_cap = get_option_value(world, "kerrigan_levels_per_mission_completed_cap")
         self.kerrigan_total_level_cap = get_option_value(world, "kerrigan_total_level_cap")
-        self.morphling_enabled = get_option_value(world, "enable_morphling")
+        self.morphling_enabled = get_option_value(world, "enable_morphling") == EnableMorphling.option_true
         self.story_tech_granted = get_option_value(world, "grant_story_tech") == GrantStoryTech.option_true
         self.story_levels_granted = get_option_value(world, "grant_story_levels") != GrantStoryLevels.option_disabled
         self.basic_terran_units = get_basic_units(world, SC2Race.TERRAN)
