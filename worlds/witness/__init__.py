@@ -3,9 +3,10 @@ Archipelago init file for The Witness
 """
 import dataclasses
 from logging import error, warning
-from typing import Any, Dict, List, Optional, cast, Union
+from typing import Any, Dict, List, Optional, Union, cast
 
-from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial, Item
+from BaseClasses import CollectionState, Entrance, Item, Location, Region, Tutorial
+
 from Options import PerGameCommonOptions, Toggle
 from worlds.AutoWorld import WebWorld, World
 
