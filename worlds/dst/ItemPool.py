@@ -1,5 +1,6 @@
 from typing import List
 from worlds.AutoWorld import World
+from BaseClasses import ItemClassification as IC
 import random
 from .Items import item_data_table, DSTItem
 from .Options import DSTOptions
@@ -22,11 +23,14 @@ class DSTItemPool:
                 not item.code
                 or "deprecated" in item.tags
                 or "progressive" in item.tags # Add these somewhere else
-                or (not options.shuffle_starting_recipes.value and "basic" in item.tags)
                 or (not options.shuffle_no_unlock_recipes.value and "nounlock" in item.tags)
                 or (not options.season_change_helper_items.value and "seasonhelper" in item.tags)
             ):
                 continue
+
+            # Add basic items as dummy event items so we can do logic with them
+            if (item.type == IC.progression and not options.shuffle_starting_recipes.value and "basic" in item.tags):
+                world.multiworld.precollected_items[world.player].append(DSTItem(name, IC.progression, None, world.player))
 
             # Put junk items in the filler pool
             if "junk" in item.tags:
