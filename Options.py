@@ -744,37 +744,6 @@ class NamedRange(Range):
         return super().from_text(text)
 
 
-class SpecialRange(NamedRange):
-    special_range_cutoff = 0
-
-    # TODO: remove class SpecialRange, earliest 3 releases after 0.4.3
-    def __new__(cls, value: int) -> SpecialRange:
-        from Utils import deprecate
-        deprecate(f"Option type {cls.__name__} is a subclass of SpecialRange, which is deprecated and pending removal. "
-                  "Consider switching to NamedRange, which supports all use-cases of SpecialRange, and more. In "
-                  "NamedRange, range_start specifies the lower end of the regular range, while special values can be "
-                  "placed anywhere (below, inside, or above the regular range).")
-        return super().__new__(cls)
-
-    @classmethod
-    def weighted_range(cls, text) -> Range:
-        if text == "random-low":
-            return cls(cls.triangular(cls.special_range_cutoff, cls.range_end, cls.special_range_cutoff))
-        elif text == "random-high":
-            return cls(cls.triangular(cls.special_range_cutoff, cls.range_end, cls.range_end))
-        elif text == "random-middle":
-            return cls(cls.triangular(cls.special_range_cutoff, cls.range_end))
-        elif text.startswith("random-range-"):
-            return cls.custom_range(text)
-        elif text == "random":
-            return cls(random.randint(cls.special_range_cutoff, cls.range_end))
-        else:
-            raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. "
-                            f"Acceptable values are: random, random-high, random-middle, random-low, "
-                            f"random-range-low-<min>-<max>, random-range-middle-<min>-<max>, "
-                            f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
-
-
 class FreezeValidKeys(AssembleOptions):
     def __new__(mcs, name, bases, attrs):
         if "valid_keys" in attrs:
