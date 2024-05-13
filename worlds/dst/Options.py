@@ -146,7 +146,7 @@ class SeasonChangeHelperItems(Toggle):
     """
     display_name = "Season Change Helper Items"
 
-class ExtraDamageAgainstBosses(Range):
+class ExtraDamageAgainstBosses(NamedRange):
     """
     This adds "Extra Damage Against Bosses" buffs as Archipelago items.
     Each stack of this buff gives the player a permanent +10% damage against easier bosses and +25% damage against tougher ones.
@@ -155,18 +155,23 @@ class ExtraDamageAgainstBosses(Range):
     range_start = 0
     range_end = 10
     default = 0
+
+    special_range_names = {
+        "none": 0,
+        "low": 3,
+        "medium": 6,
+        "high": 10,
+    }
   
 class ShuffleStartingRecipes(Toggle):
     """
     Turn your basic starting recipes into Archipelago items?
-    (Work in progress! Logic is not completed for this option. Use at your own risk!)
     """
     display_name = "Shuffle Starting Recipes"
 
 class ShuffleNoUnlockRecipes(Toggle):
     """
     Turn crafting recipes in the Ancient Pseudoscience Station and Celestial Altars into Archipelago items?
-    (Work in progress! Logic is not completed for this option. Use at your own risk!)
     """
     display_name = "Shuffle Ancient and Celestial Recipes"
 
