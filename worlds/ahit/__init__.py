@@ -45,11 +45,8 @@ class HatInTimeWorld(World):
     """
 
     game = "A Hat in Time"
-    data_version = 1
-
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = get_location_names()
-
     options_dataclass = AHITOptions
     options: AHITOptions
     item_name_groups = relic_groups

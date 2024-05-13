@@ -318,7 +318,7 @@ def create_regions(world: "HatInTimeWorld"):
     ev_area = create_region_and_connect(w, "Dead Bird Studio - Elevator Area", "DBS -> Elevator Area", dbs)
     post_ev = create_region_and_connect(w, "Dead Bird Studio - Post Elevator Area", "DBS -> Post Elevator Area", dbs)
     connect_regions(basement, ev_area, "DBS Basement -> Elevator Area", p)
-    if world.options.LogicDifficulty.value >= int(Difficulty.EXPERT):
+    if world.options.LogicDifficulty >= int(Difficulty.EXPERT):
         connect_regions(basement, post_ev, "DBS Basement -> Post Elevator Area", p)
 
     # ------------------------------------------- SUBCON FOREST --------------------------------------- #
@@ -404,10 +404,10 @@ def create_regions(world: "HatInTimeWorld"):
         create_rift_connections(w, create_region(w, "Time Rift - Balcony"))
         create_rift_connections(w, create_region(w, "Time Rift - Deep Sea"))
 
-        if w.options.ExcludeTour.value == 0:
+        if not w.options.ExcludeTour:
             create_rift_connections(w, create_region(w, "Time Rift - Tour"))
 
-        if w.options.Tasksanity.value > 0:
+        if w.options.Tasksanity:
             create_tasksanity_locations(w)
 
         connect_regions(cruise_ship, badge_seller, "CS -> Badge Seller", p)
@@ -440,7 +440,7 @@ def create_rift_connections(world: "HatInTimeWorld", region: Region):
 def create_tasksanity_locations(world: "HatInTimeWorld"):
     ship_shape: Region = world.multiworld.get_region("Ship Shape", world.player)
     id_start: int = TASKSANITY_START_ID
-    for i in range(world.options.TasksanityCheckCount.value):
+    for i in range(world.options.TasksanityCheckCount):
         location = HatInTimeLocation(world.player, f"Tasksanity Check {i+1}", id_start+i, ship_shape)
         ship_shape.locations.append(location)
 

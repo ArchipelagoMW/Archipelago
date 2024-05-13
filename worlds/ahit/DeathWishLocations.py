@@ -167,7 +167,7 @@ def create_dw_regions(world: "HatInTimeWorld"):
     spaceship = world.multiworld.get_region("Spaceship", world.player)
     dw_map: Region = create_region(world, "Death Wish Map")
     entrance = connect_regions(spaceship, dw_map, "-> Death Wish Map", world.player)
-    add_rule(entrance, lambda state: state.has("Time Piece", world.player, world.options.DWTimePieceRequirement.value))
+    add_rule(entrance, lambda state: state.has("Time Piece", world.player, world.options.DWTimePieceRequirement))
 
     if world.options.DWShuffle:
         # Connect Death Wishes randomly to one another in a linear sequence
