@@ -134,7 +134,8 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
   there without using any hint points.
 * `exclude_locations` lets you define any locations that you don't want to do and during generation will force a "junk"
   item which isn't necessary for progression to go in these locations.
-* `priority_locations` is the inverse of `exclude_locations`, forcing a progression item in the defined locations.
+* `priority_locations` lets you define any locations that you want to do and during generation will force a progression
+*  item to go in these locations.
 * `item_links` allows players to link their items into a group with the same item link name and game. The items declared
   in `item_pool` get combined and when an item is found for the group, all players in the group receive it. Item links
   can also have local and non local items, forcing the items to either be placed within the worlds of the group or in
