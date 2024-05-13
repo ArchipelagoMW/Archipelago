@@ -231,20 +231,20 @@ class ZillionContext(CommonContext):
         if cmd == "Connected":
             logger.info("logged in to Archipelago server")
             if "slot_data" not in args:
-                logger.warn("`Connected` packet missing `slot_data`")
+                logger.warning("`Connected` packet missing `slot_data`")
                 return
             slot_data = args["slot_data"]
 
             if "start_char" not in slot_data:
-                logger.warn("invalid Zillion `Connected` packet, `slot_data` missing `start_char`")
+                logger.warning("invalid Zillion `Connected` packet, `slot_data` missing `start_char`")
                 return
             self.start_char = slot_data['start_char']
             if self.start_char not in {"Apple", "Champ", "JJ"}:
-                logger.warn("invalid Zillion `Connected` packet, "
-                            f"`slot_data` `start_char` has invalid value: {self.start_char}")
+                logger.warning("invalid Zillion `Connected` packet, "
+                               f"`slot_data` `start_char` has invalid value: {self.start_char}")
 
             if "rescues" not in slot_data:
-                logger.warn("invalid Zillion `Connected` packet, `slot_data` missing `rescues`")
+                logger.warning("invalid Zillion `Connected` packet, `slot_data` missing `rescues`")
                 return
             rescues = slot_data["rescues"]
             self.rescues = {}
@@ -272,8 +272,8 @@ class ZillionContext(CommonContext):
                 self.loc_mem_to_id[mem] = id_
 
             if len(self.loc_mem_to_id) != 394:
-                logger.warn("invalid Zillion `Connected` packet, "
-                            f"`slot_data` missing locations in `loc_mem_to_id` - len {len(self.loc_mem_to_id)}")
+                logger.warning("invalid Zillion `Connected` packet, "
+                               f"`slot_data` missing locations in `loc_mem_to_id` - len {len(self.loc_mem_to_id)}")
 
             self.got_slot_data.set()
 
