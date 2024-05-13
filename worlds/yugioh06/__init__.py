@@ -10,7 +10,6 @@ from worlds.AutoWorld import WebWorld, World
 
 from .boosterpacks import booster_contents as booster_contents
 from .boosterpacks import get_booster_locations
-from .client_bh import YuGiOh2006Client as YuGiOh2006Client
 from .items import (
     Banlist_Items,
     booster_packs,
@@ -45,7 +44,7 @@ from .rom_values import function_addresses as function_addresses
 from .rom_values import structure_deck_selection as structure_deck_selection
 from .rules import set_rules
 from .structure_deck import get_deck_content_locations
-from .utils import open_file as open_file
+from .client_bh import YuGiOh2006Client
 
 
 class Yugioh06Web(WebWorld):
