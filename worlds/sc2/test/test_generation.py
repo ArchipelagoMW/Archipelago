@@ -359,3 +359,58 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertFalse(kerrigan_items_in_pool)
         kerrigan_passives_in_pool = set(ItemGroups.kerrigan_passives).intersection(item_names)
         self.assertFalse(kerrigan_passives_in_pool)
+
+    def test_excluding_zerg_units_with_morphling_enabled_doesnt_exclude_aspects(self) -> None:
+        options = {
+            'enable_wol_missions': False,
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': True,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'enable_nco_missions': False,
+            'required_tactics': Options.RequiredTactics.option_no_logic,
+            'enable_morphling': Options.EnableMorphling.option_true,
+            'excluded_items': [
+                ItemGroups.ItemGroupNames.ZERG_UNITS.lower()
+            ],
+            'unexcluded_items': [
+                ItemGroups.ItemGroupNames.ZERG_MORPHS.lower()
+            ]
+        }
+        self.generate_world(options)
+        item_names = [item.name for item in self.multiworld.itempool]
+        self.assertTrue(item_names)
+        aspects_in_pool = list(set(item_names).intersection(set(ItemGroups.zerg_morphs)))
+        self.assertTrue(aspects_in_pool)
+        units_in_pool = list(set(item_names).intersection(set(ItemGroups.zerg_units))
+                             .difference(set(ItemGroups.zerg_morphs)))
+        self.assertFalse(units_in_pool)
+
+    def test_excluding_zerg_units_with_morphling_disabled_should_exclude_aspects(self) -> None:
+        options = {
+            'enable_wol_missions': False,
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': True,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'enable_nco_missions': False,
+            'required_tactics': Options.RequiredTactics.option_no_logic,
+            'enable_morphling': Options.EnableMorphling.option_false,
+            'excluded_items': [
+                ItemGroups.ItemGroupNames.ZERG_UNITS.lower()
+            ],
+            'unexcluded_items': [
+                ItemGroups.ItemGroupNames.ZERG_MORPHS.lower()
+            ]
+        }
+        self.generate_world(options)
+        item_names = [item.name for item in self.multiworld.itempool]
+        self.assertTrue(item_names)
+        aspects_in_pool = list(set(item_names).intersection(set(ItemGroups.zerg_morphs)))
+        self.assertFalse(aspects_in_pool)
+        units_in_pool = list(set(item_names).intersection(set(ItemGroups.zerg_units))
+                             .difference(set(ItemGroups.zerg_morphs)))
+        self.assertFalse(units_in_pool)
+

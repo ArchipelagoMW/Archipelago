@@ -26,7 +26,7 @@ from worlds.sc2 import ItemNames
 from worlds.sc2.ItemGroups import item_name_groups, unlisted_item_name_groups
 from worlds.sc2 import Options
 from worlds.sc2.Options import (
-    MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence,
+    MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, EnableMorphling,
     GameSpeed, GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions,
     LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations,
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
@@ -325,6 +325,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             ConfigurableOptionInfo('supply_per_item', 'starting_supply_per_item', Options.StartingSupplyPerItem, ConfigurableOptionType.INTEGER),
             ConfigurableOptionInfo('no_forced_camera', 'disable_forced_camera', Options.DisableForcedCamera),
             ConfigurableOptionInfo('skip_cutscenes', 'skip_cutscenes', Options.SkipCutscenes),
+            ConfigurableOptionInfo('enable_morphling', 'enable_morphling', Options.EnableMorphling, can_break_logic=True),
         )
 
         WARNING_COLOUR = "salmon"
@@ -535,6 +536,7 @@ class SC2Context(CommonContext):
         self.pending_color_update = False
         self.kerrigan_presence: int = KerriganPresence.default
         self.kerrigan_primal_status = 0
+        self.enable_morphling = EnableMorphling.default
         self.mission_req_table: typing.Dict[SC2Campaign, typing.Dict[str, MissionInfo]] = {}
         self.final_mission: int = 29
         self.announcements: queue.Queue = queue.Queue()
@@ -629,6 +631,7 @@ class SC2Context(CommonContext):
             self.kerrigan_levels_per_mission_completed = args["slot_data"].get("kerrigan_levels_per_mission_completed", 0)
             self.kerrigan_levels_per_mission_completed_cap = args["slot_data"].get("kerrigan_levels_per_mission_completed_cap", -1)
             self.kerrigan_total_level_cap = args["slot_data"].get("kerrigan_total_level_cap", -1)
+            self.enable_morphling = args["slot_data"].get("enable_morphling", EnableMorphling.option_false)
             self.grant_story_tech = args["slot_data"].get("grant_story_tech", GrantStoryTech.option_false)
             self.grant_story_levels = args["slot_data"].get("grant_story_levels", GrantStoryLevels.option_additive)
             self.required_tactics = args["slot_data"].get("required_tactics", RequiredTactics.option_standard)
@@ -1046,7 +1049,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 game_speed = self.ctx.game_speed_override
             else:
                 game_speed = self.ctx.game_speed
-            await self.chat_send("?SetOptions {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
+            await self.chat_send("?SetOptions {} {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
                 difficulty,
                 self.ctx.generic_upgrade_research,
                 self.ctx.all_in_choice,
@@ -1059,7 +1062,8 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 soa_options,
                 self.ctx.mission_order,
                 1 if self.ctx.nova_covert_ops_only else 0,
-                self.ctx.grant_story_levels
+                self.ctx.grant_story_levels,
+                self.ctx.enable_morphling
             ))
             await self.chat_send("?GiveResources {} {} {}".format(
                 start_items[SC2Race.ANY][0],
