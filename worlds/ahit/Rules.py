@@ -859,14 +859,14 @@ def set_rift_rules(world: "HatInTimeWorld", regions: Dict[str, Region]):
     for entrance in regions["Time Rift - Alpine Skyline"].entrances:
         add_rule(entrance, lambda state: has_relic_combo(state, world, "Crayon"))
 
-    if world.is_dlc1() > 0:
+    if world.is_dlc1():
         for entrance in regions["Time Rift - Balcony"].entrances:
             add_rule(entrance, lambda state: can_clear_required_act(state, world, "The Arctic Cruise - Finale"))
 
         for entrance in regions["Time Rift - Deep Sea"].entrances:
             add_rule(entrance, lambda state: has_relic_combo(state, world, "Cake"))
 
-    if world.is_dlc2() > 0:
+    if world.is_dlc2():
         for entrance in regions["Time Rift - Rumbi Factory"].entrances:
             add_rule(entrance, lambda state: has_relic_combo(state, world, "Necklace"))
 
