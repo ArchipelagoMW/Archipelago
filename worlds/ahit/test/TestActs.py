@@ -5,9 +5,6 @@ from . import HatInTimeTestBase
 
 class TestActs(HatInTimeTestBase):
     run_default_tests = False
-      
-    def testAllStateCanReachEverything(self):
-        pass
 
     options = {
         "ActRandomizer": 2,
