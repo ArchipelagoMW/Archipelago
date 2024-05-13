@@ -585,7 +585,7 @@ class CommonContext:
         logger.exception(msg, exc_info=exc_info, extra={'compact_gui': True})
         self._messagebox_connection_loss = self.gui_error(msg, exc_info[1])
 
-    def run_gui(self):
+    def run_gui(self, title="Archipelago Text Client"):
         """Import kivy UI system and start running it as self.ui_task."""
         from kvui import GameManager
 
@@ -593,7 +593,7 @@ class CommonContext:
             logging_pairs = [
                 ("Client", "Archipelago")
             ]
-            base_title = "Archipelago Text Client"
+            base_title = title
 
         self.ui = TextManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
