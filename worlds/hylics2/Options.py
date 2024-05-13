@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions
+from Options import Choice, Removed, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions
 
 class PartyShuffle(Toggle):
     """Shuffles party members into the pool.
@@ -52,3 +52,6 @@ class Hylics2Options(PerGameCommonOptions):
     start_location: StartLocation
     extra_items_in_logic: ExtraLogic
     death_link: Hylics2DeathLink
+
+    # Removed options
+    random_start: Removed
