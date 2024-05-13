@@ -1,4 +1,5 @@
 import traceback
+import typing
 import zlib
 import io
 import os
@@ -8,9 +9,11 @@ from BaseClasses import ItemClassification
 from settings import get_settings
 from worlds.Files import APDeltaPatch
 from .Arrays import level_locations, level_size, level_address, item_dict, level_header
-from worlds.AutoWorld import World
 from .Items import items_by_id, ItemData
 from .Rules import name_convert
+
+if typing.TYPE_CHECKING:
+    from . import GauntletLegendsWorld
 
 
 def get_base_rom_as_bytes() -> bytes:
@@ -93,9 +96,9 @@ def zenc(data):
 
 
 class Rom:
-    def __init__(self, world: "World"):
+    def __init__(self, world: "GauntletLegendsWorld"):
         try:
-            self.random = world.multiworld.per_slot_randoms[world.player]
+            self.random = world.random
             self.stream = io.BytesIO(get_base_rom_as_bytes())
             self.world = world
             self.player = world.player
@@ -118,15 +121,27 @@ class Rom:
             self.stream.seek(level_address[i], 0)
             data = self.get_level_data(level_size[i])
             print("Data Acquired")
-            try:
-                self.print_data(i, level, data)
-            except Exception as e:
-                print(e)
             for j, location in enumerate(level):
-                location = self.world.multiworld.get_location(name_convert(location), self.player)
-                print(location.item.name)
+                try:
+                    location = self.world.multiworld.get_location(name_convert(location), self.player)
+                    print(location.name)
+                    print(location.item.name)
+                except Exception as e:
+                    print(e)
+                if "Mirror" in location.name:
+                    print("MIRROR SHARD")
+                    print(i)
+                    if i == 4:
+                        self.world.shard_values[0] = item_dict.get(location.item.code, [0x27, 0x4])
+                    elif i == 10:
+                        self.world.shard_values[1] = item_dict.get(location.item.code, [0x27, 0x4])
+                    elif i == 15:
+                        self.world.shard_values[2] = item_dict.get(location.item.code, [0x27, 0x4])
+                    elif i == 21:
+                        self.world.shard_values[3] = item_dict.get(location.item.code, [0x27, 0x4])
+                    continue
                 if "Obelisk" in location.name:
-                    print("Obelisk in item name")
+                    print("Obelisk in location name")
                     try:
                         print(len(data.objects))
                         index = [index for index in range(len(data.objects)) if data.objects[index][8] == 0x26][0]
@@ -140,7 +155,7 @@ class Rom:
                         print(traceback.print_exc())
                     continue
                 if location.item.player is not self.player:
-                    if "Chest" in location.name:
+                    if "Chest" in location.name or ("Barrel" in location.name and "Barrel of Gold" not in location.name):
                         print(j - len(data.items))
                         data.chests[j - len(data.items)][12] = 0x27
                         data.chests[j - len(data.items)][13] = 0x4
@@ -149,6 +164,7 @@ class Rom:
                         data.items[j - data.obelisk][7] = 0x4
                 else:
                     if "Obelisk" in location.item.name:
+                        print("Obelisk in item name")
                         data.objects += [bytearray(data.items[j - data.obelisk][0:6]) +
                                          bytearray([0x0, 0x0, 0x26, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0,
                                                     location.item.code - 77780054,
@@ -156,7 +172,7 @@ class Rom:
                         del data.items[j - data.obelisk]
                         data.obelisk += 1
                     else:
-                        if "Chest" in location.name:
+                        if "Chest" in location.name or ("Barrel" in location.name and "Barrel of Gold" not in location.name):
                             print(j - len(data.items))
                             data.chests[j - len(data.items)][12] = item_dict[location.item.code][0]
                             data.chests[j - len(data.items)][13] = item_dict[location.item.code][1]
@@ -223,7 +239,7 @@ class Rom:
         try:
             with open(f"C:\\Users\\james\\gl_docs\\{i}_names.txt", "w") as file:
                     for _i, chests in enumerate(data.chests):
-                        file.write(f"LocationData(\"{name} Chest - {items_by_id.get(next((key for key, value in item_dict.items() if value == [chests[12], chests[13]]), -1), ItemData(0, 'Unknown', ItemClassification.filler)).itemName}\", 8887{i if i > 10 else 30 + i}{_i}, {chests[11]}),\n")
+                        file.write(f"LocationData(\"{name} {'Chest' if chests[8] == 0x17 else 'Barrel'} - {items_by_id.get(next((key for key, value in item_dict.items() if value == [chests[12], chests[13]]), -1), ItemData(0, 'Unknown', ItemClassification.filler)).itemName}\", 8887{i if i > 10 else 30 + i}{_i}, {chests[11]}),\n")
         except Exception as e:
             print(traceback.print_exception(e))
 

@@ -1,13 +1,6 @@
 import asyncio
-import multiprocessing
-import os
 import socket
-import subprocess
 import traceback
-import typing
-import zipfile
-
-import bsdiff4
 
 import Patch
 import Utils
@@ -15,7 +8,7 @@ from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandP
     get_base_parser
 from typing import List
 
-from NetUtils import ClientStatus
+from NetUtils import ClientStatus, NetworkItem
 from worlds.gl.Arrays import inv_dict, timers, base_count, castle_id, level_locations, \
     difficulty_convert
 from worlds.gl.Items import items_by_id
@@ -172,12 +165,16 @@ class GauntletLegendsContext(CommonContext):
         self.awaiting_rom = False
         self.inventory: List[InventoryEntry] = []
         self.inventory_raw: RamChunk
-        self.current_objects: List[ObjectEntry] = []
+        self.item_objects: List[ObjectEntry] = []
+        self.obelisk_objects: List[ObjectEntry] = []
+        self.chest_objects: List[ObjectEntry] = []
         self.retro_connected: bool = False
         self.level_loading: bool = False
         self.in_game: bool = False
         self.objects_loaded: bool = False
-        self.current_locations: List[LocationData] = []
+        self.item_locations: List[LocationData] = []
+        self.obelisk_locations: List[LocationData] = []
+        self.chest_locations: List[LocationData] = []
         self.checked_locations_arr: List[LocationData] = []
         self.limbo: bool = False
         self.in_portal: bool = False
@@ -187,6 +184,7 @@ class GauntletLegendsContext(CommonContext):
         self.current_level: bytes = bytes()
         self.movement: int = 0
         self.init_refactor: bool = False
+        self.location_scouts: list[NetworkItem] = []
 
     def inv_count(self):
         return len(self.inventory)
@@ -226,20 +224,24 @@ class GauntletLegendsContext(CommonContext):
     def get_obj_addr(self) -> int:
         return (int.from_bytes(self.socket.read(MessageFormat(READ, f"0x{format(OBJ_ADDR, 'x')} 4")), 'little') + (0x3C * 0x2A)) & 0xFFFFF
 
-    def obj_read(self) -> List[ObjectEntry]:
+    # Modes: 0 = items, 1 = obelisks, 2 = chests/barrels
+    async def obj_read(self, mode=0) -> List[ObjectEntry]:
         obj_address = self.get_obj_addr()
         _obj = []
-        b = RamChunk(self.socket.read(MessageFormat(READ, f"0x{format(obj_address + ((0 if self.offset == -1 else self.offset) * 0x3C), 'x')} 6720")))
+        b = RamChunk(self.socket.read(MessageFormat(READ, f"0x{format(obj_address + ((0 if self.offset == -1 else self.offset) * 0x3C), 'x')} 18000")))
         b.iterate(0x3C)
-        for i, arr in enumerate(b.split):
-            if self.offset != -1:
+        if mode == 0:
+            for i, arr in enumerate(b.split):
+                if self.offset != -1:
+                    if arr[0] != 0xFF:
+                        _obj += [ObjectEntry(arr)]
+                    continue
                 if arr[0] != 0xFF:
+                    if self.offset == -1:
+                        self.offset = i
                     _obj += [ObjectEntry(arr)]
-                continue
-            if arr[0] != 0xFF:
-                if self.offset == -1:
-                    self.offset = i
-                _obj += [ObjectEntry(arr)]
+        elif mode == 1:
+            print("pog")
         return _obj
 
     def inv_update(self, name: str, count: int):
@@ -369,6 +371,8 @@ class GauntletLegendsContext(CommonContext):
                 self.clear_counts = {}
         elif cmd == "SetReply":
             logger.info(f"Updated: {args['key']} Value: {args['value']}")
+        elif cmd == "LocationInfo":
+            self.location_scouts = args['locations']
 
     def handle_items(self):
         item = self.item_from_name("Compass")
@@ -418,7 +422,7 @@ class GauntletLegendsContext(CommonContext):
         self.socket.write(MessageFormat(WRITE, f"0x{format(PLAYER_COUNT, 'x')} 0x{format(min(players + scale_value, 4), 'x')}"))
         self.scaled = True
 
-    def scout_locations(self) -> List[LocationData]:
+    async def scout_locations(self, ctx: "GauntletLegendsContext") -> List[LocationData]:
         level = self.read_level()
         if self.movement is not 0x12:
             level = [0x1, 0xF]
@@ -431,15 +435,24 @@ class GauntletLegendsContext(CommonContext):
         if level[1] == 1:
             _id = castle_id.index(level[0]) + 1
         raw_locations = level_locations.get((level[1] << 4) + _id, [])
+        await ctx.send_msgs([{"cmd": "LocationScouts", "locations": [location.id for location in raw_locations], "create_as_hint": 0}])
+        while len(self.location_scouts) == 0:
+            await asyncio.sleep(.1)
+        obelisks = [item for item in self.location_scouts if "Obelisk" in items_by_id[item.item].itemName and item.player == self.slot]
+        self.obelisk_locations = [location for location in raw_locations if location.id in [item.location for item in obelisks]]
+        self.item_locations = [location for location in raw_locations if "Chest" not in location.name and ("Barrel" not in location.name or "Barrel of Gold" in location.name) and location not in self.obelisk_locations]
+        self.chest_locations = [location for location in raw_locations if "Chest" in location.name or ("Barrel" in location.name and "Barrel of Gold" not in location.name) and location not in self.obelisk_locations]
+
         locations = []
         for location in raw_locations:
             if location.difficulty <= difficulty:
+
                 locations += [location]
         logger.info(f"Locations: {len(locations)} Difficulty: {difficulty}")
         return locations
 
-    def location_loop(self) -> List[int]:
-        new_objects = self.obj_read()[:len(self.current_locations)]
+    async def location_loop(self) -> List[int]:
+        new_objects = await self.obj_read()[:len(self.current_locations)]
         acquired = []
         for i, obj in enumerate(new_objects):
             if obj.raw[:2] == bytes([0xAD, 0xB]):
@@ -480,9 +493,10 @@ class GauntletLegendsContext(CommonContext):
             return True
         return False
 
-    def load_objects(self):
-        self.current_locations = self.scout_locations()
-        self.current_objects = self.obj_read()
+    async def load_objects(self, ctx: "GauntletLegendsContext"):
+
+        await self.scout_locations(ctx)
+        await self.obj_read()
         self.objects_loaded = True
 
     def run_gui(self):
@@ -557,7 +571,7 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                 try:
                     if not ctx.objects_loaded:
                         logger.info("Loading Objects...")
-                        ctx.load_objects()
+                        await ctx.load_objects(ctx)
                         await asyncio.sleep(1)
                     if ctx.level_status():
                         try:
@@ -576,7 +590,7 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                         ctx.limbo = True
                         await asyncio.sleep(.05)
                         continue
-                    checking = ctx.location_loop()
+                    checking = await ctx.location_loop()
                     if checking:
                         await ctx.send_msgs([{"cmd": "LocationChecks", "locations": checking}])
                     if not ctx.finished_game and ctx.inv_bitwise("Hell", 0x100):
@@ -601,7 +615,7 @@ def launch():
                             help="Path to an APGL file")
         args = parser.parse_args()
         if args.patch_file:
-            asyncio.create_task(_patch_and_run_game(args.patch_file))
+            await asyncio.create_task(_patch_and_run_game(args.patch_file))
         ctx = GauntletLegendsContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
         if gui_enabled:

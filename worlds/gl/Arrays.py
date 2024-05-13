@@ -5,7 +5,7 @@ from .Locations import LocationData, valleyOfFire, daggerPeak, cliffsOfDesolatio
     , venomousSpire, toxicAirShip, arcticDocks, frozenCamp \
     , crystalMine, eruptingFissure, desecratedTemple \
     , battleTrenches, battleTowers, infernalFortress \
-    , gatesOfTheUnderworld
+    , gatesOfTheUnderworld, plagueFiend, yeti
 
 inv_dict: dict[tuple, str] = {
     (0x0, 0x6, 0x0): "Gold",
@@ -226,11 +226,13 @@ level_locations: dict[int, List[LocationData]] = {
     0x72: hauntedCemetery,
     0x73: venomousSpire,
     0x74: toxicAirShip,
+    0x75: plagueFiend,
     0x81: gatesOfTheUnderworld,
     0x91: arcticDocks,
     0x92: frozenCamp,
     0x93: crystalMine,
     0x94: eruptingFissure,
+    0x95: yeti,
     0xF1: desecratedTemple,
     0x111: battleTrenches,
     0x112: battleTowers,
@@ -238,7 +240,7 @@ level_locations: dict[int, List[LocationData]] = {
 }
 
 level_size = [0x9E0, 0x5E0, 0x740, 0x8A0, 0x90, 0x3B0, 0x5A0, 0x890, 0x670, 0x7D0, 0x90, 0xCE0, 0xA50, 0xA30, 0x8E0,
-              0x760, 0xE90, 0xE40, 0xE00, 0xCD0, 0x3F0, 0xB00, 0xA30, 0xB30]
+              0x20, 0x760, 0xE90, 0xE40, 0xE00, 0xCD0, 0x20, 0x3F0, 0xB00, 0xA30, 0xB30]
 
 level_address = [0xF939B0,
                  0xF958B0,
@@ -255,11 +257,13 @@ level_address = [0xF939B0,
                  0xF85EB0,
                  0xF86B60,
                  0xF877C0,
+                 0xF880E0,
                  0xF901C0,
                  0xF884E0,
                  0xF89370,
                  0xF8A5F0,
                  0xF8B760,
+                 0xF8C7C0,
                  0xF90B50,
                  0xF8D960,
                  0xF8E6E0,
@@ -280,11 +284,13 @@ level_header = [0xF9DD9C,
                 0xF9F0BC,
                 0xF9F174,
                 0xF9F22C,
+                0xF9F2E4,
                 0xF9E1C0,
                 0xF9E330,
                 0xF9E3E8,
                 0xF9E4A0,
                 0xF9E558,
+                0xF9E600,
                 0xF9DC2C,
                 0xF9DA04,
                 0xF9DABC,

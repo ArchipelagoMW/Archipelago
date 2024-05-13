@@ -61,6 +61,7 @@ class GauntletLegendsWorld(World):
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
     required_client_version = (0, 4, 4)
     crc32: str = None
+    shard_values: typing.List[bytes] = [[0x2B, 0x3], [0x2B, 0x1], [0x2B, 0x4], [0x2B, 0x2]]
     output_complete: threading.Event = threading.Event()
 
     excluded_locations = []
@@ -74,7 +75,8 @@ class GauntletLegendsWorld(World):
         return {
             "crc32": self.crc32,
             "player": self.player,
-            "scale": self.options.scaling_type.value
+            "scale": self.options.scaling_type.value,
+            "shards": self.shard_values
         }
 
     def generate_basic(self) -> None:
