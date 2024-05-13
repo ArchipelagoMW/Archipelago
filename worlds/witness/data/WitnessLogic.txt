@@ -766,7 +766,7 @@ Swamp Near Platform (Swamp) - Swamp Cyan Underwater - 0x04B7F - Swamp Near Boat 
 Door - 0x184B7 (Between Bridges First Door) - 0x00990
 158317 - 0x17C0D (Platform Shortcut Left Panel) - True - Shapers
 158318 - 0x17C0E (Platform Shortcut Right Panel) - 0x17C0D - Shapers
-Door - 0x38AE6 (Platform Shortcut Door) - 0x17C0E
+Door - 0x38AE6 (Platform Shortcut) - 0x17C0E
 Door - 0x04B7F (Cyan Water Pump) - 0x00006
 
 Swamp Cyan Underwater (Swamp):

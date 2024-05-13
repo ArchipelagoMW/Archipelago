@@ -74,11 +74,11 @@ class DOOM2World(World):
         "Energy cell pack": 10
     }
 
-    def __init__(self, world: MultiWorld, player: int):
+    def __init__(self, multiworld: MultiWorld, player: int):
         self.included_episodes = [1, 1, 1, 0]
         self.location_count = 0
 
-        super().__init__(world, player)
+        super().__init__(multiworld, player)
 
     def get_episode_count(self):
         # Don't include 4th, those are secret levels they are additive
@@ -172,7 +172,7 @@ class DOOM2World(World):
         # platform) Unless the user allows for it.
         if not allow_death_logic:
             for death_logic_location in Locations.death_logic_locations:
-                self.multiworld.exclude_locations[self.player].value.add(death_logic_location)
+                self.options.exclude_locations.value.add(death_logic_location)
     
     def create_item(self, name: str) -> DOOM2Item:
         item_id: int = self.item_name_to_id[name]

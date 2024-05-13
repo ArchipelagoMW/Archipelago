@@ -21,7 +21,7 @@ clear it.
 
 ## Optional Software
 
-- [Pokémon Emerald AP Tracker](https://github.com/AliceMousie/emerald-ap-tracker/releases/latest), for use with
+- [Pokémon Emerald AP Tracker](https://github.com/seto10987/Archipelago-Emerald-AP-Tracker/releases/latest), for use with
 [PopTracker](https://github.com/black-sliver/PopTracker/releases)
 
 ## Generating and Patching a Game
@@ -64,7 +64,7 @@ perfectly safe to make progress offline; everything will re-sync when you reconn
 
 Pokémon Emerald has a fully functional map tracker that supports auto-tracking.
 
-1. Download [Pokémon Emerald AP Tracker](https://github.com/AliceMousie/emerald-ap-tracker/releases/latest) and
+1. Download [Pokémon Emerald AP Tracker](https://github.com/seto10987/Archipelago-Emerald-AP-Tracker/releases/latest) and
 [PopTracker](https://github.com/black-sliver/PopTracker/releases).
 2. Put the tracker pack into packs/ in your PopTracker install.
 3. Open PopTracker, and load the Pokémon Emerald pack.
