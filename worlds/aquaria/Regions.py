@@ -999,6 +999,8 @@ class AquariaRegions:
                  lambda state: _has_damaging_item(state, self.player))
         add_rule(self.multiworld.get_location("Mithalas city castle, second urn on the entrance path", self.player),
                  lambda state: _has_damaging_item(state, self.player))
+        add_rule(self.multiworld.get_location("Mithalas city, urn inside a home fish pass", self.player),
+                 lambda state: _has_damaging_item(state, self.player))
 
     def __adjusting_crates_rules(self) -> None:
         """Since Crate need to be broken, add a damaging item to rules"""
