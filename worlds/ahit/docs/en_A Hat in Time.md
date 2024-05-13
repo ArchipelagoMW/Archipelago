@@ -9,8 +9,8 @@ config file.
 
 Items which the player would normally acquire throughout the game have been moved around. 
 Chapter costs are randomized in a progressive order based on your options, 
-so for example you could go to Subcon Forest -> Battle of the Birds -> Alpine Skyline, etc. in that order. If act shuffle is turned on, 
-the levels and Time Rifts in these chapters will be randomized as well.
+so for example you could go to Subcon Forest -> Battle of the Birds -> Alpine Skyline, etc. in that order. 
+If act shuffle is turned on, the levels and Time Rifts in these chapters will be randomized as well.
  
 To unlock and access a chapter's Time Rift in act shuffle, 
 the levels in place of the original acts required to unlock the Time Rift in the vanilla game must be completed, 
@@ -44,8 +44,10 @@ Items belonging to other worlds are represented by a badge with the Archipelago 
 
 ## When the player receives an item, what happens?
 
-When the player receives an item, it will play the item collect effect and information about the item will be printed on the screen and in the in-game developer console.
+When the player receives an item, it will play the item collect effect and information about the item 
+will be printed on the screen and in the in-game developer console.
 
 ## Is the DLC required to play A Hat in Time in Archipelago?
 
-No, the DLC expansions are not required to play. Their content can be enabled through certain options that are disabled by default, but please don't turn them on if you don't own the respective DLC.
+No, the DLC expansions are not required to play. Their content can be enabled through certain options 
+that are disabled by default, but please don't turn them on if you don't own the respective DLC.
