@@ -189,8 +189,7 @@ def add_dw_rules(world: "HatInTimeWorld", loc: Location):
         add_rule(loc, lambda state: can_use_hookshot(state, world))
 
     for hat in data.required_hats:
-        if hat is not HatType.NONE:
-            add_rule(loc, lambda state, h=hat: can_use_hat(state, world, h))
+        add_rule(loc, lambda state, h=hat: can_use_hat(state, world, h))
 
     for misc in data.misc_required:
         add_rule(loc, lambda state, item=misc: state.has(item, world.player))
