@@ -627,7 +627,7 @@ def is_valid_act_combo(world: "HatInTimeWorld", entrance_act: Region,
     if entrance_act.name in blacklisted_combos.keys() and exit_act.name in blacklisted_combos[entrance_act.name]:
         return False
 
-    if len(world.options.ActBlacklist) > 0:
+    if world.options.ActBlacklist:
         act_blacklist = world.options.ActBlacklist.get(entrance_act.name)
         if act_blacklist is not None and exit_act.name in act_blacklist:
             return False
