@@ -4,8 +4,7 @@ from . import HatInTimeTestBase
 
 
 class TestActs(HatInTimeTestBase):
-    def run_default_tests(self) -> bool:
-        return False
+    run_default_tests = False
       
     def testAllStateCanReachEverything(self):
         pass
