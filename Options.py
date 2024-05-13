@@ -21,6 +21,10 @@ if typing.TYPE_CHECKING:
     import pathlib
 
 
+class OptionError(ValueError):
+    pass
+
+  
 class Visibility(enum.IntFlag):
     none = 0b0000
     template = 0b0001
