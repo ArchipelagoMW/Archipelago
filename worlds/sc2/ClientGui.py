@@ -169,7 +169,7 @@ class SC2Manager(GameManager):
                             mission_obj: SC2Mission = lookup_name_to_mission[mission]
                             mission_id: int = mission_obj.id
                             mission_data = self.ctx.mission_req_table[campaign][mission]
-                            remaining_locations, plando_locations, remaining_count = self.sort_unfinished_locations(mission)
+                            remaining_locations, plando_locations, remaining_count = self.sort_unfinished_locations(mission_obj)
                             # Map has uncollected locations
                             if mission in unfinished_missions:
                                 if self.any_valuable_locations(remaining_locations):
@@ -263,10 +263,10 @@ class SC2Manager(GameManager):
     def finish_launching(self, dt):
         self.launching = False
     
-    def sort_unfinished_locations(self, mission_name: str) -> Tuple[Dict[LocationType, List[str]], List[str], int]:
+    def sort_unfinished_locations(self, mission: SC2Mission) -> Tuple[Dict[LocationType, List[str]], List[str], int]:
         locations: Dict[LocationType, List[str]] = {loctype: [] for loctype in LocationType}
         count = 0
-        for loc in self.ctx.locations_for_mission(mission_name):
+        for loc in self.ctx.locations_for_mission(mission):
             if loc in self.ctx.missing_locations:
                 count += 1
                 locations[lookup_location_id_to_type[loc]].append(self.ctx.location_names[loc])

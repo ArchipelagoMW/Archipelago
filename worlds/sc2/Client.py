@@ -4,6 +4,7 @@ import asyncio
 import copy
 import ctypes
 import enum
+import functools
 import inspect
 import logging
 import multiprocessing
@@ -750,12 +751,16 @@ class SC2Context(CommonContext):
         self.mission_id_to_location_ids = {mission_id: sorted(objectives) for mission_id, objectives in
                                            mission_id_to_location_ids.items()}
 
-    def locations_for_mission(self, mission_name: str):
-        mission = lookup_name_to_mission[mission_name]
+    def locations_for_mission(self, mission: SC2Mission):
         mission_id: int = mission.id
         objectives = self.mission_id_to_location_ids[mission_id]
         for objective in objectives:
             yield get_location_offset(mission_id) + mission_id * VICTORY_MODULO + objective
+
+    def uncollected_locations_in_mission(self, mission: SC2Mission):
+        for location_id in self.locations_for_mission(mission):
+            if location_id in self.missing_locations:
+                yield location_id
 
 
 class CompatItemHolder(typing.NamedTuple):
@@ -1038,6 +1043,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             kerrigan_level = get_kerrigan_level(self.ctx, start_items, missions_beaten)
             kerrigan_options = calculate_kerrigan_options(self.ctx)
             soa_options = caclulate_soa_options(self.ctx)
+            uncollected_objectives: typing.List[int] = self.get_uncollected_objectives()
             if self.ctx.difficulty_override >= 0:
                 difficulty = calc_difficulty(self.ctx.difficulty_override)
             else:
@@ -1070,6 +1076,10 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             await self.updateZergTech(start_items, kerrigan_level)
             await self.updateProtossTech(start_items)
             await self.updateColors()
+            if uncollected_objectives:
+                await self.chat_send("?UncollectedLocations {}".format(
+                    functools.reduce(lambda a, b: a + " " + b, [str(x) for x in uncollected_objectives])
+                ))
             await self.chat_send("?LoadFinished")
             self.last_received_update = len(self.ctx.items_received)
 
@@ -1134,6 +1144,10 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 else:
                     await self.chat_send("?SendMessage LostConnection - Lost connection to game.")
 
+    def get_uncollected_objectives(self) -> typing.List[int]:
+        return [location % VICTORY_MODULO for location in
+                self.ctx.uncollected_locations_in_mission(lookup_id_to_mission[self.mission_id])]
+
     def missions_beaten_count(self):
         return len([location for location in self.ctx.checked_locations if location % VICTORY_MODULO == 0])
 
@@ -1178,7 +1192,7 @@ def request_unfinished_missions(ctx: SC2Context) -> None:
         _, unfinished_missions = calc_unfinished_missions(ctx, unlocks=unlocks)
 
         for mission in unfinished_missions:
-            objectives = set(ctx.locations_for_mission(mission))
+            objectives = set(ctx.locations_for_mission(lookup_name_to_mission[mission]))
             if objectives:
                 remaining_objectives = objectives.difference(ctx.checked_locations)
                 unfinished_locations[mission] = [ctx.location_names[location_id] for location_id in remaining_objectives]
@@ -1195,7 +1209,7 @@ def request_unfinished_missions(ctx: SC2Context) -> None:
         message += ", ".join(f"{mark_up_mission_name(ctx, mission, unlocks)}[{ctx.mission_req_table[ctx.find_campaign(mission)][mission].mission.id}] " +
                              mark_up_objectives(
                                  f"[{len(unfinished_missions[mission])}/"
-                                 f"{sum(1 for _ in ctx.locations_for_mission(mission))}]",
+                                 f"{sum(1 for _ in ctx.locations_for_mission(lookup_name_to_mission[mission]))}]",
                                  ctx, unfinished_locations, mission)
                              for mission in unfinished_missions)
 
@@ -1218,7 +1232,7 @@ def calc_unfinished_missions(ctx: SC2Context, unlocks: typing.Optional[typing.Di
     available_missions = calc_available_missions(ctx, unlocks)
 
     for name in available_missions:
-        objectives = set(ctx.locations_for_mission(name))
+        objectives = set(ctx.locations_for_mission(lookup_name_to_mission[name]))
         if objectives:
             objectives_completed = ctx.checked_locations & objectives
             if len(objectives_completed) < len(objectives):
