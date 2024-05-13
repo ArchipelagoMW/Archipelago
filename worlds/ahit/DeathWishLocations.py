@@ -1,5 +1,5 @@
 from .Types import HatInTimeLocation, HatInTimeItem
-from .Regions import connect_regions, create_region
+from .Regions import create_region
 from BaseClasses import Region, LocationProgressType, ItemClassification
 from worlds.generic.Rules import add_rule
 from typing import List, TYPE_CHECKING
@@ -166,7 +166,7 @@ def create_dw_regions(world: "HatInTimeWorld"):
 
     spaceship = world.multiworld.get_region("Spaceship", world.player)
     dw_map: Region = create_region(world, "Death Wish Map")
-    entrance = connect_regions(spaceship, dw_map, "-> Death Wish Map", world.player)
+    entrance = spaceship.connect(dw_map, "-> Death Wish Map")
     add_rule(entrance, lambda state: state.has("Time Piece", world.player, world.options.DWTimePieceRequirement))
 
     if world.options.DWShuffle:
@@ -209,11 +209,11 @@ def create_dw_regions(world: "HatInTimeWorld"):
 
             dw = create_region(world, key)
             if key == "Beat the Heat":
-                connect_regions(dw_map, dw, f"{dw_map.name} -> Beat the Heat", world.player)
+                dw_map.connect(dw, f"{dw_map.name} -> Beat the Heat")
             elif key in dw_prereqs.keys():
                 for name in dw_prereqs[key]:
                     parent = world.multiworld.get_region(name, world.player)
-                    connect_regions(parent, dw, f"{parent.name} -> {key}", world.player)
+                    parent.connect(dw, f"{parent.name} -> {key}")
 
             create_dw_locations(world, dw)
 

@@ -329,7 +329,7 @@ def set_rules(world: "HatInTimeWorld"):
             access_rules.append(act_entrance.access_rule)
             required_region = act_entrance.connected_region
             name: str = f"{key}: Connection {i}"
-            new_entrance: Entrance = connect_regions(required_region, region, name, world.player)
+            new_entrance: Entrance = required_region.connect(region, name)
             entrances.append(new_entrance)
 
             # Copy access rules from act completions
@@ -576,9 +576,9 @@ def set_expert_rules(world: "HatInTimeWorld"):
              lambda state: True)
 
     # Expert: Cherry Hovering
-    entrance = connect_regions(world.multiworld.get_region("Your Contract has Expired", world.player),
-                               world.multiworld.get_region("Subcon Forest Area", world.player),
-                               "Subcon Forest Entrance YCHE", world.player)
+    subcon_area = world.multiworld.get_region("Subcon Forest Area", world.player)
+    yche = world.multiworld.get_region("Your Contract has Expired", world.player)
+    entrance = yche.connect(subcon_area, "Subcon Forest Entrance YCHE")
 
     if world.options.NoPaintingSkips:
         add_rule(entrance, lambda state: has_paintings(state, world, 1))
@@ -596,9 +596,7 @@ def set_expert_rules(world: "HatInTimeWorld"):
              lambda state: has_paintings(state, world, 3, True))
 
     # You can cherry hover to Snatcher's post-fight cutscene, which completes the level without having to fight him
-    connect_regions(world.multiworld.get_region("Subcon Forest Area", world.player),
-                    world.multiworld.get_region("Your Contract has Expired", world.player),
-                    "Snatcher Hover", world.player)
+    subcon_area.connect(yche, "Snatcher Hover")
     set_rule(world.multiworld.get_location("Act Completion (Your Contract has Expired)", world.player),
              lambda state: True)
 
@@ -961,10 +959,3 @@ def set_event_rules(world: "HatInTimeWorld"):
 
         if data.act_event:
             add_rule(event, world.multiworld.get_location(f"Act Completion ({data.region})", world.player).access_rule)
-
-
-def connect_regions(start_region: Region, exit_region: Region, entrancename: str, player: int) -> Entrance:
-    entrance = Entrance(player, entrancename, start_region)
-    start_region.exits.append(entrance)
-    entrance.connect(exit_region)
-    return entrance

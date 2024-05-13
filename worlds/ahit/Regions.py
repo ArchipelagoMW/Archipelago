@@ -318,9 +318,9 @@ def create_regions(world: "HatInTimeWorld"):
     # Items near the Dead Bird Studio elevator can be reached from the basement act, and beyond in Expert
     ev_area = create_region_and_connect(w, "Dead Bird Studio - Elevator Area", "DBS -> Elevator Area", dbs)
     post_ev = create_region_and_connect(w, "Dead Bird Studio - Post Elevator Area", "DBS -> Post Elevator Area", dbs)
-    connect_regions(basement, ev_area, "DBS Basement -> Elevator Area", p)
+    basement.connect(ev_area, "DBS Basement -> Elevator Area")
     if world.options.LogicDifficulty >= int(Difficulty.EXPERT):
-        connect_regions(basement, post_ev, "DBS Basement -> Post Elevator Area", p)
+        basement.connect(post_ev, "DBS Basement -> Post Elevator Area")
 
     # ------------------------------------------- SUBCON FOREST --------------------------------------- #
     subcon_forest = create_region_and_connect(w, "Subcon Forest", "Telescope -> Subcon Forest", spaceship)
@@ -346,7 +346,7 @@ def create_regions(world: "HatInTimeWorld"):
     create_region_and_connect(w, "The Twilight Bell", "-> The Twilight Bell", alpine_area)
 
     illness = create_region_and_connect(w, "The Illness has Spread", "Alpine Skyline - Finale", alpine_skyline)
-    connect_regions(illness, alpine_area_tihs, "TIHS -> Alpine Skyline Area (TIHS)", p)
+    illness.connect(alpine_area_tihs, "TIHS -> Alpine Skyline Area (TIHS)")
     create_rift_connections(w, create_region(w, "Time Rift - Alpine Skyline"))
     create_rift_connections(w, create_region(w, "Time Rift - The Twilight Bell"))
     create_rift_connections(w, create_region(w, "Time Rift - Curly Tail Trail"))
@@ -354,38 +354,38 @@ def create_regions(world: "HatInTimeWorld"):
     # ------------------------------------------- OTHER -------------------------------------------------- #
     mt_area: Region = create_region(w, "Mafia Town Area")
     mt_area_humt: Region = create_region(w, "Mafia Town Area (HUMT)")
-    connect_regions(mt_area, mt_area_humt, "MT Area -> MT Area (HUMT)", p)
-    connect_regions(mt_act1, mt_area, "Mafia Town Entrance WTMT", p)
-    connect_regions(mt_act2, mt_area, "Mafia Town Entrance BB", p)
-    connect_regions(mt_act3, mt_area, "Mafia Town Entrance SCFOS", p)
-    connect_regions(mt_act4, mt_area, "Mafia Town Entrance DWTM", p)
-    connect_regions(mt_act5, mt_area, "Mafia Town Entrance CTR", p)
-    connect_regions(mt_act6, mt_area_humt, "Mafia Town Entrance HUMT", p)
-    connect_regions(mt_act7, mt_area, "Mafia Town Entrance TGV", p)
+    mt_area.connect(mt_area_humt, "MT Area -> MT Area (HUMT)")
+    mt_act1.connect(mt_area, "Mafia Town Entrance WTMT")
+    mt_act2.connect(mt_area, "Mafia Town Entrance BB")
+    mt_act3.connect(mt_area, "Mafia Town Entrance SCFOS")
+    mt_act4.connect(mt_area, "Mafia Town Entrance DWTM")
+    mt_act5.connect(mt_area, "Mafia Town Entrance CTR")
+    mt_act6.connect(mt_area_humt, "Mafia Town Entrance HUMT")
+    mt_act7.connect(mt_area, "Mafia Town Entrance TGV")
 
     create_rift_connections(w, create_region(w, "Time Rift - Mafia of Cooks"))
     create_rift_connections(w, create_region(w, "Time Rift - Sewers"))
     create_rift_connections(w, create_region(w, "Time Rift - Bazaar"))
 
     sf_area: Region = create_region(w, "Subcon Forest Area")
-    connect_regions(sf_act1, sf_area, "Subcon Forest Entrance CO", p)
-    connect_regions(sf_act2, sf_area, "Subcon Forest Entrance SW", p)
-    connect_regions(sf_act3, sf_area, "Subcon Forest Entrance TOD", p)
-    connect_regions(sf_act4, sf_area, "Subcon Forest Entrance QVM", p)
-    connect_regions(sf_act5, sf_area, "Subcon Forest Entrance MDS", p)
+    sf_act1.connect(sf_area, "Subcon Forest Entrance CO")
+    sf_act2.connect(sf_area, "Subcon Forest Entrance SW")
+    sf_act3.connect(sf_area, "Subcon Forest Entrance TOD")
+    sf_act4.connect(sf_area, "Subcon Forest Entrance QVM")
+    sf_act5.connect(sf_area, "Subcon Forest Entrance MDS")
 
     create_rift_connections(w, create_region(w, "Time Rift - Sleepy Subcon"))
     create_rift_connections(w, create_region(w, "Time Rift - Pipe"))
     create_rift_connections(w, create_region(w, "Time Rift - Village"))
 
     badge_seller = create_badge_seller(w)
-    connect_regions(mt_area, badge_seller, "MT Area -> Badge Seller", p)
-    connect_regions(mt_area_humt, badge_seller, "MT Area (HUMT) -> Badge Seller", p)
-    connect_regions(sf_area, badge_seller, "SF Area -> Badge Seller", p)
-    connect_regions(dbs, badge_seller, "DBS -> Badge Seller", p)
-    connect_regions(pp, badge_seller, "PP -> Badge Seller", p)
-    connect_regions(tr, badge_seller, "TR -> Badge Seller", p)
-    connect_regions(alpine_area_tihs, badge_seller, "ASA -> Badge Seller", p)
+    mt_area.connect(badge_seller, "MT Area -> Badge Seller")
+    mt_area_humt.connect(badge_seller, "MT Area (HUMT) -> Badge Seller")
+    sf_area.connect(badge_seller, "SF Area -> Badge Seller")
+    dbs.connect(badge_seller, "DBS -> Badge Seller")
+    pp.connect(badge_seller, "PP -> Badge Seller")
+    tr.connect(badge_seller, "TR -> Badge Seller")
+    alpine_area_tihs.connect(badge_seller, "ASA -> Badge Seller")
 
     times_end = create_region_and_connect(w, "Time's End", "Telescope -> Time's End", spaceship)
     create_region_and_connect(w, "The Finale", "Time's End - Act 1", times_end)
@@ -399,9 +399,9 @@ def create_regions(world: "HatInTimeWorld"):
         ac_act2 = create_region_and_connect(w, "Ship Shape", "The Arctic Cruise - Act 2", arctic_cruise)
         ac_act3 = create_region_and_connect(w, "Rock the Boat", "The Arctic Cruise - Finale", arctic_cruise)
 
-        connect_regions(ac_act1, cruise_ship, "Cruise Ship Entrance BV", p)
-        connect_regions(ac_act2, cruise_ship, "Cruise Ship Entrance SS", p)
-        connect_regions(ac_act3, cruise_ship, "Cruise Ship Entrance RTB", p)
+        ac_act1.connect(cruise_ship, "Cruise Ship Entrance BV")
+        ac_act2.connect(cruise_ship, "Cruise Ship Entrance SS")
+        ac_act3.connect(cruise_ship, "Cruise Ship Entrance RTB")
         create_rift_connections(w, create_region(w, "Time Rift - Balcony"))
         create_rift_connections(w, create_region(w, "Time Rift - Deep Sea"))
 
@@ -411,7 +411,7 @@ def create_regions(world: "HatInTimeWorld"):
         if w.options.Tasksanity:
             create_tasksanity_locations(w)
 
-        connect_regions(cruise_ship, badge_seller, "CS -> Badge Seller", p)
+        cruise_ship.connect(badge_seller, "CS -> Badge Seller")
 
     if w.is_dlc2():
         nyakuza_metro = create_region_and_connect(w, "Nyakuza Metro", "Telescope -> Nyakuza Metro", spaceship)
@@ -435,7 +435,7 @@ def create_rift_connections(world: "HatInTimeWorld", region: Region):
     for i, name in enumerate(rift_access_regions[region.name]):
         act_region = world.multiworld.get_region(name, world.player)
         entrance_name = f"{region.name} Portal - Entrance {i+1}"
-        connect_regions(act_region, region, entrance_name, world.player)
+        act_region.connect(region, entrance_name)
 
 
 def create_tasksanity_locations(world: "HatInTimeWorld"):
@@ -669,7 +669,7 @@ def connect_time_rift(world: "HatInTimeWorld", time_rift: Region, exit_region: R
             if len(time_rift.entrances) > 0:
                 entrance = time_rift.entrances[i-1]
             else:
-                entrance = connect_regions(time_rift, exit_region, name, world.player)
+                entrance = time_rift.connect(exit_region, name)
 
         # noinspection PyUnboundLocalVariable
         reconnect_regions(entrance, entrance.parent_region, exit_region)
@@ -805,13 +805,6 @@ def create_badge_seller(world: "HatInTimeWorld") -> Region:
     return badge_seller
 
 
-def connect_regions(start_region: Region, exit_region: Region, entrancename: str, player: int) -> Entrance:
-    entrance = Entrance(player, entrancename, start_region)
-    start_region.exits.append(entrance)
-    entrance.connect(exit_region)
-    return entrance
-
-
 # Takes an entrance, removes its old connections, and reconnects it between the two regions specified.
 def reconnect_regions(entrance: Entrance, start_region: Region, exit_region: Region):
     if entrance in entrance.connected_region.entrances:
@@ -845,7 +838,7 @@ def create_region_and_connect(world: "HatInTimeWorld",
         entrance_region = reg
         exit_region = connected_region
 
-    connect_regions(entrance_region, exit_region, entrancename, world.player)
+    entrance_region.connect(exit_region, entrancename)
     return reg
 
 
