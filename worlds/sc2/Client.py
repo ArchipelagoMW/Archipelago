@@ -31,7 +31,7 @@ from worlds.sc2.Options import (
     LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations,
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
-    SpearOfAdunAutonomouslyCastPresentInNoBuild,
+    SpearOfAdunAutonomouslyCastPresentInNoBuild, LEGACY_GRID_ORDERS,
 )
 
 
@@ -1376,8 +1376,8 @@ def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete
                 else:
                     req_success = False
 
-            # Grid-specific logic (to avoid long path checks and infinite recursion)
-            if ctx.mission_order in (MissionOrder.option_grid, MissionOrder.option_mini_grid, MissionOrder.option_medium_grid):
+            # Grid and Blitz-specific logic (to avoid long path checks and infinite recursion)
+            if ctx.mission_order in (MissionOrder.option_grid, MissionOrder.option_blitz) or (ctx.slot_data_version <= 3 and ctx.mission_order in LEGACY_GRID_ORDERS):
                 if req_success:
                     return True
                 else:
