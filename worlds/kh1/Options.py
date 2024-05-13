@@ -261,7 +261,7 @@ class LevelChecks(Range):
 class ForceStatsOnLevels(NamedRange):
     """
     If this value is less than the value for Level Checks, this determines the minimum level from which only stat ups are obtained at level up locations
-    For example, if you only want to find AP items from levels 1-50, set this value to 51.
+    For example, if you want to be able to find any multiworld item from levels 1-50, then just stat ups from level 51 on, set this value to 51.
     """
     display_name = "Force Stats on Level Starting From"
     default = 1
@@ -269,7 +269,7 @@ class ForceStatsOnLevels(NamedRange):
     range_end = 101
     special_range_names = {
         "none": 101,
-        "ap-checks-to-level-50": 51,
+        "multiworld-to-level-50": 51,
         "all": 1
     }
 
