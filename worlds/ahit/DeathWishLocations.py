@@ -195,10 +195,9 @@ def create_dw_regions(world: "HatInTimeWorld"):
 
         world.dw_shuffle = dw_shuffle
         prev_dw = dw_map
-        for i in range(len(dw_shuffle)):
-            name = dw_shuffle[i]
-            dw = create_region(world, name)
-            connect_regions(prev_dw, dw, f"{prev_dw.name} -> {name}", world.player)
+        for death_wish_name in dw_shuffle:
+            dw = create_region(world, death_wish_name)
+            prev_dw.connect(dw)
             create_dw_locations(world, dw)
             prev_dw = dw
     else:
