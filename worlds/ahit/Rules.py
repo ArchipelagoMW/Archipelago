@@ -229,7 +229,7 @@ def set_rules(world: "HatInTimeWorld"):
              and can_use_hat(state, world, HatType.BREWING) and can_use_hat(state, world, HatType.DWELLER))
 
     if world.is_dlc1():
-        add_rule(world.multiworld.get_entrance("Telescope -> The Arctic Cruise", world.player),
+        add_rule(world.multiworld.get_entrance("Telescope -> Arctic Cruise", world.player),
                  lambda state: state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.ALPINE])
                  and state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.CRUISE]))
 
@@ -253,8 +253,7 @@ def set_rules(world: "HatInTimeWorld"):
         loc = world.multiworld.get_location(key, world.player)
 
         for hat in data.required_hats:
-            if hat is not HatType.NONE:
-                add_rule(loc, lambda state, h=hat: can_use_hat(state, world, h))
+            add_rule(loc, lambda state, h=hat: can_use_hat(state, world, h))
 
         if data.hookshot:
             add_rule(loc, lambda state: can_use_hookshot(state, world))

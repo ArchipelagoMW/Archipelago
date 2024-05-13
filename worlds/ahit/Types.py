@@ -55,21 +55,21 @@ class Difficulty(IntEnum):
 
 
 class LocData(NamedTuple):
-    id: Optional[int] = 0
-    region: Optional[str] = ""
-    required_hats: Optional[List[HatType]] = [HatType.NONE]
-    hookshot: Optional[bool] = False
-    dlc_flags: Optional[HatDLC] = HatDLC.none
-    paintings: Optional[int] = 0  # Paintings required for Subcon painting shuffle
-    misc_required: Optional[List[str]] = []
+    id: int = 0
+    region: str = ""
+    required_hats: List[HatType] = []
+    hookshot: bool = False
+    dlc_flags: HatDLC = HatDLC.none
+    paintings: int = 0  # Paintings required for Subcon painting shuffle
+    misc_required: List[str] = []
 
     # For UmbrellaLogic setting only.
-    hit_type: Optional[HitType] = HitType.none
+    hit_type: HitType = HitType.none
 
     # Other
-    act_event: Optional[bool] = False  # Only used for event locations. Copy access rule from act completion
-    nyakuza_thug: Optional[str] = ""  # Name of Nyakuza thug NPC (for metro shops)
-    snatcher_coin: Optional[str] = ""  # Only for Snatcher Coin event locations, name of the Snatcher Coin item
+    act_event: bool = False  # Only used for event locations. Copy access rule from act completion
+    nyakuza_thug: str = ""  # Name of Nyakuza thug NPC (for metro shops)
+    snatcher_coin: str = ""  # Only for Snatcher Coin event locations, name of the Snatcher Coin item
 
 
 class ItemData(NamedTuple):
