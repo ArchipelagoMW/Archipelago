@@ -235,7 +235,7 @@ class ValidInventory:
         """Attempts to generate a reduced inventory that can fulfill the mission requirements."""
         inventory: List[Item] = list(self.item_pool)
         locked_items: List[Item] = list(self.locked_items)
-        enable_morphling = get_option_value(self.world, "enable_morphling") == EnableMorphling.option_true
+        enable_morphling = self.world.options.enable_morphling == EnableMorphling.option_true
         item_list = get_full_item_list()
         self.logical_inventory = [
             item.name for item in inventory + locked_items + self.existing_items

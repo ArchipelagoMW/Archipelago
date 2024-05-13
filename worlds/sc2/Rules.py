@@ -342,18 +342,15 @@ class SC2Logic:
                state.has_any({ItemNames.SWARM_QUEEN, ItemNames.SCOURGE}, self.player) or (self.advanced_tactics and state.has(ItemNames.SPORE_CRAWLER, self.player))
     
     def morph_brood_lord(self, state: CollectionState) -> bool:
-        return (state.has_any({ItemNames.MUTALISK, ItemNames.CORRUPTOR}, self.player)
-                or self.morphling_enabled) \
+        return (state.has_any({ItemNames.MUTALISK, ItemNames.CORRUPTOR}, self.player) or self.morphling_enabled) \
             and state.has(ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT, self.player)
     
     def morph_viper(self, state: CollectionState) -> bool:
-        return (state.has_any({ItemNames.MUTALISK, ItemNames.CORRUPTOR}, self.player)
-                or self.morphling_enabled) \
+        return (state.has_any({ItemNames.MUTALISK, ItemNames.CORRUPTOR}, self.player) or self.morphling_enabled) \
             and state.has(ItemNames.MUTALISK_CORRUPTOR_VIPER_ASPECT, self.player)
 
     def morph_impaler_or_lurker(self, state: CollectionState) -> bool:
-        return (state.has(ItemNames.HYDRALISK, self.player)
-                or self.morphling_enabled) \
+        return (state.has(ItemNames.HYDRALISK, self.player) or self.morphling_enabled) \
             and state.has_any({ItemNames.HYDRALISK_IMPALER_ASPECT, ItemNames.HYDRALISK_LURKER_ASPECT}, self.player)
 
     def zerg_competent_comp(self, state: CollectionState) -> bool:
