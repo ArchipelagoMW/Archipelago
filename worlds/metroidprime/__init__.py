@@ -5,8 +5,20 @@ from .PrimeOptions import MetroidPrimeOptions
 from .Locations import every_location
 from .Regions import create_regions
 from .Rules import set_rules
+from .config import make_config
 from worlds.AutoWorld import World
 from ..AutoWorld import WebWorld
+import py_randomprime
+import settings
+
+
+class MetroidPrimeSettings(settings.Group):
+    class RomFile(settings.UserFilePath):
+        """File name of the Metroid Prime ISO"""
+        description = "Metroid Prime (US) v1.0 ISO file"
+        copy_to = "prime.iso"
+
+    rom_file: RomFile = RomFile.copy_to
 
 
 class MetroidPrimeWeb(WebWorld):
@@ -16,7 +28,7 @@ class MetroidPrimeWeb(WebWorld):
         "English",
         "setup.md",
         "setup/en",
-        ["Electro15, UltiNaruto"]
+        ["Electro15", "hesto2"]
     )]
 
 
@@ -100,6 +112,10 @@ class MetroidPrimeWorld(World):
         set_rules(self.multiworld, self.player, every_location)
         self.multiworld.completion_condition[self.player] = lambda state: (
             state.can_reach("Mission Complete", "Region", self.player))
+
+    def generate_output(self) -> None:
+        configjson = make_config(self, self.options)
+        py_randomprime.patch_iso(self.settings.rom_file, "prime_out.iso", configjson)
 
     def fill_slot_data(self) -> Dict[str, Any]:
 
