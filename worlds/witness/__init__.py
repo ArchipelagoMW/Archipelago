@@ -334,17 +334,15 @@ class WitnessWorld(World):
                         " as all copies of it were plandoed elsewhere.")
                 continue
 
+            tutorial_gate_open = self.get_location("Tutorial Gate Open")
+            if tutorial_gate_open not in fill_locations:
+                error(f"Tried to put an item on {player_name}'s Tutorial Gate Open, but was unsuccessful as the"
+                      " location no longer exists. This could be the result of plando.")
+                return
 
-            else:
-                tutorial_gate_open = self.get_location("Tutorial Gate Open")
-                if tutorial_gate_open not in fill_locations:
-                    error(f"Tried to put an item on {player_name}'s Tutorial Gate Open, but was unsuccessful as the"
-                          " location no longer exists. This could be the result of plando.")
-                    return
-
-                progitempool.pop(early_item_index)
-                tutorial_gate_open.place_locked_item(early_item)
-                fill_locations.remove(tutorial_gate_open)
+            progitempool.pop(early_item_index)
+            tutorial_gate_open.place_locked_item(early_item)
+            fill_locations.remove(tutorial_gate_open)
 
             return
 
