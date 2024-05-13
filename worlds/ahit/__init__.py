@@ -82,7 +82,7 @@ class HatInTimeWorld(World):
     def generate_early(self):
         adjust_options(self)
 
-        if self.options.StartWithCompassBadge.value > 0:
+        if self.options.StartWithCompassBadge:
             self.multiworld.push_precollected(self.create_item("Compass Badge"))
 
         if self.is_dw_only():

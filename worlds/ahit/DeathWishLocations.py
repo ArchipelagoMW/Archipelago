@@ -4,6 +4,7 @@ from BaseClasses import Region, LocationProgressType, ItemClassification
 from worlds.generic.Rules import add_rule
 from typing import List, TYPE_CHECKING
 from .Locations import death_wishes
+from .Options import EndGoal
 
 if TYPE_CHECKING:
     from . import HatInTimeWorld
@@ -147,18 +148,18 @@ dw_classes = {
 
 
 def create_dw_regions(world: "HatInTimeWorld"):
-    if world.options.DWExcludeAnnoyingContracts.value > 0:
+    if world.options.DWExcludeAnnoyingContracts:
         for name in annoying_dws:
             world.excluded_dws.append(name)
 
-    if world.options.DWEnableBonus.value == 0 or world.options.DWAutoCompleteBonuses.value > 0:
+    if not world.options.DWEnableBonus or world.options.DWAutoCompleteBonuses:
         for name in death_wishes:
             world.excluded_bonuses.append(name)
-    elif world.options.DWExcludeAnnoyingBonuses.value > 0:
+    elif world.options.DWExcludeAnnoyingBonuses:
         for name in annoying_bonuses:
             world.excluded_bonuses.append(name)
 
-    if world.options.DWExcludeCandles.value > 0:
+    if world.options.DWExcludeCandles:
         for name in dw_candles:
             if name not in world.excluded_dws:
                 world.excluded_dws.append(name)
@@ -168,7 +169,7 @@ def create_dw_regions(world: "HatInTimeWorld"):
     entrance = connect_regions(spaceship, dw_map, "-> Death Wish Map", world.player)
     add_rule(entrance, lambda state: state.has("Time Piece", world.player, world.options.DWTimePieceRequirement.value))
 
-    if world.options.DWShuffle.value > 0:
+    if world.options.DWShuffle:
         # Connect Death Wishes randomly to one another in a linear sequence
         dw_list: List[str] = []
         for name in death_wishes.keys():

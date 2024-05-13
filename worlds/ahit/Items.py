@@ -16,7 +16,7 @@ def create_itempool(world: "HatInTimeWorld") -> List[Item]:
                                                       world.options.YarnAvailable.value,
                                                       ItemClassification.progression_skip_balancing)
 
-        for i in range(int(len(yarn_pool) * (0.01 * world.options.YarnBalancePercent.value))):
+        for i in range(int(len(yarn_pool) * (0.01 * world.options.YarnBalancePercent))):
             yarn_pool[i].classification = ItemClassification.progression
 
         itempool += yarn_pool
@@ -28,7 +28,7 @@ def create_itempool(world: "HatInTimeWorld") -> List[Item]:
         if not item_dlc_enabled(world, name):
             continue
 
-        if world.options.HatItems.value == 0 and name in hat_type_to_item.values():
+        if not world.options.HatItems and name in hat_type_to_item.values():
             continue
 
         item_type: ItemClassification = item_table.get(name).classification
@@ -39,7 +39,7 @@ def create_itempool(world: "HatInTimeWorld") -> List[Item]:
                 continue
         else:
             if name == "Scooter Badge":
-                if world.options.CTRLogic.value >= 1 or get_difficulty(world) >= Difficulty.MODERATE:
+                if world.options.CTRLogic or get_difficulty(world) >= Difficulty.MODERATE:
                     item_type = ItemClassification.progression
             elif name == "No Bonk Badge":
                 if get_difficulty(world) >= Difficulty.MODERATE:
@@ -52,22 +52,22 @@ def create_itempool(world: "HatInTimeWorld") -> List[Item]:
         if item_type is ItemClassification.filler or item_type is ItemClassification.trap:
             continue
 
-        if name in act_contracts.keys() and world.options.ShuffleActContracts.value == 0:
+        if name in act_contracts.keys() and not world.options.ShuffleActContracts:
             continue
 
-        if name in alps_hooks.keys() and world.options.ShuffleAlpineZiplines.value == 0:
+        if name in alps_hooks.keys() and not world.options.ShuffleAlpineZiplines:
             continue
 
         if name == "Progressive Painting Unlock" \
-           and world.options.ShuffleSubconPaintings.value == 0:
+           and not world.options.ShuffleSubconPaintings:
             continue
 
-        if world.options.StartWithCompassBadge.value > 0 and name == "Compass Badge":
+        if world.options.StartWithCompassBadge and name == "Compass Badge":
             continue
 
         if name == "Time Piece":
             tp_list: List[Item] = create_multiple_items(world, name, get_total_time_pieces(world), item_type)
-            for i in range(int(len(tp_list) * (0.01 * world.options.TimePieceBalancePercent.value))):
+            for i in range(int(len(tp_list) * (0.01 * world.options.TimePieceBalancePercent))):
                 tp_list[i].classification = ItemClassification.progression
 
             itempool += tp_list

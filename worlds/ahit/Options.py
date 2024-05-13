@@ -30,27 +30,27 @@ def adjust_options(world: "HatInTimeWorld"):
          world.options.DWShuffleCountMin.value, world.options.DWShuffleCountMax.value
 
     total_tps: int = get_total_time_pieces(world)
-    if world.options.HighestChapterCost.value > total_tps-5:
+    if world.options.HighestChapterCost > total_tps-5:
         world.options.HighestChapterCost.value = min(45, total_tps-5)
 
-    if world.options.LowestChapterCost.value > total_tps-5:
+    if world.options.LowestChapterCost > total_tps-5:
         world.options.LowestChapterCost.value = min(45, total_tps-5)
 
-    if world.options.FinalChapterMaxCost.value > total_tps:
+    if world.options.FinalChapterMaxCost > total_tps:
         world.options.FinalChapterMaxCost.value = min(50, total_tps)
 
-    if world.options.FinalChapterMinCost.value > total_tps:
+    if world.options.FinalChapterMinCost > total_tps:
         world.options.FinalChapterMinCost.value = min(50, total_tps)
 
     # Don't allow Rush Hour goal if DLC2 content is disabled
-    if world.options.EndGoal.value == 2 and world.options.EnableDLC2.value == 0:
+    if world.options.EndGoal == EndGoal.option_rush_hour and not world.options.EnableDLC2:
         world.options.EndGoal.value = 1
 
     # Don't allow Seal the Deal goal if Death Wish content is disabled
-    if world.options.EndGoal.value == 3 and not world.is_dw():
+    if world.options.EndGoal == EndGoal.option_seal_the_deal and not world.is_dw():
         world.options.EndGoal.value = 1
 
-    if world.options.DWEnableBonus.value > 0:
+    if world.options.DWEnableBonus:
         world.options.DWAutoCompleteBonuses.value = 0
 
     if world.is_dw_only():
@@ -73,7 +73,7 @@ def get_total_time_pieces(world: "HatInTimeWorld") -> int:
     if world.is_dlc2():
         count += 10
 
-    return min(40+world.options.MaxExtraTimePieces.value, count)
+    return min(40+world.options.MaxExtraTimePieces, count)
 
 
 class EndGoal(Choice):
