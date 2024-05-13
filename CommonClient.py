@@ -182,6 +182,7 @@ class CommonContext:
     starting_reconnect_delay: int = 5
     current_reconnect_delay: int = starting_reconnect_delay
     command_processor: typing.Type[CommandProcessor] = ClientCommandProcessor
+    ui_manager: typing.Optional["kvui.GameManager"] = None
     ui = None
     ui_task: typing.Optional["asyncio.Task[None]"] = None
     input_task: typing.Optional["asyncio.Task[None]"] = None
@@ -277,6 +278,17 @@ class CommonContext:
 
         # execution
         self.keep_alive_task = asyncio.create_task(keep_alive(self), name="Bouncy")
+
+        if gui_enabled:
+            from kvui import GameManager
+
+            class TextManager(GameManager):
+                logging_pairs = [
+                    ("Client", "Archipelago")
+                ]
+                base_title = "Archipelago Text Client"
+
+            self.ui_manager = TextManager
 
     @property
     def suggested_address(self) -> str:
@@ -585,17 +597,9 @@ class CommonContext:
         logger.exception(msg, exc_info=exc_info, extra={'compact_gui': True})
         self._messagebox_connection_loss = self.gui_error(msg, exc_info[1])
 
-    def run_gui(self, title="Archipelago Text Client"):
+    def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
-        from kvui import GameManager
-
-        class TextManager(GameManager):
-            logging_pairs = [
-                ("Client", "Archipelago")
-            ]
-            base_title = title
-
-        self.ui = TextManager(self)
+        self.ui = self.ui_manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
     def run_cli(self):
