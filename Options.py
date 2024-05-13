@@ -140,12 +140,6 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     def current_key(self) -> str:
         return self.name_lookup[self.value]
 
-    def get_current_option_name(self) -> str:
-        """Deprecated. use current_option_name instead. TODO remove around 0.4"""
-        logging.warning(DeprecationWarning(f"get_current_option_name for {self.__class__.__name__} is deprecated."
-                                           f" use current_option_name instead. Worlds should use {self}.current_key"))
-        return self.current_option_name
-
     @property
     def current_option_name(self) -> str:
         """For display purposes. Worlds should be using current_key."""
