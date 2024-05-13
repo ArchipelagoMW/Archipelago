@@ -16,20 +16,20 @@ def get_total_locations(world: "HatInTimeWorld") -> int:
             if is_location_valid(world, name):
                 total += 1
 
-        if world.is_dlc1() and world.options.Tasksanity.value > 0:
-            total += world.options.TasksanityCheckCount.value
+        if world.is_dlc1() and world.options.Tasksanity:
+            total += world.options.TasksanityCheckCount
 
     if world.is_dw():
-        if world.options.DWShuffle.value > 0:
+        if world.options.DWShuffle:
             total += len(world.dw_shuffle)
-            if world.options.DWEnableBonus.value > 0:
+            if world.options.DWEnableBonus:
                 total += len(world.dw_shuffle)
         else:
             total += 37
             if world.is_dlc2():
                 total += 1
 
-            if world.options.DWEnableBonus.value > 0:
+            if world.options.DWEnableBonus:
                 total += 37
                 if world.is_dlc2():
                     total += 1
@@ -60,39 +60,36 @@ def is_location_valid(world: "HatInTimeWorld", location: str) -> bool:
     if not location_dlc_enabled(world, location):
         return False
 
-    if world.options.ShuffleStorybookPages.value == 0 \
-       and location in storybook_pages.keys():
+    if not world.options.ShuffleStorybookPages and location in storybook_pages.keys():
         return False
 
-    if world.options.ShuffleActContracts.value == 0 \
-       and location in contract_locations.keys():
+    if not world.options.ShuffleActContracts and location in contract_locations.keys():
         return False
 
     if location not in world.shop_locs and location in shop_locations:
         return False
 
     data = location_table.get(location) or event_locs.get(location)
-    if world.options.ExcludeTour.value > 0 and data.region == "Time Rift - Tour":
+    if world.options.ExcludeTour and data.region == "Time Rift - Tour":
         return False
 
     # No need for all those event items if we're not doing candles
     if data.dlc_flags & HatDLC.death_wish:
-        if world.options.DWExcludeCandles.value > 0 and location in event_locs.keys():
+        if world.options.DWExcludeCandles and location in event_locs.keys():
             return False
 
-        if world.options.DWShuffle.value > 0 \
-           and data.region in death_wishes and data.region not in world.dw_shuffle:
+        if world.options.DWShuffle and data.region in death_wishes and data.region not in world.dw_shuffle:
             return False
 
         if location in zero_jumps:
-            if world.options.DWShuffle.value > 0 and "Zero Jumps" not in world.dw_shuffle:
+            if world.options.DWShuffle and "Zero Jumps" not in world.dw_shuffle:
                 return False
 
-            difficulty: int = world.options.LogicDifficulty.value
-            if location in zero_jumps_hard and difficulty < int(Difficulty.HARD):
+            difficulty: Difficulty = Difficulty(world.options.LogicDifficulty)
+            if location in zero_jumps_hard and difficulty < Difficulty.HARD:
                 return False
 
-            if location in zero_jumps_expert and difficulty < int(Difficulty.EXPERT):
+            if location in zero_jumps_expert and difficulty < Difficulty.EXPERT:
                 return False
 
     return True

@@ -4,6 +4,7 @@ from .Locations import location_table, storybook_pages, event_locs, is_location_
     shop_locations, TASKSANITY_START_ID, snatcher_coins, zero_jumps, zero_jumps_expert, zero_jumps_hard
 from typing import TYPE_CHECKING, List, Dict
 from .Rules import set_rift_rules, get_difficulty
+from .Options import ActRandomizer, EndGoal
 
 if TYPE_CHECKING:
     from . import HatInTimeWorld
@@ -453,7 +454,7 @@ def randomize_act_entrances(world: "HatInTimeWorld"):
     rift_dict: Dict[str, Region] = {}
 
     # Check if Plando's are valid, if so, map them
-    if len(world.options.ActPlando) > 0:
+    if world.options.ActPlando:
         player_name = world.multiworld.get_player_name(world.player)
         for (name1, name2) in world.options.ActPlando.items():
             region: Region
@@ -507,7 +508,7 @@ def randomize_act_entrances(world: "HatInTimeWorld"):
                 first_act_mapped = True
                 break  # we can stop here, as we only need one
 
-            if is_valid_act_combo(world, region, c, bool(world.options.ActRandomizer.value == 1), ignore_certain_rules):
+            if is_valid_act_combo(world, region, c, ignore_certain_rules):
                 valid_candidates.append(c)
 
         if len(valid_candidates) > 0:
@@ -598,11 +599,11 @@ def connect_acts(world: "HatInTimeWorld", entrance_act: Region, exit_act: Region
 
 
 def is_valid_act_combo(world: "HatInTimeWorld", entrance_act: Region,
-                       exit_act: Region, separate_rifts: bool, ignore_certain_rules=False) -> bool:
+                       exit_act: Region, ignore_certain_rules: bool = False) -> bool:
 
     # Ignore certain rules that aren't to prevent impossible combos. This is needed for ActPlando.
     if not ignore_certain_rules:
-        if separate_rifts and not ignore_certain_rules:
+        if world.options.ActRandomizer == ActRandomizer.option_light and not ignore_certain_rules:
             # Don't map Time Rifts to normal acts
             if "Time Rift" in entrance_act.name and "Time Rift" not in exit_act.name:
                 return False
@@ -616,7 +617,7 @@ def is_valid_act_combo(world: "HatInTimeWorld", entrance_act: Region,
                     or entrance_act.name not in purple_time_rifts and exit_act.name in purple_time_rifts:
                 return False
 
-        if world.options.FinaleShuffle.value > 0 and entrance_act.name in chapter_finales:
+        if world.options.FinaleShuffle and entrance_act.name in chapter_finales:
             if exit_act.name not in chapter_finales:
                 return False
 
@@ -633,7 +634,7 @@ def is_valid_act_combo(world: "HatInTimeWorld", entrance_act: Region,
             return False
 
     # Prevent Contractual Obligations from being inaccessible if contracts are not shuffled
-    if world.options.ShuffleActContracts.value == 0:
+    if not world.options.ShuffleActContracts:
         if (entrance_act.name == "Your Contract has Expired" or entrance_act.name == "The Subcon Well") \
                 and exit_act.name == "Contractual Obligations":
             return False
@@ -646,12 +647,11 @@ def is_valid_first_act(world: "HatInTimeWorld", act: Region) -> bool:
         return False
 
     # Not completable without Umbrella
-    if world.options.UmbrellaLogic.value > 0 \
-       and (act.name == "Heating Up Mafia Town" or act.name == "Queen Vanessa's Manor"):
+    if world.options.UmbrellaLogic and (act.name == "Heating Up Mafia Town" or act.name == "Queen Vanessa's Manor"):
         return False
 
     # Subcon sphere 1 is too small without painting unlocks, and no acts are completable either
-    if world.options.ShuffleSubconPaintings.value > 0 and "Subcon Forest" in act_entrances[act.name]:
+    if world.options.ShuffleSubconPaintings and "Subcon Forest" in act_entrances[act.name]:
         return False
 
     return True
@@ -696,13 +696,13 @@ def is_act_blacklisted(world: "HatInTimeWorld", name: str) -> bool:
                 break
 
     if name == "The Finale":
-        return not plando and world.options.EndGoal.value == 1
+        return not plando and world.options.EndGoal == EndGoal.option_finale
 
     if name == "Rush Hour":
-        return not plando and world.options.EndGoal.value == 2
+        return not plando and world.options.EndGoal == EndGoal.option_rush_hour
 
     if name == "Time Rift - Tour":
-        return world.options.ExcludeTour.value > 0
+        return bool(world.options.ExcludeTour)
 
     return name in blacklisted_acts.values()
 
@@ -763,8 +763,7 @@ def create_region(world: "HatInTimeWorld", name: str) -> Region:
             continue
 
         if data.region == name:
-            if key in storybook_pages.keys() \
-               and world.options.ShuffleStorybookPages.value == 0:
+            if key in storybook_pages.keys() and not world.options.ShuffleStorybookPages:
                 continue
 
             location = HatInTimeLocation(world.player, key, data.id, reg)
@@ -782,7 +781,7 @@ def create_badge_seller(world: "HatInTimeWorld") -> Region:
     count = 0
     max_items = 0
 
-    if world.options.BadgeSellerMaxItems.value > 0:
+    if world.options.BadgeSellerMaxItems > 0:
         max_items = world.random.randint(world.options.BadgeSellerMinItems.value,
                                          world.options.BadgeSellerMaxItems.value)
 
@@ -851,7 +850,7 @@ def create_region_and_connect(world: "HatInTimeWorld",
 
 
 def get_first_chapter_region(world: "HatInTimeWorld") -> Region:
-    start_chapter: ChapterIndex = ChapterIndex(world.options.StartingChapter.value)
+    start_chapter: ChapterIndex = ChapterIndex(world.options.StartingChapter)
     return world.multiworld.get_region(chapter_regions.get(start_chapter), world.player)
 
 

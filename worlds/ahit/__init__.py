@@ -5,7 +5,7 @@ from .Regions import create_regions, randomize_act_entrances, chapter_act_info, 
 from .Locations import location_table, contract_locations, is_location_valid, get_location_names, TASKSANITY_START_ID, \
     get_total_locations
 from .Rules import set_rules
-from .Options import AHITOptions, slot_data_options, adjust_options
+from .Options import AHITOptions, slot_data_options, adjust_options, RandomizeHatOrder, EndGoal
 from .Types import HatType, ChapterIndex, HatInTimeItem
 from .DeathWishLocations import create_dw_regions, dw_classes, death_wishes
 from .DeathWishRules import set_dw_rules, create_enemy_events
@@ -87,24 +87,24 @@ class HatInTimeWorld(World):
 
         # If our starting chapter is 4 and act rando isn't on, force hookshot into inventory
         # If starting chapter is 3 and painting shuffle is enabled, and act rando isn't, give one free painting unlock
-        start_chapter: int = self.options.StartingChapter.value
+        start_chapter: ChapterIndex = ChapterIndex(self.options.StartingChapter)
 
-        if start_chapter == 4 or start_chapter == 3:
-            if self.options.ActRandomizer.value == 0:
-                if start_chapter == 4:
+        if start_chapter == ChapterIndex.ALPINE or start_chapter == ChapterIndex.SUBCON:
+            if not self.options.ActRandomizer:
+                if start_chapter == ChapterIndex.ALPINE:
                     self.multiworld.push_precollected(self.create_item("Hookshot Badge"))
-                    if self.options.UmbrellaLogic.value > 0:
+                    if self.options.UmbrellaLogic:
                         self.multiworld.push_precollected(self.create_item("Umbrella"))
 
-                if start_chapter == 3 and self.options.ShuffleSubconPaintings.value > 0:
+                if start_chapter == ChapterIndex.SUBCON and self.options.ShuffleSubconPaintings:
                     self.multiworld.push_precollected(self.create_item("Progressive Painting Unlock"))
 
     def create_regions(self):
         # noinspection PyClassVar
-        self.topology_present = bool(self.options.ActRandomizer.value)
+        self.topology_present = bool(self.options.ActRandomizer)
 
         create_regions(self)
-        if self.options.EnableDeathWish.value > 0:
+        if self.options.EnableDeathWish:
             create_dw_regions(self)
 
         if self.is_dw_only():
@@ -116,7 +116,7 @@ class HatInTimeWorld(World):
                 create_enemy_events(self)
 
         # place vanilla contract locations if contract shuffle is off
-        if self.options.ShuffleActContracts.value == 0:
+        if not self.options.ShuffleActContracts:
             for name in contract_locations.keys():
                 self.multiworld.get_location(name, self.player).place_locked_item(create_item(self, name))
 
@@ -124,9 +124,9 @@ class HatInTimeWorld(World):
         if self.has_yarn():
             calculate_yarn_costs(self)
 
-            if self.options.RandomizeHatOrder.value > 0:
+            if self.options.RandomizeHatOrder:
                 self.random.shuffle(self.hat_craft_order)
-                if self.options.RandomizeHatOrder.value == 2:
+                if self.options.RandomizeHatOrder == RandomizeHatOrder.option_time_stop_last:
                     self.hat_craft_order.remove(HatType.TIME_STOP)
                     self.hat_craft_order.append(HatType.TIME_STOP)
 
@@ -141,12 +141,12 @@ class HatInTimeWorld(World):
             self.multiworld.completion_condition[self.player] = lambda state: state.has("Death Wish Only Mode",
                                                                                         self.player)
 
-            if self.options.DWEnableBonus.value == 0:
+            if not self.options.DWEnableBonus:
                 for name in death_wishes:
                     if name == "Snatcher Coins in Nyakuza Metro" and not self.is_dlc2():
                         continue
 
-                    if self.options.DWShuffle.value > 0 and name not in self.dw_shuffle:
+                    if self.options.DWShuffle and name not in self.dw_shuffle:
                         continue
 
                     full_clear = self.multiworld.get_location(f"{name} - All Clear", self.player)
@@ -156,7 +156,7 @@ class HatInTimeWorld(World):
 
             return
 
-        if self.options.ActRandomizer.value > 0:
+        if self.options.ActRandomizer:
             randomize_act_entrances(self)
 
         set_rules(self)
@@ -192,7 +192,7 @@ class HatInTimeWorld(World):
             slot_data.setdefault("Hat4", int(self.hat_craft_order[3]))
             slot_data.setdefault("Hat5", int(self.hat_craft_order[4]))
 
-        if self.options.ActRandomizer.value > 0:
+        if self.options.ActRandomizer:
             for name in self.act_connections.keys():
                 slot_data[name] = self.act_connections[name]
 
@@ -203,14 +203,14 @@ class HatInTimeWorld(World):
         if self.is_dw():
             i = 0
             for name in self.excluded_dws:
-                if self.options.EndGoal.value == 3 and name == "Seal the Deal":
+                if self.options.EndGoal.value == EndGoal.option_seal_the_deal and name == "Seal the Deal":
                     continue
 
                 slot_data[f"excluded_dw{i}"] = dw_classes[name]
                 i += 1
 
             i = 0
-            if self.options.DWAutoCompleteBonuses.value == 0:
+            if not self.options.DWAutoCompleteBonuses:
                 for name in self.excluded_bonuses:
                     if name in self.excluded_dws:
                         continue
@@ -218,7 +218,7 @@ class HatInTimeWorld(World):
                     slot_data[f"excluded_bonus{i}"] = dw_classes[name]
                     i += 1
 
-            if self.options.DWShuffle.value > 0:
+            if self.options.DWShuffle:
                 shuffled_dws = self.dw_shuffle
                 for i in range(len(shuffled_dws)):
                     slot_data[f"dw_{i}"] = dw_classes[shuffled_dws[i]]
@@ -244,7 +244,7 @@ class HatInTimeWorld(World):
         return slot_data
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
-        if self.is_dw_only() or self.options.ActRandomizer.value == 0:
+        if self.is_dw_only() or not self.options.ActRandomizer:
             return
 
         new_hint_data = {}
@@ -273,10 +273,10 @@ class HatInTimeWorld(World):
 
             new_hint_data[location.address] = get_shuffled_region(self, region_name)
 
-        if self.is_dlc1() and self.options.Tasksanity.value > 0:
+        if self.is_dlc1() and self.options.Tasksanity:
             ship_shape_region = get_shuffled_region(self, "Ship Shape")
             id_start: int = TASKSANITY_START_ID
-            for i in range(self.options.TasksanityCheckCount.value):
+            for i in range(self.options.TasksanityCheckCount):
                 new_hint_data[id_start+i] = ship_shape_region
 
         hint_data[self.player] = new_hint_data
@@ -289,23 +289,23 @@ class HatInTimeWorld(World):
             spoiler_handle.write("Hat Cost: %s: %i\n" % (hat, self.hat_yarn_costs[hat]))
 
     def has_yarn(self) -> bool:
-        return not self.is_dw_only() and self.options.HatItems.value == 0
+        return not self.is_dw_only() and not self.options.HatItems
 
     def is_dlc1(self) -> bool:
-        return self.options.EnableDLC1.value > 0
+        return bool(self.options.EnableDLC1)
 
     def is_dlc2(self) -> bool:
-        return self.options.EnableDLC2.value > 0
+        return bool(self.options.EnableDLC2)
 
     def is_dw(self) -> bool:
-        return self.options.EnableDeathWish.value > 0
+        return bool(self.options.EnableDeathWish)
 
     def is_dw_only(self) -> bool:
-        return self.is_dw() and self.options.DeathWishOnly.value > 0
+        return self.is_dw() and bool(self.options.DeathWishOnly)
 
     def is_dw_excluded(self, name: str) -> bool:
         # don't exclude Seal the Deal if it's our goal
-        if self.options.EndGoal.value == 3 and name == "Seal the Deal" \
+        if self.options.EndGoal.value == EndGoal.option_seal_the_deal and name == "Seal the Deal" \
            and f"{name} - Main Objective" not in self.options.exclude_locations:
             return False
 

@@ -96,7 +96,7 @@ def calculate_yarn_costs(world: "HatInTimeWorld"):
 
     extra_yarn = max_cost + world.options.MinExtraYarn - available_yarn
     if extra_yarn > 0:
-    	world.options.YarnAvailable.value += extra_yarn
+        world.options.YarnAvailable.value += extra_yarn
 
 
 def item_dlc_enabled(world: "HatInTimeWorld", name: str) -> bool:
