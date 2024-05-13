@@ -1,5 +1,5 @@
-from worlds.ahit.Regions import act_chapters
-from worlds.ahit.Rules import act_connections
+from ..Regions import act_chapters
+from ..Rules import act_connections
 from . import HatInTimeTestBase
 
 
