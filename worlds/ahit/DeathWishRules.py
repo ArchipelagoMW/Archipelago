@@ -329,8 +329,7 @@ def create_enemy_events(world: "HatInTimeWorld"):
         if name == "Time Rift - Tour" and (not world.is_dlc1() or world.options.ExcludeTour):
             continue
 
-        if world.options.DWShuffle and name in death_wishes.keys() \
-           and name not in world.dw_shuffle:
+        if world.options.DWShuffle and name in death_wishes.keys() and name not in world.dw_shuffle:
             continue
 
         region = world.multiworld.get_region(name, world.player)

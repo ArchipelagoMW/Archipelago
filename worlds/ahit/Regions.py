@@ -2,7 +2,7 @@ from BaseClasses import Region, Entrance, ItemClassification, Location
 from .Types import ChapterIndex, Difficulty, HatInTimeLocation, HatInTimeItem
 from .Locations import location_table, storybook_pages, event_locs, is_location_valid, \
     shop_locations, TASKSANITY_START_ID, snatcher_coins, zero_jumps, zero_jumps_expert, zero_jumps_hard
-from typing import TYPE_CHECKING, List, Dict
+from typing import TYPE_CHECKING, List, Dict, Optional
 from .Rules import set_rift_rules, get_difficulty
 from .Options import ActRandomizer, EndGoal
 
@@ -560,13 +560,12 @@ def sort_acts(act: Region) -> int:
 
 def get_first_act(world: "HatInTimeWorld") -> Region:
     first_chapter = get_first_chapter_region(world)
-    act: Region
+    act: Optional[Region] = None
     for e in first_chapter.exits:
         if "Act 1" in e.name or "Free Roam" in e.name:
             act = e.connected_region
             break
 
-    # noinspection PyUnboundLocalVariable
     return act
 
 
@@ -633,7 +632,7 @@ def is_valid_act_combo(world: "HatInTimeWorld", entrance_act: Region,
     # Prevent Contractual Obligations from being inaccessible if contracts are not shuffled
     if not world.options.ShuffleActContracts:
         if (entrance_act.name == "Your Contract has Expired" or entrance_act.name == "The Subcon Well") \
-                and exit_act.name == "Contractual Obligations":
+           and exit_act.name == "Contractual Obligations":
             return False
 
     return True
@@ -668,7 +667,6 @@ def connect_time_rift(world: "HatInTimeWorld", time_rift: Region, exit_region: R
             else:
                 entrance = time_rift.connect(exit_region, name)
 
-        # noinspection PyUnboundLocalVariable
         reconnect_regions(entrance, entrance.parent_region, exit_region)
         i += 1
 
