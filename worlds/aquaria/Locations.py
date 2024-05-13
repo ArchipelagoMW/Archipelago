@@ -268,7 +268,7 @@ class AquariaLocations:
     }
 
     locations_forest_bl = {
-        "Kelp Forest bottom left area, bulb close to the spirit cristals": 698054,
+        "Kelp Forest bottom left area, bulb close to the spirit crystals": 698054,
         "Kelp forest bottom left area, Walker baby": 698186,
         "Kelp Forest bottom left area, Transturtle": 698212,
     }

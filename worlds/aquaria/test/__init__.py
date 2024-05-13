@@ -103,7 +103,7 @@ after_home_water_locations = [
     "Kelp Forest top right area, bulb at the top of the center clearing",
     "Kelp forest top right area, Black pearl",
     "Kelp Forest top right area, bulb in the top fish pass",
-    "Kelp Forest bottom left area, bulb close to the spirit cristals",
+    "Kelp Forest bottom left area, bulb close to the spirit crystals",
     "Kelp forest bottom left area, Walker baby",
     "Kelp Forest bottom left area, Transturtle",
     "Kelp forest bottom right area, Odd Container",

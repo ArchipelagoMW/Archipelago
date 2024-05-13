@@ -1192,7 +1192,7 @@ class AquariaRegions:
         self.multiworld.get_location("Bubble cave, Verse egg",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
-        self.multiworld.get_location("Kelp Forest bottom left area, bulb close to the spirit cristals",
+        self.multiworld.get_location("Kelp Forest bottom left area, bulb close to the spirit crystals",
                                      self.player).item_rule =\
             lambda item: item.classification != ItemClassification.progression
         self.multiworld.get_location("Kelp forest bottom left area, Walker baby",
