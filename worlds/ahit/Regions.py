@@ -278,82 +278,79 @@ blacklisted_combos = {
 
 
 def create_regions(world: "HatInTimeWorld"):
-    w = world
-    p = world.player
-
     # ------------------------------------------- HUB -------------------------------------------------- #
-    menu = create_region(w, "Menu")
-    spaceship = create_region_and_connect(w, "Spaceship", "Save File -> Spaceship", menu)
+    menu = create_region(world, "Menu")
+    spaceship = create_region_and_connect(world, "Spaceship", "Save File -> Spaceship", menu)
 
     # we only need the menu and the spaceship regions
     if world.is_dw_only():
         return
 
-    create_rift_connections(w, create_region(w, "Time Rift - Gallery"))
-    create_rift_connections(w, create_region(w, "Time Rift - The Lab"))
+    create_rift_connections(world, create_region(world, "Time Rift - Gallery"))
+    create_rift_connections(world, create_region(world, "Time Rift - The Lab"))
 
     # ------------------------------------------- MAFIA TOWN ------------------------------------------- #
-    mafia_town = create_region_and_connect(w, "Mafia Town", "Telescope -> Mafia Town", spaceship)
-    mt_act1 = create_region_and_connect(w, "Welcome to Mafia Town", "Mafia Town - Act 1", mafia_town)
-    mt_act2 = create_region_and_connect(w, "Barrel Battle", "Mafia Town - Act 2", mafia_town)
-    mt_act3 = create_region_and_connect(w, "She Came from Outer Space", "Mafia Town - Act 3", mafia_town)
-    mt_act4 = create_region_and_connect(w, "Down with the Mafia!", "Mafia Town - Act 4", mafia_town)
-    mt_act6 = create_region_and_connect(w, "Heating Up Mafia Town", "Mafia Town - Act 6", mafia_town)
-    mt_act5 = create_region_and_connect(w, "Cheating the Race", "Mafia Town - Act 5", mafia_town)
-    mt_act7 = create_region_and_connect(w, "The Golden Vault", "Mafia Town - Act 7", mafia_town)
+    mafia_town = create_region_and_connect(world, "Mafia Town", "Telescope -> Mafia Town", spaceship)
+    mt_act1 = create_region_and_connect(world, "Welcome to Mafia Town", "Mafia Town - Act 1", mafia_town)
+    mt_act2 = create_region_and_connect(world, "Barrel Battle", "Mafia Town - Act 2", mafia_town)
+    mt_act3 = create_region_and_connect(world, "She Came from Outer Space", "Mafia Town - Act 3", mafia_town)
+    mt_act4 = create_region_and_connect(world, "Down with the Mafia!", "Mafia Town - Act 4", mafia_town)
+    mt_act6 = create_region_and_connect(world, "Heating Up Mafia Town", "Mafia Town - Act 6", mafia_town)
+    mt_act5 = create_region_and_connect(world, "Cheating the Race", "Mafia Town - Act 5", mafia_town)
+    mt_act7 = create_region_and_connect(world, "The Golden Vault", "Mafia Town - Act 7", mafia_town)
 
     # ------------------------------------------- BOTB ------------------------------------------------- #
-    botb = create_region_and_connect(w, "Battle of the Birds", "Telescope -> Battle of the Birds", spaceship)
-    dbs = create_region_and_connect(w, "Dead Bird Studio", "Battle of the Birds - Act 1", botb)
-    create_region_and_connect(w, "Murder on the Owl Express", "Battle of the Birds - Act 2", botb)
-    pp = create_region_and_connect(w, "Picture Perfect", "Battle of the Birds - Act 3", botb)
-    tr = create_region_and_connect(w, "Train Rush", "Battle of the Birds - Act 4", botb)
-    create_region_and_connect(w, "The Big Parade", "Battle of the Birds - Act 5", botb)
-    create_region_and_connect(w, "Award Ceremony", "Battle of the Birds - Finale A", botb)
-    basement = create_region_and_connect(w, "Dead Bird Studio Basement", "Battle of the Birds - Finale B", botb)
-    create_rift_connections(w, create_region(w, "Time Rift - Dead Bird Studio"))
-    create_rift_connections(w, create_region(w, "Time Rift - The Owl Express"))
-    create_rift_connections(w, create_region(w, "Time Rift - The Moon"))
+    botb = create_region_and_connect(world, "Battle of the Birds", "Telescope -> Battle of the Birds", spaceship)
+    dbs = create_region_and_connect(world, "Dead Bird Studio", "Battle of the Birds - Act 1", botb)
+    create_region_and_connect(world, "Murder on the Owl Express", "Battle of the Birds - Act 2", botb)
+    pp = create_region_and_connect(world, "Picture Perfect", "Battle of the Birds - Act 3", botb)
+    tr = create_region_and_connect(world, "Train Rush", "Battle of the Birds - Act 4", botb)
+    create_region_and_connect(world, "The Big Parade", "Battle of the Birds - Act 5", botb)
+    create_region_and_connect(world, "Award Ceremony", "Battle of the Birds - Finale A", botb)
+    basement = create_region_and_connect(world, "Dead Bird Studio Basement", "Battle of the Birds - Finale B", botb)
+    create_rift_connections(world, create_region(world, "Time Rift - Dead Bird Studio"))
+    create_rift_connections(world, create_region(world, "Time Rift - The Owl Express"))
+    create_rift_connections(world, create_region(world, "Time Rift - The Moon"))
 
     # Items near the Dead Bird Studio elevator can be reached from the basement act, and beyond in Expert
-    ev_area = create_region_and_connect(w, "Dead Bird Studio - Elevator Area", "DBS -> Elevator Area", dbs)
-    post_ev = create_region_and_connect(w, "Dead Bird Studio - Post Elevator Area", "DBS -> Post Elevator Area", dbs)
+    ev_area = create_region_and_connect(world, "Dead Bird Studio - Elevator Area", "DBS -> Elevator Area", dbs)
+    post_ev = create_region_and_connect(world, "Dead Bird Studio - Post Elevator Area", "DBS -> Post Elevator Area", dbs)
     basement.connect(ev_area, "DBS Basement -> Elevator Area")
     if world.options.LogicDifficulty >= int(Difficulty.EXPERT):
         basement.connect(post_ev, "DBS Basement -> Post Elevator Area")
 
     # ------------------------------------------- SUBCON FOREST --------------------------------------- #
-    subcon_forest = create_region_and_connect(w, "Subcon Forest", "Telescope -> Subcon Forest", spaceship)
-    sf_act1 = create_region_and_connect(w, "Contractual Obligations", "Subcon Forest - Act 1", subcon_forest)
-    sf_act2 = create_region_and_connect(w, "The Subcon Well", "Subcon Forest - Act 2", subcon_forest)
-    sf_act3 = create_region_and_connect(w, "Toilet of Doom", "Subcon Forest - Act 3", subcon_forest)
-    sf_act4 = create_region_and_connect(w, "Queen Vanessa's Manor", "Subcon Forest - Act 4", subcon_forest)
-    sf_act5 = create_region_and_connect(w, "Mail Delivery Service", "Subcon Forest - Act 5", subcon_forest)
-    create_region_and_connect(w, "Your Contract has Expired", "Subcon Forest - Finale", subcon_forest)
+    subcon_forest = create_region_and_connect(world, "Subcon Forest", "Telescope -> Subcon Forest", spaceship)
+    sf_act1 = create_region_and_connect(world, "Contractual Obligations", "Subcon Forest - Act 1", subcon_forest)
+    sf_act2 = create_region_and_connect(world, "The Subcon Well", "Subcon Forest - Act 2", subcon_forest)
+    sf_act3 = create_region_and_connect(world, "Toilet of Doom", "Subcon Forest - Act 3", subcon_forest)
+    sf_act4 = create_region_and_connect(world, "Queen Vanessa's Manor", "Subcon Forest - Act 4", subcon_forest)
+    sf_act5 = create_region_and_connect(world, "Mail Delivery Service", "Subcon Forest - Act 5", subcon_forest)
+    create_region_and_connect(world, "Your Contract has Expired", "Subcon Forest - Finale", subcon_forest)
 
     # ------------------------------------------- ALPINE SKYLINE ------------------------------------------ #
-    alpine_skyline = create_region_and_connect(w, "Alpine Skyline",  "Telescope -> Alpine Skyline", spaceship)
-    alpine_freeroam = create_region_and_connect(w, "Alpine Free Roam", "Alpine Skyline - Free Roam", alpine_skyline)
-    alpine_area = create_region_and_connect(w, "Alpine Skyline Area", "AFR -> Alpine Skyline Area", alpine_freeroam)
+    alpine_skyline = create_region_and_connect(world, "Alpine Skyline",  "Telescope -> Alpine Skyline", spaceship)
+    alpine_freeroam = create_region_and_connect(world, "Alpine Free Roam", "Alpine Skyline - Free Roam", alpine_skyline)
+    alpine_area = create_region_and_connect(world, "Alpine Skyline Area", "AFR -> Alpine Skyline Area", alpine_freeroam)
 
     # Needs to be separate because there are a lot of locations in Alpine that can't be accessed from Illness
-    alpine_area_tihs = create_region_and_connect(w, "Alpine Skyline Area (TIHS)", "-> Alpine Skyline Area (TIHS)",
+    alpine_area_tihs = create_region_and_connect(world, "Alpine Skyline Area (TIHS)", "-> Alpine Skyline Area (TIHS)",
                                                  alpine_area)
 
-    create_region_and_connect(w, "The Birdhouse", "-> The Birdhouse", alpine_area)
-    create_region_and_connect(w, "The Lava Cake", "-> The Lava Cake", alpine_area)
-    create_region_and_connect(w, "The Windmill", "-> The Windmill", alpine_area)
-    create_region_and_connect(w, "The Twilight Bell", "-> The Twilight Bell", alpine_area)
+    create_region_and_connect(world, "The Birdhouse", "-> The Birdhouse", alpine_area)
+    create_region_and_connect(world, "The Lava Cake", "-> The Lava Cake", alpine_area)
+    create_region_and_connect(world, "The Windmill", "-> The Windmill", alpine_area)
+    create_region_and_connect(world, "The Twilight Bell", "-> The Twilight Bell", alpine_area)
 
-    illness = create_region_and_connect(w, "The Illness has Spread", "Alpine Skyline - Finale", alpine_skyline)
+    illness = create_region_and_connect(world, "The Illness has Spread", "Alpine Skyline - Finale", alpine_skyline)
     illness.connect(alpine_area_tihs, "TIHS -> Alpine Skyline Area (TIHS)")
-    create_rift_connections(w, create_region(w, "Time Rift - Alpine Skyline"))
-    create_rift_connections(w, create_region(w, "Time Rift - The Twilight Bell"))
-    create_rift_connections(w, create_region(w, "Time Rift - Curly Tail Trail"))
+    create_rift_connections(world, create_region(world, "Time Rift - Alpine Skyline"))
+    create_rift_connections(world, create_region(world, "Time Rift - The Twilight Bell"))
+    create_rift_connections(world, create_region(world, "Time Rift - Curly Tail Trail"))
 
     # ------------------------------------------- OTHER -------------------------------------------------- #
-    mt_area: Region = create_region(w, "Mafia Town Area")
-    mt_area_humt: Region = create_region(w, "Mafia Town Area (HUMT)")
+    mt_area: Region = create_region(world, "Mafia Town Area")
+    mt_area_humt: Region = create_region(world, "Mafia Town Area (HUMT)")
     mt_area.connect(mt_area_humt, "MT Area -> MT Area (HUMT)")
     mt_act1.connect(mt_area, "Mafia Town Entrance WTMT")
     mt_act2.connect(mt_area, "Mafia Town Entrance BB")
@@ -363,22 +360,22 @@ def create_regions(world: "HatInTimeWorld"):
     mt_act6.connect(mt_area_humt, "Mafia Town Entrance HUMT")
     mt_act7.connect(mt_area, "Mafia Town Entrance TGV")
 
-    create_rift_connections(w, create_region(w, "Time Rift - Mafia of Cooks"))
-    create_rift_connections(w, create_region(w, "Time Rift - Sewers"))
-    create_rift_connections(w, create_region(w, "Time Rift - Bazaar"))
+    create_rift_connections(world, create_region(world, "Time Rift - Mafia of Cooks"))
+    create_rift_connections(world, create_region(world, "Time Rift - Sewers"))
+    create_rift_connections(world, create_region(world, "Time Rift - Bazaar"))
 
-    sf_area: Region = create_region(w, "Subcon Forest Area")
+    sf_area: Region = create_region(world, "Subcon Forest Area")
     sf_act1.connect(sf_area, "Subcon Forest Entrance CO")
     sf_act2.connect(sf_area, "Subcon Forest Entrance SW")
     sf_act3.connect(sf_area, "Subcon Forest Entrance TOD")
     sf_act4.connect(sf_area, "Subcon Forest Entrance QVM")
     sf_act5.connect(sf_area, "Subcon Forest Entrance MDS")
 
-    create_rift_connections(w, create_region(w, "Time Rift - Sleepy Subcon"))
-    create_rift_connections(w, create_region(w, "Time Rift - Pipe"))
-    create_rift_connections(w, create_region(w, "Time Rift - Village"))
+    create_rift_connections(world, create_region(world, "Time Rift - Sleepy Subcon"))
+    create_rift_connections(world, create_region(world, "Time Rift - Pipe"))
+    create_rift_connections(world, create_region(world, "Time Rift - Village"))
 
-    badge_seller = create_badge_seller(w)
+    badge_seller = create_badge_seller(world)
     mt_area.connect(badge_seller, "MT Area -> Badge Seller")
     mt_area_humt.connect(badge_seller, "MT Area (HUMT) -> Badge Seller")
     sf_area.connect(badge_seller, "SF Area -> Badge Seller")
@@ -387,48 +384,48 @@ def create_regions(world: "HatInTimeWorld"):
     tr.connect(badge_seller, "TR -> Badge Seller")
     alpine_area_tihs.connect(badge_seller, "ASA -> Badge Seller")
 
-    times_end = create_region_and_connect(w, "Time's End", "Telescope -> Time's End", spaceship)
-    create_region_and_connect(w, "The Finale", "Time's End - Act 1", times_end)
+    times_end = create_region_and_connect(world, "Time's End", "Telescope -> Time's End", spaceship)
+    create_region_and_connect(world, "The Finale", "Time's End - Act 1", times_end)
 
     # ------------------------------------------- DLC1 ------------------------------------------------- #
-    if w.is_dlc1():
-        arctic_cruise = create_region_and_connect(w, "The Arctic Cruise", "Telescope -> The Arctic Cruise", spaceship)
-        cruise_ship = create_region(w, "Cruise Ship")
+    if world.is_dlc1():
+        arctic_cruise = create_region_and_connect(world, "The Arctic Cruise", "Telescope -> Arctic Cruise", spaceship)
+        cruise_ship = create_region(world, "Cruise Ship")
 
-        ac_act1 = create_region_and_connect(w, "Bon Voyage!", "The Arctic Cruise - Act 1", arctic_cruise)
-        ac_act2 = create_region_and_connect(w, "Ship Shape", "The Arctic Cruise - Act 2", arctic_cruise)
-        ac_act3 = create_region_and_connect(w, "Rock the Boat", "The Arctic Cruise - Finale", arctic_cruise)
+        ac_act1 = create_region_and_connect(world, "Bon Voyage!", "The Arctic Cruise - Act 1", arctic_cruise)
+        ac_act2 = create_region_and_connect(world, "Ship Shape", "The Arctic Cruise - Act 2", arctic_cruise)
+        ac_act3 = create_region_and_connect(world, "Rock the Boat", "The Arctic Cruise - Finale", arctic_cruise)
 
         ac_act1.connect(cruise_ship, "Cruise Ship Entrance BV")
         ac_act2.connect(cruise_ship, "Cruise Ship Entrance SS")
         ac_act3.connect(cruise_ship, "Cruise Ship Entrance RTB")
-        create_rift_connections(w, create_region(w, "Time Rift - Balcony"))
-        create_rift_connections(w, create_region(w, "Time Rift - Deep Sea"))
+        create_rift_connections(world, create_region(world, "Time Rift - Balcony"))
+        create_rift_connections(world, create_region(world, "Time Rift - Deep Sea"))
 
-        if not w.options.ExcludeTour:
-            create_rift_connections(w, create_region(w, "Time Rift - Tour"))
+        if not world.options.ExcludeTour:
+            create_rift_connections(world, create_region(world, "Time Rift - Tour"))
 
-        if w.options.Tasksanity:
-            create_tasksanity_locations(w)
+        if world.options.Tasksanity:
+            create_tasksanity_locations(world)
 
         cruise_ship.connect(badge_seller, "CS -> Badge Seller")
 
-    if w.is_dlc2():
-        nyakuza_metro = create_region_and_connect(w, "Nyakuza Metro", "Telescope -> Nyakuza Metro", spaceship)
-        metro_freeroam = create_region_and_connect(w, "Nyakuza Free Roam", "Nyakuza Metro - Free Roam", nyakuza_metro)
-        create_region_and_connect(w, "Rush Hour", "Nyakuza Metro - Finale", nyakuza_metro)
+    if world.is_dlc2():
+        nyakuza = create_region_and_connect(world, "Nyakuza Metro", "Telescope -> Nyakuza Metro", spaceship)
+        metro_freeroam = create_region_and_connect(world, "Nyakuza Free Roam", "Nyakuza Metro - Free Roam", nyakuza)
+        create_region_and_connect(world, "Rush Hour", "Nyakuza Metro - Finale", nyakuza)
 
-        yellow = create_region_and_connect(w, "Yellow Overpass Station", "-> Yellow Overpass Station", metro_freeroam)
-        green = create_region_and_connect(w, "Green Clean Station", "-> Green Clean Station", metro_freeroam)
-        pink = create_region_and_connect(w, "Pink Paw Station", "-> Pink Paw Station", metro_freeroam)
-        create_region_and_connect(w, "Bluefin Tunnel", "-> Bluefin Tunnel", metro_freeroam)  # No manhole
+        yellow = create_region_and_connect(world, "Yellow Overpass Station", "-> Yellow Overpass Station", metro_freeroam)
+        green = create_region_and_connect(world, "Green Clean Station", "-> Green Clean Station", metro_freeroam)
+        pink = create_region_and_connect(world, "Pink Paw Station", "-> Pink Paw Station", metro_freeroam)
+        create_region_and_connect(world, "Bluefin Tunnel", "-> Bluefin Tunnel", metro_freeroam)  # No manhole
 
-        create_region_and_connect(w, "Yellow Overpass Manhole", "-> Yellow Overpass Manhole", yellow)
-        create_region_and_connect(w, "Green Clean Manhole", "-> Green Clean Manhole", green)
-        create_region_and_connect(w, "Pink Paw Manhole", "-> Pink Paw Manhole", pink)
+        create_region_and_connect(world, "Yellow Overpass Manhole", "-> Yellow Overpass Manhole", yellow)
+        create_region_and_connect(world, "Green Clean Manhole", "-> Green Clean Manhole", green)
+        create_region_and_connect(world, "Pink Paw Manhole", "-> Pink Paw Manhole", pink)
 
-        create_rift_connections(w, create_region(w, "Time Rift - Rumbi Factory"))
-        create_thug_shops(w)
+        create_rift_connections(world, create_region(world, "Time Rift - Rumbi Factory"))
+        create_thug_shops(world)
 
 
 def create_rift_connections(world: "HatInTimeWorld", region: Region):
