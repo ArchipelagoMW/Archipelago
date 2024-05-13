@@ -3,7 +3,7 @@ Archipelago init file for The Witness
 """
 import dataclasses
 from logging import error, warning
-from typing import Any, Dict, List, Optional, cast
+from typing import Any, Dict, List, Optional, cast, Union
 
 from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial, Item
 from Options import PerGameCommonOptions, Toggle
@@ -283,37 +283,7 @@ class WitnessWorld(World):
             if self.player_items.item_data[item_name].local_only:
                 self.options.local_items.value.add(item_name)
 
-    def pre_fill(self) -> None:
-        if self.options.puzzle_randomization != "sigma_expert":
-            return
-        # Expert: Pick an early item to add to local early items.
-        # Done in pre_fill because fill_hook is too late for early items.
-
-        early_items = self.player_items.get_early_items()
-
-        if not early_items:
-            return
-
-        self.random.shuffle(early_items)
-
-        for early_item_name in early_items:
-            try:
-                early_item_index, early_item = next(
-                    (i, item) for i, item in enumerate(self.multiworld.itempool)
-                    if item.name == early_item_name and item.player == self.player
-                )
-            except StopIteration:
-                continue
-
-            self.multiworld.local_early_items[self.player][early_item.name] = 1
-            return
-
-    def fill_hook(self, progitempool: List[Item], _, _2, fill_locations: List[Location]) -> None:
-        if self.options.puzzle_randomization == "sigma_expert":
-            return
-        # Non-Expert: Pick an early item to put on Tutorial Gate Open.
-        # Done in fill_hook because multiworld itempool manipulation is not allowed in pre_fill.
-
+    def find_good_item_from_itempool(self, itempool: List[Item], pop: bool) -> Union[Item, None]:
         early_items = self.player_items.get_early_items()
 
         if not early_items:
@@ -326,27 +296,59 @@ class WitnessWorld(World):
         for early_item_name in early_items:
             try:
                 early_item_index, early_item = next(
-                    (i, item) for i, item in enumerate(progitempool)
+                    (i, item) for i, item in enumerate(itempool)
                     if item.name == early_item_name and item.player == self.player
                 )
             except StopIteration:
-                warning(f"{early_item_name} could not be placed on {player_name}'s Tutorial Gate Open,"
+                warning(f"{early_item_name} could not be placed as the \"early good item\" in {player_name}'s world,"
                         " as all copies of it were plandoed elsewhere.")
                 continue
 
-            tutorial_gate_open = self.get_location("Tutorial Gate Open")
-            if tutorial_gate_open not in fill_locations:
-                error(f"Tried to put an item on {player_name}'s Tutorial Gate Open, but was unsuccessful as the"
-                      " location no longer exists. This could be the result of plando.")
-                return
+            if pop:
+                return itempool.pop(early_item_index)
+            else:
+                return early_item
 
-            progitempool.pop(early_item_index)
-            tutorial_gate_open.place_locked_item(early_item)
-            fill_locations.remove(tutorial_gate_open)
+        error(f"No item could be placed as the \"early good item\" in {player_name}'s world,"
+              f" they were all plandoed elsewhere.")
 
+        return None
+
+    def pre_fill(self) -> None:
+        if self.options.puzzle_randomization != "sigma_expert":
+            return
+        # Expert: Pick an early item to add to local early items.
+        # Done in pre_fill because fill_hook is too late for early items.
+
+        early_good_item = self.find_good_item_from_itempool(self.multiworld.itempool, False)
+
+        if early_good_item is None:
             return
 
-        error(f"No item could be placed on {player_name}'s Tutorial Gate Open, they were all plandoed elsewhere.")
+        self.multiworld.local_early_items[self.player][early_good_item.name] = 1
+        return
+
+    def fill_hook(self, progitempool: List[Item], _, _2, fill_locations: List[Location]) -> None:
+        if self.options.puzzle_randomization == "sigma_expert":
+            return
+        # Non-Expert: Pick an early item to put on Tutorial Gate Open.
+        # Done in fill_hook because multiworld itempool manipulation is not allowed in pre_fill.
+
+        player_name = self.multiworld.get_player_name(self.player)
+
+        tutorial_gate_open = self.get_location("Tutorial Gate Open")
+        if tutorial_gate_open not in fill_locations:
+            error(f"Tried to put an item on {player_name}'s Tutorial Gate Open, but was unsuccessful as the"
+                  " location no longer exists. This could be the result of plando.")
+            return
+
+        early_good_item = self.find_good_item_from_itempool(progitempool, True)
+
+        if early_good_item is None:
+            return
+
+        tutorial_gate_open.place_locked_item(early_good_item)
+        fill_locations.remove(tutorial_gate_open)
 
     def fill_slot_data(self) -> dict:
         self.log_ids_to_hints: Dict[int, CompactItemData] = dict()
