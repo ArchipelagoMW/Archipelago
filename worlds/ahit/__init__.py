@@ -8,8 +8,8 @@ from .Rules import set_rules
 from .Options import AHITOptions, slot_data_options, adjust_options, RandomizeHatOrder, EndGoal
 from .Types import HatType, ChapterIndex, HatInTimeItem
 from .DeathWishLocations import create_dw_regions, dw_classes, death_wishes
-from .DeathWishRules import set_dw_rules, create_enemy_events
-from worlds.AutoWorld import World, WebWorld
+from .DeathWishRules import set_dw_rules, create_enemy_events, hit_list, bosses
+from worlds.AutoWorld import World, WebWorld, CollectionState
 from typing import List, Dict, TextIO
 from worlds.LauncherComponents import Component, components, icon_paths, launch_subprocess, Type
 from Utils import local_path
@@ -287,6 +287,44 @@ class HatInTimeWorld(World):
 
         for hat in self.hat_craft_order:
             spoiler_handle.write("Hat Cost: %s: %i\n" % (hat, self.hat_yarn_costs[hat]))
+
+    def collect(self, state: "CollectionState", item: "Item") -> bool:
+        old_count: int = state.count(item.name, self.player)
+        change = super().collect(state, item)
+        if change and old_count == 0:
+            if "Stamp" in item.name:
+                if "2 Stamp" in item.name:
+                    state.prog_items[self.player]["Stamps"] += 2
+                else:
+                    state.prog_items[self.player]["Stamps"] += 1
+            elif "(Zero Jumps)" in item.name:
+                state.prog_items[self.player]["Zero Jumps"] += 1
+            elif item.name in hit_list.keys():
+                if item.name not in bosses:
+                    state.prog_items[self.player]["Enemy"] += 1
+                else:
+                    state.prog_items[self.player]["Boss"] += 1
+
+        return change
+
+    def remove(self, state: "CollectionState", item: "Item") -> bool:
+        old_count: int = state.count(item.name, self.player)
+        change = super().collect(state, item)
+        if change and old_count == 1:
+            if "Stamp" in item.name:
+                if "2 Stamp" in item.name:
+                    state.prog_items[self.player]["Stamps"] -= 2
+                else:
+                    state.prog_items[self.player]["Stamps"] -= 1
+            elif "(Zero Jumps)" in item.name:
+                state.prog_items[self.player]["Zero Jumps"] -= 1
+            elif item.name in hit_list.keys():
+                if item.name not in bosses:
+                    state.prog_items[self.player]["Enemy"] -= 1
+                else:
+                    state.prog_items[self.player]["Boss"] -= 1
+
+        return change
 
     def has_yarn(self) -> bool:
         return not self.is_dw_only() and not self.options.HatItems

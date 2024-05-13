@@ -5,8 +5,7 @@ from .DeathWishLocations import dw_prereqs, dw_candles
 from BaseClasses import Entrance, Location, ItemClassification
 from worlds.generic.Rules import add_rule, set_rule
 from typing import List, Callable, TYPE_CHECKING
-from .Regions import act_chapters
-from .Locations import zero_jumps, zero_jumps_expert, zero_jumps_hard, death_wishes
+from .Locations import death_wishes
 from .Options import EndGoal
 
 if TYPE_CHECKING:
@@ -121,7 +120,7 @@ def set_dw_rules(world: "HatInTimeWorld"):
         dw = world.multiworld.get_region(name, world.player)
         if not world.options.DWShuffle and name in dw_stamp_costs.keys():
             for entrance in dw.entrances:
-                add_rule(entrance, lambda state, n=name: get_total_dw_stamps(state, world) >= dw_stamp_costs[n])
+                add_rule(entrance, lambda state, n=name: state.has("Stamps", world.player, dw_stamp_costs[n]))
 
         main_objective = world.multiworld.get_location(f"{name} - Main Objective", world.player)
         all_clear = world.multiworld.get_location(f"{name} - All Clear", world.player)
@@ -259,36 +258,13 @@ def modify_dw_rules(world: "HatInTimeWorld", name: str):
         set_candle_dw_rules(name, world)
 
 
-def get_total_dw_stamps(state: CollectionState, world: "HatInTimeWorld") -> int:
-    if world.options.DWShuffle:
-        return 999  # no stamp costs in death wish shuffle
-
-    count = 0
-
-    for name in death_wishes:
-        if name == "Snatcher Coins in Nyakuza Metro" and not world.is_dlc2():
-            continue
-
-        if state.has(f"1 Stamp - {name}", world.player):
-            count += 1
-        else:
-            continue
-
-        if state.has(f"2 Stamps - {name}", world.player):
-            count += 2
-        elif name not in dw_candles:
-            count += 1
-
-    return count
-
-
 def set_candle_dw_rules(name: str, world: "HatInTimeWorld"):
     main_objective = world.multiworld.get_location(f"{name} - Main Objective", world.player)
     full_clear = world.multiworld.get_location(f"{name} - All Clear", world.player)
 
     if name == "Zero Jumps":
-        add_rule(main_objective, lambda state: get_zero_jump_clear_count(state, world) >= 1)
-        add_rule(full_clear, lambda state: get_zero_jump_clear_count(state, world) >= 4
+        add_rule(main_objective, lambda state: state.has("Zero Jumps", world.player))
+        add_rule(full_clear, lambda state: state.has("Zero Jumps", world.player, 4)
                  and state.has("Train Rush (Zero Jumps)", world.player) and can_use_hat(state, world, HatType.ICE))
 
         # No Ice Hat/painting required in Expert for Toilet Zero Jumps
@@ -306,11 +282,11 @@ def set_candle_dw_rules(name: str, world: "HatInTimeWorld"):
 
     elif name == "Snatcher's Hit List":
         add_rule(main_objective, lambda state: state.has("Mafia Goon", world.player))
-        add_rule(full_clear, lambda state: get_reachable_enemy_count(state, world) >= 12)
+        add_rule(full_clear, lambda state: state.has("Enemy", world.player, 12))
 
     elif name == "Camera Tourist":
-        add_rule(main_objective, lambda state: get_reachable_enemy_count(state, world) >= 8)
-        add_rule(full_clear, lambda state: can_reach_all_bosses(state, world)
+        add_rule(main_objective, lambda state: state.has("Enemy", world.player, 8))
+        add_rule(full_clear, lambda state: state.has("Boss", world.player, 6)
                  and state.has("Triple Enemy Photo", world.player))
 
     elif "Snatcher Coins" in name:
@@ -323,48 +299,6 @@ def set_candle_dw_rules(name: str, world: "HatInTimeWorld"):
         add_rule(main_objective, lambda state: state.has(coins[0], world.player)
                  or state.has(coins[1], world.player)
                  or state.has(coins[2], world.player))
-
-
-def get_zero_jump_clear_count(state: CollectionState, world: "HatInTimeWorld") -> int:
-    total = 0
-
-    for name in act_chapters.keys():
-        n = f"{name} (Zero Jumps)"
-        if n not in zero_jumps:
-            continue
-
-        if get_difficulty(world) < Difficulty.HARD and n in zero_jumps_hard:
-            continue
-
-        if get_difficulty(world) < Difficulty.EXPERT and n in zero_jumps_expert:
-            continue
-
-        if not state.has(n, world.player):
-            continue
-
-        total += 1
-
-    return total
-
-
-def get_reachable_enemy_count(state: CollectionState, world: "HatInTimeWorld") -> int:
-    count = 0
-    for enemy in hit_list.keys():
-        if enemy in bosses:
-            continue
-
-        if state.has(enemy, world.player):
-            count += 1
-
-    return count
-
-
-def can_reach_all_bosses(state: CollectionState, world: "HatInTimeWorld") -> bool:
-    for boss in bosses:
-        if not state.has(boss, world.player):
-            return False
-
-    return True
 
 
 def create_enemy_events(world: "HatInTimeWorld"):

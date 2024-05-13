@@ -230,7 +230,7 @@ def create_dw_locations(world: "HatInTimeWorld", dw: Region):
     dw.locations.append(bonus_stamps)
     main_stamp.place_locked_item(HatInTimeItem(f"1 Stamp - {dw.name}",
                                                ItemClassification.progression, None, world.player))
-    bonus_stamps.place_locked_item(HatInTimeItem(f"2 Stamps - {dw.name}",
+    bonus_stamps.place_locked_item(HatInTimeItem(f"2 Stamp - {dw.name}",
                                                  ItemClassification.progression, None, world.player))
 
     if dw.name in world.excluded_dws:
