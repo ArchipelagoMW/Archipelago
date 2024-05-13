@@ -332,6 +332,7 @@ class WitnessWorld(World):
         if self.options.puzzle_randomization == "sigma_expert":
             return
         # Non-Expert: Pick an early item to put on Tutorial Gate Open.
+        # Done after plando to avoid conflicting with it.
         # Done in fill_hook because multiworld itempool manipulation is not allowed in pre_fill.
 
         player_name = self.multiworld.get_player_name(self.player)
