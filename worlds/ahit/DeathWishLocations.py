@@ -186,7 +186,7 @@ def create_dw_regions(world: "HatInTimeWorld"):
             dw_shuffle.append(dw_list[i])
 
         # Seal the Deal is always last if it's the goal
-        if world.options.EndGoal.value == 3:
+        if world.options.EndGoal == EndGoal.option_seal_the_deal:
             if "Seal the Deal" in dw_shuffle:
                 dw_shuffle.remove("Seal the Deal")
 
