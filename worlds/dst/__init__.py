@@ -56,9 +56,15 @@ class DSTWorld(World):
         self.dst_itempool.decide_itempools(self)
 
     def create_item(self, name: str) -> Item:
+        craft_with_locked_items = True # TODO: Replace with option when available
+        itemtype = (
+            ItemClassification.progression if (not craft_with_locked_items and "progression_recipes" in item_data_table[name].tags)
+            else item_data_table[name].type if name in item_name_to_id 
+            else ItemClassification.progression
+        )
         return DSTItem(
             name, 
-            item_data_table[name].type if name in item_name_to_id else ItemClassification.progression, 
+            itemtype, 
             item_data_table[name].code if name in item_name_to_id else None, 
             self.player
         )
