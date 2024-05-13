@@ -283,8 +283,37 @@ class WitnessWorld(World):
             if self.player_items.item_data[item_name].local_only:
                 self.options.local_items.value.add(item_name)
 
+    def pre_fill(self) -> None:
+        if self.options.puzzle_randomization != "sigma_expert":
+            return
+        # Expert: Pick an early item to add to local early items.
+        # Done in pre_fill because fill_hook is too late for early items.
+
+        early_items = self.player_items.get_early_items()
+
+        if not early_items:
+            return
+
+        self.random.shuffle(early_items)
+
+        for early_item_name in early_items:
+            try:
+                early_item_index, early_item = next(
+                    (i, item) for i, item in enumerate(self.multiworld.itempool)
+                    if item.name == early_item_name and item.player == self.player
+                )
+            except StopIteration:
+                continue
+
+            self.multiworld.local_early_items[self.player][early_item.name] = 1
+            return
+
     def fill_hook(self, progitempool: List[Item], _, _2, fill_locations: List[Location]) -> None:
-        # Pick an early item to place on the tutorial gate (or an early location in expert)
+        if self.options.puzzle_randomization == "sigma_expert":
+            return
+        # Non-Expert: Pick an early item to put on Tutorial Gate Open.
+        # Done in fill_hook because multiworld itempool manipulation is not allowed in pre_fill.
+
         early_items = self.player_items.get_early_items()
 
         if not early_items:
@@ -305,9 +334,7 @@ class WitnessWorld(World):
                         " as all copies of it were plandoed elsewhere.")
                 continue
 
-            if self.options.puzzle_randomization == "sigma_expert":
-                # In Expert, only tag the item as early, rather than forcing it onto the gate.
-                self.multiworld.local_early_items[self.player][early_item.name] = 1
+
             else:
                 tutorial_gate_open = self.get_location("Tutorial Gate Open")
                 if tutorial_gate_open not in fill_locations:
