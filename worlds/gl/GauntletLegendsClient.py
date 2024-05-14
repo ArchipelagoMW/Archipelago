@@ -63,14 +63,7 @@ class RetroSocket:
         return b
 
     def crc32(self):
-        message = "GET_STATUS"
-        self.socket.sendto(message.encode(), (self.host, self.port))
-        try:
-            data, addr = self.socket.recvfrom(1000)
-        except ConnectionResetError:
-            raise Exception("Retroarch not detected. Please make sure your ROM is open in Retroarch.")
-        data = data.decode()
-        return data[data.find("crc32=") + len("crc32="):-1]
+        seed = self.read(MessageFormat(READ, f"0x{format(INV_ADDR, 'x')} 1024"))
 
 
 class RamChunk:

@@ -1,3 +1,4 @@
+import os
 import threading
 import typing
 
@@ -8,7 +9,7 @@ from worlds.AutoWorld import WebWorld, World
 from .Locations import all_locations, location_table
 from .Items import GLItem, itemList, item_table, item_frequencies
 from .Regions import create_regions, connect_regions
-from .Rom import Rom
+from .Rom import Rom, GLProcedurePatch, write_files
 from .Rules import set_rules
 from ..LauncherComponents import components, Component, launch_subprocess, Type, SuffixIdentifier
 
@@ -69,20 +70,17 @@ class GauntletLegendsWorld(World):
     def create_regions(self) -> None:
         create_regions(self)
         connect_regions(self)
-
-    def fill_slot_data(self) -> dict:
-        self.output_complete.wait()
-        return {
-            "crc32": self.crc32,
-            "player": self.player,
-            "scale": self.options.scaling_type.value,
-            "shards": self.shard_values
-        }
-
-    def generate_basic(self) -> None:
         item = self.create_item("Key")
         self.multiworld.get_location("Valley of Fire - Key 1", self.player).place_locked_item(item)
         self.multiworld.get_location("Valley of Fire - Key 5", self.player).place_locked_item(item)
+
+    def fill_slot_data(self) -> dict:
+        return {
+            "player": self.player,
+            "scale": 0,
+            "shards": self.shard_values
+        }
+
 
     def create_items(self) -> None:
         # First add in all progression and useful items
@@ -124,9 +122,9 @@ class GauntletLegendsWorld(World):
         return GLItem(item.itemName, item.progression, item.code, self.player)
 
     def generate_output(self, output_directory: str) -> None:
-        rom = Rom(self)
-        rom.write_items()
-        rom.patch_counts()
-        self.crc32 = rom.crc32()
-        rom.close(output_directory)
-        self.output_complete.set()
+        patch = GLProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
+        write_files(self, patch)
+        rom_path = os.path.join(
+            output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}" f"{patch.patch_file_ending}"
+        )
+        patch.write(rom_path)

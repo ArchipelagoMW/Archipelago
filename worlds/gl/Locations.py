@@ -5,7 +5,8 @@ from BaseClasses import Location
 
 class LocationData:
     name: str = ""
-    id: int = 0x00
+    id: int = 0
+    difficulty: int = 0
 
     def __init__(self, name, id_, difficulty):
         self.name = name
