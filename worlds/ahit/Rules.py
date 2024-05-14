@@ -39,7 +39,7 @@ def can_use_hat(state: CollectionState, world: "HatInTimeWorld", hat: HatType) -
     if world.options.HatItems:
         return state.has(hat_type_to_item[hat], world.player)
 
-    return state.count("Yarn", world.player) >= get_hat_cost(world, hat)
+    return state.has("Yarn", world.player, get_hat_cost(world, hat))
 
 
 def get_hat_cost(world: "HatInTimeWorld", hat: HatType) -> int:
@@ -74,7 +74,7 @@ def has_paintings(state: CollectionState, world: "HatInTimeWorld", count: int, a
         if get_difficulty(world) >= Difficulty.MODERATE:
             return True
 
-    return state.count("Progressive Painting Unlock", world.player) >= count
+    return state.has("Progressive Painting Unlock", world.player, count)
 
 
 def zipline_logic(world: "HatInTimeWorld") -> bool:
