@@ -1,5 +1,5 @@
 from BaseClasses import ItemClassification, Location
-from .options import ItemDropRandomization
+from .options import ItemDropRandomization, Countdown
 from .locations import get_location_info
 from .items import get_item_info
 
@@ -290,7 +290,7 @@ def get_countdown_flags(world: "CVCotMWorld", active_locations: Iterable[Locatio
     """Figures out which Countdown numbers to increase for each Location after verifying the Item on the Location should
     count towards a number.
 
-    The exact number to increase is determined by the Location's "countdown" key in the location_info dict."""
+    Which number to increase is determined by the Location's "countdown" key in the location_info dict."""
 
     next_pos = COUNTDOWN_TABLE_ADDR + 0x40
     countdown_flags = [[] for _ in range(16)]
@@ -300,7 +300,8 @@ def get_countdown_flags(world: "CVCotMWorld", active_locations: Iterable[Locatio
     # Loop over every Location and add the correct flag values of all Useful and Progression-classified Items to the
     # array of flags the Countdown will track.
     for loc in active_locations:
-        if (loc.item.advancement or loc.item.classification == ItemClassification.useful) and loc.address is not None:
+        if ((loc.item.advancement or loc.item.classification == ItemClassification.useful)
+           or world.options.countdown == Countdown.option_all_locations) and loc.address is not None:
             countdown_index = get_location_info(loc.name, "countdown")
             # If we're looking at a locally-placed DSS Card, take the card's parameter value for the flag.
             if (loc.item.player == world.player or (loc.item.player in world.multiworld.groups and world.player in

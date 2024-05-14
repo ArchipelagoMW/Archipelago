@@ -12,6 +12,24 @@ if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
 
 
+# These flags are communicated to the tracker as a bitfield using this order.
+# Modifying the order will cause undetectable autotracking issues.
+EVENT_FLAG_MAP = {
+    0x2A: "FLAG_HIT_IRON_MAIDEN_SWITCH",
+    0xB2: "FLAG_WON_BATTLE_ARENA",
+    0xB3: "FLAG_DEFEATED_CERBERUS",
+    0xB4: "FLAG_DEFEATED_NECROMANCER",
+    0xB5: "FLAG_DEFEATED_IRON_GOLEM",
+    0xB6: "FLAG_DEFEATED_ADRAMELECH",
+    0xB7: "FLAG_DEFEATED_DRAGON_ZOMBIES",
+    0xB8: "FLAG_DEFEATED_DEATH",
+    0xB9: "FLAG_DEFEATED_CAMILLA",
+    0xBA: "FLAG_DEFEATED_HUGH",
+    0xBB: "FLAG_DEFEATED_DRACULA_I",
+    0xBC: "FLAG_DEFEATED_DRACULA_II"
+}
+
+
 class CastlevaniaCotMClient(BizHawkClient):
     game = "Castlevania - Circle of the Moon"
     system = "GBA"
@@ -19,11 +37,13 @@ class CastlevaniaCotMClient(BizHawkClient):
     local_dss = {}
     self_induced_death = False
     local_checked_locations: Set[int]
+    client_set_events = {flag_name: False for flag, flag_name in EVENT_FLAG_MAP.items()}
+    killed_dracula_2 = False
+    won_battle_arena = False
     sent_message_queue = []
     death_causes = []
     currently_dead = False
-    killed_drac_2 = False
-    won_battle_arena = False
+    synced_set_events = False
     saw_arena_win_message = False
 
     def __init__(self) -> None:
@@ -137,15 +157,28 @@ class CastlevaniaCotMClient(BizHawkClient):
                 self.currently_dead = True
                 await ctx.send_death(f"{ctx.player_names[ctx.slot]} perished. Dracula has won!")
 
-            # Scout all Locations and capture the ones with local DSS Cards.
+            # Scout all Locations and get our Set events.
             if ctx.locations_info == {}:
                 await ctx.send_msgs([{
                     "cmd": "LocationScouts",
                     "locations": [code for name, code in get_location_names_to_ids().items()],
                     "create_as_hint": 0
                 }])
-                # Some other parts of this need the scouted Location info, so return now.
+                await ctx.send_msgs([{
+                    "cmd": "Get",
+                    "keys": [f"castlevania_cotm_events_{ctx.team}_{ctx.slot}"]
+                }])
+                # Some other parts of this need the scouted Location info and Set events, so return now.
                 return
+
+            # Update the Dracula II and Battle Arena events already being done on past separate sessions for if the
+            # player is running the Battle Arena and Dracula goal.
+            if ctx.stored_data[f"castlevania_cotm_events_{ctx.team}_{ctx.slot}"] is not None:
+                if ctx.stored_data[f"castlevania_cotm_events_{ctx.team}_{ctx.slot}"] & 0x1:
+                    self.won_battle_arena = True
+
+                if ctx.stored_data[f"castlevania_cotm_events_{ctx.team}_{ctx.slot}"] & 0x800:
+                    self.killed_dracula_2 = True
 
             # Capture all the Locations with local DSS Cards, so we can trigger the Location check off the Card being
             # put in the inventory by the game.
@@ -155,7 +188,8 @@ class CastlevaniaCotMClient(BizHawkClient):
 
             # If we won the Battle Arena, haven't seen the win message yet, and are in the Arena at the moment, pop up
             # the win message while playing the game's unused Theme of Simon Belmont fanfare.
-            if self.won_battle_arena and not self.saw_arena_win_message and area == 0x0E and ok_to_inject:
+            if self.won_battle_arena and not self.saw_arena_win_message and area == 0x0E \
+                    and ok_to_inject and not self.currently_dead:
                 win_message = cvcotm_string_to_bytearray("      A 「WINNER」 IS 「YOU」!▶", "little middle", 0,
                                                          wrap=False)
                 await bizhawk.write(ctx.bizhawk_ctx, [(0x25300, [0x1D, 0x82], "EWRAM"),
@@ -173,7 +207,7 @@ class CastlevaniaCotMClient(BizHawkClient):
 
                 # If we are in the Battle Arena and are not using the On Including Arena DeathLink option, extend the
                 # DeathLink message and don't actually kill Nathan.
-                if ctx.slot_data["death_link"] != DeathLink.option_on_including_arena and area == 0x0E:
+                if ctx.slot_data["death_link"] != DeathLink.option_arena_on and area == 0x0E:
                     death_text += "◊The Battle Arena nullified the DeathLink. Go fight fair and square!"
                 else:
                     # Otherwise, kill Nathan by giving him a 9999 damage-dealing poison status that hurts him as soon as
@@ -192,7 +226,7 @@ class CastlevaniaCotMClient(BizHawkClient):
                 self.currently_dead = True
 
             # If we have a queue of Locations to inject "sent" messages with, do so before giving any subsequent Items.
-            elif self.sent_message_queue and ok_to_inject:
+            elif self.sent_message_queue and ok_to_inject and not self.currently_dead:
                 loc = self.sent_message_queue[0]
                 # Truncate the Item name at 300 characters. ArchipIDLE's FFXIV Item is 214 characters, for comparison.
                 item_name = ctx.item_names[ctx.locations_info[loc].item]
@@ -226,7 +260,7 @@ class CastlevaniaCotMClient(BizHawkClient):
             # the textbox ID to trigger the multiworld textbox, sound effect to play when the textbox opens, number to
             # increment the received items count by, and the text to go into the multiworld textbox. The game will then
             # do the rest when it's able to.
-            elif num_received_items < len(ctx.items_received) and ok_to_inject:
+            elif num_received_items < len(ctx.items_received) and ok_to_inject and not self.currently_dead:
                 next_item = ctx.items_received[num_received_items]
 
                 # Figure out what inventory array and offset from said array to increment based on what we are
@@ -268,7 +302,8 @@ class CastlevaniaCotMClient(BizHawkClient):
 
             locs_to_send = set()
 
-            # Check for set location flags.
+            # Check for set Location and event flags.
+            checked_set_events = {flag_name: False for flag, flag_name in EVENT_FLAG_MAP.items()}
             for byte_index, byte in enumerate(flag_bytes):
                 for i in range(8):
                     and_value = 0x01 << i
@@ -279,14 +314,15 @@ class CastlevaniaCotMClient(BizHawkClient):
                         if location_id in ctx.server_locations:
                             locs_to_send.add(location_id)
 
-                        # Detect the "killed Dracula II" flag for the purposes of sending the game clear.
-                        if flag_id == 0xBC:
-                            self.killed_drac_2 = True
+                        if flag_id in EVENT_FLAG_MAP:
+                            checked_set_events[EVENT_FLAG_MAP[flag_id]] = True
 
-                        # Detect the Shinning Armor pickup flag at the end of the Battle Arena for the purposes of
-                        # sending the game clear.
-                        if flag_id == 0xB2:
-                            self.won_battle_arena = True
+                            # Update the client's status for the Battle Arena and Dracula goals.
+                            if flag_id == 0xB2:
+                                self.won_battle_arena = True
+
+                            if flag_id == 0xBC:
+                                self.killed_dracula_2 = True
 
             # Check for acquired local DSS Cards.
             for byte_index, byte in enumerate(cards_array):
@@ -313,11 +349,11 @@ class CastlevaniaCotMClient(BizHawkClient):
             # The Battle Arena option requires the Shinning Armor pickup flag to be set.
             # Otherwise, the Battle Arena and Dracula option requires both of the above to be satisfied simultaneously.
             if ctx.slot_data["completion_goal"] == CompletionGoal.option_dracula:
-                win_condition = self.killed_drac_2
+                win_condition = self.killed_dracula_2
             elif ctx.slot_data["completion_goal"] == CompletionGoal.option_battle_arena:
                 win_condition = self.won_battle_arena
             else:
-                win_condition = self.killed_drac_2 and self.won_battle_arena
+                win_condition = self.killed_dracula_2 and self.won_battle_arena
 
             # Send game clear if we've satisfied the win condition.
             if not ctx.finished_game and win_condition:
@@ -325,6 +361,22 @@ class CastlevaniaCotMClient(BizHawkClient):
                     "cmd": "StatusUpdate",
                     "status": ClientStatus.CLIENT_GOAL
                 }])
+
+            # Update the tracker event flags
+            if checked_set_events != self.client_set_events and ctx.slot is not None:
+                event_bitfield = 0
+                for index, (flag, flag_name) in enumerate(EVENT_FLAG_MAP.items()):
+                    if checked_set_events[flag_name]:
+                        event_bitfield |= 1 << index
+
+                await ctx.send_msgs([{
+                    "cmd": "Set",
+                    "key": f"castlevania_cotm_events_{ctx.team}_{ctx.slot}",
+                    "default": 0,
+                    "want_reply": False,
+                    "operations": [{"operation": "or", "value": event_bitfield}],
+                }])
+                self.client_set_events = checked_set_events
 
         except bizhawk.RequestFailedError:
             # Exit handler and return to main loop to reconnect.

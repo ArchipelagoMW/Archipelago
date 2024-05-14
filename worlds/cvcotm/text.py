@@ -25,7 +25,8 @@ weightless_chars = {"\n", "▶", "◊", "\b", "\t", "「", "」"}
 
 
 def cvcotm_string_to_bytearray(cvcotm_text: str, textbox_type: Literal["big top", "big middle", "little middle"],
-                               speed: int, portrait: int = 0xFF, wrap: bool = True) -> bytearray:
+                               speed: int, portrait: int = 0xFF, wrap: bool = True,
+                               skip_textbox_controllers: bool = False) -> bytearray:
     """Converts a string into a textbox bytearray following CVCotM's string format."""
     text_bytes = bytearray(0)
     if portrait == 0xFF and textbox_type != "little middle":
@@ -59,7 +60,9 @@ def cvcotm_string_to_bytearray(cvcotm_text: str, textbox_type: Literal["big top"
     else:
         refined_text = cvcotm_text
 
-    text_bytes.extend([0x1D, main_control_start_param + (speed & 0xF)])  # Speed should be a value between 0 and 15.
+    # Add the textbox control characters if we are opting to add them.
+    if not skip_textbox_controllers:
+        text_bytes.extend([0x1D, main_control_start_param + (speed & 0xF)])  # Speed should be a value between 0 and 15.
 
     # Add the portrait (if we are adding one).
     if portrait != 0xFF and textbox_type != "little middle":
@@ -69,13 +72,16 @@ def cvcotm_string_to_bytearray(cvcotm_text: str, textbox_type: Literal["big top"
         if char in cvcotm_char_dict:
             text_bytes.extend([cvcotm_char_dict[char]])
             # If we're pressing A to advance, add the text clear and reset alignment characters.
-            if char in ["▶", "◊"]:
+            if char in ["▶", "◊"] and not skip_textbox_controllers:
                 text_bytes.extend([0x01, 0x0A])
         else:
             text_bytes.extend([0x48])
 
     # Add the characters indicating the end of the whole message.
-    text_bytes.extend([0x1D, main_control_end_param, 0x00])
+    if not skip_textbox_controllers:
+        text_bytes.extend([0x1D, main_control_end_param, 0x00])
+    else:
+        text_bytes.extend([0x00])
     return text_bytes
 
 

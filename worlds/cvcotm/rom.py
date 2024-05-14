@@ -12,15 +12,20 @@ import pkgutil
 
 from .data import patches
 from .locations import get_location_info, get_all_location_names
-from .text import cvcotm_string_to_bytearray, cvcotm_text_wrap
+from .text import cvcotm_string_to_bytearray
+from .options import CompletionGoal
 from settings import get_settings
 
 if TYPE_CHECKING:
     from . import CVCotMWorld
 
-CVCOTM_CT_US_HASH = "50a1089600603a94e15ecf287f8d5a1f"  # GBA cartridge version
-CVCOTM_AC_US_HASH = "87a1bd6577b6702f97a60fc55772ad74"  # Castlevania Advance Collection version
-CVCotM_VC_US_HASH = "2cc38305f62b337281663bad8c901cf9"  # Wii U Virtual Console version
+CVCOTM_CT_US_HASH = "50a1089600603a94e15ecf287f8d5a1f"  # Original GBA cartridge ROM
+CVCOTM_AC_US_HASH = "87a1bd6577b6702f97a60fc55772ad74"  # Castlevania Advance Collection ROM
+CVCotM_VC_US_HASH = "2cc38305f62b337281663bad8c901cf9"  # Wii U Virtual Console ROM
+
+# NOTE: The Wii U VC version is untested as of when this comment was written. I am only including its hash in case it
+# does work. If someone who has it can confirm it does indeed work, this comment should be removed. If it doesn't, the
+# hash should be removed in addition.
 
 AREA_LIST_START = 0xD9A40
 
@@ -94,60 +99,143 @@ class CVCotMPatchExtensions(APPatchExtension):
         rom_data = RomData(rom)
         options = json.loads(caller.get_file(options_file).decode("utf-8"))
 
-        # These patches get applied regardless of settings.
+        # This patch grants Dash Boots on game initialization, effectively giving you Dash Boots from the beginning of
+        # the game without needing to pick them up.
+        # Created by DevAnj.
         rom_data.apply_ips("AutoDashBoots.ips")
+
+        # This patch allows placing DSS cards on pedestals, prevents them from timing out, and removes them from enemy
+        # drop tables. Created by DevAnj but drop and pedestal item replacements have been stripped out.
         rom_data.apply_ips("CardUp_v3_Custom.ips")
+
+        # This patch replaces enemy drops that included DSS cards. Created by DevAnj as part of the Card Up patch but
+        # modified for different replacement drops (Lowered rate, Potion instead of Meat, and no Shinning Armor change
+        # on Devil).
         rom_data.apply_ips("NoDSSDrops.ips")
+
+        # This patch reveals card combination descriptions instead of showing "???" until the combination is used.
+        # Created by DevAnj.
         rom_data.apply_ips("CardCombosRevealed.ips")
+
+        # In lategame, the Trick Candle and Scary Candle load in the Cerberus and Iron Golem boss rooms after defeating
+        # Camilla and Twin Dragon Zombies respectively. If the former bosses have not yet been cleared (i.e., we have
+        # sequence broken the game and returned to the earlier boss rooms to fight them), the candle enemies will cause
+        # the bosses to fail to load and soft lock the game. This patches the candles to appear after the early boss is
+        # completed instead.
+        # Created by DevAnj.
         rom_data.apply_ips("CandleFix.ips")
+
+        # A Tackle block in Machine Tower will cause a softlock if you access the Machine Tower from the Audience Room
+        # using the stone tower route with Kick Boots and not Double. This is a small level edit that moves that block
+        # slightly, removing the potential for a softlock.
+        # Created by DevAnj.
         rom_data.apply_ips("SoftlockBlockFix.ips")
+
+        # Normally, the MP boosting card combination is useless since it depletes more MP than it gains. This patch
+        # makes it consume zero MP.
+        # Created by DevAnj.
         rom_data.apply_ips("MPComboFix.ips")
+
+        # Normally, you must clear the game with each mode to unlock subsequent modes, and complete the game at least
+        # once to be able to skip the introductory text crawl. This allows all game modes to be selected and the
+        # introduction to be skipped even without game/mode completion.
+        # Created by DevAnj.
         rom_data.apply_ips("GameClearBypass.ips")
+
+        # This patch adds custom mapping in Underground Gallery and Underground Waterway to avoid softlocking/Kick Boots
+        # requirements.
+        # Created by DevAnj.
         rom_data.apply_ips("MapEdits.ips")
+
+        # Prevents demos on the main title screen after the first one from being displayed to avoid pedestal item
+        # reconnaissance from the menu.
+        # Created by Fusecavator.
         rom_data.apply_ips("DemoForceFirst.ips")
+
+        # Used internally in the item randomizer to allow setting drop rate to 10000 (100%) and actually drop the item
+        # 100% of the time. Normally, it is hard capped at 50% for common drops and 25% for rare drops.
+        # Created by Fusecavator.
         rom_data.apply_ips("AllowAlwaysDrop.ips")
+
+        # Displays the seed on the pause menu. Created by Fusecavator and modified by Liquid Cat to display a 20-digit
+        # seed for AP purposes.
         rom_data.apply_ips("SeedDisplayAPEdition.ips")
 
-        # Write the 20-digit seed name.
+        # Write the seed. Upwards of 20 digits can be displayed for the seed number.
         curr_seed_addr = 0x672152
-        while options["seed_name"]:
-            seed_digit = (options["seed_name"] % 10) + 0x511C
+        total_digits = 0
+        while options["seed"] and total_digits < 20:
+            seed_digit = (options["seed"] % 10) + 0x511C
             rom_data.write_bytes(curr_seed_addr, int.to_bytes(seed_digit, 2, "little"))
             curr_seed_addr -= 2
-            options["seed_name"] //= 10
+            total_digits += 1
+            options["seed"] //= 10
 
+        # Optional patch created by Fusecavator. Permanent dash effect without double tapping.
         if options["auto_run"]:
             rom_data.apply_ips("PermanentDash.ips")
 
+        # Optional patch created by Fusecavator. Prohibits the DSS glitch. You will not be able to update the active
+        # effect unless the card combination switched to is obtained. For example, if you switch to another DSS
+        # combination that you have not obtained during DSS startup, you will still have the effect of the original
+        # combination you had selected when you started the DSS activation. In addition, you will not be able to
+        # increase damage and/or change the element of a summon attack unless you possess the cards you swap to.
         if options["dss_patch"]:
             rom_data.apply_ips("DSSGlitchFix.ips")
 
+        # Optional patch created by DevAnj. Breaks the iron maidens blocking access to the Underground Waterway,
+        # Underground Gallery, and the room beyond the Adramelech boss room from the beginning of the game.
         if options["break_iron_maidens"]:
             rom_data.apply_ips("BrokenMaidens.ips")
 
+        # Optional patch created by Fusecavator. Changes game behavior to add instead of set Last Key values, and check
+        # for a specific value of Last Keys on the door to the Ceremonial Room, allowing multiple keys to be required to
+        # complete the game. Relies on the program to set required key values.
         if options["required_last_keys"] != 1:
             rom_data.apply_ips("MultiLastKey.ips")
             rom_data.write_byte(0x96C1E, options["required_last_keys"])
             rom_data.write_byte(0xDFB4, options["required_last_keys"])
             rom_data.write_byte(0xCB84, options["required_last_keys"])
 
+        # Optional patch created by Fusecavator. Doubles the damage of projectiles fired by ranged familiars.
         if options["buff_ranged_familiars"]:
             rom_data.apply_ips("BuffFamiliars.ips")
 
+        # Optional patch created by Fusecavator. Increases the base damage of some sub-weapons.
+        # Changes below (normal multiplier on left/shooter on right):
+        # Original:                         Changed:
+        # Dagger:            45 / 141 ----> 100 / 141 (Non-Shooter buffed)
+        # Dagger crush:      32 / 45  ----> 100 / 141 (Both buffed to match non-crush values)
+        # Axe:               89 / 158 ----> 125 / 158 (Non-Shooter somewhat buffed)
+        # Axe crush:         89 / 126 ----> 125 / 158 (Both buffed to match non-crush values)
+        # Holy water:        63 / 100 ---->  63 / 100 (Unchanged)
+        # Holy water crush:  45 / 63  ---->  63 / 100 (Large buff to Shooter, non-Shooter buffed)
+        # Cross:            110 / 173 ----> 110 / 173 (Unchanged)
+        # Cross crush:      100 / 141 ----> 110 / 173 (Slightly buffed to match non-crush values)
         if options["buff_sub_weapons"]:
             rom_data.apply_ips("BuffSubweapons.ips")
 
+        # Optional patch created by Fusecavator. Increases the Shooter gamemode base strength and strength per level to
+        # match Vampire Killer.
         if options["buff_shooter_strength"]:
             rom_data.apply_ips("ShooterStrength.ips")
 
+        # Optional patch created by Fusecavator. Allows using the Pluto + Griffin combination for the speed boost with
+        # or without the cards being obtained.
         if options["always_allow_speed_dash"]:
             rom_data.apply_ips("AllowSpeedDash.ips")
 
+        # Optional patch created by fuse. Displays a counter on the HUD showing the number of magic items and cards
+        # remaining in the current area. Requires a lookup table generated by the randomizer to function.
         if options["countdown"]:
             rom_data.apply_ips("Countdown.ips")
 
+        # This patch disables the MP drain effect in the Battle Arena.
+        # Created by Fusecavator.
         if options["disable_battle_arena_mp_drain"]:
             rom_data.apply_ips("NoMPDrain.ips")
+
+        # Everything from this line and below was created and added by Liquid Cat for this Archipelago version.
 
         # Write the textbox messaging system code.
         rom_data.write_bytes(0x7D60, [0x00, 0x48, 0x87, 0x46, 0x20, 0xFF, 0x7F, 0x08])
@@ -206,11 +294,36 @@ class CVCotMPatchExtensions(APPatchExtension):
         rom_data.write_byte(0x393DF5, 0x00)  # Roc Wing
         rom_data.write_byte(0x393E65, 0x00)  # Last Key
 
+        # Write the completion goal messages over the menu Dash Boots tutorial and Battle Arena's explanation message.
+        if options["completion_goal"] == CompletionGoal.option_dracula:
+            dash_tutorial_message = "Your goal is:\n  Dracula◊"
+            arena_goal_message = "Your goal is:\n「Dracula」▶" \
+                                 "You don't have to win the Arena, but you are certainly welcome to try!◊"
+        elif options["completion_goal"] == CompletionGoal.option_battle_arena:
+            dash_tutorial_message = "Your goal is:\n  Battle Arena◊"
+            arena_goal_message = "Your goal is:\n「Battle Arena」▶" \
+                                 "Win the Arena, and your goal will send. Good luck!◊"
+        else:
+            dash_tutorial_message = "Your goal is:\n  Arena and Dracula◊"
+            arena_goal_message = "Your goal is:\n「Battle Arena & Dracula」▶" \
+                                 "Your goal will send once you've both won the Arena and beaten Dracula. Good luck!◊"
+
+        rom_data.write_bytes(0x393EAE, cvcotm_string_to_bytearray(dash_tutorial_message, "big top", 4,
+                                                                  skip_textbox_controllers=True))
+        rom_data.write_bytes(0x393A0C, cvcotm_string_to_bytearray(arena_goal_message, "big top", 4))
+
+        # Change the pointer to the Ceremonial Room locked door text.
+        rom_data.write_bytes(0x670D94, [0xE0, 0xE9, 0x7C, 0x08])
+        # Write the Ceremonial Room door and menu Last Key tutorial messages telling the player's Last Key options.
+        door_message = f"Hmmmmmm...\nI need 「{options['required_last_keys']}」/" \
+                       f"「{options['available_last_keys']}」 Last Keys.◊"
+        key_tutorial_message = f"You need {options['required_last_keys']}/{options['available_last_keys']} keys.◊"
+        rom_data.write_bytes(0x7CE9E0, cvcotm_string_to_bytearray(door_message, "big top", 4, 0))
+        rom_data.write_bytes(0x394098, cvcotm_string_to_bytearray(key_tutorial_message, "big top", 4,
+                                                                  skip_textbox_controllers=True))
+
         # Shorten Hugh's post-battle dialogue to give players more time to pick up his item.
         rom_data.write_bytes(0x393114, cvcotm_string_to_bytearray("Ok! You win!◊", "big top", 4, 2))
-
-        test_text = "「LEBRON JAMES」 REPORTEDLY LOST TO THE 「DEVIL」 IN THE 「BATTLE ARENA」◊"
-        rom_data.write_bytes(0x7CEB00, cvcotm_string_to_bytearray(test_text, "big middle", 3))
 
         return rom_data.get_bytes()
 
@@ -282,13 +395,15 @@ def patch_rom(world: "CVCotMWorld", patch: CVCotMProcedurePatch, offset_data: Di
         "dss_patch": world.options.dss_patch.value,
         "break_iron_maidens": world.options.break_iron_maidens.value,
         "required_last_keys": world.required_last_keys,
+        "available_last_keys": world.options.available_last_keys.value,
         "buff_ranged_familiars": world.options.buff_ranged_familiars.value,
         "buff_sub_weapons": world.options.buff_sub_weapons.value,
         "buff_shooter_strength": world.options.buff_shooter_strength.value,
         "always_allow_speed_dash": world.options.always_allow_speed_dash.value,
         "countdown": world.options.countdown.value,
         "disable_battle_arena_mp_drain": world.options.disable_battle_arena_mp_drain.value,
-        "seed_name": int(world.multiworld.seed_name)
+        "completion_goal": world.options.completion_goal.value,
+        "seed": world.multiworld.seed
     }
 
     patch.write_file("options.json", json.dumps(options_dict).encode('utf-8'))

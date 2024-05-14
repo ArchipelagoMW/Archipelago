@@ -4,6 +4,7 @@
 
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
 - A Castlevania: Circle of the Moon ROM of the US version specifically. The Archipelago community cannot provide this.
+The Castlevania Advance Collection ROM can technically be used, but it has no audio. The Wii U Virtual Console ROM is untested.
 - [BizHawk](https://tasvideos.org/BizHawk/ReleaseHistory) 2.7 or later
 
 ### Configuring BizHawk
@@ -19,6 +20,10 @@ tabbed out of EmuHawk.
 - Consider clearing keybinds in `Config > Hotkeys…` if you don't intend to use them. Select the keybind and press Esc to
 clear it.
 
+## Optional Software
+
+- [Castlevania: Circle of the Moon AP Tracker](https://github.com/sassyvania/Circle-of-the-Moon-Rando-AP-Map-Tracker-/releases/latest), for use with
+[PopTracker](https://github.com/black-sliver/PopTracker/releases)
 
 ## Generating and Patching a Game
 

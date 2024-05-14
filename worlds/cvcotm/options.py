@@ -3,7 +3,7 @@ from Options import Choice, Range, Toggle, PerGameCommonOptions, StartInventoryP
 
 
 class IgnoreCleansing(Toggle):
-    """Whether the logic expects Cleansing to touch the water in Underground Waterway or not."""
+    """Makes the Cleansing not logically expected to traverse the water in Underground Waterway."""
     display_name = "Ignore Cleansing"
 
 
@@ -13,8 +13,8 @@ class AutoRun(Toggle):
 
 
 class DSSPatch(Toggle):
-    """Patches being able to pause during the DSS startup animation and switch the cards in the menu to use combos you
-    don't currently have."""
+    """Patches being able to pause during the DSS startup animation and switch the cards in the menu to use any combos
+    you don't currently have."""
     display_name = "DSS Patch"
 
 
@@ -52,7 +52,7 @@ class BuffRangedFamiliars(Toggle):
 
 
 class BuffSubWeapons(Toggle):
-    """Increases damage dealt via sub-weapons and item crushes. Stacks with Shooter Mode buffs."""
+    """Increases damage dealt by sub-weapons and item crushes in Shooter and non-Shooter Modes."""
     display_name = "Buff Sub-weapons"
 
 
@@ -62,9 +62,13 @@ class BuffShooterStrength(Toggle):
 
 
 class ItemDropRandomization(Choice):
-    """Disabled: No item drop randomization; enemies will drop their vanilla items.
-    Normal: Any enemy and boss can drop anything. Valuable items will more likely be dropped by harder enemies.
-    Hard: Enemies with less than 150 HP will only drop low-tier items and rare items can only drop from bosses."""
+    """Randomizes what enemies drop what items as well as the drop rates for said items.
+    Bosses and candle enemies will be guaranteed to have rare items in all of
+    their drop slots, and easily-farmable enemies (like those that infinitely spawn) will only drop low-tier items in
+    all of theirs. All other enemies will drop a low or regular-tier item in their common drop slot, and a low, regular,
+    or rare-tier item in their rare drop slot.
+    If Hard is chosen, all enemies below 150 HP will also be considered easily-farmable and rare items that land on
+    bosses and candle enemies will be exclusive to them."""
     display_name = "Item Drop Randomization"
     option_disabled = 0
     option_normal = 1
@@ -73,19 +77,24 @@ class ItemDropRandomization(Choice):
 
 
 class HalveDSSCardsPlaced(Toggle):
-    """Places only half of the DSS cards in the item pool. The cards left out can be
-    any number of Action and Attribute ones."""
+    """Places only half of the DSS Cards in the item pool.
+    A valid combo that lets you freeze or petrify enemies as platforms will always be placed."""
     display_name = "Halve DSS Cards Placed"
 
 
-class Countdown(Toggle):
-    """Displays, below and near the right side of the health HUD, the number of unobtained progression-marked items
-    and DSS cards in the area you are currently in."""
+class Countdown(Choice):
+    """Displays, below and near the right side of the MP bar, the number of unobtained progression/useful-marked
+    items or the total check locations remaining in the area you are currently in."""
     display_name = "Countdown"
+    option_none = 0
+    option_majors = 1
+    option_all_locations = 2
+    default = 0
 
 
 class SubWeaponShuffle(Toggle):
-    """Shuffles all sub-weapons in the game within each other in their own pool."""
+    """Randomizes which sub-weapon candles have which sub-weapons.
+    The total count of each sub-weapon will be consistent with that of the vanilla game."""
     display_name = "Sub-weapon Shuffle"
 
 
@@ -107,14 +116,14 @@ class EarlyDouble(DefaultOnToggle):
 
 class DeathLink(Choice):
     """When you die, everyone dies. Of course the reverse is true too.
-    Will be ignored in the Battle Arena unless On Including Arena is chosen."""
+    Received DeathLinks will not kill you in the Battle Arena unless Arena On is chosen."""
     display_name = "DeathLink"
     option_off = 0
     alias_no = 0
     alias_true = 1
     alias_yes = 1
     option_on = 1
-    option_on_including_arena = 2
+    option_arena_on = 2
     default = 0
 
 

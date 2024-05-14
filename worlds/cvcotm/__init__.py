@@ -13,6 +13,7 @@ from .options import CVCotMOptions, SubWeaponShuffle
 from .regions import get_region_info, get_all_region_names, get_named_entrances_data
 from .rules import CVCotMRules
 from .data import iname, lname
+from .presets import cvcotm_options_presets
 from ..AutoWorld import WebWorld, World
 
 from .aesthetics import shuffle_sub_weapons, get_location_data, get_countdown_flags, populate_enemy_drops
@@ -33,6 +34,7 @@ class CVCotMSettings(settings.Group):
 
 class CVCotMWeb(WebWorld):
     theme = "stone"
+    options_presets = cvcotm_options_presets
 
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
@@ -47,9 +49,9 @@ class CVCotMWeb(WebWorld):
 
 class CVCotMWorld(World):
     """
-    Castlevania: Circle of the Moon is the first of three Castlevania games released on the GameBoy Advance.
+    Castlevania: Circle of the Moon is the first of three Castlevania games released for the GameBoy Advance.
     As Nathan Graves, utilizing the Dual Set-Up System in conjunction with the Hunter Whip, you must battle your way
-    through Camilla's castle and rescue your master.
+    through Camilla's castle and rescue your master!
     """
     game = "Castlevania - Circle of the Moon"
     item_name_groups = {
