@@ -54,17 +54,19 @@ del MultiServer
 
 class DBCommandProcessor(ServerCommandProcessor):
     def output(self, text: str):
-        logging.info(text)
+        self.ctx.logger.info(text)
 
 
 class WebHostContext(Context):
     room_id: int
 
-    def __init__(self, static_server_data: dict):
+    def __init__(self, static_server_data: dict, logger: logging.Logger):
         # static server data is used during _load_game_data to load required data,
         # without needing to import worlds system, which takes quite a bit of memory
         self.static_server_data = static_server_data
-        super(WebHostContext, self).__init__("", 0, "", "", 1, 40, True, "enabled", "enabled", "enabled", 0, 2)
+        super(WebHostContext, self).__init__("", 0, "", "", 1,
+                                             40, True, "enabled", "enabled",
+                                             "enabled", 0, 2, logger=logger)
         del self.static_server_data
         self.main_loop = asyncio.get_running_loop()
         self.video = {}
@@ -160,6 +162,26 @@ def get_static_server_data() -> dict:
     return data
 
 
+def set_up_logging(room_id) -> logging.Logger:
+    import os
+    logging.info(f"Starting {room_id}")
+    # logger setup
+    logger = logging.getLogger(f"RoomLogger {room_id}")
+
+    # this *should* be empty, but just in case.
+    for handler in logger.handlers[:]:
+        logger.removeHandler(handler)
+        handler.close()
+
+    file_handler = logging.FileHandler(
+        os.path.join(Utils.user_path("logs"), f"{room_id}.txt"),
+        "a",
+        encoding="utf-8-sig")
+    file_handler.setFormatter(logging.Formatter("[%(asctime)s]: %(message)s"))
+    logger.setLevel(logging.INFO)
+    logger.addHandler(file_handler)
+    return logger
+
 def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                        cert_file: typing.Optional[str], cert_key_file: typing.Optional[str],
                        host: str, rooms_to_run: multiprocessing.Queue, rooms_shutting_down: multiprocessing.Queue):
@@ -190,8 +212,8 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
 
     async def start_room(room_id):
         try:
-            logging.info(f"Starting {room_id}")
-            ctx = WebHostContext(static_server_data)
+            logger = set_up_logging(room_id)
+            ctx = WebHostContext(static_server_data, logger)
             ctx.load(room_id)
             ctx.init_save()
             try:
@@ -212,12 +234,12 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                 elif wssocket.family == socket.AF_INET:
                     port = socketname[1]
             if port:
-                logging.info(f'Hosting game at {host}:{port}')
+                ctx.logger.info(f'Hosting game at {host}:{port}')
                 with db_session:
                     room = Room.get(id=ctx.room_id)
                     room.last_port = port
             else:
-                logging.exception("Could not determine port. Likely hosting failure.")
+                ctx.logger.exception("Could not determine port. Likely hosting failure.")
             with db_session:
                 ctx.auto_shutdown = Room.get(id=room_id).timeout
             ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, []))
