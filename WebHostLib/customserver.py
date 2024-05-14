@@ -164,7 +164,6 @@ def get_static_server_data() -> dict:
 
 def set_up_logging(room_id) -> logging.Logger:
     import os
-    logging.info(f"Starting {room_id}")
     # logger setup
     logger = logging.getLogger(f"RoomLogger {room_id}")
 
@@ -182,9 +181,11 @@ def set_up_logging(room_id) -> logging.Logger:
     logger.addHandler(file_handler)
     return logger
 
+
 def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                        cert_file: typing.Optional[str], cert_key_file: typing.Optional[str],
                        host: str, rooms_to_run: multiprocessing.Queue, rooms_shutting_down: multiprocessing.Queue):
+    Utils.init_logging(name)
     try:
         import resource
     except ModuleNotFoundError:
@@ -270,7 +271,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
             while 1:
                 next_room = rooms_to_run.get(block=True,  timeout=None)
                 asyncio.run_coroutine_threadsafe(start_room(next_room), loop)
-                print(f"Starting room {next_room} on {name}.")
+                logging.info(f"Starting room {next_room} on {name}.")
 
     starter = Starter()
     starter.daemon = True
