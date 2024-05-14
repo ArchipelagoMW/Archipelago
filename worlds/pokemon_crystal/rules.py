@@ -150,13 +150,13 @@ def set_rules(world: PokemonCrystalWorld) -> None:
         set_rule(get_location("Violet City - Hidden Item Behind Cut Tree"), can_cut)
     set_rule(get_location("Violet City - Item 1"), can_surf)
     set_rule(get_location("Violet City - Item 2"), can_surf)
-    set_rule(get_location("EVENT_GOT_TOGEPI_EGG_FROM_ELMS_AIDE"),
-             lambda state: state.has("EVENT_BEAT_FALKNER", world.player))
+    # set_rule(get_location("EVENT_GOT_TOGEPI_EGG_FROM_ELMS_AIDE"),
+    #          lambda state: state.has("EVENT_BEAT_FALKNER", world.player))
 
-    set_rule(get_entrance("REGION_VIOLET_CITY -> REGION_ROUTE_32"),
-             lambda state: state.has("EVENT_GOT_TOGEPI_EGG_FROM_ELMS_AIDE", world.player))
-    set_rule(get_entrance("REGION_ROUTE_36 -> REGION_ROUTE_36_RUINS_OF_ALPH_GATE"),
-             lambda state: state.has("EVENT_GOT_TOGEPI_EGG_FROM_ELMS_AIDE", world.player))
+    # set_rule(get_entrance("REGION_VIOLET_CITY -> REGION_ROUTE_32"),
+    #          lambda state: state.has("EVENT_GOT_TOGEPI_EGG_FROM_ELMS_AIDE", world.player))
+    # set_rule(get_entrance("REGION_ROUTE_36 -> REGION_ROUTE_36_RUINS_OF_ALPH_GATE"),
+    #          lambda state: state.has("EVENT_GOT_TOGEPI_EGG_FROM_ELMS_AIDE", world.player))
 
     # Route 32
     set_rule(get_location("Route 32 - Miracle Seed from Man in North"),

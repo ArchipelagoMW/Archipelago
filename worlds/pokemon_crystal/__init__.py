@@ -13,7 +13,8 @@ from .rules import set_rules
 from .data import (PokemonData, MoveData, TrainerData, LearnsetData, data as crystal_data, BASE_OFFSET)
 from .rom import generate_output
 from .locations import create_locations, PokemonCrystalLocation, create_location_label_to_id_map
-from .utils import get_random_pokemon, get_random_filler_item, get_random_held_item
+from .utils import get_random_pokemon, get_random_filler_item, get_random_held_item, get_random_types, get_type_colors, \
+    get_random_colors, get_random_base_stats
 
 
 class PokemonCrystalSettings(settings.Group):
@@ -67,6 +68,7 @@ class PokemonCrystalWorld(World):
     generated_pokemon: Dict[str, PokemonData]
     generated_starters: Tuple[List[str], List[str], List[str]]
     generated_trainers: Dict[str, TrainerData]
+    generated_palettes: Dict[str, List[List[int]]]
 
     def generate_early(self) -> None:
         if self.options.johto_only:
@@ -106,7 +108,6 @@ class PokemonCrystalWorld(World):
 
     def generate_output(self, output_directory: str) -> None:
         def get_random_move(type=None):
-            move_pool = []
             if type is None:
                 move_pool = [move_name for move_name, move_data in crystal_data.moves.items() if
                              move_data.id > 0 and not move_data.is_hm and move_name not in ["STRUGGLE", "BEAT_UP"]]
@@ -130,6 +131,41 @@ class PokemonCrystalWorld(World):
                                    ["TOTODILE", "CROCONAW", "FERALIGATR"],
                                    ["CHIKORITA", "BAYLEEF", "MEGANIUM"])
         self.generated_trainers = copy.deepcopy(crystal_data.trainers)
+        self.generated_palettes = {}
+
+        if self.options.randomize_types.value > 0:
+            for pkmn_name, pkmn_data in self.generated_pokemon.items():
+                new_types = get_random_types(self.random)
+                pkmn_list = [pkmn_name]
+                if self.options.randomize_types.value == 1:
+                    if not pkmn_data.is_base:
+                        continue
+                    for evo in pkmn_data.evolutions:
+                        pkmn_list.append(evo[-1])
+                        evo_poke = crystal_data.pokemon[evo[-1]]
+                        for second_evo in evo_poke.evolutions:
+                            pkmn_list.append(second_evo[-1])
+                for poke in pkmn_list:
+                    self.generated_pokemon[poke] = self.generated_pokemon[poke]._replace(types=new_types)
+
+        if self.options.randomize_palettes.value > 0:
+            for pkmn_name, pkmn_data in self.generated_pokemon.items():
+                pals = []
+                if self.options.randomize_palettes.value == 1:
+                    pals.append(get_type_colors(pkmn_data.types, self.random))
+                else:
+                    pals.append(get_random_colors(self.random))
+                pals.append(get_random_colors(self.random))  # shiny palette
+                self.generated_palettes[pkmn_name] = pals
+
+        if self.options.randomize_base_stats.value > 0:
+            for pkmn_name, pkmn_data in self.generated_pokemon.items():
+                if self.options.randomize_base_stats.value == 1:
+                    new_base_stats = get_random_base_stats(self.random, pkmn_data.bst)
+                else:
+                    new_base_stats = get_random_base_stats(self.random)
+                self.generated_pokemon[pkmn_name] = self.generated_pokemon[pkmn_name]._replace(
+                    base_stats=new_base_stats)
 
         if self.options.randomize_learnsets:
             for pkmn_name, pkmn_data in self.generated_pokemon.items():
@@ -143,14 +179,14 @@ class PokemonCrystalWorld(World):
 
         if self.options.randomize_starters:
             for evo_line in self.generated_starters:
-                rival_fights = [(trainer_name, trainer) for trainer_name, trainer in crystal_data.trainers.items() if
+                rival_fights = [(trainer_name, trainer) for trainer_name, trainer in self.generated_trainers.items() if
                                 trainer_name.startswith("RIVAL_" + evo_line[0])]
 
                 evo_line[0] = get_random_pokemon(self.random)
                 for trainer_name, trainer in rival_fights:
                     set_rival_fight(trainer_name, trainer, evo_line[0])
 
-                rival_fights = [(trainer_name, trainer) for trainer_name, trainer in crystal_data.trainers.items() if
+                rival_fights = [(trainer_name, trainer) for trainer_name, trainer in self.generated_trainers.items() if
                                 trainer_name.startswith("RIVAL_" + evo_line[1])]
 
                 first_evolutions = crystal_data.pokemon[evo_line[0]].evolutions
@@ -158,7 +194,7 @@ class PokemonCrystalWorld(World):
                 for trainer_name, trainer in rival_fights:
                     set_rival_fight(trainer_name, trainer, evo_line[1])
 
-                rival_fights = [(trainer_name, trainer) for trainer_name, trainer in crystal_data.trainers.items() if
+                rival_fights = [(trainer_name, trainer) for trainer_name, trainer in self.generated_trainers.items() if
                                 trainer_name.startswith("RIVAL_" + evo_line[2])]
 
                 second_evolutions = crystal_data.pokemon[evo_line[1]].evolutions

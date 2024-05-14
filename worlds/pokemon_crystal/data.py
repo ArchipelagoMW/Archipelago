@@ -61,6 +61,8 @@ class PokemonData(NamedTuple):
     evolutions: List[List[str]]
     learnset: List[LearnsetData]
     tm_hm: List[str]
+    is_base: bool
+    bst: int
 
 
 class MoveData(NamedTuple):
@@ -95,6 +97,8 @@ class PokemonCrystalData:
     pokemon: Dict[str, PokemonData]
     moves: Dict[str, MoveData]
     fish: Dict[str, FishData]
+    types: List[str]
+    type_ids: Dict[str, int]
     f_t: List[List[int]]
 
     def __init__(self) -> None:
@@ -129,10 +133,10 @@ def _init() -> None:
     ram_address_data = data_json["ram_addresses"]
     event_flag_data = data_json["event_flags"]
     item_codes = data_json["items"]
-    pokemon_data = data_json["pokemon"]
     move_data = data_json["moves"]
     trainer_data = data_json["trainers"]
     wildfish_data = data_json["wilds"]["fish"]
+    type_data = data_json["types"]
     f_data = data_json["misc"]["fuchsia"]
 
     claimed_locations: Set[str] = set()
@@ -218,7 +222,10 @@ def _init() -> None:
             pokemon_data["types"],
             pokemon_data["evolutions"],
             [LearnsetData(move[0], move[1]) for move in pokemon_data["learnset"]],
-            pokemon_data["tm_hm"])
+            pokemon_data["tm_hm"],
+            pokemon_data["is_base"],
+            pokemon_data["bst"]
+        )
 
     data.moves = {}
     for move_name, move_attributes in move_data.items():
@@ -248,6 +255,8 @@ def _init() -> None:
         )
 
     data.f_t = f_data
+    data.types = type_data["types"]
+    data.type_ids = type_data["ids"]
 
 
 _init()

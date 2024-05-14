@@ -149,6 +149,22 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
                 write_bytes(patched_rom, [move.level, move_id], address)
                 address += 2
 
+    for pkmn_name, pals in world.generated_palettes.items():
+        address = data.rom_addresses["AP_Stats_Palette_" + pkmn_name]
+        write_bytes(patched_rom, pals[0] + pals[1], address)
+
+    if world.options.randomize_types > 0:
+        for pkmn_name, pkmn_data in world.generated_pokemon.items():
+            address = data.rom_addresses["AP_Stats_Types_" + pkmn_name]
+            pkmn_types = pkmn_data.types if len(pkmn_data.types) == 2 else [pkmn_data.types[0], pkmn_data.types[0]]
+            type_ids = [data.type_ids[pkmn_types[0]], data.type_ids[pkmn_types[1]]]
+            write_bytes(patched_rom, type_ids, address)
+
+    if world.options.randomize_base_stats.value > 0:
+        for pkmn_name, pkmn_data in world.generated_pokemon.items():
+            address = data.rom_addresses["AP_Stats_Base_" + pkmn_name]
+            write_bytes(patched_rom, pkmn_data.base_stats, address)
+
     for trainer_name, trainer_data in world.generated_trainers.items():
         address = data.rom_addresses["AP_TrainerParty_" + trainer_name]
         address += trainer_data.name_length + 1  # skip name and type
@@ -165,10 +181,11 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
             write_bytes(patched_rom, pokemon_data, address)
             address += len(pokemon)
 
-    # if world.options.randomize_trainer_parties:
+    # if world.options.enable_mischief:
     #     new_coords = copy.deepcopy(data.f_t)
     #     random.shuffle(new_coords)
     #     address = data.rom_addresses["AP_Misc_FuchsiaTrainers"] + 1
+    #     write_bytes(patched_rom, [0x0a], address + 2)
     #     for c in new_coords:
     #         write_coords = [c[1] + 4, c[0] + 4]
     #         write_bytes(patched_rom, write_coords, address)

@@ -5,7 +5,6 @@
 	"BRIGHTPOWDER": {"name": "Brightpowder", "classification": "FILLER", "tags": []},
 	"GREAT_BALL": {"name": "Great Ball", "classification": "FILLER", "tags": ["Ball"]},
 	"POKE_BALL": {"name": "Poke Ball", "classification": "FILLER", "tags": ["Ball"]},
-	"TOWN_MAP": {"name": "Town Map", "classification": "FILLER", "tags": ["INVALID"]},
 	"BICYCLE": {
 		"name": "Bicycle",
 		"classification": "PROGRESSION",
@@ -60,7 +59,6 @@
 		"classification": "PROGRESSION",
 		"tags": ["Unique"]
 	},
-	"POKE_FLUTE": {"name": "Poke Flute", "classification": "FILLER", "tags": ["INVALID"]},
 	"EXP_SHARE": {"name": "Exp Share", "classification": "FILLER", "tags": []},
 	"OLD_ROD": {
 		"name": "Old Rod",

@@ -99,9 +99,9 @@ class RandomizeTrainerParties(Choice):
 
 
 class RandomizeLearnsets(Choice):
-    """start_with_four_moves: Random movesets with 4 starting moves
+    """vanilla: Vanilla movesets
     randomize: Random movesets
-    vanilla: Vanilla movesets"""
+    start_with_four_moves: Random movesets with 4 starting moves"""
     display_name = "Randomize Learnsets"
     default = 0
     option_vanilla = 0
@@ -113,6 +113,39 @@ class FullTmHmCompatibility(Toggle):
     """All Pokemon can learn any TM/HM"""
     display_name = "Full TM/HM Compatibility"
     default = 0
+
+
+class RandomizeBaseStats(Choice):
+    """vanilla: Vanilla base stats
+    keep_bst: Random base stats, but base stat total is preserved
+    completely_random: Base stats and BST are completely random"""
+    display_name = "Randomize Base Stats"
+    default = 0
+    option_vanilla = 0
+    option_keep_bst = 1
+    option_completely_random = 2
+
+
+class RandomizeTypes(Choice):
+    """vanilla: Vanilla Pokemon types
+    follow_evolutions: Types are randomized but preserved when evolved
+    completely_random: Types are completely random"""
+    display_name = "Randomize Types"
+    default = 0
+    option_vanilla = 0
+    option_follow_evolutions = 1
+    option_completely_random = 2
+
+
+class RandomizePalettes(Choice):
+    """vanilla: Vanilla Pokemon color palettes
+    match_types: Color palettes match Pokemon Type
+    completely_random: Color palettes are completely random"""
+    display_name = "Randomize Palettes"
+    default = 0
+    option_vanilla = 0
+    option_match_types = 1
+    option_completely_random = 2
 
 
 class HMBadgeRequirements(Choice):
@@ -191,6 +224,9 @@ class PokemonCrystalOptions(PerGameCommonOptions):
     randomize_trainer_parties: RandomizeTrainerParties
     randomize_learnsets: RandomizeLearnsets
     full_tmhm_compatibility: FullTmHmCompatibility
+    randomize_base_stats: RandomizeBaseStats
+    randomize_types: RandomizeTypes
+    randomize_palettes: RandomizePalettes
     hm_badge_requirements: HMBadgeRequirements
     reusable_tms: ReusableTMs
     guaranteed_catch: GuaranteedCatch
