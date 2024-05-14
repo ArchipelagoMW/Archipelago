@@ -2475,7 +2475,7 @@
     ],
     "events": [],
     "exits": [
-      "REGION_LILYCOVE_CITY/MAIN",
+      "REGION_LILYCOVE_CITY/SEA",
       "REGION_MOSSDEEP_CITY/MAIN",
       "REGION_UNDERWATER_ROUTE124/BIG_AREA",
       "REGION_UNDERWATER_ROUTE124/SMALL_AREA_1",
@@ -3294,7 +3294,7 @@
     "locations": [],
     "events": [],
     "exits": [
-      "REGION_SLATEPORT_CITY/MAIN"
+      "REGION_SLATEPORT_CITY/WATER"
     ],
     "warps": []
   },

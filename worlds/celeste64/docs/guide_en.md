@@ -3,6 +3,11 @@
 ## Required Software
 - Archipelago Build of Celeste 64 from: [Celeste 64 Archipelago Releases Page](https://github.com/PoryGoneDev/Celeste64/releases/)
 
+## Optional Software
+- Celeste 64 Tracker
+	- PopTracker from: [PopTracker Releases Page](https://github.com/black-sliver/PopTracker/releases/)
+	- Celeste 64 Archipelago PopTracker pack from: [Celeste 64 AP Tracker Releases Page](https://github.com/PoryGone/Celeste-64-AP-Tracker/releases/)
+
 ## Installation Procedures (Windows)
 
 1. Download the above release and extract it.
