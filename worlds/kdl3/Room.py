@@ -31,7 +31,7 @@ class KDL3Room(Region):
 
     def __init__(self, name: str, player: int, multiworld: MultiWorld, hint: Optional[str], level: int,
                  stage: int, room: int, pointer: int, music: int,
-                 default_exits: List[Dict[str, Union[int, List[str]]]],
+                 default_exits: List[Dict[str, List[str]]],
                  animal_pointers: List[int], enemies: List[str],
                  entity_load: List[List[int]],
                  consumables: List[Dict[str, Union[int, str]]], consumable_pointer: int) -> None:

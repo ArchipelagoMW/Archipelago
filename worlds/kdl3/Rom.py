@@ -431,8 +431,8 @@ def patch_rom(world: "KDL3World", patch: KDL3ProcedurePatch) -> None:
         elif world.options.music_shuffle == 2:
             for room in rooms:
                 room.music = world.random.choice(music_choices)
-            for room in room_music:
-                patch.write_token(APTokenTypes.WRITE, room + 2,
+            for room_ptr in room_music:
+                patch.write_token(APTokenTypes.WRITE, room_ptr + 2,
                                   world.random.choice(music_choices).to_bytes(1, "little"))
             for i in range(5):
                 # level themes
