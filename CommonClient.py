@@ -283,9 +283,6 @@ class CommonContext:
             from kvui import GameManager
 
             class TextManager(GameManager):
-                logging_pairs = [
-                    ("Client", "Archipelago")
-                ]
                 base_title = "Archipelago Text Client"
 
             self.ui_manager = TextManager
