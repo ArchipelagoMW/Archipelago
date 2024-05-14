@@ -11,10 +11,10 @@ stage_vile = "Vile Access Codes"
 stage_doppler_lab = "Dr. Doppler's Lab Access Codes"
 
 # Third Armor
-third_armor_helmet = "Progressive Third Armor Helmet"
-third_armor_body = "Progressive Third Armor Body"
-third_armor_arms = "Progressive Third Armor Arms"
-third_armor_legs = "Progressive Third Armor Legs"
+third_armor_helmet = "Helmet Upgrade"
+third_armor_body = "Body Upgrade"
+third_armor_arms = "Arms Upgrade"
+third_armor_legs = "Legs Upgrade"
 
 # Weapons 
 parasitic_bomb = "Parasitic Bomb"
@@ -45,3 +45,5 @@ victory = "Sigma Virus Destroyed"
 small_hp = "Small HP Refill"
 large_hp = "Large HP Refill"
 life = "1-Up"
+small_weapon = "Small Weapon Energy Refill"
+large_weapon = "Large Weapon Energy Refill"

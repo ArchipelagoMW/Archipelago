@@ -16,6 +16,7 @@ from .Regions import create_regions, connect_regions
 from .Names import ItemName, LocationName, EventName
 from .Options import MMX3Options
 from .Client import MMX3SNIClient
+from .Weaknesses import randomize_weaknesses, boss_weaknesses, weapon_id
 from .Rom import patch_rom, MMX3ProcedurePatch, HASH_US, HASH_LEGACY
 
 class MMX3Settings(settings.Group):
@@ -179,9 +180,11 @@ class MMX3World(World):
         junk_count = total_required_locations - len(itempool)
 
         junk_weights = []
-        junk_weights += ([ItemName.small_hp] * 30)
-        junk_weights += ([ItemName.large_hp] * 40)
-        junk_weights += ([ItemName.life] * 30)
+        junk_weights += ([ItemName.small_weapon] * 5)
+        junk_weights += ([ItemName.large_weapon] * 10)
+        junk_weights += ([ItemName.small_hp] * 25)
+        junk_weights += ([ItemName.large_hp] * 35)
+        junk_weights += ([ItemName.life] * 25)
 
         junk_pool = []
         for i in range(junk_count):
@@ -239,8 +242,24 @@ class MMX3World(World):
         return slot_data
     
     def generate_early(self):
+        if self.options.boss_weakness_rando != "vanilla":
+            self.boss_weaknesses = {}
+            self.boss_weakness_data = {}
+            randomize_weaknesses(self)
         early_stage = self.random.choice(list(item_groups["Access Codes"]))
         self.multiworld.local_early_items[self.player][early_stage] = 1
+
+    def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
+        if self.options.boss_weakness_rando != "vanilla":
+            spoiler_handle.write(f"\nMega Man X3 boss weaknesses for {self.multiworld.player_name[self.player]}:\n")
+            
+            for boss, data in self.boss_weaknesses.items():
+                weaknesses = ""
+                for i in range(len(data)):
+                    weaknesses += f"{weapon_id[data[i][1]]}, "
+                weaknesses = weaknesses[:-2]
+                spoiler_handle.writelines(f"{boss + ':':<30s}{weaknesses}\n")
+
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(list(junk_table.keys()))

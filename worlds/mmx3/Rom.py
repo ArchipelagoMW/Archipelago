@@ -3,11 +3,13 @@ import bsdiff4
 import Utils
 import hashlib
 import os
-from typing import Optional, TYPE_CHECKING
+from typing import Optional
 from pkgutil import get_data
 
 from worlds.AutoWorld import World
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
+
+from .Weaknesses import boss_weakness_data
 
 HASH_US = 'cfe8c11f0dce19e4fa5f3fd75775e47c'
 HASH_LEGACY = 'ff683b75e75e9b59f0c713c7512a016b'
@@ -51,12 +53,60 @@ boss_access_rom_data = {
 }
 
 refill_rom_data = {
-    0xBD0030: ["small hp refill"],
-    0xBD0031: ["large hp refill"],
-    0xBD0034: ["1up"],
-    #0xBD0032: ["small weapon refill"],
-    #0xBD0033: ["large weapon refill"]
+    0xBD0030: ["hp refill", 2],
+    0xBD0031: ["hp refill", 8],
+    0xBD0034: ["1up", 0],
+    0xBD0032: ["weapon refill", 2],
+    0xBD0033: ["weapon refill", 8]
 }
+
+boss_weakness_offsets = {
+    "Blast Hornet": 0x03674B,
+    "Blizzard Buffalo": 0x036771,
+    "Gravity Beetle": 0x036797,
+    "Toxic Seahorse": 0x0367BD,
+    "Volt Catfish": 0x0367E3,
+    "Crush Crawfish": 0x036809,
+    "Tunnel Rhino": 0x03682F,
+    "Neon Tiger": 0x036855,
+    "Bit": 0x03687B,
+    "Byte": 0x0368A1,
+    "Vile": 0x0368C7,
+    "Vile Goliath": 0x0368ED,
+    "Doppler": 0x036913,
+    "Sigma": 0x036939,
+    "Kaiser Sigma": 0x03695F,
+    "Godkarmachine": 0x037F00,
+    "Press Disposer": 0x037FC8,
+    "Worm Seeker-R": 0x03668D,
+    "Shurikein": 0x037F28,
+    "Hotareeca": 0x037F50,
+    "Volt Kurageil": 0x037F78,
+    "Hell Crusher": 0x037FA0,
+}
+
+boss_hp_caps_offsets = {
+    "Maoh": 0x016985,
+    "Blast Hornet": 0x1C9DC2,
+    "Blizzard Buffalo": 0x01C9CB,
+    "Gravity Beetle": 0x09F3C3,
+    "Toxic Seahorse": 0x09E612,
+    "Volt Catfish": 0x09EBC0,
+    "Crush Crawfish": 0x01D1B2,
+    "Tunnel Rhino": 0x1FE765,
+    "Neon Tiger": 0x09DE11,
+    "Bit": 0x0390F2,
+    "Byte": 0x1E4614,
+    "Vile": 0x02AC3E,
+    "Vile Kangaroo": 0x03958F,
+    "Vile Goliath": 0x02A4EA,
+    "Doppler": 0x09D737,
+    "Sigma": 0x0294F2,
+    "Kaiser Sigma": 0x029B1F,
+    "Godkarmachine": 0x028F60,
+    "Press Disposer": 0x09C6B9,
+}
+
 
 class MMX3ProcedurePatch(APProcedurePatch, APTokenMixin):
     hash = [HASH_US, HASH_LEGACY]
@@ -78,6 +128,42 @@ class MMX3ProcedurePatch(APProcedurePatch, APTokenMixin):
 
     def write_bytes(self, offset, value: typing.Iterable[int]):
         self.write_token(APTokenTypes.WRITE, offset, bytes(value))
+
+def adjust_boss_damage_table(world: World, patch: MMX3ProcedurePatch):
+    for boss, data in world.boss_weakness_data.items():
+        try:
+            offset = boss_weakness_offsets[boss]
+            if boss == "Worm Seeker-R":
+                for x in range(len(data)):
+                    if x == 0x02 or x == 0x04 or x == 0x05:
+                        data[x] = 0x7F
+                    else:
+                        data[x] = data[x]*3 if data[x] < 0x80 else data[x]
+        except:
+            continue
+        patch.write_bytes(offset, bytearray(data))
+
+    # Adjust Charged Triad Thunder lag (lasts 90 less frames)
+    patch.write_byte(0x1FD2D1, 0x14)
+
+def adjust_boss_hp(world: World, patch: MMX3ProcedurePatch):
+    option = world.options.boss_randomize_hp
+    if option == "weak":
+        ranges = [1,32]
+    elif option == "regular":
+        ranges = [16,48]
+    elif option == "strong":
+        ranges = [32,64]
+    elif option == "chaotic":
+        ranges = [1,64]
+    
+    for boss, offset in boss_hp_caps_offsets.items():
+        if boss == "Blast Hornet":
+            patch.write_byte(offset, world.random.randint(ranges[0], 32))
+        else:
+            patch.write_byte(offset, world.random.randint(ranges[0], ranges[1]))
+
+
 
 def patch_rom(world: World, patch: MMX3ProcedurePatch):
     from Utils import __version__
@@ -116,10 +202,26 @@ def patch_rom(world: World, patch: MMX3ProcedurePatch):
     patch.write_bytes(0x0FF84, bytearray([0xFF for _ in range(0x007C)]))
     patch.write_bytes(0x1FA80, bytearray([0xFF for _ in range(0x0580)]))
 
+    if world.options.boss_weakness_rando != "vanilla":
+        adjust_boss_damage_table(world, patch)
+    
+    if world.options.boss_randomize_hp != "off":
+        adjust_boss_hp(world, patch)
+
     # Edit the ROM header
     patch.name = bytearray(f'MMX3{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
     patch.name.extend([0] * (21 - len(patch.name)))
     patch.write_bytes(0x7FC0, patch.name)
+
+    # Setup starting HP
+    patch.write_byte(0x007487, world.options.starting_hp.value)
+    patch.write_byte(0x0019B6, world.options.starting_hp.value)
+    patch.write_byte(0x0021CC, (world.options.starting_hp.value + (world.options.heart_tank_effectiveness.value * 8)) | 0x80)
+
+    # Setup starting life count
+    patch.write_byte(0x0019B1, world.options.starting_life_count.value)
+    patch.write_byte(0x0072C3, world.options.starting_life_count.value)
+    patch.write_byte(0x0021BE, world.options.starting_life_count.value)
 
     # Write options to the ROM
     patch.write_byte(0x17FFE0, world.options.doppler_open.value)
@@ -170,11 +272,11 @@ def patch_rom(world: World, patch: MMX3ProcedurePatch):
     patch.write_byte(0x17FFF8, world.options.death_link.value)
     
     patch.write_byte(0x17FFF9, world.options.jammed_buster.value)
-
-    # Setup starting life count
-    patch.write_byte(0x0019B1, world.options.starting_life_count.value)
-    patch.write_byte(0x0072C3, world.options.starting_life_count.value)
-    patch.write_byte(0x0021BE, world.options.starting_life_count.value)
+    patch.write_byte(0x17FFFA, world.options.boss_weakness_rando.value)
+    patch.write_byte(0x17FFFB, world.options.boss_weakness_strictness.value)
+    patch.write_byte(0x17FFFC, world.options.starting_hp.value)
+    patch.write_byte(0x17FFFD, world.options.heart_tank_effectiveness.value)
+    patch.write_byte(0x17FFFE, world.options.doppler_all_labs.value)
 
     patch.write_file("token_patch.bin", patch.get_token_binary())
 

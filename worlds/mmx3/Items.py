@@ -67,6 +67,8 @@ third_armor_table = {
 junk_table = {
     ItemName.small_hp:      ItemData(0xBD0030, False),
     ItemName.large_hp:      ItemData(0xBD0031, False),
+    ItemName.small_weapon:  ItemData(0xBD0032, False),
+    ItemName.large_weapon:  ItemData(0xBD0033, False),
     ItemName.life:          ItemData(0xBD0034, False),
 }
 
