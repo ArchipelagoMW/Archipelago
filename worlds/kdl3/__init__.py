@@ -71,7 +71,7 @@ class KDL3World(World):
     settings: typing.ClassVar[KDL3Settings]
 
     def __init__(self, multiworld: MultiWorld, player: int):
-        self.rom_name: bytearray = bytearray()
+        self.rom_name: bytes = bytes()
         self.rom_name_available_event = threading.Event()
         super().__init__(multiworld, player)
         self.copy_abilities: Dict[str, str] = vanilla_enemies.copy()
@@ -322,7 +322,7 @@ class KDL3World(World):
         rom_name = getattr(self, "rom_name", None)
         # we skip in case of error, so that the original error in the output thread is the one that gets raised
         if rom_name:
-            new_name = base64.b64encode(bytes(self.rom_name)).decode()
+            new_name = base64.b64encode(self.rom_name).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
