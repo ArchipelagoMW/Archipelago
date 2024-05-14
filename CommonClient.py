@@ -182,7 +182,7 @@ class CommonContext:
     starting_reconnect_delay: int = 5
     current_reconnect_delay: int = starting_reconnect_delay
     command_processor: typing.Type[CommandProcessor] = ClientCommandProcessor
-    ui_manager: typing.Optional["kvui.GameManager"] = None
+    ui_manager: typing.Optional["type[kvui.GameManager]"] = None
     ui = None
     ui_task: typing.Optional["asyncio.Task[None]"] = None
     input_task: typing.Optional["asyncio.Task[None]"] = None
