@@ -155,7 +155,7 @@ Gives the player starting hints for where the items defined here are.
 Gives the player starting hints for the items on locations defined here.
 
 ### ExcludeLocations
-Marks locations given here as `LocationProgressType.Excluded` so that progression items can't be placed on them.
+Marks locations given here as `LocationProgressType.Excluded` so that neither progression nor useful items can be placed on them.
 
 ### PriorityLocations
 Marks locations given here as `LocationProgressType.Priority` forcing progression items on them.
