@@ -1,6 +1,6 @@
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Tuple, TypedDict
 from logging import warning
-from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
+from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld
 from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
 from .locations import location_table, location_name_groups, location_name_to_id, hexagon_locations
 from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
@@ -8,8 +8,9 @@ from .er_rules import set_er_location_rules
 from .regions import tunic_regions
 from .er_scripts import create_er_regions
 from .er_data import portal_mapping
-from .options import TunicOptions
+from .options import TunicOptions, EntranceRando
 from worlds.AutoWorld import WebWorld, World
+from worlds.generic import PlandoConnection
 from decimal import Decimal, ROUND_HALF_UP
 
 
@@ -36,6 +37,13 @@ class TunicLocation(Location):
     game: str = "TUNIC"
 
 
+class SeedGroup(TypedDict):
+    logic_rules: int  # logic rules value
+    laurels_at_10_fairies: bool  # laurels location value
+    fixed_shop: bool  # fixed shop value
+    plando: List[PlandoConnection]  # consolidated list of plando connections for the seed group
+
+
 class TunicWorld(World):
     """
     Explore a land filled with lost legends, ancient powers, and ferocious monsters in TUNIC, an isometric action game
@@ -57,8 +65,21 @@ class TunicWorld(World):
     slot_data_items: List[TunicItem]
     tunic_portal_pairs: Dict[str, str]
     er_portal_hints: Dict[int, str]
+    seed_groups: Dict[str, SeedGroup] = {}
 
     def generate_early(self) -> None:
+        if self.multiworld.plando_connections[self.player]:
+            for index, cxn in enumerate(self.multiworld.plando_connections[self.player]):
+                # making shops second to simplify other things later
+                if cxn.entrance.startswith("Shop"):
+                    replacement = PlandoConnection(cxn.exit, "Shop Portal", "both")
+                    self.multiworld.plando_connections[self.player].remove(cxn)
+                    self.multiworld.plando_connections[self.player].insert(index, replacement)
+                elif cxn.exit.startswith("Shop"):
+                    replacement = PlandoConnection(cxn.entrance, "Shop Portal", "both")
+                    self.multiworld.plando_connections[self.player].remove(cxn)
+                    self.multiworld.plando_connections[self.player].insert(index, replacement)
+
         # Universal tracker stuff, shouldn't do anything in standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "TUNIC" in self.multiworld.re_gen_passthrough:
@@ -73,6 +94,58 @@ class TunicWorld(World):
                 self.options.hexagon_quest.value = passthrough["hexagon_quest"]
                 self.options.entrance_rando.value = passthrough["entrance_rando"]
                 self.options.shuffle_ladders.value = passthrough["shuffle_ladders"]
+
+    @classmethod
+    def stage_generate_early(cls, multiworld: MultiWorld) -> None:
+        tunic_worlds: Tuple[TunicWorld] = multiworld.get_game_worlds("TUNIC")
+        for tunic in tunic_worlds:
+            # if it's one of the options, then it isn't a custom seed group
+            if tunic.options.entrance_rando.value in EntranceRando.options:
+                continue
+            group = tunic.options.entrance_rando.value
+            # if this is the first world in the group, set the rules equal to its rules
+            if group not in cls.seed_groups:
+                cls.seed_groups[group] = SeedGroup(logic_rules=tunic.options.logic_rules.value,
+                                                   laurels_at_10_fairies=tunic.options.laurels_location == 3,
+                                                   fixed_shop=bool(tunic.options.fixed_shop),
+                                                   plando=multiworld.plando_connections[tunic.player])
+                continue
+                
+            # lower value is more restrictive
+            if tunic.options.logic_rules.value < cls.seed_groups[group]["logic_rules"]:
+                cls.seed_groups[group]["logic_rules"] = tunic.options.logic_rules.value
+            # laurels at 10 fairies changes logic for secret gathering place placement
+            if tunic.options.laurels_location == 3:
+                cls.seed_groups[group]["laurels_at_10_fairies"] = True
+            # fewer shops, one at windmill
+            if tunic.options.fixed_shop:
+                cls.seed_groups[group]["fixed_shop"] = True
+
+            if multiworld.plando_connections[tunic.player]:
+                # loop through the connections in the player's yaml
+                for cxn in multiworld.plando_connections[tunic.player]:
+                    new_cxn = True
+                    for group_cxn in cls.seed_groups[group]["plando"]:
+                        # if neither entrance nor exit match anything in the group, add to group
+                        if ((cxn.entrance == group_cxn.entrance and cxn.exit == group_cxn.exit)
+                                or (cxn.exit == group_cxn.entrance and cxn.entrance == group_cxn.exit)):
+                            new_cxn = False
+                            break
+                                   
+                        # check if this pair is the same as a pair in the group already
+                        is_mismatched = (
+                            cxn.entrance == group_cxn.entrance and cxn.exit != group_cxn.exit
+                            or cxn.entrance == group_cxn.exit and cxn.exit != group_cxn.entrance
+                            or cxn.exit == group_cxn.entrance and cxn.entrance != group_cxn.exit
+                            or cxn.exit == group_cxn.exit and cxn.entrance != group_cxn.entrance
+                        )
+                        if is_mismatched:
+                            raise Exception(f"TUNIC: Conflict between seed group {group}'s plando "
+                                            f"connection {group_cxn.entrance} <-> {group_cxn.exit} and "
+                                            f"{tunic.multiworld.get_player_name(tunic.player)}'s plando "
+                                            f"connection {cxn.entrance} <-> {cxn.exit}")
+                    if new_cxn:
+                        cls.seed_groups[group]["plando"].append(cxn)
 
     def create_item(self, name: str) -> TunicItem:
         item_data = item_table[name]
@@ -140,7 +213,7 @@ class TunicWorld(World):
         if self.options.shuffle_ladders:
             ladder_count = 0
             for item_name, item_data in item_table.items():
-                if item_data.item_group == "ladders":
+                if item_data.item_group == "Ladders":
                     items_to_create[item_name] = 1
                     ladder_count += 1
             remove_filler(ladder_count)
@@ -259,7 +332,7 @@ class TunicWorld(World):
                         name, connection = connection
                         # for LS entrances, we just want to give the portal name
                         if "(LS)" in name:
-                            name, _ = name.split(" (LS) ")
+                            name = name.split(" (LS) ", 1)[0]
                         # was getting some cases like Library Grave -> Library Grave -> other place
                         if name in portal_names and name != previous_name:
                             previous_name = name
