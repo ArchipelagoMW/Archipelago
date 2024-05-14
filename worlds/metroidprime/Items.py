@@ -29,7 +29,7 @@ suit_upgrade_table: dict[str, ItemData] = {
     "Plasma Beam": ItemData("Plasma Beam", 3, ItemClassification.progression),
     "Missile Expansion": ItemData("Missile Expansion", 4, ItemClassification.useful, 999),
     "Scan Visor": ItemData("Scan Visor", 5, ItemClassification.progression),
-    "Morph Ball Bombs": ItemData("Morph Ball Bombs", 6, ItemClassification.progression),
+    "Morph Ball Bomb": ItemData("Morph Ball Bomb", 6, ItemClassification.progression),
     "Power Bomb Expansion": ItemData("Power Bomb Expansion", 7, ItemClassification.useful, 99),
     "Flamethrower": ItemData("Flamethrower", 8, ItemClassification.filler),
     "Thermal Visor": ItemData("Thermal Visor", 9, ItemClassification.progression),
@@ -48,10 +48,13 @@ suit_upgrade_table: dict[str, ItemData] = {
     "Varia Suit": ItemData("Varia Suit", 22, ItemClassification.progression),
     "Phazon Suit": ItemData("Phazon Suit", 23, ItemClassification.progression),
     "Energy Tank": ItemData("Energy Tank", 24, ItemClassification.useful, 14),
-    "UnknownItem1": ItemData("UnknownItem1", 25, ItemClassification.useful),
     # item 026 is a health refill
-    "Ice Trap": ItemData("Ice Trap", 27, ItemClassification.trap),
     "Wavebuster": ItemData("Wavebuster", 28, ItemClassification.filler),
+}
+
+misc_item_table: dict[str, ItemData] = {
+    "UnknownItem1": ItemData("UnknownItem1", 25, ItemClassification.useful),
+    "Ice Trap": ItemData("Ice Trap", 27, ItemClassification.trap),
 }
 
 # These item ids are invalid in the player state, we'll need to exclude it from logic relying on that

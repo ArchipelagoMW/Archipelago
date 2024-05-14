@@ -27,7 +27,7 @@ class MetroidPrimeLogic(LogicMixin):
         return count
 
     def prime_can_bomb(self, world: MultiWorld, player: int) -> bool:
-        return self.has_all({'Morph Ball', 'Morph Ball Bombs'}, player)
+        return self.has_all({'Morph Ball', 'Morph Ball Bomb'}, player)
 
     def prime_can_boost(self, world: MultiWorld, player: int) -> bool:
         return self.has_all({'Morph Ball', 'Boost Ball'}, player)
@@ -125,5 +125,5 @@ class MetroidPrimeLogic(LogicMixin):
     # should also cover reverse lower mines since upper mines can logically expect magmoor elevator
     def prime_lower_mines(self, world: MultiWorld, player: int) -> bool:
         return (self.prime_upper_mines(world, player) and self.prime_can_pb(world, player) and
-                self.has_all({'Morph Ball Bombs', 'Boost Ball', 'Spider Ball', 'Plasma Beam',
+                self.has_all({'Morph Ball Bomb', 'Boost Ball', 'Spider Ball', 'Plasma Beam',
                               'X-Ray Visor', 'Grapple Beam'}, player))

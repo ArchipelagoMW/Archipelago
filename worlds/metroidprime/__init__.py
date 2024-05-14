@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Any, Dict, List
 from BaseClasses import Item, Tutorial, ItemClassification
 from .Items import MetroidPrimeItem, suit_upgrade_table, artifact_table, item_table, custom_suit_upgrade_table
@@ -45,6 +46,7 @@ class MetroidPrimeWorld(World):
     topology_present = True
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = every_location
+    settings: MetroidPrimeSettings
 
     def create_regions(self) -> None:
         boss_selection = int(self.options.final_bosses)
@@ -113,9 +115,22 @@ class MetroidPrimeWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: (
             state.can_reach("Mission Complete", "Region", self.player))
 
-    def generate_output(self) -> None:
-        configjson = make_config(self, self.options)
-        py_randomprime.patch_iso(self.settings.rom_file, "prime_out.iso", configjson)
+    def generate_output(self, output_directory: str) -> None:
+        configjson = make_config(self)
+        # convert configjson to json
+        import json
+
+        configjsons = json.dumps(configjson, indent=4)
+        # TODO: Remove this later
+        # write configjson to a file for review
+        with open("config.json", "w") as file:
+            file.write(configjsons)
+        notifier = py_randomprime.ProgressNotifier(lambda progress, message: print("Generating ISO: ", progress, message))
+
+        input_iso_path = Path(settings.get_settings().metroidprime_options.rom_file)
+        output_iso_path = Path(f"{output_directory}\prime_out.iso")
+
+        py_randomprime.patch_iso(input_iso_path, output_iso_path, configjson, notifier)
 
     def fill_slot_data(self) -> Dict[str, Any]:
 
