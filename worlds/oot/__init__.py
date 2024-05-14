@@ -92,7 +92,7 @@ class OOTSettings(settings.Group):
 
 class OOTWeb(WebWorld):
     setup = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up the Archipelago Ocarina of Time software on your computer.",
         "English",
         "setup_en.md",
@@ -118,7 +118,16 @@ class OOTWeb(WebWorld):
         ["TheLynk"]
     )
 
-    tutorials = [setup, setup_es, setup_fr]
+    setup_de = Tutorial(
+        setup.tutorial_name,
+        setup.description,
+        "Deutsch",
+        "setup_de.md",
+        "setup/de",
+        ["Held_der_Zeit"]
+    )
+
+    tutorials = [setup, setup_es, setup_fr, setup_de]
 
 
 class OOTWorld(World):
@@ -708,7 +717,6 @@ class OOTWorld(World):
             item = self.create_item(name, allow_arbitrary_name=True)
         self.multiworld.push_item(location, item, collect=False)
         location.locked = True
-        location.event = True
         if name not in item_table:
             location.internal = True
         return item
@@ -833,7 +841,7 @@ class OOTWorld(World):
         all_state.sweep_for_events(locations=all_locations)
         reachable = self.multiworld.get_reachable_locations(all_state, self.player)
         unreachable = [loc for loc in all_locations if
-                       (loc.internal or loc.type == 'Drop') and loc.event and loc.locked and loc not in reachable]
+                       (loc.internal or loc.type == 'Drop') and loc.address is None and loc.locked and loc not in reachable]
         for loc in unreachable:
             loc.parent_region.locations.remove(loc)
         # Exception: Sell Big Poe is an event which is only reachable if Bottle with Big Poe is in the item pool.
@@ -963,7 +971,6 @@ class OOTWorld(World):
                     for location in song_locations:
                         location.item = None
                         location.locked = False
-                        location.event = False
                 else:
                     break
 
@@ -1025,6 +1032,31 @@ class OOTWorld(World):
 
 
     def generate_output(self, output_directory: str):
+
+        # Write entrances to spoiler log
+        all_entrances = self.get_shuffled_entrances()
+        all_entrances.sort(reverse=True, key=lambda x: (x.type, x.name))
+        if not self.decouple_entrances:
+            while all_entrances:
+                loadzone = all_entrances.pop()
+                if loadzone.type != 'Overworld':
+                    if loadzone.primary:
+                        entrance = loadzone
+                    else:
+                        entrance = loadzone.reverse
+                    if entrance.reverse is not None:
+                        self.multiworld.spoiler.set_entrance(entrance, entrance.replaces.reverse, 'both', self.player)
+                    else:
+                        self.multiworld.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
+                else:
+                    reverse = loadzone.replaces.reverse
+                    if reverse in all_entrances:
+                        all_entrances.remove(reverse)
+                    self.multiworld.spoiler.set_entrance(loadzone, reverse, 'both', self.player)
+        else:
+            for entrance in all_entrances:
+                self.multiworld.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
+
         if self.hints != 'none':
             self.hint_data_available.wait()
 
@@ -1220,37 +1252,14 @@ class OOTWorld(World):
 
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
         required_trials_str = ", ".join(t for t in self.skipped_trials if not self.skipped_trials[t])
+        if required_trials_str == "":
+            required_trials_str = "None"
         spoiler_handle.write(f"\n\nTrials ({self.multiworld.get_player_name(self.player)}): {required_trials_str}\n")
 
         if self.shopsanity != 'off':
             spoiler_handle.write(f"\nShop Prices ({self.multiworld.get_player_name(self.player)}):\n")
             for k, v in self.shop_prices.items():
                 spoiler_handle.write(f"{k}: {v} Rupees\n")
-
-        # Write entrances to spoiler log
-        all_entrances = self.get_shuffled_entrances()
-        all_entrances.sort(reverse=True, key=lambda x: x.name)
-        all_entrances.sort(reverse=True, key=lambda x: x.type)
-        if not self.decouple_entrances:
-            while all_entrances:
-                loadzone = all_entrances.pop()
-                if loadzone.type != 'Overworld':
-                    if loadzone.primary:
-                        entrance = loadzone
-                    else:
-                        entrance = loadzone.reverse
-                    if entrance.reverse is not None:
-                        self.multiworld.spoiler.set_entrance(entrance, entrance.replaces.reverse, 'both', self.player)
-                    else:
-                        self.multiworld.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
-                else:
-                    reverse = loadzone.replaces.reverse
-                    if reverse in all_entrances:
-                        all_entrances.remove(reverse)
-                    self.multiworld.spoiler.set_entrance(loadzone, reverse, 'both', self.player)
-        else:
-            for entrance in all_entrances:
-                self.multiworld.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
 
 
     # Key ring handling:

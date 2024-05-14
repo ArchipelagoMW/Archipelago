@@ -1,3 +1,0 @@
-Disabled Locations:
-0x0356B (Challenge Vault Box)
-0x04D75 (Vault Door)

@@ -21,7 +21,7 @@ from pathlib import Path
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 try:
-    requirement = 'cx-Freeze>=6.15.10'
+    requirement = 'cx-Freeze>=7.0.0'
     import pkg_resources
     try:
         pkg_resources.require(requirement)
@@ -54,7 +54,6 @@ if __name__ == "__main__":
     # TODO: move stuff to not require this
     import ModuleUpdate
     ModuleUpdate.update(yes="--yes" in sys.argv or "-y" in sys.argv)
-    ModuleUpdate.update_ran = False  # restore for later
 
 from worlds.LauncherComponents import components, icon_paths
 from Utils import version_tuple, is_windows, is_linux
@@ -69,26 +68,22 @@ non_apworlds: set = {
     "Archipelago",
     "ChecksFinder",
     "Clique",
-    "DLCQuest",
     "Final Fantasy",
     "Lufia II Ancient Cave",
     "Meritous",
     "Ocarina of Time",
     "Overcooked! 2",
     "Raft",
-    "Secret of Evermore",
     "Slay the Spire",
     "Sudoku",
     "Super Mario 64",
     "VVVVVV",
     "Wargroove",
-    "Zillion",
 }
 
 # LogicMixin is broken before 3.10 import revamp
 if sys.version_info < (3,10):
     non_apworlds.add("Hollow Knight")
-    non_apworlds.add("Starcraft 2 Wings of Liberty")
 
 def download_SNI():
     print("Updating SNI")
@@ -233,8 +228,8 @@ class BuildCommand(setuptools.command.build.build):
 
 
 # Override cx_Freeze's build_exe command for pre and post build steps
-class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
-    user_options = cx_Freeze.command.build_exe.BuildEXE.user_options + [
+class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
+    user_options = cx_Freeze.command.build_exe.build_exe.user_options + [
         ('yes', 'y', 'Answer "yes" to all questions.'),
         ('extra-data=', None, 'Additional files to add.'),
     ]
@@ -305,7 +300,6 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         print(f"Outputting to: {self.buildfolder}")
         os.makedirs(self.buildfolder, exist_ok=True)
         import ModuleUpdate
-        ModuleUpdate.requirements_files.add(os.path.join("WebHostLib", "requirements.txt"))
         ModuleUpdate.update(yes=self.yes)
 
         # auto-build cython modules
@@ -352,6 +346,18 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
             for folder in sdl2.dep_bins + glew.dep_bins:
                 shutil.copytree(folder, self.libfolder, dirs_exist_ok=True)
                 print(f"copying {folder} -> {self.libfolder}")
+            # windows needs Visual Studio C++ Redistributable
+            # Installer works for x64 and arm64
+            print("Downloading VC Redist")
+            import certifi
+            import ssl
+            context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=certifi.where())
+            with urllib.request.urlopen(r"https://aka.ms/vs/17/release/vc_redist.x64.exe",
+                                        context=context) as download:
+                vc_redist = download.read()
+            print(f"Download complete, {len(vc_redist) / 1024 / 1024:.2f} MBytes downloaded.", )
+            with open("VC_redist.x64.exe", "wb") as vc_file:
+                vc_file.write(vc_redist)
 
         for data in self.extra_data:
             self.installfile(Path(data))
@@ -387,8 +393,6 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
                     folders_to_remove.append(file_name)
                 shutil.rmtree(world_directory)
         shutil.copyfile("meta.yaml", self.buildfolder / "Players" / "Templates" / "meta.yaml")
-        # TODO: fix LttP options one day
-        shutil.copyfile("playerSettings.yaml", self.buildfolder / "Players" / "Templates" / "A Link to the Past.yaml")
         try:
             from maseya import z3pr
         except ImportError:
