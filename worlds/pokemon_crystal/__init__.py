@@ -14,7 +14,7 @@ from .data import (PokemonData, MoveData, TrainerData, LearnsetData, data as cry
 from .rom import generate_output
 from .locations import create_locations, PokemonCrystalLocation, create_location_label_to_id_map
 from .utils import get_random_pokemon, get_random_filler_item, get_random_held_item, get_random_types, get_type_colors, \
-    get_random_colors, get_random_base_stats
+    get_random_colors, get_random_base_stats, get_tmhm_compatibility
 
 
 class PokemonCrystalSettings(settings.Group):
@@ -177,6 +177,12 @@ class PokemonCrystalWorld(World):
                 new_learnset = [LearnsetData(level, get_random_move()) for level in learn_levels]
                 self.generated_pokemon[pkmn_name] = self.generated_pokemon[pkmn_name]._replace(learnset=new_learnset)
 
+        if self.options.tm_compatibility > 0 or self.options.hm_compatibility > 0:
+            for pkmn_name, pkmn_data in self.generated_pokemon.items():
+                new_tmhms = get_tmhm_compatibility(self.options.tm_compatibility.value,
+                                                   self.options.hm_compatibility.value, pkmn_data.types, self.random)
+                self.generated_pokemon[pkmn_name] = self.generated_pokemon[pkmn_name]._replace(tm_hm=new_tmhms)
+
         if self.options.randomize_starters:
             for evo_line in self.generated_starters:
                 rival_fights = [(trainer_name, trainer) for trainer_name, trainer in self.generated_trainers.items() if
@@ -235,7 +241,6 @@ class PokemonCrystalWorld(World):
             "randomize_starters",
             "randomize_wilds",
             "randomize_learnsets",
-            "full_tmhm_compatibility",
             "blind_trainers",
             "better_marts",
             "goal",

@@ -24,7 +24,6 @@ class LocationData(NamedTuple):
     rom_address: int
     flag: int
     tags: FrozenSet[str]
-    # location_type: str
     script: str
 
 
@@ -74,6 +73,12 @@ class MoveData(NamedTuple):
     is_hm: bool
 
 
+class TMHMData(NamedTuple):
+    tm_num: int
+    type: str
+    is_hm: bool
+
+
 class TrainerData(NamedTuple):
     trainer_type: str
     pokemon: List[List[str]]
@@ -99,6 +104,7 @@ class PokemonCrystalData:
     fish: Dict[str, FishData]
     types: List[str]
     type_ids: Dict[str, int]
+    tmhm: Dict[str, TMHMData]
     f_t: List[List[int]]
 
     def __init__(self) -> None:
@@ -138,6 +144,7 @@ def _init() -> None:
     wildfish_data = data_json["wilds"]["fish"]
     type_data = data_json["types"]
     f_data = data_json["misc"]["fuchsia"]
+    tmhm_data = data_json["tmhm"]
 
     claimed_locations: Set[str] = set()
     claimed_warps: Set[str] = set()
@@ -257,6 +264,14 @@ def _init() -> None:
     data.f_t = f_data
     data.types = type_data["types"]
     data.type_ids = type_data["ids"]
+
+    data.tmhm = {}
+    for tm_name, tm_data in tmhm_data.items():
+        data.tmhm[tm_name] = TMHMData(
+            tm_data["tm_num"],
+            tm_data["type"],
+            tm_data["is_hm"]
+        )
 
 
 _init()

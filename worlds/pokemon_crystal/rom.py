@@ -133,13 +133,6 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
         write_bytes(patched_rom, [33, 0, 66, 2, 100, 4],
                     data.rom_addresses["AP_Prob_WaterMon"])
 
-    if world.options.full_tmhm_compatibility:
-        address = data.rom_addresses["BaseData"]
-        for i in range(251):
-            address += 24
-            write_bytes(patched_rom, [255, 255, 255, 255, 255, 255, 255, 15], address)
-            address += 8
-
     if world.options.randomize_learnsets > 0:
         for pkmn_name, pkmn_data in world.generated_pokemon.items():
             address = data.rom_addresses["AP_EvosAttacks_" + pkmn_name]
@@ -152,6 +145,14 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
     for pkmn_name, pals in world.generated_palettes.items():
         address = data.rom_addresses["AP_Stats_Palette_" + pkmn_name]
         write_bytes(patched_rom, pals[0] + pals[1], address)
+
+    for pkmn_name, pkmn_data in world.generated_pokemon.items():
+        tm_bytes = [0, 0, 0, 0, 0, 0, 0, 0]
+        for tm in pkmn_data.tm_hm:
+            tm_num = data.tmhm[tm].tm_num
+            tm_bytes[int(tm_num / 8)] |= 1 << tm_num % 8
+        address = data.rom_addresses["AP_Stats_TMHM_" + pkmn_name]
+        write_bytes(patched_rom, tm_bytes, address)
 
     if world.options.randomize_types > 0:
         for pkmn_name, pkmn_data in world.generated_pokemon.items():
