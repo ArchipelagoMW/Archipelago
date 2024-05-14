@@ -235,11 +235,16 @@ class MMX3World(World):
     
     def fill_slot_data(self):
         slot_data = {}
-        for option_name in (attr.name for attr in dataclasses.fields(MMX3Options)
-                            if attr not in dataclasses.fields(PerGameCommonOptions)):
-            option = getattr(self.options, option_name)
-            slot_data[option_name] = option.value
+        slot_data["Doppler Open"] = self.options.doppler_open.value
+        slot_data["Vile Open"] = self.options.vile_open.value
+        slot_data["Boss Weakness Rando"] = self.options.boss_weakness_rando.value
+        slot_data["Boss Weaknesses"] = {}
+        for boss, data in self.boss_weaknesses.items():
+            slot_data["Boss Weaknesses"][boss] = []
+            for i in range(len(data)):
+                slot_data["Boss Weaknesses"][boss].append(data[i][1])
         return slot_data
+    
     
     def generate_early(self):
         if self.options.boss_weakness_rando != "vanilla":
@@ -248,6 +253,7 @@ class MMX3World(World):
             randomize_weaknesses(self)
         early_stage = self.random.choice(list(item_groups["Access Codes"]))
         self.multiworld.local_early_items[self.player][early_stage] = 1
+
 
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
         if self.options.boss_weakness_rando != "vanilla":
@@ -264,6 +270,7 @@ class MMX3World(World):
     def get_filler_item_name(self) -> str:
         return self.random.choice(list(junk_table.keys()))
 
+
     def generate_output(self, output_directory: str):
         try:
             patch = MMX3ProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
@@ -279,6 +286,7 @@ class MMX3World(World):
         finally:
             self.rom_name_available_event.set()  # make sure threading continues and errors are collected
 
+
     def modify_multidata(self, multidata: dict):
         import base64
         # wait for self.rom_name to be available.
@@ -288,7 +296,3 @@ class MMX3World(World):
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
-
-    @classmethod
-    def stage_fill_hook(cls, multiworld: MultiWorld, progitempool, usefulitempool, filleritempool, fill_locations):
-        return
