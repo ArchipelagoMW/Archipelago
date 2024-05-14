@@ -279,7 +279,7 @@ class CommonContext:
         # execution
         self.keep_alive_task = asyncio.create_task(keep_alive(self), name="Bouncy")
 
-        if gui_enabled:
+        if gui_enabled and self.ui_manager is None:
             from kvui import GameManager
 
             class TextManager(GameManager):
