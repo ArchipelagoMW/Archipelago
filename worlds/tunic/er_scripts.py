@@ -1,7 +1,7 @@
 from typing import Dict, List, Set, TYPE_CHECKING
 from BaseClasses import Region, ItemClassification, Item, Location
 from .locations import location_table
-from .er_data import Portal, tunic_er_regions, portal_mapping, traversal_requirements
+from .er_data import Portal, tunic_er_regions, portal_mapping, traversal_requirements, DeadEnd
 from .er_rules import set_er_region_rules
 from .options import EntranceRando
 from worlds.generic import PlandoConnection
@@ -163,42 +163,29 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                 break
 
     # create separate lists for dead ends and non-dead ends
-    if logic_rules:
-        for portal in portal_map:
-            if tunic_er_regions[portal.region].dead_end == 3:
-                # we treat secret gathering place as a two_plus if laurels is there, so it can be added earlier
-                if portal.region == "Secret Gathering Place":
-                    if laurels_location == "10_fairies":
-                        two_plus.append(portal)
-                    else:
-                        dead_ends.append(portal)
-                if portal.region == "Zig Skip Exit":
-                    if fixed_shop:
-                        two_plus.append(portal)
-                    else:
-                        dead_ends.append(portal)
-            # this is the difference between this and the below one
-            elif tunic_er_regions[portal.region].dead_end == 1:
-                dead_ends.append(portal)
-            else:
+    for portal in portal_map:
+        dead_end_status = tunic_er_regions[portal.region].dead_end
+        if dead_end_status == DeadEnd.free:
+            two_plus.append(portal)
+        elif dead_end_status == DeadEnd.all_cats:
+            dead_ends.append(portal)
+        elif dead_end_status == DeadEnd.restricted:
+            if logic_rules:
                 two_plus.append(portal)
-    else:
-        for portal in portal_map:
-            if tunic_er_regions[portal.region].dead_end == 3:
-                if portal.region == "Secret Gathering Place":
-                    if laurels_location == "10_fairies":
-                        two_plus.append(portal)
-                    else:
-                        dead_ends.append(portal)
-                if portal.region == "Zig Skip Exit":
-                    if fixed_shop:
-                        two_plus.append(portal)
-                    else:
-                        dead_ends.append(portal)
-            elif tunic_er_regions[portal.region].dead_end:
-                dead_ends.append(portal)
             else:
-                two_plus.append(portal)
+                dead_ends.append(portal)
+        # these two get special handling
+        elif dead_end_status == DeadEnd.special:
+            if portal.region == "Secret Gathering Place":
+                if laurels_location == "10_fairies":
+                    two_plus.append(portal)
+                else:
+                    dead_ends.append(portal)
+            if portal.region == "Zig Skip Exit":
+                if fixed_shop:
+                    two_plus.append(portal)
+                else:
+                    dead_ends.append(portal)
 
     connected_regions: Set[str] = set()
     # make better start region stuff when/if implementing random start
@@ -488,26 +475,20 @@ def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[s
                              has_laurels: bool, logic: int) -> Set[str]:
     # starting count, so we can run it again if this changes
     region_count = len(connected_regions)
-    # checking each origin region
     for origin, destinations in traversal_reqs.items():
-        # if the origin is not connected, skip it
         if origin not in connected_regions:
             continue
         # check if we can traverse to any of the destinations
         for destination, req_lists in destinations.items():
-            # if the destination already connected, skip it
             if destination in connected_regions:
                 continue
-            # met meaning met the requirements to traverse
-            met = False
-            # if the list of requirement lists is empty, then you can freely connect this
+            met_traversal_reqs = False
             if len(req_lists) == 0:
-                met = True
+                met_traversal_reqs = True
             # loop through each set of possible requirements
             for reqs in req_lists:
-                # if for some reason a list is empty, then you can freely connect it
                 if len(reqs) == 0:
-                    met = True
+                    met_traversal_reqs = True
                 else:
                     met_count = 0
                     for req in reqs:
@@ -522,12 +503,11 @@ def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[s
                         if req in connected_regions:
                             met_count += 1
                     if met_count == len(reqs):
-                        met = True
+                        met_traversal_reqs = True
                 # if we met one set of requirements, no need to check the next set
-                if met:
+                if met_traversal_reqs:
                     break
-            # if we can reach it, we add it to connected_regions
-            if met:
+            if met_traversal_reqs:
                 connected_regions.add(destination)
 
     # if the length of connected_regions changed, we got new regions, so we want to check those new origins
