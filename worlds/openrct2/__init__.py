@@ -7,7 +7,7 @@ from worlds.generic.Rules import add_rule
 
 from .Constants import base_id, item_info, location_info, scenario_info
 from .Items import OpenRCT2Item, set_openRCT2_items
-from .Options import openRCT2Options
+from .Options import openRCT2Options, Scenario
 from worlds.AutoWorld import World, WebWorld
 class OpenRCT2WebWorld(WebWorld):
     tutorials = []
