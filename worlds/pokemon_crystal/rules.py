@@ -11,25 +11,61 @@ else:
 
 def set_rules(world: PokemonCrystalWorld) -> None:
     def can_cut(state: CollectionState):
-        return state.has("HM01 Cut", world.player) and state.has("Hive Badge", world.player)
+        if world.options.hm_badge_requirements == 0:
+            return state.has("HM01 Cut", world.player) and state.has("Hive Badge", world.player)
+        elif world.options.hm_badge_requirements == 1:
+            return state.has("HM01 Cut", world.player)
+        else:
+            return state.has("HM01 Cut", world.player) and (
+                    state.has("Hive Badge", world.player) or state.has("Cascade Badge", world.player))
 
     # def can_fly(state: CollectionState):
     #     return state.has("HM02 Fly", world.player) and state.has("Storm Badge", world.player)
 
     def can_surf(state: CollectionState):
-        return state.has("HM03 Surf", world.player) and state.has("Fog Badge", world.player)
+        if world.options.hm_badge_requirements == 0:
+            return state.has("HM03 Surf", world.player) and state.has("Fog Badge", world.player)
+        elif world.options.hm_badge_requirements == 1:
+            return state.has("HM03 Surf", world.player)
+        else:
+            return state.has("HM03 Surf", world.player) and (
+                    state.has("Fog Badge", world.player) or state.has("Soul Badge", world.player))
 
     def can_strength(state: CollectionState):
-        return state.has("HM04 Strength", world.player) and state.has("Plain Badge", world.player)
+        if world.options.hm_badge_requirements == 0:
+            return state.has("HM04 Strength", world.player) and state.has("Plain Badge", world.player)
+        elif world.options.hm_badge_requirements == 1:
+            return state.has("HM04 Strength", world.player)
+        else:
+            return state.has("HM04 Strength", world.player) and (
+                    state.has("Plain Badge", world.player) or state.has("Rainbow Badge", world.player))
 
     def can_flash(state: CollectionState):
-        return state.has("HM05 Flash", world.player) and state.has("Zephyr Badge", world.player)
+        if world.options.hm_badge_requirements == 0:
+            return state.has("HM05 Flash", world.player) and state.has("Zephyr Badge", world.player)
+        elif world.options.hm_badge_requirements == 1:
+            return state.has("HM05 Flash", world.player)
+        else:
+            return state.has("HM05 Flash", world.player) and (
+                    state.has("Zephyr Badge", world.player) or state.has("Boulder Badge", world.player))
 
     def can_whirlpool(state: CollectionState):
-        return state.has("HM06 Whirlpool", world.player) and state.has("Glacier Badge", world.player)
+        if world.options.hm_badge_requirements == 0:
+            return state.has("HM06 Whirlpool", world.player) and state.has("Glacier Badge", world.player)
+        elif world.options.hm_badge_requirements == 1:
+            return state.has("HM06 Whirlpool", world.player)
+        else:
+            return state.has("HM06 Whirlpool", world.player) and (
+                    state.has("Glacier Badge", world.player) or state.has("Earth Badge", world.player))
 
     def can_waterfall(state: CollectionState):
-        return state.has("HM07 Waterfall", world.player) and state.has("Rising Badge", world.player)
+        if world.options.hm_badge_requirements == 0:
+            return state.has("HM07 Waterfall", world.player) and state.has("Rising Badge", world.player)
+        elif world.options.hm_badge_requirements == 1:
+            return state.has("HM07 Waterfall", world.player)
+        else:
+            return state.has("HM07 Waterfall", world.player) and (
+                    state.has("Rising Badge", world.player) or state.has("Volcano Badge", world.player))
 
     def can_rocksmash(state: CollectionState):
         return state.has("TM08 Rock Smash", world.player)
