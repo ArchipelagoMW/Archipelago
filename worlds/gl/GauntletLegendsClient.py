@@ -4,14 +4,15 @@ import traceback
 
 import Patch
 import Utils
+from BaseClasses import ItemClassification
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, \
     get_base_parser
 from typing import List
 
 from NetUtils import ClientStatus, NetworkItem
 from worlds.gl.Arrays import inv_dict, timers, base_count, castle_id, level_locations, \
-    difficulty_convert
-from worlds.gl.Items import items_by_id
+    difficulty_convert, spawners
+from worlds.gl.Items import items_by_id, ItemData
 from worlds.gl.Locations import LocationData
 
 SYSTEM_MESSAGE_ID = 0
@@ -157,6 +158,7 @@ class GauntletLegendsContext(CommonContext):
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
+        self.difficulty: int = 0
         self.gl_sync_task = None
         self.received_index: int = 0
         self.glslotdata = None
@@ -173,7 +175,7 @@ class GauntletLegendsContext(CommonContext):
         self.level_loading: bool = False
         self.in_game: bool = False
         self.objects_loaded: bool = False
-        self.obelisks: List[int] = []
+        self.obelisks: List[NetworkItem] = []
         self.item_locations: List[LocationData] = []
         self.obelisk_locations: List[LocationData] = []
         self.chest_locations: List[LocationData] = []
@@ -226,25 +228,26 @@ class GauntletLegendsContext(CommonContext):
         return (int.from_bytes(self.socket.read(MessageFormat(READ, f"0x{format(OBJ_ADDR, 'x')} 4")), 'little') + (0x3C * 0x2A)) & 0xFFFFF
 
     # Modes: 0 = items, 1 = chests/barrels
-    async def obj_read(self, mode=0) -> List[ObjectEntry] | None:
+    async def obj_read(self, mode=0):
         obj_address = self.get_obj_addr()
         _obj = []
-        b = RamChunk(self.socket.read(MessageFormat(READ, f"0x{format(obj_address + ((0 if self.offset == -1 else self.offset) * 0x3C), 'x')} {'18000' if self.offset == -1 else (100 * 0x3C)}")))
+        if self.offset == -1:
+            b = RamChunk(self.socket.read(MessageFormat(READ, f"0x{format(obj_address, 'x')} {0x3C * 0x50}")))
+            b.iterate(0x3C)
+            for i, arr in enumerate(b.split):
+                if arr[0] != 0xFF:
+                    self.offset = i
+                    break
+        b = RamChunk(self.socket.read(MessageFormat(READ, f"0x{format(obj_address + (self.offset * 0x3C + (0 if mode == 0 else 0x3C * (len(self.item_locations) + len([spawner for spawner in spawners[(self.current_level[1] << 4) + self.current_level[0]] if self.difficulty >= spawner])))), 'x')} {0x3C * (len(self.item_locations) if mode == 0 else len(self.chest_locations))}")))
         b.iterate(0x3C)
         if mode == 0:
             for i, arr in enumerate(b.split):
-                if arr[0] != 0xFF:
-                    if self.offset == -1:
-                        self.offset = i
-                    _obj += [ObjectEntry(arr)]
+                _obj += [ObjectEntry(arr)]
             self.item_objects = _obj
         elif mode == 1:
-            for i, arr in enumerate(b.split[len(self.item_locations):]):
-                if arr[0] != 0xFF:
-                    if self.offset == -1:
-                        self.offset = i
-                    _obj += [ObjectEntry(arr)]
-        return _obj
+            for i, arr in enumerate(b.split):
+                _obj += [ObjectEntry(arr)]
+            self.chest_objects = _obj
 
     def inv_update(self, name: str, count: int):
         self.inv_read()
@@ -433,17 +436,19 @@ class GauntletLegendsContext(CommonContext):
             difficulty = self.active_players() + (0 if level[1] != 2 else min(self.player_level() // 10, 3))
         else:
             difficulty = self.active_players()
+        self.difficulty = difficulty
         _id = level[0]
         if level[1] == 1:
             _id = castle_id.index(level[0]) + 1
-        raw_locations = [location for location in level_locations.get((level[1] << 4) + _id, []) if location.difficulty >= difficulty]
+        raw_locations = [location for location in level_locations.get((level[1] << 4) + _id, []) if difficulty >= location.difficulty]
         await ctx.send_msgs([{"cmd": "LocationScouts", "locations": [location.id for location in raw_locations], "create_as_hint": 0}])
         while len(self.location_scouts) == 0:
             await asyncio.sleep(.1)
-        self.obelisks = [item for item in self.location_scouts if "Obelisk" in items_by_id[item.item].itemName and item.player == self.slot]
+        self.obelisks = [item for item in self.location_scouts if "Obelisk" in items_by_id.get(item.item, ItemData(0, "", ItemClassification.filler)).itemName and item.player == self.slot]
         self.obelisk_locations = [location for location in raw_locations if location.id in [item.location for item in self.obelisks]]
         self.item_locations = [location for location in raw_locations if "Chest" not in location.name and ("Barrel" not in location.name or "Barrel of Gold" in location.name) and location not in self.obelisk_locations]
         self.chest_locations = [location for location in raw_locations if "Chest" in location.name or ("Barrel" in location.name and "Barrel of Gold" not in location.name) and location not in self.obelisk_locations]
+        logger.info(f"Locations: {len(self.obelisk_locations + self.item_locations + self.chest_locations)} Difficulty: {self.difficulty}")
 
     async def location_loop(self) -> List[int]:
         await self.obj_read()
@@ -454,16 +459,22 @@ class GauntletLegendsContext(CommonContext):
                 if self.item_locations[i].id not in self.locations_checked:
                     self.locations_checked += [self.item_locations[i].id]
                     acquired += [self.item_locations[i].id]
-        for i, obj in enumerate(self.obelisk_objects):
-            obelisk_id = self.obelisks[i] - 77780055
+        for j in range(len(self.obelisk_locations)):
+            obelisk_id = self.obelisks[j].item - 77780055
             if self.inv_bitwise("Obelisk", 1 << obelisk_id):
-                self.locations_checked += [self.obelisk_locations[i].id]
-                acquired += [self.obelisk_locations[i].id]
-        for i, obj in enumerate(self.obelisk_objects):
-            if obj.raw[:2] == bytes([0xAD, 0xB]):
-                if self.chest_locations[i].id not in self.locations_checked:
-                    self.locations_checked += [self.chest_locations[i].id]
-                    acquired += [self.chest_locations[i].id]
+                self.locations_checked += [self.obelisk_locations[j].id]
+                acquired += [self.obelisk_locations[j].id]
+        for k, obj in enumerate(self.chest_objects):
+            if "Chest" in self.chest_locations[k].name:
+                if obj.raw[:2] == bytes([0xAD, 0xB]):
+                    if self.chest_locations[k].id not in self.locations_checked:
+                        self.locations_checked += [self.chest_locations[k].id]
+                        acquired += [self.chest_locations[k].id]
+            else:
+                if obj.raw[33] != 0:
+                    if self.chest_locations[k].id not in self.locations_checked:
+                        self.locations_checked += [self.chest_locations[k].id]
+                        acquired += [self.chest_locations[k].id]
         if self.dead():
             return []
         return acquired
@@ -493,13 +504,14 @@ class GauntletLegendsContext(CommonContext):
             self.chest_locations = []
             self.chest_objects = []
             self.obelisk_locations = []
-            self.obelisk_objects = []
             self.obelisks = []
             self.in_game = False
             self.level_loading = False
             self.scaled = False
             self.offset = -1
             self.movement = 0
+            self.difficulty = 0
+            self.location_scouts = []
             return True
         return False
 

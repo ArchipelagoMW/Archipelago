@@ -120,6 +120,7 @@ class Rom:
             print(i)
             self.stream.seek(level_address[i], 0)
             data = self.get_level_data(level_size[i])
+            self.print_data(i, level, data)
             print("Data Acquired")
             for j, location in enumerate(level):
                 try:
@@ -157,8 +158,8 @@ class Rom:
                 if location.item.player is not self.player:
                     if "Chest" in location.name or ("Barrel" in location.name and "Barrel of Gold" not in location.name):
                         print(j - len(data.items))
-                        data.chests[j - len(data.items)][12] = 0x27
-                        data.chests[j - len(data.items)][13] = 0x4
+                        data.chests[j - (len(data.items) + data.obelisk)][12] = 0x27
+                        data.chests[j - (len(data.items) + data.obelisk)][13] = 0x4
                     else:
                         data.items[j - data.obelisk][6] = 0x27
                         data.items[j - data.obelisk][7] = 0x4
@@ -174,8 +175,8 @@ class Rom:
                     else:
                         if "Chest" in location.name or ("Barrel" in location.name and "Barrel of Gold" not in location.name):
                             print(j - len(data.items))
-                            data.chests[j - len(data.items)][12] = item_dict[location.item.code][0]
-                            data.chests[j - len(data.items)][13] = item_dict[location.item.code][1]
+                            data.chests[j - (len(data.items) + data.obelisk)][12] = item_dict[location.item.code][0]
+                            data.chests[j - (len(data.items) + data.obelisk)][13] = item_dict[location.item.code][1]
                         else:
                             data.items[j - data.obelisk][6] = item_dict[location.item.code][0]
                             data.items[j - data.obelisk][7] = item_dict[location.item.code][1]
@@ -234,18 +235,18 @@ class Rom:
         return data
 
     def print_data(self, i: int, level, data: LevelData) -> None:
-        name = level[0].name.find('-')
-        name = level[0].name[:name - 1]
         try:
-            with open(f"C:\\Users\\james\\gl_docs\\{i}_names.txt", "w") as file:
-                    for _i, chests in enumerate(data.chests):
-                        file.write(f"LocationData(\"{name} {'Chest' if chests[8] == 0x17 else 'Barrel'} - {items_by_id.get(next((key for key, value in item_dict.items() if value == [chests[12], chests[13]]), -1), ItemData(0, 'Unknown', ItemClassification.filler)).itemName}\", 8887{i if i > 10 else 30 + i}{_i}, {chests[11]}),\n")
+            with open(f"C:\\Users\\james\\gl_docs\\{i}_spawners.txt", "w") as file:
+                file.write("[")
+                for _i, spawner in enumerate(data.spawners):
+                    file.write(f"{format(spawner[14], 'x')}, ")
+                file.write("]")
         except Exception as e:
             print(traceback.print_exception(e))
 
     def level_data_reformat(self, data: LevelData) -> bytes:
         stream = io.BytesIO()
-        obelisk_offset = (24 * (data.obelisk if data.obelisk > 0 else -data.item))
+        obelisk_offset = (24 * (data.obelisk - data.item))
         stream.write(int.to_bytes(0x5C, 4, "big"))
         stream.write(int.to_bytes(data.spawner_addr + (12 * (data.item - data.obelisk)), 4, "big"))
         stream.write(int.to_bytes(data.spawner_addr + (12 * (data.item - data.obelisk)), 4, "big"))
