@@ -1953,7 +1953,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     def resolve_player(self, input_name: str) -> typing.Optional[typing.Tuple[int, int, str]]:
         """
-        returns (team: int, slot: int, player name: str)
+        returns (team: int, slot: int, player name: str) if player was found or None otherwise
         Looks for an exact match as wrong player can be fatal, _ can be used instead of a space.
         """
         if not self.player_name_lookup_table:
