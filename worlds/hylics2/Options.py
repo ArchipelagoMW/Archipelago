@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions
+from Options import Choice, Removed, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions
 
 class PartyShuffle(Toggle):
     """Shuffles party members into the pool.
@@ -18,10 +18,22 @@ class MedallionShuffle(Toggle):
     """Shuffles red medallions into the pool."""
     display_name = "Shuffle Red Medallions"
 
-class RandomStart(Toggle):
-    """Start the randomizer in 1 of 4 positions.
-    (Waynehouse, Viewax's Edifice, TV Island, Shield Facility)"""
-    display_name = "Randomize Start Location"
+class StartLocation(Choice):
+    """Select the starting location from 1 of 4 positions."""
+    display_name = "Start Location"
+    option_waynehouse = 0
+    option_viewaxs_edifice = 1
+    option_tv_island = 2
+    option_shield_facility = 3
+    default = 0
+
+    @classmethod
+    def get_option_name(cls, value: int) -> str:
+        if value == 1:
+            return "Viewax's Edifice"
+        if value == 2:
+            return "TV Island"
+        return super().get_option_name(value)
 
 class ExtraLogic(DefaultOnToggle):
     """Include some extra items in logic (CHARGE UP, 1x PAPER CUP) to prevent the game from becoming too difficult."""
@@ -37,6 +49,9 @@ class Hylics2Options(PerGameCommonOptions):
     party_shuffle: PartyShuffle
     gesture_shuffle: GestureShuffle
     medallion_shuffle: MedallionShuffle
-    random_start: RandomStart
+    start_location: StartLocation
     extra_items_in_logic: ExtraLogic
     death_link: Hylics2DeathLink
+
+    # Removed options
+    random_start: Removed
