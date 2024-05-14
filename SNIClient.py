@@ -565,7 +565,7 @@ async def snes_write(ctx: SNIContext, write_list: typing.List[typing.Tuple[int, 
         PutAddress_Request: SNESRequest = {"Opcode": "PutAddress", "Operands": [], 'Space': 'SNES'}
         try:
             for address, data in write_list:
-                PutAddress_Request['Operands'] = [hex(address)[2:], hex(min(len(data), 256))[2:]]
+                PutAddress_Request['Operands'] = [hex(address)[2:], hex(len(data))[2:]]
                 if ctx.snes_socket is not None:
                     await ctx.snes_socket.send(dumps(PutAddress_Request))
                     await ctx.snes_socket.send(data)
