@@ -50,17 +50,14 @@ def set_rules(dst_world: World) -> None:
         return reached_autumn(state) or not reached_winter(state)
 
     def mining (state: CollectionState) -> bool: 
-        return state.has_any(["Pickaxe", "Opulent Pickaxe", "Woodie"], player) or EXPERT_PLAYER_BIAS
+        return state.has_any(["Pickaxe", "Opulent Pickaxe", "Woodie"], player)
     
     def chopping (state: CollectionState) -> bool: 
-        return state.has_any(["Axe", "Luxury Axe", "Woodie"], player) or EXPERT_PLAYER_BIAS
+        return state.has_any(["Axe", "Luxury Axe", "Woodie"], player)
     
     def hammering (state: CollectionState) -> bool: 
-        return state.has_any(["Hammer", "Woodie"], player) or EXPERT_PLAYER_BIAS
+        return state.has_any(["Hammer", "Woodie"], player)
     
-    def trapping (state: CollectionState) -> bool: 
-        return state.has("Trap", player)
-
     def bug_catching (state: CollectionState) -> bool:
         return state.has_all(["Bug Net", "Rope"], player)
 
@@ -76,10 +73,17 @@ def set_rules(dst_world: World) -> None:
     def nightmare_fuel (state: CollectionState) -> bool: 
         return CRAFT_WITH_LOCKED_RECIPES or state.has("Nightmare Fuel", player)
 
-    # Rules dependent on other rules. Avoid recursion by using rules above it
+    # Rules dependent on other rules. Avoid recursion by using rules above it    
     def basic_combat (state: CollectionState) -> bool:
         if EXPERT_PLAYER_BIAS: return True
-        return state.has_all(["Rope", "Spear", "Grass Suit"], player) and state.has_any(["Log Suit", "Football Helmet"], player) and chopping(state)
+        return state.has_all(["Rope", "Spear"], player) and state.has_any(["Log Suit", "Football Helmet"], player) and chopping(state)
+    
+    def pre_basic_combat (state: CollectionState) -> bool:
+        if EXPERT_PLAYER_BIAS: return True
+        return (
+            (state.has("Grass Suit", player) and chopping(state)) 
+            or basic_combat(state)
+        )
 
     def gem_digging (state: CollectionState) -> bool:
         return digging(state),
@@ -113,7 +117,7 @@ def set_rules(dst_world: World) -> None:
             return firestarting(state)
         return (
             firestarting(state) 
-            and state.has_any(["Axe", "Pickaxe"], player) # Avoid getting gold axe and no way to mine
+            and state.has_any(["Axe", "Pickaxe"], player) # Have a flint tool at least
         )
 
     def has_survived_num_days (day_goal:int, state: CollectionState) -> bool:
@@ -139,7 +143,7 @@ def set_rules(dst_world: World) -> None:
     def backpack (state: CollectionState) -> bool:
         return (
             state.has("Backpack", player)
-            or (state.has_all(["Piggyback", "Rope"], player) and basic_combat(state))
+            or (state.has_all(["Piggyback", "Rope"], player) and pre_basic_combat(state))
         )
 
     def basic_exploration (state: CollectionState) -> bool:
@@ -147,11 +151,9 @@ def set_rules(dst_world: World) -> None:
         return (
             basic_survival(state) 
             and backpack(state) 
-            and digging(state) 
-            and bug_catching(state) 
             and chopping(state) 
             and mining(state)
-            and state.has_all(["Telltale Heart", "Torch"], player)
+            and state.has_all(["Telltale Heart", "Torch", "Campfire"], player)
         )
 
     def basic_cooking (state: CollectionState) -> bool:
@@ -165,7 +167,7 @@ def set_rules(dst_world: World) -> None:
             (basic_cooking(state) and not state.has("Wormwood", player)) # Wormwood can't heal from food
             or (state.has("Healing Salve", player) and firestarting(state) and mining(state)) # Ash and rocks
             or (honey_farming(state) and state.has_all(["Honey Poultice", "Papyrus"], player)) 
-            or (state.has("Bat Bat", player) and CAVES_ENABLED)
+            or (state.has("Bat Bat", player) and CAVES_ENABLED and (CRAFT_WITH_LOCKED_RECIPES or state.has("Purple Gem", player)))
         )
 
     def slow_healing (state: CollectionState) -> bool:
@@ -180,13 +182,13 @@ def set_rules(dst_world: World) -> None:
 
     def desert_exploration (state: CollectionState) -> bool:
         if ADVANCED_PLAYER_BIAS: return True
-        return basic_exploration(state) and basic_combat(state)
+        return basic_survival(state) and pre_basic_combat(state)
 
     def swamp_exploration (state: CollectionState) -> bool:
         if ADVANCED_PLAYER_BIAS: return True
         return (
-            basic_exploration(state) 
-            and (basic_combat(state) or healing(state)) # Kinda dangerous
+            basic_survival(state) 
+            and (pre_basic_combat(state) or healing(state)) # Kinda dangerous
         )
 
     def base_making (state: CollectionState) -> bool:
@@ -738,14 +740,14 @@ def set_rules(dst_world: World) -> None:
         "locations": {
             # Events
             "Winter": lambda state: winter_survival(state),
-            "Spring": lambda state: reached_winter(state) and spring_survival(state),
-            "Summer": lambda state: reached_spring(state) and summer_survival(state),
-            "Autumn": lambda state: reached_summer(state) and autumn_survival(state),
+            "Spring": lambda state: reached_winter(state) and spring_survival(state) and state.has("Defeat Deerclops", player),
+            "Summer": lambda state: reached_spring(state) and summer_survival(state) and state.has("Defeat Moose/Goose", player),
+            "Autumn": lambda state: reached_summer(state) and autumn_survival(state) and state.has("Defeat Antlion", player),
             "Late Game": lambda state: reached_autumn(state) and late_game_survival(state),
             "Survival Goal": lambda state: survival_goal(state),
-            "Build Science Machine": lambda state: has_survived_num_days(1, state) and chopping(state) and mining(state),
+            "Build Science Machine": lambda state: basic_survival(state) and chopping(state) and mining(state),
             "Build Alchemy Engine": lambda state: base_making(state) and state.has("Science Machine", player),
-            "Build Prestihatitor": lambda state: state.has_all(["Top Hat", "Boards", "Science Machine"], player) and trapping(state),	
+            "Build Prestihatitor": lambda state: state.has_all(["Top Hat", "Boards", "Science Machine", "Trap"], player),	
             "Build Shadow Manipulator": lambda state: ruins_exploration(state) and nightmare_fuel(state) and state.has("Prestihatitor", player),
             "Build Think Tank": lambda state: state.has_all(["Boards", "Science Machine"], player),	
             "Find Celestial Orb": lambda state: has_survived_num_days(5, state) and mining(state),
@@ -780,7 +782,7 @@ def set_rules(dst_world: World) -> None:
             "Defeat Frostjaw": lambda state: advanced_boating(state) and advanced_boss_combat(state) and speed_boost(state) and state.has("Sea Fishing Rod", player),
 
             # Pearl Questline
-            "Hermit Home Upgrade (1)": lambda state: hermit_island(state), # Cookie cutters, boards, fireflies
+            "Hermit Home Upgrade (1)": lambda state: hermit_island(state) and bug_catching(state), # Cookie cutters, boards, fireflies
             "Hermit Home Upgrade (2)": lambda state: hermit_island(state), # Marble, cut stone, light bulb
             "Hermit Home Upgrade (3)": lambda state: hermit_island(state) and state.has("Floorings", player), # Moonrock, rope, carpet
             "Hermit Island Drying Racks": lambda state: hermit_island(state),
@@ -807,7 +809,7 @@ def set_rules(dst_world: World) -> None:
             "Pig King": lambda state: has_survived_num_days(4, state),      
             "Chester": lambda state: has_survived_num_days(8, state),       
             "Hutch": lambda state: cave_exploration(state),         
-            "Stagehand": lambda state: basic_exploration(state) and hammering(state),     
+            "Stagehand": lambda state: basic_survival(state) and hammering(state),     
             "Pirate Stash": lambda state: state.has("Pirate Map", player) and digging(state),  
             "Moon Stone Event": lambda state: state.has("Mooncaller Staff", player),
             "Oasis": lambda state: is_summer(state) and freshwater_fishing(state),
@@ -841,21 +843,21 @@ def set_rules(dst_world: World) -> None:
             "Frostjaw": lambda state: state.has("Defeat Frostjaw", player),
 
             # Creatures
-            "Batilisk": lambda state: basic_exploration(state) and mining(state),
-            "Bee": lambda state: has_survived_num_days(2, state),
-            "Beefalo": lambda state: basic_combat(state),
+            "Batilisk": lambda state: pre_basic_combat(state) and mining(state),
+            "Bee": lambda state: pre_basic_combat(state) or bug_catching(state),
+            "Beefalo": lambda state: basic_survival(state),
             "Clockwork Bishop": lambda state: advanced_combat(state) and (healing(state) or ADVANCED_PLAYER_BIAS),
             "Bunnyman": lambda state: basic_combat(state) and cave_exploration(state),
             "Butterfly": lambda state: True,
             "Buzzard": lambda state: basic_combat(state),
             "Canary": lambda state: canary(state) and can_get_feathers(state),
             "Carrat": lambda state: lunar_island(state),
-            "Catcoon": lambda state: has_survived_num_days(3, state),
+            "Catcoon": lambda state: basic_survival(state),
             "Cookie Cutter": lambda state: advanced_boating(state),
             "Crawling Horror": lambda state: advanced_combat(state),
             "Crow": lambda state: can_get_feathers(state),
             "Red Hound": lambda state: basic_combat(state) and is_summer(state),
-            "Frog": lambda state: True,
+            "Frog": lambda state: pre_basic_combat(state),
             "Saladmander": lambda state: lunar_island(state),
             "Ghost": lambda state: basic_exploration(state) and digging(state),
             "Gnarwail": lambda state: basic_combat(state) and advanced_boating(state),
@@ -864,9 +866,9 @@ def set_rules(dst_world: World) -> None:
             "Briar Wolf": lambda state: basic_combat(state),
             "Hound": lambda state: basic_combat(state) and desert_exploration(state),
             "Blue Hound": lambda state: basic_combat(state) and is_winter(state),
-            "Killer Bee": lambda state: basic_combat(state),
+            "Killer Bee": lambda state: pre_basic_combat(state),
             "Clockwork Knight": lambda state: advanced_combat(state),
-            "Koalefant": lambda state: basic_combat(state) and ranged_aggression(state),
+            "Koalefant": lambda state: pre_basic_combat(state) and ranged_aggression(state),
             "Krampus": lambda state: basic_combat(state) and can_get_feathers(state) and has_survived_num_days(11, state),
             "Treeguard": lambda state: basic_combat(state) and has_survived_num_days(10, state) and chopping(state),
             "Crustashine": lambda state: moon_quay_exploration(state) and ranged_aggression(state),
@@ -877,16 +879,16 @@ def set_rules(dst_world: World) -> None:
             "Naked Mole Bat": lambda state: basic_combat(state) and cave_exploration(state),
             "Splumonkey": lambda state: ruins_exploration(state),
             "Moon Moth": lambda state: lunar_island(state),
-            "Mosquito": lambda state: basic_combat(state) and swamp_exploration(state),
+            "Mosquito": lambda state: swamp_exploration(state) and (pre_basic_combat(state) or bug_catching(state)),
             "Mosling": lambda state: basic_combat(state) and is_spring(state),
             "Mush Gnome": lambda state: basic_combat(state) and cave_exploration(state),
             "Terrorclaw": lambda state: advanced_combat(state) and advanced_boating(state),
             "Pengull": lambda state: basic_combat(state) and is_winter(state),
-            "Gobbler": lambda state: basic_combat(state),
-            "Pig Man": lambda state: has_survived_num_days(4, state),
+            "Gobbler": lambda state: basic_exploration(state),
+            "Pig Man": lambda state: basic_survival(state),
             "Powder Monkey": lambda state: basic_combat(state) and moon_quay_exploration(state),
             "Prime Mate": lambda state: state.has("Pirate Map", player),
-            "Puffin": lambda state: sea_cooking(state),
+            "Puffin": lambda state: can_get_feathers(state),
             "Rabbit": lambda state: True,
             "Redbird": lambda state: can_get_feathers(state),
             "Snowbird": lambda state: can_get_feathers(state) and is_winter(state),
@@ -894,8 +896,8 @@ def set_rules(dst_world: World) -> None:
             "Clockwork Rook": lambda state: advanced_combat(state) and (healing(state) or ADVANCED_PLAYER_BIAS),
             "Rockjaw": lambda state: advanced_combat(state) and advanced_boating(state) and (ranged_combat(state) or cannon(state)),
             "Slurper": lambda state: ruins_exploration(state),
-            "Slurtle": lambda state: cave_exploration(state) and firestarting(state) or basic_combat(state),
-            "Snurtle": lambda state: cave_exploration(state) and firestarting(state) or basic_combat(state),
+            "Slurtle": lambda state: cave_exploration(state) and (firestarting(state) or basic_combat(state)),
+            "Snurtle": lambda state: cave_exploration(state) and (firestarting(state) or basic_combat(state)),
             "Ewecus": lambda state: advanced_combat(state) and advanced_exploration(state) and reached_autumn(state),
             "Spider": lambda state: True,
             "Dangling Depth Dweller": lambda state: ruins_exploration(state),
@@ -926,7 +928,7 @@ def set_rules(dst_world: World) -> None:
             "Horror Hound": lambda state: moonstorm_exploration(state) and basic_combat(state),
             "Resting Horror": lambda state: ruins_exploration(state),
             "Birchnutter": lambda state: reached_autumn(state) and chopping(state),
-            "Mandrake": lambda state: has_survived_num_days(3, state),
+            "Mandrake": lambda state: basic_survival(state),
             "Fruit Fly": lambda state: basic_farming(state) and reached_spring(state),
             
             # Cook foods
@@ -1049,7 +1051,7 @@ def set_rules(dst_world: World) -> None:
             "Science (Honeycomb)": lambda state: basic_combat(state),			
             "Science (Petals)": lambda state: True,				
             "Science (Succulent)": lambda state: desert_exploration(state),			
-            "Science (Foliage)": lambda state: mining(state) or desert_exploration(state),				
+            "Science (Foliage)": lambda state: (CAVES_ENABLED and mining(state)) or desert_exploration(state),				
             "Science (Tillweeds)": lambda state: basic_farming(state) and has_survived_num_days(15, state),	
             "Science (Lichen)": lambda state: ruins_exploration(state),	
             "Science (Banana)": lambda state: moon_quay_exploration(state) or ruins_exploration(state),			
@@ -1109,7 +1111,7 @@ def set_rules(dst_world: World) -> None:
             "Magic (Sanity)": lambda state: True,					
             "Magic (Telltale Heart)": lambda state: healing(state) and state.has("Telltale Heart", player),					
             "Magic (Forget-Me-Lots)": lambda state: basic_farming(state),			
-            "Magic (Cat Tail)": lambda state: True,					
+            "Magic (Cat Tail)": lambda state: pre_basic_combat(state),					
             "Magic (Bunny Puff)": lambda state: cave_exploration(state) and basic_combat(state),		
             "Magic (Mosquito Sack)": lambda state: swamp_exploration(state),						
             "Magic (Spider Gland)": lambda state: True,				
@@ -1124,16 +1126,16 @@ def set_rules(dst_world: World) -> None:
             "Magic (Iridescent Gem)": lambda state: iridescent_gem(state),			
             "Magic (Desert Stone)": lambda state: reached_summer(state) and storm_protection(state),		
             "Magic (Naked Nostrils)": lambda state: cave_exploration(state),			
-            "Magic (Frog Legs)": lambda state: True,		
+            "Magic (Frog Legs)": lambda state: pre_basic_combat(state),		
             "Magic (Spoiled Fish)": lambda state: sea_fishing(state) and has_survived_num_days(15, state),	
             "Magic (Spoiled Fish Morsel)": lambda state: fishing(state) and  has_survived_num_days(10, state),
-            "Magic (Rot)": lambda state: has_survived_num_days(10, state),				
+            "Magic (Rot)": lambda state: has_survived_num_days(15, state),				
             "Magic (Rotten Egg)": lambda state: advanced_cooking(state) and has_survived_num_days(20, state),		
             "Magic (Carrat)": lambda state: lunar_island(state),				
             "Magic (Moleworm)": lambda state: hammering(state),		
             "Magic (Fireflies)": lambda state: bug_catching(state),
             "Magic (Bulbous Lightbug)": lambda state: cave_exploration(state) and bug_catching(state),			
-            "Magic (Rabbit)": lambda state: trapping(state),	
+            "Magic (Rabbit)": lambda state: state.has("Trap", player),	
             "Magic (Butterfly)": lambda state: bug_catching(state),			
             "Magic (Mosquito)": lambda state: bug_catching(state),		
             "Magic (Bee)": lambda state: bug_catching(state),					
@@ -1166,7 +1168,7 @@ def set_rules(dst_world: World) -> None:
             "Think Tank (Lunar Wobster)": lambda state: lunar_island(state) and sea_fishing(state),
             "Pseudoscience (Purple Gem)": lambda state: True,		
             "Pseudoscience (Yellow Gem)": lambda state: True,
-            "Pseudoscience (Thulecite)": lambda state: not NO_UNLOCK_RECIPES_SHUFFLED or state.has("Thulecite", player),
+            "Pseudoscience (Thulecite)": lambda state: thulecite(state),
             "Pseudoscience (Orange Gem)": lambda state: True,		
             "Pseudoscience (Green Gem)": lambda state: True,			
             "Celestial (Moon Rock)": lambda state: True,				
