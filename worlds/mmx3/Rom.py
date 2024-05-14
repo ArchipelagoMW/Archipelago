@@ -130,10 +130,11 @@ class MMX3ProcedurePatch(APProcedurePatch, APTokenMixin):
         self.write_token(APTokenTypes.WRITE, offset, bytes(value))
 
 def adjust_boss_damage_table(world: World, patch: MMX3ProcedurePatch):
+    strictness = world.options.boss_weakness_strictness
     for boss, data in world.boss_weakness_data.items():
         try:
             offset = boss_weakness_offsets[boss]
-            if boss == "Worm Seeker-R":
+            if boss == "Worm Seeker-R" and strictness != "not_strict":
                 for x in range(len(data)):
                     if x == 0x02 or x == 0x04 or x == 0x05:
                         data[x] = 0x7F
