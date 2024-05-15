@@ -111,7 +111,7 @@ def main(args=None, callback=ERmain):
     player_files = {}
     for file in os.scandir(args.player_files_path):
         fname = file.name
-        ext = os.path.splitext(fname)[1]
+        ext = os.path.splitext(fname)[1].lower()
         if file.is_file() and not fname.startswith(".") and (ext == ".yaml" or ext == ".yml") and \
                 os.path.join(args.player_files_path, fname) not in {args.meta_file_path, args.weights_file_path}:
             path = os.path.join(args.player_files_path, fname)
