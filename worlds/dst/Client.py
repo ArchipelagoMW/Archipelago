@@ -1,3 +1,4 @@
+from typing import Dict, List
 import urllib.parse
 import logging
 import asyncio
@@ -25,13 +26,13 @@ class DSTContext(CommonContext):
     lockable_items = set()
     dst_handler = None
     connected_to_ap = False
-    _eventqueue:list[dict] = []
+    _eventqueue:List[Dict] = []
 
     def __init__(self, server_address, password):
         self.dst_handler = DSTHandler(self)
         super().__init__(server_address, password)
 
-    def on_deathlink(self, data:dict):
+    def on_deathlink(self, data:Dict):
         self.dst_handler.enqueue({
             "datatype": "Death",
             "msg": data.get("cause")
@@ -119,7 +120,7 @@ class DSTContext(CommonContext):
         else:
             self.logger.info("Waiting to connect to Archipelago.")
 
-    def on_package(self, cmd: str, args: dict):
+    def on_package(self, cmd: str, args: Dict):
         # print("on_package", cmd)
         try:
             if cmd == "RoomInfo":
@@ -213,7 +214,7 @@ class DSTContext(CommonContext):
                 self.logger.error(f"DST event queue error: {e}")
             await asyncio.sleep(3.0)
 
-    async def manage_event(self, event:dict):
+    async def manage_event(self, event:Dict):
         eventtype = event.get("datatype")
         try:
             # print(f"Got event from DST: {eventtype}" )
@@ -309,7 +310,7 @@ def parse_request(req_bytes:bytes):
     return json.loads(datastr)
 
 
-def send_response(conn:socket.socket, content:dict = {}, status=100):
+def send_response(conn:socket.socket, content:Dict = {}, status=100):
     "Sends a response to the connection "
     header  = f"HTTP/1.1 {status}\r\n".encode()
     header += b"Content-type: application/json\r\n"
@@ -325,8 +326,8 @@ class DSTHandler():
     logger = logging.getLogger("DSTInterface")
     ctx = None
     lastping = time.time()
-    _sendqueue:list[str] = []
-    _sendqueue_lowpriority:list[str] = []
+    _sendqueue:List[str] = []
+    _sendqueue_lowpriority:List[str] = []
 
     def __init__(self, ctx:DSTContext):
         self.ctx = ctx

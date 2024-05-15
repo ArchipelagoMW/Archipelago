@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Set
 from worlds.AutoWorld import World
 from BaseClasses import ItemClassification as IC
 import random
@@ -7,11 +7,11 @@ from .Options import DSTOptions
 from .Constants import ITEM_ID_OFFSET
 
 class DSTItemPool:
-    nonfiller_itempool:list[str] = list() # All items enabled by the options except junk
-    filler_items:set = set()
-    trap_items:set = set()
-    seasontrap_items:set = set()
-    locked_items_local_id:set = set()
+    nonfiller_itempool:List[str] = list() # All items enabled by the options except junk
+    filler_items:Set = set()
+    trap_items:Set = set()
+    seasontrap_items:Set = set()
+    locked_items_local_id:Set = set()
 
     def decide_itempools(self, world:World) -> None:
         "Before generating, decide what items go in itempool categories"

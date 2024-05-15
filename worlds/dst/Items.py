@@ -1,4 +1,4 @@
-from typing import Callable, Dict, NamedTuple, Optional
+from typing import Dict, NamedTuple, Optional, Set
 
 from BaseClasses import Item, ItemClassification as IC
 from .Constants import DSTAP_ITEMS, ITEM_ID_OFFSET
@@ -9,14 +9,14 @@ class DSTItem(Item):
 class DSTItemData(NamedTuple):
 	code: Optional[int] = None
 	type: IC = IC.filler
-	tags: set[str] = set()
+	tags: Set[str] = set()
 
 def generate_item_map() -> Dict[str, DSTItemData]:
 	ret: Dict[str, DSTItemData] = {}
 	for v in DSTAP_ITEMS:
 		code:int = v[0] + ITEM_ID_OFFSET
 		name:str = v[1]
-		tags: set[str] = set(v[3])
+		tags: Set[str] = set(v[3])
 		classification:IC = (
 			IC.progression if "progression" in tags else
 			IC.progression_skip_balancing if "progression_skip_balancing" in tags else

@@ -1,4 +1,4 @@
-from typing import Dict, List, NamedTuple
+from typing import Dict, List, NamedTuple, Set
 from BaseClasses import MultiWorld, Region, Entrance, ItemClassification
 from .Locations import location_data_table, DSTLocation
 from .Items import DSTItem, item_data_table
@@ -30,7 +30,7 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
       loc.place_locked_item(create_event_item(event_item_name))
       region.locations.append(loc)
 
-   def get_region_name_from_tags(tags: set[str]):
+   def get_region_name_from_tags(tags: Set[str]):
       return "Cave" if "caves" in tags else "Ocean" if "ocean" in tags else "Forest"
    
    # Get number of items that need to be placed, plus make space for junk items and traps
@@ -117,7 +117,7 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
    for loc_name, item_name in DSTAP_EVENTS.items(): create_event(loc_name, item_name)
 
    # Decide win conditions
-   victory_events:set = set()
+   victory_events:Set = set()
    if options.goal.current_key == "survival":
       victory_events.add("Victory")
       create_event("Survival Goal", "Victory")

@@ -1,4 +1,4 @@
-import typing
+from typing import Dict, Set
 from collections.abc import Callable
 
 from BaseClasses import CollectionState
@@ -733,7 +733,7 @@ def set_rules(dst_world: World) -> None:
             return reached_autumn(state)
         return late_game_survival(state)
 
-    rules_lookup: typing.Dict[str, typing.Dict[str, Callable[[CollectionState], bool]]] = {
+    rules_lookup: Dict[str, Dict[str, Callable[[CollectionState], bool]]] = {
         "regions": {
             "Cave": lambda state: CAVES_ENABLED, # Will mostly be used as a test
         },
@@ -1192,7 +1192,7 @@ def set_rules(dst_world: World) -> None:
     EXISTING_LOCATIONS = [item.name for item in multiworld.get_locations(player)]
     SEASON_HELPER_ITEMS = [name for name, data in item_data_table.items() if "seasonhelper" in data.tags]
     excluded = set()
-    PROGRESSION_REQUIRED_BOSSES:set = set()
+    PROGRESSION_REQUIRED_BOSSES:Set = set()
 
     if options.goal.current_key != "survival":
         excluded.update(options.required_bosses.value) # Prevent goal bosses from having progression items
