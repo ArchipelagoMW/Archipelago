@@ -10,7 +10,7 @@ from BaseClasses import Location, Item
 from settings import get_settings
 from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin
 from .Arrays import level_locations, level_size, level_address, item_dict, level_header
-from .Items import items_by_id, ItemData
+from .Items import items_by_id
 from .Rules import name_convert
 
 if typing.TYPE_CHECKING:
@@ -94,27 +94,27 @@ class GLPatchExtension(APPatchExtension):
         options = json.loads(caller.get_file("options.json").decode("UTF-8"))
         shard_values = json.loads(caller.get_file(f"shard_values.json").decode("utf-8"))
         for i in range(len(level_locations)):
-            level: dict[str, Item] = json.loads(caller.get_file(f"level_{i}.json").decode("utf-8"))
+            level: dict[str, (int, int)] = json.loads(caller.get_file(f"level_{i}.json").decode("utf-8"))
             stream.seek(level_address[i], 0)
             stream, data = get_level_data(stream, level_size[i])
             for j, (location_name, item) in enumerate(level.items()):
                 if "Mirror" in location_name:
-                    shard_values[i // 7] = item_dict[item.code] if item.player == options["player"] else [0x27, 0x4]
+                    shard_values[i // 7] = item_dict[item[0]] if item[1] == options["player"] else [0x27, 0x4]
                     continue
                 if "Obelisk" in location_name:
                     try:
                         index = [index for index in range(len(data.objects)) if data.objects[index][8] == 0x26][0]
                         data.items += [
                             bytearray(data.objects[index][0:6]) + bytes(
-                                item_dict[item.code] if item.player == options["player"] else [0x27, 0x4]) + bytes(
+                                item_dict[item[0]] if item[1] == options["player"] else [0x27, 0x4]) + bytes(
                                 [0x0, 0x0, 0x0, 0x0])]
                         del data.objects[index]
                         data.item += 1
                     except Exception as e:
-                        print(item.code)
+                        print(item[0])
                         print(e)
                     continue
-                if item.player is not options["player"]:
+                if item[1] is not options["player"]:
                     if "Chest" in location_name or (
                             "Barrel" in location_name and "Barrel of Gold" not in location_name):
                         data.chests[j - (len(data.items) + data.obelisk)][12] = 0x27
@@ -123,10 +123,10 @@ class GLPatchExtension(APPatchExtension):
                         data.items[j - data.obelisk][6] = 0x27
                         data.items[j - data.obelisk][7] = 0x4
                 else:
-                    if "Obelisk" in item.name:
+                    if "Obelisk" in items_by_id[item[0]].itemName:
                         data.objects += [bytearray(data.items[j - data.obelisk][0:6]) +
                                          bytearray([0x0, 0x0, 0x26, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0,
-                                                    item.code - 77780054,
+                                                    item[0] - 77780054,
                                                     0x3F, 0x80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0])]
                         del data.items[j - data.obelisk]
                         data.obelisk += 1
@@ -134,11 +134,11 @@ class GLPatchExtension(APPatchExtension):
                         if "Chest" in location_name or (
                                 "Barrel" in location_name and "Barrel of Gold" not in location_name):
                             print(j - len(data.items))
-                            data.chests[j - (len(data.items) + data.obelisk)][12] = item_dict[item.code][0]
-                            data.chests[j - (len(data.items) + data.obelisk)][13] = item_dict[item.code][1]
+                            data.chests[j - (len(data.items) + data.obelisk)][12] = item_dict[item[0]][0]
+                            data.chests[j - (len(data.items) + data.obelisk)][13] = item_dict[item[0]][1]
                         else:
-                            data.items[j - data.obelisk][6] = item_dict[item.code][0]
-                            data.items[j - data.obelisk][7] = item_dict[item.code][1]
+                            data.items[j - data.obelisk][6] = item_dict[item[0]][0]
+                            data.items[j - data.obelisk][7] = item_dict[item[0]][1]
             compressed = zenc(level_data_reformat(data))
             stream.seek(level_header[i] + 4, 0)
             stream.write(len(compressed).to_bytes(4, byteorder='big'))
@@ -159,6 +159,7 @@ class GLProcedurePatch(APProcedurePatch, APTokenMixin):
 
     procedure = [
         ("patch_items", []),
+        ("patch_counts", [])
     ]
 
     @classmethod
@@ -176,12 +177,12 @@ def write_files(world: "GauntletLegendsWorld", patch: GLProcedurePatch) -> None:
     for i, level in enumerate(level_locations.values()):
         locations = []
         for location in level:
-            locations += [world.get_location(location.name)]
+            locations += [world.get_location(name_convert(location))]
         patch.write_file(f"level_{i}.json", json.dumps(locations_to_dict(locations)).encode("UTF-8"))
 
 
-def locations_to_dict(locations: list[Location]) -> dict[str, Item]:
-    return {location.name: location.item for location in locations}
+def locations_to_dict(locations: list[Location]) -> dict[str, (int, int)]:
+    return {location.name: (location.item.code, location.item.player) for location in locations}
 
 
 def zdec(data):

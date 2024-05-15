@@ -63,7 +63,15 @@ class RetroSocket:
         return b
 
     def crc32(self):
-        seed = self.read(MessageFormat(READ, f"0x{format(INV_ADDR, 'x')} 1024"))
+        message = "GET_STATUS"
+        self.socket.sendto(message.encode(), (self.host, self.port))
+        try:
+            data, addr = self.socket.recvfrom(1000)
+        except ConnectionResetError:
+            raise Exception("Retroarch not detected. Please make sure your ROM is open in Retroarch.")
+        data = data.decode()
+        logger.info(data)
+        return data[data.find("crc32=") + len("crc32="):-1]
 
 
 class RamChunk:
@@ -464,7 +472,7 @@ class GauntletLegendsContext(CommonContext):
                         self.locations_checked += [self.chest_locations[k].id]
                         acquired += [self.chest_locations[k].id]
             else:
-                if obj.raw[33] != 0:
+                if obj.raw[0x33] != 0:
                     if self.chest_locations[k].id not in self.locations_checked:
                         self.locations_checked += [self.chest_locations[k].id]
                         acquired += [self.chest_locations[k].id]

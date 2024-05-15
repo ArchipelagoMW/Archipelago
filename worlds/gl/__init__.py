@@ -9,7 +9,7 @@ from worlds.AutoWorld import WebWorld, World
 from .Locations import all_locations, location_table
 from .Items import GLItem, itemList, item_table, item_frequencies
 from .Regions import create_regions, connect_regions
-from .Rom import Rom, GLProcedurePatch, write_files
+from .Rom import GLProcedurePatch, write_files
 from .Rules import set_rules
 from ..LauncherComponents import components, Component, launch_subprocess, Type, SuffixIdentifier
 

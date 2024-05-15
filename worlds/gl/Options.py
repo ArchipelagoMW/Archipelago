@@ -1,4 +1,4 @@
-from Options import Choice, StartInventoryPool, PerGameCommonOptions
+from Options import StartInventoryPool, PerGameCommonOptions
 from dataclasses import dataclass
 
 
