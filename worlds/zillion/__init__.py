@@ -332,7 +332,7 @@ class ZillionWorld(World):
             assert isinstance(z_loc, ZillionLocation)
             # debug_zz_loc_ids[z_loc.zz_loc.name] = id(z_loc.zz_loc)
             if z_loc.item is None:
-                self.logger.warn("generate_output location has no item - is that ok?")
+                self.logger.warning("generate_output location has no item - is that ok?")
                 z_loc.zz_loc.item = empty
             elif z_loc.item.player == self.player:
                 z_item = z_loc.item
