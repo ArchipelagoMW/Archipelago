@@ -76,13 +76,18 @@ def set_rules(dst_world: World) -> None:
     # Rules dependent on other rules. Avoid recursion by using rules above it    
     def basic_combat (state: CollectionState) -> bool:
         if EXPERT_PLAYER_BIAS: return True
-        return state.has_all(["Rope", "Spear"], player) and state.has_any(["Log Suit", "Football Helmet"], player) and chopping(state)
+        return (
+            (state.has_all(["Rope", "Spear"], player) or state.has("Wigfrid", player))
+            and state.has_any(["Log Suit", "Football Helmet"], player) 
+            and chopping(state) # Wood for the log suit, or at least a weapon before you get the spear
+        )
     
     def pre_basic_combat (state: CollectionState) -> bool:
         if EXPERT_PLAYER_BIAS: return True
         return (
-            (state.has("Grass Suit", player) and chopping(state)) 
+            (state.has("Grass Suit", player) and chopping(state)) # Axe as a weapon
             or basic_combat(state)
+            or state.has_any(["Wendy", "Wigfrid"], player) # Abigail
         )
 
     def gem_digging (state: CollectionState) -> bool:
@@ -153,6 +158,7 @@ def set_rules(dst_world: World) -> None:
             and backpack(state) 
             and chopping(state) 
             and mining(state)
+            and digging(state)
             and state.has_all(["Telltale Heart", "Torch", "Campfire"], player)
         )
 
@@ -205,6 +211,7 @@ def set_rules(dst_world: World) -> None:
                 state.has_any(["Garden Hoe", "Splendid Garden Hoe"], player) 
                 and state.has("Garden Digamajig", player) 
                 and base_making(state) # Boards and Rope requirement
+                and digging(state)
             )
         )
 
@@ -586,9 +593,15 @@ def set_rules(dst_world: World) -> None:
             and advanced_boating(state) 
             and shaving(state)
         )
-
+    def weregoose (state: CollectionState) -> bool:
+        return state.has("Woodie", player) and basic_survival(state)
+    
     def lunar_island (state: CollectionState) -> bool:
-        return (basic_boating(state) and ADVANCED_PLAYER_BIAS) or advanced_boating(state)
+        return (
+            (basic_boating(state) and ADVANCED_PLAYER_BIAS) 
+            or advanced_boating(state)
+            or weregoose(state)
+        )
 
     def hermit_island (state: CollectionState) -> bool:
         return (
@@ -597,6 +610,7 @@ def set_rules(dst_world: World) -> None:
             and (
                 (basic_boating(state) and ADVANCED_PLAYER_BIAS) 
                 or advanced_boating(state)
+                or weregoose(state)
             )
         )
                             
@@ -735,7 +749,7 @@ def set_rules(dst_world: World) -> None:
 
     rules_lookup: Dict[str, Dict[str, Callable[[CollectionState], bool]]] = {
         "regions": {
-            "Cave": lambda state: CAVES_ENABLED, # Will mostly be used as a test
+            "Cave": lambda state: CAVES_ENABLED and mining(state), # Will mostly be used as a test
         },
         "locations": {
             # Events
@@ -940,7 +954,7 @@ def set_rules(dst_world: World) -> None:
             "Fishsticks": lambda state: basic_cooking(state) and fishing(state),
             "Honey Nuggets": lambda state: sweet_cooking(state),
             "Honey Ham": lambda state: sweet_cooking(state),
-            "Dragonpie": lambda state: farmplant_cooking(state) or (basic_cooking(state) and lunar_island(state)),
+            "Dragonpie": lambda state: farmplant_cooking(state) or (basic_cooking(state) and lunar_island(state) and basic_combat(state)),
             "Kabobs": lambda state: pre_basic_cooking(state),
             "Mandrake Soup": lambda state: basic_cooking(state),
             "Bacon and Eggs": lambda state: egg_cooking(state),
@@ -1079,7 +1093,7 @@ def set_rules(dst_world: World) -> None:
             "Science (Corn)": lambda state: basic_farming(state) and has_survived_num_days(15, state),				
             "Science (Onion)": lambda state: basic_farming(state) and has_survived_num_days(15, state),				
             "Science (Potato)": lambda state: basic_farming(state) and has_survived_num_days(15, state),				
-            "Science (Dragon Fruit)": lambda state: (basic_farming(state) and has_survived_num_days(15, state)) or lunar_island(state),				
+            "Science (Dragon Fruit)": lambda state: (basic_farming(state) and has_survived_num_days(15, state)) or (lunar_island(state) and basic_combat(state)),				
             "Science (Pomegranate)": lambda state: basic_farming(state) and has_survived_num_days(15, state) and reached_spring(state),		
             "Science (Eggplant)": lambda state: basic_farming(state) and has_survived_num_days(15, state),			
             "Science (Toma Root)": lambda state: basic_farming(state) and has_survived_num_days(15, state),				
