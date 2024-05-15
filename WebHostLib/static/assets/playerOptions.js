@@ -45,12 +45,19 @@ window.addEventListener('load', async () => {
     checkbox.addEventListener('change', () => {
       const optionInput = document.getElementById(optionName);
       const namedRangeSelect = document.querySelector(`select[data-option-name=${optionName}]`);
+      const customInput = document.getElementById(`${optionName}-custom`);
       if (checkbox.checked) {
         optionInput.setAttribute('disabled', '1');
         namedRangeSelect?.setAttribute('disabled', '1');
+        if (customInput) {
+          customInput.setAttribute('disabled', '1');
+        }
       } else {
         optionInput.removeAttribute('disabled');
         namedRangeSelect?.removeAttribute('disabled');
+        if (customInput) {
+          customInput.removeAttribute('disabled');
+        }
       }
     });
   });
