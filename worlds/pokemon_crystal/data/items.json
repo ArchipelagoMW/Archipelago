@@ -288,42 +288,42 @@
 	"BOULDER_BADGE": {
 		"name": "Boulder Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique"]
+		"tags": ["Badge", "Unique", "KantoBadge"]
 	},
 	"CASCADE_BADGE": {
 		"name": "Cascade Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique"]
+		"tags": ["Badge", "Unique", "KantoBadge"]
 	},
 	"THUNDER_BADGE": {
 		"name": "Thunder Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique"]
+		"tags": ["Badge", "Unique", "KantoBadge"]
 	},
 	"RAINBOW_BADGE": {
 		"name": "Rainbow Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique"]
+		"tags": ["Badge", "Unique", "KantoBadge"]
 	},
 	"SOUL_BADGE": {
 		"name": "Soul Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique"]
+		"tags": ["Badge", "Unique", "KantoBadge"]
 	},
 	"MARSH_BADGE": {
 		"name": "Marsh Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique"]
+		"tags": ["Badge", "Unique", "KantoBadge"]
 	},
 	"VOLCANO_BADGE": {
 		"name": "Volcano Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique"]
+		"tags": ["Badge", "Unique", "KantoBadge"]
 	},
 	"EARTH_BADGE": {
 		"name": "Earth Badge",
 		"classification": "PROGRESSION",
-		"tags": ["Badge", "Unique"]
+		"tags": ["Badge", "Unique", "KantoBadge"]
 	},
 	"RADIO_CARD": {
 		"name": "Radio Card", "classification": "PROGRESSION",

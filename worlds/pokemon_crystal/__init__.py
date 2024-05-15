@@ -4,6 +4,7 @@ import copy
 import logging
 
 from BaseClasses import Tutorial
+from Fill import fill_restrictive, FillError
 from worlds.AutoWorld import World, WebWorld
 from .client import PokemonCrystalClient
 from .options import PokemonCrystalOptions
@@ -97,6 +98,9 @@ class PokemonCrystalWorld(World):
             if location.address is not None
         ]
 
+        if self.options.randomize_badges.value == 1:
+            item_locations = [location for location in item_locations if "Badge" not in location.tags]
+
         default_itempool = [self.create_item_by_code(
             location.default_item_code if location.default_item_code > BASE_OFFSET
             else get_random_filler_item(self.random))
@@ -105,6 +109,25 @@ class PokemonCrystalWorld(World):
 
     def set_rules(self) -> None:
         set_rules(self)
+
+    def pre_fill(self) -> None:
+        if self.options.randomize_badges.value == 1:
+            badge_locs = [loc for loc in self.multiworld.get_locations(self.player) if "Badge" in loc.tags]
+            badge_items = [self.create_item_by_code(loc.default_item_code) for loc in badge_locs]
+
+            collection_state = self.multiworld.get_all_state(False)
+            attempts_remaining = 2
+            while attempts_remaining > 0:
+                attempts_remaining -= 1
+                self.random.shuffle(badge_locs)
+                try:
+                    fill_restrictive(self.multiworld, collection_state, badge_locs, badge_items,
+                                     single_player_placement=True, lock=True, allow_excluded=True)
+                    break
+                except FillError as exc:
+                    if attempts_remaining == 0:
+                        raise exc
+                    continue
 
     def generate_output(self, output_directory: str) -> None:
         def get_random_move(type=None):

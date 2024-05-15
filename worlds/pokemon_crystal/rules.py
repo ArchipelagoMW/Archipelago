@@ -12,93 +12,114 @@ else:
 def set_rules(world: PokemonCrystalWorld) -> None:
     def can_cut(state: CollectionState):
         if world.options.hm_badge_requirements == 0:
-            return state.has("HM01 Cut", world.player) and state.has("Hive Badge", world.player)
+            return state.has("HM01 Cut", world.player) and has_badge(state, 2)
         elif world.options.hm_badge_requirements == 1:
             return state.has("HM01 Cut", world.player)
         else:
-            return state.has("HM01 Cut", world.player) and (
-                    state.has("Hive Badge", world.player) or state.has("Cascade Badge", world.player))
+            return state.has("HM01 Cut", world.player) and (has_badge(state, 2) or has_badge(state, 10))
 
     # def can_fly(state: CollectionState):
     #     return state.has("HM02 Fly", world.player) and state.has("Storm Badge", world.player)
 
     def can_surf(state: CollectionState):
         if world.options.hm_badge_requirements == 0:
-            return state.has("HM03 Surf", world.player) and state.has("Fog Badge", world.player)
+            return state.has("HM03 Surf", world.player) and has_badge(state, 4)
         elif world.options.hm_badge_requirements == 1:
             return state.has("HM03 Surf", world.player)
         else:
-            return state.has("HM03 Surf", world.player) and (
-                    state.has("Fog Badge", world.player) or state.has("Soul Badge", world.player))
+            return state.has("HM03 Surf", world.player) and (has_badge(state, 4) or has_badge(state, 13))
 
     def can_strength(state: CollectionState):
         if world.options.hm_badge_requirements == 0:
-            return state.has("HM04 Strength", world.player) and state.has("Plain Badge", world.player)
+            return state.has("HM04 Strength", world.player) and has_badge(state, 3)
         elif world.options.hm_badge_requirements == 1:
             return state.has("HM04 Strength", world.player)
         else:
-            return state.has("HM04 Strength", world.player) and (
-                    state.has("Plain Badge", world.player) or state.has("Rainbow Badge", world.player))
+            return state.has("HM04 Strength", world.player) and (has_badge(state, 3) or has_badge(state, 12))
 
     def can_flash(state: CollectionState):
         if world.options.hm_badge_requirements == 0:
-            return state.has("HM05 Flash", world.player) and state.has("Zephyr Badge", world.player)
+            return state.has("HM05 Flash", world.player) and has_badge(state, 1)
         elif world.options.hm_badge_requirements == 1:
             return state.has("HM05 Flash", world.player)
         else:
-            return state.has("HM05 Flash", world.player) and (
-                    state.has("Zephyr Badge", world.player) or state.has("Boulder Badge", world.player))
+            return state.has("HM05 Flash", world.player) and (has_badge(state, 1) or has_badge(state, 9))
 
     def can_whirlpool(state: CollectionState):
         if world.options.hm_badge_requirements == 0:
-            return state.has("HM06 Whirlpool", world.player) and state.has("Glacier Badge", world.player)
+            return state.has("HM06 Whirlpool", world.player) and has_badge(state, 7)
         elif world.options.hm_badge_requirements == 1:
             return state.has("HM06 Whirlpool", world.player)
         else:
-            return state.has("HM06 Whirlpool", world.player) and (
-                    state.has("Glacier Badge", world.player) or state.has("Earth Badge", world.player))
+            return state.has("HM06 Whirlpool", world.player) and (has_badge(state, 7) or has_badge(state, 16))
 
     def can_waterfall(state: CollectionState):
         if world.options.hm_badge_requirements == 0:
-            return state.has("HM07 Waterfall", world.player) and state.has("Rising Badge", world.player)
+            return state.has("HM07 Waterfall", world.player) and has_badge(state, 8)
         elif world.options.hm_badge_requirements == 1:
             return state.has("HM07 Waterfall", world.player)
         else:
-            return state.has("HM07 Waterfall", world.player) and (
-                    state.has("Rising Badge", world.player) or state.has("Volcano Badge", world.player))
+            return state.has("HM07 Waterfall", world.player) and (has_badge(state, 8) or has_badge(state, 15))
 
     def can_rocksmash(state: CollectionState):
         return state.has("TM08 Rock Smash", world.player)
 
-    def has_n_badges(state: CollectionState, n: int) -> bool:
-        return sum([state.has(event, world.player) for event in [
-            "Zephyr Badge",
-            "Hive Badge",
-            "Plain Badge",
-            "Fog Badge",
-            "Mineral Badge",
-            "Storm Badge",
-            "Glacier Badge",
-            "Rising Badge",
+    def has_badge_item(state: CollectionState, n: int):
+        badge_items = ["Zephyr Badge",
+                       "Hive Badge",
+                       "Plain Badge",
+                       "Fog Badge",
+                       "Mineral Badge",
+                       "Storm Badge",
+                       "Glacier Badge",
+                       "Rising Badge",
 
-            "Boulder Badge",
-            "Cascade Badge",
-            "Thunder Badge",
-            "Rainbow Badge",
-            "Soul Badge",
-            "Marsh Badge",
-            "Volcano Badge",
-            "Earth Badge"
-        ]]) >= n
+                       "Boulder Badge",
+                       "Cascade Badge",
+                       "Thunder Badge",
+                       "Rainbow Badge",
+                       "Soul Badge",
+                       "Marsh Badge",
+                       "Volcano Badge",
+                       "Earth Badge"]
+        return state.has(badge_items[n - 1], world.player)
+
+    def has_badge_flag(state: CollectionState, n: int):
+        badge_flags = ["EVENT_BEAT_FALKNER",
+                       "EVENT_BEAT_BUGSY",
+                       "EVENT_BEAT_WHITNEY",
+                       "EVENT_BEAT_MORTY",
+                       "EVENT_BEAT_JASMINE",
+                       "EVENT_BEAT_CHUCK",
+                       "EVENT_BEAT_PRYCE",
+                       "EVENT_BEAT_CLAIR",
+
+                       "EVENT_BEAT_BROCK",
+                       "EVENT_BEAT_MISTY",
+                       "EVENT_BEAT_LTSURGE",
+                       "EVENT_BEAT_ERIKA",
+                       "EVENT_BEAT_JANINE",
+                       "EVENT_BEAT_SABRINA",
+                       "EVENT_BEAT_BLAINE",
+                       "EVENT_BEAT_BLUE"]
+        return state.has(badge_flags[n - 1], world.player)
+
+    def has_badge(state: CollectionState, n: int):
+        if world.options.randomize_badges.value == 0:
+            return has_badge_flag(state, n)
+        return has_badge_item(state, n)
+
+    def has_n_badges(state: CollectionState, n: int) -> bool:
+        return sum([has_badge(state, i) for i in range(0, 16)]) >= n
 
     def has_rocket_badges(state: CollectionState):
-        return has_n_badges(state, world.options.elite_four_badges - 1)
+        return has_n_badges(state, world.options.elite_four_badges.value - 1)
 
     def has_elite_four_badges(state: CollectionState):
-        return has_n_badges(state, world.options.elite_four_badges)
+        return has_n_badges(state, world.options.elite_four_badges.value)
 
     def has_red_badges(state: CollectionState):
-        return has_n_badges(state, world.options.red_badges)
+        return has_n_badges(state, world.options.red_badges.value)
 
     def get_entrance(entrance: str):
         return world.multiworld.get_entrance(entrance, world.player)
@@ -145,13 +166,13 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_location("Elm's Lab - Gift from Aide After Returning Mystery Egg"),
              lambda state: state.has("Mystery Egg", world.player))
 
-    set_rule(get_location("Elm's Lab - Master Ball from Elm"), lambda state: state.has("Rising Badge", world.player))
+    set_rule(get_location("Elm's Lab - Master Ball from Elm"), lambda state: has_badge(state, 8))
 
     set_rule(get_location("Elm's Lab - S.S. Ticket from Elm"),
              lambda state: state.has("EVENT_BEAT_ELITE_FOUR", world.player))
 
     # Route 29
-    set_rule(get_location("Route 29 - Pink Bow from Tuscany"), lambda state: state.has("Zephyr Badge", world.player))
+    set_rule(get_location("Route 29 - Pink Bow from Tuscany"), lambda state: has_badge(state, 1))
     # Route 30
     # set_rule(get_entrance("REGION_ROUTE_30 -> REGION_ROUTE_31"),
     #          lambda state: state.has("EVENT_GOT_MYSTERY_EGG_FROM_MR_POKEMON", world.player))
@@ -223,7 +244,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     # Goldenrod City
     set_rule(get_location("Goldenrod City - Squirtbottle from Flower Shop"),
-             lambda state: state.has("Plain Badge", world.player))
+             lambda state: has_badge(state, 3))
 
     if not johto_only():
         set_rule(get_entrance("REGION_GOLDENROD_MAGNET_TRAIN_STATION -> REGION_SAFFRON_MAGNET_TRAIN_STATION"),

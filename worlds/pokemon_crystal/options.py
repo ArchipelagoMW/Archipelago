@@ -34,13 +34,13 @@ class RedBadges(Range):
     range_end = 16
 
 
-# class RandomizeBadges(Choice):
-#     """Shuffles badges into the pool"""
-#     display_name = "Randomize Badges"
-#     default = 2
-#     option_vanilla = 0
-#     option_shuffle = 1
-#     option_completely_random = 2
+class RandomizeBadges(Choice):
+    """Shuffles badges into the pool"""
+    display_name = "Randomize Badges"
+    default = 2
+    option_vanilla = 0
+    option_shuffle = 1
+    option_completely_random = 2
 
 
 class RandomizeHiddenItems(Toggle):
@@ -228,7 +228,7 @@ class PokemonCrystalOptions(PerGameCommonOptions):
     johto_only: JohtoOnly
     elite_four_badges: EliteFourBadges
     red_badges: RedBadges
-    # randomize_badges: RandomizeBadges
+    randomize_badges: RandomizeBadges
     randomize_hidden_items: RandomizeHiddenItems
     require_itemfinder: RequireItemfinder
     trainersanity: Trainersanity
