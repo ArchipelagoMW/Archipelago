@@ -353,6 +353,26 @@
 		"name": "Phone Trap", "classification": "TRAP",
 		"tags": ["Trap"]
 	},
+	"SLEEP_TRAP": {
+		"name": "Sleep Trap", "classification": "TRAP",
+		"tags": ["Trap"]
+	},
+	"PSN_TRAP": {
+		"name": "Poison Trap", "classification": "TRAP",
+		"tags": ["Trap"]
+	},
+	"BRN_TRAP": {
+		"name": "Burn Trap", "classification": "TRAP",
+		"tags": ["Trap"]
+	},
+	"FRZ_TRAP": {
+		"name": "Freeze Trap", "classification": "TRAP",
+		"tags": ["Trap"]
+	},
+	"PAR_TRAP": {
+		"name": "Paralysis Trap", "classification": "TRAP",
+		"tags": ["Trap"]
+	},
 	"AP_ITEM": {"name": "AP Item", "classification": "FILLER", "tags": ["INVALID"]},
 	"TM_DYNAMICPUNCH": {
 		"name": "TM01 Dynamicpunch",
