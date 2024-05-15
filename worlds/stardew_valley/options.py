@@ -1,3 +1,4 @@
+import sys
 from dataclasses import dataclass
 from typing import Protocol, ClassVar
 
@@ -707,6 +708,9 @@ disabled_mods = {ModNames.deepwoods, ModNames.tractor,
                  ModNames.wellwick, ModNames.shiko, ModNames.delores,
                  ModNames.ayeisha, ModNames.riley, ModNames.sve, ModNames.distant_lands,
                  ModNames.lacey, ModNames.boarding_house}
+
+if 'unittest' in sys.modules.keys() or 'pytest' in sys.modules.keys():
+    disabled_mods = {}
 
 
 class Mods(OptionSet):
