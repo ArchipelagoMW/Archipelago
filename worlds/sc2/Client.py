@@ -833,6 +833,11 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
         if item_data.quantity == 1:
             accumulators[item_data.race][item_data.type.flag_word] |= 1 << item_data.number
 
+            # Guardian Shell breaks without SoA on version 4+, but can be generated without SoA on version 3
+            if ctx.slot_data_version < 4 and name == ItemNames.GUARDIAN_SHELL \
+                    and ctx.spear_of_adun_autonomously_cast_ability_presence != SpearOfAdunAutonomouslyCastAbilityPresence.option_everywhere:
+                ctx.spear_of_adun_autonomously_cast_ability_presence = SpearOfAdunAutonomouslyCastAbilityPresence.option_protoss
+
         # exists multiple times
         elif item_data.quantity > 1:
             flaggroup = item_data.type.flag_word
