@@ -57,7 +57,7 @@
                     <label for="game-options-preset">
                         Options Preset: <span class="interactive" data-tooltip="Select from a list of developer-curated presets (if any) or reset all options to their defaults.">(?)</span>
                     </label>
-                    <select id="game-options-preset" disabled>
+                    <select id="game-options-preset" name="game-options-preset" disabled>
                         <option value="default">Default</option>
                         {% for preset_name in world.web.options_presets %}
                             <option value="{{ preset_name }}">{{ preset_name }}</option>
