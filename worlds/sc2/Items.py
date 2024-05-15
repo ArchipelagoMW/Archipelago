@@ -1853,6 +1853,7 @@ spear_of_adun_calldowns = {
 spear_of_adun_castable_passives = {
     ItemNames.RECONSTRUCTION_BEAM,
     ItemNames.OVERWATCH,
+    ItemNames.GUARDIAN_SHELL,
 }
 
 nova_equipment = {
