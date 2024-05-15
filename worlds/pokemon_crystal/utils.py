@@ -50,7 +50,7 @@ def get_tmhm_compatibility(tm_value, hm_value, types, random):
         use_value = hm_value if tm_data.is_hm else tm_value
         if tm_data.type in types:
             use_value = use_value * 2
-        if random.randint(0, 99) < use_value:
+        if use_value == 0 or random.randint(0, 99) < use_value:
             tmhms.append(tm_name)
     return tmhms
 

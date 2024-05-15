@@ -3318,7 +3318,7 @@
 		"script": "AP_Trainer_MEDIUM_GRACE"
 	},
 	"ITEM_FROM_SAILOR_JEFF": {
-		"label": "Fast Ship B1F - Sailor Jeff",
+		"label": "S.S. Aqua B1F - Sailor Jeff",
 		"flag": "EVENT_ITEM_FROM_SAILOR_JEFF",
 		"type": "trainer",
 		"tags": [
@@ -3328,7 +3328,7 @@
 		"script": "AP_Trainer_SAILOR_JEFF"
 	},
 	"ITEM_FROM_PICNICKER_DEBRA": {
-		"label": "Fast Ship B1F - Picnicker Debra",
+		"label": "S.S. Aqua B1F - Picnicker Debra",
 		"flag": "EVENT_ITEM_FROM_PICNICKER_DEBRA",
 		"type": "trainer",
 		"tags": [
@@ -3338,7 +3338,7 @@
 		"script": "AP_Trainer_PICNICKER_DEBRA"
 	},
 	"ITEM_FROM_JUGGLER_FRITZ": {
-		"label": "Fast Ship B1F - Juggler Fritz",
+		"label": "S.S. Aqua B1F - Juggler Fritz",
 		"flag": "EVENT_ITEM_FROM_JUGGLER_FRITZ",
 		"type": "trainer",
 		"tags": [
@@ -3348,7 +3348,7 @@
 		"script": "AP_Trainer_JUGGLER_FRITZ"
 	},
 	"ITEM_FROM_SAILOR_GARRETT": {
-		"label": "Fast Ship B1F - Sailor Garrett",
+		"label": "S.S. Aqua B1F - Sailor Garrett (Eastbound)",
 		"flag": "EVENT_ITEM_FROM_SAILOR_GARRETT",
 		"type": "trainer",
 		"tags": [
@@ -3358,7 +3358,7 @@
 		"script": "AP_Trainer_SAILOR_GARRETT"
 	},
 	"ITEM_FROM_FISHER_JONAH": {
-		"label": "Fast Ship B1F - Fisher Jonah",
+		"label": "S.S. Aqua B1F - Fisher Jonah (Eastbound)",
 		"flag": "EVENT_ITEM_FROM_FISHER_JONAH",
 		"type": "trainer",
 		"tags": [
@@ -3368,7 +3368,7 @@
 		"script": "AP_Trainer_FISHER_JONAH"
 	},
 	"ITEM_FROM_BLACKBELT_WAI": {
-		"label": "Fast Ship B1F - Blackbelt Wai",
+		"label": "S.S. Aqua B1F - Blackbelt Wai (Eastbound)",
 		"flag": "EVENT_ITEM_FROM_BLACKBELT_WAI",
 		"type": "trainer",
 		"tags": [
@@ -3378,7 +3378,7 @@
 		"script": "AP_Trainer_BLACKBELT_T_WAI"
 	},
 	"ITEM_FROM_SAILOR_KENNETH": {
-		"label": "Fast Ship B1F - Sailor Kenneth",
+		"label": "S.S. Aqua B1F - Sailor Kenneth (Westbound)",
 		"flag": "EVENT_ITEM_FROM_SAILOR_KENNETH",
 		"type": "trainer",
 		"tags": [
@@ -3388,7 +3388,7 @@
 		"script": "AP_Trainer_SAILOR_KENNETH"
 	},
 	"ITEM_FROM_TEACHER_SHIRLEY": {
-		"label": "Fast Ship B1F - Teacher Shirley",
+		"label": "S.S. Aqua B1F - Teacher Shirley (Westbound)",
 		"flag": "EVENT_ITEM_FROM_TEACHER_SHIRLEY",
 		"type": "trainer",
 		"tags": [
@@ -3398,7 +3398,7 @@
 		"script": "AP_Trainer_TEACHER_SHIRLEY"
 	},
 	"ITEM_FROM_SCHOOLBOY_NATE": {
-		"label": "Fast Ship B1F - Schoolboy Nate",
+		"label": "S.S. Aqua B1F - Schoolboy Nate (Westbound)",
 		"flag": "EVENT_ITEM_FROM_SCHOOLBOY_NATE",
 		"type": "trainer",
 		"tags": [
@@ -3408,7 +3408,7 @@
 		"script": "AP_Trainer_SCHOOLBOY_NATE"
 	},
 	"ITEM_FROM_SCHOOLBOY_RICKY": {
-		"label": "Fast Ship B1F - Schoolboy Ricky",
+		"label": "S.S. Aqua B1F - Schoolboy Ricky (Westbound)",
 		"flag": "EVENT_ITEM_FROM_SCHOOLBOY_RICKY",
 		"type": "trainer",
 		"tags": [
@@ -3418,7 +3418,7 @@
 		"script": "AP_Trainer_SCHOOLBOY_RICKY"
 	},
 	"ITEM_FROM_COOLTRAINERM_SEAN": {
-		"label": "Fast Ship 1F - Cool Trainer Sean",
+		"label": "S.S. Aqua 1F - Cool Trainer Sean (Eastbound)",
 		"flag": "EVENT_ITEM_FROM_COOLTRAINERM_SEAN",
 		"type": "trainer",
 		"tags": [
@@ -3428,7 +3428,7 @@
 		"script": "AP_Trainer_COOLTRAINERM_SEAN"
 	},
 	"ITEM_FROM_COOLTRAINERF_CAROL": {
-		"label": "Fast Ship 1F - Cool Trainer Carol",
+		"label": "S.S. Aqua 1F - Cool Trainer Carol (Eastbound)",
 		"flag": "EVENT_ITEM_FROM_COOLTRAINERF_CAROL",
 		"type": "trainer",
 		"tags": [
@@ -3438,7 +3438,7 @@
 		"script": "AP_Trainer_COOLTRAINERF_CAROL"
 	},
 	"ITEM_FROM_POKEMANIAC_ETHAN": {
-		"label": "Fast Ship 1F - Pokemaniac Ethan",
+		"label": "S.S. Aqua 1F - Pokemaniac Ethan (Westbound)",
 		"flag": "EVENT_ITEM_FROM_POKEMANIAC_ETHAN",
 		"type": "trainer",
 		"tags": [
@@ -3448,7 +3448,7 @@
 		"script": "AP_Trainer_POKEMANIAC_ETHAN"
 	},
 	"ITEM_FROM_HIKER_NOLAND": {
-		"label": "Fast Ship 1F - Hiker Noland",
+		"label": "S.S. Aqua 1F - Hiker Noland",
 		"flag": "EVENT_ITEM_FROM_HIKER_NOLAND",
 		"type": "trainer",
 		"tags": [
@@ -3458,7 +3458,7 @@
 		"script": "AP_Trainer_HIKER_NOLAND"
 	},
 	"ITEM_FROM_GENTLEMAN_EDWARD": {
-		"label": "Fast Ship 1F - Gentleman Edward",
+		"label": "S.S. Aqua 1F - Gentleman Edward (Eastbound)",
 		"flag": "EVENT_ITEM_FROM_GENTLEMAN_EDWARD",
 		"type": "trainer",
 		"tags": [
@@ -3468,7 +3468,7 @@
 		"script": "AP_Trainer_GENTLEMAN_EDWARD"
 	},
 	"ITEM_FROM_BURGLAR_COREY": {
-		"label": "Fast Ship 1F - Burglar Corey",
+		"label": "S.S. Aqua 1F - Burglar Corey (Westbound)",
 		"flag": "EVENT_ITEM_FROM_BURGLAR_COREY",
 		"type": "trainer",
 		"tags": [
@@ -3478,7 +3478,7 @@
 		"script": "AP_Trainer_BURGLAR_COREY"
 	},
 	"ITEM_FROM_POKEFANM_COLIN": {
-		"label": "Fast Ship 1F - Pokefan Colin",
+		"label": "S.S. Aqua 1F - Pokefan Colin",
 		"flag": "EVENT_ITEM_FROM_POKEFANM_COLIN",
 		"type": "trainer",
 		"tags": [
@@ -3488,7 +3488,7 @@
 		"script": "AP_Trainer_POKEFANM_COLIN"
 	},
 	"ITEM_FROM_TWINS_MEG_AND_PEG": {
-		"label": "Fast Ship 1F - Twins Meg & Peg",
+		"label": "S.S. Aqua 1F - Twins Meg & Peg",
 		"flag": "EVENT_ITEM_FROM_TWINS_MEG_AND_PEG",
 		"type": "trainer",
 		"tags": [
@@ -3498,7 +3498,7 @@
 		"script": "AP_Trainer_TWINS_MEGANDPEG1"
 	},
 	"ITEM_FROM_PSYCHIC_RODNEY": {
-		"label": "Fast Ship 1F - Psychic Rodney",
+		"label": "S.S. Aqua 1F - Psychic Rodney (Eastbound)",
 		"flag": "EVENT_ITEM_FROM_PSYCHIC_RODNEY",
 		"type": "trainer",
 		"tags": [
@@ -3508,7 +3508,7 @@
 		"script": "AP_Trainer_PSYCHIC_T_RODNEY"
 	},
 	"ITEM_FROM_POKEFANM_JEREMY": {
-		"label": "Fast Ship 1F - Pokefan Jeremy",
+		"label": "S.S. Aqua 1F - Pokefan Jeremy (Westbound)",
 		"flag": "EVENT_ITEM_FROM_POKEFANM_JEREMY",
 		"type": "trainer",
 		"tags": [
@@ -3518,7 +3518,7 @@
 		"script": "AP_Trainer_POKEFANM_JEREMY"
 	},
 	"ITEM_FROM_POKEFANF_GEORGIA": {
-		"label": "Fast Ship 1F - Pokefan Georgia",
+		"label": "S.S. Aqua 1F - Pokefan Georgia (Westbound)",
 		"flag": "EVENT_ITEM_FROM_POKEFANF_GEORGIA",
 		"type": "trainer",
 		"tags": [
@@ -3528,7 +3528,7 @@
 		"script": "AP_Trainer_POKEFANF_GEORGIA"
 	},
 	"ITEM_FROM_SUPER_NERD_SHAWN": {
-		"label": "Fast Ship 1F - Super Nerd Shawn",
+		"label": "S.S. Aqua 1F - Super Nerd Shawn (Eastbound)",
 		"flag": "EVENT_ITEM_FROM_SUPER_NERD_SHAWN",
 		"type": "trainer",
 		"tags": [
@@ -3538,7 +3538,7 @@
 		"script": "AP_Trainer_SUPER_NERD_SHAWN"
 	},
 	"ITEM_FROM_FIREBREATHER_LYLE": {
-		"label": "Fast Ship 1F - Firebreather Lyle",
+		"label": "S.S. Aqua 1F - Firebreather Lyle",
 		"flag": "EVENT_ITEM_FROM_FIREBREATHER_LYLE",
 		"type": "trainer",
 		"tags": [
@@ -3548,7 +3548,7 @@
 		"script": "AP_Trainer_FIREBREATHER_LYLE"
 	},
 	"ITEM_FROM_BUG_CATCHER_KEN": {
-		"label": "Fast Ship 1F - Bug Catcher Ken",
+		"label": "S.S. Aqua 1F - Bug Catcher Ken (Westbound)",
 		"flag": "EVENT_ITEM_FROM_BUG_CATCHER_KEN",
 		"type": "trainer",
 		"tags": [
@@ -3558,7 +3558,7 @@
 		"script": "AP_Trainer_BUG_CATCHER_KEN"
 	},
 	"ITEM_FROM_BEAUTY_CASSIE": {
-		"label": "Fast Ship 1F - Beauty Cassie",
+		"label": "S.S. Aqua 1F - Beauty Cassie (Eastbound)",
 		"flag": "EVENT_ITEM_FROM_BEAUTY_CASSIE",
 		"type": "trainer",
 		"tags": [
@@ -3568,7 +3568,7 @@
 		"script": "AP_Trainer_BEAUTY_CASSIE"
 	},
 	"ITEM_FROM_GUITARIST_CLYDE": {
-		"label": "Fast Ship 1F - Guitarist Clyde",
+		"label": "S.S. Aqua 1F - Guitarist Clyde (Westbound)",
 		"flag": "EVENT_ITEM_FROM_GUITARIST_CLYDE",
 		"type": "trainer",
 		"tags": [

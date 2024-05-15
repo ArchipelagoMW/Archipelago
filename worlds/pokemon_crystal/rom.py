@@ -42,7 +42,7 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
         if location.item and location.item.player == world.player:
             write_bytes(patched_rom, [reverse_offset_item_value(location.item.code)], location.rom_address)
         else:
-            write_bytes(patched_rom, [world.item_name_to_id("AP ITEM")], location.rom_address)
+            write_bytes(patched_rom, [item_const_name_to_id("AP_ITEM")], location.rom_address)
             if location.item.advancement:
                 remote_progression_items.append(location)
 

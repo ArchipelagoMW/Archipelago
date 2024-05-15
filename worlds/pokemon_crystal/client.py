@@ -13,18 +13,62 @@ else:
 
 EXPECTED_ROM_VERSION = 2
 
+TRACKER_EVENT_FLAGS = [
+    "EVENT_GOT_KENYA",
+    "EVENT_GAVE_KENYA",
+    "EVENT_JASMINE_RETURNED_TO_GYM",
+    "EVENT_DECIDED_TO_HELP_LANCE",
+    "EVENT_CLEARED_ROCKET_HIDEOUT",
+    "EVENT_CLEARED_RADIO_TOWER",
+    "EVENT_BEAT_ELITE_FOUR",
+    "EVENT_RESTORED_POWER_TO_KANTO",
+    "EVENT_VIRIDIAN_GYM_BLUE",
+    "EVENT_BEAT_RED"
+]
+EVENT_FLAG_MAP = {data.event_flags[event]: event for event in TRACKER_EVENT_FLAGS}
+
+TRACKER_KEY_ITEM_FLAGS = [
+    "EVENT_ZEPHYR_BADGE_FROM_FALKNER",
+    "EVENT_HIVE_BADGE_FROM_BUGSY",
+    "EVENT_PLAIN_BADGE_FROM_WHITNEY",
+    "EVENT_FOG_BADGE_FROM_MORTY",
+    "EVENT_STORM_BADGE_FROM_CHUCK",
+    "EVENT_MINERAL_BADGE_FROM_JASMINE",
+    "EVENT_GLACIER_BADGE_FROM_PRYCE",
+    "EVENT_RISING_BADGE_FROM_CLAIR",
+    "EVENT_BOULDER_BADGE_FROM_BROCK",
+    "EVENT_CASCADE_BADGE_FROM_MISTY",
+    "EVENT_THUNDER_BADGE_FROM_LTSURGE",
+    "EVENT_RAINBOW_BADGE_FROM_ERIKA",
+    "EVENT_SOUL_BADGE_FROM_JANINE",
+    "EVENT_MARSH_BADGE_FROM_SABRINA",
+    "EVENT_VOLCANO_BADGE_FROM_BLAINE",
+    "EVENT_EARTH_BADGE_FROM_BLUE",
+
+    "EVENT_GOT_RADIO_CARD",
+    "EVENT_GOT_MAP_CARD",
+    "EVENT_GOT_PHONE_CARD",
+    "EVENT_GOT_EXPN_CARD",
+    "EVENT_GOT_POKEGEAR",
+    "EVENT_GOT_POKEDEX"
+]
+KEY_ITEM_FLAG_MAP = {data.event_flags[event]: event for event in TRACKER_KEY_ITEM_FLAGS}
+
 
 class PokemonCrystalClient(BizHawkClient):
     game = "Pokemon Crystal"
     system = ("GB", "GBC")
     local_checked_locations: Set[int]
     patch_suffix = ".apcrystal"
-    local_checked_locations: Set[int]
+    local_set_events: Dict[str, bool]
+    local_found_key_items: Dict[str, bool]
 
     def __init__(self) -> None:
         super().__init__()
         self.local_checked_locations = set()
         self.goal_flag = None
+        self.local_set_events = {}
+        self.local_found_key_items = {}
 
     async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
         from CommonClient import logger
@@ -101,6 +145,8 @@ class PokemonCrystalClient(BizHawkClient):
 
             game_clear = False
             local_checked_locations = set()
+            local_set_events = {flag_name: False for flag_name in TRACKER_EVENT_FLAGS}
+            local_found_key_items = {flag_name: False for flag_name in TRACKER_KEY_ITEM_FLAGS}
 
             flag_bytes = read_result[0]
             for byte_i, byte in enumerate(flag_bytes):
@@ -114,6 +160,12 @@ class PokemonCrystalClient(BizHawkClient):
 
                         if self.goal_flag is not None and flag_id == self.goal_flag:
                             game_clear = True
+
+                        if flag_id in EVENT_FLAG_MAP:
+                            local_set_events[EVENT_FLAG_MAP[flag_id]] = True
+
+                        if flag_id in KEY_ITEM_FLAG_MAP:
+                            local_found_key_items[KEY_ITEM_FLAG_MAP[flag_id]] = True
 
             if local_checked_locations != self.local_checked_locations:
                 self.local_checked_locations = local_checked_locations
@@ -130,6 +182,37 @@ class PokemonCrystalClient(BizHawkClient):
                     "cmd": "StatusUpdate",
                     "status": ClientStatus.CLIENT_GOAL
                 }])
+
+            if local_set_events != self.local_set_events and ctx.slot is not None:
+                event_bitfield = 0
+                for i, flag_name in enumerate(TRACKER_EVENT_FLAGS):
+                    if local_set_events[flag_name]:
+                        event_bitfield |= 1 << i
+
+                await ctx.send_msgs([{
+                    "cmd": "Set",
+                    "key": f"pokemon_crystal_events_{ctx.team}_{ctx.slot}",
+                    "default": 0,
+                    "want_reply": False,
+                    "operations": [{"operation": "or", "value": event_bitfield}],
+                }])
+                self.local_set_events = local_set_events
+
+            if local_found_key_items != self.local_found_key_items:
+                key_bitfield = 0
+                for i, location_name in enumerate(TRACKER_KEY_ITEM_FLAGS):
+                    if local_found_key_items[location_name]:
+                        key_bitfield |= 1 << i
+
+                await ctx.send_msgs([{
+                    "cmd": "Set",
+                    "key": f"pokemon_crystal_keys_{ctx.team}_{ctx.slot}",
+                    "default": 0,
+                    "want_reply": False,
+                    "operations": [{"operation": "or", "value": key_bitfield}],
+                }])
+                self.local_found_key_items = local_found_key_items
+
         except bizhawk.RequestFailedError:
             # Exit handler and return to main loop to reconnect
             pass

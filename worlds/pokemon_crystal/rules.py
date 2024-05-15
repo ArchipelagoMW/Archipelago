@@ -85,23 +85,22 @@ def set_rules(world: PokemonCrystalWorld) -> None:
         return state.has(badge_items[n - 1], world.player)
 
     def has_badge_flag(state: CollectionState, n: int):
-        badge_flags = ["EVENT_BEAT_FALKNER",
-                       "EVENT_BEAT_BUGSY",
-                       "EVENT_BEAT_WHITNEY",
-                       "EVENT_BEAT_MORTY",
-                       "EVENT_BEAT_JASMINE",
-                       "EVENT_BEAT_CHUCK",
-                       "EVENT_BEAT_PRYCE",
-                       "EVENT_BEAT_CLAIR",
-
-                       "EVENT_BEAT_BROCK",
-                       "EVENT_BEAT_MISTY",
-                       "EVENT_BEAT_LTSURGE",
-                       "EVENT_BEAT_ERIKA",
-                       "EVENT_BEAT_JANINE",
-                       "EVENT_BEAT_SABRINA",
-                       "EVENT_BEAT_BLAINE",
-                       "EVENT_BEAT_BLUE"]
+        badge_flags = ["EVENT_ZEPHYR_BADGE_FROM_FALKNER",
+                       "EVENT_HIVE_BADGE_FROM_BUGSY",
+                       "EVENT_PLAIN_BADGE_FROM_WHITNEY",
+                       "EVENT_FOG_BADGE_FROM_MORTY",
+                       "EVENT_STORM_BADGE_FROM_CHUCK",
+                       "EVENT_MINERAL_BADGE_FROM_JASMINE",
+                       "EVENT_GLACIER_BADGE_FROM_PRYCE",
+                       "EVENT_RISING_BADGE_FROM_CLAIR",
+                       "EVENT_BOULDER_BADGE_FROM_BROCK",
+                       "EVENT_CASCADE_BADGE_FROM_MISTY",
+                       "EVENT_THUNDER_BADGE_FROM_LTSURGE",
+                       "EVENT_RAINBOW_BADGE_FROM_ERIKA",
+                       "EVENT_SOUL_BADGE_FROM_JANINE",
+                       "EVENT_MARSH_BADGE_FROM_SABRINA",
+                       "EVENT_VOLCANO_BADGE_FROM_BLAINE",
+                       "EVENT_EARTH_BADGE_FROM_BLUE"]
         return state.has(badge_flags[n - 1], world.player)
 
     def has_badge(state: CollectionState, n: int):
@@ -138,6 +137,9 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     def johto_only():
         return world.options.johto_only
+
+    def trainersanity():
+        return world.options.trainersanity
 
     def expn(state: CollectionState):
         if pokegear():
@@ -216,8 +218,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     #          lambda state: state.has("EVENT_GOT_TOGEPI_EGG_FROM_ELMS_AIDE", world.player))
 
     # Route 32
-    set_rule(get_location("Route 32 - Miracle Seed from Man in North"),
-             lambda state: state.has("Zephyr Badge", world.player))
+    set_rule(get_location("Route 32 - Miracle Seed from Man in North"), lambda state: has_badge(state, 1))
 
     set_rule(get_location("Route 32 - TM05 from Roar Guy"), can_cut)
 
@@ -260,6 +261,13 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     set_rule(get_entrance("REGION_GOLDENROD_DEPT_STORE_B1F:WAREHOUSE -> REGION_GOLDENROD_DEPT_STORE_B1F"),
              lambda state: state.has("Card Key", world.player))
+
+    set_rule(get_entrance("REGION_GOLDENROD_UNDERGROUND_WAREHOUSE -> REGION_GOLDENROD_UNDERGROUND_WAREHOUSE:TAKEOVER"),
+             has_rocket_badges)
+
+    set_rule(get_entrance(
+        "REGION_GOLDENROD_UNDERGROUND_SWITCH_ROOM_ENTRANCES -> REGION_GOLDENROD_UNDERGROUND_SWITCH_ROOM_ENTRANCES:TAKEOVER"),
+             has_rocket_badges)
 
     # Radio Tower
 
@@ -367,6 +375,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_location("Mount Mortar 1F Inside - Item 2"), can_strength)
     set_rule(get_location("Mount Mortar 1F Inside - Item 6"), can_strength)
     set_rule(get_location("Mount Mortar 1F Inside - Item 7"), can_strength)
+    set_rule(get_location("Mount Mortar 1F Inside - Super Nerd Markus"), can_strength)
 
     # 1F C -> B1F Everything needs surf so im being lazy
 

@@ -171,8 +171,8 @@ class PokemonCrystalWorld(World):
                 for poke in pkmn_list:
                     self.generated_pokemon[poke] = self.generated_pokemon[poke]._replace(types=new_types)
 
-        if self.options.randomize_palettes.value > 0:
-            for pkmn_name, pkmn_data in self.generated_pokemon.items():
+        for pkmn_name, pkmn_data in self.generated_pokemon.items():
+            if self.options.randomize_palettes.value > 0:
                 pals = []
                 if self.options.randomize_palettes.value == 1:
                     pals.append(get_type_colors(pkmn_data.types, self.random))
@@ -181,8 +181,7 @@ class PokemonCrystalWorld(World):
                 pals.append(get_random_colors(self.random))  # shiny palette
                 self.generated_palettes[pkmn_name] = pals
 
-        if self.options.randomize_base_stats.value > 0:
-            for pkmn_name, pkmn_data in self.generated_pokemon.items():
+            if self.options.randomize_base_stats.value > 0:
                 if self.options.randomize_base_stats.value == 1:
                     new_base_stats = get_random_base_stats(self.random, pkmn_data.bst)
                 else:
@@ -190,8 +189,7 @@ class PokemonCrystalWorld(World):
                 self.generated_pokemon[pkmn_name] = self.generated_pokemon[pkmn_name]._replace(
                     base_stats=new_base_stats)
 
-        if self.options.randomize_learnsets:
-            for pkmn_name, pkmn_data in self.generated_pokemon.items():
+            if self.options.randomize_learnsets:
                 learn_levels = [1 for move in pkmn_data.learnset if move.move ==
                                 "NO_MOVE" and self.options.randomize_learnsets > 1]
                 for move in pkmn_data.learnset:
@@ -200,8 +198,7 @@ class PokemonCrystalWorld(World):
                 new_learnset = [LearnsetData(level, get_random_move()) for level in learn_levels]
                 self.generated_pokemon[pkmn_name] = self.generated_pokemon[pkmn_name]._replace(learnset=new_learnset)
 
-        if self.options.tm_compatibility > 0 or self.options.hm_compatibility > 0:
-            for pkmn_name, pkmn_data in self.generated_pokemon.items():
+            if self.options.tm_compatibility > 0 or self.options.hm_compatibility > 0:
                 new_tmhms = get_tmhm_compatibility(self.options.tm_compatibility.value,
                                                    self.options.hm_compatibility.value, pkmn_data.types, self.random)
                 self.generated_pokemon[pkmn_name] = self.generated_pokemon[pkmn_name]._replace(tm_hm=new_tmhms)
