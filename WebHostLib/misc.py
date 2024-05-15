@@ -2,9 +2,6 @@ import datetime
 import os
 from typing import List, Dict, Union
 
-import flask
-import json
-
 import jinja2.exceptions
 from flask import request, redirect, url_for, render_template, Response, session, abort, send_from_directory
 from pony.orm import count, commit, db_session
@@ -38,28 +35,6 @@ def page_not_found(err):
 @cache.cached()
 def start_playing():
     return render_template(f"startPlaying.html")
-
-
-@app.route("/games/<string:game>/option-presets", methods=["GET"])
-@cache.cached()
-def option_presets(game):
-    world = AutoWorldRegister.world_types[game]
-    presets = {}
-
-    if world.web.options_presets:
-        presets = presets | world.web.options_presets
-
-    class SetEncoder(json.JSONEncoder):
-        def default(self, obj):
-            from collections.abc import Set
-            if isinstance(obj, Set):
-                return list(obj)
-            return json.JSONEncoder.default(self, obj)
-
-    json_data = json.dumps(presets, cls=SetEncoder)
-    response = flask.Response(json_data)
-    response.headers["Content-Type"] = "application/json"
-    return response
 
 
 # Game Info Pages

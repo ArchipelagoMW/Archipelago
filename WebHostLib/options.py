@@ -1,6 +1,8 @@
 import os
 import yaml
 import requests
+import json
+import flask
 
 import Options
 from Options import Visibility
@@ -84,6 +86,28 @@ def send_yaml(player_name: str, formatted_options: dict):
 @app.template_filter("dedent")
 def filter_dedent(text: str):
     return dedent(text).strip("\n ")
+
+
+@app.route("/games/<string:game>/option-presets", methods=["GET"])
+@cache.cached()
+def option_presets(game: str) -> Response:
+    world = AutoWorldRegister.world_types[game]
+    presets = {}
+
+    if world.web.options_presets:
+        presets = presets | world.web.options_presets
+
+    class SetEncoder(json.JSONEncoder):
+        def default(self, obj):
+            from collections.abc import Set
+            if isinstance(obj, Set):
+                return list(obj)
+            return json.JSONEncoder.default(self, obj)
+
+    json_data = json.dumps(presets, cls=SetEncoder)
+    response = flask.Response(json_data)
+    response.headers["Content-Type"] = "application/json"
+    return response
 
 
 @app.route("/weighted-options")
