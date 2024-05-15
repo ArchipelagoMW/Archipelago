@@ -78,12 +78,6 @@
                                         {% if issubclass(option, Options.Toggle) %}
                                             {{ inputs.Toggle(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.DefaultOnToggle) %}
-                                            {{ inputs.DefaultOnToggle(option_name, option) }}
-
-                                        {% elif issubclass(option, Options.PlandoBosses) %}
-                                            {{ inputs.PlandoBosses(option_name, option) }}
-
                                         {% elif issubclass(option, Options.TextChoice) %}
                                             {{ inputs.TextChoice(option_name, option) }}
 
@@ -123,12 +117,6 @@
                                     {% if loop.index > (loop.length / 2)|round(0,"ceil") %}
                                         {% if issubclass(option, Options.Toggle) %}
                                             {{ inputs.Toggle(option_name, option) }}
-
-                                        {% elif issubclass(option, Options.DefaultOnToggle) %}
-                                            {{ inputs.DefaultOnToggle(option_name, option) }}
-
-                                        {% elif issubclass(option, Options.PlandoBosses) %}
-                                            {{ inputs.PlandoBosses(option_name, option) }}
 
                                         {% elif issubclass(option, Options.TextChoice) %}
                                             {{ inputs.TextChoice(option_name, option) }}

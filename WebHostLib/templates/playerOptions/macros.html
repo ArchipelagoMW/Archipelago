@@ -14,11 +14,6 @@
     </div>
 {% endmacro %}
 
-{% macro DefaultOnToggle(option_name, option) %}
-    <!-- Toggle handles defaults properly, so we just reuse that -->
-    {{ Toggle(option_name, option) }}
-{% endmacro %}
-
 {% macro Choice(option_name, option) %}
     {{ OptionTitle(option_name, option) }}
     <div class="select-container">
@@ -114,11 +109,6 @@
         </div>
         <input type="text" id="{{ option_name }}-custom" name="{{ option_name }}-custom" data-option-name="{{ option_name }}" placeholder="Custom value..." />
     </div>
-{% endmacro %}
-
-{% macro PlandoBosses(option_name, option) %}
-    <!-- PlandoBosses is handled by its parent, TextChoice -->
-    {{ TextChoice(option_name, option) }}
 {% endmacro %}
 
 {% macro ItemDict(option_name, option, world) %}
