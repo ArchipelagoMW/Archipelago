@@ -220,7 +220,6 @@ const choosePreset = (evt) => {
   }
 
   document.querySelectorAll('#options-form input, #options-form select').forEach((input) => {
-    if (input.classList.contains('group-toggle')) { return; }
     if (input.id === 'player-name') { return; }
     input.removeAttribute('value');
   });
@@ -266,11 +265,25 @@ const applyPresets = (presetName) => {
       return;
     }
 
-    // Handle normal (text, number, select, etc.) and custom inputs (custom inputs exist with TextChoice only)
+    // Identify all possible elements
     const normalInput = document.getElementById(optionName);
     const customInput = document.getElementById(`${optionName}-custom`);
     const rangeValue = document.getElementById(`${optionName}-value`);
     const randomizeInput = document.getElementById(`random-${optionName}`);
+    const namedRangeSelect = document.getElementById(`${optionName}-select`);
+
+    // It is possible for named ranges to use name of a value rather than the value itself. This is accounted for here
+    let trueValue = optionValue;
+    if (namedRangeSelect) {
+      namedRangeSelect.querySelectorAll('option').forEach((opt) => {
+        if (opt.innerText.startsWith(optionValue)) {
+          trueValue = opt.value;
+        }
+      });
+      namedRangeSelect.value = trueValue;
+    }
+
+    // Handle options whose presets are "random"
     if (optionValue === 'random') {
       normalInput.setAttribute('disabled', '1');
       randomizeInput.setAttribute('checked', '1');
@@ -280,17 +293,21 @@ const applyPresets = (presetName) => {
       if (rangeValue) {
         rangeValue.innerText = normalInput.value;
       }
+      if (namedRangeSelect) {
+        namedRangeSelect.setAttribute('disabled', '1');
+      }
       return;
     }
 
-    normalInput.value = optionValue;
+    // Handle normal (text, number, select, etc.) and custom inputs (custom inputs exist with TextChoice only)
+    normalInput.value = trueValue;
     normalInput.removeAttribute('disabled');
     randomizeInput.removeAttribute('checked');
     if (customInput) {
       document.getElementById(`${optionName}-custom`).removeAttribute('disabled');
     }
     if (rangeValue) {
-      rangeValue.innerText = optionValue;
+      rangeValue.innerText = trueValue;
     }
   });
 
