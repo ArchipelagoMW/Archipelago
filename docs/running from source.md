@@ -23,7 +23,6 @@ After this, you should be able to run the programs.
  * `WebHost.py` will host the website on your computer.
     * You can copy `docs/webhost configuration sample.yaml` to `config.yaml`
     to change WebHost options (like the web hosting port number).
-    * As a side effect, `WebHost.py` creates the template yamls for all the games in `WebHostLib/static/generated`.
 
 
 ## Windows
