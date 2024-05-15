@@ -39,7 +39,7 @@ class WargrooveWorld(World):
     """
 
     options: WargrooveOptions
-    option_dataclass = WargrooveOptions
+    options_dataclass = WargrooveOptions
     settings: typing.ClassVar[WargrooveSettings]
     game = "Wargroove"
     topology_present = True
