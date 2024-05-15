@@ -6,7 +6,7 @@ from .Locations import location_table, contract_locations, is_location_valid, ge
     get_total_locations
 from .Rules import set_rules
 from .Options import AHITOptions, slot_data_options, adjust_options, RandomizeHatOrder, EndGoal
-from .Types import HatType, ChapterIndex, HatInTimeItem
+from .Types import HatType, ChapterIndex, HatInTimeItem, hat_type_to_item
 from .DeathWishLocations import create_dw_regions, dw_classes, death_wishes
 from .DeathWishRules import set_dw_rules, create_enemy_events, hit_list, bosses
 from worlds.AutoWorld import World, WebWorld, CollectionState
@@ -129,6 +129,13 @@ class HatInTimeWorld(World):
                 if self.options.RandomizeHatOrder == RandomizeHatOrder.option_time_stop_last:
                     self.hat_craft_order.remove(HatType.TIME_STOP)
                     self.hat_craft_order.append(HatType.TIME_STOP)
+
+            # move precollected hats to the start of the list
+            for i in range(5):
+                hat = HatType(i)
+                if self.is_hat_precollected(hat):
+                    self.hat_craft_order.remove(hat)
+                    self.hat_craft_order.insert(0, hat)
 
         self.multiworld.itempool += create_itempool(self)
 
@@ -328,6 +335,13 @@ class HatInTimeWorld(World):
 
     def has_yarn(self) -> bool:
         return not self.is_dw_only() and not self.options.HatItems
+
+    def is_hat_precollected(self, hat: HatType) -> bool:
+        for item in self.multiworld.precollected_items[self.player]:
+            if item.name == hat_type_to_item[hat]:
+                return True
+
+        return False
 
     def is_dlc1(self) -> bool:
         return bool(self.options.EnableDLC1)

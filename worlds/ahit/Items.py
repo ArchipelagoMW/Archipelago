@@ -2,7 +2,7 @@ from BaseClasses import Item, ItemClassification
 from .Types import HatDLC, HatType, hat_type_to_item, Difficulty, ItemData, HatInTimeItem
 from .Locations import get_total_locations
 from .Rules import get_difficulty
-from .Options import get_total_time_pieces
+from .Options import get_total_time_pieces, CTRLogic
 from typing import List, Dict, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -39,10 +39,7 @@ def create_itempool(world: "HatInTimeWorld") -> List[Item]:
                 continue
         else:
             if name == "Scooter Badge":
-                if world.options.CTRLogic or get_difficulty(world) >= Difficulty.MODERATE:
-                    item_type = ItemClassification.progression
-            elif name == "No Bonk Badge":
-                if get_difficulty(world) >= Difficulty.MODERATE:
+                if world.options.CTRLogic is CTRLogic.option_scooter or get_difficulty(world) >= Difficulty.MODERATE:
                     item_type = ItemClassification.progression
 
         # some death wish bonuses require one hit hero + hookshot
@@ -58,8 +55,7 @@ def create_itempool(world: "HatInTimeWorld") -> List[Item]:
         if name in alps_hooks.keys() and not world.options.ShuffleAlpineZiplines:
             continue
 
-        if name == "Progressive Painting Unlock" \
-           and not world.options.ShuffleSubconPaintings:
+        if name == "Progressive Painting Unlock" and not world.options.ShuffleSubconPaintings:
             continue
 
         if world.options.StartWithCompassBadge and name == "Compass Badge":
@@ -85,14 +81,8 @@ def calculate_yarn_costs(world: "HatInTimeWorld"):
 
     max_cost = 0
     for i in range(5):
-        precollected: bool = False
         hat: HatType = HatType(i)
-        for item in world.multiworld.precollected_items[world.player]:
-            if item.name == hat_type_to_item[hat]:
-                precollected = True
-                break
-
-        if not precollected:
+        if not world.is_hat_precollected(hat):
             cost: int = world.random.randint(min_yarn_cost, max_yarn_cost)
             world.hat_yarn_costs[hat] = cost
             max_cost += cost

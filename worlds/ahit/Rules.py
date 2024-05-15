@@ -91,10 +91,6 @@ def can_hit(state: CollectionState, world: "HatInTimeWorld", umbrella_only: bool
     return state.has("Umbrella", world.player) or not umbrella_only and can_use_hat(state, world, HatType.BREWING)
 
 
-def can_surf(state: CollectionState, world: "HatInTimeWorld"):
-    return state.has("No Bonk Badge", world.player)
-
-
 def has_relic_combo(state: CollectionState, world: "HatInTimeWorld", relic: str) -> bool:
     return state.has_group(relic, world.player, len(world.item_name_groups[relic]))
 
