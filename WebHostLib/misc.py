@@ -150,6 +150,7 @@ def host_room(room: UUID):
             if cmd:
                 Command(room=room, commandtext=cmd)
                 commit()
+        return redirect(url_for("host_room", room=room.id))
 
     now = datetime.datetime.utcnow()
     # indicate that the page should reload to get the assigned port
