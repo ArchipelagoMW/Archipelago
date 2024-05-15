@@ -55,6 +55,7 @@ A textbox announcing the item being received and the player who sent it will pop
 Similar to the outgoing item textbox, it will be accompanied by a sound depending on the item received being filler or progression/useful.
 
 ## What are the item name groups?
+
 When you attempt to hint for items in Archipelago you can use either the name for the specific item, or the name of a group
 of items. Hinting for a group will choose a random item from the group that you do not currently have and hint for it. The
 groups you can use for Castlevania: Circle of the Moon are as follows:
@@ -67,10 +68,12 @@ groups you can use for Castlevania: Circle of the Moon are as follows:
 * `Attribute Freeze`: Either Attribute Card that logically lets you freeze enemies.
 
 ## What are the location name groups?
+
 In Castlevania: Circle of the Moon, every location is part of a location group under that location's area name.
 So if you want to exclude all of, say, Underground Waterway, you can do so by just excluding "Underground Waterway" as a whole.
 
 ## Why do magic items sometimes look glitched?
+
 This is to do with the fact that the magic item's graphics cannot be loaded at the same time as some special action objects
 that might be in that same room, such as crumbling platforms and push/tackle blocks. It will still function as expected when
 picked up, it just looks weird.

@@ -25,7 +25,7 @@ all_random_options = {
     "disable_battle_arena_mp_drain": "random",
     "require_all_bosses":            "random",
     "early_double":                  "random",
-    "death_link":                    "random",
+    "death_link":                    DeathLink.option_off,
     "completion_goal":               "random",
 }
 
@@ -126,7 +126,7 @@ competitive_all_bosses_options = {
 }
 
 hardcore_mode_options = {
-    "progression_balancing":         0,
+    "progression_balancing":         ProgressionBalancing.default,
     "accessibility":                 Accessibility.option_locations,
     "ignore_cleansing":              IgnoreCleansing.option_true,
     "auto_run":                      AutoRun.option_false,
@@ -145,7 +145,7 @@ hardcore_mode_options = {
     "disable_battle_arena_mp_drain": DisableBattleArenaMPDrain.option_false,
     "require_all_bosses":            RequireAllBosses.option_false,
     "early_double":                  EarlyDouble.option_false,
-    "death_link":                    DeathLink.option_on,
+    "death_link":                    DeathLink.option_off,
     "completion_goal":               CompletionGoal.option_battle_arena_and_dracula,
 }
 

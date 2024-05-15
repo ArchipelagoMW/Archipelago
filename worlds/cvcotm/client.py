@@ -173,12 +173,13 @@ class CastlevaniaCotMClient(BizHawkClient):
 
             # Update the Dracula II and Battle Arena events already being done on past separate sessions for if the
             # player is running the Battle Arena and Dracula goal.
-            if ctx.stored_data[f"castlevania_cotm_events_{ctx.team}_{ctx.slot}"] is not None:
-                if ctx.stored_data[f"castlevania_cotm_events_{ctx.team}_{ctx.slot}"] & 0x1:
-                    self.won_battle_arena = True
+            if f"castlevania_cotm_events_{ctx.team}_{ctx.slot}" in ctx.stored_data:
+                if ctx.stored_data[f"castlevania_cotm_events_{ctx.team}_{ctx.slot}"] is not None:
+                    if ctx.stored_data[f"castlevania_cotm_events_{ctx.team}_{ctx.slot}"] & 0x1:
+                        self.won_battle_arena = True
 
-                if ctx.stored_data[f"castlevania_cotm_events_{ctx.team}_{ctx.slot}"] & 0x800:
-                    self.killed_dracula_2 = True
+                    if ctx.stored_data[f"castlevania_cotm_events_{ctx.team}_{ctx.slot}"] & 0x800:
+                        self.killed_dracula_2 = True
 
             # Capture all the Locations with local DSS Cards, so we can trigger the Location check off the Card being
             # put in the inventory by the game.
