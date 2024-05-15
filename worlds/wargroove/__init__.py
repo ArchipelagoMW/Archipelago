@@ -7,8 +7,8 @@ from .Items import item_table, faction_table
 from .Locations import location_table
 from .Regions import create_regions
 from .Rules import set_rules
-from ..AutoWorld import World, WebWorld
-from .Options import wargroove_options
+from worlds.AutoWorld import World, WebWorld
+from .Options import WargrooveOptions
 
 
 class WargrooveSettings(settings.Group):
@@ -38,11 +38,11 @@ class WargrooveWorld(World):
     Command an army, in this retro style turn based strategy game!
     """
 
-    option_definitions = wargroove_options
+    options: WargrooveOptions
+    option_dataclass = WargrooveOptions
     settings: typing.ClassVar[WargrooveSettings]
     game = "Wargroove"
     topology_present = True
-    data_version = 1
     web = WargrooveWeb()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
@@ -50,7 +50,7 @@ class WargrooveWorld(World):
 
     def _get_slot_data(self):
         return {
-            'seed': "".join(self.multiworld.per_slot_randoms[self.player].choice(string.ascii_letters) for i in range(16)),
+            'seed': "".join(self.random.choice(string.ascii_letters) for i in range(16)),
             'income_boost': self.options.income_boost.value,
             'commander_defense_boost': self.options.commander_defense_boost.value,
             'can_choose_commander': self.options.commander_choice.value != 0,
@@ -104,10 +104,7 @@ class WargrooveWorld(World):
         create_regions(self.multiworld, self.player)
 
     def fill_slot_data(self) -> dict:
-        slot_data = self._get_slot_data()
-        for option_name in wargroove_options:
-            option = getattr(self.multiworld, option_name)[self.player]
-            slot_data[option_name] = int(option.value)
+        slot_data = self.options.as_dict("income_boost","commander_defense_boost", "commander_choice")
         return slot_data
 
     def get_filler_item_name(self) -> str:
