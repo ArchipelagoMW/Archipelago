@@ -85,9 +85,19 @@ def calculate_yarn_costs(world: "HatInTimeWorld"):
 
     max_cost = 0
     for i in range(5):
-        cost: int = world.random.randint(min_yarn_cost, max_yarn_cost)
-        world.hat_yarn_costs[HatType(i)] = cost
-        max_cost += cost
+        precollected: bool = False
+        hat: HatType = HatType(i)
+        for item in world.multiworld.precollected_items[world.player]:
+            if item.name == hat_type_to_item[hat]:
+                precollected = True
+                break
+
+        if not precollected:
+            cost: int = world.random.randint(min_yarn_cost, max_yarn_cost)
+            world.hat_yarn_costs[hat] = cost
+            max_cost += cost
+        else:
+            world.hat_yarn_costs[hat] = 0
 
     available_yarn: int = world.options.YarnAvailable.value
     if max_cost > available_yarn:

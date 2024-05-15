@@ -6,6 +6,10 @@
 - [Archipelago Workshop Mod for A Hat in Time](https://steamcommunity.com/sharedfiles/filedetails/?id=3026842601)
 
 
+## Optional Software
+- [A Hat in Time Archipelago Map Tracker](https://github.com/Mysteryem/ahit-poptracker/releases), for use with [PopTracker](https://github.com/black-sliver/PopTracker/releases)
+
+
 ## Instructions
 
 1. Have Steam running. Open the Steam console with this link: [steam://open/console](steam://open/console)   

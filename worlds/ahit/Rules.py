@@ -39,6 +39,9 @@ def can_use_hat(state: CollectionState, world: "HatInTimeWorld", hat: HatType) -
     if world.options.HatItems:
         return state.has(hat_type_to_item[hat], world.player)
 
+    if world.hat_yarn_costs[hat] <= 0:  # this means the hat was put into starting inventory
+        return True
+
     return state.has("Yarn", world.player, get_hat_cost(world, hat))
 
 
@@ -50,10 +53,6 @@ def get_hat_cost(world: "HatInTimeWorld", hat: HatType) -> int:
             break
 
     return cost
-
-
-def can_sdj(state: CollectionState, world: "HatInTimeWorld"):
-    return can_use_hat(state, world, HatType.SPRINT)
 
 
 def painting_logic(world: "HatInTimeWorld") -> bool:
@@ -358,9 +357,6 @@ def set_specific_rules(world: "HatInTimeWorld"):
              lambda state: state.has("Time Piece", world.player, 12)
              and state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.BIRDS]))
 
-    add_rule(world.multiworld.get_location("Spaceship - Rumbi Abuse", world.player),
-             lambda state: state.has("Time Piece", world.player, 4))
-
     set_mafia_town_rules(world)
     set_botb_rules(world)
     set_subcon_rules(world)
@@ -500,13 +496,13 @@ def set_hard_rules(world: "HatInTimeWorld"):
 
     # SDJ
     add_rule(world.multiworld.get_location("Subcon Forest - Long Tree Climb Chest", world.player),
-             lambda state: can_sdj(state, world) and has_paintings(state, world, 2), "or")
+             lambda state: can_use_hat(state, world, HatType.SPRINT) and has_paintings(state, world, 2), "or")
 
     add_rule(world.multiworld.get_location("Subcon Forest - Dweller Platforming Tree B", world.player),
-             lambda state: has_paintings(state, world, 3) and can_sdj(state, world), "or")
+             lambda state: has_paintings(state, world, 3) and can_use_hat(state, world, HatType.SPRINT), "or")
 
     add_rule(world.multiworld.get_location("Act Completion (Time Rift - Curly Tail Trail)", world.player),
-             lambda state: can_sdj(state, world), "or")
+             lambda state: can_use_hat(state, world, HatType.SPRINT), "or")
 
     # Hard: Goat Refinery from TIHS with nothing
     add_rule(world.multiworld.get_location("Alpine Skyline - Goat Refinery", world.player),
