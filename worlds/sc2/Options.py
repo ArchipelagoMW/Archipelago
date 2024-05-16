@@ -491,6 +491,13 @@ class KerriganPrimalStatus(Choice):
     option_half_completion = 4
     option_item = 5
 
+class EnableMorphling(Toggle):
+    """
+    Determines whether the player can build Morphlings, which allow for inefficient morphing of advanced units
+    like Ravagers and Lurkers without requiring the base unit to be unlocked first.
+    """
+    display_name = "Enable Morphling"
+
 
 class SpearOfAdunPresence(Choice):
     """
@@ -857,6 +864,7 @@ class Starcraft2Options(PerGameCommonOptions):
     kerrigan_total_level_cap: KerriganTotalLevelCap
     start_primary_abilities: StartPrimaryAbilities
     kerrigan_primal_status: KerriganPrimalStatus
+    enable_morphling: EnableMorphling
     spear_of_adun_presence: SpearOfAdunPresence
     spear_of_adun_present_in_no_build: SpearOfAdunPresentInNoBuild
     spear_of_adun_autonomously_cast_ability_presence: SpearOfAdunAutonomouslyCastAbilityPresence

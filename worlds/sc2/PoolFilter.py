@@ -10,7 +10,7 @@ from .MissionTables import (MissionInfo, MissionPools,
 from .Options import (get_option_value, MissionOrder,
     get_enabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech,
     TakeOverAIAllies, campaign_depending_orders,
-    ShuffleCampaigns, get_excluded_missions, ShuffleNoBuild, ExtraLocations, GrantStoryLevels,
+    ShuffleCampaigns, get_excluded_missions, ShuffleNoBuild, ExtraLocations, GrantStoryLevels, EnableMorphling,
     static_mission_orders, dynamic_mission_orders
 )
 from . import ItemNames, ItemGroups
@@ -236,6 +236,7 @@ class ValidInventory:
         """Attempts to generate a reduced inventory that can fulfill the mission requirements."""
         inventory: List[Item] = list(self.item_pool)
         locked_items: List[Item] = list(self.locked_items)
+        enable_morphling = self.world.options.enable_morphling == EnableMorphling.option_true
         item_list = get_full_item_list()
         self.logical_inventory = [
             item.name for item in inventory + locked_items + self.existing_items
@@ -423,15 +424,17 @@ class ValidInventory:
         if (ItemNames.ZERGLING_BANELING_ASPECT in self.logical_inventory
                 and ItemNames.ZERGLING not in self.logical_inventory
                 and ItemNames.KERRIGAN_SPAWN_BANELINGS not in self.logical_inventory
+                and not enable_morphling
         ):
             inventory = [item for item in inventory if item.name != ItemNames.ZERGLING_BANELING_ASPECT]
             inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.ZERGLING_BANELING_ASPECT]
             unused_items = [item_name for item_name in unused_items if item_name != ItemNames.ZERGLING_BANELING_ASPECT]
             unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != ItemNames.ZERGLING_BANELING_ASPECT]
-        # Spawn Banelings without Zergling => remove Baneling unit, keep upgrades except macro ones
+        # Spawn Banelings without Zergling/Morphling => remove Baneling unit, keep upgrades except macro ones
         if (ItemNames.ZERGLING_BANELING_ASPECT in self.logical_inventory
             and ItemNames.ZERGLING not in self.logical_inventory
             and ItemNames.KERRIGAN_SPAWN_BANELINGS in self.logical_inventory
+            and not enable_morphling
         ):
             inventory = [item for item in inventory if item.name != ItemNames.ZERGLING_BANELING_ASPECT]
             inventory = [item for item in inventory if item.name != ItemNames.BANELING_RAPID_METAMORPH]
@@ -441,8 +444,8 @@ class ValidInventory:
             inventory = [item for item in inventory if not item.name.startswith(ItemNames.ZERG_FLYER_UPGRADE_PREFIX)]
             locked_items = [item for item in locked_items if not item.name.startswith(ItemNames.ZERG_FLYER_UPGRADE_PREFIX)]
             unused_items = [item_name for item_name in unused_items if not item_name.startswith(ItemNames.ZERG_FLYER_UPGRADE_PREFIX)]
-        # T3 items removal rules - remove morph and its upgrades if the basic unit isn't in
-        if not {ItemNames.MUTALISK, ItemNames.CORRUPTOR} & logical_inventory_set:
+        # T3 items removal rules - remove morph and its upgrades if the basic unit isn't in and morphling is unavailable
+        if not {ItemNames.MUTALISK, ItemNames.CORRUPTOR} & logical_inventory_set and not enable_morphling:
             inventory = [item for item in inventory if not item.name.endswith("(Mutalisk/Corruptor)")]
             inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT]
             inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.MUTALISK_CORRUPTOR_DEVOURER_ASPECT]
@@ -453,12 +456,12 @@ class ValidInventory:
             unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != ItemNames.MUTALISK_CORRUPTOR_DEVOURER_ASPECT]
             unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT]
             unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != ItemNames.MUTALISK_CORRUPTOR_VIPER_ASPECT]
-        if ItemNames.ROACH not in logical_inventory_set:
+        if ItemNames.ROACH not in logical_inventory_set and not enable_morphling:
             inventory = [item for item in inventory if item.name != ItemNames.ROACH_RAVAGER_ASPECT]
             inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.ROACH_RAVAGER_ASPECT]
             unused_items = [item_name for item_name in unused_items if item_name != ItemNames.ROACH_RAVAGER_ASPECT]
             unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != ItemNames.ROACH_RAVAGER_ASPECT]
-        if ItemNames.HYDRALISK not in logical_inventory_set:
+        if ItemNames.HYDRALISK not in logical_inventory_set and not enable_morphling:
             inventory = [item for item in inventory if not item.name.endswith("(Hydralisk)")]
             inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.HYDRALISK_LURKER_ASPECT]
             inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.HYDRALISK_IMPALER_ASPECT]
