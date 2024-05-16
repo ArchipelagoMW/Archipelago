@@ -104,7 +104,7 @@ class MCPlandoConnections(PlandoConnections):
 
     @classmethod
     def can_connect(cls, entrance, exit):
-        if exit in region_info["illegal_connections"] and exit in region_info["illegal_connections"][exit]:
+        if exit in region_info["illegal_connections"] and entrance in region_info["illegal_connections"][exit]:
             return False
         return True
 
