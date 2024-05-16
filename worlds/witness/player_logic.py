@@ -461,6 +461,7 @@ class WitnessPlayerLogic:
             self.VICTORY_LOCATION = "0xFFF00"
         elif victory == "panel_hunt":
             self.VICTORY_LOCATION = "0x03629"
+            self.COMPLETELY_DISABLED_ENTITIES.add("0x3352F")
 
         # Long box can usually only be solved by opening Mountain Entry. However, if it requires 7 lasers or less
         # (challenge_lasers <= 7), you can now solve it without opening Mountain Entry first.
