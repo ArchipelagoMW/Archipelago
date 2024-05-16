@@ -54,6 +54,7 @@ class WargrooveWorld(World):
             'income_boost': self.options.income_boost.value,
             'commander_defense_boost': self.options.commander_defense_boost.value,
             'can_choose_commander': self.options.commander_choice.value != 0,
+            'commander_choice': self.options.commander_choice.value,
             'starting_groove_multiplier': 20  # Backwards compatibility in case this ever becomes an option
         }
 
@@ -104,7 +105,7 @@ class WargrooveWorld(World):
         create_regions(self.multiworld, self.player)
 
     def fill_slot_data(self) -> dict:
-        slot_data = self.options.as_dict("income_boost","commander_defense_boost", "commander_choice")
+        slot_data = self._get_slot_data()
         return slot_data
 
     def get_filler_item_name(self) -> str:
