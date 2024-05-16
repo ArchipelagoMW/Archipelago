@@ -24,6 +24,7 @@ from .stardew_rule import True_, StardewRule, HasProgressionPercent, true_
 from .strings.ap_names.event_names import Event
 from .strings.entrance_names import Entrance as EntranceName
 from .strings.goal_names import Goal as GoalName
+from .strings.metal_names import Ore
 from .strings.region_names import Region as RegionName, LogicRegion
 
 client_version = 0
@@ -186,6 +187,7 @@ class StardewValleyWorld(World):
         self.setup_construction_events()
         self.setup_quest_events()
         self.setup_action_events()
+        self.setup_logic_events()
 
     def setup_construction_events(self):
         can_construct_buildings = LocationData(None, RegionName.carpenter, Event.can_construct_buildings)
@@ -207,6 +209,13 @@ class StardewValleyWorld(World):
         self.create_event_location(summer_farming, true_, Event.summer_farming)
         fall_farming = LocationData(None, LogicRegion.fall_farming, Event.fall_farming)
         self.create_event_location(fall_farming, true_, Event.fall_farming)
+
+    def setup_logic_events(self):
+        def register_event(name: str, rule: StardewRule):
+            event_location = LocationData(None, RegionName.farm, name)
+            self.create_event_location(event_location, rule, name)
+
+        self.logic.setup_events(register_event)
 
     def setup_victory(self):
         if self.options.goal == Goal.option_community_center:

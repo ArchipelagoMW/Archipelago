@@ -1,14 +1,19 @@
 from typing import Optional
 
+from BaseClasses import ItemClassification
 from .base_logic import BaseLogic, BaseLogicMixin
 from .has_logic import HasLogicMixin
+from ..items import item_table
 from ..stardew_rule import StardewRule, Received, TotalReceived
+from ..strings.ap_names.event_names import all_events
 
 
 class ReceivedLogicMixin(BaseLogic[HasLogicMixin], BaseLogicMixin):
     # Should be cached
     def received(self, item: str, count: Optional[int] = 1) -> StardewRule:
         assert count >= 0, "Can't receive a negative amount of item."
+        assert item in all_events or item_table[item].classification & ItemClassification.progression, \
+            f"Item [{item_table[item].name}] has to be progression to be used in logic"
 
         return Received(item, self.player, count)
 
