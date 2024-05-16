@@ -17,6 +17,8 @@ Then run any of the starting point scripts, like Generate.py, and the included M
 required modules and after pressing enter proceed to install everything automatically.
 After this, you should be able to run the programs.
 
+ * `Launcher.py` gives access to many components, including clients registered in `worlds/LauncherComponents.py`.
+    * The Launcher button "Generate Template Options" will generate default yamls for all worlds.
  * With yaml(s) in the `Players` folder, `Generate.py` will generate the multiworld archive.
  * `MultiServer.py`, with the filename of the generated archive as a command line parameter, will host the multiworld locally.
     * `--log_network` is a command line parameter useful for debugging.
