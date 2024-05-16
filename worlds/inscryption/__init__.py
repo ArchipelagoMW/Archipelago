@@ -1,10 +1,10 @@
 from .Options import InscryptionOptions
 from .Items import act1_items, act2_items, act3_items, filler_items, base_id, InscryptionItem, ItemDict
-from .Locations import act1_locations, act2_locations, act3_locations, locations_to_progress_type, regions_to_locations
+from .Locations import act1_locations, act2_locations, act3_locations, regions_to_locations
 from .Regions import inscryption_regions_all, inscryption_regions_act_1
 from typing import Dict, Any
 from . import Rules
-from BaseClasses import Region, Item, Tutorial
+from BaseClasses import Region, Item, Tutorial, ItemClassification, LocationProgressType
 from ..AutoWorld import World, WebWorld
 
 
@@ -61,6 +61,7 @@ class InscryptionWorld(World):
                 useful_items.remove(act2_items[3])
             elif self.options.epitaph_pieces_randomization.value == 1:
                 useful_items.remove(act2_items[2])
+                useful_items[len(act1_items) + 2]['count'] = 3
             else:
                 useful_items.remove(act2_items[2])
                 useful_items[len(act1_items) + 2]['count'] = 1
@@ -91,13 +92,20 @@ class InscryptionWorld(World):
             region.add_locations({
                 location: self.location_name_to_id[location] for location in regions_to_locations[region_name]
             })
-            for name, progress_type in locations_to_progress_type.items():
-                loc = next((x for x in region.locations if x.name == name), None)
-                if loc is not None and not (self.options.goal == 2 and name.startswith("Act 1")):
-                    loc.progress_type = progress_type
 
     def set_rules(self) -> None:
         Rules.InscryptionRules(self).set_all_rules()
+        if self.options.painting_checks_balancing.value == 1:
+            Rules.InscryptionRules(self).set_painting_rules()
+        elif self.options.painting_checks_balancing.value == 2 and \
+                sum(item.classification == ItemClassification.filler for item in self.multiworld.itempool) >= 2:
+            region = self.multiworld.get_region("Act 1", self.player)
+            loc = next((x for x in region.locations if x.name == "Act 1 - Painting 2"), None)
+            if loc is not None:
+                loc.progress_type = LocationProgressType.EXCLUDED
+            loc = next((x for x in region.locations if x.name == "Act 1 - Painting 3"), None)
+            if loc is not None:
+                loc.progress_type = LocationProgressType.EXCLUDED
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
@@ -106,8 +114,9 @@ class InscryptionWorld(World):
             "goal": self.options.goal.value,
             "randomize_codes": self.options.randomize_codes.value,
             "randomize_deck": self.options.randomize_deck.value,
-            "randomize_abilities": self.options.randomize_abilities.value,
+            "randomize_sigils": self.options.randomize_sigils.value,
             "optional_death_card": self.options.optional_death_card.value,
             "skip_tutorial": self.options.skip_tutorial.value,
+            "skip_epilogue": self.options.skip_epilogue.value,
             "epitaph_pieces_randomization": self.options.epitaph_pieces_randomization.value
         }

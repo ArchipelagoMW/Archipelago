@@ -1,4 +1,4 @@
-from typing import Dict, Set, List
+from typing import Dict, Set
 
 inscryption_regions_all: Dict[str, Set[str]] = {
     "Menu": {"Act 1", "Act 2", "Act 3", "Epilogue"},

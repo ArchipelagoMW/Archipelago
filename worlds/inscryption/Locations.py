@@ -1,5 +1,5 @@
 from typing import List
-from BaseClasses import Location, LocationProgressType
+from BaseClasses import Location
 
 base_id = 147000
 
@@ -117,13 +117,7 @@ act3_locations: List[str] = [
     "Act 3 - Well"
 ]
 
-locations_to_progress_type: dict[str, LocationProgressType] = {
-    "Act 1 - Painting 2": LocationProgressType.EXCLUDED,
-    "Act 1 - Painting 3": LocationProgressType.EXCLUDED,
-    "Act 3 - Goobert's Painting": LocationProgressType.EXCLUDED,
-}
-
-regions_to_locations: dict[str, List[str] | None] = {
+regions_to_locations: dict[str, List[str]] = {
     "Menu": {},
     "Act 1": act1_locations,
     "Act 2": act2_locations,

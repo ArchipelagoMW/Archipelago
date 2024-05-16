@@ -82,7 +82,7 @@ class InscryptionRules:
             "Act 3 - Luke's File Entry 4": self.has_transcendence_requirements,
             "Act 3 - Well": self.has_inspectometer_battery,
             "Act 3 - Gems Drone": self.has_inspectometer_battery,
-            "Act 3 - Clock": self.has_gems_and_battery  # Can be brute-forced, but the solution needs those items.
+            "Act 3 - Clock": self.has_gems_and_battery,  # Can be brute-forced, but the solution needs those items.
         }
         self.region_rules = {
             "Act 2": self.has_act2_requirements,
@@ -102,10 +102,13 @@ class InscryptionRules:
     def has_magnificus_eye(self, state: CollectionState) -> bool:
         return state.has("Magnificus Eye", self.player)
 
+    def has_useful_act1_items(self, state: CollectionState) -> bool:
+        return state.has("Oil Painting's Clover Plant", self.player) and state.has("Squirrel Totem Head")
+
     def has_all_epitaph_pieces(self, state: CollectionState) -> bool:
-        if self.world.multiworld.epitaph_pieces_randomization[self.player].value == 0:
+        if self.world.options.epitaph_pieces_randomization.value == 0:
             return state.has("Epitaph Piece", self.player, 9)
-        elif self.world.multiworld.epitaph_pieces_randomization[self.player].value == 1:
+        elif self.world.options.epitaph_pieces_randomization.value == 1:
             return state.has("Epitaph Pieces", self.player, 3)
         else:
             return state.has("Epitaph Pieces", self.player, 1)
@@ -172,21 +175,29 @@ class InscryptionRules:
             self.has_camera_and_meat(state) and self.has_monocle(state)
 
     def has_epilogue_requirements(self, state: CollectionState) -> bool:
-        # TODO Add the missing checks
         return self.has_act3_requirements(state) and self.has_transcendence_requirements(state)
 
     def set_all_rules(self) -> None:
         multiworld = self.world.multiworld
-        if multiworld.goal[self.player].value <= 1:
+        if self.world.options.goal.value <= 1:
             multiworld.completion_condition[self.player] = self.has_epilogue_requirements
         else:
             multiworld.completion_condition[self.player] = self.has_act2_requirements
         for region in multiworld.get_regions(self.player):
-            if multiworld.goal[self.player].value == 0:
+            if self.world.options.goal.value == 0:
                 if region.name in self.region_rules:
                     for entrance in region.entrances:
                         entrance.access_rule = self.region_rules[region.name]
             for loc in region.locations:
                 if loc.name in self.location_rules:
                     loc.access_rule = self.location_rules[loc.name]
+
+    def set_painting_rules(self) -> None:
+        region = self.world.multiworld.get_region("Act 1", self.player)
+        loc = next((x for x in region.locations if x.name == "Act 1 - Painting 2"), None)
+        if loc is not None:
+            loc.access_rule = self.has_useful_act1_items
+        loc = next((x for x in region.locations if x.name == "Act 1 - Painting 3"), None)
+        if loc is not None:
+            loc.access_rule = self.has_useful_act1_items
 
