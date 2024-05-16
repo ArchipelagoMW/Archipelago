@@ -1,4 +1,4 @@
-LocationData("Cliffs of Desolation Barrel - Key", 8887370, 3),
+    LocationData("Cliffs of Desolation Barrel - Key", 8887370, 3),
 LocationData("Cliffs of Desolation Barrel - Unknown", 8887371, 3),
 LocationData("Cliffs of Desolation Chest - Unknown", 8887372, 2),
 LocationData("Cliffs of Desolation Barrel - Shrink", 8887373, 2),
