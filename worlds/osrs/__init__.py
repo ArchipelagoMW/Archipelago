@@ -3,7 +3,8 @@ import typing
 from BaseClasses import Item, Tutorial, ItemClassification, Region, MultiWorld
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_rule, CollectionRule
-from .Items import OSRSItem, starting_area_dict, chunksanity_starting_chunks, QP_Items, ItemRow
+from .Items import OSRSItem, starting_area_dict, chunksanity_starting_chunks, QP_Items, ItemRow, \
+    chunksanity_special_region_names
 from .Locations import OSRSLocation, LocationRow
 
 from .Options import OSRSOptions, StartingArea
@@ -110,7 +111,10 @@ class OSRSWorld(World):
 
         # Removes the word "Area: " from the item name to get the region it applies to.
         # I figured tacking "Area: " at the beginning would make it _easier_ to tell apart. Turns out it made it worse
-        starting_area_region = self.starting_area_item[len("Area: "):]
+        if self.starting_area_item in chunksanity_special_region_names:
+            starting_area_region = chunksanity_special_region_names[self.starting_area_item]
+        else:
+            starting_area_region = self.starting_area_item[len("Area: "):]
         starting_entrance = menu_region.create_exit(f"Start->{starting_area_region}")
         starting_entrance.access_rule = lambda state: state.has(self.starting_area_item, self.player)
         starting_entrance.connect(self.region_name_to_data[starting_area_region])

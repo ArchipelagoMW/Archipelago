@@ -77,3 +77,9 @@ chunksanity_starting_chunks: typing.List[str] = [
     ItemNames.Mudskipper_Point,
     ItemNames.Wilderness
 ]
+
+# Some starting areas contain multiple regions, so if that area is rolled for Chunksanity, we need to map it to one
+chunksanity_special_region_names: typing.Dict[str, str] = {
+    ItemNames.Lumbridge_Farms: 'Lumbridge Farms East',
+    ItemNames.Crafting_Guild: 'Crafting Guild Outskirts',
+}
