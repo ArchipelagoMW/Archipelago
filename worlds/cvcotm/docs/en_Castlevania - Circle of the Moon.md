@@ -18,7 +18,7 @@ item pool as well; you will now receive these as randomized items rather than by
 Yes. All alternate classes (Magician, Fighter, Shooter, and Thief) are all unlocked and usable from the start by registering
 their names shown on the Data Select screen.
 
-If you intend to play as the Magician, it is highly recommend to put all of your cards in `start_inventory_from_pool` so that
+If you intend to play as the Magician, it is highly recommended to put all of your cards in `start_inventory_from_pool` so that
 the logic can properly account for starting with all cards (and because all locally-placed cards that are your own will
 immediately be detected by the client as found while playing as this class).
 
