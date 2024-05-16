@@ -759,6 +759,7 @@ id,name,classification,groups,mod_name
 5234,Resource Pack: 10 Qi Seasoning,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5235,Mr. Qi's Hat,filler,"MAXIMUM_ONE,RESOURCE_PACK",
 5236,Aquatic Sanctuary,filler,RESOURCE_PACK,
+5237,Leprechaun Hat,filler,"MAXIMUM_ONE,RESOURCE_PACK",
 5242,Exotic Double Bed,filler,RESOURCE_PACK,
 5243,Resource Pack: 2 Qi Gem,filler,"GINGER_ISLAND,RESOURCE_PACK,DEPRECATED",
 5245,Golden Walnut,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL,GINGER_ISLAND",
