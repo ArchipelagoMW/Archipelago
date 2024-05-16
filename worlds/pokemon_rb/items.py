@@ -212,7 +212,13 @@ item_table.update(
 )
 
 
-item_groups = {}
+item_groups = {
+    "HM01": {"HM01 Cut"},
+    "HM02": {"HM02 Fly"},
+    "HM03": {"HM03 Surf"},
+    "HM04": {"HM04 Strength"},
+    "HM05": {"HM05 Flash"},
+}
 for item, data in item_table.items():
     for group in data.groups:
         item_groups[group] = item_groups.get(group, []) + [item]
