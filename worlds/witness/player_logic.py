@@ -316,7 +316,7 @@ class WitnessPlayerLogic:
                 line = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[line]["checkName"]
             self.ADDED_CHECKS.add(line)
 
-    def handle_postgame(self, world: "WitnessWorld") -> List[List[str]]:
+    def handle_regular_postgame(self, world: "WitnessWorld") -> List[List[str]]:
         """
         In shuffle_postgame, panels that become accessible "after or at the same time as the goal" are disabled.
         This mostly involves the disabling of key panels (e.g. long box when the goal is short box).
@@ -331,7 +331,6 @@ class WitnessPlayerLogic:
         victory = world.options.victory_condition
         mnt_lasers = world.options.mountain_lasers
         chal_lasers = world.options.challenge_lasers
-        panel_hunt_postgame = world.options.panel_hunt_postgame
 
         # Goal is "short box", and long box requires at least as many lasers as short box (as god intended)
         proper_shortbox_goal = victory == "mountain_box_short" and chal_lasers >= mnt_lasers
@@ -391,34 +390,38 @@ class WitnessPlayerLogic:
         if not (early_caves or remote_doors) and victory == "challenge":
             postgame_adjustments.append(get_caves_except_path_to_challenge_exclusion_list())
 
-        # ||| Section 3: Forced Postgame |||
-        # The player is given options to force locations to be postgame.
-        # This section handles them. (Right now, this is only panel hunt)
+        return postgame_adjustments
 
-        if victory == "panel_hunt":
-            disable_mountain_lasers = (
-                panel_hunt_postgame == "disable_mountain_lasers_locations"
-                or panel_hunt_postgame == "disable_anything_locked_by_lasers"
-            )
+    def handle_panelhunt_postgame(self, world: "WitnessWorld") -> List[List[str]]:
+        postgame_adjustments = []
 
-            disable_challenge_lasers = (
-                panel_hunt_postgame == "disable_challenge_lasers_locations"
-                or panel_hunt_postgame == "disable_anything_locked_by_lasers"
-            )
+        # Make some quick references to some options
+        panel_hunt_postgame = world.options.panel_hunt_postgame
+        chal_lasers = world.options.challenge_lasers
 
-            if disable_mountain_lasers:
-                self.DISABLE_EVERYTHING_BEHIND.add("0x09F7F")
-                self.HUNT_ENTITIES.add("0x09F7F")
+        disable_mountain_lasers = (
+            panel_hunt_postgame == "disable_mountain_lasers_locations"
+            or panel_hunt_postgame == "disable_anything_locked_by_lasers"
+        )
 
-                # If mountain lasers are disabled, and challenge lasers > 7, the box will need to be rotated
-                if chal_lasers > 7:
-                    postgame_adjustments.append([
-                        "Requirement Changes:",
-                        "0xFFF00 - 11 Lasers - True",
-                    ])
-            if disable_challenge_lasers:
-                self.DISABLE_EVERYTHING_BEHIND.add("0xFFF00")
-                self.HUNT_ENTITIES.add("0xFFF00")
+        disable_challenge_lasers = (
+            panel_hunt_postgame == "disable_challenge_lasers_locations"
+            or panel_hunt_postgame == "disable_anything_locked_by_lasers"
+        )
+
+        if disable_mountain_lasers:
+            self.DISABLE_EVERYTHING_BEHIND.add("0x09F7F")
+            self.HUNT_ENTITIES.add("0x09F7F")
+
+            # If mountain lasers are disabled, and challenge lasers > 7, the box will need to be rotated
+            if chal_lasers > 7:
+                postgame_adjustments.append([
+                    "Requirement Changes:",
+                    "0xFFF00 - 11 Lasers - True",
+                ])
+        if disable_challenge_lasers:
+            self.DISABLE_EVERYTHING_BEHIND.add("0xFFF00")
+            self.HUNT_ENTITIES.add("0xFFF00")
 
         return postgame_adjustments
 
@@ -436,7 +439,11 @@ class WitnessPlayerLogic:
 
         # Exclude panels from the post-game if shuffle_postgame is false.
         if not world.options.shuffle_postgame:
-            adjustment_linesets_in_order += self.handle_postgame(world)
+            adjustment_linesets_in_order += self.handle_regular_postgame(world)
+
+        # Exclude panels from the post-game if shuffle_postgame is false.
+        if not world.options.panel_hunt_postgame:
+            adjustment_linesets_in_order += self.handle_panelhunt_postgame(world)
 
         # Exclude Discards / Vaults
         if not world.options.shuffle_discarded_panels:
