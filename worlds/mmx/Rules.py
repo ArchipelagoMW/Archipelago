@@ -2,6 +2,66 @@ from worlds.generic.Rules import add_rule, set_rule
 
 from . import MMXWorld
 from .Names import LocationName, ItemName, RegionName, EventName
+  
+bosses = {
+    "Sting Chameleon": [
+        f"{RegionName.sting_chameleon_swamp} -> {RegionName.sting_chameleon_boss}",
+        f"{RegionName.sigma_fortress_3_rematch_1} -> {RegionName.sigma_fortress_3_rematch_2}"
+    ],
+    "Storm Eagle": [
+        f"{RegionName.storm_eagle_aircraft} -> {RegionName.storm_eagle_boss}",
+        f"{RegionName.sigma_fortress_2_ride} -> {RegionName.sigma_fortress_2_rematch_2}"
+    ],
+    "Flame Mammoth": [
+        f"{RegionName.flame_mammoth_lava_river_2} -> {RegionName.flame_mammoth_boss}",
+        f"{RegionName.sigma_fortress_3_rematch_4} -> {RegionName.sigma_fortress_3_rematch_5}"
+    ],
+    "Chill Penguin": [
+        f"{RegionName.chill_penguin_ride} -> {RegionName.chill_penguin_boss}",
+        f"{RegionName.sigma_fortress_2_start} -> {RegionName.sigma_fortress_2_rematch_1}"
+    ],
+    "Spark Mandrill": [
+        f"{RegionName.spark_mandrill_deep} -> {RegionName.spark_mandrill_boss}",
+        f"{RegionName.sigma_fortress_3_rematch_2} -> {RegionName.sigma_fortress_3_rematch_3}"
+    ],
+    "Armored Armadillo": [
+        f"{RegionName.armored_armadillo_ride_3} -> {RegionName.armored_armadillo_boss}",
+        f"{RegionName.sigma_fortress_3} -> {RegionName.sigma_fortress_3_rematch_1}"
+    ],
+    "Launch Octopus": [
+        f"{RegionName.launch_octopus_sea} -> {RegionName.launch_octopus_boss}",
+        f"{RegionName.sigma_fortress_3_rematch_3} -> {RegionName.sigma_fortress_3_rematch_4}"
+    ],
+    "Boomer Kuwanger": [
+        f"{RegionName.boomer_kuwanger_top} -> {RegionName.boomer_kuwanger_boss}",
+        f"{RegionName.sigma_fortress_1_vertical} -> {RegionName.sigma_fortress_1_rematch_1}"
+    ],
+    "Thunder Slimer": [
+        f"{RegionName.spark_mandrill_entrance} -> {RegionName.spark_mandrill_mid_boss}"
+    ],
+    "Vile": [
+        f"{RegionName.sigma_fortress_1_outside} -> {RegionName.sigma_fortress_1_vile}"
+    ],
+    "Bospider": [
+        f"{RegionName.sigma_fortress_1_rematch_1} -> {RegionName.sigma_fortress_1_boss}"
+    ],
+    "Rangda Bangda": [
+        f"{RegionName.sigma_fortress_2_rematch_2} -> {RegionName.sigma_fortress_2_boss}"
+    ],
+    "D-Rex": [
+        f"{RegionName.sigma_fortress_3_rematch_5} -> {RegionName.sigma_fortress_3_boss}"
+    ],
+    "Velguarder": [
+        f"{RegionName.sigma_fortress_4} -> {RegionName.sigma_fortress_4_dog}"
+    ],
+    "Sigma": [
+        f"{RegionName.sigma_fortress_4_dog} -> {RegionName.sigma_fortress_4_sigma}"
+    ],
+    "Wolf Sigma": [
+        f"{RegionName.sigma_fortress_4_dog} -> {RegionName.sigma_fortress_4_sigma}"
+    ],
+}
+
 
 def set_rules(world: MMXWorld):
     player = world.player
@@ -111,7 +171,7 @@ def set_rules(world: MMXWorld):
         add_pickupsanity_logic(world)
 
     # Handle bosses weakness
-    if world.options.logic_boss_weakness.value:
+    if world.options.logic_boss_weakness.value or world.options.boss_weakness_strictness.value >= 2:
         add_boss_weakness_logic(world)
 
     # Handle charged shotgun ice logic
@@ -119,7 +179,7 @@ def set_rules(world: MMXWorld):
         add_charged_shotgun_ice_logic(world)
 
 
-def add_pickupsanity_logic(world):
+def add_pickupsanity_logic(world: MMXWorld):
     player = world.player
     multiworld = world.multiworld
     jammed_buster = world.options.jammed_buster.value
@@ -161,83 +221,35 @@ def add_pickupsanity_logic(world):
              ))
 
 
-def add_boss_weakness_logic(world):
+def add_boss_weakness_logic(world: MMXWorld):
     player = world.player
     multiworld = world.multiworld
+    jammed_buster = world.options.jammed_buster.value
 
-    # Armored Armadillo
-    set_rule(multiworld.get_entrance(f"{RegionName.armored_armadillo_ride_3} -> {RegionName.armored_armadillo_boss}", player),
-             lambda state: state.has(ItemName.electric_spark, player))
-    set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress_3} -> {RegionName.sigma_fortress_3_rematch_1}", player),
-            lambda state: state.has(ItemName.electric_spark, player))
+    if world.options.boss_weakness_rando == "vanilla":
+        from .Weaknesses import boss_weaknesses
+        world.boss_weaknesses = boss_weaknesses
 
-    # Chill Penguin
-    set_rule(multiworld.get_entrance(f"{RegionName.chill_penguin_ride} -> {RegionName.chill_penguin_boss}", player),
-             lambda state: state.has(ItemName.fire_wave, player))
-    set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress_2_start} -> {RegionName.sigma_fortress_2_rematch_1}", player),
-            lambda state: state.has(ItemName.fire_wave, player))
-    
-    # Flame Mammoth
-    set_rule(multiworld.get_entrance(f"{RegionName.flame_mammoth_lava_river_2} -> {RegionName.flame_mammoth_boss}", player),
-             lambda state: state.has(ItemName.storm_tornado, player))
-    set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress_3_rematch_4} -> {RegionName.sigma_fortress_3_rematch_5}", player),
-             lambda state: state.has(ItemName.storm_tornado, player))
+    for boss, regions in bosses.items():
+        weaknesses = world.boss_weaknesses[boss]
+        for weakness in weaknesses:
+            if weakness[0] is None:
+                continue
+            weakness = weakness[0]
+            for region in regions:
+                ruleset = {}
+                if "Check Charge" in weakness[0]:
+                    ruleset[ItemName.arms] = jammed_buster + int(weakness[0][-1:]) - 1
+                elif "Check Dash" in weakness[0]:
+                    ruleset[ItemName.legs] = 1
+                else:
+                    ruleset[weakness[0]] = 1
+                if len(weakness) != 1:
+                    ruleset[weakness[1]] = 1
+                add_rule(multiworld.get_entrance(region, player),
+                         lambda state, ruleset=ruleset: state.has_all_counts(ruleset, player))
 
-    # Boomer Kuwanger
-    set_rule(multiworld.get_entrance(f"{RegionName.boomer_kuwanger_top} -> {RegionName.boomer_kuwanger_boss}", player),
-             lambda state: state.has(ItemName.homing_torpedo, player))
-    set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress_1_vertical} -> {RegionName.sigma_fortress_1_rematch_1}", player),
-             lambda state: state.has(ItemName.homing_torpedo, player))
-    
-    # Sting Chameleon
-    set_rule(multiworld.get_entrance(f"{RegionName.sting_chameleon_swamp} -> {RegionName.sting_chameleon_boss}", player),
-             lambda state: state.has(ItemName.boomerang_cutter, player))
-    set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress_3_rematch_1} -> {RegionName.sigma_fortress_3_rematch_2}", player),
-             lambda state: state.has(ItemName.boomerang_cutter, player))
-    
-    # Spark Mandrill
-    set_rule(multiworld.get_entrance(f"{RegionName.spark_mandrill_deep} -> {RegionName.spark_mandrill_boss}", player),
-             lambda state: state.has(ItemName.shotgun_ice, player))
-    set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress_3_rematch_2} -> {RegionName.sigma_fortress_3_rematch_3}", player),
-             lambda state: state.has(ItemName.shotgun_ice, player))
-
-    # Storm Eagle
-    set_rule(multiworld.get_entrance(f"{RegionName.storm_eagle_aircraft} -> {RegionName.storm_eagle_boss}", player),
-             lambda state: state.has(ItemName.chameleon_sting, player))
-    set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress_2_ride} -> {RegionName.sigma_fortress_2_rematch_2}", player),
-             lambda state: state.has(ItemName.chameleon_sting, player))
-    
-    # Launch Octopus
-    set_rule(multiworld.get_entrance(f"{RegionName.launch_octopus_sea} -> {RegionName.launch_octopus_boss}", player),
-             lambda state: state.has(ItemName.rolling_shield, player))
-    set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress_3_rematch_3} -> {RegionName.sigma_fortress_3_rematch_4}", player),
-             lambda state: state.has(ItemName.rolling_shield, player))
-
-    # Bospider
-    set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress_1_rematch_1} -> {RegionName.sigma_fortress_1_boss}", player),
-            lambda state: state.has(ItemName.shotgun_ice, player))
-    
-    # Rangda Bangda
-    set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress_2_rematch_2} -> {RegionName.sigma_fortress_2_boss}", player),
-            lambda state: state.has(ItemName.chameleon_sting, player))
-    
-    # D-Rex
-    set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress_3_rematch_5} -> {RegionName.sigma_fortress_3_boss}", player),
-            lambda state: state.has(ItemName.boomerang_cutter, player))
-    
-    # Velguarder
-    set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress_4} -> {RegionName.sigma_fortress_4_dog}", player),
-            lambda state: state.has(ItemName.shotgun_ice, player))
-    
-    # Sigma & Wolf Sigma
-    set_rule(multiworld.get_entrance(f"{RegionName.sigma_fortress_4_dog} -> {RegionName.sigma_fortress_4_sigma}", player),
-            lambda state: (
-                state.has(ItemName.electric_spark, player) and
-                state.has(ItemName.rolling_shield, player)
-            ))
-
-
-def add_charged_shotgun_ice_logic(world):
+def add_charged_shotgun_ice_logic(world: MMXWorld):
     player = world.player
     multiworld = world.multiworld
     jammed_buster = world.options.jammed_buster.value

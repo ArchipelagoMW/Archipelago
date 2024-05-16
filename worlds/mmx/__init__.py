@@ -16,6 +16,7 @@ from .Regions import create_regions, connect_regions
 from .Names import ItemName, LocationName, EventName
 from .Options import MMXOptions
 from .Client import MMXSNIClient
+from .Weaknesses import randomize_weaknesses, boss_weaknesses, weapon_id
 from .Rom import patch_rom, MMXProcedurePatch, HASH_US, HASH_LEGACY
 
 class MMXSettings(settings.Group):
@@ -79,7 +80,7 @@ class MMXWorld(World):
             total_required_locations += 26
 
         # Add levels into the pool
-        start_inventory = self.multiworld.start_inventory[self.player].value.copy()
+        start_inventory = self.options.start_inventory.value.copy()
         stage_list = [
             ItemName.stage_armored_armadillo,
             ItemName.stage_boomer_kuwanger,
@@ -203,6 +204,7 @@ class MMXWorld(World):
         # Finish
         self.multiworld.itempool += itempool
 
+
     def create_item(self, name: str, force_classification=False) -> Item:
         data = item_table[name]
 
@@ -219,10 +221,12 @@ class MMXWorld(World):
 
         return created_item
 
+
     def set_rules(self):
         from .Rules import set_rules
         set_rules(self)
-    
+
+
     def fill_slot_data(self):
         slot_data = {}
         for option_name in (attr.name for attr in dataclasses.fields(MMXOptions)
@@ -230,13 +234,36 @@ class MMXWorld(World):
             option = getattr(self.options, option_name)
             slot_data[option_name] = option.value
         return slot_data
-    
+
+
     def generate_early(self):
         if self.options.early_legs:
             self.multiworld.early_items[self.player][ItemName.legs] = 1
+            
+        if self.options.boss_weakness_rando != "vanilla":
+            self.boss_weaknesses = {}
+            self.boss_weakness_data = {}
+            randomize_weaknesses(self)
+        
+        early_stage = self.random.choice(list(item_groups["Access Codes"]))
+        self.multiworld.local_early_items[self.player][early_stage] = 1
+
+
+    def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
+        if self.options.boss_weakness_rando != "vanilla":
+            spoiler_handle.write(f"\nMega Man X boss weaknesses for {self.multiworld.player_name[self.player]}:\n")
+            
+            for boss, data in self.boss_weaknesses.items():
+                weaknesses = ""
+                for i in range(len(data)):
+                    weaknesses += f"{weapon_id[data[i][1]]}, "
+                weaknesses = weaknesses[:-2]
+                spoiler_handle.writelines(f"{boss + ':':<30s}{weaknesses}\n")
+
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(list(junk_table.keys()))
+
 
     def generate_output(self, output_directory: str):
         try:
@@ -253,6 +280,7 @@ class MMXWorld(World):
         finally:
             self.rom_name_available_event.set()  # make sure threading continues and errors are collected
 
+
     def modify_multidata(self, multidata: dict):
         import base64
         # wait for self.rom_name to be available.
@@ -262,7 +290,3 @@ class MMXWorld(World):
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
-
-    @classmethod
-    def stage_fill_hook(cls, multiworld: MultiWorld, progitempool, usefulitempool, filleritempool, fill_locations):
-        return

@@ -47,11 +47,48 @@ boss_access_rom_data = {
 }
 
 refill_rom_data = {
-    STARTING_ID + 0x0030: ["small hp refill"],
-    STARTING_ID + 0x0031: ["large hp refill"],
-    STARTING_ID + 0x0034: ["1up"],
+    STARTING_ID + 0x0030: ["hp refill", 2],
+    STARTING_ID + 0x0031: ["hp refill", 8],
+    STARTING_ID + 0x0034: ["1up", 0],
     #0xBD0032: ["small weapon refill"],
     #0xBD0033: ["large weapon refill"]
+}
+
+boss_weakness_offsets = {
+    "Sting Chameleon": 0x37E20,
+    "Storm Eagle": 0x37E60,
+    "Flame Mammoth": 0x37E80,
+    "Chill Penguin": 0x37EA0,
+    "Spark Mandrill": 0x3708B,
+    "Armored Armadillo": 0x370A9,
+    "Launch Octopus": 0x370C7,
+    "Boomer Kuwanger": 0x370E5,
+    "Thunder Slimer": 0x37F00,
+    "Vile": 0x37E00,
+    "Bospider": 0x37EC0,
+    "Rangda Bangda": 0x37031,
+    "D-Rex": 0x37E40,
+    "Velguarder": 0x37EE0,
+    "Sigma": 0x3717B,
+    "Wolf Sigma": 0x37199,
+}
+
+boss_hp_caps_offsets = {
+    "Sting Chameleon": 0x406C9,
+    "Storm Eagle": 0x3D95F,
+    "Flame Mammoth": 0x392BD,
+    "Chill Penguin": 0x0B5FB,
+    "Spark Mandrill": 0x41D29,
+    "Armored Armadillo": 0x1B2B5,
+    "Launch Octopus": 0x0C504,
+    "Boomer Kuwanger": 0x38BE8,
+    "Vile": 0x45C34,
+    "Bospider": 0x15C0E,
+    "Rangda Bangda": 0x42A38,
+    "D-Rex": 0x440FD,
+    "Velguarder": 0x148DF,
+    "Sigma": 0x4467B,
+    "Wolf Sigma": 0x44B79,
 }
 
 class MMXProcedurePatch(APProcedurePatch, APTokenMixin):
@@ -75,9 +112,32 @@ class MMXProcedurePatch(APProcedurePatch, APTokenMixin):
     def write_bytes(self, offset, value: typing.Iterable[int]):
         self.write_token(APTokenTypes.WRITE, offset, bytes(value))
 
-def patch_rom(world: World, patch: MMXProcedurePatch):
-    from Utils import __version__
 
+def adjust_boss_damage_table(world: World, patch: MMXProcedurePatch):
+    for boss, data in world.boss_weakness_data.items():
+        offset = boss_weakness_offsets[boss]
+        patch.write_bytes(offset, bytearray(data))
+
+    # Fix second anglerge having different weakness
+    patch.write_byte(0x12E62, 0x01)
+
+
+def adjust_boss_hp(world: World, patch: MMXProcedurePatch):
+    option = world.options.boss_randomize_hp
+    if option == "weak":
+        ranges = [1,32]
+    elif option == "regular":
+        ranges = [16,48]
+    elif option == "strong":
+        ranges = [32,64]
+    elif option == "chaotic":
+        ranges = [1,64]
+    
+    for _, offset in boss_hp_caps_offsets.items():
+        patch.write_byte(offset, world.random.randint(ranges[0], ranges[1]))
+
+
+def patch_rom(world: World, patch: MMXProcedurePatch):
     # Prepare some ROM locations to receive the basepatch output
     patch.write_bytes(0x00098C, bytearray([0x85,0xB3,0x8A]))
     patch.write_bytes(0x0009AE, bytearray([0x85,0xB3,0x8A]))
@@ -118,7 +178,14 @@ def patch_rom(world: World, patch: MMXProcedurePatch):
                                            0x20,0x42,0x59,0x20,0x4E,0x49,0x4E,0x54,
                                            0x45,0x4E,0x44,0x4F,0x00]))
 
+    if world.options.boss_weakness_rando != "vanilla":
+        adjust_boss_damage_table(world, patch)
+    
+    if world.options.boss_randomize_hp != "off":
+        adjust_boss_hp(world, patch)
+        
     # Edit the ROM header
+    from Utils import __version__
     patch.name = bytearray(f'MMX1{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
     patch.name.extend([0] * (21 - len(patch.name)))
     patch.write_bytes(0x7FC0, patch.name)
@@ -136,6 +203,12 @@ def patch_rom(world: World, patch: MMXProcedurePatch):
     patch.write_byte(0x17FFE9, world.options.death_link.value)
     patch.write_byte(0x17FFEA, world.options.jammed_buster.value)
     patch.write_byte(0x17FFEB, world.options.logic_boss_weakness.value)
+    patch.write_byte(0x17FFEC, world.options.boss_weakness_rando.value)
+    patch.write_byte(0x17FFED, world.options.starting_hp.value)
+    patch.write_byte(0x17FFEE, world.options.heart_tank_effectiveness.value)
+    patch.write_byte(0x17FFEF, world.options.sigma_all_levels.value)
+
+    patch.write_byte(0x014FF, world.options.starting_hp.value)
 
     patch.write_file("token_patch.bin", patch.get_token_binary())
 
