@@ -93,14 +93,14 @@ def get_total_count_of_item_received(network_id: int, items: list[NetworkItem]) 
 async def handle_checked_location(ctx: MetroidPrimeContext, current_inventory: dict[str, InventoryItemData]):
     """Uses the current amount of UnknownItem1 in inventory as an indicator of which location was checked. This will break if the player collects more than one pickup without having the AP client hooked to the game and server"""
     unknown_item1 = current_inventory["UnknownItem1"]
-    if (unknown_item1.current_amount == 0):
+    if (unknown_item1.current_capacity == 0):
         return
     checked_location_id = METROID_PRIME_LOCATION_BASE + \
-        unknown_item1.current_amount - 1
+        unknown_item1.current_capacity - 1
     logger.debug(
-        f"Checked location: {checked_location_id} with amount: {unknown_item1.current_amount} ")
+        f"Checked location: {checked_location_id} with amount: {unknown_item1.current_capacity} ")
     await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [checked_location_id]}])
-    ctx.game_interface.give_item_to_player(unknown_item1.id, 0, 999)
+    ctx.game_interface.give_item_to_player(unknown_item1.id, 0, 0)
 
 
 async def handle_receive_items(ctx: MetroidPrimeContext, current_items: dict[str, InventoryItemData]):

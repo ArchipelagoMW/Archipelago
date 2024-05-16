@@ -80,4 +80,4 @@ artifact_table: dict[str, ItemData] = {
 }
 
 item_table: dict[str, ItemData] = {
-    **suit_upgrade_table, **artifact_table, **custom_suit_upgrade_table}
+    **suit_upgrade_table, **artifact_table, **custom_suit_upgrade_table, **misc_item_table}
