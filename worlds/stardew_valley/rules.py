@@ -101,6 +101,8 @@ def set_isolated_locations_rules(logic: StardewLogic, multiworld, player):
                              logic.money.can_spend(20000))
     MultiWorldRules.add_rule(multiworld.get_location("Demetrius's Breakthrough", player),
                              logic.money.can_have_earned_total(25000))
+    MultiWorldRules.add_rule(multiworld.get_location("Pot Of Gold", player),
+                             logic.season.has(Season.spring))
 
 
 def set_tool_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
