@@ -42,6 +42,13 @@ def adjust_options(world: "HatInTimeWorld"):
     if world.options.FinalChapterMinCost > total_tps:
         world.options.FinalChapterMinCost.value = min(50, total_tps)
 
+    if world.is_dlc1() and world.options.ShipShapeCustomTaskGoal <= 0:
+        # automatically determine task count based on Tasksanity settings
+        if world.options.Tasksanity:
+            world.options.ShipShapeCustomTaskGoal = world.options.TasksanityCheckCount * world.options.TasksanityTaskStep
+        else:
+            world.options.ShipShapeCustomTaskGoal = 18
+
     # Don't allow Rush Hour goal if DLC2 content is disabled
     if world.options.EndGoal == EndGoal.option_rush_hour and not world.options.EnableDLC2:
         world.options.EndGoal.value = 1
@@ -388,7 +395,7 @@ class TasksanityTaskStep(Range):
 class TasksanityCheckCount(Range):
     """How many Tasksanity checks there will be in total."""
     display_name = "Tasksanity Check Count"
-    range_start = 5
+    range_start = 1
     range_end = 30
     default = 18
 
@@ -401,11 +408,14 @@ class ExcludeTour(Toggle):
 
 
 class ShipShapeCustomTaskGoal(Range):
-    """Change the number of tasks required to complete Ship Shape. This will not affect Cruisin' for a Bruisin'."""
+    """Change the number of tasks required to complete Ship Shape. If this option's value is 0, the number of tasks
+    required will be TasksanityTaskStep x TasksanityCheckCount, if Tasksanity is enabled. If Tasksanity is disabled,
+    it will use the game's default of 18.
+    This option will not affect Cruisin' for a Bruisin'."""
     display_name = "Ship Shape Custom Task Goal"
-    range_start = 1
-    range_end = 30
-    default = 18
+    range_start = 0
+    range_end = 90
+    default = 0
 
 
 class EnableDLC2(Toggle):

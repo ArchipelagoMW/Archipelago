@@ -5,7 +5,7 @@ from .Locations import location_table, zipline_unlocks, is_location_valid, contr
 from .Types import HatType, ChapterIndex, hat_type_to_item, Difficulty, HitType
 from BaseClasses import Location, Entrance, Region
 from typing import TYPE_CHECKING, List, Callable, Union, Dict
-from .Options import EndGoal, CTRLogic
+from .Options import EndGoal, CTRLogic, NoTicketSkips
 
 if TYPE_CHECKING:
     from . import HatInTimeWorld
@@ -515,7 +515,7 @@ def set_hard_rules(world: "HatInTimeWorld"):
                  lambda state: can_use_hat(state, world, HatType.ICE))
 
         # Hard: clear Rush Hour with Brewing Hat only
-        if not world.options.NoTicketSkips:
+        if world.options.NoTicketSkips is not NoTicketSkips.option_true:
             set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player),
                      lambda state: can_use_hat(state, world, HatType.BREWING))
         else:
