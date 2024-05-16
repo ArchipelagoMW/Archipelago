@@ -1,3 +1,5 @@
+from typing import Dict, List
+
 from BaseClasses import Location
 
 base_id = 147000
@@ -116,10 +118,10 @@ act3_locations = [
     "Act 3 - Well"
 ]
 
-regions_to_locations: dict[str, list[str]] = {
-    "Menu": {},
+regions_to_locations: Dict[str, List[str]] = {
+    "Menu": [],
     "Act 1": act1_locations,
     "Act 2": act2_locations,
     "Act 3": act3_locations,
-    "Epilogue": {}
+    "Epilogue": []
 }
