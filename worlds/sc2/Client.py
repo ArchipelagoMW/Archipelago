@@ -669,10 +669,18 @@ class SC2Context(CommonContext):
                     current_ver = f.read()
                     sc2_logger.debug(f"Current version: {current_ver}")
                 if is_mod_update_available(DATA_REPO_OWNER, DATA_REPO_NAME, DATA_API_VERSION, current_ver):
-                    sc2_logger.info("NOTICE: Update for required files found. Run /download_data to install.")
+                    (
+                        ColouredMessage().coloured("NOTICE: Update for required files found. ", colour="red")
+                        ("Run ").coloured("/download_data", colour="slateblue")
+                        (" to install.")
+                    ).send(self)
             elif maps_present:
-                sc2_logger.warning("NOTICE: Your map files may be outdated (version number not found). "
-                                   "Run /download_data to update them.")
+                (
+                    ColouredMessage()
+                    .coloured("NOTICE: Your map files may be outdated (version number not found). ", colour="red")
+                    ("Run ").coloured("/download_data", colour="slateblue")
+                    (" to install.")
+                ).send(self)
 
     @staticmethod
     def parse_mission_info(mission_info: dict[str, typing.Any]) -> MissionInfo:
@@ -1527,12 +1535,12 @@ def is_mod_installed_correctly() -> bool:
         sc2_logger.warning(f"Missing {len(missing_maps)} map files.")
         needs_files = True
     else:  # Must be no maps missing
-        sc2_logger.info(f"All maps found in {mapdir}.")
+        sc2_logger.debug(f"All maps found in {mapdir}.")
 
     # Check for mods.
     for modfile in modfiles:
         if os.path.isfile(modfile) or os.path.isdir(modfile):
-            sc2_logger.info(f"Archipelago mod found at {modfile}.")
+            sc2_logger.debug(f"Archipelago mod found at {modfile}.")
         else:
             sc2_logger.warning(f"Archipelago mod could not be found at {modfile}.")
             needs_files = True
