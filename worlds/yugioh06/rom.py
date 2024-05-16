@@ -8,7 +8,7 @@ from settings import get_settings
 import Utils
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 
-from ..AutoWorld import World
+from worlds.AutoWorld import World
 from .items import item_to_index
 from .rom_values import banlist_ids, function_addresses, structure_deck_selection
 

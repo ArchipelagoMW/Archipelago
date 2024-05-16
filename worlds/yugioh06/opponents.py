@@ -220,7 +220,7 @@ def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int], rando
         if item.name in tier_1_opponents:
             # convert item index to opponent index
             chosen_ones.insert(item_to_index[item.name] - item_to_index["Campaign Tier 1 Column 1"], start)
-            continue
+            break
     chosen_ones.append(goal)
     tier = 1
     column = 1
@@ -249,9 +249,15 @@ def get_opponent_locations(opponent: OpponentData) -> Dict[str, Optional[Union[s
 
 def get_opponent_condition(opponent: OpponentData, unlock_item: str, unlock_amount: int, player: int,
                            is_challenge: bool):
-    return lambda state: (
-            ((is_challenge and state.has(unlock_item, player, unlock_amount))
-             or (not is_challenge and state.has_group(unlock_item, player, unlock_amount)))
+    if is_challenge:
+        return lambda state: (
+            state.has(unlock_item, player, unlock_amount)
             and yugioh06_difficulty(state, player, opponent.difficulty)
             and state.has_all(opponent.additional_info, player)
-    )
+        )
+    else:
+        return lambda state: (
+            state.has_group(unlock_item, player, unlock_amount)
+            and yugioh06_difficulty(state, player, opponent.difficulty)
+            and state.has_all(opponent.additional_info, player)
+        )
