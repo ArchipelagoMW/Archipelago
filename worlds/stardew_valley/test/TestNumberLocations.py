@@ -50,7 +50,7 @@ class TestMinSanityHasAllExpectedLocations(SVTestBase):
     options = get_minsanity_options()
 
     def test_minsanity_has_fewer_than_locations(self):
-        expected_locations = 84
+        expected_locations = 85
         real_locations = self.get_real_locations()
         number_locations = len(real_locations)
         self.assertLessEqual(number_locations, expected_locations)
@@ -66,7 +66,7 @@ class TestDefaultSettingsHasAllExpectedLocations(SVTestBase):
     options = default_5_x_x()
 
     def test_default_settings_has_exactly_locations(self):
-        expected_locations = 422
+        expected_locations = 489
         real_locations = self.get_real_locations()
         number_locations = len(real_locations)
         print(f"Stardew Valley - Default options locations: {number_locations}")
@@ -81,7 +81,7 @@ class TestAllSanitySettingsHasAllExpectedLocations(SVTestBase):
     options = allsanity_no_mods_5_x_x()
 
     def test_allsanity_without_mods_has_at_least_locations(self):
-        expected_locations = 1956
+        expected_locations = 2134
         real_locations = self.get_real_locations()
         number_locations = len(real_locations)
         self.assertGreaterEqual(number_locations, expected_locations)
@@ -97,11 +97,11 @@ class TestAllSanityWithModsSettingsHasAllExpectedLocations(SVTestBase):
     options = allsanity_mods_5_x_x()
 
     def test_allsanity_with_mods_has_at_least_locations(self):
-        expected_locations = 2804
+        expected_locations = 2974
         real_locations = self.get_real_locations()
         number_locations = len(real_locations)
         self.assertGreaterEqual(number_locations, expected_locations)
-        print(f"\nStardew Valley - Allsanity Locations with all mods: {number_locations}")
+        print(f"Stardew Valley - Allsanity Locations with all mods: {number_locations}")
         if number_locations != expected_locations:
             print(f"\tNew locations detected!"
                   f"\n\tPlease update test_allsanity_with_mods_has_at_least_locations"
