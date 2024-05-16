@@ -2544,7 +2544,7 @@
 		"script": "AP_NPC_RadioTower5F_BASEMENT_KEY"
 	},
 	"CLEAR_BELL": {
-		"label": "Radio Tower 5F - Clear Bell from Rocket Exec",
+		"label": "Radio Tower 5F - Clear Bell from Rocket Boss",
 		"flag": "EVENT_GOT_CLEAR_BELL",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
@@ -3015,7 +3015,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_BUG_CATCHER_BENNY"
+		"script": "AP_Trainer_BUG_CATCHER_BUG_CATCHER_BENNY"
 	},
 	"ITEM_FROM_BUG_CATCHER_AL": {
 		"label": "Azalea Gym - Bug Catcher Al",
@@ -4148,7 +4148,7 @@
 		"script": "AP_Trainer_SCIENTIST_RICH"
 	},
 	"ITEM_FROM_ROCKET_EXECUTIVEF_1": {
-		"label": "Radio Tower 5F - Executive",
+		"label": "Radio Tower 5F - Rocket Executive",
 		"flag": "EVENT_ITEM_FROM_ROCKET_EXECUTIVEF_1",
 		"type": "trainer",
 		"tags": [
@@ -4178,7 +4178,7 @@
 		"script": "AP_Trainer_COOLTRAINERF_QUINN"
 	},
 	"ITEM_FROM_HIKER_JIM": {
-		"label": "Route 10 South - Hiker Jim",
+		"label": "Route 10 - Hiker Jim",
 		"flag": "EVENT_ITEM_FROM_HIKER_JIM",
 		"type": "trainer",
 		"tags": [
@@ -4188,7 +4188,7 @@
 		"script": "AP_Trainer_HIKER_JIM"
 	},
 	"ITEM_FROM_POKEFANM_ROBERT": {
-		"label": "Route 10 South - Pokefan Robert",
+		"label": "Route 10 - Pokefan Robert",
 		"flag": "EVENT_ITEM_FROM_POKEFANM_ROBERT",
 		"type": "trainer",
 		"tags": [

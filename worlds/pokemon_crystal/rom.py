@@ -244,7 +244,8 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
     write_bytes(patched_rom, elite_four_text, data.rom_addresses["AP_Setting_VictoryRoadBadges_Text"] + 1)
     write_bytes(patched_rom, [world.options.elite_four_badges - 1],
                 data.rom_addresses["AP_Setting_VictoryRoadBadges"] + 1)
-    write_bytes(patched_rom, [world.options.elite_four_badges - 2], data.rom_addresses["AP_Setting_RocketBadges"] + 1)
+    rocket_badges = world.options.elite_four_badges - 2 if world.options.elite_four_badges > 1 else 0
+    write_bytes(patched_rom, [rocket_badges], data.rom_addresses["AP_Setting_RocketBadges"] + 1)
 
     red_text = convert_to_ingame_text("{:02d}".format(world.options.red_badges.value))
     write_bytes(patched_rom, red_text, data.rom_addresses["AP_Setting_RedBadges_Text"] + 1)

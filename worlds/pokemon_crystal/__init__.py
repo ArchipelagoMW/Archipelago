@@ -257,14 +257,16 @@ class PokemonCrystalWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = self.options.as_dict(
-            "randomize_hidden_items",
-            "randomize_starters",
-            "randomize_wilds",
-            "randomize_learnsets",
-            "blind_trainers",
-            "better_marts",
             "goal",
-            "require_itemfinder"
+            "johto_only",
+            "elite_four_badges",
+            "red_badges",
+            "randomize_badges",
+            "randomize_hidden_items",
+            "require_itemfinder",
+            "trainersanity",
+            "randomize_pokegear",
+            "hm_badge_requirements"
         )
         return slot_data
 
@@ -272,7 +274,10 @@ class PokemonCrystalWorld(World):
         if self.options.randomize_starters:
             spoiler_handle.write(f"\n\nStarter Pokemon ({self.multiworld.player_name[self.player]}):\n\n")
             for evo in self.generated_starters:
-                spoiler_handle.write(f"{evo[0]} -> {evo[1]} -> {evo[2]}\n")
+                types_0 = ", ".join(self.generated_pokemon[evo[0]].types)
+                types_1 = ", ".join(self.generated_pokemon[evo[1]].types)
+                types_2 = ", ".join(self.generated_pokemon[evo[2]].types)
+                spoiler_handle.write(f"{evo[0]} ({types_0}) -> {evo[1]} ({types_1}) -> {evo[2]} ({types_2})\n")
 
     def create_item(self, name: str) -> PokemonCrystalItem:
         return self.create_item_by_code(self.item_name_to_id[name])

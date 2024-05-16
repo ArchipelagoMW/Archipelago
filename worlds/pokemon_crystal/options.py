@@ -90,7 +90,7 @@ class RandomizeStaticPokemon(Toggle):
 
 
 class RandomizeTrainerParties(Choice):
-    """Randomizes Pokemon in emey trainer parties"""
+    """Randomizes Pokemon in enemy trainer parties"""
     display_name = "Randomize Trainer Parties"
     default = 0
     option_vanilla = 0

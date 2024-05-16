@@ -12,104 +12,127 @@ else:
 def set_rules(world: PokemonCrystalWorld) -> None:
     def can_cut(state: CollectionState):
         if world.options.hm_badge_requirements == 0:
-            return state.has("HM01 Cut", world.player) and has_badge(state, 2)
+            return state.has("HM01 Cut", world.player) and has_badge(state, "hive")
         elif world.options.hm_badge_requirements == 1:
             return state.has("HM01 Cut", world.player)
         else:
-            return state.has("HM01 Cut", world.player) and (has_badge(state, 2) or has_badge(state, 10))
+            return state.has("HM01 Cut", world.player) and (has_badge(state, "hive") or has_badge(state, "cascade"))
 
     # def can_fly(state: CollectionState):
     #     return state.has("HM02 Fly", world.player) and state.has("Storm Badge", world.player)
 
     def can_surf(state: CollectionState):
         if world.options.hm_badge_requirements == 0:
-            return state.has("HM03 Surf", world.player) and has_badge(state, 4)
+            return state.has("HM03 Surf", world.player) and has_badge(state, "fog")
         elif world.options.hm_badge_requirements == 1:
             return state.has("HM03 Surf", world.player)
         else:
-            return state.has("HM03 Surf", world.player) and (has_badge(state, 4) or has_badge(state, 13))
+            return state.has("HM03 Surf", world.player) and (has_badge(state, "fog") or has_badge(state, "thunder"))
 
     def can_strength(state: CollectionState):
         if world.options.hm_badge_requirements == 0:
-            return state.has("HM04 Strength", world.player) and has_badge(state, 3)
+            return state.has("HM04 Strength", world.player) and has_badge(state, "plain")
         elif world.options.hm_badge_requirements == 1:
             return state.has("HM04 Strength", world.player)
         else:
-            return state.has("HM04 Strength", world.player) and (has_badge(state, 3) or has_badge(state, 12))
+            return state.has("HM04 Strength", world.player) and (
+                    has_badge(state, "plain") or has_badge(state, "rainbow"))
 
     def can_flash(state: CollectionState):
         if world.options.hm_badge_requirements == 0:
-            return state.has("HM05 Flash", world.player) and has_badge(state, 1)
+            return state.has("HM05 Flash", world.player) and has_badge(state, "zephyr")
         elif world.options.hm_badge_requirements == 1:
             return state.has("HM05 Flash", world.player)
         else:
-            return state.has("HM05 Flash", world.player) and (has_badge(state, 1) or has_badge(state, 9))
+            return state.has("HM05 Flash", world.player) and (has_badge(state, "zephyr") or has_badge(state, "boulder"))
 
     def can_whirlpool(state: CollectionState):
         if world.options.hm_badge_requirements == 0:
-            return state.has("HM06 Whirlpool", world.player) and has_badge(state, 7)
+            return state.has("HM06 Whirlpool", world.player) and has_badge(state, "glacier")
         elif world.options.hm_badge_requirements == 1:
             return state.has("HM06 Whirlpool", world.player)
         else:
-            return state.has("HM06 Whirlpool", world.player) and (has_badge(state, 7) or has_badge(state, 16))
+            return state.has("HM06 Whirlpool", world.player) and (
+                    has_badge(state, "glacier") or has_badge(state, "volcano"))
 
     def can_waterfall(state: CollectionState):
         if world.options.hm_badge_requirements == 0:
-            return state.has("HM07 Waterfall", world.player) and has_badge(state, 8)
+            return state.has("HM07 Waterfall", world.player) and has_badge(state, "rising")
         elif world.options.hm_badge_requirements == 1:
             return state.has("HM07 Waterfall", world.player)
         else:
-            return state.has("HM07 Waterfall", world.player) and (has_badge(state, 8) or has_badge(state, 15))
+            return state.has("HM07 Waterfall", world.player) and (
+                    has_badge(state, "rising") or has_badge(state, "earth"))
 
     def can_rocksmash(state: CollectionState):
         return state.has("TM08 Rock Smash", world.player)
 
-    def has_badge_item(state: CollectionState, n: int):
-        badge_items = ["Zephyr Badge",
-                       "Hive Badge",
-                       "Plain Badge",
-                       "Fog Badge",
-                       "Mineral Badge",
-                       "Storm Badge",
-                       "Glacier Badge",
-                       "Rising Badge",
+    def has_badge_item(state: CollectionState, badge):
+        badge_items = {"zephyr": "Zephyr Badge",
+                       "hive": "Hive Badge",
+                       "plain": "Plain Badge",
+                       "fog": "Fog Badge",
+                       "mineral": "Mineral Badge",
+                       "storm": "Storm Badge",
+                       "glacier": "Glacier Badge",
+                       "rising": "Rising Badge",
 
-                       "Boulder Badge",
-                       "Cascade Badge",
-                       "Thunder Badge",
-                       "Rainbow Badge",
-                       "Soul Badge",
-                       "Marsh Badge",
-                       "Volcano Badge",
-                       "Earth Badge"]
-        return state.has(badge_items[n - 1], world.player)
+                       "boulder": "Boulder Badge",
+                       "cascade": "Cascade Badge",
+                       "thunder": "Thunder Badge",
+                       "rainbow": "Rainbow Badge",
+                       "soul": "Soul Badge",
+                       "marsh": "Marsh Badge",
+                       "volcano": "Volcano Badge",
+                       "earth": "Earth Badge"
+                       }
+        return state.has(badge_items[badge], world.player)
 
-    def has_badge_flag(state: CollectionState, n: int):
-        badge_flags = ["EVENT_ZEPHYR_BADGE_FROM_FALKNER",
-                       "EVENT_HIVE_BADGE_FROM_BUGSY",
-                       "EVENT_PLAIN_BADGE_FROM_WHITNEY",
-                       "EVENT_FOG_BADGE_FROM_MORTY",
-                       "EVENT_STORM_BADGE_FROM_CHUCK",
-                       "EVENT_MINERAL_BADGE_FROM_JASMINE",
-                       "EVENT_GLACIER_BADGE_FROM_PRYCE",
-                       "EVENT_RISING_BADGE_FROM_CLAIR",
-                       "EVENT_BOULDER_BADGE_FROM_BROCK",
-                       "EVENT_CASCADE_BADGE_FROM_MISTY",
-                       "EVENT_THUNDER_BADGE_FROM_LTSURGE",
-                       "EVENT_RAINBOW_BADGE_FROM_ERIKA",
-                       "EVENT_SOUL_BADGE_FROM_JANINE",
-                       "EVENT_MARSH_BADGE_FROM_SABRINA",
-                       "EVENT_VOLCANO_BADGE_FROM_BLAINE",
-                       "EVENT_EARTH_BADGE_FROM_BLUE"]
-        return state.has(badge_flags[n - 1], world.player)
+    def has_badge_flag(state: CollectionState, badge):
+        badge_flags = {"zephyr": "EVENT_ZEPHYR_BADGE_FROM_FALKNER",
+                       "hive": "EVENT_HIVE_BADGE_FROM_BUGSY",
+                       "plain": "EVENT_PLAIN_BADGE_FROM_WHITNEY",
+                       "fog": "EVENT_FOG_BADGE_FROM_MORTY",
+                       "mineral": "EVENT_STORM_BADGE_FROM_CHUCK",
+                       "storm": "EVENT_MINERAL_BADGE_FROM_JASMINE",
+                       "glacier": "EVENT_GLACIER_BADGE_FROM_PRYCE",
+                       "rising": "EVENT_RISING_BADGE_FROM_CLAIR",
 
-    def has_badge(state: CollectionState, n: int):
+                       "boulder": "EVENT_BOULDER_BADGE_FROM_BROCK",
+                       "cascade": "EVENT_CASCADE_BADGE_FROM_MISTY",
+                       "thunder": "EVENT_THUNDER_BADGE_FROM_LTSURGE",
+                       "rainbow": "EVENT_RAINBOW_BADGE_FROM_ERIKA",
+                       "soul": "EVENT_SOUL_BADGE_FROM_JANINE",
+                       "marsh": "EVENT_MARSH_BADGE_FROM_SABRINA",
+                       "volcano": "EVENT_VOLCANO_BADGE_FROM_BLAINE",
+                       "earth": "EVENT_EARTH_BADGE_FROM_BLUE"
+                       }
+        return state.has(badge_flags[badge], world.player)
+
+    def has_badge(state: CollectionState, badge):
         if world.options.randomize_badges.value == 0:
-            return has_badge_flag(state, n)
-        return has_badge_item(state, n)
+            return has_badge_flag(state, badge)
+        return has_badge_item(state, badge)
 
     def has_n_badges(state: CollectionState, n: int) -> bool:
-        return sum([has_badge(state, i) for i in range(0, 16)]) >= n
+        return sum([has_badge(state, i) for i in [
+            "zephyr",
+            "hive",
+            "plain",
+            "fog",
+            "mineral",
+            "storm",
+            "glacier",
+            "rising",
+            "boulder",
+            "cascade",
+            "thunder",
+            "rainbow",
+            "soul",
+            "marsh",
+            "volcano",
+            "earth"
+        ]]) >= n
 
     def has_rocket_badges(state: CollectionState):
         return has_n_badges(state, world.options.elite_four_badges.value - 1)
@@ -168,13 +191,13 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_location("Elm's Lab - Gift from Aide After Returning Mystery Egg"),
              lambda state: state.has("Mystery Egg", world.player))
 
-    set_rule(get_location("Elm's Lab - Master Ball from Elm"), lambda state: has_badge(state, 8))
+    set_rule(get_location("Elm's Lab - Master Ball from Elm"), lambda state: has_badge(state, "rising"))
 
     set_rule(get_location("Elm's Lab - S.S. Ticket from Elm"),
              lambda state: state.has("EVENT_BEAT_ELITE_FOUR", world.player))
 
     # Route 29
-    set_rule(get_location("Route 29 - Pink Bow from Tuscany"), lambda state: has_badge(state, 1))
+    set_rule(get_location("Route 29 - Pink Bow from Tuscany"), lambda state: has_badge(state, "zephyr"))
     # Route 30
     # set_rule(get_entrance("REGION_ROUTE_30 -> REGION_ROUTE_31"),
     #          lambda state: state.has("EVENT_GOT_MYSTERY_EGG_FROM_MR_POKEMON", world.player))
@@ -217,8 +240,17 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     # set_rule(get_entrance("REGION_ROUTE_36 -> REGION_ROUTE_36_RUINS_OF_ALPH_GATE"),
     #          lambda state: state.has("EVENT_GOT_TOGEPI_EGG_FROM_ELMS_AIDE", world.player))
 
+    set_rule(get_entrance("REGION_RUINS_OF_ALPH_AERODACTYL_CHAMBER -> REGION_RUINS_OF_ALPH_AERODACTYL_ITEM_ROOM"),
+             lambda state: can_surf(state) and can_flash(state))
+
+    set_rule(get_entrance("REGION_RUINS_OF_ALPH_HO_OH_CHAMBER -> REGION_RUINS_OF_ALPH_HO_OH_ITEM_ROOM"),
+             can_surf)
+
+    set_rule(get_entrance("REGION_RUINS_OF_ALPH_OMANYTE_CHAMBER -> REGION_RUINS_OF_ALPH_OMANYTE_ITEM_ROOM"),
+             lambda state: can_surf(state) and can_strength(state))
+
     # Route 32
-    set_rule(get_location("Route 32 - Miracle Seed from Man in North"), lambda state: has_badge(state, 1))
+    set_rule(get_location("Route 32 - Miracle Seed from Man in North"), lambda state: has_badge(state, "zephyr"))
 
     set_rule(get_location("Route 32 - TM05 from Roar Guy"), can_cut)
 
@@ -238,14 +270,11 @@ def set_rules(world: PokemonCrystalWorld) -> None:
              lambda state: state.has("EVENT_CLEARED_SLOWPOKE_WELL", world.player))
 
     # Route 34
-    set_rule(get_location("Route 34 - Soft Sand from Kate"), can_surf)
-    if hidden():
-        set_rule(get_location("Route 34 - Hidden Item Across Water"), can_surf)
-    set_rule(get_location("Route 34 - Item Across Water"), can_surf)
+    set_rule(get_entrance("REGION_ROUTE_34 -> REGION_ROUTE_34:WATER"), can_surf)
 
     # Goldenrod City
     set_rule(get_location("Goldenrod City - Squirtbottle from Flower Shop"),
-             lambda state: has_badge(state, 3))
+             lambda state: has_badge(state, "plain"))
 
     if not johto_only():
         set_rule(get_entrance("REGION_GOLDENROD_MAGNET_TRAIN_STATION -> REGION_SAFFRON_MAGNET_TRAIN_STATION"),
@@ -267,7 +296,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     set_rule(get_entrance(
         "REGION_GOLDENROD_UNDERGROUND_SWITCH_ROOM_ENTRANCES -> REGION_GOLDENROD_UNDERGROUND_SWITCH_ROOM_ENTRANCES:TAKEOVER"),
-             has_rocket_badges)
+        has_rocket_badges)
 
     # Radio Tower
 
@@ -321,7 +350,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     # Route 40
 
-    set_rule(get_entrance("REGION_ROUTE_40 -> REGION_ROUTE_41"), can_surf)
+    set_rule(get_entrance("REGION_ROUTE_40 -> REGION_ROUTE_40:WATER"), can_surf)
 
     if hidden():
         set_rule(get_location("Route 40 - Hidden Item in Rock"), can_rocksmash)
@@ -375,7 +404,8 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_location("Mount Mortar 1F Inside - Item 2"), can_strength)
     set_rule(get_location("Mount Mortar 1F Inside - Item 6"), can_strength)
     set_rule(get_location("Mount Mortar 1F Inside - Item 7"), can_strength)
-    set_rule(get_location("Mount Mortar 1F Inside - Super Nerd Markus"), can_strength)
+    if trainersanity():
+        set_rule(get_location("Mount Mortar 1F Inside - Super Nerd Markus"), can_strength)
 
     # 1F C -> B1F Everything needs surf so im being lazy
 
@@ -403,20 +433,9 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     # Lake of Rage
 
-    set_rule(get_location("EVENT_DECIDED_TO_HELP_LANCE"), can_surf)
+    set_rule(get_entrance("REGION_LAKE_OF_RAGE -> REGION_LAKE_OF_RAGE:WATER"), can_surf)
 
-    set_rule(get_location("Lake of Rage - Red Scale from Gyarados"), can_surf)
-
-    set_rule(get_location("Lake of Rage - Blackbelt from Wesley"), can_cut)
-
-    set_rule(get_location("Lake of Rage - TM10 from Hidden Power House"), can_cut)
-
-    if hidden():
-        set_rule(get_location("Lake of Rage - Hidden Item Behind Cut Tree"), can_cut)
-
-    set_rule(get_location("Lake of Rage - Item 1"), can_cut)
-
-    set_rule(get_location("Lake of Rage - Item 2"), can_cut)
+    set_rule(get_entrance("REGION_LAKE_OF_RAGE -> REGION_LAKE_OF_RAGE:CUT"), can_cut)
 
     # Route 44
 
@@ -435,7 +454,8 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_entrance("REGION_BLACKTHORN_CITY -> REGION_BLACKTHORN_GYM_1F"),
              lambda state: state.has("EVENT_CLEARED_RADIO_TOWER", world.player))
 
-    set_rule(get_location("EVENT_BEAT_CLAIR"), can_strength)
+    set_rule(get_entrance("REGION_BLACKTHORN_GYM_2F -> REGION_BLACKTHORN_GYM_1F:STRENGTH"),
+             can_strength)
 
     set_rule(get_entrance("REGION_BLACKTHORN_CITY -> REGION_DRAGONS_DEN_1F"),
              lambda state: state.has("EVENT_BEAT_CLAIR", world.player))
@@ -443,10 +463,10 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     add_rule(get_entrance("REGION_BLACKTHORN_CITY -> REGION_DRAGONS_DEN_1F"), can_surf)
 
     # Dragons Den
-    set_rule(get_location("Dragon's Den B1F - Item 3"), can_whirlpool)
+    set_rule(get_location("Dragon's Den B1F - Item 2"), can_whirlpool)
 
     if hidden():
-        set_rule(get_location("Dragon's Den B1F - Hidden Item in Water 2"),
+        set_rule(get_location("Dragon's Den B1F - Hidden Item in Water 1"),
                  can_whirlpool)
         set_rule(get_location("Dragon's Den B1F - Hidden Item in SE Corner"),
                  can_whirlpool)
@@ -467,6 +487,8 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_location("Route 27 - Item 1"), can_surf)
 
     set_rule(get_location("Route 27 - Item 2"), lambda state: can_surf(state) and can_whirlpool(state))
+
+    set_rule(get_location("Route 27 - Bird Keeper Jose"), lambda state: can_surf(state) and can_whirlpool(state))
 
     set_rule(get_location("Tohjo Falls - Item"), can_surf)
 
@@ -624,9 +646,10 @@ def set_rules(world: PokemonCrystalWorld) -> None:
         # Route 15
         set_rule(get_location("Route 15 - Item"), can_cut)
 
+        set_rule(get_entrance("REGION_ROUTE_19_FUCHSIA_GATE -> REGION_ROUTE_19"), can_surf)
         # Route 20
         set_rule(get_entrance("REGION_ROUTE_19 -> REGION_ROUTE_20"),
-                 lambda state: state.has("EVENT_CINNABAR_ROCKS_CLEARED", world.player) and can_surf(state))
+                 lambda state: state.has("EVENT_CINNABAR_ROCKS_CLEARED", world.player))
 
         set_rule(get_entrance("REGION_CINNABAR_ISLAND -> REGION_ROUTE_20"), can_surf)
 
