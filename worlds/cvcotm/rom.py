@@ -11,7 +11,7 @@ import os
 import pkgutil
 
 from .data import patches
-from .locations import get_location_info, get_all_location_names
+from .locations import cvcotm_location_info
 from .text import cvcotm_string_to_bytearray
 from .options import CompletionGoal
 from settings import get_settings
@@ -330,27 +330,27 @@ class CVCotMPatchExtensions(APPatchExtension):
     @staticmethod
     def fix_item_graphics(caller: APProcedurePatch, rom: bytes) -> bytes:
         rom_data = RomData(rom)
-        for loc in get_all_location_names():
-            offset = get_location_info(loc, "offset")
+        for loc in cvcotm_location_info:
+            offset = cvcotm_location_info[loc].offset
             if offset is None:
                 continue
             item_category = rom_data.read_byte(offset)
 
             # Magic Items in Max Up locations should have their Y position decreased by 8.
-            if item_category == 0xE8 and get_location_info(loc, "type") not in ["magic item", "boss"]:
+            if item_category == 0xE8 and cvcotm_location_info[loc].type not in ["magic item", "boss"]:
                 y_pos = int.from_bytes(rom_data.read_bytes(offset-2, 2), "little")
                 y_pos -= 8
                 rom_data.write_bytes(offset-2, int.to_bytes(y_pos, 2, "little"))
 
                 # Fix the Magic Item's graphics if it's in a room it can be fixed in (the room graphics value is 0xFFFF,
                 # meaning it's not loading any additional graphics)
-                gfx_offset = get_location_info(loc, "room gfx")
+                gfx_offset = cvcotm_location_info[loc].room_gfx
                 if gfx_offset is not None:
                     if rom_data.read_bytes(gfx_offset, 2) == b"\xFF\xFF":
                         rom_data.write_bytes(gfx_offset, b"\x0A\x00")
 
             # Max Ups in Magic Item locations should have their Y position increased by 8.
-            if item_category != 0xE8 and get_location_info(loc, "type") in ["magic item", "boss"]:
+            if item_category != 0xE8 and cvcotm_location_info[loc].type in ["magic item", "boss"]:
                 y_pos = int.from_bytes(rom_data.read_bytes(offset - 2, 2), "little")
                 y_pos += 8
                 rom_data.write_bytes(offset - 2, int.to_bytes(y_pos, 2, "little"))

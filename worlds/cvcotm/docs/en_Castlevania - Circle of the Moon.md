@@ -1,17 +1,17 @@
 # Castlevania: Circle of the Moon
 
 ## Quick Links
-- [Setup](../setup/en)
-- [Options Page](../player-options)
+- [Setup](/tutorial/Castlevania%20-%20Circle%20of%20the%20Moon/setup/en)
+- [Options Page](/games/Castlevania%20-%20Circle%20of%20the%20Moon/player-options)
 - [PopTracker Pack](https://github.com/sassyvania/Circle-of-the-Moon-Rando-AP-Map-Tracker-/releases/latest)
 - [Repo of the original non-Archipelago version of this randomizer](https://github.com/calm-palm/cotm-randomizer)
 - [Web version of the above randomizer](https://rando.circleofthemoon.com/)
 
 ## What does randomization do to this game?
 
-All items that you would normally find on pedestals throughout the game have had their locations changed. In addition to
-magic items and stat max ups, the DSS Cards have been added to the item pool as well; you will now receive these as randomized
-items rather than by farming them via enemy drops.
+Almost all items that you would normally find on pedestals throughout the game have had their locations changed. In addition to
+magic items (barring the Dash Boots which you always start with) and stat max ups, the DSS Cards have been added to the
+item pool as well; you will now receive these as randomized items rather than by farming them via enemy drops.
 
 ## What is the goal of Castlevania: Circle of the Moon when randomized?
 
@@ -26,6 +26,17 @@ DSS to be used. Reaching the Battle Arena in the first place requires finding th
 - `battle_arena_and_dracula`: Complete both of the above-mentioned objectives. The server will remember which ones (if any) were
 already completed on previous sessions upon connecting.
 
+If you don't know what goal you have, there are two in-game ways you can check:
+
+- Pause the game, go to the Magic Item menu, and view the Dash Boots tutorial.
+- Approach the door to the first Battle Arena combat room and the textbox that normally explains how the place works will tell you.
+
+To see how many Last Keys are in the seed for you in total, there are also two in-game ways:
+
+- Pause the game, go to the Magic Item menu, and view the Last Key tutorial.
+- If you don't have any keys, touch the Ceremonial Room door before acquiring the necessary amount.
+
+
 ## What items and locations get shuffled?
 
 Stat max ups, magic items, and DSS Cards are all randomized into the item pool, and the check locations are the pedestals
@@ -38,8 +49,9 @@ of the chosen options.
 
 Stat max ups, magic items, and DSS Cards can all be placed into another player's world.
 
-The Shinning Armor is not randomized; it will always be found at the end of the Battle Arena in your own world.
-And depending on your goal, you may or may not be required to pick it up.
+The Dash Boots and Shinning Armor are not randomized in the item pool; the former you will always start with and the
+latter will always be found at the end of the Battle Arena in your own world. And depending on your goal, you may or may
+not be required to pick it up.
 
 ## What does another world's item look like in Castlevania: Circle of the Moon?
 

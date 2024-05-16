@@ -5,9 +5,9 @@ import base64
 import logging
 
 from BaseClasses import Item, Region, Tutorial, ItemClassification
-from .items import CVCotMItem, filler_item_names, action_cards, attribute_cards, get_item_info, get_item_names_to_ids,\
-    get_item_counts
-from .locations import CVCotMLocation, get_location_info, get_location_names_to_ids, base_id, get_named_locations_data,\
+from .items import CVCotMItem, filler_item_names, action_cards, attribute_cards, cvcotm_item_info, \
+    get_item_names_to_ids, get_item_counts
+from .locations import CVCotMLocation, get_location_names_to_ids, base_id, get_named_locations_data, \
     get_locations_by_area
 from .options import CVCotMOptions, SubWeaponShuffle
 from .regions import get_region_info, get_all_region_names, get_named_entrances_data
@@ -71,7 +71,8 @@ class CVCotMWorld(World):
     settings: typing.ClassVar[CVCotMSettings]
     topology_present = True
 
-    item_name_to_id = get_item_names_to_ids()
+    item_name_to_id = {name: cvcotm_item_info[name].code + base_id for name in cvcotm_item_info
+                       if cvcotm_item_info[name].code is not None}
     location_name_to_id = get_location_names_to_ids()
 
     # Default values to possibly be updated in generate_early
@@ -127,15 +128,16 @@ class CVCotMWorld(World):
 
             # Place event Items on all of their associated Locations.
             for event_loc, event_item in events.items():
-                self.get_location(event_loc).place_locked_item(self.create_item(event_item, "progression"))
+                self.get_location(event_loc).place_locked_item(self.create_item(event_item,
+                                                                                ItemClassification.progression))
 
-    def create_item(self, name: str, force_classification: typing.Optional[str] = None) -> Item:
+    def create_item(self, name: str, force_classification: typing.Optional[ItemClassification] = None) -> Item:
         if force_classification is not None:
-            classification = getattr(ItemClassification, force_classification)
+            classification = force_classification
         else:
-            classification = getattr(ItemClassification, get_item_info(name, "default classification"))
+            classification = cvcotm_item_info[name].default_classification
 
-        code = get_item_info(name, "code")
+        code = cvcotm_item_info[name].code
         if code is not None:
             code += base_id
 

@@ -1,7 +1,7 @@
 from BaseClasses import ItemClassification, Location
 from .options import ItemDropRandomization, Countdown
-from .locations import get_location_info
-from .items import get_item_info
+from .locations import cvcotm_location_info
+from .items import cvcotm_item_info
 
 from typing import TYPE_CHECKING, Dict, List, Iterable
 
@@ -302,7 +302,7 @@ def get_countdown_flags(world: "CVCotMWorld", active_locations: Iterable[Locatio
     for loc in active_locations:
         if ((loc.item.advancement or loc.item.classification == ItemClassification.useful)
            or world.options.countdown == Countdown.option_all_locations) and loc.address is not None:
-            countdown_index = get_location_info(loc.name, "countdown")
+            countdown_index = cvcotm_location_info[loc.name].countdown
             # If we're looking at a locally-placed DSS Card, take the card's parameter value for the flag.
             if (loc.item.player == world.player or (loc.item.player in world.multiworld.groups and world.player in
                                                     world.multiworld.groups[loc.item.player]['players'])) \
@@ -339,11 +339,11 @@ def get_location_data(world: "CVCotMWorld", active_locations: Iterable[Location]
         # Figure out the item ID bytes to put in each Location here. Write the item itself if either it's the player's
         # very own, or it belongs to an Item Link that the player is a part of.
         if loc.item.player == world.player:
-            code = get_item_info(loc.item.name, "code")
-            location_bytes[get_location_info(loc.name, "offset")] = bytes([code >> 8, 0x01, code & 0x00FF, 0x00])
+            code = cvcotm_item_info[loc.item.name].code
+            location_bytes[cvcotm_location_info[loc.name].offset] = bytes([code >> 8, 0x01, code & 0x00FF, 0x00])
         else:
             # Make the item the unused Map - our multiworld item.
-            location_bytes[get_location_info(loc.name, "offset")] = bytes([0xE8, 0x01, 0x05, 0x00])
+            location_bytes[cvcotm_location_info[loc.name].offset] = bytes([0xE8, 0x01, 0x05, 0x00])
 
     return location_bytes
 

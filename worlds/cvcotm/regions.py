@@ -4,7 +4,7 @@ from typing import List, Optional, Dict
 # # #    KEY    # # #
 # "locations" = The Locations to add to that Region when putting in said Region.
 # "entrances" = The Entrances to add to that Region when putting in said Region.
-region_info = {
+cvcotm_region_info = {
     "Menu": {"entrances": ["At an Old Austrian Castle"]},
 
     "Catacomb": {"locations": [lname.sr3,
@@ -176,7 +176,7 @@ region_info = {
 # "connection" = The name of the Region the Entrance connects into.
 # "rule" = What rule should be applied to the Entrance during set_rules, as defined in self.rules in the CVCotMRules
 #          class definition in rules.py.
-entrance_info = {
+cvcotm_entrance_info = {
     "At an Old Austrian Castle": {"destination": "Catacomb"},
     "Catacomb to Stairway": {"destination": "Abyss Stairway", "rule": "Double OR Kick"},
     "Stairway to Audience": {"destination": "Audience Room", "rule": "Double"},
@@ -203,15 +203,15 @@ entrance_info = {
 
 
 def get_region_info(region: str, info: str) -> Optional[List[str]]:
-    return region_info[region].get(info, None)
+    return cvcotm_region_info[region].get(info, None)
 
 
 def get_entrance_info(entrance: str, info: str) -> Optional[str]:
-    return entrance_info[entrance].get(info, None)
+    return cvcotm_entrance_info[entrance].get(info, None)
 
 
 def get_all_region_names() -> List[str]:
-    return [reg_name for reg_name in region_info]
+    return [reg_name for reg_name in cvcotm_region_info]
 
 
 def get_named_entrances_data(entrances: List[str]) -> Dict[str, str]:

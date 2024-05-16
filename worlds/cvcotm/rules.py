@@ -3,7 +3,7 @@ from typing import Dict, TYPE_CHECKING
 from BaseClasses import CollectionState
 from worlds.generic.Rules import CollectionRule
 from .regions import get_entrance_info
-from .locations import get_location_info
+from .locations import cvcotm_location_info
 from .data import iname
 from .options import CompletionGoal
 
@@ -85,7 +85,7 @@ class CVCotMRules:
 
             # Set each Location's rule if it should have one.
             for loc in region.locations:
-                loc_rule = get_location_info(loc.name, "rule")
+                loc_rule = cvcotm_location_info[loc.name].rule
                 if loc_rule is not None:
                     loc.access_rule = self.rules[loc_rule]
 

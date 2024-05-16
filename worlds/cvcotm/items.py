@@ -1,10 +1,10 @@
 import logging
 
-from BaseClasses import Item
+from BaseClasses import Item, ItemClassification
 from .data import iname
 from .locations import base_id
 
-from typing import TYPE_CHECKING, Dict, Union
+from typing import TYPE_CHECKING, Dict, NamedTuple, Optional
 
 if TYPE_CHECKING:
     from . import CVCotMWorld
@@ -14,48 +14,52 @@ class CVCotMItem(Item):
     game: str = "Castlevania Circle of the Moon"
 
 
-# # #    KEY    # # #
+class CVCotMItemData(NamedTuple):
+    code: Optional[int]
+    default_classification: ItemClassification
 # "code" = The unique part of the Item's AP code attribute, as well as the value to call the in-game "prepare item
 #          textbox" function with to give the Item in-game. Add this + base_id to get the actual AP code.
 # "default classification" = The AP Item Classification that gets assigned to instances of that Item in create_item
-#                            by default, unless I deliberately override it (as is the case for some Special1s).
-# "textbox id" = The ID of the textbox in-game that announces the item's receival.
-item_info = {
-    iname.heart_max:      {"code": 0xE400, "default classification": "filler"},
-    iname.hp_max:         {"code": 0xE401, "default classification": "filler"},
-    iname.mp_max:         {"code": 0xE402, "default classification": "filler"},
-    iname.salamander:     {"code": 0xE600, "default classification": "useful"},
-    iname.serpent:        {"code": 0xE601, "default classification": "progression"},
-    iname.mandragora:     {"code": 0xE602, "default classification": "useful"},
-    iname.golem:          {"code": 0xE603, "default classification": "useful"},
-    iname.cockatrice:     {"code": 0xE604, "default classification": "progression"},
-    iname.manticore:      {"code": 0xE605, "default classification": "useful"},
-    iname.griffin:        {"code": 0xE606, "default classification": "useful"},
-    iname.thunderbird:    {"code": 0xE607, "default classification": "useful"},
-    iname.unicorn:        {"code": 0xE608, "default classification": "useful"},
-    iname.black_dog:      {"code": 0xE609, "default classification": "useful"},
-    iname.mercury:        {"code": 0xE60A, "default classification": "progression"},
-    iname.venus:          {"code": 0xE60B, "default classification": "useful"},
-    iname.jupiter:        {"code": 0xE60C, "default classification": "useful"},
-    iname.mars:           {"code": 0xE60D, "default classification": "progression"},
-    iname.diana:          {"code": 0xE60E, "default classification": "useful"},
-    iname.apollo:         {"code": 0xE60F, "default classification": "useful"},
-    iname.neptune:        {"code": 0xE610, "default classification": "useful"},
-    iname.saturn:         {"code": 0xE611, "default classification": "useful"},
-    iname.uranus:         {"code": 0xE612, "default classification": "useful"},
-    iname.pluto:          {"code": 0xE613, "default classification": "useful"},
+#                            by default, unless I deliberately override it (as is the case for the Cleansing on the
+#                            Ignore Cleansing option).
+
+
+cvcotm_item_info: Dict[str, CVCotMItemData] = {
+    iname.heart_max:      CVCotMItemData(0xE400, ItemClassification.filler),
+    iname.hp_max:         CVCotMItemData(0xE401, ItemClassification.filler),
+    iname.mp_max:         CVCotMItemData(0xE402, ItemClassification.filler),
+    iname.salamander:     CVCotMItemData(0xE600, ItemClassification.useful),
+    iname.serpent:        CVCotMItemData(0xE601, ItemClassification.progression),
+    iname.mandragora:     CVCotMItemData(0xE602, ItemClassification.useful),
+    iname.golem:          CVCotMItemData(0xE603, ItemClassification.useful),
+    iname.cockatrice:     CVCotMItemData(0xE604, ItemClassification.progression),
+    iname.manticore:      CVCotMItemData(0xE605, ItemClassification.useful),
+    iname.griffin:        CVCotMItemData(0xE606, ItemClassification.useful),
+    iname.thunderbird:    CVCotMItemData(0xE607, ItemClassification.useful),
+    iname.unicorn:        CVCotMItemData(0xE608, ItemClassification.useful),
+    iname.black_dog:      CVCotMItemData(0xE609, ItemClassification.useful),
+    iname.mercury:        CVCotMItemData(0xE60A, ItemClassification.progression),
+    iname.venus:          CVCotMItemData(0xE60B, ItemClassification.useful),
+    iname.jupiter:        CVCotMItemData(0xE60C, ItemClassification.useful),
+    iname.mars:           CVCotMItemData(0xE60D, ItemClassification.progression),
+    iname.diana:          CVCotMItemData(0xE60E, ItemClassification.useful),
+    iname.apollo:         CVCotMItemData(0xE60F, ItemClassification.useful),
+    iname.neptune:        CVCotMItemData(0xE610, ItemClassification.useful),
+    iname.saturn:         CVCotMItemData(0xE611, ItemClassification.useful),
+    iname.uranus:         CVCotMItemData(0xE612, ItemClassification.useful),
+    iname.pluto:          CVCotMItemData(0xE613, ItemClassification.useful),
     # Dash Boots
-    iname.double:         {"code": 0xE801, "default classification": "progression"},
-    iname.tackle:         {"code": 0xE802, "default classification": "progression"},
-    iname.kick_boots:     {"code": 0xE803, "default classification": "progression"},
-    iname.heavy_ring:     {"code": 0xE804, "default classification": "progression"},
+    iname.double:         CVCotMItemData(0xE801, ItemClassification.progression),
+    iname.tackle:         CVCotMItemData(0xE802, ItemClassification.progression),
+    iname.kick_boots:     CVCotMItemData(0xE803, ItemClassification.progression),
+    iname.heavy_ring:     CVCotMItemData(0xE804, ItemClassification.progression),
     # Map
-    iname.cleansing:      {"code": 0xE806, "default classification": "progression"},
-    iname.roc_wing:       {"code": 0xE807, "default classification": "progression"},
-    iname.last_key:       {"code": 0xE808, "default classification": "progression_skip_balancing"},
-    iname.ironmaidens:    {"default classification": "progression"},
-    iname.dracula:        {"default classification": "progression"},
-    iname.shinning_armor: {"default classification": "progression"},
+    iname.cleansing:      CVCotMItemData(0xE806, ItemClassification.progression),
+    iname.roc_wing:       CVCotMItemData(0xE807, ItemClassification.progression),
+    iname.last_key:       CVCotMItemData(0xE808, ItemClassification.progression_skip_balancing),
+    iname.ironmaidens:    CVCotMItemData(None, ItemClassification.progression),
+    iname.dracula:        CVCotMItemData(None, ItemClassification.progression),
+    iname.shinning_armor: CVCotMItemData(None, ItemClassification.progression),
 }
 
 action_cards = {iname.mercury, iname.venus, iname.jupiter, iname.mars, iname.diana, iname.apollo, iname.neptune,
@@ -67,21 +71,18 @@ attribute_cards = {iname.salamander, iname.serpent, iname.mandragora, iname.gole
 filler_item_names = [iname.heart_max, iname.hp_max, iname.mp_max]
 
 
-def get_item_info(item: str, info: str) -> Union[str, int, None]:
-    return item_info[item].get(info, None)
-
-
 def get_item_names_to_ids() -> Dict[str, int]:
-    return {name: get_item_info(name, "code")+base_id for name in item_info if get_item_info(name, "code") is not None}
+    return {name: cvcotm_item_info[name].code + base_id for name in cvcotm_item_info
+            if cvcotm_item_info[name].code is not None}
 
 
-def get_item_counts(world: "CVCotMWorld") -> Dict[str, Dict[str, int]]:
+def get_item_counts(world: "CVCotMWorld") -> Dict[ItemClassification, Dict[str, int]]:
 
     item_counts = {
-        "progression": {},
-        "progression_skip_balancing": {},
-        "useful": {},
-        "filler": {},
+        ItemClassification.progression: {},
+        ItemClassification.progression_skip_balancing: {},
+        ItemClassification.useful: {},
+        ItemClassification.filler: {},
     }
     total_items = 0
     excluded_cards = []
@@ -150,9 +151,9 @@ def get_item_counts(world: "CVCotMWorld") -> Dict[str, Dict[str, int]]:
         excluded_cards = world.random.sample(excluded_cards, 10)
 
     # Add one of each Item to the pool that is not filler or progression skip balancing.
-    for item in item_info:
-        classification = get_item_info(item, "default classification")
-        code = get_item_info(item, "code")
+    for item in cvcotm_item_info:
+        classification = cvcotm_item_info[item].default_classification
+        code = cvcotm_item_info[item].code
 
         # Skip event Items and cards that are excluded with Halve DSS Cards Placed.
         if code is None or item in excluded_cards:
@@ -160,9 +161,9 @@ def get_item_counts(world: "CVCotMWorld") -> Dict[str, Dict[str, int]]:
 
         # Classify the Cleansing as Useful instead of Progression if Ignore Cleansing is on.
         if item == iname.cleansing and world.options.ignore_cleansing:
-            classification = "useful"
+            classification = ItemClassification.useful
 
-        if classification in ["filler", "progression_skip_balancing"]:
+        if classification in [ItemClassification.filler, ItemClassification.progression_skip_balancing]:
             item_counts[classification][item] = 0
             continue
         item_counts[classification][item] = 1
@@ -170,12 +171,13 @@ def get_item_counts(world: "CVCotMWorld") -> Dict[str, Dict[str, int]]:
 
     # Add the total Last Keys.
     if not world.options.require_all_bosses:
-        item_counts["progression_skip_balancing"][iname.last_key] = world.options.available_last_keys.value
+        item_counts[ItemClassification.progression_skip_balancing][iname.last_key] = \
+            world.options.available_last_keys.value
         total_items += world.options.available_last_keys.value
 
     # Add filler items at random until the total Items = the total Locations.
     while total_items < len(world.multiworld.get_unfilled_locations(world.player)):
-        item_counts["filler"][world.random.choice(filler_item_names)] += 1
+        item_counts[ItemClassification.filler][world.random.choice(filler_item_names)] += 1
         total_items += 1
 
     return item_counts
