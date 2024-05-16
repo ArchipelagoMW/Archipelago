@@ -2,7 +2,7 @@ from worlds.generic.Rules import add_rule, forbid_item
 from .Locations import all_locations, chimerasKeep, dragonsLair, LocationData, gatesOfTheUnderworld
 from worlds.AutoWorld import World
 from .Items import itemList
-from .Arrays import level_locations, difficulty_convert
+from .Arrays import level_locations, difficulty_convert, difficulty_lambda
 
 
 def prog_count(state, player):
@@ -47,5 +47,5 @@ def set_rules(world: "World", excluded):
     for level_id, locations in level_locations.items():
         for location in locations:
             if location.difficulty > 1:
-                add_rule(world.multiworld.get_location(name_convert(location), world.player), lambda state: prog_count(state, world.player) >= (difficulty_convert[level_id >> 4] // 10) + (difficulty_convert[level_id >> 4] // 15) + location.difficulty)
+                add_rule(world.multiworld.get_location(name_convert(location), world.player), lambda state: prog_count(state, world.player) >= difficulty_lambda[level_id >> 4][location.difficulty - 1])
 

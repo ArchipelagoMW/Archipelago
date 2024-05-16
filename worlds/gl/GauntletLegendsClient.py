@@ -62,7 +62,7 @@ class RetroSocket:
             b += bytes.fromhex(s)
         return b
 
-    def crc32(self):
+    def status(self) -> bool:
         message = "GET_STATUS"
         self.socket.sendto(message.encode(), (self.host, self.port))
         try:
@@ -71,7 +71,7 @@ class RetroSocket:
             raise Exception("Retroarch not detected. Please make sure your ROM is open in Retroarch.")
         data = data.decode()
         logger.info(data)
-        return data[data.find("crc32=") + len("crc32="):-1]
+        return True
 
 
 class RamChunk:
@@ -355,12 +355,10 @@ class GauntletLegendsContext(CommonContext):
         if cmd in {"Connected"}:
             self.slot = args['slot']
             self.glslotdata = args['slot_data']
-            if self.glslotdata["crc32"] == self.socket.crc32():
+            if self.socket.status():
                 self.retro_connected = True
             else:
-                logger.info(self.glslotdata["crc32"])
-                logger.info(self.socket.crc32())
-                raise Exception("The loaded ROM is incorrect. Please load your patched ROM of Gauntlet Legends")
+                raise Exception("Retroarch not detected. Please open you patched ROM in Retroarch.")
         elif cmd == "Retrieved":
             if "keys" not in args:
                 logger.warning(f"invalid Retrieved packet to GLClient: {args}")

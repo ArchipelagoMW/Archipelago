@@ -106,7 +106,7 @@ def connect_regions(world: "World"):
             and state.has("Runestone 7", world.player) and state.has("Runestone 8", world.player)
             and state.has("Runestone 9", world.player) and state.has("Runestone 10", world.player)
             and state.has("Runestone 11", world.player) and state.has("Runestone 12", world.player)
-            and state.has("Runestone 13", world.player) and prog_count(state, world.player) >= 24)
+            and state.has("Runestone 13", world.player))
 
 
 def create_region(world: "World", name, locations):
