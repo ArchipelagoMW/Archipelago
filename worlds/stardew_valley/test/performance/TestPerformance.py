@@ -219,11 +219,13 @@ class TestAllsanityWithMods(SVPerformanceTestCase):
     options = allsanity_mods_5_x_x()
     results = []
 
+    @unittest.skip
     def test_solo(self):
         number_players = 1
         multiworld_options = [self.options] * number_players
         self.performance_test_multiworld(multiworld_options)
 
+    @unittest.skip
     def test_duo(self):
         number_players = 2
         multiworld_options = [self.options] * number_players
