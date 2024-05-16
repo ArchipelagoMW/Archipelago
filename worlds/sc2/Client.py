@@ -464,11 +464,11 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     def _cmd_download_data(self) -> bool:
         """Download the most recent release of the necessary files for playing SC2 with
         Archipelago. Will overwrite existing files."""
-        pool.submit(self._download_data)
+        pool.submit(self._download_data, self.ctx)
         return True
 
     @staticmethod
-    def _download_data() -> bool:
+    def _download_data(ctx: SC2Context) -> bool:
         if "SC2PATH" not in os.environ:
             check_game_install_path()
 
@@ -493,6 +493,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         else:
             sc2_logger.warning("Download aborted/failed. Read the log for more information.")
             return False
+        ctx.data_out_of_date = False
         return True
 
 
@@ -523,6 +524,7 @@ class SC2Context(CommonContext):
         super(SC2Context, self).__init__(*args, **kwargs)
         self.raw_text_parser = SC2JSONtoTextParser(self)
 
+        self.data_out_of_date: bool = False
         self.difficulty = -1
         self.game_speed = -1
         self.disable_forced_camera = 0
@@ -674,6 +676,7 @@ class SC2Context(CommonContext):
                         ("Run ").coloured("/download_data", colour="slateblue")
                         (" to install.")
                     ).send(self)
+                    self.data_out_of_date = True
             elif maps_present:
                 (
                     ColouredMessage()
@@ -681,6 +684,7 @@ class SC2Context(CommonContext):
                     ("Run ").coloured("/download_data", colour="slateblue")
                     (" to install.")
                 ).send(self)
+                self.data_out_of_date = True
 
     @staticmethod
     def parse_mission_info(mission_info: dict[str, typing.Any]) -> MissionInfo:

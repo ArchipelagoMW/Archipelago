@@ -2,6 +2,12 @@
     scroll_type: ["content", "bars"]
     bar_width: dp(12)
     effect_cls: "ScrollEffect"
+    canvas.after:
+        Color:
+            rgba: (0.82, 0.2, 0, 1)
+        Line:
+            width: 1.5
+            rectangle: self.x+1 - 30*(not root.border_on), self.y+1 - 30*(not root.border_on), self.width-1 if root.border_on else 1, self.height-1 if root.border_on else 1
 
 <MultiCampaignLayout>
     cols: 1
