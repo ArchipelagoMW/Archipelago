@@ -49,7 +49,7 @@
             <a href="{{ url_for("game_info", game=game_name, lang="en") }}">Game Page</a>
             {% if world.web.tutorials %}
             <span class="link-spacer">|</span>
-            <a href="{{ url_for("tutorial_landing") }}#{{ game_name }}">Setup Guides</a>
+            <a href="{{ url_for("tutorial_landing", _anchor = game_name | urlencode) }}">Setup Guides</a>
             {% endif %}
             {% if world.web.options_page is string %}
             <span class="link-spacer">|</span>

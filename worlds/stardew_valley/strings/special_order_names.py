@@ -13,7 +13,7 @@ class SpecialOrder:
     pierres_prime_produce = "Pierre's Prime Produce"
     robins_project = "Robin's Project"
     robins_resource_rush = "Robin's Resource Rush"
-    juicy_bugs_wanted_yum = "Juicy Bugs Wanted!"
+    juicy_bugs_wanted = "Juicy Bugs Wanted!"
     tropical_fish = "Tropical Fish"
     a_curious_substance = "A Curious Substance"
     prismatic_jelly = "Prismatic Jelly"
@@ -31,3 +31,10 @@ class SpecialOrder:
 
 class ModSpecialOrder:
     junas_monster_mash = "Juna's Monster Mash"
+    andys_cellar = "Andy's Cellar"
+    a_mysterious_venture = "A Mysterious Venture"
+    an_elegant_reception = "An Elegant Reception"
+    fairy_garden = "Fairy Garden"
+    homemade_fertilizer = "Homemade Fertilizer"
+    geode_order = "Geode Order"
+    dwarf_scroll = "Dwarven Scrolls"
