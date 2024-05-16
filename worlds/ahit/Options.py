@@ -47,7 +47,7 @@ def adjust_options(world: "HatInTimeWorld"):
         if world.options.Tasksanity:
             world.options.ShipShapeCustomTaskGoal = world.options.TasksanityCheckCount * world.options.TasksanityTaskStep
         else:
-            world.options.ShipShapeCustomTaskGoal = 18
+            world.options.ShipShapeCustomTaskGoal.value = 18
 
     # Don't allow Rush Hour goal if DLC2 content is disabled
     if world.options.EndGoal == EndGoal.option_rush_hour and not world.options.EnableDLC2:
