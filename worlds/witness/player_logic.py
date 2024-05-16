@@ -226,6 +226,10 @@ class WitnessPlayerLogic:
                     if entity_hex in self.DOOR_ITEMS_BY_ID and item_name in self.DOOR_ITEMS_BY_ID[entity_hex]:
                         self.DOOR_ITEMS_BY_ID[entity_hex].remove(item_name)
 
+        if adj_type == "Forbidden Doors":
+            entity_hex = line[:7]
+            self.FORBIDDEN_DOORS.add(entity_hex)
+
         if adj_type == "Starting Inventory":
             self.STARTING_INVENTORY.add(line)
 
@@ -565,7 +569,7 @@ class WitnessPlayerLogic:
 
                 self.make_single_adjustment(current_adjustment_type, line)
 
-        for entity_id in self.COMPLETELY_DISABLED_ENTITIES:
+        for entity_id in self.COMPLETELY_DISABLED_ENTITIES | self.FORBIDDEN_DOORS:
             if entity_id in self.DOOR_ITEMS_BY_ID:
                 del self.DOOR_ITEMS_BY_ID[entity_id]
 
@@ -816,7 +820,6 @@ class WitnessPlayerLogic:
             "0x17CC4": come_to_you or eps_shuffled,  # Quarry Elevator Panel
             "0x17E2B": come_to_you and boat_shuffled or eps_shuffled,  # Swamp Long Bridge
             "0x0CF2A": False,  # Jungle Monastery Garden Shortcut
-            "0x17CAA": remote_doors,  # Jungle Monastery Garden Shortcut Panel
             "0x0364E": False,  # Monastery Laser Shortcut Door
             "0x03713": remote_doors,  # Monastery Laser Shortcut Panel
             "0x03313": False,  # Orchard Second Gate
@@ -848,6 +851,16 @@ class WitnessPlayerLogic:
             "0x03629",  # Tutorial Gate Open, which is the panel that is locked by panel hunt
             "0x03505",  # Tutorial Gate Close (same thing)
             "0x3352F",  # Gate EP (same thing)
+            "0x00CDB",  # Challenge Reallocating
+            "0x0051F",  # Challenge Reallocating
+            "0x00524",  # Challenge Reallocating
+            "0x00CD4",  # Challenge Reallocating
+            "0x00CB9",  # Challenge May Be Unsolvable
+            "0x00CA1",  # Challenge May Be Unsolvable
+            "0x00C80",  # Challenge May Be Unsolvable
+            "0x00C68",  # Challenge May Be Unsolvable
+            "0x00C59",  # Challenge May Be Unsolvable
+            "0x00C22",  # Challenge May Be Unsolvable
         }
 
         all_eligible_panels = [
@@ -922,6 +935,7 @@ class WitnessPlayerLogic:
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI = set()
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME = set()
         self.DOOR_ITEMS_BY_ID: Dict[str, List[str]] = {}
+        self.FORBIDDEN_DOORS: Set[str] = set()
         self.STARTING_INVENTORY = set()
 
         self.DIFFICULTY = world.options.puzzle_randomization
@@ -930,6 +944,8 @@ class WitnessPlayerLogic:
             self.REFERENCE_LOGIC = static_witness_logic.sigma_normal
         elif self.DIFFICULTY == "sigma_expert":
             self.REFERENCE_LOGIC = static_witness_logic.sigma_expert
+        elif self.DIFFICULTY == "umbra_variety":
+            self.REFERENCE_LOGIC = static_witness_logic.umbra_variety
         elif self.DIFFICULTY == "none":
             self.REFERENCE_LOGIC = static_witness_logic.vanilla
 
