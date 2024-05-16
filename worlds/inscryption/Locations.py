@@ -1,4 +1,3 @@
-from typing import List
 from BaseClasses import Location
 
 base_id = 147000
@@ -8,7 +7,7 @@ class InscryptionLocation(Location):
     game: str = "Inscryption"
 
 
-act1_locations: List[str] = [
+act1_locations = [
     "Act 1 - Boss Prospector",
     "Act 1 - Boss Angler",
     "Act 1 - Boss Trapper",
@@ -28,7 +27,7 @@ act1_locations: List[str] = [
     "Act 1 - Greater Smoke"
 ]
 
-act2_locations: List[str] = [
+act2_locations = [
     "Act 2 - Boss Leshy",
     "Act 2 - Boss Magnificus",
     "Act 2 - Boss Grimora",
@@ -83,7 +82,7 @@ act2_locations: List[str] = [
     "Act 2 - Epitaph Piece 9"
 ]
 
-act3_locations: List[str] = [
+act3_locations = [
     "Act 3 - Boss Photographer",
     "Act 3 - Boss Archivist",
     "Act 3 - Boss Unfinished",
@@ -117,7 +116,7 @@ act3_locations: List[str] = [
     "Act 3 - Well"
 ]
 
-regions_to_locations: dict[str, List[str]] = {
+regions_to_locations: dict[str, list[str]] = {
     "Menu": {},
     "Act 1": act1_locations,
     "Act 2": act2_locations,

@@ -1,6 +1,4 @@
-from typing import Dict, Set
-
-inscryption_regions_all: Dict[str, Set[str]] = {
+inscryption_regions_all: dict[str, set[str]] = {
     "Menu": {"Act 1", "Act 2", "Act 3", "Epilogue"},
     "Act 1": {},
     "Act 2": {},
@@ -8,7 +6,7 @@ inscryption_regions_all: Dict[str, Set[str]] = {
     "Epilogue": {}
 }
 
-inscryption_regions_act_1: Dict[str, Set[str]] = {
+inscryption_regions_act_1: dict[str, set[str]] = {
     "Menu": {"Act 1"},
     "Act 1": {}
 }
