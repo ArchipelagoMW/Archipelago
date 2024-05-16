@@ -1,3 +1,4 @@
+import collections.abc
 import os
 import yaml
 import requests
@@ -86,6 +87,11 @@ def send_yaml(player_name: str, formatted_options: dict):
 @app.template_filter("dedent")
 def filter_dedent(text: str):
     return dedent(text).strip("\n ")
+
+
+@app.template_test("ordered")
+def test_ordered(obj):
+    return isinstance(obj, collections.abc.Sequence)
 
 
 @app.route("/games/<string:game>/option-presets", methods=["GET"])
