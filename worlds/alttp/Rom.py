@@ -18,7 +18,7 @@ import subprocess
 import threading
 import concurrent.futures
 import bsdiff4
-from typing import Optional, List
+from typing import Collection, Optional, List, SupportsIndex
 
 from BaseClasses import CollectionState, Region, Location, MultiWorld
 from Utils import local_path, user_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen, parse_yaml, read_snes_rom
@@ -52,7 +52,7 @@ except:
 enemizer_logger = logging.getLogger("Enemizer")
 
 
-class LocalRom(object):
+class LocalRom:
 
     def __init__(self, file, patch=True, vanillaRom=None, name=None, hash=None):
         self.name = name
@@ -71,13 +71,13 @@ class LocalRom(object):
     def read_byte(self, address: int) -> int:
         return self.buffer[address]
 
-    def read_bytes(self, startaddress: int, length: int) -> bytes:
+    def read_bytes(self, startaddress: int, length: int) -> bytearray:
         return self.buffer[startaddress:startaddress + length]
 
     def write_byte(self, address: int, value: int):
         self.buffer[address] = value
 
-    def write_bytes(self, startaddress: int, values):
+    def write_bytes(self, startaddress: int, values: Collection[SupportsIndex]) -> None:
         self.buffer[startaddress:startaddress + len(values)] = values
 
     def encrypt_range(self, startaddress: int, length: int, key: bytes):
