@@ -131,9 +131,7 @@ class GLPatchExtension(APPatchExtension):
                         del data.items[j - data.obelisk]
                         data.obelisk += 1
                     else:
-                        if "Chest" in location_name or (
-                                "Barrel" in location_name and "Barrel of Gold" not in location_name):
-                            print(j - len(data.items))
+                        if "Chest" in location_name or ("Barrel" in location_name and "Barrel of Gold" not in location_name):
                             data.chests[j - (len(data.items) + data.obelisk)][12] = item_dict[item[0]][0]
                             data.chests[j - (len(data.items) + data.obelisk)][13] = item_dict[item[0]][1]
                         else:
@@ -177,7 +175,8 @@ def write_files(world: "GauntletLegendsWorld", patch: GLProcedurePatch) -> None:
     for i, level in enumerate(level_locations.values()):
         locations = []
         for location in level:
-            locations += [world.get_location(name_convert(location))]
+            if location.name not in world.disabled_locations:
+                locations += [world.get_location(name_convert(location))]
         patch.write_file(f"level_{i}.json", json.dumps(locations_to_dict(locations)).encode("UTF-8"))
 
 

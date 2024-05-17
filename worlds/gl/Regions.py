@@ -109,11 +109,12 @@ def connect_regions(world: "GauntletLegendsWorld"):
 
 
 def create_region(world: "GauntletLegendsWorld", name, locations):
-    ret = Region(name, world.player, world.multiworld)
+    reg = Region(name, world.player, world.multiworld)
     for location in locations:
-        loc = GLLocation(world.player, name_convert(location), location.id, ret)
-        ret.locations.append(loc)
-    world.multiworld.regions.append(ret)
+        if location.name not in world.disabled_locations:
+            loc = GLLocation(world.player, name_convert(location), location.id, reg)
+            reg.locations.append(loc)
+    world.multiworld.regions.append(reg)
 
 
 def connect(world: "GauntletLegendsWorld", used_names: typing.Dict[str, int], source: str, target: str,
@@ -138,4 +139,3 @@ def connect(world: "GauntletLegendsWorld", used_names: typing.Dict[str, int], so
 
 def name_convert(location: "LocationData") -> str:
     return location.name + (f" {sum(1 for l in all_locations[:all_locations.index(location) + 1] if l.name == location.name)}" if "Chest" in location.name or "Barrel" in location.name else "") + (f" (Dif. {location.difficulty})" if location.difficulty > 1 else "")
-

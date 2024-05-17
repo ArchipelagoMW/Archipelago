@@ -35,7 +35,6 @@ def prog_count(state, player):
         count += 1
     if state.has("Haunted Cemetery Obelisk", player):
         count += 1
-        print(state)
     return count
 
 
@@ -43,15 +42,15 @@ def name_convert(location: "LocationData") -> str:
     return location.name + (f" {sum(1 for l in all_locations[:all_locations.index(location) + 1] if l.name == location.name)}" if "Chest" in location.name or "Barrel" in location.name else "") + (f" (Dif. {location.difficulty})" if location.difficulty > 1 else "")
 
 
-def set_rules(world: "GauntletLegendsWorld", excluded):
+def set_rules(world: "GauntletLegendsWorld"):
     for location in [location for location in all_locations if "Obelisk" in location.name or "Chest" in location.name or "Mirror" in location.name or ("Barrel" in location.name and "Barrel of Gold" not in location.name) or location in dragonsLair or location in chimerasKeep or location in gatesOfTheUnderworld]:
         for item in [item for item in itemList if "Obelisk" in item.itemName]:
-            if location not in excluded:
+            if location.name not in world.disabled_locations:
                 forbid_item(world.get_location(name_convert(location)), item.itemName, world.player)
 
     for level_id, locations in level_locations.items():
         for location in locations:
             if location.difficulty > 1:
-                if location not in excluded:
+                if location.name not in world.disabled_locations:
                     add_rule(world.get_location(name_convert(location)), lambda state: prog_count(state, world.player) >= difficulty_lambda[level_id >> 4][location.difficulty - 1])
 

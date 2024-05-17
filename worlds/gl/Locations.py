@@ -410,7 +410,7 @@ dragonsLair: typing.List[LocationData] = [
     LocationData("Dragon's Lair - Speed Boots", 88870179, 3),
     LocationData("Dragon's Lair - 3-Way Shot", 88870180, 1),
     LocationData("Dragon's Lair - Drumstick", 88870181, 1),
-    LocationData("Dragon's Lair - Mirror Shard", 88870607, 1),
+    LocationData("Dragon's Lair - Dragon Mirror Shard", 88870607, 1),
 ]
 
 castleCourtyard: typing.List[LocationData] = [
@@ -741,7 +741,7 @@ chimerasKeep: typing.List[LocationData] = [
     LocationData("Chimera's Keep - ", 88870332, 3),
     LocationData("Chimera's Keep - Ham", 88870333, 2),
     LocationData("Chimera's Keep - Drumstick", 88870334, 1),
-    LocationData("Chimera's Keep - Mirror Shard", 88870608, 1)
+    LocationData("Chimera's Keep - Chimera Mirror Shard", 88870608, 1)
 ]
 
 obelisks = [
@@ -1105,7 +1105,7 @@ toxicAirShip: typing.List[LocationData] = [
 ]
 
 plagueFiend: typing.List[LocationData] = [
-    LocationData("Vat of the Plague Fiend - Mirror Shard", 88870609, 1),
+    LocationData("Vat of the Plague Fiend - Plague Fiend Mirror Shard", 88870609, 1),
 ]
 
 arcticDocks: typing.List[LocationData] = [
@@ -1507,7 +1507,7 @@ eruptingFissure: typing.List[LocationData] = [
 ]
 
 yeti: typing.List[LocationData] = [
-    LocationData("Yeti's Cavern - Mirror Shard", 88870610, 1)
+    LocationData("Yeti's Cavern - Yeti Mirror Shard", 88870610, 1)
 ]
 
 desecratedTemple: typing.List[LocationData] = [

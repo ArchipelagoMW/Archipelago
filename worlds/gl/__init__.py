@@ -6,7 +6,7 @@ import settings
 from BaseClasses import Tutorial, ItemClassification
 from .Options import GLOptions
 from worlds.AutoWorld import WebWorld, World
-from .Locations import all_locations, location_table
+from .Locations import all_locations, location_table, LocationData
 from .Items import GLItem, itemList, item_table, item_frequencies
 from .Regions import create_regions, connect_regions
 from .Rom import GLProcedurePatch, write_files
@@ -65,14 +65,47 @@ class GauntletLegendsWorld(World):
     shard_values: typing.List[bytes] = [[0x2B, 0x3], [0x2B, 0x1], [0x2B, 0x4], [0x2B, 0x2]]
     output_complete: threading.Event = threading.Event()
 
-    excluded_locations = []
+    disabled_locations: typing.List[LocationData]
 
     def create_regions(self) -> None:
+        self.disabled_locations = []
+        if self.options.chests_barrels == 0:
+            self.disabled_locations += [location.name for location in all_locations if "Chest" in location.name or ("Barrel" in location.name and "Barrel of Gold" not in location.name)]
+        elif self.options.chests_barrels == 1:
+            self.disabled_locations += [location.name for location in all_locations if "Chest" in location.name]
+        elif self.options.chests_barrels == 2:
+            self.disabled_locations += [location.name for location in all_locations if "Barrel" in location.name and "Barrel of Gold" not in location.name]
+
         create_regions(self)
         connect_regions(self)
         item = self.create_item("Key")
-        self.multiworld.get_location("Valley of Fire - Key 1", self.player).place_locked_item(item)
-        self.multiworld.get_location("Valley of Fire - Key 5", self.player).place_locked_item(item)
+        self.get_location("Valley of Fire - Key 1").place_locked_item(item)
+        self.get_location("Valley of Fire - Key 5").place_locked_item(item)
+        if self.options.obelisks == 0:
+            item = self.create_item("Valley of Fire Obelisk")
+            self.get_location("Valley of Fire - Obelisk").place_locked_item(item)
+            item = self.create_item("Dagger Peak Obelisk")
+            self.get_location("Dagger Peak - Obelisk").place_locked_item(item)
+            item = self.create_item("Cliffs of Desolation Obelisk")
+            self.get_location("Cliffs of Desolation - Obelisk").place_locked_item(item)
+            item = self.create_item("Castle Courtyard Obelisk")
+            self.get_location("Castle Courtyard - Obelisk").place_locked_item(item)
+            item = self.create_item("Dungeon of Torment Obelisk")
+            self.get_location("Dungeon of Torment - Obelisk").place_locked_item(item)
+            item = self.create_item("Poisoned Fields Obelisk")
+            self.get_location("Poisoned Fields - Obelisk").place_locked_item(item)
+            item = self.create_item("Haunted Cemetery Obelisk")
+            self.get_location("Haunted Cemetery - Obelisk").place_locked_item(item)
+        if self.options.mirror_shards == 0:
+            item = self.create_item("Dragon Mirror Shard")
+            self.get_location("Dragon's Lair - Dragon Mirror Shard").place_locked_item(item)
+            item = self.create_item("Chimera Mirror Shard")
+            self.get_location("Chimera's Keep - Chimera Mirror Shard").place_locked_item(item)
+            item = self.create_item("Plague Fiend Mirror Shard")
+            self.get_location("Vat of the Plague Fiend - Plague Fiend Mirror Shard", ).place_locked_item(item)
+            item = self.create_item("Yeti Mirror Shard")
+            self.get_location("Yeti's Cavern - Yeti Mirror Shard").place_locked_item(item)
+
 
     def fill_slot_data(self) -> dict:
         return {
@@ -87,7 +120,11 @@ class GauntletLegendsWorld(World):
         required_items = []
         precollected = [item for item in itemList if item in self.multiworld.precollected_items[self.player]]
         for item in itemList:
-            if item.progression != ItemClassification.filler and item.progression != ItemClassification.skip_balancing and item not in precollected:
+            if item.progression != ItemClassification.filler and item not in precollected:
+                if "Obelisk" in item.itemName and self.options.obelisks == 0:
+                    continue
+                if "Mirror" in item.itemName and self.options.mirror_shards == 0:
+                    continue
                 freq = item_frequencies.get(item.itemName, 1)
                 if freq is None:
                     freq = 1
@@ -105,7 +142,11 @@ class GauntletLegendsWorld(World):
                     freq = 1
                 filler_items += [item.itemName for _ in range(freq)]
 
-        remaining = len(all_locations) - len(required_items) - 2
+        remaining = len(all_locations) - len(required_items) - len(self.disabled_locations) - 2
+        if self.options.obelisks == 0:
+            remaining -= 7
+        if self.options.mirror_shards == 0:
+            remaining -= 4
         for i in range(remaining):
             filler_item_name = self.multiworld.random.choice(filler_items)
             item = self.create_item(filler_item_name)
@@ -113,7 +154,7 @@ class GauntletLegendsWorld(World):
             filler_items.remove(filler_item_name)
 
     def set_rules(self) -> None:
-        set_rules(self, self.excluded_locations)
+        set_rules(self)
         self.multiworld.completion_condition[self.player] = \
             lambda state: state.can_reach("Gates of the Underworld", "Region", self.player)
 
