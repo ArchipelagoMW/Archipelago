@@ -1,6 +1,9 @@
 # Kingdom Hearts Randomizer Setup Guide
 
 ##Setting up the required mods
+
+BEFORE MODDING, PLEASE INSTALL AND RUN KH1 AT LEAST ONCE.
+
 1. Install OpenKH and the LUA Backend.
 
     Download the [latest release of OpenKH](https://github.com/OpenKH/OpenKh/releases/tag/latest)
