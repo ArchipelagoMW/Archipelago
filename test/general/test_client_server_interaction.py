@@ -17,5 +17,7 @@ class TestClient(unittest.TestCase):
             self.assertFalse(usable, "This test must be updated, it seems get_fuzzy_results behavior changed")
 
             hint_command = get_input_text_from_response(response, "hint")
-            self.assertIsNotNone(hint_command, "The response to fuzzy hints is no longer recognized by the hint autofill")
-            self.assertEqual(hint_command, f"!hint {item_name}", "The hint command autofilled by the response is not correct")
+            self.assertIsNotNone(hint_command,
+                                 "The response to fuzzy hints is no longer recognized by the hint autofill")
+            self.assertEqual(hint_command, f"!hint {item_name}",
+                             "The hint command autofilled by the response is not correct")
