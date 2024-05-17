@@ -17,9 +17,10 @@ When the world has parsed its options, a second function is called to finalize t
 
 import copy
 from collections import defaultdict
-from functools import lru_cache
 from logging import warning
 from typing import TYPE_CHECKING, Dict, FrozenSet, List, Set, Tuple, cast
+
+from Utils import cache_self1
 
 from .data import static_logic as static_witness_logic
 from .data import utils
@@ -32,6 +33,7 @@ if TYPE_CHECKING:
 class WitnessPlayerLogic:
     """WITNESS LOGIC CLASS"""
 
+    @cache_self1
     def reduce_req_within_region(self, entity_hex: str) -> FrozenSet[FrozenSet[str]]:
         """
         Panels in this game often only turn on when other panels are solved.
@@ -625,8 +627,6 @@ class WitnessPlayerLogic:
             self.EVENT_ITEM_PAIRS[pair[0]] = pair[1]
 
     def __init__(self, world: "WitnessWorld", disabled_locations: Set[str], start_inv: Dict[str, int]) -> None:
-        self.reduce_req_within_region = lru_cache(maxsize=None)(self.reduce_req_within_region)
-
         self.YAML_DISABLED_LOCATIONS = disabled_locations
         self.YAML_ADDED_ITEMS = start_inv
 
