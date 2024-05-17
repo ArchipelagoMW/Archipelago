@@ -1235,11 +1235,7 @@ class AquariaRegions:
             add_rule(self.multiworld.get_entrance("Home Water to Open water top left area", self.player),
                      lambda state: _has_bind_song(state, self.player) and _has_energy_form(state, self.player))
         if options.early_energy_form:
-            add_rule(self.multiworld.get_entrance("Home Water to Home water transturtle room", self.player),
-                     lambda state: _has_energy_form(state, self.player))
-        if options.early_energy_form:
-            add_rule(self.multiworld.get_entrance("Home Water to Open water top left area", self.player),
-                     lambda state: _has_energy_form(state, self.player))
+            self.multiworld.early_items[self.player]["Energy form"] = 1
 
         if options.no_progression_hard_or_hidden_locations:
             self.__no_progression_hard_or_hidden_location()

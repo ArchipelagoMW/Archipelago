@@ -67,7 +67,6 @@ class EnergyFormAccessTest(AquariaTestBase):
             "First secret",
             "Sunken City cleared",
             "Objective complete",
-
         ]
         items = [["Energy form"]]
         self.assertAccessDependency(locations, items)

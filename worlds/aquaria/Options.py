@@ -35,9 +35,7 @@ class TurtleRandomizer(Choice):
 
 
 class EarlyEnergyForm(DefaultOnToggle):
-    """
-    Force the Energy Form to be in a location before leaving the areas around the Home Water.
-    """
+    """ Force the Energy Form to be in a location early in the game """
     display_name = "Early Energy Form"
 
 
