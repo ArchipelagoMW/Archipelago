@@ -616,6 +616,7 @@ def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: ty
         )
     )
 
+
 def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bool, str]:
     picks = get_fuzzy_results(input_text, possible_answers, limit=2)
     if len(picks) > 1:
@@ -650,6 +651,7 @@ def get_input_text_from_response(text: str, command: str) -> typing.Optional[str
     elif text.startswith("Missing: "):
         return text.replace("Missing: ", "!hint_location ")
     return None
+
 
 def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typing.Sequence[str]]], suggest: str = "") \
         -> typing.Optional[str]:
