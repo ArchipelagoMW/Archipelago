@@ -4,8 +4,6 @@ import sys
 import typing
 import re
 
-from util.server_communication import get_input_text_from_response
-
 if sys.platform == "win32":
     import ctypes
 
@@ -66,7 +64,7 @@ from kivy.uix.popup import Popup
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
 from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType
-from Utils import async_start
+from Utils import async_start, get_input_text_from_response
 
 if typing.TYPE_CHECKING:
     import CommonClient
