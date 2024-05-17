@@ -29,9 +29,9 @@ class DishRandomizer(Toggle):
 class TurtleRandomizer(Choice):
     """Randomize the transportation turtle."""
     display_name = "Turtle Randomizer"
-    option_no_turtle_randomization = 0
-    option_randomize_all_turtle = 1
-    option_randomize_turtle_other_than_the_final_one = 2
+    option_none = 0
+    option_all = 1
+    option_all_except_final = 2
     default = 2
 
 
