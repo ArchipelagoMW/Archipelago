@@ -500,7 +500,7 @@ def only_dark(state, player):
         "Inferno Hammer",
         "Jinzo",
         "Ryu Kokki"
-    ], player, 1) \
+    ], player) \
            and state.has_from_list_exclusive([
         "Legendary Fiend",
         "Don Zaloog",

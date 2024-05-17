@@ -25,4 +25,4 @@ core_booster: List[str] = [
 
 
 def yugioh06_difficulty(state: CollectionState, player: int, amount: int):
-    return state.count_from_list(core_booster, player) >= amount
+    return state.has_from_list(core_booster, player, amount)
