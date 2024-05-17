@@ -18,8 +18,7 @@ the original game will stop working. Copying the folder will guarantee that the 
 Also, in Windows, the save files are stored in the Aquaria folder. So copying the Aquaria folder for every Multiworld
 game you play will make sure that every game has its own save game.
 
-Unzip the Aquaria randomizer release and copy all unzipped files in the Aquaria game folder. The unzipped files
-are:
+Unzip the Aquaria randomizer release and copy all unzipped files in the Aquaria game folder. The unzipped files are:
 - aquaria_randomizer.exe
 - OpenAL32.dll
 - override (directory)
@@ -76,8 +75,7 @@ the preceding commands will launch the game multiple times.
 First, you should copy the original Aquaria folder game. The randomizer will possibly modify the game so that
 the original game will stop working. Copying the folder will guarantee that the original game keeps on working.
 
-Untar the Aquaria randomizer release and copy all extracted files in the Aquaria game folder. The extracted
-files are:
+Untar the Aquaria randomizer release and copy all extracted files in the Aquaria game folder. The extracted files are:
 - aquaria_randomizer
 - override (directory)
 - usersettings.xml
