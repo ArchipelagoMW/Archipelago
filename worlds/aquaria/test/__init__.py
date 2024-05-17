@@ -25,7 +25,7 @@ after_home_water_locations = [
     "Open water top right area, bulb in the turtle room",
     "Open water top right area, Transturtle",
     "Open water bottom left area, bulb behind the chomper fish",
-    "Open water bottom left area, bulb inside the downest fish pass",
+    "Open water bottom left area, bulb inside the lowest fish pass",
     "Open water skeleton path, bulb close to the right exit",
     "Open water skeleton path, bulb behind the chomper fish",
     "Open water skeleton path, King skull",
