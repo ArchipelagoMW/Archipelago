@@ -129,7 +129,7 @@ class AquariaLocations:
 
     locations_openwater_bl = {
         "Open water bottom left area, bulb behind the chomper fish": 698011,
-        "Open water bottom left area, bulb inside the downest fish pass": 698010,
+        "Open water bottom left area, bulb inside the lowest fish pass": 698010,
     }
 
     locations_skeleton_path = {
