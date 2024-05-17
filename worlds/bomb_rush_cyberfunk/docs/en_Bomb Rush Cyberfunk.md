@@ -12,7 +12,7 @@ longer earned from doing graffiti, and is instead earned by finding it randomly 
 
 Items can be found by picking up any type of collectible, unlocking characters, taking pictures of Polo, and for every 
 5 graffiti spots tagged. The types of items that can be found are Music, Graffiti (M), Graffiti (L), Graffiti (XL), 
-Skateboards, Inline Skates, BMX, Outifts, Characters, REP, and the Camera.
+Skateboards, Inline Skates, BMX, Outfits, Characters, REP, and the Camera.
 
 Several changes have been made to the game for a better experience as a randomizer:
 

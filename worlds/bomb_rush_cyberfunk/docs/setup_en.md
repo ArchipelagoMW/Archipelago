@@ -3,7 +3,7 @@
 ## Quick Links
 
 - Bomb Rush Cyberfunk: [Steam](https://store.steampowered.com/app/1353230/Bomb_Rush_Cyberfunk/)
-- Archipelago Mod: [Thunderstore](https://thunderstore.io/c/bomb-rush-cyberfunk/p/TRPG/Archipelago/), 
+- Archipelago Mod: [Thunderstore](https://thunderstore.io/c/bomb-rush-cyberfunk/p/TRPG/BRC_Archipelago/), 
 [GitHub](https://github.com/TRPG0/BRC-Archipelago/releases)
 
 ## Setup
