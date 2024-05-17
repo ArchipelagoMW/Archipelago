@@ -1,7 +1,6 @@
 import typing
 
 from BaseClasses import Location
-from worlds.gl.Rules import name_convert
 
 
 class LocationData:
@@ -43,27 +42,27 @@ valleyOfFire: typing.List[LocationData] = [
     LocationData("Valley of Fire - Key 10", 88870021, 1),
     LocationData("Valley of Fire - Small Gold Pile 2", 88870022, 2),
     LocationData("Valley of Fire - Obelisk", 88870611, 1),
-    LocationData("Valley of Fire Barrel - Nothing 1", 88873500, 1),
+    LocationData("Valley of Fire Barrel - Nothing", 88873500, 1),
     LocationData("Valley of Fire Chest - Meat", 88873501, 2),
-    LocationData("Valley of Fire Chest - Potion 1", 88873502, 1),
-    LocationData("Valley of Fire Chest - Potion 2", 88873503, 2),
+    LocationData("Valley of Fire Chest - Potion", 88873502, 1),
+    LocationData("Valley of Fire Chest - Potion", 88873503, 2),
     LocationData("Valley of Fire Chest - Invisibility", 88873504, 3),
-    LocationData("Valley of Fire Chest - Gold 1", 88873505, 1),
+    LocationData("Valley of Fire Chest - Gold", 88873505, 1),
     LocationData("Valley of Fire Chest - Random Chest", 88873506, 3),
-    LocationData("Valley of Fire Chest - Gold 2", 88873507, 1),
-    LocationData("Valley of Fire Chest - Fruit 1", 88873508, 1),
-    LocationData("Valley of Fire Barrel - Nothing 2", 88873509, 1),
-    LocationData("Valley of Fire Barrel - Gold 3", 88873510, 1),
-    LocationData("Valley of Fire Barrel - Fruit 2", 88873511, 3),
+    LocationData("Valley of Fire Chest - Gold", 88873507, 1),
+    LocationData("Valley of Fire Chest - Fruit", 88873508, 1),
+    LocationData("Valley of Fire Barrel - Nothing", 88873509, 1),
+    LocationData("Valley of Fire Barrel - Gold", 88873510, 1),
+    LocationData("Valley of Fire Barrel - Fruit", 88873511, 3),
     LocationData("Valley of Fire Chest - 3-Way Shot", 88873512, 4),
-    LocationData("Valley of Fire Barrel - Nothing 3", 88873513, 1),
+    LocationData("Valley of Fire Barrel - Nothing", 88873513, 1),
     LocationData("Valley of Fire Barrel - Scroll", 88873514, 1),
-    LocationData("Valley of Fire Barrel - Nothing 4", 88873515, 1),
+    LocationData("Valley of Fire Barrel - Nothing", 88873515, 1),
     LocationData("Valley of Fire Barrel - Key", 88873516, 4),
     LocationData("Valley of Fire Barrel - Speed Boots", 88873517, 1),
     LocationData("Valley of Fire Barrel - Fire Breath", 88873518, 1),
     LocationData("Valley of Fire Barrel - Key", 88873519, 1),
-    LocationData("Valley of Fire Barrel - Potion 3", 88873520, 1)
+    LocationData("Valley of Fire Barrel - Potion", 88873520, 1)
 ]
 
 daggerPeak: typing.List[LocationData] = [
@@ -1797,5 +1796,9 @@ all_locations: typing.List[LocationData] = valleyOfFire + daggerPeak + cliffsOfD
                                            + crystalMine + eruptingFissure + desecratedTemple \
                                            + battleTrenches + battleTowers + infernalFortress \
                                            + gatesOfTheUnderworld + plagueFiend + yeti
+
+def name_convert(location: "LocationData") -> str:
+    return location.name + (f" {sum(1 for l in all_locations[:all_locations.index(location) + 1] if l.name == location.name)}" if "Chest" in location.name or "Barrel" in location.name else "") + (f" (Dif. {location.difficulty})" if location.difficulty > 1 else "")
+
 
 location_table: typing.Dict[str, int] = {name_convert(locData): locData.id for locData in all_locations}

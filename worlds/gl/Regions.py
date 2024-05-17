@@ -1,15 +1,14 @@
 import typing
 
 from BaseClasses import Region, Entrance
-from worlds.AutoWorld import World
 from .Locations import GLLocation, valleyOfFire, daggerPeak, cliffsOfDesolation, lostCave, volcanicCavern \
     , dragonsLair, castleCourtyard, dungeonOfTorment, towerArmory \
     , castleTreasury, chimerasKeep, poisonedFields, hauntedCemetery \
     , venomousSpire, toxicAirShip, arcticDocks, frozenCamp \
     , crystalMine, eruptingFissure, desecratedTemple \
     , battleTrenches, battleTowers, infernalFortress \
-    , gatesOfTheUnderworld, plagueFiend, yeti
-from .Rules import prog_count, name_convert
+    , gatesOfTheUnderworld, plagueFiend, yeti, all_locations \
+    , LocationData
 
 if typing.TYPE_CHECKING:
     from . import GauntletLegendsWorld
@@ -71,7 +70,7 @@ def create_regions(world: "GauntletLegendsWorld"):
     create_region(world, "Gates of the Underworld", gatesOfTheUnderworld)
 
 
-def connect_regions(world: "World"):
+def connect_regions(world: "GauntletLegendsWorld"):
     names: typing.Dict[str, int] = {}
 
     connect(world, names, "Menu", "Valley of Fire")
@@ -109,7 +108,7 @@ def connect_regions(world: "World"):
             and state.has("Runestone 13", world.player))
 
 
-def create_region(world: "World", name, locations):
+def create_region(world: "GauntletLegendsWorld", name, locations):
     ret = Region(name, world.player, world.multiworld)
     for location in locations:
         loc = GLLocation(world.player, name_convert(location), location.id, ret)
@@ -117,7 +116,7 @@ def create_region(world: "World", name, locations):
     world.multiworld.regions.append(ret)
 
 
-def connect(world: "World", used_names: typing.Dict[str, int], source: str, target: str,
+def connect(world: "GauntletLegendsWorld", used_names: typing.Dict[str, int], source: str, target: str,
             rule: typing.Optional[typing.Callable] = None):
     source_region = world.multiworld.get_region(source, world.player)
     target_region = world.multiworld.get_region(target, world.player)
@@ -136,3 +135,7 @@ def connect(world: "World", used_names: typing.Dict[str, int], source: str, targ
 
     source_region.exits.append(connection)
     connection.connect(target_region)
+
+def name_convert(location: "LocationData") -> str:
+    return location.name + (f" {sum(1 for l in all_locations[:all_locations.index(location) + 1] if l.name == location.name)}" if "Chest" in location.name or "Barrel" in location.name else "") + (f" (Dif. {location.difficulty})" if location.difficulty > 1 else "")
+

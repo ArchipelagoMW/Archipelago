@@ -331,18 +331,18 @@ difficulty_convert: dict[int, int] = {
     0x7: 20,
     0x9: 30,
     0xF: 30,
-    0x11: 30,
-    0x8: 45
+    0x11: 45,
+    0x8: 30
 }
 
 difficulty_lambda: dict[int, list[int]] = {
     0x2: [0, 1, 2, 3],
-    0x1: [2, 4, 5, 6],
-    0x7: [3, 7, 8, 9],  # No items required for Mountain (Difficulty 1 not included)
-    0x9: [2, 10, 11, 12],
-    0xF: [4, 10, 11, 12],
-    0x11: [4, 10, 11, 12],
-    0x8: [13, 19, 20, 21]
+    0x1: [0, 3, 4, 5],
+    0x7: [0, 5, 6, 7],  # No items required for Mountain (Difficulty 1 not included)
+    0x9: [0, 8, 9, 10],
+    0xF: [0, 8, 9, 10],
+    0x11: [0, 19, 20, 21],
+    0x8: [0, 8, 9, 10]
 }
 
 boss_realm = [2, 1, 7, 9]

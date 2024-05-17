@@ -1,9 +1,12 @@
+import typing
+
 from worlds.generic.Rules import add_rule, forbid_item
 from .Locations import all_locations, chimerasKeep, dragonsLair, LocationData, gatesOfTheUnderworld
-from worlds.AutoWorld import World
 from .Items import itemList
-from .Arrays import level_locations, difficulty_convert, difficulty_lambda
+from .Arrays import level_locations, difficulty_lambda
 
+if typing.TYPE_CHECKING:
+    from . import GauntletLegendsWorld
 
 def prog_count(state, player):
     count = 0
@@ -32,20 +35,23 @@ def prog_count(state, player):
         count += 1
     if state.has("Haunted Cemetery Obelisk", player):
         count += 1
+        print(state)
     return count
 
 
-def name_convert(location: LocationData) -> str:
-    return location.name + (f" (Dif. {location.difficulty})" if location.difficulty > 1 else "")
+def name_convert(location: "LocationData") -> str:
+    return location.name + (f" {sum(1 for l in all_locations[:all_locations.index(location) + 1] if l.name == location.name)}" if "Chest" in location.name or "Barrel" in location.name else "") + (f" (Dif. {location.difficulty})" if location.difficulty > 1 else "")
 
 
-def set_rules(world: "World", excluded):
+def set_rules(world: "GauntletLegendsWorld", excluded):
     for location in [location for location in all_locations if "Obelisk" in location.name or "Chest" in location.name or "Mirror" in location.name or ("Barrel" in location.name and "Barrel of Gold" not in location.name) or location in dragonsLair or location in chimerasKeep or location in gatesOfTheUnderworld]:
         for item in [item for item in itemList if "Obelisk" in item.itemName]:
-            forbid_item(world.multiworld.get_location(name_convert(location), world.player), item.itemName, world.player)
+            if location not in excluded:
+                forbid_item(world.get_location(name_convert(location)), item.itemName, world.player)
 
     for level_id, locations in level_locations.items():
         for location in locations:
             if location.difficulty > 1:
-                add_rule(world.multiworld.get_location(name_convert(location), world.player), lambda state: prog_count(state, world.player) >= difficulty_lambda[level_id >> 4][location.difficulty - 1])
+                if location not in excluded:
+                    add_rule(world.get_location(name_convert(location)), lambda state: prog_count(state, world.player) >= difficulty_lambda[level_id >> 4][location.difficulty - 1])
 
