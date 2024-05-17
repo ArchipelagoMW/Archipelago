@@ -562,8 +562,10 @@ class Walnutsanity(OptionList):
     """
     internal_name = "walnutsanity"
     display_name = "Walnutsanity"
-    valid_keys = {"Puzzles", "Bushes", "Dig spots", "Repeatables", }
-    default = []
+    valid_keys = {"Puzzles", "Bushes", "Dig Spots", "Repeatables", }
+    preset_none = []
+    preset_all = ["Puzzles", "Bushes", "Dig Spots", "Repeatables", ]
+    default = preset_none
 
 
 class NumberOfMovementBuffs(Range):
@@ -767,6 +769,7 @@ class StardewValleyOptions(PerGameCommonOptions):
     friendsanity: Friendsanity
     friendsanity_heart_size: FriendsanityHeartSize
     booksanity: Booksanity
+    walnutsanity: Walnutsanity
     exclude_ginger_island: ExcludeGingerIsland
     quick_start: QuickStart
     starting_money: StartingMoney

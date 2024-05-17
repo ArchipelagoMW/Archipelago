@@ -73,6 +73,11 @@ class LocationTags(enum.Enum):
     REQUIRES_MASTERIES = enum.auto()
     GINGER_ISLAND = enum.auto()
     WALNUT_PURCHASE = enum.auto()
+    WALNUTSANITY = enum.auto()
+    WALNUTSANITY_PUZZLE = enum.auto()
+    WALNUTSANITY_BUSH = enum.auto()
+    WALNUTSANITY_DIG = enum.auto()
+    WALNUTSANITY_REPEATABLE = enum.auto()
 
     BABY = enum.auto()
     MONSTERSANITY = enum.auto()
@@ -441,6 +446,20 @@ def extend_book_locations(randomized_locations: List[LocationData], content: Sta
     randomized_locations.extend(book_locations)
 
 
+def extend_walnutsanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
+    if not options.walnutsanity:
+        return
+
+    if "Puzzles" in options.walnutsanity:
+        randomized_locations.extend(locations_by_tag[LocationTags.WALNUTSANITY_PUZZLE])
+    if "Bushes" in options.walnutsanity:
+        randomized_locations.extend(locations_by_tag[LocationTags.WALNUTSANITY_BUSH])
+    if "Dig Spots" in options.walnutsanity:
+        randomized_locations.extend(locations_by_tag[LocationTags.WALNUTSANITY_DIG])
+    if "Repeatables" in options.walnutsanity:
+        randomized_locations.extend(locations_by_tag[LocationTags.WALNUTSANITY_REPEATABLE])
+
+
 def create_locations(location_collector: StardewLocationCollector,
                      bundle_rooms: List[BundleRoom],
                      options: StardewValleyOptions,
@@ -492,6 +511,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_craftsanity_locations(randomized_locations, options)
     extend_quests_locations(randomized_locations, options)
     extend_book_locations(randomized_locations, content)
+    extend_walnutsanity_locations(randomized_locations, options)
 
     # Mods
     extend_situational_quest_locations(randomized_locations, options)
