@@ -1516,8 +1516,6 @@ panel_doors:
     RIGHT: 444614
   Compass Room:
     Lookout: 444615
-  Dread Hallway:
-    DREAD: 444616
   Hedge Maze:
     DOWN: 444617
   The Perceptive:
@@ -1611,6 +1609,8 @@ panel_doors:
     KITTEN CAT: 444677
   Outside The Scientific:
     OPEN: 444678
+  Directional Gallery:
+    TURN LEARN: 444679
 panel_groups:
   Tenacious Entrance Panels: 444593
   Symmetry Room Panels: 444607

@@ -1458,11 +1458,6 @@
         item_group: Achievement Room Entrances
         panels:
           - DREAD
-    panel_doors:
-      DREAD:
-        panel_group: Tenacious Entrance Panels
-        panels:
-          - DREAD
   The Agreeable:
     entrances:
       Outside The Agreeable:
@@ -4703,6 +4698,11 @@
         panels:
           - room: Color Hunt
             panel: YELLOW
+    panel_doors:
+      TURN LEARN:
+        panels:
+          - TURN
+          - LEARN
     paintings:
       - id: smile_painting_7
         orientation: south
