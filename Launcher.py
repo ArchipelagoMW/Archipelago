@@ -259,7 +259,7 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
     elif not args:
         args = {}
 
-    if "Patch|Game|Component" in args:
+    if args.get("Patch|Game|Component", None) is not None:
         file, component = identify(args["Patch|Game|Component"])
         if file:
             args['file'] = file
