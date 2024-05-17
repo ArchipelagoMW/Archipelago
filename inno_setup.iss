@@ -169,7 +169,7 @@ Root: HKCR; Subkey: "{#MyAppName}pkmnepatch";                     ValueData: "Ar
 Root: HKCR; Subkey: "{#MyAppName}pkmnepatch\DefaultIcon";         ValueData: "{app}\ArchipelagoBizHawkClient.exe,0";                                          ValueType: string; ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}pkmnepatch\shell\open\command";  ValueData: """{app}\ArchipelagoBizHawkClient.exe"" ""%1""";                                 ValueType: string; ValueName: "";
 
-Root: HKCR; Subkey: ".apmlss";                                 ValueData: "{#MyAppName}cv64patch";                               Flags: uninsdeletevalue; ValueType: string; ValueName: "";
+Root: HKCR; Subkey: ".apmlss";                                 ValueData: "{#MyAppName}mlsspatch";                               Flags: uninsdeletevalue; ValueType: string; ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}mlsspatch";                     ValueData: "Archipelago Mario & Luigi Superstar Saga Patch";                    Flags: uninsdeletekey;   ValueType: string; ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}mlsspatch\DefaultIcon";         ValueData: "{app}\ArchipelagoBizHawkClient.exe,0";                                          ValueType: string; ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}mlsspatch\shell\open\command";  ValueData: """{app}\ArchipelagoBizHawkClient.exe"" ""%1""";                                 ValueType: string; ValueName: "";
