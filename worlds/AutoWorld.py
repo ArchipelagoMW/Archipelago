@@ -504,6 +504,10 @@ class World(metaclass=AutoWorldRegister):
     def get_region(self, region_name: str) -> "Region":
         return self.multiworld.get_region(region_name, self.player)
 
+    @property
+    def player_name(self) -> str:
+        return self.multiworld.get_player_name(self.player)
+
     @classmethod
     def get_data_package_data(cls) -> "GamesPackage":
         sorted_item_name_groups = {
