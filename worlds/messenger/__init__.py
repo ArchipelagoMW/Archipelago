@@ -155,7 +155,8 @@ class MessengerWorld(World):
             self.starting_portals.append("Searing Crags Portal")
             portals_to_strip = [portal for portal in ["Riviere Turquoise Portal", "Sunken Shrine Portal"]
                                 if portal in self.starting_portals]
-            self.starting_portals.remove(self.random.choice(portals_to_strip))
+            if portals_to_strip:
+                self.starting_portals.remove(self.random.choice(portals_to_strip))
 
         self.filler = FILLER.copy()
         if self.options.traps:
