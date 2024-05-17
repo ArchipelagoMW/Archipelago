@@ -32,7 +32,7 @@ Il y a trois approches pour obtenir un fichier *yaml* pour *StarCraft 2 Randomiz
 * Vous pouvez aller à la page [*Player options*](/games/Starcraft%202/player-options) qui vous permet de définir vos 
 choix via une interface graphique et ensuite télécharger le *yaml* correspondant à ces choix.
 * Vous pouvez obtenir le modèle de base en le téléchargeant à la page 
-[*Player options*](/games/Starcraft%202/player-options) ou en cliquant sur *Generate template* après avoir éxécuté le 
+[*Player options*](/games/Starcraft%202/player-options) ou en cliquant sur *Generate template* après avoir exécuté le 
 *Launcher* d'Archipelago (i.e., `ArchipelagoLauncher.exe`). Ce modèle de base inclut une description pour chacune des 
 options et vous n'avez qu'à modifier les options dans un éditeur de texte de votre choix.
 * Vous pouvez demander à quelqu'un d'autre de partager un de ces fichiers *yaml* pour l'utiliser ou l'ajuster à vos 
@@ -66,16 +66,16 @@ dans le dossier `logs/`.
 
 #### À quoi sert l'option *Progression Balancing*?
 
-Pour un monde *StarCraft 2* seule, cette option ne fait rien. 
-Il s'agit d'une option d'Archipelago qui permet de balancer la progression d'un monde relativement aux autres mondes en 
-interchangeant les *items* de progression dans les *sphères*.
+Pour *Starcraft 2*, cette option ne fait pas grand-chose.
+Il s'agit d'une option d'Archipelago permettant d'équilibrer la progression des mondes en interchangeant les *items* 
+dans les *spheres*. 
 Si le *Progression Balancing* d'un monde est plus grand que ceux des autres, les *items* de progression de ce monde ont 
-plus de chance d'être obtenus tôt et vice-versa si sa valeur est plus petite que celle des autres mondes.
-Cependant, *StarCraft 2* est beaucoup plus permissif en termes d'*items* qui sont nécessaires pour progresser.
-Pour cette raison, cet ajustement a souvent peu d'influence sur la capacité de progresser dans un monde de 
-*StarCraft 2*. 
-De plus, cette option augmente le temps de génération d'un *MultiWorld*, alors certains recommandent de le définir à 
-zéro pour *StartCraft 2*.
+plus de chance d'être obtenus tôt et vice-versa si sa valeur est plus petite que celle des autres mondes. 
+Cependant, *Starcraft 2* est beaucoup plus permissif en termes d'*items* qui permettent de progresser, ce réglage à 
+donc peu d'influence sur la progression dans *StarCraft 2*. 
+Vu qu'il augmente le temps de génération d'un *MultiWorld*, nous recommandons de le désactiver, c-à-d le définir à 
+zéro, pour *Starcraft 2*. 
+
 
 #### Comment est-ce que je définis une liste d'*items*, e.g. pour l'option *excluded items*?
 
@@ -134,7 +134,7 @@ votre *room*.
 4. Si le serveur a un mot de passe, l'inscrire lorsque vous y êtes invité.
 5. Une fois connecté, aller sur l'onglet *StarCraft 2 Launcher* dans le client. Dans cet onglet, vous devriez trouver 
 toutes les missions de votre monde. Les missions qui ne sont pas disponibles présentement auront leur texte dans une 
-tonte de gris. Vous n'avez qu'à cliquer une des missions qui est disponible pour la commencer!
+nuance de gris. Vous n'avez qu'à cliquer une des missions qui est disponible pour la commencer!
 
 ## *StarCraft 2* ne démarre pas quand je tente de commencer une mission
 
@@ -153,9 +153,9 @@ Si le dossier n'existe pas, créez-le.
 
 Pour que *StarCraft 2 Archipelago* utilise votre profil, suivez les étapes suivantes.
 Lancez *Starcraft 2* via l'application *Battle.net*. 
-Changez votre profil de raccourcis clavier pour le mode standard et acceptez, puis changez pour votre profil 
+Changez votre profil de raccourcis clavier pour le mode standard et acceptez, puis sélectionnez votre profil 
 personnalisé et acceptez. 
-Vous aurez juste besoin de faire ça une seule fois.
+Vous n'aurez besoin de faire ça qu'une seule fois.
 
 ## Exécuter sous macOS
 
@@ -165,14 +165,14 @@ Notez que pour lancer le client, vous devez exécuter la commande `python3 Starc
 
 ## Exécuter sous Linux
 
-Pour éxécuter *StarCraft 2* via Archipelago sous Linux, vous allez devoir installer le jeu avec *Wine* et ensuite 
-éxécuter le client d'Archipelago pour Linux.
+Pour exécuter *StarCraft 2* via Archipelago sous Linux, vous allez devoir installer le jeu avec *Wine* et ensuite 
+exécuter le client d'Archipelago pour Linux.
 
 Confirmez que vous avez installé *StarCraft 2* via *Wine* et que vous avez suivi les 
 [instructions d'installation](#comment-est-ce-que-j'installe-ce-randomizer?) pour ajouter les *Maps* et les *Data 
 files* nécessairent pour *StarCraft 2 Archipelago* au bon endroit.
 Vous n'avez pas besoin de copier les fichiers `.dll`.
-Si vous avez des difficultés pour installer ou éxécuter *StarCraft 2* sous Linux, il est recommandé d'utiliser le 
+Si vous avez des difficultés pour installer ou exécuter *StarCraft 2* sous Linux, il est recommandé d'utiliser le 
 logiciel *Lutris*.
 
 Copier ce qui suit dans un fichier avec l'extension `.sh`, en prenant soin de définir les variables **WINE** et 
@@ -180,11 +180,11 @@ Copier ce qui suit dans un fichier avec l'extension `.sh`, en prenant soin de d�
 *AppImage* si ce dernier n'est pas dans le même dossier que ce script.
 
 ```sh
-# Permet au client de savoir que SC2 est éxécuté via Wine
+# Permet au client de savoir que SC2 est exécuté via Wine
 export SC2PF=WineLinux
 export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
 
-# À_CHANGER Remplacer le chemin avec celui qui correspond à la version de Wine utilisé pour éxécuter SC2
+# À_CHANGER Remplacer le chemin avec celui qui correspond à la version de Wine utilisé pour exécuter SC2
 export WINE="/usr/bin/wine"
 
 # À_CHANGER Remplacer le chemin par celui qui indique où StarCraft II est installé
@@ -194,20 +194,20 @@ export SC2PATH="/home/user/Games/starcraft-ii/drive_c/Program Files (x86)/StarCr
 PATH_TO_ARCHIPELAGO=
 
 # Obtiens la dernière version de l'AppImage de Archipelago dans le dossier PATH_TO_ARCHIPELAGO.
-# Si PATH_TO_ARCHIPELAGO n'est pas déféni, la valeur par défaut est le dossier qui contient ce script.
+# Si PATH_TO_ARCHIPELAGO n'est pas défini, la valeur par défaut est le dossier qui contient ce script.
 ARCHIPELAGO="$(ls ${PATH_TO_ARCHIPELAGO:-$(dirname $0)}/Archipelago_*.AppImage | sort -r | head -1)"
 
 # Lance le client de Archipelago
 $ARCHIPELAGO Starcraft2Client
 ```
 
-Pour une installation via Lutris, vous pouvez éxécuter `lutris -l` pour obtenir l'identifiant numérique de votre 
-installation *StarCraft II* et ensuite éxécuter la commande suivante, en remplacant **${ID}** pour cet identifiant 
+Pour une installation via Lutris, vous pouvez exécuter `lutris -l` pour obtenir l'identifiant numérique de votre 
+installation *StarCraft II* et ensuite exécuter la commande suivante, en remplacant **${ID}** pour cet identifiant 
 numérique.
 
     lutris lutris:rungameid/${ID} --output-script sc2.sh
 
-Cette commande va définir toutes les variables d'environnement nécessaires pour éxécuter *StarCraft 2* dans un script, 
+Cette commande va définir toutes les variables d'environnement nécessaires pour exécuter *StarCraft 2* dans un script, 
 incluant le chemin vers l'exécutable *Wine* que Lutris utilise.
 Après ça, vous pouvez enlever la ligne qui permet de démarrer *Battle.Net* et copier le code décrit plus haut dans le 
 script produit.
