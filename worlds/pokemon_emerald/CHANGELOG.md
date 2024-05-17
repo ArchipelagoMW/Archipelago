@@ -4,6 +4,8 @@
 
 - When you blacklist species from wild encounters and turn on dexsanity, blacklisted species are not added as locations
 and won't show up in the wild. Previously they would be forced to show up exactly once.
+- Dexsanity locations for species that evolve via item contribute their evolution item to the item pool instead of a
+great/ultra ball.
 - Added support for some new autotracking events.
 
 ### Fixes
