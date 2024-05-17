@@ -158,7 +158,7 @@ def brink_terminal_plaza(state: CollectionState, player: int) -> bool:
     
 
 def brink_terminal_tower(state: CollectionState, player: int) -> bool:
-   return rep(state, player, 280)
+    return rep(state, player, 280)
     
 
 def brink_terminal_oldhead_underground(state: CollectionState, player: int) -> bool:
@@ -246,8 +246,8 @@ def millennium_mall_challenge4(state: CollectionState, player: int) -> bool:
     return rep(state, player, 458)
 
 
-def millennium_mall_all_challenges(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
-    return millennium_mall_challenge4(state, player, limit, glitched)
+def millennium_mall_all_challenges(state: CollectionState, player: int) -> bool:
+    return millennium_mall_challenge4(state, player)
 
 
 def millennium_mall_theater(state: CollectionState, player: int, limit: bool) -> bool:
@@ -769,7 +769,7 @@ def build_access_cache(state: CollectionState, player: int, movestyle: int, limi
         func = globals()[fname]
         access: bool = func(*fvars)
         access_cache[fname] = access
-        if not access and not "oldhead" in fname:
+        if not access and "oldhead" not in fname:
             stop = True
 
     return access_cache
@@ -876,7 +876,6 @@ def rules(brcworld):
             set_rule(e, lambda state: mataan_smoke_wall2(state, player, limit, glitched))
         for e in multiworld.get_region(Stages.MA5, player).entrances:
             set_rule(e, lambda state: mataan_deepest(state, player, limit, glitched))
-
 
     # locations
     # hideout
@@ -1029,15 +1028,12 @@ def rules(brcworld):
         add_rule(multiworld.get_location("Defeat Faux", player),
             lambda state: rep(state, player, 1000))
 
-    
     # graffiti spots
     spots: int = 0
     while spots < 385:
         spots += 5
         set_rule(multiworld.get_location(f"Tagged {spots} Graffiti Spots", player),
-            lambda state, spots=spots: graffiti_spots(state, player, movestyle, limit, glitched, spots))
+            lambda state, spot_count=spots: graffiti_spots(state, player, movestyle, limit, glitched, spot_count))
 
     set_rule(multiworld.get_location("Tagged 389 Graffiti Spots", player),
         lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 389))
-    
-    
