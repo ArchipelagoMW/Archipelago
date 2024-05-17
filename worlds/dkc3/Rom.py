@@ -434,7 +434,7 @@ level_music_ids = [
     0x21,
 ]
 
-class LocalRom(object):
+class LocalRom:
 
     def __init__(self, file, patch=True, vanillaRom=None, name=None, hash=None):
         self.name = name

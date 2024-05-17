@@ -52,7 +52,7 @@ except:
 enemizer_logger = logging.getLogger("Enemizer")
 
 
-class LocalRom(object):
+class LocalRom:
 
     def __init__(self, file, patch=True, vanillaRom=None, name=None, hash=None):
         self.name = name

@@ -396,7 +396,7 @@ location_table = {
     0x30510B: [0x14B2, 4]
 }
 
-class LocalRom(object):
+class LocalRom:
 
     def __init__(self, file: str) -> None:
         self.name = None
