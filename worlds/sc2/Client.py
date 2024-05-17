@@ -973,7 +973,7 @@ def caclulate_soa_options(ctx: SC2Context) -> int:
     elif ctx.spear_of_adun_autonomously_cast_ability_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_everywhere:
         soa_autocasts_presence_value = 3
     # Guardian Shell breaks without SoA on version 4+, but can be generated without SoA on version 3
-    if ctx.slow_data_version < 4 and soa_autocasts_presence_value < 2:
+    if ctx.slot_data_version < 4 and soa_autocasts_presence_value < 2:
         soa_autocasts_presence_value = 2
     options |= soa_autocasts_presence_value << 3
 
