@@ -183,7 +183,9 @@ def patch_rom(world: World, patch: MMXProcedurePatch):
     
     if world.options.boss_randomize_hp != "off":
         adjust_boss_hp(world, patch)
-        
+
+    patch.write_byte(0x014FF, world.options.starting_hp.value)
+
     # Edit the ROM header
     from Utils import __version__
     patch.name = bytearray(f'MMX1{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
@@ -207,8 +209,6 @@ def patch_rom(world: World, patch: MMXProcedurePatch):
     patch.write_byte(0x17FFED, world.options.starting_hp.value)
     patch.write_byte(0x17FFEE, world.options.heart_tank_effectiveness.value)
     patch.write_byte(0x17FFEF, world.options.sigma_all_levels.value)
-
-    patch.write_byte(0x014FF, world.options.starting_hp.value)
 
     patch.write_file("token_patch.bin", patch.get_token_binary())
 
