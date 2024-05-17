@@ -29,7 +29,7 @@ _Separately released, branching from 2.0.0. Included procedure patch migration, 
 - Changed "Ho-oh" to "Ho-Oh" in options.
 - Temporary fix to alleviate problems with sometimes not receiving certain items just after connecting if `remote_items`
 is `true`.
-- Temporarily disable a possible location for Marine Cave to spawn, as its causes an overflow.
+- Temporarily disable a possible location for Marine Cave to spawn, as it causes an overflow.
 - Water encounters in Dewford now correctly require Surf.
 
 # 2.0.0
