@@ -344,8 +344,6 @@ class KDL3PatchExtensions(APPatchExtension):
     @staticmethod
     def apply_post_patch(_: APProcedurePatch, rom: bytes) -> bytes:
         rom_data = RomData(rom)
-        target_language = rom_data.read_byte(0x3C020)
-        rom_data.write_byte(0x7FD9, target_language)
         write_heart_star_sprites(rom_data)
         if rom_data.read_bytes(0x3D014, 1)[0] > 0:
             stages = [struct.unpack("HHHHHHH", rom_data.read_bytes(0x3D020 + x * 14, 14)) for x in range(5)]
@@ -373,7 +371,7 @@ class KDL3ProcedurePatch(APProcedurePatch, APTokenMixin):
         ("apply_post_patch", []),
         ("calc_snes_crc", [])
     ]
-    name: bytes  # used to pass to init
+    name: bytes  # used to pass to __init__
 
     @classmethod
     def get_source_data(cls) -> bytes:
