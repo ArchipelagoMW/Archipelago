@@ -14,6 +14,7 @@ ModuleUpdate.update()
 
 import Utils
 death_link = False
+item_num = 1
 
 logger = logging.getLogger("Client")
 
@@ -138,29 +139,18 @@ class KH1Context(CommonContext):
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
             if start_index != len(self.items_received):
+                global item_num
                 for item in args['items']:
-                    check_num = 0
-                    for filename in os.listdir(self.game_communication_path):
-                        if filename.startswith("AP"):
-                            if int(filename.split("_")[-1].split(".")[0]) > check_num:
-                                check_num = int(filename.split("_")[-1].split(".")[0])
-                    item_id = ""
-                    location_id = ""
-                    player = ""
                     found = False
+                    item_filename = f"AP_{str(item_num)}.item"
                     for filename in os.listdir(self.game_communication_path):
-                        if filename.startswith(f"AP"):
-                            with open(os.path.join(self.game_communication_path, filename), 'r') as f:
-                                item_id = str(f.readline()).replace("\n", "")
-                                location_id = str(f.readline()).replace("\n", "")
-                                player = str(f.readline()).replace("\n", "")
-                                if str(item_id) == str(NetworkItem(*item).item) and str(location_id) == str(NetworkItem(*item).location) and str(player) == str(NetworkItem(*item).player) and int(location_id) > 0:
-                                    found = True
+                        if filename == item_filename:
+                            found = True
                     if not found:
-                        filename = f"AP_{str(check_num+1)}.item"
-                        with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+                        with open(os.path.join(self.game_communication_path, item_filename), 'w') as f:
                             f.write(str(NetworkItem(*item).item) + "\n" + str(NetworkItem(*item).location) + "\n" + str(NetworkItem(*item).player))
                             f.close()
+                            item_num = item_num + 1
 
         if cmd in {"RoomUpdate"}:
             if "checked_locations" in args:
