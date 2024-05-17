@@ -52,6 +52,8 @@ class Received(CombinableStardewRule):
     item: str
     player: int
     count: int
+    event: bool = False
+    """Helps `explain` to know it can dig into a location with the same name."""
 
     @property
     def combination_key(self) -> Hashable:

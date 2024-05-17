@@ -211,8 +211,8 @@ class StardewValleyWorld(World):
         self.create_event_location(fall_farming, true_, Event.fall_farming)
 
     def setup_logic_events(self):
-        def register_event(name: str, rule: StardewRule):
-            event_location = LocationData(None, RegionName.farm, name)
+        def register_event(name: str, region: str, rule: StardewRule):
+            event_location = LocationData(None, region, name)
             self.create_event_location(event_location, rule, name)
 
         self.logic.setup_events(register_event)

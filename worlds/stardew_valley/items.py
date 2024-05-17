@@ -11,6 +11,7 @@ from . import data
 from .content.feature import friendsanity
 from .content.game_content import StardewContent
 from .data.game_item import ItemTag
+from .logic.logic_event import all_events
 from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
     BuildingProgression, SkillProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
@@ -18,7 +19,6 @@ from .options import StardewValleyOptions, TrapItems, FestivalLocations, Exclude
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.buff_names import Buff
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade
-from .strings.ap_names.event_names import Event
 from .strings.ap_names.mods.mod_items import SVEQuestItem
 from .strings.currency_names import Currency
 from .strings.wallet_item_names import Wallet
@@ -140,15 +140,8 @@ def load_item_csv():
 
 
 events = [
-    ItemData(None, Event.victory, ItemClassification.progression),
-    ItemData(None, Event.can_construct_buildings, ItemClassification.progression),
-    ItemData(None, Event.start_dark_talisman_quest, ItemClassification.progression),
-    ItemData(None, Event.can_ship_items, ItemClassification.progression),
-    ItemData(None, Event.can_shop_at_pierre, ItemClassification.progression),
-
-    ItemData(None, Event.spring_farming, ItemClassification.progression),
-    ItemData(None, Event.summer_farming, ItemClassification.progression),
-    ItemData(None, Event.fall_farming, ItemClassification.progression),
+    ItemData(None, e, ItemClassification.progression)
+    for e in all_events
 ]
 
 all_items: List[ItemData] = load_item_csv() + events

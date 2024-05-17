@@ -6,8 +6,7 @@ from typing import Iterable, Set, Tuple, List, Optional
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import CollectionRule
-from . import StardewRule, AggregatingStardewRule, Count, Has, TotalReceived, Received, Reach
-from ..strings.ap_names.event_names import all_events
+from . import StardewRule, AggregatingStardewRule, Count, Has, TotalReceived, Received, Reach, true_
 
 
 @dataclass
@@ -104,13 +103,19 @@ def _(rule: Reach, state: CollectionState, expected: bool, explored_spots: Set[T
         spot = state.multiworld.get_location(rule.spot, rule.player)
 
         if isinstance(spot.access_rule, StardewRule):
-            access_rules = [spot.access_rule, Reach(spot.parent_region.name, "Region", rule.player)]
+            if spot.access_rule is true_:
+                access_rules = [Reach(spot.parent_region.name, "Region", rule.player)]
+            else:
+                access_rules = [spot.access_rule, Reach(spot.parent_region.name, "Region", rule.player)]
 
     elif rule.resolution_hint == 'Entrance':
         spot = state.multiworld.get_entrance(rule.spot, rule.player)
 
         if isinstance(spot.access_rule, StardewRule):
-            access_rules = [spot.access_rule, Reach(spot.parent_region.name, "Region", rule.player)]
+            if spot.access_rule is true_:
+                access_rules = [Reach(spot.parent_region.name, "Region", rule.player)]
+            else:
+                access_rules = [spot.access_rule, Reach(spot.parent_region.name, "Region", rule.player)]
 
     else:
         spot = state.multiworld.get_region(rule.spot, rule.player)
@@ -125,9 +130,12 @@ def _(rule: Reach, state: CollectionState, expected: bool, explored_spots: Set[T
 @_explain.register
 def _(rule: Received, state: CollectionState, expected: bool, explored_spots: Set[Tuple[str, str]]) -> RuleExplanation:
     access_rules = None
-    if rule.item in all_events:
+    if rule.event:
         spot = state.multiworld.get_location(rule.item, rule.player)
-        access_rules = [spot.access_rule, Reach(spot.parent_region.name, "Region", rule.player)]
+        if spot.access_rule is true_:
+            access_rules = [Reach(spot.parent_region.name, "Region", rule.player)]
+        else:
+            access_rules = [spot.access_rule, Reach(spot.parent_region.name, "Region", rule.player)]
 
     if not access_rules:
         return RuleExplanation(rule, state, expected, explored_rules_key=explored_spots)
@@ -136,7 +144,7 @@ def _(rule: Received, state: CollectionState, expected: bool, explored_spots: Se
 
 
 @singledispatch
-def _rule_key(rule: StardewRule) -> Optional[Tuple[str, str]]:
+def _rule_key(_: StardewRule) -> Optional[Tuple[str, str]]:
     return None
 
 
@@ -147,7 +155,7 @@ def _(rule: Reach) -> Tuple[str, str]:
 
 @_rule_key.register
 def _(rule: Received) -> Optional[Tuple[str, str]]:
-    if rule.item not in all_events:
+    if not rule.event:
         return None
 
     return rule.item, "Logic Event"

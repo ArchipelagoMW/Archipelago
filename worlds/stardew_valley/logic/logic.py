@@ -20,6 +20,7 @@ from .fishing_logic import FishingLogicMixin
 from .gift_logic import GiftLogicMixin
 from .harvesting_logic import HarvestingLogicMixin
 from .has_logic import HasLogicMixin
+from .logic_event import all_logic_events
 from .mine_logic import MineLogicMixin
 from .money_logic import MoneyLogicMixin
 from .monster_logic import MonsterLogicMixin
@@ -84,8 +85,6 @@ from ..strings.villager_names import NPC
 from ..strings.wallet_item_names import Wallet
 
 logger = logging.getLogger(__name__)
-
-items_to_create_events = (Ore.copper, Ore.iron, Ore.gold, Ore.iridium, MetalBar.copper, MetalBar.iron, MetalBar.gold, MetalBar.iridium)
 
 
 class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogicMixin, TravelingMerchantLogicMixin, TimeLogicMixin,
@@ -473,12 +472,11 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         self.special_order.initialize_rules()
         self.special_order.update_rules(self.mod.special_order.get_modded_special_orders_rules())
 
-    def setup_events(self, register_event: Callable[[str, StardewRule], None]) -> None:
-        for item in items_to_create_events:
-            logic_event_name = f"{item} (Logic event)"
-            rule = self.registry.item_rules[item]
-            register_event(logic_event_name, rule)
-            self.registry.item_rules[item] = self.received(logic_event_name)
+    def setup_events(self, register_event: Callable[[str, str, StardewRule], None]) -> None:
+        for logic_event in all_logic_events:
+            rule = self.registry.item_rules[logic_event.item]
+            register_event(logic_event.name, logic_event.region, rule)
+            self.registry.item_rules[logic_event.item] = self.received(logic_event.name)
 
     def can_smelt(self, item: str) -> StardewRule:
         return self.has(Machine.furnace) & self.has(item)
