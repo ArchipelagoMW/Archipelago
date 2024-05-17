@@ -2,6 +2,7 @@
 
 ### Features
 
+- Added many new item and location groups
 - When you blacklist species from wild encounters and turn on dexsanity, blacklisted species are not added as locations
 and won't show up in the wild. Previously they would be forced to show up exactly once.
 - Added support for some new autotracking events.
