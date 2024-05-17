@@ -206,8 +206,8 @@ class World(metaclass=AutoWorldRegister):
 
     game: ClassVar[str]
     """name the game"""
-    topology_present: ClassVar[bool] = False
-    """indicate if world type has any meaningful layout/pathing"""
+    topology_present: bool = False
+    """indicate if this world has any meaningful layout/pathing"""
 
     all_item_and_group_names: ClassVar[FrozenSet[str]] = frozenset()
     """gets automatically populated with all item and item group names"""
