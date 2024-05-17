@@ -2,7 +2,7 @@ import sys
 from dataclasses import dataclass
 from typing import Protocol, ClassVar
 
-from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink
+from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList
 from .mods.mod_data import ModNames
 
 
@@ -551,6 +551,19 @@ class Booksanity(Choice):
     option_power = 1
     option_power_skill = 2
     option_all = 3
+
+
+class Walnutsanity(OptionList):
+    """Shuffle walnuts?
+    Puzzles: Walnuts obtained from solving a special puzzle or winning a minigame
+    Bushes: Walnuts that are in a bush and can be collected by clicking it
+    Dig spots: Walnuts that are underground and must be digged up. Includes Journal scrap walnuts
+    Repeatables: Random chance walnuts from normal actions (fishing, farming, combat, etc)
+    """
+    internal_name = "walnutsanity"
+    display_name = "Walnutsanity"
+    valid_keys = {"Puzzles", "Bushes", "Dig spots", "Repeatables", }
+    default = []
 
 
 class NumberOfMovementBuffs(Range):
