@@ -2,11 +2,11 @@
 
 ## Required Software
 
-- The original Aquaria Game (buyable from a lot of online game seller)
+- The original Aquaria Game (purchasable from most online game stores)
 - The [Aquaria randomizer](https://github.com/tioui/Aquaria_Randomizer/releases)
 
 ## Optional Software
-- 
+ 
 - For sending [commands](/tutorial/Archipelago/commands/en) like `!hint`: the TextClient from [the most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases)
 
 ## Installation and execution Procedures

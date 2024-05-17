@@ -101,7 +101,7 @@ class NoProgressionHardOrHiddenLocation(Toggle):
 class LightNeededToGetToDarkPlaces(DefaultOnToggle):
     """
     Make sure that the sun form or the dumbo pet can be acquired before getting to dark places.
-    Be aware that navigating in dark place without light is extremely difficult.
+    Be aware that navigating in dark places without light is extremely difficult.
     """
     display_name = "Light needed to get to dark places"
 
