@@ -108,7 +108,7 @@ class LightNeededToGetToDarkPlaces(DefaultOnToggle):
 
 class BindSongNeededToGetUnderRockBulb(Toggle):
     """
-    Make sure that the bind song can be acquired before having to obtain sing bulb under rocks.
+    Make sure that the bind song can be acquired before having to obtain sing bulbs under rocks.
     """
     display_name = "Bind song needed to get sing bulbs under rocks"
 
