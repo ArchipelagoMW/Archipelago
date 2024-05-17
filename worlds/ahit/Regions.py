@@ -717,7 +717,7 @@ def is_valid_first_act(world: "HatInTimeWorld", act: Region) -> bool:
     elif act.name == "Contractual Obligations" and world.options.ShuffleSubconPaintings:
         return False
 
-    if world.options.ShuffleSubconPaintings and "Time Rift" not in act.name and act_chapters[act.name] == "Subcon Forest":
+    if world.options.ShuffleSubconPaintings and act_chapters.get(act.name, "") == "Subcon Forest":
         # This requires a cherry hover to enter Subcon
         if act.name == "Your Contract has Expired":
             if diff < Difficulty.EXPERT or world.options.NoPaintingSkips:
@@ -793,7 +793,7 @@ def is_valid_plando(world: "HatInTimeWorld", region: str, act: str) -> bool:
         return False
 
     # Don't allow plando-ing things onto the first act that aren't permitted
-    entrance_name = act_entrances.get(region)
+    entrance_name = act_entrances.get(region, "")
     if entrance_name != "":
         is_first_act: bool = act_chapters.get(region) == get_first_chapter_region(world).name \
                              and ("Act 1" in entrance_name or "Free Roam" in entrance_name)
