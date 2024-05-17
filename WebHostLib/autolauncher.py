@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 import logging
 import multiprocessing
-import threading
 import time
 import typing
 from uuid import UUID
@@ -13,16 +12,6 @@ from pony.orm import db_session, select, commit
 
 from Utils import restricted_loads
 from .locker import Locker, AlreadyRunningException
-
-
-def launch_room(room: Room, config: dict):
-    # requires db_session!
-    if room.last_activity >= datetime.utcnow() - timedelta(seconds=room.timeout):
-        multiworld = multiworlds.get(room.id, None)
-        if not multiworld:
-            multiworld = MultiworldInstance(room, config)
-
-        multiworld.start()
 
 
 def handle_generation_success(seed_id):
@@ -59,21 +48,30 @@ def init_db(pony_config: dict):
     db.generate_mapping()
 
 
+def cleanup():
+    """delete unowned user-content"""
+    with db_session:
+        # >>> bool(uuid.UUID(int=0))
+        # True
+        rooms = Room.select(lambda room: room.owner == UUID(int=0)).delete(bulk=True)
+        seeds = Seed.select(lambda seed: seed.owner == UUID(int=0) and not seed.rooms).delete(bulk=True)
+        slots = Slot.select(lambda slot: not slot.seed).delete(bulk=True)
+        # Command gets deleted by ponyorm Cascade Delete, as Room is Required
+    if rooms or seeds or slots:
+        logging.info(f"{rooms} Rooms, {seeds} Seeds and {slots} Slots have been deleted.")
+
+
 def autohost(config: dict):
     def keep_running():
         try:
             with Locker("autohost"):
-                # delete unowned user-content
-                with db_session:
-                    # >>> bool(uuid.UUID(int=0))
-                    # True
-                    rooms = Room.select(lambda room: room.owner == UUID(int=0)).delete(bulk=True)
-                    seeds = Seed.select(lambda seed: seed.owner == UUID(int=0) and not seed.rooms).delete(bulk=True)
-                    slots = Slot.select(lambda slot: not slot.seed).delete(bulk=True)
-                    # Command gets deleted by ponyorm Cascade Delete, as Room is Required
-                if rooms or seeds or slots:
-                    logging.info(f"{rooms} Rooms, {seeds} Seeds and {slots} Slots have been deleted.")
-                run_guardian()
+                cleanup()
+                hosters = []
+                for x in range(config["HOSTERS"]):
+                    hoster = MultiworldInstance(config, x)
+                    hosters.append(hoster)
+                    hoster.start()
+
                 while 1:
                     time.sleep(0.1)
                     with db_session:
@@ -81,7 +79,9 @@ def autohost(config: dict):
                             room for room in Room if
                             room.last_activity >= datetime.utcnow() - timedelta(days=3))
                         for room in rooms:
-                            launch_room(room, config)
+                            # we have to filter twice, as the per-room timeout can't currently be PonyORM transpiled.
+                            if room.last_activity >= datetime.utcnow() - timedelta(seconds=room.timeout):
+                                hosters[room.id.int % len(hosters)].start_room(room.id)
 
         except AlreadyRunningException:
             logging.info("Autohost reports as already running, not starting another.")
@@ -132,28 +132,37 @@ multiworlds: typing.Dict[type(Room.id), MultiworldInstance] = {}
 
 
 class MultiworldInstance():
-    def __init__(self, room: Room, config: dict):
-        self.room_id = room.id
+    def __init__(self, config: dict, id: int):
+        self.room_ids = set()
         self.process: typing.Optional[multiprocessing.Process] = None
-        with guardian_lock:
-            multiworlds[self.room_id] = self
         self.ponyconfig = config["PONY"]
         self.cert = config["SELFLAUNCHCERT"]
         self.key = config["SELFLAUNCHKEY"]
         self.host = config["HOST_ADDRESS"]
+        self.rooms_to_start = multiprocessing.Queue()
+        self.rooms_shutting_down = multiprocessing.Queue()
+        self.name = f"MultiHoster{id}"
 
     def start(self):
         if self.process and self.process.is_alive():
             return False
 
-        logging.info(f"Spinning up {self.room_id}")
         process = multiprocessing.Process(group=None, target=run_server_process,
-                                          args=(self.room_id, self.ponyconfig, get_static_server_data(),
-                                                self.cert, self.key, self.host),
-                                          name="MultiHost")
+                                          args=(self.name, self.ponyconfig, get_static_server_data(),
+                                                self.cert, self.key, self.host,
+                                                self.rooms_to_start, self.rooms_shutting_down),
+                                          name=self.name)
         process.start()
-        # bind after start to prevent thread sync issues with guardian.
         self.process = process
+
+    def start_room(self, room_id):
+        while not self.rooms_shutting_down.empty():
+            self.room_ids.remove(self.rooms_shutting_down.get(block=True, timeout=None))
+        if room_id in self.room_ids:
+            pass  # should already be hosted currently.
+        else:
+            self.room_ids.add(room_id)
+            self.rooms_to_start.put(room_id)
 
     def stop(self):
         if self.process:
@@ -166,40 +175,6 @@ class MultiworldInstance():
     def collect(self):
         self.process.join()  # wait for process to finish
         self.process = None
-
-
-guardian = None
-guardian_lock = threading.Lock()
-
-
-def run_guardian():
-    global guardian
-    global multiworlds
-    with guardian_lock:
-        if not guardian:
-            try:
-                import resource
-            except ModuleNotFoundError:
-                pass  # unix only module
-            else:
-                # Each Server is another file handle, so request as many as we can from the system
-                file_limit = resource.getrlimit(resource.RLIMIT_NOFILE)[1]
-                # set soft limit to hard limit
-                resource.setrlimit(resource.RLIMIT_NOFILE, (file_limit, file_limit))
-
-            def guard():
-                while 1:
-                    time.sleep(1)
-                    done = []
-                    with guardian_lock:
-                        for key, instance in multiworlds.items():
-                            if instance.done():
-                                instance.collect()
-                                done.append(key)
-                        for key in done:
-                            del (multiworlds[key])
-
-            guardian = threading.Thread(name="Guardian", target=guard)
 
 
 from .models import Room, Generation, STATE_QUEUED, STATE_STARTED, STATE_ERROR, db, Seed, Slot

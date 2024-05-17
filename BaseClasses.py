@@ -718,10 +718,6 @@ class CollectionState():
     def count(self, item: str, player: int) -> int:
         return self.prog_items[player][item]
 
-    def item_count(self, item: str, player: int) -> int:
-        Utils.deprecate("Use count instead.")
-        return self.count(item, player)
-
     def has_from_list(self, items: Iterable[str], player: int, count: int) -> bool:
         """Returns True if the state contains at least `count` items matching any of the item names from a list."""
         found: int = 0
