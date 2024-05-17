@@ -213,11 +213,8 @@ def zenc(data):
 
 def get_level_data(stream: io.BytesIO, size: int) -> (io.BytesIO, LevelData):
     data = LevelData()
-    print("Data Created")
     data.stream = io.BytesIO(zdec(stream.read(size)))
-    print("Stream Created")
     data.header = data.stream.read(0x5C)
-    print("Header Read")
     data.stream.seek(0)
     data.item_addr = int.from_bytes(data.stream.read(4), "big")
     data.spawner_addr = int.from_bytes(data.stream.read(4), "big")
@@ -229,29 +226,19 @@ def get_level_data(stream: io.BytesIO, size: int) -> (io.BytesIO, LevelData):
     data.end_addr2 = int.from_bytes(data.stream.read(4), "big")
     data.end_addr3 = int.from_bytes(data.stream.read(4), "big")
     data.stream.seek(data.item_addr)
-    print("Reading Items")
-    print(format(data.item_addr, 'x'))
     for i in range(data.stream.tell(), data.spawner_addr, 12):
         data.stream.seek(i)
         data.items += [bytearray(data.stream.read(12))]
-    print("Items Done")
-    print(format(data.spawner_addr, 'x'))
     for i in range(data.stream.tell(), data.obj_addr, 16):
         data.stream.seek(i)
         data.spawners += [bytearray(data.stream.read(16))]
-    print("Spawners Done")
-    print(format(data.obj_addr, 'x'))
     for i in range(data.stream.tell(), data.chest_addr, 24):
         data.stream.seek(i)
         data.objects += [bytearray(data.stream.read(24))]
-    print("Objects Done")
-    print(format(data.chest_addr, 'x'))
     for i in range(data.stream.tell(), data.end_addr, 16):
         data.stream.seek(i)
         data.chests += [bytearray(data.stream.read(16))]
-    print("Chests Done")
     data.end = data.stream.read()
-    print("Read End")
     return (stream, data)
 
 
