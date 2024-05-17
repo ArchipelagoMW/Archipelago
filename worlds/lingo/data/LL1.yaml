@@ -6817,9 +6817,6 @@
         tag: syn rhyme
         subtag: bot
         link: rhyme FALL
-      LEAP:
-        id: Double Room/Panel_leap_leap
-        tag: midwhite
     doors:
       Exit:
         id: Double Room Area Doors/Door_room_exit
@@ -7068,6 +7065,9 @@
         tag: syn rhyme
         subtag: bot
         link: rhyme CREATIVE
+      LEAP:
+        id: Double Room/Panel_leap_leap
+        tag: midwhite
     doors:
       Door to Cross:
         id: Double Room Area Doors/Door_room_4a
