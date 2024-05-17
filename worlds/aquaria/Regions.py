@@ -1118,7 +1118,7 @@ class AquariaRegions:
                                          self.player), lambda state: _has_energy_form(state, self.player))
         add_rule(self.multiworld.get_location("Home water, bulb in the bottom left room", self.player),
                  lambda state: _has_bind_song(state, self.player))
-        add_rule(self.multiworld.get_location("Home water, bulb in the path bellow Nautilus Prime", self.player),
+        add_rule(self.multiworld.get_location("Home water, bulb in the path below Nautilus Prime", self.player),
                  lambda state: _has_bind_song(state, self.player))
         add_rule(self.multiworld.get_location("Naija's home, bulb after the energy door", self.player),
                  lambda state: _has_energy_form(state, self.player))
