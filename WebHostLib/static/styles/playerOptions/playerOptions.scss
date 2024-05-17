@@ -110,6 +110,7 @@ html{
         border-radius: 3px;
         min-width: 150px;
         background-color: #ffffff;
+        text-overflow: ellipsis;
     }
 
     .game-options{
@@ -118,7 +119,7 @@ html{
 
         .left, .right{
             display: grid;
-            grid-template-columns: 10rem auto;
+            grid-template-columns: 12rem auto;
             grid-row-gap: 0.5rem;
             grid-auto-rows: min-content;
             align-items: start;
@@ -135,26 +136,23 @@ html{
 
         input, select{
             box-sizing: border-box;
-            min-width: 150px;
-            width: 50%;
+            width: 200px;
         }
     }
 
     .left, .right{
         flex-grow: 1;
+        margin-bottom: 0.5rem;
     }
 
     .left{
-        margin-right: 10px;
-    }
-
-    .right{
-        margin-left: 10px;
+        margin-right: 20px;
     }
 
     .select-container{
         display: flex;
         flex-direction: row;
+        max-width: 270px;
 
         select{
             min-width: 200px;
@@ -169,6 +167,7 @@ html{
     .range-container{
         display: flex;
         flex-direction: row;
+        max-width: 270px;
 
         input[type=range]{
             flex-grow: 1;
@@ -183,6 +182,7 @@ html{
     .named-range-container{
         display: flex;
         flex-direction: column;
+        max-width: 270px;
 
         .named-range-wrapper{
             display: flex;
@@ -198,6 +198,7 @@ html{
     .free-text-container{
         display: flex;
         flex-direction: column;
+        max-width: 270px;
 
         input[type=text]{
             flex-grow: 1;
@@ -207,6 +208,7 @@ html{
     .text-choice-container{
         display: flex;
         flex-direction: column;
+        max-width: 270px;
 
         .text-choice-wrapper{
             display: flex;

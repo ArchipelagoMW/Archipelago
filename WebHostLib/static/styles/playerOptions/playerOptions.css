@@ -94,6 +94,7 @@ html {
   border-radius: 3px;
   min-width: 150px;
   background-color: #ffffff;
+  text-overflow: ellipsis;
 }
 #player-options .game-options {
   display: flex;
@@ -101,7 +102,7 @@ html {
 }
 #player-options .game-options .left, #player-options .game-options .right {
   display: grid;
-  grid-template-columns: 10rem auto;
+  grid-template-columns: 12rem auto;
   grid-row-gap: 0.5rem;
   grid-auto-rows: min-content;
   align-items: start;
@@ -116,21 +117,19 @@ html {
 }
 #player-options #meta-options input, #player-options #meta-options select {
   box-sizing: border-box;
-  min-width: 150px;
-  width: 50%;
+  width: 200px;
 }
 #player-options .left, #player-options .right {
   flex-grow: 1;
+  margin-bottom: 0.5rem;
 }
 #player-options .left {
-  margin-right: 10px;
-}
-#player-options .right {
-  margin-left: 10px;
+  margin-right: 20px;
 }
 #player-options .select-container {
   display: flex;
   flex-direction: row;
+  max-width: 270px;
 }
 #player-options .select-container select {
   min-width: 200px;
@@ -142,6 +141,7 @@ html {
 #player-options .range-container {
   display: flex;
   flex-direction: row;
+  max-width: 270px;
 }
 #player-options .range-container input[type=range] {
   flex-grow: 1;
@@ -153,6 +153,7 @@ html {
 #player-options .named-range-container {
   display: flex;
   flex-direction: column;
+  max-width: 270px;
 }
 #player-options .named-range-container .named-range-wrapper {
   display: flex;
@@ -165,6 +166,7 @@ html {
 #player-options .free-text-container {
   display: flex;
   flex-direction: column;
+  max-width: 270px;
 }
 #player-options .free-text-container input[type=text] {
   flex-grow: 1;
@@ -172,6 +174,7 @@ html {
 #player-options .text-choice-container {
   display: flex;
   flex-direction: column;
+  max-width: 270px;
 }
 #player-options .text-choice-container .text-choice-wrapper {
   display: flex;
