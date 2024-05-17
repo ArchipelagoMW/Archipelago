@@ -203,7 +203,7 @@ def get_locations_by_area() -> Dict[str, Set[str]]:
 def get_named_locations_data(locations: List[str], options: CVCotMOptions) -> \
         Tuple[Dict[str, Optional[int]], Dict[str, str]]:
     locations_with_ids = {}
-    locked_items = {}
+    locked_pairs = {}
 
     for loc in locations:
         # If Break Iron Maidens is on, don't place the Broke Iron Maidens Location.
@@ -223,7 +223,7 @@ def get_named_locations_data(locations: List[str], options: CVCotMOptions) -> \
         # If we are looking at an event Location, add its associated event Item to the events' dict.
         # Otherwise, add the base_id to the Location's code.
         if isinstance(loc_code, str):
-            locked_items[loc] = loc_code
+            locked_pairs[loc] = loc_code
             locations_with_ids.update({loc: None})
         else:
             loc_code += base_id
@@ -232,6 +232,6 @@ def get_named_locations_data(locations: List[str], options: CVCotMOptions) -> \
         # If the Require All Bosses option is on, add a Last Key to the events dict for all Locations marked "boss" for
         # their type.
         if options.require_all_bosses and cvcotm_location_info[loc].type in ["boss", "max up boss"]:
-            locked_items[loc] = iname.last_key
+            locked_pairs[loc] = iname.last_key
 
-    return locations_with_ids, locked_items
+    return locations_with_ids, locked_pairs

@@ -175,7 +175,7 @@ class CastlevaniaCotMClient(BizHawkClient):
             # player is running the Battle Arena and Dracula goal.
             if f"castlevania_cotm_events_{ctx.team}_{ctx.slot}" in ctx.stored_data:
                 if ctx.stored_data[f"castlevania_cotm_events_{ctx.team}_{ctx.slot}"] is not None:
-                    if ctx.stored_data[f"castlevania_cotm_events_{ctx.team}_{ctx.slot}"] & 0x1:
+                    if ctx.stored_data[f"castlevania_cotm_events_{ctx.team}_{ctx.slot}"] & 0x2:
                         self.won_battle_arena = True
 
                     if ctx.stored_data[f"castlevania_cotm_events_{ctx.team}_{ctx.slot}"] & 0x800:

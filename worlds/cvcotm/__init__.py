@@ -123,13 +123,13 @@ class CVCotMWorld(World):
             loc_names = get_region_info(reg.name, "locations")
             if loc_names is None:
                 continue
-            locations_with_ids, events = get_named_locations_data(loc_names, self.options)
+            locations_with_ids, locked_pairs = get_named_locations_data(loc_names, self.options)
             reg.add_locations(locations_with_ids, CVCotMLocation)
 
-            # Place event Items on all of their associated Locations.
-            for event_loc, event_item in events.items():
-                self.get_location(event_loc).place_locked_item(self.create_item(event_item,
-                                                                                ItemClassification.progression))
+            # Place locked Items on all of their associated Locations.
+            for locked_loc, locked_item in locked_pairs.items():
+                self.get_location(locked_loc).place_locked_item(self.create_item(locked_item,
+                                                                                 ItemClassification.progression))
 
     def create_item(self, name: str, force_classification: typing.Optional[ItemClassification] = None) -> Item:
         if force_classification is not None:
