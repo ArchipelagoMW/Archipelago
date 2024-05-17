@@ -399,6 +399,10 @@ def set_moderate_rules(world: "HatInTimeWorld"):
     set_rule(world.multiworld.get_location("Subcon Forest - Manor Rooftop", world.player),
              lambda state: has_paintings(state, world, 1))
 
+    # Moderate: Village Time Rift with nothing IF umbrella logic is off
+    if not world.options.UmbrellaLogic:
+        set_rule(world.multiworld.get_location("Act Completion (Time Rift - Village)", world.player), lambda state: True)
+
     # Moderate: get to Birdhouse/Yellow Band Hills without Brewing Hat
     set_rule(world.multiworld.get_entrance("-> The Birdhouse", world.player),
              lambda state: can_use_hookshot(state, world))
@@ -478,6 +482,8 @@ def set_hard_rules(world: "HatInTimeWorld"):
     # No Dweller Mask required
     set_rule(world.multiworld.get_location("Subcon Forest - Dweller Floating Rocks", world.player),
              lambda state: has_paintings(state, world, 3))
+    set_rule(world.multiworld.get_location("Subcon Forest - Dweller Platforming Tree B", world.player),
+             lambda state: has_paintings(state, world, 3))
 
     # Cherry bridge over boss arena gap (painting still expected)
     set_rule(world.multiworld.get_location("Subcon Forest - Boss Arena Chest", world.player),
@@ -493,9 +499,6 @@ def set_hard_rules(world: "HatInTimeWorld"):
     # SDJ
     add_rule(world.multiworld.get_location("Subcon Forest - Long Tree Climb Chest", world.player),
              lambda state: can_use_hat(state, world, HatType.SPRINT) and has_paintings(state, world, 2), "or")
-
-    add_rule(world.multiworld.get_location("Subcon Forest - Dweller Platforming Tree B", world.player),
-             lambda state: has_paintings(state, world, 3) and can_use_hat(state, world, HatType.SPRINT), "or")
 
     add_rule(world.multiworld.get_location("Act Completion (Time Rift - Curly Tail Trail)", world.player),
              lambda state: can_use_hat(state, world, HatType.SPRINT), "or")
@@ -581,8 +584,6 @@ def set_expert_rules(world: "HatInTimeWorld"):
     # Set painting rules only. Skipping paintings is determined in has_paintings
     set_rule(world.multiworld.get_location("Subcon Forest - Boss Arena Chest", world.player),
              lambda state: has_paintings(state, world, 1, True))
-    set_rule(world.multiworld.get_location("Subcon Forest - Dweller Platforming Tree B", world.player),
-             lambda state: has_paintings(state, world, 3, True))
     set_rule(world.multiworld.get_location("Subcon Forest - Magnet Badge Bush", world.player),
              lambda state: has_paintings(state, world, 3, True))
 
@@ -600,6 +601,12 @@ def set_expert_rules(world: "HatInTimeWorld"):
                      lambda state: state.has("Metro Ticket - Yellow", world.player)
                      and state.has("Metro Ticket - Blue", world.player)
                      and state.has("Metro Ticket - Pink", world.player))
+
+        # Expert: Yellow/Green Manhole with nothing using a Boop Clip
+        set_rule(world.multiworld.get_location("Act Completion (Yellow Overpass Manhole)", world.player),
+                 lambda state: True)
+        set_rule(world.multiworld.get_location("Act Completion (Green Clean Manhole)", world.player),
+                 lambda state: True)
 
 
 def set_mafia_town_rules(world: "HatInTimeWorld"):

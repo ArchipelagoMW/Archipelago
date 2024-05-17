@@ -1,4 +1,4 @@
-from BaseClasses import Region, Entrance, ItemClassification, Location
+from BaseClasses import Region, Entrance, ItemClassification, Location, LocationProgressType
 from .Types import ChapterIndex, Difficulty, HatInTimeLocation, HatInTimeItem
 from .Locations import location_table, storybook_pages, event_locs, is_location_valid, \
     shop_locations, TASKSANITY_START_ID, snatcher_coins, zero_jumps, zero_jumps_expert, zero_jumps_hard
@@ -8,6 +8,9 @@ from .Options import ActRandomizer, EndGoal
 
 if TYPE_CHECKING:
     from . import HatInTimeWorld
+
+
+MIN_FIRST_SPHERE_LOCATIONS = 30
 
 
 # ChapterIndex: region
@@ -217,17 +220,32 @@ chapter_act_info = {
     "Time Rift - Rumbi Factory":    "Metro_CaveRift_RumbiFactory"
 }
 
-# Guarantee that the first level a player can access is a location dense area beatable with no items
+# Some of these may vary depending on options. See is_valid_first_act()
 guaranteed_first_acts = [
     "Welcome to Mafia Town",
     "Barrel Battle",
     "She Came from Outer Space",
     "Down with the Mafia!",
-    "Heating Up Mafia Town",  # Removed in umbrella logic
+    "Heating Up Mafia Town",
     "The Golden Vault",
 
-    "Contractual Obligations",  # Removed in painting logic
-    "Queen Vanessa's Manor",  # Removed in umbrella/painting logic
+    "Dead Bird Studio",
+    "Murder on the Owl Express",
+    "Dead Bird Studio Basement",
+
+    "Contractual Obligations",
+    "The Subcon Well",
+    "Queen Vanessa's Manor",
+    "Your Contract has Expired",
+
+    "Rock the Boat",
+
+    "Time Rift - Mafia of Cooks",
+    "Time Rift - Dead Bird Studio",
+    "Time Rift - Sleepy Subcon",
+    "Time Rift - Alpine Skyline"
+    "Time Rift - Tour",
+    "Time Rift - Rumbi Factory",
 ]
 
 purple_time_rifts = [
@@ -482,29 +500,61 @@ def randomize_act_entrances(world: "HatInTimeWorld"):
                       f"\"{name1}: {name2}\" "
                       f"is an invalid or disallowed act plando combination!")
 
-    first_act_mapped: bool = False
+    # Decide what should be on the first few levels before randomizing the rest
+    first_acts: List[Region] = []
+    first_chapter_name = chapter_regions[ChapterIndex(world.options.StartingChapter)]
+    first_acts.append(get_act_by_number(world, first_chapter_name, 1))
+    # Chapter 3 and 4 only have one level accessible at the start
+    if first_chapter_name == "Mafia Town" or first_chapter_name == "Battle of the Birds":
+        first_acts.append(get_act_by_number(world, first_chapter_name, 2))
+        first_acts.append(get_act_by_number(world, first_chapter_name, 3))
+
+    valid_first_acts: List[Region] = []
+    for candidate in candidate_list:
+        if is_valid_first_act(world, candidate):
+            valid_first_acts.append(candidate)
+
+    total_locations = 0
+    for level in first_acts:
+        if level not in region_list:  # make sure it hasn't been plando'd
+            continue
+
+        candidate = valid_first_acts[world.random.randint(0, len(valid_first_acts)-1)]
+        region_list.remove(level)
+        candidate_list.remove(candidate)
+        valid_first_acts.remove(candidate)
+        connect_acts(world, level, candidate, rift_dict)
+
+        # Only allow one purple rift
+        if candidate.name in purple_time_rifts:
+            for act in reversed(valid_first_acts):
+                if act.name in purple_time_rifts:
+                    valid_first_acts.remove(act)
+
+        total_locations += get_region_location_count(world, candidate.name)
+        if "Time Rift" not in candidate.name:
+            chapter = act_chapters.get(candidate.name)
+            if chapter == "Mafia Town":
+                total_locations += get_region_location_count(world, "Mafia Town Area (HUMT)")
+                if candidate.name != "Heating Up Mafia Town":
+                    total_locations += get_region_location_count(world, "Mafia Town Area")
+            elif chapter == "Subcon Forest":
+                total_locations += get_region_location_count(world, "Subcon Forest Area")
+            elif chapter == "The Arctic Cruise":
+                total_locations += get_region_location_count(world, "Cruise Ship")
+
+        # If we have enough Sphere 1 locations, we can allow the rest to be randomized
+        if total_locations >= MIN_FIRST_SPHERE_LOCATIONS:
+            break
+
     ignore_certain_rules: bool = False
     while len(region_list) > 0:
-        region: Region
-        if not first_act_mapped:
-            region = get_first_act(world)
-        else:
-            region = region_list[0]
-
+        region = region_list[0]
         candidate: Region
         valid_candidates: List[Region] = []
 
         # Look for candidates to map this act to
         for c in candidate_list:
-            # Map the first act before anything
-            if not first_act_mapped:
-                if not is_valid_first_act(world, c):
-                    continue
-
-                valid_candidates.append(c)
-                first_act_mapped = True
-                break  # we can stop here, as we only need one
-
             if is_valid_act_combo(world, region, c, ignore_certain_rules):
                 valid_candidates.append(c)
 
@@ -545,7 +595,7 @@ def sort_acts(act: Region) -> int:
        and "Time Rift" not in act.name:
         return -3
 
-    if act.name == "Contractual Obligations":
+    if act.name == "Contractual Obligations" or act.name == "The Subcon Well":
         return -2
 
     world = act.multiworld.worlds[act.player]
@@ -556,17 +606,6 @@ def sort_acts(act: Region) -> int:
                 return -1
 
     return 0
-
-
-def get_first_act(world: "HatInTimeWorld") -> Region:
-    first_chapter = get_first_chapter_region(world)
-    act: Optional[Region] = None
-    for e in first_chapter.exits:
-        if "Act 1" in e.name or "Free Roam" in e.name:
-            act = e.connected_region
-            break
-
-    return act
 
 
 def connect_acts(world: "HatInTimeWorld", entrance_act: Region, exit_act: Region, rift_dict: Dict[str, Region]):
@@ -642,32 +681,66 @@ def is_valid_first_act(world: "HatInTimeWorld", act: Region) -> bool:
     if act.name not in guaranteed_first_acts:
         return False
 
-    # Not completable without Umbrella
-    if world.options.UmbrellaLogic and (act.name == "Heating Up Mafia Town" or act.name == "Queen Vanessa's Manor"):
+    # If there's only a single level in the starting chapter, only allow Mafia Town or Subcon Forest levels
+    start_chapter = world.options.StartingChapter
+    if start_chapter is ChapterIndex.ALPINE or start_chapter is ChapterIndex.SUBCON:
+        if "Time Rift" in act.name:
+            return False
+
+        if act_chapters[act.name] != "Mafia Town" and act_chapters[act.name] != "Subcon Forest":
+            return False
+
+    if act.name in purple_time_rifts and not world.options.ShuffleStorybookPages:
         return False
 
-    # Subcon sphere 1 is too small without painting unlocks, and no acts are completable either
-    if world.options.ShuffleSubconPaintings and "Subcon Forest" in act_entrances[act.name]:
+    diff = get_difficulty(world)
+    # Not completable without Umbrella?
+    if world.options.UmbrellaLogic:
+        # Needs to be at least moderate to cross the big dweller wall
+        if act.name == "Queen Vanessa's Manor" and diff < Difficulty.MODERATE:
+            return False
+        elif act.name == "Your Contract has Expired" and diff < Difficulty.EXPERT:  # Snatcher Hover
+            return False
+        elif act.name == "Heating Up Mafia Town":  # Straight up impossible
+            return False
+
+    if act.name == "Dead Bird Studio":
+        # No umbrella logic = moderate, umbrella logic = expert.
+        if diff < Difficulty.MODERATE or world.options.UmbrellaLogic and diff < Difficulty.EXPERT:
+            return False
+    elif act.name == "Dead Bird Studio Basement" and (diff < Difficulty.EXPERT or world.options.FinaleShuffle):
         return False
+    elif act.name == "Rock the Boat" and (diff < Difficulty.MODERATE or world.options.FinaleShuffle):
+        return False
+    elif act.name == "The Subcon Well" and diff < Difficulty.MODERATE:
+        return False
+    elif act.name == "Contractual Obligations" and world.options.ShuffleSubconPaintings:
+        return False
+
+    if world.options.ShuffleSubconPaintings and "Time Rift" not in act.name and act_chapters[act.name] == "Subcon Forest":
+        # This requires a cherry hover to enter Subcon
+        if act.name == "Your Contract has Expired":
+            if diff < Difficulty.EXPERT or world.options.NoPaintingSkips:
+                return False
+        else:
+            # Only allow Subcon levels if paintings can be skipped
+            if diff < Difficulty.MODERATE or world.options.NoPaintingSkips:
+                return False
 
     return True
 
 
 def connect_time_rift(world: "HatInTimeWorld", time_rift: Region, exit_region: Region):
-    count: int = len(rift_access_regions[time_rift.name])
-    i: int = 1
-    while i <= count:
+    i = 1
+    while i <= len(rift_access_regions[time_rift.name]):
         name = f"{time_rift.name} Portal - Entrance {i}"
         entrance: Entrance
         try:
             entrance = world.multiworld.get_entrance(name, world.player)
+            reconnect_regions(entrance, entrance.parent_region, exit_region)
         except KeyError:
-            if len(time_rift.entrances) > 0:
-                entrance = time_rift.entrances[i-1]
-            else:
-                entrance = time_rift.connect(exit_region, name)
+            time_rift.connect(exit_region, name)
 
-        reconnect_regions(entrance, entrance.parent_region, exit_region)
         i += 1
 
 
@@ -860,6 +933,27 @@ def get_shuffled_region(world: "HatInTimeWorld", region: str) -> str:
             for name in chapter_act_info.keys():
                 if chapter_act_info[name] == key:
                     return name
+
+
+def get_region_location_count(world: "HatInTimeWorld", region_name: str, included_only: bool = True) -> int:
+    count = 0
+    region = world.multiworld.get_region(region_name, world.player)
+    for loc in region.locations:
+        if loc.address is not None and (not included_only or loc.progress_type is not LocationProgressType.EXCLUDED):
+            count += 1
+
+    return count
+
+
+def get_act_by_number(world: "HatInTimeWorld", chapter_name: str, num: int) -> Region:
+    chapter = world.multiworld.get_region(chapter_name, world.player)
+    act: Optional[Region] = None
+    for e in chapter.exits:
+        if f"Act {num}" in e.name or num == 1 and "Free Roam" in e.name:
+            act = e.connected_region
+            break
+
+    return act
 
 
 def create_thug_shops(world: "HatInTimeWorld"):

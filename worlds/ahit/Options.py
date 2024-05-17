@@ -45,30 +45,30 @@ def adjust_options(world: "HatInTimeWorld"):
     if world.is_dlc1() and world.options.ShipShapeCustomTaskGoal <= 0:
         # automatically determine task count based on Tasksanity settings
         if world.options.Tasksanity:
-            world.options.ShipShapeCustomTaskGoal = world.options.TasksanityCheckCount * world.options.TasksanityTaskStep
+            world.options.ShipShapeCustomTaskGoal.value = world.options.TasksanityCheckCount * world.options.TasksanityTaskStep
         else:
             world.options.ShipShapeCustomTaskGoal.value = 18
 
     # Don't allow Rush Hour goal if DLC2 content is disabled
     if world.options.EndGoal == EndGoal.option_rush_hour and not world.options.EnableDLC2:
-        world.options.EndGoal.value = 1
+        world.options.EndGoal.value = EndGoal.option_finale
 
     # Don't allow Seal the Deal goal if Death Wish content is disabled
     if world.options.EndGoal == EndGoal.option_seal_the_deal and not world.is_dw():
-        world.options.EndGoal.value = 1
+        world.options.EndGoal.value = EndGoal.option_finale
 
     if world.options.DWEnableBonus:
         world.options.DWAutoCompleteBonuses.value = 0
 
     if world.is_dw_only():
-        world.options.EndGoal.value = 3
+        world.options.EndGoal.value = EndGoal.option_seal_the_deal
         world.options.ActRandomizer.value = 0
         world.options.ShuffleAlpineZiplines.value = 0
         world.options.ShuffleSubconPaintings.value = 0
         world.options.ShuffleStorybookPages.value = 0
         world.options.ShuffleActContracts.value = 0
         world.options.EnableDLC1.value = 0
-        world.options.LogicDifficulty.value = -1
+        world.options.LogicDifficulty.value = LogicDifficulty.option_normal
         world.options.DWTimePieceRequirement.value = 0
 
 
