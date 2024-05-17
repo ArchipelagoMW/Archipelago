@@ -10,7 +10,7 @@ class LocationDict(TypedDict):
 
 class EventDict(TypedDict):
     name: str
-    stage: Stages
+    stage: str
     item: str
 
 
