@@ -5,6 +5,7 @@ import collections
 import datetime
 import functools
 import logging
+import multiprocessing
 import pickle
 import random
 import socket
@@ -53,17 +54,19 @@ del MultiServer
 
 class DBCommandProcessor(ServerCommandProcessor):
     def output(self, text: str):
-        logging.info(text)
+        self.ctx.logger.info(text)
 
 
 class WebHostContext(Context):
     room_id: int
 
-    def __init__(self, static_server_data: dict):
+    def __init__(self, static_server_data: dict, logger: logging.Logger):
         # static server data is used during _load_game_data to load required data,
         # without needing to import worlds system, which takes quite a bit of memory
         self.static_server_data = static_server_data
-        super(WebHostContext, self).__init__("", 0, "", "", 1, 40, True, "enabled", "enabled", "enabled", 0, 2)
+        super(WebHostContext, self).__init__("", 0, "", "", 1,
+                                             40, True, "enabled", "enabled",
+                                             "enabled", 0, 2, logger=logger)
         del self.static_server_data
         self.main_loop = asyncio.get_running_loop()
         self.video = {}
@@ -159,63 +162,95 @@ def get_static_server_data() -> dict:
     return data
 
 
-def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
+def set_up_logging(room_id) -> logging.Logger:
+    import os
+    # logger setup
+    logger = logging.getLogger(f"RoomLogger {room_id}")
+
+    # this *should* be empty, but just in case.
+    for handler in logger.handlers[:]:
+        logger.removeHandler(handler)
+        handler.close()
+
+    file_handler = logging.FileHandler(
+        os.path.join(Utils.user_path("logs"), f"{room_id}.txt"),
+        "a",
+        encoding="utf-8-sig")
+    file_handler.setFormatter(logging.Formatter("[%(asctime)s]: %(message)s"))
+    logger.setLevel(logging.INFO)
+    logger.addHandler(file_handler)
+    return logger
+
+
+def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                        cert_file: typing.Optional[str], cert_key_file: typing.Optional[str],
-                       host: str):
+                       host: str, rooms_to_run: multiprocessing.Queue, rooms_shutting_down: multiprocessing.Queue):
+    Utils.init_logging(name)
+    try:
+        import resource
+    except ModuleNotFoundError:
+        pass  # unix only module
+    else:
+        # Each Server is another file handle, so request as many as we can from the system
+        file_limit = resource.getrlimit(resource.RLIMIT_NOFILE)[1]
+        # set soft limit to hard limit
+        resource.setrlimit(resource.RLIMIT_NOFILE, (file_limit, file_limit))
+        del resource, file_limit
+
     # establish DB connection for multidata and multisave
     db.bind(**ponyconfig)
     db.generate_mapping(check_tables=False)
 
-    async def main():
-        if "worlds" in sys.modules:
-            raise Exception("Worlds system should not be loaded in the custom server.")
+    if "worlds" in sys.modules:
+        raise Exception("Worlds system should not be loaded in the custom server.")
 
-        import gc
-        Utils.init_logging(str(room_id), write_mode="a")
-        ctx = WebHostContext(static_server_data)
-        ctx.load(room_id)
-        ctx.init_save()
-        ssl_context = load_server_cert(cert_file, cert_key_file) if cert_file else None
-        gc.collect()  # free intermediate objects used during setup
+    import gc
+    ssl_context = load_server_cert(cert_file, cert_key_file) if cert_file else None
+    del cert_file, cert_key_file, ponyconfig
+    gc.collect()  # free intermediate objects used during setup
+
+    loop = asyncio.get_event_loop()
+
+    async def start_room(room_id):
         try:
-            ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=ssl_context)
+            logger = set_up_logging(room_id)
+            ctx = WebHostContext(static_server_data, logger)
+            ctx.load(room_id)
+            ctx.init_save()
+            try:
+                ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=ssl_context)
 
-            await ctx.server
-        except OSError:  # likely port in use
-            ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, 0, ssl=ssl_context)
+                await ctx.server
+            except OSError:  # likely port in use
+                ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, 0, ssl=ssl_context)
 
-            await ctx.server
-        port = 0
-        for wssocket in ctx.server.ws_server.sockets:
-            socketname = wssocket.getsockname()
-            if wssocket.family == socket.AF_INET6:
-                # Prefer IPv4, as most users seem to not have working ipv6 support
-                if not port:
+                await ctx.server
+            port = 0
+            for wssocket in ctx.server.ws_server.sockets:
+                socketname = wssocket.getsockname()
+                if wssocket.family == socket.AF_INET6:
+                    # Prefer IPv4, as most users seem to not have working ipv6 support
+                    if not port:
+                        port = socketname[1]
+                elif wssocket.family == socket.AF_INET:
                     port = socketname[1]
-            elif wssocket.family == socket.AF_INET:
-                port = socketname[1]
-        if port:
-            logging.info(f'Hosting game at {host}:{port}')
+            if port:
+                ctx.logger.info(f'Hosting game at {host}:{port}')
+                with db_session:
+                    room = Room.get(id=ctx.room_id)
+                    room.last_port = port
+            else:
+                ctx.logger.exception("Could not determine port. Likely hosting failure.")
             with db_session:
-                room = Room.get(id=ctx.room_id)
-                room.last_port = port
-        else:
-            logging.exception("Could not determine port. Likely hosting failure.")
-        with db_session:
-            ctx.auto_shutdown = Room.get(id=room_id).timeout
-        ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, []))
-        await ctx.shutdown_task
+                ctx.auto_shutdown = Room.get(id=room_id).timeout
+            ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, []))
+            await ctx.shutdown_task
 
-        # ensure auto launch is on the same page in regard to room activity.
-        with db_session:
-            room: Room = Room.get(id=ctx.room_id)
-            room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(seconds=room.timeout + 60)
+            # ensure auto launch is on the same page in regard to room activity.
+            with db_session:
+                room: Room = Room.get(id=ctx.room_id)
+                room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(seconds=room.timeout + 60)
 
-        logging.info("Shutting down")
-
-    with Locker(room_id):
-        try:
-            asyncio.run(main())
         except (KeyboardInterrupt, SystemExit):
             with db_session:
                 room = Room.get(id=room_id)
@@ -228,3 +263,17 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
                 # ensure the Room does not spin up again on its own, minute of safety buffer
                 room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(minutes=1, seconds=room.timeout)
             raise
+        finally:
+            rooms_shutting_down.put(room_id)
+
+    class Starter(threading.Thread):
+        def run(self):
+            while 1:
+                next_room = rooms_to_run.get(block=True,  timeout=None)
+                asyncio.run_coroutine_threadsafe(start_room(next_room), loop)
+                logging.info(f"Starting room {next_room} on {name}.")
+
+    starter = Starter()
+    starter.daemon = True
+    starter.start()
+    loop.run_forever()
