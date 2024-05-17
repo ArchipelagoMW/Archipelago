@@ -3,6 +3,7 @@ import logging
 import sys
 import typing
 import re
+from collections import deque
 
 if sys.platform == "win32":
     import ctypes
@@ -390,15 +391,12 @@ class CommandPromptTextInput(TextInput):
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
         self._command_history_index = -1
-        self._command_history: typing.List[str] = []
+        self._command_history: typing.Deque[str] = deque(maxlen=CommandPromptTextInput.MAXIMUM_HISTORY_MESSAGES)
     
     def update_history(self, new_entry: str) -> None:
         self._command_history_index = -1
         if is_command_input(new_entry):
-            self._command_history = [
-                new_entry,
-                *self._command_history[:CommandPromptTextInput.MAXIMUM_HISTORY_MESSAGES-1]
-            ]
+            self._command_history.appendleft(new_entry)
 
     def keyboard_on_key_down(
         self,
