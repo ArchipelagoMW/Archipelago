@@ -119,11 +119,11 @@ item_table = {
     "Card Key 11F": ItemData(109, ItemClassification.progression, ["Unique", "Key Items", "Card Keys"]),
     "Progressive Card Key": ItemData(110, ItemClassification.progression, ["Unique", "Key Items", "Card Keys"]),
     "Sleep Trap": ItemData(111, ItemClassification.trap, ["Traps"]),
-    "HM01 Cut": ItemData(196, ItemClassification.progression, ["Unique", "HMs", "Key Items"]),
-    "HM02 Fly": ItemData(197, ItemClassification.progression, ["Unique", "HMs", "Key Items"]),
-    "HM03 Surf": ItemData(198, ItemClassification.progression, ["Unique", "HMs", "Key Items"]),
-    "HM04 Strength": ItemData(199, ItemClassification.progression, ["Unique", "HMs", "Key Items"]),
-    "HM05 Flash": ItemData(200, ItemClassification.progression, ["Unique", "HMs", "Key Items"]),
+    "HM01 Cut": ItemData(196, ItemClassification.progression, ["Unique", "HMs", "HM01", "Key Items"]),
+    "HM02 Fly": ItemData(197, ItemClassification.progression, ["Unique", "HMs", "HM02", "Key Items"]),
+    "HM03 Surf": ItemData(198, ItemClassification.progression, ["Unique", "HMs", "HM03", "Key Items"]),
+    "HM04 Strength": ItemData(199, ItemClassification.progression, ["Unique", "HMs", "HM04", "Key Items"]),
+    "HM05 Flash": ItemData(200, ItemClassification.progression, ["Unique", "HMs", "HM05", "Key Items"]),
     "TM01 Mega Punch": ItemData(201, ItemClassification.useful, ["Unique", "TMs"]),
     "TM02 Razor Wind": ItemData(202, ItemClassification.filler, ["Unique", "TMs"]),
     "TM03 Swords Dance": ItemData(203, ItemClassification.useful, ["Unique", "TMs"]),
@@ -212,13 +212,7 @@ item_table.update(
 )
 
 
-item_groups = {
-    "HM01": {"HM01 Cut"},
-    "HM02": {"HM02 Fly"},
-    "HM03": {"HM03 Surf"},
-    "HM04": {"HM04 Strength"},
-    "HM05": {"HM05 Flash"},
-}
+item_groups = {}
 for item, data in item_table.items():
     for group in data.groups:
         item_groups[group] = item_groups.get(group, []) + [item]
