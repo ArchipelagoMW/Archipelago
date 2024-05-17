@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Optional, cast
 
 from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial
 
-from Options import PerGameCommonOptions, Toggle
+from Options import OptionError, PerGameCommonOptions, Toggle
 from worlds.AutoWorld import WebWorld, World
 
 from .data import static_items as static_witness_items
@@ -124,9 +124,9 @@ class WitnessWorld(World):
             warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any progression"
                     f" items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle if that doesn't seem right.")
         elif not interacts_sufficiently_with_multiworld and self.multiworld.players > 1:
-            raise Exception(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have enough"
-                            f" progression items that can be placed in other players' worlds. Please turn on Symbol"
-                            f" Shuffle, Door Shuffle, or Obelisk Keys.")
+            raise OptionError(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have enough"
+                              f" progression items that can be placed in other players' worlds. Please turn on Symbol"
+                              f" Shuffle, Door Shuffle, or Obelisk Keys.")
 
     def generate_early(self) -> None:
         disabled_locations = self.options.exclude_locations.value
