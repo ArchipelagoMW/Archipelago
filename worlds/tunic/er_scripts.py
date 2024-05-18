@@ -474,27 +474,22 @@ def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[s
             met_traversal_reqs = False
             if len(req_lists) == 0:
                 met_traversal_reqs = True
-            # loop through each set of possible requirements
+            # loop through each set of possible requirements, with a fancy for else loop
             for reqs in req_lists:
-                if len(reqs) == 0:
-                    met_traversal_reqs = True
+                for req in reqs:
+                    if req == "Hyperdash":
+                        if not has_laurels:
+                            break
+                    elif req == "NMG":
+                        if not logic:
+                            break
+                    elif req == "UR":
+                        if logic < 2:
+                            break
+                    elif req not in connected_regions:
+                        break
                 else:
-                    met_count = 0
-                    for req in reqs:
-                        # will need to change this if item plando gets evaluated earlier
-                        if req == "Hyperdash" and has_laurels:
-                            met_count += 1
-                        if req == "NMG" and logic:
-                            met_count += 1
-                        if req == "UR" and logic == 2:
-                            met_count += 1
-                        # check if we have the regions required for traversal
-                        if req in connected_regions:
-                            met_count += 1
-                    if met_count == len(reqs):
-                        met_traversal_reqs = True
-                # if we met one set of requirements, no need to check the next set
-                if met_traversal_reqs:
+                    met_traversal_reqs = True
                     break
             if met_traversal_reqs:
                 connected_regions.add(destination)
