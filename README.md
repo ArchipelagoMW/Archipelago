@@ -66,6 +66,8 @@ Currently, the following games are supported:
 * A Short Hike
 * Yoshi's Island
 * Mario & Luigi: Superstar Saga
+* Bomb Rush Cyberfunk
+* Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006
 * Mega Man 2
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
