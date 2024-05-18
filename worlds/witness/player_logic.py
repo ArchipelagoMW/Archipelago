@@ -410,8 +410,9 @@ class WitnessPlayerLogic:
         )
 
         if disable_mountain_lasers:
-            self.DISABLE_EVERYTHING_BEHIND.add("0x09F7F")
+            self.DISABLE_EVERYTHING_BEHIND.add("0x09F7F")  # Short box
             self.HUNT_ENTITIES.add("0x09F7F")
+            self.COMPLETELY_DISABLED_ENTITIES.add("0x3D9A9")  # Elevator Start
 
             # If mountain lasers are disabled, and challenge lasers > 7, the box will need to be rotated
             if chal_lasers > 7:
@@ -420,8 +421,9 @@ class WitnessPlayerLogic:
                     "0xFFF00 - 11 Lasers - True",
                 ])
         if disable_challenge_lasers:
-            self.DISABLE_EVERYTHING_BEHIND.add("0xFFF00")
+            self.DISABLE_EVERYTHING_BEHIND.add("0xFFF00")  # Long box
             self.HUNT_ENTITIES.add("0xFFF00")
+            self.COMPLETELY_DISABLED_ENTITIES.add("0x0A332")  # Challenge Timer
 
         return postgame_adjustments
 
