@@ -5,7 +5,7 @@ def get_random_pokemon(random, types=None, base_only=False):
     pokemon_pool = []
     if types is None or types[0] is None:
         pokemon_pool = [pkmn_name for pkmn_name, pkmn_data in data.pokemon.items() if
-                        pkmn_name != "UNOWN" and pkmn_data.is_base if base_only]
+                        pkmn_name != "UNOWN" and (pkmn_data.is_base or not base_only)]
     else:
         pokemon_pool = [pkmn_name for pkmn_name, pkmn_data in data.pokemon.items()
                         if pkmn_name != "UNOWN" and pkmn_data.types == types]

@@ -258,7 +258,7 @@ class PokemonCrystalWorld(World):
                 rival_fights = [(trainer_name, trainer) for trainer_name, trainer in self.generated_trainers.items() if
                                 trainer_name.startswith("RIVAL_" + evo_line[0])]
 
-                evo_line[0] = get_random_pokemon(self.random, base_only)
+                evo_line[0] = get_random_pokemon(self.random, base_only=base_only)
                 for trainer_name, trainer in rival_fights:
                     set_rival_fight(trainer_name, trainer, evo_line[0])
 
@@ -328,8 +328,11 @@ class PokemonCrystalWorld(World):
             "hm_badge_requirements"
         )
         if self.options.phone_trap_weight.value > 0:
-            print(f"Pokecrystal Debug: Filling phone slot data for player {self.player}")
-            slot_data["phone_traps"] = self.generated_phone_indices
+            if hasattr(self, "generated_phone_indices"):
+                slot_data["phone_traps"] = self.generated_phone_indices
+            else:
+                print(f"Pokecrystal Debug: Failed to get phone slot data for player {self.player}")
+
         return slot_data
 
     def write_spoiler(self, spoiler_handle) -> None:
