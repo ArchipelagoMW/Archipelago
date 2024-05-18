@@ -1,9 +1,10 @@
-from typing import ClassVar, Dict, Any, List, Union, Iterable
+from test.bases import WorldTestBase
+from test.general import gen_steps, setup_multiworld
+from test.multiworld.test_multiworlds import MultiworldTestBase
+from typing import Any, ClassVar, Dict, Iterable, List, Union
 
 from BaseClasses import Item
-from test.bases import WorldTestBase
-from test.general import setup_multiworld, gen_steps
-from test.multiworld.test_multiworlds import MultiworldTestBase
+
 from worlds.witness import WitnessWorld
 
 

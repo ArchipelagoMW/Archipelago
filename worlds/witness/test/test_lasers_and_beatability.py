@@ -10,8 +10,6 @@ class TestDisableNonRandomizedLasers(WitnessTestBase):
     }
 
     def test_can_reach_lasers_through_alternate_activation_triggers(self):
-        print("A")
-
         self.assertFalse(_has_lasers(1, self.world, False)(self.multiworld.state))
 
         self.collect_by_name("Triangles")

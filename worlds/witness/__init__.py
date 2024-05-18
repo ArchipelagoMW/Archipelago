@@ -5,7 +5,6 @@ import dataclasses
 from logging import error, warning
 from typing import Any, Dict, List, Optional, cast
 
-import worlds.terraria
 from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial
 
 from Options import OptionError, PerGameCommonOptions, Toggle

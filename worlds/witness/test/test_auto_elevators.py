@@ -1,4 +1,4 @@
-from worlds.witness.test import WitnessTestBase, WitnessMultiworldTestBase
+from worlds.witness.test import WitnessMultiworldTestBase, WitnessTestBase
 
 
 class TestElevatorsComeToYou(WitnessTestBase):
@@ -41,7 +41,7 @@ class TestElevatorsComeToYouBleed(WitnessMultiworldTestBase):
         "shuffle_doors": "panels",
     }
 
-    def testCorrectAccessPerPlayer(self):
+    def test_correct_access_per_player(self):
         self.assertFalse(self.multiworld.state.can_reach("Bunker Laser Panel", "Location", 1))
         self.assertFalse(self.multiworld.state.can_reach("Bunker Laser Panel", "Location", 2))
         self.assertFalse(self.multiworld.state.can_reach("Bunker Laser Panel", "Location", 3))

@@ -1,4 +1,4 @@
-from worlds.witness.test import WitnessTestBase, WitnessMultiworldTestBase
+from worlds.witness.test import WitnessMultiworldTestBase, WitnessTestBase
 
 
 class TestSymbols(WitnessTestBase):
@@ -61,8 +61,8 @@ class TestSymbolRequirementsMultiworld(WitnessMultiworldTestBase):
 
     def test_correct_symbol_requirements(self):
         desert_discard = "0x17CE7"
-        triangles = frozenset({frozenset({'Triangles'})})
-        arrows = frozenset({frozenset({'Arrows'})})
+        triangles = frozenset({frozenset({"Triangles"})})
+        arrows = frozenset({frozenset({"Arrows"})})
 
         self.assertEqual(self.multiworld.worlds[1].player_logic.REQUIREMENTS_BY_HEX[desert_discard], triangles)
         self.assertEqual(self.multiworld.worlds[2].player_logic.REQUIREMENTS_BY_HEX[desert_discard], arrows)
