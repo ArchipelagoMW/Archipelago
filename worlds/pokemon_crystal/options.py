@@ -217,10 +217,58 @@ class ExpModifier(Range):
     range_end = 255
 
 
+class PhoneTrapWeight(Range):
+    """Adds random Pokegear calls as traps"""
+    display_name = "Phone Trap Weight"
+    default = 0
+    range_start = 0
+    range_end = 8
+
+
+class SleepTrapWeight(Range):
+    """Trap that causes Sleep status on your party"""
+    display_name = "Sleep Trap Weight"
+    default = 0
+    range_start = 0
+    range_end = 8
+
+
+class PoisonTrapWeight(Range):
+    """Trap that causes Poison status on your party"""
+    display_name = "Poison Trap Weight"
+    default = 0
+    range_start = 0
+    range_end = 8
+
+
+class BurnTrapWeight(Range):
+    """Trap that causes Burn status on your party"""
+    display_name = "Burn Trap Weight"
+    default = 0
+    range_start = 0
+    range_end = 8
+
+
+class FreezeTrapWeight(Range):
+    """Trap that causes Freeze status on your party"""
+    display_name = "Freeze Trap Weight"
+    default = 0
+    range_start = 0
+    range_end = 8
+
+
+class ParalysisTrapWeight(Range):
+    """Trap that causes Paralysis status on your party"""
+    display_name = "Paralysis Trap Weight"
+    default = 0
+    range_start = 0
+    range_end = 8
+
+
 class ItemReceiveSound(DefaultOnToggle):
     """Play item received sound on receiving a remote item"""
     display_name = "Item Receive Sound"
-    
+
 
 class EnableMischief(Toggle):
     """If I told you what this does, it would ruin the surprises :)"""
@@ -256,5 +304,11 @@ class PokemonCrystalOptions(PerGameCommonOptions):
     blind_trainers: BlindTrainers
     better_marts: BetterMarts
     experience_modifier: ExpModifier
+    phone_trap_weight: PhoneTrapWeight
+    sleep_trap_weight: SleepTrapWeight
+    poison_trap_weight: PoisonTrapWeight
+    burn_trap_weight: BurnTrapWeight
+    freeze_trap_weight: FreezeTrapWeight
+    paralysis_trap_weight: ParalysisTrapWeight
     item_receive_sound: ItemReceiveSound
     enable_mischief: EnableMischief

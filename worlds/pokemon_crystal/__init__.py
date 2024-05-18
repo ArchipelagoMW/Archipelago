@@ -1,3 +1,5 @@
+import random
+
 import settings
 from typing import List, Union, ClassVar, Dict, Any, Tuple
 import copy
@@ -12,7 +14,7 @@ from .options import PokemonCrystalOptions
 from .phone import generate_phone_traps
 from .phone_data import PhoneScript
 from .regions import create_regions
-from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_classification
+from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_classification, reverse_offset_item_value
 from .rules import set_rules
 from .data import (PokemonData, MoveData, TrainerData, LearnsetData, data as crystal_data, BASE_OFFSET, MiscData)
 from .rom import generate_output
@@ -107,10 +109,38 @@ class PokemonCrystalWorld(World):
         if self.options.randomize_badges.value == 1:
             item_locations = [location for location in item_locations if "Badge" not in location.tags]
 
-        default_itempool = [self.create_item_by_code(
-            location.default_item_code if location.default_item_code > BASE_OFFSET
-            else get_random_filler_item(self.random))
-            for location in item_locations]
+        total_trap_weight = sum([
+            self.options.phone_trap_weight.value,
+            self.options.sleep_trap_weight.value,
+            self.options.poison_trap_weight.value,
+            self.options.burn_trap_weight.value,
+            self.options.freeze_trap_weight.value,
+            self.options.paralysis_trap_weight.value,
+        ])
+
+        def get_random_trap():
+            traps = []
+            traps += ["Phone Trap"] * self.options.phone_trap_weight.value
+            traps += ["Sleep Trap"] * self.options.sleep_trap_weight.value
+            traps += ["Poison Trap"] * self.options.poison_trap_weight.value
+            traps += ["Burn Trap"] * self.options.burn_trap_weight.value
+            traps += ["Freeze Trap"] * self.options.freeze_trap_weight.value
+            traps += ["Paralysis Trap"] * self.options.paralysis_trap_weight.value
+            return self.create_item(self.random.choice(traps))
+
+        default_itempool = []
+
+        for location in item_locations:
+            item_code = reverse_offset_item_value(location.default_item_code)
+            if item_code > BASE_OFFSET and get_item_classification(item_code) != ItemClassification.filler:
+                default_itempool += [self.create_item_by_code(item_code)]
+            elif self.random.randint(0, 100) < total_trap_weight:
+                default_itempool += [get_random_trap()]
+            elif item_code == BASE_OFFSET:
+                default_itempool += [self.create_item(get_random_filler_item(self.random))]
+            else:
+                default_itempool += [self.create_item_by_code(item_code)]
+
         self.multiworld.itempool += default_itempool
 
     def set_rules(self) -> None:
@@ -278,7 +308,8 @@ class PokemonCrystalWorld(World):
         if self.options.enable_mischief:
             self.generated_misc = misc_activities(self.generated_misc, self.random)
 
-        self.generated_phone_traps, self.generated_phone_indices = generate_phone_traps(self)
+        if self.options.phone_trap_weight > 0:
+            self.generated_phone_traps, self.generated_phone_indices = generate_phone_traps(self)
 
         generate_output(self, output_directory)
 

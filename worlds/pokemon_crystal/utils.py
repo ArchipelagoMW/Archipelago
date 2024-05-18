@@ -40,8 +40,18 @@ def get_random_held_item(random):
 
 
 def get_random_filler_item(random):
-    helditems = [item_id for item_id, item in data.items.items()
-                 if "Unique" not in item.tags and "INVALID" not in item.tags and "Trap" not in item.tags]
+    weighted_pool = [["Rare Candy"] * 3, ["Ether", "Elixer", "Max Ether", "Max Elixer", "Mysteryberry"] * 5,
+                     ["Water Stone", "Fire Stone", "Thunderstone", "Leaf Stone", "Sun Stone", "Moon Stone"] * 2,
+                     ["Escape Rope"] * 3, ["Nugget", "Star Piece", "Stardust", "Pearl", "Big Pearl"] * 2,
+                     ["Poke Ball", "Great Ball", "Ultra Ball"] * 5,
+                     ["Potion", "Super Potion", "Hyper Potion", "Energy Root", "Energypowder"] * 12,
+                     ["Full Restore"] * 2, ["Repel", "Super Repel", "Max Repel"] * 3,
+                     ["Revive", "Revival Powder"] * 4 + ["Max Revive"] * 2,
+                     ["HP Up", "PP Up", "Protein", "Carbos", "Calcium", "Iron"] * 5,
+                     ["Guard Spec", "Dire Hit", "X Attack", "X Defend", "X Speed", "X Special"] * 2,
+                     ["Heal Powder", "Burn Heal", "Parlyz Heal", "Ice Heal", "Antidote", "Awakening", "Full Heal"] * 5]
+    group = random.choice(weighted_pool)
+    return random.choice(group)
     return random.choice(helditems) + BASE_OFFSET
 
 
