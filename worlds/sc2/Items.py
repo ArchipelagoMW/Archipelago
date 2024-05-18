@@ -1262,6 +1262,18 @@ item_table = {
     ItemNames.BROOD_QUEEN_ENHANCED_MITOCHONDRIA:
         ItemData(276 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 16, SC2Race.ZERG, parent_item=ItemNames.BROOD_QUEEN,
                  origin={"ext"}),
+    ItemNames.DEFILER_PATHOGEN_PROJECTORS:
+        ItemData(276 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 17, SC2Race.ZERG, parent_item=ItemNames.DEFILER,
+                 origin={"ext"}),
+    ItemNames.DEFILER_TRAPDOOR_ADAPTATION:
+        ItemData(276 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 18, SC2Race.ZERG, parent_item=ItemNames.DEFILER,
+                 origin={"ext"}),
+    ItemNames.DEFILER_PREDATORY_CONSUMPTION:
+        ItemData(276 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 19, SC2Race.ZERG, parent_item=ItemNames.DEFILER,
+                 origin={"ext"}),
+    ItemNames.DEFILER_COMORBIDITY:
+        ItemData(276 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 20, SC2Race.ZERG, parent_item=ItemNames.DEFILER,
+                 origin={"ext"}),
 
     ItemNames.ZERGLING_RAPTOR_STRAIN:
         ItemData(300 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Strain, 0, SC2Race.ZERG, parent_item=ItemNames.ZERGLING,
@@ -1701,7 +1713,6 @@ second_pass_placeable_items: typing.Tuple[str, ...] = (
     ItemNames.PSI_DISRUPTER,
     ItemNames.PERDITION_TURRET,
     # Terran units without upgrades
-    ItemNames.HERC,
     ItemNames.WARHOUND,
     # General Terran upgrades without any dependencies
     ItemNames.SCV_ADVANCED_CONSTRUCTION,
@@ -1731,8 +1742,7 @@ second_pass_placeable_items: typing.Tuple[str, ...] = (
     # Zerg static defenses
     ItemNames.SPORE_CRAWLER,
     ItemNames.SPINE_CRAWLER,
-    # Defiler, Aberration (no upgrades)
-    ItemNames.DEFILER,
+    # Aberration (no upgrades)
     ItemNames.ABERRATION,
     # Spear of Adun Abilities
     ItemNames.SOA_CHRONO_SURGE,
