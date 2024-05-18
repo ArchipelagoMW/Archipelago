@@ -5,7 +5,7 @@ from .Regions import create_regions, randomize_act_entrances, chapter_act_info, 
 from .Locations import location_table, contract_locations, is_location_valid, get_location_names, TASKSANITY_START_ID, \
     get_total_locations
 from .Rules import set_rules
-from .Options import AHITOptions, slot_data_options, adjust_options, RandomizeHatOrder, EndGoal
+from .Options import AHITOptions, slot_data_options, adjust_options, RandomizeHatOrder, EndGoal, create_option_groups
 from .Types import HatType, ChapterIndex, HatInTimeItem, hat_type_to_item
 from .DeathWishLocations import create_dw_regions, dw_classes, death_wishes
 from .DeathWishRules import set_dw_rules, create_enemy_events, hit_list, bosses
@@ -28,6 +28,7 @@ icon_paths['yatta'] = local_path('data', 'yatta.png')
 
 class AWebInTime(WebWorld):
     theme = "partyTime"
+    option_groups = create_option_groups()
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide for setting up A Hat in Time to be played in Archipelago.",

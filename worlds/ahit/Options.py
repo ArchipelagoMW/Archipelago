@@ -1,12 +1,21 @@
-from typing import List, TYPE_CHECKING
+from typing import List, TYPE_CHECKING, Dict, Any
 from schema import Schema, Optional
 from dataclasses import dataclass
 from worlds.AutoWorld import PerGameCommonOptions
 from Options import Range, Toggle, DeathLink, Choice, OptionDict, DefaultOnToggle
+from BaseClasses import OptionGroup
 
 if TYPE_CHECKING:
     from . import HatInTimeWorld
-    
+
+
+def create_option_groups() -> List[OptionGroup]:
+    option_group_list: List[OptionGroup] = []
+    for name, options in ahit_option_groups.items():
+        option_group_list.append(OptionGroup(name=name, options=options))
+
+    return option_group_list
+
 
 def adjust_options(world: "HatInTimeWorld"):
     if world.options.HighestChapterCost < world.options.LowestChapterCost:
@@ -342,7 +351,7 @@ class HatItems(Toggle):
 
 
 class MinPonCost(Range):
-    """The minimum number of Pons that any shop item can cost."""
+    """The minimum number of Pons that any item in the Badge Seller's shop can cost."""
     display_name = "Minimum Shop Pon Cost"
     range_start = 10
     range_end = 800
@@ -350,7 +359,7 @@ class MinPonCost(Range):
 
 
 class MaxPonCost(Range):
-    """The maximum number of Pons that any shop item can cost."""
+    """The maximum number of Pons that any item in the Badge Seller's shop can cost."""
     display_name = "Maximum Shop Pon Cost"
     range_start = 10
     range_end = 800
@@ -690,6 +699,33 @@ class AHITOptions(PerGameCommonOptions):
     ParadeTrapWeight:         ParadeTrapWeight
 
     death_link:               DeathLink
+
+
+ahit_option_groups: Dict[str, List[Any]] = {
+    "General Options": [EndGoal, ShuffleStorybookPages, ShuffleAlpineZiplines, ShuffleSubconPaintings,
+                        MinPonCost, MaxPonCost, BadgeSellerMinItems, BadgeSellerMaxItems, LogicDifficulty,
+                        NoPaintingSkips, CTRLogic],
+
+    "Act Shuffle Options": [ActRandomizer, StartingChapter, LowestChapterCost, HighestChapterCost,
+                            ChapterCostIncrement, ChapterCostMinDifference, FinalChapterMinCost, FinalChapterMaxCost,
+                            FinaleShuffle, ActPlando, ActBlacklist],
+
+    "Item Options": [StartWithCompassBadge, CompassBadgeMode, RandomizeHatOrder, YarnAvailable, YarnCostMin,
+                     YarnCostMax, MinExtraYarn, HatItems, UmbrellaLogic, MaxExtraTimePieces, YarnBalancePercent,
+                     TimePieceBalancePercent],
+
+    "Arctic Cruise Options": [EnableDLC1, Tasksanity, TasksanityTaskStep, TasksanityCheckCount,
+                              ShipShapeCustomTaskGoal, ExcludeTour],
+
+    "Nyakuza Metro Options": [EnableDLC2, MetroMinPonCost, MetroMaxPonCost, NyakuzaThugMinShopItems,
+                              NyakuzaThugMaxShopItems, BaseballBat, NoTicketSkips],
+
+    "Death Wish Options": [EnableDeathWish, DWTimePieceRequirement, DWShuffle, DWShuffleCountMin, DWShuffleCountMax,
+                           DWEnableBonus, DWAutoCompleteBonuses, DWExcludeAnnoyingContracts, DWExcludeAnnoyingBonuses,
+                           DWExcludeCandles, DeathWishOnly],
+
+    "Trap Options": [TrapChance, BabyTrapWeight, LaserTrapWeight, ParadeTrapWeight]
+}
 
 
 slot_data_options: List[str] = [

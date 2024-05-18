@@ -292,7 +292,7 @@ def set_candle_dw_rules(name: str, world: "HatInTimeWorld"):
         coins: List[str] = []
         for coin in required_snatcher_coins[name]:
             coins.append(coin)
-            add_rule(full_clear, lambda state: state.has(coin, world.player))
+            add_rule(full_clear, lambda state, c=coin: state.has(c, world.player))
 
         # any coin works for the main objective
         add_rule(main_objective, lambda state: state.has(coins[0], world.player)

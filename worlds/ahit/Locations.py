@@ -964,7 +964,7 @@ snatcher_coins = {
                                                  dlc_flags=HatDLC.dlc2_dw),
 
     "Snatcher Coin - Bluefin Cat Train": LocData(0, "Bluefin Tunnel",
-                                                 snatcher_coin="Snatcher Coin - Bluefin Tunnel",
+                                                 snatcher_coin="Snatcher Coin - Bluefin Cat Train",
                                                  dlc_flags=HatDLC.dlc2_dw),
 
     "Snatcher Coin - Pink Paw Fence": LocData(0, "Pink Paw Station",
