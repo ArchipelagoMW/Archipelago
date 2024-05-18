@@ -60,6 +60,9 @@ class CampaignScroll(ScrollView):
 class MultiCampaignLayout(GridLayout):
     pass
 
+class DownloadDataWarningMessage(Label):
+    pass
+
 class CampaignLayout(GridLayout):
     pass
 
@@ -139,9 +142,8 @@ class SC2Manager(GameManager):
         self.campaign_panel.clear_widgets()
         if self.ctx.data_out_of_date:
             self.campaign_panel.add_widget(Label(text="", padding=[0, 5, 0, 5]))
-            warning_label = Label(
-                text="[color=d23300]Map/Mod data is out of date. Run /download_data in the client[/color]",
-                markup=True,
+            warning_label = DownloadDataWarningMessage(
+                text="Map/Mod data is out of date. Run /download_data in the client",
                 padding=[0, 25, 0, 25],
             )
             self.campaign_scroll_panel.border_on = True

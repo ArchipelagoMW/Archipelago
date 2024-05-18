@@ -4,10 +4,19 @@
     effect_cls: "ScrollEffect"
     canvas.after:
         Color:
-            rgba: (0.82, 0.2, 0, 1)
+            rgba: (0.82, 0.2, 0, root.border_on)
         Line:
             width: 1.5
-            rectangle: self.x+1 - 30*(not root.border_on), self.y+1 - 30*(not root.border_on), self.width-1 if root.border_on else 1, self.height-1 if root.border_on else 1
+            rectangle: self.x+1, self.y+1, self.width-1, self.height-1
+
+<DownloadDataWarningMessage>
+    color: (0, 0, 0, 1)
+    canvas.before:
+        Color:
+            rgba: (0xd2/0xff, 0x33/0xff, 0, 1)
+        Rectangle: 
+            pos: (self.x - 8, self.y - 8)
+            size: (self.width + 30, self.height + 16)
 
 <MultiCampaignLayout>
     cols: 1
