@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict, Tuple
 from .Locations import LocationData, valleyOfFire, daggerPeak, cliffsOfDesolation, lostCave, volcanicCavern \
     , dragonsLair, castleCourtyard, dungeonOfTorment, towerArmory \
     , castleTreasury, chimerasKeep, poisonedFields, hauntedCemetery \
@@ -7,7 +7,7 @@ from .Locations import LocationData, valleyOfFire, daggerPeak, cliffsOfDesolatio
     , battleTrenches, battleTowers, infernalFortress \
     , gatesOfTheUnderworld, plagueFiend, yeti
 
-inv_dict: dict[tuple, str] = {
+inv_dict: Dict[Tuple, str] = {
     (0x0, 0x6, 0x0): "Gold",
     (0x0, 0x7, 0x0): "Key",
     (0x0, 0xA, 0x0): "Level",
@@ -62,7 +62,7 @@ inv_dict: dict[tuple, str] = {
     (0x0, 0xC, 0x80): "Obelisk"
 }
 
-item_dict: dict[int, bytes] = {
+item_dict: Dict[int, bytes] = {
     77780000: [0x0, 0x0],
     77780001: [0x1, 0x1],
     77780002: [0x1, 0x2],
@@ -143,7 +143,7 @@ timers = [
     "Invulnerability"
 ]
 
-base_count: dict[str, int] = {
+base_count: Dict[str, int] = {
     "Key": 1,
     "Lightning Potion": 1,
     "Light Potion": 1,
@@ -198,7 +198,7 @@ base_count: dict[str, int] = {
     "Soul Savior": 1
 }
 
-levels: dict[int, str] = {
+levels: Dict[int, str] = {
     0x1: "Castle",
     0x2: "Mountain",
     0x7: "Town",
@@ -210,7 +210,7 @@ levels: dict[int, str] = {
 
 castle_id = [1, 6, 3, 4, 5]
 
-level_locations: dict[int, List[LocationData]] = {
+level_locations: Dict[int, List[LocationData]] = {
     0x11: castleCourtyard,
     0x12: dungeonOfTorment,
     0x13: towerArmory,
@@ -239,7 +239,7 @@ level_locations: dict[int, List[LocationData]] = {
     0x113: infernalFortress
 }
 
-spawners: dict[int, List[int]] = {
+spawners: Dict[int, List[int]] = {
     0x11: [0, 0, 0, 4, 3, 2, 0, 0, 2, 4, 2, 0, 2, 4, 0, 3, 4, 4, 3, 0, 2, 0, 0, 3, 4, 0, 2, 2, 0, 3, 0, 4, 3, 0, 0, 2, 0, 2, 2, 4, 3, 0, 3, 2, 4, 2, 2, 2, 4, 0, 4, 3, 2, 0, 4, 0, 3, 3, 4, 2, 3, 0, 0, 0, 2, 3, 4, 2, 2, 2, 2, 0, 3, 2, 0, 2, 0, 0, 3, 0, 4, 2, 2, 0, 0, 0, 3, 0, 3, 0, 3, 3, 0, 0, 4, 4, 3, 0, 2, 0, 2, 3, 0, 4, 0, 2, 2, 0, 2, 4, 0, 2, 0, 3, 4, 0, 4, 3, 2, 0, 3, 0],
     0x12: [0, 0, 0, 2, 3, 2, 0, 2, 0, 2, 3, 0, 2, 0, 2, 0, 3, 2, 0, 3, 2, 0, 3, 0, 0, 2, 0, 3, 0, 0, 4, 3, 0, 0, 0, 2, 4, 3, 2, 2, 0, 0, 0, 0, 2, 2, 0, 2, 0, 3, 4, 3, 0, 0, 2, 2, 3, 3, 3, 2, 2, 4, 4, 4],
     0x13: [0, 0, 0, 2, 0, 0, 0, 0, 4, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 4, 4, 2, 3, 0, 0, 3, 0, 2, 0, 2, 3, 3, 2, 0, 0, 2, 3, 0, 2, 0, 4, 2, 4, 2, 2, 3, 0, 2, 0, 3, 4, 3, 0, 0, 3, 3, 3, 4, 2, 3, 4, 3, 0, 0, 3, 2, 2, 2, 0, 2, 0, 3, 2, 0, 2, 0, 4, 4, 3, 0, 4, 3, 0, 0, 2, 3, 4],
@@ -325,7 +325,7 @@ level_header = [0xF9DD9C,
                 0xF9DABC,
                 0xF9DB74]
 
-difficulty_convert: dict[int, int] = {
+difficulty_convert: Dict[int, int] = {
     0x2: 0,
     0x1: 10,
     0x7: 20,
@@ -335,7 +335,7 @@ difficulty_convert: dict[int, int] = {
     0x8: 30
 }
 
-difficulty_lambda: dict[int, list[int]] = {
+difficulty_lambda: Dict[int, List[int]] = {
     0x2: [0, 1, 2, 3],
     0x1: [0, 3, 4, 5],
     0x7: [0, 5, 6, 7],  # No items required for Mountain (Difficulty 1 not included)

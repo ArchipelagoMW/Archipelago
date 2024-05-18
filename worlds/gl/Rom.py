@@ -6,7 +6,8 @@ import io
 import os
 
 import Utils
-from BaseClasses import Location, Item
+from typing import List, Dict, Tuple
+from BaseClasses import Location
 from settings import get_settings
 from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin
 from .Arrays import level_locations, level_size, level_address, item_dict, level_header
@@ -43,10 +44,10 @@ class LevelData:
     end_addr: int
     end_addr2: int
     end_addr3: int
-    items: list[bytearray]
-    spawners: list[bytearray]
-    objects: list[bytearray]
-    chests: list[bytearray]
+    items: List[bytearray]
+    spawners: List[bytearray]
+    objects: List[bytearray]
+    chests: List[bytearray]
     end: bytes
     obelisk = 0
     item = 0
@@ -94,7 +95,7 @@ class GLPatchExtension(APPatchExtension):
         options = json.loads(caller.get_file("options.json").decode("UTF-8"))
         shard_values = json.loads(caller.get_file(f"shard_values.json").decode("utf-8"))
         for i in range(len(level_locations)):
-            level: dict[str, (int, int)] = json.loads(caller.get_file(f"level_{i}.json").decode("utf-8"))
+            level: Dict[str, Tuple] = json.loads(caller.get_file(f"level_{i}.json").decode("utf-8"))
             stream.seek(level_address[i], 0)
             stream, data = get_level_data(stream, level_size[i])
             for j, (location_name, item) in enumerate(level.items()):
@@ -180,7 +181,7 @@ def write_files(world: "GauntletLegendsWorld", patch: GLProcedurePatch) -> None:
         patch.write_file(f"level_{i}.json", json.dumps(locations_to_dict(locations)).encode("UTF-8"))
 
 
-def locations_to_dict(locations: list[Location]) -> dict[str, (int, int)]:
+def locations_to_dict(locations: List[Location]) -> Dict[str, Tuple]:
     return {location.name: (location.item.code, location.item.player) for location in locations}
 
 
