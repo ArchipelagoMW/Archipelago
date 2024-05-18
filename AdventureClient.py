@@ -80,7 +80,7 @@ class AdventureContext(CommonContext):
         self.local_item_locations = {}
         self.dragon_speed_info = {}
 
-        options = Utils.get_options()
+        options = Utils.get_settings()
         self.display_msgs = options["adventure_options"]["display_msgs"]
 
     async def server_auth(self, password_requested: bool = False):
@@ -102,7 +102,7 @@ class AdventureContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == 'Connected':
             self.locations_array = None
-            if Utils.get_options()["adventure_options"].get("death_link", False):
+            if Utils.get_settings()["adventure_options"].get("death_link", False):
                 self.set_deathlink = True
             async_start(self.get_freeincarnates_used())
         elif cmd == "RoomInfo":
@@ -415,8 +415,8 @@ async def atari_sync_task(ctx: AdventureContext):
 
 
 async def run_game(romfile):
-    auto_start = Utils.get_options()["adventure_options"].get("rom_start", True)
-    rom_args = Utils.get_options()["adventure_options"].get("rom_args")
+    auto_start = Utils.get_settings()["adventure_options"].get("rom_start", True)
+    rom_args = Utils.get_settings()["adventure_options"].get("rom_args")
     if auto_start is True:
         import webbrowser
         webbrowser.open(romfile)
