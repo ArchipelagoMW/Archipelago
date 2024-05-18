@@ -261,7 +261,8 @@ class ALTTPWorld(World):
     fix_fake_world: bool = True
 
     clock_mode: str = ""
-    treasure_hunt_count: int = 1
+    treasure_hunt_required: int = 0
+    treasure_hunt_total: int = 0
 
     def __init__(self, *args, **kwargs):
         self.dungeon_local_item_names = set()

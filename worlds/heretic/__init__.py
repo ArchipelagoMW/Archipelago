@@ -182,7 +182,7 @@ class HereticWorld(World):
         # platform) Unless the user allows for it.
         if not allow_death_logic:
             for death_logic_location in Locations.death_logic_locations:
-                self.multiworld.exclude_locations[self.player].value.add(death_logic_location)
+                self.options.exclude_locations.value.add(death_logic_location)
     
     def create_item(self, name: str) -> HereticItem:
         item_id: int = self.item_name_to_id[name]

@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import Dict, List, NamedTuple, Optional, Set, Tuple, TYPE_CHECKING
 
+from Options import OptionError
 from .datatypes import Door, DoorType, RoomAndDoor, RoomAndPanel
 from .items import ALL_ITEM_TABLE, ItemType
 from .locations import ALL_LOCATION_TABLE, LocationClassification
@@ -149,8 +150,8 @@ class LingoPlayerLogic:
         early_color_hallways = world.options.early_color_hallways
 
         if location_checks == LocationChecks.option_reduced and door_shuffle != ShuffleDoors.option_none:
-            raise Exception("You cannot have reduced location checks when door shuffle is on, because there would not "
-                            "be enough locations for all of the door items.")
+            raise OptionError("You cannot have reduced location checks when door shuffle is on, because there would not"
+                              " be enough locations for all of the door items.")
 
         # Create door items, where needed.
         door_groups: Set[str] = set()
@@ -219,7 +220,7 @@ class LingoPlayerLogic:
             self.event_loc_to_item[self.level_2_location] = "Victory"
 
             if world.options.level_2_requirement == 1:
-                raise Exception("The Level 2 requirement must be at least 2 when LEVEL 2 is the victory condition.")
+                raise OptionError("The Level 2 requirement must be at least 2 when LEVEL 2 is the victory condition.")
         elif victory_condition == VictoryCondition.option_pilgrimage:
             self.victory_condition = "Pilgrim Antechamber - PILGRIM"
             self.add_location("Pilgrim Antechamber", "PILGRIM (Solved)", None,
@@ -236,20 +237,23 @@ class LingoPlayerLogic:
         elif location_checks == LocationChecks.option_insanity:
             location_classification = LocationClassification.insanity
 
+        if door_shuffle != ShuffleDoors.option_none and not early_color_hallways:
+            location_classification |= LocationClassification.small_sphere_one
+
         for location_name, location_data in ALL_LOCATION_TABLE.items():
             if location_name != self.victory_condition:
-                if location_classification not in location_data.classification:
+                if not (location_classification & location_data.classification):
                     continue
 
                 self.add_location(location_data.room, location_name, location_data.code, location_data.panels, world)
                 self.real_locations.append(location_name)
 
         if world.options.enable_pilgrimage and world.options.sunwarp_access == SunwarpAccess.option_disabled:
-            raise Exception("Sunwarps cannot be disabled when pilgrimage is enabled.")
+            raise OptionError("Sunwarps cannot be disabled when pilgrimage is enabled.")
 
         if world.options.shuffle_sunwarps:
             if world.options.sunwarp_access == SunwarpAccess.option_disabled:
-                raise Exception("Sunwarps cannot be shuffled if they are disabled.")
+                raise OptionError("Sunwarps cannot be shuffled if they are disabled.")
 
             self.sunwarp_mapping = list(range(0, 12))
             world.random.shuffle(self.sunwarp_mapping)
@@ -275,7 +279,7 @@ class LingoPlayerLogic:
                                 "iterations. This is very unlikely to happen on its own, and probably indicates some "
                                 "kind of logic error.")
 
-        if door_shuffle != ShuffleDoors.option_none and location_classification != LocationClassification.insanity \
+        if door_shuffle != ShuffleDoors.option_none and location_checks != LocationChecks.option_insanity \
                 and not early_color_hallways and world.multiworld.players > 1:
             # Under the combination of door shuffle, normal location checks, and no early color hallways, sphere 1 is
             # only three checks. In a multiplayer situation, this can be frustrating for the player because they are

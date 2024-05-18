@@ -433,7 +433,7 @@ def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
     if multiworld.key_drop_shuffle[player]:
         key_drop_enemies = {
             0x4DA20, 0x4DA5C, 0x4DB7F, 0x4DD73, 0x4DDC3, 0x4DE07, 0x4E201,
-            0x4E20A, 0x4E326, 0x4E4F7, 0x4E686, 0x4E70C, 0x4E7C8, 0x4E7FA
+            0x4E20A, 0x4E326, 0x4E4F7, 0x4E687, 0x4E70C, 0x4E7C8, 0x4E7FA
         }
         for enemy in key_drop_enemies:
             if rom.read_byte(enemy) == 0x12:
@@ -1269,7 +1269,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         rom.write_int32(0x18020C, 0)  # starting time (in frames, sint32)
 
     # set up goals for treasure hunt
-    rom.write_int16(0x180163, local_world.treasure_hunt_count)
+    rom.write_int16(0x180163, local_world.treasure_hunt_required)
     rom.write_bytes(0x180165, [0x0E, 0x28])  #  Triforce Piece Sprite
     rom.write_byte(0x180194, 1)  # Must turn in triforced pieces (instant win not enabled)
 
@@ -1859,7 +1859,7 @@ def apply_oof_sfx(rom, oof: str):
     rom.write_bytes(0x12803A, oof_bytes)
     rom.write_bytes(0x12803A + len(oof_bytes), [0xEB, 0xEB])
 
-	#Enemizer patch: prevent Enemizer from overwriting $3188 in SPC memory with an unused sound effect ("WHAT")
+    # Enemizer patch: prevent Enemizer from overwriting $3188 in SPC memory with an unused sound effect ("WHAT")
     rom.write_bytes(0x13000D, [0x00, 0x00, 0x00, 0x08])
 
 
@@ -2482,16 +2482,16 @@ def write_strings(rom, world, player):
             tt['sign_ganon'] = 'Go find the Triforce pieces with your friends... Ganon is invincible!'
         else:
             tt['sign_ganon'] = 'Go find the Triforce pieces... Ganon is invincible!'
-        if w.treasure_hunt_count > 1:
+        if w.treasure_hunt_required > 1:
             tt['murahdahla'] = "Hello @. I\nam Murahdahla, brother of\nSahasrahla and Aginah. Behold the power of\n" \
                                "invisibility.\n\n\n\n… … …\n\nWait! you can see me? I knew I should have\n" \
                                "hidden in  a hollow tree. If you bring\n%d Triforce pieces out of %d, I can reassemble it." % \
-                               (w.treasure_hunt_count, world.triforce_pieces_available[player])
+                               (w.treasure_hunt_required, w.treasure_hunt_total)
         else:
             tt['murahdahla'] = "Hello @. I\nam Murahdahla, brother of\nSahasrahla and Aginah. Behold the power of\n" \
                                "invisibility.\n\n\n\n… … …\n\nWait! you can see me? I knew I should have\n" \
                                "hidden in  a hollow tree. If you bring\n%d Triforce piece out of %d, I can reassemble it." % \
-                               (w.treasure_hunt_count, world.triforce_pieces_available[player])
+                               (w.treasure_hunt_required, w.treasure_hunt_total)
     elif world.goal[player] in ['pedestal']:
         tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Your goal is at the pedestal.'
         tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
@@ -2500,20 +2500,20 @@ def write_strings(rom, world, player):
         tt['ganon_fall_in'] = Ganon1_texts[local_random.randint(0, len(Ganon1_texts) - 1)]
         tt['ganon_fall_in_alt'] = 'You cannot defeat me until you finish your goal!'
         tt['ganon_phase_3_alt'] = 'Got wax in\nyour ears?\nI can not die!'
-        if w.treasure_hunt_count > 1:
+        if w.treasure_hunt_required > 1:
             if world.goal[player] == 'ganon_triforce_hunt' and world.players > 1:
                 tt['sign_ganon'] = 'You need to find %d Triforce pieces out of %d with your friends to defeat Ganon.' % \
-                                   (w.treasure_hunt_count, world.triforce_pieces_available[player])
+                                   (w.treasure_hunt_required, w.treasure_hunt_total)
             elif world.goal[player] in ['ganon_triforce_hunt', 'local_ganon_triforce_hunt']:
                 tt['sign_ganon'] = 'You need to find %d Triforce pieces out of %d to defeat Ganon.' % \
-                                   (w.treasure_hunt_count, world.triforce_pieces_available[player])
+                                   (w.treasure_hunt_required, w.treasure_hunt_total)
         else:
             if world.goal[player] == 'ganon_triforce_hunt' and world.players > 1:
                 tt['sign_ganon'] = 'You need to find %d Triforce piece out of %d with your friends to defeat Ganon.' % \
-                                   (w.treasure_hunt_count, world.triforce_pieces_available[player])
+                                   (w.treasure_hunt_required, w.treasure_hunt_total)
             elif world.goal[player] in ['ganon_triforce_hunt', 'local_ganon_triforce_hunt']:
                 tt['sign_ganon'] = 'You need to find %d Triforce piece out of %d to defeat Ganon.' % \
-                                   (w.treasure_hunt_count, world.triforce_pieces_available[player])
+                                   (w.treasure_hunt_required, w.treasure_hunt_total)
 
     tt['kakariko_tavern_fisherman'] = TavernMan_texts[local_random.randint(0, len(TavernMan_texts) - 1)]
 
@@ -3021,7 +3021,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options = Utils.get_options()
+    options = Utils.get_settings()
     if not file_name:
         file_name = options["lttp_options"]["rom_file"]
     if not os.path.exists(file_name):
