@@ -868,6 +868,10 @@ class WitnessPlayerLogic:
             "0x00C68",  # Challenge May Be Unsolvable
             "0x00C59",  # Challenge May Be Unsolvable
             "0x00C22",  # Challenge May Be Unsolvable
+            "0x0A3A8",  # Reset PP
+            "0x0A3B9",  # Reset PP
+            "0x0A3BB",  # Reset PP
+            "0x0A3AD",  # Reset PP
         }
 
         all_eligible_panels = [
