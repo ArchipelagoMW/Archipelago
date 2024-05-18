@@ -115,8 +115,6 @@ class Overcooked2World(World):
             region,
         )
 
-        location.event = is_event
-
         if priority:
             location.progress_type = LocationProgressType.PRIORITY
         else:
@@ -219,8 +217,6 @@ class Overcooked2World(World):
     # Autoworld Hooks
 
     def generate_early(self):
-        self.player_name = self.multiworld.player_name[self.player]
-
         # 0.0 to 1.0 where 1.0 is World Record
         self.star_threshold_scale = self.options.star_threshold_scale / 100.0
 

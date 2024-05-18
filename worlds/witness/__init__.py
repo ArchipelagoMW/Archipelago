@@ -7,14 +7,14 @@ from typing import Any, Dict, List, Optional, cast
 
 from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial
 
-from Options import PerGameCommonOptions, Toggle
+from Options import OptionError, PerGameCommonOptions, Toggle
 from worlds.AutoWorld import WebWorld, World
 
 from .data import static_items as static_witness_items
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import DoorItemDefinition, ItemData
 from .data.utils import get_audio_logs
-from .hints import CompactItemData, create_all_hints, generate_joke_hints, make_compact_hint_data, make_laser_hints
+from .hints import CompactItemData, create_all_hints, make_compact_hint_data, make_laser_hints
 from .locations import WitnessPlayerLocations, static_witness_locations
 from .options import TheWitnessOptions
 from .player_items import WitnessItem, WitnessPlayerItems
@@ -124,9 +124,9 @@ class WitnessWorld(World):
             warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any progression"
                     f" items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle if that doesn't seem right.")
         elif not interacts_sufficiently_with_multiworld and self.multiworld.players > 1:
-            raise Exception(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have enough"
-                            f" progression items that can be placed in other players' worlds. Please turn on Symbol"
-                            f" Shuffle, Door Shuffle, or Obelisk Keys.")
+            raise OptionError(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have enough"
+                              f" progression items that can be placed in other players' worlds. Please turn on Symbol"
+                              f" Shuffle, Door Shuffle, or Obelisk Keys.")
 
     def generate_early(self) -> None:
         disabled_locations = self.options.exclude_locations.value
@@ -319,13 +319,6 @@ class WitnessWorld(World):
         # Audio Log Hints
 
         hint_amount = self.options.hint_amount.value
-
-        credits_hint = (
-            "This Randomizer is brought to you by\n"
-            "NewSoupVi, Jarno, blastron,\n"
-            "jbzdarkid, sigma144, IHNN, oddGarrett, Exempt-Medic.", -1, -1
-        )
-
         audio_logs = get_audio_logs().copy()
 
         if hint_amount:
@@ -344,15 +337,8 @@ class WitnessWorld(World):
                     audio_log = audio_logs.pop()
                     self.log_ids_to_hints[int(audio_log, 16)] = compact_hint_data
 
-        if audio_logs:
-            audio_log = audio_logs.pop()
-            self.log_ids_to_hints[int(audio_log, 16)] = credits_hint
-
-        joke_hints = generate_joke_hints(self, len(audio_logs))
-
-        while audio_logs:
-            audio_log = audio_logs.pop()
-            self.log_ids_to_hints[int(audio_log, 16)] = joke_hints.pop()
+        # Client will generate joke hints for these.
+        self.log_ids_to_hints.update({int(audio_log, 16): ("", -1, -1) for audio_log in audio_logs})
 
         # Options for the client & auto-tracker
 
