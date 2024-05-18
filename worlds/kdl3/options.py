@@ -4,7 +4,7 @@ from typing import List
 
 from BaseClasses import OptionGroup
 from Options import DeathLinkMixin, Choice, Toggle, OptionDict, Range, PlandoBosses, DefaultOnToggle, \
-    PerGameCommonOptions
+    PerGameCommonOptions, Visibility
 from .names import location_name
 
 
@@ -46,13 +46,14 @@ class GoalSpeed(Choice):
     option_fast = 1
 
 
-class TotalHeartStars(Range):
+class MaxHeartStars(Range):
     """
     Maximum number of heart stars to include in the pool of items.
+    If fewer available locations exist in the pool than this number, the number of available locations will be used instead.
     """
     display_name = "Max Heart Stars"
     range_start = 5  # set to 5 so strict bosses does not degrade
-    range_end = 50  # 30 default locations + 30 stage clears + 5 bosses - 14 progression items = 51, so round down
+    range_end = 99  # previously set to 50, set to highest it can be should there be less locations than heart stars
     default = 30
 
 
@@ -320,6 +321,7 @@ class KirbyFlavor(OptionDict):
       "14": "F8F8F8",
       "15": "B03830",
     }
+    visibility = Visibility.template | Visibility.spoiler  # likely never supported on guis
 
 
 class GooeyFlavorPreset(Choice):
@@ -371,6 +373,7 @@ class GooeyFlavor(OptionDict):
         "8": "D0C0C0",
         "9": "F8F8F8",
     }
+    visibility = Visibility.template | Visibility.spoiler  # likely never supported on guis
 
 
 class MusicShuffle(Choice):
@@ -410,13 +413,23 @@ class Gifting(Toggle):
     display_name = "Gifting"
 
 
+class TotalHeartStars(Range):
+    """
+    Deprecated. Use max_heart_stars instead. Supported for only one version.
+    """
+    default = -1
+    range_start = 5
+    range_end = 99
+    visibility = Visibility.none
+
+
 @dataclass
 class KDL3Options(PerGameCommonOptions, DeathLinkMixin):
     remote_items: RemoteItems
     game_language: GameLanguage
     goal: Goal
     goal_speed: GoalSpeed
-    total_heart_stars: TotalHeartStars
+    max_heart_stars: MaxHeartStars
     heart_stars_required: HeartStarsRequired
     filler_percentage: FillerPercentage
     trap_percentage: TrapPercentage
@@ -443,9 +456,11 @@ class KDL3Options(PerGameCommonOptions, DeathLinkMixin):
     music_shuffle: MusicShuffle
     virtual_console: VirtualConsoleChanges
 
+    total_heart_stars: TotalHeartStars  # remove in 2 versions
+
 
 kdl3_option_groups: List[OptionGroup] = [
-    OptionGroup("Goal Options", [Goal, GoalSpeed, TotalHeartStars, HeartStarsRequired, JumpingTarget, ]),
+    OptionGroup("Goal Options", [Goal, GoalSpeed, MaxHeartStars, HeartStarsRequired, JumpingTarget, ]),
     OptionGroup("World Options", [RemoteItems, StrictBosses, OpenWorld, OpenWorldBossRequirement, ConsumableChecks,
                                   StarChecks, FillerPercentage, TrapPercentage, GooeyTrapPercentage,
                                   SlowTrapPercentage, AbilityTrapPercentage, LevelShuffle, BossShuffle,

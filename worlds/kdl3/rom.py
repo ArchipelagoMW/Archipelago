@@ -550,10 +550,11 @@ def patch_rom(world: "KDL3World", patch: KDL3ProcedurePatch) -> None:
     patch.write_token(APTokenTypes.WRITE, 0x944E, struct.pack("H", world.options.jumping_target))
 
     from Utils import __version__
-    patch.name = bytearray(
+    patch_name = bytearray(
         f'KDL3{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
-    patch.name.extend([0] * (21 - len(patch.name)))
-    patch.write_token(APTokenTypes.WRITE, 0x3C000, bytes(patch.name))
+    patch_name.extend([0] * (21 - len(patch_name)))
+    patch.name = bytes(patch_name)
+    patch.write_token(APTokenTypes.WRITE, 0x3C000, patch.name)
     patch.write_token(APTokenTypes.WRITE, 0x3C020, world.options.game_language.value.to_bytes(1, "little"))
 
     patch.write_token(APTokenTypes.COPY, 0x7FC0, (21, 0x3C000))

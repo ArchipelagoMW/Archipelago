@@ -77,9 +77,9 @@ filler_item_weights = {
 }
 
 star_item_weights = {
-    "Little Star": 4,
-    "Medium Star": 2,
-    "Big Star": 1
+    "Little Star": 16,
+    "Medium Star": 8,
+    "Big Star": 4
 }
 
 total_filler_weights = {

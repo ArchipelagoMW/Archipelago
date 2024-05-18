@@ -85,6 +85,12 @@ class KDL3World(World):
 
     create_regions = create_levels
 
+    def generate_early(self) -> None:
+        if self.options.total_heart_stars != -1:
+            logger.warning(f"Kirby's Dream Land 3 ({self.player_name}): Use of \"total_heart_stars\" is deprecated. "
+                           f"Please use \"max_heart_stars\" instead.")
+            self.options.max_heart_stars.value = self.options.total_heart_stars.value
+
     def create_item(self, name: str, force_non_progression: bool = False) -> KDL3Item:
         item = item_table[name]
         classification = ItemClassification.filler
@@ -245,21 +251,20 @@ class KDL3World(World):
         remaining_items = len(location_table) - len(itempool)
         if not self.options.consumables:
             remaining_items -= len(consumable_locations)
-        remaining_items -= len(star_locations)
-        if self.options.starsanity:
-            # star fill, keep consumable pool locked to consumable and fill 767 stars specifically
-            star_items = list(star_item_weights.keys())
-            star_weights = list(star_item_weights.values())
-            itempool.extend([self.create_item(item) for item in self.random.choices(star_items, weights=star_weights,
-                                                                                    k=767)])
-        total_heart_stars = self.options.total_heart_stars
+        if not self.options.starsanity:
+            remaining_items -= len(star_locations)
+        max_heart_stars = self.options.max_heart_stars.value
+        if max_heart_stars > remaining_items:
+            max_heart_stars = remaining_items
         # ensure at least 1 heart star required per world
-        required_heart_stars = max(int(total_heart_stars * required_percentage), 5)
-        filler_items = total_heart_stars - required_heart_stars
-        filler_amount = math.floor(filler_items * (self.options.filler_percentage / 100.0))
-        trap_amount = math.floor(filler_amount * (self.options.trap_percentage / 100.0))
-        filler_amount -= trap_amount
-        non_required_heart_stars = filler_items - filler_amount - trap_amount
+        required_heart_stars = min(max(int(max_heart_stars * required_percentage), 5), 99)
+        filler_items = remaining_items - required_heart_stars
+        converted_heart_stars = math.floor((max_heart_stars - required_heart_stars) * (self.options.filler_percentage / 100.0))
+        non_required_heart_stars = max_heart_stars - converted_heart_stars - required_heart_stars
+        filler_items -= non_required_heart_stars
+        trap_amount = math.floor(filler_items * (self.options.trap_percentage / 100.0))
+
+        filler_items -= trap_amount
         self.required_heart_stars = required_heart_stars
         # handle boss requirements here
         requirements = [required_heart_stars]
@@ -281,8 +286,8 @@ class KDL3World(World):
                 requirements.insert(i - 1, quotient * i)
         self.boss_requirements = requirements
         itempool.extend([self.create_item("Heart Star") for _ in range(required_heart_stars)])
-        itempool.extend([self.create_item(self.get_filler_item_name(False))
-                         for _ in range(filler_amount + (remaining_items - total_heart_stars))])
+        itempool.extend([self.create_item(self.get_filler_item_name(bool(self.options.starsanity.value)))
+                         for _ in range(filler_items)])
         itempool.extend([self.create_item(self.get_trap_item_name())
                          for _ in range(trap_amount)])
         itempool.extend([self.create_item("Heart Star", True) for _ in range(non_required_heart_stars)])
