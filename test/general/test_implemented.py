@@ -3,6 +3,7 @@ import unittest
 from Fill import distribute_items_restrictive
 from NetUtils import encode
 from worlds.AutoWorld import AutoWorldRegister, call_all
+from worlds import failed_world_loads
 from . import setup_solo_multiworld
 
 
@@ -47,3 +48,7 @@ class TestImplemented(unittest.TestCase):
                 for key, data in multiworld.worlds[1].fill_slot_data().items():
                     self.assertIsInstance(key, str, "keys in slot data must be a string")
                     self.assertIsInstance(encode(data), str, f"object {type(data).__name__} not serializable.")
+
+    def test_no_failed_world_loads(self):
+        if failed_world_loads:
+            self.fail(f"The following worlds failed to load: {failed_world_loads}")
