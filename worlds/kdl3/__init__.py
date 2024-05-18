@@ -215,7 +215,7 @@ class KDL3World(World):
             locations = [self.multiworld.get_location(spawn, self.player) for spawn in spawns]
             items: List[Item] = [self.create_item(animal) for animal in animal_pool]
             allstate = CollectionState(self.multiworld)
-            for item in [*copy_ability_table, *animal_friend_table, *["Heart Star" for _ in range(50)]]:
+            for item in [*copy_ability_table, *animal_friend_table, *["Heart Star" for _ in range(99)]]:
                 self.collect(allstate, self.create_item(item))
             self.random.shuffle(locations)
             fill_restrictive(self.multiworld, allstate, locations, items, True, True)

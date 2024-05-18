@@ -4,7 +4,7 @@ from typing import List
 
 from BaseClasses import OptionGroup
 from Options import DeathLinkMixin, Choice, Toggle, OptionDict, Range, PlandoBosses, DefaultOnToggle, \
-    PerGameCommonOptions, Visibility
+    PerGameCommonOptions, Visibility, NamedRange
 from .names import location_name
 
 
@@ -414,13 +414,16 @@ class Gifting(Toggle):
     display_name = "Gifting"
 
 
-class TotalHeartStars(Range):
+class TotalHeartStars(NamedRange):
     """
     Deprecated. Use max_heart_stars instead. Supported for only one version.
     """
     default = -1
     range_start = 5
     range_end = 99
+    special_range_names = {
+        "default": -1
+    }
     visibility = Visibility.none
 
 
