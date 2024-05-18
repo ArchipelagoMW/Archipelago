@@ -501,7 +501,25 @@ def distribute_items_restrictive(multiworld: MultiWorld) -> None:
         print_data = {"items": items_counter, "locations": locations_counter}
         logging.info(f"Per-Player counts: {print_data})")
         if unfilled:
-            raise FillError(f"Not enough items to fill all locations.")
+            for player in multiworld.player_ids:
+                locs_diff = locations_counter[player] - items_counter[player]
+                if locs_diff:
+                    logging.warning(
+                        f"Player {multiworld.get_player_name(player)} had {locs_diff} more locations than items.")
+            raise FillError(
+                f"Unable to fill all locations.\n" +
+                f"Unfilled Locations({len(unfilled)}): {unfilled}"
+            )
+        else:
+            for player in multiworld.player_ids:
+                items_diff = items_counter[player] - locations_counter[player]
+                if items_diff:
+                    logging.warning(
+                        f"Player {multiworld.get_player_name(player)} had {items_diff} more items than locations.")
+            logging.warning(
+                f"Unable to place all items.\n" +
+                f"Unplaced items({len(unplaced)}): {unplaced}"
+            )
 
 
 def flood_items(multiworld: MultiWorld) -> None:
