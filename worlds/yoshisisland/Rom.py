@@ -3,7 +3,7 @@ import os
 import Utils
 from worlds.Files import APDeltaPatch
 from settings import get_settings
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Collection, SupportsIndex
 
 from .Options import YoshiColors, BowserDoor, PlayerGoal, MinigameChecks
 
@@ -396,7 +396,7 @@ location_table = {
     0x30510B: [0x14B2, 4]
 }
 
-class LocalRom(object):
+class LocalRom:
 
     def __init__(self, file: str) -> None:
         self.name = None
@@ -413,13 +413,13 @@ class LocalRom(object):
     def read_byte(self, address: int) -> int:
         return self.buffer[address]
 
-    def read_bytes(self, startaddress: int, length: int) -> bytes:
+    def read_bytes(self, startaddress: int, length: int) -> bytearray:
         return self.buffer[startaddress:startaddress + length]
 
     def write_byte(self, address: int, value: int) -> None:
         self.buffer[address] = value
 
-    def write_bytes(self, startaddress: int, values: bytearray) -> None:
+    def write_bytes(self, startaddress: int, values: Collection[SupportsIndex]) -> None:
         self.buffer[startaddress:startaddress + len(values)] = values
 
     def write_to_file(self, file: str) -> None:
