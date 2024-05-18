@@ -40,7 +40,9 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
             continue
 
         if location.item and location.item.player == world.player:
-            write_bytes(patched_rom, [reverse_offset_item_value(location.item.code)], location.rom_address)
+            item_id = reverse_offset_item_value(location.item.code)
+            item_id = item_id - 256 if item_id > 256 else item_id
+            write_bytes(patched_rom, [item_id], location.rom_address)
         else:
             write_bytes(patched_rom, [item_const_name_to_id("AP_ITEM")], location.rom_address)
 
@@ -179,6 +181,11 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
                         pokemon_data.append(move_id)
             write_bytes(patched_rom, pokemon_data, address)
             address += len(pokemon)
+
+    if world.options.randomize_tm_moves.value:
+        tm_moves = [tm_data.move_id for _name, tm_data in world.generated_tms.items()]
+        address = data.rom_addresses["AP_Setting_TMMoves"]
+        write_bytes(patched_rom, tm_moves, address)
 
     if world.options.enable_mischief:
         address = data.rom_addresses["AP_Misc_FuchsiaTrainers"] + 1
@@ -332,4 +339,5 @@ def get_random_move(random):
 def get_random_helditem(random):
     helditems = [item_id for item_id, item in data.items.items(
     ) if "Unique" not in item.tags and "INVALID" not in item.tags]
-    return random.choice(helditems)
+    item = random.choice(helditems)
+    return item if item < 256 else item - 256

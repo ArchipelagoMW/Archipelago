@@ -112,8 +112,15 @@ class RandomizeLearnsets(Choice):
     option_start_with_four_moves = 2
 
 
+class RandomizeTMMoves(Toggle):
+    """Randomizes the moves available as TMs"""
+    display_name = "Randomize TM Moves"
+    default = 0
+
+
 class TMCompatibility(Range):
     """Percent chance for Pokemon to be compatible with a TM"""
+    display_name = "TM Compatibility"
     default = 0
     range_start = 0
     range_end = 100
@@ -125,6 +132,7 @@ class TMCompatibility(Range):
 
 class HMCompatibility(Range):
     """Percent chance for Pokemon to be compatible with a HM"""
+    display_name = "HM Compatibility"
     default = 0
     range_start = 0
     range_end = 100
@@ -295,6 +303,7 @@ class PokemonCrystalOptions(PerGameCommonOptions):
     randomize_static_pokemon: RandomizeStaticPokemon
     randomize_trainer_parties: RandomizeTrainerParties
     randomize_learnsets: RandomizeLearnsets
+    randomize_tm_moves: RandomizeTMMoves
     tm_compatibility: TMCompatibility
     hm_compatibility: HMCompatibility
     randomize_base_stats: RandomizeBaseStats

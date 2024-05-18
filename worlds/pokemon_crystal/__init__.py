@@ -16,7 +16,8 @@ from .phone_data import PhoneScript
 from .regions import create_regions
 from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_classification, reverse_offset_item_value
 from .rules import set_rules
-from .data import (PokemonData, MoveData, TrainerData, LearnsetData, data as crystal_data, BASE_OFFSET, MiscData)
+from .data import (PokemonData, MoveData, TrainerData, LearnsetData, data as crystal_data, BASE_OFFSET, MiscData,
+                   TMHMData)
 from .rom import generate_output
 from .locations import create_locations, PokemonCrystalLocation, create_location_label_to_id_map
 from .utils import get_random_pokemon, get_random_filler_item, get_random_held_item, get_random_types, get_type_colors, \
@@ -78,6 +79,7 @@ class PokemonCrystalWorld(World):
     generated_phone_traps: List[PhoneScript]
     generated_phone_indices: List[int]
     generated_misc: MiscData
+    generated_tms: Dict[str, TMHMData]
 
     def generate_early(self) -> None:
         if self.options.johto_only:
@@ -133,7 +135,10 @@ class PokemonCrystalWorld(World):
         for location in item_locations:
             item_code = location.default_item_code
             if item_code > BASE_OFFSET and get_item_classification(item_code) != ItemClassification.filler:
-                default_itempool += [self.create_item_by_code(item_code)]
+                if item_code in crystal_data.tm_replace_map and self.options.randomize_tm_moves:
+                    default_itempool += [self.create_item_by_code(item_code + 256)]
+                else:
+                    default_itempool += [self.create_item_by_code(item_code)]
             elif self.random.randint(0, 100) < total_trap_weight:
                 default_itempool += [get_random_trap()]
             elif item_code == BASE_OFFSET:
@@ -193,9 +198,20 @@ class PokemonCrystalWorld(World):
                                    ["CHIKORITA", "BAYLEEF", "MEGANIUM"])
         self.generated_trainers = copy.deepcopy(crystal_data.trainers)
         self.generated_misc = copy.deepcopy(crystal_data.misc)
+        self.generated_tms = copy.deepcopy(crystal_data.tmhm)
         self.generated_palettes = {}
         self.generated_phone_traps = []
         self.generated_phone_indices = []
+
+        if self.options.randomize_tm_moves.value:
+            move_pool = [move_data for move_name, move_data in copy.deepcopy(crystal_data.moves).items() if
+                         not move_data.is_hm and move_name != "ROCK_SMASH"]
+            self.random.shuffle(move_pool)
+            for tm_name, tm_data in self.generated_tms.items():
+                if tm_data.is_hm or tm_name == "ROCK_SMASH":
+                    continue
+                new_move = move_pool.pop()
+                self.generated_tms[tm_name] = TMHMData(tm_data.tm_num, new_move.type, False, new_move.id)
 
         if self.options.randomize_types.value > 0:
             for pkmn_name, pkmn_data in self.generated_pokemon.items():
@@ -247,7 +263,7 @@ class PokemonCrystalWorld(World):
                 self.generated_pokemon[pkmn_name] = self.generated_pokemon[pkmn_name]._replace(learnset=new_learnset)
 
             if self.options.tm_compatibility > 0 or self.options.hm_compatibility > 0:
-                new_tmhms = get_tmhm_compatibility(self.options.tm_compatibility.value,
+                new_tmhms = get_tmhm_compatibility(self.generated_tms, self.options.tm_compatibility.value,
                                                    self.options.hm_compatibility.value, pkmn_data.types,
                                                    self.generated_pokemon[pkmn_name].tm_hm, self.random)
                 self.generated_pokemon[pkmn_name] = self.generated_pokemon[pkmn_name]._replace(tm_hm=new_tmhms)

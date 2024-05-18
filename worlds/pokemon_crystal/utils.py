@@ -61,9 +61,9 @@ def get_random_pokemon_id(random):
     return random.choice(pokemon_pool)
 
 
-def get_tmhm_compatibility(tm_value, hm_value, types, vanilla_learnset, random):
+def get_tmhm_compatibility(tms, tm_value, hm_value, types, vanilla_learnset, random):
     tmhms = []
-    for tm_name, tm_data in data.tmhm.items():
+    for tm_name, tm_data in tms.items():
         use_value = hm_value if tm_data.is_hm else tm_value
         if tm_data.type in types:
             use_value = use_value * 2

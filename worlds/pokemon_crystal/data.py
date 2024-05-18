@@ -71,7 +71,6 @@ class MoveData(NamedTuple):
     accuracy: int
     pp: int
     is_hm: bool
-    desc: List[str]
     name: str
 
 
@@ -79,6 +78,7 @@ class TMHMData(NamedTuple):
     tm_num: int
     type: str
     is_hm: bool
+    move_id: int
 
 
 class TrainerData(NamedTuple):
@@ -124,6 +124,7 @@ class PokemonCrystalData:
     types: List[str]
     type_ids: Dict[str, int]
     tmhm: Dict[str, TMHMData]
+    tm_replace_map: List[int]
     misc: MiscData
 
     def __init__(self) -> None:
@@ -207,6 +208,7 @@ def _init() -> None:
     # items
 
     data.items = {}
+    data.tm_replace_map = []
     for item_constant_name, attributes in items_json.items():
         item_classification = None
         if attributes["classification"] == "PROGRESSION":
@@ -228,6 +230,16 @@ def _init() -> None:
             item_classification,
             frozenset(attributes["tags"])
         )
+        if attributes["name"].startswith("TM") and item_constant_name != "TM_ROCK_SMASH":
+            tm_num = attributes["name"][2:4]
+            data.items[item_codes[item_constant_name] + 256] = ItemData(
+                "TM" + tm_num,
+                item_codes[item_constant_name],
+                "TM_" + tm_num,
+                item_classification,
+                frozenset(attributes["tags"])
+            )
+            data.tm_replace_map.append(item_codes[item_constant_name] + BASE_OFFSET)
 
     data.ram_addresses = {}
     for address_name, address in ram_address_data.items():
@@ -263,7 +275,6 @@ def _init() -> None:
             move_attributes["accuracy"],
             move_attributes["pp"],
             move_attributes["is_hm"],
-            move_attributes["desc"],
             move_attributes["name"],
         )
 
@@ -299,7 +310,8 @@ def _init() -> None:
         data.tmhm[tm_name] = TMHMData(
             tm_data["tm_num"],
             tm_data["type"],
-            tm_data["is_hm"]
+            tm_data["is_hm"],
+            move_data[tm_name]["id"]
         )
 
 
