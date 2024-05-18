@@ -707,8 +707,8 @@ ahit_option_groups: Dict[str, List[Any]] = {
                         NoPaintingSkips, CTRLogic],
 
     "Act Options": [ActRandomizer, StartingChapter, LowestChapterCost, HighestChapterCost,
-                            ChapterCostIncrement, ChapterCostMinDifference, FinalChapterMinCost, FinalChapterMaxCost,
-                            FinaleShuffle, ActPlando, ActBlacklist],
+                    ChapterCostIncrement, ChapterCostMinDifference, FinalChapterMinCost, FinalChapterMaxCost,
+                    FinaleShuffle, ActPlando, ActBlacklist],
 
     "Item Options": [StartWithCompassBadge, CompassBadgeMode, RandomizeHatOrder, YarnAvailable, YarnCostMin,
                      YarnCostMax, MinExtraYarn, HatItems, UmbrellaLogic, MaxExtraTimePieces, YarnBalancePercent,
