@@ -7,7 +7,7 @@ from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .time_logic import TimeLogicMixin
 from ..options import SeasonRandomization
-from ..stardew_rule import StardewRule, True_
+from ..stardew_rule import StardewRule, True_, true_
 from ..strings.generic_names import Generic
 from ..strings.season_names import Season
 
@@ -50,6 +50,8 @@ class SeasonLogic(BaseLogic[Union[HasLogicMixin, SeasonLogicMixin, TimeLogicMixi
         return self.logic.received(season)
 
     def has_any(self, seasons: Iterable[str]):
+        if seasons == Season.all:
+            return true_
         if not seasons:
             # That should be false, but I'm scared.
             return True_()

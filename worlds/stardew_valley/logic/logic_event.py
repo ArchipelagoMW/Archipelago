@@ -5,7 +5,7 @@ from ..strings.metal_names import MetalBar, Ore
 from ..strings.region_names import Region
 
 all_events = event_names.all_events.copy()
-all_logic_events = set()
+all_logic_events = list()
 
 
 @dataclass(frozen=True)
@@ -25,7 +25,7 @@ class LogicItemEvent(LogicEvent):
 
 def register_item_event(item: str, region: str = Region.farm):
     event = LogicItemEvent(item, region)
-    all_logic_events.add(event)
+    all_logic_events.append(event)
     all_events.add(event.name)
 
 

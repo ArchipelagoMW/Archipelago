@@ -141,7 +141,7 @@ def load_item_csv():
 
 events = [
     ItemData(None, e, ItemClassification.progression)
-    for e in all_events
+    for e in sorted(all_events)
 ]
 
 all_items: List[ItemData] = load_item_csv() + events

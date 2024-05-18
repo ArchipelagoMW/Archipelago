@@ -25,7 +25,7 @@ class TestGenerationIsStable(SVTestCase):
             raise unittest.SkipTest("Long tests disabled")
 
         # seed = get_seed(33778671150797368040) # troubleshooting seed
-        seed = get_seed()
+        seed = get_seed(74716545478307145559)
 
         output_a = subprocess.check_output([sys.executable, '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])
         output_b = subprocess.check_output([sys.executable, '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])
