@@ -371,7 +371,7 @@ class LingoPlayerLogic:
                 # doors mode, and when sunwarps are disabled or sunwarp shuffle is on and the Color Hunt sunwarp is not
                 # an exit. This is because these two rooms would then be inaccessible without roof access, and we can't
                 # hide the Owl Hallway entrance behind roof access.
-                if painting.room == "Color Hunt" or painting.room == "Champion's Rest":
+                if painting.room in ["Color Hunt", "Champion's Rest"]:
                     if world.options.sunwarp_access == SunwarpAccess.option_disabled\
                             or (world.options.shuffle_sunwarps and "Color Hunt" not in self.sunwarp_exits):
                         return False
