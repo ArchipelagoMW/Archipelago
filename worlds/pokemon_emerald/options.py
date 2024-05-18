@@ -89,7 +89,7 @@ class RandomizeOverworldItems(DefaultOnToggle):
     """
     Adds items on the ground with a Pokeball sprite to the pool
     """
-    # display_name = "Randomize Overworld Items"
+    display_name = "Randomize Overworld Items"
 
 
 class RandomizeHiddenItems(Toggle):
