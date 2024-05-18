@@ -1,6 +1,6 @@
 from BaseClasses import Location
 from .GameID import jak1_name
-from .locs import CellLocations as Cells, ScoutLocations as Scouts
+from .locs import CellLocations as Cells, ScoutLocations as Scouts, SpecialLocations as Specials
 
 
 class JakAndDaxterLocation(Location):
@@ -8,9 +8,9 @@ class JakAndDaxterLocation(Location):
 
 
 # All Locations
-# Because all items in Jak And Daxter are unique and do not regenerate, we can use this same table as our item table.
 # Each Item ID == its corresponding Location ID. While we're here, do all the ID conversions needed.
 location_table = {
+    **{Cells.to_ap_id(k): Cells.loc7SF_cellTable[k] for k in Cells.loc7SF_cellTable},
     **{Cells.to_ap_id(k): Cells.locGR_cellTable[k] for k in Cells.locGR_cellTable},
     **{Cells.to_ap_id(k): Cells.locSV_cellTable[k] for k in Cells.locSV_cellTable},
     **{Cells.to_ap_id(k): Cells.locFJ_cellTable[k] for k in Cells.locFJ_cellTable},
@@ -42,5 +42,6 @@ location_table = {
     **{Scouts.to_ap_id(k): Scouts.locSC_scoutTable[k] for k in Scouts.locSC_scoutTable},
     **{Scouts.to_ap_id(k): Scouts.locSM_scoutTable[k] for k in Scouts.locSM_scoutTable},
     **{Scouts.to_ap_id(k): Scouts.locLT_scoutTable[k] for k in Scouts.locLT_scoutTable},
-    **{Scouts.to_ap_id(k): Scouts.locGMC_scoutTable[k] for k in Scouts.locGMC_scoutTable}
+    **{Scouts.to_ap_id(k): Scouts.locGMC_scoutTable[k] for k in Scouts.locGMC_scoutTable},
+    **{Specials.to_ap_id(k): Specials.loc_specialTable[k] for k in Specials.loc_specialTable},
 }

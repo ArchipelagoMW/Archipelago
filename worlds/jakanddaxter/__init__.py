@@ -5,12 +5,13 @@ from BaseClasses import Item, ItemClassification, Tutorial
 from .GameID import jak1_id, jak1_name
 from .JakAndDaxterOptions import JakAndDaxterOptions
 from .Items import JakAndDaxterItem
-from .Locations import JakAndDaxterLocation, location_table as item_table
-from .locs import CellLocations as Cells, ScoutLocations as Scouts, OrbLocations as Orbs
+from .Locations import JakAndDaxterLocation, location_table
+from .Items import JakAndDaxterItem, item_table
+from .locs import CellLocations as Cells, ScoutLocations as Scouts, OrbLocations as Orbs, SpecialLocations as Specials
 from .Regions import create_regions
 from .Rules import set_rules
-from ..AutoWorld import World, WebWorld
-from ..LauncherComponents import components, Component, launch_subprocess, Type
+from worlds.AutoWorld import World, WebWorld
+from worlds.LauncherComponents import components, Component, launch_subprocess, Type
 
 
 class JakAndDaxterSettings(settings.Group):
@@ -46,8 +47,7 @@ class JakAndDaxterWorld(World):
     """
     # ID, name, version
     game = jak1_name
-    data_version = 1
-    required_client_version = (0, 4, 5)
+    required_client_version = (0, 4, 6)
 
     # Options
     settings: typing.ClassVar[JakAndDaxterSettings]
@@ -61,13 +61,17 @@ class JakAndDaxterWorld(World):
     # Stored as {ID: Name} pairs, these must now be swapped to {Name: ID} pairs.
     # Remember, the game ID and various offsets for each item type have already been calculated.
     item_name_to_id = {item_table[k]: k for k in item_table}
-    location_name_to_id = {item_table[k]: k for k in item_table}
+    location_name_to_id = {location_table[k]: k for k in location_table}
     item_name_groups = {
-        "Power Cell": {item_table[k]: k for k in item_table
-                       if k in range(jak1_id, jak1_id + Scouts.fly_offset)},
-        "Scout Fly": {item_table[k]: k for k in item_table
-                      if k in range(jak1_id + Scouts.fly_offset, jak1_id + Orbs.orb_offset)}
-        # "Precursor Orb": {}  # TODO
+        "Power Cells": {item_table[k]: k for k in item_table
+                        if k in range(jak1_id, jak1_id + Scouts.fly_offset)},
+        "Scout Flies": {item_table[k]: k for k in item_table
+                        if k in range(jak1_id + Scouts.fly_offset, jak1_id + Specials.special_offset)},
+        "Specials": {item_table[k]: k for k in item_table
+                     if k in range(jak1_id + Specials.special_offset, jak1_id + Orbs.orb_offset)},
+        # TODO - Make group for Precursor Orbs.
+        # "Precursor Orbs": {item_table[k]: k for k in item_table
+        #                    if k in range(jak1_id + Orbs.orb_offset, ???)},
     }
 
     def create_regions(self):
@@ -76,25 +80,47 @@ class JakAndDaxterWorld(World):
     def set_rules(self):
         set_rules(self.multiworld, self.options, self.player)
 
+    # Helper function to reuse some nasty if/else trees.
+    @staticmethod
+    def item_type_helper(item) -> (int, ItemClassification):
+        # Make 101 Power Cells.
+        if item in range(jak1_id, jak1_id + Scouts.fly_offset):
+            classification = ItemClassification.progression_skip_balancing
+            count = 101
+
+        # Make 7 Scout Flies per level.
+        elif item in range(jak1_id + Scouts.fly_offset, jak1_id + Specials.special_offset):
+            classification = ItemClassification.progression_skip_balancing
+            count = 7
+
+        # Make only 1 of each Special Item.
+        elif item in range(jak1_id + Specials.special_offset, jak1_id + Orbs.orb_offset):
+            classification = ItemClassification.progression
+            count = 1
+
+        # TODO - Make ??? Precursor Orbs.
+        # elif item in range(jak1_id + Orbs.orb_offset, ???):
+        #     classification = ItemClassification.filler
+        #     count = ???
+
+        # If we try to make items with ID's higher than we've defined, something has gone wrong.
+        else:
+            raise KeyError(f"Tried to fill item pool with unknown ID {item}.")
+
+        return count, classification
+
     def create_items(self):
-        self.multiworld.itempool += [self.create_item(item_table[k]) for k in item_table]
+        for item_id in item_table:
+            count, _ = self.item_type_helper(item_id)
+            self.multiworld.itempool += [self.create_item(item_table[item_id]) for k in range(0, count)]
 
     def create_item(self, name: str) -> Item:
         item_id = self.item_name_to_id[name]
-        if item_id in range(jak1_id, jak1_id + Scouts.fly_offset):
-            # Power Cell
-            classification = ItemClassification.progression_skip_balancing
-        elif item_id in range(jak1_id + Scouts.fly_offset, jak1_id + Orbs.orb_offset):
-            # Scout Fly
-            classification = ItemClassification.progression_skip_balancing
-        elif item_id > jak1_id + Orbs.orb_offset:
-            # Precursor Orb
-            classification = ItemClassification.filler  # TODO
-        else:
-            classification = ItemClassification.filler
+        _, classification = self.item_type_helper(item_id)
+        return JakAndDaxterItem(name, classification, item_id, self.player)
 
-        item = JakAndDaxterItem(name, classification, item_id, self.player)
-        return item
+    def get_filler_item_name(self) -> str:
+        return "Power Cell"  # TODO - Make Precursor Orb the filler item. Until then, enjoy the free progression.
 
 
 def launch_client():

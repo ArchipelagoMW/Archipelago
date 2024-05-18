@@ -6,6 +6,7 @@ import asyncio
 import colorama
 
 import Utils
+from NetUtils import ClientStatus
 from CommonClient import ClientCommandProcessor, CommonContext, logger, server_loop, gui_enabled
 
 from worlds.jakanddaxter.GameID import jak1_name
@@ -108,12 +109,21 @@ class JakAndDaxterContext(CommonContext):
                 logger.info(args)
                 self.repl.item_inbox[index] = item
 
-    async def ap_inform_location_checks(self, location_ids: typing.List[int]):
+    async def ap_inform_location_check(self, location_ids: typing.List[int]):
         message = [{"cmd": "LocationChecks", "locations": location_ids}]
         await self.send_msgs(message)
 
-    def on_locations(self, location_ids: typing.List[int]):
-        create_task_log_exception(self.ap_inform_location_checks(location_ids))
+    def on_location_check(self, location_ids: typing.List[int]):
+        create_task_log_exception(self.ap_inform_location_check(location_ids))
+
+    async def ap_inform_finished_game(self):
+        if not self.finished_game and self.memr.finished_game:
+            message = [{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}]
+            await self.send_msgs(message)
+            self.finished_game = True
+
+    def on_finish(self):
+        create_task_log_exception(self.ap_inform_finished_game())
 
     async def run_repl_loop(self):
         while True:
@@ -122,7 +132,7 @@ class JakAndDaxterContext(CommonContext):
 
     async def run_memr_loop(self):
         while True:
-            await self.memr.main_tick(self.on_locations)
+            await self.memr.main_tick(self.on_location_check, self.on_finish)
             await asyncio.sleep(0.1)
 
 
@@ -189,7 +199,7 @@ async def main():
     ctx.run_cli()
 
     # Find and run the game (gk) and compiler/repl (goalc).
-    await run_game(ctx)
+    # await run_game(ctx)
     await ctx.exit_event.wait()
     await ctx.shutdown()
 

@@ -22,12 +22,31 @@ def to_game_id(ap_id: int) -> int:
 
 # The ID's you see below correspond directly to that cell's game-task ID.
 
+# The "Free 7 Scout Flies" Power Cells will be unlocked separately from their respective levels.
+loc7SF_cellTable = {
+    95: "GR: Free 7 Scout Flies",
+    75: "SV: Free 7 Scout Flies",
+    7:  "FJ: Free 7 Scout Flies",
+    20: "SB: Free 7 Scout Flies",
+    28: "MI: Free 7 Scout Flies",
+    68: "FC: Free 7 Scout Flies",
+    76: "RV: Free 7 Scout Flies",
+    57: "PB: Free 7 Scout Flies",
+    49: "LPC: Free 7 Scout Flies",
+    43: "BS: Free 7 Scout Flies",
+    88: "MP: Free 7 Scout Flies",
+    77: "VC: Free 7 Scout Flies",
+    85: "SC: Free 7 Scout Flies",
+    65: "SM: Free 7 Scout Flies",
+    90: "LT: Free 7 Scout Flies",
+    91: "GMC: Free 7 Scout Flies",
+}
+
 # Geyser Rock
 locGR_cellTable = {
     92: "GR: Find The Cell On The Path",
     93: "GR: Open The Precursor Door",
     94: "GR: Climb Up The Cliff",
-    95: "GR: Free 7 Scout Flies"
 }
 
 # Sandover Village
@@ -37,7 +56,6 @@ locSV_cellTable = {
     10: "SV: Herd The Yakows Into The Pen",
     13: "SV: Bring 120 Orbs To The Oracle (1)",
     14: "SV: Bring 120 Orbs To The Oracle (2)",
-    75: "SV: Free 7 Scout Flies"
 }
 
 # Forbidden Jungle
@@ -49,7 +67,6 @@ locFJ_cellTable = {
     5: "FJ: Catch 200 Pounds Of Fish",
     8: "FJ: Follow The Canyon To The Sea",
     9: "FJ: Open The Locked Temple Door",
-    7: "FJ: Free 7 Scout Flies"
 }
 
 # Sentinel Beach
@@ -61,7 +78,6 @@ locSB_cellTable = {
     19: "SB: Launch Up To The Cannon Tower",
     21: "SB: Explore The Beach",
     22: "SB: Climb The Sentinel",
-    20: "SB: Free 7 Scout Flies"
 }
 
 # Misty Island
@@ -73,13 +89,11 @@ locMI_cellTable = {
     27: "MI: Destroy the Balloon Lurkers",
     29: "MI: Use Zoomer To Reach Power Cell",
     30: "MI: Use Blue Eco To Reach Power Cell",
-    28: "MI: Free 7 Scout Flies"
 }
 
 # Fire Canyon
 locFC_cellTable = {
     69: "FC: Reach The End Of Fire Canyon",
-    68: "FC: Free 7 Scout Flies"
 }
 
 # Rock Village
@@ -89,7 +103,6 @@ locRV_cellTable = {
     33: "RV: Bring 90 Orbs To The Warrior",
     34: "RV: Bring 120 Orbs To The Oracle (1)",
     35: "RV: Bring 120 Orbs To The Oracle (2)",
-    76: "RV: Free 7 Scout Flies"
 }
 
 # Precursor Basin
@@ -101,7 +114,6 @@ locPB_cellTable = {
     55: "PB: Cure Dark Eco Infected Plants",
     58: "PB: Navigate The Purple Precursor Rings",
     59: "PB: Navigate The Blue Precursor Rings",
-    57: "PB: Free 7 Scout Flies"
 }
 
 # Lost Precursor City
@@ -113,7 +125,6 @@ locLPC_cellTable = {
     44: "LPC: Match The Platform Colors",
     50: "LPC: Climb The Slide Tube",
     51: "LPC: Reach The Center Of The Complex",
-    49: "LPC: Free 7 Scout Flies"
 }
 
 # Boggy Swamp
@@ -125,7 +136,6 @@ locBS_cellTable = {
     40: "BS: Break The Tethers To The Zeppelin (2)",
     41: "BS: Break The Tethers To The Zeppelin (3)",
     42: "BS: Break The Tethers To The Zeppelin (4)",
-    43: "BS: Free 7 Scout Flies"
 }
 
 # Mountain Pass
@@ -133,7 +143,6 @@ locMP_cellTable = {
     86: "MP: Defeat Klaww",
     87: "MP: Reach The End Of The Mountain Pass",
     110: "MP: Find The Hidden Power Cell",
-    88: "MP: Free 7 Scout Flies"
 }
 
 # Volcanic Crater
@@ -145,7 +154,6 @@ locVC_cellTable = {
     100: "VC: Bring 120 Orbs To The Oracle (1)",
     101: "VC: Bring 120 Orbs To The Oracle (2)",
     74: "VC: Find The Hidden Power Cell",
-    77: "VC: Free 7 Scout Flies"
 }
 
 # Spider Cave
@@ -157,7 +165,6 @@ locSC_cellTable = {
     82: "SC: Launch To The Poles",
     83: "SC: Navigate The Spider Tunnel",
     84: "SC: Climb the Precursor Platforms",
-    85: "SC: Free 7 Scout Flies"
 }
 
 # Snowy Mountain
@@ -169,13 +176,11 @@ locSM_cellTable = {
     63: "SM: Open The Lurker Fort Gate",
     62: "SM: Get Through The Lurker Fort",
     64: "SM: Survive The Lurker Infested Cave",
-    65: "SM: Free 7 Scout Flies"
 }
 
 # Lava Tube
 locLT_cellTable = {
     89: "LT: Cross The Lava Tube",
-    90: "LT: Free 7 Scout Flies"
 }
 
 # Gol and Maias Citadel
@@ -184,5 +189,4 @@ locGMC_cellTable = {
     72: "GMC: Free The Red Sage",
     73: "GMC: Free The Yellow Sage",
     70: "GMC: Free The Green Sage",
-    91: "GMC: Free 7 Scout Flies"
 }
