@@ -2,10 +2,10 @@
 import typing
 
 if typing.TYPE_CHECKING:
-    from CommonClient import CommonContext
+    from SNIClient import SNIContext
 
 
-async def update_object(ctx: "CommonContext", key: str, value: typing.Dict[str, typing.Any]) -> None:
+async def update_object(ctx: "SNIContext", key: str, value: typing.Dict[str, typing.Any]) -> None:
     await ctx.send_msgs([
         {
             "cmd": "Set",
@@ -19,7 +19,7 @@ async def update_object(ctx: "CommonContext", key: str, value: typing.Dict[str, 
     ])
 
 
-async def pop_object(ctx: "CommonContext", key: str, value: str) -> None:
+async def pop_object(ctx: "SNIContext", key: str, value: str) -> None:
     await ctx.send_msgs([
         {
             "cmd": "Set",
@@ -33,14 +33,14 @@ async def pop_object(ctx: "CommonContext", key: str, value: str) -> None:
     ])
 
 
-async def initialize_giftboxes(ctx: "CommonContext", giftbox_key: str, motherbox_key: str, is_open: bool) -> None:
+async def initialize_giftboxes(ctx: "SNIContext", giftbox_key: str, motherbox_key: str, is_open: bool) -> None:
     ctx.set_notify(motherbox_key, giftbox_key)
     await update_object(ctx, f"Giftboxes;{ctx.team}", {f"{ctx.slot}":
                                                        {
                                                            "IsOpen": is_open,
                                                            **kdl3_gifting_options
                                                        }})
-    setattr(ctx, "gifting", is_open)
+    ctx.client_handler.gifting = is_open
 
 
 kdl3_gifting_options = {
