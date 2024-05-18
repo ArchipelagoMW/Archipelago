@@ -33,7 +33,7 @@ class TestSymbols(WitnessTestBase):
         )
 
 
-class TestArrows(WitnessMultiworldTestBase):
+class TestSymbolRequirementsMultiworld(WitnessMultiworldTestBase):
     options_per_world = [
         {
             "puzzle_randomization": "sigma_normal",
@@ -55,3 +55,12 @@ class TestArrows(WitnessMultiworldTestBase):
         self.assertFalse(self.get_items_by_name("Arrows", 1))
         self.assertTrue(self.get_items_by_name("Arrows", 2))
         self.assertFalse(self.get_items_by_name("Arrows", 3))
+
+    def test_correct_symbol_requirements(self):
+        desert_discard = "0x17CE7"
+        triangles = frozenset({frozenset({'Triangles'})})
+        arrows = frozenset({frozenset({'Arrows'})})
+
+        self.assertEqual(self.multiworld.worlds[1].player_logic.REQUIREMENTS_BY_HEX[desert_discard], triangles)
+        self.assertEqual(self.multiworld.worlds[2].player_logic.REQUIREMENTS_BY_HEX[desert_discard], arrows)
+        self.assertEqual(self.multiworld.worlds[3].player_logic.REQUIREMENTS_BY_HEX[desert_discard], triangles)
