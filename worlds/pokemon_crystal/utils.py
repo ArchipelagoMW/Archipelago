@@ -46,7 +46,7 @@ def get_random_filler_item(random):
                      ["Poke Ball", "Great Ball", "Ultra Ball"] * 5,
                      ["Potion", "Super Potion", "Hyper Potion", "Energy Root", "Energypowder"] * 12,
                      ["Full Restore"] * 2, ["Repel", "Super Repel", "Max Repel"] * 3,
-                     ["Revive", "Revival Powder"] * 4 + ["Max Revive"] * 2,
+                     ["Revive", "Revival Herb"] * 4 + ["Max Revive"] * 2,
                      ["HP Up", "PP Up", "Protein", "Carbos", "Calcium", "Iron"] * 5,
                      ["Guard Spec", "Dire Hit", "X Attack", "X Defend", "X Speed", "X Special"] * 2,
                      ["Heal Powder", "Burn Heal", "Parlyz Heal", "Ice Heal", "Antidote", "Awakening", "Full Heal"] * 5]

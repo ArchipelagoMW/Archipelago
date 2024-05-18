@@ -2,6 +2,7 @@ from typing import List, Union
 
 from BaseClasses import Location
 from .utils import convert_to_ingame_text
+import copy
 
 
 class ScriptLine:
@@ -127,7 +128,7 @@ def template_call_psychic():
 
 
 def get_shuffled_basic_calls(random):
-    basic_calls = phone_scripts
+    basic_calls = copy.deepcopy(phone_scripts)
     random.shuffle(basic_calls)
     return basic_calls
 

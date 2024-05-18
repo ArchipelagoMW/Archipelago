@@ -131,7 +131,7 @@ class PokemonCrystalWorld(World):
         default_itempool = []
 
         for location in item_locations:
-            item_code = reverse_offset_item_value(location.default_item_code)
+            item_code = location.default_item_code
             if item_code > BASE_OFFSET and get_item_classification(item_code) != ItemClassification.filler:
                 default_itempool += [self.create_item_by_code(item_code)]
             elif self.random.randint(0, 100) < total_trap_weight:
@@ -308,8 +308,8 @@ class PokemonCrystalWorld(World):
         if self.options.enable_mischief:
             self.generated_misc = misc_activities(self.generated_misc, self.random)
 
-        if self.options.phone_trap_weight > 0:
-            self.generated_phone_traps, self.generated_phone_indices = generate_phone_traps(self)
+        self.generated_phone_traps, self.generated_phone_indices = generate_phone_traps(self)
+        # print(self.generated_phone_indices)
 
         generate_output(self, output_directory)
 
@@ -326,7 +326,9 @@ class PokemonCrystalWorld(World):
             "randomize_pokegear",
             "hm_badge_requirements"
         )
-        slot_data["phone_traps"] = self.generated_phone_indices
+        if self.options.phone_trap_weight.value > 0:
+            print(f"Pokecrystal Debug: Filling phone slot data for player {self.player}")
+            slot_data["phone_traps"] = self.generated_phone_indices
         return slot_data
 
     def write_spoiler(self, spoiler_handle) -> None:

@@ -42,7 +42,11 @@ def generate_phone_traps(world: PokemonCrystalWorld):
         remote_locs += sphere
     world.random.shuffle(remote_locs)
 
-    phone_traps_list = ["bike shop", "psychic"]
+    phone_traps_list = []
+    if psychic_location is not None and world.random.random() < 0.5:
+        phone_traps_list.append("psychic")
+    if bike_shop_location is not None and world.random.random() < 0.5:
+        phone_traps_list.append("bike_shop")
     remote_count = 3 if len(remote_locs) > 2 else len(remote_locs)
     phone_traps_list += ["remote"] * remote_count
     phone_traps_list += ["basic"] * (16 - len(phone_traps_list))
@@ -56,7 +60,7 @@ def generate_phone_traps(world: PokemonCrystalWorld):
         if trap == "basic":
             phone_traps += [basic_calls.pop()]
             continue
-        if trap == "bike shop":
+        if trap == "bike_shop":
             trap = template_call_bike_shop(bike_shop_location)
             phone_traps += [trap]
             location_call_indices[i] = bike_shop_location.address
@@ -72,5 +76,4 @@ def generate_phone_traps(world: PokemonCrystalWorld):
             phone_traps += [trap]
             location_call_indices[i] = remote_loc.address
 
-    print(location_call_indices)
     return phone_traps, location_call_indices
