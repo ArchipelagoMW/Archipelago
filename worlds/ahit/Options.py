@@ -703,8 +703,8 @@ class AHITOptions(PerGameCommonOptions):
 
 ahit_option_groups: Dict[str, List[Any]] = {
     "General Options": [EndGoal, ShuffleStorybookPages, ShuffleAlpineZiplines, ShuffleSubconPaintings,
-                        MinPonCost, MaxPonCost, BadgeSellerMinItems, BadgeSellerMaxItems, LogicDifficulty,
-                        NoPaintingSkips, CTRLogic],
+                        ShuffleActContracts, MinPonCost, MaxPonCost, BadgeSellerMinItems, BadgeSellerMaxItems,
+                        LogicDifficulty, NoPaintingSkips, CTRLogic],
 
     "Act Options": [ActRandomizer, StartingChapter, LowestChapterCost, HighestChapterCost,
                     ChapterCostIncrement, ChapterCostMinDifference, FinalChapterMinCost, FinalChapterMaxCost,
