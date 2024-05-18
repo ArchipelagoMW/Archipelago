@@ -11,7 +11,7 @@ from typing import List
 
 from NetUtils import ClientStatus, NetworkItem
 from worlds.gl.Arrays import inv_dict, timers, base_count, castle_id, level_locations, \
-    difficulty_convert, spawners
+    difficulty_convert, spawners, mirror_levels
 from worlds.gl.Items import items_by_id, ItemData
 from worlds.gl.Locations import LocationData
 
@@ -487,13 +487,15 @@ class GauntletLegendsContext(CommonContext):
     def dead(self) -> bool:
         return self.socket.read(MessageFormat(READ, f"0x{format(PLAYER_ALIVE, 'x')} 1"))[0] == 0x0
 
-    def level_status(self) -> bool:
+    async def level_status(self, ctx: "GauntletLegendsContext") -> bool:
         portaling = self.portaling()
         dead = self.dead()
         if portaling or dead:
             if self.in_game:
                 if portaling:
                     self.clear_counts[str(self.current_level)] = self.clear_counts.get(str(self.current_level), 0) + 1
+                    if self.current_level[1] << 4 + self.current_level[0] in mirror_levels:
+                        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [location.id for location in level_locations[self.current_level[1] << 4 + self.current_level[0]] if "Mirror" in location.name]}])
                 if dead:
                     if self.current_level == bytes([0x2, 0xF]):
                         self.clear_counts[str([0x1, 0xF])] = max(self.clear_counts.get(str([0x1, 0xF]), 0) - 1, 0)
@@ -595,7 +597,7 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                         logger.info("Loading Objects...")
                         await ctx.load_objects(ctx)
                         await asyncio.sleep(1)
-                    if ctx.level_status():
+                    if await ctx.level_status(ctx):
                         try:
                             await ctx.send_msgs([{
                                 "cmd": "Set",

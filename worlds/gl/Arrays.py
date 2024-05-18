@@ -347,4 +347,8 @@ difficulty_lambda: dict[int, list[int]] = {
 
 boss_realm = [2, 1, 7, 9]
 
+mirror_levels = [
+    0x15, 0x26, 0x75, 0x95
+]
+
 level_obelisk = [5, 6, 7, 11, 12, 0, 1]
