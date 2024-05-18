@@ -114,19 +114,47 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
 
         for fish_name, fish_data in data.fish.items():
             cur_address = data.rom_addresses["AP_FishMons_" + fish_name] + 1
-            for poke in fish_data.old:
+            for i, _poke in enumerate(fish_data.old):
+                if world.options.normalize_encounter_rates:
+                    encounter_rate = int(((i + 1) / 3) * 255)
+                    write_bytes(patched_rom, [encounter_rate], cur_address - 1)
                 random_poke = get_random_pokemon_id(random)
                 write_bytes(patched_rom, [random_poke], cur_address)
                 cur_address += 3
-            for poke in fish_data.good:
+            for i, _poke in enumerate(fish_data.good):
+                if world.options.normalize_encounter_rates:
+                    encounter_rate = int(((i + 1) / 4) * 255)
+                    write_bytes(patched_rom, [encounter_rate], cur_address - 1)
                 random_poke = get_random_pokemon_id(random)
                 write_bytes(patched_rom, [random_poke], cur_address)
                 cur_address += 3
-            for poke in fish_data.super:
+            for i, _poke in enumerate(fish_data.super):
+                if world.options.normalize_encounter_rates:
+                    encounter_rate = int(((i + 1) / 4) * 255)
+                    write_bytes(patched_rom, [encounter_rate], cur_address - 1)
                 random_poke = get_random_pokemon_id(random)
                 write_bytes(patched_rom, [random_poke], cur_address)
                 cur_address += 3
 
+        for tree_set in ["Canyon", "Town", "Route", "Kanto", "Lake", "Forest"]:
+            address = data.rom_addresses["TreeMonSet_" + tree_set] + 1
+            for i in range(0, 2):
+                for j in range(0, 6):
+                    if world.options.normalize_encounter_rates:
+                        encounter_rate = int(((j + 1) / 6) * 255)
+                        write_bytes(patched_rom, [encounter_rate], address - 1)
+                    random_poke = get_random_pokemon_id(random)
+                    write_bytes(patched_rom, [random_poke], address)
+                    address += 3
+                address += 1
+        address = data.rom_addresses["TreeMonSet_Rock"] + 1
+        for i in range(0, 2):
+            if world.options.normalize_encounter_rates:
+                write_bytes(patched_rom, [((i + 1) * 128) - 1], address - 1)
+                random_poke = get_random_pokemon_id(random)
+                write_bytes(patched_rom, [random_poke], address)
+                address += 3
+                
     if world.options.normalize_encounter_rates:
         write_bytes(patched_rom, [14, 0, 28, 2, 42, 4, 57, 6, 71, 8, 86, 10, 100, 12],
                     data.rom_addresses["AP_Prob_GrassMon"])

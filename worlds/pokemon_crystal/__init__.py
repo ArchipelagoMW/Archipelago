@@ -120,15 +120,16 @@ class PokemonCrystalWorld(World):
             self.options.paralysis_trap_weight.value,
         ])
 
+        traps_pool = []
+        traps_pool += ["Phone Trap"] * self.options.phone_trap_weight.value
+        traps_pool += ["Sleep Trap"] * self.options.sleep_trap_weight.value
+        traps_pool += ["Poison Trap"] * self.options.poison_trap_weight.value
+        traps_pool += ["Burn Trap"] * self.options.burn_trap_weight.value
+        traps_pool += ["Freeze Trap"] * self.options.freeze_trap_weight.value
+        traps_pool += ["Paralysis Trap"] * self.options.paralysis_trap_weight.value
+
         def get_random_trap():
-            traps = []
-            traps += ["Phone Trap"] * self.options.phone_trap_weight.value
-            traps += ["Sleep Trap"] * self.options.sleep_trap_weight.value
-            traps += ["Poison Trap"] * self.options.poison_trap_weight.value
-            traps += ["Burn Trap"] * self.options.burn_trap_weight.value
-            traps += ["Freeze Trap"] * self.options.freeze_trap_weight.value
-            traps += ["Paralysis Trap"] * self.options.paralysis_trap_weight.value
-            return self.create_item(self.random.choice(traps))
+            return self.create_item(self.random.choice(traps_pool))
 
         default_itempool = []
 
