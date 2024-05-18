@@ -161,9 +161,19 @@ class LingoPlayerLogic:
         victory_condition = world.options.victory_condition
         early_color_hallways = world.options.early_color_hallways
 
-        if location_checks == LocationChecks.option_reduced and door_shuffle != ShuffleDoors.option_none:
-            raise OptionError("You cannot have reduced location checks when door shuffle is on, because there would not"
-                              " be enough locations for all of the door items.")
+        if location_checks == LocationChecks.option_reduced:
+            if door_shuffle == ShuffleDoors.option_doors:
+                raise OptionError("You cannot have reduced location checks when door shuffle is on, because there "
+                                  "would not be enough locations for all of the door items.")
+            if door_shuffle == ShuffleDoors.option_panels:
+                if not world.options.group_doors:
+                    raise OptionError("You cannot have reduced location checks when complex panels mode door shuffle "
+                                      "is on, because there would not be enough locations for all of the panel items.")
+                if color_shuffle and (world.options.sunwarp_access >= SunwarpAccess.option_unlock or
+                                      not world.options.enable_pilgrimage):
+                    raise OptionError("You cannot have reduced location checks when panels mode door shuffle is "
+                                      "combined with color shuffle and either sunwarp locking or disabled pilgrimage, "
+                                      "because there would not be enough locations for all of the items.")
 
         # Create door items, where needed.
         door_groups: Set[str] = set()
