@@ -252,12 +252,13 @@ class PokemonCrystalWorld(World):
                                                    self.generated_pokemon[pkmn_name].tm_hm, self.random)
                 self.generated_pokemon[pkmn_name] = self.generated_pokemon[pkmn_name]._replace(tm_hm=new_tmhms)
 
-        if self.options.randomize_starters:
+        if self.options.randomize_starters.value:
+            base_only = self.options.randomize_starters.value == 1
             for evo_line in self.generated_starters:
                 rival_fights = [(trainer_name, trainer) for trainer_name, trainer in self.generated_trainers.items() if
                                 trainer_name.startswith("RIVAL_" + evo_line[0])]
 
-                evo_line[0] = get_random_pokemon(self.random)
+                evo_line[0] = get_random_pokemon(self.random, base_only)
                 for trainer_name, trainer in rival_fights:
                     set_rival_fight(trainer_name, trainer, evo_line[0])
 

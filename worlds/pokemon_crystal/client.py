@@ -22,7 +22,7 @@ TRACKER_EVENT_FLAGS = [
     "EVENT_CLEARED_RADIO_TOWER",
     "EVENT_BEAT_ELITE_FOUR",
     "EVENT_RESTORED_POWER_TO_KANTO",
-    "EVENT_VIRIDIAN_GYM_BLUE",
+    "EVENT_BLUE_GYM_TRACKER",
     "EVENT_BEAT_RED"
 ]
 EVENT_FLAG_MAP = {data.event_flags[event]: event for event in TRACKER_EVENT_FLAGS}
@@ -124,8 +124,9 @@ class PokemonCrystalClient(BizHawkClient):
             if read_result is None:  # Not in overworld
                 return
 
-            phone_trap_index = read_result[0][5]
-            if ctx.slot_data["phone_traps"] is not None and len(ctx.slot_data["phone_traps"]):
+            phone_trap_index = read_result[0][4]
+            if ctx.slot_data is not None and ctx.slot_data["phone_traps"] is not None and len(
+                    ctx.slot_data["phone_traps"]):
                 hint_locations = [location for location in ctx.slot_data["phone_traps"][:phone_trap_index] if
                                   location != 0]
                 if len(hint_locations):

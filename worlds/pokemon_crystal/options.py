@@ -66,10 +66,13 @@ class RandomizePokegear(Toggle):
     default = 0
 
 
-class RandomizeStarters(Toggle):
+class RandomizeStarters(Choice):
     """Randomizes species of starter Pokemon"""
     display_name = "Randomize Starters"
     default = 0
+    option_vanilla = 0
+    option_unevolved_only = 1
+    option_completely_random = 2
 
 
 class RandomizeWilds(Toggle):
