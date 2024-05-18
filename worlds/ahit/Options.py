@@ -706,7 +706,7 @@ ahit_option_groups: Dict[str, List[Any]] = {
                         MinPonCost, MaxPonCost, BadgeSellerMinItems, BadgeSellerMaxItems, LogicDifficulty,
                         NoPaintingSkips, CTRLogic],
 
-    "Act Shuffle Options": [ActRandomizer, StartingChapter, LowestChapterCost, HighestChapterCost,
+    "Act Options": [ActRandomizer, StartingChapter, LowestChapterCost, HighestChapterCost,
                             ChapterCostIncrement, ChapterCostMinDifference, FinalChapterMinCost, FinalChapterMaxCost,
                             FinaleShuffle, ActPlando, ActBlacklist],
 
