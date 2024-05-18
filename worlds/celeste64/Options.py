@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+from BaseClasses import OptionGroup
 from Options import Choice, Range, Toggle, DeathLink, PerGameCommonOptions
 
 
@@ -47,7 +48,9 @@ class MoveShuffle(Toggle):
     - Air Dash
     - Skid Jump
     - Climb
+
     NOTE: Having Move Shuffle and Standard Logic Difficulty will guarantee that one of the four Move items will be immediately accessible
+
     WARNING: Combining Move Shuffle and Hard Logic Difficulty can require very difficult tricks
     """
     display_name = "Move Shuffle"
@@ -75,7 +78,9 @@ class Carsanity(Toggle):
 class BadelineChaserSource(Choice):
     """
     What type of action causes more Badeline Chasers to start spawning
+
     Locations: The number of locations you've checked contributes to Badeline Chasers
+
     Strawberries: The number of Strawberry items you've received contributes to Badeline Chasers
     """
     display_name = "Badeline Chaser Source"
@@ -86,7 +91,9 @@ class BadelineChaserSource(Choice):
 class BadelineChaserFrequency(Range):
     """
     How many of the `Badeline Chaser Source` actions must occur to make each Badeline Chaser start spawning
+
     NOTE: Choosing `0` disables Badeline Chasers entirely
+
     WARNING: Turning on Badeline Chasers alongside Move Shuffle could result in extremely difficult situations
     """
     display_name = "Badeline Chaser Frequency"
@@ -102,6 +109,24 @@ class BadelineChaserSpeed(Range):
     range_start = 2
     range_end = 10
     default = 3
+
+
+celeste_64_option_groups = [
+    OptionGroup("Goal Options", [
+        TotalStrawberries,
+        StrawberriesRequiredPercentage,
+    ]),
+    OptionGroup("Sanity Options", [
+        Friendsanity,
+        Signsanity,
+        Carsanity,
+    ]),
+    OptionGroup("Badeline Chasers", [
+        BadelineChaserSource,
+        BadelineChaserFrequency,
+        BadelineChaserSpeed,
+    ]),
+]
 
 
 @dataclass
