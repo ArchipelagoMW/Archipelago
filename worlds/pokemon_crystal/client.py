@@ -119,10 +119,21 @@ class PokemonCrystalClient(BizHawkClient):
             overworld_guard = (data.ram_addresses["wArchipelagoSafeWrite"], [1], "WRAM")
 
             read_result = await bizhawk.guarded_read(
-                ctx.bizhawk_ctx, [(data.ram_addresses["wArchipelagoItemReceived"], 4, "WRAM")], [overworld_guard])
+                ctx.bizhawk_ctx, [(data.ram_addresses["wArchipelagoItemReceived"], 5, "WRAM")], [overworld_guard])
 
             if read_result is None:  # Not in overworld
                 return
+
+            phone_trap_index = read_result[0][5]
+            if ctx.slot_data["phone_traps"] is not None and len(ctx.slot_data["phone_traps"]):
+                hint_locations = [location for location in ctx.slot_data["phone_traps"][:phone_trap_index] if
+                                  location != 0]
+                if len(hint_locations):
+                    await ctx.send_msgs([{
+                        "cmd": "LocationScouts",
+                        "locations": hint_locations,
+                        "create_as_hint": 2
+                    }])
 
             num_received_items = int.from_bytes([read_result[0][1], read_result[0][2]], "little")
             received_item_is_empty = read_result[0][0] == 0

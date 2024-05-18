@@ -11,6 +11,12 @@ def get_random_pokemon(random, types=None):
     return random.choice(pokemon_pool)
 
 
+def get_random_nezumi(random):
+    pokemon_pool = ["RATTATA", "RATICATE", "NIDORAN_F", "NIDORAN_M", "NIDORINA", "NIDORINO", "PIKACHU", "RAICHU",
+                    "SANDSHREW", "SANDSLASH", "CYNDAQUIL", "QUILAVA", "SENTRET", "FURRET", "MARILL"]
+    return random.choice(pokemon_pool)
+
+
 def get_random_types(random):
     if random.randint(0, 25) < 11:
         type1 = random.choice(data.types)
@@ -44,13 +50,16 @@ def get_random_pokemon_id(random):
     return random.choice(pokemon_pool)
 
 
-def get_tmhm_compatibility(tm_value, hm_value, types, random):
+def get_tmhm_compatibility(tm_value, hm_value, types, vanilla_learnset, random):
     tmhms = []
     for tm_name, tm_data in data.tmhm.items():
         use_value = hm_value if tm_data.is_hm else tm_value
         if tm_data.type in types:
             use_value = use_value * 2
-        if use_value == 0 or random.randint(0, 99) < use_value:
+        if use_value == 0:
+            if tm_name in vanilla_learnset:
+                tmhms.append(tm_name)
+        elif random.randint(0, 99) < use_value:
             tmhms.append(tm_name)
     return tmhms
 
@@ -89,6 +98,8 @@ def convert_color(r: int, g: int, b: int):
 
 def convert_to_ingame_text(text: str):
     charmap = {
+        "…": 0x75,
+        " ": 0x7f,
         "A": 0x80,
         "B": 0x81,
         "C": 0x82,
@@ -147,12 +158,25 @@ def convert_to_ingame_text(text: str):
         "x": 0xb7,
         "y": 0xb8,
         "z": 0xb9,
+        "Ä": 0xc0,
+        "Ö": 0xc1,
+        "Ü": 0xc2,
+        "ä": 0xc3,
+        "ö": 0xc4,
+        "ü": 0xc5,
         "'": 0xe0,
         "-": 0xe3,
         "?": 0xe6,
         "!": 0xe7,
         ".": 0xe8,
         "&": 0xe9,
+        "é": 0xea,
+        "→": 0xeb,
+        "▷": 0xec,
+        "▶": 0xed,
+        "▼": 0xee,
+        "♂": 0xef,
+        "¥": 0xf0,
         "/": 0xf3,
         ",": 0xf4,
         "0": 0xf6,

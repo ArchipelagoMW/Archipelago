@@ -3,19 +3,22 @@ from typing import List, Union, ClassVar, Dict, Any, Tuple
 import copy
 import logging
 
-from BaseClasses import Tutorial
+from BaseClasses import Tutorial, ItemClassification
 from Fill import fill_restrictive, FillError
 from worlds.AutoWorld import World, WebWorld
 from .client import PokemonCrystalClient
+from .misc import misc_activities, get_misc_spoiler_log
 from .options import PokemonCrystalOptions
+from .phone import generate_phone_traps
+from .phone_data import PhoneScript
 from .regions import create_regions
 from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_classification
 from .rules import set_rules
-from .data import (PokemonData, MoveData, TrainerData, LearnsetData, data as crystal_data, BASE_OFFSET)
+from .data import (PokemonData, MoveData, TrainerData, LearnsetData, data as crystal_data, BASE_OFFSET, MiscData)
 from .rom import generate_output
 from .locations import create_locations, PokemonCrystalLocation, create_location_label_to_id_map
 from .utils import get_random_pokemon, get_random_filler_item, get_random_held_item, get_random_types, get_type_colors, \
-    get_random_colors, get_random_base_stats, get_tmhm_compatibility
+    get_random_colors, get_random_base_stats, get_tmhm_compatibility, get_random_nezumi
 
 
 class PokemonCrystalSettings(settings.Group):
@@ -70,6 +73,9 @@ class PokemonCrystalWorld(World):
     generated_starters: Tuple[List[str], List[str], List[str]]
     generated_trainers: Dict[str, TrainerData]
     generated_palettes: Dict[str, List[List[int]]]
+    generated_phone_traps: List[PhoneScript]
+    generated_phone_indices: List[int]
+    generated_misc: MiscData
 
     def generate_early(self) -> None:
         if self.options.johto_only:
@@ -130,7 +136,7 @@ class PokemonCrystalWorld(World):
                     continue
 
     def generate_output(self, output_directory: str) -> None:
-        def get_random_move(type=None):
+        def get_random_move(type=None, attacking=None):
             if type is None:
                 move_pool = [move_name for move_name, move_data in crystal_data.moves.items() if
                              move_data.id > 0 and not move_data.is_hm and move_name not in ["STRUGGLE", "BEAT_UP"]]
@@ -138,6 +144,8 @@ class PokemonCrystalWorld(World):
                 move_pool = [move_name for move_name, move_data in crystal_data.moves.items() if
                              move_data.id > 0 and not move_data.is_hm and move_data.type == type and move_name not in [
                                  "STRUGGLE", "BEAT_UP"]]
+            if attacking is not None:
+                move_pool = [move_name for move_name in move_pool if crystal_data.moves[move_name].power > 0]
             return self.random.choice(move_pool)
 
         def get_random_move_from_learnset(pokemon, level):
@@ -154,7 +162,10 @@ class PokemonCrystalWorld(World):
                                    ["TOTODILE", "CROCONAW", "FERALIGATR"],
                                    ["CHIKORITA", "BAYLEEF", "MEGANIUM"])
         self.generated_trainers = copy.deepcopy(crystal_data.trainers)
+        self.generated_misc = copy.deepcopy(crystal_data.misc)
         self.generated_palettes = {}
+        self.generated_phone_traps = []
+        self.generated_phone_indices = []
 
         if self.options.randomize_types.value > 0:
             for pkmn_name, pkmn_data in self.generated_pokemon.items():
@@ -196,11 +207,19 @@ class PokemonCrystalWorld(World):
                     if move.move != "NO_MOVE":
                         learn_levels.append(move.level)
                 new_learnset = [LearnsetData(level, get_random_move()) for level in learn_levels]
+
+                start_attacking = [learnset for learnset in new_learnset if
+                                   crystal_data.moves[learnset.move].power > 0 and learnset.level == 1]
+
+                if not len(start_attacking):  # ensure every pokemon starts with an attacking move
+                    new_learnset[0] = LearnsetData(1, get_random_move(attacking=True))
+
                 self.generated_pokemon[pkmn_name] = self.generated_pokemon[pkmn_name]._replace(learnset=new_learnset)
 
             if self.options.tm_compatibility > 0 or self.options.hm_compatibility > 0:
                 new_tmhms = get_tmhm_compatibility(self.options.tm_compatibility.value,
-                                                   self.options.hm_compatibility.value, pkmn_data.types, self.random)
+                                                   self.options.hm_compatibility.value, pkmn_data.types,
+                                                   self.generated_pokemon[pkmn_name].tm_hm, self.random)
                 self.generated_pokemon[pkmn_name] = self.generated_pokemon[pkmn_name]._replace(tm_hm=new_tmhms)
 
         if self.options.randomize_starters:
@@ -238,7 +257,10 @@ class PokemonCrystalWorld(World):
                         match_types = [None, None]
                         if self.options.randomize_trainer_parties == 1:
                             match_types = crystal_data.pokemon[new_pkmn_data[1]].types
-                        new_pokemon = get_random_pokemon(self.random, match_types)
+                        if "LASS_3" in trainer_name:
+                            new_pokemon = get_random_nezumi(self.random)
+                        else:
+                            new_pokemon = get_random_pokemon(self.random, match_types)
                         new_pkmn_data[1] = new_pokemon
                     if trainer_data.trainer_type in ["TRAINERTYPE_ITEM", "TRAINERTYPE_ITEM_MOVES"]:
                         new_pkmn_data[2] = get_random_held_item(self.random)
@@ -252,6 +274,11 @@ class PokemonCrystalWorld(World):
                     new_party[i] = new_pkmn_data
                 self.generated_trainers[trainer_name] = self.generated_trainers[trainer_name]._replace(
                     pokemon=new_party)
+
+        if self.options.enable_mischief:
+            self.generated_misc = misc_activities(self.generated_misc, self.random)
+
+        self.generated_phone_traps, self.generated_phone_indices = generate_phone_traps(self)
 
         generate_output(self, output_directory)
 
@@ -268,6 +295,7 @@ class PokemonCrystalWorld(World):
             "randomize_pokegear",
             "hm_badge_requirements"
         )
+        slot_data["phone_traps"] = self.generated_phone_indices
         return slot_data
 
     def write_spoiler(self, spoiler_handle) -> None:
@@ -278,6 +306,10 @@ class PokemonCrystalWorld(World):
                 types_1 = ", ".join(self.generated_pokemon[evo[1]].types)
                 types_2 = ", ".join(self.generated_pokemon[evo[2]].types)
                 spoiler_handle.write(f"{evo[0]} ({types_0}) -> {evo[1]} ({types_1}) -> {evo[2]} ({types_2})\n")
+
+        if self.options.enable_mischief:
+            spoiler_handle.write(f"\n\nMischief ({self.multiworld.player_name[self.player]}):\n\n")
+            get_misc_spoiler_log(self.generated_misc, spoiler_handle.write)
 
     def create_item(self, name: str) -> PokemonCrystalItem:
         return self.create_item_by_code(self.item_name_to_id[name])

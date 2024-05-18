@@ -487,8 +487,8 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_location("Route 27 - Item 1"), can_surf)
 
     set_rule(get_location("Route 27 - Item 2"), lambda state: can_surf(state) and can_whirlpool(state))
-
-    set_rule(get_location("Route 27 - Bird Keeper Jose"), lambda state: can_surf(state) and can_whirlpool(state))
+    if trainersanity():
+        set_rule(get_location("Route 27 - Bird Keeper Jose"), lambda state: can_surf(state) and can_whirlpool(state))
 
     set_rule(get_location("Tohjo Falls - Item"), can_surf)
 

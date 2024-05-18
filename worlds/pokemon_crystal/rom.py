@@ -6,6 +6,7 @@ import copy
 
 from worlds.Files import APDeltaPatch
 from settings import get_settings
+from .phone_data import phone_scripts
 
 from .items import reverse_offset_item_value, item_const_name_to_id
 from .data import data
@@ -33,7 +34,6 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
     base_rom = get_base_rom_as_bytes()
     base_patch = pkgutil.get_data(__name__, "data/basepatch.bsdiff4")
     patched_rom = bytearray(bsdiff4.patch(base_rom, base_patch))
-    remote_progression_items = []
 
     for location in world.multiworld.get_locations(world.player):
         if location.address is None:
@@ -43,8 +43,6 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
             write_bytes(patched_rom, [reverse_offset_item_value(location.item.code)], location.rom_address)
         else:
             write_bytes(patched_rom, [item_const_name_to_id("AP_ITEM")], location.rom_address)
-            if location.item.advancement:
-                remote_progression_items.append(location)
 
     static = {
         "RedGyarados": 2,
@@ -182,15 +180,33 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
             write_bytes(patched_rom, pokemon_data, address)
             address += len(pokemon)
 
-    # if world.options.enable_mischief:
-    #     new_coords = copy.deepcopy(data.f_t)
-    #     random.shuffle(new_coords)
-    #     address = data.rom_addresses["AP_Misc_FuchsiaTrainers"] + 1
-    #     write_bytes(patched_rom, [0x0a], address + 2)
-    #     for c in new_coords:
-    #         write_coords = [c[1] + 4, c[0] + 4]
-    #         write_bytes(patched_rom, write_coords, address)
-    #         address += 13
+    if world.options.enable_mischief:
+        address = data.rom_addresses["AP_Misc_FuchsiaTrainers"] + 1
+        write_bytes(patched_rom, [0x0a], address + 2)  # spin speed
+        for c in world.generated_misc.fu:
+            write_coords = [c[1] + 4, c[0] + 4]
+            write_bytes(patched_rom, write_coords, address)
+            address += 13
+        for pair in world.generated_misc.sa.pairs:
+            addresses = [data.rom_addresses["AP_Misc_SG_" + warp] + 2 for warp in pair]
+            ids = [world.generated_misc.sa.warps[warp].id for warp in pair]
+            write_bytes(patched_rom, [ids[1]], addresses[0])  # reverse ids
+            write_bytes(patched_rom, [ids[0]], addresses[1])
+        eg_warp_counts = [1, 3, 3, 3]
+        for i in range(0, 4):
+            address = data.rom_addresses["AP_Misc_EG_" + str(i + 1)]
+            for j in range(0, eg_warp_counts[i]):
+                warp = world.generated_misc.ec[i][j]
+                write_bytes(patched_rom, [warp[0], warp[1]], address)
+                address += 5
+        for i in range(0, 3):
+            address = data.rom_addresses["AP_Misc_OK_" + str(i + 1)] + 4
+            write_bytes(patched_rom, [0x98], address)
+        for i in range(0, 5):
+            answer = world.generated_misc.ra[i]
+            byte = 0x08 if answer == "Y" else 0x09
+            address = data.rom_addresses["AP_Misc_Ra_" + str(i + 1)]
+            write_bytes(patched_rom, [byte], address)
 
     if world.options.blind_trainers:
         address = data.rom_addresses["AP_Setting_Blind_Trainers"]
@@ -251,6 +267,15 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
     write_bytes(patched_rom, red_text, data.rom_addresses["AP_Setting_RedBadges_Text"] + 1)
     write_bytes(patched_rom, red_text, data.rom_addresses["AP_Setting_RedBadges_Text2"] + 1)
     write_bytes(patched_rom, [world.options.red_badges - 1], data.rom_addresses["AP_Setting_RedBadges"] + 1)
+
+    for i in range(0, 16):
+        address = data.rom_addresses["AP_Setting_PhoneCallTrapTexts"] + (i * 0x400)
+        script = world.generated_phone_traps[i]
+        s_bytes = script.get_script_bytes()
+        # print(len(s_bytes))
+        write_bytes(patched_rom, s_bytes, address)
+        address = data.rom_addresses["AP_Setting_SpecialCalls"] + (6 * i) + 2
+        write_bytes(patched_rom, [script.caller_id], address)
 
     start_inventory_address = data.rom_addresses["AP_Start_Inventory"]
     start_inventory = world.options.start_inventory.value.copy()

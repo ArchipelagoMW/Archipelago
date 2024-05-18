@@ -71,6 +71,8 @@ class MoveData(NamedTuple):
     accuracy: int
     pp: int
     is_hm: bool
+    desc: List[str]
+    name: str
 
 
 class TMHMData(NamedTuple):
@@ -91,6 +93,23 @@ class FishData(NamedTuple):
     super: List[str]
 
 
+class MiscWarp(NamedTuple):
+    coords: List[int]
+    id: int
+
+
+class MiscSa(NamedTuple):
+    warps: Dict[str, MiscWarp]
+    pairs: List[List[str]]
+
+
+class MiscData(NamedTuple):
+    fu: List[List[int]]
+    ra: List[str]
+    sa: MiscSa
+    ec: List[List[List[int]]]
+
+
 class PokemonCrystalData:
     rom_addresses: Dict[str, int]
     ram_addresses: Dict[str, int]
@@ -105,7 +124,7 @@ class PokemonCrystalData:
     types: List[str]
     type_ids: Dict[str, int]
     tmhm: Dict[str, TMHMData]
-    f_t: List[List[int]]
+    misc: MiscData
 
     def __init__(self) -> None:
         self.rom_addresses = {}
@@ -143,11 +162,12 @@ def _init() -> None:
     trainer_data = data_json["trainers"]
     wildfish_data = data_json["wilds"]["fish"]
     type_data = data_json["types"]
-    f_data = data_json["misc"]["fuchsia"]
+    f_data = data_json["misc"]["fu"]
+    sa_data = data_json["misc"]["sa"]
+    ec_data = data_json["misc"]["ec"]
     tmhm_data = data_json["tmhm"]
 
     claimed_locations: Set[str] = set()
-    claimed_warps: Set[str] = set()
 
     data.regions = {}
 
@@ -243,6 +263,8 @@ def _init() -> None:
             move_attributes["accuracy"],
             move_attributes["pp"],
             move_attributes["is_hm"],
+            move_attributes["desc"],
+            move_attributes["name"],
         )
 
     data.trainers = {}
@@ -261,7 +283,14 @@ def _init() -> None:
             fish_data["Super"]
         )
 
-    data.f_t = f_data
+    sa_warps = {}
+    # print(sa_data)
+    for warp_name, warp_data in sa_data["warps"].items():
+        sa_warps[warp_name] = MiscWarp(warp_data["coords"], warp_data["id"])
+
+    ra_data = ["Y", "Y", "N", "Y", "N"]
+    data.misc = MiscData(f_data, ra_data, MiscSa(sa_warps, sa_data["pairs"]), ec_data)
+
     data.types = type_data["types"]
     data.type_ids = type_data["ids"]
 

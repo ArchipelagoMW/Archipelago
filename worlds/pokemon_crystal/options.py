@@ -220,6 +220,11 @@ class ExpModifier(Range):
 class ItemReceiveSound(DefaultOnToggle):
     """Play item received sound on receiving a remote item"""
     display_name = "Item Receive Sound"
+    
+
+class EnableMischief(Toggle):
+    """If I told you what this does, it would ruin the surprises :)"""
+    display_name = "Enable Mischief"
 
 
 @dataclass
@@ -252,3 +257,4 @@ class PokemonCrystalOptions(PerGameCommonOptions):
     better_marts: BetterMarts
     experience_modifier: ExpModifier
     item_receive_sound: ItemReceiveSound
+    enable_mischief: EnableMischief
