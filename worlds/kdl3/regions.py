@@ -119,46 +119,50 @@ def generate_rooms(world: "KDL3World", level_regions: Dict[int, Region]) -> None
                 .parent_region.add_exits([first_rooms[0x770200 + level - 1].name])
 
 
-def generate_valid_levels(world: "KDL3World", enforce_world: bool, enforce_pattern: bool) -> Dict[int, List[int]]:
-    levels: Dict[int, List[Optional[int]]] = {
-        1: [None] * 7,
-        2: [None] * 7,
-        3: [None] * 7,
-        4: [None] * 7,
-        5: [None] * 7,
-    }
+def generate_valid_levels(world: "KDL3World", shuffle_mode: int) -> Dict[int, List[int]]:
+    if shuffle_mode:
+        levels: Dict[int, List[Optional[int]]] = {
+            1: [None] * 7,
+            2: [None] * 7,
+            3: [None] * 7,
+            4: [None] * 7,
+            5: [None] * 7,
+        }
 
-    possible_stages = [default_levels[level][stage] for level in default_levels for stage in range(6)]
-    if world.multiworld.plando_connections[world.player]:
-        for connection in world.multiworld.plando_connections[world.player]:
-            try:
-                entrance_world, entrance_stage = connection.entrance.rsplit(" ", 1)
-                stage_world, stage_stage = connection.exit.rsplit(" ", 1)
-                new_stage = default_levels[location_name.level_names[stage_world.strip()]][int(stage_stage) - 1]
-                levels[location_name.level_names[entrance_world.strip()]][int(entrance_stage) - 1] = new_stage
-                possible_stages.remove(new_stage)
-
-            except Exception:
-                raise Exception(
-                    f"Invalid connection: {connection.entrance} =>"
-                    f" {connection.exit} for player {world.player} ({world.player_name})")
-
-    for level in range(1, 6):
-        for stage in range(6):
-            # Randomize bosses separately
-            try:
-                if levels[level][stage] is None:
-                    stage_candidates = [candidate for candidate in possible_stages
-                                        if (enforce_world and candidate in default_levels[level])
-                                        or (enforce_pattern and ((candidate - 1) & 0x00FFFF) % 6 == stage)
-                                        or (enforce_pattern == enforce_world)
-                                        ]
-                    new_stage = generate_valid_level(world, level, stage, stage_candidates, levels[level])
+        possible_stages = [default_levels[level][stage] for level in default_levels for stage in range(6)]
+        if world.multiworld.plando_connections[world.player]:
+            for connection in world.multiworld.plando_connections[world.player]:
+                try:
+                    entrance_world, entrance_stage = connection.entrance.rsplit(" ", 1)
+                    stage_world, stage_stage = connection.exit.rsplit(" ", 1)
+                    new_stage = default_levels[location_name.level_names[stage_world.strip()]][int(stage_stage) - 1]
+                    levels[location_name.level_names[entrance_world.strip()]][int(entrance_stage) - 1] = new_stage
                     possible_stages.remove(new_stage)
-                    levels[level][stage] = new_stage
-            except Exception:
-                raise Exception(f"Failed to find valid stage for {level}-{stage}. Remaining Stages:{possible_stages}")
 
+                except Exception:
+                    raise Exception(
+                        f"Invalid connection: {connection.entrance} =>"
+                        f" {connection.exit} for player {world.player} ({world.player_name})")
+
+        for level in range(1, 6):
+            for stage in range(6):
+                # Randomize bosses separately
+                try:
+                    if levels[level][stage] is None:
+                        stage_candidates = [candidate for candidate in possible_stages
+                                            if (shuffle_mode == 1 and candidate in default_levels[level])
+                                            or (shuffle_mode == 2 and ((candidate - 1) & 0x00FFFF) % 6 == stage)
+                                            or (shuffle_mode == 3)
+                                            ]
+                        new_stage = generate_valid_level(world, level, stage, stage_candidates, levels[level])
+                        possible_stages.remove(new_stage)
+                        levels[level][stage] = new_stage
+                except Exception:
+                    raise Exception(f"Failed to find valid stage for {level}-{stage}. Remaining Stages:{possible_stages}")
+    else:
+        levels = default_levels.copy()
+        for level in levels:
+            levels[level][6] = None
     # now handle bosses
     boss_shuffle: Union[int, str] = world.options.boss_shuffle.value
     plando_bosses = []
@@ -223,11 +227,9 @@ def create_levels(world: "KDL3World") -> None:
         5: level5,
     }
     level_shuffle = world.options.stage_shuffle.value
-    if level_shuffle != 0:
-        world.player_levels = generate_valid_levels(
-            world,
-            level_shuffle == 1,
-            level_shuffle == 2)
+    world.player_levels = generate_valid_levels(
+        world,
+        level_shuffle)
 
     generate_rooms(world, levels)
 
