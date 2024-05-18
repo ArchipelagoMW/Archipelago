@@ -85,6 +85,25 @@ class ExampleWorld(World):
     options: ExampleGameOptions
 ```
 
+### Option Groups
+Options may be categorized into groups for display on the WebHost. Option groups are displayed alphabetically on the
+player-options and weighted-options pages. Options without a group name are categorized into a generic "Game Options"
+group.
+
+```python
+from worlds.AutoWorld import WebWorld
+from BaseClasses import OptionGroup
+
+class MyWorldWeb(WebWorld):
+    option_groups = [
+        OptionGroup('Color Options', [
+            Options.ColorblindMode,
+            Options.FlashReduction,
+            Options.UIColors,
+        ]),
+    ]
+```
+
 ### Option Checking
 Options are parsed by `Generate.py` before the worlds are created, and then the option classes are created shortly after
 world instantiation. These are created as attributes on the MultiWorld and can be accessed with
