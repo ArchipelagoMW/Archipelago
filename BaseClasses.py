@@ -1453,6 +1453,14 @@ class Tutorial(NamedTuple):
     authors: List[str]
 
 
+class OptionGroup(NamedTuple):
+    """Define a grouping of options"""
+    name: str
+    """Name of the group to categorize this option in for display on the WebHost and in generated YAMLS."""
+    options: List[Type[Options.Option]]
+    """Options to be in the defined group. """
+
+
 class PlandoOptions(IntFlag):
     none = 0b0000
     items = 0b0001
