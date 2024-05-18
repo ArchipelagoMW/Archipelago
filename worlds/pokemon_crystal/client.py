@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, Set
+from typing import TYPE_CHECKING, Dict, Set, List
 
 from NetUtils import ClientStatus
 import worlds._bizhawk as bizhawk
@@ -62,6 +62,7 @@ class PokemonCrystalClient(BizHawkClient):
     patch_suffix = ".apcrystal"
     local_set_events: Dict[str, bool]
     local_found_key_items: Dict[str, bool]
+    phone_trap_locations: List[int]
 
     def __init__(self) -> None:
         super().__init__()
@@ -69,6 +70,7 @@ class PokemonCrystalClient(BizHawkClient):
         self.goal_flag = None
         self.local_set_events = {}
         self.local_found_key_items = {}
+        self.phone_trap_locations = []
 
     async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
         from CommonClient import logger
@@ -124,10 +126,21 @@ class PokemonCrystalClient(BizHawkClient):
             if read_result is None:  # Not in overworld
                 return
 
-            phone_trap_index = read_result[0][4]
-            if ctx.slot_data is not None and ctx.slot_data["phone_traps"] is not None and len(
-                    ctx.slot_data["phone_traps"]):
-                hint_locations = [location for location in ctx.slot_data["phone_traps"][:phone_trap_index] if
+            if not len(self.phone_trap_locations):
+                phone_result = await bizhawk.guarded_read(
+                    ctx.bizhawk_ctx,
+                    [(data.rom_addresses["AP_Setting_Phone_Trap_Locations"], 0x40, "ROM")],  # Flags
+                    [overworld_guard]
+                )
+                if phone_result is not None:
+                    read_locations = []
+                    for i in range(0, 16):
+                        loc = int.from_bytes(phone_result[0][i * 4:(i + 1) * 4], "little")
+                        read_locations.append(loc)
+                    self.phone_trap_locations = read_locations
+            else:
+                phone_trap_index = read_result[0][4]
+                hint_locations = [location for location in self.phone_trap_locations[:phone_trap_index] if
                                   location != 0]
                 if len(hint_locations):
                     await ctx.send_msgs([{

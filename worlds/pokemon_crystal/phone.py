@@ -43,9 +43,9 @@ def generate_phone_traps(world: PokemonCrystalWorld):
     world.random.shuffle(remote_locs)
 
     phone_traps_list = []
-    if psychic_location is not None and world.random.random() < 0.5:
+    if psychic_location is not None and world.random.random() < 0.75:
         phone_traps_list.append("psychic")
-    if bike_shop_location is not None and world.random.random() < 0.5:
+    if bike_shop_location is not None and world.random.random() < 0.75:
         phone_traps_list.append("bike_shop")
     remote_count = 3 if len(remote_locs) > 2 else len(remote_locs)
     phone_traps_list += ["remote"] * remote_count

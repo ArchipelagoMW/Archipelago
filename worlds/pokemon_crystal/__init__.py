@@ -327,11 +327,6 @@ class PokemonCrystalWorld(World):
             "randomize_pokegear",
             "hm_badge_requirements"
         )
-        if self.options.phone_trap_weight.value > 0:
-            if hasattr(self, "generated_phone_indices"):
-                slot_data["phone_traps"] = self.generated_phone_indices
-            else:
-                print(f"Pokecrystal Debug: Failed to get phone slot data for player {self.player}")
 
         return slot_data
 

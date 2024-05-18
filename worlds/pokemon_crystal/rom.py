@@ -277,6 +277,12 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
         address = data.rom_addresses["AP_Setting_SpecialCalls"] + (6 * i) + 2
         write_bytes(patched_rom, [script.caller_id], address)
 
+    phone_location_bytes = []
+    for loc in world.generated_phone_indices:
+        phone_location_bytes += list(loc.to_bytes(4, "little"))
+    phone_location_address = data.rom_addresses["AP_Setting_Phone_Trap_Locations"]
+    write_bytes(patched_rom, phone_location_bytes, phone_location_address)
+
     start_inventory_address = data.rom_addresses["AP_Start_Inventory"]
     start_inventory = world.options.start_inventory.value.copy()
     for item, quantity in start_inventory.items():
