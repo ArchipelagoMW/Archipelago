@@ -1,6 +1,7 @@
 import orjson
 import os
 from pkgutil import get_data
+from copy import deepcopy
 
 from typing import TYPE_CHECKING, List, Dict, Optional, Union, Callable
 from BaseClasses import Region, CollectionState
@@ -160,7 +161,7 @@ def generate_valid_levels(world: "KDL3World", shuffle_mode: int) -> Dict[int, Li
                 except Exception:
                     raise Exception(f"Failed to find valid stage for {level}-{stage}. Remaining Stages:{possible_stages}")
     else:
-        levels = default_levels.copy()
+        levels = deepcopy(default_levels)
         for level in levels:
             levels[level][6] = None
     # now handle bosses
