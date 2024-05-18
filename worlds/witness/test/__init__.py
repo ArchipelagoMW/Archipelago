@@ -11,6 +11,8 @@ class WitnessTestBase(WorldTestBase):
     game = "The Witness"
     player: ClassVar[int] = 1
 
+    world: WitnessWorld
+
 
 class WitnessMultiworldTestBase(MultiworldTestBase):
     options_per_world: List[Dict[str, Any]]

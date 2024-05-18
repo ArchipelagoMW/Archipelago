@@ -7,6 +7,9 @@ class TestSymbols(WitnessTestBase):
     }
 
     def test_progressive_symbols(self):
+        progressive_dots = self.get_items_by_name("Progressive Dots")
+        self.assertEquals(len(progressive_dots), 2)
+
         self.assertFalse(
             self.multiworld.state.can_reach("Outside Tutorial Shed Row 5", "Location", self.player)
         )
@@ -14,7 +17,7 @@ class TestSymbols(WitnessTestBase):
             self.multiworld.state.can_reach("Outside Tutorial Outpost Entry Panel", "Location", self.player)
         )
 
-        self.collect(self.world.create_item("Progressive Dots"))
+        self.collect(progressive_dots.pop())
 
         self.assertTrue(
             self.multiworld.state.can_reach("Outside Tutorial Shed Row 5", "Location", self.player)
@@ -23,7 +26,7 @@ class TestSymbols(WitnessTestBase):
             self.multiworld.state.can_reach("Outside Tutorial Outpost Entry Panel", "Location", self.player)
         )
 
-        self.collect(self.world.create_item("Progressive Dots"))
+        self.collect(progressive_dots.pop())
 
         self.assertTrue(
             self.multiworld.state.can_reach("Outside Tutorial Shed Row 5", "Location", self.player)
