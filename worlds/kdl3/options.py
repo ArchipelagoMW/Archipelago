@@ -90,9 +90,9 @@ class BossShuffle(PlandoBosses):
     Singularity: All (non-Zero) bosses will be replaced with a single boss
     Supports plando placement.
     """
-    bosses = frozenset(LocationName.boss_names.keys())
+    bosses = frozenset(location_name.boss_names.keys())
 
-    locations = frozenset(LocationName.level_names.keys())
+    locations = frozenset(location_name.level_names.keys())
 
     duplicate_bosses = True
 

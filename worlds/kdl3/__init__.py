@@ -275,7 +275,7 @@ class KDL3World(World):
                     self.multiworld.get_location(location_table[self.player_levels[level][stage]]
                                                  .replace("Complete", "Stage Completion"), self.player) \
                         .place_locked_item(KDL3Item(
-                            f"{LocationName.level_names_inverse[level]} - Stage Completion",
+                            f"{location_name.level_names_inverse[level]} - Stage Completion",
                             ItemClassification.progression, None, self.player))
 
     set_rules = set_rules
@@ -283,7 +283,7 @@ class KDL3World(World):
     def generate_basic(self) -> None:
         self.stage_shuffle_enabled = self.options.stage_shuffle > 0
         goal = self.options.goal.value
-        goal_location = self.multiworld.get_location(LocationName.goals[goal], self.player)
+        goal_location = self.multiworld.get_location(location_name.goals[goal], self.player)
         goal_location.place_locked_item(KDL3Item("Love-Love Rod", ItemClassification.progression, None, self.player))
         for level in range(1, 6):
             self.multiworld.get_location(f"Level {level} Boss - Defeated", self.player) \
@@ -329,8 +329,8 @@ class KDL3World(World):
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
         if self.stage_shuffle_enabled:
             spoiler_handle.write(f"\nLevel Layout ({self.multiworld.get_player_name(self.player)}):\n")
-            for level in LocationName.level_names:
-                for stage, i in zip(self.player_levels[LocationName.level_names[level]], range(1, 7)):
+            for level in location_name.level_names:
+                for stage, i in zip(self.player_levels[location_name.level_names[level]], range(1, 7)):
                     spoiler_handle.write(f"{level} {i}: {location_table[stage].replace(' - Complete', '')}\n")
         if self.options.animal_randomization:
             spoiler_handle.write(f"\nAnimal Friends ({self.multiworld.get_player_name(self.player)}):\n")
@@ -351,7 +351,7 @@ class KDL3World(World):
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]) -> None:
         if self.stage_shuffle_enabled:
-            regions = {LocationName.level_names[level]: level for level in LocationName.level_names}
+            regions = {location_name.level_names[level]: level for level in location_name.level_names}
             level_hint_data = {}
             for level in regions:
                 for stage in range(7):

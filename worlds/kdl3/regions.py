@@ -54,7 +54,7 @@ def generate_valid_level(world: "KDL3World", level: int, stage: int,
 
 
 def generate_rooms(world: "KDL3World", level_regions: Dict[int, Region]) -> None:
-    level_names = {LocationName.level_names[level]: level for level in LocationName.level_names}
+    level_names = {location_name.level_names[level]: level for level in location_name.level_names}
     room_data = orjson.loads(get_data(__name__, os.path.join("data", "Rooms.json")))
     rooms: Dict[str, KDL3Room] = dict()
     for room_entry in room_data:
@@ -134,8 +134,8 @@ def generate_valid_levels(world: "KDL3World", enforce_world: bool, enforce_patte
             try:
                 entrance_world, entrance_stage = connection.entrance.rsplit(" ", 1)
                 stage_world, stage_stage = connection.exit.rsplit(" ", 1)
-                new_stage = default_levels[LocationName.level_names[stage_world.strip()]][int(stage_stage) - 1]
-                levels[LocationName.level_names[entrance_world.strip()]][int(entrance_stage) - 1] = new_stage
+                new_stage = default_levels[location_name.level_names[stage_world.strip()]][int(stage_stage) - 1]
+                levels[location_name.level_names[entrance_world.strip()]][int(entrance_stage) - 1] = new_stage
                 possible_stages.remove(new_stage)
 
             except Exception:
@@ -171,14 +171,14 @@ def generate_valid_levels(world: "KDL3World", enforce_world: bool, enforce_patte
                 loc, plando_boss = option.split("-")
                 loc = loc.title()
                 plando_boss = plando_boss.title()
-                levels[LocationName.level_names[loc]][6] = LocationName.boss_names[plando_boss]
-                plando_bosses.append(LocationName.boss_names[plando_boss])
+                levels[location_name.level_names[loc]][6] = location_name.boss_names[plando_boss]
+                plando_bosses.append(location_name.boss_names[plando_boss])
             else:
                 option = option.title()
                 for level in levels:
                     if levels[level][6] is None:
-                        levels[level][6] = LocationName.boss_names[option]
-                        plando_bosses.append(LocationName.boss_names[option])
+                        levels[level][6] = location_name.boss_names[option]
+                        plando_bosses.append(location_name.boss_names[option])
 
     if boss_shuffle > 0:
         if boss_shuffle == BossShuffle.option_full:
@@ -231,7 +231,7 @@ def create_levels(world: "KDL3World") -> None:
 
     generate_rooms(world, levels)
 
-    level6.add_locations({LocationName.goals[world.options.goal.value]: None}, KDL3Location)
+    level6.add_locations({location_name.goals[world.options.goal.value]: None}, KDL3Location)
 
     menu.connect(level1, "Start Game")
     level1.connect(level2, "To Level 2")
