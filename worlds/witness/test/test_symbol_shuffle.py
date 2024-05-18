@@ -48,6 +48,7 @@ class TestArrows(WitnessMultiworldTestBase):
 
     common_options = {
         "shuffle_discarded_panels": True,
+        "early_symbol_item": False,
     }
 
     def test_arrows(self):
