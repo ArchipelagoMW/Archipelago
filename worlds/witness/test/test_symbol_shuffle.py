@@ -8,7 +8,7 @@ class TestSymbols(WitnessTestBase):
 
     def test_progressive_symbols(self):
         progressive_dots = self.get_items_by_name("Progressive Dots")
-        self.assertEquals(len(progressive_dots), 2)
+        self.assertEqual(len(progressive_dots), 2)
 
         self.assertFalse(
             self.multiworld.state.can_reach("Outside Tutorial Shed Row 5", "Location", self.player)
