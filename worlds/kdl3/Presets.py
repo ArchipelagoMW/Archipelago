@@ -25,6 +25,7 @@ all_random = {
     "ow_boss_requirement": "random",
     "boss_requirement_random": "random",
     "consumables": "random",
+    "starsanity": "random",
     "kirby_flavor_preset": "random",
     "gooey_flavor_preset": "random",
     "music_shuffle": "random",

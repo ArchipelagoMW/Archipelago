@@ -12,7 +12,7 @@ from .Locations import location_table, KDL3Location, level_consumables, consumab
 from .Names.AnimalFriendSpawns import animal_friend_spawns
 from .Names.EnemyAbilities import vanilla_enemies, enemy_mapping, enemy_restrictive
 from .Regions import create_levels, default_levels
-from .Options import KDL3Options
+from .Options import KDL3Options, kdl3_option_groups
 from .Presets import kdl3_options_presets
 from .Names import LocationName
 from .Room import KDL3Room
@@ -54,6 +54,7 @@ class KDL3WebWorld(WebWorld):
         )
     ]
     options_presets = kdl3_options_presets
+    option_groups = kdl3_option_groups
 
 
 class KDL3World(World):

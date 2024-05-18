@@ -1,6 +1,8 @@
 import random
 from dataclasses import dataclass
+from typing import List
 
+from BaseClasses import OptionGroup
 from Options import DeathLinkMixin, Choice, Toggle, OptionDict, Range, PlandoBosses, DefaultOnToggle, \
     PerGameCommonOptions
 from .Names import LocationName
@@ -440,3 +442,15 @@ class KDL3Options(PerGameCommonOptions, DeathLinkMixin):
     gooey_flavor: GooeyFlavor
     music_shuffle: MusicShuffle
     virtual_console: VirtualConsoleChanges
+
+
+kdl3_option_groups: List[OptionGroup] = [
+    OptionGroup("Goal Options", [Goal, GoalSpeed, TotalHeartStars, HeartStarsRequired, JumpingTarget, ]),
+    OptionGroup("World Options", [RemoteItems, StrictBosses, OpenWorld, OpenWorldBossRequirement, ConsumableChecks,
+                                  StarChecks, FillerPercentage, TrapPercentage, GooeyTrapPercentage,
+                                  SlowTrapPercentage, AbilityTrapPercentage, LevelShuffle, BossShuffle,
+                                  AnimalRandomization, CopyAbilityRandomization,  BossRequirementRandom,
+                                  Gifting, ]),
+    OptionGroup("Cosmetic Options", [GameLanguage, BossShuffleAllowBB, KirbyFlavorPreset, KirbyFlavor,
+                                     GooeyFlavorPreset, GooeyFlavor, MusicShuffle, VirtualConsoleChanges, ]),
+]
