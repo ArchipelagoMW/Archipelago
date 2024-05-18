@@ -9,9 +9,9 @@ import struct
 
 import settings
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
-from .Aesthetics import get_palette_bytes, kirby_target_palettes, get_kirby_palette, gooey_target_palettes, \
+from .aesthetics import get_palette_bytes, kirby_target_palettes, get_kirby_palette, gooey_target_palettes, \
     get_gooey_palette
-from .Compression import hal_decompress
+from .compression import hal_decompress
 import bsdiff4
 
 if TYPE_CHECKING:

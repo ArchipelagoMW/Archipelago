@@ -5,20 +5,20 @@ from BaseClasses import Tutorial, ItemClassification, MultiWorld, CollectionStat
 from Fill import fill_restrictive
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
-from .Items import item_table, item_names, copy_ability_table, animal_friend_table, filler_item_weights, KDL3Item, \
+from .items import item_table, item_names, copy_ability_table, animal_friend_table, filler_item_weights, KDL3Item, \
     trap_item_table, copy_ability_access_table, star_item_weights, total_filler_weights, animal_friend_spawn_table,\
     lookup_item_to_id
-from .Locations import location_table, KDL3Location, level_consumables, consumable_locations, star_locations
+from .locations import location_table, KDL3Location, level_consumables, consumable_locations, star_locations
 from .Names.AnimalFriendSpawns import animal_friend_spawns
 from .Names.EnemyAbilities import vanilla_enemies, enemy_mapping, enemy_restrictive
-from .Regions import create_levels, default_levels
-from .Options import KDL3Options, kdl3_option_groups
-from .Presets import kdl3_options_presets
+from .regions import create_levels, default_levels
+from .options import KDL3Options, kdl3_option_groups
+from .presets import kdl3_options_presets
 from .Names import LocationName
-from .Room import KDL3Room
-from .Rules import set_rules
-from .Rom import KDL3ProcedurePatch, get_base_rom_path, patch_rom, KDL3JHASH, KDL3UHASH
-from .Client import KDL3SNIClient
+from .room import KDL3Room
+from .rules import set_rules
+from .rom import KDL3ProcedurePatch, get_base_rom_path, patch_rom, KDL3JHASH, KDL3UHASH
+from .client import KDL3SNIClient
 
 from typing import Dict, TextIO, Optional, List, Any
 import os

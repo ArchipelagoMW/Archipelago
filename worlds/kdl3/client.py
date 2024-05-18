@@ -11,9 +11,9 @@ from MultiServer import mark_raw
 from NetUtils import ClientStatus, color
 from Utils import async_start
 from worlds.AutoSNIClient import SNIClient
-from .Locations import boss_locations
-from .Gifting import kdl3_gifting_options, kdl3_trap_gifts, kdl3_gifts, update_object, pop_object, initialize_giftboxes
-from .ClientAddrs import consumable_addrs, star_addrs
+from .locations import boss_locations
+from .gifting import kdl3_gifting_options, kdl3_trap_gifts, kdl3_gifts, update_object, pop_object, initialize_giftboxes
+from .client_addrs import consumable_addrs, star_addrs
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:

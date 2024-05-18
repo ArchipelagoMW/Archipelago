@@ -1,7 +1,7 @@
 from worlds.generic.Rules import set_rule, add_rule
 from .Names import LocationName, EnemyAbilities
-from .Locations import location_table
-from .Options import GoalSpeed
+from .locations import location_table
+from .options import GoalSpeed
 import typing
 
 if typing.TYPE_CHECKING:

@@ -1,6 +1,6 @@
 from typing import List, Tuple, Optional
 from . import KDL3TestBase
-from ..Room import KDL3Room
+from ..room import KDL3Room
 
 
 class TestCopyAbilityShuffle(KDL3TestBase):

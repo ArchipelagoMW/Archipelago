@@ -2,10 +2,10 @@ import struct
 from typing import Optional, Dict, TYPE_CHECKING, List, Union
 from BaseClasses import Region, ItemClassification, MultiWorld
 from worlds.Files import APTokenTypes
-from .ClientAddrs import consumable_addrs, star_addrs
+from .client_addrs import consumable_addrs, star_addrs
 
 if TYPE_CHECKING:
-    from .Rom import KDL3ProcedurePatch
+    from .rom import KDL3ProcedurePatch
 
 animal_map = {
     "Rick Spawn": 0,

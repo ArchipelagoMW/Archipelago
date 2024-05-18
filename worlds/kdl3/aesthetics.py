@@ -1,5 +1,5 @@
 import struct
-from .Options import KirbyFlavorPreset, GooeyFlavorPreset
+from .options import KirbyFlavorPreset, GooeyFlavorPreset
 from typing import TYPE_CHECKING, Optional, Dict, List, Tuple
 
 if TYPE_CHECKING:

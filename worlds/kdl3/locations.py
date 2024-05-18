@@ -3,7 +3,7 @@ from BaseClasses import Location, Region
 from .Names import LocationName
 
 if typing.TYPE_CHECKING:
-    from .Room import KDL3Room
+    from .room import KDL3Room
 
 
 class KDL3Location(Location):

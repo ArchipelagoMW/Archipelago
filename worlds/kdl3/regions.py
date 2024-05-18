@@ -5,10 +5,10 @@ from pkgutil import get_data
 from typing import TYPE_CHECKING, List, Dict, Optional, Union, Callable
 from BaseClasses import Region, CollectionState
 from worlds.generic.Rules import add_item_rule
-from .Locations import KDL3Location
+from .locations import KDL3Location
 from .Names import LocationName
-from .Options import BossShuffle
-from .Room import KDL3Room
+from .options import BossShuffle
+from .room import KDL3Room
 
 if TYPE_CHECKING:
     from . import KDL3World
