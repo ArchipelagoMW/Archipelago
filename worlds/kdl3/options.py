@@ -5,7 +5,7 @@ from typing import List
 from BaseClasses import OptionGroup
 from Options import DeathLinkMixin, Choice, Toggle, OptionDict, Range, PlandoBosses, DefaultOnToggle, \
     PerGameCommonOptions
-from .Names import LocationName
+from .names import location_name
 
 
 class RemoteItems(DefaultOnToggle):

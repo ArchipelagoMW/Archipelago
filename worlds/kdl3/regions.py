@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, List, Dict, Optional, Union, Callable
 from BaseClasses import Region, CollectionState
 from worlds.generic.Rules import add_item_rule
 from .locations import KDL3Location
-from .Names import LocationName
+from .names import location_name
 from .options import BossShuffle
 from .room import KDL3Room
 

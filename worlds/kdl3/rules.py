@@ -1,5 +1,5 @@
 from worlds.generic.Rules import set_rule, add_rule
-from .Names import LocationName, EnemyAbilities
+from .names import location_name, enemy_abilities
 from .locations import location_table
 from .options import GoalSpeed
 import typing

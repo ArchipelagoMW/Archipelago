@@ -1,6 +1,6 @@
 import typing
 from BaseClasses import Location, Region
-from .Names import LocationName
+from .names import location_name
 
 if typing.TYPE_CHECKING:
     from .room import KDL3Room
