@@ -52,3 +52,4 @@ class TestImplemented(unittest.TestCase):
     def test_no_failed_world_loads(self):
         if failed_world_loads:
             self.fail(f"The following worlds failed to load: {failed_world_loads}")
+            
