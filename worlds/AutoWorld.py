@@ -11,11 +11,11 @@ from dataclasses import make_dataclass
 from typing import (Any, Callable, ClassVar, Dict, FrozenSet, List, Mapping,
                     Optional, Set, TextIO, Tuple, TYPE_CHECKING, Type, Union)
 
-from Options import ExcludeLocations, ItemLinks, LocalItems, NonLocalItems, PerGameCommonOptions, \
-    PriorityLocations, \
-    StartHints, \
-    StartInventory, StartInventoryPool, StartLocationHints
-from BaseClasses import CollectionState, OptionGroup
+from Options import (
+    ExcludeLocations, ItemLinks, LocalItems, NonLocalItems, OptionGroup, PerGameCommonOptions,
+    PriorityLocations, StartHints, StartInventory, StartInventoryPool, StartLocationHints
+)
+from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
     from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance
