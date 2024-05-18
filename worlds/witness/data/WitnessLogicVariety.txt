@@ -1143,15 +1143,15 @@ Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Caves Path to Challenge - 0x01
 158486 - 0x0A2DD (Left Upstairs Left Row 4) - 0x0A2D7 - Dots & Full Dots & Triangles
 158487 - 0x0A2EA (Left Upstairs Left Row 5) - 0x0A2DD - Dots & Full Dots & Triangles & Eraser
 158488 - 0x0008F (Right Upstairs Left Row 1) - True - Dots
-158489 - 0x0006B (Right Upstairs Left Row 2) - 0x0008F - Black/White Squares
-158490 - 0x0008B (Right Upstairs Left Row 3) - 0x0006B - Black/White Squares & Stars & Stars + Same Colored Symbol
-158491 - 0x0008C (Right Upstairs Left Row 4) - 0x0008B - Black/White Squares & Stars & Stars + Same Colored Symbol & Shapers
-158492 - 0x0008A (Right Upstairs Left Row 5) - 0x0008C - Black/White Squares & Stars & Stars + Same Colored Symbol
-158493 - 0x00089 (Right Upstairs Left Row 6) - 0x0008A - Black/White Squares & Stars & Stars + Same Colored Symbol & Rotated Shapers
+158489 - 0x0006B (Right Upstairs Left Row 2) - 0x0008F - Black/White Squares & Colored Squares
+158490 - 0x0008B (Right Upstairs Left Row 3) - 0x0006B - Black/White Squares & Colored Squares & Stars & Stars + Same Colored Symbol
+158491 - 0x0008C (Right Upstairs Left Row 4) - 0x0008B - Black/White Squares & Colored Squares & Stars & Stars + Same Colored Symbol & Shapers
+158492 - 0x0008A (Right Upstairs Left Row 5) - 0x0008C - Black/White Squares & Colored Squares & Stars & Stars + Same Colored Symbol
+158493 - 0x00089 (Right Upstairs Left Row 6) - 0x0008A - Black/White Squares & Colored Squares & Stars & Stars + Same Colored Symbol & Rotated Shapers
 158494 - 0x0006A (Right Upstairs Left Row 7) - 0x00089 - Stars & Stars + Same Colored Symbol & Shapers & Negative Shapers
 158495 - 0x0006C (Right Upstairs Left Row 8) - 0x0006A - Dots & Shapers & Negative Shapers & Eraser
-158496 - 0x00027 (Right Upstairs Right Row 1) - True - Black/White Squares & Eraser & Symmetry
-158497 - 0x00028 (Right Upstairs Right Row 2) - 0x00027 - Black/White Squares & Eraser & Symmetry
+158496 - 0x00027 (Right Upstairs Right Row 1) - True - Black/White Squares & Colored Squares & Eraser & Symmetry
+158497 - 0x00028 (Right Upstairs Right Row 2) - 0x00027 - Black/White Squares & Colored Squares & Eraser & Symmetry
 158498 - 0x00029 (Right Upstairs Right Row 3) - 0x00028 - Stars & Stars + Same Colored Symbol & Eraser & Symmetry
 158476 - 0x09DD5 (Lone Pillar) - True - Triangles & Dots
 Door - 0x019A5 (Pillar Door) - 0x09DD5
