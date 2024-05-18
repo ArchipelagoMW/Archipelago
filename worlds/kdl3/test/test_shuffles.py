@@ -1,6 +1,7 @@
 from typing import List, Tuple, Optional
 from . import KDL3TestBase
 from ..room import KDL3Room
+from ..names import animal_friend_spawns
 
 
 class TestCopyAbilityShuffle(KDL3TestBase):
@@ -174,6 +175,14 @@ class TestAnimalShuffle(KDL3TestBase):
         self.assertTrue(sand_canyon_6.item is not None and sand_canyon_6.item.name in
                         {"Kine Spawn", "Coo Spawn"}, f"Multiworld did not place Coo/Kine, Seed: {self.multiworld.seed}")
 
+    def test_problematic(self) -> None:
+        for spawns in animal_friend_spawns.problematic_sets:
+            placed = [self.multiworld.get_location(spawn, 1).item for spawn in spawns]
+            placed_names = set([item.name for item in placed])
+            self.assertEqual(len(placed), len(placed_names),
+                             f"Duplicate animal placed in problematic locations:"
+                             f" {[spawn.location for spawn in placed]}")
+
 
 class TestAllShuffle(KDL3TestBase):
     options = {
@@ -237,6 +246,14 @@ class TestAllShuffle(KDL3TestBase):
         sand_canyon_6 = self.multiworld.get_location("Sand Canyon 6 - Animal 1", 1)
         self.assertTrue(sand_canyon_6.item is not None and sand_canyon_6.item.name in
                         {"Kine Spawn", "Coo Spawn"}, f"Multiworld did not place Coo/Kine, Seed: {self.multiworld.seed}")
+
+    def test_problematic(self) -> None:
+        for spawns in animal_friend_spawns.problematic_sets:
+            placed = [self.multiworld.get_location(spawn, 1).item for spawn in spawns]
+            placed_names = set([item.name for item in placed])
+            self.assertEqual(len(placed), len(placed_names),
+                             f"Duplicate animal placed in problematic locations:"
+                             f" {[spawn.location for spawn in placed]}")
 
     def test_cutter_and_burning_reachable(self) -> None:
         rooms = self.multiworld.worlds[1].rooms

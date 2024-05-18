@@ -240,6 +240,9 @@ MainLoopHook:
     BEQ .Return ; return if we are
     LDA $5541 ; gooey status
     BPL .Slowness ; gooey is already spawned
+    LDA $39D1 ; is kirby alive?
+    BEQ .Slowness ; branch if he isn't
+    ; maybe BMI here too?
     LDA $8080
     CMP #$0000 ; did we get a gooey trap
     BEQ .Slowness ; branch if we did not
@@ -432,17 +435,47 @@ AnimalFriendSpawn:
     BNE .Return
     XBA
     PHA
+    PHX
+    PHA
+    LDX #$0000
+    .CheckSpawned:
+    LDA $05CA, X
+    BNE .Continue
+    LDA #$0002
+    CMP $074A, X
+    BNE .ContinueCheck
+    PLA
+    PHA
+    XBA
+    CMP $07CA, X
+    BEQ .AlreadySpawned
+    .ContinueCheck:
+    INX
+    INX
+    BRA .CheckSpawned
+    .Continue:
+    PLA
+    PLX
     ASL
     TAY
     PLA
     INC
     CMP $8000, Y ; do we have this animal friend
     BEQ .Return ; we have this animal friend
+    .False:
     INX
     .Return:
     PLY
     LDA #$9999
     RTL
+    .AlreadySpawned:
+    PLA
+    PLX
+    ASL
+    TAY
+    PLA
+    BRA .False
+
 
 WriteBWRAM:
     LDY #$6001 ;starting addr

@@ -9,7 +9,7 @@ from .items import item_table, item_names, copy_ability_table, animal_friend_tab
     trap_item_table, copy_ability_access_table, star_item_weights, total_filler_weights, animal_friend_spawn_table,\
     lookup_item_to_id
 from .locations import location_table, KDL3Location, level_consumables, consumable_locations, star_locations
-from .names.animal_friend_spawns import animal_friend_spawns
+from .names.animal_friend_spawns import animal_friend_spawns, problematic_sets
 from .names.enemy_abilities import vanilla_enemies, enemy_mapping, enemy_restrictive
 from .regions import create_levels, default_levels
 from .options import KDL3Options, kdl3_option_groups
@@ -213,6 +213,24 @@ class KDL3World(World):
                 self.collect(allstate, self.create_item(item))
             self.random.shuffle(locations)
             fill_restrictive(self.multiworld, allstate, locations, items, True, True)
+
+            # Need to ensure all of these are unique items, and replace them if they aren't
+            for spawns in problematic_sets:
+                placed = [self.get_location(spawn).item for spawn in spawns]
+                placed_names = set([item.name for item in placed])
+                if len(placed_names) != len(placed):
+                    # have a duplicate
+                    animals = []
+                    for spawn in spawns:
+                        spawn_location = self.get_location(spawn)
+                        if spawn_location.item.name not in animals:
+                            animals.append(spawn_location.item.name)
+                        else:
+                            new_animal = self.random.choice([x for x in ["Rick Spawn", "Coo Spawn", "Kine Spawn",
+                                                                         "ChuChu Spawn", "Nago Spawn", "Pitch Spawn"]
+                                                             if x not in placed_names])
+                            spawn_location.item = self.create_item(new_animal)
+                            # logically, this should be sound pre-ER. May need to adjust around it with ER in the future
         else:
             animal_friends = animal_friend_spawns.copy()
             for animal in animal_friends:

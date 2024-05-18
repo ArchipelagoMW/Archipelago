@@ -1,5 +1,5 @@
 from worlds.generic.Rules import set_rule, add_rule
-from .names import location_name, enemy_abilities
+from .names import location_name, enemy_abilities, animal_friend_spawns
 from .locations import location_table
 from .options import GoalSpeed
 import typing
@@ -301,6 +301,13 @@ def set_rules(world: "KDL3World") -> None:
              lambda state: can_reach_kine(state, world.player) or can_reach_chuchu(state, world.player))
     set_rule(world.multiworld.get_location(enemy_abilities.Sand_Canyon_4_E10, world.player),
              lambda state: can_reach_kine(state, world.player) or can_reach_chuchu(state, world.player))
+
+    # animal friend rules
+    set_rule(world.multiworld.get_location(animal_friend_spawns.iceberg_4_a2, world.player),
+             lambda state: can_reach_coo(state, world.player) and can_reach_burning(state, world.player))
+    set_rule(world.multiworld.get_location(animal_friend_spawns.iceberg_4_a3, world.player),
+             lambda state: can_reach_chuchu(state, world.player) and can_reach_coo(state, world.player)
+             and can_reach_burning(state, world.player))
 
     for boss_flag, purification, i in zip(["Level 1 Boss - Purified", "Level 2 Boss - Purified",
                                            "Level 3 Boss - Purified", "Level 4 Boss - Purified",
