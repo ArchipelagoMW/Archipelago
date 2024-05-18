@@ -21,15 +21,16 @@ limpiarlas, selecciona el atajo y presiona la tecla Esc.
 
 ## Software Opcional
 
-- [Pokémon Emerald AP Tracker](https://github.com/seto10987/Archipelago-Emerald-AP-Tracker/releases/latest), para usar con
-[PopTracker](https://github.com/black-sliver/PopTracker/releases)
+- [Pokémon Emerald AP Tracker](https://github.com/seto10987/Archipelago-Emerald-AP-Tracker/releases/latest), para usar
+con [PopTracker](https://github.com/black-sliver/PopTracker/releases)
 
 ## Generando y Parcheando el Juego
 
 1. Crea tu archivo de configuración (YAML). Puedes hacerlo en 
 [Página de Opciones de Pokémon Emerald](../../../games/Pokemon%20Emerald/player-options).
-2. Sigue las instrucciones generales de Archipelago para [Generar un juego]
-(../../Archipelago/setup/en#generating-a-game). Esto generará un archivo de salida (output file) para ti. Tu archivo 
+2. Sigue las instrucciones generales de Archipelago para
+[Generar un juego](../../Archipelago/setup/en#generating-a-game). Esto generará un archivo de salida (output file) para
+ti. Tu archivo 
 de parche tendrá la extensión de archivo`.apemerald`.
 3. Abre `ArchipelagoLauncher.exe`
 4. Selecciona "Open Patch" en el lado derecho y elige tu archivo de parcheo.
