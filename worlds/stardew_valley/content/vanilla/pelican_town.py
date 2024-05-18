@@ -213,7 +213,7 @@ pelican_town = ContentPack(
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.ol_slitherlegs: (ShopSource(money_price=25000, shop_region=LogicRegion.bookseller_2),),
         Book.price_catalogue: (ShopSource(money_price=3000, shop_region=LogicRegion.bookseller_2),),
-        Book.the_alleyway_buffet: (PermanentSource(regions=Region.town),
+        Book.the_alleyway_buffet: (PermanentSource(regions=Region.town),  # TODO add iron axe and iron pickaxe
                                    ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.the_art_o_crabbing: (  # Needs a source for the SquidFest Iridium Tier,
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
