@@ -119,6 +119,9 @@ class KH1World(World):
             item_pool += [self.create_item("Ansem's Report " + str(i+1))]
             i = i + 1
         
+        while len(item_pool) > total_locations:
+            item_pool.pop(0)
+        
         print("KH1: Item Pool = " + str(len(item_pool)))
         print("KH1: Locations = " + str(total_locations))
         print("KH1: Level Up Item Pool = " + str(len(level_up_item_pool)))
