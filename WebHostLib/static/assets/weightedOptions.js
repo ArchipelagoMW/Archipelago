@@ -126,8 +126,8 @@ const addRangeRow = (optionName) => {
   const inputQuery = `input[type=number][data-option="${optionName}"].range-option-value`;
   const inputTarget = document.querySelector(inputQuery);
   const newValue = inputTarget.value;
-  if (!/^\d+$/.test(newValue)) {
-    alert('Range values must be a whole number!');
+  if (!/^-?\d+$/.test(newValue)) {
+    alert('Range values must be a positive or negative integer!');
     return;
   }
   inputTarget.value = '';
