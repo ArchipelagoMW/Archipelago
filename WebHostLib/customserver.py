@@ -142,7 +142,7 @@ class WebHostContext(Context):
             savegame_data = Room.get(id=self.room_id).multisave
             if savegame_data:
                 self.set_save(restricted_loads(Room.get(id=self.room_id).multisave))
-            self._start_async_saving()
+            self._start_async_saving(atexit_save=False)
         threading.Thread(target=self.listen_to_db_commands, daemon=True).start()
 
     @db_session
@@ -278,6 +278,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                 raise
             finally:
                 try:
+                    ctx._save()
                     with (db_session):
                         # ensure the Room does not spin up again on its own, minute of safety buffer
                         room = Room.get(id=room_id)
