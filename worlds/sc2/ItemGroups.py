@@ -149,6 +149,14 @@ class ItemGroupNames:
 
     VANILLA_ITEMS = "Vanilla Items"
 
+    @classmethod
+    def get_all_group_names(cls) -> typing.Set[str]:
+        return {
+            name for identifier, name in cls.__dict__.items()
+            if not identifier.startswith('_')
+            and not identifier.startswith('get_')
+        }
+
 
 # Terran
 item_name_groups[ItemGroupNames.TERRAN_ITEMS] = terran_items = [

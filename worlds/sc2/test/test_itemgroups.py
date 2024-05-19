@@ -26,7 +26,5 @@ class ItemGroupsUnitTests(unittest.TestCase):
             self.assertIn("Stimpack", item_name)
 
     def test_all_item_group_names_have_a_group_defined(self) -> None:
-        for var_name, display_name in ItemGroups.ItemGroupNames.__dict__.items():
-            if var_name.startswith("_"):
-                continue
-            assert display_name in ItemGroups.item_name_groups
+        for display_name in ItemGroups.ItemGroupNames.get_all_group_names():
+            self.assertIn(display_name, ItemGroups.item_name_groups)

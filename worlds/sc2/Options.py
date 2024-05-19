@@ -1,17 +1,58 @@
 from dataclasses import dataclass, fields, Field
 from typing import *
 
-from Options import (Choice, Toggle, DefaultOnToggle, ItemDict, OptionSet, Range, OptionDict,
+from Utils import is_iterable_except_str
+from Options import (Choice, Toggle, DefaultOnToggle, OptionSet, Range,
     PerGameCommonOptions, Option, VerifyKeys)
 from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
 from .MissionTables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_no_build_missions, \
     campaign_mission_table
 from .MissionOrders import vanilla_shuffle_order, mini_campaign_order
+from .mission_groups import mission_groups, MissionGroupNames
 
 if TYPE_CHECKING:
     from worlds.AutoWorld import World
     from . import SC2World
+
+
+class Sc2MissionSet(OptionSet):
+    """Option set made for handling missions and expanding mission groups"""
+    valid_keys = [x.mission_name for x in SC2Mission]
+
+    @classmethod
+    def from_any(cls, data: Any):
+        if is_iterable_except_str(data):
+            return cls(data)
+        return cls.from_text(str(data))
+
+    def verify(self, world: Type['World'], player_name: str, plando_options: PlandoOptions) -> None:
+        """Overridden version of function from Options.VerifyKeys for a better error message"""
+        new_value: set[str] = set()
+        case_insensitive_group_mapping = {
+            group_name.casefold(): group_value for group_name, group_value in mission_groups.items()
+        }
+        case_insensitive_group_mapping.update({mission.mission_name.casefold(): [mission.mission_name] for mission in SC2Mission})
+        for group_name in self.value:
+            item_names = case_insensitive_group_mapping.get(group_name.casefold(), {group_name})
+            new_value.update(item_names)
+        self.value = new_value
+        for item_name in self.value:
+            if item_name not in self.valid_keys:
+                picks = get_fuzzy_results(
+                    item_name,
+                    list(self.valid_keys) + list(MissionGroupNames.get_all_group_names()),
+                    limit=1,
+                )
+                raise Exception(f"Mission {item_name} from option {self} "
+                                f"is not a valid mission name from {world.game}. "
+                                f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
+
+    def __iter__(self) -> Iterator[str]:
+        return self.value.__iter__()
+
+    def __len__(self) -> int:
+        return self.value.__len__()
 
 
 class GameDifficulty(Choice):
@@ -633,7 +674,6 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
             # It doesn't play nice with trigger merging dicts and lists together, though, so best not to advertise it overmuch.
             data = {item: 0 for item in data}
         if isinstance(data, dict):
-            cls.verify_keys(data)
             for key, value in data.items():
                 if not isinstance(value, int):
                     raise ValueError(f"Invalid type in '{cls.display_name}': element '{key}' maps to '{value}', expected an integer")
@@ -647,7 +687,9 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
         """Overridden version of function from Options.VerifyKeys for a better error message"""
         new_value: dict[str, int] = {}
         case_insensitive_group_mapping = {
-            group_name.casefold(): group_value for group_name, group_value in world.item_name_groups.items()}
+            group_name.casefold(): group_value for group_name, group_value in world.item_name_groups.items()
+        }
+        case_insensitive_group_mapping.update({item.casefold(): [item] for item in world.item_names})
         for group_name in self.value:
             item_names = case_insensitive_group_mapping.get(group_name.casefold(), {group_name})
             for item_name in item_names:
@@ -655,7 +697,12 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
         self.value = new_value
         for item_name in self.value:
             if item_name not in world.item_names:
-                picks = get_fuzzy_results(item_name, list(world.item_names), limit=1)
+                from . import ItemGroups
+                picks = get_fuzzy_results(
+                    item_name,
+                    list(world.item_names) + list(ItemGroups.ItemGroupNames.get_all_group_names()),
+                    limit=1,
+                )
                 raise Exception(f"Item {item_name} from option {self} "
                                 f"is not a valid item name from {world.game}. "
                                 f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
@@ -691,7 +738,7 @@ class UnexcludedItems(Sc2ItemDict):
     display_name = "Unexcluded Items"
 
 
-class ExcludedMissions(OptionSet):
+class ExcludedMissions(Sc2MissionSet):
     """Guarantees that these missions will not appear in the campaign
     Doesn't apply to vanilla mission order.
     It may be impossible to build a valid campaign if too many missions are excluded."""

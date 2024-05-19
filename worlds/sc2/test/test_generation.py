@@ -4,7 +4,7 @@ Unit tests for world generation
 from typing import *
 from .test_base import Sc2SetupTestBase
 
-from .. import Options, MissionTables, ItemNames, Items, ItemGroups
+from .. import Options, MissionTables, ItemNames, Items, ItemGroups, mission_groups
 from .. import get_all_missions
 
 
@@ -89,6 +89,20 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertIn(ItemNames.MARINE, self.world.options.excluded_items)
         for item_name in ItemGroups.barracks_units:
             self.assertNotIn(item_name, item_names)
+
+    def test_excluding_mission_groups_excludes_all_missions_in_group(self):
+        options = {
+            'excluded_missions': [
+                mission_groups.MissionGroupNames.HOTS_ZERUS_MISSIONS,
+            ],
+            'mission_order': Options.MissionOrder.option_grid,
+        }
+        self.generate_world(options)
+        missions = get_all_missions(self.world.mission_req_table)
+        self.assertTrue(missions)
+        self.assertNotIn(MissionTables.SC2Mission.WAKING_THE_ANCIENT, missions)
+        self.assertNotIn(MissionTables.SC2Mission.THE_CRUCIBLE, missions)
+        self.assertNotIn(MissionTables.SC2Mission.SUPREME, missions)
 
     def test_excluding_campaigns_excludes_campaign_specific_items(self) -> None:
         options = {
