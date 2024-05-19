@@ -21,7 +21,6 @@ import Utils
 
 from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor, load_server_cert
 from Utils import restricted_loads, cache_argsless
-from .locker import Locker
 from .models import Command, GameDataPackage, Room, db
 
 
@@ -246,25 +245,24 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
             ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, []))
             await ctx.shutdown_task
 
-            # ensure auto launch is on the same page in regard to room activity.
-            with db_session:
-                room: Room = Room.get(id=ctx.room_id)
-                room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(seconds=room.timeout + 60)
-
         except (KeyboardInterrupt, SystemExit):
-            with db_session:
-                room = Room.get(id=room_id)
-                # ensure the Room does not spin up again on its own, minute of safety buffer
-                room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(minutes=1, seconds=room.timeout)
+            pass
         except Exception:
             with db_session:
                 room = Room.get(id=room_id)
                 room.last_port = -1
-                # ensure the Room does not spin up again on its own, minute of safety buffer
-                room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(minutes=1, seconds=room.timeout)
             raise
         finally:
-            rooms_shutting_down.put(room_id)
+            try:
+                with (db_session):
+                    # ensure the Room does not spin up again on its own, minute of safety buffer
+                    room = Room.get(id=room_id)
+                    room.last_activity = datetime.datetime.utcnow() - \
+                                         datetime.timedelta(minutes=1, seconds=room.timeout)
+                logging.info(f"Shutting down room {room_id} on {name}.")
+            finally:
+                await asyncio.sleep(5)
+                rooms_shutting_down.put(room_id)
 
     class Starter(threading.Thread):
         def run(self):

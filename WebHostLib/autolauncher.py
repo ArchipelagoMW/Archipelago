@@ -80,7 +80,7 @@ def autohost(config: dict):
                             room.last_activity >= datetime.utcnow() - timedelta(days=3))
                         for room in rooms:
                             # we have to filter twice, as the per-room timeout can't currently be PonyORM transpiled.
-                            if room.last_activity >= datetime.utcnow() - timedelta(seconds=room.timeout):
+                            if room.last_activity >= datetime.utcnow() - timedelta(seconds=room.timeout + 5):
                                 hosters[room.id.int % len(hosters)].start_room(room.id)
 
         except AlreadyRunningException:
