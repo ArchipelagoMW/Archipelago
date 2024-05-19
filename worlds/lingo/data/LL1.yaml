@@ -6050,7 +6050,7 @@
     paintings:
       - id: symmetry_painting_a_5
         orientation: east
-      - id: symmetry_painting_a_5
+      - id: symmetry_painting_b_5
         disable: True
   The Wondrous (Window):
     entrances:
