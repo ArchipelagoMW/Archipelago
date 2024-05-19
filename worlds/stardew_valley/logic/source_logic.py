@@ -8,11 +8,13 @@ from .has_logic import HasLogicMixin
 from .money_logic import MoneyLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
+from .tool_logic import ToolLogicMixin
 from ..data.artisan import MachineSource
 from ..data.game_item import PermanentSource, ItemSource, GameItem
-from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, SeasonalForagingSource, HarvestCropSource, HarvestFruitTreeSource
+from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, SeasonalForagingSource, \
+    HarvestCropSource, HarvestFruitTreeSource, ToolSource
 from ..data.shop import ShopSource
-from ..stardew_rule import true_
+from ..stardew_rule import true_, And
 
 
 class SourceLogicMixin(BaseLogicMixin):
@@ -22,7 +24,7 @@ class SourceLogicMixin(BaseLogicMixin):
 
 
 class SourceLogic(BaseLogic[Union[SourceLogicMixin, HasLogicMixin, ReceivedLogicMixin, HarvestingLogicMixin, MoneyLogicMixin, RegionLogicMixin,
-ArtisanLogicMixin]]):
+ArtisanLogicMixin, ToolLogicMixin]]):
 
     def has_access_to_item(self, item: GameItem):
         rules = []
@@ -76,3 +78,11 @@ ArtisanLogicMixin]]):
     @has_access_to.register
     def _(self, source: PermanentSource):
         return self.logic.region.can_reach_any(source.regions) if source.regions else true_
+
+    @has_access_to.register
+    def _(self, source: ToolSource):
+        regions_rule = self.logic.region.can_reach_any(source.regions)
+        tools_rule = []
+        for (tool, material) in source.tools:
+            tools_rule.append(self.logic.tool.has_tool(tool, material))
+        return regions_rule & And(*tools_rule)

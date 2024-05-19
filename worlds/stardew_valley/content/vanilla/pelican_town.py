@@ -1,7 +1,7 @@
 from ..game_content import ContentPack
 from ...data import villagers_data, fish_data
 from ...data.game_item import PermanentSource
-from ...data.harvest import ForagingSource, SeasonalForagingSource
+from ...data.harvest import ForagingSource, SeasonalForagingSource, ToolSource
 from ...data.shop import ShopSource
 from ...strings.book_names import Book
 from ...strings.crop_names import Fruit
@@ -13,6 +13,7 @@ from ...strings.material_names import Material
 from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed, TreeSeed
+from ...strings.tool_names import Tool, ToolMaterial
 
 pelican_town = ContentPack(
     "Pelican Town (Vanilla)",
@@ -213,7 +214,7 @@ pelican_town = ContentPack(
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.ol_slitherlegs: (ShopSource(money_price=25000, shop_region=LogicRegion.bookseller_2),),
         Book.price_catalogue: (ShopSource(money_price=3000, shop_region=LogicRegion.bookseller_2),),
-        Book.the_alleyway_buffet: (PermanentSource(regions=Region.town),  # TODO add iron axe and iron pickaxe
+        Book.the_alleyway_buffet: (ToolSource(regions=Region.town, tools=((Tool.axe, ToolMaterial.iron), (Tool.pickaxe, ToolMaterial.iron))),
                                    ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.the_art_o_crabbing: (  # Needs a source for the SquidFest Iridium Tier,
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
