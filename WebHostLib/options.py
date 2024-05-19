@@ -4,6 +4,7 @@ import yaml
 import requests
 import json
 import flask
+from urllib.parse import urlparse
 
 import Options
 from Options import Visibility
@@ -69,7 +70,10 @@ def generate_game(player_name: str, formatted_options: dict):
             player_name: formatted_options,
         },
     }
-    r = requests.post("https://archipelago.gg/api/generate", json=payload)
+
+    url = urlparse(request.base_url)
+    port_string = f":{url.port}" if url.port else ""
+    r = requests.post(f"{url.scheme}://{url.hostname}{port_string}/api/generate", json=payload)
     if 200 <= r.status_code <= 299:
         response_data = r.json()
         return redirect(response_data["url"])
