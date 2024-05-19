@@ -1,7 +1,7 @@
 from typing import Dict, List, NamedTuple, Optional
 
 from BaseClasses import MultiWorld, Region, Entrance
-from .Locations import KH1Location, location_table, get_locations_by_category
+from .Locations import KH1Location, location_table
 
 
 class KH1RegionData(NamedTuple):

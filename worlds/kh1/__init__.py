@@ -8,7 +8,6 @@ from .Options import KH1Options
 from .Regions import create_regions
 from .Rules import set_rules
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
-import random
 
 
 def launch_client():
@@ -50,11 +49,6 @@ class KH1World(World):
     location_name_groups = location_name_groups
 
     def create_items(self):
-        
-        print("Reports in Pool: " + str(self.determine_reports_in_pool()))
-        print("Reports to Open Final Rest Door: " + str(self.determine_reports_required_to_open_final_rest_door()))
-        print("Reports to Open End of the World: " + str(self.determine_reports_required_to_open_end_of_the_world()))
-        
         item_pool: List[KH1Item] = []
         possible_level_up_item_pool = []
         level_up_item_pool = []
@@ -113,19 +107,12 @@ class KH1World(World):
             else:
                 item_pool += [self.create_item(name) for _ in range(0, quantity)]
         
-        i = 0
-        reports_in_pool = self.determine_reports_in_pool()
-        while i < reports_in_pool:
+        for i in range(self.determine_reports_in_pool()):
             item_pool += [self.create_item("Ansem's Report " + str(i+1))]
-            i = i + 1
         
         while len(item_pool) > total_locations:
             item_pool.pop(0)
         
-        print("KH1: Item Pool = " + str(len(item_pool)))
-        print("KH1: Locations = " + str(total_locations))
-        print("KH1: Level Up Item Pool = " + str(len(level_up_item_pool)))
-        print("KH1: Adding " + str(min(len(level_up_item_pool), total_locations - len(item_pool))) + " Stat Increases to the Item Pool")
         while len(item_pool) < total_locations and len(level_up_item_pool) > 0:
             item_pool += [self.create_item(level_up_item_pool.pop())]
         
@@ -208,16 +195,12 @@ class KH1World(World):
         return KH1Item(name, data.classification, data.code, self.player)
 
     def set_rules(self):
-        if self.options.goal.current_key == "super_boss_hunt":
-            reports_in_pool = max(self.options.reports_in_pool, 5)
-        else:
-            reports_in_pool = self.options.reports_in_pool
         set_rules(self.multiworld, self.player, self.options, self.determine_reports_required_to_open_end_of_the_world(), self.determine_reports_required_to_open_final_rest_door(), self.options.final_rest_door.current_key)
 
     def create_regions(self):
         create_regions(self.multiworld, self.player, self.options)
     
-    def get_numbers_of_reports_to_consider(self):
+    def get_numbers_of_reports_to_consider(self) -> int:
         numbers_to_consider = []
         if self.options.end_of_the_world_unlock.current_key == "reports":
             numbers_to_consider.append(self.options.required_reports_eotw)
