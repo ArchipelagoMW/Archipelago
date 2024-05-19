@@ -41,7 +41,7 @@ class FestivalCheck:
     emily_outfit_service = "Emily's Outfit Services"
     earthy_mousse = "Earthy Mousse"
     sweet_bean_cake = "Sweet Bean Cake"
-    skull_cavern = "Skull Cavern Casserole"
+    skull_cave_casserole = "Skull Cave Casserole"
     spicy_tacos = "Spicy Tacos"
     mountain_chili = "Mountain Chili"
     crystal_cake = "Crystal Cake"

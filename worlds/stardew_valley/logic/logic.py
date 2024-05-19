@@ -412,7 +412,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             FestivalCheck.emily_outfit_service: True_(),
             FestivalCheck.earthy_mousse: True_(),
             FestivalCheck.sweet_bean_cake: True_(),
-            FestivalCheck.skull_cavern: True_(),
+            FestivalCheck.skull_cave_casserole: True_(),
             FestivalCheck.spicy_tacos: True_(),
             FestivalCheck.mountain_chili: True_(),
             FestivalCheck.crystal_cake: True_(),
