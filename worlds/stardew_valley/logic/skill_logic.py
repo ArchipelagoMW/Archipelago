@@ -93,7 +93,7 @@ CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
         if level <= 0:
             return True_()
 
-        if self.options.skill_progression == options.SkillProgression.option_progressive:
+        if self.options.skill_progression >= options.SkillProgression.option_progressive:
             skills_items = vanilla_skill_items
             if allow_modded_skills:
                 skills_items += get_mod_skill_levels(self.options.mods)
@@ -107,7 +107,7 @@ CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
         return self.logic.time.has_lived_months(months_with_4_skills) | rule_with_fishing
 
     def has_all_skills_maxed(self, included_modded_skills: bool = True) -> StardewRule:
-        if self.options.skill_progression != options.SkillProgression.option_progressive:
+        if self.options.skill_progression == options.SkillProgression.option_vanilla:
             return self.has_total_level(50)
         skills_items = vanilla_skill_items
         if included_modded_skills:
@@ -148,7 +148,7 @@ CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
 
     @cached_property
     def can_get_fishing_xp(self) -> StardewRule:
-        if self.options.skill_progression == options.SkillProgression.option_progressive:
+        if self.options.skill_progression >= options.SkillProgression.option_progressive:
             return self.logic.skill.can_fish() | self.logic.skill.can_crab_pot
 
         return self.logic.skill.can_fish()
@@ -178,7 +178,7 @@ CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
     @cached_property
     def can_crab_pot(self) -> StardewRule:
         crab_pot_rule = self.logic.has(Fishing.bait)
-        if self.options.skill_progression == options.SkillProgression.option_progressive:
+        if self.options.skill_progression >= options.SkillProgression.option_progressive:
             crab_pot_rule = crab_pot_rule & self.logic.has(Machine.crab_pot)
         else:
             crab_pot_rule = crab_pot_rule & self.logic.skill.can_get_fishing_xp

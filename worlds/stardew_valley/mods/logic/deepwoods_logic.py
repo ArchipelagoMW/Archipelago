@@ -45,7 +45,7 @@ CookingLogicMixin]]):
                          self.logic.received(ModTransportation.woods_obelisk))
 
         tier = int(depth / 25) + 1
-        if self.options.skill_progression == options.SkillProgression.option_progressive:
+        if self.options.skill_progression >= options.SkillProgression.option_progressive:
             combat_tier = min(10, max(0, tier + 5))
             rules.append(self.logic.skill.has_level(Skill.combat, combat_tier))
 

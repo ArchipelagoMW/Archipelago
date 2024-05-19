@@ -59,7 +59,7 @@ SkillLogicMixin]]):
         rules.append(weapon_rule)
         if self.options.tool_progression & ToolProgression.option_progressive:
             rules.append(self.logic.tool.has_tool(Tool.pickaxe, ToolMaterial.tiers[tier]))
-        if self.options.skill_progression == options.SkillProgression.option_progressive:
+        if self.options.skill_progression >= options.SkillProgression.option_progressive:
             skill_tier = min(10, max(0, tier * 2))
             rules.append(self.logic.skill.has_level(Skill.combat, skill_tier))
             rules.append(self.logic.skill.has_level(Skill.mining, skill_tier))
@@ -81,7 +81,7 @@ SkillLogicMixin]]):
         rules.append(weapon_rule)
         if self.options.tool_progression & ToolProgression.option_progressive:
             rules.append(self.logic.received("Progressive Pickaxe", min(4, max(0, tier + 2))))
-        if self.options.skill_progression == options.SkillProgression.option_progressive:
+        if self.options.skill_progression >= options.SkillProgression.option_progressive:
             skill_tier = min(10, max(0, tier * 2 + 6))
             rules.extend({self.logic.skill.has_level(Skill.combat, skill_tier),
                           self.logic.skill.has_level(Skill.mining, skill_tier)})
