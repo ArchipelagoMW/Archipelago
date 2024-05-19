@@ -6,7 +6,7 @@ from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range,
 
 class SwordProgression(DefaultOnToggle):
     """
-    Adds four sword upgrades to the item pool that will progressively grant stronger melee weapons, including two new swords with increased range.
+    Adds four sword upgrades to the item pool that will progressively grant stronger melee weapons, including two new swords with increased range and attack power.
     """
     internal_name = "sword_progression"
     display_name = "Sword Progression"
