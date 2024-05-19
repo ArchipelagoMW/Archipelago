@@ -15,16 +15,20 @@ class LobbyAccess(Choice):
     """Chooses how keys needed to reach the lobby are placed.
     - Normal: Keys are placed anywhere
     - Early: Keys are placed early 
-    - Local: Keys are placed locally"""
+    - Local: Keys are placed locally
+    """
     display_name = "Lobby Access"
     option_normal = 0
     option_early = 1
     option_local = 2
+    default = 1
 
 class PuzzleHintsRequired(DefaultOnToggle):
-    """If turned on puzzle hints will be available before the corresponding puzzle is required. For example: The Shaman
+    """
+    If turned on puzzle hints will be available before the corresponding puzzle is required. For example: The Shaman
     Drums puzzle will be placed after access to the security cameras which give you the solution. Turning this off
-    allows for greater randomization."""
+    allows for greater randomization.
+    """
     display_name = "Puzzle Hints Required"
 
 class InformationPlaques(Toggle):
@@ -35,7 +39,9 @@ class InformationPlaques(Toggle):
     display_name = "Include Information Plaques"
 
 class FrontDoorUsable(Toggle):
-    """Adds a key to unlock the front door of the museum."""
+    """
+    Adds a key to unlock the front door of the museum.
+    """
     display_name = "Front Door Usable"
 
 class ElevatorsStaySolved(DefaultOnToggle):
@@ -46,7 +52,9 @@ class ElevatorsStaySolved(DefaultOnToggle):
     display_name = "Elevators Stay Solved"
 
 class EarlyBeth(DefaultOnToggle):
-    """Beth's body is open at the start of the game. This allows any pot piece to be placed in the slide and early checks on the second half of the final riddle."""
+    """
+    Beth's body is open at the start of the game. This allows any pot piece to be placed in the slide and early checks on the second half of the final riddle.
+    """
     display_name = "Early Beth"
 
 class EarlyLightning(Toggle):
@@ -57,27 +65,33 @@ class EarlyLightning(Toggle):
     display_name = "Early Lightning"
 
 class LocationPotPieces(Choice):
-    """Chooses where pot pieces will be located within the multiworld.
+    """
+    Chooses where pot pieces will be located within the multiworld.
     - Own World: Pot pieces will be located within your own world
     - Different World: Pot pieces will be located in another world
-    - Any World: Pot pieces will be located in any world"""
+    - Any World: Pot pieces will be located in any world
+    """
     display_name = "Location of Pot Pieces"
     option_own_world = 0
     option_different_world = 1
     option_any_world = 2
 
 class FullPots(Choice):
-    """Chooses if pots will be in pieces or already completed
+    """
+    Chooses if pots will be in pieces or already completed
     - Pieces: Only pot pieces will be added to the item pool
     - Complete: Only completed pots will be added to the item pool
-    - Mixed: Each pot will be randomly chosen to be pieces or already completed."""
+    - Mixed: Each pot will be randomly chosen to be pieces or already completed.
+    """
     display_name = "Full Pots"
     option_pieces = 0
     option_complete = 1
     option_mixed = 2
 
 class IxupiCapturesPriority(DefaultOnToggle):
-    """Ixupi captures are set to priority locations. This forces a progression item into these locations if possible."""
+    """
+    Ixupi captures are set to priority locations. This forces a progression item into these locations if possible.
+    """
     display_name = "Ixupi Captures are Priority"
 
 

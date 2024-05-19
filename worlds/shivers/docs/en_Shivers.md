@@ -23,7 +23,7 @@ If the player receives a key then the corresponding door will be unlocked. If th
 
 ## What is the victory condition?
 
-Victory is achieved when the player has captured the required number Ixupi set in options.
+Victory is achieved when the player has captured the required number Ixupi set in their options.
 
 ## Encountered a bug?
 
