@@ -254,9 +254,11 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
             raise
         finally:
             try:
-                with db_session:
+                with (db_session):
                     # ensure the Room does not spin up again on its own, minute of safety buffer
-                    room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(minutes=1, seconds=room.timeout)
+                    room = Room.get(id=room_id)
+                    room.last_activity = datetime.datetime.utcnow() - \
+                                         datetime.timedelta(minutes=1, seconds=room.timeout)
                 logging.info(f"Shutting down room {room_id} on {name}.")
             finally:
                 await asyncio.sleep(5)
