@@ -512,6 +512,46 @@ class WitnessPlayerLogic:
             if entity_id in self.DOOR_ITEMS_BY_ID:
                 del self.DOOR_ITEMS_BY_ID[entity_id]
 
+    def discover_reachable_regions(self):
+        # First step: Find unreachable regions
+        reachable_regions = {"Entry"}
+        new_regions_found = True
+
+        # This for loop "floods" the region graph until no more new regions are discovered.
+        # Note that connections that rely on disabled entities are considered invalid.
+        # This fact may lead to unreachable regions being discovered.
+        while new_regions_found:
+            new_regions_found = False
+            regions_to_check = reachable_regions.copy()
+
+            # Find new regions through connections from currently reachable regions
+            while regions_to_check:
+                next_region = regions_to_check.pop()
+
+                for region_exit in self.CONNECTIONS_BY_REGION_NAME[next_region]:
+                    target = region_exit[0]
+
+                    if target in reachable_regions:
+                        continue
+
+                    # There may be multiple conncetions between two regions. We should check all of them to see if
+                    # any of them are valid.
+                    for option in region_exit[1]:
+                        # If a connection requires having access to a not-yet-reached region, do not consider it.
+                        # Otherwise, this connection is valid, and the target region is reachable -> break for loop
+                        if not any(req in self.CONNECTIONS_BY_REGION_NAME and req not in reachable_regions
+                                   for req in option):
+                            break
+                    # If none of the connections were valid, this region is not reachable this way, for now.
+                    else:
+                        continue
+
+                    new_regions_found = True
+                    regions_to_check.add(target)
+                    reachable_regions.add(target)
+
+        return reachable_regions
+
     def find_unsolvable_entities(self, world: "WitnessWorld") -> None:
         """
         Settings like "shuffle_postgame: False" may disable certain panels.
@@ -522,58 +562,20 @@ class WitnessPlayerLogic:
         # if "shuffle_postgame", consider the victory location "disabled".
         postgame_included = bool(world.options.shuffle_postgame)
 
-        dirty = True
-        while dirty:
-            dirty = False
+        all_regions = set(self.CONNECTIONS_BY_REGION_NAME_THEORETICAL)
 
-            # Re-make the dependency reduced entity requirements dict, based on the current set of disabled entities.
+        while True:
+            # Re-make the dependency reduced entity requirements dict, which depends on currently
             self.make_dependency_reduced_checklist(postgame_included)
 
-            # First step: Find unreachable regions
-            reachable_regions = {"Entry"}
-            regions_dirty = True
+            # Discover currently reachable regions.
+            reachable_regions = self.discover_reachable_regions()
 
-            # This for loop "floods" the region graph until no more new regions are discovered.
-            # Note that connections that rely on disabled entities are considered invalid.
-            # This fact may lead to unreachable regions being discovered.
-            while regions_dirty:
-                regions_dirty = False
-                regions_to_check = reachable_regions.copy()
-
-                # Find new regions through connections from currently reachable regions
-                while regions_to_check:
-                    next_region = regions_to_check.pop()
-
-                    for exit in self.CONNECTIONS_BY_REGION_NAME[next_region]:
-                        target = exit[0]
-
-                        if target in reachable_regions:
-                            continue
-
-                        # There may be multiple conncetions between two regions. We should check all of them to see if
-                        # any of them are valid.
-                        for option in exit[1]:
-                            # If a connection requires having access to a not-yet-reached region, do not consider it.
-                            # Otherwise, this connection is valid, and the target region is reachable -> break for loop
-                            if not any(req in self.CONNECTIONS_BY_REGION_NAME and req not in reachable_regions
-                                       for req in option):
-                                break
-                        # If none of the connections were valid, this region is not reachable this way, for now.
-                        else:
-                            continue
-
-                        regions_dirty = True
-                        regions_to_check.add(target)
-                        reachable_regions.add(target)
-
-            # Any regions not reached by this graph search are unreachable.
-            new_unreachable_regions = set(
-                self.CONNECTIONS_BY_REGION_NAME) - reachable_regions - self.UNREACHABLE_REGIONS
+            new_unreachable_regions = all_regions - reachable_regions - self.UNREACHABLE_REGIONS
             if new_unreachable_regions:
-                dirty = True
                 self.UNREACHABLE_REGIONS.update(new_unreachable_regions)
 
-            # Now, we get to unreachable entities
+            # Then, discover unreachable entities.
             newly_discovered_disabled_entities = set()
 
             # First, entities in unreachable regions are obviously themselves unreachable.
@@ -588,7 +590,6 @@ class WitnessPlayerLogic:
                         continue
 
                     newly_discovered_disabled_entities.add(entity)
-                    dirty = True
 
             # Secondly, any entities that depend on disabled entities are unreachable as well.
             for entity, req in self.REQUIREMENTS_BY_HEX.items():
@@ -606,10 +607,40 @@ class WitnessPlayerLogic:
                                            f" This is not allowed to happen, please report to Violet.")
 
                     newly_discovered_disabled_entities.add(entity)
-                    dirty = True
 
             # Disable the newly determined unreachable entities.
             self.COMPLETELY_DISABLED_ENTITIES.update(newly_discovered_disabled_entities)
+            if not new_unreachable_regions and not newly_discovered_disabled_entities:
+                return
+
+    def reduce_connection_requirement(self, connection: Tuple[str, FrozenSet[FrozenSet[str]]], allow_victory: bool) -> FrozenSet[FrozenSet[str]]:
+        overall_requirement = frozenset()
+
+        # Check each traversal option individually
+        for option in connection[1]:
+            individual_entity_requirements = []
+            for entity in option:
+                # If a connection requires solving a disabled entity, it is not valid.
+                if not self.solvability_guaranteed(entity):
+                    individual_entity_requirements.append(frozenset())
+                # If a connection requires acquiring an event, add that event to its requirements.
+                elif (entity in self.ALWAYS_EVENT_NAMES_BY_HEX
+                      or entity not in self.REFERENCE_LOGIC.ENTITIES_BY_HEX):
+                    individual_entity_requirements.append(frozenset({frozenset({entity})}))
+                # If a connection requires entities, use their newly calculated independent requirements.
+                else:
+                    entity_req = self.reduce_req_within_region(entity, allow_victory)
+
+                    if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"]:
+                        region_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"]["name"]
+                        entity_req = dnf_and([entity_req, frozenset({frozenset({region_name})})])
+
+                    individual_entity_requirements.append(entity_req)
+
+            # Merge all possible requirements into one DNF condition.
+            overall_requirement |= dnf_and(individual_entity_requirements)
+
+        return overall_requirement
 
     def make_dependency_reduced_checklist(self, allow_victory: bool):
         """
@@ -647,36 +678,13 @@ class WitnessPlayerLogic:
             new_connections = []
 
             for connection in connections:
-                overall_requirement = frozenset()
-
-                for option in connection[1]:
-                    individual_entity_requirements = []
-                    for entity in option:
-                        # If a connection requires solving a disabled entity, it is not valid.
-                        if not self.solvability_guaranteed(entity):
-                            individual_entity_requirements.append(frozenset())
-                        # If a connection requires acquiring an event, add that event to its requirements.
-                        elif (entity in self.ALWAYS_EVENT_NAMES_BY_HEX
-                                or entity not in self.REFERENCE_LOGIC.ENTITIES_BY_HEX):
-                            individual_entity_requirements.append(frozenset({frozenset({entity})}))
-                        # If a connection requires entities, use their newly calculated independent requirements.
-                        else:
-                            entity_req = self.reduce_req_within_region(entity, allow_victory)
-
-                            if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"]:
-                                region_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"]["name"]
-                                entity_req = dnf_and([entity_req, frozenset({frozenset({region_name})})])
-
-                            individual_entity_requirements.append(entity_req)
-
-                    # Merge all possible requirements into one DNF condition.
-                    overall_requirement |= dnf_and(individual_entity_requirements)
+                overall_requirement = self.reduce_connection_requirement(connection, allow_victory)
 
                 # If there is a way to use this connection, add it.
                 if overall_requirement:
                     new_connections.append((connection[0], overall_requirement))
 
-            # If there are any connections between these two regions, add them.
+            # If there are any usable outgoing connections from this region, add them.
             if new_connections:
                 self.CONNECTIONS_BY_REGION_NAME[region] = new_connections
 
