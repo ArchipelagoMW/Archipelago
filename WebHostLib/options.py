@@ -38,7 +38,7 @@ def render_options_page(template: str, world_name: str, is_complex: bool = False
     grouped_options = {group: {} for group in ordered_groups}
     for option_name, option in world.options_dataclass.type_hints.items():
         # Exclude settings from options pages if their visibility is disabled
-        if not is_complex and option.visibility < Options.Visibility.simple_ui:
+        if not is_complex and option.visibility & Options.Visibility.simple_ui:
             continue
 
         if is_complex and option.visibility < Options.Visibility.complex_ui:
