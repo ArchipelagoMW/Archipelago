@@ -21,7 +21,6 @@ import Utils
 
 from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor, load_server_cert
 from Utils import restricted_loads, cache_argsless
-from .locker import Locker
 from .models import Command, GameDataPackage, Room, db
 
 
@@ -264,6 +263,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                 room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(minutes=1, seconds=room.timeout)
             raise
         finally:
+            logging.info(f"Shutting down room {room_id} on {name}.")
             rooms_shutting_down.put(room_id)
 
     class Starter(threading.Thread):
