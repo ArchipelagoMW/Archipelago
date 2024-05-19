@@ -32,6 +32,7 @@ class Sc2MissionSet(OptionSet):
         case_insensitive_group_mapping = {
             group_name.casefold(): group_value for group_name, group_value in mission_groups.items()
         }
+        case_insensitive_group_mapping.update({mission.mission_name.casefold(): [mission.mission_name] for mission in SC2Mission})
         for group_name in self.value:
             item_names = case_insensitive_group_mapping.get(group_name.casefold(), {group_name})
             new_value.update(item_names)
@@ -686,7 +687,9 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
         """Overridden version of function from Options.VerifyKeys for a better error message"""
         new_value: dict[str, int] = {}
         case_insensitive_group_mapping = {
-            group_name.casefold(): group_value for group_name, group_value in world.item_name_groups.items()}
+            group_name.casefold(): group_value for group_name, group_value in world.item_name_groups.items()
+        }
+        case_insensitive_group_mapping.update({item.casefold(): [item] for item in world.item_names})
         for group_name in self.value:
             item_names = case_insensitive_group_mapping.get(group_name.casefold(), {group_name})
             for item_name in item_names:
