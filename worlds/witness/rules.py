@@ -2,13 +2,14 @@
 Defines the rules by which locations can be accessed,
 depending on the items received
 """
-from typing import TYPE_CHECKING, FrozenSet
+from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
 
 from worlds.generic.Rules import CollectionRule, set_rule
 
 from .data import static_logic as static_witness_logic
+from .data.utils import WitnessRule
 from .locations import WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
 
@@ -248,8 +249,7 @@ def _has_item(item: str, world: "WitnessWorld", player: int,
     return lambda state: state.has(prog_item, player, player_logic.MULTI_AMOUNTS[item])
 
 
-def _meets_item_requirements(requirements: FrozenSet[FrozenSet[str]],
-                             world: "WitnessWorld") -> CollectionRule:
+def _meets_item_requirements(requirements: WitnessRule, world: "WitnessWorld") -> CollectionRule:
     """
     Checks whether item and panel requirements are met for
     a panel

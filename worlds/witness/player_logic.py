@@ -19,14 +19,13 @@ import copy
 from collections import defaultdict
 from functools import lru_cache
 from logging import warning
-from typing import TYPE_CHECKING, Dict, FrozenSet, List, Set, Tuple, cast
+from typing import TYPE_CHECKING, Dict, List, Set, Tuple, cast
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
 from .data.utils import (
+    WitnessRule,
     define_new_region,
-    dnf_and,
-    dnf_remove_redundancies,
     get_boat,
     get_caves_except_path_to_challenge_exclusion_list,
     get_complex_additional_panels,
@@ -48,6 +47,8 @@ from .data.utils import (
     get_simple_panels,
     get_symbol_shuffle_list,
     get_vault_exclusion_list,
+    logical_and_witness_rules,
+    logical_or_witness_rules,
     parse_lambda,
 )
 
@@ -59,7 +60,7 @@ class WitnessPlayerLogic:
     """WITNESS LOGIC CLASS"""
 
     @lru_cache(maxsize=None)
-    def reduce_req_within_region(self, entity_hex: str, allow_victory: bool) -> FrozenSet[FrozenSet[str]]:
+    def reduce_req_within_region(self, entity_hex: str, allow_victory: bool) -> WitnessRule:
         """
         Panels in this game often only turn on when other panels are solved.
         Those other panels may have different item requirements.
@@ -79,30 +80,31 @@ class WitnessPlayerLogic:
         if entity_obj["region"] is not None and entity_obj["region"]["name"] in self.UNREACHABLE_REGIONS:
             return frozenset()
 
-        these_items = frozenset({frozenset()})
+        # For the requirement of an entity, we consider two things:
+        # 1. Any items this entity needs (e.g. Symbols or Door Items)
+        these_items = self.DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex].get("items", frozenset({frozenset()}))
+        # 2. Any entities that this entity depends on (e.g. one panel powering on the next panel in a set)
+        these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex]["entities"]
 
-        if entity_obj["id"]:
-            these_items = self.DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex]["items"]
-
+        # Remove any items that don't actually exist in the settings (e.g. Symbol Shuffle turned off)
         these_items = frozenset({
             subset.intersection(self.THEORETICAL_ITEMS_NO_MULTI)
             for subset in these_items
         })
 
+        # Update the list of "items that are actually being used by any entity"
         for subset in these_items:
             self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(subset)
 
-        these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex]["entities"]
-
+        # If this entity is opened by a door item that exists in the itempool, add that item to its requirements.
+        # Also, remove any original power requirements this entity might have had.
         if entity_hex in self.DOOR_ITEMS_BY_ID:
             door_items = frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[entity_hex]})
 
-            all_options: Set[FrozenSet[str]] = set()
-
             for dependent_item in door_items:
                 self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(dependent_item)
-                for items_option in these_items:
-                    all_options.add(items_option.union(dependent_item))
+
+            all_options = logical_and_witness_rules([door_items, these_items])
 
             # If this entity is not an EP, and it has an associated door item, ignore the original power dependencies
             if static_witness_logic.ENTITIES_BY_HEX[entity_hex]["entityType"] != "EP":
@@ -122,11 +124,17 @@ class WitnessPlayerLogic:
             else:
                 these_items = all_options
 
-        all_options = set()
+        # Now that we have item requirements and entity dependencies, it's time for the dependency reduction.
+
+        # For each entity that this entity depends on (e.g. a panel turning on another panel),
+        # Add that entities requirements to this entity.
+        # If there are multiple options, consider each, and then or-chain them.
+        all_options = list()
 
         for option in these_panels:
             dependent_items_for_option = frozenset({frozenset()})
 
+            # For each entity in this option, resolve it to its actual requirement.
             for option_entity in option:
                 dep_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX.get(option_entity)
 
@@ -158,13 +166,13 @@ class WitnessPlayerLogic:
                                 for possibility in new_items
                             )
 
-                dependent_items_for_option = dnf_and([dependent_items_for_option, new_items])
+                dependent_items_for_option = logical_and_witness_rules([dependent_items_for_option, new_items])
 
-            for items_option in these_items:
-                for dependent_item in dependent_items_for_option:
-                    all_options.add(items_option.union(dependent_item))
+            # Combine the resolved dependent entity requirements with the item requirements of this entity.
+            all_options.append(logical_and_witness_rules([these_items, dependent_items_for_option]))
 
-        return dnf_remove_redundancies(frozenset(all_options))
+        # or-chain all separate dependent entity options.
+        return logical_or_witness_rules(all_options)
 
     def make_single_adjustment(self, adj_type: str, line: str) -> None:
         from .data import static_items as static_witness_items
@@ -282,7 +290,7 @@ class WitnessPlayerLogic:
                             (target_region, frozenset({frozenset(["TrueOneWay"])}))
                         )
                     else:
-                        new_lambda = connection[1] | parse_lambda(panel_set_string)
+                        new_lambda = logical_or_witness_rules([connection[1], parse_lambda(panel_set_string)])
                         self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].add((target_region, new_lambda))
                     break
             else:
@@ -613,8 +621,8 @@ class WitnessPlayerLogic:
             if not new_unreachable_regions and not newly_discovered_disabled_entities:
                 return
 
-    def reduce_connection_requirement(self, connection: Tuple[str, FrozenSet[FrozenSet[str]]], allow_victory: bool) -> FrozenSet[FrozenSet[str]]:
-        overall_requirement = frozenset()
+    def reduce_connection_requirement(self, connection: Tuple[str, WitnessRule], allow_victory: bool) -> WitnessRule:
+        all_possibilities = []
 
         # Check each traversal option individually
         for option in connection[1]:
@@ -633,14 +641,14 @@ class WitnessPlayerLogic:
 
                     if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"]:
                         region_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"]["name"]
-                        entity_req = dnf_and([entity_req, frozenset({frozenset({region_name})})])
+                        entity_req = logical_and_witness_rules([entity_req, frozenset({frozenset({region_name})})])
 
                     individual_entity_requirements.append(entity_req)
 
             # Merge all possible requirements into one DNF condition.
-            overall_requirement |= dnf_and(individual_entity_requirements)
+            all_possibilities.append(logical_and_witness_rules(individual_entity_requirements))
 
-        return overall_requirement
+        return logical_or_witness_rules(all_possibilities)
 
     def make_dependency_reduced_checklist(self, allow_victory: bool):
         """

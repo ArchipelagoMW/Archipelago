@@ -3,14 +3,14 @@ Defines Region for The Witness, assigns locations to them,
 and connects them with the proper requirements
 """
 from collections import defaultdict
-from typing import TYPE_CHECKING, Dict, FrozenSet, List, Set, Tuple
+from typing import TYPE_CHECKING, Dict, List, Set, Tuple
 
 from BaseClasses import Entrance, Region
 
 from worlds.generic.Rules import CollectionRule
 
 from .data import static_logic as static_witness_logic
-from .data.utils import dnf_remove_redundancies
+from .data.utils import WitnessRule, optimize_witness_rule
 from .locations import WitnessPlayerLocations, static_witness_locations
 from .player_logic import WitnessPlayerLogic
 
@@ -25,7 +25,7 @@ class WitnessPlayerRegions:
     logic = None
 
     @staticmethod
-    def make_lambda(item_requirement: FrozenSet[FrozenSet[str]], world: "WitnessWorld") -> CollectionRule:
+    def make_lambda(item_requirement: WitnessRule, world: "WitnessWorld") -> CollectionRule:
         from .rules import _meets_item_requirements
 
         """
@@ -35,7 +35,7 @@ class WitnessPlayerRegions:
 
         return _meets_item_requirements(item_requirement, world)
 
-    def connect_if_possible(self, world: "WitnessWorld", source: str, target: str, req: FrozenSet[FrozenSet[str]],
+    def connect_if_possible(self, world: "WitnessWorld", source: str, target: str, req: WitnessRule,
                             regions_by_name: Dict[str, Region]):
         """
         connect two regions and set the corresponding requirement
@@ -53,7 +53,7 @@ class WitnessPlayerRegions:
 
         # We don't need to check for the accessibility of the source region.
         final_requirement = frozenset({option - frozenset({source}) for option in real_requirement})
-        final_requirement = dnf_remove_redundancies(final_requirement)
+        final_requirement = optimize_witness_rule(final_requirement)
 
         source_region = regions_by_name[source]
         target_region = regions_by_name[target]

@@ -1,6 +1,6 @@
 from collections import defaultdict
 from functools import lru_cache
-from typing import Dict, List, FrozenSet, Tuple, Set
+from typing import Dict, List, Set, Tuple
 
 from .item_definition_classes import (
     CATEGORY_NAME_MAPPINGS,
@@ -11,12 +11,13 @@ from .item_definition_classes import (
     WeightedItemDefinition,
 )
 from .utils import (
+    WitnessRule,
     define_new_region,
-    dnf_remove_redundancies,
     get_items,
     get_sigma_expert_logic,
     get_sigma_normal_logic,
     get_vanilla_logic,
+    optimize_witness_rule,
     parse_lambda,
 )
 
@@ -153,7 +154,7 @@ class StaticWitnessLogicObj:
             current_region["entities"].append(entity_hex)
             current_region["physical_entities"].append(entity_hex)
 
-    def reverse_connection(self, source_region: str, connection: Tuple[str, Set[FrozenSet[FrozenSet[str]]]]):
+    def reverse_connection(self, source_region: str, connection: Tuple[str, Set[WitnessRule]]):
         target = connection[0]
         traversal_options = connection[1]
 
@@ -179,7 +180,7 @@ class StaticWitnessLogicObj:
 
         for source, connections in self.CONNECTIONS_WITH_DUPLICATES.items():
             for target, requirement in connections.items():
-                combined_req = dnf_remove_redundancies(frozenset().union(*requirement))
+                combined_req = optimize_witness_rule(frozenset().union(*requirement))
                 self.STATIC_CONNECTIONS_BY_REGION_NAME[source].add((target, combined_req))
 
     def __init__(self, lines=None) -> None:
