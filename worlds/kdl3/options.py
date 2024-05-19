@@ -2,9 +2,8 @@ import random
 from dataclasses import dataclass
 from typing import List
 
-from BaseClasses import OptionGroup
 from Options import DeathLinkMixin, Choice, Toggle, OptionDict, Range, PlandoBosses, DefaultOnToggle, \
-    PerGameCommonOptions, Visibility, NamedRange
+    PerGameCommonOptions, Visibility, NamedRange, OptionGroup
 from .names import location_name
 
 
