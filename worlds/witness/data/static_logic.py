@@ -158,6 +158,7 @@ class StaticWitnessLogicObj:
         target = connection[0]
         traversal_options = connection[1]
 
+        # Reverse this connection with all its possibilities, except the ones marked as "OneWay".
         for requirement in traversal_options:
             remaining_options = set()
             for option in requirement:
@@ -171,7 +172,6 @@ class StaticWitnessLogicObj:
         # Iterate all connections
         for region_name, connections in list(self.CONNECTIONS_WITH_DUPLICATES.items()):
             for connection in connections.items():
-                # Reverse this connection with all its possibilities, except the ones marked as "OneWay".
                 self.reverse_connection(region_name, connection)
 
     def combine_connections(self):
