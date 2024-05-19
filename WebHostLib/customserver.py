@@ -21,6 +21,7 @@ import Utils
 
 from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor, load_server_cert
 from Utils import restricted_loads, cache_argsless
+from .locker import Locker
 from .models import Command, GameDataPackage, Room, db
 
 
@@ -231,58 +232,61 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
     loop = asyncio.get_event_loop()
 
     async def start_room(room_id):
-        try:
-            logger = set_up_logging(room_id)
-            ctx = WebHostContext(static_server_data, logger)
-            ctx.load(room_id)
-            ctx.init_save()
+        with Locker(f"RoomLocker {room_id}"):
             try:
-                ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=ssl_context)
+                logger = set_up_logging(room_id)
+                ctx = WebHostContext(static_server_data, logger)
+                ctx.load(room_id)
+                ctx.init_save()
+                try:
+                    ctx.server = websockets.serve(
+                        functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=ssl_context)
 
-                await ctx.server
-            except OSError:  # likely port in use
-                ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, 0, ssl=ssl_context)
+                    await ctx.server
+                except OSError:  # likely port in use
+                    ctx.server = websockets.serve(
+                        functools.partial(server, ctx=ctx), ctx.host, 0, ssl=ssl_context)
 
-                await ctx.server
-            port = 0
-            for wssocket in ctx.server.ws_server.sockets:
-                socketname = wssocket.getsockname()
-                if wssocket.family == socket.AF_INET6:
-                    # Prefer IPv4, as most users seem to not have working ipv6 support
-                    if not port:
+                    await ctx.server
+                port = 0
+                for wssocket in ctx.server.ws_server.sockets:
+                    socketname = wssocket.getsockname()
+                    if wssocket.family == socket.AF_INET6:
+                        # Prefer IPv4, as most users seem to not have working ipv6 support
+                        if not port:
+                            port = socketname[1]
+                    elif wssocket.family == socket.AF_INET:
                         port = socketname[1]
-                elif wssocket.family == socket.AF_INET:
-                    port = socketname[1]
-            if port:
-                ctx.logger.info(f'Hosting game at {host}:{port}')
+                if port:
+                    ctx.logger.info(f'Hosting game at {host}:{port}')
+                    with db_session:
+                        room = Room.get(id=ctx.room_id)
+                        room.last_port = port
+                else:
+                    ctx.logger.exception("Could not determine port. Likely hosting failure.")
                 with db_session:
-                    room = Room.get(id=ctx.room_id)
-                    room.last_port = port
-            else:
-                ctx.logger.exception("Could not determine port. Likely hosting failure.")
-            with db_session:
-                ctx.auto_shutdown = Room.get(id=room_id).timeout
-            ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, []))
-            await ctx.shutdown_task
+                    ctx.auto_shutdown = Room.get(id=room_id).timeout
+                ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, []))
+                await ctx.shutdown_task
 
-        except (KeyboardInterrupt, SystemExit):
-            pass
-        except Exception:
-            with db_session:
-                room = Room.get(id=room_id)
-                room.last_port = -1
-            raise
-        finally:
-            try:
-                with (db_session):
-                    # ensure the Room does not spin up again on its own, minute of safety buffer
+            except (KeyboardInterrupt, SystemExit):
+                pass
+            except Exception:
+                with db_session:
                     room = Room.get(id=room_id)
-                    room.last_activity = datetime.datetime.utcnow() - \
-                                         datetime.timedelta(minutes=1, seconds=room.timeout)
-                logging.info(f"Shutting down room {room_id} on {name}.")
+                    room.last_port = -1
+                raise
             finally:
-                await asyncio.sleep(5)
-                rooms_shutting_down.put(room_id)
+                try:
+                    with (db_session):
+                        # ensure the Room does not spin up again on its own, minute of safety buffer
+                        room = Room.get(id=room_id)
+                        room.last_activity = datetime.datetime.utcnow() - \
+                                             datetime.timedelta(minutes=1, seconds=room.timeout)
+                    logging.info(f"Shutting down room {room_id} on {name}.")
+                finally:
+                    await asyncio.sleep(5)
+                    rooms_shutting_down.put(room_id)
 
     class Starter(threading.Thread):
         def run(self):
